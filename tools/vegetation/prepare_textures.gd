@@ -328,9 +328,9 @@ func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 			_fray_ends(image, 0.14)
 		elif cell.size.x == 1024:
 			# The mat and the brush are mounds, so overlapping cards run into one another.
-			_fray_ends(image, 0.5)
+			_fray_ends(image, 0.3)
 		if name == "marsh_low_mat.png":
-			_fray_foot(image, 0.3)
+			_fray_foot(image, 0.5)
 		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(CELL_MARGIN, CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "marsh_atlas.png", errors)

@@ -1296,7 +1296,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.03,
+     "per_m2": 0.09,
      "spacing": [0.45, 0.9],
      "field": {
       "axis": {
@@ -1414,8 +1414,8 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 1.4,
-     "spacing": [0.25, 0.5],
+     "per_m2": 2.6,
+     "spacing": [0.2, 0.4],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1424,11 +1424,11 @@
        "zero_m": 56
       },
       "height_m": [2.1, 2.35, 3.55, 3.95],
-      "slope": [0.04, 0.1],
+      "slope": [0.02, 0.06],
       "drift_m": 7,
       "clump_m": 2.2,
-      "drift_cover": 0.82,
-      "lone": 0.4,
+      "drift_cover": 0.95,
+      "lone": 0.6,
       "wander": {
        "height_m": 0.2,
        "scale_m": 15
@@ -1774,6 +1774,88 @@
      "basis": "production_inference",
      "rule": "A thin scatter of rounded stones out across the floor, more in its drifts.",
      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): stones lying in the mat and the shallows (t112)."
+    },
+    {
+     "id": "fence_foot_scrub",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": [
+      "terrain_wetland",
+      "land_ground"
+     ],
+     "per_m2": 0.4,
+     "spacing": [0.3, 0.6],
+     "field": {
+      "axis": {
+       "from_xz": [-341.94, 311.65],
+       "to_xz": [-369.34, 255.91],
+       "full_m": 1.6,
+       "zero_m": 4
+      },
+      "drift_m": 9,
+      "clump_m": 3,
+      "drift_cover": 0.8,
+      "lone": 0.2
+     },
+     "mix": [
+      {
+       "prop": "marsh_brush",
+       "variants": [2, 2],
+       "scale": [0.85, 1.2],
+       "at": [0.3, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "marsh_brush",
+       "variants": [3, 3],
+       "scale": [0.85, 1.2],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Old dark scrub along the ditch side of the banner fence.",
+     "evidence": "Owner photo, Nov 2026, along the bank from its top at about (-264, 205), with the same frames: a dark band of low scrub at the foot of the fence, from the frames' side too (t118)."
+    },
+    {
+     "id": "far_floor_scrub",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": [
+      "terrain_wetland",
+      "land_ground"
+     ],
+     "per_m2": 0.14,
+     "spacing": [0.35, 0.7],
+     "field": {
+      "axis": {
+       "from_xz": [-372, 243],
+       "to_xz": [-318, 214],
+       "full_m": 4,
+       "zero_m": 9
+      },
+      "height_m": [1.94, 2.0, 2.5, 2.85],
+      "wander": {
+       "height_m": 0.2,
+       "scale_m": 13
+      },
+      "drift_m": 10,
+      "clump_m": 3,
+      "drift_cover": 0.6,
+      "lone": 0.15
+     },
+     "mix": [
+      {
+       "prop": "marsh_brush",
+       "variants": [3, 3],
+       "scale": [0.8, 1.15],
+       "at": [0.0, 1.0],
+       "share": 1
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low dark scrub in a broken line across the far floor, at the foot of the straw bank.",
+     "evidence": "Owner photo, Nov 2026, along the bank from its top at about (-264, 205), with the same frames: a low brown line of scrub across the far floor by the concrete box (t116)."
     },
     {
      "id": "bank_rubble",
@@ -2289,9 +2371,9 @@
      "pattern": "along",
      "line_xz": [[-372.4, 241.8], [-350.9, 227.3], [-341.4, 223.5], [-326.9, 217.4], [-317.7, 202.7], [-325.09999999999997, 183.0], [-331.4, 166.0], [-337.09999999999997, 151.0]],
      "offsets_m": [0],
-     "spacing_m": 2.4,
-     "jitter_m": 1.1,
-     "acceptance": 0.82,
+     "spacing_m": 1.7,
+     "jitter_m": 0.9,
+     "acceptance": 0.85,
      "prop": "marsh_fringe",
      "params": {
       "variants": [1, 1],

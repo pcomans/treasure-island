@@ -98,16 +98,16 @@ uniform float marsh_floor_y = 1.95;
 uniform vec3 marsh_wine : source_color = vec3(0.15, 0.08, 0.07);
 uniform vec3 marsh_crimson : source_color = vec3(0.29, 0.125, 0.105);
 uniform vec3 marsh_flare : source_color = vec3(0.36, 0.15, 0.125);
-uniform vec3 marsh_ruddy : source_color = vec3(0.17, 0.135, 0.105);
+uniform vec3 marsh_ruddy : source_color = vec3(0.15, 0.125, 0.09);
 uniform vec3 marsh_straw : source_color = vec3(0.34, 0.275, 0.2);
 uniform vec3 marsh_green : source_color = vec3(0.12, 0.13, 0.075);
 uniform vec3 marsh_olive : source_color = vec3(0.235, 0.215, 0.125);
 uniform vec3 marsh_mud : source_color = vec3(0.25, 0.2, 0.16);
 uniform vec3 marsh_wet_mud : source_color = vec3(0.16, 0.13, 0.105);
 uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
-uniform vec3 bank_gap : source_color = vec3(0.1, 0.08, 0.07);
-uniform vec3 bank_blade : source_color = vec3(0.29, 0.24, 0.2);
-uniform vec3 bank_straw : source_color = vec3(0.46, 0.4, 0.33);
+uniform vec3 bank_gap : source_color = vec3(0.085, 0.068, 0.06);
+uniform vec3 bank_blade : source_color = vec3(0.255, 0.21, 0.18);
+uniform vec3 bank_straw : source_color = vec3(0.44, 0.385, 0.33);
 uniform vec3 bank_gravel : source_color = vec3(0.27, 0.26, 0.235);
 uniform vec3 marsh_far_red : source_color = vec3(0.26, 0.165, 0.14);
 uniform vec3 marsh_far_olive : source_color = vec3(0.26, 0.235, 0.135);
@@ -143,7 +143,7 @@ const float MARSH_TILE_M = 1.8;
 // The flopped grass's and the crushed rock's repeats, and the level of the red mat's drifts.
 const float BANK_TILE_M = 3.0;
 const float BANK_ROCK_TILE_M = 1.67;
-const float RED_LEVEL = 0.47;
+const float RED_LEVEL = 0.45;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
 
@@ -259,6 +259,8 @@ void fragment() {
 			float ragged = 1.0 - smoothstep(130.0, 260.0, dist);
 			float n_small = mix(0.5, value_noise(p / 2.1 + vec2(3.3, 47.9)), ragged);
 			float n_tiny = mix(0.5, value_noise(p / 0.8 + vec2(29.9, 13.3)), ragged);
+			float fine = 1.0 - smoothstep(60.0, 150.0, dist);
+			float n_fine = mix(0.5, value_noise(p / 0.37 + vec2(37.3, 5.9)), fine);
 			float far_off = smoothstep(150.0, 420.0, dist);
 			// The marsh map: red the signed distance from the wetland's outline, green the
 			// distance from the lots' paving, blue the floor's low ground.
@@ -278,34 +280,33 @@ void fragment() {
 			// The slopes: dead grass flopped in swathes over dark thatch, hollowed between
 			// its tussocks (a hollow, not a shadow: it holds under any sun).
 			float flopped = mix(texture(marsh_grain, mat2(vec2(0.96, 0.28), vec2(-0.28, 0.96)) * p / BANK_TILE_M).a, texture(marsh_grain, mat2(vec2(0.55, -0.83), vec2(0.83, 0.55)) * p / (BANK_TILE_M * 2.63) + vec2(0.13, 0.57)).a, 0.35);
-			vec3 bank = mix(mix(bank_gap, bank_blade, smoothstep(0.22, 0.5, flopped)), bank_straw, smoothstep(0.5, 0.8, flopped));
-			float hollow = smoothstep(0.52, 0.74, 0.6 * value_noise(p / 1.9 + vec2(67.1, 31.7)) + 0.4 * n_small);
-			bank *= (1.0 - 0.5 * hollow) * (0.86 + 0.28 * smoothstep(0.3, 0.7, 0.55 * n_mid + 0.45 * n_patch8));
+			vec3 bank = mix(mix(bank_gap, bank_blade, smoothstep(0.3, 0.52, flopped)), bank_straw, smoothstep(0.52, 0.74, flopped));
+			float hollow = smoothstep(0.5, 0.7, 0.6 * value_noise(p / 1.9 + vec2(67.1, 31.7)) + 0.4 * n_small);
+			bank *= (1.0 - 0.6 * hollow) * (0.86 + 0.28 * smoothstep(0.3, 0.7, 0.55 * n_mid + 0.45 * n_patch8));
 			// The slope falls away a little darker to its foot, pale at the top.
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
 			// Crushed rock spills from the lots' shoulders over the slope's top, ragged into
 			// the grass, with patches of rubble showing through it lower down.
-			float rock_w = 1.0 - smoothstep(0.3, 2.4, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
+			float rock_w = 1.0 - smoothstep(0.5, 3.0, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
 			rock_w = max(rock_w, 0.85 * smoothstep(0.6, 0.66, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny) * smoothstep(2.9, 3.4, h_land));
-			bank = mix(bank, bank_gravel * (0.35 + 1.3 * texture(marsh_grain, p / BANK_ROCK_TILE_M).b), rock_w);
+			bank = mix(bank, bank_gravel * (0.1 + 1.8 * texture(marsh_grain, p / BANK_ROCK_TILE_M).b), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
 
 			// The mat: crimson in drifts a few metres to a few tens long, ragged at every scale
 			// down to the grain, over dark litter, with lenses of straw and dull green.
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
-			float fine = 1.0 - smoothstep(60.0, 150.0, dist);
-			float drifts = 0.3 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.24 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.22 * value_noise(along / vec2(2.8, 1.6) + vec2(41.7, 17.3)) + 0.24 * mix(0.5, 0.6 * n_tiny + 0.4 * value_noise(p / 0.37 + vec2(37.3, 5.9)), fine);
+			float drifts = 0.3 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.24 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.22 * value_noise(along / vec2(2.8, 1.6) + vec2(41.7, 17.3)) + 0.24 * (0.6 * n_tiny + 0.4 * n_fine);
 			float red_edge = mix(0.04, 0.09, smoothstep(20.0, 120.0, dist));
 			float red_w = smoothstep(RED_LEVEL - red_edge, RED_LEVEL + red_edge, drifts + 0.3 * (grain.x - 0.5) * fine);
-			float straw_w = smoothstep(0.6, 0.64, 0.5 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.3 * n_mid + 0.2 * n_small + 0.1 * (grain.y - 0.5) * fine);
+			float straw_w = smoothstep(0.57, 0.67, 0.42 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.22 * n_mid + 0.18 * n_small + 0.18 * n_tiny + 0.14 * (grain.y - 0.5) * fine);
 			float green_w = smoothstep(0.6, 0.64, 0.72 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.28 * n_small);
 			vec3 red = mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.62, grain.x));
 			red = mix(red, marsh_flare, 0.5 * smoothstep(0.66, 0.86, grain.x));
-			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.12 + 0.5 * smoothstep(0.5, 0.8, grain.y));
+			vec3 marsh = mix(marsh_ruddy, marsh_straw, 0.08 + 0.55 * smoothstep(0.55, 0.85, grain.y));
 			marsh = mix(marsh, mix(marsh_green, marsh_olive, smoothstep(0.34, 0.62, green_grain)), green_w);
 			marsh = mix(marsh, mix(marsh_ruddy, marsh_straw, smoothstep(0.34, 0.62, grain.y)), straw_w);
 			marsh = mix(marsh, red, red_w * (1.0 - 0.75 * max(straw_w, green_w)));
-			marsh *= 0.82 + 0.36 * n_small;
+			marsh *= 0.66 + 0.68 * (0.55 * mix(0.5, value_noise(p / 0.9 + vec2(13.7, 77.1)), ragged) + 0.45 * n_small);
 			// The floor: inside the wetland's frayed outline, and any lower land round it.
 			float wet = smoothstep(-1.5, 3.0, outline_m + 7.0 * (n_mid - 0.5) + 5.0 * (n_wide - 0.5) + 2.5 * (n_small - 0.5)) * (1.0 - bank_rise);
 			float carpet = max(1.0 - smoothstep(2.45, 2.8, h), wet);
@@ -326,7 +327,7 @@ void fragment() {
 			float water = 0.38 * value_noise(along / vec2(15.0, 5.0) + vec2(3.7, 19.1)) + 0.38 * value_noise(along / vec2(5.5, 2.4) + vec2(41.3, 7.9)) + 0.24 * n_small;
 			water -= WATER_LEVEL + WATER_RISE_PER_M * max(0.0, ground_y - marsh_floor_y);
 			water += WATER_POOL * marsh_read.b - WATER_DRY * (1.0 - smoothstep(0.0, 0.2, marsh_read.b));
-			water += 0.2 * (n_tiny - 0.5) + 0.24 * (n_small - 0.5) + 0.12 * (n_mid - 0.5);
+			water += 0.1 * (n_fine - 0.5) + 0.2 * (n_tiny - 0.5) + 0.24 * (n_small - 0.5) + 0.12 * (n_mid - 0.5);
 			float flat_w = smoothstep(-0.07, -0.01, water + 0.12 * (grain.y - 0.5) + 0.1 * (n_small - 0.5));
 			vec3 mud = mix(marsh_wet_mud, marsh_mud, smoothstep(0.32, 0.6, grain.y) * (1.0 - 0.5 * smoothstep(-0.05, 0.02, water)));
 			marsh = mix(marsh, mud, 0.92 * flat_w * (1.0 - far_off));
@@ -350,7 +351,7 @@ void fragment() {
 			// Plants and mud stand through the water's edge, so it never ends in a line; the
 			// shallows show their mud, the deep the sky.
 			float reeds = smoothstep(0.42, 0.62, 0.5 * n_tiny + 0.5 * n_small);
-			pool = smoothstep(0.0, 0.05, water) * (1.0 - reeds * (1.0 - smoothstep(0.05, 0.2, water))) * region * (1.0 - 0.75 * far_off);
+			pool = smoothstep(0.0, 0.02, water) * (1.0 - reeds * (1.0 - smoothstep(0.05, 0.2, water))) * region * (1.0 - 0.75 * far_off);
 			pool_depth = smoothstep(0.02, 0.3, water);
 		}
 	}

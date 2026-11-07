@@ -83,7 +83,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 6, 0.2, false),
   marsh_stems: vegetationProp(LOW_PLANT_KINDS, 2, 0.15, false),
   marsh_mat: vegetationProp(LOW_PLANT_KINDS, 2, 0.2, false),
-  marsh_brush: vegetationProp(LOW_PLANT_KINDS, 2, 0.2, false),
+  marsh_brush: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
   marsh_fringe: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
   marsh_stones: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   young_planting: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
