@@ -496,17 +496,17 @@
     },
     "glass_east": {
       "rgb": [
-        0.1,
-        0.1,
-        0.085
+        0.19,
+        0.19,
+        0.155
       ],
-      "roughness": 0.3
+      "roughness": 0.35
     },
     "blinds": {
       "rgb": [
-        0.75,
-        0.75,
-        0.7
+        0.78,
+        0.78,
+        0.71
       ],
       "roughness": 0.7,
       "texture": "res://game/resources/textures/world/aracely/aracely_blinds.png",

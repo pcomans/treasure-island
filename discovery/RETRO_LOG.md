@@ -24282,6 +24282,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: I composed the chain from one view and it sat a metre low until a review made me look properly. Four textures came back with sun in them although their prompts said even light; a bay narrower than its window dropped silently; a lawn rule matched nothing and the generator ran clean; an emission change greyed the storefront. Run R05 failed because a new umbrella stood over a gameplay pose, R10 because I chained a shot run behind a parse error, and R11's path view sat inside the hedge.
 - What the team should change next time: Zoom every dated photo of a signature feature at full size before composing it. Stop a chained command on the build check's result, not only on its output. Re-check gameplay and matched poses against what a change adds. Give the art owner a per-area green lawn channel or accept the lawn recipe's dry patches in writing: the one left on the east lot comes from the shared recipe's noise, not from a rule.
 
+### aracely-art, round 2 — 2026-11-07 — r133351 after the second visual hold
+
+- What worked well: reading how the hedge's core and cards were each offset found the wedges in one step, and rebuilding the hedge as clumps gave the relief and top the photos show. Putting the ground shader's own masks and colours through its grass image made a lawn pad with no seam.
+- What did not work well: I had named those wedges tree shadows from a neutral render that keeps the sun's direction. My first hand-back rendered before its last commit, so bulbs and disc faces went unseen.
+- What the team should change next time: compare the surfaces that could make a mark before naming it, and commit first, then render and fit from that commit.
+
 ### aracely-visual-review, round 2 — 2026-11-07 — independent visual review of r133351 at 0fe6f586
 
 - What worked well: paired crops and the neutral render settled the wedge question, and island diffs confirmed the change stayed on the site.
