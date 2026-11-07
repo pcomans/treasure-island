@@ -36,6 +36,7 @@ extends Node3D
 ##   and peek over it (the eye shader draws nothing inside the lid).
 
 const Parts := preload("res://game/scripts/player/chest_avatar_parts.gd")
+const GroundDressing := preload("res://game/scripts/world/ground_dressing.gd")
 
 ## Feet stand on what the player stands on: its own collision mask (world solid
 ## and street props); this is the fallback without a player.
@@ -135,6 +136,7 @@ var _spills: Array[Spill] = []
 var _spill_multimesh: MultiMesh
 var _spill_instance: MultiMeshInstance3D
 var _poof: LandingPoof
+var _poof_warmed := false
 var _eye_mount: Node3D
 ## The eye mount relative to the arch frame under it, and that frame's arch angle.
 var _eye_seat := Transform3D.IDENTITY
@@ -291,6 +293,7 @@ func describe() -> Dictionary:
 		"feet": [_legs[0].current, _legs[1].current] if _legs.size() == 2 else [],
 		"spilled": _spills.filter(func(coin: Spill) -> bool: return coin.age < SPILL_LIFE).size(),
 		"dust": _poof != null and _poof.emitting,
+		"dust_ground": _poof != null and _poof.ground_offered,
 	}
 
 
@@ -424,6 +427,11 @@ func _physics_process(delta: float) -> void:
 		_reset_pending = true
 		return
 	_space = get_world_3d().direct_space_state
+	if not _poof_warmed:
+		_poof_warmed = true
+		# Compile the dust's shader behind the start-up screen, not at the first landing.
+		if DisplayServer.get_name() != "headless":
+			_poof.warm_up(global_position)
 	if _ground_stale and _world != null:
 		_ground_stale = false
 		_visible_ground.build([_world.ground_and_areas, _world.roads_and_paths])
@@ -460,7 +468,7 @@ func _physics_process(delta: float) -> void:
 		_airborne = false
 		_land(xf, _fall_speed, yaw)
 		if dropping and _fall_speed >= POOF_SPEED_SHARE * _fast_drop_speed():
-			_poof.burst(_ground(xf.origin, xf.origin.y))
+			_poof.burst(_ground(xf.origin, xf.origin.y), _ground_capture())
 	elif not _airborne and not on_floor and (thrust or velocity.y > 1.0 or _air_time > AIR_GRACE):
 		_airborne = true
 		_take_off(xf, thrust)
@@ -617,9 +625,19 @@ func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
 		coin.spin_speed = _rng.randf_range(-10.0, 10.0)
 
 
-## The stock controller's fast-drop speed (m/s).
+## The stock controller's fast-drop speed (m/s); without one nothing is a fast drop.
 func _fast_drop_speed() -> float:
-	return (_player as PlayerController).fast_drop_speed_mps if _player is PlayerController else 18.0
+	return (_player as PlayerController).fast_drop_speed_mps if _player is PlayerController else INF
+
+
+## The grass's ground captures, for the dust's colour, or {} where none are drawn
+## (the web's Compatibility renderer, headless runs, the dressing off).
+func _ground_capture() -> Dictionary:
+	var main := _player.get_parent()
+	if main == null:
+		return {}
+	var dressing := main.get_node_or_null("GroundDressing") as GroundDressing
+	return dressing.ground_capture() if dressing != null else {}
 
 
 func _take_off(xf: Transform3D, thrust: bool) -> void:
