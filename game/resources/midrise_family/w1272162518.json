@@ -1149,7 +1149,7 @@
         "rows": {
           "0": {
             "sill": 0.6,
-            "head": 3.6
+            "head": 2.3
           },
           "*": {
             "sill": 0.45,
@@ -1496,6 +1496,8 @@
     {
       "id": "ene",
       "storeys": 4,
+      "floor_raise": 1.6,
+      "ground_h": 2.7,
       "clip": [
         {
           "edge": 2,
@@ -1665,6 +1667,7 @@
   ],
   "study_notes": {
     "observed": "Nov 2025 Street View: WSW frontage (white render, taupe brick loggia bays, two-storey brick-framed recess), north corner (charcoal brick, balcony stack, glazed lobby, white glazed corner, lower dark-brick wing); undated Apple overhead: parallel blocks around a landscaped courtyard, PV on the WSW block.",
+    "ground": "The east block's ground floor stands level with Garden Walk (about 1.6 m over the frozen-terrain floor of the Avenue of the Palms front), as Street View lm04 (Seven Seas Ave, Sep 2025, down the lane) and owner photo n1 (Nov 2026) show; its upper floors and roof keep their level.",
     "inferred": "ENE paseo side (4-storey white/brown block; corroborated only by Star View NW and the medium-confidence Johnson St view), SSE end (secondary entrance, egress door, podium garage/service door/louvres) and courtyard faces. Storey heights, bay cadence, loggia/recess depths and roof items are production inference.",
     "footprint": "Frozen OSM quadrilateral kept as the outer ring; blocks tile it exactly. Courtyard deck at the second-floor level between the 6-storey WSW and 4-storey ENE blocks, closed at the north by a 3-storey wing. Floor at the median frozen terrain along the WSW front; higher terrain meets the walls, lower terrain exposes the dark plinth."
   }

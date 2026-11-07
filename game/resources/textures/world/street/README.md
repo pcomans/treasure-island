@@ -54,7 +54,7 @@ Generated 2026-11-07 with `tools/generate-texture` (text prompts only; no photog
 
 | File | Use | Source prompt (short) |
 |---|---|---|
-| `paseo_aggregate.png` | Garden Walk's pale exposed-aggregate paving: the source resized and tiled 4 x 4 into one 5 m bay, with a saw-cut joint drawn on two edges | seamless pale exposed aggregate concrete paving, fine rounded white, cream and light grey pebbles |
+| `paseo_aggregate.png` | Garden Walk's pale exposed-aggregate paving: the source desaturated, its speckle contrast raised, resized and tiled 4 x 4 into one 5 m bay, with a saw-cut joint drawn on two edges | seamless pale exposed aggregate concrete paving, fine rounded white, cream and light grey pebbles |
 | `paseo_walk.png` | the poured concrete walks beside it: one 2.5 m panel, the saw-cut joint drawn across the tile's middle so it falls on a walk's edges | seamless pale cool grey poured concrete slab with a very fine light broom finish |
 | `paseo_brick.png` | the dark red brick band along it, turned so the joints run across the band (1 m tile) | seamless dark oxblood red clay brick pavers in a soldier course |
 

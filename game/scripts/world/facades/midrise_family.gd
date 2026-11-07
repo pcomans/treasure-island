@@ -613,7 +613,8 @@ static func _outline(ctx: Ctx, block: Block, value: Variant, ring: PackedVector2
 		ctx.errors.append("block %s outline_xz needs 3+ [x, z] points inside the footprint" % block.id)
 		return PackedVector2Array()
 	if (_area(poly) > 0.0) != (_area(ring) > 0.0):
-		poly.reverse()
+		ctx.errors.append("block %s outline_xz must wind as the footprint does" % block.id)
+		return PackedVector2Array()
 	return poly
 
 
@@ -1447,6 +1448,9 @@ static func _plaque(ctx: Ctx, face: Face, plaque: Dictionary) -> void:
 	var y0 := face.block.floors[0] + float(plaque.get("bottom", 0.0))
 	var y1 := face.block.floors[0] + float(plaque.get("top", 0.0))
 	var depth := -float(plaque.get("t", 0.03))
+	if absf(s1 - s0) < 0.01 or y1 - y0 < 0.01:
+		ctx.errors.append("%s/%s plaque needs from before to and bottom below top" % [face.block.id, face.key])
+		return
 	var bucket := ctx.bucket("support", str(plaque.get("material", "metal")))
 	var first := bucket.uvs.size()
 	_rect(bucket, face, s0, s1, y0, y1, depth, face.out3())
@@ -2882,15 +2886,17 @@ static func _make_materials(ctx: Ctx) -> void:
 		if rgb.size() != 3:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
-		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
+		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), entry.get("receive_shadows", true)]
 		if entry.has("texture"):
-			cache_key += "|%s|%s|%s" % [entry.texture, entry.get("tile_m", [1.0, 1.0]), entry.get("offset_m", [0.0, 0.0])]
+			cache_key += "|%s|%s|%s|%s" % [entry.texture, entry.get("tile_m", [1.0, 1.0]), entry.get("offset_m", [0.0, 0.0]), entry.get("texture_alpha", false)]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
 			material.albedo_color = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]), float(entry.get("alpha", 1.0)))
 			material.roughness = float(entry.get("roughness", 0.9))
 			material.metallic = float(entry.get("metallic", 0.0))
+			# Opt-out: glass shows what it reflects, not the shadows that fall on it.
+			material.disable_receive_shadows = not bool(entry.get("receive_shadows", true))
 			if float(entry.get("alpha", 1.0)) < 1.0:
 				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				material.cull_mode = BaseMaterial3D.CULL_BACK
@@ -2905,6 +2911,10 @@ static func _make_materials(ctx: Ctx) -> void:
 				material.uv1_scale = Vector3(1.0 / float(tile[0]), 1.0 / float(tile[1]), 1.0)
 				var offset: Array = entry.get("offset_m", [0.0, 0.0])
 				material.uv1_offset = Vector3(float(offset[0]) / float(tile[0]), float(offset[1]) / float(tile[1]), 0.0)
+				# Opt-in cut-out: the texture's own alpha shows the wall behind it.
+				if bool(entry.get("texture_alpha", false)):
+					material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
+					material.alpha_scissor_threshold = 0.5
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

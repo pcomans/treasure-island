@@ -1100,7 +1100,9 @@ export function generateStreetDetail({
     const ring = item.geometry[0][0];
     return parkZones.some(({ contains }) => ring.filter(([east, north]) => contains([east, -north])).length * 2 >= ring.length);
   };
-  const plantRoads = polygonSet(roads.items.filter((item) => !bedSidewalks.has(item.key) && !(item.visual_class === "pedestrian" && inParkZone(item))));
+  // ... and the OSM paths a zone's surfaces name as their source are drawn by them.
+  const surfacedPaths = new Set(config.zones.flatMap((zone) => zone.ground?.surfaces?.source_keys ?? []));
+  const plantRoads = polygonSet(roads.items.filter((item) => !bedSidewalks.has(item.key) && !(item.visual_class === "pedestrian" && (surfacedPaths.has(item.key) || inParkZone(item)))));
   const shorelineOverlays = polygonSet(objects
     .filter((object) => object.roles.includes("terrain_shoreline") && !object.logical_key.startsWith("land:") && !object.boundary_attached_visual)
     .map((object) => ({ key: object.row.source_key, geometry: object.geometry })));

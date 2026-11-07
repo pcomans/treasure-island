@@ -41,11 +41,11 @@
  "palette": {
   "seam": {
    "rgb": [
-    0.94,
-    0.98,
-    1.0
+    0.97,
+    0.92,
+    0.84
    ],
-   "roughness": 0.85,
+   "roughness": 0.6,
    "texture": "res://game/resources/textures/world/maceo_may/seam_dark.png",
    "tile_m": [
     1.9,
@@ -54,9 +54,9 @@
   },
   "lap": {
    "rgb": [
-    0.97,
-    0.97,
-    0.97
+    1.0,
+    1.0,
+    1.0
    ],
    "roughness": 0.85,
    "texture": "res://game/resources/textures/world/maceo_may/lap_cream.png",
@@ -67,9 +67,9 @@
   },
   "corr": {
    "rgb": [
-    0.9,
-    0.9,
-    0.91
+    0.955,
+    0.935,
+    0.905
    ],
    "roughness": 0.6,
    "texture": "res://game/resources/textures/world/maceo_may/corrugated_white.png",
@@ -80,9 +80,22 @@
   },
   "stucco": {
    "rgb": [
-    0.97,
-    0.98,
-    0.97
+    1.08,
+    1.06,
+    1.03
+   ],
+   "roughness": 0.85,
+   "texture": "res://game/resources/textures/world/maceo_may/stucco_pale.png",
+   "tile_m": [
+    3.0,
+    3.0
+   ]
+  },
+  "stucco_dim": {
+   "rgb": [
+    0.82,
+    0.81,
+    0.79
    ],
    "roughness": 0.85,
    "texture": "res://game/resources/textures/world/maceo_may/stucco_pale.png",
@@ -93,27 +106,22 @@
   },
   "panel": {
    "rgb": [
-    1.12,
-    1.1,
-    1.08
+    0.93,
+    0.9,
+    0.865
    ],
-   "roughness": 0.55,
+   "roughness": 0.65,
    "texture": "res://game/resources/textures/world/maceo_may/panel_dark.png",
    "tile_m": [
     1.4,
-    6.9
-   ],
-   "metallic": 0.15,
-   "offset_m": [
-    0.0,
-    4.45
+    3.0
    ]
   },
   "rib": {
    "rgb": [
-    1,
-    1,
-    1
+    0.8,
+    0.84,
+    0.82
    ],
    "roughness": 0.6,
    "texture": "res://game/resources/textures/world/maceo_may/rib_red.png",
@@ -122,44 +130,57 @@
     1.8
    ]
   },
+  "sd_lap": {
+   "rgb": [
+    0.4,
+    0.44,
+    0.46
+   ],
+   "roughness": 0.7,
+   "texture": "res://game/resources/textures/world/maceo_may/lap_cream.png",
+   "tile_m": [
+    1.6,
+    1.6
+   ]
+  },
+  "joint": {
+   "rgb": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "roughness": 0.9
+  },
   "dark": {
    "rgb": [
-    0.17,
-    0.175,
-    0.18
-   ],
-   "roughness": 0.8
-  },
-  "dark2": {
-   "rgb": [
-    0.24,
-    0.235,
-    0.23
+    0.27,
+    0.255,
+    0.24
    ],
    "roughness": 0.8
   },
   "spandrel": {
    "rgb": [
-    0.2,
-    0.2,
-    0.2
+    0.17,
+    0.165,
+    0.16
    ],
    "roughness": 0.8
   },
   "frame": {
    "rgb": [
     0.12,
-    0.12,
-    0.125
+    0.115,
+    0.11
    ],
    "roughness": 0.55,
    "metallic": 0.2
   },
   "red": {
    "rgb": [
-    0.5,
-    0.14,
-    0.1
+    0.44,
+    0.235,
+    0.23
    ],
    "roughness": 0.6
   },
@@ -169,7 +190,9 @@
     0.56,
     0.6
    ],
-   "roughness": 0.22
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
   },
   "glass_w": {
    "rgb": [
@@ -177,15 +200,19 @@
     0.4,
     0.44
    ],
-   "roughness": 0.22
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
   },
   "glass_pale": {
    "rgb": [
     0.58,
-    0.7,
-    0.72
+    0.68,
+    0.68
    ],
-   "roughness": 0.25
+   "roughness": 0.16,
+   "metallic": 0.2,
+   "receive_shadows": false
   },
   "glass_low": {
    "rgb": [
@@ -193,7 +220,9 @@
     0.74,
     0.69
    ],
-   "roughness": 0.45
+   "roughness": 0.3,
+   "metallic": 0.15,
+   "receive_shadows": false
   },
   "glass_dark": {
    "rgb": [
@@ -201,15 +230,19 @@
     0.2,
     0.21
    ],
-   "roughness": 0.25
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
   },
   "glass_curtain": {
    "rgb": [
-    0.2,
-    0.33,
-    0.34
+    0.56,
+    0.66,
+    0.66
    ],
-   "roughness": 0.3
+   "roughness": 0.14,
+   "metallic": 0.45,
+   "receive_shadows": false
   },
   "glass_lit": {
    "rgb": [
@@ -217,15 +250,33 @@
     0.5,
     0.34
    ],
-   "roughness": 0.5
+   "roughness": 0.5,
+   "metallic": 0.0,
+   "receive_shadows": false
   },
   "wood": {
    "rgb": [
-    0.42,
-    0.32,
-    0.22
+    0.62,
+    0.47,
+    0.31
    ],
    "roughness": 0.8
+  },
+  "wood_pale": {
+   "rgb": [
+    0.78,
+    0.66,
+    0.5
+   ],
+   "roughness": 0.8
+  },
+  "shutter": {
+   "rgb": [
+    0.19,
+    0.185,
+    0.18
+   ],
+   "roughness": 0.6
   },
   "soffit": {
    "rgb": [
@@ -328,17 +379,25 @@
   },
   "mech_dark": {
    "rgb": [
-    0.2,
-    0.2,
-    0.2
+    0.24,
+    0.235,
+    0.23
+   ],
+   "roughness": 0.9
+  },
+  "mech_mid": {
+   "rgb": [
+    0.5,
+    0.49,
+    0.47
    ],
    "roughness": 0.9
   },
   "concrete": {
    "rgb": [
-    0.66,
-    0.65,
-    0.62
+    0.52,
+    0.52,
+    0.505
    ],
    "roughness": 0.95
   },
@@ -371,7 +430,7 @@
     1.0
    ],
    "metallic": 0.4,
-   "alpha": 0.99
+   "texture_alpha": true
   }
  },
  "schemes": {
@@ -869,6 +928,14 @@
    "parapet_material": "panel",
    "module": 1.8,
    "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
    "ground": {
     "kind": "window",
     "w": 0.98,
@@ -894,6 +961,14 @@
    "parapet_material": "panel",
    "module": 0.9,
    "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
    "ground": {
     "kind": "window",
     "w": 0.74,
@@ -919,6 +994,14 @@
    "parapet_material": "panel",
    "module": 1.15,
    "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
    "ground": {
     "kind": "window",
     "w": 0.62,
@@ -946,7 +1029,15 @@
    "upper": "blank",
    "ground": {
     "kind": "blank"
-   }
+   },
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ]
   },
   "door_w": {
    "material": "panel",
@@ -996,14 +1087,16 @@
    "ground": {
     "kind": "storefront",
     "pier": 0.1,
-    "sill": 0.12,
-    "head": 0.42,
+    "sill": 0.08,
+    "head": 0.3,
     "depth": 0.1,
     "glass": "glass_curtain",
     "frame": "frame",
-    "mullion_step": 1.2,
+    "frame_w": 0.035,
+    "bar_w": 0.03,
+    "mullion_step": 1.15,
     "transoms": [
-     0.78
+     0.8
     ]
    },
    "features": [
@@ -1045,20 +1138,98 @@
     "frame": "frame"
    }
   },
-  "pod_ene": {
+  "pod_ene_s": {
    "material": "dark",
    "parapet_material": "dark",
-   "module": 1.75,
+   "module": 50.0,
    "upper": "blank",
    "ground": {
-    "kind": "window",
-    "w": 0.62,
-    "h": 2.55,
-    "sill": 0.55,
-    "depth": 0.2,
-    "glass": "glass_low",
-    "frame": "frame"
-   }
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 12.4,
+     "to": 17.2,
+     "module": 1.6,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "spandrel",
+      "glass": "glass_dark",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    }
+   ]
+  },
+  "pod_ene_n": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 36.0,
+     "to": 38.8,
+     "module": 1.4,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "spandrel",
+      "glass": "glass_dark",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    },
+    {
+     "type": "bays",
+     "from": 42.6,
+     "to": 45.0,
+     "module": 2.4,
+     "ground": {
+      "kind": "window",
+      "w": 2.3,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.26,
+      "reveal": "spandrel",
+      "glass": "glass_w",
+      "frame": "frame",
+      "frame_w": 0.05,
+      "mullions": [
+       0.5
+      ]
+     }
+    },
+    {
+     "type": "bays",
+     "from": 45.0,
+     "to": 46.1,
+     "module": 1.1,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "spandrel",
+      "glass": "glass_dark",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    }
+   ]
   },
   "pod_n": {
    "material": "dark",
@@ -1070,8 +1241,9 @@
     "w": 1.75,
     "h": 2.5,
     "sill": 0.5,
-    "depth": 0.2,
-    "glass": "glass_low",
+    "depth": 0.24,
+    "reveal": "spandrel",
+    "glass": "glass_w",
     "frame": "frame",
     "mullions": [
      0.5
@@ -1097,8 +1269,9 @@
       "w": 0.62,
       "h": 2.55,
       "sill": 0.55,
-      "depth": 0.2,
-      "glass": "glass_low",
+      "depth": 0.3,
+      "reveal": "spandrel",
+      "glass": "glass_dark",
       "frame": "frame"
      }
     }
@@ -1116,6 +1289,15 @@
   "wood": {
    "material": "wood",
    "parapet_material": "wood",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "wood_back": {
+   "material": "shutter",
+   "parapet_material": "shutter",
    "module": 50.0,
    "upper": "blank",
    "ground": {
@@ -1170,7 +1352,7 @@
     }
    },
    "grid_unit": {
-    "depth": 0.12,
+    "depth": 0.1,
     "reveal": "red",
     "materials": {
      "pane": "glass",
@@ -1179,20 +1361,31 @@
      "transom": "red"
     },
     "box": {
-     "project": 0.24,
-     "t": 0.06,
+     "project": 0.18,
+     "t": 0.035,
      "material": "red"
     },
-    "unit": {
-     "frame_w": 0.05,
-     "mullion_w": 0.05,
-     "transom_w": 0.05,
-     "split": 0.72,
-     "split_min_w": 1.2,
-     "transoms": [
-      0.3,
-      1.42
+    "panels": [
+     [
+      0.0,
+      0.62,
+      0.735,
+      0.76,
+      "red"
      ],
+     [
+      0.62,
+      1.0,
+      0.16,
+      0.185,
+      "red"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.04,
+     "mullion_w": 0.04,
+     "split": 0.62,
+     "split_min_w": 1.2,
      "member_d": 0.02
     }
    },
@@ -1225,19 +1418,21 @@
       "w": 2.15,
       "h": 0.62,
       "sill": 1.1,
-      "depth": 0.14,
+      "depth": 0.12,
       "reveal": "red",
       "glass": "glass",
-      "frame": "red"
+      "frame": "red",
+      "frame_w": 0.04
      },
      "ground": {
       "w": 2.15,
       "h": 0.62,
       "sill": 1.1,
-      "depth": 0.14,
+      "depth": 0.12,
       "reveal": "red",
       "glass": "glass",
       "frame": "red",
+      "frame_w": 0.04,
       "kind": "window"
      }
     },
@@ -1251,41 +1446,61 @@
       "w": 1.62,
       "h": 1.72,
       "sill": 0.62,
-      "depth": 0.16,
+      "depth": 0.12,
       "reveal": "red",
       "glass": "glass",
       "frame": "red",
+      "frame_w": 0.04,
+      "bar_w": 0.04,
       "mullions": [
-       0.7
+       0.62
       ],
-      "transoms": [
-       0.2
-      ],
-      "box": {
-       "project": 0.28,
-       "t": 0.06,
-       "material": "red"
-      }
+      "panels": [
+       [
+        0.0,
+        0.62,
+        0.735,
+        0.76,
+        "red"
+       ],
+       [
+        0.62,
+        1.0,
+        0.16,
+        0.185,
+        "red"
+       ]
+      ]
      },
      "ground": {
       "w": 1.62,
       "h": 1.72,
       "sill": 0.62,
-      "depth": 0.16,
+      "depth": 0.12,
       "reveal": "red",
       "glass": "glass",
       "frame": "red",
+      "frame_w": 0.04,
+      "bar_w": 0.04,
       "mullions": [
-       0.7
+       0.62
       ],
-      "transoms": [
-       0.2
+      "panels": [
+       [
+        0.0,
+        0.62,
+        0.735,
+        0.76,
+        "red"
+       ],
+       [
+        0.62,
+        1.0,
+        0.16,
+        0.185,
+        "red"
+       ]
       ],
-      "box": {
-       "project": 0.28,
-       "t": 0.06,
-       "material": "red"
-      },
       "kind": "window"
      }
     }
@@ -1320,8 +1535,8 @@
    ]
   },
   "sd_w": {
-   "material": "dark2",
-   "parapet_material": "dark2",
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
    "grid": {
     "columns": [
      [
@@ -1344,7 +1559,7 @@
    },
    "grid_unit": {
     "depth": 0.3,
-    "reveal": "dark2",
+    "reveal": "spandrel",
     "materials": {
      "pane": "glass"
     },
@@ -1366,8 +1581,8 @@
    }
   },
   "sd_court": {
-   "material": "dark2",
-   "parapet_material": "dark2",
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
    "grid": {
     "columns": [
      [
@@ -1436,7 +1651,7 @@
    },
    "grid_unit": {
     "depth": 0.3,
-    "reveal": "dark2",
+    "reveal": "spandrel",
     "materials": {
      "pane": "glass"
     },
@@ -1458,8 +1673,8 @@
    }
   },
   "sd_plain": {
-   "material": "dark2",
-   "parapet_material": "dark2",
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
    "module": 50.0,
    "upper": "blank",
    "ground": {
@@ -2172,15 +2387,46 @@
    },
    "grid_unit": {
     "depth": 0.42,
-    "reveal": "stucco",
+    "reveal": "spandrel",
     "materials": {
-     "pane": "glass"
+     "pane": "glass_w"
     },
+    "panels": [
+     [
+      0.36,
+      0.64,
+      0.0,
+      0.8,
+      "spandrel"
+     ],
+     [
+      0.0,
+      1.0,
+      0.8,
+      1.0,
+      "spandrel"
+     ],
+     [
+      0.0,
+      0.08,
+      0.0,
+      0.8,
+      "spandrel"
+     ],
+     [
+      0.92,
+      1.0,
+      0.0,
+      0.8,
+      "spandrel"
+     ]
+    ],
     "unit": {
-     "frame_w": 0.06,
-     "mullion_w": 0.05,
-     "split": 0.5,
-     "split_min_w": 1.2,
+     "frame_w": 0.07,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
      "member_d": 0.02
     }
    },
@@ -2192,6 +2438,77 @@
     "kind": "window",
     "glass": "glass",
     "frame": "frame"
+   }
+  },
+  "pier_w": {
+   "material": "stucco_dim",
+   "parapet_material": "stucco_dim",
+   "grid": {
+    "columns": [
+     [
+      1.1,
+      2.0
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 1.3,
+      "head": 2.25
+     }
+    },
+    "blank_cells": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      5
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "wsw05, wsw06 (Jun 2026): the pier and its two small windows",
+     "date": "2026-06",
+     "side": "court E"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.12,
+    "reveal": "stucco_dim",
+    "materials": {
+     "pane": "glass"
+    },
+    "unit": {
+     "frame_w": 0.05,
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "pier_side": {
+   "material": "stucco_dim",
+   "parapet_material": "stucco_dim",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
    }
   },
   "rust_back": {
@@ -2573,12 +2890,12 @@
      309.852
     ],
     [
-     -130.814,
-     310.713
+     -133.934,
+     312.299
     ],
     [
-     -132.173,
-     308.039
+     -135.293,
+     309.625
     ],
     [
      -130.479,
@@ -2654,11 +2971,11 @@
     "p6": "pod_curve",
     "p7": "pod_curve",
     "p8": "pod_curve",
-    "p10": "pod_ene",
+    "p10": "pod_ene_s",
     "p11": "wood",
-    "p12": "wood",
+    "p12": "wood_back",
     "p13": "wood",
-    "p14": "pod_ene",
+    "p14": "pod_ene_n",
     "p18": "pod_n",
     "p19": "pod_nnw"
    }
@@ -2939,16 +3256,16 @@
      "kind": "box",
      "edge": 3,
      "s": [
-      11.34,
-      16.87
+      13.94,
+      16.06
      ],
      "d": [
-      10.72,
-      20.3
+      16.75,
+      21.31
      ],
-     "h": 3.3,
-     "material": "mech",
-     "top": "mech"
+     "h": 2.9,
+     "material": "mech_mid",
+     "top": "mech_dark"
     },
     {
      "kind": "box",
@@ -2967,16 +3284,31 @@
     },
     {
      "kind": "box",
-     "edge": 4,
+     "edge": 3,
      "s": [
-      4.9,
-      5.1
+      44.69,
+      51.36
      ],
      "d": [
-      9.5,
-      9.7
+      18.5,
+      21.26
      ],
-     "h": 6.2,
+     "h": 2.7,
+     "material": "mech_dark",
+     "top": "mech_dark"
+    },
+    {
+     "kind": "box",
+     "edge": 3,
+     "s": [
+      45.21,
+      45.57
+     ],
+     "d": [
+      19.85,
+      20.21
+     ],
+     "h": 3.7,
      "material": "metal",
      "top": "metal"
     }
@@ -3014,6 +3346,75 @@
    },
    "stacked": true,
    "floor_raise": 3.9,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "pier",
+   "outline_xz": [
+    [
+     -143.952,
+     327.14
+    ],
+    [
+     -142.475,
+     329.856
+    ],
+    [
+     -133.685,
+     325.076
+    ],
+    [
+     -135.162,
+     322.36
+    ]
+   ],
+   "storeys": 6,
+   "ground_h": 3.15,
+   "storey_h": 3.15,
+   "parapet": {
+    "h": 1.15,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "pier_side",
+    "p0": "pier_w"
+   },
+   "stacked": true,
+   "floor_raise": 3.75,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "portal_head",
+   "outline_xz": [
+    [
+     -129.12,
+     309.852
+    ],
+    [
+     -130.479,
+     307.178
+    ],
+    [
+     -131.906,
+     307.903
+    ],
+    [
+     -130.546,
+     310.577
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 0.7,
+   "storey_h": 0.7,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "pod_plain"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
    "soffit": "soffit_dark"
   },
   {

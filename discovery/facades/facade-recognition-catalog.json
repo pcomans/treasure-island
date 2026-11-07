@@ -14004,6 +14004,41 @@
             9,
             10
           ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "maceo-may-wsw-four-cream-bays-dark-seam-stepped-wing",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:r19685981:wall",
+          "reference_ids": [
+            "MACEO-MAY-2026-WSW-LOW-WING-SETTING"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "maceo-may-low-curved-dark-wing-louvred-slots",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:r19685981:wall",
+          "reference_ids": [
+            "MACEO-MAY-2026-WSW-LOW-WING-SETTING"
+          ],
+          "run_indices": [
+            5,
+            6,
+            7,
+            8
+          ]
         }
       ],
       "reference_records": [
@@ -14017,6 +14052,19 @@
           "supports": [
             "ENE pale complete grid/dark paired windows/graphite base.",
             "SSE fine pale rib field, complete rust asymmetric frames and entrance stack, pale return and glazed columned base; simplified glass/relief/ground limits retained."
+          ]
+        },
+        {
+          "observation_id": "MACEO-MAY-2026-WSW-LOW-WING-SETTING",
+          "observed_regions": [
+            "Owner photos o1-o5 and n1, n2, Nov 2026 (private, kept with the study outside Git); Street View 55 Cravath St and Seven Seas Ave, Sep 2025; contributor pano frames wsw04-wsw08, Jun 2026, camera x -240, z 373; drone photo 2023-01-26. Historical observations, not current-condition proof."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "maceo-20261107 study references, outside Git",
+          "supports": [
+            "WSW: four cream lap bays on dark standing seam, stepped three-storey wing, court upper rows, pale pier and bulkheads on the skyline.",
+            "Low curved dark panel wing with louvred slots, rust joint, tower on round columns.",
+            "Garden Walk: aggregate fire lane, brick bands, walks, beds, fork lamps, bollards and signs."
           ]
         }
       ],

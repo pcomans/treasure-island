@@ -1666,6 +1666,14 @@
   ],
   "aprons": [
     {
+      "way": "w1001544696",
+      "side": "right",
+      "from_m": 319.2,
+      "to_m": 323.2,
+      "depth_m": 4.4,
+      "evidence": "Google Street View Jun 2026 on Seven Seas Avenue (camera x -118, z 300, headings 210 to 300) and Sep 2025 (camera x -114, z 318, heading 300): the paved drive from the street across the curb strip to the Maceo May portal."
+    },
+    {
       "way": "w8916716",
       "side": "left",
       "from_m": 16,

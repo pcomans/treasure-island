@@ -57,19 +57,6 @@
       "runtime_attachment": "prototype_only"
     },
     {
-      "source_key": "r19685981",
-      "receiver_key": "building:r19685981:wall",
-      "canonical_name": "Maceo May",
-      "chunk_id": "x_-1__z_1",
-      "region_scope": "OUTER-SSE fine-rib field only; outer endpoints unresolved; never inner courtyard",
-      "material_path": "res://game/resources/materials/world/maceo_may/maceo_may_sse_rib.tres",
-      "field_kind": 3,
-      "roughness_range": [0.60, 0.82],
-      "proof_primary_scale_m": 0.08,
-      "scale_status": "rib_pitch_unmeasured_proof_only",
-      "runtime_attachment": "prototype_only"
-    },
-    {
       "source_key": "w291189336",
       "receiver_key": "building:w291189336:wall",
       "canonical_name": "Navy Chapel Building 187",

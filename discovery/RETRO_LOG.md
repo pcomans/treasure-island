@@ -24276,4 +24276,20 @@ Comparing every record against the base commit found a change the author hadn't 
 
 - What worked well: Resampling both dated aerials into the wall's own station and offset frame turned every later reading into plain numbers: the band lines, island beds, and where the low wing really stands. Rendering the form grey first let ROOT agree the massing before any material existed. The park-surface layers, planted rules and one new furniture pattern carried the whole setting, so nothing is placed by hand. Zooming the dated photos at each detail before editing, rather than working from my notes, corrected the window units, the rust panel and the low wing's plan.
 - What did not work well: Two engine runs failed for avoidable reasons, one on a surface name the loader rejects and one on view targets the moved wall left outside the bounds, and each regeneration costs 7 minutes. The low wing's south wall stood 0.8 m too far out until I read both aerials against cr07 again; in the May 2026 aerial the dark band round it is largely the planted bed. The trees placed nothing twice before I looked at the rule order. I left the Cravath sidewalk's fill and the verge south of the tactile strip as they were, so the ground there still differs from the photos.
-- What the team should change next time: Check a new surface name, a zone's rule order and view targets against the loader and the bounds before spending a run, with the headless build and one world load as the gate. Give a whole-building study with a new site its generator time in the budget: this one needed seven regenerations. Plan the first site render with its joins from the start, since the first look's worst faults were at joins: the lane corner and the north end.
+- What the team should change next time: Check a new surface name, a zone's rule order and view targets against the loader and the bounds before spending a run, with the headless build and one world load as the gate. Give a whole-building study with a new site its generator time in the budget: this one needed eleven regenerations over two rounds. Plan the first site render with its joins from the start, since the first look's worst faults were at joins: the lane corner and the north end. Sample render colours against the photos before asking for review: the first round judged by eye from pair sheets and missed that sunlit ground runs about 1.6 times its albedo, and that a zone polygon can quietly remove a street's curbs.
+
+### maceo-visual-review
+
+(Relayed verbatim by the coordinator; added by maceo-art.)
+
+- **What worked well:** wsw05 and owner originals made skyline and colour gaps concrete, and full-size originals exposed defects pair sheets hide.
+- **What did not work well:** pairs flatter colour because light differs.
+- **What to change next time:** add a shaded-versus-sunlit swatch check and a wsw05-matched render before review.
+
+### maceo-code-review
+
+(Relayed verbatim by the coordinator; added by maceo-art.)
+
+- **What worked well:** computing floors and land from main's chunks exposed the 490 step that the A/B and fits can't show.
+- **What did not work well:** the brief didn't name the A/B's script and base file, so the reviewer went outside the permitted logs.
+- **What to change next time:** record a source key and pano on every `KNOWN_ISSUES.md` mismatch line, so a removal can be checked.

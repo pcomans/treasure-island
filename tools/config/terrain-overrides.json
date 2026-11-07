@@ -2298,9 +2298,9 @@
     },
     {
       "id": "garden_walk_maceo_may",
-      "name": "Garden Walk beside Maceo May",
+      "name": "Garden Walk from Cravath Street to its north end",
       "basis": "production_inference",
-      "evidence": "The frozen 2023 USGS raster still holds the excavation for 490 Avenue of the Palms, whose east flank drops the land along the Maceo May WSW wall from about 4.4 m to about 2.0 m. Owner photos of Nov 2026 (o1, o3, o4: the paseo level along the wall and at the lane mouth) and Google Street View (55 Cravath St, Sep 2025, camera x -159, z 392, heading 355; Ave of the Palms, Jun 2026, camera x -240, z 373, heading 70) show the finished paseo flat, level with the ground floors. The paseo between the two buildings is levelled to the grade of its two ends (about 4.3 m), reaching under each building's wall so the correction is whole at the wall foot, and fades out inside both footprints and into the open lot to the south-west. Owner-directed correction, approved by ROOT 2026-11-07 for this study.",
+      "evidence": "The frozen 2023 USGS raster still holds the excavations for 490 Avenue of the Palms and Star View Court: the land along Garden Walk falls from about 4.4 m to about 1.1 m between the two buildings and to about 2.0 m along the Maceo May WSW wall. Owner photos of Nov 2026 (o1, o3, o4 along Maceo May; n1, n2 up the walk beside Star View Court, looking north to the far street) and Google Street View (55 Cravath St, Sep 2025, camera x -159, z 392, heading 355; Ave of the Palms, Jun 2026, camera x -240, z 373, heading 70; Seven Seas Ave, Sep 2025, camera x -137, z 273, heading 243, down the lane to the foot of 490's flank) show the finished walk flat from end to end, level with the ground floors each side. The walk is levelled to the grade of its ends (about 4.2 to 4.4 m), reaching under each building's wall so the correction is whole at the wall foot, and fades out inside both footprints and into the open lot to the south-west. Owner-directed correction, approved by ROOT 2026-11-07 for this study; ROOT asked 2026-11-07 for the ground at 490 to be judged from the photos.",
       "scope": {
         "source_keys": [],
         "add_xz": [
@@ -2324,20 +2324,38 @@
           ],
           [
             [
-              -203.05,
-              314.63
+              -209.32,
+              302.27
             ],
             [
               -183.03,
-              353.81
+              353.85
             ],
             [
-              -191.04,
-              357.91
+              -201.47,
+              363.25
             ],
             [
-              -211.06,
-              318.72
+              -227.76,
+              311.67
+            ]
+          ],
+          [
+            [
+              -219.9,
+              206.64
+            ],
+            [
+              -179.94,
+              285.05
+            ],
+            [
+              -212.01,
+              301.39
+            ],
+            [
+              -251.97,
+              222.99
             ]
           ]
         ],
@@ -2351,6 +2369,31 @@
         "relaxation": 1.9
       },
       "regions": [
+        {
+          "id": "walk_north",
+          "shape": {
+            "line_xz": [
+              [
+                -231.97,
+                218.41
+              ],
+              [
+                -191.56,
+                297.48
+              ]
+            ],
+            "width_m": 20.0
+          },
+          "rule": {
+            "kind": "profile",
+            "elevations_m": [
+              4.22,
+              4.4
+            ]
+          },
+          "min_leaf_m": 2,
+          "reason": "The walk reads flat from the lane mouth to its north end in the dated photos, level with Star View Court's ground floor and with the foot of 490's east block."
+        },
         {
           "id": "paseo",
           "shape": {
@@ -2386,20 +2429,20 @@
           "shape": {
             "points_xz": [
               [
-                -192.32,
-                313.64
+                -192.28,
+                313.68
               ],
               [
-                -176.85,
-                343.92
+                -176.84,
+                343.97
               ],
               [
-                -186.65,
-                348.92
+                -191.72,
+                351.55
               ],
               [
-                -202.12,
-                318.64
+                -207.16,
+                321.26
               ]
             ]
           },
@@ -2408,7 +2451,7 @@
             "elevation_m": 4.33
           },
           "min_leaf_m": 2,
-          "reason": "The level carries past the south-east corner of 490 Avenue of the Palms, so its side door stands on flat ground as in the dated photos and the fade into the open lot starts beyond it."
+          "reason": "The level carries past the south-east corner of 490 Avenue of the Palms and along its east block's end, so that block's ground floor and side door stand on flat ground, as the lot does in the dated photos, and the fade into the open lot starts beyond it."
         }
       ]
     }

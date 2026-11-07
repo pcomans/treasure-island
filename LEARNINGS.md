@@ -1159,3 +1159,11 @@ A surface material added to the generator's list generated cleanly, then failed 
 ## Move a fixed view's target when a wall moves
 
 A focused view's target must lie inside the building's bounds. Pulling one wall back 0.8 m on 2026-11-07 left seven targets outside, and the run stopped after loading the world, on the third view. Compare every target with the bounds the headless build prints before an engine run; a target further along the same ray keeps the pose.
+
+## A pilot zone cuts the street ground under it
+
+The Garden Walk zone (2026-11-07) was drawn past both ends of the walk and over the Cravath sidewalk. A pilot zone with `kerbs: false` removes the rule streets' kerbs, ramps and sidewalks inside its polygon, so the sidewalk stopped in hard diagonals against grass and the code review, not the render, named the cause. Stop such a polygon at the back of the street's sidewalk: plot the baseline `street_kerb_concrete` and `street_kerb_verge` triangles first and trace their back edge.
+
+## Check a raised neighbour's floor when terrain moves
+
+The same override lifted the ground 1.6 m above the floor of accepted neighbour 490, and the fit test and the family A/B could not see it: walls still met the ground and the build was unchanged. When an override reaches a neighbour's wall, compare its floor with the new ground along that wall, and read a dated photo of its base before choosing between tapering the ground and moving the floor.

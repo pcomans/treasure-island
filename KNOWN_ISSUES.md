@@ -25,6 +25,8 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
 
   A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
+- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk. Its west block, podium and the open lot south of it still sit on the 2023 excavation (land 1.1-3.9 m, photos show flat ground about 4 m), so the podium's east end meets a bank.
+- **Garden Walk (w1249412095):** the Cravath Street and north-end sidewalks still cross the walk's mouths, where owner photo o2 shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where the photos show concrete.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;
@@ -39,6 +41,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - Mismatches the street reviews found against dated photos (seen in review, 2026-11-05):
   - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
   - The Mersea venue's containers are green where the photo shows blue in front.
+  - The Cravath Street building at heading 42 is a blank brown box where the photo shows a modern white and grey panelled facade.
   - The green-teal roof of w34313544 is paler than the aerial's duller colour (seen in review, 2026-11-06).
 
 ## Clutter yards: accepted 2026-11-05 with known gaps
