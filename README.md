@@ -76,8 +76,14 @@ curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/tr
 gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
 
-The app is not notarized, so after a browser download macOS blocks the first
-launch: open System Settings → Privacy & Security and click "Open Anyway".
+With its signing secrets set (listed at the top of
+[mac-build.yml](.github/workflows/mac-build.yml)), CI signs the app with the
+owner's Developer ID and Apple notarizes it, so it opens directly after a browser
+download too; the release notes say "Signed and notarized (Developer ID)".
+Without those secrets, and for a local `tools/build-mac.sh` build, the app is
+ad-hoc signed and not notarized ("Ad-hoc signed, not notarized" in the release
+notes): macOS then blocks the first launch after a browser download, so open
+System Settings → Privacy & Security and click "Open Anyway".
 
 To build it in the devcontainer instead:
 

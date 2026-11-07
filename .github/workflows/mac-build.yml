@@ -1,9 +1,31 @@
 # Builds the Mac app on every push to main with tools/build-mac.sh (the same
-# script as in the devcontainer), launches it on an Apple Silicon Mac to check
-# the island loads, then publishes it as a new GitHub Release of its own, marked
-# latest, so this fixed link always gets the newest build:
+# script as in the devcontainer), signs it with the owner's Developer ID and has
+# Apple notarize it, launches it on an Apple Silicon Mac to check the island
+# loads, then publishes it as a new GitHub Release of its own, marked latest, so
+# this fixed link always gets the newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03. No secrets: the publish job uses GITHUB_TOKEN.
+# Owner-approved 2026-11-03; signing and notarization owner-requested 2026-11-07.
+# Run it by hand on any branch from the Actions tab (workflow_dispatch) to test
+# signing there; only main publishes.
+#
+# Signing uses only Apple's own tools on the macOS runner (security, codesign,
+# xcrun notarytool and stapler, ditto) and these repository secrets
+# (Settings -> Secrets and variables -> Actions):
+#   MACOS_CERTIFICATE_P12_BASE64  the "Developer ID Application" certificate with
+#                                 its private key, exported from Keychain Access as
+#                                 .p12, then base64: `base64 -i cert.p12 | pbcopy`
+#   MACOS_CERTIFICATE_PASSWORD    the password chosen for that .p12 export
+#   APPLE_TEAM_ID                 the 10-character Team ID (developer.apple.com ->
+#                                 Account -> Membership details)
+#   APPSTORE_API_KEY_ID           an App Store Connect team API key (Users and
+#   APPSTORE_API_ISSUER_ID        Access -> Integrations -> Team Keys, Developer
+#   APPSTORE_API_KEY_P8_BASE64    role): its Key ID, the Issuer ID shown above the
+#                                 key list, and the downloaded AuthKey_<id>.p8,
+#                                 base64: `base64 -i AuthKey_<id>.p8 | pbcopy`
+# Without MACOS_CERTIFICATE_P12_BASE64 the build stays ad-hoc signed and is not
+# notarized (a warning says so) and still publishes. With it, every other secret
+# is required and any signing or notarization failure fails the run. The publish
+# job uses GITHUB_TOKEN.
 name: Mac build
 
 on:
@@ -100,9 +122,211 @@ jobs:
         if: always()
         run: df -h / && du -sh .git . /opt/godot || true
 
+  sign:
+    name: Sign and notarize
+    needs: build
+    runs-on: macos-26
+    timeout-minutes: 60
+    concurrency:
+      group: mac-sign-${{ github.ref }}
+      cancel-in-progress: true
+    outputs:
+      # "true" only once Apple accepted the app and its ticket is stapled.
+      notarized: ${{ steps.notarize.outputs.notarized || 'false' }}
+    steps:
+      - name: Check out the entitlements file only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/mac-entitlements.plist
+          sparse-checkout-cone-mode: false
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Check for the signing secrets
+        id: mode
+        env:
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+          APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
+        # Reports only which secrets are set, never their values.
+        run: |
+          if [ -z "${MACOS_CERTIFICATE_P12_BASE64}" ]; then
+            echo "::warning::MACOS_CERTIFICATE_P12_BASE64 is not set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
+            echo "sign=false" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          missing=""
+          for name in MACOS_CERTIFICATE_PASSWORD APPLE_TEAM_ID APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64; do
+            [ -n "${!name}" ] || missing="${missing} ${name}"
+          done
+          if [ -n "${missing}" ]; then
+            echo "::error::MACOS_CERTIFICATE_P12_BASE64 is set, so the build must be signed and notarized, but these secrets are missing:${missing}"
+            exit 1
+          fi
+          if ! [[ "${APPLE_TEAM_ID}" =~ ^[A-Z0-9]{10}$ ]]; then
+            echo "::error::APPLE_TEAM_ID is not a 10-character Team ID (capital letters and digits)."
+            exit 1
+          fi
+          echo "sign=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Download the Mac app
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: mac-app
+          path: in
+
+      - name: Pass the ad-hoc build through unchanged (no signing secrets)
+        if: steps.mode.outputs.sign != 'true'
+        run: |
+          mkdir out
+          cp in/treasure-island-mac-*.zip out/
+          ls -l out
+
+      - name: Sign with the Developer ID (hardened runtime)
+        if: steps.mode.outputs.sign == 'true'
+        env:
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
+          CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
+        # A throwaway keychain holds the certificate for this step only; the last
+        # step deletes it however the job ends. The Godot export has one Mach-O
+        # executable (MoltenVK is linked in statically) and no nested code today;
+        # nested libraries or frameworks, as a GDExtension would add, are signed
+        # first, deepest first, instead of with codesign --deep, which Apple
+        # advises against for signing. Entitlements: tools/mac-entitlements.plist.
+        run: |
+          zips=(in/treasure-island-mac-*.zip)
+          [ "${#zips[@]}" -eq 1 ] || { echo "::error::expected one zip from the build job, found ${#zips[@]}"; exit 1; }
+          ditto -x -k "${zips[0]}" work
+          apps=(work/*.app)
+          [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in ${zips[0]}"; exit 1; }
+          app="${apps[0]}"
+          echo "${app}" > app-path.txt
+
+          keychain_password="$(uuidgen)"
+          echo "::add-mask::${keychain_password}"
+          security create-keychain -p "${keychain_password}" "${KEYCHAIN}"
+          security set-keychain-settings -lut 3600 "${KEYCHAIN}"
+          security unlock-keychain -p "${keychain_password}" "${KEYCHAIN}"
+          printf '%s' "${MACOS_CERTIFICATE_P12_BASE64}" | tr -d ' \r\n' | base64 --decode > "${CERTIFICATE_FILE}"
+          security import "${CERTIFICATE_FILE}" -k "${KEYCHAIN}" -f pkcs12 -P "${MACOS_CERTIFICATE_PASSWORD}" -T /usr/bin/codesign >/dev/null
+          rm -f "${CERTIFICATE_FILE}"
+          # Lets codesign use the key without a permission dialog.
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${keychain_password}" "${KEYCHAIN}" >/dev/null
+          # codesign finds the intermediate certificates through the search list.
+          existing=()
+          while IFS= read -r line; do
+            line="${line#"${line%%[![:space:]]*}"}"
+            existing+=("${line//\"/}")
+          done < <(security list-keychains -d user)
+          security list-keychains -d user -s "${KEYCHAIN}" "${existing[@]}"
+
+          identities="$(security find-identity -v -p codesigning "${KEYCHAIN}" | grep "Developer ID Application: .*(${APPLE_TEAM_ID})" || true)"
+          if [ "$(grep -c . <<< "${identities}")" -ne 1 ]; then
+            echo "::error::Expected exactly one valid \"Developer ID Application\" identity for APPLE_TEAM_ID in the certificate; found $(grep -c . <<< "${identities}"). Check that the .p12 holds that certificate with its private key."
+            security find-identity -v -p codesigning "${KEYCHAIN}" | tail -1
+            exit 1
+          fi
+          identity="$(awk '{print $2}' <<< "${identities}")"
+
+          # Stray extended attributes make codesign fail ("detritus not allowed").
+          xattr -cr "${app}"
+          sign() { codesign --force --timestamp --options runtime --keychain "${KEYCHAIN}" --sign "${identity}" "$@"; }
+          nested=()
+          while IFS= read -r -d '' path; do
+            nested+=("${path}")
+          done < <(find "${app}/Contents" -depth \
+            \( -name '*.framework' -o -name '*.dylib' -o -name '*.so' -o -name '*.bundle' -o -name '*.app' -o -name '*.xpc' \) -print0)
+          for path in "${nested[@]}"; do
+            echo "Signing nested ${path#"${app}/"}"
+            sign "${path}"
+          done
+          sign --entitlements tools/mac-entitlements.plist "${app}"
+
+          codesign --verify --deep --strict --verbose=2 "${app}"
+          details="$(codesign -dvv "${app}" 2>&1)"
+          grep -E '^(Identifier|Format|Authority|TeamIdentifier|Timestamp|Runtime Version)=' <<< "${details}"
+          grep -q "^TeamIdentifier=${APPLE_TEAM_ID}$" <<< "${details}" || { echo "::error::the signature does not carry APPLE_TEAM_ID"; exit 1; }
+          grep -q '^Timestamp=' <<< "${details}" || { echo "::error::the signature has no secure timestamp"; exit 1; }
+          grep -Eq '^CodeDirectory .*flags=0x[0-9a-f]*\(.*runtime' <<< "${details}" || { echo "::error::the signature lacks the hardened runtime"; exit 1; }
+          echo "Entitlements:"
+          codesign -d --entitlements - --xml "${app}" 2>/dev/null || true; echo
+          security delete-keychain "${KEYCHAIN}"
+
+      - name: Notarize, staple and zip
+        id: notarize
+        if: steps.mode.outputs.sign == 'true'
+        env:
+          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
+          APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
+          API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
+        run: |
+          app="$(cat app-path.txt)"
+          zips=(in/treasure-island-mac-*.zip)
+          name="$(basename "${zips[0]}")"
+          printf '%s' "${APPSTORE_API_KEY_P8_BASE64}" | tr -d ' \r\n' | base64 --decode > "${API_KEY_FILE}"
+          auth=(--key "${API_KEY_FILE}" --key-id "${APPSTORE_API_KEY_ID}" --issuer "${APPSTORE_API_ISSUER_ID}")
+
+          ditto -c -k --keepParent "${app}" notarize.zip
+          status=0
+          xcrun notarytool submit notarize.zip "${auth[@]}" --wait --timeout 45m --output-format json > notary.json || status=$?
+          cat notary.json; echo
+          id="$(plutil -extract id raw -o - notary.json 2>/dev/null || true)"
+          result="$(plutil -extract status raw -o - notary.json 2>/dev/null || true)"
+          if [ "${result}" != "Accepted" ]; then
+            if [ -n "${id}" ]; then
+              echo "Notary log for ${id}:"
+              xcrun notarytool log "${id}" "${auth[@]}" || true
+            fi
+            echo "::error::Notarization did not succeed (notarytool exited ${status}, status \"${result:-none}\")."
+            exit 1
+          fi
+          rm -f "${API_KEY_FILE}"
+
+          # The ticket can take a moment to reach Apple's ticket service after
+          # acceptance, so try stapling a few times.
+          for attempt in 1 2 3 4 5; do
+            if xcrun stapler staple "${app}"; then break; fi
+            [ "${attempt}" -lt 5 ] || { echo "::error::stapling the notarization ticket failed"; exit 1; }
+            sleep 20
+          done
+          xcrun stapler validate "${app}"
+
+          mkdir out
+          ditto -c -k --keepParent "${app}" "out/${name}"
+          ls -l out
+          echo "notarized=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Upload the release app
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mac-app-release
+          path: out/treasure-island-mac-*.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+      - name: Delete the keychain and key files
+        if: always()
+        env:
+          KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
+          CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
+          API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
+        run: |
+          if [ -e "${KEYCHAIN}" ]; then security delete-keychain "${KEYCHAIN}" || rm -f "${KEYCHAIN}"; fi
+          rm -f "${CERTIFICATE_FILE}" "${API_KEY_FILE}"
+
   verify:
     name: Load on Apple Silicon
-    needs: build
+    needs: sign
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
@@ -112,11 +336,14 @@ jobs:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mac-app
+          name: mac-app-release
 
       - name: Launch it headless on arm64 and check the island loads
         # The same rule as the Linux launch check in tools/build-mac.sh: the game
-        # loads the island, quits with 0 and prints no engine errors.
+        # loads the island, quits with 0 and prints no engine errors. A notarized
+        # build must also pass Gatekeeper and carry its stapled ticket.
+        env:
+          NOTARIZED: ${{ needs.sign.outputs.notarized }}
         run: |
           echo "$(sw_vers -productName) $(sw_vers -productVersion), $(uname -m)"
           df -h .
@@ -126,6 +353,12 @@ jobs:
           exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
           echo "${exe}: $(lipo -archs "${exe}")"
           codesign --verify --deep --strict --verbose=2 "${app}"
+          if [ "${NOTARIZED}" = "true" ]; then
+            spctl --assess --type execute -vv "${app}" || { echo "FAIL: Gatekeeper rejects the notarized app" >&2; exit 1; }
+            xcrun stapler validate "${app}" || { echo "FAIL: the notarization ticket is not stapled" >&2; exit 1; }
+          else
+            echo "Ad-hoc signed, not notarized: skipping the Gatekeeper and ticket checks."
+          fi
           log=launch.log
           arch -arm64 "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
           pid=$!
@@ -145,7 +378,7 @@ jobs:
 
   publish:
     name: Publish
-    needs: [build, verify]
+    needs: [build, sign, verify]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-26.04
     timeout-minutes: 15
@@ -160,12 +393,13 @@ jobs:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mac-app
+          name: mac-app-release
 
       - name: Publish this build as a new release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          NOTARIZED: ${{ needs.sign.outputs.notarized }}
         # Each build gets a tag and release of its own, and nothing here replaces a
         # published build. gh uploads to a draft and then publishes it, so the fixed
         # link never reaches a release without its zip. If the reply to that publish
@@ -202,7 +436,14 @@ jobs:
             exit 0
           fi
           mv treasure-island-mac-*.zip "${name}"
+          if [ "${NOTARIZED}" = "true" ]; then
+            signing="Signed and notarized (Developer ID)."
+          else
+            signing="Ad-hoc signed, not notarized: macOS blocks the first launch after a browser download."
+          fi
           notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ).
+
+          ${signing}
 
           The newest build is always at ${site}/latest/download/${name}
           For the first launch, see Build for the Mac in the README."

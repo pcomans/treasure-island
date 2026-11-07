@@ -24653,3 +24653,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Independent three-way comparisons of the cover map and rows, plus the A/B with its negative control.
 - What did not work well: Evidence summaries cut row-detail fields.
 - What the team should change next time: Each release records cover-map cells matching no parent, and zones that touch.
+
+### mac-notarize — 2026-11-07 — Developer ID signing and notarization in the Mac build
+
+- What worked well: Inspecting the owner's downloaded release first settled the entitlements: Godot's ad-hoc export already runs with the hardened runtime and an empty entitlement dictionary, and MoltenVK is linked in statically, so an empty plist and a single top-level signature were justified by the shipped app, not guessed. A local ad-hoc dry run of the signing script caught nothing new but proved the nested-code loop, runtime-flag check and `plutil` JSON parsing on real files.
+- What did not work well: The macOS jobs can't run before the owner adds the secrets, so keychain import, notarytool and stapling are unexercised. `runner.temp` isn't available in job-level `env`, which I first wrote and caught on review; actionlint still flags the pre-existing `ubuntu-26.04` label it doesn't know.
+- What the team should change next time: After the secrets exist, run the workflow by hand on this branch before merging, and read the notary log once even when accepted.
