@@ -115,7 +115,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - OSM's chain-link w1212173468 across the walk isn't built, by rule: the footage runs through its line, and the owner walked through it.
   - The riprap's crest stands lower than the footage shows along the promenade, and Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; both are accepted work, left unchanged by this study.
   - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
-  - Only the first of the lawn's galvanised tubs is built; the rest of the row stands north of z 236, past the close footage's reach.
+  - The Johnson St lot's asphalt reads bluer than the footage's from the road end (frame D4).
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.

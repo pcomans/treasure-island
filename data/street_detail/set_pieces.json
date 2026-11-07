@@ -1982,6 +1982,102 @@
      "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=322 (B6), t=349 (B8)."
     },
     {
+     "id": "promenade_tub_row_1_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-395.31, 223.5],
+     "yaw": 0.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_2",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-397.28, 220.02],
+     "yaw": 1.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_3",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-399.25, 216.54],
+     "yaw": 1.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_4",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-401.22, 213.06],
+     "yaw": 2.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-405.16, 206.09],
+     "yaw": 1.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_2",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-406.64, 203.48],
+     "yaw": 1.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_3",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-408.24, 200.94],
+     "yaw": 2.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_4",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-409.81, 198.38],
+     "yaw": 2.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
      "id": "promenade_canary_palm",
      "kind": "tree",
      "prop": "canary_date_palm",

@@ -168,6 +168,7 @@ const COTTAGE_WHITE := Color(0.93, 0.93, 0.9)
 const COTTAGE_GROOVE := Color(0.7, 0.7, 0.67)
 const COTTAGE_DOOR := Color(0.79, 0.83, 0.84)
 const WATER_BLOCK_RED := Color(0.74, 0.13, 0.09)
+const TUB_STEEL := Color(0.5, 0.52, 0.54)
 const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
 ## The north-west end's tall window, which the footage shows holding the pale sky.
 const COTTAGE_GLASS_PALE := Color(0.5, 0.6, 0.6)
@@ -522,7 +523,8 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "water_block", func(b: Builder) -> void: _water_block(b), Transform3D.IDENTITY, _plastic)
 			_box_shape(result, Vector3(1.94, 0.85, 0.48), Vector3(0.0, 0.425, 0.0))
 		"galvanised_tub":
-			_piece(result, "galvanised_tub", func(b: Builder) -> void: _galvanised_tub(b))
+			var mound := str(params.get("plant", "blades")) == "mound"
+			_piece(result, "galvanised_tub_mound" if mound else "galvanised_tub_blades", func(b: Builder) -> void: _galvanised_tub(b, mound))
 			_box_shape(result, Vector3(0.9, 0.62, 0.9), Vector3(0.0, 0.31, 0.0))
 		"restroom_cottage":
 			var centre := Transform3D(Basis.IDENTITY, -COTTAGE_PLAN_CENTRE)
@@ -1347,29 +1349,32 @@ func _water_block(b: Builder) -> void:
 	b.disc(Vector3(0.0, 0.855, 0.0), Vector3.UP, 0.085, 14, Color(0.05, 0.03, 0.03))
 
 
-## A round ribbed galvanised tub at the lawn's corner by the Mersea promenade, a clump of
-## long bronze blades in it (IMG_0960, t=322 and t=349). The blades fall by a fixed seed.
-func _galvanised_tub(b: Builder) -> void:
+## A round ribbed galvanised tub on the lawn by the Mersea promenade, a clump of long
+## bronze blades in the corner tub, a low dark-green mound in the row beyond it
+## (IMG_0960, t=316-349). The leaves fall by a fixed seed.
+func _galvanised_tub(b: Builder, mound: bool) -> void:
 	var path := PackedVector3Array([Vector3(0, -0.02, 0), Vector3(0, 0.6, 0)])
-	b.tube(path, PackedFloat32Array([0.46, 0.51]), 20, GALVANIZED, CELL_WHITE, false, false)
+	b.tube(path, PackedFloat32Array([0.46, 0.51]), 20, TUB_STEEL, CELL_WHITE, false, false)
 	for y: float in [0.12, 0.26, 0.4, 0.58]:
 		var radius := lerpf(0.46, 0.51, y / 0.6) + 0.012
-		b.tube(PackedVector3Array([Vector3(0, y - 0.015, 0), Vector3(0, y + 0.015, 0)]), PackedFloat32Array([radius, radius]), 20, GALVANIZED * 1.12, CELL_WHITE, false, false)
+		b.tube(PackedVector3Array([Vector3(0, y - 0.015, 0), Vector3(0, y + 0.015, 0)]), PackedFloat32Array([radius, radius]), 20, TUB_STEEL * 1.18, CELL_WHITE, false, false)
 	b.disc(Vector3(0, 0.54, 0), Vector3.UP, 0.5, 20, Color(0.1, 0.08, 0.07))
 	var random := RandomNumberGenerator.new()
-	random.seed = 3127
-	for index in 34:
+	random.seed = 3131 if mound else 3127
+	for index in 170 if mound else 34:
 		var angle := random.randf() * TAU
 		var out := Vector3(cos(angle), 0.0, sin(angle))
 		var side := out.cross(Vector3.UP)
-		var width := random.randf_range(0.02, 0.034)
-		var foot := Vector3(0, 0.52, 0) + out * random.randf_range(0.02, 0.14)
-		var reach := random.randf_range(0.28, 0.62)
-		var rise := random.randf_range(0.5, 1.0)
+		var width := random.randf_range(0.03, 0.05) if mound else random.randf_range(0.02, 0.034)
+		var from_middle := sqrt(random.randf()) * 0.47 if mound else random.randf_range(0.02, 0.14)
+		var foot := Vector3(0, 0.52, 0) + out * from_middle
+		var reach := random.randf_range(0.06, 0.16) if mound else random.randf_range(0.28, 0.62)
+		# A mound's leaves stop at a dome over the tub, the blades arch out past it.
+		var rise := 0.62 * sqrt(maxf(0.05, 1.0 - pow(from_middle / 0.52, 2.0))) * random.randf_range(0.8, 1.05) if mound else random.randf_range(0.5, 1.0)
 		var bend := foot + out * reach * 0.45 + Vector3.UP * rise * 0.8
 		var tip := foot + out * reach + Vector3.UP * rise * random.randf_range(0.7, 1.05)
 		var tone := random.randf_range(0.8, 1.3)
-		var blade := Color(0.2 * tone, 0.11 * tone, 0.09 * tone)
+		var blade := Color(0.09 * tone, 0.13 * tone, 0.08 * tone) if mound else Color(0.2 * tone, 0.11 * tone, 0.09 * tone)
 		var normal := (Vector3.UP - out * 0.6).normalized()
 		for face: float in [1.0, -1.0]:
 			b.quad_face(foot - side * width, foot + side * width, bend + side * width, bend - side * width, blade, normal * face)

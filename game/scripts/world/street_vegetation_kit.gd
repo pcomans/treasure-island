@@ -299,7 +299,7 @@ const CANARY_PALMS := [
 	# The tall old palm on the lawn by the Mersea promenade (owner video, Nov 2026): a
 	# slim dark ringed trunk about 12 m tall, a little bowed, under a small open crown.
 	{"seed": 27, "height": 11.8, "lean": 0.55, "bow": 0.22, "radius_low": 0.33, "radius_top": 0.27, "flare": 0.2, "knob": 1.0, "knob_radius": 0.42, "fronds": 46, "frond": 3.5,
-		"shag": 0.06, "rings": 40, "high": 72.0, "low": -48.0, "arch": 0.36, "droop": 0.62, "width": 0.22, "bark": "canary_ring_bark"},
+		"shag": 0.06, "rings": 40, "high": 72.0, "low": -48.0, "arch": 0.36, "droop": 0.62, "width": 0.22, "impostor_forward": 0.7, "bark": "canary_ring_bark"},
 ]
 ## Two old wind-shaped cypresses (Building 1 grounds, Sep 2025 and Jul 2023),
 ## a young conical one (the Waterfront Plaza, Sep 2025) and two smaller young
@@ -4121,7 +4121,7 @@ func impostor_mesh(prop: String, variant: int, image: Texture2D = null, high_ima
 	if str(PROPS[prop].form) in ["fan_palm", "canary_palm"]:
 		var bark := Surf.new()
 		var shade := func(_h: float) -> Color: return Color(0.9, 0.9, 0.9)
-		var wood := "fan_palm_bark" if prop == "mexican_fan_palm" else "canary_bark"
+		var wood := "fan_palm_bark" if prop == "mexican_fan_palm" else str((tree.params as Dictionary).get("bark", "canary_bark"))
 		_palm_trunk(bark, tree.shape, 4, 5, tree.radius, FAN_BARK_M if prop == "mexican_fan_palm" else CANARY_BARK_M, 0.0, shade)
 		if prop == "canary_date_palm":
 			var knob: Dictionary = tree.knob
