@@ -4,7 +4,7 @@
   "Tree crowns read from the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, May 2026 z19 tiles): [x, z, crown width in metres], world metres, +X east, +Z south. Production inference, not survey data: crowns of dark, textured canopy on the land, split at the peaks of a distance transform; positions are good to about 5 m (the imagery sits 3-6 m off OSM in places), and a clump may be several trees or one.",
   "Audited by eye against the same aerial: dark roofs, a tank, asphalt and bare ground the mask read as crowns are gone, and sparse and bright crowns it missed are added by hand (the mask finds dark canopy only), so a clump here is one or several trees as seen.",
   "Groups name the areas a street-detail canopy rule plants (tools/config/street-detail-zones.json); species are the rules' mixes, not read from the aerial. Round tanks, ponds and the zones planted by their own rules are left out. fourth_street_lot_palms is traced palm by palm.",
-  "The thirteenth_street line is the tall hedge round the Aracely Cafe patio at 401 13th Street, read from the aerial (01-satellite-b33, undated) and Street View Mar 2025 (panos aTtd and 4BjM; the 13th Street end): along the sidewalk, round its east end and back up the entry path. The school_lawn lines are the low clipped hedges on the lawn in front of the east wing (Street View Mar 2025, pano gWJc). The school_band and school_frontage lines are the shrub runs under the former school's east wing and 13th Street frontage, read from Street View Mar 2025 panos gWJc and 6UrJ.",
+  "The thirteenth_street line is the tall hedge round the Aracely Cafe patio at 401 13th Street, read from the aerial (01-satellite-b33, undated) and Street View Mar 2025 (panos aTtd and 4BjM; the 13th Street end): along the sidewalk, round its east end and back up the entry path. The school_lawn lines are the low clipped hedges on the lawn in front of the east wing (Street View Mar 2025, pano gWJc). The school_band_e19, e20 and e21 lines are the shrub runs under the former school's east wing, each read from its wall in Street View Mar 2025 pano gWJc; the school_frontage_hedge lines are the clipped hedge under the e15 windows in pano 6UrJ.",
   "Hedges: lines 1.5 m out from the walls where dark foliage runs along them in the same aerial, 5 m or more long, about two runs in five kept (the rest of what the aerial shows there is yard shrubs) and opened every 7 m or so: the data does not place the unit entries, which a hedge must not cross.",
   "fourth_street_lot_palms is traced by hand on the 2026-05-26 aerial (z19), one point per young palm's crown in the lot's islands; the mask misses palms that small. One residential hedge, the first line, [-282.2, -660.4] to [-281.8, -652] at the Mariner units, is traced by hand from Street View Mar 2025 (pano j3ugQSzJZtl9lpbb5i58bQ, heading 50, species pass crop h1) and the aerial; the rest are detected.",
   "Pins: a crown within reach_m of a pin keeps the species a dated photo names; the crown's own position and width still come from the aerial.",
@@ -1023,19 +1023,11 @@
    [[-206.3, -481.6], [-198.9, -485.6]]
   ],
   "school_band_e20": [
-   [[-204.1, -476.8], [-205.7, -479.8]]
+   [[-204.3, -477.1], [-205.5, -479.4]]
   ],
   "school_frontage_hedge": [
    [[-231.9, -467.8], [-228.1, -469.8]],
    [[-227.8, -470.0], [-225.0, -471.4]]
-  ],
-  "school_frontage_mounds": [
-   [[-255.8, -455.0], [-253.5, -456.2]],
-   [[-248.4, -458.9], [-246.1, -460.1]],
-   [[-234.8, -466.2], [-232.5, -467.4]]
-  ],
-  "school_frontage_low": [
-   [[-236.6, -458.4], [-232.9, -460.4]]
   ]
  }
 }

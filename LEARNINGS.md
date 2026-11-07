@@ -1171,3 +1171,7 @@ On 2026-11-06 the Aracely mural's disc chain had been composed from one matched 
 ## A dark shape on a card surface may be the core poking through
 
 On 2026-11-07 hard-edged wedges hung down the Aracely hedge, and I reported them as tree shadows because they survived a neutral-light render, though that switch keeps the sun's direction. The reviewer read them correctly as a layer showing through: the hedge core swells with height by its `lobes` and `bulge` terms, while the leaf cards sit at a fixed lateral, so wherever the swell passed 1.03 of the half-depth the core came out in front, wide at the top and narrowing down. Check a suspect by the shapes that made it: compare the two surfaces' offsets before naming it a shadow, and keep any core inside the layer that clothes it.
+
+## Compare every face a shared colour touches
+
+On 2026-11-07 a note to turn a cream corner olive went onto the gym's whole `fascia_edges`, and the cafe's upper tier, white in the entrance photos, came back khaki at 204,203,178 against 238-247. The corner seen from the west and the tier seen from the east are the same surface. Before editing a shared material, list the faces it covers and the photos that show each, and take a fixed-pose sample of each after the render.

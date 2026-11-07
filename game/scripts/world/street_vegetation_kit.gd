@@ -433,6 +433,9 @@ const PITTOSPORUMS := [
 	{"seed": 611, "shape": "mound", "cell": "pittosporum", "height": 1.0, "width": 1.5, "lobes": 3},
 	{"seed": 612, "shape": "mound", "cell": "pittosporum", "height": 1.25, "width": 2.0, "lobes": 4},
 	{"seed": 613, "shape": "mound", "cell": "pittosporum", "height": 1.5, "width": 2.5, "lobes": 5},
+	# Darker clipped mounds under the school's 13th Street eaves (Street View Mar 2025, pano 6UrJ), one upright, one low.
+	{"seed": 614, "shape": "mound", "cell": "dark", "height": 1.1, "width": 1.5, "lobes": 3, "leaf": "hedge_clump_foliage"},
+	{"seed": 615, "shape": "mound", "cell": "dark", "height": 0.7, "width": 1.8, "lobes": 4, "leaf": "hedge_clump_foliage"},
 ]
 const RED_TIPS := [
 	# Slender, to 1.5 m, dull red new growth at the shoot tips only (species unresolved).
@@ -468,14 +471,14 @@ const HEDGES := [
 	# Job Corps (h2, 2025 gallery): a solid block 1.2-1.5 m tall of small glossy dark leaves with white flowers, down to the ground.
 	{"seed": 802, "style": "box", "height": 1.14, "depth": 0.76, "canopy_base": 0.0, "lobes": 0.04, "surface": "glossy_hedge_leaves", "tile": 1.0, "mats": "glossy_mat"},
 	# 13th Street (Street View Mar 2025): a bright yellow-green wall of fine leaves about twice a person's height, 2.5-3 m deep, shaggy rather than clipped.
-	{"seed": 803, "style": "box", "height": 3.2, "depth": 2.5, "canopy_base": 0.0, "lobes": 0.0, "surface": "bright_hedge_leaves", "tile": 1.2, "clump_m": 0.56, "relief": 0.2, "core_inset": 0.42, "core_shade": 0.42, "runs": [[1.0, "bright"]]},
-	# The school's east wing (Street View Mar 2025, pano gWJc): one clipped band under the windows, its colours in the order the photo shows them, left wing then right.
-	{"seed": 804, "height": 0.8, "depth": 1.05, "clump_m": 0.42, "relief": 0.05, "core": false, "runs": [[3.9, "burgundy"], [1.0, "green"], [0.6, ""], [3.1, "gold"], [0.5, ""], [2.0, "green"]]},
-	{"seed": 805, "height": 0.8, "depth": 1.05, "clump_m": 0.42, "relief": 0.05, "core": false, "runs": [[2.2, "green"], [1.0, "dark"], [0.5, ""], [3.2, "gold"], [0.3, ""], [1.4, "burgundy"]]},
-	# The school's 13th Street frontage (Street View Mar 2025, pano 6UrJ): a low clipped hedge, dark rounded shrubs, a low mixed mass.
-	{"seed": 806, "height": 1.0, "depth": 1.0, "clump_m": 0.4, "relief": 0.03, "core": false, "runs": [[1.0, "green"]]},
-	{"seed": 807, "height": 0.92, "depth": 1.3, "clump_m": 0.5, "relief": 0.14, "core": false, "runs": [[1.0, "dark"]]},
-	{"seed": 808, "height": 0.62, "depth": 1.2, "clump_m": 0.42, "relief": 0.1, "core": false, "runs": [[1.0, "dark"]]},
+	{"seed": 803, "style": "box", "height": 3.2, "depth": 2.5, "canopy_base": 0.0, "lobes": 0.0, "surface": "bright_hedge_leaves", "tile": 1.2, "clump_m": 0.42, "relief": 0.15, "core_inset": 0.36, "core_shade": 0.3, "runs": [[1.0, "bright"]]},
+	# The school's east wing (Street View Mar 2025, pano gWJc): one clipped band under the windows, in the photo's order, left wing then right. A run is [share, cell, its height].
+	{"seed": 804, "height": 0.8, "depth": 1.05, "clump_m": 0.4, "relief": 0.09, "core": false, "runs": [[3.9, "burgundy", 1.05], [1.0, "green", 0.85], [0.6, ""], [3.1, "gold", 0.85], [0.5, ""], [2.0, "green", 1.2]]},
+	{"seed": 805, "height": 0.8, "depth": 1.05, "clump_m": 0.4, "relief": 0.09, "core": false, "runs": [[2.2, "green", 0.9], [1.0, "dark", 1.0], [0.5, ""], [3.2, "gold", 1.05], [0.3, ""], [1.4, "burgundy", 1.2]]},
+	# The school's 13th Street frontage (Street View Mar 2025, pano 6UrJ): a low clipped hedge.
+	{"seed": 806, "height": 1.0, "depth": 1.0, "clump_m": 0.36, "relief": 0.03, "core": false, "runs": [[1.0, "green"]]},
+	# The dark clipped shrubs at the foot of the east wing's sign wall (pano gWJc).
+	{"seed": 807, "height": 0.8, "depth": 0.85, "clump_m": 0.4, "relief": 0.08, "core": false, "runs": [[1.0, "dark"]]},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -3279,7 +3282,8 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 	rng.seed = int(p.seed)
 	var height := float(p.height)
 	var radius := float(p.width) * 0.5
-	var cell: Rect2 = SHRUB_CELLS[str(p.cell)]
+	var leaf_material := str(p.get("leaf", "shrub_foliage"))
+	var cell: Rect2 = SHRUB_CELLS[str(p.cell)] if leaf_material == "shrub_foliage" else HEDGE_CLUMP_CELLS[str(p.cell)]
 	var sway_top := SHRUB_SWAY * height
 	var phase := rng.randf() * TAU
 	var heart := Vector3(0.0, height * 0.35, 0.0)
@@ -3405,7 +3409,7 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 			# A dark floor of the same foliage hides the hollow inside from low views.
 			_dish(leaves, IDENTITY_FRAME, cell, 0.05, radius * 0.75, 0.04, Color(0.3, 0.3, 0.3), phase)
 		_emit_cards(leaves, cards, lod, height, sway_top)
-		leaves.commit(mesh, material("shrub_foliage"))
+		leaves.commit(mesh, material(leaf_material))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": float(p.height), "capsules": []}
 
@@ -3524,8 +3528,7 @@ const HEDGE_BOX_ROWS := [[0.45, 0.95, 1.0, 0.1], [0.92, 0.93, 0.7, 0.7], [1.03, 
 ## one clump: [across, up] from straight out, the first facing out and the rest leaning
 ## round it, so the clump is a ball of leaves.
 const HEDGE_CLUMP_CELLS := {
-	"burgundy": Rect2(0.0, 0.0, 0.25, 0.5), "gold": Rect2(0.25, 0.0, 0.25, 0.5), "green": Rect2(0.5, 0.0, 0.25, 0.5), "dark": Rect2(0.75, 0.0, 0.25, 0.5),
-	"bright": Rect2(0.0, 0.5, 0.25, 0.5),
+	"burgundy": Rect2(0.0, 0.0, 0.2, 1.0), "gold": Rect2(0.2, 0.0, 0.2, 1.0), "green": Rect2(0.4, 0.0, 0.2, 1.0), "dark": Rect2(0.6, 0.0, 0.2, 1.0), "bright": Rect2(0.8, 0.0, 0.2, 1.0),
 }
 const HEDGE_CLUMP_CARDS := [Vector2(0.0, 0.0), Vector2(0.95, 0.1), Vector2(-0.95, 0.1), Vector2(0.1, 0.95), Vector2(-0.1, -0.8)]
 ## A hedge's core under its mats reads as the soft shade between them; alone, at the
@@ -3728,38 +3731,49 @@ func _hedge_clumps(surfs: Dictionary, p: Dictionary, points: PackedVector3Array,
 	var total := lengths[lengths.size() - 1]
 	var grow := float([1.0, 1.35, 2.0][lod])
 	var step := float(p.clump_m) * grow
-	var top := float(p.height)
 	var d := float(p.depth) * 0.5
 	var relief := float(p.relief)
 	var count := maxi(1, roundi(total / step))
-	var rows := maxi(1, roundi(top / step))
 	var across := maxi(1, roundi(2.0 * d / step))
 	var per_clump: int = [5, 3, 2][lod]
 	var phases := Vector2(_hash01(seed, -1, 0) * TAU, _hash01(seed, -2, 0) * TAU)
+	var bend_from := Vector3.ZERO
 	for g in count + 1:
 		var station := total * float(g) / float(count)
 		if station < from_m - 0.001 or (station > to_m - 0.001 and to_m < total - 0.001):
 			continue
 		var run := _hedge_run(p, station / total)
-		if run == "":
+		if str(run[1]) == "":
 			continue
-		var cell: Rect2 = HEDGE_CLUMP_CELLS[run]
+		var cell: Rect2 = HEDGE_CLUMP_CELLS[str(run[1])]
+		var top := float(p.height) * (float(run[2]) if run.size() > 2 else 1.0)
+		var rows := maxi(1, roundi(top / step))
 		var frame := _hedge_frame(points, lengths, station)
 		var right: Vector3 = frame.right
 		var tangent: Vector3 = frame.tangent
 		var ground: Vector3 = frame.position
-		for flank: float in [1.0, -1.0]:
-			for row in rows:
-				var k := row * 2 + (1 if flank > 0.0 else 0)
-				var rise := (float(row) + 0.5) / float(rows)
-				var r := step * lerpf(0.55, 0.85, _hash01(seed, g, k))
-				var billow := 0.6 * sin(station * 0.9 + rise * 5.0 + phases.x) + 0.4 * sin(station * 2.3 - rise * 3.0 + phases.y)
-				var lateral := d - r * 0.6 + relief * billow + (_hash01(seed, g, k + 40) - 0.5) * relief
-				var height := lerpf(0.12, top - 0.05, rise) + (_hash01(seed, g, k + 80) - 0.5) * step * 0.5
-				var along := (_hash01(seed, g, k + 120) - 0.5) * step * 0.6
-				var out := (right * flank + Vector3.UP * lerpf(-0.2, 0.35, rise)).normalized()
-				_hedge_clump(cards, ground + right * (flank * lateral) + tangent * along + Vector3.UP * height, out, tangent, r, cell,
-					lerpf(0.8, 1.05, _hash01(seed, g, k + 160)) * lerpf(0.78, 1.0, rise), per_clump, top, seed, g, k)
+		# Round a bend the outer side stretches: extra fans of clumps keep it clothed.
+		var fans: Array[Vector3] = [right]
+		if bend_from != Vector3.ZERO and bend_from.angle_to(right) > 0.2:
+			var extra := ceili(bend_from.angle_to(right) * d / step)
+			for e in extra:
+				fans.append(bend_from.slerp(right, (float(e) + 1.0) / (float(extra) + 1.0)))
+		bend_from = right
+		for fan in fans.size():
+			var side: Vector3 = fans[fan]
+			var sideways := Vector3.UP.cross(side)
+			for flank: float in [1.0, -1.0]:
+				for row in rows:
+					var k := fan * 64 + row * 2 + (1 if flank > 0.0 else 0)
+					var rise := (float(row) + 0.5) / float(rows)
+					var r := step * lerpf(0.55, 0.85, _hash01(seed, g, k))
+					var billow := 0.6 * sin(station * 0.9 + rise * 5.0 + phases.x) + 0.4 * sin(station * 2.3 - rise * 3.0 + phases.y)
+					var lateral := d - r * 0.6 + relief * billow + (_hash01(seed, g, k + 40) - 0.5) * relief
+					var height := lerpf(0.12, top - 0.05, rise) + (_hash01(seed, g, k + 80) - 0.5) * step * 0.5
+					var along := (_hash01(seed, g, k + 120) - 0.5) * step * 0.6
+					var out := (side * flank + Vector3.UP * lerpf(-0.2, 0.35, rise)).normalized()
+					_hedge_clump(cards, ground + side * (flank * lateral) + sideways * along + Vector3.UP * height, out, sideways, r, cell,
+						lerpf(0.8, 1.05, _hash01(seed, g, k + 160)) * lerpf(0.78, 1.0, rise), per_clump, top, seed, g, k)
 		for i in across:
 			var k := 400 + i
 			var x := (2.0 * (float(i) + 0.5) / float(across) - 1.0) * (d - step * 0.3)
@@ -3782,8 +3796,8 @@ func _hedge_clumps(surfs: Dictionary, p: Dictionary, points: PackedVector3Array,
 						lerpf(0.8, 1.05, _hash01(seed, g, k + 40)) * lerpf(0.78, 1.0, rise), per_clump, top, seed, g, k)
 
 
-## The cell of a clumped hedge at a share of its length: an empty string in a gap.
-func _hedge_run(p: Dictionary, share: float) -> String:
+## The run of a clumped hedge at a share of its length: [share, cell, height]; a gap's cell is empty.
+func _hedge_run(p: Dictionary, share: float) -> Array:
 	var runs: Array = p.runs
 	var whole := 0.0
 	for run: Array in runs:
@@ -3793,8 +3807,8 @@ func _hedge_run(p: Dictionary, share: float) -> String:
 	for run: Array in runs:
 		reached += float(run[0])
 		if at <= reached + 0.001:
-			return str(run[1])
-	return str(runs[runs.size() - 1][1])
+			return run
+	return runs[runs.size() - 1]
 
 
 ## One clump of a hedge: cards round its heart at `centre`, out along `out`, leaning
@@ -4339,7 +4353,7 @@ func material(key: String) -> Material:
 			# No edge fade: walking along a hedge sees its mats at a grazing angle.
 			made = _foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82)
 		"hedge_clump_foliage":
-			made = _foliage("clipped_band_atlas.png", Color(1.0, 1.0, 1.0), Color(0.1, 0.11, 0.03), Vector2(2048.0, 1024.0), 0.12, 0.82)
+			made = _foliage("clipped_band_atlas.png", Color(1.0, 1.0, 1.0), Color(0.1, 0.11, 0.03), Vector2(2560.0, 512.0), 0.12, 0.82)
 		"agave_foliage":
 			made = _crown_foliage("agave_leaf.png", Color(0.76, 0.8, 0.62), Color(0.08, 0.1, 0.04), Vector2(256.0, 1024.0), 0.12, 0.82, SHRUB_EDGE_FADE)
 		"hedge_leaves":

@@ -2146,8 +2146,8 @@
         "under": "slate_soffit",
         "fascia": "slate_fascia",
         "fascia_edges": {
-          "5": "fascia_olive",
-          "8": "fascia_olive"
+          "5": "fascia_white",
+          "8": "fascia_white"
         }
       },
       "roof_material": "roof_dark",
@@ -2166,7 +2166,7 @@
     "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference.",
     "wholeunit_ends": "The ends under the gym overhang differ on purpose, following sideD_240: at the NW end the photo shows a lower pale porch/hall under the fascia, so hall_nw fills the 1.25 m strip at hall height; at the SE end the photo shows an open dark pocket under the fascia (equipment, fence), so that strip stays open ground.",
     "reuse": "Reuse (2026-11-06): stays on midrise_family with the l2fix-midrise-20261103 frontage reading adapted (columned walk, blue spandrels, bay, porch; e9 corrected to frosted glazing, its ribbon windows on unphotographed faces not taken). New opt-in family fields wall_ring, eaves, parts, lights, door glazing, fascia_edges and palette textures; other instances build as before.",
-    "setting": "The living-wall chain, heaters, furniture, hedge and beds are read off the Aug 2026 and Jan 2026 patio photos and the Mar 2025 panos; the shrub bands under the east wing and frontage run in the photos' order; furniture placing is production_inference. Palms in the beds are not drawn: the kit's palms are street trees, and agaves and flax carry the spiky form. The sidewalk beside the forecourt and the walks' ramps up its back slope are visual pads over the kerb's heights in the generated world; regenerate them if that kerb moves. The east lot's lawn pad holds the lawn recipe's dry patch off a lawn the photo shows green.",
+    "setting": "The living-wall chain, heaters, furniture, hedge and beds are read off the Aug 2026 and Jan 2026 patio photos and the Mar 2025 panos; the shrub bands under the east wing and frontage run in the photos' order; furniture placing is production_inference. Palms in the beds are not drawn: the kit's palms are street trees, and agaves and flax carry the spiky form. The sidewalk beside the forecourt and the walks' ramp pads up its back slope are visual pads set to the kerb's heights in the generated world: recheck them whenever that kerb changes. The east lot's lawn pad holds the lawn recipe's dry patch off a lawn the photo shows green.",
     "references_filed": "r133351-spec-gWJc (Mar 2025, pano gWJcXXKQ03dQoyUTMI1ZgQ, 37.8279144,-122.3730815) shows the EAST end e19-e21, not the west part as filed in c-set-refs-20261021/reference-note.md."
   },
   "face_key": "overlap",
@@ -2250,6 +2250,11 @@
         "6": "soffit_dark",
         "7": "soffit_dark",
         "8": "soffit_dark"
+      },
+      "edge_materials": {
+        "6": {
+          "fascia_pale": "fascia_olive"
+        }
       },
       "end_material": "fascia_pale"
     },
@@ -4154,156 +4159,174 @@
       "poly": [
         [
           -261.25,
-          -423.1
+          -423.1,
+          -0.009
         ],
         [
           -257.2,
-          -424.5
+          -424.5,
+          -0.019
         ],
         [
           -256.05,
-          -425.7
+          -425.7,
+          -0.02
         ],
         [
           -256.05,
-          -428.1
+          -428.1,
+          -0.013
         ],
         [
           -248.0,
-          -432.45
+          -432.45,
+          -0.028
         ],
         [
-          -246.2,
-          -433.42
+          -245.14,
+          -433.94,
+          -0.033
         ],
         [
-          -246.25,
-          -435.27
+          -245.97,
+          -435.48,
+          -0.027
         ],
         [
-          -248.05,
-          -434.3
+          -248.08,
+          -434.35,
+          -0.023
         ],
         [
-          -252.15,
-          -432.07
+          -252.18,
+          -432.13,
+          -0.015
         ],
         [
-          -256.05,
-          -429.97
+          -256.08,
+          -430.02,
+          -0.008
         ],
         [
-          -258.15,
-          -428.78
+          -258.16,
+          -428.82,
+          -0.004
         ],
         [
-          -259.6,
-          -427.62
+          -259.62,
+          -427.66,
+          -0.003
         ],
         [
-          -260.5,
-          -426.4
+          -260.56,
+          -426.43,
+          -0.003
         ],
         [
-          -261.25,
-          -424.4
+          -261.3,
+          -424.42,
+          -0.006
+        ],
+        [
+          -261.44,
+          -423.11,
+          -0.009
         ]
       ],
-      "material": "site_concrete",
-      "lift": 0.29
+      "material": "site_concrete"
     },
     {
       "kind": "pad",
       "poly": [
         [
-          -261.31,
-          -423.04,
-          0.001
+          -245.97,
+          -435.48,
+          -0.027
         ],
         [
-          -261.16,
-          -424.36,
-          0.004
+          -248.08,
+          -434.35,
+          -0.023
         ],
         [
-          -260.43,
-          -426.35,
-          0.007
+          -252.18,
+          -432.13,
+          -0.015
         ],
         [
-          -259.51,
-          -427.55,
-          0.007
+          -256.08,
+          -430.02,
+          -0.008
         ],
         [
-          -258.07,
-          -428.7,
-          0.006
+          -258.16,
+          -428.82,
+          -0.004
         ],
         [
-          -256.0,
-          -429.89,
-          0.002
+          -259.62,
+          -427.66,
+          -0.003
         ],
         [
-          -252.1,
-          -432.0,
-          -0.005
+          -260.56,
+          -426.43,
+          -0.003
         ],
         [
-          -248.0,
-          -434.22,
-          -0.013
+          -261.3,
+          -424.42,
+          -0.006
         ],
         [
-          -246.2,
-          -435.2,
-          -0.014
-        ],
-        [
-          -246.65,
-          -435.95,
-          -0.189
-        ],
-        [
-          -248.45,
-          -434.98,
-          -0.189
-        ],
-        [
-          -252.55,
-          -432.75,
-          -0.189
-        ],
-        [
-          -256.45,
-          -430.65,
-          -0.189
-        ],
-        [
-          -258.65,
-          -429.45,
-          -0.189
-        ],
-        [
-          -260.2,
-          -428.25,
-          -0.189
-        ],
-        [
-          -261.25,
-          -426.85,
-          -0.189
-        ],
-        [
-          -262.0,
-          -424.7,
-          -0.189
+          -261.44,
+          -423.11,
+          -0.009
         ],
         [
           -262.15,
           -423.5,
-          -0.189
+          -0.183
+        ],
+        [
+          -262.0,
+          -424.7,
+          -0.18
+        ],
+        [
+          -261.25,
+          -426.85,
+          -0.177
+        ],
+        [
+          -260.2,
+          -428.25,
+          -0.177
+        ],
+        [
+          -258.65,
+          -429.45,
+          -0.178
+        ],
+        [
+          -256.45,
+          -430.65,
+          -0.182
+        ],
+        [
+          -252.55,
+          -432.75,
+          -0.19
+        ],
+        [
+          -248.45,
+          -434.98,
+          -0.197
+        ],
+        [
+          -246.28,
+          -436.05,
+          -0.201
         ]
       ],
       "material": "site_concrete"
@@ -4688,14 +4711,14 @@
       "kind": "pad",
       "poly": [
         [
-          -223.87,
-          -447.14,
-          -0.062
+          -223.92,
+          -447.22,
+          -0.054
         ],
         [
-          -222.65,
-          -448.02,
-          -0.062
+          -222.59,
+          -447.94,
+          -0.054
         ],
         [
           -223.17,
@@ -4738,14 +4761,14 @@
       "kind": "pad",
       "poly": [
         [
-          -233.76,
-          -441.81,
-          -0.062
+          -233.81,
+          -441.88,
+          -0.054
         ],
         [
-          -232.8,
-          -442.53,
-          -0.062
+          -232.75,
+          -442.46,
+          -0.054
         ],
         [
           -233.34,
@@ -4784,14 +4807,14 @@
       "kind": "pad",
       "poly": [
         [
-          -188.05,
-          -466.69,
-          0.088
+          -188.03,
+          -466.65,
+          0.096
         ],
         [
-          -185.93,
-          -467.81,
-          0.088
+          -185.92,
+          -467.79,
+          0.096
         ],
         [
           -186.35,
@@ -4830,14 +4853,14 @@
       "kind": "pad",
       "poly": [
         [
-          -195.19,
-          -462.75,
-          0.098
+          -195.2,
+          -462.77,
+          0.106
         ],
         [
-          -194.09,
-          -463.45,
-          0.098
+          -194.05,
+          -463.39,
+          0.106
         ],
         [
           -194.57,
@@ -4877,7 +4900,7 @@
         ]
       ],
       "material": "site_lawn",
-      "lift": 0.045
+      "lift": 0.052
     },
     {
       "kind": "pad",
@@ -4952,7 +4975,213 @@
         ]
       ],
       "material": "site_lawn",
-      "lift": 0.045
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -186.7,
+          -468.4
+        ],
+        [
+          -198.9,
+          -491.2
+        ],
+        [
+          -193.6,
+          -490.2
+        ],
+        [
+          -185.4,
+          -474.4
+        ],
+        [
+          -182.8,
+          -469.8
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -323.0,
+          -436.0
+        ],
+        [
+          -323.21,
+          -437.28
+        ],
+        [
+          -322.4,
+          -438.49
+        ],
+        [
+          -322.57,
+          -439.77
+        ],
+        [
+          -322.57,
+          -441.04
+        ],
+        [
+          -322.5,
+          -442.3
+        ],
+        [
+          -321.06,
+          -442.64
+        ],
+        [
+          -319.86,
+          -443.45
+        ],
+        [
+          -318.83,
+          -444.59
+        ],
+        [
+          -317.16,
+          -444.48
+        ],
+        [
+          -316.28,
+          -445.91
+        ],
+        [
+          -315.0,
+          -446.55
+        ],
+        [
+          -313.7,
+          -447.18
+        ],
+        [
+          -312.32,
+          -447.62
+        ],
+        [
+          -311.0,
+          -448.2
+        ],
+        [
+          -309.45,
+          -447.89
+        ],
+        [
+          -308.06,
+          -447.23
+        ],
+        [
+          -306.79,
+          -446.31
+        ],
+        [
+          -305.55,
+          -445.31
+        ],
+        [
+          -304.0,
+          -445.0
+        ],
+        [
+          -304.23,
+          -443.62
+        ],
+        [
+          -303.42,
+          -442.36
+        ],
+        [
+          -303.88,
+          -440.95
+        ],
+        [
+          -303.05,
+          -439.7
+        ],
+        [
+          -303.58,
+          -438.28
+        ],
+        [
+          -303.0,
+          -437.0
+        ],
+        [
+          -304.2,
+          -436.3
+        ],
+        [
+          -304.78,
+          -435.09
+        ],
+        [
+          -305.85,
+          -434.29
+        ],
+        [
+          -306.55,
+          -433.18
+        ],
+        [
+          -306.8,
+          -431.7
+        ],
+        [
+          -308.0,
+          -431.0
+        ],
+        [
+          -309.33,
+          -430.88
+        ],
+        [
+          -310.67,
+          -430.89
+        ],
+        [
+          -312.0,
+          -431.0
+        ],
+        [
+          -313.33,
+          -430.99
+        ],
+        [
+          -314.67,
+          -430.88
+        ],
+        [
+          -316.0,
+          -431.0
+        ],
+        [
+          -317.21,
+          -431.78
+        ],
+        [
+          -318.44,
+          -432.51
+        ],
+        [
+          -319.3,
+          -433.79
+        ],
+        [
+          -320.95,
+          -433.94
+        ],
+        [
+          -322.05,
+          -434.87
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
     },
     {
       "kind": "set",

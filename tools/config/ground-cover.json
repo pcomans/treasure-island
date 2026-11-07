@@ -237,7 +237,7 @@
    "id": "school_west_lawn",
    "channel": "lawn",
    "surfaces": ["land_ground", "major_area_landuse"],
-   "within_xz": [[-331, -433], [-327, -441], [-316, -446], [-310, -449.5], [-303, -436], [-296, -432], [-290, -428], [-289, -417], [-300, -414], [-318, -418], [-331, -423]],
+   "within_xz": [[-333, -433], [-331, -446], [-318, -453], [-308, -456], [-303, -436], [-296, -432], [-290, -428], [-289, -417], [-300, -414], [-318, -418], [-333, -423]],
    "feather_m": 2.5,
    "basis": "production_inference",
    "reason": "The lawns either side of the drive beside the gym are mown green.",

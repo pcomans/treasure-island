@@ -2878,14 +2878,20 @@ static func _eave(ctx: Ctx, spec: Variant) -> void:
 	# Fascia section by section, each swept along the run.
 	var top_in := float(profile[profile.size() - 1][0])
 	var bottom_in := float(profile[0][0])
+	# Opt-in "edge_materials": {"<edge>": {"<profile material>": material}} recolours one side of the run.
+	var edge_materials: Dictionary = (spec as Dictionary).get("edge_materials", {})
+	for key: Variant in edge_materials:
+		if not str(key).is_valid_int() or not run.has(float(str(key))) or not edge_materials[key] is Dictionary:
+			ctx.errors.append("eave edge_materials need edges of the run and a material map")
+			return
 	for p in range(1, profile.size()):
 		var a: Array = profile[p - 1]
 		var b: Array = profile[p]
 		var material := str(b[2]) if b.size() > 2 else "coping"
-		var bucket := ctx.bucket("support", material)
 		var rise := float(b[1]) - float(a[1])
 		var move := float(b[0]) - float(a[0])
 		for i in run.size():
+			var bucket := ctx.bucket("support", str((edge_materials.get(str(int(run[i])), {}) as Dictionary).get(material, material)))
 			var n: Vector2 = (ctx.edges[int(run[i])] as Edge).n
 			var a0 := outer[i] - miter[i] * float(a[0])
 			var a1 := outer[i + 1] - miter[i + 1] * float(a[0])
@@ -3261,14 +3267,28 @@ static func _part_lights(ctx: Ctx, spec: Dictionary) -> void:
 			# A small glass globe under its socket.
 			var q := Vector2(here.x, here.z)
 			_plan_box(wire, q - Vector2(0.012, 0.0), q + Vector2(0.012, 0.0), Vector2(0.0, 1.0), here.y - 0.05, here.y, 0.012)
-			var globe := here + Vector3.DOWN * 0.085
-			var rim: Array[Vector3] = [Vector3(0.04, 0.0, 0.0), Vector3(0.0, 0.0, 0.04), Vector3(-0.04, 0.0, 0.0), Vector3(0.0, 0.0, -0.04)]
-			for k in 4:
-				var near := rim[k]
-				var far := rim[(k + 1) % 4]
-				bulbs.tri(globe + Vector3.UP * 0.04, globe + near, globe + far, near + far + Vector3.UP * 0.04)
-				bulbs.tri(globe + Vector3.DOWN * 0.04, globe + near, globe + far, near + far + Vector3.DOWN * 0.04)
+			_globe(bulbs, here + Vector3.DOWN * 0.095, 0.045)
 		previous = here
+
+
+## A small round lamp, eight sides by four bands.
+static func _globe(bucket: Bucket, centre: Vector3, r: float) -> void:
+	var bands: Array[Vector2] = [Vector2(0.0, -1.0), Vector2(0.71, -0.71), Vector2(1.0, 0.0), Vector2(0.71, 0.71), Vector2(0.0, 1.0)]
+	for j in 4:
+		for k in 8:
+			var a := Vector2(cos(TAU * k / 8.0), sin(TAU * k / 8.0))
+			var b := Vector2(cos(TAU * (k + 1) / 8.0), sin(TAU * (k + 1) / 8.0))
+			var low := bands[j]
+			var high := bands[j + 1]
+			var p0 := centre + Vector3(a.x * low.x, low.y, a.y * low.x) * r
+			var p1 := centre + Vector3(b.x * low.x, low.y, b.y * low.x) * r
+			var p2 := centre + Vector3(b.x * high.x, high.y, b.y * high.x) * r
+			var p3 := centre + Vector3(a.x * high.x, high.y, a.y * high.x) * r
+			var out := p0 + p1 + p2 + p3 - centre * 4.0
+			if j > 0:
+				bucket.tri(p0, p1, p2, out)
+			if j < 3:
+				bucket.tri(p0, p2, p3, out)
 
 
 ## Solid fence along `path`: posts in `post_material` every `post_every`, `h` tall.
@@ -3413,7 +3433,7 @@ static func _make_materials(ctx: Ctx) -> void:
 			return
 		var texture_path := str(entry.get("texture", ""))
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
-		if not texture_path.is_empty() or entry.has("emission"):
+		if not texture_path.is_empty() or entry.has("emission") or entry.has("specular"):
 			cache_key += "|%s|%s|%s|%s|%s" % [texture_path, entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5)]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()

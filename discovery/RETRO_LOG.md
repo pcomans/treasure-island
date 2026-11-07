@@ -24299,3 +24299,21 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: comparing rows, planting blocks, a rasterised plan and cover-map pixels against the base settled the shared-damage question quickly.
 - What did not work well: an ordered vertex diff showed an alarming island-wide change that was only retriangulation.
 - What the team should change next time: authors should report chunk-level churn and its cause in the handoff, not only row counts.
+
+### aracely-visual-review, round 3 — 2026-11-07 — independent visual review of r133351 at 14d77ca5
+
+- What worked well: renders from the exact commit removed staleness, and fixed-pose samples caught an unlisted regression.
+- What did not work well: a fix aimed at one face changed a shared material.
+- What the team should change next time: after any shared-colour edit, compare every face it touches with its photo.
+
+### aracely-code-review, round 2 — 2026-11-07 — independent code review of r133351 at 14d77ca5
+
+- What worked well: sampling pad heights against the kerb turned the merge question into measured margins.
+- What did not work well: the planting rule can't be settled when each line's evidence is one shared sentence.
+- What the team should change next time: give each data line its own photo reference.
+
+### aracely-art, round 3 — 2026-11-07 — r133351 after the third visual hold
+
+- What worked well: pairing the olive request with the fascia's own geometry showed that the far gym fascia is the same surface the entrance photos show white, so the olive moved to the low cafe eave the west photos actually show.
+- What did not work well: I recoloured two whole fascia sides for a sliver seen from one angle, and wrote mound lines into the data for shrubs no photo fixes, which the owner's rule forbids.
+- What the team should change next time: ask which surface a colour note is really about before changing a palette entry, and keep data lines to runs a photo can place.
