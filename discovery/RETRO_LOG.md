@@ -24754,3 +24754,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: My quick contract script ended on a grep that found no error lines, so its step reported exit 1 while every contract passed; only the log showed it. The impostor bake writes `.import` files in a minimal form, so an import had to restore them before the commit.
 - What the team should change next time: End check scripts with an explicit exit taken from the checks themselves, not from the last command. Give the impostor bake a check-only mode that compares the committed image with a fresh one, so a recheck needn't touch the tree.
 - Addendum after the glitter check: the water's soft limit was only rendered under the old sun, where these views show no glitter, so the merged sun's clipped path appeared only at release; the owner kept it. My glitter clip plan aimed a free camera at a target, but in motion mode `building_shots.gd` aims it at the player, so one clip looked away from the water. Render a look-dependent fix under the light it will ship with, and put the player at the subject of any motion clip.
+
+### release-b-code-review — 2026-11-07 — independent code review of release/20261107b at 1754339c (relayed by the coordinator)
+
+- What worked well: Diffing each branch's added and removed lines against the merged tree settled "nothing lost" quickly, and the engine source on disk settled the light_specular default.
+- What did not work well: The review fix list wasn't in the evidence folder, so it had to be inferred from commit messages.
+- What the team should change next time: Put each branch review's findings, or a link to them, in the release evidence folder.
+
+### release-b-visual-review — 2026-11-07 — independent visual review of release/20261107b at 1754339c (relayed by the coordinator)
+
+- What worked well: Before/after sheets next to full-size originals and the branch review sets made it quick to tell what the merge caused from what was already there.
+- What did not work well: No release capture showed a rubble mound up close or the rebaked palm and flax in the world, so those fixes could only be checked indirectly. Sheets were labelled 6fa1f445, not the head.
+- What the team should change next time: When a fix touches stones or impostors, add a close view of that subject to the release capture list, and label sheets with the release head.

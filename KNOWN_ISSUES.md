@@ -24,12 +24,18 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - On the rubble mound the broken pieces only stand from about 12 m out, where they break its outline; nearer, its texture carries it alone, since faceted pieces read as pits or lumps beside it (visual review, 2026-11-07).
 - A stone's contact shadow is a skirt on the stone's own mesh, not darkening in the ground shader, because the yard surfaces it lies on have no ground shader of their own to darken.
 - Ground that grows nothing near the camera still pays for its tufts' vertices (about 2.3 ms on the Radeon 780M at `high` over the bare sand pad at x 328, z 383): cells can't tell what the capture holds without a read back.
+- The grass capture now reads a constant view distance (`2b418f33`), so it draws the ground's detailed layers (bare-edge noise, crisp edges, soil noise) rather than each layer's mean colour, and the comment on `CAPTURE_HEIGHT_M` at `game/scripts/world/ground_dressing.gd:102` is now wrong. Decide between detail and mean colour, then fix the comment or the code.
+- Mid-range grass toward the sun turns to dark brown specks where the backlight fades (release glitter-cove-clip and lawn-south-spawn views, 2026-11-07).
+- A line of dry tufts on Building 2's WSW forecourt follows a dark streak in the ground texture (release review, 2026-11-07).
+- No close capture yet of the rubble mounds at `medium` density.
 
 ## Lighting (`game/scenes/main.tscn`, the look pass of 2026-11-07)
 
 - SSAO is on (radius 3 m, Medium) and hasn't been timed on the Mac's Metal. If the Mac test finds it slow, the fallback is `ssao_enabled = false` in `main.tscn`'s environment.
 - Most far tree impostors were baked under the old look and not rebaked: with the leans retuned, their tone against the near models comes to about 6% (look pass, 2026-11-07). The release's recheck rebaked `canary_date_palm` 6 (14% off) and `nz_flax` 3 (19% off) and kept `pittosporum_tobira` 3 and 4 (within 2%).
 - `nz_flax` 3's far card covers about 55% more than its LOD1 at the 60 m hand-over, and its sides read +60/+2/−52/+2 in the bake check against ±35 or less for variants 0 and 1. A lean retune would move the siblings too.
+- SSAO and the grass haven't been timed together on native Forward+: add both, together, to the Mac test.
+- No close capture yet of the rebaked `canary_date_palm` 6 and `nz_flax` 3 at their switch distances.
 
 ## Bay water (`game/resources/materials/world/water/bay_water.gdshader`)
 
@@ -37,6 +43,8 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring: the far end of the western span from the island overviews' 10 km far plane (water pass, 2026-11-07).
 - Seen from the jetpack toward the sun, the far sun path is a solid white patch: from 120 to 160 m up, its largest clipped area is about 2% of the frame (`glitter_limit` 2.0, `glitter_gain` 2.0, under the merged sun of 2026-11-07). The owner accepted it on 2026-11-07 as what real water does, so it stays as reviewed. At ground level the path is a broken sheen.
 - The SF skyline billboard fades into the hazy far water when seen from above its top: the billboard's colour and the scene's fog, outside the water pass (water pass, 2026-11-07).
+- `glitter_gain` was tuned with the sun's specular at 1.0. The merged sun has `light_specular` 0.5 with more energy and exposure, so the sheen is weaker and the clipped core brighter (the clipping is owner-accepted). Note "tuned at specular 1.0" if it is retuned.
+- Faint diagonal streaks show in the jetpack glitter; they were already on the water branch.
 
 ## Buildings
 
@@ -268,6 +276,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
+  - `headless_gameplay_contract.gd` preloads `building_shots.gd` only to read `ISLAND_CAMERA_FAR_M`; a shared constants script would be lighter.
   - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
