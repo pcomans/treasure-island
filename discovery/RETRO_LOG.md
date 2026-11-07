@@ -24659,3 +24659,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Inspecting the owner's downloaded release first settled the entitlements: Godot's ad-hoc export already runs with the hardened runtime and an empty entitlement dictionary, and MoltenVK is linked in statically, so an empty plist and a single top-level signature were justified by the shipped app, not guessed. A local ad-hoc dry run of the signing script caught nothing new but proved the nested-code loop, runtime-flag check and `plutil` JSON parsing on real files.
 - What did not work well: The macOS jobs can't run before the owner adds the secrets, so keychain import, notarytool and stapling are unexercised. `runner.temp` isn't available in job-level `env`, which I first wrote and caught on review; actionlint still flags the pre-existing `ubuntu-26.04` label it doesn't know.
 - What the team should change next time: After the secrets exist, run the workflow by hand on this branch before merging, and read the notary log once even when accepted.
+
+### mac-notarize-docs — 2026-11-07 — AGENTS.md "Mac builds" for Developer ID signing
+
+- What worked well: Reading the workflow header and job graph first gave the exact six secret names and the sign -> verify -> publish order, so one sentence replaced the stale "no signing identity, notarization" claim without restating the workflow.
+- What did not work well: The signing description now lives in three places (workflow header, README, AGENTS); only a grep across them showed CLAUDE.md had no conflicting line.
+- What the team should change next time: When the signing secrets or job names change, update the workflow header, README "Build for the Mac" and AGENTS "Mac builds" in the same commit.
