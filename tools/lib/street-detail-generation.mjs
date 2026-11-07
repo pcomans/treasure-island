@@ -1636,6 +1636,7 @@ export function generateStreetDetail({
   const placePlanting = (zone, rule, contains, bounds) => {
     if (!plantingStates.has(zone.id)) plantingStates.set(zone.id, plantingState());
     const radius = STREET_DETAIL_KINDS[rule.kind].footprint_radius_m;
+    const wallBuffer = rule.building_buffer_m ?? exclusions.building_buffer_m;
     // The items a plant must clear, on a coarse grid of their reach.
     const BLOCK_CELL_M = 8;
     const blockers = new Map();
@@ -1662,7 +1663,7 @@ export function generateStreetDetail({
       if (!contains(xz)) problem = "outside_zone";
       else if (!onLand(xz, exclusions.land_edge_buffer_m + radius * 0.5)) problem = "land_edge";
       else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
-      else if (buildings.nearest(xz, exclusions.building_buffer_m + radius).distance < exclusions.building_buffer_m + radius) problem = "building_buffer";
+      else if (buildings.nearest(xz, wallBuffer + radius).distance < wallBuffer + radius) problem = "building_buffer";
       else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
       else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
       else if (TREE_KINDS.includes(rule.kind) && utilityProblem(xz)) problem = utilityProblem(xz);

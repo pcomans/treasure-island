@@ -78,7 +78,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.6]),
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45, 1.0]),
-  clipped_hedge: Object.freeze([1.0, 1.2]),
+  clipped_hedge: Object.freeze([1.0, 1.2, 3.2, 1.2, 1.2, 1.2, 1.0]),
   clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25, 1.0, 1.2]),
   conical_shrub: Object.freeze([2.0, 2.4]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),
@@ -90,10 +90,10 @@ export const PLANT_WIDTHS_M = Object.freeze({
   monterey_pine: Object.freeze([4.0, 5.0, 6.0, 3.0, 3.6, 4.2]),
   norfolk_island_pine: Object.freeze([2.0, 2.4]),
   nz_christmas_tree: Object.freeze([3.0, 3.4]),
-  nz_flax: Object.freeze([1.4, 1.7, 2.0]),
+  nz_flax: Object.freeze([1.4, 1.7, 2.0, 1.5]),
   pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.2]),
   pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
-  pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5]),
+  pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5, 1.5, 1.8]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
   rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.7, 0.85]),
   sea_thrift: Object.freeze([0.24, 0.32, 0.4, 1.1]),
@@ -201,10 +201,13 @@ export function validatePlantingRule(rule, label, checkProp, variantCount) {
   }
 }
 
-// A field rule's own fields; its within_xz is optional (the zone's shape bounds it).
+// A field rule's own fields; its within_xz is optional (the zone's shape bounds it),
+// and building_buffer_m may bring foundation planting closer to a wall than the
+// shared buffer, as under a deep eave.
 function validateFieldRule(rule, label, checkProp, variantCount) {
-  const fields = [...PLANTING_RULE_FIELDS.field, ...("within_xz" in rule ? ["within_xz"] : [])];
+  const fields = [...PLANTING_RULE_FIELDS.field, ...("within_xz" in rule ? ["within_xz"] : []), ...("building_buffer_m" in rule ? ["building_buffer_m"] : [])];
   invariant(exactKeys(rule, fields), `${label}: a field rule has exactly ${fields.join(", ")}`);
+  if (rule.building_buffer_m !== undefined) invariant(isFiniteNumber(rule.building_buffer_m) && rule.building_buffer_m >= 0, `${label} building_buffer_m must not be negative`);
   if (rule.within_xz !== undefined) {
     invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)), `${label} within_xz must be a polygon of 3+ [x, z] points`);
   }

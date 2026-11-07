@@ -433,6 +433,9 @@ const PITTOSPORUMS := [
 	{"seed": 611, "shape": "mound", "cell": "pittosporum", "height": 1.0, "width": 1.5, "lobes": 3},
 	{"seed": 612, "shape": "mound", "cell": "pittosporum", "height": 1.25, "width": 2.0, "lobes": 4},
 	{"seed": 613, "shape": "mound", "cell": "pittosporum", "height": 1.5, "width": 2.5, "lobes": 5},
+	# Darker clipped mounds under the school's 13th Street eaves (Street View Mar 2025, pano 6UrJ), one upright, one low.
+	{"seed": 614, "shape": "mound", "cell": "dark", "height": 1.1, "width": 1.5, "lobes": 3, "leaf": "hedge_clump_foliage"},
+	{"seed": 615, "shape": "mound", "cell": "dark", "height": 0.7, "width": 1.8, "lobes": 4, "leaf": "hedge_clump_foliage"},
 ]
 const RED_TIPS := [
 	# Slender, to 1.5 m, dull red new growth at the shoot tips only (species unresolved).
@@ -452,6 +455,8 @@ const FLAXES := [
 	{"seed": 701, "height": 1.35, "leaves": 30, "width": 0.09},
 	{"seed": 702, "height": 1.45, "leaves": 36, "width": 0.11},
 	{"seed": 703, "height": 1.8, "leaves": 42, "width": 0.13},
+	# A foxtail agave's rosette (Aracely Cafe, Aug 2026 and Jan 2026 visitor photos): broad pale leaves spiralling out from the heart, about 1.2 m across.
+	{"seed": 704, "height": 0.85, "leaves": 26, "width": 0.2, "leaf": "agave_foliage", "rosette": true},
 ]
 ## Clipped hedges, laid along a line (hedge_into): style rounded (a rolling top
 ## with rounded shoulders and bulging sides) or box (upright sides, soft top
@@ -465,6 +470,15 @@ const HEDGES := [
 	{"seed": 801, "style": "rounded", "height": 0.88, "depth": 0.62, "canopy_base": 0.42, "lobes": 0.12, "surface": "hedge_leaves", "tile": 0.7, "mats": "hedge_mat"},
 	# Job Corps (h2, 2025 gallery): a solid block 1.2-1.5 m tall of small glossy dark leaves with white flowers, down to the ground.
 	{"seed": 802, "style": "box", "height": 1.14, "depth": 0.76, "canopy_base": 0.0, "lobes": 0.04, "surface": "glossy_hedge_leaves", "tile": 1.0, "mats": "glossy_mat"},
+	# 13th Street (Street View Mar 2025): a bright yellow-green wall of fine leaves about twice a person's height, 2.5-3 m deep, shaggy rather than clipped.
+	{"seed": 803, "style": "box", "height": 3.2, "depth": 2.5, "canopy_base": 0.0, "lobes": 0.0, "surface": "bright_hedge_leaves", "tile": 1.2, "clump_m": 0.42, "relief": 0.15, "core_inset": 0.36, "core_shade": 0.3, "runs": [[1.0, "bright"]]},
+	# The school's east wing (Street View Mar 2025, pano gWJc): one clipped band under the windows, in the photo's order, left wing then right. A run is [share, cell, its height].
+	{"seed": 804, "height": 0.8, "depth": 1.05, "clump_m": 0.4, "relief": 0.09, "core": false, "runs": [[3.9, "burgundy", 1.05], [1.0, "green", 0.85], [0.6, ""], [3.1, "gold", 0.85], [0.5, ""], [2.0, "green", 1.2]]},
+	{"seed": 805, "height": 0.8, "depth": 1.05, "clump_m": 0.4, "relief": 0.09, "core": false, "runs": [[2.2, "green", 0.9], [1.0, "dark", 1.0], [0.5, ""], [3.2, "gold", 1.05], [0.3, ""], [1.4, "burgundy", 1.2]]},
+	# The school's 13th Street frontage (Street View Mar 2025, pano 6UrJ): a low clipped hedge.
+	{"seed": 806, "height": 1.0, "depth": 1.0, "clump_m": 0.36, "relief": 0.03, "core": false, "runs": [[1.0, "green"]]},
+	# The dark clipped shrubs at the foot of the east wing's sign wall (pano gWJc).
+	{"seed": 807, "height": 0.8, "depth": 0.85, "clump_m": 0.4, "relief": 0.08, "core": false, "runs": [[1.0, "dark"]]},
 ]
 ## Cityside Park's low plants as they stand in late November, built in layers
 ## (_build_low): crossed side-view cards for clumps, shrubs' wands and flower
@@ -3268,7 +3282,8 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 	rng.seed = int(p.seed)
 	var height := float(p.height)
 	var radius := float(p.width) * 0.5
-	var cell: Rect2 = SHRUB_CELLS[str(p.cell)]
+	var leaf_material := str(p.get("leaf", "shrub_foliage"))
+	var cell: Rect2 = SHRUB_CELLS[str(p.cell)] if leaf_material == "shrub_foliage" else HEDGE_CLUMP_CELLS[str(p.cell)]
 	var sway_top := SHRUB_SWAY * height
 	var phase := rng.randf() * TAU
 	var heart := Vector3(0.0, height * 0.35, 0.0)
@@ -3394,7 +3409,7 @@ func _build_shrub(p: Dictionary) -> Dictionary:
 			# A dark floor of the same foliage hides the hollow inside from low views.
 			_dish(leaves, IDENTITY_FRAME, cell, 0.05, radius * 0.75, 0.04, Color(0.3, 0.3, 0.3), phase)
 		_emit_cards(leaves, cards, lod, height, sway_top)
-		leaves.commit(mesh, material("shrub_foliage"))
+		leaves.commit(mesh, material(leaf_material))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": float(p.height), "capsules": []}
 
@@ -3412,7 +3427,8 @@ func _build_flax(p: Dictionary) -> Dictionary:
 	var height := float(p.height)
 	var width := float(p.width)
 	var count := int(p.leaves)
-	var cell: Rect2 = SHRUB_CELLS.flax_leaf
+	var leaf_material := str(p.get("leaf", "shrub_foliage"))
+	var cell: Rect2 = SHRUB_CELLS.flax_leaf if leaf_material == "shrub_foliage" else Rect2(0.0, 0.0, 1.0, 1.0)
 	var sway_top := SHRUB_SWAY * height
 	var phase := rng.randf() * TAU
 	var leaves := []
@@ -3423,7 +3439,7 @@ func _build_flax(p: Dictionary) -> Dictionary:
 		var spread := deg_to_rad((1.0 if rng.randf() < 0.5 else -1.0) * pow(rng.randf(), 1.3) * 50.0)
 		var outward := absf(spread) / deg_to_rad(50.0)
 		var direction := (Vector3.UP * cos(spread) + in_plane * sin(spread)).normalized()
-		leaves.append({
+		var leaf := {
 			"base": in_plane * rng.randf_range(-0.06, 0.06) + Vector3(rng.randf_range(-0.03, 0.03), -0.05, rng.randf_range(-0.03, 0.03)),
 			"direction": direction,
 			"length": height * lerpf(1.12, 0.8, outward) * rng.randf_range(0.88, 1.05),
@@ -3433,7 +3449,18 @@ func _build_flax(p: Dictionary) -> Dictionary:
 			"face": Vector3(-in_plane.z, 0.0, in_plane.x) * (1.0 if rng.randf() < 0.5 else -1.0),
 			"width": width * rng.randf_range(0.85, 1.1),
 			"shade": rng.randf_range(0.82, 1.06),
-		})
+		}
+		if p.get("rosette", false):
+			# Each leaf a golden angle round from the last, the heart's upright, the outer ones nearly flat.
+			var ring := float(i) / float(count - 1)
+			var out := Vector3(cos(i * 2.4), 0.0, sin(i * 2.4))
+			var tilt := deg_to_rad(lerpf(14.0, 72.0, sqrt(ring)))
+			leaf.direction = Vector3.UP * cos(tilt) + out * sin(tilt)
+			leaf.base = out * 0.05 + Vector3.DOWN * 0.05
+			leaf.face = (Vector3.UP * sin(tilt) - out * cos(tilt)).normalized()
+			leaf.length = height * lerpf(0.72, 1.0, ring) * rng.randf_range(0.92, 1.05)
+			leaf.droop = minf(0.08 + 0.2 * ring, cos(tilt) - 0.14)
+		leaves.append(leaf)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()
@@ -3458,8 +3485,11 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var across := face.cross(tangent).normalized()
 				var c := float(leaf.shade) * lerpf(0.55, 1.0, sqrt(t))
 				var wind := Vector2(sway_top * t * t, 0.01 + 0.03 * t * t)
-				# The leaf image's widest stretch runs most of the strap, its point the last quarter.
-				var along := lerpf(0.15, 0.42, t / 0.72) if t < 0.72 else lerpf(0.42, 1.0, (t - 0.72) / 0.28)
+				# The flax image's widest stretch runs most of the strap, its point the last
+				# quarter. A leaf with an image of its own shows it whole.
+				var along := t
+				if leaf_material == "shrub_foliage":
+					along = lerpf(0.15, 0.42, t / 0.72) if t < 0.72 else lerpf(0.42, 1.0, (t - 0.72) / 0.28)
 				var v := cell.end.y - along * cell.size.y
 				# Folded along its midrib: the keel sits a little behind the edges. Its upper
 				# side faces the sky, so a dark leaf still catches the light along its length.
@@ -3471,7 +3501,7 @@ func _build_flax(p: Dictionary) -> Dictionary:
 				var a := first + j * 3
 				s.quad(a, a + 1, a + 4, a + 3, face)
 				s.quad(a + 1, a + 2, a + 5, a + 4, face)
-		s.commit(mesh, material("shrub_foliage"))
+		s.commit(mesh, material(leaf_material))
 		meshes.append(mesh)
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "capsules": []}
 
@@ -3494,6 +3524,13 @@ const HEDGE_MIN_PIECE_M := 0.05
 const HEDGE_MAT_M := 1.05
 const HEDGE_ROUNDED_ROWS := [[0.36, 0.84, 1.0, 0.1], [0.82, 0.86, 0.7, 0.7], [1.03, 0.58, 1.0, 0.25], [1.0, 0.2, 1.0, -0.1]]
 const HEDGE_BOX_ROWS := [[0.45, 0.95, 1.0, 0.1], [0.92, 0.93, 0.7, 0.7], [1.03, 0.7, 1.0, 0.1], [1.03, 0.42, 1.0, 0.0], [1.03, 0.14, 1.0, 0.0]]
+## The cells of the clumped hedges' leaf atlas (clipped_band_atlas.png), and the cards of
+## one clump: [across, up] from straight out, the first facing out and the rest leaning
+## round it, so the clump is a ball of leaves.
+const HEDGE_CLUMP_CELLS := {
+	"burgundy": Rect2(0.0, 0.0, 0.2, 1.0), "gold": Rect2(0.2, 0.0, 0.2, 1.0), "green": Rect2(0.4, 0.0, 0.2, 1.0), "dark": Rect2(0.6, 0.0, 0.2, 1.0), "bright": Rect2(0.8, 0.0, 0.2, 1.0),
+}
+const HEDGE_CLUMP_CARDS := [Vector2(0.0, 0.0), Vector2(0.95, 0.1), Vector2(-0.95, 0.1), Vector2(0.1, 0.95), Vector2(-0.1, -0.8)]
 ## A hedge's core under its mats reads as the soft shade between them; alone, at the
 ## far level, it stands for them, as big as they make the hedge, and a rounded
 ## hedge keeps the stems the nearer levels draw.
@@ -3522,6 +3559,10 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 	to_m = clampf(to_m, from_m, total)
 	if to_m - from_m < HEDGE_MIN_PIECE_M:
 		return
+	if p.has("clump_m"):
+		_hedge_clumps(surfs, p, points, lengths, from_m, to_m, lod, seed)
+		if not bool(p.get("core", true)):
+			return
 	var step: float = HEDGE_STEP_M * float([1.0, 2.0, 4.0][lod])
 	# The level's grid stations in the stretch, and its ends where they fall between them.
 	var stations := PackedFloat64Array()
@@ -3533,9 +3574,12 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		stations.append(j * step)
 	if absf(last * step - to_m) > 0.001:
 		stations.append(to_m)
-	var top := float(p.height)
+	# A clumped hedge's core sits back inside its clumps, the shade the gaps fall into;
+	# alone, at the far level, it stands for them at full size.
+	var core_inset := float(p.get("core_inset", 0.0)) if lod < 2 else 0.0
+	var top := float(p.height) - core_inset
 	var base := float(p.canopy_base)
-	var d := float(p.depth) * 0.5
+	var d := float(p.depth) * 0.5 - core_inset
 	var rounded := str(p.style) == "rounded"
 	# The profile across the hedge, [lateral, height] from its left foot over its top to its right foot.
 	var profile: Array[Vector2] = []
@@ -3603,7 +3647,7 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 			var normal := (right * outward_2d.x + Vector3.UP * outward_2d.y + tilt).normalized()
 			var position := ground + right * lateral + Vector3.UP * lift
 			var bottom := corner.y <= base + 0.01
-			var shade := (0.3 if bottom and rounded else lerpf(0.55, 1.0, rise)) * (1.0 if lod == 2 else HEDGE_CORE_SHADE)
+			var shade := (0.3 if bottom and rounded else lerpf(0.55, 1.0, rise)) * (1.0 if lod == 2 else float(p.get("core_shade", HEDGE_CORE_SHADE)))
 			ring.append(core.add(position, normal, Vector2(station / tile, perimeter / tile), Color(shade, shade, shade), Vector2(0.01 * pow(clampf(lift / top, 0.0, 1.0), 2.0), 0.0)))
 		rings.append(ring)
 	for i in rings.size() - 1:
@@ -3626,6 +3670,8 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 		var middle := core.add(centre, outward, Vector2(0.5, 0.5), Color(0.8, 0.8, 0.8), Vector2(0.005, 0.0))
 		for k in profile.size() - 1:
 			core.tri(middle, ring[k], ring[k + 1], outward)
+	if p.has("clump_m"):
+		return
 	var mat_cell: Rect2 = SHRUB_CELLS[str(p.mats)]
 	if not surfs.has("hedge_foliage"):
 		surfs["hedge_foliage"] = Surf.new()
@@ -3668,6 +3714,116 @@ func hedge_into(surfs: Dictionary, variant: int, points: PackedVector3Array, fro
 			_foliage_card(cards, ground + right * (flank * d * lerpf(0.2, 0.6, _hash01(seed, index, 351))) + shift + Vector3.DOWN * 0.06, right * flank, Vector3.UP,
 				lerpf(1.3, 1.6, _hash01(seed, index, 352)) * (1.0 if _hash01(seed, index, 353) < 0.5 else -1.0), base + 0.3, 0.0, 0.0,
 				SHRUB_CELLS.hedge_stems, Color(0.6, 0.6, 0.6), ground + heart_lift, 0.2, top, 0.0, 0.0, false)
+
+
+## The leaves of a grown hedge or a mixed shrub band: clumps clump_m apart over its
+## sides, top and ends, each a ball of cards whose normals fan out from its own heart,
+## so the runtime light rounds every clump and the gaps between them fall away to the
+## core or the ground. Slow billows and a seeded scatter set how far each clump stands
+## out. runs lists [share of the length, cell]; an empty cell leaves a gap.
+func _hedge_clumps(surfs: Dictionary, p: Dictionary, points: PackedVector3Array, lengths: PackedFloat32Array, from_m: float, to_m: float, lod: int, seed: int) -> void:
+	var with_core := bool(p.get("core", true))
+	if lod == 2 and with_core:
+		return
+	if not surfs.has("hedge_clump_foliage"):
+		surfs["hedge_clump_foliage"] = Surf.new()
+	var cards: Surf = surfs["hedge_clump_foliage"]
+	var total := lengths[lengths.size() - 1]
+	var grow := float([1.0, 1.35, 2.0][lod])
+	var step := float(p.clump_m) * grow
+	var d := float(p.depth) * 0.5
+	var relief := float(p.relief)
+	var count := maxi(1, roundi(total / step))
+	var across := maxi(1, roundi(2.0 * d / step))
+	var per_clump: int = [5, 3, 2][lod]
+	var phases := Vector2(_hash01(seed, -1, 0) * TAU, _hash01(seed, -2, 0) * TAU)
+	var bend_from := Vector3.ZERO
+	for g in count + 1:
+		var station := total * float(g) / float(count)
+		if station < from_m - 0.001 or (station > to_m - 0.001 and to_m < total - 0.001):
+			continue
+		var run := _hedge_run(p, station / total)
+		if str(run[1]) == "":
+			continue
+		var cell: Rect2 = HEDGE_CLUMP_CELLS[str(run[1])]
+		var top := float(p.height) * (float(run[2]) if run.size() > 2 else 1.0)
+		var rows := maxi(1, roundi(top / step))
+		var frame := _hedge_frame(points, lengths, station)
+		var right: Vector3 = frame.right
+		var tangent: Vector3 = frame.tangent
+		var ground: Vector3 = frame.position
+		# Round a bend the outer side stretches: extra fans of clumps keep it clothed.
+		var fans: Array[Vector3] = [right]
+		if bend_from != Vector3.ZERO and bend_from.angle_to(right) > 0.2:
+			var extra := ceili(bend_from.angle_to(right) * d / step)
+			for e in extra:
+				fans.append(bend_from.slerp(right, (float(e) + 1.0) / (float(extra) + 1.0)))
+		bend_from = right
+		for fan in fans.size():
+			var side: Vector3 = fans[fan]
+			var sideways := Vector3.UP.cross(side)
+			for flank: float in [1.0, -1.0]:
+				for row in rows:
+					var k := fan * 64 + row * 2 + (1 if flank > 0.0 else 0)
+					var rise := (float(row) + 0.5) / float(rows)
+					var r := step * lerpf(0.55, 0.85, _hash01(seed, g, k))
+					var billow := 0.6 * sin(station * 0.9 + rise * 5.0 + phases.x) + 0.4 * sin(station * 2.3 - rise * 3.0 + phases.y)
+					var lateral := d - r * 0.6 + relief * billow + (_hash01(seed, g, k + 40) - 0.5) * relief
+					var height := lerpf(0.12, top - 0.05, rise) + (_hash01(seed, g, k + 80) - 0.5) * step * 0.5
+					var along := (_hash01(seed, g, k + 120) - 0.5) * step * 0.6
+					var out := (side * flank + Vector3.UP * lerpf(-0.2, 0.35, rise)).normalized()
+					_hedge_clump(cards, ground + side * (flank * lateral) + sideways * along + Vector3.UP * height, out, sideways, r, cell,
+						lerpf(0.8, 1.05, _hash01(seed, g, k + 160)) * lerpf(0.78, 1.0, rise), per_clump, top, seed, g, k)
+		for i in across:
+			var k := 400 + i
+			var x := (2.0 * (float(i) + 0.5) / float(across) - 1.0) * (d - step * 0.3)
+			var r := step * lerpf(0.6, 0.9, _hash01(seed, g, k))
+			var billow := 0.6 * sin(station * 1.1 + x * 1.7 + phases.y) + 0.4 * sin(station * 2.7 - x + phases.x)
+			var height := top + relief * billow + (_hash01(seed, g, k + 40) - 0.5) * relief - r * 0.4
+			var out := (Vector3.UP + right * (0.7 * x / maxf(d, 0.1))).normalized()
+			_hedge_clump(cards, ground + right * x + tangent * ((_hash01(seed, g, k + 80) - 0.5) * step * 0.6) + Vector3.UP * height, out, tangent, r, cell,
+				lerpf(0.9, 1.08, _hash01(seed, g, k + 120)), per_clump, top, seed, g, k)
+		if g == 0 or g == count:
+			var end := -1.0 if g == 0 else 1.0
+			for row in rows:
+				for i in across:
+					var k := 500 + row * across + i
+					var rise := (float(row) + 0.5) / float(rows)
+					var x := (2.0 * (float(i) + 0.5) / float(across) - 1.0) * (d - step * 0.3)
+					var r := step * lerpf(0.55, 0.85, _hash01(seed, g, k))
+					var out := (tangent * end + Vector3.UP * lerpf(-0.2, 0.3, rise)).normalized()
+					_hedge_clump(cards, ground + right * x + tangent * (end * step * 0.3) + Vector3.UP * lerpf(0.12, top - 0.1, rise), out, right, r, cell,
+						lerpf(0.8, 1.05, _hash01(seed, g, k + 40)) * lerpf(0.78, 1.0, rise), per_clump, top, seed, g, k)
+
+
+## The run of a clumped hedge at a share of its length: [share, cell, height]; a gap's cell is empty.
+func _hedge_run(p: Dictionary, share: float) -> Array:
+	var runs: Array = p.runs
+	var whole := 0.0
+	for run: Array in runs:
+		whole += float(run[0])
+	var at := share * whole
+	var reached := 0.0
+	for run: Array in runs:
+		reached += float(run[0])
+		if at <= reached + 0.001:
+			return run
+	return runs[runs.size() - 1]
+
+
+## One clump of a hedge: cards round its heart at `centre`, out along `out`, leaning
+## toward `side` and toward the sky, their normals fanning from the heart.
+func _hedge_clump(cards: Surf, centre: Vector3, out: Vector3, side: Vector3, r: float, cell: Rect2, shade: float, count: int, top: float, seed: int, g: int, k: int) -> void:
+	var up := out.cross(side).normalized()
+	if up.y < 0.0:
+		up = -up
+	for c in count:
+		var offset: Vector2 = HEDGE_CLUMP_CARDS[c]
+		var facing := (out + side * offset.x + up * offset.y).normalized()
+		var at := k * 8 + c
+		var width := r * lerpf(1.9, 2.5, _hash01(seed, g, at + 1000)) * (1.0 if _hash01(seed, g, at + 2000) < 0.5 else -1.0)
+		_foliage_card(cards, centre + facing * r * 0.65, facing, Vector3.UP, width, absf(width) * 0.82, 0.5, (_hash01(seed, g, at + 3000) - 0.5) * 2.0, cell,
+			Color(shade, shade, shade), centre, 0.85, top, 0.01, 0.02, false, 0.72)
 
 
 ## Where a hedge stands at distance along its line: {position (the visible
@@ -4196,8 +4352,14 @@ func material(key: String) -> Material:
 		"hedge_foliage":
 			# No edge fade: walking along a hedge sees its mats at a grazing angle.
 			made = _foliage("shrub_foliage_atlas.png", Color(0.9, 0.92, 0.88), Color(0.08, 0.1, 0.04), Vector2(2048.0, 1024.0), 0.12, 0.82)
+		"hedge_clump_foliage":
+			made = _foliage("clipped_band_atlas.png", Color(1.0, 1.0, 1.0), Color(0.1, 0.11, 0.03), Vector2(2560.0, 512.0), 0.12, 0.82)
+		"agave_foliage":
+			made = _crown_foliage("agave_leaf.png", Color(0.76, 0.8, 0.62), Color(0.08, 0.1, 0.04), Vector2(256.0, 1024.0), 0.12, 0.82, SHRUB_EDGE_FADE)
 		"hedge_leaves":
 			made = _bark("hedge_surface.png", Color(0.84, 0.9, 0.76))
+		"bright_hedge_leaves":
+			made = _bark("hedge_surface_bright.png", Color(1.0, 1.0, 1.0))
 		"glossy_hedge_leaves":
 			made = _bark("glossy_hedge_surface.png", Color(0.82, 0.84, 0.84))
 			made.set_shader_parameter("specular", 0.15)

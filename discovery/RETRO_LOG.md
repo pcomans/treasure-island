@@ -24416,3 +24416,63 @@ Comparing every record against the base commit found a change the author hadn't 
 - **Worked:** computing strip height against real road triangles answered the flicker question without an engine.
 - **Didn't:** a grep missed the uppercase `STREET_DETAIL` line, so a log was misreported.
 - **Change:** read the run's own state line before describing what a log covers, and don't let the acceptance record's commit run ahead of its reviews.
+
+### aracely-visual-review — 2026-11-06 — independent visual review of r133351 R02
+
+- What worked well: fitted-pose sheets plus full-size originals and side-by-side crops exposed exact opening errors quickly.
+- What did not work well: R02 had no island shots, cars and trees blocked two key views, and first colour samples landed on wrong surfaces.
+- What the team should change next time: include island and site views in each review render, clear blocked poses, and judge hedge-scale planting with massing.
+
+### aracely-art — 2026-11-06 — whole-building study of r133351 (Aracely Cafe tip and the photographed faces)
+
+- What worked well: Fitted poses, then a headless dump and an offline rasterizer, caught most form errors without a render slot, so twelve shot runs covered the whole study. Zooming both dated patio photos and taking stations by cross-ratio placed the living-wall chain and the heaters; the paired views changed more from that hour than from any earlier round. Rule-sown beds, the hedge as a data line and the row diff against the base kept the street-detail changes reviewable.
+- What did not work well: I composed the chain from one view and it sat a metre low until a review made me look properly. Four textures came back with sun in them although their prompts said even light; a bay narrower than its window dropped silently; a lawn rule matched nothing and the generator ran clean; an emission change greyed the storefront. Run R05 failed because a new umbrella stood over a gameplay pose, R10 because I chained a shot run behind a parse error, and R11's path view sat inside the hedge.
+- What the team should change next time: Zoom every dated photo of a signature feature at full size before composing it. Stop a chained command on the build check's result, not only on its output. Re-check gameplay and matched poses against what a change adds. Give the art owner a per-area green lawn channel or accept the lawn recipe's dry patches in writing: the one left on the east lot comes from the shared recipe's noise, not from a rule.
+
+### aracely-art, round 2 — 2026-11-07 — r133351 after the second visual hold
+
+- What worked well: reading how the hedge's core and cards were each offset found the wedges in one step, and rebuilding the hedge as clumps gave the relief and top the photos show. Putting the ground shader's own masks and colours through its grass image made a lawn pad with no seam.
+- What did not work well: I had named those wedges tree shadows from a neutral render that keeps the sun's direction. My first hand-back rendered before its last commit, so bulbs and disc faces went unseen.
+- What the team should change next time: compare the surfaces that could make a mark before naming it, and commit first, then render and fit from that commit.
+
+### aracely-visual-review, round 2 — 2026-11-07 — independent visual review of r133351 at 0fe6f586
+
+- What worked well: paired crops and the neutral render settled the wedge question, and island diffs confirmed the change stayed on the site.
+- What did not work well: the final commit landed after every supplied render, so two claimed fixes could not be seen.
+- What the team should change next time: render the views a commit touches from that commit before requesting review.
+
+### aracely-code-review — 2026-11-07 — independent code review of r133351 at 0fe6f586
+
+- What worked well: comparing rows, planting blocks, a rasterised plan and cover-map pixels against the base settled the shared-damage question quickly.
+- What did not work well: an ordered vertex diff showed an alarming island-wide change that was only retriangulation.
+- What the team should change next time: authors should report chunk-level churn and its cause in the handoff, not only row counts.
+
+### aracely-visual-review, round 3 — 2026-11-07 — independent visual review of r133351 at 14d77ca5
+
+- What worked well: renders from the exact commit removed staleness, and fixed-pose samples caught an unlisted regression.
+- What did not work well: a fix aimed at one face changed a shared material.
+- What the team should change next time: after any shared-colour edit, compare every face it touches with its photo.
+
+### aracely-code-review, round 2 — 2026-11-07 — independent code review of r133351 at 14d77ca5
+
+- What worked well: sampling pad heights against the kerb turned the merge question into measured margins.
+- What did not work well: the planting rule can't be settled when each line's evidence is one shared sentence.
+- What the team should change next time: give each data line its own photo reference.
+
+### aracely-art, round 3 — 2026-11-07 — r133351 after the third visual hold
+
+- What worked well: pairing the olive request with the fascia's own geometry showed that the far gym fascia is the same surface the entrance photos show white, so the olive moved to the low cafe eave the west photos actually show.
+- What did not work well: I recoloured two whole fascia sides for a sliver seen from one angle, and wrote mound lines into the data for shrubs no photo fixes, which the owner's rule forbids.
+- What the team should change next time: ask which surface a colour note is really about before changing a palette entry, and keep data lines to runs a photo can place.
+
+### aracely-visual-review, final — 2026-11-07 — independent visual review of r133351 at 2ade767f
+
+- What worked well: exact-commit renders and fixed-pose samples let a colour regression be proved, fixed and rechecked quickly.
+- What did not work well: fixed-pose diffs were noisy from moved closeup poses and plant motion.
+- What the team should change next time: lock closeup poses between rounds.
+
+### aracely-code-review, final — 2026-11-07 — independent code review of r133351 at 2ade767f
+
+- What worked well: reusing pad and row sampling scripts made the delta quick.
+- What did not work well: pad heights are only checkable by hand-run sampling.
+- What the team should change next time: if another building needs kerb-hugging pads, sample the kerb at build time.

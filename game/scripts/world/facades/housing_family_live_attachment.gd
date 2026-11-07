@@ -92,7 +92,8 @@ static func _contacts(model: Node3D, retained: Array[MeshInstance3D], source: St
 	var faces_by_role: Dictionary = {"wall":PackedVector3Array(),"roof":PackedVector3Array(),"support":PackedVector3Array(),"ground":PackedVector3Array(),"solid":PackedVector3Array()}
 	var meshes: Array[MeshInstance3D] = []
 	for child: Node in model.get_children():
-		if child is MeshInstance3D: meshes.append(child)
+		# Visual-only paving is drawn over the land the player walks on, like a road.
+		if child is MeshInstance3D and not bool(child.get_meta("visual_only", false)): meshes.append(child)
 	meshes.append_array(retained)
 	for mesh: MeshInstance3D in meshes:
 		var role := str(mesh.get_meta("family_role","support"))

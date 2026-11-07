@@ -1165,3 +1165,31 @@ For City Building 201 (2026-11-06) the brief estimated a 15 m market and a singl
 ## Check a fitted camera against where it could really stand
 
 For City Building 201 (2026-11-06) the fitted camera for two Street View crops sat in the far parking strip with their headings swapped, and it still matched the building corners to about 2 degrees. The tan container placed through that camera landed on the Avenue H lane, which the visual review caught. Two container corners on the rectified aerial put the camera in a traffic lane, and the next render lined up with the photo at once. A fit to a few distant corners can look right from an impossible spot. Before placing anything through a fitted camera, check that it stands where a Street View car or a person could, and check the placed object against the aerial as well as the photo.
+
+## An emission image adds to the emission colour
+
+On 2026-11-06 the Aracely storefront's dark glass came back flat grey after plain-colour emission was added for string-light bulbs. The new branch set `emission` to the albedo colour, white for an image material, and StandardMaterial3D's default operator adds the image to that colour, so every pixel gained the whole emission strength. Keep the emission colour black when a material has an emission image, and sample the glass in the next render rather than the bulbs that prompted the change.
+
+## Count a family's openings against the bays you wrote
+
+On 2026-11-06 midrise_family dropped windows on four faces of r133351 without a word: `_placed` returns nothing when a bay is narrower than the window plus its piers, and a neighbouring wall inset had moved one face's start by a metre. The build stayed valid and the first render was the first sign. After authoring a scheme, check each face's windows in the offline preview or dump before spending a render, and widen the bay or the window, never read a valid build as all openings placed.
+
+## Prove a ground-cover rule changed the map before you render it
+
+On 2026-11-06 a `within_sources` lawn rule for the school frontage named the relation the ground sits around, not a source that owns that ground, so the rule matched nothing, the generator ran clean and a full render showed the same dry grass. Read the map's channels at a point inside the rule's box after a generator run (`convert map.png -crop 3x1+x+y txt:-`; ImageMagick `compare` called the fixed map identical because the map's alpha is 0), and pick `surfaces` or `within_xz` by what the ground under the rule actually is.
+
+## Keep sun out of a texture; a shadow belongs to geometry
+
+On 2026-11-06 the owner set the direction for a future time of day: no sun-direction shadows or highlights painted into textures. An audit of the Aracely set found four images with light in them although their prompts said "even flat lighting": a louvred grille with a bright top and a shadow under every blade, blinds lit from above slat by slat, ledgestone with a dark band under each stone, and plants with sunlit tops. Say what the light must not do in the prompt ("no darker band under a stone, no bright top edge"), zoom to each image at full size before packing it, and build anything that should cast a shadow, such as louvres and wall planters, as geometry. Dark joints and weathering are fine.
+
+## Read a heavy feature off two photos before composing it
+
+On 2026-11-06 the Aracely mural's disc chain had been composed from one matched view and sat a metre too low and three metres off, hidden by planting, while still reading as "a chain" on the sheet. Zooming both dated photos showed it runs at 1.2-2.5 m with its largest disc at the wall's middle, and that the two steel heaters stand off the wall: the same heater lands on different stations in the two views. Take stations by cross-ratio against the wall's vanishing point, calibrate one photo with the features common to both, and use parallax between them for anything off the wall.
+
+## A dark shape on a card surface may be the core poking through
+
+On 2026-11-07 hard-edged wedges hung down the Aracely hedge, and I reported them as tree shadows because they survived a neutral-light render, though that switch keeps the sun's direction. The reviewer read them correctly as a layer showing through: the hedge core swells with height by its `lobes` and `bulge` terms, while the leaf cards sit at a fixed lateral, so wherever the swell passed 1.03 of the half-depth the core came out in front, wide at the top and narrowing down. Check a suspect by the shapes that made it: compare the two surfaces' offsets before naming it a shadow, and keep any core inside the layer that clothes it.
+
+## Compare every face a shared colour touches
+
+On 2026-11-07 a note to turn a cream corner olive went onto the gym's whole `fascia_edges`, and the cafe's upper tier, white in the entrance photos, came back khaki at 204,203,178 against 238-247. The corner seen from the west and the tier seen from the east are the same surface. Before editing a shared material, list the faces it covers and the photos that show each, and take a fixed-pose sample of each after the render.

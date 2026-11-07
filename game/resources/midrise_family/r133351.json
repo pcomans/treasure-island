@@ -165,7 +165,7 @@
     "basis": "median frozen terrain around the outer ring"
   },
   "levels": {
-    "ground_h": 2.75,
+    "ground_h": 3.43,
     "storey_h": 3.0,
     "parapet_h": 0.25
   },
@@ -361,6 +361,559 @@
         0.2
       ],
       "roughness": 0.9
+    },
+    "wall_white": {
+      "rgb": [
+        0.93,
+        0.9,
+        0.79
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stucco.png",
+      "uv_scale": 0.4
+    },
+    "fascia_pale": {
+      "rgb": [
+        0.89,
+        0.9,
+        0.83
+      ],
+      "roughness": 0.7
+    },
+    "fascia_white": {
+      "rgb": [
+        0.93,
+        0.92,
+        0.85
+      ],
+      "roughness": 0.7
+    },
+    "cap_metal": {
+      "rgb": [
+        0.36,
+        0.38,
+        0.41
+      ],
+      "roughness": 0.5,
+      "metallic": 0.3
+    },
+    "soffit_dark": {
+      "rgb": [
+        0.19,
+        0.2,
+        0.19
+      ],
+      "roughness": 0.9
+    },
+    "soffit_white": {
+      "rgb": [
+        0.82,
+        0.79,
+        0.7
+      ],
+      "roughness": 0.9
+    },
+    "sage_wall": {
+      "rgb": [
+        0.5,
+        0.53,
+        0.45
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stucco.png",
+      "uv_scale": 0.4
+    },
+    "sage_pier": {
+      "rgb": [
+        0.59,
+        0.62,
+        0.54
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stucco.png",
+      "uv_scale": 0.4
+    },
+    "sage_pale": {
+      "rgb": [
+        0.83,
+        0.83,
+        0.73
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stucco.png",
+      "uv_scale": 0.4
+    },
+    "sage_dark": {
+      "rgb": [
+        0.26,
+        0.29,
+        0.27
+      ],
+      "roughness": 0.85
+    },
+    "wainscot": {
+      "rgb": [
+        0.72,
+        0.73,
+        0.63
+      ],
+      "roughness": 0.85
+    },
+    "glass_dark": {
+      "rgb": [
+        0.05,
+        0.06,
+        0.06
+      ],
+      "roughness": 0.12
+    },
+    "glass_clear": {
+      "rgb": [
+        0.04,
+        0.05,
+        0.05
+      ],
+      "alpha": 0.55,
+      "roughness": 0.05
+    },
+    "glass_frosted": {
+      "rgb": [
+        0.92,
+        0.92,
+        0.9
+      ],
+      "roughness": 0.35,
+      "texture": "res://game/resources/textures/world/aracely/aracely_curtain.png",
+      "uv_scale": 0.33
+    },
+    "glass_pale": {
+      "rgb": [
+        0.74,
+        0.74,
+        0.66
+      ],
+      "roughness": 0.45
+    },
+    "glass_east": {
+      "rgb": [
+        0.19,
+        0.19,
+        0.155
+      ],
+      "roughness": 0.35
+    },
+    "blinds": {
+      "rgb": [
+        0.78,
+        0.78,
+        0.71
+      ],
+      "roughness": 0.7,
+      "texture": "res://game/resources/textures/world/aracely/aracely_blinds.png",
+      "uv_scale": 0.83
+    },
+    "frame_teal": {
+      "rgb": [
+        0.32,
+        0.52,
+        0.6
+      ],
+      "roughness": 0.6
+    },
+    "frame_brown": {
+      "rgb": [
+        0.24,
+        0.2,
+        0.17
+      ],
+      "roughness": 0.6
+    },
+    "spandrel_blue": {
+      "rgb": [
+        0.28,
+        0.5,
+        0.7
+      ],
+      "roughness": 0.7
+    },
+    "header_blue": {
+      "rgb": [
+        0.16,
+        0.3,
+        0.44
+      ],
+      "roughness": 0.7
+    },
+    "door_blue": {
+      "rgb": [
+        0.26,
+        0.47,
+        0.66
+      ],
+      "roughness": 0.6
+    },
+    "tan_wall": {
+      "rgb": [
+        0.5,
+        0.44,
+        0.36
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stucco.png",
+      "uv_scale": 0.4
+    },
+    "tan_panel": {
+      "rgb": [
+        0.89,
+        0.82,
+        0.7
+      ],
+      "roughness": 0.8
+    },
+    "brown": {
+      "rgb": [
+        0.25,
+        0.21,
+        0.18
+      ],
+      "roughness": 0.75
+    },
+    "stone": {
+      "rgb": [
+        0.8,
+        0.78,
+        0.74
+      ],
+      "roughness": 0.95,
+      "texture": "res://game/resources/textures/world/aracely/aracely_stone.png",
+      "uv_scale": 0.6
+    },
+    "roof_dark": {
+      "rgb": [
+        0.45,
+        0.46,
+        0.46
+      ],
+      "roughness": 0.9
+    },
+    "timber_grey": {
+      "rgb": [
+        0.8,
+        0.8,
+        0.78
+      ],
+      "roughness": 0.9,
+      "texture": "res://game/resources/textures/world/aracely/aracely_boards.png",
+      "uv_scale": 0.9
+    },
+    "timber_back": {
+      "rgb": [
+        0.19,
+        0.19,
+        0.18
+      ],
+      "roughness": 0.9
+    },
+    "soil": {
+      "rgb": [
+        0.2,
+        0.17,
+        0.13
+      ],
+      "roughness": 1.0
+    },
+    "fence_sage": {
+      "rgb": [
+        0.42,
+        0.44,
+        0.39
+      ],
+      "roughness": 0.8
+    },
+    "fence_sage_rib": {
+      "rgb": [
+        0.47,
+        0.49,
+        0.44
+      ],
+      "roughness": 0.8
+    },
+    "fence_slat": {
+      "rgb": [
+        0.45,
+        0.45,
+        0.43
+      ],
+      "roughness": 0.85
+    },
+    "fence_post": {
+      "rgb": [
+        0.36,
+        0.28,
+        0.22
+      ],
+      "roughness": 0.85
+    },
+    "canvas": {
+      "rgb": [
+        0.88,
+        0.85,
+        0.76
+      ],
+      "roughness": 0.85
+    },
+    "pole_grey": {
+      "rgb": [
+        0.66,
+        0.62,
+        0.55
+      ],
+      "roughness": 0.8
+    },
+    "sofa_frame": {
+      "rgb": [
+        0.56,
+        0.55,
+        0.5
+      ],
+      "roughness": 0.8
+    },
+    "cushion_pink": {
+      "rgb": [
+        0.85,
+        0.72,
+        0.64
+      ],
+      "roughness": 0.9
+    },
+    "stump": {
+      "rgb": [
+        0.5,
+        0.42,
+        0.33
+      ],
+      "roughness": 0.95
+    },
+    "heater": {
+      "rgb": [
+        0.74,
+        0.74,
+        0.72
+      ],
+      "roughness": 0.45
+    },
+    "bulb": {
+      "rgb": [
+        1.0,
+        0.86,
+        0.62
+      ],
+      "roughness": 0.4,
+      "emission": 0.9
+    },
+    "mech_metal": {
+      "rgb": [
+        0.9,
+        0.91,
+        0.92
+      ],
+      "roughness": 0.6,
+      "texture": "res://game/resources/textures/world/aracely/aracely_metal.png",
+      "uv_scale": 0.35
+    },
+    "louvre_blade": {
+      "rgb": [
+        0.62,
+        0.63,
+        0.62
+      ],
+      "roughness": 0.6
+    },
+    "disc_plants": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.9,
+      "texture": "res://game/resources/textures/world/aracely/aracely_disc.png"
+    },
+    "disc_rim": {
+      "rgb": [
+        0.07,
+        0.07,
+        0.07
+      ],
+      "roughness": 0.7
+    },
+    "table_top": {
+      "rgb": [
+        0.17,
+        0.165,
+        0.155
+      ],
+      "roughness": 0.85
+    },
+    "planter_strip": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.9,
+      "texture": "res://game/resources/textures/world/aracely/aracely_planter.png",
+      "texture_alpha": true
+    },
+    "gaa_sign": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.7,
+      "texture": "res://game/resources/textures/world/aracely/gaa_sign.png",
+      "texture_alpha": true
+    },
+    "gaa_seal": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.7,
+      "texture": "res://game/resources/textures/world/aracely/gaa_seal.png",
+      "texture_alpha": true
+    },
+    "site_mulch": {
+      "rgb": [
+        0.95,
+        0.85,
+        0.78
+      ],
+      "roughness": 1.0,
+      "texture": "res://game/resources/textures/world/street/street_mulch.png",
+      "uv_scale": 0.5
+    },
+    "pavers": {
+      "rgb": [
+        0.76,
+        0.7,
+        0.65
+      ],
+      "roughness": 0.95,
+      "texture": "res://game/resources/textures/world/aracely/aracely_apron.png",
+      "uv_scale": 0.5
+    },
+    "sign_white": {
+      "rgb": [
+        0.95,
+        0.94,
+        0.9
+      ],
+      "roughness": 0.6
+    },
+    "bench_white": {
+      "rgb": [
+        0.9,
+        0.89,
+        0.85
+      ],
+      "roughness": 0.7
+    },
+    "floor_dark": {
+      "rgb": [
+        0.22,
+        0.2,
+        0.18
+      ],
+      "roughness": 0.8
+    },
+    "mural": {
+      "rgb": [
+        1.0,
+        0.97,
+        0.89
+      ],
+      "roughness": 0.85,
+      "texture": "res://game/resources/textures/world/aracely/aracely_mural.png"
+    },
+    "cafe_sign": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.7,
+      "texture": "res://game/resources/textures/world/aracely/aracely_script.png",
+      "texture_alpha": true
+    },
+    "cafe_interior": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.8,
+      "texture": "res://game/resources/textures/world/aracely/aracely_interior.png",
+      "emission": 0.55
+    },
+    "slab_face": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 0.6,
+      "texture": "res://game/resources/textures/world/aracely/aracely_slab.png"
+    },
+    "patio_gravel": {
+      "rgb": [
+        0.84,
+        0.79,
+        0.67
+      ],
+      "roughness": 1.0,
+      "texture": "res://game/resources/textures/world/street/yard_gravel_pale.png",
+      "uv_scale": 0.5
+    },
+    "site_concrete": {
+      "rgb": [
+        0.8,
+        0.77,
+        0.71
+      ],
+      "roughness": 0.95,
+      "texture": "res://game/resources/textures/world/aracely/aracely_apron.png",
+      "uv_scale": 0.2
+    },
+    "site_lawn": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 1.0,
+      "specular": 0.2,
+      "texture": "res://game/resources/textures/world/aracely/aracely_lawn.png",
+      "uv_scale": 0.2
+    },
+    "fascia_olive": {
+      "rgb": [
+        0.66,
+        0.67,
+        0.57
+      ],
+      "roughness": 0.7
+    },
+    "site_planting": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 1.0,
+      "texture": "res://game/resources/textures/world/aracely/aracely_planting.png",
+      "uv_scale": 0.3333
     }
   },
   "schemes": {
@@ -545,131 +1098,6 @@
         }
       ]
     },
-    "door7": {
-      "material": "school_cream",
-      "parapet_material": "fascia_paleblue",
-      "module": 4.8,
-      "window": {
-        "w": 1.8,
-        "h": 1.3,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
-      "ground": {
-        "w": 1.8,
-        "h": 1.3,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
-      },
-      "plinth": {
-        "material": "concrete",
-        "top": 0.15
-      },
-      "bands": [
-        {
-          "storey": 1,
-          "offset": -0.55,
-          "h": 0.55,
-          "material": "fascia_paleblue"
-        }
-      ],
-      "features": [
-        {
-          "type": "entry",
-          "from": 7.646,
-          "to": 9.446,
-          "door": {
-            "kind": "unit",
-            "w": 1.0,
-            "h": 2.2,
-            "leaf_h": 2.2,
-            "material": "door"
-          },
-          "landing": {
-            "w": 1.8,
-            "depth": 1.2
-          }
-        }
-      ]
-    },
-    "front": {
-      "material": "school_cream",
-      "parapet_material": "fascia_paleblue",
-      "module": 4.8,
-      "window": {
-        "w": 1.8,
-        "h": 1.3,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light"
-      },
-      "ground": {
-        "w": 1.8,
-        "h": 1.3,
-        "sill": 1.0,
-        "depth": 0.1,
-        "mullions": [
-          0.5
-        ],
-        "frame": "frame_light",
-        "kind": "window"
-      },
-      "plinth": {
-        "material": "concrete",
-        "top": 0.15
-      },
-      "bands": [
-        {
-          "storey": 1,
-          "offset": -0.55,
-          "h": 0.55,
-          "material": "fascia_paleblue"
-        }
-      ],
-      "features": [
-        {
-          "type": "entry",
-          "from": 3.495,
-          "to": 8.695,
-          "door": {
-            "kind": "lobby",
-            "w": 4.2,
-            "h": 2.4,
-            "mullions": [
-              0.25,
-              0.5,
-              0.75
-            ],
-            "transoms": [
-              0.8
-            ]
-          },
-          "landing": {
-            "w": 5.2,
-            "depth": 2.0
-          },
-          "canopy": {
-            "w": 6.4,
-            "depth": 2.0,
-            "t": 0.25,
-            "material": "fascia_paleblue",
-            "gap": 0.1
-          }
-        }
-      ]
-    },
     "door_ene": {
       "material": "school_cream",
       "parapet_material": "fascia_paleblue",
@@ -710,8 +1138,8 @@
       "features": [
         {
           "type": "entry",
-          "from": 47.42,
-          "to": 49.22,
+          "from": 19.092,
+          "to": 20.891,
           "door": {
             "kind": "unit",
             "w": 1.0,
@@ -829,13 +1257,586 @@
           }
         }
       ]
+    },
+    "cafe_end": {
+      "material": "sage_dark",
+      "parapet_material": "sage_dark",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank"
+    },
+    "cafe_front": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "features": [
+        {
+          "type": "entry",
+          "from": 14.2,
+          "to": 20.75,
+          "door": {
+            "kind": "lobby",
+            "w": 6.3,
+            "h": 2.82,
+            "recess": 1.3,
+            "reveal": "sage_dark",
+            "mullions": [],
+            "transoms": [],
+            "glazing": {
+              "glass": "glass_dark",
+              "frame": "frame"
+            }
+          },
+          "landing": {
+            "w": 6.3,
+            "depth": 2.0
+          }
+        },
+        {
+          "type": "blank",
+          "from": 20.75,
+          "to": 24.6,
+          "material": "sage_wall"
+        }
+      ]
+    },
+    "cafe_east": {
+      "material": "sage_wall",
+      "parapet_material": "sage_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "features": [
+        {
+          "type": "bays",
+          "from": 2.1,
+          "to": 5.4,
+          "module": 3.3,
+          "ground": {
+            "kind": "window",
+            "w": 3.0,
+            "h": 2.15,
+            "sill": 0.62,
+            "depth": 0.1,
+            "mullions": [
+              0.5
+            ],
+            "transoms": [
+              0.55
+            ],
+            "frame": "frame",
+            "frame_w": 0.08,
+            "glass": "glass_dark"
+          }
+        },
+        {
+          "type": "blank",
+          "from": 5.4,
+          "to": 8.0,
+          "material": "sage_dark"
+        }
+      ]
+    },
+    "glazed_run": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.12
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 0.1,
+          "to": 13.85,
+          "module": 3.4375,
+          "ground": {
+            "kind": "storefront",
+            "pier": 0.16,
+            "sill": 0.14,
+            "head": 0.62,
+            "depth": 0.08,
+            "mullions": [
+              0.5
+            ],
+            "frame": "frame_light",
+            "frame_w": 0.05,
+            "glass": "glass_frosted"
+          }
+        }
+      ]
+    },
+    "white_wall": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.12
+      }
+    },
+    "blue_run": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "bands": [
+        {
+          "storey": 0,
+          "offset": -0.3,
+          "h": 1.15,
+          "material": "spandrel_blue"
+        },
+        {
+          "storey": 0,
+          "offset": 2.0,
+          "h": 0.25,
+          "material": "header_blue"
+        }
+      ],
+      "features": [
+        {
+          "type": "bays",
+          "from": 0.2,
+          "to": 3.15,
+          "module": 2.95,
+          "ground": {
+            "kind": "window",
+            "h": 0.8,
+            "sill": 1.2,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.75
+            ],
+            "frame": "frame_light",
+            "frame_w": 0.05,
+            "glass": "glass_pale",
+            "lights": [
+              {
+                "h": 0.55,
+                "sill": 2.25,
+                "glass": "glass_dark",
+                "frame": "frame",
+                "mullions": [
+                  0.5
+                ],
+                "frame_w": 0.05
+              }
+            ],
+            "w": 2.55
+          }
+        },
+        {
+          "type": "bays",
+          "from": 3.5,
+          "to": 7.0,
+          "module": 3.5,
+          "ground": {
+            "kind": "window",
+            "h": 0.8,
+            "sill": 1.2,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.75
+            ],
+            "frame": "frame_light",
+            "frame_w": 0.05,
+            "glass": "glass_pale",
+            "lights": [
+              {
+                "h": 0.55,
+                "sill": 2.25,
+                "glass": "glass_dark",
+                "frame": "frame",
+                "mullions": [
+                  0.5
+                ],
+                "frame_w": 0.05
+              }
+            ],
+            "w": 3.1
+          }
+        },
+        {
+          "type": "bays",
+          "from": 7.3,
+          "to": 10.9,
+          "module": 3.6,
+          "ground": {
+            "kind": "window",
+            "h": 0.8,
+            "sill": 1.2,
+            "depth": 0.1,
+            "mullions": [
+              0.25,
+              0.75
+            ],
+            "frame": "frame_light",
+            "frame_w": 0.05,
+            "glass": "glass_pale",
+            "lights": [
+              {
+                "h": 0.55,
+                "sill": 2.25,
+                "glass": "glass_dark",
+                "frame": "frame",
+                "mullions": [
+                  0.5
+                ],
+                "frame_w": 0.05
+              }
+            ],
+            "w": 3.2
+          }
+        },
+        {
+          "type": "entry",
+          "from": 11.1,
+          "to": 12.3,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.74,
+            "leaf_h": 2.74,
+            "material": "door_blue"
+          },
+          "landing": {
+            "w": 1.2,
+            "depth": 0.6
+          }
+        }
+      ]
+    },
+    "bay_front": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.12
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 1.7,
+          "to": 5.25,
+          "module": 3.55,
+          "ground": {
+            "kind": "window",
+            "w": 3.15,
+            "h": 1.25,
+            "sill": 0.78,
+            "depth": 0.1,
+            "mullions": [
+              0.3,
+              0.7
+            ],
+            "frame": "frame_teal",
+            "frame_w": 0.07,
+            "glass": "blinds",
+            "lights": [
+              {
+                "h": 0.6,
+                "sill": 2.22,
+                "glass": "glass_dark",
+                "frame": "frame_light",
+                "mullions": [
+                  0.5
+                ],
+                "frame_w": 0.06
+              }
+            ]
+          }
+        },
+        {
+          "type": "vents",
+          "from": 7.4,
+          "to": 9.3,
+          "count": 2,
+          "w": 0.22,
+          "h": 0.22,
+          "y": 2.3
+        }
+      ]
+    },
+    "porch_front": {
+      "material": "wall_white",
+      "parapet_material": "wall_white",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "concrete",
+        "top": 0.12
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.6,
+          "to": 3.25,
+          "door": {
+            "kind": "porch",
+            "w": 2.4,
+            "h": 2.72,
+            "recess": 2.0,
+            "door_w": 1.6,
+            "back": "wall_white",
+            "reveal": "wall_white",
+            "soffit": "soffit_white",
+            "glazing": {
+              "glass": "wall_white",
+              "frame": "wall_white",
+              "mullions": [],
+              "transoms": []
+            }
+          },
+          "landing": {
+            "w": 2.4,
+            "depth": 0.5
+          }
+        },
+        {
+          "type": "bays",
+          "from": 3.75,
+          "to": 14.5,
+          "module": 3.5833,
+          "ground": {
+            "kind": "window",
+            "w": 2.9,
+            "h": 1.25,
+            "sill": 0.78,
+            "depth": 0.1,
+            "mullions": [
+              0.3,
+              0.7
+            ],
+            "frame": "frame_teal",
+            "frame_w": 0.07,
+            "glass": "blinds",
+            "lights": [
+              {
+                "h": 0.6,
+                "sill": 2.22,
+                "glass": "glass_dark",
+                "frame": "frame_light",
+                "mullions": [
+                  0.5
+                ],
+                "frame_w": 0.06
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "tan_e19": {
+      "material": "tan_wall",
+      "parapet_material": "tan_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "brown",
+        "top": 0.1
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 2.95,
+          "to": 5.75,
+          "module": 2.8,
+          "ground": {
+            "kind": "window",
+            "h": 1.5,
+            "sill": 0.85,
+            "depth": 0.1,
+            "mullions": [
+              0.2,
+              0.8
+            ],
+            "frame": "frame_brown",
+            "frame_w": 0.08,
+            "glass": "glass_east",
+            "w": 2.35
+          }
+        },
+        {
+          "type": "bays",
+          "from": 6.08,
+          "to": 9.38,
+          "module": 3.3,
+          "ground": {
+            "kind": "window",
+            "h": 1.2,
+            "sill": 0.8,
+            "depth": 0.1,
+            "mullions": [
+              0.2,
+              0.8
+            ],
+            "frame": "frame_brown",
+            "frame_w": 0.08,
+            "glass": "glass_east",
+            "lights": [
+              {
+                "h": 0.62,
+                "sill": 2.2,
+                "glass": "glass_dark",
+                "frame": "frame_brown",
+                "mullions": [
+                  0.5
+                ]
+              }
+            ],
+            "w": 2.9
+          }
+        }
+      ]
+    },
+    "tan_e20": {
+      "material": "tan_wall",
+      "parapet_material": "tan_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "brown",
+        "top": 0.1
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 4.4,
+          "to": 5.8,
+          "door": {
+            "kind": "unit",
+            "w": 1.1,
+            "h": 2.7,
+            "leaf_h": 2.7,
+            "material": "frame_brown"
+          },
+          "landing": {
+            "w": 1.4,
+            "depth": 1.0
+          }
+        }
+      ]
+    },
+    "tan_e21": {
+      "material": "tan_wall",
+      "parapet_material": "tan_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "brown",
+        "top": 0.1
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 4.6,
+          "to": 7.95,
+          "module": 3.35,
+          "ground": {
+            "kind": "window",
+            "h": 1.2,
+            "sill": 0.8,
+            "depth": 0.1,
+            "mullions": [
+              0.2,
+              0.8
+            ],
+            "frame": "frame_brown",
+            "frame_w": 0.08,
+            "glass": "glass_east",
+            "lights": [
+              {
+                "h": 0.62,
+                "sill": 2.2,
+                "glass": "glass_dark",
+                "frame": "frame_brown",
+                "mullions": [
+                  0.5
+                ]
+              }
+            ],
+            "w": 2.95
+          }
+        }
+      ]
+    },
+    "sage_upper": {
+      "material": "sage_wall",
+      "parapet_material": "sage_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank"
+    },
+    "porch_open": {
+      "material": "fascia_pale",
+      "open": {
+        "post_w": 0.3,
+        "post_material": "wall_white",
+        "module": 3.6,
+        "posts": false
+      }
+    },
+    "tan_side": {
+      "material": "tan_wall",
+      "parapet_material": "tan_wall",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank",
+      "plinth": {
+        "material": "brown",
+        "top": 0.1
+      }
     }
   },
   "blocks": [
     {
       "id": "hall",
       "storeys": 1,
-      "ground_h": 2.75,
+      "ground_h": 3.43,
       "parapet": {
         "h": 0.25,
         "t": 0.2
@@ -843,7 +1844,7 @@
       "clip": [
         {
           "edge": 4,
-          "min": 20.0
+          "min": 28.75
         }
       ],
       "faces": {
@@ -851,25 +1852,78 @@
         "hole": "school",
         "e0": "door0",
         "e37": "door37",
-        "e7": "door7",
-        "e11": "front",
-        "e8": "door_ene",
+        "e36": "door_ene",
         "e2": "plain",
         "e3": "plain",
-        "e10": "plain",
         "e34": "plain",
         "e4": "plain",
-        "e6": "olive",
-        "e12": "olive",
-        "e18": "olive",
         "e26": "olive",
-        "e32": "olive"
-      }
+        "e32": "olive",
+        "e6": "cafe_end",
+        "e7": "cafe_front",
+        "e8": "cafe_east",
+        "e9": "glazed_run",
+        "e10": "white_wall",
+        "e11": "blue_run",
+        "e12": "white_wall",
+        "e13": "bay_front",
+        "e14": "white_wall",
+        "e15": "porch_front",
+        "e16": "white_wall",
+        "e17": "white_wall",
+        "e18": "tan_side",
+        "e19": "tan_e19",
+        "e20": "tan_e20",
+        "e21": "tan_e21"
+      },
+      "roof_items": [
+        {
+          "edge": 15,
+          "s": [
+            -20.53,
+            -14.13
+          ],
+          "d": [
+            9.56,
+            12.96
+          ],
+          "h": 2.1,
+          "material": "mech_metal",
+          "top": "mech"
+        },
+        {
+          "edge": 15,
+          "s": [
+            1.6,
+            8.2
+          ],
+          "d": [
+            10.26,
+            13.46
+          ],
+          "h": 2.1,
+          "material": "mech_metal",
+          "top": "mech"
+        },
+        {
+          "edge": 15,
+          "s": [
+            -3.19,
+            -1.69
+          ],
+          "d": [
+            10.42,
+            12.82
+          ],
+          "h": 0.6,
+          "material": "mech"
+        }
+      ]
     },
     {
       "id": "hall_nw",
       "storeys": 1,
-      "ground_h": 2.75,
+      "ground_h": 3.43,
       "parapet": {
         "h": 0.25,
         "t": 0.2
@@ -877,7 +1931,8 @@
       "clip": [
         {
           "edge": 4,
-          "max": 20.0,
+          "min": 3.0,
+          "max": 28.75,
           "s_max": 1.25
         }
       ],
@@ -886,25 +1941,145 @@
         "hole": "school",
         "e0": "door0",
         "e37": "door37",
-        "e7": "door7",
-        "e11": "front",
-        "e8": "door_ene",
+        "e36": "door_ene",
         "e2": "plain",
         "e3": "plain",
-        "e10": "plain",
         "e34": "plain",
         "e4": "plain",
-        "e6": "olive",
-        "e12": "olive",
-        "e18": "olive",
         "e26": "olive",
-        "e32": "olive"
+        "e32": "olive",
+        "e6": "cafe_end",
+        "e7": "cafe_front",
+        "e8": "cafe_east",
+        "e9": "glazed_run",
+        "e10": "white_wall",
+        "e11": "blue_run",
+        "e12": "white_wall",
+        "e13": "bay_front",
+        "e14": "white_wall",
+        "e15": "porch_front",
+        "e16": "white_wall",
+        "e17": "white_wall",
+        "e18": "tan_side",
+        "e19": "tan_e19",
+        "e20": "tan_e20",
+        "e21": "tan_e21"
+      },
+      "roof_items": [
+        {
+          "edge": 0,
+          "s": [
+            11.63,
+            16.43
+          ],
+          "d": [
+            12.35,
+            15.35
+          ],
+          "h": 1.9,
+          "material": "mech_metal",
+          "top": "mech"
+        },
+        {
+          "edge": 0,
+          "s": [
+            27.91,
+            32.71
+          ],
+          "d": [
+            12.28,
+            15.28
+          ],
+          "h": 1.9,
+          "material": "mech_metal",
+          "top": "mech"
+        },
+        {
+          "edge": 0,
+          "s": [
+            43.11,
+            47.91
+          ],
+          "d": [
+            11.88,
+            14.88
+          ],
+          "h": 1.9,
+          "material": "mech_metal",
+          "top": "mech"
+        },
+        {
+          "edge": 0,
+          "s": [
+            20.81,
+            22.81
+          ],
+          "d": [
+            12.14,
+            14.14
+          ],
+          "h": 0.35,
+          "material": "metal",
+          "top": "glass_dark"
+        },
+        {
+          "edge": 0,
+          "s": [
+            37.17,
+            39.17
+          ],
+          "d": [
+            12.21,
+            14.21
+          ],
+          "h": 0.35,
+          "material": "metal",
+          "top": "glass_dark"
+        },
+        {
+          "edge": 0,
+          "s": [
+            53.6,
+            55.6
+          ],
+          "d": [
+            12.07,
+            14.07
+          ],
+          "h": 0.35,
+          "material": "metal",
+          "top": "glass_dark"
+        }
+      ]
+    },
+    {
+      "id": "gym_porch",
+      "storeys": 1,
+      "ground_h": 3.43,
+      "parapet": {
+        "h": 0.25,
+        "t": 0.2
+      },
+      "open_sided": true,
+      "deck": {
+        "t": 0.62,
+        "material": "fascia_pale"
+      },
+      "clip": [
+        {
+          "edge": 4,
+          "max": 3.0,
+          "s_max": 1.25
+        }
+      ],
+      "faces": {
+        "default": "porch_open"
       }
     },
     {
       "id": "hall_sw",
       "storeys": 1,
-      "ground_h": 2.75,
+      "ground_h": 3.43,
       "parapet": {
         "h": 0.25,
         "t": 0.2
@@ -912,8 +2087,8 @@
       "clip": [
         {
           "edge": 4,
-          "min": 7.4839,
-          "max": 20.0,
+          "min": 8.98,
+          "max": 28.75,
           "s_min": 17.12
         }
       ],
@@ -922,19 +2097,29 @@
         "hole": "school",
         "e0": "door0",
         "e37": "door37",
-        "e7": "door7",
-        "e11": "front",
-        "e8": "door_ene",
+        "e36": "door_ene",
         "e2": "plain",
         "e3": "plain",
-        "e10": "plain",
         "e34": "plain",
         "e4": "plain",
-        "e6": "olive",
-        "e12": "olive",
-        "e18": "olive",
         "e26": "olive",
-        "e32": "olive"
+        "e32": "olive",
+        "e6": "cafe_end",
+        "e7": "cafe_front",
+        "e8": "cafe_east",
+        "e9": "glazed_run",
+        "e10": "white_wall",
+        "e11": "blue_run",
+        "e12": "white_wall",
+        "e13": "bay_front",
+        "e14": "white_wall",
+        "e15": "porch_front",
+        "e16": "white_wall",
+        "e17": "white_wall",
+        "e18": "tan_side",
+        "e19": "tan_e19",
+        "e20": "tan_e20",
+        "e21": "tan_e21"
       }
     },
     {
@@ -948,7 +2133,7 @@
         {
           "edge": 4,
           "min": 1.2,
-          "max": 20.0,
+          "max": 28.75,
           "s_min": 1.25,
           "s_max": 17.12
         }
@@ -959,21 +2144,4270 @@
         "overhang": 1.25,
         "t": 1.0,
         "under": "slate_soffit",
-        "fascia": "slate_fascia"
+        "fascia": "slate_fascia",
+        "fascia_edges": {
+          "5": "fascia_white",
+          "8": "fascia_white"
+        }
       },
-      "roof_material": "roof",
+      "roof_material": "roof_dark",
       "faces": {
         "default": "slate",
-        "e5": "slate_door"
+        "e5": "slate_door",
+        "court": "sage_upper"
       }
     }
   ],
   "study_notes": {
-    "observed": "Mar 2025 13th St (south frontage): low one-storey flat-roofed building, cream/white walls under pale blue fascia panels, a glazed central double-door entrance; a darker olive wing with brown trim to the west.",
-    "inferred": "Window cadence, the olive treatment on the WSW-facing faces, doors on every side; north, courtyard and re-entrant sides are unseen.",
-    "footprint": "Frozen relation r133351: outer ring (61 edges) kept as one block around its inner courtyard ring.",
+    "observed": "Former school ring: one-storey flat roofs about 3.85 m to the fascia top (Mar 2025 Street View panos aTtd, 4BjM, 6UrJ, gWJc, zHJe, nCSx; 2026 visitor photos of the patio). South tip e6-e8: Aracely Cafe, sage piers either side of a dark storefront, floral mural wall with bench planters, gravel patio with umbrellas, sloped pale fascia over a dark soffit. e9: white columns before wide frosted glazing. e11: three bays of blue spandrel, pale lights and dark clerestory, blue door. e13: projecting bay on white pilasters. e15: recess, then ribbon windows. e19-e21: dark brown posts and fascia over tan walls. e4: dark slate gym, its SSE and ENE fascias pale above the cafe roof.",
+    "inferred": "All dimensions and stations are production_inference from projected footprints on fitted panorama poses. Wall insets from eave shadows and pixel rays; column depth from foot offsets; gym depth (30 m) and roof-unit plans from the undated aerial; the cafe interior, script, mural and sign faces are original interpretations, not copies. North, far ENE, the NE lot side, the west wing outer face and the courtyard have no bound photo and keep their previous schemes; their roof edge only rises with the measured height.",
+    "footprint": "Frozen relation r133351: outer ring (61 edges, 38 merged) around its inner courtyard ring. The roof edge stays on the outline; wall_ring moves the photographed walls in behind it.",
     "grid_b5": "Mar 2025 photos (r133351-sideD_240 and 883-sideB_153): the olive wing's WSW wall at e4 is windowless (round logo only)",
     "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference.",
-    "wholeunit_ends": "The ends under the gym overhang differ on purpose, following sideD_240: at the NW end the photo shows a lower pale porch/hall under the fascia, so hall_nw fills the 1.25 m strip at hall height; at the SE end the photo shows an open dark pocket under the fascia (equipment, fence), so that strip stays open ground."
-  }
+    "wholeunit_ends": "The ends under the gym overhang differ on purpose, following sideD_240: at the NW end the photo shows a lower pale porch/hall under the fascia, so hall_nw fills the 1.25 m strip at hall height; at the SE end the photo shows an open dark pocket under the fascia (equipment, fence), so that strip stays open ground.",
+    "reuse": "Reuse (2026-11-06): stays on midrise_family with the l2fix-midrise-20261103 frontage reading adapted (columned walk, blue spandrels, bay, porch; e9 corrected to frosted glazing, its ribbon windows on unphotographed faces not taken). New opt-in family fields wall_ring, eaves, parts, lights, door glazing, fascia_edges and palette textures; other instances build as before.",
+    "setting": "The living-wall chain, heaters, furniture, hedge and beds are read off the Aug 2026 and Jan 2026 patio photos and the Mar 2025 panos; the shrub bands under the east wing and frontage run in the photos' order; furniture placing is production_inference. Palms in the beds are not drawn: the kit's palms are street trees, and agaves and flax carry the spiky form. The sidewalk beside the forecourt and the walks' ramp pads up its back slope are visual pads set to the kerb's heights in the generated world: recheck them whenever that kerb changes. The east lot's lawn pad holds the lawn recipe's dry patch off a lawn the photo shows green.",
+    "references_filed": "r133351-spec-gWJc (Mar 2025, pano gWJcXXKQ03dQoyUTMI1ZgQ, 37.8279144,-122.3730815) shows the EAST end e19-e21, not the west part as filed in c-set-refs-20261021/reference-note.md."
+  },
+  "face_key": "overlap",
+  "wall_ring": {
+    "insets": {
+      "6": 1.5,
+      "7": 2.0,
+      "8": 1.0,
+      "9": 2.0,
+      "10": 0.1,
+      "11": 2.4,
+      "12": 1.7,
+      "13": 1.2,
+      "14": 1.15,
+      "15": 1.2,
+      "16": 1.2,
+      "17": 1.0,
+      "18": 2.0,
+      "19": 1.1,
+      "20": 1.2,
+      "21": 1.1
+    }
+  },
+  "eaves": [
+    {
+      "id": "tip_and_frontage",
+      "edges": [
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "soffit": 2.88,
+      "top": 3.7,
+      "profile": [
+        [
+          0.0,
+          2.88
+        ],
+        [
+          0.16,
+          3.44,
+          "fascia_pale"
+        ],
+        [
+          0.05,
+          3.44,
+          "fascia_pale"
+        ],
+        [
+          0.07,
+          3.62,
+          "fascia_pale"
+        ],
+        [
+          0.03,
+          3.62,
+          "cap_metal"
+        ],
+        [
+          0.03,
+          3.7,
+          "cap_metal"
+        ],
+        [
+          0.2,
+          3.7,
+          "cap_metal"
+        ]
+      ],
+      "soffit_material": "soffit_white",
+      "soffit_edges": {
+        "6": "soffit_dark",
+        "7": "soffit_dark",
+        "8": "soffit_dark"
+      },
+      "edge_materials": {
+        "6": {
+          "fascia_pale": "fascia_olive"
+        }
+      },
+      "end_material": "fascia_pale"
+    },
+    {
+      "id": "east_wing",
+      "edges": [
+        18,
+        19,
+        20,
+        21
+      ],
+      "soffit": 2.88,
+      "top": 3.7,
+      "profile": [
+        [
+          0.0,
+          2.88
+        ],
+        [
+          0.0,
+          2.98,
+          "brown"
+        ],
+        [
+          0.06,
+          2.98,
+          "brown"
+        ],
+        [
+          0.06,
+          3.4,
+          "tan_panel"
+        ],
+        [
+          0.0,
+          3.4,
+          "brown"
+        ],
+        [
+          0.0,
+          3.7,
+          "brown"
+        ],
+        [
+          0.12,
+          3.7,
+          "brown"
+        ]
+      ],
+      "soffit_material": "brown",
+      "end_material": "brown"
+    }
+  ],
+  "sets": {
+    "table": [
+      [
+        -0.52,
+        0.52,
+        -0.36,
+        0.36,
+        0.72,
+        0.75,
+        "table_top"
+      ],
+      [
+        -0.38,
+        -0.34,
+        -0.03,
+        0.03,
+        0.0,
+        0.72,
+        "table_top"
+      ],
+      [
+        0.34,
+        0.38,
+        -0.03,
+        0.03,
+        0.0,
+        0.72,
+        "table_top"
+      ],
+      [
+        -0.38,
+        -0.34,
+        -0.34,
+        0.34,
+        0.0,
+        0.03,
+        "table_top"
+      ],
+      [
+        0.34,
+        0.38,
+        -0.34,
+        0.34,
+        0.0,
+        0.03,
+        "table_top"
+      ],
+      [
+        -0.34,
+        0.34,
+        -0.015,
+        0.015,
+        0.62,
+        0.66,
+        "table_top"
+      ]
+    ],
+    "chair": [
+      [
+        -0.18,
+        0.18,
+        -0.18,
+        0.18,
+        0.43,
+        0.46,
+        "bench_white"
+      ],
+      [
+        0.15,
+        0.175,
+        0.15,
+        0.175,
+        0.0,
+        0.43,
+        "bench_white"
+      ],
+      [
+        0.15,
+        0.175,
+        -0.175,
+        -0.15,
+        0.0,
+        0.43,
+        "bench_white"
+      ],
+      [
+        -0.19,
+        -0.165,
+        0.15,
+        0.175,
+        0.0,
+        0.84,
+        "bench_white"
+      ],
+      [
+        -0.19,
+        -0.165,
+        -0.175,
+        -0.15,
+        0.0,
+        0.84,
+        "bench_white"
+      ],
+      [
+        -0.188,
+        -0.168,
+        -0.15,
+        0.15,
+        0.7,
+        0.84,
+        "bench_white"
+      ],
+      [
+        -0.186,
+        -0.17,
+        -0.15,
+        0.15,
+        0.56,
+        0.59,
+        "bench_white"
+      ]
+    ],
+    "sofa": [
+      [
+        -1.05,
+        1.05,
+        -0.5,
+        0.5,
+        0.16,
+        0.26,
+        "sofa_frame"
+      ],
+      [
+        -1.05,
+        -0.97,
+        -0.5,
+        -0.42,
+        0.0,
+        0.62,
+        "sofa_frame"
+      ],
+      [
+        0.97,
+        1.05,
+        -0.5,
+        -0.42,
+        0.0,
+        0.62,
+        "sofa_frame"
+      ],
+      [
+        -1.05,
+        -0.97,
+        0.42,
+        0.5,
+        0.0,
+        0.72,
+        "sofa_frame"
+      ],
+      [
+        0.97,
+        1.05,
+        0.42,
+        0.5,
+        0.0,
+        0.72,
+        "sofa_frame"
+      ],
+      [
+        -1.05,
+        -0.97,
+        -0.5,
+        0.5,
+        0.55,
+        0.62,
+        "sofa_frame"
+      ],
+      [
+        0.97,
+        1.05,
+        -0.5,
+        0.5,
+        0.55,
+        0.62,
+        "sofa_frame"
+      ],
+      [
+        -1.05,
+        1.05,
+        0.42,
+        0.5,
+        0.64,
+        0.72,
+        "sofa_frame"
+      ],
+      [
+        -0.96,
+        0.96,
+        -0.46,
+        0.42,
+        0.26,
+        0.44,
+        "canvas"
+      ],
+      [
+        -0.96,
+        -0.01,
+        0.2,
+        0.42,
+        0.44,
+        0.76,
+        "canvas"
+      ],
+      [
+        0.01,
+        0.96,
+        0.2,
+        0.42,
+        0.44,
+        0.76,
+        "canvas"
+      ],
+      [
+        -0.58,
+        -0.22,
+        -0.02,
+        0.18,
+        0.44,
+        0.62,
+        "cushion_pink"
+      ]
+    ],
+    "stump": [
+      [
+        -0.52,
+        0.52,
+        -0.3,
+        0.3,
+        0.38,
+        0.44,
+        "stump"
+      ],
+      [
+        -0.18,
+        0.18,
+        -0.2,
+        0.2,
+        0.0,
+        0.38,
+        "stump"
+      ],
+      [
+        -0.3,
+        0.3,
+        -0.14,
+        0.14,
+        0.0,
+        0.16,
+        "stump"
+      ]
+    ]
+  },
+  "parts": [
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.975,
+        14.325
+      ],
+      "d": [
+        0.1,
+        2.0
+      ],
+      "material": "sage_pier",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.975,
+        14.325
+      ],
+      "d": [
+        0.06,
+        0.1
+      ],
+      "material": "sage_pale",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        20.625,
+        20.975
+      ],
+      "d": [
+        0.1,
+        2.0
+      ],
+      "material": "sage_pier",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        20.625,
+        20.975
+      ],
+      "d": [
+        0.06,
+        0.1
+      ],
+      "material": "sage_pale",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        14.325,
+        20.625
+      ],
+      "d": [
+        2.0,
+        3.32
+      ],
+      "material": "floor_dark",
+      "role": "wall",
+      "g": [
+        0.0,
+        0.1
+      ],
+      "foot": true
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        14.325,
+        20.625
+      ],
+      "y": [
+        0.06,
+        2.9
+      ],
+      "d": 3.29,
+      "material": "cafe_interior",
+      "role": "wall"
+    },
+    {
+      "kind": "glazing",
+      "edge": 7,
+      "s": [
+        14.325,
+        20.625
+      ],
+      "y": [
+        0.12,
+        2.86
+      ],
+      "d": 2.08,
+      "glass": "glass_clear",
+      "frame": "frame",
+      "frame_w": 0.09,
+      "bar_w": 0.1,
+      "mullions": [
+        0.335,
+        0.665
+      ],
+      "transoms": [
+        0.62
+      ],
+      "role": "wall"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        1.3,
+        13.975
+      ],
+      "y": [
+        -0.08,
+        2.8899999999999997
+      ],
+      "d": 1.985,
+      "material": "mural",
+      "role": "wall"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        16.775,
+        18.125
+      ],
+      "y": [
+        2.9,
+        3.43
+      ],
+      "d": [
+        -0.006285714285714282,
+        0.1451428571428572
+      ],
+      "material": "cafe_sign",
+      "role": "support"
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        20.975,
+        23.4
+      ],
+      "d": [
+        1.97,
+        2.0
+      ],
+      "material": "wainscot",
+      "role": "wall",
+      "y": [
+        0.0,
+        1.05
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.4,
+        13.7
+      ],
+      "d": [
+        1.15,
+        1.98
+      ],
+      "material": "soil",
+      "role": "support",
+      "g": [
+        0.0,
+        0.82
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.4,
+        13.7
+      ],
+      "d": [
+        1.0,
+        1.15
+      ],
+      "material": "timber_back",
+      "role": "support",
+      "g": [
+        0.0,
+        1.0
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.4,
+        13.7
+      ],
+      "d": [
+        0.975,
+        1.0
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.03,
+        0.18
+      ],
+      "count_y": 5,
+      "step_y": 0.19
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.4,
+        12.85
+      ],
+      "d": [
+        0.5,
+        0.975
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.0,
+        0.46
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.25,
+        13.7
+      ],
+      "d": [
+        -2.5,
+        1.0
+      ],
+      "material": "timber_back",
+      "role": "support",
+      "g": [
+        0.0,
+        1.0
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.225,
+        13.25
+      ],
+      "d": [
+        -2.5,
+        1.0
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.03,
+        0.18
+      ],
+      "count_y": 5,
+      "step_y": 0.19
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        12.8,
+        13.225
+      ],
+      "d": [
+        -2.5,
+        0.5
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.0,
+        0.46
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.7,
+        13.725
+      ],
+      "d": [
+        -2.525,
+        1.0
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.03,
+        0.18
+      ],
+      "count_y": 5,
+      "step_y": 0.19
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.225,
+        13.7
+      ],
+      "d": [
+        -2.525,
+        -2.5
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.03,
+        0.18
+      ],
+      "count_y": 5,
+      "step_y": 0.19
+    },
+    {
+      "kind": "box",
+      "edge": 8,
+      "s": [
+        2.3,
+        5.3
+      ],
+      "d": [
+        0.15,
+        0.95
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.0,
+        0.52
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 9,
+      "s": [
+        0.6,
+        3.1
+      ],
+      "d": [
+        0.0,
+        0.5
+      ],
+      "material": "timber_grey",
+      "role": "support",
+      "g": [
+        0.0,
+        0.62
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 2,
+      "s": [
+        0.15,
+        0.5
+      ],
+      "d": [
+        0.15,
+        0.5
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 2,
+      "s": [
+        1.95,
+        2.3
+      ],
+      "d": [
+        0.15,
+        0.5
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 9,
+      "s": [
+        3.29,
+        3.59
+      ],
+      "d": [
+        0.7,
+        1.0
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true,
+      "count": 3,
+      "step": 3.4375
+    },
+    {
+      "kind": "box",
+      "edge": 9,
+      "s": [
+        13.6,
+        13.9
+      ],
+      "d": [
+        0.7,
+        1.0
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 11,
+      "s": [
+        0.15,
+        0.6
+      ],
+      "d": [
+        1.2,
+        2.4
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 11,
+      "s": [
+        3.5,
+        3.9
+      ],
+      "d": [
+        1.0,
+        1.4
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true,
+      "count": 3,
+      "step": 3.58
+    },
+    {
+      "kind": "box",
+      "edge": 13,
+      "s": [
+        1.62,
+        1.9200000000000002
+      ],
+      "d": [
+        1.05,
+        1.2
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 13,
+      "s": [
+        5.22,
+        5.52
+      ],
+      "d": [
+        1.05,
+        1.2
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        3.3,
+        3.75
+      ],
+      "d": [
+        1.05,
+        1.2
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        7.1,
+        7.5
+      ],
+      "d": [
+        1.05,
+        1.2
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        10.7,
+        11.1
+      ],
+      "d": [
+        1.05,
+        1.2
+      ],
+      "material": "wall_white",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.9
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 19,
+      "s": [
+        5.78,
+        6.08
+      ],
+      "d": [
+        -0.03,
+        1.1
+      ],
+      "material": "brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        3.72
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 19,
+      "s": [
+        9.35,
+        9.65
+      ],
+      "d": [
+        -0.03,
+        1.1
+      ],
+      "material": "brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        3.72
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        4.35,
+        4.6499999999999995
+      ],
+      "d": [
+        -0.03,
+        1.1
+      ],
+      "material": "brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        3.72
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        7.9,
+        8.200000000000001
+      ],
+      "d": [
+        -0.03,
+        1.1
+      ],
+      "material": "brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        3.72
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        -1.0,
+        -0.2
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "frame_brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.86
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        0.15,
+        1.02
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "frame_brown",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.86
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        8.84,
+        9.8
+      ],
+      "d": [
+        1.04,
+        1.1
+      ],
+      "material": "stone",
+      "role": "wall",
+      "y": [
+        0.0,
+        2.88
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 19,
+      "s": [
+        1.1,
+        2.85
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "tan_panel",
+      "role": "support",
+      "y": [
+        0.78,
+        1.24
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        1.1,
+        4.3
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "tan_panel",
+      "role": "support",
+      "y": [
+        0.86,
+        1.33
+      ]
+    },
+    {
+      "kind": "art",
+      "edge": 20,
+      "s": [
+        1.4,
+        4.4
+      ],
+      "y": [
+        2.02,
+        2.42
+      ],
+      "d": 1.19,
+      "material": "gaa_sign",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 21,
+      "s": [
+        2.45,
+        3.25
+      ],
+      "y": [
+        1.42,
+        2.22
+      ],
+      "d": 1.09,
+      "material": "gaa_seal",
+      "role": "support"
+    },
+    {
+      "kind": "box",
+      "edge": 19,
+      "s": [
+        0.1,
+        11.0
+      ],
+      "d": [
+        -1.55,
+        -1.4
+      ],
+      "material": "concrete",
+      "role": "support",
+      "g": [
+        0.0,
+        0.16
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        1.2,
+        10.0
+      ],
+      "d": [
+        -1.55,
+        -1.4
+      ],
+      "material": "concrete",
+      "role": "support",
+      "g": [
+        0.0,
+        0.16
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 5,
+      "s": [
+        -1.3,
+        14.0
+      ],
+      "d": [
+        -0.05,
+        -0.005
+      ],
+      "material": "slate_fascia",
+      "role": "support",
+      "y": [
+        4.58,
+        5.6
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -20.2,
+        -18.9
+      ],
+      "d": [
+        9.530000000000001,
+        9.57
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        4.18,
+        5.03
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -20.2,
+        -18.9
+      ],
+      "d": [
+        9.450000000000001,
+        9.530000000000001
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.23,
+        4.2700000000000005
+      ],
+      "count_y": 7,
+      "step_y": 0.11
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -20.25,
+        -20.2
+      ],
+      "d": [
+        9.430000000000001,
+        9.55
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -18.9,
+        -18.849999999999998
+      ],
+      "d": [
+        9.430000000000001,
+        9.55
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -20.2,
+        -18.9
+      ],
+      "d": [
+        9.430000000000001,
+        9.55
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        4.2
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        -20.2,
+        -18.9
+      ],
+      "d": [
+        9.430000000000001,
+        9.55
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        5.01,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        2.1,
+        3.4000000000000004
+      ],
+      "d": [
+        10.23,
+        10.27
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        4.18,
+        5.03
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        2.1,
+        3.4000000000000004
+      ],
+      "d": [
+        10.15,
+        10.23
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.23,
+        4.2700000000000005
+      ],
+      "count_y": 7,
+      "step_y": 0.11
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        2.0500000000000003,
+        2.1
+      ],
+      "d": [
+        10.13,
+        10.25
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        3.4000000000000004,
+        3.45
+      ],
+      "d": [
+        10.13,
+        10.25
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        2.1,
+        3.4000000000000004
+      ],
+      "d": [
+        10.13,
+        10.25
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        4.15,
+        4.2
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 15,
+      "s": [
+        2.1,
+        3.4000000000000004
+      ],
+      "d": [
+        10.13,
+        10.25
+      ],
+      "material": "louvre_blade",
+      "role": "support",
+      "y": [
+        5.01,
+        5.0600000000000005
+      ]
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        2.45,
+        4.550000000000001
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        4.35,
+        6.449999999999999
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        6.25,
+        8.35
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        8.149999999999999,
+        10.249999999999998
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        10.05,
+        12.15
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        11.95,
+        13.65
+      ],
+      "g": [
+        0.86,
+        1.48
+      ],
+      "d": 1.45,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        3.25,
+        5.35
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        5.1499999999999995,
+        7.25
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        7.05,
+        9.15
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        8.95,
+        11.049999999999999
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        10.850000000000001,
+        12.950000000000001
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 7,
+      "s": [
+        12.75,
+        13.65
+      ],
+      "g": [
+        0.86,
+        1.38
+      ],
+      "d": 1.78,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "art",
+      "edge": 8,
+      "s": [
+        2.3,
+        5.3
+      ],
+      "g": [
+        0.5,
+        1.2
+      ],
+      "d": 0.5,
+      "material": "planter_strip",
+      "role": "support"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -289.8,
+          -432.67
+        ],
+        [
+          -276.02,
+          -440.0
+        ],
+        [
+          -274.4,
+          -436.4
+        ],
+        [
+          -270.9,
+          -431.6
+        ],
+        [
+          -268.4,
+          -430.6
+        ],
+        [
+          -278.4,
+          -422.6
+        ],
+        [
+          -280.2,
+          -423.2
+        ]
+      ],
+      "material": "patio_gravel",
+      "lift": 0.05
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -281.2,
+          -417.0
+        ],
+        [
+          -262.3,
+          -422.2
+        ],
+        [
+          -258.6,
+          -425.5
+        ],
+        [
+          -254.8,
+          -428.7
+        ],
+        [
+          -245.6,
+          -434.6
+        ],
+        [
+          -246.6,
+          -435.4
+        ],
+        [
+          -249.6,
+          -438.2
+        ],
+        [
+          -254.2,
+          -437.8
+        ],
+        [
+          -257.6,
+          -437.2
+        ],
+        [
+          -261.4,
+          -436.0
+        ],
+        [
+          -263.8,
+          -434.8
+        ],
+        [
+          -265.8,
+          -435.6
+        ],
+        [
+          -263.4,
+          -430.4
+        ],
+        [
+          -263.6,
+          -428.0
+        ],
+        [
+          -277.4,
+          -420.7
+        ],
+        [
+          -281.0,
+          -418.6
+        ]
+      ],
+      "material": "site_concrete",
+      "lift": 0.055
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -254.6,
+          -437.7
+        ],
+        [
+          -250.2,
+          -438.0
+        ],
+        [
+          -254.4,
+          -446.8
+        ],
+        [
+          -258.6,
+          -452.6
+        ],
+        [
+          -264.6,
+          -454.0
+        ],
+        [
+          -267.2,
+          -451.2
+        ],
+        [
+          -263.8,
+          -447.2
+        ],
+        [
+          -258.2,
+          -445.0
+        ],
+        [
+          -255.8,
+          -440.6
+        ]
+      ],
+      "material": "site_concrete",
+      "lift": 0.055
+    },
+    {
+      "kind": "path",
+      "line": [
+        [
+          -270.1,
+          -440.9
+        ],
+        [
+          -268.4,
+          -438.8
+        ],
+        [
+          -266.6,
+          -437.0
+        ],
+        [
+          -265.0,
+          -435.2
+        ],
+        [
+          -264.2,
+          -433.6
+        ]
+      ],
+      "w": 1.9,
+      "material": "site_concrete",
+      "lift": 0.06
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -278.3,
+          -420.55
+        ],
+        [
+          -277.43,
+          -420.87
+        ],
+        [
+          -276.65,
+          -421.38
+        ],
+        [
+          -275.83,
+          -421.8
+        ],
+        [
+          -275.03,
+          -422.27
+        ],
+        [
+          -274.1,
+          -422.47
+        ],
+        [
+          -273.4,
+          -423.14
+        ],
+        [
+          -272.61,
+          -423.61
+        ],
+        [
+          -271.77,
+          -423.99
+        ],
+        [
+          -270.94,
+          -424.41
+        ],
+        [
+          -270.11,
+          -424.81
+        ],
+        [
+          -269.3,
+          -425.25
+        ],
+        [
+          -268.5,
+          -425.72
+        ],
+        [
+          -267.64,
+          -426.06
+        ],
+        [
+          -266.82,
+          -426.49
+        ],
+        [
+          -265.95,
+          -426.82
+        ],
+        [
+          -265.2,
+          -427.37
+        ],
+        [
+          -264.4,
+          -427.83
+        ],
+        [
+          -263.5,
+          -428.1
+        ],
+        [
+          -263.04,
+          -428.84
+        ],
+        [
+          -262.6,
+          -429.6
+        ],
+        [
+          -262.66,
+          -430.32
+        ],
+        [
+          -262.9,
+          -431.0
+        ],
+        [
+          -263.48,
+          -431.73
+        ],
+        [
+          -264.0,
+          -432.5
+        ],
+        [
+          -265.6,
+          -431.8
+        ],
+        [
+          -264.9,
+          -430.1
+        ],
+        [
+          -264.6,
+          -429.4
+        ],
+        [
+          -278.6,
+          -422.2
+        ]
+      ],
+      "material": "site_mulch",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -261.25,
+          -423.1,
+          -0.009
+        ],
+        [
+          -257.2,
+          -424.5,
+          -0.019
+        ],
+        [
+          -256.05,
+          -425.7,
+          -0.02
+        ],
+        [
+          -256.05,
+          -428.1,
+          -0.013
+        ],
+        [
+          -248.0,
+          -432.45,
+          -0.028
+        ],
+        [
+          -245.14,
+          -433.94,
+          -0.033
+        ],
+        [
+          -245.97,
+          -435.48,
+          -0.027
+        ],
+        [
+          -248.08,
+          -434.35,
+          -0.023
+        ],
+        [
+          -252.18,
+          -432.13,
+          -0.015
+        ],
+        [
+          -256.08,
+          -430.02,
+          -0.008
+        ],
+        [
+          -258.16,
+          -428.82,
+          -0.004
+        ],
+        [
+          -259.62,
+          -427.66,
+          -0.003
+        ],
+        [
+          -260.56,
+          -426.43,
+          -0.003
+        ],
+        [
+          -261.3,
+          -424.42,
+          -0.006
+        ],
+        [
+          -261.44,
+          -423.11,
+          -0.009
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -245.97,
+          -435.48,
+          -0.027
+        ],
+        [
+          -248.08,
+          -434.35,
+          -0.023
+        ],
+        [
+          -252.18,
+          -432.13,
+          -0.015
+        ],
+        [
+          -256.08,
+          -430.02,
+          -0.008
+        ],
+        [
+          -258.16,
+          -428.82,
+          -0.004
+        ],
+        [
+          -259.62,
+          -427.66,
+          -0.003
+        ],
+        [
+          -260.56,
+          -426.43,
+          -0.003
+        ],
+        [
+          -261.3,
+          -424.42,
+          -0.006
+        ],
+        [
+          -261.44,
+          -423.11,
+          -0.009
+        ],
+        [
+          -262.15,
+          -423.5,
+          -0.183
+        ],
+        [
+          -262.0,
+          -424.7,
+          -0.18
+        ],
+        [
+          -261.25,
+          -426.85,
+          -0.177
+        ],
+        [
+          -260.2,
+          -428.25,
+          -0.177
+        ],
+        [
+          -258.65,
+          -429.45,
+          -0.178
+        ],
+        [
+          -256.45,
+          -430.65,
+          -0.182
+        ],
+        [
+          -252.55,
+          -432.75,
+          -0.19
+        ],
+        [
+          -248.45,
+          -434.98,
+          -0.197
+        ],
+        [
+          -246.28,
+          -436.05,
+          -0.201
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -274.4,
+          -436.4
+        ],
+        [
+          -274.28,
+          -437.18
+        ],
+        [
+          -274.6,
+          -437.9
+        ],
+        [
+          -273.92,
+          -438.41
+        ],
+        [
+          -272.99,
+          -438.46
+        ],
+        [
+          -272.33,
+          -439.01
+        ],
+        [
+          -271.75,
+          -439.7
+        ],
+        [
+          -270.9,
+          -439.9
+        ],
+        [
+          -270.36,
+          -439.28
+        ],
+        [
+          -269.55,
+          -439.06
+        ],
+        [
+          -268.9,
+          -438.6
+        ],
+        [
+          -268.6,
+          -437.67
+        ],
+        [
+          -267.9,
+          -437.0
+        ],
+        [
+          -268.16,
+          -436.17
+        ],
+        [
+          -268.32,
+          -435.31
+        ],
+        [
+          -268.4,
+          -434.45
+        ],
+        [
+          -268.6,
+          -433.6
+        ],
+        [
+          -269.05,
+          -432.95
+        ],
+        [
+          -269.79,
+          -432.65
+        ],
+        [
+          -270.17,
+          -431.93
+        ],
+        [
+          -270.9,
+          -431.6
+        ],
+        [
+          -271.57,
+          -432.16
+        ],
+        [
+          -271.89,
+          -432.98
+        ],
+        [
+          -272.24,
+          -433.77
+        ],
+        [
+          -272.71,
+          -434.48
+        ],
+        [
+          -273.6,
+          -434.89
+        ],
+        [
+          -273.72,
+          -435.85
+        ]
+      ],
+      "material": "site_planting",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -268.2,
+          -441.8
+        ],
+        [
+          -267.63,
+          -442.34
+        ],
+        [
+          -267.01,
+          -442.77
+        ],
+        [
+          -266.12,
+          -442.79
+        ],
+        [
+          -265.6,
+          -443.4
+        ],
+        [
+          -265.1,
+          -444.15
+        ],
+        [
+          -264.77,
+          -444.99
+        ],
+        [
+          -264.46,
+          -445.83
+        ],
+        [
+          -264.0,
+          -446.6
+        ],
+        [
+          -263.24,
+          -446.27
+        ],
+        [
+          -262.52,
+          -445.87
+        ],
+        [
+          -261.72,
+          -445.65
+        ],
+        [
+          -260.98,
+          -445.27
+        ],
+        [
+          -260.13,
+          -445.21
+        ],
+        [
+          -259.3,
+          -445.08
+        ],
+        [
+          -258.6,
+          -444.6
+        ],
+        [
+          -258.35,
+          -443.88
+        ],
+        [
+          -257.68,
+          -443.38
+        ],
+        [
+          -257.57,
+          -442.58
+        ],
+        [
+          -257.18,
+          -441.94
+        ],
+        [
+          -256.51,
+          -441.44
+        ],
+        [
+          -256.52,
+          -440.57
+        ],
+        [
+          -256.0,
+          -440.0
+        ],
+        [
+          -256.58,
+          -439.52
+        ],
+        [
+          -256.97,
+          -438.91
+        ],
+        [
+          -257.06,
+          -438.11
+        ],
+        [
+          -257.6,
+          -437.6
+        ],
+        [
+          -258.4,
+          -437.49
+        ],
+        [
+          -259.05,
+          -436.91
+        ],
+        [
+          -259.91,
+          -436.98
+        ],
+        [
+          -260.57,
+          -436.42
+        ],
+        [
+          -261.4,
+          -436.4
+        ],
+        [
+          -262.1,
+          -436.15
+        ],
+        [
+          -262.84,
+          -435.95
+        ],
+        [
+          -263.22,
+          -435.11
+        ],
+        [
+          -264.0,
+          -435.0
+        ],
+        [
+          -264.49,
+          -435.46
+        ],
+        [
+          -265.03,
+          -435.85
+        ],
+        [
+          -265.6,
+          -436.2
+        ],
+        [
+          -265.85,
+          -437.03
+        ],
+        [
+          -266.33,
+          -437.71
+        ],
+        [
+          -267.05,
+          -438.24
+        ],
+        [
+          -267.4,
+          -439.0
+        ],
+        [
+          -267.5,
+          -439.73
+        ],
+        [
+          -267.85,
+          -440.38
+        ],
+        [
+          -267.91,
+          -441.13
+        ]
+      ],
+      "material": "site_planting",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -271.155,
+          -453.614
+        ],
+        [
+          -257.931,
+          -460.695
+        ],
+        [
+          -256.869,
+          -458.711
+        ],
+        [
+          -270.093,
+          -451.631
+        ]
+      ],
+      "material": "site_concrete",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -258.246,
+          -457.387
+        ],
+        [
+          -245.046,
+          -464.3
+        ],
+        [
+          -243.817,
+          -461.953
+        ],
+        [
+          -257.016,
+          -455.04
+        ]
+      ],
+      "material": "site_concrete",
+      "lift": 0.058
+    },
+    {
+      "kind": "path",
+      "line": [
+        [
+          -223.78,
+          -448.31
+        ],
+        [
+          -228.5,
+          -455.0
+        ],
+        [
+          -233.8,
+          -463.7
+        ],
+        [
+          -234.4,
+          -466.5
+        ]
+      ],
+      "w": 1.5,
+      "material": "site_concrete",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -223.92,
+          -447.22,
+          -0.054
+        ],
+        [
+          -222.59,
+          -447.94,
+          -0.054
+        ],
+        [
+          -223.17,
+          -448.75,
+          -0.253
+        ],
+        [
+          -224.39,
+          -447.87,
+          -0.253
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "path",
+      "line": [
+        [
+          -233.82,
+          -442.89
+        ],
+        [
+          -236.0,
+          -445.8
+        ],
+        [
+          -241.7,
+          -453.3
+        ],
+        [
+          -245.4,
+          -458.8
+        ]
+      ],
+      "w": 1.2,
+      "material": "site_concrete",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -233.81,
+          -441.88,
+          -0.054
+        ],
+        [
+          -232.75,
+          -442.46,
+          -0.054
+        ],
+        [
+          -233.34,
+          -443.25,
+          -0.236
+        ],
+        [
+          -234.3,
+          -442.53,
+          -0.236
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "path",
+      "line": [
+        [
+          -187.41,
+          -468.04
+        ],
+        [
+          -193.6,
+          -479.6
+        ],
+        [
+          -199.6,
+          -490.8
+        ]
+      ],
+      "w": 2.4,
+      "material": "pavers",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -188.03,
+          -466.65,
+          0.096
+        ],
+        [
+          -185.92,
+          -467.79,
+          0.096
+        ],
+        [
+          -186.35,
+          -468.6,
+          -0.096
+        ],
+        [
+          -188.47,
+          -467.48,
+          -0.096
+        ]
+      ],
+      "material": "pavers"
+    },
+    {
+      "kind": "path",
+      "line": [
+        [
+          -195.12,
+          -463.86
+        ],
+        [
+          -199.1,
+          -470.1
+        ],
+        [
+          -204.5,
+          -479.4
+        ]
+      ],
+      "w": 1.3,
+      "material": "site_concrete",
+      "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.2,
+          -462.77,
+          0.106
+        ],
+        [
+          -194.05,
+          -463.39,
+          0.106
+        ],
+        [
+          -194.57,
+          -464.21,
+          -0.096
+        ],
+        [
+          -195.67,
+          -463.51,
+          -0.096
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.0,
+          -463.95
+        ],
+        [
+          -188.0,
+          -467.75
+        ],
+        [
+          -197.4,
+          -485.25
+        ],
+        [
+          -205.4,
+          -480.9
+        ],
+        [
+          -204.4,
+          -479.5
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.1,
+          -463.8
+        ],
+        [
+          -204.0,
+          -459.0
+        ],
+        [
+          -205.14,
+          -459.61
+        ],
+        [
+          -206.22,
+          -460.29
+        ],
+        [
+          -206.91,
+          -461.51
+        ],
+        [
+          -208.36,
+          -461.69
+        ],
+        [
+          -209.18,
+          -462.73
+        ],
+        [
+          -210.2,
+          -463.5
+        ],
+        [
+          -209.96,
+          -464.72
+        ],
+        [
+          -210.3,
+          -465.99
+        ],
+        [
+          -209.68,
+          -467.17
+        ],
+        [
+          -209.69,
+          -468.41
+        ],
+        [
+          -209.21,
+          -469.61
+        ],
+        [
+          -209.9,
+          -470.92
+        ],
+        [
+          -209.3,
+          -472.1
+        ],
+        [
+          -204.0,
+          -474.9
+        ],
+        [
+          -204.5,
+          -479.4
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -186.7,
+          -468.4
+        ],
+        [
+          -198.9,
+          -491.2
+        ],
+        [
+          -193.6,
+          -490.2
+        ],
+        [
+          -185.4,
+          -474.4
+        ],
+        [
+          -182.8,
+          -469.8
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -323.0,
+          -436.0
+        ],
+        [
+          -323.21,
+          -437.28
+        ],
+        [
+          -322.4,
+          -438.49
+        ],
+        [
+          -322.57,
+          -439.77
+        ],
+        [
+          -322.57,
+          -441.04
+        ],
+        [
+          -322.5,
+          -442.3
+        ],
+        [
+          -321.06,
+          -442.64
+        ],
+        [
+          -319.86,
+          -443.45
+        ],
+        [
+          -318.83,
+          -444.59
+        ],
+        [
+          -317.16,
+          -444.48
+        ],
+        [
+          -316.28,
+          -445.91
+        ],
+        [
+          -315.0,
+          -446.55
+        ],
+        [
+          -313.7,
+          -447.18
+        ],
+        [
+          -312.32,
+          -447.62
+        ],
+        [
+          -311.0,
+          -448.2
+        ],
+        [
+          -309.45,
+          -447.89
+        ],
+        [
+          -308.06,
+          -447.23
+        ],
+        [
+          -306.79,
+          -446.31
+        ],
+        [
+          -305.55,
+          -445.31
+        ],
+        [
+          -304.0,
+          -445.0
+        ],
+        [
+          -304.23,
+          -443.62
+        ],
+        [
+          -303.42,
+          -442.36
+        ],
+        [
+          -303.88,
+          -440.95
+        ],
+        [
+          -303.05,
+          -439.7
+        ],
+        [
+          -303.58,
+          -438.28
+        ],
+        [
+          -303.0,
+          -437.0
+        ],
+        [
+          -304.2,
+          -436.3
+        ],
+        [
+          -304.78,
+          -435.09
+        ],
+        [
+          -305.85,
+          -434.29
+        ],
+        [
+          -306.55,
+          -433.18
+        ],
+        [
+          -306.8,
+          -431.7
+        ],
+        [
+          -308.0,
+          -431.0
+        ],
+        [
+          -309.33,
+          -430.88
+        ],
+        [
+          -310.67,
+          -430.89
+        ],
+        [
+          -312.0,
+          -431.0
+        ],
+        [
+          -313.33,
+          -430.99
+        ],
+        [
+          -314.67,
+          -430.88
+        ],
+        [
+          -316.0,
+          -431.0
+        ],
+        [
+          -317.21,
+          -431.78
+        ],
+        [
+          -318.44,
+          -432.51
+        ],
+        [
+          -319.3,
+          -433.79
+        ],
+        [
+          -320.95,
+          -433.94
+        ],
+        [
+          -322.05,
+          -434.87
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.052
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -283.2,
+        -432.85
+      ],
+      "yaw": -35.0
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -283.06,
+        -432.08
+      ],
+      "yaw": -131.1
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -282.57,
+        -432.54
+      ],
+      "yaw": -114.4
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -283.89,
+        -433.27
+      ],
+      "yaw": 46.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -283.31,
+        -433.59
+      ],
+      "yaw": 62.6
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -280.9,
+        -434.07
+      ],
+      "yaw": -30.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -280.85,
+        -433.34
+      ],
+      "yaw": -127.0
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -280.26,
+        -433.65
+      ],
+      "yaw": -130.5
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -281.53,
+        -434.48
+      ],
+      "yaw": 48.7
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -281.0,
+        -434.87
+      ],
+      "yaw": 47.6
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -278.61,
+        -435.29
+      ],
+      "yaw": -32.5
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -278.55,
+        -434.59
+      ],
+      "yaw": -115.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -277.98,
+        -434.92
+      ],
+      "yaw": -113.6
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -279.22,
+        -435.64
+      ],
+      "yaw": 60.0
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -278.68,
+        -436.02
+      ],
+      "yaw": 43.9
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -276.4,
+        -436.47
+      ],
+      "yaw": -23.5
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.46,
+        -435.77
+      ],
+      "yaw": -118.1
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -275.81,
+        -435.95
+      ],
+      "yaw": -117.7
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.97,
+        -436.95
+      ],
+      "yaw": 73.6
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.37,
+        -437.21
+      ],
+      "yaw": 69.4
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -279.99,
+        -430.65
+      ],
+      "yaw": -30.7
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -279.92,
+        -429.89
+      ],
+      "yaw": -122.6
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -279.38,
+        -430.27
+      ],
+      "yaw": -131.0
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -280.65,
+        -431.12
+      ],
+      "yaw": 61.2
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -280.01,
+        -431.34
+      ],
+      "yaw": 71.3
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -278.67,
+        -431.8
+      ],
+      "yaw": -24.0
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -278.71,
+        -431.07
+      ],
+      "yaw": -104.2
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -278.12,
+        -431.38
+      ],
+      "yaw": -114.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -279.22,
+        -432.22
+      ],
+      "yaw": 65.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -278.64,
+        -432.54
+      ],
+      "yaw": 73.0
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -276.8,
+        -433.6
+      ],
+      "yaw": -34.7
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.67,
+        -432.83
+      ],
+      "yaw": -135.2
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.17,
+        -433.27
+      ],
+      "yaw": -116.3
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -277.46,
+        -433.97
+      ],
+      "yaw": 64.4
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -276.88,
+        -434.3
+      ],
+      "yaw": 42.6
+    },
+    {
+      "kind": "set",
+      "name": "table",
+      "at": [
+        -275.04,
+        -434.76
+      ],
+      "yaw": -23.8
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -275.05,
+        -433.98
+      ],
+      "yaw": -108.9
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -274.44,
+        -434.23
+      ],
+      "yaw": -108.3
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -275.63,
+        -435.29
+      ],
+      "yaw": 52.7
+    },
+    {
+      "kind": "set",
+      "name": "chair",
+      "at": [
+        -275.04,
+        -435.58
+      ],
+      "yaw": 78.7
+    },
+    {
+      "kind": "set",
+      "name": "sofa",
+      "at": [
+        -276.79,
+        -431.67
+      ],
+      "yaw": 152.0
+    },
+    {
+      "kind": "set",
+      "name": "stump",
+      "at": [
+        -274.49,
+        -430.75
+      ],
+      "yaw": 2.0
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        1.9,
+        3.15
+      ],
+      "d": [
+        1.1,
+        1.34
+      ],
+      "material": "heater",
+      "role": "support",
+      "y": [
+        2.42,
+        2.58
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.1,
+        2.13
+      ],
+      "d": [
+        1.2,
+        1.23
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        2.58,
+        2.9
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        2.92,
+        2.9499999999999997
+      ],
+      "d": [
+        1.2,
+        1.23
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        2.58,
+        2.9
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        9.9,
+        11.15
+      ],
+      "d": [
+        1.1,
+        1.34
+      ],
+      "material": "heater",
+      "role": "support",
+      "y": [
+        2.42,
+        2.58
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        10.1,
+        10.129999999999999
+      ],
+      "d": [
+        1.2,
+        1.23
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        2.58,
+        2.9
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        10.92,
+        10.95
+      ],
+      "d": [
+        1.2,
+        1.23
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        2.58,
+        2.9
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        13.3,
+        13.85
+      ],
+      "d": [
+        1.68,
+        1.98
+      ],
+      "material": "frame",
+      "role": "support",
+      "y": [
+        2.32,
+        2.82
+      ]
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 2.15,
+      "g": [
+        1.01,
+        1.29
+      ],
+      "d": 1.985,
+      "depth": 0.108,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 187
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 2.352,
+      "g": [
+        1.233,
+        1.589
+      ],
+      "d": 1.985,
+      "depth": 0.116,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 283
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 2.601,
+      "g": [
+        1.488,
+        1.786
+      ],
+      "d": 1.985,
+      "depth": 0.11,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 216
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 2.84,
+      "g": [
+        1.679,
+        1.955
+      ],
+      "d": 1.985,
+      "depth": 0.108,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 0
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 3.135,
+      "g": [
+        1.789,
+        2.165
+      ],
+      "d": 1.985,
+      "depth": 0.118,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 353
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 3.5,
+      "g": [
+        1.933,
+        2.325
+      ],
+      "d": 1.985,
+      "depth": 0.119,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 62
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 3.834,
+      "g": [
+        2.059,
+        2.325
+      ],
+      "d": 1.985,
+      "depth": 0.107,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 154
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.154,
+      "g": [
+        2.06,
+        2.418
+      ],
+      "d": 1.985,
+      "depth": 0.116,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 248
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.462,
+      "g": [
+        2.046,
+        2.318
+      ],
+      "d": 1.985,
+      "depth": 0.107,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 96
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.715,
+      "g": [
+        1.929,
+        2.193
+      ],
+      "d": 1.985,
+      "depth": 0.106,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 149
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.951,
+      "g": [
+        1.787,
+        2.051
+      ],
+      "d": 1.985,
+      "depth": 0.106,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 223
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.214,
+      "g": [
+        1.572,
+        1.916
+      ],
+      "d": 1.985,
+      "depth": 0.114,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 353
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.515,
+      "g": [
+        1.463,
+        1.757
+      ],
+      "d": 1.985,
+      "depth": 0.109,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 258
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.797,
+      "g": [
+        1.347,
+        1.639
+      ],
+      "d": 1.985,
+      "depth": 0.109,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 108
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 6.108,
+      "g": [
+        1.278,
+        1.602
+      ],
+      "d": 1.985,
+      "depth": 0.112,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 304
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 6.475,
+      "g": [
+        1.23,
+        1.616
+      ],
+      "d": 1.985,
+      "depth": 0.119,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 92
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 6.95,
+      "g": [
+        1.22,
+        1.88
+      ],
+      "d": 1.985,
+      "depth": 0.146,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 155
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 8.09,
+      "g": [
+        1.44,
+        2.64
+      ],
+      "d": 1.985,
+      "depth": 0.2,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 225
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 9.01,
+      "g": [
+        2.0,
+        2.6
+      ],
+      "d": 1.985,
+      "depth": 0.14,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 167
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 9.53,
+      "g": [
+        2.285,
+        2.615
+      ],
+      "d": 1.985,
+      "depth": 0.113,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 236
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 9.85,
+      "g": [
+        2.255,
+        2.485
+      ],
+      "d": 1.985,
+      "depth": 0.103,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 286
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 10.04,
+      "g": [
+        2.07,
+        2.31
+      ],
+      "d": 1.985,
+      "depth": 0.104,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 327
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 10.27,
+      "g": [
+        1.77,
+        2.07
+      ],
+      "d": 1.985,
+      "depth": 0.11,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 355
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 10.58,
+      "g": [
+        1.655,
+        1.885
+      ],
+      "d": 1.985,
+      "depth": 0.103,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 50
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 10.84,
+      "g": [
+        1.57,
+        1.79
+      ],
+      "d": 1.985,
+      "depth": 0.102,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 333
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 11.17,
+      "g": [
+        1.53,
+        1.85
+      ],
+      "d": 1.985,
+      "depth": 0.112,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 102
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 11.6,
+      "g": [
+        1.63,
+        1.81
+      ],
+      "d": 1.985,
+      "depth": 0.098,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 330
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 11.96,
+      "g": [
+        1.74,
+        1.9
+      ],
+      "d": 1.985,
+      "depth": 0.096,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 68
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 12.14,
+      "g": [
+        1.865,
+        2.035
+      ],
+      "d": 1.985,
+      "depth": 0.097,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 225
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 12.28,
+      "g": [
+        2.015,
+        2.185
+      ],
+      "d": 1.985,
+      "depth": 0.097,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 241
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 12.33,
+      "g": [
+        2.185,
+        2.355
+      ],
+      "d": 1.985,
+      "depth": 0.097,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 266
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 12.38,
+      "g": [
+        2.355,
+        2.525
+      ],
+      "d": 1.985,
+      "depth": 0.097,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 12
+    },
+    {
+      "kind": "slab",
+      "at": [
+        -257.7,
+        -432.2
+      ],
+      "yaw": -20.0,
+      "w": 0.95,
+      "h": 1.9,
+      "t": 0.04,
+      "bow": 0.14,
+      "arch": true,
+      "material": "sign_white",
+      "face_material": "slab_face"
+    },
+    {
+      "kind": "slab",
+      "at": [
+        -256.9,
+        -432.5
+      ],
+      "yaw": 20.0,
+      "w": 0.95,
+      "h": 1.45,
+      "t": 0.04,
+      "bow": 0.2,
+      "arch": true,
+      "material": "sign_white",
+      "face_material": "sign_white"
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        22.7,
+        26.8
+      ],
+      "d": [
+        -7.0,
+        -6.55
+      ],
+      "material": "bench_white",
+      "role": "support",
+      "g": [
+        0.38,
+        0.45
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        23.1,
+        23.2
+      ],
+      "d": [
+        -7.0,
+        -6.55
+      ],
+      "material": "bench_white",
+      "role": "support",
+      "g": [
+        0.0,
+        0.38
+      ],
+      "foot": true,
+      "count": 2,
+      "step": 3.2
+    },
+    {
+      "kind": "umbrella",
+      "at": [
+        -282.347,
+        -428.487
+      ],
+      "r": 1.5,
+      "h": 2.3,
+      "rise": 0.52,
+      "valance": 0.05,
+      "sides": 8,
+      "material": "canvas",
+      "pole_material": "pole_grey"
+    },
+    {
+      "kind": "umbrella",
+      "at": [
+        -277.071,
+        -428.578
+      ],
+      "r": 1.5,
+      "h": 2.3,
+      "rise": 0.52,
+      "valance": 0.05,
+      "sides": 8,
+      "material": "canvas",
+      "pole_material": "pole_grey"
+    },
+    {
+      "kind": "umbrella",
+      "at": [
+        -273.809,
+        -432.241
+      ],
+      "r": 1.5,
+      "h": 2.3,
+      "rise": 0.52,
+      "valance": 0.05,
+      "sides": 8,
+      "material": "canvas",
+      "pole_material": "pole_grey"
+    },
+    {
+      "kind": "fence",
+      "style": "ribs",
+      "path": [
+        [
+          -294.4,
+          -437.2
+        ],
+        [
+          -286.4,
+          -429.4
+        ]
+      ],
+      "h": 2.1,
+      "post_every": 2.8,
+      "rib": 0.2,
+      "material": "fence_sage",
+      "rib_material": "fence_sage_rib",
+      "post_material": "fence_sage"
+    },
+    {
+      "kind": "fence",
+      "style": "boards",
+      "path": [
+        [
+          -286.4,
+          -429.4
+        ],
+        [
+          -280.0,
+          -423.0
+        ]
+      ],
+      "h": 2.1,
+      "post_every": 2.1,
+      "board": 0.11,
+      "gap": 0.035,
+      "material": "fence_slat",
+      "post_material": "fence_post"
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        1.12,
+        1.22
+      ],
+      "d": [
+        -6.69,
+        -6.59
+      ],
+      "material": "fence_post",
+      "role": "support",
+      "g": [
+        0.0,
+        3.5
+      ],
+      "foot": true
+    },
+    {
+      "kind": "box",
+      "edge": 7,
+      "s": [
+        12.19,
+        12.29
+      ],
+      "d": [
+        -11.0,
+        -10.9
+      ],
+      "material": "fence_post",
+      "role": "support",
+      "g": [
+        0.0,
+        3.5
+      ],
+      "foot": true
+    },
+    {
+      "kind": "lights",
+      "from": [
+        -284.844,
+        -433.389,
+        2.84
+      ],
+      "to": [
+        -283.2,
+        -426.4,
+        3.3
+      ],
+      "sag": 0.35,
+      "every": 0.9,
+      "material": "bulb",
+      "wire_material": "frame"
+    },
+    {
+      "kind": "lights",
+      "from": [
+        -279.989,
+        -435.974,
+        2.84
+      ],
+      "to": [
+        -283.2,
+        -426.4,
+        3.3
+      ],
+      "sag": 0.35,
+      "every": 0.9,
+      "material": "bulb",
+      "wire_material": "frame"
+    },
+    {
+      "kind": "lights",
+      "from": [
+        -279.107,
+        -436.444,
+        2.84
+      ],
+      "to": [
+        -271.4,
+        -427.8,
+        3.3
+      ],
+      "sag": 0.35,
+      "every": 0.9,
+      "material": "bulb",
+      "wire_material": "frame"
+    },
+    {
+      "kind": "lights",
+      "from": [
+        -275.576,
+        -438.324,
+        2.84
+      ],
+      "to": [
+        -271.4,
+        -427.8,
+        3.3
+      ],
+      "sag": 0.35,
+      "every": 0.9,
+      "material": "bulb",
+      "wire_material": "frame"
+    },
+    {
+      "kind": "lights",
+      "from": [
+        -286.08,
+        -432.731,
+        2.84
+      ],
+      "to": [
+        -275.223,
+        -438.512,
+        2.84
+      ],
+      "sag": 0.1,
+      "every": 0.8,
+      "material": "bulb",
+      "wire_material": "frame"
+    }
+  ]
 }

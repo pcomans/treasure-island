@@ -255,6 +255,26 @@
    "basis": "production_inference",
    "reason": "Green tufts and darker olive grass in the Avenue N verge's straw: a third of the lawn recipe over it turns the pale straw olive-brown with green patches, and leaves no bare ground.",
    "evidence": "Street View Nov 2025 pano ttrmGi5rdijqAHRqMz7bsQ (505 Avenue N, refs sv02/sv03): darker olive-brown verge with green tufts, mulch round the shrubs; phase 1 review of the sv02 matched pose: the straw alone read as pale beach sand."
+  },
+  {
+   "id": "school_frontage_lawn",
+   "channel": "lawn",
+   "surfaces": ["land_ground", "major_area_landuse"],
+   "within_xz": [[-262, -436], [-252, -442], [-247, -434.5], [-196, -462], [-186, -469], [-193, -486], [-199, -487], [-204, -477], [-214, -471.5], [-221, -474.5], [-226, -484], [-236, -467], [-233, -461], [-243, -456], [-246, -461.5], [-257, -456], [-258, -459], [-270, -452], [-266, -444]],
+   "feather_m": 2.5,
+   "basis": "production_inference",
+   "reason": "The lawns in front of the school and its east wing on 13th Street are mown green to the walks.",
+   "evidence": "Street View Mar 2025 panos 6UrJ and gWJc: green lawn from the sidewalk to the walls; undated aerial 01-satellite-b33: green panels along the frontage."
+  },
+  {
+   "id": "school_west_lawn",
+   "channel": "lawn",
+   "surfaces": ["land_ground", "major_area_landuse"],
+   "within_xz": [[-333, -433], [-331, -446], [-318, -453], [-308, -456], [-303, -436], [-296, -432], [-290, -428], [-289, -417], [-300, -414], [-318, -418], [-333, -423]],
+   "feather_m": 2.5,
+   "basis": "production_inference",
+   "reason": "The lawns either side of the drive beside the gym are mown green.",
+   "evidence": "Street View Mar 2025 panos zHJe and nCSx: green lawn left and right of the drive; undated aerial 01-satellite-b33: the same panels."
   }
  ]
 }
