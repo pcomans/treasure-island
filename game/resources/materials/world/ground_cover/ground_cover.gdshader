@@ -137,7 +137,7 @@ const float WATER_LEVEL = 0.74;
 const float WATER_RISE_PER_M = 2.0;
 const float WATER_NORTH = 0.1;
 // How much the marsh map's pool mask (blue: the floor's mapped low ground) lifts the water.
-const float WATER_POOL = 0.5;
+const float WATER_POOL = 0.62;
 const float MARSH_TILE_M = 1.8;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
@@ -258,13 +258,14 @@ void fragment() {
 			float paved_m = marsh_read.g * MARSH_MAP_RANGE_M;
 			// A straw bank climbs to the lots' edges, so no lot's slab drops onto the mat.
 			float bank_rise = 1.0 - smoothstep(3.0, 11.0, paved_m + 7.0 * (n_mid - 0.5) + 4.0 * (n_small - 0.5));
-			float h = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5) + 1.6 * bank_rise;
+			float h_land = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5);
+			float h = h_land + 1.6 * bank_rise;
 
 			// The grain, read at two scales so its repeat never shows; each pattern's
 			// picks are tight near the walker and spread into an even blend with distance.
 			vec2 tile_uv = mat2(vec2(0.82, 0.57), vec2(-0.57, 0.82)) * p / MARSH_TILE_M;
 			vec3 grain = mix(texture(marsh_grain, tile_uv).rgb, texture(marsh_grain, mat2(vec2(0.31, -0.95), vec2(0.95, 0.31)) * p / (MARSH_TILE_M * 2.9) + vec2(0.37, 0.71)).rgb, 0.3);
-			float spread = mix(0.1, 0.55, smoothstep(0.0, 0.6, fade));
+			float spread = mix(0.12, 0.7, smoothstep(5.0, 38.0, length(VERTEX)));
 
 			// Dead grass, its straw on dark thatch, with the odd lighter patch.
 			vec3 bank = mix(mix(bank_gap, bank_blade, smoothstep(0.3, 0.52, grain.g)), bank_straw, smoothstep(0.5, 0.74, grain.g));
@@ -273,13 +274,13 @@ void fragment() {
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
 			float gravel_w = 0.75 * smoothstep(3.3, 3.9, h) * smoothstep(0.5, 0.62, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny);
 			bank = mix(bank, bank_gravel * (0.8 + 0.4 * n_tiny), gravel_w);
-			float bank_w = 1.0 - smoothstep(4.7, 5.3, h);
+			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
 
 			// The mat: a fine crimson stipple through straw and olive, its shares drifting a
 			// few metres to a few tens across, never a patch with an edge of its own.
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
 			float mat_level = 0.36 * value_noise(p / 19.0 + vec2(7.3, 51.9)) + 0.34 * n_mid + 0.3 * value_noise(p / 3.1 + vec2(41.7, 17.3));
-			float red_share = 0.14 + 0.76 * smoothstep(0.3, 0.66, mat_level);
+			float red_share = 0.36 + 0.46 * smoothstep(0.3, 0.7, mat_level);
 			float olive_share = 0.5 * smoothstep(0.46, 0.76, 0.72 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.28 * n_small);
 			vec3 red = mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.62, grain.r));
 			red = mix(red, marsh_flare, 0.5 * smoothstep(0.66, 0.86, grain.r));
@@ -310,7 +311,7 @@ void fragment() {
 			water -= WATER_LEVEL + WATER_RISE_PER_M * max(0.0, ground_y - marsh_floor_y) + WATER_NORTH * (1.0 - smoothstep(0.14, 0.36, south));
 			water += WATER_POOL * marsh_read.b;
 			water += 0.12 * (n_tiny - 0.5) + 0.2 * (n_small - 0.5) + 0.16 * (n_mid - 0.5);
-			float flat_w = smoothstep(-0.26, -0.04, water + 0.14 * (grain.g - 0.5) + 0.1 * (n_small - 0.5));
+			float flat_w = smoothstep(-0.14, -0.02, water + 0.14 * (grain.g - 0.5) + 0.1 * (n_small - 0.5));
 			vec3 mud = mix(marsh_wet_mud, marsh_mud, smoothstep(0.32, 0.6, grain.g) * (1.0 - 0.5 * smoothstep(-0.05, 0.02, water)));
 			marsh = mix(marsh, mud, 0.92 * flat_w * (1.0 - far_off));
 

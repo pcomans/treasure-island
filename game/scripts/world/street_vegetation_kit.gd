@@ -677,7 +677,7 @@ const YOUNG_PLANTING := [
 ## The ditch plants' tones against the footage's dry bank, about sRGB 110,95,80 in sun.
 const MARSH_SHRUB_TINT := Color(0.72, 0.66, 0.6)
 const MARSH_STEM_TINT := Color(0.72, 0.68, 0.62)
-const MARSH_GRASS_TINT := Color(0.62, 0.56, 0.5)
+const MARSH_GRASS_TINT := Color(0.98, 0.9, 0.82)
 const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
@@ -698,9 +698,9 @@ const MARSH_STEMS := [
 ## and lanky stems, and of twiggy shrubs in dry grass, sown close so they run together
 ## with no one plant to pick out. The cards start under the ground, so nothing shows a foot.
 const MARSH_TANGLES := [
-	{"seed": 138, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 3, "width": 2.2, "height": 0.92, "base": -0.14, "curl": 0.08, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
-	{"seed": 139, "lean": 0.04, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_b", "cards": 3, "width": 2.4, "height": 1.0, "base": -0.14, "curl": 0.08, "splay_deg": 6.0, "flutter": 0.04, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
-	{"seed": 140, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 2, "width": 1.5, "height": 0.6, "base": -0.1, "curl": 0.07, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
+	{"seed": 138, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 3, "width": 2.0, "height": 1.0, "base": -0.45, "curl": 0.08, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
+	{"seed": 139, "lean": 0.04, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_b", "cards": 3, "width": 2.2, "height": 1.35, "base": -0.45, "curl": 0.08, "splay_deg": 6.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
+	{"seed": 140, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 2, "width": 1.4, "height": 0.7, "base": -0.32, "curl": 0.07, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
 ]
 ## The tall yellow-green fringe that closes the view along the ditch's far banks.
 const MARSH_FRINGES := [
@@ -711,9 +711,9 @@ const MARSH_FRINGES := [
 ## group, a few spread out and one big enough to read from the bank. Each is a real
 ## form, so it holds at a walker's feet. stones is how many, size_m their radii.
 const MARSH_STONES := [
-	{"seed": 148, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 4, "spread_m": 0.3, "size_m": [0.035, 0.09]}]},
-	{"seed": 149, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 5, "spread_m": 0.7, "size_m": [0.05, 0.13]}]},
-	{"seed": 150, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 2, "spread_m": 0.25, "size_m": [0.12, 0.22]}]},
+	{"seed": 148, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 4, "spread_m": 0.3, "size_m": [0.025, 0.06]}]},
+	{"seed": 149, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 5, "spread_m": 0.7, "size_m": [0.03, 0.08]}]},
+	{"seed": 150, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 2, "spread_m": 0.25, "size_m": [0.07, 0.13]}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
@@ -4265,7 +4265,7 @@ func material(key: String) -> Material:
 			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 			made.set_shader_parameter("desaturate", 0.7)
 		"marsh_stone":
-			made = _bark("park_gravel.png", Color(1.5, 1.42, 1.28))
+			made = _bark("park_gravel.png", Color(1.22, 1.16, 1.04))
 			made.set_shader_parameter("specular", 0.15)
 		"young_planting":
 			made = _foliage("young_planting_atlas.png", Color(0.95, 0.95, 0.92), Color(0.1, 0.12, 0.05), Vector2(1536.0, 1024.0), 0.1, 0.85)

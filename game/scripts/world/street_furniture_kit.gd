@@ -1370,7 +1370,7 @@ func _slab_chair(b: Builder) -> void:
 	var seat_tilt := Basis(Vector3.RIGHT, deg_to_rad(9.0))
 	var back_tilt := Basis(Vector3.RIGHT, deg_to_rad(-28.0))
 	b.box(Vector3(0.0, 0.3, -0.04), seat_tilt, Vector3(0.66, 0.05, 0.74), CHAIR_CYAN, CELL_WHITE)
-	b.box(Vector3(0.0, 0.66, 0.42), back_tilt, Vector3(0.62, 0.98, 0.05), CHAIR_CYAN, CELL_WHITE)
+	b.box(Vector3(0.0, 0.6, 0.4), back_tilt, Vector3(0.62, 0.84, 0.05), CHAIR_CYAN, CELL_WHITE)
 	for side: float in [-1.0, 1.0]:
 		var x := side * 0.345
 		b.box(Vector3(x, 0.27, -0.03), Basis.IDENTITY, Vector3(0.05, 0.54, 0.1), CHAIR_CYAN, CELL_WHITE)

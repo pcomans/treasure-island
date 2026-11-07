@@ -133,7 +133,7 @@ const EDGE_CLEAR_M = 0.1;
 // piers), that no crown reaches over; so is any ground added later until it is
 // listed here.
 export const SPILL_GROUNDS = Object.freeze([
-  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock",
+  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock", "yard_shoulder_band", "yard_shoulder_gravel",
   "street_kerb_planting", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland",
 ]);
 const SPILL = new Set(SPILL_GROUNDS);

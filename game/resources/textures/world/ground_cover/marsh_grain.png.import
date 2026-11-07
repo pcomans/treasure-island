@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://b0dn56g4cd3v7"
+path="res://.godot/imported/marsh_grain.png-61580fd227ef0b42ddfca5883af3a478.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/ground_cover/marsh_grain.png"
+dest_files=["res://.godot/imported/marsh_grain.png-61580fd227ef0b42ddfca5883af3a478.ctex"]
 
 [params]
 

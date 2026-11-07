@@ -371,7 +371,7 @@ All are used round the whole island: ten segments and seven closures.
 | Pale-seeded shrub (variants 0–2) | The ditch (195), the Mersea strip (150), the 1349 Gateview thicket (76) | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, cream seed clusters on lighter stems, added after that verdict and not yet reviewed. Final placement review at `641cd2cd`: level 1 | 2: a review of variant 2 on straw ground |
 | Marsh plants: pale-seeded shrub 3–4, `marsh_stems`, `marsh_tangle`, `marsh_fringe`, `marsh_stones` | The ditch's banks and floor (`marsh_atlas.png`) | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 | Young planting (`young_planting`) | The Mersea promenade's mulch on both sides | | From the owner's video, Nov 2026, crossed cards; not yet reviewed | Rate |
-| Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026; no far impostor, its LOD1 draws to the far range; not yet reviewed | Rate |
+| Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026, with its own baked far impostor; not yet reviewed | Rate |
 
 ### Player
 

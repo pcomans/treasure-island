@@ -513,7 +513,7 @@ export function drawGroundCoverMap(config, world) {
 // The lots whose edges the marsh keeps a straw bank from (the map's green channel).
 const MARSH_PAVED_MATERIALS = Object.freeze(["yard_asphalt", "yard_asphalt_fresh", "yard_asphalt_pale"]);
 // How far inside a mapped pool its mask reaches full strength (m).
-const MARSH_POOL_RAMP_M = 5;
+const MARSH_POOL_RAMP_M = 3;
 
 // The marsh map: red the signed distance from the wetland's outline (0.5 on it, positive
 // inside), green the distance from the lots' paving, both up to MARSH_MAP_RANGE_M, and

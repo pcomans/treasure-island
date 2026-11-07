@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 329952
+    "sample_points": 329854
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "cb791ee43c96c2da637c774acfcd3c08b5efcc9d3ceca7b51b1db6924354c119"
+      "sha256": "f785161898571d9f640c7f642b5ea92d07f406738a2377f9869670e02106b3e6"
     },
     "corrected_cells": 213,
-    "leaves": 5766,
+    "leaves": 5757,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -1503,7 +1503,7 @@
       ]
     ],
     "refined_cells": 213,
-    "refined_triangles": 13508,
+    "refined_triangles": 13494,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1655,7 +1655,7 @@
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 4827,
+          "free_nodes": 4623,
           "kind": "harmonic"
         },
         "id": "mersea_ditch_promenade",
@@ -1694,7 +1694,7 @@
             "rule": "sink"
           }
         ],
-        "scope_area_m2": 10076.5
+        "scope_area_m2": 10093.5
       }
     ]
   },

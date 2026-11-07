@@ -53,7 +53,7 @@ uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 // about 150,142,130, and a double yellow worn to an ochre a shade off the road.
 uniform vec3 rolled_white : source_color = vec3(0.52, 0.505, 0.48);
 uniform vec3 trace_white : source_color = vec3(0.4, 0.37, 0.33);
-uniform vec3 trace_yellow : source_color = vec3(0.275, 0.247, 0.2);
+uniform vec3 trace_yellow : source_color = vec3(0.3, 0.26, 0.185);
 // A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a
 // walker's low view doesn't catch the sky in it.
 uniform vec3 crack_tar : source_color = vec3(0.16, 0.145, 0.13);
