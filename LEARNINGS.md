@@ -1167,3 +1167,7 @@ On 2026-11-06 the owner set the direction for a future time of day: no sun-direc
 ## Read a heavy feature off two photos before composing it
 
 On 2026-11-06 the Aracely mural's disc chain had been composed from one matched view and sat a metre too low and three metres off, hidden by planting, while still reading as "a chain" on the sheet. Zooming both dated photos showed it runs at 1.2-2.5 m with its largest disc at the wall's middle, and that the two steel heaters stand off the wall: the same heater lands on different stations in the two views. Take stations by cross-ratio against the wall's vanishing point, calibrate one photo with the features common to both, and use parallax between them for anything off the wall.
+
+## A dark shape on a card surface may be the core poking through
+
+On 2026-11-07 hard-edged wedges hung down the Aracely hedge, and I reported them as tree shadows because they survived a neutral-light render, though that switch keeps the sun's direction. The reviewer read them correctly as a layer showing through: the hedge core swells with height by its `lobes` and `bulge` terms, while the leaf cards sit at a fixed lateral, so wherever the swell passed 1.03 of the half-depth the core came out in front, wide at the top and narrowing down. Check a suspect by the shapes that made it: compare the two surfaces' offsets before naming it a shadow, and keep any core inside the layer that clothes it.

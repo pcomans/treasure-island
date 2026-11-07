@@ -2156,6 +2156,10 @@ static func _pitched_roof(ctx: Ctx, block: Block) -> void:
 	var fascia := ctx.bucket("support", str(roof_cfg.get("fascia", "coping")))
 	# Opt-in "fascia_edges": {"<edge>": material} for the sides facing as that footprint edge does.
 	var fascia_edges: Dictionary = roof_cfg.get("fascia_edges", {})
+	for key: Variant in fascia_edges:
+		if not str(key).is_valid_int() or int(str(key)) < 0 or int(str(key)) >= ctx.edges.size():
+			ctx.errors.append("fascia_edges keys need footprint edges")
+			return
 	var outline := _grow_convex(block.poly, float(roof_cfg.get("overhang", 0.3)))
 	var canon: Array = []
 	for j in block.planes.size():
@@ -2879,7 +2883,7 @@ static func _eave(ctx: Ctx, spec: Variant) -> void:
 		var b: Array = profile[p]
 		var material := str(b[2]) if b.size() > 2 else "coping"
 		var bucket := ctx.bucket("support", material)
-		var rise := floor_y + float(b[1]) - (floor_y + float(a[1]))
+		var rise := float(b[1]) - float(a[1])
 		var move := float(b[0]) - float(a[0])
 		for i in run.size():
 			var n: Vector2 = (ctx.edges[int(run[i])] as Edge).n
@@ -2920,9 +2924,9 @@ static func _eave(ctx: Ctx, spec: Variant) -> void:
 			ends.tri(anchor, section[j - 1], section[j], normal if normal.dot(Vector3(along.x, 0.0, along.y)) >= 0.0 else -normal)
 
 
-## Opt-in "parts": pieces a scheme has no field for. kind "box", "glazing", "art" and
-## the site pieces "slab", "umbrella", "fence", "pad" and "path" (see the README).
-## Invalid input fails the build.
+## Opt-in "parts": pieces a scheme has no field for. kind "box", "glazing", "art",
+## "disc" and the site pieces "slab", "umbrella", "fence", "lights", "pad", "path" and
+## "set" (see the README). Invalid input fails the build.
 static func _part(ctx: Ctx, spec: Variant) -> void:
 	if not spec is Dictionary:
 		ctx.errors.append("part needs a dictionary")
@@ -3100,7 +3104,6 @@ static func _part_slab(ctx: Ctx, spec: Dictionary) -> void:
 		var x1 := -radius + w * float(i + 1) / float(strips)
 		var y0: float = top_at.call(x0)
 		var y1: float = top_at.call(x1)
-		var lower := 1.0
 		var fa: Vector3 = point.call(x0, base, t * 0.5)
 		var fb: Vector3 = point.call(x1, base, t * 0.5)
 		var fc: Vector3 = point.call(x1, y1, t * 0.5)
@@ -3109,8 +3112,8 @@ static func _part_slab(ctx: Ctx, spec: Dictionary) -> void:
 		var u1 := x1 / w + 0.5
 		var v0 := 1.0 - (y0 - base) / (top - base)
 		var v1 := 1.0 - (y1 - base) / (top - base)
-		front.tri_uv(fa, fb, fc, Vector2(u0, lower), Vector2(u1, lower), Vector2(u1, v1), facing)
-		front.tri_uv(fa, fc, fd, Vector2(u0, lower), Vector2(u1, v1), Vector2(u0, v0), facing)
+		front.tri_uv(fa, fb, fc, Vector2(u0, 1.0), Vector2(u1, 1.0), Vector2(u1, v1), facing)
+		front.tri_uv(fa, fc, fd, Vector2(u0, 1.0), Vector2(u1, v1), Vector2(u0, v0), facing)
 		var ba: Vector3 = point.call(x0, base, -t * 0.5)
 		var bb: Vector3 = point.call(x1, base, -t * 0.5)
 		var bc: Vector3 = point.call(x1, y1, -t * 0.5)
@@ -3227,7 +3230,8 @@ static func _part_set(ctx: Ctx, spec: Dictionary) -> void:
 
 ## A string of bulbs hung from `from` to `to` ([x, z, height above the building floor]),
 ## sagging `sag` metres at mid-span, with a bulb every `every` metres: a thin wire in
-## `wire_material` and small bulbs in `material`. Support role.
+## `wire_material` and small bulbs in `material`. Visual only, so a jetpack rise does
+## not stop on a wire no one can see.
 static func _part_lights(ctx: Ctx, spec: Dictionary) -> void:
 	var a: Variant = spec.get("from", [])
 	var b: Variant = spec.get("to", [])
@@ -3242,8 +3246,8 @@ static func _part_lights(ctx: Ctx, spec: Dictionary) -> void:
 	if span < 0.5:
 		ctx.errors.append("lights part needs a span of at least 0.5 m")
 		return
-	var wire := ctx.bucket("support", str(spec.get("wire_material", "frame")))
-	var bulbs := ctx.bucket("support", str(spec.get("material", "slab")))
+	var wire := ctx.bucket("ground", str(spec.get("wire_material", "frame")) + "|" + VISUAL_TAG)
+	var bulbs := ctx.bucket("ground", str(spec.get("material", "slab")) + "|" + VISUAL_TAG)
 	var count := maxi(2, ceili(span / every))
 	var side := Vector3(p1.z - p0.z, 0.0, p0.x - p1.x).normalized()
 	var previous := p0
@@ -3314,13 +3318,28 @@ static func _part_fence(ctx: Ctx, spec: Dictionary) -> void:
 
 ## Site paving over the simple polygon `poly`, in `material`, `lift` above the land.
 static func _part_pad(ctx: Ctx, spec: Dictionary) -> void:
-	var poly := _plan_points(spec.get("poly", []))
+	var points: Array = spec.get("poly", [])
+	var poly := PackedVector2Array()
+	var heights := PackedFloat32Array()
+	for value: Variant in points:
+		if value is Array and (value as Array).size() >= 2:
+			poly.append(Vector2(float(value[0]), float(value[1])))
+			if (value as Array).size() == 3:
+				heights.append(ctx.floor_y + float(value[2]))
 	var indices := Geometry2D.triangulate_polygon(poly) if poly.size() >= 3 else PackedInt32Array()
-	if indices.is_empty():
-		ctx.errors.append("pad part needs a simple poly of three or more points")
+	if indices.is_empty() or not heights.size() in [0, poly.size()]:
+		ctx.errors.append("pad part needs a simple poly of three or more points, all or none with a height")
 		return
+	var bucket := ctx.bucket("ground", str(spec.get("material", "paving")) + "|" + VISUAL_TAG)
 	for i in range(0, indices.size(), 3):
-		_pad_polygon(ctx, PackedVector2Array([poly[indices[i]], poly[indices[i + 1]], poly[indices[i + 2]]]), spec)
+		var corners: Array[int] = [indices[i], indices[i + 1], indices[i + 2]]
+		if heights.is_empty():
+			_pad_polygon(ctx, PackedVector2Array([poly[corners[0]], poly[corners[1]], poly[corners[2]]]), spec)
+			continue
+		var at: Array[Vector3] = []
+		for corner in corners:
+			at.append(Vector3(poly[corner].x, heights[corner], poly[corner].y))
+		bucket.tri(at[0], at[1], at[2], Vector3.UP)
 
 
 ## Convex site paving `poly`, draped over the frozen land `lift` above it (clear of
@@ -3395,13 +3414,14 @@ static func _make_materials(ctx: Ctx) -> void:
 		var texture_path := str(entry.get("texture", ""))
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
 		if not texture_path.is_empty() or entry.has("emission"):
-			cache_key += "|%s|%s|%s|%s" % [texture_path, entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0)]
+			cache_key += "|%s|%s|%s|%s|%s" % [texture_path, entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5)]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
 			material.albedo_color = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]), float(entry.get("alpha", 1.0)))
 			material.roughness = float(entry.get("roughness", 0.9))
 			material.metallic = float(entry.get("metallic", 0.0))
+			material.metallic_specular = float(entry.get("specular", 0.5))
 			if float(entry.get("alpha", 1.0)) < 1.0:
 				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				material.cull_mode = BaseMaterial3D.CULL_BACK

@@ -78,7 +78,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   bronze_clump_grass: Object.freeze([0.5, 0.62, 0.75, 1.6]),
   california_buckwheat: Object.freeze([0.65, 0.95, 1.25]),
   california_sagebrush: Object.freeze([0.75, 1.1, 1.45, 1.0]),
-  clipped_hedge: Object.freeze([1.0, 1.2, 3.2]),
+  clipped_hedge: Object.freeze([1.0, 1.2, 3.2, 1.2, 1.2, 1.2, 1.4, 1.3]),
   clump_grass: Object.freeze([0.92, 1.15, 1.0, 1.25, 1.0, 1.25, 1.0, 1.2]),
   conical_shrub: Object.freeze([2.0, 2.4]),
   dense_sedge: Object.freeze([0.55, 0.75, 0.95, 1.6, 2.5]),

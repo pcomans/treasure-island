@@ -470,12 +470,13 @@ export function validateStreetGroundRules(rules) {
       (walk.width_m === undefined || (isFiniteNumber(walk.width_m) && walk.width_m >= 2 && walk.width_m <= 12)) &&
       typeof walk.evidence === "string" && walk.evidence.trim() !== "", `Street ground crosswalk on ${walk.way} is malformed`);
   }
-  // Pavement flush with a street's edge, out to a building's parking (no stalls).
+  // A building's own forecourt, where a sidewalk's back slope runs down in concrete.
   for (const back of rules.paved_backs) {
     exactKeys(back, ["evidence", "points_xz"], "Street ground paved back");
     invariant(Array.isArray(back.points_xz) && back.points_xz.length >= 3 && back.points_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) &&
       typeof back.evidence === "string" && back.evidence.trim() !== "", "Street ground paved back is malformed");
   }
+  // Pavement flush with a street's edge, out to a building's parking (no stalls).
   for (const apron of rules.aprons) {
     exactKeys(apron, ["depth_m", "evidence", "from_m", "side", "to_m", "way"], "Street ground apron");
     invariant(/^w\d+$/u.test(apron.way) && ["left", "right"].includes(apron.side) && isFiniteNumber(apron.from_m) && isFiniteNumber(apron.to_m) && apron.to_m > apron.from_m &&

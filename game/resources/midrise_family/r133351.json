@@ -488,20 +488,27 @@
     },
     "glass_pale": {
       "rgb": [
-        0.72,
-        0.76,
-        0.76
+        0.74,
+        0.74,
+        0.66
       ],
-      "roughness": 0.25,
-      "metallic": 0.1
+      "roughness": 0.45
+    },
+    "glass_east": {
+      "rgb": [
+        0.1,
+        0.1,
+        0.085
+      ],
+      "roughness": 0.3
     },
     "blinds": {
       "rgb": [
-        0.95,
-        0.94,
-        0.9
+        0.75,
+        0.75,
+        0.7
       ],
-      "roughness": 0.6,
+      "roughness": 0.7,
       "texture": "res://game/resources/textures/world/aracely/aracely_blinds.png",
       "uv_scale": 0.83
     },
@@ -573,9 +580,9 @@
     },
     "stone": {
       "rgb": [
-        0.92,
-        0.9,
-        0.86
+        0.8,
+        0.78,
+        0.74
       ],
       "roughness": 0.95,
       "texture": "res://game/resources/textures/world/aracely/aracely_stone.png",
@@ -878,6 +885,25 @@
       "roughness": 0.95,
       "texture": "res://game/resources/textures/world/aracely/aracely_apron.png",
       "uv_scale": 0.2
+    },
+    "site_lawn": {
+      "rgb": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "roughness": 1.0,
+      "specular": 0.2,
+      "texture": "res://game/resources/textures/world/aracely/aracely_lawn.png",
+      "uv_scale": 0.2
+    },
+    "fascia_olive": {
+      "rgb": [
+        0.66,
+        0.67,
+        0.57
+      ],
+      "roughness": 0.7
     },
     "site_planting": {
       "rgb": [
@@ -1660,7 +1686,7 @@
             ],
             "frame": "frame_brown",
             "frame_w": 0.08,
-            "glass": "glass_pale",
+            "glass": "glass_east",
             "w": 2.35
           }
         },
@@ -1680,7 +1706,7 @@
             ],
             "frame": "frame_brown",
             "frame_w": 0.08,
-            "glass": "glass_pale",
+            "glass": "glass_east",
             "lights": [
               {
                 "h": 0.62,
@@ -1757,7 +1783,7 @@
             ],
             "frame": "frame_brown",
             "frame_w": 0.08,
-            "glass": "glass_pale",
+            "glass": "glass_east",
             "lights": [
               {
                 "h": 0.62,
@@ -2120,8 +2146,8 @@
         "under": "slate_soffit",
         "fascia": "slate_fascia",
         "fascia_edges": {
-          "5": "fascia_white",
-          "8": "fascia_white"
+          "5": "fascia_olive",
+          "8": "fascia_olive"
         }
       },
       "roof_material": "roof_dark",
@@ -2140,7 +2166,7 @@
     "wholeunit": "Mar 2025 r133351-sideD_240 (pano zHJe3vjFyKW1aAgqgdeypw, h 48): the e4 bump is a tall dark slate box (about 5.6 m to the fascia top) with a deep overhanging fascia about 1 m tall; its fascia ends match the OSM outline, so the walls sit about 1.2 m inside it on the WSW and 1.25 m in from both ends. Box depth (20 m), the SSE door and the roof are inference.",
     "wholeunit_ends": "The ends under the gym overhang differ on purpose, following sideD_240: at the NW end the photo shows a lower pale porch/hall under the fascia, so hall_nw fills the 1.25 m strip at hall height; at the SE end the photo shows an open dark pocket under the fascia (equipment, fence), so that strip stays open ground.",
     "reuse": "Reuse (2026-11-06): stays on midrise_family with the l2fix-midrise-20261103 frontage reading adapted (columned walk, blue spandrels, bay, porch; e9 corrected to frosted glazing, its ribbon windows on unphotographed faces not taken). New opt-in family fields wall_ring, eaves, parts, lights, door glazing, fascia_edges and palette textures; other instances build as before.",
-    "setting": "The living-wall chain, heaters, furniture, hedge and beds are read off the Aug 2026 and Jan 2026 patio photos and the Mar 2025 panos; furniture placing is production_inference. Palms in the beds are not drawn: the kit's palms are street trees, and agaves and flax carry the spiky form.",
+    "setting": "The living-wall chain, heaters, furniture, hedge and beds are read off the Aug 2026 and Jan 2026 patio photos and the Mar 2025 panos; the shrub bands under the east wing and frontage run in the photos' order; furniture placing is production_inference. Palms in the beds are not drawn: the kit's palms are street trees, and agaves and flax carry the spiky form. The sidewalk beside the forecourt and the walks' ramps up its back slope are visual pads over the kerb's heights in the generated world; regenerate them if that kerb moves. The east lot's lawn pad holds the lawn recipe's dry patch off a lawn the photo shows green.",
     "references_filed": "r133351-spec-gWJc (Mar 2025, pano gWJcXXKQ03dQoyUTMI1ZgQ, 37.8279144,-122.3730815) shows the EAST end e19-e21, not the west part as filed in c-set-refs-20261021/reference-note.md."
   },
   "face_key": "overlap",
@@ -3287,6 +3313,42 @@
       "foot": true
     },
     {
+      "kind": "box",
+      "edge": 19,
+      "s": [
+        1.1,
+        2.85
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "tan_panel",
+      "role": "support",
+      "y": [
+        0.78,
+        1.24
+      ]
+    },
+    {
+      "kind": "box",
+      "edge": 21,
+      "s": [
+        1.1,
+        4.3
+      ],
+      "d": [
+        1.06,
+        1.1
+      ],
+      "material": "tan_panel",
+      "role": "support",
+      "y": [
+        0.86,
+        1.33
+      ]
+    },
+    {
       "kind": "art",
       "edge": 20,
       "s": [
@@ -3968,20 +4030,120 @@
       "kind": "pad",
       "poly": [
         [
-          -277.8,
-          -421.5
+          -278.3,
+          -420.55
+        ],
+        [
+          -277.43,
+          -420.87
+        ],
+        [
+          -276.65,
+          -421.38
+        ],
+        [
+          -275.83,
+          -421.8
+        ],
+        [
+          -275.03,
+          -422.27
+        ],
+        [
+          -274.1,
+          -422.47
+        ],
+        [
+          -273.4,
+          -423.14
+        ],
+        [
+          -272.61,
+          -423.61
+        ],
+        [
+          -271.77,
+          -423.99
+        ],
+        [
+          -270.94,
+          -424.41
+        ],
+        [
+          -270.11,
+          -424.81
+        ],
+        [
+          -269.3,
+          -425.25
+        ],
+        [
+          -268.5,
+          -425.72
+        ],
+        [
+          -267.64,
+          -426.06
+        ],
+        [
+          -266.82,
+          -426.49
+        ],
+        [
+          -265.95,
+          -426.82
+        ],
+        [
+          -265.2,
+          -427.37
+        ],
+        [
+          -264.4,
+          -427.83
+        ],
+        [
+          -263.5,
+          -428.1
+        ],
+        [
+          -263.04,
+          -428.84
+        ],
+        [
+          -262.6,
+          -429.6
+        ],
+        [
+          -262.66,
+          -430.32
+        ],
+        [
+          -262.9,
+          -431.0
+        ],
+        [
+          -263.48,
+          -431.73
         ],
         [
           -264.0,
-          -428.8
+          -432.5
         ],
         [
-          -263.6,
-          -428.0
+          -265.6,
+          -431.8
         ],
         [
-          -277.4,
-          -420.7
+          -264.9,
+          -430.1
+        ],
+        [
+          -264.6,
+          -429.4
+        ],
+        [
+          -278.6,
+          -422.2
         ]
       ],
       "material": "site_mulch",
@@ -3991,32 +4153,271 @@
       "kind": "pad",
       "poly": [
         [
+          -261.25,
+          -423.1
+        ],
+        [
+          -257.2,
+          -424.5
+        ],
+        [
+          -256.05,
+          -425.7
+        ],
+        [
+          -256.05,
+          -428.1
+        ],
+        [
+          -248.0,
+          -432.45
+        ],
+        [
+          -246.2,
+          -433.42
+        ],
+        [
+          -246.25,
+          -435.27
+        ],
+        [
+          -248.05,
+          -434.3
+        ],
+        [
+          -252.15,
+          -432.07
+        ],
+        [
+          -256.05,
+          -429.97
+        ],
+        [
+          -258.15,
+          -428.78
+        ],
+        [
+          -259.6,
+          -427.62
+        ],
+        [
+          -260.5,
+          -426.4
+        ],
+        [
+          -261.25,
+          -424.4
+        ]
+      ],
+      "material": "site_concrete",
+      "lift": 0.29
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -261.31,
+          -423.04,
+          0.001
+        ],
+        [
+          -261.16,
+          -424.36,
+          0.004
+        ],
+        [
+          -260.43,
+          -426.35,
+          0.007
+        ],
+        [
+          -259.51,
+          -427.55,
+          0.007
+        ],
+        [
+          -258.07,
+          -428.7,
+          0.006
+        ],
+        [
+          -256.0,
+          -429.89,
+          0.002
+        ],
+        [
+          -252.1,
+          -432.0,
+          -0.005
+        ],
+        [
+          -248.0,
+          -434.22,
+          -0.013
+        ],
+        [
+          -246.2,
+          -435.2,
+          -0.014
+        ],
+        [
+          -246.65,
+          -435.95,
+          -0.189
+        ],
+        [
+          -248.45,
+          -434.98,
+          -0.189
+        ],
+        [
+          -252.55,
+          -432.75,
+          -0.189
+        ],
+        [
+          -256.45,
+          -430.65,
+          -0.189
+        ],
+        [
+          -258.65,
+          -429.45,
+          -0.189
+        ],
+        [
+          -260.2,
+          -428.25,
+          -0.189
+        ],
+        [
+          -261.25,
+          -426.85,
+          -0.189
+        ],
+        [
+          -262.0,
+          -424.7,
+          -0.189
+        ],
+        [
+          -262.15,
+          -423.5,
+          -0.189
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
           -274.4,
           -436.4
+        ],
+        [
+          -274.28,
+          -437.18
         ],
         [
           -274.6,
           -437.9
         ],
         [
+          -273.92,
+          -438.41
+        ],
+        [
+          -272.99,
+          -438.46
+        ],
+        [
+          -272.33,
+          -439.01
+        ],
+        [
+          -271.75,
+          -439.7
+        ],
+        [
           -270.9,
           -439.9
+        ],
+        [
+          -270.36,
+          -439.28
+        ],
+        [
+          -269.55,
+          -439.06
         ],
         [
           -268.9,
           -438.6
         ],
         [
+          -268.6,
+          -437.67
+        ],
+        [
           -267.9,
           -437.0
+        ],
+        [
+          -268.16,
+          -436.17
+        ],
+        [
+          -268.32,
+          -435.31
+        ],
+        [
+          -268.4,
+          -434.45
         ],
         [
           -268.6,
           -433.6
         ],
         [
+          -269.05,
+          -432.95
+        ],
+        [
+          -269.79,
+          -432.65
+        ],
+        [
+          -270.17,
+          -431.93
+        ],
+        [
           -270.9,
           -431.6
+        ],
+        [
+          -271.57,
+          -432.16
+        ],
+        [
+          -271.89,
+          -432.98
+        ],
+        [
+          -272.24,
+          -433.77
+        ],
+        [
+          -272.71,
+          -434.48
+        ],
+        [
+          -273.6,
+          -434.89
+        ],
+        [
+          -273.72,
+          -435.85
         ]
       ],
       "material": "site_planting",
@@ -4030,40 +4431,184 @@
           -441.8
         ],
         [
+          -267.63,
+          -442.34
+        ],
+        [
+          -267.01,
+          -442.77
+        ],
+        [
+          -266.12,
+          -442.79
+        ],
+        [
           -265.6,
           -443.4
+        ],
+        [
+          -265.1,
+          -444.15
+        ],
+        [
+          -264.77,
+          -444.99
+        ],
+        [
+          -264.46,
+          -445.83
         ],
         [
           -264.0,
           -446.6
         ],
         [
+          -263.24,
+          -446.27
+        ],
+        [
+          -262.52,
+          -445.87
+        ],
+        [
+          -261.72,
+          -445.65
+        ],
+        [
+          -260.98,
+          -445.27
+        ],
+        [
+          -260.13,
+          -445.21
+        ],
+        [
+          -259.3,
+          -445.08
+        ],
+        [
           -258.6,
           -444.6
+        ],
+        [
+          -258.35,
+          -443.88
+        ],
+        [
+          -257.68,
+          -443.38
+        ],
+        [
+          -257.57,
+          -442.58
+        ],
+        [
+          -257.18,
+          -441.94
+        ],
+        [
+          -256.51,
+          -441.44
+        ],
+        [
+          -256.52,
+          -440.57
         ],
         [
           -256.0,
           -440.0
         ],
         [
+          -256.58,
+          -439.52
+        ],
+        [
+          -256.97,
+          -438.91
+        ],
+        [
+          -257.06,
+          -438.11
+        ],
+        [
           -257.6,
           -437.6
+        ],
+        [
+          -258.4,
+          -437.49
+        ],
+        [
+          -259.05,
+          -436.91
+        ],
+        [
+          -259.91,
+          -436.98
+        ],
+        [
+          -260.57,
+          -436.42
         ],
         [
           -261.4,
           -436.4
         ],
         [
+          -262.1,
+          -436.15
+        ],
+        [
+          -262.84,
+          -435.95
+        ],
+        [
+          -263.22,
+          -435.11
+        ],
+        [
           -264.0,
           -435.0
+        ],
+        [
+          -264.49,
+          -435.46
+        ],
+        [
+          -265.03,
+          -435.85
         ],
         [
           -265.6,
           -436.2
         ],
         [
+          -265.85,
+          -437.03
+        ],
+        [
+          -266.33,
+          -437.71
+        ],
+        [
+          -267.05,
+          -438.24
+        ],
+        [
           -267.4,
           -439.0
+        ],
+        [
+          -267.5,
+          -439.73
+        ],
+        [
+          -267.85,
+          -440.38
+        ],
+        [
+          -267.91,
+          -441.13
         ]
       ],
       "material": "site_planting",
@@ -4119,8 +4664,8 @@
       "kind": "path",
       "line": [
         [
-          -222.5,
-          -446.5
+          -223.78,
+          -448.31
         ],
         [
           -228.5,
@@ -4140,8 +4685,38 @@
       "lift": 0.058
     },
     {
+      "kind": "pad",
+      "poly": [
+        [
+          -223.87,
+          -447.14,
+          -0.062
+        ],
+        [
+          -222.65,
+          -448.02,
+          -0.062
+        ],
+        [
+          -223.17,
+          -448.75,
+          -0.253
+        ],
+        [
+          -224.39,
+          -447.87,
+          -0.253
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
       "kind": "path",
       "line": [
+        [
+          -233.82,
+          -442.89
+        ],
         [
           -236.0,
           -445.8
@@ -4160,11 +4735,37 @@
       "lift": 0.058
     },
     {
+      "kind": "pad",
+      "poly": [
+        [
+          -233.76,
+          -441.81,
+          -0.062
+        ],
+        [
+          -232.8,
+          -442.53,
+          -0.062
+        ],
+        [
+          -233.34,
+          -443.25,
+          -0.236
+        ],
+        [
+          -234.3,
+          -442.53,
+          -0.236
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
       "kind": "path",
       "line": [
         [
-          -189.0,
-          -471.0
+          -187.41,
+          -468.04
         ],
         [
           -193.6,
@@ -4180,11 +4781,37 @@
       "lift": 0.058
     },
     {
+      "kind": "pad",
+      "poly": [
+        [
+          -188.05,
+          -466.69,
+          0.088
+        ],
+        [
+          -185.93,
+          -467.81,
+          0.088
+        ],
+        [
+          -186.35,
+          -468.6,
+          -0.096
+        ],
+        [
+          -188.47,
+          -467.48,
+          -0.096
+        ]
+      ],
+      "material": "pavers"
+    },
+    {
       "kind": "path",
       "line": [
         [
-          -195.6,
-          -464.6
+          -195.12,
+          -463.86
         ],
         [
           -199.1,
@@ -4198,6 +4825,134 @@
       "w": 1.3,
       "material": "site_concrete",
       "lift": 0.058
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.19,
+          -462.75,
+          0.098
+        ],
+        [
+          -194.09,
+          -463.45,
+          0.098
+        ],
+        [
+          -194.57,
+          -464.21,
+          -0.096
+        ],
+        [
+          -195.67,
+          -463.51,
+          -0.096
+        ]
+      ],
+      "material": "site_concrete"
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.0,
+          -463.95
+        ],
+        [
+          -188.0,
+          -467.75
+        ],
+        [
+          -197.4,
+          -485.25
+        ],
+        [
+          -205.4,
+          -480.9
+        ],
+        [
+          -204.4,
+          -479.5
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.045
+    },
+    {
+      "kind": "pad",
+      "poly": [
+        [
+          -195.1,
+          -463.8
+        ],
+        [
+          -204.0,
+          -459.0
+        ],
+        [
+          -205.14,
+          -459.61
+        ],
+        [
+          -206.22,
+          -460.29
+        ],
+        [
+          -206.91,
+          -461.51
+        ],
+        [
+          -208.36,
+          -461.69
+        ],
+        [
+          -209.18,
+          -462.73
+        ],
+        [
+          -210.2,
+          -463.5
+        ],
+        [
+          -209.96,
+          -464.72
+        ],
+        [
+          -210.3,
+          -465.99
+        ],
+        [
+          -209.68,
+          -467.17
+        ],
+        [
+          -209.69,
+          -468.41
+        ],
+        [
+          -209.21,
+          -469.61
+        ],
+        [
+          -209.9,
+          -470.92
+        ],
+        [
+          -209.3,
+          -472.1
+        ],
+        [
+          -204.0,
+          -474.9
+        ],
+        [
+          -204.5,
+          -479.4
+        ]
+      ],
+      "material": "site_lawn",
+      "lift": 0.045
     },
     {
       "kind": "set",
@@ -4708,126 +5463,224 @@
       "edge": 7,
       "s": 2.15,
       "g": [
-        1.05,
-        1.25
-      ],
-      "d": 1.985,
-      "depth": 0.1,
-      "material": "disc_plants",
-      "rim_material": "disc_rim",
-      "spin": 354
-    },
-    {
-      "kind": "disc",
-      "edge": 7,
-      "s": 2.42,
-      "g": [
-        1.39,
-        1.61
-      ],
-      "d": 1.985,
-      "depth": 0.102,
-      "material": "disc_plants",
-      "rim_material": "disc_rim",
-      "spin": 169
-    },
-    {
-      "kind": "disc",
-      "edge": 7,
-      "s": 2.95,
-      "g": [
-        1.78,
-        2.02
-      ],
-      "d": 1.985,
-      "depth": 0.104,
-      "material": "disc_plants",
-      "rim_material": "disc_rim",
-      "spin": 139
-    },
-    {
-      "kind": "disc",
-      "edge": 7,
-      "s": 3.55,
-      "g": [
-        2.02,
-        2.28
-      ],
-      "d": 1.985,
-      "depth": 0.106,
-      "material": "disc_plants",
-      "rim_material": "disc_rim",
-      "spin": 59
-    },
-    {
-      "kind": "disc",
-      "edge": 7,
-      "s": 4.3,
-      "g": [
-        2.12,
-        2.4
+        1.01,
+        1.29
       ],
       "d": 1.985,
       "depth": 0.108,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 126
+      "spin": 187
     },
     {
       "kind": "disc",
       "edge": 7,
-      "s": 4.8,
+      "s": 2.352,
       "g": [
-        1.89,
-        2.15
+        1.233,
+        1.589
       ],
       "d": 1.985,
-      "depth": 0.106,
+      "depth": 0.116,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 84
+      "spin": 283
     },
     {
       "kind": "disc",
       "edge": 7,
-      "s": 5.25,
+      "s": 2.601,
       "g": [
-        1.57,
-        1.87
+        1.488,
+        1.786
       ],
       "d": 1.985,
       "depth": 0.11,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 259
+      "spin": 216
     },
     {
       "kind": "disc",
       "edge": 7,
-      "s": 5.9,
+      "s": 2.84,
       "g": [
-        1.25,
-        1.65
+        1.679,
+        1.955
       ],
       "d": 1.985,
-      "depth": 0.12,
+      "depth": 0.108,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 23
+      "spin": 0
     },
     {
       "kind": "disc",
       "edge": 7,
-      "s": 6.42,
+      "s": 3.135,
       "g": [
-        1.26,
-        1.58
+        1.789,
+        2.165
+      ],
+      "d": 1.985,
+      "depth": 0.118,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 353
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 3.5,
+      "g": [
+        1.933,
+        2.325
+      ],
+      "d": 1.985,
+      "depth": 0.119,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 62
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 3.834,
+      "g": [
+        2.059,
+        2.325
+      ],
+      "d": 1.985,
+      "depth": 0.107,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 154
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.154,
+      "g": [
+        2.06,
+        2.418
+      ],
+      "d": 1.985,
+      "depth": 0.116,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 248
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.462,
+      "g": [
+        2.046,
+        2.318
+      ],
+      "d": 1.985,
+      "depth": 0.107,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 96
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.715,
+      "g": [
+        1.929,
+        2.193
+      ],
+      "d": 1.985,
+      "depth": 0.106,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 149
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 4.951,
+      "g": [
+        1.787,
+        2.051
+      ],
+      "d": 1.985,
+      "depth": 0.106,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 223
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.214,
+      "g": [
+        1.572,
+        1.916
+      ],
+      "d": 1.985,
+      "depth": 0.114,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 353
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.515,
+      "g": [
+        1.463,
+        1.757
+      ],
+      "d": 1.985,
+      "depth": 0.109,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 258
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 5.797,
+      "g": [
+        1.347,
+        1.639
+      ],
+      "d": 1.985,
+      "depth": 0.109,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 108
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 6.108,
+      "g": [
+        1.278,
+        1.602
       ],
       "d": 1.985,
       "depth": 0.112,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 358
+      "spin": 304
+    },
+    {
+      "kind": "disc",
+      "edge": 7,
+      "s": 6.475,
+      "g": [
+        1.23,
+        1.616
+      ],
+      "d": 1.985,
+      "depth": 0.119,
+      "material": "disc_plants",
+      "rim_material": "disc_rim",
+      "spin": 92
     },
     {
       "kind": "disc",
@@ -4841,7 +5694,7 @@
       "depth": 0.146,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 200
+      "spin": 155
     },
     {
       "kind": "disc",
@@ -4855,7 +5708,7 @@
       "depth": 0.2,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 42
+      "spin": 225
     },
     {
       "kind": "disc",
@@ -4869,7 +5722,7 @@
       "depth": 0.14,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 270
+      "spin": 167
     },
     {
       "kind": "disc",
@@ -4883,7 +5736,7 @@
       "depth": 0.113,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 12
+      "spin": 236
     },
     {
       "kind": "disc",
@@ -4897,7 +5750,7 @@
       "depth": 0.103,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 254
+      "spin": 286
     },
     {
       "kind": "disc",
@@ -4911,7 +5764,7 @@
       "depth": 0.104,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 17
+      "spin": 327
     },
     {
       "kind": "disc",
@@ -4925,7 +5778,7 @@
       "depth": 0.11,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 306
+      "spin": 355
     },
     {
       "kind": "disc",
@@ -4939,7 +5792,7 @@
       "depth": 0.103,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 159
+      "spin": 50
     },
     {
       "kind": "disc",
@@ -4953,7 +5806,7 @@
       "depth": 0.102,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 126
+      "spin": 333
     },
     {
       "kind": "disc",
@@ -4967,7 +5820,7 @@
       "depth": 0.112,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 160
+      "spin": 102
     },
     {
       "kind": "disc",
@@ -4981,7 +5834,7 @@
       "depth": 0.098,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 118
+      "spin": 330
     },
     {
       "kind": "disc",
@@ -4995,7 +5848,7 @@
       "depth": 0.096,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 15
+      "spin": 68
     },
     {
       "kind": "disc",
@@ -5009,7 +5862,7 @@
       "depth": 0.097,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 236
+      "spin": 225
     },
     {
       "kind": "disc",
@@ -5023,7 +5876,7 @@
       "depth": 0.097,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 322
+      "spin": 241
     },
     {
       "kind": "disc",
@@ -5037,7 +5890,7 @@
       "depth": 0.097,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 219
+      "spin": 266
     },
     {
       "kind": "disc",
@@ -5051,7 +5904,7 @@
       "depth": 0.097,
       "material": "disc_plants",
       "rim_material": "disc_rim",
-      "spin": 328
+      "spin": 12
     },
     {
       "kind": "slab",
@@ -5074,11 +5927,11 @@
         -256.9,
         -432.5
       ],
-      "yaw": 40.0,
-      "w": 0.9,
-      "h": 1.4,
+      "yaw": 20.0,
+      "w": 0.95,
+      "h": 1.45,
       "t": 0.04,
-      "bow": 0.12,
+      "bow": 0.2,
       "arch": true,
       "material": "sign_white",
       "face_material": "sign_white"

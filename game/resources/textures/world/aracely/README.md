@@ -13,9 +13,10 @@ Original interpretations for the cafe at the south tip of the former school ring
 | `aracely_stucco.png` | painted render tile on the study's walls (2.5 m) | seamless smooth painted exterior stucco | resized |
 | `aracely_boards.png` | bench and planter boards (1.1 m) | seamless weathered grey-brown horizontal boards | resized |
 | `aracely_apron.png` | concrete walks and aprons (5 m, four panels) | seamless pale warm concrete, hairline joints | resized and desaturated |
-| `aracely_blinds.png`, `aracely_curtain.png` | venetian blinds behind the frontage windows; silvery curtains in the glazed run | seamless white blinds, each slat one flat colour with a thin even line between; seamless silvery sheer curtains | resized, the blinds' lines lifted; the curtain desaturated |
+| `aracely_blinds.png`, `aracely_curtain.png` | venetian blinds behind the frontage windows; silvery curtains in the glazed run | seamless white blinds, each slat one flat colour with a thin even line between; seamless silvery sheer curtains | resized, the curtain desaturated |
 | `aracely_metal.png` | weathered penthouse cladding | seamless galvanized sheet cladding, joints a thin even line | resized and desaturated |
-| `aracely_stone.png` | stone corner on the east wing | seamless stacked ledgestone, the joints the same soft dark on every side of a stone | resized |
+| `aracely_stone.png` | stone corner on the east wing | seamless stacked ledgestone, the joints the same soft dark on every side of a stone | resized, darkened and desaturated to grey-brown |
+| `aracely_lawn.png` | the east lot's mown lawn (5 m) | not generated: the Poly Haven `sparse_grass` image the ground cover uses, put through the shader's own tuft and straw masks with the lawn recipe's colours | so it matches the shader lawn beside it |
 | `aracely_planter.png` | planting card in the bench planters | a strip of mixed garden planting on white, each leaf its plain colour | background keyed out |
 | `gaa_sign.png`, `gaa_seal.png` | wall sign and round seal on the east wing, original lettering and an original design, not the real mark | two lines of plain lettering; a simple round seal | alpha from darkness; masked to the circle |
 

@@ -1925,129 +1925,92 @@
    },
    "scatter": [
     {
+     "id": "frontage_clipped_hedge",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_frontage_hedge",
+     "prop": "clipped_hedge",
+     "variant": 5,
+     "basis": "production_inference",
+     "rule": "A low clipped hedge under the windows.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    },
+    {
+     "id": "frontage_dark_mounds",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_frontage_mounds",
+     "prop": "clipped_hedge",
+     "variant": 6,
+     "basis": "production_inference",
+     "rule": "Dark rounded shrubs against the frontage.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    },
+    {
+     "id": "frontage_low_mass",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_frontage_low",
+     "prop": "clipped_hedge",
+     "variant": 7,
+     "basis": "production_inference",
+     "rule": "A low mixed mass under the blank stretch of the bay.",
+     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
+    },
+    {
      "id": "frontage_e11_shrubs",
      "kind": "planting_slot",
      "pattern": "field",
-     "within_xz": [[-256.0, -455.6], [-246.9, -460.3], [-246.0, -458.6], [-255.1, -453.9]],
+     "within_xz": [[-253.5, -456.9], [-248.8, -459.4], [-247.9, -457.7], [-252.6, -455.2]],
      "building_buffer_m": 0.2,
      "surfaces": ["land_ground", "major_area_landuse"],
-     "per_m2": 1.7,
-     "spacing": [0.5, 0.85],
+     "per_m2": 0.9,
+     "spacing": [0.6, 1.2],
      "field": {
-      "drift_m": 5.0,
-      "clump_m": 2.0,
-      "drift_cover": 0.9,
-      "lone": 0.45
+      "drift_m": 2.6,
+      "clump_m": 1.1,
+      "drift_cover": 0.7,
+      "lone": 0.5
      },
      "mix": [
       {
-       "prop": "pittosporum_tobira",
+       "prop": "red_tip_shrub",
        "variants": [0, 1],
-       "scale": [0.8, 1.05],
+       "scale": [0.8, 1.15],
+       "at": [0.0, 1.0],
+       "share": 2
+      },
+      {
+       "prop": "conical_shrub",
+       "variants": [0, 0],
+       "scale": [0.8, 1.0],
        "at": [0.3, 1.0],
-       "share": 4
+       "share": 1
+      },
+      {
+       "prop": "shrubby_sage",
+       "variants": [0, 2],
+       "scale": [0.8, 1.25],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "nz_flax",
+       "variants": [3, 3],
+       "scale": [0.8, 1.05],
+       "at": [0.0, 1.0],
+       "share": 1
       },
       {
        "prop": "indian_hawthorn",
        "variants": [0, 0],
-       "scale": [0.8, 0.95],
-       "at": [0.5, 1.0],
-       "share": 2
-      },
-      {
-       "prop": "shrubby_sage",
-       "variants": [1, 2],
-       "scale": [0.95, 1.2],
-       "at": [0.0, 0.7],
-       "share": 2
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Foundation shrubs in loose runs under the eaves.",
-     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
-    },
-    {
-     "id": "frontage_e13_shrubs",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "within_xz": [[-237.4, -458.6], [-233.2, -460.9], [-232.4, -459.4], [-236.6, -457.1]],
-     "building_buffer_m": 0.2,
-     "surfaces": ["land_ground", "major_area_landuse"],
-     "per_m2": 1.7,
-     "spacing": [0.5, 0.85],
-     "field": {
-      "drift_m": 5.0,
-      "clump_m": 2.0,
-      "drift_cover": 0.9,
-      "lone": 0.45
-     },
-     "mix": [
-      {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 1],
        "scale": [0.8, 1.05],
-       "at": [0.3, 1.0],
-       "share": 4
-      },
-      {
-       "prop": "indian_hawthorn",
-       "variants": [0, 0],
-       "scale": [0.8, 0.95],
-       "at": [0.5, 1.0],
-       "share": 2
-      },
-      {
-       "prop": "shrubby_sage",
-       "variants": [1, 2],
-       "scale": [0.95, 1.2],
-       "at": [0.0, 0.7],
+       "at": [0.0, 1.0],
        "share": 2
       }
      ],
      "basis": "production_inference",
-     "rule": "Foundation shrubs in loose runs under the eaves.",
-     "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
-    },
-    {
-     "id": "frontage_e15_shrubs",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "within_xz": [[-235.0, -466.8], [-222.1, -473.6], [-221.2, -472.0], [-234.2, -465.2]],
-     "building_buffer_m": 0.2,
-     "surfaces": ["land_ground", "major_area_landuse"],
-     "per_m2": 1.7,
-     "spacing": [0.5, 0.85],
-     "field": {
-      "drift_m": 5.0,
-      "clump_m": 2.0,
-      "drift_cover": 0.9,
-      "lone": 0.45
-     },
-     "mix": [
-      {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 1],
-       "scale": [0.8, 1.05],
-       "at": [0.3, 1.0],
-       "share": 4
-      },
-      {
-       "prop": "indian_hawthorn",
-       "variants": [0, 0],
-       "scale": [0.8, 0.95],
-       "at": [0.5, 1.0],
-       "share": 2
-      },
-      {
-       "prop": "shrubby_sage",
-       "variants": [1, 2],
-       "scale": [0.95, 1.2],
-       "at": [0.0, 0.7],
-       "share": 2
-      }
-     ],
-     "basis": "production_inference",
-     "rule": "Foundation shrubs in loose runs under the eaves.",
+     "rule": "Mixed shrubs and a few rosettes between the hedge runs under the eaves.",
      "evidence": "Street View Mar 2025, pano 6UrJ: dark mounds, a pale leggy shrub and clipped rounded shrubs under the eaves of the 13th Street frontage."
     }
    ]
@@ -2075,87 +2038,36 @@
      "evidence": "Street View Mar 2025, pano gWJc: a clipped hedge from the sidewalk to each end of the wing."
     },
     {
-     "id": "east_e19_shrubs",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "within_xz": [[-214.2, -471.1], [-204.8, -476.1], [-204.3, -475.1], [-213.6, -470.1]],
-     "building_buffer_m": 0.2,
-     "surfaces": ["land_ground", "major_area_landuse"],
-     "per_m2": 2.4,
-     "spacing": [0.42, 0.65],
-     "field": {
-      "drift_m": 3.0,
-      "clump_m": 1.6,
-      "drift_cover": 0.95,
-      "lone": 0.8
-     },
-     "mix": [
-      {
-       "prop": "red_tip_shrub",
-       "variants": [0, 1],
-       "scale": [0.95, 1.2],
-       "at": [0.0, 1.0],
-       "share": 4
-      },
-      {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 0],
-       "scale": [0.8, 0.95],
-       "at": [0.0, 1.0],
-       "share": 3
-      },
-      {
-       "prop": "indian_hawthorn",
-       "variants": [0, 0],
-       "scale": [0.8, 0.9],
-       "at": [0.4, 1.0],
-       "share": 2
-      }
-     ],
+     "id": "east_band_e19",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_band_e19",
+     "prop": "clipped_hedge",
+     "variant": 3,
      "basis": "production_inference",
-     "rule": "A continuous band of clipped shrubs under the windows, maroon, green and olive in turn.",
+     "rule": "One clipped band under the windows of the left wing, burgundy, green and gold as the photo runs.",
      "evidence": "Street View Mar 2025, pano gWJc: a band of clipped maroon, green and yellow shrubs under the east wing's windows behind a low curb."
     },
     {
-     "id": "east_e21_shrubs",
-     "kind": "planting_slot",
-     "pattern": "field",
-     "within_xz": [[-206.3, -482.3], [-198.9, -486.3], [-198.3, -485.2], [-205.7, -481.2]],
-     "building_buffer_m": 0.2,
-     "surfaces": ["land_ground", "major_area_landuse"],
-     "per_m2": 2.4,
-     "spacing": [0.42, 0.65],
-     "field": {
-      "drift_m": 3.0,
-      "clump_m": 1.6,
-      "drift_cover": 0.95,
-      "lone": 0.8
-     },
-     "mix": [
-      {
-       "prop": "red_tip_shrub",
-       "variants": [0, 1],
-       "scale": [0.95, 1.2],
-       "at": [0.0, 1.0],
-       "share": 4
-      },
-      {
-       "prop": "pittosporum_tobira",
-       "variants": [0, 0],
-       "scale": [0.8, 0.95],
-       "at": [0.0, 1.0],
-       "share": 3
-      },
-      {
-       "prop": "indian_hawthorn",
-       "variants": [0, 0],
-       "scale": [0.8, 0.9],
-       "at": [0.4, 1.0],
-       "share": 2
-      }
-     ],
+     "id": "east_band_e21",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_band_e21",
+     "prop": "clipped_hedge",
+     "variant": 4,
      "basis": "production_inference",
-     "rule": "A continuous band of clipped shrubs under the windows, maroon, green and olive in turn.",
+     "rule": "The same band under the right wing, green, gold and burgundy.",
+     "evidence": "Street View Mar 2025, pano gWJc: a band of clipped maroon, green and yellow shrubs under the east wing's windows behind a low curb."
+    },
+    {
+     "id": "east_band_e20",
+     "kind": "hedge",
+     "pattern": "hedge_lines",
+     "group": "school_band_e20",
+     "prop": "clipped_hedge",
+     "variant": 6,
+     "basis": "production_inference",
+     "rule": "Dark clipped shrubs against the sign wall.",
      "evidence": "Street View Mar 2025, pano gWJc: a band of clipped maroon, green and yellow shrubs under the east wing's windows behind a low curb."
     }
    ]

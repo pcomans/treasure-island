@@ -24281,3 +24281,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Fitted poses, then a headless dump and an offline rasterizer, caught most form errors without a render slot, so twelve shot runs covered the whole study. Zooming both dated patio photos and taking stations by cross-ratio placed the living-wall chain and the heaters; the paired views changed more from that hour than from any earlier round. Rule-sown beds, the hedge as a data line and the row diff against the base kept the street-detail changes reviewable.
 - What did not work well: I composed the chain from one view and it sat a metre low until a review made me look properly. Four textures came back with sun in them although their prompts said even light; a bay narrower than its window dropped silently; a lawn rule matched nothing and the generator ran clean; an emission change greyed the storefront. Run R05 failed because a new umbrella stood over a gameplay pose, R10 because I chained a shot run behind a parse error, and R11's path view sat inside the hedge.
 - What the team should change next time: Zoom every dated photo of a signature feature at full size before composing it. Stop a chained command on the build check's result, not only on its output. Re-check gameplay and matched poses against what a change adds. Give the art owner a per-area green lawn channel or accept the lawn recipe's dry patches in writing: the one left on the east lot comes from the shared recipe's noise, not from a rule.
+
+### aracely-visual-review, round 2 — 2026-11-07 — independent visual review of r133351 at 0fe6f586
+
+- What worked well: paired crops and the neutral render settled the wedge question, and island diffs confirmed the change stayed on the site.
+- What did not work well: the final commit landed after every supplied render, so two claimed fixes could not be seen.
+- What the team should change next time: render the views a commit touches from that commit before requesting review.
+
+### aracely-code-review — 2026-11-07 — independent code review of r133351 at 0fe6f586
+
+- What worked well: comparing rows, planting blocks, a rasterised plan and cover-map pixels against the base settled the shared-damage question quickly.
+- What did not work well: an ordered vertex diff showed an alarming island-wide change that was only retriangulation.
+- What the team should change next time: authors should report chunk-level churn and its cause in the handoff, not only row counts.

@@ -585,7 +585,7 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
 	var bodies := {}
 	for node: Node in root.get_children():
-		if node is MeshInstance3D and bool(node.get_meta("visual_only", false)):
+		if node is MeshInstance3D and bool(node.get_meta("visual_only", false)) and str(node.get_meta("family_role", "")) == "ground":
 			continue
 		if node is MeshInstance3D:
 			var role := str(node.get_meta("family_role", "support"))
