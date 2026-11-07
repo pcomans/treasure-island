@@ -24305,3 +24305,25 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Two renders gave most of the answer. The first showed every feature at once and too strong; cutting seed heads to about one tuft in ten made it natural, and shooting a stronger and a deeper variant beside the default in one run settled the tones. Rendering the mound from a generated texture of mixed broken concrete took one command and removed the cobbles.
 - What did not work well: I signed off the first version from close crops, when the owner judges from the game camera; the spawn pose was on my sheets, but I read it for edges, not for whether it looked like grass.
 - What the team should change next time: Open the gameplay-camera pose first and ask whether a stranger would name the surface. Keep colour variation zero-mean per channel from the start: my first multipliers dropped the mean blue by a tenth.
+
+### ground-visual-review — 2026-11-07 — review of 118e2173
+
+(Relayed by the coordinator; added by ground-dressing.)
+
+- What worked well: Raw originals, matched off and high pairs and frame times let the fade and island claims be tested directly.
+- What did not work well: The player strip never entered tall straw.
+- What the team should change next time: Capture the avatar on each surface type, with a dated reference for every surface the owner names.
+
+### ground-code-review — 2026-11-07 — review of 118e2173
+
+(Relayed by the coordinator; added by ground-dressing.)
+
+- What worked well: Reading pinned engine source settled resize, tonemap, Metal and backlight questions without a run.
+- What did not work well: A grep on the wrong checkout at first.
+- What the team should change next time: Give the reviewer suite receipts, or say up front they don't exist.
+
+### ground-dressing — 2026-11-07 — addendum: review fixes
+
+- What worked well: The avatar shots in tall straw answered the bend question at once: no disc or streaks once the blades lean each their own way. Hiding the ground's painted lawn threads by setting one existing uniform while the grass is on fixed the "painted ground" read without touching the ground shader. Keeping rubble pieces to the far heap, as the reviewer offered, beat every way of making them hold up close.
+- What did not work well: Textured rubble pieces still read as pits, then as dents, over two runs before I took the simpler route. I started one run as `( ... ) &` inside a foreground call; it survived as an orphan, but its handle was only a PID I had to look up. I had also not counted the native bakes as engine runs in my earlier tallies.
+- What the team should change next time: When a reviewer offers a simpler fallback, render it beside the ambitious fix in the same run. Start every engine run with the tool's own background mode, and count every Godot invocation, bakes included, against the budget.

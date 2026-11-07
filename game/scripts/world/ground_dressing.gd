@@ -32,10 +32,11 @@ extends Node3D
 ## renderer) and not headless.
 
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
-const BLADE_SHADER := preload("res://game/resources/materials/world/ground_cover/ground_dressing_blades.gdshader")
-const STONE_SHADER := preload("res://game/resources/materials/world/ground_cover/ground_dressing_stones.gdshader")
-const MASK_SHADER := preload("res://game/resources/materials/world/ground_cover/ground_dressing_mask.gdshader")
-const YARD_SHADER := preload("res://game/resources/materials/world/ground_cover/ground_dressing_yard.gdshader")
+## Loaded in configure(), so a run that draws none (the web) never loads them.
+const BLADE_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_blades.gdshader"
+const STONE_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_stones.gdshader"
+const MASK_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_mask.gdshader"
+const YARD_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_yard.gdshader"
 
 const DENSITY_SETTING := "treasure_island/ground_dressing/density"
 const DENSITY_FLAG := "--ground-dressing"
@@ -61,10 +62,10 @@ const LEVELS := {
 ## lawns mown to a few centimetres; the dry fields thin stems to about the shin over
 ## soil, stones lying where the soil shows.
 const DRESS := {
-	"lawn": Vector3(1.0, 0.075, 0.0),
-	"park_lawn": Vector3(1.0, 0.06, 0.0),
-	"sports": Vector3(1.0, 0.05, 0.0),
-	"watered_pitch": Vector3(1.0, 0.055, 0.0),
+	"lawn": Vector3(1.0, 0.058, 0.0),
+	"park_lawn": Vector3(1.0, 0.052, 0.0),
+	"sports": Vector3(1.0, 0.045, 0.0),
+	"watered_pitch": Vector3(1.0, 0.048, 0.0),
 	"turf": Vector3(1.0, 0.025, 0.0),
 	"field": Vector3(0.6, 0.24, 0.3),
 	"straw": Vector3(0.62, 0.2, 0.2),
@@ -76,13 +77,14 @@ const DRESS := {
 	"sand_pad": Vector3(0.12, 0.16, 0.25),
 	"verge": Vector3(0.3, 0.2, 0.5),
 }
-## The same for the worked yards' surfaces, by material.
+## The same for the worked yards' surfaces, by material. A stones share over 1 is
+## rubble: the share over 1 lies in piles of broken pieces in the surface's own texture.
 const YARD_DRESS := {
 	"yard_sand_pale": Vector3(0.14, 0.18, 0.3),
 	"yard_gravel": Vector3(0.05, 0.14, 0.14),
 	"yard_gravel_pale": Vector3(0.05, 0.14, 0.14),
 	"yard_soil_dark": Vector3(0.08, 0.18, 0.3),
-	"rubble_grey": Vector3(0.0, 0.0, 0.85),
+	"rubble_grey": Vector3(0.0, 0.0, 1.9),
 }
 ## The tallest grass on a kerb verge, kept low whatever grows behind it.
 const KERB_HEIGHT_LIMIT_M := 0.09
@@ -115,11 +117,13 @@ const GROUND_Y_M := 4.0
 const RESELECT_M := 1.5
 
 ## Blades in a tuft and the mesh levels: a cell's nearest distance, blades, segments.
-const TUFT_BLADES := 8
+const TUFT_BLADES := 12
+const MID_BLADES := 8
+const FAR_BLADES := 5
 const MESH_LEVELS := [
-	{"until_m": 8.0, "blades": 8, "segments": 3},
-	{"until_m": 24.0, "blades": 8, "segments": 2},
-	{"until_m": INF, "blades": 5, "segments": 1},
+	{"until_m": 8.0, "blades": TUFT_BLADES, "segments": 3},
+	{"until_m": 24.0, "blades": MID_BLADES, "segments": 2},
+	{"until_m": INF, "blades": FAR_BLADES, "segments": 1},
 ]
 const TUFT_SEED := 20261107
 const STONE_SEED := 20261108
@@ -132,8 +136,8 @@ const CARD_BLADE_PLACE := 0.3
 const CARD_HALF_WIDTH := 16.0
 const CARD_TUFT_SHARE := 0.21
 
-## Blades lean away from the player within this distance.
-const BEND_RADIUS_M := 0.85
+## Blades part round the player within this distance.
+const BEND_RADIUS_M := 0.6
 
 ## The grass's own render layer (reflection probes draw layers 1 and 2).
 const RENDER_DRESSING := 1 << 4
@@ -150,6 +154,7 @@ var _stones: Dictionary
 ## The ring drawing the grass, _blades or _cards.
 var _grass: Dictionary
 var _use_cards := false
+var _render_priority := 0
 var _draw_grass := true
 var _draw_stones := true
 var _selected_at := Vector3.INF
@@ -157,6 +162,8 @@ var _window_centre := Vector2.INF
 var _capture_shader: Shader
 ## A ground family or yard material -> [colour material, surface material].
 var _capture_materials := {}
+## Every ground-cover material in the world, as keys.
+var _ground_materials := {}
 var _mask_block: ShaderMaterial
 var _mask_pass: ShaderMaterial
 var _mask_prop: ShaderMaterial
@@ -249,7 +256,9 @@ static func tile_point(index: int) -> Vector2:
 
 ## One tuft at unit height, as the blade shader reads it. Every level draws the same
 ## first blades, so a cell changing mesh level keeps its tufts' shape. The first blade
-## is a long stem with a seed head, which the shader shows in long grass.
+## is a long stem with a seed head, which the shader shows in long grass; those only
+## the near meshes have lie along the ground, a thatch under the rest; and the nearest
+## mesh's extra blades, which end sooner, thicken the grass under the camera.
 static func tuft_mesh(blades: int, segments: int, material: Material) -> ArrayMesh:
 	var random := RandomNumberGenerator.new()
 	random.seed = TUFT_SEED
@@ -272,17 +281,22 @@ static func tuft_mesh(blades: int, segments: int, material: Material) -> ArrayMe
 		if blade >= blades:
 			continue
 		var stem := blade == 0
+		var rise := 1.0
 		if stem:
 			length = 1.6
 			lean = 0.25
 			blade_width = 0.9
+		elif blade >= FAR_BLADES and blade < MID_BLADES:
+			lean = 1.2 + 0.7 * one_blade
+			rise = 0.3
+			blade_width = 1.3
 		var side_3d := Vector3(side.x, 0.0, side.y)
 		var first := vertices.size()
-		var rows := _blade_rows(segments, stem)
+		var rows := _blade_rows(mini(segments, 2) if blade >= MID_BLADES else segments, stem)
 		for row: Vector2 in rows:
 			var t := row.x
-			var point := _blade_point(t, lean_direction, lean, length)
-			var normal := side_3d.cross(_blade_point(minf(t + 0.05, 1.05), lean_direction, lean, length) - _blade_point(t - 0.05, lean_direction, lean, length)).normalized()
+			var point := _blade_point(t, lean_direction, lean, length, rise)
+			var normal := side_3d.cross(_blade_point(minf(t + 0.05, 1.05), lean_direction, lean, length, rise) - _blade_point(t - 0.05, lean_direction, lean, length, rise)).normalized()
 			if normal.y < 0.0:
 				normal = -normal
 			var colour := Color(side.x * 0.5 + 0.5, side.y * 0.5 + 0.5, one_blade, float(blade) / float(TUFT_BLADES))
@@ -328,14 +342,14 @@ static func _blade_rows(segments: int, stem: bool) -> PackedVector2Array:
 
 
 ## A blade's centre line at t of its length, at unit height: it rises, then leans.
-static func _blade_point(t: float, direction: Vector2, lean: float, length: float) -> Vector3:
+static func _blade_point(t: float, direction: Vector2, lean: float, length: float, rise: float) -> Vector3:
 	var along := clampf(t, 0.0, 1.0)
 	var out := lean * pow(along, 1.8)
-	return Vector3(direction.x * out, length * (along - 0.3 * lean * along * along), direction.y * out)
+	return Vector3(direction.x * out, rise * length * (along - 0.3 * minf(lean, 1.0) * along * along), direction.y * out)
 
 
-## One rock at unit radius, as the stone shader reads it: the faces of a jittered
-## icosahedron that show above the ground, and its contact skirt (UV.x 1).
+## One rock at unit radius, as the stone shader reads it: a jittered icosahedron,
+## closed so a piece tipped on a slope shows no hollow, and its contact skirt (UV.x 1).
 static func stone_mesh(material: Material) -> ArrayMesh:
 	var random := RandomNumberGenerator.new()
 	random.seed = STONE_SEED
@@ -351,8 +365,6 @@ static func stone_mesh(material: Material) -> ArrayMesh:
 		var a := corners[faces[face]]
 		var b := corners[faces[face + 1]]
 		var c := corners[faces[face + 2]]
-		if maxf(a.y, maxf(b.y, c.y)) < -0.2:
-			continue
 		var normal := (b - a).cross(c - a).normalized()
 		# Godot's front faces wind clockwise seen from outside.
 		if normal.dot(a + b + c) > 0.0:
@@ -445,35 +457,24 @@ func configure(world: Node3D, player: Node3D, level: String) -> void:
 	_world = world
 	_player = player
 	var meshes: Array[Mesh] = []
-	var blades := _ring_material("ground_dressing_blades", BLADE_SHADER)
+	var blades := _ring_material("ground_dressing_blades", load(BLADE_SHADER_PATH))
 	for entry: Dictionary in MESH_LEVELS:
 		meshes.append(tuft_mesh(int(entry.blades), int(entry.segments), blades))
 	_blades = _new_ring(blades, meshes, true)
-	var cards_shader := Shader.new()
-	cards_shader.code = "#define GROUND_DRESSING_CARDS\n" + (BLADE_SHADER as Shader).code
-	var cards := _ring_material("ground_dressing_cards", cards_shader)
-	cards.set_shader_parameter("card_texture", card_texture())
-	var card_meshes: Array[Mesh] = [card_mesh(cards)]
-	_cards = _new_ring(cards, card_meshes, false)
-	var stones := _ring_material("ground_dressing_stones", STONE_SHADER)
+	var stones := _ring_material("ground_dressing_stones", load(STONE_SHADER_PATH))
 	var stone_meshes: Array[Mesh] = [stone_mesh(stones)]
 	_stones = _new_ring(stones, stone_meshes, false)
 	_use_cards = bool(ProjectSettings.get_setting(CARDS_SETTING, false))
-	_grass = _cards if _use_cards else _blades
 	_draw_grass = bool(ProjectSettings.get_setting(GRASS_SETTING, true))
 	_draw_stones = bool(ProjectSettings.get_setting(STONES_SETTING, true))
-	set_render_priority(int(ProjectSettings.get_setting(RENDER_PRIORITY_SETTING, 0)))
+	_render_priority = int(ProjectSettings.get_setting(RENDER_PRIORITY_SETTING, 0))
 	var started := Time.get_ticks_msec()
 	_build_captures()
 	print("GROUND_DRESSING level=%s surface_copies=%d colour_copies=%d build_ms=%d" % [level, surface_viewport.get_child_count() - 1, colour_viewport.get_child_count() - 1, Time.get_ticks_msec() - started])
-	for ring: Dictionary in _rings():
-		var material: ShaderMaterial = ring.material
-		material.set_shader_parameter("ground_surface", surface_viewport.get_texture())
-		material.set_shader_parameter("ground_colour", colour_viewport.get_texture())
-		material.set_shader_parameter("tile_m", CELL_M)
-		material.set_shader_parameter("full_density_m", FULL_DENSITY_M)
-		material.set_shader_parameter("share_margin", SHARE_MARGIN)
-		material.set_shader_parameter("ground_y_m", GROUND_Y_M)
+	_share_captures(blades)
+	_share_captures(stones)
+	set_render_priority(_render_priority)
+	_pick_grass()
 	set_level(level)
 
 
@@ -484,8 +485,36 @@ func _ring_material(material_name: String, shader: Shader) -> ShaderMaterial:
 	return material
 
 
+## Gives a ring's material the captures and the placement settings it shares.
+func _share_captures(material: ShaderMaterial) -> void:
+	material.set_shader_parameter("ground_surface", surface_viewport.get_texture())
+	material.set_shader_parameter("ground_colour", colour_viewport.get_texture())
+	material.set_shader_parameter("tile_m", CELL_M)
+	material.set_shader_parameter("full_density_m", FULL_DENSITY_M)
+	material.set_shader_parameter("share_margin", SHARE_MARGIN)
+	material.set_shader_parameter("ground_y_m", GROUND_Y_M)
+
+
+## _grass from _use_cards. The cards are built only if something asks for them.
+func _pick_grass() -> void:
+	if _use_cards and _cards.is_empty():
+		var shader := Shader.new()
+		shader.code = "#define GROUND_DRESSING_CARDS\n" + (_blades.material.shader as Shader).code
+		var cards := _ring_material("ground_dressing_cards", shader)
+		cards.set_shader_parameter("card_texture", card_texture())
+		cards.render_priority = _render_priority
+		_share_captures(cards)
+		var meshes: Array[Mesh] = [card_mesh(cards)]
+		_cards = _new_ring(cards, meshes, false)
+	_grass = _cards if _use_cards else _blades
+	_window_centre = Vector2.INF
+
+
 func _rings() -> Array[Dictionary]:
-	return [_blades, _cards, _stones]
+	var rings: Array[Dictionary] = [_blades, _stones]
+	if not _cards.is_empty():
+		rings.append(_cards)
+	return rings
 
 
 ## Switches to a level of LEVELS, or OFF.
@@ -497,15 +526,30 @@ func set_level(level: String) -> void:
 	for ring: Dictionary in _rings():
 		_clear_ring(ring)
 	if level == OFF:
+		_set_lawn_threads(true)
 		return
 	var settings: Dictionary = LEVELS[level]
+	_set_lawn_threads(false)
 	if _draw_grass:
 		_set_ring(_grass, float(settings.tufts_m2) * (CARD_TUFT_SHARE if _use_cards else 1.0), float(settings.ring_m))
 	if _draw_stones:
 		_set_ring(_stones, float(settings.stones_m2), float(settings.stone_ring_m))
-	for ring: Dictionary in [_blades, _cards]:
-		(ring.material as ShaderMaterial).set_shader_parameter("width_scale", float(settings.width_scale))
+	(_grass.material as ShaderMaterial).set_shader_parameter("width_scale", float(settings.width_scale))
 	_warm_variants()
+
+
+## The ground's lawn has tan threads painted through it, which stand for blades of
+## straw and show as paint between real blades: with grass on, they take the colour of
+## its green blades. Its distance mean moves by under one part in a hundred.
+func _set_lawn_threads(shown: bool) -> void:
+	for material: ShaderMaterial in _ground_materials:
+		if shown:
+			material.set_shader_parameter("lawn_straw", null)
+		else:
+			var blade: Variant = material.get_shader_parameter("lawn_blade")
+			if blade == null:
+				blade = RenderingServer.shader_get_parameter_default(material.shader.get_rid(), "lawn_blade")
+			material.set_shader_parameter("lawn_straw", blade)
 
 
 func get_level() -> String:
@@ -517,20 +561,21 @@ func set_parts(cards: bool, grass: bool, stones: bool) -> void:
 	var level := _level
 	set_level(OFF)
 	_use_cards = cards
-	_grass = _cards if cards else _blades
 	_draw_grass = grass
 	_draw_stones = stones
+	_pick_grass()
 	set_level(level)
 
 
 func set_render_priority(priority: int) -> void:
+	_render_priority = priority
 	for ring: Dictionary in _rings():
 		(ring.material as ShaderMaterial).render_priority = priority
 
 
 ## Sets a uniform of the grass and of the ground captures, for tuning shots.
 func set_parameter(uniform: String, value: Variant) -> void:
-	for ring: Dictionary in [_blades, _cards]:
+	for ring: Dictionary in _rings():
 		(ring.material as ShaderMaterial).set_shader_parameter(uniform, value)
 	for pair: Array in _capture_materials.values():
 		for material: Material in pair:
@@ -603,7 +648,8 @@ func _select_cells(ring: Dictionary, at: Vector3) -> void:
 			_release_cell(ring, cell)
 	for cell: Vector3i in wanted:
 		var distance: float = wanted[cell]
-		var multimesh := _variant(ring, cell.z, tier_at(distance), mesh_level_at(distance) if ring.mesh_levels else 0)
+		# The camera may come RESELECT_M nearer before cells are chosen again.
+		var multimesh := _variant(ring, cell.z, tier_at(distance - RESELECT_M), mesh_level_at(distance) if ring.mesh_levels else 0)
 		if not cells.has(cell):
 			cells[cell] = _claim_cell(ring, cell)
 		var node: MultiMeshInstance3D = cells[cell]
@@ -626,8 +672,8 @@ func _claim_cell(ring: Dictionary, cell: Vector3i) -> MultiMeshInstance3D:
 	var size := CELL_M * float(1 << cell.z)
 	node.position = Vector3(float(cell.x) * size, 0.0, float(cell.y) * size)
 	# The shader moves instances from their place to the ground and out of the cell
-	# by up to a tuft's reach.
-	node.custom_aabb = AABB(Vector3(-1.0, -2.0, -1.0), Vector3(size + 2.0, 32.0, size + 2.0))
+	# by up to a tuft's reach, as wide as a far blade grows.
+	node.custom_aabb = AABB(Vector3(-3.0, -2.0, -3.0), Vector3(size + 6.0, 32.0, size + 6.0))
 	return node
 
 
@@ -650,7 +696,7 @@ func _warm_variants() -> void:
 			var to_m := minf(float(ring.ring_m), 2.0 * SPLIT * size + 1.5 * size)
 			var distance := from_m
 			while distance <= to_m:
-				_variant(ring, level, tier_at(distance), mesh_level_at(distance) if ring.mesh_levels else 0)
+				_variant(ring, level, tier_at(distance - RESELECT_M), mesh_level_at(distance) if ring.mesh_levels else 0)
 				distance += 0.5
 
 
@@ -724,13 +770,11 @@ func _build_captures() -> void:
 	colour_viewport = _make_viewport("GroundColour", COLOUR_PIXELS)
 	_capture_shader = Shader.new()
 	_capture_shader.code = "#define GROUND_DRESSING_CAPTURE\n" + (GROUND_COVER.SHADER as Shader).code
-	_mask_block = ShaderMaterial.new()
-	_mask_block.shader = MASK_SHADER
-	_mask_pass = ShaderMaterial.new()
-	_mask_pass.shader = MASK_SHADER
+	var mask_shader: Shader = load(MASK_SHADER_PATH)
+	_mask_block = _ring_material("ground_dressing_mask", mask_shader)
+	_mask_pass = _ring_material("ground_dressing_mask_pass", mask_shader)
 	_mask_pass.set_shader_parameter("factor", Vector4.ONE)
-	_mask_prop = ShaderMaterial.new()
-	_mask_prop.shader = MASK_SHADER
+	_mask_prop = _ring_material("ground_dressing_mask_prop", mask_shader)
 	_mask_prop.set_shader_parameter("below_m", PROP_MASK_M)
 	for parent_name: String in ["ground_and_areas", "roads_and_paths", "buildings"]:
 		var parent: Node = _world.get(parent_name)
@@ -795,6 +839,7 @@ func _capture_pair(material: Material, kerb: bool) -> Array:
 
 ## A family's capture materials: its own settings on the capture shader.
 func _ground_capture(source: ShaderMaterial, family: String, kerb: bool) -> Array:
+	_ground_materials[source] = true
 	var key := family + ("/kerb" if kerb else "")
 	if _capture_materials.has(key):
 		return _capture_materials[key]
@@ -824,9 +869,15 @@ func _yard_capture(source: BaseMaterial3D) -> Array:
 		return _capture_materials[source.resource_name]
 	var colour := source.duplicate() as BaseMaterial3D
 	colour.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	var surface := ShaderMaterial.new()
-	surface.shader = YARD_SHADER
+	var surface := _ring_material("ground_dressing_yard", load(YARD_SHADER_PATH))
 	surface.set_shader_parameter("dress", YARD_DRESS[source.resource_name])
 	var pair := [colour, surface]
+	var dress: Vector3 = YARD_DRESS[source.resource_name]
+	if dress.z > 1.0:
+		# Pieces of rubble wear the texture of the heap they lie in.
+		var stones: ShaderMaterial = _stones.material
+		stones.set_shader_parameter("rubble_albedo", source.albedo_texture)
+		stones.set_shader_parameter("rubble_tint", source.albedo_color)
+		stones.set_shader_parameter("rubble_tile_m", 10.0 / source.uv1_scale.x)
 	_capture_materials[source.resource_name] = pair
 	return pair

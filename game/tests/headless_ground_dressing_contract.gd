@@ -16,6 +16,7 @@ func _initialize() -> void:
 		for at: Vector3 in cameras:
 			_check_cells(at, ring_m)
 	_check_nothing_from_high_above()
+	_check_every_family_is_dressed()
 	_check_tile_points()
 	if _failed:
 		quit(1)
@@ -70,6 +71,12 @@ func _check_cells(at: Vector3, ring_m: float) -> void:
 func _check_nothing_from_high_above() -> void:
 	var ring_m := float(GROUND_DRESSING.LEVELS.high.ring_m)
 	_require(GROUND_DRESSING.cells_around(Vector3(10.0, GROUND_DRESSING.GROUND_Y_M + ring_m + 40.0, 10.0), ring_m).is_empty(), "No cells from above the ring: the ground alone carries the look from there.")
+
+
+## A new ground-cover family can't quietly grow nothing.
+func _check_every_family_is_dressed() -> void:
+	for family: String in GROUND_DRESSING.GROUND_COVER.FAMILIES:
+		_require(GROUND_DRESSING.DRESS.has(family), "Ground-cover family %s has no dressing." % family)
 
 
 ## Any first share of the tile's points spreads over the whole tile.
