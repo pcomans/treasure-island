@@ -304,7 +304,7 @@ void fragment() {
 			vec2 stipples = (0.3 * grain_near + 0.25 * grain_mid + 0.25 * fine_grain + 0.2 * wide_grain - vec2(RED_GRAIN_MEAN, STRAW_GRAIN_MEAN)) * mix(12.0, 32.0, smoothstep(8.0, 90.0, dist));
 			float thick = smoothstep(0.34, 0.66, 0.5 * value_noise(along / vec2(19.0, 8.0) + vec2(7.3, 51.9)) + 0.34 * value_noise(along / vec2(7.0, 3.6) + vec2(23.7, 11.1)) + 0.1 * n_small + 0.06 * n_tiny);
 			// Close to, the tips stand apart: fewer of them fill a walker's view.
-			float red_w = smoothstep(-0.3, 0.3, stipples.x - mix(1.7, 0.0, thick) - 0.5 * (1.0 - smoothstep(10.0, 40.0, dist)));
+			float red_w = smoothstep(-0.3, 0.3, stipples.x - mix(1.3, -0.5, thick) - 0.7 * (1.0 - smoothstep(10.0, 40.0, dist)));
 			float straw_w = smoothstep(0.57, 0.67, 0.42 * value_noise(along / vec2(11.0, 3.4) + vec2(61.7, 43.9)) + 0.22 * n_mid + 0.18 * n_small + 0.18 * n_tiny + 0.14 * (grain.y - 0.5) * fine);
 			float green_w = smoothstep(0.61, 0.66, 0.6 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.22 * n_small + 0.18 * n_tiny);
 			vec3 red = mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.62, grain.x));
