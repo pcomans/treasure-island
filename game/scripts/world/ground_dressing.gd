@@ -105,7 +105,7 @@ const SPLIT := 1.5
 ## Must match the shader: density is full to FULL_DENSITY_M and SHARE_MARGIN keeps the
 ## last ranks full height until they thin.
 const FULL_DENSITY_M := 6.0
-const SHARE_MARGIN := 1.3
+const SHARE_MARGIN := 1.15
 ## The ground's typical height, for the same distance on CPU and GPU.
 const GROUND_Y_M := 4.0
 ## Cells are chosen again when the camera has moved this far.
@@ -114,8 +114,8 @@ const RESELECT_M := 1.5
 ## Blades in a tuft and the mesh levels: a cell's nearest distance, blades, segments.
 const TUFT_BLADES := 8
 const MESH_LEVELS := [
-	{"until_m": 10.0, "blades": 8, "segments": 3},
-	{"until_m": 28.0, "blades": 8, "segments": 2},
+	{"until_m": 8.0, "blades": 8, "segments": 3},
+	{"until_m": 24.0, "blades": 8, "segments": 2},
 	{"until_m": INF, "blades": 5, "segments": 1},
 ]
 const TUFT_SEED := 20261107
@@ -191,10 +191,16 @@ static func share_at(distance: float) -> float:
 	return minf(1.0, SHARE_MARGIN * ratio * ratio)
 
 
-## Density tier for a cell: its tufts are the first 1 / 2^tier of each tile's points,
+## Density tier for a cell: it holds the first tier_share() of each tile's points,
 ## enough for every rank that stands at the cell's nearest point.
 static func tier_at(distance: float) -> int:
-	return maxi(0, floori(-log(share_at(distance)) / log(2.0)))
+	return maxi(0, floori(-2.0 * log(share_at(distance)) / log(2.0)))
+
+
+## A tier's share of a tile's points: half a power of two per tier, so a cell never
+## holds much more than it draws.
+static func tier_share(tier: int) -> float:
+	return pow(2.0, -0.5 * float(tier))
 
 
 ## The mesh level for a cell whose nearest point is this far away.
@@ -544,7 +550,7 @@ func _new_ring(material: ShaderMaterial, meshes: Array[Mesh], mesh_levels: bool)
 func _set_ring(ring: Dictionary, points_m2: float, ring_m: float) -> void:
 	ring.tile_points = ceili(points_m2 * CELL_M * CELL_M)
 	ring.ring_m = ring_m
-	(ring.material as ShaderMaterial).set_shader_parameter("tile_tufts", float(ring.tile_points))
+	(ring.material as ShaderMaterial).set_shader_parameter("tile_points", float(ring.tile_points))
 	(ring.material as ShaderMaterial).set_shader_parameter("ring_end_m", ring_m)
 
 
@@ -617,14 +623,14 @@ func _warm_variants() -> void:
 
 
 ## The instances of a cell of this level, tier and mesh level: for each tile of the
-## cell, the first 1 / 2^tier of its points. Their y is the point's rank.
+## cell, its first tier_share() of points. Their y is the point's rank.
 func _variant(ring: Dictionary, level: int, tier: int, mesh_level: int) -> MultiMesh:
 	var variants: Dictionary = ring.variants
 	var key := Vector3i(level, tier, mesh_level)
 	if variants.has(key):
 		return variants[key]
 	var tile_points: int = ring.tile_points
-	var per_tile := maxi(1, ceili(float(tile_points) / float(1 << tier)))
+	var per_tile := maxi(1, ceili(float(tile_points) * tier_share(tier)))
 	var tiles := 1 << level
 	var data := PackedFloat32Array()
 	data.resize(tiles * tiles * per_tile * 12)

@@ -60,7 +60,7 @@ func _check_cells(at: Vector3, ring_m: float) -> void:
 					var nearest: float = cells[cell]
 					if not _require(nearest <= distance + 0.001, "A cell's nearest point is no further than a point in it."):
 						return
-					var held := 1.0 / float(1 << GROUND_DRESSING.tier_at(nearest))
+					var held: float = GROUND_DRESSING.tier_share(GROUND_DRESSING.tier_at(nearest))
 					if not _require(held >= GROUND_DRESSING.share_at(distance) - 0.001, "A cell holds every tuft that stands anywhere in it."):
 						return
 			if not _require(holders == 1, "Point %s of the ring lies in %d cells." % [point, holders]):

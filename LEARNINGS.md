@@ -1151,3 +1151,11 @@ The web smoke's run-speed check took two position reads 550 ms apart (2026-11-06
 ## Read the endpoint's reference before designing around a reported limit
 
 The first Mac publish job (2026-11-03) kept one fixed tag and swapped the zip inside it, because a community report said GITHUB_TOKEN can't move a tag past a `.github/workflows` change. The owner then couldn't tell a new build existed. The [Create a release](https://docs.github.com/en/rest/releases/releases#create-a-release) reference, read on 2026-11-07, gives the wider rule: a release whose commit adds or modifies files under `.github/workflows/` relative to the default branch gets a 404 or 403 unless the token may change workflows, which GITHUB_TOKEN never may. So the limit follows the difference from `main`, not the commit's own change: by that rule a new tag at the head of `main` is allowed, and a commit behind a later workflow change is not. Before a reported platform limit shapes a design, read that endpoint's reference and the client's source, and put the rule and its link in a comment beside the code that depends on it.
+
+## Time a draw-on-demand viewport while it draws every frame
+
+On 2026-11-07 `viewport_get_measured_render_time_gpu` read 0.0 for both ground captures three frames after each `UPDATE_ONCE` draw, which looked like a free capture. Drawn every frame for a moment (`UPDATE_ALWAYS`, read after 30 frames) they read about 1.0-1.9 ms and 0.2 ms. Read a viewport's time while it is drawing, and treat 0.0 as no reading, not no cost.
+
+## Send an engine run only after the step that prepares it has returned
+
+On 2026-11-07 a prep command and the engine run that needed it went out together as two parallel tool calls. The prep was refused (it held a force-push), and the run started anyway with no plan and no bake, and spent one of a fixed budget of runs on nothing. Wait for the prep's result, or chain the two with `&&` in one command. A second commit would have done what the amend and force-push were for.

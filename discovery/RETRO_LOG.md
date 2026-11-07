@@ -24293,3 +24293,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Adding the lost-reply case let the fix be tested from the exact broken state.
 - What did not work well: Hiding stderr repeated a fail-open pattern.
 - What the team should change next time: When a check's failure leads to advice for a person, keep the underlying error visible.
+
+### ground-dressing — 2026-11-07 — Real grass island-wide, first coherent render
+
+- What worked well: Reading the ground through a top-down capture of its own meshes, with its own shader, answered placement, height, kerb edges and colour at once: the first render stopped cleanly at walks and kerbs, and blades matched the ground within 2-4 % at every distance with no colour tuning, in a design that needs no new map and survives other branches' ground work. Shooting one pose with several uniform sets in a single run (`dressing_params`) made a 12-run budget plenty; eight runs reached this point. Rendering every level and pose in one process, with timing in alternating blocks, kept the numbers comparable while other agents shared the GPU.
+- What did not work well: I sent an engine run in the same batch as the command that prepared it. The prep was refused and the run burnt a slot with no plan. My first capture timing read 0.0 and could have passed for free. I judged cards only after building them; they were never going to be close to the blades, though the brief asked for them, and the time went into their toggles.
+- What the team should change next time: Send a run only once its prep has returned. Treat a shared GPU as a noisy instrument: the `off` state moved by up to 2 ms between runs here, so compare only inside one process. For anything that must match a shader-driven surface, capture that surface instead of re-deriving it.
