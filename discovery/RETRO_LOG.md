@@ -24317,3 +24317,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: pairing the olive request with the fascia's own geometry showed that the far gym fascia is the same surface the entrance photos show white, so the olive moved to the low cafe eave the west photos actually show.
 - What did not work well: I recoloured two whole fascia sides for a sliver seen from one angle, and wrote mound lines into the data for shrubs no photo fixes, which the owner's rule forbids.
 - What the team should change next time: ask which surface a colour note is really about before changing a palette entry, and keep data lines to runs a photo can place.
+
+### aracely-visual-review, final — 2026-11-07 — independent visual review of r133351 at 2ade767f
+
+- What worked well: exact-commit renders and fixed-pose samples let a colour regression be proved, fixed and rechecked quickly.
+- What did not work well: fixed-pose diffs were noisy from moved closeup poses and plant motion.
+- What the team should change next time: lock closeup poses between rounds.
+
+### aracely-code-review, final — 2026-11-07 — independent code review of r133351 at 2ade767f
+
+- What worked well: reusing pad and row sampling scripts made the delta quick.
+- What did not work well: pad heights are only checkable by hand-run sampling.
+- What the team should change next time: if another building needs kerb-hugging pads, sample the kerb at build time.

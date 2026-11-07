@@ -197,6 +197,13 @@ Follow-ups from the code review (all non-blocking at `e51de21d`):
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
+- **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
+  - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
+  - the 13th Street hedge is slightly flat, with a mild row rhythm;
+  - the lawn pad by the west wing leaves a tan notch at its edge;
+  - a hairline sliver remains at the end of the SSE walk;
+  - the sidewalk and ramp pads are set to the generated kerb's heights by hand, so recheck them whenever that kerb moves;
+  - the lawn pads are a patch over the lawn recipe's dry spots until the ground cover has a per-area lawn channel.
 - **Player:**
   - The chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
   - The shore lift could use `to.y = maxf(from.y, floor + lift)`, and its "Recovered" toast wording could say what happened.
