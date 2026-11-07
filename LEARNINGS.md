@@ -1120,6 +1120,8 @@ On 2026-11-06 a dull shrub material took a tint of 0.42 as if it meant 42 % brig
 
 Five bright 2 m marks in the Johnson St lot (2026-11-06) were first reported as cars and then as pole heads; at full zoom they had two lobes, and the owner's photo showed four of them were aisle arrows. An aerial at 0.24 m can't name a small mark on its own. Look at the shape at full zoom and find one ground photo before reporting what it is; until then call it a mark.
 
+A species named from an aerial alone must be checked against a dated street view: the 4th Street lot's young trees were traced as star-shaped palm crowns on the May 2026 aerial, and Sep 2025 photos showed open deciduous broadleaves (2026-11-06).
+
 ## Test a traced edge against one photographed distance
 
 The same lot's outline followed the aerial's dark edge, but a photo put the arrow 1.5 m from the curb where the trace had 2.2 m: the dark band behind the curb reads as asphalt from above. Where a photo shows an edge and a painted mark together, compare that one distance with the trace before building on the edge.
@@ -1127,6 +1129,10 @@ The same lot's outline followed the aerial's dark edge, but a photo put the arro
 ## Give every join of a new surface a framed view
 
 The first lot was cut round a road's rounded end cap, and no sheet framed that join, so only the reviewer's raw top view caught it. The aerial's joint was straight. List each place a new surface meets existing ground in the first views file, from above and at gameplay height, and when a new surface counts as road, apply that everywhere the code asks what an edge faces.
+
+## Diff a shared map per surface after adding a rule
+
+The paving-edge wear rules (2026-11-06) named land and two area surfaces and drew a band about 5 m wide. The ground-cover map then gives every drawn cell off the ruled ground the weights of its nearest ruled cell, so the band spread up to 29 m across whatever had no rule of its own, in Voronoi patches. On roofs and yards that never shows, but Cityside's event lawn reads the map: 556 m² of it went tan, in a straight-edged wedge. None of my road-side views framed it and I missed it in the overviews; a per-surface diff of the map showed it at once. After adding a rule to any shared map, tally the changed cells by top surface and distance from the rule's own ground, and shoot one ground view on each protected lawn.
 
 ## Set a tint from two rendered samples
 

@@ -6,7 +6,7 @@
 4. Walk around. Things worth reporting:
    - buildings that don't look like the real ones, or look out of place next to their neighbours;
    - spots where you fall through, get stuck, or walk through a wall;
-   - whether walking (4 m/s), running (`Shift`, 20 m/s) and the jetpack (`Space`) feel right;
+   - whether walking (4 m/s), running (`Shift`, 20 m/s), the jetpack (`Space`) and the fast drop (`C`) feel right;
    - whether spraying (click) lands where you aim.
 
 Controls are in the [README](README.md#controls).

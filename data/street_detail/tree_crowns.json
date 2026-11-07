@@ -3,10 +3,10 @@
  "notes": [
   "Tree crowns read from the 2026-05-26 aerial (Wayback release 2026-10-29, Vantor Vivid Advanced, May 2026 z19 tiles): [x, z, crown width in metres], world metres, +X east, +Z south. Production inference, not survey data: crowns of dark, textured canopy on the land, split at the peaks of a distance transform; positions are good to about 5 m (the imagery sits 3-6 m off OSM in places), and a clump may be several trees or one.",
   "Audited by eye against the same aerial: dark roofs, a tank, asphalt and bare ground the mask read as crowns are gone, and sparse and bright crowns it missed are added by hand (the mask finds dark canopy only), so a clump here is one or several trees as seen.",
-  "Groups name the areas a street-detail canopy rule plants (tools/config/street-detail-zones.json); species are the rules' mixes, not read from the aerial. Round tanks, ponds and the zones planted by their own rules are left out. fourth_street_lot_palms is traced palm by palm.",
+  "Groups name the areas a street-detail canopy rule plants (tools/config/street-detail-zones.json); species are the rules' mixes, not read from the aerial. Round tanks, ponds and the zones planted by their own rules are left out. fourth_street_lot_trees is traced tree by tree.",
   "Hedges: lines 1.5 m out from the walls where dark foliage runs along them in the same aerial, 5 m or more long, about two runs in five kept (the rest of what the aerial shows there is yard shrubs) and opened every 7 m or so: the data does not place the unit entries, which a hedge must not cross.",
-  "fourth_street_lot_palms is traced by hand on the 2026-05-26 aerial (z19), one point per young palm's crown in the lot's islands; the mask misses palms that small. One residential hedge, the first line, [-282.2, -660.4] to [-281.8, -652] at the Mariner units, is traced by hand from Street View Mar 2025 (pano j3ugQSzJZtl9lpbb5i58bQ, heading 50, species pass crop h1) and the aerial; the rest are detected.",
-  "Pins: a crown within reach_m of a pin keeps the species a dated photo names; the crown's own position and width still come from the aerial.",
+  "fourth_street_lot_trees is traced by hand on the 2026-05-26 aerial (z19), one point per young tree's crown in the lot's islands; the mask misses trees that small. One residential hedge, the first line, [-282.2, -660.4] to [-281.8, -652] at the Mariner units, is traced by hand from Street View Mar 2025 (pano j3ugQSzJZtl9lpbb5i58bQ, heading 50, species pass crop h1) and the aerial; the rest are detected.",
+  "Pins: a crown within reach_m of a pin keeps the species a dated photo names (three 4th Street lot pins name theirs from the aerial alone, and say so); the crown's own position and width still come from the aerial.",
     "The Johnson St lot's near-black asphalt read as three crowns in the island group, at (-229.2, 147.3), (-236.2, 150.3) and (-254.2, 174.3): dropped on 2026-11-06, the same aerial at full zoom showing plain asphalt there."
  ],
  "pins": [
@@ -21,10 +21,13 @@
   {"at_xz": [-610, -303], "reach_m": 2, "prop": "mexican_fan_palm", "variants": [5, 5], "evidence": "Street View Mar 2025, 1318 Gateview Ave (pano uRl0jeIdSuHK96_NR4QjEg, heading 250): the tall old fan palm above the roof, at bearing 280 from the camera, by the west wall where the aerial shows the green mass."},
   {"at_xz": [-588.5, -305], "reach_m": 2, "prop": "spreading_broadleaf", "variants": [1, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (heading 250): the yellow-green broadleaf behind the fence, at bearing 295 about 22 m off, the aerial's yard crown."},
   {"at_xz": [-612, -297.5], "reach_m": 2, "prop": "spreading_broadleaf", "variants": [1, 1], "evidence": "Aerial 2026-05-26 (z19): the crown west of the building; Street View Mar 2025 (heading 250) shows nothing of it over the roof, so a mid-height tree."},
-  {"at_xz": [-577.4, -295.0], "reach_m": 2, "prop": "island_oak_young", "variants": [2, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (heading 250): a low green mass just over the fence, not a tall tree."}
+  {"at_xz": [-577.4, -295.0], "reach_m": 2, "prop": "island_oak_young", "variants": [2, 2], "evidence": "Street View Mar 2025, 1318 Gateview Ave (heading 250): a low green mass just over the fence, not a tall tree."},
+  {"at_xz": [245.1, 141.8], "reach_m": 1, "prop": "canary_date_palm", "variants": [0, 1], "evidence": "Aerial 2026-05-26 (z19) only: a star-shaped crown on the east edge of the 4th Street lot (c0005). No dated street photo shows it, so the species is unconfirmed."},
+  {"at_xz": [254, 160], "reach_m": 1, "prop": "canary_date_palm", "variants": [0, 1], "evidence": "Aerial 2026-05-26 (z19) only: a star-shaped crown on the east edge of the 4th Street lot (c0006). No dated street photo shows it, so the species is unconfirmed."},
+  {"at_xz": [260.5, 173], "reach_m": 1, "prop": "canary_date_palm", "variants": [0, 1], "evidence": "Aerial 2026-05-26 (z19) only: a star-shaped crown on the east edge of the 4th Street lot (c0007). No dated street photo shows it, so the species is unconfirmed."}
  ],
  "groups": {
-  "fourth_street_lot_palms": [
+  "fourth_street_lot_trees": [
    [199.7, 147.7, 6],
    [208, 144, 6],
    [216.3, 140, 6],

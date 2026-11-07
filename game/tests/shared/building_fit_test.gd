@@ -24,7 +24,8 @@ extends SceneTree
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
-## --use-prebuilt-world checks the native baked scene with the same stock checks.
+## --use-prebuilt-world checks the native baked scene with the same stock checks. It
+## refuses --native-producer and --adjacent-source, which compare authored meshes.
 ## Optional --street-detail on|off: street detail (vegetation, furniture, fences,
 ## clutter) is off by default here, so the building is checked on its own.
 ## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
@@ -153,6 +154,10 @@ func _run() -> void:
 			return
 		seen[flag] = true
 		index += 2
+	if seen.has("--use-prebuilt-world") and (seen.has("--native-producer") or seen.has("--adjacent-source")):
+		push_error("--use-prebuilt-world cannot take --native-producer or --adjacent-source: they compare authored meshes, which only the generated world keeps")
+		quit(1)
+		return
 	var args := WorldHarness.user_args()
 	if not args.has("source"):
 		push_error("usage: -- --source KEY")

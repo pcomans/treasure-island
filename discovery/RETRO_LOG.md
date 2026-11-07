@@ -24293,3 +24293,51 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Adding the lost-reply case let the fix be tested from the exact broken state.
 - What did not work well: Hiding stderr repeated a fail-open pattern.
 - What the team should change next time: When a check's failure leads to advice for a person, keep the underlying error visible.
+
+### carmack-critique
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** measuring pixels before asserting.
+- **What did not work well:** the first crops included Maps UI and missed surfaces.
+- **What to change next time:** brief critics with the worktree that made the renders, and give matched photo and render pairs.
+
+### water-clouds-research
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** engine source settled what the docs omit.
+- **What did not work well:** PDF fetches failed, and some talks stayed unread.
+- **What to change next time:** provide a PDF text tool for research runs.
+
+### clip-trial
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** a top-down raster from source geometry plus a photo camera fit identified the bench quickly.
+- **What did not work well:** the blue hunt was long, and pixel measurement should have come first.
+- **What to change next time:** give every prop a true footprint before scoring.
+
+### batch-visual-review
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** high-gain difference images and a per-surface diff of the cover map found a regression the sheets didn't make obvious.
+- **What did not work well:** the edge views were all at roads, so none covered a protected lawn, and the Job Corps views were planned but never captured.
+- **What to change next time:** for any island-wide map rule, diff the map per surface before review and shoot one ground view on each protected lawn.
+
+### batch-code-review
+
+(Relayed by the coordinator; added by batch-20261106.)
+
+- **What worked well:** diffing records by key and redrawing the map per surface answered the owner-rule and `no_fill` questions directly.
+- **What did not work well:** with no engine allowed, engine-side claims stayed inferred, and the suite result wasn't available.
+- **What to change next time:** give the reviewer the suite result for the reviewed commit, plus the author's per-surface diff.
+
+### batch-20261106 — 2026-11-06 — fast drop on C, 4th Street lot trees and stalls, worn grass edges, bake safety, clipping fixes
+
+(The suite's result on `d445887a` is in the hand-back to ROOT; only comments, notes and docs changed after it.)
+
+- What worked well: Measuring the May 2026 aerial by distance from paving took one short script and under a second a run, and gave the two wear rules numbers instead of an impression. A one-second scratch run replaced my assumption about a script error inside a typed static (null) with the fact (an empty Dictionary) before it went into the bake's check. A negative bake with an injected problem proved the exit code end to end, and a mutation run proved the new merge fixtures fail without their guards. perf-2's R03 bake (same code as dae432a8) and its dump and compare scripts saved a baseline bake and a new proof tool; the proof came back exact on all 1,960,331 building triangles.
+- What did not work well: Three of the first five generator runs (6 minutes each) were spent on things I could have read first: the palm 5 mm inside a road's exclusion margin, stall rows clashing on the car row ids, and two crowns lost because a mulch pit can't stand on stall paint. I then spent a search on stall pitches and sides to dodge the id clash, which is a workaround, so it is logged rather than hidden. The first wear weight came from reasoning over thresholds and read as a dry kerb with green behind it; only the close-up showed that. My first shots plan stopped at a camera over a roof, which lost two views. The fifth item reached me after I had committed and started the suite, so I stopped that suite at the island test, about 8 minutes in, with every earlier stage passed; those minutes bought nothing. Worst: my wear rules leaked through the map's nearest-ruled fill onto the Cityside event lawn and I shipped that to review, because I judged the rule from road-side views and the overviews and never diffed the map by surface. The fill's header comment says what it does; I read it and still didn't connect it to a band.
+- What the team should change next time: Before adding rows to a shared config, read what consumes them (here car ids and the pit check) and diff a scratch run of the placed rows. Have the world generator run its set-piece and id checks before its slow stages, or give it a street-detail-only mode, so a data slip costs seconds rather than minutes. When a rule blends into several ground families, compute the blend for each family before the first render. Diff a shared map per surface before anyone reviews it.

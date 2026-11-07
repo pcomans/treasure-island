@@ -1105,24 +1105,48 @@
      "in_lots": true
     },
     {
-     "id": "fourth_street_lot_palms",
+     "id": "fourth_street_lot_trees",
      "kind": "tree",
      "pattern": "canopy",
-     "group": "fourth_street_lot_palms",
+     "group": "fourth_street_lot_trees",
      "mix": [
       {
-       "prop": "canary_date_palm",
-       "share": 1,
-       "variants": [0, 1],
-       "scale": [0.8, 1.0]
+       "prop": "spreading_broadleaf",
+       "share": 3,
+       "variants": [0, 0],
+       "scale": [0.8, 0.8]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 3,
+       "variants": [0, 0],
+       "scale": [0.95, 0.95]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 2,
+       "variants": [0, 0],
+       "scale": [1.1, 1.1]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 3,
+       "variants": [1, 1],
+       "scale": [0.8, 0.8]
+      },
+      {
+       "prop": "spreading_broadleaf",
+       "share": 2,
+       "variants": [1, 1],
+       "scale": [0.95, 0.95]
       }
      ],
-     "fit": 0.5,
+     "fit": 0.7,
      "nudge_m": 3,
      "in_lots": true,
      "basis": "production_inference",
-     "rule": "Young date palms in the rows of the 4th Street lot's islands, traced palm by palm.",
-     "evidence": "2026-05-26 aerial (May 2026 z19 tiles): about 25 star-shaped young palm crowns in rows across the lot at x 200-260, z 135-228. The points are traced by hand on the 2026-05-26 aerial (z19), one per young palm crown."
+     "rule": "Young deciduous broadleaves in the rows of the 4th Street lot's islands, traced tree by tree; the three crowns on its east edge pinned as date palms stay palms.",
+     "evidence": "Street View Sep 2025: 351 Avenue H (pano UOyfEUp5LQUWLDOvDdGWzg, heading 255), 400 Avenue H (pano WLVY0WTBeS3BziBLJImPZw, heading 225) and 651 4th St (camera about x 304, z 198, heading 239): open young broadleaves about 6-8 m tall in rows through the lot, their leaves turning yellow, not palms; the species is unresolved, so the kit's nearest form stands in. 2026-05-26 aerial (May 2026 z19 tiles): about 25 crowns in rows across the lot at x 200-260, z 135-228, the points traced by hand, one per crown. An earlier pass read them as young palms from that aerial alone. Crowns c0005, c0006 and c0007 on the east edge stay Canary date palms on the aerial evidence only: star-shaped crowns, in no dated street photo."
     },
     {
      "id": "residential_hedges",

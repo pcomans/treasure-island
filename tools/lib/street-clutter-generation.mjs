@@ -803,6 +803,10 @@ export function placeStreetClutter({
     }
     return false;
   };
+  // Every car placed so far: no two may overlap, whichever rules placed them
+  // (stalls fan in round a bend, and rows of different drives can meet).
+  const carBoxes = [];
+  const carBox = (center, front, footprint) => ({ center, front, half_length: footprint.z_m / 2, half_width: footprint.x_m / 2 });
   // A car at rest (settleParkedCar): the row keeps the land under its middle
   // and that point's top surface; lift takes the body from there to its rest.
   const addCar = (zone, rule, cell, center, front, params, footprint, rest) => {
@@ -834,11 +838,14 @@ export function placeStreetClutter({
       basis: rule.basis,
     };
     ruleRows.push(row);
+    carBoxes.push(carBox(center, front, footprint));
     count(audit.rules, `${zone.id}/${rule.id}`);
     return row;
   };
   // The site checks, then the rest on the ground; the reason when either fails.
   const fit = (center, front, footprint, surface, body, lot = null) => {
+    const box = carBox(center, front, footprint);
+    if (carBoxes.some((other) => boxesOverlap(box, other))) return { problem: "car" };
     const problem = reject(center, front, footprint, surface, lot);
     if (problem) return { problem };
     return settleParkedCar(body, center, front, groundAt);
@@ -885,6 +892,7 @@ export function placeStreetClutter({
               if (buildings.nearest(xz, exclusions.wall_buffer_m + radius).distance < exclusions.wall_buffer_m + radius) continue;
               if ([...occupiedNear([xz], radius + ITEM_CLEAR_M)].some((item) => item.id !== stop.id && (item.points.length > 1 ? distanceToPolyline(xz, item.points) : length(sub(xz, item.points[0]))) < item.radius_m + radius + ITEM_CLEAR_M)) continue;
               if (ruleRows.some((row) => row.footprint_m && streetFootprintDistance(row, xz) < radius + ITEM_CLEAR_M)) continue;
+              if (stop.footprint_m && inFootprint(stop, xz, radius)) continue;
               spot = xz;
             }
             if (spot) break;
@@ -1320,6 +1328,14 @@ function boxesOverlap(left, right) {
     const [b0, b1] = extent(right, axis);
     return a1 > b0 && b1 > a0;
   });
+}
+
+// Whether a point lies within margin of a placed row's footprint rectangle. The rings
+// round a stop start inside its shelter's plan, which the occupied items leave out.
+function inFootprint(row, xz, margin) {
+  const [dx, dz] = [xz[0] - row.position_m[0], xz[1] - row.position_m[2]];
+  const [c, s] = [Math.cos(row.yaw_radians), Math.sin(row.yaw_radians)];
+  return Math.abs(dx * c - dz * s) < row.footprint_m.x_m / 2 + margin && Math.abs(dx * s + dz * c) < row.footprint_m.z_m / 2 + margin;
 }
 
 // Plan distance (m) from a point to a placed row's footprint rectangle (its stadium).

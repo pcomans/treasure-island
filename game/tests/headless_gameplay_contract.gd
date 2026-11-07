@@ -1,7 +1,7 @@
 extends SceneTree
 
 const REQUIRED_ACTIONS := [
-	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack",
+	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
 	"spray", "recover", "pause", "quit_game", "toggle_debug",
 ]
 const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
@@ -21,6 +21,9 @@ func _initialize() -> void:
 			return
 	if not _action_has_physical_key("jetpack", KEY_SPACE):
 		_fail("Jetpack input must be bound to physical Space.")
+		return
+	if not _action_has_physical_key("fast_drop", KEY_C):
+		_fail("Fast drop input must be bound to physical C.")
 		return
 	for action_value: Variant in InputMap.get_actions():
 		var action := str(action_value).to_lower()
@@ -59,6 +62,9 @@ func _initialize() -> void:
 	or not is_equal_approx(player.jetpack_descent_speed_mps, 1.5) \
 	or not is_equal_approx(player.jetpack_vertical_response_mps2, 12.0):
 		_fail("Jetpack rise, slow-descent, or response defaults drifted.")
+		return
+	if not is_equal_approx(player.fast_drop_speed_mps, 18.0) or not is_equal_approx(player.fast_drop_response_mps2, 30.0):
+		_fail("Fast drop speed or response defaults drifted.")
 		return
 	var arm := player.get_node("CameraPivot/SpringArm3D") as SpringArm3D
 	var camera := player.get_node("CameraPivot/SpringArm3D/Camera3D") as Camera3D
@@ -184,7 +190,7 @@ func _initialize() -> void:
 		_fail("Approved daylight needs an editable procedural sky with lit sky and ground hemispheres.")
 		return
 	main.free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
+	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
 	quit(0)
 
 

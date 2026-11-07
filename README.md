@@ -100,6 +100,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - `WASD` moves; hold `Shift` to run.
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
+- Hold `C` in the air to drop fast. It does nothing on the ground, and `Space` wins if both are held.
 - Fences stop you on foot (gates and path crossings stay open); the jetpack clears them.
 - Stepping off the island onto the shore rocks, or flying out over the water,
   lifts you about 5 m into the air where you are; float down and steer or
@@ -125,9 +126,9 @@ pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-play starts by itself. WASD moves, Shift runs, Space rises with the jetpack and
-releasing Space descends slowly. Click **Click to look** at the top to capture the
-mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
+play starts by itself. WASD moves, Shift runs, Space rises with the jetpack,
+releasing Space descends slowly and holding C in the air drops fast. Click
+**Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
 again and continues. Spray is omitted in the browser build by owner approval.
 F3 shows actual FPS.
 

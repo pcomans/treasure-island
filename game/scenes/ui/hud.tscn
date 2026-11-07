@@ -93,7 +93,7 @@ horizontal_alignment = 1
 
 [node name="Controls" type="Label" parent="PausePanel/PauseLayout"]
 layout_mode = 2
-text = "WASD move • Shift fast run (~45 mph) • Space jetpack • Mouse look\nClick spray • R recover • F3 debug"
+text = "WASD move • Shift fast run (~45 mph) • Space jetpack • C drop fast • Mouse look\nClick spray • R recover • F3 debug"
 horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="PausePanel/PauseLayout"]

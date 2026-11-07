@@ -80,6 +80,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Gateview Court (OSM w8916719): the curb ends at the court's corners read as short blocks.
   - The KEEP CLEAR legend at Trade Winds isn't painted.
   - Asphalt tone: photos show paler, sun-bleached roads than the game. Parked as a look pass.
+  - Inferred from `tools/clip_audit.mjs`, not seen in a render: `major_area_amenity` and `major_area_paved` lie 1 mm apart over 10.7 m² at (235.4, 223.8), on the 4th Street lot's south edge, so they could fight on depth there.
 - **Street objects:**
   - Signs stand off their photographed spots at Bayside Drive / Gateview Avenue, Gateview Court / Gateview Avenue and Northpoint Drive / Gateview Avenue.
   - In the matched view at 9th Street / Avenue B the stop sign is 8.3 m away; in the photo it is 4 to 5 m.
@@ -107,6 +108,17 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The gravel shoulder reads as a graded path.
   - Far stall lines break into dashes at low angles, in every lot compared (Johnson St, Clipper Cove strip, Mersea field).
   - From directly above, a pale chip shows at the inner tip of the strip beside the south-west hatch (seen in review, 2026-11-06).
+- **4th Street lot** (OSM w96698661):
+  - Its curbed islands and planted strips aren't built, only its stall rows, because a new curb moves storm drains island-wide (see the drain walk item under the street ground generator).
+  - Four traced crowns on its west and south edges (c0015, c0016, c0017, c0023) stay unplanted, as they were: their trunks' wells would reach off the paving. The islands would settle them.
+  - The trees' species is unresolved. `spreading_broadleaf` stands in, denser and darker than the open yellowing crowns of the Sep 2025 photos.
+  - Crowns c0005, c0006 and c0007 are date palms on the May 2026 aerial alone; no dated street photo shows them.
+  - Its trees stand in round mulch discs on open asphalt, where the real ones stand in planted islands, mostly long strips (seen in review, 2026-11-06).
+  - Its asphalt is dark and clean; the real surface is pale and weathered (seen in review, 2026-11-06).
+  - Its stall lines break up past about 50 m, as in the other lots (seen in review, 2026-11-06).
+  - The long side of the 655 building (OSM w34313513) reads blank in the lot views, where the photos show dark glazing (seen in review, 2026-11-06).
+  - Lot trees vary only through `spreading_broadleaf` variants 0 and 1. Variants 2 and 3 are the old wide forms, 12 to 14 m across at the kit's smallest scale against the photos' 6 to 8 m.
+  - At its south-east corner the Sep 2025 photo at 351 Avenue H shows the Job Corps sign, its planting, a chain-link fence and the bus shelter about 8 m from the camera. None of the first three is built, and the shelter (OSM n1249019421) stands about 15 m east of that.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.
@@ -143,12 +155,10 @@ Not needed to ship, and not done:
 - Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
 - 1,852 hidden meshes stay in the bake.
 
-Follow-ups from the code review (all non-blocking at `e51de21d`):
+Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
-- **Top follow-up:** `tools/prebuild_static_world.gd:37` prints the merge's result and ignores it, so a failed merge can exit 0 with buildings missing. The bake should fail on a broken merge.
-- `surface_remove` in the merge doesn't move a mesh's surface override materials, and its `uses` count doesn't see a mesh shared with a MultiMesh. Neither occurs in today's world: the census found no surface overrides and no mesh shared with a MultiMesh.
-- `building_fit_test.gd` still accepts `--use-prebuilt-world` with `--native-producer` or `--adjacent-source`, then false-fails: those compare authored meshes, which only the generated world still has.
-- `headless_bake_merge_contract.gd` has no fixtures for some kept cases: shared meshes, unsupported channels, per-instance settings, and parts with children or a script.
+- **Top follow-up:** the bake's check compares each built mesh with its group, not with what was removed, so a script error inside `_add_part` could drop a part and still exit 0 (`tools/merge_baked_buildings.gd:86-87`, `:265`). The fix is about five lines: total each taken surface's indices in `merge()`.
+- `headless_bake_merge_contract.gd` has no fixtures for some kept cases: unsupported channels, per-instance settings, and parts with children or a script.
 
 ## Deferred by the owner
 
@@ -172,6 +182,8 @@ Follow-ups from the code review (all non-blocking at `e51de21d`):
   - The draped-area layer check in `tools/validate_godot_world.mjs` sums each pair's overlap over the chunk-clipped triangles, so slivers along a shared edge could add up to a false failure.
   - The yard-kit floor check tests floor vertices on the sides of the plan rectangle, not the mesh's actual open edges.
   - Yard props rest on a 3 m sample grid, which can miss ditches narrower than 3 m.
+  - A lot's car rows are named by aisle, side and distance along the row (`cell` in `tools/lib/street-clutter-generation.mjs`), not by the row, so rows of one lot on the same side with the same pitch share ids, and cars in both fail the build's unique row ids check. The 4th Street lot's stall widths and sides are arranged to avoid the clash. Adding the row to the id would reshuffle the Mersea lot's cars.
+  - In `tools/lib/ground-cover-map.mjs:493`, `drawn[cell] = 1` also runs for `no_fill` rules, so a `no_fill` rule that is the only rule on a verge would cut that verge off from the ground behind it. It doesn't happen today.
   - `tools/render_naip_generated_vegetation_comparison.mjs` is broken: it reads `generated/world/vegetation.json`, which no longer exists. Fix or remove it with its outputs in `source_assets/vegetation/naip_2022/`.
   - `tools/render_world_coverage_evidence.mjs` fails on an unknown demolished status.
 - **Street objects generator** (findings at `f4a6f827`, line numbers of that commit):
@@ -198,6 +210,7 @@ Follow-ups from the code review (all non-blocking at `e51de21d`):
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
 - **Player:**
+  - Holding C over the water or riprap repeats the shore lift about every 0.6 s, with a "Recovered" message each time (`game/scripts/player/player_controller.gd:134`, `game/scripts/player/recovery_controller.gd:7`, `:69`). Jittery only.
   - The chest avatar's `WALK_SPEED` (4.0) is a copy of `player_controller.walk_speed_mps`; couple them.
   - The shore lift could use `to.y = maxf(from.y, floor + lift)`, and its "Recovered" toast wording could say what happened.
 - **Mersea mural mesh** (`game/scripts/world/facades/mersea_model.gd`):

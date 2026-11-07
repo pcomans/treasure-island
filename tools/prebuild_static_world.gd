@@ -34,7 +34,13 @@ func _run() -> void:
 	print("SOURCE_WORLD_MS ", world.runtime_evidence.load_duration_msec)
 	print("BAKE_STREET_DETAIL layers_on=", ",".join(PackedStringArray(world.get_street_detail_layers())), " rows=", world.runtime_evidence.street_detail_rows)
 	var merge_started := Time.get_ticks_msec()
-	print("BAKE_MERGE ", MERGE_BUILDINGS.merge(world.buildings), " ms=", Time.get_ticks_msec() - merge_started)
+	var merged := MERGE_BUILDINGS.merge(world.buildings)
+	print("BAKE_MERGE ", merged, " ms=", Time.get_ticks_msec() - merge_started)
+	# A script error inside the merge comes back as an empty report.
+	if not merged.has("problems") or not (merged.problems as PackedStringArray).is_empty():
+		push_error("The building merge failed: ", merged)
+		quit(1)
+		return
 	var packed := PREBUILT_WORLD.pack_world(world)
 	if packed == null:
 		quit(1)
