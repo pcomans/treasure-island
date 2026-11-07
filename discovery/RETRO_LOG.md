@@ -24671,3 +24671,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The diff was self-contained (one new job, two rewired artifact names, one output), so tracing the fail-closed path (P12 present -> every failure exits non-zero -> verify and publish skipped) took one read; the commit message stated plainly that the macOS jobs are unexercised.
 - What did not work well: No signed or ad-hoc app was available locally, so the entitlement argument (the ad-hoc export already runs with the hardened runtime) rests on the author's inspection, and the CI launch check is headless, so it can't confirm the GPU path under the new signature.
 - What the team should change next time: After the first notarized release, have the owner launch it with rendering on the Mac once before calling signing done; fail the mode check when signing secrets other than the P12 are set without it.
+
+### mac-notarize security re-check — 2026-11-07 — follow-up review of daae395a
+
+- What worked well: The commit kept the security fix narrow: one `environment:` line, one `vars || secrets` expression used in both steps that read the Team ID, and a cache that holds only archives, so the pinned `sha256sum -c` path is the same for a cache hit, a miss and the devcontainer.
+- What did not work well: GitHub makes repository-level secrets visible inside an environment job too, so the "other branches never see the key" claim depends on the owner not keeping repository copies; the docs don't say to delete them. A main-only environment also fails the sign job on manual branch runs, which skips the Apple Silicon launch check there.
+- What the team should change next time: When moving secrets into an environment, say in the same doc line to delete any repository-level copies, and state what a branch run without the branch allowed will show.
