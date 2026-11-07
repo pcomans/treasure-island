@@ -1296,7 +1296,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.09,
+     "per_m2": 0.25,
      "spacing": [0.45, 0.9],
      "field": {
       "axis": {
@@ -1414,8 +1414,8 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 2.6,
-     "spacing": [0.2, 0.4],
+     "per_m2": 3.2,
+     "spacing": [0.3, 0.6],
      "field": {
       "axis": {
        "from_xz": [-295, 145],
@@ -1547,8 +1547,8 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.34,
-     "spacing": [0.3, 0.55],
+     "per_m2": 1.4,
+     "spacing": [0.25, 0.45],
      "field": {
       "axis": {
        "from_xz": [-267, 203],
@@ -1573,7 +1573,7 @@
       ],
       "drift_m": 11,
       "clump_m": 3.2,
-      "drift_cover": 0.8,
+      "drift_cover": 0.85,
       "lone": 0.12,
       "wander": {
        "height_m": 0.18,
@@ -1783,7 +1783,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.4,
+     "per_m2": 1.6,
      "spacing": [0.3, 0.6],
      "field": {
       "axis": {
@@ -1825,7 +1825,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.14,
+     "per_m2": 0.7,
      "spacing": [0.35, 0.7],
      "field": {
       "axis": {
@@ -1841,7 +1841,7 @@
       },
       "drift_m": 10,
       "clump_m": 3,
-      "drift_cover": 0.6,
+      "drift_cover": 0.7,
       "lone": 0.15
      },
      "mix": [
@@ -1865,7 +1865,7 @@
       "terrain_wetland",
       "land_ground"
      ],
-     "per_m2": 0.09,
+     "per_m2": 0.4,
      "spacing": [0.8, 1.8],
      "field": {
       "axis": {

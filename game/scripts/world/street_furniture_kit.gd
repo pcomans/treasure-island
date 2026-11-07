@@ -167,7 +167,7 @@ const COTTAGE_PLAN_CENTRE := Vector3(1.85, 0.0, 0.475)
 const COTTAGE_WHITE := Color(0.93, 0.93, 0.9)
 const COTTAGE_GROOVE := Color(0.7, 0.7, 0.67)
 const COTTAGE_DOOR := Color(0.79, 0.83, 0.84)
-const WATER_BLOCK_RED := Color(0.74, 0.13, 0.09)
+const WATER_BLOCK_RED := Color(0.62, 0.125, 0.1)
 const TUB_STEEL := Color(0.5, 0.52, 0.54)
 const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
 ## The north-west end's tall window, which the footage shows holding the pale sky.

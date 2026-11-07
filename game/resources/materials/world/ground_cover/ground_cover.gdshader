@@ -108,7 +108,7 @@ uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
 uniform vec3 bank_gap : source_color = vec3(0.085, 0.068, 0.06);
 uniform vec3 bank_blade : source_color = vec3(0.255, 0.21, 0.18);
 uniform vec3 bank_straw : source_color = vec3(0.44, 0.385, 0.33);
-uniform vec3 bank_gravel : source_color = vec3(0.27, 0.26, 0.235);
+uniform vec3 bank_gravel : source_color = vec3(0.33, 0.32, 0.29);
 uniform vec3 marsh_far_red : source_color = vec3(0.26, 0.165, 0.14);
 uniform vec3 marsh_far_olive : source_color = vec3(0.26, 0.235, 0.135);
 uniform vec3 marsh_far_straw : source_color = vec3(0.42, 0.365, 0.265);
@@ -289,7 +289,7 @@ void fragment() {
 			// the grass, with patches of rubble showing through it lower down.
 			float rock_w = 1.0 - smoothstep(0.5, 3.0, paved_m + 2.4 * (n_small - 0.5) + 1.4 * (n_tiny - 0.5) + 1.2 * (flopped - 0.5));
 			rock_w = max(rock_w, 0.85 * smoothstep(0.6, 0.66, 0.5 * n_patch8 + 0.3 * n_small + 0.2 * n_tiny) * smoothstep(2.9, 3.4, h_land));
-			bank = mix(bank, bank_gravel * (0.1 + 1.8 * texture(marsh_grain, p / BANK_ROCK_TILE_M).b), rock_w);
+			bank = mix(bank, bank_gravel * (0.2 + 1.6 * smoothstep(0.15, 0.85, texture(marsh_grain, p / BANK_ROCK_TILE_M).b)), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
 
 			// The mat: crimson in drifts a few metres to a few tens long, ragged at every scale

@@ -24293,3 +24293,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Diffing the generated world row by row and rasterising land separated real damage from retriangulation.
 - What did not work well: The walk loop offered as cottage evidence stayed 1.7 m from every wall.
 - What the team should change next time: When a structure sits outside the fit test, walk into each side, and run one Compatibility launch for any `ground_cover.gdshader` change.
+
+### mersea-ditch-art — 2026-11-07 — Phase 2 review round: the bank, floor and water from the owner's bank photo
+
+- What worked well: Solving the owner's photo into a matched pose from known objects paid at once: its water traced onto the floor within a metre or two of the pool drawn from the D frames, its shrub band landed on the modelled toe, and the matched pair showed the bank was wrong in one look. Three new generated sources (flopped-grass tile, low mat, brush row) did more than the earlier rounds of tuning. Folding gravel and flopped grass into the grain's spare channels kept the sampler count at six.
+- What did not work well: I spent four rounds tuning the floor's mean toward a stipple before cropping the frames at full size, and read a uv_scale backwards (it is repeats per 10 m), which cost a render. Cards tuned at gameplay distance fell apart in a tele view and the other way round: wide crossed cards read as haystacks, single flat cards as sticks. I stopped a build to add two rules once I had seen them; I should have listed everything the photo shows before the first edit.
+- What the team should change next time: When a new reference arrives, make the matched pose first and list everything it shows against the current render before touching anything. Measure mixed surfaces by distribution. Give a low-density field rule a quick instance count before rendering: three of mine placed 14 to 22 plants.

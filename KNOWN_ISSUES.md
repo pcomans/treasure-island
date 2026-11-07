@@ -108,7 +108,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Far stall lines break into dashes at low angles, in every lot compared (Johnson St, Clipper Cove strip, Mersea field).
   - From directly above, a pale chip shows at the inner tip of the strip beside the south-west hatch (seen in review, 2026-11-06).
 - **Mersea ditch and promenade** (owner video and track, 2026-11-06):
-  - The owner's "boardwalk" is the wide paved promenade, a recorded exception to the OSM layout like the Johnson St lot. Its close footage stops at about z 236, so north of there, to the fence corner seen from the walk, it is plain surface and paint. The row of stock tanks along the lawn, seen from a distance north of z 236, isn't placed.
+  - The owner's "boardwalk" is the wide paved promenade, a recorded exception to the OSM layout like the Johnson St lot. Its close footage stops at about z 236, so north of there, to the fence corner seen from the walk, it is plain surface and paint.
   - Shot list for the owner, to finish it: from about (-400, 236) north past the tent to Mersea's west side, looking both ways along the walk; the ditch's north end, from the 9th Street side.
   - The rust-steel sculpture on the lawn by the promenade isn't built. An owner 3D scan exists: https://www.kiriengine.app/share/download/bc9ac0d2f54245a6ae13a65ba1849253
   - Plants at the ditch and along the walk are described by form; their species are unconfirmed.
@@ -116,6 +116,10 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; it is accepted work, left unchanged by this study.
   - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
   - The Johnson St lot's asphalt reads bluer than the footage's from the road end (frame D4).
+  - From the ditch side (frame D4 and the owner's bank photo) the cottage reads about 7 m further south than it stands, against the palm; it stays where the road frames put it.
+  - A hairline of the old path's pale surface shows along the seal's seaward edge for about 7 m near s 15-21: the path lies under the lots by a centimetre and its own triangles come through. Fixing it means a higher lift for every lot, or a new surface under this one.
+  - The cottage's bay throws a soft shadow onto the wall under it, blurrier than the footage's (a sun-shadow resolution limit, smaller since the bay went shallow).
+  - The ditch's mats and brush are crossed cards: at a walker's feet the slope reads as tufts over a painted thatch, not the owner's photo's deep tangle.
   - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
   - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.

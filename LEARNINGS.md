@@ -1171,3 +1171,7 @@ Every ground projection of the Mersea video (2026-11-06) assumed the phone 1.15 
 ## A rough surface's colour can be its specular
 
 The promenade's mulch, seal and verges (2026-11-06) wouldn't take their tints: blue stayed about 80 whether the albedo asked for 29 or 62, and warm asphalt read mauve. Plotting render against albedo across materials gave about 60 + 0.75x, an offset no tint could reach: StandardMaterial3D's default specular of 0.5 was reflecting the sky at a walker's grazing angle. Dropping it to 0.2 gave the tints back. If a tint moves a channel less than it should, measure two or three materials before changing the colour again, and set the specular for what the surface is.
+
+### Measure a mixed surface by its distribution, and look at it full size
+
+The Mersea floor took four render rounds (2026-11-06 to 07) of mean-colour tuning toward "a fine crimson stipple", which blended to a flat brown at any distance. Cropping the 4K frames at full size showed something else: ragged crimson drifts over dark litter, with lenses of straw and green. The numbers agreed: the footage's floor was mean sRGB 88,62,49 with luminance p10-p90 of 47-91 and a reddest tenth of 105,61,54; the render was 100,73,59 with 63-96 and 109,75,61. A mean can be right while the surface is wrong, and my eye was no better: the footage looked far more saturated than its mean. For any stippled or mixed ground, crop the reference at native size before designing, and compare mean, percentiles and the extreme deciles at the same box, the same scale.

@@ -157,7 +157,7 @@ const PROMENADE_PAVEMENT_SHADER := preload("res://game/resources/materials/world
 const PROMENADE_AGGREGATE := preload("res://game/resources/textures/world/street/promenade_aggregate.png")
 const PROMENADE_PAVEMENT := {
 	"promenade_asphalt": {"tile_m": 1.15, "contrast": 1.0, "tone": Color(0.51, 0.53, 0.56), "wear": 1.0},
-	"promenade_seal": {"tile_m": 0.62, "contrast": 0.55, "tone": Color(0.47, 0.49, 0.52), "wear": 0.3},
+	"promenade_seal": {"tile_m": 0.62, "contrast": 0.55, "tone": Color(0.485, 0.51, 0.54), "wear": 0.3},
 }
 
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
