@@ -112,8 +112,8 @@ export function streetFurnitureFootprint(prop, params) {
   if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
   if (prop === "bike_rack") return { x_m: 0.8, z_m: roundCoordinate(0.12 + BIKE_RACK_HOOP_SPACING_M * (Math.round(number("hoops", 1, 1, BIKE_RACK_MAX_HOOPS)) - 1)) };
   if (prop === "picnic_table_long") return { x_m: roundCoordinate(number("length_m", 6.1, 2.0, 7.0) + 0.1), z_m: 2.1 };
-  // The player walks through a cobble pile, so only its spine claims ground.
-  if (prop === "cobble_pile") return { x_m: roundCoordinate(number("length_m", 5.0, 1.0, 9.0) + 0.2), z_m: 0.4 };
+  // The player walks through a cobble pile, so only its spine claims ground, unless it gives its spread.
+  if (prop === "cobble_pile") return { x_m: roundCoordinate(number("length_m", 5.0, 1.0, 9.0) + 0.2), z_m: isFiniteNumber(params?.width_m) ? number("width_m", 1.0, 0.5, 2.5) : 0.4 };
   if (prop === "log_seat") {
     const size = number("size_m", 3.2, 0.5, 5.0);
     if (params?.form === "stump") return { x_m: roundCoordinate(size + 0.06), z_m: roundCoordinate(size + 0.06) };

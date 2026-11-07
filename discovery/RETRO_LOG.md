@@ -24329,3 +24329,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Porting the wedge builder offline found the lip and hover, which no walk log shows.
 - What did not work well: All three rock walks took the same seaward line.
 - What the team should change next time: When a new collider stands in for visible geometry, measure it against what's drawn and walk it in both directions.
+
+### mersea-visual-review — 2026-11-07 — round 4, the final check of r18
+
+- What worked well: Zooming native originals beyond the supplied crops found the pile on the asphalt.
+- What did not work well: A scripted edge scan gave noise, so lip width rests on an eye comparison.
+- What the team should change next time: When a set piece moves near a kerb or paint, add a top-down check that it stays on its surface.
+
+### mersea-code-review — 2026-11-07 — round 4, the delta at `bb4fb9dc`
+
+- What worked well: Reusing the port made this a quick, exact before-and-after check.
+- What did not work well: The hull maths added a step to re-derive.
+- What the team should change next time: When a collider's fit is a known issue, keep the measurement script with the study.
