@@ -4,15 +4,17 @@
 // data/ybi/ybi-land-cover-2026-05-26.json for tools/lib/ybi-context-generation.mjs
 // (its tree crowns, scrub and ground-cover map).
 //
+//   tools/fetch_ybi_aerial.sh DIR
 //   node tools/build_ybi_land_cover.mjs --mosaic DIR
 //
 // DIR holds the aerial outside Git: mosaic.json ({z, X0, Y0, nx, ny}, the Web Mercator
-// tile range) and mosaic.rgb (the tiles assembled north-up, raw 8-bit RGB). The run of
-// 2026-11-07 used Esri World Imagery Wayback release 43291 (2026-10-29), zoom 19, tiles
-// x 83923-83947 and y 202572-202591, whose YBI imagery is the 2026-05-26 Vantor capture
-// (0.34 m, World_Imagery_Metadata_2026_r10 layer 4 at five points on the island): the
-// same capture and classifier as the Treasure Island vegetation and ground-cover work.
-// The aerial itself never enters the repository; only these class shares do.
+// tile range) and mosaic.rgb (the tiles assembled north-up, raw 8-bit RGB), as
+// tools/fetch_ybi_aerial.sh fetches and assembles them: Esri World Imagery Wayback
+// release 43291 (2026-10-29), zoom 19, tiles x 83923-83947 and y 202572-202591, whose YBI
+// imagery is the 2026-05-26 Vantor capture (0.34 m, World_Imagery_Metadata_2026_r10
+// layer 4 at five points on the island): the same capture as the Treasure Island
+// vegetation and ground-cover work. The aerial itself never enters the repository; only
+// these class shares do.
 //
 // Each 1 m sample takes the class of the aerial pixels it covers (the vegetation
 // inventory's heuristic: canopy = dark saturated green, green = bright green, dry =
@@ -45,8 +47,8 @@ import { YBI_LAND_COVER_CLASSES, YBI_LAND_COVER_GRID, YBI_LAND_COVER_LAYERS, YBI
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const SHADOW_LUMINANCE = 38;
 
-// The vegetation inventory's per-pixel cover class (its zonestats.py): 0 canopy,
-// 1 green, 2 dry, 3 bare, 4 other.
+// A pixel's heuristic cover class: 0 canopy (dark saturated green), 1 green (bright
+// green), 2 dry (straw), 3 bare (pale soil, rock or concrete), 4 other.
 export function classifyAerialPixel(r, g, b) {
   const l = (r + g + b) / 3;
   const mx = Math.max(r, g, b);
@@ -165,4 +167,5 @@ function main() {
   process.stdout.write(`${JSON.stringify({ output: YBI_LAND_COVER_PATH, land_cells: landCells })}\n`);
 }
 
-main();
+// Run as a script only, so importing classifyAerialPixel builds nothing.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

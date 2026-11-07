@@ -1524,47 +1524,29 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 ## YBI's trees and scrub: a well-formed ybi_vegetation document whose every foot stands
 ## on the YBI terrain record (inside its top's plan, and at most 1.3 m below and 0.05 m
 ## above its surface there: a foot rests on the lowest ground round its trunk).
+## YBI's plants against its terrain, cheaply on every load: the document's shape and
+## ranges (the builder's own check) and each foot within the terrain's plan and height
+## bounds. The full proof that every foot rests on the terrain triangle under it runs
+## where it costs nothing at load: tools/validate_godot_world.mjs (in tools/test.sh).
 static func _validate_ybi_vegetation(document: Variant, terrain: Dictionary) -> Dictionary:
 	var problem := YBI_VEGETATION.document_error(document)
 	if problem != "":
 		return _failure("context_ybi_vegetation", problem)
 	if terrain.is_empty():
 		return _failure("context_ybi_vegetation", "YBI's vegetation has no terrain record to stand on.")
-	var vertices: Array = terrain.vertices
-	var indices: Array = terrain.indices
-	var bucket_m := 8.0
-	var buckets: Dictionary = {}
-	for offset in range(0, indices.size(), 3):
-		var a := _vertex_at(vertices, int(indices[offset]))
-		var b := _vertex_at(vertices, int(indices[offset + 1]))
-		var c := _vertex_at(vertices, int(indices[offset + 2]))
-		# The top only: the shore's sides are vertical.
-		if absf((b.x - a.x) * (c.z - a.z) - (c.x - a.x) * (b.z - a.z)) <= 1e-6:
-			continue
-		for bx in range(floori(minf(a.x, minf(b.x, c.x)) / bucket_m), floori(maxf(a.x, maxf(b.x, c.x)) / bucket_m) + 1):
-			for bz in range(floori(minf(a.z, minf(b.z, c.z)) / bucket_m), floori(maxf(a.z, maxf(b.z, c.z)) / bucket_m) + 1):
-				var key := Vector2i(bx, bz)
-				if not buckets.has(key):
-					buckets[key] = []
-				(buckets[key] as Array).append(offset)
+	var vertices := PackedFloat32Array(terrain.vertices)
+	var low := Vector3(INF, INF, INF)
+	var high := Vector3(-INF, -INF, -INF)
+	for index in range(0, vertices.size(), 3):
+		var vertex := Vector3(vertices[index], vertices[index + 1], vertices[index + 2])
+		low = low.min(vertex)
+		high = high.max(vertex)
 	for row: Array in (document as Dictionary).instances:
 		var x := float(row[2])
 		var y := float(row[3])
 		var z := float(row[4])
-		var ground := NAN
-		for offset: int in buckets.get(Vector2i(floori(x / bucket_m), floori(z / bucket_m)), []):
-			var a := _vertex_at(vertices, int(indices[offset]))
-			var b := _vertex_at(vertices, int(indices[offset + 1]))
-			var c := _vertex_at(vertices, int(indices[offset + 2]))
-			var det := (b.z - c.z) * (a.x - c.x) + (c.x - b.x) * (a.z - c.z)
-			var wa := ((b.z - c.z) * (x - c.x) + (c.x - b.x) * (z - c.z)) / det
-			var wb := ((c.z - a.z) * (x - c.x) + (a.x - c.x) * (z - c.z)) / det
-			var wc := 1.0 - wa - wb
-			if wa >= -1e-6 and wb >= -1e-6 and wc >= -1e-6:
-				ground = wa * a.y + wb * b.y + wc * c.y
-				break
-		if is_nan(ground) or y > ground + 0.05 or y < ground - 1.3:
-			return _failure("context_ybi_vegetation", "A YBI plant at (%.2f, %.2f) does not stand on YBI's terrain." % [x, z])
+		if x < low.x or x > high.x or z < low.z or z > high.z or y < low.y - 1.3 or y > high.y + 0.05:
+			return _failure("context_ybi_vegetation", "A YBI plant at (%.2f, %.2f) stands off YBI's terrain." % [x, z])
 	return {"ok": true}
 
 

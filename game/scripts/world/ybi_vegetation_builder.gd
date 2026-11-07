@@ -50,6 +50,20 @@ static func document_error(document: Variant) -> String:
 	for prop: Variant in doc.props:
 		if not KIT.PROPS.has(str(prop)) or KIT.is_low_plant(str(prop)) or KIT.is_hedge(str(prop)):
 			return "ybi_vegetation names a prop the kit cannot stand: %s" % prop
+	# The kit's nominal heights the generator kept the crowns under the bridge decks and
+	# round the summit sculpture with (its Node mirror, STREET_VEGETATION_PROPS).
+	if not doc.get("prop_heights_m", null) is Array or (doc.prop_heights_m as Array).size() != (doc.props as Array).size():
+		return "ybi_vegetation needs one row of nominal heights per prop"
+	for prop_index in (doc.props as Array).size():
+		var prop := str(doc.props[prop_index])
+		var heights: Variant = doc.prop_heights_m[prop_index]
+		if not heights is Array or (heights as Array).size() != KIT.variant_count(prop):
+			return "ybi_vegetation needs a nominal height per %s variant" % prop
+		var table: Array = KIT.PROPS[prop].variants
+		for variant in (heights as Array).size():
+			var height: Variant = heights[variant]
+			if not (height is float or height is int) or absf(float(height) - float((table[variant] as Dictionary).get("height", -1.0))) > 1e-6:
+				return "ybi_vegetation's nominal height of %s variant %d drifts from the kit" % [prop, variant]
 	for row_value: Variant in doc.instances:
 		if not row_value is Array or (row_value as Array).size() != FIELDS.size():
 			return "ybi_vegetation instance is not a %d-field row" % FIELDS.size()

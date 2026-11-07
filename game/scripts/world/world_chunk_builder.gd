@@ -245,7 +245,6 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"major_area_court": "concrete_floor_03",
 	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
-	"context_ybi": "sparse_grass",
 	# Yerba Buena Island's L1 buildings and at-grade surfaces take Treasure Island's own.
 	"context_ybi_building_wall": "plaster_grey_04",
 	"context_ybi_road": "clean_asphalt",
@@ -1164,22 +1163,23 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			# Gutter pans: smoother, slightly darker concrete; cooled so the
 			# warm source map does not read pink beside the asphalt.
 			return Color(0.84, 0.92, 0.98)
-		"context_ybi":
-			return Color("d2d8cb")
 		"context_ybi_road", "context_ybi_paved":
 			return Color(1.04, 1.05, 1.05)
 		"context_ybi_path":
-			return Color(1.12, 1.20, 1.28)
+			# Light, slightly warm concrete paths and plazas (the summit plaza round the
+			# sculpture in the 2025-05-27 close photo), lighter than Treasure Island's own
+			# so the distant haze does not turn them slate.
+			return Color(1.30, 1.33, 1.33)
 		"context_ybi_construction":
 			# Graded gravel of the west shore works, paler and warmer than a court.
 			return Color(1.0, 0.95, 0.84)
 		"context_ybi_building_wall":
 			return Color("f7f2eb")
 		"context_ybi_wall":
-			# Pale poured and board-formed retaining walls and the summit plaza's parapets
-			# (Macalla Road, under The Bristol, Hilltop Park): the warm source map lifted
-			# to light grey concrete.
-			return Color(1.16, 1.28, 1.40)
+			# Weathered mid-grey concrete: the retaining walls along Macalla Road and the
+			# ramps, the summit plaza's parapets and the summit reservoir's banks (the
+			# 2025-05-27 photo from Treasure Island's west shore).
+			return Color(0.88, 0.99, 1.10)
 		"building_wall", "building_part_wall":
 			return Color("f7f2eb")
 		"building_roof", "building_part_roof":

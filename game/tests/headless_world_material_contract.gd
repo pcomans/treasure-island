@@ -16,13 +16,14 @@ const EXPECTED_MATERIALS := {
 	"road_path_pedestrian": {"feature_kind": "road_path", "context": false, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
 	"major_area_paved": {"feature_kind": "major_area", "context": false, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"major_area_court": {"feature_kind": "major_area", "context": false, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
-	"context_ybi": {"feature_kind": "ybi", "context": true, "asset": "sparse_grass", "source_dimension_m": 2.0, "repeat_dimension_m": 5.0, "normal_strength": 0.2},
-	# Yerba Buena Island's L1 buildings and surfaces wear Treasure Island's own maps.
+	# Yerba Buena Island's L1 buildings, surfaces and walls wear Treasure Island's own maps
+	# (its terrain draws its own ground shader: ybi_ground.gd).
 	"context_ybi_building_wall": {"feature_kind": "ybi_building", "context": true, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"context_ybi_road": {"feature_kind": "ybi_surface", "context": true, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"context_ybi_paved": {"feature_kind": "ybi_surface", "context": true, "asset": "clean_asphalt", "source_dimension_m": 2.1, "repeat_dimension_m": 2.1, "normal_strength": 0.2},
 	"context_ybi_path": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
 	"context_ybi_construction": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
+	"context_ybi_wall": {"feature_kind": "ybi_building", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"building_wall": {"feature_kind": "building_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_part_wall": {"feature_kind": "building_part_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},

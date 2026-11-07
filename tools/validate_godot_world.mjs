@@ -411,12 +411,47 @@ function validateYbiDetailDocuments(context) {
   const vegetation = context.ybi_vegetation;
   invariant(vegetation?.schema_version === YBI_VEGETATION_SCHEMA, "YBI vegetation schema drift");
   invariant(Array.isArray(vegetation.instances) && vegetation.instances.length > 0, "YBI vegetation is empty");
+  invariant(Array.isArray(vegetation.prop_heights_m) && vegetation.prop_heights_m.length === vegetation.props.length
+    && vegetation.prop_heights_m.every((heights) => Array.isArray(heights) && heights.every((height) => Number.isFinite(height) && height > 0)), "YBI vegetation needs nominal heights per prop");
   for (const row of vegetation.instances) {
     invariant(Array.isArray(row) && row.length === vegetation.fields.length && row.every(Number.isFinite), "YBI vegetation row is malformed");
     invariant(Number.isInteger(row[0]) && row[0] >= 0 && row[0] < vegetation.props.length, "YBI vegetation row names no prop");
     const [scale, stretch] = [row[6], row[7]];
     invariant(scale >= YBI_VEGETATION_LIMITS.scale[0] && scale <= YBI_VEGETATION_LIMITS.scale[1]
       && stretch >= YBI_VEGETATION_LIMITS.stretch[0] && stretch <= YBI_VEGETATION_LIMITS.stretch[1], "YBI vegetation row scale or stretch is outside the drawn range");
+  }
+  // Every foot rests on the terrain triangle under it, at most 1.3 m sunk and never above
+  // it (the game checks only the terrain's bounds on load).
+  const terrain = context.records.find((record) => record.object_key === "context:ybi");
+  invariant(terrain, "YBI vegetation has no terrain record");
+  const bucketM = 8;
+  const buckets = new Map();
+  const vertex = (index) => [terrain.vertices[index * 3], terrain.vertices[index * 3 + 1], terrain.vertices[index * 3 + 2]];
+  for (let offset = 0; offset < terrain.indices.length; offset += 3) {
+    const [a, b, c] = [0, 1, 2].map((k) => vertex(terrain.indices[offset + k]));
+    // The top only: the shore's sides are vertical.
+    if (Math.abs((b[0] - a[0]) * (c[2] - a[2]) - (c[0] - a[0]) * (b[2] - a[2])) <= 1e-6) continue;
+    for (let bx = Math.floor(Math.min(a[0], b[0], c[0]) / bucketM); bx <= Math.floor(Math.max(a[0], b[0], c[0]) / bucketM); bx += 1) {
+      for (let bz = Math.floor(Math.min(a[2], b[2], c[2]) / bucketM); bz <= Math.floor(Math.max(a[2], b[2], c[2]) / bucketM); bz += 1) {
+        const key = `${bx},${bz}`;
+        if (!buckets.has(key)) buckets.set(key, []);
+        buckets.get(key).push([a, b, c]);
+      }
+    }
+  }
+  for (const row of vegetation.instances) {
+    const [x, y, z] = [row[2], row[3], row[4]];
+    let ground = null;
+    for (const [a, b, c] of buckets.get(`${Math.floor(x / bucketM)},${Math.floor(z / bucketM)}`) ?? []) {
+      const det = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+      const wa = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / det;
+      const wb = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / det;
+      if (wa >= -1e-6 && wb >= -1e-6 && 1 - wa - wb >= -1e-6) {
+        ground = wa * a[1] + wb * b[1] + (1 - wa - wb) * c[1];
+        break;
+      }
+    }
+    invariant(ground != null && y <= ground + 0.05 && y >= ground - 1.3, `A YBI plant at (${x}, ${z}) does not stand on YBI's terrain`);
   }
 }
 
