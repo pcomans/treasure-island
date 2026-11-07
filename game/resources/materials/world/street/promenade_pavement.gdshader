@@ -53,8 +53,8 @@ void fragment() {
 	float ragged = 0.7 * (value_noise(vec2(road.x / 7.0, 3.1)) - 0.5);
 	float lane = 1.0 - smoothstep(lane_edge_m - 0.35, lane_edge_m + 0.2, road.y + ragged);
 	float shade = 1.0 + 0.32 * (drift - 0.5) + 0.2 * (blotch - 0.5);
-	shade *= 1.0 - 0.3 * dark_track * (0.6 + 0.4 * lane);
-	shade *= 1.0 + 0.16 * pale_track * (1.0 - 0.7 * lane);
+	shade *= 1.0 - 0.22 * dark_track * (0.6 + 0.4 * lane);
+	shade *= 1.0 + 0.12 * pale_track * (1.0 - 0.7 * lane);
 	shade *= 1.0 - 0.45 * lane;
 
 	ALBEDO = stones * tone * mix(1.0, shade, wear);

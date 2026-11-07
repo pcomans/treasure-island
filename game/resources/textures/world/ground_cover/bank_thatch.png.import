@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://cf086yjiyt71y"
+path="res://.godot/imported/bank_thatch.png-be86232714c17c387925b2c1c5bec7ae.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/ground_cover/bank_thatch.png"
+dest_files=["res://.godot/imported/bank_thatch.png-be86232714c17c387925b2c1c5bec7ae.ctex"]
 
 [params]
 

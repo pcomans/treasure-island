@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://cn1n6qliabyes"
+path="res://.godot/imported/marsh_mat.png-bab919489e94531f7713d072faf7f8a6.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/ground_cover/marsh_mat.png"
+dest_files=["res://.godot/imported/marsh_mat.png-bab919489e94531f7713d072faf7f8a6.ctex"]
 
 [params]
 

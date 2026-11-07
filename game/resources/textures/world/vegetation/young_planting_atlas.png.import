@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://cyl5ak37q25kt"
+path="res://.godot/imported/young_planting_atlas.png-e75cba12b4da5203d516f11658e42160.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/young_planting_atlas.png"
+dest_files=["res://.godot/imported/young_planting_atlas.png-e75cba12b4da5203d516f11658e42160.ctex"]
 
 [params]
 

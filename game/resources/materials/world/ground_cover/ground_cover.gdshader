@@ -301,7 +301,7 @@ void fragment() {
 			float straw_w = smoothstep(0.57, 0.68, 0.5 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.3 * n_small + 0.2 * stipple + 0.14 * (1.0 - smoothstep(1.0, 11.0, outline_m)));
 			marsh = mix(marsh, marsh_straw * (0.78 + 0.44 * clump), 0.9 * straw_w);
 			float sward_w = smoothstep(0.655, 0.695, 0.72 * value_noise(along / vec2(14.0, 4.6) + vec2(11.7, 23.1)) + 0.28 * n_small + 0.12 * (stipple - 0.5));
-			marsh = mix(marsh, mix(marsh_green, marsh_olive, smoothstep(0.35, 0.68, clump)) * (0.85 + 0.3 * tip), 0.92 * sward_w);
+			marsh = mix(marsh, mix(marsh_green, marsh_olive, smoothstep(0.35, 0.68, clump)) * (0.85 + 0.3 * tip) * dot(mix(vec3(1.0), thatch_detail, 0.8), vec3(0.3333)), 0.92 * sward_w);
 			// The floor: inside the wetland's frayed outline, and any lower land round it.
 			float wet = smoothstep(-1.5, 3.0, outline_m + 7.0 * (n_mid - 0.5) + 5.0 * (n_wide - 0.5) + 2.5 * (n_small - 0.5));
 			float carpet = max(1.0 - smoothstep(2.45, 2.8, h), wet);

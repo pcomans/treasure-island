@@ -118,7 +118,7 @@ const STREET_GROUND_SURFACES := {
 	# its south end, low in specular so the sky's sheen doesn't wash them out at a
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
 	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.51, 0.51)},
-	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.63, 0.6, 0.5)},
+	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.58, 0.57, 0.5)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
@@ -156,7 +156,7 @@ const STREET_GROUND_SURFACES := {
 const PROMENADE_PAVEMENT_SHADER := preload("res://game/resources/materials/world/street/promenade_pavement.gdshader")
 const PROMENADE_PAVEMENT := {
 	"promenade_asphalt": {"aggregate": preload("res://game/resources/textures/world/street/promenade_aggregate.png"), "tile_m": 1.15, "tone": Color(0.51, 0.53, 0.56), "wear": 1.0},
-	"promenade_seal": {"aggregate": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "tile_m": 2.1, "tone": Color(0.83, 0.74, 0.68), "wear": 0.3},
+	"promenade_seal": {"aggregate": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "tile_m": 2.1, "tone": Color(0.94, 0.85, 0.79), "wear": 0.3},
 }
 
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
