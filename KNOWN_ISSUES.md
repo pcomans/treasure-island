@@ -24,7 +24,8 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - the OSM service road along the WSW and SSE sides shows as a darker band where the photos show one worn surface. This is deliberate: the road stays represented, and the lot is darkened to meet it;
   - the lot mesh still carries the building's source key, so the fit test and close-ups count it in the building's box, which makes the box bigger than the building;
   - the lot's cracks go soft in the closest ground views, because the stain tile is about 25 px per metre.
-  - OSM power pole n11545781132 stands about 0.5 m inside the frozen footprint at the ENE step, in the low block's corner.
+  - OSM power pole n11545781132 is `excluded` (`inside_building`) in `street_detail.json`, so it isn't drawn; it falls about 0.5 m inside the frozen footprint at the ENE step;
+  - the lower south apron dust strip is soft up close, and its dark slashes could read as a cast shadow (seen in review, 2026-11-07).
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;

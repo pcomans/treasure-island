@@ -24328,3 +24328,19 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Mapping every `street_detail.json` row into the building's frame took one short script and listed all 16 rows on the site, so the pole fix came with a check of the rest.
 - What did not work well: The fit test passed with street detail on while a container swallowed a power pole, because a pole inside a container meets no check. I had placed that row from the aerial without reading the street rows.
 - What the team should change next time: When placing solid props, list the street rows inside them first. A fit pass doesn't show that a prop and a street row don't overlap.
+
+### b201-visual-review, delta
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** comparing every r19 image with r18 proved the market views were untouched.
+- **Didn't:** a colour sample landed on the wrong surface at r18.
+- **Change:** check where each sample lands, and review even small final commits before the acceptance record is written.
+
+### b201-code-review, delta
+
+(Relayed by the coordinator; added by b201-art.)
+
+- **Worked:** computing strip height against real road triangles answered the flicker question without an engine.
+- **Didn't:** a grep missed the uppercase `STREET_DETAIL` line, so a log was misreported.
+- **Change:** read the run's own state line before describing what a log covers, and don't let the acceptance record's commit run ahead of its reviews.

@@ -149,7 +149,7 @@
       "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
       "recognition_acceptance_status": "accepted",
       "review_status": "independent_exact_current_live_pass",
-      "review_status_scope": "whole_building_model_replacement_reviewed_2026-11-06",
+      "review_status_scope": "whole_building_model_replacement_reviewed_at_49b733e6_2026-11-07",
       "runtime_adapter_path": "game/scripts/world/facades/b201_market_live_replacement.gd",
       "runtime_asset_paths": [
         "game/resources/materials/world/d1_current/b201_service_leaf.tres",
@@ -1719,6 +1719,17 @@
           "source_locator": "Esri World Imagery level 19, Vantor capture 2026-05-26 (0.24 m)",
           "supports": [
             "parallel white roof strips with the dark monitor strip, sign roof and canopy extents forward of the OSM line"
+          ]
+        },
+        {
+          "observation_id": "800I-SV06",
+          "observed_regions": [
+            "Sep 2025 ENE container yard and return wall, from Avenue I; Aug 2025 aerial of the yard and the Avenue H pavement"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View, 800 Ave I, Sep 2025; retained in refs/island-cove 14, 22. Esri World Imagery level 20 (Wayback release 43291), Vantor capture 2025-08-29",
+          "supports": [
+            "container stack order and door ends, tarps, and the plain return wall with its notice; the tan container's position by Avenue H"
           ]
         }
       ],
