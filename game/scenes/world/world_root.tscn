@@ -1,19 +1,28 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/world/world_loader.gd" id="1_loader"]
 [ext_resource type="Script" path="res://game/scripts/world/world_boundary.gd" id="2_boundary"]
 [ext_resource type="Script" path="res://game/scripts/debug/runtime_evidence.gd" id="3_evidence"]
 [ext_resource type="Texture2D" path="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png" id="4_skyline"]
 [ext_resource type="PackedScene" path="res://game/resources/models/context/baybridge-western-span.glb" id="5_western_bridge"]
+[ext_resource type="Shader" path="res://game/resources/materials/world/water/bay_water.gdshader" id="6_water_shader"]
+[ext_resource type="CompressedTexture2DArray" path="res://game/resources/textures/world/water/bay_waves.png" id="7_water_waves"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/water/shore_map.png" id="8_water_shore"]
 
-[sub_resource type="StandardMaterial3D" id="Material_water"]
-transparency = 1
-albedo_color = Color(0.17, 0.45, 0.61, 0.82)
-roughness = 0.72
+[sub_resource type="ShaderMaterial" id="Material_water"]
+render_priority = -1
+shader = ExtResource("6_water_shader")
+shader_parameter/waves = ExtResource("7_water_waves")
+shader_parameter/shore_map = ExtResource("8_water_shore")
+shader_parameter/grid_rows = 23.0
+shader_parameter/far_radius_m = 4800.0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 material = SubResource("Material_water")
-size = Vector2(6000, 6000)
+custom_aabb = AABB(-8000, -1, -8000, 16000, 4000, 16000)
+size = Vector2(2, 2)
+subdivide_width = 22
+subdivide_depth = 22
 
 [sub_resource type="StandardMaterial3D" id="Material_skyline"]
 transparency = 1

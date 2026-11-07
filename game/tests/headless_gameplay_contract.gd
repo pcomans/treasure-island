@@ -8,10 +8,8 @@ const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_sk
 const EXPECTED_BILLBOARD_TEXTURE_SIZE := Vector2i(2212, 340)
 const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
 const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
-const EXPECTED_WATER_SIZE := Vector2(6000.0, 6000.0)
 const EXPECTED_WATER_Y := -0.12
-const EXPECTED_WATER_COLOR := Color(0.17, 0.45, 0.61, 0.82)
-const EXPECTED_WATER_ROUGHNESS := 0.72
+const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
 
 
 func _initialize() -> void:
@@ -109,20 +107,33 @@ func _initialize() -> void:
 	var water_node := world.get_node_or_null("ContextWorld/Water")
 	var water := water_node as MeshInstance3D
 	var water_mesh := water.mesh as PlaneMesh if water != null else null
-	var water_material := water_mesh.material as StandardMaterial3D if water_mesh != null else null
-	if water == null or water_mesh == null or water_material == null:
-		_fail("Water must remain a MeshInstance3D with a PlaneMesh and StandardMaterial3D.")
+	var water_material := water_mesh.material as ShaderMaterial if water_mesh != null else null
+	# The imported wave frames are a CompressedTexture2DArray, a TextureLayered but not a Texture2DArray.
+	var water_waves := water_material.get_shader_parameter("waves") as TextureLayered if water_material != null else null
+	if water == null or water_mesh == null or water_material == null \
+	or water_material.shader == null or water_material.shader.resource_path != EXPECTED_WATER_SHADER \
+	or water_waves == null or water_waves.get_layered_type() != TextureLayered.LAYERED_TYPE_2D_ARRAY \
+	or not water_material.get_shader_parameter("shore_map") is Texture2D:
+		_fail("Water must remain a MeshInstance3D with a PlaneMesh and the bay water shader, its waves and its shore map.")
 		return
-	if water_mesh.size != EXPECTED_WATER_SIZE \
-	or not is_equal_approx(_off_tree_world_transform(water, world).origin.y, EXPECTED_WATER_Y) \
+	if not is_equal_approx(_off_tree_world_transform(water, world).origin.y, EXPECTED_WATER_Y) \
+	or not _off_tree_world_transform(water, world).basis.is_equal_approx(Basis.IDENTITY) \
 	or water.layers != 1 \
 	or water.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
-		_fail("Water size, world elevation, render layer, or shadow setting drifted.")
+		_fail("Water elevation, orientation, render layer, or shadow setting drifted.")
 		return
-	if water_material.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA \
-	or not water_material.albedo_color.is_equal_approx(EXPECTED_WATER_COLOR) \
-	or not is_equal_approx(water_material.roughness, EXPECTED_WATER_ROUGHNESS):
-		_fail("Water translucent color or roughness drifted.")
+	# The shader spreads the unit grid into rings round the camera out to far_radius_m:
+	# its row count must match the mesh, and the mesh's bounds must hold the rings
+	# from any camera over the island, up to a high jetpack.
+	var far_radius := float(water_material.get_shader_parameter("far_radius_m"))
+	if water_mesh.size != Vector2(2.0, 2.0) \
+	or water_mesh.subdivide_width != water_mesh.subdivide_depth \
+	or int(water_material.get_shader_parameter("grid_rows")) != water_mesh.subdivide_width + 1 \
+	or far_radius <= 0.0 \
+	or water_mesh.custom_aabb.size.x < 2.0 * (far_radius + 2000.0) \
+	or water_mesh.custom_aabb.size.z < 2.0 * (far_radius + 2000.0) \
+	or water_mesh.custom_aabb.end.y < 1000.0:
+		_fail("Water grid, far radius or bounds drifted apart.")
 		return
 	if not water.find_children("*", "CollisionObject3D", true, false).is_empty() \
 	or not water.find_children("*", "CollisionShape3D", true, false).is_empty() \
