@@ -188,6 +188,11 @@ const LOW_CELLS := {
 	"bronze_top": ["perennial", Rect2(0.25, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"daisy_flowers": ["perennial", Rect2(0.5, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
 	"seeded_tufts": ["perennial", Rect2(0.75, 2.0 / 3.0, 0.25, 1.0 / 3.0)],
+	# The Mersea ditch's own atlas (2048 x 1024, owner video, Nov 2026): a shrub of red
+	# stems laden with cream seed, thin dead stems, a loose tussock of dry grass.
+	"marsh_shrub": ["marsh", Rect2(0.0, 0.0, 0.5, 1.0)],
+	"marsh_stems": ["marsh", Rect2(0.5, 0.0, 0.25, 1.0)],
+	"marsh_grass": ["marsh", Rect2(0.75, 0.0, 0.25, 1.0)],
 }
 ## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
 const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
@@ -287,6 +292,10 @@ const CANARY_PALMS := [
 		"shag": 0.15, "rings": 26, "high": 74.0, "low": -60.0, "arch": 0.44, "droop": 0.7, "width": 0.25, "impostor_forward": 1.1},
 	{"seed": 26, "height": 9.8, "lean": 0.65, "bow": 0.3, "radius_low": 0.6, "radius_top": 0.64, "flare": 0.25, "knob": 1.7, "knob_radius": 0.85, "fronds": 116, "frond": 5.5,
 		"shag": 0.16, "rings": 32, "high": 74.0, "low": -62.0, "arch": 0.44, "droop": 0.72, "width": 0.25, "impostor_forward": 1.15},
+	# The tall old palm on the lawn by the Mersea promenade (owner video, Nov 2026): a
+	# slim dark ringed trunk about 12 m tall, a little bowed, under a small open crown.
+	{"seed": 27, "height": 11.8, "lean": 0.55, "bow": 0.22, "radius_low": 0.33, "radius_top": 0.27, "flare": 0.2, "knob": 1.0, "knob_radius": 0.42, "fronds": 46, "frond": 3.5,
+		"shag": 0.06, "rings": 40, "high": 72.0, "low": -48.0, "arch": 0.36, "droop": 0.62, "width": 0.22, "bark": "canary_ring_bark"},
 ]
 ## Two old wind-shaped cypresses (Building 1 grounds, Sep 2025 and Jul 2023),
 ## a young conical one (the Waterfront Plaza, Sep 2025) and two smaller young
@@ -655,6 +664,21 @@ const SEEDED_SHRUBS := [
 	{"seed": 132, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 1.0, "height": 1.15, "splay_deg": 9.0, "flop_deg": 16.0, "flutter": 0.035, "shade_low": 0.7}]},
 	# Laden with seed: loose cream clusters over the upper two thirds, grey to reddish-brown stems showing through.
 	{"seed": 133, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "seeded_tufts", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 9.0, "flop_deg": 14.0, "flutter": 0.035, "shade_low": 0.62}]},
+	# The ditch bank by the road end (owner video, Nov 2026): red stems fanning up from one foot, cream seed in soft clusters on their upper parts.
+	{"seed": 134, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 3, "width": 1.05, "height": 1.05, "splay_deg": 6.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.72}]},
+	{"seed": 135, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 4, "width": 1.4, "height": 1.4, "splay_deg": 7.0, "flop_deg": 12.0, "flutter": 0.04, "shade_low": 0.72}]},
+]
+## Thin dead stems standing through the Mersea ditch's mat and its pools (owner video,
+## Nov 2026): a few hair-thin stalks, some with a seed head; a thin stand, then a taller one.
+const MARSH_STEMS := [
+	{"seed": 136, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 2, "width": 0.42, "height": 0.62, "curl": 0.05, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.78}]},
+	{"seed": 137, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 3, "width": 0.6, "height": 0.95, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.78}]},
+]
+## Loose tussocks of dry dead grass, the cover of the ditch's banks (owner video, Nov 2026).
+const MARSH_GRASSES := [
+	{"seed": 138, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 3, "width": 0.8, "height": 0.5, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 18.0, "flutter": 0.04, "shade_low": 0.62}]},
+	{"seed": 139, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 1.05, "height": 0.72, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 20.0, "flutter": 0.045, "shade_low": 0.62}]},
+	{"seed": 140, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 1.3, "height": 1.0, "curl": 0.07, "splay_deg": 11.0, "flop_deg": 22.0, "flutter": 0.05, "shade_low": 0.62}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
@@ -720,6 +744,8 @@ const PROPS := {
 	"dune_tansy": {"kinds": LOW_KINDS, "variants": TANSIES, "ranges": [50.0], "foot_m": 0.2, "form": "low"},
 	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
 	"pale_seeded_shrub": {"kinds": LOW_KINDS, "variants": SEEDED_SHRUBS, "ranges": [65.0], "foot_m": 0.2, "form": "low", "shadow": true},
+	"marsh_stems": {"kinds": LOW_KINDS, "variants": MARSH_STEMS, "ranges": [55.0], "foot_m": 0.15, "form": "low"},
+	"marsh_grass": {"kinds": LOW_KINDS, "variants": MARSH_GRASSES, "ranges": [70.0], "foot_m": 0.2, "form": "low", "shadow": true},
 }
 ## Below about this cosine of the angle between the view and a card, a rollout
 ## model's card fades out, so it never shows as a long streak across the crown; a
@@ -1306,7 +1332,7 @@ func _build_canary_palm(p: Dictionary) -> Dictionary:
 					kept = kept.duplicate()
 					kept.width = float(kept.width) * 1.6
 				_canary_frond(leaves, kept, crown, 4 if p.has("shag") else 3, sway_top)
-		bark.commit(mesh, material("canary_bark"))
+		bark.commit(mesh, material(str(p.get("bark", "canary_bark"))))
 		knob_surf.commit(mesh, material("canary_knob"))
 		leaves.commit(mesh, material("canary_foliage"))
 		meshes.append(mesh)
@@ -1335,7 +1361,7 @@ func _build_canary_palm(p: Dictionary) -> Dictionary:
 			var wide: Dictionary = (fronds[f_index] as Dictionary).duplicate()
 			wide.width = float(wide.width) * 2.2
 			_canary_frond(leaves, wide, crown, 3, sway_top)
-		bark.commit(shadow, material("canary_bark"))
+		bark.commit(shadow, material(str(p.get("bark", "canary_bark"))))
 		leaves.commit(shadow, material("canary_foliage"))
 		tree.shadow = shadow
 	return tree
@@ -4130,6 +4156,8 @@ func material(key: String) -> Material:
 			made = _bark("fan_palm_bark.png", Color(0.84, 0.82, 0.78))
 		"canary_bark":
 			made = _bark("canary_trunk_bark.png", Color(0.88, 0.85, 0.82))
+		"canary_ring_bark":
+			made = _bark("fan_palm_bark.png", Color(0.5, 0.45, 0.4))
 		"canary_knob":
 			made = _bark("canary_knob.png", Color(0.6, 0.53, 0.47))
 		"cypress_bark":
@@ -4156,6 +4184,11 @@ func material(key: String) -> Material:
 			made.set_shader_parameter("distance_fade", true)
 			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 			made.set_shader_parameter("desaturate", 0.7)
+		"marsh":
+			made = _foliage("marsh_atlas.png", Color(0.95, 0.94, 0.9), Color(0.1, 0.09, 0.05), Vector2(2048.0, 1024.0), 0.08, 0.92)
+			made.set_shader_parameter("alpha_cutoff", 0.35)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 		"meadow_dead":
 			made = _foliage("meadow_atlas.png", Color(0.68, 0.56, 0.46), Color(0.08, 0.07, 0.04), Vector2(2048.0, 2048.0), 0.1, 0.9)
 			made.set_shader_parameter("alpha_cutoff", 0.4)

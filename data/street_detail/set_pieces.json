@@ -1936,7 +1936,7 @@
      "kind": "chair",
      "prop": "adirondack_chair",
      "params": {},
-     "xz": [-362.56, 312.97],
+     "xz": [-360.89, 314.9],
      "yaw": 2.12,
      "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
@@ -1946,7 +1946,7 @@
      "kind": "chair",
      "prop": "adirondack_chair",
      "params": {},
-     "xz": [-364.76, 310.31],
+     "xz": [-362.25, 312.1],
      "yaw": 1.67,
      "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
@@ -1956,7 +1956,7 @@
      "kind": "chair",
      "prop": "adirondack_chair",
      "params": {},
-     "xz": [-365.79, 307.67],
+     "xz": [-362.7, 310.29],
      "yaw": 2.02,
      "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
@@ -1966,35 +1966,33 @@
      "kind": "chair",
      "prop": "adirondack_chair",
      "params": {},
-     "xz": [-367.03, 304.47],
+     "xz": [-364.3, 307.87],
      "yaw": 2.27,
      "reason": "Bright blue Adirondack chairs on the mulch, facing the water.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
-     "id": "promenade_tank_1",
-     "kind": "planter",
-     "prop": "stock_tank_planter",
-     "params": {
-      "paint": "beige"
-     },
-     "xz": [-388.49, 235.26],
-     "yaw": 2.486,
-     "reason": "A galvanised stock-tank planter at the lawn's corner by the road.",
-     "reference": "Owner video IMG_0960, 2026-11-06: t=322 (B6), t=349 (B8)."
+     "id": "promenade_tub_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {},
+     "xz": [-388.93, 233.67],
+     "yaw": 0.4,
+     "reason": "A round ribbed galvanised tub of bronze blades at the lawn's corner by the road.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=322 (B6), t=349 (B8)."
     },
     {
      "id": "promenade_canary_palm",
      "kind": "tree",
      "prop": "canary_date_palm",
      "params": {
-      "variant": 5,
+      "variant": 6,
       "scale": 1.0
      },
      "xz": [-388.5, 230.56],
      "yaw": 0.9,
-     "reason": "The tall Canary Island date palm on the lawn by the road.",
-     "reference": "Owner video IMG_0960, 2026-11-06: t=118 (D4), t=286 (B4), t=322 (B6), t=349 (B8); two rays agree within 4 m."
+     "reason": "The tall slim-trunked palm on the lawn by the road.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=118 (D4), t=286 (B4), t=316, t=322 (B6), t=349 (B8); the rays agree within 4 m."
     },
     {
      "id": "ditch_cobbles_road_end",
@@ -2003,7 +2001,7 @@
      "params": {
       "length_m": 5.0
      },
-     "xz": [-302.2, 239.1],
+     "xz": [-304.4, 241.4],
      "yaw": -2.632,
      "reason": "A spread of rounded pale and brown cobbles on the gravel between the Johnson St lot's curb and the red barriers, where the road ends at the ditch.",
      "reference": "Owner video IMG_0960, 2026-11-06, t=112 (D2) and t=118 (D4); owner photos, Nov 2026 (ditch 3)"

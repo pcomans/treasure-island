@@ -1296,7 +1296,7 @@
        "terrain_wetland",
        "land_ground"
       ],
-      "per_m2": 0.035,
+      "per_m2": 0.07,
       "spacing": [0.7, 1.5],
       "field": {
        "axis": {
@@ -1342,9 +1342,9 @@
       "mix": [
        {
         "prop": "pale_seeded_shrub",
-        "variants": [2, 2],
-        "scale": [0.8, 0.95],
-        "at": [0.42, 1.0],
+        "variants": [3, 4],
+        "scale": [0.85, 1.1],
+        "at": [0.3, 1.0],
         "share": 1
        },
        {
@@ -1407,8 +1407,8 @@
        "terrain_wetland",
        "land_ground"
       ],
-      "per_m2": 0.06,
-      "spacing": [0.45, 1.2],
+      "per_m2": 0.55,
+      "spacing": [0.4, 1.0],
       "field": {
        "axis": {
         "from_xz": [-295, 145],
@@ -1416,14 +1416,14 @@
         "full_m": 40,
         "zero_m": 56
        },
-       "height_m": [2.9, 3.25, 3.95, 4.2],
-       "drift_m": 7,
-       "clump_m": 2,
-       "drift_cover": 0.38,
-       "lone": 0.06,
+       "height_m": [2.35, 2.75, 3.9, 4.3],
+       "drift_m": 8,
+       "clump_m": 2.2,
+       "drift_cover": 0.62,
+       "lone": 0.1,
        "groups": {
-        "count": [1, 9],
-        "spread_m": [0.6, 1.8]
+        "count": [2, 9],
+        "spread_m": [0.6, 1.7]
        },
        "wander": {
         "height_m": 0.25,
@@ -1431,6 +1431,13 @@
        }
       },
       "mix": [
+       {
+        "prop": "marsh_grass",
+        "variants": [0, 2],
+        "scale": [0.85, 1.2],
+        "at": [0.0, 1.0],
+        "share": 4
+       },
        {
         "prop": "clump_grass",
         "variants": [4, 5],
@@ -1440,8 +1447,8 @@
        }
       ],
       "basis": "production_inference",
-      "rule": "Dead straw on the banks, in drifts.",
-      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): dry straw grass on the slope."
+      "rule": "Dead grass over the banks, thick in its drifts, the slope's bare ground only in their gaps.",
+      "evidence": "Owner video IMG_0960, 2026-11-06, frames D1-D5 from the road end at about (-298, 241), and owner photos, Nov 2026, from the lot's west corner at about (-266, 203): dry straw grass cloaks the slope."
      },
      {
       "id": "bank_foot_stems",
@@ -1451,7 +1458,7 @@
        "terrain_wetland",
        "land_ground"
       ],
-      "per_m2": 0.08,
+      "per_m2": 0.16,
       "spacing": [0.4, 1.0],
       "field": {
        "axis": {
@@ -1477,25 +1484,25 @@
       },
       "mix": [
        {
-        "prop": "rush",
-        "variants": [4, 5],
-        "scale": [0.8, 1.15],
+        "prop": "marsh_stems",
+        "variants": [0, 1],
+        "scale": [0.85, 1.2],
         "at": [0.0, 1.0],
-        "share": 5
+        "share": 6
        },
        {
-        "prop": "clump_grass",
-        "variants": [4, 5],
+        "prop": "marsh_grass",
+        "variants": [0, 0],
         "scale": [0.8, 1.0],
         "at": [0.0, 1.0],
-        "share": 3
+        "share": 2
        },
        {
         "prop": "pale_seeded_shrub",
         "variants": [0, 1],
         "scale": [0.85, 1.05],
         "at": [0.0, 1.0],
-        "share": 2
+        "share": 1
        }
       ],
       "basis": "production_inference",
@@ -1510,7 +1517,7 @@
        "terrain_wetland",
        "land_ground"
       ],
-      "per_m2": 0.1,
+      "per_m2": 0.03,
       "spacing": [0.8, 1.6],
       "field": {
        "axis": {
@@ -1522,11 +1529,11 @@
        "height_m": [1.7, 1.8, 2.4, 2.7],
        "drift_m": 16,
        "clump_m": 5,
-       "drift_cover": 0.24,
-       "lone": 0.012,
+       "drift_cover": 0.14,
+       "lone": 0.0,
        "groups": {
-        "count": [2, 8],
-        "spread_m": [0.7, 2.0]
+        "count": [2, 6],
+        "spread_m": [0.6, 1.6]
        }
       },
       "mix": [
@@ -1550,8 +1557,8 @@
        "terrain_wetland",
        "land_ground"
       ],
-      "per_m2": 0.07,
-      "spacing": [0.35, 0.9],
+      "per_m2": 0.05,
+      "spacing": [0.3, 0.8],
       "field": {
        "axis": {
         "from_xz": [-295, 145],
@@ -1566,18 +1573,18 @@
        },
        "drift_m": 9,
        "clump_m": 2.2,
-       "drift_cover": 0.34,
-       "lone": 0.05,
+       "drift_cover": 0.3,
+       "lone": 0.02,
        "groups": {
-        "count": [2, 9],
-        "spread_m": [0.5, 1.6]
+        "count": [3, 10],
+        "spread_m": [0.4, 1.2]
        }
       },
       "mix": [
        {
-        "prop": "rush",
-        "variants": [4, 5],
-        "scale": [0.8, 1.1],
+        "prop": "marsh_stems",
+        "variants": [0, 1],
+        "scale": [0.85, 1.25],
         "at": [0.0, 1.0],
         "share": 1
        }
@@ -1786,7 +1793,7 @@
         "id": "promenade_sea_mulch",
         "material": "promenade_mulch",
         "shape": {
-         "points_xz": [[-350.91, 323.61], [-361.38, 303.69], [-363.73, 305.02], [-372.38, 290.95], [-381.63, 293.89], [-361.44, 329.57]],
+         "points_xz": [[-352.82, 324.7], [-357.15, 317.15], [-361.73, 303.88], [-363.73, 305.02], [-372.38, 290.95], [-381.63, 293.89], [-361.44, 329.57]],
          "minus_sources": [
           "w1222685424"
          ]
@@ -1807,9 +1814,9 @@
         "id": "promenade_dg_band",
         "material": "promenade_dg",
         "shape": {
-         "points_xz": [[-350.12, 323.17], [-361.2, 303.59], [-361.38, 303.69], [-351.52, 323.96]]
+         "points_xz": [[-351.83, 324.83], [-356.41, 316.73], [-361.2, 303.59], [-361.73, 303.88], [-357.15, 317.15], [-352.53, 325.22]]
         },
-        "reason": "A band of decomposed granite along the seal's seaward edge, wider toward the park.",
+        "reason": "A narrow band of decomposed granite along the slab and the seal's seaward edge, ending at the joint.",
         "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B3."
        },
        {
@@ -1849,6 +1856,9 @@
        "variants": [0, 1],
        "scale": [0.8, 1.0]
       },
+      "visible_surfaces": [
+       "promenade_mulch"
+      ],
       "basis": "production_inference",
       "rule": "Young staked trees along the mulch on the marsh side, at uneven spacing with long gaps.",
       "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
@@ -1857,16 +1867,19 @@
       "id": "promenade_trees_sea_side",
       "kind": "tree",
       "pattern": "along",
-      "line_xz": [[-358.13, 324.25], [-376.24, 294.28]],
+      "line_xz": [[-359.17, 321.4], [-365.95, 304.55], [-373.71, 292.85]],
       "offsets_m": [0],
-      "spacing_m": 7.0,
-      "jitter_m": 2.2,
-      "acceptance": 0.6,
+      "spacing_m": 5.0,
+      "jitter_m": 1.6,
+      "acceptance": 0.85,
       "prop": "island_oak_young",
       "params": {
        "variants": [0, 1],
        "scale": [0.8, 0.95]
       },
+      "visible_surfaces": [
+       "promenade_mulch"
+      ],
       "basis": "production_inference",
       "rule": "Young staked trees on the seaward mulch, far apart.",
       "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
@@ -1875,20 +1888,22 @@
       "id": "promenade_shrubs",
       "kind": "planting_slot",
       "pattern": "along",
-      "line_xz": [[-345.48, 312.5], [-360.8, 284.4], [-374.12, 258.62]],
-      "offsets_m": [-1.0, 0.8],
-      "spacing_m": 6.5,
-      "jitter_m": 2.2,
-      "acceptance": 0.5,
+      "line_xz": [[-346.26, 312.94], [-361.58, 284.84], [-374.99, 259.11]],
+      "offsets_m": [0],
+      "spacing_m": 4.5,
+      "jitter_m": 1.4,
+      "acceptance": 0.62,
       "prop": "pittosporum_tobira",
       "params": {
        "variants": [0, 0],
-       "scale": [0.8, 1.0]
+       "scale": [0.8, 0.95]
       },
+      "visible_surfaces": [
+       "promenade_mulch"
+      ],
       "basis": "production_inference",
-      "rule": "Leafy young shrubs between the young trees, with bare mulch between them.",
-      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps.",
-      "stagger_m": 3.0
+      "rule": "Leafy young shrubs nearer the road than the young trees, with bare mulch between them.",
+      "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B1-B4 and the crops at t=254, t=270 and t=278: young staked trees a couple of metres tall and leafy young shrubs in the mulch, at uneven spacing with long gaps."
      }
     ],
     "fences": [
@@ -2000,14 +2015,14 @@
     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4.",
     "shape": {
      "type": "polygon",
-     "points_xz": [[-299, 232], [-311, 238], [-311, 244], [-299, 238]]
+     "points_xz": [[-299, 234.5], [-312.5, 240.5], [-312.5, 245.5], [-299, 240]]
     },
     "scatter": [],
     "yard": [
      {
       "id": "road_end_barriers",
       "pattern": "pack",
-      "lines": [[-300.6, 235.4, -308.4, 239.8]],
+      "lines": [[-301.5, 237.2, -311.2, 243.0]],
       "orient": "along",
       "facing": "forward",
       "items": [

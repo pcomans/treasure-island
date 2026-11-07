@@ -113,6 +113,9 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The rust-steel sculpture on the lawn by the promenade isn't built. An owner 3D scan exists: https://www.kiriengine.app/share/download/bc9ac0d2f54245a6ae13a65ba1849253
   - Plants at the ditch and along the walk are described by form; their species are unconfirmed.
   - OSM's chain-link w1212173468 across the walk isn't built, by rule: the footage runs through its line, and the owner walked through it.
+  - The riprap's crest stands lower than the footage shows along the promenade, and Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; both are accepted work, left unchanged by this study.
+  - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
+  - Only the first of the lawn's galvanised tubs is built; the rest of the row stands north of z 236, past the close footage's reach.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.

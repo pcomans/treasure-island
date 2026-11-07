@@ -1163,3 +1163,11 @@ Porting the marsh branch of the ground shader to a short Node script, over the l
 ## A zone's ground, fences and yard rules run only when it is a pilot zone
 
 The Mersea promenade zone (2026-11-06) passed every schema check with `pilot: false` and would have drawn nothing: `streetGroundSettings` skips a zone that isn't a pilot, and fence and yard rules run over the pilot shapes alone. The first sign was an OSM fence row still reserving ground after a rule had cut it. A fence row with no `prop` is data, not a built fence: it holds its footprint in placement while nothing stands in the game, so read `prop` before saying a fence is built or unbuilt. Turning a zone into a pilot also starts building the OSM fences that reach its polygon, so keep the polygon tight or cut them by rule.
+
+## Solve a walking video's camera from known objects, not one assumed height
+
+Every ground projection of the Mersea video (2026-11-06) assumed the phone 1.15 m up, and it placed the poured slab's end 3 m short, drew a wide buff wedge where the frame shows a narrow band, and put the frame's B1 camera on a plaza the frame doesn't show. The check was a chair: 55 px tall at the distance its feet gave was 0.6 m. At 1.4 m, and 6 m further along the road, the same pixels put the joint, the baulks, the crossing and the bank's edge within a metre of where three other frames had them, and the plaza fell just below the frame, as it does in the footage. The height wasn't constant either: two later frames still fitted 1.15 m. Before tracing an outline from a frame, test the camera against an object of known size and a feature another frame has already fixed.
+
+## A rough surface's colour can be its specular
+
+The promenade's mulch, seal and verges (2026-11-06) wouldn't take their tints: blue stayed about 80 whether the albedo asked for 29 or 62, and warm asphalt read mauve. Plotting render against albedo across materials gave about 60 + 0.75x, an offset no tint could reach: StandardMaterial3D's default specular of 0.5 was reflecting the sky at a walker's grazing angle. Dropping it to 0.2 gave the tints back. If a tint moves a channel less than it should, measure two or three materials before changing the colour again, and set the specular for what the surface is.

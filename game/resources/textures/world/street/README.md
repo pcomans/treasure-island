@@ -46,6 +46,8 @@ ImageMagick; both tile seamlessly over 2 m (world UV):
 | File | Use | Source prompt (short) |
 |---|---|---|
 | `park_dg.png` | decomposed-granite paths through the beds | seamless tan decomposed granite path surface |
+| `promenade_aggregate.png` | the Mersea promenade's old road and fresh seal under `promenade_pavement.gdshader` (2.4 m tiles, owner video Nov 2026) | seamless very old sun-worn asphalt, the binder weathered away and small angular stones 5 to 15 mm across standing exposed in pale grey, tan and buff in a dark grey-brown matrix, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
+| `promenade_bark_mulch.png` | the promenade's verges (1.8 m tiles, owner video Nov 2026) | seamless weathered coarse shredded wood-chip and bark mulch, mixed grey-brown, tan and dark brown chips, some bleached pale grey, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
 | `park_asphalt.png` | the park's new dark asphalt paths, cycle track and lawn ring | seamless new dark charcoal asphalt with fine grey aggregate, no markings |
 
 ## Street furniture
@@ -91,6 +93,7 @@ the street-fences work notes.
 | `street_fence_barbed.png` | the three strands of barbed wire on the arms of industrial chain-link, drawn like the chain-link; a crop of three barb repeats, alpha from brightness | three strands of galvanised barbed wire, flat-on, on solid black |
 | `street_fence_screen.png` | construction windscreen fabric, tinted black or dark green by the kit | seamless grey woven polypropylene windscreen |
 | `street_fence_wood.png` | the wood board fence: six boards (0.84 m) per tile | seamless weathered cedar privacy fence boards |
+| `street_fence_banners.png` | the printed vinyl banners on the Mersea promenade's chain-link, in a 2 x 4 grid of 768 x 256 cells (`BANNER_ART` in the kit) | original banner art after the owner's video (Nov 2026): a slate Mersea and ferry panel, skyline, charcoal, lawn and trees, the Treasure Island panel, parchment, coral and an aerial scene, no photo pixels, no people |
 
 ## Yard ground
 

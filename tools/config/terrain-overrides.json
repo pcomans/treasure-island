@@ -2349,6 +2349,18 @@
         "elevation_m": 1.95
        },
        "reason": "The marsh's flat floor, 6 m in from its OSM outline, so a bank ramps down from the edge; the outline less the guarded land cells."
+      },
+      {
+       "id": "marsh_pool",
+       "shape": {
+        "points_xz": [[-305, 225], [-316.7, 230.5], [-324.7, 235.5], [-332.5, 243.3], [-343, 251.3], [-341.7, 254.2], [-336.7, 256.7], [-332.5, 253], [-325.8, 247.5], [-320, 242], [-313.3, 236.7], [-310, 232], [-303.3, 228.3]]
+       },
+       "rule": {
+        "kind": "sink",
+        "depth_m": 0.12,
+        "side_run_m": 2.5
+       },
+       "reason": "The floor's low ground, where the footage's water stands: blue pixels of frames D3 and D4 projected onto the floor's plane through their poses (production inference). The ground shader fills what lies under the floor's level."
       }
      ]
     }

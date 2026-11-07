@@ -82,7 +82,7 @@
         "osm_levels": 1
       }
     },
-    "physical_objects": 993,
+    "physical_objects": 994,
     "playable_rows": 735,
     "source_rows": 739,
     "status_totals": {
@@ -180,7 +180,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 327418
+    "sample_points": 327460
   },
   "road_batch_quantization_audits": [
     {

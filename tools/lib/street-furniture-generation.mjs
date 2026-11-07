@@ -61,6 +61,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   post_sign: "street_sign",
   pump_station: "site_structure",
   restroom_cottage: "site_structure",
+  galvanised_tub: "site_structure",
   cobble_pile: "site_structure",
   signal_cabinet: "street_cabinet",
   signal_mast: "traffic_signals",
@@ -93,6 +94,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   // The cottage block with the enclosure on its +X end, as one plan rectangle round
   // the prop's origin (street_furniture_kit.gd COTTAGE_PLAN_CENTRE).
   restroom_cottage: Object.freeze({ x_m: 9.1, z_m: 4.45 }),
+  galvanised_tub: Object.freeze({ x_m: 1.1, z_m: 1.1 }),
   transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });
@@ -104,7 +106,8 @@ export function streetFurnitureFootprint(prop, params) {
   if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
   if (prop === "bike_rack") return { x_m: 0.8, z_m: roundCoordinate(0.12 + BIKE_RACK_HOOP_SPACING_M * (Math.round(number("hoops", 1, 1, BIKE_RACK_MAX_HOOPS)) - 1)) };
   if (prop === "picnic_table_long") return { x_m: roundCoordinate(number("length_m", 6.1, 2.0, 7.0) + 0.1), z_m: 2.1 };
-  if (prop === "cobble_pile") return { x_m: roundCoordinate(number("length_m", 5.0, 1.0, 9.0) + 0.2), z_m: 1.8 };
+  // The player walks through a cobble pile, so only its spine claims ground.
+  if (prop === "cobble_pile") return { x_m: roundCoordinate(number("length_m", 5.0, 1.0, 9.0) + 0.2), z_m: 0.4 };
   if (prop === "log_seat") {
     const size = number("size_m", 3.2, 0.5, 5.0);
     if (params?.form === "stump") return { x_m: roundCoordinate(size + 0.06), z_m: roundCoordinate(size + 0.06) };

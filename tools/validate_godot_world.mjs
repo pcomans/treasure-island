@@ -144,6 +144,7 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "promenade-mulch": ["street_paint", "promenade_mulch", "none", false],
   "promenade-rock": ["street_paint", "promenade_rock", "none", false],
   "promenade-seal": ["street_paint", "promenade_seal", "none", false],
+  "promenade-slab": ["street_paint", "promenade_slab", "none", false],
   "yard-shoulder-band": ["street_paint", "yard_shoulder_band", "none", false],
   "yard-shoulder-gravel": ["street_paint", "yard_shoulder_gravel", "none", false],
   "yard-gravel": ["street_paint", "yard_gravel", "none", false],

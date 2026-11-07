@@ -11,7 +11,8 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 // STREET_PAINT_KINDS and PAINT_VARIANT_STRIDE): kinds 0 white, 1 yellow, 2 red
 // lane, 3 green lane, 4 tactile pad, 5 STOP legend, 6 faded yellow, 7 red curb,
 // 8 accessible blue, 9 a legend of the atlas, 10 a lot's tar-sealed joint, 11 a
-// lot's patched strip, 12 dark accessible blue. The variant is the paint's wear
+// lot's patched strip, 12 dark accessible blue, 13 thin rolled white, 14 a white
+// line and 15 a double yellow worn nearly back to the road. The variant is the paint's wear
 // step, 0 fresh, 3 mostly worn, 4 nearly worn away; for kind 9 it is the atlas cell plus
 // legend_cells times the wear step (STREET_LEGEND_ATLAS_CELLS). A legend's
 // fraction and UV.y are its local coordinates.
@@ -47,6 +48,15 @@ uniform vec3 worn_paint : source_color = vec3(0.560, 0.560, 0.540);
 // lot asphalt, which renders at about 0.40).
 uniform vec3 sealant : source_color = vec3(0.240, 0.240, 0.245);
 uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
+// The Mersea promenade's old paint (owner video, Nov 2026): the crossing's bars rolled
+// thin over worn asphalt, about 165,160,156 under the tone map, its white lines gone to
+// about 150,142,130, and a double yellow worn to an ochre a shade off the road.
+uniform vec3 rolled_white : source_color = vec3(0.47, 0.455, 0.44);
+uniform vec3 trace_white : source_color = vec3(0.4, 0.37, 0.33);
+uniform vec3 trace_yellow : source_color = vec3(0.31, 0.24, 0.15);
+// A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a
+// walker's low view doesn't catch the sky in it.
+uniform vec3 crack_tar : source_color = vec3(0.1, 0.09, 0.08);
 
 varying vec3 world_position;
 
@@ -112,22 +122,44 @@ void fragment() {
 		albedo = accessible_blue * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
 	} else if (kind < 9.5) {
-		// A legend of the atlas, worn like the line paint.
+		// A legend of the atlas, worn like the line paint; the promenade's shared-path
+		// mark (cell 6) rolled thin like its crossing's bars.
 		coverage = (wear + 0.25 - worn * 0.3) * texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
+		if (cell > 5.5 && cell < 6.5) {
+			albedo = rolled_white * mix(0.8, 1.05, wear_fine);
+		}
 	} else if (kind < 10.5) {
 		// Tar sealant along a lot joint: dark grey, a little glossy, broken where worn.
 		albedo = sealant;
 		coverage = wear + 0.1;
 		rough = 0.6;
+		if (wear_step > 0.5) {
+			albedo = crack_tar;
+			coverage = wear + 0.2;
+			rough = 0.95;
+			worn = 0.0;
+		}
 	} else if (kind < 11.5) {
 		// A patched strip of darker asphalt, mottled, never cut through.
 		albedo = patch_asphalt * mix(0.88, 1.06, wear);
 		coverage = 1.0;
 		rough = 0.95;
-	} else {
+	} else if (kind < 12.5) {
 		// A filled accessible bay in the darker blue, mottled where worn.
 		albedo = accessible_blue_dark * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
+	} else if (kind < 13.5) {
+		// Rolled white: the road's stones mottle it and only the odd one shows through.
+		albedo = rolled_white * mix(0.8, 1.05, wear_fine) * mix(0.92, 1.04, wear);
+		coverage = max(wear, wear_fine) + 0.32;
+	} else if (kind < 14.5) {
+		// A white line nearly gone: dull, broken in soft patches.
+		albedo = trace_white * mix(0.85, 1.05, wear);
+		coverage = smoothstep(0.1, 0.55, mix(wear, wear_fine, 0.5)) + 0.05;
+	} else {
+		// A double yellow nearly gone: an ochre stain with the road showing through.
+		albedo = trace_yellow * mix(0.85, 1.05, wear_fine);
+		coverage = smoothstep(0.14, 0.62, mix(wear, wear_fine, 0.5));
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;

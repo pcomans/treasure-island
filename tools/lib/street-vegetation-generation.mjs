@@ -52,7 +52,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   bronze_clump_grass: vegetationProp(LOW_PLANT_KINDS, 4, 0.18, false),
   california_buckwheat: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
   california_sagebrush: vegetationProp(LOW_PLANT_KINDS, 4, 0.3, false),
-  canary_date_palm: vegetationProp(["palm_slot", "tree"], 6, 0.7, true),
+  canary_date_palm: vegetationProp(["palm_slot", "tree"], 7, 0.7, true),
   clipped_hedge: vegetationProp(["hedge"], 2, 0.45, false),
   clump_grass: vegetationProp(["grass_clump"], 8, 0.3, false),
   conical_shrub: vegetationProp(["planting_slot", "tree"], 2, 0.4, false),
@@ -80,7 +80,9 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   weeping_broadleaf: vegetationProp(["tree"], 2, 0.5, true),
   sydney_blue_gum_young: vegetationProp(["tree"], 3, 0.3, true),
   white_umbel_perennial: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
-  pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 5, 0.2, false),
+  marsh_stems: vegetationProp(LOW_PLANT_KINDS, 2, 0.15, false),
+  marsh_grass: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.
@@ -274,7 +276,7 @@ export function validateTreeCrowns(document) {
 // The crown width (m) of each kit variant a canopy rule may plant (the kit's
 // spread or crown), null for a form no canopy rule draws.
 const CANOPY_CROWNS_M = Object.freeze({
-  canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0]),
+  canary_date_palm: Object.freeze([6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 5.5]),
   mexican_fan_palm: Object.freeze([null, null, null, null, 5.0, 5.5]),
   eucalyptus_mature: Object.freeze([15.0, 18.0]),
   island_oak_young: Object.freeze([2.5, 2.0, 3.4]),

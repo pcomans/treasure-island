@@ -247,6 +247,7 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "promenade_asphalt",
   "promenade_dg",
   "promenade_seal",
+  "promenade_slab",
   "road_path",
   "road_path_concrete",
   "road_path_pedestrian",

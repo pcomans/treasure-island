@@ -99,9 +99,9 @@ uniform vec3 marsh_straw : source_color = vec3(0.3, 0.235, 0.175);
 uniform vec3 marsh_green : source_color = vec3(0.095, 0.125, 0.07);
 uniform vec3 marsh_olive : source_color = vec3(0.19, 0.17, 0.095);
 uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
-uniform vec3 bank_gap : source_color = vec3(0.245, 0.21, 0.17);
-uniform vec3 bank_blade : source_color = vec3(0.325, 0.285, 0.225);
-uniform vec3 bank_straw : source_color = vec3(0.45, 0.405, 0.32);
+uniform vec3 bank_gap : source_color = vec3(0.2, 0.165, 0.135);
+uniform vec3 bank_blade : source_color = vec3(0.27, 0.225, 0.175);
+uniform vec3 bank_straw : source_color = vec3(0.4, 0.345, 0.265);
 uniform vec3 bank_gravel : source_color = vec3(0.47, 0.44, 0.39);
 uniform vec3 marsh_far_red : source_color = vec3(0.26, 0.165, 0.14);
 uniform vec3 marsh_far_olive : source_color = vec3(0.26, 0.235, 0.135);
@@ -132,6 +132,9 @@ const float WATER_LEVEL = 0.645;
 const float WATER_RISE_PER_M = 2.0;
 const float WATER_NORTH = 0.1;
 const float WATER_RIM = 0.13;
+// How fast the water rises per metre the land dips under the floor's level: a shallow
+// sink in the terrain (the site's marsh_pool) holds the footage's long pool.
+const float WATER_SINK_PER_M = 3.0;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
 // The bank's run in from the outline, where the level floor starts (terrain-overrides.json).
@@ -305,10 +308,11 @@ void fragment() {
 			float water = 0.38 * value_noise(along / vec2(15.0, 5.0) + vec2(3.7, 19.1)) + 0.38 * value_noise(along / vec2(5.5, 2.4) + vec2(41.3, 7.9)) + 0.24 * n_small;
 			water -= WATER_LEVEL + WATER_RISE_PER_M * max(0.0, ground_y - marsh_floor_y) + WATER_NORTH * (1.0 - smoothstep(0.14, 0.36, south));
 			water += WATER_RIM * rim * smoothstep(0.3, 0.55, south) * smoothstep(0.55 * BANK_RUN_M, 1.1 * BANK_RUN_M, outline_m);
-			water += 0.08 * (n_tiny - 0.5) + 0.06 * (n_mid - 0.5);
+			water += WATER_SINK_PER_M * max(0.0, marsh_floor_y - ground_y);
+			water += 0.12 * (n_tiny - 0.5) + 0.2 * (n_small - 0.5) + 0.16 * (n_mid - 0.5);
 			float pan = smoothstep(-0.2, -0.06, water + 0.08 * (clump - 0.5));
-			marsh = mix(marsh, marsh_mud * (0.86 + 0.28 * clump), 0.8 * pan * (1.0 - far_off));
-			marsh = mix(marsh, marsh_wet_mud, smoothstep(-0.07, 0.0, water) * (1.0 - far_off));
+			marsh = mix(marsh, marsh_mud * (0.86 + 0.28 * clump), 0.5 * pan * (1.0 - far_off));
+			marsh = mix(marsh, marsh_wet_mud, smoothstep(-0.04, 0.0, water) * (1.0 - far_off));
 
 			// Cobbles lie scattered over the floor in loose drifts, pale in a dark ring where
 			// they meet the mat, the same all round: nothing here is painted for one sun,
@@ -332,7 +336,7 @@ void fragment() {
 			ground *= 1.0 - 0.14 * smoothstep(-0.1, 0.0, water) * region * (1.0 - 0.7 * far_off);
 			// Plants and mud stand through the water's edge, so it never ends in a line.
 			float reeds = smoothstep(0.42, 0.62, 0.5 * n_tiny + 0.5 * n_small);
-			pool = smoothstep(0.0, 0.05, water) * (1.0 - reeds * (1.0 - smoothstep(0.04, 0.1, water))) * region * (1.0 - 0.75 * far_off);
+			pool = smoothstep(0.0, 0.05, water) * (1.0 - reeds * (1.0 - smoothstep(0.05, 0.2, water))) * region * (1.0 - 0.75 * far_off);
 		}
 	}
 	if (mix_settings.y <= 1.0 + patch_softness) {

@@ -25,6 +25,7 @@ const SETS := {
 	"barks": ["fan_bark_grey.png", "canary_trunk_a.png", "canary_knob.png", "cypress_bark.png"],
 	"meadow": MEADOW_CELLS,
 	"perennial": PERENNIAL_CELLS,
+	"marsh": ["marsh_seeded_shrub.png", "marsh_thin_stems.png", "marsh_bank_grass.png"],
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
 	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
@@ -93,7 +94,7 @@ const PERENNIAL_CELLS := [
 const MAGENTA := Color(1.0, 0.0, 1.0)
 const CYAN := Color(0.0, 1.0, 1.0)
 ## Sources generated on cyan, so their pink, lilac and blue flowers survive the key.
-const ON_CYAN := ["seeded_tufts.png", "blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_spray_flowers.png", "hawthorn_spray.png", "red_tip_shoots.png", "phormium_leaf.png"]
+const ON_CYAN := ["marsh_seeded_shrub.png", "seeded_tufts.png", "blue_eyed_grass.png", "thrift_stalks.png", "daisy_flowers.png", "sage_side.png", "christmas_spray_flowers.png", "hawthorn_spray.png", "red_tip_shoots.png", "phormium_leaf.png"]
 ## Pixels a low-plant image keeps clear round its atlas cell's edge, so mipmaps
 ## don't pull a neighbouring cell's leaves into a card's outline.
 const CELL_MARGIN := 8
@@ -115,6 +116,9 @@ const LOW_GRADES := {
 	"litter.png": [Color(0.64, 0.62, 0.6), 0.55],
 	"seeded_stems.png": [Color(1.0, 0.95, 0.9), 0.55, 0.75],
 	"seeded_tufts.png": [Color(0.86, 0.84, 0.8), 0.7],
+	"marsh_seeded_shrub.png": [Color(0.84, 0.77, 0.7), 0.25],
+	"marsh_thin_stems.png": [Color(0.92, 0.86, 0.74), 0.3],
+	"marsh_bank_grass.png": [Color(0.86, 0.8, 0.7), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
 	"buckwheat_foliage.png": [Color(0.8, 0.76, 0.68), 0.55],
@@ -296,6 +300,23 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * (index % 4) + CELL_MARGIN, 512 * (index / 4) + CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "perennial_atlas.png", errors)
+
+
+## The Mersea ditch's plants, 2048 x 1024: the seed-laden shrub on the left half, the
+## thin stems and the dry grass in the two tall cells on the right. Thin stems want
+## height, not width; the kit's card sizes set the plants' proportions.
+func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
+	var cells := {"marsh_seeded_shrub.png": Rect2i(0, 0, 1024, 1024), "marsh_thin_stems.png": Rect2i(1024, 0, 512, 1024), "marsh_bank_grass.png": Rect2i(1536, 0, 512, 1024)}
+	for name: String in cells:
+		var cell: Rect2i = cells[name]
+		var image := _keyed_fit(images[name], cell.size.x - 2 * CELL_MARGIN, cell.size.y - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
+		if name != "marsh_seeded_shrub.png":
+			_straw(image)
+		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(CELL_MARGIN, CELL_MARGIN))
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "marsh_atlas.png", errors)
 
 
 ## The young trees: their foliage atlas, 1024 x 512, a hanging spray of gum

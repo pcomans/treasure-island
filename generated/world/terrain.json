@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 327418
+    "sample_points": 327460
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "032b58eceacdf4d8fb2d5eef32084c36c9b342d8976df93afa672e1a35fe7c37"
+      "sha256": "98df96b80fd677f5d34d2e604baeac3d068950f51cffcec56ec7309dd0123fc0"
     },
     "corrected_cells": 209,
-    "leaves": 5633,
+    "leaves": 5636,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -1479,7 +1479,7 @@
       ]
     ],
     "refined_cells": 209,
-    "refined_triangles": 13312,
+    "refined_triangles": 13318,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1644,6 +1644,10 @@
           {
             "id": "marsh_floor",
             "rule": "level"
+          },
+          {
+            "id": "marsh_pool",
+            "rule": "sink"
           }
         ],
         "scope_area_m2": 9159.7

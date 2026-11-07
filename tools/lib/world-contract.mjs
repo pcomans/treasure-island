@@ -195,6 +195,7 @@ export const MATERIAL_KEYS = Object.freeze([
   "promenade_mulch",
   "promenade_rock",
   "promenade_seal",
+  "promenade_slab",
   "road_path",
   "road_path_concrete",
   "road_path_pedestrian",

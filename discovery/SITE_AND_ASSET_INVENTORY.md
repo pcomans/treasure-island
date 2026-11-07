@@ -114,7 +114,7 @@ below use. Place #8 is two zones. The zones the tree push added are in
 | #15 SFFD training facility yard | `fire_training_yard` | 2 est. | Yards B (as #7): rubble pile, white work vehicles | 3: secondary items |
 | #16 Fenced Navy investigation lots | `navy_investigation_lots` | 2 est. | Yards B (as #7): the OSM barbed chain-link fence is its only content; the lots are grass and old slabs | 3: the old slabs, where a dated photo shows them |
 | Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4. The tree push planted the planters | 3: the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
-| Mersea promenade | `mersea_promenade`; lots `mersea_promenade`, `mersea_promenade_seal` (a recorded exception to the OSM layout) | | The owner's "boardwalk", from the owner's video, 2026-11-06: one wide pavement with its paint, mulch, crushed-rock and lawn edges, banner fence, baulks and young planting; not yet reviewed | Rate; detail stops at about z 236 |
+| Mersea promenade | `mersea_promenade`; lots `mersea_promenade`, `mersea_promenade_seal`, `mersea_promenade_slab` (a recorded exception to the OSM layout) | | The owner's "boardwalk", from the owner's video, 2026-11-06: one wide pavement with its paint, mulch, crushed-rock and lawn edges, banner fence, baulks and young planting; not yet reviewed | Rate; detail stops at about z 236 |
 | Johnson St lot | `johnson_lot`; no OSM area, the one recorded exception (outline from the 2026-05-26 aerial, level 19) | 2 (visual-review-clutter-rollout) | PASS at `03f645ae`: outline and pattern rule match the aerial, with the tail joint and shoulder band from the PASS WITH FIXES at `d38100ad` fixed | 3: pole, drainage gap, rock pile, aisle marks |
 | Avenue N seawall palm row | `avenue_n_seawall` | 2 (visual-review-veg-models) | 61 mature Canary palms between Avenue N and the riprap and 135 shrubs beside them, from Nov 2025 Street View and the dated aerials | 3: secondary items |
 
@@ -303,6 +303,7 @@ the rows below are rated only where a record names the prop.
 | Pump station | Cityside set piece | | Whole-park PASS only | Rate |
 | Restroom cottage | Mersea promenade set piece, a site structure outside the frozen inventory | | Modelled from the owner's video, 2026-11-06, on the sides it shows; not yet reviewed | Rate |
 | Cobble pile | the ditch's road end, two set pieces | | From the owner's video and photos, Nov 2026; not yet reviewed | Rate |
+| Galvanised tub | the lawn's corner on the Mersea promenade | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 
 ### Fence types
 
@@ -365,6 +366,8 @@ All are used round the whole island: ten segments and seven closures.
 | New Zealand flax | The Mersea planters (20) | 2 (visual-review-vegetation R03) | R03: broad arching straps, but nearly black in sun; lifted after the verdict, not yet reviewed | 3 |
 | Clipped hedge (variants 0–1) | 177 lines, 1,245 m: the housing (151, variant 0), Job Corps (26, variant 1) | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
 | Pale-seeded shrub (variants 0–2) | The ditch (195), the Mersea strip (150), the 1349 Gateview thicket (76) | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, cream seed clusters on lighter stems, added after that verdict and not yet reviewed. Final placement review at `641cd2cd`: level 1 | 2: a review of variant 2 on straw ground |
+| Marsh plants: pale-seeded shrub 3–4, `marsh_stems`, `marsh_grass` | The ditch's banks and floor (`marsh_atlas.png`) | | From the owner's video, Nov 2026; not yet reviewed | Rate |
+| Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026; no far impostor, its LOD1 draws to the far range; not yet reviewed | Rate |
 
 ### Player
 

@@ -87,6 +87,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   promenade_mulch: "promenade-mulch",
   promenade_rock: "promenade-rock",
   promenade_seal: "promenade-seal",
+  promenade_slab: "promenade-slab",
   black_plastic: "black-plastic",
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
@@ -121,8 +122,10 @@ const RECORD_KINDS = Object.freeze({
 // 4 nearly worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
 // atlas (STREET_LEGEND_CELLS) plus STREET_LEGEND_ATLAS_CELLS times its wear step.
 // red_curb is curb paint, blue an accessible stall and blue_dark a filled one on the
-// Johnson St lot; sealant and patch are a lot's tar-sealed joints and patched strips.
-export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12 });
+// Johnson St lot; sealant and patch are a lot's tar-sealed joints and patched strips;
+// white_rolled, white_trace and yellow_trace are the Mersea promenade's thin rolled
+// bars and its old lines, worn nearly back to the road (wear step 0: they have their own).
+export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12 , white_rolled: 13, white_trace: 14, yellow_trace: 15 });
 export const PAINT_VARIANT_STRIDE = 16;
 export const PAINT_WEAR_STEPS = 5;
 export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4, arrow_short: 5, shared_path: 6 });
@@ -511,7 +514,9 @@ export function validateStreetGroundRules(rules) {
     // A lot's own pavement where the photographs show it unlike the lots' asphalt:
     // a yard or park ground material draped over the whole lot at LOT_SURFACE_LIFT_M.
     if (lot.surface !== undefined) {
-      exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear"], `${label} surface`);
+      // seam_wear: the paint wear step of its joints (1: a dull old road's tar).
+      exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear", ...("seam_wear" in lot.surface ? ["seam_wear"] : [])], `${label} surface`);
+      invariant(lot.surface.seam_wear === undefined || lot.surface.seam_wear === 1, `${label} surface seam_wear must be 1`);
       exactKeys(lot.surface.wear, LOT_WEAR_FIELDS, `${label} surface wear`);
       for (const key of LOT_WEAR_FIELDS) invariant(isFiniteNumber(lot.surface.wear[key]) && lot.surface.wear[key] >= 0, `${label} surface wear.${key} must be non-negative`);
       // Long tar-sealed joints and patched strips, each along a line.
@@ -585,7 +590,7 @@ export function validateStreetGroundRules(rules) {
 // arrows. curb_edges are the outline's edges (by their first point) with a raised
 // curb just inside them; shoulder is the ground behind some of them, a dark band
 // then pale gravel, offset outward from those edges.
-const EXCEPTION_LOT_IDS = Object.freeze(["johnson_lot", "mersea_promenade", "mersea_promenade_seal"]);
+const EXCEPTION_LOT_IDS = Object.freeze(["johnson_lot", "mersea_promenade", "mersea_promenade_seal", "mersea_promenade_slab"]);
 const LOT_PATTERN_FIELDS = Object.freeze(["accessible", "arrows", "bearing_xz", "curb_edges", "depth_m", "lines", "origin_xz", "rows", "shoulder", "stall_width_m", "ticks", "zones"]);
 // About the least the raised band's clean-up keeps (bandRaised, 0.2 m wide).
 const LOT_CURB_WIDTH_M = 0.22;
@@ -3076,7 +3081,7 @@ export function generateStreetGround({
     });
     const sealed = seams.length === 0 ? [] : openPavement(`lot ${lot.id} seams`, union(`lot ${lot.id} seam lines`, seams));
     if (sealed.length > 0) {
-      addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant));
+      addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant, lot.surface.seam_wear ?? 0));
       sources.marking.add(lot.source_key);
     }
     // Its cracks, patches and oil stains (under its joints and paint), anywhere
