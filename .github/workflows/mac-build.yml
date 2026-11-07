@@ -5,28 +5,39 @@
 # this fixed link always gets the newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 # Owner-approved 2026-11-03; signing and notarization owner-requested 2026-11-07.
-# Run it by hand on any branch from the Actions tab (workflow_dispatch) to test
-# signing there; only main publishes.
+# Run it by hand from the Actions tab (workflow_dispatch) to test it on a branch;
+# only main publishes.
 #
 # Signing uses only Apple's own tools on the macOS runner (security, codesign,
-# xcrun notarytool and stapler, ditto) and these repository secrets
-# (Settings -> Secrets and variables -> Actions):
+# xcrun notarytool and stapler, ditto). The sign job runs in the GitHub
+# Environment `mac-signing` (Settings -> Environments), which the owner creates
+# with Required reviewers = the owner and Deployment branches = main only, so
+# each signing run waits for the owner's approval and other branches never see
+# the key. To test a feature branch, add it to the deployment branches for that
+# run and remove it afterwards. Environment secrets in the `mac-signing`
+# environment, each set with gh from a pipe rather than the clipboard:
 #   MACOS_CERTIFICATE_P12_BASE64  the "Developer ID Application" certificate with
-#                                 its private key, exported from Keychain Access as
-#                                 .p12, then base64: `base64 -i cert.p12 | pbcopy`
-#   MACOS_CERTIFICATE_PASSWORD    the password chosen for that .p12 export
-#   APPLE_TEAM_ID                 the 10-character Team ID (developer.apple.com ->
-#                                 Account -> Membership details)
+#                                 its private key, exported from Keychain Access as .p12:
+#     base64 -i cert.p12 | gh secret set MACOS_CERTIFICATE_P12_BASE64 --env mac-signing -R pcomans/treasure-island
+#   MACOS_CERTIFICATE_PASSWORD    the password chosen for that .p12 export (gh prompts):
+#     gh secret set MACOS_CERTIFICATE_PASSWORD --env mac-signing -R pcomans/treasure-island
 #   APPSTORE_API_KEY_ID           an App Store Connect team API key (Users and
 #   APPSTORE_API_ISSUER_ID        Access -> Integrations -> Team Keys, Developer
 #   APPSTORE_API_KEY_P8_BASE64    role): its Key ID, the Issuer ID shown above the
-#                                 key list, and the downloaded AuthKey_<id>.p8,
-#                                 base64: `base64 -i AuthKey_<id>.p8 | pbcopy`
-# With none of these secrets set, the build stays ad-hoc signed and is not
-# notarized (a warning says so) and still publishes. With any of them set, all six
-# are required (a missing one fails the run, as with a misnamed certificate
-# secret) and any signing or notarization failure fails the run. The publish
-# job uses GITHUB_TOKEN.
+#                                 key list, and the downloaded AuthKey_<id>.p8:
+#     gh secret set APPSTORE_API_KEY_ID --env mac-signing -R pcomans/treasure-island
+#     gh secret set APPSTORE_API_ISSUER_ID --env mac-signing -R pcomans/treasure-island
+#     base64 -i AuthKey_<id>.p8 | gh secret set APPSTORE_API_KEY_P8_BASE64 --env mac-signing -R pcomans/treasure-island
+# and one variable, not a secret, so logs show it unmasked (environment or
+# repository level; a secret of the same name still works as a fallback):
+#   APPLE_TEAM_ID                 the 10-character Team ID (developer.apple.com ->
+#                                 Account -> Membership details):
+#     gh variable set APPLE_TEAM_ID --env mac-signing --body <TEAMID> -R pcomans/treasure-island
+# With none of these set, the build stays ad-hoc signed and is not notarized (a
+# warning says so) and still publishes. With any of them set, all six are
+# required (a missing one fails the run, as with a misnamed certificate secret)
+# and any signing or notarization failure fails the run. The publish job uses
+# GITHUB_TOKEN.
 name: Mac build
 
 on:
@@ -83,23 +94,32 @@ jobs:
           sudo chown "$(id -u):$(id -g)" /opt/godot
           echo "version=$(sed -n 's/^VERSION=//p' .devcontainer/setup-godot.sh)" >> "${GITHUB_OUTPUT}"
 
-      - name: Restore Godot from the cache
+      # The cache holds only the downloaded archives, never the installed Godot:
+      # setup-godot.sh checks their pinned SHA-256 and extracts them on every run,
+      # so a restored cache is verified again before its macOS template reaches a
+      # signed release.
+      - name: Restore the Godot downloads from the cache
         id: cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /opt/godot/${{ steps.godot.outputs.version }}
+          path: ${{ runner.temp }}/godot-downloads
           # setup-godot.sh pins the version and both SHA-256 hashes, so its hash keys the cache.
-          key: godot-${{ steps.godot.outputs.version }}-${{ hashFiles('.devcontainer/setup-godot.sh') }}
+          key: godot-downloads-${{ steps.godot.outputs.version }}-${{ hashFiles('.devcontainer/setup-godot.sh') }}
 
-      - name: Install Godot and its export templates (downloads are SHA-256 checked)
+      - name: Install Godot and its export templates (archives are SHA-256 checked on every run)
+        env:
+          GODOT_DOWNLOAD_CACHE: ${{ runner.temp }}/godot-downloads
         run: .devcontainer/setup-godot.sh
 
-      - name: Save Godot to the cache
+      - name: Save the Godot downloads to the cache
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /opt/godot/${{ steps.godot.outputs.version }}
+          path: ${{ runner.temp }}/godot-downloads
           key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Free the disk the Godot downloads used
+        run: rm -rf "${RUNNER_TEMP:?}/godot-downloads"
 
       - name: Build the Mac app (tools/build-mac.sh)
         timeout-minutes: 45
@@ -128,6 +148,9 @@ jobs:
     needs: build
     runs-on: macos-26
     timeout-minutes: 60
+    # The signing secrets live only in this environment (see the header): it
+    # needs the owner's approval and admits only main.
+    environment: mac-signing
     concurrency:
       group: mac-sign-${{ github.ref }}
       cancel-in-progress: true
@@ -150,11 +173,12 @@ jobs:
         env:
           MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
           APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
           APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
           APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
-        # Reports only which secrets are set, never their values.
+        # Reports only which are set, never the secrets' values. APPLE_TEAM_ID is
+        # a variable (a secret of that name is the fallback).
         run: |
           missing=""
           present=""
@@ -162,20 +186,20 @@ jobs:
             if [ -n "${!name}" ]; then present="${present} ${name}"; else missing="${missing} ${name}"; fi
           done
           if [ -z "${present}" ]; then
-            echo "::warning::No signing secrets are set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
+            echo "::warning::No signing secrets or APPLE_TEAM_ID variable are set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
             echo "sign=false" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
           if [ -z "${MACOS_CERTIFICATE_P12_BASE64}" ]; then
-            echo "::error::Some signing secrets are set (${present# }) but MACOS_CERTIFICATE_P12_BASE64 is not. The certificate secret is probably misnamed; check its exact name. Refusing to publish an unsigned build while signing is half configured."
+            echo "::error::Some of the signing settings are set (${present# }) but MACOS_CERTIFICATE_P12_BASE64 is not. The certificate secret is probably misnamed; check its exact name. Refusing to publish an unsigned build while signing is half configured."
             exit 1
           fi
           if [ -n "${missing}" ]; then
-            echo "::error::MACOS_CERTIFICATE_P12_BASE64 is set, so the build must be signed and notarized, but these secrets are missing:${missing}"
+            echo "::error::MACOS_CERTIFICATE_P12_BASE64 is set, so the build must be signed and notarized, but these secrets or variables are missing:${missing}"
             exit 1
           fi
           if ! [[ "${APPLE_TEAM_ID}" =~ ^[A-Z0-9]{10}$ ]]; then
-            echo "::error::APPLE_TEAM_ID is not a 10-character Team ID (capital letters and digits)."
+            echo "::error::APPLE_TEAM_ID (${APPLE_TEAM_ID}) is not a 10-character Team ID (capital letters and digits)."
             exit 1
           fi
           echo "sign=true" >> "${GITHUB_OUTPUT}"
@@ -198,7 +222,7 @@ jobs:
         env:
           MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
           KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
           CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
         # A throwaway keychain holds the certificate for this step only; the last

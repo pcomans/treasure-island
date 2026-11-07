@@ -76,11 +76,17 @@ curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/tr
 gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
 
-With its signing secrets set (listed at the top of
-[mac-build.yml](.github/workflows/mac-build.yml)), CI signs the app with the
-owner's Developer ID and Apple notarizes it, so it opens directly after a browser
-download too; the release notes say "Signed and notarized (Developer ID)".
-Without those secrets, and for a local `tools/build-mac.sh` build, the app is
+With its signing settings in place, CI signs the app with the owner's Developer
+ID and Apple notarizes it, so it opens directly after a browser download too; the
+release notes say "Signed and notarized (Developer ID)". They are environment
+secrets in the `mac-signing` environment plus an `APPLE_TEAM_ID` variable, all
+listed with their `gh secret set ... --env mac-signing` commands at the top of
+[mac-build.yml](.github/workflows/mac-build.yml); pipe each value from `base64`
+into gh rather than through the clipboard. Create the environment with Required
+reviewers = the owner and Deployment branches = main only, so every signing run
+waits for the owner's approval; to test a feature branch, add it to the
+deployment branches for that run and remove it afterwards. Without those
+settings, and for a local `tools/build-mac.sh` build, the app is
 ad-hoc signed and not notarized ("Ad-hoc signed, not notarized" in the release
 notes): macOS then blocks the first launch after a browser download, so open
 System Settings → Privacy & Security and click "Open Anyway".
