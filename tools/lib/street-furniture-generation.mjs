@@ -62,6 +62,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   pump_station: "site_structure",
   restroom_cottage: "site_structure",
   galvanised_tub: "site_structure",
+  water_block: "site_structure",
   cobble_pile: "site_structure",
   signal_cabinet: "street_cabinet",
   signal_mast: "traffic_signals",
@@ -95,6 +96,7 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   // the prop's origin (street_furniture_kit.gd COTTAGE_PLAN_CENTRE).
   restroom_cottage: Object.freeze({ x_m: 9.1, z_m: 4.45 }),
   galvanised_tub: Object.freeze({ x_m: 1.1, z_m: 1.1 }),
+  water_block: Object.freeze({ x_m: 1.86, z_m: 0.5 }),
   transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
 });

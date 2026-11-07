@@ -304,6 +304,7 @@ the rows below are rated only where a record names the prop.
 | Restroom cottage | Mersea promenade set piece, a site structure outside the frozen inventory | | Modelled from the owner's video, 2026-11-06, on the sides it shows; not yet reviewed | Rate |
 | Cobble pile | the ditch's road end, two set pieces | | From the owner's video and photos, Nov 2026; not yet reviewed | Rate |
 | Galvanised tub | the lawn's corner on the Mersea promenade | | From the owner's video, Nov 2026; not yet reviewed | Rate |
+| Water road block | The ditch's road end, six set pieces | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 
 ### Fence types
 
@@ -367,6 +368,7 @@ All are used round the whole island: ten segments and seven closures.
 | Clipped hedge (variants 0–1) | 177 lines, 1,245 m: the housing (151, variant 0), Job Corps (26, variant 1) | 3 (visual-review-vegetation R03) | R03: rows of ragged leaf mats over a core, open stems on the residential hedge (h1), white flowers on the glossy one (h2) | 4: the residential far level |
 | Pale-seeded shrub (variants 0–2) | The ditch (195), the Mersea strip (150), the 1349 Gateview thicket (76) | 1 (visual-review-veg-models form round) | Accepted at `1f4a5318` as the bare form (variants 0, 1): crossed cards in the low-plant family, one level; dark twigs at 10–30 m where the bank reads pale in the owner's photos (Nov 2026). Species unconfirmed, so the photographed form. Variant 2, cream seed clusters on lighter stems, added after that verdict and not yet reviewed. Final placement review at `641cd2cd`: level 1 | 2: a review of variant 2 on straw ground |
 | Marsh plants: pale-seeded shrub 3–4, `marsh_stems`, `marsh_grass` | The ditch's banks and floor (`marsh_atlas.png`) | | From the owner's video, Nov 2026; not yet reviewed | Rate |
+| Young planting (`young_planting`) | The Mersea promenade's mulch on both sides | | From the owner's video, Nov 2026, crossed cards; not yet reviewed | Rate |
 | Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026; no far impostor, its LOD1 draws to the far range; not yet reviewed | Rate |
 
 ### Player

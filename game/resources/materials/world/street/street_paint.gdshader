@@ -51,12 +51,12 @@ uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 // The Mersea promenade's old paint (owner video, Nov 2026): the crossing's bars rolled
 // thin over worn asphalt, about 165,160,156 under the tone map, its white lines gone to
 // about 150,142,130, and a double yellow worn to an ochre a shade off the road.
-uniform vec3 rolled_white : source_color = vec3(0.47, 0.455, 0.44);
+uniform vec3 rolled_white : source_color = vec3(0.44, 0.425, 0.405);
 uniform vec3 trace_white : source_color = vec3(0.4, 0.37, 0.33);
-uniform vec3 trace_yellow : source_color = vec3(0.31, 0.24, 0.15);
+uniform vec3 trace_yellow : source_color = vec3(0.3, 0.262, 0.2);
 // A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a
 // walker's low view doesn't catch the sky in it.
-uniform vec3 crack_tar : source_color = vec3(0.1, 0.09, 0.08);
+uniform vec3 crack_tar : source_color = vec3(0.16, 0.145, 0.13);
 
 varying vec3 world_position;
 
@@ -124,9 +124,11 @@ void fragment() {
 	} else if (kind < 9.5) {
 		// A legend of the atlas, worn like the line paint; the promenade's shared-path
 		// mark (cell 6) rolled thin like its crossing's bars.
-		coverage = (wear + 0.25 - worn * 0.3) * texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
+		float mark = texture(legends, vec2((cell + local.x) / legend_cells, local.y)).r;
+		coverage = (wear + 0.25 - worn * 0.3) * mark;
 		if (cell > 5.5 && cell < 6.5) {
-			albedo = rolled_white * mix(0.8, 1.05, wear_fine);
+			albedo = rolled_white * mix(1.05, 1.3, wear_fine);
+			coverage = (wear_fine + 0.5) * mark;
 		}
 	} else if (kind < 10.5) {
 		// Tar sealant along a lot joint: dark grey, a little glossy, broken where worn.
@@ -144,13 +146,19 @@ void fragment() {
 		albedo = patch_asphalt * mix(0.88, 1.06, wear);
 		coverage = 1.0;
 		rough = 0.95;
+		// Wear step 1: an old road's dark oval patch, in the crack tar's tone.
+		if (wear_step > 0.5) {
+			albedo = crack_tar * mix(1.0, 1.3, wear_fine);
+			worn = 0.0;
+		}
 	} else if (kind < 12.5) {
 		// A filled accessible bay in the darker blue, mottled where worn.
 		albedo = accessible_blue_dark * mix(0.82, 1.0, wear);
 		coverage = 1.0 - worn * 0.35 * (1.0 - wear);
 	} else if (kind < 13.5) {
 		// Rolled white: the road's stones mottle it and only the odd one shows through.
-		albedo = rolled_white * mix(0.8, 1.05, wear_fine) * mix(0.92, 1.04, wear);
+		float stones = texture(paint_wear, world_position.zx / 0.13 + vec2(0.19, 0.53)).r;
+		albedo = rolled_white * mix(0.84, 1.08, wear_fine) * mix(0.9, 1.05, wear) * mix(0.76, 1.08, stones);
 		coverage = max(wear, wear_fine) + 0.32;
 	} else if (kind < 14.5) {
 		// A white line nearly gone: dull, broken in soft patches.
@@ -159,7 +167,7 @@ void fragment() {
 	} else {
 		// A double yellow nearly gone: an ochre stain with the road showing through.
 		albedo = trace_yellow * mix(0.85, 1.05, wear_fine);
-		coverage = smoothstep(0.14, 0.62, mix(wear, wear_fine, 0.5));
+		coverage = smoothstep(0.2, 0.7, mix(wear, wear_fine, 0.6));
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;

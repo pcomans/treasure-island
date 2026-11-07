@@ -273,9 +273,9 @@ const PLAYER_WIDTH_M = 0.7;
 // the stock tanks stand in a tight row against the chain-link, as photographed, so
 // their plan capsules (a little longer than the pallets) may overlap each other and
 // a fence run this much (m), and the promenade's timber baulks lie in short rows, end
-// to end. Anything else stays a player's width away. The clearance flood still
+// to end, as do the road blocks at the ditch's road end. Anything else stays a player's width away. The clearance flood still
 // checks what that shuts in.
-const PROPS_STANDING_TIGHT = Object.freeze(["log_seat", "stock_tank_planter"]);
+const PROPS_STANDING_TIGHT = Object.freeze(["log_seat", "stock_tank_planter", "water_block"]);
 const TIGHT_PROP_GAP_M = -0.3;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 

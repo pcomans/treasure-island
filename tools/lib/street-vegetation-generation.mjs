@@ -83,6 +83,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   pale_seeded_shrub: vegetationProp(LOW_PLANT_KINDS, 5, 0.2, false),
   marsh_stems: vegetationProp(LOW_PLANT_KINDS, 2, 0.15, false),
   marsh_grass: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  young_planting: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.

@@ -193,6 +193,10 @@ const LOW_CELLS := {
 	"marsh_shrub": ["marsh", Rect2(0.0, 0.0, 0.5, 1.0)],
 	"marsh_stems": ["marsh", Rect2(0.5, 0.0, 0.25, 1.0)],
 	"marsh_grass": ["marsh", Rect2(0.75, 0.0, 0.25, 1.0)],
+	# The Mersea promenade's young planting (1536 x 1024, owner video, Nov 2026).
+	"young_tree_a": ["young_planting", Rect2(0.0, 0.0, 1.0 / 3.0, 1.0)],
+	"young_tree_b": ["young_planting", Rect2(1.0 / 3.0, 0.0, 1.0 / 3.0, 1.0)],
+	"young_shrub": ["young_planting", Rect2(2.0 / 3.0, 0.0, 1.0 / 3.0, 1.0)],
 }
 ## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
 const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
@@ -658,6 +662,18 @@ const WHITE_UMBELS := [
 	{"seed": 109, "lean": 0.1, "layers": [{"kind": "shell", "cell": "yarrow", "cards": 8, "card": 0.66, "width": 0.52, "height": 0.18, "flat": 0.4},
 		{"kind": "crossed", "cell": "umbel_stalks", "cards": 3, "width": 0.42, "height": 0.6, "base": 0.06, "splay_deg": 8.0, "flop_deg": 20.0, "flutter": 0.05}]},
 ]
+## The Mersea promenade's new planting (owner video, Nov 2026): two staked saplings, each a
+## couple of metres tall on crossed cards, and a low leafy shrub, small and larger.
+const YOUNG_PLANTING := [
+	{"seed": 141, "lean": 0.02, "layers": [{"kind": "crossed", "cell": "young_tree_a", "cards": 3, "width": 1.4, "height": 2.7, "curl": 0.03, "splay_deg": 1.5, "flutter": 0.02, "shade_low": 0.9}]},
+	{"seed": 142, "lean": 0.02, "layers": [{"kind": "crossed", "cell": "young_tree_b", "cards": 3, "width": 1.7, "height": 3.1, "curl": 0.03, "splay_deg": 1.5, "flutter": 0.02, "shade_low": 0.9}]},
+	{"seed": 143, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "young_shrub", "cards": 3, "width": 1.0, "height": 0.8, "splay_deg": 5.0, "flutter": 0.03, "shade_low": 0.8}]},
+	{"seed": 144, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "young_shrub", "cards": 4, "width": 1.3, "height": 1.05, "splay_deg": 5.0, "flutter": 0.03, "shade_low": 0.8}]},
+]
+## The ditch plants' tones against the footage's dry bank, about sRGB 110,95,80 in sun.
+const MARSH_SHRUB_TINT := Color(0.72, 0.66, 0.6)
+const MARSH_STEM_TINT := Color(0.72, 0.68, 0.62)
+const MARSH_GRASS_TINT := Color(0.62, 0.56, 0.5)
 const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
@@ -665,20 +681,20 @@ const SEEDED_SHRUBS := [
 	# Laden with seed: loose cream clusters over the upper two thirds, grey to reddish-brown stems showing through.
 	{"seed": 133, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "seeded_tufts", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 9.0, "flop_deg": 14.0, "flutter": 0.035, "shade_low": 0.62}]},
 	# The ditch bank by the road end (owner video, Nov 2026): red stems fanning up from one foot, cream seed in soft clusters on their upper parts.
-	{"seed": 134, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 3, "width": 1.05, "height": 1.05, "splay_deg": 6.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.72}]},
-	{"seed": 135, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 4, "width": 1.4, "height": 1.4, "splay_deg": 7.0, "flop_deg": 12.0, "flutter": 0.04, "shade_low": 0.72}]},
+	{"seed": 134, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 3, "width": 0.8, "height": 0.72, "splay_deg": 6.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.72, "tint": MARSH_SHRUB_TINT}]},
+	{"seed": 135, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 4, "width": 1.05, "height": 1.0, "splay_deg": 7.0, "flop_deg": 12.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_SHRUB_TINT}]},
 ]
 ## Thin dead stems standing through the Mersea ditch's mat and its pools (owner video,
 ## Nov 2026): a few hair-thin stalks, some with a seed head; a thin stand, then a taller one.
 const MARSH_STEMS := [
-	{"seed": 136, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 2, "width": 0.42, "height": 0.62, "curl": 0.05, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.78}]},
-	{"seed": 137, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 3, "width": 0.6, "height": 0.95, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.78}]},
+	{"seed": 136, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 2, "width": 0.42, "height": 0.62, "curl": 0.05, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.78, "tint": MARSH_STEM_TINT}]},
+	{"seed": 137, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 3, "width": 0.6, "height": 0.95, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.78, "tint": MARSH_STEM_TINT}]},
 ]
 ## Loose tussocks of dry dead grass, the cover of the ditch's banks (owner video, Nov 2026).
 const MARSH_GRASSES := [
-	{"seed": 138, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 3, "width": 0.8, "height": 0.5, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 18.0, "flutter": 0.04, "shade_low": 0.62}]},
-	{"seed": 139, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 1.05, "height": 0.72, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 20.0, "flutter": 0.045, "shade_low": 0.62}]},
-	{"seed": 140, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 1.3, "height": 1.0, "curl": 0.07, "splay_deg": 11.0, "flop_deg": 22.0, "flutter": 0.05, "shade_low": 0.62}]},
+	{"seed": 138, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 3, "width": 0.7, "height": 0.42, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 18.0, "flutter": 0.04, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
+	{"seed": 139, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 0.9, "height": 0.6, "curl": 0.06, "splay_deg": 10.0, "flop_deg": 20.0, "flutter": 0.045, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
+	{"seed": 140, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_grass", "cards": 4, "width": 1.1, "height": 0.82, "curl": 0.07, "splay_deg": 11.0, "flop_deg": 22.0, "flutter": 0.05, "shade_low": 0.55, "tint": MARSH_GRASS_TINT}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
@@ -745,6 +761,7 @@ const PROPS := {
 	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
 	"pale_seeded_shrub": {"kinds": LOW_KINDS, "variants": SEEDED_SHRUBS, "ranges": [65.0], "foot_m": 0.2, "form": "low", "shadow": true},
 	"marsh_stems": {"kinds": LOW_KINDS, "variants": MARSH_STEMS, "ranges": [55.0], "foot_m": 0.15, "form": "low"},
+	"young_planting": {"kinds": LOW_KINDS, "variants": YOUNG_PLANTING, "ranges": [130.0], "foot_m": 0.2, "form": "low", "shadow": true},
 	"marsh_grass": {"kinds": LOW_KINDS, "variants": MARSH_GRASSES, "ranges": [70.0], "foot_m": 0.2, "form": "low", "shadow": true},
 }
 ## Below about this cosine of the angle between the view and a card, a rollout
@@ -4184,6 +4201,11 @@ func material(key: String) -> Material:
 			made.set_shader_parameter("distance_fade", true)
 			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 			made.set_shader_parameter("desaturate", 0.7)
+		"young_planting":
+			made = _foliage("young_planting_atlas.png", Color(0.95, 0.95, 0.92), Color(0.1, 0.12, 0.05), Vector2(1536.0, 1024.0), 0.1, 0.85)
+			made.set_shader_parameter("alpha_cutoff", 0.35)
+			made.set_shader_parameter("distance_fade", true)
+			made.set_shader_parameter("fade_length_m", LOW_FADE_M)
 		"marsh":
 			made = _foliage("marsh_atlas.png", Color(0.95, 0.94, 0.9), Color(0.1, 0.09, 0.05), Vector2(2048.0, 1024.0), 0.08, 0.92)
 			made.set_shader_parameter("alpha_cutoff", 0.35)

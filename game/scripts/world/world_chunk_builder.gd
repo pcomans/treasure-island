@@ -117,10 +117,10 @@ const STREET_GROUND_SURFACES := {
 	# granite, grey-brown bark mulch and dark crushed rock, and the warm poured slab at
 	# its south end, low in specular so the sky's sheen doesn't wash them out at a
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
-	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.74, 0.7, 0.62)},
-	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.78, 0.77, 0.64)},
-	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.85, 0.77, 0.68)},
-	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.9, 0.86, 0.76)},
+	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.51, 0.51)},
+	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.63, 0.6, 0.5)},
+	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
+	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"yard_gravel_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.91, 0.87, 0.75)},
 	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
@@ -151,13 +151,12 @@ const STREET_GROUND_SURFACES := {
 	"road_path_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 3.33, "roughness": 0.9, "tint": Color(0.96, 0.94, 0.86)},
 }
 ## The Mersea promenade's pavement: the old road and its fresh seal, one generated
-## tile of worn aggregate under promenade_pavement.gdshader, which draws the road's
-## wear (tone, tile_m and wear are its parameters).
+## pavement shader (promenade_pavement.gdshader) drawing the road's wear: the old road on
+## a generated tile of worn aggregate, the seal on the fine Poly Haven asphalt.
 const PROMENADE_PAVEMENT_SHADER := preload("res://game/resources/materials/world/street/promenade_pavement.gdshader")
-const PROMENADE_AGGREGATE := preload("res://game/resources/textures/world/street/promenade_aggregate.png")
 const PROMENADE_PAVEMENT := {
-	"promenade_asphalt": {"tone": Color(0.68, 0.71, 0.71), "wear": 1.0},
-	"promenade_seal": {"tone": Color(0.56, 0.54, 0.55), "wear": 0.3},
+	"promenade_asphalt": {"aggregate": preload("res://game/resources/textures/world/street/promenade_aggregate.png"), "tile_m": 1.15, "tone": Color(0.51, 0.53, 0.56), "wear": 1.0},
+	"promenade_seal": {"aggregate": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "tile_m": 2.1, "tone": Color(0.83, 0.74, 0.68), "wear": 0.3},
 }
 
 ## A park's planted beds (park_mulch records): the vegetation kit's dark
@@ -1052,7 +1051,8 @@ func _promenade_pavement_material(material_key: String) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
 	material.resource_name = material_key
 	material.shader = PROMENADE_PAVEMENT_SHADER
-	material.set_shader_parameter("aggregate", PROMENADE_AGGREGATE)
+	material.set_shader_parameter("aggregate", pavement.aggregate)
+	material.set_shader_parameter("tile_m", pavement.tile_m)
 	material.set_shader_parameter("tone", pavement.tone)
 	material.set_shader_parameter("wear", pavement.wear)
 	_street_ground_materials[material_key] = material

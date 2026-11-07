@@ -2017,6 +2017,66 @@
      "yaw": 0.764,
      "reason": "The cobble pile behind the Johnson St lot's west curb, at its drainage gap.",
      "reference": "Owner video IMG_0960, 2026-11-06, t=112 (D2) and t=118 (D4); owner photos, Nov 2026 (ditch 3)"
+    },
+    {
+     "id": "ditch_road_block_1",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-302.31, 237.68],
+     "yaw": -2.583,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_2",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-303.93, 238.65],
+     "yaw": -2.633,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_3",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-305.54, 239.62],
+     "yaw": -2.588,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_4",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-307.16, 240.58],
+     "yaw": -2.623,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_5",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-308.77, 241.55],
+     "yaw": -2.573,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_6",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-310.39, 242.52],
+     "yaw": -2.613,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
     }
   ]
 }

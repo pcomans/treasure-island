@@ -1844,17 +1844,17 @@
     "scatter": [
      {
       "id": "promenade_trees_marsh_side",
-      "kind": "tree",
+      "kind": "planting_slot",
       "pattern": "along",
-      "line_xz": [[-345.48, 312.5], [-360.8, 284.4], [-374.12, 258.62]],
+      "line_xz": [[-345.3, 312.4], [-360.63, 284.3], [-374.04, 258.57]],
       "offsets_m": [0],
       "spacing_m": 5.0,
       "jitter_m": 1.7,
       "acceptance": 0.62,
-      "prop": "island_oak_young",
+      "prop": "young_planting",
       "params": {
        "variants": [0, 1],
-       "scale": [0.8, 1.0]
+       "scale": [0.85, 1.1]
       },
       "visible_surfaces": [
        "promenade_mulch"
@@ -1865,17 +1865,17 @@
      },
      {
       "id": "promenade_trees_sea_side",
-      "kind": "tree",
+      "kind": "planting_slot",
       "pattern": "along",
       "line_xz": [[-359.17, 321.4], [-365.95, 304.55], [-373.71, 292.85]],
       "offsets_m": [0],
       "spacing_m": 5.0,
       "jitter_m": 1.6,
       "acceptance": 0.85,
-      "prop": "island_oak_young",
+      "prop": "young_planting",
       "params": {
        "variants": [0, 1],
-       "scale": [0.8, 0.95]
+       "scale": [0.85, 1.0]
       },
       "visible_surfaces": [
        "promenade_mulch"
@@ -1890,13 +1890,13 @@
       "pattern": "along",
       "line_xz": [[-346.26, 312.94], [-361.58, 284.84], [-374.99, 259.11]],
       "offsets_m": [0],
-      "spacing_m": 4.5,
-      "jitter_m": 1.4,
-      "acceptance": 0.62,
-      "prop": "pittosporum_tobira",
+      "spacing_m": 3.8,
+      "jitter_m": 1.3,
+      "acceptance": 0.66,
+      "prop": "young_planting",
       "params": {
-       "variants": [0, 0],
-       "scale": [0.8, 0.95]
+       "variants": [2, 3],
+       "scale": [0.85, 1.1]
       },
       "visible_surfaces": [
        "promenade_mulch"
@@ -2004,42 +2004,6 @@
       "basis": "production_inference",
       "rule": "OSM's chain-link across the promenade is not there now: the walk runs through its line unbroken (owner, 2026-11-06: it stays unbuilt).",
       "evidence": "Owner video IMG_0960, 2026-11-06 12:25-12:27 PST, and Friday Night Track.kml, walked along it; poses fitted to landmarks (frames B1-B9 of the study's contact sheet, kept outside Git). Frames B6-B9 look along the road through the fence's line with nothing across it, and the owner walked through it on the track."
-     }
-    ]
-   },
-   {
-    "id": "ditch_road_end",
-    "name": "The road end at the ditch",
-    "pilot": true,
-    "reason": "The red barriers along the ditch side of the road end, beside the Johnson St lot's tail (owner video, 2026-11-06).",
-    "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4.",
-    "shape": {
-     "type": "polygon",
-     "points_xz": [[-299, 234.5], [-312.5, 240.5], [-312.5, 245.5], [-299, 240]]
-    },
-    "scatter": [],
-    "yard": [
-     {
-      "id": "road_end_barriers",
-      "pattern": "pack",
-      "lines": [[-301.5, 237.2, -311.2, 243.0]],
-      "orient": "along",
-      "facing": "forward",
-      "items": [
-       {
-        "weight": 1,
-        "prop": "equipment",
-        "params": {
-         "variant": 7,
-         "paint": "red"
-        }
-       }
-      ],
-      "gap_m": [0.05, 0.1],
-      "fill": 1.0,
-      "basis": "production_inference",
-      "rule": "A short row of red water-filled barriers along the ditch side of the road end, beyond the cobbles.",
-      "evidence": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
      }
     ]
    }

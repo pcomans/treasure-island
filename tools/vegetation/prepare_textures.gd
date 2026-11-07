@@ -26,6 +26,7 @@ const SETS := {
 	"meadow": MEADOW_CELLS,
 	"perennial": PERENNIAL_CELLS,
 	"marsh": ["marsh_seeded_shrub.png", "marsh_thin_stems.png", "marsh_bank_grass.png"],
+	"young_planting": ["young_tree_a.png", "young_tree_b.png", "young_shrub.png"],
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
 	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
@@ -117,6 +118,9 @@ const LOW_GRADES := {
 	"seeded_stems.png": [Color(1.0, 0.95, 0.9), 0.55, 0.75],
 	"seeded_tufts.png": [Color(0.86, 0.84, 0.8), 0.7],
 	"marsh_seeded_shrub.png": [Color(0.84, 0.77, 0.7), 0.25],
+	"young_tree_a.png": [Color(0.86, 0.86, 0.8), 0.2],
+	"young_tree_b.png": [Color(0.9, 0.92, 0.84), 0.2],
+	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
 	"marsh_thin_stems.png": [Color(0.92, 0.86, 0.74), 0.3],
 	"marsh_bank_grass.png": [Color(0.86, 0.8, 0.7), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
@@ -317,6 +321,20 @@ func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), cell.position + Vector2i(CELL_MARGIN, CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "marsh_atlas.png", errors)
+
+
+## The Mersea promenade's young planting, 1536 x 1024: two staked saplings and a low
+## leafy shrub in tall cells, side views for the kit's crossed cards.
+func _pack_young_planting(images: Dictionary, errors: Array[String]) -> void:
+	var atlas := Image.create_empty(1536, 1024, false, Image.FORMAT_RGBA8)
+	var names := ["young_tree_a.png", "young_tree_b.png", "young_shrub.png"]
+	for index in names.size():
+		var name: String = names[index]
+		var image := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 1024 - 2 * CELL_MARGIN, MAGENTA)
+		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
+		atlas.blit_rect(image, Rect2i(Vector2i.ZERO, image.get_size()), Vector2i(512 * index + CELL_MARGIN, CELL_MARGIN))
+	_fill_transparent(atlas)
+	_save(atlas, OUT + "young_planting_atlas.png", errors)
 
 
 ## The young trees: their foliage atlas, 1024 x 512, a hanging spray of gum

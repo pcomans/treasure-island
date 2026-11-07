@@ -167,6 +167,7 @@ const COTTAGE_PLAN_CENTRE := Vector3(1.85, 0.0, 0.475)
 const COTTAGE_WHITE := Color(0.93, 0.93, 0.9)
 const COTTAGE_GROOVE := Color(0.7, 0.7, 0.67)
 const COTTAGE_DOOR := Color(0.79, 0.83, 0.84)
+const WATER_BLOCK_RED := Color(0.74, 0.13, 0.09)
 const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
 ## The north-west end's tall window, which the footage shows holding the pale sky.
 const COTTAGE_GLASS_PALE := Color(0.5, 0.6, 0.6)
@@ -208,6 +209,7 @@ const PROPS := {
 	"restroom_cottage": {"range_m": 700.0, "shadow": true},
 	"cobble_pile": {"range_m": 120.0, "shadow": true},
 	"galvanised_tub": {"range_m": 120.0, "shadow": true},
+	"water_block": {"range_m": 220.0, "shadow": true},
 	"utility_pole": {"range_m": 450.0, "shadow": true},
 	"transformer_pad": {"range_m": 130.0, "shadow": true},
 	"bus_shelter": {"range_m": 220.0, "shadow": true},
@@ -516,6 +518,9 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# Small decor: the player walks through it.
 			var run := snappedf(clampf(_number(params, "length_m", 5.0), 1.0, 9.0), 0.1)
 			_piece(result, "cobble_pile_%.1f" % run, func(b: Builder) -> void: _cobble_pile(b, run))
+		"water_block":
+			_piece(result, "water_block", func(b: Builder) -> void: _water_block(b), Transform3D.IDENTITY, _plastic)
+			_box_shape(result, Vector3(1.94, 0.85, 0.48), Vector3(0.0, 0.425, 0.0))
 		"galvanised_tub":
 			_piece(result, "galvanised_tub", func(b: Builder) -> void: _galvanised_tub(b))
 			_box_shape(result, Vector3(0.9, 0.62, 0.9), Vector3(0.0, 0.31, 0.0))
@@ -1316,7 +1321,7 @@ func _cobble_pile(b: Builder, length_m: float) -> void:
 	for index in int(length_m * 70.0):
 		var along := random.randf_range(-0.5, 0.5)
 		var edge := 1.0 - absf(along) * 1.7
-		var across := random.randfn(0.0, 0.34) * edge
+		var across := random.randfn(0.0, 0.28) * edge
 		var radius := random.randf_range(0.04, 0.095)
 		var stack := 0.05 + maxf(0.0, 0.12 * (edge - absf(across) * 2.0)) * random.randf()
 		var center := Vector3(along * length_m, stack, across)
@@ -1327,14 +1332,29 @@ func _cobble_pile(b: Builder, length_m: float) -> void:
 		b.tube(PackedVector3Array([center - half, center - half * 0.55, center, center + half * 0.55, center + half]), PackedFloat32Array([0.012, radius * 0.72, radius * 0.9, radius * 0.72, 0.012]), 7, Color(tone.r * shade, tone.g * shade, tone.b * shade), CELL_WHITE, false, false)
 
 
+## A water-filled plastic road block along local X, the low rounded kind at the ditch's
+## road end (IMG_0960, t=98-123): a fat body with ribbed ends, two hand slots through its
+## waist and a fill hole on top; unlike the jersey-profile yard barrier, the top is broad.
+func _water_block(b: Builder) -> void:
+	var profile := PackedVector2Array([Vector2(-0.24, 0.0), Vector2(0.24, 0.0), Vector2(0.24, 0.12), Vector2(0.2, 0.22), Vector2(0.19, 0.68), Vector2(0.15, 0.85), Vector2(-0.15, 0.85), Vector2(-0.19, 0.68), Vector2(-0.2, 0.22), Vector2(-0.24, 0.12)])
+	b.slab(Vector3(0.0, 0.0, 0.0), _frame(Vector3.BACK, Vector3.UP), Builder.rounded(profile, [0.03, 0.03, 0.03, 0.03, 0.05, 0.07, 0.07, 0.05, 0.03, 0.03], 3), 1.86, 0.05, WATER_BLOCK_RED)
+	for side: float in [-1.0, 1.0]:
+		for x: float in [-0.46, 0.46]:
+			b.box(Vector3(x, 0.44, side * 0.197), Basis.IDENTITY, Vector3(0.3, 0.13, 0.012), Color(0.05, 0.03, 0.03), CELL_WHITE)
+		for y: float in [0.16, 0.34, 0.52, 0.7]:
+			b.box(Vector3(side * 0.945, y, 0.0), Basis.IDENTITY, Vector3(0.07, 0.07, 0.32), WATER_BLOCK_RED, CELL_WHITE)
+	b.disc(Vector3(0.0, 0.853, 0.0), Vector3.UP, 0.11, 14, WATER_BLOCK_RED * 0.7)
+	b.disc(Vector3(0.0, 0.855, 0.0), Vector3.UP, 0.085, 14, Color(0.05, 0.03, 0.03))
+
+
 ## A round ribbed galvanised tub at the lawn's corner by the Mersea promenade, a clump of
 ## long bronze blades in it (IMG_0960, t=322 and t=349). The blades fall by a fixed seed.
 func _galvanised_tub(b: Builder) -> void:
 	var path := PackedVector3Array([Vector3(0, -0.02, 0), Vector3(0, 0.6, 0)])
-	b.tube(path, PackedFloat32Array([0.46, 0.51]), 20, GALVANIZED, CELL_METAL, false, false)
+	b.tube(path, PackedFloat32Array([0.46, 0.51]), 20, GALVANIZED, CELL_WHITE, false, false)
 	for y: float in [0.12, 0.26, 0.4, 0.58]:
 		var radius := lerpf(0.46, 0.51, y / 0.6) + 0.012
-		b.tube(PackedVector3Array([Vector3(0, y - 0.015, 0), Vector3(0, y + 0.015, 0)]), PackedFloat32Array([radius, radius]), 20, GALVANIZED, CELL_METAL, false, false)
+		b.tube(PackedVector3Array([Vector3(0, y - 0.015, 0), Vector3(0, y + 0.015, 0)]), PackedFloat32Array([radius, radius]), 20, GALVANIZED * 1.12, CELL_WHITE, false, false)
 	b.disc(Vector3(0, 0.54, 0), Vector3.UP, 0.5, 20, Color(0.1, 0.08, 0.07))
 	var random := RandomNumberGenerator.new()
 	random.seed = 3127

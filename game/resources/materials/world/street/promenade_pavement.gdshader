@@ -12,7 +12,7 @@ render_mode cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D aggregate : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform vec3 tone : source_color = vec3(0.7, 0.7, 0.7);
-uniform float tile_m = 2.4;
+uniform float tile_m = 1.15;
 uniform float wear = 1.0;
 // The road's frame: its origin and direction, x and z (promenade_layout's O and U).
 uniform vec2 road_origin = vec2(-346.3, 327.9);
@@ -55,7 +55,7 @@ void fragment() {
 	float shade = 1.0 + 0.32 * (drift - 0.5) + 0.2 * (blotch - 0.5);
 	shade *= 1.0 - 0.3 * dark_track * (0.6 + 0.4 * lane);
 	shade *= 1.0 + 0.16 * pale_track * (1.0 - 0.7 * lane);
-	shade *= 1.0 - 0.32 * lane;
+	shade *= 1.0 - 0.45 * lane;
 
 	ALBEDO = stones * tone * mix(1.0, shade, wear);
 	ROUGHNESS = 0.96;

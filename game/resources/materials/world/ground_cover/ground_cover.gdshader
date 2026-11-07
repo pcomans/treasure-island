@@ -85,6 +85,10 @@ uniform vec3 turf_color : source_color = vec3(0.08, 0.17, 0.065);
 // the ditch and pale cobbles on it; round it gold-straw banks and gravel. Water stands
 // on the level floor, most of it along the rim of the south half, in mud pans.
 uniform sampler2D marsh_map : hint_default_black, filter_linear, repeat_disable;
+// Generated tiles of the mat and of the bank's thatch from above: near the walker they
+// break the palette's colours into stems and blades, by each tile's ratio to its own mean.
+uniform sampler2D marsh_mat_tile : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D bank_thatch_tile : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
 uniform float marsh_amount = 0.0;
 uniform vec4 marsh_axis = vec4(-295.0, 145.0, -345.0, 290.0);
 uniform vec2 marsh_radii = vec2(46.0, 66.0);
@@ -96,8 +100,8 @@ uniform vec3 marsh_ruddy : source_color = vec3(0.225, 0.165, 0.13);
 uniform vec3 marsh_mud : source_color = vec3(0.185, 0.145, 0.115);
 uniform vec3 marsh_wet_mud : source_color = vec3(0.16, 0.13, 0.108);
 uniform vec3 marsh_straw : source_color = vec3(0.3, 0.235, 0.175);
-uniform vec3 marsh_green : source_color = vec3(0.095, 0.125, 0.07);
-uniform vec3 marsh_olive : source_color = vec3(0.19, 0.17, 0.095);
+uniform vec3 marsh_green : source_color = vec3(0.135, 0.165, 0.09);
+uniform vec3 marsh_olive : source_color = vec3(0.225, 0.205, 0.115);
 uniform vec3 marsh_cobble : source_color = vec3(0.62, 0.58, 0.51);
 uniform vec3 bank_gap : source_color = vec3(0.2, 0.165, 0.135);
 uniform vec3 bank_blade : source_color = vec3(0.27, 0.225, 0.175);
@@ -135,6 +139,7 @@ const float WATER_RIM = 0.13;
 // How fast the water rises per metre the land dips under the floor's level: a shallow
 // sink in the terrain (the site's marsh_pool) holds the footage's long pool.
 const float WATER_SINK_PER_M = 3.0;
+const float MARSH_TILE_M = 2.4;
 // marsh_map's reach either side of the outline (tools/lib/ground-cover-map.mjs).
 const float MARSH_MAP_RANGE_M = 32.0;
 // The bank's run in from the outline, where the level floor starts (terrain-overrides.json).
@@ -250,8 +255,19 @@ void fragment() {
 			float far_off = smoothstep(150.0, 420.0, length(VERTEX));
 			float h = ground_y + 0.6 * (n_wide - 0.5) + 0.5 * (n_mid - 0.5) + 0.3 * (n_small - 0.5);
 
+			// Near the walker the mat and the thatch are the tiles' stems and blades.
+			float near = 1.0 - fade;
+			vec3 mat_detail = vec3(1.0);
+			vec3 thatch_detail = vec3(1.0);
+			if (near > 0.0) {
+				vec2 tile_uv = mat2(vec2(0.82, 0.57), vec2(-0.57, 0.82)) * p / MARSH_TILE_M;
+				mat_detail = texture(marsh_mat_tile, tile_uv).rgb / max(textureLod(marsh_mat_tile, vec2(0.5), 11.0).rgb, vec3(0.01));
+				thatch_detail = texture(bank_thatch_tile, tile_uv + vec2(0.31, 0.77)).rgb / max(textureLod(bank_thatch_tile, vec2(0.5), 11.0).rgb, vec3(0.01));
+				mat_detail = mix(vec3(1.0), clamp(mat_detail, 0.0, 3.0), near);
+				thatch_detail = mix(vec3(1.0), clamp(thatch_detail, 0.0, 3.0), near);
+			}
 			// Gold straw in lighter and duller patches over crusted fill, gravel toward the top.
-			vec3 bank = cover_layer(bank_gap, bank_blade, bank_straw, m, 0.8, fade);
+			vec3 bank = cover_layer(bank_gap, bank_blade, bank_straw, m, 0.8, fade) * thatch_detail;
 			bank *= mix(0.84 + 0.32 * smoothstep(0.3, 0.7, 0.45 * n_mid + 0.3 * n_patch8 + 0.25 * n_tiny), 1.0, fade);
 			// Dead grass lies in strands, in patches that lie two ways.
 			if (fade < 1.0) {
@@ -270,7 +286,7 @@ void fragment() {
 			// decimetres, settling to their mean with distance.
 			float tip = mix(value_noise(p / 0.15 + vec2(7.7, 1.3)), 0.5, fade);
 			float clump = mix(value_noise(p / 0.46 + vec2(2.1, 9.4)), 0.5, fade);
-			float stipple = 0.6 * tip + 0.4 * clump;
+			float stipple = mix(0.6 * tip + 0.4 * clump, clamp(0.5 + 0.3 * (dot(mat_detail, vec3(0.3333)) - 1.0), 0.0, 1.0), 0.7 * near);
 			vec2 along = vec2(0.643 * p.x + 0.766 * p.y, 0.643 * p.y - 0.766 * p.x);
 
 			// The mat in drifts a few metres to a few tens across, ragged at the plants'
@@ -280,7 +296,7 @@ void fragment() {
 			float red_cover = smoothstep(0.38, 0.56, mat_level + 0.36 * (stipple - 0.5));
 			vec3 red = mix(mix(marsh_wine, marsh_crimson, smoothstep(0.34, 0.6, stipple)), marsh_flare, smoothstep(0.62, 0.74, stipple));
 			vec3 under = mix(marsh_ruddy, marsh_mud, smoothstep(0.42, 0.68, n_small));
-			vec3 marsh = mix(under * (0.84 + 0.32 * clump), red, red_cover);
+			vec3 marsh = mix(under * (0.84 + 0.32 * clump) * mix(vec3(1.0), thatch_detail, 0.6), red * mat_detail, red_cover);
 			float outline_m = (texture(marsh_map, (p - cover_map_rect.xy) * cover_map_rect.zw).r - 0.5) * 2.0 * MARSH_MAP_RANGE_M;
 			float straw_w = smoothstep(0.57, 0.68, 0.5 * value_noise(p / 9.0 + vec2(37.1, 3.3)) + 0.3 * n_small + 0.2 * stipple + 0.14 * (1.0 - smoothstep(1.0, 11.0, outline_m)));
 			marsh = mix(marsh, marsh_straw * (0.78 + 0.44 * clump), 0.9 * straw_w);
@@ -323,10 +339,16 @@ void fragment() {
 				float size = (0.045 + 0.1 * hash12(cell + 71.0) * hash12(cell + 97.0) * 2.0) / 1.1;
 				float drift = smoothstep(0.42, 0.62, value_noise(p / 13.0 + vec2(91.3, 5.7)));
 				float here = step(1.0 - 0.62 * drift, hash12(cell + 17.0)) * (1.0 - fade) * (1.0 - smoothstep(-0.02, 0.05, water));
-				float stone = 1.0 - smoothstep(size * 0.82, size, length(inside * vec2(1.0, 1.0 + 0.7 * hash12(cell + 11.0))));
-				float ring = 1.0 - smoothstep(size * 0.9, size * 1.3, length(inside));
+				// A rough outline, not a disc: its radius wanders round the stone, and the stone
+				// falls a little darker to its edge, the same all round.
+				vec2 squashed = inside * vec2(1.0, 1.0 + 0.7 * hash12(cell + 11.0));
+				float turn = atan(squashed.y, squashed.x);
+				float rough_edge = 1.0 + 0.2 * sin(3.0 * turn + 6.28 * hash12(cell + 23.0)) + 0.11 * sin(5.0 * turn + 6.28 * hash12(cell + 41.0));
+				float reach_at = length(squashed) / (size * rough_edge);
+				float stone = 1.0 - smoothstep(0.82, 1.0, reach_at);
+				float ring = 1.0 - smoothstep(0.9, 1.3, reach_at);
 				marsh *= 1.0 - 0.4 * ring * here;
-				marsh = mix(marsh, marsh_cobble * (0.8 + 0.4 * hash12(cell + 7.0)), stone * here);
+				marsh = mix(marsh, marsh_cobble * (0.8 + 0.4 * hash12(cell + 7.0)) * mix(1.06, 0.8, reach_at * reach_at), stone * here);
 			}
 
 			ground = mix(ground, mix(bank, marsh, carpet), region * max(bank_w, carpet));
@@ -367,4 +389,6 @@ void fragment() {
 	SPECULAR = mix(0.2, 0.5, pool);
 	NORMAL_MAP = texture(detail_normal, uv_a).rgb;
 	NORMAL_MAP_DEPTH = normal_strength * (1.0 - 0.5 * fade) * (1.0 - pool) * (1.0 + 1.5 * rough);
+	// Standing water lies level: the land's facets under it must not show in its sky.
+	NORMAL = normalize(mix(NORMAL, (VIEW_MATRIX * vec4(0.0, 1.0, 0.0, 0.0)).xyz, pool));
 }

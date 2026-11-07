@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://budo7wd0mrsam"
+path="res://.godot/imported/promenade_bark_mulch.png-d4c8cd9f900c120e5d9d0769d314ff39.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/street/promenade_bark_mulch.png"
+dest_files=["res://.godot/imported/promenade_bark_mulch.png-d4c8cd9f900c120e5d9d0769d314ff39.ctex"]
 
 [params]
 
