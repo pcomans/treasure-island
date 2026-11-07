@@ -223,8 +223,25 @@ function validateFieldRule(rule, label, checkProp, variantCount) {
   invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== ""), `${label} surfaces must list materials`);
   invariant(isFiniteNumber(rule.per_m2) && rule.per_m2 > 0 && rule.per_m2 <= 4, `${label} per_m2 must be in (0, 4]`);
   invariant(Array.isArray(rule.spacing) && rule.spacing.length === 2 && rule.spacing.every((value) => isFiniteNumber(value) && value >= 0.2 && value <= 4) && rule.spacing[0] <= rule.spacing[1], `${label} spacing must be [full, thin] factors in [0.2, 4]`);
-  const field = rule.field;
-  invariant(field != null && Object.keys(field).every((key) => FIELD_TERMS.includes(key)), `${label} field may hold ${FIELD_TERMS.join(", ")}`);
+  validateFieldSpec(rule.field, label);
+  invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
+  for (const text of ["rule", "evidence"]) invariant(typeof rule[text] === "string" && rule[text].trim() !== "", `${label} needs ${text}`);
+  invariant(Array.isArray(rule.mix) && rule.mix.length > 0, `${label} needs a mix`);
+  for (const [index, entry] of rule.mix.entries()) {
+    const entryLabel = `${label} mix ${index} (${entry?.prop})`;
+    invariant(exactKeys(entry, FIELD_MIX_FIELDS), `${entryLabel} must have exactly ${FIELD_MIX_FIELDS.join(", ")}`);
+    checkProp(entry.prop, rule.kind, { variants: entry.variants, scale: entry.scale }, entryLabel);
+    invariant(PLANT_WIDTHS_M[entry.prop]?.length === variantCount(entry.prop), `${entryLabel} needs a crown width for each of the kit's variants (PLANT_WIDTHS_M)`);
+    invariant(isFiniteNumber(entry.share) && entry.share > 0, `${entryLabel} share must be positive`);
+    invariant(Array.isArray(entry.at) && entry.at.length === 2 && entry.at.every(isFiniteNumber) && entry.at[0] >= 0 && entry.at[1] <= 1 && entry.at[0] < entry.at[1], `${entryLabel} at must be a field range in [0, 1]`);
+  }
+}
+
+// A field's density terms (a field rule's field, or a yard field rule's), each
+// checked as the density reads it; terms lists those the caller can read (the
+// yards read no land height, slope, edge or road bands).
+export function validateFieldSpec(field, label, terms = FIELD_TERMS) {
+  invariant(field != null && Object.keys(field).every((key) => terms.includes(key)), `${label} field may hold ${terms.join(", ")}`);
   invariant(isFiniteNumber(field.drift_m) && field.drift_m >= 1, `${label} field drift_m must be at least 1`);
   invariant(isFiniteNumber(field.clump_m) && field.clump_m >= 0.5 && field.clump_m <= field.drift_m, `${label} field clump_m must be in [0.5, drift_m]`);
   invariant(isFiniteNumber(field.drift_cover) && field.drift_cover > 0 && field.drift_cover < 1, `${label} field drift_cover must be in (0, 1)`);
@@ -253,17 +270,6 @@ function validateFieldRule(rule, label, checkProp, variantCount) {
   }
   for (const ramp of field.ramps ?? []) {
     invariant(exactKeys(ramp, ["from_xz", "high", "low", "to_xz"]) && [ramp.from_xz, ramp.to_xz].every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)) && isFiniteNumber(ramp.low) && isFiniteNumber(ramp.high) && ramp.low >= 0 && ramp.high <= 1 && ramp.low <= ramp.high, `${label} field ramps must be {from_xz, to_xz, low, high}`);
-  }
-  invariant(rule.basis === "production_inference", `${label} basis must be production_inference`);
-  for (const text of ["rule", "evidence"]) invariant(typeof rule[text] === "string" && rule[text].trim() !== "", `${label} needs ${text}`);
-  invariant(Array.isArray(rule.mix) && rule.mix.length > 0, `${label} needs a mix`);
-  for (const [index, entry] of rule.mix.entries()) {
-    const entryLabel = `${label} mix ${index} (${entry?.prop})`;
-    invariant(exactKeys(entry, FIELD_MIX_FIELDS), `${entryLabel} must have exactly ${FIELD_MIX_FIELDS.join(", ")}`);
-    checkProp(entry.prop, rule.kind, { variants: entry.variants, scale: entry.scale }, entryLabel);
-    invariant(PLANT_WIDTHS_M[entry.prop]?.length === variantCount(entry.prop), `${entryLabel} needs a crown width for each of the kit's variants (PLANT_WIDTHS_M)`);
-    invariant(isFiniteNumber(entry.share) && entry.share > 0, `${entryLabel} share must be positive`);
-    invariant(Array.isArray(entry.at) && entry.at.length === 2 && entry.at.every(isFiniteNumber) && entry.at[0] >= 0 && entry.at[1] <= 1 && entry.at[0] < entry.at[1], `${entryLabel} at must be a field range in [0, 1]`);
   }
 }
 
@@ -745,7 +751,8 @@ const smoothRamp = (from, to, value) => {
 
 // The density of a field rule at a point, in [0, 1]: site is {height, edge, road},
 // each the site's reading there or undefined for a term the rule does not use.
-function fieldDensity(rule, tag) {
+// The yards' field rules (street-yard-generation.mjs) read the same density.
+export function fieldDensity(rule, tag) {
   const spec = rule.field;
   const drift = valueNoise(`${tag}|field-drift`);
   const clump = valueNoise(`${tag}|field-clump`);
@@ -786,6 +793,52 @@ function fieldDensity(rule, tag) {
   };
 }
 
+// Sows a field: perM2 candidates per square metre of the box {min_x, max_x,
+// min_z, max_z} fall at random over it, with no lattice, and each survives with
+// fieldAt(point), the field's value there in [0, 1] (null where nothing may go).
+// With spec.groups each survivor is a group's centre and its members fall round
+// it in a bell curve, most groups small and a few large, so real gaps lie
+// between. sow(point, value, identity) takes each point that survives (a
+// member's value is at least 0.8 of its centre's); reject(reason) counts each
+// one that does not. Every draw is seeded by tag ("<seed>|<zone>|<rule>"), so
+// the planting field and the yards' field rules sow by one rule.
+export function sowField({ tag, perM2, spec, box, fieldAt, sow, reject }) {
+  const random = generator(`${tag}|field`);
+  const hashUnit = (text, slot = 0) => createHash("sha256").update(`${tag}|${text}`, "utf8").digest().readUInt32BE(slot * 4) / 0xffffffff;
+  const attempts = Math.ceil((box.max_x - box.min_x) * (box.max_z - box.min_z) * perM2);
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const point = [box.min_x + random() * (box.max_x - box.min_x), box.min_z + random() * (box.max_z - box.min_z)];
+    const roll = random();
+    const here = fieldAt(point);
+    if (here === null) continue;
+    if (roll >= here) {
+      reject("thin");
+      continue;
+    }
+    const identity = `f${String(attempt).padStart(6, "0")}`;
+    if (!spec.groups) {
+      sow(point, here, identity);
+      continue;
+    }
+    // A group: most small, a few large, its members in a bell round its centre.
+    const [fewest, most] = spec.groups.count;
+    const count = fewest + Math.floor(hashUnit(identity, 3) ** 2 * (most - fewest + 1));
+    const spread = spec.groups.spread_m[0] + (spec.groups.spread_m[1] - spec.groups.spread_m[0]) * hashUnit(identity, 4);
+    for (let member = 0; member < count; member += 1) {
+      const memberId = `${identity}m${member}`;
+      const reach = member === 0 ? 0 : spread * Math.sqrt(-2 * Math.log(Math.max(1e-6, hashUnit(memberId, 5))));
+      const angle = hashUnit(memberId, 6) * Math.PI * 2;
+      const spot = [point[0] + Math.cos(angle) * reach, point[1] + Math.sin(angle) * reach];
+      const there = fieldAt(spot);
+      if (there === null || there <= 0) {
+        reject("off_field");
+        continue;
+      }
+      sow(spot, Math.max(there, here * 0.8), memberId);
+    }
+  }
+}
+
 // Places a field rule's plants. box {min_x, max_x, min_z, max_z} bounds them;
 // inside(xz) is the zone's and the rule's shape; onGround(xz) whether the visible
 // ground is one of the rule's surfaces; heightAt(xz) the land's height, slopeAt(xz)
@@ -793,7 +846,6 @@ function fieldDensity(rule, tag) {
 // paving and accept as planDrifts. Returns {placed, rejected}.
 export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt, slopeAt, edgeOk, roadOk, paving, state, accept }) {
   const tag = `${seed}|${zoneId}|${rule.id}`;
-  const random = generator(`${tag}|field`);
   const density = fieldDensity(rule, tag);
   const hashUnit = (text, slot = 0) => createHash("sha256").update(`${tag}|${text}`, "utf8").digest().readUInt32BE(slot * 4) / 0xffffffff;
   const rejected = {};
@@ -835,37 +887,6 @@ export function planField({ rule, zoneId, seed, box, inside, onGround, heightAt,
     addPlant(state, candidate.prop, candidate.half, point[0], point[1]);
     placed += 1;
   };
-  const attempts = Math.ceil((box.max_x - box.min_x) * (box.max_z - box.min_z) * rule.per_m2);
-  for (let attempt = 0; attempt < attempts; attempt += 1) {
-    const point = [box.min_x + random() * (box.max_x - box.min_x), box.min_z + random() * (box.max_z - box.min_z)];
-    const roll = random();
-    const here = fieldAt(point);
-    if (here === null) continue;
-    if (roll >= here) {
-      reject("thin");
-      continue;
-    }
-    const identity = `f${String(attempt).padStart(6, "0")}`;
-    if (!spec.groups) {
-      plant(point, here, identity);
-      continue;
-    }
-    // A group: most small, a few large, its plants in a bell round its centre.
-    const [fewest, most] = spec.groups.count;
-    const count = fewest + Math.floor(hashUnit(identity, 3) ** 2 * (most - fewest + 1));
-    const spread = spec.groups.spread_m[0] + (spec.groups.spread_m[1] - spec.groups.spread_m[0]) * hashUnit(identity, 4);
-    for (let member = 0; member < count; member += 1) {
-      const memberId = `${identity}m${member}`;
-      const reach = member === 0 ? 0 : spread * Math.sqrt(-2 * Math.log(Math.max(1e-6, hashUnit(memberId, 5))));
-      const angle = hashUnit(memberId, 6) * Math.PI * 2;
-      const spot = [point[0] + Math.cos(angle) * reach, point[1] + Math.sin(angle) * reach];
-      const there = fieldAt(spot);
-      if (there === null || there <= 0) {
-        reject("off_field");
-        continue;
-      }
-      plant(spot, Math.max(there, here * 0.8), memberId);
-    }
-  }
+  sowField({ tag, perM2: rule.per_m2, spec, box, fieldAt, sow: plant, reject });
   return { placed, rejected };
 }

@@ -236,12 +236,32 @@ export function validateFenceRules(zone, kinds) {
       if ("xz" in leg) {
         invariant(Object.keys(leg).length === 1 && Array.isArray(leg.xz) && leg.xz.length === 2 && leg.xz.every(isFiniteNumber), `${label}: a point leg is exactly {xz: [x, z]}`);
       } else {
-        invariant(JSON.stringify(Object.keys(leg).sort()) === JSON.stringify(["from_m", "offset_m", "side", "to_m", "way"]), `${label}: a way leg is exactly {way, side, offset_m, from_m, to_m}`);
-        invariant(/^w\d+$/u.test(leg.way) && ["left", "right"].includes(leg.side), `${label}: a way leg needs an OSM way and side left or right`);
-        invariant([leg.offset_m, leg.from_m, leg.to_m].every(isFiniteNumber) && leg.offset_m > 0 && leg.from_m >= 0 && leg.to_m >= 0 && leg.from_m !== leg.to_m, `${label}: way leg offset and along-distances are invalid`);
+        validateWayLeg(leg, label);
       }
     }
   }
+}
+
+// A way leg, {way, side, offset_m, from_m, to_m}: the stretch of an OSM way
+// between two along-distances, shifted sideways off it (a fence rule's leg, or
+// a yard pack line along an OSM way).
+export function validateWayLeg(leg, label) {
+  invariant(JSON.stringify(Object.keys(leg ?? {}).sort()) === JSON.stringify(["from_m", "offset_m", "side", "to_m", "way"]), `${label}: a way leg is exactly {way, side, offset_m, from_m, to_m}`);
+  invariant(/^w\d+$/u.test(leg.way) && ["left", "right"].includes(leg.side), `${label}: a way leg needs an OSM way and side left or right`);
+  invariant([leg.offset_m, leg.from_m, leg.to_m].every(isFiniteNumber) && leg.offset_m > 0 && leg.from_m >= 0 && leg.to_m >= 0 && leg.from_m !== leg.to_m, `${label}: way leg offset and along-distances are invalid`);
+}
+
+// A way leg's line in world x, z (wayLine(key) gives a way's points): the way
+// between the leg's along-distances, offset_m to its left or right (seen from
+// above with north up), running from from_m toward to_m.
+export function wayLegLine(wayLine, leg, label) {
+  const wayPoints = wayLine(leg.way);
+  const wayLengths = cumulative(wayPoints);
+  invariant(Math.max(leg.from_m, leg.to_m) <= wayLengths.at(-1) + 1e-6, `${label}: leg runs past the end of ${leg.way}`);
+  const piece = slice(wayPoints, wayLengths, Math.min(leg.from_m, leg.to_m), Math.max(leg.from_m, leg.to_m));
+  const shifted = offsetLine(piece, leg.side === "left" ? leg.offset_m : -leg.offset_m);
+  if (leg.from_m > leg.to_m) shifted.reverse();
+  return shifted;
 }
 
 // Why a fence type's params are unusable, or null: every type takes inside;
@@ -652,12 +672,7 @@ export function placeStreetFences({
           vertexSources.push("rule_point");
           continue;
         }
-        const wayPoints = wayLine(leg.way);
-        const wayLengths = cumulative(wayPoints);
-        invariant(Math.max(leg.from_m, leg.to_m) <= wayLengths.at(-1) + 1e-6, `${label}: leg runs past the end of ${leg.way}`);
-        const piece = slice(wayPoints, wayLengths, Math.min(leg.from_m, leg.to_m), Math.max(leg.from_m, leg.to_m));
-        const shifted = offsetLine(piece, leg.side === "left" ? leg.offset_m : -leg.offset_m);
-        if (leg.from_m > leg.to_m) shifted.reverse();
+        const shifted = wayLegLine(wayLine, leg, label);
         line.push(...shifted);
         vertexSources.push(...shifted.map(() => leg.way));
       }
