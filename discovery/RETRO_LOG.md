@@ -24315,7 +24315,7 @@ Comparing every record against the base commit found a change the author hadn't 
 ## look-pass (lighting round 3, 2026-11-07)
 
 - What worked well: the reviewers' per-channel shade numbers pointed at fill colour, and when the fill didn't move asphalt, a check of the texture's real albedo (about 0.06) showed the shade was mostly sky reflection, not ambient. One scratch process swept the impostor lean per prop with the bake's own check, so a retune cost one run rather than one per value.
-- What did not work well: my crown tone table in round 2 included lawn pixels and read 0.93 where the eye saw near black; opening the sheet caught it, late. I deepened the sky in round 2 without seeing that road reflection would carry it into every shaded road. The first specular value also took away most of the roads' brightness, because reflection had been hiding a low albedo.
+- What did not work well: my crown tone table in round 2 included lawn pixels and read 0.93 where the eye saw near black; opening the sheet caught it, late. I deepened the sky in round 2 without seeing that road reflection would carry it into every shaded road. The first specular value also took away most of the roads' brightness, because reflection had been hiding a low albedo. Correction to commit e106556c's message: ambient energy went from 0.27 to 0.5, not from 0.6, and the sky share and exposure also changed (0.5 to 0.3, 1.25 to 1.18).
 - What the team should change next time: when a surface ignores a lighting change, work out what actually lights it before changing more settings. Check any measured crop on the pixels it covers before trusting the number.
 
 ## look-visual-review (independent visual review of the look pass, 2026-11-07)
