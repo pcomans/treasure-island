@@ -10,6 +10,12 @@ const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
 const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
+## The largest camera far plane in use: the island overviews in
+## game/tests/shared/building_shots.gd (_island_shots sets camera.far = 10000.0);
+## gameplay's camera uses player.tscn's.
+const WATER_LARGEST_CAMERA_FAR_M := 10000.0
+## Cameras stay within this of the origin: the island (about 950 m) and its overview poses.
+const WATER_CAMERA_REACH_M := 2000.0
 
 
 func _initialize() -> void:
@@ -80,6 +86,7 @@ func _initialize() -> void:
 	if pool == null or pool.session_limit != 64:
 		_fail("Session tag limit must default to 64.")
 		return
+	var gameplay_far := camera.far
 	player.free()
 
 	var world_scene := load("res://game/scenes/world/world_root.tscn") as PackedScene
@@ -122,18 +129,24 @@ func _initialize() -> void:
 	or water.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
 		_fail("Water elevation, orientation, render layer, or shadow setting drifted.")
 		return
-	# The shader spreads the unit grid into rings round the camera out to far_radius_m:
-	# its row count must match the mesh, and the mesh's bounds must hold the rings
-	# from any camera over the island, up to a high jetpack.
-	var far_radius := float(water_material.get_shader_parameter("far_radius_m"))
+	# The shader spreads the unit grid into rings round the camera, out to far_share of
+	# the camera's far plane: an odd row count whose rings match the mesh, and bounds
+	# centred on the island that hold the rings of the farthest-seeing camera from
+	# anywhere it stands, and the outer ring's eye height up to where gameplay's camera
+	# still sees the water.
+	var far_share := float(water_material.get_shader_parameter("far_share"))
+	var grid_rows := int(water_material.get_shader_parameter("grid_rows"))
+	var bounds := water_mesh.custom_aabb
+	var reach := far_share * WATER_LARGEST_CAMERA_FAR_M + WATER_CAMERA_REACH_M
 	if water_mesh.size != Vector2(2.0, 2.0) \
 	or water_mesh.subdivide_width != water_mesh.subdivide_depth \
-	or int(water_material.get_shader_parameter("grid_rows")) != water_mesh.subdivide_width + 1 \
-	or far_radius <= 0.0 \
-	or water_mesh.custom_aabb.size.x < 2.0 * (far_radius + 2000.0) \
-	or water_mesh.custom_aabb.size.z < 2.0 * (far_radius + 2000.0) \
-	or water_mesh.custom_aabb.end.y < 1000.0:
-		_fail("Water grid, far radius or bounds drifted apart.")
+	or grid_rows % 2 != 1 or grid_rows != water_mesh.subdivide_width + 1 \
+	or far_share <= 0.0 or far_share >= 1.0 \
+	or gameplay_far > WATER_LARGEST_CAMERA_FAR_M \
+	or absf(bounds.get_center().x) > 1.0 or absf(bounds.get_center().z) > 1.0 \
+	or bounds.size.x < 2.0 * reach or bounds.size.z < 2.0 * reach \
+	or bounds.position.y > 0.0 or bounds.end.y < far_share * gameplay_far:
+		_fail("Water grid, far reach or bounds drifted apart.")
 		return
 	if not water.find_children("*", "CollisionObject3D", true, false).is_empty() \
 	or not water.find_children("*", "CollisionShape3D", true, false).is_empty() \

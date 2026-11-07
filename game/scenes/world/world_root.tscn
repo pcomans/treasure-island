@@ -15,11 +15,11 @@ shader = ExtResource("6_water_shader")
 shader_parameter/waves = ExtResource("7_water_waves")
 shader_parameter/shore_map = ExtResource("8_water_shore")
 shader_parameter/grid_rows = 23.0
-shader_parameter/far_radius_m = 4800.0
+shader_parameter/far_share = 0.96
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 material = SubResource("Material_water")
-custom_aabb = AABB(-8000, -1, -8000, 16000, 4000, 16000)
+custom_aabb = AABB(-12000, -1, -12000, 24000, 6001, 24000)
 size = Vector2(2, 2)
 subdivide_width = 22
 subdivide_depth = 22

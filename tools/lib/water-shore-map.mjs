@@ -9,17 +9,25 @@
 //   blue   fetch: how far the prevailing westerly has blown over open water to reach
 //          the point, square-root scaled up to SHORE_FETCH_RANGE_M (low in the lee of
 //          the islands, where the water lies calmer);
-//   alpha  255.
+//   alpha  cover: 1 under a pier deck, fading to 0 SHORE_COVER_FADE_M beyond its edge
+//          (the deck hides the sky from the water under it).
 // The waterline is where the drawn ground meets the water plane (WATER_Y_M): land is
 // every cell whose highest drawn surface stands above it, among the playable chunks'
 // records, the shoreline's slopes, faces and walls (generated/world/shoreline.json)
-// and Yerba Buena Island (context.json). Piers and floats over the water, the bridge
-// and the loose stones are not shore. Land is found on a SHORE_LAND_CELL_M grid, the
-// signed distance measured there and sampled at the map's cell centres, so the
-// shader's bilinear filtering places the waterline between cells. Fetch is the mean
-// over SHORE_WIND_BEARINGS_DEG of the open water upwind along each bearing (the map's
-// upwind edge counts as SHORE_OPEN_FETCH_M). The prevailing wind through the Golden
-// Gate is a production assumption for game art, not a measurement.
+// and Yerba Buena Island (context.json). Pier decks stand on piles over the water, so
+// they are not shore: the cells under a deck (the playable land's terrain_pier decks
+// and the boundary-attached pier decks) are left out of the land and make the cover
+// instead. The marina basin, the bridge and the loose stones are not shore either.
+// Land is found on a SHORE_LAND_CELL_M grid, the signed distance measured there and
+// sampled at the map's cell centres, so the shader's bilinear filtering places the
+// waterline between cells. Fetch is the mean over SHORE_WIND_BEARINGS_DEG of the open
+// water upwind along each bearing (the map's upwind edge counts as
+// SHORE_OPEN_FETCH_M). The prevailing wind through the Golden Gate is a production
+// assumption for game art, not a measurement.
+//
+// The shader repeats these numbers by hand: its shore_rect is SHORE_MAP_ORIGIN_XZ and
+// SHORE_MAP_SIZE_M, and it decodes red with SHORE_FINE_RANGE_M (16), green with
+// SHORE_COARSE_RANGE_M (1024) and blue with SHORE_FETCH_RANGE_M (4096). Change both.
 //
 // tools/build_water_shore_map.mjs writes it, and so does tools/build_godot_world.mjs
 // each time it writes the committed generated/world; tools/check_godot_world_determinism.mjs
@@ -42,9 +50,13 @@ export const SHORE_FINE_RANGE_M = 16;
 export const SHORE_COARSE_RANGE_M = 1024;
 export const SHORE_FETCH_RANGE_M = 4096;
 export const SHORE_OPEN_FETCH_M = 4096;
+export const SHORE_COVER_FADE_M = 2;
 // Bearings (clockwise from north) the waves run toward under a west-south-westerly.
 export const SHORE_WIND_BEARINGS_DEG = Object.freeze([62, 66.5, 71, 75.5, 80, 84.5, 89, 93.5, 98]);
-// Context records that stand over the water rather than on a shore.
+// Pier decks: on piles over the water, the cover rather than shore.
+const DECK_MATERIALS = Object.freeze(["terrain_pier", "context_boundary_pier"]);
+// Other context that stands over the water rather than on a shore (the boundary-
+// attached marina basin is water).
 const NOT_SHORE_CONTEXT = Object.freeze(["bay_bridge", "boundary_attached_visual"]);
 
 function grid(cell) {
@@ -84,14 +96,29 @@ function markLand(land, mask, vertices, indices) {
   }
 }
 
-// The land mask on the SHORE_LAND_CELL_M grid: {grid, mask}.
+// Marks every cell whose centre lies under a triangle of the footprint.
+function markFootprint(land, mask, vertices, indices) {
+  for (let offset = 0; offset < indices.length; offset += 3) {
+    const corner = (index) => [vertices[index * 3], vertices[index * 3 + 2]];
+    rasterizeTriangle(land, [corner(indices[offset]), corner(indices[offset + 1]), corner(indices[offset + 2])], (index) => {
+      mask[index] = 1;
+    });
+  }
+}
+
+// The land and pier-deck masks on the SHORE_LAND_CELL_M grid: {grid, mask, deck};
+// a deck's cells are never land.
 export function shoreLandMask(worldRoot) {
   const land = grid(SHORE_LAND_CELL_M);
   const mask = new Uint8Array(land.width * land.height);
+  const deck = new Uint8Array(land.width * land.height);
   const chunkRoot = join(worldRoot, "chunks");
   for (const name of readdirSync(chunkRoot).filter((entry) => entry.endsWith(".json")).sort()) {
     const chunk = JSON.parse(readFileSync(join(chunkRoot, name), "utf8"));
-    for (const record of chunk.records) markLand(land, mask, record.vertices, record.indices);
+    for (const record of chunk.records) {
+      if (DECK_MATERIALS.includes(record.material_key)) markFootprint(land, deck, record.vertices, record.indices);
+      else markLand(land, mask, record.vertices, record.indices);
+    }
   }
   const shoreline = JSON.parse(readFileSync(join(worldRoot, "shoreline.json"), "utf8"));
   for (const record of shoreline.records) {
@@ -100,11 +127,13 @@ export function shoreLandMask(worldRoot) {
   }
   const context = JSON.parse(readFileSync(join(worldRoot, "context.json"), "utf8"));
   for (const record of [...context.records, ...context.boundary_attached_visuals]) {
-    if (NOT_SHORE_CONTEXT.includes(record.context_kind)) continue;
-    markLand(land, mask, record.vertices, record.indices);
+    if (DECK_MATERIALS.includes(record.material_key)) markFootprint(land, deck, record.vertices, record.indices);
+    else if (!NOT_SHORE_CONTEXT.includes(record.context_kind)) markLand(land, mask, record.vertices, record.indices);
   }
+  for (let index = 0; index < mask.length; index += 1) if (deck[index]) mask[index] = 0;
   invariant(mask.some((cell) => cell === 1), "The world has no land above the water for the shore map");
-  return { grid: land, mask };
+  invariant(deck.some((cell) => cell === 1), "The world has no pier decks for the shore map's cover");
+  return { grid: land, mask, deck };
 }
 
 // Bilinear sample of a field on grid g at world (x, z), clamped to the grid.
@@ -153,7 +182,7 @@ const byte = (value) => Math.max(0, Math.min(255, Math.round(value * 255)));
 
 // The shore map for a world: {grid, rgba}.
 export function drawWaterShoreMap(worldRoot) {
-  const { grid: land, mask } = shoreLandMask(worldRoot);
+  const { grid: land, mask, deck } = shoreLandMask(worldRoot);
   // Distances between cell centres, less half a cell, so the waterline lies between them.
   const toLand = distanceToMask(land, mask);
   const toWater = distanceToMask(land, mask.map((cell) => 1 - cell));
@@ -162,13 +191,17 @@ export function drawWaterShoreMap(worldRoot) {
   for (let index = 0; index < mask.length; index += 1) {
     signed[index] = mask[index] ? -(Math.min(toWater[index], 1e6) - half) : Math.min(toLand[index], 1e6) - half;
   }
+  const toDeck = distanceToMask(land, deck);
+  const deckCover = Float32Array.from(toDeck, (value) => Math.max(0, Math.min(1, 1 - (value - half) / SHORE_COVER_FADE_M)));
   const map = grid(SHORE_MAP_CELL_M);
   const distance = new Float32Array(map.width * map.height);
+  const cover = new Float32Array(map.width * map.height);
   const water = new Uint8Array(map.width * map.height);
   for (let j = 0; j < map.height; j += 1) {
     for (let i = 0; i < map.width; i += 1) {
       const value = sample(land, signed, map.centerX(i), map.centerZ(j));
       distance[j * map.width + i] = value;
+      cover[j * map.width + i] = sample(land, deckCover, map.centerX(i), map.centerZ(j));
       water[j * map.width + i] = value > 0 ? 1 : 0;
     }
   }
@@ -196,19 +229,15 @@ export function drawWaterShoreMap(worldRoot) {
     rgba[index * 4] = byte(0.5 + Math.max(-SHORE_FINE_RANGE_M, Math.min(SHORE_FINE_RANGE_M, d)) / (2 * SHORE_FINE_RANGE_M));
     rgba[index * 4 + 1] = byte(Math.sqrt(Math.max(0, Math.min(SHORE_COARSE_RANGE_M, d)) / SHORE_COARSE_RANGE_M));
     rgba[index * 4 + 2] = byte(Math.sqrt(Math.max(0, Math.min(SHORE_FETCH_RANGE_M, soft[index])) / SHORE_FETCH_RANGE_M));
-    rgba[index * 4 + 3] = 255;
+    rgba[index * 4 + 3] = byte(cover[index]);
   }
   return { grid: map, rgba };
-}
-
-export function buildWaterShoreMap({ worldRoot }) {
-  return drawWaterShoreMap(worldRoot);
 }
 
 // Draws the map from worldRoot and writes it as the PNG at output (by default the
 // committed WATER_SHORE_MAP_PATH); returns the drawn map and the PNG's size.
 export function writeWaterShoreMap({ projectRoot, worldRoot, output = resolve(projectRoot, WATER_SHORE_MAP_PATH) }) {
-  const map = buildWaterShoreMap({ worldRoot });
+  const map = drawWaterShoreMap(worldRoot);
   const png = encodeGroundCoverPng(map.grid.width, map.grid.height, map.rgba);
   mkdirSync(dirname(output), { recursive: true });
   writeFileSync(output, png);

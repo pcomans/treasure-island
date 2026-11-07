@@ -1,17 +1,23 @@
 #!/usr/bin/env node
 // Bakes the bay water's wave tile: a seamless, looping animation of wind waves
 // that game/resources/materials/world/water/bay_water.gdshader samples at several
-// scales. FRAMES frames of a SIZE x SIZE tile, packed as an 8 x 8 atlas PNG and
-// imported as a Texture2DArray (one layer per frame).
+// scales. FRAMES frames of a SIZE x SIZE tile, packed as an 8 x 8 atlas PNG that the
+// 2d_array_texture importer turns into a CompressedTexture2DArray (one layer per
+// frame; see bay_waves.png.import).
 //
 // The tile is a sum of deep-water waves on the tile's integer wave lattice, so it
 // wraps in space, and each wave's frequency is a whole number of cycles per loop,
 // so it wraps in time. Wave numbers run from BAND[0] to BAND[1] cycles per tile;
-// the frequency of wave number n is round(LOOP_CYCLES[0] * sqrt(n / BAND[0]))
+// the frequency of wave number n is round(LOOP_CYCLES * sqrt(n / BAND[0]))
 // cycles per loop, which is deep-water dispersion (frequency grows with the
 // square root of wave number) rounded to whole cycles. The shader plays a tile of
-// L metres over a loop of LOOP_CYCLES[0] periods of a wave L / BAND[0] long, so
+// L metres over a loop of LOOP_CYCLES periods of a wave L / BAND[0] long, so
 // every scale keeps the right speed.
+//
+// The shader repeats these numbers by hand: its FRAMES and TILE_TEXELS are FRAMES and
+// SIZE here, its slope decode (s.rg - 0.5) * 6.0 is 2 * CLIP, its MIP_KEPT is the
+// printed `mip_retained`, and its LAYER_LOOP_S follow from BAND[0] and LOOP_CYCLES
+// (see LAYER_M there). Change both.
 //
 // Amplitudes follow a saturation-range spectrum (elevation ~ k^-3), so every
 // octave holds about the same slope variance and the shader can stack scaled
@@ -42,7 +48,7 @@ export const SIZE = 128;
 export const FRAMES = 64;
 export const ATLAS_COLUMNS = 8;
 export const BAND = [4, 11.3];
-export const LOOP_CYCLES = [6, null];
+export const LOOP_CYCLES = 6;
 const SPREAD_S = 3;
 const CLIP = 3;
 const SEED = 20261107;
@@ -72,7 +78,7 @@ export function waveSet() {
       // Elevation spectrum ~ k^-4 per unit area (k^-3 per unit k): amplitude ~ k^-2.
       const amplitude = Math.pow(n, -2) * Math.sqrt(spread) * Math.sqrt(-2 * Math.log(1 - random()));
       const phase = Math.floor(random() * SIZE);
-      const cycles = Math.round(LOOP_CYCLES[0] * Math.sqrt(n / BAND[0]));
+      const cycles = Math.round(LOOP_CYCLES * Math.sqrt(n / BAND[0]));
       if (amplitude > 0) waves.push({ nx, nz, cycles, amplitude, phase });
     }
   }

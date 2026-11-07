@@ -7,7 +7,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 ## Known issues on main (not scheduled)
 
 - A thin strip of water shows between the grass and the root of Pier 1 from the land side (seen in review, by 2026-11-05; still there on 2026-11-06).
-- The Clipper Cove marina past the playable boundary (OSM w644986117, x −9 to 162, z 804 to 1021) is a flat pale teal sheet on the water, plain in the island overviews (seen at integration, 2026-11-06; the same on the earlier `main`).
+- The Clipper Cove marina basin past the playable boundary (OSM w644986117, x −9 to 162, z 804 to 1021) is open bay water: its floating docks and moored boats are not modelled (the flat teal sheet that stood in for them was folded into the bay water, 2026-11-07).
 - **Web build** (Godot's Compatibility renderer):
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;
   - it draws no decals, which the owner accepted, so spraying is off there and the Mersea mural is drawn as a mesh instead;

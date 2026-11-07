@@ -11,6 +11,9 @@ const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
 ## concrete for the tower, columns, caps and cables; the girders' sides mid
 ## grey; their undersides darker; the roadway on top road grey.
 const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("8a8883"), Color("75736e"), Color("5d6164")]
+## The Clipper Cove marina basin past the outline (OSM w644986117, boundary-attached
+## context) is water: the bay water (world_root.tscn ContextWorld/Water) draws it.
+const MARINA_BASIN_MATERIAL_KEY := "context_boundary_marina"
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
@@ -913,8 +916,9 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		root.set_meta("accepted_material_run_trial", (surface_plan.metadata as Dictionary).duplicate(true))
 	var mesh_instances := 0
 	var surfaces := 0
-	# Street-kerb support ramps are collision only: no visible mesh.
-	if str(record.feature_kind) != "street_kerb_support":
+	# Street-kerb support ramps are collision only, and the marina basin is the bay
+	# water's: no visible mesh.
+	if str(record.feature_kind) != "street_kerb_support" and str(record.material_key) != MARINA_BASIN_MATERIAL_KEY:
 		var mesh_instance := MeshInstance3D.new()
 		mesh_instance.name = "Mesh"
 		mesh_instance.mesh = mesh
@@ -1192,9 +1196,9 @@ func _color_for(material_key: String, feature_kind: String, is_context: bool) ->
 		if feature_kind == "ybi":
 			return Color("66765c")
 		if feature_kind == "boundary_attached_visual":
-			# The marina basin (water, floats and boats). A pier deck draws its
-			# concrete (STREET_GROUND_SURFACES); without UVs, that concrete's mean.
-			return Color("718b8c") if "marina" in material_key else Color("908e7c")
+			# A pier deck draws its concrete (STREET_GROUND_SURFACES); without UVs,
+			# that concrete's mean. The marina basin draws nothing (the bay water's).
+			return Color("908e7c")
 		return Color("bbb7af")
 	match feature_kind:
 		"land_ground":

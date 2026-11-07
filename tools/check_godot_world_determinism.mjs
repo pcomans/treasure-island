@@ -9,7 +9,7 @@ import { fileURLToPath } from "node:url";
 import { buildStreetClutterKitGlb, STREET_CLUTTER_KIT_PATH } from "./build_street_clutter_kit.mjs";
 import { buildStreetYardKitGlb, STREET_YARD_KIT_PATH } from "./build_street_yard_kit.mjs";
 import { buildGroundCoverMap, buildMarshMap, decodeGroundCoverPng, GROUND_COVER_MAP_PATH, MARSH_MAP_PATH } from "./lib/ground-cover-map.mjs";
-import { buildWaterShoreMap, WATER_SHORE_MAP_PATH } from "./lib/water-shore-map.mjs";
+import { drawWaterShoreMap, WATER_SHORE_MAP_PATH } from "./lib/water-shore-map.mjs";
 import { invariant, sha256File, stableJson } from "./lib/world-contract.mjs";
 
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
@@ -114,7 +114,7 @@ function main() {
       `Committed ${MARSH_MAP_PATH} differs from a fresh draw; redraw it with tools/build_ground_cover_map.mjs`,
     );
     // And the water's shore map, drawn from the same world.
-    const shoreMap = buildWaterShoreMap({ worldRoot: first });
+    const shoreMap = drawWaterShoreMap(first);
     const committedShore = decodeGroundCoverPng(readFileSync(resolve(projectRoot, WATER_SHORE_MAP_PATH)));
     invariant(
       committedShore.width === shoreMap.grid.width && committedShore.height === shoreMap.grid.height
