@@ -127,6 +127,8 @@ const STONE_SEED := 20261108
 ## fewer card tufts match the blades' coverage (card tuft area x alpha over a blade
 ## tuft's).
 const CARDS_PER_TUFT := 3
+## A card's place in its tuft: a plain blade, neither the stem nor one that thins out.
+const CARD_BLADE_PLACE := 0.3
 const CARD_HALF_WIDTH := 16.0
 const CARD_TUFT_SHARE := 0.21
 
@@ -402,7 +404,7 @@ static func card_mesh(material: Material) -> ArrayMesh:
 			normals.append(Vector3.UP)
 			uvs.append(Vector2(CARD_HALF_WIDTH * (-1.0 if corner & 1 == 0 else 1.0), float(corner >> 1)))
 			roots.append(Vector2.ZERO)
-			colours.append(Color(cos(angle) * 0.5 + 0.5, sin(angle) * 0.5 + 0.5, float(card) / float(CARDS_PER_TUFT), 0.0))
+			colours.append(Color(cos(angle) * 0.5 + 0.5, sin(angle) * 0.5 + 0.5, float(card) / float(CARDS_PER_TUFT), CARD_BLADE_PLACE))
 		indices.append_array(PackedInt32Array([first, first + 1, first + 2, first + 1, first + 3, first + 2]))
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)

@@ -42,9 +42,9 @@ uniform float lay = 0.35;
 // more, from these distances.
 uniform float far_gain = 0.5;
 uniform vec2 far_gain_m = vec2(10.0, 35.0);
-// Mowers miss what grows against a kerb or a wall: a tuft that much of this away from
-// an edge grows up to edge_gain taller and drier. Tufts look only one way, at random,
-// so the long grass along an edge comes and goes.
+// Mowers miss what grows against a kerb or a wall: a tuft within edge_tap_m of an edge
+// grows up to edge_gain taller and drier. Tufts look only one way, at random, and many
+// don't look at all, so the long grass along an edge comes and goes.
 uniform float edge_tap_m = 0.5;
 uniform float edge_gain = 1.3;
 uniform float edge_reach_m = 60.0;
