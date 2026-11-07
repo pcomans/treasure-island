@@ -1164,6 +1164,14 @@ A focused view's target must lie inside the building's bounds. Pulling one wall 
 
 The Garden Walk zone (2026-11-07) was drawn past both ends of the walk and over the Cravath sidewalk. A pilot zone with `kerbs: false` removes the rule streets' kerbs, ramps and sidewalks inside its polygon, so the sidewalk stopped in hard diagonals against grass and the code review, not the render, named the cause. Stop such a polygon at the back of the street's sidewalk: plot the baseline `street_kerb_concrete` and `street_kerb_verge` triangles first and trace their back edge.
 
+## Frame every side of a neighbour the changed ground touches
+
+Garden Walk's wider terrain raised one block of accepted 490 Avenue of the Palms and tore the surface at the walk's north end (2026-11-07). The pack framed the sides under study, so arithmetic found the block's step at its far end and a reviewer's crop found the tear. Before the first review, list each neighbour side and junction inside the terrain diff and frame each one, and look again at every join the wider ground moved.
+
+## Bring a zone's ground under the street's back slope
+
+A rule street stays its back slope's run plus 0.2 m clear of a pilot zone, so paving drawn to the zone's outline leaves land, an OSM path ribbon and a grass slope between it and the sidewalk. At Garden Walk's ends these read as torn edges and dry-grass strips (2026-11-07). Set `surfaces.reach_m` and draw the layers on under the sidewalk's top. A top-down map of the generated records, coloured by material, shows such gaps after a regeneration without an engine run.
+
 ## Check a raised neighbour's floor when terrain moves
 
 The same override lifted the ground 1.6 m above the floor of accepted neighbour 490, and the fit test and the family A/B could not see it: walls still met the ground and the build was unchanged. When an override reaches a neighbour's wall, compare its floor with the new ground along that wall, and read a dated photo of its base before choosing between tapering the ground and moving the floor.

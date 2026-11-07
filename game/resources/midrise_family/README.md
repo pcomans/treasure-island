@@ -90,7 +90,7 @@ All are opt-in; configs without them build as before.
 |---|---|
 | palette `texture`, `tile_m`, `offset_m` | A tiling albedo under `rgb` as a multiplier. The wall and roof UVs are metres, so `tile_m` `[u, v]` is the tile's size on the wall; `offset_m` slides it, to put a panel joint at a chosen height. |
 | window or `grid_unit` `box` | `{"project": 0.05-1, "t": 0.03-0.5, "material": ...}`: a frame `t` thick round the opening, standing `project` out from the wall, with its inner faces running back to the wall plane. Support role, so it stays clear of the spray receiver. |
-| scheme `plaques` | Flat panels on a face, each `{"from": s, "to": s, "bottom": m, "top": m, "t": 0.03, "material": ...}`, heights above the block's floor: a building's name. Support role. A palette `texture_alpha` lets the texture's own alpha show the wall behind. |
+| scheme `plaques` | Flat panels on a face, each `{"from": s, "to": s, "bottom": m, "top": m, "t": 0.03, "material": ...}`, heights above the block's floor: a building's name, its texture one opaque panel. Support role. |
 | palette `receive_shadows` | `false` keeps cast shadows off a material: glass shows what it reflects, and shadow-map edges on it read as scallops. |
 | window, `grid_unit` or lobby door `panels` | Opaque panels in a light, each `[u0, u1, y0, y1, material]` as fractions of the light: a louvre over a window, a spandrel between two panes. A grid unit repeats them in each joined storey. |
 

@@ -2888,7 +2888,7 @@ static func _make_materials(ctx: Ctx) -> void:
 			return
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), entry.get("receive_shadows", true)]
 		if entry.has("texture"):
-			cache_key += "|%s|%s|%s|%s" % [entry.texture, entry.get("tile_m", [1.0, 1.0]), entry.get("offset_m", [0.0, 0.0]), entry.get("texture_alpha", false)]
+			cache_key += "|%s|%s|%s" % [entry.texture, entry.get("tile_m", [1.0, 1.0]), entry.get("offset_m", [0.0, 0.0])]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
@@ -2911,10 +2911,6 @@ static func _make_materials(ctx: Ctx) -> void:
 				material.uv1_scale = Vector3(1.0 / float(tile[0]), 1.0 / float(tile[1]), 1.0)
 				var offset: Array = entry.get("offset_m", [0.0, 0.0])
 				material.uv1_offset = Vector3(float(offset[0]) / float(tile[0]), float(offset[1]) / float(tile[1]), 0.0)
-				# Opt-in cut-out: the texture's own alpha shows the wall behind it.
-				if bool(entry.get("texture_alpha", false)):
-					material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-					material.alpha_scissor_threshold = 0.5
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

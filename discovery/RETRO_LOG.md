@@ -24293,3 +24293,27 @@ Comparing every record against the base commit found a change the author hadn't 
 - **What worked well:** computing floors and land from main's chunks exposed the 490 step that the A/B and fits can't show.
 - **What did not work well:** the brief didn't name the A/B's script and base file, so the reviewer went outside the permitted logs.
 - **What to change next time:** record a source key and pano on every `KNOWN_ISSUES.md` mismatch line, so a removal can be checked.
+
+### maceo-art — 2026-11-07 — second correction round: north end, 490's end wall, south mouth
+
+(Written before the commit under review; the render, fit and A/B results are in the hand-back to ROOT.)
+
+- What worked well: A top-down map of the generated records, coloured by material and drawn in the wall's own frame, showed what each join was made of after a regeneration with no engine run. It found the real cause of the torn edge, the gap a rule street keeps from a zone, where I had blamed the terrain. The Nov 2025 frames in an earlier batch (palms-nnw-end04, starview-nw01) showed 490's end wall and the walk's north end, which I had treated as unphotographed.
+- What did not work well: I handed back a neighbour's ground from the views I already had, so review found a tear I had not looked at and a step the floors and land numbers would have shown. Three regenerations went on small misses: a 1.25 m reach that stopped short of an OSM path bay, a plant rule in a zone without surfaces that placed nothing, and a sign a wall's clearance dropped without a word.
+- What the team should change next time: Search every earlier reference batch for a neighbour's other sides before judging its ground. Print each rule's placed count beside its expected count after a regeneration, so a dropped item shows before the render.
+
+### maceo-visual-review, round 2
+
+(Relayed verbatim by the coordinator; added by maceo-art.)
+
+- **What worked well:** author fixes from pixels, the swatch sheet and the wsw05 row made the re-check fast.
+- **What did not work well:** the neighbour pack had no north-corner or WSW-foot views, and the wider terrain added an unrecorded tear.
+- **What to change next time:** when a change touches an accepted neighbour, capture every side touching the changed ground and each junction.
+
+### maceo-code-review, round 2
+
+(Relayed verbatim by the coordinator; added by maceo-art.)
+
+- **What worked well:** rebuilding wall runs from the record settled the cue question exactly.
+- **What did not work well:** first tree positions ignored the `spacing/2` start and gave a false hit.
+- **What to change next time:** list the anchor, run map and views for every side a config edit touches in the hand-off.

@@ -231,8 +231,14 @@ function exactKeys(value, keys, label) {
 // along axis_xz from origin_xz. A way or line layer may add markings {edges,
 // centre}: painted edge lines and a dashed centre line along it (STREET_PAINT_KINDS
 // names, or null for none), as on a two-way cycle track.
+//
+// surfaces may add reach_m: its layers may run that far past the zone, under the
+// back slope of a street the zone meets, so the paving or bed comes up to the
+// sidewalk with no land showing between them (the street keeps its slope's run
+// clear of the zone), and that slope is then concrete rather than grass.
 function validateParkSurfaces(surfaces, label, minimumLift) {
-  exactKeys(surfaces, ["layers", "lift_m", "source_keys"], label);
+  exactKeys(surfaces, "reach_m" in surfaces ? ["layers", "lift_m", "reach_m", "source_keys"] : ["layers", "lift_m", "source_keys"], label);
+  invariant(surfaces.reach_m === undefined || (isFiniteNumber(surfaces.reach_m) && surfaces.reach_m > 0 && surfaces.reach_m <= 3), `${label} reach_m must lie in (0, 3] m`);
   invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m >= minimumLift - 1e-9 && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie a layer step over the road paint (${minimumLift} m) and inside the street-ground band`);
   invariant(Array.isArray(surfaces.source_keys) && surfaces.source_keys.length > 0 && surfaces.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} needs OSM source_keys`);
   invariant(Array.isArray(surfaces.layers) && surfaces.layers.length > 0, `${label} needs layers`);
@@ -1474,6 +1480,12 @@ export function generateStreetGround({
   const pilotGround = union("pilot ground zones", zoneRegions.filter((zone) => !zone.settings.kerbs).map((zone) => zone.region));
   const pilotGroundMargin = pilotGround.length === 0 ? [] :
     union("pilot ground zone margin", [pilotGround, boundaryBand("pilot ground zone outline", pilotGround, kerb.back_slope_run_m + 0.2)]);
+  // Where a zone's layers may lie: its region, and its reach_m past it.
+  for (const zone of zoneRegions) {
+    const reach = zone.settings.surfaces?.reach_m;
+    zone.layerRegion = reach ? union(`zone ${zone.id} reach`, [zone.region, boundaryBand(`zone ${zone.id} outline`, zone.region, reach)]) : zone.region;
+  }
+  const reachIndex = polygonIndex(union("zone reach", zoneRegions.filter((zone) => zone.settings.surfaces?.reach_m).map((zone) => zone.layerRegion)));
   const ruleOf = new Map();
   for (const street of rules?.streets ?? []) {
     for (const key of street.ways) ruleOf.set(key, street);
@@ -2256,7 +2268,7 @@ export function generateStreetGround({
     const probe = add(middle, scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
     const inner = add(middle, scale(skirt.edge.outward, -0.05));
     const planted = skirt.kind === "back" && plantedIndex.contains(inner);
-    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || vehicleIndex.contains(probe);
+    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || vehicleIndex.contains(probe) || reachIndex.contains(probe);
     if (planted) addPiece("planting", visible, height, tiledUv(2));
     else if (paved) addPiece("kerb", visible, height, roadFrameUv(nearestKerbLine(middle), middle, kerb.panel_m));
     else addPiece("verge", visible, height, worldUv);
@@ -2909,7 +2921,7 @@ export function generateStreetGround({
       polygon = strip(`park ${layer.id}`, line, offset - shape.width_m / 2, offset + shape.width_m / 2);
     }
     if (shape.minus_sources) polygon = difference(`park ${layer.id} minus`, polygon, shape.minus_sources.map(sourceGeometry));
-    return intersect(`park ${layer.id} in zone`, polygon, zone.region);
+    return intersect(`park ${layer.id} in zone`, polygon, zone.layerRegion);
   };
   const parkLayers = [];
   const parkLifts = new Map();
@@ -2918,8 +2930,8 @@ export function generateStreetGround({
   for (const [zoneIndex, zone] of groundZones.entries()) {
     const surfaces = zone.settings.surfaces;
     const shapes = zoneShapes.get(zone);
-    const later = groundZones.slice(zoneIndex + 1).filter((other) => boxesOverlap(zone.box, other.box) &&
-      multiArea(intersect(`zones ${zone.id} ${other.id}`, zone.region, other.region)) > 1e-8);
+    const later = groundZones.slice(zoneIndex + 1).filter((other) => boxesOverlap(boxOfMulti(zone.layerRegion), boxOfMulti(other.layerRegion)) &&
+      multiArea(intersect(`zones ${zone.id} ${other.id}`, zone.layerRegion, other.layerRegion)) > 1e-8);
     let covered = union(`park ${zone.id} later zones`, later.flatMap((other) => zoneShapes.get(other)));
     for (let index = surfaces.layers.length - 1; index >= 0; index -= 1) {
       const layer = surfaces.layers[index];

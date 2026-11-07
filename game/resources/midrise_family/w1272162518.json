@@ -1374,6 +1374,19 @@
         }
       ]
     },
+    "palms_corner": {
+      "material": "render",
+      "parapet_material": "render",
+      "plinth": {
+        "material": "base_dark",
+        "top": 0.3
+      },
+      "module": 50.0,
+      "upper": "blank",
+      "ground": {
+        "kind": "blank"
+      }
+    },
     "palms_podium": {
       "material": "concrete_dark",
       "parapet_material": "concrete_dark",
@@ -1494,6 +1507,30 @@
       ]
     },
     {
+      "id": "ene_nnw",
+      "storeys": 4,
+      "clip": [
+        {
+          "edge": 2,
+          "max": 16.5
+        },
+        {
+          "edge": 3,
+          "max": 0.4
+        }
+      ],
+      "parapet": {
+        "h": 1.0,
+        "t": 0.3
+      },
+      "faces": {
+        "e2": "palms_corner",
+        "e3": "palms_nnw_ene",
+        "court": "palms_court",
+        "return": "palms_court"
+      }
+    },
+    {
       "id": "ene",
       "storeys": 4,
       "floor_raise": 1.6,
@@ -1502,6 +1539,10 @@
         {
           "edge": 2,
           "max": 16.5
+        },
+        {
+          "edge": 3,
+          "min": 0.4
         }
       ],
       "parapet": {
@@ -1511,7 +1552,6 @@
       "faces": {
         "e1": "palms_sse_ene",
         "e2": "palms_ene",
-        "e3": "palms_nnw_ene",
         "court": "palms_court",
         "return": "palms_court"
       },
@@ -1667,7 +1707,7 @@
   ],
   "study_notes": {
     "observed": "Nov 2025 Street View: WSW frontage (white render, taupe brick loggia bays, two-storey brick-framed recess), north corner (charcoal brick, balcony stack, glazed lobby, white glazed corner, lower dark-brick wing); undated Apple overhead: parallel blocks around a landscaped courtyard, PV on the WSW block.",
-    "ground": "The east block's ground floor stands level with Garden Walk (about 1.6 m over the frozen-terrain floor of the Avenue of the Palms front), as Street View lm04 (Seven Seas Ave, Sep 2025, down the lane) and owner photo n1 (Nov 2026) show; its upper floors and roof keep their level.",
+    "ground": "The east block's ground floor stands level with Garden Walk (about 1.6 m over the frozen-terrain floor of the Avenue of the Palms front), as Street View lm04 (Seven Seas Ave, Sep 2025, down the lane) and owner photo n1 (Nov 2026) show; its upper floors and roof keep their level. Its NNW end wall, block ene_nnw, stays on the base floor with the wing beside it: the frozen land falls along that wall, and no step shows at their joint.",
     "inferred": "ENE paseo side (4-storey white/brown block; corroborated only by Star View NW and the medium-confidence Johnson St view), SSE end (secondary entrance, egress door, podium garage/service door/louvres) and courtyard faces. Storey heights, bay cadence, loggia/recess depths and roof items are production inference.",
     "footprint": "Frozen OSM quadrilateral kept as the outer ring; blocks tile it exactly. Courtyard deck at the second-floor level between the 6-storey WSW and 4-storey ENE blocks, closed at the north by a 3-storey wing. Floor at the median frozen terrain along the WSW front; higher terrain meets the walls, lower terrain exposes the dark plinth."
   }

@@ -250,7 +250,7 @@
         "w1001544695"
       ],
       "treatment": "new_district",
-      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars.",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars. Owner photo o5 (Nov 2026): the curb across the mouth of Garden Walk painted red, no car at it.",
       "set": {
         "centerline": null
       },
@@ -265,6 +265,10 @@
           "left": [
             [
               0,
+              81.5
+            ],
+            [
+              93,
               147
             ]
           ],
@@ -272,6 +276,16 @@
             [
               0,
               147
+            ]
+          ]
+        }
+      },
+      "red_curb": {
+        "w1001544695": {
+          "left": [
+            [
+              81.5,
+              93
             ]
           ]
         }

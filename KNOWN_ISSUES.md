@@ -25,8 +25,9 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
 
   A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
-- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk. Its west block, podium and the open lot south of it still sit on the 2023 excavation (land 1.1-3.9 m, photos show flat ground about 4 m), so the podium's east end meets a bank.
-- **Garden Walk (w1249412095):** the Cravath Street and north-end sidewalks still cross the walk's mouths, where owner photo o2 shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where the photos show concrete.
+- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk; the block's NNW end wall stays on the base floor with the wing beside it. Everything west of that still sits on the 2023 excavation (land 1.1-3.9 m, where Street View palms-wsw01, palms-n-corner02 and palms-nnw-end04 of Nov 2025 show flat ground about 4 m), so the podium's east end meets a bank and Johnson Street falls along the NNW end. The SSE end and the ENE wall also differ in detail from Street View wsw03 (Sep 2025) and owner photo n1 (Nov 2026).
+- **Star View Court (OSM w1212173437):** its walk side lacks the bed and the dark tile bays of owner photos n1 and n2 (Nov 2026), its stoops aren't modelled (n2: doors a few risers above the walk), and the bed along its north wall in Street View starview-nw01 (Nov 2025) is a concrete edge. A Star View pass is queued.
+- **Garden Walk (w1249412095):** Johnson Street's sidewalk still crosses the walk's north mouth, where Street View starview-nw01 (Nov 2025) shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where Street View ss02 (Jun 2026) shows concrete.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;

@@ -11,4 +11,4 @@ Wall tiles of the Maceo May mid-rise instance (`game/resources/midrise_family/r1
 | `panel_dark.png` | the low wing's flat metal panels: a strip of the source without its horizontal joint, neutralised and darkened, tiled to the vertical joints the photos show | dark grey flat metal panels with thin joints |
 | `rib_red.png` | the rust-red ribbed panels of the slots | rust-red horizontally ribbed metal siding |
 
-`maceo_letters.png` is not generated: the building's name stacked in DejaVu Serif Bold, drawn with ImageMagick on a transparent ground, for its plaque on the tower's return.
+`maceo_letters.png` is not generated: the building's name stacked in DejaVu Sans Bold, each letter on a thin pale ledge, drawn with ImageMagick on a flat pale ground, for its panel on the tower's return.
