@@ -119,7 +119,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - From the ditch side (frame D4 and the owner's bank photo) the cottage reads about 7 m further south than it stands, against the palm; it stays where the road frames put it.
   - A hairline of the old path's pale surface shows along the seal's seaward edge for about 7 m near s 15-21: the path lies under the lots by a centimetre and its own triangles come through. Fixing it means a higher lift for every lot, or a new surface under this one.
   - The cottage's bay throws a soft shadow onto the wall under it, blurrier than the footage's (a sun-shadow resolution limit, smaller since the bay went shallow).
-  - The ditch's mats and brush are crossed cards: at a walker's feet the slope reads as tufts over a painted thatch, not the owner's photo's deep tangle.
+  - The ditch's mats and brush are crossed cards: at a walker's feet the slope reads as tufts over a painted thatch, not the owner's photo's deep tangle, and from straight above, on the jetpack, they show as small crosses. The slope's 8,800 tussocks took the island's vegetation rows from about 31,500 to 37,800; nothing has profiled that yet.
   - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
   - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
