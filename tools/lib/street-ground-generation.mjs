@@ -69,7 +69,9 @@ export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street
 // ground (tools/lib/street-yard-generation.mjs): worn yard asphalt, compacted
 // yard gravel (beige-grey, or the pale grey of a fresh aggregate pad), grey
 // concrete rubble, black plastic sheeting over earth, plain poured concrete,
-// pale graded sand, dark excavated soil and shallow murky ponds.
+// pale graded sand, dark excavated soil and shallow murky ponds. promenade_* are
+// the Mersea promenade's worn old asphalt, fresh seal, decomposed granite, bark
+// mulch and crushed rock.
 export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_asphalt: "park-asphalt",
   park_concrete: "park-concrete",
@@ -80,6 +82,12 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
+  promenade_asphalt: "promenade-asphalt",
+  promenade_dg: "promenade-dg",
+  promenade_mulch: "promenade-mulch",
+  promenade_rock: "promenade-rock",
+  promenade_seal: "promenade-seal",
+  promenade_slab: "promenade-slab",
   black_plastic: "black-plastic",
   rubble_grey: "rubble-grey",
   yard_asphalt: "yard-asphalt",
@@ -114,11 +122,13 @@ const RECORD_KINDS = Object.freeze({
 // 4 nearly worn away; PAINT_WEAR_STEPS), for kind legend it is the cell of the legend
 // atlas (STREET_LEGEND_CELLS) plus STREET_LEGEND_ATLAS_CELLS times its wear step.
 // red_curb is curb paint, blue an accessible stall and blue_dark a filled one on the
-// Johnson St lot; sealant and patch are a lot's tar-sealed joints and patched strips.
-export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12 });
+// Johnson St lot; sealant and patch are a lot's tar-sealed joints and patched strips;
+// white_rolled, white_trace and yellow_trace are the Mersea promenade's thin rolled
+// bars and its old lines, worn nearly back to the road (wear step 0: they have their own).
+export const STREET_PAINT_KINDS = Object.freeze({ white: 0, yellow: 1, red: 2, green: 3, tactile: 4, stop_legend: 5, yellow_faded: 6, red_curb: 7, blue: 8, legend: 9, sealant: 10, patch: 11, blue_dark: 12, white_rolled: 13, white_trace: 14, yellow_trace: 15 });
 export const PAINT_VARIANT_STRIDE = 16;
 export const PAINT_WEAR_STEPS = 5;
-export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4, arrow_short: 5 });
+export const STREET_LEGEND_CELLS = Object.freeze({ tour_bus_parking: 0, arrow_straight: 1, arrow_left: 2, arrow_right: 3, accessible: 4, arrow_short: 5, shared_path: 6 });
 // The legend atlas's cell count (street_legends.png, street_paint.gdshader legend_cells).
 export const STREET_LEGEND_ATLAS_CELLS = 8;
 export const STREET_WEAR_CELLS = Object.freeze({ crack_a: 0, crack_b: 1, oil_a: 2, oil_b: 3, patch: 4, manhole: 5, drain: 6 });
@@ -500,7 +510,7 @@ export function validateStreetGroundRules(rules) {
   const lots = rules.lots.map(expandLotPattern);
   for (const lot of lots) {
     const label = `Street ground lot ${lot?.id}`;
-    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...["osm_exception", "pattern", "planted", "surface"].filter((field) => field in (lot ?? {}))], label);
+    exactKeys(lot, ["evidence", "hatches", "id", "islands", "legends", "paint_wear", "rows", "source_key", ...["osm_exception", "paint", "pattern", "planted", "surface"].filter((field) => field in (lot ?? {}))], label);
     invariant(Number.isInteger(lot.paint_wear) && lot.paint_wear >= 0 && lot.paint_wear < PAINT_WEAR_STEPS, `${label} paint_wear must be a wear step`);
     for (const hatch of lot.hatches) {
       exactKeys(hatch, ["id", "points_xz", "stripes"], `${label} hatch`);
@@ -510,7 +520,9 @@ export function validateStreetGroundRules(rules) {
     // A lot's own pavement where the photographs show it unlike the lots' asphalt:
     // a yard or park ground material draped over the whole lot at LOT_SURFACE_LIFT_M.
     if (lot.surface !== undefined) {
-      exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear"], `${label} surface`);
+      // seam_wear: the paint wear step of its joints (1: a dull old road's tar).
+      exactKeys(lot.surface, ["evidence", "material", "patch_strips", "seams", "wear", ...("seam_wear" in lot.surface ? ["seam_wear"] : [])], `${label} surface`);
+      invariant(lot.surface.seam_wear === undefined || lot.surface.seam_wear === 1, `${label} surface seam_wear must be 1`);
       exactKeys(lot.surface.wear, LOT_WEAR_FIELDS, `${label} surface wear`);
       for (const key of LOT_WEAR_FIELDS) invariant(isFiniteNumber(lot.surface.wear[key]) && lot.surface.wear[key] >= 0, `${label} surface wear.${key} must be non-negative`);
       // Long tar-sealed joints and patched strips, each along a line.
@@ -546,6 +558,20 @@ export function validateStreetGroundRules(rules) {
       invariant(island.fill === undefined || island.fill === "mulch", `${label} island ${island.id} fill must be mulch`);
       invariant(SAFE_ID.test(island.id) && Array.isArray(island.points_xz) && island.points_xz.length >= 3 && island.points_xz.every(isXZ), `${label} island ${island.id} needs 3+ points`);
     }
+    // Paint of its own kind and wear on the lot's pavement: a filled polygon, or a
+    // line (offset_m to its left, width_m wide, dash_m [painted, bare] if broken).
+    for (const mark of lot.paint ?? []) {
+      invariant(STREET_PAINT_KINDS[mark.kind] !== undefined && Number.isInteger(mark.wear) && mark.wear >= 0 && mark.wear < PAINT_WEAR_STEPS, `${label} paint needs a paint kind and a wear step`);
+      if (mark.points_xz !== undefined) {
+        exactKeys(mark, ["kind", "points_xz", "wear"], `${label} paint`);
+        invariant(Array.isArray(mark.points_xz) && mark.points_xz.length >= 3 && mark.points_xz.every(isXZ), `${label} paint polygon needs 3+ points`);
+      } else {
+        exactKeys(mark, ["kind", "line_xz", "wear", "width_m", ...["dash_m", "offset_m"].filter((field) => field in mark)], `${label} paint`);
+        invariant(Array.isArray(mark.line_xz) && mark.line_xz.length >= 2 && mark.line_xz.every(isXZ) && isFiniteNumber(mark.width_m) && mark.width_m > 0 && mark.width_m <= 0.3 &&
+          (mark.offset_m === undefined || isFiniteNumber(mark.offset_m)) &&
+          (mark.dash_m === undefined || (Array.isArray(mark.dash_m) && mark.dash_m.length === 2 && mark.dash_m.every((value) => isFiniteNumber(value) && value > 0))), `${label} paint line is malformed`);
+      }
+    }
     for (const legend of lot.legends) {
       exactKeys(legend, ["at_xz", "cell", "facing_xz", "length_m", "paint_wear", "width_m"], `${label} legend`);
       invariant(STREET_LEGEND_CELLS[legend.cell] !== undefined && isXZ(legend.at_xz) && isXZ(legend.facing_xz) && Math.hypot(...legend.facing_xz) > 1e-6 &&
@@ -556,9 +582,11 @@ export function validateStreetGroundRules(rules) {
   return { ...rules, lots, streets, wayOwner };
 }
 
-// The Johnson St lot, which OSM lacks: the one recorded exception to the snapshot
-// as the horizontal layout. osm_exception holds the reason, the approval, the aerial
-// with its date and zoom, and the traced outline, the only traced data. Everything
+// Recorded exceptions to the snapshot as the horizontal layout: the Johnson St lot,
+// which OSM lacks, and the Mersea promenade, one wide surface where OSM has two narrow
+// paths (they stay under it, unchanged). osm_exception holds the reason, the approval,
+// the dated source (an aerial with its date and zoom, or footage) and the traced
+// outline. A lot with a pattern has nothing else traced: everything
 // inside comes from the pattern, in the lot's own axes: s along the bearing from the
 // origin, t square to it, left of the bearing. A row's line runs along its aisle and
 // fills with as many stalls as fit at about the pattern's width. Accessible bays
@@ -568,7 +596,7 @@ export function validateStreetGroundRules(rules) {
 // arrows. curb_edges are the outline's edges (by their first point) with a raised
 // curb just inside them; shoulder is the ground behind some of them, a dark band
 // then pale gravel, offset outward from those edges.
-const EXCEPTION_LOT_ID = "johnson_lot";
+const EXCEPTION_LOT_IDS = Object.freeze(["johnson_lot", "mersea_promenade", "mersea_promenade_seal", "mersea_promenade_slab"]);
 const LOT_PATTERN_FIELDS = Object.freeze(["accessible", "arrows", "bearing_xz", "curb_edges", "depth_m", "lines", "origin_xz", "rows", "shoulder", "stall_width_m", "ticks", "zones"]);
 // About the least the raised band's clean-up keeps (bandRaised, 0.2 m wide).
 const LOT_CURB_WIDTH_M = 0.22;
@@ -587,11 +615,13 @@ const SHOULDER_JOIN_M = 1;
 function expandLotPattern(lot) {
   if (lot?.osm_exception === undefined) return lot;
   const label = `Street ground lot ${lot.id}`;
-  invariant(lot.id === EXCEPTION_LOT_ID, `${label}: only ${EXCEPTION_LOT_ID} is an exception to the OSM layout`);
+  invariant(EXCEPTION_LOT_IDS.includes(lot.id), `${label}: only ${EXCEPTION_LOT_IDS.join(", ")} are exceptions to the OSM layout`);
   const exception = lot.osm_exception;
-  exactKeys(exception, ["aerial", "approved", "outline_xz", "reason"], `${label} osm_exception`);
-  invariant(["aerial", "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== "") &&
-    Array.isArray(exception.outline_xz) && exception.outline_xz.length >= 3 && exception.outline_xz.every(isXZ), `${label} osm_exception needs its aerial, approval, reason and outline`);
+  const dated = "footage" in exception ? "footage" : "aerial";
+  exactKeys(exception, [dated, "approved", "outline_xz", "reason"], `${label} osm_exception`);
+  invariant([dated, "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== "") &&
+    Array.isArray(exception.outline_xz) && exception.outline_xz.length >= 3 && exception.outline_xz.every(isXZ), `${label} osm_exception needs its dated source, approval, reason and outline`);
+  if (lot.pattern === undefined) return lot;
   const pattern = lot.pattern;
   exactKeys(pattern, LOT_PATTERN_FIELDS, `${label} pattern`);
   const outline = exception.outline_xz;
@@ -1276,12 +1306,12 @@ function strip(label, points, from, to) {
   return union(label, quads);
 }
 
-// Dashes along a polyline at an offset to its left: dash metres painted, then as
-// many left bare, each dash a straight quad between its ends.
-function dashedStrip(label, points, offset, width, dash) {
+// Dashes along a polyline at an offset to its left: dash metres painted, then gap
+// (as many, unless given) left bare, each dash a straight quad between its ends.
+function dashedStrip(label, points, offset, width, dash, gap = dash) {
   const quads = [];
   const total = polylineLength(points);
-  for (let start = dash / 2; start + dash <= total; start += dash * 2) {
+  for (let start = dash / 2; start + dash <= total; start += dash + gap) {
     const ends = [pointAlong(points, start), pointAlong(points, start + dash)];
     const corners = ends.flatMap(({ point, tangent }) => {
       const left = [-tangent[1], tangent[0]];
@@ -1622,10 +1652,10 @@ export function generateStreetGround({
   const sidewalks = roads.filter((object) => object.road_visual_class === "pedestrian" && object.tags.footway === "sidewalk");
   const pedestrianIndex = partsIndex("pedestrian ways", roads.filter((object) => object.road_visual_class === "pedestrian").map((object) => object.geometry));
   const lots = objects.filter((object) => object.roles.includes("major_area") && object.tags.amenity === "parking" && nearPilot(object, 30));
-  // The lot OSM lacks stands on its traced outline, over the rounded end of the
-  // road it meets: the aerial's joint with the older pavement is straight, so the
-  // lot's sheet lies across that end. Its source key is the OSM way it meets, for
-  // the records' provenance.
+  // A lot OSM lacks stands on its traced outline, over the rounded end of the road
+  // it meets: the aerial's joint with the older pavement is straight, so the lot's
+  // sheet lies across that end. Its source key is the OSM way it meets or follows,
+  // for the records' provenance.
   const exceptionLots = (rules?.lots ?? []).filter((lot) => lot.osm_exception !== undefined).map((lot) => {
     invariant(playableObjects.has(lot.source_key), `Street ground lot ${lot.id} names ${lot.source_key}, which is not an OSM object`);
     const ring = lot.osm_exception.outline_xz.map(([x, z]) => [x, -z]);
@@ -2807,6 +2837,19 @@ export function generateStreetGround({
       }
       paintLot(STREET_PAINT_KINDS.white, intersect(`lot ${lot.id} ${hatch.id}`, union(`lot ${lot.id} ${hatch.id} paint`, parts), zone), lot.paint_wear, lotTop);
     }
+    for (const [index, mark] of (lot.paint ?? []).entries()) {
+      const label = `lot ${lot.id} paint ${index}`;
+      let shape;
+      if (mark.points_xz) {
+        const raw = mark.points_xz.map(([x, z]) => [x, -z]);
+        shape = [[ringArea(raw) > 0 ? raw : [...raw].reverse()]];
+      } else {
+        const line = mark.line_xz.map(([x, z]) => [x, -z]);
+        const offset = mark.offset_m ?? 0;
+        shape = mark.dash_m ? dashedStrip(label, line, offset, mark.width_m, mark.dash_m[0], mark.dash_m[1]) : strip(label, line, offset - mark.width_m / 2, offset + mark.width_m / 2);
+      }
+      paintLot(STREET_PAINT_KINDS[mark.kind], intersect(`${label} in lot`, shape, object.geometry), mark.wear, lotTop);
+    }
     for (const legend of lot.legends) {
       legendPiece(STREET_LEGEND_CELLS[legend.cell], [legend.at_xz[0], -legend.at_xz[1]], [legend.facing_xz[0], -legend.facing_xz[1]], legend.length_m, legend.width_m, lot.source_key, lotTop, legend.paint_wear);
     }
@@ -3049,7 +3092,7 @@ export function generateStreetGround({
     });
     const sealed = seams.length === 0 ? [] : openPavement(`lot ${lot.id} seams`, union(`lot ${lot.id} seam lines`, seams));
     if (sealed.length > 0) {
-      addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant));
+      addPiece("marking", sealed, lotStep("seam"), kindUv(STREET_PAINT_KINDS.sealant, lot.surface.seam_wear ?? 0));
       sources.marking.add(lot.source_key);
     }
     // Its cracks, patches and oil stains (under its joints and paint), anywhere
@@ -3507,7 +3550,8 @@ export function generateStreetGround({
     // Inside an OSM parking lot near the pilot.
     inLot: (point) => lotIndex.contains(point),
     // The lot OSM lacks, for the street clutter's parked cars.
-    exception_lots: exceptionLots.map(({ lot, object }) => ({ source_key: lot.source_key, geometry: object.geometry })),
+    // The lots that park cars: a promenade's exception lots have no pattern or rows.
+    exception_lots: exceptionLots.filter(({ lot }) => lot.pattern !== undefined || (lot.rows ?? []).length > 0).map(({ lot, object }) => ({ source_key: lot.source_key, geometry: object.geometry })),
   };
   return { records, summary, surfaceAt, site };
 }

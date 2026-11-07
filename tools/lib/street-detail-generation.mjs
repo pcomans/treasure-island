@@ -244,6 +244,10 @@ const UNPLANTABLE_MATERIALS = Object.freeze([
   "park_dg",
   "park_plaza_lens",
   "park_plaza_zigzag",
+  "promenade_asphalt",
+  "promenade_dg",
+  "promenade_seal",
+  "promenade_slab",
   "road_path",
   "road_path_concrete",
   "road_path_pedestrian",
@@ -268,9 +272,11 @@ const PLAYER_WIDTH_M = 0.7;
 // Street props keep a player's width clear of what they stand beside, except these:
 // the stock tanks stand in a tight row against the chain-link, as photographed, so
 // their plan capsules (a little longer than the pallets) may overlap each other and
-// a fence run this much (m). Anything else stays a player's width away. The
-// clearance flood still checks what that shuts in.
-const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter"]);
+// a fence run this much (m), and the promenade's timber baulks lie in short rows, end
+// to end, as do the road blocks at the ditch's road end. Anything else stays a player's width away. The clearance flood still
+// checks what that shuts in.
+const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter", "water_block"]);
+const standsTight = (prop, params) => PROPS_STANDING_TIGHT.includes(prop) || (prop === "log_seat" && params?.form === "baulk");
 const TIGHT_PROP_GAP_M = -0.3;
 // A rigid street-furniture set piece stands at the height under its centre. The most
 // the visible ground may rise into it elsewhere under its plan (m): past this a step
@@ -1427,7 +1433,7 @@ export function generateStreetDetail({
     // Low plants (grass clumps, planting slots) have no collision; drift planting may overlap them.
     const lowPlant = row.layer === "vegetation" && (row.kind === "grass_clump" || row.kind === "planting_slot");
     streetDetailPieces(row).forEach((piece, index) => {
-      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted, tightNeighbour: row.fence != null || PROPS_STANDING_TIGHT.includes(row.prop) });
+      occupied.push({ id: row.fence ? `${row.id}#${piece.label ?? index}` : row.id, points: piece.points, radius_m: Math.max(piece.radius, pit), lowPlant, planted, tightNeighbour: row.fence != null || standsTight(row.prop, row.prop_params) });
     });
   };
   rows.forEach(occupy);
@@ -1539,7 +1545,7 @@ export function generateStreetDetail({
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
-    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, false, null, PROPS_STANDING_TIGHT.includes(entry.prop));
+    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, false, null, standsTight(entry.prop, entry.params));
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);

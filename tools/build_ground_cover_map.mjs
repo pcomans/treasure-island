@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Draws the ground-cover map (tools/lib/ground-cover-map.mjs) from the
 // generated world and tools/config/ground-cover.json, and writes it to
-// game/resources/textures/world/ground_cover/cover_map.png. Regenerating the
+// game/resources/textures/world/ground_cover/cover_map.png, with the marsh's
+// distance map marsh_map.png beside it. Regenerating the
 // world (tools/build_godot_world.mjs) redraws it too; run this after changing
 // only the config. The determinism check (tools/check_godot_world_determinism.mjs)
 // fails while the committed map differs from a fresh draw.

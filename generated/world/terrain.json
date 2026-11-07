@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 317569
+    "sample_points": 329896
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "86783b8b6fd6182dcc0bb7d7473b3e735f70a9ac7b2b28bd943dfccc3ec3baa9"
+      "sha256": "2c0df37f80fe67b714abdb3a2cfae3ce1eb6fd69b8e36700dbeb91c192c42337"
     },
-    "corrected_cells": 193,
-    "leaves": 5176,
+    "corrected_cells": 213,
+    "leaves": 5763,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 297,
+    "neighbour_edge_vertices": 345,
     "refined_cell_bounds_m": [
       [
         0,
@@ -512,6 +512,24 @@
         96
       ],
       [
+        -352,
+        96,
+        -320,
+        128
+      ],
+      [
+        -320,
+        96,
+        -288,
+        128
+      ],
+      [
+        -288,
+        96,
+        -256,
+        128
+      ],
+      [
         0,
         96,
         32,
@@ -570,6 +588,30 @@
         96,
         640,
         128
+      ],
+      [
+        -480,
+        128,
+        -448,
+        160
+      ],
+      [
+        -352,
+        128,
+        -320,
+        160
+      ],
+      [
+        -320,
+        128,
+        -288,
+        160
+      ],
+      [
+        -288,
+        128,
+        -256,
+        160
       ],
       [
         0,
@@ -650,6 +692,24 @@
         160
       ],
       [
+        -480,
+        160,
+        -448,
+        192
+      ],
+      [
+        -320,
+        160,
+        -288,
+        192
+      ],
+      [
+        -288,
+        160,
+        -256,
+        192
+      ],
+      [
         32,
         160,
         64,
@@ -708,6 +768,18 @@
         160,
         704,
         192
+      ],
+      [
+        -320,
+        192,
+        -288,
+        224
+      ],
+      [
+        -288,
+        192,
+        -256,
+        224
       ],
       [
         448,
@@ -750,6 +822,24 @@
         192,
         704,
         224
+      ],
+      [
+        -352,
+        224,
+        -320,
+        256
+      ],
+      [
+        -320,
+        224,
+        -288,
+        256
+      ],
+      [
+        -288,
+        224,
+        -256,
+        256
       ],
       [
         384,
@@ -792,6 +882,24 @@
         224,
         672,
         256
+      ],
+      [
+        -416,
+        256,
+        -384,
+        288
+      ],
+      [
+        -384,
+        256,
+        -352,
+        288
+      ],
+      [
+        -352,
+        256,
+        -320,
+        288
       ],
       [
         -320,
@@ -840,6 +948,18 @@
         256,
         512,
         288
+      ],
+      [
+        -416,
+        288,
+        -384,
+        320
+      ],
+      [
+        -384,
+        288,
+        -352,
+        320
       ],
       [
         -352,
@@ -1382,8 +1502,8 @@
         672
       ]
     ],
-    "refined_cells": 193,
-    "refined_triangles": 12246,
+    "refined_cells": 213,
+    "refined_triangles": 13500,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1530,6 +1650,51 @@
           }
         ],
         "scope_area_m2": 6820.2
+      },
+      {
+        "edge_blend_m": 3,
+        "grade": {
+          "final_sweep_change_m": 0,
+          "free_nodes": 4462,
+          "kind": "harmonic"
+        },
+        "id": "mersea_ditch_promenade",
+        "name": "The ditch and the promenade in front of Mersea",
+        "regions": [
+          {
+            "id": "walk",
+            "rule": "profile"
+          },
+          {
+            "id": "marsh_floor",
+            "rule": "level"
+          },
+          {
+            "id": "marsh_bank_toe",
+            "rule": "level"
+          },
+          {
+            "id": "rock_rise",
+            "rule": "profile"
+          },
+          {
+            "id": "marsh_pool_floor",
+            "rule": "level"
+          },
+          {
+            "id": "marsh_pool_north_floor",
+            "rule": "level"
+          },
+          {
+            "id": "marsh_pool",
+            "rule": "sink"
+          },
+          {
+            "id": "marsh_pool_north",
+            "rule": "sink"
+          }
+        ],
+        "scope_area_m2": 10080.6
       }
     ]
   },

@@ -33,7 +33,7 @@ const SHORELINE_SCHEMA := "ti.shoreline/4"
 ## land's, world x / 10 and z / 10) and the concrete closure faces.
 const SHORELINE_RECORD_KINDS := {"shoreline-face:": "shoreline_face", "shoreline-slope:": "shoreline_riprap", "shoreline-verge:": "shoreline_verge", "shoreline-wall:": "shoreline_wall"}
 const SHORELINE_VERGE_MATERIAL := "shoreline_verge"
-const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "top"]
+const SHORELINE_BANDS := ["cobble", "driftwood", "heap", "inland", "top"]
 const SHORELINE_CLOSURE_KINDS := ["none", "ramp", "wall"]
 const SHORELINE_PROTOTYPE_MATERIALS := {"boulder": "shoreline_boulder", "log": "shoreline_driftwood", "plank": "shoreline_driftwood"}
 const SHORELINE_FIELDS := ["batches", "closures", "config", "generator", "lod", "overlay", "packing", "prototypes", "records", "schema_version", "seed", "segments", "visual_only", "water_y_m"]
@@ -157,7 +157,7 @@ const SURFACE_RECORD_FIELDS := ["surface_bias_m"]
 ## surfaces so VisibleGround can stand visuals on them.
 const PARK_SURFACE_MATERIAL_PREFIX := "park_"
 ## The yards' shared zone ground surfaces, draped the same way.
-const YARD_SURFACE_MATERIALS := ["black_plastic", "rubble_grey", "yard_asphalt", "yard_asphalt_pale", "yard_asphalt_fresh", "yard_shoulder_band", "yard_shoulder_gravel", "yard_concrete", "yard_gravel", "yard_gravel_pale", "yard_pond", "yard_sand_pale", "yard_soil_dark"]
+const YARD_SURFACE_MATERIALS := ["black_plastic", "rubble_grey", "promenade_asphalt", "promenade_dg", "promenade_mulch", "promenade_rock", "promenade_seal", "promenade_slab", "yard_asphalt", "yard_asphalt_pale", "yard_asphalt_fresh", "yard_shoulder_band", "yard_shoulder_gravel", "yard_concrete", "yard_gravel", "yard_gravel_pale", "yard_pond", "yard_sand_pale", "yard_soil_dark"]
 const BUILDING_LEVEL_FIELDS := ["flat_base_elevation_m", "source_height_m", "top_elevation_m"]
 const BUILDING_WALL_FIELDS := ["exterior_foundation_segments", "shared_wall_segments"]
 const CONTEXT_RECORD_FIELDS := [

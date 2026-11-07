@@ -745,6 +745,8 @@ export function placeStreetClutter({
       if (samples.some((point) => Math.hypot(point[0] - entrance[0], point[1] - entrance[1]) < piece.radius + ENTRANCE_CLEAR_M)) return "entrance";
     }
     for (const item of occupiedNear(samples, piece.radius + ITEM_CLEAR_M)) {
+      // A planted low plant has no collision, so it never takes a lot's stall.
+      if (lot && item.lowPlant && item.planted) continue;
       const clear = itemClearance(item, surface);
       for (const point of samples) {
         const near = item.points.length > 1 ? distanceToPolyline(point, item.points) : Math.hypot(point[0] - item.points[0][0], point[1] - item.points[0][1]);

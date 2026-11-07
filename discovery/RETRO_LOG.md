@@ -24476,3 +24476,75 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: reusing pad and row sampling scripts made the delta quick.
 - What did not work well: pad heights are only checkable by hand-run sampling.
 - What the team should change next time: if another building needs kerb-hugging pads, sample the kerb at build time.
+
+### mersea-ditch-art — 2026-11-06 — Phase 1: the owner's video and track, target identity and scope
+
+- What worked well: Checking the footage's transfer before extracting frames: it is HLG with Dolby Vision, and a plain extraction would have put every colour reading on the wrong curve. Calibrating the lens on far landmarks (Sutro, the Golden Gate towers, Alcatraz) gave 62 degrees and let poses be fitted and checked against OSM poles and corners instead of timing alone. Measuring hue and fine contrast at native resolution overturned the working theory: the game's floor was not too red, it was smooth orange-rust, while the real floor is redder but finely woven. The offline plan from the generated chunks showed the "boardwalk" was two thin ribbons with no engine run.
+- What did not work well: My first promenade pose fits looked fine until I evaluated residuals at the positions I actually reported, which exposed a wrongly named tent corner and a GPS bias. I read only the newest 60 hits of a view-plan search before saying no render existed and had to redo it exhaustively. I tried a Python venv before noticing ImageMagick already covered the need.
+- What the team should change next time: Report residuals at the reported pose, never the fit's own. Compare hue and grain at native resolution before accepting a colour complaint at face value: means hid the whole problem. Search a whole list before claiming absence.
+
+### mersea-ditch-art — 2026-11-07 — Phase 2: the ditch and promenade from the owner's video, to the first coherent render
+
+- What worked well: Generated plant cards and tiles through `tools/generate-texture` changed the study more than any tuning: the shrub, stems, grass, saplings, mulch, aggregate, mat and thatch each took about two minutes in parallel, and the first render with them read as a real place. Reading real objects against each other (a chair's height, the baulks' stations, the joint from three frames) fixed a wrong camera that had distorted the south end for two runs. Projecting the footage's blue pixels onto the floor's plane showed the pool hugging the wetland's outline, where my bank's 6 m run had put a slope. A temporary per-rule reject line found in one build why the marsh-side planting never appeared (the mulch lay on a shoreline overlay; the rule needed `visible_surfaces`).
+- What did not work well: I kept tuning palettes and densities for two runs when the fault was in the assets: a dark rush card can't become a thin pale stem by tinting, and oak balls can't become saplings. Set-piece clearance failures surfaced 4.5 minutes into each build, and I hit four in a row (cobbles against barriers, blocks against each other, a joint against the park's asphalt, a missing validator key) by changing one number at a time. My first render-versus-albedo fit was wrong, so r3's tones came out a third too bright: a straight fit across different textures hid that the tile's own mean had changed. I took five runs to the first hand-back where ROOT asked for the first coherent render.
+- What the team should change next time: When a study's look depends on plant or ground forms, generate those cards first and tune afterwards. Add a dry-run of street-detail's set-piece checks that doesn't need the whole world build. Calibrate a new texture's tint from one render of that texture, not from another's. Hand back at the first render that holds together, and list the polish that remains.
+
+### mersea-visual-review — 2026-11-07 — r5 of the Mersea ditch and promenade
+
+- What worked well: Same-scale crops of native renders against 4K frames, plus colour samples, exposed the flat stones and the mulch error.
+- What did not work well: There was no promenade before view and no overviews, and the pairs flatter distance reads while the worst defects sit at foot level.
+- What the team should change next time: Include a foot-level matched pair for each ground type and a before view for each surface.
+
+### mersea-code-review — 2026-11-07 — `1491eb6e`, the Mersea ditch and promenade
+
+- What worked well: Diffing the generated world row by row and rasterising land separated real damage from retriangulation.
+- What did not work well: The walk loop offered as cottage evidence stayed 1.7 m from every wall.
+- What the team should change next time: When a structure sits outside the fit test, walk into each side, and run one Compatibility launch for any `ground_cover.gdshader` change.
+
+### mersea-ditch-art — 2026-11-07 — Phase 2 review round: the bank, floor and water from the owner's bank photo
+
+- What worked well: Solving the owner's photo into a matched pose from known objects paid at once: its water traced onto the floor within a metre or two of the pool drawn from the D frames, its shrub band landed on the modelled toe, and the matched pair showed the bank was wrong in one look. Three new generated sources (flopped-grass tile, low mat, brush row) did more than the earlier rounds of tuning. Folding gravel and flopped grass into the grain's spare channels kept the sampler count at six.
+- What did not work well: I spent four rounds tuning the floor's mean toward a stipple before cropping the frames at full size, and read a uv_scale backwards (it is repeats per 10 m), which cost a render. Cards tuned at gameplay distance fell apart in a tele view and the other way round: wide crossed cards read as haystacks, single flat cards as sticks. I stopped a build to add two rules once I had seen them; I should have listed everything the photo shows before the first edit.
+- What the team should change next time: When a new reference arrives, make the matched pose first and list everything it shows against the current render before touching anything. Measure mixed surfaces by distribution. Give a low-density field rule a quick instance count before rendering: three of mine placed 14 to 22 plants.
+
+### mersea-visual-review — 2026-11-07 — round 2, the re-review of r13
+
+- What worked well: A red-coverage count turned "solid sheet" into a decision, and comparing neutral, Compatibility and main side by side surfaced black mats and fence domes.
+- What did not work well: The fence domes sit in a view no pair covers.
+- What the team should change next time: Add a matched pair for every walk view looking through the fence, and report red coverage by distribution.
+
+### mersea-code-review — 2026-11-07 — round 2, the re-check of `3530b035`
+
+- What worked well: Decoding the generated shoreline and comparing peak visible plants against Cityside turned two open questions into numbers.
+- What did not work well: `shoreline.json` passed in round one as a one-line diff that hid 14,000 moved stones.
+- What the team should change next time: Decode every packed generated file in a diff, and list changes to released ground in the hand-off.
+
+### mersea-ditch-art — 2026-11-07 — Phase 2 third round: red by distribution, solid rock, released ground
+
+- What worked well: Measuring the footage by share of pixels over a redness ratio replaced my reading of "red": nearly all of it is warm brown and a third is red, where my floor was a bimodal mix of olive and wine. Baking tints into the atlas fixed a renderer difference without touching the shared shader.
+- What did not work well: I widened a validator to make a band pass and never asked what it now allowed, so a thousand thigh-high stones stood on walkable land without collision. I changed a released lot's shoulder and a car's stall through side effects and didn't list either in the hand-off.
+- What the team should change next time: Treat a widened check as a decision to report, with its new limit. Diff generated rows against the base before every hand-off and list every change to released ground, including ones a new rule causes at a distance.
+
+### mersea-visual-review — 2026-11-07 — round 3, the narrow re-check of r16
+
+- What worked well: Comparing the same crop across before, r13 and r16 caught a kerb band the commit called softer.
+- What did not work well: A listing cut off by `head` nearly misreported Compatibility.
+- What the team should change next time: Every change to released ground should ship with before, previous and current crops and one measured ratio, and any aerial used for a car check should be in the set.
+
+### mersea-code-review — 2026-11-07 — round 3, the delta at `d89df708`
+
+- What worked well: Porting the wedge builder offline found the lip and hover, which no walk log shows.
+- What did not work well: All three rock walks took the same seaward line.
+- What the team should change next time: When a new collider stands in for visible geometry, measure it against what's drawn and walk it in both directions.
+
+### mersea-visual-review — 2026-11-07 — round 4, the final check of r18
+
+- What worked well: Zooming native originals beyond the supplied crops found the pile on the asphalt.
+- What did not work well: A scripted edge scan gave noise, so lip width rests on an eye comparison.
+- What the team should change next time: When a set piece moves near a kerb or paint, add a top-down check that it stays on its surface.
+
+### mersea-code-review — 2026-11-07 — round 4, the delta at `bb4fb9dc`
+
+- What worked well: Reusing the port made this a quick, exact before-and-after check.
+- What did not work well: The hull maths added a step to re-derive.
+- What the team should change next time: When a collider's fit is a known issue, keep the measurement script with the study.

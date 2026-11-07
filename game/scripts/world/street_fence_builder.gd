@@ -65,7 +65,7 @@ func build(document: Dictionary) -> Dictionary:
 				bay_boxes.append_array(kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), gate.get("leaves", []) as Array))
 		for banner_value: Variant in (fence as Dictionary).get("banners", []):
 			if banner_value is Dictionary:
-				kit.add_banner(cells, CELL_M, type, row.prop_params, _posts(banner_value), float((banner_value as Dictionary).get("height_m", 1.0)))
+				kit.add_banner(cells, CELL_M, type, row.prop_params, _posts(banner_value), float((banner_value as Dictionary).get("height_m", 1.0)), int((banner_value as Dictionary).get("art", -1)))
 		var group := Node3D.new()
 		group.name = "Fence__" + id.validate_node_name()
 		group.set_meta("street_detail_id", id)

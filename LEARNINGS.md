@@ -1193,3 +1193,31 @@ On 2026-11-07 hard-edged wedges hung down the Aracely hedge, and I reported them
 ## Compare every face a shared colour touches
 
 On 2026-11-07 a note to turn a cream corner olive went onto the gym's whole `fascia_edges`, and the cafe's upper tier, white in the entrance photos, came back khaki at 204,203,178 against 238-247. The corner seen from the west and the tier seen from the east are the same surface. Before editing a shared material, list the faces it covers and the photos that show each, and take a fixed-pose sample of each after the render.
+
+## Read HDR phone footage through its transfer, and anchor colours to it
+
+The owner's iPhone video of the ditch (2026-11-06) is HLG in BT.2020 with Dolby Vision. A plain ffmpeg frame came out flat and grey; tone-mapped by hand it looked right, but the curve still lifted the darks: the same lot asphalt read (96,88,86) in a frame and about (65,65,68) in the owner's SDR photo. Check `color_transfer` with ffprobe before extracting a frame, and set a material from the ratio to something the game already draws (here the lot's asphalt), not from a frame's raw values.
+
+## Measure a colour complaint's hue and grain before changing the colour
+
+The owner called the ditch "too red", and the first reading blamed an over-red palette. At native resolution the real floor was the redder of the two: about half its pixels crimson and red, against 1 % in the game, with mean colours almost equal. The game's fault was a smooth orange stain with 2-3 times less fine contrast. A mean colour would have hidden that, and desaturating would have made it worse. Compare hue histograms and local contrast at full resolution, and report what a complaint really means before tuning.
+
+## Ray-cast a ground shader through the matched pose before spending a render
+
+Porting the marsh branch of the ground shader to a short Node script, over the land's height raster and through the frame's pose, took minutes and ran in two seconds. Its first picture showed what no palette could fix: on land heights alone the floor began 30 m from the camera where the real water stands 12 m away, because the 32 m land grid smears a real bank. That led to a level floor in the terrain and a signed-distance map of the OSM outline. For a procedural ground, preview the form through a real pose before the first engine run.
+
+## A zone's ground, fences and yard rules run only when it is a pilot zone
+
+The Mersea promenade zone (2026-11-06) passed every schema check with `pilot: false` and would have drawn nothing: `streetGroundSettings` skips a zone that isn't a pilot, and fence and yard rules run over the pilot shapes alone. The first sign was an OSM fence row still reserving ground after a rule had cut it. A fence row with no `prop` is data, not a built fence: it holds its footprint in placement while nothing stands in the game, so read `prop` before saying a fence is built or unbuilt. Turning a zone into a pilot also starts building the OSM fences that reach its polygon, so keep the polygon tight or cut them by rule.
+
+## Solve a walking video's camera from known objects, not one assumed height
+
+Every ground projection of the Mersea video (2026-11-06) assumed the phone 1.15 m up, and it placed the poured slab's end 3 m short, drew a wide buff wedge where the frame shows a narrow band, and put the frame's B1 camera on a plaza the frame doesn't show. The check was a chair: 55 px tall at the distance its feet gave was 0.6 m. At 1.4 m, and 6 m further along the road, the same pixels put the joint, the baulks, the crossing and the bank's edge within a metre of where three other frames had them, and the plaza fell just below the frame, as it does in the footage. The height wasn't constant either: two later frames still fitted 1.15 m. Before tracing an outline from a frame, test the camera against an object of known size and a feature another frame has already fixed.
+
+## A rough surface's colour can be its specular
+
+The promenade's mulch, seal and verges (2026-11-06) wouldn't take their tints: blue stayed about 80 whether the albedo asked for 29 or 62, and warm asphalt read mauve. Plotting render against albedo across materials gave about 60 + 0.75x, an offset no tint could reach: StandardMaterial3D's default specular of 0.5 was reflecting the sky at a walker's grazing angle. Dropping it to 0.2 gave the tints back. If a tint moves a channel less than it should, measure two or three materials before changing the colour again, and set the specular for what the surface is.
+
+### Measure a mixed surface by its distribution, and look at it full size
+
+The Mersea floor took four render rounds (2026-11-06 to 07) of mean-colour tuning toward "a fine crimson stipple", which blended to a flat brown at any distance. Cropping the 4K frames at full size showed something else: ragged crimson drifts over dark litter, with lenses of straw and green. The numbers agreed: the footage's floor was mean sRGB 88,62,49 with luminance p10-p90 of 47-91 and a reddest tenth of 105,61,54; the render was 100,73,59 with 63-96 and 109,75,61. A mean can be right while the surface is wrong, and my eye was no better: the footage looked far more saturated than its mean. For any stippled or mixed ground, crop the reference at native size before designing, and compare mean, percentiles and the extreme deciles at the same box, the same scale.

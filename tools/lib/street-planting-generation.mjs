@@ -92,7 +92,13 @@ export const PLANT_WIDTHS_M = Object.freeze({
   nz_christmas_tree: Object.freeze([3.0, 3.4]),
   nz_flax: Object.freeze([1.4, 1.7, 2.0, 1.5]),
   pacific_reedgrass: Object.freeze([0.85, 1.05, 1.3, 2.2]),
-  pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1]),
+  pale_seeded_shrub: Object.freeze([0.7, 1.0, 1.1, 0.8, 1.05, 0.55]),
+  marsh_fringe: Object.freeze([2.8, 2.2, 1.0]),
+  marsh_stones: Object.freeze([0.6, 1.4, 0.5]),
+  marsh_stems: Object.freeze([0.36, 0.5]),
+  marsh_mat: Object.freeze([1.0, 0.7, 1.1]),
+  marsh_brush: Object.freeze([2.2, 1.7, 2.2]),
+  young_planting: Object.freeze([1.4, 1.7, 1.0, 1.3]),
   pittosporum_tobira: Object.freeze([1.5, 2.0, 2.5, 1.5, 1.8]),
   red_tip_shrub: Object.freeze([0.7, 0.9]),
   rush: Object.freeze([0.45, 0.6, 0.75, 1.5, 0.7, 0.85]),
@@ -128,7 +134,7 @@ const EDGE_CLEAR_M = 0.1;
 // piers), that no crown reaches over; so is any ground added later until it is
 // listed here.
 export const SPILL_GROUNDS = Object.freeze([
-  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch",
+  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock",
   "street_kerb_planting", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland",
 ]);
 const SPILL = new Set(SPILL_GROUNDS);

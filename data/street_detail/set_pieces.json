@@ -1830,6 +1830,362 @@
       "yaw": 0.4775,
       "reason": "One of the eight galvanised stock-tank planters on pallets in a row along the chain-link at the east edge of the Mersea lot's Avenue A strip; their plants (a dark red New Zealand flax and dull green shrubs) are the rule planter_plants'.",
       "reference": "Street View Sep 2025 inside the Mersea lot: pano UmL4Ss_-CFTPXI4O98FkOA (x -346.4, z 179.1) heading 340 and pano LtXShSEN6YyhB4uQoFoS-A (x -328.1, z 205.1) heading 330: a row of eight galvanised oval stock tanks on pallets along the chain-link at the strip's east edge; positions from the 2026-05-26 aerial (level 19), where their dark plants stand against the fence from about z 172 to 187 (the street props' player-width margins; gaps either shut or clearly open), position production inference"
+    },
+    {
+     "id": "promenade_restroom_cottage",
+     "kind": "site_structure",
+     "prop": "restroom_cottage",
+     "params": {},
+     "xz": [-377.65, 250.22],
+     "yaw": 2.086,
+     "reason": "The white gabled restroom cottage on the promenade, and the boarded enclosure on its north-west end. It is not in the frozen OSM building inventory, so it is a site structure, a recorded exception on the pattern of the Johnson St lot (owner, 2026-11-06: add it, outside the scored inventory; the 213-unit count is unchanged). Only sides the footage shows carry detail; the enclosure's far sides stay plain.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=286 (B4), t=300-310 (B5), t=360 (B9) and t=118 (D4), Mersea ditch study contact sheet."
+    },
+    {
+     "id": "promenade_baulk_1",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.5
+     },
+     "xz": [-367.47, 299.21],
+     "yaw": 2.176,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_2",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.5
+     },
+     "xz": [-369.24, 296.3],
+     "yaw": 1.966,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_3",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 0.9
+     },
+     "xz": [-370.49, 293.67],
+     "yaw": 2.586,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_4",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.4
+     },
+     "xz": [-390.93, 261.0],
+     "yaw": 2.156,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_5",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.4
+     },
+     "xz": [-392.73, 258.23],
+     "yaw": 1.976,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_6",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.4
+     },
+     "xz": [-394.26, 255.31],
+     "yaw": 2.226,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_baulk_7",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {
+      "form": "baulk",
+      "size_m": 2.4
+     },
+     "xz": [-396.15, 252.58],
+     "yaw": 2.006,
+     "reason": "A dark squared timber baulk lying along the seaward edge of the road; they lie in short rows.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=262 (B3), t=305 (B5), t=360 (B9)."
+    },
+    {
+     "id": "promenade_chair_1",
+     "kind": "chair",
+     "prop": "slab_chair",
+     "params": {},
+     "xz": [-360.89, 314.9],
+     "yaw": 2.12,
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
+    },
+    {
+     "id": "promenade_chair_2",
+     "kind": "chair",
+     "prop": "slab_chair",
+     "params": {},
+     "xz": [-362.25, 312.1],
+     "yaw": 1.67,
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
+    },
+    {
+     "id": "promenade_chair_3",
+     "kind": "chair",
+     "prop": "slab_chair",
+     "params": {},
+     "xz": [-362.7, 310.29],
+     "yaw": 2.02,
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
+    },
+    {
+     "id": "promenade_chair_4",
+     "kind": "chair",
+     "prop": "slab_chair",
+     "params": {},
+     "xz": [-364.3, 307.87],
+     "yaw": 2.27,
+     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
+    },
+    {
+     "id": "promenade_tub_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {},
+     "xz": [-388.93, 233.67],
+     "yaw": 0.4,
+     "reason": "A round ribbed galvanised tub of bronze blades at the lawn's corner by the road.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=322 (B6), t=349 (B8)."
+    },
+    {
+     "id": "promenade_tub_row_1_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-395.31, 223.5],
+     "yaw": 0.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_2",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-397.28, 220.02],
+     "yaw": 1.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_3",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-399.25, 216.54],
+     "yaw": 1.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_1_4",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-401.22, 213.06],
+     "yaw": 2.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_1",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-405.16, 206.09],
+     "yaw": 1.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_2",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-406.64, 203.48],
+     "yaw": 1.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_3",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-408.24, 200.94],
+     "yaw": 2.0,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_tub_row_2_4",
+     "kind": "site_structure",
+     "prop": "galvanised_tub",
+     "params": {
+      "plant": "mound"
+     },
+     "xz": [-409.81, 198.38],
+     "yaw": 2.5,
+     "reason": "A galvanised tub with a low dark-green mound, in the row along the lawn's road edge.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=316, t=334, t=340 (B7), read by ground projection."
+    },
+    {
+     "id": "promenade_canary_palm",
+     "kind": "tree",
+     "prop": "canary_date_palm",
+     "params": {
+      "variant": 6,
+      "scale": 1.0
+     },
+     "xz": [-388.5, 230.56],
+     "yaw": 0.9,
+     "reason": "The tall slim-trunked palm on the lawn by the road.",
+     "reference": "Owner video IMG_0960, 2026-11-06: t=118 (D4), t=286 (B4), t=316, t=322 (B6), t=349 (B8); the rays agree within 4 m."
+    },
+    {
+     "id": "ditch_concrete_box",
+     "kind": "site_structure",
+     "prop": "concrete_box",
+     "params": {},
+     "xz": [-327.0, 223.5],
+     "yaw": 0.3,
+     "reason": "The small concrete box on the ditch's far bank.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=116 (D3)."
+    },
+    {
+     "id": "ditch_cobbles_road_end",
+     "kind": "site_structure",
+     "prop": "cobble_pile",
+     "params": {
+      "length_m": 5.0
+     },
+     "xz": [-304.4, 241.4],
+     "yaw": -2.632,
+     "reason": "A spread of rounded pale and brown cobbles on the gravel between the Johnson St lot's curb and the red barriers, where the road ends at the ditch.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=112 (D2) and t=118 (D4); owner photos, Nov 2026 (ditch 3)"
+    },
+    {
+     "id": "ditch_cobbles_west_curb",
+     "kind": "site_structure",
+     "prop": "cobble_pile",
+     "params": {
+      "length_m": 3.0,
+      "width_m": 2.4,
+      "rise_m": 0.34
+     },
+     "xz": [-284.3, 222.3],
+     "yaw": -0.851,
+     "reason": "The cobble pile behind the Johnson St lot's west curb, at its drainage gap.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=112 (D2) and t=118 (D4); owner photos, Nov 2026 (ditch 3)"
+    },
+    {
+     "id": "ditch_road_block_1",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-302.31, 237.68],
+     "yaw": -2.583,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_2",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-303.93, 238.65],
+     "yaw": -2.633,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_3",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-305.54, 239.62],
+     "yaw": -2.588,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_4",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-307.16, 240.58],
+     "yaw": -2.623,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_5",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-308.77, 241.55],
+     "yaw": -2.573,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "ditch_road_block_6",
+     "kind": "site_structure",
+     "prop": "water_block",
+     "params": {},
+     "xz": [-310.39, 242.52],
+     "yaw": -2.613,
+     "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
+     "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
     }
   ]
 }

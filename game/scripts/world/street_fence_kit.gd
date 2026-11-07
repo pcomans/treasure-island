@@ -79,6 +79,11 @@ const GATE_LEAF_LIFT_M := 0.05
 ## the fabric: Gate 5, Nov 2025).
 const GATED_TYPES := ["chain_link_slatted", "chain_link", "chain_link_screened"]
 const BANNER_COLOR := Color(0.9, 0.9, 0.88)
+## The printed banners (tools/lib/street-fence-generation.mjs STREET_FENCE_BANNER_ART_CELLS).
+const BANNER_ART := preload("res://game/resources/textures/world/street/street_fence_banners.png")
+const BANNER_BACK_UV := Vector2(0.52, 0.52)
+const BANNER_ART_COLUMNS := 2
+const BANNER_ART_ROWS := 4
 const SCREEN_BACKLIGHT := Color(0.73, 0.73, 0.73)
 ## Visible ranges (m): a fence is long and low, so it reaches as far as a lamp pole.
 const RANGE_M := 260.0
@@ -117,6 +122,7 @@ var _screens: Dictionary = {}
 var _screen_shadow: StandardMaterial3D
 var _slats: Dictionary = {}
 var _banner: StandardMaterial3D
+var _banner_art: StandardMaterial3D
 
 
 func _init() -> void:
@@ -179,6 +185,14 @@ func _init() -> void:
 	_banner.albedo_color = BANNER_COLOR
 	_banner.roughness = 0.8
 	_banner.cull_mode = BaseMaterial3D.CULL_DISABLED
+	# The printed panels of the Mersea promenade's fence: an original atlas, its cells
+	# in rows of BANNER_ART_COLUMNS; vinyl, a little glossier than a bedsheet.
+	_banner_art = StandardMaterial3D.new()
+	_banner_art.resource_name = "street_fence_banner_art"
+	_banner_art.albedo_texture = BANNER_ART
+	_banner_art.roughness = 0.62
+	_banner_art.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_banner_art.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	# Blended surfaces cast no shadow: an opaque, shadow-only copy of each screen does.
 	_screen_shadow = StandardMaterial3D.new()
 	_screen_shadow.resource_name = "street_fence_screen_shadow"
@@ -282,6 +296,7 @@ func commit(cell: Dictionary) -> Dictionary:
 	for colour: String in SLATS:
 		_add_surface(solid, cell["slats_" + colour], _slats[colour])
 	_add_surface(solid, cell.banner, _banner)
+	_add_surface(solid, cell.banner_art, _banner_art)
 	return {
 		"solid": solid if solid.get_surface_count() > 0 else null,
 		"fabric": fabric if fabric.get_surface_count() > 0 else null,
@@ -315,6 +330,7 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"slats_brown": Quads.new(),
 			"slats_black": Quads.new(),
 			"banner": Quads.new(),
+			"banner_art": Quads.new(),
 		}
 	return cells[key]
 
@@ -501,7 +517,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 ## A banner tied to a chain-link fence between two grounded ends: a plain white
 ## sheet height_m tall, centred on the fence's height, on its outer face (the
 ## side away from the inside; a centred fence's left).
-func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, height_m: float) -> void:
+func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, ends: PackedVector3Array, height_m: float, art := -1) -> void:
 	if ends.size() != 2 or type not in GATED_TYPES:
 		return
 	var fence_h := height_of(type, params)
@@ -510,7 +526,25 @@ func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dic
 	var shift := outward * 0.045
 	var bottom := maxf(0.1, (fence_h - height_m) * 0.5)
 	var cell := _cell(cells, cell_size_m, (ends[0] + ends[1]) * 0.5)
-	(cell.banner as Quads).wall(ends[0] + shift, ends[1] + shift, bottom, bottom + height_m, 0.0, Vector2(1.0, 1.0))
+	if art < 0:
+		(cell.banner as Quads).wall(ends[0] + shift, ends[1] + shift, bottom, bottom + height_m, 0.0, Vector2(1.0, 1.0))
+		return
+	# A printed panel reads from the path side: its art runs left to right there.
+	var a := ends[0] + shift
+	var b := ends[1] + shift
+	var u0 := float(art % BANNER_ART_COLUMNS) / float(BANNER_ART_COLUMNS)
+	var u1 := u0 + 1.0 / float(BANNER_ART_COLUMNS)
+	var v0 := float(art / BANNER_ART_COLUMNS) / float(BANNER_ART_ROWS)
+	var v1 := v0 + 1.0 / float(BANNER_ART_ROWS)
+	var normal := Vector3(b.z - a.z, 0.0, -(b.x - a.x)).normalized()
+	var up := Vector3.UP
+	(cell.banner_art as Quads).quad([a + up * bottom, b + up * bottom, b + up * (bottom + height_m), a + up * (bottom + height_m)],
+		[Vector2(u1, v1), Vector2(u0, v1), Vector2(u0, v0), Vector2(u1, v0)], normal)
+	# Its back is bare pale vinyl: a corner of the plain parchment cell, held a little behind.
+	var back := -outward * 0.02
+	var plain := BANNER_BACK_UV
+	(cell.banner_art as Quads).quad([b + back + up * bottom, a + back + up * bottom, a + back + up * (bottom + height_m), b + back + up * (bottom + height_m)],
+		[plain, plain, plain, plain], -normal)
 
 
 # ---------------------------------------------------------------- panels

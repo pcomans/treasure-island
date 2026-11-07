@@ -99,7 +99,7 @@ export const SHORELINE_DRIFTWOOD_MATERIAL = "shoreline_driftwood";
 export const SHORELINE_OVERLAY_PREFIX = "shoreline";
 // Placement batches: cobbles inside the outline; the top row, the heap and the
 // driftwood outside it.
-export const SHORELINE_BANDS = Object.freeze(["cobble", "driftwood", "heap", "top"]);
+export const SHORELINE_BANDS = Object.freeze(["cobble", "driftwood", "heap", "inland", "top"]);
 // A stone tone: [brightness, warm share, dark share, pale share] (the shader's
 // stone families; the rest are grey and olive), see riprap.gdshader.
 export const SHORELINE_TONE_LENGTH = 4;
@@ -116,6 +116,10 @@ export const SHORELINE_RECORD_MATERIALS = Object.freeze({
 export const SHORELINE_CLOSURE_KINDS = Object.freeze(["none", "ramp", "wall"]);
 // Cobbles stand on walkable land with no collision: at most this far above it.
 export const SHORELINE_COBBLE_MAX_TOP_M = 0.15;
+// An inland stone bank's stones: how high over the land and how far from the outline they
+// may stand. Unlike the cobbles they are solid (shoreline_builder.gd gives the band a body).
+export const SHORELINE_INLAND_MAX_TOP_M = 0.8;
+export const SHORELINE_INLAND_MAX_REACH_M = 6.0;
 // Stones and logs outside keep at least this far beyond the outline.
 export const SHORELINE_OUTSIDE_CLEARANCE_M = 0.1;
 // A rock ground lies this far over the draped band it covers (three draped
@@ -149,8 +153,9 @@ const CAP_INSET_M = 0.05;
 const MINIMUM_TRIANGLE_AREA_M2 = 1e-6;
 const SAFE_ID = /^[a-z0-9_]+$/u;
 
-const CONFIG_FIELDS = ["closure", "closures", "mounds", "notes", "overlay_bias_m", "rock_grounds", "schema_version", "seed", "segments", "slope", "stones", "structures", "tones"];
+const CONFIG_FIELDS = ["closure", "closures", "inland_stones", "mounds", "notes", "overlay_bias_m", "rock_grounds", "schema_version", "seed", "segments", "slope", "stones", "structures", "tones"];
 const ROCK_GROUND_FIELDS = ["id", "reason", "reference", "s_m", "source_key"];
+const INLAND_STONE_FIELDS = ["fill", "from_xz", "id", "reach_m", "reason", "reference", "segment", "size_m", "to_xz", "top_m"];
 const TONE_SETTINGS_FIELDS = ["blend_m", "palettes"];
 const MOUND_FIELDS = ["centerline_xz", "crest_min_m", "crest_y_m", "gradient", "half_width_m", "id", "reason", "reference", "segment", "taper_m"];
 const SLOPE_FIELDS = ["berm", "clamp_reach_m", "columns", "dem_fit_m", "end_cap_bottom_y_m", "gradient_m_per_m", "gradient_smoothing_m", "relief_m", "relief_wavelength_m", "section_m", "shoulder_m", "station_m", "toe_y_m", "top_blend_m", "waterline"];
@@ -418,6 +423,24 @@ export function shorelineSettings(config) {
     invariant(config.segments.some((segment) => segment.source_key === ground.source_key), `Shoreline rock ground ${ground.id} names ${ground.source_key}, which no segment takes`);
     invariant(Array.isArray(ground.s_m) && ground.s_m.length === 2 && ground.s_m.every(isFiniteNumber) && ground.s_m[1] > ground.s_m[0], `Shoreline rock ground ${ground.id} s_m must be [start, end] along the outline`);
     for (const field of ["reason", "reference"]) invariant(typeof ground[field] === "string" && ground[field].trim() !== "", `Shoreline rock ground ${ground.id} needs ${field}`);
+  }
+  // A local rock bank inside the outline, where the footage shows the riprap standing
+  // on the land itself: quarry stones within reach_m of the outline, between the
+  // shore points nearest from_xz and to_xz, their tops top_m above the land.
+  invariant(Array.isArray(config.inland_stones), "Shoreline inland_stones must be a list");
+  // shoreline_builder.gd draws one body along all the inland stones it finds.
+  invariant(config.inland_stones.length <= 1, "Shoreline inland_stones may name one bank");
+  for (const bank of config.inland_stones) {
+    exactKeys(bank, INLAND_STONE_FIELDS, `Shoreline inland stones ${bank?.id}`);
+    invariant(typeof bank.id === "string" && SAFE_ID.test(bank.id) && !ids.has(bank.id), `Shoreline inland stones ${bank.id} need a unique lower_snake id`);
+    ids.add(bank.id);
+    invariant(segmentIds.has(bank.segment), `Shoreline inland stones ${bank.id} name unknown segment ${bank.segment}`);
+    for (const key of ["fill", "reach_m"]) invariant(isFiniteNumber(bank[key]) && bank[key] > 0, `Shoreline inland stones ${bank.id} ${key} must be positive`);
+    requireRange(bank.size_m, 0, `Shoreline inland stones ${bank.id} size_m`);
+    requireRange(bank.top_m, 0, `Shoreline inland stones ${bank.id} top_m`);
+    invariant(bank.top_m[1] <= SHORELINE_INLAND_MAX_TOP_M, `Shoreline inland stones ${bank.id} may rise at most ${SHORELINE_INLAND_MAX_TOP_M} m`);
+    for (const key of ["from_xz", "to_xz"]) invariant(Array.isArray(bank[key]) && bank[key].length === 2 && bank[key].every(isFiniteNumber), `Shoreline inland stones ${bank.id} ${key} must be [x, z]`);
+    for (const field of ["reason", "reference"]) invariant(typeof bank[field] === "string" && bank[field].trim() !== "", `Shoreline inland stones ${bank.id} need ${field}`);
   }
   invariant(Array.isArray(config.mounds), "Shoreline mounds must be a list");
   for (const mound of config.mounds) {
@@ -2664,6 +2687,31 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
       }
       invariant(placedPlank, `Shoreline plank ${k} has no stones to rest on`);
     }
+    // Inland stones, last so they move nothing placed above: crest blocks on the land,
+    // sunk until only their tops stand out, wholly inside the outline.
+    for (const bank of settings.inland_stones.filter((entry) => entry.segment === segment.id)) {
+      const [from, to] = [bank.from_xz, bank.to_xz].map(([x, z]) => outline.nearestS([x, -z])).sort((a, b) => a - b);
+      const meanSize = (bank.size_m[0] + bank.size_m[1]) / 2;
+      const target = Math.ceil(((to - from) * bank.reach_m * bank.fill) / (Math.PI * (meanSize * 0.42) ** 2));
+      const rng = random(seed, `${segment.id}:inland:${bank.id}`);
+      let placed = 0;
+      for (let attempt = 0; attempt < target * 12 && placed < target; attempt += 1) {
+        const sAt = lerp(from, to, rng());
+        const section = sectionAtS(sAt);
+        const plan2 = planAt(section, -bank.reach_m * rng());
+        const size = pickSize(bank.size_m, rules.crest.size_skew, rng);
+        const prototype = shapeFor(size, rng);
+        const o = orient(prototype, [0, 1, 0], 16, rng, crestPosture);
+        const radius = o.radius * size;
+        if (!fits(plan2, radius, 0.8) || blocked(plan2, radius, true)) continue;
+        const ground = landAt(plan2);
+        if (ground == null) continue;
+        const stone = makeStone({ band: "inland", s: sAt, d: -1, plan2, size, prototype, o, bedY: ground + pick(bank.top_m, rng) - (o.high - o.low) * size, settle: false });
+        if (stone.placed.some((point) => outline.signedDistance([point[0], -point[2]]) > -0.01)) continue;
+        keep(stone);
+        placed += 1;
+      }
+    }
     const openWater = sections.filter((section) => !section.clamp).map((section) => section.water_m);
     segmentSummaries.push({
       id: segment.id,
@@ -2939,7 +2987,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         // The heap and cobbles are shaded by their texture and the shader's
         // contact darkening; the big stones of the top row and the wood also
         // cast shadows.
-        cast_shadow: (band === "top" && !pebble) || band === "driftwood",
+        cast_shadow: ((band === "top" || band === "inland") && !pebble) || band === "driftwood",
         placements: [],
       });
     }
@@ -2973,7 +3021,7 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
   // falls as the stones thin out; the underlay in the gaps stands in for the
   // stones by that share. Fitted here as smoothstep(fade[0], fade[1], x) to
   // the actual stones, so the shader's stand-in follows the thinning.
-  const covering = stones.filter((stone) => stone.band !== "driftwood" && stone.band !== "cobble")
+  const covering = stones.filter((stone) => !["cobble", "driftwood", "inland"].includes(stone.band))
     .map((stone) => ({ area: stone.radius * stone.radius, reach: reachOf(stone) }));
   const coverArea = covering.reduce((sum, stone) => sum + stone.area, 0);
   const lost = (x) => 1 - covering.reduce((sum, stone) => {

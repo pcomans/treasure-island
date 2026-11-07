@@ -8,8 +8,10 @@ extends RefCounted
 ## stones and heap), the low cobbles in the band inside the outline and the
 ## driftwood, each segment's stones and underlay in their own materials (its
 ## stone tone, blended into its neighbours' at its ends). Visual only, like the
-## Yerba Buena context: no collision and no spray receiver. The band inside the
-## outline is an ordinary chunk overlay; it and the shoulder share
+## Yerba Buena context: no collision and no spray receiver, but for the inland
+## stones, which stand on walkable land and get a coarse body of their own
+## (_inland_body). The band inside the outline is an ordinary chunk overlay; it
+## and the shoulder share
 ## BAND_GROUND_FAMILY, the dry grass-and-dirt verge at the top of the riprap, so
 ## the verge runs on past the outline to the stones.
 
@@ -33,6 +35,15 @@ const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 ## The ground cover family of the verge: the band inside the outline (a chunk
 ## overlay, see world_chunk_builder.gd) and the shoulder outside it.
 const BAND_GROUND_FAMILY := "verge"
+## The inland stones' body: what it blocks (a street prop's layer, so the player's mask
+## has it and the camera's doesn't), the length of one wedge, how steeply it climbs from
+## the land to the stones' tops, how far it reaches below them, and how high in their
+## tops it stands, as a share of them from the lowest.
+const PHYSICS_STREET_PROP := 1 << 3
+const INLAND_BODY_STEP_M := 12.0
+const INLAND_BODY_SLOPE := 0.7
+const INLAND_BODY_DEPTH_M := 2.0
+const INLAND_BODY_TOP_SHARE := 0.7
 
 static var _riprap := {}
 
@@ -121,7 +132,6 @@ static func _record_material(material_key: String) -> Material:
 func build(document: Dictionary) -> Dictionary:
 	var root := Node3D.new()
 	root.name = "GeneratedShoreline"
-	root.set_meta("visual_only", true)
 	var triangles := 0
 	var mesh_instances := 0
 	# Each segment's stones and underlay take their own materials: its tone,
@@ -167,6 +177,7 @@ func build(document: Dictionary) -> Dictionary:
 	root.add_child(stones)
 	var batches := 0
 	var instances := 0
+	var inland: Array[AABB] = []
 	for batch_value: Variant in document.batches:
 		var batch: Dictionary = batch_value
 		var prototype: Dictionary = prototypes[str(batch.prototype)]
@@ -182,7 +193,10 @@ func build(document: Dictionary) -> Dictionary:
 			var at := index * GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH
 			var rotation := Quaternion(transforms[at + 3], transforms[at + 4], transforms[at + 5], transforms[at + 6]).normalized()
 			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
-			multi_mesh.set_instance_transform(index, Transform3D(basis, Vector3(transforms[at], transforms[at + 1], transforms[at + 2])))
+			var placed := Transform3D(basis, Vector3(transforms[at], transforms[at + 1], transforms[at + 2]))
+			multi_mesh.set_instance_transform(index, placed)
+			if str(batch.band) == "inland":
+				inland.append(placed * (prototype.mesh as ArrayMesh).get_aabb())
 		var node := MultiMeshInstance3D.new()
 		node.name = str(batch.id).validate_node_name()
 		node.multimesh = multi_mesh
@@ -204,6 +218,8 @@ func build(document: Dictionary) -> Dictionary:
 		batches += 1
 		instances += count
 		triangles += int(prototype.triangles) * count
+	if not inland.is_empty():
+		root.add_child(_inland_body(inland))
 	return {
 		"ok": true,
 		"node": root,
@@ -213,6 +229,77 @@ func build(document: Dictionary) -> Dictionary:
 		"multimesh_batches": batches,
 		"boulders": instances,
 	}
+
+
+## The inland stones stand on walkable land, so their band is solid, in a few coarse
+## shapes rather than one a stone: along its length, a wedge every INLAND_BODY_STEP_M that
+## climbs from the land to the stones' tops at the band's inner edge and runs on to its outer
+## edge, its ends meeting its neighbours' so a foot finds no step. A walker climbs onto the
+## rocks instead of wading through them, and goes on to the shore as anywhere else. There is
+## one band: the config allows no more. stones are their bounds in the world.
+func _inland_body(stones: Array[AABB]) -> StaticBody3D:
+	var extremes := [stones[0], stones[0]]
+	var middle := Vector2.ZERO
+	for stone: AABB in stones:
+		var at := stone.get_center()
+		middle += Vector2(at.x, at.z) / stones.size()
+		if at.z < (extremes[0] as AABB).get_center().z:
+			extremes[0] = stone
+		if at.z > (extremes[1] as AABB).get_center().z:
+			extremes[1] = stone
+	var first: Vector3 = (extremes[0] as AABB).get_center()
+	var last: Vector3 = (extremes[1] as AABB).get_center()
+	var along := Vector2(last.x - first.x, last.z - first.z).normalized()
+	# Inland: the side of the band toward the island's middle, the world's origin.
+	var inward := Vector2(along.y, -along.x)
+	if inward.dot(middle) > 0.0:
+		inward = -inward
+	var bins := {}
+	for stone: AABB in stones:
+		var at := stone.get_center()
+		var key := int(floor(Vector2(at.x, at.z).dot(along) / INLAND_BODY_STEP_M))
+		if not bins.has(key):
+			bins[key] = []
+		(bins[key] as Array).append(stone)
+	var keys: Array = bins.keys()
+	keys.sort()
+	var rows: Array[Dictionary] = []
+	for key: int in keys:
+		var tops := PackedFloat32Array()
+		var near := -INF
+		var far := INF
+		for stone: AABB in bins[key]:
+			var at := stone.get_center()
+			var reach := maxf(stone.size.x, stone.size.z) / 2.0
+			near = maxf(near, Vector2(at.x, at.z).dot(inward) + reach)
+			far = minf(far, Vector2(at.x, at.z).dot(inward) - reach)
+			tops.append(stone.end.y)
+		tops.sort()
+		rows.append({"key": key, "top": tops[int(tops.size() * INLAND_BODY_TOP_SHARE)], "near": near, "far": far})
+	var body := StaticBody3D.new()
+	body.name = "InlandStones"
+	body.collision_layer = PHYSICS_STREET_PROP
+	body.collision_mask = 0
+	for index in rows.size():
+		var row: Dictionary = rows[index]
+		var points := PackedVector3Array()
+		for side in 2:
+			# Each end stands halfway to its neighbour's wedge.
+			var other: Dictionary = rows[clampi(index + side * 2 - 1, 0, rows.size() - 1)]
+			var top := (float(row.top) + float(other.top)) / 2.0
+			var near := (float(row.near) + float(other.near)) / 2.0
+			var far := (float(row.far) + float(other.far)) / 2.0
+			var foot := top - INLAND_BODY_DEPTH_M
+			var toe := near + INLAND_BODY_DEPTH_M / INLAND_BODY_SLOPE
+			for corner: Vector2 in [Vector2(far, foot), Vector2(far, top), Vector2(near, top), Vector2(toe, foot)]:
+				var plan := along * ((int(row.key) + side) * INLAND_BODY_STEP_M) + inward * corner.x
+				points.append(Vector3(plan.x, corner.y, plan.y))
+		var shape := ConvexPolygonShape3D.new()
+		shape.points = points
+		var holder := CollisionShape3D.new()
+		holder.shape = shape
+		body.add_child(holder)
+	return body
 
 
 ## An ArrayMesh from a mesh dictionary: vertices and normals (packed Vector3

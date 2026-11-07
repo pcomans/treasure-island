@@ -11,7 +11,8 @@
 #   1 straight arrow, 2 left-turn arrow, 3 right-turn arrow (painted about 1.2 m across, 4.8 m along)
 #   4 the International Symbol of Access (painted about 1.5 m square)
 #   5 short, wide aisle arrow (painted about 1 m across, 2 m along)
-#   6-7 spare (black)
+#   6 the Mersea promenade's shared-path mark: bicycle and walker between two chevrons (painted about 1.25 m across, 2.8 m along, drawn as it reads from a low eye)
+#   7 spare (black)
 # Needs ImageMagick and the DejaVu Sans Bold font, both in the
 # devcontainer image; the output is the same byte for byte on every run.
 #   tools/draw_street_legends.sh [output.png]
@@ -40,5 +41,15 @@ convert -size 300x300 xc:black -fill white -stroke white \
 # 5: the Johnson St lot's aisle arrow at 1 x 2 m (100 x 200 px): head and shaft of
 # about equal length, the shaft under half the head's width (Nov 2026 photograph).
 convert -size 100x200 xc:black -fill white -draw 'polygon 50,0 100,100 69,100 69,200 31,200 31,100 0,100' -resize '256x512!' "${work}/c5.png"
-for cell in 6 7; do convert -size 256x512 xc:black "${work}/c${cell}.png"; done
+# 6: the shared-path mark, drawn at 540 x 340 px as it reads from a low eye: a chevron above and below,
+# points to the far end, and a bicycle and a walker between (IMG_0960, t=305).
+convert -size 540x340 xc:black -fill none -stroke white -strokewidth 13 \
+  -draw 'polyline 70,62 270,16 470,62' -draw 'polyline 70,96 270,50 470,96' \
+  -draw 'polyline 70,290 270,324 470,290' -draw 'polyline 70,254 270,288 470,254' \
+  -strokewidth 11 -draw 'circle 150,200 150,158' -draw 'circle 258,200 258,158' \
+  -draw 'polyline 150,200 190,146 234,146 258,200' -draw 'line 182,160 212,200' -draw 'line 150,200 212,200' -draw 'line 186,126 200,146' \
+  -fill white -stroke none -draw 'circle 372,138 372,116' \
+  -draw 'polygon 354,160 396,160 408,212 392,214 402,250 382,252 372,216 352,252 334,246 356,204' \
+  -draw 'polygon 396,160 450,190 442,204 390,178' -draw 'polygon 354,160 318,206 332,214 366,176' -resize '256x512!' "${work}/c6.png"
+convert -size 256x512 xc:black "${work}/c7.png"
 convert "${work}"/c{0,1,2,3,4,5,6,7}.png +append -colorspace Gray -depth 8 -strip -define png:exclude-chunks=date,time "${out}"

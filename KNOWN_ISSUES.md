@@ -106,7 +106,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The dumpster group at heading 10 stands farther right than in the photo.
   - The dumpsters have no finish yet.
   - The Sep 2025 photos of the strip show no cars; its row comes from the May 2026 aerial.
-- **Johnson St lot** (the one recorded exception to the OSM layout; L2 accepted, L3 open):
+- **Johnson St lot** (a recorded exception to the OSM layout, with the Mersea promenade; L2 accepted, L3 open):
   - The tall pole with a dome camera at its south-west curb (owner photo, ditch 1) isn't built.
   - Its west part sits up to about 1.2 m below its middle: the terrain slopes where the real lot looks flat. The terrain stays as it is.
   - The west curb's drainage gap and the rock pile behind it (owner photo, ditch 3) aren't built.
@@ -125,6 +125,29 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The long side of the 655 building (OSM w34313513) reads blank in the lot views, where the photos show dark glazing (seen in review, 2026-11-06).
   - Lot trees vary only through `spreading_broadleaf` variants 0 and 1. Variants 2 and 3 are the old wide forms, 12 to 14 m across at the kit's smallest scale against the photos' 6 to 8 m.
   - At its south-east corner the Sep 2025 photo at 351 Avenue H shows the Job Corps sign, its planting, a chain-link fence and the bus shelter about 8 m from the camera. None of the first three is built, and the shelter (OSM n1249019421) stands about 15 m east of that.
+
+- **Mersea ditch and promenade** (owner video and track, 2026-11-06):
+  - The owner's "boardwalk" is the wide paved promenade, a recorded exception to the OSM layout like the Johnson St lot. Its close footage stops at about z 236, so north of there, to the fence corner seen from the walk, it is plain surface and paint.
+  - Shot list for the owner, to finish it: from about (-400, 236) north past the tent to Mersea's west side, looking both ways along the walk; the ditch's north end, from the 9th Street side.
+  - The rust-steel sculpture on the lawn by the promenade isn't built. An owner 3D scan exists: https://www.kiriengine.app/share/download/bc9ac0d2f54245a6ae13a65ba1849253
+  - Plants at the ditch and along the walk are described by form; their species are unconfirmed.
+  - OSM's chain-link w1212173468 across the walk isn't built, by rule: the footage runs through its line, and the owner walked through it.
+  - Mersea's tent w1001544698 is plain massing where the footage shows its glazed end; it is accepted work, left unchanged by this study.
+  - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
+  - The Johnson St lot's asphalt reads bluer than the footage's from the road end (frame D4).
+  - From the ditch side (frame D4 and the owner's bank photo) the cottage reads about 7 m further south than it stands, against the palm; it stays where the road frames put it.
+  - A hairline of the old path's pale surface shows along the seal's seaward edge for about 7 m near s 15-21, and pale pinholes about a metre apart along the seal's joint at s 28.5: the path lies under the lots by a centimetre and its own triangles come through. Fixing it means a higher lift for every lot, or a new surface under this one.
+  - The cottage's bay throws a soft shadow onto the wall under it, blurrier than the footage's (a sun-shadow resolution limit, smaller since the bay went shallow).
+  - The ditch's mats and brush are crossed cards: at a walker's feet the slope reads as tufts over a painted thatch, not the owner's photo's deep tangle, and from straight above, on the jetpack, they show as small crosses. Accepted as a known limit (visual review, 2026-11-07); the planned ground-dressing work should address it.
+  - The slope's 8,800 tussocks took the island's vegetation rows from about 31,500 to 37,800. Their cost hasn't been profiled.
+  - Any land edit re-rolls the riprap: the Mersea study's terrain moved 27,193 shoreline stones a little, out to the far shore, because each stone's draw follows the ones before it. `shoreline.json` is packed, so its diff shows none of it.
+  - In the Compatibility renderer vertex colours come out darker than in Forward+, so tinted cards and `shade_low` feet read dark on the web. The ditch's plants carry their tones in `marsh_atlas.png` to stay clear of it, except the dark scrub.
+  - Mersea lot's cars: a planted low plant no longer takes a lot's stall, so two cars came back nearer the aerial's north-east gathering at about (-335, 78). A 0.44 m2 pocket by the field fence still bars the stall at (-330.8, 113.1), on the terrain the ditch re-meshed; its car moved 5 m along the row. That stall's cell name is shared with the stall at (-345.1, 204.4) (`island_lot_cars` cells aren't unique across the lot's rows), so the car at the Avenue A strip's west edge went 20 m along that edge to (-357.2, 183.4).
+  - The ditch's water blocks stand level on a shoulder that falls 4% along them: their corners sit up to 0.11 m clear of the ground or 0.13 m into it.
+  - The promenade's rock bank has one coarse body (`shoreline_builder.gd`): it hovers up to 1.68 m over bare land at the ramp's start and north end, where the stones thin out, and its two end faces are invisible walls.
+  - The marsh's straw flecks look like flat splats at 2x zoom.
+  - `street_paint.gdshader`'s kinds 13-15 use up the 16-slot stride (`PAINT_VARIANT_STRIDE`): a new paint kind means widening it.
+  - The marsh's floor level and the tile sizes are constants in both `ground_cover.gdshader` and the configs (`terrain-overrides.json`, `ground-cover-map.mjs`); change them together.
 - **Parked cars:** Avenue I's review is held, so its cars are unjudged.
 - **Shoreline:**
   - Two small dark tips remain at the north slipway: one at the grass corner of the ramp's head, one at its water end.

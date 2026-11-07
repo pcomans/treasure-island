@@ -53,6 +53,8 @@ import {
   SHORELINE_BOULDER_MATERIAL,
   SHORELINE_CLOSURE_KINDS,
   SHORELINE_COBBLE_MAX_TOP_M,
+  SHORELINE_INLAND_MAX_REACH_M,
+  SHORELINE_INLAND_MAX_TOP_M,
   SHORELINE_DRIFTWOOD_MATERIAL,
   SHORELINE_OUTSIDE_CLEARANCE_M,
   SHORELINE_OVERLAY_MATERIAL,
@@ -139,6 +141,12 @@ const STREET_GROUND_RECORDS = Object.freeze({
   "yard-asphalt": ["street_paint", "yard_asphalt", "none", false],
   "yard-asphalt-pale": ["street_paint", "yard_asphalt_pale", "none", false],
   "yard-asphalt-fresh": ["street_paint", "yard_asphalt_fresh", "none", false],
+  "promenade-asphalt": ["street_paint", "promenade_asphalt", "none", false],
+  "promenade-dg": ["street_paint", "promenade_dg", "none", false],
+  "promenade-mulch": ["street_paint", "promenade_mulch", "none", false],
+  "promenade-rock": ["street_paint", "promenade_rock", "none", false],
+  "promenade-seal": ["street_paint", "promenade_seal", "none", false],
+  "promenade-slab": ["street_paint", "promenade_slab", "none", false],
   "yard-shoulder-band": ["street_paint", "yard_shoulder_band", "none", false],
   "yard-shoulder-gravel": ["street_paint", "yard_shoulder_gravel", "none", false],
   "yard-gravel": ["street_paint", "yard_gravel", "none", false],
@@ -1428,7 +1436,9 @@ function validateFenceRow(row, grounded, inBoundary, groundAt) {
 // unit rotation with positive, and for a stone uniform, scale. Then each stone
 // is placed and checked against the island the player walks on: cobbles lie
 // wholly inside it and no higher than SHORELINE_COBBLE_MAX_TOP_M above the
-// land (the player walks over them, with no collision); every other stone and
+// land (the player walks over them, with no collision); an inland stone stands
+// inside it too, within SHORELINE_INLAND_MAX_REACH_M of it and no higher than
+// SHORELINE_INLAND_MAX_TOP_M above the land (its band has a body); every other stone and
 // log keeps SHORELINE_OUTSIDE_CLEARANCE_M clear of it on the water side, and
 // one that lies under a walkable pier (the playable boundary's pier
 // extensions) tops out at least 1 m below the land edge, under the deck.
@@ -1594,8 +1604,9 @@ function validateShoreline(worldRoot, manifest, records) {
         const z = oz + columns[0][2] * vx + columns[1][2] * vy + columns[2][2] * vz;
         top = Math.max(top, y);
         const distance = nearBoundary(x, z);
-        if (batch.band === "cobble") {
-          invariant(inside(x, z) && distance > 0.005, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
+        if (batch.band === "cobble" || batch.band === "inland") {
+          invariant(inside(x, z) && distance > 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) reaches the playable boundary`);
+          invariant(batch.band !== "inland" || distance <= SHORELINE_INLAND_MAX_REACH_M, `Shoreline inland stone in ${batch.id} at (${ox}, ${oz}) stands ${distance.toFixed(3)} m inside the island edge`);
         } else {
           invariant(!inside(x, z) && distance >= SHORELINE_OUTSIDE_CLEARANCE_M - 0.005, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) comes within ${distance.toFixed(3)} m of the island edge`);
           underPier ||= walkable(x, z);
@@ -1604,6 +1615,9 @@ function validateShoreline(worldRoot, manifest, records) {
       if (batch.band === "cobble") {
         const land = landAt(ox, oz);
         invariant(land != null && top <= land + SHORELINE_COBBLE_MAX_TOP_M + 1e-6, `Shoreline cobble in ${batch.id} at (${ox}, ${oz}) rises ${(top - land).toFixed(3)} m above the land`);
+      } else if (batch.band === "inland") {
+        const land = landAt(ox, oz);
+        invariant(land != null && top <= land + SHORELINE_INLAND_MAX_TOP_M + 1e-6, `Shoreline inland stone in ${batch.id} at (${ox}, ${oz}) rises ${(top - land).toFixed(3)} m above the land`);
       } else if (underPier) {
         const land = edgeLandAt(ox, oz);
         invariant(land != null && top <= land - 1.0, `Shoreline ${batch.band} stone in ${batch.id} at (${ox}, ${oz}) under a walkable pier reaches ${top.toFixed(3)} m, within 1 m of the land edge`);
