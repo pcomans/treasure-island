@@ -225,7 +225,14 @@ void fragment() {
 	float own = clamp(1.0 - (cover.r + cover.g + cover.b + cover.a), 0.0, 1.0);
 	vec3 mix_settings = vec3(dry_threshold, bare_threshold, green_dryness) * own
 		+ recipe_lawn * cover.r + recipe_straw * cover.g + recipe_dry_field * cover.b + recipe_bare * cover.a;
-	float fade = smoothstep(fade_start_m, fade_end_m, length(VERTEX));
+#ifdef GROUND_DRESSING_CAPTURE
+	// The capture's camera recentres as the player moves, so a distance from it would
+	// move what the grass grows by; the capture reads the near ground's, where it stands.
+	float view_m = 0.0;
+#else
+	float view_m = length(VERTEX);
+#endif
+	float fade = smoothstep(fade_start_m, fade_end_m, view_m);
 	float n_patch = value_noise(p / patch_scale_m);
 	float n_fine = value_noise(p / (patch_scale_m * 0.31) + vec2(17.31, 5.13));
 	float n_blend = value_noise(p / 7.3 + vec2(3.71, 29.17));
@@ -264,7 +271,7 @@ void fragment() {
 			region = (1.0 - smoothstep(marsh_radii.x, marsh_radii.y, reach)) * smoothstep(1.2, 1.6, ground_y) * marsh_amount;
 		}
 		if (region > 0.0) {
-			float dist = length(VERTEX);
+			float dist = view_m;
 			float n_mid = value_noise(p / 5.7 + vec2(23.7, 11.1));
 			float n_wide = value_noise(p / 23.0 + vec2(71.3, 37.9));
 			float n_patch8 = value_noise(p / 8.0 + vec2(19.3, 83.1));

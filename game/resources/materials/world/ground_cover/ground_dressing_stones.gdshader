@@ -56,8 +56,9 @@ void vertex() {
 		vec2 map_uv = ground_uv(at);
 		vec4 surface = textureLod(ground_surface, map_uv, 0.0);
 		float lying = max(-surface.b, 0.0) * smoothstep(0.35, 0.75, surface.a) * in_window(map_uv);
-		float rubble = step(1.0, lying);
-		float amount = lying - rubble;
+		// Rubble is flagged past 1; filtering blends the flag at a heap's edge, so decode it softly.
+		float rubble = smoothstep(0.95, 1.05, lying);
+		float amount = clamp(lying - rubble, 0.0, 1.0);
 		float stand = clamp((share - rank) / (0.3 * share + 0.0001), 0.0, 1.0) * (1.0 - smoothstep(0.7 * ring_end_m, ring_end_m, dist));
 		// Rubble lies in pieces of every size, up to well over the stones in a field.
 		float radius = mix(stone_radius_m.y, stone_radius_m.x, pow(1.0 - rank, mix(9.0, 5.0, rubble))) * stand * mix(0.7 + 0.6 * h2.y, 0.45 + 1.1 * h2.y, rubble) * (1.0 + 1.6 * rubble);
@@ -70,6 +71,8 @@ void vertex() {
 			float step_uv = 0.5 * ground_window.z;
 			vec2 slope = vec2(textureLod(ground_surface, map_uv + vec2(step_uv, 0.0), 0.0).r - textureLod(ground_surface, map_uv - vec2(step_uv, 0.0), 0.0).r,
 				textureLod(ground_surface, map_uv + vec2(0.0, step_uv), 0.0).r - textureLod(ground_surface, map_uv - vec2(0.0, step_uv), 0.0).r);
+			// A sample past the window's edge or under a prop's mask reads a cliff: keep it to about 45 degrees.
+			slope = clamp(slope, vec2(-1.0), vec2(1.0));
 			// Most are rounded lumps; some are flat shards of concrete and brick.
 			float shard = step(0.82, h2.z);
 			vec3 stretch = mix(vec3(1.0, 0.7 + 0.4 * h.x, 0.75 + 0.4 * h.y), vec3(1.7, 0.42, 0.8), shard);

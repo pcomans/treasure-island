@@ -193,8 +193,9 @@ void vertex() {
 				colour *= mix(1.0, along, 0.35 + 0.65 * detail) * (1.0 + (one_blade - 0.5) * blade_contrast * detail);
 				colour *= 1.0 - (1.0 - thatch_shade) * is_lying * long_grass;
 				tint = mix(colour, seed_head * (0.8 + 0.4 * h.y), 0.8 * head * seeded);
-				// Sun through a blade lifts it off the ground's colour, so it fades with the detail.
-				backlight = translucency * detail;
+				// Sun through a blade lifts it off the ground's colour, so it fades with the detail,
+				// and before the tuft's reach, so tufts shrinking away don't glow.
+				backlight = translucency * detail * (1.0 - smoothstep(0.4 * reach, 0.7 * reach, dist));
 			}
 		}
 	}
