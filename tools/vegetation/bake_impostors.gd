@@ -30,7 +30,7 @@ const Kit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const TextureImport := preload("res://tools/vegetation/texture_import.gd")
 ## Longest side of the saved image of one view; the bake renders at twice this and halves it.
 const PIXELS := {
-	"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 256,
+	"mexican_fan_palm": 256, "canary_date_palm": 256, "monterey_cypress": 512, "sydney_blue_gum_young": 256, "island_oak_young": 128,
 	"monterey_pine": 256, "spreading_broadleaf": 256, "nz_christmas_tree": 192, "eucalyptus_mature": 256, "weeping_broadleaf": 256, "norfolk_island_pine": 128,
 	"indian_hawthorn": 96, "pittosporum_tobira": 96, "red_tip_shrub": 64, "conical_shrub": 128, "nz_flax": 64,
 }
