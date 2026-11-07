@@ -1647,7 +1647,7 @@
    "reference": "Owner photos o1-o5, n1, n2 (Nov 2026); Street View 55 Cravath St and Seven Seas Ave (Sep 2025); Esri World Imagery captures of 2025-08-29 and 2026-05-26",
    "shape": {
     "type": "polygon",
-    "points_xz": [[-228.25, 216.46], [-227.39, 216.21], [-197.64, 181.12], [-197.1, 181.58], [-226.86, 216.66], [-227.77, 217.39], [-187.81, 295.8], [-146.3, 274.64], [-143.34, 280.43], [-180.5, 299.36], [-154.84, 349.7], [-151.43, 351.33], [-147.81, 356.22], [-141.1989869256088, 352.7078509706502], [-127.04812270646428, 336.3887504485217], [-125.23488931511667, 337.96106869509333], [-144.6923276164404, 360.39983191302], [-144.71, 360.98], [-148.56, 365.66], [-146.19, 367.6], [-153.23, 376.2], [-155.34, 374.48], [-157.0, 375.64], [-158.41, 377.27], [-159.82, 378.92], [-237.2, 227.08]]
+    "points_xz": [[-228.25, 216.46], [-227.39, 216.21], [-197.64, 181.12], [-197.1, 181.58], [-226.86, 216.66], [-227.77, 217.39], [-187.81, 295.8], [-146.3, 274.64], [-143.34, 280.43], [-180.5, 299.36], [-154.84, 349.7], [-151.43, 351.33], [-147.81, 356.22], [-141.1989869256088, 352.7078509706502], [-127.04812270646428, 336.3887504485217], [-125.23488931511667, 337.96106869509333], [-144.6923276164404, 360.39983191302], [-144.71, 360.98], [-148.56, 365.66], [-146.19, 367.6], [-153.23, 376.2], [-155.34, 374.48], [-157.0, 375.64], [-158.41, 377.27], [-159.82, 378.92], [-236.27, 228.17], [-247.32, 240.95], [-248.0, 240.37], [-237.2, 227.08]]
    },
    "ground": {
     "kerbs": false,
@@ -1836,6 +1836,15 @@
        },
        "reason": "The bed along the foot of 490 Avenue of the Palms' east block.",
        "evidence": "Owner photo n1 (Nov 2026); Street View lm04 (Sep 2025): planting at the block's foot beyond the walk."
+      },
+      {
+       "id": "palms_north_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-236.02, 227.73], [-247.4, 240.89], [-249.59, 238.99], [-237.23, 224.7], [-235.72, 226.0]]
+       },
+       "reason": "The bed along the foot of 490 Avenue of the Palms' NNW end wall, out to the Johnson Street sidewalk.",
+       "evidence": "Street View 57 Johnson St (Nov 2025): low planting at the wall's foot."
       },
       {
        "id": "door_walk_south",
@@ -2480,6 +2489,47 @@
      "basis": "production_inference",
      "rule": "Low shrubs and tufts at the foot of 490's east block. Species are unknown; these are the kit's closest plants.",
      "evidence": "Owner photo n1 (Nov 2026).",
+     "wall_beds": ["w1272162518"]
+    },
+    {
+     "id": "palms_north_plants",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-236.68, 227.95], [-247.53, 240.51], [-247.87, 240.21], [-237.02, 227.66]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.8,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 2,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low shrubs and tufts at the foot of 490's NNW end wall. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View 57 Johnson St (Nov 2025).",
      "wall_beds": ["w1272162518"]
     },
     {
