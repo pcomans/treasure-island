@@ -333,4 +333,4 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Authorizing decision or request: owner, 2026-11-03: build on every push to `main`, newest build at one fixed link.
 - Trust and malware checks: official publishers only; a checksum mismatch stops setup-godot.sh and the build.
 - Verification and result: Godot reported `4.7.2.stable.official.ed1daf0bf`; the bake reported `BAKE_RENDERER Wayland / llvmpipe (LLVM 21.1.8, 256 bits)`; all four runs built, audited and launched the app.
-- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the `mac-latest` release.
+- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the Mac releases with their `mac-*` tags.

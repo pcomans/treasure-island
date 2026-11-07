@@ -61,18 +61,19 @@ when a building counts as done.
 Every push to `main` builds the Mac app on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
 headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
-Apple Silicon Mac has launched the app and loaded the island, the build replaces
-the previous one at one fixed link:
+Apple Silicon Mac has launched the app and loaded the island, the build becomes
+a new release of its own, unless a newer push has overtaken it. This link always
+gets the newest release:
 
-https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
+https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 
-The [release page](https://github.com/pcomans/treasure-island/releases/tag/mac-latest)
-names the commit and date of the build. Downloaded with curl or `gh`, the zip has
-no quarantine flag, so the unzipped app opens directly:
+The [releases page](https://github.com/pcomans/treasure-island/releases) lists
+each build by date and commit, and older builds stay there. Downloaded with curl
+or `gh`, the zip has no quarantine flag, so the unzipped app opens directly:
 
 ```sh
-curl -fLO https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
-gh release download mac-latest --repo pcomans/treasure-island   # or this
+curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
+gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
 
 The app is not notarized, so after a browser download macOS blocks the first

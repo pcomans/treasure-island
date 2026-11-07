@@ -1,7 +1,8 @@
 # Builds the Mac app on every push to main with tools/build-mac.sh (the same
 # script as in the devcontainer), launches it on an Apple Silicon Mac to check
-# the island loads, then replaces the download at the fixed link
-#   https://github.com/pcomans/treasure-island/releases/download/mac-latest/treasure-island-mac.zip
+# the island loads, then publishes it as a new GitHub Release of its own, marked
+# latest, so this fixed link always gets the newest build:
+#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 # Owner-approved 2026-11-03. No secrets: the publish job uses GITHUB_TOKEN.
 name: Mac build
 
@@ -19,7 +20,7 @@ defaults:
     shell: bash
 
 # Concurrency is per job, not per workflow: a newer push cancels an older run's
-# build or launch check, but never a publish that is swapping the download.
+# build or launch check, but never a publish that is under way.
 jobs:
   build:
     name: Build
@@ -150,10 +151,10 @@ jobs:
     timeout-minutes: 15
     permissions:
       contents: write
-    # Never cancelled mid-swap. A newer publish waits for it, and replaces an
+    # Never cancelled mid-publish. A newer publish waits for it, and replaces an
     # older one that is still waiting.
     concurrency:
-      group: mac-latest-publish
+      group: mac-publish
       cancel-in-progress: false
     steps:
       - name: Download the Mac app
@@ -161,44 +162,55 @@ jobs:
         with:
           name: mac-app
 
-      - name: Replace the download on the mac-latest release
+      - name: Publish this build as a new release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
-        # One release on a fixed tag keeps the link fixed. The tag stays where the
-        # first publish created it: GITHUB_TOKEN may not move a tag past a change to
-        # .github/workflows, and a new release per build would notify every
-        # watcher. The title and notes name the commit each build comes from.
+        # Each build gets a tag and release of its own, and nothing here changes a
+        # release once it is published. gh uploads to a draft and then publishes it,
+        # so the fixed link never reaches a release without its zip.
+        #
+        # Only the head of main publishes. An older build must not take the fixed
+        # link from a newer one. GitHub also refuses (HTTP 404) a release whose commit
+        # has .github/workflows files that differ from main's, unless the token may
+        # change workflows, and GITHUB_TOKEN never may. A commit that edits a workflow
+        # is fine while it is the head of main, because then it matches main. See
+        # https://docs.github.com/en/rest/releases/releases#create-a-release
         run: |
-          tag=mac-latest
           name=treasure-island-mac.zip
-          next=treasure-island-mac-next.zip
           api="repos/${GITHUB_REPOSITORY}"
-          link="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases/download/${tag}/${name}"
-          # A re-run of an older run must not publish over a newer build.
-          head="$(gh api "${api}/commits/main" --jq .sha)"
-          [ "${head}" = "${GITHUB_SHA}" ] || { echo "SKIP: ${GITHUB_SHA} is no longer the head of main (${head}); a newer run publishes"; exit 0; }
-          mv treasure-island-mac-*.zip "${next}"
+          site="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases"
+          # The commit's date, not today's: a re-run on a later day must find the same
+          # tag, and stop.
           committed="$(gh api "${api}/commits/${GITHUB_SHA}" --jq .commit.committer.date)"
-          title="Mac build ${GITHUB_SHA:0:7} (${committed%%T*})"
+          day="${committed%%T*}"
+          short="${GITHUB_SHA:0:7}"
+          tag="mac-${day}-${short}"
+          if gh api "${api}/git/ref/tags/${tag}" --silent 2>/dev/null; then
+            echo "::error::Tag ${tag} already exists. Stopping: a re-run never replaces a published build, and nothing was changed."
+            exit 1
+          fi
+          head="$(gh api "${api}/commits/main" --jq .sha)"
+          if [ "${head}" != "${GITHUB_SHA}" ]; then
+            echo "::notice::SKIP: ${GITHUB_SHA} is no longer the head of main (${head}); a newer run publishes."
+            exit 0
+          fi
+          mv treasure-island-mac-*.zip "${name}"
           notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ).
 
-          Download: ${link}
-          The ${tag} tag only anchors that link and does not follow main. For the first launch, see Build for the Mac in the README."
-          if ! gh release view "${tag}" >/dev/null 2>&1; then
-            gh release create "${tag}" --target "${GITHUB_SHA}" --title "${title}" --notes "${notes}"
-          fi
-          asset_id() { gh api "${api}/releases/tags/${tag}" --jq ".assets[] | select(.name == \"$1\") | .id"; }
-          # Upload under a temporary name, then swap it in: the link is missing only
-          # for a moment, and an interrupted upload leaves the previous build in place.
-          stale="$(asset_id "${next}")"
-          [ -z "${stale}" ] || gh api -X DELETE "${api}/releases/assets/${stale}" --silent
-          gh release upload "${tag}" "${next}"
-          new="$(asset_id "${next}")"
-          [ -n "${new}" ] || { echo "FAIL: ${next} is not listed on the release after its upload" >&2; exit 1; }
-          old="$(asset_id "${name}")"
-          [ -z "${old}" ] || gh api -X DELETE "${api}/releases/assets/${old}" --silent
-          gh api -X PATCH "${api}/releases/assets/${new}" -f name="${name}" --silent
-          [ "$(asset_id "${name}")" = "${new}" ] || { echo "FAIL: ${name} is not the new upload" >&2; exit 1; }
-          gh release edit "${tag}" --title "${title}" --notes "${notes}"
-          echo "Published ${link}"
+          The newest build is always at ${site}/latest/download/${name}
+          For the first launch, see Build for the Mac in the README."
+          gh release create "${tag}" "${name}" --target "${GITHUB_SHA}" --latest --title "Mac build ${day} (${short})" --notes "${notes}" || {
+            echo "::error::Publishing ${tag} failed, so the fixed link still gets the previous build. If gh printed HTTP 404, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes instead."
+            exit 1
+          }
+          # The fixed link must now lead to this build. Allow a moment for the redirect.
+          for _ in $(seq 12); do
+            if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
+              echo "Published ${site}/tag/${tag}"
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "::error::${tag} is published, but the fixed link does not lead to it."
+          exit 1
