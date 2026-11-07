@@ -2303,7 +2303,7 @@
           ],
           "band_m": 0.6,
           "band_material": "yard_shoulder_band",
-          "gravel_m": 2.5,
+          "gravel_m": 1.5,
           "gravel_material": "yard_shoulder_gravel"
         }
       }

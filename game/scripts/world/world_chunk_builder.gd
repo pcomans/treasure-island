@@ -118,15 +118,15 @@ const STREET_GROUND_SURFACES := {
 	# its south end, low in specular so the sky's sheen doesn't wash them out at a
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
 	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.5, 0.51, 0.53)},
-	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 8.3, "roughness": 1.0, "specular": 0.2, "tint": Color(0.5, 0.45, 0.4)},
+	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.42, 0.405, 0.375)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
 	"yard_gravel_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_gravel_pale.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(0.91, 0.87, 0.75)},
 	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
 	# owner's November 2026 photographs, the gravel and the dark band against the curb.
-	"yard_shoulder_gravel": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 4.2, "roughness": 0.97, "specular": 0.25, "tint": Color(0.55, 0.54, 0.52)},
-	"yard_shoulder_band": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 4.2, "roughness": 0.97, "specular": 0.25, "tint": Color(0.5, 0.49, 0.47)},
+	"yard_shoulder_gravel": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 6.0, "roughness": 0.97, "specular": 0.25, "tint": Color(0.55, 0.54, 0.52)},
+	"yard_shoulder_band": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 6.0, "roughness": 0.97, "specular": 0.25, "tint": Color(0.5, 0.49, 0.47)},
 	"yard_concrete": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.9, "tint": Color(1.18, 1.38, 1.46)},
 	"yard_sand_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_sand_pale.png"), "uv_scale": 5.0, "roughness": 0.98, "tint": Color(0.77, 0.76, 0.65)},
 	"yard_soil_dark": {"albedo": preload("res://game/resources/textures/world/street/yard_soil_dark.png"), "uv_scale": 5.0, "roughness": 0.95},

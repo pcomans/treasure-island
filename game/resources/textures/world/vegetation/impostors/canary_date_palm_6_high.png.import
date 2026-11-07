@@ -2,10 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
+uid="uid://b22uvtxwsa67h"
+path="res://.godot/imported/canary_date_palm_6_high.png-e106bb621800a30fbd933bfb8b2eda1f.ctex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/canary_date_palm_6_high.png"
+dest_files=["res://.godot/imported/canary_date_palm_6_high.png-e106bb621800a30fbd933bfb8b2eda1f.ctex"]
 
 [params]
 

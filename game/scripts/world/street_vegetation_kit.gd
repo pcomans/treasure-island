@@ -191,8 +191,8 @@ const LOW_CELLS := {
 	# The Mersea ditch's own atlas (2048 x 1024, owner video, Nov 2026): wide tangles of
 	# dead grass and twigs, the tall fringe, a shrub of red stems laden with cream seed
 	# and thin dead stems.
-	"marsh_tangle_a": ["marsh", Rect2(0.0, 0.0, 0.5, 0.5)],
-	"marsh_tangle_b": ["marsh", Rect2(0.5, 0.0, 0.5, 0.5)],
+	"marsh_mat": ["marsh", Rect2(0.0, 0.0, 0.5, 0.5)],
+	"marsh_brush": ["marsh", Rect2(0.5, 0.0, 0.5, 0.5)],
 	"marsh_fringe": ["marsh", Rect2(0.0, 0.5, 0.5, 0.5)],
 	"marsh_shrub": ["marsh", Rect2(0.5, 0.5, 0.25, 0.5)],
 	"marsh_stems": ["marsh", Rect2(0.75, 0.5, 0.25, 0.5)],
@@ -674,10 +674,11 @@ const YOUNG_PLANTING := [
 	{"seed": 143, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "young_shrub", "cards": 3, "width": 1.0, "height": 0.8, "splay_deg": 5.0, "flutter": 0.03, "shade_low": 0.8}]},
 	{"seed": 144, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "young_shrub", "cards": 4, "width": 1.3, "height": 1.05, "splay_deg": 5.0, "flutter": 0.03, "shade_low": 0.8}]},
 ]
-## The ditch plants' tones against the footage's dry bank, about sRGB 110,95,80 in sun.
+## The ditch plants' tones against the footage's dry bank: about sRGB 88,68,55 over the slope.
 const MARSH_SHRUB_TINT := Color(0.72, 0.66, 0.6)
-const MARSH_STEM_TINT := Color(0.72, 0.68, 0.62)
-const MARSH_GRASS_TINT := Color(0.98, 0.9, 0.82)
+const MARSH_STEM_TINT := Color(0.46, 0.43, 0.38)
+const MARSH_MAT_TINT := Color(0.66, 0.6, 0.54)
+const MARSH_BRUSH_TINT := Color(0.74, 0.7, 0.64)
 const SEEDED_SHRUBS := [
 	# Thin dark stems in a loose vase, nearly bare, sparse pale seed heads near the tips.
 	{"seed": 131, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.7, "height": 0.62, "splay_deg": 9.0, "flutter": 0.03, "shade_low": 0.7}]},
@@ -687,6 +688,8 @@ const SEEDED_SHRUBS := [
 	# The ditch bank by the road end (owner video, Nov 2026): red stems fanning up from one foot, cream seed in soft clusters on their upper parts.
 	{"seed": 134, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 3, "width": 0.8, "height": 0.72, "splay_deg": 6.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.72, "tint": MARSH_SHRUB_TINT}]},
 	{"seed": 135, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 4, "width": 1.05, "height": 1.0, "splay_deg": 7.0, "flop_deg": 12.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_SHRUB_TINT}]},
+	# A young one on the same bank's slope, knee high, standing alone in the grass.
+	{"seed": 152, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_shrub", "cards": 3, "width": 0.55, "height": 0.5, "splay_deg": 6.0, "flop_deg": 10.0, "flutter": 0.03, "shade_low": 0.72, "tint": MARSH_SHRUB_TINT}]},
 ]
 ## Thin dead stems standing through the Mersea ditch's mat and its pools (owner video,
 ## Nov 2026): a few hair-thin stalks, some with a seed head; a thin stand, then a taller one.
@@ -694,26 +697,32 @@ const MARSH_STEMS := [
 	{"seed": 136, "lean": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 2, "width": 0.42, "height": 0.62, "curl": 0.05, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.78, "tint": MARSH_STEM_TINT}]},
 	{"seed": 137, "lean": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_stems", "cards": 3, "width": 0.6, "height": 0.95, "curl": 0.05, "splay_deg": 7.0, "flop_deg": 10.0, "flutter": 0.035, "shade_low": 0.78, "tint": MARSH_STEM_TINT}]},
 ]
-## The ditch's banks (owner video, Nov 2026): wide cards of one untidy tangle of dead grass
-## and lanky stems, and of twiggy shrubs in dry grass, sown close so they run together
-## with no one plant to pick out. The cards start under the ground, so nothing shows a foot.
-const MARSH_TANGLES := [
-	{"seed": 138, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 3, "width": 2.0, "height": 1.0, "base": -0.45, "curl": 0.08, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
-	{"seed": 139, "lean": 0.04, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_b", "cards": 3, "width": 2.2, "height": 1.35, "base": -0.45, "curl": 0.08, "splay_deg": 6.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
-	{"seed": 140, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_tangle_a", "cards": 2, "width": 1.4, "height": 0.7, "base": -0.32, "curl": 0.07, "splay_deg": 5.0, "flutter": 0.04, "shade_low": 0.72, "tint": MARSH_GRASS_TINT}]},
+## The ditch's slopes (owner photo, Nov 2026): dead grass flopped over in low swathes, sown
+## close so no one tussock shows. Its cards lean out to lie along the ground.
+const MARSH_MATS := [
+	{"seed": 138, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_mat", "cards": 3, "width": 1.9, "height": 0.55, "base": -0.06, "curl": 0.12, "splay_deg": 28.0, "flop_deg": 36.0, "flutter": 0.02, "shade_low": 0.55, "tint": MARSH_MAT_TINT}]},
+	{"seed": 139, "lean": 0.03, "hue": 0.1, "layers": [{"kind": "crossed", "cell": "marsh_mat", "cards": 2, "width": 1.3, "height": 0.42, "base": -0.05, "curl": 0.1, "splay_deg": 30.0, "flop_deg": 40.0, "flutter": 0.02, "shade_low": 0.55, "tint": MARSH_MAT_TINT}]},
+]
+## The cream-seeded brush along the foot of the slope (owner photo, Nov 2026): wide cards of
+## billowing seed over dark stems, sown so they run together into one ragged band.
+const MARSH_BRUSHES := [
+	{"seed": 140, "lean": 0.03, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 3, "width": 3.0, "height": 1.55, "base": -0.1, "curl": 0.1, "splay_deg": 5.0, "flutter": 0.035, "shade_low": 0.5, "tint": MARSH_BRUSH_TINT}]},
+	{"seed": 151, "lean": 0.04, "hue": 0.08, "layers": [{"kind": "crossed", "cell": "marsh_brush", "cards": 2, "width": 2.2, "height": 1.15, "base": -0.08, "curl": 0.1, "splay_deg": 6.0, "flutter": 0.035, "shade_low": 0.5, "tint": MARSH_BRUSH_TINT}]},
 ]
 ## The tall yellow-green fringe that closes the view along the ditch's far banks.
 const MARSH_FRINGES := [
 	{"seed": 146, "lean": 0.03, "hue": 0.12, "layers": [{"kind": "crossed", "cell": "marsh_fringe", "cards": 3, "width": 2.8, "height": 1.8, "base": -0.15, "curl": 0.06, "splay_deg": 3.0, "flutter": 0.05, "shade_low": 0.6, "tint": Color(0.78, 0.76, 0.62)}]},
 	{"seed": 147, "lean": 0.04, "hue": 0.12, "layers": [{"kind": "crossed", "cell": "marsh_fringe", "cards": 2, "width": 2.2, "height": 1.35, "base": -0.15, "curl": 0.06, "splay_deg": 3.0, "flutter": 0.05, "shade_low": 0.6, "tint": Color(0.78, 0.76, 0.62)}]},
+	# A knot of the same sedge in the brush at the foot of the slope.
+	{"seed": 153, "lean": 0.04, "hue": 0.12, "layers": [{"kind": "crossed", "cell": "marsh_fringe", "cards": 2, "width": 1.3, "height": 0.85, "base": -0.1, "curl": 0.06, "splay_deg": 4.0, "flutter": 0.05, "shade_low": 0.6, "tint": Color(0.78, 0.76, 0.62)}]},
 ]
-## Stones lying in the ditch's mat, rounded and part sunk, pale over a dark foot: a small
-## group, a few spread out and one big enough to read from the bank. Each is a real
-## form, so it holds at a walker's feet. stones is how many, size_m their radii.
+## Stones lying in the ditch, rounded and part sunk: small pale ones over the floor, in a
+## tight group and spread out, and a grey rock for the slopes. Each is a real form, so it
+## holds at a walker's feet. stones is how many, size_m their radii, tone their shade.
 const MARSH_STONES := [
-	{"seed": 148, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 4, "spread_m": 0.3, "size_m": [0.025, 0.06]}]},
-	{"seed": 149, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 5, "spread_m": 0.7, "size_m": [0.03, 0.08]}]},
-	{"seed": 150, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 2, "spread_m": 0.25, "size_m": [0.07, 0.13]}]},
+	{"seed": 148, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 5, "spread_m": 0.35, "size_m": [0.02, 0.05]}]},
+	{"seed": 149, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 6, "spread_m": 0.8, "size_m": [0.025, 0.07]}]},
+	{"seed": 150, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 2, "spread_m": 0.3, "size_m": [0.07, 0.15], "tone": 0.55}]},
 ]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
@@ -780,7 +789,8 @@ const PROPS := {
 	"white_umbel_perennial": {"kinds": LOW_KINDS, "variants": WHITE_UMBELS, "ranges": [50.0], "foot_m": 0.15, "form": "low"},
 	"pale_seeded_shrub": {"kinds": LOW_KINDS, "variants": SEEDED_SHRUBS, "ranges": [65.0], "foot_m": 0.2, "form": "low", "shadow": true},
 	"marsh_stems": {"kinds": LOW_KINDS, "variants": MARSH_STEMS, "ranges": [55.0], "foot_m": 0.15, "form": "low"},
-	"marsh_tangle": {"kinds": LOW_KINDS, "variants": MARSH_TANGLES, "ranges": [80.0], "foot_m": 0.2, "form": "low"},
+	"marsh_mat": {"kinds": LOW_KINDS, "variants": MARSH_MATS, "ranges": [85.0], "foot_m": 0.2, "form": "low"},
+	"marsh_brush": {"kinds": LOW_KINDS, "variants": MARSH_BRUSHES, "ranges": [170.0], "foot_m": 0.2, "form": "low"},
 	"marsh_fringe": {"kinds": LOW_KINDS, "variants": MARSH_FRINGES, "ranges": [170.0], "foot_m": 0.2, "form": "low"},
 	"marsh_stones": {"kinds": LOW_KINDS, "variants": MARSH_STONES, "ranges": [70.0], "foot_m": 0.15, "form": "low"},
 	"young_planting": {"kinds": LOW_KINDS, "variants": YOUNG_PLANTING, "ranges": [130.0], "foot_m": 0.2, "form": "low", "shadow": true},
@@ -3946,7 +3956,7 @@ func _stones_layer(s: Surf, rng: RandomNumberGenerator, layer: Dictionary, frame
 		var radius := rng.randf_range(float(sizes[0]), float(sizes[1]))
 		var squash := rng.randf_range(0.55, 0.8)
 		var stretch := rng.randf_range(0.8, 1.25)
-		var tone := rng.randf_range(0.82, 1.1)
+		var tone := rng.randf_range(0.82, 1.1) * float(layer.get("tone", 1.0))
 		var warm := rng.randf_range(0.95, 1.05)
 		var ring_size := 7
 		var lumps := PackedFloat32Array()

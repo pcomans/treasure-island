@@ -25,7 +25,7 @@ const SETS := {
 	"barks": ["fan_bark_grey.png", "canary_trunk_a.png", "canary_knob.png", "cypress_bark.png"],
 	"meadow": MEADOW_CELLS,
 	"perennial": PERENNIAL_CELLS,
-	"marsh": ["marsh_tangle_a.png", "marsh_tangle_b.png", "tall_fringe.png", "marsh_seeded_shrub.png", "marsh_thin_stems.png"],
+	"marsh": ["marsh_low_mat.png", "marsh_seeded_brush.png", "tall_fringe.png", "marsh_seeded_shrub.png", "marsh_thin_stems.png"],
 	"young_planting": ["young_tree_a.png", "young_tree_b.png", "young_shrub.png"],
 	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
@@ -122,8 +122,8 @@ const LOW_GRADES := {
 	"young_tree_b.png": [Color(0.9, 0.92, 0.84), 0.2],
 	"young_shrub.png": [Color(0.8, 0.82, 0.74), 0.25],
 	"marsh_thin_stems.png": [Color(0.92, 0.86, 0.74), 0.3],
-	"marsh_tangle_a.png": [Color(0.84, 0.8, 0.74), 0.4],
-	"marsh_tangle_b.png": [Color(0.84, 0.8, 0.74), 0.35],
+	"marsh_low_mat.png": [Color(0.84, 0.8, 0.74), 0.4],
+	"marsh_seeded_brush.png": [Color(0.84, 0.78, 0.7), 0.25],
 	"tall_fringe.png": [Color(0.86, 0.86, 0.72), 0.25],
 	"woolly_stalks.png": [Color(0.78, 0.72, 0.66), 0.55],
 	"buckwheat_stalks.png": [Color(0.84, 0.74, 0.64), 0.7],
@@ -308,20 +308,20 @@ func _pack_perennial(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "perennial_atlas.png", errors)
 
 
-## The Mersea ditch's plants, 2048 x 1024: two wide tangles of dead grass and twigs along
-## the top row, the tall fringe, the seed-laden shrub and the thin stems below. The wide
-## cards' ends are frayed so a card never stops in a straight cut; the kit's card sizes
-## set the plants' proportions.
+## The Mersea ditch's plants, 2048 x 1024: the low mat of flopped dead grass and the row of
+## cream-seeded brush along the top row, the tall fringe, the seed-laden shrub and the thin
+## stems below. The wide cards' ends are frayed so a card never stops in a straight cut; the
+## kit's card sizes set the plants' proportions.
 func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(2048, 1024, false, Image.FORMAT_RGBA8)
 	var cells := {
-		"marsh_tangle_a.png": Rect2i(0, 0, 1024, 512), "marsh_tangle_b.png": Rect2i(1024, 0, 1024, 512),
+		"marsh_low_mat.png": Rect2i(0, 0, 1024, 512), "marsh_seeded_brush.png": Rect2i(1024, 0, 1024, 512),
 		"tall_fringe.png": Rect2i(0, 512, 1024, 512), "marsh_seeded_shrub.png": Rect2i(1024, 512, 512, 512), "marsh_thin_stems.png": Rect2i(1536, 512, 512, 512),
 	}
 	for name: String in cells:
 		var cell: Rect2i = cells[name]
 		var image := _keyed_fit(images[name], cell.size.x - 2 * CELL_MARGIN, cell.size.y - 2 * CELL_MARGIN, CYAN if name in ON_CYAN else MAGENTA)
-		if name != "marsh_seeded_shrub.png":
+		if name not in ["marsh_seeded_shrub.png", "marsh_seeded_brush.png"]:
 			_straw(image)
 		_grade(image, LOW_GRADES[name][0], LOW_GRADES[name][1])
 		if cell.size.x == 1024:
@@ -331,22 +331,25 @@ func _pack_marsh(images: Dictionary, errors: Array[String]) -> void:
 	_save(atlas, OUT + "marsh_atlas.png", errors)
 
 
-## Clears more and more upright slivers toward an image's left and right ends, over
-## fraction of its width, by a fixed seed, so a card's ends thin out into stray stalks.
+## Lowers an image's left and right ends over fraction of its width, in upright slivers
+## each to its own height, by a fixed seed, so a card's ends sink into the ground in stray
+## stalks and never stop in a straight cut.
 func _fray_ends(image: Image, fraction: float) -> void:
 	var w := image.get_width()
+	var h := image.get_height()
 	var data := image.get_data()
 	var random := RandomNumberGenerator.new()
 	random.seed = 4177
 	var sliver := 3
 	for from_x in range(0, w, sliver):
 		var keep := minf(1.0, minf(float(from_x), float(w - 1 - from_x)) / (fraction * w))
-		if random.randf() < keep * keep * 1.6:
+		if keep >= 1.0:
 			continue
-		for y in image.get_height():
+		var stands := pow(keep, 0.7) * (1.0 - 0.4 * (1.0 - keep) * random.randf())
+		for y in int(h * (1.0 - stands)):
 			for x in range(from_x, mini(w, from_x + sliver)):
 				data[(y * w + x) * 4 + 3] = 0
-	image.set_data(w, image.get_height(), false, Image.FORMAT_RGBA8, data)
+	image.set_data(w, h, false, Image.FORMAT_RGBA8, data)
 
 
 ## The Mersea promenade's young planting, 1536 x 1024: two staked saplings and a low

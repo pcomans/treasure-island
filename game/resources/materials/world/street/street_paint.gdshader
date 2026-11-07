@@ -52,7 +52,7 @@ uniform vec3 patch_asphalt : source_color = vec3(0.360, 0.360, 0.365);
 // thin over worn asphalt, about 165,160,156 under the tone map, its white lines gone to
 // about 150,142,130, and a double yellow worn to an ochre a shade off the road.
 uniform vec3 rolled_white : source_color = vec3(0.52, 0.505, 0.48);
-uniform vec3 trace_white : source_color = vec3(0.4, 0.37, 0.33);
+uniform vec3 trace_white : source_color = vec3(0.36, 0.335, 0.3);
 uniform vec3 trace_yellow : source_color = vec3(0.3, 0.26, 0.185);
 // A tar-sealed crack in an old road (a sealant's wear step 1): dark and dull, so a
 // walker's low view doesn't catch the sky in it.
@@ -163,11 +163,11 @@ void fragment() {
 	} else if (kind < 14.5) {
 		// A white line nearly gone: dull, broken in soft patches.
 		albedo = trace_white * mix(0.85, 1.05, wear);
-		coverage = smoothstep(0.1, 0.55, mix(wear, wear_fine, 0.5)) + 0.05;
+		coverage = smoothstep(0.18, 0.62, mix(wear, wear_fine, 0.5)) + 0.05;
 	} else {
 		// A double yellow nearly gone: an ochre stain with the road showing through.
 		albedo = trace_yellow * mix(0.85, 1.05, wear_fine);
-		coverage = smoothstep(0.3, 0.76, mix(wear, wear_fine, 0.6));
+		coverage = smoothstep(0.38, 0.84, mix(wear, wear_fine, 0.6));
 	}
 	albedo = mix(albedo, worn_paint, worn * 0.45);
 	ALBEDO = albedo;
