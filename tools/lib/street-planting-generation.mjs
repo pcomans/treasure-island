@@ -175,8 +175,11 @@ export function validatePlantingRule(rule, label, checkProp, variantCount) {
     validateFieldRule(rule, label, checkProp, variantCount);
     return;
   }
-  const fields = PLANTING_RULE_FIELDS[rule.pattern];
+  const fields = PLANTING_RULE_FIELDS[rule.pattern] && [...PLANTING_RULE_FIELDS[rule.pattern], ...("wall_beds" in rule ? ["wall_beds"] : [])];
   invariant(fields && exactKeys(rule, fields), `${label}: a ${rule.pattern} rule has exactly ${fields?.join(", ")}`);
+  // wall_beds skips those buildings' buffer altogether: only the rule's traced
+  // within_xz keeps its plants off the walls, so it must follow them.
+  if (rule.wall_beds !== undefined) invariant(Array.isArray(rule.wall_beds) && rule.wall_beds.length > 0 && rule.wall_beds.every((key) => /^[wr]\d+$/u.test(key)), `${label} wall_beds must list OSM building keys`);
   invariant(Array.isArray(rule.within_xz) && rule.within_xz.length >= 3 && rule.within_xz.every((point) => Array.isArray(point) && point.length === 2 && point.every(isFiniteNumber)), `${label} within_xz must be a polygon of 3+ [x, z] points`);
   invariant(Array.isArray(rule.surfaces) && rule.surfaces.length > 0 && rule.surfaces.every((key) => typeof key === "string" && key !== ""), `${label} surfaces must list the bed's material keys`);
   invariant(exactKeys(rule.gaps, ["cover", "scale_m"]) && isFiniteNumber(rule.gaps.cover) && rule.gaps.cover >= 0 && rule.gaps.cover < 0.5 && isFiniteNumber(rule.gaps.scale_m) && rule.gaps.scale_m > 0, `${label} gaps must be {cover in [0, 0.5), scale_m > 0}`);

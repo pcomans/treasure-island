@@ -251,7 +251,7 @@
         "w1001544695"
       ],
       "treatment": "new_district",
-      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars.",
+      "evidence": "Aerial 2026-05-26: sidewalks on both curbs, cars parked along both curbs, continental crosswalks at its ends. Google Street View Sep 2025 at 55 Cravath St and the aerial: no centre line between the parked cars. Owner photo o5 (Nov 2026): the curb across the mouth of Garden Walk painted red, no car at it.",
       "set": {
         "centerline": null
       },
@@ -266,6 +266,10 @@
           "left": [
             [
               0,
+              81.5
+            ],
+            [
+              93,
               147
             ]
           ],
@@ -273,6 +277,16 @@
             [
               0,
               147
+            ]
+          ]
+        }
+      },
+      "red_curb": {
+        "w1001544695": {
+          "left": [
+            [
+              81.5,
+              93
             ]
           ]
         }
@@ -1686,6 +1700,14 @@
     }
   ],
   "aprons": [
+    {
+      "way": "w1001544696",
+      "side": "right",
+      "from_m": 319.2,
+      "to_m": 323.2,
+      "depth_m": 4.4,
+      "evidence": "Google Street View Jun 2026 on Seven Seas Avenue (camera x -118, z 300, headings 210 to 300) and Sep 2025 (camera x -114, z 318, heading 300): the paved drive from the street across the curb strip to the Maceo May portal."
+    },
     {
       "way": "w8916716",
       "side": "left",

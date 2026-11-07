@@ -1,0 +1,3636 @@
+{
+ "schema_version": "ti.midrise-family/1",
+ "target": {
+  "source_key": "r19685981",
+  "address": "Maceo May",
+  "edge_normals": [
+   [
+    -0.891,
+    0.454
+   ],
+   [
+    0.494,
+    0.869
+   ],
+   [
+    0.756,
+    0.655
+   ],
+   [
+    0.891,
+    -0.453
+   ],
+   [
+    -0.459,
+    -0.888
+   ]
+  ],
+  "holes": 1,
+  "holes_tiled": true
+ },
+ "floor": {
+  "anchor_edge": 0,
+  "above_terrain": 0.05,
+  "basis": "median land along the photographed WSW paseo plus clearance"
+ },
+ "levels": {
+  "ground_h": 4.0,
+  "storey_h": 3.3,
+  "parapet_h": 0.9
+ },
+ "palette": {
+  "seam": {
+   "rgb": [
+    0.97,
+    0.92,
+    0.84
+   ],
+   "roughness": 0.6,
+   "texture": "res://game/resources/textures/world/maceo_may/seam_dark.png",
+   "tile_m": [
+    1.9,
+    1.9
+   ]
+  },
+  "lap": {
+   "rgb": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "roughness": 0.85,
+   "texture": "res://game/resources/textures/world/maceo_may/lap_cream.png",
+   "tile_m": [
+    1.0,
+    1.0
+   ]
+  },
+  "corr": {
+   "rgb": [
+    0.955,
+    0.935,
+    0.905
+   ],
+   "roughness": 0.6,
+   "texture": "res://game/resources/textures/world/maceo_may/corrugated_white.png",
+   "tile_m": [
+    1.2,
+    1.2
+   ]
+  },
+  "stucco": {
+   "rgb": [
+    1.08,
+    1.06,
+    1.03
+   ],
+   "roughness": 0.85,
+   "texture": "res://game/resources/textures/world/maceo_may/stucco_pale.png",
+   "tile_m": [
+    3.0,
+    3.0
+   ]
+  },
+  "stucco_dim": {
+   "rgb": [
+    0.82,
+    0.81,
+    0.79
+   ],
+   "roughness": 0.85,
+   "texture": "res://game/resources/textures/world/maceo_may/stucco_pale.png",
+   "tile_m": [
+    3.0,
+    3.0
+   ]
+  },
+  "panel": {
+   "rgb": [
+    0.93,
+    0.9,
+    0.865
+   ],
+   "roughness": 0.65,
+   "texture": "res://game/resources/textures/world/maceo_may/panel_dark.png",
+   "tile_m": [
+    1.4,
+    3.0
+   ]
+  },
+  "rib": {
+   "rgb": [
+    0.8,
+    0.84,
+    0.82
+   ],
+   "roughness": 0.6,
+   "texture": "res://game/resources/textures/world/maceo_may/rib_red.png",
+   "tile_m": [
+    1.8,
+    1.8
+   ]
+  },
+  "sd_lap": {
+   "rgb": [
+    0.4,
+    0.44,
+    0.46
+   ],
+   "roughness": 0.7,
+   "texture": "res://game/resources/textures/world/maceo_may/lap_cream.png",
+   "tile_m": [
+    1.6,
+    1.6
+   ]
+  },
+  "joint": {
+   "rgb": [
+    0.1,
+    0.1,
+    0.1
+   ],
+   "roughness": 0.9
+  },
+  "dark": {
+   "rgb": [
+    0.27,
+    0.255,
+    0.24
+   ],
+   "roughness": 0.8
+  },
+  "spandrel": {
+   "rgb": [
+    0.17,
+    0.165,
+    0.16
+   ],
+   "roughness": 0.8
+  },
+  "frame": {
+   "rgb": [
+    0.12,
+    0.115,
+    0.11
+   ],
+   "roughness": 0.55,
+   "metallic": 0.2
+  },
+  "red": {
+   "rgb": [
+    0.44,
+    0.235,
+    0.23
+   ],
+   "roughness": 0.6
+  },
+  "red_w": {
+   "rgb": [
+    0.58,
+    0.315,
+    0.24
+   ],
+   "roughness": 0.6
+  },
+  "glass": {
+   "rgb": [
+    0.46,
+    0.56,
+    0.6
+   ],
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
+  },
+  "glass_w": {
+   "rgb": [
+    0.33,
+    0.4,
+    0.44
+   ],
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
+  },
+  "glass_pale": {
+   "rgb": [
+    0.58,
+    0.68,
+    0.68
+   ],
+   "roughness": 0.16,
+   "metallic": 0.2,
+   "receive_shadows": false
+  },
+  "glass_low": {
+   "rgb": [
+    0.6,
+    0.74,
+    0.69
+   ],
+   "roughness": 0.3,
+   "metallic": 0.15,
+   "receive_shadows": false
+  },
+  "glass_dark": {
+   "rgb": [
+    0.16,
+    0.2,
+    0.21
+   ],
+   "roughness": 0.16,
+   "metallic": 0.35,
+   "receive_shadows": false
+  },
+  "glass_black": {
+   "rgb": [
+    0.05,
+    0.055,
+    0.06
+   ],
+   "roughness": 0.28,
+   "metallic": 0.1,
+   "receive_shadows": false
+  },
+  "glass_curtain": {
+   "rgb": [
+    0.56,
+    0.66,
+    0.66
+   ],
+   "roughness": 0.14,
+   "metallic": 0.45,
+   "receive_shadows": false
+  },
+  "glass_lit": {
+   "rgb": [
+    0.62,
+    0.5,
+    0.34
+   ],
+   "roughness": 0.5,
+   "metallic": 0.0,
+   "receive_shadows": false
+  },
+  "wood": {
+   "rgb": [
+    0.62,
+    0.47,
+    0.31
+   ],
+   "roughness": 0.8
+  },
+  "wood_pale": {
+   "rgb": [
+    0.78,
+    0.66,
+    0.5
+   ],
+   "roughness": 0.8
+  },
+  "shutter": {
+   "rgb": [
+    0.19,
+    0.185,
+    0.18
+   ],
+   "roughness": 0.6
+  },
+  "soffit": {
+   "rgb": [
+    0.72,
+    0.72,
+    0.7
+   ],
+   "roughness": 0.9
+  },
+  "soffit_dark": {
+   "rgb": [
+    0.24,
+    0.24,
+    0.24
+   ],
+   "roughness": 0.9
+  },
+  "slab": {
+   "rgb": [
+    0.6,
+    0.6,
+    0.59
+   ],
+   "roughness": 0.9
+  },
+  "metal": {
+   "rgb": [
+    0.17,
+    0.18,
+    0.19
+   ],
+   "roughness": 0.5,
+   "metallic": 0.45
+  },
+  "door": {
+   "rgb": [
+    0.19,
+    0.19,
+    0.2
+   ],
+   "roughness": 0.6
+  },
+  "vent_back": {
+   "rgb": [
+    0.08,
+    0.08,
+    0.08
+   ],
+   "roughness": 0.9
+  },
+  "paving": {
+   "rgb": [
+    0.72,
+    0.71,
+    0.68
+   ],
+   "roughness": 0.95
+  },
+  "coping": {
+   "rgb": [
+    0.62,
+    0.62,
+    0.6
+   ],
+   "roughness": 0.5,
+   "metallic": 0.2
+  },
+  "roof": {
+   "rgb": [
+    0.86,
+    0.86,
+    0.84
+   ],
+   "roughness": 0.9
+  },
+  "deck": {
+   "rgb": [
+    0.76,
+    0.72,
+    0.64
+   ],
+   "roughness": 0.95
+  },
+  "pv": {
+   "rgb": [
+    0.07,
+    0.09,
+    0.15
+   ],
+   "roughness": 0.25,
+   "metallic": 0.3
+  },
+  "mech": {
+   "rgb": [
+    0.8,
+    0.78,
+    0.72
+   ],
+   "roughness": 0.9
+  },
+  "mech_dark": {
+   "rgb": [
+    0.24,
+    0.235,
+    0.23
+   ],
+   "roughness": 0.9
+  },
+  "mech_mid": {
+   "rgb": [
+    0.5,
+    0.49,
+    0.47
+   ],
+   "roughness": 0.9
+  },
+  "concrete": {
+   "rgb": [
+    0.52,
+    0.52,
+    0.505
+   ],
+   "roughness": 0.95
+  },
+  "parapet": {
+   "rgb": [
+    0.8,
+    0.8,
+    0.78
+   ],
+   "roughness": 0.9
+  },
+  "louvre": {
+   "rgb": [
+    0.14,
+    0.14,
+    0.14
+   ],
+   "roughness": 0.7
+  },
+  "sign_letters": {
+   "rgb": [
+    1,
+    1,
+    1
+   ],
+   "roughness": 0.7,
+   "texture": "res://game/resources/textures/world/maceo_may/maceo_letters.png",
+   "tile_m": [
+    1.0,
+    1.0
+   ]
+  }
+ },
+ "schemes": {
+  "w_wsw": {
+   "material": "seam",
+   "parapet_material": "seam",
+   "grid": {
+    "columns": [
+     [
+      4.25,
+      5.75
+     ],
+     [
+      7.2,
+      8.7
+     ],
+     [
+      10.7,
+      13.3
+     ],
+     [
+      15.3,
+      16.8
+     ],
+     [
+      18.25,
+      19.75
+     ],
+     [
+      22.2,
+      24.8
+     ],
+     [
+      26.8,
+      28.3
+     ],
+     [
+      29.75,
+      31.25
+     ],
+     [
+      33.7,
+      36.3
+     ],
+     [
+      38.3,
+      39.8
+     ],
+     [
+      41.25,
+      42.75
+     ],
+     [
+      49.8,
+      51.3
+     ],
+     [
+      52.75,
+      54.25
+     ]
+    ],
+    "rows": {
+     "0": {
+      "sill": 0.3,
+      "head": 2.85
+     },
+     "1": {
+      "sill": 0.15,
+      "head": 2.1
+     },
+     "2": {
+      "sill": 0.0,
+      "head": 2.0
+     }
+    },
+    "groups": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    "blank_cells": [
+     [
+      2,
+      1
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      5,
+      1
+     ],
+     [
+      5,
+      2
+     ],
+     [
+      8,
+      1
+     ],
+     [
+      8,
+      2
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "owner o4, o3, o1 (Nov 2026); wsw05, wsw06 (Jun 2026)",
+     "date": "2026",
+     "side": "WSW"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.16,
+    "reveal": "dark",
+    "materials": {
+     "spandrel": "spandrel"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "transom_w": 0.05,
+     "split": 0.5,
+     "split_min_w": 1.2,
+     "transoms": [
+      0.5
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass_w",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass_low",
+    "frame": "frame"
+   },
+   "features": [
+    {
+     "type": "entry",
+     "from": 44.8,
+     "to": 47.8,
+     "door": {
+      "kind": "lobby",
+      "w": 2.6,
+      "h": 2.85,
+      "mullions": [
+       0.33,
+       0.66
+      ],
+      "transoms": [
+       0.82
+      ]
+     },
+     "landing": {
+      "w": 3.0,
+      "depth": 0.8
+     }
+    }
+   ]
+  },
+  "w_nnw": {
+   "material": "seam",
+   "parapet_material": "seam",
+   "grid": {
+    "columns": [
+     [
+      28.85,
+      30.35
+     ],
+     [
+      32.65,
+      34.15
+     ],
+     [
+      36.45,
+      37.95
+     ],
+     [
+      40.25,
+      41.75
+     ]
+    ],
+    "rows": {
+     "0": {
+      "sill": 0.3,
+      "head": 2.85
+     },
+     "1": {
+      "sill": 0.15,
+      "head": 2.1
+     },
+     "2": {
+      "sill": 0.0,
+      "head": 2.0
+     }
+    },
+    "groups": [
+     [
+      0,
+      0
+     ],
+     [
+      1,
+      2
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "owner o4, o3, o1 (Nov 2026); wsw05, wsw06 (Jun 2026)",
+     "date": "2026",
+     "side": "WSW"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.16,
+    "reveal": "dark",
+    "materials": {
+     "spandrel": "spandrel"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "transom_w": 0.05,
+     "split": 0.5,
+     "split_min_w": 1.2,
+     "transoms": [
+      0.5
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass_w",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass_low",
+    "frame": "frame"
+   }
+  },
+  "w_south": {
+   "material": "seam",
+   "parapet_material": "seam",
+   "grid": {
+    "columns": [
+     [
+      1.1,
+      2.5
+     ]
+    ],
+    "rows": {
+     "0": {
+      "sill": 0.3,
+      "head": 2.85
+     },
+     "1": {
+      "sill": 0.15,
+      "head": 2.1
+     },
+     "2": {
+      "sill": 0.0,
+      "head": 2.0
+     }
+    },
+    "blank_cells": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "owner o4, o3, o1 (Nov 2026); wsw05, wsw06 (Jun 2026)",
+     "date": "2026",
+     "side": "WSW"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.16,
+    "reveal": "dark",
+    "materials": {
+     "spandrel": "spandrel"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "transom_w": 0.05,
+     "split": 0.5,
+     "split_min_w": 1.2,
+     "transoms": [
+      0.5
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass_w",
+    "frame": "frame"
+   }
+  },
+  "plain_court": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "box_side": {
+   "material": "lap",
+   "parapet_material": "lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "box1": {
+   "material": "lap",
+   "parapet_material": "lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "band",
+     "from": 10.75,
+     "to": 13.25,
+     "w": 2.2,
+     "storeys": [
+      0,
+      1
+     ],
+     "bottom": 1.05,
+     "top": 2.25,
+     "depth": 0.42,
+     "border": 0.06,
+     "frame": "frame",
+     "spandrel": "spandrel",
+     "window": {
+      "sill": 1.1,
+      "h": 2.0,
+      "glass": "glass_w",
+      "frame": "frame",
+      "mullions": [
+       0.55
+      ],
+      "transoms": [
+       0.26
+      ],
+      "bar_w": 0.06
+     }
+    }
+   ]
+  },
+  "box2": {
+   "material": "lap",
+   "parapet_material": "lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "band",
+     "from": 22.25,
+     "to": 24.75,
+     "w": 2.2,
+     "storeys": [
+      0,
+      1
+     ],
+     "bottom": 1.05,
+     "top": 2.25,
+     "depth": 0.42,
+     "border": 0.06,
+     "frame": "frame",
+     "spandrel": "spandrel",
+     "window": {
+      "sill": 1.1,
+      "h": 2.0,
+      "glass": "glass_w",
+      "frame": "frame",
+      "mullions": [
+       0.55
+      ],
+      "transoms": [
+       0.26
+      ],
+      "bar_w": 0.06
+     }
+    }
+   ]
+  },
+  "box3": {
+   "material": "lap",
+   "parapet_material": "lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "band",
+     "from": 33.75,
+     "to": 36.25,
+     "w": 2.2,
+     "storeys": [
+      0,
+      1
+     ],
+     "bottom": 1.05,
+     "top": 2.25,
+     "depth": 0.42,
+     "border": 0.06,
+     "frame": "frame",
+     "spandrel": "spandrel",
+     "window": {
+      "sill": 1.1,
+      "h": 2.0,
+      "glass": "glass_w",
+      "frame": "frame",
+      "mullions": [
+       0.55
+      ],
+      "transoms": [
+       0.26
+      ],
+      "bar_w": 0.06
+     }
+    }
+   ]
+  },
+  "box4": {
+   "material": "lap",
+   "parapet_material": "lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "band",
+     "from": 45.25,
+     "to": 47.75,
+     "w": 2.2,
+     "storeys": [
+      0,
+      1
+     ],
+     "bottom": 1.05,
+     "top": 2.25,
+     "depth": 0.42,
+     "border": 0.06,
+     "frame": "frame",
+     "spandrel": "spandrel",
+     "window": {
+      "sill": 1.1,
+      "h": 2.0,
+      "glass": "glass_w",
+      "frame": "frame",
+      "mullions": [
+       0.55
+      ],
+      "transoms": [
+       0.26
+      ],
+      "bar_w": 0.06
+     }
+    }
+   ]
+  },
+  "lw_w": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 1.8,
+   "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
+   "ground": {
+    "kind": "window",
+    "w": 0.98,
+    "h": 2.95,
+    "sill": 0.55,
+    "depth": 0.32,
+    "reveal": "dark",
+    "glass": "glass_low",
+    "frame": "frame",
+    "panels": [
+     [
+      0.0,
+      1.0,
+      0.87,
+      1.0,
+      "louvre"
+     ]
+    ]
+   }
+  },
+  "lw_arc": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 0.9,
+   "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
+   "ground": {
+    "kind": "window",
+    "w": 0.74,
+    "h": 2.95,
+    "sill": 0.55,
+    "depth": 0.32,
+    "reveal": "vent_back",
+    "glass": "glass_black",
+    "frame": "frame",
+    "panels": [
+     [
+      0.0,
+      1.0,
+      0.87,
+      1.0,
+      "louvre"
+     ]
+    ]
+   }
+  },
+  "lw_s": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 1.15,
+   "upper": "blank",
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ],
+   "ground": {
+    "kind": "window",
+    "w": 0.62,
+    "h": 2.95,
+    "sill": 0.55,
+    "depth": 0.3,
+    "reveal": "vent_back",
+    "glass": "glass_black",
+    "frame": "frame",
+    "panels": [
+     [
+      0.0,
+      1.0,
+      0.87,
+      1.0,
+      "louvre"
+     ]
+    ]
+   }
+  },
+  "lw_plain": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "bands": [
+    {
+     "storey": 0,
+     "offset": 3.62,
+     "h": 0.025,
+     "material": "joint"
+    }
+   ]
+  },
+  "door_w": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "entry",
+     "from": 55.05,
+     "to": 56.95,
+     "door": {
+      "kind": "lobby",
+      "w": 1.5,
+      "h": 3.4,
+      "mullions": [
+       0.72
+      ],
+      "transoms": [
+       0.81
+      ],
+      "panels": [
+       [
+        0.0,
+        1.0,
+        0.84,
+        1.0,
+        "louvre"
+       ]
+      ]
+     },
+     "landing": {
+      "w": 1.8,
+      "depth": 0.8
+     }
+    }
+   ]
+  },
+  "pod_curtain": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 3.5,
+   "upper": "blank",
+   "ground": {
+    "kind": "storefront",
+    "pier": 0.1,
+    "sill": 0.08,
+    "head": 0.3,
+    "depth": 0.1,
+    "glass": "glass_curtain",
+    "frame": "frame",
+    "frame_w": 0.035,
+    "bar_w": 0.03,
+    "mullion_step": 1.15,
+    "transoms": [
+     0.8
+    ]
+   },
+   "features": [
+    {
+     "type": "entry",
+     "from": 31.2,
+     "to": 33.5,
+     "door": {
+      "kind": "lobby",
+      "w": 2.1,
+      "h": 3.0,
+      "mullions": [
+       0.5
+      ],
+      "transoms": [
+       0.78
+      ]
+     },
+     "landing": {
+      "w": 2.4,
+      "depth": 0.8
+     }
+    }
+   ]
+  },
+  "pod_curve": {
+   "material": "panel",
+   "parapet_material": "panel",
+   "module": 1.25,
+   "upper": "blank",
+   "ground": {
+    "kind": "window",
+    "w": 0.62,
+    "h": 2.7,
+    "sill": 0.5,
+    "depth": 0.25,
+    "reveal": "vent_back",
+    "glass": "glass_black",
+    "frame": "frame"
+   }
+  },
+  "pod_ene_s": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 12.4,
+     "to": 17.2,
+     "module": 1.6,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "vent_back",
+      "glass": "glass_black",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    }
+   ]
+  },
+  "pod_ene_n": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 36.0,
+     "to": 38.8,
+     "module": 1.4,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "vent_back",
+      "glass": "glass_black",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    },
+    {
+     "type": "bays",
+     "from": 42.6,
+     "to": 45.0,
+     "module": 2.4,
+     "ground": {
+      "kind": "window",
+      "w": 2.3,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.26,
+      "reveal": "spandrel",
+      "glass": "glass_w",
+      "frame": "frame",
+      "frame_w": 0.05,
+      "mullions": [
+       0.5
+      ]
+     }
+    },
+    {
+     "type": "bays",
+     "from": 45.0,
+     "to": 46.1,
+     "module": 1.1,
+     "ground": {
+      "kind": "window",
+      "w": 0.6,
+      "h": 2.6,
+      "sill": 0.45,
+      "depth": 0.34,
+      "reveal": "vent_back",
+      "glass": "glass_black",
+      "frame": "frame",
+      "frame_w": 0.04
+     }
+    }
+   ]
+  },
+  "pod_n": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 2.8,
+   "upper": "blank",
+   "ground": {
+    "kind": "window",
+    "w": 1.75,
+    "h": 2.5,
+    "sill": 0.5,
+    "depth": 0.24,
+    "reveal": "spandrel",
+    "glass": "glass_w",
+    "frame": "frame",
+    "mullions": [
+     0.5
+    ]
+   }
+  },
+  "pod_nnw": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 1.75,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 0.8,
+     "to": 10.6,
+     "module": 1.75,
+     "ground": {
+      "kind": "window",
+      "w": 0.62,
+      "h": 2.55,
+      "sill": 0.55,
+      "depth": 0.3,
+      "reveal": "spandrel",
+      "glass": "glass_dark",
+      "frame": "frame"
+     }
+    }
+   ]
+  },
+  "pod_plain": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "wood": {
+   "material": "wood",
+   "parapet_material": "wood",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "wood_back": {
+   "material": "wood_pale",
+   "parapet_material": "wood_pale",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "t_front": {
+   "material": "corr",
+   "parapet_material": "corr",
+   "grid": {
+    "columns": [
+     [
+      12.14,
+      13.86
+     ],
+     [
+      14.94,
+      16.66
+     ],
+     [
+      17.74,
+      19.46
+     ],
+     [
+      20.54,
+      22.26
+     ],
+     [
+      23.34,
+      25.06
+     ],
+     [
+      26.04,
+      27.76
+     ],
+     [
+      28.84,
+      30.56
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.62,
+      "head": 2.36
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "sse02, cr07 (Sep 2025)",
+     "date": "2025-09",
+     "side": "SSE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.1,
+    "reveal": "red",
+    "materials": {
+     "pane": "glass",
+     "frame": "red",
+     "mullion": "red",
+     "transom": "red"
+    },
+    "box": {
+     "project": 0.18,
+     "t": 0.035,
+     "material": "red"
+    },
+    "panels": [
+     [
+      0.0,
+      0.62,
+      0.735,
+      0.76,
+      "red"
+     ],
+     [
+      0.62,
+      1.0,
+      0.16,
+      0.185,
+      "red"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.04,
+     "mullion_w": 0.04,
+     "split": 0.62,
+     "split_min_w": 1.2,
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "red"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "red"
+   }
+  },
+  "t_west": {
+   "material": "corr",
+   "parapet_material": "corr",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 0.7,
+     "to": 4.7,
+     "module": 4.0,
+     "upper": "window",
+     "window": {
+      "w": 2.15,
+      "h": 0.62,
+      "sill": 1.1,
+      "depth": 0.12,
+      "reveal": "red_w",
+      "glass": "glass_pale",
+      "frame": "red_w",
+      "frame_w": 0.07,
+      "box": {
+       "project": 0.1,
+       "t": 0.07,
+       "material": "red_w"
+      }
+     },
+     "ground": {
+      "w": 2.15,
+      "h": 0.62,
+      "sill": 1.1,
+      "depth": 0.12,
+      "reveal": "red_w",
+      "glass": "glass_pale",
+      "frame": "red_w",
+      "frame_w": 0.07,
+      "box": {
+       "project": 0.1,
+       "t": 0.07,
+       "material": "red_w"
+      },
+      "kind": "window"
+     }
+    },
+    {
+     "type": "bays",
+     "from": 5.2,
+     "to": 7.8,
+     "module": 2.6,
+     "upper": "window",
+     "window": {
+      "w": 1.62,
+      "h": 1.72,
+      "sill": 0.62,
+      "depth": 0.12,
+      "reveal": "red_w",
+      "glass": "glass_pale",
+      "frame": "red_w",
+      "frame_w": 0.07,
+      "bar_w": 0.06,
+      "mullions": [
+       0.62
+      ],
+      "panels": [
+       [
+        0.0,
+        0.62,
+        0.72,
+        0.755,
+        "red_w"
+       ],
+       [
+        0.62,
+        1.0,
+        0.145,
+        0.18,
+        "red_w"
+       ]
+      ],
+      "box": {
+       "project": 0.1,
+       "t": 0.07,
+       "material": "red_w"
+      }
+     },
+     "ground": {
+      "w": 1.62,
+      "h": 1.72,
+      "sill": 0.62,
+      "depth": 0.12,
+      "reveal": "red_w",
+      "glass": "glass_pale",
+      "frame": "red_w",
+      "frame_w": 0.07,
+      "bar_w": 0.06,
+      "mullions": [
+       0.62
+      ],
+      "panels": [
+       [
+        0.0,
+        0.62,
+        0.72,
+        0.755,
+        "red_w"
+       ],
+       [
+        0.62,
+        1.0,
+        0.145,
+        0.18,
+        "red_w"
+       ]
+      ],
+      "box": {
+       "project": 0.1,
+       "t": 0.07,
+       "material": "red_w"
+      },
+      "kind": "window"
+     }
+    }
+   ]
+  },
+  "t_side": {
+   "material": "corr",
+   "parapet_material": "corr",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "t_return": {
+   "material": "corr",
+   "parapet_material": "corr",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "plaques": [
+    {
+     "from": 0.3,
+     "to": 1.3,
+     "bottom": 2.7,
+     "top": 8.0,
+     "t": 0.04,
+     "material": "sign_letters"
+    }
+   ]
+  },
+  "sd_w": {
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
+   "grid": {
+    "columns": [
+     [
+      0.7,
+      1.9
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.6,
+      "head": 2.2
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "owner o4, o3, o1 (Nov 2026); wsw05, wsw06 (Jun 2026)",
+     "date": "2026",
+     "side": "WSW"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.3,
+    "reveal": "spandrel",
+    "materials": {
+     "pane": "glass"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "split": 0.5,
+     "split_min_w": 1.0
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "sd_court": {
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
+   "grid": {
+    "columns": [
+     [
+      0.85,
+      2.35
+     ],
+     [
+      3.65,
+      5.15
+     ],
+     [
+      6.45,
+      7.95
+     ],
+     [
+      9.25,
+      10.75
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.6,
+      "head": 2.2
+     }
+    },
+    "blank_cells": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      3,
+      0
+     ],
+     [
+      3,
+      1
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "wsw06 (Jun 2026): upper floors over the low roof",
+     "date": "2026-06",
+     "side": "court S"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.3,
+    "reveal": "spandrel",
+    "materials": {
+     "pane": "glass"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "split": 0.5,
+     "split_min_w": 1.0
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "sd_plain": {
+   "material": "sd_lap",
+   "parapet_material": "sd_lap",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "e_grid": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "grid": {
+    "columns": [
+     [
+      1.4,
+      5.0
+     ],
+     [
+      6.225,
+      8.775
+     ],
+     [
+      9.575,
+      12.125
+     ],
+     [
+      12.925,
+      15.475
+     ],
+     [
+      16.275,
+      18.825
+     ],
+     [
+      19.625,
+      22.175
+     ],
+     [
+      26.125,
+      28.675
+     ],
+     [
+      29.475,
+      32.025
+     ],
+     [
+      32.825,
+      35.375
+     ],
+     [
+      36.175,
+      38.725
+     ],
+     [
+      39.525,
+      42.075
+     ],
+     [
+      42.875,
+      45.425
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.3,
+      "head": 2.72
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "ss02, la02 (Jun 2026); kEX8 (Sep 2025)",
+     "date": "2026-06",
+     "side": "ENE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.5,
+    "reveal": "stucco",
+    "materials": {
+     "pane": "glass_pale"
+    },
+    "panels": [
+     [
+      0.38,
+      0.62,
+      0.0,
+      0.85,
+      "spandrel"
+     ],
+     [
+      0.0,
+      1.0,
+      0.85,
+      1.0,
+      "spandrel"
+     ],
+     [
+      0.0,
+      0.05,
+      0.0,
+      0.85,
+      "spandrel"
+     ],
+     [
+      0.95,
+      1.0,
+      0.0,
+      0.85,
+      "spandrel"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.06,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "c_sse": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "grid": {
+    "columns": [
+     [
+      36.15,
+      40.05
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.3,
+      "head": 2.72
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "sse02, cr07 (Sep 2025)",
+     "date": "2025-09",
+     "side": "SSE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.5,
+    "reveal": "stucco",
+    "materials": {
+     "pane": "glass_pale"
+    },
+    "panels": [
+     [
+      0.38,
+      0.62,
+      0.0,
+      0.85,
+      "spandrel"
+     ],
+     [
+      0.0,
+      1.0,
+      0.85,
+      1.0,
+      "spandrel"
+     ],
+     [
+      0.0,
+      0.05,
+      0.0,
+      0.85,
+      "spandrel"
+     ],
+     [
+      0.95,
+      1.0,
+      0.0,
+      0.85,
+      "spandrel"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.06,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "e_slot_back": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "grid": {
+    "columns": [
+     [
+      0.2,
+      2.8
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.5,
+      "head": 2.75
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "ss02, la02 (Jun 2026); kEX8 (Sep 2025)",
+     "date": "2026-06",
+     "side": "ENE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.12,
+    "reveal": "dark",
+    "materials": {
+     "pane": "glass"
+    },
+    "unit": {
+     "frame_w": 0.06,
+     "mullion_w": 0.05,
+     "transoms": [
+      0.8
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "n_slot_back": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "grid": {
+    "columns": [
+     [
+      46.35,
+      47.45
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.5,
+      "head": 2.75
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "ss02, la02 (Jun 2026); kEX8 (Sep 2025)",
+     "date": "2026-06",
+     "side": "ENE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.12,
+    "reveal": "dark",
+    "materials": {
+     "pane": "glass_lit"
+    },
+    "unit": {
+     "frame_w": 0.05,
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass_lit",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass_lit",
+    "frame": "frame"
+   }
+  },
+  "slot_side": {
+   "material": "dark",
+   "parapet_material": "dark",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "n_red": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "grid": {
+    "columns": [
+     [
+      48.65,
+      51.15
+     ],
+     [
+      51.95,
+      54.45
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.3,
+      "head": 2.72
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "ss02, la02 (Jun 2026); kEX8 (Sep 2025)",
+     "date": "2026-06",
+     "side": "ENE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.42,
+    "reveal": "stucco",
+    "materials": {
+     "pane": "glass_pale",
+     "frame": "red",
+     "mullion": "red",
+     "transom": "red"
+    },
+    "panels": [
+     [
+      0.38,
+      0.62,
+      0.0,
+      0.85,
+      "red"
+     ],
+     [
+      0.0,
+      1.0,
+      0.85,
+      1.0,
+      "rib"
+     ],
+     [
+      0.0,
+      0.05,
+      0.0,
+      0.85,
+      "red"
+     ],
+     [
+      0.95,
+      1.0,
+      0.0,
+      0.85,
+      "red"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.05,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "n_nnw": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "grid": {
+    "columns": [
+     [
+      1.05,
+      3.35
+     ],
+     [
+      4.65,
+      6.95
+     ],
+     [
+      8.25,
+      10.55
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.3,
+      "head": 2.72
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "lm01, lm02 (Sep 2025), lm05 (Mar 2025)",
+     "date": "2025-09",
+     "side": "NNW east end"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.42,
+    "reveal": "stucco",
+    "materials": {
+     "pane": "glass_pale",
+     "frame": "red",
+     "mullion": "red",
+     "transom": "red"
+    },
+    "panels": [
+     [
+      0.38,
+      0.62,
+      0.0,
+      0.85,
+      "red"
+     ],
+     [
+      0.0,
+      1.0,
+      0.85,
+      1.0,
+      "rib"
+     ],
+     [
+      0.0,
+      0.05,
+      0.0,
+      0.85,
+      "red"
+     ],
+     [
+      0.95,
+      1.0,
+      0.0,
+      0.85,
+      "red"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.05,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "n_west": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "module": 50.0,
+   "skip_storeys": [
+    0,
+    1,
+    2
+   ],
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   },
+   "features": [
+    {
+     "type": "bays",
+     "from": 1.2,
+     "to": 3.6,
+     "module": 2.4,
+     "upper": "window",
+     "window": {
+      "w": 1.3,
+      "h": 0.32,
+      "sill": 1.45,
+      "depth": 0.1,
+      "reveal": "dark",
+      "glass": "louvre",
+      "frame": "frame"
+     }
+    },
+    {
+     "type": "bays",
+     "from": 6.2,
+     "to": 7.8,
+     "module": 1.6,
+     "upper": "window",
+     "window": {
+      "w": 0.72,
+      "h": 1.5,
+      "sill": 0.75,
+      "depth": 0.12,
+      "reveal": "dark",
+      "glass": "glass",
+      "frame": "frame"
+     }
+    }
+   ]
+  },
+  "e_court": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "grid": {
+    "columns": [
+     [
+      0.7,
+      2.9
+     ],
+     [
+      3.6,
+      5.8
+     ],
+     [
+      6.5,
+      8.7
+     ],
+     [
+      9.4,
+      11.6
+     ],
+     [
+      12.3,
+      14.5
+     ],
+     [
+      15.2,
+      17.4
+     ],
+     [
+      18.1,
+      20.3
+     ],
+     [
+      21.0,
+      23.2
+     ],
+     [
+      23.9,
+      26.1
+     ],
+     [
+      26.8,
+      29.0
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.3,
+      "head": 2.72
+     }
+    },
+    "blank_cells": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      1,
+      0
+     ],
+     [
+      1,
+      1
+     ],
+     [
+      1,
+      2
+     ],
+     [
+      2,
+      0
+     ],
+     [
+      2,
+      1
+     ],
+     [
+      2,
+      2
+     ],
+     [
+      3,
+      0
+     ],
+     [
+      3,
+      1
+     ],
+     [
+      3,
+      2
+     ],
+     [
+      4,
+      0
+     ],
+     [
+      4,
+      1
+     ],
+     [
+      4,
+      2
+     ],
+     [
+      5,
+      0
+     ],
+     [
+      5,
+      1
+     ],
+     [
+      5,
+      2
+     ],
+     [
+      6,
+      0
+     ],
+     [
+      6,
+      1
+     ],
+     [
+      6,
+      2
+     ],
+     [
+      7,
+      0
+     ],
+     [
+      7,
+      1
+     ],
+     [
+      7,
+      2
+     ],
+     [
+      8,
+      0
+     ],
+     [
+      8,
+      1
+     ],
+     [
+      8,
+      2
+     ],
+     [
+      9,
+      0
+     ],
+     [
+      9,
+      1
+     ],
+     [
+      9,
+      2
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "wsw05, wsw06 (Jun 2026): top two rows over the low roof",
+     "date": "2026-06",
+     "side": "court E"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.42,
+    "reveal": "spandrel",
+    "materials": {
+     "pane": "glass_w"
+    },
+    "panels": [
+     [
+      0.36,
+      0.64,
+      0.0,
+      0.8,
+      "spandrel"
+     ],
+     [
+      0.0,
+      1.0,
+      0.8,
+      1.0,
+      "spandrel"
+     ],
+     [
+      0.0,
+      0.08,
+      0.0,
+      0.8,
+      "spandrel"
+     ],
+     [
+      0.92,
+      1.0,
+      0.0,
+      0.8,
+      "spandrel"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.07,
+     "transom_w": 0.05,
+     "transoms": [
+      0.3
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "pier_w": {
+   "material": "stucco_dim",
+   "parapet_material": "stucco_dim",
+   "grid": {
+    "columns": [
+     [
+      1.1,
+      2.0
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 1.3,
+      "head": 2.25
+     }
+    },
+    "blank_cells": [
+     [
+      0,
+      0
+     ],
+     [
+      0,
+      1
+     ],
+     [
+      0,
+      2
+     ],
+     [
+      0,
+      5
+     ]
+    ],
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "wsw05, wsw06 (Jun 2026): the pier and its two small windows",
+     "date": "2026-06",
+     "side": "court E"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.12,
+    "reveal": "stucco_dim",
+    "materials": {
+     "pane": "glass"
+    },
+    "unit": {
+     "frame_w": 0.05,
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "frame"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "frame"
+   }
+  },
+  "pier_side": {
+   "material": "stucco_dim",
+   "parapet_material": "stucco_dim",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "rust_back": {
+   "material": "rib",
+   "parapet_material": "rib",
+   "grid": {
+    "columns": [
+     [
+      32.6,
+      33.85
+     ]
+    ],
+    "rows": {
+     "*": {
+      "sill": 0.35,
+      "head": 2.7
+     }
+    },
+    "source": {
+     "kind": "rectified_photo",
+     "ref": "sse02, cr07 (Sep 2025)",
+     "date": "2025-09",
+     "side": "SSE"
+    }
+   },
+   "grid_unit": {
+    "depth": 0.1,
+    "reveal": "red",
+    "materials": {
+     "pane": "glass",
+     "frame": "red",
+     "mullion": "red",
+     "transom": "red"
+    },
+    "panels": [
+     [
+      0.0,
+      1.0,
+      0.0,
+      0.15,
+      "rib"
+     ]
+    ],
+    "unit": {
+     "frame_w": 0.05,
+     "mullion_w": 0.05,
+     "transom_w": 0.05,
+     "split": 0.3,
+     "split_min_w": 1.0,
+     "transoms": [
+      1.85
+     ],
+     "member_d": 0.02
+    }
+   },
+   "window": {
+    "glass": "glass",
+    "frame": "red"
+   },
+   "ground": {
+    "kind": "window",
+    "glass": "glass",
+    "frame": "red"
+   }
+  },
+  "rust_side": {
+   "material": "rib",
+   "parapet_material": "rib",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  },
+  "st_plain": {
+   "material": "stucco",
+   "parapet_material": "stucco",
+   "module": 50.0,
+   "upper": "blank",
+   "ground": {
+    "kind": "blank"
+   }
+  }
+ },
+ "blocks": [
+  {
+   "id": "west",
+   "outline_xz": [
+    [
+     -181.35,
+     299.23
+    ],
+    [
+     -156.372,
+     348.237
+    ],
+    [
+     -147.549,
+     342.079
+    ],
+    [
+     -166.208,
+     305.555
+    ],
+    [
+     -157.3,
+     299.867
+    ],
+    [
+     -162.664,
+     289.576
+    ]
+   ],
+   "storeys": 3,
+   "ground_h": 4.0,
+   "storey_h": 3.2,
+   "parapet": {
+    "h": 0.7,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "plain_court",
+    "p0": "w_wsw",
+    "p1": "w_south",
+    "p5": "w_nnw"
+   }
+  },
+  {
+   "id": "low",
+   "outline_xz": [
+    [
+     -150.827,
+     348.105
+    ],
+    [
+     -155.193,
+     350.33
+    ],
+    [
+     -154.33,
+     352.023
+    ],
+    [
+     -153.468,
+     353.716
+    ],
+    [
+     -152.605,
+     355.408
+    ],
+    [
+     -151.742,
+     357.101
+    ],
+    [
+     -150.88,
+     358.793
+    ],
+    [
+     -150.303,
+     359.578
+    ],
+    [
+     -149.505,
+     360.136
+    ],
+    [
+     -148.57,
+     360.409
+    ],
+    [
+     -147.598,
+     360.369
+    ],
+    [
+     -146.689,
+     360.019
+    ],
+    [
+     -145.94,
+     359.397
+    ],
+    [
+     -145.459,
+     358.214
+    ],
+    [
+     -144.929,
+     357.074
+    ],
+    [
+     -144.312,
+     356.01
+    ],
+    [
+     -143.585,
+     355.041
+    ],
+    [
+     -142.748,
+     354.166
+    ],
+    [
+     -141.824,
+     353.368
+    ],
+    [
+     -140.851,
+     352.612
+    ],
+    [
+     -147.549,
+     342.079
+    ],
+    [
+     -152.233,
+     345.348
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 5.0,
+   "storey_h": 3.0,
+   "parapet": {
+    "h": 0.9,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "lw_plain",
+    "p1": "lw_w",
+    "p2": "lw_w",
+    "p3": "lw_w",
+    "p4": "lw_w",
+    "p5": "lw_w",
+    "p6": "lw_plain",
+    "p7": "lw_arc",
+    "p8": "lw_plain",
+    "p9": "lw_arc",
+    "p10": "lw_plain",
+    "p11": "lw_arc",
+    "p12": "lw_s",
+    "p13": "lw_s",
+    "p14": "lw_s",
+    "p15": "lw_s",
+    "p16": "lw_s",
+    "p17": "lw_s"
+   },
+   "roof_material": "deck"
+  },
+  {
+   "id": "doorb",
+   "outline_xz": [
+    [
+     -155.958,
+     347.948
+    ],
+    [
+     -154.837,
+     350.149
+    ],
+    [
+     -150.827,
+     348.105
+    ],
+    [
+     -152.233,
+     345.348
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 4.9,
+   "storey_h": 3.0,
+   "parapet": {
+    "h": 0.4,
+    "t": 0.25
+   },
+   "faces": {
+    "default": "lw_plain",
+    "p0": "door_w"
+   },
+   "roof_material": "deck"
+  },
+  {
+   "id": "court",
+   "outline_xz": [
+    [
+     -147.549,
+     342.079
+    ],
+    [
+     -144.506,
+     342.135
+    ],
+    [
+     -136.619,
+     332.506
+    ],
+    [
+     -138.703,
+     328.665
+    ],
+    [
+     -142.475,
+     329.856
+    ],
+    [
+     -143.258,
+     326.806
+    ],
+    [
+     -157.3,
+     299.867
+    ],
+    [
+     -166.208,
+     305.555
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 3.9,
+   "storey_h": 3.0,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "plain_court"
+   },
+   "roof_material": "deck"
+  },
+  {
+   "id": "podium",
+   "outline_xz": [
+    [
+     -140.851,
+     352.612
+    ],
+    [
+     -125.194,
+     334.555
+    ],
+    [
+     -124.347,
+     334.495
+    ],
+    [
+     -121.867,
+     331.635
+    ],
+    [
+     -121.27,
+     330.754
+    ],
+    [
+     -120.896,
+     329.758
+    ],
+    [
+     -120.767,
+     328.703
+    ],
+    [
+     -120.889,
+     327.646
+    ],
+    [
+     -121.255,
+     326.647
+    ],
+    [
+     -123.945,
+     321.356
+    ],
+    [
+     -124.316,
+     319.301
+    ],
+    [
+     -129.12,
+     309.852
+    ],
+    [
+     -133.934,
+     312.299
+    ],
+    [
+     -135.293,
+     309.625
+    ],
+    [
+     -130.479,
+     307.178
+    ],
+    [
+     -139.815,
+     288.814
+    ],
+    [
+     -140.973,
+     289.404
+    ],
+    [
+     -141.608,
+     288.156
+    ],
+    [
+     -139.736,
+     287.204
+    ],
+    [
+     -143.415,
+     279.967
+    ],
+    [
+     -162.526,
+     289.842
+    ],
+    [
+     -157.3,
+     299.867
+    ],
+    [
+     -143.258,
+     326.806
+    ],
+    [
+     -142.475,
+     329.856
+    ],
+    [
+     -138.703,
+     328.665
+    ],
+    [
+     -136.619,
+     332.506
+    ],
+    [
+     -144.506,
+     342.135
+    ],
+    [
+     -147.549,
+     342.079
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 3.9,
+   "storey_h": 3.0,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "pod_plain",
+    "p0": "pod_curtain",
+    "p2": "pod_curve",
+    "p3": "pod_curve",
+    "p4": "pod_curve",
+    "p5": "pod_curve",
+    "p6": "pod_curve",
+    "p7": "pod_curve",
+    "p8": "pod_curve",
+    "p10": "pod_ene_s",
+    "p11": "wood",
+    "p12": "wood_back",
+    "p13": "wood",
+    "p14": "pod_ene_n",
+    "p18": "pod_n",
+    "p19": "pod_nnw"
+   }
+  },
+  {
+   "id": "tower_up",
+   "outline_xz": [
+    [
+     -138.338,
+     353.071
+    ],
+    [
+     -124.842,
+     337.508
+    ],
+    [
+     -131.793,
+     331.481
+    ],
+    [
+     -145.288,
+     347.044
+    ]
+   ],
+   "storeys": 5,
+   "ground_h": 3.2,
+   "storey_h": 3.2,
+   "parapet": {
+    "h": 1.35,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "t_side",
+    "p0": "t_front",
+    "p1": "t_return",
+    "p3": "t_west"
+   },
+   "stacked": true,
+   "floor_raise": 3.75,
+   "roof_items": [
+    {
+     "kind": "pv",
+     "edge": 2,
+     "s": [
+      13.32,
+      31.2
+     ],
+     "d": [
+      4.86,
+      8.64
+     ],
+     "h": 0.45
+    }
+   ]
+  },
+  {
+   "id": "sdark_up",
+   "outline_xz": [
+    [
+     -144.764,
+     346.44
+    ],
+    [
+     -134.348,
+     334.427
+    ],
+    [
+     -136.619,
+     332.506
+    ],
+    [
+     -144.506,
+     342.135
+    ],
+    [
+     -146.728,
+     344.736
+    ]
+   ],
+   "storeys": 5,
+   "ground_h": 3.15,
+   "storey_h": 3.15,
+   "parapet": {
+    "h": 1.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "sd_plain",
+    "p2": "sd_court",
+    "p4": "sd_w"
+   },
+   "stacked": true,
+   "floor_raise": 3.75,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "e_up",
+   "outline_xz": [
+    [
+     -123.269,
+     335.695
+    ],
+    [
+     -118.393,
+     330.071
+    ],
+    [
+     -128.763,
+     309.671
+    ],
+    [
+     -130.457,
+     310.532
+    ],
+    [
+     -131.817,
+     307.858
+    ],
+    [
+     -130.123,
+     306.997
+    ],
+    [
+     -139.458,
+     288.633
+    ],
+    [
+     -140.617,
+     289.222
+    ],
+    [
+     -141.251,
+     287.974
+    ],
+    [
+     -139.468,
+     287.068
+    ],
+    [
+     -143.284,
+     279.562
+    ],
+    [
+     -162.664,
+     289.576
+    ],
+    [
+     -157.3,
+     299.867
+    ],
+    [
+     -143.258,
+     326.806
+    ],
+    [
+     -142.475,
+     329.856
+    ],
+    [
+     -138.703,
+     328.665
+    ],
+    [
+     -136.619,
+     332.506
+    ],
+    [
+     -134.348,
+     334.427
+    ],
+    [
+     -131.793,
+     331.481
+    ],
+    [
+     -126.051,
+     336.46
+    ],
+    [
+     -124.478,
+     334.646
+    ]
+   ],
+   "storeys": 5,
+   "ground_h": 3.15,
+   "storey_h": 3.15,
+   "parapet": {
+    "h": 1.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "plain_court",
+    "p0": "c_sse",
+    "p1": "e_grid",
+    "p2": "slot_side",
+    "p3": "e_slot_back",
+    "p4": "slot_side",
+    "p5": "e_grid",
+    "p6": "slot_side",
+    "p7": "n_slot_back",
+    "p8": "slot_side",
+    "p9": "n_red",
+    "p10": "n_nnw",
+    "p11": "n_west",
+    "p12": "e_court",
+    "p19": "rust_back",
+    "p20": "rust_side"
+   },
+   "stacked": true,
+   "floor_raise": 3.75,
+   "roof_items": [
+    {
+     "kind": "pv",
+     "edge": 3,
+     "s": [
+      19.6,
+      43.82
+     ],
+     "d": [
+      12.3,
+      18.4
+     ],
+     "h": 0.45
+    },
+    {
+     "kind": "pv",
+     "edge": 3,
+     "s": [
+      20.72,
+      42.99
+     ],
+     "d": [
+      4.29,
+      9.38
+     ],
+     "h": 0.45
+    },
+    {
+     "kind": "pv",
+     "edge": 3,
+     "s": [
+      47.53,
+      54.16
+     ],
+     "d": [
+      9.7,
+      15.16
+     ],
+     "h": 0.45
+    },
+    {
+     "kind": "pv",
+     "edge": 3,
+     "s": [
+      49.03,
+      54.0
+     ],
+     "d": [
+      2.45,
+      7.11
+     ],
+     "h": 0.45
+    },
+    {
+     "kind": "pv",
+     "edge": 3,
+     "s": [
+      7.03,
+      13.35
+     ],
+     "d": [
+      1.36,
+      7.31
+     ],
+     "h": 0.45
+    },
+    {
+     "kind": "box",
+     "edge": 3,
+     "s": [
+      13.94,
+      16.06
+     ],
+     "d": [
+      16.75,
+      21.31
+     ],
+     "h": 2.9,
+     "material": "mech_mid",
+     "top": "mech_dark"
+    },
+    {
+     "kind": "box",
+     "edge": 4,
+     "s": [
+      1.6,
+      8.6
+     ],
+     "d": [
+      8.3,
+      10.9
+     ],
+     "h": 2.7,
+     "material": "mech_dark",
+     "top": "mech_dark"
+    },
+    {
+     "kind": "box",
+     "edge": 3,
+     "s": [
+      44.69,
+      51.36
+     ],
+     "d": [
+      18.5,
+      21.26
+     ],
+     "h": 2.7,
+     "material": "mech_dark",
+     "top": "mech_dark"
+    },
+    {
+     "kind": "box",
+     "edge": 3,
+     "s": [
+      45.21,
+      45.57
+     ],
+     "d": [
+      19.85,
+      20.21
+     ],
+     "h": 3.7,
+     "material": "metal",
+     "top": "metal"
+    }
+   ]
+  },
+  {
+   "id": "rust_joint",
+   "outline_xz": [
+    [
+     -140.927,
+     352.547
+    ],
+    [
+     -140.075,
+     351.565
+    ],
+    [
+     -142.871,
+     349.141
+    ],
+    [
+     -143.722,
+     350.123
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 2.0,
+   "storey_h": 2.0,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "rust_side"
+   },
+   "stacked": true,
+   "floor_raise": 3.9,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "pier",
+   "outline_xz": [
+    [
+     -143.952,
+     327.14
+    ],
+    [
+     -142.475,
+     329.856
+    ],
+    [
+     -133.685,
+     325.076
+    ],
+    [
+     -135.162,
+     322.36
+    ]
+   ],
+   "storeys": 6,
+   "ground_h": 3.15,
+   "storey_h": 3.15,
+   "parapet": {
+    "h": 1.15,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "pier_side",
+    "p0": "pier_w"
+   },
+   "stacked": true,
+   "floor_raise": 3.75,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "portal_head",
+   "outline_xz": [
+    [
+     -129.12,
+     309.852
+    ],
+    [
+     -130.479,
+     307.178
+    ],
+    [
+     -131.906,
+     307.903
+    ],
+    [
+     -130.546,
+     310.577
+    ]
+   ],
+   "storeys": 1,
+   "ground_h": 0.7,
+   "storey_h": 0.7,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "pod_plain"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "bay1",
+   "outline_xz": [
+    [
+     -177.901,
+     308.198
+    ],
+    [
+     -175.676,
+     312.563
+    ],
+    [
+     -174.785,
+     312.109
+    ],
+    [
+     -177.01,
+     307.744
+    ]
+   ],
+   "storeys": 2,
+   "ground_h": 3.1,
+   "storey_h": 5.6,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "box_side",
+    "e0": "box1"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "bay2",
+   "outline_xz": [
+    [
+     -172.679,
+     318.444
+    ],
+    [
+     -170.454,
+     322.809
+    ],
+    [
+     -169.563,
+     322.355
+    ],
+    [
+     -171.788,
+     317.989
+    ]
+   ],
+   "storeys": 2,
+   "ground_h": 3.1,
+   "storey_h": 5.6,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "box_side",
+    "e0": "box2"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "bay3",
+   "outline_xz": [
+    [
+     -167.457,
+     328.69
+    ],
+    [
+     -165.232,
+     333.055
+    ],
+    [
+     -164.341,
+     332.601
+    ],
+    [
+     -166.566,
+     328.235
+    ]
+   ],
+   "storeys": 2,
+   "ground_h": 3.1,
+   "storey_h": 5.6,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "box_side",
+    "e0": "box3"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
+   "soffit": "soffit_dark"
+  },
+  {
+   "id": "bay4",
+   "outline_xz": [
+    [
+     -162.235,
+     338.936
+    ],
+    [
+     -160.01,
+     343.301
+    ],
+    [
+     -159.119,
+     342.847
+    ],
+    [
+     -161.344,
+     338.481
+    ]
+   ],
+   "storeys": 2,
+   "ground_h": 3.1,
+   "storey_h": 5.6,
+   "parapet": {
+    "h": 0.0,
+    "t": 0.3
+   },
+   "faces": {
+    "default": "box_side",
+    "e0": "box4"
+   },
+   "stacked": true,
+   "floor_raise": 3.2,
+   "soffit": "soffit_dark"
+  }
+ ],
+ "round_columns": [
+  {
+   "xz": [
+    -138.201,
+    351.998
+   ],
+   "r": 0.5,
+   "top": 3.8
+  },
+  {
+   "xz": [
+    -134.729,
+    347.994
+   ],
+   "r": 0.5,
+   "top": 3.8
+  },
+  {
+   "xz": [
+    -129.422,
+    341.874
+   ],
+   "r": 0.5,
+   "top": 3.8
+  },
+  {
+   "xz": [
+    -126.016,
+    337.946
+   ],
+   "r": 0.5,
+   "top": 3.8
+  }
+ ],
+ "study_notes": {
+  "observed": "Owner photos Nov 2026; Street View Mar 2025, Sep 2025, Jun 2026; Esri aerials 2025-08-29 and 2026-05-26; drone photo 2023-01-26.",
+  "inferred": "Heights, bay stations, plan lines inside the ring and roof item sizes are production inference fitted to those dated views, not survey. Court walls below the rows the Jun 2026 frames show, and the middle of the NNW lane wall, have no dated photo and stay plain.",
+  "footprint": "Frozen OSM relation ring kept as the outer extent; the court ring is filled by a deck block at the second floor."
+ }
+}

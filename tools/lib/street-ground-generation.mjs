@@ -65,7 +65,8 @@ import {
 export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street_kerb_support", "street_paint"]);
 // Record kinds in emission order: [object key prefix, feature kind, material, collision, opaque].
 // Zone ground surfaces (a zone's ground.surfaces): material key -> record key
-// prefix. The park_* ones are Cityside Park's; the rest are the yards' shared
+// prefix. The park_* ones are the parks', Garden Walk's among them (aggregate, brick, tactile
+// strips and its walk); the rest are the yards' shared
 // ground (tools/lib/street-yard-generation.mjs): worn yard asphalt, compacted
 // yard gravel (beige-grey, or the pale grey of a fresh aggregate pad), grey
 // concrete rubble, black plastic sheeting over earth, plain poured concrete,
@@ -82,6 +83,10 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
   park_plaza_zigzag: "park-plaza-zigzag",
+  park_aggregate: "park-aggregate",
+  park_brick: "park-brick",
+  park_tactile: "park-tactile",
+  park_walk: "park-walk",
   promenade_asphalt: "promenade-asphalt",
   promenade_dg: "promenade-dg",
   promenade_mulch: "promenade-mulch",
@@ -236,8 +241,14 @@ function exactKeys(value, keys, label) {
 // along axis_xz from origin_xz. A way or line layer may add markings {edges,
 // centre}: painted edge lines and a dashed centre line along it (STREET_PAINT_KINDS
 // names, or null for none), as on a two-way cycle track.
+//
+// surfaces may add reach_m: its layers may run that far past the zone, under the
+// back slope of a street the zone meets, so the paving or bed comes up to the
+// sidewalk with no land showing between them (the street keeps its slope's run
+// clear of the zone), and that slope is then concrete rather than grass.
 function validateParkSurfaces(surfaces, label, minimumLift) {
-  exactKeys(surfaces, ["layers", "lift_m", "source_keys"], label);
+  exactKeys(surfaces, "reach_m" in surfaces ? ["layers", "lift_m", "reach_m", "source_keys"] : ["layers", "lift_m", "source_keys"], label);
+  invariant(surfaces.reach_m === undefined || (isFiniteNumber(surfaces.reach_m) && surfaces.reach_m > 0 && surfaces.reach_m <= 3), `${label} reach_m must lie in (0, 3] m`);
   invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m >= minimumLift - 1e-9 && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie a layer step over the road paint (${minimumLift} m) and inside the street-ground band`);
   invariant(Array.isArray(surfaces.source_keys) && surfaces.source_keys.length > 0 && surfaces.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} needs OSM source_keys`);
   invariant(Array.isArray(surfaces.layers) && surfaces.layers.length > 0, `${label} needs layers`);
@@ -1505,6 +1516,12 @@ export function generateStreetGround({
   const pilotGround = union("pilot ground zones", zoneRegions.filter((zone) => !zone.settings.kerbs).map((zone) => zone.region));
   const pilotGroundMargin = pilotGround.length === 0 ? [] :
     union("pilot ground zone margin", [pilotGround, boundaryBand("pilot ground zone outline", pilotGround, kerb.back_slope_run_m + 0.2)]);
+  // Where a zone's layers may lie: its region, and its reach_m past it.
+  for (const zone of zoneRegions) {
+    const reach = zone.settings.surfaces?.reach_m;
+    zone.layerRegion = reach ? union(`zone ${zone.id} reach`, [zone.region, boundaryBand(`zone ${zone.id} outline`, zone.region, reach)]) : zone.region;
+  }
+  const reachIndex = polygonIndex(union("zone reach", zoneRegions.filter((zone) => zone.settings.surfaces?.reach_m).map((zone) => zone.layerRegion)));
   const ruleOf = new Map();
   for (const street of rules?.streets ?? []) {
     for (const key of street.ways) ruleOf.set(key, street);
@@ -2292,7 +2309,7 @@ export function generateStreetGround({
     const probe = add(middle, scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
     const inner = add(middle, scale(skirt.edge.outward, -0.05));
     const planted = skirt.kind === "back" && plantedIndex.contains(inner);
-    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || pavedBackIndex.contains(probe) || vehicleIndex.contains(probe);
+    const paved = skirt.kind === "flare" || skirt.kind === "curb" || notchIndex.contains(probe) || pedestrianIndex.contains(probe) || lotIndex.contains(probe) || pavedBackIndex.contains(probe) || vehicleIndex.contains(probe) || reachIndex.contains(probe);
     if (planted) addPiece("planting", visible, height, tiledUv(2));
     else if (paved) addPiece("kerb", visible, height, roadFrameUv(nearestKerbLine(middle), middle, kerb.panel_m));
     else addPiece("verge", visible, height, worldUv);
@@ -2958,7 +2975,7 @@ export function generateStreetGround({
       polygon = strip(`park ${layer.id}`, line, offset - shape.width_m / 2, offset + shape.width_m / 2);
     }
     if (shape.minus_sources) polygon = difference(`park ${layer.id} minus`, polygon, shape.minus_sources.map(sourceGeometry));
-    return intersect(`park ${layer.id} in zone`, polygon, zone.region);
+    return intersect(`park ${layer.id} in zone`, polygon, zone.layerRegion);
   };
   const parkLayers = [];
   const parkLifts = new Map();
@@ -2967,8 +2984,8 @@ export function generateStreetGround({
   for (const [zoneIndex, zone] of groundZones.entries()) {
     const surfaces = zone.settings.surfaces;
     const shapes = zoneShapes.get(zone);
-    const later = groundZones.slice(zoneIndex + 1).filter((other) => boxesOverlap(zone.box, other.box) &&
-      multiArea(intersect(`zones ${zone.id} ${other.id}`, zone.region, other.region)) > 1e-8);
+    const later = groundZones.slice(zoneIndex + 1).filter((other) => boxesOverlap(boxOfMulti(zone.layerRegion), boxOfMulti(other.layerRegion)) &&
+      multiArea(intersect(`zones ${zone.id} ${other.id}`, zone.layerRegion, other.layerRegion)) > 1e-8);
     let covered = union(`park ${zone.id} later zones`, later.flatMap((other) => zoneShapes.get(other)));
     for (let index = surfaces.layers.length - 1; index >= 0; index -= 1) {
       const layer = surfaces.layers[index];
@@ -2984,19 +3001,20 @@ export function generateStreetGround({
     const { layer, polygon, lift } = entry;
     for (const key of entry.sources) sources[layer.material].add(key);
     const height = constantHeight(lift);
-    const path = layer.material === "park_concrete" ? layerLine(layer) : null;
+    const path = ["park_concrete", "park_walk", "park_brick"].includes(layer.material) ? layerLine(layer) : null;
     if (layer.frame) {
       // Plaza paint laid out in metres along the plaza's axis.
       const origin = [layer.frame.origin_xz[0], -layer.frame.origin_xz[1]];
       const axis = unit([layer.frame.axis_xz[0], -layer.frame.axis_xz[1]]);
       addPiece(layer.material, polygon, height, (point) => [dot(sub(point, origin), axis), cross(axis, sub(point, origin))], true);
     } else if (path) {
-      // Concrete paths in poured panels that follow the path's bends.
+      // Concrete paths in poured panels, and brick bands in courses, that follow
+      // the path's bends: a park path's UV in panels, the others' in metres.
       for (const cell of gridCells(boxOfMulti(polygon), PATH_FRAME_CELL_M)) {
         const piece = intersect(`park ${layer.id} cell`, polygon, cell);
         if (multiArea(piece) < 1e-6) continue;
         const box = boxOfMulti(piece);
-        addPiece(layer.material, piece, height, roadFrameUv(path.line, [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2], kerb.panel_m * 2), true);
+        addPiece(layer.material, piece, height, roadFrameUv(path.line, [(box.min_x + box.max_x) / 2, (box.min_y + box.max_y) / 2], layer.material === "park_concrete" ? kerb.panel_m * 2 : 1), true);
       }
     } else {
       // Concrete elsewhere in panels on the world grid; other ground in world UV.

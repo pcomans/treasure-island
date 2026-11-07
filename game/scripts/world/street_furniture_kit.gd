@@ -32,6 +32,8 @@ const CELL_WHITE := Rect2(0.8, 0.42, 0.15, 0.06)
 const CELL_POLE_WOOD := Rect2(0.0, 0.5, 0.25, 0.25)
 const CELL_TOW_AWAY := Rect2(0.25, 0.5, 0.25, 0.25)
 const CELL_MERSEA := Rect2(0.5, 0.5, 0.25, 0.25)
+const CELL_DO_NOT_ENTER := Rect2(0.75, 0.5, 0.25, 0.25)
+const CELL_EXCEPT := Rect2(0.0, 0.75, 0.25, 0.25)
 
 ## Vertex colours (sRGB), multiplied with the atlas cell they sample.
 ## Galvanised steel: the metal cell darkened to the dated photos' mid grey
@@ -204,6 +206,8 @@ const PROPS := {
 	"bike_rack": {"range_m": 70.0, "shadow": false},
 	"canopy_of_sky": {"range_m": 450.0, "shadow": true},
 	"lamp_disc": {"range_m": 220.0, "shadow": true},
+	"lamp_fork": {"range_m": 220.0, "shadow": true},
+	"bollard_steel": {"range_m": 90.0, "shadow": true},
 	"event_pole": {"range_m": 400.0, "shadow": true},
 	"bench_long": {"range_m": 130.0, "shadow": true},
 	"picnic_table_long": {"range_m": 150.0, "shadow": true},
@@ -247,6 +251,8 @@ const INSULATOR_TOP_M := 0.2
 const LOWER_CABLE_M := 6.6
 ## The tow-away sign's post, up to just above the sign's top (1.77 m).
 const TOW_AWAY_POST_M := 1.8
+## The post of Garden Walk's DO NOT ENTER sign, up to just above its top.
+const DO_NOT_ENTER_POST_M := 2.85
 const WIRE_SHADER := preload("res://game/resources/materials/world/street/street_wire.gdshader")
 const LABEL_RANGE_M := 60.0
 const LABEL_FONT_SIZE := 64
@@ -417,7 +423,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"post_sign":
 			var post_kind := str(params.get("sign", "tow_away"))
 			_piece(result, "post_sign_%s" % post_kind, func(b: Builder) -> void: _post_sign(b, post_kind))
-			_capsule(result, 0.05, TOW_AWAY_POST_M if post_kind == "tow_away" else 2.5)
+			_capsule(result, 0.05, TOW_AWAY_POST_M if post_kind == "tow_away" else (DO_NOT_ENTER_POST_M if post_kind == "do_not_enter" else 2.5))
 		"monument_sign":
 			_piece(result, "monument_sign", func(b: Builder) -> void: _monument_sign(b))
 			_box_shape(result, Vector3(1.24, 1.06, 0.12), Vector3(0.0, 0.53, 0.0))
@@ -477,6 +483,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"lamp_disc":
 			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b))
 			_capsule(result, 0.07, 4.2)
+		"lamp_fork":
+			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b))
+			_capsule(result, 0.1, 5.4)
+		"bollard_steel":
+			_piece(result, "bollard_steel", func(b: Builder) -> void: _bollard_steel(b))
+			_capsule(result, 0.08, 1.0)
 		"event_pole":
 			_piece(result, "event_pole", func(b: Builder) -> void: _event_pole(b))
 			_capsule(result, 0.13, 9.0)
@@ -1214,6 +1226,26 @@ func _lamp_disc(b: Builder) -> void:
 	b.disc(Vector3(0, top - 0.12, 0), Vector3.DOWN, 0.42, 24, LENS_GREY)
 
 
+## Garden Walk's lamps (owner photos o2, o3, o4, Nov 2026): a tapered galvanised
+## pole forking near its top into two slim arms that carry a flat round luminaire.
+func _lamp_fork(b: Builder) -> void:
+	var fork := 5.3
+	var head := fork + 0.78
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, fork, 0)]), PackedFloat32Array([0.1, 0.05]), 12, GALVANIZED, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.1, 0)]), PackedFloat32Array([0.17, 0.15]), 12, GALVANIZED, CELL_METAL, false, true)
+	for side: float in [-1.0, 1.0]:
+		b.tube(PackedVector3Array([Vector3(0, fork - 0.04, 0), Vector3(side * 0.16, fork + 0.3, 0), Vector3(side * 0.34, head, 0)]), PackedFloat32Array([0.032, 0.024, 0.02]), 6, GALVANIZED, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, head, 0), Vector3(0, head + 0.05, 0)]), PackedFloat32Array([0.4, 0.42]), 24, GALVANIZED, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, head + 0.05, 0), Vector3(0, head + 0.08, 0), Vector3(0, head + 0.11, 0)]), PackedFloat32Array([0.42, 0.34, 0.05]), 24, GALVANIZED, CELL_METAL, false, true)
+	b.disc(Vector3(0, head, 0), Vector3.DOWN, 0.38, 24, LENS_GREY)
+
+
+## Garden Walk's steel bollards (owner photos o2, o3, o4): a round galvanised post
+## with a rounded head, about a metre tall.
+func _bollard_steel(b: Builder) -> void:
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0), Vector3(0, 1.0, 0)]), PackedFloat32Array([0.07, 0.07, 0.06, 0.02]), 12, GALVANIZED, CELL_METAL, false, true)
+
+
 ## The 30 ft event light poles round the lawn (2024 art-location plan label
 ## "Light Pole 30 ft (event use only)"; ph08): a tall tapered grey pole with a
 ## short cross arm near its top holding two small floodlights aimed down over the
@@ -1863,10 +1895,17 @@ func _bus_shelter_roof(b: Builder) -> void:
 	_roof_arc(b, 0.0, SHELTER_HALF_X * 2.0 + 0.1, Color.WHITE, 0.02)
 
 
-## A sign on its own square galvanised post, facing -Z: "tow_away", the banded
+## A sign on its own square galvanised post, facing -Z: "do_not_enter", the R5-1
+## with its EXCEPT bicycles and emergency vehicles plaque at the ends of Garden
+## Walk (owner photos o2, o5, Nov 2026; Sep 2025 pano sse01); "tow_away", the banded
 ## tow-away sign at the owner's lot fence (0.6 x 0.92 m, its top level with the
 ## fence's top rail, as the Sep 2025 photos show), else a no-stopping plate.
 func _post_sign(b: Builder, kind: String) -> void:
+	if kind == "do_not_enter":
+		b.box(Vector3(0, DO_NOT_ENTER_POST_M * 0.5 - 0.15, 0), Basis.IDENTITY, Vector3(0.05, DO_NOT_ENTER_POST_M + 0.3, 0.05), GALVANIZED, CELL_METAL)
+		_pole_sign(b, Vector3(0, 2.5, -0.04), Vector3.FORWARD, Vector2(0.62, 0.62), CELL_DO_NOT_ENTER)
+		_pole_sign(b, Vector3(0, 1.85, -0.04), Vector3.FORWARD, Vector2(0.45, 0.6), CELL_EXCEPT)
+		return
 	if kind == "tow_away":
 		b.box(Vector3(0, TOW_AWAY_POST_M * 0.5 - 0.15, 0), Basis.IDENTITY, Vector3(0.05, TOW_AWAY_POST_M + 0.3, 0.05), GALVANIZED, CELL_METAL)
 		_pole_sign(b, Vector3(0, 1.31, -0.04), Vector3.FORWARD, Vector2(0.6, 0.92), CELL_TOW_AWAY)

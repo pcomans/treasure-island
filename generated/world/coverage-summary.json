@@ -7,13 +7,13 @@
   },
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4777,
+    "exterior_segments": 5080,
     "flat_roof_cells": 200,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14331,
+    "sample_points": 15240,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,
@@ -82,7 +82,7 @@
         "osm_levels": 1
       }
     },
-    "physical_objects": 995,
+    "physical_objects": 1003,
     "playable_rows": 735,
     "source_rows": 739,
     "status_totals": {
@@ -180,7 +180,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 329896
+    "sample_points": 335251
   },
   "road_batch_quantization_audits": [
     {

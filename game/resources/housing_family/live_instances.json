@@ -351,6 +351,12 @@
       "chunk": "res://generated/world/chunks/x_-2__z_-2.json"
     },
     {
+      "source_key": "r19685981",
+      "family": "midrise",
+      "config": "res://game/resources/midrise_family/r19685981.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json"
+    },
+    {
       "source_key": "w1272162518",
       "family": "midrise",
       "config": "res://game/resources/midrise_family/w1272162518.json",

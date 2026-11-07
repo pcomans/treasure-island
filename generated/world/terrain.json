@@ -1,13 +1,13 @@
 {
   "building_foundations": {
     "burial_margin_m": 0.02,
-    "exterior_segments": 4777,
+    "exterior_segments": 5080,
     "flat_roof_cells": 200,
     "maximum_height_deviation_m": 0,
     "maximum_positive_gap_m": 0,
     "maximum_roof_elevation_range_m": 0,
     "minimum_embed_m": -4.062,
-    "sample_points": 14331,
+    "sample_points": 15240,
     "shared_segments": 3,
     "tolerance_m": 0.001,
     "water_datum_m": 0,
@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 329896
+    "sample_points": 335251
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "2c0df37f80fe67b714abdb3a2cfae3ce1eb6fd69b8e36700dbeb91c192c42337"
+      "sha256": "b572afe2d0f6862d3ab7026760395451fa239ee28c2ad0551be426ee55676b25"
     },
-    "corrected_cells": 213,
-    "leaves": 5763,
+    "corrected_cells": 229,
+    "leaves": 6493,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 345,
+    "neighbour_edge_vertices": 361,
     "refined_cell_bounds_m": [
       [
         0,
@@ -782,6 +782,18 @@
         224
       ],
       [
+        -256,
+        192,
+        -224,
+        224
+      ],
+      [
+        -224,
+        192,
+        -192,
+        224
+      ],
+      [
         448,
         192,
         480,
@@ -842,6 +854,18 @@
         256
       ],
       [
+        -256,
+        224,
+        -224,
+        256
+      ],
+      [
+        -224,
+        224,
+        -192,
+        256
+      ],
+      [
         384,
         224,
         416,
@@ -905,6 +929,24 @@
         -320,
         256,
         -288,
+        288
+      ],
+      [
+        -256,
+        256,
+        -224,
+        288
+      ],
+      [
+        -224,
+        256,
+        -192,
+        288
+      ],
+      [
+        -192,
+        256,
+        -160,
         288
       ],
       [
@@ -977,6 +1019,24 @@
         -288,
         288,
         -256,
+        320
+      ],
+      [
+        -256,
+        288,
+        -224,
+        320
+      ],
+      [
+        -224,
+        288,
+        -192,
+        320
+      ],
+      [
+        -192,
+        288,
+        -160,
         320
       ],
       [
@@ -1055,6 +1115,24 @@
         -288,
         320,
         -256,
+        352
+      ],
+      [
+        -224,
+        320,
+        -192,
+        352
+      ],
+      [
+        -192,
+        320,
+        -160,
+        352
+      ],
+      [
+        -160,
+        320,
+        -128,
         352
       ],
       [
@@ -1139,6 +1217,24 @@
         -256,
         352,
         -224,
+        384
+      ],
+      [
+        -224,
+        352,
+        -192,
+        384
+      ],
+      [
+        -192,
+        352,
+        -160,
+        384
+      ],
+      [
+        -160,
+        352,
+        -128,
         384
       ],
       [
@@ -1502,8 +1598,8 @@
         672
       ]
     ],
-    "refined_cells": 213,
-    "refined_triangles": 13500,
+    "refined_cells": 229,
+    "refined_triangles": 15268,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
@@ -1695,6 +1791,31 @@
           }
         ],
         "scope_area_m2": 10080.6
+      },
+      {
+        "edge_blend_m": 6,
+        "grade": {
+          "final_sweep_change_m": 0,
+          "free_nodes": 798,
+          "kind": "harmonic"
+        },
+        "id": "garden_walk_maceo_may",
+        "name": "Garden Walk from Cravath Street to its north end",
+        "regions": [
+          {
+            "id": "walk_north",
+            "rule": "profile"
+          },
+          {
+            "id": "paseo",
+            "rule": "profile"
+          },
+          {
+            "id": "foot_of_490_south_east",
+            "rule": "level"
+          }
+        ],
+        "scope_area_m2": 6836.3
       }
     ]
   },

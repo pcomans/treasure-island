@@ -1,8 +1,8 @@
 # Modern mid-rise family
 
-[midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar follows the accepted Maceo May study next door: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
+[midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar began with the Maceo May study: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
 
-Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms) and [w1212173437.json](w1212173437.json) (Star View Court), and with its [roof edges and parts](#roof-edges-and-parts) [r133351.json](r133351.json) (Building 33 F, Aracely Cafe). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
+Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms), [w1212173437.json](w1212173437.json) (Star View Court), [r19685981.json](r19685981.json) (Maceo May, whose [plan fields](#plan-fields) cover wings of different heights round a court, a curved wing and overhanging upper floors) and, with its [roof edges and parts](#roof-edges-and-parts), [r133351.json](r133351.json) (Building 33 F, Aracely Cafe). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
 
 ## How it builds
 
@@ -70,6 +70,30 @@ All are opt-in; configs without them build as before. Materials are shared acros
 
 Parts are emitted into the same role buckets: posts, rails, ladders, pergola beams, fascia and roof undersides are `support`, knee walls and infill are `wall`, ramps are `ground`.
 
+## Plan fields
+
+All are opt-in; configs without them build as before.
+
+| Field | Meaning |
+|---|---|
+| block `outline_xz` | The block's plan as world `[x, z]` points instead of a clip of the footprint, for curved or notched plans. Every point lies inside the footprint or within 5 mm of it. Neighbouring blocks hide each other's walls only along edges that share a line within 2 mm, so give them the same points. |
+| block `stacked` | The block floats from `floor_raise` up, free of the tiling: it may overlap the block under it and is left out of the overlap and area checks. Its walls start at its floor and it gets a `soffit` (palette key, default `soffit`) on its underside, so upper floors can overhang a smaller ground storey. A neighbour's wall behind it is hidden only from that floor up. |
+| face key `p<i>` | Names outline edge `i` of a block in `faces`, ahead of `e<k>`, `court`, `return` and `default`, so each facet of a curved plan can take its own scheme. |
+| target `holes_tiled` | With `holes`: no block owns the courtyard ring. A low deck block fills the court and the wings round it are blocks of their own heights, so the court walls are ordinary `court` faces above the deck. |
+| top-level `round_columns` | Round columns, each `{"xz": [x, z], "r": 0.1-1, "top": 0.5-12, "material": "concrete", "sides": 16}`, from below grade to `top` above the building floor. Support role, so they stop the player. |
+
+## Material and opening fields
+
+All are opt-in; configs without them build as before.
+
+| Field | Meaning |
+|---|---|
+| palette `texture`, `tile_m`, `offset_m` | A tiling albedo under `rgb` as a multiplier. The wall and roof UVs are metres, so `tile_m` `[u, v]` is the tile's size on the wall; `offset_m` slides it, to put a panel joint at a chosen height. `tile_m` wins over `uv_scale`, `offset_m` needs it, and a `tile_m` texture keeps the default filter, where a `uv_scale` one is filtered anisotropically. |
+| window or `grid_unit` `box` | `{"project": 0.05-1, "t": 0.03-0.5, "material": ...}`: a frame `t` thick round the opening, standing `project` out from the wall, with its inner faces running back to the wall plane. Support role, so it stays clear of the spray receiver. |
+| scheme `plaques` | Flat panels on a face, each `{"from": s, "to": s, "bottom": m, "top": m, "t": 0.03, "material": ...}`, heights above the block's floor: a building's name, its texture one opaque panel. Support role. |
+| palette `receive_shadows` | `false` keeps cast shadows off a material: glass shows what it reflects, and shadow-map edges on it read as scallops. |
+| window, `grid_unit` or lobby door `panels` | Opaque panels in a light, each `[u0, u1, y0, y1, material]` as fractions of the light: a louvre over a window, a spandrel between two panes. A grid unit repeats them in each joined storey. |
+
 ## Roof edges and parts
 
 All opt-in; configs without them build as before. Coordinates in an edge's frame are stations `s` along footprint edge `edge` and depths `d` inward of it (negative: outside the outline). Invalid input fails the build.
@@ -83,7 +107,7 @@ All opt-in; configs without them build as before. Coordinates in an edge's frame
 | eave `edge_materials` | `{"<edge>": {"<profile material>": material}}`: recolours one edge of an eave run, keeping its mitres. |
 | ground window `lights` | Further windows in the same bay, each merged over the ground window spec (a clerestory over a window). |
 | door `glazing` | Lobby or porch door: extra glazing fields (`glass`, `frame`). |
-| palette `texture` | Image on the material. On a part `art` panel or slab face it is stretched over the panel; on other surfaces it tiles by world metres, `uv_scale` tiles per metre. `texture_alpha` blends it. |
+| palette `texture` | Image on the material. On a part `art` panel or slab face it is stretched over the panel; on other surfaces it tiles by world metres, `uv_scale` tiles per metre, unless `tile_m` sizes it ([below](#material-and-opening-fields)). `texture_alpha` blends it. |
 | palette `specular` | The material's specular level, 0.5 by default; ground like lawn wants it low. |
 | palette `emission` | Energy: the material lights itself, from its image when it has one. |
 

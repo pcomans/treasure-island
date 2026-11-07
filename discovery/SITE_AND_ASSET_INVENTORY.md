@@ -116,6 +116,7 @@ below use. Place #8 is two zones. The zones the tree push added are in
 | Mersea lot | `mersea_lot`; w28356874 | 2 (visual-review-clutter-rollout) | Re-check PASS at `7ccf14c7`: 29 cars from the May 2026 aerial, stall rows, the strip along Avenue A, chain-link and pickets. The objects contribution is level 3 (visual-review-objects), the street ground's paint and wear 4. The tree push planted the planters | 3: the lot light's second arm, a longer planted lamp island. 4: the dumpsters' finish |
 | Mersea promenade | `mersea_promenade`; lots `mersea_promenade`, `mersea_promenade_seal`, `mersea_promenade_slab` (a recorded exception to the OSM layout) | | The owner's "boardwalk", from the owner's video, 2026-11-06: one wide pavement with its paint, mulch, crushed-rock and lawn edges, banner fence, baulks and young planting; not yet reviewed | Rate; detail stops at about z 236 |
 | Johnson St lot | `johnson_lot`; no OSM area, a recorded exception (outline from the 2026-05-26 aerial, level 19) | 2 (visual-review-clutter-rollout) | PASS at `03f645ae`: outline and pattern rule match the aerial, with the tail joint and shoulder band from the PASS WITH FIXES at `d38100ad` fixed. Changed since by the Mersea ditch study (owner video, frame D2): the shoulder is a 0.25 m dark lip at the curb and 1.85 m of crushed-rock gravel, not 0.6 m and 2.5 m, and the ground shader carries rock and sand on to the slope's top, ragged into the grass; that change has had the study's visual review, not its own | 3: pole, drainage gap, rock pile, aisle marks |
+| Garden Walk | `garden_walk`, `maceo_may_east_beds`, `seven_seas_maceo_verge`; w1249412095 | | New 2026-11-07 with the Maceo May study, not yet reviewed: aggregate lane, brick bands, walks, beds, lamps, bollards and signs from owner photos of Nov 2026 and the 2025-08-29 aerial, the lane to Seven Seas Avenue, the beds and curb strip on that street | Rate |
 | Avenue N seawall palm row | `avenue_n_seawall` | 2 (visual-review-veg-models) | 61 mature Canary palms between Avenue N and the riprap and 135 shrubs beside them, from Nov 2025 Street View and the dated aerials | 3: secondary items |
 
 ### Trees and shrubs by site
@@ -295,6 +296,8 @@ the rows below are rated only where a record names the prop.
 | Bike rack | Avenue of the Palms set piece, OSM racks | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`; hoop rows and flanges added after it | 3: secondary parts close up |
 | Canopy of Sky (artwork) | Cityside set piece | | Whole-park PASS only; the r04 view named for it was not framed on it | Rate against ph05 |
 | Disc lamp | Cityside set pieces | | Whole-park PASS only | Rate |
+| Fork lamp | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o2, o3 |
+| Steel bollard | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o1, o3 |
 | Event pole | Cityside set pieces | | Whole-park PASS only | Rate |
 | Long bench | Cityside set pieces | | Whole-park PASS only | Rate |
 | Long picnic table | Cityside set pieces | | Whole-park PASS only | Rate |

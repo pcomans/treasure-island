@@ -2425,6 +2425,165 @@
        "reason": "The shallow low ground along the foot of the bank: broken water with stems through it, read from the owner's photo of the bank and frames D1 and D2."
       }
      ]
+    },
+    {
+      "id": "garden_walk_maceo_may",
+      "name": "Garden Walk from Cravath Street to its north end",
+      "basis": "production_inference",
+      "evidence": "The frozen 2023 USGS raster still holds the excavations for 490 Avenue of the Palms and Star View Court: the land along Garden Walk falls from about 4.4 m to about 1.1 m between the two buildings and to about 2.0 m along the Maceo May WSW wall. Owner photos of Nov 2026 (o1, o3, o4 along Maceo May; n1, n2 up the walk beside Star View Court, looking north to the far street) and Google Street View (55 Cravath St, Sep 2025, camera x -159, z 392, heading 355; Ave of the Palms, Jun 2026, camera x -240, z 373, heading 70; Seven Seas Ave, Sep 2025, camera x -137, z 273, heading 243, down the lane to the foot of 490's flank) show the finished walk flat from end to end, level with the wall foot each side (Star View Court's doors stand a few risers above it on stoops, n2). The walk is levelled to the grade of its ends (about 4.2 to 4.4 m), reaching under each building's wall so the correction is whole at the wall foot, and fades out inside both footprints and into the open lot to the south-west. Owner-directed correction, approved by ROOT 2026-11-07 for this study; ROOT asked 2026-11-07 for the ground at 490 to be judged from the photos.",
+      "scope": {
+        "source_keys": [],
+        "add_xz": [
+          [
+            [
+              -213.02,
+              299.51
+            ],
+            [
+              -180.96,
+              283.13
+            ],
+            [
+              -147.29,
+              349.03
+            ],
+            [
+              -179.35,
+              365.41
+            ]
+          ],
+          [
+            [
+              -209.32,
+              302.27
+            ],
+            [
+              -183.03,
+              353.85
+            ],
+            [
+              -201.47,
+              363.25
+            ],
+            [
+              -227.76,
+              311.67
+            ]
+          ],
+          [
+            [
+              -219.9,
+              206.64
+            ],
+            [
+              -179.94,
+              285.05
+            ],
+            [
+              -212.01,
+              301.39
+            ],
+            [
+              -251.97,
+              222.99
+            ]
+          ]
+        ],
+        "exclude_xz": [],
+        "exclude_ways": [],
+        "edge_blend_m": 6.0
+      },
+      "grade": {
+        "grid_m": 2,
+        "iterations": 3000,
+        "relaxation": 1.9
+      },
+      "regions": [
+        {
+          "id": "walk_north",
+          "shape": {
+            "line_xz": [
+              [
+                -231.97,
+                218.41
+              ],
+              [
+                -191.56,
+                297.48
+              ]
+            ],
+            "width_m": 20.0
+          },
+          "rule": {
+            "kind": "profile",
+            "elevations_m": [
+              4.22,
+              4.4
+            ]
+          },
+          "min_leaf_m": 2,
+          "reason": "The walk reads flat from the lane mouth to its north end in the dated photos, level with the foot of Star View Court's wall and of 490's east block."
+        },
+        {
+          "id": "paseo",
+          "shape": {
+            "line_xz": [
+              [
+                -191.57,
+                297.53
+              ],
+              [
+                -178.38,
+                323.36
+              ],
+              [
+                -165.18,
+                349.18
+              ]
+            ],
+            "width_m": 20.0
+          },
+          "rule": {
+            "kind": "profile",
+            "elevations_m": [
+              4.4,
+              4.33,
+              4.27
+            ]
+          },
+          "min_leaf_m": 2,
+          "reason": "The paseo reads flat along Maceo May in the dated photos, level with the wall foot at both of its ends."
+        },
+        {
+          "id": "foot_of_490_south_east",
+          "shape": {
+            "points_xz": [
+              [
+                -192.28,
+                313.68
+              ],
+              [
+                -176.84,
+                343.97
+              ],
+              [
+                -191.72,
+                351.55
+              ],
+              [
+                -207.16,
+                321.26
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.33
+          },
+          "min_leaf_m": 2,
+          "reason": "The level carries past the south-east corner of 490 Avenue of the Palms and along its east block's end, so that block's ground floor and side door stand on flat ground, as the lot does in the dated photos, and the fade into the open lot starts beyond it."
+        }
+      ]
     }
   ]
 }

@@ -17,7 +17,6 @@ const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3
 const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
 const D5_1308_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd")
 const D5_1394_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd")
-const MACEO_MAY_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/maceo_may_live_replacement.gd")
 const NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northern_canopy_free_live_replacement.gd")
 const NORTHPOINT_1238_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1238_live_replacement.gd")
 const MARINER_1206_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1206_live_replacement.gd")
@@ -97,6 +96,15 @@ const STREET_GROUND_SURFACES := {
 	"park_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95},
 	"park_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(1.0, 0.96, 0.9)},
 	"park_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0},
+	# Garden Walk (owner photos Nov 2026), UV in metres: pale exposed-aggregate
+	# paving in 5 m scored bays, the walk's poured concrete in 2.5 m panels with
+	# the joint across the tile's middle, so a walk 2.5 m wide has none down it,
+	# and the dark red brick band in courses that follow its line; the yellow
+	# tactile strips, the curb-ramp pads' domes in 0.5 m tiles of the world UV.
+	"park_aggregate": {"albedo": preload("res://game/resources/textures/world/street/paseo_aggregate.png"), "uv_scale": 0.2, "roughness": 0.95, "tint": Color(0.785, 0.79, 0.795)},
+	"park_walk": {"albedo": preload("res://game/resources/textures/world/street/paseo_walk.png"), "uv_scale": 0.4, "roughness": 0.9, "tint": Color(0.735, 0.73, 0.715)},
+	"park_brick": {"albedo": preload("res://game/resources/textures/world/street/paseo_brick.png"), "uv_scale": 1.0, "roughness": 0.85, "tint": Color(0.92, 1.0, 0.86)},
+	"park_tactile": {"albedo": preload("res://game/resources/textures/world/street/street_tactile.png"), "uv_scale": 20.0, "roughness": 0.8},
 	# The yards' shared ground (yard surfaces of street-detail-zones.json, May 2026
 	# aerial): worn asphalt as the parking lots draw it (2.1 m Poly Haven tiles,
 	# the lots' tint), the older lots' pale, sun-bleached asphalt (the same tiles,
@@ -283,10 +291,6 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(fs48_pair.get("ok", false)):
 		chunk_root.free()
 		return fs48_pair
-	var maceo_pair := MACEO_MAY_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
-	if not bool(maceo_pair.get("ok", false)):
-		chunk_root.free()
-		return maceo_pair
 	var northern_canopy_pair := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
 	if not bool(northern_canopy_pair.get("ok", false)):
 		chunk_root.free()
@@ -401,12 +405,6 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		chunk_root.free()
 		return fs48_plan
 	rollback_plans.append({"adapter": FIRE_STATION48_LIVE_REPLACEMENT, "plan": fs48_plan})
-	var maceo_plan := MACEO_MAY_LIVE_REPLACEMENT.build_chunk_plan(maceo_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
-	if not bool(maceo_plan.get("ok", false)):
-		_free_unconsumed_plans(rollback_plans)
-		chunk_root.free()
-		return maceo_plan
-	rollback_plans.append({"adapter": MACEO_MAY_LIVE_REPLACEMENT, "plan": maceo_plan})
 	var northern_canopy_plan := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.build_chunk_plan(northern_canopy_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
 	if not bool(northern_canopy_plan.get("ok", false)):
 		_free_unconsumed_plans(rollback_plans)
@@ -538,7 +536,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		elif B201_MARKET_LIVE_REPLACEMENT.claims_record(record):
 			record_result = B201_MARKET_LIVE_REPLACEMENT.consume_record(record, b201_market_plan)
 		else:
-			record_result = _build_record(record, false, chapel_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
+			record_result = _build_record(record, false, chapel_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
 		if not record_result.ok:
 			_free_unconsumed_plans(rollback_plans)
 			chunk_root.free()
@@ -579,7 +577,6 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)
 	var d5_1317_consumed := D5_1317_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1317_plan)
 	var fs48_consumed := FIRE_STATION48_LIVE_REPLACEMENT.plan_was_fully_consumed(fs48_plan)
-	var maceo_consumed := MACEO_MAY_LIVE_REPLACEMENT.plan_was_fully_consumed(maceo_plan)
 	var northern_canopy_consumed := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.plan_was_fully_consumed(northern_canopy_plan)
 	var northpoint_1238_consumed := NORTHPOINT_1238_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1238_plan)
 	var mariner_1206_consumed := MARINER_1206_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1206_plan)
@@ -598,7 +595,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var gateview_1397_consumed := GATEVIEW_1397_LIVE_REPLACEMENT.plan_was_fully_consumed(gateview_1397_plan)
 	var bayside_1226_consumed := BAYSIDE_1226_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1226_plan)
 	var bayside_1215_consumed := BAYSIDE_1215_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1215_plan)
-	if not chapel_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
+	if not chapel_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
 		_free_unconsumed_plans(rollback_plans)
 		chunk_root.free()
 		if not chapel_consumed:
@@ -611,8 +608,6 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			return {"ok": false, "code": "d5_1317_live_unconsumed_pair", "message": "The supplied 1317 pair was not consumed exactly once.", "source_keys": ["w95934125"]}
 		if not fs48_consumed:
 			return {"ok": false, "code": "fire_station48_unconsumed_pair", "message": "The supplied Station 48 pair was not consumed exactly once.", "source_keys": ["w764313741"]}
-		if not maceo_consumed:
-			return {"ok": false, "code": "maceo_may_unconsumed_pair", "message": "The supplied Maceo May pair was not consumed exactly once.", "source_keys": ["r19685981"]}
 		if not northern_canopy_consumed:
 			return {"ok": false, "code": "northern_canopy_unconsumed_pair", "message": "The supplied 1201 pair was not consumed exactly once.", "source_keys": ["w96215672"]}
 		if not northpoint_1238_consumed:
@@ -705,7 +700,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -750,8 +745,6 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 		return D5_1317_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1317_plan)
 	if not is_context and FIRE_STATION48_LIVE_REPLACEMENT.claims_record(record):
 		return FIRE_STATION48_LIVE_REPLACEMENT.consume_record(record, fs48_plan)
-	if not is_context and MACEO_MAY_LIVE_REPLACEMENT.claims_record(record):
-		return MACEO_MAY_LIVE_REPLACEMENT.consume_record(record, maceo_plan)
 	if not is_context and NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.claims_record(record):
 		return NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.consume_record(record, northern_canopy_plan)
 	if not is_context and NORTHPOINT_1238_LIVE_REPLACEMENT.claims_record(record):

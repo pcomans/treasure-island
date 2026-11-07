@@ -18,6 +18,9 @@ extends RefCounted
 ## anchor) cover sheds, tanks, trailers and pavilions; configs without them build
 ## as before.
 ## Dimensions, cadence and unseen sides are production inference.
+## Opt-in plan fields (block `outline_xz`, `stacked`, faces keyed `p<i>`, target
+## `holes_tiled`, top-level `round_columns`) cover buildings whose wings differ in
+## height round a court, curved plans and upper floors that overhang the ground storey.
 ## Opt-in scheme `grid` (shared facade_grid format, columns in footprint-edge stations
 ## on e<k> faces) places the windows of every bay from a photo-derived grid, built as
 ## shared facade_assembly units; schemes without it build exactly as before.
@@ -146,6 +149,8 @@ class Block:
 	var planes: Array = []
 	## Courtyard holes inside this block (flat blocks only).
 	var holes: Array[PackedVector2Array] = []
+	## Opt-in: floats from its floor up over its plan, free of the tiling (see "stacked").
+	var stacked := false
 
 
 ## One exposed block edge with its facade scheme and station mapping.
@@ -302,6 +307,8 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 		_eave(ctx, eave)
 	for part: Variant in ctx.cfg.get("parts", []):
 		_part(ctx, part)
+	for column: Variant in ctx.cfg.get("round_columns", []):
+		_round_column(ctx, column)
 
 
 # ------------------------------------------------------------------ footprint
@@ -481,6 +488,10 @@ static func _make_blocks(ctx: Ctx) -> void:
 			return
 		ids[block.id] = true
 		var poly := ring.duplicate()
+		if item.has("outline_xz"):
+			poly = _outline(ctx, block, item.outline_xz, ring)
+			if poly.is_empty():
+				return
 		for clip: Dictionary in item.get("clip", []):
 			for plane: Array in _planes(ctx, clip):
 				poly = _clip(poly, plane[0], plane[1])
@@ -488,7 +499,9 @@ static func _make_blocks(ctx: Ctx) -> void:
 			ctx.errors.append("block %s clips to nothing" % block.id)
 			return
 		block.poly = poly
-		total += absf(_area(poly))
+		block.stacked = bool(item.get("stacked", false))
+		if not block.stacked:
+			total += absf(_area(poly))
 		var raise := float(item.get("floor_raise", 0.0))
 		if not _in_range(raise, 0.0, 10.0):
 			ctx.errors.append("block %s floor_raise must be 0-10 m" % block.id)
@@ -546,8 +559,12 @@ static func _make_blocks(ctx: Ctx) -> void:
 		ctx.errors.append("blocks overlap or exceed the footprint (%.3f > %.3f m2)" % [total, footprint_area])
 		return
 	# A hole (courtyard) lies wholly inside one flat block, which builds its walls,
-	# parapets and roof around it.
-	for hole: PackedVector2Array in ctx.holes:
+	# parapets and roof around it. Opt-in target.holes_tiled: a low deck block fills
+	# the court and the wings round it are blocks of their own heights, so no block owns it.
+	var owned_holes: Array[PackedVector2Array] = ctx.holes
+	if bool((ctx.cfg.target as Dictionary).get("holes_tiled", false)):
+		owned_holes = []
+	for hole: PackedVector2Array in owned_holes:
 		var owner: Block = null
 		for block: Block in ctx.blocks:
 			var inside := 0
@@ -570,6 +587,8 @@ static func _make_blocks(ctx: Ctx) -> void:
 		owner.holes.append(hole)
 	for i in ctx.blocks.size():
 		for j in range(i + 1, ctx.blocks.size()):
+			if (ctx.blocks[i] as Block).stacked or (ctx.blocks[j] as Block).stacked:
+				continue
 			for piece: PackedVector2Array in Geometry2D.intersect_polygons((ctx.blocks[i] as Block).poly, (ctx.blocks[j] as Block).poly):
 				if absf(_area(piece)) > 0.01:
 					ctx.errors.append("blocks %s and %s overlap" % [(ctx.blocks[i] as Block).id, (ctx.blocks[j] as Block).id])
@@ -641,6 +660,33 @@ static func _planes(ctx: Ctx, clip: Dictionary) -> Array:
 			normal = -normal
 		planes.append([p0, normal])
 	return planes
+
+
+## Opt-in explicit block plan ("outline_xz": world [x, z] points) in the ring's winding,
+## every point inside the footprint or within 5 mm of it. Empty on error.
+static func _outline(ctx: Ctx, block: Block, value: Variant, ring: PackedVector2Array) -> PackedVector2Array:
+	var poly := PackedVector2Array()
+	if value is Array and (value as Array).size() >= 3:
+		for point: Variant in value:
+			if not point is Array or (point as Array).size() != 2:
+				poly.clear()
+				break
+			var p := Vector2(float(point[0]), float(point[1]))
+			var near := Geometry2D.is_point_in_polygon(p, ring)
+			for i in ring.size():
+				if Geometry2D.get_closest_point_to_segment(p, ring[i], ring[(i + 1) % ring.size()]).distance_to(p) < 0.005:
+					near = true
+			if not p.is_finite() or not near:
+				poly.clear()
+				break
+			poly.append(p)
+	if poly.size() < 3:
+		ctx.errors.append("block %s outline_xz needs 3+ [x, z] points inside the footprint" % block.id)
+		return PackedVector2Array()
+	if (_area(poly) > 0.0) != (_area(ring) > 0.0):
+		ctx.errors.append("block %s outline_xz must wind as the footprint does" % block.id)
+		return PackedVector2Array()
+	return poly
 
 
 static func _clip(poly: PackedVector2Array, point: Vector2, normal: Vector2) -> PackedVector2Array:
@@ -863,7 +909,8 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 			if float(cover[0]) <= mid and mid <= float(cover[1]):
 				bands.append(cover)
 		bands.sort_custom(func(p: Array, q: Array) -> bool: return float(p[3]) < float(q[3]))
-		var bottom := -INF
+		# A stacked block starts at its own floor, so stacked neighbours hide each other.
+		var bottom := block.floors[0] if block.stacked else -INF
 		for band: Array in bands:
 			if float(band[3]) <= bottom + 0.000001:
 				bottom = maxf(bottom, float(band[2]))
@@ -877,9 +924,11 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 	return spans
 
 
-## Lowest level a block hides of a neighbour's wall: the deck underside of a flat
-## deck block (open beneath it), else the ground (-INF).
+## Lowest level a block hides of a neighbour's wall: a stacked block's floor, the deck
+## underside of a flat deck block (open beneath it), else the ground (-INF).
 static func _cover_floor(block: Block) -> float:
+	if block.stacked:
+		return block.floors[0]
 	var deck: Dictionary = block.cfg.get("deck", {})
 	if block.form != "flat" or deck.is_empty():
 		return -INF
@@ -931,7 +980,8 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 			face.key = "e%d" % k
 			face.edge = k
 			break
-		var scheme_name := str(faces_cfg.get(face.key, faces_cfg.get("default", "")))
+		# Opt-in "p<i>" keys name one outline edge, for facets of a curved plan.
+		var scheme_name := str(faces_cfg.get("p%d" % i, faces_cfg.get(face.key, faces_cfg.get("default", ""))))
 		if not schemes.has(scheme_name):
 			ctx.errors.append("block %s face %s has no scheme" % [block.id, face.key])
 			return
@@ -1469,6 +1519,29 @@ static func _facade(ctx: Ctx, face: Face) -> void:
 			_ladder(ctx, face, bay)
 		elif str(bay.kind) == "top_box":
 			_top_box(ctx, face, bay)
+	for plaque: Dictionary in face.scheme.get("plaques", []):
+		_plaque(ctx, face, plaque)
+
+
+## Opt-in plaque: a flat panel `t` off the wall, `bottom` to `top` above the block's
+## floor, its texture filling it once and reading left to right from outside.
+static func _plaque(ctx: Ctx, face: Face, plaque: Dictionary) -> void:
+	var s0 := _local_station(ctx, face, float(plaque.get("from", 0.0)))
+	var s1 := _local_station(ctx, face, float(plaque.get("to", 0.0)))
+	var y0 := face.block.floors[0] + float(plaque.get("bottom", 0.0))
+	var y1 := face.block.floors[0] + float(plaque.get("top", 0.0))
+	var depth := -float(plaque.get("t", 0.03))
+	if absf(s1 - s0) < 0.01 or y1 - y0 < 0.01:
+		ctx.errors.append("%s/%s plaque needs from before to and bottom below top" % [face.block.id, face.key])
+		return
+	var bucket := ctx.bucket("support", str(plaque.get("material", "metal")))
+	var first := bucket.uvs.size()
+	_rect(bucket, face, s0, s1, y0, y1, depth, face.out3())
+	var centre := face.point((s0 + s1) * 0.5, y1, depth)
+	var right := (-face.out3()).cross(Vector3.UP).normalized()
+	for i in range(first, bucket.uvs.size()):
+		var p := bucket.vertices[i]
+		bucket.uvs[i] = Vector2((p - centre).dot(right) / absf(s1 - s0) + 0.5, (y1 - p.y) / (y1 - y0))
 
 
 ## Wall surface of one bay strip with rectangular holes and material zones.
@@ -1684,7 +1757,9 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 					mullions.append(float(m) / float(count))
 				glazing = _merge(spec, {"mullions": mullions})
 			_glazing(ctx, face, glazing, s0, s1, y0, y1, depth)
+			_panels(ctx, face, spec, s0, s1, y0, y1, depth)
 			_hood(ctx, face, spec, s0, s1, y1)
+			_window_box(ctx, face, spec, s0, s1, y0, y1)
 		"grid":
 			# Shared facade_assembly units on the grid opening (frames, mullions,
 			# transoms, lower fields, spandrels across joined storeys).
@@ -1707,6 +1782,15 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			var out := face.out3()
 			for r: Dictionary in assembly.rects:
 				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
+			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material].
+			var bottom := y0
+			var bands: Array = (o.get("extras", {}) as Dictionary).get("spandrels", [])
+			for storey: int in bands.size() + 1:
+				var top := float(bands[storey][0]) if storey < bands.size() else y1
+				_panels(ctx, face, unit, s0, s1, bottom, top, depth)
+				if storey < bands.size():
+					bottom = float(bands[storey][1])
+			_window_box(ctx, face, unit, s0, s1, y0, y1)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
@@ -1748,6 +1832,31 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			while y < y1 - 0.05:
 				_rect(slats, face, s0, s1, y, y + 0.045, 0.06, out)
 				y += 0.12
+
+
+## Opt-in opaque panels (`panels`) in a light, as fractions [u0, u1, y0, y1, material].
+static func _panels(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+	for panel: Array in spec.get("panels", []):
+		_rect(ctx.bucket("wall", str(panel[4])), face, lerpf(s0, s1, float(panel[0])), lerpf(s0, s1, float(panel[1])), lerpf(y0, y1, float(panel[2])), lerpf(y0, y1, float(panel[3])), depth - 0.005, face.out3())
+
+
+## Opt-in window box (window or grid_unit `box`): a frame `t` thick round the opening,
+## standing `project` out from the wall, with its inner faces running back to the wall
+## plane. Support role, so it stays clear of the spray receiver.
+static func _window_box(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float) -> void:
+	var box: Dictionary = spec.get("box", {})
+	if box.is_empty():
+		return
+	var project := float(box.get("project", 0.3))
+	var t := float(box.get("t", 0.12))
+	if not (_in_range(project, 0.05, 1.0) and _in_range(t, 0.03, 0.5)):
+		ctx.errors.append("window box needs project 0.05-1 and t 0.03-0.5 m")
+		return
+	var bucket := ctx.bucket("support", str(box.get("material", "metal")))
+	_box(bucket, face, s0 - t, s0, y0 - t, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s1, s1 + t, y0 - t, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s0, s1, y1, y1 + t, -project, 0.02, false)
+	_box(bucket, face, s0, s1, y0 - t, y0, -project, 0.02, false)
 
 
 ## Opt-in box hood over a window head (window `hood`): a box `depth` out from the
@@ -1982,6 +2091,7 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 		_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0)
 	elif kind == "lobby":
 		_glazing(ctx, face, _merge({"mullions": door.get("mullions", [0.25, 0.5, 0.75]), "transoms": door.get("transoms", [0.78])}, door.get("glazing", {})), s0, s1, y0, y1, depth)
+		_panels(ctx, face, door, s0, s1, y0, y1, depth)
 	else:
 		var leaf_top := minf(y1, y0 + float(door.get("leaf_h", 2.4)))
 		_rect(ctx.bucket("wall", str(door.get("material", "door"))), face, s0, s1, y0, leaf_top, depth, out)
@@ -2082,6 +2192,13 @@ static func _roof(ctx: Ctx, block: Block) -> void:
 				var q1: Vector2 = t[1]
 				var q2: Vector2 = t[2]
 				under.tri(Vector3(q0.x, under_y, q0.y), Vector3(q1.x, under_y, q1.y), Vector3(q2.x, under_y, q2.y), Vector3.DOWN)
+		if block.stacked:
+			var soffit := ctx.bucket("support", str(block.cfg.get("soffit", "soffit")))
+			for t: Array in tris:
+				var q0: Vector2 = t[0]
+				var q1: Vector2 = t[1]
+				var q2: Vector2 = t[2]
+				soffit.tri(Vector3(q0.x, block.floors[0], q0.y), Vector3(q1.x, block.floors[0], q1.y), Vector3(q2.x, block.floors[0], q2.y), Vector3.DOWN)
 		_parapets(ctx, block)
 		for hole: PackedVector2Array in block.holes:
 			_hole_parapets(ctx, block, hole)
@@ -2402,6 +2519,25 @@ static func _prism(ctx: Ctx, corners: Array, y0: float, y1: float, side_mat: Str
 		var c1: Vector2 = corners[i]
 		var c2: Vector2 = corners[i + 1]
 		top.tri(Vector3(c0.x, y1, c0.y), Vector3(c1.x, y1, c1.y), Vector3(c2.x, y1, c2.y), Vector3.UP)
+
+
+## Opt-in round column ("round_columns" entry): a prism of `sides` (default 16) round
+## plan point `xz`, radius `r` (0.1-1 m), from below grade to `top` metres above the
+## building floor, in `material` (default "concrete"). Support role, so it stops the player.
+static func _round_column(ctx: Ctx, spec: Variant) -> void:
+	var ok := spec is Dictionary and (spec as Dictionary).get("xz") is Array and ((spec as Dictionary).xz as Array).size() == 2
+	var r := float((spec as Dictionary).get("r", 0.0)) if ok else 0.0
+	var top := float((spec as Dictionary).get("top", 0.0)) if ok else 0.0
+	if not ok or not _in_range(r, 0.1, 1.0) or not _in_range(top, 0.5, 12.0):
+		ctx.errors.append("round column needs xz, r 0.1-1 m and top 0.5-12 m")
+		return
+	var c := Vector2(float(spec.xz[0]), float(spec.xz[1]))
+	var sides := maxi(8, int(spec.get("sides", 16)))
+	var ring: Array = []
+	for i in sides:
+		ring.append(c + Vector2(cos(TAU * float(i) / float(sides)), sin(TAU * float(i) / float(sides))) * r)
+	var material := str(spec.get("material", "concrete"))
+	_prism(ctx, ring, _ground_y(ctx, c) - BURY_M, ctx.floor_y + top, material, material)
 
 
 ## Walkable paving strip inside the footprint line where a block face is set back.
@@ -3432,9 +3568,9 @@ static func _make_materials(ctx: Ctx) -> void:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
 		var texture_path := str(entry.get("texture", ""))
-		var cache_key := "%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0)]
+		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), entry.get("receive_shadows", true)]
 		if not texture_path.is_empty() or entry.has("emission") or entry.has("specular"):
-			cache_key += "|%s|%s|%s|%s|%s" % [texture_path, entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5)]
+			cache_key += "|%s|%s|%s|%s|%s|%s|%s" % [texture_path, entry.get("tile_m", []), entry.get("offset_m", [0.0, 0.0]), entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5)]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
@@ -3442,21 +3578,33 @@ static func _make_materials(ctx: Ctx) -> void:
 			material.roughness = float(entry.get("roughness", 0.9))
 			material.metallic = float(entry.get("metallic", 0.0))
 			material.metallic_specular = float(entry.get("specular", 0.5))
+			# Opt-out: glass shows what it reflects, not the shadows that fall on it.
+			material.disable_receive_shadows = not bool(entry.get("receive_shadows", true))
 			if float(entry.get("alpha", 1.0)) < 1.0:
 				material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				material.cull_mode = BaseMaterial3D.CULL_BACK
-			# Opt-in image: a whole picture on a panel, or a tile by world metres (uv_scale
-			# tiles per metre); texture_alpha blends it. Opt-in emission lights the
-			# material, or its image when it has one.
+			# Opt-in image: a whole picture on a panel, or a tile. The wall and roof UVs are
+			# metres, so tile_m, which wins, is its size on the wall and offset_m slides it;
+			# otherwise uv_scale tiles per metre, anisotropically filtered. texture_alpha blends
+			# it. Opt-in emission lights the material, or its image when it has one.
 			if not texture_path.is_empty():
 				var texture := load(texture_path) as Texture2D
 				if texture == null:
 					ctx.errors.append("palette %s has no texture at %s" % [key, texture_path])
 					return
 				material.albedo_texture = texture
-				material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-				var tiles := float(entry.get("uv_scale", 1.0))
-				material.uv1_scale = Vector3(tiles, tiles, 1.0)
+				if entry.has("tile_m"):
+					var tile: Array = entry.tile_m
+					if tile.size() != 2 or float(tile[0]) <= 0.0 or float(tile[1]) <= 0.0:
+						ctx.errors.append("palette %s needs a positive tile_m" % key)
+						return
+					material.uv1_scale = Vector3(1.0 / float(tile[0]), 1.0 / float(tile[1]), 1.0)
+					var offset: Array = entry.get("offset_m", [0.0, 0.0])
+					material.uv1_offset = Vector3(float(offset[0]) / float(tile[0]), float(offset[1]) / float(tile[1]), 0.0)
+				else:
+					material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+					var tiles := float(entry.get("uv_scale", 1.0))
+					material.uv1_scale = Vector3(tiles, tiles, 1.0)
 				if bool(entry.get("texture_alpha", false)):
 					material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 				if entry.has("emission"):

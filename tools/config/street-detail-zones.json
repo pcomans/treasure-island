@@ -5,6 +5,7 @@
     "Zone scatter for procedural street detail. Coordinates are world metres: +X east, +Z south (the game's frame).",
     "Zone shapes and scatter densities are production inference for the ferry-arrival pilot, not survey data.",
     "A canopy rule (pattern canopy) plants the crowns of a group of data/street_detail/tree_crowns.json, read from the dated aerial: at each crown a species of its mix whose crown fits within fit (a fraction of the crown), its trunk moved up to nudge_m where the crown's centre cannot take one; in_lots lets a trunk stand in a parking lot, in its mulch pit. A hedge rule (kind hedge, pattern hedge_lines) lays the same file's hedge lines where their site is clear. visible_surfaces limits a planted rule to the ground the eye sees (the street ground's grass tops read as its concrete to surfaces). height_m limits a planted rule to visible ground between two heights (a basin's bank or floor).",
+    "A planted rule's wall_beds names the buildings its bed stands against: its plants skip those buildings' buffer, and its within_xz, traced to the photographed wall, keeps them off it. A furniture rule of pattern line stands an item at each of offsets_m (metres along line_xz) from stations spacing_m apart, its front to the left of the line.",
     "A field rule (pattern field) sows plants by a density field that reads the site (street-planting-generation.mjs): nothing it plants is listed by position. A field rule's building_buffer_m brings foundation planting closer to a wall than the shared buffer, as under a deep eave. A planters rule (pattern planters) plants the soil of the stock tanks the set pieces stand, each row naming its tank.",
     "Step 0 scatter emits placement slots only; later steps assign assets per slot kind. The runtime builds nothing from slots yet.",
     "Furniture rules place the vertical street objects of the pilot zones (tools/lib/street-furniture-generation.mjs) where OSM leaves gaps: kerb (along the curbs of named kerbed roads), signalized_crossings and near_signals (at OSM crossings with signals), junctions (named-street corners), all_way_stops (the other approaches of an OSM stop=all junction), drive_entries (traffic turning into a kerbed service drive from a named road) and lot_edge (around a parking lot). Each is production inference with its dated photo evidence; prop is the kit prop the runtime builds and params its settings.",
@@ -38,6 +39,7 @@
       "Wear densities are decals per 100 m2 of asphalt in the zone: low in the new district, more on older roads and the forecourt lot.",
       "Sidewalks are poured concrete in panel_m squares that follow the street. closing_m fills gaps narrower than twice it between raised pieces. A zone with planting curb_strip turns the raised ground between the curb and a sidewalk set back by planting_gap_m or more, and the ground beyond the default sidewalk where an OSM sidewalk crowds the curb, into mulch beds (Avenue of the Palms, Sep 2025 photos ih02 and ih05). planting_behind_walk names OSM sidewalks photographed at the curb instead: the default walk stays there and the bed takes the ground behind it.",
       "A plaza is a concrete walk walk_m wide at the curb plus banded paving out to depth_m, on the side of its roads nearest side_point_xz, clipped to its zone.",
+      "A rule street stays back_slope_run_m and 0.2 m clear of a zone without kerbs. surfaces.reach_m lets such a zone's layers run on past its outline, under that slope, so paving or a bed comes up to the sidewalk with no land showing; the slope is then concrete.",
       "parking_lanes add width_m of asphalt beyond the frozen ribbon on both sides of the listed roads inside the zone; the curb, its ramps and the sidewalk move out with it (Avenue of the Palms: cars park along both curbs in Sep 2025 ih02 and ih05).",
       "centerlines picks a style per road class: double_yellow, or dashed_faded (a worn yellow dash dash_m long every dash_m + dash_gap_m).",
       "The drawn layers over the road lie, bottom to top, at least 2 mm (a layer step) apart where they overlap, so none share a plane: the road (and its parking lanes, at the same height but drawn clear of every road and path ribbon), the pedestrian skin 2 mm up, gutter pans gutter_m up, asphalt wear midway between the gutter and the paint, and road paint paint_m up. A curb ramp's foot stands ramp_foot_m over the road, under the paint. A zone's ground surfaces lie at least 2 mm over the paint; where two zones' ground overlaps, the zone listed later replaces the earlier one's."
@@ -2928,6 +2930,1316 @@
      "basis": "production_inference",
      "rule": "Tall stems standing along the chain-link, at uneven spacing.",
      "evidence": "Owner video IMG_0960, 2026-11-06, t=116 (D3): chain-link along the drive and the lot, tall yellow-green stems standing along it, a straw bank climbing to it."
+    }
+   ]
+  },
+  {
+   "id": "garden_walk",
+   "name": "Garden Walk from Cravath Street to its north end",
+   "pilot": true,
+   "reason": "The fire lane and walks along Maceo May's city side and up Garden Walk, and the lane to Seven Seas Avenue: the owner's request of 2026-11-05 for this building's setting. Layers and rules, nothing planted by position. The zone stops behind Johnson Street's sidewalk and a curb strip's width from Cravath Street's curb, so the streets keep their curbs and ramps; its layers reach under the sidewalks' back slopes.",
+   "reference": "Owner photos o1-o5, n1, n2 (Nov 2026); Street View 55 Cravath St and Seven Seas Ave (Sep 2025); Esri World Imagery captures of 2025-08-29 and 2026-05-26",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-228.25, 216.46], [-227.39, 216.21], [-197.64, 181.12], [-197.1, 181.58], [-226.86, 216.66], [-227.77, 217.39], [-187.81, 295.8], [-146.3, 274.64], [-143.34, 280.43], [-180.5, 299.36], [-154.84, 349.7], [-151.43, 351.33], [-147.81, 356.22], [-141.1989869256088, 352.7078509706502], [-127.04812270646428, 336.3887504485217], [-125.23488931511667, 337.96106869509333], [-144.6923276164404, 360.39983191302], [-144.71, 360.98], [-148.56, 365.66], [-146.19, 367.6], [-153.23, 376.2], [-155.34, 374.48], [-157.0, 375.64], [-158.41, 377.27], [-159.82, 378.92], [-236.27, 228.17], [-247.32, 240.95], [-248.0, 240.37], [-237.2, 227.08]]
+   },
+   "ground": {
+    "kerbs": false,
+    "centerlines": {},
+    "lane_markings": false,
+    "planting": "none",
+    "parking_lanes": [],
+    "planting_behind_walk": [],
+    "plazas": [],
+    "parking_stalls": false,
+    "wear": {
+     "crack_per_100m2": 0.0,
+     "patch_per_100m2": 0.0,
+     "oil_per_100m2": 0.0,
+     "manhole_spacing_m": 0,
+     "drain_spacing_m": 0
+    },
+    "surfaces": {
+     "lift_m": 0.1,
+     "reach_m": 2.7,
+     "source_keys": ["w1212173436", "w1249412095"],
+     "layers": [
+      {
+       "id": "north_mouth",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-228.78, 214.99], [-237.41, 220.06], [-237.75, 226.0], [-235.09, 231.22], [-223.51, 225.32]]
+       },
+       "reason": "The paving of the lane's north mouth, up to the back of the street's sidewalk.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "south_mouth",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-155.54, 374.3], [-152.42, 376.87], [-153.46, 378.18], [-156.63, 376.8], [-159.97, 369.15], [-157.56, 367.92]]
+       },
+       "reason": "The walk's end at the Cravath Street sidewalk.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "paseo",
+       "material": "park_aggregate",
+       "shape": {
+        "points_xz": [[-230.11, 216.11], [-195.24, 283.87], [-187.26, 297.76], [-181.97, 305.72], [-174.2, 321.41], [-174.3, 325.95], [-166.17, 342.01], [-162.88, 345.38], [-153.35, 362.97], [-150.29, 365.45], [-148.72, 366.67], [-145.79, 369.07], [-152.42, 376.87], [-155.54, 374.3], [-157.38, 368.95], [-158.25, 366.03], [-168.87, 346.19], [-171.08, 343.39], [-175.44, 334.39], [-179.17, 326.19], [-189.1, 308.8], [-234.74, 218.81]]
+       },
+       "reason": "The fire lane between the two brick bands, in scored bays along the walk.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "star_view_walk",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-228.78, 214.99], [-187.9, 295.84], [-187.26, 297.76], [-195.24, 283.87], [-230.11, 216.11]]
+       },
+       "reason": "The walk between the east band and Star View Court's west wall.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "corner_walk",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-152.8, 358.76], [-148.72, 366.67], [-145.79, 369.07], [-144.24, 367.2], [-147.12, 364.85], [-144.25, 361.56], [-146.09768965816025, 359.5782739225574], [-151.56, 358.13]]
+       },
+       "reason": "The walk round the low wing's corner to the Cravath Street sidewalk.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-145.544, 361.382],
+        "axis_xz": [0.655, -0.756]
+       }
+      },
+      {
+       "id": "maceo_walk",
+       "material": "park_walk",
+       "shape": {
+        "line_xz": [[-186.1, 297.17], [-180.81, 305.13], [-173.04, 320.82], [-173.14, 325.36], [-165.01, 341.42], [-161.72, 344.79], [-152.19, 362.38], [-149.13, 364.86], [-147.56, 366.08]],
+        "width_m": 2.5
+       },
+       "reason": "The poured concrete walk inside the east band, about 2.5 m wide, a panel across.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "lane_walk",
+       "material": "park_walk",
+       "shape": {
+        "line_xz": [[-143.68, 276.9], [-186.16, 298.6]],
+        "width_m": 1.95
+       },
+       "reason": "The concrete walk down the lane between Maceo May and Star View Court.",
+       "evidence": "Street View Seven Seas Ave lm01, lm02, lm04 (Sep 2025): a pale concrete walk down the lane, beds both sides."
+      },
+      {
+       "id": "west_walk",
+       "material": "park_walk",
+       "shape": {
+        "line_xz": [[-235.85, 219.38], [-190.21, 309.37], [-180.29, 326.75], [-176.55, 334.95], [-172.19, 343.95], [-169.98, 346.75], [-159.36, 366.6], [-158.49, 369.52], [-156.66, 374.87]],
+        "width_m": 2.5
+       },
+       "reason": "The poured concrete walk outside the west band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "sv_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-220.43, 218.14], [-182.29, 292.98], [-188.05, 295.91], [-226.19, 221.07]]
+       },
+       "reason": "The bed under Star View Court's stepped west wall.",
+       "evidence": "Owner photos n1, n2 (Nov 2026)."
+      },
+      {
+       "id": "wall_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-180.44, 300.35], [-179.51, 302.18], [-178.58, 304.01], [-177.64, 305.85], [-176.71, 307.68], [-175.77, 309.51], [-174.84, 311.35], [-173.9, 313.18], [-172.97, 315.01], [-172.03, 316.85], [-171.1, 318.68], [-170.17, 320.51], [-169.23, 322.35], [-168.3, 324.18], [-167.36, 326.01], [-166.43, 327.85], [-165.49, 329.68], [-164.56, 331.51], [-163.63, 333.35], [-162.69, 335.18], [-161.76, 337.01], [-160.82, 338.85], [-159.89, 340.68], [-158.95, 342.51], [-158.02, 344.35], [-157.08, 346.18], [-156.15, 348.01], [-158.08, 349.0], [-159.06, 347.19], [-160.04, 345.38], [-161.22, 343.67], [-162.72, 342.12], [-164.12, 340.53], [-165.05, 338.69], [-165.98, 336.85], [-166.91, 335.02], [-167.83, 333.18], [-168.76, 331.35], [-169.69, 329.51], [-170.62, 327.67], [-171.55, 325.84], [-172.05, 323.78], [-172.0, 321.45], [-172.43, 319.35], [-173.34, 317.51], [-174.25, 315.67], [-175.17, 313.82], [-176.08, 311.98], [-176.99, 310.13], [-177.91, 308.29], [-178.82, 306.45], [-179.73, 304.6], [-180.88, 302.88], [-182.03, 301.15]]
+       },
+       "reason": "The bed from the walk to the west wing's wall.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "low_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-154.93, 350.19], [-154.06, 351.89], [-153.2, 353.58], [-152.34, 355.27], [-151.47, 356.96], [-150.62, 358.64], [-150.09, 359.36], [-149.38, 359.87], [-148.53, 360.11], [-147.66, 360.08], [-146.84, 359.76], [-146.19, 359.23], [-145.73, 358.09], [-145.2, 356.94], [-144.56, 355.84], [-143.81, 354.85], [-142.95, 353.95], [-142.01, 353.14], [-141.04, 352.38], [-139.65, 354.15], [-140.59, 354.88], [-141.4, 355.58], [-142.1, 356.3], [-142.69, 357.09], [-143.2, 357.97], [-143.67, 358.99], [-144.33, 360.5], [-145.7, 361.7], [-147.2, 362.28], [-148.81, 362.34], [-150.35, 361.89], [-151.67, 360.97], [-152.57, 359.77], [-153.48, 357.99], [-154.34, 356.29], [-155.21, 354.6], [-156.07, 352.91], [-156.93, 351.22]]
+       },
+       "reason": "The bed along the low wing, round its corner.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "corner_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-142.44, 279.35], [-143.16, 277.92], [-184.01, 298.74], [-182.4, 301.46], [-180.4, 300.44], [-181.1, 299.05]]
+       },
+       "reason": "The bed round the west wing's north-west corner and along the lane to Seven Seas Avenue.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "lane_bed_sv",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-145.09, 274.13], [-144.16, 275.96], [-186.3, 297.44], [-187.23, 295.61]]
+       },
+       "reason": "The bed along Star View Court's side of the lane.",
+       "evidence": "Street View lm01, lm02, lm04 (Sep 2025)."
+      },
+      {
+       "id": "tower_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-140.99240901375504, 352.62226144831175], [-127.36565087680104, 336.90757205663243], [-124.75912787673884, 339.16777953607914], [-138.38588601369284, 354.88246892775845]]
+       },
+       "reason": "The bed along the tower's glass, round its columns.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "south_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-144.28207943833638, 361.68209414531196], [-138.12383297259757, 354.58026336253386], [-140.8059073639659, 352.25454262281335], [-146.43529409056165, 359.8149662275082]]
+       },
+       "reason": "The bed from the low wing's south wall to the back of the Cravath Street sidewalk.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "palms_flank_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-235.27, 223.06], [-185.93, 319.87], [-188.56, 321.2], [-237.33, 225.51]]
+       },
+       "reason": "The bed along the foot of 490 Avenue of the Palms' east block.",
+       "evidence": "Owner photo n1 (Nov 2026); Street View lm04 (Sep 2025): planting at the block's foot beyond the walk."
+      },
+      {
+       "id": "palms_north_bed",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-236.02, 227.73], [-247.4, 240.89], [-249.59, 238.99], [-237.23, 224.7], [-235.72, 226.0]]
+       },
+       "reason": "The bed along the foot of 490 Avenue of the Palms' NNW end wall, out to the Johnson Street sidewalk.",
+       "evidence": "Street View 57 Johnson St (Nov 2025): low planting at the wall's foot."
+      },
+      {
+       "id": "door_walk_south",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-155.68, 347.61], [-154.55, 349.83], [-157.31, 351.24], [-158.45, 349.01]]
+       },
+       "reason": "The short walk to the door between the west wing and the low wing.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "door_walk_bay",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-160.74, 338.79], [-159.19, 341.82], [-162.67, 343.59], [-164.21, 340.56]]
+       },
+       "reason": "The short walk to the lobby door at the south cream bay.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them.",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.4541, 0.891]
+       }
+      },
+      {
+       "id": "isl_n1",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-181.62, 307.79], [-181.48, 307.78], [-181.38, 307.87], [-179.95, 310.67], [-179.94, 310.81], [-180.03, 310.91], [-181.05, 311.43], [-181.18, 311.44], [-181.29, 311.35], [-182.72, 308.55], [-182.73, 308.41], [-182.64, 308.31]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_n2",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-179.58, 311.8], [-179.44, 311.79], [-179.34, 311.88], [-177.77, 314.95], [-177.76, 315.08], [-177.85, 315.19], [-178.87, 315.71], [-179.01, 315.72], [-179.11, 315.63], [-180.67, 312.56], [-180.68, 312.42], [-180.59, 312.32]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_n3",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-177.35, 316.28], [-177.21, 316.27], [-177.11, 316.36], [-175.46, 319.6], [-175.45, 319.74], [-175.54, 319.84], [-176.55, 320.36], [-176.69, 320.37], [-176.79, 320.28], [-178.45, 317.04], [-178.46, 316.9], [-178.37, 316.8]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_w1",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-177.31, 327.48], [-177.17, 327.47], [-177.07, 327.56], [-174.05, 333.48], [-174.04, 333.61], [-174.13, 333.72], [-175.15, 334.24], [-175.28, 334.25], [-175.39, 334.16], [-178.4, 328.24], [-178.42, 328.1], [-178.33, 328.0]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_w2",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-173.36, 335.57], [-173.22, 335.56], [-173.11, 335.65], [-170.1, 341.56], [-170.09, 341.7], [-170.18, 341.81], [-171.19, 342.32], [-171.33, 342.33], [-171.44, 342.24], [-174.45, 336.33], [-174.46, 336.19], [-174.37, 336.09]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_e1",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-162.9, 345.95], [-162.76, 345.94], [-162.66, 346.03], [-159.19, 352.84], [-159.18, 352.98], [-159.27, 353.08], [-160.28, 353.6], [-160.42, 353.61], [-160.53, 353.52], [-164.0, 346.71], [-164.01, 346.58], [-163.92, 346.47]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_e2",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-158.23, 354.79], [-158.09, 354.78], [-157.98, 354.87], [-155.42, 359.9], [-155.41, 360.04], [-155.5, 360.14], [-156.52, 360.66], [-156.66, 360.67], [-156.76, 360.58], [-159.32, 355.55], [-159.33, 355.42], [-159.24, 355.31]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_sv1",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-219.5, 237.87], [-219.37, 237.86], [-219.26, 237.95], [-216.25, 243.86], [-216.24, 244.0], [-216.32, 244.11], [-217.21, 244.56], [-217.34, 244.57], [-217.45, 244.48], [-220.46, 238.56], [-220.47, 238.42], [-220.39, 238.32]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_sv2",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-200.71, 274.31], [-200.57, 274.3], [-200.47, 274.39], [-195.63, 283.87], [-195.62, 284.0], [-195.71, 284.11], [-196.59, 284.56], [-196.73, 284.57], [-196.84, 284.48], [-201.67, 275.0], [-201.68, 274.86], [-201.59, 274.76]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "isl_490a",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-211.95, 260.96], [-211.81, 260.94], [-211.7, 261.03], [-205.96, 272.3], [-205.95, 272.43], [-206.04, 272.54], [-206.84, 272.94], [-206.97, 272.95], [-207.08, 272.86], [-212.82, 261.6], [-212.83, 261.46], [-212.74, 261.36]]
+       },
+       "reason": "An island bed beside the band.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "east_band",
+       "material": "park_brick",
+       "shape": {
+        "line_xz": [[-230.11, 216.11], [-195.24, 283.87], [-187.26, 297.76], [-181.97, 305.72], [-174.2, 321.41], [-174.3, 325.95], [-166.17, 342.01], [-162.88, 345.38], [-153.35, 362.97], [-150.29, 365.45], [-148.72, 366.67]],
+        "width_m": 0.2
+       },
+       "reason": "The thin rust brick band along the fire lane's east edge, in straight runs with crisp kinks.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "west_band",
+       "material": "park_brick",
+       "shape": {
+        "line_xz": [[-234.74, 218.81], [-189.1, 308.8], [-179.17, 326.19], [-175.44, 334.39], [-171.08, 343.39], [-168.87, 346.19], [-158.25, 366.03], [-157.38, 368.95], [-155.54, 374.3]],
+        "width_m": 0.2
+       },
+       "reason": "The thin rust brick band along the fire lane's west edge.",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "tactile_south",
+       "material": "park_tactile",
+       "shape": {
+        "line_xz": [[-148.63, 366.74], [-146.01, 368.88]],
+        "width_m": 0.6
+       },
+       "reason": "The yellow tactile strip on from the east band's end to the curb, where the sidewalk stops at the aggregate (o2, o5).",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      },
+      {
+       "id": "tactile_north",
+       "material": "park_tactile",
+       "shape": {
+        "line_xz": [[-172.43, 319.38], [-174.56, 320.47]],
+        "width_m": 0.6
+       },
+       "reason": "The yellow tactile strip across the walk by the north bollards (o1).",
+       "evidence": "Owner photos o1, o2, o3, o4, n1, n2 (Nov 2026): a pale exposed-aggregate fire lane between dark red brick bands, a poured concrete walk along Maceo May, beds at the walls. Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: the two band lines from the Cravath Street end to the north end of Garden Walk, the island beds beside them."
+      }
+     ]
+    }
+   },
+   "scatter": [
+    {
+     "id": "wall_bed_trees",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-171.49, 320.31], [-171.58, 324.56], [-163.45, 340.62], [-160.16, 344.0], [-156.11, 351.47]],
+     "offsets_m": [0],
+     "spacing_m": 11.5,
+     "jitter_m": 0.4,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.95, 1.15]
+     },
+     "wall_beds": ["r19685981"],
+     "within_xz": [[-172.44, 317.14], [-154.28, 352.78], [-159.0, 355.19], [-177.17, 319.55]],
+     "basis": "production_inference",
+     "rule": "A small round young tree in the wall bed about every 11.5 m, between the cream bays. Species unknown; the kit's small round young tree.",
+     "evidence": "Owner photos o3, o4 (Nov 2026): round young trees in the bed in front of the dark wall sections."
+    },
+    {
+     "id": "island_trees_north",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-182.4, 307.07], [-174.69, 322.22]],
+     "offsets_m": [0],
+     "spacing_m": 5.6,
+     "jitter_m": 0.3,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.95, 1.15]
+     },
+     "basis": "production_inference",
+     "rule": "A small round young tree in each of the three north island beds. Species unknown; the kit's small round young tree.",
+     "evidence": "Owner photo o1 (Nov 2026); Esri World Imagery capture of 2026-05-26: crowns at the three north island beds."
+    },
+    {
+     "id": "island_trees_south",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-163.05, 346.7], [-157.87, 356.86]],
+     "offsets_m": [0],
+     "spacing_m": 6.8,
+     "jitter_m": 0.3,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [0, 1],
+      "scale": [0.9, 1.05]
+     },
+     "basis": "production_inference",
+     "rule": "A slender young tree in each of the two south island beds. Species unknown; the kit's small round young tree.",
+     "evidence": "Owner photos o2, o3 (Nov 2026)."
+    },
+    {
+     "id": "sv_island_trees",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-219.92, 238.08], [-196.31, 284.41]],
+     "offsets_m": [0],
+     "spacing_m": 11.0,
+     "jitter_m": 0.3,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.95, 1.15]
+     },
+     "wall_beds": ["w1212173437"],
+     "within_xz": [[-220.21, 235.98], [-194.78, 285.88], [-196.02, 286.51], [-221.45, 236.62]],
+     "basis": "production_inference",
+     "rule": "Young round trees in the island beds up the walk. Species unknown; the kit's small round young tree.",
+     "evidence": "Owner photos n1, n2 (Nov 2026)."
+    },
+    {
+     "id": "tower_trees",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-138.53645797917784, 352.766499154059], [-125.4993191846882, 337.731772284135]],
+     "offsets_m": [0],
+     "spacing_m": 6.75,
+     "jitter_m": 0.2,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [0, 1],
+      "scale": [0.9, 1.05]
+     },
+     "wall_beds": ["r19685981"],
+     "within_xz": [[-140.54147749439437, 352.48383903377174], [-127.17677239853568, 337.071355207317], [-125.5901931811065, 338.4471336730672], [-138.95489827696522, 353.8596174995219]],
+     "basis": "production_inference",
+     "rule": "A slender young tree on stakes in the bed along the tower's glass. Species unknown; the kit's small round young tree.",
+     "evidence": "Street View 55 Cravath St sse02, cr07 (Sep 2025)."
+    },
+    {
+     "id": "wall_sedge",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-180.89, 300.57], [-156.69, 348.06], [-157.71, 348.58], [-181.91, 301.1]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.95,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 1,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "An orange sedge band hugs the west wing's wall. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "corner_sedge",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-164.49, 290.47], [-164.96, 289.54], [-183.23, 298.85], [-181.87, 301.18], [-180.84, 300.66], [-181.59, 299.19]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.9,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 3,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dense_sedge",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The sedge carries on round the north-west corner along the lane. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photo o1 (Nov 2026).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "tower_sedge",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-140.99240901375504, 352.62226144831175], [-127.36565087680104, 336.90757205663243], [-124.75912787673884, 339.16777953607914], [-138.38588601369284, 354.88246892775845]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.9,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 4,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dune_tansy",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dense_sedge",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The same sedge along the tower's glass, round the columns. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View 55 Cravath St sse02, cr07 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "low_wing_sedge",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-155.39, 350.43], [-154.53, 352.12], [-153.66, 353.82], [-152.8, 355.51], [-151.94, 357.2], [-151.07, 358.9], [-150.46, 359.74], [-149.6, 360.33], [-148.6, 360.63], [-147.55, 360.58], [-146.58, 360.21], [-145.76, 359.52], [-145.26, 358.3], [-144.73, 357.18], [-144.13, 356.13], [-143.42, 355.18], [-142.6, 354.33], [-141.68, 353.54], [-140.72, 352.79], [-140.24, 353.4], [-141.19, 354.14], [-142.06, 354.89], [-142.82, 355.69], [-143.48, 356.56], [-144.04, 357.54], [-144.54, 358.61], [-145.11, 359.96], [-146.18, 360.88], [-147.39, 361.35], [-148.69, 361.4], [-149.94, 361.04], [-151.0, 360.29], [-151.74, 359.3], [-152.63, 357.56], [-153.5, 355.86], [-154.36, 354.17], [-155.22, 352.48], [-156.08, 350.78]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.95,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 5,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dune_tansy",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Orange sedge along the low wing with yellow-flowered clumps among it. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "low_wing_front",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-156.08, 350.78], [-155.22, 352.48], [-154.36, 354.17], [-153.5, 355.86], [-152.63, 357.56], [-151.74, 359.3], [-151.0, 360.29], [-149.94, 361.04], [-148.69, 361.4], [-147.39, 361.35], [-146.18, 360.88], [-145.11, 359.96], [-144.54, 358.61], [-144.04, 357.54], [-143.48, 356.56], [-142.82, 355.69], [-142.06, 354.89], [-141.19, 354.14], [-140.24, 353.4], [-139.65, 354.15], [-140.59, 354.88], [-141.4, 355.58], [-142.1, 356.3], [-142.69, 357.09], [-143.2, 357.97], [-143.67, 358.99], [-144.33, 360.5], [-145.7, 361.7], [-147.2, 362.28], [-148.81, 362.34], [-150.35, 361.89], [-151.67, 360.97], [-152.57, 359.77], [-153.48, 357.99], [-154.34, 356.29], [-155.21, 354.6], [-156.07, 352.91], [-156.93, 351.22]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.9,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 3,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dune_tansy",
+       "share": 2,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dense_sedge",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The outer edge of the low wing's bed: the same sedge, with more of the yellow-flowered clumps and a little green. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "wall_bed_shrubs",
+     "kind": "planting_slot",
+     "pattern": "drifts",
+     "within_xz": [[-181.91, 301.1], [-157.71, 348.58], [-158.17, 348.82], [-160.41, 344.69], [-162.48, 342.37], [-164.39, 339.98], [-166.2, 336.41], [-168.91, 331.06], [-170.72, 327.49], [-172.07, 324.81], [-172.02, 322.54], [-173.3, 317.58], [-177.74, 308.62], [-182.03, 301.15]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "drift_m": 2.2,
+     "count": [1, 3],
+     "spread": 1.2,
+     "spacing": {
+      "same": 0.6,
+      "other": 0.45
+     },
+     "gaps": {
+      "cover": 0.02,
+      "scale_m": 4.0
+     },
+     "mix": [
+      {
+       "prop": "pittosporum_tobira",
+       "share": 1,
+       "variants": [0, 0],
+       "scale": [0.8, 0.9],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.3
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low dark green shrubs in the bed in front of the sedge band. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "wall_bed_tufts",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-181.91, 301.1], [-157.71, 348.58], [-158.17, 348.82], [-160.41, 344.69], [-162.48, 342.37], [-164.39, 339.98], [-166.2, 336.41], [-168.91, 331.06], [-170.72, 327.49], [-172.07, 324.81], [-172.02, 322.54], [-173.3, 317.58], [-177.74, 308.62], [-182.03, 301.15]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.85,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 2,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "clump_grass",
+       "share": 1,
+       "variants": [0, 1],
+       "scale": [0.8, 0.9],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Green tufts and low grey-green mounds fill the rest of the bed to the walk. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "south_bed_plants",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-145.05766961346254, 360.7448322394139], [-139.09596292854516, 353.8696556305542], [-140.49366366770894, 352.65766031548856], [-145.77540783087096, 360.12245626681266]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.9,
+     "drift_m": 2.0,
+     "max_per_m2": 4,
+     "spacing": [0.22, 0.5],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "bronze_clump_grass",
+       "share": 3,
+       "variants": [1, 3],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dune_tansy",
+       "share": 2,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dense_sedge",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The bed's outer edge to the sidewalk: the same mix. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026); Street View 55 Cravath St cr07, sse01, sse02 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "palms_flank_plants",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-233.69, 227.14], [-186.92, 318.91], [-188.26, 319.59], [-235.03, 227.82]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.8,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 2,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low shrubs and tufts at the foot of 490's east block. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photo n1 (Nov 2026).",
+     "wall_beds": ["w1272162518"]
+    },
+    {
+     "id": "palms_north_plants",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-236.68, 227.95], [-247.53, 240.51], [-247.87, 240.21], [-237.02, 227.66]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.8,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 2,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low shrubs and tufts at the foot of 490's NNW end wall. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View 57 Johnson St (Nov 2025).",
+     "wall_beds": ["w1272162518"]
+    },
+    {
+     "id": "lane_mc_shrubs",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-144.44, 280.26], [-145.1, 278.96], [-165.15, 289.18], [-164.49, 290.47]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.85,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 3,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low dark shrubs and tufts along the lane on Maceo May's side. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View lm01, lm02, lm04 (Sep 2025).",
+     "wall_beds": ["r19685981"]
+    },
+    {
+     "id": "lane_sv_shrubs",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-146.92, 275.4], [-146.19, 276.83], [-186.01, 297.12], [-186.74, 295.7]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.85,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 3,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "The same on Star View Court's side of the lane. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View lm01, lm02, lm04 (Sep 2025).",
+     "wall_beds": ["w1212173437"]
+    },
+    {
+     "id": "island_tufts",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-218.61, 234.05], [-153.68, 361.45], [-160.45, 364.91], [-225.38, 237.5]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.9,
+     "drift_m": 2.0,
+     "max_per_m2": 3.5,
+     "spacing": [0.3, 0.6],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "clump_grass",
+       "share": 3,
+       "variants": [0, 1],
+       "scale": [0.8, 0.95],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "dense_sedge",
+       "share": 2,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Green strap-leaved tufts fill the island beds. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Owner photos o2, o3 (Nov 2026); Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom."
+    }
+   ],
+   "furniture": [
+    {
+     "id": "paseo_lamps",
+     "kind": "street_lamp",
+     "prop": "lamp_fork",
+     "pattern": "line",
+     "line_xz": [[-185.62, 301.41], [-151.11, 369.13]],
+     "offsets_m": [0],
+     "spacing_m": 23,
+     "phase_m": 18,
+     "slide_m": 0,
+     "params": {},
+     "basis": "production_inference",
+     "rule": "Tapered fork-topped lamps in a straight row about 3.8 m off the WSW wall line, about 23 m apart.",
+     "evidence": "Owner photos o2, o3, o4 (Nov 2026) and Street View 55 Cravath St (Sep 2025): the lamps stand in a straight row the bands meander across, about two bays (23 m) apart."
+    },
+    {
+     "id": "lamp_bollards",
+     "kind": "bollard",
+     "prop": "bollard_steel",
+     "pattern": "line",
+     "line_xz": [[-185.62, 301.41], [-151.11, 369.13]],
+     "offsets_m": [-1.25, 1.25],
+     "spacing_m": 23,
+     "phase_m": 18,
+     "slide_m": 0,
+     "params": {},
+     "basis": "production_inference",
+     "rule": "A steel bollard about 1.25 m to each side of each lamp.",
+     "evidence": "Owner photos o3, o4 (Nov 2026): a bollard either side of a lamp at the walk's edge."
+    },
+    {
+     "id": "walk_lamps",
+     "kind": "street_lamp",
+     "prop": "lamp_fork",
+     "pattern": "line",
+     "line_xz": [[-220.7, 236.23], [-189.36, 297.71]],
+     "offsets_m": [0],
+     "spacing_m": 23,
+     "phase_m": 0,
+     "slide_m": 0,
+     "params": {},
+     "basis": "production_inference",
+     "rule": "The same lamps carry on up Garden Walk at the aggregate's edge, the same 23 m apart.",
+     "evidence": "Owner photos n1, n2 (Nov 2026): lamps at the band up the walk beside Star View Court."
+    },
+    {
+     "id": "walk_bollards",
+     "kind": "bollard",
+     "prop": "bollard_steel",
+     "pattern": "line",
+     "line_xz": [[-220.7, 236.23], [-189.36, 297.71]],
+     "offsets_m": [-1.25, 1.25],
+     "spacing_m": 23,
+     "phase_m": 0,
+     "slide_m": 0,
+     "params": {},
+     "basis": "production_inference",
+     "rule": "A steel bollard about 1.25 m to each side of those lamps.",
+     "evidence": "Owner photo n2 (Nov 2026): a bollard either side of the lamp."
+    },
+    {
+     "id": "north_bollards",
+     "kind": "bollard",
+     "prop": "bollard_steel",
+     "pattern": "line",
+     "line_xz": [[-174.59, 323.29], [-179.49, 325.79]],
+     "offsets_m": [0],
+     "spacing_m": 1.35,
+     "phase_m": 0.1,
+     "slide_m": 0,
+     "params": {},
+     "basis": "production_inference",
+     "rule": "A row of steel bollards across the fire lane at the north island beds.",
+     "evidence": "Owner photo o1 (Nov 2026): a row of about five bollards across the lane beyond the trees."
+    },
+    {
+     "id": "entry_signs_north",
+     "kind": "street_sign",
+     "prop": "post_sign",
+     "pattern": "line",
+     "line_xz": [[-232.46, 224.27], [-228.59, 221.96]],
+     "offsets_m": [0],
+     "spacing_m": 4.5,
+     "phase_m": 0,
+     "slide_m": 0,
+     "params": {
+      "sign": "do_not_enter"
+     },
+     "basis": "production_inference",
+     "rule": "The same signs on both sides of the walk's north end, facing Johnson Street.",
+     "evidence": "Street View 57 and 58 Johnson St (Nov 2025): a DO NOT ENTER, EXCEPT sign at the north end of the walk."
+    },
+    {
+     "id": "entry_signs",
+     "kind": "street_sign",
+     "prop": "post_sign",
+     "pattern": "line",
+     "line_xz": [[-150.24, 366.66], [-155.47, 372.02]],
+     "offsets_m": [0],
+     "spacing_m": 7.4,
+     "phase_m": 0,
+     "slide_m": 0,
+     "params": {
+      "sign": "do_not_enter"
+     },
+     "basis": "production_inference",
+     "rule": "DO NOT ENTER signs, EXCEPT bicycles and emergency vehicles, on both sides of the Cravath Street end, facing the street.",
+     "evidence": "Owner photos o2, o5 (Nov 2026); Street View 55 Cravath St sse01 (Sep 2025)."
+    }
+   ]
+  },
+  {
+   "id": "maceo_may_east_beds",
+   "name": "The beds at Maceo May's Seven Seas Avenue wall",
+   "pilot": true,
+   "reason": "The narrow beds between the Seven Seas sidewalk and the wall, each side of the drive portal.",
+   "reference": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026).",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-118.53316653831493, 328.1401972684963], [-127.91355137373549, 309.6875990682587], [-126.17526313748121, 308.80393962724077], [-127.89726615074683, 305.4165061412068], [-129.6355543870011, 306.30016558222474], [-138.92530748488133, 288.02585335493626], [-140.57445273466104, 288.86419692718397], [-131.2846996367808, 307.13850915447244], [-135.74184896050969, 309.40430259297983], [-134.01984594724405, 312.7917360790138], [-129.56269662351517, 310.5259426405064], [-120.18231178809461, 328.978540840744]]
+   },
+   "ground": {
+    "kerbs": false,
+    "centerlines": {},
+    "lane_markings": false,
+    "planting": "none",
+    "parking_lanes": [],
+    "planting_behind_walk": [],
+    "plazas": [],
+    "parking_stalls": false,
+    "wear": {
+     "crack_per_100m2": 0.0,
+     "patch_per_100m2": 0.0,
+     "oil_per_100m2": 0.0,
+     "manhole_spacing_m": 0,
+     "drain_spacing_m": 0
+    },
+    "surfaces": {
+     "lift_m": 0.1,
+     "source_keys": ["w1212173446"],
+     "layers": [
+      {
+       "id": "east_bed_south",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-118.80431737540295, 327.7171402705084], [-128.00343873574292, 309.62111401616914], [-129.51886950581073, 310.39148378526164], [-120.31974814547077, 328.4875100396009]]
+       },
+       "reason": "The bed south of the drive portal.",
+       "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026)."
+      },
+      {
+       "id": "east_bed_north",
+       "material": "park_mulch",
+       "shape": {
+        "points_xz": [[-129.63481001146823, 306.41196650308433], [-138.7432996342679, 288.49422622169425], [-140.25873040433572, 289.26459599078675], [-131.15024078153604, 307.1823362721768]]
+       },
+       "reason": "The bed north of the drive portal.",
+       "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026)."
+      },
+      {
+       "id": "portal_slab",
+       "material": "park_walk",
+       "shape": {
+        "points_xz": [[-126.26515049948866, 308.7374545751513], [-127.89652177521397, 305.52830706206646], [-135.60739010526495, 309.4481297106842], [-133.97601882953964, 312.65727722376903]]
+       },
+       "reason": "The concrete through the drive portal and across the sidewalk.",
+       "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026).",
+       "frame": {
+        "origin_xz": [-182.24, 299.69],
+        "axis_xz": [0.891, -0.4541]
+       }
+      }
+     ]
+    }
+   },
+   "scatter": [
+    {
+     "id": "east_bed_shrubs",
+     "kind": "grass_clump",
+     "pattern": "fill",
+     "within_xz": [[-118.80431737540295, 327.7171402705084], [-138.7432996342679, 288.49422622169425], [-139.5901580057764, 288.9247269750106], [-119.65117574691143, 328.1476410238248]],
+     "margin_m": 0.0,
+     "surfaces": ["park_mulch"],
+     "cover": 0.8,
+     "drift_m": 2.0,
+     "max_per_m2": 2.6,
+     "spacing": [0.3, 0.75],
+     "clump_m": 2.5,
+     "gaps": {
+      "cover": 0.04,
+      "scale_m": 3.0
+     },
+     "mix": [
+      {
+       "prop": "dense_sedge",
+       "share": 3,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "shrubby_sage",
+       "share": 2,
+       "variants": [0, 1],
+       "scale": [0.8, 1.0],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      },
+      {
+       "prop": "bronze_clump_grass",
+       "share": 1,
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "band_m": [0, 99],
+       "max_slope": 0.6,
+       "spill_m": 0.15
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Low shrubs and tufts in the narrow bed at the wall. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026).",
+     "wall_beds": ["r19685981"]
+    }
+   ]
+  },
+  {
+   "id": "seven_seas_maceo_verge",
+   "name": "The curb strip of Seven Seas Avenue beside Maceo May",
+   "pilot": false,
+   "reason": "The planted strip between the sidewalk and the curb, its grasses and young trees, on the street's verge: nothing here touches the street ground.",
+   "reference": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026). Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom: trees and beds along the curb strip.",
+   "shape": {
+    "type": "polygon",
+    "points_xz": [[-144.69, 273.82], [-118.35, 325.49], [-113.72, 323.13], [-140.06, 271.46]]
+   },
+   "scatter": [
+    {
+     "id": "verge_trees",
+     "kind": "tree",
+     "pattern": "along",
+     "line_xz": [[-139.87, 278.66], [-118.3, 320.98]],
+     "offsets_m": [0],
+     "spacing_m": 9.0,
+     "jitter_m": 0.4,
+     "acceptance": 1.0,
+     "prop": "island_oak_young",
+     "params": {
+      "variants": [1, 2],
+      "scale": [0.95, 1.15]
+     },
+     "visible_surfaces": ["street_kerb_verge"],
+     "basis": "production_inference",
+     "rule": "Young trees about every 9 m along the curb strip. Species unknown; the kit's small round young tree.",
+     "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026). Esri World Imagery capture of 2025-08-29 (0.15 m exports), read at full zoom."
+    },
+    {
+     "id": "verge_grasses",
+     "kind": "grass_clump",
+     "pattern": "field",
+     "surfaces": ["street_kerb_verge"],
+     "per_m2": 2.4,
+     "spacing": [0.35, 0.8],
+     "field": {
+      "drift_m": 6,
+      "clump_m": 2.2,
+      "drift_cover": 0.85,
+      "lone": 0.5
+     },
+     "mix": [
+      {
+       "prop": "clump_grass",
+       "variants": [0, 1],
+       "scale": [0.85, 1.05],
+       "at": [0.0, 1.0],
+       "share": 3
+      },
+      {
+       "prop": "dense_sedge",
+       "variants": [1, 2],
+       "scale": [1.0, 1.25],
+       "at": [0.0, 1.0],
+       "share": 2
+      }
+     ],
+     "basis": "production_inference",
+     "rule": "Green grasses in drifts along the curb strip, its density wandering. Species are unknown; these are the kit's closest plants.",
+     "evidence": "Street View Seven Seas Ave ene01, ss02 (Sep 2025, Jun 2026), la02 (Jun 2026)."
     }
    ]
   }

@@ -26,11 +26,19 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - the lot's cracks go soft in the closest ground views, because the stain tile is about 25 px per metre.
   - OSM power pole n11545781132 is `excluded` (`inside_building`) in `street_detail.json`, so it isn't drawn; it falls about 0.5 m inside the frozen footprint at the ENE step;
   - the lower south apron dust strip is soft up close, and its dark slashes could read as a cast shadow (seen in review, 2026-11-07).
+
+- **Owner shot list, Maceo May (OSM r19685981):** these walls have no dated photo, so they stay plain:
+  - the court's west and north walls, its east wall below the top two window rows, and its south wall below the upper floors (an undated architect's photo shows the east wall, which doesn't count);
+  - the middle of the north wall along the lane to Star View Court, seen only at a grazing angle from each end.
+
+  A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
+- **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk; the block's NNW end wall stays on the base floor with the wing beside it. Everything west of that still sits on the 2023 excavation (land 1.1-3.9 m, where Street View palms-wsw01, palms-n-corner02 and palms-nnw-end04 of Nov 2025 show flat ground about 4 m), so the podium's east end meets a bank and Johnson Street falls along the NNW end. The SSE end and the ENE wall also differ in detail from Street View wsw03 (Sep 2025) and owner photo n1 (Nov 2026).
+- **Star View Court (OSM w1212173437):** its walk side lacks the bed and the dark tile bays of owner photos n1 and n2 (Nov 2026), its stoops aren't modelled (n2: doors a few risers above the walk), and the bed along its north wall in Street View starview-nw01 (Nov 2025) is a concrete edge. A Star View pass is queued.
+- **Garden Walk (w1249412095):** Johnson Street's sidewalk still crosses the walk's north mouth, where Street View starview-nw01 (Nov 2025) shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where Street View ss02 (Jun 2026) shows concrete.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;
     - the B225 WSW wall;
-    - the Maceo May SW corner;
     - the ends of 1317;
   - the Exposition roofs render tan or olive; photos show grey shingle;
   - the 901 Avenue B mansard skirt is too shallow: about 12° where about 30° is needed;
@@ -38,7 +46,6 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
     - a blank side faces Avenue of the Palms / Bruton;
     - the recessed rear entries have no steps;
     - the belfry slots should be mid-grey slats;
-  - Maceo May: the WSW ground-floor windows at its north end sit above a 2 m dip in the terrain, and its inner courtyard is untouched.
 - Mismatches the street reviews found against dated photos (seen in review, 2026-11-05):
   - **Mersea lot:** at Street View pano TKhpp heading 190 (Sep 2025) a white event tent renders as a solid grey building with a roll-up door and windows; at heading 330 a white tent with a hedge renders as a flat white box.
   - The Mersea venue's containers are green where the photo shows blue in front.
