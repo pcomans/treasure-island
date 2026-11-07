@@ -25,6 +25,18 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - A stone's contact shadow is a skirt on the stone's own mesh, not darkening in the ground shader, because the yard surfaces it lies on have no ground shader of their own to darken.
 - Ground that grows nothing near the camera still pays for its tufts' vertices (about 2.3 ms on the Radeon 780M at `high` over the bare sand pad at x 328, z 383): cells can't tell what the capture holds without a read back.
 
+## Lighting (`game/scenes/main.tscn`, the look pass of 2026-11-07)
+
+- SSAO is on (radius 3 m, Medium) and hasn't been timed on the Mac's Metal. If the Mac test finds it slow, the fallback is `ssao_enabled = false` in `main.tscn`'s environment.
+- Most far tree impostors were baked under the old look and not rebaked: with the leans retuned, their tone against the near models comes to about 6% (look pass, 2026-11-07). The release's recheck rebaked `canary_date_palm` 6 (14% off) and `nz_flax` 3 (19% off) and kept `pittosporum_tobira` 3 and 4 (within 2%).
+- `nz_flax` 3's far card covers about 55% more than its LOD1 at the 60 m hand-over, and its sides read +60/+2/−52/+2 in the bake check against ±35 or less for variants 0 and 1. A lean retune would move the siblings too.
+
+## Bay water (`game/resources/materials/world/water/bay_water.gdshader`)
+
+- From about 4.2 km up the water's outer ring lies down to water level, flat from about 4.65 km, so it can't wall in the camera near the far plane's height. From there the water ends about a kilometre out and sky shows below the horizon beyond it, at the far plane's limit.
+- Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring: the far end of the western span from the island overviews' 10 km far plane (water pass, 2026-11-07).
+- The SF skyline billboard fades into the hazy far water when seen from above its top: the billboard's colour and the scene's fog, outside the water pass (water pass, 2026-11-07).
+
 ## Buildings
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
