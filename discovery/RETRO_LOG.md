@@ -24665,3 +24665,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading the workflow header and job graph first gave the exact six secret names and the sign -> verify -> publish order, so one sentence replaced the stale "no signing identity, notarization" claim without restating the workflow.
 - What did not work well: The signing description now lives in three places (workflow header, README, AGENTS); only a grep across them showed CLAUDE.md had no conflicting line.
 - What the team should change next time: When the signing secrets or job names change, update the workflow header, README "Build for the Mac" and AGENTS "Mac builds" in the same commit.
+
+### mac-notarize code review — 2026-11-07 — independent review of ef02d816
+
+- What worked well: The diff was self-contained (one new job, two rewired artifact names, one output), so tracing the fail-closed path (P12 present -> every failure exits non-zero -> verify and publish skipped) took one read; the commit message stated plainly that the macOS jobs are unexercised.
+- What did not work well: No signed or ad-hoc app was available locally, so the entitlement argument (the ad-hoc export already runs with the hardened runtime) rests on the author's inspection, and the CI launch check is headless, so it can't confirm the GPU path under the new signature.
+- What the team should change next time: After the first notarized release, have the owner launch it with rendering on the Mac once before calling signing done; fail the mode check when signing secrets other than the P12 are set without it.
