@@ -53,6 +53,8 @@ void vertex() {
 			vec3 normal = NORMAL / stretch;
 			normal = vec3(normal.x, ct * normal.y - st * normal.z, st * normal.y + ct * normal.z);
 			normal = normalize(vec3(cy * normal.x - sy * normal.z, normal.y, sy * normal.x + cy * normal.z));
+			// A piece of rubble is lit much like the pale heap it lies in.
+			normal = normalize(mix(normal, vec3(0.0, 1.0, 0.0), 0.6 * rubble));
 			vec3 tone = ground_tone(map_uv);
 			if (UV.x > 0.5) {
 				// Rubble lies heaped on itself, with no ground for a skirt to lie on.
@@ -66,7 +68,7 @@ void vertex() {
 				float grey = dot(tone, vec3(0.2126, 0.7152, 0.0722));
 				// Each broken face catches its own tone.
 				float face = fract(dot(NORMAL, vec3(12.9, 78.2, 37.7)));
-				tint = mix(tone, vec3(grey * 1.02, grey, grey * 0.94), 0.4) * (1.15 + 0.25 * rubble + stone_contrast * (h.x - 0.5)) * (1.0 + 0.1 * shard) * (0.86 + 0.28 * face);
+				tint = mix(tone, vec3(grey * 1.02, grey, grey * 0.94), 0.4) * (1.15 + 0.35 * rubble + stone_contrast * (h.x - 0.5)) * (1.0 + 0.1 * shard) * (0.86 + 0.28 * face);
 			}
 			out_vertex = vec3(at.x, surface.r, at.y) + stone - place;
 			out_normal = normal;

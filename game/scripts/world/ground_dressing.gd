@@ -82,7 +82,7 @@ const YARD_DRESS := {
 	"yard_gravel": Vector3(0.05, 0.14, 0.14),
 	"yard_gravel_pale": Vector3(0.05, 0.14, 0.14),
 	"yard_soil_dark": Vector3(0.08, 0.18, 0.3),
-	"rubble_grey": Vector3(0.0, 0.0, 0.7),
+	"rubble_grey": Vector3(0.0, 0.0, 0.85),
 }
 ## The tallest grass on a kerb verge, kept low whatever grows behind it.
 const KERB_HEIGHT_LIMIT_M := 0.09
@@ -94,7 +94,7 @@ const PROP_MASK_M := 1.0
 ## and it recentres when the camera has gone RECENTRE_M from its centre.
 const WINDOW_M := 256.0
 const SURFACE_PIXELS := 1024
-const COLOUR_PIXELS := 1024
+const COLOUR_PIXELS := 768
 const SNAP_M := 8.0
 const RECENTRE_M := 22.0
 ## Over the ground shader's fade_end_m, so it draws each layer's mean colour.
