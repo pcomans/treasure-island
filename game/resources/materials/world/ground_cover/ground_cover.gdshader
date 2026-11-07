@@ -110,7 +110,7 @@ uniform vec3 bank_gap : source_color = vec3(0.115, 0.092, 0.08);
 uniform vec3 bank_blade : source_color = vec3(0.255, 0.21, 0.18);
 uniform vec3 bank_straw : source_color = vec3(0.44, 0.385, 0.33);
 uniform vec3 bank_gravel : source_color = vec3(0.33, 0.32, 0.29);
-uniform vec3 bank_sand : source_color = vec3(0.34, 0.285, 0.225);
+uniform vec3 bank_sand : source_color = vec3(0.31, 0.27, 0.225);
 uniform vec3 marsh_far_red : source_color = vec3(0.31, 0.2, 0.115);
 uniform vec3 marsh_far_olive : source_color = vec3(0.29, 0.26, 0.12);
 uniform vec3 marsh_far_straw : source_color = vec3(0.45, 0.39, 0.25);
@@ -292,10 +292,11 @@ void fragment() {
 			bank *= mix(0.9, 1.06, smoothstep(2.6, 3.7, h));
 			// Sand lies along the lots' edges before the grass takes over, and crushed rock
 			// spills from their shoulders over it, each ragged into the next.
-			float sand_w = 1.0 - smoothstep(1.0, 5.5, paved_m + 3.0 * (n_small - 0.5) + 2.0 * (n_mid - 0.5) + 1.2 * (n_tiny - 0.5) + 1.0 * (flopped - 0.5));
-			bank = mix(bank, bank_sand * (0.75 + 0.5 * grain.y), sand_w);
+			float rock_grain = texture(marsh_grain, p / BANK_ROCK_TILE_M).b;
+			float sand_w = 1.0 - smoothstep(1.0, 5.0, paved_m + 3.0 * (n_small - 0.5) + 2.0 * (n_mid - 0.5) + 1.2 * (n_tiny - 0.5) + 1.6 * (flopped - 0.5));
+			bank = mix(bank, bank_sand * (0.5 + rock_grain), 0.85 * sand_w);
 			float rock_w = 1.0 - smoothstep(0.2, 1.6, paved_m + 1.8 * (n_small - 0.5) + 1.2 * (n_tiny - 0.5) + 1.0 * (flopped - 0.5));
-			bank = mix(bank, bank_gravel * (0.2 + 1.6 * smoothstep(0.15, 0.85, texture(marsh_grain, p / BANK_ROCK_TILE_M).b)), rock_w);
+			bank = mix(bank, bank_gravel * (0.2 + 1.6 * smoothstep(0.15, 0.85, rock_grain)), rock_w);
 			float bank_w = 1.0 - smoothstep(4.7, 5.3, h_land);
 
 			// The mat: a stipple of crimson tips through warm litter, thick in some drifts and

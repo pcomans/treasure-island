@@ -126,7 +126,7 @@ const STREET_GROUND_SURFACES := {
 	# The Johnson St lot's shoulder: the same fine aggregate at the greys of the
 	# owner's November 2026 photographs, the gravel and the narrow dark lip against the curb.
 	"yard_shoulder_gravel": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 6.0, "roughness": 0.97, "specular": 0.25, "tint": Color(0.55, 0.54, 0.52)},
-	"yard_shoulder_band": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 6.0, "roughness": 0.97, "specular": 0.25, "tint": Color(0.3, 0.29, 0.28)},
+	"yard_shoulder_band": {"albedo": preload("res://game/resources/textures/world/street/yard_shoulder_gravel.png"), "uv_scale": 6.0, "roughness": 0.97, "specular": 0.25, "tint": Color(0.36, 0.35, 0.34)},
 	"yard_concrete": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.9, "tint": Color(1.18, 1.38, 1.46)},
 	"yard_sand_pale": {"albedo": preload("res://game/resources/textures/world/street/yard_sand_pale.png"), "uv_scale": 5.0, "roughness": 0.98, "tint": Color(0.77, 0.76, 0.65)},
 	"yard_soil_dark": {"albedo": preload("res://game/resources/textures/world/street/yard_soil_dark.png"), "uv_scale": 5.0, "roughness": 0.95},

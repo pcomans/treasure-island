@@ -117,7 +117,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - The land grid keeps a hump about 0.45 m high in the road near s 128 (about (-408, 216)): those cells sit beside the tent's footprint, and splitting them would re-cut a foundation.
   - The Johnson St lot's asphalt reads bluer than the footage's from the road end (frame D4).
   - From the ditch side (frame D4 and the owner's bank photo) the cottage reads about 7 m further south than it stands, against the palm; it stays where the road frames put it.
-  - A hairline of the old path's pale surface shows along the seal's seaward edge for about 7 m near s 15-21: the path lies under the lots by a centimetre and its own triangles come through. Fixing it means a higher lift for every lot, or a new surface under this one.
+  - A hairline of the old path's pale surface shows along the seal's seaward edge for about 7 m near s 15-21, and pale pinholes about a metre apart along the seal's joint at s 28.5: the path lies under the lots by a centimetre and its own triangles come through. Fixing it means a higher lift for every lot, or a new surface under this one.
   - The cottage's bay throws a soft shadow onto the wall under it, blurrier than the footage's (a sun-shadow resolution limit, smaller since the bay went shallow).
   - The ditch's mats and brush are crossed cards: at a walker's feet the slope reads as tufts over a painted thatch, not the owner's photo's deep tangle, and from straight above, on the jetpack, they show as small crosses. Accepted as a known limit (visual review, 2026-11-07); the planned ground-dressing work should address it.
   - The slope's 8,800 tussocks took the island's vegetation rows from about 31,500 to 37,800. Their cost hasn't been profiled.
