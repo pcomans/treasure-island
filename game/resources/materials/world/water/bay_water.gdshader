@@ -7,7 +7,9 @@ shader_type spatial;
 // last one stands up to the camera's eye height, so from any camera, at any height
 // and with any far plane, the water reaches the horizon with no edge or sky gap
 // below it, and only scenery in the last few percent of the view's depth can stand
-// behind that ring. Nothing in the bay collides; the node only places the level.
+// behind that ring. Within a few hundred metres of the far plane's own height the
+// last ring lies down instead (vertex()). Nothing in the bay collides; the node only
+// places the level.
 //
 // Waves: one baked tile of looping wind waves (tools/bake_water_waves.mjs) played at
 // six scales, each turned a little off the wind and run at deep-water speed for its
@@ -139,7 +141,12 @@ void vertex() {
 	float far_radius = sqrt(max(reach * reach - height * height, 1.0));
 	float radius = ring >= outer - 0.5 ? far_radius : far_radius * pow((2.0 * ring + 1.0) / (grid_rows - 2.0), 2.0);
 	vec2 dir = normalize(grid);
-	world_pos = vec3(camera.x + dir.x * radius, ring > outer - 0.5 ? max(camera.y, level) : level, camera.z + dir.y * radius);
+	// Near the far plane's own height (about 4.7 km up for gameplay's camera) the rings
+	// shrink round the camera, and a standing outer ring would wall it in and cover the
+	// island, so it lies down at water level as its radius falls from half the reach to
+	// a quarter.
+	float stand = smoothstep(0.25, 0.5, far_radius / reach);
+	world_pos = vec3(camera.x + dir.x * radius, ring > outer - 0.5 ? mix(level, max(camera.y, level), stand) : level, camera.z + dir.y * radius);
 	VERTEX = world_pos - NODE_POSITION_WORLD;
 }
 

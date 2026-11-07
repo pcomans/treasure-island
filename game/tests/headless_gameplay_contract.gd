@@ -10,10 +10,10 @@ const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
 const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
-## The largest camera far plane in use: the island overviews in
-## game/tests/shared/building_shots.gd (_island_shots sets camera.far = 10000.0);
-## gameplay's camera uses player.tscn's.
-const WATER_LARGEST_CAMERA_FAR_M := 10000.0
+## The largest camera far plane in use: the island overviews' in
+## game/tests/shared/building_shots.gd, read from it; gameplay's camera uses player.tscn's.
+const BUILDING_SHOTS := preload("res://game/tests/shared/building_shots.gd")
+const WATER_LARGEST_CAMERA_FAR_M: float = BUILDING_SHOTS.ISLAND_CAMERA_FAR_M
 ## Cameras stay within this of the origin: the island (about 950 m) and its overview poses.
 const WATER_CAMERA_REACH_M := 2000.0
 

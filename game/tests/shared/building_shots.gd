@@ -87,6 +87,9 @@ extends SceneTree
 ##   new capture costs.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+## The island overviews' far plane, the largest any camera uses: the bay water's
+## bounds hold its rings (game/tests/headless_gameplay_contract.gd reads this).
+const ISLAND_CAMERA_FAR_M := 10000.0
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
@@ -1143,7 +1146,7 @@ func _island_shots(out: String, suffix: String) -> void:
 	var span := (high - low).length()
 	var camera := Camera3D.new()
 	camera.fov = 55.0
-	camera.far = 10000.0
+	camera.far = ISLAND_CAMERA_FAR_M
 	_h.main.add_child(camera)
 	var views := [
 		["top", Vector3(0.0, span * 0.75, span * 0.05)],
