@@ -30,7 +30,8 @@ extends SceneTree
 ##      rest and freezes where it ends up, and a second hit from the same start
 ##      wakes it (the K-rail or the row units it lies among move again; the car
 ##      lies against a wall);
-##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
+##   9. on foot after getting out: the stock controller back on, then the stock
+##      walk, run, jetpack and fast drop on open street.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
 ## first F): getting out must never leave the player without a character.
@@ -750,6 +751,10 @@ func _case_shove() -> bool:
 
 func _case_on_foot() -> bool:
 	if not _require(not _player.is_driving() and _player.is_processing_unhandled_input(), "The player must be on foot."):
+		return false
+	# Out of the car the controller is back (checked just above); the walk, run,
+	# rise and drop are measured on open street, away from what the shoves left.
+	if not await _stand_player(Vector2(_cases.on_foot.at_xz[0], _cases.on_foot.at_xz[1])):
 		return false
 	var rig := _player.get_node("CameraPivot") as Node3D
 	rig.rotation.y = 0.0
