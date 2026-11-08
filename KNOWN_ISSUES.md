@@ -98,6 +98,14 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The plants' nominal heights are kept twice, in the street-vegetation kit and its Node mirror (`STREET_VEGETATION_PROPS`); the game checks that they agree only at load.
 - The Point of Infinity draws its true geometry, so from Treasure Island its upper reach is fainter than a pixel (the owner's choice, 2026-11-08).
 
+## Causeway join and token closure (`tools/lib/ybi-context-generation.mjs`, the `road_closure_barricade` prop, 2026-11-08)
+
+All four were seen in the visual review (2026-11-08) and left as non-blocking:
+- The barricades' shadows on the road have beaded edges, clearest from above. Rebuilding the rail stripes from shared edge points didn't change them, so they look like the sun's 800 m shadow range aliasing thin bars.
+- Where the median's end cap meets YBI's grass strip, the left (southbound) yellow line has a short kink.
+- The two signs' backs are plain grey.
+- Up close, the bottom edge of the median's end cap looks slightly jagged.
+
 ## Bay Bridge (`game/scripts/world/bay_bridge_builder.gd`, 2026-11-08)
 
 - The western span's towers have 3 X panels where the photos show 4, and no gusset nodes or top gallery.
