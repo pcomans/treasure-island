@@ -222,12 +222,12 @@ const PARK_EDGE_LINE_INSET_M = 0.25;
 const PARK_DASH_M = 3;
 const PARK_PAINT_LIFT_M = 0.006;
 // A pitch's lines: fresh white paint (the 2026-05-26 aerial's lines are unbroken; a worn
-// step cuts specks of turf through them), the park paint's lift over the turf they are
-// painted on, an OSM landuse area's skin (0.02 m over the land, tools/build_godot_world.mjs
-// area styles). They lie that low, not at the zone's surfaces lift, so a ball on the land
-// is not sunk in them.
+// step cuts specks of turf through them), the park paint's lift over the ground they are
+// painted on, the skin of the zone's OSM area (areaSkin: 0.02 m over the land for a
+// landuse area, 0.04 m for a leisure one, tools/build_godot_world.mjs area styles). They
+// lie that low, not at the zone's surfaces lift, so a ball on the land is not sunk in
+// them, and no lower, so the area's own ground doesn't cover them.
 const PITCH_PAINT_WEAR = 0;
-const PITCH_PAINT_HEIGHT_M = 0.02 + PARK_PAINT_LIFT_M;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -257,12 +257,14 @@ function exactKeys(value, keys, label) {
 // back slope of a street the zone meets, so the paving or bed comes up to the
 // sidewalk with no land showing between them (the street keeps its slope's run
 // clear of the zone), and that slope is then concrete rather than grass.
-function validateParkSurfaces(surfaces, label, minimumLift) {
+// A zone that paints pitches on its OSM area's own ground (a grass sports field)
+// may have no layers (layersOptional).
+function validateParkSurfaces(surfaces, label, minimumLift, layersOptional = false) {
   exactKeys(surfaces, "reach_m" in surfaces ? ["layers", "lift_m", "reach_m", "source_keys"] : ["layers", "lift_m", "source_keys"], label);
   invariant(surfaces.reach_m === undefined || (isFiniteNumber(surfaces.reach_m) && surfaces.reach_m > 0 && surfaces.reach_m <= 3), `${label} reach_m must lie in (0, 3] m`);
   invariant(isFiniteNumber(surfaces.lift_m) && surfaces.lift_m >= minimumLift - 1e-9 && surfaces.lift_m < STREET_GROUND_MAXIMUM_HEIGHT_M, `${label} lift_m must lie a layer step over the road paint (${minimumLift} m) and inside the street-ground band`);
   invariant(Array.isArray(surfaces.source_keys) && surfaces.source_keys.length > 0 && surfaces.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} needs OSM source_keys`);
-  invariant(Array.isArray(surfaces.layers) && surfaces.layers.length > 0, `${label} needs layers`);
+  invariant(Array.isArray(surfaces.layers) && (surfaces.layers.length > 0 || layersOptional), `${label} needs layers`);
   const ids = new Set();
   for (const layer of surfaces.layers) {
     const layerLabel = `${label} layer ${layer?.id}`;
@@ -340,7 +342,7 @@ export function streetGroundSettings(config) {
     if (!zone.pilot || zone.ground == null) continue;
     exactKeys(zone.ground, [...ZONE_GROUND_FIELDS, ...ZONE_GROUND_OPTIONAL.filter((field) => field in zone.ground)], `Street ground zone ${zone.id}`);
     const settings = zone.ground;
-    if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`, ROAD_TOP_M + lifts.paint_m + DRAPED_LAYER_STEP_M);
+    if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`, ROAD_TOP_M + lifts.paint_m + DRAPED_LAYER_STEP_M, settings.pitches !== undefined);
     if (settings.pitches !== undefined) {
       invariant(settings.surfaces !== undefined, `Street ground zone ${zone.id} pitches are painted at its surfaces' lift and need surfaces`);
       validatePitches(settings.pitches, `Street ground zone ${zone.id}`);
@@ -1535,6 +1537,9 @@ export function generateStreetGround({
   // The land's smooth shading normal at a plan point, or null (terrain overrides):
   // park surfaces over re-meshed land shade with it rather than per land triangle.
   normalAt = null,
+  // The height (m) an OSM area's ground lies over the land, by its source key: a
+  // pitch's lines lie just over their zone's area.
+  areaSkin,
   // The island-wide rules (validateStreetGroundRules), or null for the pilot zones alone.
   rules = null,
 }) {
@@ -3101,7 +3106,9 @@ export function generateStreetGround({
     for (const pitch of zone.settings.pitches ?? []) {
       const painted = difference(`pitch ${pitch.id} off layers`, intersect(`pitch ${pitch.id} in zone`, pitchPaint(pitch), zone.layerRegion), zoneShapes.get(zone));
       if (painted.length === 0) continue;
-      addPiece("marking", painted, constantHeight(PITCH_PAINT_HEIGHT_M), kindUv(STREET_PAINT_KINDS.white, PITCH_PAINT_WEAR));
+      const skins = [...new Set(zone.settings.surfaces.source_keys.map((key) => areaSkin(key)))];
+      invariant(skins.length === 1 && isFiniteNumber(skins[0]), `Street ground zone ${zone.id} pitch ${pitch.id} lies on areas of more than one skin height`);
+      addPiece("marking", painted, constantHeight(skins[0] + PARK_PAINT_LIFT_M), kindUv(STREET_PAINT_KINDS.white, PITCH_PAINT_WEAR));
       for (const key of zone.settings.surfaces.source_keys) sources.marking.add(key);
     }
   }

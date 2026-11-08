@@ -37,6 +37,11 @@ extends Node3D
 ## and stops at a tree.
 ##
 ## The manager pauses with the game (F and R do nothing in the pause menu).
+##
+## Touch (the browser's touch controls, touch_controls.gd): no key prompts show;
+## the use button shows instead, a car while can_enter() or driving, and a tap on
+## it is F. In a car the touch stick drives and steers (its vector, not the WASD
+## actions) and RISE, which presses the handbrake as Space does, brakes.
 
 signal entered(row_id: String)
 signal exited(row_id: String)
@@ -114,6 +119,9 @@ var _breakable_fences: Array[RID] = []
 var _fences: Array[RID] = []
 var _enter_down := false
 var _recover_down := false
+## The car F would get into now, on foot ("" none): the prompt's and the touch
+## use button's test.
+var _nearest := ""
 var _prompt := ""
 var _exit_prompt_s := 0.0
 var _query := PhysicsShapeQueryParameters3D.new()
@@ -126,7 +134,7 @@ func _init() -> void:
 
 
 ## Indexes the swappable rows of the loaded world. touch: a touch-only browser,
-## which has no F key, so it shows no prompt.
+## which has no F key, so it shows no prompt (its use button shows instead).
 func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch: bool = false) -> void:
 	_world = world
 	_player = player
@@ -159,6 +167,7 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	_fences = _breaker.all_fence_bodies()
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
+	_camera.use_planes_of(_player.get_camera())
 	add_child(_camera)
 	_query.collision_mask = PHYSICS_STREET_PROP
 	_query.collide_with_areas = false
@@ -167,6 +176,11 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 
 func is_driving() -> bool:
 	return _active != null
+
+
+## On foot within reach of a car to get into: where "F  Drive" shows.
+func can_enter() -> bool:
+	return _active == null and _nearest != ""
 
 
 func active_car() -> DRIVABLE_CAR:
@@ -224,13 +238,14 @@ func _physics_process(delta: float) -> void:
 
 
 func _on_foot(enter_pressed: bool) -> void:
-	if _touch or not _player.is_processing_unhandled_input():
+	if not _player.is_processing_unhandled_input():
+		_nearest = ""
 		_set_prompt("")
 		return
-	var nearest := _nearest_car(_player.global_position)
-	_set_prompt(PROMPT_ENTER if nearest != "" else "")
-	if enter_pressed and nearest != "":
-		enter(nearest)
+	_nearest = _nearest_car(_player.global_position)
+	_set_prompt(PROMPT_ENTER if _nearest != "" and not _touch else "")
+	if enter_pressed and _nearest != "":
+		enter(_nearest)
 
 
 func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
@@ -238,15 +253,23 @@ func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
 	if not is_instance_valid(car):
 		_active = null
 		return
-	car.drive_input = Input.get_axis("move_back", "move_forward")
-	car.steer_input = Input.get_axis("move_left", "move_right")
+	# The touch stick sets the player's touch vector, not the WASD actions. Its
+	# value is taken to the square, so a corner is full throttle and lock, as W+D.
+	var stick := _player.touch_input_vector
+	if stick.is_zero_approx():
+		car.drive_input = Input.get_axis("move_back", "move_forward")
+		car.steer_input = Input.get_axis("move_left", "move_right")
+	else:
+		stick *= stick.length() / maxf(absf(stick.x), absf(stick.y))
+		car.drive_input = clampf(-stick.y, -1.0, 1.0)
+		car.steer_input = clampf(stick.x, -1.0, 1.0)
 	car.handbrake = Input.is_action_pressed("handbrake")
 	if recover_pressed:
 		car.request_recover("manual")
 	# The player rides along at the seat (the grass bends there, the web state reads it).
 	_player.global_position = car.seat_transform().origin
 	_exit_prompt_s = maxf(0.0, _exit_prompt_s - delta)
-	_set_prompt(PROMPT_EXIT if _exit_prompt_s > 0.0 else "")
+	_set_prompt(PROMPT_EXIT if _exit_prompt_s > 0.0 and not _touch else "")
 	_breaker.break_overlaps(car)
 	# Sinking in the bay, the car takes the player back to land with it.
 	if exit_pressed and not car.is_sinking():
@@ -267,6 +290,7 @@ func enter(id: String) -> bool:
 	car.wake()
 	car.occupied = true
 	_active = car
+	_nearest = ""
 	_player.begin_driving()
 	_camera.attach(car, showing if take else null, take)
 	_exit_prompt_s = PROMPT_EXIT_SHOW_S

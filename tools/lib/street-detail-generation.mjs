@@ -190,6 +190,8 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   // A loose ball on a pitch: a rigid body the player pushes about
   // (game/scripts/world/soccer_ball.gd), not a fixed prop.
   sports_ball: pointKind("furniture", 0.15, "seeded"),
+  // A goal on a pitch's goal line (its row carries its plan as footprint_m).
+  sports_goal: pointKind("furniture", 0.3, "seeded"),
   stop_sign: pointKind("furniture", 0.15, "host_road"),
   street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),
@@ -280,9 +282,10 @@ const PLAYER_WIDTH_M = 0.7;
 // the stock tanks stand in a tight row against the chain-link, as photographed, so
 // their plan capsules (a little longer than the pallets) may overlap each other and
 // a fence run this much (m), and the promenade's timber baulks lie in short rows, end
-// to end, as do the road blocks at the ditch's road end. Anything else stays a player's width away. The clearance flood still
+// to end, as do the road blocks at the ditch's road end and the sections of the GAA
+// field's board wall. Anything else stays a player's width away. The clearance flood still
 // checks what that shuts in.
-const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter", "water_block"]);
+const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter", "water_block", "mural_wall"]);
 const standsTight = (prop, params) => PROPS_STANDING_TIGHT.includes(prop) || (prop === "log_seat" && params?.form === "baulk");
 const TIGHT_PROP_GAP_M = -0.3;
 // A rigid street-furniture set piece stands at the height under its centre. The most

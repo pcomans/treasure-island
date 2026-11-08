@@ -2444,6 +2444,11 @@ function main() {
       spawnXZ,
       hardShapes,
       normalAt: terrainPlan.smoothNormalAt,
+      areaSkin: (key) => {
+        const object = playableObjects.get(key);
+        invariant(object, `Street ground area ${key} is not a playable OSM object`);
+        return areaStyle(object.tags, object.roles).elevation_m;
+      },
       rules: loadStreetGroundRules(projectRoot),
     });
     for (const [id, records] of streetGround.records) {

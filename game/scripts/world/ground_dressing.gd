@@ -66,7 +66,10 @@ const DRESS := {
 	"park_lawn": Vector3(1.0, 0.052, 0.0),
 	"sports": Vector3(1.0, 0.045, 0.0),
 	"watered_pitch": Vector3(1.0, 0.048, 0.0),
-	"turf": Vector3(1.0, 0.025, 0.0),
+	# A mown pitch keeps its blades short whatever their colour.
+	"mown_pitch": Vector3(1.0, 0.04, 0.0),
+	# Synthetic turf grows nothing: its pile is the ground's own even green.
+	"turf": Vector3(0.0, 0.0, 0.0),
 	"field": Vector3(0.6, 0.24, 0.3),
 	"straw": Vector3(0.62, 0.2, 0.2),
 	"rough_grass": Vector3(0.7, 0.32, 0.2),

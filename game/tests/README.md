@@ -9,8 +9,8 @@ It must pass before anything is pushed to `main`.
 | `headless_scene_parse.gd` | The gameplay scenes parse. |
 | `headless_startup_configuration_contract.gd` | Dummy audio is selected; every catalog building has one recognition status, every accepted one has a reviewer verdict, and the demolished ones are exactly those `tools/config/demolished-buildings.json` lists. Prints the score out of the standing buildings. |
 | `validate_generated_world.gd` | The generated world data is valid and matches its manifest. |
-| `headless_gameplay_contract.gd` | Controls, movement and jetpack defaults, water, skyline billboard. |
-| `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. |
+| `headless_gameplay_contract.gd` | Controls, movement and jetpack defaults, water, and the distant horizon as non-colliding scenery all round the island within the gameplay camera's far plane. |
+| `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. RISE holds the handbrake with the jetpack. The use button (`scripts/ui/touch_use_button.gd`): a tap is one F press that a physics tick sees, neither its finger nor a second one pressed on it turns the camera, and DROP holds C until the finger lifts or is cancelled, the button changes or hides, or the game pauses. |
 | `headless_world_material_contract.gd` | The ground and building materials load with their textures. |
 | `headless_ground_dressing_contract.gd` | The grass's placement rules: the density setting, every point of the ring in one cell round the camera, and each cell holding every tuft that stands in it. |
 | `headless_facade_meter_uv_adapter_contract.gd` | Facade texture coordinates run continuously around corners. |
@@ -34,7 +34,9 @@ tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_s
 tools/build-mac.sh   # Mac build + content audit + launch check
 ```
 
-A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation. A free camera may add `far` (metres, default 5000, at most the island overviews' 10000) to see scenery farther off, such as the whole Bay Bridge.
+The game fills its window at any shape (`window/stretch/aspect="expand"`), but the shared harness (`world_harness.gd`) keeps the base 1440 × 900 frame, so captures stay 1440 × 900 at any `--resolution`.
+
+A `--views` focused view may add `camera_xyz` with a vertical `fov` (default 70) to shoot from a free camera aimed at its `target_xyz`, for example to match a reference photo, or `"projection": "ortho"` with `ortho_size` (vertical extent in metres) for a square-on elevation. A free camera sees as far as the gameplay camera (its 26 km far plane, which holds the distant horizon) unless it adds `far` (metres, from 100 up to that) to see less far.
 The grass and small stones (`game/scripts/world/ground_dressing.gd`) are drawn round the camera at runtime from what the ground draws, so they follow any change to the ground-cover map. They are on in every rendered run on Forward+ and off headless and on the web. `--ground-dressing off|low|medium|high` after `--` sets the density for a run, else the project setting `treasure_island/ground_dressing/density`; `.../cards`, `.../grass`, `.../stones` and `.../render_priority` are for timing them apart. A still `--street-views` or `--views` view may add `dressing`, `dressing_parts`, `dressing_params`, `dressing_maps` and `measure_dressing` (see the header of `building_shots.gd`). `shared/ground_dressing_views.json` is a `--street-views` plan of the poses the grass was judged and timed at, each shot off and on.
 `--street-views FILE` shoots a street-detail area instead of a building: `{"area": "NAME", "views": [...]}` with the same view fields but no building bound, saved as `street-NAME.png`, with street detail on and off by default.
 The player avatar is hidden in every shot; `--show-player` keeps it.

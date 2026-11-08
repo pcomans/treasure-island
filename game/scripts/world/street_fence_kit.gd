@@ -4,8 +4,10 @@ extends RefCounted
 ## (tools/lib/street-fence-generation.mjs places them). One shared kit for every
 ## fence type: plain chain-link, chain-link with barbed wire (industrial),
 ## chain-link with a privacy windscreen and temporary chain-link panels
-## (construction), a wood board fence (housing), and chain-link with privacy
-## slats woven through it, with its gates standing open (storage yards).
+## (construction), a wood board fence (housing), chain-link with privacy
+## slats woven through it, with its gates standing open (storage yards), and a
+## sports ground's tall ball-stop net. Plain and screened chain-link may be 6 or
+## 8 ft tall and galvanised or vinyl-coated dark green or black (params coating).
 ##
 ## Metal parts are tubes and boxes of the street-furniture kit's builder, sharing
 ## its galvanised atlas cell; fabric, screens and boards are textured quads tiled
@@ -53,7 +55,41 @@ const TYPES := {
 	"construction_panel": {"height_m": 1.83, "half_thickness_m": 0.3, "collision_half_m": 0.22},
 	"wood_privacy": {"height_m": 1.83, "half_thickness_m": 0.08, "collision_half_m": 0.08},
 	"steel_picket": {"height_m": 1.37, "half_thickness_m": 0.05, "collision_half_m": 0.05},
+	"ball_stop_net": {"height_m": 9.14, "half_thickness_m": 0.1, "collision_half_m": 0.06},
 }
+## Types that come in several heights (params height_m) and their heights
+## (tools/lib/street-fence-generation.mjs heights_m).
+const HEIGHTS := {
+	"chain_link_slatted": [1.83, 2.44],
+	"chain_link": [1.83, 2.44],
+	"chain_link_screened": [1.83, 2.44],
+	"ball_stop_net": [6.1, 9.14, 12.19],
+}
+## Chain-link coatings (params coating): galvanised, or vinyl-coated posts, rails
+## and wire. Colours (sRGB, multiplied with the metal atlas cell and the wire
+## texture) from the dated photos: the GAA field's dark green fence on 13th St
+## (Mar 2025) and the rugby field's on 11th St and Avenue I (Mar, Nov 2025).
+const COATED_TYPES := ["chain_link", "chain_link_screened"]
+const COATING_METAL := {"galvanised": Color(0.86, 0.87, 0.88), "green": Color(0.2, 0.3, 0.23), "black": Color(0.09, 0.095, 0.1)}
+const COATING_WIRE := {"galvanised": Color(0.74, 0.75, 0.77), "green": Color(0.13, 0.24, 0.16), "black": Color(0.05, 0.052, 0.056)}
+## The low concrete curb a coated chain-link may stand on (curb: true; the GAA
+## field's fence on 11th and 13th Streets, Mar 2025, and on Avenue H, Sep 2025, and
+## the rugby field's on Avenue H): its height over the ground, depth below it and
+## width, production inference from those views.
+const CURB_TOP_M := 0.2
+const CURB_BURY_M := 0.15
+const CURB_WIDTH_M := 0.2
+const CURB_CONCRETE := Color(0.64, 0.63, 0.6)
+## The ball-stop net: black knotted netting of about 10 cm mesh (NET_TILE holds
+## one mesh square each way), hung from a top cable between the poles from just
+## over the ground; the poles a little thicker at a run's ends.
+const NET_TILE := Vector2(0.1, 0.1)
+## The top cable's sag at mid-bay, as a share of the bay's span, and the panels
+## the netting hangs in along a bay.
+const NET_SAG := 0.022
+const NET_SEGMENTS := 6
+const NET_TINT := Color(0.06, 0.062, 0.066)
+const NET_FOOT_M := 0.12
 const INSIDE := ["left", "right", "center"]
 ## Windscreen colours (sRGB, multiplied with the soft grey screen texture) and
 ## opacity: the photographed "black" screen reads as a smooth, neutral to
@@ -69,14 +105,17 @@ const INSIDE := ["left", "right", "center"]
 const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.45, 0.05)}
 const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.92}
 const SCREEN_PLAIN := ["orange"]
+## Dense windscreens: an opaque knitted screen tied to the outside of the fabric,
+## hiding the posts from the street, the galvanised wire showing over it as a
+## diamond weave (the turf pitch's, 8th St and Avenue I, Mar 2025; 9th St, Sep
+## 2025). sRGB, from the sunlit and shaded screen in those views.
+const DENSE_SCREENS := {"dense_green": Color(0.16, 0.38, 0.33)}
 ## A screen may stop below the fence top (screen_height_m), at least this tall.
 const SCREEN_MIN_M := 0.6
 ## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
 ## photos: dark teal-green (9th St, Sep 2025; Avenue M, Mar 2025), brown
 ## (12th St, Jul 2023), black.
 const SLATS := {"green": Color(0.19, 0.3, 0.29), "brown": Color(0.3, 0.26, 0.21), "black": Color(0.08, 0.08, 0.085)}
-## Slatted fences come 6 or 8 ft tall (tools/lib/street-fence-generation.mjs).
-const SLATTED_HEIGHTS := [1.83, 2.44]
 ## A slat tile: eight slats across SLAT_TILE_M, one fabric height tall.
 const SLAT_TILE_M := 0.4
 ## A gate leaf's collision half thickness (GATE_LEAF_HALF_M in
@@ -126,11 +165,16 @@ const WIRE_ALPHA_CUT := 0.45
 
 var _metal: StandardMaterial3D
 var _chain: ShaderMaterial
+var _chains: Dictionary = {}
+var _net: ShaderMaterial
+var _net_shadow: ShaderMaterial
 var _barbed: ShaderMaterial
 var _chain_shadow: ShaderMaterial
 var _barbed_shadow: ShaderMaterial
 var _wood: StandardMaterial3D
 var _screens: Dictionary = {}
+var _dense_screens: Dictionary = {}
+static var _fine_net: Texture2D
 var _screen_shadow: StandardMaterial3D
 var _slats: Dictionary = {}
 var _banner: StandardMaterial3D
@@ -147,6 +191,19 @@ func _init() -> void:
 	_metal.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	_metal.texture_repeat = false
 	_chain = _fabric_material("street_fence_chain_link", CHAIN_LINK)
+	_chains["galvanised"] = _chain
+	for coating: String in ["green", "black"]:
+		var coated := _fabric_material("street_fence_chain_link_" + coating, CHAIN_LINK)
+		coated.set_shader_parameter("tint", COATING_WIRE[coating])
+		# Vinyl, not bare zinc: no metal sheen.
+		coated.set_shader_parameter("metallic_value", 0.0)
+		coated.set_shader_parameter("roughness_value", 0.7)
+		_chains[coating] = coated
+	_net = _fabric_material("street_fence_ball_stop_net", _fine_net_texture())
+	_net.set_shader_parameter("tint", NET_TINT)
+	_net.set_shader_parameter("metallic_value", 0.0)
+	_net.set_shader_parameter("roughness_value", 0.85)
+	_net_shadow = _fabric_shadow_material("street_fence_ball_stop_net_shadow", _fine_net_texture())
 	_barbed = _fabric_material("street_fence_barbed", BARBED)
 	_chain_shadow = _fabric_shadow_material("street_fence_chain_link_shadow", CHAIN_LINK)
 	_barbed_shadow = _fabric_shadow_material("street_fence_barbed_shadow", BARBED)
@@ -171,6 +228,13 @@ func _init() -> void:
 		# light through it, so the screens take no shadows.
 		screen.disable_receive_shadows = true
 		_screens[colour] = screen
+	for colour: String in DENSE_SCREENS:
+		var dense := StandardMaterial3D.new()
+		dense.resource_name = "street_fence_screen_" + colour
+		dense.albedo_color = DENSE_SCREENS[colour]
+		dense.roughness = 0.9
+		dense.cull_mode = BaseMaterial3D.CULL_DISABLED
+		_dense_screens[colour] = dense
 	# Privacy slats: opaque stripes, one slat per mesh column with a dark
 	# seam between, a little uneven in tone (a texture made here, no file).
 	var stripes := Image.create_empty(64, 16, false, Image.FORMAT_RGBA8)
@@ -242,25 +306,33 @@ static func params_error(type: String, params: Variant) -> String:
 		return "fence params need inside left, right or center"
 	if (params as Dictionary).has("breakable") and not (params as Dictionary).breakable is bool:
 		return "fence params breakable must be true or false"
+	if (params as Dictionary).has("height_m"):
+		var height: Variant = (params as Dictionary).height_m
+		var heights: Array = HEIGHTS.get(type, [])
+		if not (height is float or height is int) or not heights.any(func(value: float) -> bool: return is_equal_approx(value, float(height))):
+			return "%s height_m must be one of %s" % [type, heights]
+	if (params as Dictionary).has("coating") and (type not in COATED_TYPES or str((params as Dictionary).coating) not in COATING_METAL):
+		return "coating must be galvanised, green or black on plain or screened chain-link"
+	if (params as Dictionary).has("curb") and (type not in COATED_TYPES or not (params as Dictionary).curb is bool or not bool((params as Dictionary).curb)):
+		return "curb must be true on plain or screened chain-link"
 	if type == "chain_link_screened":
-		if str((params as Dictionary).get("screen", "black")) not in SCREENS:
+		var screen_colour := str((params as Dictionary).get("screen", "black"))
+		if screen_colour not in SCREENS and screen_colour not in DENSE_SCREENS:
 			return "unknown screen colour %s" % (params as Dictionary).get("screen")
-		var screen_height: Variant = (params as Dictionary).get("screen_height_m", TYPES.chain_link_screened.height_m)
-		if not (screen_height is float or screen_height is int) or float(screen_height) < SCREEN_MIN_M or float(screen_height) > float(TYPES.chain_link_screened.height_m):
-			return "screen_height_m must be %.1f..%.2f" % [SCREEN_MIN_M, TYPES.chain_link_screened.height_m]
+		var top := height_of(type, params)
+		var screen_height: Variant = (params as Dictionary).get("screen_height_m", top)
+		if not (screen_height is float or screen_height is int) or float(screen_height) < SCREEN_MIN_M or float(screen_height) > top:
+			return "screen_height_m must be %.1f..%.2f" % [SCREEN_MIN_M, top]
 	if type == "chain_link_slatted":
 		if str((params as Dictionary).get("slats", "")) not in SLATS:
 			return "slatted fence needs slats green, brown or black"
-		var height: Variant = (params as Dictionary).get("height_m", 1.83)
-		if not (height is float or height is int) or not SLATTED_HEIGHTS.any(func(value: float) -> bool: return is_equal_approx(value, float(height))):
-			return "slatted fence height_m must be 1.83 or 2.44"
 	return ""
 
 
 ## The top of a screened fence's windscreen above the ground: its
 ## screen_height_m, or just under the top rail.
 static func screen_top_of(params: Variant) -> float:
-	var full := float(TYPES.chain_link_screened.height_m) - 0.07
+	var full := height_of("chain_link_screened", params) - 0.07
 	if params is Dictionary and (params as Dictionary).has("screen_height_m"):
 		return minf(full, float((params as Dictionary).screen_height_m))
 	return full
@@ -268,9 +340,16 @@ static func screen_top_of(params: Variant) -> float:
 
 ## The height of a fence of this type with these params.
 static func height_of(type: String, params: Variant) -> float:
-	if type == "chain_link_slatted" and params is Dictionary and (params as Dictionary).has("height_m"):
+	if HEIGHTS.has(type) and params is Dictionary and (params as Dictionary).has("height_m"):
 		return float((params as Dictionary).height_m)
 	return float(TYPES[type].height_m)
+
+
+## A chain-link fence's coating: galvanised unless params name one.
+static func coating_of(params: Variant) -> String:
+	if params is Dictionary and str((params as Dictionary).get("coating", "")) in COATING_METAL:
+		return str((params as Dictionary).coating)
+	return "galvanised"
 
 
 ## Adds one run's geometry to the cell builders (cells: key -> builders, filled
@@ -294,8 +373,16 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 			boxes = _picket_fence(cells, cell_size_m, posts)
 		"chain_link_slatted":
 			boxes = _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
+		"ball_stop_net":
+			boxes = _ball_stop_net(cells, cell_size_m, posts, height_of(type, params))
 		_:
-			boxes = _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params))
+			var curb := params.get("curb", false) == true
+			# The curb under each bay stays when a car breaks the bay: drawn before
+			# the bay's vertex runs are marked, and not at all for a bay built alone.
+			if curb and not bay_only:
+				for index in posts.size() - 1:
+					_curb(_cell(cells, cell_size_m, (posts[index] + posts[index + 1]) * 0.5).metal, posts[index], posts[index + 1])
+			boxes = _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params), _fabric_h(type, params), coating_of(params), curb)
 	if bay_only:
 		return boxes
 	for index in posts.size():
@@ -333,8 +420,16 @@ static func post_size(type: String, params: Variant, frame: Dictionary) -> Vecto
 			return Vector3(0.12, height_of(type, params) + 0.2, 0.12)
 		"chain_link_barbed":
 			return Vector3(0.08, 1.83 + 0.45, 0.7)
-	var top := (height_of(type, params) if type == "chain_link_slatted" else 1.83) + 0.1
-	return Vector3(0.08, top, 0.08)
+		"ball_stop_net":
+			return Vector3(0.18, height_of(type, params) + 0.15, 0.18)
+	return Vector3(0.08, _fabric_h(type, params) + 0.1, 0.08)
+
+
+## How tall a chain-link or slatted fence's fabric stands: its height (6 or 8
+## ft, params height_m), but 6 ft on the barbed type, whose height counts its
+## arms over the fabric.
+static func _fabric_h(type: String, params: Variant) -> float:
+	return 1.83 if type == "chain_link_barbed" else height_of(type, params)
 
 
 ## Builds one post at its frame (post_frame): the run's posts, or a felled post
@@ -363,19 +458,25 @@ func add_post(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 				finial.append(foot + Vector3(0, height + profile.x, 0))
 				finial_radii.append(profile.y)
 			metal.tube(finial, finial_radii, 8, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+		"ball_stop_net":
+			# A tall galvanised pole, a little thicker at a run's ends.
+			var pole := 0.085 if bool(frame.terminal) else 0.065
+			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height_of(type, params) + 0.15, 0)]), PackedFloat32Array([pole, pole * 0.75]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
 		_:
-			# Line posts, stouter terminal posts, on chain-link (fabric 6 ft) and
-			# slatted fences (their height); a barbed fence's arm leans outward.
+			# Line posts, stouter terminal posts, as tall as the fabric (6 or 8 ft;
+			# slatted fences their height) in its coating (COATING_METAL); a barbed
+			# fence's arm leans outward.
 			var terminal := bool(frame.terminal)
 			var radius := 0.03 if terminal else 0.024
-			var top := (height_of(type, params) if type == "chain_link_slatted" else 1.83) + (0.06 if terminal else 0.03)
-			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-			metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+			var top := _fabric_h(type, params) + (0.06 if terminal else 0.03)
+			var metal_colour: Color = COATING_METAL[coating_of(params)]
+			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, metal_colour, FURNITURE.CELL_METAL, false, false)
+			metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, metal_colour, FURNITURE.CELL_METAL, false, true)
 			if type == "chain_link_barbed":
 				var side := _side_of(params)
 				var outward := normal * (-side if side != 0.0 else 1.0)
 				var arm_end := foot + Vector3(0, top + 0.02, 0) + (Vector3.UP + outward).normalized() * 0.42
-				metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), arm_end]), PackedFloat32Array([0.016, 0.014]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+				metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), arm_end]), PackedFloat32Array([0.016, 0.014]), 6, metal_colour, FURNITURE.CELL_METAL, false, true)
 
 
 ## The side of a run its site lies on: 1 left, -1 right, 0 centred.
@@ -428,12 +529,19 @@ func commit(cell: Dictionary) -> Dictionary:
 	var shadow := ArrayMesh.new()
 	_add_surface(solid, cell.wood, _wood, "solid", "wood", surfaces)
 	_add_surface(fabric, cell.chain, _chain, "fabric", "chain", surfaces)
+	for coating: String in ["green", "black"]:
+		_add_surface(fabric, cell["chain_" + coating], _chains[coating], "fabric", "chain_" + coating, surfaces)
+		_add_surface(shadow, cell["chain_" + coating], _chain_shadow, "shadow", "chain_" + coating, surfaces)
+	_add_surface(fabric, cell.net, _net, "fabric", "net", surfaces)
+	_add_surface(shadow, cell.net, _net_shadow, "shadow", "net", surfaces)
 	_add_surface(fabric, cell.barbed, _barbed, "fabric", "barbed", surfaces)
 	_add_surface(shadow, cell.chain, _chain_shadow, "shadow", "chain", surfaces)
 	_add_surface(shadow, cell.barbed, _barbed_shadow, "shadow", "barbed", surfaces)
 	for colour: String in SCREENS:
 		_add_surface(fabric, cell["screen_" + colour], _screens[colour], "fabric", "screen_" + colour, surfaces)
 		_add_surface(shadow, cell["screen_" + colour], _screen_shadow, "shadow", "screen_" + colour, surfaces)
+	for colour: String in DENSE_SCREENS:
+		_add_surface(solid, cell["screen_" + colour], _dense_screens[colour], "solid", "screen_" + colour, surfaces)
 	for colour: String in SLATS:
 		_add_surface(solid, cell["slats_" + colour], _slats[colour], "solid", "slats_" + colour, surfaces)
 	_add_surface(solid, cell.banner, _banner, "solid", "banner", surfaces)
@@ -467,11 +575,15 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 		cells[key] = {
 			"metal": FURNITURE.Builder.new(FURNITURE.CELL_WHITE),
 			"chain": Quads.new(),
+			"chain_green": Quads.new(),
+			"chain_black": Quads.new(),
+			"net": Quads.new(),
 			"barbed": Quads.new(),
 			"wood": Quads.new(),
 			"screen_black": Quads.new(),
 			"screen_green": Quads.new(),
 			"screen_orange": Quads.new(),
+			"screen_dense_green": Quads.new(),
 			"slats_green": Quads.new(),
 			"slats_brown": Quads.new(),
 			"slats_black": Quads.new(),
@@ -517,10 +629,14 @@ static func _bay_box(a: Vector3, b: Vector3, height: float, half_m: float) -> Di
 
 ## Chain-link on line posts with a top rail and a bottom tension wire; the
 ## screened type adds a windscreen on the inside, the barbed type angled arms
-## with three strands of barbed wire leaning outward.
-func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float) -> Array[Dictionary]:
+## with three strands of barbed wire leaning outward. fabric_h is the fabric's
+## height (6 or 8 ft) and coating its finish (galvanised, green or black); with
+## curb, the fabric stands on the low concrete curb add_run lays under each bay
+## (outside the bay's vertex runs, so a car's break leaves it standing).
+func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float, fabric_h := 1.83, coating := "galvanised", curb := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES[type]
-	var fabric_h := 1.83
+	var metal_colour: Color = COATING_METAL[coating]
+	var wire_key := "chain" if coating == "galvanised" else "chain_" + coating
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
 	for index in posts.size() - 1:
@@ -529,31 +645,50 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var middle := (a + b) * 0.5
 		var cell := _cell(cells, cell_size_m, middle)
-		var before := _marks(cell)
 		var metal: FURNITURE.Builder = cell.metal
+		var before := _marks(cell)
 		var normal := _left(_flat(b - a))
-		metal.tube(PackedVector3Array([a + Vector3(0, fabric_h - 0.02, 0), b + Vector3(0, fabric_h - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-		metal.tube(PackedVector3Array([a + Vector3(0, 0.07, 0), b + Vector3(0, 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		var base := CURB_TOP_M if curb else 0.0
+		metal.tube(PackedVector3Array([a + Vector3(0, fabric_h - 0.02, 0), b + Vector3(0, fabric_h - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, metal_colour, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([a + Vector3(0, base + 0.07, 0), b + Vector3(0, base + 0.07, 0)]), PackedFloat32Array([0.004, 0.004]), 4, metal_colour, FURNITURE.CELL_METAL, false, false)
 		# Fabric just inside the posts (or through them on a centred fence). Behind
 		# a windscreen the wire is barely visible, so the screen stands for both;
 		# above a screen lower than the fence the wire shows.
 		var shift := normal * side * 0.035
-		var wire_from := 0.05
-		if type == "chain_link_screened":
+		var wire_from := base + 0.05
+		if type == "chain_link_screened" and screen in DENSE_SCREENS:
+			# Outside the posts, the wire outermost: the posts hide behind it.
+			var outward := normal * -(side if side != 0.0 else 1.0)
+			(cell["screen_" + screen] as Quads).wall(a + outward * 0.045, b + outward * 0.045, base + 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			shift = outward * 0.06
+		elif type == "chain_link_screened":
 			var screen_shift := normal * (side if side != 0.0 else 1.0) * 0.055
-			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, base + 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
 			wire_from = screen_top
 		if wire_from < fabric_h - 0.1:
-			(cell.chain as Quads).wall(a + shift, b + shift, wire_from, fabric_h - 0.04, along_m, CHAIN_TILE)
+			(cell[wire_key] as Quads).wall(a + shift, b + shift, wire_from, fabric_h - 0.04, along_m, CHAIN_TILE)
 		if type == "chain_link_barbed":
 			var out_a := _post_normal(posts, index) * (-side if side != 0.0 else 1.0)
 			var out_b := _post_normal(posts, index + 1) * (-side if side != 0.0 else 1.0)
 			var lift := Vector3(0, fabric_h + 0.06, 0)
 			var rise := 0.3
 			(cell.barbed as Quads).ribbon(a + lift, b + lift, (Vector3.UP + out_a).normalized() * rise / 0.7071, (Vector3.UP + out_b).normalized() * rise / 0.7071, along_m, BARBED_TILE_M)
-		boxes.append(_bay(_bay_box(a, b, float(spec.height_m), float(spec.collision_half_m)), a, b, cell_key(middle, cell_size_m), cell, before))
+		boxes.append(_bay(_bay_box(a, b, maxf(fabric_h, float(spec.height_m)), float(spec.collision_half_m)), a, b, cell_key(middle, cell_size_m), cell, before))
 		along_m += length
 	return boxes
+
+
+## A low concrete curb under a chain-link bay from post foot a to b: CURB_TOP_M up
+## and CURB_BURY_M into the ground, CURB_WIDTH_M across, following the bay's slope.
+func _curb(metal: FURNITURE.Builder, a: Vector3, b: Vector3) -> void:
+	var run := b - a
+	if Vector2(run.x, run.z).length() < 0.01:
+		return
+	var x_axis := run.normalized()
+	var z_axis := Vector3(-run.z, 0.0, run.x).normalized()
+	var y_axis := z_axis.cross(x_axis).normalized()
+	var centre := (a + b) * 0.5 + y_axis * ((CURB_TOP_M - CURB_BURY_M) * 0.5)
+	metal.box(centre, Basis(x_axis, y_axis, z_axis), Vector3(run.length() + 0.02, CURB_TOP_M + CURB_BURY_M, CURB_WIDTH_M), CURB_CONCRETE, FURNITURE.CELL_WHITE)
 
 
 ## The horizontal normal at a post: the left of the run, averaged at a corner.
@@ -592,6 +727,70 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 	return boxes
 
 
+# ---------------------------------------------------------------- ball-stop net
+
+## A ball-stop net: tall galvanised poles (add_post), a top cable sagging between
+## them, and fine black netting hung from it to just over the ground, drawn like
+## the chain-link fabric (crisp up close, nearly gone far off). Its collision is
+## the whole bay, so the player walks along it and the jetpack clears it; the
+## fields' nets are breakable: false, so a car stops at them.
+func _ball_stop_net(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, height: float) -> Array[Dictionary]:
+	var spec: Dictionary = TYPES.ball_stop_net
+	var boxes: Array[Dictionary] = []
+	var along_m := 0.0
+	for index in posts.size() - 1:
+		var a := posts[index]
+		var b := posts[index + 1]
+		var length := Vector2(b.x - a.x, b.z - a.z).length()
+		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var before := _marks(cell)
+		var metal: FURNITURE.Builder = cell.metal
+		var normal := Vector3(b.z - a.z, 0.0, -(b.x - a.x)).normalized()
+		var sag := clampf(length * NET_SAG, 0.05, 0.4)
+		var cable := PackedVector3Array()
+		var cable_radii := PackedFloat32Array()
+		for step in NET_SEGMENTS + 1:
+			var t := float(step) / float(NET_SEGMENTS)
+			cable.append(a.lerp(b, t) + Vector3(0, height - 0.04 - sag * 4.0 * t * (1.0 - t), 0))
+			cable_radii.append(0.009)
+		metal.tube(cable, cable_radii, 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		# The netting hangs from the cable: one panel per cable segment.
+		for step in NET_SEGMENTS:
+			var t0 := float(step) / float(NET_SEGMENTS)
+			var t1 := float(step + 1) / float(NET_SEGMENTS)
+			var p0 := a.lerp(b, t0)
+			var p1 := a.lerp(b, t1)
+			var top0 := cable[step].y - p0.y - 0.01
+			var top1 := cable[step + 1].y - p1.y - 0.01
+			var u0 := (along_m + length * t0) / NET_TILE.x
+			var u1 := (along_m + length * t1) / NET_TILE.x
+			(cell.net as Quads).quad([p0 + Vector3(0, NET_FOOT_M, 0), p1 + Vector3(0, NET_FOOT_M, 0), p1 + Vector3(0, top1, 0), p0 + Vector3(0, top0, 0)],
+				[Vector2(u0, -NET_FOOT_M / NET_TILE.y), Vector2(u1, -NET_FOOT_M / NET_TILE.y), Vector2(u1, -top1 / NET_TILE.y), Vector2(u0, -top0 / NET_TILE.y)], normal)
+		boxes.append(_bay(_bay_box(a, b, height, float(spec.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
+		along_m += length
+	return boxes
+
+
+## The ball-stop net's tile: a fine white square mesh, its alpha a thin cord one
+## texel of 32 wide with slightly heavier knots, so the tinted net stays faint and
+## its far haze nearly vanishes (FURNITURE.net_texture() is the goal nets').
+static func _fine_net_texture() -> Texture2D:
+	if _fine_net != null:
+		return _fine_net
+	var size := 32
+	var image := Image.create_empty(size, size, false, Image.FORMAT_RGBA8)
+	for y in size:
+		for x in size:
+			var dx := minf(float(x) + 0.5, float(size) - float(x) - 0.5)
+			var dy := minf(float(y) + 0.5, float(size) - float(y) - 0.5)
+			var cord := clampf(1.1 - minf(dx, dy), 0.0, 1.0)
+			var knot := clampf(1.8 - maxf(dx, dy), 0.0, 1.0) * 0.5
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, maxf(cord, knot)))
+	image.generate_mipmaps()
+	_fine_net = ImageTexture.create_from_image(image)
+	return _fine_net
+
+
 ## An open gate between the solid runs either side of it (a slatted, plain or
 ## screened chain-link fence): two stout gate posts, and its open leaves as the
 ## generator lays them out (tools/lib/street-fence-generation.mjs gateLeaves:
@@ -606,9 +805,12 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 	var height := height_of(type, params)
 	var slats := str(params.get("slats", "green"))
 	var screen := str(params.get("screen", "black"))
+	var coating := coating_of(params)
+	var metal_colour: Color = COATING_METAL[coating]
+	var wire_key := "chain" if coating == "galvanised" else "chain_" + coating
 	for foot: Vector3 in [ends[0], ends[1]]:
 		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, foot).metal
-		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.045, 0.045]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.12, 0)]), PackedFloat32Array([0.045, 0.045]), 8, metal_colour, FURNITURE.CELL_METAL, false, true)
 	for leaf_value: Variant in leaves:
 		if not leaf_value is Dictionary:
 			continue
@@ -625,8 +827,8 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 		var metal: FURNITURE.Builder = cell.metal
 		var lift := Vector3(0, GATE_LEAF_LIFT_M, 0)
 		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
-		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		metal.tube(frame, PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, metal_colour, FURNITURE.CELL_METAL, false, false)
+		metal.tube(PackedVector3Array([hinge + lift + Vector3(0, (height - 0.08) * 0.5, 0), far + lift + Vector3(0, (height - 0.08) * 0.5, 0)]), PackedFloat32Array([0.018, 0.018]), 6, metal_colour, FURNITURE.CELL_METAL, false, false)
 		match type:
 			"chain_link_slatted":
 				(cell["slats_" + slats] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, Vector2(SLAT_TILE_M, height))
@@ -635,9 +837,9 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 				var screen_top := minf(screen_top_of(params), height - 0.1)
 				(cell["screen_" + screen] as Quads).wall(hinge + lift, far + lift, 0.03, screen_top, 0.0, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
 				if screen_top < height - 0.2:
-					(cell.chain as Quads).wall(hinge + lift, far + lift, screen_top, height - 0.1, 0.0, CHAIN_TILE)
+					(cell[wire_key] as Quads).wall(hinge + lift, far + lift, screen_top, height - 0.1, 0.0, CHAIN_TILE)
 			_:
-				(cell.chain as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
+				(cell[wire_key] as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
 		boxes.append(_bay(_bay_box(hinge, far, height, GATE_LEAF_HALF_M), hinge, far, cell_key((hinge + far) * 0.5, cell_size_m), cell, before))
 	return boxes
 

@@ -47,12 +47,14 @@ color = Color(1, 1, 1, 0.9)
 
 [node name="FeedbackPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 420.0
+offset_left = -300.0
 offset_top = -88.0
-offset_right = -420.0
+offset_right = 300.0
 offset_bottom = -34.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -66,12 +68,14 @@ vertical_alignment = 1
 
 [node name="PromptPanel" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 12
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 560.0
+offset_left = -160.0
 offset_top = -146.0
-offset_right = -560.0
+offset_right = 160.0
 offset_bottom = -100.0
 grow_horizontal = 2
 grow_vertical = 0

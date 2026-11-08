@@ -34,7 +34,7 @@ const RENDER_WORLD_VISIBLE := 1
 ## Debris mass (kg) per fence type, per metre of bay.
 const DEBRIS_KG_PER_M := {
 	"chain_link": 10.0, "chain_link_barbed": 12.0, "chain_link_screened": 12.0, "chain_link_slatted": 16.0,
-	"construction_panel": 12.0, "wood_privacy": 22.0, "steel_picket": 20.0,
+	"construction_panel": 12.0, "wood_privacy": 22.0, "steel_picket": 20.0, "ball_stop_net": 6.0,
 }
 ## How the debris leaves: a share of the car's velocity, a pop up (m/s) and a
 ## tip about the bay's line (rad/s).
@@ -44,7 +44,7 @@ const DEBRIS_TIP_RADPS := 2.2
 ## A felled post's mass (kg) per fence type.
 const POST_KG := {
 	"chain_link": 8.0, "chain_link_barbed": 10.0, "chain_link_screened": 8.0, "chain_link_slatted": 8.0,
-	"construction_panel": 14.0, "wood_privacy": 12.0, "steel_picket": 10.0,
+	"construction_panel": 14.0, "wood_privacy": 12.0, "steel_picket": 10.0, "ball_stop_net": 60.0,
 }
 ## A post is tested against a moving hull within this distance of its foot (m).
 const POST_REACH_M := 6.0

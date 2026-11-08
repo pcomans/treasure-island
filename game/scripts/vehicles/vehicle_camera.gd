@@ -85,14 +85,10 @@ func _init() -> void:
 	camera = Camera3D.new()
 	camera.name = "Camera3D"
 	camera.fov = FOV
-	camera.near = 0.08
-	camera.far = 5000.0
 	spring_arm.add_child(camera)
 	_blend = Camera3D.new()
 	_blend.name = "BlendCamera"
 	_blend.top_level = true
-	_blend.near = camera.near
-	_blend.far = camera.far
 	add_child(_blend)
 	_clearance.radius = 0.3
 	spring_arm.shape = _clearance
@@ -104,6 +100,14 @@ func _init() -> void:
 func _ready() -> void:
 	set_process(false)
 	set_process_unhandled_input(false)
+
+
+## Takes the on-foot gameplay camera's near and far planes (player.tscn) for the
+## chase camera and its blend, so driving sees as far: the distant horizon.
+func use_planes_of(gameplay: Camera3D) -> void:
+	for view: Camera3D in [camera, _blend]:
+		view.near = gameplay.near
+		view.far = gameplay.far
 
 
 ## Takes over behind car, blending from from_camera (the view the player had)

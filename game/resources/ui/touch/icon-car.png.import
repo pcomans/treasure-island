@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uh56bp2uesk4"
-path="res://.godot/imported/sf_skyline_owner_silhouette_final.png-7dae90868c6463ec9988a547b1e5ccac.ctex"
+uid="uid://df6q240ni300k"
+path="res://.godot/imported/icon-car.png-866d4485f1a133da1dea7fecea6e49b2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
-dest_files=["res://.godot/imported/sf_skyline_owner_silhouette_final.png-7dae90868c6463ec9988a547b1e5ccac.ctex"]
+source_file="res://game/resources/ui/touch/icon-car.png"
+dest_files=["res://.godot/imported/icon-car.png-866d4485f1a133da1dea7fecea6e49b2.ctex"]
 
 [params]
 

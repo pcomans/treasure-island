@@ -184,6 +184,75 @@ const COBBLE_TONES := [Color(0.62, 0.57, 0.49), Color(0.5, 0.42, 0.34), Color(0.
 const BAULK_SIDE := Color(0.15, 0.14, 0.13)
 const BAULK_TOP := Color(0.29, 0.275, 0.25)
 const BAULK_END := Color(0.2, 0.16, 0.135)
+## Sports goals on the pitches' goal lines (tools/lib/sports-pitch.mjs goal_lines;
+## origin on the middle of the line, front -Z toward the pitch, nets behind +Z).
+## The GAA goals of Pairc na nGael (SF GAA photos, Jun 2026): white round
+## uprights 6.5 m apart standing well above a crossbar at 2.5 m, a white net from
+## the crossbar sloping back to a bar on the ground. The rugby field's tall white
+## H posts (Avenue I, Nov 2025): uprights 5.6 m apart, crossbar at 3 m. Soccer
+## goals (9th St, Sep 2025): a white 7.32 x 2.44 m frame (smaller on the
+## small-sided pitches, params) with a net held by sloping back stanchions.
+## Upright heights and net depths are production inference (the GAA's rule
+## minimum is 7 m; the photos crop the tops).
+const POST_WHITE := Color(0.93, 0.93, 0.91)
+const GOAL_STAY := Color(0.62, 0.63, 0.64)
+const GAA_GOAL_HALF_M := 3.3
+const GAA_CROSSBAR_M := 2.5
+const GAA_UPRIGHT_M := 9.5
+const GAA_NET_DEPTH_M := 2.0
+const RUGBY_GOAL_HALF_M := 2.85
+const RUGBY_CROSSBAR_M := 3.0
+const RUGBY_UPRIGHT_M := 10.5
+const SOCCER_NET_DEPTH_M := 1.8
+## Goal nets: white cord on the shared net tile, NET_TILE_M each way.
+const GOAL_NET_TINT := Color(0.9, 0.9, 0.88)
+const GOAL_NET_TILE_M := 0.12
+## How high a goal net's collision walls stand (_goal_net_shapes).
+const GOAL_NET_WALL_M := 0.6
+const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
+## Portable light towers on their trailers (the rugby field's on Avenue H, Sep 2025;
+## the GAA field's in its 11th Street corner, Mar 2025; one by the turf pitch's small
+## pitches, 9th St, Sep 2025): a cream trailer body on two wheels with its drawbar
+## and four outrigger jacks, a dark telescoping mast at its drawbar end wound with
+## its coiled cable, a box at its top and a T-bar carrying four rectangular lamp
+## heads, two on it and two hung under it. Sizes are those of the common 9 m
+## towers, production inference.
+const TOWER_BODY := Color(0.85, 0.84, 0.79)
+const TOWER_MAST := Color(0.17, 0.18, 0.19)
+const TOWER_HEAD := Color(0.6, 0.61, 0.62)
+## Where the mast stands on the trailer (m along X from the body's centre, toward
+## the drawbar).
+const TOWER_MAST_X := 0.75
+## Aluminium spectator bleachers (the GAA field's spectator side, SF GAA photos
+## Jun 2026; the rugby field's, Avenue H and Avenue I, Sep 2025): rows of plank
+## seats and footboards on aluminium A-frames, each row a step up and back, and on
+## a guard round the back and ends: galvanised chain link (the GAA field's,
+## WW1_6676; on four rows or more unless told otherwise) or aluminium pickets (the
+## rugby field's on Avenue I, Sep 2025). Origin at the plan's centre, the seats
+## facing -Z. Row rise, depth, frame spacing and the guard's 42 in height are US
+## bleacher-trade sizes, production inference.
+const BLEACHER_RISE_M := 0.305
+const BLEACHER_ROW_M := 0.61
+const BLEACHER_SEAT_M := 0.43
+const BLEACHER_FRAME_STEP_M := 1.85
+const BLEACHER_GUARD_M := 1.07
+const BLEACHER_GUARDS := ["chain_link", "pickets", "none"]
+const BLEACHER_PICKET_STEP_M := 0.11
+const BLEACHER_GUARD_TINT := Color(0.74, 0.75, 0.77)
+const CHAIN_LINK := preload("res://game/resources/textures/world/street/street_fence_chainlink.png")
+## The chain-link tile's size (m), as the fence kit's CHAIN_TILE.
+const CHAIN_LINK_TILE := Vector2(0.10, 0.12)
+## The GAA field's spectator side (SF GAA photos, Jun 2026 and 2025): a tall wall
+## of dark teal-green painted boards (sRGB about 15-35, 65-86, 75-96 in WW1_5704 and
+## WW1_6934C) with black posts on its field face about every 12 ft, the murals of
+## 2025 painted on its field face (an original design, MURAL_ART, that only echoes
+## them, its boards the wall's colour). Sizes are production inference from the
+## people in the photos.
+const MURAL_ART := preload("res://game/resources/textures/world/street/gaa_mural_wall.png")
+const MURAL_GREEN := Color(0.058, 0.285, 0.276)
+const MURAL_POST := Color(0.06, 0.065, 0.07)
+const MURAL_WALL_THICKNESS_M := 0.12
+const MURAL_POST_STEP_M := 3.66
 
 ## Per prop: visibility range (m) and whether it casts a sun shadow. Tall poles
 ## keep their shadows and reach; small items fade out early for the web build.
@@ -224,6 +293,12 @@ const PROPS := {
 	"post_sign": {"range_m": 110.0, "shadow": false},
 	"monument_sign": {"range_m": 120.0, "shadow": true},
 	"ev_charger_bay": {"range_m": 120.0, "shadow": true},
+	"goal_gaa": {"range_m": 450.0, "shadow": true},
+	"goal_rugby": {"range_m": 450.0, "shadow": true},
+	"goal_soccer": {"range_m": 260.0, "shadow": true},
+	"light_tower": {"range_m": 450.0, "shadow": true},
+	"bleachers": {"range_m": 260.0, "shadow": true},
+	"mural_wall": {"range_m": 450.0, "shadow": true},
 }
 ## The power lines' wires: drawn to this range, never casting shadows, each span
 ## in straight pieces of at most WIRE_SEGMENT_M (at least 4), sagging WIRE_SAG of its
@@ -279,6 +354,9 @@ var _wire: ShaderMaterial
 var _wire_mesh: ArrayMesh
 var _plastic: StandardMaterial3D
 var _discs: StandardMaterial3D
+var _goal_net: ShaderMaterial
+var _bleacher_mesh: ShaderMaterial
+var _mural: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
 
@@ -333,6 +411,30 @@ func _init() -> void:
 	_roof_glass.cull_mode = BaseMaterial3D.CULL_DISABLED
 	_wire = ShaderMaterial.new()
 	_wire.shader = WIRE_SHADER
+	# Goal nets: the fence fabric's see-through blend on the shared net tile.
+	_goal_net = ShaderMaterial.new()
+	_goal_net.resource_name = "street_furniture_goal_net"
+	_goal_net.shader = FABRIC_SHADER
+	_goal_net.set_shader_parameter("wire_texture", net_texture())
+	_goal_net.set_shader_parameter("tint", GOAL_NET_TINT)
+	_goal_net.set_shader_parameter("metallic_value", 0.0)
+	_goal_net.set_shader_parameter("roughness_value", 0.85)
+	_goal_net.set_shader_parameter("max_layers", 4.0)
+	_goal_net.render_priority = 1
+	# The bleachers' guard: galvanised chain link, the fence fabric's blend.
+	_bleacher_mesh = ShaderMaterial.new()
+	_bleacher_mesh.resource_name = "street_furniture_bleacher_chain_link"
+	_bleacher_mesh.shader = FABRIC_SHADER
+	_bleacher_mesh.set_shader_parameter("wire_texture", CHAIN_LINK)
+	_bleacher_mesh.set_shader_parameter("tint", BLEACHER_GUARD_TINT)
+	_bleacher_mesh.set_shader_parameter("max_layers", 4.0)
+	_bleacher_mesh.render_priority = 1
+	# The mural's painted face: the art itself, flat paint on boards.
+	_mural = StandardMaterial3D.new()
+	_mural.resource_name = "street_furniture_mural"
+	_mural.albedo_texture = MURAL_ART
+	_mural.roughness = 0.85
+	_mural.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 
 
 ## What to build for one placed row: {ok, pieces: [{key, mesh, transform}],
@@ -563,6 +665,67 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				hull.points = roof
 				_shapes["cottage_roof"] = hull
 			result.shapes.append({"shape": _shapes["cottage_roof"], "transform": centre})
+		"goal_gaa":
+			_piece(result, "goal_gaa_frame", func(b: Builder) -> void: _goal_gaa(b))
+			_piece(result, "goal_gaa_net", func(b: Builder) -> void: _goal_gaa_net(b), Transform3D.IDENTITY, _goal_net, false)
+			_goal_frame_shapes(result, GAA_GOAL_HALF_M, GAA_CROSSBAR_M, GAA_UPRIGHT_M, 0.06)
+			_goal_net_shapes(result, GAA_GOAL_HALF_M, GAA_NET_DEPTH_M)
+		"goal_rugby":
+			_piece(result, "goal_rugby", func(b: Builder) -> void: _goal_rugby(b))
+			_goal_frame_shapes(result, RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, RUGBY_UPRIGHT_M, 0.075)
+		"goal_soccer":
+			var goal_width := snappedf(clampf(_number(params, "width_m", 7.32), 2.0, 7.32), 0.01)
+			var goal_height := snappedf(clampf(_number(params, "height_m", 2.44), 1.0, 2.44), 0.01)
+			var goal_key := "goal_soccer_w%.2f_h%.2f" % [goal_width, goal_height]
+			_piece(result, goal_key + "_frame", func(b: Builder) -> void: _goal_soccer(b, goal_width, goal_height))
+			_piece(result, goal_key + "_net", func(b: Builder) -> void: _goal_soccer_net(b, goal_width, goal_height), Transform3D.IDENTITY, _goal_net, false)
+			_goal_frame_shapes(result, goal_width * 0.5 + 0.06, goal_height, goal_height, 0.06)
+			_goal_net_shapes(result, goal_width * 0.5 + 0.04, SOCCER_NET_DEPTH_M * minf(1.0, goal_height / 2.44))
+		"light_tower":
+			var mast := snappedf(clampf(_number(params, "mast_m", 9.0), 6.0, 10.0), 0.5)
+			# heads_deg turns the heads about the mast from -Z (counterclockwise seen
+			# from above), as a tower's crew aims them whatever way its trailer stands.
+			var heads_deg := snappedf(clampf(_number(params, "heads_deg", 0.0), -180.0, 180.0), 5.0)
+			_piece(result, "light_tower_m%.1f_h%d" % [mast, roundi(heads_deg)], func(b: Builder) -> void: _light_tower(b, mast, heads_deg))
+			# The trailer with its wheels and outriggers, and the mast.
+			_box_shape(result, Vector3(2.4, 1.5, 2.7), Vector3(0.0, 0.75, 0.0))
+			_capsule(result, 0.1, mast, Vector3(TOWER_MAST_X, 0.0, 0.0))
+		"bleachers":
+			var rows := clampi(int(_number(params, "rows", 3)), 2, 10)
+			var seat_length := snappedf(clampf(_number(params, "length_m", 6.4), 2.0, 10.0), 0.1)
+			var guard := str(params.get("guard", "chain_link" if rows >= 4 else "none"))
+			if guard not in BLEACHER_GUARDS:
+				guard = "none"
+			var bleacher_key := "bleachers_r%d_l%.1f_%s" % [rows, seat_length, guard]
+			_piece(result, bleacher_key, func(b: Builder) -> void: _bleachers(b, rows, seat_length, guard))
+			# A step of solid under each row, so the player stands on the planks.
+			var depth := float(rows) * BLEACHER_ROW_M
+			for row in rows:
+				var top := BLEACHER_SEAT_M + BLEACHER_RISE_M * float(row)
+				_box_shape(result, Vector3(seat_length, top, BLEACHER_ROW_M), Vector3(0.0, top * 0.5, -depth * 0.5 + BLEACHER_ROW_M * (float(row) + 0.5)))
+			if guard == "chain_link":
+				_piece(result, bleacher_key + "_mesh", func(b: Builder) -> void: _bleacher_guard(b, rows, seat_length), Transform3D.IDENTITY, _bleacher_mesh, false)
+			if guard != "none":
+				# The guard closes the back and ends to its rail; the front stays open.
+				var rail := BLEACHER_SEAT_M + BLEACHER_RISE_M * float(rows - 1) + BLEACHER_GUARD_M
+				_box_shape(result, Vector3(seat_length, rail, 0.06), Vector3(0.0, rail * 0.5, depth * 0.5 - 0.05))
+				for side: float in [-1.0, 1.0]:
+					_box_shape(result, Vector3(0.06, rail, depth), Vector3(side * seat_length * 0.5, rail * 0.5, 0.0))
+		"mural_wall":
+			var wall_length := snappedf(clampf(_number(params, "length_m", 10.0), 2.0, 24.0), 0.1)
+			var wall_height := snappedf(clampf(_number(params, "height_m", 3.6), 2.0, 4.5), 0.05)
+			# art: the share of the mural (MURAL_ART's width) the face shows, from
+			# art_from to art_to (0..1), or none (plain boards) when they are equal.
+			var art_from := snappedf(clampf(_number(params, "art_from", 0.0), 0.0, 1.0), 0.001)
+			var art_to := snappedf(clampf(_number(params, "art_to", 0.0), 0.0, 1.0), 0.001)
+			var art := art_to > art_from
+			var wall_key := "mural_wall_l%.1f_h%.2f%s" % [wall_length, wall_height, "_panel" if art else ""]
+			_piece(result, wall_key, func(b: Builder) -> void: _mural_wall(b, wall_length, wall_height, art))
+			if art:
+				_piece(result, "%s_art_%.3f_%.3f" % [wall_key, art_from, art_to], func(b: Builder) -> void: _mural_face(b, wall_length, wall_height, art_from, art_to), Transform3D.IDENTITY, _mural)
+			# The boards, the posts on their field face and the panel.
+			var wall_depth := MURAL_WALL_THICKNESS_M + 0.2
+			_box_shape(result, Vector3(wall_length, wall_height, wall_depth), Vector3(0.0, wall_height * 0.5, MURAL_WALL_THICKNESS_M * 0.5 - wall_depth * 0.5))
 	return result
 
 
@@ -1256,6 +1419,279 @@ func _event_pole(b: Builder) -> void:
 		b.tube(PackedVector3Array([mount, mount + axis * 0.3]), PackedFloat32Array([0.1, 0.13]), 10, PARK_POLE_GREY, CELL_METAL, true, false)
 		b.disc(mount + axis * 0.3, axis, 0.12, 10, LENS_GREY)
 	b.box(Vector3(0, top - 1.4, 0.1), Basis.IDENTITY, Vector3(0.22, 0.32, 0.16), PARK_POLE_GREY, CELL_METAL)
+
+
+## The upright shapes of a goal (capsules round the uprights from the foot to
+## their tops) and a box round its crossbar, so the player and the ball meet the
+## frame.
+func _goal_frame_shapes(result: Dictionary, half_m: float, crossbar_m: float, upright_m: float, radius: float) -> void:
+	for side: float in [-1.0, 1.0]:
+		_capsule(result, radius, upright_m, Vector3(side * half_m, 0.0, 0.0))
+	_box_shape(result, Vector3(half_m * 2.0, radius * 2.0, radius * 2.0), Vector3(0.0, crossbar_m - radius, 0.0))
+
+
+## A goal net's low walls, so a ball rolled into the goal stays in it: a box along
+## the back where the net meets the ground, depth behind the line, and one down
+## each side from the line to it, GOAL_NET_WALL_M high.
+func _goal_net_shapes(result: Dictionary, half_m: float, depth: float) -> void:
+	_box_shape(result, Vector3(half_m * 2.0, GOAL_NET_WALL_M, 0.06), Vector3(0.0, GOAL_NET_WALL_M * 0.5, depth - 0.03))
+	for side: float in [-1.0, 1.0]:
+		_box_shape(result, Vector3(0.06, GOAL_NET_WALL_M, depth), Vector3(side * half_m, GOAL_NET_WALL_M * 0.5, depth * 0.5))
+
+
+## A GAA goal: two white round uprights from the foot to GAA_UPRIGHT_M, a
+## crossbar whose top is at GAA_CROSSBAR_M, and the net's frame: a bar along the
+## ground GAA_NET_DEPTH_M behind the line and a stay from each upright at the
+## crossbar's height bending back down to it.
+func _goal_gaa(b: Builder) -> void:
+	for side: float in [-1.0, 1.0]:
+		var x := side * GAA_GOAL_HALF_M
+		b.tube(PackedVector3Array([Vector3(x, -0.3, 0.0), Vector3(x, GAA_UPRIGHT_M, 0.0)]), PackedFloat32Array([0.055, 0.05]), 10, POST_WHITE, CELL_WHITE, false, true)
+		b.tube(_goal_stay(x, GAA_CROSSBAR_M - 0.05, GAA_NET_DEPTH_M), PackedFloat32Array([0.022, 0.022, 0.022, 0.022, 0.022]), 6, GOAL_STAY, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(-GAA_GOAL_HALF_M, GAA_CROSSBAR_M - 0.05, 0.0), Vector3(GAA_GOAL_HALF_M, GAA_CROSSBAR_M - 0.05, 0.0)]), PackedFloat32Array([0.05, 0.05]), 10, POST_WHITE, CELL_WHITE, false, false)
+	b.tube(PackedVector3Array([Vector3(-GAA_GOAL_HALF_M, 0.03, GAA_NET_DEPTH_M), Vector3(GAA_GOAL_HALF_M, 0.03, GAA_NET_DEPTH_M)]), PackedFloat32Array([0.022, 0.022]), 6, GOAL_STAY, CELL_METAL, false, false)
+
+
+## A net stay at x: from the upright at height y it runs back a little, then
+## bends down to the ground bar depth metres behind the line.
+static func _goal_stay(x: float, y: float, depth: float) -> PackedVector3Array:
+	return PackedVector3Array([Vector3(x, y, 0.0), Vector3(x, y - 0.03, depth * 0.35), Vector3(x, y * 0.72, depth * 0.72), Vector3(x, y * 0.32, depth * 0.94), Vector3(x, 0.03, depth)])
+
+
+## The GAA goal's net: the back from the crossbar to the ground bar, and a side
+## from each upright back along its stay.
+func _goal_gaa_net(b: Builder) -> void:
+	_goal_net_sheets(b, GAA_GOAL_HALF_M - 0.04, _goal_stay(0.0, GAA_CROSSBAR_M - 0.05, GAA_NET_DEPTH_M))
+
+
+## A goal's net between two side profiles at x = +-half: the back sheet along the
+## profile (from the crossbar to the ground at the back) and the two side sheets
+## between the line and the profile.
+func _goal_net_sheets(b: Builder, half: float, profile: PackedVector3Array) -> void:
+	var travelled := 0.0
+	for index in profile.size() - 1:
+		var p0 := profile[index]
+		var p1 := profile[index + 1]
+		var step := p0.distance_to(p1)
+		var outward := Vector3.RIGHT.cross(p1 - p0).normalized()
+		if outward.z < 0.0:
+			outward = -outward
+		_net_quad(b, [Vector3(-half, p0.y, p0.z), Vector3(half, p0.y, p0.z), Vector3(half, p1.y, p1.z), Vector3(-half, p1.y, p1.z)],
+			[Vector2(-half, travelled), Vector2(half, travelled), Vector2(half, travelled + step), Vector2(-half, travelled + step)], outward)
+		travelled += step
+	for side: float in [-1.0, 1.0]:
+		var x := side * half
+		for index in profile.size() - 1:
+			var p0 := profile[index]
+			var p1 := profile[index + 1]
+			# Fan from the upright's foot: each triangle reaches from the line's foot to the profile.
+			var points := [Vector3(x, 0.0, 0.0), Vector3(x, p0.y, p0.z), Vector3(x, p1.y, p1.z)]
+			var uvs := [Vector2(0.0, 0.0), Vector2((points[1] as Vector3).z, (points[1] as Vector3).y), Vector2((points[2] as Vector3).z, (points[2] as Vector3).y)]
+			_net_triangle(b, points, uvs, Vector3(side, 0.0, 0.0))
+
+
+## One quad of net with uv in metres (scaled to the tile, the goal net's unless
+## given), both faces drawn by the material.
+func _net_quad(b: Builder, corners: Array, uv_m: Array, outward: Vector3, tile := Vector2(GOAL_NET_TILE_M, GOAL_NET_TILE_M)) -> void:
+	_net_triangle(b, [corners[0], corners[1], corners[2]], [uv_m[0], uv_m[1], uv_m[2]], outward, tile)
+	_net_triangle(b, [corners[0], corners[2], corners[3]], [uv_m[0], uv_m[2], uv_m[3]], outward, tile)
+
+
+func _net_triangle(b: Builder, points: Array, uv_m: Array, outward: Vector3, tile := Vector2(GOAL_NET_TILE_M, GOAL_NET_TILE_M)) -> void:
+	var indices := PackedInt32Array()
+	for index in 3:
+		indices.append(b.vertex(0, points[index], outward.normalized(), (uv_m[index] as Vector2) / tile, Color.WHITE))
+	b.triangle(0, indices[0], indices[1], indices[2], outward)
+
+
+## Rugby H posts: two tall white uprights and a crossbar at RUGBY_CROSSBAR_M.
+func _goal_rugby(b: Builder) -> void:
+	for side: float in [-1.0, 1.0]:
+		var x := side * RUGBY_GOAL_HALF_M
+		b.tube(PackedVector3Array([Vector3(x, -0.3, 0.0), Vector3(x, RUGBY_UPRIGHT_M, 0.0)]), PackedFloat32Array([0.075, 0.055]), 10, POST_WHITE, CELL_WHITE, false, true)
+	b.tube(PackedVector3Array([Vector3(-RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, 0.0), Vector3(RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, 0.0)]), PackedFloat32Array([0.06, 0.06]), 10, POST_WHITE, CELL_WHITE, false, false)
+
+
+## A soccer goal: a white frame of square-ish posts and crossbar (the opening
+## width x height between them), the net's frame of a ground bar SOCCER_NET_DEPTH_M
+## behind the line and a sloping stanchion from each top corner down to it.
+func _goal_soccer(b: Builder, width: float, height: float) -> void:
+	var half := width * 0.5 + 0.06
+	var depth := SOCCER_NET_DEPTH_M * minf(1.0, height / 2.44)
+	for side: float in [-1.0, 1.0]:
+		var x := side * half
+		b.box(Vector3(x, height * 0.5, 0.0), Basis.IDENTITY, Vector3(0.12, height + 0.12, 0.12), POST_WHITE, CELL_WHITE)
+		b.tube(PackedVector3Array([Vector3(x, height, 0.06), Vector3(x, height * 0.5, depth * 0.55), Vector3(x, 0.03, depth)]), PackedFloat32Array([0.03, 0.03, 0.03]), 6, POST_WHITE, CELL_WHITE, false, false)
+		b.tube(PackedVector3Array([Vector3(x, 0.03, 0.06), Vector3(x, 0.03, depth)]), PackedFloat32Array([0.025, 0.025]), 6, POST_WHITE, CELL_WHITE, false, false)
+	b.box(Vector3(0.0, height + 0.06, 0.0), Basis.IDENTITY, Vector3(half * 2.0 + 0.12, 0.12, 0.12), POST_WHITE, CELL_WHITE)
+	b.tube(PackedVector3Array([Vector3(-half, 0.03, depth), Vector3(half, 0.03, depth)]), PackedFloat32Array([0.025, 0.025]), 6, POST_WHITE, CELL_WHITE, false, false)
+
+
+func _goal_soccer_net(b: Builder, width: float, height: float) -> void:
+	var depth := SOCCER_NET_DEPTH_M * minf(1.0, height / 2.44)
+	_goal_net_sheets(b, width * 0.5 + 0.04, PackedVector3Array([Vector3(0.0, height, 0.06), Vector3(0.0, height * 0.5, depth * 0.55), Vector3(0.0, 0.03, depth)]))
+
+
+## A portable light tower on its trailer, its drawbar to +X: the trailer body on
+## two wheels, the drawbar and its jack, four outrigger jacks set down on the
+## ground, the mast in three telescoped sections with its coiled cable, a box at
+## its top, and the T-bar with two rectangular heads on it and two under it, aimed
+## down over -Z turned heads_deg about the mast.
+func _light_tower(b: Builder, mast: float, heads_deg: float) -> void:
+	b.box(Vector3(0.0, 0.98, 0.0), Basis.IDENTITY, Vector3(2.3, 1.04, 1.24), TOWER_BODY, CELL_WHITE)
+	b.box(Vector3(0.0, 0.42, 0.0), Basis.IDENTITY, Vector3(2.4, 0.09, 1.3), TOWER_MAST, CELL_METAL)
+	for side: float in [-1.0, 1.0]:
+		b.tube(PackedVector3Array([Vector3(-0.2, 0.33, side * 0.62), Vector3(-0.2, 0.33, side * 0.82)]), PackedFloat32Array([0.33, 0.33]), 14, STEEL_BLACK, CELL_METAL, true, true)
+		# The drawbar's arms meet at the hitch.
+		b.tube(PackedVector3Array([Vector3(1.1, 0.45, side * 0.5), Vector3(2.3, 0.45, 0.0)]), PackedFloat32Array([0.04, 0.04]), 6, TOWER_MAST, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(2.15, 0.0, 0.0), Vector3(2.15, 0.62, 0.0)]), PackedFloat32Array([0.035, 0.035]), 6, TOWER_MAST, CELL_METAL, false, true)
+	# Outriggers: a beam out from each corner of the frame, a jack down to a pad.
+	for x: float in [-0.95, 0.95]:
+		for side: float in [-1.0, 1.0]:
+			b.box(Vector3(x, 0.5, side * 0.98), Basis.IDENTITY, Vector3(0.08, 0.08, 0.76), TOWER_MAST, CELL_METAL)
+			b.box(Vector3(x, 0.29, side * 1.32), Basis.IDENTITY, Vector3(0.07, 0.5, 0.07), TOWER_MAST, CELL_METAL)
+			b.box(Vector3(x, 0.02, side * 1.32), Basis.IDENTITY, Vector3(0.22, 0.04, 0.22), TOWER_MAST, CELL_METAL)
+	# The mast: three sections, each a little thinner, from the body's top.
+	var foot := 1.5
+	var heights := [foot, foot + (mast - foot) * 0.4, foot + (mast - foot) * 0.72, mast]
+	var radii := [0.085, 0.07, 0.056]
+	for index in 3:
+		b.tube(PackedVector3Array([Vector3(TOWER_MAST_X, heights[index], 0.0), Vector3(TOWER_MAST_X, heights[index + 1], 0.0)]), PackedFloat32Array([radii[index], radii[index]]), 10, TOWER_MAST, CELL_METAL, false, true)
+	# Its power cable coiled round it, a turn every 0.4 m.
+	var coil := PackedVector3Array()
+	var coil_radii := PackedFloat32Array()
+	var turns := floori((mast - 1.0 - (foot + 0.4)) / 0.4)
+	for step in turns * 10 + 1:
+		var angle := TAU * float(step) / 10.0
+		coil.append(Vector3(TOWER_MAST_X + cos(angle) * 0.14, foot + 0.4 + 0.04 * float(step), sin(angle) * 0.14))
+		coil_radii.append(0.014)
+	b.tube(coil, coil_radii, 4, STEEL_BLACK, CELL_METAL, false, false)
+	b.box(Vector3(TOWER_MAST_X, mast + 0.15, 0.0), Basis.IDENTITY, Vector3(0.3, 0.3, 0.26), TOWER_MAST, CELL_METAL)
+	# The T-bar and its heads: two standing on it and two hung under it, aimed
+	# down over -Z, the whole turned heads_deg about the mast.
+	var turn := Basis(Vector3.UP, deg_to_rad(heads_deg))
+	var aim := turn * Vector3(0.0, -0.45, -1.0).normalized()
+	var head_basis := turn * Basis(Vector3.RIGHT, Vector3.RIGHT.cross(Vector3(0.0, 0.45, 1.0).normalized()).normalized() * -1.0, Vector3(0.0, 0.45, 1.0).normalized())
+	var axis := Vector3(TOWER_MAST_X, 0.0, 0.0)
+	var bar := mast - 0.5
+	b.box(axis + Vector3(0.0, bar, 0.0) + turn * Vector3(0.0, 0.0, -0.1), turn, Vector3(1.6, 0.06, 0.06), TOWER_MAST, CELL_METAL)
+	for y: float in [bar + 0.23, bar - 0.25]:
+		for side: float in [-1.0, 1.0]:
+			var mount := axis + Vector3(0.0, y, 0.0) + turn * Vector3(side * 0.55, 0.0, -0.18)
+			b.box(mount + aim * 0.07, head_basis, Vector3(0.5, 0.4, 0.14), TOWER_HEAD, CELL_WHITE)
+			b.box(mount + aim * 0.142, head_basis, Vector3(0.44, 0.34, 0.01), LENS_GREY, CELL_WHITE)
+
+
+## Aluminium bleachers of `rows` rows, `length` long: per row a footboard and a
+## seat plank a step up and back from the row before, on A-frames of a sloped
+## stringer and a rear leg; four rows or more add a guard rail round the back and
+## ends at a metre over the top seat.
+func _bleachers(b: Builder, rows: int, length: float, guard: String) -> void:
+	var depth := float(rows) * BLEACHER_ROW_M
+	var front := -depth * 0.5
+	for row in rows:
+		var z := front + BLEACHER_ROW_M * float(row)
+		var rise := BLEACHER_RISE_M * float(row)
+		b.box(Vector3(0.0, 0.17 + rise, z + 0.16), Basis.IDENTITY, Vector3(length, 0.035, 0.26), ALUMINIUM, CELL_METAL)
+		b.box(Vector3(0.0, BLEACHER_SEAT_M - 0.025 + rise, z + 0.44), Basis.IDENTITY, Vector3(length, 0.05, 0.3), ALUMINIUM, CELL_METAL)
+	var frames := maxi(2, ceili(length / BLEACHER_FRAME_STEP_M) + 1)
+	var top := BLEACHER_SEAT_M + BLEACHER_RISE_M * float(rows - 1)
+	var back := front + depth - 0.05
+	for index in frames:
+		var x := lerpf(-length * 0.5 + 0.15, length * 0.5 - 0.15, float(index) / float(frames - 1))
+		b.tube(PackedVector3Array([Vector3(x, 0.0, front + 0.05), Vector3(x, top - 0.06, back)]), PackedFloat32Array([0.03, 0.03]), 6, ALUMINIUM, CELL_METAL, false, false)
+		b.tube(PackedVector3Array([Vector3(x, 0.0, back), Vector3(x, top - 0.06, back)]), PackedFloat32Array([0.025, 0.025]), 6, ALUMINIUM, CELL_METAL, false, false)
+		b.tube(PackedVector3Array([Vector3(x, 0.05, back), Vector3(x, top * 0.55, front + depth * 0.45)]), PackedFloat32Array([0.018, 0.018]), 6, ALUMINIUM, CELL_METAL, false, false)
+	if guard == "none":
+		return
+	# The guard's frame: a level top rail along the back, a rail down each end over
+	# the seats' line, corner posts and back posts at the frames; galvanised round
+	# chain link, aluminium with its pickets.
+	var metal := GALVANIZED if guard == "chain_link" else ALUMINIUM
+	var rail := top + BLEACHER_GUARD_M
+	var foot := front + 0.1
+	var half := length * 0.5 + 0.03
+	for side: float in [-1.0, 1.0]:
+		var x := side * half
+		b.tube(PackedVector3Array([Vector3(x, 0.0, foot), Vector3(x, BLEACHER_SEAT_M + BLEACHER_GUARD_M, foot), Vector3(x, rail, back), Vector3(x, 0.0, back)]), PackedFloat32Array([0.024, 0.024, 0.024, 0.024]), 6, metal, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(-half, rail, back), Vector3(half, rail, back)]), PackedFloat32Array([0.024, 0.024]), 6, metal, CELL_METAL, false, false)
+	for index in range(1, frames - 1):
+		var x := lerpf(-length * 0.5 + 0.15, length * 0.5 - 0.15, float(index) / float(frames - 1))
+		b.tube(PackedVector3Array([Vector3(x, top - 0.06, back), Vector3(x, rail, back)]), PackedFloat32Array([0.02, 0.02]), 6, metal, CELL_METAL, false, false)
+	if guard != "pickets":
+		return
+	# Pickets: a bottom rail along the back over the top seat, and upright bars
+	# along the back and down each end between the seats' line and the end rail.
+	b.tube(PackedVector3Array([Vector3(-half, top + 0.02, back), Vector3(half, top + 0.02, back)]), PackedFloat32Array([0.018, 0.018]), 6, metal, CELL_METAL, false, false)
+	var count := maxi(2, roundi(length / BLEACHER_PICKET_STEP_M))
+	for index in range(1, count):
+		var x := lerpf(-half, half, float(index) / float(count))
+		b.box(Vector3(x, (top + rail) * 0.5, back), Basis.IDENTITY, Vector3(0.022, rail - top, 0.022), metal, CELL_METAL)
+	var across := maxi(2, roundi((back - foot) / BLEACHER_PICKET_STEP_M))
+	for side: float in [-1.0, 1.0]:
+		for index in range(1, across):
+			var t := float(index) / float(across)
+			var z := lerpf(foot, back, t)
+			var low := lerpf(BLEACHER_SEAT_M - 0.05, top - 0.06, t)
+			var high := lerpf(BLEACHER_SEAT_M + BLEACHER_GUARD_M, rail, t)
+			b.box(Vector3(side * half, (low + high) * 0.5, z), Basis.IDENTITY, Vector3(0.022, high - low, 0.022), metal, CELL_METAL)
+
+
+## The bleachers' chain-link guard (rows >= 4): a sheet along the back from the top
+## seat to the rail, and one down each end between the seats' line and its rail.
+func _bleacher_guard(b: Builder, rows: int, length: float) -> void:
+	var depth := float(rows) * BLEACHER_ROW_M
+	var front := -depth * 0.5 + 0.1
+	var back := depth * 0.5 - 0.05
+	var top := BLEACHER_SEAT_M + BLEACHER_RISE_M * float(rows - 1)
+	var rail := top + BLEACHER_GUARD_M
+	var half := length * 0.5 + 0.03
+	_net_quad(b, [Vector3(-half, top - 0.06, back), Vector3(half, top - 0.06, back), Vector3(half, rail, back), Vector3(-half, rail, back)],
+		[Vector2(-half, top - 0.06), Vector2(half, top - 0.06), Vector2(half, rail), Vector2(-half, rail)], Vector3.BACK, CHAIN_LINK_TILE)
+	for side: float in [-1.0, 1.0]:
+		var x := side * half
+		var low := BLEACHER_SEAT_M - 0.05
+		_net_quad(b, [Vector3(x, 0.17, front), Vector3(x, top - 0.06, back), Vector3(x, rail, back), Vector3(x, low + BLEACHER_GUARD_M, front)],
+			[Vector2(front, 0.17), Vector2(back, top - 0.06), Vector2(back, rail), Vector2(front, low + BLEACHER_GUARD_M)], Vector3(side, 0.0, 0.0), CHAIN_LINK_TILE)
+
+
+## A wall of dark green boards `length` long and `height` tall along X, its field
+## face toward -Z: horizontal boards with dark seams, black posts on its field face
+## every MURAL_POST_STEP_M or less and a cap along the top; with `panel`, a board
+## panel over the posts carries the mural (_mural_face).
+func _mural_wall(b: Builder, length: float, height: float, panel: bool) -> void:
+	var half := MURAL_WALL_THICKNESS_M * 0.5
+	b.box(Vector3(0.0, height * 0.5, 0.0), Basis.IDENTITY, Vector3(length, height, MURAL_WALL_THICKNESS_M), MURAL_GREEN, CELL_WHITE)
+	# Board seams on both faces, every 0.3 m up.
+	var seams := floori(height / 0.3)
+	for index in range(1, seams + 1):
+		var y := 0.3 * float(index)
+		if y > height - 0.1:
+			break
+		for face: float in [-1.0, 1.0]:
+			b.box(Vector3(0.0, y, face * (half + 0.002)), Basis.IDENTITY, Vector3(length, 0.018, 0.004), MURAL_GREEN.darkened(0.45), CELL_WHITE)
+	var posts := maxi(2, ceili(length / MURAL_POST_STEP_M) + 1)
+	for index in posts:
+		var x := lerpf(-length * 0.5 + 0.06, length * 0.5 - 0.06, float(index) / float(posts - 1))
+		b.box(Vector3(x, (height + 0.05) * 0.5 - 0.15, -half - 0.06), Basis.IDENTITY, Vector3(0.12, height + 0.35, 0.12), MURAL_POST, CELL_WHITE)
+	b.box(Vector3(0.0, height + 0.02, -0.06), Basis.IDENTITY, Vector3(length + 0.04, 0.05, MURAL_WALL_THICKNESS_M + 0.18), MURAL_POST, CELL_WHITE)
+	if panel:
+		b.box(Vector3(0.0, height * 0.5, -half - 0.135), Basis.IDENTITY, Vector3(length - 0.3, height - 0.12, 0.03), MURAL_GREEN, CELL_WHITE)
+
+
+## The mural on the panel over the wall's field face: the art from art_from to
+## art_to across the panel, left to right as seen from the field (from +X to -X),
+## a few millimetres proud of it.
+func _mural_face(b: Builder, length: float, height: float, art_from: float, art_to: float) -> void:
+	var z := -MURAL_WALL_THICKNESS_M * 0.5 - 0.156
+	var x := length * 0.5 - 0.15
+	var corners := [Vector3(x, 0.06, z), Vector3(-x, 0.06, z), Vector3(-x, height - 0.06, z), Vector3(x, height - 0.06, z)]
+	var uvs := [Vector2(art_from, 1.0), Vector2(art_to, 1.0), Vector2(art_to, 0.0), Vector2(art_from, 0.0)]
+	var indices := PackedInt32Array()
+	for index in 4:
+		indices.append(b.vertex(0, corners[index], Vector3.FORWARD, uvs[index], Color.WHITE))
+	b.triangle(0, indices[0], indices[1], indices[2], Vector3.FORWARD)
+	b.triangle(0, indices[0], indices[2], indices[3], Vector3.FORWARD)
 
 
 ## The park's long timber benches (2024 art-location plan label "Park Bench -
@@ -1953,6 +2389,31 @@ func _rectangle(width: float, height: float) -> PackedVector2Array:
 ## Two-surface mesh builder: surface 0 is the shaded atlas material, surface 1
 ## the unshaded lit lenses. Triangles are wound for Godot's clockwise front faces
 ## from the outward normal each primitive supplies.
+static var _net_tile: Texture2D
+
+
+## A white square-mesh net tile, its alpha the cord (about a tenth of the tile
+## wide, a little heavier at the knots): the goal nets here and the ball-stop nets
+## of street_fence_kit.gd draw it, tinted, with the fence fabric's shader, which
+## blends it from its mipmaps into a faint haze far off. Made here, no file.
+static func net_texture() -> Texture2D:
+	if _net_tile != null:
+		return _net_tile
+	var size := 32
+	var image := Image.create_empty(size, size, false, Image.FORMAT_RGBA8)
+	for y in size:
+		for x in size:
+			# Distance (texels) to the cords along the tile's edges.
+			var dx := minf(float(x) + 0.5, float(size) - float(x) - 0.5)
+			var dy := minf(float(y) + 0.5, float(size) - float(y) - 0.5)
+			var cord := clampf(2.0 - minf(dx, dy), 0.0, 1.0)
+			var knot := clampf(3.0 - maxf(dx, dy), 0.0, 1.0) * 0.6
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, maxf(cord, knot)))
+	image.generate_mipmaps()
+	_net_tile = ImageTexture.create_from_image(image)
+	return _net_tile
+
+
 class Builder:
 	extends RefCounted
 	var _surfaces: Array[Dictionary] = []

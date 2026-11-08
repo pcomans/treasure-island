@@ -33,18 +33,30 @@ export const STREET_FENCE_TYPES = Object.freeze({
   // Chain-link with privacy slats woven through it (storage yards: green on 9th
   // St, Sep 2025, and Avenue M, Mar 2025; brown on 12th St, Jul 2023), 6 or 8 ft.
   chain_link_slatted: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
-  chain_link: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
+  // Plain and screened chain-link come 6 or 8 ft tall too (the turf pitch's
+  // windscreened fence, Sep 2025), galvanised or vinyl-coated (coating).
+  chain_link: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
   chain_link_barbed: Object.freeze({ height_m: 2.13, post_spacing_m: 3.05, half_thickness_m: 0.25 }),
-  chain_link_screened: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06 }),
+  chain_link_screened: Object.freeze({ height_m: 1.83, post_spacing_m: 3.05, half_thickness_m: 0.06, heights_m: Object.freeze([1.83, 2.44]) }),
   construction_panel: Object.freeze({ height_m: 1.83, post_spacing_m: 3.66, half_thickness_m: 0.3 }),
   wood_privacy: Object.freeze({ height_m: 1.83, post_spacing_m: 2.44, half_thickness_m: 0.08 }),
   // Black steel picket panels, 4.5 ft on 8 ft bays (the Mersea grounds beside
   // its lot, Sep 2025).
   steel_picket: Object.freeze({ height_m: 1.37, post_spacing_m: 2.44, half_thickness_m: 0.05 }),
+  // A sports ground's ball-stop net: black knotted netting hung between tall
+  // galvanised poles with a top cable, 20, 30 or 40 ft tall (behind the GAA
+  // pitch's goal on 13th St, Mar 2025; along the turf pitch's south-west side,
+  // Mar 2025). Pole spacing is production inference from those views.
+  ball_stop_net: Object.freeze({ height_m: 9.14, post_spacing_m: 9.0, half_thickness_m: 0.1, heights_m: Object.freeze([6.1, 9.14, 12.19]) }),
 });
+// Chain-link wire and posts: plain galvanised, or vinyl-coated dark green or
+// black (the GAA and rugby fields' fences, Mar and Nov 2025).
+export const STREET_FENCE_COATINGS = Object.freeze(["galvanised", "green", "black"]);
+const COATED_TYPES = Object.freeze(["chain_link", "chain_link_screened"]);
 // Windscreen colours; orange is the open safety mesh of construction sites
-// (9th St, Sep 2025: about 1.2 m high behind construction panels).
-export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange"]);
+// (9th St, Sep 2025: about 1.2 m high behind construction panels), dense_green the
+// opaque knitted screen tied outside the fabric (street_fence_kit.gd DENSE_SCREENS).
+export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange", "dense_green"]);
 // A screen may stop below the fence top (screen_height_m), the wire bare above it.
 export const STREET_FENCE_SCREEN_MIN_M = 0.6;
 export const STREET_FENCE_SLATS = Object.freeze(["green", "brown", "black"]);
@@ -264,35 +276,43 @@ export function wayLegLine(wayLine, leg, label) {
   return shifted;
 }
 
-// Why a fence type's params are unusable, or null: every type takes inside;
-// a screened fence its screen colour and, optionally, the screen's height; a
-// slatted one its slat colour and, optionally, its height (6 or 8 ft).
+// Why a fence type's params are unusable, or null: every type takes inside and,
+// optionally, breakable; a screened fence its screen colour and, optionally, the screen's height; a
+// slatted one its slat colour; a type with several heights optionally its
+// height_m (6 or 8 ft chain-link, a ball-stop net's 20, 30 or 40 ft); plain and
+// screened chain-link optionally a coating and a low concrete curb (curb: true).
 export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
   // breakable: false keeps a fence whole when a car hits it (the Job Corps
-  // perimeter, owner 2026-11-08); every other kit fence breaks bay by bay.
-  const allowed = [...(type === "chain_link_screened" ? ["inside", "screen", "screen_height_m"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"]), "breakable"];
-  if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.join(", ")}`;
+  // perimeter, owner 2026-11-08; the ball-stop nets); every other kit fence
+  // breaks bay by bay.
+  const allowed = ["inside", "breakable"];
+  if (spec.heights_m) allowed.push("height_m");
+  if (COATED_TYPES.includes(type)) allowed.push("coating", "curb");
+  if (type === "chain_link_screened") allowed.push("screen", "screen_height_m");
+  if (type === "chain_link_slatted") allowed.push("slats");
+  if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.sort().join(", ")}`;
   if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
   if (params.breakable !== undefined && typeof params.breakable !== "boolean") return "params.breakable must be true or false";
+  if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
+  if (params.coating !== undefined && !STREET_FENCE_COATINGS.includes(params.coating)) return `params.coating must be ${STREET_FENCE_COATINGS.join(", ")}`;
+  if (params.curb !== undefined && params.curb !== true) return "params.curb must be true when given";
   if (type === "chain_link_screened") {
     if (!STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(", ")}`;
     const screen = params.screen_height_m;
-    if (screen !== undefined && !(isFiniteNumber(screen) && screen >= STREET_FENCE_SCREEN_MIN_M && screen <= spec.height_m)) return `params.screen_height_m must be ${STREET_FENCE_SCREEN_MIN_M}..${spec.height_m}`;
+    const top = fenceHeight(type, params);
+    if (screen !== undefined && !(isFiniteNumber(screen) && screen >= STREET_FENCE_SCREEN_MIN_M && screen <= top)) return `params.screen_height_m must be ${STREET_FENCE_SCREEN_MIN_M}..${top}`;
   }
-  if (type === "chain_link_slatted") {
-    if (!STREET_FENCE_SLATS.includes(params.slats)) return `params.slats must be ${STREET_FENCE_SLATS.join(", ")}`;
-    if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
-  }
+  if (type === "chain_link_slatted" && !STREET_FENCE_SLATS.includes(params.slats)) return `params.slats must be ${STREET_FENCE_SLATS.join(", ")}`;
   return null;
 }
 
-// A fence's height: a slatted fence may be the taller 8 ft kind.
+// A fence's height: its params' height_m where its type comes in several heights.
 export function fenceHeight(type, params) {
   const spec = STREET_FENCE_TYPES[type];
-  return type === "chain_link_slatted" && params?.height_m !== undefined ? params.height_m : spec.height_m;
+  return spec.heights_m && params?.height_m !== undefined ? params.height_m : spec.height_m;
 }
 
 // The style a gate opening of this width gets when no rule names one.

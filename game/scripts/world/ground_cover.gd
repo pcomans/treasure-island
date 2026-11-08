@@ -50,6 +50,10 @@ const FAMILIES := {
 	# GAA Field A: a watered pitch, green with dry patches between its
 	# sprinkler heads, 18 m apart on the pitch's axes (2026-05-26 aerial).
 	"watered_pitch": {"dry_threshold": 0.6, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "grid_m": 18.0, "grid_angle": -0.4887, "grid_amount": 0.5},
+	# The rugby field (GAA Field B): a mown pitch gone dry, about 10 / 90 / 0,
+	# short and tan with crisp lines in the 2026-05-26 aerial (97 % dry), green
+	# in the Sep 2025 Street View.
+	"mown_pitch": {"dry_threshold": 0.30, "bare_threshold": 2.0, "green_dryness": 0.5, "patch_scale_m": 28.0, "bare_scale_m": 23.0},
 	# The synthetic-turf soccer pitch on w1252737754 (2026-05-26 aerial: an
 	# even dark green field with line markings).
 	"turf": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 28.0, "bare_scale_m": 23.0, "turf_amount": 1.0},
@@ -63,8 +67,8 @@ const FAMILIES := {
 	# camouflage from above).
 	"field": {"dry_threshold": 0.378, "bare_threshold": 0.69, "green_dryness": 0.35, "patch_scale_m": 32.0, "bare_scale_m": 21.0, "marsh_amount": 1.0},
 	# Dry straw grass, about 11 / 89 / 0: the residential grounds and the
-	# Avenue N verge (map), the Job Corps campus, GAA Field B, the old Job
-	# Corps ballfield and the dry Avenue D medians. The aerial shows only a
+	# Avenue N verge (map), the Job Corps campus, the old Job Corps ballfield
+	# and the dry Avenue D medians. The aerial shows only a
 	# handful of dirt patches in the residential grounds.
 	"straw": {"dry_threshold": 0.30, "bare_threshold": 0.90, "green_dryness": 0.6, "patch_scale_m": 32.0, "bare_scale_m": 21.0},
 	# Rough grass, about 44 / 53 / 3: the west shore parcel, olive to brown.
@@ -136,7 +140,7 @@ const FAMILY_BY_SOURCE := {
 	"w1102656842": PAVED, # leisure=pitch sport=tennis: hard court
 	"w1061513876": PAVED, # leisure=pitch sport=skateboard surface=concrete: skate park
 	"w99060807": "watered_pitch", # leisure=pitch, GAA Field A: green with dry sprinkler-grid patches (2026-05-26 aerial)
-	"w99060801": "straw", # leisure=pitch, GAA Field B: dry tan (2026-05-26 aerial: 97 % dry)
+	"w99060801": "mown_pitch", # leisure=pitch, GAA Field B (the rugby field): mown, dry tan (2026-05-26 aerial: 97 % dry)
 	"w133809962": "sports", # leisure=pitch sport=baseball: natural grass field
 	"w133809964": "straw", # leisure=pitch sport=baseball: the old Job Corps ballfield, dry grass (2026-05-26 aerial: 90 % dry)
 	"w28353177": "sports", # leisure=sports_centre sport=baseball, Tepper Little League Field #1

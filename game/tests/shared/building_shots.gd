@@ -17,8 +17,9 @@ extends SceneTree
 ## and "fov": degrees (vertical, default 70) to shoot from a free camera at that
 ## position aimed at the target, e.g. to match a reference photo's height, tilt and
 ## field of view, or "projection": "ortho" with "ortho_size": metres (vertical
-## extent) for a square-on elevation. A free camera may add "far": metres (default
-## 5000, at most the island overviews' ISLAND_CAMERA_FAR_M) to see farther scenery.
+## extent) for a square-on elevation. A free camera sees as far as the gameplay
+## camera (player.tscn's far plane, which holds the distant horizon), or may add
+## "far": metres (100 up to that) to see less far.
 ## The player still settles at player_xz.
 ## The player's avatar mesh is hidden in every shot (visual only); --show-player keeps it.
 ## --street-views FILE: views of a street-detail area, not bound to a building:
@@ -120,9 +121,6 @@ extends SceneTree
 ##   new capture costs.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
-## The island overviews' far plane, the largest any camera uses: the bay water's
-## bounds hold its rings (game/tests/headless_gameplay_contract.gd reads this).
-const ISLAND_CAMERA_FAR_M := 10000.0
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
@@ -948,7 +946,7 @@ func _free_camera(view: Dictionary, target: Vector3) -> Camera3D:
 		free.size = float(view.ortho_size)
 	else:
 		free.fov = float(view.get("fov", 70.0))
-	free.far = float(view.get("far", 5000.0))
+	free.far = float(view.get("far", _h.player.get_camera().far))
 	_h.main.add_child(free)
 	free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	free.look_at(target, Vector3.UP)
@@ -1162,8 +1160,9 @@ func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 		return "fov must be a number of degrees between 0 and 180"
 	if projection == "ortho" and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0):
 		return "ortho needs a positive ortho_size"
-	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) < 100.0 or float(view.far) > ISLAND_CAMERA_FAR_M):
-		return "far must be metres between 100 and %d" % int(ISLAND_CAMERA_FAR_M)
+	var gameplay_far := _h.player.get_camera().far
+	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) < 100.0 or float(view.far) > gameplay_far):
+		return "far must be metres between 100 and the gameplay camera's %d" % int(gameplay_far)
 	var direction := target - Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	if direction.length() < 0.01 or absf(direction.normalized().dot(Vector3.UP)) > 0.999:
 		return "camera_xyz must not coincide with or lie straight above or below the target"
@@ -1260,7 +1259,7 @@ func _context_shots(source_key: String, out: String, suffix: String) -> void:
 	var radius: float = frame.radius
 	var camera := Camera3D.new()
 	camera.fov = 60.0
-	camera.far = 5000.0
+	camera.far = _h.player.get_camera().far
 	_h.main.add_child(camera)
 	for view in [["southwest", Vector3(-1.0, 0.0, 1.0)], ["northeast", Vector3(1.0, 0.0, -1.0)]]:
 		var direction := (view[1] as Vector3).normalized()
@@ -1291,7 +1290,7 @@ func _island_shots(out: String, suffix: String) -> void:
 	var span := (high - low).length()
 	var camera := Camera3D.new()
 	camera.fov = 55.0
-	camera.far = ISLAND_CAMERA_FAR_M
+	camera.far = _h.player.get_camera().far
 	_h.main.add_child(camera)
 	var views := [
 		["top", Vector3(0.0, span * 0.75, span * 0.05)],

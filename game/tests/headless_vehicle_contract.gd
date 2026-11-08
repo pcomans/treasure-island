@@ -6,7 +6,8 @@ extends SceneTree
 ##   1. enter and exit with F: with the game paused F beside a parked car does
 ##      nothing; unpaused, the stock player presses F
 ##      and drives it (avatar hidden, capsule off, the parked box gone), the view
-##      blending from the on-foot camera to the chase camera; F again stands the
+##      blending from the on-foot camera to the chase camera, which sees as far
+##      (the distant horizon); F again stands the
 ##      player on the ground beside it, walking as before, the view blending
 ##      back; the car comes to rest, freezes and stays there; F gets back in;
 ##   2. a run along Seven Seas Avenue: up to speed, mostly on its wheels and
@@ -30,7 +31,9 @@ extends SceneTree
 ##      foot an intact bay of the same fence still stops the stock player and
 ##      the broken gap lets it through; then a chain-link fence's bay with the
 ##      same key as a broken one (keys repeat from fence to fence) breaks too
-##      and its gap opens on foot;
+##      and its gap opens on foot; then the turf pitch's windscreen: the car
+##      breaks its bay and stops at the ball-stop net behind it, whose rows are
+##      breakable: false;
 ##   7. plants: the car drives through a shrub without slowing and stops at a
 ##      palm's trunk;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
@@ -42,7 +45,17 @@ extends SceneTree
 ##   9. the pitch's ball: a car driven into it along the pitch sends it rolling
 ##      off ahead of the car (a bumper's push, not a ride over it);
 ##  10. on foot after getting out: the stock controller back on, then the stock
-##      walk, run, jetpack and fast drop on open street.
+##      walk, run, jetpack and fast drop on open street;
+##  11. the browser's touch controls (touch_controls.gd, made as main.gd makes
+##      them on a touch browser), driven by their own touch events: in a car the
+##      use button shows GET OUT, RISE reads BRAKE with the handbrake glyph, RUN
+##      and the look hint are hidden, the touch stick drives and its corner
+##      steers at full throttle, RISE holds the handbrake, and a tap gets out,
+##      which brings RISE, RUN and the hint back; beside the car it shows DRIVE
+##      and a tap gets back in, letting go of a run held as it does; on the
+##      ground away from cars it hides; in the air it shows DROP, held it holds
+##      the fast drop, lifted it lets go, and held through the landing it lets go
+##      of C and hides on the ground with the finger still down.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
 ## first F): getting out must never leave the player without a character.
@@ -51,6 +64,7 @@ const CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 const BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
+const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const VEHICLE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
 ## On foot the avatar's feet stand within this of the player (m).
 const AVATAR_REACH_M := 2.0
@@ -91,10 +105,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_bay, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_plants, _case_shove, _case_ball, _case_on_foot]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_bay, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
 	_finish()
 
 
@@ -135,6 +149,10 @@ func _case_enter_exit() -> bool:
 	var showing := _main.get_viewport().get_camera_3d()
 	var start_gap := showing.global_position.distance_to(view_before.origin)
 	if not _require(rig.is_blending() and showing != rig.camera and start_gap < 1.5, "Getting in must blend from the on-foot view (blending %s, %.2f m from it)." % [rig.is_blending(), start_gap]):
+		return false
+	# The chase camera and its blend see as far as the on-foot camera: the distant horizon stays.
+	var on_foot := _player.get_camera()
+	if not _require(rig.camera.far == on_foot.far and showing.far == on_foot.far and rig.camera.near == on_foot.near and showing.near == on_foot.near, "The chase camera and its blend must see as far as the on-foot camera (far %.0f and %.0f m against %.0f m)." % [rig.camera.far, showing.far, on_foot.far]):
 		return false
 	# Settle, drive a few metres, stop.
 	for _tick in 45:
@@ -770,6 +788,47 @@ static func _neighbour_posts(key: String) -> Array[String]:
 	return ["p%s:%d" % [run, index - 1], "p%s:%d" % [run, index + 1]]
 
 
+## The turf pitch's windscreen breaks under a car, the ball-stop net behind it
+## (breakable: false) stops it like a wall.
+func _case_field_net() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var start := Vector2(_cases.field_net.start_xz[0], _cases.field_net.start_xz[1])
+	var heading := Vector2(_cases.field_net.heading_xz[0], _cases.field_net.heading_xz[1]).normalized()
+	var fences := _world.street_detail_layer("fences")
+	var screen := fences.find_child("Fence__" + str(_cases.field_net.fence).validate_node_name(), true, false) as Node3D
+	var net := fences.find_child("Fence__" + str(_cases.field_net.net).validate_node_name(), true, false) as Node3D
+	if not _require(screen != null and net != null and screen.has_meta("fence_bays") and net.has_meta("fence_bays"), "Fixture fences %s and %s have no bays." % [_cases.field_net.fence, _cases.field_net.net]):
+		return false
+	var net_body := net.get_node_or_null("Collision") as StaticBody3D
+	if not _require(net_body != null and not bool(net_body.get_meta("breakable", true)), "The ball-stop net %s is not breakable: false." % _cases.field_net.net):
+		return false
+	if not await _drive_from(car, start, heading):
+		return false
+	var breaker := _vehicles.fence_breaker()
+	var broken_before := breaker.broken_count()
+	var top := 0.0
+	var stopped := false
+	Input.action_press("move_forward")
+	for tick in 300:
+		_steer_toward(car, start + heading * 200.0)
+		await physics_frame
+		var speed := car.linear_velocity.length()
+		top = maxf(top, speed)
+		if top > 5.0 and speed < 0.5:
+			stopped = true
+			break
+	_release_driving()
+	var keys: Array = breaker.broken_keys().slice(broken_before)
+	var net_bay: Dictionary = (net.get_meta("fence_bays") as Dictionary).values()[0]
+	var car_xz := Vector2(car.global_position.x, car.global_position.z)
+	print("FIELD_NET broke %s at up to %.2f m/s, stopped %s at %s" % [keys, top, stopped, car_xz])
+	if not _require(keys.size() >= 1, "Driving at the turf's windscreen broke no bay.") \
+	or not _require(stopped, "The car did not stop at the ball-stop net (top %.2f m/s)." % top) \
+	or not _require(_side(net_bay, car_xz) == _side(net_bay, start), "The car got through the ball-stop net."):
+		return false
+	return await _stop_and_exit(car, "field_net")
+
+
 ## Which side of a bay's line a point lies on.
 func _side(bay: Dictionary, xz: Vector2) -> bool:
 	var a: Vector3 = bay.a
@@ -1105,7 +1164,195 @@ func _case_on_foot() -> bool:
 	return await _rest("on_foot")
 
 
+# --- 11. The browser's touch controls.
+
+func _case_touch() -> bool:
+	var touch := TOUCH_CONTROLS.new() as TouchControls
+	touch.name = "TouchControls"
+	touch.camera_rig = _player.camera_rig
+	touch.player = _player
+	touch.vehicles = _vehicles
+	_main.hud.add_child(touch)
+	touch.set_gameplay_active(true)
+	var passed := await _touch_steps(touch)
+	touch.free()
+	var held := ["jetpack", "handbrake", "run", "fast_drop", "vehicle_enter_exit"].filter(func(action: String) -> bool: return Input.is_action_pressed(action))
+	if not _require(held.is_empty() and _player.touch_input_vector.is_zero_approx(), "Removing the touch controls left %s held." % [held]):
+		return false
+	return passed and await _rest("touch")
+
+
+func _touch_steps(touch: TouchControls) -> bool:
+	var use := touch.use_button
+	# The fixture car at the start of the Seven Seas run, the player in it.
+	var points: Array = _cases.route.points_xz
+	var start := Vector2(points[0][0], points[0][1])
+	var error: String = _vehicles.drive_from(str(_cases.enter.car), start, Vector2(points[1][0], points[1][1]) - start)
+	var car := _vehicles.active_car() as DRIVABLE_CAR
+	if not _require(error == "" and car != null, "Could not start the touch drive: %s." % error):
+		return false
+	for _tick in 60:
+		await physics_frame
+	var shown := touch.describe()
+	if not _require(use.visible and use.mode_name() == "exit" and str(shown.rise_label) == "BRAKE" and str(shown.rise_icon) == "brake" and not bool(shown.run_visible) and not bool(shown.look_hint), "In a car the use button must show GET OUT, RISE the BRAKE glyph and label, and RUN and the look hint hide (%s)." % [shown]):
+		return false
+	# The stick drives (up), and its corner (up and right) is full throttle and lock.
+	var stick := _touch_point(touch, "stick")
+	var reach := float(touch.describe().stick_reach)
+	_finger(touch, 1, stick, true)
+	_slide(touch, 1, stick + Vector2(0.0, -reach))
+	for _tick in 90:
+		await physics_frame
+	var drive := car.drive_input
+	var speed := car.forward_speed()
+	var heading := car.global_transform.basis.z
+	_slide(touch, 1, stick + Vector2(reach, -reach) * 0.7071)
+	for _tick in 45:
+		await physics_frame
+	var corner := Vector2(car.drive_input, car.steer_input)
+	var turned := rad_to_deg(heading.angle_to(car.global_transform.basis.z))
+	print("TOUCH stick up: drive %.2f, %.2f m/s; corner: drive %.2f, steer %.2f, turned %.1f deg" % [drive, speed, corner.x, corner.y, turned])
+	if not _require(drive > 0.95 and speed > 3.0, "The touch stick did not drive the car (input %.2f, %.2f m/s)." % [drive, speed]) \
+	or not _require(corner.x > 0.95 and corner.y > 0.95 and turned > 10.0, "The touch stick's corner did not steer at full throttle (drive %.2f, steer %.2f, turned %.1f deg)." % [corner.x, corner.y, turned]):
+		return false
+	# RISE is the handbrake while touched.
+	var rise := _touch_point(touch, "rise")
+	_finger(touch, 2, rise, true)
+	for _tick in 5:
+		await physics_frame
+	var braking := car.handbrake
+	_finger(touch, 2, rise, false)
+	for _tick in 2:
+		await physics_frame
+	print("TOUCH RISE handbrake while touched %s, after %s" % [braking, car.handbrake])
+	if not _require(braking and not car.handbrake, "RISE must hold the car's handbrake while touched (touched %s, after %s)." % [braking, car.handbrake]):
+		return false
+	# Stopped with the stick (down brakes), then a tap on GET OUT.
+	_slide(touch, 1, stick + Vector2(0.0, reach))
+	for _tick in 240:
+		await physics_frame
+		if car.linear_velocity.length() < 0.5:
+			break
+	_finger(touch, 1, stick, false)
+	for _tick in 30:
+		await physics_frame
+	await _tap(touch, "use")
+	if not _require(not _player.is_driving(), "A tap on GET OUT did not get the player out."):
+		return false
+	shown = touch.describe()
+	if not _require(str(shown.rise_label) == "RISE" and str(shown.rise_icon) == "jump" and bool(shown.run_visible) and bool(shown.look_hint), "Out of the car RISE, RUN and the look hint must come back (%s)." % [shown]):
+		return false
+	# Beside the car DRIVE: a tap gets back in, another out again.
+	for _tick in 30:
+		await physics_frame
+	print("TOUCH out at %s, %.2f m from the car, button %s" % [_player.global_position, _player.global_position.distance_to(car.global_position), use.mode_name()])
+	if not _require(use.visible and use.mode_name() == "enter" and (use.get_node("Icon") as TextureRect).texture == TouchUseButton.CAR_ICON, "Beside the car the use button must show DRIVE (%s)." % use.mode_name()):
+		return false
+	# A finger holding RUN as DRIVE is tapped: RUN hides in the car and its run goes up.
+	var run_at := _touch_point(touch, "run")
+	_finger(touch, 5, run_at, true)
+	var running := Input.is_action_pressed("run")
+	await _tap(touch, "use")
+	var run_left := Input.is_action_pressed("run")
+	_finger(touch, 5, run_at, false)
+	if not _require(_vehicles.active_car() == car and use.mode_name() == "exit", "A tap on DRIVE did not get back in (button %s)." % use.mode_name()) \
+	or not _require(running and not run_left and not Input.is_action_pressed("run") and not bool(touch.describe().run_visible), "A run held as the player got in must go up with RUN hidden (held %s, after %s)." % [running, run_left]):
+		return false
+	for _tick in 10:
+		await physics_frame
+	await _tap(touch, "use")
+	if not _require(not _player.is_driving(), "The second tap on GET OUT did not get the player out."):
+		return false
+	# On open street away from cars it hides; the stick walks.
+	if not await _stand_player(Vector2(_cases.on_foot.at_xz[0], _cases.on_foot.at_xz[1])):
+		return false
+	var ground_y := _player.global_position.y
+	var from := _player.global_position
+	# North, where the on-foot case walked and ran clear.
+	(_player.get_node("CameraPivot") as Node3D).rotation.y = 0.0
+	_finger(touch, 1, stick, true)
+	_slide(touch, 1, stick + Vector2(0.0, -reach))
+	for _tick in 30:
+		await physics_frame
+	_finger(touch, 1, stick, false)
+	for _tick in 30:
+		await physics_frame
+	var walked := Vector2(_player.global_position.x - from.x, _player.global_position.z - from.z).length()
+	if not _require(walked > 1.0 and _player.is_on_floor() and not use.visible and use.mode_name() == "hidden", "On the ground away from cars the stick must walk and the use button hide (walked %.2f m, button %s)." % [walked, use.mode_name()]):
+		return false
+	# RISE lifts; once off the ground a moment the button shows DROP.
+	_finger(touch, 2, rise, true)
+	var shown_tick := -1
+	for tick in 150:
+		await physics_frame
+		if shown_tick < 0 and use.mode_name() == "drop":
+			shown_tick = tick
+	_finger(touch, 2, rise, false)
+	for _tick in 30:
+		await physics_frame
+	var height := _player.global_position.y - ground_y
+	print("TOUCH DROP shown after %d ticks in the air, %.2f m up" % [shown_tick, height])
+	if not _require(shown_tick > 0 and use.visible and (use.get_node("Icon") as TextureRect).texture == TouchUseButton.DROP_ICON and height > 6.0, "In the air the use button must show DROP (after %d ticks, %.2f m up, button %s)." % [shown_tick, height, use.mode_name()]):
+		return false
+	# Held, DROP is the fast drop; lifted in the air, it lets go.
+	var drop := _touch_point(touch, "use")
+	_finger(touch, 3, drop, true)
+	for _tick in 20:
+		await physics_frame
+	var held_c := Input.is_action_pressed("fast_drop") and use.is_touched()
+	var falling := -_player.velocity.y
+	_finger(touch, 3, drop, false)
+	var let_go := not Input.is_action_pressed("fast_drop")
+	print("TOUCH DROP held %s, falling %.2f m/s, let go %s, %.2f m up" % [held_c, falling, let_go, _player.global_position.y - ground_y])
+	if not _require(held_c and falling > 6.0 and let_go and not _player.is_on_floor() and use.mode_name() == "drop", "Holding DROP must hold the fast drop and lifting it let go in the air (held %s, falling %.2f m/s, let go %s)." % [held_c, falling, let_go]):
+		return false
+	# Held through the landing: on the ground C goes up and the button hides,
+	# the finger still down; its lift then changes nothing.
+	_finger(touch, 3, drop, true)
+	var landed := false
+	for _tick in 240:
+		await physics_frame
+		if _player.is_on_floor():
+			landed = true
+			break
+	for _tick in 3:
+		await physics_frame
+	var after := [Input.is_action_pressed("fast_drop"), use.visible, use.is_touched()]
+	_finger(touch, 3, drop, false)
+	print("TOUCH DROP held through the landing: landed %s, C held %s, shown %s, touched %s" % [landed, after[0], after[1], after[2]])
+	return _require(landed and after == [false, false, false] and not Input.is_action_pressed("fast_drop"), "Landing with DROP held must let go of C and hide the button (landed %s, C held %s, shown %s)." % [landed, after[0], after[1]])
+
+
 # --- Helpers.
+
+## A control's centre in the touch controls (their describe()).
+func _touch_point(touch: TouchControls, control: String) -> Vector2:
+	var at: Array = touch.describe()[control]
+	return Vector2(float(at[0]), float(at[1]))
+
+
+func _finger(touch: TouchControls, index: int, at: Vector2, down: bool) -> void:
+	var event := InputEventScreenTouch.new()
+	event.index = index
+	event.position = at
+	event.pressed = down
+	touch._input(event)
+
+
+func _slide(touch: TouchControls, index: int, at: Vector2) -> void:
+	var event := InputEventScreenDrag.new()
+	event.index = index
+	event.position = at
+	touch._input(event)
+
+
+## A quick tap on a touch control, lifted before any physics tick, then three ticks.
+func _tap(touch: TouchControls, control: String) -> void:
+	var at := _touch_point(touch, control)
+	_finger(touch, 9, at, true)
+	_finger(touch, 9, at, false)
+	for _tick in 3:
+		await physics_frame
 
 ## Where every live car and K-rail is now (but the driven car), by row id.
 func _live_positions(driven: Node3D) -> Dictionary:
