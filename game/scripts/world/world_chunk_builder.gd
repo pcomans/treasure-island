@@ -5,12 +5,8 @@ const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
-const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
-## The modern eastern span (tools/lib/east-span-generation.mjs) colours each
-## face by its UV, which picks one texel of this palette, in order: light
-## concrete for the tower, columns, caps and cables; the girders' sides mid
-## grey; their undersides darker; the roadway on top road grey.
-const BAY_BRIDGE_PALETTE: Array[Color] = [Color("c4c1b9"), Color("8a8883"), Color("75736e"), Color("5d6164")]
+## The Bay Bridge scenery record (context:bay-bridge) has its own builder.
+const BAY_BRIDGE := preload("res://game/scripts/world/bay_bridge_builder.gd")
 ## The Clipper Cove marina basin past the outline (OSM w644986117, boundary-attached
 ## context) is water: the bay water (world_root.tscn ContextWorld/Water) draws it.
 const MARINA_BASIN_MATERIAL_KEY := "context_boundary_marina"
@@ -729,6 +725,8 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 
 
 func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
+	if BAY_BRIDGE.matches_record(record, is_context):
+		return BAY_BRIDGE.build_record(record)
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -840,14 +838,6 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		var first := int(record.indices[index])
 		var second := int(record.indices[index + 1])
 		var third := int(record.indices[index + 2])
-		# The old western span is a disconnected component west of X=500 m.
-		# Its imported replacement is owned by world_root.tscn; retain the modern
-		# eastern-span component from the same generated context record.
-		if is_context and str(record.feature_kind) == "bay_bridge" \
-		and vertices[first].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
-		and vertices[second].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
-		and vertices[third].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M:
-			continue
 		indices.append(first)
 		indices.append(third)
 		indices.append(second)
@@ -1136,13 +1126,6 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 		# The summit reservoir's still, algae-green water (the 2026-05-26 aerial).
 		material.albedo_color = Color(.19, .24, .16)
 		material.roughness = .2
-	if material_key == "context_bay_bridge":
-		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)
-		for index in BAY_BRIDGE_PALETTE.size():
-			palette.set_pixel(index, 0, BAY_BRIDGE_PALETTE[index])
-		material.albedo_texture = ImageTexture.create_from_image(palette)
-		material.albedo_color = Color.WHITE
-		material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	_apply_polyhaven_textures(material, material_key)
 	_materials[cache_key] = material
 	return material

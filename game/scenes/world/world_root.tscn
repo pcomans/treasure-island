@@ -73,6 +73,7 @@ layers = 1
 position = Vector3(417.375, 0, 1643.827)
 rotation = Vector3(0, 2.437807, 0)
 scale = Vector3(1.09506, 0.55, 1.09506)
+visible = false
 metadata/source_asset = "Baybridge-western-span by cdr420"
 metadata/source_url = "https://sketchfab.com/3d-models/baybridge-western-span-1c2cd0daa908481aadad7073b91f1732"
 metadata/license = "CC BY 4.0"
