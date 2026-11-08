@@ -64,7 +64,7 @@ const SAS_EAST_HINGE_STATION_M = 428;
 const CONCRETE_BOX = Object.freeze({ tip: 0.35, root: 0.8, wing: 4.6, batter: 0.25 });
 // YBI transition: shallow reinforced-concrete frame 1 (spans 21.6-36.7 m), deeper
 // post-tensioned frame 2 (59.2-84.8 m).
-const YBITS_DEPTH = Object.freeze({ frame1: 2.8, frame2: 5.0, frame1Spans: 4 });
+const YBITS_DEPTH = Object.freeze({ frame1: 2.8, frame2: 4.4, frame1Spans: 4 });
 // The westbound deck holds the tunnel's upper-deck height from the portal to the
 // start of the YBI transition structure's W line.
 const UPPER_TRANSITION_TOP_M = 59.2;
@@ -96,8 +96,8 @@ const TOWER = Object.freeze({
 // Main cables and suspenders: drawn a little thicker than real (0.78 m cable,
 // suspender pairs) so they hold at a kilometre. The suspenders anchor at the
 // outer edge of each box, the cable planes leaning in to the saddle.
-const CABLE = Object.freeze({ radius: 0.45, saddleY: 158.4, saddleOffset: SAS.saddle_offset_m, landingRise: 1.2, step: 5 });
-const SUSPENDER = Object.freeze({ radius: 0.11, towerClear: 12 });
+const CABLE = Object.freeze({ radius: 0.6, saddleY: 158.4, saddleOffset: SAS.saddle_offset_m, landingRise: 1.2, step: 5 });
+const SUSPENDER = Object.freeze({ radius: 0.15, towerClear: 12 });
 // The cable's bend round the west deck end at W2: radius, its fall (a fraction of
 // the radius per quarter turn) and its pieces.
 const KNUCKLE = Object.freeze({ radius: 5.5, drop: 1.2, segments: 5 });
@@ -107,7 +107,9 @@ const TIDAL_BAND_TOP_M = 1.4;
 const WATER_FOOTING_M = -2.0;
 const GROUND_BURY_M = 3.0;
 const SKYWAY_COLUMN = Object.freeze({ across: 7.5, along: 4.5, flareAcross: 11, flareAlong: 6.6, flareHeight: 6, cap: Object.freeze({ across: 16, along: 12 }) });
-const YBITS_COLUMN = Object.freeze({ across: 4.6, along: 2.6, cap: Object.freeze({ across: 9, along: 3.6, depth: 1.6 }) });
+// The transition structure's bents: twin columns under each deck (the dated
+// Street View frames from TI show them in close pairs) on a cap beam.
+const YBITS_COLUMN = Object.freeze({ across: 3.0, along: 2.4, twin: 4.8, cap: Object.freeze({ inset: 3.5, along: 3.2, depth: 1.8 }) });
 const TOUCHDOWN_COLUMN = Object.freeze({ across: 4.2, along: 2.4 });
 const END_PIER = Object.freeze({ capAlong: 8, capDepth: 4.5, columnAcross: 8, columnAlong: 6 });
 // Light masts (273 white pentagonal poles, 23-65 ft, on the east span: fact sheet)
@@ -261,7 +263,7 @@ const eastProfile = smoothProfile(EAST_DECK_PROFILE, 220);
 // The transition structure holds each deck near its tunnel level over most of its
 // length and makes the change late (the dated Street View frames from TI show the
 // two decks a full girder apart over the island's east shore).
-const TRANSITION_EASE = 1.7;
+const TRANSITION_EASE = 2.6;
 
 function lineProfile(line, hingeS, westTop, beginS, beginTop) {
   const hingeTop = eastProfile(line.at(hingeS).point[0]);
@@ -489,9 +491,13 @@ function buildTransitionBents(mesh, decks, groundAt, report) {
         continue;
       }
       if (near.distance < (other.ybits.left - other.ybits.right) / 2 + 1 && otherTop > soffit) continue;
-      column(mesh, groundAt, point, tangent, YBITS_COLUMN, soffit - YBITS_COLUMN.cap.depth + 0.1);
-      const cap = planRectangle(point, tangent, YBITS_COLUMN.cap.along / 2, YBITS_COLUMN.cap.across / 2, 0.5);
-      mesh.prism([{ ring: cap, y: soffit - YBITS_COLUMN.cap.depth }, { ring: cap, y: soffit + 0.1 }], shade(R.concrete, O.under), C.structure);
+      for (const side of [-1, 1]) {
+        column(mesh, groundAt, offsetPlan(point, tangent, side * YBITS_COLUMN.twin), tangent, YBITS_COLUMN, soffit - YBITS_COLUMN.cap.depth + 0.1);
+      }
+      const capHalf = (deck.ybits.left - deck.ybits.right) / 2 - YBITS_COLUMN.cap.inset;
+      const capCenter = offsetPlan(point, tangent, (deck.ybits.left + deck.ybits.right) / 2);
+      const cap = planRectangle(capCenter, tangent, YBITS_COLUMN.cap.along / 2, capHalf, 0.6);
+      mesh.prism([{ ring: cap, y: soffit - YBITS_COLUMN.cap.depth }, { ring: cap, y: soffit + 0.1 }], shade(R.concrete, O.under), C.structure, { capBottom: true, capTop: false });
       report.ybits_bents += 1;
     }
   }

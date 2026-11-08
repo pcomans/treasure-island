@@ -17,9 +17,14 @@ uniform float specular_value = 0.4;
 
 varying vec3 strip_side;
 varying vec3 to_camera;
-varying float across;
-varying float coverage;
-varying float half_pixels;
+
+// One screen pixel's size in metres at view-space depth `depth`. The projection's
+// [1][1] is negative where the renderer flips Y (Forward+'s RenderingDevice), so
+// take its size.
+float pixel_size(float depth, mat4 projection, vec2 viewport) {
+	bool orthographic = projection[3][3] > 0.5;
+	return 2.0 * (orthographic ? 1.0 : max(depth, 0.01)) / (abs(projection[1][1]) * viewport.y);
+}
 
 void vertex() {
 	vec3 center = (MODELVIEW_MATRIX * vec4(VERTEX, 1.0)).xyz;
@@ -30,13 +35,7 @@ void vertex() {
 	float side_length = length(side);
 	// Seen end-on the member has no screen direction: any side will do.
 	side = side_length > 0.0001 ? side / side_length : normalize(cross(direction, vec3(0.0, 1.0, 0.0) + vec3(0.0001)));
-	float depth = orthographic ? 1.0 : max(-center.z, 0.01);
-	float pixel = 2.0 * depth / (PROJECTION_MATRIX[1][1] * VIEWPORT_SIZE.y);
-	float radius = UV.y;
-	float half_width = max(radius, 0.5 * MIN_PIXELS * pixel);
-	coverage = radius / half_width;
-	half_pixels = half_width / pixel;
-	across = UV.x;
+	float half_width = max(UV.y, 0.5 * MIN_PIXELS * pixel_size(-center.z, PROJECTION_MATRIX, VIEWPORT_SIZE));
 	strip_side = side;
 	VERTEX = center + side * UV.x * half_width;
 	NORMAL = to_camera;
@@ -47,7 +46,11 @@ vec3 srgb_to_linear(vec3 color) {
 }
 
 void fragment() {
-	float a = clamp(across, -1.0, 1.0);
+	// The strip's own across position and the member's radius come in the built-in UV,
+	// its width in pixels from this fragment's depth.
+	float a = clamp(UV.x, -1.0, 1.0);
+	float pixel = pixel_size(-VERTEX.z, PROJECTION_MATRIX, VIEWPORT_SIZE);
+	float half_pixels = max(UV.y / pixel, 0.5 * MIN_PIXELS);
 	NORMAL = normalize(to_camera * sqrt(max(1.0 - a * a, 0.0)) + strip_side * a);
 	ALBEDO = srgb_to_linear(COLOR.rgb);
 	ROUGHNESS = roughness_value;
@@ -55,6 +58,6 @@ void fragment() {
 	// Full inside, falling to nothing over the outer pixel: the strip then holds
 	// about (2 * half_pixels - 1) pixels of ink, scaled to the member's own width.
 	float edge = clamp((1.0 - abs(a)) * half_pixels, 0.0, 1.0);
-	float ink = clamp(2.0 * coverage * half_pixels / max(2.0 * half_pixels - 1.0, 1.0), 0.0, 1.0);
+	float ink = clamp(2.0 * UV.y / pixel / max(2.0 * half_pixels - 1.0, 1.0), 0.0, 1.0);
 	ALPHA = edge * ink;
 }

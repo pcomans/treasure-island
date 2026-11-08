@@ -35,10 +35,10 @@ const WIRE_BOUNDS_GROW_M := 12.0
 ## specifications.
 const ROLE_COLORS: Array[Color] = [
 	Color8(222, 223, 220), # sas_white
-	Color8(160, 157, 150), # concrete
-	Color8(104, 101, 95), # concrete_dark
+	Color8(140, 138, 132), # concrete
+	Color8(92, 90, 85), # concrete_dark
 	Color8(84, 85, 88), # roadway
-	Color8(180, 177, 170), # barrier
+	Color8(172, 169, 162), # barrier
 	Color8(150, 154, 158), # steel_silver
 	Color8(232, 232, 228), # light_pole
 	Color8(222, 223, 220), # suspender

@@ -40,8 +40,8 @@ const LEG = Object.freeze({
 });
 const TOWER_TOP = Object.freeze({ strutDepth: 6, strutBelowTop: 4, saddleHeight: 4, braceRadius: 1.05, deckClearAbove: 6.5, deckClearBelow: 1.8 });
 const PIER = Object.freeze({ along: 22, across: 44, top: 4.5, chamfer: 6 });
-const CABLE = Object.freeze({ lateral: 10.6, radius: 0.42, step: 10, saddleDrop: 1.6, midspanRise: 3.0, bentRise: 6.0 });
-const SUSPENDER_RADIUS = 0.14;
+const CABLE = Object.freeze({ lateral: 10.6, radius: 0.55, step: 10, saddleDrop: 1.6, midspanRise: 3.0, bentRise: 6.0 });
+const SUSPENDER_RADIUS = 0.18;
 const ANCHORAGE = Object.freeze({
   center: Object.freeze({ baseAlong: 54, baseAcross: 42, topAlong: 46, topAcross: 36, above: 9 }),
   sf: Object.freeze({ along: 44, across: 46, above: 7 }),
