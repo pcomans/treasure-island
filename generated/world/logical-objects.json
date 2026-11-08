@@ -18635,6 +18635,7 @@
       "heights": [],
       "logical_object_key": "context:ybi-roads",
       "physical_object_keys": [
+        "context:ybi-road-paint",
         "context:ybi-roads"
       ],
       "representation": "composite",
@@ -25108,6 +25109,7 @@
       "logical_object_key": "road:w1115934722",
       "physical_object_keys": [
         "boundary_context:w1115934722",
+        "boundary_context:w1115934722:paint",
         "roads:x_-1__z_3",
         "roads:x_0__z_3"
       ],
@@ -32174,6 +32176,7 @@
       "logical_object_key": "road:w1249797943",
       "physical_object_keys": [
         "boundary_context:w1249797943",
+        "boundary_context:w1249797943:paint",
         "roads:x_-1__z_3"
       ],
       "representation": "direct",

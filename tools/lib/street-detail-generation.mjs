@@ -184,6 +184,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   power_line: lineKind("furniture", 0, true),
   power_pole: pointKind("furniture", 0.2, "host_power_line"),
   retaining_wall: lineKind("fences", 0.2),
+  // A barricade across a carriageway where the island's outline closes it (the
+  // causeway to YBI): it stands on the road, right inside the outline.
+  road_closure: pointKind("furniture", 0.35, "seeded"),
   // A small park building outside the OSM inventory (Cityside Park's pump
   // station): its footprint is its own rectangle (footprint_m on the row).
   site_structure: pointKind("furniture", 3.8, "seeded"),
@@ -285,7 +288,10 @@ const PLAYER_WIDTH_M = 0.7;
 // to end, as do the road blocks at the ditch's road end and the sections of the GAA
 // field's board wall. Anything else stays a player's width away. The clearance flood still
 // checks what that shuts in.
-const PROPS_STANDING_TIGHT = Object.freeze(["stock_tank_planter", "water_block", "mural_wall"]);
+const PROPS_STANDING_TIGHT = Object.freeze(["road_closure_barricade", "stock_tank_planter", "water_block", "mural_wall"]);
+// A road closure stands on the carriageway it closes, its centre at most this far
+// inside the island's outline (m).
+const ROAD_CLOSURE_OUTLINE_M = 1.5;
 const standsTight = (prop, params) => PROPS_STANDING_TIGHT.includes(prop) || (prop === "log_seat" && params?.form === "baulk");
 const TIGHT_PROP_GAP_M = -0.3;
 // A rigid street-furniture set piece stands at the height under its centre. The most
@@ -1510,8 +1516,10 @@ export function generateStreetDetail({
   const pathDistance = (en, reach = 6) => pedestrianWays.nearest(toWorld(en), reach).distance;
   // withIsland: also keep off the carriageways beyond the street ground (the
   // island-wide street furniture), ignoring the occupied items in ignore (the
-  // row being moved); set pieces keep the street ground's own check.
-  const propSiteViolation = (piece, withIsland = false, ignore = null, tight = false) => {
+  // row being moved); set pieces keep the street ground's own check. closure: a
+  // road closure, which stands on the carriageway right inside the outline: it
+  // keeps only its own width on the land, off curb ramps and crosswalks.
+  const propSiteViolation = (piece, withIsland = false, ignore = null, tight = false, closure = false) => {
     const { radius } = piece;
     // The footprint's segment, sampled every half metre for the site tests.
     const samples = [];
@@ -1519,14 +1527,14 @@ export function generateStreetDetail({
     const steps = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.5));
     for (let step = 0; step <= steps; step += 1) samples.push([a[0] + ((b[0] - a[0]) * step) / steps, a[1] + ((b[1] - a[1]) * step) / steps]);
     const violation = (reason, sourceId = null) => ({ reason, source_id: sourceId, observed_m: null, required_m: null });
-    if (!samples.every((xz) => onLand(xz, exclusions.land_edge_buffer_m + radius))) return violation("land_edge", PLAYABLE_BOUNDARY_SOURCE_KEY);
+    if (!samples.every((xz) => onLand(xz, (closure ? 0 : exclusions.land_edge_buffer_m) + radius))) return violation("land_edge", PLAYABLE_BOUNDARY_SOURCE_KEY);
     const hard = hardViolation(hardShapes, piece.points, radius);
     if (hard) return hard;
     for (const xz of samples) {
       const building = buildings.nearest(xz, exclusions.wall_buffer_m + radius);
       if (building.distance < exclusions.wall_buffer_m + radius) return violation(building.distance === 0 ? "inside_building" : "wall_buffer", building.key);
       const en = toEastNorth(xz);
-      if ((withIsland ? carriagewayDistance(en) : ground.site.carriagewayDistance(en)) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
+      if (!closure && (withIsland ? carriagewayDistance(en) : ground.site.carriagewayDistance(en)) < PROP_KERB_CLEAR_M + radius) return violation("carriageway");
       if (ground.site.rampDistance(en) < PROP_RAMP_CLEAR_M + radius) return violation("curb_ramp");
       if (crosswalkAt(en)) return violation("crosswalk");
     }
@@ -1577,8 +1585,13 @@ export function generateStreetDetail({
     const piece = footprint
       ? footprintPiece(xz, normalizedYaw(entry.yaw), footprint)
       : { points: [xz], radius: STREET_DETAIL_KINDS[entry.kind].footprint_radius_m };
-    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, false, null, standsTight(entry.prop, entry.params));
+    const closure = entry.kind === "road_closure";
+    const violation = entry.prop === undefined || tree ? siteViolation(entry.kind, xz, exclusions.wall_buffer_m) : propSiteViolation(piece, false, null, standsTight(entry.prop, entry.params), closure);
     invariant(!violation, `Street detail set piece ${entry.id} fails the exclusion mask: ${JSON.stringify(violation)}`);
+    if (closure) {
+      invariant(!onLand(xz, ROAD_CLOSURE_OUTLINE_M), `Street detail set piece ${entry.id} is a road closure more than ${ROAD_CLOSURE_OUTLINE_M} m inside the island's outline`);
+      invariant(carriagewayDistance(toEastNorth(xz)) === 0, `Street detail set piece ${entry.id} is a road closure off the carriageway`);
+    }
     const { y, support } = grounded(xz);
     const surface = surfaceAt(xz);
     let planted = null;

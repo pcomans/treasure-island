@@ -28,8 +28,9 @@ import {
   rectangleMultiPolygon,
   selectGeometry,
 } from "./osm-geometry.mjs";
+import { PAINT_VARIANT_STRIDE, STREET_PAINT_KINDS } from "./street-ground-generation.mjs";
 import { STREET_VEGETATION_PROPS } from "./street-vegetation-generation.mjs";
-import { invariant, roundCoordinate, sha256Bytes, stableJson } from "./world-contract.mjs";
+import { ROAD_SURFACE_BIASES_M, invariant, roundCoordinate, sha256Bytes, stableJson } from "./world-contract.mjs";
 
 export const YBI_CONFIG_PATH = "tools/config/ybi-context.json";
 export const YBI_LAND_COVER_PATH = "data/ybi/ybi-land-cover-2026-05-26.json";
@@ -85,6 +86,13 @@ export const YBI_MATERIAL_KEYS = Object.freeze([
   "context_ybi_wall",
   "context_ybi_water",
 ]);
+// Treasure Island Road's paint (causewayPaintPlan): on the YBI ways that carry it on
+// from the causeway to the hilltop it is the second part of YBI's road composite
+// (context:ybi-roads, whose members it claims); on each playable carriageway's own run
+// past the outline it is that run's second boundary-attached record
+// (boundary_context:KEY:paint), for the continuations listed here.
+export const YBI_ROAD_PAINT_RECORD = Object.freeze({ object_key: "context:ybi-road-paint", material_key: "street_marking" });
+export const YBI_CONTINUATION_PAINT_SOURCE_KEYS = Object.freeze(["w1115934722", "w1249797943"]);
 // Playable roads and paths whose frozen ways run on from the causeway onto YBI: their
 // part past the Treasure Island outline is drawn as boundary-attached context
 // (boundary_context:KEY), as a pier deck past the outline is.
@@ -168,9 +176,11 @@ function simplifyLine(line, toleranceM) {
   }
   return line.filter((_point, index) => keep[index]);
 }
+// How far a ribbon's centreline may stray from the mapped way when simplified (m).
+const RIBBON_SIMPLIFY_M = 0.25;
 // A road's ribbon: its simplified centreline swept at width, with octagonal joins.
 function ribbon(line, width, label) {
-  const simple = simplifyLine(line, 0.25);
+  const simple = simplifyLine(line, RIBBON_SIMPLIFY_M);
   const radius = width / 2;
   const parts = [];
   for (let index = 1; index < simple.length; index += 1) {
@@ -391,6 +401,83 @@ function ringSegments(multiPolygon) {
     }
   }
   return segments;
+}
+
+// The rectangle reaching depth either side of a seam segment, square to it: inside it
+// the distance to the segment is the distance to its line, so a ramp by that distance
+// is affine there.
+function seamBandRectangle(a, b, depth) {
+  const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+  const nx = (-(b[1] - a[1]) / length) * depth;
+  const ny = ((b[0] - a[0]) / length) * depth;
+  return [[[a[0] + nx, a[1] + ny], [a[0] - nx, a[1] - ny], [b[0] - nx, b[1] - ny], [b[0] + nx, b[1] + ny]]];
+}
+
+// Stations every stepM along a polyline (both ends included), each with its point, its
+// distance along the line and its left normal (counter-clockwise from the direction of
+// travel), taken across smoothM either side so it turns smoothly through the line's
+// vertices.
+function lineStations(line, stepM, smoothM) {
+  const lengths = [0];
+  for (let index = 1; index < line.length; index += 1) lengths.push(lengths[index - 1] + Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]));
+  const total = lengths.at(-1);
+  const pointAt = (s) => {
+    const clamped = Math.max(0, Math.min(total, s));
+    let index = 1;
+    while (index < line.length - 1 && lengths[index] < clamped) index += 1;
+    const span = lengths[index] - lengths[index - 1];
+    const t = span > 0 ? (clamped - lengths[index - 1]) / span : 0;
+    return [line[index - 1][0] + (line[index][0] - line[index - 1][0]) * t, line[index - 1][1] + (line[index][1] - line[index - 1][1]) * t];
+  };
+  const count = Math.max(1, Math.ceil(total / stepM));
+  const stations = [];
+  for (let k = 0; k <= count; k += 1) {
+    const s = (total * k) / count;
+    const before = pointAt(s - smoothM);
+    const after = pointAt(s + smoothM);
+    const length = Math.hypot(after[0] - before[0], after[1] - before[1]);
+    stations.push({ s, point: pointAt(s), left: [-(after[1] - before[1]) / length, (after[0] - before[0]) / length] });
+  }
+  return stations;
+}
+
+// A painted line between two runs of stations' offset centres, widthM wide across each
+// station's normal: one ring, so a line that bends gently stays a single simple polygon.
+// offsets: each station's centre offset along its left normal (null leaves a gap, the
+// line breaks there).
+function stationStrips(stations, offsets, widthM) {
+  const strips = [];
+  let run = [];
+  const flush = () => {
+    if (run.length >= 2) {
+      const left = run.map(({ point, left: n, offset }) => [point[0] + n[0] * (offset + widthM / 2), point[1] + n[1] * (offset + widthM / 2)]);
+      const right = run.map(({ point, left: n, offset }) => [point[0] + n[0] * (offset - widthM / 2), point[1] + n[1] * (offset - widthM / 2)]);
+      strips.push([[...right, ...left.reverse()].map((point) => point.map(round3))]);
+    }
+    run = [];
+  };
+  stations.forEach((station, index) => {
+    if (offsets[index] == null) flush();
+    else run.push({ ...station, offset: offsets[index] });
+  });
+  flush();
+  return strips.length > 0 ? rawUnion(...strips) : [];
+}
+
+// The nearest point of a polyline to a point, with its distance.
+function nearestOnLine(point, line) {
+  let best = null;
+  for (let index = 1; index < line.length; index += 1) {
+    const [a, b] = [line[index - 1], line[index]];
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const lengthSquared = dx * dx + dy * dy;
+    const t = lengthSquared > 0 ? Math.max(0, Math.min(1, ((point[0] - a[0]) * dx + (point[1] - a[1]) * dy) / lengthSquared)) : 0;
+    const candidate = [a[0] + dx * t, a[1] + dy * t];
+    const distance = Math.hypot(point[0] - candidate[0], point[1] - candidate[1]);
+    if (!best || distance < best.distance) best = { point: candidate, distance };
+  }
+  return best;
 }
 
 // A mesh's plan footprint (east, north): the union of its triangles.
@@ -688,9 +775,12 @@ function clipConvex(polygon, triangle) {
 // piece lies in one terrain triangle's plane, so the surface follows the drawn ground
 // exactly. The polygon is cut into the terrain's cells first (through 8-cell tiles), so
 // each cell's few pieces meet only that cell's triangles.
+// biasM may instead be a function of the plan point; it must be affine over each piece
+// for the pieces to stay planar (as a seam ramp is, inside its band).
 // keep: an optional test of each terrain triangle (its plan corners and heights); the
 // drape covers only the triangles it keeps.
 function drapeMultiPolygon(multiPolygon, terrain, biasM, keep = null) {
+  const biasAt = typeof biasM === "function" ? biasM : () => biasM;
   const mesh = emptyMesh();
   const vertex = vertexWriter(mesh, true);
   const up = [0, 1, 0];
@@ -724,7 +814,7 @@ function drapeMultiPolygon(multiPolygon, terrain, biasM, keep = null) {
               const heightAt = (p) => {
                 const wa = ((b[1] - c[1]) * (p[0] - c[0]) + (c[0] - b[0]) * (p[1] - c[1])) / det;
                 const wb = ((c[1] - a[1]) * (p[0] - c[0]) + (a[0] - c[0]) * (p[1] - c[1])) / det;
-                return wa * entry.y[0] + wb * entry.y[1] + (1 - wa - wb) * entry.y[2] + biasM;
+                return wa * entry.y[0] + wb * entry.y[1] + (1 - wa - wb) * entry.y[2] + biasAt(p);
               };
               // Shaded like the terrain under it (its normals come from the same DEM).
               const indices = clipped.map((p) => vertex([p[0], heightAt(p), -p[1]], terrain.normalAt(p[0], p[1]), [p[0] / 10, -p[1] / 10]));
@@ -1338,13 +1428,35 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
   };
   const boundaryVisuals = [];
   const continuationRecords = [];
+  // A playable road or path leaves the causeway seam at Treasure Island's own skin
+  // height for its class (ROAD_SURFACE_BIASES_M) and rises to YBI's bias over
+  // seam_ramp_m, so the two surfaces meet edge to edge: a 22 mm step there showed the
+  // ground through it as a hairline across both carriageways (owner, 2026-11-08). lift
+  // raises the whole drape (paint over the road).
+  const seamRampM = config.surfaces.seam_ramp_m;
+  invariant(seamRampM > 0, "YBI surfaces need a seam_ramp_m");
+  const seamBand = rawIntersect(rawUnion(...seam.map(([a, b]) => seamBandRectangle(a, b, seamRampM))), land);
+  const seamBias = (klass) => (klass === "vehicle" ? ROAD_SURFACE_BIASES_M.base : ROAD_SURFACE_BIASES_M.pedestrian);
+  const drapeFromSeam = (geometry, klass, lift = 0) => {
+    const atSeam = seamBias(klass);
+    const ramp = (point) => {
+      const distance = Math.min(...seam.map(([a, b]) => distanceToSegment(point, a, b)));
+      return atSeam + (config.surfaces.bias_m - atSeam) * Math.min(1, distance / seamRampM) + lift;
+    };
+    return mergeMeshes(
+      drapeMultiPolygon(rawIntersect(geometry, seamBand), terrain, ramp),
+      drapeMultiPolygon(rawDifference(geometry, seamBand), terrain, config.surfaces.bias_m + lift),
+    );
+  };
+  const continuationClaims = new Map();
   const addContinuation = (object, klass) => {
     const run = rawIntersect(ribbon(geometryToLine(selectGeometry(object.exported, "line"), object.row.source_key), ROAD_CONTINUATION_WIDTH(object, config), object.row.source_key), land);
     const free = claim(run);
     if (free.length === 0 || multiPolygonArea(free) <= 0.01) return;
-    const mesh = drapeMultiPolygon(free, terrain, config.surfaces.bias_m);
+    const mesh = drapeFromSeam(free, klass);
     if (mesh.indices.length === 0) return;
     continuationRecords.push({ object, klass, mesh });
+    continuationClaims.set(object.row.source_key, free);
   };
   const roadsByClass = { vehicle: [], pedestrian: [], construction: [] };
   for (const joined of byCategory("context_ybi_road")) roadsByClass[roadClass(joined.tags)].push(joined);
@@ -1424,6 +1536,89 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       mesh,
     });
   }
+  // Treasure Island Road's paint past the causeway seam (causewayPaintPlan): on each
+  // playable carriageway's run past the outline its own boundary-attached record, on
+  // the YBI ways that carry the road on to the hilltop YBI's road-paint record.
+  const paintSpec = config.causeway_paint;
+  invariant(stableJson(YBI_CONTINUATION_PAINT_SOURCE_KEYS) === stableJson([paintSpec.northbound, paintSpec.southbound[0]].sort()), "YBI causeway paint ways drift from the continuations that carry paint");
+  const continuationOf = (key) => {
+    const object = continuations.find((item) => item.row.source_key === key && item.road_visual_class === "vehicle");
+    invariant(object && continuationClaims.has(key), `Causeway paint way ${key} is not a drawn vehicle continuation`);
+    return object;
+  };
+  const paintLine = (object, key) => simplifyLine(geometryToLine(selectGeometry(object.exported, "line"), key), RIBBON_SIMPLIFY_M);
+  const southboundWays = paintSpec.southbound.map((key, index) => {
+    const object = index === 0 ? continuationOf(key) : roadsByClass.vehicle.find((joined) => joined.row.source_key === key);
+    invariant(object, `Causeway paint way ${key} is not a YBI vehicle road`);
+    return { source_key: key, object, line: paintLine(object, key) };
+  });
+  for (let index = 1; index < southboundWays.length; index += 1) {
+    const [end, start] = [southboundWays[index - 1].line.at(-1), southboundWays[index].line[0]];
+    invariant(Math.hypot(end[0] - start[0], end[1] - start[1]) < 0.01, `Causeway paint way ${southboundWays[index].source_key} does not continue ${southboundWays[index - 1].source_key}`);
+  }
+  const paintWays = new Set([paintSpec.northbound, ...paintSpec.southbound]);
+  const northboundLine = paintLine(continuationOf(paintSpec.northbound), paintSpec.northbound);
+  const paintBox = multiPolygonBounds([[[...northboundLine, ...southboundWays.flatMap((entry) => entry.line)]]]);
+  const nearPaint = (geometry) => {
+    const box = multiPolygonBounds(geometry);
+    const reach = paintSpec.junction_clear_m + 1;
+    return box.max_x >= paintBox.min_x - reach && box.min_x <= paintBox.max_x + reach && box.max_y >= paintBox.min_y - reach && box.min_y <= paintBox.max_y + reach;
+  };
+  // Every other road that crosses or joins it keeps the paint junction_clear_m off.
+  const crossing = [...roadsByClass.vehicle, ...roadsByClass.construction]
+    .filter((joined) => !paintWays.has(joined.row.source_key))
+    .map((joined) => {
+      const line = geometryToLine(selectGeometry(joined.exported, "line"), joined.row.source_key);
+      const width = joined.tags.highway === "construction" && joined.tags.construction == null ? config.surfaces.unspecified_construction_width_m : config.surfaces.road_widths_m[joined.tags.highway];
+      return ribbon(line, width + 2 * paintSpec.junction_clear_m, `${joined.row.source_key}/paint-clear`);
+    })
+    .filter(nearPaint);
+  const paintPlan = causewayPaintPlan({
+    spec: paintSpec,
+    land,
+    lines: { northbound: northboundLine, northbound_key: paintSpec.northbound, southbound: southboundWays.map(({ source_key, line }) => ({ source_key, line })) },
+    asphalt: rawUnion(continuationClaims.get(paintSpec.northbound), continuationClaims.get(paintSpec.southbound[0]), surfaceGeometry.vehicle ?? []),
+    keepouts: crossing.length > 0 ? rawUnion(...crossing) : [],
+    halfWidthM: config.surfaces.road_widths_m.tertiary / 2,
+  });
+  const paintMesh = ({ white, yellow }) => {
+    const coat = (geometry, kind) => {
+      const mesh = drapeFromSeam(geometry, "vehicle", paintSpec.lift_m);
+      const code = kind + PAINT_VARIANT_STRIDE * paintSpec.paint_wear + 0.5;
+      mesh.uvs = mesh.uvs.map((_value, index) => (index % 2 === 0 ? code : 0.5));
+      return mesh;
+    };
+    return mergeMeshes(coat(white, STREET_PAINT_KINDS.white), coat(yellow, STREET_PAINT_KINDS.yellow));
+  };
+  const paintReport = {};
+  const addPaintVisual = (part) => {
+    const mesh = paintMesh(part);
+    invariant(mesh.indices.length > 0, `Causeway paint of ${part.source_key} draped no triangles`);
+    boundaryVisuals.push({
+      object_key: `boundary_context:${part.source_key}:paint`,
+      context_kind: "boundary_attached_visual",
+      material_key: YBI_ROAD_PAINT_RECORD.material_key,
+      source_keys: [part.source_key],
+      mesh,
+    });
+    paintReport[part.source_key] = { white_m2: round2(multiPolygonArea(part.white)), yellow_m2: round2(multiPolygonArea(part.yellow)) };
+  };
+  addPaintVisual(paintPlan.northbound);
+  addPaintVisual(paintPlan.southbound[0]);
+  // On YBI's own ways the paint is the second part of YBI's road composite
+  // (context:ybi-roads), drawn for the whole composite as the reservoir's lining is.
+  const ybiPaintParts = paintPlan.southbound.slice(1);
+  invariant(ybiPaintParts.length > 0, "YBI's causeway road paint names no YBI way");
+  const ybiPaintMesh = mergeMeshes(...ybiPaintParts.map(paintMesh));
+  invariant(ybiPaintMesh.indices.length > 0, "YBI's causeway road paint draped no triangles");
+  const roadMembers = surfaceMembers.vehicle.map((joined) => joined.row.source_key);
+  for (const part of ybiPaintParts) {
+    invariant(roadMembers.includes(part.source_key), `Causeway paint way ${part.source_key} is not one of YBI's roads`);
+    paintReport[part.source_key] = { white_m2: round2(multiPolygonArea(part.white)), yellow_m2: round2(multiPolygonArea(part.yellow)) };
+  }
+  records.push({ object_key: YBI_ROAD_PAINT_RECORD.object_key, context_kind: "ybi_surface", material_key: YBI_ROAD_PAINT_RECORD.material_key, source_keys: roadMembers, mesh: ybiPaintMesh });
+  for (const key of roadMembers) objects.get(key).physical_object_keys.add(YBI_ROAD_PAINT_RECORD.object_key);
+  surfaceReport.causeway_paint = paintReport;
   // The summit sculpture, on the drawn plaza where OSM's pedestrian area paves it.
   const structureReport = [];
   // Round a structure that keeps its silhouette (structures[KEY].tree_clearance), trees
@@ -2034,4 +2229,84 @@ function ROAD_CONTINUATION_WIDTH(object, config) {
   const width = config.surfaces.road_widths_m[object.tags.highway];
   invariant(width > 0, `${object.row.source_key} highway=${object.tags.highway} has no YBI continuation width`);
   return width;
+}
+
+// Treasure Island Road's paint past the causeway seam (owner request 2026-11-08: the
+// markings broke off at the seam). The road leaves Treasure Island as two one-way
+// carriageways round a raised concrete median; past the seam they run side by side
+// round a narrowing strip of ground and then share one roadway up to the hilltop
+// junction. Each carriageway takes a white edge line on its right, inset as Treasure
+// Island's edge lines are, and a yellow line on its left (median) side; the two yellow
+// lines hug the median strip while it is open and close into a double yellow where the
+// carriageways meet. Lines stop clear of the roads that cross or join. Plan geometry in
+// east/north; spec is the config's causeway_paint block. Returns the paint of the
+// northbound way and of each southbound way, as {white, yellow} plan multipolygons.
+function causewayPaintPlan({ spec, land, lines, asphalt, keepouts, halfWidthM }) {
+  const width = spec.line_width_m;
+  const edgeOffset = halfWidthM - spec.edge_inset_m - width / 2;
+  const northbound = lines.northbound;
+  const southbound = lines.southbound.flatMap((entry, index) => (index === 0 ? entry.line : entry.line.slice(1)));
+  const stationsN = lineStations(northbound, spec.station_m, spec.smooth_m);
+  const stationsS = lineStations(southbound, spec.station_m, spec.smooth_m);
+  const clip = (geometry) => {
+    if (geometry.length === 0) return [];
+    const onRoad = rawIntersect(rawIntersect(geometry, land), asphalt);
+    return keepouts.length === 0 ? onRoad : rawDifference(onRoad, keepouts);
+  };
+  // Edge lines, on each carriageway's right.
+  const whiteN = clip(stationStrips(stationsN, stationsN.map(() => -edgeOffset), width));
+  const whiteS = clip(stationStrips(stationsS, stationsS.map(() => -edgeOffset), width));
+  // The median lines, from the northbound way's stations: half the distance across to
+  // the southbound centre line sets the median's middle, and the two lines sit either
+  // side of it, each its inset inside its own carriageway's edge while the strip is open,
+  // closing linearly to a double yellow as the strip narrows to nothing.
+  const closedSpacing = spec.double_gap_m + width;
+  const openSpacing = (gap) => gap + 2 * (spec.edge_inset_m + width / 2);
+  const offsetsN = [];
+  const offsetsS = [];
+  for (const station of stationsN) {
+    const near = nearestOnLine(station.point, southbound);
+    const across = (near.point[0] - station.point[0]) * station.left[0] + (near.point[1] - station.point[1]) * station.left[1];
+    if (near.distance > spec.pair_reach_m || across <= 0) {
+      offsetsN.push(null);
+      offsetsS.push(null);
+      continue;
+    }
+    const half = across / 2;
+    const gap = across - 2 * halfWidthM;
+    const spacing = gap >= spec.median_open_gap_m ? openSpacing(gap)
+      : gap <= 0 ? closedSpacing
+      : closedSpacing + (openSpacing(spec.median_open_gap_m) - closedSpacing) * (gap / spec.median_open_gap_m);
+    offsetsN.push(half - spacing / 2);
+    offsetsS.push(half + spacing / 2);
+  }
+  const yellowN = clip(stationStrips(stationsN, offsetsN, width));
+  const yellowS = clip(stationStrips(stationsN, offsetsS, width));
+  // The southbound paint by way: cut square to the line at each joint between its ways.
+  const southboundParts = [];
+  let rest = { white: whiteS, yellow: yellowS };
+  for (let index = 0; index < lines.southbound.length; index += 1) {
+    const entry = lines.southbound[index];
+    if (index === lines.southbound.length - 1) {
+      southboundParts.push({ source_key: entry.source_key, ...rest });
+      break;
+    }
+    const joint = entry.line.at(-1);
+    const before = entry.line.at(-2);
+    const along = [joint[0] - before[0], joint[1] - before[1]];
+    const length = Math.hypot(...along);
+    const t = [along[0] / length, along[1] / length];
+    const n = [-t[1], t[0]];
+    const reach = 1000;
+    // Everything up to the joint, square to the way's last segment there.
+    const behind = [[[
+      [joint[0] - t[0] * reach + n[0] * reach, joint[1] - t[1] * reach + n[1] * reach],
+      [joint[0] - t[0] * reach - n[0] * reach, joint[1] - t[1] * reach - n[1] * reach],
+      [joint[0] - n[0] * reach, joint[1] - n[1] * reach],
+      [joint[0] + n[0] * reach, joint[1] + n[1] * reach],
+    ]]];
+    southboundParts.push({ source_key: entry.source_key, white: rawIntersect(rest.white, behind), yellow: rawIntersect(rest.yellow, behind) });
+    rest = { white: rawDifference(rest.white, behind), yellow: rawDifference(rest.yellow, behind) };
+  }
+  return { northbound: { source_key: lines.northbound_key, white: whiteN, yellow: yellowN }, southbound: southboundParts };
 }

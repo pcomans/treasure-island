@@ -177,6 +177,39 @@ const COTTAGE_GLASS_PALE := Color(0.5, 0.6, 0.6)
 const COTTAGE_SHINGLE := Color(0.235, 0.195, 0.155)
 const COTTAGE_BAY_DEPTH_M := 0.44
 const CONCRETE_BOX_GREY := Color(0.62, 0.59, 0.53)
+## The causeway's road closure (owner request 2026-11-08, an invented joke prop): Type
+## III barricades, ROAD_CLOSURE_LENGTH_M long, with three rails striped in reflective
+## orange and white at 45 degrees, sloping down toward the middle, on two A-frame
+## uprights; the middle one of each carriageway carries a white sign with a black border
+## and black letters (prop_params.sign_lines, the first line larger). The feet
+## (STREET_FURNITURE_FEET in tools/lib/street-furniture-generation.mjs) are its two
+## uprights' front and back pads.
+const BARRICADE_ORANGE := Color(0.95, 0.42, 0.08)
+const BARRICADE_WHITE := Color(0.93, 0.93, 0.91)
+const BARRICADE_FRAME := Color(0.86, 0.86, 0.84)
+const BARRICADE_PAD := Color(0.08, 0.08, 0.085)
+const CLOSURE_SIGN_BLACK := Color(0.04, 0.04, 0.045)
+const ROAD_CLOSURE_LENGTH_M := 2.6
+const ROAD_CLOSURE_FOOT_X := 1.0
+const ROAD_CLOSURE_FOOT_Z := 0.3
+## Each rail's centre height, its height and thickness, its face's distance in front of
+## the uprights, and the stripe width (along the rail).
+const ROAD_CLOSURE_RAILS: Array[float] = [0.5, 0.92, 1.34]
+const ROAD_CLOSURE_RAIL_HEIGHT := 0.22
+## The top rail's top edge.
+const ROAD_CLOSURE_TOP_M := 1.45
+const ROAD_CLOSURE_RAIL_THICK := 0.03
+const ROAD_CLOSURE_RAIL_Z := -0.06
+const ROAD_CLOSURE_STRIPE_M := 0.15
+## The sign: its lines' letter scales on LABEL_PIXEL_M, the border and margins round
+## the text, and its gap over the top rail.
+const CLOSURE_SIGN_SCALES := [1.9, 1.25]
+const CLOSURE_SIGN_BORDER_M := 0.035
+const CLOSURE_SIGN_MARGIN_M := 0.11
+const CLOSURE_SIGN_LINE_GAP_M := 0.07
+const CLOSURE_SIGN_RAISE_M := 0.06
+## The sign's letters stay drawn this far, past LABEL_RANGE_M.
+const CLOSURE_SIGN_RANGE_M := 160.0
 ## The rounded stones of the cobble pile at the ditch's road end.
 const COBBLE_TONES := [Color(0.62, 0.57, 0.49), Color(0.5, 0.42, 0.34), Color(0.47, 0.45, 0.42), Color(0.34, 0.28, 0.23), Color(0.56, 0.52, 0.45)]
 ## The promenade's dark baulks: their tarred sides, a little more worn tops and sawn
@@ -299,6 +332,7 @@ const PROPS := {
 	"light_tower": {"range_m": 450.0, "shadow": true},
 	"bleachers": {"range_m": 260.0, "shadow": true},
 	"mural_wall": {"range_m": 450.0, "shadow": true},
+	"road_closure_barricade": {"range_m": 300.0, "shadow": true},
 }
 ## The power lines' wires: drawn to this range, never casting shadows, each span
 ## in straight pieces of at most WIRE_SEGMENT_M (at least 4), sagging WIRE_SAG of its
@@ -644,6 +678,19 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"water_block":
 			_piece(result, "water_block", func(b: Builder) -> void: _water_block(b), Transform3D.IDENTITY, _plastic)
 			_box_shape(result, Vector3(1.94, 0.85, 0.48), Vector3(0.0, 0.425, 0.0))
+		"road_closure_barricade":
+			# Its rest on the road under its pads (settleOnFeet), as the chair's.
+			var rest := _rest(params)
+			var drops := _leg_drops(params)
+			var barricade_key := "road_closure_barricade"
+			for drop in drops:
+				barricade_key += "_%d" % roundi(drop * 1000.0)
+			_piece(result, barricade_key, func(b: Builder) -> void: _road_closure_barricade(b, drops), rest)
+			var top := ROAD_CLOSURE_TOP_M
+			_box_shape(result, Vector3(ROAD_CLOSURE_LENGTH_M, top, 0.3), Vector3(0.0, top * 0.5, -0.02), rest)
+			var lines: Variant = params.get("sign_lines", [])
+			if lines is Array and not (lines as Array).is_empty():
+				_closure_sign(result, lines as Array, rest)
 		"galvanised_tub":
 			var mound := str(params.get("plant", "blades")) == "mound"
 			_piece(result, "galvanised_tub_mound" if mound else "galvanised_tub_blades", func(b: Builder) -> void: _galvanised_tub(b, mound))
@@ -767,6 +814,8 @@ func standing_vertices(prop: String) -> PackedVector3Array:
 	match prop:
 		"adirondack_chair":
 			_adirondack_chair(builder, PackedFloat32Array())
+		"road_closure_barricade":
+			_road_closure_barricade(builder, PackedFloat32Array())
 		_:
 			return PackedVector3Array()
 	return builder.vertices(0)
@@ -1827,6 +1876,122 @@ func _water_block(b: Builder) -> void:
 			b.box(Vector3(side * 0.945, y, 0.0), Basis.IDENTITY, Vector3(0.07, 0.07, 0.32), WATER_BLOCK_RED, CELL_WHITE)
 	b.disc(Vector3(0.0, 0.853, 0.0), Vector3.UP, 0.11, 14, WATER_BLOCK_RED * 0.7)
 	b.disc(Vector3(0.0, 0.855, 0.0), Vector3.UP, 0.085, 14, Color(0.05, 0.03, 0.03))
+
+
+## A Type III barricade along X, its face toward -Z: three striped rails in front of two
+## A-frame uprights, each upright a post on two splayed legs ending in rubber pads, the
+## front and back pads in the kit's foot order (front-left, front-right, back-left,
+## back-right), each lengthened by its leg drop.
+func _road_closure_barricade(b: Builder, drops: PackedFloat32Array) -> void:
+	var half := ROAD_CLOSURE_LENGTH_M * 0.5
+	var top := ROAD_CLOSURE_TOP_M
+	for index in 2:
+		var x := ROAD_CLOSURE_FOOT_X * (-1.0 if index == 0 else 1.0)
+		b.box(Vector3(x, (0.56 + top + 0.02) * 0.5, 0.0), Basis.IDENTITY, Vector3(0.05, top + 0.02 - 0.56, 0.05), BARRICADE_FRAME, CELL_WHITE)
+		for leg in 2:
+			var z := ROAD_CLOSURE_FOOT_Z * (-1.0 if leg == 0 else 1.0)
+			var drop := drops[index + 2 * leg] if drops.size() == 4 else 0.0
+			b.tube(PackedVector3Array([Vector3(x, 0.62, z * 0.08), Vector3(x, 0.03 - drop, z)]), PackedFloat32Array([0.02, 0.02]), 6, BARRICADE_FRAME, CELL_WHITE, true, true)
+			b.box(Vector3(x, 0.01 - drop, z), Basis.IDENTITY, Vector3(0.07, 0.02, 0.1), BARRICADE_PAD, CELL_WHITE)
+	for y: float in ROAD_CLOSURE_RAILS:
+		var y0 := y - ROAD_CLOSURE_RAIL_HEIGHT * 0.5
+		var y1 := y + ROAD_CLOSURE_RAIL_HEIGHT * 0.5
+		var front := ROAD_CLOSURE_RAIL_Z - ROAD_CLOSURE_RAIL_THICK * 0.5
+		var back := ROAD_CLOSURE_RAIL_Z + ROAD_CLOSURE_RAIL_THICK * 0.5
+		_rail_stripes(b, half, y0, y1, front, Vector3.FORWARD)
+		_rail_stripes(b, half, y0, y1, back, Vector3.BACK)
+		# The rail's edges: white.
+		b.quad_face(Vector3(-half, y1, front), Vector3(half, y1, front), Vector3(half, y1, back), Vector3(-half, y1, back), BARRICADE_WHITE, Vector3.UP)
+		b.quad_face(Vector3(-half, y0, front), Vector3(half, y0, front), Vector3(half, y0, back), Vector3(-half, y0, back), BARRICADE_WHITE, Vector3.DOWN)
+		for end: float in [-half, half]:
+			b.quad_face(Vector3(end, y0, front), Vector3(end, y1, front), Vector3(end, y1, back), Vector3(end, y0, back), BARRICADE_WHITE, Vector3(signf(end), 0.0, 0.0))
+
+
+## One face of a rail, -half..half by y0..y1 in the plane z facing `outward`: orange
+## and white stripes ROAD_CLOSURE_STRIPE_M wide along the rail at 45 degrees, sloping
+## down toward x = 0 from both ends (a closure's chevron), orange at the middle. Each
+## stripe edge's two ends are worked out once and shared by the stripes either side of
+## it, so the face has no cracks for light to leak through into the shadow map.
+func _rail_stripes(b: Builder, half: float, y0: float, y1: float, z: float, outward: Vector3) -> void:
+	var height := y1 - y0
+	for side: float in [-1.0, 1.0]:
+		# Half-face coordinates: u = |x| in [0, half], v = y - y0 in [0, height]; a stripe
+		# edge is the line u - v = c, c from -height (the top of x = 0) to half.
+		var count := ceili((half + height) / ROAD_CLOSURE_STRIPE_M)
+		var edges: Array[PackedVector2Array] = []
+		for k in count + 1:
+			var c := minf(-height + float(k) * ROAD_CLOSURE_STRIPE_M, half)
+			var low := maxf(0.0, -c)
+			var high := minf(height, half - c)
+			edges.append(PackedVector2Array([Vector2(c + low, low), Vector2(c + high, high)]))
+		for k in count:
+			var c0 := -height + float(k) * ROAD_CLOSURE_STRIPE_M
+			var c1 := minf(c0 + ROAD_CLOSURE_STRIPE_M, half)
+			# Round the stripe: up its lower edge, along the top and the far end, down its
+			# upper edge, back along the bottom and the near end.
+			var ring := PackedVector2Array([edges[k][0], edges[k][1]])
+			if c0 < half - height and c1 > half - height:
+				ring.append(Vector2(half, height))
+			ring.append(edges[k + 1][1])
+			ring.append(edges[k + 1][0])
+			if c0 < 0.0 and c1 > 0.0:
+				ring.append(Vector2(0.0, 0.0))
+			var color := BARRICADE_ORANGE if k % 2 == 0 else BARRICADE_WHITE
+			var points: Array[Vector3] = []
+			for point in ring:
+				var at := Vector3(side * point.x, y0 + point.y, z)
+				if points.is_empty() or at.distance_to(points[points.size() - 1]) > 1e-6:
+					points.append(at)
+			for index in range(1, points.size() - 1):
+				if (points[index] - points[0]).cross(points[index + 1] - points[0]).length() > 1e-9:
+					b.triangle_face(points[0], points[index], points[index + 1], color, outward)
+
+
+## The closure's sign on the barricade's top rail: a white panel with a black border on
+## two posts, its lines in black letters toward -Z (Label3D), the first line larger,
+## each centred; sized to its text. Its own box keeps a jetpack out of it.
+func _closure_sign(result: Dictionary, lines: Array, rest: Transform3D) -> void:
+	var font := ThemeDB.fallback_font
+	var widths: Array[float] = []
+	var heights: Array[float] = []
+	for index in lines.size():
+		var scale := float(CLOSURE_SIGN_SCALES[mini(index, CLOSURE_SIGN_SCALES.size() - 1)])
+		var size := font.get_string_size(str(lines[index]), HORIZONTAL_ALIGNMENT_LEFT, -1, LABEL_FONT_SIZE) * LABEL_PIXEL_M * scale
+		widths.append(size.x)
+		heights.append(font.get_height(LABEL_FONT_SIZE) * LABEL_PIXEL_M * scale)
+	var text_height := 0.0
+	for height in heights:
+		text_height += height
+	text_height += CLOSURE_SIGN_LINE_GAP_M * float(lines.size() - 1)
+	var width := snappedf(widths.max() + 2.0 * (CLOSURE_SIGN_MARGIN_M + CLOSURE_SIGN_BORDER_M), 0.05)
+	var height := snappedf(text_height + 2.0 * (CLOSURE_SIGN_MARGIN_M * 0.6 + CLOSURE_SIGN_BORDER_M), 0.05)
+	var rail_top := ROAD_CLOSURE_TOP_M
+	var center := Vector3(0.0, rail_top + CLOSURE_SIGN_RAISE_M + height * 0.5, ROAD_CLOSURE_RAIL_Z)
+	_piece(result, "closure_sign_%.2f_%.2f" % [width, height], func(b: Builder) -> void: _closure_sign_panel(b, center, width, height), rest)
+	_box_shape(result, Vector3(width, height, 0.12), center, rest)
+	# The lines, top to bottom, a hair in front of the white face (Label3D faces +Z, so
+	# each turns half round toward -Z).
+	var face_z := center.z - 0.012 - 0.004
+	var y := center.y + text_height * 0.5
+	for index in lines.size():
+		var scale := float(CLOSURE_SIGN_SCALES[mini(index, CLOSURE_SIGN_SCALES.size() - 1)])
+		y -= heights[index] * 0.5
+		var basis := Basis(Vector3.UP, PI).scaled(Vector3(scale, scale, scale))
+		result.labels.append({"text": str(lines[index]), "color": CLOSURE_SIGN_BLACK, "range_m": CLOSURE_SIGN_RANGE_M, "transform": rest * Transform3D(basis, Vector3(0.0, y, face_z))})
+		y -= heights[index] * 0.5 + CLOSURE_SIGN_LINE_GAP_M
+
+
+## The sign panel centred at `center`: a dark aluminium blank with a white face inset on
+## its front (the black border shows round it), grey on its back, on two posts down to
+## the top rail.
+func _closure_sign_panel(b: Builder, center: Vector3, width: float, height: float) -> void:
+	b.box(center, Basis.IDENTITY, Vector3(width, height, 0.02), SIGN_BACK, CELL_WHITE, CELL_WHITE, CLOSURE_SIGN_BLACK)
+	b.box(center + Vector3(0.0, 0.0, -0.011), Basis.IDENTITY, Vector3(width - 2.0 * CLOSURE_SIGN_BORDER_M, height - 2.0 * CLOSURE_SIGN_BORDER_M, 0.002), BARRICADE_WHITE, CELL_WHITE)
+	var rail_top := ROAD_CLOSURE_TOP_M
+	for x: float in [-0.32 * width, 0.32 * width]:
+		var bottom := rail_top - 0.12
+		var top := center.y + height * 0.5 - 0.05
+		b.box(Vector3(x, (bottom + top) * 0.5, center.z + 0.025), Basis.IDENTITY, Vector3(0.04, top - bottom, 0.03), GALVANIZED, CELL_METAL)
 
 
 ## The small concrete box standing on the ditch's far bank (IMG_0960, t=116): a pale cast

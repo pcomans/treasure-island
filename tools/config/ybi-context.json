@@ -111,6 +111,8 @@
    "steps": 2
   },
   "unspecified_construction_width_m": 4,
+  "seam_ramp_m": 3,
+  "seam_ramp_evidence": "Owner request 2026-11-08: a thin light line showed across both carriageways at the causeway seam. Treasure Island's road skin lies 0.078 m over its land (its paths 0.08 m) and YBI's surfaces 0.1 m over its terrain, which meets the land edge to edge at the seam, so the 22 mm step showed the ground through it. The playable roads' and paths' runs past the outline now leave the seam at Treasure Island's own height for their class and rise to bias_m over seam_ramp_m, and their paint with them.",
   "evidence": "Widths follow the Treasure Island road classes (tools/lib/world-contract.mjs ROAD_WIDTHS_M); steps as footways, links and construction roads as their aerial width. The on-grade Treasure Island Road works on the west shore (highway=construction, construction=tertiary) are drawn as the graded gravel the 2026-05-26 aerial shows. A construction way that names no road class (highway=construction alone) is a 4 m graded track (unspecified_construction_width_m), as the aerial shows the west-side haul roads."
  },
  "bridge_track": {
@@ -622,6 +624,21 @@
   "bury_m": 0.4,
   "max_height_m": 7.0,
   "evidence": "OSM barrier=retaining_wall and barrier=wall ways on YBI's land. A retaining wall's height is the 2023 DEM's step across it (3 m either side) plus a coping, as the pale walls along Macalla Road (Street View Sep 2025 sv02, Mar 2025 sv03) and the board-formed wall under The Bristol (ybi02, Nov 2025) stand; a freestanding wall 1.2 m (production inference)."
+ },
+ "causeway_paint": {
+  "northbound": "w1115934722",
+  "southbound": ["w1249797943", "w513879523"],
+  "line_width_m": 0.1,
+  "double_gap_m": 0.1,
+  "edge_inset_m": 0.3,
+  "median_open_gap_m": 0.6,
+  "pair_reach_m": 16,
+  "junction_clear_m": 1.5,
+  "station_m": 0.5,
+  "smooth_m": 1.5,
+  "lift_m": 0.008,
+  "paint_wear": 1,
+  "evidence": "Owner request 2026-11-08: the road markings broke off at the seam between Treasure Island and the YBI causeway road. Treasure Island Road leaves the island as two one-way carriageways (OSM w1115934722, lanes=2, and w1249797943, lanes=1) round a raised concrete median and continues up YBI as w1115934722 and w513879523. Each carriageway takes a white edge line on its right and a yellow line on its median side, and where the carriageways meet the yellow lines close into a double yellow, to the hilltop junction with Macalla Road; paint stops junction_clear_m off every road that crosses or joins. Line width, double-line gap, edge inset and paint lift are Treasure Island's own (tools/config/street-detail-zones.json street_ground lines and lifts), paint wear the new district's (tools/config/street-ground.json). Production inference read with the 2026-05-26 aerial (Esri Wayback 43291, z19), which shows edge lines along both carriageways and the median running on onto YBI."
  },
  "basin": {
   "bank_reach_m": 14.0,

@@ -41,9 +41,11 @@ import { validateFerryTerminal } from "./lib/ferry-terminal.mjs";
 import {
   YBI_BASIN_RECORDS,
   YBI_BUILDINGS_KEY,
+  YBI_CONTINUATION_PAINT_SOURCE_KEYS,
   YBI_CONTINUATION_SOURCE_KEYS,
   YBI_GROUND_COVER_SCHEMA,
   YBI_LAND_COVER_GRID,
+  YBI_ROAD_PAINT_RECORD,
   YBI_SURFACE_RECORDS,
   YBI_VEGETATION_LIMITS,
   YBI_VEGETATION_SCHEMA,
@@ -99,7 +101,7 @@ import {
   STREET_FENCE_TYPES,
 } from "./lib/street-fence-generation.mjs";
 import {
-  BIKE_RACK_HOOP_SPACING_M, BIKE_RACK_MAX_HOOPS, MAX_LEG_DROP_M, MAX_REST_TILT_RAD, MAX_SPUR_M, PAD_SKIRT_M, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS,
+  BIKE_RACK_HOOP_SPACING_M, BIKE_RACK_MAX_HOOPS, MAX_LEG_DROP_M, MAX_REST_TILT_RAD, MAX_SPUR_M, PAD_SKIRT_M, restOffset, restTilt, STREET_FURNITURE_FEET, STREET_FURNITURE_PADS, STREET_FURNITURE_PROPS,
   streetFurnitureFootprint,
 } from "./lib/street-furniture-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PARTS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, yardMaxSink, yardPropFootprint, yardPropParamsError, yardPropRests, yardRestGaps } from "./lib/street-yard-kit.mjs";
@@ -330,6 +332,8 @@ function validateRecords(worldRoot, manifest, coverage) {
     [YBI_WALLS_KEY, "context_ybi_wall"],
     ...Object.values(YBI_SURFACE_RECORDS).map((spec) => [spec.object_key, spec.material_key]),
     ...Object.values(YBI_BASIN_RECORDS).map((spec) => [spec.object_key, spec.material_key]),
+    // Treasure Island Road's paint on the YBI ways that carry it to the hilltop.
+    [YBI_ROAD_PAINT_RECORD.object_key, YBI_ROAD_PAINT_RECORD.material_key],
   ]);
   invariant(context.records.length === 2 + ybiDetailRecords.size, `Expected ${2 + ybiDetailRecords.size} context records, found ${context.records.length}`);
   const expectedContext = new Map([
@@ -369,20 +373,26 @@ function validateRecords(worldRoot, manifest, coverage) {
   invariant(ybiClaimed.size === ybiDetailRows.size, "A YBI detail row has no context record");
   validateYbiDetailDocuments(context);
   const boundaryVisualSources = [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS, ...YBI_CONTINUATION_SOURCE_KEYS];
+  // Each approved source's visual, and a paint record on the carriageways that carry
+  // Treasure Island Road's paint past the outline.
   invariant(
-    Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === boundaryVisualSources.length,
-    "Context must contain exactly the approved boundary-attached visuals and pier decks",
+    Array.isArray(context.boundary_attached_visuals) &&
+      context.boundary_attached_visuals.length === boundaryVisualSources.length + YBI_CONTINUATION_PAINT_SOURCE_KEYS.length,
+    "Context must contain exactly the approved boundary-attached visuals, pier decks and continuation paint",
   );
   for (const record of context.boundary_attached_visuals) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} boundary context kind drift`);
     invariant(record.source_keys.length === 1 && boundaryVisualSources.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
-    if (YBI_CONTINUATION_SOURCE_KEYS.includes(record.source_keys[0])) {
+    const paint = record.object_key === `boundary_context:${record.source_keys[0]}:paint`;
+    if (paint) {
+      invariant(YBI_CONTINUATION_PAINT_SOURCE_KEYS.includes(record.source_keys[0]) && record.material_key === YBI_ROAD_PAINT_RECORD.material_key, `${record.object_key} continuation paint drift`);
+    } else if (YBI_CONTINUATION_SOURCE_KEYS.includes(record.source_keys[0])) {
       invariant(["context_ybi_road", "context_ybi_path"].includes(record.material_key), `${record.object_key} YBI continuation material drift`);
     }
     if (PIER_DECK_SOURCE_KEYS.includes(record.source_keys[0])) {
       invariant(record.material_key === "context_boundary_pier", `${record.object_key} pier deck material drift`);
     }
-    invariant(record.object_key === `boundary_context:${record.source_keys[0]}`, `${record.object_key} boundary context object key drift`);
+    invariant(paint || record.object_key === `boundary_context:${record.source_keys[0]}`, `${record.object_key} boundary context object key drift`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none" && record.opaque === false, `${record.object_key} boundary context semantics leak`);
     validateMesh(record, record.object_key);
     invariant(!physical.has(record.object_key), `Duplicate boundary context key ${record.object_key}`);
@@ -1185,7 +1195,8 @@ function validatePlantedRow(row, groundAt, rowsById) {
 // A street prop stands on the visible ground, never sunk into a sidewalk or
 // floating over it. Furniture and the anchored clutter (barricades, cones)
 // keep their base, the row's y with its surface bias and any lift, within these
-// of the ground at their anchor (m): the yard rows' float limit both ways, as a
+// of the ground at their anchor (a prop on legs at each of its feet) (m): the
+// yard rows' float limit both ways, as a
 // prop on paving has no reason to sink (they rest within a millimetre). A
 // parked car's tyres, set from its pitch, roll, twist and lift, rest on the
 // ground at their centres: they float at most the yard vehicles' 0.1 m (the
@@ -1241,6 +1252,17 @@ function validatePropRest(row, groundAt) {
       const ground = groundAt(point);
       rests(ground ? base - ground.y : null, `bike_rack hoop ${index}`, point);
     }
+  } else if (row.layer === "furniture" && STREET_FURNITURE_FEET[row.prop] !== undefined) {
+    // A prop on legs (settleOnFeet) rests on the ground under each of its feet, at its
+    // tilt, lift and leg drops; the ground between them may rise or fall (a long
+    // barricade unit standing across a bend in the road).
+    const drops = params.leg_drops_m ?? [];
+    STREET_FURNITURE_FEET[row.prop].forEach((foot, index) => {
+      const offset = restOffset([foot.x, -(drops[index] ?? 0), foot.z], row.yaw_radians, params.pitch ?? 0, params.roll ?? 0);
+      const point = [row.position_m[0] + offset[0], row.position_m[2] + offset[2]];
+      const ground = groundAt(point);
+      rests(ground ? base + offset[1] - ground.y : null, `${row.prop} foot ${index}`, point);
+    });
   } else if (row.layer === "furniture" || ANCHORED_CLUTTER.includes(row.prop)) {
     const point = [row.position_m[0], row.position_m[2]];
     const ground = groundAt(point);
