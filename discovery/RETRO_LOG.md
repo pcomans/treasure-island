@@ -25047,3 +25047,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading where loading text comes from before coding showed two different screens. The world builds synchronously, so the native window keeps Godot's boot splash until "Preparing graphics…", the first loading frame drawn. On the web, the shell's DOM overlay covers the HUD's load panel until play. So the chest went into both the HUD panel and the shell's preparing phase, and the shell reuses the favicon the exporter already writes, adding no download. A CDP-throttled download (cache off) kept the boot splash on screen long enough to capture it before the chest.
 - What did not work well: My web check compared the chest's src with the favicon link's current href, but Godot's web runtime swaps that link to a blob URL when the engine sets its icon. The check failed on correct pixels and correct src in both legs, and the budget left no run to repeat them.
 - What the team should change next time: In a web check, compare against values read before the engine starts, never against page state the engine may rewrite. Note in the brief that native startup draws no frame while the world builds, so "mid-load" there means "Preparing graphics…".
+
+### app-icon-visual-review — 2026-11-08 — independent visual check of the loading-screen chest (8f856967)
+
+- What worked well: The splash → chest → play captures for each web shape, and the overview sheet, made the order and placement easy to check. Full-resolution crops settled the edge question in seconds.
+- What did not work well: The native capture set starts at "Preparing graphics…", so it doesn't show whether Godot's boot splash appears first on native; I could confirm that only for web.
+- What the team should change next time: When an assignment asks to confirm order, capture the first frame on every target, native included.
