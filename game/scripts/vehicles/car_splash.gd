@@ -16,14 +16,14 @@ const LAUNCH_PER_MPS := 0.26
 const LAUNCH_MAX_MPS := 10.5
 const SPRAY_LIFE_S := 0.9
 const STREAK := 3.2
-## Foam: a few small sprites spreading low over the water.
+## Foam: a few small, flat sprites spreading low over the water.
 const FOAM := 8
 const FOAM_LIFE_S := 1.0
-## The ring: its starting and final radius as shares of the car's length, and
-## its life (s).
+## The ring: a thin ripple of foam, its starting and final radius as shares of
+## the car's length, and its life (s).
 const RING_FROM := 0.45
-const RING_TO := 1.3
-const RING_LIFE_S := 1.8
+const RING_TO := 1.1
+const RING_LIFE_S := 1.4
 const RENDER_WORLD_VISIBLE := 1
 
 static var _dot: GradientTexture2D
@@ -54,7 +54,7 @@ func start(at: Vector3, speed: float, car_length_m: float) -> void:
 	spray.scale_amount_curve = _curve(1.0, 0.35)
 	add_child(spray)
 	spray.emitting = true
-	var foam := _particles("Foam", FOAM, FOAM_LIFE_S, 0.8, car_length_m * 0.3, 0.3, Vector2.ONE)
+	var foam := _particles("Foam", FOAM, FOAM_LIFE_S, 0.8, car_length_m * 0.3, 0.3, Vector2(1.0, 0.4))
 	foam.direction = Vector3.UP
 	foam.spread = 80.0
 	foam.initial_velocity_min = 0.3
@@ -139,15 +139,15 @@ static func _dot_sprite() -> GradientTexture2D:
 	return _dot
 
 
-## A soft white ring: clear in the middle and beyond its edge.
+## A thin soft white ring: clear in the middle and beyond its edge.
 static func _ring_sprite() -> GradientTexture2D:
 	if _ring_texture == null:
 		var gradient := Gradient.new()
 		gradient.set_color(0, Color(1.0, 1.0, 1.0, 0.0))
 		gradient.set_color(1, Color(1.0, 1.0, 1.0, 0.0))
-		gradient.add_point(0.55, Color(1.0, 1.0, 1.0, 0.08))
-		gradient.add_point(0.8, Color(1.0, 1.0, 1.0, 0.7))
-		gradient.add_point(0.92, Color(1.0, 1.0, 1.0, 0.25))
+		gradient.add_point(0.74, Color(1.0, 1.0, 1.0, 0.04))
+		gradient.add_point(0.84, Color(1.0, 1.0, 1.0, 0.55))
+		gradient.add_point(0.9, Color(1.0, 1.0, 1.0, 0.12))
 		_ring_texture = _radial(gradient)
 	return _ring_texture
 
@@ -176,4 +176,4 @@ func _update_ring() -> void:
 	var eased := 1.0 - (1.0 - t) * (1.0 - t)
 	var radius := _length * lerpf(RING_FROM, RING_TO, eased)
 	_ring.scale = Vector3(radius, 1.0, radius)
-	_ring_material.albedo_color.a = 0.45 * (1.0 - t) * (1.0 - t)
+	_ring_material.albedo_color.a = 0.32 * (1.0 - t) * (1.0 - t)

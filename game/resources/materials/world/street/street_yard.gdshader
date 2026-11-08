@@ -288,30 +288,35 @@ void fragment() {
 		}
 	} else if (pattern == 11) {
 		// A dirt car ramp (stunt_ramp, tools/lib/street-yard-meshes.mjs): its
-		// run and top, and the spoil round its foot, dry and dusty with a fine
-		// grain, small stones and two darker bands worn by tyres along Z; its
-		// sides (facing across, or the back slope) fresher and darker, rills
-		// running down them and clods. Fine detail gives way to its average
-		// with distance.
+		// run and top dry and dusty, with a fine grain, small stones and two
+		// darker bands worn by tyres along Z; its sides (facing across, or the
+		// back slope) fresher and darker, with rills running down them, clods
+		// and pebbles; the spoil round its foot (flat, at most 3 cm up, sloping
+		// down outward) turning from soil to the dry ground's tan as it thins
+		// out. Fine detail gives way to its average with distance.
 		vec2 g = v_pos.xz + seed * 23.0;
 		float fw = max(fwidth(g.x), fwidth(g.y));
 		float near = 1.0 - smoothstep(0.015, 0.07, fw);
 		float fine = 1.0 - smoothstep(0.005, 0.018, fw);
 		float coarse = fbm(g * 0.8);
 		float grain = vnoise(g * 26.0);
-		vec2 c = cells(g * 6.5);
 		if (abs(v_normal_model.x) > 0.3 || v_normal_model.z < -0.2) {
-			float rill = vnoise(vec2(v_pos.z * 3.5 + seed * 11.0, (v_pos.y + abs(v_pos.x)) * 0.7));
-			float clod = smoothstep(0.0, 0.12, c.x) * near;
-			albedo *= vec3(0.82, 0.76, 0.7) * (0.8 + 0.3 * rill) * (0.85 + 0.3 * coarse) * mix(1.0, 0.82 + 0.3 * c.y, clod) * (1.0 + 0.16 * (grain - 0.5) * fine);
+			float across = abs(v_normal_model.x) > 0.3 ? v_pos.z : v_pos.x;
+			float rill = vnoise(vec2(across * 3.2 + seed * 11.0, v_pos.y * 0.5));
+			float rill_fine = vnoise(vec2(across * 9.0 + seed * 5.0, v_pos.y * 1.3));
+			float clod = smoothstep(0.62, 0.82, vnoise(vec2(across, v_pos.y) * 7.0 + 3.7)) * near;
+			float pebble = smoothstep(0.84, 0.95, vnoise(vec2(across, v_pos.y) * 15.0 + 9.1)) * near;
+			albedo *= vec3(0.86, 0.81, 0.77) * (0.74 + 0.36 * rill) * (0.92 + 0.16 * rill_fine * near) * (0.88 + 0.24 * coarse) * (1.0 - 0.18 * clod) * (1.0 + 0.22 * pebble) * (1.0 + 0.16 * (grain - 0.5) * fine);
 		} else {
+			vec2 c = cells(g * 6.5);
 			float worn = 1.0 - smoothstep(0.16, 0.42, abs(abs(v_pos.x) - 0.82));
 			float streak = vnoise(vec2(v_pos.x * 10.0, v_pos.z * 0.6) + seed * 7.0);
 			float stone = smoothstep(0.86, 0.97, c.y) * smoothstep(0.02, 0.1, c.x) * near;
-			albedo *= vec3(1.06, 1.05, 1.03) * (0.84 + 0.26 * coarse) * (1.0 - 0.16 * worn * (0.55 + 0.45 * streak)) * (1.0 + 0.2 * (grain - 0.5) * fine) * (1.0 + 0.35 * stone);
-			if (v_pos.y < 0.06 && v_normal_model.y > 0.98) {
-				// The spoil round the foot: looser, a touch lighter, in clods.
-				albedo *= 1.05 * mix(1.0, 0.88 + 0.3 * c.y, smoothstep(0.0, 0.15, c.x) * near);
+			albedo *= vec3(1.05, 1.04, 1.02) * (0.84 + 0.26 * coarse) * (1.0 - 0.16 * worn * (0.55 + 0.45 * streak)) * (1.0 + 0.2 * (grain - 0.5) * fine) * (1.0 + 0.35 * stone);
+			if (v_pos.y < 0.035 && v_normal_model.y > 0.98) {
+				float out_t = clamp((0.03 - v_pos.y) / 0.06, 0.0, 1.0);
+				float clod = smoothstep(0.6, 0.8, vnoise(g * 6.0 + 1.3)) * near;
+				albedo = mix(albedo * (1.0 - 0.15 * clod), vec3(0.2, 0.155, 0.085) * (0.9 + 0.2 * coarse), out_t * 0.7);
 			}
 		}
 		// The grain tilts the normal a little near the camera.

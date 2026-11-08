@@ -526,7 +526,9 @@ func _exit_transform(car: DRIVABLE_CAR) -> Transform3D:
 		var feet: Vector3 = hit.position
 		probe.transform = Transform3D(Basis.IDENTITY, feet + Vector3.UP * 0.93)
 		if space.intersect_shape(probe, 1).is_empty():
-			return Transform3D(Basis.IDENTITY, feet + Vector3.UP * 0.05)
+			# A centimetre up: a 5 cm drop landed hard enough to spill the chest
+			# avatar's coins (chest_avatar.gd _land) every time the player got out.
+			return Transform3D(Basis.IDENTITY, feet + Vector3.UP * 0.01)
 	return Transform3D(Basis.IDENTITY, origin + Vector3.UP * (car.height_m + 0.3))
 
 
