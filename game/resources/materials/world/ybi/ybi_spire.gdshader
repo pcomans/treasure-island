@@ -47,8 +47,9 @@ void vertex() {
 	vec2 radial = world.xz - axis_base.xz;
 	float r = length(radial);
 	float h = world.y - axis_base.y;
-	// A pixel's angle on this camera, then the radius that covers min_pixels at this distance.
-	float pixel_angle = 2.0 / (PROJECTION_MATRIX[1][1] * VIEWPORT_SIZE.y);
+	// A pixel's angle on this camera, then the radius that covers min_pixels at this distance
+	// (abs: the RenderingDevice renderers' projection flips Y, so its [1][1] is negative).
+	float pixel_angle = 2.0 / (abs(PROJECTION_MATRIX[1][1]) * VIEWPORT_SIZE.y);
 	float distance_m = length(CAMERA_POSITION_WORLD - world);
 	float tip_taper = clamp((height_m - h) / (0.2 * height_m), 0.0, 1.0);
 	float r_min = 0.5 * mix(tip_pixels, min_pixels, sqrt(tip_taper)) * pixel_angle * distance_m;

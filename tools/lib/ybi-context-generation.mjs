@@ -62,7 +62,7 @@ export const YBI_WALLS_KEY = "context:ybi-walls";
 // The summit reservoir (OSM natural=water): its water and the pale concrete lining round it.
 export const YBI_BASIN_RECORDS = Object.freeze({
   water: Object.freeze({ object_key: "context:ybi-basin", material_key: "context_ybi_water" }),
-  lining: Object.freeze({ object_key: "context:ybi-basin-lining", material_key: "context_ybi_wall" }),
+  lining: Object.freeze({ object_key: "context:ybi-basin-lining", material_key: "context_ybi_bank" }),
 });
 export const YBI_SURFACE_RECORDS = Object.freeze({
   vehicle: Object.freeze({ object_key: "context:ybi-roads", material_key: "context_ybi_road" }),
@@ -71,6 +71,7 @@ export const YBI_SURFACE_RECORDS = Object.freeze({
   construction: Object.freeze({ object_key: "context:ybi-construction", material_key: "context_ybi_construction" }),
 });
 export const YBI_MATERIAL_KEYS = Object.freeze([
+  "context_ybi_bank",
   "context_ybi_building_roof",
   "context_ybi_building_wall",
   "context_ybi_construction",
