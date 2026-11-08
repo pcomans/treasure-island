@@ -102,7 +102,6 @@ func _initialize() -> void:
 		"ContextWorld/Water",
 		"ContextWorld/YerbaBuenaIsland",
 		"ContextWorld/BayBridge",
-		"ContextWorld/WesternBayBridgeModel",
 		"ContextWorld/BoundaryAttachedVisuals",
 		"ContextWorld/FerryTerminal",
 		"ContextWorld/SanFranciscoBillboard",
@@ -153,13 +152,6 @@ func _initialize() -> void:
 	or not water.find_children("*", "CollisionShape3D", true, false).is_empty() \
 	or not water.find_children("*", "CollisionPolygon3D", true, false).is_empty():
 		_fail("Water must remain visual-only with no collision body, shape, or polygon descendants.")
-		return
-	var western_bridge := world.get_node("ContextWorld/WesternBayBridgeModel") as Node3D
-	if western_bridge == null \
-	or western_bridge.find_children("*", "MeshInstance3D", true, false).is_empty() \
-	or not western_bridge.find_children("*", "CollisionObject3D", true, false).is_empty() \
-	or str(western_bridge.get_meta("license", "")) != "CC BY 4.0":
-		_fail("Western Bay Bridge asset must be visible, attributed, and non-colliding.")
 		return
 	var billboard := world.get_node("ContextWorld/SanFranciscoBillboard") as MeshInstance3D
 	var billboard_mesh := billboard.mesh as QuadMesh if billboard != null else null

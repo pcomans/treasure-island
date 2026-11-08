@@ -40,7 +40,7 @@ magick sf_skyline_owner_outline_final.png \
 - Runtime format: indexed palette-alpha PNG with exactly two entries: transparent `#00000000` and opaque slate `#526979FF`.
 - Runtime SHA-256: `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`.
 - Runtime content: one solid-color skyline silhouette; transparent sky and foreground; no bridge duplication.
-- Runtime billboard geometry: `3900x600 m` at `(-1875,264.85,4306.4)`, positioned beyond the western span's San Francisco endpoint so the separate bridge model meets the city context.
+- Runtime billboard geometry: `3900x600 m` at `(-1875,264.85,4306.4)`, positioned beyond the western span's San Francisco endpoint so the generated bridge meets the city context.
 - The doubled height and raised center preserve the alpha silhouette's near-water baseline; the billboard remains camera-facing, shadowless, and non-colliding.
 
 ## Historical fallback

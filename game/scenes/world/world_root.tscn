@@ -1,10 +1,9 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/world/world_loader.gd" id="1_loader"]
 [ext_resource type="Script" path="res://game/scripts/world/world_boundary.gd" id="2_boundary"]
 [ext_resource type="Script" path="res://game/scripts/debug/runtime_evidence.gd" id="3_evidence"]
 [ext_resource type="Texture2D" path="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png" id="4_skyline"]
-[ext_resource type="PackedScene" path="res://game/resources/models/context/baybridge-western-span.glb" id="5_western_bridge"]
 [ext_resource type="Shader" path="res://game/resources/materials/world/water/bay_water.gdshader" id="6_water_shader"]
 [ext_resource type="CompressedTexture2DArray" path="res://game/resources/textures/world/water/bay_waves.png" id="7_water_waves"]
 [ext_resource type="Texture2D" path="res://game/resources/textures/world/water/shore_map.png" id="8_water_shore"]
@@ -68,15 +67,6 @@ cast_shadow = 0
 layers = 1
 
 [node name="BayBridge" type="Node3D" parent="ContextWorld"]
-
-[node name="WesternBayBridgeModel" parent="ContextWorld" instance=ExtResource("5_western_bridge")]
-position = Vector3(417.375, 0, 1643.827)
-rotation = Vector3(0, 2.437807, 0)
-scale = Vector3(1.09506, 0.55, 1.09506)
-visible = false
-metadata/source_asset = "Baybridge-western-span by cdr420"
-metadata/source_url = "https://sketchfab.com/3d-models/baybridge-western-span-1c2cd0daa908481aadad7073b91f1732"
-metadata/license = "CC BY 4.0"
 
 [node name="BoundaryAttachedVisuals" type="Node3D" parent="ContextWorld"]
 
