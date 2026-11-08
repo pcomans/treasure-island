@@ -232,7 +232,10 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
 - **Ground tone:**
   - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
   - The football pitch (OSM w1252737754) has its lines, apron and ball, but no goals, floodlights or green windscreen fence yet (Street View, 749 9th St, Sep 2025); they wait for the athletic-fields job.
-  - The pitch's concrete apron is drawn over the land like the parks' paving, 0.1 m up, but the ball rolls on the land, so on the apron it sinks about 0.1 m into the concrete (on the turf and its lines, 2 to 3 cm).
+  - The pitch's concrete apron is drawn over the land like the parks' paving, 0.1 m up, but the ball rolls on the land, so on the apron it sinks about 0.1 m into the concrete (on the turf and its lines, 2 to 3 cm). No capture shows the ball on the apron yet.
+  - From grazing distance the pitch's lines break into dashes, and they likely shimmer in motion.
+  - Dark specks of turf show along the pitch lines' edges, where the shared white paint's wear mask cuts through.
+  - The apron's joint grid runs on the world grid, diagonal to the turf edge.
   - South of Maceo May, at about x −196 to −146, z 278 to 300, the worn band may show as a dotted dirt line (unverified).
   - The 2026-11-07 release's merge left 1,833 ground-cover map cells that match no parent branch, where the paving-edge wear meets the new Mersea, Garden Walk and Aracely paving. That combined look hasn't been seen up close.
 - **Trees and shrubs:**

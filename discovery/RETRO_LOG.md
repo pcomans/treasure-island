@@ -24849,3 +24849,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Solving each owner camera in plain Python from points in the generated data (the Hawkins storefront ends, the four Mersea chairs, the pitch's corners and edges), with the spring arm as a check, reproduced all three Mac frames in the first capture, the stray X-frame included, so each before and after shares one pose. A Hough pass and circle fits over the dated aerial's line pixels placed the pitch's centre circle, goal lines and touchlines to about half a metre, and brightness profiles across its edges found a north-east apron band the old cover-map trace had missed. Diffing the regenerated chunks record by record caught both side effects before any engine run.
 - What did not work well: The new pilot zone's 1 m street margin trimmed 9th Street's verge, which reaches 0.4 m into the pitch outline, and the ball row was refused because the pitch paint lay at the parks' 0.1 m lift, above the land the ball stands on; each cost a 6-minute regeneration. The first after-capture stopped at startup when a concurrent island suite held the GPU past the 120 s guard while Mersea's probes waited, and the worn-paint specks on the new lines showed only in the push frames, after a regeneration had already run.
 - What the team should change next time: Before adding a ground zone beside streets, measure how far their street ground reaches into the outline and inset the zone by the pilot margin. Paint markings at the height of the surface they lie on, not at a zone's lift. Render one close-up of new paint before the full capture run. Treat a startup-guard failure during a concurrent suite as contention and rerun it once before diagnosing.
+
+### owner-bugs-code-review — 2026-11-08 — independent code review of the owner-bugs branch at fc56c966 (relayed by the coordinator)
+
+- What worked well: Diffing the generated data by id separated the intended changes from provenance churn.
+- What did not work well: The gameplay contract pinned the number of soccer balls, which AGENTS.md rules out.
+- What the team should change next time: Authors should run `git merge-tree` against the other open branches before review.
+
+### owner-bugs-visual-review — 2026-11-08 — independent visual review of the owner-bugs branch at fc56c966 (relayed by the coordinator)
+
+- What worked well: Camera poses solved from the owner's own frames made each complaint a one-glance check.
+- What did not work well: The declared ball-on-apron issue had no frame, and the push run predated the head.
+- What the team should change next time: Capture each declared known issue and a grazing-angle view of new lines from the head.
