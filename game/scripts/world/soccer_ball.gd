@@ -32,9 +32,10 @@ const PUSH_REBOUND := 0.1
 const MAX_PUSH_SPEED_MPS := 24.0
 ## How near the character's capsule the ball's surface counts as touching it.
 const CONTACT_MARGIN_M := 0.04
-## Rolling resistance on the ground (a deceleration, like artificial turf's in a
-## ball-roll test) and air drag (0.5 rho Cd A / m: a ball loses about 8 m/s^2 at 25 m/s).
-const ROLLING_DECEL_MPS2 := 0.7
+## Rolling resistance on the ground, a deceleration in the middle of artificial turf's
+## range in FIFA's ball-roll test (a ball off its 1 m ramp rolls 4 to 10 m), and air drag
+## (0.5 rho Cd A / m: a ball loses about 8 m/s^2 at 25 m/s).
+const ROLLING_DECEL_MPS2 := 1.0
 const AIR_DRAG_PER_M := 0.0133
 ## A contact this upright is ground the ball rolls on.
 const GROUND_NORMAL_Y := 0.6
