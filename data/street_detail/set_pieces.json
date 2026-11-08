@@ -1935,41 +1935,41 @@
     {
      "id": "promenade_chair_1",
      "kind": "chair",
-     "prop": "slab_chair",
+     "prop": "adirondack_chair",
      "params": {},
      "xz": [-360.89, 314.9],
      "yaw": 2.12,
-     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reason": "The park's blue Adirondack chairs (the shared chair) on the mulch, facing the water; the owner named them the shared model, 2026-11-08.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_2",
      "kind": "chair",
-     "prop": "slab_chair",
+     "prop": "adirondack_chair",
      "params": {},
      "xz": [-362.25, 312.1],
      "yaw": 1.67,
-     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reason": "The park's blue Adirondack chairs (the shared chair) on the mulch, facing the water; the owner named them the shared model, 2026-11-08.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_3",
      "kind": "chair",
-     "prop": "slab_chair",
+     "prop": "adirondack_chair",
      "params": {},
      "xz": [-362.7, 310.29],
      "yaw": 2.02,
-     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reason": "The park's blue Adirondack chairs (the shared chair) on the mulch, facing the water; the owner named them the shared model, 2026-11-08.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {
      "id": "promenade_chair_4",
      "kind": "chair",
-     "prop": "slab_chair",
+     "prop": "adirondack_chair",
      "params": {},
      "xz": [-364.3, 307.87],
      "yaw": 2.27,
-     "reason": "Plain cyan slab chairs on the mulch, facing the water.",
+     "reason": "The park's blue Adirondack chairs (the shared chair) on the mulch, facing the water; the owner named them the shared model, 2026-11-08.",
      "reference": "Owner video IMG_0960, 2026-11-06: t=240 (B1), t=248 (B2)."
     },
     {

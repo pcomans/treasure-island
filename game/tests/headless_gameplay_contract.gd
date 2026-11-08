@@ -16,6 +16,9 @@ const BUILDING_SHOTS := preload("res://game/tests/shared/building_shots.gd")
 const WATER_LARGEST_CAMERA_FAR_M: float = BUILDING_SHOTS.ISLAND_CAMERA_FAR_M
 ## Cameras stay within this of the origin: the island (about 950 m) and its overview poses.
 const WATER_CAMERA_REACH_M := 2000.0
+## The street-detail zones: the soccer ball's check finds the full-size pitch's
+## centre spot in their ground blocks (tools/lib/sports-pitch.mjs).
+const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
 
 
 func _initialize() -> void:
@@ -269,9 +272,138 @@ func _check_ferry_solidity() -> void:
 			_fail("Straight down onto the ferry %s at %s the first world-solid hit must be the terminal's own non-receiver body above the water, not %s." % [target, xz, hit])
 			return
 		heights.append("%s %.2f m" % [target, (hit.position as Vector3).y])
+	var ball := await _check_soccer_ball(main, world)
+	if ball.is_empty():
+		return
 	main.queue_free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, and the ferry terminal solid from above (%s)" % ", ".join(heights))
+	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
 	quit(0)
+
+
+## The pitch's football (game/scripts/world/soccer_ball.gd): the ball on a full-size
+## pitch's centre spot, on the loose-prop layer the player's mask leaves out, colliding
+## with the world and the street props. The stock player walking into it moves it on
+## ahead of them, and it comes to rest on the turf; running into it sends it rolling;
+## dropped in the bay off the island, or through the land, it goes back to its centre
+## spot. Returns a summary, or "" after failing.
+func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
+	var player := main.get_node("Player") as PlayerController
+	var spots := _full_pitch_spots()
+	var ball: SoccerBall = null
+	for node: Node in get_nodes_in_group(SoccerBall.GROUP):
+		var candidate := node as SoccerBall
+		if candidate != null and spots.any(func(spot: Vector2) -> bool: return spot.distance_to(Vector2(candidate.spot.origin.x, candidate.spot.origin.z)) < 0.05):
+			ball = candidate
+			break
+	if ball == null:
+		_fail("No soccer ball rests on a full-size pitch's centre spot %s." % [spots])
+		return ""
+	if ball.collision_layer != SoccerBall.LOOSE_PROP_LAYER or (player.collision_mask & ball.collision_layer) != 0 or ball.collision_mask != (1 | 1 << 3):
+		_fail("The soccer ball must sit on the loose-prop layer, outside the player's mask, and meet the world and the street props: layer %d, mask %d, player mask %d." % [ball.collision_layer, ball.collision_mask, player.collision_mask])
+		return ""
+	if not await _ball_rests(ball) or ball.global_position.distance_to(ball.spot.origin) > 0.1:
+		_fail("The soccer ball did not rest on its spot %s: at %s." % [ball.spot.origin, ball.global_position])
+		return ""
+	# Walk into it from 2.5 m west, heading east across the open pitch.
+	var east := Vector3.RIGHT
+	var start := ball.global_position
+	if not await _place_player(player, world, start - east * 2.5):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-east.x, -east.z), 0.0)
+	Input.action_press("move_forward")
+	for _tick in 90:
+		await physics_frame
+	Input.action_release("move_forward")
+	var pushed := (ball.global_position - start).dot(east)
+	if pushed < 2.0:
+		_fail("Walking into the soccer ball moved it %.2f m east, not at least 2 m." % pushed)
+		return ""
+	if not await _ball_rests(ball):
+		_fail("The walked soccer ball did not come to rest: moving at %.2f m/s." % ball.linear_velocity.length())
+		return ""
+	var rolled := (ball.global_position - start).dot(east)
+	# Run into it: it goes off much faster than a walk sends it.
+	var from := ball.global_position
+	if not await _place_player(player, world, from - east * 4.0):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-east.x, -east.z), 0.0)
+	Input.action_press("move_forward")
+	Input.action_press("run")
+	var fastest := 0.0
+	for _tick in 45:
+		await physics_frame
+		fastest = maxf(fastest, ball.linear_velocity.length())
+	Input.action_release("run")
+	Input.action_release("move_forward")
+	player.set_gameplay_enabled(false)
+	if fastest < 12.0:
+		_fail("Running into the soccer ball sent it off at %.2f m/s, not at least 12." % fastest)
+		return ""
+	# Over the bay, off the island: back on its spot. Then the same from below the land.
+	var resets := ball.resets
+	var over_bay := ball.spot.origin
+	while world.get_boundary().contains_position(over_bay):
+		over_bay += east * 10.0
+	over_bay += east * 30.0
+	for case: Vector3 in [over_bay, ball.spot.origin - Vector3.UP * 10.0]:
+		ball.global_position = case
+		ball.linear_velocity = Vector3.ZERO
+		# A ball at rest sleeps and skips the check, as it can't have moved.
+		ball.sleeping = false
+		for _tick in 10:
+			await physics_frame
+		if ball.global_position.distance_to(ball.spot.origin) > 0.05:
+			_fail("The soccer ball dropped at %s did not go back to its spot %s: at %s." % [case, ball.spot.origin, ball.global_position])
+			return ""
+	if ball.resets != resets + 2:
+		_fail("The soccer ball went back to its spot %d times for its 2 drops." % (ball.resets - resets))
+		return ""
+	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land" % [pushed, rolled, fastest]
+
+
+## The centre spots (world x, z) of the full-size pitches in the street-detail zones.
+func _full_pitch_spots() -> Array[Vector2]:
+	var spots: Array[Vector2] = []
+	var config: Variant = JSON.parse_string(FileAccess.get_file_as_string(STREET_DETAIL_ZONES_PATH))
+	var zones: Array = (config as Dictionary).get("zones", []) if config is Dictionary else []
+	for zone: Variant in zones:
+		var ground: Variant = (zone as Dictionary).get("ground", {}) if zone is Dictionary else {}
+		var pitches: Array = (ground as Dictionary).get("pitches", []) if ground is Dictionary else []
+		for pitch: Variant in pitches:
+			if pitch is Dictionary and str((pitch as Dictionary).get("layout", "")) == "full_size":
+				var centre: Array = (pitch as Dictionary).get("centre_xz", [])
+				spots.append(Vector2(float(centre[0]), float(centre[1])))
+	return spots
+
+
+## Puts the stock player on the ground at the column through at, with gameplay on.
+func _place_player(player: PlayerController, world: WorldLoader, at: Vector3) -> bool:
+	player.set_gameplay_enabled(false)
+	var query := PhysicsRayQueryParameters3D.create(Vector3(at.x, at.y + 20.0, at.z), Vector3(at.x, at.y - 20.0, at.z), player.collision_mask, [player.get_rid()])
+	var hit := player.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty() or not world.get_boundary().contains_position(at):
+		_fail("No ground for the player at %s." % at)
+		return false
+	player.global_transform = Transform3D(Basis.IDENTITY, (hit.position as Vector3) + Vector3.UP * 0.05)
+	player.velocity = Vector3.ZERO
+	player.set_gameplay_enabled(true)
+	for _tick in 20:
+		await physics_frame
+	if not player.is_on_floor():
+		_fail("The player did not settle at %s: at %s." % [at, player.global_position])
+		return false
+	return true
+
+
+## Waits until the ball rests (asleep, or still for half a second), at most 30 s.
+func _ball_rests(ball: SoccerBall) -> bool:
+	var still := 0
+	for _tick in 1800:
+		await physics_frame
+		still = still + 1 if ball.linear_velocity.length() < 0.05 else 0
+		if ball.sleeping or still >= 30:
+			return true
+	return false
 
 
 func _off_tree_world_transform(node: Node3D, scene_root: Node3D) -> Transform3D:

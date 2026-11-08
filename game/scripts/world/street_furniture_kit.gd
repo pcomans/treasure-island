@@ -176,7 +176,6 @@ const COTTAGE_GLASS := Color(0.07, 0.09, 0.12)
 const COTTAGE_GLASS_PALE := Color(0.5, 0.6, 0.6)
 const COTTAGE_SHINGLE := Color(0.235, 0.195, 0.155)
 const COTTAGE_BAY_DEPTH_M := 0.44
-const CHAIR_CYAN := Color(0.16, 0.58, 0.74)
 const CONCRETE_BOX_GREY := Color(0.62, 0.59, 0.53)
 ## The rounded stones of the cobble pile at the ditch's road end.
 const COBBLE_TONES := [Color(0.62, 0.57, 0.49), Color(0.5, 0.42, 0.34), Color(0.47, 0.45, 0.42), Color(0.34, 0.28, 0.23), Color(0.56, 0.52, 0.45)]
@@ -216,7 +215,6 @@ const PROPS := {
 	"pump_station": {"range_m": 700.0, "shadow": true},
 	"restroom_cottage": {"range_m": 400.0, "shadow": true},
 	"cobble_pile": {"range_m": 120.0, "shadow": false},
-	"slab_chair": {"range_m": 100.0, "shadow": true},
 	"concrete_box": {"range_m": 160.0, "shadow": true},
 	"galvanised_tub": {"range_m": 120.0, "shadow": true},
 	"water_block": {"range_m": 220.0, "shadow": true},
@@ -538,9 +536,6 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			var spread := snappedf(clampf(_number(params, "width_m", 1.0), 0.5, 2.5), 0.1)
 			var rise := snappedf(clampf(_number(params, "rise_m", 0.0), -0.6, 0.6), 0.01)
 			_piece(result, "cobble_pile_%.1f_%.1f_%.2f" % [run, spread, rise], func(b: Builder) -> void: _cobble_pile(b, run, spread, rise))
-		"slab_chair":
-			_piece(result, "slab_chair", func(b: Builder) -> void: _slab_chair(b), Transform3D.IDENTITY, _plastic)
-			_box_shape(result, Vector3(0.78, 0.6, 0.92), Vector3(0.0, 0.3, 0.0))
 		"concrete_box":
 			_piece(result, "concrete_box", func(b: Builder) -> void: _concrete_box(b))
 			_box_shape(result, Vector3(0.8, 0.72, 0.8), Vector3(0.0, 0.36, 0.0))
@@ -1396,23 +1391,6 @@ func _water_block(b: Builder) -> void:
 			b.box(Vector3(side * 0.945, y, 0.0), Basis.IDENTITY, Vector3(0.07, 0.07, 0.32), WATER_BLOCK_RED, CELL_WHITE)
 	b.disc(Vector3(0.0, 0.853, 0.0), Vector3.UP, 0.11, 14, WATER_BLOCK_RED * 0.7)
 	b.disc(Vector3(0.0, 0.855, 0.0), Vector3.UP, 0.085, 14, Color(0.05, 0.03, 0.03))
-
-
-## The plain slab chairs on the Mersea promenade's mulch (IMG_0960, t=240-248): a broad
-## flat back and seat in solid moulded panels on board sides, front to local -Z. Simple
-## forms, a paler cyan than the park's slatted Adirondacks.
-func _slab_chair(b: Builder) -> void:
-	var seat_tilt := Basis(Vector3.RIGHT, deg_to_rad(9.0))
-	var back_tilt := Basis(Vector3.RIGHT, deg_to_rad(-28.0))
-	b.box(Vector3(0.0, 0.3, -0.04), seat_tilt, Vector3(0.66, 0.05, 0.74), CHAIR_CYAN, CELL_WHITE)
-	b.box(Vector3(0.0, 0.6, 0.4), back_tilt, Vector3(0.62, 0.84, 0.05), CHAIR_CYAN, CELL_WHITE)
-	for side: float in [-1.0, 1.0]:
-		var x := side * 0.345
-		b.box(Vector3(x, 0.27, -0.03), Basis.IDENTITY, Vector3(0.05, 0.54, 0.1), CHAIR_CYAN, CELL_WHITE)
-		b.box(Vector3(x, 0.2, 0.3), Basis.IDENTITY, Vector3(0.05, 0.4, 0.1), CHAIR_CYAN, CELL_WHITE)
-		b.box(Vector3(x, 0.2, -0.36), Basis.IDENTITY, Vector3(0.05, 0.4, 0.1), CHAIR_CYAN, CELL_WHITE)
-		b.box(Vector3(x, 0.32, -0.04), seat_tilt, Vector3(0.05, 0.1, 0.8), CHAIR_CYAN, CELL_WHITE)
-		b.box(Vector3(x + side * 0.03, 0.56, -0.08), Basis.IDENTITY, Vector3(0.12, 0.035, 0.66), CHAIR_CYAN * 1.05, CELL_WHITE)
 
 
 ## The small concrete box standing on the ditch's far bank (IMG_0960, t=116): a pale cast

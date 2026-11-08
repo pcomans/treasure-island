@@ -292,7 +292,7 @@ the rows below are rated only where a record names the prop.
 | Park bench | OSM benches outside the pilot zones | | Placed by the clutter rollout; no prop-specific verdict | Rate |
 | Waste basket | ferry plaza and Avenue of the Palms set pieces; one OSM basket | | Step 4 PASS, placement only | Rate |
 | Map board | ferry plaza set piece | | Step 4 PASS, placement only; the map is an original drawing from the frozen OSM data | Rate |
-| Adirondack chair | ferry plaza and Cityside set pieces | 2 est. | Owner: the blue chairs "need a lot of work". Rebuilt with the flat-topped back and water-facing row of photos 24 and 25, colour sampled against them, feet settled (plaza-chairs PASS at `1be722c2`) | 3: slat and joint detail close up |
+| Adirondack chair | ferry plaza, Cityside and Mersea promenade set pieces (the owner: the promenade chairs are the shared model, 2026-11-08) | 2 est. | Owner: the blue chairs "need a lot of work". Rebuilt with the flat-topped back and water-facing row of photos 24 and 25, colour sampled against them, feet settled (plaza-chairs PASS at `1be722c2`) | 3: slat and joint detail close up |
 | Bike rack | Avenue of the Palms set piece, OSM racks | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`; hoop rows and flanges added after it | 3: secondary parts close up |
 | Canopy of Sky (artwork) | Cityside set piece | | Whole-park PASS only; the r04 view named for it was not framed on it | Rate against ph05 |
 | Disc lamp | Cityside set pieces | | Whole-park PASS only | Rate |
@@ -308,7 +308,6 @@ the rows below are rated only where a record names the prop.
 | Cobble pile | the ditch's road end, two set pieces | | From the owner's video and photos, Nov 2026; not yet reviewed | Rate |
 | Galvanised tub | the lawn's corner on the Mersea promenade | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 | Water road block | The ditch's road end, six set pieces | | From the owner's video, Nov 2026; not yet reviewed | Rate |
-| Slab chair | Mersea promenade set pieces | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 | Concrete box | The ditch's far bank, one set piece | | From the owner's video, Nov 2026; not yet reviewed | Rate |
 
 ### Fence types
