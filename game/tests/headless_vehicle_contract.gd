@@ -13,8 +13,9 @@ extends SceneTree
 ##   3. off the west shore into the bay: the car meets the water (a splash),
 ##      sinks for a moment with the player kept in it (F does nothing), then car
 ##      and player are back on land, upright, facing away from the water;
-##   4. a roll: a car rolled over comes to rest on its roof or side, rights
-##      itself within a few seconds and drives on;
+##   4. a roll: a car rolled over comes to rest on its roof or side; F gets
+##      the player out of it there, it rights itself within a few seconds with
+##      nobody in it, F gets back in and it drives on;
 ##   5. a ramp: driven straight at a dirt kicker at a sensible speed, the car
 ##      leaves the ground, flies and lands on its wheels, upright;
 ##   6. a fence: the car drives through a construction-panel bay, which breaks
@@ -311,20 +312,45 @@ func _case_roll() -> bool:
 			lowest = minf(lowest, up)
 			if tick % 30 == 0:
 				print("ROLL spin %.1f t=%.1f s at %s turning %.2f rad/s %s" % [spin, tick / 60.0, car.global_position, car.angular_velocity.length(), JSON.stringify(car.describe())])
-			if flipped_at < 0 and up < 0.5 and car.linear_velocity.length() < 1.0 and car.angular_velocity.length() < 1.0:
+			if up < 0.5 and car.linear_velocity.length() < 1.0 and car.angular_velocity.length() < 1.0:
 				flipped_at = tick
-			if flipped_at >= 0 and righted_at < 0 and up > 0.95 and car.grounded_wheels() >= 3 and not car.is_righting():
-				righted_at = tick
 				break
-			if flipped_at < 0 and tick > 150 and up > 0.95 and car.linear_velocity.length() < 0.3:
+			if tick > 150 and up > 0.95 and car.linear_velocity.length() < 0.3:
 				break
 		if flipped_at >= 0:
 			break
-	print("ROLL lowest up %.3f, came to rest flipped at %.2f s, back on its wheels at %.2f s" % [lowest, flipped_at / 60.0, righted_at / 60.0])
-	if not _require(flipped_at >= 0, "The knocked car did not come to rest on its roof or side (lowest up %.3f)." % lowest) \
-	or not _require(righted_at >= 0 and (righted_at - flipped_at) / 60.0 <= 5.0, "The flipped car did not right itself within 5 s."):
+	if not _require(flipped_at >= 0, "The knocked car did not come to rest on its roof or side (lowest up %.3f)." % lowest):
 		return false
-	# And it drives on.
+	var flipped_frame := Engine.get_physics_frames()
+	# F gets the player out of the car on its roof or side, onto the ground.
+	await _press("vehicle_enter_exit")
+	for _tick in 30:
+		await physics_frame
+	var out_on_floor := _player.is_on_floor()
+	if not _require(not _player.is_driving() and out_on_floor, "F did not get the player out of the flipped car onto the ground (on floor %s)." % out_on_floor):
+		return false
+	# With nobody in it (the player stepped well clear of its roll), it rights itself.
+	if not await _stand_player(Vector2(car.global_position.x, car.global_position.z) + Vector2(7.0, 0.0)):
+		return false
+	for _tick in 360:
+		if car.global_transform.basis.y.y > 0.95 and car.grounded_wheels() >= 3 and not car.is_righting():
+			righted_at = Engine.get_physics_frames() - flipped_frame
+			break
+		await physics_frame
+	print("ROLL lowest up %.3f, came to rest flipped, F got the player out onto the ground, and it was back on its wheels %.2f s later" % [lowest, righted_at / 60.0])
+	if not _require(righted_at >= 0 and righted_at / 60.0 <= 5.0, "The flipped car did not right itself within 5 s."):
+		return false
+	# F beside it gets back in, and it drives on.
+	var side := car.global_transform.basis.x
+	side.y = 0.0
+	var door := car.global_position - side.normalized() * (car.width_m * 0.5 + 0.8)
+	if not await _stand_player(Vector2(door.x, door.z)):
+		return false
+	await _press("vehicle_enter_exit")
+	if not _require(_player.is_driving() and _vehicles.active_car() == car, "F beside the righted car did not get back in."):
+		return false
+	for _tick in 20:
+		await physics_frame
 	var from := car.global_position
 	Input.action_press("move_forward")
 	for _tick in 120:
