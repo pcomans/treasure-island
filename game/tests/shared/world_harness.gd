@@ -3,6 +3,11 @@ extends RefCounted
 ## find a building by OSM source key, place the stock player and aim its camera.
 
 const WORLD_SOLID_MASK := 1
+## How long a load may take to reach play (wall clock). A rendered load with
+## --fixed-fps settles the player one physics tick per drawn frame, and its first
+## frames are slow when other engine slots share the GPU (2026-11-08: two
+## capture runs ran out at 120 s while a plain rendered start took 94 s).
+const LOAD_LIMIT_MS := 300000
 const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
 
 var tree: SceneTree
@@ -42,22 +47,22 @@ func load_world(street_detail: Variant = null) -> String:
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: failed.append("%s: %s" % [code, message]))
 	tree.root.add_child(main)
 	var started := Time.get_ticks_msec()
-	while ready.is_empty() and failed.is_empty() and Time.get_ticks_msec() - started < 120000:
+	while ready.is_empty() and failed.is_empty() and Time.get_ticks_msec() - started < LOAD_LIMIT_MS:
 		await tree.process_frame
 	if not failed.is_empty():
 		return "world failed to load: %s" % failed[0]
 	if ready.is_empty():
-		return "world did not load within 120 s"
-	while not player.was_first_reveal_grounded() and Time.get_ticks_msec() - started < 120000:
+		return "world did not load within %d s" % (LOAD_LIMIT_MS / 1000)
+	while not player.was_first_reveal_grounded() and Time.get_ticks_msec() - started < LOAD_LIMIT_MS:
 		await tree.physics_frame
 	if not player.was_first_reveal_grounded():
 		return "player did not settle at spawn"
 	# Startup enables gameplay and shows the HUD only once it hands over play;
 	# wait for that, so it can't undo the setup below a few frames later.
-	while not main.is_play_ready() and Time.get_ticks_msec() - started < 120000:
+	while not main.is_play_ready() and Time.get_ticks_msec() - started < LOAD_LIMIT_MS:
 		await tree.process_frame
 	if not main.is_play_ready():
-		return "startup did not reach play within 120 s"
+		return "startup did not reach play within %d s" % (LOAD_LIMIT_MS / 1000)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.set_gameplay_enabled(false)
 	clean_hud()
@@ -412,6 +417,9 @@ func settle_player(xz: Vector2, support_context: Dictionary = {}) -> String:
 		return STEEP if (hit.normal as Vector3).dot(Vector3.UP) < 0.7 else ON_BUILDING
 	var y := float((hit.position as Vector3).y)
 	release_input()
+	# Out of any car first (game/scripts/vehicles/vehicle_manager.gd).
+	if main.vehicles != null:
+		main.vehicles.force_exit()
 	player.set_gameplay_enabled(false)
 	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + 2.0, xz.y))
 	player.velocity = Vector3.DOWN * 0.1
@@ -436,14 +444,14 @@ func aim_camera(target: Vector3) -> void:
 
 
 func release_input() -> void:
-	for action: StringName in ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop"]:
+	for action: StringName in ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake"]:
 		Input.action_release(action)
 
 
 func clean_hud() -> void:
 	tree.paused = false
 	hud.set_paused(false)
-	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel]:
+	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel, hud.prompt_panel]:
 		panel.hide()
 	hud.reticle.show()
 

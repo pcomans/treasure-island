@@ -58,6 +58,12 @@ void fragment() {
 		// 0 solid gloss, 1 metallic, 2 pearl, 3 matte.
 		metallic = finish == 1 ? 0.55 : (finish == 2 ? 0.25 : (finish == 3 ? 0.1 : 0.0));
 		roughness = finish == 1 ? 0.34 : (finish == 3 ? 0.72 : 0.26);
+		// A body-colour roof is one flat panel facing the fixed sun: a touch
+		// rougher, so a view low across it (a driven car's, getting out of
+		// it) doesn't see it flare white.
+		if (p == 1) {
+			roughness += 0.14;
+		}
 	}
 	if (p == 4 && dark_rims) {
 		metallic = 0.4;

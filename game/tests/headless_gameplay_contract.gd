@@ -2,7 +2,7 @@ extends SceneTree
 
 const REQUIRED_ACTIONS := [
 	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
-	"spray", "recover", "pause", "quit_game", "toggle_debug",
+	"spray", "recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
 ]
 const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
 const EXPECTED_BILLBOARD_TEXTURE_SIZE := Vector2i(2212, 340)
@@ -32,11 +32,14 @@ func _initialize() -> void:
 	if not _action_has_physical_key("fast_drop", KEY_C):
 		_fail("Fast drop input must be bound to physical C.")
 		return
-	for action_value: Variant in InputMap.get_actions():
-		var action := str(action_value).to_lower()
-		if "vehicle" in action or "car_" in action:
-			_fail("Deferred vehicle action leaked into the first playable: %s" % action)
-			return
+	# Drivable cars (owner, 2026-11-08): F gets in and out; in a car Space is the
+	# handbrake, its own action on the jetpack's key.
+	if not _action_has_physical_key("vehicle_enter_exit", KEY_F):
+		_fail("Getting in and out of a car must be bound to physical F.")
+		return
+	if not _action_has_physical_key("handbrake", KEY_SPACE):
+		_fail("The handbrake must be bound to physical Space.")
+		return
 
 	var boundary := {
 		"components": [{
@@ -276,7 +279,7 @@ func _check_ferry_solidity() -> void:
 	if ball.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
+	print("PASS: gameplay inputs (F drives, Space handbrake), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
 	quit(0)
 
 

@@ -99,6 +99,7 @@ for test in \
   game/tests/headless_facade_grid_contract.gd \
   game/tests/headless_shore_lift.gd \
   game/tests/headless_fast_drop.gd \
+  game/tests/headless_vehicle_contract.gd \
   game/tests/automated_route_qa.gd \
   game/tests/shared/island_test.gd
 do

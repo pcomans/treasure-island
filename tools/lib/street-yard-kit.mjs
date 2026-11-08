@@ -68,6 +68,7 @@ export const YARD_KIT_PARTS = Object.freeze([
   "tank", // hoppers and tanks: body colour, welded, weathered
   "belt", // a conveyor's rubber belt
   "earth_dark", // freshly dumped soil: darker and browner than the tan earth
+  "ramp_soil", // a dirt car ramp's packed soil: worn on top, rills down its sides
 ]);
 export const YARD_KIT_PART_SLOTS = 64;
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
@@ -97,6 +98,64 @@ const WALL_COLOURS = ["green", "beige", "white", "grey", "blue_grey", "red", "ru
 const intRange = (min, max) => Object.freeze({ type: "int", min, max });
 const numRange = (min, max, step = null) => Object.freeze({ type: "number", min, max, step });
 const oneOf = (...values) => Object.freeze({ type: "enum", values: Object.freeze(values.flat()) });
+
+// ---------------------------------------------------------------- stunt ramps
+// Each ramp's dirt profile is the outline both finishes share: the run up
+// from the toe (+Z) to the lip, curving up toward the lip (a kicker) or
+// straight (a tabletop's faces, a landing's slope), a flat top, and the
+// faces down. Plywood stops square where dirt slopes away at STUNT_RAMP_BACK
+// behind a lip and in front of a landing; dirt also slopes out at
+// STUNT_RAMP_SIDE beside the deck.
+// up: run to the lip; height; top: flat after the lip; down: a falling face
+// after it (a tabletop) or the landing's whole slope (a landing starts high
+// at its +Z end, facing the gap); run_up_m and landing_m: the clear ground a
+// car needs before and after it (tools/lib/street-yard-generation.mjs ramps).
+export const STUNT_RAMP_VARIANTS = Object.freeze([
+  Object.freeze({ name: "kicker_small", width: 4.0, up: 4.0, height: 0.6, top: 0, down: 0, run_up_m: 16, landing_m: 12 }),
+  Object.freeze({ name: "kicker_medium", width: 4.5, up: 7.0, height: 1.2, top: 0, down: 0, run_up_m: 35, landing_m: 22 }),
+  Object.freeze({ name: "kicker_large", width: 5.0, up: 10.0, height: 2.0, top: 0, down: 0, run_up_m: 40, landing_m: 35 }),
+  Object.freeze({ name: "tabletop", width: 5.0, up: 8.0, height: 1.5, top: 6.0, down: 9.0, run_up_m: 35, landing_m: 12 }),
+  Object.freeze({ name: "gap_kicker", width: 4.5, up: 7.0, height: 1.4, top: 0, down: 0, run_up_m: 35, landing_m: 0 }),
+  Object.freeze({ name: "landing", width: 4.5, up: 0, height: 1.4, top: 0, down: 9.0, run_up_m: 0, landing_m: 12 }),
+]);
+// The gap a gap pair leaves between its kicker's lip and its landing's top (m).
+export const STUNT_RAMP_GAP_M = 10.0;
+export const STUNT_RAMP_BACK = Math.tan((35 * Math.PI) / 180);
+export const STUNT_RAMP_SIDE = Math.tan((40 * Math.PI) / 180);
+const RAMP_CURVE = Object.freeze([0, 0.3, 0.55, 0.8, 1]);
+const RAMP_CURVE_POWER = 1.6;
+
+// A ramp's top outline in its frame, [[z, y], ...] from its +Z end to its -Z
+// end, starting and ending on the ground, centred so the dirt outline's plan
+// is centred on the origin.
+export function stuntRampProfile(ramp, finish) {
+  const points = rampOutline(ramp, finish === "dirt");
+  // Centre on the dirt outline, so both finishes share one plan.
+  const zs = rampOutline(ramp, true).map(([z]) => z);
+  const shift = -(Math.max(...zs) + Math.min(...zs)) / 2;
+  return points.map(([z, y]) => [Math.round((z + shift) * 1e4) / 1e4, Math.round(y * 1e4) / 1e4]);
+}
+
+// The outline from the toe at z = 0 (a landing: its high end at z = 0).
+function rampOutline(ramp, dirt) {
+  const h = ramp.height;
+  const points = [];
+  if (ramp.name === "landing") {
+    points.push([dirt ? h / STUNT_RAMP_BACK : 0, 0], [0, h], [-ramp.down, 0]);
+  } else {
+    for (const t of RAMP_CURVE) points.push([-ramp.up * t, ramp.top === 0 ? h * Math.pow(t, RAMP_CURVE_POWER) : h * t]);
+    if (ramp.top > 0) points.push([-ramp.up - ramp.top, h], [-ramp.up - ramp.top - ramp.down, 0]);
+    else if (dirt) points.push([-ramp.up - 0.3, h - 0.04], [-ramp.up - 0.3 - (h - 0.04) / STUNT_RAMP_BACK, 0]);
+    else points.push([-ramp.up, 0]);
+  }
+  return points;
+}
+
+// A ramp's plan and height: the dirt outline with its side slopes.
+function stuntRampPlan(ramp) {
+  const zs = stuntRampProfile(ramp, "dirt").map(([z]) => z);
+  return { x_m: Math.round((ramp.width + (2 * ramp.height) / STUNT_RAMP_SIDE) * 1000) / 1000, z_m: Math.round((Math.max(...zs) - Math.min(...zs)) * 1000) / 1000, h_m: ramp.height };
+}
 
 // Every prop: its variants in index order with their plan size and height,
 // its collision kind and its params (the runtime, street_yard_kit.gd, holds
@@ -284,6 +343,17 @@ export const YARD_KIT_PROPS = Object.freeze({
     collision: "cylinder",
     variants: [{ name: "flag", x_m: 0.15, z_m: 0.15, h_m: 6.5 }],
     params: { height_m: numRange(5, 8), text: oneOf("self_storage", "none") },
+  },
+  // Car ramps (owner request, 2026-11-08): a few in three empty lots so the
+  // player can jump cars, an invented gameplay feature rather than anything
+  // photographed on the island. Generic stunt ramps, production inference: a
+  // graded dirt kicker or a plywood deck on a galvanised frame (finish). A car
+  // drives toward -Z over one; each variant's profile (stuntRampProfile) gives
+  // its plan, with a dirt ramp's side and back slopes, which both finishes keep.
+  stunt_ramp: {
+    collision: "prisms",
+    variants: STUNT_RAMP_VARIANTS.map((ramp) => Object.freeze({ name: ramp.name, ...stuntRampPlan(ramp) })),
+    params: { finish: oneOf("dirt", "plywood") },
   },
   // Pier 1's work barges and crane (May 2026 aerial, Mar 2025 Avenue N view).
   // Visual context outside the playable boundary: no collision. A barge's

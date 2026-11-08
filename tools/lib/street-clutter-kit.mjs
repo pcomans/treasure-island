@@ -504,7 +504,8 @@ function tubRing(fns, body, zf, hw, end) {
 }
 
 // Exported for the yard kit's cargo van (tools/lib/street-yard-kit.mjs).
-export function buildCar(name, lodIndex) {
+// wheels: false leaves the four wheels out (the drivable car's chassis).
+export function buildCar(name, lodIndex, { wheels = true } = {}) {
   const body = CAR_BODIES[name];
   const lod = LODS[lodIndex];
   const fns = bodyFunctions(body);
@@ -697,47 +698,14 @@ export function buildCar(name, lodIndex) {
   };
   out.loft(gGrid, glassPart, { crease: 40 });
 
-  // --- Wheels (centres from carBodyGeometry).
+  // --- Wheels (centres from carBodyGeometry). Without wheels (the drivable
+  // car's chassis, carKitExtras) the wells keep their liners.
   const R = body.wheel_radius;
   const tw = body.tire_width;
   const xOut = W - WHEEL_INSET_M;
   for (const axle of axles) {
     for (const side of [1, -1]) {
-      const center = v3(side * (xOut - tw / 2), R, zOf(axle));
-      const axis = v3(side, 0, 0);
-      const rimR = R * 0.64;
-      // The tyre's outer half (the inner half is hidden in the wheel well).
-      const profile = lodIndex === 0
-        ? [[R - 0.01, -tw / 2], [R, -tw / 2 + 0.05], [R, tw / 2 - 0.06], [R - 0.014, tw / 2 - 0.022], [R - 0.055, tw / 2], [rimR, tw / 2], [rimR * 0.97, tw / 2 - 0.02]]
-        : [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]];
-      const rimSegment = profile.length - 2;
-      out.lathe(center, axis, profile, lod.sides, (i) => (i >= rimSegment ? PART.rim : PART.tire), Math.PI / lod.sides, (i) => (i <= 1 ? 0.85 : 1));
-      // Rim face: spokes (rim colour) and the dark gaps between them.
-      const face = vadd(center, vscale(axis, tw / 2 - 0.02));
-      const helper = v3(0, 1, 0);
-      const u = vnorm(vcross(axis, helper));
-      const w = vcross(axis, u);
-      const at = (r, angle, depth = 0) => vadd(face, vadd(vscale(axis, -depth), vadd(vscale(u, r * Math.cos(angle)), vscale(w, r * Math.sin(angle)))));
-      const segments = lod.spokes ? 15 : 8;
-      const rings = lod.spokes ? [0.0, 0.17, 0.86, 0.98] : [0.0, 0.98];
-      for (let s = 0; s < segments; s += 1) {
-        const a0 = (2 * Math.PI * s) / segments;
-        const a1 = (2 * Math.PI * (s + 1)) / segments;
-        for (let r = 0; r < rings.length - 1; r += 1) {
-          const spoke = lod.spokes ? s % 3 === 0 : true;
-          const part = r === 0 ? PART.hub : r === rings.length - 2 ? PART.rim : spoke ? PART.rim : PART.hub;
-          const depth = part === PART.hub && r > 0 ? 0.03 : r === 0 ? -0.005 : 0;
-          const a = at(rimR * rings[r], a0, depth);
-          const b = at(rimR * rings[r], a1, depth);
-          const c = at(rimR * rings[r + 1], a1, depth);
-          const d = at(rimR * rings[r + 1], a0, depth);
-          const n = axis;
-          // Counterclockwise seen from outside along +axis.
-          const cr = vcross(vsub(b, a), vsub(c, a));
-          if (vdot(cr, n) >= 0) out.quad(a, b, c, d, [n, n, n, n], part);
-          else out.quad(a, d, c, b, [n, n, n, n], part);
-        }
-      }
+      if (wheels) addWheel(out, body, lodIndex, v3(side * (xOut - tw / 2), R, zOf(axle)), side);
       // Wheel-well liner behind the tyre, so the well reads dark and closed.
       const innerX = side * (xOut - tw - 0.05);
       const top = R + archRadius;
@@ -805,6 +773,56 @@ export function buildCar(name, lodIndex) {
     for (const side of [1, -1]) out.box(v3(side * (W - 0.06), 1.24, zOf(4.85)), [0.04, 0.02, 0.98], PART.trim);
   }
 
+  return out.result();
+}
+
+// One wheel: the tyre's outer half (the inner half is hidden in the wheel well)
+// and the rim face with its spokes, round the axis (side, 0, 0) through centre,
+// its face toward side. The parked cars' wheels and the drivable car's are the same.
+function addWheel(out, body, lodIndex, center, side) {
+  const lod = LODS[lodIndex];
+  const R = body.wheel_radius;
+  const tw = body.tire_width;
+  const axis = v3(side, 0, 0);
+  const rimR = R * 0.64;
+  const profile = lodIndex === 0
+    ? [[R - 0.01, -tw / 2], [R, -tw / 2 + 0.05], [R, tw / 2 - 0.06], [R - 0.014, tw / 2 - 0.022], [R - 0.055, tw / 2], [rimR, tw / 2], [rimR * 0.97, tw / 2 - 0.02]]
+    : [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]];
+  const rimSegment = profile.length - 2;
+  out.lathe(center, axis, profile, lod.sides, (i) => (i >= rimSegment ? PART.rim : PART.tire), Math.PI / lod.sides, (i) => (i <= 1 ? 0.85 : 1));
+  // Rim face: spokes (rim colour) and the dark gaps between them.
+  const face = vadd(center, vscale(axis, tw / 2 - 0.02));
+  const helper = v3(0, 1, 0);
+  const u = vnorm(vcross(axis, helper));
+  const w = vcross(axis, u);
+  const at = (r, angle, depth = 0) => vadd(face, vadd(vscale(axis, -depth), vadd(vscale(u, r * Math.cos(angle)), vscale(w, r * Math.sin(angle)))));
+  const segments = lod.spokes ? 15 : 8;
+  const rings = lod.spokes ? [0.0, 0.17, 0.86, 0.98] : [0.0, 0.98];
+  for (let s = 0; s < segments; s += 1) {
+    const a0 = (2 * Math.PI * s) / segments;
+    const a1 = (2 * Math.PI * (s + 1)) / segments;
+    for (let r = 0; r < rings.length - 1; r += 1) {
+      const spoke = lod.spokes ? s % 3 === 0 : true;
+      const part = r === 0 ? PART.hub : r === rings.length - 2 ? PART.rim : spoke ? PART.rim : PART.hub;
+      const depth = part === PART.hub && r > 0 ? 0.03 : r === 0 ? -0.005 : 0;
+      const a = at(rimR * rings[r], a0, depth);
+      const b = at(rimR * rings[r], a1, depth);
+      const c = at(rimR * rings[r + 1], a1, depth);
+      const d = at(rimR * rings[r + 1], a0, depth);
+      const n = axis;
+      // Counterclockwise seen from outside along +axis.
+      const cr = vcross(vsub(b, a), vsub(c, a));
+      if (vdot(cr, n) >= 0) out.quad(a, b, c, d, [n, n, n, n], part);
+      else out.quad(a, d, c, b, [n, n, n, n], part);
+    }
+  }
+}
+
+// One right-hand wheel of a body round the origin, its face toward +X: the
+// drivable car turns it about Y for the left side and spins it on X.
+export function buildCarTyre(name, lodIndex) {
+  const out = new MeshBuilder();
+  addWheel(out, CAR_BODIES[name], lodIndex, v3(0, 0, 0), 1);
   return out.result();
 }
 
@@ -1037,7 +1055,24 @@ export function clutterKitMeshes() {
   for (const [name, prop] of Object.entries(CLUTTER_PROPS_KIT)) {
     for (let lod = 0; lod < LODS.length; lod += 1) meshes.push({ name: `${name}_lod${lod}`, ...prop.build(lod) });
   }
-  return meshes;
+  return [...meshes, ...carKitExtras()];
+}
+
+// The drivable car's parts of each body (game/scripts/vehicles/drivable_car.gd),
+// after the parked meshes so those stay as they were: the chassis without its
+// wheels, one wheel round the origin (named tyre: Godot's importer turns a node
+// whose name ends in "wheel" into a VehicleWheel3D) and two empty nodes at the
+// right-hand front and rear wheel centres (the left ones mirror them in x).
+export function carKitExtras() {
+  const extras = [];
+  for (const name of Object.keys(CAR_BODIES)) {
+    const geometry = carBodyGeometry(name);
+    extras.push({ name: `car_${name}_chassis_lod0`, ...buildCar(name, 0, { wheels: false }) });
+    extras.push({ name: `car_${name}_tyre_lod0`, ...buildCarTyre(name, 0) });
+    extras.push({ name: `car_${name}_axle_front`, marker: true, translation: [...geometry.wheels.front_right] });
+    extras.push({ name: `car_${name}_axle_rear`, marker: true, translation: [...geometry.wheels.rear_right] });
+  }
+  return extras;
 }
 
 // Key dimensions of a car body, in one place for whatever places (or later

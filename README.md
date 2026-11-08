@@ -104,7 +104,11 @@ The bake merges each building's opaque surfaces into far fewer draws
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
 - Hold `C` in the air to drop fast. It does nothing on the ground, and `Space` wins if both are held.
-- Fences stop you on foot (gates and path crossings stay open); the jetpack clears them.
+- `F` beside a parked street or lot car gets in; `F` again gets out beside it.
+- In a car: `W`/`S` drive, brake and reverse; `A`/`D` steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
+- A car breaks through fences bay by bay (a broken bay stays open, on foot too, until a restart), shoves parked cars and K-rails, sends the pitch's ball rolling, drives through bushes and stops at trees. Into the bay it splashes and sinks, then comes back on land with you in it. On its roof or side it rights itself after about three seconds.
+- Car ramps stand in three empty lots: the 12th Street and Avenue D dirt lot, the north slab site between Avenue I and Avenue M, and the former school lot by Aracely Cafe.
+- Fences stop you on foot (gates, path crossings and bays a car broke stay open); the jetpack clears them.
 - Stepping off the island onto the shore rocks, or flying out over the water,
   lifts you about 5 m into the air where you are; float down and steer or
   jetpack back to land.
@@ -130,7 +134,9 @@ Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
 play starts by itself. WASD moves, Shift runs, Space rises with the jetpack,
-releasing Space descends slowly and holding C in the air drops fast. Click
+releasing Space descends slowly and holding C in the air drops fast. F gets
+in or out of a parked car; in a car W/S drive, A/D steer and Space is the
+handbrake. Click
 **Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
 again and continues. Spray is omitted in the browser build by owner approval.
 F3 shows actual FPS.
@@ -174,7 +180,7 @@ upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues. Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
-controls are retained.
+controls are retained. There is no car button yet; cars need a keyboard.
 
 This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
 controller (see game/scripts/vendor/selgesel/README.md): its analog thumbstick,

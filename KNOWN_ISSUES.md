@@ -69,6 +69,22 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The visual review flagged the rhythm of the breakwater's base.
 - The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
+## Drivable cars (`game/scripts/vehicles/`, 2026-11-08)
+
+- There's no animation for getting in or out: the player appears in the seat, and beside the door (owner: none needed).
+- The storage yards' vans, RVs and trucks stay parked props: they can't be driven or shoved (owner, 2026-11-08). Only street and lot cars (the street-clutter kit's) can.
+- No engine, tyre, crash or splash sounds (the game has no audio).
+- Off the island the shoreline riprap is drawn only, with no collision, so a car that rolls slowly off the edge drops through the rocks into the water instead of tumbling down them (seen in review, 2026-11-08).
+- Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
+- Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
+- The chase camera's arm stops at street props as well as the world (so it never sits inside a parked car): a lamp post or palm between the car and the camera pulls the view in for a moment, and a sideways glance over kerbside cars passes just over their roofs (2026-11-08).
+- After the bay reset the chase camera starts facing the car's nose and swings round behind it in about a second (visual review, 2026-11-08).
+- A car pushes the pitch's ball with a scripted bumper push (the ball's own push model, `vehicle_manager.gd` `_push_loose`), not by contact alone: the hull's raked nose sits about a ball's height up, and without the push the car rode over the ball (2026-11-08).
+- Taillights read a dull brownish red in shade (visual review, 2026-11-08).
+- From raised views the dirt ramps still read as crisp blocks: hard straight shoulders, tyre-worn bands like planks and a skirt with a straight run to its ragged edge (visual review, 2026-11-08).
+- The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
+- The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
+
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
 - YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.
@@ -194,6 +210,9 @@ photos of 2025 and Jun 2026. What isn't there yet:
   11th and 13th Streets; along Avenue E and Avenue I it is assumed to continue.
 - From raised views far off, the pitches' 10 cm lines break into dashes: the
   shared street paint has no minimum width on screen.
+- A driven car breaks the fields' chain-link and windscreen fences bay by bay (a
+  bay's concrete curb stays), as it does other kit fences; the ball-stop nets are
+  `breakable: false`, so a car stops at them.
 - The rugby pitch's frame was moved 5.4 m east and 3.1 m south from the aerial,
   where the aerial's fence lies that far from OSM's; the GAA pitch needed no move.
 - Not modelled: the containers, sheds and the school bus round the rugby field,
@@ -331,7 +350,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
 ## Deferred by the owner
 
-- Drivable cars: after the release.
 - Audio: the game has no sound; "not now".
 - Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data. The street reviews saw three that are missing: a container wall at 11th Street, a container wall at 4th Street / Avenue M, and wooden fences at 13th Street / Gateview Avenue, which hide a shelter in the photo.
 - Mac notarization: later. It needs a paid Apple Developer membership.
@@ -378,7 +396,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `headless_gameplay_contract.gd` preloads `building_shots.gd` only to read `ISLAND_CAMERA_FAR_M`; a shared constants script would be lighter.
-  - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
+  - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two. Stopping the drawing as `island_test.gd` does would need it back on for a `--spray` case's screenshot.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;

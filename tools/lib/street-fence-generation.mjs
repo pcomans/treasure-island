@@ -276,8 +276,8 @@ export function wayLegLine(wayLine, leg, label) {
   return shifted;
 }
 
-// Why a fence type's params are unusable, or null: every type takes inside;
-// a screened fence its screen colour and, optionally, the screen's height; a
+// Why a fence type's params are unusable, or null: every type takes inside and,
+// optionally, breakable; a screened fence its screen colour and, optionally, the screen's height; a
 // slatted one its slat colour; a type with several heights optionally its
 // height_m (6 or 8 ft chain-link, a ball-stop net's 20, 30 or 40 ft); plain and
 // screened chain-link optionally a coating and a low concrete curb (curb: true).
@@ -285,13 +285,17 @@ export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
-  const allowed = ["inside"];
+  // breakable: false keeps a fence whole when a car hits it (the Job Corps
+  // perimeter, owner 2026-11-08; the ball-stop nets); every other kit fence
+  // breaks bay by bay.
+  const allowed = ["inside", "breakable"];
   if (spec.heights_m) allowed.push("height_m");
   if (COATED_TYPES.includes(type)) allowed.push("coating", "curb");
   if (type === "chain_link_screened") allowed.push("screen", "screen_height_m");
   if (type === "chain_link_slatted") allowed.push("slats");
   if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.sort().join(", ")}`;
   if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
+  if (params.breakable !== undefined && typeof params.breakable !== "boolean") return "params.breakable must be true or false";
   if (params.height_m !== undefined && !spec.heights_m.includes(params.height_m)) return `params.height_m must be ${spec.heights_m.join(" or ")}`;
   if (params.coating !== undefined && !STREET_FENCE_COATINGS.includes(params.coating)) return `params.coating must be ${STREET_FENCE_COATINGS.join(", ")}`;
   if (params.curb !== undefined && params.curb !== true) return "params.curb must be true when given";

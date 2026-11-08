@@ -76,6 +76,8 @@ const PROPS := {
 var _material: ShaderMaterial
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
+## The kit's empty nodes by name: the drivable car's wheel centres.
+var _markers: Dictionary = {}
 
 
 func _init() -> void:
@@ -92,7 +94,51 @@ func _init() -> void:
 	var scene := KIT_SCENE.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh
+	for node: Node in scene.find_children("car_*_axle_*", "Node3D", true, false):
+		if not node is MeshInstance3D:
+			_markers[str(node.name)] = (node as Node3D).position
 	scene.free()
+
+
+## A parked car's instance custom data (paint, style, suspension twist) from its
+## row params: {ok, custom} or {ok: false, message}. A drivable car takes the
+## same paint with no twist (its suspension takes up the ground).
+static func car_custom(params: Dictionary, twist_override: Variant = null) -> Dictionary:
+	var body := str(params.get("body", ""))
+	var paint := str(params.get("paint", ""))
+	var finish := FINISHES.find(str(params.get("finish", "")))
+	if not body in CAR_BODIES or not PAINTS.has(paint) or finish < 0:
+		return {"ok": false, "message": "parked_car needs a known body, paint and finish: %s" % [params]}
+	var style := finish
+	if str(params.get("roof", "body")) == "black":
+		style |= 4
+	if str(params.get("rims", "alloy")) == "dark":
+		style |= 8
+	var twist: Variant = params.get("twist", 0.0) if twist_override == null else twist_override
+	if not (twist is float or twist is int) or absf(float(twist)) > MAX_TWIST_M:
+		return {"ok": false, "message": "parked_car twist must be a number within %.2f m: %s" % [MAX_TWIST_M, params]}
+	var paint_index := paint_names().find(paint)
+	return {"ok": true, "custom": Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), 0.0)}
+
+
+## The parts of a body that a drivable car draws (tools/lib/street-clutter-kit.mjs
+## carKitExtras): {ok, chassis (the near mesh without wheels), tyre (one
+## right-hand wheel round its own centre, face toward +X), far (the parked far
+## mesh, wheels and all), front, rear (the right-hand front and rear wheel
+## centres in the car frame; the left ones mirror them in x), radius, tyre_width}
+## or {ok: false, message}.
+func drivable(body: String) -> Dictionary:
+	var chassis: Variant = _meshes.get("car_%s_chassis_lod0" % body, null)
+	var tyre: Variant = _meshes.get("car_%s_tyre_lod0" % body, null)
+	var far: Variant = _meshes.get("car_%s_lod1" % body, null)
+	if not chassis is Mesh or not tyre is Mesh or not far is Mesh or not _markers.has("car_%s_axle_front" % body) or not _markers.has("car_%s_axle_rear" % body):
+		return {"ok": false, "message": "the street-clutter kit has no drivable parts for %s" % body}
+	var tyre_box: AABB = (tyre as Mesh).get_aabb()
+	return {
+		"ok": true, "chassis": chassis, "tyre": tyre, "far": far,
+		"front": _markers["car_%s_axle_front" % body], "rear": _markers["car_%s_axle_rear" % body],
+		"radius": tyre_box.size.y * 0.5, "tyre_width": tyre_box.size.x,
+	}
 
 
 static func paint_names() -> Array:
@@ -113,22 +159,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 	var result := {"ok": true, "range_m": float(PROPS[prop].range_m), "shadow": bool(PROPS[prop].shadow), "custom": Color(0, 0, 0, 0)}
 	var base := ""
 	if prop == "parked_car":
-		var body := str(params.get("body", ""))
-		var paint := str(params.get("paint", ""))
-		var finish := FINISHES.find(str(params.get("finish", "")))
-		if not body in CAR_BODIES or not PAINTS.has(paint) or finish < 0:
-			return {"ok": false, "message": "parked_car needs a known body, paint and finish: %s" % [params]}
-		base = "car_%s" % body
-		var style := finish
-		if str(params.get("roof", "body")) == "black":
-			style |= 4
-		if str(params.get("rims", "alloy")) == "dark":
-			style |= 8
-		var twist: Variant = params.get("twist", 0.0)
-		if not (twist is float or twist is int) or absf(float(twist)) > MAX_TWIST_M:
-			return {"ok": false, "message": "parked_car twist must be a number within %.2f m: %s" % [MAX_TWIST_M, params]}
-		var paint_index := paint_names().find(paint)
-		result.custom = Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), 0.0)
+		var car := car_custom(params)
+		if not car.ok:
+			return car
+		base = "car_%s" % params.body
+		result.custom = car.custom
 	elif prop in ["dumpster", "stock_tank_planter"]:
 		# A dumpster's body, a planter's pallet: the instance paint, matte. A
 		# dumpster's lids (the roof part) take the body's, or params.lid's paint.

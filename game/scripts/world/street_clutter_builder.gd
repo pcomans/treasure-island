@@ -20,6 +20,15 @@ extends RefCounted
 ## on the ground by its optional pitch, roll and lift. A row on a context deck
 ## (its surface kind deck: a pier drawn as visual-only context beyond the
 ## playable boundary) gets no shapes, as the deck has none.
+##
+## The rows a car can set moving (game/scripts/vehicles/vehicle_manager.gd: the
+## parked cars, which the player drives and a driven car shoves, and the jersey
+## water barriers, which it shoves) are listed in the root's swappable_rows
+## metadata: id -> {prop, params, transform, custom, footprint, instances:
+## [[MultiMeshInstance3D name, instance index], ...], shapes: [[body name,
+## CollisionShape3D name], ...]}, so a static row can be hidden and replaced by a
+## live body in the world generated at startup and in the baked one alike (the
+## dummy renderer reads no MultiMesh transforms back).
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
@@ -32,6 +41,8 @@ const PHYSICS_CELL_M := 96.0
 const RENDER_WORLD_VISIBLE := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
+## The yard kit's equipment variant that is the jersey water barrier (K-rail).
+const WATER_BARRIER_VARIANT := 7
 
 
 static func _cell(position: Array, size_m: float) -> String:
@@ -48,6 +59,7 @@ func build(document: Dictionary) -> Dictionary:
 	var shapes: Dictionary = {}
 	var prop_counts: Dictionary = {}
 	var items := 0
+	var swappable: Dictionary = {}
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
 		if str(row.get("status", "")) != "placed" or str(row.get("layer", "")) != "clutter" or not row.get("prop", null) is String:
@@ -57,7 +69,7 @@ func build(document: Dictionary) -> Dictionary:
 		if YARD_KIT.is_prop(prop):
 			if yard == null:
 				yard = YARD_KIT.new()
-			var added := _add_yard_row(yard, row, prop, params if params is Dictionary else {}, batches, shapes)
+			var added := _add_yard_row(yard, row, prop, params if params is Dictionary else {}, batches, shapes, swappable)
 			if added != "":
 				root.free()
 				return {"ok": false, "code": "street_clutter_prop", "message": "%s: %s" % [row.get("id", "?"), added], "source_keys": []}
@@ -87,7 +99,9 @@ func build(document: Dictionary) -> Dictionary:
 		var cell := _cell(position, CELL_M)
 		if not cells.has(cell):
 			cells[cell] = []
-		(cells[cell] as Array).append([placement, parts.custom])
+		(cells[cell] as Array).append([placement, parts.custom, str(row.id)])
+		if prop == "parked_car" and str(surface.get("kind", "")) != "deck":
+			swappable[str(row.id)] = {"prop": prop, "params": tilt.duplicate(true), "transform": placement, "custom": parts.custom, "footprint": {}, "instances": [], "shapes": []}
 		var physics_cell := _cell(position, PHYSICS_CELL_M)
 		if not shapes.has(physics_cell):
 			shapes[physics_cell] = []
@@ -125,6 +139,9 @@ func build(document: Dictionary) -> Dictionary:
 				multimesh.custom_aabb = bounds
 				var instance := MultiMeshInstance3D.new()
 				instance.name = "%s_lod%d__c%s" % [key, level, cell]
+				for index in entries.size():
+					if swappable.has(entries[index][2]):
+						(swappable[entries[index][2]].instances as Array).append([str(instance.name), index])
 				instance.multimesh = multimesh
 				instance.material_override = batch.material
 				instance.layers = RENDER_WORLD_VISIBLE
@@ -162,10 +179,13 @@ func build(document: Dictionary) -> Dictionary:
 			body.add_child(collision)
 			ids.append(str(entry.id))
 			shape_count += 1
+			if swappable.has(entry.id):
+				(swappable[entry.id].shapes as Array).append([str(body.name), str(collision.name)])
 		body.set_meta("street_detail_ids", ids)
 		root.add_child(body)
 	root.set_meta("items", items)
 	root.set_meta("prop_counts", prop_counts)
+	root.set_meta("swappable_rows", swappable)
 	return {
 		"ok": true,
 		"node": root,
@@ -178,7 +198,7 @@ func build(document: Dictionary) -> Dictionary:
 
 ## Adds one yard-kit row's pieces to the render batches and its shapes to the
 ## physics cells; "" or why it can't be built.
-func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Dictionary, batches: Dictionary, shapes: Dictionary) -> String:
+func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Dictionary, batches: Dictionary, shapes: Dictionary, swappable: Dictionary) -> String:
 	var footprint: Variant = row.get("footprint_m", {})
 	var built: Dictionary = yard.pieces(prop, params, hash(str(row.id)) & 0x7fffffff, footprint if footprint is Dictionary else {})
 	if not built.ok:
@@ -190,6 +210,9 @@ func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Diction
 	# Its rest on uneven ground: pitch raises the front (-Z), roll the left side, lift the whole.
 	var basis := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, float(params.get("pitch", 0.0))) * Basis(Vector3.BACK, -float(params.get("roll", 0.0)))
 	var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + float(params.get("lift", 0.0)), float(position[2])))
+	var id := str(row.id)
+	if prop == "equipment" and int(params.get("variant", -1)) == WATER_BARRIER_VARIANT and str(surface.get("kind", "")) != "deck":
+		swappable[id] = {"prop": prop, "params": params.duplicate(true), "transform": placement, "custom": Color(0, 0, 0, 0), "footprint": (footprint as Dictionary).duplicate() if footprint is Dictionary else {}, "seed": hash(id) & 0x7fffffff, "instances": [], "shapes": []}
 	for piece: Dictionary in built.pieces:
 		var key := "yard:%s" % piece.mesh_key
 		if not batches.has(key):
@@ -199,7 +222,7 @@ func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Diction
 		var cell := _cell([world.origin.x, world.origin.y, world.origin.z], float(built.cell_m))
 		if not cells.has(cell):
 			cells[cell] = []
-		(cells[cell] as Array).append([world, piece.custom])
+		(cells[cell] as Array).append([world, piece.custom, id])
 	if str(surface.get("kind", "")) == "deck":
 		return ""
 	for entry: Dictionary in built.shapes:

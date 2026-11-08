@@ -28,6 +28,21 @@
 //              to the rule's other items runs from gap_m[0] where the field is
 //              full to gap_m[1] where it is thin, so piles stand close in
 //              clusters and apart elsewhere. Its yaw is seeded.
+//   ramps      car ramps (owner request, 2026-11-08: an invented gameplay
+//              feature, nothing photographed on the island) from a per-lot
+//              table of ramp types (ramps: [{variant, finish}], variant "gap" a
+//              gap kicker and its landing STUNT_RAMP_GAP_M apart). Each takes a
+//              straight corridor lane_m wide: its run-up, the ramp and its
+//              landing ground (the kit's run_up_m and landing_m). Longest
+//              corridor first, each runs along the lot's minimum-area
+//              rectangle or one of its long edges, lanes tried from the middle
+//              out, every other one facing the other way; it stays margin_m
+//              inside the lot and out of (and margin_m from) the closed OSM
+//              ways in keep_out and from under the aerial's tree crowns (the
+//              canopy rules plant them later), clear of buildings, roads (but
+//              allow_roads), rows and the other corridors. One that fits
+//              nowhere is left out (the audit counts it). Everything placed
+//              after the yards keeps off the corridors.
 //
 // pack lines may also follow an OSM way: a line given as a way leg {way, side,
 // offset_m, from_m, to_m} (as a fence rule's leg) is that stretch of the way,
@@ -73,11 +88,11 @@ import { createHash } from "node:crypto";
 import { pointInRing } from "./osm-geometry.mjs";
 import { validateWayLeg, wayLegLine } from "./street-fence-generation.mjs";
 import { fieldDensity, sowField, validateFieldSpec } from "./street-planting-generation.mjs";
-import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, containerWallLayout, yardMaxSink, yardPropFootprint, yardPropParamsError, yardRestGaps } from "./street-yard-kit.mjs";
+import { STUNT_RAMP_GAP_M, STUNT_RAMP_VARIANTS, YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, containerWallLayout, stuntRampProfile, yardMaxSink, yardPropFootprint, yardPropParamsError, yardRestGaps } from "./street-yard-kit.mjs";
 import { WATER_Y_M } from "./shoreline-generation.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
-export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored", "field"]);
+export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored", "field", "ramps"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "pattern", "rule"]);
 const PATTERN_FIELDS = Object.freeze({
   pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "skew_deg", "allow_roads", "deck"] },
@@ -85,6 +100,7 @@ const PATTERN_FIELDS = Object.freeze({
   wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m", "allow_roads"] },
   moored: { required: ["items"], optional: [] },
   field: { required: ["field", "per_m2", "inset_m", "gap_m", "items"], optional: ["keep_out"] },
+  ramps: { required: ["ramps", "lane_m", "margin_m"], optional: ["keep_out", "allow_roads"] },
 });
 // The density terms a yard field reads: position only (no land height, slope,
 // edge or road bands, which the planting field reads from its beds).
@@ -126,6 +142,19 @@ const SPINE_GAP_M = 0.12;
 const SEGMENT_GAP_M = 0.12;
 // The steepest rest the kit takes (radians, its pitch and roll params).
 const MAX_REST_RAD = 0.35;
+// Ramps: the table's names (a stunt_ramp variant, or a gap pair), the samples
+// along a lane and between candidate lanes, and how far a corridor slides
+// along its lane between tries (m).
+const RAMP_PROP = "stunt_ramp";
+const RAMP_GAP = "gap";
+const RAMP_TABLE_NAMES = Object.freeze(["kicker_small", "kicker_medium", "kicker_large", "tabletop", RAMP_GAP]);
+const RAMP_SAMPLE_M = 0.5;
+const RAMP_LANE_STEP_M = 3;
+const RAMP_SLIDE_M = 4;
+// A lot's long edges also give lanes: edges at least this long (m), unless
+// within RAMP_AXIS_SAME_RAD of a direction already taken.
+const RAMP_EDGE_AXIS_M = 30;
+const RAMP_AXIS_SAME_RAD = (10 * Math.PI) / 180;
 // Ground samples along a long side are at most this far apart (m).
 const REST_SAMPLE_M = 3;
 
@@ -332,8 +361,80 @@ export function validateYardRules(zone, kinds) {
           }
         }
       });
+    } else if (rule.pattern === "ramps") {
+      invariant(kinds[RAMP_PROP]?.layer === "clutter", `${label}: ${RAMP_PROP} has no clutter kind`);
+      invariant(Array.isArray(rule.ramps) && rule.ramps.length > 0, `${label} needs ramps`);
+      const finishes = YARD_KIT_PROPS[RAMP_PROP].params.finish.values;
+      rule.ramps.forEach((ramp, index) => {
+        invariant(isPlainObject(ramp) && JSON.stringify(Object.keys(ramp).sort()) === JSON.stringify(["finish", "variant"]), `${label} ramp ${index} is {variant, finish}`);
+        invariant(RAMP_TABLE_NAMES.includes(ramp.variant), `${label} ramp ${index} variant is one of ${RAMP_TABLE_NAMES.join(", ")}`);
+        invariant(finishes.includes(ramp.finish), `${label} ramp ${index} finish is one of ${finishes.join(", ")}`);
+      });
+      const widest = Math.max(...rule.ramps.flatMap((entry) => rampUnit(entry).parts.map((part) => part.footprint.x_m)));
+      invariant(isFiniteNumber(rule.lane_m) && rule.lane_m >= widest, `${label} lane_m must be at least its widest ramp's plan, ${widest} m`);
+      invariant(isFiniteNumber(rule.margin_m) && rule.margin_m >= 0, `${label} margin_m must not be negative`);
+      if (rule.keep_out !== undefined) invariant(Array.isArray(rule.keep_out) && rule.keep_out.length > 0 && rule.keep_out.every((key) => /^w\d+$/u.test(key)), `${label} keep_out lists OSM way keys`);
     }
   }
+}
+
+// A ramp table entry as the parts it places and the corridor they need: parts
+// [{params, footprint, at}] with at the part's centre along the corridor from
+// its entry end, and length, the corridor's whole length (run-up, the parts,
+// landing ground).
+function rampUnit(entry) {
+  const variantIndex = (name) => STUNT_RAMP_VARIANTS.findIndex((ramp) => ramp.name === name);
+  const part = (name) => {
+    const params = { variant: variantIndex(name), finish: entry.finish };
+    return { name, ramp: STUNT_RAMP_VARIANTS[params.variant], params, footprint: yardPropFootprint(RAMP_PROP, params) };
+  };
+  if (entry.variant !== RAMP_GAP) {
+    const ramp = part(entry.variant);
+    const at = ramp.ramp.run_up_m + ramp.footprint.z_m / 2;
+    return { parts: [{ ...ramp, at }], length: at + ramp.footprint.z_m / 2 + ramp.ramp.landing_m };
+  }
+  // A gap pair: the landing's top STUNT_RAMP_GAP_M on from the kicker's lip,
+  // both along the corridor (a part's local +Z points back to the entry).
+  const kicker = part("gap_kicker");
+  const landing = part("landing");
+  const top = (unit) => {
+    const profile = stuntRampProfile(unit.ramp, unit.params.finish);
+    const high = Math.max(...profile.map(([, y]) => y));
+    return profile.find(([, y]) => y >= high - 1e-6)[0];
+  };
+  const kickerAt = kicker.ramp.run_up_m + kicker.footprint.z_m / 2;
+  const landingAt = kickerAt + STUNT_RAMP_GAP_M + top(landing) - top(kicker);
+  return {
+    parts: [{ ...kicker, at: kickerAt }, { ...landing, at: landingAt }],
+    length: landingAt + landing.footprint.z_m / 2 + landing.ramp.landing_m,
+  };
+}
+
+// A lot outline's lane directions: its minimum-area rectangle's long axis,
+// then its edges at least RAMP_EDGE_AXIS_M long, longest first, each unless
+// within RAMP_AXIS_SAME_RAD of one already taken (either way round).
+function rampAxes(outline) {
+  let best = null;
+  for (let index = 0; index < outline.length; index += 1) {
+    const edge = sub(outline[(index + 1) % outline.length], outline[index]);
+    if (length(edge) < 1e-6) continue;
+    const u = unit(edge);
+    const v = leftOf(u);
+    const us = outline.map((point) => dot(point, u));
+    const vs = outline.map((point) => dot(point, v));
+    const spanU = Math.max(...us) - Math.min(...us);
+    const spanV = Math.max(...vs) - Math.min(...vs);
+    if (best === null || spanU * spanV < best.area - 1e-9) best = { area: spanU * spanV, axis: spanU >= spanV ? u : v };
+  }
+  const edges = outline.map((point, index) => sub(outline[(index + 1) % outline.length], point))
+    .filter((edge) => length(edge) >= RAMP_EDGE_AXIS_M)
+    .sort((left, right) => length(right) - length(left));
+  const axes = [best.axis];
+  for (const edge of edges) {
+    const u = unit(edge);
+    if (axes.every((axis) => Math.acos(Math.min(1, Math.abs(dot(axis, u)))) > RAMP_AXIS_SAME_RAD)) axes.push(u);
+  }
+  return axes;
 }
 
 // A moored row: a vessel on the water (pattern moored), not on the land.
@@ -420,8 +521,9 @@ function rectangleSamples({ centre, axisX, axisZ, halfX, halfZ }, step) {
 
 // Places the yards: rows of the zones' yard rules. Returns {rows, audit}.
 // wayLine(key) gives an OSM way's points in world x, z (pack lines along a way,
-// a field's keep_out areas).
-export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, deckSupport, surfaceAt, groundAt, exclusions, wayLine }) {
+// a field's keep_out areas); crowns are the aerial's tree crowns, [x, z,
+// width], which a ramp corridor keeps out from under.
+export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, deckSupport, surfaceAt, groundAt, exclusions, wayLine, crowns = [] }) {
   const audit = { rules: {}, rejected_by_reason: {}, rest: { max_tilt_rad: 0, max_float_m: 0, max_float_row: null, max_sink_m: 0, max_sink_row: null } };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
@@ -529,8 +631,9 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     return { rest, gaps: gaps.map((gap) => gap - drop) };
   };
 
-  // One item: its row when it stands, else the reason it doesn't.
-  const addItem = (zone, rule, cell, prop, params, centre, front) => {
+  // One item's row when it can stand ({row, gaps}), else the reason it can't
+  // ({problem}); nothing is placed until commitItem.
+  const prepareItem = (zone, rule, cell, prop, params, centre, front) => {
     const footprint = yardPropFootprint(prop, params);
     const yaw = roundYaw(Math.atan2(-front[0], -front[1]));
     const rect = rowRectangle({ position_m: [centre[0], 0, centre[1]], yaw_radians: yaw, footprint_m: footprint, prop, prop_params: params });
@@ -544,7 +647,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     const surface = surfaceAt(xz);
     const resting = gridRest(prop, params, footprint, xz, yaw, y + surface.bias_m, settled, groundAt);
     if (resting.problem) return resting;
-    const { rest: restParams, gaps: settledGaps } = resting;
+    const { rest: restParams, gaps } = resting;
     const row = {
       id: `scatter:${zone.id}:${rule.id}:${cell}`,
       source: "scatter",
@@ -566,17 +669,28 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     };
     const paramError = yardPropParamsError(prop, row.prop_params);
     invariant(paramError === null, `${row.id}: ${paramError}`);
+    return { row, gaps };
+  };
+
+  // Places a prepared item.
+  const commitItem = (zone, rule, { row, gaps: settledGaps }) => {
     rows.push(row);
     placed.push({ id: row.id, rect: rowRectangle(row) });
     for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
     // The audit reports the corner gaps the validator checks.
     const float = Math.max(0, ...settledGaps);
     const sink = Math.max(0, ...settledGaps.map((gap) => -gap));
-    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(restParams.pitch), Math.abs(restParams.roll));
+    audit.rest.max_tilt_rad = Math.max(audit.rest.max_tilt_rad, Math.abs(row.prop_params.pitch), Math.abs(row.prop_params.roll));
     if (float > audit.rest.max_float_m) Object.assign(audit.rest, { max_float_m: round3(float), max_float_row: row.id });
     if (sink > audit.rest.max_sink_m) Object.assign(audit.rest, { max_sink_m: round3(sink), max_sink_row: row.id });
     count(audit.rules, `${zone.id}/${rule.id}`);
     return { row };
+  };
+
+  // One item: its row when it stands, else the reason it doesn't.
+  const addItem = (zone, rule, cell, prop, params, centre, front) => {
+    const prepared = prepareItem(zone, rule, cell, prop, params, centre, front);
+    return prepared.problem ? prepared : commitItem(zone, rule, prepared);
   };
 
   // One item of a deck rule: its row when it stands on the deck, else the reason it doesn't.
@@ -879,6 +993,100 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
             if (result.problem) count(audit.rejected_by_reason, reasonKey(result.problem));
             else own.push({ rect: rowRectangle(result.row), gap });
           },
+        });
+      } else if (rule.pattern === "ramps") {
+        const label = `Street yard rule ${zone.id}/${rule.id}`;
+        const zoneShape = yardShapes.find((shape) => shape.zone === zone);
+        const outline = zone.shape.points_xz;
+        const edge = [...outline, outline[0]];
+        const keepOut = (rule.keep_out ?? []).map((key) => {
+          const ring = wayLine(key);
+          invariant(ring.length >= 4 && length(sub(ring[0], ring.at(-1))) < 1e-6, `${label} keep_out ${key} is not a closed way`);
+          return ring;
+        });
+        // Open ground for a corridor: in the lot, margin_m from its edge, out
+        // of (and margin_m from) every keep_out area and from under every crown.
+        const lotCrowns = crowns.filter(([x, z]) => zoneShape.contains([x, z]) || segmentsDistance([[x, z]], edge) < 20);
+        const open = (xz) => zoneShape.contains(xz) && segmentsDistance([xz], edge) >= rule.margin_m
+          && keepOut.every((ring) => !pointInRing(xz, ring, true) && segmentsDistance([xz], ring) >= rule.margin_m)
+          && lotCrowns.every(([x, z, width]) => Math.hypot(x - xz[0], z - xz[1]) >= width / 2);
+        const half = rule.lane_m / 2;
+        const corridors = [];
+        const units = rule.ramps.map((entry, index) => ({ cell: `r${String(index).padStart(2, "0")}`, ...rampUnit(entry) }))
+          .sort((left, right) => right.length - left.length || (left.cell < right.cell ? -1 : 1));
+        const axes = rampAxes(outline);
+        // A corridor along an axis: entry at along s, lane offset t, heading way
+        // (+1 along the axis, -1 against it): its rectangle and its parts.
+        const corridorAt = (axis, s, t, way, unitLength) => {
+          const across = leftOf(axis);
+          const entry = add(scale(axis, s), scale(across, t));
+          const forward = scale(axis, way);
+          const exit = add(entry, scale(forward, unitLength));
+          return { entry, exit, forward, rect: { centre: scale(add(entry, exit), 0.5), axisX: across, axisZ: scale(forward, -1), halfX: half, halfZ: unitLength / 2 } };
+        };
+        // Each axis's lanes, middle out, and each lane's open runs [a, b] along
+        // it: where the corridor's middle and both edges are open ground.
+        const lanesOf = axes.map((axis) => {
+          const across = leftOf(axis);
+          const us = outline.map((point) => dot(point, axis));
+          const vs = outline.map((point) => dot(point, across));
+          const [u0, u1, v0, v1] = [Math.min(...us), Math.max(...us), Math.min(...vs), Math.max(...vs)];
+          const offsets = [];
+          for (let t = v0 + rule.margin_m + half; t <= v1 - rule.margin_m - half + 1e-6; t += RAMP_LANE_STEP_M) offsets.push(t);
+          const middle = (v0 + v1) / 2;
+          offsets.sort((left, right) => Math.abs(left - middle) - Math.abs(right - middle) || left - right);
+          return offsets.map((t) => {
+            const runs = [];
+            let start = null;
+            let last = null;
+            for (let step = 0; u0 + step * RAMP_SAMPLE_M <= u1 + 1e-6; step += 1) {
+              const s = u0 + step * RAMP_SAMPLE_M;
+              if ([-half, 0, half].every((offset) => open(add(scale(axis, s), scale(across, t + offset))))) {
+                if (start === null) start = s;
+                last = s;
+              } else if (start !== null) {
+                runs.push([start, last]);
+                start = null;
+              }
+            }
+            if (start !== null) runs.push([start, last]);
+            return { t, runs };
+          });
+        });
+        units.forEach((unitSpec, order) => {
+          const ways = order % 2 === 0 ? [1, -1] : [-1, 1];
+          const attempt = () => {
+            for (const [axisIndex, axis] of axes.entries()) {
+              for (const { t, runs } of lanesOf[axisIndex]) {
+                for (const way of ways) {
+                  for (const [a, b] of runs) {
+                    for (let slide = 0; slide <= b - a - unitSpec.length + 1e-6; slide += RAMP_SLIDE_M) {
+                      const s = way === 1 ? a + slide : b - slide;
+                      const corridor = corridorAt(axis, s, t, way, unitSpec.length);
+                      if (corridors.some((other) => rectanglesOverlap(corridor.rect, other.rect, 0))) continue;
+                      if (reject(zoneShape, corridor.rect, rule.allow_roads ?? [])) continue;
+                      const prepared = unitSpec.parts.map((part, index) => prepareItem(zone, rule, unitSpec.parts.length > 1 ? `${unitSpec.cell}${index === 0 ? "k" : "l"}` : unitSpec.cell,
+                        RAMP_PROP, part.params, add(corridor.entry, scale(corridor.forward, part.at)), corridor.forward));
+                      if (prepared.some((result) => result.problem)) continue;
+                      return { corridor, prepared };
+                    }
+                  }
+                }
+              }
+            }
+            return null;
+          };
+          const found = attempt();
+          if (!found) {
+            count(audit.rejected_by_reason, reasonKey(`no_lane_${unitSpec.cell}`));
+            return;
+          }
+          for (const prepared of found.prepared) commitItem(zone, rule, prepared);
+          corridors.push(found.corridor);
+          // Everything placed after the yards keeps off the corridor: a stadium
+          // whose round ends stop at the corridor's ends.
+          const { entry, exit, forward } = found.corridor;
+          occupied.push({ id: `scatter:${zone.id}:${rule.id}:${unitSpec.cell}#corridor`, points: [add(entry, scale(forward, half)), add(exit, scale(forward, -half))], radius_m: half, yard: true });
         });
       }
     }

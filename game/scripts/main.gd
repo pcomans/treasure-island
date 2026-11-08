@@ -8,12 +8,15 @@ extends Node3D
 const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
+const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 
 var _world_ready := false
 var _startup_failed := false
 var _touch_controls: TouchControls
 ## The grass round the camera (ground_dressing.gd), null where it isn't drawn.
 var ground_dressing: GROUND_DRESSING
+## The drivable cars (vehicle_manager.gd), once the world is loaded.
+var vehicles: VEHICLE_MANAGER
 var _web_blur_callback: JavaScriptObject
 var _web_visibility_callback: JavaScriptObject
 var _web_pointer_lock_callback: JavaScriptObject
@@ -145,6 +148,11 @@ func _on_world_ready(_report: Dictionary) -> void:
 		ground_dressing.name = "GroundDressing"
 		add_child(ground_dressing)
 		ground_dressing.configure(world_root, player, dressing_level)
+	if vehicles == null:
+		vehicles = VEHICLE_MANAGER.new()
+		vehicles.name = "Vehicles"
+		add_child(vehicles)
+		vehicles.configure(world_root, player, hud, _touch_controls != null)
 	hud.show_loading("Preparing graphics…")
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")
@@ -355,6 +363,8 @@ func _publish_web_state(_args: Array) -> void:
 		"touch_visible": _touch_controls != null and _touch_controls.visible,
 		"capture_pending": _web_capture_pending, "pointer_locked": _web_pointer_locked,
 		"view_revision": _web_view_revision,
+		"driving": vehicles != null and vehicles.is_driving(),
+		"car": vehicles.active_car().describe() if vehicles != null and vehicles.is_driving() else {},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 

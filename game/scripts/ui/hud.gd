@@ -14,6 +14,8 @@ signal exit_requested
 @onready var load_text: Label = $LoadPanel/LoadLayout/LoadText
 @onready var debug_panel: PanelContainer = $DebugPanel
 @onready var debug_text: Label = $DebugPanel/DebugText
+@onready var prompt_panel: PanelContainer = $PromptPanel
+@onready var prompt_text: Label = $PromptPanel/PromptText
 
 var _feedback_seconds := 0.0
 var _evidence: RuntimeEvidence
@@ -23,12 +25,13 @@ var _capture_hint: Button
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
-		$PausePanel/PauseLayout/Controls.text = "WASD move • Shift run • Space jetpack • C drop fast • Mouse look\nR recover • F3 debug • Spray unavailable in browser"
+		$PausePanel/PauseLayout/Controls.text = "WASD move • Shift run • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer, Space handbrake, R reset\nR recover • F3 debug • Spray unavailable in browser"
 	resume_button.pressed.connect(func() -> void: resume_requested.emit())
 	exit_button.pressed.connect(func() -> void: exit_requested.emit())
 	feedback_panel.hide()
 	pause_panel.hide()
 	debug_panel.hide()
+	prompt_panel.hide()
 	reticle.hide()
 
 
@@ -74,6 +77,13 @@ func show_feedback(message: String, success: bool) -> void:
 	feedback_text.modulate = Color("d9ffe9") if success else Color("ffe1d9")
 	feedback_panel.show()
 	_feedback_seconds = 2.0
+
+
+## A short key hint near the bottom of the screen ("F  Drive" beside a car);
+## "" hides it.
+func set_prompt(text: String) -> void:
+	prompt_text.text = text
+	prompt_panel.visible = not text.is_empty()
 
 
 func set_paused(paused: bool) -> void:

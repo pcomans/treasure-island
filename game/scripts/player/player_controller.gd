@@ -29,6 +29,8 @@ var _gameplay_enabled := false
 var _startup_settling := false
 var _startup_boundary: WorldBoundary
 var _first_reveal_grounded := false
+var _driving := false
+var _avatar_shown := true
 
 
 func _ready() -> void:
@@ -66,6 +68,8 @@ func was_first_reveal_grounded() -> bool:
 
 
 func set_gameplay_enabled(enabled: bool) -> void:
+	# In a car the stock controller stays off until end_driving().
+	enabled = enabled and not _driving
 	_gameplay_enabled = enabled
 	set_physics_process(enabled or _startup_settling)
 	set_process_unhandled_input(enabled)
@@ -77,6 +81,36 @@ func set_gameplay_enabled(enabled: bool) -> void:
 
 func get_camera() -> Camera3D:
 	return camera_rig.get_camera()
+
+
+## In a car (game/scripts/vehicles/vehicle_manager.gd): the stock controller,
+## its camera input and the spray stop, the avatar hides (not the whole player:
+## the spray tags and the dust hang under it) and the capsule stops colliding
+## while the player rides along. end_driving() puts them back as they were.
+func begin_driving() -> void:
+	_driving = true
+	set_gameplay_enabled(false)
+	_avatar_shown = avatar_pivot.visible
+	avatar_pivot.hide()
+	collision_shape.disabled = true
+
+
+## Out of the car, standing at `at`: walking, the camera, the spray and the
+## avatar as before. With safe (the player got out beside the car, on the
+## ground), the recovery's safe place moves there.
+func end_driving(at: Transform3D, safe: bool = true) -> void:
+	global_transform = at
+	velocity = Vector3.ZERO
+	collision_shape.disabled = false
+	avatar_pivot.visible = _avatar_shown
+	_driving = false
+	set_gameplay_enabled(true)
+	if safe:
+		recovery_controller.mark_safe(at)
+
+
+func is_driving() -> bool:
+	return _driving
 
 
 func get_spray_controller() -> SprayController:
