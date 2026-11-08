@@ -182,10 +182,12 @@ photos of 2025 and Jun 2026. What isn't there yet:
 - The turf pitch's windscreen fence stops 3 m short of the south corner (Avenue I
   at 8th Street) on both sides: no photo shows that corner, so it stays open.
 - The fields' lights are portable light towers on trailers, which move. The rugby
-  field's two stand where Street View caught them (Avenue H, Sep 2025; near the
-  11th Street corner, Mar 2025), 3 m inside the fence. The turf pitch's one stands
-  on its Sep 2025 bearing from 9th Street at an inferred 37 m (no turf tower in
-  Mar 2025, and neither aerial shows it). Their 9 m masts are estimates. Four
+  field's one stands where Street View caught it on Avenue H (Sep 2025), 3 m
+  inside the fence, and the GAA field's one in its corner at 11th Street and
+  Avenue H (Mar 2025), on the photo's bearing at an inferred 26 m, its heads
+  turned over the GAA pitch by inference. The turf pitch's one stands on its
+  Sep 2025 bearing from 9th Street at an inferred 37 m (no turf tower in Mar 2025,
+  and neither aerial shows it). Their 9 m masts are estimates. Four
   dark spots on the turf's south-east apron in the 2026-05-26 aerial match
   nothing photographed, so they aren't modelled.
 - The GAA and rugby fields' low concrete curb is photographed on Avenue H and

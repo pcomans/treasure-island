@@ -210,17 +210,19 @@ const GOAL_NET_TILE_M := 0.12
 ## How high a goal net's collision walls stand (_goal_net_shapes).
 const GOAL_NET_WALL_M := 0.6
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
-## Portable light towers on their trailers (the rugby field's, Avenue H, Sep 2025,
-## and 11th St, Mar 2025; one by the turf pitch's small pitches, 9th St, Sep 2025):
-## a cream trailer body on two wheels with its drawbar and four outrigger jacks, a
-## dark telescoping mast wound with its coiled cable, a box at its top and a T-bar
-## with four rectangular lamp heads, two up and two lower, aimed down over the
-## pitch (-Z). Sizes are those of the common 9 m towers, production inference.
+## Portable light towers on their trailers (the rugby field's on Avenue H, Sep 2025;
+## the GAA field's in its 11th Street corner, Mar 2025; one by the turf pitch's small
+## pitches, 9th St, Sep 2025): a cream trailer body on two wheels with its drawbar
+## and four outrigger jacks, a dark telescoping mast at its drawbar end wound with
+## its coiled cable, a box at its top and a T-bar carrying four rectangular lamp
+## heads, two on it and two hung under it. Sizes are those of the common 9 m
+## towers, production inference.
 const TOWER_BODY := Color(0.85, 0.84, 0.79)
 const TOWER_MAST := Color(0.17, 0.18, 0.19)
 const TOWER_HEAD := Color(0.6, 0.61, 0.62)
-## Where the mast stands on the trailer (m along X from the body's centre).
-const TOWER_MAST_X := -0.75
+## Where the mast stands on the trailer (m along X from the body's centre, toward
+## the drawbar).
+const TOWER_MAST_X := 0.75
 ## Aluminium spectator bleachers (the GAA field's spectator side, SF GAA photos
 ## Jun 2026; the rugby field's, Avenue H and Avenue I, Sep 2025): rows of plank
 ## seats and footboards on aluminium A-frames, each row a step up and back, and on
@@ -681,7 +683,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_goal_net_shapes(result, goal_width * 0.5 + 0.04, SOCCER_NET_DEPTH_M * minf(1.0, goal_height / 2.44))
 		"light_tower":
 			var mast := snappedf(clampf(_number(params, "mast_m", 9.0), 6.0, 10.0), 0.5)
-			_piece(result, "light_tower_m%.1f" % mast, func(b: Builder) -> void: _light_tower(b, mast))
+			# heads_deg turns the heads about the mast from -Z (counterclockwise seen
+			# from above), as a tower's crew aims them whatever way its trailer stands.
+			var heads_deg := snappedf(clampf(_number(params, "heads_deg", 0.0), -180.0, 180.0), 5.0)
+			_piece(result, "light_tower_m%.1f_h%d" % [mast, roundi(heads_deg)], func(b: Builder) -> void: _light_tower(b, mast, heads_deg))
 			# The trailer with its wheels and outriggers, and the mast.
 			_box_shape(result, Vector3(2.4, 1.5, 2.7), Vector3(0.0, 0.75, 0.0))
 			_capsule(result, 0.1, mast, Vector3(TOWER_MAST_X, 0.0, 0.0))
@@ -1530,8 +1535,9 @@ func _goal_soccer_net(b: Builder, width: float, height: float) -> void:
 ## A portable light tower on its trailer, its drawbar to +X: the trailer body on
 ## two wheels, the drawbar and its jack, four outrigger jacks set down on the
 ## ground, the mast in three telescoped sections with its coiled cable, a box at
-## its top, and the T-bar's four rectangular heads aimed down over -Z.
-func _light_tower(b: Builder, mast: float) -> void:
+## its top, and the T-bar with two rectangular heads on it and two under it, aimed
+## down over -Z turned heads_deg about the mast.
+func _light_tower(b: Builder, mast: float, heads_deg: float) -> void:
 	b.box(Vector3(0.0, 0.98, 0.0), Basis.IDENTITY, Vector3(2.3, 1.04, 1.24), TOWER_BODY, CELL_WHITE)
 	b.box(Vector3(0.0, 0.42, 0.0), Basis.IDENTITY, Vector3(2.4, 0.09, 1.3), TOWER_MAST, CELL_METAL)
 	for side: float in [-1.0, 1.0]:
@@ -1561,15 +1567,17 @@ func _light_tower(b: Builder, mast: float) -> void:
 		coil_radii.append(0.014)
 	b.tube(coil, coil_radii, 4, STEEL_BLACK, CELL_METAL, false, false)
 	b.box(Vector3(TOWER_MAST_X, mast + 0.15, 0.0), Basis.IDENTITY, Vector3(0.3, 0.3, 0.26), TOWER_MAST, CELL_METAL)
-	# The T-bar and its heads, two up and two lower, aimed down over -Z.
-	var aim := Vector3(0.0, -0.45, -1.0).normalized()
-	var head_basis := Basis(Vector3.RIGHT, Vector3.RIGHT.cross(-aim).normalized() * -1.0, -aim)
-	b.box(Vector3(TOWER_MAST_X, mast - 0.12, -0.1), Basis.IDENTITY, Vector3(1.6, 0.06, 0.06), TOWER_MAST, CELL_METAL)
-	for row in 2:
-		var y := mast - 0.25 - 0.55 * float(row)
+	# The T-bar and its heads: two standing on it and two hung under it, aimed
+	# down over -Z, the whole turned heads_deg about the mast.
+	var turn := Basis(Vector3.UP, deg_to_rad(heads_deg))
+	var aim := turn * Vector3(0.0, -0.45, -1.0).normalized()
+	var head_basis := turn * Basis(Vector3.RIGHT, Vector3.RIGHT.cross(Vector3(0.0, 0.45, 1.0).normalized()).normalized() * -1.0, Vector3(0.0, 0.45, 1.0).normalized())
+	var axis := Vector3(TOWER_MAST_X, 0.0, 0.0)
+	var bar := mast - 0.5
+	b.box(axis + Vector3(0.0, bar, 0.0) + turn * Vector3(0.0, 0.0, -0.1), turn, Vector3(1.6, 0.06, 0.06), TOWER_MAST, CELL_METAL)
+	for y: float in [bar + 0.23, bar - 0.25]:
 		for side: float in [-1.0, 1.0]:
-			var mount := Vector3(TOWER_MAST_X + side * 0.55, y, -0.18)
-			b.tube(PackedVector3Array([Vector3(TOWER_MAST_X + side * 0.55, mast - 0.12, -0.1), mount]), PackedFloat32Array([0.02, 0.02]), 6, TOWER_MAST, CELL_METAL, false, false)
+			var mount := axis + Vector3(0.0, y, 0.0) + turn * Vector3(side * 0.55, 0.0, -0.18)
 			b.box(mount + aim * 0.07, head_basis, Vector3(0.5, 0.4, 0.14), TOWER_HEAD, CELL_WHITE)
 			b.box(mount + aim * 0.142, head_basis, Vector3(0.44, 0.34, 0.01), LENS_GREY, CELL_WHITE)
 
