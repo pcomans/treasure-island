@@ -14,6 +14,8 @@ extends RefCounted
 ## end + side, end - side]; they are rebuilt as centre lines for the wire shader,
 ## which keeps them at least a pixel or so wide and fades them by the share of that
 ## width they cover.
+## The solid meshes cast the sun's shadows (the decks' and towers' on the water and on
+## Yerba Buena Island); the camera-facing wire strips do not.
 
 const WIRE_SHADER := preload("res://game/resources/materials/world/bay_bridge/bay_bridge_wire.gdshader")
 
@@ -128,9 +130,10 @@ static func build_record(record: Dictionary) -> Dictionary:
 		instance.name = key
 		instance.position = center
 		instance.layers = 1
-		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var wire := kind == CLASS_WIRE or kind == CLASS_WIRE_FAR
+		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if wire else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		var mesh: ArrayMesh
-		if kind == CLASS_WIRE or kind == CLASS_WIRE_FAR:
+		if wire:
 			mesh = _wire_mesh(bucket.items, points, colors, center)
 			triangles += int(bucket.items.size()) * 2
 		else:
