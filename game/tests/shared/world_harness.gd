@@ -436,7 +436,7 @@ func aim_camera(target: Vector3) -> void:
 
 
 func release_input() -> void:
-	for action: StringName in ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]:
+	for action: StringName in ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop"]:
 		Input.action_release(action)
 
 

@@ -20,7 +20,9 @@ extends Node3D
 ##   out behind, bounce and shrink away (a small reused pool; nothing stays).
 ## - Air: the legs dangle and pedal and reach for the ground before landing; the
 ##   arms flail on the way up and float out on the slow descent. Landing
-##   squashes the chest, plants both feet and pops a few coins out.
+##   squashes the chest, plants both feet and pops a few coins out. Coming down
+##   on the fast drop (C) also kicks up a little dust poof round the feet
+##   (landing_poof.gd).
 ## - Lid: a sprung hinge, simulated. It is driven by the chest's own
 ##   acceleration (the lid's inertia in the chest's accelerating frame: thrust
 ##   pushes it shut, releasing the jet or the rebound of a landing throws it
@@ -34,6 +36,7 @@ extends Node3D
 ##   and peek over it (the eye shader draws nothing inside the lid).
 
 const Parts := preload("res://game/scripts/player/chest_avatar_parts.gd")
+const GroundDressing := preload("res://game/scripts/world/ground_dressing.gd")
 
 ## Feet stand on what the player stands on: its own collision mask (world solid
 ## and street props); this is the fallback without a player.
@@ -112,6 +115,11 @@ const SPILL_SPEED := 9.0
 const SPILL_CHANCE := 0.35
 ## Spilled coins are drawn larger than the heap's, to read at camera distance.
 const SPILL_SCALE := 1.6
+## A landing kicks up the dust poof only on the fast drop: C held (and not Space,
+## which wins over it) and coming down at least this share of the fast-drop speed.
+## The slow descent, which also follows walking off a ledge, is 1.5 m/s; a tap of
+## C in the last metre or so before touchdown does not count.
+const POOF_SPEED_SHARE := 0.5
 
 var _player: CharacterBody3D
 var _materials: Parts.Materials
@@ -127,6 +135,8 @@ var _puffs: Array[Puff] = []
 var _spills: Array[Spill] = []
 var _spill_multimesh: MultiMesh
 var _spill_instance: MultiMeshInstance3D
+var _poof: LandingPoof
+var _poof_warmed := false
 var _eye_mount: Node3D
 ## The eye mount relative to the arch frame under it, and that frame's arch angle.
 var _eye_seat := Transform3D.IDENTITY
@@ -282,6 +292,8 @@ func describe() -> Dictionary:
 		"flame": _flame, "swinging": [_legs[0].swinging, _legs[1].swinging] if _legs.size() == 2 else [],
 		"feet": [_legs[0].current, _legs[1].current] if _legs.size() == 2 else [],
 		"spilled": _spills.filter(func(coin: Spill) -> bool: return coin.age < SPILL_LIFE).size(),
+		"dust": _poof != null and _poof.emitting,
+		"dust_ground": _poof != null and _poof.ground_offered,
 	}
 
 
@@ -384,6 +396,10 @@ func _build() -> void:
 	for i in SPILL_COINS:
 		_spills.append(Spill.new())
 		_spill_multimesh.set_instance_transform(i, Transform3D(Basis.from_scale(Vector3.ONE * 0.0001), Vector3.ZERO))
+	# The dust of a fast-drop landing, in world space too.
+	_poof = LandingPoof.new()
+	_poof.name = "LandingPoof"
+	add_child(_poof)
 	# The web build draws no sun shadows: soft blobs under the shoes and chest.
 	if OS.has_feature("web"):
 		var disc := Parts.blob(m)
@@ -411,6 +427,11 @@ func _physics_process(delta: float) -> void:
 		_reset_pending = true
 		return
 	_space = get_world_3d().direct_space_state
+	if not _poof_warmed:
+		_poof_warmed = true
+		# Compile the dust's shader behind the start-up screen, not at the first landing.
+		if DisplayServer.get_name() != "headless":
+			_poof.warm_up(global_position)
 	if _ground_stale and _world != null:
 		_ground_stale = false
 		_visible_ground.build([_world.ground_and_areas, _world.roads_and_paths])
@@ -424,6 +445,7 @@ func _physics_process(delta: float) -> void:
 	_time += delta
 	var on_floor := _player.is_on_floor()
 	var thrust := active and _player.is_processing_unhandled_input() and Input.is_action_pressed("jetpack")
+	var dropping := active and _player.is_processing_unhandled_input() and Input.is_action_pressed("fast_drop") and not Input.is_action_pressed("jetpack")
 
 	# Smoothed velocity and its acceleration, world frame.
 	var previous := _velocity
@@ -445,6 +467,8 @@ func _physics_process(delta: float) -> void:
 	if _airborne and on_floor:
 		_airborne = false
 		_land(xf, _fall_speed, yaw)
+		if dropping and _fall_speed >= POOF_SPEED_SHARE * _fast_drop_speed():
+			_poof.burst(_ground(xf.origin, xf.origin.y), _ground_capture())
 	elif not _airborne and not on_floor and (thrust or velocity.y > 1.0 or _air_time > AIR_GRACE):
 		_airborne = true
 		_take_off(xf, thrust)
@@ -599,6 +623,21 @@ func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
 	_phase = 0.02
 	for coin in _coins:
 		coin.spin_speed = _rng.randf_range(-10.0, 10.0)
+
+
+## The stock controller's fast-drop speed (m/s); without one nothing is a fast drop.
+func _fast_drop_speed() -> float:
+	return (_player as PlayerController).fast_drop_speed_mps if _player is PlayerController else INF
+
+
+## The grass's ground captures, for the dust's colour, or {} where none are drawn
+## (the web's Compatibility renderer, headless runs, the dressing off).
+func _ground_capture() -> Dictionary:
+	var main := _player.get_parent()
+	if main == null:
+		return {}
+	var dressing := main.get_node_or_null("GroundDressing") as GroundDressing
+	return dressing.ground_capture() if dressing != null else {}
 
 
 func _take_off(xf: Transform3D, thrust: bool) -> void:
