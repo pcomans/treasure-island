@@ -74,6 +74,15 @@ body {
 	image-rendering: pixelated;
 }
 
+/* After the download: the game's treasure chest, centred above the notice. */
+#status-splash.chest {
+	position: static;
+	width: 25vmin;
+	height: 25vmin;
+	object-fit: contain;
+	margin: 0 0 1.5rem;
+}
+
 #status-progress, #status-notice {
 	display: none;
 }
@@ -136,6 +145,17 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		statusNotice.textContent = text;
 	}
 
+	// Godot's boot splash shows while the game downloads; then the game's own
+	// treasure chest (the favicon the exporter writes from the project icon).
+	function showChest() {
+		const icon = document.getElementById('-gd-engine-icon');
+		const splash = document.getElementById('status-splash');
+		if (icon && icon.href) {
+			splash.src = icon.href;
+			splash.className = 'chest';
+		}
+	}
+
 	function preparing() {
 		if (phase !== 'download') return;
 		if (!downloadComplete) {
@@ -144,6 +164,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		}
 		phase = 'preparing';
 		showNotice('Preparing graphics…');
+		showChest();
 		mark('status_changed');
 	}
 

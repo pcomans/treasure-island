@@ -11,7 +11,9 @@ signal exit_requested
 @onready var resume_button: Button = $PausePanel/PauseLayout/ResumeButton
 @onready var exit_button: Button = $PausePanel/PauseLayout/ExitButton
 @onready var load_panel: PanelContainer = $LoadPanel
-@onready var load_text: Label = $LoadPanel/LoadLayout/LoadText
+@onready var load_text: Label = $LoadPanel/LoadLayout/LoadStack/LoadText
+## The loading screen's treasure chest, the app icon (game/resources/ui/PROVENANCE.md).
+@onready var load_icon: TextureRect = $LoadPanel/LoadLayout/LoadStack/LoadIcon
 @onready var debug_panel: PanelContainer = $DebugPanel
 @onready var debug_text: Label = $DebugPanel/DebugText
 @onready var prompt_panel: PanelContainer = $PromptPanel
@@ -33,6 +35,15 @@ func _ready() -> void:
 	debug_panel.hide()
 	prompt_panel.hide()
 	reticle.hide()
+	resized.connect(_fit_load_icon)
+	_fit_load_icon()
+
+
+## The chest on the loading screen is a quarter of the screen's shorter side, at
+## any window shape; the load panel centres it above the text.
+func _fit_load_icon() -> void:
+	var side := roundf(0.25 * minf(size.x, size.y))
+	load_icon.custom_minimum_size = Vector2(side, side)
 
 
 func _process(delta: float) -> void:

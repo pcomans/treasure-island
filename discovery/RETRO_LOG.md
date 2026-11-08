@@ -25168,3 +25168,30 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: `git show --remerge-diff` plus a list of batch E's added lines missing from the merge showed at once that every missing line had been moved on purpose, into `add_post` and `add_run`. `git diff a3ed4ce9 cc1c43bd` touching only the car-shore files settled that nothing from batch E was lost.
 - What did not work well: The merge commit doesn't compile by itself: the curb flag's inferred type broke the parse until 112786a4. The suite queued at 01c0906c and finished at cc1c43bd because retro commits landed while it ran, so its head line needed reading against the diff.
 - What the team should change next time: Parse-check the merge commit itself (`tools/godot --headless --check-only`) before committing it. Keep retro commits out of the tree while a suite runs on it, so the run's start and end heads match.
+
+### app-icon-20261108 — 2026-11-08 — the owner's treasure chest as the app icon
+
+- What worked well: Reading the pinned engine source (`/opt/godot/tracy-4.7.2`) before choosing any size settled every consumer in minutes. The web favicon is `config/icon` saved as is, and the apple-touch-icon is a bilinear resize of it to 180. The macOS `.icns` (32 to 1024 px, Lanczos) comes from the preset's own icon. An exported Mac app never lets `config/icon` override its bundle icon. So the 1024 master went to the Mac preset and a 360 (exactly twice 180) to `config/icon`. Comparing the master with the owner's picture on three backgrounds (0 differing pixels), and the served favicon with the committed 360 (0), proved the art was neither scaled nor altered.
+- What did not work well: My first 360 had pixels saved fully transparent but still coloured, because Lanczos left them an alpha under one 8-bit step when the script blackened transparent pixels; a direct check of colour under alpha 0 caught it. The window icon can't be seen here at all: headless Weston has no xdg-toplevel-icon protocol, so the native launch could only show that Godot loads the icon and hands it over.
+- What the team should change next time: When an image will be resized by code that doesn't premultiply alpha, check the colour under every saved alpha-0 pixel, not just the alpha. For icons, read the exporter's code for each platform before picking sizes; each one resizes differently.
+
+### app-icon-code-review — 2026-11-08 — independent code review of the app icon (6a7c505a)
+
+- What worked well: The diff was small and its claims were checkable in seconds without the engine: rerunning the script's 360 step from the committed master in a scratch folder gave a byte-identical file, and a pixel dump showed no colour under any alpha-0 pixel in either PNG. The served-favicon logs and the contact sheet answered the web and fringe questions directly.
+- What did not work well: The owner's original WebP exists nowhere on disk now, so the script's rebuild-from-original branch can't be exercised; the committed master is the de facto source, which PROVENANCE only implies.
+- What the team should change next time: When an owner-supplied original isn't kept, say in the provenance note that the committed master is the source of truth and which script call rebuilds the derived files from it.
+### app-icon-20261108 — 2026-11-08 — round 2: the treasure chest on the loading screen
+
+- What worked well: Reading where loading text comes from before coding showed two different screens. The world builds synchronously, so the native window keeps Godot's boot splash until "Preparing graphics…", the first loading frame drawn. On the web, the shell's DOM overlay covers the HUD's load panel until play. So the chest went into both the HUD panel and the shell's preparing phase, and the shell reuses the favicon the exporter already writes, adding no download. A CDP-throttled download (cache off) kept the boot splash on screen long enough to capture it before the chest.
+- What did not work well: My web check compared the chest's src with the favicon link's current href, but Godot's web runtime swaps that link to a blob URL when the engine sets its icon. The check failed on correct pixels and correct src in both legs, and the budget left no run to repeat them.
+- What the team should change next time: In a web check, compare against values read before the engine starts, never against page state the engine may rewrite. Note in the brief that native startup draws no frame while the world builds, so "mid-load" there means "Preparing graphics…".
+
+### app-icon-visual-review — 2026-11-08 — independent visual check of the loading-screen chest (8f856967)
+
+- What worked well: The splash → chest → play captures for each web shape, and the overview sheet, made the order and placement easy to check. Full-resolution crops settled the edge question in seconds.
+- What did not work well: The native capture set starts at "Preparing graphics…", so it doesn't show whether Godot's boot splash appears first on native; I could confirm that only for web.
+- What the team should change next time: When an assignment asks to confirm order, capture the first frame on every target, native included.
+
+### app-icon-code-review — 2026-11-08 — delta review of the loading-screen chest (afe93619..ba4fc0dc)
+
+- Delta addendum: The e04 log answered the driver-versus-page question by itself. The splash `src` held the static favicon URL while the link already held Godot's later `blob:` URL, and the size and screenshot checks passed. Next time, a capture driver should compare against the URL the page actually used, which is the static favicon taken before `callMain`, not the link's live `href`.
