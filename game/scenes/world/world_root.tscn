@@ -1,9 +1,9 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/world/world_loader.gd" id="1_loader"]
 [ext_resource type="Script" path="res://game/scripts/world/world_boundary.gd" id="2_boundary"]
 [ext_resource type="Script" path="res://game/scripts/debug/runtime_evidence.gd" id="3_evidence"]
-[ext_resource type="Texture2D" path="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png" id="4_skyline"]
+[ext_resource type="Script" path="res://game/scripts/world/fresh_bay_horizon.gd" id="4_horizon"]
 [ext_resource type="PackedScene" path="res://game/resources/models/context/baybridge-western-span.glb" id="5_western_bridge"]
 [ext_resource type="Shader" path="res://game/resources/materials/world/water/bay_water.gdshader" id="6_water_shader"]
 [ext_resource type="CompressedTexture2DArray" path="res://game/resources/textures/world/water/bay_waves.png" id="7_water_waves"]
@@ -19,21 +19,10 @@ shader_parameter/far_share = 0.96
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_water"]
 material = SubResource("Material_water")
-custom_aabb = AABB(-12000, -1, -12000, 24000, 6001, 24000)
+custom_aabb = AABB(-27000, -1, -27000, 54000, 26001, 54000)
 size = Vector2(2, 2)
 subdivide_width = 22
 subdivide_depth = 22
-
-[sub_resource type="StandardMaterial3D" id="Material_skyline"]
-transparency = 1
-shading_mode = 0
-cull_mode = 2
-albedo_texture = ExtResource("4_skyline")
-billboard_mode = 1
-
-[sub_resource type="QuadMesh" id="QuadMesh_skyline"]
-material = SubResource("Material_skyline")
-size = Vector2(3900, 600)
 
 [node name="WorldRoot" type="Node3D"]
 script = ExtResource("1_loader")
@@ -81,11 +70,8 @@ metadata/license = "CC BY 4.0"
 
 [node name="Shoreline" type="Node3D" parent="ContextWorld"]
 
-[node name="SanFranciscoBillboard" type="MeshInstance3D" parent="ContextWorld"]
-position = Vector3(-1875, 264.85, 4306.4)
-layers = 1
-mesh = SubResource("QuadMesh_skyline")
-cast_shadow = 0
+[node name="BayAreaHorizon" type="Node3D" parent="ContextWorld"]
+script = ExtResource("4_horizon")
 
 [node name="WorldBoundary" type="Node" parent="."]
 script = ExtResource("2_boundary")

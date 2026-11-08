@@ -4,10 +4,6 @@ const REQUIRED_ACTIONS := [
 	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
 	"spray", "recover", "pause", "quit_game", "toggle_debug",
 ]
-const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
-const EXPECTED_BILLBOARD_TEXTURE_SIZE := Vector2i(2212, 340)
-const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
-const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
 ## The largest camera far plane in use: the island overviews' in
@@ -104,7 +100,7 @@ func _initialize() -> void:
 		"ContextWorld/BayBridge",
 		"ContextWorld/WesternBayBridgeModel",
 		"ContextWorld/BoundaryAttachedVisuals",
-		"ContextWorld/SanFranciscoBillboard",
+		"ContextWorld/BayAreaHorizon",
 		"WorldBoundary",
 		"RuntimeEvidence",
 	]:
@@ -137,12 +133,12 @@ func _initialize() -> void:
 	var far_share := float(water_material.get_shader_parameter("far_share"))
 	var grid_rows := int(water_material.get_shader_parameter("grid_rows"))
 	var bounds := water_mesh.custom_aabb
-	var reach := far_share * WATER_LARGEST_CAMERA_FAR_M + WATER_CAMERA_REACH_M
+	var largest_far := maxf(gameplay_far, WATER_LARGEST_CAMERA_FAR_M)
+	var reach := far_share * largest_far + WATER_CAMERA_REACH_M
 	if water_mesh.size != Vector2(2.0, 2.0) \
 	or water_mesh.subdivide_width != water_mesh.subdivide_depth \
 	or grid_rows % 2 != 1 or grid_rows != water_mesh.subdivide_width + 1 \
 	or far_share <= 0.0 or far_share >= 1.0 \
-	or gameplay_far > WATER_LARGEST_CAMERA_FAR_M \
 	or absf(bounds.get_center().x) > 1.0 or absf(bounds.get_center().z) > 1.0 \
 	or bounds.size.x < 2.0 * reach or bounds.size.z < 2.0 * reach \
 	or bounds.position.y > 0.0 or bounds.end.y < far_share * gameplay_far:
@@ -160,34 +156,111 @@ func _initialize() -> void:
 	or str(western_bridge.get_meta("license", "")) != "CC BY 4.0":
 		_fail("Western Bay Bridge asset must be visible, attributed, and non-colliding.")
 		return
-	var billboard := world.get_node("ContextWorld/SanFranciscoBillboard") as MeshInstance3D
-	var billboard_mesh := billboard.mesh as QuadMesh if billboard != null else null
-	var billboard_material := billboard_mesh.material as StandardMaterial3D if billboard_mesh != null else null
-	var billboard_texture := billboard_material.albedo_texture if billboard_material != null else null
-	if billboard == null \
-	or billboard_mesh == null \
-	or billboard_material == null \
-	or billboard_texture == null:
-		_fail("SF billboard mesh, material, or texture is missing.")
+	var horizon := world.get_node("ContextWorld/BayAreaHorizon")
+	horizon.build_scenery() # This contract instantiates the scene off-tree.
+	var band := horizon.get_node("Continuous360Horizon") as Node3D
+	var city := horizon.get_node("SanFranciscoDepthCard") as MeshInstance3D
+	if band == null or city == null or band.get_child_count() != 4:
+		_fail("Four continuous horizon sectors and fixed skyline must exist.")
 		return
-	if billboard.transform != EXPECTED_BILLBOARD_TRANSFORM \
-	or billboard_mesh.size != EXPECTED_BILLBOARD_SIZE:
-		_fail("SF billboard exact transform or QuadMesh size drifted.")
+	for kind: String in ["CollisionObject3D", "CollisionShape3D", "CollisionPolygon3D"]:
+		if not horizon.find_children("*", kind, true, false).is_empty():
+			_fail("Distant context must remain non-colliding.")
+			return
+	for item: MeshInstance3D in horizon.find_children("*", "MeshInstance3D", true, false):
+		if item.layers != 1 or item.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			_fail("Horizon art must remain layer1 and shadowless.")
+			return
+	var eastern := horizon.get_node_or_null("MappedEasternBackground") as Node3D
+	if eastern == null or eastern.get_node_or_null("EastLowShore") == null or eastern.get_node_or_null("EastSetbackHills") == null or eastern.get_node_or_null("EastDevelopedEnvelope") == null:
+		_fail("Eastern context must separate low shore and setback hill owners.")
 		return
-	if billboard_texture.resource_path != EXPECTED_BILLBOARD_TEXTURE \
-	or Vector2i(billboard_texture.get_width(), billboard_texture.get_height()) != EXPECTED_BILLBOARD_TEXTURE_SIZE:
-		_fail("SF billboard texture identity or dimensions drifted.")
+	var western := horizon.get_node_or_null("MappedWesternBackground") as Node3D
+	if western == null or band.get_child(0).visible:
+		_fail("Mapped western scenery must own the region without old ring duplicates.")
 		return
-	if billboard.layers != 1 \
-	or billboard.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
-	or not billboard.find_children("*", "CollisionObject3D", true, false).is_empty():
-		_fail("SF billboard must remain layer-1, shadowless, and non-colliding.")
+	var western_data: Dictionary = western.registration
+	for key: String in ["south", "north"]:
+		var expected: Array = western_data.ggb.towers[key].world_xz_m
+		var tower := western.get_node("GGBCalibrated%sTower" % key.capitalize()) as MeshInstance3D
+		var tower_box := tower.mesh as BoxMesh
+		if tower_box == null or not is_equal_approx(tower_box.size.y, 227.0) \
+		or Vector2(tower.position.x, tower.position.z).distance_to(Vector2(expected[0], expected[1])) > 0.01:
+			_fail("GGB towers must retain mapped world coordinates and official227m height.")
+			return
+	if western.get_node_or_null("AngelMappedIsland") == null or western.get_node_or_null("AlcatrazMappedIsland") == null:
+		_fail("Mapped islands must be separate non-playable western owners.")
 		return
-	if billboard_material.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA \
-	or billboard_material.shading_mode != BaseMaterial3D.SHADING_MODE_UNSHADED \
-	or billboard_material.cull_mode != BaseMaterial3D.CULL_DISABLED \
-	or billboard_material.billboard_mode != BaseMaterial3D.BILLBOARD_ENABLED:
-		_fail("SF billboard material must remain transparent, unshaded, double-sided, and camera-facing.")
+	var city_material := city.get_active_material(0) as ShaderMaterial
+	var city_source := FileAccess.get_file_as_string("res://game/resources/textures/context/fresh_bay/city.gdshader")
+	if city_material == null or city_material.shader.resource_path != "res://game/resources/textures/context/fresh_bay/city.gdshader" \
+	or not city_source.contains("unshaded, cull_disabled, fog_disabled, depth_draw_opaque") \
+	or not city_source.contains("if (color.a < 0.5) { discard; }") \
+	or city_source.contains("void vertex") or city_source.contains("depth_test_disabled") or city_source.contains("ALPHA ="):
+		_fail("SF must retain fixed opaque cutout depth, alpha0.5, unshaded double-sided material semantics.")
+		return
+	var city_texture := city_material.get_shader_parameter("art") as Texture2D
+	var city_quad := city.mesh as QuadMesh
+	if city_texture == null or city_texture.resource_path != "res://game/resources/textures/context/fresh_bay/sf_skyline.png" \
+	or city_quad == null or not is_equal_approx(city_quad.size.x / city_quad.size.y, 3.0) \
+	or city_texture.get_size() != Vector2(2172, 724):
+		_fail("SF card must preserve original texture and native3:1 raster aspect/dimensions.")
+		return
+	var land_source := FileAccess.get_file_as_string("res://game/resources/textures/context/fresh_bay/land.gdshader")
+	if not land_source.contains("depth_draw_opaque") or land_source.contains("VERTEX =") \
+	or land_source.contains("depth_test_disabled") or land_source.contains("ALPHA ="):
+		_fail("Land grading must preserve opaque depth and geometry.")
+		return
+	var shader_source := FileAccess.get_file_as_string("res://game/resources/textures/context/fresh_bay/sector.gdshader")
+	if not shader_source.contains("unshaded, cull_disabled, fog_disabled") or not shader_source.contains("ALPHA =") or shader_source.contains("void vertex") or not shader_source.contains("art_uv.y = art_waterline + (UV.y - art_waterline) / scale_y;") \
+	or not shader_source.contains("depth_draw_opaque") or shader_source.contains("depth_test_disabled") \
+	or shader_source.contains("DEPTH =") or not shader_source.contains("ALPHA_SCISSOR_THRESHOLD = 0.5;") \
+	or not shader_source.contains("south_right_backing && geographic_bearing >= 196.0 && geographic_bearing < 232.0") \
+	or not shader_source.contains("float urban_scale = mix(1.0, 0.28, urban_weight);") \
+	or not shader_source.contains("south_right_backing ? 1.0 :") \
+	or not shader_source.contains("smoothstep(0.35, 0.65, color.a) * fade") \
+	or not shader_source.contains("float local_atmosphere = atmosphere;") \
+	or not shader_source.contains("land_px.y <= 679.0 && color.a < 0.35") \
+	or not shader_source.contains("land_px.x >= 290.0 && land_px.x <= 302.0") \
+	or not shader_source.contains("land_px.x > 454.0 && land_px.x <= 470.0") \
+	or not shader_source.contains("14.0 * (1.0 - smoothstep(646.0, 661.0, land_px.y))") :
+		_fail("Sector material must retain alpha/depth and retain fixed geometry and waterline-anchored transition sampling.")
+		return
+	if horizon.get_node_or_null("LegacyMainlandBacking1") == null or horizon.get_node_or_null("LegacyMainlandBacking3") == null \
+	or western.get_node_or_null("GGBLandwardsouth1") == null or western.get_node_or_null("GGBLandwardnorth1") == null:
+		_fail("Elevated context must retain mainland backing and mapped landward approach continuations.")
+		return
+	for backing_index in [1, 2, 3]:
+		var backing := horizon.get_node("LegacyMainlandBacking%d" % backing_index) as MeshInstance3D
+		var backing_material := backing.material_override as ShaderMaterial
+		var backing_source := backing_material.shader.code
+		if backing_source.contains("fog_disabled") or backing_source.contains("DEPTH =") \
+		or backing_source.contains("ALPHA =") or not backing_source.contains("depth_draw_opaque"):
+			_fail("Mainland backing must retain opaque real depth and existing world distance fog.")
+			return
+	var extent := AABB()
+	for i in range(4):
+		var sector := band.get_child(i) as MeshInstance3D
+		var material := sector.get_active_material(0) as ShaderMaterial
+		if not is_equal_approx(float(material.get_shader_parameter("atmosphere")), 0.16) \
+		or material.render_priority != (-11 if i == 3 else -10) \
+		or bool(material.get_shader_parameter("south_right_backing")) != (i == 3) \
+		or bool(material.get_shader_parameter("north_left_join")) != (i == 1) \
+		or bool(material.get_shader_parameter("western_blockout_cut")) != (i == 3) \
+		or bool(material.get_shader_parameter("eastern_blockout_cut")) != (i == 1 or i == 2) \
+		or not is_equal_approx(float(material.get_shader_parameter("art_waterline")), horizon.WATERLINES[i]):
+			_fail("Regional cutouts must retain their per-sector ownership parameters.")
+			return
+		var texture := material.get_shader_parameter("art") as Texture2D
+		if bool(material.get_shader_parameter("restore_bridge_cables")) != (i == 0):
+			_fail("Cable contrast correction must remain exclusive to the west sector.")
+			return
+		if texture == null or texture.get_size() != Vector2(2172, 724) or texture != horizon.SECTORS[i]:
+			_fail("Sector original texture identity/dimensions drifted.")
+			return
+		extent = extent.merge(sector.mesh.get_aabb())
+	if extent.size.x < 6990.0 or extent.size.z < 6990.0:
+		_fail("Distant band must cover all cardinal directions.")
 		return
 	world.free()
 
@@ -219,7 +292,7 @@ func _initialize() -> void:
 		_fail("Sun rotation must follow its solar metadata: (-elevation, 180 - azimuth, 0).")
 		return
 	main.free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
+	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, continuous horizon contract, layer defaults, and procedural daylight")
 	quit(0)
 
 

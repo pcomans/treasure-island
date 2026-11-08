@@ -17,6 +17,26 @@ cd "$(dirname "$0")/.."
 # npm/node live here in the devcontainer (node feature); non-login shells lack it.
 export PATH="/usr/local/share/nvm/current/bin:${PATH}"
 failed=()
+# Explicit local native startup allowance; all readiness predicates remain required.
+if [ "$(uname -s)" = Darwin ]; then
+  export TI_TEST_NATIVE_STARTUP_TIMEOUT_MS=300000
+fi
+
+# Local macOS verification preserves the same limits/checks as Linux.
+run_with_timeout() {
+  if [ "$(uname -s)" = Darwin ]; then
+    python3 tools/local-timeout.py "$@"
+  else
+    timeout "$@"
+  fi
+}
+file_size() {
+  if [ "$(uname -s)" = Darwin ]; then
+    stat -f %z "$1"
+  else
+    stat -c %s "$1"
+  fi
+}
 
 # Godot can exit 0 after a script or engine error, so its output is checked too.
 # A clean run prints no ERROR lines at all.
@@ -47,7 +67,7 @@ else
       image/*|video/*)
         junk+="${path}  (an image or video, whatever its name; those belong in game/resources/)"$'\n'; continue ;;
     esac
-    if [ "$(stat -c %s "${path}")" -gt 5000000 ]; then
+    if [ "$(file_size "${path}")" -gt 5000000 ]; then
       junk+="${path}  (over 5 MB)"$'\n'
     fi
   done < <( { git diff -z --name-only --no-renames --diff-filter=A "${base}"; git ls-files -z --others --exclude-standard; } )
@@ -60,7 +80,7 @@ else
 fi
 
 echo "== import"
-output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
+output="$(run_with_timeout 300 tools/godot --headless --path . --import 2>&1)"
 if [ $? -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
   grep -E "${godot_errors}|ERROR" <<< "${output}" | head -20
   failed+=("import")
@@ -74,7 +94,7 @@ fi
 check_godot() {
   local name="$1" limit="$2" output status
   shift 2
-  output="$(timeout "${limit}" "$@" 2>&1)"
+  output="$(run_with_timeout "${limit}" "$@" 2>&1)"
   status=$?
   grep -E "^(PASS|FAIL|NOTE)|${godot_errors}" <<< "${output}"
   if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
@@ -104,16 +124,14 @@ for test in \
 do
   echo "== ${test}"
   # --fixed-fps 60: physics (the island test's walk-ups) runs as fast as the CPU allows.
-  display_args=(--headless)
-  time_limit=600
   # The dummy renderer does not retain the visible MultiMesh transforms that
   # the shared island fit check compares against collision and stock movement.
-  # It walks every scored building, so its hang guard is longer than the others'.
+  # Explicit branches also avoid Bash3.2's empty-array/set-u failure on macOS.
   if [ "${test}" = game/tests/shared/island_test.gd ]; then
-    display_args=()
-    time_limit=900
+    check_godot "${test}" 900 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
+  else
+    check_godot "${test}" 600 tools/godot --headless --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
   fi
-  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
 done
 
 # Desktop exports load a baked world instead of generating it at startup

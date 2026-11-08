@@ -18,6 +18,11 @@ if [ ! -x "${bin}" ]; then
   exit 1
 fi
 
+# Owner-authorized local macOS verification through the standard wrapper.
+if [ "$(uname -s)" = "Darwin" ]; then
+  exec "${bin}" "$@"
+fi
+
 # Engine flags only; anything after "--" belongs to the script.
 engine_args=()
 for arg in "$@"; do

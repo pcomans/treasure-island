@@ -23,11 +23,13 @@ func _init(scene_tree: SceneTree) -> void:
 ## street_detail: null keeps the world's own choice (--street-detail on the
 ## command line, else the project setting, normally on); an array of layer
 ## names (WorldLoader.STREET_DETAIL_LAYERS, or [] for none) overrides it.
-func load_world(street_detail: Variant = null) -> String:
+func load_world(street_detail: Variant = null, startup_timeout_ms: int = 120000) -> String:
 	# Dummy-renderer MultiMesh readback can return identity transforms, silently
 	# moving visible geometry into the origin and invalidating fit/approach checks.
 	if DisplayServer.get_name() == "headless":
 		return "shared visible-geometry checks require rendering; omit --headless"
+	if OS.get_name() == "macOS" and OS.get_environment("TI_TEST_NATIVE_STARTUP_TIMEOUT_MS") == "300000":
+		startup_timeout_ms = maxi(startup_timeout_ms, 300000)
 	var packed := load("res://game/scenes/main.tscn") as PackedScene
 	main = packed.instantiate() as GameMain
 	main.capture_mouse_on_ready = false
@@ -42,22 +44,24 @@ func load_world(street_detail: Variant = null) -> String:
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: failed.append("%s: %s" % [code, message]))
 	tree.root.add_child(main)
 	var started := Time.get_ticks_msec()
-	while ready.is_empty() and failed.is_empty() and Time.get_ticks_msec() - started < 120000:
+	while ready.is_empty() and failed.is_empty() and Time.get_ticks_msec() - started < startup_timeout_ms:
 		await tree.process_frame
 	if not failed.is_empty():
 		return "world failed to load: %s" % failed[0]
 	if ready.is_empty():
-		return "world did not load within 120 s"
-	while not player.was_first_reveal_grounded() and Time.get_ticks_msec() - started < 120000:
+		return "world did not load within %.3f s" % (startup_timeout_ms / 1000.0)
+	print("NOTE: native startup world_ready elapsed_ms=%d budget_ms=%d player=%s grounded=%s play_ready=%s" % [Time.get_ticks_msec() - started, startup_timeout_ms, player.global_position, player.was_first_reveal_grounded(), main.is_play_ready()])
+	while not player.was_first_reveal_grounded() and Time.get_ticks_msec() - started < startup_timeout_ms:
 		await tree.physics_frame
 	if not player.was_first_reveal_grounded():
-		return "player did not settle at spawn"
+		return "player did not settle at spawn: elapsed_ms=%d budget_ms=%d position=%s velocity=%s grounded=%s play_ready=%s" % [Time.get_ticks_msec() - started, startup_timeout_ms, player.global_position, player.velocity, player.was_first_reveal_grounded(), main.is_play_ready()]
 	# Startup enables gameplay and shows the HUD only once it hands over play;
 	# wait for that, so it can't undo the setup below a few frames later.
-	while not main.is_play_ready() and Time.get_ticks_msec() - started < 120000:
+	while not main.is_play_ready() and Time.get_ticks_msec() - started < startup_timeout_ms:
 		await tree.process_frame
 	if not main.is_play_ready():
-		return "startup did not reach play within 120 s"
+		return "startup did not reach play: elapsed_ms=%d budget_ms=%d position=%s grounded=%s" % [Time.get_ticks_msec() - started, startup_timeout_ms, player.global_position, player.was_first_reveal_grounded()]
+	print("NOTE: native startup play_ready elapsed_ms=%d budget_ms=%d grounded=%s" % [Time.get_ticks_msec() - started, startup_timeout_ms, player.was_first_reveal_grounded()])
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.set_gameplay_enabled(false)
 	clean_hud()

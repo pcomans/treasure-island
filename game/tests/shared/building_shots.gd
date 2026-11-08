@@ -170,6 +170,17 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := WorldHarness.user_args()
 	var out := str(args.get("out", ""))
+	var startup_seconds := 120.0
+	if args.has("startup-timeout-seconds"):
+		var raw_timeout := str(args["startup-timeout-seconds"])
+		if not raw_timeout.is_valid_float():
+			_fail("--startup-timeout-seconds requires a positive finite number")
+			return
+		startup_seconds = raw_timeout.to_float()
+		if not is_finite(startup_seconds) or startup_seconds <= 0.0 or startup_seconds > 86400.0:
+			_fail("--startup-timeout-seconds must be positive and at most86400")
+			return
+	print("CAPTURE_STARTUP_TIMEOUT seconds=%.3f" % startup_seconds)
 	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead") and not args.has("views-batch") and not args.has("street-views")):
 		_fail("usage: -- [--source KEY] [--street-views FILE] [--island] [--overhead center_x,center_z,width,depth] --out DIR")
 		return
@@ -211,7 +222,7 @@ func _run() -> void:
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
 	# Load with every layer on when any view wants it; the off views come after.
-	var error := await _h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if "on" in passes else [])
+	var error := await _h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if "on" in passes else [], maxi(1, int(startup_seconds * 1000.0)))
 	if error != "":
 		_fail(error)
 		return
@@ -680,6 +691,10 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var free := _free_camera(view, target)
 	if free == null:
 		_h.aim_camera(target)
+	elif free.far < _h.player.get_camera().far or not is_equal_approx(free.near, _h.player.get_camera().near):
+		free.queue_free()
+		_h.player.get_camera().make_current()
+		return "matched camera must retain gameplay horizon clipping range"
 	await physics_frame
 	await physics_frame
 	error = await _h.save_screenshot(path)
@@ -908,12 +923,15 @@ func _free_camera(view: Dictionary, target: Vector3) -> Camera3D:
 		free.projection = Camera3D.PROJECTION_ORTHOGONAL
 		free.size = float(view.ortho_size)
 	else:
-		free.fov = float(view.get("fov", 70.0))
-	free.far = 5000.0
+		free.fov = float(view.get("fov", _h.player.get_camera().fov))
+	# A matched pose must retain gameplay depth coverage, including distant context.
+	free.near = _h.player.get_camera().near
+	free.far = _h.player.get_camera().far
 	_h.main.add_child(free)
 	free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	free.look_at(target, Vector3.UP)
 	free.make_current()
+	print("CAMERA_PROOF " + JSON.stringify({"projection": free.projection, "keep_aspect": free.keep_aspect, "fov": free.fov, "near": free.near, "far": free.far, "h_offset": free.h_offset, "v_offset": free.v_offset, "position": [free.global_position.x, free.global_position.y, free.global_position.z], "forward": [-free.global_basis.z.x, -free.global_basis.z.y, -free.global_basis.z.z], "target": [target.x, target.y, target.z], "viewport": [free.get_viewport().get_visible_rect().size.x, free.get_viewport().get_visible_rect().size.y], "gameplay_far": _h.player.get_camera().far}))
 	return free
 
 
@@ -953,6 +971,13 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	player.set_gameplay_enabled(true)
 	var tick := 0
 	var frame := 0
+	var initial_y := player.global_position.y
+	var ascent_ticks := 0
+	var vertical_only := true
+	for check_step: Dictionary in view.moves:
+		for action: String in check_step.hold:
+			if action != "jetpack":
+				vertical_only = false
 	for step: Dictionary in view.moves:
 		for action: String in step.hold:
 			Input.action_press(action)
@@ -962,13 +987,23 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 			await physics_frame
 			# Resume after this tick's physics has moved the player.
 			await process_frame
+			if "jetpack" in step.hold:
+				ascent_ticks += 1
+			if vertical_only:
+				var maximum_y := initial_y + float(ascent_ticks) / float(Engine.physics_ticks_per_second) * float(player.jetpack_ascent_speed_mps) + 1.0
+				if player.global_position.y > maximum_y:
+					error = "jetpack height exceeds counted input time: actual=%.3f maximum=%.3f" % [player.global_position.y, maximum_y]
+					break
 			var saved := "-"
 			if tick % int(every) == 0:
 				if free != null:
 					free.global_position = player.global_position + camera_offset
 					free.look_at(capsule.global_position, Vector3.UP)
 				_h.clean_hud()
-				await RenderingServer.frame_post_draw
+				var draw_error := await _draw_motion_snapshot(player)
+				if draw_error != "":
+					error = draw_error
+					break
 				var path := "%s-%03d.png" % [prefix, frame]
 				if root.get_texture().get_image().save_png(path) != OK:
 					error = "could not save " + path
@@ -1204,3 +1239,24 @@ func _overhead_shot(spec: String, out: String, suffix: String) -> void:
 	camera.queue_free()
 	_h.player.get_camera().make_current()
 	root.size = old_size
+
+
+## Snapshot latency must not advance held gameplay inputs outside counted ticks.
+func _draw_motion_snapshot(player: CharacterBody3D) -> String:
+	var before_transform := player.global_transform
+	var before_velocity: Vector3 = player.velocity
+	var was_paused := paused
+	paused = true
+	var drawn := [false]
+	var on_draw := func() -> void: drawn[0] = true
+	RenderingServer.frame_post_draw.connect(on_draw, CONNECT_ONE_SHOT)
+	RenderingServer.force_draw(false)
+	var deadline := Time.get_ticks_msec() + 10000
+	while not drawn[0] and Time.get_ticks_msec() < deadline:
+		await process_frame
+	if RenderingServer.frame_post_draw.is_connected(on_draw):
+		RenderingServer.frame_post_draw.disconnect(on_draw)
+	paused = was_paused
+	if not player.global_transform.is_equal_approx(before_transform) or not player.velocity.is_equal_approx(before_velocity):
+		return "player moved during paused motion snapshot"
+	return "" if drawn[0] else "motion snapshot draw deadline exceeded"

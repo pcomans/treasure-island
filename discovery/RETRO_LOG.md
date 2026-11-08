@@ -24766,3 +24766,140 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Before/after sheets next to full-size originals and the branch review sets made it quick to tell what the merge caused from what was already there.
 - What did not work well: No release capture showed a rubble mound up close or the rebaked palm and flax in the world, so those fixes could only be checked indirectly. Sheets were labelled 6fa1f445, not the head.
 - What the team should change next time: When a fix touches stones or impostors, add a close view of that subject to the release capture list, and label sheets with the release head.
+
+### panorama_alignment — 032 current-main narrow port — 2026-11-07
+Ported accepted horizon and pendingL4family onto2068b992 current-main in isolatedbranch. Retained latest fast-drop/controller/modernBayBridge/worlddata/currentwater. Only sceneSFhookup/far26000 and conservativewaterAABB±27000/Y26000 changed; watermaxfar guard now max(gameplay,overview) without raisingoverviewcamera. Migrated semanticSFguards and optionalstartupdeadline into latesthelpers; minimalDarwinwrapper honorsGODOT_BIN. No runtimeLFSpointers, protectedfilesbyteidenticaltoHEAD, diffcheckclean. No engine yet; importthen9angleisolatedproposal frozen. FRESH/originaldirtycheckout untouched.
+
+### skybox_preflight — 2026-11-07 integrated032 independent source review
+
+- Caught stale required SanFranciscoBillboard hierarchy entry before engine; author corrected only identity to BayAreaHorizon and refroze35 inputs, manifest1aeada8d908ffef0aee8e563a7fcc6ef072ea02eb3b6066544dd7ff581d37d40. Current hashes match, HOLD cleared. Material migration preserves opaque SF alpha.5 discard/default depth and fixed geometry; sector far-depth/waterline rules retained.
+- Latest main protected project/controller/world builder/water shader/generated context bytes independently equal HEAD. Modern bridge and fast-drop remain. Water±27000 bounds cover26960m required reach atfar26000; Y26000 covers24960. No selected runtime LFS pointers; tracked/new text whitespace clean.
+- Nine-angle isolated helper/commands use supported local wrapper and current environment/water, explicitly excluding live world/bridge/YBI. Source READY for authorized import/preview; final current-game evidence remains required. No engine by reviewer.
+
+### skybox_preflight — 2026-11-07 material032 actual diagnosis
+
+- Inspected actual isolated NW and land shader. No normal lighting is used; fan-shaped variation cannot be attributed to faceted lighting normals. Cover includes piecewise interpolated height and derivative filtering across radial triangles, a plausible sampling mechanism, not proven sole cause. Suggested stable geographic sampling/filtering without geometry changes, then matched isolated comparison.
+- Broad modulation at most±15percent and fine±2.75percent before strength/grade explains restrained detail; filtering affects only fine term, so cannot explain all blank land. Independent L4 REWORK retained. Strong diagonal water contrast seen in same image is separate current-world observation, not authorization to change water. No engine or production edits by reviewer.
+
+### panorama_alignment — 033 sameL4 source correction — 2026-11-07
+032 nineangle native completed but independent+ROOT REWORK: flat/fan proxyland vs coarseoldrasters/crispSF. Retainedfailed032. Source correction reuses onlyoriginalauthored inlandcoverRGB, islandXZ sampling removesheight/fwidth triangle dependence; compressesoldrastercoarsemottling/SFhighfrequency withoutalpha/shapechange.35pins frozen, noengine. Actualappearance remainsopen; no finalworld expense yet.
+
+### skybox_preflight — 2026-11-07 material033 source delta
+
+- Verified35 pins bdb43fd51ae77c7f2abf41275377649466219b49d9c84b5ef730b12e7c4c787e; exactly four material files changed032. Original authored north RGB supplies cover modulation only, no alpha/shape sampling. Island XZ removes prior height/derivative coordinate coupling; curtains use world bearing/height. SF/sector quieting preserves source alpha and guards blurred edge RGB. Geometry, water, controls and actual raster bytes unchanged.
+- Exact preview-command.txt in durable033 directory uses latest worktree/local wrapper, same nine-angle helper,1440x900 and isolated033 output without import. Source READY; actual cover scale/repetition/fan disappearance remains visual, not proven by source. No engine by reviewer.
+
+### panorama_alignment — 034 projection and finite preview preparation — 2026-11-07
+033 retainedfailedexit143/5frames/partialREWORK. Corrected material aspect900×27 into equal10unitspertexel onstableoriginangles forslopes+curtains; sourceonly, no geometrychange. Helperfiniteperviewdrawdeadline/stagemilestones, noassertedstallcause. AdditiveDarwinsuiteadapters preserveLinux/checklist; cached4lockedpackages installedoffline. Syntax/timeout7→7/deadline124 checksPASS.38pins/focused4viewplan frozen; noengine034yet.
+
+### panorama_alignment — owner normal-game launch — 2026-11-07
+Ownerrequestednewpanorama launch. Emptyinventory thennormalmain viawrapper, session81761/PID25268. WORLD_READY+PLAY_READY observed; no script/shadererrors. CUA actualwindow confirmed renderedisland/avatar; leaveopenforowner, no terminal/slotrelease intended. Current034visualrefinement remainsunaccepted; no fullsuite/capture/deploy.
+
+### skybox_preflight — 2026-11-07 GGB035 route source check
+
+- Used retained ggb-towers/fort-point-shore/marin-headland OSM only; no network acquisition. Author's south23/north19 route nodes exactly match declared way coordinates; adjacent ways share actual nodes. Official side-anchor centerlines lie4.901m/4.368m from selected one-way routes. First stored route-node gaps117.59m/105.84m reflect filtering/sparse nodes; initial connector is disclosed inference, not surveyed centerline.
+- Mapped road course supports bounded landward continuation, not arbitrary ramps. Vertical grade to proxy ground remains inferred, requiring slope/support validity review. Await035 freeze for normal-depth/backing/clip review; no engine or implementation edits by reviewer.
+
+### panorama_alignment — 035 elevated L1 source repair — 2026-11-07
+ROOT transitionedL4→L1 afterownerjetpack defects. Implementednormaldepthlegacycutouts, physicalbackgrounddepths/angularpreservation, mainlandbackingandridge-to-shore surfaces. ExactmappedGGBroadroute continuations, south518.52m/−4.28%inferredgrade, northlevel82.57intohigherland. Staticproofrejectednaive40%/−9.3%grades beforefreeze, extendedonlyretainedsouthroute.38pins and58imagewalking+jetpackplan ready, noengine. Ownergame81761/PID25268 leftopen. Sourceonly; actualocclusion/contacts remainreviewgates.
+
+### skybox_preflight — 2026-11-07 elevated035 frozen source review
+
+- Verified38 current inputs ede06fc370b3911020db24b30c6e9d5cd9dd6533f2ff47a9826edcbfebd95b1d and plan f7dff2086a3d733fd33f60cea811165e2e32d519e48b16e24c0ceda2b4beb1c7. Ten static views plus7200 genuine jetpack/release ticks, no fake elevated camera. Current water/controller/world builder/generated bridge remain HEAD-identical; tracked whitespace clear.
+- Normal cutout depth addresses proven mixed-depth water mismatch. Connected land/backings extend32km beyond26km far/24.96km water reach; clipping is intentional and ordinary150m test coverage plausible, not unlimited-flight proof. Double-sided land avoids winding-cull holes; code filters zero-area triangles and uses finite data. South mapped approach inferred−4.28percent grade; north level82.57 enters bank, no40percent ramp.
+- Source READY for controlled restart/native; actual alpha-edge joins, elevated ground coverage and road burial remain unresolved until pixels. No engine by reviewer; owner game stays open pending ROOT.
+
+### skybox_preflight — 2026-11-07 remaining delivery-check preparation
+
+- Read AGENTS suite requirement and current tools/test.sh. Darwin adapters preserve check list and deadlines: Python process-group timeout/status124, BSDstat, native Metal bake. Required suite includes junk/import,15 contracts/behavior/island tests, rendered native bake plus prebuilt island, street-prop spray blocker and Node validation/determinism/clearance. Earcut/polygon-clipping package files present.
+- Exact future invocation uses local GODOT_BIN and bash tools/test.sh after ROOT slot GO. Expected .godot/cache and temporary baked-world mutations; suite deletes baked artifact, determinism cleans scratch, junk step fetches origin/main. Preserve pre-existing artifacts. Strict ERROR detection may flag known CA/user-log diagnostics; no filtering/skip or automatic PASS. Safe parallel work is source/hash/whitespace/prerequisite inspection; running Node checks now would duplicate suite without resolving new risk. No engine/suite invoked.
+
+### panorama_alignment — 035 incomplete native verification attempt1 — 2026-11-07
+Ownerplay81761 hadalreadyexited0; inventoryempty/noagentkill. Contract12613exit0PASS, native24248/PID53105 exited0 unexpectedly duringgraphicsstartup243s beforePLAY_READY/anyimage. NoFAIL/ERROR; noagenttermination. Causeunknown, notPASS,0images/0motionticks. Rawlog+failedreceipt retained; processabsent/slotreleased. Noautomaticrerun/reopen.
+
+### skybox_preflight — 2026-11-07 bounded efficiency checkpoint 032–035
+
+- Actual isolated reviews were necessary: 032 exposed blank land/fan variation; 033 showed XZ-only sampling did not remove the fan. Source coordinate continuity did not establish projected texture scale: the 900×27 crop used unequal world-axis scale until 034. The 033 partial exit143 has no established cause; do not attribute its stall to the shader. Owner-requested 034 play was explicitly unaccepted, not an accidental acceptance, and exposed elevated mixed-depth/water and finite-land failures missing from walking previews.
+- One reversible experiment: when changing horizon projection or depth, replace one redundant walking angle in the first existing isolated preview with a representative elevated junction view including current water. Compare the actual surface there before the expensive full-world proof; success means catching a depth/projection defect before owner play or another full-world correction. This adds no framework and never replaces stock-player jetpack, full-world, independent review or suite checks. Source aspect/endpoint math remains useful but is not surface proof.
+- 035 static rejection of extreme inferred approach grades was useful prevention. Latest native attempt1 ended0 before PLAY_READY with0 images/ticks; this is incomplete evidence, not a pass or an avoidable rerun diagnosis. Cause remains unknown. No engine or production edits by reviewer.
+
+### skybox_preflight — 2026-11-07 035 residual SE source diagnosis
+
+- ROOT accepted the bounded elevated-junction diagnostic experiment; frozen035 plan was not changed. Attempt2 receipt reports58 images/7200 ticks,38 unchanged pins, no runtime errors and existing7TextureRID warning. This establishes capture completion, not visual acceptance: SE remains REWORK.
+- Sector2/3 share origin fade-midpoint157.882136 degrees but physical radii14km/6km. Alpha-scissor0.5 turns these fades into separate hard ownership edges. From saved SE playerXZ397.051/569.149, edge azimuths158.5424/159.5343 differ0.992degrees; eye130m waterline elevations differ0.839degrees. Approximate stock-camera projection gives13px horizontal separation, not an exact attribution of every reported defect pixel. A continuous physical seam/backing is needed for multi-eye consistency; another forced-depth/fade patch would not establish it.
+- Diagnostic recommendation: reproduce actual failed SE camera with current water, then compare same heading at walking/150/300m after correction. This is a bounded helper check, not replacement for stock-player jetpack/full-world/suite proof. No engine or production edits by reviewer.
+
+
+## panorama_alignment — 036 source correction — 2026-11-07
+03558-frame proof exposed secondary14km/6km physical seam despite normal depth. Kept independent REWORK and changed only inferred East connector depth/backing. No engine yet; focused elevated evidence required before full world/suite/reopen.
+
+### skybox_preflight — 2026-11-07 036 bounded source/preview review
+
+- All38 runtime pins00634cff match; final helper41e592 and plan7a50a5 match corrected fixed-grounded-pitch reconstruction. Only sector2 inferred radial connector changes: positive smooth14km-to6km transition, common6km overlap and matching backing edge. Origin vertex azimuth/elevation and triangle topology preserved; other sectors/shaders/art/map anchors unchanged. Source READY, actual contour/triangle interpolation remains preview responsibility.
+- Existing035 failed fullworld image is baseline; four isolated current-water views at walking/failed/150/300m are diagnostic only. No live YBI/bridge/foreground proof, no engine by reviewer. Exact command retained in bay-horizon036-sector-junction/preview-command.txt.
+
+
+## panorama_alignment — 037 backing atmosphere source — 2026-11-07
+036 seam depth improvement retained;300m flat backing band remains REWORK. Enabled existingworldfog only for opaque backing, no alpha/depth/geometry workaround. Same fourposes pending actual; exponential residual is not a sky-match guarantee.
+
+### skybox_preflight — 2026-11-07 037 backing atmosphere source review
+
+- Independently matched39 runtime pins28d4f410, unchanged helper41e592/plan7a50a5. Only backing shader binding, new opaque fog-enabled ground shader and focused semantic guards changed. Base color/family grade retained; prior backing cover_strength0 means removed procedural cover branch had no contribution. No geometry/global fog/coast/art changes. Source READY for matched isolated preview, not visual acceptance.
+- Existing fog is compatible with unshaded opaque material. Estimated1.56percent at26km is remaining surface color, not guaranteed contrast against sky; fog target differs from sky when aerial perspective0.35/sky affect0. Actual300m clipping edge still requires review. No engine by reviewer.
+
+037 isolated terminal: four unchanged walking/129.56m-eye/152m-eye/302m-eye views saved, exit0, no logged errors,39 frozen inputs match, process absent. Author sees former dark far-plane backing band removed; independent visual/fullworld verification remains required. The focused preview avoided repeating a full58-frame world run before resolving this local geometry/atmosphere interaction.
+
+
+# 038 capture-only repair
+037 valid completed SE14frames/walking2 retained. GGBcapture stalled atframe_post_draw while heldjetpackphysics continued: recordedtick149Y14.8342→tick150Y49583.68. Raising ownedwindow resumeddriver and exit0, but GGB20frames invalid; no signal issued. Exact window-occlusion trigger remains uncertain.
+
+Only building_shots.gd motion snapshot wait changes: pause SceneTree gameplayphysics during capture, force_draw, wait on frame signal with10s process-frame deadline, restore priorpause and propagate failure. Input/physics loop and actual3000tick sequence unchanged. Synchronous force_draw itself cannot be preempted by GDScript deadline; external owned-handle supervision retained. Remaining plan replays only GGB1800rise+1200release360,20images. No scenery/geometry/material/gameplay-controller change. After actual/independentPASS run fullstrictsuite, then approvednormalreopen.
+
+### skybox_preflight — 2026-11-07 038 capture-state repair review
+
+- Reviewed39 current pins e2ef3a1c; only capture driver changed from037. Pause/force-draw/deadline/disconnect/prior-pause restoration has one cleanup path before return; transform and velocity stability checked. Vertical-only actual height is bounded by counted held ticks and configured ascent speed plus1m, rejecting observed037 uncounted rise. Synchronous force_draw remains outside deadline interruption capability.
+- GGB-only plan c052a918 retains proven W pose,1800 rise and1200 release ticks with360degree turn. Scenery/controller unchanged; invalid037 sweep stays retained but excluded. Source READY for ROOT-authorized replay; no engine by reviewer.
+
+038 capture-only correction actual:20 remaining sweep frames/3000 counted ticks completed, maxY153.3343 and maximum adjacentYdelta0.0834m, snapshot state/height sanity guards passed, exit0,39 source pins match, engine absent. Prior037 invalid GGB frames remain retained/excluded; valid037SE14+walking2 retained. This bounded remaining-only replay avoided repeating completed scene evidence. Independent review and full suite remain before owner reopen.
+
+### skybox_preflight — 2026-11-07 038 actual receipt and suite readiness
+
+- Independently recomputed39 current pins and20 PNG hashes, all match. Raw log3000 ticks includes1800 held/1200 release; maxY153.3343, final124.0469, maxstep0.0834m, noERROR/FAIL and finalfull5.5m arm. Existing7TextureRID shutdown warning retained. Flight remains airborne, not landing proof.
+- Only helper changed; valid037 SE/walking evidence reused, invalid037 GGB excluded. Earlier035 unchanged views are scoped regression evidence. Exact037/suite-command.txt uses local GODOT_BIN with full tools/test.sh, no skips; source/mechanical READY for ROOT full-suite GO. No engine by reviewer.
+
+## panorama_alignment — 039 local suite portability — 2026-11-07
+Full strict suite passed through routeQA, then exited1 before nativeisland because systemBash3.2 under set-u rejects empty display_args array expansion. Engine/bake absent; rawfailedlog retained. Replaced only native/headless array dispatch with explicit branches preserving every test, argument and timeout. bash-n and whitespace checks passed; independentreview/fullsuite rerun pending. No scenery changes or normalgame reopen.
+
+### skybox_preflight — 2026-11-07 039 Bash adapter review
+
+- Verified39 pins62d5977; only tools/test.sh changed from038. Explicit native900s/headless600s dispatch preserves arguments/checks and removes Bash3.2 empty-array nounset failure. Same-path review: failed-array length safely tested using /bin/bash -u; failure expansion occurs only nonempty; bake renderer array always populated; Darwin wrapper exits before Linux array code.
+- Source READY for exact full-suite rerun with separate039 log; original incomplete suite failure retained, no filtered errors/skipped tests. No engine by reviewer; prior visual evidence unchanged.
+
+## panorama_alignment — 040 native startup budget — 2026-11-07
+039 failed generatednativeisland and spray sharedstartup, while nativebake/prebuilt174fit passed. ROOT authorized stopping knownfailedsuite during seconddeterminism generation; owned73949/75969/76351 terminated, session29074 exit143, absence confirmed, only known test scratch cleaned. Failurelog retained, noPASS. Applied exact independently reviewed off-tree040 patch: explicitDarwin suite300s nativebudget and elapsed/state diagnostics; default/headless/readinessconditions unchanged. Every check remains in next full rerun. This avoids finishing expensive proof that cannot satisfy finalsourcegate, not a testwaiver.
+
+
+## panorama_alignment — 041 northernjunction source — 2026-11-07
+Ownercrop exposed distinctNorthcut missedbySEscope. Identified335–338deg physical/alphaownership gap; bounded inferredtail+waterlineheightjoin, mappedanchors unchanged. Sourcefreeze/targetedactualpending, nofogmask or wholefinishclaim.
+
+### skybox_preflight — 2026-11-07 041 northern physical junction review
+
+- Matched39 runtime pins a54d5705; four intended files only. Independently recomputed common14km/335.882136degree endpoint and10m remapped top. North opaque edge extends belowwater; leftfade removed onlyforsector1, preserving otherdepth/alpha rules. Actual filtered contour/material continuity still needs native pixels.
+- Retained map coverage ends292.76degrees; modified>330 tail is production inference, not mapped shoreline. Targeted current-water helper uses matched038 elevated eye plus walking/adjacent headings. Source READY, no engine or author-source edits by reviewer.
+
+### skybox_preflight — 2026-11-07 041 invalid projection prevention
+
+- Independent source review missed full-world free-camera far5000 despite validating isolated far26000. Four actual041 fullworld views are invalid for northern coverage; source/scoped isolated findings remain, not final acceptance. Requested helper-only stock near/far/defaultFOV inheritance and actual camera projection log before rerun.
+- Efficiency correction: inspect the actual next driver camera constructor, not just copied pose/plan or previous helper. This single preflight comparison would have prevented the expensive invalid capture; no new framework/gate. Added concise LEARNINGS with observed cause. No engine or author-source edits.
+
+### panorama_alignment — 042 capture coverage repair — 2026-11-07
+041 isolated shoreline readiness passed, but full-world four images are invalid: helper far5000 clipped the14km North card. Terminal0 is not visual acceptance. Kept originals/invalid receipt; changed only capture helper to inherit gameplay clips/defaultFOV and log actual camera state with coverage guard. Same four-pose rerun pending review/GO; scenery unchanged and complete suite remains incomplete.
+
+### skybox_preflight — 2026-11-07 bounded 041–042 efficiency checkpoint
+
+- Avoidable cycle: isolated041 used gameplay far26000 but fullworld helper retained5000; reviewing only pose/FOV allowed an expensive invalid world capture. Required042 rerun and complete suite are necessary after that error, not redundant checks. Repeated READY messages without a live executing owner also introduced handoff latency; an idle/interrupted owner requires followup_task, not another passive message, under existing orchestration rules.
+- One reversible improvement, refining the existing preflight: in the single readiness handoff compare the exact next driver's camera constructor against live gameplay projection/clip settings, and attach its exact frozen command. This catches cross-driver mismatch before GO; measure invalid-projection reruns avoided, without extra renders or framework. Existing orchestration continuation remains required rather than a second experiment.
+- Current042 suite command runs full tools/test.sh without selectors/filtering; all39 runtime pins still match2373766b. No engine or implementation edits by reviewer, author retains live suite.
+
+### panorama_alignment — 042 targeted closure and PR handoff — 2026-11-07
+The corrected four full-world views passed independent northern-join review. Before: a pose-matched helper clipped at 5 km and hid the 14 km horizon. After: gameplay clipping inheritance and actual projection logs exposed the corrected shoreline at elevated and adjacent views; the walking view has foreground occlusion. Future readiness checks compare the actual next driver with gameplay before capture, without an extra render. The complete suite passed generated and prebuilt 174-building fit and native bake reload, then was interrupted by owner instruction during spray verification (exit143); remaining checks are delegated to the release agent. No full-suite PASS. Owner requests a feature-branch PR and absolutely prohibits merging into main, auto-merge, direct-main push or deployment.

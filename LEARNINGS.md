@@ -1269,3 +1269,18 @@ The bay water's first render (2026-11-07) put each layer's averaged-away wave sl
 ## Unproject with each renderer's own depth convention
 
 The water's outer ring had to reach a share of the camera's far plane (2026-11-07). The suggested way, unprojecting NDC depth 0 and 1 and taking the farther, works on Forward+, where RenderingDevice reverses depth into 0..1 (far at 0; servers/rendering/renderer_rd/storage_rd/render_scene_data_rd.cpp, Projection::set_depth_correction's defaults). Compatibility reverses depth without remapping it (`set_depth_correction(p_flip_y, true, false)` in drivers/gles3/rasterizer_scene_gles3.cpp), so its far plane is NDC -1 and depth 0 is a point about 2 near planes out: the web ring would have been about 16 cm wide. Pick the far NDC with `#if CURRENT_RENDERER == RENDERER_COMPATIBILITY` and check both paths in the first render. In the same change a hash that wrapped its input at 289 met cells that wrapped at 300, so cells 11 apart came out identical; give a periodic pattern a hash whose own wrap (if any) is a multiple of the pattern's period, or a sine-free hash with no wrap.
+
+## Validate background depth above walking height
+
+Owner jetpack screenshots on2026-11-07 exposed floating horizon ribbons after grounded studies passed: legacy raster fragments forced depth to the far plane while adjacent mainland curtains used realdepth; the currentwater horizon ring rises to eyeheight, so it occluded the two owners differently. Near-to-far curtain ends and missing mainland backing were also visible fromabove. Preserve actualwater behavior, use consistent realdepth and continuous land ownership, and compare walking plus realjetpack rise/release at each changedbackground join before claiming integration. Palette/alpha softness cannot repair a missing landvolume.
+
+
+## Pause gameplay during asynchronous capture waits
+037 native motion capture waited indefinitely for frame_post_draw while heldjetpackphysics continued uncounted; raising thewindow resumed it with tick149→150 height14.83→49583.68m. Exit0 and imagecount therefore did not establish valid movement. Snapshot waits must pause gameplayphysics, force a draw and have finite failure, then restorepause; check actual height/tick continuity before accepting motion evidence. Windowocclusion is a hypothesis, not proven sole trigger.
+
+## Give native startup a measured test budget without weakening readiness
+039 localMac suite failed generated-island and spray checks at the shared120s startup deadline, while successful captures reached world_ready around232s using300s and the faster prebuilt174-building fit passed. This supports deadline exhaustion rather than proving a collision defect; old failure output lacked stage timing. The localMac suite now explicitly allows300s within the existing outer test limits, keeps Linux/default120s and all world/first-grounded/play-ready predicates, and logs stage elapsed/player state. A confirmed-failed suite may be stopped before expensive unchanged checks only if the subsequent required full run still includes every check.
+
+## Match the actual capture camera, not only its pose
+
+On 2026-11-07 the 041 full-world matched-view capture used the correct pose/FOV but the free-camera helper retained far=5000 while gameplay used26000; the14km northern horizon vanished. Source review checked the isolated camera but missed the different full-world helper. For a matched capture, trace the actual camera constructor and inherit stock near/far plus default projection parameters; retain explicit view overrides. Log actual projection/aspect/FOV/clip planes/pose and viewport size. A successful capture exit does not establish equivalent visibility.
