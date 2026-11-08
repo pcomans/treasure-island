@@ -2547,7 +2547,7 @@ function buildWaterBarrier(lod) {
 // stunt_ramp): its profile (stuntRampProfile) swept across the deck's width.
 // Dirt: a graded mound, its run and top packed darker than its sides, which
 // slope out at STUNT_RAMP_SIDE. Plywood: a deck of 4 x 8 ft sheets on square
-// timber sides, a steel angle along the lip and a galvanised frame showing at
+// timber sides, a steel angle along a kicker's lip and a galvanised frame showing at
 // the back.
 function buildStuntRamp(ramp, finish, lod) {
   const out = new YardBuilder(lod);
@@ -2596,8 +2596,11 @@ function buildStuntRamp(ramp, finish, lod) {
           out.face([vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, 0.012))), vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, 0.012)))], up, P.seal);
         }
       }
-      const top = profile.reduce((best, point) => (point[1] > best[1] ? point : best), profile[0]);
-      out.aabb([-hw - 0.02, top[1] - 0.06, top[0] - 0.06], [hw + 0.02, top[1] + 0.01, top[0] + 0.03], P.metal);
+      // A tabletop's top runs on past the end of its run-up: no edge there to guard.
+      if (ramp.top === 0) {
+        const top = profile.reduce((best, point) => (point[1] > best[1] ? point : best), profile[0]);
+        out.aabb([-hw - 0.02, top[1] - 0.06, top[0] - 0.06], [hw + 0.02, top[1] + 0.01, top[0] + 0.03], P.metal);
+      }
     }
   }
   return out.result();
