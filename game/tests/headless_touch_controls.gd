@@ -92,7 +92,7 @@ func _run() -> void:
 	if Input.is_action_pressed("jetpack") or Input.is_action_pressed("handbrake") or Input.is_action_pressed("fast_drop"):
 		_fail("Teardown left rise or drop held")
 		return
-	print("PASS: donor analog strength, touch multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, its finger never turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go")
+	print("PASS: donor analog strength, touch multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, neither its finger nor a second one on it turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go")
 	quit(0)
 
 
@@ -150,6 +150,17 @@ func _use_button(controls: TouchControls) -> bool:
 		await physics_frame
 	if not Input.is_action_pressed("fast_drop"):
 		return _fail("Holding DROP did not hold C")
+	# A second finger pressed on the held button is the button's too: it never
+	# turns the camera, and its lift leaves the first finger's C held.
+	var view_held := controls.get_camera_rotation()
+	_touch(controls, 11, at + Vector2(12, 12), true)
+	var second := InputEventScreenDrag.new()
+	second.index = 11
+	second.position = at + Vector2(-80, -60)
+	controls._input(second)
+	_touch(controls, 11, second.position, false)
+	if controls.get_camera_rotation() != view_held or not Input.is_action_pressed("fast_drop") or not use.is_touched():
+		return _fail("A second finger on held DROP turned the camera or let go of C")
 	_touch(controls, 8, at, false)
 	if Input.is_action_pressed("fast_drop"):
 		return _fail("Lifting DROP left C held")

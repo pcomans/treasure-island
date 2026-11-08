@@ -98,7 +98,7 @@ func toggle_debug() -> void:
 
 
 func set_touch_instructions() -> void:
-	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Right drag: look\nHold RISE: jetpack • Release: descend\nHold RUN while moving to run\nTap DRIVE by a car • Tap GET OUT to leave\nIn a car RISE brakes • Hold DROP: fall fast"
+	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Right drag: look\nHold RISE: jetpack • Release: descend\nHold RUN while moving to run\nTap DRIVE by a car • Tap GET OUT to leave\nIn a car: BRAKE (RISE) slows • Hold DROP: fall fast"
 	resume_button.text = "Play / Resume"
 	resume_button.custom_minimum_size.y = 64.0
 	exit_button.custom_minimum_size.y = 64.0

@@ -6,6 +6,7 @@ signal pause_requested
 const THUMB := preload("res://game/scripts/vendor/selgesel/virtual_thumb_stick.gd")
 const BUTTON := preload("res://game/scripts/vendor/selgesel/virtual_button.gd")
 const USE_BUTTON := preload("res://game/scripts/ui/touch_use_button.gd")
+const BRAKE_ICON := preload("res://game/resources/ui/touch/icon-brake.png")
 const ART := "res://game/resources/ui/selgesel/"
 const BUTTON_COLOR := Color(0.9, 0.9, 0.9, 0.85)
 ## How long the player must be off the ground before the use button shows the
@@ -21,6 +22,8 @@ var use_button: TouchUseButton
 var _active := false
 var _air_s := 0.0
 var _driving := false
+## RISE's own glyph, back on foot (in a car it shows BRAKE_ICON).
+var _rise_texture: Texture2D
 var _last_camera_rotation := Vector2.ZERO
 var _safe_rect := Rect2()
 var _pause_center := Vector2.ZERO
@@ -38,6 +41,7 @@ func _ready() -> void:
 	add_child(_move_stick)
 	_make_button(RiseButton.new(), "jetpack", "icon-jump.png")
 	_make_button(BUTTON.new(), "run", "icon-sprint.png")
+	_rise_texture = _buttons[0].button_texture
 	use_button = USE_BUTTON.new()
 	use_button.name = "UseButton"
 	use_button.default_color = BUTTON_COLOR
@@ -134,7 +138,7 @@ func _update_use_button(delta: float) -> void:
 		_driving = driving
 		# Getting out turns the stock camera rig to the car's view.
 		_sync_camera()
-		queue_redraw()
+		_show_driving(driving)
 	if player == null:
 		return
 	_air_s = 0.0 if driving or player.is_on_floor() else _air_s + delta
@@ -148,8 +152,18 @@ func _update_use_button(delta: float) -> void:
 			mode = TouchUseButton.Mode.ENTER
 	use_button.set_mode(mode)
 
-## Where the controls are, in viewport pixels, and what the use button shows
-## (the web state readback; a capture driver touches them there).
+## In a car RISE is the handbrake, shown with its own glyph and label, and RUN
+## and the look hint go (a car reads neither the run nor a touch look); on foot
+## all come back. RUN lets go of its finger first, so no run outlasts the hide.
+func _show_driving(driving: bool) -> void:
+	_buttons[0].set_button_texture(BRAKE_ICON if driving else _rise_texture)
+	if driving:
+		_buttons[1]._release()
+	_buttons[1].visible = not driving
+	queue_redraw()
+
+## Where the controls are, in viewport pixels, and what they show (the web
+## state readback; a capture driver touches them there).
 func describe() -> Dictionary:
 	var at := func(point: Vector2) -> Array: return [point.x, point.y]
 	return {
@@ -162,6 +176,9 @@ func describe() -> Dictionary:
 		"use_mode": use_button.mode_name(),
 		"use_touched": use_button.is_touched(),
 		"rise_label": _rise_label(),
+		"rise_icon": "brake" if _buttons[0].button_texture == BRAKE_ICON else "jump",
+		"run_visible": _buttons[1].visible,
+		"look_hint": not _driving,
 	}
 
 func _rise_label() -> String:
@@ -184,7 +201,10 @@ func _draw() -> void:
 	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
 	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
-	for item in [[_move_stick.position + Vector2(82, 228), "MOVE"], [_buttons[0].position + Vector2(18, 122), _rise_label()], [_buttons[1].position + Vector2(18, 122), "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]]:
+	var labels := [[_move_stick.position + Vector2(82, 228), "MOVE"], [_buttons[0].position + Vector2(18, 122), _rise_label()]]
+	if not _driving:
+		labels.append_array([[_buttons[1].position + Vector2(18, 122), "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]])
+	for item in labels:
 		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
 	draw_circle(_pause_center, 34, Color(0.03, 0.1, 0.14, 0.65))
 	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)

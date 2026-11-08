@@ -8,6 +8,8 @@ extends Control
 ## the air it shows a down arrow (DROP): holding it holds C (fast_drop) until the
 ## finger lifts or the touch is cancelled, and whenever the button changes or
 ## hides (landing, pausing) it lets go, so C is never left held. Hidden otherwise.
+## A second finger pressed on it while it is held is taken too, doing nothing, so
+## it can't become a look drag.
 ## It looks like the vendored RISE and RUN buttons: a white ring and glyph
 ## (tools/draw_touch_icons.sh) tinted as they are, blue while touched, and its
 ## label underneath.
@@ -76,8 +78,10 @@ func handle_input(event: InputEvent) -> bool:
 	if touch == null:
 		return false
 	if touch.pressed and not touch.canceled:
-		if _touch_index != -1 or mode == Mode.HIDDEN or not is_visible_in_tree() or not get_global_rect().has_point(touch.position):
+		if mode == Mode.HIDDEN or not is_visible_in_tree() or not get_global_rect().has_point(touch.position):
 			return false
+		if _touch_index != -1:
+			return true
 		_touch_index = touch.index
 		_let_go()
 		_held = ACTIONS[mode]

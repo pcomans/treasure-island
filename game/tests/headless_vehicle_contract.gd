@@ -36,9 +36,11 @@ extends SceneTree
 ##      walk, run, jetpack and fast drop on open street;
 ##  11. the browser's touch controls (touch_controls.gd, made as main.gd makes
 ##      them on a touch browser), driven by their own touch events: in a car the
-##      use button shows GET OUT and RISE reads BRAKE, the touch stick drives and
-##      its corner steers at full throttle, RISE holds the handbrake, and a tap
-##      gets out; beside the car it shows DRIVE and a tap gets back in; on the
+##      use button shows GET OUT, RISE reads BRAKE with the handbrake glyph, RUN
+##      and the look hint are hidden, the touch stick drives and its corner
+##      steers at full throttle, RISE holds the handbrake, and a tap gets out,
+##      which brings RISE, RUN and the hint back; beside the car it shows DRIVE
+##      and a tap gets back in, letting go of a run held as it does; on the
 ##      ground away from cars it hides; in the air it shows DROP, held it holds
 ##      the fast drop, lifted it lets go, and held through the landing it lets go
 ##      of C and hides on the ground with the finger still down.
@@ -93,7 +95,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
 	_finish()
 
 
@@ -864,7 +866,8 @@ func _touch_steps(touch: TouchControls) -> bool:
 		return false
 	for _tick in 60:
 		await physics_frame
-	if not _require(use.visible and use.mode_name() == "exit" and str(touch.describe().rise_label) == "BRAKE", "In a car the use button must show GET OUT and RISE read BRAKE (%s, %s)." % [use.mode_name(), touch.describe().rise_label]):
+	var shown := touch.describe()
+	if not _require(use.visible and use.mode_name() == "exit" and str(shown.rise_label) == "BRAKE" and str(shown.rise_icon) == "brake" and not bool(shown.run_visible) and not bool(shown.look_hint), "In a car the use button must show GET OUT, RISE the BRAKE glyph and label, and RUN and the look hint hide (%s)." % [shown]):
 		return false
 	# The stick drives (up), and its corner (up and right) is full throttle and lock.
 	var stick := _touch_point(touch, "stick")
@@ -909,14 +912,24 @@ func _touch_steps(touch: TouchControls) -> bool:
 	await _tap(touch, "use")
 	if not _require(not _player.is_driving(), "A tap on GET OUT did not get the player out."):
 		return false
+	shown = touch.describe()
+	if not _require(str(shown.rise_label) == "RISE" and str(shown.rise_icon) == "jump" and bool(shown.run_visible) and bool(shown.look_hint), "Out of the car RISE, RUN and the look hint must come back (%s)." % [shown]):
+		return false
 	# Beside the car DRIVE: a tap gets back in, another out again.
 	for _tick in 30:
 		await physics_frame
 	print("TOUCH out at %s, %.2f m from the car, button %s" % [_player.global_position, _player.global_position.distance_to(car.global_position), use.mode_name()])
 	if not _require(use.visible and use.mode_name() == "enter" and (use.get_node("Icon") as TextureRect).texture == TouchUseButton.CAR_ICON, "Beside the car the use button must show DRIVE (%s)." % use.mode_name()):
 		return false
+	# A finger holding RUN as DRIVE is tapped: RUN hides in the car and its run goes up.
+	var run_at := _touch_point(touch, "run")
+	_finger(touch, 5, run_at, true)
+	var running := Input.is_action_pressed("run")
 	await _tap(touch, "use")
-	if not _require(_vehicles.active_car() == car and use.mode_name() == "exit", "A tap on DRIVE did not get back in (button %s)." % use.mode_name()):
+	var run_left := Input.is_action_pressed("run")
+	_finger(touch, 5, run_at, false)
+	if not _require(_vehicles.active_car() == car and use.mode_name() == "exit", "A tap on DRIVE did not get back in (button %s)." % use.mode_name()) \
+	or not _require(running and not run_left and not Input.is_action_pressed("run") and not bool(touch.describe().run_visible), "A run held as the player got in must go up with RUN hidden (held %s, after %s)." % [running, run_left]):
 		return false
 	for _tick in 10:
 		await physics_frame

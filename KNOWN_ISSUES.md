@@ -85,6 +85,13 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
 
+## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
+
+- RUN, RISE and the use button are white rings and glyphs with no backdrop, unlike the stick and the pause button, so they are faint over white cars, pale walls and bright paving (visual review, 2026-11-08).
+- In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
+- Touch has no R: nothing resets a car to land or recovers the player on foot. A car on its roof rights itself, and one in the bay comes back on its own.
+- On a touch browser with a keyboard, pausing, resizing or lifting RISE lets go of the handbrake (and the jetpack) even while a physical Space is held, until Space is pressed again (code review, 2026-11-08).
+
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
 - YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.
