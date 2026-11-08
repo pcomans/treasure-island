@@ -14,7 +14,25 @@
 //   moored     singular evidenced vessels on the water (the Pier 1 barges):
 //              each item a prop with its origin on the waterline at its own
 //              xz and yaw, wholly off the land, at WATER_Y_M with no land
-//              support (the row's surface is water) and no rest tilt.
+//              support (the row's surface is water) and no rest tilt;
+//   field      props sown over the yard's open ground by the planting field's
+//              density rule (street-planting-generation.mjs sowField and
+//              fieldDensity: drifts and clumps of rotated, warped noise, lone
+//              items between them, groups fallen round a centre in a bell
+//              curve), so nothing is listed by hand: per_m2 candidates fall at
+//              random over the zone, each kept with the field's value there.
+//              An item keeps inset_m from the zone's edge (its fence) and from
+//              the closed OSM ways in keep_out (a fenced substation inside the
+//              site); the field's value picks its scale through the item's
+//              scale range (bigger where the field is full), and its clear gap
+//              to the rule's other items runs from gap_m[0] where the field is
+//              full to gap_m[1] where it is thin, so piles stand close in
+//              clusters and apart elsewhere. Its yaw is seeded.
+//
+// pack lines may also follow an OSM way: a line given as a way leg {way, side,
+// offset_m, from_m, to_m} (as a fence rule's leg) is that stretch of the way,
+// shifted sideways, in world x, z, and packs leg by leg (a barrier row along a
+// fence that follows the same way).
 //
 // pack and span lines are [u0, v0, u1, v1]: in the rule's frame (metres along
 // U = (cos a, sin a) and V = (-sin a, cos a) in world x, z from origin_xz, a =
@@ -52,18 +70,28 @@
 
 import { createHash } from "node:crypto";
 
+import { pointInRing } from "./osm-geometry.mjs";
+import { validateWayLeg, wayLegLine } from "./street-fence-generation.mjs";
+import { fieldDensity, sowField, validateFieldSpec } from "./street-planting-generation.mjs";
 import { YARD_KIT_KEYS, YARD_KIT_PROPS, YARD_MAX_FLOAT_M, containerWallLayout, yardMaxSink, yardPropFootprint, yardPropParamsError, yardRestGaps } from "./street-yard-kit.mjs";
 import { WATER_Y_M } from "./shoreline-generation.mjs";
 import { invariant, roundCoordinate } from "./world-contract.mjs";
 
-export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored"]);
+export const STREET_YARD_PATTERNS = Object.freeze(["pack", "span", "wall", "moored", "field"]);
 const COMMON_FIELDS = Object.freeze(["basis", "evidence", "id", "pattern", "rule"]);
 const PATTERN_FIELDS = Object.freeze({
   pack: { required: ["lines", "orient", "facing", "items", "gap_m", "fill"], optional: ["frame", "anchor", "align", "jitter_m", "jitter_deg", "skew_deg", "allow_roads", "deck"] },
   span: { required: ["lines", "prop", "params", "facing"], optional: ["frame", "align", "allow_roads", "segment_m"] },
   wall: { required: ["line_xz", "inside", "params"], optional: ["closed", "openings", "align", "segment_m", "allow_roads"] },
   moored: { required: ["items"], optional: [] },
+  field: { required: ["field", "per_m2", "inset_m", "gap_m", "items"], optional: ["keep_out"] },
 });
+// The density terms a yard field reads: position only (no land height, slope,
+// edge or road bands, which the planting field reads from its beds).
+const FIELD_TERMS = Object.freeze(["axis", "clump_m", "drift_cover", "drift_m", "groups", "lone", "ramps"]);
+// How much of a field item's scale follows the field's value (the rest is
+// seeded), as the planting field grows its plants.
+const FIELD_SCALE_FROM_VALUE = 0.65;
 // The yard kit props (and variants) whose origin is on the waterline, which a
 // moored rule may float: the barges of crane_barge (its pier crane stands on land).
 export const MOORED_PROP_VARIANTS = Object.freeze({ crane_barge: Object.freeze([0, 1]) });
@@ -169,9 +197,13 @@ function paramCombinations(params) {
   return combinations;
 }
 
-function validateLines(lines, label, facings = []) {
+function validateLines(lines, label, facings = [], ways = false) {
   invariant(Array.isArray(lines) && lines.length > 0, `${label} needs lines`);
   for (const line of lines) {
+    if (ways && isPlainObject(line)) {
+      validateWayLeg(line, `${label} line`);
+      continue;
+    }
     const own = line?.length === 5 && facings.includes(line[4]);
     invariant(Array.isArray(line) && (line.length === 4 || own) && line.slice(0, 4).every(isFiniteNumber) && Math.hypot(line[2] - line[0], line[3] - line[1]) > 0.5,
       `${label} lines are [u0, v0, u1, v1${facings.length > 0 ? `, optional facing ${facings.join("/")}` : ""}] at least 0.5 m long`);
@@ -221,7 +253,8 @@ export function validateYardRules(zone, kinds) {
       invariant(["across", "along"].includes(rule.orient), `${label} orient is across or along`);
       const facings = rule.orient === "across" ? ["left", "right"] : ["forward", "backward"];
       invariant(facings.includes(rule.facing), `${label} facing is left/right across a line, forward/backward along it`);
-      validateLines(rule.lines, label, facings);
+      validateLines(rule.lines, label, facings, true);
+      invariant(rule.frame === undefined || rule.lines.every(Array.isArray), `${label}: a frame moves only [u0, v0, u1, v1] lines (a way leg is in world x, z)`);
       invariant(rule.anchor === undefined || (rule.orient === "across" && ["center", "minus_z", "plus_z"].includes(rule.anchor)), `${label} anchor (across only) is center, minus_z or plus_z`);
       invariant(rule.skew_deg === undefined || (rule.orient === "across" && (rule.anchor ?? "center") === "center" && isFiniteNumber(rule.skew_deg) && Math.abs(rule.skew_deg) <= 60), `${label} skew_deg (across, middle anchor only) is at most 60 degrees either way`);
       invariant(Array.isArray(rule.items) && rule.items.length > 0, `${label} needs items`);
@@ -274,6 +307,30 @@ export function validateYardRules(zone, kinds) {
         invariant(Object.values(item.params).every((value) => !isPlainObject(value)), `${itemLabel}: a moored item's params are fixed (it is one evidenced vessel)`);
         invariant(yardPropParamsError(item.prop, item.params) === null, `${itemLabel}: ${yardPropParamsError(item.prop, item.params)}`);
         invariant(isXZ(item.xz) && isFiniteNumber(item.yaw) && Math.abs(item.yaw) <= Math.PI, `${itemLabel} needs xz [x, z] and yaw in [-pi, pi]`);
+      });
+    } else if (rule.pattern === "field") {
+      validateFieldSpec(rule.field, label, FIELD_TERMS);
+      invariant(isFiniteNumber(rule.per_m2) && rule.per_m2 > 0 && rule.per_m2 <= 0.05, `${label} per_m2 must be in (0, 0.05] (candidates for large props)`);
+      invariant(isFiniteNumber(rule.inset_m) && rule.inset_m >= 0, `${label} inset_m must not be negative`);
+      invariant(Array.isArray(rule.gap_m) && rule.gap_m.length === 2 && rule.gap_m.every(isFiniteNumber) && rule.gap_m[0] >= 0 && rule.gap_m[1] >= rule.gap_m[0], `${label} gap_m is [full, thin] metres`);
+      if (rule.keep_out !== undefined) invariant(Array.isArray(rule.keep_out) && rule.keep_out.length > 0 && rule.keep_out.every((key) => /^w\d+$/u.test(key)), `${label} keep_out lists OSM way keys`);
+      invariant(Array.isArray(rule.items) && rule.items.length > 0, `${label} needs items`);
+      rule.items.forEach((item, index) => {
+        const itemLabel = `${label} item ${index}`;
+        invariant(isPlainObject(item) && JSON.stringify(Object.keys(item).filter((key) => key !== "scale").sort()) === JSON.stringify(["params", "prop", "weight"]), `${itemLabel} is {weight, prop, params} and optionally scale`);
+        invariant(isFiniteNumber(item.weight) && item.weight > 0, `${itemLabel} weight must be positive`);
+        checkProp(item.prop, item.params, itemLabel);
+        if (item.scale !== undefined) {
+          invariant(YARD_KIT_PROPS[item.prop].params?.scale?.type === "number", `${itemLabel}: scale goes with a prop that takes one`);
+          invariant(!("scale" in item.params), `${itemLabel} params leave out scale, which the field sets`);
+          invariant(Array.isArray(item.scale) && item.scale.length === 2 && item.scale.every(isFiniteNumber) && item.scale[0] <= item.scale[1], `${itemLabel} scale is [low, high]`);
+        }
+        for (const params of paramCombinations(item.params)) {
+          for (const scale of item.scale ?? [undefined]) {
+            const error = yardPropParamsError(item.prop, scale === undefined ? params : { ...params, scale });
+            invariant(error === null, `${itemLabel}: ${error}`);
+          }
+        }
       });
     }
   }
@@ -362,7 +419,9 @@ function rectangleSamples({ centre, axisX, axisZ, halfX, halfZ }, step) {
 }
 
 // Places the yards: rows of the zones' yard rules. Returns {rows, audit}.
-export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, deckSupport, surfaceAt, groundAt, exclusions }) {
+// wayLine(key) gives an OSM way's points in world x, z (pack lines along a way,
+// a field's keep_out areas).
+export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, hardShapes, hardViolation, buildings, roads, onLand, grounded, deckSupport, surfaceAt, groundAt, exclusions, wayLine }) {
   const audit = { rules: {}, rejected_by_reason: {}, rest: { max_tilt_rad: 0, max_float_m: 0, max_float_row: null, max_sink_m: 0, max_sink_row: null } };
   const count = (table, key) => {
     table[key] = (table[key] ?? 0) + 1;
@@ -572,14 +631,21 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
     return { row };
   };
 
-  // A rule's lines in world x, z.
-  const worldLines = (rule) => rule.lines.map(([u0, v0, u1, v1]) => {
-    if (!rule.frame) return [[u0, v0], [u1, v1]];
+  // A rule's straight lines in world x, z, {ends: [start, end], facing} (facing
+  // a pack line's own, if it names one): a way leg gives one line per leg of its
+  // shifted stretch of the way.
+  const worldLines = (rule, label) => rule.lines.flatMap((line) => {
+    if (!Array.isArray(line)) {
+      const points = wayLegLine(wayLine, line, label);
+      return points.slice(1).map((end, index) => ({ ends: [points[index], end], facing: undefined }));
+    }
+    const [u0, v0, u1, v1, facing] = line;
+    if (!rule.frame) return [{ ends: [[u0, v0], [u1, v1]], facing }];
     const a = (rule.frame.angle_deg * Math.PI) / 180;
     const axisU = [Math.cos(a), Math.sin(a)];
     const axisV = [-Math.sin(a), Math.cos(a)];
     const at = (u, v) => add(rule.frame.origin_xz, add(scale(axisU, u), scale(axisV, v)));
-    return [at(u0, v0), at(u1, v1)];
+    return [{ ends: [at(u0, v0), at(u1, v1)], facing }];
   });
   const alignShift = (align, free) => (align === "center" ? free / 2 : align === "end" ? free : 0);
 
@@ -588,11 +654,12 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
       audit.rules[`${zone.id}/${rule.id}`] = 0;
       const reasonKey = (problem) => `${zone.id}/${rule.id}:${problem}`;
       if (rule.pattern === "pack") {
-        worldLines(rule).forEach(([start, end], lineIndex) => {
+        worldLines(rule, `Street yard rule ${zone.id}/${rule.id}`).forEach(({ ends: [start, end], facing: own }, lineIndex) => {
           const total = length(sub(end, start));
+          if (total < 1e-6) return;
           const direction = unit(sub(end, start));
           const left = leftOf(direction);
-          const facing = rule.lines[lineIndex][4] ?? rule.facing;
+          const facing = own ?? rule.facing;
           const skew = ((rule.skew_deg ?? 0) * Math.PI) / 180;
           // Side by side, a skewed item takes 1 / cos(skew) more of the line.
           const stretch = 1 / Math.cos(skew);
@@ -637,7 +704,7 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
         });
       } else if (rule.pattern === "span") {
         const sizeParam = SIZE_PARAMS[rule.prop];
-        worldLines(rule).forEach(([lineStart, lineEnd], lineIndex) => {
+        worldLines(rule, `Street yard rule ${zone.id}/${rule.id}`).forEach(({ ends: [lineStart, lineEnd] }, lineIndex) => {
           const lineTotal = length(sub(lineEnd, lineStart));
           const direction = unit(sub(lineEnd, lineStart));
           const front = rule.facing === "forward" ? direction : scale(direction, -1);
@@ -759,6 +826,59 @@ export function placeStreetYards({ config, kinds, zoneShapes, seed, occupied, ha
           placed.push({ id: row.id, rect: rowRectangle(row) });
           for (const piece of yardRowPieces(row)) occupied.push({ id: row.id, points: piece.points, radius_m: piece.radius, yard: true });
           count(audit.rules, `${zone.id}/${rule.id}`);
+        });
+      } else if (rule.pattern === "field") {
+        const label = `Street yard rule ${zone.id}/${rule.id}`;
+        const zoneShape = yardShapes.find((shape) => shape.zone === zone);
+        const edge = [...zone.shape.points_xz, zone.shape.points_xz[0]];
+        const keepOut = (rule.keep_out ?? []).map((key) => {
+          const ring = wayLine(key);
+          invariant(ring.length >= 4 && length(sub(ring[0], ring.at(-1))) < 1e-6, `${label} keep_out ${key} is not a closed way`);
+          return ring;
+        });
+        // Whether a plan point may hold part of an item: in the zone, inset_m
+        // from its edge, and out of (and inset_m from) every keep_out area.
+        const open = (xz) => zoneShape.contains(xz) && segmentsDistance([xz], edge) >= rule.inset_m
+          && keepOut.every((ring) => !pointInRing(xz, ring, true) && segmentsDistance([xz], ring) >= rule.inset_m);
+        const tag = `${seed}|${zone.id}|${rule.id}`;
+        const density = fieldDensity(rule, tag);
+        const weights = Object.fromEntries(rule.items.map((item, index) => [String(index).padStart(2, "0"), item.weight]));
+        // The rule's placed items, each with the clear gap it keeps.
+        const own = [];
+        sowField({
+          tag,
+          perM2: rule.per_m2,
+          spec: rule.field,
+          box: { min_x: zoneShape.bounds.min_x, max_x: zoneShape.bounds.max_x, min_z: zoneShape.bounds.min_y, max_z: zoneShape.bounds.max_y },
+          fieldAt: (xz) => (open(xz) ? density(xz[0], xz[1], {}) : null),
+          reject: (reason) => count(audit.rejected_by_reason, reasonKey(`field_${reason}`)),
+          sow: (xz, value, cell) => {
+            const identity = `${zone.id}:${rule.id}:${cell}`;
+            const item = rule.items[Number(pickWeighted(weights, hashUnit(seed, identity, "item")))];
+            const params = drawParams(item.params, seed, identity);
+            if (item.scale) {
+              const step = YARD_KIT_PROPS[item.prop].params.scale.step ?? 0.001;
+              const grown = FIELD_SCALE_FROM_VALUE * value + (1 - FIELD_SCALE_FROM_VALUE) * hashUnit(seed, identity, "scale");
+              params.scale = round3(Math.min(item.scale[1], Math.max(item.scale[0], Math.round((item.scale[0] + (item.scale[1] - item.scale[0]) * grown) / step) * step)));
+            }
+            const turn = hashUnit(seed, identity, "yaw") * Math.PI * 2;
+            const front = [Math.cos(turn), Math.sin(turn)];
+            const footprint = yardPropFootprint(item.prop, params);
+            const rect = rowRectangle({ position_m: [xz[0], 0, xz[1]], yaw_radians: roundYaw(Math.atan2(-front[0], -front[1])), footprint_m: footprint, prop: item.prop, prop_params: params });
+            const corners = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([i, j]) => add(rect.centre, add(scale(rect.axisX, i * rect.halfX), scale(rect.axisZ, j * rect.halfZ))));
+            if (!corners.every(open)) {
+              count(audit.rejected_by_reason, reasonKey("field_inset"));
+              return;
+            }
+            const gap = rule.gap_m[1] + (rule.gap_m[0] - rule.gap_m[1]) * value;
+            if (own.some((other) => rectanglesOverlap(rect, other.rect, Math.max(gap, other.gap)))) {
+              count(audit.rejected_by_reason, reasonKey("field_gap"));
+              return;
+            }
+            const result = addItem(zone, rule, cell, item.prop, params, xz, front);
+            if (result.problem) count(audit.rejected_by_reason, reasonKey(result.problem));
+            else own.push({ rect: rowRectangle(result.row), gap });
+          },
         });
       }
     }

@@ -77,6 +77,7 @@ const PART_COLORS := [
 	Color(0.78, 0.78, 0.76), # vent
 	Color(0.5, 0.5, 0.5), # tank
 	Color(0.06, 0.06, 0.065), # belt
+	Color(0.41, 0.33, 0.24), # earth_dark: freshly dumped soil (wastewater plant site, 2025-26 aerials and Street View)
 ]
 ## Named paints (sRGB): the params' colour names and a few the kit picks
 ## itself. Container and wall colours are sampled from the dated photos (Sep
@@ -125,7 +126,7 @@ const PROPS := {
 	"trailer": {"range_m": 700.0, "variants": ["trailer_cargo", "trailer_utility", "trailer_semi", "trailer_office"]},
 	"fabric_shed": {"range_m": 1500.0, "variants": ["span10", "span15", "span20", "span30"]},
 	"equipment": {"range_m": 700.0, "variants": ["excavator", "wheel_loader", "crane_mats", "cylinder_section", "open_bin", "hopper", "conveyor", "water_barrier"]},
-	"material_pile": {"range_m": 1500.0, "variants": ["gravel", "rubble", "soil", "tarp", "ridge"]},
+	"material_pile": {"range_m": 1500.0, "variants": ["gravel", "rubble", "soil", "tarp", "ridge", "dumped"]},
 	"plastic_berm": {"range_m": 1500.0, "variants": ["low", "high"]},
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
 	"pole_flag": {"range_m": 600.0, "variants": ["flag"]},

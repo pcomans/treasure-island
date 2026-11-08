@@ -67,6 +67,7 @@ export const YARD_KIT_PARTS = Object.freeze([
   "vent", // roof vents and AC units
   "tank", // hoppers and tanks: body colour, welded, weathered
   "belt", // a conveyor's rubber belt
+  "earth_dark", // freshly dumped soil: darker and browner than the tan earth
 ]);
 export const YARD_KIT_PART_SLOTS = 64;
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
@@ -254,6 +255,11 @@ export const YARD_KIT_PROPS = Object.freeze({
       // A windrow: a long low soil ridge in 4 m modules (505 Avenue N, May 2026
       // aerial: ~12 parallel ridges ~3 m wide, ~1 m high, ~60 m long).
       { name: "ridge", x_m: 3, z_m: null, h_m: 1, required: ["length_m"], only: ["length_m"] },
+      // Truckloads of soil dumped together on a construction site: darker and
+      // lumpier than the stockpiled soil, a few loads merged with saddles
+      // between their tops and loose clods on them (the wastewater plant site:
+      // Esri aerials Aug 2025 and May 2026, Street View 13th St Sep 2025).
+      { name: "dumped", x_m: 12, z_m: 12, h_m: 3.6 },
     ],
     // scale (in steps of 0.05, so piles share their floor shapes) and shape for
     // the mounds; length_m (rounded to whole 4 m modules) for a ridge.

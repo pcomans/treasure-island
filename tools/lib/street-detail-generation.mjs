@@ -1481,6 +1481,7 @@ export function generateStreetDetail({
     surfaceAt,
     groundAt,
     exclusions,
+    wayLine,
   });
   rows.push(...yards.rows);
   // Site checks for a set piece that is a street prop (it stands on the street
