@@ -49,6 +49,7 @@ const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
+const PHYSICS_LOOSE_PROP := 1 << 4
 const RENDER_WORLD_VISIBLE := 1
 ## How close (m) the player must be to a car's body to get in.
 const ENTER_REACH_M := 2.5
@@ -70,6 +71,16 @@ const CONTACT_MARGIN_M := 0.12
 const BREAK_SPEED_MPS := 0.5
 ## A frozen body is woken by a hit at most once in this long (s).
 const WAKE_GAP_S := 0.5
+## A moving car hands a loose prop it reaches (the pitch's ball,
+## game/scripts/world/soccer_ball.gd) its velocity along the contact, plus this
+## share of their closing speed, at most LOOSE_PUSH_MAX_MPS, with a little lift,
+## as a bumper would: the hull's raked nose sits about a ball's height up, so on
+## contact alone a car rides over the ball. Like the ball's own push from a
+## character's capsule.
+const LOOSE_PUSH_REBOUND := 0.6
+const LOOSE_PUSH_LIFT := 0.12
+const LOOSE_PUSH_MAX_MPS := 24.0
+const LOOSE_PUSH_MARGIN_M := 0.2
 ## A K-rail: a water-filled jersey unit stands in for concrete; heavy.
 const BARRIER_MASS_KG := 900.0
 const BARRIER_PARK_S := 1.0
@@ -104,6 +115,7 @@ var _recover_down := false
 var _prompt := ""
 var _exit_prompt_s := 0.0
 var _query := PhysicsShapeQueryParameters3D.new()
+var _loose_query := PhysicsShapeQueryParameters3D.new()
 
 
 func _init() -> void:
@@ -205,6 +217,8 @@ func _physics_process(delta: float) -> void:
 			_breaker.break_overlaps(body)
 		if not body is DRIVABLE_CAR:
 			_settle_barrier(body, delta)
+		elif speed > BREAK_SPEED_MPS:
+			_push_loose(body)
 
 
 func _on_foot(enter_pressed: bool) -> void:
@@ -515,6 +529,38 @@ func _shove(car: RigidBody3D, lookahead_s: float, margin: float) -> void:
 					var node := _make_live(id)
 					if node is DRIVABLE_CAR:
 						(node as DRIVABLE_CAR).occupied = false
+
+
+## Pushes the loose props (the pitch's ball) a moving car's hull is about to
+## meet, as a bumper: see LOOSE_PUSH_REBOUND.
+func _push_loose(car: RigidBody3D) -> void:
+	var space := car.get_world_3d().direct_space_state
+	_loose_query.collision_mask = PHYSICS_LOOSE_PROP
+	_loose_query.collide_with_areas = false
+	_loose_query.margin = LOOSE_PUSH_MARGIN_M
+	_loose_query.exclude = [car.get_rid()]
+	var pushed := {}
+	for owner_id in car.get_shape_owners():
+		for index in car.shape_owner_get_shape_count(owner_id):
+			_loose_query.shape = car.shape_owner_get_shape(owner_id, index)
+			_loose_query.transform = car.global_transform * car.shape_owner_get_transform(owner_id)
+			for hit: Dictionary in space.intersect_shape(_loose_query, 4):
+				var prop := hit.get("collider") as RigidBody3D
+				if prop == null or pushed.has(prop):
+					continue
+				pushed[prop] = true
+				var offset := prop.global_position - car.global_position
+				var normal := Vector3(offset.x, 0.0, offset.z)
+				if normal.length_squared() < 0.000001:
+					continue
+				normal = normal.normalized()
+				var closing := (car.linear_velocity - prop.linear_velocity).dot(normal)
+				if closing <= 0.0:
+					continue
+				var target := minf(car.linear_velocity.dot(normal) + LOOSE_PUSH_REBOUND * closing, LOOSE_PUSH_MAX_MPS)
+				var change := target - prop.linear_velocity.dot(normal)
+				if change > 0.0:
+					prop.apply_central_impulse((normal + Vector3.UP * LOOSE_PUSH_LIFT) * change * prop.mass)
 
 
 ## A live car or K-rail that came to rest and froze, set moving again by a hit

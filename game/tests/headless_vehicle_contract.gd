@@ -31,7 +31,7 @@ extends SceneTree
 ##      wakes it (the K-rail or the row units it lies among move again; the car
 ##      lies against a wall);
 ##   9. the pitch's ball: a car driven into it along the pitch sends it rolling
-##      (it is on the loose-prop layer, which takes a car's push);
+##      off ahead of the car (a bumper's push, not a ride over it);
 ##  10. on foot after getting out: the stock controller back on, then the stock
 ##      walk, run, jetpack and fast drop on open street.
 ## Every case ends with the car stopped and the player standing, inputs released,
@@ -774,8 +774,10 @@ func _case_ball() -> bool:
 			break
 	_release_driving()
 	var moved := ball.global_position.distance_to(spot)
-	print("BALL a car at %.1f m/s sent the pitch's ball %.1f m from its spot, at up to %.1f m/s" % [hit_speed, moved, top])
-	if not _require(moved > 3.0 and top > 2.0, "The car did not send the pitch's ball rolling (moved %.2f m, top %.1f m/s)." % [moved, top]):
+	# Sent off ahead of the bumper, not ridden over and left behind.
+	var ahead := (ball.global_position - car.global_position).dot(Vector3(heading.x, 0.0, heading.y))
+	print("BALL a car at %.1f m/s sent the pitch's ball %.1f m from its spot, at up to %.1f m/s, %.1f m ahead of the car" % [hit_speed, moved, top, ahead])
+	if not _require(moved > 3.0 and top > 2.0 and ahead > 0.0, "The car did not send the pitch's ball rolling ahead of it (moved %.2f m, top %.1f m/s, %.1f m ahead)." % [moved, top, ahead]):
 		return false
 	return await _stop_and_exit(car, "ball")
 
