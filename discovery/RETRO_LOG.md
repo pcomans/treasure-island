@@ -25053,4 +25053,7 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The splash → chest → play captures for each web shape, and the overview sheet, made the order and placement easy to check. Full-resolution crops settled the edge question in seconds.
 - What did not work well: The native capture set starts at "Preparing graphics…", so it doesn't show whether Godot's boot splash appears first on native; I could confirm that only for web.
 - What the team should change next time: When an assignment asks to confirm order, capture the first frame on every target, native included.
-- Delta addendum (afe93619..ba4fc0dc, loading-screen chest): The e04 log answered the driver-versus-page question by itself. The splash `src` held the static favicon URL while the link already held Godot's later `blob:` URL, and the size and screenshot checks passed. Next time, a capture driver should compare against the URL the page actually used, which is the static favicon taken before `callMain`, not the link's live `href`.
+
+### app-icon-code-review — 2026-11-08 — delta review of the loading-screen chest (afe93619..ba4fc0dc)
+
+- Delta addendum: The e04 log answered the driver-versus-page question by itself. The splash `src` held the static favicon URL while the link already held Godot's later `blob:` URL, and the size and screenshot checks passed. Next time, a capture driver should compare against the URL the page actually used, which is the static favicon taken before `callMain`, not the link's live `href`.
