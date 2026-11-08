@@ -68,6 +68,7 @@ export const YARD_KIT_PARTS = Object.freeze([
   "tank", // hoppers and tanks: body colour, welded, weathered
   "belt", // a conveyor's rubber belt
   "earth_dark", // freshly dumped soil: darker and browner than the tan earth
+  "ramp_soil", // a dirt car ramp's packed soil: worn on top, rills down its sides
 ]);
 export const YARD_KIT_PART_SLOTS = 64;
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));

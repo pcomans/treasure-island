@@ -22,11 +22,11 @@ render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 
-// Parts (tools/lib/street-yard-kit.mjs YARD_KIT_PARTS), 47 used of 64 slots;
+// Parts (tools/lib/street-yard-kit.mjs YARD_KIT_PARTS), 48 used of 64 slots;
 // the arrays below have one entry per part, and the parts the shader treats
 // specially are named (tools/validate_godot_world.mjs checks both against
 // YARD_KIT_PARTS).
-const int PART_COUNT = 47;
+const int PART_COUNT = 48;
 const int PART_PAINT = 0;
 const int PART_CONTAINER_ROOF = 17;
 const int PART_CONTAINER_DOOR = 18;
@@ -35,24 +35,25 @@ const int PART_PLASTIC = 30;
 const int PART_HULL = 33;
 const int PART_DECK = 35;
 // SOURCE: 0 the part's own colour, 1 primary, 2 secondary, 3 tertiary paint.
-const int SOURCE[47] = int[47](1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	1, 1, 1, 1, 0, 2, 3, 1, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 3, 0, 1, 2, 0, 0, 0, 0, 1, 0, 0);
+const int SOURCE[48] = int[48](1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	1, 1, 1, 1, 0, 2, 3, 1, 2, 1, 0, 0, 0, 0, 0, 1, 1, 1, 0, 2, 3, 0, 1, 2, 0, 0, 0, 0, 1, 0, 0, 0);
 // PATTERN: 0 none, 1 container wall, 2 container roof, 3 container door,
 // 4 roll-up door, 5 ribbed wall, 6 ribbed roof, 7 wood grain, 8 aggregate,
-// 9 fabric over frames (a seam every 5 m), 10 wrinkled sheeting.
-const int PATTERN[47] = int[47](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	1, 2, 3, 0, 0, 0, 4, 5, 6, 9, 7, 8, 8, 8, 10, 8, 0, 0, 10, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8);
-const float ROUGH[47] = float[47](0.38, 0.38, 0.05, 0.86, 0.35, 0.55, 0.6, 0.14, 0.07, 0.12, 0.5, 0.95, 0.42, 0.55, 0.45, 0.42,
-	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.6, 0.9, 0.5, 0.75, 0.55, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8, 0.95);
-const float METAL[47] = float[47](0.0, 0.0, 0.0, 0.0, 0.85, 0.3, 0.0, 1.0, 0.55, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.75,
-	0.25, 0.2, 0.25, 0.25, 0.7, 0.0, 0.3, 0.3, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.3, 0.0, 0.2, 0.15, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.3, 0.2, 0.0, 0.0);
-const float SPEC[47] = float[47](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5,
-	0.45, 0.4, 0.45, 0.4, 0.5, 0.5, 0.45, 0.45, 0.45, 0.35, 0.3, 0.25, 0.25, 0.3, 0.45, 0.3, 0.5, 0.4, 0.4, 0.35, 0.45, 0.2, 0.6, 0.35, 0.4, 0.3, 0.45, 0.45, 0.45, 0.3, 0.25);
+// 9 fabric over frames (a seam every 5 m), 10 wrinkled sheeting, 11 a dirt
+// ramp's packed soil.
+const int PATTERN[48] = int[48](0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+	1, 2, 3, 0, 0, 0, 4, 5, 6, 9, 7, 8, 8, 8, 10, 8, 0, 0, 10, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 11);
+const float ROUGH[48] = float[48](0.38, 0.38, 0.05, 0.86, 0.35, 0.55, 0.6, 0.14, 0.07, 0.12, 0.5, 0.95, 0.42, 0.55, 0.45, 0.42,
+	0.55, 0.62, 0.55, 0.6, 0.45, 0.4, 0.5, 0.5, 0.48, 0.85, 0.9, 0.95, 0.95, 0.92, 0.6, 0.9, 0.5, 0.75, 0.55, 0.85, 0.6, 0.95, 0.25, 0.85, 0.5, 0.8, 0.45, 0.55, 0.6, 0.8, 0.95, 0.95);
+const float METAL[48] = float[48](0.0, 0.0, 0.0, 0.0, 0.85, 0.3, 0.0, 1.0, 0.55, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.75,
+	0.25, 0.2, 0.25, 0.25, 0.7, 0.0, 0.3, 0.3, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.1, 0.3, 0.0, 0.2, 0.15, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.3, 0.2, 0.0, 0.0, 0.0);
+const float SPEC[48] = float[48](0.5, 0.5, 0.8, 0.3, 0.5, 0.4, 0.4, 0.5, 0.6, 0.5, 0.4, 0.2, 0.4, 0.5, 0.5, 0.5,
+	0.45, 0.4, 0.45, 0.4, 0.5, 0.5, 0.45, 0.45, 0.45, 0.35, 0.3, 0.25, 0.25, 0.3, 0.45, 0.3, 0.5, 0.4, 0.4, 0.35, 0.45, 0.2, 0.6, 0.35, 0.4, 0.3, 0.45, 0.45, 0.45, 0.3, 0.25, 0.25);
 // How strongly each part rusts and gathers grime (scaled by the instance's level).
-const float RUST[47] = float[47](0.03, 0.03, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25,
-	1.0, 1.0, 0.8, 1.3, 0.6, 0.03, 0.15, 0.2, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 1.0, 0.0, 0.9, 0.2, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.15, 0.9, 0.0, 0.0);
-const float GRIME[47] = float[47](0.55, 0.55, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4,
-	1.0, 0.6, 1.0, 1.0, 0.6, 0.35, 0.6, 0.8, 0.5, 0.9, 0.5, 0.0, 0.0, 0.0, 0.3, 0.8, 0.6, 0.8, 0.0, 0.6, 0.8, 0.0, 0.4, 0.6, 0.4, 0.0, 0.6, 0.5, 0.8, 0.2, 0.0);
+const float RUST[48] = float[48](0.03, 0.03, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25,
+	1.0, 1.0, 0.8, 1.3, 0.6, 0.03, 0.15, 0.2, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 1.0, 0.0, 0.9, 0.2, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.15, 0.9, 0.0, 0.0, 0.0);
+const float GRIME[48] = float[48](0.55, 0.55, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4,
+	1.0, 0.6, 1.0, 1.0, 0.6, 0.35, 0.6, 0.8, 0.5, 0.9, 0.5, 0.0, 0.0, 0.0, 0.3, 0.8, 0.6, 0.8, 0.0, 0.6, 0.8, 0.0, 0.4, 0.6, 0.4, 0.0, 0.6, 0.5, 0.8, 0.2, 0.0, 0.0);
 const vec3 RUST_COLOUR = vec3(0.235, 0.075, 0.025); // linear; about sRGB (0.52, 0.30, 0.17)
 const vec3 DIRT_COLOUR = vec3(0.16, 0.12, 0.08); // linear; about sRGB (0.44, 0.38, 0.31)
 
@@ -285,6 +286,37 @@ void fragment() {
 			vec2 tilt = vec2(hash12(vec2(c.y, 1.7)), hash12(vec2(c.y, 5.3))) - 0.5;
 			NORMAL = normalize(NORMAL + (v_across * tilt.x + v_along * tilt.y) * 0.6 * near * gap);
 		}
+	} else if (pattern == 11) {
+		// A dirt car ramp (stunt_ramp, tools/lib/street-yard-meshes.mjs): its
+		// run and top, and the spoil round its foot, dry and dusty with a fine
+		// grain, small stones and two darker bands worn by tyres along Z; its
+		// sides (facing across, or the back slope) fresher and darker, rills
+		// running down them and clods. Fine detail gives way to its average
+		// with distance.
+		vec2 g = v_pos.xz + seed * 23.0;
+		float fw = max(fwidth(g.x), fwidth(g.y));
+		float near = 1.0 - smoothstep(0.015, 0.07, fw);
+		float fine = 1.0 - smoothstep(0.005, 0.018, fw);
+		float coarse = fbm(g * 0.8);
+		float grain = vnoise(g * 26.0);
+		vec2 c = cells(g * 6.5);
+		if (abs(v_normal_model.x) > 0.3 || v_normal_model.z < -0.2) {
+			float rill = vnoise(vec2(v_pos.z * 3.5 + seed * 11.0, (v_pos.y + abs(v_pos.x)) * 0.7));
+			float clod = smoothstep(0.0, 0.12, c.x) * near;
+			albedo *= vec3(0.82, 0.76, 0.7) * (0.8 + 0.3 * rill) * (0.85 + 0.3 * coarse) * mix(1.0, 0.82 + 0.3 * c.y, clod) * (1.0 + 0.16 * (grain - 0.5) * fine);
+		} else {
+			float worn = 1.0 - smoothstep(0.16, 0.42, abs(abs(v_pos.x) - 0.82));
+			float streak = vnoise(vec2(v_pos.x * 10.0, v_pos.z * 0.6) + seed * 7.0);
+			float stone = smoothstep(0.86, 0.97, c.y) * smoothstep(0.02, 0.1, c.x) * near;
+			albedo *= vec3(1.06, 1.05, 1.03) * (0.84 + 0.26 * coarse) * (1.0 - 0.16 * worn * (0.55 + 0.45 * streak)) * (1.0 + 0.2 * (grain - 0.5) * fine) * (1.0 + 0.35 * stone);
+			if (v_pos.y < 0.06 && v_normal_model.y > 0.98) {
+				// The spoil round the foot: looser, a touch lighter, in clods.
+				albedo *= 1.05 * mix(1.0, 0.88 + 0.3 * c.y, smoothstep(0.0, 0.15, c.x) * near);
+			}
+		}
+		// The grain tilts the normal a little near the camera.
+		vec2 dg = vec2(vnoise(g * 26.0 + vec2(0.04, 0.0)) - grain, vnoise(g * 26.0 + vec2(0.0, 0.04)) - grain) / 0.04;
+		NORMAL = normalize(NORMAL + (v_across * dg.x + v_along * dg.y) * 0.006 * fine);
 	}
 	// Container door markings: two small blocks of dark text near the top.
 	if (p == PART_CONTAINER_DOOR) {

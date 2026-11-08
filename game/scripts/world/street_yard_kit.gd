@@ -78,6 +78,7 @@ const PART_COLORS := [
 	Color(0.5, 0.5, 0.5), # tank
 	Color(0.06, 0.06, 0.065), # belt
 	Color(0.41, 0.33, 0.24), # earth_dark: freshly dumped soil (wastewater plant site, 2025-26 aerials and Street View)
+	Color(0.47, 0.37, 0.27), # ramp_soil: a dirt car ramp's packed soil (the shader dusts its top and darkens its sides)
 ]
 ## Named paints (sRGB): the params' colour names and a few the kit picks
 ## itself. Container and wall colours are sampled from the dated photos (Sep

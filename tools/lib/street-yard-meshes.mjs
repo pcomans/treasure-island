@@ -2545,17 +2545,20 @@ function buildWaterBarrier(lod) {
 // ---------------------------------------------------------------- stunt ramps
 // A car ramp (owner request, 2026-11-08; tools/lib/street-yard-kit.mjs
 // stunt_ramp): its profile (stuntRampProfile) swept across the deck's width.
-// Dirt: a graded mound, its run and top packed darker than its sides, which
-// slope out at STUNT_RAMP_SIDE. Plywood: a deck of 4 x 8 ft sheets on square
-// timber sides, a steel angle along a kicker's lip and a galvanised frame showing at
-// the back.
+// Dirt: a graded mound of packed soil (ramp_soil: the shader packs and wears
+// its run and top and runs rills down its sides, which slope out at
+// STUNT_RAMP_SIDE, darker toward their foot), standing in a skirt of spoil
+// that thins out over the ground to a ragged edge, so it meets the grass as
+// dug soil does, not along a straight line. Plywood: a deck of 4 x 8 ft sheets
+// on square timber sides, a steel angle along a kicker's lip and a galvanised
+// frame showing at the back.
 function buildStuntRamp(ramp, finish, lod) {
   const out = new YardBuilder(lod);
   const dirt = finish === "dirt";
   const profile = stuntRampProfile(ramp, finish);
   const hw = ramp.width / 2;
-  const deckPart = dirt ? P.earth_dark : P.timber;
-  const sidePart = dirt ? P.earth : P.timber;
+  const deckPart = dirt ? P.ramp_soil : P.timber;
+  const sidePart = dirt ? P.ramp_soil : P.timber;
   for (let i = 0; i < profile.length - 1; i += 1) {
     const [z0, y0] = profile[i];
     const [z1, y1] = profile[i + 1];
@@ -2573,28 +2576,40 @@ function buildStuntRamp(ramp, finish, lod) {
         const top0 = v3(side * hw, y0, z0);
         const top1 = v3(side * hw, y1, z1);
         const normal = vnorm(vcross(vsub(top1, top0), vsub(base0, top0)));
-        out.face([top0, top1, base1, base0], vdot(normal, v3(side, 0, 0)) >= 0 ? normal : vscale(normal, -1), sidePart, 0.85);
+        out.face([top0, top1, base1, base0], vdot(normal, v3(side, 0, 0)) >= 0 ? normal : vscale(normal, -1), sidePart, [0.95, 0.95, 0.72, 0.72]);
       }
     }
   }
+  if (dirt) stuntRampSpoil(out, ramp, profile, hw);
   if (!dirt) {
     // Square timber sides on the profile.
     const outline = profile.map(([z, y]) => [z, y]);
     for (const side of [1, -1]) polygonFace(out, v3(side * hw, 0, 0), Z, Y, outline, [], v3(side, 0, 0), sidePart, 0.8);
     if (lod === 0) {
-      // Sheet joints across the deck every 2.44 m, and the steel angle at the lip.
+      // Sheet joints across the deck every 2.44 m measured along the whole deck
+      // from the toe (not per profile segment, so the run-up's short curve
+      // segments get theirs too and the spacing stays even), hairline thin and
+      // clear of the creases; and the steel angle at a kicker's lip.
+      let start = 0;
+      let next = 2.44;
       for (let i = 0; i < profile.length - 1; i += 1) {
         const [z0, y0] = profile[i];
         const [z1, y1] = profile[i + 1];
         const run = Math.hypot(z1 - z0, y1 - y0);
-        if (run < 0.5 || Math.abs(z1 - z0) < 1e-6) continue;
+        if (Math.abs(z1 - z0) < 1e-6) {
+          start += run;
+          continue;
+        }
         const up = vnorm(v3(0, z0 - z1, y1 - y0));
-        for (let at = 2.44; at < run - 0.2; at += 2.44) {
+        const along = vnorm(v3(0, y1 - y0, z1 - z0));
+        for (; next < start + run; next += 2.44) {
+          const at = next - start;
+          if (at < 0.15 || at > run - 0.15) continue;
           const t = at / run;
           const centre = vadd(v3(0, y0 + (y1 - y0) * t, z0 + (z1 - z0) * t), vscale(up, 0.004));
-          const along = vnorm(v3(0, y1 - y0, z1 - z0));
-          out.face([vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, 0.012))), vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, 0.012)))], up, P.seal);
+          out.face([vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, -0.006))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, -0.006))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, 0.006))), vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, 0.006)))], up, P.seal);
         }
+        start += run;
       }
       // A tabletop's top runs on past the end of its run-up: no edge there to guard.
       if (ramp.top === 0) {
@@ -2604,6 +2619,52 @@ function buildStuntRamp(ramp, finish, lod) {
     }
   }
   return out.result();
+}
+
+// A dirt ramp's spoil skirt: from just inside the mound's foot (under its
+// sides and ends), loose soil a few centimetres deep thins out over the ground
+// to a ragged edge 0.5 to 1.3 m out, its last few centimetres under the
+// ground. Visual only (no collision): it hides the line where the mound meets
+// the ground, and, being low prop geometry, keeps the ground dressing's grass
+// off it (game/scripts/world/ground_dressing.gd).
+function stuntRampSpoil(out, ramp, profile, hw) {
+  // The foot of the mound, all round: up one side from the toe to the back,
+  // down the other.
+  const right = [];
+  for (const [z, y] of profile) {
+    const point = [hw + y / STUNT_RAMP_SIDE, z];
+    const last = right[right.length - 1];
+    if (!last || Math.hypot(point[0] - last[0], point[1] - last[1]) > 1e-4) right.push(point);
+  }
+  const corners = [...right, ...right.slice().reverse().map(([x, z]) => [-x, z])];
+  // Points along it no more than 0.7 m apart.
+  const loop = [];
+  corners.forEach((a, index) => {
+    const b = corners[(index + 1) % corners.length];
+    const steps = Math.max(1, Math.ceil(Math.hypot(b[0] - a[0], b[1] - a[1]) / 0.7));
+    for (let step = 0; step < steps; step += 1) loop.push([a[0] + ((b[0] - a[0]) * step) / steps, a[1] + ((b[1] - a[1]) * step) / steps]);
+  });
+  let area = 0;
+  loop.forEach(([x0, z0], index) => {
+    const [x1, z1] = loop[(index + 1) % loop.length];
+    area += x0 * z1 - x1 * z0;
+  });
+  const turn = area > 0 ? 1 : -1;
+  const jitter = loop.map((_, index) => hash(index, ramp.width, ramp.up, ramp.height, ramp.down));
+  const ring = loop.map(([x, z], index) => {
+    const [px, pz] = loop[(index + loop.length - 1) % loop.length];
+    const [nx, nz] = loop[(index + 1) % loop.length];
+    const length = Math.hypot(nx - px, nz - pz) || 1;
+    // Outward: the tangent turned away from the inside.
+    const away = [(turn * (nz - pz)) / length, (-turn * (nx - px)) / length];
+    const smooth = 0.5 * jitter[index] + 0.25 * (jitter[(index + loop.length - 1) % loop.length] + jitter[(index + 1) % loop.length]);
+    const reach = 0.5 + 0.8 * smooth;
+    return { inner: v3(x - away[0] * 0.06, 0.03, z - away[1] * 0.06), outer: v3(x + away[0] * reach, -0.03, z + away[1] * reach) };
+  });
+  ring.forEach((a, index) => {
+    const b = ring[(index + 1) % ring.length];
+    out.face([a.inner, b.inner, b.outer, a.outer], Y, P.ramp_soil, [0.78, 0.78, 1, 1]);
+  });
 }
 
 // The ramps' profile points as empty nodes, stunt_ramp_<variant>_<finish>_rp<k>
