@@ -24,6 +24,7 @@ const EXPECTED_MATERIALS := {
 	"context_ybi_path": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_pavement", "source_dimension_m": 1.8, "repeat_dimension_m": 1.8, "normal_strength": 0.2},
 	"context_ybi_construction": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"context_ybi_wall": {"feature_kind": "ybi_building", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
+	"context_ybi_bank": {"feature_kind": "ybi_surface", "context": true, "asset": "concrete_floor_03", "source_dimension_m": 2.5, "repeat_dimension_m": 2.5, "normal_strength": 0.2},
 	"building_wall": {"feature_kind": "building_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_part_wall": {"feature_kind": "building_part_wall", "context": false, "asset": "plaster_grey_04", "source_dimension_m": 1.5, "repeat_dimension_m": 0.75, "normal_strength": 0.1},
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},

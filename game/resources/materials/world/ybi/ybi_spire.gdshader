@@ -27,9 +27,9 @@ uniform vec3 axis_base = vec3(0.0);
 uniform float height_m = 21.03;
 uniform float steel_from_m = 6.0;
 uniform float min_pixels = 2.0;
-uniform float tip_pixels = 1.0;
+uniform float tip_pixels = 1.4;
 // Glass-fibre-reinforced concrete with a slight warm cast (the close photo).
-uniform vec3 concrete_color : source_color = vec3(0.58, 0.52, 0.44);
+uniform vec3 concrete_color : source_color = vec3(0.57, 0.525, 0.465);
 uniform vec3 steel_color : source_color = vec3(0.62, 0.64, 0.67);
 uniform float steel_metallic : hint_range(0.0, 1.0) = 0.55;
 uniform float steel_roughness : hint_range(0.0, 1.0) = 0.3;
@@ -47,8 +47,9 @@ void vertex() {
 	vec2 radial = world.xz - axis_base.xz;
 	float r = length(radial);
 	float h = world.y - axis_base.y;
-	// A pixel's angle on this camera, then the radius that covers min_pixels at this distance.
-	float pixel_angle = 2.0 / (PROJECTION_MATRIX[1][1] * VIEWPORT_SIZE.y);
+	// A pixel's angle on this camera, then the radius that covers min_pixels at this distance
+	// (abs: the RenderingDevice renderers' projection flips Y, so its [1][1] is negative).
+	float pixel_angle = 2.0 / (abs(PROJECTION_MATRIX[1][1]) * VIEWPORT_SIZE.y);
 	float distance_m = length(CAMERA_POSITION_WORLD - world);
 	float tip_taper = clamp((height_m - h) / (0.2 * height_m), 0.0, 1.0);
 	float r_min = 0.5 * mix(tip_pixels, min_pixels, sqrt(tip_taper)) * pixel_angle * distance_m;

@@ -81,7 +81,7 @@ const YBI_CONTEXT_CATEGORIES := ["context_ybi_building", "context_ybi_building_p
 const YBI_DETAIL_RECORDS := {
 	# The summit reservoir's water and its concrete lining.
 	"context:ybi-basin": {"context_kind": "ybi_surface", "material_key": "context_ybi_water"},
-	"context:ybi-basin-lining": {"context_kind": "ybi_surface", "material_key": "context_ybi_wall"},
+	"context:ybi-basin-lining": {"context_kind": "ybi_surface", "material_key": "context_ybi_bank"},
 	# The three photographed buildings' banded façades and the summit sculpture.
 	"context:ybi-buildings:facade:w1228080320": {"context_kind": "ybi_building", "material_key": "context_ybi_facade_cove"},
 	"context:ybi-buildings:facade:w1228080322": {"context_kind": "ybi_building", "material_key": "context_ybi_facade_meadow"},

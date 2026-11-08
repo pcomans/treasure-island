@@ -57,6 +57,7 @@ const YBI_DETAIL := preload("res://game/scripts/world/ybi_detail_materials.gd")
 ## YBI's L1 buildings' roofs: the generic provisional roof's quiet grey.
 const YBI_ROOF_KEY := "context_ybi_building_roof"
 const YBI_WATER_KEY := "context_ybi_water"
+const YBI_BANK_KEY := "context_ybi_bank"
 ## The shoreline riprap overlay (tools/lib/shoreline-generation.mjs): the band
 ## inside the outline is the dry dirt verge at the top of the riprap, in the
 ## ground cover family the shoreline's shoulder continues past the outline
@@ -252,6 +253,7 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"context_ybi_path": "concrete_pavement",
 	"context_ybi_construction": "concrete_floor_03",
 	"context_ybi_wall": "concrete_floor_03",
+	"context_ybi_bank": "concrete_floor_03",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
 	"building_roof": "bitumen",
@@ -1116,6 +1118,10 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 	if material_key == YBI_ROOF_KEY:
 		material.albedo_color = Color(.62, .62, .59)
 		material.roughness = .96
+	if material_key == YBI_BANK_KEY:
+		# Weathered concrete, matte.
+		material.roughness = 1.0
+		material.metallic_specular = ASPHALT_SPECULAR
 	if material_key == YBI_WATER_KEY:
 		# The summit reservoir's still, algae-green water (the 2026-05-26 aerial).
 		material.albedo_color = Color(.19, .24, .16)
@@ -1180,6 +1186,10 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			# ramps, the summit plaza's parapets and the summit reservoir's banks (the
 			# 2025-05-27 photo from Treasure Island's west shore).
 			return Color(0.88, 0.99, 1.10)
+		"context_ybi_bank":
+			# The summit reservoir's banks: weathered dark grey concrete (the 2025-05-27
+			# profile from Treasure Island's west shore).
+			return Color(0.6, 0.68, 0.77)
 		"building_wall", "building_part_wall":
 			return Color("f7f2eb")
 		"building_roof", "building_part_roof":

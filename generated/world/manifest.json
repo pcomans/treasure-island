@@ -231,11 +231,11 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     }
   ],
-  "content_sha256": "3a8240c3ae5ae948c241ac990bd20472862ab7cc1fbe2eaaf6d263817e3f8c27",
+  "content_sha256": "5524f1babe22fb947d97b4568dcc5970480e1b77ee9deede39848f2ffed3cc00",
   "context": {
-    "bytes": 8910132,
+    "bytes": 8912026,
     "path": "context.json",
-    "sha256": "04e6c5988bb56865c2cd9eab65dcc10e11cb0b797be6e07eefa80e8c47618ab8"
+    "sha256": "b86b72419382aa01c0e56e43eef3892eefe56ca8eaf5e9d89399cac1bbfb4f1d"
   },
   "coordinate_system": {
     "coordinate_rounding_m": 0.001,
@@ -267,7 +267,7 @@
   "coverage_ledger": {
     "bytes": 286172,
     "path": "coverage-ledger.csv",
-    "sha256": "9b9a902f3903b9acd6d7454c577fb2f87172667d781f3155eba98343b8215da8"
+    "sha256": "90892324be25eba84ab425430692ecb9975875560e8afc9f2c0d636d8c64ba26"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -494,19 +494,19 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     },
     {
-      "bytes": 8910132,
+      "bytes": 8912026,
       "path": "context.json",
-      "sha256": "04e6c5988bb56865c2cd9eab65dcc10e11cb0b797be6e07eefa80e8c47618ab8"
+      "sha256": "b86b72419382aa01c0e56e43eef3892eefe56ca8eaf5e9d89399cac1bbfb4f1d"
     },
     {
       "bytes": 286172,
       "path": "coverage-ledger.csv",
-      "sha256": "9b9a902f3903b9acd6d7454c577fb2f87172667d781f3155eba98343b8215da8"
+      "sha256": "90892324be25eba84ab425430692ecb9975875560e8afc9f2c0d636d8c64ba26"
     },
     {
-      "bytes": 83708,
+      "bytes": 83707,
       "path": "coverage-summary.json",
-      "sha256": "39551d3b4db90b38b68c6bed8a120b0ad85ad4d3a382284dd575ef4078bc2407"
+      "sha256": "147d22507f0c859db9c0eadef080c4dff08ee77e8c1463cd249c46dc41a0234e"
     },
     {
       "bytes": 1624428,
@@ -563,6 +563,7 @@
     "context_boundary_marina",
     "context_boundary_pier",
     "context_ybi",
+    "context_ybi_bank",
     "context_ybi_building_roof",
     "context_ybi_building_wall",
     "context_ybi_construction",
