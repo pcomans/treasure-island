@@ -184,9 +184,9 @@ controls are retained.
 
 A context button above **RISE** does what F and C do. Beside a parked car it
 shows a car, **DRIVE**: tap it to get in. In a car it shows **GET OUT**: tap it to
-get out. In a car the stick drives and steers and **RISE** is the handbrake. In
-the air it shows a down arrow, **DROP**: hold it to fall fast; it lets go when
-you land. Otherwise it is hidden.
+get out; there the stick drives and steers, and **RISE**, labelled **BRAKE**, is
+the handbrake. In the air it shows a down arrow, **DROP**: hold it to fall fast;
+it lets go when you land. Otherwise it is hidden.
 
 This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
 controller (see game/scripts/vendor/selgesel/README.md): its analog thumbstick,
