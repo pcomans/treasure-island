@@ -41,8 +41,8 @@ func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
-		# Fit the actual browser aspect; native keeps its existing window policy.
-		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		# The view fills the browser's shape (window/stretch/aspect "expand", as
+		# everywhere); a touch screen's controls are laid out for 720 px or more.
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
 		if bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
 			get_window().content_scale_size = Vector2i(720, 720)
