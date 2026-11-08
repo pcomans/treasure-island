@@ -30,7 +30,9 @@ extends SceneTree
 ##      rest and freezes where it ends up, and a second hit from the same start
 ##      wakes it (the K-rail or the row units it lies among move again; the car
 ##      lies against a wall);
-##   9. on foot after getting out: the stock controller back on, then the stock
+##   9. the pitch's ball: a car driven into it along the pitch sends it rolling
+##      (it is on the loose-prop layer, which takes a car's push);
+##  10. on foot after getting out: the stock controller back on, then the stock
 ##      walk, run, jetpack and fast drop on open street.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -79,10 +81,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_on_foot]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_ball, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -747,7 +749,38 @@ func _case_shove() -> bool:
 	return await _stop_and_exit(car, "shove")
 
 
-# --- 9. On foot after getting out.
+# --- 9. The pitch's ball.
+
+func _case_ball() -> bool:
+	var balls := get_nodes_in_group(SoccerBall.GROUP)
+	if not _require(not balls.is_empty(), "No soccer ball on the pitch."):
+		return false
+	var ball := balls[0] as SoccerBall
+	var spot := ball.global_position
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var heading := Vector2(_cases.ball.heading_xz[0], _cases.ball.heading_xz[1]).normalized()
+	if not await _drive_from(car, Vector2(spot.x, spot.z) - heading * float(_cases.ball.run_up_m), heading):
+		return false
+	Input.action_press("move_forward")
+	var hit_speed := 0.0
+	var top := 0.0
+	for _tick in 300:
+		_steer_toward(car, Vector2(spot.x, spot.z))
+		await physics_frame
+		top = maxf(top, ball.linear_velocity.length())
+		if hit_speed == 0.0 and ball.linear_velocity.length() > 1.0:
+			hit_speed = car.linear_velocity.length()
+		if ball.global_position.distance_to(spot) > 3.0:
+			break
+	_release_driving()
+	var moved := ball.global_position.distance_to(spot)
+	print("BALL a car at %.1f m/s sent the pitch's ball %.1f m from its spot, at up to %.1f m/s" % [hit_speed, moved, top])
+	if not _require(moved > 3.0 and top > 2.0, "The car did not send the pitch's ball rolling (moved %.2f m, top %.1f m/s)." % [moved, top]):
+		return false
+	return await _stop_and_exit(car, "ball")
+
+
+# --- 10. On foot after getting out.
 
 func _case_on_foot() -> bool:
 	if not _require(not _player.is_driving() and _player.is_processing_unhandled_input(), "The player must be on foot."):
