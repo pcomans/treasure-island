@@ -18,7 +18,7 @@ shader_type spatial;
 render_mode blend_mix, depth_draw_never, cull_disabled;
 
 // The dust's colour: darker than pale sand, lighter than soil and asphalt.
-uniform vec3 tint : source_color = vec3(0.70, 0.66, 0.60);
+uniform vec3 tint : source_color = vec3(0.70, 0.675, 0.63);
 // 0 draws nothing: the start-up burst that compiles this shader early.
 uniform float strength = 1.0;
 // Height over width of the puff's body: below 1 it is wider than tall.
