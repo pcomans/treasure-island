@@ -997,6 +997,9 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		if started != "":
 			return "car_start: " + started
 		if start.has("roll_deg"):
+			# Once drive_from's placement has reached the body.
+			for _tick in 2:
+				await physics_frame
 			var car: Variant = _h.main.vehicles.active_car()
 			var put: Transform3D = car.global_transform
 			car.place(Transform3D(Basis(-put.basis.z.normalized(), deg_to_rad(float(start.roll_deg))) * put.basis, put.origin + Vector3.UP * (float(car.height_m) + 0.2)))
