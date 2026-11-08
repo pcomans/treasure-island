@@ -133,6 +133,8 @@ const WATER_SPIN_DRAG := 2.5
 const STRANDED_S := 2.0
 const OUTSIDE_LIMIT_S := 8.0
 const FALL_RECOVERY_Y := -20.0
+## The outline test is redone only once the car has moved this far (m).
+const OUTLINE_RECHECK_M := 1.0
 ## The detail hand-over and draw range, as the parked cars' (street_clutter_kit.gd).
 const LOD_NEAR_M := KIT.LOD_NEAR_M
 const FAR_RANGE_M := 260.0
@@ -179,6 +181,8 @@ var _park_wait := 0.0
 var _safe: Array[Dictionary] = []
 var _safe_clock := 0.0
 var _outside_s := 0.0
+var _inside := true
+var _inside_at := Vector3.INF
 var _sinking := -1.0
 var _sink_from := Vector3.ZERO
 var _clock := 0.0
@@ -610,7 +614,10 @@ func _watch_recovery(state: PhysicsDirectBodyState3D, dt: float) -> void:
 		return
 	var xf := state.transform
 	var origin := xf.origin
-	var inside := boundary.contains_position(origin)
+	if origin.distance_squared_to(_inside_at) > OUTLINE_RECHECK_M * OUTLINE_RECHECK_M:
+		_inside = boundary.contains_position(origin)
+		_inside_at = origin
+	var inside := _inside
 	_outside_s = 0.0 if inside else _outside_s + dt
 	_safe_clock += dt
 	if inside and _grounded >= 3 and xf.basis.y.dot(Vector3.UP) > 0.9 and state.angular_velocity.length() < 1.5 and _safe_clock >= SAFE_EVERY_S:
@@ -688,6 +695,7 @@ func _reset(state: PhysicsDirectBodyState3D, cause: String, from: Vector3) -> vo
 			break
 	var placed := Transform3D(Basis(forward.cross(Vector3.UP).normalized(), Vector3.UP, -forward), target.origin + Vector3.UP * 0.15)
 	_outside_s = 0.0
+	_inside_at = Vector3.INF
 	_upright_wait = 0.0
 	_righting = -1.0
 	_sinking = -1.0
