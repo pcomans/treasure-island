@@ -79,6 +79,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - Off the island the shoreline riprap is drawn only, with no collision, so a car that rolls slowly off the edge drops through the rocks into the water instead of tumbling down them (seen in review, 2026-11-08).
 - Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
 - Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
+- The chase camera's arm stops at street props as well as the world (so it never sits inside a parked car): a lamp post or palm between the car and the camera pulls the view in for a moment, and a sideways glance over kerbside cars passes just over their roofs (2026-11-08).
 - The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
 
