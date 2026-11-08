@@ -53,7 +53,10 @@ void vertex() {
 	float distance_m = length(CAMERA_POSITION_WORLD - world);
 	float tip_taper = clamp((height_m - h) / (0.2 * height_m), 0.0, 1.0);
 	float r_min = 0.5 * mix(tip_pixels, min_pixels, sqrt(tip_taper)) * pixel_angle * distance_m;
-	if (UV.x < 1.5 && r > 1e-6 && r < r_min && h > 0.05) {
+	// Only through a perspective camera: an orthographic pass (the directional light's
+	// shadow map, PROJECTION_MATRIX[3][3] = 1) keeps the true form, which would otherwise
+	// widen there into a disc of shadow over the bay.
+	if (PROJECTION_MATRIX[3][3] < 0.5 && UV.x < 1.5 && r > 1e-6 && r < r_min && h > 0.05) {
 		world.xz = axis_base.xz + radial * (r_min / r);
 		VERTEX = (inverse(MODEL_MATRIX) * vec4(world, 1.0)).xyz;
 	}
