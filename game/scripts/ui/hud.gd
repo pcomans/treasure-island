@@ -98,14 +98,14 @@ func toggle_debug() -> void:
 
 
 func set_touch_instructions() -> void:
-	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Right drag: look\nHold RISE: jetpack • Release: descend\nHold RUN while moving to run"
+	$PausePanel/PauseLayout/Controls.text = "Left stick: move • Right drag: look\nHold RISE: jetpack • Release: descend\nHold RUN while moving to run\nTap DRIVE by a car • Tap GET OUT to leave\nIn a car RISE brakes • Hold DROP: fall fast"
 	resume_button.text = "Play / Resume"
 	resume_button.custom_minimum_size.y = 64.0
 	exit_button.custom_minimum_size.y = 64.0
 	pause_panel.offset_left = -240.0
 	pause_panel.offset_right = 240.0
-	pause_panel.offset_top = -165.0
-	pause_panel.offset_bottom = 165.0
+	pause_panel.offset_top = -190.0
+	pause_panel.offset_bottom = 190.0
 
 
 func set_pointer_capture_hint(show_hint: bool) -> void:

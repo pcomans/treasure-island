@@ -10,7 +10,7 @@ It must pass before anything is pushed to `main`.
 | `headless_startup_configuration_contract.gd` | Dummy audio is selected; every catalog building has one recognition status, every accepted one has a reviewer verdict, and the demolished ones are exactly those `tools/config/demolished-buildings.json` lists. Prints the score out of the standing buildings. |
 | `validate_generated_world.gd` | The generated world data is valid and matches its manifest. |
 | `headless_gameplay_contract.gd` | Controls, movement and jetpack defaults, water, skyline billboard. |
-| `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. |
+| `headless_touch_controls.gd` | The browser touch controls: proportional stick, independent fingers, release, pause and teardown. RISE holds the handbrake with the jetpack. The use button (`scripts/ui/touch_use_button.gd`): a tap is one F press that a physics tick sees, its finger never turns the camera, and DROP holds C until the finger lifts or is cancelled, the button changes or hides, or the game pauses. |
 | `headless_world_material_contract.gd` | The ground and building materials load with their textures. |
 | `headless_ground_dressing_contract.gd` | The grass's placement rules: the density setting, every point of the ring in one cell round the camera, and each cell holding every tuft that stands in it. |
 | `headless_facade_meter_uv_adapter_contract.gd` | Facade texture coordinates run continuously around corners. |
