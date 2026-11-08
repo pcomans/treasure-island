@@ -293,7 +293,8 @@ func glance(relative: Vector2) -> void:
 		_camera.glance(relative)
 
 
-## The nearest car the player can get into from here, or "".
+## The nearest car the player can get into from here, or "". Parked cars are
+## found by their row's cell; a live car (driven or shoved) wherever it is now.
 func _nearest_car(at: Vector3) -> String:
 	var best := ""
 	var best_distance := ENTER_REACH_M
@@ -302,12 +303,19 @@ func _nearest_car(at: Vector3) -> String:
 		for dz in range(-1, 2):
 			for id: String in _cells.get(cell + Vector2i(dx, dz), []):
 				var entry: Dictionary = _rows[id]
-				if str(entry.prop) != "parked_car":
+				if str(entry.prop) != "parked_car" or _live.has(id):
 					continue
 				var distance := _distance_to_car(id, at)
 				if distance < best_distance:
 					best_distance = distance
 					best = id
+	for id: String in _live:
+		if not _live[id] is DRIVABLE_CAR:
+			continue
+		var distance := _distance_to_car(id, at)
+		if distance < best_distance:
+			best_distance = distance
+			best = id
 	return best
 
 
