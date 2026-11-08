@@ -4,7 +4,8 @@ extends SceneTree
 ##
 ##   tools/godot --fixed-fps 60 --path . --script game/tests/shared/island_test.gd
 ##
-## --fixed-fps 60 lets the walking simulation run as fast as the CPU allows.
+## --fixed-fps 60 lets the walking simulation run as fast as the CPU allows. It
+## draws nothing while it walks (see _stop_drawing).
 ## Optional -- --use-prebuilt-world: run the same checks on the baked native
 ## world that desktop exports load (bake it first: tools/prebuild-static-world.sh native).
 ## Optional -- --street-detail on|off or --street-detail-layers vegetation,fences:
@@ -61,6 +62,7 @@ func _run() -> void:
 			diagnostic_units.append(catalog_units[i])
 		print("DIAGNOSTIC ONLY: %d subsequent units; no placement, movement, fit, active REST or acceptance credit" % diagnostic_units.size())
 	var h := WorldHarness.new(self)
+	var load_started := Time.get_ticks_msec()
 	var error := await h.load_world()
 	if error != "":
 		print("FAIL: " + error)
@@ -99,6 +101,10 @@ func _run() -> void:
 	var fit := BuildingFit.new(h)
 	var failures: Array[String] = []
 	var checked := 0
+	var walk_started := Time.get_ticks_msec()
+	var ticks := Engine.get_physics_frames()
+	var drawn := Engine.get_frames_drawn()
+	var drawing := _stop_drawing()
 	for unit: Dictionary in accepted:
 		var key := str(unit.anchor_source_key)
 		failures.append_array(await fit.check(key, true, "%s: " % key, unit.get("stairs", [])))
@@ -106,6 +112,8 @@ func _run() -> void:
 		if fit.has_unsafe_failure():
 			failures.append("island checks stopped after unsafe failure at %s; %d remaining buildings untested" % [key, accepted.size() - checked])
 			break
+	_resume_drawing(drawing)
+	print("NOTE: island loaded in %.0f s; walked %d of %d scored buildings in %.0f s (%d physics ticks, %d frames drawn)" % [(walk_started - load_started) / 1000.0, checked, accepted.size(), (Time.get_ticks_msec() - walk_started) / 1000.0, Engine.get_physics_frames() - ticks, Engine.get_frames_drawn() - drawn])
 	if failures.is_empty():
 		var on := h.world.get_street_detail_layers()
 		print("PASS: island loads and all %d scored buildings fit%s, street detail %s" % [accepted.size(), " (prebuilt native world)" if prebuilt else "", "on: " + ",".join(PackedStringArray(on)) if not on.is_empty() else "off"])
@@ -114,3 +122,22 @@ func _run() -> void:
 			print("FAIL: " + message)
 	h.main.queue_free()
 	quit(0 if failures.is_empty() else 1)
+
+
+## The fit checks read collision and the renderer's mesh data, never pixels, so
+## nothing is drawn while they walk: drawing the island on every tick made the
+## walks about 50 times slower, which a compositor idle timeout once hid
+## (LEARNINGS.md). Vsync goes off too: Godot's Wayland backend paces vsync by
+## waiting for the compositor's frame callback, none comes while nothing is
+## drawn, and it would stall up to a second at a time.
+## Returns what _resume_drawing restores.
+func _stop_drawing() -> Array:
+	var saved := [RenderingServer.render_loop_enabled, DisplayServer.window_get_vsync_mode()]
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	RenderingServer.render_loop_enabled = false
+	return saved
+
+
+func _resume_drawing(saved: Array) -> void:
+	RenderingServer.render_loop_enabled = saved[0]
+	DisplayServer.window_set_vsync_mode(saved[1])
