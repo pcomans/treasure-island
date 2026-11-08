@@ -54,7 +54,6 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   canopy_of_sky: "artwork",
   ev_charger_bay: "charging_station",
   event_pole: "street_lamp",
-  floodlight_pole: "street_lamp",
   goal_gaa: "sports_goal",
   goal_rugby: "sports_goal",
   goal_soccer: "sports_goal",
@@ -64,6 +63,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   lamp_fork: "street_lamp",
   lamp_lot: "street_lamp",
   lamp_plaza: "street_lamp",
+  light_tower: "street_lamp",
   log_seat: "bench",
   map_board: "information_board",
   monument_sign: "street_sign",
@@ -125,6 +125,9 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
 export function streetFurnitureFootprint(prop, params) {
   const number = (key, fallback, low, high) => Math.min(high, Math.max(low, isFiniteNumber(params?.[key]) ? params[key] : fallback));
   if (prop === "bench_long") return { x_m: roundCoordinate(number("length_m", 2.4, 1.2, 6.0) + 0.1), z_m: 0.7 };
+  // A light tower's trailer from its outrigger pads to its drawbar's hitch, round
+  // the prop's origin (street_furniture_kit.gd light_tower).
+  if (prop === "light_tower") return { x_m: 4.7, z_m: 2.8 };
   // A mural wall's boards, posts and cap (street_furniture_kit.gd mural_wall).
   if (prop === "mural_wall") return { x_m: roundCoordinate(number("length_m", 10.0, 2.0, 24.0) + 0.1), z_m: 0.45 };
   // Aluminium bleachers: rows a 0.61 m step back each, round the plan's centre.

@@ -74,6 +74,10 @@ const CURB_CONCRETE := Color(0.64, 0.63, 0.6)
 ## one mesh square each way), hung from a top cable between the poles from just
 ## over the ground; the poles a little thicker at a run's ends.
 const NET_TILE := Vector2(0.1, 0.1)
+## The top cable's sag at mid-bay, as a share of the bay's span, and the panels
+## the netting hangs in along a bay.
+const NET_SAG := 0.022
+const NET_SEGMENTS := 6
 const NET_TINT := Color(0.06, 0.062, 0.066)
 const NET_FOOT_M := 0.12
 const INSIDE := ["left", "right", "center"]
@@ -91,6 +95,11 @@ const INSIDE := ["left", "right", "center"]
 const SCREENS := {"black": Color(0.32, 0.32, 0.43), "green": Color(0.34, 0.5, 0.4), "orange": Color(1.0, 0.45, 0.05)}
 const SCREEN_OPACITY := {"black": 0.92, "green": 0.92, "orange": 0.92}
 const SCREEN_PLAIN := ["orange"]
+## Dense windscreens: an opaque knitted screen tied to the outside of the fabric,
+## hiding the posts from the street, the galvanised wire showing over it as a
+## diamond weave (the turf pitch's, 8th St and Avenue I, Mar 2025; 9th St, Sep
+## 2025). sRGB, from the sunlit and shaded screen in those views.
+const DENSE_SCREENS := {"dense_green": Color(0.16, 0.38, 0.33)}
 ## A screen may stop below the fence top (screen_height_m), at least this tall.
 const SCREEN_MIN_M := 0.6
 ## Privacy slat colours (sRGB, multiplied with the slat stripes), from the
@@ -152,6 +161,8 @@ var _chain_shadow: ShaderMaterial
 var _barbed_shadow: ShaderMaterial
 var _wood: StandardMaterial3D
 var _screens: Dictionary = {}
+var _dense_screens: Dictionary = {}
+static var _fine_net: Texture2D
 var _screen_shadow: StandardMaterial3D
 var _slats: Dictionary = {}
 var _banner: StandardMaterial3D
@@ -176,11 +187,11 @@ func _init() -> void:
 		coated.set_shader_parameter("metallic_value", 0.0)
 		coated.set_shader_parameter("roughness_value", 0.7)
 		_chains[coating] = coated
-	_net = _fabric_material("street_fence_ball_stop_net", FURNITURE.net_texture())
+	_net = _fabric_material("street_fence_ball_stop_net", _fine_net_texture())
 	_net.set_shader_parameter("tint", NET_TINT)
 	_net.set_shader_parameter("metallic_value", 0.0)
 	_net.set_shader_parameter("roughness_value", 0.85)
-	_net_shadow = _fabric_shadow_material("street_fence_ball_stop_net_shadow", FURNITURE.net_texture())
+	_net_shadow = _fabric_shadow_material("street_fence_ball_stop_net_shadow", _fine_net_texture())
 	_barbed = _fabric_material("street_fence_barbed", BARBED)
 	_chain_shadow = _fabric_shadow_material("street_fence_chain_link_shadow", CHAIN_LINK)
 	_barbed_shadow = _fabric_shadow_material("street_fence_barbed_shadow", BARBED)
@@ -205,6 +216,13 @@ func _init() -> void:
 		# light through it, so the screens take no shadows.
 		screen.disable_receive_shadows = true
 		_screens[colour] = screen
+	for colour: String in DENSE_SCREENS:
+		var dense := StandardMaterial3D.new()
+		dense.resource_name = "street_fence_screen_" + colour
+		dense.albedo_color = DENSE_SCREENS[colour]
+		dense.roughness = 0.9
+		dense.cull_mode = BaseMaterial3D.CULL_DISABLED
+		_dense_screens[colour] = dense
 	# Privacy slats: opaque stripes, one slat per mesh column with a dark
 	# seam between, a little uneven in tone (a texture made here, no file).
 	var stripes := Image.create_empty(64, 16, false, Image.FORMAT_RGBA8)
@@ -284,7 +302,8 @@ static func params_error(type: String, params: Variant) -> String:
 	if (params as Dictionary).has("curb") and (type not in COATED_TYPES or not (params as Dictionary).curb is bool or not bool((params as Dictionary).curb)):
 		return "curb must be true on plain or screened chain-link"
 	if type == "chain_link_screened":
-		if str((params as Dictionary).get("screen", "black")) not in SCREENS:
+		var screen_colour := str((params as Dictionary).get("screen", "black"))
+		if screen_colour not in SCREENS and screen_colour not in DENSE_SCREENS:
 			return "unknown screen colour %s" % (params as Dictionary).get("screen")
 		var top := height_of(type, params)
 		var screen_height: Variant = (params as Dictionary).get("screen_height_m", top)
@@ -362,6 +381,8 @@ func commit(cell: Dictionary) -> Dictionary:
 	for colour: String in SCREENS:
 		_add_surface(fabric, cell["screen_" + colour], _screens[colour])
 		_add_surface(shadow, cell["screen_" + colour], _screen_shadow)
+	for colour: String in DENSE_SCREENS:
+		_add_surface(solid, cell["screen_" + colour], _dense_screens[colour])
 	for colour: String in SLATS:
 		_add_surface(solid, cell["slats_" + colour], _slats[colour])
 	_add_surface(solid, cell.banner, _banner)
@@ -398,6 +419,7 @@ func _cell(cells: Dictionary, cell_size_m: float, position: Vector3) -> Dictiona
 			"screen_black": Quads.new(),
 			"screen_green": Quads.new(),
 			"screen_orange": Quads.new(),
+			"screen_dense_green": Quads.new(),
 			"slats_green": Quads.new(),
 			"slats_brown": Quads.new(),
 			"slats_black": Quads.new(),
@@ -483,7 +505,12 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		# above a screen lower than the fence the wire shows.
 		var shift := normal * side * 0.035
 		var wire_from := base + 0.05
-		if type == "chain_link_screened":
+		if type == "chain_link_screened" and screen in DENSE_SCREENS:
+			# Outside the posts, the wire outermost: the posts hide behind it.
+			var outward := normal * -(side if side != 0.0 else 1.0)
+			(cell["screen_" + screen] as Quads).wall(a + outward * 0.045, b + outward * 0.045, base + 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
+			shift = outward * 0.06
+		elif type == "chain_link_screened":
 			var screen_shift := normal * (side if side != 0.0 else 1.0) * 0.055
 			(cell["screen_" + screen] as Quads).wall(a + screen_shift, b + screen_shift, base + 0.03, screen_top, along_m, Vector2(SCREEN_TILE_M, SCREEN_TILE_M))
 			wire_from = screen_top
@@ -558,10 +585,10 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 
 # ---------------------------------------------------------------- ball-stop net
 
-## A ball-stop net: tall galvanised poles, a top cable, and black netting hung
-## from it to just over the ground, drawn like the chain-link fabric (crisp up
-## close, a faint dark haze far off). Its collision is the whole bay, so the
-## player walks along it and the jetpack clears it.
+## A ball-stop net: tall galvanised poles, a top cable sagging between them, and
+## fine black netting hung from it to just over the ground, drawn like the
+## chain-link fabric (crisp up close, nearly gone far off). Its collision is the
+## whole bay, so the player walks along it and the jetpack clears it.
 func _ball_stop_net(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, height: float) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.ball_stop_net
 	var boxes: Array[Dictionary] = []
@@ -577,11 +604,50 @@ func _ball_stop_net(cells: Dictionary, cell_size_m: float, posts: PackedVector3A
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
 		var metal: FURNITURE.Builder = cell.metal
-		metal.tube(PackedVector3Array([a + Vector3(0, height - 0.04, 0), b + Vector3(0, height - 0.04, 0)]), PackedFloat32Array([0.009, 0.009]), 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-		(cell.net as Quads).wall(a, b, NET_FOOT_M, height - 0.05, along_m, NET_TILE)
+		var normal := Vector3(b.z - a.z, 0.0, -(b.x - a.x)).normalized()
+		var sag := clampf(length * NET_SAG, 0.05, 0.4)
+		var cable := PackedVector3Array()
+		var cable_radii := PackedFloat32Array()
+		for step in NET_SEGMENTS + 1:
+			var t := float(step) / float(NET_SEGMENTS)
+			cable.append(a.lerp(b, t) + Vector3(0, height - 0.04 - sag * 4.0 * t * (1.0 - t), 0))
+			cable_radii.append(0.009)
+		metal.tube(cable, cable_radii, 4, GALVANIZED, FURNITURE.CELL_METAL, false, false)
+		# The netting hangs from the cable: one panel per cable segment.
+		for step in NET_SEGMENTS:
+			var t0 := float(step) / float(NET_SEGMENTS)
+			var t1 := float(step + 1) / float(NET_SEGMENTS)
+			var p0 := a.lerp(b, t0)
+			var p1 := a.lerp(b, t1)
+			var top0 := cable[step].y - p0.y - 0.01
+			var top1 := cable[step + 1].y - p1.y - 0.01
+			var u0 := (along_m + length * t0) / NET_TILE.x
+			var u1 := (along_m + length * t1) / NET_TILE.x
+			(cell.net as Quads).quad([p0 + Vector3(0, NET_FOOT_M, 0), p1 + Vector3(0, NET_FOOT_M, 0), p1 + Vector3(0, top1, 0), p0 + Vector3(0, top0, 0)],
+				[Vector2(u0, -NET_FOOT_M / NET_TILE.y), Vector2(u1, -NET_FOOT_M / NET_TILE.y), Vector2(u1, -top1 / NET_TILE.y), Vector2(u0, -top0 / NET_TILE.y)], normal)
 		boxes.append(_bay_box(a, b, height, float(spec.collision_half_m)))
 		along_m += length
 	return boxes
+
+
+## The ball-stop net's tile: a fine white square mesh, its alpha a thin cord one
+## texel of 32 wide with slightly heavier knots, so the tinted net stays faint and
+## its far haze nearly vanishes (FURNITURE.net_texture() is the goal nets').
+static func _fine_net_texture() -> Texture2D:
+	if _fine_net != null:
+		return _fine_net
+	var size := 32
+	var image := Image.create_empty(size, size, false, Image.FORMAT_RGBA8)
+	for y in size:
+		for x in size:
+			var dx := minf(float(x) + 0.5, float(size) - float(x) - 0.5)
+			var dy := minf(float(y) + 0.5, float(size) - float(y) - 0.5)
+			var cord := clampf(1.1 - minf(dx, dy), 0.0, 1.0)
+			var knot := clampf(1.8 - maxf(dx, dy), 0.0, 1.0) * 0.5
+			image.set_pixel(x, y, Color(1.0, 1.0, 1.0, maxf(cord, knot)))
+	image.generate_mipmaps()
+	_fine_net = ImageTexture.create_from_image(image)
+	return _fine_net
 
 
 ## An open gate between the solid runs either side of it (a slatted, plain or

@@ -54,8 +54,9 @@ export const STREET_FENCE_TYPES = Object.freeze({
 export const STREET_FENCE_COATINGS = Object.freeze(["galvanised", "green", "black"]);
 const COATED_TYPES = Object.freeze(["chain_link", "chain_link_screened"]);
 // Windscreen colours; orange is the open safety mesh of construction sites
-// (9th St, Sep 2025: about 1.2 m high behind construction panels).
-export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange"]);
+// (9th St, Sep 2025: about 1.2 m high behind construction panels), dense_green the
+// opaque knitted screen tied outside the fabric (street_fence_kit.gd DENSE_SCREENS).
+export const STREET_FENCE_SCREENS = Object.freeze(["black", "green", "orange", "dense_green"]);
 // A screen may stop below the fence top (screen_height_m), the wire bare above it.
 export const STREET_FENCE_SCREEN_MIN_M = 0.6;
 export const STREET_FENCE_SLATS = Object.freeze(["green", "brown", "black"]);

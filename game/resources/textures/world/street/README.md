@@ -150,8 +150,9 @@ shape (480 x 288) and the pair is packed into the square, by
 `tools/draw_pole_flag_texture.sh`, which redraws it byte for byte.
 
 `gaa_mural_wall.png` (2048 x 512) is the mural painted on the GAA field's board
-wall (`mural_wall` in `street_furniture_kit.gd`): a round crest, the words TÁ ÁIT
-DÚINN UILE ANN and a panel with PÁIRC NA nGAEL and THE HOME OF GAELIC SPORTS on
-dark green boards. Generated 2026-11-08 with `tools/generate-texture` from a text
-prompt only: an original design that echoes the field's 2025 murals (SF GAA
-photos), not a copy of them.
+wall (`mural_wall` in `street_furniture_kit.gd`): an orange outline of a Celtic ring
+cross, the words TÁ ÁIT DÚINN UILE ANN, and PÁIRC NA nGAEL over THE HOME OF GAELIC
+SPORTS, all painted straight on dark teal-green boards. Generated 2026-11-08 with
+`tools/generate-texture` from a text prompt only (a second version, after review):
+an original design that echoes the field's 2025 murals (SF GAA photos), not a copy
+of them.

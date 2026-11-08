@@ -167,8 +167,8 @@ From the site's reviews.
 
 The GAA pitch (OSM w99060807, Páirc na nGael), the rugby field (OSM w99060801,
 "GAA Field B" in OSM) and the turf pitch (OSM w1252737754) got their fences,
-lines, goals, nets and floodlights, and the GAA field's spectator wall and
-bleachers, from Mar to Nov 2025 Street View, the 2026-05-26 aerial and the SF GAA
+lines, goals, nets and portable light towers, and the GAA field's spectator wall
+and bleachers, from Mar to Nov 2025 Street View, the 2026-05-26 aerial and the SF GAA
 photos of 2025 and Jun 2026. What isn't there yet:
 
 - No dated photo fixes where these stand, so they aren't built: the GAA field's
@@ -181,19 +181,21 @@ photos of 2025 and Jun 2026. What isn't there yet:
   opening that the others don't.
 - The turf pitch's windscreen fence stops 3 m short of the south corner (Avenue I
   at 8th Street) on both sides: no photo shows that corner, so it stays open.
-- The floodlight heights are estimates: about 24 m at the turf pitch (from one
-  Sep 2025 view at about 110 m) and 9 m at the rugby field. Street View shows no
-  turf floodlights in Mar 2025 and one in Sep 2025; the four come from the
-  2026-05-26 aerial's pole bases, so they may be new.
+- The fields' lights are portable light towers on trailers, which move. The rugby
+  field's two stand where Street View caught them (Avenue H, Sep 2025; near the
+  11th Street corner, Mar 2025), 3 m inside the fence. The turf pitch's one stands
+  on its Sep 2025 bearing from 9th Street at an inferred 37 m (no turf tower in
+  Mar 2025, and neither aerial shows it). Their 9 m masts are estimates. Four
+  dark spots on the turf's south-east apron in the 2026-05-26 aerial match
+  nothing photographed, so they aren't modelled.
 - The GAA and rugby fields' low concrete curb is photographed on Avenue H and
   11th and 13th Streets; along Avenue E and Avenue I it is assumed to continue.
-- The turf pitch's windscreen reads more see-through than in the 2025 photos: it
-  is the fence kit's shared green screen.
+- From raised views far off, the pitches' 10 cm lines break into dashes: the
+  shared street paint has no minimum width on screen.
 - The rugby pitch's frame was moved 5.4 m east and 3.1 m south from the aerial,
   where the aerial's fence lies that far from OSM's; the GAA pitch needed no move.
 - Not modelled: the containers, sheds and the school bus round the rugby field,
-  the GAA field's strip of containers and sheds by Avenue E, and the portable
-  light towers on trailers.
+  and the GAA field's strip of containers and sheds by Avenue E.
 
 ## Street detail rollouts: landed 2026-11-06 with known gaps
 

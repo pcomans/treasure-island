@@ -207,13 +207,20 @@ const SOCCER_NET_DEPTH_M := 1.8
 ## Goal nets: white cord on the shared net tile, NET_TILE_M each way.
 const GOAL_NET_TINT := Color(0.9, 0.9, 0.88)
 const GOAL_NET_TILE_M := 0.12
+## How high a goal net's collision walls stand (_goal_net_shapes).
+const GOAL_NET_WALL_M := 0.6
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
-## Sports floodlight poles (Avenue H, Sep 2025: a dark pole with four rectangular
-## heads on a T-bar at the rugby field; 9th St, Sep 2025: a galvanised pole with a
-## box and four round heads, two up and two lower, at the turf pitch), aimed down
-## over the pitch (-Z). Heights are production inference from those views.
-const FLOODLIGHT_HEAD := Color(0.5, 0.51, 0.53)
-const FLOODLIGHT_DARK := Color(0.2, 0.21, 0.22)
+## Portable light towers on their trailers (the rugby field's, Avenue H, Sep 2025,
+## and 11th St, Mar 2025; one by the turf pitch's small pitches, 9th St, Sep 2025):
+## a cream trailer body on two wheels with its drawbar and four outrigger jacks, a
+## dark telescoping mast wound with its coiled cable, a box at its top and a T-bar
+## with four rectangular lamp heads, two up and two lower, aimed down over the
+## pitch (-Z). Sizes are those of the common 9 m towers, production inference.
+const TOWER_BODY := Color(0.85, 0.84, 0.79)
+const TOWER_MAST := Color(0.17, 0.18, 0.19)
+const TOWER_HEAD := Color(0.6, 0.61, 0.62)
+## Where the mast stands on the trailer (m along X from the body's centre).
+const TOWER_MAST_X := -0.75
 ## Aluminium spectator bleachers (the GAA field's spectator side, SF GAA photos
 ## Jun 2026; the rugby field's, Avenue H and Avenue I, Sep 2025): rows of plank
 ## seats and footboards on aluminium A-frames, each row a step up and back, and on
@@ -234,12 +241,13 @@ const CHAIN_LINK := preload("res://game/resources/textures/world/street/street_f
 ## The chain-link tile's size (m), as the fence kit's CHAIN_TILE.
 const CHAIN_LINK_TILE := Vector2(0.10, 0.12)
 ## The GAA field's spectator side (SF GAA photos, Jun 2026 and 2025): a tall wall
-## of dark green painted boards with black posts on its field face about every
-## 12 ft (WW1_5704, WW1_6934C), the murals of 2025 on a panel over its field face
-## (an original design, MURAL_ART, that only echoes them). Sizes are production
-## inference from the people in the photos.
+## of dark teal-green painted boards (sRGB about 15-35, 65-86, 75-96 in WW1_5704 and
+## WW1_6934C) with black posts on its field face about every 12 ft, the murals of
+## 2025 painted on its field face (an original design, MURAL_ART, that only echoes
+## them, its boards the wall's colour). Sizes are production inference from the
+## people in the photos.
 const MURAL_ART := preload("res://game/resources/textures/world/street/gaa_mural_wall.png")
-const MURAL_GREEN := Color(0.11, 0.25, 0.19)
+const MURAL_GREEN := Color(0.058, 0.285, 0.276)
 const MURAL_POST := Color(0.06, 0.065, 0.07)
 const MURAL_WALL_THICKNESS_M := 0.12
 const MURAL_POST_STEP_M := 3.66
@@ -286,7 +294,7 @@ const PROPS := {
 	"goal_gaa": {"range_m": 450.0, "shadow": true},
 	"goal_rugby": {"range_m": 450.0, "shadow": true},
 	"goal_soccer": {"range_m": 260.0, "shadow": true},
-	"floodlight_pole": {"range_m": 500.0, "shadow": true},
+	"light_tower": {"range_m": 450.0, "shadow": true},
 	"bleachers": {"range_m": 260.0, "shadow": true},
 	"mural_wall": {"range_m": 450.0, "shadow": true},
 }
@@ -659,6 +667,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, "goal_gaa_frame", func(b: Builder) -> void: _goal_gaa(b))
 			_piece(result, "goal_gaa_net", func(b: Builder) -> void: _goal_gaa_net(b), Transform3D.IDENTITY, _goal_net, false)
 			_goal_frame_shapes(result, GAA_GOAL_HALF_M, GAA_CROSSBAR_M, GAA_UPRIGHT_M, 0.06)
+			_goal_net_shapes(result, GAA_GOAL_HALF_M, GAA_NET_DEPTH_M)
 		"goal_rugby":
 			_piece(result, "goal_rugby", func(b: Builder) -> void: _goal_rugby(b))
 			_goal_frame_shapes(result, RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, RUGBY_UPRIGHT_M, 0.075)
@@ -669,14 +678,13 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_piece(result, goal_key + "_frame", func(b: Builder) -> void: _goal_soccer(b, goal_width, goal_height))
 			_piece(result, goal_key + "_net", func(b: Builder) -> void: _goal_soccer_net(b, goal_width, goal_height), Transform3D.IDENTITY, _goal_net, false)
 			_goal_frame_shapes(result, goal_width * 0.5 + 0.06, goal_height, goal_height, 0.06)
-		"floodlight_pole":
-			var pole_height := snappedf(clampf(_number(params, "height_m", 15.0), 8.0, 24.0), 0.5)
-			var heads := clampi(int(_number(params, "heads", 4)), 1, 6)
-			var dark := str(params.get("finish", "galvanised")) == "dark"
-			var boxed := str(params.get("head", "round")) == "box"
-			_piece(result, "floodlight_pole_h%.1f_n%d_%s_%s" % [pole_height, heads, "dark" if dark else "galvanised", "box" if boxed else "round"],
-				func(b: Builder) -> void: _floodlight_pole(b, pole_height, heads, dark, boxed))
-			_capsule(result, 0.17, pole_height)
+			_goal_net_shapes(result, goal_width * 0.5 + 0.04, SOCCER_NET_DEPTH_M * minf(1.0, goal_height / 2.44))
+		"light_tower":
+			var mast := snappedf(clampf(_number(params, "mast_m", 9.0), 6.0, 10.0), 0.5)
+			_piece(result, "light_tower_m%.1f" % mast, func(b: Builder) -> void: _light_tower(b, mast))
+			# The trailer with its wheels and outriggers, and the mast.
+			_box_shape(result, Vector3(2.4, 1.5, 2.7), Vector3(0.0, 0.75, 0.0))
+			_capsule(result, 0.1, mast, Vector3(TOWER_MAST_X, 0.0, 0.0))
 		"bleachers":
 			var rows := clampi(int(_number(params, "rows", 3)), 2, 10)
 			var seat_length := snappedf(clampf(_number(params, "length_m", 6.4), 2.0, 10.0), 0.1)
@@ -1410,11 +1418,20 @@ func _event_pole(b: Builder) -> void:
 
 ## The upright shapes of a goal (capsules round the uprights from the foot to
 ## their tops) and a box round its crossbar, so the player and the ball meet the
-## frame; the nets stay soft.
+## frame.
 func _goal_frame_shapes(result: Dictionary, half_m: float, crossbar_m: float, upright_m: float, radius: float) -> void:
 	for side: float in [-1.0, 1.0]:
 		_capsule(result, radius, upright_m, Vector3(side * half_m, 0.0, 0.0))
 	_box_shape(result, Vector3(half_m * 2.0, radius * 2.0, radius * 2.0), Vector3(0.0, crossbar_m - radius, 0.0))
+
+
+## A goal net's low walls, so a ball rolled into the goal stays in it: a box along
+## the back where the net meets the ground, depth behind the line, and one down
+## each side from the line to it, GOAL_NET_WALL_M high.
+func _goal_net_shapes(result: Dictionary, half_m: float, depth: float) -> void:
+	_box_shape(result, Vector3(half_m * 2.0, GOAL_NET_WALL_M, 0.06), Vector3(0.0, GOAL_NET_WALL_M * 0.5, depth - 0.03))
+	for side: float in [-1.0, 1.0]:
+		_box_shape(result, Vector3(0.06, GOAL_NET_WALL_M, depth), Vector3(side * half_m, GOAL_NET_WALL_M * 0.5, depth * 0.5))
 
 
 ## A GAA goal: two white round uprights from the foot to GAA_UPRIGHT_M, a
@@ -1510,42 +1527,51 @@ func _goal_soccer_net(b: Builder, width: float, height: float) -> void:
 	_goal_net_sheets(b, width * 0.5 + 0.04, PackedVector3Array([Vector3(0.0, height, 0.06), Vector3(0.0, height * 0.5, depth * 0.55), Vector3(0.0, 0.03, depth)]))
 
 
-## A sports floodlight pole: a tapered pole (galvanised, or dark painted), a box on
-## top and its heads in pairs either side of a cross bar each, two up and two lower,
-## aimed down over the pitch (-Z): round heads (the turf pitch's pole, Sep 2025) or
-## rectangular ones, boxed (the rugby field's dark pole, Sep 2025). The head
-## assembly grows with the pole: on the 24 m turf pole its pairs stand about 3.5 m
-## apart and 2.5 m one above the other, each head over a metre across (749 9th St,
-## Sep 2025, from 110 m); on the 9 m rugby pole they are a third of that.
-func _floodlight_pole(b: Builder, height: float, heads: int, dark: bool, boxed: bool) -> void:
-	var finish := FLOODLIGHT_DARK if dark else GALVANIZED
-	var k := clampf(height / 9.0, 1.0, 3.0)
-	var girth := 1.0 + (k - 1.0) * 0.4
-	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, height - 0.6 * k, 0)]), PackedFloat32Array([0.17 * girth, 0.09 * girth]), 10, finish, CELL_METAL, false, true)
-	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.5, 0)]), PackedFloat32Array([0.24 * girth, 0.21 * girth]), 10, finish, CELL_METAL, false, true)
-	b.box(Vector3(0.0, 3.0, 0.16 * girth), Basis.IDENTITY, Vector3(0.26, 0.42, 0.16), finish, CELL_METAL)
-	b.box(Vector3(0.0, height - 0.3 * k, 0.0), Basis.IDENTITY, Vector3(0.3, 0.5, 0.3) * k, finish, CELL_METAL)
-	var aim := Vector3(0.0, -0.55, -1.0).normalized()
-	var spread := 0.62 * k
-	var row_gap := 0.55 * k * (1.0 + (k - 1.0) * 0.5)
-	var rows := (heads + 1) / 2
-	for row in rows:
-		b.box(Vector3(0.0, height - 0.95 * k - row_gap * float(row), -0.12 * k), Basis.IDENTITY, Vector3(spread * 2.0 + 0.3, 0.07 * k, 0.07 * k), finish, CELL_METAL)
-	var mounts: Array[Vector3] = []
-	for index in heads:
-		var row := index / 2
-		var side := -1.0 if index % 2 == 0 else 1.0
-		mounts.append(Vector3(side * spread, height - 0.95 * k - row_gap * float(row), -0.3 * k))
-	# A head's frame: its face aimed down over the pitch, its width level.
+## A portable light tower on its trailer, its drawbar to +X: the trailer body on
+## two wheels, the drawbar and its jack, four outrigger jacks set down on the
+## ground, the mast in three telescoped sections with its coiled cable, a box at
+## its top, and the T-bar's four rectangular heads aimed down over -Z.
+func _light_tower(b: Builder, mast: float) -> void:
+	b.box(Vector3(0.0, 0.98, 0.0), Basis.IDENTITY, Vector3(2.3, 1.04, 1.24), TOWER_BODY, CELL_WHITE)
+	b.box(Vector3(0.0, 0.42, 0.0), Basis.IDENTITY, Vector3(2.4, 0.09, 1.3), TOWER_MAST, CELL_METAL)
+	for side: float in [-1.0, 1.0]:
+		b.tube(PackedVector3Array([Vector3(-0.2, 0.33, side * 0.62), Vector3(-0.2, 0.33, side * 0.82)]), PackedFloat32Array([0.33, 0.33]), 14, STEEL_BLACK, CELL_METAL, true, true)
+		# The drawbar's arms meet at the hitch.
+		b.tube(PackedVector3Array([Vector3(1.1, 0.45, side * 0.5), Vector3(2.3, 0.45, 0.0)]), PackedFloat32Array([0.04, 0.04]), 6, TOWER_MAST, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(2.15, 0.0, 0.0), Vector3(2.15, 0.62, 0.0)]), PackedFloat32Array([0.035, 0.035]), 6, TOWER_MAST, CELL_METAL, false, true)
+	# Outriggers: a beam out from each corner of the frame, a jack down to a pad.
+	for x: float in [-0.95, 0.95]:
+		for side: float in [-1.0, 1.0]:
+			b.box(Vector3(x, 0.5, side * 0.98), Basis.IDENTITY, Vector3(0.08, 0.08, 0.76), TOWER_MAST, CELL_METAL)
+			b.box(Vector3(x, 0.29, side * 1.32), Basis.IDENTITY, Vector3(0.07, 0.5, 0.07), TOWER_MAST, CELL_METAL)
+			b.box(Vector3(x, 0.02, side * 1.32), Basis.IDENTITY, Vector3(0.22, 0.04, 0.22), TOWER_MAST, CELL_METAL)
+	# The mast: three sections, each a little thinner, from the body's top.
+	var foot := 1.5
+	var heights := [foot, foot + (mast - foot) * 0.4, foot + (mast - foot) * 0.72, mast]
+	var radii := [0.085, 0.07, 0.056]
+	for index in 3:
+		b.tube(PackedVector3Array([Vector3(TOWER_MAST_X, heights[index], 0.0), Vector3(TOWER_MAST_X, heights[index + 1], 0.0)]), PackedFloat32Array([radii[index], radii[index]]), 10, TOWER_MAST, CELL_METAL, false, true)
+	# Its power cable coiled round it, a turn every 0.4 m.
+	var coil := PackedVector3Array()
+	var coil_radii := PackedFloat32Array()
+	var turns := floori((mast - 1.0 - (foot + 0.4)) / 0.4)
+	for step in turns * 10 + 1:
+		var angle := TAU * float(step) / 10.0
+		coil.append(Vector3(TOWER_MAST_X + cos(angle) * 0.14, foot + 0.4 + 0.04 * float(step), sin(angle) * 0.14))
+		coil_radii.append(0.014)
+	b.tube(coil, coil_radii, 4, STEEL_BLACK, CELL_METAL, false, false)
+	b.box(Vector3(TOWER_MAST_X, mast + 0.15, 0.0), Basis.IDENTITY, Vector3(0.3, 0.3, 0.26), TOWER_MAST, CELL_METAL)
+	# The T-bar and its heads, two up and two lower, aimed down over -Z.
+	var aim := Vector3(0.0, -0.45, -1.0).normalized()
 	var head_basis := Basis(Vector3.RIGHT, Vector3.RIGHT.cross(-aim).normalized() * -1.0, -aim)
-	for mount: Vector3 in mounts:
-		b.tube(PackedVector3Array([Vector3(mount.x, mount.y + 0.05 * k, -0.12 * k), mount]), PackedFloat32Array([0.03 * k, 0.03 * k]), 6, finish, CELL_METAL, false, false)
-		if boxed:
-			b.box(mount + aim * 0.1 * k, head_basis, Vector3(0.62, 0.48, 0.18) * k, FLOODLIGHT_HEAD, CELL_WHITE)
-			b.box(mount + aim * 0.195 * k, head_basis, Vector3(0.54, 0.4, 0.012) * k, LENS_GREY, CELL_WHITE)
-		else:
-			b.tube(PackedVector3Array([mount, mount + aim * 0.22 * k]), PackedFloat32Array([0.24 * k, 0.27 * k]), 12, FLOODLIGHT_HEAD, CELL_WHITE, true, false)
-			b.disc(mount + aim * 0.225 * k, aim, 0.24 * k, 12, LENS_GREY)
+	b.box(Vector3(TOWER_MAST_X, mast - 0.12, -0.1), Basis.IDENTITY, Vector3(1.6, 0.06, 0.06), TOWER_MAST, CELL_METAL)
+	for row in 2:
+		var y := mast - 0.25 - 0.55 * float(row)
+		for side: float in [-1.0, 1.0]:
+			var mount := Vector3(TOWER_MAST_X + side * 0.55, y, -0.18)
+			b.tube(PackedVector3Array([Vector3(TOWER_MAST_X + side * 0.55, mast - 0.12, -0.1), mount]), PackedFloat32Array([0.02, 0.02]), 6, TOWER_MAST, CELL_METAL, false, false)
+			b.box(mount + aim * 0.07, head_basis, Vector3(0.5, 0.4, 0.14), TOWER_HEAD, CELL_WHITE)
+			b.box(mount + aim * 0.142, head_basis, Vector3(0.44, 0.34, 0.01), LENS_GREY, CELL_WHITE)
 
 
 ## Aluminium bleachers of `rows` rows, `length` long: per row a footboard and a
