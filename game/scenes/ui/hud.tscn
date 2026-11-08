@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://game/resources/ui/app_icon_360.png" id="2_icon"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -135,7 +136,19 @@ mouse_filter = 0
 [node name="LoadLayout" type="CenterContainer" parent="LoadPanel"]
 layout_mode = 2
 
-[node name="LoadText" type="Label" parent="LoadPanel/LoadLayout"]
+[node name="LoadStack" type="VBoxContainer" parent="LoadPanel/LoadLayout"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="LoadIcon" type="TextureRect" parent="LoadPanel/LoadLayout/LoadStack"]
+custom_minimum_size = Vector2(225, 225)
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("2_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="LoadText" type="Label" parent="LoadPanel/LoadLayout/LoadStack"]
 custom_minimum_size = Vector2(680, 160)
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
