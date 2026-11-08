@@ -71,6 +71,27 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The visual review flagged the rhythm of the breakwater's base.
 - The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
+## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
+
+- YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.
+- Its housing is OSM's buildings only, so anything missing from the frozen snapshot is absent.
+- The VTS station's lattice towers aren't modelled.
+- In the May 2025 view the east grove is sparser than in the photo.
+- The summit reservoir's bank form is approximate.
+- The Point of Infinity's glint follows the fixed sun.
+- In the Compatibility renderer (web) YBI costs up to 37% more frame time in the worst YBI-facing view.
+- The plants' nominal heights are kept twice, in the street-vegetation kit and its Node mirror (`STREET_VEGETATION_PROPS`); the game checks that they agree only at load.
+- The Point of Infinity draws its true geometry, so from Treasure Island its upper reach is fainter than a pixel (the owner's choice, 2026-11-08).
+
+## Bay Bridge (`game/scripts/world/bay_bridge_builder.gd`, 2026-11-08)
+
+- The western span's towers have 3 X panels where the photos show 4, and no gusset nodes or top gallery.
+- The western span's main cables are thin and grey, and its deck truss is faint.
+- The transition girders are slightly light.
+- Optional: a gap line near W2.
+- The self-anchored span's deck reads at about 0.68 times the sky's value.
+- The SAS tower's lit faces are dimmer than its cable fan.
+
 ## Buildings
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
