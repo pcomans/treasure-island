@@ -16,6 +16,9 @@ const BUILDING_SHOTS := preload("res://game/tests/shared/building_shots.gd")
 const WATER_LARGEST_CAMERA_FAR_M: float = BUILDING_SHOTS.ISLAND_CAMERA_FAR_M
 ## Cameras stay within this of the origin: the island (about 950 m) and its overview poses.
 const WATER_CAMERA_REACH_M := 2000.0
+## The street-detail zones: the soccer ball's check finds the full-size pitch's
+## centre spot in their ground blocks (tools/lib/sports-pitch.mjs).
+const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
 
 
 func _initialize() -> void:
@@ -285,19 +288,24 @@ func _check_ferry_solidity() -> void:
 	quit(0)
 
 
-## The pitch's football (game/scripts/world/soccer_ball.gd): one ball, on the loose-prop
-## layer the player's mask leaves out, colliding with the world and the street props.
-## The stock player walking into it moves it on ahead of them, and it comes to rest on
-## the turf; running into it sends it rolling; dropped in the bay off the island, or
-## through the land, it goes back to its centre spot. Returns a summary, or "" after
-## failing.
+## The pitch's football (game/scripts/world/soccer_ball.gd): the ball on a full-size
+## pitch's centre spot, on the loose-prop layer the player's mask leaves out, colliding
+## with the world and the street props. The stock player walking into it moves it on
+## ahead of them, and it comes to rest on the turf; running into it sends it rolling;
+## dropped in the bay off the island, or through the land, it goes back to its centre
+## spot. Returns a summary, or "" after failing.
 func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
-	var balls := get_nodes_in_group(SoccerBall.GROUP)
 	var player := main.get_node("Player") as PlayerController
-	if balls.size() != 1 or not balls[0] is SoccerBall:
-		_fail("Expected one soccer ball in the world, found %d." % balls.size())
+	var spots := _full_pitch_spots()
+	var ball: SoccerBall = null
+	for node: Node in get_nodes_in_group(SoccerBall.GROUP):
+		var candidate := node as SoccerBall
+		if candidate != null and spots.any(func(spot: Vector2) -> bool: return spot.distance_to(Vector2(candidate.spot.origin.x, candidate.spot.origin.z)) < 0.05):
+			ball = candidate
+			break
+	if ball == null:
+		_fail("No soccer ball rests on a full-size pitch's centre spot %s." % [spots])
 		return ""
-	var ball := balls[0] as SoccerBall
 	if ball.collision_layer != SoccerBall.LOOSE_PROP_LAYER or (player.collision_mask & ball.collision_layer) != 0 or ball.collision_mask != (1 | 1 << 3):
 		_fail("The soccer ball must sit on the loose-prop layer, outside the player's mask, and meet the world and the street props: layer %d, mask %d, player mask %d." % [ball.collision_layer, ball.collision_mask, player.collision_mask])
 		return ""
@@ -348,6 +356,8 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	for case: Vector3 in [over_bay, ball.spot.origin - Vector3.UP * 10.0]:
 		ball.global_position = case
 		ball.linear_velocity = Vector3.ZERO
+		# A ball at rest sleeps and skips the check, as it can't have moved.
+		ball.sleeping = false
 		for _tick in 10:
 			await physics_frame
 		if ball.global_position.distance_to(ball.spot.origin) > 0.05:
@@ -357,6 +367,21 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 		_fail("The soccer ball went back to its spot %d times for its 2 drops." % (ball.resets - resets))
 		return ""
 	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land" % [pushed, rolled, fastest]
+
+
+## The centre spots (world x, z) of the full-size pitches in the street-detail zones.
+func _full_pitch_spots() -> Array[Vector2]:
+	var spots: Array[Vector2] = []
+	var config: Variant = JSON.parse_string(FileAccess.get_file_as_string(STREET_DETAIL_ZONES_PATH))
+	var zones: Array = (config as Dictionary).get("zones", []) if config is Dictionary else []
+	for zone: Variant in zones:
+		var ground: Variant = (zone as Dictionary).get("ground", {}) if zone is Dictionary else {}
+		var pitches: Array = (ground as Dictionary).get("pitches", []) if ground is Dictionary else []
+		for pitch: Variant in pitches:
+			if pitch is Dictionary and str((pitch as Dictionary).get("layout", "")) == "full_size":
+				var centre: Array = (pitch as Dictionary).get("centre_xz", [])
+				spots.append(Vector2(float(centre[0]), float(centre[1])))
+	return spots
 
 
 ## Puts the stock player on the ground at the column through at, with gameplay on.

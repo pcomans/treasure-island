@@ -178,7 +178,9 @@ func reset_to_spot() -> void:
 func _physics_process(_delta: float) -> void:
 	if _reset_pending:
 		return
-	if _out_of_play():
+	# Asleep, it hasn't moved since it was last in play, so the outline test is skipped;
+	# a touch still reaches it through the area, and its push wakes it.
+	if not sleeping and _out_of_play():
 		reset_to_spot()
 		return
 	for body: Node3D in _touch.get_overlapping_bodies():
