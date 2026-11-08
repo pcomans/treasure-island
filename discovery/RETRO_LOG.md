@@ -24868,6 +24868,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The captures were split across five sets, so routes had to be compared by hand, and the fence side camera missed the break again.
 - What the team should change next time: Flag any on-foot frame where the avatar is more than 2 m from the player, and preview a fixed camera's aim from the logged path.
 
+### cars-r3-visual-review — 2026-11-08 — independent visual gate on the drivable cars' r3 captures (relayed by the coordinator)
+
+- What worked well: The reply mapped point by point to the review notes, with exact frames.
+- What did not work well: A capture flag looked like a game bug and cost a round, and part of the final evidence came from an older head.
+- What the team should change next time: Turn on `--show-player` and the avatar-distance check by default in the shared capture tool, and capture every view once at the final head before the gate.
+
 ### drivable-cars-20261108 — 2026-11-08 — round 3: the flip capture, the route check, the r2 review's fixes, web smoke and suite
 
 - What worked well: A scratch headless route check reusing `building_shots.gd`'s own step logic ran the remaining ramp views and eight flip candidates in one engine run. The chosen flip then replayed tick for tick in the rendered capture (same positions, same righting tick), so it needed no rendered retakes. The contract's new roll case (F out of the flipped car, F back in once it righted) found that a car left more than one grid cell from its parking place couldn't be got back into. No capture would have shown that. The r2 review's missing avatar was settled from the logs in minutes: the r2c-on captures lacked `--show-player`, and the game was fine. The contract now checks the avatar after every exit.
