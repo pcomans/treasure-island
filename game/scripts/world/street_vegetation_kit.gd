@@ -102,13 +102,14 @@ extends RefCounted
 ## images are baked from LOD0 by tools/vegetation/bake_impostors.gd. The rollout's
 ## shrubs and flax have the same three levels (their far impostor ends at a short
 ## range), and a hedge's far level is its plain core over its stems. The rollout's
-## impostors hold several views round the plant, the shader showing the camera's
-## side of each instance, so a leaning tree keeps its lean. Their crowns are not
-## tiled from round balls: cards of ragged sprays clothe one body of crown (or
-## separate pads, on the broadleaf), shaded from the crown's heart, and fade out
-## edge-on. Their big trees cast through a cheap shadow mesh of main limbs and a few
-## large cards (_shadow_mesh), the builder drawing it into the shadow maps alone,
-## past the impostor switch. Cityside's low plants
+## impostors, and the young oak's (built the same way since 2026-11-07), hold several
+## views round the plant, the shader showing the camera's side of each instance, so a
+## leaning tree keeps its lean. Their crowns are not tiled from round balls: cards of
+## ragged sprays clothe one body of crown (or separate pads, on the broadleaf), shaded
+## from the crown's heart, and fade out edge-on. Their big trees and the young oak
+## cast through a cheap shadow mesh of main limbs and a few large cards
+## (_shadow_mesh), the builder drawing it into the shadow maps alone, past the
+## impostor switch. Cityside's low plants
 ## (grasses, perennials, shrubs) have one level that dissolves away before its
 ## range ends. Collision is the trunk only (capsules), so crowns never stop a
 ## jetpack flight; shrubs, flax, hedges and low plants have none.
@@ -202,9 +203,10 @@ const LOW_CELLS := {
 	"young_tree_b": ["young_planting", Rect2(1.0 / 3.0, 0.0, 1.0 / 3.0, 1.0)],
 	"young_shrub": ["young_planting", Rect2(2.0 / 3.0, 0.0, 1.0 / 3.0, 1.0)],
 }
-## The young trees' foliage atlas: a hanging spray of gum leaves, a cluster of oak leaves.
+## The young trees' foliage atlas: a hanging spray of gum leaves, and an upright spray
+## of island oak leaves on a twig, the twig's foot at the middle of the cell's bottom edge.
 const GUM_SPRAY := Rect2(0.0, 0.0, 0.5, 1.0)
-const OAK_CLUSTER := Rect2(0.5, 0.0, 0.5, 1.0)
+const OAK_SPRAY := Rect2(0.5, 0.0, 0.5, 1.0)
 ## The pine's atlas: a wide crest of upright needle tufts and the same with the
 ## pale candles of its new shoots, each twice as wide as tall on its cards, and a
 ## long row of candles alone, cut into stretches for the sprays over the crown.
@@ -348,16 +350,18 @@ const STAKE_SPACING_M := 0.7
 const STAKE_RADIUS_M := 0.03
 ## Young island oaks in the beds (named on the 2024 art-location plan and in the
 ## 2025 acceptance minutes; no dated photo, so the form is a young oak of the
-## species' habit, production inference): two or three stems branching low into
-## a dense, rounded, lumpy crown of small dark leaves, about as wide as it is
-## tall. clear is the bare stem in metres, lobes the smaller crown lobes round
-## the main one, lopsided how far the crown sits off its stems (a fraction of
-## its width), so no two read as the same clipped ball.
+## species' habit, production inference): two or three stems parting from one root
+## crown into a dense, lumpy crown of small dark leaves, about as wide as it is
+## tall, widest low down. crown is its width, low its underside as a share of the
+## height, lobes the smaller lobes round its main mass, lopsided how far the crown
+## sits off its stems (a share of its width), so no two read as the same clipped
+## ball, rise how steeply its limbs climb (1 straight up), card the side of its leaf
+## cards in metres and spacing how closely they sit (a share of a card).
 const OAKS := [
 	# A low, wide one; a narrow upright one; a broad, lopsided one.
-	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "clear": 0.3, "stems": 2, "lobes": 3, "lopsided": 0.18, "cards": 120},
-	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "clear": 0.4, "stems": 3, "lobes": 3, "lopsided": 0.1, "cards": 130},
-	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "clear": 0.45, "stems": 2, "lobes": 6, "lopsided": 0.28, "cards": 210},
+	{"seed": 51, "height": 2.3, "crown": 2.5, "trunk_radius": 0.04, "low": 0.26, "stems": 2, "lobes": 5, "lopsided": 0.1, "rise": 0.55, "card": 0.56, "spacing": 0.66},
+	{"seed": 52, "height": 3.4, "crown": 2.0, "trunk_radius": 0.05, "low": 0.26, "stems": 3, "lobes": 5, "lopsided": 0.06, "rise": 0.8, "card": 0.56, "spacing": 0.66},
+	{"seed": 53, "height": 4.0, "crown": 3.4, "trunk_radius": 0.065, "low": 0.26, "stems": 2, "lobes": 8, "lopsided": 0.16, "rise": 0.6, "card": 0.62, "spacing": 0.66},
 ]
 ## Monterey pines: three residential trees (p5/p6, Keppler, Mar 2025: 10-14 m
 ## tall, 8-12 m crowns, branching low) and three wind-pruned low domes (p2-p4,
@@ -778,7 +782,7 @@ const PROPS := {
 	"canary_date_palm": {"kinds": ["palm_slot", "tree"], "variants": CANARY_PALMS, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "canary_palm"},
 	"monterey_cypress": {"kinds": ["tree"], "variants": CYPRESSES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.8, "form": "cypress"},
 	"sydney_blue_gum_young": {"kinds": ["tree"], "variants": GUMS, "ranges": [40.0, 100.0, 900.0], "foot_m": 0.3, "form": "gum"},
-	"island_oak_young": {"kinds": ["tree"], "variants": OAKS, "ranges": [35.0, 90.0, 700.0], "foot_m": 0.3, "form": "oak"},
+	"island_oak_young": {"kinds": ["tree"], "variants": OAKS, "ranges": [35.0, 90.0, 700.0], "foot_m": 0.3, "form": "oak", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
 	"monterey_pine": {"kinds": ["tree"], "variants": PINES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.6, "form": "pine", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.06, "impostor_sky_lean": IMPOSTOR_PINE_SKY_LEAN},
 	"spreading_broadleaf": {"kinds": ["tree"], "variants": BROADLEAVES, "ranges": [45.0, 110.0, 900.0], "foot_m": 0.7, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
 	"nz_christmas_tree": {"kinds": ["tree"], "variants": CHRISTMAS_TREES, "ranges": [40.0, 100.0, 800.0], "foot_m": 0.5, "form": "broadleaf", "impostor_grid": IMPOSTOR_TREE_GRID, "impostor_alpha": 0.05},
@@ -1978,111 +1982,126 @@ func _gum_spray_card(s: Surf, spray: Dictionary, azimuth: float, size: float, cr
 # --- Young island oak ---------------------------------------------------------------------------------
 
 
-## A young island oak: two or three stems from the ground, forking low into
-## scaffold limbs, under a dense, irregular, rounded crown: a main lobe and a
-## few smaller ones round it, each filled with crossed leaf-cluster cards,
-## darker underneath and inside, so the outline is lumpy rather than a clipped ball.
+## A young island oak (no dated photo of these trees, so the species' young habit,
+## production inference: often nearly conical when young, broadening with age, its
+## leaves leathery, glossy and dark green): two or three stems part from one root
+## crown just above the ground and rise, splaying a little, into one dense, lumpy
+## crown, widest low down and rounding off at its top, set off its stems by
+## lopsided. The crown is a main mass with lobes round it, a lower ring at its widest
+## and a smaller upper ring closer in, and a lobe on its top. Limbs run from the stems
+## out to every lobe (_cloud_limbs); the lobes' outsides are closed over with crossed
+## cards of leafy sprays (_crown_sites) over a dark backing (_filler_cards), all
+## shaded from the crown's heart as one body, darker low down and underneath, the
+## cards fading out edge-on. So the crown reads as one mass of leaves held up by its
+## limbs, not as separate balls on bare sticks.
 func _build_oak(p: Dictionary) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
 	var height := float(p.height)
 	var crown_width := float(p.crown)
-	var clear := float(p.clear)
 	var trunk_radius := float(p.trunk_radius)
-	var half := Vector3(crown_width * 0.5, (height - clear) * 0.5, crown_width * 0.5)
-	var lopsided_angle := rng.randf() * TAU
-	var center := Vector3(cos(lopsided_angle), 0.0, sin(lopsided_angle)) * crown_width * float(p.get("lopsided", 0.0)) + Vector3.UP * (clear + half.y)
+	var card_size := float(p.card)
 	var sway_top := OAK_SWAY * height
-	var phase := rng.randf() * TAU
-	var lobes := [{"center": center, "half": half * 0.8}]
+	var crown_low := height * float(p.low)
+	# The lobes stop short of the crown's nominal size by the cards' overhang.
+	var overhang := card_size * 0.3
+	var half := Vector3(crown_width * 0.5 - overhang, (height - crown_low) * 0.5 - overhang, crown_width * 0.5 - overhang)
+	var lean_angle := rng.randf() * TAU
+	var lean_dir := Vector3(cos(lean_angle), 0.0, sin(lean_angle))
+	var center := lean_dir * crown_width * float(p.lopsided) + Vector3.UP * (crown_low + overhang + half.y)
+	var lobes: Array[Dictionary] = [{"center": center - Vector3.UP * half.y * 0.1, "half": Vector3(half.x * 0.72, half.y * 0.78, half.z * 0.72)}]
 	var lobe_count := int(p.lobes)
+	var lower := ceili(lobe_count * 0.6)
+	var phase := rng.randf() * TAU
 	for k in lobe_count:
-		var azimuth := phase + TAU * k / lobe_count + rng.randf_range(-0.4, 0.4)
+		var upper := k >= lower
+		var ring := (lobe_count - lower) if upper else lower
+		var azimuth := phase + TAU * (k - (lower if upper else 0)) / maxf(1.0, ring) + (PI / maxf(1.0, ring) if upper else 0.0) + rng.randf_range(-0.35, 0.35)
 		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
-		var lobe_half := half * rng.randf_range(0.42, 0.7)
-		lobes.append({"center": center + out * half.x * rng.randf_range(0.38, 0.5) + Vector3.UP * half.y * rng.randf_range(-0.3, 0.45), "half": lobe_half})
-	var stems := []
+		var share := rng.randf_range(0.36, 0.46) if upper else rng.randf_range(0.48, 0.6)
+		# A lower lobe reaches the crown's widest outline, an upper one stays in under its top.
+		var reach := (1.0 - share) * (rng.randf_range(0.55, 0.75) if upper else rng.randf_range(0.88, 1.0))
+		var lift := rng.randf_range(0.25, 0.45) if upper else rng.randf_range(-0.38, -0.12)
+		lobes.append({"center": center + out * half.x * reach + Vector3.UP * half.y * lift, "half": Vector3(half.x * share, half.y * share * 1.1, half.z * share)})
+	lobes.append({"center": center + Vector3.UP * half.y * 0.55 - lean_dir * half.x * 0.1, "half": Vector3(half.x * 0.42, half.y * 0.42, half.z * 0.42)})
+	var branches := []
+	var starts: Array[Dictionary] = []
+	var capsules := []
 	var stem_count := int(p.stems)
 	for k in stem_count:
-		# The stems spread from one root crown, leaning out a little each.
-		var out := Vector3(cos(phase + TAU * k / stem_count), 0.0, sin(phase + TAU * k / stem_count)) * (0.0 if stem_count == 1 else 1.0)
-		var fork := Vector3(0.0, clear, 0.0) + out * 0.16
-		var radius := trunk_radius * (1.0 if k == 0 else 0.8)
-		stems.append({"points": PackedVector3Array([Vector3.DOWN * BURY_M + out * 0.02, out * 0.03, out * 0.06 + Vector3.UP * clear * 0.5, fork, fork + Vector3.UP * 0.25]),
-			"radii": PackedFloat32Array([radius * 1.25, radius * 1.1, radius, radius * 0.85, radius * 0.6])})
-	# Scaffold limbs from the fork out to each lobe.
-	var limbs := []
-	for lobe: Dictionary in lobes:
-		var origin := Vector3(0.0, clear * rng.randf_range(0.9, 1.08), 0.0)
-		var tip: Vector3 = (lobe.center as Vector3).lerp(origin, 0.25)
-		limbs.append({"points": PackedVector3Array([origin, origin.lerp(tip, 0.5) + Vector3.UP * 0.12, tip]), "radii": PackedFloat32Array([trunk_radius * 0.6, trunk_radius * 0.4, 0.01])})
-	# Leaf clusters through the crown's lobes, each of crossed cards: one facing
-	# out from the lobe and one turned a quarter about the vertical (a cluster on
-	# the crown's top, whose first card lies flat, gets two upright ones), so from
-	# any side one card of a cluster faces the viewer and the outline is leaves,
-	# not card edges. Most sit near the outside, some deeper in and darker.
+		# Each stem leans out a little from the root crown, then turns up into the crown's
+		# lower part, toward its lean; it runs on inside and closes there, hidden.
+		var azimuth := lean_angle + TAU * k / stem_count + rng.randf_range(-0.4, 0.4)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var base := out * trunk_radius * 0.7
+		var top := Vector3(center.x, 0.0, center.z) * 0.8 + out * half.x * rng.randf_range(0.18, 0.32) + Vector3.UP * (crown_low + half.y * rng.randf_range(0.35, 0.55))
+		var climb := top - base
+		var side := Vector3(-out.z, 0.0, out.x) * climb.length() * rng.randf_range(0.04, 0.09) * (1.0 if k % 2 == 0 else -1.0)
+		var points := _bezier(base + Vector3.DOWN * BURY_M, base + out * climb.length() * 0.1 + Vector3.UP * climb.length() * 0.38 + side, top - climb * 0.3 - side * 0.5, top, 7)
+		var r := trunk_radius * (1.0 if k == 0 else rng.randf_range(0.72, 0.88))
+		var radii := _taper(r * 1.25, r * 0.6, points.size(), 0.9)
+		var root := points[points.size() - 2]
+		points.append(top + (top - root).normalized() * 0.2)
+		radii.append(0.012)
+		branches.append({"depth": 0, "points": points, "radii": radii})
+		starts.append({"point": top, "root": root, "out": out, "radius": r * 0.62})
+		# A second limb leaves it lower down, so the stems don't just run up into the leaves.
+		starts.append({"point": points[4], "root": points[3], "out": out.rotated(Vector3.UP, 0.9 if k % 2 == 0 else -0.9), "radius": r * 0.5})
+		# The stem from the foot to the crown's underside.
+		capsules.append({"radius_m": r * 1.2, "from": Vector3(base.x, 0.0, base.z), "to": _polyline_at(points, clampf(crown_low / maxf(top.y, 0.1), 0.2, 1.0) * 0.85)})
+	_cloud_limbs(rng, branches, lobes, starts, starts.size(), float(p.rise), center)
+	# _cloud_limbs ends its twigs at a broadleaf's size; a young oak's stay thinner than where they leave.
+	for branch: Dictionary in branches:
+		if int(branch.depth) == 2:
+			var radii: PackedFloat32Array = branch.radii
+			for i in radii.size():
+				radii[i] = minf(radii[i], radii[0])
+			branch.radii = radii
+	# The crown's outside, closely clothed: crossed cards over each lobe's top, sides and
+	# underside, shaded as one body from its heart.
+	var spacing := card_size * float(p.spacing)
+	var sites := _crown_sites(rng, lobes, spacing, 2.5, crown_low + overhang * 0.5)
+	_mark_lod1(sites, spacing * 1.7)
+	var heart := center - Vector3(0.0, half.y * 0.2, 0.0)
 	var cards := []
-	var total := 0.0
-	for lobe: Dictionary in lobes:
-		total += pow((lobe.half as Vector3).x, 2.0)
-	var cluster := 0
-	for lobe: Dictionary in lobes:
-		var lobe_center: Vector3 = lobe.center
-		var lobe_half: Vector3 = lobe.half
-		var count := maxi(4, int(round(float(p.cards) * 0.5 * pow(lobe_half.x, 2.0) / total)))
-		for i in count:
-			# Round the lobe from its top to its underside, the very bottom left open.
-			var t := (float(i) + rng.randf_range(0.2, 0.8)) / count
-			var polar := lerpf(0.15, 2.4, t)
-			var azimuth := phase + i * GOLDEN_ANGLE + rng.randf_range(-0.3, 0.3)
-			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
-			var unit := out * sin(polar) + Vector3.UP * cos(polar)
-			var depth := lerpf(0.5, 0.86, sqrt(rng.randf()))
-			var position := lobe_center + Vector3(unit.x * lobe_half.x, unit.y * lobe_half.y, unit.z * lobe_half.z) * depth
-			var first := (Vector3(unit.x / lobe_half.x, unit.y / lobe_half.y, unit.z / lobe_half.z).normalized() + Vector3(rng.randf_range(-0.3, 0.3), rng.randf_range(-0.2, 0.3), rng.randf_range(-0.3, 0.3))).normalized()
-			var normals: Array[Vector3] = [first]
-			if absf(first.y) < 0.7:
-				normals.append(first.rotated(Vector3.UP, PI * 0.5))
-			else:
-				var upright := first.rotated(first.cross(out).normalized(), PI * 0.5)
-				normals.append(upright)
-				normals.append(upright.rotated(Vector3.UP, PI * 0.5))
-			var size := minf(0.62, lobe_half.x * rng.randf_range(0.48, 0.62))
-			var shade := rng.randf_range(0.88, 1.04) * lerpf(0.72, 1.0, (depth - 0.5) / 0.36)
-			for normal: Vector3 in normals:
-				cards.append({"center": position, "normal": normal, "out": out, "size": size, "spin": rng.randf_range(-0.6, 0.6), "shade": shade, "cluster": cluster})
-			cluster += 1
-	var crown_low := center.y - half.y
+	for index in sites.size():
+		var site: Dictionary = sites[index]
+		var out: Vector3 = site.out
+		var position: Vector3 = site.center
+		var lobe: Dictionary = lobes[int(site.lobe)]
+		var height_f := clampf((position.y - crown_low) / maxf(0.5, height - crown_low), 0.0, 1.0)
+		var radial := clampf(Vector2(position.x - center.x, position.z - center.z).length() / maxf(half.x, 0.1), 0.0, 1.0)
+		var shade := rng.randf_range(0.9, 1.05) * lerpf(0.6, 1.0, height_f) * lerpf(0.76, 1.0, radial) * lerpf(1.0, 0.72, clampf(-out.y, 0.0, 1.0))
+		var size := card_size * rng.randf_range(0.82, 1.18)
+		var width := size * (1.0 if rng.randf() < 0.5 else -1.0)
+		# A spray stands on its twig's foot, inside the crown, its leaves fanning up and
+		# out past the site; under the crown's rim they reach out and a little down.
+		var up := (Vector3.UP + out * 0.5).normalized()
+		var level := Vector3(out.x, 0.0, out.z)
+		if out.y <= -0.2 and level.length() > 0.05:
+			up = (level.normalized() + Vector3.DOWN * 0.25).normalized()
+		for normal in _cluster_normals(out, rng, 0.3):
+			var card := _card(position, normal, up, width, size, 0.3, rng.randf_range(-0.5, 0.5), OAK_SPRAY, Color(shade, shade, shade), (lobe.center as Vector3).lerp(heart, 0.7), index, 0.02)
+			card.coarse = out.y < -0.3
+			card.root = 0.74
+			card.heart_weight = 0.68
+			card.lod1 = site.has("lod1")
+			card.lod1_grow = 1.6
+			cards.append(card)
+	# A backing of darker leaves in each lobe, so no sky shows through the crown's middle.
+	_filler_cards(cards, lobes, 0.6, OAK_SPRAY, 0.4, rng, crown_low)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()
 		var bark := Surf.new()
 		var leaves := Surf.new()
-		for branch: Dictionary in stems + (limbs if lod == 0 else []):
-			var points: PackedVector3Array = branch.points
-			var colors := PackedColorArray()
-			var winds := PackedVector2Array()
-			for point in points:
-				var ao := lerpf(0.72, 1.0, clampf(point.y / 0.5, 0.0, 1.0)) * lerpf(1.0, 0.6, clampf((point.y - clear * 0.8) / maxf(0.3, half.y), 0.0, 1.0))
-				colors.append(Color(ao, ao, ao))
-				winds.append(Vector2(sway_top * pow(clampf(point.y / height, 0.0, 1.0), 2.0), 0.0))
-			_tube(bark, points, branch.radii, colors, winds, (8 if lod == 0 else 5) if branch in stems else 4, 1.0, OAK_BARK_M)
-		for card: Dictionary in cards:
-			# The far level keeps every other cluster, whole and a little larger.
-			if lod == 1 and int(card.cluster) % 2 == 1:
-				continue
-			_shell_card(leaves, IDENTITY_FRAME, card.center, card.normal, card.out, float(card.size) * (1.3 if lod == 1 else 1.0), 0.0, OAK_CLUSTER, float(card.spin), center,
-				crown_low, height, float(card.shade), Color.WHITE, 1.0, Vector2(sway_top, 0.015))
+		_emit_limbs(bark, branches, lod, height, crown_low, sway_top, OAK_BARK_M, [[8, 5, 3], [5, 4, 3]])
+		_emit_cards(leaves, cards, lod, height, sway_top)
 		bark.commit(mesh, material("oak_bark"))
-		leaves.commit(mesh, material("young_tree_foliage"))
+		leaves.commit(mesh, material("oak_foliage"))
 		meshes.append(mesh)
-	return {
-		"lod0": meshes[0],
-		"lod1": meshes[1],
-		"crown_surface": -1,
-		"top_m": height,
-		"capsules": [{"radius_m": trunk_radius * 1.2, "from": Vector3.ZERO, "to": Vector3(0.0, clear, 0.0)}],
-	}
+	var shadow := _shadow_mesh(branches.slice(0, stem_count), lobes, [], OAK_SPRAY, "oak_bark", "oak_foliage", OAK_BARK_M, height, crown_low, sway_top, rng)
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height, "shadow": shadow, "capsules": capsules}
 
 
 # --- Mature eucalyptus (the young gum grown up) -----------------------------------------------------------
@@ -4469,6 +4488,9 @@ func material(key: String) -> Material:
 			made = _bark("gum_bark.png", Color(0.95, 0.95, 0.93))
 		"oak_bark":
 			made = _bark("oak_bark.png", Color(0.85, 0.83, 0.8))
+		"oak_foliage":
+			# Island oak leaves are a darker, glossier green than the young gum's.
+			made = _crown_foliage("young_tree_foliage_atlas.png", Color(0.84, 0.88, 0.82), Color(0.08, 0.11, 0.04), Vector2(1024.0, 512.0), 0.14, 0.8)
 		"pine_bark":
 			made = _bark("pine_bark.png", Color(0.9, 0.88, 0.86))
 		"pine_foliage":

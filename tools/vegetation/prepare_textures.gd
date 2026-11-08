@@ -27,7 +27,7 @@ const SETS := {
 	"perennial": PERENNIAL_CELLS,
 	"marsh": ["marsh_low_mat.png", "marsh_seeded_brush.png", "tall_fringe.png", "marsh_seeded_shrub.png", "marsh_thin_stems.png"],
 	"young_planting": ["young_tree_a.png", "young_tree_b.png", "young_shrub.png"],
-	"young_trees": ["gum_leaves.png", "oak_leaves.png", "gum_bark.png", "oak_bark.png"],
+	"young_trees": ["gum_leaves.png", "oak_spray.png", "gum_bark.png", "oak_bark.png"],
 	"park_ground": ["park_mulch.png", "park_gravel.png"],
 	"pine": ["pine_crest.png", "pine_crest_candles.png", "pine_candle_row.png", "pine_bark.png"],
 	"broadleaf": ["broadleaf_clump.png", "broadleaf_bronze.png", "christmas_spray.png", "christmas_spray_flowers.png", "broadleaf_bark.png", "christmas_bark.png"],
@@ -387,20 +387,22 @@ func _pack_young_planting(images: Dictionary, errors: Array[String]) -> void:
 
 
 ## The young trees: their foliage atlas, 1024 x 512, a hanging spray of gum
-## leaves (0,0)-(512,512) and a cluster of oak leaves (512,0)-(1024,512), and
-## their tiled barks.
+## leaves (0,0)-(512,512) and an upright spray of oak leaves on its twig
+## (512,0)-(1024,512), each stretched to fill its cell, and their tiled barks.
 func _pack_young_trees(images: Dictionary, errors: Array[String]) -> void:
 	var atlas := Image.create_empty(1024, 512, false, Image.FORMAT_RGBA8)
 	for index in 2:
-		var name: String = ["gum_leaves.png", "oak_leaves.png"][index]
-		# The oak's round cluster is kept clear of the cell's edges, so a card
-		# never shows a straight cut through the leaves.
-		var inset := CELL_MARGIN + (48 if name == "oak_leaves.png" else 0)
-		var cell := _keyed_fit(images[name], 512 - 2 * inset, 512 - 2 * inset, MAGENTA)
+		var name: String = ["gum_leaves.png", "oak_spray.png"][index]
+		var cell := _keyed_fit(images[name], 512 - 2 * CELL_MARGIN, 512 - 2 * CELL_MARGIN, MAGENTA)
 		# Sydney blue gum crowns read grey-green (ph10), with few bronze young leaves.
 		if name == "gum_leaves.png":
 			_grade(cell, Color(0.86, 0.94, 0.95), 0.5)
-		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * index + inset, inset))
+		# The oak spray came out more saturated than the leathery dark leaves of young
+		# island oaks (2026 iNaturalist photos of planted trees round the Bay); duller,
+		# as the Christmas tree's spray.
+		else:
+			_grade(cell, Color(0.84, 0.86, 0.82), 0.34)
+		atlas.blit_rect(cell, Rect2i(Vector2i.ZERO, cell.get_size()), Vector2i(512 * index + CELL_MARGIN, CELL_MARGIN))
 	_fill_transparent(atlas)
 	_save(atlas, OUT + "young_tree_foliage_atlas.png", errors)
 	_save_barks(images, {
