@@ -203,16 +203,29 @@ photos of 2025 and Jun 2026. What isn't there yet:
   Avenue H (Mar 2025), on the photo's bearing at an inferred 26 m, its heads
   turned over the GAA pitch by inference. The turf pitch's one stands on its
   Sep 2025 bearing from 9th Street at an inferred 37 m (no turf tower in Mar 2025,
-  and neither aerial shows it). Their 9 m masts are estimates. Four
+  and neither aerial shows it). Their 9 and 9.5 m masts are estimates. Four
   dark spots on the turf's south-east apron in the 2026-05-26 aerial match
   nothing photographed, so they aren't modelled.
 - The GAA and rugby fields' low concrete curb is photographed on Avenue H and
   11th and 13th Streets; along Avenue E and Avenue I it is assumed to continue.
 - From raised views far off, the pitches' 10 cm lines break into dashes: the
   shared street paint has no minimum width on screen.
-- A driven car breaks the fields' chain-link and windscreen fences bay by bay (a
-  bay's concrete curb stays), as it does other kit fences; the ball-stop nets are
+- A driven car breaks the fields' chain-link and windscreen fences bay by bay, as
+  it does other kit fences: a broken bay's concrete curb stays drawn but is no
+  longer solid, since the bay's box covered it. The ball-stop nets are
   `breakable: false`, so a car stops at them.
+- Main's fence breaker (`game/scripts/vehicles/street_fence_breaker.gd`) keys
+  broken bays by `"run:index"` alone, and the fields' five single-run breakable
+  rows overlap indices 0-130, with each other and with other fences. Once a bay
+  breaks, a car can drive through an unbroken bay with the same key in another
+  fence: it stays drawn and stops the player on foot. The fix (a key per fence)
+  is on the car-fixes branch; the vehicle contract's field case should then also
+  check that its broken key belongs to the windscreen.
+- Low, for later: the soccer goal's net depth is worked out in three places in
+  `street_furniture_kit.gd` (its net, its frame's stays and its net walls) and
+  wants one helper; the light tower's footprint
+  (`tools/lib/street-furniture-generation.mjs`) is 2.8 m across where its
+  outrigger pads reach 2.9 m.
 - The rugby pitch's frame was moved 5.4 m east and 3.1 m south from the aerial,
   where the aerial's fence lies that far from OSM's; the GAA pitch needed no move.
 - Not modelled: the containers, sheds and the school bus round the rugby field,
