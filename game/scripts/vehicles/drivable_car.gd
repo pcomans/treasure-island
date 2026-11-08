@@ -138,12 +138,13 @@ const PARK_SPEED_MPS := 0.15
 ## one lies within ROAD_PREFER_M of it, facing the way it was going there, or
 ## the other way if that leads away from where it left; then turned, if need
 ## be, for RESET_CLEAR_M of island ahead. There it is held on its brakes until
-## it has settled (RESET_SETTLE_S at least) and its driver presses W or S, so it
-## never rolls off the spot it was put on. In the water the car keeps a share
-## of its speed (WATER_IMPACT_KEEP), is held up by a share of its weight once
-## under (SINK_BUOYANCY), slowed (WATER_DRAG, WATER_SPIN_DRAG, 1/s) and goes back
-## after SINK_S. Off the outline on something solid for STRANDED_S, or off it at
-## all for OUTSIDE_LIMIT_S, it goes back without the water.
+## it has settled (RESET_SETTLE_S at least, three wheels or more down) and its
+## driver presses W or S, so it never rolls off the spot it was put on. In the
+## water the car keeps a share of its speed (WATER_IMPACT_KEEP), is held up by a
+## share of its weight once under (SINK_BUOYANCY), slowed (WATER_DRAG,
+## WATER_SPIN_DRAG, 1/s) and goes back after SINK_S. Off the outline on
+## something solid for STRANDED_S, or off it at all for OUTSIDE_LIMIT_S, it goes
+## back without the water.
 const SAFE_EVERY_S := 0.25
 const SAFE_AGE_S := 2.0
 const SAFE_SAMPLES := 64
@@ -524,7 +525,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var held := false
 	if _holding:
 		_hold_s += dt
-		if _hold_s >= RESET_SETTLE_S and _grounded == 4 and velocity.length() < 0.2 and (absf(drive_input) > 0.1 or not occupied):
+		if _hold_s >= RESET_SETTLE_S and _grounded >= 3 and velocity.length() < 0.2 and (absf(drive_input) > 0.1 or not occupied):
 			_holding = false
 		else:
 			throttle = 0.0
