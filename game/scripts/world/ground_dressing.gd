@@ -589,16 +589,6 @@ func capture_viewports() -> Array[SubViewport]:
 	return [surface_viewport, colour_viewport]
 
 
-## The captures and the world window they cover, for anything else that takes the
-## ground's colour (the player's landing dust, landing_poof.gd): "colour" and
-## "surface" are the capture textures, "window" the rings' ground_window. {} until
-## the first capture. The ground doesn't move, so a capture holds wherever it covers.
-func ground_capture() -> Dictionary:
-	if _window_centre == Vector2.INF:
-		return {}
-	return {"colour": colour_viewport.get_texture(), "surface": surface_viewport.get_texture(), "window": _window()}
-
-
 func _process(_delta: float) -> void:
 	if _level == OFF:
 		return
@@ -622,14 +612,9 @@ func _capture(at: Vector3) -> void:
 	for viewport: SubViewport in capture_viewports():
 		(viewport.get_node("Camera") as Camera3D).position = Vector3(_window_centre.x, CAPTURE_HEIGHT_M, _window_centre.y)
 		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
-	var window := _window()
+	var window := Vector3(_window_centre.x - WINDOW_M * 0.5, _window_centre.y - WINDOW_M * 0.5, 1.0 / WINDOW_M)
 	for ring: Dictionary in _rings():
 		(ring.material as ShaderMaterial).set_shader_parameter("ground_window", window)
-
-
-## The captured window as the shaders take it: its corner in world x, z and one over its size.
-func _window() -> Vector3:
-	return Vector3(_window_centre.x - WINDOW_M * 0.5, _window_centre.y - WINDOW_M * 0.5, 1.0 / WINDOW_M)
 
 
 func _new_ring(material: ShaderMaterial, meshes: Array[Mesh], mesh_levels: bool) -> Dictionary:

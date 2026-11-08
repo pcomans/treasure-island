@@ -12,17 +12,13 @@ extends CPUParticles3D
 ## web build), and costs nothing between landings. It is top level and its
 ## particles live in world space, so the dust stays where it was kicked up when
 ## the player runs on. Its puffs are drawn by landing_dust.gdshader, lit as thin
-## dust in the scene's own light (backlit dust glows), in the colour of the ground
-## landed on, paler and greyer: it reads the grass's ground captures
-## (ground_dressing.gd) where they are drawn, and keeps a light dusty neutral where
-## they aren't (the web). A CPUParticles3D draws nothing while idle, so its shader
-## would compile at the first landing; warm_up() draws one burst that shows nothing
-## at start-up instead.
+## dust in the scene's own light (backlit dust glows), in one warm, mid-light dust
+## colour on every ground and in both renderers. A CPUParticles3D draws nothing
+## while idle, so its shader would compile at the first landing; warm_up() draws
+## one burst that shows nothing at start-up instead.
 
 signal poofed(at: Vector3)
 
-## Whether the last burst had the ground captures to take its colour from.
-var ground_offered := false
 var _material: ShaderMaterial
 
 const SHADER := preload("res://game/resources/player/landing_dust.gdshader")
@@ -98,17 +94,8 @@ func _init() -> void:
 	color_ramp = fade
 
 
-## Kicks up the dust at `at`, a point on the drawn ground, and reports it. capture is
-## GroundDressing.ground_capture(), or {} where there is none: the dust then keeps
-## its own colour.
-func burst(at: Vector3, capture: Dictionary = {}) -> void:
-	ground_offered = not capture.is_empty()
-	_material.set_shader_parameter("ground_capture", ground_offered)
-	if ground_offered:
-		_material.set_shader_parameter("ground_colour", capture.colour)
-		_material.set_shader_parameter("ground_surface", capture.surface)
-		_material.set_shader_parameter("ground_window", capture.window)
-	_material.set_shader_parameter("landing_xz", Vector2(at.x, at.z))
+## Kicks up the dust at `at`, a point on the drawn ground, and reports it.
+func burst(at: Vector3) -> void:
 	_material.set_shader_parameter("strength", 1.0)
 	global_position = at + Vector3.UP * LIFT_M
 	restart()
