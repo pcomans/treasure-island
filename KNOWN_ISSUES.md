@@ -46,12 +46,29 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 ## Bay water (`game/resources/materials/world/water/bay_water.gdshader`)
 
-- From about 4.2 km up the water's outer ring lies down to water level, flat from about 4.65 km, so it can't wall in the camera near the far plane's height. From there the water ends about a kilometre out and sky shows below the horizon beyond it, at the far plane's limit.
-- Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring: the far end of the western span from the island overviews' 10 km far plane (water pass, 2026-11-07).
+- The water's rings scale with the camera's far plane. With gameplay's 26 km far plane (skybox, 2026-11-08) the outer ring lies down to water level from about 21.6 km up, flat from about 24.2 km, so it can't wall in the camera near the far plane's height. From there the water ends about 6 km out, less higher up, and sky shows below the horizon beyond it, at the far plane's limit. The comment at `bay_water.gdshader:144` still says about 4.7 km, from the 5 km far plane: update it with the next shader change.
+- Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring (water pass, 2026-11-07). Every camera now sees as far as gameplay's 26 km (skybox, 2026-11-08), so the western span is well inside; only the distant horizon's land carried on behind its ridges reaches that far.
 - Seen from the jetpack toward the sun, the far sun path is a solid white patch: from 120 to 160 m up, its largest clipped area is about 2% of the frame (`glitter_limit` 2.0, `glitter_gain` 2.0, under the merged sun of 2026-11-07). The owner accepted it on 2026-11-07 as what real water does, so it stays as reviewed. At ground level the path is a broken sheen.
-- The SF skyline billboard fades into the hazy far water when seen from above its top: the billboard's colour and the scene's fog, outside the water pass (water pass, 2026-11-07).
 - `glitter_gain` was tuned with the sun's specular at 1.0. The merged sun has `light_specular` 0.5 with more energy and exposure, so the sheen is weaker and the clipped core brighter (the clipping is owner-accepted). Note "tuned at specular 1.0" if it is retuned.
 - Faint diagonal streaks show in the jetpack glitter; they were already on the water branch.
+
+## Distant horizon (`game/scripts/world/fresh_bay_horizon.gd`, 2026-11-08)
+
+- Judged from walking and driving height only (owner, 2026-11-08). From high on the jetpack, and in the raised island overviews, its land shows flat plateau tops and hard edges that nobody has reviewed.
+- Between the east span's Oakland abutment (about 4.2 km out) and the horizon's Oakland shore (5.0 to 5.3 km) water can show; the owner accepted it (2026-11-08).
+- Left from the first visual review (skybox-visual-review-r1, 2026-11-08):
+  - the East Bay ridge, city and port cranes read too faint;
+  - Alcatraz's cellhouse;
+  - Angel Island against Marin;
+  - the bare ridge between Telegraph Hill and the Golden Gate, which should read as low city.
+- The SF card's haze is a set share (12 %, with its darks lifted) of the horizon colour, a copy of `main.tscn`'s sky horizon and fog light colour (0.74, 0.80, 0.86), not the scene fog: if the look pass changes either, retune `city.gdshader`'s `haze` and `haze_share` with it. The rest of the distant art keeps the PR's own light veil.
+- Follow-ups from the code review (skybox-code-review, 2026-11-08):
+  - The Golden Gate Bridge is about 200 beams, each with its own material and draw call (the horizon is about 266 meshes; looking west it adds about 100 draw calls, +108 at the west shore's SF view on native). Batching the beams into one ArrayMesh would save about 100 of them without changing the look.
+  - The sector textures have no mipmaps, yet `sector.gdshader` samples them with `textureLod(…, 2.0)`, so its "quiet" detail mix does nothing.
+  - Dead code: `RADIUS` and the `radius` local and parameter of `_mainland_backing` in `fresh_bay_horizon.gd`, and the `ground_triangles` the eastern background collects but never reads.
+  - `sector.gdshader:50` hard-codes `155.882136`, the south sector's start bearing.
+  - The blockout JSON loads have no null check: a malformed file errors at build instead of failing clearly.
+  - The 26 km far plane may make Forward+'s cluster slices coarser; not measured.
 
 ## Landing dust (`game/scripts/player/landing_poof.gd`, 2026-11-07)
 
@@ -415,7 +432,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
-  - `headless_gameplay_contract.gd` preloads `building_shots.gd` only to read `ISLAND_CAMERA_FAR_M`; a shared constants script would be lighter.
   - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two. Stopping the drawing as `island_test.gd` does would need it back on for a `--spray` case's screenshot.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
