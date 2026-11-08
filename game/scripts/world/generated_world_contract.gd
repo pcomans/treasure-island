@@ -3,7 +3,7 @@ extends RefCounted
 
 const MANIFEST_SCHEMA := "ti.godot-world/2"
 const CHUNK_SCHEMA := "ti.godot-world-chunk/2"
-const CONTEXT_SCHEMA := "ti.godot-world-context/2"
+const CONTEXT_SCHEMA := "ti.godot-world-context/3"
 const EXPECTED_SOURCE_ROWS := 739
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
@@ -146,7 +146,18 @@ const COVERAGE_HEADERS := [
 ]
 const CHUNK_FIELDS := ["bounds_m", "chunk_id", "records", "schema_version"]
 const CHUNK_BOUNDS_FIELDS := ["max_x", "max_z", "min_x", "min_z"]
-const CONTEXT_FIELDS := ["boundary_attached_visuals", "records", "schema_version"]
+const CONTEXT_FIELDS := ["boundary_attached_visuals", "ferry_terminal", "records", "schema_version"]
+## The ferry terminal's scenery beyond the extract (owner decisions 2026-11-07;
+## tools/lib/ferry-terminal.mjs): the float, gangway, mooring dolphins, stop and
+## the breakwater off it, drawn by game/scripts/world/ferry_terminal.gd. Not
+## playable rows.
+const FERRY_TERMINAL_FIELDS := ["breakwater", "dolphins", "float", "gangway", "stop", "water_y_m"]
+const FERRY_FLOAT_SOURCE_KEY := "w1036802529"
+const FERRY_GANGWAY_SOURCE_KEY := "w1036802528"
+const FERRY_PIER_SOURCE_KEY := "w1011830367"
+const FERRY_DOLPHIN_SOURCE_KEYS := ["w1222514696", "w1222514697"]
+const FERRY_STOP_SOURCE_KEY := "n9335172179"
+const FERRY_BREAKWATER_SOURCE_KEY := "w1011830371"
 const MESH_RECORD_FIELDS := [
 	"collision_kind", "feature_kind", "indices", "material_key", "normals", "object_key",
 	"opaque", "receiver_kind", "source_keys", "uvs", "vertices",
@@ -1365,6 +1376,9 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		return _failure("context_schema", "Context file schema is invalid.")
 	if context.records.size() != 2:
 		return _failure("context_count", "Context must contain exactly one YBI and one Bay Bridge record.")
+	var ferry_result := _validate_ferry_terminal(context.get("ferry_terminal", null))
+	if not ferry_result.ok:
+		return ferry_result
 	var kinds_seen: Dictionary = {}
 	var prior_main_object_key := ""
 	for record_value: Variant in context.records:
@@ -1447,6 +1461,57 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 	boundary_keys_seen.sort()
 	if boundary_keys_seen != boundary_visual_sources:
 		return _failure("boundary_visual_sources", "Boundary-attached visuals do not resolve the exact approved playable sources.", boundary_keys_seen)
+	return {"ok": true}
+
+
+## The context's ferry_terminal section: its exact fields, sources and finite
+## positions, a float of plausible size, and a gangway from the pier to it.
+static func _validate_ferry_terminal(section: Variant) -> Dictionary:
+	if not section is Dictionary or not _has_exact_fields(section, FERRY_TERMINAL_FIELDS) or not _is_finite_number(section.get("water_y_m", null)):
+		return _failure("ferry_terminal_schema", "Context ferry terminal section is missing or malformed.")
+	var float_value: Variant = section["float"]
+	if not float_value is Dictionary or str(float_value.get("source_key", "")) != FERRY_FLOAT_SOURCE_KEY:
+		return _failure("ferry_terminal_float", "Ferry float has the wrong source.", [FERRY_FLOAT_SOURCE_KEY])
+	var corners: Array[Vector2] = []
+	for side: String in ["berth_side_xz", "far_side_xz"]:
+		var points: Variant = float_value.get(side, null)
+		if not points is Array or (points as Array).size() != 2 or not _finite_array(points[0], 2) or not _finite_array(points[1], 2):
+			return _failure("ferry_terminal_float", "Ferry float side %s is malformed." % side, [FERRY_FLOAT_SOURCE_KEY])
+		corners.append(Vector2(float(points[0][0]), float(points[0][1])))
+		corners.append(Vector2(float(points[1][0]), float(points[1][1])))
+	var length := (corners[0].distance_to(corners[1]) + corners[2].distance_to(corners[3])) * 0.5
+	var width := (corners[0].distance_to(corners[2]) + corners[1].distance_to(corners[3])) * 0.5
+	if length < 35.0 or length > 48.0 or width < 10.0 or width > 16.0:
+		return _failure("ferry_terminal_float", "Ferry float is not about 41 m by 13 m.", [FERRY_FLOAT_SOURCE_KEY])
+	var gangway: Variant = section.gangway
+	if not gangway is Dictionary or str(gangway.get("source_key", "")) != FERRY_GANGWAY_SOURCE_KEY or str(gangway.get("pier_source_key", "")) != FERRY_PIER_SOURCE_KEY \
+	or not _finite_array(gangway.get("top_xz", null), 2) or not _finite_array(gangway.get("bottom_xz", null), 2) \
+	or not gangway.get("pier_end_xz", null) is Array or (gangway.pier_end_xz as Array).size() != 2 \
+	or not _finite_array(gangway.pier_end_xz[0], 2) or not _finite_array(gangway.pier_end_xz[1], 2):
+		return _failure("ferry_terminal_gangway", "Ferry gangway is malformed.", [FERRY_GANGWAY_SOURCE_KEY])
+	var span := Vector2(float(gangway.top_xz[0]), float(gangway.top_xz[1])).distance_to(Vector2(float(gangway.bottom_xz[0]), float(gangway.bottom_xz[1])))
+	if span < 18.0 or span > 30.0:
+		return _failure("ferry_terminal_gangway", "Ferry gangway is not about 24 m long.", [FERRY_GANGWAY_SOURCE_KEY])
+	var dolphins: Variant = section.dolphins
+	if not dolphins is Array or (dolphins as Array).size() != FERRY_DOLPHIN_SOURCE_KEYS.size():
+		return _failure("ferry_terminal_dolphins", "Ferry mooring dolphins are malformed.", FERRY_DOLPHIN_SOURCE_KEYS)
+	for index in FERRY_DOLPHIN_SOURCE_KEYS.size():
+		var dolphin: Variant = dolphins[index]
+		if not dolphin is Dictionary or str(dolphin.get("source_key", "")) != FERRY_DOLPHIN_SOURCE_KEYS[index] \
+		or not _finite_array(dolphin.get("center_xz", null), 2) or not _is_finite_number(dolphin.get("radius_m", null)) \
+		or float(dolphin.radius_m) < 0.5 or float(dolphin.radius_m) > 1.5:
+			return _failure("ferry_terminal_dolphins", "Ferry mooring dolphin %d is malformed." % index, FERRY_DOLPHIN_SOURCE_KEYS)
+	var stop: Variant = section.stop
+	if not stop is Dictionary or str(stop.get("source_key", "")) != FERRY_STOP_SOURCE_KEY or not _finite_array(stop.get("xz", null), 2):
+		return _failure("ferry_terminal_stop", "Ferry stop is malformed.", [FERRY_STOP_SOURCE_KEY])
+	var breakwater: Variant = section.breakwater
+	if not breakwater is Dictionary or str(breakwater.get("source_key", "")) != FERRY_BREAKWATER_SOURCE_KEY \
+	or not breakwater.get("line_xz", null) is Array or (breakwater.line_xz as Array).size() != 2 \
+	or not _finite_array(breakwater.line_xz[0], 2) or not _finite_array(breakwater.line_xz[1], 2):
+		return _failure("ferry_terminal_breakwater", "Breakwater is malformed.", [FERRY_BREAKWATER_SOURCE_KEY])
+	var reach := Vector2(float(breakwater.line_xz[0][0]), float(breakwater.line_xz[0][1])).distance_to(Vector2(float(breakwater.line_xz[1][0]), float(breakwater.line_xz[1][1])))
+	if reach < 150.0 or reach > 260.0:
+		return _failure("ferry_terminal_breakwater", "Breakwater is not about 207 m long.", [FERRY_BREAKWATER_SOURCE_KEY])
 	return {"ok": true}
 
 

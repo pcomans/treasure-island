@@ -304,7 +304,7 @@ function validateWorld(worldRoot) {
   invariant(chunks.length === 38, `Expected 38 chunks, found ${chunks.length}`);
 
   const context = JSON.parse(readFileSync(resolve(worldRoot, manifest.context.path), "utf8"));
-  invariant(context.schema_version === "ti.godot-world-context/2", "Context schema drift");
+  invariant(context.schema_version === "ti.godot-world-context/3", "Context schema drift");
   invariant(context.records.length === 2 && context.boundary_attached_visuals.length === EXPECTED_BOUNDARY_ATTACHED_KEYS.length, "Context record count drift");
   const contextRecords = [...context.records, ...context.boundary_attached_visuals];
   for (const record of contextRecords) {

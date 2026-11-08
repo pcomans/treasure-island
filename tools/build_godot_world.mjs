@@ -128,9 +128,11 @@ import { EAST_SPAN_PALETTE_UV, eastSpanMesh } from "./lib/east-span-generation.m
 import { generateStreetGround, loadStreetGroundRules } from "./lib/street-ground-generation.mjs";
 import { writeGroundCoverMap } from "./lib/ground-cover-map.mjs";
 import { writeWaterShoreMap } from "./lib/water-shore-map.mjs";
+import { ferryTerminalDocument } from "./lib/ferry-terminal.mjs";
 import {
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
+  WATER_Y_M,
   generateShoreline,
   loadShorelineConfig,
   planShoreline,
@@ -1871,6 +1873,9 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
       schema_version: CONTEXT_SCHEMA,
       records,
       boundary_attached_visuals: boundaryAttachedVisuals,
+      // The ferry float, gangway, dolphins and stop beyond the extract, drawn
+      // as scenery by game/scripts/world/ferry_terminal.gd (tools/lib/ferry-terminal.mjs).
+      ferry_terminal: ferryTerminalDocument(rawOsm, rawSources, boundary, WATER_Y_M),
     },
     objects,
     member_way_count: memberWayIds.length,

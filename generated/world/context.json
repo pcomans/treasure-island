@@ -1319,6 +1319,92 @@
       ]
     }
   ],
+  "ferry_terminal": {
+    "breakwater": {
+      "line_xz": [
+        [
+          -193.845,
+          722.413
+        ],
+        [
+          -327.342,
+          880.543
+        ]
+      ],
+      "source_key": "w1011830371"
+    },
+    "dolphins": [
+      {
+        "center_xz": [
+          -205.07,
+          853.517
+        ],
+        "radius_m": 0.918,
+        "source_key": "w1222514696"
+      },
+      {
+        "center_xz": [
+          -197.891,
+          862.962
+        ],
+        "radius_m": 0.916,
+        "source_key": "w1222514697"
+      }
+    ],
+    "float": {
+      "berth_side_xz": [
+        [
+          -169.523,
+          827.243
+        ],
+        [
+          -202.26,
+          852.234
+        ]
+      ],
+      "far_side_xz": [
+        [
+          -161.609,
+          837.618
+        ],
+        [
+          -194.346,
+          862.598
+        ]
+      ],
+      "source_key": "w1036802529"
+    },
+    "gangway": {
+      "bottom_xz": [
+        -165.988,
+        831.874
+      ],
+      "pier_end_xz": [
+        [
+          -149.422,
+          814.363
+        ],
+        [
+          -145.588,
+          819.495
+        ]
+      ],
+      "pier_source_key": "w1011830367",
+      "source_key": "w1036802528",
+      "top_xz": [
+        -147.136,
+        817.425
+      ]
+    },
+    "stop": {
+      "source_key": "n9335172179",
+      "xz": [
+        -194.381,
+        846.212
+      ]
+    },
+    "water_y_m": -0.12
+  },
   "records": [
     {
       "collision_kind": "none",
@@ -141231,5 +141317,5 @@
       ]
     }
   ],
-  "schema_version": "ti.godot-world-context/2"
+  "schema_version": "ti.godot-world-context/3"
 }

@@ -32,7 +32,15 @@ extends SceneTree
 ##   holding "fast_drop"). Run with --fixed-fps 60 so the frames
 ##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
 ##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
-##   line, with the avatar's describe() when it has one.
+##   line, with the avatar's describe() when it has one, and what the player
+##   stands on: the slide floor collider and the first solid straight under its
+##   feet (support=OBJECT_KEY@y, from the body's derived_object_key or name).
+##   A moving view may add "start_xyz": [x,y,z] to start the stock player in the
+##   air there, at rest, after it settles at player_xz (a landing view: scenery
+##   off the walk route, such as the ferry float); the moves then run from there.
+##   With "camera_fixed": true its free camera stays where camera_xyz puts it,
+##   aimed at the target, instead of following the player (frames of something
+##   that moves by itself, such as the docked ferry's rocking).
 ##   A still view (focused or street) may add "frame_time_frames": N (10-3000) to
 ##   hold its camera for N more frames with vsync and the frame cap off and print
 ##   their frame time as a FRAME_TIME line (pass --rendering-method
@@ -940,12 +948,24 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	var camera_error := _free_camera_error(view, target)
 	if camera_error != "":
 		return camera_error
+	if view.has("start_xyz") and not _numbers(view.get("start_xyz"), 3):
+		return "start_xyz needs [x, y, z]"
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
 	if error != "":
 		return error
 	var player := _h.player
+	if view.has("start_xyz"):
+		player.global_position = Vector3(view.start_xyz[0], view.start_xyz[1], view.start_xyz[2])
+		player.velocity = Vector3.ZERO
+		print("MOVE_START %s at=%s (placed in the air after settling at %s)" % [prefix.get_file(), player.global_position, view.player_xz])
 	var capsule := player.get_node("CollisionShape3D") as Node3D
 	var free := _free_camera(view, target)
+	if view.has("camera_fixed") and (not view.camera_fixed is bool or free == null):
+		if free != null:
+			free.queue_free()
+			player.get_camera().make_current()
+		return "camera_fixed needs true or false and a camera_xyz"
+	var follow := free != null and not bool(view.get("camera_fixed", false))
 	var camera_offset := free.global_position - player.global_position if free != null else Vector3.ZERO
 	_h.aim_camera(target)
 	var rig := player.get_node("CameraPivot") as Node3D
@@ -966,7 +986,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 			await process_frame
 			var saved := "-"
 			if tick % int(every) == 0 and step.get("frames", true):
-				if free != null:
+				if follow:
 					free.global_position = player.global_position + camera_offset
 					free.look_at(capsule.global_position, Vector3.UP)
 				_h.clean_hud()
@@ -979,7 +999,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				frame += 1
 			var velocity := player.get_real_velocity()
 			var state: Variant = _plain(avatar.describe()) if avatar != null and avatar.has_method("describe") else null
-			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state)])
+			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player)])
 			tick += 1
 		_h.release_input()
 		if error != "":
@@ -989,6 +1009,33 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		free.queue_free()
 		player.get_camera().make_current()
 	return error
+
+
+## The collider of the player's floor contact this tick, or "-".
+func _floor_body(player: CharacterBody3D) -> String:
+	if not player.is_on_floor():
+		return "-"
+	for index in player.get_slide_collision_count():
+		var collision := player.get_slide_collision(index)
+		if collision.get_normal().dot(player.up_direction) >= cos(player.floor_max_angle):
+			return _body_label(collision.get_collider() as Node)
+	return "snap"
+
+
+## The first solid straight under the player's feet within a metre, as
+## OBJECT_KEY@height, or "-".
+func _support_under(player: CharacterBody3D) -> String:
+	var feet := player.global_position
+	var hit := _h.ray(feet + Vector3.UP * 0.2, feet - Vector3.UP * 1.0, player.collision_mask)
+	if hit.is_empty():
+		return "-"
+	return "%s@%.3f" % [_body_label(hit.collider as Node), (hit.position as Vector3).y]
+
+
+static func _body_label(node: Node) -> String:
+	if node == null:
+		return "?"
+	return str(node.get_meta("derived_object_key", node.name))
 
 
 ## Vectors as plain number lists, so a describe() dictionary prints as JSON.

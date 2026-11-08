@@ -36,6 +36,7 @@ import {
   verifySourceContract,
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
+import { validateFerryTerminal } from "./lib/ferry-terminal.mjs";
 import {
   differenceMultiPolygons,
   geometryToMultiPolygon,
@@ -300,6 +301,11 @@ function validateRecords(worldRoot, manifest, coverage) {
 
   const context = JSON.parse(readFileSync(resolve(worldRoot, manifest.context.path), "utf8"));
   invariant(context.schema_version === CONTEXT_SCHEMA, "Context schema mismatch");
+  invariant(
+    stableJson(Object.keys(context).sort()) === stableJson(["boundary_attached_visuals", "ferry_terminal", "records", "schema_version"]),
+    "Context has missing or unknown sections",
+  );
+  validateFerryTerminal(context.ferry_terminal);
   invariant(context.records.length === 2, `Expected 2 context records, found ${context.records.length}`);
   const expectedContext = new Map([
     ["context:ybi", [YBI_SOURCE_KEY]],

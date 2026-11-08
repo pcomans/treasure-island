@@ -8,6 +8,7 @@ const MERSEA := preload("res://game/scripts/world/facades/mersea_live_attachment
 const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 
 const BULGARIAN_WALL = preload("res://game/scripts/world/facades/bulgarian_wall_live_attachment.gd")
+const FERRY_TERMINAL := preload("res://game/scripts/world/ferry_terminal.gd")
 
 ## The switchable street-detail layers: subtrees PlayableWorld/StreetDetail/<Layer>,
 ## kept out of the chunk meshes. Roads, sidewalks and other ground surfaces stay
@@ -32,6 +33,8 @@ signal world_failed(code: String, message: String, source_keys: Array)
 @onready var boundary_attached_context: Node3D = $ContextWorld/BoundaryAttachedVisuals
 ## The rock slope and boulders outside the outline (generated/world/shoreline.json).
 @onready var shoreline_context: Node3D = $ContextWorld/Shoreline
+## The ferry float, gangway, piles and the docked Sammy J (context.json ferry_terminal).
+@onready var ferry_context: Node3D = $ContextWorld/FerryTerminal
 @onready var world_boundary: WorldBoundary = $WorldBoundary
 @onready var runtime_evidence: RuntimeEvidence = $RuntimeEvidence
 
@@ -164,6 +167,17 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		planting_result.node.free()
 		_fail("mersea", str(mersea_result.message), [])
 		return
+	# The gangway hangs from the canopy family's pier, installed with the housing family.
+	var ferry_result := FERRY_TERMINAL.build(validation.context.ferry_terminal, buildings)
+	if not ferry_result.ok:
+		furniture_result.node.free()
+		fence_result.node.free()
+		clutter_result.node.free()
+		planting_result.node.free()
+		_fail("ferry_terminal", str(ferry_result.message), [])
+		return
+	ferry_context.add_child(ferry_result.node)
+	runtime_evidence.add_builder_report(ferry_result)
 	street_detail_layer("vegetation").add_child(planting_result.node)
 	street_detail_layer("furniture").add_child(furniture_result.node)
 	street_detail_layer("fences").add_child(fence_result.node)
@@ -208,7 +222,7 @@ func _load_prebuilt(street_choice: Dictionary) -> void:
 		_fail("prebuilt_state", "Prebuilt world is missing validated startup state.", [])
 		return
 	var valid_categories := true
-	var required_paths: Array[String] = ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/StreetDetail", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals", "ContextWorld/Shoreline"]
+	var required_paths: Array[String] = ["PlayableWorld/GroundAndAreas", "PlayableWorld/RoadsAndPaths", "PlayableWorld/Buildings", "PlayableWorld/StreetDetail", "ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BoundaryAttachedVisuals", "ContextWorld/Shoreline", "ContextWorld/FerryTerminal"]
 	for layer: String in STREET_DETAIL_LAYERS:
 		required_paths.append("PlayableWorld/StreetDetail/" + layer.capitalize())
 	for path: String in required_paths:
@@ -235,6 +249,7 @@ func _load_prebuilt(street_choice: Dictionary) -> void:
 	bridge_context = $ContextWorld/BayBridge
 	boundary_attached_context = $ContextWorld/BoundaryAttachedVisuals
 	shoreline_context = $ContextWorld/Shoreline
+	ferry_context = $ContextWorld/FerryTerminal
 	world_boundary.configure(boundary)
 	_spawn_transform = spawn
 	for field: String in PREBUILT_WORLD.EVIDENCE_FIELDS:
@@ -411,7 +426,7 @@ func _free_staged(reports: Array[Dictionary]) -> void:
 
 
 func _clear_generated_children() -> void:
-	var parents: Array[Node3D] = [ground_and_areas, roads_and_paths, buildings, ybi_context, bridge_context, boundary_attached_context, shoreline_context]
+	var parents: Array[Node3D] = [ground_and_areas, roads_and_paths, buildings, ybi_context, bridge_context, boundary_attached_context, shoreline_context, ferry_context]
 	if street_detail != null:
 		for layer: String in STREET_DETAIL_LAYERS:
 			parents.append(street_detail_layer(layer))
