@@ -27,12 +27,16 @@ extends SceneTree
 ##      throttle pushes it; a parked car hit from the side at speed and a K-rail
 ##      hit end on are set moving; each comes to rest where it ends up;
 ##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
-## Every case ends with the car stopped and the player standing, inputs released.
+## Every case ends with the car stopped and the player standing, inputs released,
+## and the chest avatar shown with both feet beside the player (as before the
+## first F): getting out must never leave the player without a character.
 
 const CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 const VEHICLE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
+## On foot the avatar's feet stand within this of the player (m).
+const AVATAR_REACH_M := 2.0
 
 var _failure := ""
 var _main: GameMain
@@ -73,7 +77,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, and the stock walk, run, jetpack and fast drop after getting out")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -87,7 +91,7 @@ func _case_enter_exit() -> bool:
 	var parked: Transform3D = entry.transform
 	# The stock player 1.6 m off the driver's (left) door, walking.
 	var door := parked.origin - parked.basis.x * 1.6
-	if not await _stand_player(Vector2(door.x, door.z)):
+	if not await _stand_player(Vector2(door.x, door.z)) or not await _avatar_with_player("before getting in"):
 		return false
 	var shape := _parked_shape(entry)
 	if not _require(shape != null and not shape.disabled, "The parked car %s has no enabled collision box." % id):
@@ -746,15 +750,34 @@ func _stop_and_exit(car: DRIVABLE_CAR, label: String) -> bool:
 	return await _rest(label)
 
 
-## The case's end: inputs released, the car (if any) stopped, the player standing.
+## The case's end: inputs released, the car (if any) stopped, the player
+## standing with the avatar.
 func _rest(label: String) -> bool:
 	_release()
 	for _tick in 90:
 		await physics_frame
 		if _player.is_on_floor() and Vector2(_player.velocity.x, _player.velocity.z).length() < 0.05:
 			print("REST %s player at %s on floor, driving %s" % [label, _player.global_position, _player.is_driving()])
-			return true
+			return await _avatar_with_player(label)
 	return _require(false, "No supported rest after %s (player at %s, on floor %s)." % [label, _player.global_position, _player.is_on_floor()])
+
+
+## On foot the chest avatar shows and stands with the player: a few ticks on,
+## both its feet within AVATAR_REACH_M of the capsule.
+func _avatar_with_player(label: String) -> bool:
+	var pivot := _player.get_node("AvatarPivot") as Node3D
+	var avatar: Node = pivot.get_child(0) if pivot.get_child_count() > 0 else null
+	for _tick in 10:
+		await physics_frame
+	if not _require(pivot.is_visible_in_tree() and avatar != null and avatar.has_method("describe"), "On foot (%s) the avatar must show." % label):
+		return false
+	var feet: Array = avatar.describe().get("feet", [])
+	var at := _player.global_position
+	var farthest := 0.0
+	for foot: Variant in feet:
+		farthest = maxf(farthest, Vector2((foot as Vector3).x - at.x, (foot as Vector3).z - at.z).length())
+	print("AVATAR %s shown, %d feet, the farthest %.2f m from the player" % [label, feet.size(), farthest])
+	return _require(feet.size() == 2 and farthest < AVATAR_REACH_M, "On foot (%s) the avatar's feet must stand with the player (%d feet, the farthest %.2f m away)." % [label, feet.size(), farthest])
 
 
 func _press(action: String) -> void:

@@ -253,6 +253,9 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	transform = placement
 	_prev = placement
 	_curr = placement
+	# The visual is top level: put it there now, not at the first frame, so a
+	# camera taking over this tick sees the car where it is.
+	_visual.transform = placement
 	_safe = [{"transform": placement, "time": -INF}]
 	for i in 4:
 		_compression[i] = _droop
@@ -383,11 +386,16 @@ func request_recover(cause: String = "manual") -> void:
 	_recover_request = cause
 
 
-## Puts the car down at a new place with no motion (used by tests).
+## Puts the car down at a new place with no motion (used by tests); its visual
+## goes there at once, for a camera taking over this tick.
 func place(at: Transform3D) -> void:
 	_teleport = at
 	_teleport_pending = true
 	freeze = false
+	_prev = at
+	_curr = at
+	if _visual != null:
+		_visual.transform = at
 
 
 # --- Physics.

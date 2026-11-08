@@ -1,26 +1,29 @@
 extends Node3D
 ## A car meeting the bay (drivable_car.gd splashed): white spray thrown up
-## from where it went in, a low cloud of foam settling round it and a ring of
-## foam spreading on the surface, all fading; then it frees itself. Soft round
-## and ring-shaped sprites (radial gradient textures, made once) on CPU
-## particles and one flat quad, drawn alike by Forward+ and the web build's
-## Compatibility renderer.
+## from where it went in as fine streaks, a little low foam and a ring of foam
+## spreading on the surface, all fading fast; then it frees itself. Soft
+## streak, round and ring-shaped sprites (radial gradient textures, made once)
+## on CPU particles and one flat quad, drawn alike by Forward+ and the web
+## build's Compatibility renderer.
 
-## Spray: sprites for a car's length, their launch speed (m/s) at rest and per
-## m/s of the car's speed (capped), and their life (s).
-const SPRAY := 90
-const LAUNCH_MPS := 2.5
-const LAUNCH_PER_MPS := 0.24
-const LAUNCH_MAX_MPS := 9.5
-const SPRAY_LIFE_S := 1.4
-## Foam: a few broad sprites rolling out low over the water.
-const FOAM := 14
-const FOAM_LIFE_S := 1.6
+## Spray: streaks for a car's length, their launch speed (m/s) at rest and per
+## m/s of the car's speed (capped), their life (s) and their shape (a streak
+## STREAK times as tall as it is wide, standing up in the view as droplets
+## thrown up and falling do).
+const SPRAY := 150
+const LAUNCH_MPS := 3.0
+const LAUNCH_PER_MPS := 0.26
+const LAUNCH_MAX_MPS := 10.5
+const SPRAY_LIFE_S := 0.9
+const STREAK := 3.2
+## Foam: a few small sprites spreading low over the water.
+const FOAM := 8
+const FOAM_LIFE_S := 1.0
 ## The ring: its starting and final radius as shares of the car's length, and
 ## its life (s).
 const RING_FROM := 0.45
-const RING_TO := 1.4
-const RING_LIFE_S := 2.4
+const RING_TO := 1.3
+const RING_LIFE_S := 1.8
 const RENDER_WORLD_VISIBLE := 1
 
 static var _dot: GradientTexture2D
@@ -38,29 +41,29 @@ func start(at: Vector3, speed: float, car_length_m: float) -> void:
 	_length = car_length_m
 	global_position = at + Vector3.UP * 0.03
 	var launch := minf(LAUNCH_MAX_MPS, LAUNCH_MPS + LAUNCH_PER_MPS * speed)
-	var spray := _particles("Spray", SPRAY, SPRAY_LIFE_S, 0.92, car_length_m * 0.3, 0.8)
+	var spray := _particles("Spray", SPRAY, SPRAY_LIFE_S, 0.95, car_length_m * 0.3, 0.85, Vector2(1.0 / STREAK, 1.0))
 	spray.direction = Vector3.UP
-	spray.spread = 34.0
-	spray.initial_velocity_min = launch * 0.5
+	spray.spread = 26.0
+	spray.initial_velocity_min = launch * 0.45
 	spray.initial_velocity_max = launch
 	spray.gravity = Vector3(0.0, -9.8, 0.0)
-	spray.damping_min = 0.6
-	spray.damping_max = 1.6
+	spray.damping_min = 0.4
+	spray.damping_max = 1.2
 	spray.scale_amount_min = 0.12
-	spray.scale_amount_max = 0.4
-	spray.scale_amount_curve = _curve(1.0, 0.45)
+	spray.scale_amount_max = 0.42
+	spray.scale_amount_curve = _curve(1.0, 0.35)
 	add_child(spray)
 	spray.emitting = true
-	var foam := _particles("Foam", FOAM, FOAM_LIFE_S, 0.8, car_length_m * 0.3, 0.45)
+	var foam := _particles("Foam", FOAM, FOAM_LIFE_S, 0.8, car_length_m * 0.3, 0.3, Vector2.ONE)
 	foam.direction = Vector3.UP
 	foam.spread = 80.0
-	foam.initial_velocity_min = 0.6
-	foam.initial_velocity_max = 1.8
+	foam.initial_velocity_min = 0.3
+	foam.initial_velocity_max = 0.9
 	foam.gravity = Vector3(0.0, -1.2, 0.0)
 	foam.damping_min = 0.8
 	foam.damping_max = 1.4
-	foam.scale_amount_min = 0.8
-	foam.scale_amount_max = 1.6
+	foam.scale_amount_min = 0.35
+	foam.scale_amount_max = 0.7
 	foam.scale_amount_curve = _curve(0.7, 1.0)
 	add_child(foam)
 	foam.emitting = true
@@ -79,7 +82,7 @@ func start(at: Vector3, speed: float, car_length_m: float) -> void:
 	_update_ring()
 
 
-func _particles(node_name: String, amount: int, life: float, explosiveness: float, reach: float, alpha: float) -> CPUParticles3D:
+func _particles(node_name: String, amount: int, life: float, explosiveness: float, reach: float, alpha: float, size: Vector2) -> CPUParticles3D:
 	var particles := CPUParticles3D.new()
 	particles.name = node_name
 	particles.one_shot = true
@@ -89,12 +92,14 @@ func _particles(node_name: String, amount: int, life: float, explosiveness: floa
 	particles.local_coords = false
 	particles.emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
 	particles.emission_box_extents = Vector3(reach, 0.05, reach)
+	# Fading from the start, faster in the first half of a life.
 	var fade := Gradient.new()
 	fade.set_color(0, Color(1.0, 1.0, 1.0, alpha))
 	fade.set_color(1, Color(0.9, 0.95, 1.0, 0.0))
+	fade.add_point(0.45, Color(0.97, 0.98, 1.0, alpha * 0.35))
 	particles.color_ramp = fade
 	var sprite := QuadMesh.new()
-	sprite.size = Vector2(1.0, 1.0)
+	sprite.size = size
 	sprite.material = _sprite_material(_dot_sprite(), true)
 	particles.mesh = sprite
 	particles.layers = RENDER_WORLD_VISIBLE
@@ -171,4 +176,4 @@ func _update_ring() -> void:
 	var eased := 1.0 - (1.0 - t) * (1.0 - t)
 	var radius := _length * lerpf(RING_FROM, RING_TO, eased)
 	_ring.scale = Vector3(radius, 1.0, radius)
-	_ring_material.albedo_color.a = 0.55 * (1.0 - t)
+	_ring_material.albedo_color.a = 0.45 * (1.0 - t) * (1.0 - t)
