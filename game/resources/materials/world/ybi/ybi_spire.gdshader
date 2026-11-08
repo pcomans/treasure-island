@@ -16,18 +16,11 @@ render_mode cull_back, diffuse_burley, specular_schlick_ggx;
 // a satin mid-grey line darker than the sky, with a bright glint low on the steel, just
 // above the cone (the 2025-05-27 profile: about sRGB 119,146,174 against 132,180,211).
 // So the steel is a darker satin metal, with a glint along its sunlit edges (RIM,
-// scaled by the light, so it follows a moving sun) strongest just above the cone. Its
-// upper reach is far thinner than a pixel from Treasure Island, so the vertex shader
-// holds the surface at least min_pixels wide on screen, narrowing in its last stretch
-// to tip_pixels: a line that neither vanishes nor breaks into dashes at 1-1.5 km, and
-// the true form up close.
+// scaled by the light, so it follows a moving sun) strongest just above the cone. The
+// sculpture draws its true geometry at every distance: from Treasure Island its upper
+// reach is thinner than a pixel, and it shows as it looks (the owner, 2026-11-08).
 
-// The axis's foot (world x, the rim's height, world z), set from the mesh at load.
-uniform vec3 axis_base = vec3(0.0);
-uniform float height_m = 21.03;
 uniform float steel_from_m = 6.0;
-uniform float min_pixels = 2.0;
-uniform float tip_pixels = 1.4;
 // Glass-fibre-reinforced concrete with a slight warm cast (the close photo).
 uniform vec3 concrete_color : source_color = vec3(0.57, 0.525, 0.465);
 uniform vec3 steel_color : source_color = vec3(0.62, 0.64, 0.67);
@@ -41,26 +34,6 @@ uniform float glint_m = 2.5;
 uniform float panels = 8.0;
 uniform vec3 gravel_color : source_color = vec3(0.8, 0.79, 0.75);
 uniform vec3 curb_color : source_color = vec3(0.7, 0.68, 0.64);
-
-void vertex() {
-	vec3 world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-	vec2 radial = world.xz - axis_base.xz;
-	float r = length(radial);
-	float h = world.y - axis_base.y;
-	// A pixel's angle on this camera, then the radius that covers min_pixels at this distance
-	// (abs: the RenderingDevice renderers' projection flips Y, so its [1][1] is negative).
-	float pixel_angle = 2.0 / (abs(PROJECTION_MATRIX[1][1]) * VIEWPORT_SIZE.y);
-	float distance_m = length(CAMERA_POSITION_WORLD - world);
-	float tip_taper = clamp((height_m - h) / (0.2 * height_m), 0.0, 1.0);
-	float r_min = 0.5 * mix(tip_pixels, min_pixels, sqrt(tip_taper)) * pixel_angle * distance_m;
-	// Only through a perspective camera: an orthographic pass (the directional light's
-	// shadow map, PROJECTION_MATRIX[3][3] = 1) keeps the true form, which would otherwise
-	// widen there into a disc of shadow over the bay.
-	if (PROJECTION_MATRIX[3][3] < 0.5 && UV.x < 1.5 && r > 1e-6 && r < r_min && h > 0.05) {
-		world.xz = axis_base.xz + radial * (r_min / r);
-		VERTEX = (inverse(MODEL_MATRIX) * vec4(world, 1.0)).xyz;
-	}
-}
 
 void fragment() {
 	// Derivatives first, outside the branch on the part.

@@ -888,7 +888,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	elif is_context and str(record.material_key) == "context_ybi" and _ybi_ground_material != null:
 		placeholder_material = _ybi_ground_material
 	elif is_context and YBI_DETAIL.is_detail_key(str(record.material_key)):
-		placeholder_material = YBI_DETAIL.material(str(record.material_key), vertices, uvs)
+		placeholder_material = YBI_DETAIL.material(str(record.material_key))
 		if placeholder_material == null:
 			return {"ok": false, "code": "ybi_detail_material", "message": "YBI detail record %s has no material." % str(record.object_key), "source_keys": record.source_keys}
 	else:

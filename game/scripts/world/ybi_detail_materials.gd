@@ -28,6 +28,7 @@ const FACADES := {
 }
 
 static var _facades: Dictionary = {}
+static var _spire: ShaderMaterial
 
 
 static func is_detail_key(material_key: String) -> bool:
@@ -35,9 +36,13 @@ static func is_detail_key(material_key: String) -> bool:
 
 
 ## The material for a YBI detail record, or null for any other key.
-static func material(material_key: String, vertices: PackedVector3Array, uvs: PackedVector2Array) -> ShaderMaterial:
+static func material(material_key: String) -> ShaderMaterial:
 	if material_key == SPIRE_KEY:
-		return spire_material(vertices, uvs)
+		if _spire == null:
+			_spire = ShaderMaterial.new()
+			_spire.resource_name = SPIRE_KEY
+			_spire.shader = SPIRE_SHADER
+		return _spire
 	var style := material_key.trim_prefix(FACADE_PREFIX)
 	if not material_key.begins_with(FACADE_PREFIX) or not FACADES.has(style):
 		return null
@@ -50,29 +55,4 @@ static func material(material_key: String, vertices: PackedVector3Array, uvs: Pa
 	for parameter: String in params:
 		made.set_shader_parameter(parameter, params[parameter])
 	_facades[style] = made
-	return made
-
-
-## The spire's steel and concrete, its axis taken from the mesh: a surface of revolution
-## closing on its tip, the one vertex on its axis at the top, and its rim the sculpture's
-## ring at height 0 (UV.x below 1 marks the sculpture, UV.y its height above the rim;
-## the bed round it carries UV.x of 2 and more). Null when the mesh has no such rim.
-static func spire_material(vertices: PackedVector3Array, uvs: PackedVector2Array) -> ShaderMaterial:
-	if vertices.is_empty() or uvs.size() != vertices.size():
-		return null
-	var tip := vertices[0]
-	for vertex: Vector3 in vertices:
-		if vertex.y > tip.y:
-			tip = vertex
-	var rim := INF
-	for index in vertices.size():
-		if uvs[index].x <= 1.0 and absf(uvs[index].y) < 0.0005:
-			rim = minf(rim, vertices[index].y)
-	if not is_finite(rim):
-		return null
-	var made := ShaderMaterial.new()
-	made.resource_name = SPIRE_KEY
-	made.shader = SPIRE_SHADER
-	made.set_shader_parameter("axis_base", Vector3(tip.x, rim, tip.z))
-	made.set_shader_parameter("height_m", tip.y - rim)
 	return made
