@@ -45,7 +45,9 @@ extends SceneTree
 ##   "steer_to": [x, z] to steer with A and D toward that world point (as a
 ##   driver would: a key held while the car points more than 4 degrees off it)
 ##   and "max_mps": metres per second to let W go above that speed, so a
-##   drive keeps to its route whatever the frame-to-frame physics.
+##   drive keeps to its route whatever the frame-to-frame physics; and it may
+##   end early, at "until_xz": [x, z, radius_m] (the car within radius_m of that
+##   point) or "until_below_mps": metres per second (the car slower than that).
 ##   A moving view may add "car_start": {"car": ROW_ID, "xz": [x,z],
 ##   "heading_xz": [x,z]} to start in that parked car instead, on the ground
 ##   there facing that way (vehicle_manager.gd drive_from); the moves then drive it.
@@ -957,8 +959,10 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)) or (step.has("frames") and not step.frames is bool) \
 		or (step.has("glance") and not _numbers(step.get("glance"), 2)) \
 		or (step.has("steer_to") and not _numbers(step.get("steer_to"), 2)) \
-		or (step.has("max_mps") and (not _numbers([step.get("max_mps")], 1) or float(step.max_mps) <= 0.0)):
-			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg, an optional true or false frames, an optional glance [x, y], steer_to [x, z] and positive max_mps"
+		or (step.has("max_mps") and (not _numbers([step.get("max_mps")], 1) or float(step.max_mps) <= 0.0)) \
+		or (step.has("until_xz") and (not _numbers(step.get("until_xz"), 3) or float(step.until_xz[2]) <= 0.0)) \
+		or (step.has("until_below_mps") and (not _numbers([step.get("until_below_mps")], 1) or float(step.until_below_mps) <= 0.0)):
+			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg, an optional true or false frames, an optional glance [x, y], steer_to [x, z], positive max_mps, until_xz [x, z, radius_m] and positive until_below_mps"
 		for action: Variant in step.hold:
 			if not action in MOVE_ACTIONS:
 				return "moves may hold only " + ", ".join(PackedStringArray(MOVE_ACTIONS))
@@ -1037,6 +1041,8 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				car["at"] = [snappedf(active.global_position.x, 0.01), snappedf(active.global_position.y, 0.01), snappedf(active.global_position.z, 0.01)]
 			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car)])
 			tick += 1
+			if car != null and _drive_step_done(_h.main.vehicles.active_car(), step):
+				break
 		_h.release_input()
 		if error != "":
 			break
@@ -1067,6 +1073,15 @@ func _drive_keys(car: Node3D, step: Dictionary) -> void:
 			Input.action_release("move_forward")
 		else:
 			Input.action_press("move_forward")
+
+
+## Whether a drive step's until_xz or until_below_mps has come.
+func _drive_step_done(car: Node3D, step: Dictionary) -> bool:
+	if step.has("until_xz"):
+		var to := Vector2(float(step.until_xz[0]) - car.global_position.x, float(step.until_xz[1]) - car.global_position.z)
+		if to.length() < float(step.until_xz[2]):
+			return true
+	return step.has("until_below_mps") and (car as RigidBody3D).linear_velocity.length() < float(step.until_below_mps)
 
 
 ## The collider of the player's floor contact this tick, or "-".

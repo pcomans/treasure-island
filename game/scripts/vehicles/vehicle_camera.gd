@@ -18,7 +18,9 @@ extends Node3D
 ##
 ## Getting in, the view moves from where the on-foot camera was to behind the
 ## car; getting out, from here to the on-foot camera: a blend camera of its own
-## carries the view between them, so neither change is a cut.
+## carries the view between them, so neither change is a cut. It swings round
+## the pivot over the car rather than cutting across, so it never passes
+## through the car.
 
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const PITCH_REST := deg_to_rad(-10.0)
@@ -59,6 +61,9 @@ var _arm_length := 6.0
 var _clearance := SphereShape3D.new()
 var _query := PhysicsShapeQueryParameters3D.new()
 var _blend_from := Transform3D.IDENTITY
+## The point the blend swings round: the pivot over the car (followed while
+## the car is held, kept where it was once let go).
+var _blend_centre := Vector3.ZERO
 var _blend_from_fov := FOV
 var _blend_to: Camera3D
 var _blend_t := -1.0
@@ -229,6 +234,7 @@ func _place(delta: float, snap: bool) -> void:
 
 func _start_blend(from: Transform3D, from_fov: float, to: Camera3D, seconds: float) -> void:
 	_blend_from = from
+	_blend_centre = global_position
 	_blend_from_fov = from_fov
 	_blend_to = to
 	_blend_s = seconds
@@ -249,7 +255,16 @@ func _step_blend(delta: float) -> void:
 	_blend_t = minf(1.0, _blend_t + delta / _blend_s)
 	var eased := _blend_t * _blend_t * (3.0 - 2.0 * _blend_t)
 	var to := _blend_to.global_transform
-	_blend.global_transform = Transform3D(Basis(Quaternion(_blend_from.basis.orthonormalized()).slerp(Quaternion(to.basis.orthonormalized()), eased)), _blend_from.origin.lerp(to.origin, eased))
+	# Round the pivot: the offset's direction turns and its length eases.
+	if _car != null and is_instance_valid(_car):
+		_blend_centre = global_position
+	var from_offset := _blend_from.origin - _blend_centre
+	var to_offset := to.origin - _blend_centre
+	var origin := _blend_from.origin.lerp(to.origin, eased)
+	if from_offset.length() > 0.5 and to_offset.length() > 0.5:
+		var direction := from_offset.normalized().slerp(to_offset.normalized(), eased)
+		origin = _blend_centre + direction * lerpf(from_offset.length(), to_offset.length(), eased)
+	_blend.global_transform = Transform3D(Basis(Quaternion(_blend_from.basis.orthonormalized()).slerp(Quaternion(to.basis.orthonormalized()), eased)), origin)
 	_blend.fov = lerpf(_blend_from_fov, _blend_to.fov, eased)
 	if _blend_t >= 1.0:
 		_blend_t = -1.0
