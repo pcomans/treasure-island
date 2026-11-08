@@ -41,8 +41,8 @@ func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
-		# Fit the actual browser aspect; native keeps its existing window policy.
-		get_window().content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+		# The view fills the browser's shape (window/stretch/aspect "expand", as
+		# everywhere); a touch screen's controls are laid out for 720 px or more.
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
 		if bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
 			get_window().content_scale_size = Vector2i(720, 720)
@@ -153,6 +153,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.name = "Vehicles"
 		add_child(vehicles)
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
+		if _touch_controls != null:
+			_touch_controls.vehicles = vehicles
 	hud.show_loading("Preparing graphics…")
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")
@@ -365,6 +367,13 @@ func _publish_web_state(_args: Array) -> void:
 		"view_revision": _web_view_revision,
 		"driving": vehicles != null and vehicles.is_driving(),
 		"car": vehicles.active_car().describe() if vehicles != null and vehicles.is_driving() else {},
+		# What the touch controls show and press, and the car's own inputs.
+		"touch": _touch_controls.describe() if _touch_controls != null else {},
+		"fast_drop": Input.is_action_pressed("fast_drop"),
+		"enter_exit": Input.is_action_pressed("vehicle_enter_exit"),
+		"handbrake": Input.is_action_pressed("handbrake"),
+		"car_input": [vehicles.active_car().drive_input, vehicles.active_car().steer_input, vehicles.active_car().handbrake] if vehicles != null and vehicles.is_driving() else [],
+		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 

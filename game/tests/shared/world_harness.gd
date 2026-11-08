@@ -33,6 +33,9 @@ func load_world(street_detail: Variant = null) -> String:
 	# moving visible geometry into the origin and invalidating fit/approach checks.
 	if DisplayServer.get_name() == "headless":
 		return "shared visible-geometry checks require rendering; omit --headless"
+	# The game fills its window (window/stretch/aspect "expand"); review captures
+	# keep the base 1440 x 900 frame at any --resolution, as they always have.
+	tree.root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_KEEP
 	var packed := load("res://game/scenes/main.tscn") as PackedScene
 	main = packed.instantiate() as GameMain
 	main.capture_mouse_on_ready = false

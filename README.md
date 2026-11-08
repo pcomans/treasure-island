@@ -180,7 +180,14 @@ upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues. Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
-controls are retained. There is no car button yet; cars need a keyboard.
+controls are retained.
+
+A context button above **RISE** does what F and C do. Beside a parked car it
+shows a car, **DRIVE**: tap it to get in. In a car it shows **GET OUT**: tap it to
+get out. In a car the stick drives and steers, **RISE** turns into **BRAKE** (a
+handbrake symbol), and **RUN** and the look hint are hidden until you get out. In
+the air it shows a down arrow, **DROP**: hold it to fall fast; it lets go when
+you land. Otherwise it is hidden.
 
 This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
 controller (see game/scripts/vendor/selgesel/README.md): its analog thumbstick,
