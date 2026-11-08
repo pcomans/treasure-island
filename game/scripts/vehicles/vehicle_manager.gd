@@ -68,6 +68,8 @@ const SHOVE_CREEP_MPS := 0.05
 const CONTACT_MARGIN_M := 0.12
 ## A shoved or rolling car or K-rail breaks the fence bays it moves into above this (m/s).
 const BREAK_SPEED_MPS := 0.5
+## A frozen body is woken by a hit at most once in this long (s).
+const WAKE_GAP_S := 0.5
 ## A K-rail: a water-filled jersey unit stands in for concrete; heavy.
 const BARRIER_MASS_KG := 900.0
 const BARRIER_PARK_S := 1.0
@@ -410,6 +412,7 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.boundary = _world.get_boundary()
 	car.visible_ground = _visible_ground
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
+	car.breakable_fences = _breakable_fences
 	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _fences)
 	car.recovered.connect(func(cause: String, from: Vector3) -> void: car_recovered.emit(cause, from))
 	car.splashed.connect(_splash.bind(car))
@@ -514,8 +517,15 @@ func _shove(car: RigidBody3D, lookahead_s: float, margin: float) -> void:
 						(node as DRIVABLE_CAR).occupied = false
 
 
-## A live car or K-rail that came to rest and froze, set moving again by a hit.
+## A live car or K-rail that came to rest and froze, set moving again by a hit
+## (at most once in WAKE_GAP_S, so two bodies at rest against each other can't
+## keep waking each other).
 func _wake(body: RigidBody3D) -> void:
+	var frame := Engine.get_physics_frames()
+	var gap := int(WAKE_GAP_S * Engine.physics_ticks_per_second)
+	if frame - int(body.get_meta("woken_frame", -gap)) < gap:
+		return
+	body.set_meta("woken_frame", frame)
 	if body is DRIVABLE_CAR:
 		var car := body as DRIVABLE_CAR
 		car.occupied = false

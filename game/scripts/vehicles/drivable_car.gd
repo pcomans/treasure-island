@@ -163,6 +163,9 @@ var occupied := false
 var boundary: WorldBoundary
 var visible_ground: VisibleGround
 var water_y := -0.12
+## The breakable fence bodies it passes through (set by the vehicle manager);
+## its righting may end overlapping one, never an unbreakable one.
+var breakable_fences: Array[RID] = []
 
 var length_m := 4.5
 var width_m := 1.8
@@ -600,10 +603,13 @@ func _right_target(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> Transfo
 
 
 ## Whether the car's hulls at xf meet nothing solid: the world or a street prop
-## (itself and the fences it drives through left out).
+## (itself and the breakable fences it drives through left out; an unbreakable
+## fence counts, as the car can't pass it).
 func _hulls_clear(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> bool:
 	_hull_query.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP
-	_hull_query.exclude = _ray.exclude
+	var skip: Array[RID] = [get_rid()]
+	skip.append_array(breakable_fences)
+	_hull_query.exclude = skip
 	_hull_query.margin = 0.02
 	for owner_id in get_shape_owners():
 		for index in shape_owner_get_shape_count(owner_id):
