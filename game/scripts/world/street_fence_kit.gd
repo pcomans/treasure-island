@@ -376,7 +376,7 @@ func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictio
 		"ball_stop_net":
 			boxes = _ball_stop_net(cells, cell_size_m, posts, height_of(type, params))
 		_:
-			var curb := params.get("curb", false) == true
+			var curb: bool = params.get("curb", false) == true
 			# The curb under each bay stays when a car breaks the bay: drawn before
 			# the bay's vertex runs are marked, and not at all for a bay built alone.
 			if curb and not bay_only:
