@@ -622,7 +622,8 @@ func _case_shove() -> bool:
 	if not _require(creep_top < VEHICLE_MANAGER.SHOVE_SPEED_MPS and wedge_node != null, "Creeping into %s at %.2f m/s did not set it moving." % [wedge_id, creep_top]) \
 	or not _require(pushed >= 0.5 and pressed >= 0.5, "Full throttle against %s wedged (driven car %.2f m, parked car %.2f m)." % [wedge_id, pressed, pushed]):
 		return false
-	# Once it has come to rest and frozen, pressing on again pushes it again.
+	# Once it has come to rest and frozen, creeping up to it again from 7 m
+	# back along the same line and pressing on pushes it again.
 	var wedge_frozen := false
 	for _tick in 600:
 		await physics_frame
@@ -630,14 +631,30 @@ func _case_shove() -> bool:
 			wedge_frozen = true
 			break
 	var wedge_rest := wedge_node.global_position
+	if not _require(wedge_frozen, "The pushed car %s did not come to rest and freeze." % wedge_id) \
+	or not await _drive_from(car, Vector2(wedge_rest.x, wedge_rest.z) - wedge_heading * 7.0, wedge_heading):
+		return false
+	print("WEDGE AGAIN start %.2f m from the frozen car, at %s" % [car.global_position.distance_to(wedge_rest), car.global_position])
+	var woke_tick := -1
+	for tick in 600:
+		var speed := car.linear_velocity.length()
+		if speed < 0.7:
+			Input.action_press("move_forward")
+		elif speed > 0.9:
+			Input.action_release("move_forward")
+		_steer_toward(car, Vector2(wedge_rest.x, wedge_rest.z))
+		await physics_frame
+		if not wedge_node.freeze:
+			woke_tick = tick
+			break
 	Input.action_press("move_forward")
 	for _tick in 180:
 		_steer_toward(car, Vector2(wedge_node.global_position.x, wedge_node.global_position.z))
 		await physics_frame
 	_release_driving()
 	var pushed_again := wedge_node.global_position.distance_to(wedge_rest)
-	print("WEDGE AGAIN frozen %s; 3 s more of full throttle moved it %.2f m from where it had frozen" % [wedge_frozen, pushed_again])
-	if not _require(wedge_frozen and pushed_again >= 0.5, "Full throttle against %s once it had frozen wedged (moved %.2f m, frozen first %s)." % [wedge_id, pushed_again, wedge_frozen]):
+	print("WEDGE AGAIN crept up to it frozen, woken at tick %d; 3 s more of full throttle moved it %.2f m from where it had frozen" % [woke_tick, pushed_again])
+	if not _require(woke_tick >= 0 and pushed_again >= 0.5, "Creeping into %s once it had frozen and pressing on wedged (woken at tick %d, moved %.2f m)." % [wedge_id, woke_tick, pushed_again]):
 		return false
 	# At speed: a parked car from the side, a K-rail end on.
 	for target: Dictionary in [{"id": str(_cases.shove.car), "start": _cases.shove.start_xz, "heading": _cases.shove.heading_xz, "again": _cases.shove.again, "min_m": 0.5},
