@@ -25161,3 +25161,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Matching before and after crops of the same fixed camera (post x positions counted in each) showed exactly which posts went and which stayed for the GAA chain-link and the turf windscreen, without relying on the run's own labels.
 - What did not work well: Nothing new; stills only again, so the toppling is judged as sampled.
 - What the team should change next time: Keep naming the expected standing neighbours (here p0:44 and p0:46) in the review brief; it turned the check into a direct count.
+
+### car-shore-code-review — 2026-11-08 — independent code review of the car shore fixes (d6a49845) and their batch E merge (96ba63ec, fixes to 112786a4)
+
+- What worked well: `git show --remerge-diff` plus a list of batch E's added lines missing from the merge showed at once that every missing line had been moved on purpose, into `add_post` and `add_run`. `git diff a3ed4ce9 cc1c43bd` touching only the car-shore files settled that nothing from batch E was lost.
+- What did not work well: The merge commit doesn't compile by itself: the curb flag's inferred type broke the parse until 112786a4. The suite queued at 01c0906c and finished at cc1c43bd because retro commits landed while it ran, so its head line needed reading against the diff.
+- What the team should change next time: Parse-check the merge commit itself (`tools/godot --headless --check-only`) before committing it. Keep retro commits out of the tree while a suite runs on it, so the run's start and end heads match.
