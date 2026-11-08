@@ -31,13 +31,15 @@
 import { createHash } from "node:crypto";
 import { projectLonLat } from "./coordinates.mjs";
 import { pointInMultiPolygon } from "./osm-geometry.mjs";
+import { pitchAxis, pitchPoint } from "./sports-pitch.mjs";
 import { compareSourceKeys, invariant, roundCoordinate } from "./world-contract.mjs";
 
 // Kit props built by game/scripts/world/street_furniture_kit.gd, with the row
-// kind each one stands for.
+// kind each one stands for; soccer_ball is the pitch's loose ball, a rigid body
+// built by game/scripts/world/soccer_ball.gd instead.
 export const STREET_FURNITURE_PROPS = Object.freeze({
   adirondack_chair: "chair",
-  slab_chair: "chair",
+  soccer_ball: "sports_ball",
   bbq_grill: "bbq",
   bench_long: "bench",
   bench_park: "bench",
@@ -101,7 +103,6 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   restroom_cottage: Object.freeze({ x_m: 10.3, z_m: 4.45 }),
   galvanised_tub: Object.freeze({ x_m: 1.1, z_m: 1.1 }),
   concrete_box: Object.freeze({ x_m: 0.8, z_m: 0.8 }),
-  slab_chair: Object.freeze({ x_m: 0.8, z_m: 0.92 }),
   water_block: Object.freeze({ x_m: 1.86, z_m: 0.5 }),
   transformer_pad: Object.freeze({ x_m: 1.5, z_m: 1.35 }),
   waste_basket: Object.freeze({ x_m: 0.6, z_m: 0.6 }),
@@ -151,12 +152,12 @@ const LEG_DROP_STEP_M = 0.005;
 // footprint's clearance stadium.
 export const MAX_REST_TILT_RAD = 0.15;
 export const STREET_FURNITURE_PATTERNS = Object.freeze([
-  "kerb", "line", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge",
+  "kerb", "line", "centre_spot", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge",
   "pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style",
 ]);
 // The patterns of the island-wide block: they need no zone of their own.
 const ISLAND_PATTERNS = Object.freeze(["pole_fixtures", "street_lamps", "junction_stops", "junction_names", "hydrant_style", "all_way_stops", "signalized_crossings", "near_signals"]);
-const ZONE_PATTERNS = Object.freeze(["kerb", "line", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
+const ZONE_PATTERNS = Object.freeze(["kerb", "line", "centre_spot", "signalized_crossings", "near_signals", "junctions", "all_way_stops", "drive_entries", "lot_edge"]);
 // Default props for OSM rows; kinds without one stay unbuilt.
 // A bench OSM tags backless is the park's backless bench on its plinth.
 const OSM_PROPS = Object.freeze({
@@ -281,6 +282,7 @@ const OPTIONAL_RULE_FIELDS = Object.freeze({ street_lamps: ["except_cells"], jun
 const RULE_FIELDS = Object.freeze({
   kerb: ["source_keys", "sides", "spacing_m", "phase_m", "setback_m", "slide_m"],
   line: ["line_xz", "offsets_m", "spacing_m", "phase_m", "slide_m"],
+  centre_spot: ["pitch"],
   signalized_crossings: ["setback_m", "beyond_m"],
   near_signals: ["back_m", "along_m"],
   junctions: ["setback_m"],
@@ -417,6 +419,8 @@ export function validateFurnitureRules(zone, kinds, island = false) {
       invariant(Array.isArray(rule.offsets_m) && rule.offsets_m.length > 0 && rule.offsets_m.every(isFiniteNumber), `${label} offsets_m must list a station's items, in metres along the line`);
     }
     if ("source_keys" in rule) invariant(Array.isArray(rule.source_keys) && rule.source_keys.length > 0 && rule.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} needs OSM way source_keys`);
+    // A centre_spot item stands on the centre spot of one of the zone's own painted pitches.
+    if ("pitch" in rule) invariant((zone.ground?.pitches ?? []).some((pitch) => pitch.id === rule.pitch), `${label} pitch ${rule.pitch} is not one of the zone's ground pitches`);
     if ("sides" in rule) invariant(Array.isArray(rule.sides) && rule.sides.length > 0 && rule.sides.every((side) => ["left", "right"].includes(side)), `${label} sides are left and/or right`);
     if ("streets" in rule) invariant(Array.isArray(rule.streets) && rule.streets.length > 0 && rule.streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} streets are OSM street names`);
     if ("except_streets" in rule) invariant(Array.isArray(rule.except_streets) && rule.except_streets.every((name) => typeof name === "string" && name.trim() !== ""), `${label} except_streets are OSM street names`);
@@ -1518,6 +1522,12 @@ export function placeStreetFurniture({
           if (en) addRow(zone, rule, `${String(station).padStart(3, "0")}_${index}`, en, leftOf(pointAlong(line, Math.min(total, Math.max(0, at))).tangent));
         });
       }
+    } else if (rule.pattern === "centre_spot") {
+      // An item on the centre spot of one of the zone's painted pitches (its
+      // ground.pitches, tools/lib/sports-pitch.mjs), facing along the pitch.
+      const pitch = zone.ground.pitches.find((entry) => entry.id === rule.pitch);
+      const en = firstClear(rule, contains, [toEastNorth(pitchPoint(pitch, 0, 0))], {});
+      if (en) addRow(zone, rule, pitch.id, en, toEastNorth(pitchAxis(pitch)));
     } else if (rule.pattern === "street_lamps") {
       // Lamps along the named streets, on the street ground where a zone builds
       // it, else beside the frozen road ribbon: from phase_m at a spacing, or

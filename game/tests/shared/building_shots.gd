@@ -17,12 +17,16 @@ extends SceneTree
 ## and "fov": degrees (vertical, default 70) to shoot from a free camera at that
 ## position aimed at the target, e.g. to match a reference photo's height, tilt and
 ## field of view, or "projection": "ortho" with "ortho_size": metres (vertical
-## extent) for a square-on elevation. The player still settles at player_xz.
+## extent) for a square-on elevation. A free camera may add "far": metres (default
+## 5000, at most the island overviews' ISLAND_CAMERA_FAR_M) to see farther scenery.
+## The player still settles at player_xz.
 ## The player's avatar mesh is hidden in every shot (visual only); --show-player keeps it.
 ## --street-views FILE: views of a street-detail area, not bound to a building:
 ##   {"area": "NAME", "views": [{"name": "...", "player_xz": [x,z], "target_xyz": [x,y,z]}]}
 ##   with the same optional camera_xyz, fov, projection and ortho_size as --views.
 ##   Saved as street-NAME.png; taken with street detail on and off by default.
+##   A street view may add "reticle": false to hide the aiming reticle in its shots,
+##   where it would cover the subject at the screen's centre (a distant landmark).
 ##   A street view may add "moves": [{"hold": ["move_forward", "run"], "ticks": 60,
 ##   "turn_deg": 0}, ...] to drive the stock player with its real input actions
 ##   from where it settled, facing the target (turn_deg turns the camera, and so
@@ -376,10 +380,16 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 			break
 		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
 		var error := ""
+		var hide_reticle: bool = view.get("reticle", true) == false
+		if hide_reticle:
+			_h.hud.reticle.modulate.a = 0.0
 		if view.has("moves"):
 			error = await _moving_view(view, target, "%s/street-%s%s" % [out, name, suffix])
 		else:
 			error = await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
+		# The plants of a gallery keep it hidden while they stand.
+		if hide_reticle and not gallery.has("node"):
+			_h.hud.reticle.modulate.a = 1.0
 		if error == "" and view.has("measure_frames"):
 			error = await _measure_view(view, target, gallery)
 		if error != "":
@@ -935,7 +945,7 @@ func _free_camera(view: Dictionary, target: Vector3) -> Camera3D:
 		free.size = float(view.ortho_size)
 	else:
 		free.fov = float(view.get("fov", 70.0))
-	free.far = 5000.0
+	free.far = float(view.get("far", 5000.0))
 	_h.main.add_child(free)
 	free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	free.look_at(target, Vector3.UP)
@@ -1128,7 +1138,7 @@ static func _plain(value: Variant) -> Variant:
 ## Why a view's free-camera fields are unusable, or "" (also when it has none).
 func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 	if not view.has("camera_xyz"):
-		for key in ["projection", "fov", "ortho_size"]:
+		for key in ["projection", "fov", "ortho_size", "far"]:
 			if view.has(key):
 				return key + " needs camera_xyz"
 		return ""
@@ -1141,6 +1151,8 @@ func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 		return "fov must be a number of degrees between 0 and 180"
 	if projection == "ortho" and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0):
 		return "ortho needs a positive ortho_size"
+	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) < 100.0 or float(view.far) > ISLAND_CAMERA_FAR_M):
+		return "far must be metres between 100 and %d" % int(ISLAND_CAMERA_FAR_M)
 	var direction := target - Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	if direction.length() < 0.01 or absf(direction.normalized().dot(Vector3.UP)) > 0.999:
 		return "camera_xyz must not coincide with or lie straight above or below the target"

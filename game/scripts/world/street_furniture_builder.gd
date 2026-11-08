@@ -14,9 +14,11 @@ extends RefCounted
 ## are Label3D. The power lines' wires (power_wires rows) hang between the
 ## crossarms of their built utility poles, in straight pieces of one shared
 ## wire mesh, with no collision; so do a photographed pole's spur wires to the
-## poles its prop_params.wires_to names.
+## poles its prop_params.wires_to names. A soccer_ball row is the pitch's loose ball,
+## a rigid body of its own (soccer_ball.gd) resting on its spot.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
+const SOCCER_BALL := preload("res://game/scripts/world/soccer_ball.gd")
 ## Largest render cell (m) and its share of a prop's visibility range.
 const CELL_MAX_M := 96.0
 const CELL_RANGE_SHARE := 0.4
@@ -45,6 +47,7 @@ func build(document: Dictionary) -> Dictionary:
 	var poles: Dictionary = {}
 	var wire_rows: Array[Dictionary] = []
 	var spurs: Array = []
+	var balls: Array[Transform3D] = []
 	var props := 0
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
@@ -57,6 +60,13 @@ func build(document: Dictionary) -> Dictionary:
 				root.free()
 				return {"ok": false, "code": "street_furniture_prop", "message": "%s: %s is not a line prop" % [row.get("id", "?"), prop], "source_keys": []}
 			wire_rows.append(row)
+			continue
+		if prop == SOCCER_BALL.PROP:
+			# Resting on the land the row stands on, which the ball rolls on.
+			var spot: Array = row.position_m
+			balls.append(Transform3D(Basis.IDENTITY, Vector3(float(spot[0]), float(spot[1]) + SOCCER_BALL.RADIUS_M, float(spot[2]))))
+			prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
+			props += 1
 			continue
 		var parts := kit.parts(prop, params if params is Dictionary else {})
 		if not parts.ok:
@@ -197,6 +207,8 @@ func build(document: Dictionary) -> Dictionary:
 			group.add_child(label)
 			label_count += 1
 		root.add_child(group)
+	for spot: Transform3D in balls:
+		root.add_child(SOCCER_BALL.create(spot))
 	root.set_meta("props", props)
 	root.set_meta("prop_counts", prop_counts)
 	root.set_meta("wire_spans", wires.spans)

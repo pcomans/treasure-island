@@ -55,11 +55,9 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 ## Landing dust (`game/scripts/player/landing_poof.gd`, 2026-11-07)
 
-- A burst copies the grass capture's window but reads its live textures, so a capture recentre during a puff (rare; a puff lasts up to 0.65 s) can flip the dust's colour.
-- After `set_level(OFF)` the grass still hands out its last capture, so the comment on `_ground_capture()` in `chest_avatar.gd` ("{} where none are drawn") is wrong then.
 - The dust's shader warm-up runs on the avatar's first physics tick; it isn't tied to the loading screen.
 - Dust on dirt is faint.
-- On the web (Compatibility) the dust is a neutral colour and blobby.
+- On the web (Compatibility) the dust is blobby.
 
 ## Ferry terminal (`game/scripts/world/ferry_terminal.gd`, 2026-11-07)
 
@@ -85,6 +83,27 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - From raised views the dirt ramps still read as crisp blocks: hard straight shoulders, tyre-worn bands like planks and a skirt with a straight run to its ragged edge (visual review, 2026-11-08).
 - The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
+
+## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
+
+- YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.
+- Its housing is OSM's buildings only, so anything missing from the frozen snapshot is absent.
+- The VTS station's lattice towers aren't modelled.
+- In the May 2025 view the east grove is sparser than in the photo.
+- The summit reservoir's bank form is approximate.
+- The Point of Infinity's glint follows the fixed sun.
+- In the Compatibility renderer (web) YBI costs up to 37% more frame time in the worst YBI-facing view.
+- The plants' nominal heights are kept twice, in the street-vegetation kit and its Node mirror (`STREET_VEGETATION_PROPS`); the game checks that they agree only at load.
+- The Point of Infinity draws its true geometry, so from Treasure Island its upper reach is fainter than a pixel (the owner's choice, 2026-11-08).
+
+## Bay Bridge (`game/scripts/world/bay_bridge_builder.gd`, 2026-11-08)
+
+- The western span's towers have 3 X panels where the photos show 4, and no gusset nodes or top gallery.
+- The western span's main cables are thin and grey, and its deck truss is faint.
+- The transition girders are slightly light.
+- Optional: a gap line near W2.
+- The self-anchored span's deck reads at about 0.68 times the sky's value.
+- The SAS tower's lit faces are dimmer than its cable fan.
 
 ## Buildings
 
@@ -246,7 +265,11 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
 - **East span of the Bay Bridge:** the west cable sags differently from the photos, the tower shaft has no slot, and the span has a single material.
 - **Ground tone:**
   - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
-  - The football pitch (OSM w1252737754) has no line markings, so it reads as a blank dark slab; the aerial shows them.
+  - The football pitch (OSM w1252737754) has its lines, apron and ball, but no goals, floodlights or green windscreen fence yet (Street View, 749 9th St, Sep 2025); they wait for the athletic-fields job.
+  - The pitch's concrete apron is drawn over the land like the parks' paving, 0.1 m up, but the ball rolls on the land, so on the apron it sinks about 0.1 m into the concrete (on the turf and its lines, 2 to 3 cm). No capture shows the ball on the apron yet.
+  - From grazing distance the pitch's lines break into dashes, and they likely shimmer in motion.
+  - Dark specks of turf show along the pitch lines' edges, where the shared white paint's wear mask cuts through.
+  - The apron's joint grid runs on the world grid, diagonal to the turf edge.
   - South of Maceo May, at about x −196 to −146, z 278 to 300, the worn band may show as a dotted dirt line (unverified).
   - The 2026-11-07 release's merge left 1,833 ground-cover map cells that match no parent branch, where the paving-edge wear meets the new Mersea, Garden Walk and Aracely paving. That combined look hasn't been seen up close.
 - **Trees and shrubs:**

@@ -95,7 +95,8 @@ func configure(record: Dictionary, wall_geometry: Dictionary) -> Dictionary:
 			"group":
 				_group(o)
 			"store":
-				_storefront(str(o.side), float(o.out) - MASSING.REVEAL_M, float(o.u0), float(o.u1), float(o.y0), float(o.y1), [])
+				var store := _recessed_span(str(o.side), float(o.out), float(o.u0), float(o.u1))
+				_storefront(str(o.side), float(o.out) - MASSING.REVEAL_M, store.x, store.y, float(o.y0), float(o.y1), [])
 			"door":
 				_door(str(o.side), float(o.out) - MASSING.REVEAL_M, float(o.u0), float(o.u1), float(o.y0), float(o.y1))
 			"door_side":
@@ -380,12 +381,25 @@ func _terrace_rail(side: String, u0: float, u1: float) -> void:
 	_add_box("frame_charcoal", side, -0.15, center, MASSING.TERRACE_Y + 0.05, width, 0.1, -0.04, 0.02)
 
 
+# The part [u0, u1] of a grid on the recessed ground plane (out -RECESS_M) that
+# lies along its recessed wall (MASSING.recess_range). The WSW and SE recesses
+# meet at a corner about 1.95 m in from the S corner, where the massing ends their
+# glass; a grid run on to the footprint corner stood out in the open there, two
+# loose frames crossing in front of the glass. Other planes keep their range.
+func _recessed_span(side: String, out: float, u0: float, u1: float) -> Vector2:
+	if absf(out + MASSING.RECESS_M) > 0.05:
+		return Vector2(u0, u1)
+	var wall: Vector2 = MASSING.recess_range(side)
+	return Vector2(maxf(u0, wall.x), minf(u1, wall.y))
+
+
 # SE base under the wing (recess plane), the ribbed pier and its service door.
 func _se_ground() -> void:
 	var plane := -MASSING.RECESS_M
 	var y0 := STORE_BOTTOM_Y
 	var store_top: float = SE_FASCIA_Y[0]
-	_storefront("se", plane, SE_CORNER_STORE[0] + 0.3, SE_CORNER_STORE[1], y0, store_top, [], SE_CORNER_TRANSOM_Y)
+	var corner_store := _recessed_span("se", plane, float(SE_CORNER_STORE[0]) + 0.3, float(SE_CORNER_STORE[1]))
+	_storefront("se", plane, corner_store.x, corner_store.y, y0, store_top, [], SE_CORNER_TRANSOM_Y)
 	_storefront("se", plane, SE_LOBBY[0], SE_LOBBY[1], y0, store_top, [SE_LOBBY_DOORS], SE_LOBBY_TRANSOM_Y)
 	# Fascia over the storefronts with the HAWKINS letters (cav-7, hk02, hk24).
 	var fascia_mid := (float(SE_FASCIA_Y[0]) + float(SE_FASCIA_Y[1])) * 0.5

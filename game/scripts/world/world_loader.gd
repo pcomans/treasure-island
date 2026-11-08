@@ -9,6 +9,9 @@ const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family
 
 const BULGARIAN_WALL = preload("res://game/scripts/world/facades/bulgarian_wall_live_attachment.gd")
 const FERRY_TERMINAL := preload("res://game/scripts/world/ferry_terminal.gd")
+## One street-vegetation kit for the street planting and Yerba Buena Island's trees,
+## so a species both use is built once.
+const VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 
 ## The switchable street-detail layers: subtrees PlayableWorld/StreetDetail/<Layer>,
 ## kept out of the chunk meshes. Roads, sidewalks and other ground surfaces stay
@@ -90,6 +93,8 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 
 	var context_parents := {
 		"ybi": ybi_context,
+		"ybi_building": ybi_context,
+		"ybi_surface": ybi_context,
 		"bay_bridge": bridge_context,
 		"boundary_attached_visual": boundary_attached_context,
 	}
@@ -127,7 +132,8 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		_fail(str(clutter_result.get("code", "street_clutter_build")), str(clutter_result.get("message", "Could not build the street clutter.")), [])
 		return
 	# The planted trees and grass of the street-detail vegetation rows.
-	var planting_result := StreetVegetationBuilder.new().build(validation.street_detail)
+	var vegetation_kit := VEGETATION_KIT.new()
+	var planting_result := StreetVegetationBuilder.new().build(validation.street_detail, vegetation_kit)
 	if not planting_result.ok:
 		furniture_result.node.free()
 		fence_result.node.free()
@@ -136,6 +142,17 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		_free_staged(staged_reports)
 		_fail(str(planting_result.get("code", "street_vegetation_build")), str(planting_result.get("message", "Could not build the street vegetation.")), [])
 		return
+	# Yerba Buena Island's trees and scrub: context, under its node, never colliding.
+	var ybi_vegetation_result := YbiVegetationBuilder.new().build(validation.context.ybi_vegetation, vegetation_kit)
+	if not ybi_vegetation_result.ok:
+		planting_result.node.free()
+		furniture_result.node.free()
+		fence_result.node.free()
+		clutter_result.node.free()
+		shoreline_result.node.free()
+		_free_staged(staged_reports)
+		_fail(str(ybi_vegetation_result.get("code", "ybi_vegetation_build")), str(ybi_vegetation_result.get("message", "Could not build YBI's vegetation.")), [])
+		return
 
 	# Attach only after every chunk and context mesh was validated and built.
 	for report: Dictionary in staged_reports:
@@ -143,6 +160,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		runtime_evidence.add_builder_report(report)
 	shoreline_context.add_child(shoreline_result.node)
 	runtime_evidence.add_builder_report(shoreline_result)
+	ybi_context.add_child(ybi_vegetation_result.node)
 	var family_result := HOUSING_FAMILY.install(buildings, validation.chunks)
 	if not family_result.ok:
 		furniture_result.node.free()
@@ -192,6 +210,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["housing_family"] = family_result
 	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["street_vegetation"] = {"trees": int(planting_result.trees), "shrubs": int(planting_result.shrubs), "grass_clumps": int(planting_result.grass_clumps), "multimesh_batches": int(planting_result.multimesh_batches), "collision_shapes": int(planting_result.collision_shapes)}
+	ready_report["ybi_vegetation"] = {"trees": int(ybi_vegetation_result.trees), "shrubs": int(ybi_vegetation_result.shrubs), "near": int(ybi_vegetation_result.near), "multimesh_batches": int(ybi_vegetation_result.multimesh_batches)}
 	ready_report["shoreline_boulders"] = int(shoreline_result.boulders)
 	ready_report["shoreline_multimesh_batches"] = int(shoreline_result.multimesh_batches)
 	ready_report["street_detail"] = street_detail_report()

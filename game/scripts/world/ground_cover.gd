@@ -125,7 +125,7 @@ const FAMILY_BY_SOURCE := {
 	"r17241152": "rough_grass", # landuse=construction: the west shore parcel is rough grass and trees (2026-05-26 aerial: 77 % dry, 21 % green)
 	"w1252737734": "dry_field", # landuse=construction: dry grass and bare ground (2026-05-26 aerial: 44 % dry, 42 % bare)
 	"w1252737750": "straw", # amenity=college, Job Corps: dry grass (2026-05-26 aerial: 71-90 % dry, 8-23 % bare, 2-7 % lawn of the open ground); its dorm lawns are drawn by the map
-	"w1252737754": "turf", # landuse=construction: a finished synthetic-turf soccer pitch (2026-05-26 aerial: even dark green with white lines; Street View Sep 2025 at 749 9th St: goals and floodlights behind the windscreen); its apron is drawn bare by the map
+	"w1252737754": "turf", # landuse=construction: a finished synthetic-turf soccer pitch (2026-05-26 aerial: even dark green with white lines; Street View Sep 2025 at 749 9th St: goals and floodlights behind the windscreen); its lines and concrete apron are the soccer_pitch zone's street ground
 	"w269856850": "bare", # landuse=industrial: yard, overheads show gravel and bare ground
 	"w545387428": "bare", # leisure=pitch sport=boules: gravel court
 	"w28356842": PAVED, # leisure=pitch sport=basketball: hard court
