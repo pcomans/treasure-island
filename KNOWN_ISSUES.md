@@ -36,6 +36,8 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - `nz_flax` 3's far card covers about 55% more than its LOD1 at the 60 m hand-over, and its sides read +60/+2/−52/+2 in the bake check against ±35 or less for variants 0 and 1. A lean retune would move the siblings too.
 - SSAO and the grass haven't been timed together on native Forward+: add both, together, to the Mac test.
 - No close capture yet of the rebaked `canary_date_palm` 6 and `nz_flax` 3 at their switch distances.
+- `nz_flax` 3's impostor at about 68 m doesn't match its mid level: flat light strips against spiky fans (island-oak review, 2026-11-07).
+- `canary_date_palm` 6's far view is slightly ball-like (island-oak review, 2026-11-07).
 
 ## Bay water (`game/resources/materials/world/water/bay_water.gdshader`)
 
@@ -45,6 +47,24 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The SF skyline billboard fades into the hazy far water when seen from above its top: the billboard's colour and the scene's fog, outside the water pass (water pass, 2026-11-07).
 - `glitter_gain` was tuned with the sun's specular at 1.0. The merged sun has `light_specular` 0.5 with more energy and exposure, so the sheen is weaker and the clipped core brighter (the clipping is owner-accepted). Note "tuned at specular 1.0" if it is retuned.
 - Faint diagonal streaks show in the jetpack glitter; they were already on the water branch.
+
+## Landing dust (`game/scripts/player/landing_poof.gd`, 2026-11-07)
+
+- A burst copies the grass capture's window but reads its live textures, so a capture recentre during a puff (rare; a puff lasts up to 0.65 s) can flip the dust's colour.
+- After `set_level(OFF)` the grass still hands out its last capture, so the comment on `_ground_capture()` in `chest_avatar.gd` ("{} where none are drawn") is wrong then.
+- The dust's shader warm-up runs on the avatar's first physics tick; it isn't tied to the loading screen.
+- Dust on dirt is faint.
+- On the web (Compatibility) the dust is a neutral colour and blobby.
+
+## Ferry terminal (`game/scripts/world/ferry_terminal.gd`, 2026-11-07)
+
+- In a narrow case a recovery lift can put the player inside the gangway.
+- In the Compatibility renderer it costs about 0.36 ms more at the plaza (3.43 against 3.07 ms on the Radeon 780M).
+- The gameplay contract probes the docked boat at one point; a second boat probe would be a stronger check.
+- Seen head-on, the bow has a "tusk" shape (visual review).
+- The ramp beside the walkway isn't built.
+- The visual review flagged the rhythm of the breakwater's base.
+- The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
 ## Buildings
 
@@ -105,6 +125,19 @@ From the yard reviews.
   - #6's barrier panel;
   - the containers under the cypresses;
   - a corrugated gate drawn as screened chain-link.
+
+## Wastewater plant construction site (OSM w775820810): landed 2026-11-08 with known gaps
+
+From the site's reviews.
+
+- The green screen is a flat, opaque matte, as on every fence of its shared type.
+- The piles are smooth and evenly spread, not where the aerial's piles are.
+- 13th St lacks the tall black fence, and the site fence stands behind the verge there.
+- Gate 2 is narrowed to 5 m.
+- The banners are plain.
+- A dry-straw patch lies beside the piles.
+- The K-rails stand off the fence, with gaps.
+- Side effects: the switchyard fence w1242725090 is now solid, and tree c0041 moved 1.5 m.
 
 ## Street detail rollouts: landed 2026-11-06 with known gaps
 
@@ -205,6 +238,11 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - `california_sagebrush` and `california_buckwheat` stand in as forms at the ditch, the Mersea strip and the 1349 Gateview thicket. Their species are unconfirmed, so don't describe them as natives.
   - 36 trunks stand on yard pavement with no mulch pit, all on real crowns where checked.
   - The Keppler Court pine at (−292.8, −433.7) changed from variant 1 to 2 within its pin when the Johnson St lot landed: the lot dropped three crowns, and species hang on a crown's list index (see the cleanup item below).
+  - Young island oak (rebuilt 2026-11-07):
+    - oaks look dark at mid distance away from the sun;
+    - oak crowns are 6–17% wider than nominal;
+    - the collision capsules of leaning stems may catch the player;
+    - the gum and oak foliage atlas bleeds slightly between cells in its mips.
 - **Performance:** the building merge in the bake and the Mersea probe fix landed on 2026-11-06. Against `c7db08fc` at 1600 × 900 on the AMD Radeon 780M: Forward+ spawn 37 → 14 ms, overview 33 → 13, street 13 → 6, jetpack 11 → 6, Mersea 21 → 5.5; real Chrome spawn 25 → 15 ms, overview 24 → 13, street 15 → 10, jetpack 10.6 → 7, ferry 5.0 → 5.4. On the web, merged buildings no longer take distance culling, so housing stays visible at overview: 3,373 draws and 1.72 million triangles there, up from 2,769 and 0.78 million. Applying the old culling to them would save about 5 ms at that view and lose those areas again. Shadow distance is unchanged, and the ground-cover shader runs six noise calls per fragment.
 
 ## Building merge in the bake: known gaps
