@@ -28,7 +28,8 @@ extends SceneTree
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
 ##      the side at speed and a K-rail hit end on are set moving; each comes to
 ##      rest and freezes where it ends up, and a second hit from the same start
-##      wakes it (the K-rail moves again; the car lies against a wall);
+##      wakes it (the K-rail or the row units it lies among move again; the car
+##      lies against a wall);
 ##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -702,8 +703,10 @@ func _case_shove() -> bool:
 			return false
 		# Frozen where it stopped, it must not turn into a wall: a second hit
 		# from the same start wakes it, and (unless it lies against a wall)
-		# moves it.
+		# moves it or the bodies it now lies among: a K-rail rests among the
+		# rest of its row, which the hit may meet first.
 		var rest_at := moved_node.global_position
+		var others_before := _live_positions(car)
 		if not await _drive_from(car, start, heading):
 			return false
 		Input.action_press("move_forward")
@@ -730,8 +733,15 @@ func _case_shove() -> bool:
 				refrozen = true
 				break
 		var moved_again := moved_node.global_position.distance_to(rest_at)
-		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen, at rest and frozen again %s" % [target.id, woke, woke_speed, moved_again, refrozen])
-		if not _require(woke and (moved_again >= float(target.min_m) or not bool(target.again_moves)) and refrozen, "Hitting %s again once it had frozen did not shove it (woken %s, moved %.2f m, frozen again %s)." % [target.id, woke, moved_again, refrozen]):
+		# The most any other live body (frozen before the hit) or any row the hit
+		# swapped in moved.
+		var others_moved := 0.0
+		for id: String in _live_positions(car):
+			var from: Vector3 = others_before[id] if others_before.has(id) else (_vehicles.row(id).transform as Transform3D).origin
+			if id != target.id:
+				others_moved = maxf(others_moved, (_vehicles.live_node(id) as Node3D).global_position.distance_to(from))
+		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen (the most another body moved: %.2f m), at rest and frozen again %s" % [target.id, woke, woke_speed, moved_again, others_moved, refrozen])
+		if not _require(woke and (maxf(moved_again, others_moved) >= float(target.min_m) or not bool(target.again_moves)) and refrozen, "Hitting %s again once it had frozen did not shove it or what it lies among (woken %s, moved %.2f m, others %.2f m, frozen again %s)." % [target.id, woke, moved_again, others_moved, refrozen]):
 			return false
 	return await _stop_and_exit(car, "shove")
 
@@ -777,6 +787,16 @@ func _case_on_foot() -> bool:
 
 
 # --- Helpers.
+
+## Where every live car and K-rail is now (but the driven car), by row id.
+func _live_positions(driven: Node3D) -> Dictionary:
+	var found := {}
+	for id: String in _vehicles.swappable_ids():
+		var node := _vehicles.live_node(id)
+		if node != null and node != driven:
+			found[id] = node.global_position
+	return found
+
 
 ## The stock player standing still on the ground at xz, walking enabled.
 func _stand_player(xz: Vector2) -> bool:

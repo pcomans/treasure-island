@@ -57,12 +57,14 @@ const GRID_M := 16.0
 ## A moving car swaps a static parked car or K-rail it will reach within this
 ## time (s) or margin (m), so the hit is between two live bodies. Slower (below
 ## SHOVE_SPEED_MPS) it swaps what it touches (its hull grown by
-## CONTACT_MARGIN_M) while it creeps (SHOVE_CREEP_MPS) or its driver presses on,
-## so a car pressed against a parked one at full throttle always pushes it.
+## CONTACT_MARGIN_M) while it moves at all (SHOVE_CREEP_MPS) or its driver
+## presses on, so a car pressed against a parked one at full throttle always
+## pushes it, and a K-rail or car rammed against a frozen one wakes that one
+## (the hit stops it almost dead, so the creep speed is low).
 const LOOKAHEAD_S := 0.15
 const LOOKAHEAD_MARGIN_M := 0.4
 const SHOVE_SPEED_MPS := 1.5
-const SHOVE_CREEP_MPS := 0.3
+const SHOVE_CREEP_MPS := 0.05
 const CONTACT_MARGIN_M := 0.12
 ## A shoved or rolling car or K-rail breaks the fence bays it moves into above this (m/s).
 const BREAK_SPEED_MPS := 0.5
