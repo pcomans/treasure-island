@@ -203,9 +203,10 @@ function concreteBoxPoints(left, right, depth) {
     [webTopR + batter * (depth - root), -depth], [webTopR, -root], [right, -tip], [right, 0]];
 }
 
-// Occlusion per outline segment: edge faces under the barrier's overhang, webs and
-// wing undersides under the deck, the bottom a soffit.
-const STEEL_LEVELS = [O.overhang, O.under, O.under, O.soffit, O.under, O.under, O.overhang, O.open];
+// Occlusion per outline segment: edge faces under the barrier's overhang (the steel
+// box's fascia under its deep deck edge), webs and wing undersides under the deck,
+// the bottom a soffit.
+const STEEL_LEVELS = [O.under, O.under, O.under, O.soffit, O.under, O.under, O.under, O.open];
 const CONCRETE_LEVELS = [O.overhang, O.soffit, O.under, O.soffit, O.under, O.soffit, O.overhang, O.open];
 
 function boxLoop(points, material, levels) {

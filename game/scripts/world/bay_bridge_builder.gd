@@ -34,14 +34,14 @@ const WIRE_BOUNDS_GROW_M := 12.0
 ## the western span's weathered aluminium paint. Production inference, not paint
 ## specifications.
 const ROLE_COLORS: Array[Color] = [
-	Color8(222, 223, 220), # sas_white
+	Color8(232, 233, 230), # sas_white
 	Color8(140, 138, 132), # concrete
 	Color8(92, 90, 85), # concrete_dark
 	Color8(84, 85, 88), # roadway
 	Color8(172, 169, 162), # barrier
 	Color8(150, 154, 158), # steel_silver
 	Color8(232, 232, 228), # light_pole
-	Color8(222, 223, 220), # suspender
+	Color8(232, 233, 230), # suspender
 	Color8(146, 150, 154), # cable_silver
 	Color8(22, 22, 24), # tunnel_void
 ]
