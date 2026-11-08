@@ -157,6 +157,7 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	_fences = _breaker.all_fence_bodies()
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
+	_camera.use_planes_of(_player.get_camera())
 	add_child(_camera)
 	_query.collision_mask = PHYSICS_STREET_PROP
 	_query.collide_with_areas = false

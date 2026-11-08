@@ -4,17 +4,11 @@ const REQUIRED_ACTIONS := [
 	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
 	"spray", "recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
 ]
-const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
-const EXPECTED_BILLBOARD_TEXTURE_SIZE := Vector2i(2212, 340)
-const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
-const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
-## The largest camera far plane in use: the island overviews' in
-## game/tests/shared/building_shots.gd, read from it; gameplay's camera uses player.tscn's.
-const BUILDING_SHOTS := preload("res://game/tests/shared/building_shots.gd")
-const WATER_LARGEST_CAMERA_FAR_M: float = BUILDING_SHOTS.ISLAND_CAMERA_FAR_M
 ## Cameras stay within this of the origin: the island (about 950 m) and its overview poses.
+## Every camera sees as far as gameplay's (player.tscn's far plane): the driving camera
+## and game/tests/shared/building_shots.gd's capture cameras take it from the player's.
 const WATER_CAMERA_REACH_M := 2000.0
 ## The street-detail zones: the soccer ball's check finds the full-size pitch's
 ## centre spot in their ground blocks (tools/lib/sports-pitch.mjs).
@@ -93,6 +87,7 @@ func _initialize() -> void:
 		_fail("Session tag limit must default to 64.")
 		return
 	var gameplay_far := camera.far
+	var gameplay_arm_m := arm.spring_length
 	player.free()
 
 	var world_scene := load("res://game/scenes/world/world_root.tscn") as PackedScene
@@ -110,7 +105,7 @@ func _initialize() -> void:
 		"ContextWorld/BayBridge",
 		"ContextWorld/BoundaryAttachedVisuals",
 		"ContextWorld/FerryTerminal",
-		"ContextWorld/SanFranciscoBillboard",
+		"ContextWorld/BayAreaHorizon",
 		"WorldBoundary",
 		"RuntimeEvidence",
 	]:
@@ -143,12 +138,11 @@ func _initialize() -> void:
 	var far_share := float(water_material.get_shader_parameter("far_share"))
 	var grid_rows := int(water_material.get_shader_parameter("grid_rows"))
 	var bounds := water_mesh.custom_aabb
-	var reach := far_share * WATER_LARGEST_CAMERA_FAR_M + WATER_CAMERA_REACH_M
+	var reach := far_share * gameplay_far + WATER_CAMERA_REACH_M
 	if water_mesh.size != Vector2(2.0, 2.0) \
 	or water_mesh.subdivide_width != water_mesh.subdivide_depth \
 	or grid_rows % 2 != 1 or grid_rows != water_mesh.subdivide_width + 1 \
 	or far_share <= 0.0 or far_share >= 1.0 \
-	or gameplay_far > WATER_LARGEST_CAMERA_FAR_M \
 	or absf(bounds.get_center().x) > 1.0 or absf(bounds.get_center().z) > 1.0 \
 	or bounds.size.x < 2.0 * reach or bounds.size.z < 2.0 * reach \
 	or bounds.position.y > 0.0 or bounds.end.y < far_share * gameplay_far:
@@ -159,34 +153,13 @@ func _initialize() -> void:
 	or not water.find_children("*", "CollisionPolygon3D", true, false).is_empty():
 		_fail("Water must remain visual-only with no collision body, shape, or polygon descendants.")
 		return
-	var billboard := world.get_node("ContextWorld/SanFranciscoBillboard") as MeshInstance3D
-	var billboard_mesh := billboard.mesh as QuadMesh if billboard != null else null
-	var billboard_material := billboard_mesh.material as StandardMaterial3D if billboard_mesh != null else null
-	var billboard_texture := billboard_material.albedo_texture if billboard_material != null else null
-	if billboard == null \
-	or billboard_mesh == null \
-	or billboard_material == null \
-	or billboard_texture == null:
-		_fail("SF billboard mesh, material, or texture is missing.")
-		return
-	if billboard.transform != EXPECTED_BILLBOARD_TRANSFORM \
-	or billboard_mesh.size != EXPECTED_BILLBOARD_SIZE:
-		_fail("SF billboard exact transform or QuadMesh size drifted.")
-		return
-	if billboard_texture.resource_path != EXPECTED_BILLBOARD_TEXTURE \
-	or Vector2i(billboard_texture.get_width(), billboard_texture.get_height()) != EXPECTED_BILLBOARD_TEXTURE_SIZE:
-		_fail("SF billboard texture identity or dimensions drifted.")
-		return
-	if billboard.layers != 1 \
-	or billboard.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
-	or not billboard.find_children("*", "CollisionObject3D", true, false).is_empty():
-		_fail("SF billboard must remain layer-1, shadowless, and non-colliding.")
-		return
-	if billboard_material.transparency != BaseMaterial3D.TRANSPARENCY_ALPHA \
-	or billboard_material.shading_mode != BaseMaterial3D.SHADING_MODE_UNSHADED \
-	or billboard_material.cull_mode != BaseMaterial3D.CULL_DISABLED \
-	or billboard_material.billboard_mode != BaseMaterial3D.BILLBOARD_ENABLED:
-		_fail("SF billboard material must remain transparent, unshaded, double-sided, and camera-facing.")
+	# The distant Bay Area horizon (game/scripts/world/fresh_bay_horizon.gd) builds its
+	# scenery on entering the tree; this contract builds it off-tree.
+	var horizon := world.get_node("ContextWorld/BayAreaHorizon") as Node3D
+	horizon.build_scenery()
+	var horizon_problem := _horizon_problem(horizon, world as WorldLoader, gameplay_far, gameplay_arm_m)
+	if horizon_problem != "":
+		_fail(horizon_problem)
 		return
 	world.free()
 
@@ -279,7 +252,7 @@ func _check_ferry_solidity() -> void:
 	if ball.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
+	print("PASS: gameplay inputs (F drives, Space handbrake), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
 	quit(0)
 
 
@@ -407,6 +380,66 @@ func _ball_rests(ball: SoccerBall) -> bool:
 		if ball.sleeping or still >= 30:
 			return true
 	return false
+
+
+## Why the distant horizon would not work as scenery, or "". It collides with
+## nothing; its meshes draw on the world's render layer and cast no shadow; some of
+## it stands at every degree of bearing round the island; and the gameplay
+## camera's far plane holds its farthest band and ridge tops (the mapped
+## backgrounds' profile points; the land carried on behind them is meant to pass
+## the far plane) from the playable boundary's farthest point, plus the camera arm.
+func _horizon_problem(horizon: Node3D, world: WorldLoader, far: float, arm_m: float) -> String:
+	for kind: String in ["CollisionObject3D", "CollisionShape3D", "CollisionPolygon3D"]:
+		if not horizon.find_children("*", kind, true, false).is_empty():
+			return "The distant horizon must collide with nothing (it has a %s)." % kind
+	var items := horizon.find_children("*", "GeometryInstance3D", true, false)
+	if items.is_empty():
+		return "The distant horizon has no meshes."
+	var covered := PackedByteArray()
+	covered.resize(360)
+	for item: GeometryInstance3D in items:
+		var mesh: Mesh = (item as MeshInstance3D).mesh if item is MeshInstance3D else null
+		if mesh == null or item.layers != 1 or item.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+			return "Horizon item %s must be a mesh on render layer 1 alone that casts no shadow." % item.name
+		var to_world := _off_tree_world_transform(item, world)
+		var faces := mesh.get_faces()
+		for i in range(0, faces.size(), 3):
+			var bearings: Array[float] = []
+			for corner in 3:
+				var at := to_world * faces[i + corner]
+				bearings.append(fposmod(rad_to_deg(atan2(at.x, -at.z)), 360.0))
+			_cover_bearings(covered, bearings)
+	for degree in 360:
+		if covered[degree] == 0:
+			return "The distant horizon leaves a gap at a bearing of %d degrees." % degree
+	var farthest := 0.0
+	for sector: Node in horizon.get_node("Continuous360Horizon").get_children():
+		for vertex: Vector3 in (sector as MeshInstance3D).mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX] as PackedVector3Array:
+			farthest = maxf(farthest, Vector2(vertex.x, vertex.z).length())
+	for background: String in ["MappedWesternBackground", "MappedEasternBackground"]:
+		for profile: Dictionary in horizon.get_node(background).registration.profiles:
+			for point: Array in profile.points:
+				farthest = maxf(farthest, Vector2(float(point[0]), float(point[2])).length())
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(world.default_manifest_path))
+	var edge := 0.0
+	for component: Dictionary in manifest.playable_boundary.components:
+		for point: Array in component.outer:
+			edge = maxf(edge, Vector2(float(point[0]), float(point[1])).length())
+	if edge <= 0.0 or far < farthest + edge + arm_m:
+		return "The gameplay camera's far plane (%.0f m) must hold the horizon's farthest band and ridge tops (%.0f m out) from the island's farthest edge (%.0f m out) and the camera arm (%.1f m)." % [far, farthest, edge, arm_m]
+	return ""
+
+
+## Marks the whole degrees a triangle spans, given its corners' bearings (degrees
+## round the compass): the arc holding all three starts after the widest gap
+## between them.
+func _cover_bearings(covered: PackedByteArray, bearings: Array[float]) -> void:
+	bearings.sort()
+	var gaps := [bearings[1] - bearings[0], bearings[2] - bearings[1], bearings[0] + 360.0 - bearings[2]]
+	var widest := gaps.find(gaps.max())
+	var start: float = bearings[(widest + 1) % 3]
+	for degree in range(floori(start), floori(start + 360.0 - float(gaps[widest])) + 1):
+		covered[posmod(degree, 360)] = 1
 
 
 func _off_tree_world_transform(node: Node3D, scene_root: Node3D) -> Transform3D:

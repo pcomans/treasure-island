@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://uh56bp2uesk4"
-path="res://.godot/imported/sf_skyline_owner_silhouette_final.png-7dae90868c6463ec9988a547b1e5ccac.ctex"
+uid="uid://b41btywxa4bps"
+path="res://.godot/imported/sector_west.png-a7de1c3547e7e9eeabe91ea6015dcf55.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
-dest_files=["res://.godot/imported/sf_skyline_owner_silhouette_final.png-7dae90868c6463ec9988a547b1e5ccac.ctex"]
+source_file="res://game/resources/textures/context/fresh_bay/sector_west.png"
+dest_files=["res://.godot/imported/sector_west.png-a7de1c3547e7e9eeabe91ea6015dcf55.ctex"]
 
 [params]
 

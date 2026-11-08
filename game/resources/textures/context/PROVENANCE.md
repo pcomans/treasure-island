@@ -1,6 +1,16 @@
 # San Francisco context provenance
 
-## Current runtime skyline
+## Bay Area horizon (`fresh_bay/`, 2026-11-07)
+
+The distant horizon round the island (`game/scripts/world/fresh_bay_horizon.gd` and the mapped western and eastern backgrounds) replaced the skyline billboard below. It came from GitHub PR #13 (`53789a47`) and was brought onto the release on 2026-11-08 without its test-harness changes.
+
+- Art: `fresh_bay/sf_skyline.png` (the San Francisco card) and `fresh_bay/sector_north.png`, `sector_east.png`, `sector_south.png` and `sector_west.png` (the distant band's sectors), each 2172x724 RGBA. Each file carries C2PA content credentials from the OpenAI Media Service API: a `c2pa.created` action by ChatGPT `gpt-image` (digital source type `trainedAlgorithmicMedia`) on 2026-11-07 or 2026-11-08 UTC, then `c2pa.converted` and `c2pa.watermarked.unbound`, and no ingredient. The prompts are not recorded.
+- Map data: `game/resources/context/western_blockout.json` and `eastern_blockout.json` hold local coordinates derived from off-island OpenStreetMap extracts, cited in the files: the Golden Gate Bridge's tower legs, coast and approach roads (OSM API map calls checked 2026-11-07), Alcatraz and Angel Island coastlines (`alcatraz.osm`, `angel.osm`), the Alcatraz cellhouse footprint (way 128245373), and Berkeley and Oakland waterfront buildings and port cranes (`berkeley-waterfront.osm`, `oakland-port.osm`). The extracts themselves are not in the repository. Map data © OpenStreetMap contributors, available under the Open Database License (ODbL) 1.0, https://www.openstreetmap.org/copyright. The bridge's span, tower and roadway figures come from goldengate.org, as the file cites.
+- Heights: the ridge and shore profiles, island heights and building and crane masses are production inference, not survey or elevation data. As the files' notes say, dated photographs were used as shape references only; no photograph, or any part of one, ships in the game.
+
+## Retired skyline billboard (removed 2026-11-08)
+
+The billboard's files (`sf_skyline_owner_silhouette_final.png`, `sf_skyline_owner_outline_final.png` and their `.import` files) were removed when the horizon replaced it; they remain in Git history. Their record follows.
 
 - Runtime asset: `sf_skyline_owner_silhouette_final.png`.
 - Purpose: distant, non-playable San Francisco skyline billboard viewed from Treasure Island.
@@ -48,7 +58,7 @@ magick sf_skyline_owner_outline_final.png \
 - Asset: `sf_skyline_owner_outline_final.png`.
 - Dimensions: `2212x340`, 8-bit PNG with alpha.
 - SHA-256: `1939151e1098c4935d1a5fd230bc9a692c5484fc93fc5d5bd4064da0678927d4`.
-- Status: retained as the owner-photo-derived architectural-outline fallback but no longer intended as the active billboard texture.
+- Status: the owner-photo-derived architectural-outline fallback; removed with the billboard on 2026-11-08 (in Git history).
 
 - Asset: `sf_skyline.svg`.
 - Author: project-authored abstract silhouette created 2026-08-27.

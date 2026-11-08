@@ -6,7 +6,8 @@ extends SceneTree
 ##   1. enter and exit with F: with the game paused F beside a parked car does
 ##      nothing; unpaused, the stock player presses F
 ##      and drives it (avatar hidden, capsule off, the parked box gone), the view
-##      blending from the on-foot camera to the chase camera; F again stands the
+##      blending from the on-foot camera to the chase camera, which sees as far
+##      (the distant horizon); F again stands the
 ##      player on the ground beside it, walking as before, the view blending
 ##      back; the car comes to rest, freezes and stays there; F gets back in;
 ##   2. a run along Seven Seas Avenue: up to speed, mostly on its wheels and
@@ -84,7 +85,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_ball, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -125,6 +126,10 @@ func _case_enter_exit() -> bool:
 	var showing := _main.get_viewport().get_camera_3d()
 	var start_gap := showing.global_position.distance_to(view_before.origin)
 	if not _require(rig.is_blending() and showing != rig.camera and start_gap < 1.5, "Getting in must blend from the on-foot view (blending %s, %.2f m from it)." % [rig.is_blending(), start_gap]):
+		return false
+	# The chase camera and its blend see as far as the on-foot camera: the distant horizon stays.
+	var on_foot := _player.get_camera()
+	if not _require(rig.camera.far == on_foot.far and showing.far == on_foot.far and rig.camera.near == on_foot.near and showing.near == on_foot.near, "The chase camera and its blend must see as far as the on-foot camera (far %.0f and %.0f m against %.0f m)." % [rig.camera.far, showing.far, on_foot.far]):
 		return false
 	# Settle, drive a few metres, stop.
 	for _tick in 45:
