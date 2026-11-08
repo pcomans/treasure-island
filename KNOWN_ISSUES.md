@@ -79,6 +79,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
 - The chase camera's arm stops at street props as well as the world (so it never sits inside a parked car): a lamp post or palm between the car and the camera pulls the view in for a moment, and a sideways glance over kerbside cars passes just over their roofs (2026-11-08).
 - After the bay reset the chase camera starts facing the car's nose and swings round behind it in about a second (visual review, 2026-11-08).
+- A car pushes the pitch's ball with a scripted bumper push (the ball's own push model, `vehicle_manager.gd` `_push_loose`), not by contact alone: the hull's raked nose sits about a ball's height up, and without the push the car rode over the ball (2026-11-08).
 - Taillights read a dull brownish red in shade (visual review, 2026-11-08).
 - From raised views the dirt ramps still read as crisp blocks: hard straight shoulders, tyre-worn bands like planks and a skirt with a straight run to its ragged edge (visual review, 2026-11-08).
 - The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
