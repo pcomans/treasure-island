@@ -37,7 +37,7 @@ chmod 700 "${XDG_RUNTIME_DIR}"
 export WAYLAND_DISPLAY="wl-godot-$$"
 weston_log="${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}.log"
 weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
-  --width=1920 --height=1080 --idle-time=0 >"${weston_log}" 2>&1 &
+  --width=1920 --height=1080 >"${weston_log}" 2>&1 &
 weston_pid=$!
 godot_pid=""
 monitor_pid=""

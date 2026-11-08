@@ -343,6 +343,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `headless_gameplay_contract.gd` preloads `building_shots.gd` only to read `ISLAND_CAMERA_FAR_M`; a shared constants script would be lighter.
+  - `tools/godot` starts Weston without `--idle-time=0`, so a rendered run stalls after 300 s idle. Keep render plans under 280 s until it's fixed.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;
