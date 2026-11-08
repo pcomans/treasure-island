@@ -5,4 +5,5 @@
   - `tools/make_app_icon.sh <original>` makes `app_icon.png`, the master: the picture unscaled, centred on a transparent 1024 x 1024 square, its visible pixels unchanged. From that it makes `app_icon_360.png` with Lanczos. In both, fully transparent pixels are black.
   - The committed `app_icon.png` is the source of truth: `tools/make_app_icon.sh` with no argument rebuilds `app_icon_360.png` from it.
   - Used as the macOS app icon (`export_presets.cfg` `application/icon`, from the master) and as `application/config/icon` (the 360 version): the Linux window icon, the web favicon and the web's 180 x 180 apple-touch-icon.
+- **`touch/icon-car.png`, `touch/icon-drop.png`, `touch/icon-brake.png`** (the touch use button's icons): drawn by `tools/draw_touch_icons.sh`, which writes them into `game/resources/ui/touch/`, the same byte for byte on every run.
 - The RISE and RUN button art and the stick in `selgesel/` come from the MIT Selgesel controller; see `game/scripts/vendor/selgesel/README.md`.
