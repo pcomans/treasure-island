@@ -1,6 +1,7 @@
 extends Node3D
 ## Original cylindrical distant art; scale and interpolation are production inference.
 ## +X east, -Z north. Existing 3D Bay Bridges/YBI remain exclusive nearby owners.
+
 ## Sectors by number round the compass from WEST_START_DEG, 90 degrees apart: 1 north,
 ## 2 east, 3 south. The west quarter (sector 0) is the mapped western background's.
 const SECTORS := {

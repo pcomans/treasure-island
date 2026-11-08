@@ -29,9 +29,13 @@ void fragment() {
 	}
 	// SF urban overlap: lower only the legacy rear ridge, not the city card.
 	// The mapped wooded coast owns everything beyond the existing232deg cut.
-	if (south_right_backing && geographic_bearing >= 196.0 && geographic_bearing < 232.0) {
+	// Behind the Bay Bridge's west span (from 166 deg) the ridge comes down too: dated
+	// views from the island show low city and distant low hills there, about 1 to 1.5
+	// degrees up with the bridge's towers well above them; the art's ridge stood about 3.4.
+	if (south_right_backing && geographic_bearing >= 166.0 && geographic_bearing < 232.0) {
+		float bridge_weight = smoothstep(166.0, 178.0, geographic_bearing);
 		float urban_weight = smoothstep(196.0, 201.0, geographic_bearing);
-		float urban_scale = mix(1.0, 0.28, urban_weight);
+		float urban_scale = mix(mix(1.0, 0.35, bridge_weight), 0.28, urban_weight);
 		art_uv.y = art_waterline + (UV.y - art_waterline) / urban_scale;
 		if (art_uv.y < 0.0 || art_uv.y > 1.0) { discard; }
 	}
