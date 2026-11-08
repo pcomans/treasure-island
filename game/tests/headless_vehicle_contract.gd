@@ -22,6 +22,8 @@ extends SceneTree
 ##   6. a fence: the car drives through a construction-panel bay, which breaks
 ##      and falls, keeps most of its speed; on foot an intact bay of the same
 ##      fence still stops the stock player and the broken gap lets it through;
+##      then the turf pitch's windscreen: the car breaks its bay and stops at the
+##      ball-stop net behind it, whose rows are breakable: false;
 ##   7. plants: the car drives through a shrub without slowing and stops at a
 ##      palm's trunk;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
@@ -81,10 +83,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_ball, _case_on_foot]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -489,6 +491,47 @@ func _case_fence() -> bool:
 		return false
 	# ...and the broken gap lets it through.
 	return await _walk_into_bay(broken, true, "broken bay %s" % keys[0])
+
+
+## The turf pitch's windscreen breaks under a car, the ball-stop net behind it
+## (breakable: false) stops it like a wall.
+func _case_field_net() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var start := Vector2(_cases.field_net.start_xz[0], _cases.field_net.start_xz[1])
+	var heading := Vector2(_cases.field_net.heading_xz[0], _cases.field_net.heading_xz[1]).normalized()
+	var fences := _world.street_detail_layer("fences")
+	var screen := fences.find_child("Fence__" + str(_cases.field_net.fence).validate_node_name(), true, false) as Node3D
+	var net := fences.find_child("Fence__" + str(_cases.field_net.net).validate_node_name(), true, false) as Node3D
+	if not _require(screen != null and net != null and screen.has_meta("fence_bays") and net.has_meta("fence_bays"), "Fixture fences %s and %s have no bays." % [_cases.field_net.fence, _cases.field_net.net]):
+		return false
+	var net_body := net.get_node_or_null("Collision") as StaticBody3D
+	if not _require(net_body != null and not bool(net_body.get_meta("breakable", true)), "The ball-stop net %s is not breakable: false." % _cases.field_net.net):
+		return false
+	if not await _drive_from(car, start, heading):
+		return false
+	var breaker := _vehicles.fence_breaker()
+	var broken_before := breaker.broken_count()
+	var top := 0.0
+	var stopped := false
+	Input.action_press("move_forward")
+	for tick in 300:
+		_steer_toward(car, start + heading * 200.0)
+		await physics_frame
+		var speed := car.linear_velocity.length()
+		top = maxf(top, speed)
+		if top > 5.0 and speed < 0.5:
+			stopped = true
+			break
+	_release_driving()
+	var keys: Array = breaker.broken_keys().slice(broken_before)
+	var net_bay: Dictionary = (net.get_meta("fence_bays") as Dictionary).values()[0]
+	var car_xz := Vector2(car.global_position.x, car.global_position.z)
+	print("FIELD_NET broke %s at up to %.2f m/s, stopped %s at %s" % [keys, top, stopped, car_xz])
+	if not _require(keys.size() >= 1, "Driving at the turf's windscreen broke no bay.") \
+	or not _require(stopped, "The car did not stop at the ball-stop net (top %.2f m/s)." % top) \
+	or not _require(_side(net_bay, car_xz) == _side(net_bay, start), "The car got through the ball-stop net."):
+		return false
+	return await _stop_and_exit(car, "field_net")
 
 
 ## Which side of a bay's line a point lies on.
