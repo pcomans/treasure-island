@@ -55,11 +55,9 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 
 ## Landing dust (`game/scripts/player/landing_poof.gd`, 2026-11-07)
 
-- A burst copies the grass capture's window but reads its live textures, so a capture recentre during a puff (rare; a puff lasts up to 0.65 s) can flip the dust's colour.
-- After `set_level(OFF)` the grass still hands out its last capture, so the comment on `_ground_capture()` in `chest_avatar.gd` ("{} where none are drawn") is wrong then.
 - The dust's shader warm-up runs on the avatar's first physics tick; it isn't tied to the loading screen.
 - Dust on dirt is faint.
-- On the web (Compatibility) the dust is a neutral colour and blobby.
+- On the web (Compatibility) the dust is blobby.
 
 ## Ferry terminal (`game/scripts/world/ferry_terminal.gd`, 2026-11-07)
 
