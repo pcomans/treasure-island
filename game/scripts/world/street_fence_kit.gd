@@ -22,6 +22,14 @@ extends RefCounted
 ## A run is a list of posts on the visible ground (world positions). "inside" is
 ## the side of the run the fenced site lies on, left or right of the walking
 ## direction from the first post, or center: fabric and screens face that side.
+##
+## Each bay's own geometry (rails, fabric, screen, slats, boards, pickets or a
+## panel's frame, not the posts and stands it shares) is a run of vertices in
+## its cell's builders, which commit() keeps in order; add_run reports each
+## bay's runs, so a car can break one bay of a merged cell mesh
+## (game/scripts/vehicles/street_fence_breaker.gd), and bay_only builds a bay
+## alone, as the debris it leaves. "breakable": false in a row's params keeps a
+## fence whole (the Job Corps perimeter, owner 2026-11-08).
 
 const FURNITURE := preload("res://game/scripts/world/street_furniture_kit.gd")
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
@@ -228,6 +236,8 @@ static func params_error(type: String, params: Variant) -> String:
 		return "unknown fence type %s" % type
 	if not params is Dictionary or str((params as Dictionary).get("inside", "")) not in INSIDE:
 		return "fence params need inside left, right or center"
+	if (params as Dictionary).has("breakable") and not (params as Dictionary).breakable is bool:
+		return "fence params breakable must be true or false"
 	if type == "chain_link_screened":
 		if str((params as Dictionary).get("screen", "black")) not in SCREENS:
 			return "unknown screen colour %s" % (params as Dictionary).get("screen")
@@ -262,53 +272,90 @@ static func height_of(type: String, params: Variant) -> float:
 ## Adds one run's geometry to the cell builders (cells: key -> builders, filled
 ## by cell_of) and returns its collision boxes as [{transform, size}] in world
 ## space. seed varies the panel jitter between runs.
-func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, posts: PackedVector3Array, seed: int) -> Array[Dictionary]:
+## Each box also carries its bay's ends (a, b) and its geometry's vertex runs:
+## ranges [[cell key, builder key, first vertex, end], ...]. bay_only leaves the
+## posts and stands out (a bay built alone, as debris).
+func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, posts: PackedVector3Array, seed: int, bay_only := false) -> Array[Dictionary]:
 	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 0.0) as float
 	match type:
 		"construction_panel":
-			return _panels(cells, cell_size_m, posts, side, seed)
+			return _panels(cells, cell_size_m, posts, side, seed, bay_only)
 		"wood_privacy":
-			return _wood_fence(cells, cell_size_m, posts, side)
+			return _wood_fence(cells, cell_size_m, posts, side, bay_only)
 		"steel_picket":
-			return _picket_fence(cells, cell_size_m, posts)
+			return _picket_fence(cells, cell_size_m, posts, bay_only)
 		"chain_link_slatted":
-			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
+			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params), bay_only)
 		_:
-			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params))
+			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params), bay_only)
+
+
+## The vertex counts of a cell's builders now.
+static func _marks(cell: Dictionary) -> Dictionary:
+	var marks := {}
+	for key: String in cell:
+		var builder: Variant = cell[key]
+		marks[key] = (builder as FURNITURE.Builder).vertex_count(0) if builder is FURNITURE.Builder else (builder as Quads).size()
+	return marks
+
+
+## A bay's box with its ends and the vertex runs its geometry added to the cell
+## since `before` (see add_run).
+static func _bay(box: Dictionary, a: Vector3, b: Vector3, cell_key: String, cell: Dictionary, before: Dictionary) -> Dictionary:
+	var ranges: Array = []
+	var after := _marks(cell)
+	for key: String in after:
+		if int(after[key]) > int(before.get(key, 0)):
+			ranges.append([cell_key, key, int(before.get(key, 0)), int(after[key])])
+	box["a"] = a
+	box["b"] = b
+	box["ranges"] = ranges
+	return box
 
 
 ## The meshes of one cell's builders: "solid" (metal and boards, drawn with
 ## shadows), "fabric" (chain-link, barbed wire and screens, blended, no shadows)
 ## and "shadow" (a cut-out copy of the wire and an opaque copy of the screens
 ## that only cast shadows). A mesh is null when it would hold nothing.
+## surfaces maps each builder key to where its vertices landed:
+## [[mesh ("solid", "fabric" or "shadow"), surface index], ...].
 func commit(cell: Dictionary) -> Dictionary:
 	var solid: ArrayMesh = (cell.metal as FURNITURE.Builder).commit(_metal, _metal)
+	var surfaces := {}
+	# The fences' metal is all on the builder's first (opaque) surface.
+	if solid.get_surface_count() > 0:
+		surfaces["metal"] = [["solid", 0]]
 	var fabric := ArrayMesh.new()
 	var shadow := ArrayMesh.new()
-	_add_surface(solid, cell.wood, _wood)
-	_add_surface(fabric, cell.chain, _chain)
-	_add_surface(fabric, cell.barbed, _barbed)
-	_add_surface(shadow, cell.chain, _chain_shadow)
-	_add_surface(shadow, cell.barbed, _barbed_shadow)
+	_add_surface(solid, cell.wood, _wood, "solid", "wood", surfaces)
+	_add_surface(fabric, cell.chain, _chain, "fabric", "chain", surfaces)
+	_add_surface(fabric, cell.barbed, _barbed, "fabric", "barbed", surfaces)
+	_add_surface(shadow, cell.chain, _chain_shadow, "shadow", "chain", surfaces)
+	_add_surface(shadow, cell.barbed, _barbed_shadow, "shadow", "barbed", surfaces)
 	for colour: String in SCREENS:
-		_add_surface(fabric, cell["screen_" + colour], _screens[colour])
-		_add_surface(shadow, cell["screen_" + colour], _screen_shadow)
+		_add_surface(fabric, cell["screen_" + colour], _screens[colour], "fabric", "screen_" + colour, surfaces)
+		_add_surface(shadow, cell["screen_" + colour], _screen_shadow, "shadow", "screen_" + colour, surfaces)
 	for colour: String in SLATS:
-		_add_surface(solid, cell["slats_" + colour], _slats[colour])
-	_add_surface(solid, cell.banner, _banner)
-	_add_surface(solid, cell.banner_art, _banner_art)
+		_add_surface(solid, cell["slats_" + colour], _slats[colour], "solid", "slats_" + colour, surfaces)
+	_add_surface(solid, cell.banner, _banner, "solid", "banner", surfaces)
+	_add_surface(solid, cell.banner_art, _banner_art, "solid", "banner_art", surfaces)
 	return {
 		"solid": solid if solid.get_surface_count() > 0 else null,
 		"fabric": fabric if fabric.get_surface_count() > 0 else null,
 		"shadow": shadow if shadow.get_surface_count() > 0 else null,
+		"surfaces": surfaces,
 	}
 
 
-func _add_surface(mesh: ArrayMesh, quads: Quads, material: Material) -> void:
+func _add_surface(mesh: ArrayMesh, quads: Quads, material: Material, part := "", key := "", surfaces: Dictionary = {}) -> void:
 	if quads.is_empty():
 		return
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, quads.arrays())
 	mesh.surface_set_material(mesh.get_surface_count() - 1, material)
+	if key != "":
+		if not surfaces.has(key):
+			surfaces[key] = []
+		(surfaces[key] as Array).append([part, mesh.get_surface_count() - 1])
 
 
 static func cell_key(position: Vector3, cell_size_m: float) -> String:
@@ -372,12 +419,12 @@ static func _bay_box(a: Vector3, b: Vector3, height: float, half_m: float) -> Di
 ## Chain-link on line posts with a top rail and a bottom tension wire; the
 ## screened type adds a windscreen on the inside, the barbed type angled arms
 ## with three strands of barbed wire leaning outward.
-func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float) -> Array[Dictionary]:
+func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float, bay_only := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES[type]
 	var fabric_h := 1.83
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in posts.size():
+	for index in 0 if bay_only else posts.size():
 		var cell := _cell(cells, cell_size_m, posts[index])
 		var metal: FURNITURE.Builder = cell.metal
 		var terminal := _terminal(posts, index)
@@ -396,6 +443,7 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var middle := (a + b) * 0.5
 		var cell := _cell(cells, cell_size_m, middle)
+		var before := _marks(cell)
 		var metal: FURNITURE.Builder = cell.metal
 		var normal := _left(_flat(b - a))
 		metal.tube(PackedVector3Array([a + Vector3(0, fabric_h - 0.02, 0), b + Vector3(0, fabric_h - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
@@ -417,7 +465,7 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 			var lift := Vector3(0, fabric_h + 0.06, 0)
 			var rise := 0.3
 			(cell.barbed as Quads).ribbon(a + lift, b + lift, (Vector3.UP + out_a).normalized() * rise / 0.7071, (Vector3.UP + out_b).normalized() * rise / 0.7071, along_m, BARBED_TILE_M)
-		boxes.append(_bay_box(a, b, float(spec.height_m), float(spec.collision_half_m)))
+		boxes.append(_bay(_bay_box(a, b, float(spec.height_m), float(spec.collision_half_m)), a, b, cell_key(middle, cell_size_m), cell, before))
 		along_m += length
 	return boxes
 
@@ -435,10 +483,10 @@ static func _post_normal(posts: PackedVector3Array, index: int) -> Vector3:
 ## Chain-link with privacy slats: line posts with a top rail and a bottom
 ## tension wire, the slats woven through the fabric (an opaque striped sheet in
 ## the fabric's plane) and the wire over them on the outside.
-func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float) -> Array[Dictionary]:
+func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float, bay_only := false) -> Array[Dictionary]:
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in posts.size():
+	for index in 0 if bay_only else posts.size():
 		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
 		var terminal := _terminal(posts, index)
 		var radius := 0.03 if terminal else 0.024
@@ -451,6 +499,7 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 		var b := posts[index + 1]
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var before := _marks(cell)
 		var metal: FURNITURE.Builder = cell.metal
 		var normal := _left(_flat(b - a))
 		metal.tube(PackedVector3Array([a + Vector3(0, height - 0.02, 0), b + Vector3(0, height - 0.02, 0)]), PackedFloat32Array([0.021, 0.021]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
@@ -460,7 +509,7 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 		# The wire on the outside of the slats (outward: away from the inside).
 		var wire := normal * (side * 0.035 - (side if side != 0.0 else 1.0) * 0.012)
 		(cell.chain as Quads).wall(a + wire, b + wire, 0.05, height - 0.04, along_m, CHAIN_TILE)
-		boxes.append(_bay_box(a, b, height, float(TYPES.chain_link_slatted.collision_half_m)))
+		boxes.append(_bay(_bay_box(a, b, height, float(TYPES.chain_link_slatted.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
 		along_m += length
 	return boxes
 
@@ -494,6 +543,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 		var far := Vector3(float(xz[1][0]), y, float(xz[1][1]))
 		var direction := _flat(far - hinge)
 		var cell := _cell(cells, cell_size_m, (hinge + far) * 0.5)
+		var before := _marks(cell)
 		var metal: FURNITURE.Builder = cell.metal
 		var lift := Vector3(0, GATE_LEAF_LIFT_M, 0)
 		var frame := PackedVector3Array([hinge + lift, hinge + lift + Vector3(0, height - 0.08, 0), far + lift + Vector3(0, height - 0.08, 0), far + lift, hinge + lift])
@@ -510,7 +560,7 @@ func add_gate(cells: Dictionary, cell_size_m: float, type: String, params: Dicti
 					(cell.chain as Quads).wall(hinge + lift, far + lift, screen_top, height - 0.1, 0.0, CHAIN_TILE)
 			_:
 				(cell.chain as Quads).wall(hinge + lift, far + lift, 0.03, height - 0.1, 0.0, CHAIN_TILE)
-		boxes.append(_bay_box(hinge, far, height, GATE_LEAF_HALF_M))
+		boxes.append(_bay(_bay_box(hinge, far, height, GATE_LEAF_HALF_M), hinge, far, cell_key((hinge + far) * 0.5, cell_size_m), cell, before))
 	return boxes
 
 
@@ -552,7 +602,7 @@ func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dic
 ## Temporary chain-link panels: a tube frame with chain-link infill between each
 ## pair of joints, the frames side by side at a joint with a clamp, standing on a
 ## low stand; the joints lean in and out a little, as hand-set panels do.
-func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, seed: int) -> Array[Dictionary]:
+func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, seed: int, bay_only := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.construction_panel
 	var joints := PackedVector3Array()
 	for index in posts.size():
@@ -570,6 +620,7 @@ func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, s
 		var along := _flat(b - a)
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var before := _marks(cell)
 		var metal: FURNITURE.Builder = cell.metal
 		var inset := minf(0.045, length * 0.1)
 		var left_foot := a + along * inset + Vector3(0, lift, 0)
@@ -578,9 +629,9 @@ func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, s
 		var frame := PackedVector3Array([left_foot, left_foot + up, right_foot + up, right_foot, left_foot])
 		metal.tube(frame, PackedFloat32Array([0.019, 0.019, 0.019, 0.019, 0.019]), 6, GALVANIZED, FURNITURE.CELL_METAL, false, false)
 		(cell.chain as Quads).wall(left_foot - Vector3(0, lift, 0), right_foot - Vector3(0, lift, 0), lift + 0.03, lift + frame_h - 0.03, along_m, CHAIN_TILE)
-		boxes.append(_bay_box(a, b, frame_h + lift, float(spec.collision_half_m)))
+		boxes.append(_bay(_bay_box(a, b, frame_h + lift, float(spec.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
 		along_m += length
-	for index in joints.size():
+	for index in 0 if bay_only else joints.size():
 		var cell := _cell(cells, cell_size_m, joints[index])
 		var metal: FURNITURE.Builder = cell.metal
 		var normal := _post_normal(posts, index)
@@ -603,13 +654,13 @@ static func _unit_hash(seed: int, index: int) -> float:
 
 ## A 6 ft board fence: square posts, two rails on the inside face, boards on the
 ## outside face and a cap board along the top.
-func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float) -> Array[Dictionary]:
+func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, bay_only := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.wood_privacy
 	var height := float(spec.height_m)
 	var outward := -side if side != 0.0 else 0.0
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in posts.size():
+	for index in 0 if bay_only else posts.size():
 		var cell := _cell(cells, cell_size_m, posts[index])
 		var normal := _post_normal(posts, index)
 		(cell.wood as Quads).block(posts[index] + Vector3(0, -0.3, 0), normal.cross(Vector3.UP), normal, Vector3(0.09, height + 0.35, 0.09), WOOD_TILE_M)
@@ -618,6 +669,7 @@ func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Arra
 		var b := posts[index + 1]
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
 		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var before := _marks(cell)
 		var wood: Quads = cell.wood
 		var normal := _left(_flat(b - a))
 		var face := normal * outward * 0.055
@@ -626,7 +678,7 @@ func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Arra
 		for rail_y: float in [0.32, height - 0.32]:
 			wood.skewed(a + back, b + back, rail_y - 0.045, rail_y + 0.045, 0.04, normal, along_m, WOOD_TILE_M)
 		wood.skewed(a, b, height, height + 0.03, 0.14, normal, along_m, WOOD_TILE_M)
-		boxes.append(_bay_box(a, b, height + 0.03, float(spec.collision_half_m)))
+		boxes.append(_bay(_bay_box(a, b, height + 0.03, float(spec.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
 		along_m += length
 	return boxes
 
@@ -637,11 +689,11 @@ func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Arra
 ## square posts with ball caps on 8 ft bays, a bottom and a top rail, and square
 ## pickets about 12 cm apart rising past the top rail to points. The pickets
 ## follow the ground between the posts.
-func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array) -> Array[Dictionary]:
+func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, bay_only := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.steel_picket
 	var height := float(spec.height_m)
 	var boxes: Array[Dictionary] = []
-	for index in posts.size():
+	for index in 0 if bay_only else posts.size():
 		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
 		var foot := posts[index]
 		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.04, 0)]), PackedFloat32Array([0.04, 0.04]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
@@ -656,7 +708,9 @@ func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Ar
 		var a := posts[index]
 		var b := posts[index + 1]
 		var length := Vector2(b.x - a.x, b.z - a.z).length()
-		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, (a + b) * 0.5).metal
+		var cell := _cell(cells, cell_size_m, (a + b) * 0.5)
+		var before := _marks(cell)
+		var metal: FURNITURE.Builder = cell.metal
 		for rail_y: float in [0.14, height - 0.12]:
 			metal.tube(PackedVector3Array([a + Vector3(0, rail_y, 0), b + Vector3(0, rail_y, 0)]), PackedFloat32Array([0.018, 0.018]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, false)
 		var count := maxi(1, roundi(length / PICKET_SPACING_M))
@@ -664,7 +718,7 @@ func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Ar
 			var foot := a.lerp(b, float(step) / float(count))
 			metal.tube(PackedVector3Array([foot + Vector3(0, 0.06, 0), foot + Vector3(0, height - 0.03, 0)]), PackedFloat32Array([0.011, 0.011]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, false)
 			metal.tube(PackedVector3Array([foot + Vector3(0, height - 0.03, 0), foot + Vector3(0, height + 0.05, 0)]), PackedFloat32Array([0.014, 0.0]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
-		boxes.append(_bay_box(a, b, height + 0.05, float(spec.collision_half_m)))
+		boxes.append(_bay(_bay_box(a, b, height + 0.05, float(spec.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
 	return boxes
 
 
@@ -680,6 +734,9 @@ class Quads:
 
 	func is_empty() -> bool:
 		return _indices.is_empty()
+
+	func size() -> int:
+		return _vertices.size()
 
 	func arrays() -> Array:
 		var result := []

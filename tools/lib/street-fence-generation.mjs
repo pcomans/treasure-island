@@ -271,9 +271,12 @@ export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
-  const allowed = type === "chain_link_screened" ? ["inside", "screen", "screen_height_m"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"];
+  // breakable: false keeps a fence whole when a car hits it (the Job Corps
+  // perimeter, owner 2026-11-08); every other kit fence breaks bay by bay.
+  const allowed = [...(type === "chain_link_screened" ? ["inside", "screen", "screen_height_m"] : type === "chain_link_slatted" ? ["height_m", "inside", "slats"] : ["inside"]), "breakable"];
   if (!Object.keys(params).every((key) => allowed.includes(key))) return `params take only ${allowed.join(", ")}`;
   if (!STREET_FENCE_INSIDE.includes(params.inside)) return `params.inside must be ${STREET_FENCE_INSIDE.join(", ")}`;
+  if (params.breakable !== undefined && typeof params.breakable !== "boolean") return "params.breakable must be true or false";
   if (type === "chain_link_screened") {
     if (!STREET_FENCE_SCREENS.includes(params.screen)) return `params.screen must be ${STREET_FENCE_SCREENS.join(", ")}`;
     const screen = params.screen_height_m;

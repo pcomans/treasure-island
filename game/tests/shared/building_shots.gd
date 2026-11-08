@@ -35,6 +35,16 @@ extends SceneTree
 ##   line, with the avatar's describe() when it has one, and what the player
 ##   stands on: the slide floor collider and the first solid straight under its
 ##   feet (support=OBJECT_KEY@y, from the body's derived_object_key or name).
+##   Moves may also hold vehicle_enter_exit (F: a step of 2 ticks gets into the
+##   car the player stands beside, or out) and handbrake, and a step may add
+##   "glance": [x, y] pixels of mouse motion per tick for the driving camera's
+##   glance (game/scripts/vehicles/vehicle_camera.gd); while driving, frames
+##   come from the driving camera unless the view has its own (camera_xyz
+##   follows the car with the player in it), and each MOVE_TICK adds car=
+##   with the car's describe().
+##   A moving view may add "car_start": {"car": ROW_ID, "xz": [x,z],
+##   "heading_xz": [x,z]} to start in that parked car instead, on the ground
+##   there facing that way (vehicle_manager.gd drive_from); the moves then drive it.
 ##   A moving view may add "start_xyz": [x,y,z] to start the stock player in the
 ##   air there, at rest, after it settles at player_xz (a landing view: scenery
 ##   off the walk route, such as the ferry float); the moves then run from there.
@@ -124,7 +134,7 @@ const DEFAULT_STREET_DETAIL := {
 }
 
 ## Input actions a street view's moves may hold.
-const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop"]
+const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake"]
 
 ## The neutral daylight for colour matching: the sun angle, tonemapper and shadows
 ## main.tscn had before the 2026-11-07 look pass (sun at azimuth 152, elevation 52),
@@ -940,8 +950,9 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	for step: Variant in view.moves:
 		if not step is Dictionary or not step.get("hold") is Array or not _numbers([step.get("ticks")], 1) \
 		or float(step.ticks) != floorf(float(step.ticks)) or float(step.ticks) < 1.0 \
-		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)) or (step.has("frames") and not step.frames is bool):
-			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg and an optional true or false frames"
+		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)) or (step.has("frames") and not step.frames is bool) \
+		or (step.has("glance") and not _numbers(step.get("glance"), 2)):
+			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg, an optional true or false frames and an optional glance [x, y]"
 		for action: Variant in step.hold:
 			if not action in MOVE_ACTIONS:
 				return "moves may hold only " + ", ".join(PackedStringArray(MOVE_ACTIONS))
@@ -954,6 +965,14 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	if error != "":
 		return error
 	var player := _h.player
+	if view.has("car_start"):
+		var start: Variant = view.car_start
+		if not start is Dictionary or not start.get("car") is String or not _numbers(start.get("xz"), 2) or not _numbers(start.get("heading_xz"), 2) or _h.main.vehicles == null:
+			return "car_start needs car, xz and heading_xz"
+		var started: String = _h.main.vehicles.drive_from(str(start.car), Vector2(start.xz[0], start.xz[1]), Vector2(start.heading_xz[0], start.heading_xz[1]))
+		if started != "":
+			return "car_start: " + started
+		print("MOVE_START %s in %s at %s" % [prefix.get_file(), start.car, start.xz])
 	if view.has("start_xyz"):
 		player.global_position = Vector3(view.start_xyz[0], view.start_xyz[1], view.start_xyz[2])
 		player.velocity = Vector3.ZERO
@@ -979,8 +998,11 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		for action: String in step.hold:
 			Input.action_press(action)
 		var turn := deg_to_rad(float(step.get("turn_deg", 0.0))) / float(step.ticks)
+		var glance: Array = step.get("glance", [0.0, 0.0])
 		for _i in int(step.ticks):
 			rig.rotation.y += turn
+			if _h.main.vehicles != null and _h.main.vehicles.is_driving() and (float(glance[0]) != 0.0 or float(glance[1]) != 0.0):
+				_h.main.vehicles.glance(Vector2(float(glance[0]), float(glance[1])))
 			await physics_frame
 			# Resume after this tick's physics has moved the player.
 			await process_frame
@@ -999,11 +1021,14 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				frame += 1
 			var velocity := player.get_real_velocity()
 			var state: Variant = _plain(avatar.describe()) if avatar != null and avatar.has_method("describe") else null
-			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player)])
+			var car: Variant = _h.main.vehicles.active_car().describe() if _h.main.vehicles != null and _h.main.vehicles.is_driving() else null
+			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car)])
 			tick += 1
 		_h.release_input()
 		if error != "":
 			break
+	if _h.main.vehicles != null:
+		_h.main.vehicles.force_exit()
 	player.set_gameplay_enabled(false)
 	if free != null:
 		free.queue_free()

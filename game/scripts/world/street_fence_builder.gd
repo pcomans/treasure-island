@@ -13,6 +13,12 @@ extends RefCounted
 ## neither mesh nor box. A fence on a context deck (its fence block's deck: a pier
 ## drawn as visual-only context beyond the playable boundary) has no body, as the
 ## deck has none.
+##
+## A car breaks a fence one bay at a time (game/scripts/vehicles/street_fence_breaker.gd):
+## each bay's box carries its key (fence_bay) and the row's group lists every
+## bay (fence_bays: key -> {type, params, a, b, seed, ranges: [[mesh instance,
+## surface, first vertex, count], ...]}), the runs of its own vertices in the
+## cell meshes. The body's breakable meta is false where the row's params say so.
 
 const KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## Render cell size (m).
@@ -57,12 +63,22 @@ func build(document: Dictionary) -> Dictionary:
 				return _error("%s: run %d has fewer than two posts" % [id, run_index])
 			for index in posts.size() - 1:
 				length_m += Vector2(posts[index + 1].x - posts[index].x, posts[index + 1].z - posts[index].z).length()
-			bay_boxes.append_array(kit.add_run(cells, CELL_M, type, row.prop_params, posts, (id + ":" + str(run_index)).hash()))
+			var seed := (id + ":" + str(run_index)).hash()
+			var run_boxes := kit.add_run(cells, CELL_M, type, row.prop_params, posts, seed)
+			for index in run_boxes.size():
+				run_boxes[index]["key"] = "%d:%d" % [run_index, index]
+				run_boxes[index]["seed"] = seed
+			bay_boxes.append_array(run_boxes)
 		# Gates stand open, their leaves back on the inside; banners hang on the runs.
-		for gate_value: Variant in (fence as Dictionary).get("gates", []):
-			if gate_value is Dictionary:
-				var gate := gate_value as Dictionary
-				bay_boxes.append_array(kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), gate.get("leaves", []) as Array))
+		var gates: Array = (fence as Dictionary).get("gates", [])
+		for gate_index in gates.size():
+			if gates[gate_index] is Dictionary:
+				var gate := gates[gate_index] as Dictionary
+				var leaf_boxes := kit.add_gate(cells, CELL_M, type, row.prop_params, _posts(gate), gate.get("leaves", []) as Array)
+				for index in leaf_boxes.size():
+					leaf_boxes[index]["key"] = "g%d:%d" % [gate_index, index]
+					leaf_boxes[index]["seed"] = 0
+				bay_boxes.append_array(leaf_boxes)
 		for banner_value: Variant in (fence as Dictionary).get("banners", []):
 			if banner_value is Dictionary:
 				kit.add_banner(cells, CELL_M, type, row.prop_params, _posts(banner_value), float((banner_value as Dictionary).get("height_m", 1.0)), int((banner_value as Dictionary).get("art", -1)))
@@ -71,16 +87,20 @@ func build(document: Dictionary) -> Dictionary:
 		group.set_meta("street_detail_id", id)
 		var cell_keys: Array = cells.keys()
 		cell_keys.sort()
+		# Each bay's vertex runs, by cell: builder key -> [[mesh instance, surface], ...].
+		var placed: Dictionary = {}
 		for key: String in cell_keys:
 			var parts := kit.commit(cells[key])
-			for part: Array in [["Mesh", parts.solid, GeometryInstance3D.SHADOW_CASTING_SETTING_ON],
-					["Fabric", parts.fabric, GeometryInstance3D.SHADOW_CASTING_SETTING_OFF],
-					["Shadow", parts.shadow, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY]]:
+			var where: Dictionary = {}
+			for part: Array in [["Mesh", parts.solid, GeometryInstance3D.SHADOW_CASTING_SETTING_ON, "solid"],
+					["Fabric", parts.fabric, GeometryInstance3D.SHADOW_CASTING_SETTING_OFF, "fabric"],
+					["Shadow", parts.shadow, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY, "shadow"]]:
 				var mesh: ArrayMesh = part[1]
 				if mesh == null:
 					continue
 				var instance := MeshInstance3D.new()
 				instance.name = "%s__c%s" % [part[0], key]
+				where[part[3]] = str(instance.name)
 				instance.mesh = mesh
 				instance.layers = RENDER_WORLD_VISIBLE
 				instance.cast_shadow = part[2]
@@ -91,6 +111,21 @@ func build(document: Dictionary) -> Dictionary:
 				instance.set_meta("street_detail_layer", "fences")
 				group.add_child(instance)
 				meshes += 1
+			var landed: Dictionary = {}
+			for builder: String in parts.surfaces:
+				landed[builder] = []
+				for spot: Array in parts.surfaces[builder]:
+					if where.has(spot[0]):
+						(landed[builder] as Array).append([where[spot[0]], int(spot[1])])
+			placed[key] = landed
+		var bays: Dictionary = {}
+		for entry: Dictionary in bay_boxes:
+			var ranges: Array = []
+			for run: Array in entry.get("ranges", []):
+				for target: Array in (placed.get(run[0], {}) as Dictionary).get(run[1], []):
+					ranges.append([target[0], target[1], int(run[2]), int(run[3]) - int(run[2])])
+			bays[entry.key] = {"type": type, "params": (row.prop_params as Dictionary).duplicate(true), "a": entry.a, "b": entry.b, "seed": int(entry.seed), "ranges": ranges}
+		group.set_meta("fence_bays", bays)
 		if (fence as Dictionary).has("deck"):
 			root.add_child(group)
 			fences += 1
@@ -106,12 +141,14 @@ func build(document: Dictionary) -> Dictionary:
 		body.set_meta("street_detail_id", id)
 		body.set_meta("street_detail_kind", "fence")
 		body.set_meta("street_detail_ids", PackedStringArray([id]))
+		body.set_meta("breakable", bool((row.prop_params as Dictionary).get("breakable", true)))
 		for entry: Dictionary in bay_boxes:
 			var collision := CollisionShape3D.new()
 			collision.name = "Bay%d" % body.get_child_count()
 			collision.shape = _box_shape(box_shapes, entry.size)
 			collision.transform = entry.transform
 			collision.set_meta("street_detail_id", id)
+			collision.set_meta("fence_bay", entry.key)
 			body.add_child(collision)
 			boxes += 1
 		group.add_child(body)

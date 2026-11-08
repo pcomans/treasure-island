@@ -1,0 +1,11 @@
+{
+  "notes": "Places for game/tests/headless_vehicle_contract.gd in the generated world: a parked car by the ferry to get into, a run along Seven Seas Avenue, a clear lane off the west shore into the bay, and the open dirt lot at 12th Street and Avenue D for the roll. If the world moves one of them, re-aim it here.",
+  "enter": {"car": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_left_s0191"},
+  "route": {
+    "points_xz": [[41.2, 611.3], [0.6, 531.0], [-18.1, 494.1], [-25.4, 484.9], [-31.2, 475.1], [-50.9, 436.8], [-100.0, 341.6], [-108.3, 325.5], [-163.8, 216.1]],
+    "min_speed_mps": 20.0,
+    "time_s": 40.0
+  },
+  "plunge": {"start_xz": [-466.3, 52.8], "direction_xz": [-0.944, 0.329]},
+  "roll": {"at_xz": [-306.0, -232.0], "heading_xz": [-0.92, 0.39]}
+}

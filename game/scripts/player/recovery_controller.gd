@@ -102,6 +102,20 @@ func has_safe_transform() -> bool:
 	return _has_last_safe
 
 
+## Makes `at` the last safe place, where R and a fall bring the player back (the
+## spot beside a car the player got out of; game/scripts/vehicles/vehicle_manager.gd).
+## Only a place inside the playable outline counts.
+func mark_safe(at: Transform3D) -> void:
+	if not _configured or not _boundary.contains_position(at.origin):
+		return
+	_last_safe_transform = at
+	_has_last_safe = true
+	_candidate_transform = at
+	_candidate_seconds = 0.0
+	_lifted = false
+	_floating = false
+
+
 ## The edge's reset. The player keeps their x and z and rises boundary_lift_m
 ## above the higher of their own height and what lies below, with no velocity,
 ## so the controller's slow descent and air control take over. One who has

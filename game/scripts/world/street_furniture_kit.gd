@@ -2268,6 +2268,10 @@ class Builder:
 	func vertices(surface: int) -> PackedVector3Array:
 		return (_surfaces[surface].vertices as PackedVector3Array).duplicate()
 
+	## How many vertices one surface holds so far.
+	func vertex_count(surface: int) -> int:
+		return (_surfaces[surface].vertices as PackedVector3Array).size()
+
 	func commit(opaque: Material, lit: Material) -> ArrayMesh:
 		var mesh := ArrayMesh.new()
 		var materials := [opaque, lit]

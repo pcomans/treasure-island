@@ -28,6 +28,8 @@ export function buildStreetClutterKitGlb() {
 
 // One binary glTF of named meshes ({name, positions, normals, uvs, indices}),
 // one node each; also used for the yard kit (tools/build_street_yard_kit.mjs).
+// An entry {name, marker: true, translation: [x, y, z]} is an empty node at
+// that point (the drivable car's wheel centres).
 export function glbFromMeshes(meshes, { generator, scene }) {
   const chunks = [];
   let byteLength = 0;
@@ -51,6 +53,10 @@ export function glbFromMeshes(meshes, { generator, scene }) {
   const gltfMeshes = [];
   const nodes = [];
   for (const mesh of meshes) {
+    if (mesh.marker) {
+      nodes.push({ name: mesh.name, translation: mesh.translation.map((value) => Math.fround(value)) });
+      continue;
+    }
     const count = mesh.positions.length / 3;
     const min = [Infinity, Infinity, Infinity];
     const max = [-Infinity, -Infinity, -Infinity];
@@ -107,7 +113,7 @@ function main() {
   const target = resolve(projectRoot, STREET_CLUTTER_KIT_PATH);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, glb);
-  const triangles = meshes.map((mesh) => `${mesh.name} ${mesh.indices.length / 3}`).join(", ");
+  const triangles = meshes.filter((mesh) => !mesh.marker).map((mesh) => `${mesh.name} ${mesh.indices.length / 3}`).join(", ");
   console.log(`wrote ${STREET_CLUTTER_KIT_PATH} (${glb.length} bytes): ${triangles}`);
 }
 
