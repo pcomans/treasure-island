@@ -395,7 +395,7 @@ func _back_on_land(car: DRIVABLE_CAR, outward: Vector3, label: String) -> bool:
 		and _require(up >= cos(deg_to_rad(DRIVABLE_CAR.SAFE_TILT_DEG + 1.0)) and wheels == 4 and holding, "Back from %s the car must stand level on its four wheels, on its brakes (up %.4f, wheels %d, held %s)." % [label, up, wheels, holding]) \
 		and _require(forward.dot(outward) < 0.3, "Back from %s the car must face away from the water." % label) \
 		and _require(_player.is_driving() and _vehicles.active_car() == car, "Back from %s the player must be in the car." % label) \
-		and _require(drift < 0.05, "Back from %s the car moved %.3f m with nothing pressed." % [label, drift]) \
+		and _require(drift < 0.01, "Back from %s the car moved %.3f m with nothing pressed." % [label, drift]) \
 		and _require(gone.length() > 1.0 and gone.dot(outward) < 0.0, "Back from %s, W must drive it off inland (%.2f m)." % [label, gone.length()])
 
 

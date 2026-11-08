@@ -520,7 +520,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 				braking = true
 			else:
 				throttle = drive_input
-	# Just put back on land: on its brakes until settled and driven off.
+	# Just put back on land: held on its brakes until settled and driven off.
+	var held := false
 	if _holding:
 		_hold_s += dt
 		if _hold_s >= RESET_SETTLE_S and _grounded == 4 and velocity.length() < 0.2 and (absf(drive_input) > 0.1 or not occupied):
@@ -528,6 +529,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		else:
 			throttle = 0.0
 			braking = true
+			held = true
 	var hand := handbrake or not occupied
 	# Pass 1: each wheel's ray, compression and contact.
 	var travel := TRAVEL_BUMP_M + _droop
@@ -613,6 +615,14 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		if stopping > 0.0:
 			# Never more than stops the wheel's share this tick, so it can't reverse it.
 			longitudinal -= signf(v_long) * minf(stopping, absf(v_long) * quarter / dt)
+		if held:
+			# Held where it was put, the tyre grips like a parked one: it takes
+			# its share of the weight's pull along the ground as well as any
+			# slip, so the car does not creep down a gentle slope.
+			var pull := Vector3.DOWN * _gravity()
+			pull -= normal * pull.dot(normal)
+			longitudinal = -(v_long / dt + pull.dot(along)) * quarter
+			lateral = -(v_lat / dt + pull.dot(side)) * quarter
 		var tyre := Vector2(lateral, longitudinal)
 		var limit := grip * force
 		if tyre.length() > limit:
