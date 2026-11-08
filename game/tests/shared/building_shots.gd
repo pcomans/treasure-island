@@ -23,6 +23,8 @@ extends SceneTree
 ##   {"area": "NAME", "views": [{"name": "...", "player_xz": [x,z], "target_xyz": [x,y,z]}]}
 ##   with the same optional camera_xyz, fov, projection and ortho_size as --views.
 ##   Saved as street-NAME.png; taken with street detail on and off by default.
+##   A street view may add "reticle": false to hide the aiming reticle in its shots,
+##   where it would cover the subject at the screen's centre (a distant landmark).
 ##   A street view may add "moves": [{"hold": ["move_forward", "run"], "ticks": 60,
 ##   "turn_deg": 0}, ...] to drive the stock player with its real input actions
 ##   from where it settled, facing the target (turn_deg turns the camera, and so
@@ -360,10 +362,16 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 			break
 		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
 		var error := ""
+		var hide_reticle: bool = view.get("reticle", true) == false
+		if hide_reticle:
+			_h.hud.reticle.modulate.a = 0.0
 		if view.has("moves"):
 			error = await _moving_view(view, target, "%s/street-%s%s" % [out, name, suffix])
 		else:
 			error = await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
+		# The plants of a gallery keep it hidden while they stand.
+		if hide_reticle and not gallery.has("node"):
+			_h.hud.reticle.modulate.a = 1.0
 		if error == "" and view.has("measure_frames"):
 			error = await _measure_view(view, target, gallery)
 		if error != "":

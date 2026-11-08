@@ -130,6 +130,12 @@ import { writeGroundCoverMap } from "./lib/ground-cover-map.mjs";
 import { writeWaterShoreMap } from "./lib/water-shore-map.mjs";
 import { ferryTerminalDocument } from "./lib/ferry-terminal.mjs";
 import {
+  YBI_CONTINUATION_SOURCE_KEYS,
+  YBI_MATERIAL_KEYS,
+  buildYbiContext,
+  compareCodePoints,
+} from "./lib/ybi-context-generation.mjs";
+import {
   SHORELINE_OVERLAY_MATERIAL,
   SHORELINE_OVERLAY_PREFIX,
   WATER_Y_M,
@@ -291,7 +297,7 @@ function auditToolchain() {
 }
 
 function validateSourceLedger(rows) {
-  invariant(rows.length === EXPECTED_COUNTS.source_rows, `Expected 739 source ledger rows, found ${rows.length}`);
+  invariant(rows.length === EXPECTED_COUNTS.source_rows, `Expected ${EXPECTED_COUNTS.source_rows} source ledger rows, found ${rows.length}`);
   const requiredHeaders = [
     "source_key",
     "osm_type",
@@ -312,7 +318,7 @@ function validateSourceLedger(rows) {
   const playable = rows.filter((row) => row.scope === "playable");
   const context = rows.filter((row) => row.scope === "context");
   invariant(playable.length === EXPECTED_COUNTS.playable_rows, `Expected 735 playable rows, found ${playable.length}`);
-  invariant(context.length === EXPECTED_COUNTS.context_rows, `Expected 4 context rows, found ${context.length}`);
+  invariant(context.length === EXPECTED_COUNTS.context_rows, `Expected ${EXPECTED_COUNTS.context_rows} context rows, found ${context.length}`);
   invariant(rows.every((row) => row.derived_world_status === "not_started"), "Source ledger status drift");
   invariant(rows.every((row) => row.derived_object_key === ""), "Source ledger derived keys must remain empty");
   const memberships = {};
@@ -328,11 +334,14 @@ function validateSourceLedger(rows) {
     "Multi-category row count drift",
   );
   invariant(!playable.some((row) => row.source_key === YBI_SOURCE_KEY), "YBI leaked into playable ledger");
+  // The four context anchors, then Yerba Buena Island's detail rows (context_ybi_*).
+  const isYbiDetail = (row) => row.categories.split("|").every((category) => category.startsWith("context_ybi_"));
   invariant(
-    stableJson(context.map((row) => row.source_key).sort()) ===
+    stableJson(context.filter((row) => !isYbiDetail(row)).map((row) => row.source_key).sort()) ===
       stableJson([YBI_SOURCE_KEY, ...BRIDGE_SOURCE_KEYS].sort()),
     "Context key set drift",
   );
+  invariant(context.filter(isYbiDetail).length === EXPECTED_COUNTS.ybi_context_rows, "YBI context row count drift");
   return { playable, context, memberships };
 }
 
@@ -692,6 +701,42 @@ function terrainSupportFromChunks(chunks, east, north) {
     }
   }
   throw new Error(`No generated terrain triangle contains ${east},${north}`);
+}
+
+// The Treasure Island land surface's height at a point on (or within millimetres of)
+// its outline, for the YBI terrain's seam at the causeway: inside a land triangle its
+// plane, otherwise linearly along the nearest land triangle edge.
+function landSeamElevation(chunks) {
+  const triangles = [];
+  for (const chunk of chunks.values()) {
+    for (const record of chunk.records) {
+      if (record.feature_kind !== "land_ground") continue;
+      for (let offset = 0; offset < record.indices.length; offset += 3) {
+        triangles.push([0, 1, 2].map((k) => {
+          const index = record.indices[offset + k];
+          return [record.vertices[index * 3], record.vertices[index * 3 + 1], -record.vertices[index * 3 + 2]];
+        }));
+      }
+    }
+  }
+  return (east, north) => {
+    let best = null;
+    for (const triangle of triangles) {
+      for (let k = 0; k < 3; k += 1) {
+        const a = triangle[k];
+        const b = triangle[(k + 1) % 3];
+        const dx = b[0] - a[0];
+        const dn = b[2] - a[2];
+        const lengthSquared = dx * dx + dn * dn;
+        if (lengthSquared <= 0) continue;
+        const t = Math.max(0, Math.min(1, ((east - a[0]) * dx + (north - a[2]) * dn) / lengthSquared));
+        const distance = Math.hypot(east - a[0] - t * dx, north - a[2] - t * dn);
+        if (best == null || distance < best.distance) best = { distance, elevation: a[1] + (b[1] - a[1]) * t };
+      }
+    }
+    invariant(best && best.distance <= 0.05, `No Treasure Island land edge meets the YBI seam at ${east},${north}`);
+    return roundCoordinate(best.elevation);
+  };
 }
 
 function terrainElevationFromChunks(chunks, east, north) {
@@ -1741,14 +1786,30 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
   const ybiGeometry = differenceMultiPolygons(ybiSourceGeometry, boundary);
   roundingAreaAudit(ybiGeometry, "YBI context");
   invariant(ybiGeometry.length > 0, "YBI context is empty after TI subtraction");
-  const ybiTopMesh = griddedTerrainSurfaceMesh(
-    ybiGeometry,
-    TERRAIN_MESH_GRID_SIZE_M,
-    terrain.sampleTerrainEastNorth,
-    "YBI terrain context",
-  );
-  const ybiSideMesh = terrainSkirtMesh(ybiGeometry, terrain.sampleTerrainEastNorth, 0, "YBI shoreline sides");
-  const ybiMesh = mergeMeshes([ybiTopMesh, ybiSideMesh], "YBI terrain and shoreline sides");
+  // Yerba Buena Island's L1 scenery (tools/lib/ybi-context-generation.mjs): its terrain
+  // with ground cover, buildings, at-grade roads and paths, and vegetation, all
+  // non-colliding context. Where it meets Treasure Island at the causeway the terrain
+  // takes the land's own surface.
+  const ybiDetail = ledger.context.filter((joined) => joined.row.categories.split("|").every((category) => category.startsWith("context_ybi_")));
+  const playableJoined = new Map(ledger.playable.map((joined) => [joined.row.source_key, joined]));
+  const continuationSources = YBI_CONTINUATION_SOURCE_KEYS.map((sourceKey) => {
+    const object = playableObjects.get(sourceKey);
+    const joined = playableJoined.get(sourceKey);
+    invariant(object?.road_visual_class && joined?.exported, `${sourceKey} YBI continuation is not a playable road`);
+    return { row: joined.row, tags: joined.tags, exported: joined.exported, road_visual_class: object.road_visual_class };
+  });
+  const ybiContext = buildYbiContext({
+    projectRoot,
+    land: ybiGeometry,
+    boundary,
+    playableBoundary: playableBoundaryWithPiers(boundary, rawOsm),
+    sources: ybiDetail,
+    continuations: continuationSources,
+    rawSources,
+    terrain,
+    seamElevation: landSeamElevation(chunks),
+  });
+  const ybiMesh = ybiContext.terrainMesh;
 
   const west = byKey.get("w1011568818");
   invariant(west?.exported, "West Span area view is missing from raw export");
@@ -1798,7 +1859,16 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
       mesh: bridgeMesh,
     }), "bay_bridge"),
   ];
-  records.sort((left, right) => left.object_key.localeCompare(right.object_key));
+  for (const record of ybiContext.records) {
+    records.push(contextRecord(meshRecord({
+      objectKey: record.object_key,
+      featureKind: "context",
+      sourceKeys: record.source_keys,
+      materialKey: record.material_key,
+      mesh: record.mesh,
+    }), record.context_kind));
+  }
+  records.sort((left, right) => compareCodePoints(left.object_key, right.object_key));
   const boundaryAttachedVisuals = BOUNDARY_ATTACHED_SOURCE_KEYS.map((sourceKey) => {
     const object = playableObjects.get(sourceKey);
     invariant(object?.boundary_attached_visual, `${sourceKey} boundary-attached object is missing`);
@@ -1840,9 +1910,22 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
     object.physical_object_keys.add(record.object_key);
     boundaryAttachedVisuals.push(record);
   }
+  // The playable roads' and paths' runs past the outline onto YBI.
+  for (const visual of ybiContext.boundaryVisuals) {
+    const object = playableObjects.get(visual.source_keys[0]);
+    const record = contextRecord(meshRecord({
+      objectKey: visual.object_key,
+      featureKind: "context",
+      sourceKeys: visual.source_keys,
+      materialKey: visual.material_key,
+      mesh: visual.mesh,
+    }), visual.context_kind);
+    object.physical_object_keys.add(record.object_key);
+    boundaryAttachedVisuals.push(record);
+  }
   boundaryAttachedVisuals.sort((left, right) => left.object_key.localeCompare(right.object_key));
-  const objects = new Map();
-  for (const joined of ledger.context) {
+  const objects = new Map(ybiContext.objects);
+  for (const joined of ledger.context.filter((item) => !ybiDetail.includes(item))) {
     const isYbi = joined.row.source_key === YBI_SOURCE_KEY;
     const geometry = isYbi ? ybiGeometry : bridgeGeometry;
     const triangulationAudit = triangulationAreaAudit(geometry, `${joined.row.source_key}/context`);
@@ -1876,9 +1959,12 @@ function buildContext(ledger, boundary, rawOsm, rawSources, playableObjects, ter
       // The ferry float, gangway, dolphins and stop beyond the extract, drawn
       // as scenery by game/scripts/world/ferry_terminal.gd (tools/lib/ferry-terminal.mjs).
       ferry_terminal: ferryTerminalDocument(rawOsm, rawSources, boundary, WATER_Y_M),
+      ybi_ground_cover: ybiContext.groundCover,
+      ybi_vegetation: ybiContext.vegetation,
     },
     objects,
     member_way_count: memberWayIds.length,
+    ybi_report: ybiContext.report,
   };
 }
 
@@ -2145,6 +2231,10 @@ function coverageRows(allObjects, chunks, contextDocument) {
           ? "Exact-touch-only source polygon rendered as explicit non-colliding boundary-attached visual context"
           : PIER_DECK_SOURCE_KEYS.includes(object.row.source_key)
           ? "Pier deck past the island outline rendered as non-colliding boundary-attached visual context"
+          : YBI_CONTINUATION_SOURCE_KEYS.includes(object.row.source_key)
+          ? "Its run past the island outline onto Yerba Buena Island rendered as non-colliding boundary-attached visual context"
+          : object.row.scope === "context" && object.logical_key !== "context:ybi" && !BRIDGE_SOURCE_KEYS.includes(object.row.source_key)
+          ? "Yerba Buena Island L1 context; shares a non-colliding YBI composite"
           : object.row.source_key === ISLE_HOUSE_PARENT_KEY || ISLE_HOUSE_PART_KEYS.includes(object.row.source_key)
           ? "Isle House parent residual and parts share an explicit non-overlapping composite"
           : BRIDGE_SOURCE_KEYS.includes(object.row.source_key)
@@ -2225,7 +2315,7 @@ function validateFinalState(coverage, objects, chunks, context, memberships) {
   invariant(stableJson(memberships) === stableJson(CATEGORY_MEMBERSHIPS), "Coverage membership count drift");
   const heightCounts = { building: { osm_height: 0, osm_levels: 0, default_6m: 0 }, building_part: { osm_height: 0, osm_levels: 0, default_6m: 0 } };
   for (const object of objects.values()) {
-    if (!object.height) continue;
+    if (!object.height || object.row.scope !== "playable") continue;
     const group = object.roles.includes("building_part") ? "building_part" : "building";
     heightCounts[group][object.height.rule] += 1;
   }
@@ -2241,7 +2331,7 @@ function validateFinalState(coverage, objects, chunks, context, memberships) {
     }
   }
   for (const record of context.records) {
-    invariant(["ybi", "bay_bridge"].includes(record.context_kind), `${record.object_key} unknown context kind`);
+    invariant(["ybi", "ybi_building", "ybi_surface", "bay_bridge"].includes(record.context_kind), `${record.object_key} unknown context kind`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none", `${record.object_key} context collision/receiver leak`);
     validateMesh(record, record.object_key);
     physicalKeys.push(record.object_key);
@@ -2250,7 +2340,7 @@ function validateFinalState(coverage, objects, chunks, context, memberships) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} unknown boundary context kind`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none", `${record.object_key} boundary context semantics leak`);
     invariant(
-      [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS].includes(record.source_keys[0]) && record.source_keys.length === 1,
+      [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS, ...YBI_CONTINUATION_SOURCE_KEYS].includes(record.source_keys[0]) && record.source_keys.length === 1,
       `${record.object_key} invalid boundary-attached source ownership`,
     );
     validateMesh(record, record.object_key);
@@ -2420,7 +2510,8 @@ function main() {
     terrainDocument.building_foundations = chunks.foundation_audit;
 
     writeArtifact(stagingRoot, "coverage-ledger.csv", serializeCsv(coverage, COVERAGE_HEADERS));
-    writeArtifact(stagingRoot, "context.json", context.document);
+    // Number arrays on one line, like the chunks: YBI's terrain and surfaces are mostly mesh arrays.
+    writeArtifact(stagingRoot, "context.json", stableJsonInlineNumbers(context.document));
     writeArtifact(stagingRoot, "logical-objects.json", logicalObjects);
     writeArtifact(stagingRoot, "terrain.json", terrainDocument);
     // Compact, like the shoreline: planted beds make it mostly thousands of small rows.
@@ -2476,6 +2567,7 @@ function main() {
         })),
       },
       context_bridge_member_ways: context.member_way_count,
+      ybi_context: context.ybi_report,
       area_audit: areaAuditSummary,
       road_batch_quantization_audits: chunks.road_batch_audits,
       playable_surface_conformance: chunks.surface_conformance,
@@ -2493,9 +2585,9 @@ function main() {
     const validationReport = {
       schema_version: WORLD_SCHEMA,
       checks: [
-        { name: "source_rows", value: coverage.length, threshold: 739, result: "pass" },
-        { name: "playable_rows", value: 735, threshold: 735, result: "pass" },
-        { name: "context_rows", value: 4, threshold: 4, result: "pass" },
+        { name: "source_rows", value: coverage.length, threshold: EXPECTED_COUNTS.source_rows, result: "pass" },
+        { name: "playable_rows", value: EXPECTED_COUNTS.playable_rows, threshold: EXPECTED_COUNTS.playable_rows, result: "pass" },
+        { name: "context_rows", value: EXPECTED_COUNTS.context_rows, threshold: EXPECTED_COUNTS.context_rows, result: "pass" },
         { name: "unresolved_rows", value: 0, threshold: 0, result: "pass" },
         { name: "duplicate_source_keys", value: 0, threshold: 0, result: "pass" },
         { name: "building_height_rules", value: validation.heightCounts.building, threshold: { osm_height: 176, osm_levels: 10, default_6m: 27 }, result: "pass" },
@@ -2578,9 +2670,9 @@ function main() {
       boundary_source_key: PLAYABLE_BOUNDARY_SOURCE_KEY,
       chunk_size_m: CHUNK_SIZE_M,
       counts: {
-        source_rows: 739,
-        playable_rows: 735,
-        context_rows: 4,
+        source_rows: EXPECTED_COUNTS.source_rows,
+        playable_rows: EXPECTED_COUNTS.playable_rows,
+        context_rows: EXPECTED_COUNTS.context_rows,
         unresolved_rows: 0,
         duplicate_source_keys: 0,
         chunks: chunks.size,
@@ -2594,6 +2686,7 @@ function main() {
         "context_boundary_marina",
         "context_boundary_pier",
         "context_ybi",
+        ...YBI_MATERIAL_KEYS,
       ].sort(),
       feature_kinds: FEATURE_KINDS,
       coverage_ledger: coverageDescriptor,

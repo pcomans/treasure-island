@@ -68,7 +68,7 @@
       "terrain_shoreline": 22
     },
     "chunks": 38,
-    "context_rows": 4,
+    "context_rows": 418,
     "duplicate_source_keys": 0,
     "height_rules": {
       "building": {
@@ -82,11 +82,11 @@
         "osm_levels": 1
       }
     },
-    "physical_objects": 1003,
+    "physical_objects": 1023,
     "playable_rows": 735,
-    "source_rows": 739,
+    "source_rows": 1153,
     "status_totals": {
-      "composite_member": 9,
+      "composite_member": 423,
       "context": 1,
       "demolished": 14,
       "represented": 715
@@ -3497,5 +3497,93 @@
     }
   ],
   "schema_version": "ti.godot-world/2",
-  "validation": "pass"
+  "validation": "pass",
+  "ybi_context": {
+    "buildings": 94,
+    "canopy_cells": {
+      "grove": 27934,
+      "groves": 141,
+      "scrub": 25139,
+      "small": 2750
+    },
+    "continuation_visuals": 7,
+    "deck": {
+      "capped": 3,
+      "skipped": 17
+    },
+    "structure_clearance": {
+      "capped": 1,
+      "skipped": 0
+    },
+    "structures": [
+      {
+        "base_m": 97.155,
+        "dem_m": 97.016,
+        "height_m": 21.03,
+        "on_paving": true,
+        "radius_m": 3.5,
+        "rule": "osm_height",
+        "source_key": "w1232537986",
+        "tip_diameter_mm": 12.66,
+        "v_max": 7.009,
+        "world_xz": [
+          176.4,
+          1479.11
+        ]
+      }
+    ],
+    "surfaces": {
+      "basin_lining": {
+        "area_m2": 1801.72,
+        "sources": 1
+      },
+      "basin_water": {
+        "area_m2": 561.74,
+        "sources": 1
+      },
+      "construction": {
+        "area_m2": 7067.09,
+        "sources": 10
+      },
+      "paved": {
+        "area_m2": 15375.12,
+        "sources": 14
+      },
+      "pedestrian": {
+        "area_m2": 16318.01,
+        "sources": 170
+      },
+      "vehicle": {
+        "area_m2": 46578.8,
+        "sources": 74
+      }
+    },
+    "terrain": {
+      "clipped_cells": 1302,
+      "side_edges": 926,
+      "whole_cells": 8705
+    },
+    "vegetation": {
+      "near": 66,
+      "species": {
+        "acacia": 73,
+        "blue_gum": 1030,
+        "coast_live_oak": 79,
+        "garden_tree": 41,
+        "monterey_cypress": 189,
+        "monterey_pine": 83,
+        "scrub": 2500,
+        "toyon": 74,
+        "understory_acacia": 738,
+        "understory_oak": 689,
+        "willow": 19,
+        "wind_oak": 53
+      },
+      "total": 5568
+    },
+    "walls": {
+      "face_m2": 9529.66,
+      "sources": 51
+    }
+  }
 }

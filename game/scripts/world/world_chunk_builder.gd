@@ -54,6 +54,14 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+## Yerba Buena Island's ground (context:ybi): its own shader and cover map.
+const YBI_GROUND := preload("res://game/scripts/world/ybi_ground.gd")
+## YBI's photographed façades and its summit sculpture.
+const YBI_DETAIL := preload("res://game/scripts/world/ybi_detail_materials.gd")
+## YBI's L1 buildings' roofs: the generic provisional roof's quiet grey.
+const YBI_ROOF_KEY := "context_ybi_building_roof"
+const YBI_WATER_KEY := "context_ybi_water"
+const YBI_BANK_KEY := "context_ybi_bank"
 ## The shoreline riprap overlay (tools/lib/shoreline-generation.mjs): the band
 ## inside the outline is the dry dirt verge at the top of the riprap, in the
 ## ground cover family the shoreline's shoulder continues past the outline
@@ -242,7 +250,14 @@ const POLYHAVEN_MATERIAL_TEXTURE_SET := {
 	"major_area_court": "concrete_floor_03",
 	"street_parking": "clean_asphalt",
 	"street_gutter": "concrete_floor_03",
-	"context_ybi": "sparse_grass",
+	# Yerba Buena Island's L1 buildings and at-grade surfaces take Treasure Island's own.
+	"context_ybi_building_wall": "plaster_grey_04",
+	"context_ybi_road": "clean_asphalt",
+	"context_ybi_paved": "clean_asphalt",
+	"context_ybi_path": "concrete_pavement",
+	"context_ybi_construction": "concrete_floor_03",
+	"context_ybi_wall": "concrete_floor_03",
+	"context_ybi_bank": "concrete_floor_03",
 	"building_wall": "plaster_grey_04",
 	"building_part_wall": "plaster_grey_04",
 	"building_roof": "bitumen",
@@ -255,6 +270,7 @@ var _street_ground_materials: Dictionary = {}
 var _park_paving_materials: Dictionary = {}
 var _park_bed: ShaderMaterial
 var _generic_roof_material: StandardMaterial3D
+var _ybi_ground_material: ShaderMaterial
 
 
 func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
@@ -684,6 +700,11 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 		"shapes": 0,
 		"source_keys": {},
 	}
+	# YBI's terrain draws its ground-cover map (context.ybi_ground_cover).
+	_ybi_ground_material = YBI_GROUND.material(context.get("ybi_ground_cover", {}))
+	if _ybi_ground_material == null:
+		staging.free()
+		return {"ok": false, "code": "ybi_ground_cover", "message": "YBI ground-cover map is missing or malformed.", "source_keys": []}
 	var context_records: Array = context.records.duplicate()
 	context_records.append_array(context.boundary_attached_visuals)
 	for record_value: Variant in context_records:
@@ -864,6 +885,12 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _material_for("major_area_court", "major_area", false)
 	elif ground_family != "":
 		placeholder_material = GROUND_COVER.material(ground_family)
+	elif is_context and str(record.material_key) == "context_ybi" and _ybi_ground_material != null:
+		placeholder_material = _ybi_ground_material
+	elif is_context and YBI_DETAIL.is_detail_key(str(record.material_key)):
+		placeholder_material = YBI_DETAIL.material(str(record.material_key))
+		if placeholder_material == null:
+			return {"ok": false, "code": "ybi_detail_material", "message": "YBI detail record %s has no material." % str(record.object_key), "source_keys": record.source_keys}
 	else:
 		placeholder_material = _material_for(str(record.material_key), str(record.feature_kind), is_context)
 	# Quiet provisional finish for generated roof slabs only. Keep the authored
@@ -928,7 +955,7 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		mesh_instance.mesh = mesh
 		mesh_instance.layers = RENDER_BUILDING_WALL if str(record.receiver_kind) == "building_wall" else RENDER_WORLD_VISIBLE
 		mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
-			if str(record.feature_kind) in ["road_path", "major_area", "terrain_overlay", "street_paint"] \
+			if str(record.feature_kind) in ["road_path", "major_area", "terrain_overlay", "street_paint", "ybi_surface"] \
 			else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		root.add_child(mesh_instance)
 		mesh_instances = 1
@@ -1093,11 +1120,22 @@ func _material_for(material_key: String, feature_kind: String, is_context: bool)
 	# Context remains double-sided because it is distant, non-colliding scenery.
 	if is_context:
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
-	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved"]:
+	if feature_kind == "road_path" or material_key in ["street_parking", "major_area_paved", "context_ybi_road", "context_ybi_paved"]:
 		material.roughness = 1.0
 	# Asphalt only: pedestrian concrete keeps the default specular.
-	if material_key in ["road_path", "street_parking", "major_area_paved"]:
+	if material_key in ["road_path", "street_parking", "major_area_paved", "context_ybi_road", "context_ybi_paved"]:
 		material.metallic_specular = ASPHALT_SPECULAR
+	if material_key == YBI_ROOF_KEY:
+		material.albedo_color = Color(.62, .62, .59)
+		material.roughness = .96
+	if material_key == YBI_BANK_KEY:
+		# Weathered concrete, matte.
+		material.roughness = 1.0
+		material.metallic_specular = ASPHALT_SPECULAR
+	if material_key == YBI_WATER_KEY:
+		# The summit reservoir's still, algae-green water (the 2026-05-26 aerial).
+		material.albedo_color = Color(.19, .24, .16)
+		material.roughness = .2
 	if material_key == "context_bay_bridge":
 		var palette := Image.create(BAY_BRIDGE_PALETTE.size(), 1, false, Image.FORMAT_RGB8)
 		for index in BAY_BRIDGE_PALETTE.size():
@@ -1148,8 +1186,27 @@ func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
 			# Gutter pans: smoother, slightly darker concrete; cooled so the
 			# warm source map does not read pink beside the asphalt.
 			return Color(0.84, 0.92, 0.98)
-		"context_ybi":
-			return Color("d2d8cb")
+		"context_ybi_road", "context_ybi_paved":
+			return Color(1.04, 1.05, 1.05)
+		"context_ybi_path":
+			# Light, slightly warm concrete paths and plazas (the summit plaza round the
+			# sculpture in the 2025-05-27 close photo), lighter than Treasure Island's own
+			# so the distant haze does not turn them slate.
+			return Color(1.30, 1.33, 1.33)
+		"context_ybi_construction":
+			# Graded gravel of the west shore works, paler and warmer than a court.
+			return Color(1.0, 0.95, 0.84)
+		"context_ybi_building_wall":
+			return Color("f7f2eb")
+		"context_ybi_wall":
+			# Weathered mid-grey concrete: the retaining walls along Macalla Road and the
+			# ramps, the summit plaza's parapets and the summit reservoir's banks (the
+			# 2025-05-27 photo from Treasure Island's west shore).
+			return Color(0.88, 0.99, 1.10)
+		"context_ybi_bank":
+			# The summit reservoir's banks: weathered dark grey concrete (the 2025-05-27
+			# profile from Treasure Island's west shore).
+			return Color(0.6, 0.68, 0.77)
 		"building_wall", "building_part_wall":
 			return Color("f7f2eb")
 		"building_roof", "building_part_roof":

@@ -4,15 +4,21 @@ extends RefCounted
 const MANIFEST_SCHEMA := "ti.godot-world/2"
 const CHUNK_SCHEMA := "ti.godot-world-chunk/2"
 const CONTEXT_SCHEMA := "ti.godot-world-context/3"
-const EXPECTED_SOURCE_ROWS := 739
+const EXPECTED_SOURCE_ROWS := 1153
 const EXPECTED_PLAYABLE_ROWS := 735
-const EXPECTED_CONTEXT_ROWS := 4
+## The four context anchors (YBI and three Bay Bridge) and Yerba Buena Island's
+## detail rows (context_ybi_* categories: its buildings, parts, a structure,
+## at-grade roads and paths, paved areas and walls), owner direction 2026-11-07.
+const EXPECTED_CONTEXT_ROWS := 418
+const EXPECTED_YBI_CONTEXT_ROWS := 414
 const EXPECTED_CHUNK_SIZE_M := 256.0
 const ROAD_BASE_SURFACE_BIAS_M := 0.078
 const ROAD_PEDESTRIAN_SURFACE_BIAS_M := 0.08
 const STREET_DETAIL_SCHEMA := "ti.street-detail/1"
 const STREET_FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 const STREET_VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
+const YBI_VEGETATION := preload("res://game/scripts/world/ybi_vegetation_builder.gd")
+const YBI_GROUND := preload("res://game/scripts/world/ybi_ground.gd")
 ## The switchable street-detail layers, in PlayableWorld/StreetDetail node order.
 const STREET_DETAIL_LAYERS := ["vegetation", "furniture", "fences", "clutter"]
 ## Rows of the ground layer feed the always-on chunk surfaces.
@@ -69,7 +75,29 @@ const FEATURE_KINDS := [
 	"street_paint",
 	"terrain_overlay",
 ]
-const CONTEXT_KINDS := ["bay_bridge", "ybi"]
+const CONTEXT_KINDS := ["bay_bridge", "ybi", "ybi_building", "ybi_surface"]
+const YBI_CONTEXT_CATEGORIES := ["context_ybi_building", "context_ybi_building_part", "context_ybi_road", "context_ybi_paved_area", "context_ybi_structure", "context_ybi_wall", "context_ybi_water"]
+## Yerba Buena Island's detail records: each a composite of its YBI detail sources.
+const YBI_DETAIL_RECORDS := {
+	# The summit reservoir's water and its concrete lining.
+	"context:ybi-basin": {"context_kind": "ybi_surface", "material_key": "context_ybi_water"},
+	"context:ybi-basin-lining": {"context_kind": "ybi_surface", "material_key": "context_ybi_bank"},
+	# The three photographed buildings' banded façades and the summit sculpture.
+	"context:ybi-buildings:facade:w1228080320": {"context_kind": "ybi_building", "material_key": "context_ybi_facade_cove"},
+	"context:ybi-buildings:facade:w1228080322": {"context_kind": "ybi_building", "material_key": "context_ybi_facade_meadow"},
+	"context:ybi-buildings:facade:w813225688": {"context_kind": "ybi_building", "material_key": "context_ybi_facade_bristol"},
+	"context:ybi-buildings:roof": {"context_kind": "ybi_building", "material_key": "context_ybi_building_roof"},
+	"context:ybi-buildings:spire": {"context_kind": "ybi_building", "material_key": "context_ybi_spire"},
+	"context:ybi-buildings:wall": {"context_kind": "ybi_building", "material_key": "context_ybi_building_wall"},
+	"context:ybi-construction": {"context_kind": "ybi_surface", "material_key": "context_ybi_construction"},
+	"context:ybi-paths": {"context_kind": "ybi_surface", "material_key": "context_ybi_path"},
+	"context:ybi-paved": {"context_kind": "ybi_surface", "material_key": "context_ybi_paved"},
+	"context:ybi-roads": {"context_kind": "ybi_surface", "material_key": "context_ybi_road"},
+	"context:ybi-walls": {"context_kind": "ybi_building", "material_key": "context_ybi_wall"},
+}
+## Playable roads and paths whose frozen ways run on from the causeway onto YBI: their
+## run past the outline is boundary-attached context drawn as YBI's road or path.
+const YBI_CONTINUATION_SOURCE_KEYS := ["w1115934722", "w1212173456", "w1248964738", "w1248964740", "w1248964743", "w1249797943", "w1472754371"]
 const BOUNDARY_ATTACHED_SOURCE_KEYS := ["w319406837", "w644986117"]
 ## Piers reaching out over the water past the island outline: their part on the
 ## island is a playable overlay, and the deck beyond it a visual-only
@@ -127,11 +155,11 @@ const REQUIRED_SOURCE_ARTIFACTS := {
 	},
 	"source_ledger": {
 		"path": "data/osm/treasure-island-source-inventory.csv",
-		"sha256": "fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb",
+		"sha256": "ecc1d3f0b73ab9902654f8f89253152443d8aaa2460c98467dfb863c76f98405",
 	},
 	"source_summary": {
 		"path": "data/osm/treasure-island-source-inventory-summary.json",
-		"sha256": "49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7",
+		"sha256": "13a53c85dfd5ccdb54ba65d5014dd60d704fd9b96a3885bced79843872d5421a",
 	},
 	"terrain_dem": {
 		"path": "data/terrain/treasure-island-ybi-usgs-3dep-2023.tif",
@@ -146,7 +174,7 @@ const COVERAGE_HEADERS := [
 ]
 const CHUNK_FIELDS := ["bounds_m", "chunk_id", "records", "schema_version"]
 const CHUNK_BOUNDS_FIELDS := ["max_x", "max_z", "min_x", "min_z"]
-const CONTEXT_FIELDS := ["boundary_attached_visuals", "ferry_terminal", "records", "schema_version"]
+const CONTEXT_FIELDS := ["boundary_attached_visuals", "ferry_terminal", "records", "schema_version", "ybi_ground_cover", "ybi_vegetation"]
 ## The ferry terminal's scenery beyond the extract (owner decisions 2026-11-07;
 ## tools/lib/ferry-terminal.mjs): the float, gangway, mooring dolphins, stop and
 ## the breakwater off it, drawn by game/scripts/world/ferry_terminal.gd. Not
@@ -319,7 +347,7 @@ static func _validate_manifest_shape(manifest: Dictionary) -> Dictionary:
 	or int(counts.get("context_rows", -1)) != EXPECTED_CONTEXT_ROWS \
 	or int(counts.get("unresolved_rows", -1)) != 0 \
 	or int(counts.get("duplicate_source_keys", -1)) != 0:
-		return _failure("manifest_coverage_counts", "Manifest must declare 735 playable + 4 context rows, with zero unresolved or duplicate rows.")
+		return _failure("manifest_coverage_counts", "Manifest must declare %d playable + %d context rows, with zero unresolved or duplicate rows." % [EXPECTED_PLAYABLE_ROWS, EXPECTED_CONTEXT_ROWS])
 	if not counts.get("category_memberships", null) is Dictionary:
 		return _failure("manifest_memberships", "Manifest category membership counts are missing.")
 	for category_value: Variant in EXPECTED_MEMBERSHIPS.keys():
@@ -1167,6 +1195,7 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 	for key_value: Variant in EXPECTED_MEMBERSHIPS.keys():
 		membership_counts[str(key_value)] = 0
 	var context_keys: Array[String] = []
+	var ybi_context_keys: Array[String] = []
 	var multi_category_keys: Array[String] = []
 	var derived_groups: Dictionary = {}
 	var derived_group_composites: Dictionary = {}
@@ -1202,6 +1231,7 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 			return _failure("coverage_demolished", "Demolished building %s keeps geometry or is not a standalone building." % source_key, [source_key])
 		if scope == "playable" and status != "represented" and status != "composite_member" and not is_demolished:
 			return _failure("coverage_unresolved", "Playable source %s is not represented." % source_key, [source_key])
+		var ybi_detail := scope == "context" and _is_ybi_detail_categories(str(row.categories))
 		if scope == "context":
 			var expected_context_status := "context" if source_key == "w26767311" else "composite_member"
 			if status != expected_context_status:
@@ -1226,7 +1256,7 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 			return _failure("coverage_categories", "Coverage categories must be unique and sorted for %s." % source_key, [source_key])
 		for category: String in categories:
 			if scope == "context":
-				if category != "context_island" and category != "context_bridge":
+				if category != "context_island" and category != "context_bridge" and not YBI_CONTEXT_CATEGORIES.has(category):
 					return _failure("coverage_categories", "Context row %s has unknown category %s." % [source_key, category], [source_key])
 			elif not membership_counts.has(category):
 				return _failure("coverage_categories", "Coverage row %s has unknown category %s." % [source_key, category], [source_key])
@@ -1236,10 +1266,12 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 			multi_category_keys.append(source_key)
 		elif scope == "playable" and categories.size() > 2:
 			return _failure("coverage_categories", "Playable source %s has more than two categories." % source_key, [source_key])
-		var rule_result := _count_dimension_rule(row, categories, building_rules, part_rules)
+		var rule_result := _count_ybi_dimension_rule(row, categories) if ybi_detail else _count_dimension_rule(row, categories, building_rules, part_rules)
 		if not rule_result.ok:
 			return rule_result
-		if scope == "context":
+		if ybi_detail:
+			ybi_context_keys.append(source_key)
+		elif scope == "context":
 			context_keys.append(source_key)
 		elif str(row.chunk_ids).is_empty() and not BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key) and not is_demolished:
 			return _failure("coverage_chunks", "Playable row %s has no chunk reference." % source_key, [source_key])
@@ -1261,13 +1293,14 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 		rows.append(row)
 	file.close()
 	if rows.size() != EXPECTED_SOURCE_ROWS:
-		return _failure("coverage_count", "Coverage ledger must contain exactly 739 rows.")
+		return _failure("coverage_count", "Coverage ledger must contain exactly %d rows." % EXPECTED_SOURCE_ROWS)
 	var playable_count := 0
 	for scope_value: Variant in source_scopes.values():
 		if scope_value == "playable":
 			playable_count += 1
-	if playable_count != EXPECTED_PLAYABLE_ROWS or context_keys.size() != EXPECTED_CONTEXT_ROWS:
-		return _failure("coverage_count", "Coverage ledger must contain 735 playable and 4 context rows.")
+	if playable_count != EXPECTED_PLAYABLE_ROWS or context_keys.size() + ybi_context_keys.size() != EXPECTED_CONTEXT_ROWS \
+	or ybi_context_keys.size() != EXPECTED_YBI_CONTEXT_ROWS:
+		return _failure("coverage_count", "Coverage ledger must contain %d playable and %d context rows (%d of them YBI detail)." % [EXPECTED_PLAYABLE_ROWS, EXPECTED_CONTEXT_ROWS, EXPECTED_YBI_CONTEXT_ROWS])
 	context_keys.sort()
 	if context_keys != CONTEXT_SOURCE_KEYS:
 		return _failure("coverage_context_keys", "Coverage context anchors do not match the exact four-source contract.", context_keys)
@@ -1287,7 +1320,10 @@ static func _read_and_validate_coverage(path: String, demolished: Dictionary) ->
 		var derived_key := str(derived_value)
 		var group: Array = derived_groups[derived_key]
 		if group.size() > 1:
-			if not _is_approved_shared_group(group):
+			var ybi_group := derived_key.begins_with("context:ybi-")
+			for member: Variant in group:
+				ybi_group = ybi_group and ybi_context_keys.has(str(member))
+			if not ybi_group and not _is_approved_shared_group(group):
 				return _failure("coverage_composite", "An undocumented group shares one derived object.", group)
 			var composite_keys := _sorted_unique_strings(derived_group_composites[derived_key])
 			if composite_keys.size() != 1 or str(composite_keys[0]) != derived_key:
@@ -1374,13 +1410,19 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 	or not context.get("records", null) is Array \
 	or not context.get("boundary_attached_visuals", null) is Array:
 		return _failure("context_schema", "Context file schema is invalid.")
-	if context.records.size() != 2:
-		return _failure("context_count", "Context must contain exactly one YBI and one Bay Bridge record.")
+	# One YBI terrain record and one Bay Bridge record, the context anchors', and since the
+	# owner's YBI L1 direction (2026-11-07) Yerba Buena Island's detail records: its
+	# buildings' walls and roofs and its at-grade surfaces, each a composite of YBI
+	# detail sources.
+	if context.records.size() != 2 + YBI_DETAIL_RECORDS.size():
+		return _failure("context_count", "Context must contain one YBI terrain, one Bay Bridge and %d YBI detail records." % YBI_DETAIL_RECORDS.size())
 	var ferry_result := _validate_ferry_terminal(context.get("ferry_terminal", null))
 	if not ferry_result.ok:
 		return ferry_result
 	var kinds_seen: Dictionary = {}
 	var prior_main_object_key := ""
+	var ybi_terrain: Dictionary = {}
+	var anchors_seen: Dictionary = {}
 	for record_value: Variant in context.records:
 		if not record_value is Dictionary:
 			return _failure("context_record", "Context contains a non-object record.")
@@ -1398,29 +1440,54 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		prior_main_object_key = main_object_key
 		if str(record.get("collision_kind", "")) != "none" or str(record.get("receiver_kind", "")) != "none" or bool(record.get("opaque", true)):
 			return _failure("context_isolation", "Context record %s has gameplay collision or receiver semantics." % str(record.get("object_key", "")))
-		if str(record.context_kind) == "ybi":
+		var kind := str(record.context_kind)
+		if main_object_key == "context:ybi":
 			var minimum_elevation := INF
 			var maximum_elevation := -INF
 			for vertex_index in range(1, record.vertices.size(), 3):
 				var elevation := float(record.vertices[vertex_index])
 				minimum_elevation = minf(minimum_elevation, elevation)
 				maximum_elevation = maxf(maximum_elevation, elevation)
+			if kind != "ybi" or str(record.material_key) != "context_ybi" or record.source_keys != ["w26767311"]:
+				return _failure("context_sources", "The YBI terrain record has incorrect kind, material or anchor ownership.", record.source_keys)
 			if not is_equal_approx(minimum_elevation, 0.0) or maximum_elevation < 100.0:
 				return _failure("context_terrain", "YBI must retain USGS high ground and shoreline sides meeting the waterline.", record.source_keys)
-		elif str(record.get("material_key", "")) != "context_bay_bridge":
-			return _failure("context_bridge_material", "Bay Bridge context material key drifted.", record.source_keys)
-		var expected_sources := ["w26767311"] if str(record.context_kind) == "ybi" else ["r13543937", "r13543938", "w1011568818"]
-		if record.source_keys != expected_sources:
-			return _failure("context_sources", "Context record %s has incorrect anchor ownership." % str(record.object_key), record.source_keys)
-		kinds_seen[str(record.context_kind)] = true
+			ybi_terrain = record
+		elif main_object_key == "context:bay-bridge":
+			if kind != "bay_bridge" or str(record.get("material_key", "")) != "context_bay_bridge":
+				return _failure("context_bridge_material", "Bay Bridge context material key drifted.", record.source_keys)
+			if record.source_keys != ["r13543937", "r13543938", "w1011568818"]:
+				return _failure("context_sources", "Context record %s has incorrect anchor ownership." % main_object_key, record.source_keys)
+		elif YBI_DETAIL_RECORDS.has(main_object_key):
+			var expected: Dictionary = YBI_DETAIL_RECORDS[main_object_key]
+			if kind != str(expected.context_kind) or str(record.material_key) != str(expected.material_key):
+				return _failure("context_ybi_record", "YBI detail record %s has the wrong kind or material." % main_object_key)
+			for key_value: Variant in record.source_keys:
+				if CONTEXT_SOURCE_KEYS.has(str(key_value)):
+					return _failure("context_ybi_record", "YBI detail record %s claims a context anchor." % main_object_key, [str(key_value)])
+		else:
+			return _failure("context_record", "Unknown context record %s." % main_object_key)
+		kinds_seen[kind] = true
 		for key_value: Variant in record.source_keys:
 			represented_context[str(key_value)] = true
+			if CONTEXT_SOURCE_KEYS.has(str(key_value)):
+				anchors_seen[str(key_value)] = true
 	if not kinds_seen.has("ybi") or not kinds_seen.has("bay_bridge"):
 		return _failure("context_completeness", "Context must contain both YBI and Bay Bridge geometry.")
-	var context_keys := _sorted_strings(represented_context.keys())
-	if context_keys != CONTEXT_SOURCE_KEYS:
-		return _failure("context_sources", "Context geometry must resolve exactly the four context anchors.", context_keys)
-	var boundary_visual_sources: Array = BOUNDARY_ATTACHED_SOURCE_KEYS + PIER_DECK_SOURCE_KEYS
+	var anchor_keys := _sorted_strings(anchors_seen.keys())
+	if anchor_keys != CONTEXT_SOURCE_KEYS:
+		return _failure("context_sources", "Context geometry must resolve exactly the four context anchors.", anchor_keys)
+	if represented_context.size() != EXPECTED_CONTEXT_ROWS:
+		return _failure("context_sources", "Context geometry must resolve every context row: %d of %d." % [represented_context.size(), EXPECTED_CONTEXT_ROWS])
+	# YBI's ground-cover map must decode, and its vegetation (the owner's YBI L1
+	# direction: trees and scrub on YBI, never on Treasure Island's street detail)
+	# must stand on YBI's own terrain.
+	if YBI_GROUND.cover_bytes(context.get("ybi_ground_cover", null)).is_empty():
+		return _failure("context_ybi_ground", "YBI's ground-cover map is missing or malformed.")
+	var vegetation_result := _validate_ybi_vegetation(context.get("ybi_vegetation", null), ybi_terrain)
+	if not vegetation_result.ok:
+		return vegetation_result
+	var boundary_visual_sources: Array = BOUNDARY_ATTACHED_SOURCE_KEYS + PIER_DECK_SOURCE_KEYS + YBI_CONTINUATION_SOURCE_KEYS
 	boundary_visual_sources.sort()
 	if context.boundary_attached_visuals.size() != boundary_visual_sources.size():
 		return _failure("boundary_visual_count", "Context must contain exactly the approved boundary-attached visuals and pier decks.")
@@ -1440,6 +1507,10 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 			expected = BOUNDARY_ATTACHED_OBJECTS[source_key]
 		elif PIER_DECK_SOURCE_KEYS.has(source_key):
 			expected = {"object_key": "boundary_context:%s" % source_key, "material_key": "context_boundary_pier"}
+		elif YBI_CONTINUATION_SOURCE_KEYS.has(source_key):
+			# A road's or path's run onto YBI, drawn as YBI's own road or path.
+			var continuation_material := str(record.get("material_key", ""))
+			expected = {"object_key": "boundary_context:%s" % source_key, "material_key": continuation_material if continuation_material in ["context_ybi_road", "context_ybi_path"] else "context_ybi_road"}
 		else:
 			return _failure("boundary_visual_source", "Unapproved out-of-bound playable source %s." % source_key, [source_key])
 		var object_key := str(record.get("object_key", ""))
@@ -1512,6 +1583,35 @@ static func _validate_ferry_terminal(section: Variant) -> Dictionary:
 	var reach := Vector2(float(breakwater.line_xz[0][0]), float(breakwater.line_xz[0][1])).distance_to(Vector2(float(breakwater.line_xz[1][0]), float(breakwater.line_xz[1][1])))
 	if reach < 150.0 or reach > 260.0:
 		return _failure("ferry_terminal_breakwater", "Breakwater is not about 207 m long.", [FERRY_BREAKWATER_SOURCE_KEY])
+	return {"ok": true}
+
+
+## YBI's trees and scrub: a well-formed ybi_vegetation document whose every foot stands
+## on the YBI terrain record (inside its top's plan, and at most 1.3 m below and 0.05 m
+## above its surface there: a foot rests on the lowest ground round its trunk).
+## YBI's plants against its terrain, cheaply on every load: the document's shape and
+## ranges (the builder's own check) and each foot within the terrain's plan and height
+## bounds. The full proof that every foot rests on the terrain triangle under it runs
+## where it costs nothing at load: tools/validate_godot_world.mjs (in tools/test.sh).
+static func _validate_ybi_vegetation(document: Variant, terrain: Dictionary) -> Dictionary:
+	var problem := YBI_VEGETATION.document_error(document)
+	if problem != "":
+		return _failure("context_ybi_vegetation", problem)
+	if terrain.is_empty():
+		return _failure("context_ybi_vegetation", "YBI's vegetation has no terrain record to stand on.")
+	var vertices := PackedFloat32Array(terrain.vertices)
+	var low := Vector3(INF, INF, INF)
+	var high := Vector3(-INF, -INF, -INF)
+	for index in range(0, vertices.size(), 3):
+		var vertex := Vector3(vertices[index], vertices[index + 1], vertices[index + 2])
+		low = low.min(vertex)
+		high = high.max(vertex)
+	for row: Array in (document as Dictionary).instances:
+		var x := float(row[2])
+		var y := float(row[3])
+		var z := float(row[4])
+		if x < low.x or x > high.x or z < low.z or z > high.z or y < low.y - 1.3 or y > high.y + 0.05:
+			return _failure("context_ybi_vegetation", "A YBI plant at (%.2f, %.2f) stands off YBI's terrain." % [x, z])
 	return {"ok": true}
 
 
@@ -1661,7 +1761,7 @@ static func _validate_coverage_references(rows: Array, record_keys: Dictionary, 
 		if scope == "playable" and BOUNDARY_ATTACHED_SOURCE_KEYS.has(source_key):
 			if _sorted_strings(referenced_chunks.keys()) != ["boundary_context"] or not chunks.is_empty():
 				return _failure("coverage_boundary_reference", "Boundary-attached source %s has invalid part/chunk references." % source_key, [source_key])
-		elif scope == "playable" and PIER_DECK_SOURCE_KEYS.has(source_key):
+		elif scope == "playable" and (PIER_DECK_SOURCE_KEYS.has(source_key) or YBI_CONTINUATION_SOURCE_KEYS.has(source_key)):
 			# Its playable chunks plus the deck past the outline.
 			if not referenced_chunks.erase("boundary_context") or chunks.is_empty() \
 			or _sorted_chunk_ids(_string_array(referenced_chunks.keys())) != chunks:
@@ -1892,6 +1992,32 @@ static func _count_dimension_rule(row: Dictionary, categories: Array[String], bu
 	if is_part:
 		part_rules[dimension_rule] += 1
 	return {"ok": true}
+
+
+## A YBI building, part or structure row carries its own L1 height rule (OSM height or
+## levels, or a labelled inference); YBI's other rows carry none. They never count
+## toward Treasure Island's building totals.
+static func _count_ybi_dimension_rule(row: Dictionary, categories: Array[String]) -> Dictionary:
+	var massing := categories.has("context_ybi_building") or categories.has("context_ybi_building_part") or categories.has("context_ybi_structure")
+	var dimension_rule := str(row.dimension_rule)
+	var height_text := str(row.height_m)
+	if not massing:
+		if not dimension_rule.is_empty() or not height_text.is_empty():
+			return _failure("coverage_dimensions", "YBI source %s carries a building dimension." % str(row.source_key), [str(row.source_key)])
+		return {"ok": true}
+	if not (dimension_rule in ["osm_height", "osm_levels"] or dimension_rule.begins_with("inferred_")) or not height_text.is_valid_float() or float(height_text) <= 0.0:
+		return _failure("coverage_dimensions", "YBI massing source %s has an invalid height rule/value." % str(row.source_key), [str(row.source_key)])
+	return {"ok": true}
+
+
+static func _is_ybi_detail_categories(categories_text: String) -> bool:
+	var categories := _split_semicolon(categories_text)
+	if categories.is_empty():
+		return false
+	for category: String in categories:
+		if not YBI_CONTEXT_CATEGORIES.has(category):
+			return false
+	return true
 
 
 static func _is_approved_shared_group(group: Array) -> bool:

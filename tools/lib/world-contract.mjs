@@ -23,13 +23,13 @@ export const SOURCE_CONTRACT = Object.freeze({
   }),
   source_ledger: Object.freeze({
     path: "data/osm/treasure-island-source-inventory.csv",
-    sha256: "fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb",
-    bytes: 195_590,
+    sha256: "ecc1d3f0b73ab9902654f8f89253152443d8aaa2460c98467dfb863c76f98405",
+    bytes: 366_721,
   }),
   source_summary: Object.freeze({
     path: "data/osm/treasure-island-source-inventory-summary.json",
-    sha256: "49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7",
-    bytes: 1_220,
+    sha256: "13a53c85dfd5ccdb54ba65d5014dd60d704fd9b96a3885bced79843872d5421a",
+    bytes: 1_704,
   }),
   terrain_dem: Object.freeze({
     path: "data/terrain/treasure-island-ybi-usgs-3dep-2023.tif",
@@ -98,9 +98,13 @@ export const CATEGORY_MEMBERSHIPS = Object.freeze({
 });
 
 export const EXPECTED_COUNTS = Object.freeze({
-  source_rows: 739,
+  source_rows: 1153,
   playable_rows: 735,
-  context_rows: 4,
+  // The four context anchors (YBI and three Bay Bridge) and Yerba Buena Island's
+  // 414 detail rows (buildings, parts, a structure, at-grade roads, paved areas, walls
+  // and the summit reservoir).
+  context_rows: 418,
+  ybi_context_rows: 414,
   multi_category_playable_rows: 10,
 });
 

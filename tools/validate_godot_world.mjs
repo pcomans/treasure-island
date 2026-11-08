@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
+import { inflateSync } from "node:zlib";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -37,6 +38,17 @@ import {
 } from "./lib/world-contract.mjs";
 import { validateMesh } from "./lib/mesh-output.mjs";
 import { validateFerryTerminal } from "./lib/ferry-terminal.mjs";
+import {
+  YBI_BASIN_RECORDS,
+  YBI_BUILDINGS_KEY,
+  YBI_CONTINUATION_SOURCE_KEYS,
+  YBI_GROUND_COVER_SCHEMA,
+  YBI_LAND_COVER_GRID,
+  YBI_SURFACE_RECORDS,
+  YBI_VEGETATION_LIMITS,
+  YBI_VEGETATION_SCHEMA,
+  YBI_WALLS_KEY,
+} from "./lib/ybi-context-generation.mjs";
 import {
   differenceMultiPolygons,
   geometryToMultiPolygon,
@@ -195,7 +207,7 @@ function validateCoverage(worldRoot, manifest) {
   invariant(!text.includes("unresolved"), "Coverage ledger contains unresolved text");
   const rows = parseCsv(text);
   invariant(stableJson(Object.keys(rows[0])) === stableJson(COVERAGE_HEADERS), "Coverage headers drifted");
-  invariant(rows.length === EXPECTED_COUNTS.source_rows, `Expected 739 coverage rows, found ${rows.length}`);
+  invariant(rows.length === EXPECTED_COUNTS.source_rows, `Expected ${EXPECTED_COUNTS.source_rows} coverage rows, found ${rows.length}`);
   invariant(new Set(rows.map((row) => row.source_key)).size === rows.length, "Coverage has duplicate source keys");
   invariant(rows.filter((row) => row.scope === "playable").length === EXPECTED_COUNTS.playable_rows, "Playable coverage count drift");
   invariant(rows.filter((row) => row.scope === "context").length === EXPECTED_COUNTS.context_rows, "Context coverage count drift");
@@ -302,16 +314,43 @@ function validateRecords(worldRoot, manifest, coverage) {
   const context = JSON.parse(readFileSync(resolve(worldRoot, manifest.context.path), "utf8"));
   invariant(context.schema_version === CONTEXT_SCHEMA, "Context schema mismatch");
   invariant(
-    stableJson(Object.keys(context).sort()) === stableJson(["boundary_attached_visuals", "ferry_terminal", "records", "schema_version"]),
+    stableJson(Object.keys(context).sort()) === stableJson(["boundary_attached_visuals", "ferry_terminal", "records", "schema_version", "ybi_ground_cover", "ybi_vegetation"]),
     "Context has missing or unknown sections",
   );
   validateFerryTerminal(context.ferry_terminal);
-  invariant(context.records.length === 2, `Expected 2 context records, found ${context.records.length}`);
+  // The YBI terrain and Bay Bridge anchors, and Yerba Buena Island's detail composites
+  // (its buildings' walls and roofs and its at-grade surfaces, owner direction 2026-11-07).
+  const ybiDetailRecords = new Map([
+    [`${YBI_BUILDINGS_KEY}:roof`, "context_ybi_building_roof"],
+    [`${YBI_BUILDINGS_KEY}:wall`, "context_ybi_building_wall"],
+    [`${YBI_BUILDINGS_KEY}:facade:w813225688`, "context_ybi_facade_bristol"],
+    [`${YBI_BUILDINGS_KEY}:facade:w1228080320`, "context_ybi_facade_cove"],
+    [`${YBI_BUILDINGS_KEY}:facade:w1228080322`, "context_ybi_facade_meadow"],
+    [`${YBI_BUILDINGS_KEY}:spire`, "context_ybi_spire"],
+    [YBI_WALLS_KEY, "context_ybi_wall"],
+    ...Object.values(YBI_SURFACE_RECORDS).map((spec) => [spec.object_key, spec.material_key]),
+    ...Object.values(YBI_BASIN_RECORDS).map((spec) => [spec.object_key, spec.material_key]),
+  ]);
+  invariant(context.records.length === 2 + ybiDetailRecords.size, `Expected ${2 + ybiDetailRecords.size} context records, found ${context.records.length}`);
   const expectedContext = new Map([
     ["context:ybi", [YBI_SOURCE_KEY]],
     ["context:bay-bridge", [...BRIDGE_SOURCE_KEYS].sort()],
   ]);
+  const ybiDetailRows = new Set(coverage.rows.filter((row) => row.scope === "context" && splitValues(row.categories).every((category) => category.startsWith("context_ybi_"))).map((row) => row.source_key));
+  invariant(ybiDetailRows.size === EXPECTED_COUNTS.ybi_context_rows, "YBI detail coverage count drift");
+  const ybiClaimed = new Set();
   for (const record of context.records) {
+    if (ybiDetailRecords.has(record.object_key)) {
+      invariant(record.material_key === ybiDetailRecords.get(record.object_key), `${record.object_key} material drift`);
+      invariant(record.context_kind === (record.object_key.startsWith(YBI_BUILDINGS_KEY) || record.object_key === YBI_WALLS_KEY ? "ybi_building" : "ybi_surface"), `${record.object_key} context kind drift`);
+      invariant(record.source_keys.every((key) => ybiDetailRows.has(key)), `${record.object_key} claims a source that is not a YBI detail row`);
+      for (const key of record.source_keys) ybiClaimed.add(key);
+      invariant(record.collision_kind === "none" && record.receiver_kind === "none" && record.opaque === false, `${record.object_key} context semantics leak`);
+      validateMesh(record, record.object_key);
+      invariant(!physical.has(record.object_key), `Duplicate context physical key ${record.object_key}`);
+      physical.set(record.object_key, { record, chunk_id: null });
+      continue;
+    }
     invariant(expectedContext.has(record.object_key), `Unexpected context record ${record.object_key}`);
     invariant(stableJson(record.source_keys) === stableJson(expectedContext.get(record.object_key)), `${record.object_key} source anchors drift`);
     invariant(record.collision_kind === "none" && record.receiver_kind === "none" && record.opaque === false, `${record.object_key} context semantics leak`);
@@ -327,7 +366,9 @@ function validateRecords(worldRoot, manifest, coverage) {
     invariant(!physical.has(record.object_key), `Duplicate context physical key ${record.object_key}`);
     physical.set(record.object_key, { record, chunk_id: null });
   }
-  const boundaryVisualSources = [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS];
+  invariant(ybiClaimed.size === ybiDetailRows.size, "A YBI detail row has no context record");
+  validateYbiDetailDocuments(context);
+  const boundaryVisualSources = [...BOUNDARY_ATTACHED_SOURCE_KEYS, ...PIER_DECK_SOURCE_KEYS, ...YBI_CONTINUATION_SOURCE_KEYS];
   invariant(
     Array.isArray(context.boundary_attached_visuals) && context.boundary_attached_visuals.length === boundaryVisualSources.length,
     "Context must contain exactly the approved boundary-attached visuals and pier decks",
@@ -335,6 +376,9 @@ function validateRecords(worldRoot, manifest, coverage) {
   for (const record of context.boundary_attached_visuals) {
     invariant(record.context_kind === "boundary_attached_visual", `${record.object_key} boundary context kind drift`);
     invariant(record.source_keys.length === 1 && boundaryVisualSources.includes(record.source_keys[0]), `${record.object_key} invalid boundary-attached source`);
+    if (YBI_CONTINUATION_SOURCE_KEYS.includes(record.source_keys[0])) {
+      invariant(["context_ybi_road", "context_ybi_path"].includes(record.material_key), `${record.object_key} YBI continuation material drift`);
+    }
     if (PIER_DECK_SOURCE_KEYS.includes(record.source_keys[0])) {
       invariant(record.material_key === "context_boundary_pier", `${record.object_key} pier deck material drift`);
     }
@@ -362,6 +406,59 @@ function validateRecords(worldRoot, manifest, coverage) {
     }
   }
   return { physical, context };
+}
+
+// YBI's ground-cover map decodes to its grid, and its vegetation's rows are well formed.
+function validateYbiDetailDocuments(context) {
+  const cover = context.ybi_ground_cover;
+  invariant(cover?.schema_version === YBI_GROUND_COVER_SCHEMA, "YBI ground-cover schema drift");
+  invariant(cover.width === YBI_LAND_COVER_GRID.width && cover.height === YBI_LAND_COVER_GRID.height && cover.cell_m === YBI_LAND_COVER_GRID.cell_m, "YBI ground-cover grid drift");
+  invariant(inflateSync(Buffer.from(cover.rgba_zlib_base64, "base64")).length === cover.width * cover.height * 4, "YBI ground-cover map does not decode to its grid");
+  const vegetation = context.ybi_vegetation;
+  invariant(vegetation?.schema_version === YBI_VEGETATION_SCHEMA, "YBI vegetation schema drift");
+  invariant(Array.isArray(vegetation.instances) && vegetation.instances.length > 0, "YBI vegetation is empty");
+  invariant(Array.isArray(vegetation.prop_heights_m) && vegetation.prop_heights_m.length === vegetation.props.length
+    && vegetation.prop_heights_m.every((heights) => Array.isArray(heights) && heights.every((height) => Number.isFinite(height) && height > 0)), "YBI vegetation needs nominal heights per prop");
+  for (const row of vegetation.instances) {
+    invariant(Array.isArray(row) && row.length === vegetation.fields.length && row.every(Number.isFinite), "YBI vegetation row is malformed");
+    invariant(Number.isInteger(row[0]) && row[0] >= 0 && row[0] < vegetation.props.length, "YBI vegetation row names no prop");
+    const [scale, stretch] = [row[6], row[7]];
+    invariant(scale >= YBI_VEGETATION_LIMITS.scale[0] && scale <= YBI_VEGETATION_LIMITS.scale[1]
+      && stretch >= YBI_VEGETATION_LIMITS.stretch[0] && stretch <= YBI_VEGETATION_LIMITS.stretch[1], "YBI vegetation row scale or stretch is outside the drawn range");
+  }
+  // Every foot rests on the terrain triangle under it, at most 1.3 m sunk and never above
+  // it (the game checks only the terrain's bounds on load).
+  const terrain = context.records.find((record) => record.object_key === "context:ybi");
+  invariant(terrain, "YBI vegetation has no terrain record");
+  const bucketM = 8;
+  const buckets = new Map();
+  const vertex = (index) => [terrain.vertices[index * 3], terrain.vertices[index * 3 + 1], terrain.vertices[index * 3 + 2]];
+  for (let offset = 0; offset < terrain.indices.length; offset += 3) {
+    const [a, b, c] = [0, 1, 2].map((k) => vertex(terrain.indices[offset + k]));
+    // The top only: the shore's sides are vertical.
+    if (Math.abs((b[0] - a[0]) * (c[2] - a[2]) - (c[0] - a[0]) * (b[2] - a[2])) <= 1e-6) continue;
+    for (let bx = Math.floor(Math.min(a[0], b[0], c[0]) / bucketM); bx <= Math.floor(Math.max(a[0], b[0], c[0]) / bucketM); bx += 1) {
+      for (let bz = Math.floor(Math.min(a[2], b[2], c[2]) / bucketM); bz <= Math.floor(Math.max(a[2], b[2], c[2]) / bucketM); bz += 1) {
+        const key = `${bx},${bz}`;
+        if (!buckets.has(key)) buckets.set(key, []);
+        buckets.get(key).push([a, b, c]);
+      }
+    }
+  }
+  for (const row of vegetation.instances) {
+    const [x, y, z] = [row[2], row[3], row[4]];
+    let ground = null;
+    for (const [a, b, c] of buckets.get(`${Math.floor(x / bucketM)},${Math.floor(z / bucketM)}`) ?? []) {
+      const det = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+      const wa = ((b[2] - c[2]) * (x - c[0]) + (c[0] - b[0]) * (z - c[2])) / det;
+      const wb = ((c[2] - a[2]) * (x - c[0]) + (a[0] - c[0]) * (z - c[2])) / det;
+      if (wa >= -1e-6 && wb >= -1e-6 && 1 - wa - wb >= -1e-6) {
+        ground = wa * a[1] + wb * b[1] + (1 - wa - wb) * c[1];
+        break;
+      }
+    }
+    invariant(ground != null && y <= ground + 0.05 && y >= ground - 1.3, `A YBI plant at (${x}, ${z}) does not stand on YBI's terrain`);
+  }
 }
 
 function landFacet(record, offset, chunkId) {
@@ -1789,7 +1886,7 @@ function validateManifest(worldRoot) {
   invariant(manifest.coordinate_system?.vertical_datum === "NAVD 88", "Terrain vertical datum drift");
   invariant(manifest.boundary_source_key === PLAYABLE_BOUNDARY_SOURCE_KEY, "Boundary source key drift");
   invariant(manifest.chunk_size_m === 256, "Chunk size drift");
-  invariant(manifest.counts.source_rows === 739 && manifest.counts.playable_rows === 735 && manifest.counts.context_rows === 4, "Manifest denominator drift");
+  invariant(manifest.counts.source_rows === EXPECTED_COUNTS.source_rows && manifest.counts.playable_rows === EXPECTED_COUNTS.playable_rows && manifest.counts.context_rows === EXPECTED_COUNTS.context_rows, "Manifest denominator drift");
   invariant(manifest.counts.unresolved_rows === 0 && manifest.counts.duplicate_source_keys === 0, "Manifest error counts are non-zero");
   invariant(Array.isArray(manifest.playable_boundary.components) && manifest.playable_boundary.components.length > 0, "Manifest boundary missing");
   invariant(Array.isArray(manifest.initial_spawn.origin) && manifest.initial_spawn.origin.length === 3, "Manifest spawn missing");

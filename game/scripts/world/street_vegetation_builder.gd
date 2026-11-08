@@ -54,8 +54,10 @@ static func _cell(position: Vector3, size_m: float) -> String:
 	return "%d_%d" % [floori(position.x / size_m), floori(position.z / size_m)]
 
 
-func build(document: Dictionary) -> Dictionary:
-	var kit := KIT.new()
+## shared_kit: a street-vegetation kit to build the species with (so another builder
+## can reuse them), or null for a new one.
+func build(document: Dictionary, shared_kit: RefCounted = null) -> Dictionary:
+	var kit: KIT = shared_kit if shared_kit != null else KIT.new()
 	var root := Node3D.new()
 	root.name = "GeneratedStreetVegetation"
 	# batch key -> {prop, variant, levels, cells: {cell -> [Transform3D]}}
