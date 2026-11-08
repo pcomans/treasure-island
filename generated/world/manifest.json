@@ -231,11 +231,11 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     }
   ],
-  "content_sha256": "d49b5202a94e068212eea5566e90a2b99226b80ab5b43fa64716921b8cf83d6c",
+  "content_sha256": "54ecc59245bc347b7c53c71d325a77a1ddad1658f342ed4fd6b3334df5f76988",
   "context": {
-    "bytes": 4559871,
+    "bytes": 4567976,
     "path": "context.json",
-    "sha256": "fb32d827f1369c8b5d77fd62de3254c3492633b465a9c41cacf92697a24de1a4"
+    "sha256": "da64e5ece864047b3da70ae21b85e63a98ef15c4eae534e2aa6ecffe2bc7798c"
   },
   "coordinate_system": {
     "coordinate_rounding_m": 0.001,
@@ -267,7 +267,7 @@
   "coverage_ledger": {
     "bytes": 286169,
     "path": "coverage-ledger.csv",
-    "sha256": "4783e5d11f2a49ba5c2f986c739ec6dba7e24a014a406499c6f0f9abfc46c2e1"
+    "sha256": "989f28595c3ea691b548261659b14fd77e906320b0c0fc2f026f9ff357ef0851"
   },
   "demolished_buildings": {
     "path": "tools/config/demolished-buildings.json",
@@ -494,19 +494,19 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     },
     {
-      "bytes": 4559871,
+      "bytes": 4567976,
       "path": "context.json",
-      "sha256": "fb32d827f1369c8b5d77fd62de3254c3492633b465a9c41cacf92697a24de1a4"
+      "sha256": "da64e5ece864047b3da70ae21b85e63a98ef15c4eae534e2aa6ecffe2bc7798c"
     },
     {
       "bytes": 286169,
       "path": "coverage-ledger.csv",
-      "sha256": "4783e5d11f2a49ba5c2f986c739ec6dba7e24a014a406499c6f0f9abfc46c2e1"
+      "sha256": "989f28595c3ea691b548261659b14fd77e906320b0c0fc2f026f9ff357ef0851"
     },
     {
-      "bytes": 83708,
+      "bytes": 83707,
       "path": "coverage-summary.json",
-      "sha256": "315709a587d4044ddc1a433b188574e1fc4aea95cb78fcd29652676b2ff6293a"
+      "sha256": "147d22507f0c859db9c0eadef080c4dff08ee77e8c1463cd249c46dc41a0234e"
     },
     {
       "bytes": 1624428,

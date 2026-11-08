@@ -3503,7 +3503,7 @@
     "canopy_cells": {
       "grove": 27934,
       "groves": 141,
-      "scrub": 25101,
+      "scrub": 25139,
       "small": 2750
     },
     "continuation_visuals": 7,
@@ -3534,11 +3534,11 @@
     ],
     "surfaces": {
       "basin_lining": {
-        "area_m2": 3946.25,
+        "area_m2": 1801.72,
         "sources": 1
       },
       "basin_water": {
-        "area_m2": 1401.53,
+        "area_m2": 561.74,
         "sources": 1
       },
       "construction": {
@@ -3572,14 +3572,14 @@
         "garden_tree": 41,
         "monterey_cypress": 189,
         "monterey_pine": 83,
-        "scrub": 2499,
+        "scrub": 2500,
         "toyon": 74,
         "understory_acacia": 738,
         "understory_oak": 689,
         "willow": 19,
         "wind_oak": 53
       },
-      "total": 5567
+      "total": 5568
     },
     "walls": {
       "face_m2": 9529.66,

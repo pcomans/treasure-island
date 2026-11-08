@@ -321,6 +321,19 @@ function emptyMesh() {
   return { vertices: [], normals: [], uvs: [], indices: [] };
 }
 
+// One mesh of several, their vertices kept apart.
+function mergeMeshes(...meshes) {
+  const merged = emptyMesh();
+  for (const mesh of meshes) {
+    const offset = merged.vertices.length / 3;
+    merged.vertices.push(...mesh.vertices);
+    merged.normals.push(...mesh.normals);
+    merged.uvs.push(...mesh.uvs);
+    merged.indices.push(...mesh.indices.map((index) => index + offset));
+  }
+  return merged;
+}
+
 // One vertex per distinct rounded position (and normal, unless byPosition; and UV, with
 // withUv, for a texture seam) within a mesh.
 function vertexWriter(mesh, byPosition = false, withUv = false) {
@@ -377,6 +390,19 @@ function ringSegments(multiPolygon) {
     }
   }
   return segments;
+}
+
+// A mesh's plan footprint (east, north): the union of its triangles.
+function meshPlanFootprint(mesh) {
+  const triangles = [];
+  for (let t = 0; t < mesh.indices.length; t += 3) {
+    const ring = [0, 1, 2].map((k) => {
+      const index = mesh.indices[t + k];
+      return [round3(mesh.vertices[index * 3]), round3(-mesh.vertices[index * 3 + 2])];
+    });
+    triangles.push([closeRing(ring)]);
+  }
+  return rawUnion(...triangles);
 }
 
 // The nearest point on a multipolygon's outline.
@@ -1350,8 +1376,9 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
     surfaceReport[klass] = { sources: members.length, area_m2: round2(multiPolygonArea(geometry)) };
   }
   // The summit reservoir, under every road and path: its water on the level ground of
-  // its mapped area, and its concrete banks, the steep ground of that area and within
-  // bank_reach_m outside it (the rest of that band claimed as its bare verge).
+  // its mapped area, and its concrete banks, the rest of that area and the steep ground
+  // within bank_reach_m outside it. Only the banks claim the band round it; its gentler
+  // ground keeps its own cover.
   const basins = byCategory("context_ybi_water");
   if (basins.length > 0) {
     const basinArea = rawUnion(...areaGeometry(basins));
@@ -1360,8 +1387,7 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       for (const ring of polygon) edges.push(ribbon([...ring, ring[0]], 2 * config.basin.bank_reach_m, "context_ybi_water edge"));
     }
     const water = claim(basinArea);
-    const band = claim(rawIntersect(rawUnion(...edges), land));
-    const parts = { water, lining: rawUnion(water, band) };
+    const band = rawDifference(rawIntersect(rawUnion(...edges), land), ...drawn);
     const slopeOf = (entry) => {
       const [a, b, c] = entry.plan;
       const u = [b[0] - a[0], entry.y[1] - entry.y[0], b[1] - a[1]];
@@ -1369,16 +1395,22 @@ export function buildYbiContext({ projectRoot, land, boundary, playableBoundary,
       const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]];
       return Math.hypot(n[0], n[2]) / Math.max(1e-9, Math.abs(n[1]));
     };
-    const keep = {
-      water: (entry) => slopeOf(entry) <= config.basin.water_slope,
-      lining: (entry) => slopeOf(entry) >= config.basin.bank_slope,
+    const level = (entry) => slopeOf(entry) <= config.basin.water_slope;
+    const meshes = {
+      water: drapeMultiPolygon(water, terrain, config.surfaces.bias_m, level),
+      lining: mergeMeshes(
+        drapeMultiPolygon(water, terrain, config.surfaces.bias_m, (entry) => !level(entry)),
+        drapeMultiPolygon(band, terrain, config.surfaces.bias_m, (entry) => slopeOf(entry) >= config.basin.bank_slope),
+      ),
     };
     const basinKeys = Object.values(YBI_BASIN_RECORDS).map((spec) => spec.object_key);
     for (const [part, spec] of Object.entries(YBI_BASIN_RECORDS)) {
-      const mesh = drapeMultiPolygon(parts[part], terrain, config.surfaces.bias_m, keep[part]);
+      const mesh = meshes[part];
       invariant(mesh.indices.length > 0, `${spec.object_key} draped no triangles`);
+      const footprint = meshPlanFootprint(mesh);
+      if (part === "lining") claim(footprint);
       records.push({ object_key: spec.object_key, context_kind: "ybi_surface", material_key: spec.material_key, source_keys: basins.map((joined) => joined.row.source_key), mesh });
-      surfaceReport[`basin_${part}`] = { sources: basins.length, area_m2: round2(multiPolygonArea(parts[part])) };
+      surfaceReport[`basin_${part}`] = { sources: basins.length, area_m2: round2(multiPolygonArea(footprint)) };
     }
     for (const joined of basins) addObject(joined, YBI_BASIN_RECORDS.water.object_key, basinKeys, null);
   }
