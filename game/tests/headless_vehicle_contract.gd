@@ -25,9 +25,10 @@ extends SceneTree
 ##   7. plants: the car drives through a shrub without slowing and stops at a
 ##      palm's trunk;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
-##      throttle pushes it; a parked car hit from the side at speed and a K-rail
-##      hit end on are set moving; each comes to rest and freezes where it ends
-##      up, and a second hit there sets it moving again;
+##      throttle pushes it, and again once it has frozen; a parked car hit from
+##      the side at speed and a K-rail hit end on are set moving; each comes to
+##      rest and freezes where it ends up, and a second hit there sets it
+##      moving again;
 ##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -79,7 +80,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed and again once they had frozen, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -621,9 +622,26 @@ func _case_shove() -> bool:
 	if not _require(creep_top < VEHICLE_MANAGER.SHOVE_SPEED_MPS and wedge_node != null, "Creeping into %s at %.2f m/s did not set it moving." % [wedge_id, creep_top]) \
 	or not _require(pushed >= 0.5 and pressed >= 0.5, "Full throttle against %s wedged (driven car %.2f m, parked car %.2f m)." % [wedge_id, pressed, pushed]):
 		return false
+	# Once it has come to rest and frozen, pressing on again pushes it again.
+	var wedge_frozen := false
+	for _tick in 600:
+		await physics_frame
+		if wedge_node.freeze:
+			wedge_frozen = true
+			break
+	var wedge_rest := wedge_node.global_position
+	Input.action_press("move_forward")
+	for _tick in 180:
+		_steer_toward(car, Vector2(wedge_node.global_position.x, wedge_node.global_position.z))
+		await physics_frame
+	_release_driving()
+	var pushed_again := wedge_node.global_position.distance_to(wedge_rest)
+	print("WEDGE AGAIN frozen %s; 3 s more of full throttle moved it %.2f m from where it had frozen" % [wedge_frozen, pushed_again])
+	if not _require(wedge_frozen and pushed_again >= 0.5, "Full throttle against %s once it had frozen wedged (moved %.2f m, frozen first %s)." % [wedge_id, pushed_again, wedge_frozen]):
+		return false
 	# At speed: a parked car from the side, a K-rail end on.
-	for target: Dictionary in [{"id": str(_cases.shove.car), "start": _cases.shove.start_xz, "heading": _cases.shove.heading_xz, "min_m": 0.5},
-			{"id": str(_cases.krail.row), "start": _cases.krail.start_xz, "heading": _cases.krail.heading_xz, "min_m": 0.2}]:
+	for target: Dictionary in [{"id": str(_cases.shove.car), "start": _cases.shove.start_xz, "heading": _cases.shove.heading_xz, "again": _cases.shove.again, "min_m": 0.5},
+			{"id": str(_cases.krail.row), "start": _cases.krail.start_xz, "heading": _cases.krail.heading_xz, "again": _cases.krail.again, "min_m": 0.2}]:
 		var entry: Dictionary = _vehicles.row(target.id)
 		if not _require(not entry.is_empty() and _vehicles.live_node(target.id) == null, "Shove target %s is not a static swappable row." % target.id):
 			return false
@@ -660,10 +678,12 @@ func _case_shove() -> bool:
 		print("SHOVE %s: set moving %s at %.2f m/s, moved %.2f m, at rest and frozen %s, car up %.3f" % [target.id, hit, hit_speed, moved, frozen, car.global_transform.basis.y.y])
 		if not _require(hit and moved >= float(target.min_m) and frozen, "Hitting %s did not shove it and leave it at rest (moved %.2f m, frozen %s)." % [target.id, moved, frozen]):
 			return false
-		# Frozen where it stopped, it must not turn into a wall: a second hit,
-		# along the same line from 12 m back, sets it moving again.
+		# Frozen where it stopped, it must not turn into a wall: a second hit
+		# along the same line, from 12 m back the way the fixture says (the
+		# first hit's way on, or back from beyond it), sets it moving again.
 		var rest_at := moved_node.global_position
-		if not await _drive_from(car, Vector2(rest_at.x, rest_at.z) - heading * 12.0, heading):
+		var again := heading * signf(float(target.again))
+		if not await _drive_from(car, Vector2(rest_at.x, rest_at.z) - again * 12.0, again):
 			return false
 		Input.action_press("move_forward")
 		var woke := false
@@ -688,9 +708,9 @@ func _case_shove() -> bool:
 			if moved_node.freeze:
 				refrozen = true
 				break
-		var again := moved_node.global_position.distance_to(rest_at)
-		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen, at rest and frozen again %s" % [target.id, woke, woke_speed, again, refrozen])
-		if not _require(woke and again >= float(target.min_m) and refrozen, "Hitting %s again once it had frozen did not shove it (moved %.2f m, frozen again %s)." % [target.id, again, refrozen]):
+		var moved_again := moved_node.global_position.distance_to(rest_at)
+		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen, at rest and frozen again %s" % [target.id, woke, woke_speed, moved_again, refrozen])
+		if not _require(woke and moved_again >= float(target.min_m) and refrozen, "Hitting %s again once it had frozen did not shove it (moved %.2f m, frozen again %s)." % [target.id, moved_again, refrozen]):
 			return false
 	return await _stop_and_exit(car, "shove")
 
