@@ -706,7 +706,8 @@ export function buildCar(name, lodIndex, { wheels = true } = {}) {
   for (const axle of axles) {
     for (const side of [1, -1]) {
       if (wheels) addWheel(out, body, lodIndex, v3(side * (xOut - tw / 2), R, zOf(axle)), side);
-      // Wheel-well liner behind the tyre, so the well reads dark and closed.
+      // Wheel-well liner behind the tyre, so the well reads dark and closed,
+      // from the wheel's side and from under the car (or on a flipped one).
       const innerX = side * (xOut - tw - 0.05);
       const top = R + archRadius;
       const wellNormal = v3(side, 0, 0);
@@ -717,8 +718,9 @@ export function buildCar(name, lodIndex, { wheels = true } = {}) {
       const c = v3(innerX, top, z1);
       const d = v3(innerX, top, z0);
       const cr = vcross(vsub(b, a), vsub(c, a));
-      if (vdot(cr, wellNormal) >= 0) out.quad(a, b, c, d, null, PART.under, [0.3, 0.3, 0.3, 0.3]);
-      else out.quad(a, d, c, b, null, PART.under, [0.3, 0.3, 0.3, 0.3]);
+      const toWheel = vdot(cr, wellNormal) >= 0;
+      out.quad(a, toWheel ? b : d, c, toWheel ? d : b, null, PART.under, [0.3, 0.3, 0.3, 0.3]);
+      out.quad(a, toWheel ? d : b, c, toWheel ? b : d, null, PART.under, [0.3, 0.3, 0.3, 0.3]);
     }
   }
 
@@ -776,45 +778,83 @@ export function buildCar(name, lodIndex, { wheels = true } = {}) {
   return out.result();
 }
 
-// One wheel: the tyre's outer half (the inner half is hidden in the wheel well)
-// and the rim face with its spokes, round the axis (side, 0, 0) through centre,
-// its face toward side. The parked cars' wheels and the drivable car's are the same.
+// One wheel, a closed solid round the axis (side, 0, 0) through centre, its
+// face toward side: the inner face toward the car (the tyre's inner sidewall
+// round a dark disc: seen from under a car or on a flipped one), the tread,
+// the outer sidewall, the rim's lip and the rim face with its spokes, the dark
+// gaps between them sunk in walled pockets. Every face is wound
+// counterclockwise seen from outside, its normal outward, so the wheel shows
+// whole from any side. The parked cars' wheels and the drivable car's are the
+// same.
 function addWheel(out, body, lodIndex, center, side) {
   const lod = LODS[lodIndex];
   const R = body.wheel_radius;
   const tw = body.tire_width;
   const axis = v3(side, 0, 0);
   const rimR = R * 0.64;
+  // Near: from the inner sidewall (round a dark disc of innerR) out to the
+  // tread and back in to the rim's lip, which meets the rim face (tw / 2 -
+  // 0.02). Far: the tread and outer sidewall round one dark inner disc, the
+  // rim face flush with the sidewall's inner edge.
+  const innerR = lodIndex === 0 ? rimR * 0.85 : R;
   const profile = lodIndex === 0
-    ? [[R - 0.01, -tw / 2], [R, -tw / 2 + 0.05], [R, tw / 2 - 0.06], [R - 0.014, tw / 2 - 0.022], [R - 0.055, tw / 2], [rimR, tw / 2], [rimR * 0.97, tw / 2 - 0.02]]
+    ? [[innerR, -tw / 2], [R - 0.01, -tw / 2], [R, -tw / 2 + 0.05], [R, tw / 2 - 0.06], [R - 0.014, tw / 2 - 0.022], [R - 0.055, tw / 2], [rimR, tw / 2], [rimR * 0.97, tw / 2 - 0.02]]
     : [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]];
-  const rimSegment = profile.length - 2;
-  out.lathe(center, axis, profile, lod.sides, (i) => (i >= rimSegment ? PART.rim : PART.tire), Math.PI / lod.sides, (i) => (i <= 1 ? 0.85 : 1));
-  // Rim face: spokes (rim colour) and the dark gaps between them.
-  const face = vadd(center, vscale(axis, tw / 2 - 0.02));
+  const rimFrom = lodIndex === 0 ? 6 : 2;
+  const aoOf = lodIndex === 0 ? (i) => (i === 0 ? 0.5 : i <= 2 ? 0.85 : 1) : (i) => (i <= 1 ? 0.85 : 1);
+  out.lathe(center, axis, profile, lod.sides, (i) => (i >= rimFrom ? PART.rim : PART.tire), Math.PI / lod.sides, aoOf);
   const helper = v3(0, 1, 0);
   const u = vnorm(vcross(axis, helper));
   const w = vcross(axis, u);
-  const at = (r, angle, depth = 0) => vadd(face, vadd(vscale(axis, -depth), vadd(vscale(u, r * Math.cos(angle)), vscale(w, r * Math.sin(angle)))));
-  const segments = lod.spokes ? 15 : 8;
-  const rings = lod.spokes ? [0.0, 0.17, 0.86, 0.98] : [0.0, 0.98];
+  const round = (origin, r, angle) => vadd(origin, vadd(vscale(u, r * Math.cos(angle)), vscale(w, r * Math.sin(angle))));
+  const radial = (angle) => vadd(vscale(u, Math.cos(angle)), vscale(w, Math.sin(angle)));
+  const tangent = (angle) => vadd(vscale(u, -Math.sin(angle)), vscale(w, Math.cos(angle)));
+  // A flat quad wound counterclockwise seen from the side n points to (a fan
+  // triangle when a and b meet, as at the axis).
+  const facing = (a, b, c, d, n, part) => {
+    let turn = vcross(vsub(b, a), vsub(c, a));
+    if (vlen(turn) < 1e-12) turn = vcross(vsub(c, a), vsub(d, b));
+    if (vdot(turn, n) >= 0) out.quad(a, b, c, d, [n, n, n, n], part);
+    else out.quad(a, d, c, b, [n, n, n, n], part);
+  };
+  // The inner face's middle: a dark disc inside the inner sidewall's ring.
+  const back = vadd(center, vscale(axis, -tw / 2));
+  for (let s = 0; s < lod.sides; s += 1) {
+    const t0 = Math.PI / lod.sides + (2 * Math.PI * s) / lod.sides;
+    const t1 = t0 + (2 * Math.PI) / lod.sides;
+    facing(back, back, round(back, innerR, t1), round(back, innerR, t0), vscale(axis, -1), PART.under);
+  }
+  // Rim face: spokes (rim colour) and the dark gaps between them, its outer
+  // ring reaching under the lip all round; far, a plain disc.
+  const face = vadd(center, vscale(axis, tw / 2 - 0.02));
+  const at = (r, angle, depth = 0) => round(vadd(face, vscale(axis, -depth)), r, angle);
+  const segments = lod.spokes ? 15 : lod.sides;
+  const phase = lod.spokes ? 0 : Math.PI / lod.sides;
+  const rings = lod.spokes ? [0.0, 0.17, 0.86, 1.0] : [0.0, 1.0];
+  const spokeAt = (s) => !lod.spokes || (((s % segments) + segments) % segments) % 3 === 0;
+  const gapDepth = 0.03;
+  const hubDepth = lod.spokes ? -0.005 : -0.02;
   for (let s = 0; s < segments; s += 1) {
-    const a0 = (2 * Math.PI * s) / segments;
-    const a1 = (2 * Math.PI * (s + 1)) / segments;
+    const a0 = phase + (2 * Math.PI * s) / segments;
+    const a1 = phase + (2 * Math.PI * (s + 1)) / segments;
+    const spoke = spokeAt(s);
     for (let r = 0; r < rings.length - 1; r += 1) {
-      const spoke = lod.spokes ? s % 3 === 0 : true;
       const part = r === 0 ? PART.hub : r === rings.length - 2 ? PART.rim : spoke ? PART.rim : PART.hub;
-      const depth = part === PART.hub && r > 0 ? 0.03 : r === 0 ? -0.005 : 0;
-      const a = at(rimR * rings[r], a0, depth);
-      const b = at(rimR * rings[r], a1, depth);
-      const c = at(rimR * rings[r + 1], a1, depth);
-      const d = at(rimR * rings[r + 1], a0, depth);
-      const n = axis;
-      // Counterclockwise seen from outside along +axis.
-      const cr = vcross(vsub(b, a), vsub(c, a));
-      if (vdot(cr, n) >= 0) out.quad(a, b, c, d, [n, n, n, n], part);
-      else out.quad(a, d, c, b, [n, n, n, n], part);
+      const depth = part === PART.hub && r > 0 ? gapDepth : r === 0 ? hubDepth : 0;
+      facing(at(rimR * rings[r], a0, depth), at(rimR * rings[r], a1, depth), at(rimR * rings[r + 1], a1, depth), at(rimR * rings[r + 1], a0, depth), axis, part);
     }
+    if (!lod.spokes) continue;
+    // The step up to the hub disc round a spoke's foot; a gap's pocket walls:
+    // up to the hub disc inside it, the rim ring outside it and the spoke
+    // beside it.
+    const r0 = rimR * rings[1];
+    const r1 = rimR * rings[2];
+    const mid = (a0 + a1) / 2;
+    facing(at(r0, a0, spoke ? 0 : gapDepth), at(r0, a1, spoke ? 0 : gapDepth), at(r0, a1, hubDepth), at(r0, a0, hubDepth), radial(mid), PART.hub);
+    if (spoke) continue;
+    facing(at(r1, a0, gapDepth), at(r1, a1, gapDepth), at(r1, a1, 0), at(r1, a0, 0), vscale(radial(mid), -1), PART.hub);
+    if (spokeAt(s - 1)) facing(at(r0, a0, gapDepth), at(r1, a0, gapDepth), at(r1, a0, 0), at(r0, a0, 0), tangent(a0), PART.hub);
+    if (spokeAt(s + 1)) facing(at(r0, a1, gapDepth), at(r1, a1, gapDepth), at(r1, a1, 0), at(r0, a1, 0), vscale(tangent(a1), -1), PART.hub);
   }
 }
 

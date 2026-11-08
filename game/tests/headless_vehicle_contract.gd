@@ -11,17 +11,26 @@ extends SceneTree
 ##      back; the car comes to rest, freezes and stays there; F gets back in;
 ##   2. a run along Seven Seas Avenue: up to speed, mostly on its wheels and
 ##      level, no recovery; then a handbrake turn that slides and stays upright;
-##   3. off the west shore into the bay: the car meets the water (a splash),
-##      sinks for a moment with the player kept in it (F does nothing), then car
-##      and player are back on land, upright, facing away from the water;
+##   3. the shore (Avenue N, where the verge falls to the riprap): driven at
+##      the rocks fast, and crept at them, the car splashes and stops dead
+##      there, never inside a stone, with the player kept in it (F does
+##      nothing), then car and player are back on a level spot well clear of
+##      the shore, facing away from the water, where it stays put on its
+##      brakes until driven off; R from the slope by the rocks does the same;
+##      dropped on open water past the rocks it splashes, sinks for a moment
+##      and comes back the same way;
 ##   4. a roll: a car rolled over comes to rest on its roof or side; F gets
 ##      the player out of it there, it rights itself within a few seconds with
 ##      nobody in it, F gets back in and it drives on;
 ##   5. a ramp: driven straight at a dirt kicker at a sensible speed, the car
 ##      leaves the ground, flies and lands on its wheels, upright;
-##   6. a fence: the car drives through a construction-panel bay, which breaks
-##      and falls, keeps most of its speed; on foot an intact bay of the same
-##      fence still stops the stock player and the broken gap lets it through;
+##   6. a fence: the car drives through a construction-panel joint, whose two
+##      bays break and fall and whose stand goes down with them while the
+##      stands either side, untouched, stay; it keeps most of its speed; on
+##      foot an intact bay of the same fence still stops the stock player and
+##      the broken gap lets it through; then a chain-link fence's bay with the
+##      same key as a broken one (keys repeat from fence to fence) breaks too
+##      and its gap opens on foot;
 ##   7. plants: the car drives through a shrub without slowing and stops at a
 ##      palm's trunk;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
@@ -41,6 +50,7 @@ extends SceneTree
 const CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+const BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const VEHICLE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
 ## On foot the avatar's feet stand within this of the player (m).
 const AVATAR_REACH_M := 2.0
@@ -81,10 +91,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_ball, _case_on_foot]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_bay, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_plants, _case_shove, _case_ball, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -248,35 +258,96 @@ func _case_route() -> bool:
 	return await _stop_and_exit(car, "route")
 
 
-# --- 3. Off the west shore into the bay.
+# --- 3. The shore: its rocks met fast and slow, R by them, and open water.
 
-func _case_plunge() -> bool:
+func _case_shore() -> bool:
 	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
-	var start := Vector2(_cases.plunge.start_xz[0], _cases.plunge.start_xz[1])
-	var direction := Vector2(_cases.plunge.direction_xz[0], _cases.plunge.direction_xz[1]).normalized()
-	if not await _drive_from(car, start, direction):
+	var shore: Dictionary = _cases.shore
+	var start := Vector2(shore.start_xz[0], shore.start_xz[1])
+	var heading := Vector2(shore.heading_xz[0], shore.heading_xz[1]).normalized()
+	var outward := Vector3(heading.x, 0.0, heading.y)
+	var stones := _stones_near(start + heading * 14.0, 30.0)
+	if not _require(stones.size() >= 20, "Found only %d of the shore's stones by the Avenue N fixture." % stones.size()):
+		return false
+	# Driven at the rocks, then crept at them (the strip falls to them): each time
+	# a splash and a dead stop short of the stones, then back on land.
+	for run: Array in [["fast", 40.0], ["slow", float(shore.creep_mps)]]:
+		if not await _drive_from(car, start, heading) or not await _into_rocks(car, start + heading * 200.0, float(run[1]), stones, str(run[0])) \
+		or not await _back_on_land(car, outward, "rocks " + str(run[0])):
+			return false
+	# R on the slope by the rocks: crept down it and stopped short of them.
+	if not await _drive_from(car, start, heading):
 		return false
 	var boundary := _world.get_boundary()
-	var before := _recoveries.size()
-	var left_island := false
-	var seen := {}
-	var on_splash := func(at: Vector3, speed: float) -> void:
-		seen["at"] = at
-		seen["speed"] = speed
-		seen["lowest"] = car.lowest_y(car.global_transform)
-		seen["splashes"] = _vehicles.find_children("Splash*", "", false, false).size()
-	car.splashed.connect(on_splash)
-	var sinking_ticks := 0
-	var tried_exit := false
-	var stayed_in := true
 	Input.action_press("move_forward")
 	for _tick in 900:
-		_steer_toward(car, start + direction * 400.0)
+		_steer_toward(car, start + heading * 200.0)
+		if car.linear_velocity.length() > float(shore.creep_mps):
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
 		await physics_frame
-		left_island = left_island or not boundary.contains_position(car.global_position)
-		if car.is_sinking():
-			sinking_ticks += 1
-			if sinking_ticks == 30 and not tried_exit:
+		if boundary.edge_distance(car.global_position) < float(shore.r_edge_m):
+			break
+	_release_driving()
+	Input.action_press("move_back")
+	for _tick in 120:
+		await physics_frame
+		if car.linear_velocity.length() < 0.3:
+			break
+	Input.action_release("move_back")
+	var on_slope := car.global_position
+	var before := _recoveries.size()
+	print("SHORE R from %s, %.2f m from the edge, up %.4f, on the rocks %s" % [on_slope, boundary.edge_distance(on_slope), car.global_transform.basis.y.y, car.is_on_rocks()])
+	if not _require(boundary.contains_position(on_slope) and not car.is_sinking(), "The car crept onto the rocks before R (%s)." % on_slope):
+		return false
+	await _press("recover")
+	for _tick in 5:
+		await physics_frame
+	if not _require(_recoveries.size() > before and _recoveries[_recoveries.size() - 1].cause == "manual", "R on the slope by the rocks did not put the car back."):
+		return false
+	if not await _back_on_land(car, outward, "R by the rocks"):
+		return false
+	return await _stop_and_exit(car, "shore")
+
+
+## Drives (or creeps, at max_mps) toward target into the rocks: the car must
+## splash there (not on water) and stop dead for its hold with the player in
+## it (F doing nothing), no stone of them inside its hulls at any tick, then go
+## back to land ("rocks").
+func _into_rocks(car: DRIVABLE_CAR, target: Vector2, max_mps: float, stones: Array[AABB], label: String) -> bool:
+	var before := _recoveries.size()
+	var seen := {}
+	var on_splash := func(at: Vector3, speed: float, on_water: bool) -> void:
+		seen["at"] = at
+		seen["speed"] = speed
+		seen["on_water"] = on_water
+		seen["splashes"] = _vehicles.find_children("Splash*", "", false, false).size()
+	car.splashed.connect(on_splash)
+	var through := 0
+	var held := 0
+	var held_first := -1
+	var held_at := Vector3.INF
+	var held_moved := 0.0
+	var tried_exit := false
+	var stayed_in := true
+	var top := 0.0
+	for _tick in 1200:
+		_steer_toward(car, target)
+		if car.linear_velocity.length() > max_mps:
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
+		await physics_frame
+		top = maxf(top, car.linear_velocity.length())
+		through = maxi(through, _stones_in_car(car, stones))
+		if car.is_on_rocks():
+			if held_first < 0:
+				held_first = Engine.get_physics_frames()
+				held_at = car.global_position
+			held = Engine.get_physics_frames() - held_first + 1
+			held_moved = maxf(held_moved, car.global_position.distance_to(held_at))
+			if held >= 20 and not tried_exit:
 				tried_exit = true
 				_release_driving()
 				await _press("vehicle_enter_exit")
@@ -285,26 +356,158 @@ func _case_plunge() -> bool:
 			break
 	_release_driving()
 	car.splashed.disconnect(on_splash)
-	if not _require(left_island and _recoveries.size() > before, "Driving off the shore did not bring the car back (left the island %s)." % left_island):
-		return false
-	var event: Dictionary = _recoveries[_recoveries.size() - 1]
-	var water_y := car.water_y
-	print("PLUNGE splash %s at %.2f m/s, lowest corner %.2f m (water %.2f), %d splash nodes; sank %.2f s; F while sinking kept the player in: %s" % [seen.get("at"), seen.get("speed", 0.0), seen.get("lowest", INF), water_y, seen.get("splashes", 0), sinking_ticks / 60.0, stayed_in])
-	if not _require(seen.has("at") and absf((seen.at as Vector3).y - water_y) < 0.05 and float(seen.lowest) <= water_y + 0.02 and int(seen.splashes) >= 1, "The car must meet the water and splash before it goes back (%s)." % [seen]) \
-	or not _require(event.cause == "water" and sinking_ticks >= int((DRIVABLE_CAR.SINK_S - 0.1) * 60.0), "The car must sink for a moment before it goes back (%s after %.2f s)." % [event.cause, sinking_ticks / 60.0]) \
-	or not _require(tried_exit and stayed_in, "F while the car sinks must keep the player in it."):
-		return false
-	for _tick in 90:
+	var event: Dictionary = _recoveries[_recoveries.size() - 1] if _recoveries.size() > before else {}
+	print("SHORE %s: up to %.2f m/s, splash %s at %.2f m/s (on water %s, %d splash nodes), held %.2f s and moved %.3f m there, stone cores inside the car at worst %d, F there kept the player in: %s, back on land by %s from %s" % [label, top, seen.get("at"), seen.get("speed", 0.0), seen.get("on_water"), seen.get("splashes", 0), held / 60.0, held_moved, through, stayed_in, event.get("cause"), event.get("from")])
+	return _require(not event.is_empty() and event.cause == "rocks", "Driven %s at the rocks the car did not go back to land from them (%s)." % [label, event]) \
+		and _require(seen.has("at") and not bool(seen.on_water) and int(seen.splashes) >= 1, "At the rocks (%s) the car must splash, off the water (%s)." % [label, seen]) \
+		and _require(held >= int(DRIVABLE_CAR.ROCKS_HOLD_S * 60.0) - 2 and held_moved < 0.01, "At the rocks (%s) the car must stop dead for its hold (%.2f s, moved %.3f m)." % [label, held / 60.0, held_moved]) \
+		and _require(through == 0, "At the rocks (%s) %d stone cores stood inside the car." % [label, through]) \
+		and _require(tried_exit and stayed_in, "F on the rocks must keep the player in the car.")
+
+
+## Back on land after a return: on a level spot inside the outline, well clear
+## of its edge, on four wheels, facing away from the water (outward), the
+## player in it; still there, on its brakes, after the fixture's still_s with
+## nothing pressed; then W drives it off, inland.
+func _back_on_land(car: DRIVABLE_CAR, outward: Vector3, label: String) -> bool:
+	for _tick in 30:
 		await physics_frame
+	var boundary := _world.get_boundary()
+	var rest := car.global_position
+	var edge := boundary.edge_distance(rest)
 	var forward := -car.global_transform.basis.z
-	var outward := Vector3(direction.x, 0.0, direction.y)
-	var ahead := car.global_position + Vector3(forward.x, 0.0, forward.z).normalized() * DRIVABLE_CAR.RESET_CLEAR_M
-	print("PLUNGE recovered (%s) from %s to %s, up %.3f, wheels %d, facing %s (%.2f along the way it went in), island ahead %s, driving %s" % [event.cause, event.from, car.global_position, car.global_transform.basis.y.y, car.grounded_wheels(), forward, forward.dot(outward), boundary.contains_position(ahead), _player.is_driving()])
-	if not _require(boundary.contains_position(car.global_position) and car.global_transform.basis.y.y > 0.9 and car.grounded_wheels() >= 3, "The car is not back on land, upright, on its wheels.") \
-	or not _require(boundary.contains_position(ahead) and forward.dot(outward) < 0.3, "Back on land the car must face away from the water.") \
-	or not _require(_player.is_driving() and _vehicles.active_car() == car, "The player must come back in the car."):
+	forward = Vector3(forward.x, 0.0, forward.z).normalized()
+	var up := car.global_transform.basis.y.y
+	var wheels := car.grounded_wheels()
+	var holding := car.is_holding()
+	for _tick in int(float(_cases.shore.still_s) * 60.0):
+		await physics_frame
+	var drift := car.global_position.distance_to(rest)
+	Input.action_press("move_forward")
+	for _tick in 60:
+		await physics_frame
+	Input.action_release("move_forward")
+	var gone := car.global_position - rest
+	gone.y = 0.0
+	print("BACK %s at %s, %.2f m from the edge, up %.4f, wheels %d, held %s, facing %.2f along the way out, drifted %.3f m in %.1f s, then W took it %.2f m (%.2f along the way out)" % [label, rest, edge, up, wheels, holding, forward.dot(outward), drift, float(_cases.shore.still_s), gone.length(), gone.normalized().dot(outward)])
+	return _require(boundary.contains_position(rest) and edge >= DRIVABLE_CAR.SAFE_SHORE_M - 1.0, "Back from %s the car is %.2f m from the island's edge." % [label, edge]) \
+		and _require(up >= cos(deg_to_rad(DRIVABLE_CAR.SAFE_TILT_DEG + 1.0)) and wheels == 4 and holding, "Back from %s the car must stand level on its four wheels, on its brakes (up %.4f, wheels %d, held %s)." % [label, up, wheels, holding]) \
+		and _require(forward.dot(outward) < 0.3, "Back from %s the car must face away from the water." % label) \
+		and _require(_player.is_driving() and _vehicles.active_car() == car, "Back from %s the player must be in the car." % label) \
+		and _require(drift < 0.05, "Back from %s the car moved %.3f m with nothing pressed." % [label, drift]) \
+		and _require(gone.length() > 1.0 and gone.dot(outward) < 0.0, "Back from %s, W must drive it off inland (%.2f m)." % [label, gone.length()])
+
+
+## Dropped on open water past the rocks (off the west shore, after a short
+## drive there for a spot to come back to): a splash on the water, a sink with
+## the player kept in it (F does nothing), then back on land.
+func _case_bay() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var bay: Dictionary = _cases.bay
+	var start := Vector2(bay.start_xz[0], bay.start_xz[1])
+	var heading := Vector2(bay.heading_xz[0], bay.heading_xz[1]).normalized()
+	if not await _drive_from(car, start, heading):
 		return false
-	return await _stop_and_exit(car, "plunge")
+	for _tick in int(float(bay.drive_s) * 60.0):
+		_steer_toward(car, start + heading * 200.0)
+		if car.linear_velocity.length() > 8.0:
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
+		await physics_frame
+	_release_driving()
+	var boundary := _world.get_boundary()
+	var drop := Vector3(bay.drop_xyz[0], bay.drop_xyz[1], bay.drop_xyz[2])
+	if not _require(not boundary.contains_position(drop) and boundary.edge_distance(drop) > 25.0, "The bay fixture's drop %s is not on open water." % drop):
+		return false
+	var before := _recoveries.size()
+	var seen := {}
+	var on_splash := func(at: Vector3, speed: float, on_water: bool) -> void:
+		seen["at"] = at
+		seen["speed"] = speed
+		seen["on_water"] = on_water
+		seen["lowest"] = car.lowest_y(car.global_transform)
+		seen["splashes"] = _vehicles.find_children("Splash*", "", false, false).size()
+	car.splashed.connect(on_splash)
+	car.place(Transform3D(car.global_transform.basis, drop))
+	var sinking_ticks := 0
+	var tried_exit := false
+	var stayed_in := true
+	for _tick in 600:
+		await physics_frame
+		if car.is_sinking():
+			sinking_ticks += 1
+			if sinking_ticks == 30 and not tried_exit:
+				tried_exit = true
+				await _press("vehicle_enter_exit")
+				stayed_in = _player.is_driving() and _vehicles.active_car() == car
+		if _recoveries.size() > before:
+			break
+	car.splashed.disconnect(on_splash)
+	var event: Dictionary = _recoveries[_recoveries.size() - 1] if _recoveries.size() > before else {}
+	print("BAY splash %s at %.2f m/s (on water %s), lowest corner %.2f m (water %.2f), %d splash nodes; sank %.2f s; F while sinking kept the player in: %s; back by %s" % [seen.get("at"), seen.get("speed", 0.0), seen.get("on_water"), seen.get("lowest", INF), car.water_y, seen.get("splashes", 0), sinking_ticks / 60.0, stayed_in, event.get("cause")])
+	if not _require(seen.has("at") and bool(seen.on_water) and absf((seen.at as Vector3).y - car.water_y) < 0.05 and float(seen.lowest) <= car.water_y + 0.02 and int(seen.splashes) >= 1, "Dropped on open water the car must splash on it (%s)." % [seen]) \
+	or not _require(not event.is_empty() and event.cause == "water" and sinking_ticks >= int((DRIVABLE_CAR.SINK_S - 0.1) * 60.0), "The car must sink for a moment before it goes back (%s after %.2f s)." % [event, sinking_ticks / 60.0]) \
+	or not _require(tried_exit and stayed_in, "F while the car sinks must keep the player in it.") \
+	or not await _back_on_land(car, Vector3(heading.x, 0.0, heading.y), "the bay"):
+		return false
+	return await _stop_and_exit(car, "bay")
+
+
+## The shore's stones (the riprap's top row and heap, drawn only) within radius
+## of a point, as boxes in the world: the generated shoreline's placements of
+## its prototypes, as shoreline_builder.gd draws them.
+func _stones_near(center: Vector2, radius: float) -> Array[AABB]:
+	var stones: Array[AABB] = []
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/shoreline.json"))
+	if not parsed is Dictionary:
+		return stones
+	var expanded: Dictionary = GeneratedWorldContract._expand_shoreline(parsed)
+	if not bool(expanded.get("ok", false)):
+		return stones
+	var document: Dictionary = expanded.data
+	var boxes := {}
+	for prototype: Dictionary in document.prototypes:
+		var flat: Array = prototype.vertices
+		var box := AABB(Vector3(float(flat[0]), float(flat[1]), float(flat[2])), Vector3.ZERO)
+		for index in range(3, flat.size(), 3):
+			box = box.expand(Vector3(float(flat[index]), float(flat[index + 1]), float(flat[index + 2])))
+		boxes[str(prototype.id)] = box
+	for batch: Dictionary in document.batches:
+		if not str(batch.band) in ["top", "heap"] or Vector2(float(batch.origin[0]), float(batch.origin[2])).distance_to(center) > radius + 160.0:
+			continue
+		var transforms: PackedFloat32Array = batch.transforms
+		for at in range(0, transforms.size(), GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH):
+			var position := Vector3(transforms[at], transforms[at + 1], transforms[at + 2])
+			if Vector2(position.x, position.z).distance_to(center) > radius:
+				continue
+			var rotation := Quaternion(transforms[at + 3], transforms[at + 4], transforms[at + 5], transforms[at + 6]).normalized()
+			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
+			stones.append(Transform3D(basis, position) * (boxes[str(batch.prototype)] as AABB))
+	return stones
+
+
+## How many points of nearby stones' cores (the middle half of each stone's
+## box: its middle and corners) stand inside the car's hulls now: any is a
+## stone showing through the car.
+func _stones_in_car(car: DRIVABLE_CAR, stones: Array[AABB]) -> int:
+	var space := car.get_world_3d().direct_space_state
+	var query := PhysicsPointQueryParameters3D.new()
+	query.collision_mask = car.collision_layer
+	query.collide_with_areas = false
+	var inside := 0
+	for stone: AABB in stones:
+		var middle := stone.get_center()
+		if middle.distance_to(car.global_position) > car.length_m:
+			continue
+		var core := AABB(middle - stone.size * 0.25, stone.size * 0.5)
+		for corner in 9:
+			query.position = middle if corner == 8 else core.get_endpoint(corner)
+			for hit: Dictionary in space.intersect_point(query, 8):
+				if hit.get("rid", RID()) == car.get_rid():
+					inside += 1
+					break
+	return inside
 
 
 # --- 4. A roll that rights itself.
@@ -435,15 +638,23 @@ func _case_ramp() -> bool:
 
 func _case_fence() -> bool:
 	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
-	var start := Vector2(_cases.fence.start_xz[0], _cases.fence.start_xz[1])
 	var heading := Vector2(_cases.fence.heading_xz[0], _cases.fence.heading_xz[1]).normalized()
-	var group := _world.street_detail_layer("fences").find_child("Fence__" + str(_cases.fence.row).validate_node_name(), true, false) as Node3D
-	if not _require(group != null and group.has_meta("fence_bays"), "Fixture fence %s has no bays." % _cases.fence.row):
+	var group := _fence_group(str(_cases.fence.row))
+	if not _require(group != null and group.has_meta("fence_bays") and group.has_meta("fence_posts"), "Fixture fence %s has no bays or posts." % _cases.fence.row):
 		return false
+	# Straight at a joint: the run-up ends at the fixture's post (a panel stand).
+	var posts: Dictionary = group.get_meta("fence_posts")
+	var post_key := str(_cases.fence.post)
+	var neighbours := _neighbour_posts(post_key)
+	if not _require(posts.has(post_key) and posts.has(neighbours[0]) and posts.has(neighbours[1]), "Fixture fence %s has no post %s with neighbours %s." % [_cases.fence.row, post_key, neighbours]):
+		return false
+	var foot: Vector3 = posts[post_key].frame.foot
+	var start := Vector2(foot.x, foot.z) - heading * float(_cases.fence.run_up_m)
 	if not await _drive_from(car, start, heading):
 		return false
 	var breaker := _vehicles.fence_breaker()
 	var broken_before := breaker.broken_count()
+	var debris_before := breaker.get_child_count()
 	var last_speed := 0.0
 	var speed_in := 0.0
 	var speed_out := 0.0
@@ -460,12 +671,18 @@ func _case_fence() -> bool:
 			speed_out = last_speed
 			break
 	_release_driving()
-	var keys: Array = breaker.broken_keys().slice(broken_before)
+	var ids: Array = breaker.broken_keys().slice(broken_before)
+	var keys: Array = ids.map(func(id: Variant) -> String: return str(id).get_slice("|", 1))
 	var bays: Dictionary = group.get_meta("fence_bays")
-	print("FENCE broke %s at %.2f m/s, %.2f m/s half a second later, debris %d" % [keys, speed_in, speed_out, breaker.get_child_count()])
-	if not _require(broke_tick >= 0 and keys.size() >= 1 and keys.size() <= 4, "Driving into the fence broke %d bays." % keys.size()) \
+	var felled := breaker.is_post_felled(group, post_key)
+	var standing := not breaker.is_post_felled(group, neighbours[0]) and not breaker.is_post_felled(group, neighbours[1])
+	var post_debris := breaker.find_children("FencePost*", "", false, false).size()
+	print("FENCE broke %s at %.2f m/s, %.2f m/s half a second later, debris %d; post %s felled %s (%d post debris), its neighbours %s standing %s" % [ids, speed_in, speed_out, breaker.get_child_count() - debris_before, post_key, felled, post_debris, neighbours, standing])
+	if not _require(broke_tick >= 0 and keys.size() >= 2 and keys.size() <= 4 and ids.all(func(id: Variant) -> bool: return str(id) == BREAKER.fence_id(group, str(id).get_slice("|", 1))), "Driving into the fence's joint broke %s." % [ids]) \
 	or not _require(speed_out >= 0.7 * speed_in and speed_in > 5.0, "The car did not keep going through the fence (%.2f -> %.2f m/s)." % [speed_in, speed_out]) \
-	or not _require(breaker.get_child_count() >= keys.size(), "No debris fell from the broken bays."):
+	or not _require(breaker.get_child_count() - debris_before >= keys.size() + 1, "No debris fell from the broken bays and their felled stand.") \
+	or not _require(felled and post_debris >= 1, "The stand the car hit (%s) did not go down with its bays." % post_key) \
+	or not _require(standing, "A stand the car did not touch (%s) went down." % [neighbours]):
 		return false
 	var broken: Dictionary = bays[keys[0]]
 	var car_xz := Vector2(car.global_position.x, car.global_position.z)
@@ -476,7 +693,7 @@ func _case_fence() -> bool:
 	# On foot: an intact bay away from the break still stops the player...
 	var intact := ""
 	for key: String in bays:
-		if breaker.is_broken(key) or key.begins_with("g"):
+		if breaker.is_broken(group, key) or key.begins_with("g"):
 			continue
 		var mid := ((bays[key].a as Vector3) + (bays[key].b as Vector3)) * 0.5
 		var broken_mid := ((broken.a as Vector3) + (broken.b as Vector3)) * 0.5
@@ -489,6 +706,67 @@ func _case_fence() -> bool:
 		return false
 	# ...and the broken gap lets it through.
 	return await _walk_into_bay(broken, true, "broken bay %s" % keys[0])
+
+
+## A second fence's bay with the same key as one the first fence lost (keys
+## repeat from row to row): it breaks, under the car, and opens on foot too.
+func _case_fence_shared() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var breaker := _vehicles.fence_breaker()
+	var first := _fence_group(str(_cases.fence.row))
+	var second := _fence_group(str(_cases.fence_shared.row))
+	var key := str(_cases.fence_shared.bay)
+	if not _require(first != null and second != null and first != second and (second.get_meta("fence_bays", {}) as Dictionary).has(key), "Fixture fences %s and %s with bay %s are missing." % [_cases.fence.row, _cases.fence_shared.row, key]) \
+	or not _require(breaker.is_broken(first, key) and not breaker.is_broken(second, key), "Bay %s must be broken on %s and whole on %s before the second fence is driven into." % [key, _cases.fence.row, _cases.fence_shared.row]):
+		return false
+	var bay: Dictionary = (second.get_meta("fence_bays") as Dictionary)[key]
+	var shape := _bay_shape(second, key)
+	if not _require(shape != null and not shape.disabled, "Bay %s of %s has no intact box." % [key, _cases.fence_shared.row]):
+		return false
+	var start := Vector2(_cases.fence_shared.start_xz[0], _cases.fence_shared.start_xz[1])
+	var heading := Vector2(_cases.fence_shared.heading_xz[0], _cases.fence_shared.heading_xz[1]).normalized()
+	if not await _drive_from(car, start, heading):
+		return false
+	var debris_before := breaker.get_child_count()
+	Input.action_press("move_forward")
+	var broke := -1
+	for tick in 360:
+		_steer_toward(car, start + heading * 200.0)
+		await physics_frame
+		if broke < 0 and breaker.is_broken(second, key):
+			broke = tick
+		if broke >= 0 and tick >= broke + 20:
+			break
+	_release_driving()
+	print("FENCE SHARED %s bay %s broken %s at tick %d, its box disabled %s, debris %d" % [_cases.fence_shared.row, key, breaker.is_broken(second, key), broke, shape.disabled, breaker.get_child_count() - debris_before])
+	if not _require(broke >= 0 and shape.disabled and breaker.get_child_count() > debris_before, "Driving into bay %s of %s (the key %s already broke on %s) did not break it." % [key, _cases.fence_shared.row, key, _cases.fence.row]) \
+	or not _require(_side(bay, Vector2(car.global_position.x, car.global_position.z)) != _side(bay, start), "The car did not get through the second fence's line."):
+		return false
+	if not await _stop_and_exit(car, "fence_shared_drive"):
+		return false
+	return await _walk_into_bay(bay, true, "%s broken bay %s" % [_cases.fence_shared.row, key])
+
+
+func _fence_group(row: String) -> Node3D:
+	return _world.street_detail_layer("fences").find_child("Fence__" + row.validate_node_name(), true, false) as Node3D
+
+
+## A bay's collision box in its fence's body.
+func _bay_shape(group: Node3D, key: String) -> CollisionShape3D:
+	var body := group.get_node_or_null("Collision")
+	if body == null:
+		return null
+	for child: Node in body.get_children():
+		if child is CollisionShape3D and str(child.get_meta("fence_bay", "")) == key:
+			return child as CollisionShape3D
+	return null
+
+
+## The posts either side of a post "pRUN:INDEX" in its run.
+static func _neighbour_posts(key: String) -> Array[String]:
+	var run := key.trim_prefix("p").get_slice(":", 0)
+	var index := int(key.get_slice(":", 1))
+	return ["p%s:%d" % [run, index - 1], "p%s:%d" % [run, index + 1]]
 
 
 ## Which side of a bay's line a point lies on.
