@@ -6,9 +6,10 @@ extends Node3D
 ## bay (the stock player still collides with every intact bay) and, per cell
 ## mesh, the vertex ranges of each bay's own geometry (its rails, fabric,
 ## screen, slats or panel frame; posts and panel stands stay standing). A live
-## car has a collision exception with every breakable fence body, so it never
-## bounces off a fence; each tick its hull is tested against the fence bays it
-## overlaps. A bay it touches breaks: its vertices in the cell meshes collapse
+## car or K-rail has a collision exception with every breakable fence body, so
+## it never bounces off a fence; each tick a moving one's hull is tested against
+## the fence bays it overlaps (vehicle_manager.gd: the driven car always, a
+## shoved or rolling one while it moves). A bay it touches breaks: its vertices in the cell meshes collapse
 ## to a point (ArrayMesh.surface_update_vertex_region, a few hundred bytes on
 ## either renderer), its box is disabled, so the gap is open on foot too, and the
 ## fence kit builds that bay alone as a light debris body that topples away from
@@ -16,7 +17,9 @@ extends Node3D
 ## session; a restart rebuilds the world.
 ##
 ## A fence row whose params say "breakable": false (the Job Corps perimeter,
-## owner 2026-11-08) gets no exception and no break: a car stops at it like a wall.
+## owner 2026-11-08) gets no exception and no break: a car stops at it like a
+## wall. The wheels' rays skip every fence, breakable or not, so a wheel never
+## stands on a fence's top.
 
 const FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 const PHYSICS_WORLD_SOLID := 1
@@ -46,6 +49,8 @@ var _kit: FENCE_KIT
 ## Breakable fence bodies by RID; their bays by shape owner.
 var _bodies: Dictionary = {}
 var _rids: Array[RID] = []
+## Every fence body, breakable or not.
+var _all_rids: Array[RID] = []
 var _query := PhysicsShapeQueryParameters3D.new()
 var _settled: Array[RigidBody3D] = []
 var _broken := {}
@@ -54,11 +59,15 @@ var _broken := {}
 func configure(fences_layer: Node) -> void:
 	_bodies.clear()
 	_rids.clear()
+	_all_rids.clear()
 	_query.collision_mask = PHYSICS_STREET_PROP
 	_query.collide_with_areas = false
 	for body: Node in fences_layer.find_children("Collision", "StaticBody3D", true, false):
 		var fence := body as StaticBody3D
-		if str(fence.get_meta("street_detail_kind", "")) != "fence" or not bool(fence.get_meta("breakable", true)):
+		if str(fence.get_meta("street_detail_kind", "")) != "fence":
+			continue
+		_all_rids.append(fence.get_rid())
+		if not bool(fence.get_meta("breakable", true)):
 			continue
 		var group := fence.get_parent() as Node3D
 		if group == null or not group.has_meta("fence_bays"):
@@ -67,9 +76,14 @@ func configure(fences_layer: Node) -> void:
 		_rids.append(fence.get_rid())
 
 
-## The breakable fence bodies a car passes through and its wheels ignore.
+## The breakable fence bodies a live car or K-rail passes through (breaking them).
 func fence_bodies() -> Array[RID]:
 	return _rids.duplicate()
+
+
+## Every fence body, breakable or not: what the wheels' rays skip.
+func all_fence_bodies() -> Array[RID]:
+	return _all_rids.duplicate()
 
 
 func broken_count() -> int:
@@ -85,8 +99,8 @@ func broken_keys() -> Array:
 	return _broken.keys()
 
 
-## Breaks every intact bay the car's hull overlaps now.
-func break_overlaps(car: RigidBody3D, _manager: Node) -> void:
+## Breaks every intact bay the car's (or K-rail's) hull overlaps now.
+func break_overlaps(car: RigidBody3D) -> void:
 	if _bodies.is_empty() or car == null:
 		return
 	var space := car.get_world_3d().direct_space_state

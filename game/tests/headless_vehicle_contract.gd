@@ -3,7 +3,8 @@ extends SceneTree
 ## (run with --headless and --fixed-fps 60). The places come from
 ## game/tests/shared/vehicle_cases.json. Cases, in order; the first failure
 ## stops the run (later cases need the earlier ones):
-##   1. enter and exit with F: the stock player beside a parked car presses F
+##   1. enter and exit with F: with the game paused F beside a parked car does
+##      nothing; unpaused, the stock player presses F
 ##      and drives it (avatar hidden, capsule off, the parked box gone), the view
 ##      blending from the on-foot camera to the chase camera; F again stands the
 ##      player on the ground beside it, walking as before, the view blending
@@ -25,7 +26,8 @@ extends SceneTree
 ##      palm's trunk;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it; a parked car hit from the side at speed and a K-rail
-##      hit end on are set moving; each comes to rest where it ends up;
+##      hit end on are set moving; each comes to rest and freezes where it ends
+##      up, and a second hit there sets it moving again;
 ##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -77,7 +79,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_plunge, _case_roll, _case_ramp, _case_fence, _case_plants, _case_shove, _case_on_foot]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way, a run on Seven Seas Avenue on its wheels, a handbrake slide, a splash and back on land from the bay facing inland, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence bay broken while intact bays still stop the player, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed and again once they had frozen, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit")
 	_finish()
 
 
@@ -95,6 +97,15 @@ func _case_enter_exit() -> bool:
 		return false
 	var shape := _parked_shape(entry)
 	if not _require(shape != null and not shape.disabled, "The parked car %s has no enabled collision box." % id):
+		return false
+	# Paused, F does nothing (the vehicles pause with the game).
+	paused = true
+	await _press("vehicle_enter_exit")
+	var paused_in := _player.is_driving()
+	paused = false
+	for _tick in 2:
+		await physics_frame
+	if not _require(not paused_in and _vehicles.live_node(id) == null, "F in the pause menu got the player into %s." % id):
 		return false
 	var view_before := _player.get_camera().global_transform
 	await _press("vehicle_enter_exit")
@@ -648,6 +659,38 @@ func _case_shove() -> bool:
 		var moved := moved_node.global_position.distance_to(parked.origin) if moved_node != null else 0.0
 		print("SHOVE %s: set moving %s at %.2f m/s, moved %.2f m, at rest and frozen %s, car up %.3f" % [target.id, hit, hit_speed, moved, frozen, car.global_transform.basis.y.y])
 		if not _require(hit and moved >= float(target.min_m) and frozen, "Hitting %s did not shove it and leave it at rest (moved %.2f m, frozen %s)." % [target.id, moved, frozen]):
+			return false
+		# Frozen where it stopped, it must not turn into a wall: a second hit,
+		# along the same line from 12 m back, sets it moving again.
+		var rest_at := moved_node.global_position
+		if not await _drive_from(car, Vector2(rest_at.x, rest_at.z) - heading * 12.0, heading):
+			return false
+		Input.action_press("move_forward")
+		var woke := false
+		var woke_speed := 0.0
+		for _tick in 360:
+			_steer_toward(car, Vector2(rest_at.x, rest_at.z))
+			await physics_frame
+			if not moved_node.freeze:
+				woke = true
+				woke_speed = car.linear_velocity.length()
+				break
+		for _tick in 30:
+			await physics_frame
+		_release_driving()
+		Input.action_press("move_back")
+		for _tick in 90:
+			await physics_frame
+		Input.action_release("move_back")
+		var refrozen := false
+		for _tick in 600:
+			await physics_frame
+			if moved_node.freeze:
+				refrozen = true
+				break
+		var again := moved_node.global_position.distance_to(rest_at)
+		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen, at rest and frozen again %s" % [target.id, woke, woke_speed, again, refrozen])
+		if not _require(woke and again >= float(target.min_m) and refrozen, "Hitting %s again once it had frozen did not shove it (moved %.2f m, frozen again %s)." % [target.id, again, refrozen]):
 			return false
 	return await _stop_and_exit(car, "shove")
 

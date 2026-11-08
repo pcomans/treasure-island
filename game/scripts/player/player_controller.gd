@@ -96,15 +96,17 @@ func begin_driving() -> void:
 
 
 ## Out of the car, standing at `at`: walking, the camera, the spray and the
-## avatar as before, and the recovery's safe place is where the player got out.
-func end_driving(at: Transform3D) -> void:
+## avatar as before. With safe (the player got out beside the car, on the
+## ground), the recovery's safe place moves there.
+func end_driving(at: Transform3D, safe: bool = true) -> void:
 	global_transform = at
 	velocity = Vector3.ZERO
 	collision_shape.disabled = false
 	avatar_pivot.visible = _avatar_shown
 	_driving = false
 	set_gameplay_enabled(true)
-	recovery_controller.mark_safe(at)
+	if safe:
+		recovery_controller.mark_safe(at)
 
 
 func is_driving() -> bool:

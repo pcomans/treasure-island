@@ -21,15 +21,17 @@ extends RigidBody3D
 ## facing away from the water, with the player still in it.
 ##
 ## The body is on the street-prop layer, like the parked cars: the player and
-## other cars collide with it, the spray ray stops on it and the camera arms
-## ignore it. Its visual is a top-level node moved each frame between the last
+## other cars collide with it, the spray ray stops on it, the on-foot camera's
+## arm ignores it and the chase camera's arm stops at it (unless it is the car
+## being driven). Come to rest with nobody in it, it freezes (static, as solid
+## as a parked car) and does no per-frame work until wake(): getting in, being
+## put down, or a hit (vehicle_manager.gd _shove). Its visual is a top-level node moved each frame between the last
 ## two physics states (Engine.get_physics_interpolation_fraction), so it stays
 ## smooth when the frame rate and the 60 Hz physics differ (the web build).
 ##
 ## Handling numbers are production inference for arcade feel, not measured.
 
 signal recovered(cause: String, from_position: Vector3)
-signal righted
 ## The car met the water off the island, at this point on the surface and speed.
 signal splashed(at: Vector3, speed: float)
 
@@ -109,8 +111,15 @@ const RIGHT_STILL_MPS := 1.0
 const RIGHT_STILL_RADPS := 1.0
 const RIGHT_DURATION_S := 0.6
 const RIGHT_POP_M := 1.1
+## Where it rights itself: RIGHT_LIFT_M over where it lay, or, if its hulls
+## would meet a wall, a car or a prop there, the first clear of these offsets
+## (m, in its level frame: across, up, along).
+const RIGHT_LIFT_M := 0.25
+const RIGHT_OFFSETS: Array[Vector3] = [Vector3(1.2, 0.25, 0.0), Vector3(-1.2, 0.25, 0.0), Vector3(0.0, 0.25, 1.5), Vector3(0.0, 0.25, -1.5), Vector3(0.0, 1.0, 0.0), Vector3(2.4, 0.25, 0.0), Vector3(-2.4, 0.25, 0.0)]
+## A wheel in the air spins down at this share of its rolling rate (1/s).
+const AIR_SPIN_DAMP := 0.6
 ## A car left alone (no driver) and at rest this long freezes: a static body
-## where it stopped, for the rest of the session, until someone drives it.
+## where it stopped, for the rest of the session, until it is woken (wake()).
 const PARK_AFTER_S := 0.75
 const PARK_SPEED_MPS := 0.15
 ## Recovery off the island (owner: a car driven into the bay comes back on land
@@ -194,7 +203,7 @@ var _prev := Transform3D.IDENTITY
 var _curr := Transform3D.IDENTITY
 var _visual: Node3D
 var _wheels: MultiMesh
-var _air_spin_damp := 0.6
+var _hull_query := PhysicsShapeQueryParameters3D.new()
 
 
 ## Builds the car for a kit body (KIT.drivable(body)) in its paint and puts it
@@ -389,9 +398,9 @@ func request_recover(cause: String = "manual") -> void:
 ## Puts the car down at a new place with no motion (used by tests); its visual
 ## goes there at once, for a camera taking over this tick.
 func place(at: Transform3D) -> void:
+	wake()
 	_teleport = at
 	_teleport_pending = true
-	freeze = false
 	_prev = at
 	_curr = at
 	if _visual != null:
@@ -529,7 +538,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		_spin[i] = 0.0 if locked else _spin[i] - v_long / wheel_radius * dt
 	for i in 4:
 		if hits[i] == null:
-			_spin[i] -= forward_speed_now / wheel_radius * dt * _air_spin_damp
+			_spin[i] -= forward_speed_now / wheel_radius * dt * AIR_SPIN_DAMP
 	# Air drag, and a little downforce on the wheels.
 	var speed_now := velocity.length()
 	if speed_now > 0.1:
@@ -569,8 +578,40 @@ func _watch_upright(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	_upright_wait = 0.0
 	var xf := state.transform
 	_right_from = xf
-	_right_to = Transform3D(_upright_basis(xf.basis), xf.origin + Vector3.UP * 0.25)
+	_right_to = _right_target(state.get_space_state(), xf)
 	_righting = 0.0
+
+
+## Where to right itself from xf: upright, RIGHT_LIFT_M over where it lies, or
+## moved by the first of RIGHT_OFFSETS that leaves its hulls clear of the world
+## and the street props (the pop and roll itself ignores collisions, so a car
+## on its side against a wall mustn't turn into the wall). If none is clear it
+## rights itself where it lies.
+func _right_target(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> Transform3D:
+	var basis := _upright_basis(xf.basis)
+	var target := Transform3D(basis, xf.origin + Vector3.UP * RIGHT_LIFT_M)
+	if _hulls_clear(space, target):
+		return target
+	for offset: Vector3 in RIGHT_OFFSETS:
+		var moved := Transform3D(basis, xf.origin + basis.x * offset.x + Vector3.UP * offset.y - basis.z * offset.z)
+		if _hulls_clear(space, moved):
+			return moved
+	return target
+
+
+## Whether the car's hulls at xf meet nothing solid: the world or a street prop
+## (itself and the fences it drives through left out).
+func _hulls_clear(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> bool:
+	_hull_query.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP
+	_hull_query.exclude = _ray.exclude
+	_hull_query.margin = 0.02
+	for owner_id in get_shape_owners():
+		for index in shape_owner_get_shape_count(owner_id):
+			_hull_query.shape = shape_owner_get_shape(owner_id, index)
+			_hull_query.transform = xf * shape_owner_get_transform(owner_id)
+			if not space.intersect_shape(_hull_query, 1).is_empty():
+				return false
+	return true
 
 
 ## Upright, keeping the car's heading (or its side's, if it stands on its nose).
@@ -597,7 +638,6 @@ func _step_righting(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	if t >= 1.0:
 		_righting = -1.0
 		_set_state(state, xf, Vector3.DOWN * 0.5)
-		righted.emit.call_deferred()
 		return
 	state.transform = xf
 	state.linear_velocity = Vector3.ZERO
@@ -720,11 +760,35 @@ func _physics_process(delta: float) -> void:
 	if not occupied and _righting < 0.0 and _sinking < 0.0 and linear_velocity.length() < PARK_SPEED_MPS and angular_velocity.length() < PARK_SPEED_MPS and up_dot() > RIGHT_UP_DOT:
 		_park_wait += delta
 		if _park_wait >= PARK_AFTER_S:
-			_park_wait = 0.0
-			freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
-			freeze = true
+			_park()
 	else:
 		_park_wait = 0.0
+
+
+## Frozen where it came to rest, as solid as a parked car: its visual and
+## wheels drawn there once, then no per-frame work until wake().
+func _park() -> void:
+	_park_wait = 0.0
+	freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+	freeze = true
+	_prev = global_transform
+	_curr = global_transform
+	if _visual != null:
+		_visual.global_transform = global_transform
+	_update_wheels()
+	set_process(false)
+	set_physics_process(false)
+
+
+## Moving again (got into, put down or hit): unfrozen, with its per-frame work
+## back on.
+func wake() -> void:
+	_park_wait = 0.0
+	_prev = global_transform
+	_curr = global_transform
+	freeze = false
+	set_process(true)
+	set_physics_process(true)
 
 
 func _process(_delta: float) -> void:
