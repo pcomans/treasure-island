@@ -87,7 +87,7 @@ const box = (u0, u1, v0, v1, role, cls = C.structure, skip = []) => ({
 // The double-deck truss between s0 and s1: the top band (barrier, upper deck edge and
 // top chord) and the bottom chord as solids on each side, both deck slabs between
 // them, and the verticals and Warren diagonals as wires at every panel point.
-function buildTruss(mesh, frame, s0, s1, report) {
+function buildTruss(mesh, frame, s0, s1) {
   const c = TRUSS.chordLateral;
   const h = TRUSS.chordHalf;
   const depth = WEST_SPAN.truss_depth_m;
@@ -118,7 +118,6 @@ function buildTruss(mesh, frame, s0, s1, report) {
         const rising = k % 2 === 0;
         mesh.wire(node(s, side, rising ? "bottom" : "top"), node(next, side, rising ? "top" : "bottom"), TRUSS.memberRadius, R.steel_silver);
       }
-      report.west_panels += 1;
     }
   }
 }
@@ -254,7 +253,7 @@ function cableSpan(frame, side, s0, y0, s1, y1, curvature) {
 
 // Main cables over one suspension bridge's saddles [{ s, y }] (end, tower, tower, end),
 // with suspenders every panel down to the truss's top band.
-function buildCables(mesh, frame, saddles, report) {
+function buildCables(mesh, frame, saddles) {
   // Main span: the cable's low point CABLE.midspanRise over the deck at mid-span.
   const [, towerA, towerB] = saddles;
   const length = towerB.s - towerA.s;
@@ -277,7 +276,6 @@ function buildCables(mesh, frame, saddles, report) {
       points.push(...(points.length ? run.slice(1) : run));
     }
     mesh.wirePath(points.map((point) => point.world), CABLE.radius, R.cable_silver);
-    report.west_cable_segments += points.length - 1;
     // Suspenders at the panel points between the end saddles.
     for (let s = saddles[0].s + WEST_SPAN.panel_m; s < saddles.at(-1).s - 4; s += WEST_SPAN.panel_m) {
       if (saddles.some((saddle) => Math.abs(saddle.s - s) < 6)) continue;
@@ -291,24 +289,20 @@ function buildCables(mesh, frame, saddles, report) {
       if (y - deck < 2.5) continue;
       const plan = frame.plan(s, side * CABLE.lateral);
       mesh.wire(world(plan[0], plan[1], y), world(plan[0], plan[1], deck), SUSPENDER_RADIUS, R.steel_silver);
-      report.west_suspenders += 1;
     }
   }
 }
 
 // The western span from the YBI cable bent (s = 0) to San Francisco. bentTop: the
 // cable bent's saddle height; groundAt for the cables' run into the island's rock.
-export function buildWestSpan(mesh, { groundAt }, report) {
-  report.west_panels = 0;
-  report.west_suspenders = 0;
-  report.west_cable_segments = 0;
+export function buildWestSpan(mesh, { groundAt }) {
   const frame = westSpanFrame();
   const piers = WEST_SPAN.piers_m;
   const tops = WEST_SPAN.tower_top_m;
   const w4Half = ANCHORAGE.center.baseAlong / 2 - 3;
   const sfHalf = ANCHORAGE.sf.along / 2;
-  buildTruss(mesh, frame, 0, piers.w4 - w4Half, report);
-  buildTruss(mesh, frame, piers.w4 + w4Half, piers.w1 - sfHalf, report);
+  buildTruss(mesh, frame, 0, piers.w4 - w4Half);
+  buildTruss(mesh, frame, piers.w4 + w4Half, piers.w1 - sfHalf);
   const w6 = buildTower(mesh, frame, piers.w6, tops.w6);
   const w5 = buildTower(mesh, frame, piers.w5, tops.w5);
   const w3 = buildTower(mesh, frame, piers.w3, tops.w3);
@@ -319,8 +313,8 @@ export function buildWestSpan(mesh, { groundAt }, report) {
   // The YBI cable bent's saddle, then the cables dive at 37 degrees into their
   // anchorage tunnels in the rock (HAER).
   const bentY = frame.top(0) + CABLE.bentRise;
-  buildCables(mesh, frame, [{ s: 0, y: bentY }, { s: piers.w6, y: w6.saddleY }, { s: piers.w5, y: w5.saddleY }, { s: piers.w4, y: w4.saddleY }], report);
-  buildCables(mesh, frame, [{ s: piers.w4, y: w4.saddleY }, { s: piers.w3, y: w3.saddleY }, { s: piers.w2, y: w2.saddleY }, { s: piers.w1, y: sf.saddleY }], report);
+  buildCables(mesh, frame, [{ s: 0, y: bentY }, { s: piers.w6, y: w6.saddleY }, { s: piers.w5, y: w5.saddleY }, { s: piers.w4, y: w4.saddleY }]);
+  buildCables(mesh, frame, [{ s: piers.w4, y: w4.saddleY }, { s: piers.w3, y: w3.saddleY }, { s: piers.w2, y: w2.saddleY }, { s: piers.w1, y: sf.saddleY }]);
   const dive = Math.tan(37 * Math.PI / 180);
   for (const side of [-1, 1]) {
     const start = frame.plan(0, side * CABLE.lateral);

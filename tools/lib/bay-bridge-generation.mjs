@@ -322,7 +322,7 @@ function column(mesh, groundAt, center, axis, size, top, flare = null) {
 
 // --- Eastern span --------------------------------------------------------------------
 
-function buildEastSpan(mesh, { rawOsm, groundAt }, report) {
+function buildEastSpan(mesh, { rawOsm, groundAt }) {
   const axis = sasAxis();
   const westbound = deckLine(smoothLine(extendLine(joinLines(MAIN_LINE_WAYS.westbound_east.map((id) => wayLine(rawOsm, id, true))), OAKLAND_EXTENSION_M)));
   const eastbound = deckLine(smoothLine(extendLine(joinLines(MAIN_LINE_WAYS.eastbound_east.map((id) => wayLine(rawOsm, id))), OAKLAND_EXTENSION_M)));
@@ -430,7 +430,6 @@ function buildEastSpan(mesh, { rawOsm, groundAt }, report) {
       const { point, tangent } = line.at(s);
       column(mesh, groundAt, point, tangent, { ...SKYWAY_COLUMN, cap: SKYWAY_COLUMN.cap }, top(s) - deck.skywayDepth(s) + 0.2,
         { across: SKYWAY_COLUMN.flareAcross, along: SKYWAY_COLUMN.flareAlong, height: SKYWAY_COLUMN.flareHeight });
-      report.skyway_piers += 1;
     }
     for (const s of deck.touchdownPiers) {
       const { point, tangent } = line.at(s);
@@ -441,14 +440,13 @@ function buildEastSpan(mesh, { rawOsm, groundAt }, report) {
     const ring = planRectangle(add2(end.point, end.tangent, -1), end.tangent, 4, (deck.concrete.left - deck.concrete.right + deck.concrete.bike) / 2 + 1);
     mesh.prism([{ ring, y: WATER_FOOTING_M }, { ring, y: top(line.length) + 0.3 }], shade(R.concrete, O.overhang), C.structure);
   }
-  buildTransitionBents(mesh, decks, groundAt, report);
+  buildTransitionBents(mesh, decks, groundAt);
 
   buildSasTower(mesh, axis, wb.top(chainageAtAxis(wb.line, 0, axis)));
   buildSasCrossbeams(mesh, axis, decks);
   buildSasEndPiers(mesh, axis, decks, groundAt);
-  buildSasCables(mesh, axis, decks, report);
-  buildLightPoles(mesh, decks, report);
-  report.east_deck_m = Math.round(wb.line.length + eb.line.length);
+  buildSasCables(mesh, axis, decks);
+  buildLightPoles(mesh, decks);
   return { decks, axis };
 }
 
@@ -458,7 +456,7 @@ const add2 = (point, tangent, distance) => [point[0] + tangent[0] * distance, po
 // E line's scaled to its length; below the westbound deck where it stands over the
 // eastbound one, a straddle bent. Short bents west of the begin carry the
 // westbound deck from the portal.
-function buildTransitionBents(mesh, decks, groundAt, report) {
+function buildTransitionBents(mesh, decks, groundAt) {
   const [wb, eb] = decks;
   const spans = YBITS.w_line_spans_m;
   const total = spans.reduce((a, b) => a + b, 0);
@@ -488,7 +486,6 @@ function buildTransitionBents(mesh, decks, groundAt, report) {
         for (const leg of legs) column(mesh, groundAt, leg, otherPoint.tangent, { across: 2.4, along: 2.4 }, soffit - 1.4);
         const capY = soffit - 0.7;
         mesh.beam(world(legs[0][0], legs[0][1], capY), world(legs[1][0], legs[1][1], capY), 2.6, 1.6, shade(R.concrete, O.under), C.structure);
-        report.ybits_bents += 1;
         continue;
       }
       if (near.distance < (other.ybits.left - other.ybits.right) / 2 + 1 && otherTop > soffit) continue;
@@ -499,7 +496,6 @@ function buildTransitionBents(mesh, decks, groundAt, report) {
       const capCenter = offsetPlan(point, tangent, (deck.ybits.left + deck.ybits.right) / 2);
       const cap = planRectangle(capCenter, tangent, YBITS_COLUMN.cap.along / 2, capHalf, 0.6);
       mesh.prism([{ ring: cap, y: soffit - YBITS_COLUMN.cap.depth }, { ring: cap, y: soffit + 0.1 }], shade(R.concrete, O.under), C.structure, { capBottom: true, capTop: false });
-      report.ybits_bents += 1;
     }
   }
 }
@@ -598,7 +594,7 @@ function buildSasEndPiers(mesh, axis, decks, groundAt) {
 // saddle, in planes leaning from the saddle out to each deck's outer edge; equal
 // horizontal tension on both sides of the tower, so the back span reaches W2 still
 // falling while the main span flattens onto the deck at its landing.
-function buildSasCables(mesh, axis, decks, report) {
+function buildSasCables(mesh, axis, decks) {
   const [wb, eb] = decks;
   for (const [deck, side] of [[wb, 1], [eb, -1]]) {
     // The deck edge at an axis station: plan point and its top.
@@ -652,7 +648,6 @@ function buildSasCables(mesh, axis, decks, report) {
     const housingTop = world(...axis.plan(SAS.w2_station_m - 2, axis.lateral(westEdge.plan)), westY + 0.6);
     const housingFoot = world(...axis.plan(SAS.w2_station_m - 2, axis.lateral(westEdge.plan)), westY - SAS_BOX.depth - 1.2);
     mesh.beam(housingTop, housingFoot, 3.2, 3.6, shade(R.sas_white, O.overhang), C.structure);
-    report.cable_segments += points.length - 1;
     // Suspenders every 10 m, in the cable plane down to the deck edge.
     for (const direction of [-1, 1]) {
       const limit = direction > 0 ? landing : back;
@@ -662,14 +657,13 @@ function buildSasCables(mesh, axis, decks, report) {
         const bottom = world(edge.plan[0], edge.plan[1], edge.top + 0.4);
         if (top[1] - bottom[1] < 2) continue;
         mesh.wire(top, bottom, SUSPENDER.radius, R.suspender);
-        report.suspenders += 1;
       }
     }
   }
 }
 
 // Light masts along both edges of each deck, staggered, taller on the SAS.
-function buildLightPoles(mesh, decks, report) {
+function buildLightPoles(mesh, decks) {
   for (const deck of decks) {
     const { line, top } = deck;
     for (const [sideIndex, side] of [[0, 1], [1, -1]]) {
@@ -682,7 +676,6 @@ function buildLightPoles(mesh, decks, report) {
         const base = top(s) + BARRIER.height;
         const height = onSas ? POLES.sasHeight : POLES.height;
         mesh.wire(world(plan[0], plan[1], base), world(plan[0], plan[1], base + height), POLES.radius, R.light_pole);
-        report.light_poles += 1;
       }
     }
   }
@@ -694,19 +687,9 @@ function buildLightPoles(mesh, decks, report) {
 // Yerba Buena Island (null over the water).
 export function bayBridgeMesh({ rawOsm, groundAt }) {
   const mesh = new BridgeMesh();
-  const report = {
-    skyway_piers: 0,
-    ybits_bents: 0,
-    suspenders: 0,
-    cable_segments: 0,
-    light_poles: 0,
-    east_deck_m: 0,
-  };
-  const { decks } = buildEastSpan(mesh, { rawOsm, groundAt }, report);
-  buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop: westSpanFrame().top(0) }, report);
-  buildWestSpan(mesh, { groundAt }, report);
+  const { decks } = buildEastSpan(mesh, { rawOsm, groundAt });
+  buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop: westSpanFrame().top(0) });
+  buildWestSpan(mesh, { groundAt });
   invariant(mesh.indices.length > 0, "Bay Bridge mesh is empty");
-  report.vertices = mesh.vertexCount;
-  report.triangles = mesh.indices.length / 3;
-  return { mesh: mesh.toRecordMesh(), report };
+  return { mesh: mesh.toRecordMesh() };
 }

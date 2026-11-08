@@ -2,7 +2,7 @@
 // eastern span (self-anchored suspension span and Skyway), the Yerba Buena
 // Island crossing and the western suspension span. The generator builds every
 // part from these profiles, proportions and roles so the parts read as one
-// bridge. Work in progress: the generator itself is not wired in yet.
+// bridge.
 //
 // Plan geometry comes from the frozen OSM snapshot (data/osm, 2026-08-27),
 // projected with tools/lib/coordinates.mjs. "Measured" below means read from
@@ -35,11 +35,9 @@ export const OCCLUSION = Object.freeze({ open: 0, overhang: 1, under: 2, soffit:
 export const shade = (role, level) => role + ROLE_STRIDE * level;
 
 // Detail classes, carried in each vertex's UV y. Structure is drawn at every
-// distance; detail stops at DETAIL_END_M; wires are camera-facing ribbons
-// whose coverage falls with distance; far wires stand in for solid detail
-// beyond DETAIL_END_M.
-export const BRIDGE_CLASSES = Object.freeze({ structure: 0, detail: 1, wire: 2, wire_far: 3 });
-export const DETAIL_END_M = 2400;
+// distance; detail fades out by distance (the runtime builder's DETAIL_END_M);
+// wires are camera-facing ribbons whose coverage falls with distance.
+export const BRIDGE_CLASSES = Object.freeze({ structure: 0, detail: 1, wire: 2 });
 
 // Main-line OSM ways (measured), each list ordered from the tunnel's east
 // portal through the YBI transition, the suspension span and the Skyway to

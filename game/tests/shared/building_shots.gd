@@ -1029,7 +1029,7 @@ func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 		return "fov must be a number of degrees between 0 and 180"
 	if projection == "ortho" and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0):
 		return "ortho needs a positive ortho_size"
-	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) <= 100.0 or float(view.far) > ISLAND_CAMERA_FAR_M):
+	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) < 100.0 or float(view.far) > ISLAND_CAMERA_FAR_M):
 		return "far must be metres between 100 and %d" % int(ISLAND_CAMERA_FAR_M)
 	var direction := target - Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
 	if direction.length() < 0.01 or absf(direction.normalized().dot(Vector3.UP)) > 0.999:

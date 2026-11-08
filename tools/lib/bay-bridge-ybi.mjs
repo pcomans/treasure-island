@@ -113,7 +113,7 @@ function facadeSlab(mesh, outer, hole, place, thickness, outward, role) {
 
 const APPROACH = Object.freeze({ halfWidth: 10.5, upperDepth: 2.2, lowerDepth: 1.8, bentSpacing: 24, column: 1.8 });
 
-function buildWestApproach(mesh, rawOsm, groundAt, westTop, report) {
+function buildWestApproach(mesh, rawOsm, groundAt, westTop) {
   const upper = rawWayLine(rawOsm, "23874736");
   const lower = [...rawWayLine(rawOsm, "179235221"), ...rawWayLine(rawOsm, "52721870").slice(1)].reverse();
   // The stacked decks share one line, from the west portal to the cable bent.
@@ -161,7 +161,6 @@ function buildWestApproach(mesh, rawOsm, groundAt, westTop, report) {
       const ring = planRectangle(foot, tangent, APPROACH.column / 2, APPROACH.column / 2, 0.3);
       mesh.prism([{ ring, y: bottom }, { ring, y: upperAt(s) - APPROACH.upperDepth }], shade(R.concrete, O.under), C.structure);
     }
-    report.ybi_bents += 1;
   }
   return { line, total, upperAt };
 }
@@ -208,10 +207,13 @@ function rampChains(rawOsm) {
   for (const start of ways) {
     if (used.has(start.id)) continue;
     // Walk back to the chain's first way, then forward.
+    // A loop of ramp ways ends the walk where it comes back to a way already passed.
     let head = start;
+    const passed = new Set([start.id]);
     for (;;) {
       const previous = ways.find((other) => !used.has(other.id) && other !== head && other.last === head.first);
-      if (!previous || previous === start) break;
+      if (!previous || passed.has(previous.id)) break;
+      passed.add(previous.id);
       head = previous;
     }
     const chain = [head];
@@ -227,7 +229,7 @@ function rampChains(rawOsm) {
   return chains;
 }
 
-function buildRamps(mesh, rawOsm, groundAt, endHeight, report) {
+function buildRamps(mesh, rawOsm, groundAt, endHeight) {
   for (const chain of rampChains(rawOsm)) {
     const points = [];
     for (const piece of chain) for (const point of piece.line) if (points.length === 0 || Math.hypot(point[0] - points.at(-1)[0], point[1] - points.at(-1)[1]) > 0.01) points.push(point);
@@ -263,7 +265,6 @@ function buildRamps(mesh, rawOsm, groundAt, endHeight, report) {
       const ring = planRectangle(point, tangent, RAMP.column.along / 2, RAMP.column.across / 2, 0.4);
       mesh.prism([{ ring, y: (ground ?? 0) - 3 }, { ring, y: soffit + 0.1 }], shade(R.concrete, O.under), C.structure);
     }
-    report.ramps += 1;
   }
 }
 
@@ -271,18 +272,14 @@ function buildRamps(mesh, rawOsm, groundAt, endHeight, report) {
 // tunnel): roadway strips laid on the drawn terrain.
 const AT_GRADE = Object.freeze({ widths: Object.freeze({ motorway: 16, motorway_link: 8.5, construction: 8.5 }), lift: 0.25, step: 2, across: 4 });
 
-function buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear, report) {
+function buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear) {
   const ids = [...rawOsm.ways.keys()].filter((id) => {
     const tags = rawOsm.ways.get(id).tags;
     return tags.highway != null && isBridgeTrackHighway(tags) && !yes(tags.bridge) && !yes(tags.tunnel);
   }).sort();
   for (const id of ids) {
-    let line;
-    try {
-      line = rawWayLine(rawOsm, id);
-    } catch {
-      continue;
-    }
+    // Every bridge-track way of the snapshot resolves; a missing node is a data error.
+    const line = rawWayLine(rawOsm, id);
     const total = polylineLength(line);
     if (total < 4) continue;
     const width = AT_GRADE.widths[rawOsm.ways.get(id).tags.highway] ?? 8.5;
@@ -306,7 +303,6 @@ function buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear, report) {
       if (!a || !b) continue;
       for (let m = 0; m < AT_GRADE.across; m += 1) mesh.quad(a[m], a[m + 1], b[m + 1], b[m], [0, 1, 0], R.roadway, C.structure);
     }
-    report.at_grade_ways += 1;
   }
 }
 
@@ -314,16 +310,13 @@ function buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear, report) {
 
 // decks: the eastern span's westbound and eastbound deck lines and profiles (from the
 // tunnel's east portal). westTop: the western span's upper-deck top at the cable bent.
-export function buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop }, report) {
-  report.ybi_bents = report.ybi_bents ?? 0;
-  report.ramps = 0;
-  report.at_grade_ways = 0;
+export function buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop }) {
   const east = TUNNEL.east_portal_en;
   const west = TUNNEL.west_portal_en;
   const axis = unit([east[0] - west[0], east[1] - west[1], 0]);
   buildPortal(mesh, east, [axis[0], axis[1]], YBITS.lower_portal_m, YBITS.upper_portal_m);
   buildPortal(mesh, west, [-axis[0], -axis[1]], YBITS.lower_portal_m + 0.3, YBITS.upper_portal_m + 0.15);
-  buildWestApproach(mesh, rawOsm, groundAt, westTop, report);
+  buildWestApproach(mesh, rawOsm, groundAt, westTop);
   const bent = buildCableBent(mesh, rawOsm, groundAt, westTop);
   // A ramp end on an elevated main deck takes that deck's height, else the ground's.
   const endHeight = (point) => {
@@ -334,8 +327,8 @@ export function buildYbiCrossing(mesh, { rawOsm, groundAt, decks, westTop }, rep
     if (Math.hypot(point[0] - WEST_SPAN.axis_start_en[0], point[1] - WEST_SPAN.axis_start_en[1]) < 14) return westTop;
     return (groundAt(point[0], point[1]) ?? 0) + 0.2;
   };
-  buildRamps(mesh, rawOsm, groundAt, endHeight, report);
+  buildRamps(mesh, rawOsm, groundAt, endHeight);
   const skipNear = (point) => Math.hypot(point[0] - west[0], point[1] - west[1]) < 22 || Math.hypot(point[0] - east[0], point[1] - east[1]) < 22;
-  buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear, report);
+  buildAtGradeRoads(mesh, rawOsm, groundAt, skipNear);
   return { bent };
 }

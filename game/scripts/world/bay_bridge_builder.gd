@@ -13,7 +13,8 @@ extends RefCounted
 ## Wires are ribbons of four vertices in the fixed order [start - side, start + side,
 ## end + side, end - side]; they are rebuilt as centre lines for the wire shader,
 ## which keeps them at least a pixel or so wide and fades them by the share of that
-## width they cover.
+## width they cover. A wire's vertex colour alpha marks the bright strands
+## (BRIGHT_STRAND_ROLES): 1 for those, 0 for every other member.
 ## The solid meshes cast the sun's shadows (the decks' and towers' on the water and on
 ## Yerba Buena Island); the camera-facing wire strips do not.
 
@@ -22,8 +23,7 @@ const WIRE_SHADER := preload("res://game/resources/materials/world/bay_bridge/ba
 const CLASS_STRUCTURE := 0
 const CLASS_DETAIL := 1
 const CLASS_WIRE := 2
-const CLASS_WIRE_FAR := 3
-## Solid detail stops here; wires of class CLASS_WIRE_FAR stand in beyond it.
+## Solid detail fades out here.
 const DETAIL_END_M := 2400.0
 const DETAIL_FADE_M := 250.0
 const CELL_M := 400.0
@@ -55,6 +55,10 @@ const ROLE_STRIDE := 16
 const OCCLUSION_FACTORS: Array[float] = [1.0, 0.72, 0.5, 0.36, 0.24]
 ## A solid face turned straight down loses this share more.
 const DOWNWARD_DARKENING := 0.3
+## The self-anchored span's white main cable (sas_white) and its suspenders: the dated
+## photographs show them as a dense fan of bright lines, brighter than the sky, so the
+## wire shader gives these strands more ink and lights them as thin strands.
+const BRIGHT_STRAND_ROLES: Array[int] = [0, 7]
 ## Surface family per role: 0 painted steel, 1 concrete, 2 asphalt.
 const ROLE_FAMILY: Array[int] = [0, 1, 1, 2, 1, 0, 0, 0, 0, 1]
 const FAMILY_NAMES: Array[String] = ["painted_steel", "concrete", "asphalt"]
@@ -89,19 +93,22 @@ static func build_record(record: Dictionary) -> Dictionary:
 		roles[index] = code % ROLE_STRIDE
 		var level := int(code / ROLE_STRIDE)
 		classes[index] = int(source_uvs[index * 2 + 1])
-		if code < 0 or roles[index] >= ROLE_COLORS.size() or level >= OCCLUSION_FACTORS.size() or classes[index] < CLASS_STRUCTURE or classes[index] > CLASS_WIRE_FAR:
+		if code < 0 or roles[index] >= ROLE_COLORS.size() or level >= OCCLUSION_FACTORS.size() or classes[index] < CLASS_STRUCTURE or classes[index] > CLASS_WIRE:
 			return _failure("Bay Bridge vertex %d has an unknown role, occlusion or class." % index, record)
 		var factor := OCCLUSION_FACTORS[level]
 		if classes[index] == CLASS_STRUCTURE or classes[index] == CLASS_DETAIL:
 			factor *= 1.0 - DOWNWARD_DARKENING * maxf(0.0, -float(source_normals[index * 3 + 1]))
-		colors[index] = _shaded(ROLE_COLORS[roles[index]], factor)
+		var color := _shaded(ROLE_COLORS[roles[index]], factor)
+		if classes[index] == CLASS_WIRE:
+			color.a = 1.0 if BRIGHT_STRAND_ROLES.has(roles[index]) else 0.0
+		colors[index] = color
 	# Buckets: class and cell -> solid triangles or wire quads (first index of each).
 	var buckets := {}
 	var cursor := 0
 	while cursor < indices.size():
 		var first := int(indices[cursor])
 		var kind := classes[first]
-		if kind == CLASS_WIRE or kind == CLASS_WIRE_FAR:
+		if kind == CLASS_WIRE:
 			if cursor + 6 > indices.size() or int(indices[cursor + 3]) != first or int(indices[cursor + 4]) != int(indices[cursor + 2]) \
 			or int(indices[cursor + 1]) != first + 1 or int(indices[cursor + 2]) != first + 2 or int(indices[cursor + 5]) != first + 3:
 				return _failure("Bay Bridge wire at index %d is not a four-vertex ribbon." % cursor, record)
@@ -130,7 +137,7 @@ static func build_record(record: Dictionary) -> Dictionary:
 		instance.name = key
 		instance.position = center
 		instance.layers = 1
-		var wire := kind == CLASS_WIRE or kind == CLASS_WIRE_FAR
+		var wire := kind == CLASS_WIRE
 		instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if wire else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		var mesh: ArrayMesh
 		if wire:
@@ -143,10 +150,6 @@ static func build_record(record: Dictionary) -> Dictionary:
 		if kind == CLASS_DETAIL:
 			instance.visibility_range_end = DETAIL_END_M
 			instance.visibility_range_end_margin = DETAIL_FADE_M
-			instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
-		elif kind == CLASS_WIRE_FAR:
-			instance.visibility_range_begin = DETAIL_END_M
-			instance.visibility_range_begin_margin = DETAIL_FADE_M
 			instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_SELF
 		root.add_child(instance)
 		mesh_instances += 1
