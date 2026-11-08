@@ -125,11 +125,11 @@ func _run() -> void:
 
 
 ## The fit checks read collision and the renderer's mesh data, never pixels, so
-## nothing is drawn while they walk. Drawn, each physics tick of a walk-up also
-## drew the whole island, which made the walks many times slower; a compositor
-## idle timeout once hid that cost (LEARNINGS.md). Vsync goes off with drawing:
-## Godot's Wayland backend paces vsync by waiting, up to a second a frame, for
-## the compositor's frame callback, and none comes while nothing is drawn.
+## nothing is drawn while they walk: drawing the island on every tick made the
+## walks about 50 times slower, which a compositor idle timeout once hid
+## (LEARNINGS.md). Vsync goes off too: Godot's Wayland backend paces vsync by
+## waiting for the compositor's frame callback, none comes while nothing is
+## drawn, and it would stall up to a second at a time.
 ## Returns what _resume_drawing restores.
 func _stop_drawing() -> Array:
 	var saved := [RenderingServer.render_loop_enabled, DisplayServer.window_get_vsync_mode()]
