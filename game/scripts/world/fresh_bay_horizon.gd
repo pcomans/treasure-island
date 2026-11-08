@@ -1,20 +1,21 @@
 extends Node3D
 ## Original cylindrical distant art; scale and interpolation are production inference.
 ## +X east, -Z north. Existing 3D Bay Bridges/YBI remain exclusive nearby owners.
-const SECTORS := [
-	preload("res://game/resources/textures/context/fresh_bay/sector_west.png"),
-	preload("res://game/resources/textures/context/fresh_bay/sector_north.png"),
-	preload("res://game/resources/textures/context/fresh_bay/sector_east.png"),
-	preload("res://game/resources/textures/context/fresh_bay/sector_south.png"),
-]
+## Sectors by number round the compass from WEST_START_DEG, 90 degrees apart: 1 north,
+## 2 east, 3 south. The west quarter (sector 0) is the mapped western background's.
+const SECTORS := {
+	1: preload("res://game/resources/textures/context/fresh_bay/sector_north.png"),
+	2: preload("res://game/resources/textures/context/fresh_bay/sector_east.png"),
+	3: preload("res://game/resources/textures/context/fresh_bay/sector_south.png"),
+}
 const SKYLINE := preload("res://game/resources/textures/context/fresh_bay/sf_skyline.png")
 const RADIUS := 3500.0 # Historical angular authoring reference, not runtime depth.
-const SECTOR_RADII := [14000.0, 14000.0, 14000.0, 6000.0]
+const SECTOR_RADII := {1: 14000.0, 2: 14000.0, 3: 6000.0}
 const SECTOR_WIDTH_DEG := 94.0
 # Uniform angular mapping; four-degree overlaps contain no landmark motifs.
 # Visible Angel center estimated pixel1470/2172 -> geographic target309.5deg.
 const WEST_START_DEG := 245.882136
-const WATERLINES := [0.934, 0.902, 0.950, 0.941]
+const WATERLINES := {1: 0.902, 2: 0.950, 3: 0.941}
 const WESTERN_BLOCKOUT := preload("res://game/scripts/world/western_background_blockout.gd")
 const EASTERN_BLOCKOUT := preload("res://game/scripts/world/eastern_background_blockout.gd")
 const SECTOR_SHADER := preload("res://game/resources/textures/context/fresh_bay/sector.gdshader")
@@ -28,7 +29,7 @@ func build_scenery() -> void:
 	var band := Node3D.new()
 	band.name = "Continuous360Horizon"
 	add_child(band)
-	for sector in range(4):
+	for sector: int in SECTORS:
 		var vertices := PackedVector3Array()
 		var uvs := PackedVector2Array()
 		var indices := PackedInt32Array()
@@ -68,15 +69,12 @@ func build_scenery() -> void:
 		material.set_shader_parameter("sector_start_deg", WEST_START_DEG + sector * 90.0)
 		material.set_shader_parameter("art_waterline", WATERLINES[sector])
 		material.set_shader_parameter("art", SECTORS[sector])
-		material.set_shader_parameter("restore_bridge_cables", sector == 0)
 		material.set_shader_parameter("atmosphere", 0.16)
 		item.material_override = material
 		item.layers = 1
 		item.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		item.visible = sector != 0 # True-depth western owner replaces all old western motifs.
 		band.add_child(item)
-		if sector != 0:
-			_mainland_backing(band, sector, radius)
+		_mainland_backing(band, sector, radius)
 	var western = WESTERN_BLOCKOUT.new()
 	western.name = "MappedWesternBackground"
 	add_child(western)

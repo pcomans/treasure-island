@@ -7,7 +7,6 @@ uniform float sector_start_deg = 0.0;
 uniform float art_waterline = 0.934;
 uniform sampler2D art : source_color, filter_linear_mipmap, repeat_disable;
 uniform float atmosphere = 0.0;
-uniform bool restore_bridge_cables = false;
 uniform bool south_right_backing = false;
 uniform bool western_blockout_cut = false;
 uniform vec3 haze : source_color = vec3(0.60, 0.70, 0.78);
@@ -45,39 +44,6 @@ void fragment() {
 	vec4 color = texture(art, art_uv);
 	// Registered SF northshore replaces the old south-sector western tail.
 	if (western_blockout_cut && UV.x >= (232.0 - 155.882136) / 94.0) { discard; }
-	// Land-only bank contours. Preserve existing visible bridge pixels.
-	if (restore_bridge_cables) {
-		vec2 land_px = UV * vec2(2172.0, 724.0);
-		if (land_px.x >= 290.0 && land_px.x <= 302.0 && land_px.y > 664.0 && land_px.y <= 679.0 && color.a < 0.35) {
-			// A short shore toe widens downward, sampled from this same bank.
-			float toe = 10.0 * smoothstep(664.0, 677.0, land_px.y);
-			vec4 shore = texture(art, vec2(land_px.x - toe, land_px.y) / vec2(2172.0, 724.0));
-			float toe_edge = 1.0 - smoothstep(289.5 + toe, 290.5 + toe, land_px.x);
-			shore.a *= toe_edge;
-			if (shore.a > color.a) { color = shore; }
-		} else if (land_px.x > 454.0 && land_px.x <= 470.0) {
-			float upper_nose = 14.0 * (1.0 - smoothstep(646.0, 661.0, land_px.y));
-			float bank_edge = 454.0 + upper_nose;
-			color.a *= smoothstep(bank_edge - 0.5, bank_edge + 0.5, land_px.x);
-		}
-	}
-	// West artwork's subpixel cable edge loses contrast under mip filtering.
-	// Follow its existing tower tops/sag in native pixel space; no land fill.
-	if (restore_bridge_cables) {
-		vec2 p = UV * vec2(2172.0, 724.0);
-		float cable_y = -100.0;
-		if (p.x >= 290.0 && p.x < 326.0) {
-			cable_y = 652.0 - 23.0 * pow((p.x - 290.0) / 36.0, 2.0);
-		} else if (p.x >= 326.0 && p.x <= 414.0) {
-			cable_y = 629.0 + 25.0 * (1.0 - pow((p.x - 370.0) / 44.0, 2.0));
-		} else if (p.x > 414.0 && p.x <= 454.0) {
-			cable_y = 652.0 - 23.0 * pow((454.0 - p.x) / 40.0, 2.0);
-		}
-		float aa = max(fwidth(p.y), 0.5);
-		float cable = 1.0 - smoothstep(1.1, 1.1 + aa, abs(p.y - cable_y));
-		color.rgb = mix(color.rgb, vec3(0.11697, 0.18782, 0.25818), cable);
-		color.a = max(color.a, cable);
-	}
 	// Four-degree shared strips: no landmarks at edges; remove abrupt cut ends.
 	// South supplies opaque land beneath west's left fade: avoid double-fade sky leak.
 	float right_fade = south_right_backing ? 1.0 : smoothstep(0.0, 4.0 / 94.0, 1.0 - UV.x);
