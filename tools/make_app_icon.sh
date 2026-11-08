@@ -10,9 +10,12 @@
 #                     apple-touch-icon, which the exporter halves from it.
 # The background stays transparent. Fully transparent pixels are made black (the
 # art's outline colour) so a resize that doesn't premultiply alpha draws no light
-# fringe. Needs ImageMagick; the output is the same byte for byte on every run.
+# fringe. Needs ImageMagick; the output is deterministic for a given ImageMagick
+# version.
 #   tools/make_app_icon.sh [owner-picture]   with the owner's picture, rebuilds the
-#                                            master from it first
+#                                            master from it first; with no argument,
+#                                            rebuilds app_icon_360.png from the
+#                                            committed master
 set -euo pipefail
 here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 ui="${here}/game/resources/ui"
