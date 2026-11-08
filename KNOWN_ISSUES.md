@@ -343,6 +343,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `headless_gameplay_contract.gd` preloads `building_shots.gd` only to read `ISLAND_CAMERA_FAR_M`; a shared constants script would be lighter.
+  - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two. Stopping the drawing as `island_test.gd` does would need it back on for a `--spray` case's screenshot.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;
