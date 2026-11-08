@@ -221,11 +221,12 @@ const PARK_LINE_WIDTH_M = 0.1;
 const PARK_EDGE_LINE_INSET_M = 0.25;
 const PARK_DASH_M = 3;
 const PARK_PAINT_LIFT_M = 0.006;
-// A pitch's lines: lightly worn white (the 2026-05-26 aerial's lines read paler than fresh
-// paint), the park paint's lift over the turf they are painted on, an OSM landuse area's
-// skin (0.02 m over the land, tools/build_godot_world.mjs area styles). They lie that
-// low, not at the zone's surfaces lift, so a ball on the land is not sunk in them.
-const PITCH_PAINT_WEAR = 1;
+// A pitch's lines: fresh white paint (the 2026-05-26 aerial's lines are unbroken; a worn
+// step cuts specks of turf through them), the park paint's lift over the turf they are
+// painted on, an OSM landuse area's skin (0.02 m over the land, tools/build_godot_world.mjs
+// area styles). They lie that low, not at the zone's surfaces lift, so a ball on the land
+// is not sunk in them.
+const PITCH_PAINT_WEAR = 0;
 const PITCH_PAINT_HEIGHT_M = 0.02 + PARK_PAINT_LIFT_M;
 
 function isFiniteNumber(value) {

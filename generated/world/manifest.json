@@ -141,10 +141,10 @@
       "sha256": "4ddb33369a0f9f7c34baf3f402ebe0603f182ce550b8de551addcf607acc9396"
     },
     {
-      "bytes": 1186229,
+      "bytes": 1185345,
       "chunk_id": "x_0__z_-1",
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "33337bff7b6b4e4a545fbbf5e231e74b7064be7a2f3015b8af3744879772301f"
+      "sha256": "a60a9ce87489aa03b3828dab5064562cc174b085e588c25a804c67857fe3e3dd"
     },
     {
       "bytes": 559977,
@@ -177,16 +177,16 @@
       "sha256": "8f414d18d4eec663b23311c9122b287af467292ce2abbc17e1317a9040e363e2"
     },
     {
-      "bytes": 381760,
+      "bytes": 381752,
       "chunk_id": "x_1__z_-2",
       "path": "chunks/x_1__z_-2.json",
-      "sha256": "11bb2951ca795061f9c515797c1f66bb3ada6dfe592f8a393d26a6e0a1d4450d"
+      "sha256": "ff7cdabcf520ad05ef1adde8c4bc53f842e17eb0b5bb1abeaba6f184402dcf09"
     },
     {
-      "bytes": 202518,
+      "bytes": 201652,
       "chunk_id": "x_1__z_-1",
       "path": "chunks/x_1__z_-1.json",
-      "sha256": "2c50e68e02335871d7560cdd52635b61549cc8abd201cc973b3478a24768146e"
+      "sha256": "0bd4d01b0a10fe767f1ddc5025214ebc039894eec493aa22424dd248ff589be1"
     },
     {
       "bytes": 174356,
@@ -231,7 +231,7 @@
       "sha256": "123461d4ab833689a2d262ecec88a5b247360f3a9709c02ae733efebf5e014e1"
     }
   ],
-  "content_sha256": "2a122d6b4b4ec99caffc2c3576606894877c78e966cc67abd69c2a2dcd7373b5",
+  "content_sha256": "8847a49e02e55eeefbcd3b5d798c5f1793ab37b4c4627215b552b47095b1a7cc",
   "context": {
     "bytes": 2070357,
     "path": "context.json",
@@ -404,9 +404,9 @@
       "sha256": "67f9c02fe5199e07c7f3e6d477be7d23df1e102ee7772953f54ff8ca37f1a0f7"
     },
     {
-      "bytes": 1186229,
+      "bytes": 1185345,
       "path": "chunks/x_0__z_-1.json",
-      "sha256": "33337bff7b6b4e4a545fbbf5e231e74b7064be7a2f3015b8af3744879772301f"
+      "sha256": "a60a9ce87489aa03b3828dab5064562cc174b085e588c25a804c67857fe3e3dd"
     },
     {
       "bytes": 373791,
@@ -444,14 +444,14 @@
       "sha256": "7eb353de32eab82d6194a9783271b401f06a9a3abee03ade94765161f2d780ad"
     },
     {
-      "bytes": 202518,
+      "bytes": 201652,
       "path": "chunks/x_1__z_-1.json",
-      "sha256": "2c50e68e02335871d7560cdd52635b61549cc8abd201cc973b3478a24768146e"
+      "sha256": "0bd4d01b0a10fe767f1ddc5025214ebc039894eec493aa22424dd248ff589be1"
     },
     {
-      "bytes": 381760,
+      "bytes": 381752,
       "path": "chunks/x_1__z_-2.json",
-      "sha256": "11bb2951ca795061f9c515797c1f66bb3ada6dfe592f8a393d26a6e0a1d4450d"
+      "sha256": "ff7cdabcf520ad05ef1adde8c4bc53f842e17eb0b5bb1abeaba6f184402dcf09"
     },
     {
       "bytes": 17409,
