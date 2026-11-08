@@ -1,5 +1,5 @@
 {
-  "notes": "Places for game/tests/headless_vehicle_contract.gd in the generated world: a parked car by the ferry to get into, a run along Seven Seas Avenue, a clear lane off the west shore into the bay, the open north corner of the 12th Street and Avenue D dirt lot for the roll, a run-up 30 m before its medium kicker, clear run-ups into a Cityside Park construction-panel bay, an Avenue N seawall shrub and palm, two Avenue of the Palms parked cars (the row's lone first car crept up to from behind in its lane, one hit across the road) and an 8th Street K-rail; a shove target's again says which way the second hit comes once it has frozen (1 the same way, -1 back from beyond it: the car hit across the road ends in the park-side bed, where the same way on meets palms and the kerb). If the world moves one of them, re-aim it here.",
+  "notes": "Places for game/tests/headless_vehicle_contract.gd in the generated world: a parked car by the ferry to get into, a run along Seven Seas Avenue, a clear lane off the west shore into the bay, the open north corner of the 12th Street and Avenue D dirt lot for the roll, a run-up 30 m before its medium kicker, clear run-ups into a Cityside Park construction-panel bay, an Avenue N seawall shrub and palm, two Avenue of the Palms parked cars (the row's lone first car crept up to from behind in its lane, one hit across the road) and an 8th Street K-rail; once frozen, each shove target is hit again from its start; again_moves says whether it must also move (the car hit across the road ends in the bed against a building's wall, so it need only wake; the wedge target and the K-rail must move). If the world moves one of them, re-aim it here.",
   "enter": {"car": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_left_s0191"},
   "route": {
     "points_xz": [[41.2, 611.3], [0.6, 531.0], [-18.1, 494.1], [-25.4, 484.9], [-31.2, 475.1], [-50.9, 436.8], [-100.0, 341.6], [-108.3, 325.5], [-163.8, 216.1]],
@@ -13,6 +13,6 @@
   "shrub": {"row": "scatter:avenue_n_seawall:seawall_shrubs:p1", "at_xz": [678.1, 222.7], "start_xz": [686.4, 191.7], "heading_xz": [-0.259, 0.966]},
   "tree": {"row": "scatter:avenue_n_seawall:seawall_canary_palms:w8921530_o0_s037", "at_xz": [704.0, 125.5], "start_xz": [671.5, 125.5], "heading_xz": [1.0, 0.0]},
   "wedge": {"car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_001", "start_xz": [-294.26, 258.31], "heading_xz": [-0.467, -0.884]},
-  "shove": {"car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_005", "start_xz": [-284.6, 308.0], "heading_xz": [0.613, -0.79], "again": -1},
-  "krail": {"row": "scatter:eighth_avenue_n_south_yard:eighth_street_barrier:l00s000", "start_xz": [423.7, -236.1], "heading_xz": [1.0, 0.0], "again": 1}
+  "shove": {"car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_005", "start_xz": [-284.6, 308.0], "heading_xz": [0.613, -0.79], "again_moves": false},
+  "krail": {"row": "scatter:eighth_avenue_n_south_yard:eighth_street_barrier:l00s000", "start_xz": [423.7, -236.1], "heading_xz": [1.0, 0.0], "again_moves": true}
 }

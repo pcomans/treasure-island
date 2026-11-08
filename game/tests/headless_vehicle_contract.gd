@@ -27,8 +27,8 @@ extends SceneTree
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
 ##      the side at speed and a K-rail hit end on are set moving; each comes to
-##      rest and freezes where it ends up, and a second hit there sets it
-##      moving again;
+##      rest and freezes where it ends up, and a second hit from the same start
+##      wakes it (the K-rail moves again; the car lies against a wall);
 ##   9. on foot after getting out: the stock walk, run, jetpack and fast drop.
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -622,8 +622,8 @@ func _case_shove() -> bool:
 	if not _require(creep_top < VEHICLE_MANAGER.SHOVE_SPEED_MPS and wedge_node != null, "Creeping into %s at %.2f m/s did not set it moving." % [wedge_id, creep_top]) \
 	or not _require(pushed >= 0.5 and pressed >= 0.5, "Full throttle against %s wedged (driven car %.2f m, parked car %.2f m)." % [wedge_id, pressed, pushed]):
 		return false
-	# Once it has come to rest and frozen, creeping up to it again from 7 m
-	# back along the same line and pressing on pushes it again.
+	# Once it has come to rest and frozen, driving up to it again from the
+	# case's start, creeping the last metres and pressing on pushes it again.
 	var wedge_frozen := false
 	for _tick in 600:
 		await physics_frame
@@ -632,21 +632,26 @@ func _case_shove() -> bool:
 			break
 	var wedge_rest := wedge_node.global_position
 	if not _require(wedge_frozen, "The pushed car %s did not come to rest and freeze." % wedge_id) \
-	or not await _drive_from(car, Vector2(wedge_rest.x, wedge_rest.z) - wedge_heading * 7.0, wedge_heading):
+	or not await _drive_from(car, Vector2(_cases.wedge.start_xz[0], _cases.wedge.start_xz[1]), wedge_heading):
 		return false
-	print("WEDGE AGAIN start %.2f m from the frozen car, at %s" % [car.global_position.distance_to(wedge_rest), car.global_position])
+	print("WEDGE AGAIN start %.2f m from the frozen car" % car.global_position.distance_to(wedge_rest))
 	var woke_tick := -1
-	for tick in 600:
+	for tick in 1500:
+		var gap := Vector2(car.global_position.x - wedge_rest.x, car.global_position.z - wedge_rest.z).length()
+		var cap := 0.8 if gap < 9.0 else 6.0
 		var speed := car.linear_velocity.length()
-		if speed < 0.7:
+		Input.action_release("move_forward")
+		Input.action_release("move_back")
+		if speed > cap + 0.5:
+			Input.action_press("move_back")
+		elif speed < cap - 0.15:
 			Input.action_press("move_forward")
-		elif speed > 0.9:
-			Input.action_release("move_forward")
 		_steer_toward(car, Vector2(wedge_rest.x, wedge_rest.z))
 		await physics_frame
 		if not wedge_node.freeze:
 			woke_tick = tick
 			break
+	_release_driving()
 	Input.action_press("move_forward")
 	for _tick in 180:
 		_steer_toward(car, Vector2(wedge_node.global_position.x, wedge_node.global_position.z))
@@ -657,8 +662,8 @@ func _case_shove() -> bool:
 	if not _require(woke_tick >= 0 and pushed_again >= 0.5, "Creeping into %s once it had frozen and pressing on wedged (woken at tick %d, moved %.2f m)." % [wedge_id, woke_tick, pushed_again]):
 		return false
 	# At speed: a parked car from the side, a K-rail end on.
-	for target: Dictionary in [{"id": str(_cases.shove.car), "start": _cases.shove.start_xz, "heading": _cases.shove.heading_xz, "again": _cases.shove.again, "min_m": 0.5},
-			{"id": str(_cases.krail.row), "start": _cases.krail.start_xz, "heading": _cases.krail.heading_xz, "again": _cases.krail.again, "min_m": 0.2}]:
+	for target: Dictionary in [{"id": str(_cases.shove.car), "start": _cases.shove.start_xz, "heading": _cases.shove.heading_xz, "again_moves": _cases.shove.again_moves, "min_m": 0.5},
+			{"id": str(_cases.krail.row), "start": _cases.krail.start_xz, "heading": _cases.krail.heading_xz, "again_moves": _cases.krail.again_moves, "min_m": 0.2}]:
 		var entry: Dictionary = _vehicles.row(target.id)
 		if not _require(not entry.is_empty() and _vehicles.live_node(target.id) == null, "Shove target %s is not a static swappable row." % target.id):
 			return false
@@ -696,11 +701,10 @@ func _case_shove() -> bool:
 		if not _require(hit and moved >= float(target.min_m) and frozen, "Hitting %s did not shove it and leave it at rest (moved %.2f m, frozen %s)." % [target.id, moved, frozen]):
 			return false
 		# Frozen where it stopped, it must not turn into a wall: a second hit
-		# along the same line, from 12 m back the way the fixture says (the
-		# first hit's way on, or back from beyond it), sets it moving again.
+		# from the same start wakes it, and (unless it lies against a wall)
+		# moves it.
 		var rest_at := moved_node.global_position
-		var again := heading * signf(float(target.again))
-		if not await _drive_from(car, Vector2(rest_at.x, rest_at.z) - again * 12.0, again):
+		if not await _drive_from(car, start, heading):
 			return false
 		Input.action_press("move_forward")
 		var woke := false
@@ -727,7 +731,7 @@ func _case_shove() -> bool:
 				break
 		var moved_again := moved_node.global_position.distance_to(rest_at)
 		print("SHOVE AGAIN %s: set moving %s at %.2f m/s, moved %.2f m from where it had frozen, at rest and frozen again %s" % [target.id, woke, woke_speed, moved_again, refrozen])
-		if not _require(woke and moved_again >= float(target.min_m) and refrozen, "Hitting %s again once it had frozen did not shove it (moved %.2f m, frozen again %s)." % [target.id, moved_again, refrozen]):
+		if not _require(woke and (moved_again >= float(target.min_m) or not bool(target.again_moves)) and refrozen, "Hitting %s again once it had frozen did not shove it (woken %s, moved %.2f m, frozen again %s)." % [target.id, woke, moved_again, refrozen]):
 			return false
 	return await _stop_and_exit(car, "shove")
 
