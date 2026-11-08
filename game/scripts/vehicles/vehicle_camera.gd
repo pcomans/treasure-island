@@ -19,8 +19,8 @@ extends Node3D
 ## Getting in, the view moves from where the on-foot camera was to behind the
 ## car; getting out, from here to the on-foot camera: a blend camera of its own
 ## carries the view between them, so neither change is a cut. It swings round
-## the pivot over the car rather than cutting across, so it never passes
-## through the car.
+## the pivot over the car, level, rather than cutting across, so it never
+## passes through the car, and its yaw and pitch ease with no roll.
 
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const PITCH_REST := deg_to_rad(-10.0)
@@ -255,16 +255,22 @@ func _step_blend(delta: float) -> void:
 	_blend_t = minf(1.0, _blend_t + delta / _blend_s)
 	var eased := _blend_t * _blend_t * (3.0 - 2.0 * _blend_t)
 	var to := _blend_to.global_transform
-	# Round the pivot: the offset's direction turns and its length eases.
+	# Round the pivot, level: the plan offset's bearing turns and its length
+	# and height ease.
 	if _car != null and is_instance_valid(_car):
 		_blend_centre = global_position
-	var from_offset := _blend_from.origin - _blend_centre
-	var to_offset := to.origin - _blend_centre
+	var from_plan := Vector2(_blend_from.origin.x - _blend_centre.x, _blend_from.origin.z - _blend_centre.z)
+	var to_plan := Vector2(to.origin.x - _blend_centre.x, to.origin.z - _blend_centre.z)
 	var origin := _blend_from.origin.lerp(to.origin, eased)
-	if from_offset.length() > 0.5 and to_offset.length() > 0.5:
-		var direction := from_offset.normalized().slerp(to_offset.normalized(), eased)
-		origin = _blend_centre + direction * lerpf(from_offset.length(), to_offset.length(), eased)
-	_blend.global_transform = Transform3D(Basis(Quaternion(_blend_from.basis.orthonormalized()).slerp(Quaternion(to.basis.orthonormalized()), eased)), origin)
+	if from_plan.length() > 0.5 and to_plan.length() > 0.5:
+		var bearing := lerp_angle(from_plan.angle(), to_plan.angle(), eased)
+		var plan := Vector2.from_angle(bearing) * lerpf(from_plan.length(), to_plan.length(), eased)
+		origin = Vector3(_blend_centre.x + plan.x, origin.y, _blend_centre.z + plan.y)
+	# The view's yaw and pitch ease, its roll stays nil.
+	var from_euler := _blend_from.basis.get_euler()
+	var to_euler := to.basis.get_euler()
+	var look := Vector3(lerp_angle(from_euler.x, to_euler.x, eased), lerp_angle(from_euler.y, to_euler.y, eased), 0.0)
+	_blend.global_transform = Transform3D(Basis.from_euler(look), origin)
 	_blend.fov = lerpf(_blend_from_fov, _blend_to.fov, eased)
 	if _blend_t >= 1.0:
 		_blend_t = -1.0
