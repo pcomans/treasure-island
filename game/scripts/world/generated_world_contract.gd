@@ -92,12 +92,18 @@ const YBI_DETAIL_RECORDS := {
 	"context:ybi-construction": {"context_kind": "ybi_surface", "material_key": "context_ybi_construction"},
 	"context:ybi-paths": {"context_kind": "ybi_surface", "material_key": "context_ybi_path"},
 	"context:ybi-paved": {"context_kind": "ybi_surface", "material_key": "context_ybi_paved"},
+	# Treasure Island Road's paint on the YBI ways that carry it on to the hilltop: the
+	# second part of the YBI road composite.
+	"context:ybi-road-paint": {"context_kind": "ybi_surface", "material_key": "street_marking"},
 	"context:ybi-roads": {"context_kind": "ybi_surface", "material_key": "context_ybi_road"},
 	"context:ybi-walls": {"context_kind": "ybi_building", "material_key": "context_ybi_wall"},
 }
 ## Playable roads and paths whose frozen ways run on from the causeway onto YBI: their
 ## run past the outline is boundary-attached context drawn as YBI's road or path.
 const YBI_CONTINUATION_SOURCE_KEYS := ["w1115934722", "w1212173456", "w1248964738", "w1248964740", "w1248964743", "w1249797943", "w1472754371"]
+## The carriageways among them that carry Treasure Island Road's paint past the
+## outline: a second boundary-attached record each, boundary_context:KEY:paint.
+const YBI_CONTINUATION_PAINT_SOURCE_KEYS := ["w1115934722", "w1249797943"]
 const BOUNDARY_ATTACHED_SOURCE_KEYS := ["w319406837", "w644986117"]
 ## Piers reaching out over the water past the island outline: their part on the
 ## island is a playable overlay, and the deck beyond it a visual-only
@@ -1489,10 +1495,11 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		return vegetation_result
 	var boundary_visual_sources: Array = BOUNDARY_ATTACHED_SOURCE_KEYS + PIER_DECK_SOURCE_KEYS + YBI_CONTINUATION_SOURCE_KEYS
 	boundary_visual_sources.sort()
-	if context.boundary_attached_visuals.size() != boundary_visual_sources.size():
-		return _failure("boundary_visual_count", "Context must contain exactly the approved boundary-attached visuals and pier decks.")
+	if context.boundary_attached_visuals.size() != boundary_visual_sources.size() + YBI_CONTINUATION_PAINT_SOURCE_KEYS.size():
+		return _failure("boundary_visual_count", "Context must contain exactly the approved boundary-attached visuals, pier decks and continuation paint.")
 	var prior_object_key := ""
 	var boundary_keys_seen: Array[String] = []
+	var paint_keys_seen: Array[String] = []
 	for record_value: Variant in context.boundary_attached_visuals:
 		if not record_value is Dictionary:
 			return _failure("boundary_visual_record", "Boundary-attached visual is not an object.")
@@ -1503,7 +1510,11 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 			return _failure("boundary_visual_source", "Boundary-attached visual must claim exactly one approved source.")
 		var source_key := str(record.source_keys[0])
 		var expected: Dictionary
-		if BOUNDARY_ATTACHED_OBJECTS.has(source_key):
+		var paint := str(record.get("object_key", "")) == "boundary_context:%s:paint" % source_key
+		if paint and YBI_CONTINUATION_PAINT_SOURCE_KEYS.has(source_key):
+			# Treasure Island Road's paint on the carriageway's run past the outline.
+			expected = {"object_key": "boundary_context:%s:paint" % source_key, "material_key": "street_marking"}
+		elif BOUNDARY_ATTACHED_OBJECTS.has(source_key):
 			expected = BOUNDARY_ATTACHED_OBJECTS[source_key]
 		elif PIER_DECK_SOURCE_KEYS.has(source_key):
 			expected = {"object_key": "boundary_context:%s" % source_key, "material_key": "context_boundary_pier"}
@@ -1527,11 +1538,17 @@ static func _validate_context(context: Dictionary, source_scopes: Dictionary, re
 		var result := _validate_mesh_record(adapted, ["boundary_attached_visual"], source_scopes, "playable", "boundary_context", record_keys, material_keys)
 		if not result.ok:
 			return result
-		boundary_keys_seen.append(source_key)
+		if paint:
+			paint_keys_seen.append(source_key)
+		else:
+			boundary_keys_seen.append(source_key)
 		represented_playable[source_key] = true
 	boundary_keys_seen.sort()
 	if boundary_keys_seen != boundary_visual_sources:
 		return _failure("boundary_visual_sources", "Boundary-attached visuals do not resolve the exact approved playable sources.", boundary_keys_seen)
+	paint_keys_seen.sort()
+	if paint_keys_seen != YBI_CONTINUATION_PAINT_SOURCE_KEYS:
+		return _failure("boundary_visual_sources", "Continuation paint does not cover exactly the carriageways that carry it.", paint_keys_seen)
 	return {"ok": true}
 
 

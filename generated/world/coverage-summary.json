@@ -82,7 +82,7 @@
         "osm_levels": 1
       }
     },
-    "physical_objects": 1026,
+    "physical_objects": 1029,
     "playable_rows": 735,
     "source_rows": 1153,
     "status_totals": {
@@ -3506,7 +3506,7 @@
       "scrub": 25139,
       "small": 2750
     },
-    "continuation_visuals": 7,
+    "continuation_visuals": 9,
     "deck": {
       "capped": 3,
       "skipped": 17
@@ -3540,6 +3540,20 @@
       "basin_water": {
         "area_m2": 561.74,
         "sources": 1
+      },
+      "causeway_paint": {
+        "w1115934722": {
+          "white_m2": 22.75,
+          "yellow_m2": 22.01
+        },
+        "w1249797943": {
+          "white_m2": 4.73,
+          "yellow_m2": 4.92
+        },
+        "w513879523": {
+          "white_m2": 18.42,
+          "yellow_m2": 16.99
+        }
       },
       "construction": {
         "area_m2": 7067.09,

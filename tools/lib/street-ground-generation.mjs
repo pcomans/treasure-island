@@ -845,6 +845,34 @@ function openRing(ring) {
   return merged;
 }
 
+// A ring with the spikes dropped whose tips keep(tip) picks: a vertex where the ring
+// doubles straight back on itself (within SPIKE_TURN_SIN of a full turn) bounds no
+// ground, only a zero-width fold that polygon clipping can leave along a cut (at the
+// island's outline across the causeway, a fold along the seam drew a curb face and
+// gutter where no curb was). Returns the ring and how many vertices it dropped.
+const SPIKE_TURN_SIN = 1e-3;
+function dropSpikes(ring, keep) {
+  const points = ring.slice();
+  let dropped = 0;
+  let index = 0;
+  while (points.length > 3 && index < points.length) {
+    const a = points[(index + points.length - 1) % points.length];
+    const b = points[index];
+    const c = points[(index + 1) % points.length];
+    const d1 = sub(b, a);
+    const d2 = sub(c, b);
+    const span = length(d1) * length(d2);
+    if (span > 0 && Math.abs(cross(d1, d2)) <= SPIKE_TURN_SIN * span && d1[0] * d2[0] + d1[1] * d2[1] < 0 && keep(b)) {
+      points.splice(index, 1);
+      dropped += 1;
+      index = Math.max(0, index - 1);
+    } else {
+      index += 1;
+    }
+  }
+  return { ring: points, dropped };
+}
+
 function ringArea(ring) {
   let doubled = 0;
   for (let index = 0; index < ring.length; index += 1) doubled += cross(ring[index], ring[(index + 1) % ring.length]);
@@ -2121,7 +2149,7 @@ export function generateStreetGround({
       [union("curb tops", curbTops), plantedTop, paverTop, ...landings]), 0.3, 0.3);
   }
 
-  const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, bays: 0, shoulder_stalls: 0, lot_stalls: 0, red_curb_m: 0, skirt_split_fallbacks: 0, wear: {} };
+  const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, bays: 0, shoulder_stalls: 0, lot_stalls: 0, red_curb_m: 0, skirt_split_fallbacks: 0, ring_spikes: 0, wear: {} };
   const pieces = [];
   const faces = [];
   const sources = {
@@ -2238,7 +2266,9 @@ export function generateStreetGround({
   const edgeLoops = (multi, heightOf, classify) => {
     for (const polygon of multi) {
       polygon.forEach((raw, ringIndex) => {
-        let ring = openRing(raw);
+        const cleaned = dropSpikes(openRing(raw), onOutline);
+        counts.ring_spikes += cleaned.dropped;
+        let ring = cleaned.ring;
         if (ring.length < 3) return;
         const area = ringArea(ring);
         if ((ringIndex === 0) !== (area > 0)) ring = ring.reverse();
@@ -2256,12 +2286,32 @@ export function generateStreetGround({
     }
   };
   // lot_curb is an edge along the lot OSM lacks: a curb face, with no gutter or drain
-  // and with its ramp on the lot, invisible like an island's.
-  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, lot_curb: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0 };
-  const footOf = { curb: 0, island: 0, lot_curb: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0 };
+  // and with its ramp on the lot, invisible like an island's. outline is an edge on the
+  // island's own outline (the causeway seam, where the street runs on past it): a
+  // closed face down to the land, with no slope, ramp or gutter beyond the island.
+  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, lot_curb: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0, outline: 0 };
+  const footOf = { curb: 0, island: 0, lot_curb: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0, outline: 0 };
+  const landIndex = polygonIndex(land.geometry);
+  // Whether a plan point lies on the island's outline (within a centimetre): only the
+  // spikes there are dropped (dropSpikes), so the street ground elsewhere stays as built.
+  const outlineSegments = land.geometry.flatMap((polygon) => polygon.flatMap((ring) => openRing(ring).map((point, index, points) => [point, points[(index + 1) % points.length]])));
+  const onOutline = (point) => outlineSegments.some(([a, b]) => {
+    const along = sub(b, a);
+    const t = Math.max(0, Math.min(1, ((point[0] - a[0]) * along[0] + (point[1] - a[1]) * along[1]) / Math.max(1e-12, along[0] * along[0] + along[1] * along[1])));
+    return length(sub(point, add(a, scale(along, t)))) <= 0.01;
+  });
   const classifyRaised = (a, b, outward) => {
     // A lot island's edge is a curb face all round, over the lot.
     if (islandUnion.length > 0 && islandIndex.contains(add(add(a, scale(sub(b, a), 0.5)), scale(outward, -0.04)))) return "island";
+    // An edge on the island's outline (the land ends just beyond it): the raised
+    // ground ends there with a closed face. A back slope there would fall off the
+    // land, where nothing draws it, and left the causeway median's end open (owner,
+    // 2026-11-08).
+    let off = 0;
+    for (const fraction of [0.25, 0.5, 0.75]) {
+      if (!landIndex.contains(add(add(a, scale(sub(b, a), fraction)), scale(outward, 0.04)))) off += 1;
+    }
+    if (off >= 2) return "outline";
     let curb = 0;
     let lotCurb = 0;
     let flare = 0;
@@ -2288,6 +2338,10 @@ export function generateStreetGround({
   function emitSkirts(edges) {
     for (let index = 0; index < edges.length; index += 1) {
       const edge = edges[index];
+      if (edge.kind === "outline") {
+        faces.push(edge);
+        continue;
+      }
       const run = runOf[edge.kind];
       if (run <= 0) continue;
       const foot = footOf[edge.kind];
@@ -3430,8 +3484,9 @@ export function generateStreetGround({
         const offset = mesh.vertices.length / 3;
         const along0 = length(sub(p0, edge.a));
         const along1 = length(sub(p1, edge.a));
-        // A lot island's face runs down to the land, under the lot's surface.
-        const foot = edge.kind === "island" || edge.kind === "lot_curb" ? ISLAND_FOOT_M : ROAD_TOP_M;
+        // A lot island's face runs down to the land, under the lot's surface, and so
+        // does a face on the island's outline, where the land ends.
+        const foot = edge.kind === "island" || edge.kind === "lot_curb" || edge.kind === "outline" ? ISLAND_FOOT_M : ROAD_TOP_M;
         const corners = [
           [p0, foot, along0],
           [p1, foot, along1],
@@ -3549,6 +3604,7 @@ export function generateStreetGround({
       lot_stalls: counts.lot_stalls,
       red_curb_m: roundCoordinate(counts.red_curb_m),
       skirt_split_fallbacks: counts.skirt_split_fallbacks,
+      ring_spikes_dropped: counts.ring_spikes,
       grass_top_area_m2: roundCoordinate(multiArea(lawnTop)),
       centerline_m: roundCoordinate(counts.centerline_m),
       raised_area_m2: roundCoordinate(multiArea(bandRaised)),
@@ -3556,6 +3612,7 @@ export function generateStreetGround({
       plaza_paving_area_m2: roundCoordinate(multiArea(paverTop)),
       parking_lane_area_m2: roundCoordinate(multiArea(parkingSurface)),
       curb_face_m: roundCoordinate(faces.reduce((sum, edge) => sum + length(sub(edge.b, edge.a)), 0)),
+      outline_face_m: roundCoordinate(faces.filter((edge) => edge.kind === "outline").reduce((sum, edge) => sum + length(sub(edge.b, edge.a)), 0)),
       wear_by_cell: Object.fromEntries(Object.entries(STREET_WEAR_CELLS).map(([name, cell]) => [name, counts.wear[cell] ?? 0])),
       park_surface_area_m2: Object.fromEntries(Object.keys(PARK_SURFACE_MATERIALS).map((material) => [material,
         roundCoordinate(parkLayers.filter((entry) => entry.layer.material === material).reduce((sum, entry) => sum + multiArea(entry.polygon), 0))])),

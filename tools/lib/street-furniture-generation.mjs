@@ -64,6 +64,7 @@ export const STREET_FURNITURE_PROPS = Object.freeze({
   picnic_table_long: "picnic_table",
   power_wires: "power_line",
   post_sign: "street_sign",
+  road_closure_barricade: "road_closure",
   pump_station: "site_structure",
   restroom_cottage: "site_structure",
   galvanised_tub: "site_structure",
@@ -98,6 +99,8 @@ export const STREET_FURNITURE_FOOTPRINTS = Object.freeze({
   map_board: Object.freeze({ x_m: 1.34, z_m: 0.2 }),
   monument_sign: Object.freeze({ x_m: 1.3, z_m: 0.3 }),
   pump_station: Object.freeze({ x_m: 16.3, z_m: 11.2 }),
+  // A Type III barricade unit with its uprights' splayed legs (street_furniture_kit.gd).
+  road_closure_barricade: Object.freeze({ x_m: 2.6, z_m: 0.7 }),
   // The cottage block with the enclosure on its +X end, as one plan rectangle round
   // the prop's origin (street_furniture_kit.gd COTTAGE_PLAN_CENTRE).
   restroom_cottage: Object.freeze({ x_m: 10.3, z_m: 4.45 }),
@@ -139,6 +142,13 @@ export const STREET_FURNITURE_FEET = Object.freeze({
     Object.freeze({ x: 0.3, z: -0.305, half_x: 0.0115, half_z: 0.037 }),
     Object.freeze({ x: -0.3, z: 0.373, half_x: 0.0115, half_z: 0.034 }),
     Object.freeze({ x: 0.3, z: 0.373, half_x: 0.0115, half_z: 0.034 }),
+  ]),
+  // A barricade unit's rubber pads, under its two A-frame uprights' front and back legs.
+  road_closure_barricade: Object.freeze([
+    Object.freeze({ x: -1.0, z: -0.3, half_x: 0.035, half_z: 0.05 }),
+    Object.freeze({ x: 1.0, z: -0.3, half_x: 0.035, half_z: 0.05 }),
+    Object.freeze({ x: -1.0, z: 0.3, half_x: 0.035, half_z: 0.05 }),
+    Object.freeze({ x: 1.0, z: 0.3, half_x: 0.035, half_z: 0.05 }),
   ]),
 });
 // The most a settled prop's leg may be lengthened or shortened (m); uneven

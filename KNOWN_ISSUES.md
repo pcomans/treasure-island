@@ -7,6 +7,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 ## Known issues on main (not scheduled)
 
 - A thin strip of water shows between the grass and the root of Pier 1 from the land side (seen in review, by 2026-11-05; still there on 2026-11-06).
+- Avenue H, Avenue of the Palms by Cityside and Avenue M have humps in the road from the generator: 32 m land-grid corners standing on stockpiles that are gone (on Avenue H by the truck lot, two humps of about 2.2 and 2.4 m over the USGS raster; diagnosis on branch `diag/bumpy-road-20261108`, 2026-11-08). The owner chose to leave them, because a future island-wide change to road generation may replace this.
 - The Clipper Cove marina basin past the playable boundary (OSM w644986117, x −9 to 162, z 804 to 1021) is open bay water: its floating docks and moored boats are not modelled (the flat teal sheet that stood in for them was folded into the bay water, 2026-11-07).
 - **Web build** (Godot's Compatibility renderer):
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;

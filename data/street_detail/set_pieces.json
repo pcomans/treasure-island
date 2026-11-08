@@ -4,6 +4,7 @@
     "Hand-picked street-detail set pieces, each {id, kind, asset, xz, yaw, reason, reference} or, for a kit prop, {id, kind, prop, params, xz, yaw, reason, reference}.",
     "xz is world metres (+X east, +Z south); yaw is radians about +Y, turning the asset's -Z front.",
     "tools/build_godot_world.mjs rejects an entry that leaves the land or enters the shared exclusion mask; a kit prop also keeps the street furniture's margins (clear of the carriageway, curb ramps and crosswalks, a player's width from other items).",
+    "A road closure (kind road_closure) is the exception: it stands on the carriageway it closes, within 1.5 m inside the island's outline, keeping only its own width on the land; its units stand end to end.",
     "Trees are props of the street-vegetation kit (game/scripts/world/street_vegetation_kit.gd) with params {variant, scale}, where dated photos show particular trees; they keep the scatter's site checks rather than the street props' margins, and their foot must rest on the visible ground. Positions are production inference read from those photos and an undated Google satellite view (ferry-shelter-refs-20261023 shots/32-sat-canopy), not survey data. A tree whose foot reaches paving (the Building 1 lot edge, where the photographed bed is lot asphalt in the game) stands in a round mulch pit.",
     "A kit prop on legs (adirondack_chair) settles on the visible ground under its feet: the generator adds its rest (pitch, roll, lift and, where the ground folds, leg_drops_m) to the row's params."
   ],
@@ -2186,6 +2187,66 @@
      "yaw": -2.613,
      "reason": "A red water-filled road block in the short row along the ditch side of the road end, beyond the cobbles.",
      "reference": "Owner video IMG_0960, 2026-11-06, t=98-123: frames D1, D3 and D4."
+    },
+    {
+     "id": "causeway_closure_southbound_west",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {},
+     "xz": [-12.805, 943.215],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
+    },
+    {
+     "id": "causeway_closure_southbound_sign",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {"sign_lines": ["AREA CLOSED", "DUE TO LACK OF TOKENS"]},
+     "xz": [-10.393, 942.117],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
+    },
+    {
+     "id": "causeway_closure_southbound_east",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {},
+     "xz": [-7.981, 941.019],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
+    },
+    {
+     "id": "causeway_closure_northbound_west",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {},
+     "xz": [-4.773, 939.558],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
+    },
+    {
+     "id": "causeway_closure_northbound_sign",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {"sign_lines": ["AREA CLOSED", "DUE TO LACK OF TOKENS"]},
+     "xz": [-2.361, 938.46],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
+    },
+    {
+     "id": "causeway_closure_northbound_east",
+     "kind": "road_closure",
+     "prop": "road_closure_barricade",
+     "params": {},
+     "xz": [0.051, 937.362],
+     "yaw": 0.427,
+     "reason": "Owner request 2026-11-08, an invented joke prop: Type III barricades close both carriageways of Treasure Island Road where the island's outline crosses the causeway to Yerba Buena Island, where the player is already stopped; three units span each carriageway between its curbs, 0.8 m inside the outline and square to it, their faces toward Treasure Island, and the middle unit of each carries the sign.",
+     "reference": "Owner request 2026-11-08 (no photograph: the closure is not real); the outline is the frozen playable boundary w26767313's segment from (-34.566, 954.002) to (12.425, 932.607)."
     }
   ]
 }

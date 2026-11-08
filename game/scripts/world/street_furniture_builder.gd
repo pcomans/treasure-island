@@ -38,7 +38,7 @@ func build(document: Dictionary) -> Dictionary:
 	root.name = "GeneratedStreetFurniture"
 	# batch key -> {mesh, range_m, shadow, cells: {cell -> [Transform3D]}}
 	var batches: Dictionary = {}
-	# cell -> [{id, shape, transform}] and [{id, text, color, transform}]
+	# cell -> [{id, shape, transform}] and [{id, text, color, range_m, transform}]
 	var shapes: Dictionary = {}
 	var labels: Dictionary = {}
 	var prop_counts: Dictionary = {}
@@ -104,7 +104,7 @@ func build(document: Dictionary) -> Dictionary:
 		for label: Dictionary in parts.labels:
 			if not labels.has(label_cell):
 				labels[label_cell] = []
-			(labels[label_cell] as Array).append({"id": str(row.id), "text": str(label.text), "color": label.get("color", Color(0.96, 0.97, 0.95)), "transform": placement * (label.transform as Transform3D)})
+			(labels[label_cell] as Array).append({"id": str(row.id), "text": str(label.text), "color": label.get("color", Color(0.96, 0.97, 0.95)), "range_m": float(label.get("range_m", KIT.LABEL_RANGE_M)), "transform": placement * (label.transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		props += 1
 	var wires := _wire_pieces(wire_rows, spurs, poles)
@@ -201,7 +201,7 @@ func build(document: Dictionary) -> Dictionary:
 			label.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 			label.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 			label.layers = RENDER_WORLD_VISIBLE
-			label.visibility_range_end = KIT.LABEL_RANGE_M
+			label.visibility_range_end = float(entry.range_m)
 			label.transform = entry.transform
 			label.set_meta("street_detail_id", entry.id)
 			group.add_child(label)
