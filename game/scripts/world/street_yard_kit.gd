@@ -130,6 +130,7 @@ const PROPS := {
 	"plastic_berm": {"range_m": 1500.0, "variants": ["low", "high"]},
 	"crane_barge": {"range_m": 2500.0, "variants": ["crane", "deck", "pier_crane"]},
 	"pole_flag": {"range_m": 600.0, "variants": ["flag"]},
+	"stunt_ramp": {"range_m": 600.0, "variants": ["kicker_small", "kicker_medium", "kicker_large", "tabletop", "gap_kicker", "landing"]},
 }
 ## The excavator's collision (tools/lib/street-yard-meshes.mjs buildExcavator:
 ## its swing centre 1.5 m behind the plan's middle): the machine (tracks, house
@@ -180,6 +181,8 @@ var _material: ShaderMaterial
 var _flag_material: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _floors: Dictionary = {}
+## The kit's empty nodes by name: a stunt ramp's profile points and side run.
+var _markers: Dictionary = {}
 var _colour_index: Dictionary = {}
 
 
@@ -204,6 +207,9 @@ func _init() -> void:
 	var scene := KIT_SCENE.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh
+	for node: Node in scene.find_children("stunt_ramp_*", "Node3D", true, false):
+		if not node is MeshInstance3D:
+			_markers[str(node.name)] = (node as Node3D).position
 	scene.free()
 
 
@@ -275,6 +281,8 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0, plan: Dicti
 			error = _equipment(result, variants[variant], params, level, seed, plan)
 		"pole_flag":
 			error = _pole_flag(result, params, seed)
+		"stunt_ramp":
+			error = _stunt_ramp(result, variants[variant], params, level, seed)
 		_:
 			error = _vehicle(result, prop, variants[variant], params, level, seed, plan)
 	if error != "":
@@ -608,6 +616,40 @@ func _pole_flag(result: Dictionary, params: Dictionary, seed: int) -> String:
 	pole.height = height
 	(result.shapes as Array).append({"shape": pole, "transform": Transform3D(Basis.IDENTITY, Vector3(0, height * 0.5, 0))})
 	return error
+
+
+# ---------------------------------------------------------------- stunt ramps
+
+## A car ramp (owner request, 2026-11-08; tools/lib/street-yard-meshes.mjs
+## buildStuntRamp): its mesh, and a convex prism over each step of its profile
+## (the kit's profile points), out to the dirt's side slopes, so the wheels ride
+## its curve and a car hitting its side or back stops.
+func _stunt_ramp(result: Dictionary, variant: String, params: Dictionary, level: float, seed: int) -> String:
+	var finish := str(params.get("finish", "dirt"))
+	var base := "stunt_ramp_%s_%s" % [variant, finish]
+	var error := _add(result, base, Transform3D.IDENTITY, _custom("grey", "grey", "grey", level, seed))
+	if error != "":
+		return error
+	var points: Array[Vector3] = []
+	while _markers.has("%s_rp%d" % [base, points.size()]):
+		points.append(_markers["%s_rp%d" % [base, points.size()]])
+	if points.size() < 3 or not _markers.has(base + "_side"):
+		return "the yard kit has no profile for %s" % base
+	var side_run: float = (_markers[base + "_side"] as Vector3).x
+	for index in points.size() - 1:
+		var a := points[index]
+		var b := points[index + 1]
+		if absf(b.z - a.z) < 0.01:
+			continue
+		var hull := PackedVector3Array()
+		for sx: float in [-1.0, 1.0]:
+			for p: Vector3 in [a, b]:
+				hull.append(Vector3(sx * p.x, p.y, p.z))
+				hull.append(Vector3(sx * (p.x + p.y * side_run), 0.0, p.z))
+		var shape := ConvexPolygonShape3D.new()
+		shape.points = hull
+		(result.shapes as Array).append({"shape": shape, "transform": Transform3D.IDENTITY})
+	return ""
 
 
 # ---------------------------------------------------------------- barges

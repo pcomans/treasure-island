@@ -8,11 +8,17 @@ extends Node3D
 ## only while driving; the on-foot rig (player_camera.gd) is left as it is.
 ##
 ## The pivot rides above the car as drawn this frame (the car's interpolated
-## visual), so it moves smoothly whatever the frame rate. Its yaw swings behind
-## the car's heading, slowly when the car creeps and briskly at speed, and in the
-## air it follows the flight instead of a tumbling car. Moving the mouse (with
-## the pointer captured) glances round with the on-foot sensitivity and pitch
-## limits; a second after the mouse stops, the view eases back behind the car.
+## visual), so it moves smoothly whatever the frame rate, and never below the
+## water's surface (a car sinking in the bay). Its yaw swings behind the car's
+## heading, slowly when the car creeps and briskly at speed, and in the air it
+## follows the flight instead of a tumbling car. With speed the view widens and
+## the arm lengthens a little. Moving the mouse (with the pointer captured)
+## glances round with the on-foot sensitivity and pitch limits; a second after
+## the mouse stops, the view eases back behind the car.
+##
+## Getting in, the view moves from where the on-foot camera was to behind the
+## car; getting out, from here to the on-foot camera: a blend camera of its own
+## carries the view between them, so neither change is a cut.
 
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const PITCH_REST := deg_to_rad(-10.0)
@@ -25,22 +31,38 @@ const FOLLOW_SPEED_MPS := 10.0
 ## A glance holds this long after the mouse stops, then eases back (s).
 const GLANCE_HOLD_S := 1.0
 const GLANCE_RETURN_S := 0.45
-## Field of view at rest and its widening toward FOV_SPEED_MPS.
+## Field of view at rest; toward SPEED_FULL_MPS it widens by FOV_WIDEN degrees
+## and the arm lengthens by PULL_BACK_M, easing in and out over SPEED_EASE_S.
 const FOV := 70.0
-const FOV_WIDEN := 6.0
-const FOV_SPEED_MPS := 40.0
+const FOV_WIDEN := 10.0
+const PULL_BACK_M := 1.2
+const SPEED_FULL_MPS := 30.0
+const SPEED_EASE_S := 0.5
+## The blends getting in and out (s).
+const ENTER_BLEND_S := 0.6
+const EXIT_BLEND_S := 0.8
+## The pivot stays at least this far over the water.
+const WATER_CLEAR_M := 1.2
 
 @export_range(0.0005, 0.01, 0.0001) var look_sensitivity := 0.003
 
 var spring_arm: SpringArm3D
 var camera: Camera3D
+var _blend: Camera3D
 var _car: DRIVABLE_CAR
 var _yaw := 0.0
 var _glance_yaw := 0.0
 var _glance_pitch := 0.0
 var _since_glance := 0.0
+var _speed_share := 0.0
+var _arm_length := 6.0
 var _clearance := SphereShape3D.new()
 var _query := PhysicsShapeQueryParameters3D.new()
+var _blend_from := Transform3D.IDENTITY
+var _blend_from_fov := FOV
+var _blend_to: Camera3D
+var _blend_t := -1.0
+var _blend_s := ENTER_BLEND_S
 
 
 func _init() -> void:
@@ -57,6 +79,12 @@ func _init() -> void:
 	camera.near = 0.08
 	camera.far = 5000.0
 	spring_arm.add_child(camera)
+	_blend = Camera3D.new()
+	_blend.name = "BlendCamera"
+	_blend.top_level = true
+	_blend.near = camera.near
+	_blend.far = camera.far
+	add_child(_blend)
 	_clearance.radius = 0.3
 	spring_arm.shape = _clearance
 	_query.shape = _clearance
@@ -69,24 +97,62 @@ func _ready() -> void:
 	set_process_unhandled_input(false)
 
 
-## Takes over from the on-foot camera at its yaw and pitch, behind car.
-func attach(car: DRIVABLE_CAR, start_yaw: float, start_pitch: float) -> void:
+## Takes over behind car, blending from from_camera (the view the player had)
+## when there is one; with take_view false (a capture's own camera is showing)
+## it follows the car without taking the view.
+func attach(car: DRIVABLE_CAR, from_camera: Camera3D, take_view: bool = true) -> void:
 	_car = car
-	_yaw = start_yaw
+	var forward := -car.visual_transform().basis.z
+	_yaw = atan2(-forward.x, -forward.z) if Vector2(forward.x, forward.z).length() > 0.2 else 0.0
 	_glance_yaw = 0.0
-	_glance_pitch = clampf(start_pitch, MIN_PITCH, MAX_PITCH) - PITCH_REST
-	_since_glance = 0.0
-	spring_arm.spring_length = 4.2 + 0.55 * car.length_m
+	_glance_pitch = 0.0
+	_since_glance = GLANCE_HOLD_S
+	_speed_share = 0.0
+	_arm_length = 4.2 + 0.55 * car.length_m
 	_place(0.0, true)
-	camera.make_current()
+	if not take_view:
+		_blend_t = -1.0
+	elif from_camera != null and from_camera != camera:
+		_start_blend(from_camera.global_transform, from_camera.fov, camera, ENTER_BLEND_S)
+	else:
+		_blend_t = -1.0
+		camera.make_current()
 	set_process(true)
 	set_process_unhandled_input(true)
 
 
-func detach() -> void:
+## Lets go of the car; while this rig's view is the one shown, blends it to
+## to_camera. With blend false (a reset) to_camera shows at once.
+func detach(to_camera: Camera3D, blend: bool = true) -> void:
 	_car = null
-	set_process(false)
 	set_process_unhandled_input(false)
+	var showing := get_viewport().get_camera_3d() if is_inside_tree() else null
+	if to_camera == null:
+		return
+	if not blend:
+		_blend_t = -1.0
+		set_process(false)
+		to_camera.make_current()
+	elif showing == camera or showing == _blend:
+		_start_blend(showing.global_transform, showing.fov, to_camera, EXIT_BLEND_S)
+	else:
+		# Another camera (a capture's) is showing: leave it be.
+		_blend_t = -1.0
+		set_process(false)
+
+
+## True while the view is between the on-foot camera and this one.
+func is_blending() -> bool:
+	return _blend_t >= 0.0
+
+
+## Ends a blend now: its target shows, unless another camera took over.
+func finish_blend() -> void:
+	if _blend_t < 0.0:
+		return
+	_blend_t = -1.0
+	if _blend.current and _blend_to != null and is_instance_valid(_blend_to):
+		_blend_to.make_current()
 
 
 ## The view's world yaw and pitch now (handed back to the on-foot rig).
@@ -113,9 +179,12 @@ func glance(relative: Vector2) -> void:
 
 
 func _process(delta: float) -> void:
-	if _car == null or not is_instance_valid(_car):
-		return
-	_place(delta, false)
+	if _car != null and is_instance_valid(_car):
+		_place(delta, false)
+	if _blend_t >= 0.0:
+		_step_blend(delta)
+	elif _car == null:
+		set_process(false)
 
 
 func _place(delta: float, snap: bool) -> void:
@@ -137,10 +206,16 @@ func _place(delta: float, snap: bool) -> void:
 		var ease := 1.0 - exp(-delta / GLANCE_RETURN_S)
 		_glance_yaw = lerp_angle(_glance_yaw, 0.0, ease)
 		_glance_pitch = lerpf(_glance_pitch, 0.0, ease)
+	var speed_target := clampf(planar / SPEED_FULL_MPS, 0.0, 1.0)
+	_speed_share = speed_target if snap else lerpf(_speed_share, speed_target, 1.0 - exp(-delta / SPEED_EASE_S))
 	# The pivot above the car's roof, swept up from inside the car so a low
-	# ceiling can't start the arm above it (as the on-foot rig does).
+	# ceiling can't start the arm above it (as the on-foot rig does), and over
+	# the water's surface.
+	var floor_y := _car.water_y + WATER_CLEAR_M
 	var anchor := xf.origin + Vector3.UP * (_car.height_m * 0.6)
+	anchor.y = maxf(anchor.y, floor_y)
 	var desired := xf.origin + Vector3.UP * (_car.height_m + 0.5)
+	desired.y = maxf(desired.y, floor_y + 0.5)
 	_query.transform = Transform3D(Basis.IDENTITY, anchor)
 	_query.motion = desired - anchor
 	_query.exclude = [_car.get_rid()]
@@ -148,4 +223,35 @@ func _place(delta: float, snap: bool) -> void:
 	global_position = anchor + _query.motion * clampf(fractions[0] - 0.01, 0.0, 1.0)
 	rotation = Vector3(0.0, _yaw + _glance_yaw, 0.0)
 	spring_arm.rotation = Vector3(view_pitch(), 0.0, 0.0)
-	camera.fov = FOV + FOV_WIDEN * clampf(planar / FOV_SPEED_MPS, 0.0, 1.0)
+	spring_arm.spring_length = _arm_length + PULL_BACK_M * _speed_share
+	camera.fov = FOV + FOV_WIDEN * _speed_share
+
+
+func _start_blend(from: Transform3D, from_fov: float, to: Camera3D, seconds: float) -> void:
+	_blend_from = from
+	_blend_from_fov = from_fov
+	_blend_to = to
+	_blend_s = seconds
+	_blend_t = 0.0
+	_blend.global_transform = from
+	_blend.fov = from_fov
+	_blend.make_current()
+	set_process(true)
+
+
+## Moves the blend camera along: eased from where the view was to the target
+## camera wherever it is now; at the end the target shows, unless another
+## camera took over meanwhile.
+func _step_blend(delta: float) -> void:
+	if _blend_to == null or not is_instance_valid(_blend_to):
+		_blend_t = -1.0
+		return
+	_blend_t = minf(1.0, _blend_t + delta / _blend_s)
+	var eased := _blend_t * _blend_t * (3.0 - 2.0 * _blend_t)
+	var to := _blend_to.global_transform
+	_blend.global_transform = Transform3D(Basis(Quaternion(_blend_from.basis.orthonormalized()).slerp(Quaternion(to.basis.orthonormalized()), eased)), _blend_from.origin.lerp(to.origin, eased))
+	_blend.fov = lerpf(_blend_from_fov, _blend_to.fov, eased)
+	if _blend_t >= 1.0:
+		_blend_t = -1.0
+		if _blend.current:
+			_blend_to.make_current()

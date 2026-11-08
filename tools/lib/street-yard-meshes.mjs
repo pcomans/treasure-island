@@ -13,7 +13,7 @@
 import earcut from "earcut";
 
 import { buildCar, clamp, lerp, MeshBuilder, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./street-clutter-kit.mjs";
-import { CONTAINER_LENGTHS, CONVEYOR_FOOT_M, CONVEYOR_INCLINE, CONVEYOR_MODULE_M, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS } from "./street-yard-kit.mjs";
+import { CONTAINER_LENGTHS, CONVEYOR_FOOT_M, CONVEYOR_INCLINE, CONVEYOR_MODULE_M, STUNT_RAMP_SIDE, STUNT_RAMP_VARIANTS, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS, stuntRampProfile } from "./street-yard-kit.mjs";
 
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
 const X = v3(1, 0, 0);
@@ -2542,6 +2542,83 @@ function buildWaterBarrier(lod) {
   return out.result();
 }
 
+// ---------------------------------------------------------------- stunt ramps
+// A car ramp (owner request, 2026-11-08; tools/lib/street-yard-kit.mjs
+// stunt_ramp): its profile (stuntRampProfile) swept across the deck's width.
+// Dirt: a graded mound, its run and top packed darker than its sides, which
+// slope out at STUNT_RAMP_SIDE. Plywood: a deck of 4 x 8 ft sheets on square
+// timber sides, a steel angle along the lip and a galvanised frame showing at
+// the back.
+function buildStuntRamp(ramp, finish, lod) {
+  const out = new YardBuilder(lod);
+  const dirt = finish === "dirt";
+  const profile = stuntRampProfile(ramp, finish);
+  const hw = ramp.width / 2;
+  const deckPart = dirt ? P.earth_dark : P.timber;
+  const sidePart = dirt ? P.earth : P.timber;
+  for (let i = 0; i < profile.length - 1; i += 1) {
+    const [z0, y0] = profile[i];
+    const [z1, y1] = profile[i + 1];
+    if (Math.abs(z1 - z0) < 1e-6 && Math.abs(y1 - y0) < 1e-6) continue;
+    // The surface across the deck; a vertical step is a square end face.
+    const up = vnorm(v3(0, z0 - z1, y1 - y0));
+    const facing = vdot(up, Y) > 0.05 ? up : v3(0, 0, z1 < z0 || Math.abs(z1 - z0) < 1e-6 ? (y1 > y0 ? 1 : -1) : -1);
+    const square = vdot(up, Y) <= 0.05;
+    out.face([v3(-hw, y0, z0), v3(hw, y0, z0), v3(hw, y1, z1), v3(-hw, y1, z1)], facing, square && !dirt ? P.metal : deckPart, square ? 0.7 : 1);
+    if (dirt) {
+      // The mound's sides slope out to the ground.
+      for (const side of [1, -1]) {
+        const base0 = v3(side * (hw + y0 / STUNT_RAMP_SIDE), 0, z0);
+        const base1 = v3(side * (hw + y1 / STUNT_RAMP_SIDE), 0, z1);
+        const top0 = v3(side * hw, y0, z0);
+        const top1 = v3(side * hw, y1, z1);
+        const normal = vnorm(vcross(vsub(top1, top0), vsub(base0, top0)));
+        out.face([top0, top1, base1, base0], vdot(normal, v3(side, 0, 0)) >= 0 ? normal : vscale(normal, -1), sidePart, 0.85);
+      }
+    }
+  }
+  if (!dirt) {
+    // Square timber sides on the profile.
+    const outline = profile.map(([z, y]) => [z, y]);
+    for (const side of [1, -1]) polygonFace(out, v3(side * hw, 0, 0), Z, Y, outline, [], v3(side, 0, 0), sidePart, 0.8);
+    if (lod === 0) {
+      // Sheet joints across the deck every 2.44 m, and the steel angle at the lip.
+      for (let i = 0; i < profile.length - 1; i += 1) {
+        const [z0, y0] = profile[i];
+        const [z1, y1] = profile[i + 1];
+        const run = Math.hypot(z1 - z0, y1 - y0);
+        if (run < 0.5 || Math.abs(z1 - z0) < 1e-6) continue;
+        const up = vnorm(v3(0, z0 - z1, y1 - y0));
+        for (let at = 2.44; at < run - 0.2; at += 2.44) {
+          const t = at / run;
+          const centre = vadd(v3(0, y0 + (y1 - y0) * t, z0 + (z1 - z0) * t), vscale(up, 0.004));
+          const along = vnorm(v3(0, y1 - y0, z1 - z0));
+          out.face([vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, -0.012))), vadd(centre, vadd(v3(hw, 0, 0), vscale(along, 0.012))), vadd(centre, vadd(v3(-hw, 0, 0), vscale(along, 0.012)))], up, P.seal);
+        }
+      }
+      const top = profile.reduce((best, point) => (point[1] > best[1] ? point : best), profile[0]);
+      out.aabb([-hw - 0.02, top[1] - 0.06, top[0] - 0.06], [hw + 0.02, top[1] + 0.01, top[0] + 0.03], P.metal);
+    }
+  }
+  return out.result();
+}
+
+// The ramps' profile points as empty nodes, stunt_ramp_<variant>_<finish>_rp<k>
+// at (deck half width, y, z), and how far the sides run out per metre of
+// height (stunt_ramp_<variant>_<finish>_side at x): the runtime's collision
+// (game/scripts/world/street_yard_kit.gd) follows them.
+function stuntRampMarkers() {
+  const markers = [];
+  for (const ramp of STUNT_RAMP_VARIANTS) {
+    for (const finish of ["dirt", "plywood"]) {
+      const base = `stunt_ramp_${ramp.name}_${finish}`;
+      stuntRampProfile(ramp, finish).forEach(([z, y], k) => markers.push({ name: `${base}_rp${k}`, marker: true, translation: [ramp.width / 2, y, z] }));
+      markers.push({ name: `${base}_side`, marker: true, translation: [finish === "dirt" ? Math.round((1 / STUNT_RAMP_SIDE) * 1e4) / 1e4 : 0, 0, 0] });
+    }
+  }
+  return markers;
+}
+
 // Red machinery on a work barge's deck (Pier 1, May 2026 aerial: red blocks
 // beside the cranes), generic: a power pack, a winch skid and a tool
 // container, about 7 m by 6 m together. Origin on the deck.
@@ -3120,6 +3197,9 @@ function kitEntries() {
   add("deckhouse", buildDeckhouse);
   add("deck_materials", buildDeckMaterials);
   add("deck_equipment", buildDeckEquipment);
+  for (const ramp of STUNT_RAMP_VARIANTS) {
+    for (const finish of ["dirt", "plywood"]) add(`stunt_ramp_${ramp.name}_${finish}`, (lod) => buildStuntRamp(ramp, finish, lod));
+  }
   return entries;
 }
 
@@ -3144,7 +3224,7 @@ export function yardKitMeshes() {
     meshes.push({ name: `${base}_end_neg_floor`, ...capFloor(near(`${base}_end_neg`), middle, -cap, 0) });
     meshes.push({ name: `${base}_end_pos_floor`, ...capFloor(near(`${base}_end_pos`), middle, 0, cap) });
   }
-  return meshes;
+  return [...meshes, ...stuntRampMarkers()];
 }
 
 export {

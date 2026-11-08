@@ -41,7 +41,11 @@ extends SceneTree
 ##   glance (game/scripts/vehicles/vehicle_camera.gd); while driving, frames
 ##   come from the driving camera unless the view has its own (camera_xyz
 ##   follows the car with the player in it), and each MOVE_TICK adds car=
-##   with the car's describe().
+##   with the car's describe() and position. While driving, a step may add
+##   "steer_to": [x, z] to steer with A and D toward that world point (as a
+##   driver would: a key held while the car points more than 4 degrees off it)
+##   and "max_mps": metres per second to let W go above that speed, so a
+##   drive keeps to its route whatever the frame-to-frame physics.
 ##   A moving view may add "car_start": {"car": ROW_ID, "xz": [x,z],
 ##   "heading_xz": [x,z]} to start in that parked car instead, on the ground
 ##   there facing that way (vehicle_manager.gd drive_from); the moves then drive it.
@@ -951,8 +955,10 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		if not step is Dictionary or not step.get("hold") is Array or not _numbers([step.get("ticks")], 1) \
 		or float(step.ticks) != floorf(float(step.ticks)) or float(step.ticks) < 1.0 \
 		or (step.has("turn_deg") and not _numbers([step.get("turn_deg")], 1)) or (step.has("frames") and not step.frames is bool) \
-		or (step.has("glance") and not _numbers(step.get("glance"), 2)):
-			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg, an optional true or false frames and an optional glance [x, y]"
+		or (step.has("glance") and not _numbers(step.get("glance"), 2)) \
+		or (step.has("steer_to") and not _numbers(step.get("steer_to"), 2)) \
+		or (step.has("max_mps") and (not _numbers([step.get("max_mps")], 1) or float(step.max_mps) <= 0.0)):
+			return "each move needs hold (a list of actions), whole positive ticks, an optional numeric turn_deg, an optional true or false frames, an optional glance [x, y], steer_to [x, z] and positive max_mps"
 		for action: Variant in step.hold:
 			if not action in MOVE_ACTIONS:
 				return "moves may hold only " + ", ".join(PackedStringArray(MOVE_ACTIONS))
@@ -1001,8 +1007,11 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		var glance: Array = step.get("glance", [0.0, 0.0])
 		for _i in int(step.ticks):
 			rig.rotation.y += turn
-			if _h.main.vehicles != null and _h.main.vehicles.is_driving() and (float(glance[0]) != 0.0 or float(glance[1]) != 0.0):
+			var driving: bool = _h.main.vehicles != null and _h.main.vehicles.is_driving()
+			if driving and (float(glance[0]) != 0.0 or float(glance[1]) != 0.0):
 				_h.main.vehicles.glance(Vector2(float(glance[0]), float(glance[1])))
+			if driving:
+				_drive_keys(_h.main.vehicles.active_car(), step)
 			await physics_frame
 			# Resume after this tick's physics has moved the player.
 			await process_frame
@@ -1021,7 +1030,11 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				frame += 1
 			var velocity := player.get_real_velocity()
 			var state: Variant = _plain(avatar.describe()) if avatar != null and avatar.has_method("describe") else null
-			var car: Variant = _h.main.vehicles.active_car().describe() if _h.main.vehicles != null and _h.main.vehicles.is_driving() else null
+			var car: Variant = null
+			if _h.main.vehicles != null and _h.main.vehicles.is_driving():
+				var active: Variant = _h.main.vehicles.active_car()
+				car = active.describe()
+				car["at"] = [snappedf(active.global_position.x, 0.01), snappedf(active.global_position.y, 0.01), snappedf(active.global_position.z, 0.01)]
 			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car)])
 			tick += 1
 		_h.release_input()
@@ -1034,6 +1047,26 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		free.queue_free()
 		player.get_camera().make_current()
 	return error
+
+
+## A step's steering and speed keys for the car this tick: A or D toward its
+## steer_to point (none within 4 degrees of it), W let go above its max_mps.
+func _drive_keys(car: Node3D, step: Dictionary) -> void:
+	if step.has("steer_to"):
+		var forward := -car.global_transform.basis.z
+		var to := Vector2(float(step.steer_to[0]) - car.global_position.x, float(step.steer_to[1]) - car.global_position.z)
+		var angle := Vector2(forward.x, forward.z).angle_to(to)
+		Input.action_release("move_left")
+		Input.action_release("move_right")
+		if angle > deg_to_rad(4.0):
+			Input.action_press("move_right")
+		elif angle < deg_to_rad(-4.0):
+			Input.action_press("move_left")
+	if step.has("max_mps") and "move_forward" in step.hold:
+		if (car as RigidBody3D).linear_velocity.length() > float(step.max_mps):
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
 
 
 ## The collider of the player's floor contact this tick, or "-".

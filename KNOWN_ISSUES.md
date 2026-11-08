@@ -71,6 +71,17 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The visual review flagged the rhythm of the breakwater's base.
 - The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
+## Drivable cars (`game/scripts/vehicles/`, 2026-11-08)
+
+- There's no animation for getting in or out: the player appears in the seat, and beside the door (owner: none needed).
+- The storage yards' vans, RVs and trucks stay parked props: they can't be driven or shoved (owner, 2026-11-08). Only street and lot cars (the street-clutter kit's) can.
+- No engine, tyre, crash or splash sounds (the game has no audio).
+- Off the island the shoreline riprap is drawn only, with no collision, so a car that rolls slowly off the edge drops through the rocks into the water instead of tumbling down them (seen in review, 2026-11-08).
+- Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
+- Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
+- The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
+- The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
+
 ## Buildings
 
 - A building side with no dated photo of that side stays plain on purpose; no detail is invented for it. A new dated photo of such a side lets it be detailed.
@@ -273,7 +284,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
 ## Deferred by the owner
 
-- Drivable cars: after the release.
 - Audio: the game has no sound; "not now".
 - Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data. The street reviews saw three that are missing: a container wall at 11th Street, a container wall at 4th Street / Avenue M, and wooden fences at 13th Street / Gateview Avenue, which hide a shelter in the photo.
 - Mac notarization: later. It needs a paid Apple Developer membership.

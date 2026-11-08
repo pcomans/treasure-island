@@ -4263,6 +4263,42 @@
     {"id": "shore_k_rails", "pattern": "pack", "lines": [{"way": "w775820810", "side": "left", "offset_m": 2.25, "from_m": 3.0, "to_m": 40.0}], "orient": "along", "facing": "forward", "items": [{"weight": 1, "prop": "equipment", "params": {"variant": 7, "paint": "white"}}], "gap_m": [0.06, 0.09], "fill": 1.0, "basis": "production_inference", "rule": "White K-rails along the inside of the shore panels for the first stretch north of the east entrance, as far as the photograph shows them.", "evidence": "Google Street View, 649 Avenue N, Nov 2025 (camera x 393, z -446, heading 345, and the same panorama zoomed at heading 338): white K-rails at the foot of the bare panels along the riprap."},
     {"id": "soil_piles", "pattern": "field", "per_m2": 0.0022, "inset_m": 10.0, "gap_m": [0.6, 5.0], "keep_out": ["w1242725090"], "field": {"drift_m": 50, "clump_m": 16, "drift_cover": 0.3, "lone": 0.06, "groups": {"count": [1, 4], "spread_m": [9, 15]}}, "items": [{"weight": 9, "prop": "material_pile", "params": {"variant": 5, "shape": {"0": 1, "1": 1, "2": 1}}, "scale": [0.5, 0.85]}, {"weight": 1, "prop": "material_pile", "params": {"variant": 0, "shape": {"0": 1, "1": 1, "2": 1}}, "scale": [0.75, 1.0]}], "basis": "production_inference", "rule": "Dumped soil piles over the site's open ground, sown by the planting field's rule: loose clusters of two to four with gaps between and a few lone piles, 6 to 10 m across and 2 to 3 m high, bigger where they cluster, in the kit's dumped soil (a few truckloads merged, darker and lumpier than stockpiled soil); about one in ten a grey gravel pile; none within 10 m of the fence or inside the switchyard.", "evidence": "Esri World Imagery through Wayback: Vantor captures 2025-08-29 (release 13192) and 2026-05-26 (release 43291), about 0.24 m at map level 19: round dark soil piles 6-10 m across with shadows, loosely clustered on the open strip along the riprap (Aug 2025), low brown spreads and a few round piles about 6 m across and a grey gravel pile (May 2026); Google Street View, 775, 849 and 899 13th St, Sep 2025 (camera x 125, z -627, headings 152 and 75; x 185, z -659, heading 152; x 214, z -674, heading 125): brown soil mounds and a grey gravel pile behind the fence."}
    ]
+  },
+  {
+   "id": "ramps_school_lot",
+   "name": "13th Street former school lot car ramps",
+   "pilot": false,
+   "reason": "Owner request 2026-11-08: car ramps in three empty lots, an invented gameplay feature (nothing like them is on the island). The former school's asphalt lot that wraps Aracely Cafe, its west and north-west parts only: the painted playground east of x -308 (games, the basketball court) is left as it is.",
+   "reference": "Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19): empty asphalt, parking stall lines round its edges, the playground's painted games and court east of the building's north-east corner; OSM w1102659944 (amenity=parking), w499105914 and w499105913 (its aisles), w1163035324 (the basketball court)",
+   "shape": {"type": "polygon", "points_xz": [[-329.61, -454.58], [-308.0, -466.46], [-308.0, -469.14], [-328.22, -507.05], [-308.0, -517.8], [-308.0, -550.62], [-330.91, -550.48], [-333.0, -550.29], [-334.67, -550.05], [-336.41, -549.57], [-338.1, -548.97], [-341.44, -547.64], [-344.73, -546.13], [-346.39, -545.08], [-348.02, -544.05], [-349.58, -542.81], [-351.07, -541.6], [-352.43, -540.11], [-353.63, -538.52], [-354.64, -536.89], [-355.45, -535.13], [-356.03, -533.66], [-356.38, -532.07], [-356.44, -530.51], [-356.28, -528.94]]},
+   "scatter": [],
+   "yard": [
+    {"id": "school_lot_ramps", "pattern": "ramps", "ramps": [{"variant": "kicker_medium", "finish": "plywood"}, {"variant": "tabletop", "finish": "plywood"}, {"variant": "kicker_small", "finish": "plywood"}], "lane_m": 9.0, "margin_m": 2.0, "keep_out": ["w1163035324"], "allow_roads": ["w499105914", "w499105913"], "basis": "production_inference", "rule": "Plywood car ramps on galvanised frames, as a skate or stunt park builds them on asphalt, laid out by the ramps rule from this table: those that fit with their run-ups and landings on the lot's open asphalt, across its painted aisles, clear of the playground and the court, 2 m inside its edges (the building's walls among them): the plywood ramps are narrower than dirt ones, so their lanes are 9 m wide.", "evidence": "Owner request 2026-11-08 (drivable cars: ramps in empty lots to jump the cars); the lot's open ground in Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19, about 0.24 m); OSM w1102659944."}
+   ]
+  },
+  {
+   "id": "ramps_twelfth_street_lot",
+   "name": "12th Street and Avenue D dirt lot car ramps",
+   "pilot": false,
+   "reason": "Owner request 2026-11-08: car ramps in three empty lots, an invented gameplay feature (nothing like them is on the island). The vacant dirt lot on the corner of 12th Street and Avenue D, the biggest of them, gets the full set.",
+   "reference": "Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19): bare dirt and dry grass with a worn oval, open to 12th Street and Avenue D, CityView Storage's west lot and sheds to the south; not mapped in OSM (inside landuse=residential r17241151), the outline traced from that capture",
+   "shape": {"type": "polygon", "points_xz": [[-281.0, -273.0], [-254.0, -222.0], [-262.0, -213.0], [-309.0, -189.0], [-337.0, -177.0], [-366.0, -229.0], [-366.0, -237.0]]},
+   "scatter": [],
+   "yard": [
+    {"id": "dirt_lot_ramps", "pattern": "ramps", "ramps": [{"variant": "kicker_large", "finish": "dirt"}, {"variant": "gap", "finish": "dirt"}, {"variant": "tabletop", "finish": "dirt"}, {"variant": "kicker_medium", "finish": "dirt"}, {"variant": "kicker_small", "finish": "dirt"}], "lane_m": 12.0, "margin_m": 4.0, "basis": "production_inference", "rule": "Graded dirt car ramps, as a dirt jump park builds them, laid out by the ramps rule from this table: kickers, a gap pair and a tabletop, each with its run-up and landing on the lot's open dirt, 4 m inside its edges.", "evidence": "Owner request 2026-11-08 (drivable cars: ramps in empty lots to jump the cars); the lot's open ground in Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19, about 0.24 m)."}
+   ]
+  },
+  {
+   "id": "ramps_north_slab_site",
+   "name": "North slab site car ramps",
+   "pilot": false,
+   "reason": "Owner request 2026-11-08: car ramps in three empty lots, an invented gameplay feature (nothing like them is on the island). The old building slabs between Avenue I and Avenue M, inside its two OSM chain-link fences (west and north-east) and open to the streets on its other sides; the ramps keep clear of the fences and of the trees.",
+   "reference": "Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19): old concrete slabs, weeds and a few trees between Avenue I and Avenue M; OSM w1222514688 and w215879086 (barrier=fence, its west and north-east sides); not mapped otherwise, the outline traced from that capture inside the fences",
+   "shape": {"type": "polygon", "points_xz": [[-40.6, -823.9], [20.5, -787.8], [67.7, -701.6], [-18.4, -668.4], [-60.0, -768.4]]},
+   "scatter": [],
+   "yard": [
+    {"id": "slab_site_ramps", "pattern": "ramps", "ramps": [{"variant": "kicker_large", "finish": "dirt"}, {"variant": "gap", "finish": "dirt"}, {"variant": "tabletop", "finish": "dirt"}, {"variant": "kicker_medium", "finish": "dirt"}, {"variant": "kicker_small", "finish": "dirt"}], "lane_m": 12.0, "margin_m": 4.0, "basis": "production_inference", "rule": "Graded dirt car ramps pushed up on the old slabs, laid out by the ramps rule from this table: those that fit with their run-ups and landings on the site's open ground, 4 m inside its edges and the fences, out from under its trees.", "evidence": "Owner request 2026-11-08 (drivable cars: ramps in empty lots to jump the cars); the lot's open ground in Esri World Imagery, Vantor capture 2026-05-26 (Wayback release 43291, map level 19, about 0.24 m); OSM w1222514688, w215879086."}
+   ]
   }
   ],
   "island_furniture": {

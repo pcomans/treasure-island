@@ -6,19 +6,23 @@ extends Node3D
 ## restart rebuilds the world, so everything is back in place.
 ##
 ## The parked cars stay static MultiMesh instances with a collision box each
-## (street_clutter_builder.gd). Entering one, or a driven car about to hit one,
-## swaps it for a live body: its instance is drawn at zero scale, its box is
-## disabled and a DrivableCar in the same body, paint and place takes over. A
-## jersey water barrier (K-rail) about to be hit swaps the same way for a heavy
-## live barrier the car shoves. The rows that can swap are the clutter root's
-## swappable_rows metadata, so this works on the world generated at startup and
-## on the baked one alike.
+## (street_clutter_builder.gd). Entering one, or a driven car about to hit one
+## (or pressing against one), swaps it for a live body: its instance is drawn at
+## zero scale, its box is disabled and a DrivableCar in the same body, paint and
+## place takes over, which a driven car can push about. A jersey water barrier
+## (K-rail) about to be hit swaps the same way for a heavy live barrier the car
+## shoves. The rows that can swap are the clutter root's swappable_rows
+## metadata, so this works on the world generated at startup and on the baked
+## one alike.
 ##
 ## Driving: W/S drive, brake and reverse, A/D steer, Space the handbrake (its
 ## own action on the jetpack's key; the jetpack is off in a car), R puts the car
-## back on land at its last safe spot, the mouse glances (vehicle_camera.gd).
-## The stock controller stops while driving (player_controller.gd
-## begin_driving), its avatar hides and the player rides at the seat.
+## back on land at its last safe spot, the mouse glances (vehicle_camera.gd,
+## which also blends the view from and back to the on-foot camera). The stock
+## controller stops while driving (player_controller.gd begin_driving), its
+## avatar hides and the player rides at the seat. A car that meets the bay
+## splashes (car_splash.gd) and sinks with the player in it before it goes back
+## to land; F does nothing until then.
 ##
 ## Fences: the driven car passes through the fences' collision (an exception
 ## per fence body) and breaks each bay it overlaps (street_fence_breaker.gd);
@@ -34,6 +38,7 @@ const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_CAMERA := preload("res://game/scripts/vehicles/vehicle_camera.gd")
+const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
@@ -43,11 +48,15 @@ const ENTER_REACH_M := 2.5
 ## The swappable rows' lookup grid (m).
 const GRID_M := 16.0
 ## A moving car swaps a static parked car or K-rail it will reach within this
-## time (s) or margin (m), so the hit is between two live bodies.
+## time (s) or margin (m), so the hit is between two live bodies. Slower (below
+## SHOVE_SPEED_MPS) it swaps what it touches (its hull grown by
+## CONTACT_MARGIN_M) while it creeps (SHOVE_CREEP_MPS) or its driver presses on,
+## so a car pressed against a parked one at full throttle always pushes it.
 const LOOKAHEAD_S := 0.15
 const LOOKAHEAD_MARGIN_M := 0.4
-## Below this speed (m/s) a car sets nothing moving.
 const SHOVE_SPEED_MPS := 1.5
+const SHOVE_CREEP_MPS := 0.3
+const CONTACT_MARGIN_M := 0.12
 ## A K-rail: a water-filled jersey unit stands in for concrete; heavy.
 const BARRIER_MASS_KG := 900.0
 const BARRIER_PARK_S := 1.0
@@ -162,8 +171,12 @@ func _physics_process(delta: float) -> void:
 		var node: Node3D = _live[id]
 		if node is DRIVABLE_CAR:
 			var car := node as DRIVABLE_CAR
-			if not car.freeze and car.speed() > SHOVE_SPEED_MPS:
-				_shove_ahead(car)
+			if car.freeze:
+				continue
+			if car.speed() > SHOVE_SPEED_MPS:
+				_shove(car, LOOKAHEAD_S, LOOKAHEAD_MARGIN_M)
+			elif car.speed() > SHOVE_CREEP_MPS or (car.occupied and absf(car.drive_input) > 0.1):
+				_shove(car, 0.0, CONTACT_MARGIN_M)
 		elif node is RigidBody3D:
 			_settle_barrier(node as RigidBody3D, delta)
 
@@ -193,7 +206,8 @@ func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
 	_exit_prompt_s = maxf(0.0, _exit_prompt_s - delta)
 	_set_prompt(PROMPT_EXIT if _exit_prompt_s > 0.0 else "")
 	_breaker.break_overlaps(car, self)
-	if exit_pressed:
+	# Sinking in the bay, the car takes the player back to land with it.
+	if exit_pressed and not car.is_sinking():
 		exit_car()
 
 
@@ -205,20 +219,22 @@ func enter(id: String) -> bool:
 	var car := _make_live(id) as DRIVABLE_CAR
 	if car == null:
 		return false
-	var rig := _player.get_node("CameraPivot") as Node3D
-	var arm := rig.get_node("SpringArm3D") as Node3D
+	# The view blends from the player's own camera; a capture's camera keeps showing.
+	var showing := get_viewport().get_camera_3d()
+	var take := showing == null or showing == _player.get_camera() or _camera.is_ancestor_of(showing)
 	car.freeze = false
 	car.occupied = true
 	_active = car
 	_player.begin_driving()
-	_camera.attach(car, rig.global_rotation.y, arm.rotation.x)
+	_camera.attach(car, showing if take else null, take)
 	_exit_prompt_s = PROMPT_EXIT_SHOW_S
 	entered.emit(id)
 	return true
 
 
-## Gets the player out beside the car, on the ground, facing as the camera was.
-func exit_car() -> void:
+## Gets the player out beside the car, on the ground, facing as the camera was;
+## the view blends back to the on-foot camera (blend false: at once).
+func exit_car(blend: bool = true) -> void:
 	var car := _active
 	if car == null:
 		return
@@ -228,13 +244,12 @@ func exit_car() -> void:
 	car.steer_input = 0.0
 	car.handbrake = false
 	_active = null
-	_camera.detach()
 	var rig := _player.get_node("CameraPivot") as Node3D
 	var arm := rig.get_node("SpringArm3D") as Node3D
 	rig.rotation.y = _camera.view_yaw()
 	arm.rotation.x = clampf(_camera.view_pitch(), deg_to_rad((rig as PlayerCamera).minimum_pitch_degrees), deg_to_rad((rig as PlayerCamera).maximum_pitch_degrees))
 	_player.end_driving(at)
-	_player.get_camera().make_current()
+	_camera.detach(_player.get_camera(), blend)
 	_set_prompt("")
 	exited.emit(car.row_id)
 
@@ -258,10 +273,17 @@ func drive_from(id: String, xz: Vector2, heading: Vector2) -> String:
 	return "" if enter(id) else "could not get into %s" % id
 
 
-## Out of the car now, wherever it is (a test or capture driver resetting).
+## Out of the car now, wherever it is, with the on-foot camera showing at once
+## and any blend ended (a test or capture driver resetting).
 func force_exit() -> void:
 	if _active != null:
-		exit_car()
+		exit_car(false)
+	_camera.finish_blend()
+
+
+## The driving camera rig (tests read its blend).
+func driving_camera() -> VEHICLE_CAMERA:
+	return _camera
 
 
 ## A glance of the driving camera by this much mouse motion (a capture driver's
@@ -355,6 +377,7 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
 	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _excludes)
 	car.recovered.connect(func(cause: String, from: Vector3) -> void: car_recovered.emit(cause, from))
+	car.splashed.connect(_splash.bind(car))
 	for fence: RID in _excludes:
 		PhysicsServer3D.body_add_collision_exception(car.get_rid(), fence)
 	return car
@@ -426,11 +449,11 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 
 
 ## Sets moving whatever static parked car or K-rail the car is about to hit:
-## its hull a moment ahead (LOOKAHEAD_S), grown by LOOKAHEAD_MARGIN_M.
-func _shove_ahead(car: DRIVABLE_CAR) -> void:
+## its hull lookahead_s ahead, grown by margin (0 s: what it touches now).
+func _shove(car: DRIVABLE_CAR, lookahead_s: float, margin: float) -> void:
 	var space := car.get_world_3d().direct_space_state
-	var ahead := Transform3D(car.global_transform.basis, car.global_position + car.linear_velocity * LOOKAHEAD_S)
-	_query.margin = LOOKAHEAD_MARGIN_M
+	var ahead := Transform3D(car.global_transform.basis, car.global_position + car.linear_velocity * lookahead_s)
+	_query.margin = margin
 	_query.exclude = [car.get_rid()]
 	for owner_id in car.get_shape_owners():
 		for index in car.shape_owner_get_shape_count(owner_id):
@@ -449,6 +472,14 @@ func _shove_ahead(car: DRIVABLE_CAR) -> void:
 					var node := _make_live(id)
 					if node is DRIVABLE_CAR:
 						(node as DRIVABLE_CAR).occupied = false
+
+
+## The splash where a car met the water.
+func _splash(at: Vector3, speed: float, car: DRIVABLE_CAR) -> void:
+	var splash := CAR_SPLASH.new()
+	splash.name = "Splash"
+	add_child(splash, true)
+	splash.start(at, speed, car.length_m)
 
 
 func _exit_transform(car: DRIVABLE_CAR) -> Transform3D:

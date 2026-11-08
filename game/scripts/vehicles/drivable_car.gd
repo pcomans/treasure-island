@@ -16,7 +16,9 @@ extends RigidBody3D
 ## mild yaw assist steadies ordinary driving, a mild anti-roll bar keeps gentle
 ## cornering flat; nothing levels the car in the air, so it lands however it was
 ## flying. A car resting on its roof or side, nearly still, for RIGHT_AFTER_S
-## rights itself with a short pop and roll.
+## rights itself with a short pop and roll. Off the island it meets the water,
+## splashes (the splashed signal), sinks for SINK_S and then goes back to land
+## facing away from the water, with the player still in it.
 ##
 ## The body is on the street-prop layer, like the parked cars: the player and
 ## other cars collide with it, the spray ray stops on it and the camera arms
@@ -28,6 +30,8 @@ extends RigidBody3D
 
 signal recovered(cause: String, from_position: Vector3)
 signal righted
+## The car met the water off the island, at this point on the surface and speed.
+signal splashed(at: Vector3, speed: float)
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 
@@ -111,13 +115,24 @@ const PARK_AFTER_S := 0.75
 const PARK_SPEED_MPS := 0.15
 ## Recovery off the island (owner: a car driven into the bay comes back on land
 ## with the player): safe samples on the island, every SAFE_EVERY_S; the reset
-## takes the newest at least SAFE_AGE_S old.
+## takes the newest at least SAFE_AGE_S old and faces it away from the water,
+## with RESET_CLEAR_M of island ahead. In the water the car keeps a share of
+## its speed (WATER_IMPACT_KEEP), is held up by a share of its weight once under
+## (SINK_BUOYANCY), slowed (WATER_DRAG, WATER_SPIN_DRAG, 1/s) and goes back
+## after SINK_S. Off the outline on something solid for STRANDED_S, or off it at
+## all for OUTSIDE_LIMIT_S, it goes back without the water.
 const SAFE_EVERY_S := 0.25
 const SAFE_AGE_S := 2.0
 const SAFE_SAMPLES := 64
-const OUTSIDE_RESET_S := 0.6
+const RESET_CLEAR_M := 10.0
+const SINK_S := 1.6
+const WATER_IMPACT_KEEP := 0.45
+const SINK_BUOYANCY := 0.7
+const WATER_DRAG := 1.8
+const WATER_SPIN_DRAG := 2.5
+const STRANDED_S := 2.0
+const OUTSIDE_LIMIT_S := 8.0
 const FALL_RECOVERY_Y := -20.0
-const WATER_MARGIN_M := 0.3
 ## The detail hand-over and draw range, as the parked cars' (street_clutter_kit.gd).
 const LOD_NEAR_M := KIT.LOD_NEAR_M
 const FAR_RANGE_M := 260.0
@@ -164,6 +179,8 @@ var _park_wait := 0.0
 var _safe: Array[Dictionary] = []
 var _safe_clock := 0.0
 var _outside_s := 0.0
+var _sinking := -1.0
+var _sink_from := Vector3.ZERO
 var _clock := 0.0
 var _recover_request := ""
 var _teleport := Transform3D.IDENTITY
@@ -332,6 +349,11 @@ func is_righting() -> bool:
 	return _righting >= 0.0
 
 
+## In the water, sinking before it goes back to land.
+func is_sinking() -> bool:
+	return _sinking >= 0.0
+
+
 ## The car's frame as drawn this frame (between the last two physics states).
 func visual_transform() -> Transform3D:
 	return _visual.global_transform if _visual != null else global_transform
@@ -348,7 +370,7 @@ func describe() -> Dictionary:
 		"up": snappedf(up_dot(), 0.001), "pitch": snappedf(rad_to_deg(asin(clampf(-basis.z.y, -1.0, 1.0))), 0.1),
 		"roll": snappedf(rad_to_deg(asin(clampf(basis.x.y, -1.0, 1.0))), 0.1), "steer": snappedf(rad_to_deg(_steer), 0.1),
 		"compression": [snappedf(_compression[0], 0.001), snappedf(_compression[1], 0.001), snappedf(_compression[2], 0.001), snappedf(_compression[3], 0.001)],
-		"occupied": occupied, "righting": is_righting(), "frozen": freeze,
+		"occupied": occupied, "righting": is_righting(), "sinking": is_sinking(), "frozen": freeze,
 	}
 
 
@@ -375,6 +397,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		return
 	if _righting >= 0.0:
 		_step_righting(state, dt)
+		return
+	if _sinking >= 0.0:
+		_step_sinking(state, dt)
 		return
 	var xf := state.transform
 	var basis := xf.basis
@@ -577,18 +602,20 @@ func _set_state(state: PhysicsDirectBodyState3D, xf: Transform3D, velocity: Vect
 		_compression[i] = _droop
 
 
-## Off the island (outside the playable outline and down in the water, or
-## outside for a moment, or fallen far), or R: back to a safe spot on land.
+## Off the island: into the water (its lowest corner under the surface, off the
+## outline) it splashes and sinks; stranded off the outline, fallen far below
+## the world, or R: back to a safe spot on land at once.
 func _watch_recovery(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	if boundary == null:
 		return
-	var origin := state.transform.origin
+	var xf := state.transform
+	var origin := xf.origin
 	var inside := boundary.contains_position(origin)
 	_outside_s = 0.0 if inside else _outside_s + dt
 	_safe_clock += dt
-	if inside and _grounded >= 3 and state.transform.basis.y.dot(Vector3.UP) > 0.9 and state.angular_velocity.length() < 1.5 and _safe_clock >= SAFE_EVERY_S:
+	if inside and _grounded >= 3 and xf.basis.y.dot(Vector3.UP) > 0.9 and state.angular_velocity.length() < 1.5 and _safe_clock >= SAFE_EVERY_S:
 		_safe_clock = 0.0
-		_safe.append({"transform": state.transform, "time": _clock})
+		_safe.append({"transform": xf, "time": _clock})
 		if _safe.size() > SAFE_SAMPLES:
 			_safe.pop_front()
 	var cause := _recover_request
@@ -596,25 +623,75 @@ func _watch_recovery(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	if cause == "":
 		if origin.y < FALL_RECOVERY_Y:
 			cause = "fell_below_world"
-		elif not inside and (origin.y < water_y + WATER_MARGIN_M or _outside_s > OUTSIDE_RESET_S):
+		elif not inside and lowest_y(xf) < water_y:
+			_start_sinking(state)
+			return
+		elif not inside and ((_grounded > 0 and _outside_s > STRANDED_S) or _outside_s > OUTSIDE_LIMIT_S):
 			cause = "outside_boundary"
-	if cause == "":
-		return
+	if cause != "":
+		_reset(state, cause, origin)
+
+
+## The lowest of the car's box corners (wheels to roof) at xf, however it lies.
+func lowest_y(xf: Transform3D) -> float:
+	var lowest := INF
+	for corner in 8:
+		var local := Vector3((corner & 1) * 2 - 1, 0.0, ((corner >> 1) & 1) * 2 - 1) * Vector3(width_m * 0.45, 0.0, length_m * 0.45)
+		local.y = height_m if corner >= 4 else 0.05
+		lowest = minf(lowest, (xf * local).y)
+	return lowest
+
+
+func _start_sinking(state: PhysicsDirectBodyState3D) -> void:
+	var origin := state.transform.origin
+	_sinking = 0.0
+	_sink_from = origin
+	_upright_wait = 0.0
+	var impact := state.linear_velocity.length()
+	state.linear_velocity *= WATER_IMPACT_KEEP
+	splashed.emit.call_deferred(Vector3(origin.x, water_y, origin.z), impact)
+
+
+## Sinking: no wheels, held up by part of its weight once under, slowed; then
+## back to land.
+func _step_sinking(state: PhysicsDirectBodyState3D, dt: float) -> void:
+	_sinking += dt
+	_grounded = 0
+	for i in 4:
+		_contact[i] = false
+		_compression[i] = 0.0
+	var under := clampf((water_y - lowest_y(state.transform)) / maxf(height_m, 0.5), 0.0, 1.0)
+	state.apply_central_force(Vector3.UP * mass * _gravity() * SINK_BUOYANCY * under)
+	state.apply_central_force(-state.linear_velocity * mass * WATER_DRAG)
+	state.apply_torque(-state.angular_velocity * (inertia.x + inertia.y + inertia.z) / 3.0 * WATER_SPIN_DRAG)
+	if _sinking >= SINK_S:
+		_reset(state, "water", _sink_from)
+
+
+## Back to the newest safe spot at least SAFE_AGE_S old, upright and at rest.
+## From the water or off the outline it faces away from where it left the
+## island; whatever the cause, toward RESET_CLEAR_M of island ahead.
+func _reset(state: PhysicsDirectBodyState3D, cause: String, from: Vector3) -> void:
 	var target: Transform3D = _safe[0].transform
 	for index in range(_safe.size() - 1, -1, -1):
 		if _clock - float(_safe[index].time) >= SAFE_AGE_S:
 			target = _safe[index].transform
 			break
-	target = Transform3D(_upright_basis(target.basis), target.origin + Vector3.UP * 0.15)
-	# Facing the water it came off, turn it round.
-	var ahead := target.origin - target.basis.z * 8.0
-	if not boundary.contains_position(ahead):
-		target.basis = Basis(Vector3.UP, PI) * target.basis
+	var forward := -_upright_basis(target.basis).z
+	if cause == "water" or cause == "outside_boundary":
+		var away := Vector3(target.origin.x - from.x, 0.0, target.origin.z - from.z)
+		forward = away.normalized() if away.length() > 2.0 else -forward
+	for turn: float in [0.0, PI * 0.5, -PI * 0.5, PI]:
+		var heading := forward.rotated(Vector3.UP, turn)
+		if boundary.contains_position(target.origin + heading * RESET_CLEAR_M):
+			forward = heading
+			break
+	var placed := Transform3D(Basis(forward.cross(Vector3.UP).normalized(), Vector3.UP, -forward), target.origin + Vector3.UP * 0.15)
 	_outside_s = 0.0
 	_upright_wait = 0.0
 	_righting = -1.0
-	var from := origin
-	_set_state(state, target, Vector3.ZERO)
+	_sinking = -1.0
+	_set_state(state, placed, Vector3.ZERO)
 	recovered.emit.call_deferred(cause, from)
 
 
@@ -624,7 +701,7 @@ func _physics_process(delta: float) -> void:
 	if freeze:
 		return
 	# A car nobody drives freezes once it has come to rest: it stays there.
-	if not occupied and _righting < 0.0 and linear_velocity.length() < PARK_SPEED_MPS and angular_velocity.length() < PARK_SPEED_MPS and up_dot() > RIGHT_UP_DOT:
+	if not occupied and _righting < 0.0 and _sinking < 0.0 and linear_velocity.length() < PARK_SPEED_MPS and angular_velocity.length() < PARK_SPEED_MPS and up_dot() > RIGHT_UP_DOT:
 		_park_wait += delta
 		if _park_wait >= PARK_AFTER_S:
 			_park_wait = 0.0

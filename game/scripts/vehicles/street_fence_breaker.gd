@@ -80,6 +80,11 @@ func is_broken(bay_key: String) -> bool:
 	return _broken.has(bay_key)
 
 
+## The broken bays' keys, in the order they broke.
+func broken_keys() -> Array:
+	return _broken.keys()
+
+
 ## Breaks every intact bay the car's hull overlaps now.
 func break_overlaps(car: RigidBody3D, _manager: Node) -> void:
 	if _bodies.is_empty() or car == null:

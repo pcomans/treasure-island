@@ -27,8 +27,9 @@ function main() {
   const target = resolve(projectRoot, STREET_YARD_KIT_PATH);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, glb);
-  const triangles = meshes.reduce((sum, mesh) => sum + mesh.indices.length / 3, 0);
-  console.log(`wrote ${STREET_YARD_KIT_PATH} (${glb.length} bytes, ${meshes.length} meshes, ${triangles} triangles)`);
+  const solid = meshes.filter((mesh) => !mesh.marker);
+  const triangles = solid.reduce((sum, mesh) => sum + mesh.indices.length / 3, 0);
+  console.log(`wrote ${STREET_YARD_KIT_PATH} (${glb.length} bytes, ${solid.length} meshes, ${meshes.length - solid.length} markers, ${triangles} triangles)`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();
