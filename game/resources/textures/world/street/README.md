@@ -148,3 +148,10 @@ carries SELF STORAGE in blue DejaVu Sans Bold capitals on the white band, as
 legible in that photo; the lower half is plain. Each flag is drawn at its 5:3
 shape (480 x 288) and the pair is packed into the square, by
 `tools/draw_pole_flag_texture.sh`, which redraws it byte for byte.
+
+`gaa_mural_wall.png` (2048 x 512) is the mural painted on the GAA field's board
+wall (`mural_wall` in `street_furniture_kit.gd`): a round crest, the words TÁ ÁIT
+DÚINN UILE ANN and a panel with PÁIRC NA nGAEL and THE HOME OF GAELIC SPORTS on
+dark green boards. Generated 2026-11-08 with `tools/generate-texture` from a text
+prompt only: an original design that echoes the field's 2025 murals (SF GAA
+photos), not a copy of them.

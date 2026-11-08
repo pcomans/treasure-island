@@ -117,6 +117,9 @@ below use. Place #8 is two zones. The zones the tree push added are in
 | Mersea promenade | `mersea_promenade`; lots `mersea_promenade`, `mersea_promenade_seal`, `mersea_promenade_slab` (a recorded exception to the OSM layout) | | The owner's "boardwalk", from the owner's video, 2026-11-06: one wide pavement with its paint, mulch, crushed-rock and lawn edges, banner fence, baulks and young planting; not yet reviewed | Rate; detail stops at about z 236 |
 | Johnson St lot | `johnson_lot`; no OSM area, a recorded exception (outline from the 2026-05-26 aerial, level 19) | 2 (visual-review-clutter-rollout) | PASS at `03f645ae`: outline and pattern rule match the aerial, with the tail joint and shoulder band from the PASS WITH FIXES at `d38100ad` fixed. Changed since by the Mersea ditch study (owner video, frame D2): the shoulder is a 0.25 m dark lip at the curb and 1.85 m of crushed-rock gravel, not 0.6 m and 2.5 m, and the ground shader carries rock and sand on to the slope's top, ragged into the grass; that change has had the study's visual review, not its own | 3: pole, drainage gap, rock pile, aisle marks |
 | Garden Walk | `garden_walk`, `maceo_may_east_beds`, `seven_seas_maceo_verge`; w1249412095 | | New 2026-11-07 with the Maceo May study, not yet reviewed: aggregate lane, brick bands, walks, beds, lamps, bollards and signs from owner photos of Nov 2026 and the 2025-08-29 aerial, the lane to Seven Seas Avenue, the beds and curb strip on that street | Rate |
+| Páirc na nGael, the GAA pitch | `pairc_na_ngael`; w99060807, fence w99060798 | | New 2026-11-08, not yet reviewed: GAA lines and goals, coated chain-link with its photographed gates, ball-stop nets, the spectator side's board wall with its murals, two tall bleachers and two low ones, from Mar–Sep 2025 Street View, the 2026-05-26 aerial and SF GAA photos of 2025 and Jun 2026 | Rate; then the scoreboard, booth and concession stand where a dated photo places them |
+| The rugby field (OSM "GAA Field B") | `rugby_field_b`; w99060801 | | New 2026-11-08, not yet reviewed: rugby lines and H posts, coated chain-link with its gates, ball-stop nets, two floodlights, two low bleachers on Avenue H and two picket-guarded ones outside the Avenue I fence, from Mar–Nov 2025 Street View and the 2026-05-26 aerial | Rate |
+| Synthetic-turf soccer pitch | `soccer_pitch`; w1252737754 | | Lines, apron and ball 2026-11-08 (owner-bugs); goals, windscreen fence, ball-stop nets and four floodlights added 2026-11-08 (athletic fields), not yet reviewed | Rate; then the apron's shelters and benches from a ground photo |
 | Avenue N seawall palm row | `avenue_n_seawall` | 2 (visual-review-veg-models) | 61 mature Canary palms between Avenue N and the riprap and 135 shrubs beside them, from Nov 2025 Street View and the dated aerials | 3: secondary items |
 
 ### Trees and shrubs by site
@@ -167,8 +170,8 @@ Centres are world metres (x east, z south) from the generated world.
 | Ketcham Little League Field #2 (sports centre) | w109022547 | (368, -261) | 0 code | Sports ground-cover family (Mar17) | 1 |
 | Baseball pitch | w133809962 | (364, -233) | 0 code | Sports ground-cover family (Mar17) | 1 |
 | Baseball pitch | w133809964 | (-11, 109) | 0 code | Sports ground-cover family (Mar17) | 1 |
-| Gaelic Athletic Association Field A | w99060807 | (-121, -394) | 0 code | Sports ground-cover family (Mar17) | 1 |
-| Gaelic Athletic Association Field B | w99060801 | (-1, -454) | 0 code | Sports ground-cover family (Mar17) | 1 |
+| Gaelic Athletic Association Field A (Páirc na nGael) | w99060807 | (-121, -394) | see zone | Built as the `pairc_na_ngael` zone | (zone row) |
+| Gaelic Athletic Association Field B (the Golden Gate rugby field) | w99060801 | (-1, -454) | see zone | Built as the `rugby_field_b` zone | (zone row) |
 | Basketball court | w28356842 | (-159, 18) | 0 code | Paved ground-cover family (Mar17) | 1: court surface; 2: hoops |
 | Basketball court | w96665888 | (21, 163) | 0 code | Paved (Mar17) | 1; 2: hoops |
 | Basketball court | w96665934 | (-7, 170) | 0 code | Paved (Mar17) | 1; 2: hoops |
@@ -299,6 +302,12 @@ the rows below are rated only where a record names the prop.
 | Fork lamp | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o2, o3 |
 | Steel bollard | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o1, o3 |
 | Event pole | Cityside set pieces | | Whole-park PASS only | Rate |
+| Sports floodlight pole (`floodlight_pole`) | Rugby field (dark, four box heads) and turf pitch (galvanised, 24 m, four round heads) set pieces | | New 2026-11-08, not yet reviewed | Rate against Avenue H Sep 2025 and 9th St Sep 2025 |
+| GAA goal (`goal_gaa`) | Páirc na nGael, by rule on the end lines | | New 2026-11-08, not yet reviewed | Rate against the SF GAA photos |
+| Rugby posts (`goal_rugby`) | The rugby field, by rule on the try lines | | New 2026-11-08, not yet reviewed | Rate against Avenue I Nov 2025 |
+| Soccer goal (`goal_soccer`) | The turf pitch, full size and small, by rule on the goal lines | | New 2026-11-08, not yet reviewed | Rate |
+| Aluminium bleachers (`bleachers`; guard `chain_link`, `pickets` or `none`) | Páirc na nGael and the rugby field, set pieces | | New 2026-11-08, not yet reviewed | Rate against WW1_6676, Avenue H and Avenue I Sep 2025 |
+| Mural board wall (`mural_wall`) | Páirc na nGael's spectator side, set pieces, its mural an original texture (`gaa_mural_wall.png`) | | New 2026-11-08, not yet reviewed | Rate against the SF GAA photos |
 | Long bench | Cityside set pieces | | Whole-park PASS only | Rate |
 | Long picnic table | Cityside set pieces | | Whole-park PASS only | Rate |
 | BBQ grill | Cityside set pieces | | Whole-park PASS only | Rate |
@@ -317,13 +326,14 @@ gate leaves and banners are parts of the same kit.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Chain-link | #8 north, #10, #13, #15; OSM fences at #2 and #6; the Mersea promenade, with printed banners (`street_fence_banners.png`) | | Added with the yards; no type-specific verdict | Rate |
+| Chain-link | #8 north, #10, #13, #15; OSM fences at #2 and #6; the Mersea promenade, with printed banners (`street_fence_banners.png`); the GAA and rugby fields, coated dark green (params `coating`, new 2026-11-08) | | Added with the yards; no type-specific verdict | Rate |
 | Chain-link with barbed wire | #16 (OSM w109042225), the #2 pen (OSM w1252737752) | | No type-specific verdict | Rate |
-| Chain-link with windscreen | Trade Winds link (Cultural Park), #1, #2, #6, #9, #12 (orange safety mesh), #13 | 2 est. | Step 3 r2 and r5: screen tone sampled and fixed, no sparkle at distance (PASS). Orange mesh saturated and opaque after the kit review (`e556bc40`) | 3: posts, rails and ties close up |
+| Chain-link with windscreen | Trade Winds link (Cultural Park), #1, #2, #6, #9, #12 (orange safety mesh), #13; the turf pitch (8 ft, new 2026-11-08) | 2 est. | Step 3 r2 and r5: screen tone sampled and fixed, no sparkle at distance (PASS). Orange mesh saturated and opaque after the kit review (`e556bc40`) | 3: posts, rails and ties close up |
 | Chain-link with privacy slats | #1, #2, #4, #8 south | | No type-specific verdict | Rate |
 | Temporary construction panel | Avenue of the Palms (Cityside panels), #12, #14 (OSM w1252737734) | 3 est. | Step 3 r2: panel frame, clamps and stands clear in native crops; distance haze fixed (r5 PASS) | 4: materials |
 | Steel picket | Mersea lot | 3 (visual-review-clutter-rollout) | Second look at `e1306ea4`; finials added after it | 4: materials |
 | Wood privacy fence | not placed | | Not used yet | Rate when placed |
+| Ball-stop net (`ball_stop_net`) | Behind the goals at the GAA, rugby and turf pitches | | New 2026-11-08, not yet reviewed | Rate against 13th St Mar 2025 and Avenue I Mar 2025 |
 
 ### Shoreline riprap
 
