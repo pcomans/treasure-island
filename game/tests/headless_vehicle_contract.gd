@@ -367,10 +367,11 @@ func _into_rocks(car: DRIVABLE_CAR, target: Vector2, max_mps: float, stones: Arr
 
 ## Back on land after a return: on a level spot inside the outline, well clear
 ## of its edge, on four wheels, facing away from the water (outward), the
-## player in it; still there, on its brakes, after the fixture's still_s with
-## nothing pressed; then W drives it off, inland.
+## player in it; still there (across the ground, once its springs have
+## settled), on its brakes, after the fixture's still_s with nothing pressed;
+## then W drives it off, inland.
 func _back_on_land(car: DRIVABLE_CAR, outward: Vector3, label: String) -> bool:
-	for _tick in 30:
+	for _tick in 90:
 		await physics_frame
 	var boundary := _world.get_boundary()
 	var rest := car.global_position
@@ -382,7 +383,7 @@ func _back_on_land(car: DRIVABLE_CAR, outward: Vector3, label: String) -> bool:
 	var holding := car.is_holding()
 	for _tick in int(float(_cases.shore.still_s) * 60.0):
 		await physics_frame
-	var drift := car.global_position.distance_to(rest)
+	var drift := Vector2(car.global_position.x - rest.x, car.global_position.z - rest.z).length()
 	Input.action_press("move_forward")
 	for _tick in 60:
 		await physics_frame
@@ -390,7 +391,7 @@ func _back_on_land(car: DRIVABLE_CAR, outward: Vector3, label: String) -> bool:
 	var gone := car.global_position - rest
 	gone.y = 0.0
 	print("BACK %s at %s, %.2f m from the edge, up %.4f, wheels %d, held %s, facing %.2f along the way out, drifted %.3f m in %.1f s, then W took it %.2f m (%.2f along the way out)" % [label, rest, edge, up, wheels, holding, forward.dot(outward), drift, float(_cases.shore.still_s), gone.length(), gone.normalized().dot(outward)])
-	return _require(boundary.contains_position(rest) and edge >= DRIVABLE_CAR.SAFE_SHORE_M - 1.0, "Back from %s the car is %.2f m from the island's edge." % [label, edge]) \
+	return _require(boundary.contains_position(rest) and edge >= DRIVABLE_CAR.SAFE_SHORE_M - 0.5, "Back from %s the car is %.2f m from the island's edge." % [label, edge]) \
 		and _require(up >= cos(deg_to_rad(DRIVABLE_CAR.SAFE_TILT_DEG + 1.0)) and wheels == 4 and holding, "Back from %s the car must stand level on its four wheels, on its brakes (up %.4f, wheels %d, held %s)." % [label, up, wheels, holding]) \
 		and _require(forward.dot(outward) < 0.3, "Back from %s the car must face away from the water." % label) \
 		and _require(_player.is_driving() and _vehicles.active_car() == car, "Back from %s the player must be in the car." % label) \

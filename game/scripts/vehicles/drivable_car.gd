@@ -147,8 +147,8 @@ const PARK_SPEED_MPS := 0.15
 const SAFE_EVERY_S := 0.25
 const SAFE_AGE_S := 2.0
 const SAFE_SAMPLES := 64
-const SAFE_TILT_DEG := 5.0
-const SAFE_SHORE_M := 10.0
+const SAFE_TILT_DEG := 4.0
+const SAFE_SHORE_M := 12.0
 const SAFE_TURN_RADPS := 1.5
 const ROAD_LIFT_M := 0.07
 const ROAD_PREFER_M := 50.0
@@ -760,7 +760,8 @@ func _watch_recovery(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	_safe_clock += dt
 	if _safe_clock >= SAFE_EVERY_S:
 		_safe_clock = 0.0
-		if inside and _grounded == 4 and _edge_m >= SAFE_SHORE_M and xf.basis.y.dot(Vector3.UP) >= cos(deg_to_rad(SAFE_TILT_DEG)) and state.angular_velocity.length() < SAFE_TURN_RADPS:
+		if inside and _grounded == 4 and xf.basis.y.dot(Vector3.UP) >= cos(deg_to_rad(SAFE_TILT_DEG)) and state.angular_velocity.length() < SAFE_TURN_RADPS \
+		and boundary.edge_distance(origin) >= SAFE_SHORE_M:
 			var road := visible_ground != null and visible_ground.lift_at(origin.x, origin.z) >= ROAD_LIFT_M
 			_safe.append({"transform": xf, "time": _clock, "road": road})
 			if _safe.size() > SAFE_SAMPLES:
