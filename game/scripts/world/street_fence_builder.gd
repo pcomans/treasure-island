@@ -16,9 +16,13 @@ extends RefCounted
 ##
 ## A car breaks a fence one bay at a time (game/scripts/vehicles/street_fence_breaker.gd):
 ## each bay's box carries its key (fence_bay) and the row's group lists every
-## bay (fence_bays: key -> {type, params, a, b, seed, ranges: [[mesh instance,
-## surface, first vertex, count], ...]}), the runs of its own vertices in the
-## cell meshes. The body's breakable meta is false where the row's params say so.
+## bay (fence_bays: key -> {type, params, a, b, seed, posts, ranges: [[mesh
+## instance, surface, first vertex, count], ...]}), the runs of its own vertices
+## in the cell meshes, and every post (fence_posts: key -> {frame, size,
+## ranges}; a bay's posts are the keys of the two it hangs between), which a car
+## fells where it hits one; the group's fence_type and fence_params say how to
+## build a felled post alone. The body's breakable meta is false where the
+## row's params say so.
 
 const KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## Render cell size (m).
@@ -55,6 +59,7 @@ func build(document: Dictionary) -> Dictionary:
 		var id := str(row.id)
 		var cells: Dictionary = {}
 		var bay_boxes: Array[Dictionary] = []
+		var post_entries: Array = []
 		var runs: Array = (fence as Dictionary).get("runs", [])
 		for run_index in runs.size():
 			var posts := _posts(runs[run_index])
@@ -64,11 +69,16 @@ func build(document: Dictionary) -> Dictionary:
 			for index in posts.size() - 1:
 				length_m += Vector2(posts[index + 1].x - posts[index].x, posts[index + 1].z - posts[index].z).length()
 			var seed := (id + ":" + str(run_index)).hash()
-			var run_boxes := kit.add_run(cells, CELL_M, type, row.prop_params, posts, seed)
+			var run_posts: Array = []
+			var run_boxes := kit.add_run(cells, CELL_M, type, row.prop_params, posts, seed, false, run_posts)
 			for index in run_boxes.size():
 				run_boxes[index]["key"] = "%d:%d" % [run_index, index]
 				run_boxes[index]["seed"] = seed
+				run_boxes[index]["posts"] = ["p%d:%d" % [run_index, index], "p%d:%d" % [run_index, index + 1]]
 			bay_boxes.append_array(run_boxes)
+			for index in run_posts.size():
+				run_posts[index]["key"] = "p%d:%d" % [run_index, index]
+			post_entries.append_array(run_posts)
 		# Gates stand open, their leaves back on the inside; banners hang on the runs.
 		var gates: Array = (fence as Dictionary).get("gates", [])
 		for gate_index in gates.size():
@@ -120,12 +130,14 @@ func build(document: Dictionary) -> Dictionary:
 			placed[key] = landed
 		var bays: Dictionary = {}
 		for entry: Dictionary in bay_boxes:
-			var ranges: Array = []
-			for run: Array in entry.get("ranges", []):
-				for target: Array in (placed.get(run[0], {}) as Dictionary).get(run[1], []):
-					ranges.append([target[0], target[1], int(run[2]), int(run[3]) - int(run[2])])
-			bays[entry.key] = {"type": type, "params": (row.prop_params as Dictionary).duplicate(true), "a": entry.a, "b": entry.b, "seed": int(entry.seed), "ranges": ranges}
+			bays[entry.key] = {"type": type, "params": (row.prop_params as Dictionary).duplicate(true), "a": entry.a, "b": entry.b, "seed": int(entry.seed), "posts": entry.get("posts", []), "ranges": _placed_ranges(entry.get("ranges", []), placed)}
 		group.set_meta("fence_bays", bays)
+		var fence_posts: Dictionary = {}
+		for entry: Dictionary in post_entries:
+			fence_posts[entry.key] = {"frame": entry.frame, "size": entry.size, "ranges": _placed_ranges(entry.ranges, placed)}
+		group.set_meta("fence_posts", fence_posts)
+		group.set_meta("fence_type", type)
+		group.set_meta("fence_params", (row.prop_params as Dictionary).duplicate(true))
 		if (fence as Dictionary).has("deck"):
 			root.add_child(group)
 			fences += 1
@@ -166,6 +178,16 @@ func build(document: Dictionary) -> Dictionary:
 		"meshes": meshes,
 		"collision_boxes": boxes,
 	}
+
+
+## Vertex runs [[cell key, builder key, first vertex, end], ...] where they
+## landed: [[mesh instance, surface, first vertex, count], ...].
+static func _placed_ranges(runs: Array, placed: Dictionary) -> Array:
+	var ranges: Array = []
+	for run: Array in runs:
+		for target: Array in (placed.get(run[0], {}) as Dictionary).get(run[1], []):
+			ranges.append([target[0], target[1], int(run[2]), int(run[3]) - int(run[2])])
+	return ranges
 
 
 ## A run's posts at the visible ground: land elevation plus the surface bias.

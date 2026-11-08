@@ -91,7 +91,9 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - There's no animation for getting in or out: the player appears in the seat, and beside the door (owner: none needed).
 - The storage yards' vans, RVs and trucks stay parked props: they can't be driven or shoved (owner, 2026-11-08). Only street and lot cars (the street-clutter kit's) can.
 - No engine, tyre, crash or splash sounds (the game has no audio).
-- Off the island the shoreline riprap is drawn only, with no collision, so a car that rolls slowly off the edge drops through the rocks into the water instead of tumbling down them (seen in review, 2026-11-08).
+- The shoreline riprap is drawn only, so a car can't tumble down it: a car whose hull reaches past the island's outline lower than the crest's tallest stones splashes there, stops dead for a second and goes back to land (owner report, 2026-11-08). Only a car that comes down on open water clear of the stones (off a jump) splashes and sinks; at the concrete pier faces and the causeway it is put back as at the rocks. The splash over dry stones is an arcade cue. K-rails shoved into the shore still drop through the stones.
+- A car flipped farther than 60 m from the camera shows its open underside: the far detail level has no underbody, which saves triangles on every parked car; near cars are closed (2026-11-08).
+- A gate's two stout posts stay standing when a car scrapes past them through the opening; only the posts and panel stands of runs go down with their bays (2026-11-08).
 - Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
 - Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
 - The chase camera's arm stops at street props as well as the world (so it never sits inside a parked car): a lamp post or palm between the car and the camera pulls the view in for a moment, and a sideways glance over kerbside cars passes just over their roofs (2026-11-08).

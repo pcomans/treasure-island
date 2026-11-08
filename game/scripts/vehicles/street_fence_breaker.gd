@@ -5,16 +5,22 @@ extends Node3D
 ## street_fence_builder.gd leaves each fence row one static body with a box per
 ## bay (the stock player still collides with every intact bay) and, per cell
 ## mesh, the vertex ranges of each bay's own geometry (its rails, fabric,
-## screen, slats or panel frame; posts and panel stands stay standing). A live
-## car or K-rail has a collision exception with every breakable fence body, so
-## it never bounces off a fence; each tick a moving one's hull is tested against
-## the fence bays it overlaps (vehicle_manager.gd: the driven car always, a
-## shoved or rolling one while it moves). A bay it touches breaks: its vertices in the cell meshes collapse
-## to a point (ArrayMesh.surface_update_vertex_region, a few hundred bytes on
-## either renderer), its box is disabled, so the gap is open on foot too, and the
+## screen, slats or panel frame) and of each post (a panel fence's stand and
+## clamp). A live car or K-rail has a collision exception with every breakable
+## fence body, so it never bounces off a fence; each tick a moving one's hull is
+## tested against the fence bays it overlaps (vehicle_manager.gd: the driven car
+## always, a shoved or rolling one while it moves). A bay it touches breaks: its
+## vertices in the cell meshes collapse to a point
+## (ArrayMesh.surface_update_vertex_region, a few hundred bytes on either
+## renderer), its box is disabled, so the gap is open on foot too, and the
 ## fence kit builds that bay alone as a light debris body that topples away from
-## the car, settles and stays, visual only. Broken bays stay broken for the
-## session; a restart rebuilds the world.
+## the car, settles and stays, visual only. The two posts a broken bay hung
+## between stand until a moving hull touches one (tested against the post's
+## box): then it goes down the same way, as its own debris, toppling away from
+## the car; a post nothing touched stays, so the intact bays beside a gap still
+## look held up. Broken bays and felled posts are kept by fence row and key
+## (keys repeat from row to row) and stay so for the session; a restart
+## rebuilds the world.
 ##
 ## A fence row whose params say "breakable": false (the Job Corps perimeter,
 ## owner 2026-11-08) gets no exception and no break: a car stops at it like a
@@ -28,13 +34,20 @@ const RENDER_WORLD_VISIBLE := 1
 ## Debris mass (kg) per fence type, per metre of bay.
 const DEBRIS_KG_PER_M := {
 	"chain_link": 10.0, "chain_link_barbed": 12.0, "chain_link_screened": 12.0, "chain_link_slatted": 16.0,
-	"construction_panel": 12.0, "wood_privacy": 22.0, "steel_picket": 20.0,
+	"construction_panel": 12.0, "wood_privacy": 22.0, "steel_picket": 20.0, "ball_stop_net": 6.0,
 }
 ## How the debris leaves: a share of the car's velocity, a pop up (m/s) and a
 ## tip about the bay's line (rad/s).
 const DEBRIS_CARRY := 0.6
 const DEBRIS_POP_MPS := 1.6
 const DEBRIS_TIP_RADPS := 2.2
+## A felled post's mass (kg) per fence type.
+const POST_KG := {
+	"chain_link": 8.0, "chain_link_barbed": 10.0, "chain_link_screened": 8.0, "chain_link_slatted": 8.0,
+	"construction_panel": 14.0, "wood_privacy": 12.0, "steel_picket": 10.0, "ball_stop_net": 60.0,
+}
+## A post is tested against a moving hull within this distance of its foot (m).
+const POST_REACH_M := 6.0
 ## Debris settles (frozen, no collision) after this long at rest, or at most
 ## after DEBRIS_SETTLE_MAX_S; past DEBRIS_KEEP settled pieces the oldest piece
 ## goes (its bay stays broken).
@@ -52,8 +65,15 @@ var _rids: Array[RID] = []
 ## Every fence body, breakable or not.
 var _all_rids: Array[RID] = []
 var _query := PhysicsShapeQueryParameters3D.new()
+var _post_query := PhysicsShapeQueryParameters3D.new()
+var _post_box := BoxShape3D.new()
 var _settled: Array[RigidBody3D] = []
+## Broken bays and felled posts by fence_id(): "ROW_ID|KEY" -> true, in order.
 var _broken := {}
+var _felled := {}
+## The standing posts of broken bays, "ROW_ID|KEY" -> [group, key]: what a
+## moving hull is tested against.
+var _exposed := {}
 
 
 func configure(fences_layer: Node) -> void:
@@ -62,6 +82,9 @@ func configure(fences_layer: Node) -> void:
 	_all_rids.clear()
 	_query.collision_mask = PHYSICS_STREET_PROP
 	_query.collide_with_areas = false
+	_post_query.collision_mask = PHYSICS_STREET_PROP
+	_post_query.collide_with_areas = false
+	_post_query.shape = _post_box
 	for body: Node in fences_layer.find_children("Collision", "StaticBody3D", true, false):
 		var fence := body as StaticBody3D
 		if str(fence.get_meta("street_detail_kind", "")) != "fence":
@@ -90,13 +113,29 @@ func broken_count() -> int:
 	return _broken.size()
 
 
-func is_broken(bay_key: String) -> bool:
-	return _broken.has(bay_key)
+## A bay's or post's identity across every fence: its fence row's
+## street_detail_id and its key (a bay's "run:index" or a post's "prun:index",
+## which repeat from row to row).
+static func fence_id(group: Node3D, key: String) -> String:
+	return "%s|%s" % [str(group.get_meta("street_detail_id", group.name)), key]
 
 
-## The broken bays' keys, in the order they broke.
+func is_broken(group: Node3D, bay_key: String) -> bool:
+	return _broken.has(fence_id(group, bay_key))
+
+
+## The broken bays (fence_id), in the order they broke.
 func broken_keys() -> Array:
 	return _broken.keys()
+
+
+func is_post_felled(group: Node3D, post_key: String) -> bool:
+	return _felled.has(fence_id(group, post_key))
+
+
+## The felled posts (fence_id), in the order they went down.
+func felled_keys() -> Array:
+	return _felled.keys()
 
 
 ## Breaks every intact bay the car's (or K-rail's) hull overlaps now.
@@ -120,24 +159,84 @@ func break_overlaps(car: RigidBody3D) -> void:
 				if shape != null and not shape.disabled:
 					break_bay(_bodies[rid].group, shape, car.linear_velocity)
 					car.linear_velocity *= 1.0 - SPEED_SHARE_PER_BAY
+	_fell_touched_posts(car)
 
 
-## Breaks one bay: hides its geometry, opens its box and drops its debris.
+## Breaks one bay: hides its geometry, opens its box and drops its debris; the
+## posts it hung between now go down where a moving hull touches them.
 func break_bay(group: Node3D, shape: CollisionShape3D, velocity: Vector3) -> void:
 	var key := str(shape.get_meta("fence_bay", ""))
-	if key == "" or _broken.has(key):
+	if key == "" or _broken.has(fence_id(group, key)):
 		return
 	var bays: Dictionary = group.get_meta("fence_bays", {})
 	if not bays.has(key):
 		return
 	var bay: Dictionary = bays[key]
 	shape.disabled = true
-	_broken[key] = true
-	for ref: Array in bay.get("ranges", []):
+	_broken[fence_id(group, key)] = true
+	_collapse_ranges(group, bay.get("ranges", []))
+	_drop_debris(group, bay, velocity)
+	for post_key: Variant in bay.get("posts", []):
+		var id := fence_id(group, str(post_key))
+		if not _felled.has(id):
+			_exposed[id] = [group, str(post_key)]
+
+
+## Fells every standing post of a broken bay that the car's (or K-rail's) hull
+## touches now: the post's box, grown by a few centimetres, meets the hull.
+func _fell_touched_posts(car: RigidBody3D) -> void:
+	if _exposed.is_empty():
+		return
+	var space := car.get_world_3d().direct_space_state
+	var at := car.global_position
+	_post_query.margin = 0.03
+	for id: String in _exposed.keys():
+		var holder: Variant = _exposed[id][0]
+		var key := str(_exposed[id][1])
+		var group: Node3D = holder as Node3D if is_instance_valid(holder) else null
+		var post: Dictionary = (group.get_meta("fence_posts", {}) as Dictionary).get(key, {}) if group != null else {}
+		if post.is_empty():
+			_exposed.erase(id)
+			continue
+		var foot: Vector3 = post.frame.foot
+		if Vector2(foot.x - at.x, foot.z - at.z).length() > POST_REACH_M:
+			continue
+		_post_box.size = post.size
+		_post_query.transform = _post_transform(post)
+		for hit: Dictionary in space.intersect_shape(_post_query, 8):
+			if hit.get("rid", RID()) == car.get_rid():
+				fell_post(group, key, car.linear_velocity)
+				break
+
+
+## A post's box in the world: along the run, up from its foot, along its normal.
+static func _post_transform(post: Dictionary) -> Transform3D:
+	var normal: Vector3 = post.frame.normal
+	var size: Vector3 = post.size
+	return Transform3D(Basis(Vector3.UP.cross(normal).normalized(), Vector3.UP, normal), (post.frame.foot as Vector3) + Vector3.UP * size.y * 0.5)
+
+
+## Fells one post: hides its geometry and drops it as debris, toppling the way
+## the car went.
+func fell_post(group: Node3D, post_key: String, velocity: Vector3) -> void:
+	var id := fence_id(group, post_key)
+	if _felled.has(id):
+		return
+	var post: Dictionary = (group.get_meta("fence_posts", {}) as Dictionary).get(post_key, {})
+	if post.is_empty():
+		return
+	_felled[id] = true
+	_exposed.erase(id)
+	_collapse_ranges(group, post.get("ranges", []))
+	_drop_post(group, post, velocity)
+
+
+## Collapses each of [[mesh instance, surface, first vertex, count], ...].
+static func _collapse_ranges(group: Node3D, ranges: Array) -> void:
+	for ref: Array in ranges:
 		var instance := group.get_node_or_null(str(ref[0])) as MeshInstance3D
 		if instance != null and instance.mesh is ArrayMesh:
 			_collapse(instance.mesh as ArrayMesh, int(ref[1]), int(ref[2]), int(ref[3]))
-	_drop_debris(group, bay, velocity)
 
 
 ## Draws vertices [from, from + count) of a surface at one point: their
@@ -163,6 +262,51 @@ static func _collapse(mesh: ArrayMesh, surface: int, from: int, count: int) -> v
 		data.resize(count * stride)
 		data.fill(0)
 		mesh.surface_update_vertex_region(surface, from * stride, data)
+
+
+## A felled post as a light debris body standing where it stood, pushed the
+## way the car went and tipping over away from it.
+func _drop_post(group: Node3D, post: Dictionary, velocity: Vector3) -> void:
+	if _kit == null:
+		_kit = FENCE_KIT.new()
+	var type := str(group.get_meta("fence_type", ""))
+	if not FENCE_KIT.TYPES.has(type):
+		return
+	var frame: Dictionary = (post.frame as Dictionary).duplicate()
+	var foot: Vector3 = frame.foot
+	frame.foot = Vector3.ZERO
+	var cells := {}
+	_kit.add_post(cells, 1.0e6, type, group.get_meta("fence_params", {}), frame)
+	var debris := RigidBody3D.new()
+	debris.name = "FencePost%d" % _felled.size()
+	debris.collision_layer = 0
+	debris.collision_mask = PHYSICS_WORLD_SOLID
+	debris.mass = float(POST_KG.get(type, 10.0))
+	debris.can_sleep = true
+	debris.set_meta("street_detail_kind", "fence_debris")
+	debris.set_meta("age", 0.0)
+	for key: String in cells:
+		var parts: Dictionary = _kit.commit(cells[key])
+		if parts.solid == null:
+			continue
+		var instance := MeshInstance3D.new()
+		instance.mesh = parts.solid
+		instance.layers = RENDER_WORLD_VISIBLE
+		instance.visibility_range_end = DEBRIS_RANGE_M
+		debris.add_child(instance)
+	var box := BoxShape3D.new()
+	box.size = post.size
+	var collision := CollisionShape3D.new()
+	collision.shape = box
+	collision.transform = Transform3D(_post_transform(post).basis, Vector3.UP * (post.size as Vector3).y * 0.5)
+	debris.add_child(collision)
+	debris.position = foot
+	add_child(debris)
+	var push := Vector3(velocity.x, 0.0, velocity.z)
+	debris.linear_velocity = push * DEBRIS_CARRY + Vector3.UP * DEBRIS_POP_MPS * 0.5
+	# Turning about UP x push tips its top the way the car went.
+	if push.length() > 0.01:
+		debris.angular_velocity = Vector3.UP.cross(push.normalized()) * DEBRIS_TIP_RADPS * clampf(push.length() / 8.0, 0.4, 1.5)
 
 
 func _drop_debris(group: Node3D, bay: Dictionary, velocity: Vector3) -> void:

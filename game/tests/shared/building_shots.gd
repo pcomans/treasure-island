@@ -41,7 +41,8 @@ extends SceneTree
 ##   stands on: the slide floor collider and the first solid straight under its
 ##   feet (support=OBJECT_KEY@y, from the body's derived_object_key or name).
 ##   Moves may also hold vehicle_enter_exit (F: a step of 2 ticks gets into the
-##   car the player stands beside, or out) and handbrake, and a step may add
+##   car the player stands beside, or out), handbrake and recover (R: in a car,
+##   back on land), and a step may add
 ##   "glance": [x, y] pixels of mouse motion per tick for the driving camera's
 ##   glance (game/scripts/vehicles/vehicle_camera.gd); while driving, frames
 ##   come from the driving camera unless the view has its own (camera_xyz
@@ -56,6 +57,8 @@ extends SceneTree
 ##   A moving view may add "car_start": {"car": ROW_ID, "xz": [x,z],
 ##   "heading_xz": [x,z]} to start in that parked car instead, on the ground
 ##   there facing that way (vehicle_manager.gd drive_from); the moves then drive it.
+##   Its "roll_deg" turns the car that far about its length as it is put down
+##   (180: on its roof), a car's height up so it drops onto the ground.
 ##   A moving view may add "start_xyz": [x,y,z] to start the stock player in the
 ##   air there, at rest, after it settles at player_xz (a landing view: scenery
 ##   off the walk route, such as the ferry float); the moves then run from there.
@@ -142,7 +145,7 @@ const DEFAULT_STREET_DETAIL := {
 }
 
 ## Input actions a street view's moves may hold.
-const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake"]
+const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
 
 ## The neutral daylight for colour matching: the sun angle, tonemapper and shadows
 ## main.tscn had before the 2026-11-07 look pass (sun at azimuth 152, elevation 52),
@@ -985,11 +988,19 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 	var player := _h.player
 	if view.has("car_start"):
 		var start: Variant = view.car_start
-		if not start is Dictionary or not start.get("car") is String or not _numbers(start.get("xz"), 2) or not _numbers(start.get("heading_xz"), 2) or _h.main.vehicles == null:
-			return "car_start needs car, xz and heading_xz"
+		if not start is Dictionary or not start.get("car") is String or not _numbers(start.get("xz"), 2) or not _numbers(start.get("heading_xz"), 2) or _h.main.vehicles == null \
+		or (start.has("roll_deg") and not _numbers([start.get("roll_deg")], 1)):
+			return "car_start needs car, xz and heading_xz, and an optional numeric roll_deg"
 		var started: String = _h.main.vehicles.drive_from(str(start.car), Vector2(start.xz[0], start.xz[1]), Vector2(start.heading_xz[0], start.heading_xz[1]))
 		if started != "":
 			return "car_start: " + started
+		if start.has("roll_deg"):
+			# Once drive_from's placement has reached the body.
+			for _tick in 2:
+				await physics_frame
+			var car: Variant = _h.main.vehicles.active_car()
+			var put: Transform3D = car.global_transform
+			car.place(Transform3D(Basis(-put.basis.z.normalized(), deg_to_rad(float(start.roll_deg))) * put.basis, put.origin + Vector3.UP * (float(car.height_m) + 0.2)))
 		print("MOVE_START %s in %s at %s" % [prefix.get_file(), start.car, start.xz])
 	if view.has("start_xyz"):
 		player.global_position = Vector3(view.start_xyz[0], view.start_xyz[1], view.start_xyz[2])

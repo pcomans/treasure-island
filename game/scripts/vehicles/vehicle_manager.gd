@@ -26,7 +26,9 @@ extends Node3D
 ## controller stops while driving (player_controller.gd begin_driving), its
 ## avatar hides and the player rides at the seat. A car that meets the bay
 ## splashes (car_splash.gd) and sinks with the player in it before it goes back
-## to land; F does nothing until then.
+## to land; one that reaches the shore's rocks splashes and stops there before
+## it goes back (drivable_car.gd); F does nothing until then. R and both returns
+## put it on a level spot well clear of the shore, on its brakes until driven.
 ##
 ## Fences: a live car or K-rail passes through the breakable fences' collision
 ## (an exception per fence body) and breaks each bay it overlaps while it moves
@@ -605,12 +607,13 @@ func _wake(body: RigidBody3D) -> void:
 		body.freeze = false
 
 
-## The splash where a car met the water.
-func _splash(at: Vector3, speed: float, car: DRIVABLE_CAR) -> void:
+## The splash where a car met the water, or the shore's rocks (no foam ring
+## spreading on them).
+func _splash(at: Vector3, speed: float, on_water: bool, car: DRIVABLE_CAR) -> void:
 	var splash := CAR_SPLASH.new()
 	splash.name = "Splash"
 	add_child(splash, true)
-	splash.start(at, speed, car.length_m)
+	splash.start(at, speed, car.length_m, on_water)
 
 
 ## Where the player gets out: {at, beside, blocked}. Beside the car (the

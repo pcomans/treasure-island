@@ -27,11 +27,13 @@ extends RefCounted
 ##
 ## Each bay's own geometry (rails, fabric, screen, slats, boards, pickets or a
 ## panel's frame, not the posts and stands it shares) is a run of vertices in
-## its cell's builders, which commit() keeps in order; add_run reports each
-## bay's runs, so a car can break one bay of a merged cell mesh
-## (game/scripts/vehicles/street_fence_breaker.gd), and bay_only builds a bay
-## alone, as the debris it leaves. "breakable": false in a row's params keeps a
-## fence whole (the Job Corps perimeter, owner 2026-11-08).
+## its cell's builders, which commit() keeps in order, and so is each post (a
+## panel fence's stand and clamp); add_run reports each bay's and each post's
+## runs, so a car can break one bay, and fell the posts it hits, of a merged
+## cell mesh (game/scripts/vehicles/street_fence_breaker.gd); bay_only builds a
+## bay alone and add_post a post alone, as the debris they leave. "breakable":
+## false in a row's params keeps a fence whole (the Job Corps perimeter, owner
+## 2026-11-08).
 
 const FURNITURE := preload("res://game/scripts/world/street_furniture_kit.gd")
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
@@ -140,8 +142,10 @@ const CHAIN_TILE := Vector2(0.10, 0.12)
 const SCREEN_TILE_M := 0.5
 const WOOD_TILE_M := 0.84
 const BARBED_TILE_M := 0.48
-## Temporary panels lean in and out at their joints, a few centimetres each way.
+## Temporary panels lean in and out at their joints, a few centimetres each way,
+## and stand this far up on their stands.
 const PANEL_JITTER_M := 0.08
+const PANEL_LIFT_M := 0.1
 
 const GALVANIZED := Color(0.86, 0.87, 0.88)
 ## Black powder-coated steel pickets (the Mersea grounds, Sep 2025).
@@ -352,25 +356,132 @@ static func coating_of(params: Variant) -> String:
 ## by cell_of) and returns its collision boxes as [{transform, size}] in world
 ## space. seed varies the panel jitter between runs.
 ## Each box also carries its bay's ends (a, b) and its geometry's vertex runs:
-## ranges [[cell key, builder key, first vertex, end], ...]. bay_only leaves the
-## posts and stands out (a bay built alone, as debris).
-func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, posts: PackedVector3Array, seed: int, bay_only := false) -> Array[Dictionary]:
-	var side := {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 0.0) as float
+## ranges [[cell key, builder key, first vertex, end], ...]. Then each post (a
+## panel fence's stand and clamp) of the run, as add_post builds it; posts_out
+## gets one entry per post, in order: {frame (post_frame), size (post_size),
+## ranges}. bay_only leaves the posts and stands out (a bay built alone, as
+## debris).
+func add_run(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, posts: PackedVector3Array, seed: int, bay_only := false, posts_out: Array = []) -> Array[Dictionary]:
+	var side := _side_of(params)
+	var boxes: Array[Dictionary] = []
 	match type:
 		"construction_panel":
-			return _panels(cells, cell_size_m, posts, side, seed, bay_only)
+			boxes = _panels(cells, cell_size_m, posts, side, seed)
 		"wood_privacy":
-			return _wood_fence(cells, cell_size_m, posts, side, bay_only)
+			boxes = _wood_fence(cells, cell_size_m, posts, side)
 		"steel_picket":
-			return _picket_fence(cells, cell_size_m, posts, bay_only)
+			boxes = _picket_fence(cells, cell_size_m, posts)
 		"chain_link_slatted":
-			return _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params), bay_only)
+			boxes = _slatted(cells, cell_size_m, posts, side, str(params.get("slats", "green")), height_of(type, params))
 		"ball_stop_net":
-			return _ball_stop_net(cells, cell_size_m, posts, height_of(type, params), bay_only)
+			boxes = _ball_stop_net(cells, cell_size_m, posts, height_of(type, params))
 		_:
-			# The barbed type's height counts its arms over the 6 ft fabric.
-			var fabric_h := 1.83 if type == "chain_link_barbed" else height_of(type, params)
-			return _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params), fabric_h, coating_of(params), params.get("curb", false) == true, bay_only)
+			var curb: bool = params.get("curb", false) == true
+			# The curb under each bay stays when a car breaks the bay: drawn before
+			# the bay's vertex runs are marked, and not at all for a bay built alone.
+			if curb and not bay_only:
+				for index in posts.size() - 1:
+					_curb(_cell(cells, cell_size_m, (posts[index] + posts[index + 1]) * 0.5).metal, posts[index], posts[index + 1])
+			boxes = _chain_link(cells, cell_size_m, type, posts, side, str(params.get("screen", "black")), screen_top_of(params), _fabric_h(type, params), coating_of(params), curb)
+	if bay_only:
+		return boxes
+	for index in posts.size():
+		var frame := post_frame(type, posts, index, seed)
+		var cell := _cell(cells, cell_size_m, frame.foot)
+		var before := _marks(cell)
+		add_post(cells, cell_size_m, type, params, frame)
+		posts_out.append({"frame": frame, "size": post_size(type, params, frame), "ranges": _ranges(cell_key(frame.foot, cell_size_m), cell, before)})
+	return boxes
+
+
+## Where post index of a run stands and how add_post builds it: its foot, the
+## run's left there (normal), whether it is a terminal post (an end or a turn)
+## and whether it is inner (not an end: a panel fence's joint gets a clamp).
+## A panel fence's joints lean in or out a little (PANEL_JITTER_M, by seed).
+static func post_frame(type: String, posts: PackedVector3Array, index: int, seed: int) -> Dictionary:
+	var normal := _post_normal(posts, index)
+	var inner := index > 0 and index < posts.size() - 1
+	var foot := posts[index]
+	if type == "construction_panel" and inner:
+		foot += normal * (_unit_hash(seed, index) * 2.0 - 1.0) * PANEL_JITTER_M
+	return {"foot": foot, "normal": normal, "terminal": _terminal(posts, index), "inner": inner}
+
+
+## A post's box (post_frame): along the run, up from its foot, and along its
+## normal (across the run); it holds the post and its cap, a barbed arm or a
+## panel fence's stand and clamp.
+static func post_size(type: String, params: Variant, frame: Dictionary) -> Vector3:
+	match type:
+		"construction_panel":
+			return Vector3(0.16, PANEL_LIFT_M + 1.1 if bool(frame.inner) else 0.07, 0.5)
+		"wood_privacy":
+			return Vector3(0.1, height_of(type, params) + 0.06, 0.1)
+		"steel_picket":
+			return Vector3(0.12, height_of(type, params) + 0.2, 0.12)
+		"chain_link_barbed":
+			return Vector3(0.08, 1.83 + 0.45, 0.7)
+		"ball_stop_net":
+			return Vector3(0.18, height_of(type, params) + 0.15, 0.18)
+	return Vector3(0.08, _fabric_h(type, params) + 0.1, 0.08)
+
+
+## How tall a chain-link or slatted fence's fabric stands: its height (6 or 8
+## ft, params height_m), but 6 ft on the barbed type, whose height counts its
+## arms over the fabric.
+static func _fabric_h(type: String, params: Variant) -> float:
+	return 1.83 if type == "chain_link_barbed" else height_of(type, params)
+
+
+## Builds one post at its frame (post_frame): the run's posts, or a felled post
+## alone (the debris it leaves).
+func add_post(cells: Dictionary, cell_size_m: float, type: String, params: Dictionary, frame: Dictionary) -> void:
+	var cell := _cell(cells, cell_size_m, frame.foot)
+	var metal: FURNITURE.Builder = cell.metal
+	var foot: Vector3 = frame.foot
+	var normal: Vector3 = frame.normal
+	match type:
+		"construction_panel":
+			var basis := Basis(Vector3.UP.cross(normal), Vector3.UP, normal)
+			# A low stand across the line under the joint, and a clamp between frames.
+			metal.box(foot + Vector3(0, 0.035, 0), basis, Vector3(0.16, 0.07, 0.5), STAND_GREY, FURNITURE.CELL_WHITE)
+			if bool(frame.inner):
+				metal.box(foot + Vector3(0, PANEL_LIFT_M + 1.05, 0), basis, Vector3(0.16, 0.07, 0.07), GALVANIZED, FURNITURE.CELL_METAL)
+		"wood_privacy":
+			(cell.wood as Quads).block(foot + Vector3(0, -0.3, 0), normal.cross(Vector3.UP), normal, Vector3(0.09, height_of(type, params) + 0.35, 0.09), WOOD_TILE_M)
+		"steel_picket":
+			var height := height_of(type, params)
+			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.04, 0)]), PackedFloat32Array([0.04, 0.04]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+			# A square cap plate, a neck and a ball finial (the Mersea lot's posts, Sep 2025).
+			var finial := PackedVector3Array()
+			var finial_radii := PackedFloat32Array()
+			for profile: Vector2 in [Vector2(0.04, 0.055), Vector2(0.06, 0.055), Vector2(0.07, 0.022), Vector2(0.09, 0.04), Vector2(0.115, 0.05), Vector2(0.14, 0.04), Vector2(0.16, 0.0)]:
+				finial.append(foot + Vector3(0, height + profile.x, 0))
+				finial_radii.append(profile.y)
+			metal.tube(finial, finial_radii, 8, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
+		"ball_stop_net":
+			# A tall galvanised pole, a little thicker at a run's ends.
+			var pole := 0.085 if bool(frame.terminal) else 0.065
+			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height_of(type, params) + 0.15, 0)]), PackedFloat32Array([pole, pole * 0.75]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
+		_:
+			# Line posts, stouter terminal posts, as tall as the fabric (6 or 8 ft;
+			# slatted fences their height) in its coating (COATING_METAL); a barbed
+			# fence's arm leans outward.
+			var terminal := bool(frame.terminal)
+			var radius := 0.03 if terminal else 0.024
+			var top := _fabric_h(type, params) + (0.06 if terminal else 0.03)
+			var metal_colour: Color = COATING_METAL[coating_of(params)]
+			metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, metal_colour, FURNITURE.CELL_METAL, false, false)
+			metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, metal_colour, FURNITURE.CELL_METAL, false, true)
+			if type == "chain_link_barbed":
+				var side := _side_of(params)
+				var outward := normal * (-side if side != 0.0 else 1.0)
+				var arm_end := foot + Vector3(0, top + 0.02, 0) + (Vector3.UP + outward).normalized() * 0.42
+				metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), arm_end]), PackedFloat32Array([0.016, 0.014]), 6, metal_colour, FURNITURE.CELL_METAL, false, true)
+
+
+## The side of a run its site lies on: 1 left, -1 right, 0 centred.
+static func _side_of(params: Dictionary) -> float:
+	return {"left": 1.0, "right": -1.0}.get(str(params.get("inside", "center")), 0.0) as float
 
 
 ## The vertex counts of a cell's builders now.
@@ -385,15 +496,21 @@ static func _marks(cell: Dictionary) -> Dictionary:
 ## A bay's box with its ends and the vertex runs its geometry added to the cell
 ## since `before` (see add_run).
 static func _bay(box: Dictionary, a: Vector3, b: Vector3, cell_key: String, cell: Dictionary, before: Dictionary) -> Dictionary:
+	box["a"] = a
+	box["b"] = b
+	box["ranges"] = _ranges(cell_key, cell, before)
+	return box
+
+
+## The vertex runs added to a cell's builders since `before`: [[cell key,
+## builder key, first vertex, end], ...].
+static func _ranges(cell_key: String, cell: Dictionary, before: Dictionary) -> Array:
 	var ranges: Array = []
 	var after := _marks(cell)
 	for key: String in after:
 		if int(after[key]) > int(before.get(key, 0)):
 			ranges.append([cell_key, key, int(before.get(key, 0)), int(after[key])])
-	box["a"] = a
-	box["b"] = b
-	box["ranges"] = ranges
-	return box
+	return ranges
 
 
 ## The meshes of one cell's builders: "solid" (metal and boards, drawn with
@@ -514,28 +631,14 @@ static func _bay_box(a: Vector3, b: Vector3, height: float, half_m: float) -> Di
 ## screened type adds a windscreen on the inside, the barbed type angled arms
 ## with three strands of barbed wire leaning outward. fabric_h is the fabric's
 ## height (6 or 8 ft) and coating its finish (galvanised, green or black); with
-## curb, the fabric stands on a low concrete curb under each bay, which a car's
-## break leaves standing (it lies outside the bay's vertex runs, and bay_only
-## leaves it out).
-func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float, fabric_h := 1.83, coating := "galvanised", curb := false, bay_only := false) -> Array[Dictionary]:
+## curb, the fabric stands on the low concrete curb add_run lays under each bay
+## (outside the bay's vertex runs, so a car's break leaves it standing).
+func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: PackedVector3Array, side: float, screen: String, screen_top: float, fabric_h := 1.83, coating := "galvanised", curb := false) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES[type]
 	var metal_colour: Color = COATING_METAL[coating]
 	var wire_key := "chain" if coating == "galvanised" else "chain_" + coating
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in 0 if bay_only else posts.size():
-		var cell := _cell(cells, cell_size_m, posts[index])
-		var metal: FURNITURE.Builder = cell.metal
-		var terminal := _terminal(posts, index)
-		var radius := 0.03 if terminal else 0.024
-		var top := fabric_h + (0.06 if terminal else 0.03)
-		var foot := posts[index]
-		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, metal_colour, FURNITURE.CELL_METAL, false, false)
-		metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, metal_colour, FURNITURE.CELL_METAL, false, true)
-		if type == "chain_link_barbed":
-			var outward := _post_normal(posts, index) * (-side if side != 0.0 else 1.0)
-			var arm_end := foot + Vector3(0, top + 0.02, 0) + (Vector3.UP + outward).normalized() * 0.42
-			metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), arm_end]), PackedFloat32Array([0.016, 0.014]), 6, metal_colour, FURNITURE.CELL_METAL, false, true)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]
@@ -543,10 +646,6 @@ func _chain_link(cells: Dictionary, cell_size_m: float, type: String, posts: Pac
 		var middle := (a + b) * 0.5
 		var cell := _cell(cells, cell_size_m, middle)
 		var metal: FURNITURE.Builder = cell.metal
-		# The curb stays when a car breaks the bay: drawn before the bay's marks,
-		# and not at all for a bay built alone.
-		if curb and not bay_only:
-			_curb(metal, a, b)
 		var before := _marks(cell)
 		var normal := _left(_flat(b - a))
 		var base := CURB_TOP_M if curb else 0.0
@@ -605,17 +704,9 @@ static func _post_normal(posts: PackedVector3Array, index: int) -> Vector3:
 ## Chain-link with privacy slats: line posts with a top rail and a bottom
 ## tension wire, the slats woven through the fabric (an opaque striped sheet in
 ## the fabric's plane) and the wire over them on the outside.
-func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float, bay_only := false) -> Array[Dictionary]:
+func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, slats: String, height: float) -> Array[Dictionary]:
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in 0 if bay_only else posts.size():
-		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
-		var terminal := _terminal(posts, index)
-		var radius := 0.03 if terminal else 0.024
-		var top := height + (0.06 if terminal else 0.03)
-		var foot := posts[index]
-		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, top, 0)]), PackedFloat32Array([radius, radius]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, false)
-		metal.tube(PackedVector3Array([foot + Vector3(0, top, 0), foot + Vector3(0, top + 0.04, 0)]), PackedFloat32Array([radius + 0.007, radius + 0.004]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]
@@ -638,20 +729,15 @@ func _slatted(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, 
 
 # ---------------------------------------------------------------- ball-stop net
 
-## A ball-stop net: tall galvanised poles, a top cable sagging between them, and
-## fine black netting hung from it to just over the ground, drawn like the
-## chain-link fabric (crisp up close, nearly gone far off). Its collision is the
-## whole bay, so the player walks along it and the jetpack clears it; the fields'
-## nets are breakable: false, so a car stops at them.
-func _ball_stop_net(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, height: float, bay_only := false) -> Array[Dictionary]:
+## A ball-stop net: tall galvanised poles (add_post), a top cable sagging between
+## them, and fine black netting hung from it to just over the ground, drawn like
+## the chain-link fabric (crisp up close, nearly gone far off). Its collision is
+## the whole bay, so the player walks along it and the jetpack clears it; the
+## fields' nets are breakable: false, so a car stops at them.
+func _ball_stop_net(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, height: float) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.ball_stop_net
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in 0 if bay_only else posts.size():
-		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
-		var radius := 0.085 if _terminal(posts, index) else 0.065
-		var foot := posts[index]
-		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.15, 0)]), PackedFloat32Array([radius, radius * 0.75]), 8, GALVANIZED, FURNITURE.CELL_METAL, false, true)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]
@@ -796,15 +882,12 @@ func add_banner(cells: Dictionary, cell_size_m: float, type: String, params: Dic
 ## Temporary chain-link panels: a tube frame with chain-link infill between each
 ## pair of joints, the frames side by side at a joint with a clamp, standing on a
 ## low stand; the joints lean in and out a little, as hand-set panels do.
-func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, seed: int, bay_only := false) -> Array[Dictionary]:
+func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, seed: int) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.construction_panel
 	var joints := PackedVector3Array()
 	for index in posts.size():
-		var lean := 0.0
-		if index > 0 and index < posts.size() - 1:
-			lean = (_unit_hash(seed, index) * 2.0 - 1.0) * PANEL_JITTER_M
-		joints.append(posts[index] + _post_normal(posts, index) * lean)
-	var lift := 0.1
+		joints.append(post_frame("construction_panel", posts, index, seed).foot)
+	var lift := PANEL_LIFT_M
 	var frame_h := 1.83
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
@@ -825,15 +908,6 @@ func _panels(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, s
 		(cell.chain as Quads).wall(left_foot - Vector3(0, lift, 0), right_foot - Vector3(0, lift, 0), lift + 0.03, lift + frame_h - 0.03, along_m, CHAIN_TILE)
 		boxes.append(_bay(_bay_box(a, b, frame_h + lift, float(spec.collision_half_m)), a, b, cell_key((a + b) * 0.5, cell_size_m), cell, before))
 		along_m += length
-	for index in 0 if bay_only else joints.size():
-		var cell := _cell(cells, cell_size_m, joints[index])
-		var metal: FURNITURE.Builder = cell.metal
-		var normal := _post_normal(posts, index)
-		var basis := Basis(Vector3.UP.cross(normal), Vector3.UP, normal)
-		# A low stand across the line under each joint, and a clamp between frames.
-		metal.box(joints[index] + Vector3(0, 0.035, 0), basis, Vector3(0.16, 0.07, 0.5), STAND_GREY, FURNITURE.CELL_WHITE)
-		if index > 0 and index < joints.size() - 1:
-			metal.box(joints[index] + Vector3(0, lift + 1.05, 0), basis, Vector3(0.16, 0.07, 0.07), GALVANIZED, FURNITURE.CELL_METAL)
 	return boxes
 
 
@@ -848,16 +922,12 @@ static func _unit_hash(seed: int, index: int) -> float:
 
 ## A 6 ft board fence: square posts, two rails on the inside face, boards on the
 ## outside face and a cap board along the top.
-func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float, bay_only := false) -> Array[Dictionary]:
+func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, side: float) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.wood_privacy
 	var height := float(spec.height_m)
 	var outward := -side if side != 0.0 else 0.0
 	var boxes: Array[Dictionary] = []
 	var along_m := 0.0
-	for index in 0 if bay_only else posts.size():
-		var cell := _cell(cells, cell_size_m, posts[index])
-		var normal := _post_normal(posts, index)
-		(cell.wood as Quads).block(posts[index] + Vector3(0, -0.3, 0), normal.cross(Vector3.UP), normal, Vector3(0.09, height + 0.35, 0.09), WOOD_TILE_M)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]
@@ -883,21 +953,10 @@ func _wood_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Arra
 ## square posts with ball caps on 8 ft bays, a bottom and a top rail, and square
 ## pickets about 12 cm apart rising past the top rail to points. The pickets
 ## follow the ground between the posts.
-func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array, bay_only := false) -> Array[Dictionary]:
+func _picket_fence(cells: Dictionary, cell_size_m: float, posts: PackedVector3Array) -> Array[Dictionary]:
 	var spec: Dictionary = TYPES.steel_picket
 	var height := float(spec.height_m)
 	var boxes: Array[Dictionary] = []
-	for index in 0 if bay_only else posts.size():
-		var metal: FURNITURE.Builder = _cell(cells, cell_size_m, posts[index]).metal
-		var foot := posts[index]
-		metal.tube(PackedVector3Array([foot + Vector3(0, -0.3, 0), foot + Vector3(0, height + 0.04, 0)]), PackedFloat32Array([0.04, 0.04]), 4, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
-		# A square cap plate, a neck and a ball finial (the Mersea lot's posts, Sep 2025).
-		var finial := PackedVector3Array()
-		var finial_radii := PackedFloat32Array()
-		for profile: Vector2 in [Vector2(0.04, 0.055), Vector2(0.06, 0.055), Vector2(0.07, 0.022), Vector2(0.09, 0.04), Vector2(0.115, 0.05), Vector2(0.14, 0.04), Vector2(0.16, 0.0)]:
-			finial.append(foot + Vector3(0, height + profile.x, 0))
-			finial_radii.append(profile.y)
-		metal.tube(finial, finial_radii, 8, PICKET_BLACK, FURNITURE.CELL_METAL, false, true)
 	for index in posts.size() - 1:
 		var a := posts[index]
 		var b := posts[index + 1]
