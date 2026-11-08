@@ -187,6 +187,9 @@ export const STREET_DETAIL_KINDS = Object.freeze({
   // A small park building outside the OSM inventory (Cityside Park's pump
   // station): its footprint is its own rectangle (footprint_m on the row).
   site_structure: pointKind("furniture", 3.8, "seeded"),
+  // A loose ball on a pitch: a rigid body the player pushes about
+  // (game/scripts/world/soccer_ball.gd), not a fixed prop.
+  sports_ball: pointKind("furniture", 0.15, "seeded"),
   stop_sign: pointKind("furniture", 0.15, "host_road"),
   street_cabinet: pointKind("furniture", 0.6, "faces_road"),
   street_lamp: pointKind("furniture", 0.25, "faces_road"),

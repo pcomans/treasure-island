@@ -231,7 +231,8 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
 - **East span of the Bay Bridge:** the west cable sags differently from the photos, the tower shaft has no slot, and the span has a single material.
 - **Ground tone:**
   - One large dirt patch lies in the residential straw belt, and the lawn band along the residential kerbs is too even.
-  - The football pitch (OSM w1252737754) has no line markings, so it reads as a blank dark slab; the aerial shows them.
+  - The football pitch (OSM w1252737754) has its lines, apron and ball, but no goals, floodlights or green windscreen fence yet (Street View, 749 9th St, Sep 2025); they wait for the athletic-fields job.
+  - The pitch's lines and apron are drawn over the land like the parks' paint, about 0.1 m up: the ball, which rolls on the land, sinks about that far into the apron and passes under a line it crosses.
   - South of Maceo May, at about x −196 to −146, z 278 to 300, the worn band may show as a dotted dirt line (unverified).
   - The 2026-11-07 release's merge left 1,833 ground-cover map cells that match no parent branch, where the paving-edge wear meets the new Mersea, Garden Walk and Aracely paving. That combined look hasn't been seen up close.
 - **Trees and shrubs:**

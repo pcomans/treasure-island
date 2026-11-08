@@ -50,6 +50,7 @@ import polygonClipping from "polygon-clipping";
 import { projectLonLat } from "./coordinates.mjs";
 import { meshRecord } from "./mesh-output.mjs";
 import { lineRibbon, pointInRing, rawWayLine } from "./osm-geometry.mjs";
+import { PITCH_LAYOUTS, pitchMarkings, pitchPoint, validatePitches } from "./sports-pitch.mjs";
 import {
   CHUNK_SIZE_M,
   DRAPED_LAYER_STEP_M,
@@ -202,6 +203,9 @@ const GROUND_SCHEMA = Object.freeze({
   lifts: ["gutter_m", "paint_m"],
 });
 const ZONE_GROUND_FIELDS = ["centerlines", "kerbs", "lane_markings", "parking_lanes", "parking_stalls", "planting", "planting_behind_walk", "plazas", "wear"];
+// A zone ground block may add surfaces (its park layers) and pitches (painted
+// pitches, tools/lib/sports-pitch.mjs, at the surfaces' lift).
+const ZONE_GROUND_OPTIONAL = Object.freeze(["pitches", "surfaces"]);
 const PARKING_LANE_FIELDS = ["reason", "source_keys", "width_m"];
 const BEHIND_WALK_FIELDS = ["reason", "source_keys"];
 const CENTERLINE_STYLES = Object.freeze(["double_yellow", "dashed_faded"]);
@@ -217,6 +221,12 @@ const PARK_LINE_WIDTH_M = 0.1;
 const PARK_EDGE_LINE_INSET_M = 0.25;
 const PARK_DASH_M = 3;
 const PARK_PAINT_LIFT_M = 0.006;
+// A pitch's lines: lightly worn white (the 2026-05-26 aerial's lines read paler than fresh
+// paint), the park paint's lift over the turf they are painted on, an OSM landuse area's
+// skin (0.02 m over the land, tools/build_godot_world.mjs area styles). They lie that
+// low, not at the zone's surfaces lift, so a ball on the land is not sunk in them.
+const PITCH_PAINT_WEAR = 1;
+const PITCH_PAINT_HEIGHT_M = 0.02 + PARK_PAINT_LIFT_M;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -327,9 +337,13 @@ export function streetGroundSettings(config) {
   const zones = [];
   for (const zone of config.zones) {
     if (!zone.pilot || zone.ground == null) continue;
-    exactKeys(zone.ground, "surfaces" in zone.ground ? [...ZONE_GROUND_FIELDS, "surfaces"] : ZONE_GROUND_FIELDS, `Street ground zone ${zone.id}`);
+    exactKeys(zone.ground, [...ZONE_GROUND_FIELDS, ...ZONE_GROUND_OPTIONAL.filter((field) => field in zone.ground)], `Street ground zone ${zone.id}`);
     const settings = zone.ground;
     if (settings.surfaces !== undefined) validateParkSurfaces(settings.surfaces, `Street ground zone ${zone.id} surfaces`, ROAD_TOP_M + lifts.paint_m + DRAPED_LAYER_STEP_M);
+    if (settings.pitches !== undefined) {
+      invariant(settings.surfaces !== undefined, `Street ground zone ${zone.id} pitches are painted at its surfaces' lift and need surfaces`);
+      validatePitches(settings.pitches, `Street ground zone ${zone.id}`);
+    }
     for (const key of ["kerbs", "lane_markings", "parking_stalls"]) {
       invariant(typeof settings[key] === "boolean", `Street ground zone ${zone.id} ${key} must be boolean`);
     }
@@ -1315,6 +1329,44 @@ function strip(label, points, from, to) {
     quads.push([[ringArea(ring) > 0 ? ring : ring.reverse()]]);
   }
   return union(label, quads);
+}
+
+// A pitch's painted lines (tools/lib/sports-pitch.mjs) as one multipolygon in the
+// east/north frame: straight lines run on half a line width past their ends so the
+// corners close, circles are rings, arcs strips along their curve, spots discs.
+const PITCH_CURVE_STEP_RAD = Math.PI / 48;
+function pitchPaint(pitch) {
+  const width = PITCH_LAYOUTS[pitch.layout].line_m;
+  const at = (s, t) => {
+    const [x, z] = pitchPoint(pitch, s, t);
+    return [x, -z];
+  };
+  const parts = [];
+  for (const mark of pitchMarkings(pitch)) {
+    if (mark.line) {
+      const a = at(...mark.line[0]);
+      const b = at(...mark.line[1]);
+      const along = unit(sub(b, a));
+      parts.push(rectangle(a, along, leftOf(along), -width / 2, length(sub(b, a)) + width / 2, -width / 2, width / 2));
+    } else if (mark.ring) {
+      const centre = at(...mark.ring);
+      const steps = Math.ceil((2 * Math.PI) / PITCH_CURVE_STEP_RAD);
+      const around = (radius) => Array.from({ length: steps }, (_, index) => add(centre, scale([Math.cos((index * 2 * Math.PI) / steps), Math.sin((index * 2 * Math.PI) / steps)], radius)));
+      const outer = around(mark.radius + width / 2);
+      const inner = around(mark.radius - width / 2);
+      parts.push([[ringArea(outer) > 0 ? outer : outer.reverse(), ringArea(inner) < 0 ? inner : inner.reverse()]]);
+    } else if (mark.arc) {
+      const steps = Math.max(2, Math.ceil(Math.abs(mark.to - mark.from) / PITCH_CURVE_STEP_RAD));
+      const curve = Array.from({ length: steps + 1 }, (_, index) => {
+        const angle = mark.from + ((mark.to - mark.from) * index) / steps;
+        return at(mark.arc[0] + Math.cos(angle) * mark.radius, mark.arc[1] + Math.sin(angle) * mark.radius);
+      });
+      parts.push(strip(`pitch ${pitch.id} arc`, curve, -width / 2, width / 2));
+    } else {
+      parts.push(circle(at(...mark.disc), mark.radius, 16));
+    }
+  }
+  return union(`pitch ${pitch.id} paint`, parts);
 }
 
 // Dashes along a polyline at an offset to its left: dash metres painted, then gap
@@ -3039,6 +3091,17 @@ export function generateStreetGround({
         addPiece("marking", painted, constantHeight(lift + PARK_PAINT_LIFT_M), kindUv(STREET_PAINT_KINDS[kind]));
         for (const key of entry.sources) sources.marking.add(key);
       }
+    }
+  }
+  // Painted pitches (a zone's ground.pitches): white lines just over the turf (the
+  // OSM area's own ground cover), where the zone may lay ground and none of its
+  // layers lie.
+  for (const zone of groundZones) {
+    for (const pitch of zone.settings.pitches ?? []) {
+      const painted = difference(`pitch ${pitch.id} off layers`, intersect(`pitch ${pitch.id} in zone`, pitchPaint(pitch), zone.layerRegion), zoneShapes.get(zone));
+      if (painted.length === 0) continue;
+      addPiece("marking", painted, constantHeight(PITCH_PAINT_HEIGHT_M), kindUv(STREET_PAINT_KINDS.white, PITCH_PAINT_WEAR));
+      for (const key of zone.settings.surfaces.source_keys) sources.marking.add(key);
     }
   }
   // Lot rules' own pavement over their whole lot, at the yards' lift (one lift per material).
