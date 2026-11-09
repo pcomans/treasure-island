@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ifhue0akh1pl"
-path="res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.ctex"
+path.s3tc="res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.s3tc.ctex"
+path.etc2="res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/indian_hawthorn_2.png"
-dest_files=["res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.ctex"]
+dest_files=["res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.s3tc.ctex", "res://.godot/imported/indian_hawthorn_2.png-840a6a3238138e917f9fa41e85ef48fa.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

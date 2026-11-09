@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b4tr13lw0p6gf"
-path="res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.ctex"
+path.s3tc="res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.s3tc.ctex"
+path.etc2="res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/canary_date_palm_1.png"
-dest_files=["res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.ctex"]
+dest_files=["res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.s3tc.ctex", "res://.godot/imported/canary_date_palm_1.png-cb31e9127da9750ef53d65bc3bd2d504.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

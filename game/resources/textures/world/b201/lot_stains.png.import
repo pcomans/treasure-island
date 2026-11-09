@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://rjipv80vj7r4"
-path="res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.ctex"
+path.s3tc="res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.s3tc.ctex"
+path.etc2="res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/b201/lot_stains.png"
-dest_files=["res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.ctex"]
+dest_files=["res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.s3tc.ctex", "res://.godot/imported/lot_stains.png-fa11f99c9ef2a5cc9e6fdd6d653e1780.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
