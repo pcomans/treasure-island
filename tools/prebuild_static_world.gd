@@ -2,6 +2,7 @@ extends SceneTree
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 const MERGE_BUILDINGS := preload("res://tools/merge_baked_buildings.gd")
+const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 ## Build the platform static scene from the same validated source generator as native play.
 ## The generated scene is a disposable build product, never a source-of-truth cache.
 var failed := false
@@ -24,10 +25,13 @@ func _run() -> void:
 	# The bake keeps every street-detail layer; the baked world switches them when it loads.
 	world.street_detail_request = WorldLoader.STREET_DETAIL_LAYERS.duplicate()
 	root.add_child(world)
+	var superseded: Array[Node] = []
+	world.buildings.set_meta(HOUSING_FAMILY.BAKE_SUPERSEDED_META, superseded)
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void:
 		push_error(code + ": " + message)
 		failed = true)
 	world.load_world()
+	world.buildings.remove_meta(HOUSING_FAMILY.BAKE_SUPERSEDED_META)
 	if failed or not world.is_world_validated():
 		quit(1)
 		return
@@ -41,6 +45,12 @@ func _run() -> void:
 		push_error("The building merge failed: ", merged)
 		quit(1)
 		return
+	var removed := 0
+	for node in superseded:
+		if is_instance_valid(node) and _can_prune_superseded(node):
+			node.free()
+			removed += 1
+	print("BAKE_PRUNE_SUPERSEDED removed=", removed, " candidates=", superseded.size())
 	var packed := PREBUILT_WORLD.pack_world(world)
 	if packed == null:
 		quit(1)
@@ -72,6 +82,20 @@ func _run() -> void:
 	print("BAKED_BYTES ", FileAccess.get_file_as_bytes(PREBUILT_WORLD.resource_path()).size())
 	print("MEMORY_STATIC_BYTES ", Performance.get_monitor(Performance.MEMORY_STATIC))
 	quit(0)
+
+## Only remove inert visual leaves and disabled bodies whose children are plain shapes.
+func _can_prune_superseded(node: Node) -> bool:
+	if node.get_script() != null or node.unique_name_in_owner or not node.get_groups().is_empty():
+		return false
+	if node is MeshInstance3D:
+		return not node.visible and node.get_child_count(true) == 0
+	if not node is StaticBody3D or node.collision_layer != 0 or node.collision_mask != 0:
+		return false
+	for child: Node in node.get_children(true):
+		if (not child is CollisionShape3D or child.get_child_count(true) != 0
+			or child.get_script() != null or child.unique_name_in_owner or not child.get_groups().is_empty()):
+			return false
+	return true
 
 func _compare_nodes(source: Node, restored: Node, path: String) -> void:
 	_compare_value(source.get_class(), restored.get_class(), path + ":class")
