@@ -105,7 +105,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	staged_reports.append(context_result)
 	load_progress.emit(chunks.size() + 1, chunks.size() + 1)
-	var shoreline_result := ShorelineBuilder.new().build(validation.shoreline)
+	var shoreline_result := ShorelineBuilder.new().build(validation.shoreline, validation.boundary)
 	if not shoreline_result.ok:
 		_free_staged(staged_reports)
 		_fail(str(shoreline_result.get("code", "shoreline_build")), str(shoreline_result.get("message", "Could not build the validated shoreline.")), [])

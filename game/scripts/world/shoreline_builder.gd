@@ -10,8 +10,9 @@ extends RefCounted
 ## stone tone, blended into its neighbours' at its ends). Visual only, like the
 ## Yerba Buena context: no collision and no spray receiver, but for the inland
 ## stones, which stand on walkable land and get a coarse body of their own
-## (_inland_body). The band inside the outline is an ordinary chunk overlay; it
-## and the shoulder share
+## (_inland_body), and the cars' ground over the riprap (_car_ground), which only
+## cars and shoved K-rails meet. The band inside the outline is an ordinary chunk
+## overlay; it and the shoulder share
 ## BAND_GROUND_FAMILY, the dry grass-and-dirt verge at the top of the riprap, so
 ## the verge runs on past the outline to the stones.
 
@@ -44,6 +45,32 @@ const INLAND_BODY_STEP_M := 12.0
 const INLAND_BODY_SLOPE := 0.7
 const INLAND_BODY_DEPTH_M := 2.0
 const INLAND_BODY_TOP_SHARE := 0.7
+## The cars' ground over the riprap (owner, 2026-11-10: a car driven off the shore
+## rolls down the rocks and splashes where it meets the water). The stones are
+## drawn only, so this surface stands in for them for cars alone: its own layer,
+## which only drivable_car.gd's body and wheels and the live K-rails
+## (vehicle_manager.gd) look for, and the chase camera's arm stops at; the
+## player, the on-foot camera and the spray never see it. It is the underlay
+## slope and the shoulder lifted CAR_LIFT_M, about the tops of the stones on them
+## (the generated stones stand 0.3-0.4 m over the underlay at the median and
+## 0.55-0.7 m at the 90th percentile, measured round the island), with a ramp up
+## to that at the outline from CAR_RAMP_IN_M inside it, its foot CAR_RAMP_FOOT_M
+## under the land edge (about 16 degrees), so a car climbs over the crest's
+## stones instead of running into them. A shore with no shoulder (the slope
+## running from the land edge itself) lifts its slope gradually instead, fully
+## CAR_LIFT_RUN_M out from the edge. It ends at the underlay's toe a little over
+## the water, so a car rolls off its end into the bay. It is frictionless (a
+## car's wheels grip it through their own forces), so a car whose belly touches
+## the crest slides on over it instead of hanging there.
+const PHYSICS_CAR_GROUND := 1 << 5
+const CAR_LIFT_M := 0.55
+const CAR_RAMP_IN_M := 2.2
+const CAR_RAMP_FOOT_M := 0.1
+const CAR_LIFT_RUN_M := 0.6
+## A shoulder vertex this close to the outline is on it (the ramp's inner edge).
+const CAR_EDGE_ON_M := 0.02
+## The outline's edges are found through a grid of this cell size (m).
+const OUTLINE_CELL_M := 32.0
 
 static var _riprap := {}
 
@@ -128,8 +155,10 @@ static func _record_material(material_key: String) -> Material:
 
 
 ## Builds the validated, expanded document into one Node3D; returns the
-## builder report.
-func build(document: Dictionary) -> Dictionary:
+## builder report. boundary is the validated playable outline (its components'
+## outer rings and holes, as WorldBoundary.configure takes it), for the cars'
+## ground; without it there is none.
+func build(document: Dictionary, boundary: Dictionary = {}) -> Dictionary:
 	var root := Node3D.new()
 	root.name = "GeneratedShoreline"
 	var triangles := 0
@@ -220,6 +249,9 @@ func build(document: Dictionary) -> Dictionary:
 		triangles += int(prototype.triangles) * count
 	if not inland.is_empty():
 		root.add_child(_inland_body(inland))
+	var car_ground := _car_ground(document, _outline_rings(boundary))
+	if car_ground != null:
+		root.add_child(car_ground)
 	return {
 		"ok": true,
 		"node": root,
@@ -300,6 +332,180 @@ func _inland_body(stones: Array[AABB]) -> StaticBody3D:
 		holder.shape = shape
 		body.add_child(holder)
 	return body
+
+
+## The cars' ground (PHYSICS_CAR_GROUND): one body, a shape for each underlay
+## slope record and each shoulder record, both lifted CAR_LIFT_M, the shoulder's
+## with a ramp from its edge on the outline down to feet CAR_RAMP_IN_M inland and
+## CAR_RAMP_FOOT_M lower, so they make one surface from the land to the toe and
+## a car is up at the stones' tops before the crest's first stones. A slope whose
+## segment has no shoulder lifts with its distance from the outline instead. The
+## concrete closures (pier faces, the north slipway) are solid as drawn, so a car
+## drives down the slipway into the water. rings are the outline's
+## (_outline_rings); with none there is no body (null).
+func _car_ground(document: Dictionary, rings: Array[Dictionary]) -> StaticBody3D:
+	if rings.is_empty():
+		return null
+	var edges := _edge_grid(rings)
+	var shouldered := {}
+	for record_value: Variant in document.records:
+		var record: Dictionary = record_value
+		if str(record.material_key) == VERGE_MATERIAL:
+			shouldered[str(record.segment)] = true
+	var body := StaticBody3D.new()
+	body.name = "CarGround"
+	body.collision_layer = PHYSICS_CAR_GROUND
+	body.collision_mask = 0
+	var slick := PhysicsMaterial.new()
+	slick.friction = 0.0
+	slick.bounce = 0.0
+	body.physics_material_override = slick
+	body.set_meta("feature_kind", "shoreline_car_ground")
+	var lift := Vector3.UP * CAR_LIFT_M
+	for record_value: Variant in document.records:
+		var record: Dictionary = record_value
+		var key := str(record.material_key)
+		if key != SLOPE_MATERIAL and key != VERGE_MATERIAL and key != WALL_MATERIAL:
+			continue
+		var vertices := _vector3s(record.vertices)
+		var moved := PackedVector3Array()
+		moved.resize(vertices.size())
+		# A shoulder vertex on the outline: where its ramp's foot lies (else INF).
+		var feet := PackedVector3Array()
+		feet.resize(vertices.size())
+		var gradual := key == SLOPE_MATERIAL and not shouldered.has(str(record.segment))
+		for index in vertices.size():
+			var at := vertices[index]
+			feet[index] = Vector3.INF
+			if key == WALL_MATERIAL:
+				moved[index] = at
+				continue
+			if key == SLOPE_MATERIAL and not gradual:
+				moved[index] = at + lift
+				continue
+			var edge := _nearest_edge(edges, Vector2(at.x, at.z))
+			if gradual:
+				moved[index] = at + lift * clampf(float(edge.distance) / CAR_LIFT_RUN_M, 0.0, 1.0)
+				continue
+			moved[index] = at + lift
+			if float(edge.distance) < CAR_EDGE_ON_M:
+				var inland: Vector2 = -(edge.outward as Vector2) * CAR_RAMP_IN_M
+				feet[index] = Vector3(at.x + inland.x, at.y - CAR_RAMP_FOOT_M, at.z + inland.y)
+		var faces := PackedVector3Array()
+		var turned := _clockwise(record.indices)
+		for index_value: int in turned:
+			faces.append(moved[index_value])
+		# The ramp: below each shoulder edge on the outline (a triangle's two
+		# vertices on it), a quad from the lifted edge down to its feet inland.
+		for at in range(0, turned.size(), 3):
+			var on: Array[int] = []
+			for corner in 3:
+				if feet[turned[at + corner]].is_finite():
+					on.append(turned[at + corner])
+			if on.size() == 2:
+				_add_up_quad(faces, feet[on[0]], feet[on[1]], moved[on[1]], moved[on[0]])
+		var shape := ConcavePolygonShape3D.new()
+		shape.set_faces(faces)
+		var holder := CollisionShape3D.new()
+		holder.name = str(record.object_key).validate_node_name()
+		holder.shape = shape
+		body.add_child(holder)
+	return body
+
+
+## Two triangles of the quad a, b, c, d (in order round it) facing up, wound as
+## the other collision faces are (Godot's clockwise front, seen from above).
+static func _add_up_quad(faces: PackedVector3Array, a: Vector3, b: Vector3, c: Vector3, d: Vector3) -> void:
+	for triangle: Array in [[a, b, c], [a, c, d]]:
+		var first: Vector3 = triangle[0]
+		var second: Vector3 = triangle[1]
+		var third: Vector3 = triangle[2]
+		if Plane(first, second, third).normal.y < 0.0:
+			var swap := second
+			second = third
+			third = swap
+		faces.append(first)
+		faces.append(second)
+		faces.append(third)
+
+
+## The playable outline's rings as [{points (x, z), hole}], from the validated
+## boundary's components (WorldBoundary.configure's shape).
+static func _outline_rings(boundary: Dictionary) -> Array[Dictionary]:
+	var rings: Array[Dictionary] = []
+	for component_value: Variant in boundary.get("components", []):
+		var component: Dictionary = component_value
+		var all: Array = [component.get("outer", [])]
+		all.append_array(component.get("holes", []))
+		for index in all.size():
+			var points := PackedVector2Array()
+			for point: Variant in all[index]:
+				points.append(Vector2(float(point[0]), float(point[1])))
+			if points.size() >= 3:
+				rings.append({"points": points, "hole": index > 0})
+	return rings
+
+
+## The outline's edges for _nearest_edge: their ends, their unit normals away
+## from the land, and the edges near each OUTLINE_CELL_M cell (within 1 m of it).
+static func _edge_grid(rings: Array[Dictionary]) -> Dictionary:
+	var starts := PackedVector2Array()
+	var ends := PackedVector2Array()
+	var outward := PackedVector2Array()
+	var cells := {}
+	for ring: Dictionary in rings:
+		var points: PackedVector2Array = ring.points
+		var area := 0.0
+		for index in points.size():
+			var previous := points[(index + points.size() - 1) % points.size()]
+			area += previous.x * points[index].y - points[index].x * previous.y
+		# The land lies left of an outer ring's edges when its points turn
+		# counterclockwise in x and z (positive area), right of them otherwise; a
+		# hole's the other way round.
+		var away := (-1.0 if area > 0.0 else 1.0) * (-1.0 if bool(ring.hole) else 1.0)
+		for index in points.size():
+			var a := points[(index + points.size() - 1) % points.size()]
+			var b := points[index]
+			if a.distance_to(b) < 1e-6:
+				continue
+			var along := (b - a).normalized()
+			var edge := starts.size()
+			starts.append(a)
+			ends.append(b)
+			outward.append(Vector2(-along.y, along.x) * away)
+			var low := Vector2i(floori((minf(a.x, b.x) - 1.0) / OUTLINE_CELL_M), floori((minf(a.y, b.y) - 1.0) / OUTLINE_CELL_M))
+			var high := Vector2i(floori((maxf(a.x, b.x) + 1.0) / OUTLINE_CELL_M), floori((maxf(a.y, b.y) + 1.0) / OUTLINE_CELL_M))
+			for cell_x in range(low.x, high.x + 1):
+				for cell_z in range(low.y, high.y + 1):
+					var cell := Vector2i(cell_x, cell_z)
+					# An Array, which the dictionary holds by reference: appending to a
+					# packed array taken out of it would change only a copy.
+					if not cells.has(cell):
+						cells[cell] = []
+					(cells[cell] as Array).append(edge)
+	return {"starts": starts, "ends": ends, "outward": outward, "cells": cells}
+
+
+## The outline's nearest edge to a point (x, z) within about 1 m: {distance,
+## outward (unit, away from the land; at a corner the mean of both edges')};
+## distance INF when no edge is that near.
+static func _nearest_edge(edges: Dictionary, point: Vector2) -> Dictionary:
+	var cell := Vector2i(floori(point.x / OUTLINE_CELL_M), floori(point.y / OUTLINE_CELL_M))
+	var near: Array = edges.cells.get(cell, [])
+	var best := INF
+	var distances := PackedFloat32Array()
+	distances.resize(near.size())
+	for slot in near.size():
+		var a: Vector2 = edges.starts[int(near[slot])]
+		var run: Vector2 = (edges.ends[int(near[slot])] as Vector2) - a
+		var t := clampf((point - a).dot(run) / maxf(run.length_squared(), 1e-9), 0.0, 1.0)
+		distances[slot] = point.distance_to(a + run * t)
+		best = minf(best, distances[slot])
+	var outward := Vector2.ZERO
+	for slot in near.size():
+		if distances[slot] <= best + 0.001:
+			outward += edges.outward[int(near[slot])]
+	return {"distance": best, "outward": outward.normalized() if outward.length() > 1e-6 else Vector2.ZERO}
 
 
 ## An ArrayMesh from a mesh dictionary: vertices and normals (packed Vector3

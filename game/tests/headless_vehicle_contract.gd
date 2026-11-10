@@ -12,14 +12,18 @@ extends SceneTree
 ##      back; the car comes to rest, freezes and stays there; F gets back in;
 ##   2. a run along Seven Seas Avenue: up to speed, mostly on its wheels and
 ##      level, no recovery; then a handbrake turn that slides and stays upright;
-##   3. the shore (Avenue N, where the verge falls to the riprap): driven at
-##      the rocks fast, and crept at them, the car splashes and stops dead
-##      there, never inside a stone, with the player kept in it (F does
-##      nothing), then car and player are back on a level spot well clear of
-##      the shore, facing away from the water, where it stays put on its
+##   3. the shore (Avenue N, where the verge falls to the riprap): driven off
+##      it fast, and crept off it, the car goes over the crest and down the
+##      rocks without stopping, never inside a stone, and splashes only where
+##      its body reaches the water, over the corner that reached it; it sinks
+##      until it is wholly under the surface, with the player kept in it (F
+##      does nothing), then car and player are back on a level spot well clear
+##      of the shore, facing away from the water, where it stays put on its
 ##      brakes until driven off; R from the slope by the rocks does the same;
-##      dropped on open water past the rocks it splashes, sinks for a moment
-##      and comes back the same way;
+##      on foot the riprap is as before: the cars' ground over it is on a layer
+##      the player never meets, and walking out over the edge lifts the player
+##      off it (recovery_controller.gd); dropped on open water past the rocks
+##      the car splashes, sinks under and comes back the same way;
 ##   4. a roll: a car rolled over comes to rest on its roof or side; F gets
 ##      the player out of it there, it rights itself within a few seconds with
 ##      nobody in it, F gets back in and it drives on;
@@ -108,7 +112,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_bay, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, a splash, a sink and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
 	_finish()
 
 
@@ -276,7 +280,7 @@ func _case_route() -> bool:
 	return await _stop_and_exit(car, "route")
 
 
-# --- 3. The shore: its rocks met fast and slow, R by them, and open water.
+# --- 3. The shore: off it fast and slow, R by the rocks, on foot, and open water.
 
 func _case_shore() -> bool:
 	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
@@ -287,11 +291,11 @@ func _case_shore() -> bool:
 	var stones := _stones_near(start + heading * 14.0, 30.0)
 	if not _require(stones.size() >= 20, "Found only %d of the shore's stones by the Avenue N fixture." % stones.size()):
 		return false
-	# Driven at the rocks, then crept at them (the strip falls to them): each time
-	# a splash and a dead stop short of the stones, then back on land.
+	# Driven off the shore, then crept off it (the strip falls to the rocks): each
+	# time over the crest and down the rocks into the water, then back on land.
 	for run: Array in [["fast", 40.0], ["slow", float(shore.creep_mps)]]:
-		if not await _drive_from(car, start, heading) or not await _into_rocks(car, start + heading * 200.0, float(run[1]), stones, str(run[0])) \
-		or not await _back_on_land(car, outward, "rocks " + str(run[0])):
+		if not await _drive_from(car, start, heading) or not await _off_the_shore(car, start + heading * 200.0, float(run[1]), stones, str(run[0])) \
+		or not await _back_on_land(car, outward, "the water " + str(run[0])):
 			return false
 	# R on the slope by the rocks: crept down it and stopped short of them.
 	if not await _drive_from(car, start, heading):
@@ -316,7 +320,7 @@ func _case_shore() -> bool:
 	Input.action_release("move_back")
 	var on_slope := car.global_position
 	var before := _recoveries.size()
-	print("SHORE R from %s, %.2f m from the edge, up %.4f, on the rocks %s" % [on_slope, boundary.edge_distance(on_slope), car.global_transform.basis.y.y, car.is_on_rocks()])
+	print("SHORE R from %s, %.2f m from the edge, up %.4f" % [on_slope, boundary.edge_distance(on_slope), car.global_transform.basis.y.y])
 	if not _require(boundary.contains_position(on_slope) and not car.is_sinking(), "The car crept onto the rocks before R (%s)." % on_slope):
 		return false
 	await _press("recover")
@@ -326,61 +330,144 @@ func _case_shore() -> bool:
 		return false
 	if not await _back_on_land(car, outward, "R by the rocks"):
 		return false
-	return await _stop_and_exit(car, "shore")
+	return await _stop_and_exit(car, "shore") and await _shore_on_foot(start, heading)
 
 
-## Drives (or creeps, at max_mps) toward target into the rocks: the car must
-## splash there (not on water) and stop dead for its hold with the player in
-## it (F doing nothing), no stone of them inside its hulls at any tick, then go
-## back to land ("rocks").
-func _into_rocks(car: DRIVABLE_CAR, target: Vector2, max_mps: float, stones: Array[AABB], label: String) -> bool:
+## Drives (or creeps, at max_mps) toward target off the shore: over the crest
+## and down the rocks without stopping (never under 0.5 m/s once its middle is
+## off the outline), no stone of them inside its hulls on the way, its wheels on
+## the cars' ground over them; then one splash, on the water, over the corner
+## of the car that reached it first; then it sinks until it is wholly under the
+## surface, with the player kept in it (F doing nothing), and goes back to land
+## ("water", not stranded).
+func _off_the_shore(car: DRIVABLE_CAR, target: Vector2, max_mps: float, stones: Array[AABB], label: String) -> bool:
 	var before := _recoveries.size()
-	var seen := {}
-	var on_splash := func(at: Vector3, speed: float, on_water: bool) -> void:
-		seen["at"] = at
-		seen["speed"] = speed
-		seen["on_water"] = on_water
+	var boundary := _world.get_boundary()
+	var ground := _world.find_child("CarGround", true, false) as StaticBody3D
+	var seen := {"count": 0}
+	var on_splash := func(at: Vector3, speed: float) -> void:
+		if not seen.has("at"):
+			seen["at"] = at
+			seen["speed"] = speed
+		seen["count"] = int(seen.count) + 1
 		seen["splashes"] = _vehicles.find_children("Splash*", "", false, false).size()
 	car.splashed.connect(on_splash)
 	var through := 0
-	var held := 0
-	var held_first := -1
-	var held_at := Vector3.INF
-	var held_moved := 0.0
+	var off_tick := -1
+	var slowest := INF
+	var on_ground := 0
+	var contact := Vector3.INF
+	var sink_ticks := 0
+	var deepest_top := INF
 	var tried_exit := false
 	var stayed_in := true
 	var top := 0.0
-	for _tick in 1200:
-		_steer_toward(car, target)
-		if car.linear_velocity.length() > max_mps:
-			Input.action_release("move_forward")
-		else:
-			Input.action_press("move_forward")
+	for tick in 1500:
+		if not car.is_sinking():
+			_steer_toward(car, target)
+			if car.linear_velocity.length() > max_mps:
+				Input.action_release("move_forward")
+			else:
+				Input.action_press("move_forward")
 		await physics_frame
 		top = maxf(top, car.linear_velocity.length())
-		through = maxi(through, _stones_in_car(car, stones))
-		if car.is_on_rocks():
-			if held_first < 0:
-				held_first = Engine.get_physics_frames()
-				held_at = car.global_position
-			held = Engine.get_physics_frames() - held_first + 1
-			held_moved = maxf(held_moved, car.global_position.distance_to(held_at))
-			if held >= 20 and not tried_exit:
+		if tick % 30 == 0 and not car.is_sinking():
+			print("SHORE %s t=%.1f s at %s, %.2f m from the edge (%s), %s" % [label, tick / 60.0, car.global_position, boundary.edge_distance(car.global_position), "in" if boundary.contains_position(car.global_position) else "out", JSON.stringify(car.describe())])
+		if car.is_sinking():
+			sink_ticks += 1
+			if sink_ticks == 1:
+				contact = car.lowest_point(car.global_transform)
+			deepest_top = minf(deepest_top, _top_y(car))
+			if sink_ticks == 20 and not tried_exit:
 				tried_exit = true
 				_release_driving()
 				await _press("vehicle_enter_exit")
 				stayed_in = _player.is_driving() and _vehicles.active_car() == car
+		else:
+			var inside := _stones_in_car(car, stones)
+			if inside > through:
+				print("SHORE %s stone cores inside the car: %d at %s, %.2f m from the edge (%s), %s" % [label, inside, car.global_position, boundary.edge_distance(car.global_position), "in" if boundary.contains_position(car.global_position) else "out", JSON.stringify(car.describe())])
+			through = maxi(through, inside)
+			if not boundary.contains_position(car.global_position):
+				if off_tick < 0:
+					off_tick = tick
+				slowest = minf(slowest, car.linear_velocity.length())
+				# The cars' ground under it.
+				var hit := _ray(car.global_position + Vector3.UP * 1.0, car.global_position + Vector3.DOWN * 2.0, DRIVABLE_CAR.PHYSICS_CAR_GROUND)
+				if ground != null and hit.get("collider") == ground:
+					on_ground += 1
 		if _recoveries.size() > before:
 			break
 	_release_driving()
 	car.splashed.disconnect(on_splash)
 	var event: Dictionary = _recoveries[_recoveries.size() - 1] if _recoveries.size() > before else {}
-	print("SHORE %s: up to %.2f m/s, splash %s at %.2f m/s (on water %s, %d splash nodes), held %.2f s and moved %.3f m there, stone cores inside the car at worst %d, F there kept the player in: %s, back on land by %s from %s" % [label, top, seen.get("at"), seen.get("speed", 0.0), seen.get("on_water"), seen.get("splashes", 0), held / 60.0, held_moved, through, stayed_in, event.get("cause"), event.get("from")])
-	return _require(not event.is_empty() and event.cause == "rocks", "Driven %s at the rocks the car did not go back to land from them (%s)." % [label, event]) \
-		and _require(seen.has("at") and not bool(seen.on_water) and int(seen.splashes) >= 1, "At the rocks (%s) the car must splash, off the water (%s)." % [label, seen]) \
-		and _require(held >= int(DRIVABLE_CAR.ROCKS_HOLD_S * 60.0) - 2 and held_moved < 0.01, "At the rocks (%s) the car must stop dead for its hold (%.2f s, moved %.3f m)." % [label, held / 60.0, held_moved]) \
-		and _require(through == 0, "At the rocks (%s) %d stone cores stood inside the car." % [label, through]) \
-		and _require(tried_exit and stayed_in, "F on the rocks must keep the player in the car.")
+	var splash_at: Vector3 = seen.get("at", Vector3.INF)
+	var off_splash := Vector2(splash_at.x - contact.x, splash_at.z - contact.z).length() if splash_at.is_finite() and contact.is_finite() else INF
+	print("SHORE %s: up to %.2f m/s, off the outline at tick %d, slowest %.2f m/s there, %d ticks over the cars' ground, stone cores inside the car at worst %d; %d splash(es), the first %s at %.2f m/s (%d splash nodes), %.2f m from the corner that reached the water (%s); sank %.2f s, its top %.2f m under the surface at the deepest; F there kept the player in: %s; back on land by %s from %s" % [label, top, off_tick, slowest, on_ground, through, int(seen.count), splash_at, seen.get("speed", 0.0), seen.get("splashes", 0), off_splash, contact, sink_ticks / 60.0, car.water_y - deepest_top, stayed_in, event.get("cause"), event.get("from")])
+	return _require(ground != null, "No cars' ground over the riprap.") \
+		and _require(not event.is_empty() and event.cause == "water", "Driven %s off the shore the car did not go back to land from the water (%s)." % [label, event]) \
+		and _require(off_tick >= 0 and slowest > 0.5, "Off the shore (%s) the car must roll on down the rocks, not stop at the crest (slowest %.2f m/s)." % [label, slowest]) \
+		and _require(through == 0, "Off the shore (%s) %d stone cores stood inside the car." % [label, through]) \
+		and _require(int(seen.count) == 1 and int(seen.get("splashes", 0)) >= 1 and absf(splash_at.y - car.water_y) < 0.01 and not boundary.contains_position(splash_at), "Off the shore (%s) the car must splash once, on the water off the island (%s)." % [label, seen]) \
+		and _require(contact.y <= car.water_y + 0.05 and off_splash < 1.0, "Off the shore (%s) the splash must be where the car's body first reached the water (that corner %s, %.2f m from the splash)." % [label, contact, off_splash]) \
+		and _require(sink_ticks >= int((DRIVABLE_CAR.SINK_S - 0.1) * 60.0) and deepest_top < car.water_y, "Off the shore (%s) the car must sink under the surface before it goes back (%.2f s, its top %.2f m under)." % [label, sink_ticks / 60.0, car.water_y - deepest_top]) \
+		and _require(tried_exit and stayed_in, "F while the car sinks must keep the player in it.")
+
+
+## The top of the car's box (wheels to roof) at its highest corner now.
+func _top_y(car: DRIVABLE_CAR) -> float:
+	var xf := car.global_transform
+	var top := -INF
+	for corner in 8:
+		var local := Vector3((corner & 1) * 2 - 1, 0.0, ((corner >> 1) & 1) * 2 - 1) * Vector3(car.width_m * 0.45, 0.0, car.length_m * 0.45)
+		local.y = car.height_m if corner >= 4 else 0.05
+		top = maxf(top, (xf * local).y)
+	return top
+
+
+## On foot the riprap is as it was: the cars' ground over it is on its own layer,
+## which a car's mask has and the player's (and the on-foot camera's) hasn't, so
+## a ray over the rocks finds it for a car and not for the player; and the stock
+## player walking out from the verge over the edge is lifted off it there
+## (recovery_controller.gd "outside_boundary") without ever touching it.
+func _shore_on_foot(start: Vector2, heading: Vector2) -> bool:
+	var ground := _world.find_child("CarGround", true, false) as StaticBody3D
+	var boundary := _world.get_boundary()
+	var edge := boundary.edge_distance(Vector3(start.x, 0.0, start.y))
+	var over := start + heading * (edge + 3.0)
+	var for_car := _ray(Vector3(over.x, 20.0, over.y), Vector3(over.x, -5.0, over.y), DRIVABLE_CAR.GROUND_MASK)
+	var for_player := _ray(Vector3(over.x, 20.0, over.y), Vector3(over.x, -5.0, over.y), _player.collision_mask)
+	var arm := (_player.get_node("CameraPivot") as Node3D).get_node("SpringArm3D") as SpringArm3D
+	if not _require(ground != null and ground.collision_layer == DRIVABLE_CAR.PHYSICS_CAR_GROUND and ground.collision_mask == 0, "The cars' ground must stand on its own layer alone.") \
+	or not _require(_player.collision_mask & DRIVABLE_CAR.PHYSICS_CAR_GROUND == 0 and arm.collision_mask & DRIVABLE_CAR.PHYSICS_CAR_GROUND == 0, "The player and the on-foot camera must not meet the cars' ground.") \
+	or not _require(for_car.get("collider") == ground and for_player.is_empty(), "Over the rocks a car must find the cars' ground and the player nothing (%s, %s)." % [for_car.get("collider"), for_player.get("collider")]):
+		return false
+	if not await _stand_player(start + heading * (edge - 4.0)):
+		return false
+	var lifts: Array[Dictionary] = []
+	var on_lift := func(cause: String, from: Vector3) -> void:
+		lifts.append({"cause": cause, "from": from})
+	_player.recovered.connect(on_lift)
+	var rig := _player.get_node("CameraPivot") as Node3D
+	rig.rotation.y = atan2(-heading.x, -heading.y)
+	var touched := 0
+	Input.action_press("move_forward")
+	for _tick in 120:
+		await physics_frame
+		for index in _player.get_slide_collision_count():
+			if _player.get_slide_collision(index).get_collider() == ground:
+				touched += 1
+		if not lifts.is_empty():
+			break
+	_release()
+	_player.recovered.disconnect(on_lift)
+	var lift: Dictionary = lifts[0] if not lifts.is_empty() else {}
+	var from: Vector3 = lift.get("from", Vector3.INF)
+	print("SHORE on foot: %d lift(s), the first %s from %s, %.2f m off the edge; the cars' ground touched %d times" % [lifts.size(), lift.get("cause"), from, boundary.edge_distance(from) if from.is_finite() else INF, touched])
+	if not _require(not lift.is_empty() and lift.cause == "outside_boundary" and from.is_finite() and boundary.edge_distance(from) < 1.0, "Walking out over the edge must lift the player off it as before (%s)." % [lifts]) \
+	or not _require(touched == 0, "On foot the player touched the cars' ground %d times." % touched):
+		return false
+	return await _stand_player(start) and await _rest("shore_on_foot")
 
 
 ## Back on land after a return: on a level spot inside the outline, well clear
@@ -441,21 +528,22 @@ func _case_bay() -> bool:
 		return false
 	var before := _recoveries.size()
 	var seen := {}
-	var on_splash := func(at: Vector3, speed: float, on_water: bool) -> void:
+	var on_splash := func(at: Vector3, speed: float) -> void:
 		seen["at"] = at
 		seen["speed"] = speed
-		seen["on_water"] = on_water
 		seen["lowest"] = car.lowest_y(car.global_transform)
 		seen["splashes"] = _vehicles.find_children("Splash*", "", false, false).size()
 	car.splashed.connect(on_splash)
 	car.place(Transform3D(car.global_transform.basis, drop))
 	var sinking_ticks := 0
+	var deepest_top := INF
 	var tried_exit := false
 	var stayed_in := true
 	for _tick in 600:
 		await physics_frame
 		if car.is_sinking():
 			sinking_ticks += 1
+			deepest_top = minf(deepest_top, _top_y(car))
 			if sinking_ticks == 30 and not tried_exit:
 				tried_exit = true
 				await _press("vehicle_enter_exit")
@@ -464,9 +552,9 @@ func _case_bay() -> bool:
 			break
 	car.splashed.disconnect(on_splash)
 	var event: Dictionary = _recoveries[_recoveries.size() - 1] if _recoveries.size() > before else {}
-	print("BAY splash %s at %.2f m/s (on water %s), lowest corner %.2f m (water %.2f), %d splash nodes; sank %.2f s; F while sinking kept the player in: %s; back by %s" % [seen.get("at"), seen.get("speed", 0.0), seen.get("on_water"), seen.get("lowest", INF), car.water_y, seen.get("splashes", 0), sinking_ticks / 60.0, stayed_in, event.get("cause")])
-	if not _require(seen.has("at") and bool(seen.on_water) and absf((seen.at as Vector3).y - car.water_y) < 0.05 and float(seen.lowest) <= car.water_y + 0.02 and int(seen.splashes) >= 1, "Dropped on open water the car must splash on it (%s)." % [seen]) \
-	or not _require(not event.is_empty() and event.cause == "water" and sinking_ticks >= int((DRIVABLE_CAR.SINK_S - 0.1) * 60.0), "The car must sink for a moment before it goes back (%s after %.2f s)." % [event, sinking_ticks / 60.0]) \
+	print("BAY splash %s at %.2f m/s, lowest corner %.2f m (water %.2f), %d splash nodes; sank %.2f s, its top %.2f m under the surface at the deepest; F while sinking kept the player in: %s; back by %s" % [seen.get("at"), seen.get("speed", 0.0), seen.get("lowest", INF), car.water_y, seen.get("splashes", 0), sinking_ticks / 60.0, car.water_y - deepest_top, stayed_in, event.get("cause")])
+	if not _require(seen.has("at") and absf((seen.at as Vector3).y - car.water_y) < 0.05 and float(seen.lowest) <= car.water_y + 0.02 and int(seen.splashes) >= 1, "Dropped on open water the car must splash on it (%s)." % [seen]) \
+	or not _require(not event.is_empty() and event.cause == "water" and sinking_ticks >= int((DRIVABLE_CAR.SINK_S - 0.1) * 60.0) and deepest_top < car.water_y, "The car must sink under the surface before it goes back (%s after %.2f s, its top %.2f m under)." % [event, sinking_ticks / 60.0, car.water_y - deepest_top]) \
 	or not _require(tried_exit and stayed_in, "F while the car sinks must keep the player in it.") \
 	or not await _back_on_land(car, Vector3(heading.x, 0.0, heading.y), "the bay"):
 		return false

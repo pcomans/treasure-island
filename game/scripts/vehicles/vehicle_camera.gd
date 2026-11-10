@@ -3,10 +3,11 @@ extends Node3D
 ## The chase camera while the player drives (game/scripts/vehicles/vehicle_manager.gd):
 ## the player rig's own structure and settings, a pivot -> SpringArm3D ->
 ## Camera3D with the gameplay camera's field of view, near and far planes and
-## the arm's margin (game/scenes/player/player.tscn). Its arm stops at the world
-## and at street props, parked cars among them, so it never sits inside one; the
-## driven car itself is left out. It is current only while driving; the on-foot
-## rig (player_camera.gd) is left as it is.
+## the arm's margin (game/scenes/player/player.tscn). Its arm stops at the world,
+## at street props, parked cars among them, so it never sits inside one, and at
+## the cars' ground over the riprap (shoreline_builder.gd), so it stays over the
+## stones a car rolls down; the driven car itself is left out. It is current
+## only while driving; the on-foot rig (player_camera.gd) is left as it is.
 ##
 ## The pivot rides above the car as drawn this frame (the car's interpolated
 ## visual), so it moves smoothly whatever the frame rate, and never below the
@@ -27,6 +28,7 @@ extends Node3D
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_STREET_PROP := 1 << 3
+const PHYSICS_CAR_GROUND := 1 << 5
 const PITCH_REST := deg_to_rad(-10.0)
 const MIN_PITCH := deg_to_rad(-60.0)
 const MAX_PITCH := deg_to_rad(25.0)
@@ -79,7 +81,7 @@ func _init() -> void:
 	spring_arm = SpringArm3D.new()
 	spring_arm.name = "SpringArm3D"
 	spring_arm.margin = 0.15
-	spring_arm.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP
+	spring_arm.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP | PHYSICS_CAR_GROUND
 	spring_arm.rotation = Vector3(PITCH_REST, 0.0, 0.0)
 	add_child(spring_arm)
 	camera = Camera3D.new()
