@@ -35,6 +35,31 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - A line of dry tufts on Building 2's WSW forecourt follows a dark streak in the ground texture (release review, 2026-11-07).
 - No close capture yet of the rubble mounds at `medium` density.
 
+## Sky and light (`game/resources/materials/world/sky/bay_sky.gdshader`, `game/scenes/main.tscn`, 2026-11-09)
+
+Couplings, for whoever changes one side:
+
+- The sky's `sky_horizon_color` (a shader parameter of the sky material in `main.tscn`, still (0.74, 0.80, 0.86)) is the colour the fog and the distant horizon's haze copy; see the SF card's item under the distant horizon. `sky_top_color` and the two ground colours are also unchanged from the old `ProceduralSkyMaterial`, and the gradient is the same formula.
+- The clouds are part of the radiance map, so they are in the ambient light, in the water's and windows' reflections and, a little, in the fog's colour at distance (aerial perspective 0.35). `cloud_cover`, `cloud_sun_gain` and `cloud_sky_gain` therefore move the ambient light as well as the picture.
+- Below the horizon the radiance map shows the land's bounce light (`land_bounce_color` times the live sun and sky), not the two ground colours the visible sky keeps there. Ambient is now 60 % from that map (`ambient_light_sky_contribution` 0.6, energy 0.52): shade open to the sky is cooler, shade under an eave warmer. In the small look scene a cream wall's warm cast (red minus blue, 8-bit) went from 23 to 20 in grazing sun and from 21 to 12 in shade, and white stayed neutral. Retune the two together.
+- The clouds move by the global shader uniform `sky_cloud_drift` (`project.godot`, set each frame by `game/scripts/world/sky_weather.gd`). The shader must not read `TIME` or `POSITION`: either makes Godot redraw and re-filter the radiance map every frame. `headless_gameplay_contract.gd` checks `TIME`.
+- `sky_weather.gd`'s wraps (72 km of drift, 4.5 km of rise) are whole multiples of the shader's noise tiles (`WEATHER_TILE_M` 24 km, `CIRRUS_TILE_M` 36 km at twice the drift, `SHAPE_TILE_M` 9 km and half of it deep, `DETAIL_TILE_M` 2.25 km). Change them together, or the clouds jump when the drift wraps (after about 2.2 hours of play).
+- The Compatibility renderer gives a sky shader its colour uniforms and the sun's colour sRGB-encoded and decodes the result itself, so the shader decodes and encodes there (`scene_color`, `sky_output`). Without that the web's clouds came out dark; with it a cloud's tone is within one 8-bit level of Forward+ in the small look scene.
+- The shared test harness (`game/tests/shared/world_harness.gd`) holds the clouds still at their start, so screenshots of one view match from run to run. Play lets them drift.
+- The sun's light, colour, energy and position are unchanged (2026-11-13 12:30 PST; `node tools/solar_position.mjs "2026-11-13 12:30"` gives its elevation and azimuth). The sky draws its disc and halo on `LIGHT0_DIRECTION`, the light's own direction.
+
+Limits:
+
+- The radiance map redraws every 10 s (`reflection_refresh_s`) and when the sun changes, spread over a few frames (the Sky's incremental mode), so reflections and ambient light trail the visible clouds by up to 10 s (at 9 m/s, about 90 m of cloud, a few degrees overhead). Mersea's reflection probes capture once at startup and keep the clouds of that moment.
+- The clouds are drawn for a camera on the ground: they don't come nearer as the jetpack climbs, and from above their base (1.1 km) they would still be overhead.
+- Cost on the Mac's Metal, Forward+, 1440 x 900, old and new look timed in alternating blocks in one island run (2026-11-09; median frame): west shore toward the city 7.92 to 9.09 ms, 9th Street 12.71 to 13.05 ms, Bayside Drive housing 8.50 to 9.74 ms, ferry spawn 142.9 to 142.8 ms. Of that, glow is 0.35 to 0.45 ms, the sky 0.2 to 0.5 ms and the shadow splits 0 to 0.3 ms (they also change the draw calls: 4,230 to 5,619 at the housing view, 9,223 to 8,533 at 9th Street). The owner accepted up to about 2 ms. If it has to come down: `glow_enabled = false`, the Sun's old splits (0.1, 0.2, 0.5, no blend, blur 0.25), or fewer `MARCH_STEPS`. Marching the clouds in the quarter-resolution pass was cheaper but showed blocky cloud edges.
+- With the clouds drifting and the radiance map redrawn every quarter second instead of every 10 s, the median frame rose by 0.05 to 0.15 ms and the 95th percentile by up to 0.8 ms, so a redraw every 10 s is a few slower frames, not a steady cost.
+- The web build marches the same 40 steps as native, at the view's own resolution, because the Compatibility renderer has no half-resolution sky pass. Its cost in a real browser hasn't been measured.
+- Glow is on in both renderers (additive, intensity 0.35, threshold 1.0). Its cost in a real browser hasn't been measured either; the fallback is `glow_enabled = false` for the web in `main.gd`.
+- The cumulus are smooth at their edges from close up (the march runs at half resolution), the cirrus is a stretched noise that can read as brush strokes high in the sky, and one weather tile repeats every 24 km.
+- The sun's first shadow split now ends at 40 m (was 80 m) with the splits blended and `shadow_blur` 0.5: shadows within 40 m are finer, and those from 40 to 80 m and from 120 to 160 m fall in a coarser split than before.
+- Not rebaked or retuned: the tree impostors (baked under the old ambient), the water's `glitter_gain`, the distant art's haze. None of their inputs moved except the ambient light's make-up.
+
 ## Lighting (`game/scenes/main.tscn`, the look pass of 2026-11-07)
 
 - SSAO is on (radius 3 m, Medium) and hasn't been timed on the Mac's Metal. If the Mac test finds it slow, the fallback is `ssao_enabled = false` in `main.tscn`'s environment.
@@ -62,7 +87,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - Alcatraz's cellhouse;
   - Angel Island against Marin;
   - the bare ridge between Telegraph Hill and the Golden Gate, which should read as low city.
-- The SF card's haze is a set share (12 %, with its darks lifted) of the horizon colour, a copy of `main.tscn`'s sky horizon and fog light colour (0.74, 0.80, 0.86), not the scene fog: if the look pass changes either, retune `city.gdshader`'s `haze` and `haze_share` with it. The rest of the distant art keeps the PR's own light veil.
+- The SF card's haze is a set share (12 %, with its darks lifted) of the horizon colour, a copy of `main.tscn`'s sky horizon (the sky material's `sky_horizon_color`) and fog light colour (0.74, 0.80, 0.86), not the scene fog: if the look pass changes either, retune `city.gdshader`'s `haze` and `haze_share` with it. The rest of the distant art keeps the PR's own light veil.
 - Follow-ups from the code review (skybox-code-review, 2026-11-08):
   - The Golden Gate Bridge is about 200 beams, each with its own material and draw call (the horizon is about 266 meshes; looking west it adds about 100 draw calls, +108 at the west shore's SF view on native). Batching the beams into one ArrayMesh would save about 100 of them without changing the look.
   - The sector textures have no mipmaps, yet `sector.gdshader` samples them with `textureLod(…, 2.0)`, so its "quiet" detail mix does nothing.

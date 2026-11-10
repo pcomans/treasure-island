@@ -69,6 +69,9 @@ func load_world(street_detail: Variant = null) -> String:
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.set_gameplay_enabled(false)
 	clean_hud()
+	# Checks and review screenshots see the clouds where they start, standing
+	# still, so two runs of one view match; play lets them drift.
+	(main.get_node("WorldEnvironment") as SkyWeather).hold_at(0.0)
 	return ""
 
 
@@ -408,9 +411,14 @@ const STEEP := "too steep to stand"
 const NOT_SETTLED := "did not settle on the ground"
 
 
-## Drops the stock player at xz and lets physics settle it. Returns "" on
-## success, or one of the reasons above.
-func settle_player(xz: Vector2, support_context: Dictionary = {}) -> String:
+## Drops the stock player at xz, its feet drop_m above the ground under that
+## point, and lets physics settle it. Returns "" on success, or one of the
+## reasons above. The fall is slow (the player's descent cap), so a caller that
+## only needs the player standing there, such as a screenshot, passes a small
+## drop_m; it must still clear the ground under the whole capsule (0.35 m
+## radius, its bottom at the player's origin): 0.15 m on the steepest slope
+## the support check allows, 0.2 m beside a 15 cm kerb.
+func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
 		return OFF_ISLAND
 	var hit := ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y), player.collision_mask)
@@ -424,7 +432,7 @@ func settle_player(xz: Vector2, support_context: Dictionary = {}) -> String:
 	if main.vehicles != null:
 		main.vehicles.force_exit()
 	player.set_gameplay_enabled(false)
-	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + 2.0, xz.y))
+	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop_m, xz.y))
 	player.velocity = Vector3.DOWN * 0.1
 	player.set_gameplay_enabled(true)
 	for _frame in 240:
