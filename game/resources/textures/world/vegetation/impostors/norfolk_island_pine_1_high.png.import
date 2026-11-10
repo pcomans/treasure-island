@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cfq60oe5wc45j"
-path="res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.ctex"
+path.s3tc="res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.s3tc.ctex"
+path.etc2="res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/norfolk_island_pine_1_high.png"
-dest_files=["res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.ctex"]
+dest_files=["res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.s3tc.ctex", "res://.godot/imported/norfolk_island_pine_1_high.png-ad6e53a53e2eb341bf328cba5e2ed655.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

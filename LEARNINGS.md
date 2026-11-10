@@ -725,6 +725,15 @@ runtime supports or executes a diagnostic entrypoint. Before comparing an
 isolation, require actual changed-property counts and a before-draw marker; the
 subsequent query-gated game hook supplied both without modifying engine code.
 
+## Preserve texture channels that carry shader data
+
+Reviewing the 2026-11-08 VRAM-compression change found that BC3 altered all four
+independent channels of `marsh_grain.png`. The alpha-border override preserved
+alpha handling, but did not prevent block quantization. Classify textures by
+what the shader reads before bulk import changes. For a deliberate lossless 3D
+exception, disable Detect 3D as well, since the editor can rewrite the mode.
+Check the exported texture against the source channels.
+
 ## Keep browser emulation attached through verification
 
 On 2026-10-22, a CDP setup connection enabled touch emulation then closed before

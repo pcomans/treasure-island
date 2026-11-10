@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cprnwsjgu11b"
-path="res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.ctex"
+path.s3tc="res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.s3tc.ctex"
+path.etc2="res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/player/chest_wood.png"
-dest_files=["res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.ctex"]
+dest_files=["res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.s3tc.ctex", "res://.godot/imported/chest_wood.png-6f253dcc368b5de4dec40c869132abd3.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

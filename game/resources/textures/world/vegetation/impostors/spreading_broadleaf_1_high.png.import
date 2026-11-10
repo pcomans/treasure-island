@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dvhqhae8uop6p"
-path="res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.ctex"
+path.s3tc="res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.s3tc.ctex"
+path.etc2="res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/spreading_broadleaf_1_high.png"
-dest_files=["res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.ctex"]
+dest_files=["res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.s3tc.ctex", "res://.godot/imported/spreading_broadleaf_1_high.png-5368b2209dc2ca5c7806e49dc09e6230.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

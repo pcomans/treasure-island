@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c583je8stomuc"
-path="res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.ctex"
+path.s3tc="res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.s3tc.ctex"
+path.etc2="res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/monterey_pine_4.png"
-dest_files=["res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.ctex"]
+dest_files=["res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.s3tc.ctex", "res://.godot/imported/monterey_pine_4.png-587ec877cc91b60267d9f9244233825d.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -15,6 +15,9 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 			push_error("Missing static world: export through the platform build script")
 		else:
 			add_file(baked, FileAccess.get_file_as_bytes(baked), false)
+	# The Web player loads the bake directly. The raw world is a bake input.
+	if "web" in features:
+		return
 	var paths: Array[String] = []
 	_collect_files(GENERATED_WORLD_ROOT, paths)
 	paths.sort()

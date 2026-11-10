@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cogyljakyttr8"
-path="res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.ctex"
+path.s3tc="res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.s3tc.ctex"
+path.etc2="res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/sydney_blue_gum_young_0.png"
-dest_files=["res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.ctex"]
+dest_files=["res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.s3tc.ctex", "res://.godot/imported/sydney_blue_gum_young_0.png-4e0e0acf59ba974a4d1e0e586eafdb15.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

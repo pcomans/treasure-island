@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bswcyuri2wqji"
-path="res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.ctex"
+path.s3tc="res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.s3tc.ctex"
+path.etc2="res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/glossy_hedge_surface.png"
-dest_files=["res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.ctex"]
+dest_files=["res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.s3tc.ctex", "res://.godot/imported/glossy_hedge_surface.png-1aea0c8908256e1aaef154ca4c68f23a.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

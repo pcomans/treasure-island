@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c0se7p7py37ad"
-path="res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.ctex"
+path.s3tc="res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.s3tc.ctex"
+path.etc2="res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/b201/roof_membrane.png"
-dest_files=["res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.ctex"]
+dest_files=["res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.s3tc.ctex", "res://.godot/imported/roof_membrane.png-b4ea5782954de3f5788ecca5cb0d8658.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

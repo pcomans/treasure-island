@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dq7g23eu7dv2"
-path="res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.ctex"
+path.s3tc="res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.s3tc.ctex"
+path.etc2="res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"
-dest_files=["res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.ctex"]
+dest_files=["res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.s3tc.ctex", "res://.godot/imported/concrete_floor_03_diff_1k.jpg-5717b9c7cf0b56cc118e74f399f1e46e.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

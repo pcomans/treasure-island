@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d3a0edjv7cd6a"
-path="res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.ctex"
+path.s3tc="res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.s3tc.ctex"
+path.etc2="res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/young_tree_foliage_atlas.png"
-dest_files=["res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.ctex"]
+dest_files=["res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.s3tc.ctex", "res://.godot/imported/young_tree_foliage_atlas.png-7cbc517bf7813847bc6d78cfdc8198e7.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

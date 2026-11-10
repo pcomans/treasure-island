@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://46ggbddjph2l"
-path="res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.ctex"
+path.s3tc="res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.s3tc.ctex"
+path.etc2="res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/maceo_may/stucco_pale.png"
-dest_files=["res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.ctex"]
+dest_files=["res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.s3tc.ctex", "res://.godot/imported/stucco_pale.png-a468e8fd2b290737aeb168e6f8f3b261.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
