@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dbwemh2vdrpna"
-path="res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.ctex"
+path.s3tc="res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.s3tc.ctex"
+path.etc2="res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/mexican_fan_palm_2_high.png"
-dest_files=["res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.ctex"]
+dest_files=["res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.s3tc.ctex", "res://.godot/imported/mexican_fan_palm_2_high.png-6b58c77c5f82ebc83c56c1eafaa2c15f.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

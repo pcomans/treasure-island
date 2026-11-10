@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://wtcgtryp7r3r"
-path="res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.ctex"
+path.s3tc="res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.s3tc.ctex"
+path.etc2="res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/street/park_dg.png"
-dest_files=["res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.ctex"]
+dest_files=["res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.s3tc.ctex", "res://.godot/imported/park_dg.png-5a35d4553f4a88363b2bdcf9c90434a9.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

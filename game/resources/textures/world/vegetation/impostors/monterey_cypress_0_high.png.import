@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://qa42ficasty1"
-path="res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.ctex"
+path.s3tc="res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.s3tc.ctex"
+path.etc2="res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/monterey_cypress_0_high.png"
-dest_files=["res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.ctex"]
+dest_files=["res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.s3tc.ctex", "res://.godot/imported/monterey_cypress_0_high.png-93ffa3d90b49595aa52ec6366b973375.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c7jqio78lpjkf"
-path="res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.ctex"
+path.s3tc="res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.s3tc.ctex"
+path.etc2="res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/impostors/eucalyptus_mature_1_high.png"
-dest_files=["res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.ctex"]
+dest_files=["res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.s3tc.ctex", "res://.godot/imported/eucalyptus_mature_1_high.png-826b0c10c543270cc0f33f3b17056bae.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

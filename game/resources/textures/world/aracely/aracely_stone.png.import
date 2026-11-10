@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cyq71letaqya4"
-path="res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.ctex"
+path.s3tc="res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.s3tc.ctex"
+path.etc2="res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/aracely/aracely_stone.png"
-dest_files=["res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.ctex"]
+dest_files=["res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.s3tc.ctex", "res://.godot/imported/aracely_stone.png-79d744866df8893e9fd90f836a7b320b.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

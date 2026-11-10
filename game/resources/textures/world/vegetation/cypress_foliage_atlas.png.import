@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cijgmelsbr12"
-path="res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.ctex"
+path.s3tc="res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.s3tc.ctex"
+path.etc2="res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/cypress_foliage_atlas.png"
-dest_files=["res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.ctex"]
+dest_files=["res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.s3tc.ctex", "res://.godot/imported/cypress_foliage_atlas.png-8396b9e44469c8219c1638eda2f13983.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

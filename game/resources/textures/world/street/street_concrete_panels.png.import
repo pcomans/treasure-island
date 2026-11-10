@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cnb051eik6peu"
-path="res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.ctex"
+path.s3tc="res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.s3tc.ctex"
+path.etc2="res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/street/street_concrete_panels.png"
-dest_files=["res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.ctex"]
+dest_files=["res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.s3tc.ctex", "res://.godot/imported/street_concrete_panels.png-68d06c4c0267c42d8317bbbdcd2c99cf.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
