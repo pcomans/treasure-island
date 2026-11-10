@@ -26,7 +26,7 @@ with the street-vegetation, cityside-plants and tree-fix-20261107 work notes.
 
 Every PNG here and its `.import` are checked-in build products: the atlases and
 barks of `prepare_textures.gd`, the impostors of `tools/vegetation/bake_impostors.gd`.
-Both tools write each `.import` (`tools/vegetation/texture_import.gd`: lossless, with
+Both tools write each `.import` (`tools/vegetation/texture_import.gd`: VRAM-compressed, with
 mipmaps, which the shaders' alpha-scissor cards rely on). Re-run `bake_impostors.gd`
 after any kit geometry change.
 

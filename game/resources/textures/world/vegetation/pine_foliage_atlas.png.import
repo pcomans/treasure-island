@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ba0dnoa38lkph"
-path="res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.ctex"
+path.s3tc="res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.s3tc.ctex"
+path.etc2="res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/pine_foliage_atlas.png"
-dest_files=["res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.ctex"]
+dest_files=["res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.s3tc.ctex", "res://.godot/imported/pine_foliage_atlas.png-ccaec804ef34776800d8dc7031b5331a.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

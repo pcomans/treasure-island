@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b556yfk4jyk8e"
-path="res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.ctex"
+path.s3tc="res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.s3tc.ctex"
+path.etc2="res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg"
-dest_files=["res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.ctex"]
+dest_files=["res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.s3tc.ctex", "res://.godot/imported/plaster_grey_04_rough_1k.jpg-d053b81c7d621e4b796d6f71c7784adf.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0
