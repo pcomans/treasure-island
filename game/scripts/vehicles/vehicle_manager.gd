@@ -48,6 +48,7 @@ signal exited(row_id: String)
 signal car_recovered(cause: String, from_position: Vector3)
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const CAR_HERO_LEVEL := preload("res://game/scripts/vehicles/car_hero_level.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
@@ -113,6 +114,8 @@ var _active: DRIVABLE_CAR
 var _camera: VEHICLE_CAMERA
 var _visible_ground := VisibleGround.new()
 var _breaker: FENCE_BREAKER
+## Draws the parked cars nearest the camera at the hero level (desktop only).
+var _hero: CAR_HERO_LEVEL
 ## The breakable fence bodies (live bodies' collision exceptions) and every
 ## fence body (what the wheels' rays skip).
 var _breakable_fences: Array[RID] = []
@@ -157,6 +160,14 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			if not _cells.has(cell):
 				_cells[cell] = []
 			(_cells[cell] as Array).append(id)
+	if _hero != null:
+		_hero.queue_free()
+		_hero = null
+	if _clutter != null and KIT.hero_level_enabled():
+		_hero = CAR_HERO_LEVEL.new()
+		_hero.name = "CarHeroLevel"
+		add_child(_hero)
+		_hero.configure(_kit, _clutter, _rows, _cells, GRID_M)
 	_visible_ground.build([world.ground_and_areas, world.roads_and_paths])
 	_breaker = FENCE_BREAKER.new()
 	_breaker.name = "FenceBreaker"
@@ -424,6 +435,8 @@ func _make_live(id: String) -> Node3D:
 		node = _new_barrier(id, entry)
 	if node == null:
 		return null
+	if _hero != null:
+		_hero.release(id)
 	for ref: Array in entry.instances:
 		var instance := _clutter.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
 		if instance != null and instance.multimesh != null:
@@ -453,7 +466,7 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.visible_ground = _visible_ground
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
 	car.breakable_fences = _breakable_fences
-	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _fences)
+	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _fences, _kit.hero_visual(str(params.body), custom.custom))
 	car.recovered.connect(func(cause: String, from: Vector3) -> void: car_recovered.emit(cause, from))
 	car.splashed.connect(_splash.bind(car))
 	for fence: RID in _breakable_fences:
