@@ -144,6 +144,11 @@ const DEFAULT_STREET_DETAIL := {
 	"overhead": ["on", "off"],
 }
 
+## How far above the ground a shot's player starts before it settles (see
+## world_harness.gd's settle_player): just clear of slopes and kerbs, so no shot
+## waits for a 2 m fall.
+const SHOT_DROP_M := 0.2
+
 ## Input actions a street view's moves may hold.
 const MOVE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
 
@@ -646,7 +651,7 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 			toggled.append(gallery.groups[group] as Node3D)
 	if not _numbers([view.get("measure_frames")], 1) or float(view.measure_frames) < 30.0 or float(view.measure_frames) > 3000.0 or (toggled.is_empty() and not ground):
 		return "measure_frames needs 30-3000 frames and plants in the plan, a measure_layer or measure_ground"
-	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]), {}, SHOT_DROP_M)
 	if error != "":
 		return error
 	var free := _free_camera(view, target)
@@ -711,7 +716,7 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var dressing_error := _apply_dressing(view)
 	if dressing_error != "":
 		return dressing_error
-	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]), {}, SHOT_DROP_M)
 	if error != "":
 		return error
 	var free := _free_camera(view, target)
@@ -982,7 +987,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		return camera_error
 	if view.has("start_xyz") and not _numbers(view.get("start_xyz"), 3):
 		return "start_xyz needs [x, y, z]"
-	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]), {}, SHOT_DROP_M)
 	if error != "":
 		return error
 	var player := _h.player
@@ -1233,7 +1238,7 @@ func _closeup_shots(source_key: String, out: String, suffix: String) -> void:
 		for attempt in [[0.0, 1.0], [0.35, 1.0], [-0.35, 1.0], [0.0, 1.4], [0.0, 0.75], [0.7, 1.2], [-0.7, 1.2]]:
 			var angle := base_angle + float(attempt[0])
 			var spot := Vector2(center.x, center.z) + Vector2(cos(angle), sin(angle)) * radius * float(attempt[1])
-			if await _h.settle_player(spot) != "":
+			if await _h.settle_player(spot, {}, SHOT_DROP_M) != "":
 				continue
 			_h.aim_camera(target)
 			await physics_frame

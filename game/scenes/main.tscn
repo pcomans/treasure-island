@@ -1,23 +1,30 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://game/scenes/world/world_root.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://game/scenes/ui/hud.tscn" id="4_hud"]
+[ext_resource type="Shader" path="res://game/resources/materials/world/sky/bay_sky.gdshader" id="5_sky"]
+[ext_resource type="Texture3D" path="res://game/resources/textures/world/sky/cloud_noise.png" id="6_noise"]
+[ext_resource type="Script" path="res://game/scripts/world/sky_weather.gd" id="7_weather"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_daylight"]
-sky_top_color = Color(0.235, 0.445, 0.785, 1)
-sky_horizon_color = Color(0.74, 0.80, 0.86, 1)
-sky_curve = 0.15
-sky_energy_multiplier = 1.0
-ground_bottom_color = Color(0.40, 0.40, 0.37, 1)
-ground_horizon_color = Color(0.50, 0.68, 0.84, 1)
-ground_curve = 0.3
-ground_energy_multiplier = 1.0
-sun_angle_max = 2.0
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_daylight"]
+shader = ExtResource("5_sky")
+shader_parameter/cloud_noise = ExtResource("6_noise")
+shader_parameter/reflection_cloud_drift = Vector3(0, 0, 0)
+shader_parameter/sky_top_color = Color(0.235, 0.445, 0.785, 1)
+shader_parameter/sky_horizon_color = Color(0.74, 0.80, 0.86, 1)
+shader_parameter/sky_curve = 0.15
+shader_parameter/sky_energy = 1.0
+shader_parameter/ground_bottom_color = Color(0.40, 0.40, 0.37, 1)
+shader_parameter/ground_horizon_color = Color(0.50, 0.68, 0.84, 1)
+shader_parameter/ground_curve = 0.3
+shader_parameter/ground_energy = 1.0
+shader_parameter/land_bounce_color = Color(0.68, 0.62, 0.50, 1)
 
 [sub_resource type="Sky" id="Sky_daylight"]
-sky_material = SubResource("ProceduralSkyMaterial_daylight")
+sky_material = SubResource("ShaderMaterial_daylight")
+process_mode = 2
 
 [sub_resource type="Environment" id="Environment_main"]
 background_mode = 2
@@ -26,13 +33,27 @@ background_color = Color(0.46, 0.69, 0.86, 1)
 ambient_light_source = 3
 reflected_light_source = 2
 ambient_light_color = Color(0.80, 0.75, 0.66, 1)
-ambient_light_energy = 0.5
-ambient_light_sky_contribution = 0.3
+ambient_light_energy = 0.52
+ambient_light_sky_contribution = 0.6
 tonemap_mode = 2
 tonemap_exposure = 1.18
 tonemap_white = 1.3
 ssao_enabled = true
 ssao_radius = 3.0
+glow_enabled = true
+glow_levels/1 = 0.0
+glow_levels/2 = 0.6
+glow_levels/3 = 1.0
+glow_levels/4 = 0.8
+glow_levels/5 = 0.6
+glow_levels/6 = 0.3
+glow_levels/7 = 0.0
+glow_intensity = 0.35
+glow_strength = 1.0
+glow_bloom = 0.0
+glow_blend_mode = 0
+glow_hdr_threshold = 1.0
+glow_hdr_scale = 2.0
 fog_enabled = true
 fog_light_color = Color(0.74, 0.80, 0.86, 1)
 fog_light_energy = 0.85
@@ -42,13 +63,15 @@ fog_sky_affect = 0.0
 fog_height = 0.0
 fog_height_density = 0.0
 adjustment_enabled = true
-adjustment_saturation = 0.88
+adjustment_contrast = 1.04
+adjustment_saturation = 0.95
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_main")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_main")
+script = ExtResource("7_weather")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-33.43, -10.32, 0)
@@ -56,7 +79,11 @@ light_color = Color(1, 0.96, 0.89, 1)
 light_energy = 1.3
 light_specular = 0.5
 shadow_enabled = true
-shadow_blur = 0.25
+shadow_blur = 0.5
+directional_shadow_split_1 = 0.05
+directional_shadow_split_2 = 0.15
+directional_shadow_split_3 = 0.4
+directional_shadow_blend_splits = true
 directional_shadow_max_distance = 800.0
 metadata/solar_moment = "2026-11-13 12:30 PST at 37.82 N, 122.37 W"
 metadata/solar_elevation_deg = 33.43
