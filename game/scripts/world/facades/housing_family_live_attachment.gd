@@ -9,6 +9,8 @@ const FAMILY = preload("res://game/scripts/world/facades/housing_site_family.gd"
 const MIDRISE = preload("res://game/scripts/world/facades/midrise_family.gd")
 const PIER = preload("res://game/scripts/world/facades/pier_canopy_family.gd")
 const CONFIG := "res://game/resources/housing_family/live_instances.json"
+## The static bake supplies a temporary array on Buildings to collect replaced nodes.
+const BAKE_SUPERSEDED_META := &"bake_superseded_housing_nodes"
 
 static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictionary = {}) -> Dictionary:
 	# A source fixture may construct a bounded additional candidate before its
@@ -77,6 +79,7 @@ static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictio
 		plans.append({"model":model,"owner":nodes[wall_key],"hidden":hidden,"old_bodies":old_bodies,"contact":contact})
 	var disabled := 0
 	var triangles := 0
+	var collect_superseded := buildings.has_meta(BAKE_SUPERSEDED_META)
 	for plan: Dictionary in plans:
 		for mesh: MeshInstance3D in plan.hidden: mesh.visible=false
 		for body: CollisionObject3D in plan.old_bodies:
@@ -86,6 +89,10 @@ static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictio
 			disabled+=1
 		plan.owner.add_child(plan.model)
 		triangles+=int(plan.contact.triangles)
+		if collect_superseded:
+			var superseded: Array[Node] = buildings.get_meta(BAKE_SUPERSEDED_META)
+			superseded.append_array(plan.hidden)
+			superseded.append_array(plan.old_bodies)
 	return {"ok":true,"instances":plans.size(),"disabled_legacy_bodies":disabled,"contact_triangles":triangles,"scope":"approved appearance; no new recognition credit"}
 
 static func _contacts(model: Node3D, retained: Array[MeshInstance3D], source: String) -> Dictionary:
