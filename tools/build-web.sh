@@ -26,34 +26,56 @@ mkdir -p "${out}"
 # Clear the previous build but keep .vercel, the Vercel CLI's link to the project.
 find "${out}" -mindepth 1 -maxdepth 1 ! -name .vercel -exec rm -rf {} +
 touch build/.gdignore
-# Never reuse a prior bake: source code/art can change independently of the OSM manifest.
-baked=generated/web/static_world.scn
-mkdir -p generated/web
-rm -f "${baked}"
+# Use committed files and a disposable import cache so the Web cap cannot affect
+# the editor, native builds, or another checkout.
 work="$(mktemp -d)"
-trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
-# A fresh checkout has nothing imported yet, and the bake and export need it.
-# Godot can exit 0 after an import error, so check its output too, as tools/test.sh does.
-godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
-status=0
-imported="$(timeout 300 tools/godot --headless --path . --import 2>&1)" || status=$?
-if [ "${status}" -ne 0 ] || grep -qE "${godot_errors}" <<< "${imported}"; then
-  grep -E "${godot_errors}|ERROR" <<< "${imported}" | head -20 || true
-  echo "FAIL: the Godot import exited ${status} or reported engine errors" >&2
-  exit 1
-fi
-tools/prebuild-static-world.sh web
-test -s "${baked}"
+trap 'rm -rf "${work}"' EXIT
+project="${work}/project"
+mkdir -p "${project}" "${work}/mount"
+git archive "${revision}" | tar -xf - -C "${project}"
+
+# Godot can exit 0 after an import error, so check its output too.
+import_project() {
+  local output status=0
+  local errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
+  output="$(cd "${project}" && timeout 300 tools/godot --headless --path . --import 2>&1)" || status=$?
+  if [ "${status}" -ne 0 ] || grep -qE "${errors}" <<< "${output}"; then
+    grep -E "${errors}|ERROR" <<< "${output}" | head -20 || true
+    echo "FAIL: the Godot import exited ${status} or reported engine errors" >&2
+    exit 1
+  fi
+}
+
+# Bake with the original imports. Only the texture payloads in the export are
+# resized. Keep the bake outside the import scan while updating those textures.
+import_project
+(cd "${project}" && tools/prebuild-static-world.sh web)
+baked="${project}/generated/web/static_world.scn"
+mv "${baked}" "${work}/static_world.scn"
+while IFS= read -r sidecar; do
+  source="${project}/${sidecar}"
+  if ! awk '
+    /^process\/size_limit=/ { count++; if ($0 != "process/size_limit=0") exit 1; $0 = "process/size_limit=512" }
+    { print }
+    END { if (count != 1) exit 1 }
+  ' "${source}" > "${work}/texture.import"; then
+    echo "FAIL: expected an uncapped import setting in ${sidecar}" >&2
+    exit 1
+  fi
+  mv "${work}/texture.import" "${source}"
+done < "${project}/tools/web-texture-cap-512.txt"
+import_project
+mv "${work}/static_world.scn" "${baked}"
 if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelain)" ]; then
   echo "FAIL: source changed during the import or static-world bake; commit and rebuild" >&2
   exit 1
 fi
 
-tools/godot --headless --path . --export-release "Web" "${out}/${name}.html"
+(cd "${project}" && tools/godot --headless --path . --export-release "Web" "${root}/${out}/${name}.html")
 mv "${out}/${name}.html" "${out}/index.html"
 
 # Run from an empty folder so Godot sees only the pack, not the source project.
-(cd "${work}" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
+(cd "${work}/mount" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
 
 cat >"${out}/vercel.json" <<'EOF'
 {
