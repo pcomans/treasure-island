@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d4ayvuh7pmtir"
-path="res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.ctex"
+path.s3tc="res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.s3tc.ctex"
+path.etc2="res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/vegetation/clipped_band_atlas.png"
-dest_files=["res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.ctex"]
+dest_files=["res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.s3tc.ctex", "res://.godot/imported/clipped_band_atlas.png-7fbfeaf544b87794847837f350ce7f06.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

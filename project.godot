@@ -28,6 +28,13 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/generated_world_export/plugin.cfg")
 
+[importer_defaults]
+
+texture={
+"compress/mode": 2,
+"mipmaps/generate": true
+}
+
 [input]
 
 move_forward={
@@ -123,6 +130,13 @@ anti_aliasing/quality/msaa_3d=2
 textures/vram_compression/import_etc2_astc=true
 textures/default_filters/use_nearest_mipmap_filter=false
 environment/defaults/default_clear_color=Color(0.46, 0.69, 0.86, 1)
+
+[shader_globals]
+
+sky_cloud_drift={
+"type": "vec3",
+"value": Vector3(0, 0, 0)
+}
 
 [treasure_island]
 

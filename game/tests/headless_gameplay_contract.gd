@@ -179,16 +179,40 @@ func _initialize() -> void:
 	if environment.fog_enabled and environment.fog_sky_affect >= 1.0:
 		_fail("Fog must not hide the sky completely.")
 		return
-	var daylight := environment.sky.sky_material as ProceduralSkyMaterial
-	if daylight == null \
-	or daylight.sky_energy_multiplier <= 0.0 \
-	or daylight.ground_energy_multiplier <= 0.0:
-		_fail("Approved daylight needs an editable procedural sky with lit sky and ground hemispheres.")
+	# The sky is a shader (bay_sky.gdshader) that draws its clouds and sun from the
+	# live sun; it must still light and reflect, with a lit sky and a lit ground
+	# hemisphere, and it must take its sun from the scene's light, not from TIME.
+	var daylight := environment.sky.sky_material as ShaderMaterial
+	if daylight == null or daylight.shader == null \
+	or daylight.shader.get_mode() != Shader.MODE_SKY \
+	or float(daylight.get_shader_parameter("sky_energy")) <= 0.0 \
+	or float(daylight.get_shader_parameter("ground_energy")) <= 0.0:
+		_fail("Approved daylight needs an editable sky shader with lit sky and ground hemispheres.")
+		return
+	var sky_code := daylight.shader.code
+	if not sky_code.contains("LIGHT0_DIRECTION") or not sky_code.contains("LIGHT0_ENERGY"):
+		_fail("The sky's sun and clouds must be lit from the scene's own sun (LIGHT0), not from numbers of their own.")
+		return
+	if RegEx.create_from_string("\\bTIME\\b").search(_without_comments(sky_code)) != null:
+		_fail("The sky shader must not read TIME: Godot would redraw the sky's radiance map every frame. Clouds move by sky_cloud_drift.")
+		return
+	if not ProjectSettings.has_setting("shader_globals/sky_cloud_drift") \
+	or not main.get_node("WorldEnvironment").has_method("hold_at"):
+		_fail("The clouds need their drift: the sky_cloud_drift shader global and sky_weather.gd on the WorldEnvironment.")
 		return
 	var sun := main.get_node("Sun") as DirectionalLight3D
 	var solar := Vector3(-float(sun.get_meta("solar_elevation_deg")), 180.0 - float(sun.get_meta("solar_azimuth_deg")), 0.0)
 	if not sun.rotation_degrees.is_equal_approx(solar):
 		_fail("Sun rotation must follow its solar metadata: (-elevation, 180 - azimuth, 0).")
+		return
+	# North is world -Z and east +X (tools/lib/coordinates.mjs), so the direction to
+	# the sun is (sin az * cos el, sin el, -cos az * cos el): the sky draws its disc
+	# on the light's own direction, and this ties that direction to the compass.
+	var azimuth := deg_to_rad(float(sun.get_meta("solar_azimuth_deg")))
+	var elevation := deg_to_rad(float(sun.get_meta("solar_elevation_deg")))
+	var to_sun := Vector3(sin(azimuth) * cos(elevation), sin(elevation), -cos(azimuth) * cos(elevation))
+	if not sun.basis.z.is_equal_approx(to_sun):
+		_fail("The Sun must shine from its solar azimuth, clockwise from north (world -Z) through east (+X).")
 		return
 	main.free()
 	call_deferred("_check_ferry_solidity")
@@ -459,6 +483,14 @@ func _action_has_physical_key(action: StringName, physical_keycode: Key) -> bool
 		if event is InputEventKey and (event as InputEventKey).physical_keycode == physical_keycode:
 			return true
 	return false
+
+
+## Shader code without its // comments.
+func _without_comments(code: String) -> String:
+	var lines := PackedStringArray()
+	for line in code.split("\n"):
+		lines.append(line.get_slice("//", 0))
+	return "\n".join(lines)
 
 
 func _fail(message: String) -> void:

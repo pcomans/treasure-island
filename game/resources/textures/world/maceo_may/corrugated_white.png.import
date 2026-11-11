@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bi6hph14jed1l"
-path="res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.ctex"
+path.s3tc="res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.s3tc.ctex"
+path.etc2="res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/maceo_may/corrugated_white.png"
-dest_files=["res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.ctex"]
+dest_files=["res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.s3tc.ctex", "res://.godot/imported/corrugated_white.png-70c10b5ab7e0df1d3635f7a2e47d08fb.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

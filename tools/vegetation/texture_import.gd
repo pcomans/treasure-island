@@ -1,7 +1,7 @@
 ## The `.import` file the street-vegetation texture tools write next to each
 ## PNG they produce (tools/vegetation/prepare_textures.gd and
 ## bake_impostors.gd), so a re-pack or re-bake always imports the same way:
-## lossless, with a full mip chain. The foliage shader's alpha-scissor cards,
+## VRAM-compressed, with a full mip chain. The foliage shader's alpha-scissor cards,
 ## the atlases' inset cells and transparent-pixel fill, and its mip-level alpha
 ## boost are all written for mipmaps.
 ##
@@ -26,7 +26,7 @@ static func write(path: String) -> Error:
 		"",
 		"[deps]", "", "source_file=\"%s\"" % path, "",
 		"[params]", "",
-		"compress/mode=0", "compress/high_quality=false", "compress/lossy_quality=0.7",
+		"compress/mode=2", "compress/high_quality=false", "compress/lossy_quality=0.7",
 		"compress/uastc_level=0", "compress/rdo_quality_loss=0.0", "compress/hdr_compression=1",
 		"compress/normal_map=0", "compress/channel_pack=0", "mipmaps/generate=true", "mipmaps/limit=-1",
 		"roughness/mode=0", "roughness/src_normal=\"\"",

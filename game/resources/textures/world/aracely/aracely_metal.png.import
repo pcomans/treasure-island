@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bq0q7me7llfi4"
-path="res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.ctex"
+path.s3tc="res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.s3tc.ctex"
+path.etc2="res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/world/aracely/aracely_metal.png"
-dest_files=["res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.ctex"]
+dest_files=["res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.s3tc.ctex", "res://.godot/imported/aracely_metal.png-e3a0b5bafbce0a71ebc23d10751b31ba.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

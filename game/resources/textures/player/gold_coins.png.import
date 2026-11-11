@@ -3,19 +3,21 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cu56mj64vb2sm"
-path="res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.ctex"
+path.s3tc="res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.s3tc.ctex"
+path.etc2="res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.etc2.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc", "etc2_astc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://game/resources/textures/player/gold_coins.png"
-dest_files=["res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.ctex"]
+dest_files=["res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.s3tc.ctex", "res://.godot/imported/gold_coins.png-b2223724478f204af81024c1531a9acf.etc2.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/uastc_level=0

@@ -40,6 +40,11 @@ tools/godot --headless --path . --import                       # after a fresh c
 tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 ```
 
+New textures default to VRAM compression with mipmaps. For UI art or textures that
+store shader data, use **Compress > Mode > Lossless** and **Detect 3D > Compress To >
+Disabled** in the Import dock. Keep mipmaps if the shader samples them. Reimport
+and commit the `.import` file with the texture.
+
 ## Check a building
 
 ```sh
