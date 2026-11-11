@@ -1,7 +1,18 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" path="res://game/resources/ui/app_icon_360.png" id="2_icon"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_controls"]
+content_margin_left = 32.0
+content_margin_top = 18.0
+content_margin_right = 32.0
+content_margin_bottom = 22.0
+bg_color = Color(0.07, 0.09, 0.11, 0.96)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -96,10 +107,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -180.0
-offset_top = -125.0
-offset_right = 180.0
-offset_bottom = 125.0
+offset_left = -160.0
+offset_top = -115.0
+offset_right = 160.0
+offset_bottom = 115.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
@@ -115,14 +126,13 @@ theme_override_font_sizes/font_size = 28
 text = "Paused"
 horizontal_alignment = 1
 
-[node name="Controls" type="Label" parent="PausePanel/PauseLayout"]
-layout_mode = 2
-text = "WASD or arrow keys move • Shift fast run (~45 mph) • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer (or arrow keys), Space handbrake, R reset\nClick spray • R recover • F3 debug"
-horizontal_alignment = 1
-
 [node name="ResumeButton" type="Button" parent="PausePanel/PauseLayout"]
 layout_mode = 2
 text = "Resume"
+
+[node name="ControlsButton" type="Button" parent="PausePanel/PauseLayout"]
+layout_mode = 2
+text = "Controls"
 
 [node name="ExitButton" type="Button" parent="PausePanel/PauseLayout"]
 layout_mode = 2
@@ -160,6 +170,66 @@ text = "Validating complete Treasure Island world…"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
+
+[node name="ControlsButton" type="Button" parent="LoadPanel/LoadLayout/LoadStack"]
+custom_minimum_size = Vector2(220, 44)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 20
+text = "Controls"
+
+[node name="ControlsScreen" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="ControlsScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.03, 0.6)
+
+[node name="Center" type="CenterContainer" parent="ControlsScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ControlsPanel" type="PanelContainer" parent="ControlsScreen/Center"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_controls")
+
+[node name="ControlsLayout" type="VBoxContainer" parent="ControlsScreen/Center/ControlsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="ControlsScreen/Center/ControlsPanel/ControlsLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Controls"
+horizontal_alignment = 1
+
+[node name="Sections" type="VBoxContainer" parent="ControlsScreen/Center/ControlsPanel/ControlsLayout"]
+layout_mode = 2
+
+[node name="BackButton" type="Button" parent="ControlsScreen/Center/ControlsPanel/ControlsLayout"]
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Back"
 
 [node name="DebugPanel" type="PanelContainer" parent="."]
 layout_mode = 0

@@ -102,6 +102,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		hud.toggle_debug()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("pause") and hud.controls_visible():
+		# Esc on the controls screen goes back: to the pause menu, or the loading screen.
+		hud.hide_controls()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause") and _world_ready:
 		# Browser Escape may also arrive after its pointer-lock loss callback.
 		# Never turn that same unlock gesture into a new capture request.
@@ -388,6 +393,10 @@ func _publish_web_state(_args: Array) -> void:
 		"handbrake": Input.is_action_pressed("handbrake"),
 		"car_input": [vehicles.active_car().drive_input, vehicles.active_car().steer_input, vehicles.active_car().handbrake] if vehicles != null and vehicles.is_driving() else [],
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
+		# The controls screen (open or not) and the buttons that open and close it.
+		"controls": hud.controls_visible(),
+		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
+		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 

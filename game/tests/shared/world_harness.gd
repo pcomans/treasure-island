@@ -462,7 +462,7 @@ func release_input() -> void:
 func clean_hud() -> void:
 	tree.paused = false
 	hud.set_paused(false)
-	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel, hud.prompt_panel]:
+	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel, hud.controls_screen, hud.prompt_panel]:
 		panel.hide()
 	hud.reticle.show()
 

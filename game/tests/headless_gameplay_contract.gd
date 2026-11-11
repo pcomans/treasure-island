@@ -293,9 +293,76 @@ func _check_ferry_solidity() -> void:
 	var pause := await _check_pause(main)
 	if pause.is_empty():
 		return
+	var controls := _check_controls_screen(main)
+	if controls.is_empty():
+		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), and the pause (%s)" % [", ".join(heights), ball, pause])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s) and the controls screen (%s)" % [", ".join(heights), ball, pause, controls])
 	quit(0)
+
+
+## The controls screen (owner, 2026-11-11): the pause menu's Controls button shows it
+## in place of the menu, listing the bindings as they are (the arrow keys beside
+## WASD, the car's F, handbrake and R, and no spray); Esc or Back return to the menu,
+## still paused. The loading screen opens it too, and on a touch screen it lists the
+## touch controls instead. Returns a summary, or "" after failing.
+func _check_controls_screen(main: GameMain) -> String:
+	var hud := main.hud
+	_push_key(KEY_ESCAPE)
+	hud.controls_button.pressed.emit()
+	if not paused or not hud.controls_visible() or hud.pause_panel.visible:
+		_fail("The pause menu's Controls button must show the controls screen in its place.")
+		return ""
+	var keyboard := _controls_text(hud)
+	for needed: String in ["W A S D or arrow keys", "up / down arrows", "left / right arrows", "Shift", "Space (hold)", "C (hold, in the air)", "F (beside a parked car)", "Handbrake", "Back on land", "Back to safe ground", "Esc", "F3"]:
+		if not keyboard.contains(needed):
+			_fail("The controls screen does not list %s:\n%s" % [needed, keyboard])
+			return ""
+	if keyboard.to_lower().contains("spray"):
+		_fail("The controls screen still lists spray:\n%s" % keyboard)
+		return ""
+	_push_key(KEY_ESCAPE)
+	if not paused or hud.controls_visible() or not hud.pause_panel.visible:
+		_fail("Esc on the controls screen must go back to the pause menu, still paused.")
+		return ""
+	hud.controls_button.pressed.emit()
+	hud.back_button.pressed.emit()
+	if not paused or hud.controls_visible() or not hud.pause_panel.visible:
+		_fail("Back on the controls screen must go back to the pause menu, still paused.")
+		return ""
+	hud.resume_button.pressed.emit()
+	if paused or hud.controls_visible():
+		_fail("Resume after the controls screen did not go back to play.")
+		return ""
+	# A touch screen's HUD (main.gd sets it up so), opened from its loading screen.
+	var touch_hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
+	root.add_child(touch_hud)
+	touch_hud.set_touch_instructions()
+	touch_hud.load_controls_button.pressed.emit()
+	var touch := _controls_text(touch_hud)
+	var shown := touch_hud.controls_visible()
+	touch_hud.back_button.pressed.emit()
+	var closed := not touch_hud.controls_visible()
+	touch_hud.queue_free()
+	if not shown or not closed:
+		_fail("The loading screen's Controls button must open the controls screen, and Back close it.")
+		return ""
+	for needed: String in ["Left stick", "Drag on the right side", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
+		if not touch.contains(needed):
+			_fail("The touch controls screen does not list %s:\n%s" % [needed, touch])
+			return ""
+	if touch.contains("Shift") or touch.to_lower().contains("spray"):
+		_fail("The touch controls screen lists keys or spray:\n%s" % touch)
+		return ""
+	return "%d keyboard and %d touch lines" % [keyboard.count("\n") + 1, touch.count("\n") + 1]
+
+
+## Every line the controls screen shows, headings and rows.
+func _controls_text(hud: GameHUD) -> String:
+	var lines := PackedStringArray()
+	for label: Node in hud.controls_sections.find_children("*", "Label", true, false):
+		lines.append((label as Label).text)
+	return "\n".join(lines)
 
 
 ## The pause (owner, 2026-11-11) freezes everything that moves. With a car driving
