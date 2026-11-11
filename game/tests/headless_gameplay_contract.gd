@@ -323,7 +323,9 @@ func _check_ferry_solidity() -> void:
 ## stays open when play starts, and play starts paused behind it, with the pause
 ## menu hidden: nothing moves until the player closes it. Back shows the pause
 ## menu, still paused; Resume plays. Then, in play, nothing of the HUD covers the
-## middle of the screen (the spray's aiming cross went with the spray, 2026-11-11).
+## middle of the screen (the spray's aiming cross went with the spray, 2026-11-11),
+## and away from any car no prompt shows: Resume brings back only a prompt that play
+## set (it once showed the prompt label's scene text, "F  Drive", anywhere).
 ## Returns a summary, or "" after failing.
 func _check_controls_from_loading(main: GameMain) -> String:
 	var hud := main.hud
@@ -339,6 +341,9 @@ func _check_controls_from_loading(main: GameMain) -> String:
 	await process_frame
 	if paused or hud.pause_panel.visible:
 		_fail("Resume after the controls screen opened while loading did not start play.")
+		return ""
+	if hud.prompt_panel.visible and not main.vehicles.can_enter():
+		_fail("After Resume at the spawn, away from any car, the prompt \"%s\" shows." % hud.prompt_text.text)
 		return ""
 	var centre := hud.get_viewport_rect().size * 0.5
 	for node: Node in hud.find_children("*", "Control", true, false):
