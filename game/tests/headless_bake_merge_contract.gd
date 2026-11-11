@@ -2,9 +2,13 @@ extends SceneTree
 ## The bake's building merge (tools/merge_baked_buildings.gd) on a hand-built building:
 ## the same triangles and colours come out, and everything that must stay separate does.
 ## A part that leaves its source but never reaches a batch fails the merge, and the bake's
-## prune frees only inert superseded nodes and fails when none of the bodies go.
+## prune frees only inert superseded nodes and fails when fewer bodies go than the
+## housing family installer switched off.
 
 const Merge := preload("res://tools/merge_baked_buildings.gd")
+## Parts in this colour are the ones the faulty copy of the tool in
+## _check_merge_counts_drop never records.
+const DROPPED_COLOR := Color(0.123, 0.456, 0.789)
 
 var failures: Array[String] = []
 var buildings: Node3D
@@ -116,6 +120,7 @@ func _run() -> void:
 	group.surfaces.a.parts.append({"arrays": part_arrays})
 	check(Merge._build_problem(built, group) != "", "A surface short of indices must be a problem")
 	_check_dropped_parts(part_arrays)
+	_check_merge_counts_drop()
 	_check_prune()
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
@@ -192,32 +197,76 @@ func _check_dropped_parts(triangle: Array) -> void:
 	check(problems.size() == 1 and problems[0].contains("taken from its sources"), "A group whose every part was dropped must fail the merge: %s" % problems)
 
 
-## The bake's prune of what the housing family installer replaced.
+## merge() itself must count what it takes apart from _add_part, or a part that _add_part
+## fails to record goes unseen. _add_part records every part merge() can hand it, so the
+## drop takes a fault: this compiles the tool's own source with a return put at the top
+## of _add_part for parts in DROPPED_COLOR, so they are never recorded (no hook in the
+## tool), and runs that copy's merge() on a small building without and with such a part.
+func _check_merge_counts_drop() -> void:
+	var source := FileAccess.get_file_as_string(Merge.resource_path)
+	var add_part := RegEx.create_from_string("(?m)^static func _add_part\\(.*\\n").search(source)
+	if add_part == null:
+		check(false, "The merge tool has no _add_part for the dropped-part case to fault")
+		return
+	var faulty: Script = GDScript.new()
+	faulty.source_code = source.insert(add_part.get_end(), "\tif material.albedo_color.is_equal_approx(%s):\n\t\treturn\n" % var_to_str(DROPPED_COLOR))
+	if faulty.reload() != OK:
+		check(false, "The merge tool with a faulty _add_part does not compile")
+		return
+	for drop: bool in [false, true]:
+		var site := Node3D.new()
+		root.add_child(site)
+		var top := Node3D.new()
+		site.add_child(top)
+		var building := Node3D.new()
+		building.set_meta("source_keys", ["w2"])
+		top.add_child(building)
+		var first := _box(building, _material(Color(0.3, 0.6, 0.2)), Transform3D.IDENTITY)
+		var second := _box(building, _material(DROPPED_COLOR if drop else Color(0.6, 0.3, 0.2)), Transform3D.IDENTITY)
+		var report: Dictionary = faulty.merge(site)
+		var problems: PackedStringArray = report.get("problems", PackedStringArray())
+		var taken := not is_instance_valid(first) and not is_instance_valid(second)
+		if drop:
+			check(taken and problems.size() == 1 and problems[0].contains("taken from its sources"), "merge() must report a part that _add_part dropped after it left its source: %s" % problems)
+		else:
+			check(taken and problems.is_empty(), "The faulty copy must merge clean when no part drops: %s" % problems)
+		site.free()
+
+
+## The bake's prune of what the housing family installer replaced: every body the
+## installer switched off must go.
 func _check_prune() -> void:
 	var holder := Node3D.new()
 	buildings.add_child(holder)
 	var hidden := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
 	hidden.hide()
 	var shown := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
-	var body := _switched_off_body(holder)
+	var first := _switched_off_body(holder)
+	var second := _switched_off_body(holder)
+	var candidates: Array[Node] = [hidden, shown, first, second]
+	var pruned := Merge.prune_superseded(candidates, 2)
+	check(pruned.problem == "" and pruned.removed_meshes == 1 and pruned.removed_bodies == 2, "The prune must take the hidden mesh and both switched-off bodies: %s" % pruned)
+	check(not is_instance_valid(hidden) and not is_instance_valid(first) and not is_instance_valid(second), "Pruned nodes must be freed")
+	check(is_instance_valid(shown), "A shown mesh must stay")
+	# Some of the switched-off bodies can't go: one still in a group, one back on a layer.
+	var goes := _switched_off_body(holder)
 	var grouped := _switched_off_body(holder)
 	grouped.add_to_group("still_wanted")
 	var live := _switched_off_body(holder)
 	live.collision_layer = 1
-	var candidates: Array[Node] = [hidden, shown, body, grouped, live]
-	var pruned := Merge.prune_superseded(candidates, 3)
-	check(pruned.problem == "" and pruned.removed_meshes == 1 and pruned.removed_bodies == 1, "The prune must take the hidden mesh and the switched-off body: %s" % pruned)
-	check(not is_instance_valid(hidden) and not is_instance_valid(body), "Pruned nodes must be freed")
-	check(is_instance_valid(shown) and is_instance_valid(grouped) and is_instance_valid(live), "A shown mesh, a grouped body and a live body must stay")
-	# The installer switched bodies off, but none of them go: the bake must fail.
+	var partial: Array[Node] = [goes, grouped, live]
+	pruned = Merge.prune_superseded(partial, 3)
+	check(pruned.removed_bodies == 1 and str(pruned.problem).contains("switched off 3 bodies") and str(pruned.problem).contains("removed only 1"), "Fewer bodies gone than the installer switched off must fail the prune, naming both counts: %s" % pruned)
+	check(not is_instance_valid(goes) and is_instance_valid(grouped) and is_instance_valid(live), "Only the inert body may go: a grouped body and a live one stay")
+	# None of them go: no candidates came, none can go, or only meshes go.
 	var none: Array[Node] = []
 	check(Merge.prune_superseded(none, 3).problem != "", "Switched-off bodies with no candidates must fail the prune")
 	var stuck: Array[Node] = [shown, grouped, live]
-	check(Merge.prune_superseded(stuck, 3).problem != "", "Candidates none of which can go must fail the prune")
+	check(Merge.prune_superseded(stuck, 2).problem != "", "Candidates none of which can go must fail the prune")
 	var hidden_too := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
 	hidden_too.hide()
 	var meshes_only: Array[Node] = [hidden_too, grouped]
-	check(Merge.prune_superseded(meshes_only, 3).problem != "", "Switched-off bodies of which none go must fail the prune, whatever meshes go")
+	check(Merge.prune_superseded(meshes_only, 1).problem != "", "Switched-off bodies of which none go must fail the prune, whatever meshes go")
 	# A world whose installer switched nothing off has nothing to prune.
 	check(Merge.prune_superseded(none, 0).problem == "", "Nothing switched off and nothing to prune must pass")
 
@@ -225,7 +274,7 @@ func _check_prune() -> void:
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch; its prune frees only inert superseded nodes and fails when none of the bodies go")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
 		quit(0)
 		return
 	for message in failures:

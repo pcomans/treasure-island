@@ -49,7 +49,7 @@ func _run() -> void:
 		push_error("The building merge failed: ", merged)
 		quit(1)
 		return
-	# Whether there is anything to prune comes from the installer's own count of the
+	# How many bodies the prune must remove comes from the installer's own count of the
 	# bodies it switched off, not from the candidates it handed over.
 	var housing: Variant = ready_report.get("housing_family")
 	if not housing is Dictionary or not housing.get("ok", false) or not housing.get("disabled_legacy_bodies") is int:

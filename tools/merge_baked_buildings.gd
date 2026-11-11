@@ -118,8 +118,8 @@ static func _count_taken(group: Dictionary, arrays: Array) -> void:
 	group.taken_vertices += (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
 
 
-## Builds each group's batch under its anchor. Returns how many meshes and surfaces that
-## made, the indices and vertices taken from the sources, and in problems every batch
+## Builds each group's batch under its anchor. Returns how many meshes and surfaces were
+## built, the indices and vertices taken from the sources, and in problems every batch
 ## that came out short of its group or of what was taken for it.
 static func _build_groups(groups: Dictionary) -> Dictionary:
 	var meshes := 0
@@ -134,8 +134,8 @@ static func _build_groups(groups: Dictionary) -> Dictionary:
 		if not group.surfaces.is_empty():
 			built = _build_node(group, meshes)
 			batch = "BakedBatch%d" % meshes
-			meshes += 1
 			if built != null:
+				meshes += 1
 				surfaces += built.get_surface_count()
 				var problem := _build_problem(built, group)
 				if problem != "":
@@ -401,9 +401,10 @@ static func _surface_arrays(surface: Dictionary) -> Array:
 ## BAKE_SUPERSEDED_META (housing_family_live_attachment.gd: the meshes it hid and the
 ## bodies it switched off) where they are inert (_can_prune). superseded_bodies is how
 ## many bodies the installer's own report says it switched off (disabled_legacy_bodies),
-## counted whether or not the bake asked for candidates. Returns the counts for the log,
-## and a problem when that is above 0 but no body went: the candidates went missing, or
-## none could go. The bake fails on that rather than quietly keeping them all.
+## counted whether or not the bake asked for candidates. Each of those should be a plain
+## body the prune can remove, so returns the counts for the log, and a problem when
+## fewer bodies went: candidates went missing, or some could not go. The bake fails on
+## that rather than carry superseded geometry quietly.
 static func prune_superseded(candidates: Array[Node], superseded_bodies: int) -> Dictionary:
 	var meshes := 0
 	var bodies := 0
@@ -415,8 +416,8 @@ static func prune_superseded(candidates: Array[Node], superseded_bodies: int) ->
 				bodies += 1
 			node.free()
 	var problem := ""
-	if superseded_bodies > 0 and bodies == 0:
-		problem = "the housing family installer switched off %d bodies, but the prune removed none of them (%d candidates reached it, %d hidden meshes removed)" % [superseded_bodies, candidates.size(), meshes]
+	if bodies < superseded_bodies:
+		problem = "the housing family installer switched off %d bodies, but the prune removed only %d of them, so the rest would stay in the bake (%d candidates reached it, %d hidden meshes removed)" % [superseded_bodies, bodies, candidates.size(), meshes]
 	return {"candidates": candidates.size(), "removed_meshes": meshes, "removed_bodies": bodies, "superseded_bodies": superseded_bodies, "problem": problem}
 
 
