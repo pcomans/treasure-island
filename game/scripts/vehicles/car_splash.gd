@@ -10,19 +10,19 @@ extends Node3D
 ## m/s of the car's speed (capped), their life (s) and their shape (a streak
 ## STREAK times as tall as it is wide, standing up in the view as droplets
 ## thrown up and falling do).
-const SPRAY := 150
+const SPRAY := 200
 const LAUNCH_MPS := 3.0
 const LAUNCH_PER_MPS := 0.26
 const LAUNCH_MAX_MPS := 10.5
 const SPRAY_LIFE_S := 0.9
 const STREAK := 3.2
 ## Foam: a few small, flat sprites spreading low over the water.
-const FOAM := 8
+const FOAM := 12
 const FOAM_LIFE_S := 1.0
 ## The ring: a thin ripple of foam, its starting and final radius as shares of
 ## the car's length, and its life (s).
 const RING_FROM := 0.45
-const RING_TO := 1.1
+const RING_TO := 1.35
 const RING_LIFE_S := 1.4
 const RENDER_WORLD_VISIBLE := 1
 
