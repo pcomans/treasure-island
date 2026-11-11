@@ -758,6 +758,12 @@ effect, read actual DPR, CSS viewport, canvas and WebGL drawing-buffer dimension
 before interpreting performance; requested values or immediate readback alone
 are insufficient.
 
+On 2026-11-11 `agent-browser set device "iPhone 16 Pro"` (0.38.2) set the user agent, the 402 × 874
+viewport and 3× scale but no touch: `navigator.maxTouchPoints` stayed 0 and the game started with desktop
+controls. Holding `Emulation.setTouchEmulationEnabled` from the check's own CDP session, attached to
+agent-browser's page before it opened the game and kept alive to the end, gave 5 touch points through the
+load and a later `set viewport` turn to landscape.
+
 A new worktree may lack Git author identity even when prior bot commits exist.
 Before a build that requires a committed tree, check `git var GIT_AUTHOR_IDENT`;
 if absent, use the established bot identity on that commit command with `git -c`
@@ -1328,3 +1334,7 @@ The stock controller speeds each world axis up apart (`move_toward` per componen
 ## An Area3D reports a fast mover a tick late
 
 The pitch's ball pushes a character its touch area overlaps, but the area's overlap list is the last physics step's: at the stock full run, 20 m/s or a third of a metre a tick, the capsule was already past the ball's centre when the ball read it, so the push's closing test refused every full-speed kick (found 2026-11-11; the contract's run test started 4 m back and reached only 14 m/s). Test a contact at the speeds players reach, and judge an approach against the mover's position a tick earlier when the reach is under a tick's travel.
+
+## A label's scene text is state once its visibility follows that text
+
+On 2026-11-11, acfbab4d made Resume show the HUD's prompt panel whenever its label held text. The label still carried the scene's placeholder `F  Drive`, harmless while only `set_prompt()` showed the panel; after it, every Resume showed `F  Drive`: on a touch screen for good (nothing there sets a prompt; on an upright phone it sat under RUN) and on desktop until the player first walked up to a car and away. The release smoke's own shore-wall shot showed it with no car in sight, and no test looked: the touch case built the touch controls on a desktop-configured world at 1440 × 900 and never paused. Keep no placeholder text in a node whose visibility follows its text. When a change starts deriving visibility from existing state, check what that state holds at startup on every input path. Test a touch change through main's touch setup at a phone size, with a pause and Resume (`game/tests/headless_touch_drive.gd`).

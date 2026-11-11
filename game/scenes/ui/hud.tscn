@@ -62,7 +62,6 @@ mouse_filter = 2
 
 [node name="PromptText" type="Label" parent="PromptPanel"]
 layout_mode = 2
-text = "F  Drive"
 horizontal_alignment = 1
 vertical_alignment = 1
 

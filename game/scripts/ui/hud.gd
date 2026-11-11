@@ -108,7 +108,9 @@ func show_feedback(message: String, success: bool) -> void:
 
 
 ## A short key hint near the bottom of the screen ("F  Drive" beside a car);
-## "" hides it. The pause hides it too, until play goes on.
+## "" hides it. The pause hides it too, until play goes on. Its label starts
+## empty (hud.tscn), so play goes on with no prompt until one is set; a touch
+## screen never sets one (its use button shows instead, touch_controls.gd).
 func set_prompt(text: String) -> void:
 	prompt_text.text = text
 	prompt_panel.visible = not text.is_empty() and not _paused
