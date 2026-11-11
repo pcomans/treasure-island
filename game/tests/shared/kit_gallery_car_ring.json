@@ -1,0 +1,893 @@
+{
+ "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's left side). Paint and clay looks; the clay sun rakes across each view.",
+ "looks": [
+  "paint",
+  "clay"
+ ],
+ "clay_light": {
+  "elevation_deg": 14,
+  "relative_deg": 70
+ },
+ "items": [
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    -160.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "lod0",
+   "xz": [
+    -160.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "suv",
+    "paint": "navy",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    -120.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "suv",
+    "paint": "navy",
+    "finish": "metallic"
+   },
+   "level": "lod0",
+   "xz": [
+    -120.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "sedan",
+    "paint": "light_grey",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    -80.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "sedan",
+    "paint": "light_grey",
+    "finish": "metallic"
+   },
+   "level": "lod0",
+   "xz": [
+    -80.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "fastback",
+    "paint": "white",
+    "finish": "pearl"
+   },
+   "level": "hero",
+   "xz": [
+    -40.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "fastback",
+    "paint": "white",
+    "finish": "pearl"
+   },
+   "level": "lod0",
+   "xz": [
+    -40.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "hatchback",
+    "paint": "red",
+    "finish": "solid"
+   },
+   "level": "hero",
+   "xz": [
+    0.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "hatchback",
+    "paint": "red",
+    "finish": "solid"
+   },
+   "level": "lod0",
+   "xz": [
+    0.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "wagon",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    40.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "wagon",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "lod0",
+   "xz": [
+    40.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "grey",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    80.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "grey",
+    "finish": "metallic"
+   },
+   "level": "lod0",
+   "xz": [
+    80.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "utility",
+    "paint": "white",
+    "finish": "solid"
+   },
+   "level": "hero",
+   "xz": [
+    120.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "utility",
+    "paint": "white",
+    "finish": "solid"
+   },
+   "level": "lod0",
+   "xz": [
+    120.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "van",
+    "paint": "dark_grey",
+    "finish": "solid"
+   },
+   "level": "hero",
+   "xz": [
+    160.0,
+    0.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "van",
+    "paint": "dark_grey",
+    "finish": "solid"
+   },
+   "level": "lod0",
+   "xz": [
+    160.0,
+    80.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "grey",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    -200,
+    0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "suv",
+    "paint": "navy",
+    "finish": "metallic"
+   },
+   "level": "hero",
+   "xz": [
+    -200,
+    40
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "white",
+    "finish": "solid"
+   },
+   "level": "hero",
+   "xz": [
+    -200,
+    80
+   ],
+   "yaw_deg": 0
+  }
+ ],
+ "views": [
+  {
+   "name": "owner-grey-pickup",
+   "camera_xyz": [
+    -201.3,
+    2.75,
+    5.4
+   ],
+   "target_xyz": [
+    -199.75,
+    1.45,
+    -0.4
+   ],
+   "fov": 55
+  },
+  {
+   "name": "owner-dark-suv",
+   "camera_xyz": [
+    -202.55,
+    1.4,
+    41.5
+   ],
+   "target_xyz": [
+    -200.75,
+    1.45,
+    41.0
+   ],
+   "fov": 62
+  },
+  {
+   "name": "owner-white-pickup",
+   "camera_xyz": [
+    -205.6,
+    1.45,
+    80.9
+   ],
+   "target_xyz": [
+    -200.0,
+    1.0,
+    80.6
+   ],
+   "fov": 50
+  }
+ ],
+ "rings": [
+  {
+   "name": "crossover-hero",
+   "xz": [
+    -160.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.94,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.91,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.42,
+     "radius": 3.51,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.91,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "crossover-lod0",
+   "xz": [
+    -160.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.94,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.91,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.42,
+     "radius": 3.51,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.91,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "suv-hero",
+   "xz": [
+    -120.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.0,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.09,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.51,
+     "radius": 3.69,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.09,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "suv-lod0",
+   "xz": [
+    -120.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.0,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.09,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.51,
+     "radius": 3.69,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.09,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "sedan-hero",
+   "xz": [
+    -80.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.8,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.01,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.16,
+     "radius": 3.61,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.01,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "sedan-lod0",
+   "xz": [
+    -80.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.8,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.01,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.16,
+     "radius": 3.61,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.01,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "fastback-hero",
+   "xz": [
+    -40.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.8,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.96,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.16,
+     "radius": 3.56,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.96,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "fastback-lod0",
+   "xz": [
+    -40.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.8,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.96,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.16,
+     "radius": 3.56,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.96,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "hatchback-hero",
+   "xz": [
+    0.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.81,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.79,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.18,
+     "radius": 3.39,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.79,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "hatchback-lod0",
+   "xz": [
+    0.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.81,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 4.79,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.18,
+     "radius": 3.39,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 3.79,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "wagon-hero",
+   "xz": [
+    40.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.9,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.03,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.33,
+     "radius": 3.63,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.03,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "wagon-lod0",
+   "xz": [
+    40.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 0.9,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.03,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.33,
+     "radius": 3.63,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.03,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "pickup-hero",
+   "xz": [
+    80.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.08,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.53,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.67,
+     "radius": 4.13,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.53,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "pickup-lod0",
+   "xz": [
+    80.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.08,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.53,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.67,
+     "radius": 4.13,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.53,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "utility-hero",
+   "xz": [
+    120.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.08,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.7,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.67,
+     "radius": 4.3,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.7,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "utility-lod0",
+   "xz": [
+    120.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.08,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.7,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 3.67,
+     "radius": 4.3,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.7,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "van-hero",
+   "xz": [
+    160.0,
+    0.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.46,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.56,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 4.35,
+     "radius": 4.16,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.56,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  },
+  {
+   "name": "van-lod0",
+   "xz": [
+    160.0,
+    80.0
+   ],
+   "yaw_deg": 0,
+   "target_y": 1.46,
+   "fov": 50,
+   "steps": [
+    {
+     "height": 1.6,
+     "radius": 5.56,
+     "count": 8,
+     "start_deg": 0
+    },
+    {
+     "height": 4.35,
+     "radius": 4.16,
+     "count": 4,
+     "start_deg": 45
+    },
+    {
+     "height": 0.5,
+     "radius": 4.56,
+     "count": 2,
+     "start_deg": 135
+    }
+   ]
+  }
+ ]
+}
