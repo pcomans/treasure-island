@@ -102,7 +102,7 @@ the street-fences work notes.
 
 | File | Use | Source prompt (short) |
 |---|---|---|
-| `street_fence_chainlink.png` | chain-link fabric, blended from its mipmaps by `game/resources/materials/world/street/street_fence_mesh.gdshader` (its shade cut out by `street_fence_mesh_shadow.gdshader`); a crop of two diamonds each way at the source's measured repeat (460 x 556 px), scaled to 256 x 309, alpha from the wire's brightness, the openings filled with the wire grey | seamless galvanised chain-link fabric, flat-on, on solid black |
+| `street_fence_chainlink.png` | chain-link fabric, blended from its mipmaps by `game/resources/materials/world/street/street_fence_mesh.gdshader` (its shade cut out by `street_fence_mesh_shadow.gdshader`); a crop of two diamonds each way at the source's measured repeat (460 x 556 px), scaled to 256 x 309 and resampled to 256 x 308 (2026-11-11, a multiple of 4), alpha from the wire's brightness, the openings filled with the wire grey | seamless galvanised chain-link fabric, flat-on, on solid black |
 | `street_fence_barbed.png` | the three strands of barbed wire on the arms of industrial chain-link, drawn like the chain-link; a crop of three barb repeats, alpha from brightness | three strands of galvanised barbed wire, flat-on, on solid black |
 | `street_fence_screen.png` | construction windscreen fabric, tinted black or dark green by the kit | seamless grey woven polypropylene windscreen |
 | `street_fence_wood.png` | the wood board fence: six boards (0.84 m) per tile | seamless weathered cedar privacy fence boards |

@@ -125,10 +125,13 @@ func _bake(kit: Kit, prop: String, variant: int) -> void:
 	var grid: Vector2i = frame.grid
 	var longest: int = PIXELS[prop]
 	var pixels := Vector2i(longest, longest)
+	# Block compression works on 4 x 4 texels, so each side of the atlas (cell times
+	# grid) is a multiple of 4 (headless_world_material_contract.gd checks it).
+	var step := Vector2i(_block_step(grid.x), _block_step(grid.y))
 	if size.x > size.y:
-		pixels.y = maxi(32, int(round(longest * size.y / size.x)))
+		pixels.y = maxi(32, snappedi(longest * size.y / size.x, step.y))
 	else:
-		pixels.x = maxi(32, int(round(longest * size.x / size.y)))
+		pixels.x = maxi(32, snappedi(longest * size.x / size.y, step.x))
 	var atlas := Image.create_empty(pixels.x * grid.x, pixels.y * grid.y, false, Image.FORMAT_RGBA8)
 	var viewport := _bake_viewport(frame, pixels * 2, bool(frame.match_tone))
 	var camera: Camera3D = viewport.get_meta("camera")
@@ -166,6 +169,11 @@ func _bake(kit: Kit, prop: String, variant: int) -> void:
 		_errors.append("could not write %s.import (error %d)" % [path, error])
 		return
 	print("BAKED %s %dx%d views=%d frame centre=%s size=%s" % [path, atlas.get_width(), atlas.get_height(), grid.x * grid.y, frame.center, size])
+
+
+## The step a cell's side is rounded to so that it times count views is a multiple of 4.
+static func _block_step(count: int) -> int:
+	return 4 / (4 if count % 4 == 0 else 2 if count % 2 == 0 else 1)
 
 
 ## The tree's views from above, framed in a square round the side views' centre,

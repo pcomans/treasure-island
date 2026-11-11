@@ -81,7 +81,7 @@
       "metallic": 0.0,
       "roughness": 0.88,
       "albedo_texture_path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
-      "albedo_texture_sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+      "albedo_texture_sha256": "7fb84efd1de6d880a4907ae227f0f08a13c641078e69a222f67ba7865851314c",
       "uv1_scale": [0.125, 0.28735632, 1.0],
       "repeat": true,
       "filter": "linear_mipmap_anisotropic"

@@ -6,13 +6,16 @@ housing bitmaps. It is intentionally outside the export-excluded
 
 ## `warm_ivory_mineral_albedo_v2.png`
 
-- Raw PNG SHA-256: `af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c`
-- Raw byte size: `2,811,712`
-- Dimensions/source format: `1254 x 1254`, RGB PNG, no alpha
+- Raw PNG SHA-256: `99ba0dca00ee3dbb2221433e9578ffb2d53d934526b6c25718d8f4033d946184`
+- Raw byte size: `2,607,067`
+- Dimensions/source format: `1252 x 1252`, RGB PNG, no alpha
 - Promoted from:
   `res://game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png`
-- Promotion method: exact byte-for-byte copy. No regeneration, resampling,
-  recompression, filtering, color edit, or pixel edit occurred.
+- Promotion method: exact byte-for-byte copy of the 1254 x 1254 output (SHA-256
+  `af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c`, 2,811,712
+  bytes). On 2026-11-11 both copies were resampled to 1252 x 1252 (Lanczos,
+  wrapped so the tile still repeats), so block compression needs no padding. No
+  regeneration, recompression, color edit or other pixel edit occurred.
 - Provenance authority:
   `res://discovery/facades/GENAI_TEXTURE_PILOT_V1.md` records the complete
   text-only generation/edit prompts, tool boundary, original saved output,
