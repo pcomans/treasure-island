@@ -26,8 +26,8 @@ extends RigidBody3D
 ## drives off.
 ##
 ## The body is on the street-prop layer, like the parked cars: the player and
-## other cars collide with it, the spray ray stops on it, the on-foot camera's
-## arm ignores it and the chase camera's arm stops at it (unless it is the car
+## other cars collide with it, the on-foot camera's arm ignores it and the
+## chase camera's arm stops at it (unless it is the car
 ## being driven). It and its wheels meet the world, the street props and the
 ## cars' ground over the riprap and its barrier at the causeway
 ## (PHYSICS_CAR_GROUND), which is frictionless for the body (so a car that
@@ -49,7 +49,6 @@ signal splashed(at: Vector3, speed: float)
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 
 const PHYSICS_WORLD_SOLID := 1
-const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
 ## The cars' ground over the riprap and their barrier at the causeway.
 const PHYSICS_CAR_GROUND := ShorelineBuilder.PHYSICS_CAR_GROUND
@@ -300,7 +299,7 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 		mass / 12.0 * (height_m * height_m + length_m * length_m),
 		mass / 12.0 * (width_m * width_m + length_m * length_m),
 		mass / 12.0 * (width_m * width_m + height_m * height_m))
-	collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
+	collision_layer = PHYSICS_STREET_PROP
 	collision_mask = GROUND_MASK
 	continuous_cd = true
 	can_sleep = false

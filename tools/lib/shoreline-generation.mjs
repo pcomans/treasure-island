@@ -40,11 +40,13 @@
 // Bare parts of the underlay (a clamped section's fill, a capped end's face)
 // are rock faces at the heap's apparent tone, not the dark gaps of a heap.
 //
-// The player is recovered as soon as it leaves the outline, so nothing beyond
-// the outline needs collision. Every stone and log outside stays clear of the
-// outline (the top row sets back by about the player's radius) and every cobble
-// inside the band stays low enough to walk over; tools/validate_godot_world.mjs
-// checks both.
+// A player who leaves the outline is lifted straight up and floats back down
+// (the shore lift, game/scripts/player/recovery_controller.gd), so nothing
+// beyond the outline needs collision for the player; cars get a ground of their
+// own over the riprap when the world loads (shoreline_builder.gd _car_ground).
+// Every stone and log outside stays clear of the outline (the top row sets back
+// by about the player's radius) and every cobble inside the band stays low
+// enough to walk over; tools/validate_godot_world.mjs checks both.
 //
 // The document is compact: meshes and placements are quantized little-endian
 // arrays in base64 strings (unpackShorelineRecord and unpackShorelineBatch
@@ -1712,8 +1714,10 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
         fall: [station.land, slabTop(station, run)],
       }));
       rampStructures.push({ source_key: piece.id, kind: "ramp", slope: "cut", clearance_m: 0.15, under_drop_m: null, sides, area: indexedArea([[signedRingArea(footprint) > 0 ? footprint : footprint.reverse()]]) });
-      // Side walls: from ramp_wall_m above the slab down to below the toe,
-      // faced both ways (the curb seen from the ramp, its back from the water).
+      // Side walls: from ramp_wall_m above the slab's edge down to below the
+      // toe, faced both ways, closing the sides under the slab. They show as a
+      // curb from the ramp only when ramp_wall_m is above 0; beside the slab
+      // stands the slope's rock cut (pushCut's skirt, 2 cm behind them).
       for (const [station, sign] of [[edge[0], -1], [edge.at(-1), 1]]) {
         const tangent = [-normal[1], normal[0]];
         const outer = add(station.point, scale(normal, run));
@@ -2318,8 +2322,8 @@ export function generateShoreline({ plan, configDescriptor, facetsForChunk, face
     const heapReach = (section, radius) => (section.clamp ? section.clamp.width - 0.1 - radius : section.toe_m + rules.heap.toe_extra_m);
 
     // Top row: quarry blocks dumped just beyond the outline, their inner faces
-    // at least setback_m out (about the player's radius, so the player is
-    // recovered before it can reach into one). Each is buried by a share of
+    // at least setback_m out (about the player's radius, so the shore lift
+    // takes the player up before it reaches one). Each is buried by a share of
     // its own height, so big stones stand tall and small ones low, up to 5 cm
     // over the crest's highest rise above the land edge; sizes, spacing and
     // the face each rests on vary stone by stone, so the crest skyline breaks

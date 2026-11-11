@@ -189,10 +189,17 @@ jobs:
           short="${GITHUB_SHA:0:7}"
           tag="mac-${day}-${short}"
           if gh api "${api}/git/ref/tags/${tag}" --silent 2>/dev/null; then
-            if gh api "${api}/releases/tags/${tag}" --silent 2>/dev/null; then
+            if lookup="$(gh api "${api}/releases/tags/${tag}" --silent 2>&1)"; then
               echo "::error::Tag ${tag} already exists, with its release. Stopping: a re-run never replaces a published build, and nothing was changed."
             else
-              echo "::error::Tag ${tag} exists, but no published release was found for it. An earlier publish may have lost its reply, which makes gh delete the release it had just published. Stopping with nothing changed: to publish this commit, delete the tag by hand and re-run."
+              # gh's own error: only a 404 means there is no published release. Any
+              # other failure (a 502, say) leaves that unknown.
+              echo "${lookup}"
+              if grep -q 'HTTP 404' <<< "${lookup}"; then
+                echo "::error::Tag ${tag} exists, but no published release was found for it. An earlier publish may have lost its reply, which makes gh delete the release it had just published. Stopping with nothing changed: to publish this commit, delete the tag by hand and re-run."
+              else
+                echo "::error::Tag ${tag} exists, but looking up its release failed with the error above, so whether it has one is unknown. Stopping with nothing changed: re-run later, and check ${site} before deleting any tag."
+              fi
             fi
             exit 1
           fi

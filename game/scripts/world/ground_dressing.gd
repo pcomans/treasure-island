@@ -102,7 +102,10 @@ const SURFACE_PIXELS := 1024
 const COLOUR_PIXELS := 768
 const SNAP_M := 8.0
 const RECENTRE_M := 22.0
-## Over the ground shader's fade_end_m, so it draws each layer's mean colour.
+## The capture cameras' height. They look straight down through an orthographic lens,
+## so it only has to clear what they copy. The ground shader's capture pass reads the
+## near ground's view distance, not theirs, so the capture draws the ground's detail
+## (bare-edge noise, crisp edges, soil noise), not each layer's mean colour.
 const CAPTURE_HEIGHT_M := 125.0
 
 ## The smallest cell, which is also the tile of points every cell repeats.

@@ -1,6 +1,8 @@
 extends SceneTree
 ## The bake's building merge (tools/merge_baked_buildings.gd) on a hand-built building:
 ## the same triangles and colours come out, and everything that must stay separate does.
+## A part that leaves its source but never reaches a batch fails the merge, and the bake's
+## prune frees only inert superseded nodes and fails when none of the bodies go.
 
 const Merge := preload("res://tools/merge_baked_buildings.gd")
 
@@ -97,6 +99,7 @@ func _run() -> void:
 
 	var report := Merge.merge(buildings)
 	check((report.problems as PackedStringArray).is_empty(), "A clean merge must report no problems: %s" % report.problems)
+	check(int(report.get("taken_indices", 0)) > 0 and int(report.get("taken_vertices", 0)) > 0, "A merge must count what it takes from its sources: %s" % report)
 
 	check(is_instance_valid(overridden) and overridden.mesh.get_surface_count() == 2 and overridden.get_surface_override_material(0) == override_material, "A part with a surface override must stay whole")
 	check(is_instance_valid(shared_part) and is_instance_valid(twin) and twin.mesh.get_surface_count() == 2, "A mesh two parts draw must keep its surfaces")
@@ -112,6 +115,8 @@ func _run() -> void:
 	check(Merge._build_problem(built, group) == "", "A complete mesh must not be a problem")
 	group.surfaces.a.parts.append({"arrays": part_arrays})
 	check(Merge._build_problem(built, group) != "", "A surface short of indices must be a problem")
+	_check_dropped_parts(part_arrays)
+	_check_prune()
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
 	for index in kept.size():
@@ -153,10 +158,74 @@ func _run() -> void:
 	_finish()
 
 
+## A part that _add_part fails to record (a script error there, say) has left its source
+## all the same, so the batches must account for everything merge() took. triangle: an
+## unindexed one-triangle surface's arrays.
+func _check_dropped_parts(triangle: Array) -> void:
+	var anchor := Node3D.new()
+	buildings.add_child(anchor)
+	var source := MeshInstance3D.new()
+	anchor.add_child(source)
+	var plain := _material(Color(0.4, 0.4, 0.4))
+	var signature := Merge._signature(plain, {})
+	var box: Array = BoxMesh.new().surface_get_arrays(0)
+	# Both parts recorded and taken: the batch holds them both.
+	var whole_groups := {}
+	var whole := Merge._group(whole_groups, source, anchor)
+	for arrays: Array in [box, triangle]:
+		Merge._add_part(whole, signature, plain, arrays, Transform3D.IDENTITY, {})
+		Merge._count_taken(whole, arrays)
+	var clean := Merge._build_groups(whole_groups)
+	check((clean.problems as PackedStringArray).is_empty() and clean.meshes == 1, "A batch holding every part taken for it must build clean: %s" % clean)
+	# The triangle leaves its source, but _add_part never records it.
+	var short_groups := {}
+	var short := Merge._group(short_groups, source, anchor)
+	Merge._add_part(short, signature, plain, box, Transform3D.IDENTITY, {})
+	Merge._count_taken(short, box)
+	Merge._count_taken(short, triangle)
+	var problems: PackedStringArray = Merge._build_groups(short_groups).problems
+	check(problems.size() == 1 and problems[0].contains("taken from its sources"), "A part dropped after it left its source must fail the merge: %s" % problems)
+	# Every part of a group dropped: no batch at all, which must fail too.
+	var lost_groups := {}
+	Merge._count_taken(Merge._group(lost_groups, source, anchor), triangle)
+	problems = Merge._build_groups(lost_groups).problems
+	check(problems.size() == 1 and problems[0].contains("taken from its sources"), "A group whose every part was dropped must fail the merge: %s" % problems)
+
+
+## The bake's prune of what the housing family installer replaced.
+func _check_prune() -> void:
+	var holder := Node3D.new()
+	buildings.add_child(holder)
+	var hidden := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
+	hidden.hide()
+	var shown := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
+	var body := _switched_off_body(holder)
+	var grouped := _switched_off_body(holder)
+	grouped.add_to_group("still_wanted")
+	var live := _switched_off_body(holder)
+	live.collision_layer = 1
+	var candidates: Array[Node] = [hidden, shown, body, grouped, live]
+	var pruned := Merge.prune_superseded(candidates, 3)
+	check(pruned.problem == "" and pruned.removed_meshes == 1 and pruned.removed_bodies == 1, "The prune must take the hidden mesh and the switched-off body: %s" % pruned)
+	check(not is_instance_valid(hidden) and not is_instance_valid(body), "Pruned nodes must be freed")
+	check(is_instance_valid(shown) and is_instance_valid(grouped) and is_instance_valid(live), "A shown mesh, a grouped body and a live body must stay")
+	# The installer switched bodies off, but none of them go: the bake must fail.
+	var none: Array[Node] = []
+	check(Merge.prune_superseded(none, 3).problem != "", "Switched-off bodies with no candidates must fail the prune")
+	var stuck: Array[Node] = [shown, grouped, live]
+	check(Merge.prune_superseded(stuck, 3).problem != "", "Candidates none of which can go must fail the prune")
+	var hidden_too := _box(holder, _material(Color.RED), Transform3D.IDENTITY)
+	hidden_too.hide()
+	var meshes_only: Array[Node] = [hidden_too, grouped]
+	check(Merge.prune_superseded(meshes_only, 3).problem != "", "Switched-off bodies of which none go must fail the prune, whatever meshes go")
+	# A world whose installer switched nothing off has nothing to prune.
+	check(Merge.prune_superseded(none, 0).problem == "", "Nothing switched off and nothing to prune must pass")
+
+
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch; its prune frees only inert superseded nodes and fails when none of the bodies go")
 		quit(0)
 		return
 	for message in failures:
@@ -185,6 +254,18 @@ func _box(parent: Node3D, material: Material, pose: Transform3D) -> MeshInstance
 	part.transform = pose
 	parent.add_child(part, true)
 	return part
+
+
+## A body the way the housing installer leaves the one it replaces: off every layer.
+func _switched_off_body(parent: Node3D) -> StaticBody3D:
+	var body := StaticBody3D.new()
+	body.collision_layer = 0
+	body.collision_mask = 0
+	var shape := CollisionShape3D.new()
+	shape.shape = BoxShape3D.new()
+	body.add_child(shape)
+	parent.add_child(body)
+	return body
 
 
 func _two_surface_part(first: Material, second: Material) -> MeshInstance3D:

@@ -7,6 +7,9 @@ const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family
 ## The generated scene is a disposable build product, never a source-of-truth cache.
 var failed := false
 var compared_resources := {}
+## The source world's world_ready report, which carries the housing family installer's
+## own counts.
+var ready_report := {}
 
 func _initialize() -> void:
 	call_deferred("_run")
@@ -30,6 +33,7 @@ func _run() -> void:
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void:
 		push_error(code + ": " + message)
 		failed = true)
+	world.world_ready.connect(func(report: Dictionary) -> void: ready_report = report)
 	world.load_world()
 	world.buildings.remove_meta(HOUSING_FAMILY.BAKE_SUPERSEDED_META)
 	if failed or not world.is_world_validated():
@@ -45,12 +49,20 @@ func _run() -> void:
 		push_error("The building merge failed: ", merged)
 		quit(1)
 		return
-	var removed := 0
-	for node in superseded:
-		if is_instance_valid(node) and _can_prune_superseded(node):
-			node.free()
-			removed += 1
-	print("BAKE_PRUNE_SUPERSEDED removed=", removed, " candidates=", superseded.size())
+	# Whether there is anything to prune comes from the installer's own count of the
+	# bodies it switched off, not from the candidates it handed over.
+	var housing: Variant = ready_report.get("housing_family")
+	if not housing is Dictionary or not housing.get("ok", false) or not housing.get("disabled_legacy_bodies") is int:
+		push_error("The source world's ready report has no housing family result to check the prune against: ", ready_report.keys())
+		quit(1)
+		return
+	var pruned := MERGE_BUILDINGS.prune_superseded(superseded, housing.disabled_legacy_bodies)
+	print("BAKE_PRUNE_SUPERSEDED removed=", int(pruned.removed_meshes) + int(pruned.removed_bodies), " candidates=", pruned.candidates,
+		" removed_bodies=", pruned.removed_bodies, " superseded_bodies=", pruned.superseded_bodies)
+	if pruned.problem != "":
+		push_error("The bake's prune failed: ", pruned.problem)
+		quit(1)
+		return
 	var packed := PREBUILT_WORLD.pack_world(world)
 	if packed == null:
 		quit(1)
@@ -82,20 +94,6 @@ func _run() -> void:
 	print("BAKED_BYTES ", FileAccess.get_file_as_bytes(PREBUILT_WORLD.resource_path()).size())
 	print("MEMORY_STATIC_BYTES ", Performance.get_monitor(Performance.MEMORY_STATIC))
 	quit(0)
-
-## Only remove inert visual leaves and disabled bodies whose children are plain shapes.
-func _can_prune_superseded(node: Node) -> bool:
-	if node.get_script() != null or node.unique_name_in_owner or not node.get_groups().is_empty():
-		return false
-	if node is MeshInstance3D:
-		return not node.visible and node.get_child_count(true) == 0
-	if not node is StaticBody3D or node.collision_layer != 0 or node.collision_mask != 0:
-		return false
-	for child: Node in node.get_children(true):
-		if (not child is CollisionShape3D or child.get_child_count(true) != 0
-			or child.get_script() != null or child.unique_name_in_owner or not child.get_groups().is_empty()):
-			return false
-	return true
 
 func _compare_nodes(source: Node, restored: Node, path: String) -> void:
 	_compare_value(source.get_class(), restored.get_class(), path + ":class")
