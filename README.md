@@ -59,8 +59,9 @@ with the texture.
 # overviews come both ways (NAME-street-on.png, NAME-street-off.png). --street-detail off|on|both overrides.
 tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source w291189336 --island --out /tmp/shots
 
-# Fit and playability: roof and walls are solid, walls reach the ground, the player can walk up to it
-tools/godot --headless --path . --script game/tests/shared/building_fit_test.gd -- --source w291189336
+# Fit and playability: roof and walls are solid, walls reach the ground, the player can walk up to it.
+# Its visible-geometry checks need rendering, so it refuses --headless.
+tools/godot --path . --script game/tests/shared/building_fit_test.gd -- --source w291189336
 ```
 
 `--source` is the building's OSM id from `generated/world/` (e.g. `w291189336`

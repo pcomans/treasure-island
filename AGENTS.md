@@ -319,7 +319,7 @@ For a requested full workflow comparison, time from before the actual source edi
 
 ## Approved implementation approach
 
-- Godot 4.7.2 standard edition, GDScript, and Forward+. Only the web export uses the Compatibility renderer (WebGL 2, `renderer/rendering_method.web="gl_compatibility"`); the desktop renderer is unchanged.
+- Godot 4.7.2 standard edition, GDScript, and Forward+. Only the web export uses the Compatibility renderer (WebGL 2, `renderer/rendering_method.web="gl_compatibility"`); the desktop renderer is unchanged. Decals may be used freely (owner, 2026-11-03): the Compatibility renderer draws none, and that is acceptable; no web fallback is required by default.
 - One Godot unit equals one meter in a local Treasure Island coordinate system.
 - Offline `osmium` plus a project-owned Node converter using pinned `polygon-clipping@0.15.7` and `earcut@3.2.3`.
 - Deterministic, OSM-ID-traceable generated island geometry and coverage evidence.
