@@ -469,6 +469,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
   - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two.
+  - Every walk-up, stair and route start falls 2 m at the jetpack's released descent (`world_harness.gd`'s `settle_player`, about 80 physics ticks). Shortening it to a sweep to the landing and the last 0.4 m (2026-11-11) passed w95934125's fit but failed `island_test.gd` at w95934106 west, on both worlds: the player came to rest on the land with no floor contact in its last `move_and_slide`. It was reverted; the cause isn't known.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;
