@@ -1299,9 +1299,9 @@ Broken fence bays were kept by their bay key alone ("0:8", run and index), which
 
 The pause check written for grab-bag-20261111 (2026-11-11) first waited two seconds of wall clock while the game was paused in `headless_gameplay_contract.gd`. Under `--fixed-fps 60` headless every frame advances game time by 1/60 s however fast it runs, and a paused game runs thousands of frames a second, so those two seconds were minutes of the contract's frame-counted 240 s guard timer, which fired. Under `--fixed-fps`, wait a number of frames (180 for three seconds at 60); keep wall clock for rendered runs at real speed.
 
-## A player put down inside the floor snap lands without a contact
+## A shortened test settle can land without a floor contact
 
-The first direct settle in `world_harness.gd` (2026-11-11) put the stock player 2 cm above the ground its fall would land on. It had stood on a floor before the move, so its first `move_and_slide` snapped it down (`floor_snap_length` 0.35 m) and reported `is_on_floor()` with no slide collision, and the fit's start-support check, which reads the slide contacts, failed. Put such a player beyond the snap (0.35 m and a margin) so it lands with a real contact, as a fall does.
+The first direct settle in `world_harness.gd` (2026-11-11) put the stock player 2 cm above the ground its fall would land on. It had stood on a floor before the move, so its first `move_and_slide` snapped it down (`floor_snap_length` 0.35 m) and reported `is_on_floor()` with no slide collision, and the fit's start-support check, which reads the slide contacts, failed. A start 0.4 m above the swept landing, beyond the snap, then passed one building's fit (w95934125) but failed the suite's whole-island test at w95934106 west with the same signature: the player at rest on the land, its last `move_and_slide` with no floor contact. The cause was not found and the 2 m fall was restored. One building's fit does not prove a change to the shared settle or walk-up code: run `island_test.gd`, which walks every scored building, before spending the suite.
 
 ## A slanting run-up curves aside
 
