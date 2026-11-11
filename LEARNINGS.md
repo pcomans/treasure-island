@@ -734,6 +734,10 @@ what the shader reads before bulk import changes. For a deliberate lossless 3D
 exception, disable Detect 3D as well, since the editor can rewrite the mode.
 Check the exported texture against the source channels.
 
+## Keep block-compressed textures a multiple of 4
+
+Godot 4.7.2 VRAM-compresses in 4 x 4 texel blocks and pads any other size to the next multiple of 4 by repeating the last row and column (etcpak and Betsy alike, `.ctex` header 341 rows, stored 344); the GPU texture is the padded size, so UV 0..1 spans the padding, the image slides on its mesh by up to 3 texels and a tiling texture gets a smeared seam. On 2026-11-11, 40 textures imported this way (28 tree impostors, the chain-link, three murals, the B201 posters, the Aracely sign slab, five 1254 px facade albedos and the Mersea gravel) and 18 more only under the Web build's 512 px cap. `headless_world_material_contract.gd` now fails, naming file and size, on any block-compressed texture whose imported or Web-capped size isn't a multiple of 4, and on any `.import` with Detect 3D on; `tools/generate-texture` refuses other sizes. Fix one by resampling the whole image (per cell for an atlas of pixel-exact cells, wrapped where it tiles) or, for the Web alone, a smaller cap on its line in `tools/web-texture-cap-512.txt`; cropping or padding shifts its UVs.
+
 ## Keep browser emulation attached through verification
 
 On 2026-10-22, a CDP setup connection enabled touch emulation then closed before

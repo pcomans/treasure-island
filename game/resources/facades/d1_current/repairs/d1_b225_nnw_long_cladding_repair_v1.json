@@ -114,10 +114,11 @@
     },
     "project_asset": {
       "path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
-      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
-      "dimensions_px": [1254, 1254],
+      "sha256": "7fb84efd1de6d880a4907ae227f0f08a13c641078e69a222f67ba7865851314c",
+      "dimensions_px": [1252, 1252],
       "channels": "RGB_8_no_alpha",
-      "source_bytes": 2140085
+      "source_bytes": 2087805,
+      "resampled": "from the selected 1254 x 1254 output to 1252 x 1252 (Lanczos, wrapped so the tile still repeats) on 2026-11-11, so block compression needs no padding"
     },
     "selection_gate": "selected after one targeted flattening edit; no further generation permitted for this bounded repair",
     "provenance_nonclaims": [

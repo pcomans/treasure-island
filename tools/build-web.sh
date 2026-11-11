@@ -48,14 +48,17 @@ import_project() {
 
 # Bake with the original imports. Only the texture payloads in the export are
 # resized. Keep the bake outside the import scan while updating those textures.
+# Each line of the cap list names a texture's .import and, where 512 would leave a
+# side that isn't a multiple of 4, a smaller cap that doesn't
+# (game/tests/headless_world_material_contract.gd checks every capped size).
 import_project
 (cd "${project}" && tools/prebuild-static-world.sh web)
 baked="${project}/generated/web/static_world.scn"
 mv "${baked}" "${work}/static_world.scn"
-while IFS= read -r sidecar; do
+while read -r sidecar cap; do
   source="${project}/${sidecar}"
-  if ! awk '
-    /^process\/size_limit=/ { count++; if ($0 != "process/size_limit=0") exit 1; $0 = "process/size_limit=512" }
+  if ! awk -v cap="${cap:-512}" '
+    /^process\/size_limit=/ { count++; if ($0 != "process/size_limit=0") exit 1; $0 = "process/size_limit=" cap }
     { print }
     END { if (count != 1) exit 1 }
   ' "${source}" > "${work}/texture.import"; then

@@ -40,11 +40,12 @@ tools/godot --headless --path . --import                       # after a fresh c
 tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 ```
 
-New textures default to VRAM compression with mipmaps and Detect 3D off
-(`headless_world_material_contract.gd` fails on any import with Detect 3D on). For
-UI art or textures that store shader data, use **Compress > Mode > Lossless** in the
-Import dock. Keep mipmaps if the shader samples them. Reimport and commit the
-`.import` file with the texture.
+New textures default to VRAM compression with mipmaps and Detect 3D off, and a
+VRAM-compressed texture's sides must be multiples of 4 pixels, also as the Web build
+caps it (`headless_world_material_contract.gd` fails otherwise). For UI art or
+textures that store shader data, use **Compress > Mode > Lossless** in the Import
+dock. Keep mipmaps if the shader samples them. Reimport and commit the `.import`
+file with the texture.
 
 ## Check a building
 

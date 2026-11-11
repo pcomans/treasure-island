@@ -30,6 +30,18 @@ const EXPECTED_MATERIALS := {
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 	"building_part_roof": {"feature_kind": "building_part_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 }
+## Block compression (Compress > Mode: VRAM Compressed or Basis Universal) stores
+## 4 x 4 texel blocks and pads any other size by repeating the last row and column,
+## so the image slides on its mesh by up to 3 texels and a tiling texture gets a
+## seam. So every block-compressed texture is a multiple of 4 on both sides, as
+## imported (after process/size_limit) and as tools/build-web.sh caps it for the
+## Web build: 512 px unless its line in WEB_TEXTURE_CAPS gives a smaller cap.
+## Lossless textures are stored as they are and keep their size: shore_map.png
+## (650 x 900) is one, a texel per 4 m of the water shader's 2600 x 3600 m shore
+## rectangle (tools/lib/water-shore-map.mjs).
+const BLOCK_COMPRESSED_MODES := [2, 3]
+const WEB_TEXTURE_CAPS := "res://tools/web-texture-cap-512.txt"
+const WEB_TEXTURE_CAP := 512
 ## One generated record per ground route: feature kind, material key, source
 ## key and the family it must use ("" keeps the builder's own material).
 const GROUND_ROUTES := [
@@ -74,7 +86,7 @@ func _initialize() -> void:
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, and every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -364,9 +376,11 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 
 ## Every texture import keeps Detect 3D off (detect_3d/compress_to=0): with it on,
 ## the editor switches a texture to VRAM compression the first time a 3D material
-## uses it, block-compressing a lossless data or UI texture.
+## uses it, block-compressing a lossless data or UI texture. Every block-compressed
+## texture is a multiple of 4 on both sides (BLOCK_COMPRESSED_MODES), on the Web too.
 func _texture_imports_match() -> bool:
 	var problems: Array[String] = []
+	var sizes := {}
 	for path: String in _import_files("res://"):
 		var config := ConfigFile.new()
 		if config.load(path) != OK:
@@ -375,9 +389,59 @@ func _texture_imports_match() -> bool:
 		var detect_3d := int(config.get_value("params", "detect_3d/compress_to", 0))
 		if detect_3d != 0:
 			problems.append("%s has detect_3d/compress_to=%d; set it to 0 (Import dock: Detect 3D > Compress To > Disabled)." % [path, detect_3d])
+		if int(config.get_value("params", "compress/mode", 0)) not in BLOCK_COMPRESSED_MODES:
+			continue
+		if str(config.get_value("remap", "importer", "")) != "texture":
+			problems.append("%s is a block-compressed layered texture, whose size this check can't read; keep it lossless or extend the check." % path)
+			continue
+		var size := _imported_size(config)
+		if size == Vector2i.ZERO:
+			problems.append("%s has no imported texture; import the project first." % path)
+			continue
+		sizes[path] = size
+		if size.x % 4 != 0 or size.y % 4 != 0:
+			problems.append("%s imports at %d x %d; resample its image so both sides are multiples of 4." % [path, size.x, size.y])
+	for line: String in FileAccess.get_file_as_string(WEB_TEXTURE_CAPS).split("\n", false):
+		# Fields as tools/build-web.sh reads them: split on spaces and tabs.
+		var fields := line.replace("\t", " ").split(" ", false)
+		if fields.is_empty():
+			continue
+		var path := "res://" + fields[0]
+		if fields.size() > 2 or (fields.size() == 2 and not fields[1].is_valid_int()):
+			problems.append("%s: '%s' is not an import path and an optional cap." % [WEB_TEXTURE_CAPS, line])
+		elif not FileAccess.file_exists(path):
+			problems.append("%s lists %s, which does not exist." % [WEB_TEXTURE_CAPS, fields[0]])
+		elif sizes.has(path):
+			var cap := int(fields[1]) if fields.size() == 2 else WEB_TEXTURE_CAP
+			var capped := _capped(sizes[path], cap)
+			if capped.x % 4 != 0 or capped.y % 4 != 0:
+				problems.append("%s comes out %d x %d in the Web build (cap %d); give it a cap in %s at which both sides are multiples of 4." % [path, capped.x, capped.y, cap, WEB_TEXTURE_CAPS])
 	for problem in problems:
 		_require(false, problem)
 	return problems.is_empty()
+
+
+## A 2D texture's imported size (after process/size_limit, before any block
+## padding), from the header of its imported .ctex.
+static func _imported_size(config: ConfigFile) -> Vector2i:
+	if not config.has_section("remap"):
+		return Vector2i.ZERO
+	for key: String in config.get_section_keys("remap"):
+		if key == "path" or key.begins_with("path."):
+			var file := FileAccess.open(str(config.get_value("remap", key)), FileAccess.READ)
+			if file != null and file.get_length() >= 16 and file.get_buffer(4).get_string_from_ascii() == "GST2":
+				file.get_32()
+				return Vector2i(file.get_32(), file.get_32())
+	return Vector2i.ZERO
+
+
+## The size Godot's texture importer gives an image under process/size_limit=cap.
+static func _capped(size: Vector2i, cap: int) -> Vector2i:
+	if size.x <= cap and size.y <= cap:
+		return size
+	if size.x >= size.y:
+		return Vector2i(cap, size.y * cap / size.x)
+	return Vector2i(size.x * cap / size.y, cap)
 
 
 ## Every .import file Godot reads: res:// less hidden folders, folders holding a
