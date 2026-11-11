@@ -23,6 +23,21 @@ extends Node3D
 ## between them, so neither change is a cut. It swings round the pivot over the
 ## car, level, rather than cutting across, so it never passes through the car,
 ## and its yaw and pitch ease with no roll.
+##
+## Off the island (the car out past the outline, on the riprap or in the water)
+## the view stops following the car down among the stones: it blends
+## (WATCH_BLEND_S) to a watch camera of its own, held where the car left the
+## island, WATCH_BACK_M back the way it came, WATCH_SIDE_M to one side and
+## WATCH_UP_M over it, so it sees the car's way down the rocks and into the
+## water from beside it; on the first side from which both the car and the water
+## WATCH_AHEAD_M ahead of it are in sight past the world, the street props and
+## the cars' ground over the rocks, else straight back and WATCH_HIGH_M over it
+## (and WATCH_WATER_M over the water at least). It turns to keep the car in view
+## (easing over WATCH_LOOK_S), on the water's surface once the car is under it.
+## Back on the island for WATCH_END_S without going back to land (driven up off
+## the riprap) it blends back to the chase view; a car driven along the edge, in
+## and out, keeps the watch. When the car is put back on land (the water's
+## return, R), the chase view starts behind it at once, settled (snap_behind).
 
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const PHYSICS_WORLD_SOLID := 1
@@ -49,6 +64,18 @@ const ENTER_BLEND_S := 0.6
 const EXIT_BLEND_S := 0.8
 ## The pivot stays at least this far over the water.
 const WATER_CLEAR_M := 1.2
+## The watch camera off the island (see above), and how near the car it may get
+## across the ground before it backs off.
+const WATCH_BACK_M := 3.0
+const WATCH_SIDE_M := 7.0
+const WATCH_UP_M := 4.5
+const WATCH_HIGH_M := 6.5
+const WATCH_AHEAD_M := 8.0
+const WATCH_WATER_M := 2.5
+const WATCH_BLEND_S := 0.5
+const WATCH_LOOK_S := 0.12
+const WATCH_NEAR_M := 4.0
+const WATCH_END_S := 0.6
 
 @export_range(0.0005, 0.01, 0.0001) var look_sensitivity := 0.003
 
@@ -72,6 +99,15 @@ var _blend_from_fov := FOV
 var _blend_to: Camera3D
 var _blend_t := -1.0
 var _blend_s := ENTER_BLEND_S
+## The car's view is ours to show (attach take_view): a capture's own camera
+## keeps the view otherwise.
+var _takes_view := true
+var _watch: Camera3D
+var _watching := false
+## How long the watched car has been back on the island.
+var _back_s := 0.0
+var _watch_at := Vector3.ZERO
+var _watch_look := Vector3.ZERO
 
 
 func _init() -> void:
@@ -90,6 +126,10 @@ func _init() -> void:
 	_blend.name = "BlendCamera"
 	_blend.top_level = true
 	add_child(_blend)
+	_watch = Camera3D.new()
+	_watch.name = "WatchCamera"
+	_watch.top_level = true
+	add_child(_watch)
 	_clearance.radius = 0.3
 	spring_arm.shape = _clearance
 	_query.shape = _clearance
@@ -105,7 +145,7 @@ func _ready() -> void:
 ## Takes the on-foot gameplay camera's near and far planes (player.tscn) for the
 ## chase camera and its blend, so driving sees as far: the distant horizon.
 func use_planes_of(gameplay: Camera3D) -> void:
-	for view: Camera3D in [camera, _blend]:
+	for view: Camera3D in [camera, _blend, _watch]:
 		view.near = gameplay.near
 		view.far = gameplay.far
 
@@ -115,6 +155,8 @@ func use_planes_of(gameplay: Camera3D) -> void:
 ## it follows the car without taking the view.
 func attach(car: DRIVABLE_CAR, from_camera: Camera3D, take_view: bool = true) -> void:
 	_car = car
+	_takes_view = take_view
+	_watching = false
 	var forward := -car.visual_transform().basis.z
 	_yaw = atan2(-forward.x, -forward.z) if Vector2(forward.x, forward.z).length() > 0.2 else 0.0
 	_glance_yaw = 0.0
@@ -143,6 +185,7 @@ func attach(car: DRIVABLE_CAR, from_camera: Camera3D, take_view: bool = true) ->
 ## to_camera. With blend false (a reset) to_camera shows at once.
 func detach(to_camera: Camera3D, blend: bool = true) -> void:
 	_car = null
+	_watching = false
 	set_process_unhandled_input(false)
 	var showing := get_viewport().get_camera_3d() if is_inside_tree() else null
 	if to_camera == null:
@@ -151,7 +194,7 @@ func detach(to_camera: Camera3D, blend: bool = true) -> void:
 		_blend_t = -1.0
 		set_process(false)
 		to_camera.make_current()
-	elif showing == camera or showing == _blend:
+	elif showing == camera or showing == _blend or showing == _watch:
 		_start_blend(showing.global_transform, showing.fov, to_camera, EXIT_BLEND_S)
 	else:
 		# Another camera (a capture's) is showing: leave it be.
@@ -198,15 +241,117 @@ func glance(relative: Vector2) -> void:
 
 func _process(delta: float) -> void:
 	if _car != null and is_instance_valid(_car):
+		if not _watching and _car.is_off_island():
+			_start_watch()
+		elif _watching:
+			_back_s = 0.0 if _car.is_off_island() else _back_s + delta
+			if _back_s >= WATCH_END_S:
+				_end_watch()
 		_place(delta, false)
+		if _watching:
+			_step_watch(delta)
 	if _blend_t >= 0.0:
 		_step_blend(delta)
 	elif _car == null:
 		set_process(false)
 
 
-func _place(delta: float, snap: bool) -> void:
-	var xf := _car.visual_transform()
+## Whether the view showing is this rig's (chase, blend or watch camera).
+func _showing_ours() -> bool:
+	if not is_inside_tree():
+		return false
+	var showing := get_viewport().get_camera_3d()
+	return showing == camera or showing == _blend or showing == _watch
+
+
+## Off the island: the watch point beside the car's way down (or back and high
+## over it), and a blend to it from the view showing.
+func _start_watch() -> void:
+	_watching = true
+	_back_s = 0.0
+	var car_at := _car.visual_transform().origin
+	var travel := Vector3(_car.linear_velocity.x, 0.0, _car.linear_velocity.z)
+	var away := travel.normalized() if travel.length() > 0.5 else Vector3(-sin(_yaw), 0.0, -cos(_yaw))
+	var side := away.cross(Vector3.UP).normalized()
+	var ahead := car_at + away * WATCH_AHEAD_M
+	ahead.y = _car.water_y + 0.3
+	var back := car_at - away * WATCH_BACK_M
+	var spots: Array[Vector3] = [back + side * WATCH_SIDE_M + Vector3.UP * WATCH_UP_M, back - side * WATCH_SIDE_M + Vector3.UP * WATCH_UP_M]
+	_watch_at = car_at - away * WATCH_BACK_M * 2.0 + Vector3.UP * WATCH_HIGH_M
+	for spot: Vector3 in spots:
+		if _in_sight(spot, car_at + Vector3.UP * 0.8) and _in_sight(spot, ahead):
+			_watch_at = spot
+			break
+	_watch_at.y = maxf(_watch_at.y, _car.water_y + WATCH_WATER_M)
+	_watch_look = car_at + Vector3.UP * 0.6
+	_aim_watch()
+	_watch.fov = camera.fov
+	if _takes_view and _showing_ours():
+		var showing := get_viewport().get_camera_3d()
+		_start_blend(showing.global_transform, showing.fov, _watch, WATCH_BLEND_S)
+
+
+## Back on the island without going back to land: blend back to the chase view.
+func _end_watch() -> void:
+	_watching = false
+	if _takes_view and _showing_ours():
+		var showing := get_viewport().get_camera_3d()
+		_start_blend(showing.global_transform, showing.fov, camera, WATCH_BLEND_S)
+
+
+## The watch camera this frame: at the watch point (backed off to WATCH_NEAR_M
+## across the ground from the car if it came near), looking at the car, or at the
+## water's surface over it once it is under.
+func _step_watch(delta: float) -> void:
+	var car_at := _car.visual_transform().origin
+	var target := car_at + Vector3.UP * 0.6
+	target.y = maxf(target.y, _car.water_y + 0.3)
+	_watch_look = _watch_look.lerp(target, 1.0 - exp(-delta / WATCH_LOOK_S))
+	var across := Vector2(_watch_at.x - car_at.x, _watch_at.z - car_at.z)
+	if across.length() < WATCH_NEAR_M:
+		var back := across.normalized() if across.length() > 0.01 else Vector2(sin(_yaw), cos(_yaw))
+		_watch_at = Vector3(car_at.x + back.x * WATCH_NEAR_M, _watch_at.y, car_at.z + back.y * WATCH_NEAR_M)
+	_aim_watch()
+
+
+## Whether nothing solid (the world, a street prop, the cars' ground over the
+## rocks) stands between from and to; the driven car is left out.
+func _in_sight(from: Vector3, to: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(from, to, PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP | DRIVABLE_CAR.PHYSICS_CAR_GROUND, [_car.get_rid()])
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
+
+
+func _aim_watch() -> void:
+	var look := _watch_look - _watch_at
+	if Vector2(look.x, look.z).length() < 0.3:
+		look += Vector3(-sin(_yaw), 0.0, -cos(_yaw)) * 0.3
+	_watch.global_transform = Transform3D(Basis.looking_at(look.normalized(), Vector3.UP), _watch_at)
+
+
+## The car was put back on land (the water's return, R): the chase view starts
+## behind it, settled, with no blend, from where its body is now.
+func snap_behind() -> void:
+	if _car == null or not is_instance_valid(_car):
+		return
+	_watching = false
+	var xf := _car.global_transform
+	var forward := -xf.basis.z
+	if Vector2(forward.x, forward.z).length() > 0.2:
+		_yaw = atan2(-forward.x, -forward.z)
+	_glance_yaw = 0.0
+	_glance_pitch = 0.0
+	_since_glance = GLANCE_HOLD_S
+	_speed_share = 0.0
+	_place(0.0, true, xf)
+	# The arm's end before its first physics update, as in attach.
+	camera.position = Vector3(0.0, 0.0, spring_arm.spring_length)
+	_blend_t = -1.0
+	if _takes_view and _showing_ours():
+		camera.make_current()
+
+
+func _place(delta: float, snap: bool, at: Variant = null) -> void:
+	var xf: Transform3D = at if at is Transform3D else _car.visual_transform()
 	var velocity := _car.linear_velocity
 	var planar := Vector2(velocity.x, velocity.z).length()
 	# Behind the heading on the wheels; along the flight in the air.

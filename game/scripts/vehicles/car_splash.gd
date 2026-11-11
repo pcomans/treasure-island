@@ -1,8 +1,7 @@
 extends Node3D
 ## A car meeting the bay (drivable_car.gd splashed): white spray thrown up
 ## from where it went in as fine streaks, a little low foam and a ring of foam
-## spreading on the surface, all fading fast; then it frees itself. At the
-## shore's rocks the spray and foam fly off the stones with no ring. Soft
+## spreading on the surface, all fading fast; then it frees itself. Soft
 ## streak, round and ring-shaped sprites (radial gradient textures, made once)
 ## on CPU particles and one flat quad, drawn alike by Forward+ and the web
 ## build's Compatibility renderer.
@@ -11,19 +10,19 @@ extends Node3D
 ## m/s of the car's speed (capped), their life (s) and their shape (a streak
 ## STREAK times as tall as it is wide, standing up in the view as droplets
 ## thrown up and falling do).
-const SPRAY := 150
+const SPRAY := 200
 const LAUNCH_MPS := 3.0
 const LAUNCH_PER_MPS := 0.26
 const LAUNCH_MAX_MPS := 10.5
 const SPRAY_LIFE_S := 0.9
 const STREAK := 3.2
 ## Foam: a few small, flat sprites spreading low over the water.
-const FOAM := 8
+const FOAM := 12
 const FOAM_LIFE_S := 1.0
 ## The ring: a thin ripple of foam, its starting and final radius as shares of
 ## the car's length, and its life (s).
 const RING_FROM := 0.45
-const RING_TO := 1.1
+const RING_TO := 1.35
 const RING_LIFE_S := 1.4
 const RENDER_WORLD_VISIBLE := 1
 
@@ -37,9 +36,8 @@ var _length := 4.5
 
 
 ## Starts the splash at a point on the water for a car of this length that
-## went in at this speed (m/s); with ring false (spray thrown up off the shore's
-## rocks) no foam ring spreads.
-func start(at: Vector3, speed: float, car_length_m: float, ring: bool = true) -> void:
+## went in at this speed (m/s).
+func start(at: Vector3, speed: float, car_length_m: float) -> void:
 	_length = car_length_m
 	global_position = at + Vector3.UP * 0.03
 	var launch := minf(LAUNCH_MAX_MPS, LAUNCH_MPS + LAUNCH_PER_MPS * speed)
@@ -69,9 +67,6 @@ func start(at: Vector3, speed: float, car_length_m: float, ring: bool = true) ->
 	foam.scale_amount_curve = _curve(0.7, 1.0)
 	add_child(foam)
 	foam.emitting = true
-	_age = 0.0
-	if not ring:
-		return
 	var quad := PlaneMesh.new()
 	quad.size = Vector2(2.0, 2.0)
 	_ring_material = _sprite_material(_ring_sprite(), false)
@@ -83,6 +78,7 @@ func start(at: Vector3, speed: float, car_length_m: float, ring: bool = true) ->
 	_ring.layers = RENDER_WORLD_VISIBLE
 	_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(_ring)
+	_age = 0.0
 	_update_ring()
 
 

@@ -24,11 +24,14 @@ extends Node3D
 ## back on land at its last safe spot, the mouse glances (vehicle_camera.gd,
 ## which also blends the view from and back to the on-foot camera). The stock
 ## controller stops while driving (player_controller.gd begin_driving), its
-## avatar hides and the player rides at the seat. A car that meets the bay
-## splashes (car_splash.gd) and sinks with the player in it before it goes back
-## to land; one that reaches the shore's rocks splashes and stops there before
-## it goes back (drivable_car.gd); F does nothing until then. R and both returns
-## put it on a level spot well clear of the shore, on its brakes until driven.
+## avatar hides and the player rides at the seat. A car driven off the shore
+## rolls down the riprap on the cars' ground over its stones
+## (shoreline_builder.gd), watched from the shore (vehicle_camera.gd); where it
+## meets the water it splashes (car_splash.gd) and sinks with the player in it
+## before it goes back to land (drivable_car.gd); F does nothing until then. R
+## and the return put it on a level spot well clear of the shore, on its brakes
+## until driven, the view behind it. Cars stop where the outline crosses the
+## causeway (a car-only barrier, shoreline_builder.gd).
 ##
 ## Fences: a live car or K-rail passes through the breakable fences' collision
 ## (an exception per fence body) and breaks each bay it overlaps while it moves
@@ -57,6 +60,9 @@ const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
 const PHYSICS_LOOSE_PROP := 1 << 4
+## The cars' ground over the riprap and their barrier at the causeway
+## (shoreline_builder.gd), which a live K-rail shoved there meets too.
+const PHYSICS_CAR_GROUND := ShorelineBuilder.PHYSICS_CAR_GROUND
 const RENDER_WORLD_VISIBLE := 1
 ## How close (m) the player must be to a car's body to get in.
 const ENTER_REACH_M := 2.5
@@ -454,7 +460,7 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
 	car.breakable_fences = _breakable_fences
 	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _fences)
-	car.recovered.connect(func(cause: String, from: Vector3) -> void: car_recovered.emit(cause, from))
+	car.recovered.connect(_on_car_recovered.bind(car))
 	car.splashed.connect(_splash.bind(car))
 	for fence: RID in _breakable_fences:
 		PhysicsServer3D.body_add_collision_exception(car.get_rid(), fence)
@@ -473,7 +479,7 @@ func _new_barrier(id: String, entry: Dictionary) -> RigidBody3D:
 	barrier.name = "Barrier_" + id.validate_node_name()
 	barrier.mass = BARRIER_MASS_KG
 	barrier.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
-	barrier.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP
+	barrier.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP | PHYSICS_CAR_GROUND
 	barrier.can_sleep = true
 	var surface := PhysicsMaterial.new()
 	surface.friction = 0.8
@@ -607,13 +613,20 @@ func _wake(body: RigidBody3D) -> void:
 		body.freeze = false
 
 
-## The splash where a car met the water, or the shore's rocks (no foam ring
-## spreading on them).
-func _splash(at: Vector3, speed: float, on_water: bool, car: DRIVABLE_CAR) -> void:
+## A car put back on land (the water's return, R): the driven one's chase view
+## starts behind it, settled.
+func _on_car_recovered(cause: String, from: Vector3, car: DRIVABLE_CAR) -> void:
+	if car == _active:
+		_camera.snap_behind()
+	car_recovered.emit(cause, from)
+
+
+## The splash where a car met the water.
+func _splash(at: Vector3, speed: float, car: DRIVABLE_CAR) -> void:
 	var splash := CAR_SPLASH.new()
 	splash.name = "Splash"
 	add_child(splash, true)
-	splash.start(at, speed, car.length_m, on_water)
+	splash.start(at, speed, car.length_m)
 
 
 ## Where the player gets out: {at, beside, blocked}. Beside the car (the

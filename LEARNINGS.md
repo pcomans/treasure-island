@@ -1301,6 +1301,18 @@ The street-clutter kit's wheels (2026-11-08) were invisible from the inside and 
 
 Broken fence bays were kept by their bay key alone ("0:8", run and index), which every fence row reuses, so once one fence lost bay 0:8 no other fence's 0:8 could break: the car passed through it while it stood drawn and still stopped a player on foot (found by the athletic-fields author, 2026-11-08). Key such state by the owning row's id and the local key, and in the test break the same key on a second row.
 
+## A packed array taken out of a Dictionary is a copy
+
+The cars' ground over the riprap (2026-11-10) filed the outline's edges into grid cells with `(cells[cell] as PackedInt32Array).append(edge)`. Every cell stayed empty, so no shoulder vertex found the outline, the ramp up to the lifted crest was never built, and a car met the lifted shoulder's edge as a 0.55 m step: crept at it, the car hung there; fast, the step launched it. In Godot 4 a packed array read out of a Dictionary or an Array is a copy, and appending to it leaves the stored one unchanged. Keep per-key lists that grow in an `Array`, which is held by reference, or write the packed array back. Before the first gameplay run on a new collision surface, probe it with rays along a known line and compare the hit heights with the intended profile; one probe run found this, where three contract runs had only shown its symptoms.
+
+## Read a stalled vehicle's body contacts, not only its wheels
+
+On the cars' ground over the riprap (2026-11-11) a car crept at the crest at 2 m/s slowed to 0.44 m/s in one contract run and to 1.3 m/s in a probe run of the same code. Wheel readings (compression, wheels down) suggested lost traction. Logging the body's own contacts each tick (`contact_monitor`, then the direct body state's contact normals and impulses) showed the cause in one run: the front bumper riding a 30-degree climb and the belly dragging on the slope up to a sharp crest, both with normals tilted back, while the front wheels hung in the air. A level or falling top with no rise just before the crest fixed it. When a car stalls or slows on a surface, log its body contacts first, and run a few lateral offsets and speeds in one probe, because single runs of a car on rough collision diverge.
+
+## Hold a raycast-wheel car against its springs' push along the ground too
+
+A car put back on land and held on its brakes crept 1.6 cm in 4 s on a 4-degree verge (2026-11-11), failing the contract's 1 cm drift limit, while it held still 0.3 m away. The held tyre force cancelled gravity's pull along the ground under each wheel, but the wheel's spring pushes along the body's up, which is not square to the ground triangle under that wheel, so part of that push ran along the ground unchecked. Cancelling the along-ground part of both the weight and the wheel's own spring force held it at 0.000 m on every spot. A probe that put the held car down at the failing spot and a good one, at several drop heights, showed in one run that the spot mattered and the drop height did not.
+
 ## Count frames, not seconds, in a --fixed-fps test
 
 The pause check written for grab-bag-20261111 (2026-11-11) first waited two seconds of wall clock while the game was paused in `headless_gameplay_contract.gd`. Under `--fixed-fps 60` headless every frame advances game time by 1/60 s however fast it runs, and a paused game runs thousands of frames a second, so those two seconds were minutes of the contract's frame-counted 240 s guard timer, which fired. Under `--fixed-fps`, wait a number of frames (180 for three seconds at 60); keep wall clock for rendered runs at real speed.
