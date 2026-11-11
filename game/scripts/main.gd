@@ -9,6 +9,9 @@ const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+## The gameplay actions a pause lets go of, so none is still held when play goes
+## on: a key let go while the window was away, or a touch button's own press.
+const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"move_left", &"move_right", &"run", &"jetpack", &"fast_drop", &"recover", &"vehicle_enter_exit", &"handbrake"]
 
 var _world_ready := false
 var _startup_failed := false
@@ -39,7 +42,14 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
+	# Main runs always, for its pause menu and Esc. Everything that moves stops
+	# with the game: the world, the player and the sky (pausable in main.tscn),
+	# the cars and the grass added later, and shader time (PauseClock).
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	var clock := PauseClock.new()
+	clock.name = "PauseClock"
+	clock.process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_child(clock)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere); a touch screen's controls are laid out for 720 px or more.
@@ -146,6 +156,7 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if dressing_level != GROUND_DRESSING.OFF:
 		ground_dressing = GROUND_DRESSING.new()
 		ground_dressing.name = "GroundDressing"
+		ground_dressing.process_mode = Node.PROCESS_MODE_PAUSABLE
 		add_child(ground_dressing)
 		ground_dressing.configure(world_root, player, dressing_level)
 	if vehicles == null:
@@ -263,6 +274,9 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 
 func _set_paused(paused: bool) -> void:
+	if paused:
+		for action: StringName in GAMEPLAY_ACTIONS:
+			Input.action_release(action)
 	get_tree().paused = paused
 	if paused:
 		_web_capture_pending = false
@@ -376,6 +390,26 @@ func _publish_web_state(_args: Array) -> void:
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
+
+
+## Stops the clock the scene tree's pause does not: shader time (the water's
+## waves, the trees' and the grass's sway, the docked ferry's rocking, the jet
+## flame), particles' steps and every process step follow Engine.time_scale,
+## which this sets to 0 while the tree is paused and back after, however the
+## pause comes (the pause menu, a lost focus, a test). Pausable, so it hears the
+## tree pause and unpause; leaving the tree it puts the scale back.
+class PauseClock extends Node:
+	var _saved_scale := 1.0
+	var _frozen := false
+
+	func _notification(what: int) -> void:
+		if what == NOTIFICATION_PAUSED and not _frozen:
+			_saved_scale = Engine.time_scale
+			Engine.time_scale = 0.0
+			_frozen = true
+		elif (what == NOTIFICATION_UNPAUSED or what == NOTIFICATION_EXIT_TREE) and _frozen:
+			Engine.time_scale = _saved_scale
+			_frozen = false
 
 
 func _exit_tree() -> void:

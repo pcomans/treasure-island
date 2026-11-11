@@ -119,7 +119,7 @@ The bake merges each building's opaque surfaces into far fewer draws
   jetpack back to land.
 - Primary click sprays the center-reticle target.
 - `R` recovers to a safe position.
-- `Esc` pauses; `Q` quits while paused; `F3` toggles runtime evidence.
+- `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
 
 ## More
 

@@ -13,6 +13,8 @@ const WATER_CAMERA_REACH_M := 2000.0
 ## The street-detail zones: the soccer ball's check finds the full-size pitch's
 ## centre spot in their ground blocks (tools/lib/sports-pitch.mjs).
 const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
+## The vehicle contract's places: its ball case drives along the full-size pitch.
+const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 
 
 func _initialize() -> void:
@@ -288,9 +290,122 @@ func _check_ferry_solidity() -> void:
 	var ball := await _check_soccer_ball(main, world)
 	if ball.is_empty():
 		return
+	var pause := await _check_pause(main)
+	if pause.is_empty():
+		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), and the pause (%s)" % [", ".join(heights), ball, pause])
 	quit(0)
+
+
+## The pause (owner, 2026-11-11) freezes everything that moves. With a car driving
+## along the pitch, the player riding in it and the ball rolling across, Esc pauses:
+## the menu shows and keeps running, the world, the player, the sky and the cars stop
+## processing, shader time stops (Engine.time_scale 0), every gameplay action is let
+## go, and nothing moves however long the pause lasts; Resume goes on from there with
+## the clock back as it was. Then the same on foot, rising on the jetpack. Returns a
+## summary, or "" after failing.
+func _check_pause(main: GameMain) -> String:
+	var player := main.get_node("Player") as PlayerController
+	var vehicles := main.vehicles
+	var ball: SoccerBall = get_nodes_in_group(SoccerBall.GROUP)[0]
+	var car_id := ""
+	for id: String in vehicles.swappable_ids():
+		if str(vehicles.row(id).prop) == "parked_car":
+			car_id = id
+			break
+	# Beside the pitch's centre line, driving along it (the vehicle contract's
+	# heading for its ball case runs along the full-size pitch).
+	var cases: Variant = JSON.parse_string(FileAccess.get_file_as_string(VEHICLE_CASES_PATH))
+	var heading: Array = (cases as Dictionary).ball.heading_xz if cases is Dictionary else [1.0, 0.0]
+	var along := Vector2(float(heading[0]), float(heading[1])).normalized()
+	var across := Vector2(-along.y, along.x)
+	var centre := Vector2(ball.spot.origin.x, ball.spot.origin.z)
+	var problem := "no parked car" if car_id.is_empty() else vehicles.drive_from(car_id, centre - along * 20.0 + across * 10.0, along)
+	if not problem.is_empty():
+		_fail("The pause check could not start a drive: %s." % problem)
+		return ""
+	var car := vehicles.active_car()
+	Input.action_press("move_forward")
+	for _tick in 60:
+		await physics_frame
+	ball.sleeping = false
+	ball.linear_velocity = Vector3(across.x, 0.0, across.y) * 5.0
+	for _tick in 5:
+		await physics_frame
+	if car.linear_velocity.length() < 1.0 or ball.linear_velocity.length() < 1.0:
+		_fail("Before the pause the car (%.2f m/s) and the ball (%.2f m/s) must be moving." % [car.linear_velocity.length(), ball.linear_velocity.length()])
+		return ""
+	var driving := await _paused_still(main, {"car": car, "player": player, "ball": ball})
+	if driving.is_empty():
+		return ""
+	var moved := {"car": car.global_position, "ball": ball.global_position}
+	for _tick in 30:
+		await physics_frame
+	if car.global_position.distance_to(moved.car) < 0.2 or ball.global_position.distance_to(moved.ball) < 0.2:
+		_fail("After Resume the car moved %.2f m and the ball %.2f m: play did not go on." % [car.global_position.distance_to(moved.car), ball.global_position.distance_to(moved.ball)])
+		return ""
+	vehicles.force_exit()
+	for _tick in 30:
+		await physics_frame
+	# On foot, rising on the jetpack: paused it hangs where it is, and Resume lets it
+	# go on (the pause let go of Space, so it comes down).
+	Input.action_press("jetpack")
+	for _tick in 30:
+		await physics_frame
+	if player.velocity.y < 1.0:
+		_fail("The player did not rise on the jetpack before the pause: %.2f m/s." % player.velocity.y)
+		return ""
+	var rising := await _paused_still(main, {"player": player})
+	if rising.is_empty():
+		return ""
+	var hung := player.global_position
+	for _tick in 30:
+		await physics_frame
+	if player.global_position.distance_to(hung) < 0.05:
+		_fail("After Resume the player did not move on from %s." % hung)
+		return ""
+	for _tick in 600:
+		await physics_frame
+		if player.is_on_floor():
+			break
+	player.set_gameplay_enabled(false)
+	return "driving: %s; rising on foot: %s" % [driving, rising]
+
+
+## Pauses as Esc does, checks that nothing in `bodies` (name -> Node3D) moves over
+## three seconds of frames (180 at 60 a second; this runs at --fixed-fps, so wall
+## time says nothing) while the pause menu stays live, and resumes as the Resume
+## button does. Returns a summary, or "" after failing.
+func _paused_still(main: GameMain, bodies: Dictionary) -> String:
+	var scale := Engine.time_scale
+	_push_key(KEY_ESCAPE)
+	var at := {}
+	for name: String in bodies:
+		at[name] = (bodies[name] as Node3D).global_position
+	var hud := main.hud
+	var moving := [main.get_node("WorldRoot"), main.get_node("Player"), main.get_node("WorldEnvironment"), main.vehicles]
+	if not paused or Engine.time_scale != 0.0 or not hud.pause_panel.visible or not hud.can_process() \
+	or moving.any(func(node: Node) -> bool: return node.can_process()):
+		_fail("Esc must pause the tree with the menu showing and running, the clock at 0 (time scale %s) and the world, player, sky and cars stopped." % Engine.time_scale)
+		return ""
+	var held := GameMain.GAMEPLAY_ACTIONS.filter(func(action: StringName) -> bool: return Input.is_action_pressed(action))
+	if not held.is_empty():
+		_fail("The pause left %s held." % [held])
+		return ""
+	var frames := 0
+	while frames < 180:
+		await physics_frame
+		frames += 1
+		for name: String in bodies:
+			if (bodies[name] as Node3D).global_position != at[name]:
+				_fail("Paused, the %s moved from %s to %s." % [name, at[name], (bodies[name] as Node3D).global_position])
+				return ""
+	hud.resume_button.pressed.emit()
+	if paused or Engine.time_scale != scale or hud.pause_panel.visible:
+		_fail("Resume did not unpause with the clock back at %s (paused %s, time scale %s)." % [scale, paused, Engine.time_scale])
+		return ""
+	return "%s still over %d frames" % [", ".join(PackedStringArray(bodies.keys())), frames]
 
 
 ## The pitch's football (game/scripts/world/soccer_ball.gd): the ball on a full-size
@@ -505,6 +620,16 @@ func _send_key(physical_keycode: Key, pressed: bool) -> void:
 	key.pressed = pressed
 	Input.parse_input_event(key)
 	Input.flush_buffered_events()
+
+
+## A tap of a key, delivered to the game's nodes as the window delivers it.
+func _push_key(keycode: Key) -> void:
+	for pressed: bool in [true, false]:
+		var key := InputEventKey.new()
+		key.keycode = keycode
+		key.physical_keycode = keycode
+		key.pressed = pressed
+		root.push_input(key)
 
 
 ## Shader code without its // comments.
