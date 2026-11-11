@@ -6,6 +6,7 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { buildStreetCarHeroKitGlb, STREET_CAR_HERO_KIT_PATH } from "./build_street_car_hero_kit.mjs";
 import { buildStreetClutterKitGlb, STREET_CLUTTER_KIT_PATH } from "./build_street_clutter_kit.mjs";
 import { buildStreetYardKitGlb, STREET_YARD_KIT_PATH } from "./build_street_yard_kit.mjs";
 import { buildGroundCoverMap, buildMarshMap, decodeGroundCoverPng, GROUND_COVER_MAP_PATH, MARSH_MAP_PATH } from "./lib/ground-cover-map.mjs";
@@ -90,6 +91,12 @@ function main() {
       kit.equals(readFileSync(resolve(projectRoot, STREET_CLUTTER_KIT_PATH))),
       `Committed ${STREET_CLUTTER_KIT_PATH} differs from a fresh build; rebuild it with tools/build_street_clutter_kit.mjs`,
     );
+    // And the cars' hero level, from the same car module.
+    const heroKit = buildStreetCarHeroKitGlb().glb;
+    invariant(
+      heroKit.equals(readFileSync(resolve(projectRoot, STREET_CAR_HERO_KIT_PATH))),
+      `Committed ${STREET_CAR_HERO_KIT_PATH} differs from a fresh build; rebuild it with tools/build_street_car_hero_kit.mjs`,
+    );
     // Likewise the yard kit: the rows take its footprints from the same registry.
     const yardKit = buildStreetYardKitGlb().glb;
     invariant(
@@ -129,6 +136,7 @@ function main() {
       clean_generations: 2,
       files_compared: firstInventory.length,
       street_clutter_kit_bytes: kit.length,
+      street_car_hero_kit_bytes: heroKit.length,
       street_yard_kit_bytes: yardKit.length,
       ground_cover_map_cells: coverMap.grid.width * coverMap.grid.height,
       content_sha256: manifest.content_sha256,

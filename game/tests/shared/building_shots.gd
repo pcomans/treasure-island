@@ -70,6 +70,8 @@ extends SceneTree
 ##   "frame_time_layer": "clutter" (a street-detail layer that is on) the frames
 ##   are timed with that layer drawn and hidden, in three alternating blocks each
 ##   so a drift in the machine's load falls on both: one FRAME_TIME line per state.
+##   A moving view may add "frame_time_frames" too: the frames are timed after
+##   its last step, from the camera in use then (in a car, the driving camera).
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -1058,6 +1060,8 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		_h.release_input()
 		if error != "":
 			break
+	if error == "" and view.has("frame_time_frames"):
+		error = await _frame_time(view.frame_time_frames, prefix.get_file())
 	if _h.main.vehicles != null:
 		_h.main.vehicles.force_exit()
 	player.set_gameplay_enabled(false)
