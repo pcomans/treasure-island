@@ -2,7 +2,7 @@ extends SceneTree
 
 const REQUIRED_ACTIONS := [
 	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
-	"spray", "recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
+	"recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
 ]
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
@@ -36,6 +36,18 @@ func _initialize() -> void:
 	if not _action_has_physical_key("handbrake", KEY_SPACE):
 		_fail("The handbrake must be bound to physical Space.")
 		return
+	# The owner removed the spray on 2026-11-11: its action is gone and the left
+	# mouse button it was on does nothing (no action takes a click).
+	if InputMap.has_action("spray"):
+		_fail("The spray action must be gone.")
+		return
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	for action: StringName in InputMap.get_actions():
+		if InputMap.event_is_action(click, action):
+			_fail("The left mouse button must do nothing, but it is bound to %s." % action)
+			return
 	# The arrow keys move as W, S, A and D do (owner, 2026-11-11), on foot and in a
 	# car, which reads the same actions: a real key event presses the action and
 	# its release lets it go.
@@ -88,7 +100,6 @@ func _initialize() -> void:
 	var arm := player.get_node("CameraPivot/SpringArm3D") as SpringArm3D
 	var camera := player.get_node("CameraPivot/SpringArm3D/Camera3D") as Camera3D
 	var camera_pivot := player.get_node("CameraPivot") as PlayerCamera
-	var pool := player.get_node("SprayController/TagInstances") as TagInstancePool
 	if arm == null or camera == null or camera.get_parent() != arm or arm.collision_mask != 1:
 		_fail("CameraPivot -> SpringArm3D -> Camera3D contract is invalid.")
 		return
@@ -97,9 +108,6 @@ func _initialize() -> void:
 	or not is_equal_approx(arm.spring_length, 5.5) \
 	or not is_equal_approx(arm.rotation.x, deg_to_rad(-8.0)):
 		_fail("Initial third-person camera framing defaults drifted.")
-		return
-	if pool == null or pool.session_limit != 64:
-		_fail("Session tag limit must default to 64.")
 		return
 	var gameplay_far := camera.far
 	var gameplay_arm_m := arm.spring_length
@@ -236,8 +244,8 @@ func _initialize() -> void:
 ## The ferry terminal's scenery (game/scripts/world/ferry_terminal.gd) lies off the
 ## walk route, but a jetpack landing on it must never fall through: in the loaded
 ## world, straight down onto the float's deck, the breakwater, the docked boat and
-## the gangway, the first world-solid hit is the terminal's own body, which refuses
-## the spray (receiver_kind none).
+## the gangway, the first world-solid hit is the terminal's own body (receiver_kind
+## none).
 func _check_ferry_solidity() -> void:
 	create_timer(240.0, true, false, true).timeout.connect(func() -> void: _fail("The ferry solidity check timed out."))
 	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
@@ -297,7 +305,7 @@ func _check_ferry_solidity() -> void:
 	if controls.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s) and the controls screen (%s)" % [", ".join(heights), ball, pause, controls])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s) and the controls screen (%s)" % [", ".join(heights), ball, pause, controls])
 	quit(0)
 
 

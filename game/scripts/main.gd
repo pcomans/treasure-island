@@ -146,16 +146,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 		STARTUP_MARKS.mark("detail_distances_end")
 	if not player.feedback_requested.is_connected(hud.show_feedback):
 		player.feedback_requested.connect(hud.show_feedback)
-	if not player.spray_result.is_connected(world_root.get_runtime_evidence().record_spray):
-		player.spray_result.connect(world_root.get_runtime_evidence().record_spray)
 	if not player.recovered.is_connected(world_root.get_runtime_evidence().record_recovery):
 		player.recovered.connect(world_root.get_runtime_evidence().record_recovery)
-	if not player.get_spray_controller().spray_identity.is_connected(world_root.get_runtime_evidence().record_spray_identity):
-		player.get_spray_controller().spray_identity.connect(world_root.get_runtime_evidence().record_spray_identity)
-	if not player.get_spray_controller().tag_instances.active_count_changed.is_connected(world_root.get_runtime_evidence().set_active_decals):
-		player.get_spray_controller().tag_instances.active_count_changed.connect(world_root.get_runtime_evidence().set_active_decals)
-	if not player.get_spray_controller().tag_instances.oldest_tag_removed.is_connected(world_root.get_runtime_evidence().record_tag_eviction):
-		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
 	var dressing_level := GROUND_DRESSING.run_level()
 	if dressing_level != GROUND_DRESSING.OFF:

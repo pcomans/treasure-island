@@ -1,8 +1,8 @@
 # Treasure Island
 
 A private Godot game of Treasure Island, San Francisco, built autonomously by
-agents: as a treasure chest full of gold on rubber-hose legs, walk, run, jetpack,
-and spray a tag on building walls. The whole island
+agents: as a treasure chest full of gold on rubber-hose legs, walk, run and
+jetpack (the owner removed spraying tags on 2026-11-11). The whole island
 comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
 time so they look like the real ones.
 
@@ -118,7 +118,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - Stepping off the island onto the shore rocks, or flying out over the water,
   lifts you about 5 m into the air where you are; float down and steer or
   jetpack back to land.
-- Primary click sprays the center-reticle target.
+- The mouse buttons do nothing: the owner removed the spray on 2026-11-11.
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
@@ -145,7 +145,7 @@ releasing Space descends slowly and holding C in the air drops fast. F gets
 in or out of a parked car; in a car W/S drive, A/D steer (or the arrow keys)
 and Space is the handbrake. Click
 **Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
-again and continues. Spray is omitted in the browser build by owner approval.
+again and continues. The owner removed the spray on 2026-11-11.
 F3 shows actual FPS.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
