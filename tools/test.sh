@@ -101,14 +101,22 @@ node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.
 node_pids=()
 node_logs=""
 baked=""
-stop_tree() {
+# A process and every process under it, each parent before its children.
+process_tree() {
   local child
-  for child in $(pgrep -P "$1"); do stop_tree "${child}"; done
-  kill "$1" 2>/dev/null
+  echo "$1"
+  for child in $(pgrep -P "$1"); do process_tree "${child}"; done
 }
 cleanup() {
-  local pid
-  for pid in "${node_pids[@]}"; do stop_tree "${pid}"; done
+  local job pid pids=()
+  # This shell's background jobs still running (a check that has ended is not
+  # listed, so its old PID, which another process may hold by now, is never
+  # signalled) and every process under them, all listed first and signalled
+  # parents first. A child runs on when its parent stops, so each process is
+  # still running at its own signal; children first, a subshell would end
+  # with its node process and could be reaped before its own.
+  for job in $(jobs -pr); do pids+=($(process_tree "${job}")); done
+  for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
   [ -z "${node_logs}" ] || rm -rf "${node_logs}"
   [ -z "${baked}" ] || rm -f "${baked}"
 }
@@ -175,7 +183,6 @@ for index in "${!node_checks[@]}"; do
   echo "== ${node_checks[index]}"
   wait "${node_pids[index]}"
   status=$?
-  unset "node_pids[${index}]"
   cat "${node_logs}/${index}"
   [ "${status}" -eq 0 ] || failed+=("${node_checks[index]}")
 done
