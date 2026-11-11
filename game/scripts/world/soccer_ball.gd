@@ -341,14 +341,20 @@ func _push_from(character: CharacterBody3D) -> void:
 	var closing := (character.velocity - linear_velocity).dot(normal)
 	if closing <= 0.0:
 		# At the fast run (20 m/s, a third of a metre a tick) the touch reports the
-		# capsule a tick late, already past the ball's centre. A ball still ahead of
-		# the capsule a tick before was run through: it goes off along the run.
+		# capsule a tick late, already past the ball's centre. Only a ball the capsule
+		# has passed since the last tick (behind its axis now, ahead of it a tick
+		# before) was run through, and it takes the push of that earlier contact, along
+		# its normal. A ball still ahead and moving off faster than the capsule closes,
+		# as a glancing touch sends it aside, keeps the push it already had.
 		var run := Vector3(character.velocity.x, 0.0, character.velocity.z)
+		if run.length_squared() < 0.000001 or Vector3(offset.x, 0.0, offset.z).dot(run) > 0.0:
+			return
 		var back := character.velocity * get_physics_process_delta_time()
 		var earlier := centre - Geometry3D.get_closest_point_to_segment(centre, capsule.bottom - back, capsule.top - back)
-		if run.length_squared() < 0.000001 or Vector3(earlier.x, 0.0, earlier.z).dot(run) <= 0.0:
+		earlier.y = 0.0
+		if earlier.dot(run) <= 0.0:
 			return
-		normal = run.normalized()
+		normal = earlier.normalized()
 		closing = (character.velocity - linear_velocity).dot(normal)
 		if closing <= 0.0:
 			return

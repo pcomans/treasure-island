@@ -542,6 +542,26 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	if fastest < 12.0:
 		_fail("Running into the soccer ball sent it off at %.2f m/s, not at least 12." % fastest)
 		return ""
+	# A glancing walk: the capsule's axis passes 0.4 m to the side of the ball's
+	# centre. The ball goes off aside, away from the player, and slower than the walk
+	# along it: only a ball the capsule has run through goes on along the run.
+	if not await _place_ball(ball, ball.spot.origin):
+		return ""
+	var side := Vector3.BACK
+	if not await _place_player(player, world, ball.global_position - east * 4.0 + side * 0.4):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-east.x, -east.z), 0.0)
+	var glance := Vector3.ZERO
+	Input.action_press("move_forward")
+	for _tick in 90:
+		await physics_frame
+		if ball.linear_velocity.length() > glance.length():
+			glance = ball.linear_velocity
+	Input.action_release("move_forward")
+	player.set_gameplay_enabled(false)
+	if -glance.dot(side) < 1.0 or glance.dot(east) > 3.0:
+		_fail("Walked past glancing (0.4 m to the side of its centre), the ball must go off aside, at least 1 m/s away from the player and under 3 m/s along the walk: %.2f m/s aside, %.2f along." % [-glance.dot(side), glance.dot(east)])
+		return ""
 	# Over the bay, off the island: back on its spot. Then the same from below the land.
 	var resets := ball.resets
 	var over_bay := ball.spot.origin
@@ -564,7 +584,7 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	var goals := await _check_goals(player, world, ball)
 	if goals.is_empty():
 		return ""
-	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land; %s" % [pushed, rolled, fastest, goals]
+	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, a glancing walk sent aside at %.1f m/s (%.1f along), back from the bay and from below the land; %s" % [pushed, rolled, fastest, -glance.dot(side), glance.dot(east), goals]
 
 
 ## Goals (owner, 2026-11-11). The stock player running into the ball in front of the
