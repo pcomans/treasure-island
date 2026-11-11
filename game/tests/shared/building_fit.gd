@@ -644,7 +644,7 @@ func _wall_anchors(center: Vector3, side: Vector3, faces: Array[Dictionary], sha
 func _preflight_descent(ground: Vector3) -> Dictionary:
 	var player := _h.player
 	var up := player.up_direction.normalized()
-	# settle_player places an identity body two metres above global-Y ground.
+	# settle_player sweeps an identity body down from two metres above global-Y ground.
 	if not up.is_equal_approx(Vector3.UP):
 		return {"ok": false, "reason": "unsupported up direction for stock settle setup"}
 	var pose := Transform3D(Basis.IDENTITY, ground + Vector3.UP * 2.0)

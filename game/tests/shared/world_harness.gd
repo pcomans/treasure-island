@@ -411,13 +411,23 @@ const STEEP := "too steep to stand"
 const NOT_SETTLED := "did not settle on the ground"
 
 
-## Drops the stock player at xz, its feet drop_m above the ground under that
-## point, and lets physics settle it. Returns "" on success, or one of the
-## reasons above. The fall is slow (the player's descent cap), so a caller that
-## only needs the player standing there, such as a screenshot, passes a small
-## drop_m; it must still clear the ground under the whole capsule (0.35 m
-## radius, its bottom at the player's origin): 0.15 m on the steepest slope
-## the support check allows, 0.2 m beside a 15 cm kerb.
+## How far past the stock player's floor snap above the support settle_player's
+## straight drop would first meet it starts its last ticks of settling (m): out of
+## the snap's reach, so it lands with a real contact, as the fall did.
+const SETTLE_GAP_M := 0.05
+
+
+## Stands the stock player at xz and lets physics settle it there. Returns "" on
+## success, or one of the reasons above. Its feet start drop_m above the ground
+## under that point, but it does not fall from there at the jetpack's slow
+## descent (1.5 m/s: about 1.4 s of physics for 2 m, every walk-up and stair until
+## 2026-11-11): the stock body's own test motion sweeps it straight down to the
+## first support that fall would land on, and it falls the last 0.4 m (its floor
+## snap and SETTLE_GAP_M) and lands as the fall would, in about 20 ticks rather
+## than about 80. drop_m must still clear the
+## ground under the whole capsule (0.35 m radius, its bottom at the player's
+## origin): 0.15 m on the steepest slope the support check allows, 0.2 m beside a
+## 15 cm kerb.
 func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
 		return OFF_ISLAND
@@ -432,7 +442,17 @@ func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0)
 	if main.vehicles != null:
 		main.vehicles.force_exit()
 	player.set_gameplay_enabled(false)
-	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop_m, xz.y))
+	var drop := Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop_m, xz.y))
+	var sweep := PhysicsTestMotionParameters3D.new()
+	sweep.from = drop
+	sweep.motion = Vector3.DOWN * (drop_m + 1.0)
+	sweep.margin = player.safe_margin
+	var landing := PhysicsTestMotionResult3D.new()
+	# The body's own shapes, mask and exceptions, as its fall would move it; with
+	# nothing below, it falls from drop_m as before.
+	if PhysicsServer3D.body_test_motion(player.get_rid(), sweep, landing) and landing.get_travel().is_finite():
+		drop.origin += landing.get_travel() + Vector3.UP * minf(player.floor_snap_length + SETTLE_GAP_M, absf(landing.get_travel().y))
+	player.global_transform = drop
 	player.velocity = Vector3.DOWN * 0.1
 	player.set_gameplay_enabled(true)
 	for _frame in 240:
