@@ -6,6 +6,9 @@ extends SceneTree
 ## housing family installer switched off.
 
 const Merge := preload("res://tools/merge_baked_buildings.gd")
+## The same tool's source, which _check_merge_counts_drop compiles with a fault. (Merge
+## is the script's class here, so Merge.resource_path does not parse.)
+const MERGE_SOURCE := "res://tools/merge_baked_buildings.gd"
 ## Parts in this colour are the ones the faulty copy of the tool in
 ## _check_merge_counts_drop never records.
 const DROPPED_COLOR := Color(0.123, 0.456, 0.789)
@@ -203,7 +206,7 @@ func _check_dropped_parts(triangle: Array) -> void:
 ## of _add_part for parts in DROPPED_COLOR, so they are never recorded (no hook in the
 ## tool), and runs that copy's merge() on a small building without and with such a part.
 func _check_merge_counts_drop() -> void:
-	var source := FileAccess.get_file_as_string(Merge.resource_path)
+	var source := FileAccess.get_file_as_string(MERGE_SOURCE)
 	var add_part := RegEx.create_from_string("(?m)^static func _add_part\\(.*\\n").search(source)
 	if add_part == null:
 		check(false, "The merge tool has no _add_part for the dropped-part case to fault")
