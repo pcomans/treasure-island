@@ -5,7 +5,7 @@ extends Node3D
 ## (geometry and materials in chest_avatar_parts.gd). Visual only: it reads the
 ## stock player's motion (real velocity, floor contact, the jetpack action) and
 ## never changes it; it has no collision and stays about the size of the old
-## capsule, so camera framing and spray aim are unchanged.
+## capsule, so camera framing is unchanged.
 ##
 ## Everything is procedural and driven by that motion, each physics tick after
 ## the controller has moved the player:

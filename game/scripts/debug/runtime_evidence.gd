@@ -22,20 +22,9 @@ var street_detail_rows_by_layer: Dictionary = {}
 ## caller, command_line or project_setting.
 var street_detail_layers: Array = []
 var street_detail_source := "not-loaded"
-var active_decals := 0
-var tags_evicted := 0
 var recovery_count := 0
 var last_recovery_cause := "none"
 var last_recovery_from := Vector3.ZERO
-var last_spray_object := "none"
-var last_spray_sources: Array = []
-var spray_counts := {
-	"placed": 0,
-	"no_hit": 0,
-	"range_rejection": 0,
-	"receiver_rejection": 0,
-	"identity_error": 0,
-}
 var player: CharacterBody3D
 var boundary: WorldBoundary
 
@@ -103,24 +92,6 @@ func bind_runtime(player_body: CharacterBody3D, world_boundary: WorldBoundary) -
 	boundary = world_boundary
 
 
-func record_spray(result_code: String) -> void:
-	if spray_counts.has(result_code):
-		spray_counts[result_code] += 1
-
-
-func set_active_decals(count: int) -> void:
-	active_decals = count
-
-
-func record_tag_eviction() -> void:
-	tags_evicted += 1
-
-
-func record_spray_identity(derived_object_key: String, source_keys: Array) -> void:
-	last_spray_object = derived_object_key
-	last_spray_sources = source_keys.duplicate()
-
-
 func record_recovery(cause: String, from_position: Vector3) -> void:
 	recovery_count += 1
 	last_recovery_cause = cause
@@ -145,7 +116,5 @@ func debug_text() -> String:
 		"Frame: %.1f FPS | %.2f ms" % [fps, frame_ms],
 		"Memory: %.1f MiB static" % static_memory_mib,
 		"Player: (%.1f, %.1f, %.1f) | grounded %s | in boundary %s | safe transform %s" % [player_position.x, player_position.y, player_position.z, grounded, in_boundary, has_safe_transform],
-		"Tags: %d | evicted %d | placed %d | no hit %d | range %d | receiver %d | identity %d" % [active_decals, tags_evicted, spray_counts.placed, spray_counts.no_hit, spray_counts.range_rejection, spray_counts.receiver_rejection, spray_counts.identity_error],
-		"Last tag: %s | %s" % [last_spray_object, ",".join(last_spray_sources)],
 		"Recoveries: %d | last %s from (%.1f, %.1f, %.1f)" % [recovery_count, last_recovery_cause, last_recovery_from.x, last_recovery_from.y, last_recovery_from.z],
 	])
