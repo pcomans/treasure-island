@@ -32,6 +32,7 @@ enabled=PackedStringArray("res://addons/generated_world_export/plugin.cfg")
 
 texture={
 "compress/mode": 2,
+"detect_3d/compress_to": 0,
 "mipmaps/generate": true
 }
 

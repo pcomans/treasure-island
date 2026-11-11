@@ -52,6 +52,9 @@ const GROUND_ROUTES := [
 
 
 func _initialize() -> void:
+	if not _texture_imports_match():
+		quit(1)
+		return
 	var builder := WorldChunkBuilder.new()
 	for material_key: String in EXPECTED_MATERIALS:
 		var expected: Dictionary = EXPECTED_MATERIALS[material_key]
@@ -71,7 +74,7 @@ func _initialize() -> void:
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -357,6 +360,39 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 		and _require(shoulder_has_tangents, "A shoreline shoulder mesh lacks tangents for the ground cover's normal map.") \
 		and _require(has_tangents, "A riprap overlay record lacks tangents for the ground cover's normal map.") \
 		and _require(not has_collision, "A riprap overlay record has collision.")
+
+
+## Every texture import keeps Detect 3D off (detect_3d/compress_to=0): with it on,
+## the editor switches a texture to VRAM compression the first time a 3D material
+## uses it, block-compressing a lossless data or UI texture.
+func _texture_imports_match() -> bool:
+	var problems: Array[String] = []
+	for path: String in _import_files("res://"):
+		var config := ConfigFile.new()
+		if config.load(path) != OK:
+			problems.append("%s does not parse." % path)
+			continue
+		var detect_3d := int(config.get_value("params", "detect_3d/compress_to", 0))
+		if detect_3d != 0:
+			problems.append("%s has detect_3d/compress_to=%d; set it to 0 (Import dock: Detect 3D > Compress To > Disabled)." % [path, detect_3d])
+	for problem in problems:
+		_require(false, problem)
+	return problems.is_empty()
+
+
+## Every .import file Godot reads: res:// less hidden folders, folders holding a
+## .gdignore, and node_modules.
+static func _import_files(folder: String) -> Array[String]:
+	var found: Array[String] = []
+	if FileAccess.file_exists(folder.path_join(".gdignore")):
+		return found
+	for file in DirAccess.get_files_at(folder):
+		if file.ends_with(".import"):
+			found.append(folder.path_join(file))
+	for child in DirAccess.get_directories_at(folder):
+		if child != "node_modules":
+			found.append_array(_import_files(folder.path_join(child)))
+	return found
 
 
 func _require(condition: bool, message: String) -> bool:
