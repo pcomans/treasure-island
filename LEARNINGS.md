@@ -1294,3 +1294,19 @@ The street-clutter kit's wheels (2026-11-08) were invisible from the inside and 
 ## Key session state by its owner, not by a key that repeats
 
 Broken fence bays were kept by their bay key alone ("0:8", run and index), which every fence row reuses, so once one fence lost bay 0:8 no other fence's 0:8 could break: the car passed through it while it stood drawn and still stopped a player on foot (found by the athletic-fields author, 2026-11-08). Key such state by the owning row's id and the local key, and in the test break the same key on a second row.
+
+## Count frames, not seconds, in a --fixed-fps test
+
+The pause check written for grab-bag-20261111 (2026-11-11) first waited two seconds of wall clock while the game was paused in `headless_gameplay_contract.gd`. Under `--fixed-fps 60` headless every frame advances game time by 1/60 s however fast it runs, and a paused game runs thousands of frames a second, so those two seconds were minutes of the contract's frame-counted 240 s guard timer, which fired. Under `--fixed-fps`, wait a number of frames (180 for three seconds at 60); keep wall clock for rendered runs at real speed.
+
+## A player put down inside the floor snap lands without a contact
+
+The first direct settle in `world_harness.gd` (2026-11-11) put the stock player 2 cm above the ground its fall would land on. It had stood on a floor before the move, so its first `move_and_slide` snapped it down (`floor_snap_length` 0.35 m) and reported `is_on_floor()` with no slide collision, and the fit's start-support check, which reads the slide contacts, failed. Put such a player beyond the snap (0.35 m and a margin) so it lands with a real contact, as a fall does.
+
+## A slanting run-up curves aside
+
+The stock controller speeds each world axis up apart (`move_toward` per component), so a run from rest along a slant first goes off at 45 degrees and ends about 1.1 m to the side of its line after 4 m. A goal test's kick aimed along a goal's slanting axis missed the ball that way (2026-11-11). When a test needs a stock run-up to hit something, run along a world axis or line up from far enough back.
+
+## An Area3D reports a fast mover a tick late
+
+The pitch's ball pushes a character its touch area overlaps, but the area's overlap list is the last physics step's: at the stock full run, 20 m/s or a third of a metre a tick, the capsule was already past the ball's centre when the ball read it, so the push's closing test refused every full-speed kick (found 2026-11-11; the contract's run test started 4 m back and reached only 14 m/s). Test a contact at the speeds players reach, and judge an approach against the mover's position a tick earlier when the reach is under a tick's travel.
