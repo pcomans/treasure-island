@@ -1,8 +1,8 @@
 # Treasure Island
 
 A private Godot game of Treasure Island, San Francisco, built autonomously by
-agents: as a treasure chest full of gold on rubber-hose legs, walk, run, jetpack,
-and spray a tag on building walls. The whole island
+agents: as a treasure chest full of gold on rubber-hose legs, walk, run and
+jetpack (the owner removed spraying tags on 2026-11-11). The whole island
 comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
 time so they look like the real ones.
 
@@ -40,10 +40,13 @@ tools/godot --headless --path . --import                       # after a fresh c
 tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 ```
 
-New textures default to VRAM compression with mipmaps. For UI art or textures that
-store shader data, use **Compress > Mode > Lossless** and **Detect 3D > Compress To >
-Disabled** in the Import dock. Keep mipmaps if the shader samples them. Reimport
-and commit the `.import` file with the texture.
+New textures default to VRAM compression with mipmaps and Detect 3D off, and a
+VRAM-compressed texture's sides must be multiples of 4 pixels, also as the Web build
+caps it (`headless_world_material_contract.gd` fails otherwise). For UI art or
+textures that store shader data, use **Compress > Mode > Lossless** in the Import
+dock; the same test lists the shader-data textures and checks `game/resources/ui/`.
+Keep mipmaps if the shader samples them. Reimport and commit the `.import` file
+with the texture.
 
 ## Check a building
 
@@ -105,21 +108,23 @@ The bake merges each building's opaque surfaces into far fewer draws
 
 ## Controls
 
-- `WASD` moves; hold `Shift` to run.
+- `WASD` or the arrow keys move; hold `Shift` to run.
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
 - Hold `C` in the air to drop fast. It does nothing on the ground, and `Space` wins if both are held.
 - `F` beside a parked street or lot car gets in; `F` again gets out beside it.
-- In a car: `W`/`S` drive, brake and reverse; `A`/`D` steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
+- In a car: `W`/`S` (or the up and down arrows) drive, brake and reverse; `A`/`D` (or the left and right arrows) steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
 - A car breaks through fences bay by bay (a broken bay stays open, on foot too, until a restart), shoves parked cars and K-rails, sends the pitch's ball rolling, drives through bushes and stops at trees. Driven off the shore it rolls down the rocks, watched from the shore, splashes where it meets the water and sinks, then goes back, with you in it and the view behind it, to a level spot at least 12 m inside the shore, facing away from the water and held on its brakes until you drive off. Cars stop where the island's edge crosses the causeway to Yerba Buena. On its roof or side it rights itself after about three seconds.
+- Kick the pitch's ball (run into it), or push it with a car, into any goal on the athletic fields: confetti bursts at the goal and the ball goes back to its centre spot.
 - Car ramps stand in three empty lots: the 12th Street and Avenue D dirt lot, the north slab site between Avenue I and Avenue M, and the former school lot by Aracely Cafe.
 - Fences stop you on foot (gates, path crossings and bays a car broke stay open); the jetpack clears them.
 - Stepping off the island onto the shore rocks, or flying out over the water,
   lifts you about 5 m into the air where you are; float down and steer or
   jetpack back to land.
-- Primary click sprays the center-reticle target.
+- The mouse buttons do nothing: the owner removed the spray on 2026-11-11.
 - `R` recovers to a safe position.
-- `Esc` pauses; `Q` quits while paused; `F3` toggles runtime evidence.
+- `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
+- **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
 
 ## More
 
@@ -138,12 +143,12 @@ pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-play starts by itself. WASD moves, Shift runs, Space rises with the jetpack,
+play starts by itself. WASD or the arrow keys move, Shift runs, Space rises with the jetpack,
 releasing Space descends slowly and holding C in the air drops fast. F gets
-in or out of a parked car; in a car W/S drive, A/D steer and Space is the
-handbrake. Click
+in or out of a parked car; in a car W/S drive, A/D steer (or the arrow keys)
+and Space is the handbrake. Click
 **Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
-again and continues. Spray is omitted in the browser build by owner approval.
+again and continues. The owner removed the spray on 2026-11-11.
 F3 shows actual FPS.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
@@ -182,7 +187,8 @@ the container crash. That override is not in the deployed game.
 On a touch-capable browser, play starts as soon as the island has loaded. Drag the
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
-**II** button pauses; **Play / Resume** continues. Movement, look and buttons
+**II** button pauses; **Play / Resume** continues and **Controls** lists the touch
+controls. Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.

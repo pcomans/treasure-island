@@ -1,15 +1,15 @@
 game/resources/mersea/gravel_albedo.png.import
 game/resources/mersea/mural.png.import
-game/resources/textures/context/fresh_bay/sector_east.png.import
-game/resources/textures/context/fresh_bay/sector_north.png.import
-game/resources/textures/context/fresh_bay/sector_south.png.import
-game/resources/textures/context/fresh_bay/sf_skyline.png.import
+game/resources/textures/context/fresh_bay/sector_east.png.import 504
+game/resources/textures/context/fresh_bay/sector_north.png.import 504
+game/resources/textures/context/fresh_bay/sector_south.png.import 504
+game/resources/textures/context/fresh_bay/sf_skyline.png.import 504
 game/resources/textures/world/aracely/aracely_apron.png.import
 game/resources/textures/world/aracely/aracely_interior.png.import
 game/resources/textures/world/aracely/aracely_mural.png.import
-game/resources/textures/world/aracely/aracely_planter.png.import
+game/resources/textures/world/aracely/aracely_planter.png.import 504
 game/resources/textures/world/aracely/aracely_planting.png.import
-game/resources/textures/world/aracely/aracely_script.png.import
+game/resources/textures/world/aracely/aracely_script.png.import 508
 game/resources/textures/world/aracely/aracely_slab.png.import
 game/resources/textures/world/aracely/gaa_sign.png.import
 game/resources/textures/world/b201/apron_concrete.png.import
@@ -56,7 +56,7 @@ game/resources/textures/world/street/paseo_walk.png.import
 game/resources/textures/world/street/promenade_aggregate.png.import
 game/resources/textures/world/street/promenade_bark_mulch.png.import
 game/resources/textures/world/street/street_concrete_panels.png.import
-game/resources/textures/world/street/street_fence_banners.png.import
+game/resources/textures/world/street/street_fence_banners.png.import 504
 game/resources/textures/world/street/street_furniture_atlas.png.import
 game/resources/textures/world/street/street_plaza_pavers.png.import
 game/resources/textures/world/street/yard_rubble.png.import
@@ -64,25 +64,25 @@ game/resources/textures/world/street/yard_shoulder_gravel.png.import
 game/resources/textures/world/vegetation/agave_leaf.png.import
 game/resources/textures/world/vegetation/broadleaf_foliage_atlas.png.import
 game/resources/textures/world/vegetation/canary_frond_atlas.png.import
-game/resources/textures/world/vegetation/clipped_band_atlas.png.import
+game/resources/textures/world/vegetation/clipped_band_atlas.png.import 504
 game/resources/textures/world/vegetation/cypress_foliage_atlas.png.import
 game/resources/textures/world/vegetation/fan_palm_foliage_atlas.png.import
 game/resources/textures/world/vegetation/grass_atlas.png.import
-game/resources/textures/world/vegetation/impostors/eucalyptus_mature_0.png.import
-game/resources/textures/world/vegetation/impostors/eucalyptus_mature_1.png.import
+game/resources/textures/world/vegetation/impostors/eucalyptus_mature_0.png.import 484
+game/resources/textures/world/vegetation/impostors/eucalyptus_mature_1.png.import 504
 game/resources/textures/world/vegetation/impostors/monterey_pine_0.png.import
-game/resources/textures/world/vegetation/impostors/monterey_pine_1.png.import
+game/resources/textures/world/vegetation/impostors/monterey_pine_1.png.import 508
 game/resources/textures/world/vegetation/impostors/monterey_pine_2.png.import
-game/resources/textures/world/vegetation/impostors/monterey_pine_3.png.import
-game/resources/textures/world/vegetation/impostors/monterey_pine_4.png.import
+game/resources/textures/world/vegetation/impostors/monterey_pine_3.png.import 508
+game/resources/textures/world/vegetation/impostors/monterey_pine_4.png.import 508
 game/resources/textures/world/vegetation/impostors/monterey_pine_5.png.import
-game/resources/textures/world/vegetation/impostors/nz_christmas_tree_0.png.import
-game/resources/textures/world/vegetation/impostors/nz_christmas_tree_1.png.import
-game/resources/textures/world/vegetation/impostors/spreading_broadleaf_0.png.import
+game/resources/textures/world/vegetation/impostors/nz_christmas_tree_0.png.import 492
+game/resources/textures/world/vegetation/impostors/nz_christmas_tree_1.png.import 476
+game/resources/textures/world/vegetation/impostors/spreading_broadleaf_0.png.import 508
 game/resources/textures/world/vegetation/impostors/spreading_broadleaf_1.png.import
 game/resources/textures/world/vegetation/impostors/spreading_broadleaf_2.png.import
 game/resources/textures/world/vegetation/impostors/spreading_broadleaf_3.png.import
-game/resources/textures/world/vegetation/impostors/weeping_broadleaf_0.png.import
+game/resources/textures/world/vegetation/impostors/weeping_broadleaf_0.png.import 488
 game/resources/textures/world/vegetation/impostors/weeping_broadleaf_1.png.import
 game/resources/textures/world/vegetation/marsh_atlas.png.import
 game/resources/textures/world/vegetation/meadow_atlas.png.import
@@ -90,5 +90,5 @@ game/resources/textures/world/vegetation/perennial_atlas.png.import
 game/resources/textures/world/vegetation/pine_foliage_atlas.png.import
 game/resources/textures/world/vegetation/set_piece_foliage_atlas.png.import
 game/resources/textures/world/vegetation/shrub_foliage_atlas.png.import
-game/resources/textures/world/vegetation/young_planting_atlas.png.import
+game/resources/textures/world/vegetation/young_planting_atlas.png.import 504
 game/resources/textures/world/vegetation/young_tree_foliage_atlas.png.import

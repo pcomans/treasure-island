@@ -87,7 +87,7 @@
       {"role": "shallow patio/threshold edge", "path": "res://game/resources/materials/world/isle_house/isle_house_low_patio.tres", "sha256": "a4790cb821a8bf37e57de4b02e9257a23b0abf6970af5f3da8daf2a22c8eaea5"}
     ],
     "textures": [
-      {"role": "promoted muted brick source albedo", "path": "res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png", "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d"}
+      {"role": "promoted muted brick source albedo", "path": "res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png", "sha256": "60d46d03728a5fa41c2795614a5ce0b79c8b626d30bd4e5dc36d02bba99c5119"}
     ]
   },
   "prototype_topology": {

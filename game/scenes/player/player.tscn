@@ -1,10 +1,8 @@
-[gd_scene load_steps=7 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/player/player_controller.gd" id="1_player"]
 [ext_resource type="Script" path="res://game/scripts/player/player_camera.gd" id="2_camera"]
 [ext_resource type="Script" path="res://game/scripts/player/recovery_controller.gd" id="3_recovery"]
-[ext_resource type="Script" path="res://game/scripts/interaction/spray_controller.gd" id="4_spray"]
-[ext_resource type="Script" path="res://game/scripts/interaction/tag_instance_pool.gd" id="5_pool"]
 [ext_resource type="Script" path="res://game/scripts/player/chest_avatar.gd" id="6_avatar"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
@@ -43,9 +41,3 @@ far = 26000.0
 
 [node name="RecoveryController" type="Node" parent="."]
 script = ExtResource("3_recovery")
-
-[node name="SprayController" type="Node" parent="."]
-script = ExtResource("4_spray")
-
-[node name="TagInstances" type="Node3D" parent="SprayController"]
-script = ExtResource("5_pool")

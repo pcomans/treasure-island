@@ -26,8 +26,6 @@ extends SceneTree
 ##   {"area": "NAME", "views": [{"name": "...", "player_xz": [x,z], "target_xyz": [x,y,z]}]}
 ##   with the same optional camera_xyz, fov, projection and ortho_size as --views.
 ##   Saved as street-NAME.png; taken with street detail on and off by default.
-##   A street view may add "reticle": false to hide the aiming reticle in its shots,
-##   where it would cover the subject at the screen's centre (a distant landmark).
 ##   A street view may add "moves": [{"hold": ["move_forward", "run"], "ticks": 60,
 ##   "turn_deg": 0}, ...] to drive the stock player with its real input actions
 ##   from where it settled, facing the target (turn_deg turns the camera, and so
@@ -99,9 +97,8 @@ extends SceneTree
 ##   "path": [[x,z], ...] instead of xz, laid on the ground under each point. A
 ##   plant may add "level": "lod0", "lod1" or "far" to draw its group at that
 ##   detail level only, at any distance (every plant of the group the same), so
-##   a sheet can set the levels side by side. The aiming reticle is
-##   hidden while they stand. A view may then add "show": ["GROUP", ...] to
-##   draw only those groups, and "measure_frames": N to time N drawn frames with
+##   a sheet can set the levels side by side. A view may then add "show":
+##   ["GROUP", ...] to draw only those groups, and "measure_frames": N to time N drawn frames with
 ##   them shown and N with every group hidden, in three alternating blocks each,
 ##   with vsync and the frame cap off (FRAME_TIME lines, with the frame's draw
 ##   calls and primitives).
@@ -386,16 +383,10 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 			break
 		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
 		var error := ""
-		var hide_reticle: bool = view.get("reticle", true) == false
-		if hide_reticle:
-			_h.hud.reticle.modulate.a = 0.0
 		if view.has("moves"):
 			error = await _moving_view(view, target, "%s/street-%s%s" % [out, name, suffix])
 		else:
 			error = await _shoot_view(view, target, "%s/street-%s%s.png" % [out, name, suffix])
-		# The plants of a gallery keep it hidden while they stand.
-		if hide_reticle and not gallery.has("node"):
-			_h.hud.reticle.modulate.a = 1.0
 		if error == "" and view.has("measure_frames"):
 			error = await _measure_view(view, target, gallery)
 		if error != "":
@@ -409,7 +400,6 @@ func _street_views(path: String, out: String, suffix: String) -> void:
 		print("STREET_VIEW %s area=%s player=%s on_floor=%s target=%s camera=%s" % [name, plan.area, _h.player.global_position, _h.player.is_on_floor(), target, camera_note])
 	if gallery.has("node"):
 		(gallery.node as Node).free()
-		_h.hud.reticle.modulate.a = 1.0
 
 
 ## The plan's gallery beds and plants, built under one node:
@@ -509,8 +499,6 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 					(child as GeometryInstance3D).visibility_range_end = 0.0
 		root.add_child(node)
 		groups[group] = node
-	# The aiming reticle would sit on the plants in the middle of every shot.
-	_h.hud.reticle.modulate.a = 0.0
 	print("PLANT_GALLERY beds=%d plants=%d groups=%s" % [grids.size(), (plants as Array).size(), ",".join(PackedStringArray(groups.keys()))])
 	return {"node": root, "groups": groups}
 

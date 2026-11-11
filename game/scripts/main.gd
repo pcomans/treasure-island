@@ -9,6 +9,9 @@ const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+## The gameplay actions a pause lets go of, so none is still held when play goes
+## on: a key let go while the window was away, or a touch button's own press.
+const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"move_left", &"move_right", &"run", &"jetpack", &"fast_drop", &"recover", &"vehicle_enter_exit", &"handbrake"]
 
 var _world_ready := false
 var _startup_failed := false
@@ -24,6 +27,9 @@ var _web_capture_pending := false
 var _web_pointer_locked := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
+## A pause or resume asked for inside a physics tick, put off to the idle step
+## (_set_paused): true pauses, false resumes.
+var _pause_later := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -39,7 +45,14 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
+	# Main runs always, for its pause menu and Esc. Everything that moves stops
+	# with the game: the world, the player and the sky (pausable in main.tscn),
+	# the cars and the grass added later, and shader time (PauseClock).
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	var clock := PauseClock.new()
+	clock.name = "PauseClock"
+	clock.process_mode = Node.PROCESS_MODE_PAUSABLE
+	add_child(clock)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere); a touch screen's controls are laid out for 720 px or more.
@@ -92,6 +105,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		hud.toggle_debug()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("pause") and hud.controls_visible():
+		# Esc on the controls screen goes back: to the pause menu, or the loading screen.
+		hud.hide_controls()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause") and _world_ready:
 		# Browser Escape may also arrive after its pointer-lock loss callback.
 		# Never turn that same unlock gesture into a new capture request.
@@ -131,21 +149,14 @@ func _on_world_ready(_report: Dictionary) -> void:
 		STARTUP_MARKS.mark("detail_distances_end")
 	if not player.feedback_requested.is_connected(hud.show_feedback):
 		player.feedback_requested.connect(hud.show_feedback)
-	if not player.spray_result.is_connected(world_root.get_runtime_evidence().record_spray):
-		player.spray_result.connect(world_root.get_runtime_evidence().record_spray)
 	if not player.recovered.is_connected(world_root.get_runtime_evidence().record_recovery):
 		player.recovered.connect(world_root.get_runtime_evidence().record_recovery)
-	if not player.get_spray_controller().spray_identity.is_connected(world_root.get_runtime_evidence().record_spray_identity):
-		player.get_spray_controller().spray_identity.connect(world_root.get_runtime_evidence().record_spray_identity)
-	if not player.get_spray_controller().tag_instances.active_count_changed.is_connected(world_root.get_runtime_evidence().set_active_decals):
-		player.get_spray_controller().tag_instances.active_count_changed.connect(world_root.get_runtime_evidence().set_active_decals)
-	if not player.get_spray_controller().tag_instances.oldest_tag_removed.is_connected(world_root.get_runtime_evidence().record_tag_eviction):
-		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
 	var dressing_level := GROUND_DRESSING.run_level()
 	if dressing_level != GROUND_DRESSING.OFF:
 		ground_dressing = GROUND_DRESSING.new()
 		ground_dressing.name = "GroundDressing"
+		ground_dressing.process_mode = Node.PROCESS_MODE_PAUSABLE
 		add_child(ground_dressing)
 		ground_dressing.configure(world_root, player, dressing_level)
 	if vehicles == null:
@@ -170,7 +181,11 @@ func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
-	if capture_mouse_on_ready and not OS.has_feature("web"):
+	# A controls screen opened on the loading screen stays open, and play starts
+	# paused behind it: nothing moves and the mouse stays free until the player
+	# closes it (to the pause menu) and resumes.
+	var controls_open := hud.controls_visible()
+	if capture_mouse_on_ready and not OS.has_feature("web") and not controls_open:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
 	if OS.has_feature("web"):
@@ -180,6 +195,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 			_touch_controls.set_gameplay_active(true)
 		else:
 			hud.set_pointer_capture_hint(true)
+	if controls_open:
+		_set_paused(true)
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
@@ -263,6 +280,19 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 
 func _set_paused(paused: bool) -> void:
+	# The tree pauses and resumes only in the idle step. Resumed inside a physics
+	# tick (a deferred call, such as the web's pointer-lock grant, is flushed
+	# there) after a pause from the idle step, the physics server re-adds every
+	# awake body to a list it is still in ("p_elem->_root" errors) and runs that
+	# tick's remainder at the paused clock's zero step.
+	if Engine.is_in_physics_frame():
+		_pause_later = paused
+		if not get_tree().process_frame.is_connected(_set_paused_later):
+			get_tree().process_frame.connect(_set_paused_later, CONNECT_ONE_SHOT)
+		return
+	if paused:
+		for action: StringName in GAMEPLAY_ACTIONS:
+			Input.action_release(action)
 	get_tree().paused = paused
 	if paused:
 		_web_capture_pending = false
@@ -275,6 +305,10 @@ func _set_paused(paused: bool) -> void:
 	hud.set_paused(paused)
 	if OS.has_feature("web") and _touch_controls == null:
 		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
+
+
+func _set_paused_later() -> void:
+	_set_paused(_pause_later)
 
 
 func _resume_game() -> void:
@@ -374,8 +408,41 @@ func _publish_web_state(_args: Array) -> void:
 		"handbrake": Input.is_action_pressed("handbrake"),
 		"car_input": [vehicles.active_car().drive_input, vehicles.active_car().steer_input, vehicles.active_car().handbrake] if vehicles != null and vehicles.is_driving() else [],
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
+		# The controls screen (open or not) and the buttons that open and close it.
+		"controls": hud.controls_visible(),
+		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
+		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
+		# The pitch's ball: where it is and how many goals it has gone into.
+		"ball": _ball_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
+
+
+func _ball_state() -> Dictionary:
+	var ball := get_tree().get_first_node_in_group(SoccerBall.GROUP) as SoccerBall
+	if ball == null:
+		return {}
+	return {"position": [ball.global_position.x, ball.global_position.y, ball.global_position.z], "goals": ball.goals_scored, "resets": ball.resets}
+
+
+## Stops the clock the scene tree's pause does not: shader time (the water's
+## waves, the trees' and the grass's sway, the docked ferry's rocking, the jet
+## flame), particles' steps and every process step follow Engine.time_scale,
+## which this sets to 0 while the tree is paused and back after, however the
+## pause comes (the pause menu, a lost focus, a test). Pausable, so it hears the
+## tree pause and unpause; leaving the tree it puts the scale back.
+class PauseClock extends Node:
+	var _saved_scale := 1.0
+	var _frozen := false
+
+	func _notification(what: int) -> void:
+		if what == NOTIFICATION_PAUSED and not _frozen:
+			_saved_scale = Engine.time_scale
+			Engine.time_scale = 0.0
+			_frozen = true
+		elif (what == NOTIFICATION_UNPAUSED or what == NOTIFICATION_EXIT_TREE) and _frozen:
+			Engine.time_scale = _saved_scale
+			_frozen = false
 
 
 func _exit_tree() -> void:

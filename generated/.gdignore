@@ -1,2 +1,3 @@
 # Generated world files are raw runtime data, not editor-importable resources.
-# export_presets.cfg explicitly includes generated/world recursively.
+# No exported pack contains generated/world: exports load the static-world bake
+# instead, which addons/generated_world_export adds from generated/native or generated/web.

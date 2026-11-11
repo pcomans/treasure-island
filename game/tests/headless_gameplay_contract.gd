@@ -2,7 +2,7 @@ extends SceneTree
 
 const REQUIRED_ACTIONS := [
 	"move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop",
-	"spray", "recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
+	"recover", "pause", "quit_game", "toggle_debug", "vehicle_enter_exit", "handbrake",
 ]
 const EXPECTED_WATER_Y := -0.12
 const EXPECTED_WATER_SHADER := "res://game/resources/materials/world/water/bay_water.gdshader"
@@ -13,6 +13,8 @@ const WATER_CAMERA_REACH_M := 2000.0
 ## The street-detail zones: the soccer ball's check finds the full-size pitch's
 ## centre spot in their ground blocks (tools/lib/sports-pitch.mjs).
 const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
+## The vehicle contract's places: its ball case drives along the full-size pitch.
+const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 
 
 func _initialize() -> void:
@@ -34,6 +36,31 @@ func _initialize() -> void:
 	if not _action_has_physical_key("handbrake", KEY_SPACE):
 		_fail("The handbrake must be bound to physical Space.")
 		return
+	# The owner removed the spray on 2026-11-11: its action is gone and the left
+	# mouse button it was on does nothing (no action takes a click).
+	if InputMap.has_action("spray"):
+		_fail("The spray action must be gone.")
+		return
+	var click := InputEventMouseButton.new()
+	click.button_index = MOUSE_BUTTON_LEFT
+	click.pressed = true
+	for action: StringName in InputMap.get_actions():
+		if InputMap.event_is_action(click, action):
+			_fail("The left mouse button must do nothing, but it is bound to %s." % action)
+			return
+	# The arrow keys move as W, S, A and D do (owner, 2026-11-11), on foot and in a
+	# car, which reads the same actions: a real key event presses the action and
+	# its release lets it go.
+	for binding: Array in [["move_forward", KEY_W, KEY_UP], ["move_back", KEY_S, KEY_DOWN], ["move_left", KEY_A, KEY_LEFT], ["move_right", KEY_D, KEY_RIGHT]]:
+		if not _action_has_physical_key(binding[0], binding[1]) or not _action_has_physical_key(binding[0], binding[2]):
+			_fail("%s must be bound to physical %s and to its arrow key." % [binding[0], OS.get_keycode_string(binding[1])])
+			return
+		_send_key(binding[2], true)
+		var held := Input.is_action_pressed(binding[0])
+		_send_key(binding[2], false)
+		if not held or Input.is_action_pressed(binding[0]):
+			_fail("The %s arrow key did not press and release %s." % [OS.get_keycode_string(binding[2]), binding[0]])
+			return
 
 	var boundary := {
 		"components": [{
@@ -73,7 +100,6 @@ func _initialize() -> void:
 	var arm := player.get_node("CameraPivot/SpringArm3D") as SpringArm3D
 	var camera := player.get_node("CameraPivot/SpringArm3D/Camera3D") as Camera3D
 	var camera_pivot := player.get_node("CameraPivot") as PlayerCamera
-	var pool := player.get_node("SprayController/TagInstances") as TagInstancePool
 	if arm == null or camera == null or camera.get_parent() != arm or arm.collision_mask != 1:
 		_fail("CameraPivot -> SpringArm3D -> Camera3D contract is invalid.")
 		return
@@ -82,9 +108,6 @@ func _initialize() -> void:
 	or not is_equal_approx(arm.spring_length, 5.5) \
 	or not is_equal_approx(arm.rotation.x, deg_to_rad(-8.0)):
 		_fail("Initial third-person camera framing defaults drifted.")
-		return
-	if pool == null or pool.session_limit != 64:
-		_fail("Session tag limit must default to 64.")
 		return
 	var gameplay_far := camera.far
 	var gameplay_arm_m := arm.spring_length
@@ -221,8 +244,8 @@ func _initialize() -> void:
 ## The ferry terminal's scenery (game/scripts/world/ferry_terminal.gd) lies off the
 ## walk route, but a jetpack landing on it must never fall through: in the loaded
 ## world, straight down onto the float's deck, the breakwater, the docked boat and
-## the gangway, the first world-solid hit is the terminal's own body, which refuses
-## the spray (receiver_kind none).
+## the gangway, the first world-solid hit is the terminal's own body (receiver_kind
+## none).
 func _check_ferry_solidity() -> void:
 	create_timer(240.0, true, false, true).timeout.connect(func() -> void: _fail("The ferry solidity check timed out."))
 	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
@@ -231,11 +254,16 @@ func _check_ferry_solidity() -> void:
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
 	root.add_child(main)
+	# The loading screen's Controls button, pressed while the world loads.
+	main.hud.load_controls_button.pressed.emit()
 	var started := Time.get_ticks_msec()
 	while not main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
 		await process_frame
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
+		return
+	var opened := await _check_controls_from_loading(main)
+	if opened.is_empty():
 		return
 	for _frame in 2:
 		await physics_frame
@@ -275,9 +303,282 @@ func _check_ferry_solidity() -> void:
 	var ball := await _check_soccer_ball(main, world)
 	if ball.is_empty():
 		return
+	var pause := await _check_pause(main)
+	if pause.is_empty():
+		return
+	var resume := await _check_resume_in_physics(main)
+	if resume.is_empty():
+		return
+	# The menus as the player works them: from the idle step, where input arrives.
+	await process_frame
+	var controls := _check_controls_screen(main)
+	if controls.is_empty():
+		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s) and nothing in the middle of the screen in play" % [", ".join(heights), ball, pause, resume, opened, controls])
 	quit(0)
+
+
+## The controls screen opened on the loading screen (pressed as the world loads)
+## stays open when play starts, and play starts paused behind it, with the pause
+## menu hidden: nothing moves until the player closes it. Back shows the pause
+## menu, still paused; Resume plays. Then, in play, nothing of the HUD covers the
+## middle of the screen (the spray's aiming cross went with the spray, 2026-11-11).
+## Returns a summary, or "" after failing.
+func _check_controls_from_loading(main: GameMain) -> String:
+	var hud := main.hud
+	await process_frame
+	if not hud.controls_visible() or not paused or hud.pause_panel.visible or hud.load_panel.visible:
+		_fail("The controls screen opened while loading must stay open when play starts, with the game paused behind it (controls %s, paused %s, pause menu %s, loading screen %s)." % [hud.controls_visible(), paused, hud.pause_panel.visible, hud.load_panel.visible])
+		return ""
+	hud.back_button.pressed.emit()
+	if hud.controls_visible() or not paused or not hud.pause_panel.visible:
+		_fail("Back on the controls screen opened while loading must show the pause menu, still paused.")
+		return ""
+	hud.resume_button.pressed.emit()
+	await process_frame
+	if paused or hud.pause_panel.visible:
+		_fail("Resume after the controls screen opened while loading did not start play.")
+		return ""
+	var centre := hud.get_viewport_rect().size * 0.5
+	for node: Node in hud.find_children("*", "Control", true, false):
+		var control := node as Control
+		if control.is_visible_in_tree() and control.get_global_rect().has_point(centre):
+			_fail("In play %s covers the middle of the screen." % control.get_path())
+			return ""
+	return "opened while loading, kept open and paused at the start of play"
+
+
+## The controls screen (owner, 2026-11-11): the pause menu's Controls button shows it
+## in place of the menu, listing the bindings as they are (the arrow keys beside
+## WASD, the car's F, handbrake and R, and no spray); Esc or Back return to the menu,
+## still paused. The loading screen opens it too, and on a touch screen it lists the
+## touch controls instead. Returns a summary, or "" after failing.
+func _check_controls_screen(main: GameMain) -> String:
+	var hud := main.hud
+	_push_key(KEY_ESCAPE)
+	hud.controls_button.pressed.emit()
+	if not paused or not hud.controls_visible() or hud.pause_panel.visible:
+		_fail("The pause menu's Controls button must show the controls screen in its place.")
+		return ""
+	var keyboard := _controls_text(hud)
+	for needed: String in ["W A S D or arrow keys", "up / down arrows", "left / right arrows", "Shift", "Space (hold)", "C (hold, in the air)", "F (beside a parked car)", "Handbrake", "Back on land", "Back to safe ground", "Esc", "F3"]:
+		if not keyboard.contains(needed):
+			_fail("The controls screen does not list %s:\n%s" % [needed, keyboard])
+			return ""
+	if keyboard.to_lower().contains("spray"):
+		_fail("The controls screen still lists spray:\n%s" % keyboard)
+		return ""
+	_push_key(KEY_ESCAPE)
+	if not paused or hud.controls_visible() or not hud.pause_panel.visible:
+		_fail("Esc on the controls screen must go back to the pause menu, still paused.")
+		return ""
+	hud.controls_button.pressed.emit()
+	hud.back_button.pressed.emit()
+	if not paused or hud.controls_visible() or not hud.pause_panel.visible:
+		_fail("Back on the controls screen must go back to the pause menu, still paused.")
+		return ""
+	hud.resume_button.pressed.emit()
+	if paused or hud.controls_visible():
+		_fail("Resume after the controls screen did not go back to play.")
+		return ""
+	# A touch screen's HUD (main.gd sets it up so), opened from its loading screen.
+	var touch_hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
+	root.add_child(touch_hud)
+	touch_hud.set_touch_instructions()
+	touch_hud.load_controls_button.pressed.emit()
+	var touch := _controls_text(touch_hud)
+	var shown := touch_hud.controls_visible()
+	touch_hud.back_button.pressed.emit()
+	var closed := not touch_hud.controls_visible()
+	touch_hud.queue_free()
+	if not shown or not closed:
+		_fail("The loading screen's Controls button must open the controls screen, and Back close it.")
+		return ""
+	for needed: String in ["MOVE stick", "Drag on the right side", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
+		if not touch.contains(needed):
+			_fail("The touch controls screen does not list %s:\n%s" % [needed, touch])
+			return ""
+	if touch.contains("Shift") or touch.to_lower().contains("spray"):
+		_fail("The touch controls screen lists keys or spray:\n%s" % touch)
+		return ""
+	return "%d keyboard and %d touch lines" % [keyboard.count("\n") + 1, touch.count("\n") + 1]
+
+
+## Every line the controls screen shows, headings and rows.
+func _controls_text(hud: GameHUD) -> String:
+	var lines := PackedStringArray()
+	for label: Node in hud.controls_sections.find_children("*", "Label", true, false):
+		lines.append((label as Label).text)
+	return "\n".join(lines)
+
+
+## The pause (owner, 2026-11-11) freezes everything that moves. With a car driving
+## along the pitch, the player riding in it and the ball rolling across, Esc pauses:
+## the menu shows and keeps running, the world, the player, the sky and the cars stop
+## processing, shader time stops (Engine.time_scale 0), every gameplay action is let
+## go, and nothing moves however long the pause lasts; Resume goes on from there with
+## the clock back as it was. Then the same on foot, rising on the jetpack. Returns a
+## summary, or "" after failing.
+func _check_pause(main: GameMain) -> String:
+	var player := main.get_node("Player") as PlayerController
+	var vehicles := main.vehicles
+	var ball: SoccerBall = get_nodes_in_group(SoccerBall.GROUP)[0]
+	var car_id := ""
+	for id: String in vehicles.swappable_ids():
+		if str(vehicles.row(id).prop) == "parked_car":
+			car_id = id
+			break
+	# Beside the pitch's centre line, driving along it (the vehicle contract's
+	# heading for its ball case runs along the full-size pitch).
+	var cases: Variant = JSON.parse_string(FileAccess.get_file_as_string(VEHICLE_CASES_PATH))
+	var heading: Array = (cases as Dictionary).ball.heading_xz if cases is Dictionary else [1.0, 0.0]
+	var along := Vector2(float(heading[0]), float(heading[1])).normalized()
+	var across := Vector2(-along.y, along.x)
+	var centre := Vector2(ball.spot.origin.x, ball.spot.origin.z)
+	var problem := "no parked car" if car_id.is_empty() else vehicles.drive_from(car_id, centre - along * 20.0 + across * 10.0, along)
+	if not problem.is_empty():
+		_fail("The pause check could not start a drive: %s." % problem)
+		return ""
+	var car := vehicles.active_car()
+	Input.action_press("move_forward")
+	for _tick in 60:
+		await physics_frame
+	ball.sleeping = false
+	ball.linear_velocity = Vector3(across.x, 0.0, across.y) * 5.0
+	for _tick in 5:
+		await physics_frame
+	if car.linear_velocity.length() < 1.0 or ball.linear_velocity.length() < 1.0:
+		_fail("Before the pause the car (%.2f m/s) and the ball (%.2f m/s) must be moving." % [car.linear_velocity.length(), ball.linear_velocity.length()])
+		return ""
+	var driving := await _paused_still(main, {"car": car, "player": player, "ball": ball})
+	if driving.is_empty():
+		return ""
+	var moved := {"car": car.global_position, "ball": ball.global_position}
+	for _tick in 30:
+		await physics_frame
+	if car.global_position.distance_to(moved.car) < 0.2 or ball.global_position.distance_to(moved.ball) < 0.2:
+		_fail("After Resume the car moved %.2f m and the ball %.2f m: play did not go on." % [car.global_position.distance_to(moved.car), ball.global_position.distance_to(moved.ball)])
+		return ""
+	vehicles.force_exit()
+	for _tick in 30:
+		await physics_frame
+	# On foot, rising on the jetpack: paused it hangs where it is, and Resume lets it
+	# go on (the pause let go of Space, so it comes down).
+	Input.action_press("jetpack")
+	for _tick in 30:
+		await physics_frame
+	if player.velocity.y < 1.0:
+		_fail("The player did not rise on the jetpack before the pause: %.2f m/s." % player.velocity.y)
+		return ""
+	var rising := await _paused_still(main, {"player": player})
+	if rising.is_empty():
+		return ""
+	var hung := player.global_position
+	for _tick in 30:
+		await physics_frame
+	if player.global_position.distance_to(hung) < 0.05:
+		_fail("After Resume the player did not move on from %s." % hung)
+		return ""
+	for _tick in 600:
+		await physics_frame
+		if player.is_on_floor():
+			break
+	player.set_gameplay_enabled(false)
+	return "driving: %s; rising on foot: %s" % [driving, rising]
+
+
+## The tree pauses and resumes in the idle step, however that is asked for. The web
+## resumes from a deferred call (its pointer-lock grant), which Godot flushes inside
+## a physics tick: resumed there after a pause from the idle step, the physics
+## server printed an error for every awake body (an engine error fails the suite)
+## and ran the rest of that tick at the paused clock's zero step. With the ball
+## rolling, a pause from the idle step takes at once; a resume asked for inside a
+## physics tick, directly or by a deferred call, waits for the idle step, and the
+## ball rolls on from where it stopped. Returns a summary, or "" after failing.
+func _check_resume_in_physics(main: GameMain) -> String:
+	var ball: SoccerBall = get_nodes_in_group(SoccerBall.GROUP)[0]
+	var scale := Engine.time_scale
+	var rolled := PackedStringArray()
+	for deferred: bool in [false, true]:
+		ball.reset_to_spot()
+		for _tick in 30:
+			await physics_frame
+		ball.sleeping = false
+		ball.linear_velocity = Vector3(3.0, 0.0, 0.5)
+		for _tick in 6:
+			await physics_frame
+		await process_frame
+		main._set_paused(true)
+		if not paused or Engine.time_scale != 0.0:
+			_fail("A pause asked for in the idle step must take at once (paused %s, time scale %s)." % [paused, Engine.time_scale])
+			return ""
+		var stopped := ball.global_position
+		for _tick in 10:
+			await physics_frame
+			if ball.global_position != stopped:
+				_fail("Paused, the rolling ball moved.")
+				return ""
+		await physics_frame
+		if deferred:
+			main._set_paused.call_deferred(false)
+		else:
+			main._set_paused(false)
+			if not paused:
+				_fail("A resume asked for inside a physics tick must wait for the idle step.")
+				return ""
+		# The next physics tick: the idle step between has resumed.
+		await physics_frame
+		if paused or Engine.time_scale != scale:
+			_fail("A resume asked for inside a physics tick (%s) must take in the next idle step with the clock back at %s (paused %s, time scale %s)." % ["deferred" if deferred else "direct", scale, paused, Engine.time_scale])
+			return ""
+		for _tick in 4:
+			await physics_frame
+		var moved := ball.global_position.distance_to(stopped)
+		if not ball.global_position.is_finite() or not ball.linear_velocity.is_finite() or moved < 0.05:
+			_fail("After the resume the rolling ball must roll on: moved %.3f m, velocity %s." % [moved, ball.linear_velocity])
+			return ""
+		rolled.append("%s %.2f m" % ["deferred" if deferred else "direct", moved])
+	ball.reset_to_spot()
+	return "resumed from inside a physics tick in the idle step after, the ball rolling on (%s)" % ", ".join(rolled)
+
+
+## Pauses as Esc does, checks that nothing in `bodies` (name -> Node3D) moves over
+## three seconds of frames (180 at 60 a second; this runs at --fixed-fps, so wall
+## time says nothing) while the pause menu stays live, and resumes as the Resume
+## button does. Returns a summary, or "" after failing.
+func _paused_still(main: GameMain, bodies: Dictionary) -> String:
+	var scale := Engine.time_scale
+	# Keys arrive in the idle step.
+	await process_frame
+	_push_key(KEY_ESCAPE)
+	var at := {}
+	for name: String in bodies:
+		at[name] = (bodies[name] as Node3D).global_position
+	var hud := main.hud
+	var moving := [main.get_node("WorldRoot"), main.get_node("Player"), main.get_node("WorldEnvironment"), main.vehicles]
+	if not paused or Engine.time_scale != 0.0 or not hud.pause_panel.visible or not hud.can_process() \
+	or moving.any(func(node: Node) -> bool: return node.can_process()):
+		_fail("Esc must pause the tree with the menu showing and running, the clock at 0 (time scale %s) and the world, player, sky and cars stopped." % Engine.time_scale)
+		return ""
+	var held := GameMain.GAMEPLAY_ACTIONS.filter(func(action: StringName) -> bool: return Input.is_action_pressed(action))
+	if not held.is_empty():
+		_fail("The pause left %s held." % [held])
+		return ""
+	var frames := 0
+	while frames < 180:
+		await physics_frame
+		frames += 1
+		for name: String in bodies:
+			if (bodies[name] as Node3D).global_position != at[name]:
+				_fail("Paused, the %s moved from %s to %s." % [name, at[name], (bodies[name] as Node3D).global_position])
+				return ""
+	await process_frame
+	hud.resume_button.pressed.emit()
+	if paused or Engine.time_scale != scale or hud.pause_panel.visible:
+		_fail("Resume did not unpause with the clock back at %s (paused %s, time scale %s)." % [scale, paused, Engine.time_scale])
+		return ""
+	return "%s still over %d frames" % [", ".join(PackedStringArray(bodies.keys())), frames]
 
 
 ## The pitch's football (game/scripts/world/soccer_ball.gd): the ball on a full-size
@@ -339,6 +640,27 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	if fastest < 12.0:
 		_fail("Running into the soccer ball sent it off at %.2f m/s, not at least 12." % fastest)
 		return ""
+	# A glancing walk: the capsule's axis passes 0.4 m to the side of the ball's
+	# centre, a thin touch. The ball goes off aside, away from the player, and well
+	# under the walk's speed along it: only a ball the capsule has run through goes
+	# on along the run (as it did here, at about 4.3 m/s, at c1cdac7f).
+	if not await _place_ball(ball, ball.spot.origin):
+		return ""
+	var side := Vector3.BACK
+	if not await _place_player(player, world, ball.global_position - east * 4.0 + side * 0.4):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-east.x, -east.z), 0.0)
+	var glance := Vector3.ZERO
+	Input.action_press("move_forward")
+	for _tick in 90:
+		await physics_frame
+		if ball.linear_velocity.length() > glance.length():
+			glance = ball.linear_velocity
+	Input.action_release("move_forward")
+	player.set_gameplay_enabled(false)
+	if -glance.dot(side) < 0.5 or glance.dot(east) > 3.0:
+		_fail("Walked past glancing (0.4 m to the side of its centre), the ball must go off aside, at least 0.5 m/s away from the player and under 3 m/s along the walk: %.2f m/s aside, %.2f along." % [-glance.dot(side), glance.dot(east)])
+		return ""
 	# Over the bay, off the island: back on its spot. Then the same from below the land.
 	var resets := ball.resets
 	var over_bay := ball.spot.origin
@@ -358,7 +680,142 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	if ball.resets != resets + 2:
 		_fail("The soccer ball went back to its spot %d times for its 2 drops." % (ball.resets - resets))
 		return ""
-	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land" % [pushed, rolled, fastest]
+	var goals := await _check_goals(player, world, ball)
+	if goals.is_empty():
+		return ""
+	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, a glancing walk sent aside at %.1f m/s (%.1f along), back from the bay and from below the land; %s" % [pushed, rolled, fastest, -glance.dot(side), glance.dot(east), goals]
+
+
+## Goals (owner, 2026-11-11). The stock player running into the ball in front of the
+## full-size goal nearest its spot sends it in through the mouth: one goal, there, a
+## burst of confetti at that goal, and GOAL_RESET_S later the ball back on its spot at
+## rest, the confetti gone soon after. Rolled at a post from outside, or past the
+## goal's side, it scores nothing. Rolled into a GAA goal and through a rugby H it
+## scores too: every kind of goal on the island. Returns a summary, or "" after failing.
+func _check_goals(player: PlayerController, world: WorldLoader, ball: SoccerBall) -> String:
+	var kinds := {}
+	for goal: Dictionary in ball.goals:
+		kinds[str(goal.prop)] = int(kinds.get(str(goal.prop), 0)) + 1
+	if kinds.keys().size() != 3 or not kinds.has("goal_soccer") or not kinds.has("goal_gaa") or not kinds.has("goal_rugby"):
+		_fail("The ball must know every goal on the island, soccer, GAA and rugby: it knows %s." % kinds)
+		return ""
+	var scored: Array[String] = []
+	ball.scored.connect(func(id: String) -> void: scored.append(id))
+	# The kick: the player runs into the ball from 12 m back, at the full run's
+	# 20 m/s, the ball 3 m out in front of the middle of the mouth, along the compass
+	# direction nearest the goal's axis. (The stock controller speeds each axis up
+	# apart, so a slanting run-up curves aside; from 3 m out the ball still comes in
+	# well inside the posts.)
+	var soccer := _goal_of(ball, "goal_soccer")
+	var frame: Transform3D = soccer.transform
+	var into := Vector3(frame.basis.z.x, 0.0, frame.basis.z.z).normalized()
+	var run := Vector3(signf(into.x), 0.0, 0.0) if absf(into.x) >= absf(into.z) else Vector3(0.0, 0.0, signf(into.z))
+	if not await _place_ball(ball, frame * Vector3(0.0, 0.0, -3.0)):
+		return ""
+	if not await _place_player(player, world, ball.global_position - run * 12.0):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-run.x, -run.z), 0.0)
+	var before := ball.goals_scored
+	var kick_speed := 0.0
+	Input.action_press("move_forward")
+	Input.action_press("run")
+	for _tick in 120:
+		await physics_frame
+		if ball.linear_velocity.length() < 1.0:
+			kick_speed = Vector2(player.velocity.x, player.velocity.z).length()
+		if ball.goals_scored > before:
+			break
+	Input.action_release("run")
+	Input.action_release("move_forward")
+	player.set_gameplay_enabled(false)
+	if ball.goals_scored != before + 1 or scored != [str(soccer.id)] or kick_speed < 19.0:
+		_fail("Kicked in through the mouth of %s at the full run (%.1f m/s) the ball must score one goal there: %d goals, at %s, ball at %s." % [soccer.id, kick_speed, ball.goals_scored - before, scored, ball.global_position])
+		return ""
+	var confetti := _confetti_at(ball, soccer)
+	if confetti == null:
+		_fail("The goal at %s set off no confetti there." % soccer.id)
+		return ""
+	var resets := ball.resets
+	for _tick in roundi((SoccerBall.GOAL_RESET_S + 0.5) * Engine.physics_ticks_per_second):
+		await physics_frame
+		if ball.resets > resets:
+			break
+	if ball.resets != resets + 1 or not await _ball_rests(ball) or ball.global_position.distance_to(ball.spot.origin) > 0.1:
+		_fail("After the goal the ball must go back to its spot %s at rest: at %s after %d resets." % [ball.spot.origin, ball.global_position, ball.resets - resets])
+		return ""
+	for _tick in roundi(4.0 * Engine.physics_ticks_per_second):
+		await physics_frame
+		if not is_instance_valid(confetti):
+			break
+	if is_instance_valid(confetti):
+		_fail("The goal's confetti was still there 4 s after the ball went back.")
+		return ""
+	# Near misses: at the post from outside, and past the side of the goal.
+	var half := float(soccer.half_m)
+	for offset: float in [half + SoccerBall.RADIUS_M + 0.05, half + 0.6]:
+		if not await _place_ball(ball, frame * Vector3(offset, 0.0, -2.0)):
+			return ""
+		ball.linear_velocity = into * 6.0
+		for _tick in 90:
+			await physics_frame
+		if ball.goals_scored != before + 1:
+			_fail("A ball rolled %.2f m out from the middle of %s, outside its post, scored." % [offset, soccer.id])
+			return ""
+	# Every kind of goal: rolled into a GAA goal and through a rugby H from 2 m out.
+	for prop: String in ["goal_gaa", "goal_rugby"]:
+		var goal := _goal_of(ball, prop)
+		var at: Transform3D = goal.transform
+		if not await _place_ball(ball, at * Vector3(0.0, 0.0, -2.0)):
+			return ""
+		ball.linear_velocity = Vector3(at.basis.z.x, 0.0, at.basis.z.z).normalized() * 6.0
+		var count := ball.goals_scored
+		for _tick in 60:
+			await physics_frame
+			if ball.goals_scored > count:
+				break
+		if ball.goals_scored != count + 1 or scored.back() != str(goal.id) or _confetti_at(ball, goal) == null:
+			_fail("Rolled in through the mouth of %s the ball scored %d goals (last at %s), with confetti %s." % [goal.id, ball.goals_scored - count, scored.back(), _confetti_at(ball, goal) != null])
+			return ""
+	ball.reset_to_spot()
+	if not await _ball_rests(ball):
+		_fail("The ball did not come to rest on its spot after the goals.")
+		return ""
+	return "goals %s kicked in by the player at %.1f m/s, %s and %s rolled in, with confetti at each and the ball back on its spot; none from outside the post or past the goal (%d goals on the island: %s)" % [soccer.id.get_slice(":", 3), kick_speed, scored[1].get_slice(":", 3), scored[2].get_slice(":", 3), ball.goals.size(), kinds]
+
+
+## The goal of this kind nearest the ball's spot, the largest first.
+func _goal_of(ball: SoccerBall, prop: String) -> Dictionary:
+	var best := {}
+	for goal: Dictionary in ball.goals:
+		if str(goal.prop) != prop:
+			continue
+		var distance := (goal.transform as Transform3D).origin.distance_to(ball.spot.origin)
+		if best.is_empty() or float(goal.half_m) > float(best.half_m) + 0.01 \
+		or (is_equal_approx(float(goal.half_m), float(best.half_m)) and distance < (best.transform as Transform3D).origin.distance_to(ball.spot.origin)):
+			best = goal
+	return best
+
+
+## Puts the ball at rest on the ground under at.
+func _place_ball(ball: SoccerBall, at: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(at + Vector3.UP * 5.0, at + Vector3.DOWN * 5.0, ball.collision_mask, [ball.get_rid()])
+	var hit := ball.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		_fail("No ground for the ball at %s." % at)
+		return false
+	ball.place((hit.position as Vector3) + Vector3.UP * SoccerBall.RADIUS_M)
+	for _tick in 3:
+		await physics_frame
+	return true
+
+
+## The confetti burst at a goal's crossbar, or null.
+func _confetti_at(ball: SoccerBall, goal: Dictionary) -> CPUParticles3D:
+	var crossbar: Vector3 = (goal.transform as Transform3D) * Vector3(0.0, float(goal.crossbar_m), 0.0)
+	for node: Node in ball.get_parent().get_children():
+		if node is CPUParticles3D and str(node.name).begins_with("GoalConfetti") and (node as CPUParticles3D).global_position.distance_to(crossbar) < 1.0:
+			return node as CPUParticles3D
+	return null
 
 
 ## The centre spots (world x, z) of the full-size pitches in the street-detail zones.
@@ -483,6 +940,25 @@ func _action_has_physical_key(action: StringName, physical_keycode: Key) -> bool
 		if event is InputEventKey and (event as InputEventKey).physical_keycode == physical_keycode:
 			return true
 	return false
+
+
+## A key going down or up, as the platform sends it, applied at once.
+func _send_key(physical_keycode: Key, pressed: bool) -> void:
+	var key := InputEventKey.new()
+	key.physical_keycode = physical_keycode
+	key.pressed = pressed
+	Input.parse_input_event(key)
+	Input.flush_buffered_events()
+
+
+## A tap of a key, delivered to the game's nodes as the window delivers it.
+func _push_key(keycode: Key) -> void:
+	for pressed: bool in [true, false]:
+		var key := InputEventKey.new()
+		key.keycode = keycode
+		key.physical_keycode = keycode
+		key.pressed = pressed
+		root.push_input(key)
 
 
 ## Shader code without its // comments.

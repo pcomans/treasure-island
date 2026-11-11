@@ -6,7 +6,9 @@
 #
 # Codex follows the building-texture skill. stdin is closed: codex exec otherwise
 # waits for more prompt input when it is run from a script or agent shell. The image must be original: never
-# a copy of a reference photo. Prints the path when the PNG exists.
+# a copy of a reference photo. Both sides must be multiples of 4 pixels (block
+# compression works on 4 x 4 texels): an image of any other size is kept but
+# refused with exit 1. Prints the path when the PNG exists and fits.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 export PATH="${HOME}/.local/bin:${PATH}"
@@ -26,9 +28,14 @@ if ! codex login status >/dev/null 2>&1; then
 fi
 mkdir -p "${root}/$(dirname "${out}")"
 rm -f "${root}/${out}"
-codex exec --skip-git-repo-check -C "${root}" "Use the building-texture skill (.agents/skills/building-texture/SKILL.md) for a generated texture. Generate exactly one image with your image generation tool: ${description}. Save it as ${root}/${out} (PNG). Do not edit or create any other file. Reply with only the path and its pixel size." </dev/null >&2
+codex exec --skip-git-repo-check -C "${root}" "Use the building-texture skill (.agents/skills/building-texture/SKILL.md) for a generated texture. Generate exactly one image with your image generation tool: ${description}. Its width and height must each be a multiple of 4 pixels. Save it as ${root}/${out} (PNG). Do not edit or create any other file. Reply with only the path and its pixel size." </dev/null >&2
 if [ "$(file -b --mime-type "${root}/${out}" 2>/dev/null)" != "image/png" ]; then
   echo "tools/generate-texture: Codex did not produce ${out}" >&2
+  exit 1
+fi
+read -r width height < <(file -b "${root}/${out}" | sed -n 's/^PNG image data, \([0-9]*\) x \([0-9]*\),.*/\1 \2/p') || true
+if [ -z "${height:-}" ] || [ $((width % 4)) -ne 0 ] || [ $((height % 4)) -ne 0 ]; then
+  echo "tools/generate-texture: ${out} is ${width:-?} x ${height:-?} px; both sides must be multiples of 4. Resample it to the nearest multiple of 4 (Lanczos) or generate it again." >&2
   exit 1
 fi
 echo "${out}"

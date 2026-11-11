@@ -2,7 +2,6 @@ class_name PlayerController
 extends CharacterBody3D
 
 signal feedback_requested(message: String, success: bool)
-signal spray_result(code: String)
 signal recovered(cause: String, from_position: Vector3)
 signal startup_grounded
 
@@ -23,7 +22,6 @@ signal startup_grounded
 @onready var avatar_pivot: Node3D = $AvatarPivot
 @onready var camera_rig: PlayerCamera = $CameraPivot
 @onready var recovery_controller: RecoveryController = $RecoveryController
-@onready var spray_controller: SprayController = $SprayController
 
 var _gameplay_enabled := false
 var _startup_settling := false
@@ -37,9 +35,6 @@ func _ready() -> void:
 	up_direction = Vector3.UP
 	floor_snap_length = 0.35
 	floor_max_angle = deg_to_rad(48.0)
-	spray_controller.configure(self, camera_rig.get_camera())
-	spray_controller.feedback_requested.connect(_on_feedback_requested)
-	spray_controller.spray_result.connect(_on_spray_result)
 	recovery_controller.recovered.connect(_on_recovered)
 	set_gameplay_enabled(false)
 
@@ -53,7 +48,6 @@ func configure_world(spawn_transform: Transform3D, boundary: WorldBoundary) -> v
 	set_physics_process(true)
 	set_process_unhandled_input(false)
 	camera_rig.set_input_enabled(false)
-	spray_controller.set_input_enabled(false)
 
 
 func reveal_grounded() -> bool:
@@ -74,7 +68,6 @@ func set_gameplay_enabled(enabled: bool) -> void:
 	set_physics_process(enabled or _startup_settling)
 	set_process_unhandled_input(enabled)
 	camera_rig.set_input_enabled(enabled)
-	spray_controller.set_input_enabled(enabled)
 	if not enabled:
 		velocity = Vector3.ZERO
 
@@ -83,10 +76,10 @@ func get_camera() -> Camera3D:
 	return camera_rig.get_camera()
 
 
-## In a car (game/scripts/vehicles/vehicle_manager.gd): the stock controller,
-## its camera input and the spray stop, the avatar hides (not the whole player:
-## the spray tags and the dust hang under it) and the capsule stops colliding
-## while the player rides along. end_driving() puts them back as they were.
+## In a car (game/scripts/vehicles/vehicle_manager.gd): the stock controller and
+## its camera input stop, the avatar hides (not the whole player: the dust hangs
+## under it) and the capsule stops colliding while the player rides along.
+## end_driving() puts them back as they were.
 func begin_driving() -> void:
 	_driving = true
 	set_gameplay_enabled(false)
@@ -95,8 +88,8 @@ func begin_driving() -> void:
 	collision_shape.disabled = true
 
 
-## Out of the car, standing at `at`: walking, the camera, the spray and the
-## avatar as before. With safe (the player got out beside the car, on the
+## Out of the car, standing at `at`: walking, the camera and the avatar as
+## before. With safe (the player got out beside the car, on the
 ## ground), the recovery's safe place moves there.
 func end_driving(at: Transform3D, safe: bool = true) -> void:
 	global_transform = at
@@ -111,10 +104,6 @@ func end_driving(at: Transform3D, safe: bool = true) -> void:
 
 func is_driving() -> bool:
 	return _driving
-
-
-func get_spray_controller() -> SprayController:
-	return spray_controller
 
 
 func get_recovery_controller() -> RecoveryController:
@@ -175,14 +164,6 @@ func _unhandled_input(event: InputEvent) -> void:
 	if _gameplay_enabled and event.is_action_pressed("recover"):
 		recovery_controller.recover("manual")
 		get_viewport().set_input_as_handled()
-
-
-func _on_feedback_requested(message: String, success: bool) -> void:
-	feedback_requested.emit(message, success)
-
-
-func _on_spray_result(code: String) -> void:
-	spray_result.emit(code)
 
 
 func _on_recovered(cause: String, from_position: Vector3) -> void:

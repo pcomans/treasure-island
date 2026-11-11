@@ -11,7 +11,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - The Clipper Cove marina basin past the playable boundary (OSM w644986117, x −9 to 162, z 804 to 1021) is open bay water: its floating docks and moored boats are not modelled (the flat teal sheet that stood in for them was folded into the bay water, 2026-11-07).
 - **Web build** (Godot's Compatibility renderer):
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;
-  - it draws no decals, which the owner accepted, so spraying is off there and the Mersea mural is drawn as a mesh instead;
+  - it draws no decals, which the owner accepted, so the Mersea mural is drawn as a mesh instead;
   - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05);
   - it doesn't run on iPhone, which the owner accepted on 2026-11-06, so it isn't being worked on. Release `c7db08fc` fails on the owner's iPhone with Safari's "A problem repeatedly occurred"; the previous release, `9056ad03`, opened. The phone's Console log shows the cause: iOS killed the page's web content process at its 2,048 MB per-process limit (about 2.1 GB used), about 9 seconds after that process started and 7 seconds after the 291 MB pack arrived. A cut removing 71 MiB of unread data from the web pack (278 to 206 MiB) is committed but parked unmerged on the branch `web/memory-20261106`. It hasn't been run in a browser, and it probably isn't enough on its own.
 - **Browser stall while running:** in Chrome the frames stall for about 330 ms twice during a short run from spawn (about 0.6 s and 1.7 s after the keys go down), on both `c7db08fc` and the merged build, so the merge didn't cause it. Physics then catches up in a burst. It isn't there at idle (197 frames in 5 s at spawn). The cause is unknown, and it isn't confirmed for a real player: it was seen with synthetic key events in headed Chrome on Weston.
@@ -138,6 +138,15 @@ Limits:
 - In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
 - Touch has no R: nothing resets a car to land or recovers the player on foot. A car on its roof rights itself, and one in the bay comes back on its own.
 - On a touch browser with a keyboard, pausing, resizing or lifting RISE lets go of the handbrake (and the jetpack) even while a physical Space is held, until Space is pressed again (code review, 2026-11-08).
+
+## Pause menu and confetti polish (`game/scripts/ui/hud.gd`, `game/scripts/world/goal_confetti.gd`, 2026-11-11)
+
+Non-blocking notes from the reviews:
+
+- The pause menu's unfocused buttons barely read as buttons: their fill is nearly the same as the panel's.
+- The loading screen's Controls button still has the old see-through style.
+- While the controls screen is open, the loading progress is hidden.
+- On the web, the first goal may hitch once while the confetti shader compiles (not verified).
 
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
@@ -470,7 +479,8 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
-  - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two. Stopping the drawing as `island_test.gd` does would need it back on for a `--spray` case's screenshot.
+  - `building_fit_test.gd` still draws every frame while it walks: with the whole island drawn, a walk-up tick takes about 39 ms against about 0.5 ms undrawn (2026-11-08), so one building's checks walk for 40 to 90 s instead of a second or two.
+  - Every walk-up, stair and route start falls 2 m at the jetpack's released descent (`world_harness.gd`'s `settle_player`, about 80 physics ticks). Shortening it to a sweep to the landing and the last 0.4 m (2026-11-11) passed w95934125's fit but failed `island_test.gd` at w95934106 west, on both worlds: the player came to rest on the land with no floor contact in its last `move_and_slide`. It was reverted; the cause isn't known.
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;

@@ -242,6 +242,10 @@ const GOAL_NET_TINT := Color(0.9, 0.9, 0.88)
 const GOAL_NET_TILE_M := 0.12
 ## How high a goal net's collision walls stand (_goal_net_shapes).
 const GOAL_NET_WALL_M := 0.6
+## The radius of the capsules round a goal's uprights (_goal_frame_shapes): the
+## soccer and GAA goals' posts, and the rugby H's thicker ones.
+const GOAL_POST_RADIUS_M := 0.06
+const RUGBY_POST_RADIUS_M := 0.075
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")
 ## Portable light towers on their trailers (the rugby field's on Avenue H, Sep 2025;
 ## the GAA field's in its 11th Street corner, Mar 2025; one by the turf pitch's small
@@ -715,18 +719,19 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 		"goal_gaa":
 			_piece(result, "goal_gaa_frame", func(b: Builder) -> void: _goal_gaa(b))
 			_piece(result, "goal_gaa_net", func(b: Builder) -> void: _goal_gaa_net(b), Transform3D.IDENTITY, _goal_net, false)
-			_goal_frame_shapes(result, GAA_GOAL_HALF_M, GAA_CROSSBAR_M, GAA_UPRIGHT_M, 0.06)
+			_goal_frame_shapes(result, GAA_GOAL_HALF_M, GAA_CROSSBAR_M, GAA_UPRIGHT_M, GOAL_POST_RADIUS_M)
 			_goal_net_shapes(result, GAA_GOAL_HALF_M, GAA_NET_DEPTH_M)
 		"goal_rugby":
 			_piece(result, "goal_rugby", func(b: Builder) -> void: _goal_rugby(b))
-			_goal_frame_shapes(result, RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, RUGBY_UPRIGHT_M, 0.075)
+			_goal_frame_shapes(result, RUGBY_GOAL_HALF_M, RUGBY_CROSSBAR_M, RUGBY_UPRIGHT_M, RUGBY_POST_RADIUS_M)
 		"goal_soccer":
-			var goal_width := snappedf(clampf(_number(params, "width_m", 7.32), 2.0, 7.32), 0.01)
-			var goal_height := snappedf(clampf(_number(params, "height_m", 2.44), 1.0, 2.44), 0.01)
+			var goal_size := _soccer_goal_size(params)
+			var goal_width := goal_size.x
+			var goal_height := goal_size.y
 			var goal_key := "goal_soccer_w%.2f_h%.2f" % [goal_width, goal_height]
 			_piece(result, goal_key + "_frame", func(b: Builder) -> void: _goal_soccer(b, goal_width, goal_height))
 			_piece(result, goal_key + "_net", func(b: Builder) -> void: _goal_soccer_net(b, goal_width, goal_height), Transform3D.IDENTITY, _goal_net, false)
-			_goal_frame_shapes(result, goal_width * 0.5 + 0.06, goal_height, goal_height, 0.06)
+			_goal_frame_shapes(result, goal_width * 0.5 + GOAL_POST_RADIUS_M, goal_height, goal_height, GOAL_POST_RADIUS_M)
 			_goal_net_shapes(result, goal_width * 0.5 + 0.04, SOCCER_NET_DEPTH_M * minf(1.0, goal_height / 2.44))
 		"light_tower":
 			var mast := snappedf(clampf(_number(params, "mast_m", 9.0), 6.0, 10.0), 0.5)
@@ -779,6 +784,30 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 func _number(params: Dictionary, key: String, fallback: float) -> float:
 	var value: Variant = params.get(key, fallback)
 	return float(value) if (value is float or value is int) and is_finite(float(value)) else fallback
+
+
+## A soccer goal's frame, width by height (m): full size unless the row's params
+## make it smaller (the small-sided pitches).
+func _soccer_goal_size(params: Dictionary) -> Vector2:
+	return Vector2(snappedf(clampf(_number(params, "width_m", 7.32), 2.0, 7.32), 0.01), snappedf(clampf(_number(params, "height_m", 2.44), 1.0, 2.44), 0.01))
+
+
+## A goal's mouth in its own frame (origin on the middle of the goal line, -Z toward
+## the pitch, the net behind +Z), from the same sizes as its collision: half its clear
+## width between the uprights' inner faces, how high a ball may come in (under the
+## crossbar where a net hangs behind it; up to the uprights' tops for the rugby H,
+## which has none), the crossbar's height and how deep the goal is behind its line.
+## {} for a prop that is not a goal. soccer_ball.gd counts a goal through it.
+func goal_mouth(prop: String, params: Dictionary) -> Dictionary:
+	match prop:
+		"goal_gaa":
+			return {"half_m": GAA_GOAL_HALF_M - GOAL_POST_RADIUS_M, "height_m": GAA_CROSSBAR_M, "crossbar_m": GAA_CROSSBAR_M, "depth_m": GAA_NET_DEPTH_M}
+		"goal_rugby":
+			return {"half_m": RUGBY_GOAL_HALF_M - RUGBY_POST_RADIUS_M, "height_m": RUGBY_UPRIGHT_M, "crossbar_m": RUGBY_CROSSBAR_M, "depth_m": 1.0}
+		"goal_soccer":
+			var size := _soccer_goal_size(params)
+			return {"half_m": size.x * 0.5, "height_m": size.y, "crossbar_m": size.y, "depth_m": SOCCER_NET_DEPTH_M * minf(1.0, size.y / 2.44)}
+	return {}
 
 
 ## The prop's mesh for `key`, drawn once; `material` replaces the shared atlas

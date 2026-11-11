@@ -107,7 +107,7 @@ func _diagnostic_player_idle() -> bool:
 ## Runs the checks for one building and returns its failures (empty = pass).
 ## The walk-up and stairs are the slow part (seconds of simulated walking each).
 ## stairs: [{"bottom": [x, z], "top": [x, z]}, ...] from the building's catalog entry.
-func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = [], spray_case: Dictionary = {}, adjacent_source: String = "") -> Array[String]:
+func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = [], adjacent_source: String = "") -> Array[String]:
 	if _unsafe:
 		return [prefix + "check not run: a previous unsafe failure stopped this driver"]
 	_failures = []
@@ -152,8 +152,6 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 			await _check_stairs(stair)
 		if not _unsafe:
 			await _check_routes(routes, box)
-	if not _unsafe and not spray_case.is_empty():
-		await _check_spray(source_key, spray_case, box)
 	for proxy in proxies:
 		proxy.queue_free()
 	await _h.tree.physics_frame
@@ -1045,149 +1043,6 @@ func _numbers(value: Variant) -> bool:
 	for number: Variant in value:
 		if not (number is float or number is int) or not is_finite(float(number)):
 			return false
-	return true
-
-
-## One optional real stock spray, bound to this source and ordinary camera/player.
-func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
-	var screenshot_path := ""
-	if plan.has("screenshot_path"):
-		if not plan.screenshot_path is String or not _spray_screenshot_path_valid(plan.screenshot_path):
-			_failures.append(_prefix + "spray screenshot needs a normalized absolute PNG path outside project/Git trees")
-			_unsafe = true
-			return
-		screenshot_path = plan.screenshot_path
-	if not _numbers(plan.get("player_xz")) or not plan.get("target_xyz") is Array or plan.target_xyz.size()!=3:
-		_failures.append(_prefix+"spray needs finite player_xz/target_xyz")
-		_unsafe=true
-		return
-	# "placed" (default): one source-bound wall decal. "receiver_rejection": a
-	# non-receiver solid in front of the wall (a prop, say) stops the spray;
-	# with "blocker" (a body's feature_kind, as "street_furniture") the first
-	# solid the spray ray meets must be of that kind.
-	var expect: Variant = plan.get("expect", "placed")
-	if not expect is String or expect not in ["placed", "receiver_rejection"]:
-		_failures.append(_prefix+"spray expect must be \"placed\" or \"receiver_rejection\"")
-		_unsafe=true
-		return
-	var blocker_value: Variant = plan.get("blocker", "")
-	if not blocker_value is String or (blocker_value != "" and expect != "receiver_rejection"):
-		_failures.append(_prefix+"spray blocker must be a feature kind, with expect receiver_rejection")
-		_unsafe=true
-		return
-	var blocker: String = blocker_value
-	for value: Variant in plan.target_xyz:
-		if not (value is float or value is int) or not is_finite(float(value)):
-			_failures.append(_prefix+"spray target must be finite")
-			_unsafe=true
-			return
-	var target:=Vector3(plan.target_xyz[0],plan.target_xyz[1],plan.target_xyz[2])
-	if not bounds.grow(0.5).has_point(target):
-		_failures.append(_prefix+"spray target outside source bounds")
-		_unsafe=true
-		return
-	var error:=await _h.settle_player(Vector2(plan.player_xz[0],plan.player_xz[1]), _support_context)
-	if error!="":
-		_failures.append(_prefix+"spray setup: "+error)
-		_unsafe=true
-		return
-	var recoveries:=_h.world.get_runtime_evidence().recovery_count
-	_h.aim_camera(target)
-	_h.player.set_gameplay_enabled(true)
-	for _frame in 4:
-		await _h.tree.physics_frame
-		var support_error := _rooftop_floor_problem()
-		if support_error != "":
-			_h.release_input()
-			_unsafe = true
-			var rest_error := await _rest_and_disable(recoveries)
-			_failures.append(_prefix + support_error + ("; " + rest_error if rest_error != "" else ""))
-			return
-	var spray:=_h.player.get_spray_controller()
-	var pool:=spray.tag_instances
-	var before:=pool.get_children()
-	# What the spray ray meets first: the controller's own screen-centre query.
-	var camera:=_h.player.get_camera()
-	var center:=camera.get_viewport().get_visible_rect().size*0.5
-	var origin:=camera.project_ray_origin(center)
-	var query:=PhysicsRayQueryParameters3D.create(origin, origin+camera.project_ray_normal(center).normalized()*1000.0, SprayController.PHYSICS_SPRAY_SURFACE, [_h.player.get_rid()])
-	query.collide_with_areas=false
-	var first:=_h.player.get_world_3d().direct_space_state.intersect_ray(query)
-	var first_node:=first.get("collider") as Node
-	var first_receiver:=first_node!=null and first_node.is_in_group("spray_receiver_wall")
-	var first_feature:=str(first_node.get_meta("feature_kind", "")) if first_node!=null else ""
-	# The street-detail item behind the hit shape, when the body is a street prop body.
-	var first_item:=""
-	if first_node is CollisionObject3D and first.has("shape"):
-		var body:=first_node as CollisionObject3D
-		var shape_owner:=body.shape_owner_get_owner(body.shape_find_owner(int(first.shape))) as Node
-		if shape_owner!=null:
-			first_item=str(shape_owner.get_meta("street_detail_id", ""))
-	print("SPRAY_HIT source=%s expect=%s collider=%s feature=%s item=%s receiver=%s at=%s" % [source, expect, first_node.get_path() if first_node!=null else "none", first_feature, first_item, first_receiver, first.get("position", "none")])
-	var results: Array[String]=[]
-	var record:=func(code: String) -> void:results.append(code)
-	spray.spray_result.connect(record)
-	if _h.world.get_runtime_evidence().recovery_count==recoveries:spray.attempt_spray()
-	spray.spray_result.disconnect(record)
-	var placed: Array[Decal]=[]
-	for child: Node in pool.get_children():
-		if child is Decal and child not in before:placed.append(child)
-	if expect=="receiver_rejection":
-		var blocked_by: bool = first_node!=null and not first_receiver and (blocker=="" or first_feature==blocker)
-		var refused: bool = results==["receiver_rejection"] and placed.is_empty() and blocked_by
-		print("SPRAY source=%s result=%s expected=receiver_rejection blocker=%s refused=%s" % [source, results, blocker if blocker!="" else "any", refused])
-		var refusal_rest:=await _rest_and_disable(recoveries)
-		if refusal_rest!="":_failures.append(_prefix+"spray "+refusal_rest)
-		if not refused:
-			_failures.append(_prefix+"spray at a non-receiver solid was not refused by %s: %s (first hit %s %s)" % [blocker if blocker!="" else "a solid", str(results), first_feature, first_item])
-			_unsafe=true
-		if before.is_empty():pool.clear_tags()
-		return
-	var valid:=results==["placed"] and placed.size()==1
-	if valid:
-		var tag: Decal=placed[0]
-		var key: String=tag.get_meta("derived_object_key","")
-		var keys: Array=tag.get_meta("source_keys",[])
-		# An approved composite parent (Isle House) owns its listed wall parts, each bound to [part].
-		var bound:=(key=="building:"+source+":wall" and keys==[source]) or (key in GeneratedContract.ISLE_HOUSE_COMPOSITE_PART_KEYS and key.begins_with("building-composite:"+source+":") and key.ends_with(":wall") and keys==[key.get_slice(":",2)])
-		valid=bound and tag.texture_albedo!=null and tag.cull_mask==SprayController.RENDER_BUILDING_WALL
-		print("SPRAY source=%s result=%s decal=%s receiver=%s position=%s" % [source,results,tag.get_path(),tag.get_meta("derived_object_key",""),tag.global_position])
-	var rest_error:=await _rest_and_disable(recoveries)
-	if rest_error!="":_failures.append(_prefix+"spray "+rest_error)
-	if not valid:
-		_failures.append(_prefix+"spray did not place one actual source-bound wall decal: "+str(results))
-		_unsafe=true
-	if valid and rest_error == "" and not screenshot_path.is_empty():
-		# The avatar stays out of the evidence frame (visual only).
-		var avatar := _h.player.get_node("AvatarPivot") as Node3D
-		avatar.visible = false
-		var screenshot_error := await _h.save_screenshot(screenshot_path)
-		avatar.visible = true
-		if screenshot_error != "":
-			_failures.append(_prefix + "spray " + screenshot_error)
-		else:
-			print("SPRAY_SCREENSHOT source=%s path=%s" % [source, screenshot_path])
-	# A fresh-world case can clear its sole new tag through the pool.
-	# If prior tags exist, preserve the pool (including the new tag) until teardown.
-	if before.is_empty():pool.clear_tags()
-
-
-## Existing output directories only; reject symlink aliases into protected trees.
-func _spray_screenshot_path_valid(path: String) -> bool:
-	if not path.begins_with("/") or path != path.simplify_path() or path.get_extension().to_lower() != "png":
-		return false
-	var directory := DirAccess.open(path.get_base_dir())
-	if directory == null or directory.is_link(path) or FileAccess.file_exists(path):
-		return false
-	var project := ProjectSettings.globalize_path("res://").simplify_path().trim_suffix("/")
-	var parent := path.get_base_dir()
-	while parent != "":
-		if parent == project or directory.is_link(parent) or FileAccess.file_exists(parent.path_join(".git")) or DirAccess.dir_exists_absolute(parent.path_join(".git")):
-			return false
-		var next := parent.get_base_dir()
-		if next == parent:
-			break
-		parent = next
 	return true
 
 

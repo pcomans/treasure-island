@@ -30,6 +30,32 @@ const EXPECTED_MATERIALS := {
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 	"building_part_roof": {"feature_kind": "building_part_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 }
+## Block compression (compress/mode 2, VRAM Compressed, or 4, Basis Universal; 3 is
+## VRAM Uncompressed) stores 4 x 4 texel blocks and pads any other size by repeating
+## the last row and column, so the image slides on its mesh by up to 3 texels and a
+## tiling texture gets a seam. So every block-compressed texture is a multiple of 4
+## on both sides, as imported (after process/size_limit) and as tools/build-web.sh
+## caps it for the Web build: 512 px unless its line in WEB_TEXTURE_CAPS gives a
+## smaller cap. Lossless textures are stored as they are and keep their size:
+## shore_map.png (650 x 900) is one, a texel per 4 m of the water shader's
+## 2600 x 3600 m shore rectangle (tools/lib/water-shore-map.mjs).
+const BLOCK_COMPRESSED_MODES := [2, 4]
+const WEB_TEXTURE_CAPS := "res://tools/web-texture-cap-512.txt"
+const WEB_TEXTURE_CAP := 512
+## Textures a shader reads as data, channel by channel, which block compression would
+## mix and shift: each stays lossless (compress/mode=0). Add a new one here.
+const LOSSLESS_DATA_TEXTURES := {
+	"res://game/resources/textures/world/ground_cover/cover_map.png": "the ground cover's recipe weights, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/ground_cover/marsh_map.png": "the marsh's signed distances and low ground, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/ground_cover/marsh_grain.png": "four independent grain patterns, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "tuft and straw masks thresholded on its exact colours (ground_cover.gdshader tuft_masks, LAYER_SHARE)",
+	"res://game/resources/textures/world/water/shore_map.png": "shore distances, fetch and deck cover, one per channel (bay_water.gdshader)",
+	"res://game/resources/textures/world/water/bay_waves.png": "wave slopes decoded from red and green (bay_water.gdshader)",
+	"res://game/resources/textures/world/sky/cloud_noise.png": "independent cloud noise octaves, one per channel (bay_sky.gdshader)",
+}
+## UI images draw at their own size on screen: every image under this folder imports
+## lossless with mipmaps off.
+const UI_TEXTURES := "res://game/resources/ui/"
 ## One generated record per ground route: feature kind, material key, source
 ## key and the family it must use ("" keeps the builder's own material).
 const GROUND_ROUTES := [
@@ -52,6 +78,9 @@ const GROUND_ROUTES := [
 
 
 func _initialize() -> void:
+	if not _texture_imports_match():
+		quit(1)
+		return
 	var builder := WorldChunkBuilder.new()
 	for material_key: String in EXPECTED_MATERIALS:
 		var expected: Dictionary = EXPECTED_MATERIALS[material_key]
@@ -71,7 +100,7 @@ func _initialize() -> void:
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, and the shader-data and UI textures stay lossless" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -357,6 +386,112 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 		and _require(shoulder_has_tangents, "A shoreline shoulder mesh lacks tangents for the ground cover's normal map.") \
 		and _require(has_tangents, "A riprap overlay record lacks tangents for the ground cover's normal map.") \
 		and _require(not has_collision, "A riprap overlay record has collision.")
+
+
+## Every texture import keeps Detect 3D off (detect_3d/compress_to=0): with it on,
+## the editor switches a texture to VRAM compression the first time a 3D material
+## uses it, block-compressing a lossless data or UI texture. Every block-compressed
+## texture is a multiple of 4 on both sides (BLOCK_COMPRESSED_MODES), on the Web too.
+## LOSSLESS_DATA_TEXTURES and every image under UI_TEXTURES stay lossless.
+func _texture_imports_match() -> bool:
+	var problems: Array[String] = []
+	var sizes := {}
+	for path: String in _import_files("res://"):
+		var config := ConfigFile.new()
+		if config.load(path) != OK:
+			problems.append("%s does not parse." % path)
+			continue
+		var detect_3d := int(config.get_value("params", "detect_3d/compress_to", 0))
+		if detect_3d != 0:
+			problems.append("%s has detect_3d/compress_to=%d; set it to 0 (Import dock: Detect 3D > Compress To > Disabled)." % [path, detect_3d])
+		var mode := int(config.get_value("params", "compress/mode", 0))
+		if path.begins_with(UI_TEXTURES) and str(config.get_value("remap", "importer", "")) == "texture" \
+		and (mode != 0 or bool(config.get_value("params", "mipmaps/generate", false))):
+			problems.append("%s is a UI image: import it lossless (compress/mode=0) with mipmaps/generate=false." % path)
+		if mode not in BLOCK_COMPRESSED_MODES:
+			continue
+		if str(config.get_value("remap", "importer", "")) != "texture":
+			problems.append("%s is a block-compressed layered texture, whose size this check can't read; keep it lossless or extend the check." % path)
+			continue
+		var size := _imported_size(config)
+		if size == Vector2i.ZERO:
+			problems.append("%s has no imported texture; import the project first." % path)
+			continue
+		sizes[path] = size
+		if size.x % 4 != 0 or size.y % 4 != 0:
+			problems.append("%s imports at %d x %d; resample its image so both sides are multiples of 4." % [path, size.x, size.y])
+	# tools/build-web.sh reads each newline-ended line, a blank one too, as an import
+	# path and an optional cap, split on spaces and tabs (bash's read skips a last
+	# line with no newline).
+	var lines := PackedStringArray()
+	if not FileAccess.file_exists(WEB_TEXTURE_CAPS):
+		problems.append("%s is missing; tools/build-web.sh needs it." % WEB_TEXTURE_CAPS)
+	else:
+		var text := FileAccess.get_file_as_string(WEB_TEXTURE_CAPS)
+		if not text.is_empty() and not text.ends_with("\n"):
+			problems.append("%s does not end with a newline, so tools/build-web.sh would skip its last line." % WEB_TEXTURE_CAPS)
+		if not text.is_empty():
+			lines = text.trim_suffix("\n").split("\n")
+	for line: String in lines:
+		var fields := line.replace("\t", " ").split(" ", false)
+		if fields.is_empty() or fields.size() > 2 or (fields.size() == 2 and not fields[1].is_valid_int()):
+			problems.append("%s: '%s' is not an import path and an optional cap." % [WEB_TEXTURE_CAPS, line])
+			continue
+		var path := "res://" + fields[0]
+		if not FileAccess.file_exists(path):
+			problems.append("%s lists %s, which does not exist." % [WEB_TEXTURE_CAPS, fields[0]])
+		elif sizes.has(path):
+			var cap := int(fields[1]) if fields.size() == 2 else WEB_TEXTURE_CAP
+			var capped := _capped(sizes[path], cap)
+			if capped.x % 4 != 0 or capped.y % 4 != 0:
+				problems.append("%s comes out %d x %d in the Web build (cap %d); give it a cap in %s at which both sides are multiples of 4." % [path, capped.x, capped.y, cap, WEB_TEXTURE_CAPS])
+	for texture: String in LOSSLESS_DATA_TEXTURES:
+		var config := ConfigFile.new()
+		if config.load(texture + ".import") != OK:
+			problems.append("%s is listed as lossless shader data but has no import file." % texture)
+		elif int(config.get_value("params", "compress/mode", -1)) != 0:
+			problems.append("%s must stay lossless (compress/mode=0): %s." % [texture, LOSSLESS_DATA_TEXTURES[texture]])
+	for problem in problems:
+		_require(false, problem)
+	return problems.is_empty()
+
+
+## A 2D texture's imported size (after process/size_limit, before any block
+## padding), from the header of its imported .ctex.
+static func _imported_size(config: ConfigFile) -> Vector2i:
+	if not config.has_section("remap"):
+		return Vector2i.ZERO
+	for key: String in config.get_section_keys("remap"):
+		if key == "path" or key.begins_with("path."):
+			var file := FileAccess.open(str(config.get_value("remap", key)), FileAccess.READ)
+			if file != null and file.get_length() >= 16 and file.get_buffer(4).get_string_from_ascii() == "GST2":
+				file.get_32()
+				return Vector2i(file.get_32(), file.get_32())
+	return Vector2i.ZERO
+
+
+## The size Godot's texture importer gives an image under process/size_limit=cap.
+static func _capped(size: Vector2i, cap: int) -> Vector2i:
+	if size.x <= cap and size.y <= cap:
+		return size
+	if size.x >= size.y:
+		return Vector2i(cap, size.y * cap / size.x)
+	return Vector2i(size.x * cap / size.y, cap)
+
+
+## Every .import file Godot reads: res:// less hidden folders, folders holding a
+## .gdignore, and node_modules.
+static func _import_files(folder: String) -> Array[String]:
+	var found: Array[String] = []
+	if FileAccess.file_exists(folder.path_join(".gdignore")):
+		return found
+	for file in DirAccess.get_files_at(folder):
+		if file.ends_with(".import"):
+			found.append(folder.path_join(file))
+	for child in DirAccess.get_directories_at(folder):
+		if child != "node_modules":
+			found.append_array(_import_files(folder.path_join(child)))
+	return found
 
 
 func _require(condition: bool, message: String) -> bool:

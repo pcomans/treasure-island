@@ -36,11 +36,6 @@ extends SceneTree
 ## stairs), requiring ordinary ground at initial settle and final return.
 ## Optional route reach_m (15-40, default 15): how far beyond the building's box
 ## the route's ends may lie, for street ground near it (curbs, crossings).
-## Optional --spray FILE: {"source":"KEY", "player_xz":[x,z], "target_xyz":[x,y,z]},
-## optionally "expect":"receiver_rejection" to aim through a non-receiver solid
-## (a street prop in front of the wall) and require the spray to be refused,
-## with "blocker":"street_furniture" (a body's feature_kind) requiring that the
-## first solid the spray ray meets is of that kind.
 ## Optional --adjacent-source KEY: complete recorded nonreceiver roof/support
 ## mesh-to-native coverage for a neighboring POI, before ordinary building checks.
 ## Requires the existing recorded contact_mesh_paths producer; no wall exemption.
@@ -144,7 +139,7 @@ func _run() -> void:
 			seen[flag] = true
 			index += 1
 			continue
-		if flag not in ["--source", "--routes", "--spray", "--diagnose-side", "--adjacent-source", "--native-producer", "--street-detail"] or seen.has(flag):
+		if flag not in ["--source", "--routes", "--diagnose-side", "--adjacent-source", "--native-producer", "--street-detail"] or seen.has(flag):
 			push_error("unsupported or duplicate option: " + flag)
 			quit(1)
 			return
@@ -182,8 +177,8 @@ func _run() -> void:
 		return
 	var diagnostic_side := str(args.get("diagnose-side", ""))
 	if args.has("diagnose-side"):
-		if diagnostic_side not in ["north", "south", "west", "east"] or args.has("routes") or args.has("spray") or args.has("adjacent-source"):
-			push_error("--diagnose-side needs one cardinal side and cannot combine routes/spray/adjacent-source")
+		if diagnostic_side not in ["north", "south", "west", "east"] or args.has("routes") or args.has("adjacent-source"):
+			push_error("--diagnose-side needs one cardinal side and cannot combine routes/adjacent-source")
 			quit(1)
 			return
 		print("DIAGNOSTIC ONLY: whole-building HOLD; no four-side, fit or acceptance credit")
@@ -195,14 +190,6 @@ func _run() -> void:
 			quit(1)
 			return
 		routes = plan.routes
-	var spray_case: Dictionary = {}
-	if args.has("spray"):
-		var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(args.spray)))
-		if not plan is Dictionary or plan.get("source", "") != source_key:
-			push_error("spray needs a source-bound plan")
-			quit(1)
-			return
-		spray_case = plan
 	var h := WorldHarness.new(self)
 	var error := await h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if street_detail == "on" else [])
 	if error != "":
@@ -252,7 +239,7 @@ func _run() -> void:
 			quit(1)
 			return
 	var stairs: Array = Catalog.unit_for(source_key).get("stairs", [])
-	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes, spray_case, adjacent_source)
+	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes, adjacent_source)
 	if failures.is_empty():
 		print("PASS: building %s fits and plays" % source_key)
 	else:

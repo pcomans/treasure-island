@@ -15,6 +15,17 @@ extends RigidBody3D
 ##
 ## Off the playable outline (on the riprap or in the bay) or fallen through the
 ## ground, it goes back to its centre spot; a new game starts it there.
+##
+## A goal (owner, 2026-11-11): the ball wholly over a goal's line, having come in
+## through its mouth (between the uprights' inner faces, under the crossbar where a
+## net hangs, anywhere up the rugby H's uprights), sets off a burst of confetti at
+## that goal (goal_confetti.gd) and GOAL_RESET_S later goes back to its spot, at
+## rest. Every goal on the island counts, whatever sent the ball in (a kick, a car,
+## a roll); a ball that touches a post from outside, or passes beside the goal,
+## does not. The goals are the street furniture's goal rows, with their mouths
+## (street_furniture_builder.gd hands them over from street_furniture_kit.gd).
+
+signal scored(goal_id: String)
 
 const PROP := "soccer_ball"
 const GROUP := "soccer_ball"
@@ -41,27 +52,47 @@ const AIR_DRAG_PER_M := 0.0133
 const GROUND_NORMAL_Y := 0.6
 ## Fallen this far below its spot: through the ground.
 const FALL_RESET_M := 4.0
+## After a goal the ball stays in the net this long (s), the confetti flying, then
+## goes back to its spot.
+const GOAL_RESET_S := 2.0
+## A ball that came in through a mouth and is this far out to the side of it,
+## above it or behind the goal is no longer in that goal.
+const MOUTH_MARGIN_M := 0.5
+const CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
 const WHITE := Color(0.93, 0.93, 0.9)
 const BLACK := Color(0.07, 0.07, 0.08)
 
 ## Where it starts and goes back to: on the centre spot, resting on the ground.
 @export var spot := Transform3D.IDENTITY
+## Every goal it can go into: {id, prop, transform (origin on the middle of the
+## goal line, -Z toward the pitch), half_m, height_m, crossbar_m, depth_m}
+## (street_furniture_kit.gd goal_mouth).
+@export var goals: Array = []
 
 ## How often it has gone back to its spot since it was made.
 var resets := 0
+## How many goals it has gone into since it was made.
+var goals_scored := 0
 var _reset_pending := false
+## Where it was at the last physics tick, the goal whose mouth it came in through
+## (-1 none) and how long it stays in the net after a goal (s).
+var _previous := Vector3.ZERO
+var _entered := -1
+var _goal_wait_s := 0.0
 var _boundary: WorldBoundary
 var _touch: Area3D
 
 static var _mesh: ArrayMesh
 
 
-## A ball at rest at spot. Its parts are built here, not in _ready, so the baked world
-## (tools/prebuild_static_world.gd) restores them from the scene as they were.
-static func create(spot_transform: Transform3D) -> SoccerBall:
+## A ball at rest at spot, which knows the goals it can go into. Its parts are built
+## here, not in _ready, so the baked world (tools/prebuild_static_world.gd) restores
+## them from the scene as they were.
+static func create(spot_transform: Transform3D, goal_mouths: Array = []) -> SoccerBall:
 	var ball := SoccerBall.new()
 	ball.name = "SoccerBall"
 	ball.spot = spot_transform
+	ball.goals = goal_mouths.duplicate(true)
 	ball.transform = spot_transform
 	ball.add_to_group(GROUP, true)
 	ball.set_meta("street_detail_layer", "furniture")
@@ -167,6 +198,19 @@ static func _triangle(vertices: PackedVector3Array, normals: PackedVector3Array,
 
 func _ready() -> void:
 	_touch = get_node("Touch") as Area3D
+	_previous = global_position
+
+
+## Puts the ball at rest at `at` (tests and capture drivers set a shot up this
+## way); the move itself crosses no goal line, and a goal's wait is dropped.
+func place(at: Vector3) -> void:
+	global_position = at
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	sleeping = false
+	_previous = at
+	_entered = -1
+	_goal_wait_s = 0.0
 
 
 ## Back to the centre spot, at rest, on the next physics step.
@@ -175,9 +219,17 @@ func reset_to_spot() -> void:
 	sleeping = false
 
 
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	if _reset_pending:
 		return
+	if _goal_wait_s > 0.0:
+		_goal_wait_s -= delta
+		if _goal_wait_s <= 0.0:
+			reset_to_spot()
+			return
+	elif not sleeping:
+		_check_goals()
+	_previous = global_position
 	# Asleep, it hasn't moved since it was last in play, so the outline test is skipped;
 	# a touch still reaches it through the area, and its push wakes it.
 	if not sleeping and _out_of_play():
@@ -195,6 +247,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		state.linear_velocity = Vector3.ZERO
 		state.angular_velocity = Vector3.ZERO
 		resets += 1
+		_previous = spot.origin
+		_entered = -1
+		_goal_wait_s = 0.0
 		return
 	var velocity := state.linear_velocity
 	var speed := velocity.length()
@@ -211,6 +266,44 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if on_ground:
 		# Rolling: the spin slows with the roll.
 		state.angular_velocity *= share
+
+
+## A goal: since the last tick the ball came in through a goal's mouth, crossing
+## its line from the pitch between the uprights and under its top, and now it is
+## wholly over the line. It counts once; going back out over the line, or out of
+## the goal's box, forgets the mouth.
+func _check_goals() -> void:
+	var now := global_position
+	for index in goals.size():
+		var goal: Dictionary = goals[index]
+		var to_goal := (goal.transform as Transform3D).affine_inverse()
+		var before := to_goal * _previous
+		var after := to_goal * now
+		var half := float(goal.half_m)
+		var height := float(goal.height_m)
+		if before.z < 0.0 and after.z >= 0.0:
+			var crossing := before.lerp(after, -before.z / (after.z - before.z))
+			if absf(crossing.x) <= half and crossing.y <= height:
+				_entered = index
+		if _entered != index:
+			continue
+		if after.z < 0.0 or absf(after.x) > half + MOUTH_MARGIN_M or after.y > height + MOUTH_MARGIN_M or after.z > float(goal.depth_m) + MOUTH_MARGIN_M:
+			_entered = -1
+		elif after.z >= RADIUS_M:
+			_score(goal)
+			return
+
+
+## Confetti at the goal, the count, and back to the spot after GOAL_RESET_S.
+func _score(goal: Dictionary) -> void:
+	_entered = -1
+	goals_scored += 1
+	_goal_wait_s = GOAL_RESET_S
+	var confetti := CONFETTI.new()
+	confetti.name = "GoalConfetti"
+	get_parent().add_child(confetti, true)
+	confetti.start(goal.transform, float(goal.half_m), float(goal.crossbar_m))
+	scored.emit(str(goal.id))
 
 
 ## Out of play: off the island's playable outline (the riprap, the bay) or fallen
@@ -247,7 +340,24 @@ func _push_from(character: CharacterBody3D) -> void:
 	normal = normal.normalized()
 	var closing := (character.velocity - linear_velocity).dot(normal)
 	if closing <= 0.0:
-		return
+		# At the fast run (20 m/s, a third of a metre a tick) the touch reports the
+		# capsule a tick late, already past the ball's centre. Only a ball the capsule
+		# has passed since the last tick (behind its axis now, ahead of it a tick
+		# before) was run through, and it takes the push of that earlier contact, along
+		# its normal. A ball still ahead and moving off faster than the capsule closes,
+		# as a glancing touch sends it aside, keeps the push it already had.
+		var run := Vector3(character.velocity.x, 0.0, character.velocity.z)
+		if run.length_squared() < 0.000001 or Vector3(offset.x, 0.0, offset.z).dot(run) > 0.0:
+			return
+		var back := character.velocity * get_physics_process_delta_time()
+		var earlier := centre - Geometry3D.get_closest_point_to_segment(centre, capsule.bottom - back, capsule.top - back)
+		earlier.y = 0.0
+		if earlier.dot(run) <= 0.0:
+			return
+		normal = earlier.normalized()
+		closing = (character.velocity - linear_velocity).dot(normal)
+		if closing <= 0.0:
+			return
 	var target := minf(character.velocity.dot(normal) + PUSH_REBOUND * closing, MAX_PUSH_SPEED_MPS)
 	var change := target - linear_velocity.dot(normal)
 	if change > 0.0:

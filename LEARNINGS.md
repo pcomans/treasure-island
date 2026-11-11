@@ -732,7 +732,13 @@ independent channels of `marsh_grain.png`. The alpha-border override preserved
 alpha handling, but did not prevent block quantization. Classify textures by
 what the shader reads before bulk import changes. For a deliberate lossless 3D
 exception, disable Detect 3D as well, since the editor can rewrite the mode.
-Check the exported texture against the source channels.
+Check the exported texture against the source channels. `LOSSLESS_DATA_TEXTURES` in
+`headless_world_material_contract.gd` now lists these textures and fails when one
+isn't lossless; add a new one there.
+
+## Keep block-compressed textures a multiple of 4
+
+Godot 4.7.2 VRAM-compresses in 4 x 4 texel blocks and pads any other size to the next multiple of 4 by repeating the last row and column (etcpak and Betsy alike, `.ctex` header 341 rows, stored 344); the GPU texture is the padded size, so UV 0..1 spans the padding, the image slides on its mesh by up to 3 texels and a tiling texture gets a smeared seam. On 2026-11-11, 40 textures imported this way (28 tree impostors, the chain-link, three murals, the B201 posters, the Aracely sign slab, five 1254 px facade albedos and the Mersea gravel) and 18 more only under the Web build's 512 px cap. `headless_world_material_contract.gd` now fails, naming file and size, on any block-compressed texture whose imported or Web-capped size isn't a multiple of 4, and on any `.import` with Detect 3D on; `tools/generate-texture` refuses other sizes. Fix one by resampling the whole image (per cell for an atlas of pixel-exact cells, wrapped where it tiles) or, for the Web alone, a smaller cap on its line in `tools/web-texture-cap-512.txt`; cropping or padding shifts its UVs.
 
 ## Keep browser emulation attached through verification
 
@@ -1306,3 +1312,19 @@ On the cars' ground over the riprap (2026-11-11) a car crept at the crest at 2 m
 ## Hold a raycast-wheel car against its springs' push along the ground too
 
 A car put back on land and held on its brakes crept 1.6 cm in 4 s on a 4-degree verge (2026-11-11), failing the contract's 1 cm drift limit, while it held still 0.3 m away. The held tyre force cancelled gravity's pull along the ground under each wheel, but the wheel's spring pushes along the body's up, which is not square to the ground triangle under that wheel, so part of that push ran along the ground unchecked. Cancelling the along-ground part of both the weight and the wheel's own spring force held it at 0.000 m on every spot. A probe that put the held car down at the failing spot and a good one, at several drop heights, showed in one run that the spot mattered and the drop height did not.
+
+## Count frames, not seconds, in a --fixed-fps test
+
+The pause check written for grab-bag-20261111 (2026-11-11) first waited two seconds of wall clock while the game was paused in `headless_gameplay_contract.gd`. Under `--fixed-fps 60` headless every frame advances game time by 1/60 s however fast it runs, and a paused game runs thousands of frames a second, so those two seconds were minutes of the contract's frame-counted 240 s guard timer, which fired. Under `--fixed-fps`, wait a number of frames (180 for three seconds at 60); keep wall clock for rendered runs at real speed.
+
+## A shortened test settle can land without a floor contact
+
+The first direct settle in `world_harness.gd` (2026-11-11) put the stock player 2 cm above the ground its fall would land on. It had stood on a floor before the move, so its first `move_and_slide` snapped it down (`floor_snap_length` 0.35 m) and reported `is_on_floor()` with no slide collision, and the fit's start-support check, which reads the slide contacts, failed. A start 0.4 m above the swept landing, beyond the snap, then passed one building's fit (w95934125) but failed the suite's whole-island test at w95934106 west with the same signature: the player at rest on the land, its last `move_and_slide` with no floor contact. The cause was not found and the 2 m fall was restored. One building's fit does not prove a change to the shared settle or walk-up code: run `island_test.gd`, which walks every scored building, before spending the suite.
+
+## A slanting run-up curves aside
+
+The stock controller speeds each world axis up apart (`move_toward` per component), so a run from rest along a slant first goes off at 45 degrees and ends about 1.1 m to the side of its line after 4 m. A goal test's kick aimed along a goal's slanting axis missed the ball that way (2026-11-11). When a test needs a stock run-up to hit something, run along a world axis or line up from far enough back.
+
+## An Area3D reports a fast mover a tick late
+
+The pitch's ball pushes a character its touch area overlaps, but the area's overlap list is the last physics step's: at the stock full run, 20 m/s or a third of a metre a tick, the capsule was already past the ball's centre when the ball read it, so the push's closing test refused every full-speed kick (found 2026-11-11; the contract's run test started 4 m back and reached only 14 m/s). Test a contact at the speeds players reach, and judge an approach against the mover's position a tick earlier when the reach is under a tick's travel.

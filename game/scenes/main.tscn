@@ -70,6 +70,7 @@ adjustment_saturation = 0.95
 script = ExtResource("1_main")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+process_mode = 1
 environment = SubResource("Environment_main")
 script = ExtResource("7_weather")
 
@@ -91,8 +92,10 @@ metadata/solar_azimuth_deg = 190.32
 metadata/solar_note = "NOAA solar position with refraction. Azimuth is clockwise from true north, which is world -Z (tools/lib/coordinates.mjs). rotation_degrees = (-elevation, 180 - azimuth, 0)."
 
 [node name="WorldRoot" parent="." instance=ExtResource("2_world")]
+process_mode = 1
 
 [node name="Player" parent="." instance=ExtResource("3_player")]
+process_mode = 1
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
