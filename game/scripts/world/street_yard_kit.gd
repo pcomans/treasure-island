@@ -6,6 +6,9 @@ extends RefCounted
 ## (street_yard.gdshader) colours every part from a palette texture; a
 ## piece's MultiMesh custom data picks its three paints and its weathering.
 ##
+## The yard's vans, trucks and RVs can be driven (owner, 2026-11-11): drivable()
+## gives a drivable vehicle's parts, as the street-clutter kit gives a car's.
+##
 ## pieces() turns one placed row (a prop key and its params) into the meshes to
 ## instance and the collision shapes to add, all in the row's prop frame:
 ## origin on the ground under the middle of the plan rectangle, +Y up, front
@@ -182,7 +185,8 @@ var _material: ShaderMaterial
 var _flag_material: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _floors: Dictionary = {}
-## The kit's empty nodes by name: a stunt ramp's profile points and side run.
+## The kit's empty nodes by name: a stunt ramp's profile points and side run, a
+## drivable vehicle's right-hand wheel centres.
 var _markers: Dictionary = {}
 var _colour_index: Dictionary = {}
 
@@ -208,7 +212,7 @@ func _init() -> void:
 	var scene := KIT_SCENE.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh
-	for node: Node in scene.find_children("stunt_ramp_*", "Node3D", true, false):
+	for node: Node in scene.find_children("*", "Node3D", true, false):
 		if not node is MeshInstance3D:
 			_markers[str(node.name)] = (node as Node3D).position
 	scene.free()
@@ -222,6 +226,52 @@ static func colour_names() -> Array:
 
 static func is_prop(prop: String) -> bool:
 	return PROPS.has(prop)
+
+
+## The kit name of a row's vehicle a player can drive (van_cargo, rv_class_c,
+## ...: the vehicles tools/lib/street-yard-meshes.mjs YARD_DRIVABLE gives
+## drivable parts), or "" for anything else.
+func drivable_name(prop: String, params: Dictionary) -> String:
+	if not PROPS.has(prop):
+		return ""
+	var variants: Array = PROPS[prop].variants
+	var variant := int(params.get("variant", -1))
+	if variant < 0 or variant >= variants.size():
+		return ""
+	var name := str(variants[variant])
+	return name if _meshes.has("%s_chassis_lod0" % name) else ""
+
+
+## The parts a drivable yard vehicle draws (game/scripts/vehicles/drivable_car.gd),
+## as the street-clutter kit's drivable() gives a car's: {ok, chassis (the near
+## mesh without its wheels), tyre (its front right wheel round its own centre,
+## face toward +X), tyre_rear (the rear one, where the rear wheels differ: twin
+## tyres), far (the parked far mesh, wheels and all), front, rear (the right-hand
+## front and rear wheel centres in the vehicle frame; the left ones mirror them in
+## x), radius, tyre_width, lod_near_m and range_m (where it switches to the far
+## mesh and how far that shows, as when parked)} or {ok: false, message}.
+func drivable(name: String) -> Dictionary:
+	var chassis: Variant = _meshes.get("%s_chassis_lod0" % name, null)
+	var tyre: Variant = _meshes.get("%s_tyre_lod0" % name, null)
+	var far: Variant = _meshes.get("%s_lod1" % name, null)
+	var front: Variant = _markers.get("%s_axle_front" % name, null)
+	var rear: Variant = _markers.get("%s_axle_rear" % name, null)
+	if not chassis is Mesh or not tyre is Mesh or not far is Mesh or not front is Vector3 or not rear is Vector3:
+		return {"ok": false, "message": "the yard kit has no drivable parts for %s" % name}
+	# The wheel centre stands its radius over the ground (the kit's wheels).
+	var range_m := LOD_NEAR_M
+	for prop: String in PROPS:
+		if name in (PROPS[prop].variants as Array):
+			range_m = float(PROPS[prop].range_m)
+	var parts := {
+		"ok": true, "chassis": chassis, "tyre": tyre, "far": far, "front": front, "rear": rear,
+		"radius": (front as Vector3).y, "tyre_width": (tyre as Mesh).get_aabb().size.x,
+		"lod_near_m": LOD_NEAR_M, "range_m": range_m,
+	}
+	var tyre_rear: Variant = _meshes.get("%s_tyre_rear_lod0" % name, null)
+	if tyre_rear is Mesh:
+		parts["tyre_rear"] = tyre_rear
+	return parts
 
 
 func material() -> ShaderMaterial:

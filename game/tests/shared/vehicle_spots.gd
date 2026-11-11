@@ -1,0 +1,100 @@
+extends RefCounted
+## The vehicles the vehicle tests expect to drive, and where they stand the stock
+## player to get into one (headless_vehicle_contract.gd, headless_touch_drive.gd).
+##
+## A spot to get into a parked car or a yard van, truck or RV:
+## off the vehicle's right or left side, or its back or front, BESIDE_M out from
+## its parked collision box, with no other drivable vehicle within the vehicles'
+## reach and OTHER_MARGIN_M, on the world's ground about level with its wheels
+## (not on a car or another prop), with room for the player's capsule.
+
+## The storage yards' vehicles a player drives (owner, 2026-11-11: every yard van,
+## truck and RV), by their kit names (street_yard_kit.gd drivable_name); the
+## towed ones (travel and fifth-wheel RVs, the concession trailer) have no cab.
+const YARD_BODIES := ["van_cargo", "van_step", "food_truck_step_van", "box_truck_medium", "box_truck_large", "rv_class_c", "rv_class_a"]
+
+const PHYSICS_WORLD_SOLID := 1
+const PHYSICS_STREET_PROP := 1 << 3
+const BESIDE_M := 0.75
+const OTHER_MARGIN_M := 0.5
+## The highest a spot's ground may stand above or below the vehicle's wheels (m).
+const GROUND_STEP_M := 0.6
+
+
+## A parked (not yet live) vehicle of this body not in used, and a spot beside
+## it: {"id", "at"} (at: the ground under the spot), or {} if there is none.
+static func beside(main: GameMain, vehicles: VehicleManager, body: String, used: Dictionary) -> Dictionary:
+	var ids := vehicles.swappable_ids().filter(func(id: String) -> bool: return vehicles.drivable_body(id) == body and not used.has(id) and vehicles.live_node(id) == null)
+	ids.sort()
+	for id: String in ids:
+		var box := parked_box(main, vehicles, id)
+		if box.is_empty():
+			continue
+		var half: Vector3 = box.half
+		var xf: Transform3D = box.xf
+		for side: Vector3 in [Vector3(half.x + BESIDE_M, 0.0, 0.0), Vector3(-half.x - BESIDE_M, 0.0, 0.0), Vector3(0.0, 0.0, half.z + BESIDE_M), Vector3(0.0, 0.0, -half.z - BESIDE_M)]:
+			var at: Vector3 = xf * side
+			if _other_in_reach(main, vehicles, id, at):
+				continue
+			var ground := _open_ground(main, at, xf.origin.y - half.y)
+			if ground.is_finite():
+				return {"id": id, "at": ground}
+	return {}
+
+
+## A swappable row's parked collision box (street_clutter_builder.gd: one box
+## over its body, its floor on the ground): {xf, half} (its transform and half
+## size), or {}.
+static func parked_box(main: GameMain, vehicles: VehicleManager, id: String) -> Dictionary:
+	var shapes: Array = vehicles.row(id).get("shapes", [])
+	var clutter := main.world_root.street_detail_layer("clutter").get_node_or_null("GeneratedStreetClutter")
+	if clutter == null or shapes.is_empty():
+		return {}
+	var body := clutter.get_node_or_null(str(shapes[0][0]))
+	var shape := body.get_node_or_null(str(shapes[0][1])) as CollisionShape3D if body != null else null
+	var box := shape.shape as BoxShape3D if shape != null else null
+	if box == null:
+		return {}
+	return {"xf": shape.global_transform, "half": box.size * 0.5}
+
+
+## Whether another drivable vehicle's parked box is within the vehicles' reach
+## and the margin of this point, in plan.
+static func _other_in_reach(main: GameMain, vehicles: VehicleManager, id: String, at: Vector3) -> bool:
+	for other: String in vehicles.swappable_ids():
+		if other == id or vehicles.drivable_body(other) == "":
+			continue
+		var origin := (vehicles.row(other).transform as Transform3D).origin
+		if Vector2(origin.x - at.x, origin.z - at.z).length() > 16.0:
+			continue
+		var box := parked_box(main, vehicles, other)
+		if box.is_empty():
+			continue
+		var local: Vector3 = (box.xf as Transform3D).affine_inverse() * at
+		var half: Vector3 = box.half
+		if Vector2(maxf(0.0, absf(local.x) - half.x), maxf(0.0, absf(local.z) - half.z)).length() < VehicleManager.ENTER_REACH_M + OTHER_MARGIN_M:
+			return true
+	return false
+
+
+## The world's ground under this point if the stock player can stand there: the
+## first solid straight down is the world's (not a street prop's), within
+## GROUND_STEP_M of the vehicle's wheels, with room for the player. INF if not.
+static func _open_ground(main: GameMain, at: Vector3, wheels_y: float) -> Vector3:
+	var player := main.player
+	var space := main.get_world_3d().direct_space_state
+	var ray := PhysicsRayQueryParameters3D.create(at + Vector3.UP * 3.0, at + Vector3.DOWN * 3.0, player.collision_mask, [player.get_rid()])
+	ray.hit_back_faces = false
+	var hit := space.intersect_ray(ray)
+	var collider := hit.get("collider") as CollisionObject3D
+	if collider == null or (collider.collision_layer & PHYSICS_WORLD_SOLID) == 0 or (collider.collision_layer & PHYSICS_STREET_PROP) != 0:
+		return Vector3.INF
+	var ground: Vector3 = hit.position
+	if absf(ground.y - wheels_y) > GROUND_STEP_M:
+		return Vector3.INF
+	var room := PhysicsShapeQueryParameters3D.new()
+	room.shape = player.collision_shape.shape
+	room.transform = Transform3D(Basis.IDENTITY, ground + player.collision_shape.position + Vector3.UP * 0.15)
+	room.collision_mask = player.collision_mask
+	room.exclude = [player.get_rid()]
+	return Vector3.INF if not space.intersect_shape(room, 1).is_empty() else ground

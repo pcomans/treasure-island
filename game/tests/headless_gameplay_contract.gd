@@ -314,8 +314,11 @@ func _check_ferry_solidity() -> void:
 	var controls := _check_controls_screen(main)
 	if controls.is_empty():
 		return
+	var prompt := await _check_prompt_beside_car(main, world)
+	if prompt.is_empty():
+		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s) and nothing in the middle of the screen in play" % [", ".join(heights), ball, pause, resume, opened, controls])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, prompt])
 	quit(0)
 
 
@@ -324,8 +327,9 @@ func _check_ferry_solidity() -> void:
 ## menu hidden: nothing moves until the player closes it. Back shows the pause
 ## menu, still paused; Resume plays. Then, in play, nothing of the HUD covers the
 ## middle of the screen (the spray's aiming cross went with the spray, 2026-11-11),
-## and away from any car no prompt shows: Resume brings back only a prompt that play
-## set (it once showed the prompt label's scene text, "F  Drive", anywhere).
+## and the prompt shows only with a car in reach: Resume brings back only a prompt
+## that play set (it once showed the prompt label's scene text, "F  Drive",
+## anywhere; _check_prompt_beside_car checks the other way).
 ## Returns a summary, or "" after failing.
 func _check_controls_from_loading(main: GameMain) -> String:
 	var hud := main.hud
@@ -342,8 +346,8 @@ func _check_controls_from_loading(main: GameMain) -> String:
 	if paused or hud.pause_panel.visible:
 		_fail("Resume after the controls screen opened while loading did not start play.")
 		return ""
-	if hud.prompt_panel.visible and not main.vehicles.can_enter():
-		_fail("After Resume at the spawn, away from any car, the prompt \"%s\" shows." % hud.prompt_text.text)
+	if hud.prompt_panel.visible != main.vehicles.can_enter():
+		_fail("After Resume the prompt must show exactly when a car is in reach (shown %s \"%s\", a car in reach %s)." % [hud.prompt_panel.visible, hud.prompt_text.text, main.vehicles.can_enter()])
 		return ""
 	var centre := hud.get_viewport_rect().size * 0.5
 	for node: Node in hud.find_children("*", "Control", true, false):
@@ -408,6 +412,34 @@ func _check_controls_screen(main: GameMain) -> String:
 		_fail("The touch controls screen lists keys or spray:\n%s" % touch)
 		return ""
 	return "%d keyboard and %d touch lines" % [keyboard.count("\n") + 1, touch.count("\n") + 1]
+
+
+## The desktop prompt beside a car: standing at the ferry fixture car's driver
+## door (vehicle_cases.json enter), "F  Drive" shows; Esc pauses and hides it;
+## Resume brings it back. Returns a summary, or "" after failing.
+func _check_prompt_beside_car(main: GameMain, world: WorldLoader) -> String:
+	var hud := main.hud
+	var cases: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/tests/shared/vehicle_cases.json"))
+	var entry := main.vehicles.row(str((cases as Dictionary).enter.car)) if cases is Dictionary else {}
+	if entry.is_empty():
+		_fail("The prompt check's fixture car is not a swappable row.")
+		return ""
+	var parked: Transform3D = entry.transform
+	if not await _place_player(main.player, world, parked.origin - parked.basis.x * 1.6):
+		return ""
+	for _tick in 5:
+		await physics_frame
+	await process_frame
+	var beside := [main.vehicles.can_enter(), hud.prompt_panel.visible, hud.prompt_text.text]
+	_push_key(KEY_ESCAPE)
+	var while_paused := [paused, hud.prompt_panel.visible]
+	hud.resume_button.pressed.emit()
+	await process_frame
+	var resumed := [paused, hud.prompt_panel.visible, hud.prompt_text.text]
+	if beside != [true, true, "F  Drive"] or while_paused != [true, false] or resumed != [false, true, "F  Drive"]:
+		_fail("Beside a car the prompt must show \"F  Drive\", hide while paused and come back on Resume (beside: in reach, shown, text %s; paused: paused, shown %s; resumed: paused, shown, text %s)." % [beside, while_paused, resumed])
+		return ""
+	return "\"F  Drive\" beside a car, hidden while paused, back on Resume"
 
 
 ## Every line the controls screen shows, headings and rows.
