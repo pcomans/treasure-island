@@ -30,7 +30,6 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - On the rubble mound the broken pieces only stand from about 12 m out, where they break its outline; nearer, its texture carries it alone, since faceted pieces read as pits or lumps beside it (visual review, 2026-11-07).
 - A stone's contact shadow is a skirt on the stone's own mesh, not darkening in the ground shader, because the yard surfaces it lies on have no ground shader of their own to darken.
 - Ground that grows nothing near the camera still pays for its tufts' vertices (about 2.3 ms on the Radeon 780M at `high` over the bare sand pad at x 328, z 383): cells can't tell what the capture holds without a read back.
-- The grass capture now reads a constant view distance (`2b418f33`), so it draws the ground's detailed layers (bare-edge noise, crisp edges, soil noise) rather than each layer's mean colour, and the comment on `CAPTURE_HEIGHT_M` at `game/scripts/world/ground_dressing.gd:102` is now wrong. Decide between detail and mean colour, then fix the comment or the code.
 - Mid-range grass toward the sun turns to dark brown specks where the backlight fades (release glitter-cove-clip and lawn-south-spawn views, 2026-11-07).
 - A line of dry tufts on Building 2's WSW forecourt follows a dark streak in the ground texture (release review, 2026-11-07).
 - No close capture yet of the rubble mounds at `medium` density.
@@ -72,7 +71,7 @@ Limits:
 
 ## Bay water (`game/resources/materials/world/water/bay_water.gdshader`)
 
-- The water's rings scale with the camera's far plane. With gameplay's 26 km far plane (skybox, 2026-11-08) the outer ring lies down to water level from about 21.6 km up, flat from about 24.2 km, so it can't wall in the camera near the far plane's height. From there the water ends about 6 km out, less higher up, and sky shows below the horizon beyond it, at the far plane's limit. The comment at `bay_water.gdshader:144` still says about 4.7 km, from the 5 km far plane: update it with the next shader change.
+- The water's rings scale with the camera's far plane. With gameplay's 26 km far plane (skybox, 2026-11-08) the outer ring lies down to water level from about 21.6 km up, flat from about 24.2 km, so it can't wall in the camera near the far plane's height. From there the water ends about 6 km out, less higher up, and sky shows below the horizon beyond it, at the far plane's limit.
 - Scenery in the last few percent of a view's depth, below eye height, stands behind the outer ring (water pass, 2026-11-07). Every camera now sees as far as gameplay's 26 km (skybox, 2026-11-08), so the western span is well inside; only the distant horizon's land carried on behind its ridges reaches that far.
 - Seen from the jetpack toward the sun, the far sun path is a solid white patch: from 120 to 160 m up, its largest clipped area is about 2% of the frame (`glitter_limit` 2.0, `glitter_gain` 2.0, under the merged sun of 2026-11-07). The owner accepted it on 2026-11-07 as what real water does, so it stays as reviewed. At ground level the path is a broken sheen.
 - `glitter_gain` was tuned with the sun's specular at 1.0. The merged sun has `light_specular` 0.5 with more energy and exposure, so the sheen is weaker and the clipped core brighter (the clipping is owner-accepted). Note "tuned at specular 1.0" if it is retuned.
@@ -430,7 +429,6 @@ Not needed to ship, and not done:
 
 Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
-- **Top follow-up:** the bake's check compares each built mesh with its group, not with what was removed, so a script error inside `_add_part` could drop a part and still exit 0 (`tools/merge_baked_buildings.gd:86-87`, `:265`). The fix is about five lines: total each taken surface's indices in `merge()`.
 - `headless_bake_merge_contract.gd` has no fixtures for some kept cases: unsupported channels, per-instance settings, and parts with children or a script.
 
 ## Deferred by the owner
@@ -471,7 +469,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - About 9.3 m² of sloped concrete chamfer remains around (−210, 165) at the Johnson St lot's road end.
 - **Shoreline and vegetation generators:**
   - The rock ground's tone comes from shader defaults, not the segment's tone.
-  - In `tools/lib/shoreline-generation.mjs`, the "Side walls" comment (`:1692`) and the shoreline config's note are stale. So are the comments at `:43` and `:2299`, which still say the player is recovered at the outline (the shore lift replaced that).
+  - The shoreline config's closures note (`tools/config/shoreline.json`) still describes the slipway's side walls as `ramp_wall_m` high; it is 0, and the slope's rock cut stands beside the slab. The config's sha256 is recorded in `generated/world/shoreline.json`, so change the note together with a world regeneration.
   - The ramp foot's seed (code review's low, at `07a0f9e5`).
   - The ditch's axis lives in two places: `marsh_axis` in `game/resources/materials/world/ground_cover/ground_cover.gdshader:85` and the `mersea_ditch` rules in `tools/config/street-detail-zones.json`.
   - Canopy placement ignores walk-up lanes: the generated audit's `walk_up_short` grew from 32 to 37 sides. S4's island test still passes all 174.
@@ -499,7 +497,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - the view pull in its shader assumes a perspective camera, with no orthographic branch;
   - the 0.23 m clip should share a constant with the bottom rail;
   - the `ROUGHNESS` comment says the sheet keeps its own finish, but the shader sets a constant.
-- **Mac publish step** (`.github/workflows/mac-build.yml`): when a re-run finds its tag, the step asks `gh api` whether that tag has a published release, with the call's error output hidden. So a passing failure of that call, such as a 502, reads as "no release" and prints the advice to delete the tag by hand, although the release exists. Deleting a live release's tag is reported to turn the release into a draft, so check the [releases page](https://github.com/pcomans/treasure-island/releases) before acting on that advice. The step itself changes nothing. The fix is one line: drop `2>/dev/null` on the inner `gh api`, so the real error shows in the log (found in review, 2026-11-07).
 - **Docs:**
   - README.md shows `building_fit_test.gd` run with `--headless`, which the test refuses.
   - PLAYTEST.md should point to the Mac build that CI publishes.

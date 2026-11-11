@@ -8,7 +8,7 @@ extends RefCounted
 ## stones and heap), the low cobbles in the band inside the outline and the
 ## driftwood, each segment's stones and underlay in their own materials (its
 ## stone tone, blended into its neighbours' at its ends). Visual only, like the
-## Yerba Buena context: no collision and no spray receiver, but for the inland
+## Yerba Buena context: no collision, but for the inland
 ## stones, which stand on walkable land and get a coarse body of their own
 ## (_inland_body), and the cars' ground over the riprap (_car_ground) and their
 ## barrier at the causeway (_car_barrier), which only cars and shoved K-rails
@@ -49,8 +49,9 @@ const INLAND_BODY_TOP_SHARE := 0.7
 ## The cars' ground over the riprap (owner, 2026-11-10: a car driven off the shore
 ## rolls down the rocks and splashes where it meets the water). The stones are
 ## drawn only, so this surface stands in for them for cars alone: its own layer,
-## which only drivable_car.gd's body and wheels and the live K-rails
-## (vehicle_manager.gd) look for; the player, the cameras and the spray never see
+## which only drivable_car.gd's body and wheels, the live K-rails
+## (vehicle_manager.gd) and the car camera's sight test (vehicle_camera.gd
+## _in_sight) look for; the player and the camera arms never see
 ## it. It stands over the riprap in rows (_car_ground, _row), each from inland
 ## out to the underlay's toe: a climb, a top and the fall, all CAR_LIFT_M over
 ## the underlay, about the tops of the stones on it (the generated stones stand

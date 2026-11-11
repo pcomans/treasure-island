@@ -57,7 +57,6 @@ const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_CAMERA := preload("res://game/scripts/vehicles/vehicle_camera.gd")
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const PHYSICS_WORLD_SOLID := 1
-const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
 const PHYSICS_LOOSE_PROP := 1 << 4
 ## The cars' ground over the riprap and their barrier at the causeway
@@ -478,7 +477,7 @@ func _new_barrier(id: String, entry: Dictionary) -> RigidBody3D:
 	var barrier := RigidBody3D.new()
 	barrier.name = "Barrier_" + id.validate_node_name()
 	barrier.mass = BARRIER_MASS_KG
-	barrier.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
+	barrier.collision_layer = PHYSICS_STREET_PROP
 	barrier.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP | PHYSICS_CAR_GROUND
 	barrier.can_sleep = true
 	var surface := PhysicsMaterial.new()

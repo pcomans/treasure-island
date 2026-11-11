@@ -51,6 +51,8 @@ func _run() -> void:
 	_check_composite_roof_identity()
 	await _check_retained_housing_inventory()
 	print(JSON.stringify({"ok":failures.is_empty(), "failures":failures}))
+	if failures.is_empty():
+		print("PASS: the shared building-study geometry helper keeps each producer's faces, order, transforms and coverage, and its roof coverage, roof identity and retained housing checks")
 	quit(0 if failures.is_empty() else 1)
 
 func check(ok: bool, message: String) -> void:

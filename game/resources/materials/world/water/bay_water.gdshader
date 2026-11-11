@@ -141,10 +141,10 @@ void vertex() {
 	float far_radius = sqrt(max(reach * reach - height * height, 1.0));
 	float radius = ring >= outer - 0.5 ? far_radius : far_radius * pow((2.0 * ring + 1.0) / (grid_rows - 2.0), 2.0);
 	vec2 dir = normalize(grid);
-	// Near the far plane's own height (about 4.7 km up for gameplay's camera) the rings
-	// shrink round the camera, and a standing outer ring would wall it in and cover the
-	// island, so it lies down at water level as its radius falls from half the reach to
-	// a quarter.
+	// Near the reach's own height (about 25 km up for gameplay's 26 km far plane) the
+	// rings shrink round the camera, and a standing outer ring would wall it in and cover
+	// the island, so it lies down at water level as its radius falls from half the reach
+	// to a quarter: from about 21.6 km up, flat from about 24.2 km.
 	float stand = smoothstep(0.25, 0.5, far_radius / reach);
 	world_pos = vec3(camera.x + dir.x * radius, ring > outer - 0.5 ? mix(level, max(camera.y, level), stand) : level, camera.z + dir.y * radius);
 	VERTEX = world_pos - NODE_POSITION_WORLD;

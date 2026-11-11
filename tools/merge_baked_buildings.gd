@@ -18,6 +18,9 @@ extends RefCounted
 ##   differently from a plain rotation;
 ## - housing support and retained ground meshes: StudyGeometry.retained_ground_contact
 ##   compares them with their collider face by face, in order.
+##
+## The bake then frees what the housing family installer replaced (prune_superseded):
+## the meshes it hid and the bodies it switched off, where nothing else hangs on them.
 
 ## Metadata that says which building and role a mesh belongs to. A merged mesh carries
 ## its sources' values; meshes that differ in any of them don't merge.
@@ -48,7 +51,8 @@ const UNSUPPORTED_CHANNELS: Array[int] = [Mesh.ARRAY_CUSTOM0, Mesh.ARRAY_CUSTOM1
 
 
 ## Merges in place under buildings. Returns the counts before and after, for the log,
-## and in problems any merged mesh that came out short: the bake fails on those.
+## and in problems any merged mesh that came out short of its group, or of what was
+## taken from its sources: the bake fails on those.
 static func merge(buildings: Node3D) -> Dictionary:
 	var leaves: Array[Node] = buildings.find_children("*", "MeshInstance3D", true, false)
 	var uses := {}
@@ -84,6 +88,7 @@ static func merge(buildings: Node3D) -> Dictionary:
 				if not _has_only_supported_channels(arrays) or (mesh is ArrayMesh and (mesh as ArrayMesh).surface_get_primitive_type(surface) != Mesh.PRIMITIVE_TRIANGLES):
 					continue
 				_add_part(group, signature, material as StandardMaterial3D, arrays, to_anchor, materials)
+				_count_taken(group, arrays)
 				taken.append(surface)
 		if surface_count > 0 and taken.size() == surface_count:
 			node.get_parent().remove_child(node)
@@ -95,23 +100,52 @@ static func merge(buildings: Node3D) -> Dictionary:
 			(mesh as ArrayMesh).surface_remove(surface)
 		counts.meshes_kept += 1
 		counts.surfaces_kept += mesh.get_surface_count()
-	var merged_meshes := 0
-	var merged_surfaces := 0
+	var batches := _build_groups(groups)
+	counts["meshes_after"] = counts.meshes_kept + int(batches.meshes)
+	counts["surfaces_after"] = counts.surfaces_kept + int(batches.surfaces)
+	counts["materials_after"] = materials.size()
+	counts["taken_indices"] = batches.taken_indices
+	counts["taken_vertices"] = batches.taken_vertices
+	counts["problems"] = batches.problems
+	return counts
+
+
+## Counts a surface that merge() takes out of its source against its group. Counted
+## apart from _add_part: the surface leaves its source either way, so a part that
+## _add_part failed to record still counts as taken.
+static func _count_taken(group: Dictionary, arrays: Array) -> void:
+	group.taken_indices += _index_count(arrays)
+	group.taken_vertices += (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+
+
+## Builds each group's batch under its anchor. Returns how many meshes and surfaces were
+## built, the indices and vertices taken from the sources, and in problems every batch
+## that came out short of its group or of what was taken for it.
+static func _build_groups(groups: Dictionary) -> Dictionary:
+	var meshes := 0
+	var surfaces := 0
+	var taken_indices := 0
+	var taken_vertices := 0
 	var problems := PackedStringArray()
 	for group: Dictionary in groups.values():
+		var built: ArrayMesh = null
+		var batch := "No batch"
 		# A group stays empty when all its candidates' surfaces had to stay.
 		if not group.surfaces.is_empty():
-			var built := _build_node(group, merged_meshes)
-			var problem := _build_problem(built, group)
-			if problem != "":
-				problems.append("BakedBatch%d under %s: %s" % [merged_meshes, (group.anchor as Node3D).get_path(), problem])
-			merged_surfaces += built.get_surface_count()
-			merged_meshes += 1
-	counts["meshes_after"] = counts.meshes_kept + merged_meshes
-	counts["surfaces_after"] = counts.surfaces_kept + merged_surfaces
-	counts["materials_after"] = materials.size()
-	counts["problems"] = problems
-	return counts
+			built = _build_node(group, meshes)
+			batch = "BakedBatch%d" % meshes
+			if built != null:
+				meshes += 1
+				surfaces += built.get_surface_count()
+				var problem := _build_problem(built, group)
+				if problem != "":
+					problems.append("%s under %s: %s" % [batch, (group.anchor as Node3D).get_path(), problem])
+		var shortfall := _taken_problem(built, group)
+		if shortfall != "":
+			problems.append("%s under %s: %s" % [batch, (group.anchor as Node3D).get_path(), shortfall])
+		taken_indices += int(group.taken_indices)
+		taken_vertices += int(group.taken_vertices)
+	return {"meshes": meshes, "surfaces": surfaces, "taken_indices": taken_indices, "taken_vertices": taken_vertices, "problems": problems}
 
 
 ## The nearest ancestor holding inherited identity, or else the building's top node.
@@ -172,7 +206,9 @@ static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D) -> 
 			identity[key] = node.get_meta(key)
 	var group_key := "%d|%s|%d|%d" % [anchor.get_instance_id(), identity, node.cast_shadow, node.layers]
 	if not groups.has(group_key):
-		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "surfaces": {}}
+		# taken_*: what merge() took out of the sources for this group, counted apart
+		# from the parts it records, for _taken_problem.
+		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "surfaces": {}, "taken_indices": 0, "taken_vertices": 0}
 	return groups[group_key]
 
 
@@ -269,11 +305,33 @@ static func _build_problem(mesh: ArrayMesh, group: Dictionary) -> String:
 	for surface in surfaces.size():
 		var wanted := 0
 		for part: Dictionary in surfaces[surface].parts:
-			var arrays: Array = part.arrays
-			wanted += (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).size() if arrays[Mesh.ARRAY_INDEX] != null else (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+			wanted += _index_count(part.arrays)
 		if mesh.surface_get_array_index_len(surface) != wanted:
 			return "surface %d has %d of %d indices" % [surface, mesh.surface_get_array_index_len(surface), wanted]
 	return ""
+
+
+## Why a group's built mesh (null if none was built) doesn't hold everything merge() took
+## out of its sources, or "" when it does. Unlike _build_problem, this doesn't trust the
+## parts the group recorded: a part that _add_part dropped is missing from those too.
+static func _taken_problem(mesh: ArrayMesh, group: Dictionary) -> String:
+	var indices := 0
+	var vertices := 0
+	if mesh != null:
+		for surface in mesh.get_surface_count():
+			indices += mesh.surface_get_array_index_len(surface)
+			vertices += mesh.surface_get_array_len(surface)
+	if indices != int(group.taken_indices) or vertices != int(group.taken_vertices):
+		return "holds %d of the %d indices and %d of the %d vertices taken from its sources" % [indices, group.taken_indices, vertices, group.taken_vertices]
+	return ""
+
+
+## The indices a source surface brings into a merged surface, which is always indexed:
+## its own, or one per vertex if it had none.
+static func _index_count(arrays: Array) -> int:
+	if arrays[Mesh.ARRAY_INDEX] != null:
+		return (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).size()
+	return (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
 
 
 static func _surface_arrays(surface: Dictionary) -> Array:
@@ -337,3 +395,42 @@ static func _surface_arrays(surface: Dictionary) -> Array:
 	if channels & (1 << Mesh.ARRAY_TEX_UV2):
 		result[Mesh.ARRAY_TEX_UV2] = uv2s
 	return result
+
+
+## Frees the superseded housing nodes the bake collected through the installer's
+## BAKE_SUPERSEDED_META (housing_family_live_attachment.gd: the meshes it hid and the
+## bodies it switched off) where they are inert (_can_prune). superseded_bodies is how
+## many bodies the installer's own report says it switched off (disabled_legacy_bodies),
+## counted whether or not the bake asked for candidates. Each of those should be a plain
+## body the prune can remove, so returns the counts for the log, and a problem when
+## fewer bodies went: candidates went missing, or some could not go. The bake fails on
+## that rather than carry superseded geometry quietly.
+static func prune_superseded(candidates: Array[Node], superseded_bodies: int) -> Dictionary:
+	var meshes := 0
+	var bodies := 0
+	for node in candidates:
+		if is_instance_valid(node) and _can_prune(node):
+			if node is MeshInstance3D:
+				meshes += 1
+			else:
+				bodies += 1
+			node.free()
+	var problem := ""
+	if bodies < superseded_bodies:
+		problem = "the housing family installer switched off %d bodies, but the prune removed only %d of them, so the rest would stay in the bake (%d candidates reached it, %d hidden meshes removed)" % [superseded_bodies, bodies, candidates.size(), meshes]
+	return {"candidates": candidates.size(), "removed_meshes": meshes, "removed_bodies": bodies, "superseded_bodies": superseded_bodies, "problem": problem}
+
+
+## Only inert visual leaves, and switched-off bodies whose children are plain shapes.
+static func _can_prune(node: Node) -> bool:
+	if node.get_script() != null or node.unique_name_in_owner or not node.get_groups().is_empty():
+		return false
+	if node is MeshInstance3D:
+		return not node.visible and node.get_child_count(true) == 0
+	if not node is StaticBody3D or node.collision_layer != 0 or node.collision_mask != 0:
+		return false
+	for child: Node in node.get_children(true):
+		if (not child is CollisionShape3D or child.get_child_count(true) != 0
+			or child.get_script() != null or child.unique_name_in_owner or not child.get_groups().is_empty()):
+			return false
+	return true
