@@ -43,7 +43,9 @@ extends SceneTree
 ##      wakes it (the K-rail or the row units it lies among move again; the car
 ##      lies against a wall);
 ##   9. the pitch's ball: a car driven into it along the pitch sends it rolling
-##      off ahead of the car (a bumper's push, not a ride over it);
+##      off ahead of the car (a bumper's push, not a ride over it); driven at it
+##      in front of a goal, braking once it is away, the car pushes it in: a
+##      goal, with confetti at that goal, and the ball back on its spot;
 ##  10. on foot after getting out: the stock controller back on, then the stock
 ##      walk, run, jetpack and fast drop on open street;
 ##  11. the browser's touch controls (touch_controls.gd, made as main.gd makes
@@ -108,7 +110,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_bay, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, the shore's rocks met fast and slow (a splash, a stop short of the stones) and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, a splash and back on land from open water, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
 	_finish()
 
 
@@ -1116,6 +1118,55 @@ func _case_ball() -> bool:
 	var ahead := (ball.global_position - car.global_position).dot(Vector3(heading.x, 0.0, heading.y))
 	print("BALL a car at %.1f m/s sent the pitch's ball %.1f m from its spot, at up to %.1f m/s, %.1f m ahead of the car" % [hit_speed, moved, top, ahead])
 	if not _require(moved > 3.0 and top > 2.0 and ahead > 0.0, "The car did not send the pitch's ball rolling ahead of it (moved %.2f m, top %.1f m/s, %.1f m ahead)." % [moved, top, ahead]):
+		return false
+	# Into a goal (owner, 2026-11-11): the ball 8 m out in front of the middle of the
+	# full-size goal nearest its spot, and the car driven at it along the goal's axis
+	# from 12 m behind it, braking once the ball is away.
+	var goal := {}
+	for candidate: Dictionary in ball.goals:
+		if str(candidate.prop) == "goal_soccer" and (goal.is_empty() or float(candidate.half_m) > float(goal.half_m) + 0.01 \
+		or (is_equal_approx(float(candidate.half_m), float(goal.half_m)) and (candidate.transform as Transform3D).origin.distance_to(ball.spot.origin) < (goal.transform as Transform3D).origin.distance_to(ball.spot.origin))):
+			goal = candidate
+	if not _require(not goal.is_empty(), "The ball knows no soccer goal."):
+		return false
+	var frame: Transform3D = goal.transform
+	var into := Vector2(frame.basis.z.x, frame.basis.z.z).normalized()
+	var mark := frame * Vector3(0.0, 0.0, -8.0)
+	var ground := _ray(mark + Vector3.UP * 5.0, mark + Vector3.DOWN * 5.0, ball.collision_mask)
+	if not _require(not ground.is_empty(), "No ground for the ball in front of %s." % goal.id):
+		return false
+	ball.place((ground.position as Vector3) + Vector3.UP * SoccerBall.RADIUS_M)
+	if not await _drive_from(car, Vector2(mark.x, mark.z) - into * 12.0, into):
+		return false
+	var scored: Array[String] = []
+	var record := func(id: String) -> void: scored.append(id)
+	ball.scored.connect(record)
+	var before := ball.goals_scored
+	var resets := ball.resets
+	var braking := false
+	Input.action_press("move_forward")
+	for _tick in 300:
+		if not braking:
+			_steer_toward(car, Vector2(frame.origin.x, frame.origin.z))
+		await physics_frame
+		if not braking and ball.linear_velocity.length() > 1.0:
+			braking = true
+			_release_driving()
+			Input.action_press("move_back")
+		if ball.goals_scored > before:
+			break
+	_release_driving()
+	ball.scored.disconnect(record)
+	var crossbar := frame * Vector3(0.0, float(goal.crossbar_m), 0.0)
+	var confetti := ball.get_parent().get_children().filter(func(node: Node) -> bool: return node is CPUParticles3D and str(node.name).begins_with("GoalConfetti") and (node as Node3D).global_position.distance_to(crossbar) < 1.0)
+	print("GOAL a car pushed the ball into %s: goals %d, confetti %d, car %.1f m short of the line" % [goal.id, ball.goals_scored - before, confetti.size(), -(frame.affine_inverse() * car.global_position).z])
+	if not _require(ball.goals_scored == before + 1 and scored == [str(goal.id)] and not confetti.is_empty(), "A car pushing the ball in through the mouth of %s must score one goal there with confetti (goals %d at %s, confetti %d)." % [goal.id, ball.goals_scored - before, scored, confetti.size()]):
+		return false
+	for _tick in roundi((SoccerBall.GOAL_RESET_S + 0.5) * Engine.physics_ticks_per_second):
+		await physics_frame
+		if ball.resets > resets:
+			break
+	if not _require(ball.resets == resets + 1, "After the car's goal the ball did not go back to its spot."):
 		return false
 	return await _stop_and_exit(car, "ball")
 

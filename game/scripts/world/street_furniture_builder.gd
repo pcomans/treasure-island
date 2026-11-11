@@ -15,7 +15,9 @@ extends RefCounted
 ## crossarms of their built utility poles, in straight pieces of one shared
 ## wire mesh, with no collision; so do a photographed pole's spur wires to the
 ## poles its prop_params.wires_to names. A soccer_ball row is the pitch's loose ball,
-## a rigid body of its own (soccer_ball.gd) resting on its spot.
+## a rigid body of its own (soccer_ball.gd) resting on its spot; it is handed every
+## goal row's placement and mouth (the kit's goal_mouth), so it knows a goal when it
+## goes into any of them.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
 const SOCCER_BALL := preload("res://game/scripts/world/soccer_ball.gd")
@@ -48,6 +50,8 @@ func build(document: Dictionary) -> Dictionary:
 	var wire_rows: Array[Dictionary] = []
 	var spurs: Array = []
 	var balls: Array[Transform3D] = []
+	# Every goal: {id, prop, transform, half_m, height_m, crossbar_m, depth_m}.
+	var goals: Array = []
 	var props := 0
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
@@ -77,6 +81,12 @@ func build(document: Dictionary) -> Dictionary:
 		var yaw_value: Variant = row.get("yaw_radians", null)
 		var yaw := float(yaw_value) if yaw_value is float or yaw_value is int else 0.0
 		var placement := Transform3D(Basis(Vector3.UP, yaw), Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)), float(position[2])))
+		var mouth := kit.goal_mouth(prop, params if params is Dictionary else {})
+		if not mouth.is_empty():
+			mouth["id"] = str(row.id)
+			mouth["prop"] = prop
+			mouth["transform"] = placement
+			goals.append(mouth)
 		if prop == "utility_pole":
 			poles[str(row.id)] = {"placement": placement, "wires": kit.wire_levels(params if params is Dictionary else {})}
 			var wires_to: Variant = (params as Dictionary).get("wires_to", []) if params is Dictionary else []
@@ -208,7 +218,7 @@ func build(document: Dictionary) -> Dictionary:
 			label_count += 1
 		root.add_child(group)
 	for spot: Transform3D in balls:
-		root.add_child(SOCCER_BALL.create(spot))
+		root.add_child(SOCCER_BALL.create(spot, goals))
 	root.set_meta("props", props)
 	root.set_meta("prop_counts", prop_counts)
 	root.set_meta("wire_spans", wires.spans)

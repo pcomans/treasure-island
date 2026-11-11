@@ -553,7 +553,142 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 	if ball.resets != resets + 2:
 		_fail("The soccer ball went back to its spot %d times for its 2 drops." % (ball.resets - resets))
 		return ""
-	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land" % [pushed, rolled, fastest]
+	var goals := await _check_goals(player, world, ball)
+	if goals.is_empty():
+		return ""
+	return "walked %.1f m on, at rest %.1f m on, run off at %.1f m/s, back from the bay and from below the land; %s" % [pushed, rolled, fastest, goals]
+
+
+## Goals (owner, 2026-11-11). The stock player running into the ball in front of the
+## full-size goal nearest its spot sends it in through the mouth: one goal, there, a
+## burst of confetti at that goal, and GOAL_RESET_S later the ball back on its spot at
+## rest, the confetti gone soon after. Rolled at a post from outside, or past the
+## goal's side, it scores nothing. Rolled into a GAA goal and through a rugby H it
+## scores too: every kind of goal on the island. Returns a summary, or "" after failing.
+func _check_goals(player: PlayerController, world: WorldLoader, ball: SoccerBall) -> String:
+	var kinds := {}
+	for goal: Dictionary in ball.goals:
+		kinds[str(goal.prop)] = int(kinds.get(str(goal.prop), 0)) + 1
+	if kinds.keys().size() != 3 or not kinds.has("goal_soccer") or not kinds.has("goal_gaa") or not kinds.has("goal_rugby"):
+		_fail("The ball must know every goal on the island, soccer, GAA and rugby: it knows %s." % kinds)
+		return ""
+	var scored: Array[String] = []
+	ball.scored.connect(func(id: String) -> void: scored.append(id))
+	# The kick: the player runs into the ball from 12 m back, at the full run's
+	# 20 m/s, the ball 3 m out in front of the middle of the mouth, along the compass
+	# direction nearest the goal's axis. (The stock controller speeds each axis up
+	# apart, so a slanting run-up curves aside; from 3 m out the ball still comes in
+	# well inside the posts.)
+	var soccer := _goal_of(ball, "goal_soccer")
+	var frame: Transform3D = soccer.transform
+	var into := Vector3(frame.basis.z.x, 0.0, frame.basis.z.z).normalized()
+	var run := Vector3(signf(into.x), 0.0, 0.0) if absf(into.x) >= absf(into.z) else Vector3(0.0, 0.0, signf(into.z))
+	if not await _place_ball(ball, frame * Vector3(0.0, 0.0, -3.0)):
+		return ""
+	if not await _place_player(player, world, ball.global_position - run * 12.0):
+		return ""
+	(player.get_node("CameraPivot") as Node3D).rotation = Vector3(0.0, atan2(-run.x, -run.z), 0.0)
+	var before := ball.goals_scored
+	var kick_speed := 0.0
+	Input.action_press("move_forward")
+	Input.action_press("run")
+	for _tick in 120:
+		await physics_frame
+		if ball.linear_velocity.length() < 1.0:
+			kick_speed = Vector2(player.velocity.x, player.velocity.z).length()
+		if ball.goals_scored > before:
+			break
+	Input.action_release("run")
+	Input.action_release("move_forward")
+	player.set_gameplay_enabled(false)
+	if ball.goals_scored != before + 1 or scored != [str(soccer.id)] or kick_speed < 19.0:
+		_fail("Kicked in through the mouth of %s at the full run (%.1f m/s) the ball must score one goal there: %d goals, at %s, ball at %s." % [soccer.id, kick_speed, ball.goals_scored - before, scored, ball.global_position])
+		return ""
+	var confetti := _confetti_at(ball, soccer)
+	if confetti == null:
+		_fail("The goal at %s set off no confetti there." % soccer.id)
+		return ""
+	var resets := ball.resets
+	for _tick in roundi((SoccerBall.GOAL_RESET_S + 0.5) * Engine.physics_ticks_per_second):
+		await physics_frame
+		if ball.resets > resets:
+			break
+	if ball.resets != resets + 1 or not await _ball_rests(ball) or ball.global_position.distance_to(ball.spot.origin) > 0.1:
+		_fail("After the goal the ball must go back to its spot %s at rest: at %s after %d resets." % [ball.spot.origin, ball.global_position, ball.resets - resets])
+		return ""
+	for _tick in roundi(4.0 * Engine.physics_ticks_per_second):
+		await physics_frame
+		if not is_instance_valid(confetti):
+			break
+	if is_instance_valid(confetti):
+		_fail("The goal's confetti was still there 4 s after the ball went back.")
+		return ""
+	# Near misses: at the post from outside, and past the side of the goal.
+	var half := float(soccer.half_m)
+	for offset: float in [half + SoccerBall.RADIUS_M + 0.05, half + 0.6]:
+		if not await _place_ball(ball, frame * Vector3(offset, 0.0, -2.0)):
+			return ""
+		ball.linear_velocity = into * 6.0
+		for _tick in 90:
+			await physics_frame
+		if ball.goals_scored != before + 1:
+			_fail("A ball rolled %.2f m out from the middle of %s, outside its post, scored." % [offset, soccer.id])
+			return ""
+	# Every kind of goal: rolled into a GAA goal and through a rugby H from 2 m out.
+	for prop: String in ["goal_gaa", "goal_rugby"]:
+		var goal := _goal_of(ball, prop)
+		var at: Transform3D = goal.transform
+		if not await _place_ball(ball, at * Vector3(0.0, 0.0, -2.0)):
+			return ""
+		ball.linear_velocity = Vector3(at.basis.z.x, 0.0, at.basis.z.z).normalized() * 6.0
+		var count := ball.goals_scored
+		for _tick in 60:
+			await physics_frame
+			if ball.goals_scored > count:
+				break
+		if ball.goals_scored != count + 1 or scored.back() != str(goal.id) or _confetti_at(ball, goal) == null:
+			_fail("Rolled in through the mouth of %s the ball scored %d goals (last at %s), with confetti %s." % [goal.id, ball.goals_scored - count, scored.back(), _confetti_at(ball, goal) != null])
+			return ""
+	ball.reset_to_spot()
+	if not await _ball_rests(ball):
+		_fail("The ball did not come to rest on its spot after the goals.")
+		return ""
+	return "goals %s kicked in by the player at %.1f m/s, %s and %s rolled in, with confetti at each and the ball back on its spot; none from outside the post or past the goal (%d goals on the island: %s)" % [soccer.id.get_slice(":", 3), kick_speed, scored[1].get_slice(":", 3), scored[2].get_slice(":", 3), ball.goals.size(), kinds]
+
+
+## The goal of this kind nearest the ball's spot, the largest first.
+func _goal_of(ball: SoccerBall, prop: String) -> Dictionary:
+	var best := {}
+	for goal: Dictionary in ball.goals:
+		if str(goal.prop) != prop:
+			continue
+		var distance := (goal.transform as Transform3D).origin.distance_to(ball.spot.origin)
+		if best.is_empty() or float(goal.half_m) > float(best.half_m) + 0.01 \
+		or (is_equal_approx(float(goal.half_m), float(best.half_m)) and distance < (best.transform as Transform3D).origin.distance_to(ball.spot.origin)):
+			best = goal
+	return best
+
+
+## Puts the ball at rest on the ground under at.
+func _place_ball(ball: SoccerBall, at: Vector3) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(at + Vector3.UP * 5.0, at + Vector3.DOWN * 5.0, ball.collision_mask, [ball.get_rid()])
+	var hit := ball.get_world_3d().direct_space_state.intersect_ray(query)
+	if hit.is_empty():
+		_fail("No ground for the ball at %s." % at)
+		return false
+	ball.place((hit.position as Vector3) + Vector3.UP * SoccerBall.RADIUS_M)
+	for _tick in 3:
+		await physics_frame
+	return true
+
+
+## The confetti burst at a goal's crossbar, or null.
+func _confetti_at(ball: SoccerBall, goal: Dictionary) -> CPUParticles3D:
+	var crossbar: Vector3 = (goal.transform as Transform3D) * Vector3(0.0, float(goal.crossbar_m), 0.0)
+	for node: Node in ball.get_parent().get_children():
+		if node is CPUParticles3D and str(node.name).begins_with("GoalConfetti") and (node as CPUParticles3D).global_position.distance_to(crossbar) < 1.0:
+			return node as CPUParticles3D
+	return null
 
 
 ## The centre spots (world x, z) of the full-size pitches in the street-detail zones.

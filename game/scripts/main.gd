@@ -397,8 +397,17 @@ func _publish_web_state(_args: Array) -> void:
 		"controls": hud.controls_visible(),
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
 		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
+		# The pitch's ball: where it is and how many goals it has gone into.
+		"ball": _ball_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
+
+
+func _ball_state() -> Dictionary:
+	var ball := get_tree().get_first_node_in_group(SoccerBall.GROUP) as SoccerBall
+	if ball == null:
+		return {}
+	return {"position": [ball.global_position.x, ball.global_position.y, ball.global_position.z], "goals": ball.goals_scored, "resets": ball.resets}
 
 
 ## Stops the clock the scene tree's pause does not: shader time (the water's
