@@ -48,12 +48,13 @@ func _init() -> void:
 	local_coords = false
 	draw_order = CPUParticles3D.DRAW_ORDER_INDEX
 	cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-	# Thrown up and out over the pitch (the goal's -Z), widely spread.
+	# Thrown up and a little out over the pitch (the goal's -Z), widely spread, most
+	# of it staying over the goal rather than flying at a scorer's camera.
 	emission_shape = CPUParticles3D.EMISSION_SHAPE_BOX
-	direction = Vector3(0.0, 1.0, -0.55)
-	spread = 42.0
+	direction = Vector3(0.0, 1.0, -0.35)
+	spread = 40.0
 	initial_velocity_min = 4.0
-	initial_velocity_max = 9.0
+	initial_velocity_max = 8.0
 	# Paper: drag takes most of its speed and gravity only a little of its fall.
 	gravity = Vector3(0.0, -3.5, 0.0)
 	damping_min = 2.0
@@ -142,7 +143,8 @@ static func _unfilmic(value: float, white: float) -> float:
 	return (low + high) * 0.5
 
 
-## One piece: a small upright card, in the colour its particle was given.
+## One piece: a small upright card, in the colour its particle was given, fading
+## out as it comes right up to the camera.
 static func _piece() -> QuadMesh:
 	if _mesh == null:
 		var material := StandardMaterial3D.new()
@@ -150,6 +152,11 @@ static func _piece() -> QuadMesh:
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		material.vertex_color_use_as_albedo = true
 		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		# A piece within a couple of metres of the camera dithers away rather than
+		# filling the view.
+		material.distance_fade_mode = BaseMaterial3D.DISTANCE_FADE_PIXEL_DITHER
+		material.distance_fade_min_distance = 0.8
+		material.distance_fade_max_distance = 2.4
 		_mesh = QuadMesh.new()
 		_mesh.size = PIECE_M
 		_mesh.material = material
