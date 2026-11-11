@@ -1,5 +1,5 @@
 {
- "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's left side). Paint and clay looks; the clay sun rakes across each view.",
+ "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's and the white utility's left side; the owner's white truck is the utility). Paint and clay looks; the clay sun rakes across each view.",
  "looks": [
   "paint",
   "clay"
@@ -302,6 +302,20 @@
     80
    ],
    "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "utility",
+    "paint": "white",
+    "finish": "solid"
+   },
+   "level": "hero",
+   "xz": [
+    -200,
+    120
+   ],
+   "yaw_deg": 0
   }
  ],
  "views": [
@@ -344,6 +358,20 @@
     -200.0,
     1.0,
     80.6
+   ],
+   "fov": 50
+  },
+  {
+   "name": "owner-white-utility",
+   "camera_xyz": [
+    -205.6,
+    1.45,
+    120.9
+   ],
+   "target_xyz": [
+    -200.0,
+    1.0,
+    120.6
    ],
    "fov": 50
   }
