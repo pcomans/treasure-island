@@ -16,7 +16,10 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 		baked = "res://generated/web/static_world.scn"
 	elif "prebuilt_native_world" in features:
 		baked = "res://generated/native/static_world.scn"
-	# An export without the bake has no world to load: it carries no raw world either.
+	# An export without the bake has no world to load (it carries no raw world either).
+	# push_error only reports that: the export still completes and exits 0. The build
+	# scripts bake first, and tools/build-mac.sh's launch check fails a desktop build
+	# that loads no world.
 	if baked.is_empty() or not FileAccess.file_exists(baked):
 		push_error("Missing static world: export through the platform build script")
 		return

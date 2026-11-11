@@ -30,16 +30,16 @@ const EXPECTED_MATERIALS := {
 	"building_roof": {"feature_kind": "building_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 	"building_part_roof": {"feature_kind": "building_part_roof", "context": false, "asset": "bitumen", "source_dimension_m": 20.0, "repeat_dimension_m": 10.0, "normal_strength": 0.2},
 }
-## Block compression (Compress > Mode: VRAM Compressed or Basis Universal) stores
-## 4 x 4 texel blocks and pads any other size by repeating the last row and column,
-## so the image slides on its mesh by up to 3 texels and a tiling texture gets a
-## seam. So every block-compressed texture is a multiple of 4 on both sides, as
-## imported (after process/size_limit) and as tools/build-web.sh caps it for the
-## Web build: 512 px unless its line in WEB_TEXTURE_CAPS gives a smaller cap.
-## Lossless textures are stored as they are and keep their size: shore_map.png
-## (650 x 900) is one, a texel per 4 m of the water shader's 2600 x 3600 m shore
-## rectangle (tools/lib/water-shore-map.mjs).
-const BLOCK_COMPRESSED_MODES := [2, 3]
+## Block compression (compress/mode 2, VRAM Compressed, or 4, Basis Universal; 3 is
+## VRAM Uncompressed) stores 4 x 4 texel blocks and pads any other size by repeating
+## the last row and column, so the image slides on its mesh by up to 3 texels and a
+## tiling texture gets a seam. So every block-compressed texture is a multiple of 4
+## on both sides, as imported (after process/size_limit) and as tools/build-web.sh
+## caps it for the Web build: 512 px unless its line in WEB_TEXTURE_CAPS gives a
+## smaller cap. Lossless textures are stored as they are and keep their size:
+## shore_map.png (650 x 900) is one, a texel per 4 m of the water shader's
+## 2600 x 3600 m shore rectangle (tools/lib/water-shore-map.mjs).
+const BLOCK_COMPRESSED_MODES := [2, 4]
 const WEB_TEXTURE_CAPS := "res://tools/web-texture-cap-512.txt"
 const WEB_TEXTURE_CAP := 512
 ## One generated record per ground route: feature kind, material key, source
@@ -401,15 +401,25 @@ func _texture_imports_match() -> bool:
 		sizes[path] = size
 		if size.x % 4 != 0 or size.y % 4 != 0:
 			problems.append("%s imports at %d x %d; resample its image so both sides are multiples of 4." % [path, size.x, size.y])
-	for line: String in FileAccess.get_file_as_string(WEB_TEXTURE_CAPS).split("\n", false):
-		# Fields as tools/build-web.sh reads them: split on spaces and tabs.
+	# tools/build-web.sh reads each newline-ended line, a blank one too, as an import
+	# path and an optional cap, split on spaces and tabs (bash's read skips a last
+	# line with no newline).
+	var lines := PackedStringArray()
+	if not FileAccess.file_exists(WEB_TEXTURE_CAPS):
+		problems.append("%s is missing; tools/build-web.sh needs it." % WEB_TEXTURE_CAPS)
+	else:
+		var text := FileAccess.get_file_as_string(WEB_TEXTURE_CAPS)
+		if not text.is_empty() and not text.ends_with("\n"):
+			problems.append("%s does not end with a newline, so tools/build-web.sh would skip its last line." % WEB_TEXTURE_CAPS)
+		if not text.is_empty():
+			lines = text.trim_suffix("\n").split("\n")
+	for line: String in lines:
 		var fields := line.replace("\t", " ").split(" ", false)
-		if fields.is_empty():
+		if fields.is_empty() or fields.size() > 2 or (fields.size() == 2 and not fields[1].is_valid_int()):
+			problems.append("%s: '%s' is not an import path and an optional cap." % [WEB_TEXTURE_CAPS, line])
 			continue
 		var path := "res://" + fields[0]
-		if fields.size() > 2 or (fields.size() == 2 and not fields[1].is_valid_int()):
-			problems.append("%s: '%s' is not an import path and an optional cap." % [WEB_TEXTURE_CAPS, line])
-		elif not FileAccess.file_exists(path):
+		if not FileAccess.file_exists(path):
 			problems.append("%s lists %s, which does not exist." % [WEB_TEXTURE_CAPS, fields[0]])
 		elif sizes.has(path):
 			var cap := int(fields[1]) if fields.size() == 2 else WEB_TEXTURE_CAP
