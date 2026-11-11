@@ -8,13 +8,14 @@ signal exit_requested
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
 const CONTROLS_KEY_COLOR := Color(1.0, 0.86, 0.55)
 
-@onready var reticle: Control = $Reticle
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
-@onready var pause_panel: PanelContainer = $PausePanel
-@onready var resume_button: Button = $PausePanel/PauseLayout/ResumeButton
-@onready var controls_button: Button = $PausePanel/PauseLayout/ControlsButton
-@onready var exit_button: Button = $PausePanel/PauseLayout/ExitButton
+## The pause menu: like the controls screen, a solid panel over the dimmed game.
+@onready var pause_panel: Control = $PausePanel
+@onready var pause_box: PanelContainer = $PausePanel/Center/Box
+@onready var resume_button: Button = $PausePanel/Center/Box/PauseLayout/ResumeButton
+@onready var controls_button: Button = $PausePanel/Center/Box/PauseLayout/ControlsButton
+@onready var exit_button: Button = $PausePanel/Center/Box/PauseLayout/ExitButton
 ## The controls screen, opened from the pause menu or the loading screen: a
 ## solid panel over the dimmed game.
 @onready var controls_screen: Control = $ControlsScreen
@@ -50,7 +51,6 @@ func _ready() -> void:
 	controls_screen.hide()
 	debug_panel.hide()
 	prompt_panel.hide()
-	reticle.hide()
 	resized.connect(_fit_load_icon)
 	_fit_load_icon()
 
@@ -78,18 +78,16 @@ func bind_evidence(evidence: RuntimeEvidence) -> void:
 func show_loading(message: String = "Validating complete Treasure Island world…") -> void:
 	load_text.text = message
 	load_panel.show()
-	reticle.hide()
 
 
 func update_load_progress(loaded: int, total: int) -> void:
 	load_text.text = "Building complete world… %d / %d" % [loaded, total]
 
 
+## Play starts. A controls screen opened from the loading screen stays open
+## (main.gd starts the game paused behind it).
 func show_world_ready() -> void:
 	load_panel.hide()
-	# Play starts: a controls screen opened from the loading screen closes too.
-	controls_screen.hide()
-	reticle.show()
 
 
 func show_load_error(code: String, message: String, source_keys: Array) -> void:
@@ -98,29 +96,33 @@ func show_load_error(code: String, message: String, source_keys: Array) -> void:
 		source_suffix = "\nSources: %s" % ", ".join(source_keys)
 	load_text.text = "WORLD LOAD BLOCKED\n[%s] %s%s\n\nNo partial world was started." % [code, message, source_suffix]
 	load_panel.show()
-	reticle.hide()
 
 
+## A short message near the bottom of the screen, tinted green or red. (No tick or
+## cross: the web build's font has neither.)
 func show_feedback(message: String, success: bool) -> void:
-	feedback_text.text = ("✓ " if success else "✕ ") + message
+	feedback_text.text = message
 	feedback_text.modulate = Color("d9ffe9") if success else Color("ffe1d9")
 	feedback_panel.show()
 	_feedback_seconds = 2.0
 
 
 ## A short key hint near the bottom of the screen ("F  Drive" beside a car);
-## "" hides it.
+## "" hides it. The pause hides it too, until play goes on.
 func set_prompt(text: String) -> void:
 	prompt_text.text = text
-	prompt_panel.visible = not text.is_empty()
+	prompt_panel.visible = not text.is_empty() and not _paused
 
 
+## The pause menu, in place of play's prompt. A controls screen opened from the
+## loading screen stays over the pause (main.gd), and the menu shows when it closes.
 func set_paused(paused: bool) -> void:
 	_paused = paused
-	pause_panel.visible = paused
-	controls_screen.hide()
-	reticle.visible = not paused and not load_panel.visible
-	if paused:
+	pause_panel.visible = paused and not controls_screen.visible
+	if not paused:
+		controls_screen.hide()
+	prompt_panel.visible = not paused and not prompt_text.text.is_empty()
+	if pause_panel.visible:
 		resume_button.grab_focus()
 
 
@@ -182,7 +184,7 @@ func _control_rows() -> Array:
 	if _touch:
 		return [
 			["On foot", [
-				["Left stick", "Move (push further to go faster)"],
+				["MOVE stick", "Move (push further to go faster)"],
 				["Drag on the right side", "Look around"],
 				["RISE (hold)", "Jetpack up; let go to float down"],
 				["RUN (hold while moving)", "Run"],
@@ -190,7 +192,7 @@ func _control_rows() -> Array:
 				["DRIVE (beside a parked car)", "Get in"],
 			]],
 			["In a car", [
-				["Left stick", "Drive and steer"],
+				["MOVE stick", "Drive and steer"],
 				["BRAKE (hold)", "Handbrake"],
 				["GET OUT", "Get out"],
 			]],
@@ -203,13 +205,15 @@ func _control_rows() -> Array:
 	var any_time := [["Esc", "Pause and free the mouse" if web else "Pause"], ["F3", "Debug info"]]
 	if not web:
 		any_time.append(["Q (while paused)", "Quit"])
+	else:
+		any_time.push_front(["Click to look (top)", "Let the mouse turn the view"])
 	return [
 		["On foot", [
 			["W A S D or arrow keys", "Move"],
 			["Shift (hold)", "Run"],
 			["Space (hold)", "Jetpack up; let go to float down"],
 			["C (hold, in the air)", "Drop fast"],
-			["Mouse", "Look around, after Click to look" if web else "Look around"],
+			["Mouse", "Look around"],
 			["F (beside a parked car)", "Get in"],
 			["R", "Back to safe ground"],
 		]],
@@ -217,7 +221,7 @@ func _control_rows() -> Array:
 			["W / S or up / down arrows", "Drive, brake and reverse"],
 			["A / D or left / right arrows", "Steer"],
 			["Space (hold)", "Handbrake"],
-			["Mouse", "Look around"],
+			["Mouse", "Glance around (the view swings back)"],
 			["R", "Back on land"],
 			["F", "Get out"],
 		]],
@@ -237,10 +241,7 @@ func set_touch_instructions() -> void:
 	resume_button.text = "Play / Resume"
 	for button: Button in [resume_button, controls_button, exit_button, back_button, load_controls_button]:
 		button.custom_minimum_size.y = 64.0
-	pause_panel.offset_left = -200.0
-	pause_panel.offset_right = 200.0
-	pause_panel.offset_top = -170.0
-	pause_panel.offset_bottom = 170.0
+	pause_box.custom_minimum_size.x = 420.0
 
 
 func set_pointer_capture_hint(show_hint: bool) -> void:

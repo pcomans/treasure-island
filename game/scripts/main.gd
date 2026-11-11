@@ -27,6 +27,9 @@ var _web_capture_pending := false
 var _web_pointer_locked := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
+## A pause or resume asked for inside a physics tick, put off to the idle step
+## (_set_paused): true pauses, false resumes.
+var _pause_later := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -178,7 +181,11 @@ func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
-	if capture_mouse_on_ready and not OS.has_feature("web"):
+	# A controls screen opened on the loading screen stays open, and play starts
+	# paused behind it: nothing moves and the mouse stays free until the player
+	# closes it (to the pause menu) and resumes.
+	var controls_open := hud.controls_visible()
+	if capture_mouse_on_ready and not OS.has_feature("web") and not controls_open:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
 	if OS.has_feature("web"):
@@ -188,6 +195,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 			_touch_controls.set_gameplay_active(true)
 		else:
 			hud.set_pointer_capture_hint(true)
+	if controls_open:
+		_set_paused(true)
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
@@ -271,6 +280,16 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 
 func _set_paused(paused: bool) -> void:
+	# The tree pauses and resumes only in the idle step. Resumed inside a physics
+	# tick (a deferred call, such as the web's pointer-lock grant, is flushed
+	# there) after a pause from the idle step, the physics server re-adds every
+	# awake body to a list it is still in ("p_elem->_root" errors) and runs that
+	# tick's remainder at the paused clock's zero step.
+	if Engine.is_in_physics_frame():
+		_pause_later = paused
+		if not get_tree().process_frame.is_connected(_set_paused_later):
+			get_tree().process_frame.connect(_set_paused_later, CONNECT_ONE_SHOT)
+		return
 	if paused:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
@@ -286,6 +305,10 @@ func _set_paused(paused: bool) -> void:
 	hud.set_paused(paused)
 	if OS.has_feature("web") and _touch_controls == null:
 		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
+
+
+func _set_paused_later() -> void:
+	_set_paused(_pause_later)
 
 
 func _resume_game() -> void:

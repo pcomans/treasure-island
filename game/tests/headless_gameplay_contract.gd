@@ -254,11 +254,16 @@ func _check_ferry_solidity() -> void:
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
 	root.add_child(main)
+	# The loading screen's Controls button, pressed while the world loads.
+	main.hud.load_controls_button.pressed.emit()
 	var started := Time.get_ticks_msec()
 	while not main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
 		await process_frame
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
+		return
+	var opened := await _check_controls_from_loading(main)
+	if opened.is_empty():
 		return
 	for _frame in 2:
 		await physics_frame
@@ -301,12 +306,47 @@ func _check_ferry_solidity() -> void:
 	var pause := await _check_pause(main)
 	if pause.is_empty():
 		return
+	var resume := await _check_resume_in_physics(main)
+	if resume.is_empty():
+		return
+	# The menus as the player works them: from the idle step, where input arrives.
+	await process_frame
 	var controls := _check_controls_screen(main)
 	if controls.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s) and the controls screen (%s)" % [", ".join(heights), ball, pause, controls])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s) and nothing in the middle of the screen in play" % [", ".join(heights), ball, pause, resume, opened, controls])
 	quit(0)
+
+
+## The controls screen opened on the loading screen (pressed as the world loads)
+## stays open when play starts, and play starts paused behind it, with the pause
+## menu hidden: nothing moves until the player closes it. Back shows the pause
+## menu, still paused; Resume plays. Then, in play, nothing of the HUD covers the
+## middle of the screen (the spray's aiming cross went with the spray, 2026-11-11).
+## Returns a summary, or "" after failing.
+func _check_controls_from_loading(main: GameMain) -> String:
+	var hud := main.hud
+	await process_frame
+	if not hud.controls_visible() or not paused or hud.pause_panel.visible or hud.load_panel.visible:
+		_fail("The controls screen opened while loading must stay open when play starts, with the game paused behind it (controls %s, paused %s, pause menu %s, loading screen %s)." % [hud.controls_visible(), paused, hud.pause_panel.visible, hud.load_panel.visible])
+		return ""
+	hud.back_button.pressed.emit()
+	if hud.controls_visible() or not paused or not hud.pause_panel.visible:
+		_fail("Back on the controls screen opened while loading must show the pause menu, still paused.")
+		return ""
+	hud.resume_button.pressed.emit()
+	await process_frame
+	if paused or hud.pause_panel.visible:
+		_fail("Resume after the controls screen opened while loading did not start play.")
+		return ""
+	var centre := hud.get_viewport_rect().size * 0.5
+	for node: Node in hud.find_children("*", "Control", true, false):
+		var control := node as Control
+		if control.is_visible_in_tree() and control.get_global_rect().has_point(centre):
+			_fail("In play %s covers the middle of the screen." % control.get_path())
+			return ""
+	return "opened while loading, kept open and paused at the start of play"
 
 
 ## The controls screen (owner, 2026-11-11): the pause menu's Controls button shows it
@@ -355,7 +395,7 @@ func _check_controls_screen(main: GameMain) -> String:
 	if not shown or not closed:
 		_fail("The loading screen's Controls button must open the controls screen, and Back close it.")
 		return ""
-	for needed: String in ["Left stick", "Drag on the right side", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
+	for needed: String in ["MOVE stick", "Drag on the right side", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
 		if not touch.contains(needed):
 			_fail("The touch controls screen does not list %s:\n%s" % [needed, touch])
 			return ""
@@ -448,12 +488,67 @@ func _check_pause(main: GameMain) -> String:
 	return "driving: %s; rising on foot: %s" % [driving, rising]
 
 
+## The tree pauses and resumes in the idle step, however that is asked for. The web
+## resumes from a deferred call (its pointer-lock grant), which Godot flushes inside
+## a physics tick: resumed there after a pause from the idle step, the physics
+## server printed an error for every awake body (an engine error fails the suite)
+## and ran the rest of that tick at the paused clock's zero step. With the ball
+## rolling, a pause from the idle step takes at once; a resume asked for inside a
+## physics tick, directly or by a deferred call, waits for the idle step, and the
+## ball rolls on from where it stopped. Returns a summary, or "" after failing.
+func _check_resume_in_physics(main: GameMain) -> String:
+	var ball: SoccerBall = get_nodes_in_group(SoccerBall.GROUP)[0]
+	var scale := Engine.time_scale
+	var rolled := PackedStringArray()
+	for deferred: bool in [false, true]:
+		ball.reset_to_spot()
+		for _tick in 30:
+			await physics_frame
+		ball.sleeping = false
+		ball.linear_velocity = Vector3(3.0, 0.0, 0.5)
+		for _tick in 6:
+			await physics_frame
+		await process_frame
+		main._set_paused(true)
+		if not paused or Engine.time_scale != 0.0:
+			_fail("A pause asked for in the idle step must take at once (paused %s, time scale %s)." % [paused, Engine.time_scale])
+			return ""
+		var stopped := ball.global_position
+		for _tick in 10:
+			await physics_frame
+		await physics_frame
+		if deferred:
+			main._set_paused.call_deferred(false)
+		else:
+			main._set_paused(false)
+			if not paused:
+				_fail("A resume asked for inside a physics tick must wait for the idle step.")
+				return ""
+		# The next physics tick, before the physics server steps: the idle step between
+		# has resumed.
+		await physics_frame
+		if paused or Engine.time_scale != scale or ball.global_position != stopped:
+			_fail("A resume asked for inside a physics tick (%s) must take in the next idle step with the clock back at %s and the ball where it stopped (paused %s, time scale %s, ball moved %.3f m)." % ["deferred" if deferred else "direct", scale, paused, Engine.time_scale, ball.global_position.distance_to(stopped)])
+			return ""
+		for _tick in 4:
+			await physics_frame
+		var moved := ball.global_position.distance_to(stopped)
+		if not ball.global_position.is_finite() or not ball.linear_velocity.is_finite() or moved < 0.05:
+			_fail("After the resume the rolling ball must roll on: moved %.3f m, velocity %s." % [moved, ball.linear_velocity])
+			return ""
+		rolled.append("%s %.2f m" % ["deferred" if deferred else "direct", moved])
+	ball.reset_to_spot()
+	return "resumed from inside a physics tick in the idle step after, the ball rolling on (%s)" % ", ".join(rolled)
+
+
 ## Pauses as Esc does, checks that nothing in `bodies` (name -> Node3D) moves over
 ## three seconds of frames (180 at 60 a second; this runs at --fixed-fps, so wall
 ## time says nothing) while the pause menu stays live, and resumes as the Resume
 ## button does. Returns a summary, or "" after failing.
 func _paused_still(main: GameMain, bodies: Dictionary) -> String:
 	var scale := Engine.time_scale
+	# Keys arrive in the idle step.
+	await process_frame
 	_push_key(KEY_ESCAPE)
 	var at := {}
 	for name: String in bodies:
@@ -476,6 +571,7 @@ func _paused_still(main: GameMain, bodies: Dictionary) -> String:
 			if (bodies[name] as Node3D).global_position != at[name]:
 				_fail("Paused, the %s moved from %s to %s." % [name, at[name], (bodies[name] as Node3D).global_position])
 				return ""
+	await process_frame
 	hud.resume_button.pressed.emit()
 	if paused or Engine.time_scale != scale or hud.pause_panel.visible:
 		_fail("Resume did not unpause with the clock back at %s (paused %s, time scale %s)." % [scale, paused, Engine.time_scale])
