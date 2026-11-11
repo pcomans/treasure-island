@@ -466,8 +466,31 @@ func clean_hud() -> void:
 		panel.hide()
 
 
+## Stops drawing while a test walks; pass what it returns to resume_drawing.
+## The fit checks read collision and the renderer's mesh data, never pixels:
+## drawing the island on every physics tick of a walk under --fixed-fps made
+## each tick about 39 ms against 0.5 ms undrawn (2026-11-08), which a
+## compositor idle timeout once hid (LEARNINGS.md). Physics ticks run exactly
+## as before. Vsync goes off too: Godot's Wayland backend paces vsync by waiting
+## for the compositor's frame callback, none comes while nothing is drawn, and
+## it would stall up to a second at a time. load_world needs drawing (startup
+## prepares its first frames), and so does save_screenshot.
+func stop_drawing() -> Array:
+	var saved := [RenderingServer.render_loop_enabled, DisplayServer.window_get_vsync_mode()]
+	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
+	RenderingServer.render_loop_enabled = false
+	return saved
+
+
+func resume_drawing(saved: Array) -> void:
+	RenderingServer.render_loop_enabled = saved[0]
+	DisplayServer.window_set_vsync_mode(saved[1])
+
+
 ## Waits for a few rendered frames and saves the viewport to path.
 func save_screenshot(path: String) -> String:
+	if not RenderingServer.render_loop_enabled:
+		return "could not save %s: drawing is stopped (stop_drawing without resume_drawing)" % path
 	for _i in 4:
 		clean_hud()
 		await tree.process_frame

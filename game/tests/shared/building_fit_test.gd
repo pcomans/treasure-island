@@ -1,7 +1,13 @@
 extends SceneTree
 ## Checks that a building fits into the island and plays right, in the real loaded world.
 ##
-##   tools/godot --path . --script game/tests/shared/building_fit_test.gd -- --source w291189336
+##   tools/godot --fixed-fps 60 --path . --script game/tests/shared/building_fit_test.gd -- --source w291189336
+##
+## --fixed-fps 60 lets the walks run as fast as the CPU allows; without it,
+## physics keeps to the wall clock. Nothing is drawn while they walk
+## (world_harness.gd's stop_drawing). The test still refuses --headless: the
+## dummy renderer can't read back the visible MultiMesh transforms the checks
+## compare (world_harness.gd's load_world).
 ##
 ## 1. Roof: wherever the building is visible from above, the player can stand on it
 ##    (collision is there, not just a picture of a roof).
@@ -239,7 +245,13 @@ func _run() -> void:
 			quit(1)
 			return
 	var stairs: Array = Catalog.unit_for(source_key).get("stairs", [])
+	var walk_started := Time.get_ticks_msec()
+	var ticks := Engine.get_physics_frames()
+	var drawn := Engine.get_frames_drawn()
+	var drawing := h.stop_drawing()
 	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes, adjacent_source)
+	h.resume_drawing(drawing)
+	print("NOTE: checked %s in %.1f s (%d physics ticks, %d frames drawn)" % [source_key, (Time.get_ticks_msec() - walk_started) / 1000.0, Engine.get_physics_frames() - ticks, Engine.get_frames_drawn() - drawn])
 	if failures.is_empty():
 		print("PASS: building %s fits and plays" % source_key)
 	else:
