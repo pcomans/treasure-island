@@ -90,18 +90,33 @@ const CAR_FALL_SLOPE := 0.25
 const CAR_LIFT_RUN_M := 0.6
 ## The rows: every CAR_ROW_STRIDE-th station of the shoulder strip (about 5 m
 ## apart), each kept at five points (the climb's foot, the top's two ends and
-## CAR_FALL_POINTS down the fall to the toe); a row's underlay vertices lie
-## within CAR_ROW_ON_M of its line, up to CAR_ROW_REACH_M out, found through
-## CAR_CELL_M cells. Stations further apart than CAR_STATION_GAP_M, or rows
-## further apart than CAR_ROW_GAP_M, are not joined.
+## CAR_FALL_POINTS down the fall to the toe, which runs on CAR_TOE_PAST_M where it
+## falls); a row's underlay vertices lie within CAR_ROW_ON_M of its line, and
+## CAR_ROW_SPREAD more a metre out, up to CAR_ROW_REACH_M out, found through
+## CAR_CELL_M cells. Stations further apart than CAR_STATION_GAP_M start a new
+## run; rows of two runs are joined only where they stand within CAR_ROW_GAP_M of
+## each other and the point between them lies within CAR_JOIN_EDGE_M of the
+## outline. Neighbouring stations within CAR_SAME_M are one.
 const CAR_ROW_STRIDE := 4
 const CAR_FALL_POINTS := 2
+const CAR_TOE_PAST_M := 1.0
 const CAR_ROW_ON_M := 0.06
+const CAR_ROW_SPREAD := 0.03
 const CAR_ROW_REACH_M := 25.0
 const CAR_ROW_PAST_M := 3.0
 const CAR_CELL_M := 1.0
 const CAR_STATION_GAP_M := 2.5
 const CAR_ROW_GAP_M := 8.0
+const CAR_JOIN_EDGE_M := 0.5
+const CAR_SAME_M := 0.05
+## A station whose way out turns from the last kept one's by more than about 15
+## degrees (this cosine) gets a row too, and where two rows' cross-sections reach
+## out more than CAR_ROW_JUMP_M apart every station between them does.
+const CAR_ROW_TURN_COS := 0.966
+const CAR_ROW_JUMP_M := 2.0
+## A rock face vertex whose normal stands at least this far up lies no steeper
+## than a slope (underlay for the rows).
+const CAR_FACE_UP := 0.5
 ## The causeway's barrier (_car_barrier): from this far under the lowest crossing
 ## point on its edge to this far over the highest.
 const CAR_BARRIER_UNDER_M := 1.0
@@ -397,22 +412,39 @@ func _car_ground(document: Dictionary, rings: Array[Dictionary], ways: VisibleGr
 	if rings.is_empty():
 		return null
 	var shouldered := {}
-	# The underlay's vertices by CAR_CELL_M cell (Vector2i -> Array of Vector3).
+	for record_value: Variant in document.records:
+		var record: Dictionary = record_value
+		if str(record.material_key) == VERGE_MATERIAL:
+			shouldered[_section_key(record)] = true
+	# The underlay's vertices by CAR_CELL_M cell (Vector2i -> Array of Vector3): the
+	# slope's, and in a shouldered section the rock face's where it lies no steeper
+	# than a slope (a narrow inlet's clamped fill is drawn as a rock face; a capped
+	# end's face and the skirts beside a ramp stand upright and are left out). far:
+	# the fill's vertices on the outline across the inlet (_place keys), where a
+	# cross-section reaches the land again and ends.
+	var edges := _edge_grid(rings)
 	var underlay := {}
+	var far := {}
 	for record_value: Variant in document.records:
 		var record: Dictionary = record_value
 		var key := str(record.material_key)
-		if key == VERGE_MATERIAL:
-			shouldered[_section_key(record)] = true
-		elif key == SLOPE_MATERIAL:
-			for at: Vector3 in _vector3s(record.vertices):
-				var cell := Vector2i(floori(at.x / CAR_CELL_M), floori(at.z / CAR_CELL_M))
-				if not underlay.has(cell):
-					underlay[cell] = []
-				(underlay[cell] as Array).append(at)
+		var face := key == FACE_MATERIAL and shouldered.has(_section_key(record))
+		if key != SLOPE_MATERIAL and not face:
+			continue
+		var vertices := _vector3s(record.vertices)
+		var normals := _vector3s(record.normals)
+		for index in vertices.size():
+			if face and (index >= normals.size() or normals[index].y < CAR_FACE_UP):
+				continue
+			var at := vertices[index]
+			var cell := Vector2i(floori(at.x / CAR_CELL_M), floori(at.z / CAR_CELL_M))
+			if not underlay.has(cell):
+				underlay[cell] = []
+			(underlay[cell] as Array).append(at)
+			if face and float(_nearest_edge(edges, Vector2(at.x, at.z)).distance) <= CAR_EDGE_ON_M * 2.5:
+				far[_place(at)] = true
 	var faces := PackedVector3Array()
 	var lift := Vector3.UP * CAR_LIFT_M
-	var edges := {}
 	for record_value: Variant in document.records:
 		var record: Dictionary = record_value
 		var key := str(record.material_key)
@@ -421,8 +453,6 @@ func _car_ground(document: Dictionary, rings: Array[Dictionary], ways: VisibleGr
 			for index_value: int in _clockwise(record.indices):
 				faces.append(drawn[index_value])
 		elif key == SLOPE_MATERIAL and not shouldered.has(_section_key(record)):
-			if edges.is_empty():
-				edges = _edge_grid(rings)
 			var vertices := _vector3s(record.vertices)
 			var moved := PackedVector3Array()
 			moved.resize(vertices.size())
@@ -432,50 +462,102 @@ func _car_ground(document: Dictionary, rings: Array[Dictionary], ways: VisibleGr
 				moved[index] = at + lift * clampf(float(edge.distance) / CAR_LIFT_RUN_M, 0.0, 1.0)
 			for index_value: int in _clockwise(record.indices):
 				faces.append(moved[index_value])
-	# The kept stations, in the shoulder strips' order round the island, in runs
-	# (stations further apart than CAR_STATION_GAP_M are not joined: a pier, a ramp
-	# or a capped end lies between).
+	# The stations in the shoulder strips' order round the island, in runs:
+	# stations further apart than CAR_STATION_GAP_M start a new one (a pier, a ramp
+	# or a capped end lies between). Every CAR_ROW_STRIDE-th of a run, its last, and
+	# any that turns away from the last of these by more than CAR_ROW_TURN_COS (the
+	# shore's corners) get a row; where such a station's cross-section can't be read
+	# (at a sharp corner or a joint its shoulder's far edge may lie on the slope's
+	# next row), the nearest station of its run whose can stands in. used: the
+	# stations with rows, in order, and profiles their cross-sections.
 	var stations := _stations(document, underlay)
+	var run_of := PackedInt32Array()
+	run_of.resize(stations.size())
 	var kept: Array[int] = []
+	var run := 0
 	var run_start := 0
+	var kept_out := Vector2.ZERO
 	for index in stations.size():
+		run_of[index] = run
+		var station_out := Vector2((stations[index].outer as Vector3).x - (stations[index].inner as Vector3).x, (stations[index].outer as Vector3).z - (stations[index].inner as Vector3).z).normalized()
 		var next_far := index + 1 >= stations.size() or (stations[index + 1].inner as Vector3).distance_to(stations[index].inner) > CAR_STATION_GAP_M
-		if (index - run_start) % CAR_ROW_STRIDE == 0 or next_far:
+		if (index - run_start) % CAR_ROW_STRIDE == 0 or next_far or station_out.dot(kept_out) < CAR_ROW_TURN_COS:
 			kept.append(index)
+			kept_out = station_out
 		if next_far:
+			run += 1
 			run_start = index + 1
-	# Every station's room for the climb (_climb_run); a row's climb is the least
-	# room of the stations from the row before it to the row after it (those it is
-	# joined to), so the strip between two rows keeps off a way crossing it too.
+			kept_out = Vector2.ZERO
+	var used: Array[int] = []
+	var profiles: Array[Array] = []
+	for index: int in kept:
+		for shift: int in [0, 1, -1, 2, -2]:
+			var other := index + shift
+			if other < 0 or other >= stations.size() or run_of[other] != run_of[index] or (not used.is_empty() and other <= used[used.size() - 1]):
+				continue
+			var profile := _profile(stations[other], underlay, far)
+			if not profile.is_empty():
+				used.append(other)
+				profiles.append(profile)
+				break
+	# Where the cross-section's reach jumps between two rows of a run (a narrow
+	# inlet's fill gives way to the open slope), every station between them gets a
+	# row too.
+	var slot_at := 0
+	while slot_at + 1 < used.size():
+		var here := used[slot_at]
+		var there := used[slot_at + 1]
+		var inserted := 0
+		if run_of[here] == run_of[there] and there - here > 1 \
+		and absf(float(profiles[slot_at][profiles[slot_at].size() - 1][0]) - float(profiles[slot_at + 1][profiles[slot_at + 1].size() - 1][0])) > CAR_ROW_JUMP_M:
+			for index in range(here + 1, there):
+				var profile := _profile(stations[index], underlay, far)
+				if not profile.is_empty():
+					used.insert(slot_at + 1 + inserted, index)
+					profiles.insert(slot_at + 1 + inserted, profile)
+					inserted += 1
+		slot_at += inserted + 1
+	# Neighbouring rows are joined within a run, and across runs (a section's or
+	# a segment's joint, the last round to the first) where they stand within
+	# CAR_ROW_GAP_M of each other along the outline (the point between them on it,
+	# not across a strip of land between two shores). Every station's room for the
+	# climb (_climb_run);
+	# a row's climb is the least room of the stations from the row before it to the
+	# row after it (those it is joined to), so the strip between two rows keeps off
+	# a way crossing it too.
 	var room := PackedFloat32Array()
 	room.resize(stations.size())
 	for index in stations.size():
 		room[index] = _climb_run(stations[index], ways)
-	var runs := PackedFloat32Array()
-	runs.resize(kept.size())
-	for slot in kept.size():
-		runs[slot] = room[kept[slot]]
+	var climbs := PackedFloat32Array()
+	climbs.resize(used.size())
+	for slot in used.size():
+		climbs[slot] = room[used[slot]]
 	var joined := PackedByteArray()
-	joined.resize(kept.size())
-	for slot in kept.size():
-		var next := (slot + 1) % kept.size()
-		if next == slot or (stations[kept[slot]].inner as Vector3).distance_to(stations[kept[next]].inner) > CAR_ROW_GAP_M:
+	joined.resize(used.size())
+	for slot in used.size():
+		var next := (slot + 1) % used.size()
+		var here: Vector3 = stations[used[slot]].inner
+		var there: Vector3 = stations[used[next]].inner
+		if next == slot or (run_of[used[slot]] != run_of[used[next]] and (here.distance_to(there) > CAR_ROW_GAP_M \
+		or float(_nearest_edge(edges, Vector2(here.x + there.x, here.z + there.z) * 0.5).distance) > CAR_JOIN_EDGE_M)):
 			continue
 		joined[slot] = 1
-		var least := room[kept[next]]
-		var index := kept[slot]
-		while index != kept[next]:
+		var least := room[used[next]]
+		var index := used[slot]
+		while index != used[next]:
 			least = minf(least, room[index])
 			index = (index + 1) % stations.size()
-		runs[slot] = minf(runs[slot], least)
-		runs[next] = minf(runs[next], least)
+		climbs[slot] = minf(climbs[slot], least)
+		climbs[next] = minf(climbs[next], least)
 	var rows: Array[PackedVector3Array] = []
-	for slot in kept.size():
-		rows.append(_row(stations[kept[slot]], underlay, runs[slot]))
-	for slot in kept.size():
-		var next := (slot + 1) % kept.size()
-		if joined[slot] == 0 or rows[slot].is_empty() or rows[next].is_empty():
+	for slot in used.size():
+		var profile: Array = profiles[slot]
+		rows.append(_row(stations[used[slot]], profile, climbs[slot], not far.has(_place(profile[profile.size() - 1][1]))))
+	for slot in used.size():
+		if joined[slot] == 0:
 			continue
+		var next := (slot + 1) % used.size()
 		for point in rows[slot].size() - 1:
 			_add_up_quad(faces, rows[slot][point], rows[next][point], rows[next][point + 1], rows[slot][point + 1])
 	var body := StaticBody3D.new()
@@ -516,16 +598,24 @@ static func _stations(document: Dictionary, underlay: Dictionary) -> Array[Dicti
 		var normals := _vector3s(record.normals)
 		for index in vertices.size():
 			var at := vertices[index]
-			var place := Vector2i(roundi(at.x * 100.0), roundi(at.z * 100.0))
+			var place := _place(at)
 			if seen.has(place):
 				continue
 			seen[place] = true
 			if _on_underlay(underlay, at):
 				continue
+			# A section's joint repeats its last point a centimetre or so off.
+			if not stations.is_empty() and Vector2(at.x, at.z).distance_to(Vector2((stations[stations.size() - 1].inner as Vector3).x, (stations[stations.size() - 1].inner as Vector3).z)) < CAR_SAME_M:
+				continue
 			var outer := _nearest_underlay(underlay, at, 1.0)
 			if outer.is_finite():
 				stations.append({"inner": at, "outer": outer, "land": normals[index] if index < normals.size() else Vector3.UP})
 	return stations
+
+
+## A point's place in plan, to the centimetre (a Dictionary key).
+static func _place(at: Vector3) -> Vector2i:
+	return Vector2i(roundi(at.x * 100.0), roundi(at.z * 100.0))
 
 
 ## Whether the underlay has a vertex at this point (within a centimetre, in plan).
@@ -579,46 +669,63 @@ static func _way_free(from: Vector2, inland: Vector2, run: float, ways: VisibleG
 	return run
 
 
-## One row of the cars' ground at a station, from inland out to the underlay's
-## toe: the climb's foot `climb` metres inland of the outline (CAR_RAMP_FOOT_M
-## under the land there, read off the land's slope at the outline), the top's
-## inner and outer ends, and CAR_FALL_POINTS down the fall to the toe (see
-## PHYSICS_CAR_GROUND). The top starts at the shoulder's far edge, or further
-## out where a climb no steeper than CAR_CLIMB_MAX needs more room. Empty where
-## the underlay has no cross-section there.
-static func _row(station: Dictionary, underlay: Dictionary, climb: float) -> PackedVector3Array:
+## The underlay's cross-section at a station: its vertices on the line out from
+## the shoulder's far edge, as [distance along it, vertex] in order, read from the
+## cells the line's band crosses until it has run CAR_ROW_PAST_M past the last
+## one, and up to the first that lies on the outline across a narrow inlet (far,
+## _place keys); empty where it has fewer than three (or the station no
+## shoulder). The band is CAR_ROW_ON_M wide at the far edge and widens by
+## CAR_ROW_SPREAD a metre out, as the shoulder's short line points the way out
+## only to a degree or so.
+static func _profile(station: Dictionary, underlay: Dictionary, far: Dictionary) -> Array:
 	var inner: Vector3 = station.inner
 	var outer: Vector3 = station.outer
 	var out := Vector2(outer.x - inner.x, outer.z - inner.z)
-	var shoulder := out.length()
-	if shoulder < 0.01:
-		return PackedVector3Array()
-	out /= shoulder
-	# The underlay's cross-section: its vertices on the line out from the shoulder's
-	# far edge, by distance along it, read from the cells the line's band crosses
-	# until it has run CAR_ROW_PAST_M past the last one.
+	if out.length() < 0.01:
+		return []
+	out = out.normalized()
 	var profile: Array = []
 	var visited := {}
 	var step := 0.0
 	var last := 0.0
-	var band := CAR_ROW_ON_M + 0.01
 	while step <= CAR_ROW_REACH_M and step <= last + CAR_ROW_PAST_M:
 		var along := Vector2(outer.x, outer.z) + out * step
-		for corner: Vector2 in [Vector2(-band, -band), Vector2(band, -band), Vector2(-band, band), Vector2(band, band)]:
-			var cell := Vector2i(floori((along.x + corner.x) / CAR_CELL_M), floori((along.y + corner.y) / CAR_CELL_M))
-			if visited.has(cell):
-				continue
-			visited[cell] = true
-			for vertex: Vector3 in underlay.get(cell, []):
-				var offset := Vector2(vertex.x - outer.x, vertex.z - outer.z)
-				var t := offset.dot(out)
-				if t >= -0.05 and absf(offset.cross(out)) <= CAR_ROW_ON_M:
-					profile.append([t, vertex])
-					last = maxf(last, t)
+		var band := CAR_ROW_ON_M + CAR_ROW_SPREAD * (step + CAR_CELL_M) + 0.01
+		for cell_x in range(floori((along.x - band) / CAR_CELL_M), floori((along.x + band) / CAR_CELL_M) + 1):
+			for cell_z in range(floori((along.y - band) / CAR_CELL_M), floori((along.y + band) / CAR_CELL_M) + 1):
+				var cell := Vector2i(cell_x, cell_z)
+				if visited.has(cell):
+					continue
+				visited[cell] = true
+				for vertex: Vector3 in underlay.get(cell, []):
+					var offset := Vector2(vertex.x - outer.x, vertex.z - outer.z)
+					var t := offset.dot(out)
+					if t >= -0.05 and absf(offset.cross(out)) <= CAR_ROW_ON_M + CAR_ROW_SPREAD * maxf(t, 0.0):
+						profile.append([t, vertex])
+						last = maxf(last, t)
 		step += CAR_CELL_M * 0.25
-	if profile.size() < 3:
-		return PackedVector3Array()
 	profile.sort_custom(func(a: Array, b: Array) -> bool: return float(a[0]) < float(b[0]))
+	for point in profile.size():
+		if float(profile[point][0]) > 0.1 and far.has(_place(profile[point][1])):
+			profile.resize(point + 1)
+			break
+	return profile if profile.size() >= 3 else []
+
+
+## One row of the cars' ground at a station, from inland out to the underlay's
+## toe (profile: its cross-section, _profile): the climb's foot `climb` metres
+## inland of the outline (CAR_RAMP_FOOT_M under the land there, read off the
+## land's slope at the outline), the top's inner and outer ends, and
+## CAR_FALL_POINTS down the fall to the toe (see PHYSICS_CAR_GROUND), which runs
+## on (open: not a narrow inlet's fill ending on the land across it). The top
+## starts at the shoulder's far edge, or further out where a climb no steeper
+## than CAR_CLIMB_MAX needs more room.
+static func _row(station: Dictionary, profile: Array, climb: float, open: bool) -> PackedVector3Array:
+	var inner: Vector3 = station.inner
+	var outer: Vector3 = station.outer
+	var out := Vector2(outer.x - inner.x, outer.z - inner.z)
+	var shoulder := out.length()
+	out /= shoulder
 	var crest := 0
 	for point in profile.size():
 		if (profile[point][1] as Vector3).y > (profile[crest][1] as Vector3).y:
@@ -647,6 +754,13 @@ static func _row(station: Dictionary, underlay: Dictionary, climb: float) -> Pac
 	var row := PackedVector3Array([foot, Vector3(top_at.x, minf(top_y, foot.y + CAR_CLIMB_MAX * (top_d + climb)), top_at.z)])
 	for k in CAR_FALL_POINTS + 1:
 		row.append(_profile_at(profile, end_t + (toe_t - end_t) * float(k) / float(CAR_FALL_POINTS)) + Vector3.UP * CAR_LIFT_M)
+	# A falling toe runs on CAR_TOE_PAST_M down its own slope, so where the toe
+	# line bends out between two rows the drawn slope there is covered too.
+	var toe := row[row.size() - 1]
+	var before := row[row.size() - 2]
+	var run_out := Vector2(toe.x - before.x, toe.z - before.z).length()
+	if open and toe.y < before.y and run_out > 0.01:
+		row[row.size() - 1] = toe + (toe - before) * (CAR_TOE_PAST_M / run_out)
 	return row
 
 
