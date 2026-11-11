@@ -118,6 +118,8 @@ Limits:
 - The storage yards' vans, RVs and trucks stay parked props: they can't be driven or shoved (owner, 2026-11-08). Only street and lot cars (the street-clutter kit's) can.
 - No engine, tyre, crash or splash sounds (the game has no audio).
 - The shoreline riprap is drawn only; cars (and shoved K-rails) roll down a smooth ground of their own over the stones (2026-11-10; in rows about 5 m apart since 2026-11-11), not the stones themselves: about 0.65 m over the underlay, so a car rides on the tallest stones and over the gaps between them, and a few of the crest's biggest boulders stand a little over it. Its climb starts up to 1.1 m inside the outline (never on a drawn road or path), so a car crawling to the edge rises off the grass in its last half metre. A car rolling in nose first stays on its wheels until it is clear of the rocks, so it goes a little deeper before it sinks.
+- A car driven at the Yerba Buena causeway's crossing stops at the island's edge against an invisible barrier on open grass (2026-11-11); on foot the edge there is invisible too.
+- On the west shore path a car drives level through the inland riprap, its wheels and lower body inside the stones (as on main).
 - A car flipped farther than 60 m from the camera shows its open underside: the far detail level has no underbody, which saves triangles on every parked car; near cars are closed (2026-11-08).
 - A gate's two stout posts stay standing when a car scrapes past them through the opening; only the posts and panel stands of runs go down with their bays (2026-11-08).
 - Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
