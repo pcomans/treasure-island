@@ -480,7 +480,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
-  - Every walk-up, stair and route start falls 2 m at the jetpack's released descent (`world_harness.gd`'s `settle_player`, about 80 physics ticks). Shortening it to a sweep to the landing and the last 0.4 m (2026-11-11) failed `island_test.gd` at w95934106 west, on both worlds: that one 3 m `body_test_motion` sweep stopped 6 cm inside the land, so the start was within the 0.35 m floor snap of a player still `is_on_floor()` from its previous walk, and it snapped down with no slide contact (LEARNINGS.md).
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;

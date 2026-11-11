@@ -411,11 +411,19 @@ const STEEP := "too steep to stand"
 const NOT_SETTLED := "did not settle on the ground"
 
 
+## How far above the ground settle_player's stock fall resumes after skipping
+## an empty stretch (m). From 0.4 m the controller reaches its 1.5 m/s released
+## descent (it needs about 0.1 m) and lands as it would from drop_m.
+const SETTLE_RESUME_HEIGHT_M := 0.4
+
+
 ## Drops the stock player at xz, its feet drop_m above the ground under that
 ## point, and lets physics settle it. Returns "" on success, or one of the
-## reasons above. The fall is slow (the player's descent cap), so a caller that
-## only needs the player standing there, such as a screenshot, passes a small
-## drop_m; it must still clear the ground under the whole capsule (0.35 m
+## reasons above. The fall is slow (the player's descent cap, 1.5 m/s), so once
+## the player is airborne the stretch of the fall above SETTLE_RESUME_HEIGHT_M
+## is skipped when nothing is in it (_skip_empty_fall); a caller that only needs
+## the player standing there, such as a screenshot, can also pass a small
+## drop_m. drop_m must still clear the ground under the whole capsule (0.35 m
 ## radius, its bottom at the player's origin): 0.15 m on the steepest slope
 ## the support check allows, 0.2 m beside a 15 cm kerb.
 func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0) -> String:
@@ -435,13 +443,47 @@ func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0)
 	player.global_transform = Transform3D(Basis.IDENTITY, Vector3(xz.x, y + drop_m, xz.y))
 	player.velocity = Vector3.DOWN * 0.1
 	player.set_gameplay_enabled(true)
+	var skipped := false
 	for _frame in 240:
 		await tree.physics_frame
 		if player.is_on_floor() and absf(player.velocity.y) <= 0.05:
 			player.set_gameplay_enabled(false)
 			return ""
+		if not skipped and not player.is_on_floor():
+			skipped = true
+			_skip_empty_fall(y)
 	player.set_gameplay_enabled(false)
 	return NOT_SETTLED
+
+
+## Moves the airborne stock player straight down to SETTLE_RESUME_HEIGHT_M
+## above ground_y when its capsule, swept over that stretch, overlaps nothing it
+## collides with; otherwise leaves it to fall. Call it only while the player is
+## off the floor: a player that still has is_on_floor() from where it last
+## stood is snapped by its next move_and_slide onto any floor within its
+## floor_snap_length (0.35 m), with no slide contact for the fit's start-support
+## check to qualify. A capsule swept straight down is a taller capsule, so one
+## static overlap query covers the stretch. A long test-motion sweep is not
+## precise enough: its cast is an eight-step bisection, and at w95934106 west
+## one swept 3 m down stopped 6 cm inside the land (2026-11-11, LEARNINGS.md).
+func _skip_empty_fall(ground_y: float) -> void:
+	var skip := player.global_position.y - (ground_y + SETTLE_RESUME_HEIGHT_M)
+	var capsule := player.collision_shape.shape as CapsuleShape3D
+	var pose := player.collision_shape.global_transform
+	if skip <= 0.0 or capsule == null or not pose.basis.is_equal_approx(Basis.IDENTITY):
+		return
+	var swept := CapsuleShape3D.new()
+	swept.radius = capsule.radius
+	swept.height = capsule.height + skip
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = swept
+	query.transform = pose.translated(Vector3.DOWN * skip * 0.5)
+	query.margin = player.safe_margin
+	query.collision_mask = player.collision_mask
+	query.exclude = [player.get_rid()]
+	query.collide_with_areas = false
+	if player.get_world_3d().direct_space_state.intersect_shape(query, 1).is_empty():
+		player.global_position += Vector3.DOWN * skip
 
 
 ## Points the stock gameplay camera at target, within its normal pitch limits.
