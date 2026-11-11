@@ -63,7 +63,9 @@ extends SceneTree
 ##      and a tap gets back in, letting go of a run held as it does; on the
 ##      ground away from cars it hides; in the air it shows DROP, held it holds
 ##      the fast drop, lifted it lets go, and held through the landing it lets go
-##      of C and hides on the ground with the finger still down.
+##      of C and hides on the ground with the finger still down;
+##  12. the riprap round the whole island: wherever it is drawn 1.5 m and 3 m off
+##      the outline, a car finds something to land on (_case_riprap_cover).
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
 ## first F): getting out must never leave the player without a character.
@@ -77,6 +79,11 @@ const VEHICLE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right"
 ## A sinking car over the riprap may go this far under the cars' ground (the
 ## stones' tops) at its worst corner before it counts as inside the stones.
 const STONES_DEPTH_M := 0.3
+## The riprap sweep: round the outline every COVER_STEP_M, at each of COVER_OUT_M
+## out from it, and the plan cells (m) its drawn surfaces are found through.
+const COVER_STEP_M := 0.5
+const COVER_OUT_M := [1.5, 3.0]
+const COVER_CELL_M := 2.0
 ## On foot the avatar's feet stand within this of the player (m).
 const AVATAR_REACH_M := 2.0
 
@@ -87,6 +94,8 @@ var _player: PlayerController
 var _vehicles: VEHICLE_MANAGER
 var _cases: Dictionary
 var _recoveries: Array[Dictionary] = []
+## The expanded generated shoreline (_shoreline), read once.
+var _shoreline_document: Dictionary
 
 
 func _initialize() -> void:
@@ -116,10 +125,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there")
 	_finish()
 
 
@@ -734,13 +743,9 @@ func _case_bay() -> bool:
 ## its prototypes, as shoreline_builder.gd draws them.
 func _stones_near(center: Vector2, radius: float) -> Array[AABB]:
 	var stones: Array[AABB] = []
-	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/shoreline.json"))
-	if not parsed is Dictionary:
+	var document := _shoreline()
+	if document.is_empty():
 		return stones
-	var expanded: Dictionary = GeneratedWorldContract._expand_shoreline(parsed)
-	if not bool(expanded.get("ok", false)):
-		return stones
-	var document: Dictionary = expanded.data
 	var boxes := {}
 	for prototype: Dictionary in document.prototypes:
 		var flat: Array = prototype.vertices
@@ -760,6 +765,100 @@ func _stones_near(center: Vector2, radius: float) -> Array[AABB]:
 			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
 			stones.append(Transform3D(basis, position) * (boxes[str(batch.prototype)] as AABB))
 	return stones
+
+
+## The generated shoreline, expanded (empty if it can't be read).
+func _shoreline() -> Dictionary:
+	if _shoreline_document.is_empty():
+		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/shoreline.json"))
+		var expanded: Dictionary = GeneratedWorldContract._expand_shoreline(parsed) if parsed is Dictionary else {}
+		if bool(expanded.get("ok", false)):
+			_shoreline_document = expanded.data
+	return _shoreline_document
+
+
+## No hole in the cars' ground for a car driven off the island to drop through
+## the drawn stones: round the whole playable outline every COVER_STEP_M, at each
+## of COVER_OUT_M out (where that is off the island), wherever the shoreline
+## draws riprap a car can reach (the slope, a shoulder, or a shouldered section's
+## rock face lying no steeper than a slope, such as a narrow inlet's fill), a ray
+## with a car's own mask finds something to land on above the water.
+func _case_riprap_cover() -> bool:
+	var document := _shoreline()
+	if not _require(not document.is_empty(), "Could not read the generated shoreline."):
+		return false
+	var shouldered := {}
+	for record: Dictionary in document.records:
+		if str(record.material_key) == ShorelineBuilder.VERGE_MATERIAL:
+			shouldered[ShorelineBuilder._section_key(record)] = true
+	# The drawn surfaces' triangles in plan, by COVER_CELL_M cell.
+	var cells := {}
+	for record: Dictionary in document.records:
+		var key := str(record.material_key)
+		var face := key == ShorelineBuilder.FACE_MATERIAL and shouldered.has(ShorelineBuilder._section_key(record))
+		if key != ShorelineBuilder.SLOPE_MATERIAL and key != ShorelineBuilder.VERGE_MATERIAL and not face:
+			continue
+		var vertices: PackedVector3Array = record.vertices
+		var indices: PackedInt32Array = record.indices
+		for at in range(0, indices.size(), 3):
+			var a := vertices[indices[at]]
+			var b := vertices[indices[at + 1]]
+			var c := vertices[indices[at + 2]]
+			var up := (b - a).cross(c - a)
+			if up.length() < 1e-6 or (face and absf(up.normalized().y) < ShorelineBuilder.CAR_FACE_UP):
+				continue
+			var plan := [Vector2(a.x, a.z), Vector2(b.x, b.z), Vector2(c.x, c.z)]
+			for cell_x in range(floori(minf(a.x, minf(b.x, c.x)) / COVER_CELL_M), floori(maxf(a.x, maxf(b.x, c.x)) / COVER_CELL_M) + 1):
+				for cell_z in range(floori(minf(a.z, minf(b.z, c.z)) / COVER_CELL_M), floori(maxf(a.z, maxf(b.z, c.z)) / COVER_CELL_M) + 1):
+					var cell := Vector2i(cell_x, cell_z)
+					if not cells.has(cell):
+						cells[cell] = []
+					(cells[cell] as Array).append(plan)
+	var boundary := _world.get_boundary()
+	var space := _main.get_world_3d().direct_space_state
+	var water_y := GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
+	var checked := 0
+	var holes: Array[Vector2] = []
+	for component: Dictionary in boundary.get_boundary_data().components:
+		var rings: Array = [component.outer]
+		rings.append_array(component.get("holes", []))
+		for ring: Array in rings:
+			for index in ring.size():
+				var a := Vector2(float(ring[index - 1][0]), float(ring[index - 1][1]))
+				var b := Vector2(float(ring[index][0]), float(ring[index][1]))
+				var length := a.distance_to(b)
+				if length < 0.01:
+					continue
+				var out := Vector2(-(b - a).y, (b - a).x) / length
+				var middle := a.lerp(b, 0.5)
+				if boundary.contains_position(Vector3(middle.x + out.x * 0.1, 0.0, middle.y + out.y * 0.1)):
+					out = -out
+				var steps := maxi(1, roundi(length / COVER_STEP_M))
+				for k in steps:
+					for reach: float in COVER_OUT_M:
+						var p := a.lerp(b, (k + 0.5) / steps) + out * reach
+						if boundary.contains_position(Vector3(p.x, 0.0, p.y)) or not _drawn_at(cells, p):
+							continue
+						checked += 1
+						var query := PhysicsRayQueryParameters3D.create(Vector3(p.x, 60.0, p.y), Vector3(p.x, water_y, p.y), DRIVABLE_CAR.GROUND_MASK)
+						if space.intersect_ray(query).is_empty():
+							holes.append(p)
+	var shown: Array[String] = []
+	for hole: Vector2 in holes.slice(0, 12):
+		shown.append("(%.1f, %.1f)" % [hole.x, hole.y])
+	print("RIPRAP COVER %d points over drawn riprap 1.5 m and 3 m off the outline, %d with nothing for a car to land on%s" % [checked, holes.size(), (": " + ", ".join(shown)) if not holes.is_empty() else ""])
+	# The sweep must have found the riprap at all (a car's reach of it runs round
+	# the island), and a car must find ground over every point of it.
+	return _require(checked >= 1000, "The riprap sweep found only %d points of drawn riprap off the outline." % checked) \
+		and _require(holes.is_empty(), "A car would drop through the drawn riprap at %d points off the outline: %s." % [holes.size(), ", ".join(shown)])
+
+
+## Whether a drawn shoreline triangle (cells, _case_riprap_cover's) lies under p.
+func _drawn_at(cells: Dictionary, p: Vector2) -> bool:
+	for plan: Array in cells.get(Vector2i(floori(p.x / COVER_CELL_M), floori(p.y / COVER_CELL_M)), []):
+		if Geometry2D.point_is_inside_triangle(p, plan[0], plan[1], plan[2]):
+			return true
+	return false
 
 
 ## How many points of nearby stones' cores (the middle half of each stone's
