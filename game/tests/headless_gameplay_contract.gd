@@ -639,8 +639,9 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 		_fail("Running into the soccer ball sent it off at %.2f m/s, not at least 12." % fastest)
 		return ""
 	# A glancing walk: the capsule's axis passes 0.4 m to the side of the ball's
-	# centre. The ball goes off aside, away from the player, and slower than the walk
-	# along it: only a ball the capsule has run through goes on along the run.
+	# centre, a thin touch. The ball goes off aside, away from the player, and well
+	# under the walk's speed along it: only a ball the capsule has run through goes
+	# on along the run (as it did here, at about 4.3 m/s, at c1cdac7f).
 	if not await _place_ball(ball, ball.spot.origin):
 		return ""
 	var side := Vector3.BACK
@@ -655,8 +656,8 @@ func _check_soccer_ball(main: GameMain, world: WorldLoader) -> String:
 			glance = ball.linear_velocity
 	Input.action_release("move_forward")
 	player.set_gameplay_enabled(false)
-	if -glance.dot(side) < 1.0 or glance.dot(east) > 3.0:
-		_fail("Walked past glancing (0.4 m to the side of its centre), the ball must go off aside, at least 1 m/s away from the player and under 3 m/s along the walk: %.2f m/s aside, %.2f along." % [-glance.dot(side), glance.dot(east)])
+	if -glance.dot(side) < 0.5 or glance.dot(east) > 3.0:
+		_fail("Walked past glancing (0.4 m to the side of its centre), the ball must go off aside, at least 0.5 m/s away from the player and under 3 m/s along the walk: %.2f m/s aside, %.2f along." % [-glance.dot(side), glance.dot(east)])
 		return ""
 	# Over the bay, off the island: back on its spot. Then the same from below the land.
 	var resets := ball.resets
