@@ -2,6 +2,8 @@
 
 [midrise_family.gd](../../scripts/world/facades/midrise_family.gd) builds a flat-roofed courtyard apartment building over one frozen OSM footprint from a JSON config. Opt-in [outbuilding fields](#outbuilding-fields) also cover sheds, tanks and basins, trailers and pavilions. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd): register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "midrise"`. Its grammar began with the Maceo May study: pale render, recessed glazing with dark frames, a darker base, glazed lobbies and loggias, as reusable bays rather than baked geometry.
 
+The JSON files in this folder are inputs of the static-world bake. [export_presets.cfg](../../../export_presets.cfg) leaves them out of every exported pack, so nothing the exported game reads while it plays can be one of them.
+
 Instances: [w1272162518.json](w1272162518.json) (490 Avenue of the Palms), [w1212173437.json](w1212173437.json) (Star View Court), [r19685981.json](r19685981.json) (Maceo May, whose [plan fields](#plan-fields) cover wings of different heights round a court, a curved wing and overhanging upper floors) and, with its [roof edges and parts](#roof-edges-and-parts), [r133351.json](r133351.json) (Building 33 F, Aracely Cafe). Dimensions and cadence are production inference; since 2026-11-03 unphotographed sides get no inferred detail ([AGENTS](../../../AGENTS.md#facade-recognizability-policy)).
 
 ## How it builds

@@ -2,6 +2,8 @@
 
 [pier_canopy_family.gd](../../scripts/world/facades/pier_canopy_family.gd) builds a covered, fixed concrete pier from a JSON config: a walkable deck over the water under a long, thin canopy on two rows of round columns. It shares the [housing family installer](../../scripts/world/facades/housing_family_live_attachment.gd); register an instance in [live_instances.json](../housing_family/live_instances.json) with `"family": "pier"`.
 
+The JSON files in this folder are inputs of the static-world bake. [export_presets.cfg](../../../export_presets.cfg) leaves them out of every exported pack, so nothing the exported game reads while it plays can be one of them.
+
 Instance: [w1222514695.json](w1222514695.json), the Treasure Island Ferry Terminal pier. Dimensions, counts and the gate layout are production inference from dated photos; see the config's `study_notes`.
 
 ## How it builds

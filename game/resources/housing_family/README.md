@@ -2,6 +2,8 @@
 
 [housing_row_family.gd](../../scripts/world/facades/housing_row_family.gd) assembles shared fixed-width bays, terminal caps and canopy modules. It reuses the 1232 opening and entry helpers; dimensions and cadence are production inference. These are visual study layouts, not address-specific replacements or accepted live buildings.
 
+The JSON files in this folder are inputs of the static-world bake. [export_presets.cfg](../../../export_presets.cfg) leaves them out of every exported pack, so nothing the exported game reads while it plays can be one of them.
+
 Select [short_row.tres](short_row.tres) (3 bays, 2 canopy spans) or [long_row.tres](long_row.tres) (5 bays, 4 spans starting at bay 1). Duplicate a resource for another configuration rather than copying the builder. The resource fields are:
 
 | Field | Meaning |
