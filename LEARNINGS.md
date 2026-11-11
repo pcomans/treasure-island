@@ -1285,3 +1285,7 @@ The street-clutter kit's wheels (2026-11-08) were invisible from the inside and 
 ## Key session state by its owner, not by a key that repeats
 
 Broken fence bays were kept by their bay key alone ("0:8", run and index), which every fence row reuses, so once one fence lost bay 0:8 no other fence's 0:8 could break: the car passed through it while it stood drawn and still stopped a player on foot (found by the athletic-fields author, 2026-11-08). Key such state by the owning row's id and the local key, and in the test break the same key on a second row.
+
+## A packed array taken out of a Dictionary is a copy
+
+The cars' ground over the riprap (2026-11-10) filed the outline's edges into grid cells with `(cells[cell] as PackedInt32Array).append(edge)`. Every cell stayed empty, so no shoulder vertex found the outline, the ramp up to the lifted crest was never built, and a car met the lifted shoulder's edge as a 0.55 m step: crept at it, the car hung there; fast, the step launched it. In Godot 4 a packed array read out of a Dictionary or an Array is a copy, and appending to it leaves the stored one unchanged. Keep per-key lists that grow in an `Array`, which is held by reference, or write the packed array back. Before the first gameplay run on a new collision surface, probe it with rays along a known line and compare the hit heights with the intended profile; one probe run found this, where three contract runs had only shown its symptoms.
