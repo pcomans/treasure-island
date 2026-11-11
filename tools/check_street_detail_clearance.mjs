@@ -135,12 +135,30 @@ function fencedPockets(manifest, detail) {
   const failures = [];
   if (regions.length === 0) return { fences: 0, yards: 0, cells: 0, failures };
   const records = manifest.chunks.flatMap((entry) => readJson(resolve(worldRoot, entry.path)).records);
+  // Even-odd ray casting along +x: a point is inside a ring when an odd number
+  // of the edges that straddle its z cross that z east of it. The flood asks
+  // row by row, every cell of a row at one z, so each ring's crossings at a z
+  // are worked out once, edge by edge with the same expression, and sorted; a
+  // point then counts those east of it by binary search.
+  const rows = new Map();
   const inRing = (point, ring) => {
-    let inside = false;
-    for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
-      if ((ring[i][1] > point[1]) !== (ring[j][1] > point[1]) && point[0] < ((ring[j][0] - ring[i][0]) * (point[1] - ring[i][1])) / (ring[j][1] - ring[i][1]) + ring[i][0]) inside = !inside;
+    let row = rows.get(ring);
+    if (row?.z !== point[1]) {
+      const crossings = [];
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i, i += 1) {
+        if ((ring[i][1] > point[1]) !== (ring[j][1] > point[1])) crossings.push(((ring[j][0] - ring[i][0]) * (point[1] - ring[i][1])) / (ring[j][1] - ring[i][1]) + ring[i][0]);
+      }
+      row = { z: point[1], crossings: crossings.sort((left, right) => left - right) };
+      rows.set(ring, row);
     }
-    return inside;
+    let low = 0;
+    let high = row.crossings.length;
+    while (low < high) {
+      const middle = (low + high) >> 1;
+      if (point[0] < row.crossings[middle]) high = middle;
+      else low = middle + 1;
+    }
+    return (row.crossings.length - low) % 2 === 1;
   };
   const onIsland = (point) => manifest.playable_boundary.components.some((component) => inRing(point, component.outer) && !component.holes.some((hole) => inRing(point, hole)));
   const pockets = shutInPockets({ regions, roofs: roofTriangles(records), solids: streetSolids(detail.rows), onIsland });
