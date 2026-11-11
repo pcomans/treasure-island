@@ -419,13 +419,15 @@ const SETTLE_RESUME_HEIGHT_M := 0.4
 
 ## Drops the stock player at xz, its feet drop_m above the ground under that
 ## point, and lets physics settle it. Returns "" on success, or one of the
-## reasons above. The fall is slow (the player's descent cap, 1.5 m/s), so once
-## the player is airborne the stretch of the fall above SETTLE_RESUME_HEIGHT_M
-## is skipped when nothing is in it (_skip_empty_fall); a caller that only needs
-## the player standing there, such as a screenshot, can also pass a small
-## drop_m. drop_m must still clear the ground under the whole capsule (0.35 m
-## radius, its bottom at the player's origin): 0.15 m on the steepest slope
-## the support check allows, 0.2 m beside a 15 cm kerb.
+## reasons above. The fall is slow (the player's descent cap, 1.5 m/s), so the
+## stretch of the fall above SETTLE_RESUME_HEIGHT_M is skipped when nothing is
+## in it (_skip_empty_fall), but only once the player is off the floor: one
+## still on the floor from its last walk first ticks at the drop pose, which
+## clears that state. A caller that only needs the player standing there, such
+## as a screenshot, can also pass a small drop_m. drop_m must still clear the
+## ground under the whole capsule (0.35 m radius, its bottom at the player's
+## origin): 0.15 m on the steepest slope the support check allows, 0.2 m beside
+## a 15 cm kerb.
 func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
 		return OFF_ISLAND

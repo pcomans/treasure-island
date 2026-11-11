@@ -5,7 +5,7 @@ extends SceneTree
 ##   tools/godot --fixed-fps 60 --path . --script game/tests/shared/island_test.gd
 ##
 ## --fixed-fps 60 lets the walking simulation run as fast as the CPU allows. It
-## draws nothing while it walks (see _stop_drawing).
+## draws nothing while it walks (world_harness.gd's stop_drawing).
 ## Optional -- --use-prebuilt-world: run the same checks on the baked native
 ## world that desktop exports load (bake it first: tools/prebuild-static-world.sh native).
 ## Optional -- --street-detail on|off or --street-detail-layers vegetation,fences:
