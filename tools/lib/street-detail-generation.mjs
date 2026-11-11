@@ -13,7 +13,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 import { projectLonLat } from "./coordinates.mjs";
-import { geometryToLine, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
+import { geometryToLine, multiPolygonContains, pointInMultiPolygon, pointInRing, selectGeometry } from "./osm-geometry.mjs";
 import { footprintPiece, placeStreetClutter, STREET_CLUTTER_FOOTPRINTS, STREET_CLUTTER_PROPS, validateClutterRules, visibleGroundIndex } from "./street-clutter-generation.mjs";
 import { GATE_LEAF_HALF_M, placeStreetFences, validateFenceRules } from "./street-fence-generation.mjs";
 import { settleYardProp, YARD_KIT_KEYS, yardKindRadius, yardMaxSink, yardPropFootprint, yardPropRests } from "./street-yard-kit.mjs";
@@ -2360,7 +2360,10 @@ export function generateStreetDetail({
   let walkUpShort = [];
   if (clutter.rows.some(isIslandRow)) {
     const roofs = roofTriangles([...chunks.values()].flatMap((chunk) => chunk.records));
-    const onIsland = (point) => pointInMultiPolygon(toEastNorth(point), playableBoundary, false);
+    // pointInMultiPolygon(toEastNorth(point), playableBoundary, false), read
+    // row by row: the flood asks every cell of a grid row in turn.
+    const onPlayableLand = multiPolygonContains(playableBoundary, false);
+    const onIsland = (point) => onPlayableLand(toEastNorth(point));
     const carPoint = (row) => [row.position_m[0], row.position_m[2]];
     // Whether a point lies within POCKET_MARGIN_M of a point list's bounds (a
     // loop: a pocket's cut can hold more cells than a spread call takes).
@@ -2701,7 +2704,24 @@ export function shutInPockets({ regions, roofs, solids, onIsland }) {
     for (const solid of solids) {
       const xs = solid.points.map((point) => point[0]);
       const zs = solid.points.map((point) => point[1]);
-      mark(Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius, (point) => planDistance([point], solid.points) <= solid.radius);
+      const [minX, maxX, minZ, maxZ] = [Math.min(...xs) - solid.radius, Math.max(...xs) + solid.radius, Math.min(...zs) - solid.radius, Math.max(...zs) + solid.radius];
+      if (solid.points.length < 2 || !Number.isFinite(solid.radius) || !solid.points.every(isXZ)) {
+        mark(minX, maxX, minZ, maxZ, (point) => planDistance([point], solid.points) <= solid.radius);
+        continue;
+      }
+      // A line reaches a cell where one of its segments does (planDistance is
+      // the least of the segments' distances), and a segment only near its own
+      // bounds: each segment tests, of the cells the line's bounds give, those
+      // round its own bounds. Its slack, a cell, is far more than rounding moves.
+      const reach = solid.radius + POCKET_CELL_M;
+      for (let index = 1; index < solid.points.length; index += 1) {
+        const [start, end] = [solid.points[index - 1], solid.points[index]];
+        mark(
+          Math.max(minX, Math.min(start[0], end[0]) - reach), Math.min(maxX, Math.max(start[0], end[0]) + reach),
+          Math.max(minZ, Math.min(start[1], end[1]) - reach), Math.min(maxZ, Math.max(start[1], end[1]) + reach),
+          (point) => pointSegmentDistance(point, start, end) <= solid.radius,
+        );
+      }
     }
     const after = pieces();
     // Street solids only block cells, so each piece after lies inside one piece before.
