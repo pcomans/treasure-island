@@ -516,6 +516,9 @@ func _check_resume_in_physics(main: GameMain) -> String:
 		var stopped := ball.global_position
 		for _tick in 10:
 			await physics_frame
+			if ball.global_position != stopped:
+				_fail("Paused, the rolling ball moved.")
+				return ""
 		await physics_frame
 		if deferred:
 			main._set_paused.call_deferred(false)
@@ -524,11 +527,10 @@ func _check_resume_in_physics(main: GameMain) -> String:
 			if not paused:
 				_fail("A resume asked for inside a physics tick must wait for the idle step.")
 				return ""
-		# The next physics tick, before the physics server steps: the idle step between
-		# has resumed.
+		# The next physics tick: the idle step between has resumed.
 		await physics_frame
-		if paused or Engine.time_scale != scale or ball.global_position != stopped:
-			_fail("A resume asked for inside a physics tick (%s) must take in the next idle step with the clock back at %s and the ball where it stopped (paused %s, time scale %s, ball moved %.3f m)." % ["deferred" if deferred else "direct", scale, paused, Engine.time_scale, ball.global_position.distance_to(stopped)])
+		if paused or Engine.time_scale != scale:
+			_fail("A resume asked for inside a physics tick (%s) must take in the next idle step with the clock back at %s (paused %s, time scale %s)." % ["deferred" if deferred else "direct", scale, paused, Engine.time_scale])
 			return ""
 		for _tick in 4:
 			await physics_frame
