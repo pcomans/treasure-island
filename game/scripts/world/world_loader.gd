@@ -105,7 +105,11 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		return
 	staged_reports.append(context_result)
 	load_progress.emit(chunks.size() + 1, chunks.size() + 1)
-	var shoreline_result := ShorelineBuilder.new().build(validation.shoreline, validation.boundary)
+	# The cars' ground over the riprap keeps its climb off the drawn roads and paths
+	# just built, and stops at the causeway (shoreline_builder.gd).
+	var ways := VisibleGround.new()
+	ways.build([ground_and_areas, roads_and_paths])
+	var shoreline_result := ShorelineBuilder.new().build(validation.shoreline, validation.boundary, ways, ShorelineBuilder.causeway_crossings(validation.context))
 	if not shoreline_result.ok:
 		_free_staged(staged_reports)
 		_fail(str(shoreline_result.get("code", "shoreline_build")), str(shoreline_result.get("message", "Could not build the validated shoreline.")), [])
