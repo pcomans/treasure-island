@@ -529,6 +529,7 @@ func describe() -> Dictionary:
 		"roll": snappedf(rad_to_deg(asin(clampf(basis.x.y, -1.0, 1.0))), 0.1), "steer": snappedf(rad_to_deg(_steer), 0.1),
 		"compression": [snappedf(_compression[0], 0.001), snappedf(_compression[1], 0.001), snappedf(_compression[2], 0.001), snappedf(_compression[3], 0.001)],
 		"occupied": occupied, "righting": is_righting(), "sinking": is_sinking(), "holding": _holding, "frozen": freeze,
+		"body": body, "row": row_id,
 	}
 
 
