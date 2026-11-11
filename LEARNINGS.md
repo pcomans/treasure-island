@@ -732,7 +732,9 @@ independent channels of `marsh_grain.png`. The alpha-border override preserved
 alpha handling, but did not prevent block quantization. Classify textures by
 what the shader reads before bulk import changes. For a deliberate lossless 3D
 exception, disable Detect 3D as well, since the editor can rewrite the mode.
-Check the exported texture against the source channels.
+Check the exported texture against the source channels. `LOSSLESS_DATA_TEXTURES` in
+`headless_world_material_contract.gd` now lists these textures and fails when one
+isn't lossless; add a new one there.
 
 ## Keep block-compressed textures a multiple of 4
 

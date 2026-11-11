@@ -42,6 +42,20 @@ const EXPECTED_MATERIALS := {
 const BLOCK_COMPRESSED_MODES := [2, 4]
 const WEB_TEXTURE_CAPS := "res://tools/web-texture-cap-512.txt"
 const WEB_TEXTURE_CAP := 512
+## Textures a shader reads as data, channel by channel, which block compression would
+## mix and shift: each stays lossless (compress/mode=0). Add a new one here.
+const LOSSLESS_DATA_TEXTURES := {
+	"res://game/resources/textures/world/ground_cover/cover_map.png": "the ground cover's recipe weights, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/ground_cover/marsh_map.png": "the marsh's signed distances and low ground, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/ground_cover/marsh_grain.png": "four independent grain patterns, one per channel (ground_cover.gdshader)",
+	"res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "tuft and straw masks thresholded on its exact colours (ground_cover.gdshader tuft_masks, LAYER_SHARE)",
+	"res://game/resources/textures/world/water/shore_map.png": "shore distances, fetch and deck cover, one per channel (bay_water.gdshader)",
+	"res://game/resources/textures/world/water/bay_waves.png": "wave slopes decoded from red and green (bay_water.gdshader)",
+	"res://game/resources/textures/world/sky/cloud_noise.png": "independent cloud noise octaves, one per channel (bay_sky.gdshader)",
+}
+## UI images draw at their own size on screen: every image under this folder imports
+## lossless with mipmaps off.
+const UI_TEXTURES := "res://game/resources/ui/"
 ## One generated record per ground route: feature kind, material key, source
 ## key and the family it must use ("" keeps the builder's own material).
 const GROUND_ROUTES := [
@@ -86,7 +100,7 @@ func _initialize() -> void:
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, and every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, and the shader-data and UI textures stay lossless" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -378,6 +392,7 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 ## the editor switches a texture to VRAM compression the first time a 3D material
 ## uses it, block-compressing a lossless data or UI texture. Every block-compressed
 ## texture is a multiple of 4 on both sides (BLOCK_COMPRESSED_MODES), on the Web too.
+## LOSSLESS_DATA_TEXTURES and every image under UI_TEXTURES stay lossless.
 func _texture_imports_match() -> bool:
 	var problems: Array[String] = []
 	var sizes := {}
@@ -389,7 +404,11 @@ func _texture_imports_match() -> bool:
 		var detect_3d := int(config.get_value("params", "detect_3d/compress_to", 0))
 		if detect_3d != 0:
 			problems.append("%s has detect_3d/compress_to=%d; set it to 0 (Import dock: Detect 3D > Compress To > Disabled)." % [path, detect_3d])
-		if int(config.get_value("params", "compress/mode", 0)) not in BLOCK_COMPRESSED_MODES:
+		var mode := int(config.get_value("params", "compress/mode", 0))
+		if path.begins_with(UI_TEXTURES) and str(config.get_value("remap", "importer", "")) == "texture" \
+		and (mode != 0 or bool(config.get_value("params", "mipmaps/generate", false))):
+			problems.append("%s is a UI image: import it lossless (compress/mode=0) with mipmaps/generate=false." % path)
+		if mode not in BLOCK_COMPRESSED_MODES:
 			continue
 		if str(config.get_value("remap", "importer", "")) != "texture":
 			problems.append("%s is a block-compressed layered texture, whose size this check can't read; keep it lossless or extend the check." % path)
@@ -426,6 +445,12 @@ func _texture_imports_match() -> bool:
 			var capped := _capped(sizes[path], cap)
 			if capped.x % 4 != 0 or capped.y % 4 != 0:
 				problems.append("%s comes out %d x %d in the Web build (cap %d); give it a cap in %s at which both sides are multiples of 4." % [path, capped.x, capped.y, cap, WEB_TEXTURE_CAPS])
+	for texture: String in LOSSLESS_DATA_TEXTURES:
+		var config := ConfigFile.new()
+		if config.load(texture + ".import") != OK:
+			problems.append("%s is listed as lossless shader data but has no import file." % texture)
+		elif int(config.get_value("params", "compress/mode", -1)) != 0:
+			problems.append("%s must stay lossless (compress/mode=0): %s." % [texture, LOSSLESS_DATA_TEXTURES[texture]])
 	for problem in problems:
 		_require(false, problem)
 	return problems.is_empty()
