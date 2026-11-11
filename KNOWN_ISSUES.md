@@ -13,7 +13,7 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
   - it looks about 15% brighter than desktop (seen in review, by 2026-11-05); parked by the owner;
   - it draws no decals, which the owner accepted, so the Mersea mural is drawn as a mesh instead;
   - glass looks paler and more reflective than on desktop (seen in review, by 2026-11-05);
-  - it doesn't run on iPhone, which the owner accepted on 2026-11-06, so it isn't being worked on. Release `c7db08fc` fails on the owner's iPhone with Safari's "A problem repeatedly occurred"; the previous release, `9056ad03`, opened. The phone's Console log shows the cause: iOS killed the page's web content process at its 2,048 MB per-process limit (about 2.1 GB used), about 9 seconds after that process started and 7 seconds after the 291 MB pack arrived. A cut removing 71 MiB of unread data from the web pack (278 to 206 MiB) is committed but parked unmerged on the branch `web/memory-20261106`. It hasn't been run in a browser, and it probably isn't enough on its own.
+  - on iPhone it runs, but its memory headroom isn't known. Release `c7db08fc` (2026-11-06) was killed by iOS at its 2,048 MB per-process limit. PR #19 (`df3edb02`, 2026-11-09) combined the owner's PRs #14, #15, #17 and #18: VRAM-compressed world textures, no bake inputs in the web pack, superseded housing geometry pruned from the bake and 94 web textures capped at 512 px. Its description says the same tree reached play in Safari on a physical iPhone (iOS 27.0.1) in about 12 s, the owner confirmed touch walking and driving, and the page was still up at four minutes. No RAM trace was taken, and no later release has a recorded iPhone run; the live `e0267099`'s pack is 148,863,584 bytes.
 - **Browser stall while running:** in Chrome the frames stall for about 330 ms twice during a short run from spawn (about 0.6 s and 1.7 s after the keys go down), on both `c7db08fc` and the merged build, so the merge didn't cause it. Physics then catches up in a burst. It isn't there at idle (197 frames in 5 s at spawn). The cause is unknown, and it isn't confirmed for a real player: it was seen with synthetic key events in headed Chrome on Weston.
 - **Web slowdown in tree-heavy views, unattributed** (release 2026-11-08: `c1f1e796` against the live `2068b992`, both web builds timed alternately A, B, B, A in uncapped headed Chrome, Compatibility renderer, Radeon 780M; median frame time per view):
   - spawn 18.3–19.1 ms against 16.3 (the old build sits at the 60 fps cap there); the Johnson St lot from 45 m up 12.7–13.0 against 10.5–10.6; the lot's sidewalk 16.0–16.1 against 13.7–14.1; the Cityside Park wall 2.3–2.5 against 1.6; the residential street about 1 ms slower (12.7–13.4 against 11.8–12.7); Pier 1 and the ferry seen from the spawn about even. The new build stays slower in the readings taken with no other engine running;
@@ -125,16 +125,16 @@ Limits:
 - Where the land under a road dips, a fast car floats over the crests for a moment: on Seven Seas Avenue it dips about 0.9 m over 20 m.
 - Body-colour car roofs are a touch rougher than the rest of the paint, parked cars' too, so the fixed sun doesn't flare white across them from a low view (2026-11-08).
 - The chase camera's arm stops at street props as well as the world (so it never sits inside a parked car): a lamp post or palm between the car and the camera pulls the view in for a moment, and a sideways glance over kerbside cars passes just over their roofs (2026-11-08).
-- After the bay reset the chase camera starts facing the car's nose and swings round behind it in about a second (visual review, 2026-11-08).
 - A car pushes the pitch's ball with a scripted bumper push (the ball's own push model, `vehicle_manager.gd` `_push_loose`), not by contact alone: the hull's raked nose sits about a ball's height up, and without the push the car rode over the ball (2026-11-08).
 - Taillights read a dull brownish red in shade (visual review, 2026-11-08).
 - From raised views the dirt ramps still read as crisp blocks: hard straight shoulders, tyre-worn bands like planks and a skirt with a straight run to its ragged edge (visual review, 2026-11-08).
 - The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
+- The cars' index of the drawn ground and ways is built twice at load, about 76 ms: once in `world_loader.gd` for the shoreline (`VisibleGround.new()` before `ShorelineBuilder`) and again in `vehicle_manager.gd` (`_visible_ground.build`) (code review, 2026-11-11).
+- Not covered by any test: pausing while a car rolls down the riprap, `R` while a car is sinking, and a native run of the web smoke's water leg (code review, 2026-11-11).
 
 ## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
 
-- RUN, RISE and the use button are white rings and glyphs with no backdrop, unlike the stick and the pause button, so they are faint over white cars, pale walls and bright paving (visual review, 2026-11-08).
 - In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
 - Touch has no R: nothing resets a car to land or recovers the player on foot. A car on its roof rights itself, and one in the bay comes back on its own.
 - On a touch browser with a keyboard, pausing, resizing or lifting RISE lets go of the handbrake (and the jetpack) even while a physical Space is held, until Space is pressed again (code review, 2026-11-08).
@@ -147,6 +147,9 @@ Non-blocking notes from the reviews:
 - The loading screen's Controls button still has the old see-through style.
 - While the controls screen is open, the loading progress is hidden.
 - On the web, the first goal may hitch once while the confetti shader compiles (not verified).
+- Resuming (`_set_paused(false)` in `game/scripts/main.gd`) captures the mouse even when `capture_mouse_on_ready` is false, as the test harnesses set it (code review, 2026-11-11).
+- `goal_confetti.gd`'s `on_screen` clamps the tone map's white only at 0.001 (`maxf(environment.tonemap_white, 0.001)`), not at 1.0 (code review, 2026-11-11).
+- The gameplay contract's glancing walk past the ball (`_check_soccer_ball` in `headless_gameplay_contract.gd`) allows up to 3 m/s along the walk; the bound could be tightened to under 1.0 (code review, 2026-11-11).
 
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
@@ -193,7 +196,7 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
 
   A square-on walk down the lane, and the court walls if they can be reached, would let them be modelled.
 - **490 Avenue of the Palms (OSM w1272162518):** only its east block's ground floor stands level with Garden Walk; the block's NNW end wall stays on the base floor with the wing beside it. Everything west of that still sits on the 2023 excavation (land 1.1-3.9 m, where Street View palms-wsw01, palms-n-corner02 and palms-nnw-end04 of Nov 2025 show flat ground about 4 m), so the podium's east end meets a bank and Johnson Street falls along the NNW end. The SSE end and the ENE wall also differ in detail from Street View wsw03 (Sep 2025) and owner photo n1 (Nov 2026). Its NNW end has three large glazed bands and a white ground band over a dark upper band in Street View palms-nnw-end04 (Nov 2025), but the game has plain storeys.
-- **Star View Court (OSM w1212173437):** its walk side lacks the bed and the dark tile bays of owner photos n1 and n2 (Nov 2026), its stoops aren't modelled (n2: doors a few risers above the walk), and the bed along its north wall in Street View starview-nw01 (Nov 2025) is a concrete edge. A Star View pass is queued.
+- **Star View Court (OSM w1212173437):** its walk side lacks the bed and the dark tile bays of owner photos n1 and n2 (Nov 2026), its stoops aren't modelled (n2: doors a few risers above the walk), and the bed along its north wall in Street View starview-nw01 (Nov 2025) is a concrete edge.
 - **Garden Walk (w1249412095):** Johnson Street's sidewalk still crosses the walk's north mouth, where Street View starview-nw01 (Nov 2025) shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where Street View ss02 (Jun 2026) shows concrete.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
@@ -285,13 +288,10 @@ photos of 2025 and Jun 2026. What isn't there yet:
   it does other kit fences: a broken bay's concrete curb stays drawn but is no
   longer solid, since the bay's box covered it. The ball-stop nets are
   `breakable: false`, so a car stops at them.
-- Main's fence breaker (`game/scripts/vehicles/street_fence_breaker.gd`) keys
-  broken bays by `"run:index"` alone, and the fields' five single-run breakable
-  rows overlap indices 0-130, with each other and with other fences. Once a bay
-  breaks, a car can drive through an unbroken bay with the same key in another
-  fence: it stays drawn and stops the player on foot. The fix (a key per fence)
-  is on the car-fixes branch; the vehicle contract's field case should then also
-  check that its broken key belongs to the windscreen.
+- The vehicle contract's field case (`_case_field_net` in
+  `headless_vehicle_contract.gd`) checks only that some bay broke, not that its
+  broken key (the fence breaker's `fence_id`, `"<street_detail_id>|<key>"`)
+  belongs to the windscreen.
 - Low, for later: the soccer goal's net depth is worked out in three places in
   `street_furniture_kit.gd` (its net, its frame's stays and its net walls) and
   wants one helper; the light tower's footprint
@@ -433,7 +433,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
 ## Deferred by the owner
 
-- Audio: the game has no sound; "not now".
+- Audio: the game has no sound. Sound effects are the next big thing (owner, 2026-11-08): the owner sources the samples, and integrating them starts when the owner hands them over.
 - Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data. The street reviews saw three that are missing: a container wall at 11th Street, a container wall at 4th Street / Avenue M, and wooden fences at 13th Street / Gateview Avenue, which hide a shelter in the photo.
 - Mac notarization: later. It needs a paid Apple Developer membership.
 - The pelican rider variant of the player: paused.
@@ -478,6 +478,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - The startup test (`game/tests/headless_startup_configuration_contract.gd`) checks that a demolished building has a demolition record, but doesn't compare it with the evidence in `tools/config/demolished-buildings.json`.
   - `building_shots.gd`'s `_moving_view` turns off the player controller right after the last move, without waiting for the player to come to rest.
   - `building_shots.gd`'s `MOVE_ACTIONS` duplicates the action list in `world_harness.gd`'s `release_input`; share one list.
+  - Loading the baked scene or the web pack outside the normal game path reports a pre-existing script/scene load error for `hawkins_77_bruton_facade` (seen independently by two reviewers of the web-memory PRs, 2026-11-10/11; the PR #15 review found it the same on #14 and absent in the browser). The cause hasn't been looked at (code review).
 - **r133351, the former school ring with Aracely Cafe** (seen in review, 2026-11-07):
   - the SSE planting is its weakest area: near-even dark balls, and red spikes that ref 22 does not show;
   - the 13th Street hedge is slightly flat, with a mild row rhythm;
@@ -495,7 +496,3 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - the view pull in its shader assumes a perspective camera, with no orthographic branch;
   - the 0.23 m clip should share a constant with the bottom rail;
   - the `ROUGHNESS` comment says the sheet keeps its own finish, but the shader sets a constant.
-- **Docs:**
-  - README.md shows `building_fit_test.gd` run with `--headless`, which the test refuses.
-  - PLAYTEST.md should point to the Mac build that CI publishes.
-  - AGENTS.md should state the decal policy: decals are used freely, and their absence on the web is acceptable.

@@ -29,7 +29,7 @@ It must pass before anything is pushed to `main`.
 Checks for one building, used while working on it (see [AGENTS.md](../../AGENTS.md#what-done-means-for-a-building)):
 
 ```sh
-tools/godot --headless --path . --script game/tests/shared/building_fit_test.gd -- --source <key>
+tools/godot --fixed-fps 60 --path . --script game/tests/shared/building_fit_test.gd -- --source <key>   # renders: no --headless; --fixed-fps 60 walks faster than the wall clock
 tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source <key> --island --out <dir>
 tools/build-mac.sh   # Mac build + content audit + launch check
 ```
