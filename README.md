@@ -105,12 +105,12 @@ The bake merges each building's opaque surfaces into far fewer draws
 
 ## Controls
 
-- `WASD` moves; hold `Shift` to run.
+- `WASD` or the arrow keys move; hold `Shift` to run.
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
 - Hold `C` in the air to drop fast. It does nothing on the ground, and `Space` wins if both are held.
 - `F` beside a parked street or lot car gets in; `F` again gets out beside it.
-- In a car: `W`/`S` drive, brake and reverse; `A`/`D` steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
+- In a car: `W`/`S` (or the up and down arrows) drive, brake and reverse; `A`/`D` (or the left and right arrows) steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
 - A car breaks through fences bay by bay (a broken bay stays open, on foot too, until a restart), shoves parked cars and K-rails, sends the pitch's ball rolling, drives through bushes and stops at trees. On the shore rocks it splashes and goes back, with you in it, to a level spot at least 12 m inside the shore, facing away from the water and held on its brakes until you drive off; only a car that comes down on open water sinks for a moment first. On its roof or side it rights itself after about three seconds.
 - Car ramps stand in three empty lots: the 12th Street and Avenue D dirt lot, the north slab site between Avenue I and Avenue M, and the former school lot by Aracely Cafe.
 - Fences stop you on foot (gates, path crossings and bays a car broke stay open); the jetpack clears them.
@@ -138,10 +138,10 @@ pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-play starts by itself. WASD moves, Shift runs, Space rises with the jetpack,
+play starts by itself. WASD or the arrow keys move, Shift runs, Space rises with the jetpack,
 releasing Space descends slowly and holding C in the air drops fast. F gets
-in or out of a parked car; in a car W/S drive, A/D steer and Space is the
-handbrake. Click
+in or out of a parked car; in a car W/S drive, A/D steer (or the arrow keys)
+and Space is the handbrake. Click
 **Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
 again and continues. Spray is omitted in the browser build by owner approval.
 F3 shows actual FPS.

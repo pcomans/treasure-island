@@ -34,6 +34,19 @@ func _initialize() -> void:
 	if not _action_has_physical_key("handbrake", KEY_SPACE):
 		_fail("The handbrake must be bound to physical Space.")
 		return
+	# The arrow keys move as W, S, A and D do (owner, 2026-11-11), on foot and in a
+	# car, which reads the same actions: a real key event presses the action and
+	# its release lets it go.
+	for binding: Array in [["move_forward", KEY_W, KEY_UP], ["move_back", KEY_S, KEY_DOWN], ["move_left", KEY_A, KEY_LEFT], ["move_right", KEY_D, KEY_RIGHT]]:
+		if not _action_has_physical_key(binding[0], binding[1]) or not _action_has_physical_key(binding[0], binding[2]):
+			_fail("%s must be bound to physical %s and to its arrow key." % [binding[0], OS.get_keycode_string(binding[1])])
+			return
+		_send_key(binding[2], true)
+		var held := Input.is_action_pressed(binding[0])
+		_send_key(binding[2], false)
+		if not held or Input.is_action_pressed(binding[0]):
+			_fail("The %s arrow key did not press and release %s." % [OS.get_keycode_string(binding[2]), binding[0]])
+			return
 
 	var boundary := {
 		"components": [{
@@ -276,7 +289,7 @@ func _check_ferry_solidity() -> void:
 	if ball.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), and the pitch's ball (%s)" % [", ".join(heights), ball])
 	quit(0)
 
 
@@ -483,6 +496,15 @@ func _action_has_physical_key(action: StringName, physical_keycode: Key) -> bool
 		if event is InputEventKey and (event as InputEventKey).physical_keycode == physical_keycode:
 			return true
 	return false
+
+
+## A key going down or up, as the platform sends it, applied at once.
+func _send_key(physical_keycode: Key, pressed: bool) -> void:
+	var key := InputEventKey.new()
+	key.physical_keycode = physical_keycode
+	key.pressed = pressed
+	Input.parse_input_event(key)
+	Input.flush_buffered_events()
 
 
 ## Shader code without its // comments.

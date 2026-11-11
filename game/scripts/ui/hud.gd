@@ -27,7 +27,7 @@ var _capture_hint: Button
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	if OS.has_feature("web"):
-		$PausePanel/PauseLayout/Controls.text = "WASD move • Shift run • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer, Space handbrake, R reset\nR recover • F3 debug • Spray unavailable in browser"
+		$PausePanel/PauseLayout/Controls.text = "WASD or arrow keys move • Shift run • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer (or arrow keys), Space handbrake, R reset\nR recover • F3 debug • Spray unavailable in browser"
 	resume_button.pressed.connect(func() -> void: resume_requested.emit())
 	exit_button.pressed.connect(func() -> void: exit_requested.emit())
 	feedback_panel.hide()

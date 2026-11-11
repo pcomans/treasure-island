@@ -117,7 +117,7 @@ horizontal_alignment = 1
 
 [node name="Controls" type="Label" parent="PausePanel/PauseLayout"]
 layout_mode = 2
-text = "WASD move • Shift fast run (~45 mph) • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer, Space handbrake, R reset\nClick spray • R recover • F3 debug"
+text = "WASD or arrow keys move • Shift fast run (~45 mph) • Space jetpack • C drop fast • Mouse look\nF get in or out of a car: W/S drive, A/D steer (or arrow keys), Space handbrake, R reset\nClick spray • R recover • F3 debug"
 horizontal_alignment = 1
 
 [node name="ResumeButton" type="Button" parent="PausePanel/PauseLayout"]
