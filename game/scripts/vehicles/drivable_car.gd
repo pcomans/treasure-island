@@ -78,8 +78,6 @@ const BODIES := {
 	"pickup": {"mass": 2300.0, "top": 34.0, "accel": 7.5, "belt": 1.25, "deck": 1.21, "cabin": [1.75, 2.38, 3.7, 3.8], "roof": 1.95},
 	"utility": {"mass": 2600.0, "top": 31.0, "accel": 6.5, "belt": 1.25, "deck": 1.5, "cabin": [1.75, 2.38, 3.7, 3.8], "roof": 1.95},
 	"van": {"mass": 2500.0, "top": 30.0, "accel": 6.5, "belt": 1.26, "deck": 1.26, "cabin": [0.98, 1.82, 5.82, 5.9], "roof": 2.62},
-	# The yard's cargo van is the street van's body.
-	"van_cargo": {"mass": 2500.0, "top": 30.0, "accel": 6.5, "belt": 1.26, "deck": 1.26, "cabin": [0.98, 1.82, 5.82, 5.9], "roof": 2.62},
 	"van_step": {"mass": 4500.0, "top": 27.0, "accel": 5.0, "roof": 2.95, "width": 2.4,
 		"boxes": [[0.0, 7.0, 0.42, 1.25, 1.2], [0.42, 7.0, 1.25, 2.55, 1.2], [0.82, 7.0, 2.55, 2.95, 1.2]]},
 	"food_truck_step_van": {"mass": 5200.0, "top": 26.0, "accel": 4.5, "roof": 2.98, "width": 2.4,
@@ -93,6 +91,9 @@ const BODIES := {
 	"rv_class_a": {"mass": 10000.0, "top": 25.0, "accel": 3.5, "roof": 3.45, "width": 2.55,
 		"boxes": [[0.0, 11.6, 0.42, 1.25, 1.275], [0.1, 11.6, 1.25, 2.6, 1.275], [0.9, 11.6, 2.6, 3.45, 1.275]]},
 }
+## Bodies that drive as another body's BODIES entry: the yard's cargo van is the
+## street van's body, so a retune of the van moves both.
+const ALIASES := {"van_cargo": "van"}
 const REVERSE_TOP_MPS := 10.0
 const REVERSE_ACCEL_MPS2 := 6.0
 const BRAKE_MPS2 := 14.0
@@ -297,12 +298,18 @@ var _front_z := -2.25
 var _hull_query := PhysicsShapeQueryParameters3D.new()
 
 
+## The BODIES entry a body drives with (through ALIASES), or {} for a body
+## nobody can drive.
+static func spec_of(car_body: String) -> Dictionary:
+	return BODIES.get(ALIASES.get(car_body, car_body), {})
+
+
 ## Builds the car for a kit body (KIT.drivable(body)) in its paint and puts it
 ## at placement; excludes are bodies its wheels and its own queries skip (the
 ## fences it drives through and their debris).
 func setup(car_body: String, parts: Dictionary, material: Material, custom: Color, placement: Transform3D, excludes: Array[RID]) -> void:
 	body = car_body
-	var spec: Dictionary = BODIES[car_body]
+	var spec := spec_of(car_body)
 	var front: Vector3 = parts.front
 	var rear: Vector3 = parts.rear
 	wheel_radius = float(parts.radius)

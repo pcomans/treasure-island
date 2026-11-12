@@ -10,11 +10,12 @@ extends SceneTree
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
-##     RVs, vehicle_spots.gd YARD_BODIES; a different one at each shape) the use
-##     button shows DRIVE: the car icon, inside the screen and
-##     clear of the stick, RUN, RISE, the pause button and their labels; a tap gets
-##     the player into that vehicle, where it shows GET OUT, inside and clear the
-##     same way, also after a pause and Resume there; a tap gets the player out;
+##     RVs, vehicle_spots.gd yard_bodies(); a different one at each shape where
+##     the world has another) the use button shows DRIVE: the car icon, inside
+##     the screen and clear of the stick, RUN, RISE, the pause button and their
+##     labels; a tap gets the player into that vehicle, where it shows GET OUT,
+##     inside and clear the same way, also after a pause and Resume there; a tap
+##     gets the player out;
 ##   - at every step no keyboard prompt shows (a touch screen has no F key), and
 ##     nothing else of the HUD lies over a touch control.
 ## The first failure stops the run.
@@ -30,7 +31,8 @@ var _failure := ""
 var _main: GameMain
 var _touch: TouchControls
 var _vehicles: VehicleManager
-## The parked vehicles got into so far, by row id: each shape uses others.
+## The parked vehicles got into so far, by row id: each shape uses others where
+## the world has them.
 var _used := {}
 var _checked: Array[String] = []
 
@@ -63,7 +65,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls; beside a parked %s, a different one at each shape, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -87,7 +89,7 @@ func _check_shape(shape: String) -> bool:
 
 ## Every drivable body: the street cars' and the yards' vehicles'.
 func _bodies() -> Array:
-	return KIT.CAR_BODIES + SPOTS.YARD_BODIES
+	return KIT.CAR_BODIES + SPOTS.yard_bodies()
 
 
 ## Beside a parked vehicle of this body: DRIVE, a tap in, GET OUT (and after a

@@ -114,7 +114,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - Mouse looks around.
 - Hold `Space` to jetpack upward; release it to descend slowly.
 - Hold `C` in the air to drop fast. It does nothing on the ground, and `Space` wins if both are held.
-- `F` beside a parked street or lot car gets in; `F` again gets out beside it.
+- `F` beside a parked street or lot car, or a storage yard's van, box truck, food-truck step van or class A or C RV, gets in; `F` again gets out beside it.
 - In a car: `W`/`S` (or the up and down arrows) drive, brake and reverse; `A`/`D` (or the left and right arrows) steer; `Space` is the handbrake; the mouse glances round and the view eases back behind the car; `R` puts the car back on land. No jetpack in a car.
 - A car breaks through fences bay by bay (a broken bay stays open, on foot too, until a restart), shoves parked cars and K-rails, sends the pitch's ball rolling, drives through bushes and stops at trees. Driven off the shore it rolls down the rocks, watched from the shore, splashes where it meets the water and sinks, then goes back, with you in it and the view behind it, to a level spot at least 12 m inside the shore, facing away from the water and held on its brakes until you drive off. Cars stop where the island's edge crosses the causeway to Yerba Buena. On its roof or side it rights itself after about three seconds.
 - Kick the pitch's ball (run into it), or push it with a car, into any goal on the athletic fields: confetti bursts at the goal and the ball goes back to its centre spot.

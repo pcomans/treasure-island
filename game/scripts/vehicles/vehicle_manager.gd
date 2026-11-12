@@ -167,6 +167,12 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			if not _cells.has(cell):
 				_cells[cell] = []
 			(_cells[cell] as Array).append(id)
+	# The yard kit draws the yards' vehicles and K-rails once they go live: built
+	# here, under the load screen, not on the player's first approach to one.
+	for entry: Dictionary in _rows.values():
+		if str(entry.prop) != "parked_car":
+			_yard_kit()
+			break
 	_visible_ground.build([world.ground_and_areas, world.roads_and_paths])
 	_breaker = FENCE_BREAKER.new()
 	_breaker.name = "FenceBreaker"
@@ -497,7 +503,7 @@ func _parts(id: String) -> Dictionary:
 	return _yard_kit().drivable(drivable_body(id))
 
 
-## The yard kit, made the first time a yard row needs it.
+## The yard kit (configure builds it when the world has yard rows).
 func _yard_kit() -> YARD_KIT:
 	if _yard == null:
 		_yard = YARD_KIT.new()

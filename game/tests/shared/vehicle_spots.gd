@@ -1,5 +1,5 @@
 extends RefCounted
-## The vehicles the vehicle tests expect to drive, and where they stand the stock
+## The yard vehicles the vehicle tests drive, and where they stand the stock
 ## player to get into one (headless_vehicle_contract.gd, headless_touch_drive.gd).
 ##
 ## A spot to get into a parked car or a yard van, truck or RV:
@@ -8,11 +8,8 @@ extends RefCounted
 ## reach and OTHER_MARGIN_M, on the world's ground about level with its wheels
 ## (not on a car or another prop), with room for the player's capsule.
 
-## The storage yards' vehicles a player drives (owner, 2026-11-11: every yard van,
-## truck and RV), by their kit names (street_yard_kit.gd drivable_name); the
-## towed ones (travel and fifth-wheel RVs, the concession trailer) have no cab.
-const YARD_BODIES := ["van_cargo", "van_step", "food_truck_step_van", "box_truck_medium", "box_truck_large", "rv_class_c", "rv_class_a"]
-
+const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
+const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_STREET_PROP := 1 << 3
 const BESIDE_M := 0.75
@@ -21,24 +18,36 @@ const OTHER_MARGIN_M := 0.5
 const GROUND_STEP_M := 0.6
 
 
+## The storage yards' bodies a player drives: the bodies drivable_car.gd knows
+## (BODIES and ALIASES, whose yard ones are the kit's YARD_DRIVABLE) past the
+## street cars'.
+static func yard_bodies() -> Array:
+	return (DRIVABLE_CAR.ALIASES.keys() + DRIVABLE_CAR.BODIES.keys()).filter(func(body: String) -> bool: return body not in KIT.CAR_BODIES)
+
+
 ## A parked (not yet live) vehicle of this body not in used, and a spot beside
 ## it: {"id", "at"} (at: the ground under the spot), or {} if there is none.
+## Where no unused one has a spot (the world has two class A RVs), one used
+## before: it stands where it was parked (got into and out of, nothing moved it).
 static func beside(main: GameMain, vehicles: VehicleManager, body: String, used: Dictionary) -> Dictionary:
-	var ids := vehicles.swappable_ids().filter(func(id: String) -> bool: return vehicles.drivable_body(id) == body and not used.has(id) and vehicles.live_node(id) == null)
+	var ids := vehicles.swappable_ids().filter(func(id: String) -> bool: return vehicles.drivable_body(id) == body)
 	ids.sort()
-	for id: String in ids:
-		var box := parked_box(main, vehicles, id)
-		if box.is_empty():
-			continue
-		var half: Vector3 = box.half
-		var xf: Transform3D = box.xf
-		for side: Vector3 in [Vector3(half.x + BESIDE_M, 0.0, 0.0), Vector3(-half.x - BESIDE_M, 0.0, 0.0), Vector3(0.0, 0.0, half.z + BESIDE_M), Vector3(0.0, 0.0, -half.z - BESIDE_M)]:
-			var at: Vector3 = xf * side
-			if _other_in_reach(main, vehicles, id, at):
+	for again: bool in [false, true]:
+		for id: String in ids:
+			if used.has(id) != again or (not again and vehicles.live_node(id) != null):
 				continue
-			var ground := _open_ground(main, at, xf.origin.y - half.y)
-			if ground.is_finite():
-				return {"id": id, "at": ground}
+			var box := parked_box(main, vehicles, id)
+			if box.is_empty():
+				continue
+			var half: Vector3 = box.half
+			var xf: Transform3D = box.xf
+			for side: Vector3 in [Vector3(half.x + BESIDE_M, 0.0, 0.0), Vector3(-half.x - BESIDE_M, 0.0, 0.0), Vector3(0.0, 0.0, half.z + BESIDE_M), Vector3(0.0, 0.0, -half.z - BESIDE_M)]:
+				var at: Vector3 = xf * side
+				if _other_in_reach(main, vehicles, id, at):
+					continue
+				var ground := _open_ground(main, at, xf.origin.y - half.y)
+				if ground.is_finite():
+					return {"id": id, "at": ground}
 	return {}
 
 
