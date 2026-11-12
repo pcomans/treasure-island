@@ -119,6 +119,8 @@ var _wheel_material: ShaderMaterial
 var _glass_material: ShaderMaterial
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
+## A car body's collision pieces (car_hulls): body -> Array of ConvexPolygonShape3D.
+var _hulls: Dictionary = {}
 ## The kit's empty nodes by name: the drivable car's wheel centres.
 var _markers: Dictionary = {}
 var _hero_loaded := false
@@ -189,8 +191,9 @@ static func car_custom(params: Dictionary, twist_override: Variant = null) -> Di
 ## right-hand wheel round its own centre, face toward +X), far (the parked far
 ## mesh, wheels and all), shadow (the shadow caster), front, rear (the
 ## right-hand front and rear wheel centres in the car frame; the left ones
-## mirror them in x), radius, tyre_width} or {ok: false, message}. The car's
-## size comes from the chassis and tyre boxes, the same at every level.
+## mirror them in x), radius, tyre_width, hulls (car_hull_points: what it
+## collides as)} or {ok: false, message}. The car's size comes from the chassis
+## and tyre boxes, the same at every level.
 func drivable(body: String) -> Dictionary:
 	var chassis: Variant = _meshes.get("car_%s_chassis_lod0" % body, null)
 	var tyre: Variant = _meshes.get("car_%s_tyre_lod0" % body, null)
@@ -203,7 +206,34 @@ func drivable(body: String) -> Dictionary:
 		"ok": true, "chassis": chassis, "tyre": tyre, "far": far, "shadow": shadow,
 		"front": _markers["car_%s_axle_front" % body], "rear": _markers["car_%s_axle_rear" % body],
 		"radius": tyre_box.size.y * 0.5, "tyre_width": tyre_box.size.x,
+		"hulls": car_hull_points(body),
 	}
+
+
+## A car body's collision pieces in the car frame (tools/lib/street-car-kit.mjs
+## carHullMeshes): the nose to the cowl, the cabin, the deck or bed, each the
+## hull of the drawn body over its stretch above the driven car's lower hull's
+## bottom, so the player stands on what is drawn. One point list per piece.
+func car_hull_points(body: String) -> Array[PackedVector3Array]:
+	var pieces: Array[PackedVector3Array] = []
+	var index := 0
+	while _meshes.has("car_%s_hull%d" % [body, index]):
+		var mesh := _meshes["car_%s_hull%d" % [body, index]] as Mesh
+		pieces.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX] as PackedVector3Array)
+		index += 1
+	return pieces
+
+
+## The same pieces as shapes, made once per body and shared by every car of it.
+func car_hulls(body: String) -> Array:
+	if not _hulls.has(body):
+		var shapes: Array = []
+		for points: PackedVector3Array in car_hull_points(body):
+			var shape := ConvexPolygonShape3D.new()
+			shape.points = points
+			shapes.append(shape)
+		_hulls[body] = shapes
+	return _hulls[body]
 
 
 static func paint_names() -> Array:
@@ -325,7 +355,9 @@ func preview(prop: String, params: Dictionary, level: String, placement: Transfo
 
 ## What to build for one placed row: {ok, meshes: [near, far], custom: Color,
 ## shape, shape_transform, range_m, shadow, and for a car shadow_mesh: what
-## casts its shadow while the near mesh draws} or {ok: false, message}.
+## casts its shadow while the near mesh draws, and shapes: [{shape,
+## transform}] its collision pieces, which stand in for the box shape} or
+## {ok: false, message}.
 func parts(prop: String, params: Dictionary) -> Dictionary:
 	if not PROPS.has(prop):
 		return {"ok": false, "message": "unknown street-clutter prop %s" % prop}
@@ -358,6 +390,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 	var caster: Variant = _meshes.get("%s_shadow" % base, null)
 	if caster is Mesh:
 		result.shadow_mesh = caster
+	if prop == "parked_car" and not car_hulls(str(params.body)).is_empty():
+		# A car collides as the drawn body (car_hulls), in its own frame.
+		var pieces: Array = []
+		for shape: Variant in car_hulls(str(params.body)):
+			pieces.append({"shape": shape, "transform": Transform3D.IDENTITY})
+		result.shapes = pieces
 	if not _shapes.has(base):
 		# A box over the near mesh's bounds, its floor on the ground.
 		var bounds: AABB = (near as Mesh).get_aabb()

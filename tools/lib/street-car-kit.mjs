@@ -1704,6 +1704,7 @@ export function carKitExtras() {
     extras.push({ name: `car_${name}_tyre_lod0`, ...buildCarParts(name, "near").wheel.result() });
     extras.push({ name: `car_${name}_axle_front`, marker: true, translation: [...geometry.wheels.front_right] });
     extras.push({ name: `car_${name}_axle_rear`, marker: true, translation: [...geometry.wheels.rear_right] });
+    extras.push(...carHullMeshes(name));
   }
   return extras;
 }
@@ -1756,4 +1757,156 @@ export function carBodyGeometry(name) {
   });
   geometryCache.set(name, geometry);
   return geometry;
+}
+
+// ---------------------------------------------------------------- collision
+// What a car collides as, parked or driven: a few convex pieces along the car
+// (the nose to the cowl, the cabin, the deck or bed behind it), each the hull
+// of the drawn body over its stretch, so whoever stands on a hood, a roof or a
+// bed stands on what is drawn. Their bottoms are the driven car's own lower
+// hull as it has always been (game/scripts/vehicles/drivable_car.gd: flat at
+// max(0.14, 0.6 wheel radius), raked up 0.17 m over the first 0.42 m and the
+// last 0.36 m), so a driven car meets kerbs and ramps as before. Each piece is
+// a mesh car_<body>_hull<n> whose vertices are its hull's points (a loft of
+// convex cross-sections); the runtime takes the hull of those points.
+const HULL_SECTION_POINTS = 16;
+export function carHullMeshes(name) {
+  const shape = bodyShape(name);
+  const { body, L } = shape;
+  const cab = body.cabin;
+  const zOf = (zf) => zf - L / 2;
+  const near = buildCarParts(name, "near").chassis.result();
+  let zMin = Infinity;
+  let zMax = -Infinity;
+  for (let i = 2; i < near.positions.length; i += 3) {
+    zMin = Math.min(zMin, near.positions[i]);
+    zMax = Math.max(zMax, near.positions[i]);
+  }
+  const halfL = (zMax - zMin) / 2;
+  const hw = 0.49 * body.width;
+  const floor = Math.max(0.14, body.wheel_radius * 0.6);
+  const bottomAt = (z) => {
+    if (z < -halfL + 0.42) return floor + 0.17 * (1 - (z + halfL) / 0.42);
+    if (z > halfL - 0.36) return floor + 0.17 * ((z - (halfL - 0.36)) / 0.36);
+    return floor;
+  };
+  const cuts = [zMin + L / 2, cab.windshield_base];
+  if (cab.rear_base < L - 0.12) cuts.push(cab.rear_base);
+  cuts.push(zMax + L / 2);
+  const meshes = [];
+  for (let s = 0; s < cuts.length - 1; s += 1) {
+    const sections = [];
+    const steps = Math.max(2, Math.ceil((cuts[s + 1] - cuts[s]) / 0.25));
+    for (let i = 0; i <= steps; i += 1) {
+      const zf = lerp(cuts[s], cuts[s + 1], i / steps);
+      const z = clamp(zOf(zf), -halfL, halfL);
+      const floorHere = bottomAt(z);
+      const pts = [[hw, floorHere], [-hw, floorHere]];
+      const add = (x, y) => {
+        if (y >= floorHere) pts.push([x, y], [-x, y]);
+      };
+      for (const a of outlineStationsAt(shape, zf)) {
+        for (const f of [1, 0.85, 0.55]) {
+          const p = shape.wall(a, f);
+          add(p.x, p.y);
+        }
+      }
+      // The lid across at this zf (its top over the shoulder in to the centre line).
+      const side = outlineStationsAt(shape, zf).map((a) => shape.wall(a, 1).x);
+      const reach = side.length ? Math.max(...side) : 0;
+      for (let k = 0; k <= 8; k += 1) {
+        const x = reach * (1 - k / 8);
+        add(x, shape.lid(x, zf).y);
+      }
+      sections.push([z, resampleConvex(convexHull2(pts), HULL_SECTION_POINTS)]);
+    }
+    meshes.push({ name: `car_${name}_hull${s}`, ...loftMesh(sections) });
+  }
+  return meshes;
+}
+
+// The stations a of the outline whose wall top is at plan zf.
+function outlineStationsAt(shape, zf) {
+  const found = [];
+  const SAMPLES = 300;
+  let prev = shape.wall(0, 1);
+  for (let i = 1; i <= SAMPLES; i += 1) {
+    const a = (3 * i) / SAMPLES;
+    const here = shape.wall(a, 1);
+    if ((prev.zf - zf) * (here.zf - zf) <= 0 && prev.zf !== here.zf) found.push(lerp((3 * (i - 1)) / SAMPLES, a, (zf - prev.zf) / (here.zf - prev.zf)));
+    prev = here;
+  }
+  return found;
+}
+
+// A 2D convex hull ([x, y] points, counterclockwise).
+function convexHull2(points) {
+  const pts = points.map((p) => [Math.round(p[0] * 1e5) / 1e5, Math.round(p[1] * 1e5) / 1e5]).sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const crossZ = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const lower = [];
+  for (const p of pts) {
+    while (lower.length >= 2 && crossZ(lower.at(-2), lower.at(-1), p) <= 0) lower.pop();
+    lower.push(p);
+  }
+  const upper = [];
+  for (const p of [...pts].reverse()) {
+    while (upper.length >= 2 && crossZ(upper.at(-2), upper.at(-1), p) <= 0) upper.pop();
+    upper.push(p);
+  }
+  return [...lower.slice(0, -1), ...upper.slice(0, -1)];
+}
+
+// n points along a closed polygon's boundary, its corners among them where it has few.
+function resampleConvex(poly, n) {
+  if (poly.length >= n) {
+    // Keep the corners that turn most.
+    const turn = poly.map((p, i) => {
+      const a = poly[(i + poly.length - 1) % poly.length];
+      const b = poly[(i + 1) % poly.length];
+      const u = vnorm(v3(p[0] - a[0], p[1] - a[1], 0));
+      const w = vnorm(v3(b[0] - p[0], b[1] - p[1], 0));
+      return [1 - vdot(u, w), i];
+    });
+    const keep = new Set(turn.sort((a, b) => b[0] - a[0]).slice(0, n).map(([, i]) => i));
+    return poly.filter((_, i) => keep.has(i));
+  }
+  const out = poly.map((p) => p);
+  while (out.length < n) {
+    // Split the longest edge.
+    let best = 0;
+    let len = -1;
+    for (let i = 0; i < out.length; i += 1) {
+      const a = out[i];
+      const b = out[(i + 1) % out.length];
+      const l = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      if (l > len) {
+        len = l;
+        best = i;
+      }
+    }
+    const a = out[best];
+    const b = out[(best + 1) % out.length];
+    out.splice(best + 1, 0, [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
+  }
+  return out;
+}
+
+// Sections [[z, [[x, y], ...n]], ...] joined into a band of triangles (each section the same count).
+function loftMesh(sections) {
+  const out = new CarMesh();
+  const up = v3(0, 1, 0);
+  for (let i = 0; i < sections.length - 1; i += 1) {
+    const [za, a] = sections[i];
+    const [zb, b] = sections[i + 1];
+    for (let k = 0; k < a.length; k += 1) {
+      const k1 = (k + 1) % a.length;
+      const p = [v3(a[k][0], a[k][1], za), v3(b[k][0], b[k][1], zb), v3(b[k1][0], b[k1][1], zb), v3(a[k1][0], a[k1][1], za)];
+      out.face(p[0], p[1], p[2], up, up, up, P.under);
+      out.face(p[0], p[2], p[3], up, up, up, P.under);
+    }
+  }
+  return out.result();
+}
+export function carHullKitMeshes() {
+  return Object.keys(CAR_BODIES).flatMap((name) => carHullMeshes(name));
 }

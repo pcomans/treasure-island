@@ -13,9 +13,10 @@ extends RefCounted
 ## are not drawn again in the shadow passes. The parked cars nearest the camera
 ## swap their near instance for the hero level at run time
 ## (game/scripts/vehicles/car_hero_level.gd), their shadow caster staying.
-## Every item has a box on the street-prop physics layer: the player collides
-## with it and the spray ray stops on it (never a receiver), while the camera arm
-## ignores it, as for the street furniture.
+## Every item has a box on the street-prop physics layer (a car the convex
+## pieces of its drawn body, street_clutter_kit.gd car_hulls): the player
+## collides with it and the spray ray stops on it (never a receiver), while the
+## camera arm ignores it, as for the street furniture.
 ## The yard kit's props (street_yard_kit.gd: containers, container walls, shed
 ## rows, yard vehicles, fabric sheds, equipment, piles, berms, pole flags and
 ## barges) are built the same way from their rows: each row becomes the kit's
@@ -111,7 +112,11 @@ func build(document: Dictionary) -> Dictionary:
 		var physics_cell := _cell(position, PHYSICS_CELL_M)
 		if not shapes.has(physics_cell):
 			shapes[physics_cell] = []
-		(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": parts.shape, "transform": placement * (parts.shape_transform as Transform3D)})
+		if parts.has("shapes"):
+			for piece: Dictionary in parts.shapes:
+				(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": piece.shape, "transform": placement * (piece.transform as Transform3D)})
+		else:
+			(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": parts.shape, "transform": placement * (parts.shape_transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		items += 1
 	var multimeshes := 0

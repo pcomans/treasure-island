@@ -314,7 +314,9 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	set_meta("receiver_kind", "none")
 	set_meta("opaque", true)
 	set_meta("street_detail_id", row_id)
-	for hull: PackedVector3Array in _hulls(spec):
+	# A kit car collides as its drawn body (parts.hulls); a body without them as two boxes.
+	var hulls: Array = parts.get("hulls", [])
+	for hull: PackedVector3Array in (hulls if not hulls.is_empty() else _hulls(spec)):
 		var shape := ConvexPolygonShape3D.new()
 		shape.points = hull
 		var collision := CollisionShape3D.new()
@@ -402,7 +404,12 @@ func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: N
 	var wheels := _instance("Wheels", parts.tyre, 4, custom, material, bounds, near_from, LOD_NEAR_M, off)
 	_wheels = wheels.multimesh
 	_visual.add_child(wheels)
-	_visual.add_child(_instance("Shadow", parts.shadow, 1, custom, material, bounds, 0.0, LOD_NEAR_M, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
+	if parts.get("shadow") is Mesh:
+		_visual.add_child(_instance("Shadow", parts.shadow, 1, custom, material, bounds, 0.0, LOD_NEAR_M, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
+	else:
+		# No shadow caster (a yard vehicle): the near level casts its own.
+		(_visual.get_node("Chassis") as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+		(_visual.get_node("Wheels") as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, LOD_NEAR_M, FAR_RANGE_M, GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
 	_update_wheels()
 
