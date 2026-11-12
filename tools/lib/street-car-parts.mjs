@@ -535,7 +535,8 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
     // over each of their top corners by 6 cm (a fastback's or a saloon's rear
     // glass falls steeply over them); where even the nearest place leaves too
     // little room, its back is lower, or it has no headrests.
-    const benchW = Math.min(1.36, 2 * inner - 0.1);
+    // Between the rear wheel wells, whose walls it stays inside of.
+    const benchW = Math.min(1.36, 2 * inner - 0.1, 2 * (W - 0.035 - body.tire_width - 0.08));
     const clears = (zf, backH, headrests) => {
       const { backC, heads } = seatParts(0, zf, benchW, true, backH);
       const tops = headrests

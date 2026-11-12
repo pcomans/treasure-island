@@ -1716,10 +1716,13 @@ function rightHalfFittings(out, name, detail) {
   const sides = detail >= 3 ? 20 : detail >= 2 ? 12 : 8;
   for (const axle of axles) {
     const centre = v3(0, R, zOf(axle));
-    const r = archRadius + 0.004;
     // The liner runs from the floor in front of the wheel over it to the floor
-    // behind, so with the wall and the floor it closes the well.
+    // behind, so with the wall and the floor it closes the well. Its sides are
+    // chords: it rides out so their middles stay over the arch's edge (inside
+    // it, a slot opened between the arch and the liner at the coarse levels).
     const floor = underFloorY(body, detail);
+    const r0 = archRadius + 0.004;
+    const r = r0 / Math.cos((Math.PI + 2 * Math.asin(clamp((R - floor) / r0, -1, 1))) / sides / 2);
     const reach = Math.asin(clamp((R - floor) / r, -1, 1));
     const rows = [];
     const normals = [];
@@ -1739,7 +1742,7 @@ function rightHalfFittings(out, name, detail) {
     const n = v3(1, 0, 0);
     // The wall stands on the floor (never below the sills, where it would show as a flap).
     const floorY = underFloorY(body, detail);
-    out.flat(v3(innerX, floorY, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle + archRadius)), v3(innerX, floorY, zOf(axle + archRadius)), n, P.under, 0.3);
+    out.flat(v3(innerX, floorY, zOf(axle - r)), v3(innerX, R + r, zOf(axle - r)), v3(innerX, R + r, zOf(axle + r)), v3(innerX, floorY, zOf(axle + r)), n, P.under, 0.3);
   }
   if (detail >= 2) {
     // Mirror: a housing on a foot at the front corner of the side glass, its glass toward the rear.
