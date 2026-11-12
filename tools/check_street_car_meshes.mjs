@@ -42,14 +42,15 @@ const MIN_GAP_RUN_M = 0.04;
 const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
 // A pixel's height (m) on the owner's display (a Mac drawing about 2170 rows
 // over a 70 degree view: 0.645 mm a metre away) at the nearest distance each
-// level is drawn from: the hero level from about 0.4 m, the near level (a
-// seventh car within the hero range draws it) from about 2 m, the far level
-// from 43 m (game/scripts/world/street_clutter_kit.gd LOD_NEAR_M less half
-// the diagonal of a 24 m clutter cell). A see-through hit counts when at
-// least CRACK_RAYS of nine rays half a pixel apart round it see a back face
-// too, so a crack a third of a pixel wide fails and only a pinhole passes.
+// level is drawn from: the hero and near levels from about 0.4 m (a seventh
+// car within the hero range draws the near level, and the player can walk up
+// to it), the far level from 43 m (game/scripts/world/street_clutter_kit.gd
+// LOD_NEAR_M less half the diagonal of a 24 m clutter cell). A see-through
+// hit counts when at least CRACK_RAYS of nine rays half a pixel apart round it
+// see a back face too, so a crack a third of a pixel wide fails and only a
+// pinhole passes.
 const PIXEL_PER_M = (2 * Math.tan((35 * Math.PI) / 180)) / 2170;
-const FOOTPRINT_M = { hero: 0.4 * PIXEL_PER_M, near: 2 * PIXEL_PER_M, far: 43 * PIXEL_PER_M };
+const FOOTPRINT_M = { hero: 0.4 * PIXEL_PER_M, near: 0.4 * PIXEL_PER_M, far: 43 * PIXEL_PER_M };
 const CRACK_RAYS = 3;
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);

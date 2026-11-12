@@ -125,6 +125,15 @@ void fragment() {
 	// How many metres one pixel covers here: detail finer than that fades out.
 	float pixel = length(fwidth(local_position));
 	float facing = clamp(dot(normalize(NORMAL), normalize(VIEW)), 0.0, 1.0);
+	if (p == P_GAP) {
+		// A shut line or panel gap (12 mm across at the near level) fades into
+		// the paint it is cut in once it is narrower than a pixel or so: the
+		// far level has none, so a near car's lines are gone before it hands
+		// over to the far level (from 43 m), not at the hand-over.
+		float gone = smoothstep(0.012, 0.028, pixel);
+		albedo = mix(albedo, texture(palette, vec2(paint_u, 0.75)).rgb, gone);
+		roughness = mix(roughness, 0.5, gone);
+	}
 	if (p == P_ROOF && black_roof) {
 		roughness = 0.08;
 		clearcoat = 1.0;

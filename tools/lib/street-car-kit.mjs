@@ -428,8 +428,14 @@ export function bodyShape(name) {
     const yBottom = bottom(clamp(o.zf, 0, L));
     const h = Math.max(0.08, yTop - yBottom);
     const widest = lerp(0.5, FACE_F, e);
+    // A box's tail (a service body's, its corner a few centimetres round) is
+    // square to the ground: its side's tuck under at the sill runs out along
+    // the side before the corner, and its face has none. Tucked round so tight
+    // a corner, the two twisted its foot into a dark crack.
+    const boxTail = !front && tail.corner < BOX_TAIL_CORNER_M;
+    const sillTuck = boxTail ? 1 - tuck : 1;
     // Inward along the plan normal: the tuck under at the sill, the roll in at the shoulder, a crease below it.
-    let inward = lerp(0.05, 0, e) * Math.max(0, (widest - f) / widest) ** 2.2 + 0.04 * Math.max(0, (0.07 - f) / 0.07) ** 2;
+    let inward = sillTuck * lerp(0.05, 0, e) * Math.max(0, (widest - f) / widest) ** 2.2 + 0.04 * Math.max(0, (0.07 - f) / 0.07) ** 2;
     const leanSlope = (end.lean * es * 1.8) / ((1 - FACE_F) * h);
     const power = clamp((Math.max(0.08, 1 / st.slope - leanSlope) * h * (1 - widest)) / st.dUp, 1.6, 14);
     inward += st.dUp * Math.max(0, (f - widest) / (1 - widest)) ** power;
@@ -438,7 +444,7 @@ export function bodyShape(name) {
     // Along the car at the ends: the face leans back above the bumper line and tucks under below it.
     const lean = f < FACE_F ? 0 : ((f - FACE_F) / (1 - FACE_F)) ** 1.8;
     const under = f < FACE_F ? ((FACE_F - f) / FACE_F) ** 2 : 0;
-    const shift = sign * (es * end.lean * lean + tuck * 0.05 * under);
+    const shift = sign * (es * end.lean * lean + (boxTail ? 0 : tuck) * 0.05 * under);
     return { x: o.x - o.nx * inward, y: yBottom + f * h, zf: o.zf - o.nz * inward + shift, e, front, yTop, yBottom, h, st };
   };
 
@@ -449,9 +455,19 @@ export function bodyShape(name) {
     const point = wall((3 * i) / SHOULDER_STEPS, 1);
     shoulder.push({ x: point.x, zf: point.zf, y: point.y, zeta: point.st.zeta, bed: point.st.bed, k: point.st.k, slope: point.st.roll });
   }
+  // The nearest point of the shoulder to a plan point: the polyline's nearest
+  // segment as a start, then Newton steps on the wall's top itself, a smooth
+  // curve in a, so the lid's roll from the shoulder (its distance, and the
+  // height and style there) is as smooth as the wall. Read off the polyline,
+  // the style kinked at every vertex and, round a corner, the distance creased
+  // along every vertex's bisector: the D pillar's reflection crumpled.
+  const shoulderPlan = (a) => {
+    const w = wall(clamp(a, 0, 3), 1);
+    return [w.x, w.zf];
+  };
   const nearest = (x, zf) => {
     let best = Infinity;
-    let at = null;
+    let at = 0;
     for (let i = 0; i < SHOULDER_STEPS; i += 1) {
       const p = shoulder[i];
       const q = shoulder[i + 1];
@@ -464,18 +480,37 @@ export function bodyShape(name) {
       const d2 = ex * ex + ez * ez;
       if (d2 < best) {
         best = d2;
-        at = [i, t];
+        at = ((i + t) * 3) / SHOULDER_STEPS;
       }
     }
-    const p = shoulder[at[0]];
-    const q = shoulder[at[0] + 1];
-    const t = at[1];
-    // The shoulder's inward normal there (it runs round the right half from the
-    // front centre line to the rear one, so inward is its direction turned left).
-    const tl = Math.hypot(q.x - p.x, q.zf - p.zf) || 1;
-    const tx = (q.x - p.x) / tl;
-    const tz = (q.zf - p.zf) / tl;
-    return { dist: Math.sqrt(best), y: lerp(p.y, q.y, t), zeta: lerp(p.zeta, q.zeta, t), bed: lerp(p.bed, q.bed, t), k: lerp(p.k, q.k, t), slope: lerp(p.slope, q.slope, t), inward: [-tz, tx] };
+    // Newton on (P(a) - q) . P'(a) = 0.
+    const h = 1e-4;
+    let a = at;
+    for (let iter = 0; iter < 6; iter += 1) {
+      const p0 = shoulderPlan(a - h);
+      const p1 = shoulderPlan(a);
+      const p2 = shoulderPlan(a + h);
+      const d1 = [(p2[0] - p0[0]) / (2 * h), (p2[1] - p0[1]) / (2 * h)];
+      const d2 = [(p2[0] - 2 * p1[0] + p0[0]) / (h * h), (p2[1] - 2 * p1[1] + p0[1]) / (h * h)];
+      const r = [p1[0] - x, p1[1] - zf];
+      const g = r[0] * d1[0] + r[1] * d1[1];
+      const gp = d1[0] * d1[0] + d1[1] * d1[1] + r[0] * d2[0] + r[1] * d2[1];
+      if (gp <= 1e-12) break;
+      const step = clamp(-g / gp, -0.02, 0.02);
+      const next = clamp(a + step, 0, 3);
+      if (Math.abs(next - a) < 1e-10) {
+        a = next;
+        break;
+      }
+      a = next;
+    }
+    const w = wall(a, 1);
+    const pa = shoulderPlan(a - h);
+    const pb = shoulderPlan(a + h);
+    const tl = Math.hypot(pb[0] - pa[0], pb[1] - pa[1]) || 1;
+    const tx = (pb[0] - pa[0]) / tl;
+    const tz = (pb[1] - pa[1]) / tl;
+    return { dist: Math.hypot(x - w.x, zf - w.zf), y: w.y, zeta: w.st.zeta, bed: w.st.bed, k: w.st.k, slope: w.st.roll, inward: [-tz, tx] };
   };
 
   const roofHalf = W - cab.tumblehome + 0.08;
@@ -531,6 +566,20 @@ const CREASE_CLEAR_M = 0.003;
 const CREASE_COLUMN_MIN_M = 0.006;
 // A turned-over sliver no taller than this across its long edge is laid flat on it (m).
 const SLIVER_M = 0.003;
+// Where the near and hero shells halve an edge: the surface's normal at its
+// middle turning more than `turn` degrees from the normal drawn there (its
+// ends' blended), or the surface standing more than `sag` (m) off the edge;
+// edges shorter than `minEdge` (m) stay.
+// How far along the side from each corner (in a, the side being 1) refining runs.
+const REFINE_SIDE_A = 0.15;
+const REFINE = Object.freeze({
+  hero: { turn: 2, sag: 0.004, minEdge: 0.012, passes: 3 },
+  near: { turn: 3, sag: 0.008, minEdge: 0.025, passes: 3 },
+});
+// How far off the arch's line (m) an edge of the shell's border round an arch still gets a lip.
+const LIP_REACH_M = 0.012;
+// A tail corner tighter than this (m) is a box's: square to the ground.
+const BOX_TAIL_CORNER_M = 0.1;
 // At the far level, between these angles (degrees) of a corner's smooth
 // normal from the mean of its faces, the normal turns to that mean.
 const FAR_FACES_DEG = [5, 15];
@@ -820,12 +869,30 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // record sits at (station, ring) of the wall's grid, a lid record at (row,
   // column) of the lid's; the seam between them (the wall's top ring, the
   // lid's column 0 and end rows) is the wall's own top, read from either side.
+  // At the near and hero levels the wall's ring nearest the side's crease
+  // (the shoulder's character line, whose height on the wall changes with the
+  // wall's) runs along the crease at each station, and the rings beside it
+  // follow: crossing the rings, the crease zigzagged through the triangles
+  // and rippled the reflection along the rear quarter.
+  const creaseRing = detail >= 2 && !inner && inset === 0 ? (() => {
+    const mid = wall(1.5, 1);
+    const c0 = 1 - 0.17 / mid.h;
+    let jc = 1;
+    for (let j = 1; j < nW; j += 1) if (Math.abs(wallF[j] - c0) < Math.abs(wallF[jc] - c0)) jc = j;
+    return jc;
+  })() : null;
+  const ringF = (a, v) => {
+    const j = clamp(Math.floor(v), 0, nW - 1);
+    const f = lerp(wallF[j], wallF[j + 1], v - j);
+    if (creaseRing === null || v <= creaseRing - 1 || v >= creaseRing + 1) return f;
+    const c = clamp(1 - 0.17 / wall(a, 1).h, lerp(wallF[creaseRing - 1], wallF[creaseRing], 0.3), lerp(wallF[creaseRing], wallF[creaseRing + 1], 0.7));
+    return v < creaseRing ? lerp(wallF[creaseRing - 1], c, v - (creaseRing - 1)) : lerp(c, wallF[creaseRing + 1], v - creaseRing);
+  };
   const record = (kf, v) => {
     const k0 = clamp(Math.floor(kf), 0, K - 2);
     const t = kf - k0;
     const a = lerp(stations[k0], stations[k0 + 1], t);
-    const j = clamp(Math.floor(v), 0, nW - 1);
-    const f = lerp(wallF[j], wallF[j + 1], v - j);
+    const f = ringF(a, v);
     const p = wall(a, f);
     const w = shape.arcAt(a);
     return { kf, v, wall: true, a, f, x: p.x, y: p.y, zf: p.zf, e: p.e, front: p.front, top: p.yTop, bottom: p.yBottom, h: p.h, w, wr: shape.arcTotal - w, zeta: p.st.zeta, bed: p.st.bed };
@@ -1023,6 +1090,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // The running light: a band inside the lamp's lower edge; the amber marker its outer end.
   const fDrl = region(inLamp, (rec) => Math.max(fHead.fn(rec) + 0.02, -(fHead.fn(rec) + 0.038), rec.y - (lampY(rec) - 0.004)));
   fDrl.pre = [region(inLamp, (rec) => fHead.fn(rec) + 0.02), region(inLamp, (rec) => fHead.fn(rec) + 0.038), region(inLamp, (rec) => rec.y - (lampY(rec) - 0.004))];
+  const fDrlFoot = fDrl.pre[2];
   const fAmber = region(inLamp, (rec) => Math.max(fHead.fn(rec) + 0.02, lampCentre + lampHalf - 0.085 - rec.w));
   fAmber.pre = [region(inLamp, (rec) => lampCentre + lampHalf - 0.085 - rec.w)];
   const grilleHalf = truck ? lampCentre - lampHalf - 0.03 : body.grille === "wide" ? lampCentre - lampHalf - 0.035 : 0.3;
@@ -1112,7 +1180,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   if (!inner) cut(fArch);
   if (inset === 0) {
     cut(fSide);
-    if (detail >= 1) cut(fPillar, 9);
+    // The pillars between the side windows at every level (the far level's
+    // glass ran through them, and lost its B pillar at the hand-over).
+    cut(fPillar, 9);
     cut(fWind, ...(frit ? [0, -frit] : [0]));
     if (frit) cut(fritFoot);
     if (!barn) cut(fRear, ...(rearFrit ? [0, -frit] : [0]));
@@ -1139,6 +1209,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (body.bed === "tonneau") cut(fTonneau);
     if (slot) cut(fBedGap);
     if (detail >= 1) cut(fCowl);
+    // The far level's head lamp lit above its daytime strip's foot, its tail lamp
+    // lit all over: as bright, seen from 45 m, as the near level's strips (its
+    // plain lamps went dim at the hand-over); one cut, not the strips' three.
+    if (detail === 0) cut(fDrlFoot);
     if (detail >= 2) {
       cut(fDrl, 9);
       cut(fTailBar, 9);
@@ -1151,6 +1225,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       for (const fn of lockerLines) line(fn);
       for (const fn of barnLines) line(fn);
       if (service) cut(fLockerRail);
+      // The rear plate's dark pocket (flat at the near level, sunk at the
+      // hero's): without it the plate lost its black frame at the hand-over.
+      if (detail === 2) cut(fPocket);
     }
     if (detail >= 3) {
       cut(fAmber, 9);
@@ -1233,7 +1310,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // millimetres from a ring or a column round a tight corner left a sliver
   // turned over.
   const regionEps = inner ? LINING_SNAP_M : inset > 0 ? REGION_SNAP_M.far : REGION_SNAP_M[levelName];
-  const epsOf = (fn) => (lines.includes(fn) ? EPS : regionEps);
+  // (The arches are cut as closely as the lines at every level: snapped by a
+  // centimetre at the far level, their border ran off the arch's line and
+  // opened a crack beside it into the wheel well.)
+  const epsOf = (fn) => (lines.includes(fn) || fn === fArch ? EPS : regionEps);
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset, eps = EPS) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
@@ -1395,7 +1475,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (slot && R(fBedGap) < 0) return null;
     const side = R(fSide);
     if (side < 0) {
-      if (detail >= 1 && R(fPillar) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
+      if (R(fPillar) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
       // Door glass runs in seals, without a frit band.
       return { part: P.glass, glass: true, frit: false, dark: rec.zf > (body.pillars.b ?? L) };
     }
@@ -1412,16 +1492,16 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const head = R(fHead);
     if (head < 0) {
       if (detail >= 3 && R(fAmber) < 0) return { part: P.lamp_amber, lens: P.head_lamp, lamp: true };
-      if (detail >= 2 && R(fDrl) < 0) return { part: P.lamp_drl, lens: P.head_lamp, lamp: true, proud: true };
+      if (detail >= 2 ? R(fDrl) < 0 : detail === 0 && R(fDrlFoot) > 0) return { part: P.lamp_drl, lens: P.head_lamp, lamp: true, proud: detail >= 2 };
       return { part: detail >= 3 ? P.lamp_housing : P.head_lamp, lens: P.head_lamp, lamp: true };
     }
     const tailLamp = R(fTail);
     if (tailLamp < 0) {
       if (detail >= 3 && R(fReverse) < 0) return { part: P.lamp_white, lens: P.tail_lamp, lamp: true };
-      if (detail >= 2 && R(fTailBar) < 0) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: true };
+      if (detail === 0 || (detail >= 2 && R(fTailBar) < 0)) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: detail >= 2 };
       return { part: P.tail_lamp, lens: P.tail_lamp, lamp: true };
     }
-    if (detail >= 3 && R(fPocket) < 0) return { part: P.trim, ao: 0.7 };
+    if (detail >= 2 && R(fPocket) < 0) return { part: P.trim, ao: 0.7 };
     const grille = R(fGrille);
     if (grille < 0) return { part: detail >= 2 && grille > -0.018 ? (truck || body.grille === "sedan" ? P.chrome : P.gloss_black) : P.grille, ao: grille > -0.018 ? 1 : 0.6 };
     if (detail >= 1 && R(fIntake) < 0) return { part: P.grille, ao: 0.55 };
@@ -1617,6 +1697,121 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const t = clamp(vdot(vsub(far, a), ab) / vdot(ab, ab), 0, 1);
     placeCache.set(entry.tri[(at + 2) % 3], vadd(a, vscale(ab, t)));
   }
+  // Where the surface turns faster than the grid follows (the D pillar's and
+  // the corners' rolls, where cuts leave long thin triangles), an edge is
+  // halved, and both its triangles with it: when the surface's own normal at
+  // its middle differs from the mean of its ends' by more than REFINE.turn
+  // degrees, or the surface stands off its chord by more than REFINE.sag. So
+  // the normals drawn between corners follow the surface, and the reflection
+  // on glossy paint runs smooth instead of crumpling along the slivers.
+  // (The near and hero levels; never along the seam, a groove or a recess.)
+  const refine = REFINE[levelName];
+  if (refine && !inner && inset === 0) {
+    const onSeam = (id) => twins[id] !== null && twins[id] !== undefined;
+    // Round the corners and the ends of the side next to them (where the
+    // pillars, the rolls and the lamps meet), on the wall and on the lid's
+    // rows there; along the side the grid follows the surface well enough.
+    const cornerA = (a) => (a > 0.45 && a < 1 + REFINE_SIDE_A) || (a > 2 - REFINE_SIDE_A && a < 2.55);
+    const inCorner = (id, lidPatch) => {
+      if (!lidPatch) return cornerA(verts[id].a ?? 0);
+      const rf = paramsIn(id, true)[0];
+      const r0 = clamp(Math.floor(rf), 0, NR - 1);
+      return cornerA(lerp(rowA(r0), rowA(r0 + 1), rf - r0));
+    };
+    const sunk = (id) => pressed(verts[id]) > 0 || recessed(verts[id]) > 0;
+    for (let pass = 0; pass < refine.passes; pass += 1) {
+      const mids = new Map();
+      const byEdge = new Map();
+      kept.forEach((entry, index) => {
+        for (let c = 0; c < 3; c += 1) {
+          const i = entry.tri[c];
+          const j = entry.tri[(c + 1) % 3];
+          const key = i < j ? i * 1e7 + j : j * 1e7 + i;
+          if (!byEdge.has(key)) byEdge.set(key, []);
+          byEdge.get(key).push(index);
+        }
+      });
+      for (const [key, users] of byEdge) {
+        const i = Math.floor(key / 1e7);
+        const j = key % 1e7;
+        // An edge along the seam is halved in both patches at once (a seam
+        // vertex and its lid twin); any other edge lies in one patch.
+        const seamEdge = onSeam(i) && onSeam(j);
+        const patches = [...new Set(users.map((u) => kept[u].lidPatch))];
+        if ((!seamEdge && patches.length > 1) || sunk(i) || sunk(j)) continue;
+        // Never a groove or a lit strip (their widths are their look).
+        if (users.some((u) => [P.gap, P.lamp_drl, P.lamp_red].includes(kept[u].kind.part))) continue;
+        // Round the corners; the glass anywhere (its reflection wobbled across a windshield's coarse triangles).
+        const allGlass = users.every((u) => kept[u].kind.glass);
+        if (!allGlass && !patches.some((lidPatch) => inCorner(i, lidPatch) || inCorner(j, lidPatch))) continue;
+        const pi = point(verts[i]);
+        const pj = point(verts[j]);
+        if (vlen(vsub(pi, pj)) < refine.minEdge) continue;
+        let split = false;
+        const recs = {};
+        for (const lidPatch of seamEdge ? [false, true] : patches) {
+          const a = paramsIn(i, lidPatch);
+          const b = paramsIn(j, lidPatch);
+          const rec = recordIn(lidPatch, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2);
+          recs[lidPatch ? "lid" : "wall"] = rec;
+          // The normal drawn at the point of the edge nearest the surface's
+          // middle (the ends' normals, as this patch reads them, blended
+          // there) against the surface's own.
+          const pm = point(rec);
+          const e = vsub(pj, pi);
+          const t = clamp(vdot(vsub(pm, pi), e) / vdot(e, e), 0, 1);
+          const ni = baseNormal(recordIn(lidPatch, ...a));
+          const nj = baseNormal(recordIn(lidPatch, ...b));
+          const drawn = vnorm(vadd(vscale(ni, 1 - t), vscale(nj, t)));
+          const nm = baseNormal(rec);
+          const turn = (Math.acos(clamp(vdot(nm, drawn), -1, 1)) * 180) / Math.PI;
+          const sag = Math.abs(vdot(vsub(pm, vadd(pi, vscale(e, t))), nm));
+          if (turn > refine.turn || sag > refine.sag) split = true;
+        }
+        if (split) mids.set(key, seamEdge ? { rec: recs.wall, twin: recs.lid } : { rec: recs.wall ?? recs.lid, twin: null });
+      }
+      if (mids.size === 0) break;
+      const midId = new Map();
+      for (const [key, { rec, twin }] of mids) midId.set(key, addVertex(rec, twin));
+      const keyOf = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
+      const split = (entry) => {
+        const [v0, v1, v2] = entry.tri;
+        const m = [[v0, v1], [v1, v2], [v2, v0]].map(([i, j]) => midId.get(keyOf(i, j)) ?? null);
+        const count = m.filter((x) => x !== null).length;
+        if (count === 0) return [entry.tri];
+        if (count === 3) return [[v0, m[0], m[2]], [m[0], v1, m[1]], [m[2], m[1], v2], [m[0], m[1], m[2]]];
+        if (count === 1) {
+          const c = m.findIndex((x) => x !== null);
+          const [a, b, o] = [entry.tri[c], entry.tri[(c + 1) % 3], entry.tri[(c + 2) % 3]];
+          return [[a, m[c], o], [m[c], b, o]];
+        }
+        // Two halved: the one left whole is edge c (from a to b, o opposite);
+        // the corner o's two halves meet in a triangle, the rest is a quad cut
+        // along its shorter diagonal.
+        const c = m.findIndex((x) => x === null);
+        const [a, b, o] = [entry.tri[c], entry.tri[(c + 1) % 3], entry.tri[(c + 2) % 3]];
+        const mb = m[(c + 1) % 3];
+        const mo = m[(c + 2) % 3];
+        if (vlen(vsub(point(verts[a]), point(verts[mb]))) <= vlen(vsub(point(verts[b]), point(verts[mo])))) return [[mb, o, mo], [a, b, mb], [a, mb, mo]];
+        return [[mb, o, mo], [a, b, mo], [b, mb, mo]];
+      };
+      // A split whose children would turn over (a tight bend) is not made.
+      for (let tries = 0; tries < 4; tries += 1) {
+        let dropped = 0;
+        for (const entry of kept) {
+          const children = split(entry);
+          if (children.length === 1 || children.every((tri) => facingOf(tri, entry.lidPatch) >= 0)) continue;
+          const t = entry.tri;
+          for (const [i, j] of [[t[0], t[1]], [t[1], t[2]], [t[2], t[0]]]) if (midId.delete(keyOf(i, j))) dropped += 1;
+        }
+        if (dropped === 0) break;
+      }
+      const next = [];
+      for (const entry of kept) for (const tri of split(entry)) next.push(tri === entry.tri ? entry : { tri, kind: entry.kind, lidPatch: entry.lidPatch });
+      kept.length = 0;
+      kept.push(...next);
+    }
+  }
   for (const entry of kept) entry.normals = [0, 1, 2].map((corner) => cornerNormal(entry.tri, corner, entry.lidPatch));
   // Weld each vertex's corner normals that agree within the crease angle.
   const corners = new Map();
@@ -1772,13 +1967,33 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       }
     }
   }
-  // The wheel arches' lips: the cut edge turned in toward the wheel.
+  // The wheel arches' lips: the cut edge turned in toward the wheel. Every
+  // edge of the shell's open border round an arch has one: the border runs a
+  // few millimetres off the arch's line where another cut passes close by (a
+  // shut line, the sill's), and a lip only on the edges exactly on it left
+  // gaps that showed the black liner behind, white and black stripes.
   if (!inner && inset === 0) {
     const lipDepth = 0.035;
-    for (const [i, j, part] of edgeOwner.values()) {
+    const uses = new Map();
+    for (const { tri } of kept) {
+      for (let c = 0; c < 3; c += 1) {
+        const i = tri[c];
+        const j = tri[(c + 1) % 3];
+        const key = i < j ? i * 1e7 + j : j * 1e7 + i;
+        uses.set(key, (uses.get(key) ?? 0) + 1);
+      }
+    }
+    // (Exactly on the line at the far level, whose coarse liner lies too close
+    // behind the arch's edge for a lip off the line.)
+    const reach = detail === 0 ? 1e-4 : LIP_REACH_M;
+    const onArch = (rec) => rec.wall && Math.abs(fArch(rec)) < reach;
+    for (const [key, [i, j, part]] of edgeOwner) {
       const a = verts[i];
       const b = verts[j];
-      if (!a.wall || !b.wall || Math.abs(fArch(a)) > 1e-4 || Math.abs(fArch(b)) > 1e-4) continue;
+      if (uses.get(key) !== 1 || !onArch(a) || !onArch(b)) continue;
+      // Along the arch, not across it (the wall's foot by the arch's ends).
+      const da = archDistance(a) - archDistance(b);
+      if (Math.abs(da) > 0.7 * Math.hypot(a.zf - b.zf, a.y - b.y)) continue;
       const lip = (rec) => {
         const axle = Math.abs(rec.zf - axles[0]) < Math.abs(rec.zf - axles[1]) ? axles[0] : axles[1];
         return vnorm(v3(0, R - rec.y, axle - rec.zf));
@@ -1789,8 +2004,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       const qb = vadd(pb, v3(-lipDepth, 0, 0));
       const na = lip(a);
       const nb = lip(b);
-      body3.face(pa, pb, qb, na, nb, nb, part === P.trim ? P.trim : P.paint, 0.7, 0.7, 0.45);
-      body3.face(pa, qb, qa, na, nb, na, part === P.trim ? P.trim : P.paint, 0.7, 0.45, 0.45);
+      // Wound against the shell's own edge (written j to i), so the two meet
+      // as one surface; where that faces away from the wheel, the border is
+      // not the arch's opening (a service body's foot beside it): no lip.
+      if (vdot(vcross(vsub(pb, pa), vsub(qb, pa)), vadd(na, nb)) <= 0) continue;
+      body3.triangle(pa, pb, qb, [na, nb, nb], part === P.trim ? P.trim : P.paint, [0.7, 0.7, 0.45]);
+      body3.triangle(pa, qb, qa, [na, nb, na], part === P.trim ? P.trim : P.paint, [0.7, 0.45, 0.45]);
     }
   }
   // Where a head lamp's two projectors sit: the surface point and normal at a place along the lamp.
@@ -1980,6 +2199,13 @@ function rightHalfFittings(out, name, detail) {
       normals.push([vscale(out3, -1), vscale(out3, -1)]);
     }
     out.grid(rows, normals, P.under, (i, j) => (j === 0 ? 0.45 : 0.25));
+    // Its two ends down to the floor faced from behind too (dark): seen in
+    // under a bumper, their culled backs left a crack through the well.
+    // (A millimetre behind the liner, so neither ever hides the other.)
+    const back = (i) => [vscale(normals[i][0], -1), vscale(normals[i][1], -1)];
+    const behind = (i) => rows[i].map((p, k) => vadd(p, vscale(back(i)[k], 0.001)));
+    out.grid([behind(0), behind(1)], [back(0), back(1)], P.under, 0.25);
+    out.grid([behind(sides - 1), behind(sides)], [back(sides - 1), back(sides)], P.under, 0.25);
     const n = v3(1, 0, 0);
     // The wall stands on the floor (never below the sills, where it would show as a flap).
     const floorY = underFloorY(body, detail);
@@ -1996,9 +2222,19 @@ function rightHalfFittings(out, name, detail) {
       out.roundedBox(centre, [(reach - inner) / 2, 0.06, 0.05], 0.026, (k, sign) => (k === 2 && sign > 0 ? P.mirror : P.paint), { taper: [1, 0, 0.72] });
       out.roundedBox(v3(W - 0.06, belt + 0.03, zOf(zf + 0.005)), [0.05, 0.02, 0.035], 0.015, P.gloss_black);
     } else {
-      out.box(centre, [(reach - inner) / 2, 0.055, 0.042], (face) => (face === "+z" ? P.glass : P.paint));
+      // Its glass a mirror, as the hero level's (dark glass, the housing
+      // turned black at the hand-over from behind).
+      out.box(centre, [(reach - inner) / 2, 0.055, 0.042], (face) => (face === "+z" ? P.mirror : P.paint));
       out.box(v3(W - 0.06, belt + 0.025, zOf(zf + 0.01)), [0.05, 0.02, 0.035], P.trim);
     }
+  } else {
+    // The far level's mirror: the housing alone (without it the car lost its
+    // mirrors at the hand-over from the near level, 7 px across at 45 m).
+    const zf = cab.windshield_base + 0.3;
+    const belt = shape.top(zf);
+    const reach = W + MIRROR_REACH_M;
+    const inner = W - 0.03;
+    out.box(v3((inner + reach) / 2, belt + 0.075, zOf(zf)), [(reach - inner) / 2, 0.055, 0.042], (face) => (face === "+z" ? P.mirror : P.paint));
   }
   if (body.roof_rails && detail >= 1) {
     // Roof rail: a bar standing off the roof on feet, its top the car's height.
@@ -2033,7 +2269,18 @@ function rightHalfFittings(out, name, detail) {
       }
     }
   }
-  if (body.bed === "tonneau" && detail >= 2) out.box(v3(W - 0.07, shape.top(4.85) + 0.012, zOf(4.85)), [0.035, 0.012, 0.98], P.trim);
+  if (body.bed === "tonneau" && detail >= 2) {
+    // The bed's side rail cap, along the top of the bed's side from the deck's
+    // start to where the tail's corner begins: run on to the tail (as it was),
+    // it stood out over the rounded corner as a black ear.
+    const x = W - 0.07;
+    const z0 = body.deck[0][0] + 0.01;
+    const z1 = L - body.tail.corner - 0.02;
+    const a = v3(x, shape.top(z0) + 0.012, zOf(z0));
+    const b = v3(x, shape.top(z1) + 0.012, zOf(z1));
+    const along = vnorm(vsub(b, a));
+    out.box(vscale(vadd(a, b), 0.5), [0.035, 0.012, vlen(vsub(b, a)) / 2], P.trim, [v3(1, 0, 0), vnorm(vcross(along, v3(1, 0, 0))), along]);
+  }
 }
 
 // Parts on the centre line or on one side only: wipers, antenna fin, the closed underside.
@@ -2237,7 +2484,7 @@ export function buildCarParts(name, levelName) {
     buildUnderbody(chassis, body, shell.shape);
     result = { body: chassis, glass, wheel: buildWheel(body, "hero"), brake: buildBrake(body), driver };
   } else {
-    const wheel = buildWheel(body, level.wheel);
+    const wheel = buildWheel(body, shadow ? "shadow" : level.wheel);
     const car = new CarMesh();
     car.append(chassis);
     // The shadow caster's wheels are thinner and a little smaller, so they

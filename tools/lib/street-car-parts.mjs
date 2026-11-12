@@ -260,6 +260,8 @@ export const WHEEL_LEVELS = Object.freeze({
   near: { sides: 20, section: 7, spokeSeg: 2, spokeSection: 4, lugs: false, barrel: false },
   mid: { sides: 16, section: 7, spokeSeg: 1, spokeSection: 2, lugs: false, barrel: false },
   far: { sides: 12, section: 0, spokeSeg: 0, spokeSection: 0, lugs: false, barrel: false },
+  // The shadow caster's: the far level's tyre with a plain disc (spokes cast nothing seen).
+  shadow: { sides: 12, section: 0, spokeSeg: 0, spokeSection: 0, lugs: false, barrel: false, plain: true },
 });
 
 export const rimRadius = (body) => body.wheel_radius * 0.66;
@@ -280,9 +282,27 @@ export function buildWheel(body, levelName) {
   const o = v3(0, 0, 0);
   const sides = level.sides;
   if (level.section === 0) {
-    // Far: tread, outer sidewall, a plain rim disc and a dark back.
-    out.revolve(o, X, [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]], sides, (i) => P.tire);
-    out.revolve(o, X, [[rimR, tw / 2], [rimR * 0.3, tw / 2 - 0.03], [0, tw / 2 - 0.03]], sides, (i) => (i === 0 ? P.rim : P.hub));
+    // Far: tread, outer sidewall, the rim's lip, five flat spokes over a dark
+    // dish and a dark back. A plain pale rim disc read as a white button with
+    // a black dot beside the near level's spoked wheel at the hand-over.
+    const face = tw / 2;
+    const lipR = rimR * 0.86;
+    out.revolve(o, X, [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]], sides, () => P.tire);
+    if (level.plain) {
+      out.revolve(o, X, [[rimR, face], [0, face - 0.03]], sides, () => P.hub);
+      out.revolve(o, X, [[0, -tw / 2], [R, -tw / 2]], sides, () => P.hub);
+      return out;
+    }
+    out.revolve(o, X, [[rimR, face], [lipR, face - 0.008]], sides, () => P.rim);
+    out.revolve(o, X, [[lipR, face - 0.008], [0, face - 0.03]], sides, () => P.hub);
+    const radial = (angle) => v3(0, -Math.sin(angle), Math.cos(angle));
+    const tangent = (angle) => v3(0, -Math.cos(angle), -Math.sin(angle));
+    for (let k = 0; k < 5; k += 1) {
+      const angle = (2 * Math.PI * k) / 5 + Math.PI / 2;
+      const at = (r, w) => vadd(vadd(vscale(radial(angle), r), vscale(tangent(angle), w)), vscale(X, face - 0.006));
+      out.flat(at(0.05, -0.024), at(0.05, 0.024), at(lipR + 0.004, 0.018), at(lipR + 0.004, -0.018), X, P.rim);
+    }
+    out.revolve(o, X, [[0.06, face - 0.005], [0, face - 0.003]], 6, () => P.rim);
     out.revolve(o, X, [[0, -tw / 2], [R, -tw / 2]], sides, () => P.hub);
     return out;
   }
