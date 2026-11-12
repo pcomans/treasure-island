@@ -13,7 +13,7 @@ extends SceneTree
 ##     a folder never covers those inside it), and every folder it names is there;
 ##   - every licence text an entry shows ships with the game: each export preset's
 ##     include_filter lists it;
-##   - the pause menu's Credits button, between Controls and Exit, opens the credits
+##   - the pause menu's Credits button, between Options and Exit, opens the credits
 ##     screen in the menu's place. It shows every entry (title, credit, licence,
 ##     link, use) and, behind Licences, each licence text an entry ships, the
 ##     engine's own licence, every component's copyright holders and every licence
@@ -100,7 +100,7 @@ func _run() -> void:
 			return _finish()
 	if not _require(_scrolled.has("upright: the list") and _scrolled.has("desktop: the Licences"), "Too little to scroll: the list must outrun an upright phone's view and the Licences the desktop's (scrolled: %s)." % [_scrolled]):
 		return _finish()
-	print("PASS: credits: %s lists %d entries and covers %d folders (%s); its licence texts ship in every export; the pause menu's Credits (between Controls and Exit) opens them in its place and Back returns a step at a time; Licences shows the licence texts the game ships, the engine's licence, %d components and %d licence texts, and leaving frees them; keys alone work it; keys, the wheel and a finger scroll it (%s); the loading screen shows OSM's credit; it fits the desktop frame and an iPhone upright and sideways, thumb-sized on touch" % [GameHUD.CREDITS_PATH, entries.size(), declared.size(), ", ".join(PackedStringArray(declared.keys())), Engine.get_copyright_info().size(), Engine.get_license_info().size(), ", ".join(PackedStringArray(_scrolled))])
+	print("PASS: credits: %s lists %d entries and covers %d folders (%s); its licence texts ship in every export; the pause menu's Credits (between Options and Exit) opens them in its place and Back returns a step at a time; Licences shows the licence texts the game ships, the engine's licence, %d components and %d licence texts, and leaving frees them; keys alone work it; keys, the wheel and a finger scroll it (%s); the loading screen shows OSM's credit; it fits the desktop frame and an iPhone upright and sideways, thumb-sized on touch" % [GameHUD.CREDITS_PATH, entries.size(), declared.size(), ", ".join(PackedStringArray(declared.keys())), Engine.get_copyright_info().size(), Engine.get_license_info().size(), ", ".join(PackedStringArray(_scrolled))])
 	_finish()
 
 
@@ -241,7 +241,7 @@ func _check_screen(entries: Array, shape: String) -> bool:
 	for child: Node in hud.pause_box.get_node("PauseLayout").get_children():
 		if child is Button:
 			order.append(child.name)
-	if not _require(order == PackedStringArray(["ResumeButton", "ControlsButton", "CreditsButton", "ExitButton"]) and hud.credits_button.text == "Credits" and hud.pause_panel.visible, "%s: the pause menu must read Resume, Controls, Credits, Exit (it has %s)." % [shape, order]):
+	if not _require(order == PackedStringArray(["ResumeButton", "ControlsButton", "OptionsButton", "CreditsButton", "ExitButton"]) and hud.credits_button.text == "Credits" and hud.pause_panel.visible, "%s: the pause menu must read Resume, Controls, Options, Credits, Exit (it has %s)." % [shape, order]):
 		return false
 	hud.credits_button.pressed.emit()
 	await _frames(2)

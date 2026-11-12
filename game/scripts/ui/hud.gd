@@ -3,6 +3,8 @@ extends Control
 
 signal resume_requested
 signal exit_requested
+## A shadow level chosen on the options screen (main.gd puts it on and keeps it).
+signal shadow_quality_chosen(id: String)
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -29,6 +31,8 @@ const CREDITS_FINE_PRINT_PX := 14
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
 const CREDITS_LICENCE_HEADING_PX := 44.0
+## The options screen's shadow level buttons are at least this wide (px).
+const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
@@ -40,6 +44,7 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var pause_box: PanelContainer = $PausePanel/Center/Box
 @onready var resume_button: Button = $PausePanel/Center/Box/PauseLayout/ResumeButton
 @onready var controls_button: Button = $PausePanel/Center/Box/PauseLayout/ControlsButton
+@onready var options_button: Button = $PausePanel/Center/Box/PauseLayout/OptionsButton
 @onready var credits_button: Button = $PausePanel/Center/Box/PauseLayout/CreditsButton
 @onready var exit_button: Button = $PausePanel/Center/Box/PauseLayout/ExitButton
 ## The controls screen, opened from the pause menu or the loading screen: a
@@ -47,6 +52,15 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var controls_screen: Control = $ControlsScreen
 @onready var controls_sections: VBoxContainer = $ControlsScreen/Center/ControlsPanel/ControlsLayout/Sections
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
+## The options screen, opened from the pause menu: the sun's shadow quality, a
+## button for each level main.gd offers here (set_shadow_levels), the level on
+## pressed and its note under them. A solid panel over the dimmed game, which shows
+## a change at once.
+@onready var options_screen: Control = $OptionsScreen
+@onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
+@onready var shadow_levels: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowLevels
+@onready var shadow_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowNote
+@onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
 ## behind its Licences button, the licence texts that ship with the game and the
 ## engine's own licence and notices. A solid panel over the dimmed game, like the
@@ -84,6 +98,8 @@ var _credits_finger := -1
 ## The licence texts the list's entries ship (their licence_file), as [title, text],
 ## for the Licences view.
 var _licence_files: Array = []
+## The shadow level buttons: one pressed at a time.
+var _shadow_group := ButtonGroup.new()
 
 
 func _ready() -> void:
@@ -93,6 +109,8 @@ func _ready() -> void:
 	controls_button.pressed.connect(show_controls)
 	load_controls_button.pressed.connect(show_controls)
 	back_button.pressed.connect(hide_controls)
+	options_button.pressed.connect(show_options)
+	options_back_button.pressed.connect(hide_options)
 	credits_button.pressed.connect(show_credits)
 	credits_licences_button.pressed.connect(show_licences)
 	credits_back_button.pressed.connect(credits_back)
@@ -103,6 +121,7 @@ func _ready() -> void:
 	feedback_panel.hide()
 	pause_panel.hide()
 	controls_screen.hide()
+	options_screen.hide()
 	credits_screen.hide()
 	debug_panel.hide()
 	prompt_panel.hide()
@@ -175,12 +194,13 @@ func set_prompt(text: String) -> void:
 
 ## The pause menu, in place of play's prompt. A controls screen opened from the
 ## loading screen stays over the pause (main.gd), and the menu shows when it closes;
-## so does an open credits screen when the game pauses again (a lost focus).
+## so does an open options or credits screen when the game pauses again (a lost focus).
 func set_paused(paused: bool) -> void:
 	_paused = paused
-	pause_panel.visible = paused and not controls_screen.visible and not credits_screen.visible
+	pause_panel.visible = paused and not controls_screen.visible and not options_screen.visible and not credits_screen.visible
 	if not paused:
 		controls_screen.hide()
+		options_screen.hide()
 		if credits_licences.visible:
 			_show_credits_view(false)
 		credits_screen.hide()
@@ -206,6 +226,61 @@ func hide_controls() -> void:
 
 func controls_visible() -> bool:
 	return controls_screen.visible
+
+
+## Shows the options screen in place of the pause menu, the level on now focused;
+## Back, or Esc (main.gd), returns.
+func show_options() -> void:
+	pause_panel.hide()
+	options_screen.show()
+	var on := _shadow_group.get_pressed_button()
+	(on if on != null else options_back_button).grab_focus()
+
+
+func hide_options() -> void:
+	options_screen.hide()
+	if _paused:
+		pause_panel.show()
+		options_button.grab_focus()
+
+
+func options_visible() -> bool:
+	return options_screen.visible
+
+
+## The shadow levels to offer, as ShadowQuality.offered() gives them, with the one
+## on now pressed. Pressing another asks main.gd to put it on (shadow_quality_chosen).
+## With no choice to make the pause menu has no Options.
+func set_shadow_levels(levels: Array, current: String) -> void:
+	for child: Node in shadow_levels.get_children():
+		shadow_levels.remove_child(child)
+		child.queue_free()
+	for level: Dictionary in levels:
+		var id := str(level.id)
+		var button := Button.new()
+		button.name = id
+		button.text = str(level.name)
+		button.toggle_mode = true
+		button.button_group = _shadow_group
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size = Vector2(OPTIONS_LEVEL_MIN_WIDTH_PX, 64.0 if _touch else 40.0)
+		button.set_meta("note", str(level.note))
+		button.toggled.connect(func(on: bool) -> void:
+			if on:
+				shadow_quality_chosen.emit(id))
+		shadow_levels.add_child(button)
+	options_button.visible = levels.size() > 1
+	show_shadow_level(current)
+
+
+## Shows the level on now: its button pressed (without asking for it again) and its
+## note.
+func show_shadow_level(id: String) -> void:
+	var button := shadow_levels.get_node_or_null(id) as Button
+	if button == null:
+		return
+	button.set_pressed_no_signal(true)
+	shadow_note.text = str(button.get_meta("note"))
 
 
 ## Shows the credits screen in place of the pause menu, at the top of its list.
@@ -539,8 +614,10 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Button in [resume_button, controls_button, credits_button, exit_button, back_button, load_controls_button, credits_licences_button, credits_back_button]:
+	for button: Button in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button]:
 		button.custom_minimum_size.y = 64.0
+	for button: Node in shadow_levels.get_children():
+		(button as Button).custom_minimum_size.y = 64.0
 	pause_box.custom_minimum_size.x = 420.0
 	_fill_credits()
 	_fit_credits()

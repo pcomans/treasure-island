@@ -15,9 +15,15 @@ const WATER_CAMERA_REACH_M := 2000.0
 const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
 ## The vehicle contract's places: its ball case drives along the full-size pitch.
 const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
+## Where this run keeps the shadow level its options check chooses.
+const OPTIONS_SETTINGS_PATH := "user://test-gameplay-contract-%d.cfg"
 
 
 func _initialize() -> void:
+	# The options check chooses a shadow level, which the game keeps: in a file of
+	# this run's own, never the shared user folder's.
+	ShadowQuality.settings_path = OPTIONS_SETTINGS_PATH % OS.get_process_id()
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	for action: String in REQUIRED_ACTIONS:
 		if not InputMap.has_action(action):
 			_fail("Missing input action: %s" % action)
@@ -317,11 +323,15 @@ func _check_ferry_solidity() -> void:
 	var credits := await _check_credits_screen(main)
 	if credits.is_empty():
 		return
+	var options := await _check_options_screen(main)
+	if options.is_empty():
+		return
 	var prompt := await _check_prompt_beside_car(main, world)
 	if prompt.is_empty():
 		return
 	main.queue_free()
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, prompt])
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, prompt])
 	quit(0)
 
 
@@ -510,6 +520,66 @@ func _check_credits_screen(main: GameMain) -> String:
 		_fail("After Resume from the credits, away from any car, the prompt \"%s\" shows." % hud.prompt_text.text)
 		return ""
 	return "frozen through the list and the Licences, Esc back to the %s, Back and Resume" % " then ".join(steps)
+
+
+## The options screen (owner, 2026-11-12) in the loaded game. With the ball rolling,
+## Esc pauses and the pause menu's Options opens the shadow levels in its place,
+## the game frozen (the clock at 0, the world, player, sky and cars stopped, the
+## ball still). A level chosen there goes on at once, still paused, and is kept;
+## Esc goes back to the pause menu, still paused, and Resume plays on with the
+## clock back, the ball rolling on and the level still on. Medium is put back after.
+## Returns a summary, or "" after failing.
+func _check_options_screen(main: GameMain) -> String:
+	var hud := main.hud
+	var sun := main.get_node("Sun") as DirectionalLight3D
+	var ball: SoccerBall = get_nodes_in_group(SoccerBall.GROUP)[0]
+	var scale := Engine.time_scale
+	if main.shadows.current != ShadowQuality.default_id():
+		_fail("Before the options check the game must have the default shadows, not %s." % main.shadows.current)
+		return ""
+	for _tick in 10:
+		await physics_frame
+	ball.sleeping = false
+	ball.linear_velocity = Vector3(-4.0, 0.0, 0.0)
+	for _tick in 5:
+		await physics_frame
+	await process_frame
+	_push_key(KEY_ESCAPE)
+	hud.options_button.pressed.emit()
+	var rolled_to := ball.global_position
+	var moving := [main.get_node("WorldRoot"), main.get_node("Player"), main.get_node("WorldEnvironment"), main.vehicles]
+	if not paused or Engine.time_scale != 0.0 or not hud.options_visible() or hud.pause_panel.visible or not hud.options_screen.can_process() \
+	or moving.any(func(node: Node) -> bool: return node.can_process()):
+		_fail("The pause menu's Options must show the shadow levels in the menu's place with the game frozen (paused %s, time scale %s, options %s, pause menu %s)." % [paused, Engine.time_scale, hud.options_visible(), hud.pause_panel.visible])
+		return ""
+	(hud.shadow_levels.get_node("high") as Button).button_pressed = true
+	var file := ConfigFile.new()
+	file.load(ShadowQuality.settings_path)
+	if main.shadows.current != "high" or str(file.get_value(ShadowQuality.SECTION, ShadowQuality.KEY, "")) != "high" or not paused:
+		_fail("Choosing High on the options screen must put it on at once, still paused, and keep it (on: %s, kept: %s, paused %s)." % [main.shadows.current, file.get_value(ShadowQuality.SECTION, ShadowQuality.KEY, ""), paused])
+		return ""
+	for _tick in 60:
+		await physics_frame
+	if ball.global_position != rolled_to or not paused or Engine.time_scale != 0.0:
+		_fail("With the options open the ball moved from %s to %s (paused %s, time scale %s)." % [rolled_to, ball.global_position, paused, Engine.time_scale])
+		return ""
+	await process_frame
+	_push_key(KEY_ESCAPE)
+	if hud.options_visible() or not hud.pause_panel.visible or not paused:
+		_fail("Esc on the options screen must go back to the pause menu, still paused.")
+		return ""
+	hud.resume_button.pressed.emit()
+	await process_frame
+	if paused or Engine.time_scale != scale or hud.options_visible() or hud.pause_panel.visible or main.shadows.current != "high" or not sun.shadow_enabled:
+		_fail("Resume after the options did not play on with the clock at %s and High still on (paused %s, time scale %s, on: %s)." % [scale, paused, Engine.time_scale, main.shadows.current])
+		return ""
+	for _tick in 10:
+		await physics_frame
+	if ball.global_position.distance_to(rolled_to) < 0.05:
+		_fail("After Resume the ball did not roll on from %s." % rolled_to)
+		return ""
+	main._on_shadow_quality_chosen("medium")
+	return "frozen while open, High on at once and kept, Esc back to the pause menu, Resume with High still on"
 
 
 ## Every line the controls screen shows, headings and rows.
@@ -1078,4 +1148,5 @@ func _without_comments(code: String) -> String:
 
 func _fail(message: String) -> void:
 	push_error(message)
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	quit(1)

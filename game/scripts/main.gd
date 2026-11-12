@@ -36,6 +36,12 @@ var _pause_later := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
+## The sun's shadow quality (the pause menu's Options), put on as the game starts.
+var shadows: ShadowQuality
+## Startup puts on the shadow level kept from the last run; the shared capture
+## harness turns this off, so its captures always have the default (a player's
+## choice is a global engine setting that would reach its neutral sun too).
+var use_saved_settings := true
 
 
 func _init() -> void:
@@ -56,12 +62,16 @@ func _ready() -> void:
 	clock.name = "PauseClock"
 	clock.process_mode = Node.PROCESS_MODE_PAUSABLE
 	add_child(clock)
+	# The web's default level is Off: the complete island without distant shadow
+	# passes in WebGL (ShadowQuality).
+	shadows = ShadowQuality.new($Sun)
+	shadows.apply(ShadowQuality.saved_id() if use_saved_settings else ShadowQuality.default_id())
+	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
+	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere).
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
-		# Keep the complete island while avoiding distant shadow passes in WebGL.
-		$Sun.shadow_enabled = false
 		get_viewport().scaling_3d_scale = 0.75
 		get_viewport().msaa_3d = Viewport.MSAA_2X
 		print("WEB_RENDER msaa_3d=%d scale=%.2f" % [get_viewport().msaa_3d, get_viewport().scaling_3d_scale])
@@ -130,6 +140,11 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("pause") and hud.controls_visible():
 		# Esc on the controls screen goes back: to the pause menu, or the loading screen.
 		hud.hide_controls()
+		get_viewport().set_input_as_handled()
+		return
+	if event.is_action_pressed("pause") and hud.options_visible():
+		# Esc on the options screen goes back to the pause menu.
+		hud.hide_options()
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("pause") and hud.credits_visible():
@@ -334,6 +349,13 @@ func _set_paused(paused: bool) -> void:
 		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
 
 
+## A shadow level chosen on the options screen: on at once, and kept for next time.
+func _on_shadow_quality_chosen(id: String) -> void:
+	shadows.apply(id)
+	ShadowQuality.save_id(shadows.current)
+	hud.show_shadow_level(shadows.current)
+
+
 func _set_paused_later() -> void:
 	_set_paused(_pause_later)
 
@@ -447,10 +469,25 @@ func _publish_web_state(_args: Array) -> void:
 		"credits_button": [hud.credits_button.get_global_rect().get_center().x, hud.credits_button.get_global_rect().get_center().y],
 		"credits_licences_button": [hud.credits_licences_button.get_global_rect().get_center().x, hud.credits_licences_button.get_global_rect().get_center().y],
 		"credits_back_button": [hud.credits_back_button.get_global_rect().get_center().x, hud.credits_back_button.get_global_rect().get_center().y],
+		# The options screen (open or not), the shadow level on, and the buttons
+		# that open it and choose each level.
+		"options": hud.options_visible(),
+		"shadow_quality": shadows.current,
+		"sun_shadows": ($Sun as DirectionalLight3D).shadow_enabled,
+		"options_button": [hud.options_button.get_global_rect().get_center().x, hud.options_button.get_global_rect().get_center().y],
+		"shadow_level_buttons": _shadow_level_buttons(),
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
+
+
+func _shadow_level_buttons() -> Dictionary:
+	var at := {}
+	for button: Node in hud.shadow_levels.get_children():
+		var middle := (button as Control).get_global_rect().get_center()
+		at[str(button.name)] = [middle.x, middle.y]
+	return at
 
 
 func _ball_state() -> Dictionary:

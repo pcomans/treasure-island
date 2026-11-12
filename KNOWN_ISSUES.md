@@ -164,6 +164,13 @@ Non-blocking notes from the reviews:
 - The plants' nominal heights are kept twice, in the street-vegetation kit and its Node mirror (`STREET_VEGETATION_PROPS`); the game checks that they agree only at load.
 - The Point of Infinity draws its true geometry, so from Treasure Island its upper reach is fainter than a pixel (the owner's choice, 2026-11-08).
 
+## Shadow quality option (`game/scripts/settings/shadow_quality.gd`, 2026-11-12)
+
+- Medium, the default, keeps the shadows as they were, the barricades' beaded edges included (below). High resolves them near the player: on the dev machine's Radeon 780M, Forward+ at 1440 x 900, its median GPU time per frame was 1.4 to 3.8 ms over Medium at five fixed views. Not measured on the Mac.
+- Low shows striped acne along kerb faces and rough edges: it is the cheapest level, for a slow machine.
+- The web build keeps its sun shadows off and offers no levels. In the Compatibility renderer (native, on the dev machine) turning them on also brightened every sunlit surface by about 40% (road 88 to 123 in sRGB) while Forward+ stayed the same, which looks like the shadowed sun drawn on top of the unshadowed one. The cause in the engine is not established.
+- A level's shadow map size and soft-shadow filter are engine-wide, so they also reach building_shots.gd's neutral light; the shared capture harness always takes the default (`main.use_saved_settings = false`).
+
 ## Causeway join and token closure (`tools/lib/ybi-context-generation.mjs`, the `road_closure_barricade` prop, 2026-11-08)
 
 All four were seen in the visual review (2026-11-08) and left as non-blocking:
