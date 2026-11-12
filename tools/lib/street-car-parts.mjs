@@ -418,9 +418,13 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   const cab = body.cabin;
   const zOf = (zf) => zf - L / 2;
   const at = (x, y, zf) => v3(x, y, zOf(zf));
-  const floor = body.clearance + 0.14;
   const belt = shape.top(cab.windshield_base + 0.6);
   const cowl = shape.top(cab.windshield_base);
+  // High enough that the seat's cushion is at most 0.4 m under the belt and
+  // 0.32 m under the cowl, so the driver (car_driver.gd: eyes 0.52 m over the
+  // cushion) shows over the door and the windshield's foot (a pickup's, a
+  // utility's or a van's high cab).
+  const floor = Math.max(body.clearance + 0.14, belt - 0.735, cowl - 0.655);
   const inner = W - 0.14;
   const rows = body.pillars.cargo_from ? 1 : 2;
   const cabinEnd = body.pillars.cargo_from ? body.pillars.cargo_from : cab.rear_base - 0.12;
@@ -429,9 +433,14 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   const up = Y;
   out.flat(at(-inner, floor, dashZ), at(-inner, floor, cabinEnd), at(inner, floor, cabinEnd), at(inner, floor, dashZ), up, P.cabin, 0.5);
   if (body.pillars.cargo_from || body.bed) {
+    // Up to just under the roof all the way across, so nothing past it shows
+    // over its top and no corner of it pokes out through a cab's roof rail.
     const n = v3(0, 0, -1);
-    const top = body.cabin.roof - 0.1;
-    out.flat(at(-inner, floor, cabinEnd), at(-inner, top, cabinEnd), at(inner, top, cabinEnd), at(inner, floor, cabinEnd), n, P.cabin, 0.5);
+    const xs = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1].map((t) => t * inner);
+    const topAt = (x) => shape.lid(Math.abs(x), cabinEnd).y - 0.02;
+    for (let i = 0; i < xs.length - 1; i += 1) {
+      out.flat(at(xs[i], floor, cabinEnd), at(xs[i], topAt(xs[i]), cabinEnd), at(xs[i + 1], topAt(xs[i + 1]), cabinEnd), at(xs[i + 1], floor, cabinEnd), n, P.cabin, 0.5);
+    }
   }
   // Dashboard: a section swept across the car, its top under the windshield.
   const dashTop = Math.min(cowl - 0.02, belt - 0.02);

@@ -507,7 +507,25 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     return (lo + hi) / 2;
   };
   const keys = [shape.peakZ, cab.windshield_base, cab.windshield_top, cab.roof_end, cab.rear_base];
-  if (detail >= 2) keys.push(cab.windshield_base - 0.07, cab.rear_base + 0.04, cab.roof_end + 0.04);
+  // Rows on the cowl's, the deck's and the roof's back edges themselves (fCowl;
+  // the deck line's start; fRoof and fRear), so their cuts run along a row
+  // instead of a few millimetres beside one.
+  const roofBack = cab.roof_end + Math.min(0.035, 0.2 * (cab.rear_base - cab.roof_end));
+  // The hood's shut line ends on the row whose shoulder turns from the hood's
+  // roll to the side glass's (zeta 0.6), so its end runs along that row.
+  let hoodEndA = 1;
+  {
+    let lo = 1;
+    let hi = sideStation(cab.windshield_base + 0.06);
+    for (let i = 0; i < 40; i += 1) {
+      const mid = (lo + hi) / 2;
+      if (wall(mid, 1).st.zeta < 0.6) lo = mid;
+      else hi = mid;
+    }
+    hoodEndA = (lo + hi) / 2;
+  }
+  const hoodEndZq = rowZq(hoodEndA);
+  if (detail >= 2) keys.push(cab.windshield_base - 0.065, cab.rear_base + 0.05, roofBack, hoodEndZq);
   const steps = Math.max(2, Math.ceil((sideTo - sideFrom) / level.step));
   const regular = [];
   for (let i = 1; i < steps; i += 1) regular.push(1 + i / steps);
@@ -624,10 +642,14 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const known = found.filter(([, xi]) => xi !== null).map(([, xi]) => xi).sort((p, q) => p - q);
     if (known.length > 0) {
       const median = known[Math.floor(known.length / 2)];
-      // The column whose share along a side row is nearest the crease's.
+      // The column whose share along a side row is nearest the crease's; never
+      // the first, so the side glass between the belt and the rail keeps a
+      // column of its own: its outline is only cut where a column inside it
+      // meets one outside (with a long hood and deck, most rows' creases lie
+      // close to the shoulder, and the glass was once a single painted strip).
       const sideRow = Math.floor(NR / 2);
-      let cr = 1;
-      for (let c = 1; c < C; c += 1) if (Math.abs(columnTable[sideRow][c] - median) < Math.abs(columnTable[sideRow][cr] - median)) cr = c;
+      let cr = Math.min(2, C - 1);
+      for (let c = cr; c < C; c += 1) if (Math.abs(columnTable[sideRow][c] - median) < Math.abs(columnTable[sideRow][cr] - median)) cr = c;
       for (const [r, xi] of found) {
         if (xi === null) continue;
         const table = columnTable[r];
@@ -781,6 +803,20 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const onSide = (rec) => rec.wall && rec.e <= 0.3;
   const seams = doorSeams(body);
   const gapHalf = detail >= 3 ? 0.0035 : 0.006;
+  // How close to an outline a vertex counts as on it (the cuts' snap), and so
+  // how far past a groove line's end its domain reaches: a vertex snapped onto
+  // the end must still read the line, or the triangles round it go uncut.
+  const SNAP_M = 1.5e-3;
+  // A groove line's ends: cut along each beside the line first (pre-cuts, read
+  // across the end), so no triangle reaches past an end uncut and turns into a
+  // dark wedge of groove. near: within LINE_END_NEAR_M of the line (wider than
+  // a triangle, or one reaching past it is never cut); across: the end's
+  // function, zero on it.
+  const LINE_END_NEAR_M = 0.25;
+  const lineEnds = (fn, near, ...across) => {
+    fn.pre = [...(fn.pre ?? []), ...across.map((end) => region(near, end))];
+    return fn;
+  };
   // Where the side glass ends: a van's cab door, a pickup's cab back less its
   // corner pillar, otherwise a real C or D pillar's width ahead of the rear
   // glass, so the roof never floats on glass that wraps round the corner.
@@ -801,23 +837,45 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   });
   fPillar.pre = pillarEdges.map((zf) => region(nearSideGlass, (rec) => rec.zf - zf));
   const fWind = region(onLid, (rec) => max3(cab.windshield_base + 0.06 - rec.zq, rec.zq - (cab.windshield_top - 0.035), rec.k + 0.016 - rec.g, 0.03));
-  // The windshield's deeper frit band along its foot.
-  const fritFoot = region((rec) => !rec.wall && fWind.fn(rec) < 0.02, (rec) => rec.zq - (cab.windshield_base + 0.12));
+  // The windshield's deeper frit band along its foot: about 7 cm up the glass
+  // from where the glass starts (wb + 0.06), however steep it stands (a van's
+  // would otherwise rise past a driver's eyes seen from in front).
+  const windshieldSlope = (shape.roofLine(cab.windshield_top) - shape.cowl) / (cab.windshield_top - cab.windshield_base);
+  const fritFoot = region((rec) => !rec.wall && fWind.fn(rec) < 0.02, (rec) => rec.zq - (cab.windshield_base + 0.06 + 0.07 / Math.hypot(1, windshieldSlope)));
   const rearSpan = cab.rear_base - cab.roof_end;
-  const fRear = region(onLid, (rec) => smax(max3(cab.roof_end + Math.min(0.035, 0.2 * rearSpan) - rec.zq, rec.zq - (cab.rear_base - Math.min(0.045, 0.25 * rearSpan)), rec.k + 0.03 - rec.g, 0.03), shape.tailTop + 0.05 - rec.y, 0.03));
+  const fRear = region(onLid, (rec) => smax(max3(roofBack - rec.zq, rec.zq - (cab.rear_base - Math.min(0.045, 0.25 * rearSpan)), rec.k + 0.03 - rec.g, 0.03), shape.tailTop + 0.05 - rec.y, 0.03));
   const fGlassRoof = region((rec) => !rec.wall && body.glass_roof === true, (rec) => max3(cab.windshield_top + 0.1 - rec.zq, rec.zq - (cab.roof_end - 0.1), rec.k + 0.07 - rec.g, 0.05));
-  const fRoof = region(onLid, (rec) => Math.max(cab.windshield_top - 0.035 - rec.zq, rec.zq - (cab.roof_end + 0.035), -(rec.g + rec.k * 0.6)));
+  const fRoof = region(onLid, (rec) => Math.max(cab.windshield_top - 0.035 - rec.zq, rec.zq - roofBack, -(rec.g + rec.k * 0.6)));
   const fCowl = region(onLid, (rec) => Math.max(Math.abs(rec.zq - cab.windshield_base) - 0.065, 0.02 - rec.g));
   fCowl.pre = [region(onLid, (rec) => rec.zq - (cab.windshield_base - 0.065)), region(onLid, (rec) => rec.zq - (cab.windshield_base + 0.065))];
-  const hoodLine = region((rec) => !rec.wall && rec.zq < cab.windshield_base - 0.06 && rec.zeta < 0.6, (rec) => rec.dist - 0.075);
+  const hoodLine = lineEnds(
+    region((rec) => !rec.wall && rec.zq < hoodEndZq + SNAP_M, (rec) => rec.dist - 0.075),
+    (rec) => !rec.wall && Math.abs(rec.dist - 0.075) < LINE_END_NEAR_M,
+    (rec) => rec.zq - hoodEndZq,
+  );
   const deckFrom = cab.rear_base + 0.05;
-  const deckLine = region((rec) => !rec.wall && (shape.hasTrunk || body.bed !== undefined) && rec.zq > deckFrom, (rec) => rec.dist - 0.07);
+  const deckLine = lineEnds(
+    region((rec) => !rec.wall && (shape.hasTrunk || body.bed !== undefined) && rec.zq > deckFrom - SNAP_M, (rec) => rec.dist - 0.07),
+    (rec) => !rec.wall && (shape.hasTrunk || body.bed !== undefined) && Math.abs(rec.dist - 0.07) < LINE_END_NEAR_M,
+    (rec) => rec.zq - deckFrom,
+  );
   const fTonneau = region((rec) => !rec.wall && body.bed === "tonneau", (rec) => Math.max(deckFrom + 0.04 - rec.zq, 0.075 - rec.dist));
   const sill = (rec) => rec.bottom + 0.105;
   // A door seam stops on the sill line's centre, the sill line on the first
   // and last seams' centres: both are cut, so no triangle straddles an end.
-  const seamLines = seams.map((zf) => region((rec) => onSide(rec) && rec.y >= sill(rec) - 1e-7, (rec) => rec.zf - zf));
-  const sillLine = region((rec) => onSide(rec) && rec.zf >= seams[0] - 1e-7 && rec.zf <= seams.at(-1) + 1e-7, (rec) => rec.y - sill(rec));
+  const seamLines = seams.map((zf) =>
+    lineEnds(
+      region((rec) => onSide(rec) && rec.y >= sill(rec) - SNAP_M, (rec) => rec.zf - zf),
+      (rec) => onSide(rec) && Math.abs(rec.zf - zf) < LINE_END_NEAR_M,
+      (rec) => rec.y - sill(rec),
+    ),
+  );
+  const sillLine = lineEnds(
+    region((rec) => onSide(rec) && rec.zf >= seams[0] - SNAP_M && rec.zf <= seams.at(-1) + SNAP_M, (rec) => rec.y - sill(rec)),
+    (rec) => onSide(rec) && Math.abs(rec.y - sill(rec)) < LINE_END_NEAR_M,
+    (rec) => rec.zf - seams[0],
+    (rec) => rec.zf - seams.at(-1),
+  );
   const cladding = body.cladding > 0;
   const fClad = region((rec) => rec.wall && cladding, (rec) => Math.min(rec.y - (rec.bottom + 0.15), archDistance(rec) - (archRadius + 0.06)));
   // Front face: w is the distance round the outline from the centre line.
@@ -864,17 +922,30 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const rearPlateY = (rec) => rec.bottom + (body.bed ? 0.16 : 0.56) * rec.h;
   const fPocket = boxRegion(onTailFace, (rec) => rec.x, (rec) => rec.y - rearPlateY(rec), 0.25, 0.105, 0.03, [[0.014, 3]]);
   const fGarnish = boxRegion((rec) => onTailFace(rec) && !body.bed, (rec) => rec.x, (rec) => rec.y - (rearPlateY(rec) + 0.135), Math.min(0.34, tailCentre - tailHalf - 0.03), 0.014, 0.012);
-  const bumperLine = region((rec) => onTail(rec) && !body.bed && rec.wr < tailEdge + tail.corner * 1.2, (rec) => rec.y - (rec.bottom + 0.34 * rec.h));
+  const bumperLine = lineEnds(
+    region((rec) => onTail(rec) && !body.bed && rec.wr < tailEdge + tail.corner * 1.2 + SNAP_M, (rec) => rec.y - (rec.bottom + 0.34 * rec.h)),
+    (rec) => onTail(rec) && !body.bed && Math.abs(rec.y - (rec.bottom + 0.34 * rec.h)) < LINE_END_NEAR_M,
+    (rec) => rec.wr - (tailEdge + tail.corner * 1.2),
+  );
   // The tailgate's sides stop on the bumper line's centre (cut), not near it.
   // On a bed the tailgate's sides run up to its top (its lamps are on the corner posts).
   const gateTop = (rec) => (body.bed ? rec.top - 0.03 : tailY(rec) - tailHigh + 0.02);
-  const gateLine = region((rec) => onTailFace(rec) && rec.y >= rec.bottom + 0.34 * rec.h - 1e-7 && rec.y <= gateTop(rec) + 1e-7, (rec) => rec.x - (tailCentre - tailHalf - 0.012));
+  const gateLine = region((rec) => onTailFace(rec) && rec.y >= rec.bottom + 0.34 * rec.h - SNAP_M && rec.y <= gateTop(rec) + SNAP_M, (rec) => rec.x - (tailCentre - tailHalf - 0.012));
   // Its ends are cut too, so the groove stops square.
-  const nearGate = (rec) => onTailFace(rec) && Math.abs(rec.x - (tailCentre - tailHalf - 0.012)) < 0.05;
+  const nearGate = (rec) => onTailFace(rec) && Math.abs(rec.x - (tailCentre - tailHalf - 0.012)) < LINE_END_NEAR_M;
   gateLine.pre = [region(nearGate, (rec) => rec.y - (rec.bottom + 0.34 * rec.h)), region(nearGate, (rec) => rec.y - gateTop(rec))];
   // A service body's compartment doors.
   const service = body.bed === "service";
-  const lockerLines = service ? [4.3, 5.0, 5.75].map((zf) => region((rec) => onSide(rec) && rec.y > 0.6 && rec.y < 1.4, (rec) => rec.zf - zf)) : [];
+  const lockerLines = service
+    ? [4.3, 5.0, 5.75].map((zf) =>
+        lineEnds(
+          region((rec) => onSide(rec) && rec.y > 0.6 - SNAP_M && rec.y < 1.4 + SNAP_M, (rec) => rec.zf - zf),
+          (rec) => onSide(rec) && Math.abs(rec.zf - zf) < LINE_END_NEAR_M,
+          (rec) => rec.y - 0.6,
+          (rec) => rec.y - 1.4,
+        ),
+      )
+    : [];
   const fLockerRail = boxRegion((rec) => onSide(rec) && service, (rec) => rec.zf - 5.0, (rec) => rec.y - 1.41, 1.15, 0.012, 0.004);
 
   // What to cut at this detail: [region, offsets...].
@@ -895,6 +966,17 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     cut(fRear, ...(frit ? [0, -frit] : [0]));
     if (body.glass_roof) cut(fGlassRoof, ...(frit ? [0, -frit] : [0]));
   }
+  // The lining's edges (the cabin's length, down to the floor; positive inside
+  // it), cut so they run straight: a van's ends at its bulkhead under the roof,
+  // in plain sight through the windshield.
+  const liningEnd = body.pillars.cargo_from ? body.pillars.cargo_from + 0.02 : body.bed ? cab.rear_base : shape.hasTrunk ? cab.rear_base + 0.05 : null;
+  const liningEdges = [
+    region((rec) => rec.wall, (rec) => rec.zf - (cab.windshield_base + 0.05)),
+    region(onLid, (rec) => rec.zq - (cab.windshield_base + 0.04)),
+    region((rec) => rec.wall, (rec) => rec.f - 0.12),
+  ];
+  if (liningEnd !== null) liningEdges.push(region(() => true, (rec) => liningEnd - rec.zf));
+  if (inner) for (const fn of liningEdges) cut(fn);
   if (!inner && inset === 0) {
     cut(fRoof);
     if (cladding) cut(fClad);
@@ -990,7 +1072,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const onSeam = (id) => twins[id] !== null;
   // A vertex this close to an outline (metres, the regions' unit) counts as on
   // it: no crossing is made a hair beside it, which would leave a sliver.
-  const EPS = 1.5e-3;
+  const EPS = SNAP_M;
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
@@ -1120,7 +1202,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (!inner && R(fArch) < 0) return null;
     if (inner) {
       // The lining: the cabin's length only, down to the floor.
-      if ((rec.wall ? rec.zf < cab.windshield_base + 0.05 : rec.zq < cab.windshield_base + 0.04) || (shape.hasTrunk && rec.zf > cab.rear_base + 0.05) || (body.bed && rec.zf > cab.rear_base) || (body.pillars.cargo_from && rec.zf > body.pillars.cargo_from + 0.02) || (rec.wall && rec.f < 0.12)) return null;
+      if (liningEdges.some((fn) => R(fn) < 0)) return null;
       // Not down into the wheel arches, where it would show from outside.
       if (rec.wall && archDistance(rec) < archRadius + 0.06) return null;
       if (R(fSide) < 0 && R(fPillar) > 0) return null;
@@ -1218,6 +1300,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const at = recordIn(lidPatch, p0, p1);
     const n = baseNormal(at);
     if (!moving) return n;
+    // A triangle beside a groove or a bowl, not pressed itself (at its middle),
+    // keeps the surface's own normal: one sampled across the edge into the
+    // groove (a corner snapped onto the edge reads a hair of its depth) tilts
+    // its corners there and shades the whole triangle as a sunken step.
+    if (pressed(recordIn(lidPatch, mid[0], mid[1])) < 1e-5) return n;
+    const depth = pressed(at);
     // Is the surface pressed unevenly here? Then the normal of the pressed surface.
     const h = 4e-3;
     const span = lidPatch ? [NR, C] : [K - 1, nW];
@@ -1225,7 +1313,6 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       const r = recordIn(lidPatch, clamp(p0 + dk, 0, span[0]), clamp(p1 + dv, 0, span[1]));
       return [r, pressed(r)];
     });
-    const depth = pressed(at);
     if (samples.every(([, d]) => Math.abs(d - depth) < 1e-5)) return n;
     const pts = samples.map(([r, d]) => placed(r, n, d));
     const m = vcross(vsub(pts[2], pts[3]), vsub(pts[0], pts[1]));
@@ -1774,9 +1861,13 @@ export function carBodyGeometry(name) {
 // hull as it has always been (game/scripts/vehicles/drivable_car.gd: flat at
 // max(0.14, 0.6 wheel radius), raked up 0.17 m over the first 0.42 m and the
 // last 0.36 m), so a driven car meets kerbs and ramps as before. Each piece is
-// a mesh car_<body>_hull<n> whose vertices are its hull's points (a loft of
-// convex cross-sections); the runtime takes the hull of those points.
-const HULL_SECTION_POINTS = 24;
+// a mesh car_<body>_hull<n> whose vertices are its hull's points (convex
+// cross-sections, each a flat fan); the runtime takes the hull of those points.
+// A section keeps only the corners that hold it within HULL_TOLERANCE_M of the
+// drawn outline, so its roof and sides are flat between them: a car knocked
+// over comes to rest on its roof or side, as on its old box hull, instead of
+// rolling on like a barrel.
+const HULL_TOLERANCE_M = 0.015;
 export function carHullMeshes(name) {
   const shape = bodyShape(name);
   const { body, L } = shape;
@@ -1797,8 +1888,10 @@ export function carHullMeshes(name) {
     if (z > halfL - 0.36) return floor + 0.17 * ((z - (halfL - 0.36)) / 0.36);
     return floor;
   };
+  // The deck's piece starts a little behind the rear glass's foot, clear of the
+  // cab's or cabin's shoulder there, so its top lies on the deck or bed alone.
   const cuts = [zMin + L / 2, cab.windshield_base];
-  if (cab.rear_base < L - 0.12) cuts.push(cab.rear_base);
+  if (cab.rear_base < L - 0.2) cuts.push(cab.rear_base + 0.06);
   cuts.push(zMax + L / 2);
   const meshes = [];
   for (let s = 0; s < cuts.length - 1; s += 1) {
@@ -1821,18 +1914,37 @@ export function carHullMeshes(name) {
       // The lid across at this zf (its top over the shoulder in to the centre line).
       const side = outlineStationsAt(shape, zf).map((a) => shape.wall(a, 1).x);
       const reach = side.length ? Math.max(...side) : 0;
+      // Over the roof, flat out to the rails at the drawn roof's height 0.7 of
+      // the way there (its crowned middle a little under that, its rails a
+      // little over), so a car knocked onto its roof lies still on it.
+      const rail = zf > cab.windshield_top + 0.05 && zf < cab.roof_end - 0.05 ? railAt(shape, zf, reach) : 0;
+      const roofY = rail > 0 ? shape.lid(0.7 * rail, zf).y : 0;
       for (let k = 0; k <= 8; k += 1) {
         const x = reach * (1 - k / 8);
-        add(x, shape.lid(x, zf).y);
+        add(x, x < rail ? roofY : shape.lid(x, zf).y);
       }
-      sections.push([z, resampleConvex(convexHull2(pts), HULL_SECTION_POINTS)]);
+      if (rail > 0) add(rail, roofY);
+      sections.push([z, simplifyConvex(convexHull2(pts), HULL_TOLERANCE_M)]);
     }
-    meshes.push({ name: `car_${name}_hull${s}`, ...loftMesh(sections) });
+    meshes.push({ name: `car_${name}_hull${s}`, ...sectionsMesh(sections) });
   }
   return meshes;
 }
 
 // The stations a of the outline whose wall top is at plan zf.
+// Where the roof meets the side glass across the car at zf: the rail, where
+// the lid stops following the glass plane (its g turns positive), or 0.
+function railAt(shape, zf, reach) {
+  if (shape.lid(0, zf).g <= 0 || shape.lid(reach, zf).g > 0) return 0;
+  let lo = 0;
+  let hi = reach;
+  for (let i = 0; i < 40; i += 1) {
+    const mid = (lo + hi) / 2;
+    if (shape.lid(mid, zf).g > 0) lo = mid;
+    else hi = mid;
+  }
+  return lo;
+}
 function outlineStationsAt(shape, zf) {
   const found = [];
   const SAMPLES = 300;
@@ -1863,45 +1975,63 @@ function convexHull2(points) {
   return [...lower.slice(0, -1), ...upper.slice(0, -1)];
 }
 
-// n points evenly along a closed polygon's boundary (by arc length, from its
-// highest point), so a gently crowned roof keeps its share of them.
-function resampleConvex(poly, n) {
-  let start = 0;
-  for (let i = 1; i < poly.length; i += 1) if (poly[i][1] > poly[start][1]) start = i;
-  const ring = [...poly.slice(start), ...poly.slice(0, start)];
-  const lengths = [0];
-  for (let i = 0; i < ring.length; i += 1) {
-    const a = ring[i];
-    const b = ring[(i + 1) % ring.length];
-    lengths.push(lengths[i] + Math.hypot(b[0] - a[0], b[1] - a[1]));
-  }
-  const total = lengths.at(-1);
-  const out = [];
-  let k = 0;
-  for (let j = 0; j < n; j += 1) {
-    const want = (total * j) / n;
-    while (k < ring.length - 1 && lengths[k + 1] < want) k += 1;
-    const a = ring[k];
-    const b = ring[(k + 1) % ring.length];
-    const t = (want - lengths[k]) / Math.max(1e-12, lengths[k + 1] - lengths[k]);
-    out.push([lerp(a[0], b[0], t), lerp(a[1], b[1], t)]);
-  }
-  return out;
+// The corners of a convex outline, symmetric about x = 0 (in order round it),
+// that keep it within tolerance of the whole: Douglas-Peucker down its right
+// half, from the top of the centre line round to its bottom, mirrored to the
+// left. Any of a convex outline's corners make a convex outline inside it.
+function simplifyConvex(poly, tolerance) {
+  const offLine = (p, a, b) => {
+    const dx = b[0] - a[0];
+    const dy = b[1] - a[1];
+    const len = Math.hypot(dx, dy);
+    return len < 1e-12 ? Math.hypot(p[0] - a[0], p[1] - a[1]) : Math.abs((p[0] - a[0]) * dy - (p[1] - a[1]) * dx) / len;
+  };
+  // Where the outline crosses the centre line, at its top and its bottom.
+  const crossing = (top) => {
+    let best = top ? -Infinity : Infinity;
+    for (let i = 0; i < poly.length; i += 1) {
+      const a = poly[i];
+      const b = poly[(i + 1) % poly.length];
+      if ((a[0] <= 0 && b[0] >= 0) || (a[0] >= 0 && b[0] <= 0)) {
+        const y = Math.abs(b[0] - a[0]) < 1e-12 ? (top ? Math.max(a[1], b[1]) : Math.min(a[1], b[1])) : a[1] + ((b[1] - a[1]) * (0 - a[0])) / (b[0] - a[0]);
+        best = top ? Math.max(best, y) : Math.min(best, y);
+      }
+    }
+    return best;
+  };
+  const cy = poly.reduce((sum, p) => sum + p[1], 0) / poly.length;
+  const side = poly.filter((p) => p[0] > 1e-6).sort((p, q) => Math.atan2(q[1] - cy, q[0]) - Math.atan2(p[1] - cy, p[0]));
+  const half = [[0, crossing(true)], ...side, [0, crossing(false)]];
+  const keep = new Set([0, half.length - 1]);
+  const split = (i, j) => {
+    let worst = -1;
+    let at = -1;
+    for (let k = i + 1; k < j; k += 1) {
+      const d = offLine(half[k], half[i], half[j]);
+      if (d > worst) {
+        worst = d;
+        at = k;
+      }
+    }
+    if (worst > tolerance) {
+      keep.add(at);
+      split(i, at);
+      split(at, j);
+    }
+  };
+  split(0, half.length - 1);
+  const right = [...keep].sort((a, b) => a - b).map((i) => half[i]);
+  const left = right.filter((p) => p[0] > 1e-6).map(([x, y]) => [-x, y]).reverse();
+  return [...right, ...left];
 }
 
-// Sections [[z, [[x, y], ...n]], ...] joined into a band of triangles (each section the same count).
-function loftMesh(sections) {
+// A hull piece's points as a mesh: each section a flat fan at its z.
+function sectionsMesh(sections) {
   const out = new CarMesh();
-  const up = v3(0, 1, 0);
-  for (let i = 0; i < sections.length - 1; i += 1) {
-    const [za, a] = sections[i];
-    const [zb, b] = sections[i + 1];
-    for (let k = 0; k < a.length; k += 1) {
-      const k1 = (k + 1) % a.length;
-      const p = [v3(a[k][0], a[k][1], za), v3(b[k][0], b[k][1], zb), v3(b[k1][0], b[k1][1], zb), v3(a[k1][0], a[k1][1], za)];
-      out.face(p[0], p[1], p[2], up, up, up, P.under);
-      out.face(p[0], p[2], p[3], up, up, up, P.under);
-    }
+  const along = v3(0, 0, 1);
+  for (const [z, ring] of sections) {
+    const pts = ring.map(([x, y]) => v3(x, y, z));
+    for (let k = 1; k < pts.length - 1; k += 1) out.face(pts[0], pts[k], pts[k + 1], along, along, along, P.under);
   }
   return out.result();
 }

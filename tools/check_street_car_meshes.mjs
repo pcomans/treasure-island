@@ -3,9 +3,11 @@
 // street_car_hero_kit.glb, as committed) for the faults a car body must never
 // show: triangles with no area, faces turned inside out (facing against their
 // own shading), neighbours wound against each other (a fold), panel gaps and
-// shut lines broken into fragments, and see-through spots: a ray from where a
-// player or a camera stands (around and above the car) whose first hit on the
-// body is a face seen from behind.
+// shut lines broken into fragments or ending in a wedge wider than the groove
+// (a dark notch), see-through spots (a ray from where a
+// player or a camera stands, around and above the car, whose first hit on the
+// body is a face seen from behind) and side windows painted over (a ray
+// straight in at a side window that meets anything but glass first).
 //
 //   node tools/check_street_car_meshes.mjs [CLUTTER_KIT.glb HERO_KIT.glb]
 //
@@ -16,6 +18,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { CAR_BODIES, bodyShape } from "./lib/street-car-kit.mjs";
 import { CAR_PARTS } from "./lib/street-car-parts.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -28,6 +31,9 @@ const [clutterPath, heroPath] = process.argv.length > 3
 const MIN_JUDGED_AREA_M2 = 1e-7;
 // A broken panel gap: a run of gap triangles shorter than this (m).
 const MIN_GAP_RUN_M = 0.04;
+// A groove's triangle no wider than this (m: twice its area over its longest
+// edge) at the hero level and the others; the groove is 7 mm and 12 mm across.
+const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);
 const VERBOSE = process.env.CAR_CHECK_VERBOSE === "1";
@@ -88,9 +94,10 @@ function triangles(mesh, { offset = [0, 0, 0], turned = false } = {}) {
   return out;
 }
 
-// Topology and facing: degenerate, inside-out, wound against a neighbour, broken gap runs.
-function surfaceFaults(tris) {
-  const faults = { degenerate: 0, insideOut: 0, insideOutArea: 0, foldEdges: 0, gapFragments: 0, where: [] };
+// Topology and facing: degenerate, inside-out, wound against a neighbour,
+// broken gap runs and gap triangles wider than maxGapWidth (m).
+function surfaceFaults(tris, maxGapWidth) {
+  const faults = { degenerate: 0, insideOut: 0, insideOutArea: 0, foldEdges: 0, gapFragments: 0, gapWedges: 0, where: [] };
   const key = (p) => `${Math.round(p[0] * 1e5)},${Math.round(p[1] * 1e5)},${Math.round(p[2] * 1e5)}`;
   const ids = new Map();
   const vid = (p) => {
@@ -104,6 +111,13 @@ function surfaceFaults(tris) {
       faults.degenerate += 1;
       faults.where.push(["degenerate", tri.p[0]]);
       return;
+    }
+    if (tri.part === "gap") {
+      const longest = Math.max(length(sub(tri.p[1], tri.p[0])), length(sub(tri.p[2], tri.p[1])), length(sub(tri.p[0], tri.p[2])));
+      if ((2 * tri.area) / longest > maxGapWidth) {
+        faults.gapWedges += 1;
+        faults.where.push(["wedge of groove", tri.p[0]]);
+      }
     }
     if (tri.area >= MIN_JUDGED_AREA_M2) {
       const shading = [tri.n[0][0] + tri.n[1][0] + tri.n[2][0], tri.n[0][1] + tri.n[1][1] + tri.n[2][1], tri.n[0][2] + tri.n[1][2] + tri.n[2][2]];
@@ -163,9 +177,8 @@ function surfaceFaults(tris) {
   return faults;
 }
 
-// See-through: rays from round the car at a player's and a chase camera's
-// heights, aimed into its box; the first face each meets must face it.
-function seeThrough(tris, bounds, name = "") {
+// The nearest face along a ray (origin, unit direction), or null.
+function rayCaster(tris, bounds) {
   const shell = tris.filter((tri) => tri.area > 1e-12);
   // A uniform grid over the triangles' boxes.
   const cell = 0.12;
@@ -222,6 +235,13 @@ function seeThrough(tris, bounds, name = "") {
     }
     return found;
   };
+  return hit;
+}
+
+// See-through: rays from round the car at a player's and a chase camera's
+// heights, aimed into its box; the first face each meets must face it.
+function seeThrough(tris, bounds, name = "") {
+  const hit = rayCaster(tris, bounds);
   const centre = [(bounds.lo[0] + bounds.hi[0]) / 2, (bounds.lo[1] + bounds.hi[1]) / 2, (bounds.lo[2] + bounds.hi[2]) / 2];
   const reach = length(sub(bounds.hi, bounds.lo));
   let random = 12345;
@@ -255,6 +275,35 @@ function seeThrough(tris, bounds, name = "") {
   return faults;
 }
 const lerp = (a, b, t) => a + (b - a) * t;
+
+// Side windows: rays straight in at each side's glass, between the windshield
+// and where the side glass ends (clear of the pillars), low, middle and high
+// between the belt and the roof; the first face each meets must be glass (the
+// hero level's darker rear glass included).
+const GLASS_PARTS = new Set(["glass", "grille"]);
+function paintedWindows(tris, bounds, bodyName, hero) {
+  const body = CAR_BODIES[bodyName];
+  const shape = bodyShape(bodyName);
+  const cab = body.cabin;
+  const hit = rayCaster(tris, bounds);
+  const end = body.pillars.cargo_from ?? (body.bed ? cab.rear_base - 0.1 : cab.roof_end);
+  const faults = { rays: 0, painted: 0, where: [] };
+  for (let zf = cab.windshield_top + 0.1; zf < end - 0.25; zf += 0.12) {
+    if ([body.pillars.b, body.pillars.c].some((pillar) => pillar && Math.abs(zf - pillar) < 0.12)) continue;
+    const belt = shape.top(zf);
+    for (const up of [0.3, 0.5, 0.7]) {
+      const y = lerp(belt, cab.roof, up);
+      for (const side of [1, -1]) {
+        const tri = hit([side * (shape.W + 1), y, zf - shape.L / 2], [-side, 0, 0]);
+        faults.rays += 1;
+        if (tri && (hero ? GLASS_PARTS : new Set(["glass"])).has(tri.part)) continue;
+        faults.painted += 1;
+        faults.where.push([`${tri ? tri.part : "nothing"} where the side glass is`, [side * shape.W, y, zf - shape.L / 2]]);
+      }
+    }
+  }
+  return faults;
+}
 
 // ---------------------------------------------------------------- the check
 function boundsOf(tris) {
@@ -296,14 +345,17 @@ function main() {
       for (const piece of ["glass", "tyre", "brake"]) levels.push([`car_${body}_hero_${piece}`, triangles(hero.meshes.get(`car_${body}_hero_${piece}`)), false]);
     }
     for (const [name, tris, rays] of levels) {
-      const s = surfaceFaults(tris);
+      const s = surfaceFaults(tris, name.includes("_hero") ? MAX_GAP_WIDTH_M.hero : MAX_GAP_WIDTH_M.other);
       if (s.degenerate) report(name, "triangles with no area", s.degenerate, s.where.filter(([w]) => w === "degenerate"));
       if (s.insideOut) report(name, `faces turned inside out (${(s.insideOutArea * 1e4).toFixed(2)} cm2)`, s.insideOut, s.where.filter(([w]) => w === "inside out"));
       if (s.foldEdges) report(name, "edges whose two faces are wound against each other", s.foldEdges, s.where.filter(([w]) => w.startsWith("wound")));
       if (s.gapFragments) report(name, "broken panel gaps", s.gapFragments, s.where.filter(([w]) => w.startsWith("broken")));
+      if (s.gapWedges) report(name, "groove triangles wider than the groove", s.gapWedges, s.where.filter(([w]) => w.startsWith("wedge")));
       if (rays) {
         const r = seeThrough(tris, boundsOf(tris), name);
         if (r.backFirst || r.interiorFirst) report(name, `see-through hits of ${r.rays} rays`, r.backFirst + r.interiorFirst, r.where);
+        const w = paintedWindows(tris, boundsOf(tris), body, name.endsWith("_hero"));
+        if (w.painted) report(name, `side-window rays of ${w.rays} meeting no glass`, w.painted, w.where);
       }
     }
   }

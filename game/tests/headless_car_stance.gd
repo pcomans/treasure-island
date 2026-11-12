@@ -144,9 +144,17 @@ func _distance(faces: PackedVector3Array, p: Vector3) -> float:
 	var best := INF
 	for i in range(0, faces.size(), 3):
 		var a := faces[i]
-		if absf(a.x - p.x) > 1.0 or absf(a.z - p.z) > 1.0:
+		var b := faces[i + 1]
+		var c := faces[i + 2]
+		# Only triangles whose box comes within a metre of the point, and with
+		# some area (a degenerate one gives NaN, and minf(best, NaN) is NaN).
+		if minf(a.x, minf(b.x, c.x)) > p.x + 1.0 or maxf(a.x, maxf(b.x, c.x)) < p.x - 1.0 or minf(a.z, minf(b.z, c.z)) > p.z + 1.0 or maxf(a.z, maxf(b.z, c.z)) < p.z - 1.0:
 			continue
-		best = minf(best, p.distance_to(_closest_on_triangle(p, a, faces[i + 1], faces[i + 2])))
+		if (b - a).cross(c - a).length_squared() < 1e-14:
+			continue
+		var d := p.distance_to(_closest_on_triangle(p, a, b, c))
+		if not is_nan(d):
+			best = minf(best, d)
 	return best
 
 
