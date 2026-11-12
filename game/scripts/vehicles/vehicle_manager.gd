@@ -2,14 +2,17 @@ class_name VehicleManager
 extends Node3D
 ## Drivable cars (owner, 2026-11-08): the player walks up to any parked car of
 ## the street clutter, presses F (vehicle_enter_exit) and drives it; F again gets
-## out beside it. A car left alone stays where it stopped for the session; a
-## restart rebuilds the world, so everything is back in place.
+## out beside it. The storage yards' vans, trucks and RVs drive the same way
+## (owner, 2026-11-11; street_yard_kit.gd drivable(), bodies in drivable_car.gd).
+## A car left alone stays where it stopped for the session; a restart rebuilds
+## the world, so everything is back in place.
 ##
-## The parked cars stay static MultiMesh instances with a collision box each
-## (street_clutter_builder.gd). Entering one, or a moving live car about to hit
-## one (or the driven car pressing against one), swaps it for a live body: its
-## instance is drawn at zero scale, its box is disabled and a DrivableCar in the
-## same body, paint and place takes over, which a car can push about. A jersey
+## The parked cars and yard vehicles stay static MultiMesh instances with a
+## collision box each (street_clutter_builder.gd). Entering one, or a moving live
+## car about to hit one (or the driven car pressing against one), swaps it for a
+## live body: its instance is drawn at zero scale, its box is disabled and a
+## DrivableCar in the same body, paint and place takes over, which a car can push
+## about. A jersey
 ## water barrier (K-rail) about to be hit swaps the same way for a heavy live
 ## barrier. A live car or K-rail that comes to rest freezes there (static, no
 ## per-frame work); a hit wakes it again, so it can be shoved any number of
@@ -131,6 +134,8 @@ var _prompt := ""
 var _exit_prompt_s := 0.0
 var _query := PhysicsShapeQueryParameters3D.new()
 var _loose_query := PhysicsShapeQueryParameters3D.new()
+## A static row's reach box per drivable body (half width, height, half length).
+var _boxes: Dictionary = {}
 
 
 func _init() -> void:
@@ -162,6 +167,12 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			if not _cells.has(cell):
 				_cells[cell] = []
 			(_cells[cell] as Array).append(id)
+	# The yard kit draws the yards' vehicles and K-rails once they go live: built
+	# here, under the load screen, not on the player's first approach to one.
+	for entry: Dictionary in _rows.values():
+		if str(entry.prop) != "parked_car":
+			_yard_kit()
+			break
 	_visible_ground.build([world.ground_and_areas, world.roads_and_paths])
 	_breaker = FENCE_BREAKER.new()
 	_breaker.name = "FenceBreaker"
@@ -177,6 +188,13 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	_query.collision_mask = PHYSICS_STREET_PROP
 	_query.collide_with_areas = false
 	_query.collide_with_bodies = true
+
+
+## On a touch screen (main.gd use_touch_controls) there is no F key, so no key
+## prompts: the touch use button shows instead.
+func set_touch(touch: bool) -> void:
+	_touch = touch
+	_set_prompt("")
 
 
 func is_driving() -> bool:
@@ -203,6 +221,15 @@ func swappable_ids() -> Array:
 
 func row(id: String) -> Dictionary:
 	return _rows.get(id, {})
+
+
+## The body a swappable row drives as (a parked car's, or a yard vehicle's kit
+## name: van_cargo, box_truck_large, ...), or "" for one nobody drives (a K-rail).
+func drivable_body(id: String) -> String:
+	var entry: Dictionary = _rows.get(id, {})
+	if str(entry.get("prop", "")) == "parked_car":
+		return str((entry.params as Dictionary).get("body", ""))
+	return str(entry.get("body", ""))
 
 
 func fence_breaker() -> FENCE_BREAKER:
@@ -281,10 +308,10 @@ func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
 		exit_car()
 
 
-## Gets the player into the car of a swappable row (a parked car, or one that
-## is already live). False if the row is not a car.
+## Gets the player into the car of a swappable row (a parked car or yard
+## vehicle, or one that is already live). False if nobody drives the row.
 func enter(id: String) -> bool:
-	if _active != null or not _rows.has(id) or str(_rows[id].prop) != "parked_car":
+	if _active != null or drivable_body(id) == "":
 		return false
 	var car := _make_live(id) as DRIVABLE_CAR
 	if car == null:
@@ -332,8 +359,8 @@ func exit_car(blend: bool = true) -> void:
 ## (tests and capture drivers start a drive this way): "" or why it can't.
 func drive_from(id: String, xz: Vector2, heading: Vector2) -> String:
 	force_exit()
-	if not _rows.has(id) or str(_rows[id].prop) != "parked_car":
-		return "%s is not a parked car" % id
+	if drivable_body(id) == "":
+		return "%s is not a vehicle to drive" % id
 	var car := _make_live(id) as DRIVABLE_CAR
 	if car == null:
 		return "%s could not be made live" % id
@@ -367,8 +394,9 @@ func glance(relative: Vector2) -> void:
 		_camera.glance(relative)
 
 
-## The nearest car the player can get into from here, or "". Parked cars are
-## found by their row's cell; a live car (driven or shoved) wherever it is now.
+## The nearest car the player can get into from here, or "". Parked cars and
+## yard vehicles are found by their row's cell; a live car (driven or shoved)
+## wherever it is now.
 func _nearest_car(at: Vector3) -> String:
 	var best := ""
 	var best_distance := ENTER_REACH_M
@@ -376,8 +404,7 @@ func _nearest_car(at: Vector3) -> String:
 	for dx in range(-1, 2):
 		for dz in range(-1, 2):
 			for id: String in _cells.get(cell + Vector2i(dx, dz), []):
-				var entry: Dictionary = _rows[id]
-				if str(entry.prop) != "parked_car" or _live.has(id):
+				if _live.has(id) or drivable_body(id) == "":
 					continue
 				var distance := _distance_to_car(id, at)
 				if distance < best_distance:
@@ -405,10 +432,12 @@ func _distance_to_car(id: String, at: Vector3) -> float:
 		xf = car.global_transform
 		box = Vector3(car.width_m * 0.5, car.height_m, car.length_m * 0.5)
 	else:
-		var parts := _kit.drivable(str((entry.params as Dictionary).get("body", "")))
-		if parts.ok:
-			var chassis: AABB = (parts.chassis as Mesh).get_aabb()
-			box = Vector3(chassis.size.x * 0.5, chassis.end.y, chassis.size.z * 0.5)
+		var body := drivable_body(id)
+		if not _boxes.has(body):
+			var parts := _parts(id)
+			var chassis: AABB = (parts.chassis as Mesh).get_aabb() if parts.ok else AABB()
+			_boxes[body] = Vector3(chassis.size.x * 0.5, chassis.end.y, chassis.size.z * 0.5) if parts.ok else box
+		box = _boxes[body]
 	var local := xf.affine_inverse() * at
 	if local.y < -2.0 or local.y > box.y + 2.0:
 		return INF
@@ -423,7 +452,7 @@ func _make_live(id: String) -> Node3D:
 		return null
 	var entry: Dictionary = _rows[id]
 	var node: Node3D = null
-	if str(entry.prop) == "parked_car":
+	if drivable_body(id) != "":
 		node = _new_car(id, entry)
 	else:
 		node = _new_barrier(id, entry)
@@ -445,9 +474,10 @@ func _make_live(id: String) -> Node3D:
 
 
 func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
-	var params: Dictionary = entry.params
-	var parts := _kit.drivable(str(params.get("body", "")))
-	var custom := KIT.car_custom(params, 0.0)
+	var parked := str(entry.prop) == "parked_car"
+	var parts := _parts(id)
+	# A yard vehicle keeps its parked paint; a car its paint with no twist.
+	var custom: Dictionary = KIT.car_custom(entry.params, 0.0) if parked else {"ok": true, "custom": entry.custom}
 	if not parts.ok or not custom.ok:
 		push_warning("Vehicle %s: %s" % [id, parts.get("message", custom.get("message", ""))])
 		return null
@@ -458,7 +488,7 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.visible_ground = _visible_ground
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
 	car.breakable_fences = _breakable_fences
-	car.setup(str(params.body), parts, _kit.material(), custom.custom, entry.transform, _fences)
+	car.setup(drivable_body(id), parts, _kit.material() if parked else _yard_kit().material(), custom.custom, entry.transform, _fences)
 	car.recovered.connect(_on_car_recovered.bind(car))
 	car.splashed.connect(_splash.bind(car))
 	for fence: RID in _breakable_fences:
@@ -466,11 +496,23 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	return car
 
 
-## A K-rail as a heavy live barrier: the yard kit's pieces and shapes for its row.
-func _new_barrier(id: String, entry: Dictionary) -> RigidBody3D:
+## The drivable parts of a row's body, from the kit that draws it.
+func _parts(id: String) -> Dictionary:
+	if str(_rows[id].prop) == "parked_car":
+		return _kit.drivable(drivable_body(id))
+	return _yard_kit().drivable(drivable_body(id))
+
+
+## The yard kit (configure builds it when the world has yard rows).
+func _yard_kit() -> YARD_KIT:
 	if _yard == null:
 		_yard = YARD_KIT.new()
-	var built: Dictionary = _yard.pieces(str(entry.prop), entry.params, int(entry.get("seed", 0)), entry.get("footprint", {}))
+	return _yard
+
+
+## A K-rail as a heavy live barrier: the yard kit's pieces and shapes for its row.
+func _new_barrier(id: String, entry: Dictionary) -> RigidBody3D:
+	var built: Dictionary = _yard_kit().pieces(str(entry.prop), entry.params, int(entry.get("seed", 0)), entry.get("footprint", {}))
 	if not built.ok:
 		push_warning("Barrier %s: %s" % [id, built.message])
 		return null

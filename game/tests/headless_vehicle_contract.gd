@@ -56,8 +56,9 @@ extends SceneTree
 ##      goal, with confetti at that goal, and the ball back on its spot;
 ##  10. on foot after getting out: the stock controller back on, then the stock
 ##      walk, run, jetpack and fast drop on open street;
-##  11. the browser's touch controls (touch_controls.gd, made as main.gd makes
-##      them on a touch browser), driven by their own touch events: in a car the
+##  11. the browser's touch controls (touch_controls.gd, set up by main.gd's own
+##      use_touch_controls(), as on a touch browser), driven by their own touch
+##      events: in a car the
 ##      use button shows GET OUT, RISE reads BRAKE with the handbrake glyph, RUN
 ##      and the look hint are hidden, the touch stick drives and its corner
 ##      steers at full throttle, RISE holds the handbrake, and a tap gets out,
@@ -66,7 +67,16 @@ extends SceneTree
 ##      ground away from cars it hides; in the air it shows DROP, held it holds
 ##      the fast drop, lifted it lets go, and held through the landing it lets go
 ##      of C and hides on the ground with the finger still down;
-##  12. the riprap round the whole island: wherever it is drawn 1.5 m and 3 m off
+##  12. the storage yards' vans, trucks and RVs (owner, 2026-11-11): every row
+##      a player can drive drives as a body drivable_car.gd knows, and every yard
+##      body it knows (vehicle_spots.gd yard_bodies()) has rows in the world; a
+##      boxy body's outline spans its kit chassis's length and reaches its top
+##      (HULL_*_MARGIN_M); beside a parked one of every yard body F gets the
+##      player in (its parked box gone, the live one in its body), F out onto the
+##      ground beside it; then each, put down on Seven Seas Avenue, drives off on
+##      its wheels, upright, at least DRIVE_SHARE of what its own acceleration
+##      gives, and F gets out;
+##  13. the riprap round the whole island: wherever it is drawn 1.5 m and 3 m off
 ##      the outline, a car finds something to land on (_case_riprap_cover).
 ## Every case ends with the car stopped and the player standing, inputs released,
 ## and the chest avatar shown with both feet beside the player (as before the
@@ -76,7 +86,8 @@ const CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 const BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
-const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
+const SPOTS := preload("res://game/tests/shared/vehicle_spots.gd")
+const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const VEHICLE_ACTIONS := ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack", "fast_drop", "vehicle_enter_exit", "handbrake", "recover"]
 ## A sinking car over the riprap may go this far under the cars' ground (the
 ## stones' tops) at its worst corner before it counts as inside the stones.
@@ -88,6 +99,24 @@ const COVER_OUT_M := [1.5, 3.0]
 const COVER_CELL_M := 2.0
 ## On foot the avatar's feet stand within this of the player (m).
 const AVATAR_REACH_M := 2.0
+## A boxy yard body's outline (drivable_car.gd BODIES boxes, read off the kit's
+## profiles to HULL_READ_M) against its kit chassis: the chassis may run this much
+## longer than the outline, its lamps, grilles, bumpers and rear ladders standing
+## proud of the body (0.13 m at most: the class A RV's), and rise this much above
+## the outline's top, its rooftop units left out of the outline (the food truck's
+## hood vent, 0.32 m over the roof, the tallest); neither may be shorter or lower
+## than the outline. A kit rebuild that changes a body's length or height by more
+## fails.
+const HULL_READ_M := 0.01
+const HULL_LENGTH_MARGIN_M := 0.15
+const HULL_TOP_MARGIN_M := 0.35
+## A yard vehicle's drive from rest (DRIVE_S under full throttle) must cover at
+## least this share of the distance and speed its own launch acceleration and top
+## speed give (drivable_car.gd BODIES): the throttle and the tyres' grip build up
+## and rolling and air drag take some, so each kept 82 to 97% of both on
+## 2026-11-12; a stalled, dragging or wheel-less one keeps far less.
+const DRIVE_S := 1.5
+const DRIVE_SHARE := 0.6
 
 var _failure := ""
 var _main: GameMain
@@ -127,10 +156,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there")
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1574,17 +1603,14 @@ func _case_on_foot() -> bool:
 # --- 11. The browser's touch controls.
 
 func _case_touch() -> bool:
-	var touch := TOUCH_CONTROLS.new() as TouchControls
-	touch.name = "TouchControls"
-	touch.camera_rig = _player.camera_rig
-	touch.player = _player
-	touch.vehicles = _vehicles
-	_main.hud.add_child(touch)
-	touch.set_gameplay_active(true)
+	# Touch play from here on, as main.gd sets it up on a touch browser.
+	var touch := _main.use_touch_controls()
+	if not _require(touch.visible and touch.vehicles == _vehicles, "use_touch_controls() after play started did not hand the touch controls the cars and start them."):
+		return false
 	var passed := await _touch_steps(touch)
-	touch.free()
+	touch.set_gameplay_active(false)
 	var held := ["jetpack", "handbrake", "run", "fast_drop", "vehicle_enter_exit"].filter(func(action: String) -> bool: return Input.is_action_pressed(action))
-	if not _require(held.is_empty() and _player.touch_input_vector.is_zero_approx(), "Removing the touch controls left %s held." % [held]):
+	if not _require(held.is_empty() and _player.touch_input_vector.is_zero_approx(), "Stopping the touch controls left %s held." % [held]):
 		return false
 	return passed and await _rest("touch")
 
@@ -1728,6 +1754,135 @@ func _touch_steps(touch: TouchControls) -> bool:
 	_finger(touch, 3, drop, false)
 	print("TOUCH DROP held through the landing: landed %s, C held %s, shown %s, touched %s" % [landed, after[0], after[1], after[2]])
 	return _require(landed and after == [false, false, false] and not Input.is_action_pressed("fast_drop"), "Landing with DROP held must let go of C and hide the button (landed %s, C held %s, shown %s)." % [landed, after[0], after[1]])
+
+
+# --- 12. The storage yards' vans, trucks and RVs.
+
+func _case_yard() -> bool:
+	var bodies := _yard_bodies()
+	# One rule for the kit's drivable vehicles (tools/lib/street-yard-meshes.mjs
+	# YARD_DRIVABLE) and drivable_car.gd's bodies: every row a player can drive has a
+	# body to drive with, and every yard body has rows to drive.
+	var found := {}
+	for id: String in _vehicles.swappable_ids():
+		var body := _vehicles.drivable_body(id)
+		if body == "":
+			continue
+		if not _require(not DRIVABLE_CAR.spec_of(body).is_empty(), "Row %s drives as %s, which drivable_car.gd has no body for (BODIES, ALIASES)." % [id, body]):
+			return false
+		found[body] = true
+	var missing := bodies.filter(func(body: String) -> bool: return not found.has(body))
+	if not _require(not bodies.is_empty() and missing.is_empty(), "drivable_car.gd's yard bodies %s have no rows a player can drive (the kit has no drivable parts for them)." % [missing if not bodies.is_empty() else "(none)"]):
+		return false
+	# A boxy body's outline against its kit chassis.
+	var yard := YARD_KIT.new()
+	for body: String in bodies:
+		var spec := DRIVABLE_CAR.spec_of(body)
+		if not spec.has("boxes"):
+			continue
+		var parts := yard.drivable(body)
+		if not _require(parts.ok, "The %s: %s." % [body, parts.get("message", "")]):
+			return false
+		var chassis: AABB = (parts.chassis as Mesh).get_aabb()
+		var front := INF
+		var back := -INF
+		var top := -INF
+		for box: Array in spec.boxes:
+			front = minf(front, float(box[0]))
+			back = maxf(back, float(box[1]))
+			top = maxf(top, float(box[3]))
+		var longer := chassis.size.z - (back - front)
+		var higher := chassis.end.y - top
+		print("YARD %s outline %.2f m long to %.2f m up; chassis %.3f m long to %.3f m up" % [body, back - front, top, chassis.size.z, chassis.end.y])
+		if not _require(longer >= -HULL_READ_M and longer <= HULL_LENGTH_MARGIN_M and higher >= -HULL_READ_M and higher <= HULL_TOP_MARGIN_M, "The %s's outline (%.2f m long, %.2f m up) no longer matches its kit chassis (%.3f m long, %.3f m up): read drivable_car.gd BODIES boxes off the kit again." % [body, back - front, top, chassis.size.z, chassis.end.y]):
+			return false
+	# Beside a parked one of each: F in, F out.
+	var used := {}
+	var cars: Array[DRIVABLE_CAR] = []
+	for body: String in bodies:
+		var spot := SPOTS.beside(_main, _vehicles, body, used)
+		if not _require(not spot.is_empty(), "No parked %s with room to stand beside it on its own." % body):
+			return false
+		var id: String = spot.id
+		used[id] = true
+		var shape := _parked_shape(_vehicles.row(id))
+		if not await _stand_at(spot.at) or not _require(_vehicles.can_enter() and shape != null and not shape.disabled, "Beside the parked %s %s the player is not in reach of it, or it has no collision box." % [body, id]):
+			return false
+		await _press("vehicle_enter_exit")
+		var car := _vehicles.active_car() as DRIVABLE_CAR
+		if not _require(car != null and car.row_id == id and car.body == body and shape.disabled, "F beside the %s %s did not get the player into it (in %s)." % [body, id, car.row_id if car != null else "nothing"]):
+			return false
+		for _tick in 30:
+			await physics_frame
+		await _press("vehicle_enter_exit")
+		for _tick in 30:
+			await physics_frame
+		var beside := Vector2(_player.global_position.x - car.global_position.x, _player.global_position.z - car.global_position.z).length()
+		print("YARD %s %s: in and out, the player %.2f m from it, on the floor %s" % [body, id, beside, _player.is_on_floor()])
+		if not _require(not _player.is_driving() and _player.is_on_floor() and beside < car.length_m * 0.5 + 3.0, "F did not get the player out of the %s %s onto the ground beside it (%.2f m away)." % [body, id, beside]):
+			return false
+		cars.append(car)
+	# Each put down on Seven Seas Avenue (40 m apart, past where the touch case left
+	# its car), a short drive on its wheels.
+	for index in cars.size():
+		var car := cars[index]
+		var at := _route_point(80.0 + 40.0 * index)
+		if not await _drive_from(car, Vector2(at[0].x, at[0].z), at[1]):
+			return false
+		var start := car.global_position
+		Input.action_press("move_forward")
+		for _tick in roundi(DRIVE_S * Engine.physics_ticks_per_second):
+			await physics_frame
+		Input.action_release("move_forward")
+		var moved := car.global_position.distance_to(start)
+		var speed := car.forward_speed()
+		# From rest at its launch acceleration, capped at its top speed.
+		var spec := DRIVABLE_CAR.spec_of(car.body)
+		var full_mps := minf(float(spec.accel) * DRIVE_S, float(spec.top))
+		var full_m := full_mps * DRIVE_S - full_mps * full_mps / (2.0 * float(spec.accel))
+		print("YARD %s drove %.2f m to %.2f m/s (%.0f%% and %.0f%% of %.2f m and %.2f m/s), up %.3f, wheels %d" % [car.body, moved, speed, 100.0 * moved / full_m, 100.0 * speed / full_mps, full_m, full_mps, car.up_dot(), car.grounded_wheels()])
+		if not _require(moved >= DRIVE_SHARE * full_m and speed >= DRIVE_SHARE * full_mps and car.grounded_wheels() == 4 and car.up_dot() > 0.95, "The %s did not drive off on its wheels, upright, as its acceleration gives (moved %.2f m of %.2f m, %.2f m/s of %.2f m/s, %d wheels, up %.3f)." % [car.body, moved, full_m, speed, full_mps, car.grounded_wheels(), car.up_dot()]):
+			return false
+		if not await _stop_and_exit(car, "the %s's drive" % car.body):
+			return false
+	return true
+
+
+## The storage yards' bodies the player drives (vehicle_spots.gd yard_bodies()).
+func _yard_bodies() -> Array:
+	return SPOTS.yard_bodies()
+
+
+## A point this far along the Seven Seas run (vehicle_cases.json route) and the
+## run's heading there (x, z): [Vector3, Vector2].
+func _route_point(distance: float) -> Array:
+	var points: Array = _cases.route.points_xz
+	var left := distance
+	for index in points.size() - 1:
+		var a := Vector2(points[index][0], points[index][1])
+		var b := Vector2(points[index + 1][0], points[index + 1][1])
+		if left <= a.distance_to(b):
+			var at := a + (b - a).normalized() * left
+			return [Vector3(at.x, 0.0, at.y), (b - a).normalized()]
+		left -= a.distance_to(b)
+	var last := Vector2(points[-1][0], points[-1][1])
+	return [Vector3(last.x, 0.0, last.y), (last - Vector2(points[-2][0], points[-2][1])).normalized()]
+
+
+## The stock player standing still on the ground at this point, walking enabled.
+func _stand_at(at: Vector3) -> bool:
+	_release()
+	_player.set_gameplay_enabled(false)
+	_player.global_transform = Transform3D(Basis.IDENTITY, at + Vector3.UP * 0.1)
+	_player.velocity = Vector3.ZERO
+	_player.set_gameplay_enabled(true)
+	for _tick in 90:
+		await physics_frame
+		if _player.is_on_floor() and _player.velocity.length() < 0.05:
+			for _settle in 5:
+				await physics_frame
+			return true
+	return _require(false, "The player did not settle at %s." % at)
 
 
 # --- Helpers.
