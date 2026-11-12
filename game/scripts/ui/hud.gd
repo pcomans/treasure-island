@@ -27,6 +27,8 @@ const CREDITS_MAX_WIDTH_PX := 860.0
 ## is no smaller than the controls screen's. Licence texts are in the fine print.
 const CREDITS_TOUCH_EXTRA_PX := 2
 const CREDITS_FINE_PRINT_PX := 14
+## The gap between a listed credit's bullet and its text (px).
+const CREDITS_BULLET_GAP_PX := 8
 ## The Licences' headings: a section's, and each engine licence text's, the gap
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
@@ -364,7 +366,12 @@ func _fill_credits() -> void:
 		credits_entries.add_child(block)
 		var link := str(entry.get("url", "")).trim_prefix("https://")
 		_credits_label(block, str(entry.get("title", "")), 20 + extra, CONTROLS_HEADING_COLOR)
-		_credits_label(block, str(entry.get("credit", "")), 18 + extra, Color.WHITE)
+		var credit := str(entry.get("credit", ""))
+		if credit.contains("\n"):
+			for item: String in credit.split("\n"):
+				_credits_item(block, item, 18 + extra)
+		else:
+			_credits_label(block, credit, 18 + extra, Color.WHITE)
 		for part: String in [str(entry.get("licence", "")), link]:
 			if not part.is_empty():
 				_credits_label(block, part, 16 + extra, CONTROLS_KEY_COLOR)
@@ -445,6 +452,20 @@ static func _reflowed(text: String) -> String:
 func _credits_section(view: Control, text: String, extra: int) -> void:
 	var first := view.get_child_count() == 0
 	_credits_label(view, text, 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 0.0 if first else CREDITS_SECTION_PX
+
+
+## One item of a credit that lists several (one a line in CREDITS_PATH), after a
+## bullet, in a column of its own: a line it wraps onto starts under its first, so it
+## never reads as a new item.
+func _credits_item(parent: Control, text: String, font_size: int) -> void:
+	var row := HBoxContainer.new()
+	row.add_theme_constant_override("separation", CREDITS_BULLET_GAP_PX)
+	parent.add_child(row)
+	var bullet := _credits_label(row, "•", font_size, Color.WHITE)
+	bullet.autowrap_mode = TextServer.AUTOWRAP_OFF
+	bullet.vertical_alignment = VERTICAL_ALIGNMENT_TOP
+	bullet.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	_credits_label(row, text, font_size, Color.WHITE).size_flags_horizontal = Control.SIZE_EXPAND_FILL
 
 
 func _credits_label(parent: Control, text: String, font_size: int, color: Color) -> Label:

@@ -2,8 +2,8 @@
   "schema_version": "ti.credits/1",
   "notes": [
     "The sources the game draws on and acknowledges: the pause menu's Credits screen (game/scripts/ui/hud.gd) shows every entry, in this order. This file is the only list; no scene or script repeats it.",
-    "An entry: id, title, credit (the line to show), licence and url (empty if none), required (true where the licence asks for the acknowledgement, false where it is a courtesy) and used_for. Optional: licence_file, a licence text that ships with the game and shows under the screen's Licences button (export_presets.cfg's include_filter must list it); engine, for Godot Engine, whose own licence and its third-party notices come from Engine.get_license_text(), get_copyright_info() and get_license_info(), also under Licences; loading_screen, a credit the loading screen shows too; folders, the project folders the entry covers.",
-    "game/tests/headless_credits_contract.gd fails when a folder under game/ or generated/ holds a licence or provenance file (LICENSE, LICENCE, COPYING, NOTICE, PROVENANCE, ATTRIBUTION, AUTHORS, CREDITS, OFL), fonts, sounds, videos or 3D models, image data under a name that isn't an image's (a PNG kept as .dat), or a file an export preset's include_filter adds, or sits directly in a vendor, addons or third_party folder, or is a folder under game/resources/ that holds images, and is listed neither in an entry's folders nor in own_work (things made in this project, which need no credit, each with how it was made). The match is exact: a folder never covers the folders inside it. It fails too when a listed folder is gone.",
+    "An entry: id, title, credit (the line to show; several works one a line, each shown after a bullet), licence and url (empty if none), required (true where the licence asks for the acknowledgement, false where it is a courtesy) and used_for. Optional: licence_file, a licence text that ships with the game and shows under the screen's Licences button (export_presets.cfg's include_filter must list it); engine, for Godot Engine, whose own licence and its third-party notices come from Engine.get_license_text(), get_copyright_info() and get_license_info(), also under Licences; loading_screen, a credit the loading screen shows too; folders, the project folders the entry covers.",
+    "game/tests/headless_credits_contract.gd fails when a folder under game/ or generated/ holds a licence or provenance file (LICENSE, LICENCE, COPYING, NOTICE, PROVENANCE, ATTRIBUTION, AUTHORS, CREDITS, OFL), fonts, sounds, videos or 3D models, image data under a name that isn't an image's (a PNG kept as .dat), or a file an export preset's include_filter adds, or sits directly in a vendor, addons or third_party folder, or is a folder under game/resources/ that holds images, and is listed neither in an entry's folders nor in own_work (the project's own, made here or supplied by the owner, which need no credit, each with what is recorded of how it was made). The match is exact: a folder never covers the folders inside it. It fails too when a listed folder is gone.",
     "Not listed because nothing of them ships: reference photos and Street View (looked at, never in the game), the Kenney Nature Kit and the NAIP-placed placeholder vegetation (both removed), and the npm packages and tools that generate the world offline."
   ],
   "entries": [
@@ -106,7 +106,7 @@
     },
     {
       "folder": "game/resources/ui",
-      "made_by": "the app icon, which the owner supplied (ui/PROVENANCE.md); the touch art in selgesel/ is credited above"
+      "made_by": "the app icon: owner-supplied (ui/PROVENANCE.md); how it was made is not otherwise recorded in the repo. The touch art in selgesel/ is credited above"
     },
     {
       "folder": "game/resources/ui/touch",

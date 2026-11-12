@@ -15,10 +15,11 @@ extends SceneTree
 ##     include_filter lists it;
 ##   - the pause menu's Credits button, between Options and Exit, opens the credits
 ##     screen in the menu's place. It shows every entry (title, credit, licence,
-##     link, use) and, behind Licences, each licence text an entry ships, the
-##     engine's own licence, every component's copyright holders and every licence
-##     text the engine gives; Back goes back a step at a time, to the pause menu,
-##     and leaving the Licences frees their labels;
+##     link, use; a credit listing several works shows each after a bullet, its
+##     wrapped lines hanging under its first) and, behind Licences, each licence
+##     text an entry ships, the engine's own licence, every component's copyright
+##     holders and every licence text the engine gives; Back goes back a step at a
+##     time, to the pause menu, and leaving the Licences frees their labels;
 ##   - keys alone work it: Back has the focus, Left reaches Licences and Enter opens
 ##     it; the arrows, Page Up and Down, Home and End scroll;
 ##   - the wheel and a finger's drag scroll each view, the finger one for one and
@@ -292,11 +293,12 @@ func _check_screen(entries: Array, shape: String) -> bool:
 	var shown := _texts(hud.credits_entries)
 	for entry: Dictionary in entries:
 		for key: String in ["title", "credit", "licence", "url", "used_for"]:
-			# Links show without their https://.
-			var text := str(entry[key]).trim_prefix("https://")
-			if not text.is_empty() and not _require(shown.contains(text), "%s: the credits do not show %s's %s \"%s\"." % [shape, entry.id, key, text]):
-				return false
-	if not _check_fit(shape, hud.credits_list, touch) or not await _check_scrolling(hud.credits_list, "%s: the list" % shape):
+			# Links show without their https://; a credit's works, one a line, each on
+			# its own.
+			for text: String in str(entry[key]).trim_prefix("https://").split("\n"):
+				if not text.is_empty() and not _require(shown.contains(text), "%s: the credits do not show %s's %s \"%s\"." % [shape, entry.id, key, text]):
+					return false
+	if not _check_bullets(entries, shape) or not _check_fit(shape, hud.credits_list, touch) or not await _check_scrolling(hud.credits_list, "%s: the list" % shape):
 		return false
 	hud.credits_back_button.pressed.emit()
 	await _frames(1)
@@ -314,6 +316,25 @@ func _check_screen(entries: Array, shape: String) -> bool:
 	hud.set_paused(false)
 	await _frames(1)
 	return _require(not hud.credits_visible() and not hud.pause_panel.visible and hud.credits_licence_text.get_child_count() == 0 and not hud.prompt_panel.visible, "%s: play going on with the Licences open must hide the credits, free their %d labels and show no prompt (prompt shown %s)." % [shape, hud.credits_licence_text.get_child_count(), hud.prompt_panel.visible])
+
+
+## Each work of a credit that lists several (one a line) shows after a bullet, its
+## text in a column of its own starting right of the bullet, so a line it wraps
+## onto hangs under its first instead of reading as a new item.
+func _check_bullets(entries: Array, shape: String) -> bool:
+	var works := 0
+	for entry: Dictionary in entries:
+		var lines := str(entry.credit).split("\n")
+		if lines.size() > 1:
+			works += lines.size()
+	var bullets := _hud.credits_entries.find_children("*", "Label", true, false).filter(func(label: Node) -> bool: return (label as Label).text == "•")
+	if not _require(works > 0 and bullets.size() == works, "%s: the credits list %d works one a line but show %d bullets." % [shape, works, bullets.size()]):
+		return false
+	for bullet: Label in bullets:
+		var text := bullet.get_parent().get_child(1) as Label
+		if not _require(text != null and text.get_global_rect().position.x >= bullet.get_global_rect().end.x, "%s: a listed credit must start right of its bullet, so its wrapped lines hang under its first (\"%s\")." % [shape, text.text.left(50) if text != null else "?"]):
+			return false
+	return true
 
 
 ## The panel inside the page, no line past its view's text, and on touch the
