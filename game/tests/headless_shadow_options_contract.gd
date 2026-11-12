@@ -1,22 +1,28 @@
 extends SceneTree
 ## The sun's shadow quality on the pause menu's Options screen (owner, 2026-11-12:
 ## "make shadow quality configurable in-game ... sort of an options item"),
-## headless, with main.tscn made and freed before its world loads (the pause and
-## Resume in the loaded game are headless_gameplay_contract.gd's):
+## headless. Each check makes main.tscn and frees it within a few frames, long
+## before its world finishes loading, on failure too (the pause and Resume in the
+## loaded game are headless_gameplay_contract.gd's):
 ##   - the default is the game as it was: with no saved choice, main puts on Medium,
 ##     whose sun settings are main.tscn's Sun's and whose shadow map and filter are
 ##     project.godot's (the engine's own);
 ##   - each level puts on exactly the settings it claims (ShadowQuality.settings_of):
 ##     the sun's shadow settings, and the shadow map and filter it hands the engine
-##     (recorded by a stand-in); Off has no sun shadows, Low is lighter than Medium
-##     and High finer;
+##     (recorded by a stand-in); Off has no sun shadows; Low keeps Medium's map and
+##     filter over fewer splits and a shorter range; High has a bigger map, a finer
+##     filter and a nearer first split, over Medium's split count and reach;
 ##   - the pause menu's Options, between Controls and Credits, opens the options
 ##     screen in its place with the level on pressed and focused; Right then Enter
-##     choose the next level, which goes on at once; Back returns to the pause menu;
+##     choose the next level, which goes on at once; the level in use, and only it,
+##     shows pressed, in the headings' blue, whoever changes it; Back returns to
+##     the pause menu;
 ##   - the choice survives a restart of the scene (the settings file), a level
 ##     chosen again replaces it, and an unknown saved level, a missing file or a
 ##     file that can't be written fall back quietly;
-##   - the shared capture harness's main.use_saved_settings = false gets the default;
+##   - the shared capture harness's main.use_saved_settings = false gets the default,
+##     and a test driver that leaves saved settings on with the player's settings
+##     file is caught (GameMain.saved_settings_problem: its run logs an error);
 ##   - the web's one level (Off) leaves the pause menu without Options.
 ## Uses its own settings file, removed at the end. The first failure stops the run.
 
@@ -25,6 +31,9 @@ const SUN_KEYS := ["enabled", "mode", "splits", "max_distance"]
 
 var _failure := ""
 var _settings_file := ""
+## The main scene made for the check under way (_make_main), freed by the next or
+## by _finish.
+var _main: GameMain
 
 
 ## Records what the shadow levels hand the engine, in place of the RenderingServer.
@@ -99,28 +108,42 @@ func _run() -> void:
 	_key(KEY_RIGHT)
 	_key(KEY_ENTER)
 	await process_frame
-	if not _require((hud.shadow_levels.get_node(next) as Button).button_pressed and not medium_button.button_pressed and main.shadows.current == next and _sun_matches(main.get_node("Sun"), main.shadows.settings_of(next)), "Right then Enter on the options screen must put on %s at once (on: %s)." % [next, main.shadows.current]):
+	if not _require((hud.shadow_levels.get_node(next) as Button).button_pressed and not medium_button.button_pressed and main.shadows.current == next and _sun_matches(main.get_node("Sun"), main.shadows.settings_of(next)), "Right then Enter on the options screen must put on %s at once (on: %s)." % [next, main.shadows.current]) \
+	or not _shows_only(hud, next, "after Right and Enter"):
+		return _finish()
+	# Whoever changes the level, the screen shows that one alone.
+	main._on_shadow_quality_chosen("low")
+	if not _shows_only(hud, "low", "after main put Low on"):
+		return _finish()
+	main._on_shadow_quality_chosen(next)
+	if not _shows_only(hud, next, "after main put %s on again" % next):
 		return _finish()
 	hud.options_back_button.pressed.emit()
 	await process_frame
 	if not _require(not hud.options_visible() and hud.pause_panel.visible and hud.options_button.has_focus(), "Back on the options screen must go back to the pause menu, Options focused."):
 		return _finish()
-	main.free()
 	# A restart keeps the choice; choosing again replaces it.
 	main = _make_main()
 	if not _require(main.shadows.current == next and _sun_matches(main.get_node("Sun"), main.shadows.settings_of(next)) and (main.hud.shadow_levels.get_node(next) as Button).button_pressed, "After a restart the game must put %s on again, as chosen (it put on %s)." % [next, main.shadows.current]):
 		return _finish()
 	(main.hud.shadow_levels.get_node("off") as Button).button_pressed = true
-	main.free()
 	main = _make_main()
 	if not _require(main.shadows.current == "off" and not (main.get_node("Sun") as DirectionalLight3D).shadow_enabled, "A level chosen again must replace the kept one (after choosing Off and a restart: %s)." % main.shadows.current):
 		return _finish()
-	main.free()
 	# The capture harness's opt-out: the default, whatever is kept.
 	main = _make_main(false)
 	if not _require(main.shadows.current == ShadowQuality.default_id(), "With use_saved_settings off the game must put on the default, not the kept %s." % main.shadows.current):
 		return _finish()
-	main.free()
+	_free_main()
+	# A test driver that leaves saved settings on is caught unless it brought a
+	# settings file of its own (this check runs main.gd's own rule, not main).
+	ShadowQuality.settings_path = ShadowQuality.DEFAULT_SETTINGS_PATH
+	var caught := GameMain.saved_settings_problem(true, self)
+	var off_ok := GameMain.saved_settings_problem(false, self)
+	ShadowQuality.settings_path = _settings_file
+	var own_file_ok := GameMain.saved_settings_problem(true, self)
+	if not _require(not caught.is_empty() and off_ok.is_empty() and own_file_ok.is_empty(), "A test driver with saved settings on and the player's file must be caught, and one with them off or its own file let be (caught \"%s\", off \"%s\", own file \"%s\")." % [caught, off_ok, own_file_ok]):
+		return _finish()
 	# The web's levels (Off alone) leave the pause menu without Options.
 	var web_hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
 	root.add_child(web_hud)
@@ -142,18 +165,37 @@ func _run() -> void:
 	ShadowQuality.settings_path = _settings_file
 	if not _require([unknown, missing, unwritten] == [ShadowQuality.default_id(), ShadowQuality.default_id(), ShadowQuality.default_id()], "An unknown kept level, a missing file and an unwritable one must all give the default, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the game as it was); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default; the web's Off alone leaves no Options; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the game as it was); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a test driver left on the player's settings is caught; the web's Off alone leaves no Options; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
 	_finish()
 
 
-## The main scene made and readied (its shadow level put on), before its world
-## loads: freed in the same frame, the world never does.
+## The main scene made and readied (its shadow level put on), after freeing the
+## one before: each lives a few frames at most, long before its world finishes
+## loading.
 func _make_main(use_saved := true) -> GameMain:
-	var main := (load(MAIN_SCENE) as PackedScene).instantiate() as GameMain
-	main.capture_mouse_on_ready = false
-	main.use_saved_settings = use_saved
-	root.add_child(main)
-	return main
+	_free_main()
+	_main = (load(MAIN_SCENE) as PackedScene).instantiate() as GameMain
+	_main.capture_mouse_on_ready = false
+	_main.use_saved_settings = use_saved
+	root.add_child(_main)
+	return _main
+
+
+func _free_main() -> void:
+	if is_instance_valid(_main):
+		_main.free()
+	_main = null
+
+
+## The options screen shows this level, and only it, pressed, filled in the headings'
+## blue (not the keyboard focus's white outline), with its note.
+func _shows_only(hud: GameHUD, id: String, when: String) -> bool:
+	var pressed := PackedStringArray()
+	for button: Button in hud.shadow_levels.get_children():
+		if button.button_pressed:
+			pressed.append(button.name)
+	var marker := (hud.shadow_levels.get_node(id) as Button).get_theme_stylebox("pressed") as StyleBoxFlat
+	return _require(pressed == PackedStringArray([id]) and marker != null and marker.bg_color == GameHUD.CONTROLS_HEADING_COLOR and hud.shadow_note.text == str(hud.shadow_levels.get_node(id).get_meta("note")), "%s the options screen must show %s alone pressed, in the headings' blue, with its note (pressed: %s)." % [when.capitalize(), id, pressed])
 
 
 ## main.tscn's Sun as the scene has it, outside the tree.
@@ -204,12 +246,13 @@ func _check_levels() -> bool:
 	var off := levels.settings_of("off")
 	var low := levels.settings_of("low")
 	var medium := levels.settings_of("medium")
-	sun.free()
 	var high := levels.settings_of("high")
-	if not _require(high.enabled and int(high.atlas) > int(medium.atlas) and int(high.filter) > int(medium.filter), "High must be finer than Medium: a bigger shadow map and a finer filter."):
+	sun.free()
+	if not _require(high.enabled and int(high.atlas) > int(medium.atlas) and int(high.filter) > int(medium.filter) and float((high.splits as Array)[0]) < float((medium.splits as Array)[0]) \
+			and int(high.mode) == int(medium.mode) and is_equal_approx(float(high.max_distance), float(medium.max_distance)), "High must be finer than Medium near the player: a bigger shadow map, a finer filter and a nearer first split, with Medium's split count and reach."):
 		return false
 	return _require(not off.enabled, "Off must turn the sun's shadows off.") \
-		and _require(low.enabled and int(low.atlas) < int(medium.atlas) and float(low.max_distance) < float(medium.max_distance), "Low must be lighter than Medium: a smaller shadow map over a shorter range.")
+		and _require(low.enabled and int(low.atlas) == int(medium.atlas) and int(low.filter) == int(medium.filter) and int(low.mode) < int(medium.mode) and float(low.max_distance) < float(medium.max_distance), "Low must draw Medium's own map and filter (a smaller map and the cheapest filter striped and crawled), and be lighter by fewer splits over a shorter range.")
 
 
 func _key(keycode: Key) -> void:
@@ -230,6 +273,7 @@ func _require(condition: bool, message: String) -> bool:
 func _finish(timeout_message := "") -> void:
 	if timeout_message != "" and _failure == "":
 		_failure = timeout_message
+	_free_main()
 	DirAccess.remove_absolute(_settings_file)
 	if _failure != "":
 		push_error("FAIL: " + _failure)

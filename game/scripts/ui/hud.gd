@@ -33,8 +33,10 @@ const CREDITS_BULLET_GAP_PX := 8
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
 const CREDITS_LICENCE_HEADING_PX := 44.0
-## The options screen's shadow level buttons are at least this wide (px).
+## The options screen's shadow level buttons are at least this wide (px), and the
+## one in use is filled in the headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
+const OPTIONS_ACTIVE_TEXT_COLOR := Color(0.04, 0.07, 0.1)
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
@@ -102,6 +104,8 @@ var _credits_finger := -1
 var _licence_files: Array = []
 ## The shadow level buttons: one pressed at a time.
 var _shadow_group := ButtonGroup.new()
+## The pressed level's fill (_active_level_style).
+var _active_level_box: StyleBoxFlat
 
 
 func _ready() -> void:
@@ -267,6 +271,7 @@ func set_shadow_levels(levels: Array, current: String) -> void:
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size = Vector2(OPTIONS_LEVEL_MIN_WIDTH_PX, 64.0 if _touch else 40.0)
 		button.set_meta("note", str(level.note))
+		_active_level_style(button)
 		button.toggled.connect(func(on: bool) -> void:
 			if on:
 				shadow_quality_chosen.emit(id))
@@ -275,14 +280,28 @@ func set_shadow_levels(levels: Array, current: String) -> void:
 	show_shadow_level(current)
 
 
-## Shows the level on now: its button pressed (without asking for it again) and its
-## note.
+## Shows the level on now: its button pressed and every other let go (without
+## asking for any level again), and its note.
 func show_shadow_level(id: String) -> void:
 	var button := shadow_levels.get_node_or_null(id) as Button
 	if button == null:
 		return
-	button.set_pressed_no_signal(true)
+	for level: Node in shadow_levels.get_children():
+		(level as Button).set_pressed_no_signal(level == button)
 	shadow_note.text = str(button.get_meta("note"))
+
+
+## The level in use: filled in the headings' blue with dark type, so it never reads
+## as the keyboard focus, which outlines a button white.
+func _active_level_style(button: Button) -> void:
+	if _active_level_box == null:
+		var pressed := button.get_theme_stylebox("pressed")
+		_active_level_box = pressed.duplicate() as StyleBoxFlat if pressed is StyleBoxFlat else StyleBoxFlat.new()
+		_active_level_box.bg_color = CONTROLS_HEADING_COLOR
+	for state: String in ["pressed", "hover_pressed"]:
+		button.add_theme_stylebox_override(state, _active_level_box)
+	for colour: String in ["font_pressed_color", "font_hover_pressed_color"]:
+		button.add_theme_color_override(colour, OPTIONS_ACTIVE_TEXT_COLOR)
 
 
 ## Shows the credits screen in place of the pause menu, at the top of its list.

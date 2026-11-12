@@ -65,7 +65,10 @@ func _ready() -> void:
 	# The web's default level is Off: the complete island without distant shadow
 	# passes in WebGL (ShadowQuality).
 	shadows = ShadowQuality.new($Sun)
-	shadows.apply(ShadowQuality.saved_id() if use_saved_settings else ShadowQuality.default_id())
+	var settings_problem := saved_settings_problem(use_saved_settings, get_tree())
+	if not settings_problem.is_empty():
+		push_error(settings_problem)
+	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
 	if OS.has_feature("web"):
@@ -347,6 +350,18 @@ func _set_paused(paused: bool) -> void:
 	hud.set_paused(paused)
 	if OS.has_feature("web") and _touch_controls == null:
 		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
+
+
+## Why this run must not read the player's saved settings, or "". A test driver (a
+## --script run, its SceneTree scripted) that leaves use_saved_settings on would take
+## whatever level was last saved in the shared user folder, so its renders and
+## timings would change with the machine; it must turn the settings off or point
+## ShadowQuality at a file of its own. (_ready then takes the default and reports
+## the error, which fails the test run.)
+static func saved_settings_problem(use_saved: bool, tree: SceneTree) -> String:
+	if use_saved and tree.get_script() != null and ShadowQuality.settings_path == ShadowQuality.DEFAULT_SETTINGS_PATH:
+		return "A test driver loaded main.tscn with use_saved_settings on and the player's settings file (%s): set main.use_saved_settings = false before adding it, or point ShadowQuality.settings_path at a file of the test's own." % ShadowQuality.DEFAULT_SETTINGS_PATH
+	return ""
 
 
 ## A shadow level chosen on the options screen: on at once, and kept for next time.

@@ -4,12 +4,21 @@ extends RefCounted
 ## 2026-11-12: "right now the shadows are pretty rough ... make that sort of an
 ## options item"). Medium is the game as it was: main.tscn's Sun and the shadow
 ## map and filter project.godot gives the engine, read when this is made, so it
-## stays whatever those say. High sharpens and smooths them (a level that pulled the
-## nearest split in to 24 m was sharper only inside it and softer just past it, so it
-## isn't offered); Low and Off are for a slow machine. The web keeps Off, its default,
-## and offers nothing else, so it has no Options item: in the Compatibility renderer
-## sun shadows also brightened every sunlit surface by about 40% (2026-11-12, native
-## Compatibility on the dev machine), unlike desktop's Forward+.
+## stays whatever those say. Medium's nearest split reaches 40 m on a quarter of a
+## 4096 px map, about 5.5 cm by 10 cm of ground per shadow texel with the sun 33
+## degrees up: coarser than the avatar's 8-9 cm legs and a palm's leaflets, which the
+## owner saw as chunky and pixelated (2026-11-12). High doubles the map, uses a
+## smoother filter and pulls that split in to 16 m, the next ending at 48 m and the
+## third at 200 m: near the player about a fifth of Medium's texel, out to about
+## 120 m still finer, and from about 120 to 240 m a little softer (computed: the
+## smoother filter spreads wider there). Tried and not offered
+## (2026-11-12): only doubling the map (a modest step), Medium's map with its nearest
+## split at 24 m (sharper inside, softer just past it), and giving the sun a size
+## (palm shadows blurred far more than the real sun's). Low and Off are for a slow
+## machine. The web keeps Off, its default, and offers nothing else, so it has no
+## Options item: in the Compatibility renderer sun shadows also brightened every
+## sunlit surface by about 40% (2026-11-12, native Compatibility on the dev
+## machine), unlike desktop's Forward+.
 ## A change applies at once, with no restart; the choice is kept in settings_path
 ## between runs, and where storage fails it lasts the session (save quietly fails).
 
@@ -22,22 +31,29 @@ extends RefCounted
 ##   mode: the splits (DirectionalLight3D.ShadowMode);
 ##   splits: the split distances, as shares of max_distance;
 ##   max_distance: how far from the camera the sun casts shadows (m).
+## Low keeps Medium's map and filter, so what shadows it draws look like Medium's
+## (a smaller map and the cheapest filter striped, dithered and crawled, review of
+## 2026-11-12); it is lighter by drawing two splits out to 200 m instead of four
+## to 800 m.
 const LEVELS: Array[Dictionary] = [
 	{"id": "off", "name": "Off", "web": true, "enabled": false,
-		"note": "No sun shadows: the lightest on a slow machine."},
-	{"id": "low", "name": "Low", "web": false, "atlas": 2048, "filter": RenderingServer.SHADOW_QUALITY_SOFT_VERY_LOW,
-		"mode": DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, "splits": [0.15, 0.15, 0.15], "max_distance": 300.0,
-		"note": "Coarser shadows out to 300 m, for a slow machine."},
+		"note": "No sun shadows. The lightest choice, for a slow machine."},
+	{"id": "low", "name": "Low", "web": false,
+		"mode": DirectionalLight3D.SHADOW_PARALLEL_2_SPLITS, "splits": [0.2, 0.2, 0.2], "max_distance": 200.0,
+		"note": "Shadows nearby only, none in the distance. Lighter, for a slow machine."},
 	{"id": "medium", "name": "Medium", "web": false,
-		"note": "The game's standard shadows: a 4096 px shadow map over 800 m."},
+		"note": "The game's usual shadows."},
 	{"id": "high", "name": "High", "web": false, "atlas": 8192, "filter": RenderingServer.SHADOW_QUALITY_SOFT_HIGH,
-		"note": "Sharper, smoother shadows: twice the shadow map's detail and a finer filter."},
+		"splits": [0.02, 0.06, 0.25],
+		"note": "Sharper shadows near you: your own, a palm's fronds. Costs a little more."},
 ]
 const SECTION := "graphics"
 const KEY := "shadow_quality"
 
-## The settings file; a test points it at its own.
-static var settings_path := "user://settings.cfg"
+## The player's settings file.
+const DEFAULT_SETTINGS_PATH := "user://settings.cfg"
+## The settings file in use; a test points it at its own.
+static var settings_path := DEFAULT_SETTINGS_PATH
 
 var sun: DirectionalLight3D
 ## Where the engine's shadow map and filter settings go: the RenderingServer, or a

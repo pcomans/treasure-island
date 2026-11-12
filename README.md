@@ -127,7 +127,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off, Low, Medium (the game as it was, the default) or High. The web build keeps its sun shadows off and has no Options item (with them on, its renderer also brightened every sunlit surface). A choice applies at once and is kept between runs in `user://settings.cfg`; the shared capture harness always takes the default.
+- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the game as it was, the default); or High (a bigger shadow map with its nearest split pulled in, so shadows near the player, its own and palm fronds', come out sharp). The web build keeps its sun shadows off and has no Options item (with them on, its renderer also brightened every sunlit surface). A choice applies at once and is kept between runs in `user://settings.cfg`; the shared capture harness always takes the default.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ## More
@@ -192,8 +192,8 @@ On a touch-capable browser, play starts as soon as the island has loaded. Drag t
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues, **Controls** lists the touch
-controls, **Options** sets the shadows and **Credits** lists the game's sources (drag
-to scroll). Movement, look and buttons
+controls and **Credits** lists the game's sources (drag to scroll); the web build has
+no **Options**, as its sun shadows stay off. Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.

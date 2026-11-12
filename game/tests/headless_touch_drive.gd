@@ -54,6 +54,8 @@ func _run() -> void:
 	root.size = SHAPES.upright
 	_main = (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
 	_main.capture_mouse_on_ready = false
+	# The default shadows, never a level saved in the shared user folder (main.gd).
+	_main.use_saved_settings = false
 	var load_failures: Array[String] = []
 	(_main.get_node("WorldRoot") as WorldLoader).world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
 	root.add_child(_main)

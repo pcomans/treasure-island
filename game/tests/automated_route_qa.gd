@@ -77,6 +77,8 @@ func _run() -> void:
 		_finish(null, baseline_nodes)
 		return
 	var main := main_scene.instantiate() as GameMain
+	# The default shadows, never a level saved in the shared user folder (main.gd).
+	main.use_saved_settings = false
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var player := main.get_node("Player") as PlayerController
 	var ready_reports: Array[Dictionary] = []
