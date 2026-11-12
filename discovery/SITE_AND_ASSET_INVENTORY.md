@@ -225,7 +225,10 @@ it yet.
 `YARD_KIT_PROPS` in [`tools/lib/street-yard-kit.mjs`](../tools/lib/street-yard-kit.mjs)
 (meshes in `tools/lib/street-yard-meshes.mjs`, runtime
 `game/scripts/world/street_yard_kit.gd`). The `equipment` prop's variants are
-separate machines, so each has its own row. The kit's visual review (E02 and E08
+separate machines, so each has its own row. Since 2026-11-11 the yards' vans,
+box trucks, food-truck step vans and class A and C RVs can be driven: the kit
+adds each one's chassis without wheels, its tyres and its wheel centres
+(`yardDrivableParts`). The kit's visual review (E02 and E08
 rounds, then the heaps delta) worked from one gallery sheet per prop family;
 the rows below are rated only where a record names the prop.
 
@@ -234,11 +237,11 @@ the rows below are rated only where a record names the prop.
 | Shipping container (20 ft, 40 ft, 40 ft high cube, 20 ft roll-up, 40 ft office, 10 ft) | #1–#6, #9, #10, #12, #13 (office only #1; 10 ft #1, #10; high cube and roll-up not placed) | 2 est. | Kit review fixes `15c75852`: container finish (corrugation that doesn't alias, lighter rarer rust, less grime) | 3: door hardware, castings and lock bars judged close up |
 | Container wall (single, double) | #1, #2, #3, #5, #6, #7 (double only #7) | 2 est. | `15c75852`: forest green and beige walls; E08 sunlit frames confirmed the photo colours (kit RETRO) | 3: joints and corner castings close up |
 | Storage shed row (double, single, wide) | #1, #2, #4, #5, #6 | | In the kit's family sheets; no prop-specific verdict recorded | Rate: compare with the dated yard photos |
-| RV (class A, class C, travel trailer, fifth wheel) | #1, #2, #4, #6, #8 north, #9 | | No prop-specific verdict | Rate |
+| RV (class A, class C, travel trailer, fifth wheel; class A and C drivable since 2026-11-11) | #1, #2, #4, #6, #8 north, #9 | | No prop-specific verdict | Rate |
 | Bus (coach, shuttle) | #2, #3, #4 | | No prop-specific verdict | Rate |
-| Box truck (medium, large) | #1–#6, #8 north, #9, #10, #12, #13, #15 | | No prop-specific verdict | Rate |
-| Van (cargo: the car kit's van body; step van) | #1–#6, #8, #9, #13, #15 | | No prop-specific verdict | Rate |
-| Food truck (step van, trailer) | #6 | 2 est. | `15c75852` added the glazed serving window with its hood and ledge; E08 opposite-side frames confirmed it | 3: hatch, vents and hardware close up |
+| Box truck (medium, large; drivable since 2026-11-11) | #1–#6, #8 north, #9, #10, #12, #13, #15 | | No prop-specific verdict | Rate |
+| Van (cargo: the car kit's van body; step van; both drivable since 2026-11-11) | #1–#6, #8, #9, #13, #15 | | No prop-specific verdict | Rate |
+| Food truck (step van, trailer; the step van drivable since 2026-11-11) | #6 | 2 est. | `15c75852` added the glazed serving window with its hood and ledge; E08 opposite-side frames confirmed it | 3: hatch, vents and hardware close up |
 | Boat on trailer (runabout, cabin) | #2, #3, #4 | | No prop-specific verdict | Rate |
 | Trailer (cargo, utility, semi, office) | #1–#4, #8, #9, #12, #13, #15 (office only #12) | | No prop-specific verdict | Rate |
 | Fabric shed (10, 15, 20, 30 m spans) | #2, #6, #8 south, #13 (30 m span not placed) | | No prop-specific verdict | Rate |

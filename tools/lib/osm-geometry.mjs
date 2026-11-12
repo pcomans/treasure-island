@@ -614,6 +614,48 @@ export function pointInMultiPolygon(point, multiPolygon, includeBoundary = true)
   });
 }
 
+// pointInMultiPolygon as a function of the point, for many points that share
+// their y with the point before (a grid read row by row). The same answer for
+// every point, from the same arithmetic: for each ring and y it keeps the edges
+// whose y-range reaches y (pointOnSegment is false on every other edge) and
+// where the edges that straddle y cross it (pointInRing's expression), sorted.
+// A point is then tested on those few edges, and is inside when an odd number
+// of the crossings lie east of it, which a binary search counts.
+export function multiPolygonContains(multiPolygon, includeBoundary = true) {
+  const rows = new Map();
+  const inRing = (point, ring, boundaryCounts) => {
+    const y = point[1];
+    let row = rows.get(ring);
+    if (row?.y !== y) {
+      const reaching = [];
+      const crossings = [];
+      for (let current = 0, previous = ring.length - 1; current < ring.length; previous = current, current += 1) {
+        const a = ring[previous];
+        const b = ring[current];
+        if (y >= Math.min(a[1], b[1]) - EPSILON && y <= Math.max(a[1], b[1]) + EPSILON) reaching.push([a, b]);
+        if ((a[1] > y) !== (b[1] > y)) crossings.push(((b[0] - a[0]) * (y - a[1])) / (b[1] - a[1]) + a[0]);
+      }
+      row = { y, reaching, crossings: crossings.sort((left, right) => left - right) };
+      rows.set(ring, row);
+    }
+    for (const [a, b] of row.reaching) {
+      if (pointOnSegment(point, a, b)) return boundaryCounts;
+    }
+    let low = 0;
+    let high = row.crossings.length;
+    while (low < high) {
+      const middle = (low + high) >> 1;
+      if (point[0] < row.crossings[middle]) high = middle;
+      else low = middle + 1;
+    }
+    return (row.crossings.length - low) % 2 === 1;
+  };
+  return (point) => multiPolygon.some((polygon) => {
+    if (!inRing(point, polygon[0], includeBoundary)) return false;
+    return polygon.slice(1).every((hole) => !inRing(point, hole, !includeBoundary));
+  });
+}
+
 export function roundedCanonicalGeometry(multiPolygon, label = "geometry") {
   return roundingAreaAudit(multiPolygon, label).geometry;
 }

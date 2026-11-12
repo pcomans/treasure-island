@@ -11,7 +11,8 @@
 #    in the world generated at startup and in the baked world desktop exports load.
 # 3. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
-#    approaches, the spawn or the QA corridors.
+#    approaches, the spawn or the QA corridors. They run in the background
+#    beside the long Godot stages, and their results come last.
 set -uo pipefail
 cd "$(dirname "$0")/.."
 # npm/node live here in the devcontainer (node feature); non-login shells lack it.
@@ -85,6 +86,51 @@ check_godot() {
   fi
 }
 
+# The generated-world checks read only committed files and their own temporary
+# copies, so they run in the background, side by side, from the first
+# whole-island stage on: the stages from there (island tests, bake) leave
+# their load and time limits wide room, unlike the short contracts before.
+# Each check's output goes to its own file; the results come last, in this
+# order, under their headings. As before, only the clearance check's stdout
+# is shown. Each runs in a subshell that waits for it, so a check killed by a
+# signal is reported in its own output, as it was in the foreground. On any
+# exit, checks still running (an interrupted suite) are stopped with all
+# their processes, and the files removed, with the baked world once the bake
+# has begun.
+node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.mjs tools/check_street_detail_clearance.mjs)
+node_pids=()
+node_logs=""
+baked=""
+# A process and every process under it, each parent before its children.
+process_tree() {
+  local child
+  echo "$1"
+  for child in $(pgrep -P "$1"); do process_tree "${child}"; done
+}
+cleanup() {
+  local job pid pids=()
+  # This shell's background jobs still running (a check that has ended is not
+  # listed, so its old PID, which another process may hold by now, is never
+  # signalled) and every process under them, all listed first and signalled
+  # parents first. A child runs on when its parent stops, so each process is
+  # still running at its own signal; children first, a subshell would end
+  # with its node process and could be reaped before its own.
+  for job in $(jobs -pr); do pids+=($(process_tree "${job}")); done
+  for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
+  [ -z "${node_logs}" ] || rm -rf "${node_logs}"
+  [ -z "${baked}" ] || rm -f "${baked}"
+}
+trap cleanup EXIT
+start_node_checks() {
+  node_logs="$(mktemp -d)"
+  ( node tools/validate_godot_world.mjs >/dev/null; exit ) 2>"${node_logs}/0" &
+  node_pids[0]=$!
+  ( node tools/check_godot_world_determinism.mjs >/dev/null; exit ) 2>"${node_logs}/1" &
+  node_pids[1]=$!
+  ( node tools/check_street_detail_clearance.mjs; exit ) >"${node_logs}/2" 2>&1 &
+  node_pids[2]=$!
+}
+
 for test in \
   game/tests/headless_scene_parse.gd \
   game/tests/headless_startup_configuration_contract.gd \
@@ -101,6 +147,7 @@ for test in \
   game/tests/headless_fast_drop.gd \
   game/tests/headless_vehicle_contract.gd \
   game/tests/headless_car_stance.gd \
+  game/tests/headless_touch_drive.gd \
   game/tests/automated_route_qa.gd \
   game/tests/shared/island_test.gd
 do
@@ -114,15 +161,16 @@ do
   if [ "${test}" = game/tests/shared/island_test.gd ]; then
     display_args=()
     time_limit=900
+    start_node_checks
   fi
   check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
 done
 
 # Desktop exports load a baked world instead of generating it at startup
 # (tools/build-linux.sh, tools/build-mac.sh). Bake it the same way and run the
-# whole-island check on it too. The bake is a build product, removed afterwards.
+# whole-island check on it too. The bake is a build product, removed afterwards
+# (and on any exit, by cleanup).
 baked=generated/native/static_world.scn
-trap 'rm -f "${baked}"' EXIT
 echo "== tools/prebuild-static-world.sh native"
 check_godot "tools/prebuild-static-world.sh native" 900 tools/prebuild-static-world.sh native
 if [ -s "${baked}" ]; then
@@ -131,14 +179,15 @@ if [ -s "${baked}" ]; then
 fi
 rm -f "${baked}"
 
-echo "== tools/validate_godot_world.mjs"
-node tools/validate_godot_world.mjs >/dev/null || failed+=("tools/validate_godot_world.mjs")
-
-echo "== tools/check_godot_world_determinism.mjs"
-node tools/check_godot_world_determinism.mjs >/dev/null || failed+=("tools/check_godot_world_determinism.mjs")
-
-echo "== tools/check_street_detail_clearance.mjs"
-node tools/check_street_detail_clearance.mjs || failed+=("tools/check_street_detail_clearance.mjs")
+# The generated-world checks' results (started above; here if they were not).
+[ "${#node_pids[@]}" -gt 0 ] || start_node_checks
+for index in "${!node_checks[@]}"; do
+  echo "== ${node_checks[index]}"
+  wait "${node_pids[index]}"
+  status=$?
+  cat "${node_logs}/${index}"
+  [ "${status}" -eq 0 ] || failed+=("${node_checks[index]}")
+done
 
 echo
 if [ ${#failed[@]} -eq 0 ]; then

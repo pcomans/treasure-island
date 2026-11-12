@@ -16,10 +16,10 @@
 // module holds the small props and the kit's mesh list.
 
 import { KIT_BASE_PARTS, MeshBuilder, clamp, curve, lerp, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./kit-mesh.mjs";
-import { CAR_BODIES, CAR_PART_COUNT, buildCar, carBodyGeometry, carKitExtras, carKitMeshes } from "./street-car-kit.mjs";
+import { CAR_BODIES, CAR_PART_COUNT, buildCar, buildCarTyre, carBodyGeometry, carKitExtras, carKitMeshes } from "./street-car-kit.mjs";
 
 // Re-exported for the kit's other users (the yard kit, the world generator, the validator).
-export { CAR_BODIES, MeshBuilder, buildCar, carBodyGeometry, carKitExtras, clamp, curve, lerp, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub };
+export { CAR_BODIES, MeshBuilder, buildCar, buildCarTyre, carBodyGeometry, carKitExtras, clamp, curve, lerp, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub };
 
 // The sixteen parts the kits share. The kit's meshes name a part in UV.x as
 // (part + 0.5) / CLUTTER_KIT_PART_SLOTS: the car kit's longer list

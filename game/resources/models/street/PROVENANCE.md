@@ -78,7 +78,12 @@
   lowered), a deckhouse and deck loads, a water barrier and a pole flag; and for
   every heap (pile, berm and windrow module) its collision floor (`_floor`), a
   height field laid over its near mesh with no triangle steeper than 45
-  degrees. Each vertex carries
+  degrees; and, last, for every vehicle a player drives (the vans, box trucks,
+  food-truck step van and class A and C RVs; 2026-11-11) its chassis without
+  wheels (`_chassis_lod0`), its front tyre and, where twin rear tyres differ, its
+  rear one round their centres (`_tyre_lod0`, `_tyre_rear_lod0`) and two empty
+  nodes at its right-hand wheel centres (`_axle_front`, `_axle_rear`), as the
+  car kit has for the cars. Each vertex carries
   its part in UV.x and baked occlusion in UV.y (a flag's face carries texture
   coordinates instead, for `street_pole_flag.png`); no materials or textures in
   the file. `street_yard.gdshader` colours the parts and

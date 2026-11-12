@@ -1,14 +1,15 @@
 class_name DrivableCar
 extends RigidBody3D
-## A street-clutter parked car set moving: the one the player drives, or one a
-## driven car shoved (game/scripts/vehicles/vehicle_manager.gd swaps it in for
-## its static row). An arcade car on raycast suspension, a real rigid body: it
+## A street-clutter parked car or a storage yard's van, truck or RV set moving:
+## the one the player drives, or one a driven car shoved
+## (game/scripts/vehicles/vehicle_manager.gd swaps it in for its static row). An arcade car on raycast suspension, a real rigid body: it
 ## goes airborne, lands, bounces, leans in corners and can flip and roll in
 ## crashes, off a ramp taken askew, in hard turns and when a kerb or an obstacle
 ## trips it sideways (owner, 2026-11-08: "flipping cars in games is fun").
 ##
 ## Each physics tick four rays, one per wheel, find the ground under the kit's
-## wheel centres (street_clutter_kit.gd drivable(); the drawn ground's lift over
+## wheel centres (street_clutter_kit.gd or street_yard_kit.gd drivable(); the
+## drawn ground's lift over
 ## the land collision is added, as for the player character's feet). A spring
 ## and damper per wheel hold the body up, sized so it rests at the parked car's
 ## height; tyre forces at each contact cancel side slip and drive or brake along
@@ -61,7 +62,13 @@ const RENDER_WORLD_VISIBLE := 1
 ## collision outline from the kit's body profiles (tools/lib/street-clutter-kit.mjs
 ## CAR_BODIES): the belt (hood) height, the rear deck height, the cabin's
 ## windshield base and top, roof end and rear glass base (m from the front
-## bumper) and its roof height.
+## bumper) and its roof height. The yards' vans, trucks and RVs (owner,
+## 2026-11-11; tools/lib/street-yard-meshes.mjs YARD_DRIVABLE, by kit name) are
+## heavier and slower, on the same suspension, grip and mild anti-roll, so the
+## tall ones tip in a fast corner; KISS arcade values, production inference.
+## Their outline is boxes [front, back (m from the front bumper), bottom, top,
+## half width] read off the kit's profiles (the first one's bottom edges raked as
+## a car's), their width the body's (m; a car's comes from its wheel track).
 const BODIES := {
 	"crossover": {"mass": 1750.0, "top": 37.0, "accel": 8.5, "belt": 1.04, "deck": 1.06, "cabin": [1.35, 2.18, 4.25, 4.58], "roof": 1.66},
 	"suv": {"mass": 2050.0, "top": 35.0, "accel": 8.0, "belt": 1.1, "deck": 1.11, "cabin": [1.42, 2.25, 4.7, 4.94], "roof": 1.76},
@@ -72,7 +79,22 @@ const BODIES := {
 	"pickup": {"mass": 2300.0, "top": 34.0, "accel": 7.5, "belt": 1.25, "deck": 1.21, "cabin": [1.75, 2.38, 3.7, 3.8], "roof": 1.95},
 	"utility": {"mass": 2600.0, "top": 31.0, "accel": 6.5, "belt": 1.25, "deck": 1.5, "cabin": [1.75, 2.38, 3.7, 3.8], "roof": 1.95},
 	"van": {"mass": 2500.0, "top": 30.0, "accel": 6.5, "belt": 1.26, "deck": 1.26, "cabin": [0.98, 1.82, 5.82, 5.9], "roof": 2.62},
+	"van_step": {"mass": 4500.0, "top": 27.0, "accel": 5.0, "roof": 2.95, "width": 2.4,
+		"boxes": [[0.0, 7.0, 0.42, 1.25, 1.2], [0.42, 7.0, 1.25, 2.55, 1.2], [0.82, 7.0, 2.55, 2.95, 1.2]]},
+	"food_truck_step_van": {"mass": 5200.0, "top": 26.0, "accel": 4.5, "roof": 2.98, "width": 2.4,
+		"boxes": [[0.0, 7.3, 0.42, 1.25, 1.2], [0.42, 7.3, 1.25, 2.55, 1.2], [0.82, 7.3, 2.55, 2.98, 1.2]]},
+	"box_truck_medium": {"mass": 6500.0, "top": 26.0, "accel": 4.5, "roof": 3.5, "width": 2.4,
+		"boxes": [[0.0, 7.4, 0.45, 0.98, 1.2], [0.0, 2.05, 0.98, 2.48, 1.0], [2.17, 7.4, 0.98, 3.5, 1.2]]},
+	"box_truck_large": {"mass": 9500.0, "top": 24.0, "accel": 3.6, "roof": 4.0, "width": 2.6,
+		"boxes": [[0.0, 10.4, 0.42, 1.18, 1.3], [0.0, 1.3, 1.18, 1.72, 1.17], [1.3, 2.75, 1.18, 2.8, 1.17], [2.87, 10.4, 1.18, 4.0, 1.3]]},
+	"rv_class_c": {"mass": 5500.0, "top": 27.0, "accel": 4.5, "roof": 3.2, "width": 2.4,
+		"boxes": [[0.0, 8.5, 0.45, 1.3, 1.2], [0.75, 1.85, 1.3, 2.24, 1.0], [0.95, 1.73, 2.24, 3.2, 1.2], [1.73, 8.5, 1.3, 3.2, 1.2]]},
+	"rv_class_a": {"mass": 10000.0, "top": 25.0, "accel": 3.5, "roof": 3.45, "width": 2.55,
+		"boxes": [[0.0, 11.6, 0.42, 1.25, 1.275], [0.1, 11.6, 1.25, 2.6, 1.275], [0.9, 11.6, 2.6, 3.45, 1.275]]},
 }
+## Bodies that drive as another body's BODIES entry: the yard's cargo van is the
+## street van's body, so a retune of the van moves both.
+const ALIASES := {"van_cargo": "van"}
 const REVERSE_TOP_MPS := 10.0
 const REVERSE_ACCEL_MPS2 := 6.0
 const BRAKE_MPS2 := 14.0
@@ -192,7 +214,8 @@ const OUTSIDE_LIMIT_S := 8.0
 const FALL_RECOVERY_Y := -20.0
 ## The outline test is redone only once the car has moved this far (m).
 const OUTLINE_RECHECK_M := 1.0
-## The detail hand-over and draw range, as the parked cars' (street_clutter_kit.gd).
+## The detail hand-over and draw range, as the parked cars' (street_clutter_kit.gd);
+## a yard vehicle's parts give its own (street_yard_kit.gd drivable()).
 const LOD_NEAR_M := KIT.LOD_NEAR_M
 const FAR_RANGE_M := 260.0
 ## The driver's seat in the car frame: where the player rides, for the systems
@@ -273,13 +296,25 @@ var _teleport_pending := false
 var _prev := Transform3D.IDENTITY
 var _curr := Transform3D.IDENTITY
 var _visual: Node3D
+## The wheels: all four, or the front two where the rear ones are another mesh
+## (_rear_wheels: a truck's twin tyres).
 var _wheels: MultiMesh
 ## The hero level's driver at the wheel (shown while occupied), where it draws.
 var _driver: Node3D
 ## The hero level's wheels and brakes, where it draws.
 var _hero_wheels: MultiMesh
 var _hero_brakes: MultiMesh
+var _rear_wheels: MultiMesh
+## The front of the body (its chassis mesh's) in the car frame, where a boxy
+## body's outline is measured from.
+var _front_z := -2.25
 var _hull_query := PhysicsShapeQueryParameters3D.new()
+
+
+## The BODIES entry a body drives with (through ALIASES), or {} for a body
+## nobody can drive.
+static func spec_of(car_body: String) -> Dictionary:
+	return BODIES.get(ALIASES.get(car_body, car_body), {})
 
 
 ## Builds the car for a kit body (KIT.drivable(body)) in its paint and puts it
@@ -288,14 +323,15 @@ var _hull_query := PhysicsShapeQueryParameters3D.new()
 func setup(car_body: String, parts: Dictionary, material: Material, custom: Color, placement: Transform3D, excludes: Array[RID], hero: Node3D = null) -> void:
 	body = car_body
 	look = custom
-	var spec: Dictionary = BODIES[car_body]
+	var spec := spec_of(car_body)
 	var front: Vector3 = parts.front
 	var rear: Vector3 = parts.rear
 	wheel_radius = float(parts.radius)
 	wheelbase = rear.z - front.z
 	var chassis_box: AABB = (parts.chassis as Mesh).get_aabb()
 	length_m = chassis_box.size.z
-	width_m = 2.0 * (front.x + float(parts.tyre_width) * 0.5 + 0.035)
+	_front_z = chassis_box.position.z
+	width_m = float(spec.get("width", 2.0 * (front.x + float(parts.tyre_width) * 0.5 + 0.035)))
 	height_m = maxf(float(spec.roof), chassis_box.end.y)
 	_wheel_rest = [Vector3(-front.x, front.y, front.z), front, Vector3(-rear.x, rear.y, rear.z), rear]
 	mass = float(spec.mass)
@@ -364,8 +400,11 @@ func _gravity() -> float:
 
 
 ## Two convex hulls in the car frame (front -Z): the lower body, its nose and
-## tail raked up so kerbs and ramp toes don't snag, and the cabin.
+## tail raked up so kerbs and ramp toes don't snag, and the cabin. A boxy body
+## (spec boxes) has its boxes instead (_box_hulls).
 func _hulls(spec: Dictionary) -> Array[PackedVector3Array]:
+	if spec.has("boxes"):
+		return _box_hulls(spec.boxes)
 	var half_l := length_m * 0.5
 	var hw := width_m * 0.49
 	var bottom := maxf(0.14, wheel_radius * 0.6)
@@ -389,10 +428,39 @@ func _hulls(spec: Dictionary) -> Array[PackedVector3Array]:
 	return [lower, cabin]
 
 
+## A boxy body's hulls: each box [front, back (m from the front of the body),
+## bottom, top, half width], the first one's bottom edges raked as a car's lower
+## body's, so kerbs and ramp toes don't snag.
+func _box_hulls(boxes: Array) -> Array[PackedVector3Array]:
+	var hulls: Array[PackedVector3Array] = []
+	for index in boxes.size():
+		var box: Array = boxes[index]
+		var z0 := _front_z + float(box[0])
+		var z1 := _front_z + float(box[1])
+		var bottom := float(box[2])
+		var top := float(box[3])
+		var hw := float(box[4])
+		var hull := PackedVector3Array()
+		for sx: float in [-1.0, 1.0]:
+			hull.append(Vector3(sx * hw, top, z0))
+			hull.append(Vector3(sx * hw, top, z1))
+			if index == 0:
+				hull.append(Vector3(sx * hw, bottom, z0 + 0.42))
+				hull.append(Vector3(sx * hw, bottom, z1 - 0.36))
+				hull.append(Vector3(sx * hw, bottom + 0.17, z0))
+				hull.append(Vector3(sx * hw, bottom + 0.17, z1))
+			else:
+				hull.append(Vector3(sx * hw, bottom, z0))
+				hull.append(Vector3(sx * hw, bottom, z1))
+		hulls.append(hull)
+	return hulls
+
+
 ## The car's drawn levels, each over its own range from the car: the hero level
 ## (hero: the kit's hero_visual, where it is on) nearest, then the near chassis
-## with its four wheels, then the far mesh. Only the shadow caster and the far
-## mesh cast a shadow.
+## with its wheels (a boxy body's rear wheels apart, parts.tyre_rear), then the
+## far mesh. Only the shadow caster and the far mesh cast a shadow; a body
+## without a shadow caster (a yard vehicle) casts its own from its near level.
 func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: Node3D) -> void:
 	_visual = Node3D.new()
 	_visual.name = "Visual"
@@ -417,17 +485,20 @@ func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: N
 				(piece as GeometryInstance3D).visibility_range_end = near_from
 			hero.add_child(_driver)
 		_visual.add_child(hero)
-	_visual.add_child(_instance("Chassis", parts.chassis, 1, custom, material, bounds, near_from, LOD_NEAR_M, off))
-	var wheels := _instance("Wheels", parts.tyre, 4, custom, material, bounds, near_from, LOD_NEAR_M, off)
+	var near_m := float(parts.get("lod_near_m", LOD_NEAR_M))
+	var shadow_caster: Variant = parts.get("shadow")
+	var near_shadows := off if shadow_caster is Mesh else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	_visual.add_child(_instance("Chassis", parts.chassis, 1, custom, material, bounds, near_from, near_m, near_shadows))
+	var wheels := _instance("Wheels", parts.tyre, 2 if parts.has("tyre_rear") else 4, custom, material, bounds, near_from, near_m, near_shadows)
 	_wheels = wheels.multimesh
 	_visual.add_child(wheels)
-	if parts.get("shadow") is Mesh:
-		_visual.add_child(_instance("Shadow", parts.shadow, 1, custom, material, bounds, 0.0, LOD_NEAR_M, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
-	else:
-		# No shadow caster (a yard vehicle): the near level casts its own.
-		(_visual.get_node("Chassis") as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-		(_visual.get_node("Wheels") as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
-	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, LOD_NEAR_M, FAR_RANGE_M, GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
+	if parts.has("tyre_rear"):
+		var rear_wheels := _instance("RearWheels", parts.tyre_rear, 2, custom, material, bounds, near_from, near_m, near_shadows)
+		_rear_wheels = rear_wheels.multimesh
+		_visual.add_child(rear_wheels)
+	if shadow_caster is Mesh:
+		_visual.add_child(_instance("Shadow", shadow_caster, 1, custom, material, bounds, 0.0, near_m, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
+	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, near_m, float(parts.get("range_m", FAR_RANGE_M)), GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
 	_update_wheels()
 
 
@@ -508,6 +579,7 @@ func describe() -> Dictionary:
 		"roll": snappedf(rad_to_deg(asin(clampf(basis.x.y, -1.0, 1.0))), 0.1), "steer": snappedf(rad_to_deg(_steer), 0.1),
 		"compression": [snappedf(_compression[0], 0.001), snappedf(_compression[1], 0.001), snappedf(_compression[2], 0.001), snappedf(_compression[3], 0.001)],
 		"occupied": occupied, "righting": is_righting(), "sinking": is_sinking(), "holding": _holding, "frozen": freeze,
+		"body": body, "row": row_id,
 	}
 
 
@@ -1067,8 +1139,11 @@ func _update_wheels() -> void:
 		var left := i % 2 == 0
 		var face := Basis(Vector3.UP, PI) if left else Basis.IDENTITY
 		var spin := Basis(Vector3.RIGHT, -_spin[i] if left else _spin[i])
-		var turned := Transform3D(steer * face * spin, centre)
-		_wheels.set_instance_transform(i, turned)
+		var placed := Transform3D(steer * face * spin, centre)
+		if _rear_wheels != null and i >= 2:
+			_rear_wheels.set_instance_transform(i - 2, placed)
+		else:
+			_wheels.set_instance_transform(i, placed)
 		if _hero_wheels != null:
-			_hero_wheels.set_instance_transform(i, turned)
+			_hero_wheels.set_instance_transform(i, placed)
 			_hero_brakes.set_instance_transform(i, Transform3D(steer * face * (Basis(Vector3.RIGHT, 2.0 * KIT.CALIPER_ANGLE - PI) if left else Basis.IDENTITY), centre))

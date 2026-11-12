@@ -12,7 +12,7 @@
 
 import earcut from "earcut";
 
-import { buildCar, clamp, lerp, MeshBuilder, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./street-clutter-kit.mjs";
+import { buildCar, buildCarTyre, carBodyGeometry, clamp, lerp, MeshBuilder, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./street-clutter-kit.mjs";
 import { CONTAINER_LENGTHS, CONVEYOR_FOOT_M, CONVEYOR_INCLINE, CONVEYOR_MODULE_M, STUNT_RAMP_SIDE, STUNT_RAMP_VARIANTS, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS, stuntRampProfile } from "./street-yard-kit.mjs";
 
 const P = Object.freeze(Object.fromEntries(YARD_KIT_PARTS.map((name, index) => [name, index])));
@@ -346,11 +346,19 @@ function vnorm2(a) {
 }
 
 // ---------------------------------------------------------------- wheels
+// While a drivable vehicle's chassis is built (yardDrivableParts), wheel()
+// notes each wheel here instead of drawing it.
+let heldWheels = null;
+
 // A road wheel on an axle at (x centre of the tyre, radius, z), its outer face
 // toward `side` (+1 right, -1 left). dual: twin rear tyres (one wide tyre with
 // a deep-dish rim face). inner: close the tyre's inner side (a wheel no body
 // hides from below, such as a loader's).
 function wheel(out, x, z, radius, width, side, lod, { dual = false, rimColour = P.rim, inner = false } = {}) {
+  if (heldWheels) {
+    heldWheels.push({ x, z, radius, width, side, dual, rimColour, inner });
+    return;
+  }
   const center = v3(x, radius, z);
   const axis = v3(side, 0, 0);
   const tw = dual ? width * 2 + 0.03 : width;
@@ -1846,17 +1854,20 @@ function fifthWheel(out, lod) {
 
 // ---- vans
 function buildVan(variant, lod) {
-  if (variant === "cargo") {
-    // The car kit's high-roof cargo van, re-encoded into the yard kit's part slots.
-    const car = buildCar("van", lod);
-    const uvs = car.uvs.slice();
-    for (let i = 0; i < uvs.length; i += 2) {
-      const part = Math.floor(uvs[i] * 16);
-      uvs[i] = (part + 0.5) / YARD_KIT_PART_SLOTS;
-    }
-    return { ...car, uvs };
-  }
+  // The car kit's high-roof cargo van.
+  if (variant === "cargo") return yardSlots(buildCar("van", lod));
   return stepVan(new YardBuilder(lod), lod, { length: 7.0, height: 2.95, food: false });
+}
+
+// A car kit mesh re-encoded into the yard kit's part slots (the car kit's 16
+// parts are the yard kit's first 16, in the same order).
+function yardSlots(mesh) {
+  const uvs = mesh.uvs.slice();
+  for (let i = 0; i < uvs.length; i += 2) {
+    const part = Math.floor(uvs[i] * 16);
+    uvs[i] = (part + 0.5) / YARD_KIT_PART_SLOTS;
+  }
+  return { ...mesh, uvs };
 }
 
 // A food truck's serving window in its +X side at x = hw: glazing in a
@@ -3288,7 +3299,74 @@ export function yardKitMeshes() {
     meshes.push({ name: `${base}_end_neg_floor`, ...capFloor(near(`${base}_end_neg`), middle, -cap, 0) });
     meshes.push({ name: `${base}_end_pos_floor`, ...capFloor(near(`${base}_end_pos`), middle, 0, cap) });
   }
-  return [...meshes, ...stuntRampMarkers()];
+  return [...meshes, ...stuntRampMarkers(), ...yardDrivableParts()];
+}
+
+// The yard vehicles a player drives (owner, 2026-11-11: every storage-yard van,
+// RV and truck; game/scripts/vehicles/drivable_car.gd), by kit name. The towed
+// ones (travel and fifth-wheel RVs, the concession trailer, the trailers and
+// boats) have no cab to drive from; buses and the yards' machines are none of
+// the three.
+export const YARD_DRIVABLE = Object.freeze(["van_cargo", "van_step", "food_truck_step_van", "box_truck_medium", "box_truck_large", "rv_class_c", "rv_class_a"]);
+
+// Their drivable parts, as the car kit's carKitExtras, after every other mesh so
+// those stay as they were: <name>_chassis_lod0, the near mesh without its wheels
+// (their arch liners and axle bars stay); <name>_tyre_lod0, its front right
+// wheel round the origin, its face toward +X; <name>_tyre_rear_lod0 where the
+// rear wheels differ (twin tyres); and empty nodes <name>_axle_front and
+// <name>_axle_rear at the right-hand front and rear wheel centres (the left ones
+// mirror them in x).
+function yardDrivableParts() {
+  const builds = new Map(kitEntries());
+  const round = (values) => values.map((value) => Math.round(value * 1e4) / 1e4);
+  const parts = [];
+  for (const name of YARD_DRIVABLE) {
+    let chassis;
+    let tyre;
+    let tyreRear = null;
+    let front;
+    let rear;
+    if (name === "van_cargo") {
+      const geometry = carBodyGeometry("van");
+      chassis = yardSlots(buildCar("van", 0, { wheels: false }));
+      tyre = yardSlots(buildCarTyre("van", 0));
+      front = geometry.wheels.front_right;
+      rear = geometry.wheels.rear_right;
+    } else {
+      heldWheels = [];
+      let wheels;
+      try {
+        chassis = builds.get(name)(0);
+      } finally {
+        wheels = heldWheels;
+        heldWheels = null;
+      }
+      const right = wheels.filter((spec) => spec.side > 0).sort((a, b) => a.z - b.z);
+      if (wheels.length !== 4 || right.length !== 2) throw new Error(`${name} needs two axles of two wheels to drive, not ${wheels.length} wheels`);
+      const [frontWheel, rearWheel] = right;
+      tyre = wheelAtOrigin(frontWheel);
+      const same = ["radius", "width", "dual", "rimColour", "inner"].every((key) => frontWheel[key] === rearWheel[key]);
+      if (!same) tyreRear = wheelAtOrigin(rearWheel);
+      front = [frontWheel.x, frontWheel.radius, frontWheel.z];
+      rear = [rearWheel.x, rearWheel.radius, rearWheel.z];
+    }
+    parts.push({ name: `${name}_chassis_lod0`, ...chassis });
+    parts.push({ name: `${name}_tyre_lod0`, ...tyre });
+    if (tyreRear) parts.push({ name: `${name}_tyre_rear_lod0`, ...tyreRear });
+    parts.push({ name: `${name}_axle_front`, marker: true, translation: round(front) });
+    parts.push({ name: `${name}_axle_rear`, marker: true, translation: round(rear) });
+  }
+  return parts;
+}
+
+// One right-hand wheel as wheel() draws it, its centre moved to the origin.
+function wheelAtOrigin(spec) {
+  const out = new YardBuilder(0);
+  wheel(out, 0, 0, spec.radius, spec.width, 1, 0, { dual: spec.dual, rimColour: spec.rimColour, inner: spec.inner });
+  const mesh = out.result();
+  const positions = mesh.positions.slice();
+  for (let i = 1; i < positions.length; i += 3) positions[i] -= spec.radius;
+  return { ...mesh, positions };
 }
 
 export {

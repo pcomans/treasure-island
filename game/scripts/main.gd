@@ -9,6 +9,9 @@ const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+## A touch screen's HUD is laid out for this many pixels or more each way
+## (use_touch_controls); the view still fills the screen's shape.
+const TOUCH_LAYOUT_PX := 720
 ## The gameplay actions a pause lets go of, so none is still held when play goes
 ## on: a key let go while the window was away, or a touch button's own press.
 const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"move_left", &"move_right", &"run", &"jetpack", &"fast_drop", &"recover", &"vehicle_enter_exit", &"handbrake"]
@@ -55,10 +58,8 @@ func _ready() -> void:
 	add_child(clock)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
-		# everywhere); a touch screen's controls are laid out for 720 px or more.
+		# everywhere).
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
-		if bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
-			get_window().content_scale_size = Vector2i(720, 720)
 		# Keep the complete island while avoiding distant shadow passes in WebGL.
 		$Sun.shadow_enabled = false
 		get_viewport().scaling_3d_scale = 0.75
@@ -69,14 +70,7 @@ func _ready() -> void:
 	player.hide()
 	player.set_gameplay_enabled(false)
 	if OS.has_feature("web") and bool(JavaScriptBridge.eval("navigator.maxTouchPoints > 0")):
-		_touch_controls = TOUCH_CONTROLS.new()
-		_touch_controls.name = "TouchControls"
-		_touch_controls.camera_rig = player.camera_rig
-		_touch_controls.player = player
-		hud.add_child(_touch_controls)
-		_touch_controls.set_gameplay_active(false)
-		_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
-		hud.set_touch_instructions()
+		use_touch_controls()
 	if OS.has_feature("web"):
 		_web_blur_callback = JavaScriptBridge.create_callback(_on_web_blur)
 		_web_visibility_callback = JavaScriptBridge.create_callback(_on_web_visibility)
@@ -98,6 +92,34 @@ func _ready() -> void:
 	hud.exit_requested.connect(_exit_game)
 	world_root.call_deferred("load_world")
 	STARTUP_MARKS.mark("main_ready_end")
+
+
+## Touch play, as on a touch browser (navigator.maxTouchPoints > 0: _ready calls
+## it there, and the touch tests do): the HUD laid out for a screen
+## TOUCH_LAYOUT_PX or more each way, the touch controls over it (their II button
+## pauses), the controls screen's touch list and the cars told there is no F key.
+## Called before the world is ready, play hands the touch controls the cars and
+## starts them (_on_world_ready); called after, that happens at once. Returns
+## the touch controls.
+func use_touch_controls() -> TouchControls:
+	if _touch_controls != null:
+		return _touch_controls
+	get_window().content_scale_size = Vector2i(TOUCH_LAYOUT_PX, TOUCH_LAYOUT_PX)
+	_touch_controls = TOUCH_CONTROLS.new()
+	_touch_controls.name = "TouchControls"
+	_touch_controls.camera_rig = player.camera_rig
+	_touch_controls.player = player
+	hud.add_child(_touch_controls)
+	_touch_controls.set_gameplay_active(false)
+	_touch_controls.pause_requested.connect(func() -> void: _set_paused(true))
+	hud.set_touch_instructions()
+	if vehicles != null:
+		vehicles.set_touch(true)
+		_touch_controls.vehicles = vehicles
+	if _world_ready:
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+		_touch_controls.set_gameplay_active(not get_tree().paused)
+	return _touch_controls
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -185,16 +207,15 @@ func _on_world_ready(_report: Dictionary) -> void:
 	# paused behind it: nothing moves and the mouse stays free until the player
 	# closes it (to the pause menu) and resumes.
 	var controls_open := hud.controls_visible()
-	if capture_mouse_on_ready and not OS.has_feature("web") and not controls_open:
+	if capture_mouse_on_ready and not OS.has_feature("web") and _touch_controls == null and not controls_open:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
-	if OS.has_feature("web"):
-		# Touch plays immediately; desktop walks with a visible pointer until a
-		# deliberate click requests look capture. Never auto-request browser lock.
-		if _touch_controls != null:
-			_touch_controls.set_gameplay_active(true)
-		else:
-			hud.set_pointer_capture_hint(true)
+	# Touch plays immediately; the desktop web walks with a visible pointer until
+	# a deliberate click requests look capture. Never auto-request browser lock.
+	if _touch_controls != null:
+		_touch_controls.set_gameplay_active(true)
+	elif OS.has_feature("web"):
+		hud.set_pointer_capture_hint(true)
 	if controls_open:
 		_set_paused(true)
 	# Launch check for exported builds: load the island, then exit cleanly.

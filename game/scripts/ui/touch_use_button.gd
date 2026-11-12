@@ -16,6 +16,10 @@ extends Control
 
 enum Mode { HIDDEN, ENTER, EXIT, DROP }
 
+## Every touch button's label (touch_controls.gd draws RISE's and RUN's alike):
+## its baseline this far below the button's top, in the fallback font at this size.
+const LABEL_BASELINE_PX := 122.0
+const LABEL_FONT_SIZE := 20
 const CAR_ICON := preload("res://game/resources/ui/touch/icon-car.png")
 const DROP_ICON := preload("res://game/resources/ui/touch/icon-drop.png")
 const ICONS := {Mode.ENTER: CAR_ICON, Mode.EXIT: CAR_ICON, Mode.DROP: DROP_ICON}
@@ -132,4 +136,4 @@ func _draw() -> void:
 	if mode == Mode.HIDDEN:
 		return
 	# The same font, size and baseline as the RISE and RUN labels, centred.
-	draw_string(ThemeDB.fallback_font, Vector2(0, 122), LABELS[mode], HORIZONTAL_ALIGNMENT_CENTER, size.x, 20, Color.WHITE)
+	draw_string(ThemeDB.fallback_font, Vector2(0, LABEL_BASELINE_PX), LABELS[mode], HORIZONTAL_ALIGNMENT_CENTER, size.x, LABEL_FONT_SIZE, Color.WHITE)

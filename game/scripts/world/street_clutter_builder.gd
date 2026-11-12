@@ -28,14 +28,15 @@ extends RefCounted
 ## playable boundary) gets no shapes, as the deck has none.
 ##
 ## The rows a car can set moving (game/scripts/vehicles/vehicle_manager.gd: the
-## parked cars, which the player drives and a driven car shoves, and the jersey
-## water barriers, which it shoves) are listed in the root's swappable_rows
-## metadata: id -> {prop, params, transform, custom, footprint, instances:
-## [[MultiMeshInstance3D name, instance index] (and "shadow" for a car's shadow
-## caster), ...], shapes: [[body name,
-## CollisionShape3D name], ...]}, so a static row can be hidden and replaced by a
-## live body in the world generated at startup and in the baked one alike (the
-## dummy renderer reads no MultiMesh transforms back).
+## parked cars and the yards' vans, trucks and RVs, which the player drives and a
+## driven car shoves, and the jersey water barriers, which it shoves) are listed
+## in the root's swappable_rows metadata: id -> {prop, params, transform, custom,
+## footprint, instances: [[MultiMeshInstance3D name, instance index] (and
+## "shadow" for a car's shadow caster), ...], shapes: [[body name,
+## CollisionShape3D name], ...]}, a yard row also its seed and a yard vehicle its
+## body (street_yard_kit.gd drivable_name), so a static row can be hidden and
+## replaced by a live body in the world generated at startup and in the baked
+## one alike (the dummy renderer reads no MultiMesh transforms back).
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
@@ -232,8 +233,13 @@ func _add_yard_row(yard: Variant, row: Dictionary, prop: String, params: Diction
 	var basis := Basis(Vector3.UP, yaw) * Basis(Vector3.RIGHT, float(params.get("pitch", 0.0))) * Basis(Vector3.BACK, -float(params.get("roll", 0.0)))
 	var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + float(params.get("lift", 0.0)), float(position[2])))
 	var id := str(row.id)
-	if prop == "equipment" and int(params.get("variant", -1)) == WATER_BARRIER_VARIANT and str(surface.get("kind", "")) != "deck":
+	var drivable: String = yard.drivable_name(prop, params)
+	if str(surface.get("kind", "")) != "deck" and (drivable != "" or (prop == "equipment" and int(params.get("variant", -1)) == WATER_BARRIER_VARIANT)):
 		swappable[id] = {"prop": prop, "params": params.duplicate(true), "transform": placement, "custom": Color(0, 0, 0, 0), "footprint": (footprint as Dictionary).duplicate() if footprint is Dictionary else {}, "seed": hash(id) & 0x7fffffff, "instances": [], "shapes": []}
+		if drivable != "":
+			# The vehicle is one piece: the live one takes its paint.
+			swappable[id]["body"] = drivable
+			swappable[id]["custom"] = (built.pieces[0] as Dictionary).custom
 	for piece: Dictionary in built.pieces:
 		var key := "yard:%s" % piece.mesh_key
 		if not batches.has(key):

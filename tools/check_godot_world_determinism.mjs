@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { mkdtempSync, readFileSync, readdirSync, rmSync, statSync } from "node:fs";
-import { spawnSync } from "node:child_process";
+import { execFile } from "node:child_process";
 import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -16,15 +16,29 @@ import { invariant, sha256File, stableJson } from "./lib/world-contract.mjs";
 const scriptDirectory = dirname(fileURLToPath(import.meta.url));
 const projectRoot = resolve(scriptDirectory, "..");
 
+// Runs a project script in a child node process. It does not block, so the two
+// clean generations below run side by side, each in its own process.
 function run(script, args) {
-  const result = spawnSync(process.execPath, [resolve(projectRoot, script), ...args], {
-    cwd: projectRoot,
-    encoding: "utf8",
-    maxBuffer: 50 * 1024 * 1024,
+  return new Promise((resolveRun, rejectRun) => {
+    execFile(process.execPath, [resolve(projectRoot, script), ...args], {
+      cwd: projectRoot,
+      encoding: "utf8",
+      maxBuffer: 50 * 1024 * 1024,
+    }, (error, stdout, stderr) => {
+      // A string code: the child could not start, or it overflowed maxBuffer.
+      if (typeof error?.code === "string") {
+        rejectRun(error);
+        return;
+      }
+      // Otherwise an error is a non-zero exit (a number) or a signal (null).
+      try {
+        invariant(!error, `${script} failed:\n${stdout}\n${stderr}`);
+        resolveRun(stdout.trim());
+      } catch (failure) {
+        rejectRun(failure);
+      }
+    });
   });
-  if (result.error) throw result.error;
-  invariant(result.status === 0, `${script} failed:\n${result.stdout}\n${result.stderr}`);
-  return result.stdout.trim();
 }
 
 function list(root, current = root) {
@@ -45,15 +59,21 @@ function inventory(root) {
   }));
 }
 
-function main() {
+async function main() {
   const temporaryDirectory = mkdtempSync(join(tmpdir(), "ti-world-determinism-"));
   try {
     const first = resolve(temporaryDirectory, "first");
     const second = resolve(temporaryDirectory, "second");
-    run("tools/build_godot_world.mjs", ["--output", first]);
-    run("tools/validate_godot_world.mjs", [first]);
-    run("tools/build_godot_world.mjs", ["--output", second]);
-    run("tools/validate_godot_world.mjs", [second]);
+    // Two clean generations, each then validated, side by side. Both run to
+    // their end before either counts, and a failure is reported as when they
+    // ran one after the other: the first generation's before the second's.
+    const generations = await Promise.allSettled([first, second].map(async (output) => {
+      await run("tools/build_godot_world.mjs", ["--output", output]);
+      await run("tools/validate_godot_world.mjs", [output]);
+    }));
+    for (const generation of generations) {
+      if (generation.status === "rejected") throw generation.reason;
+    }
     const firstInventory = inventory(first);
     const secondInventory = inventory(second);
     invariant(stableJson(firstInventory) === stableJson(secondInventory), "Clean generations differ by path, byte count, or hash");
@@ -147,4 +167,4 @@ function main() {
   }
 }
 
-main();
+await main();

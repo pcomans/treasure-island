@@ -1767,7 +1767,15 @@ export function buildCarParts(name, levelName) {
 // the yard kit's cargo van takes level 0 (mid) and 1 (far) this way.
 export function buildCar(name, lodIndex, { wheels = true } = {}) {
   const parts = buildCarParts(name, lodIndex === 0 ? "mid" : "far");
-  const mesh = (wheels ? parts.car : parts.chassis).result();
+  return asBaseParts((wheels ? parts.car : parts.chassis).result());
+}
+// One right-hand wheel of a body round its own centre, its face toward +X, at
+// buildCar's level and in its sixteen base parts (the yard kit's driven cargo
+// van, whose chassis is buildCar's).
+export function buildCarTyre(name, lodIndex) {
+  return asBaseParts(buildCarParts(name, lodIndex === 0 ? "mid" : "far").wheel.result());
+}
+function asBaseParts(mesh) {
   const uvs = mesh.uvs.slice();
   for (let i = 0; i < uvs.length; i += 2) uvs[i] = (CAR_PART_AS_BASE[Math.floor(uvs[i] * CAR_PART_COUNT)] + 0.5) / 16;
   return { ...mesh, uvs };

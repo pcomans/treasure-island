@@ -12,6 +12,13 @@ const BUTTON_COLOR := Color(0.9, 0.9, 0.9, 0.85)
 ## How long the player must be off the ground before the use button shows the
 ## drop arrow (s), so a step down a kerb doesn't flash it.
 const AIR_SHOW_S := 0.15
+## The pause button: a disc of this radius, and a tap within it (px).
+const PAUSE_RADIUS_PX := 34.0
+## A button's label sits LABEL_INSET_PX in from its left and on the use button's
+## baseline (touch_use_button.gd LABEL_BASELINE_PX); the stick's MOVE label at
+## this offset from the stick's corner.
+const LABEL_INSET_PX := 18.0
+const STICK_LABEL_AT := Vector2(82, 228)
 var camera_rig: PlayerCamera
 var player: PlayerController
 ## The drivable cars (main.gd sets them once the world is loaded): the use
@@ -106,7 +113,7 @@ func _sync_camera() -> void:
 func _input(event: InputEvent) -> void:
 	if not _active:
 		return
-	if event is InputEventScreenTouch and event.pressed and not event.canceled and event.position.distance_to(_pause_center) <= 34.0:
+	if event is InputEventScreenTouch and event.pressed and not event.canceled and event.position.distance_to(_pause_center) <= PAUSE_RADIUS_PX:
 		pause_requested.emit()
 		get_viewport().set_input_as_handled()
 		return
@@ -201,13 +208,14 @@ func _draw() -> void:
 	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
 	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
-	var labels := [[_move_stick.position + Vector2(82, 228), "MOVE"], [_buttons[0].position + Vector2(18, 122), _rise_label()]]
+	var label_at := Vector2(LABEL_INSET_PX, USE_BUTTON.LABEL_BASELINE_PX)
+	var labels := [[_move_stick.position + STICK_LABEL_AT, "MOVE"], [_buttons[0].position + label_at, _rise_label()]]
 	if not _driving:
-		labels.append_array([[_buttons[1].position + Vector2(18, 122), "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]])
+		labels.append_array([[_buttons[1].position + label_at, "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]])
 	for item in labels:
-		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
-	draw_circle(_pause_center, 34, Color(0.03, 0.1, 0.14, 0.65))
-	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, 20, Color.WHITE)
+		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
+	draw_circle(_pause_center, PAUSE_RADIUS_PX, Color(0.03, 0.1, 0.14, 0.65))
+	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 
 ## RISE presses the jetpack and, as Space does, the handbrake: in a car the
 ## vehicles read it (the jetpack is off there); on foot nothing reads it.
