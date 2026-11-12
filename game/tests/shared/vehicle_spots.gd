@@ -51,20 +51,42 @@ static func beside(main: GameMain, vehicles: VehicleManager, body: String, used:
 	return {}
 
 
-## A swappable row's parked collision box (street_clutter_builder.gd: one box
-## over its body, its floor on the ground): {xf, half} (its transform and half
-## size), or {}.
+## A swappable row's parked collision as one box round all its shapes, in the
+## row's own frame (street_clutter_builder.gd: a box over a yard vehicle's body,
+## a car's convex pieces of its drawn body, their floor on the ground): {xf,
+## half} (the box's transform and half size), or {}.
 static func parked_box(main: GameMain, vehicles: VehicleManager, id: String) -> Dictionary:
-	var shapes: Array = vehicles.row(id).get("shapes", [])
+	var row := vehicles.row(id)
+	var shapes: Array = row.get("shapes", [])
 	var clutter := main.world_root.street_detail_layer("clutter").get_node_or_null("GeneratedStreetClutter")
 	if clutter == null or shapes.is_empty():
 		return {}
-	var body := clutter.get_node_or_null(str(shapes[0][0]))
-	var shape := body.get_node_or_null(str(shapes[0][1])) as CollisionShape3D if body != null else null
-	var box := shape.shape as BoxShape3D if shape != null else null
-	if box == null:
+	var frame: Transform3D = row.transform
+	var to_row := frame.affine_inverse()
+	var bounds := AABB()
+	var found := false
+	for ref: Array in shapes:
+		var body := clutter.get_node_or_null(str(ref[0]))
+		var shape := body.get_node_or_null(str(ref[1])) as CollisionShape3D if body != null else null
+		if shape == null:
+			continue
+		var local := to_row * shape.global_transform
+		var piece := AABB()
+		if shape.shape is BoxShape3D:
+			var size := (shape.shape as BoxShape3D).size
+			piece = local * AABB(-size * 0.5, size)
+		elif shape.shape is ConvexPolygonShape3D and not (shape.shape as ConvexPolygonShape3D).points.is_empty():
+			var points := (shape.shape as ConvexPolygonShape3D).points
+			piece = AABB(local * points[0], Vector3.ZERO)
+			for point: Vector3 in points:
+				piece = piece.expand(local * point)
+		else:
+			continue
+		bounds = piece if not found else bounds.merge(piece)
+		found = true
+	if not found:
 		return {}
-	return {"xf": shape.global_transform, "half": box.size * 0.5}
+	return {"xf": frame * Transform3D(Basis.IDENTITY, bounds.get_center()), "half": bounds.size * 0.5}
 
 
 ## Whether another drivable vehicle's parked box is within the vehicles' reach
