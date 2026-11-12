@@ -436,8 +436,8 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
     // Up to just under the roof all the way across, so nothing past it shows
     // over its top and no corner of it pokes out through a cab's roof rail.
     const n = v3(0, 0, -1);
-    const xs = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1].map((t) => t * inner);
-    const topAt = (x) => shape.lid(Math.abs(x), cabinEnd).y - 0.02;
+    const xs = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1].map((t) => t * (inner - 0.06));
+    const topAt = (x) => shape.lid(Math.abs(x), cabinEnd).y - 0.03;
     for (let i = 0; i < xs.length - 1; i += 1) {
       out.flat(at(xs[i], floor, cabinEnd), at(xs[i], topAt(xs[i]), cabinEnd), at(xs[i + 1], topAt(xs[i + 1]), cabinEnd), at(xs[i + 1], floor, cabinEnd), n, P.cabin, 0.5);
     }
@@ -485,15 +485,19 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   // Seats.
   const recline = (16 * Math.PI) / 180;
   const seatAxes = [X, vnorm(v3(0, Math.cos(recline), Math.sin(recline))), vnorm(v3(0, -Math.sin(recline), Math.cos(recline)))];
-  const seat = (x, zf, width, bench) => {
+  const fullBackH = Math.min(0.31, (body.cabin.roof - 0.3 - (floor + 0.27)) / 2);
+  // A seat's back centre and its headrests' centres (x offsets), for a back height.
+  const seatParts = (x, zf, width, bench, backH) => {
+    const backC = vadd(at(x, floor + 0.27 + 0.03, zf + 0.25), vscale(seatAxes[1], backH + 0.02));
+    const heads = (bench ? [-width * 0.3, width * 0.3] : [0]).map((dx) => vadd(vadd(backC, v3(dx, 0, 0)), vscale(seatAxes[1], backH + 0.115)));
+    return { backC, heads };
+  };
+  const seat = (x, zf, width, bench, { backH = fullBackH, headrests = true } = {}) => {
     const hip = floor + 0.27;
     out.roundedBox(at(x, hip, zf - 0.02), [width / 2, 0.065, 0.25], 0.05, P.seat, { axes: [X, vnorm(v3(0, 1, -0.1)), vnorm(v3(0, 0.1, 1))], ao: 0.85 });
-    const backH = Math.min(0.31, (body.cabin.roof - 0.3 - hip) / 2);
-    const backC = vadd(at(x, hip + 0.03, zf + 0.25), vscale(seatAxes[1], backH + 0.02));
+    const { backC, heads: headCs } = seatParts(x, zf, width, bench, backH);
     out.roundedBox(backC, [width / 2 - 0.01, backH, 0.06], 0.05, P.seat, { axes: seatAxes, taper: bench ? null : [0, 1, 0.82] });
-    const heads = bench ? [-width * 0.3, width * 0.3] : [0];
-    for (const dx of heads) {
-      const headC = vadd(vadd(backC, v3(dx, 0, 0)), vscale(seatAxes[1], backH + 0.115));
+    for (const headC of headrests ? headCs : []) {
       out.roundedBox(headC, [0.125, 0.085, 0.05], 0.045, P.seat, { axes: seatAxes });
       if (detail) {
         for (const post of [-0.05, 0.05]) out.tube([vadd(headC, vadd(v3(post, 0, 0), vscale(seatAxes[1], -0.07))), vadd(headC, vadd(v3(post, 0, 0), vscale(seatAxes[1], -0.16)))], 0.006, 4, P.chrome, { caps: false });
@@ -506,29 +510,48 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   const seated = { seat: at(-seatX, floor + 0.27 + 0.065, seatZ - 0.04), hands: [grip(-1), grip(1)] };
   seat(seatX, seatZ, 0.5, false);
   if (rows === 2) {
-    // The rear seat comes forward until its headrests clear the glass above
-    // them (a fastback's or a saloon's rear glass falls steeply over them).
-    const headroom = (zf) => shape.lid(inner * 0.35, zf).y - 0.07;
-    const headTop = (zf) => {
-      const hip = floor + 0.27;
-      const backH = Math.min(0.31, (body.cabin.roof - 0.3 - hip) / 2);
-      const back = vadd(at(0, hip + 0.03, zf + 0.25), vscale(seatAxes[1], backH + 0.02));
-      const head = vadd(back, vscale(seatAxes[1], backH + 0.115));
-      return { y: head[1] + 0.085, zf: head[2] + L / 2 + 0.05 };
+    // The rear seat comes forward until its headrests clear the roof and glass
+    // over each of their top corners by 6 cm (a fastback's or a saloon's rear
+    // glass falls steeply over them); where even the nearest place leaves too
+    // little room, its back is lower, or it has no headrests.
+    const benchW = Math.min(1.36, 2 * inner - 0.1);
+    const clears = (zf, backH, headrests) => {
+      const { backC, heads } = seatParts(0, zf, benchW, true, backH);
+      const tops = headrests
+        ? heads.flatMap((c) => [-0.125, 0.125].flatMap((dx) => [-0.05, 0.05].map((dz) => vadd(c, vadd(v3(dx, 0, 0), vadd(vscale(seatAxes[1], 0.085), vscale(seatAxes[2], dz)))))))
+        : [-1, 1].flatMap((sx) => [-0.06, 0.06].map((dz) => vadd(backC, vadd(v3(sx * (benchW / 2 - 0.01), 0, 0), vadd(vscale(seatAxes[1], backH), vscale(seatAxes[2], dz))))));
+      return tops.every((p) => p[1] < shape.lid(Math.abs(p[0]), p[2] + L / 2).y - 0.06);
     };
     let rearZ = Math.min(cabinEnd - 0.5, seatZ + 0.95);
-    while (rearZ > seatZ + 0.62 && headTop(rearZ).y > headroom(headTop(rearZ).zf)) rearZ -= 0.02;
-    if (rearZ > seatZ + 0.6) seat(0, rearZ, Math.min(1.36, 2 * inner - 0.1), true);
+    while (rearZ > seatZ + 0.62 && !clears(rearZ, fullBackH, true)) rearZ -= 0.02;
+    let rearSeat = { backH: fullBackH, headrests: true };
+    if (!clears(rearZ, fullBackH, true)) {
+      let backH = fullBackH;
+      while (backH > 0.16 && !clears(rearZ, backH, true)) backH -= 0.01;
+      rearSeat = clears(rearZ, backH, true) ? { backH, headrests: true } : { backH: fullBackH, headrests: false };
+      while (!rearSeat.headrests && rearSeat.backH > 0.12 && !clears(rearZ, rearSeat.backH, false)) rearSeat.backH -= 0.01;
+    }
+    if (rearZ > seatZ + 0.6) seat(0, rearZ, benchW, true, rearSeat);
     // Rear shelf (a saloon) or load cover (a hatch) behind the rear seat.
     const shelfY = shape.top(Math.min(L, cab.rear_base)) - 0.07;
     const shelf0 = rearZ + 0.42;
-    const shelf1 = cab.rear_base - 0.02;
+    const shelf1 = cab.rear_base - 0.08;
     if (!body.bed && shelf1 > shelf0 + 0.05) {
-      out.flat(at(-inner, shelfY, shelf0), at(-inner, shelfY, shelf1), at(inner, shelfY, shelf1), at(inner, shelfY, shelf0), up, P.cabin, 0.7);
+      // Its rear corners in from the body's rounded rear corners, so none pokes out through them.
+      const halfAt = (zf) => {
+        let half = inner;
+        for (let i = 0; i <= 120; i += 1) {
+          const o = shape.outline(2 + i / 120);
+          if (o.zf <= zf + 0.12) half = Math.min(half, Math.max(0, o.x - 0.15));
+        }
+        return half;
+      };
+      const rearHalf = halfAt(shelf1);
+      out.flat(at(-inner, shelfY, shelf0), at(-rearHalf, shelfY, shelf1), at(rearHalf, shelfY, shelf1), at(inner, shelfY, shelf0), up, P.cabin, 0.7);
     }
   }
   // Rear-view mirror under the windshield's top.
-  out.roundedBox(at(0, cab.roof - 0.09, cab.windshield_top - 0.02), [0.11, 0.032, 0.012], 0.01, (k, sign) => (k === 2 && sign > 0 ? P.mirror : P.cabin));
+  out.roundedBox(at(0, (cab.glass_top ?? cab.roof) - 0.09, cab.windshield_top - 0.02), [0.11, 0.032, 0.012], 0.01, (k, sign) => (k === 2 && sign > 0 ? P.mirror : P.cabin));
   return seated;
 }
 
@@ -540,7 +563,7 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
 export function underFloorY(body, detail) {
   return body.clearance + (detail >= 3 ? 0.1 : 0.03);
 }
-export function underFloor(out, shape, y, zf0, zf1, hw, ao) {
+export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08) {
   const { body, L, W, axles, archRadius } = shape;
   const zOf = (zf) => zf - L / 2;
   const well = W - 0.035 - body.tire_width - 0.055;
@@ -563,7 +586,7 @@ export function underFloor(out, shape, y, zf0, zf1, hw, ao) {
   // inside the body's bottom edge, so it never shows from beside or behind; at
   // each wheel it narrows to the well's wall.
   const zs = [];
-  const steps = Math.max(8, Math.ceil((zf1 - zf0) / 0.08));
+  const steps = Math.max(8, Math.ceil((zf1 - zf0) / step));
   for (let i = 0; i <= steps; i += 1) zs.push(lerp(zf0, zf1, i / steps));
   // The notch for each wheel ends exactly where the well's liner comes down to the floor.
   const linerR = archRadius + 0.004;
@@ -685,13 +708,34 @@ function band(out, outer, inner, xa, xb, part, ao = 1) {
 }
 // A flat disc filling an outline at height x: rings of the outline scaled in
 // toward its middle, then a small fan, so a draped disc follows its surface.
-function disc(out, outline, x, part, ao = 1) {
-  const scales = [1, 0.78, 0.56, 0.36, 0.18];
+function disc(out, outline, x, part, ao = 1, scales = [1, 0.78, 0.56, 0.36, 0.18]) {
   for (let i = 0; i < scales.length - 1; i += 1) {
     band(out, outline.map(([z, y]) => [z * scales[i], y * scales[i]]), outline.map(([z, y]) => [z * scales[i + 1], y * scales[i + 1]]), x, x, part, ao);
   }
   const last = scales.at(-1);
   out.fan(v3(x, 0, 0), outline.map(([z, y]) => v3(x, y * last, z * last)), v3(1, 0, 0), part, ao);
+}
+// A flat rectangle at height x facing out (+x), hz by hy half-sizes, in cols
+// columns along z.
+function strip(out, hz, hy, x, cols, part, ao = 1) {
+  const n = v3(1, 0, 0);
+  for (let i = 0; i < cols; i += 1) {
+    const z0 = lerp(-hz, hz, i / cols);
+    const z1 = lerp(-hz, hz, (i + 1) / cols);
+    out.flat(v3(x, -hy, z0), v3(x, hy, z0), v3(x, hy, z1), v3(x, -hy, z1), n, part, ao);
+  }
+}
+// A box from x0 (against its mount, left open) to x1, in cols columns along z.
+function slab(out, hz, hy, x0, x1, cols, part, ao = 1) {
+  strip(out, hz, hy, x1, cols, part, ao);
+  for (let i = 0; i < cols; i += 1) {
+    const z0 = lerp(-hz, hz, i / cols);
+    const z1 = lerp(-hz, hz, (i + 1) / cols);
+    out.flat(v3(x0, hy, z0), v3(x0, hy, z1), v3(x1, hy, z1), v3(x1, hy, z0), v3(0, 1, 0), part, ao);
+    out.flat(v3(x0, -hy, z1), v3(x0, -hy, z0), v3(x1, -hy, z0), v3(x1, -hy, z1), v3(0, -1, 0), part, ao);
+  }
+  out.flat(v3(x0, -hy, -hz), v3(x0, hy, -hz), v3(x1, hy, -hz), v3(x1, -hy, -hz), v3(0, 0, -1), part, ao);
+  out.flat(v3(x0, hy, hz), v3(x0, -hy, hz), v3(x1, -hy, hz), v3(x1, hy, hz), v3(0, 0, 1), part, ao);
 }
 
 const fittingCache = new Map();
@@ -736,13 +780,29 @@ export function doorHandle(detail) {
   });
 }
 
-// A US number plate (12 by 6 inches) in a black frame, standing off its mount.
+// A number plate in its frame (a US plate, 305 by 152 mm): the plate 2 mm
+// proud of the frame's face, so the frame shows all round it from any side,
+// and at the nearer levels its characters, a dark band across its middle, so
+// it reads as a plate on a white car too. Below the hero level the frame is a
+// plain slab and the plate a strip, in columns so a draped plate follows a
+// curved face; the far level has the plate alone.
 export function numberPlate(detail) {
   return cached(`plate${detail}`, () => {
     const out = new CarMesh();
-    if (detail >= 1) out.roundedBox(v3(0.002, 0, 0), [0.006, 0.086, 0.162], 0.004, P.trim, { ao: 0.8 });
-    else out.box(v3(0.002, 0, 0), [0.006, 0.084, 0.16], P.trim);
-    disc(out, roundedRect(0.1525, 0.076, 0.012, detail >= 2 ? 4 : 1), 0.0125, P.plate);
+    const cols = 4;
+    if (detail >= 3) out.roundedBox(v3(0.002, 0, 0), [0.006, 0.088, 0.164], 0.004, P.trim, { ao: 0.8 });
+    else if (detail >= 1) slab(out, 0.164, 0.088, -0.004, 0.008, cols, P.trim, 0.8);
+    if (detail >= 2) disc(out, roundedRect(0.1525, 0.076, 0.012, detail >= 3 ? 4 : 2, detail >= 3 ? 4 : 2), 0.0102, P.plate, 1, detail >= 3 ? undefined : [1, 0.5]);
+    else strip(out, 0.1525, 0.076, 0.0102, cols, P.plate);
+    if (detail >= 2) {
+      const n = v3(1, 0, 0);
+      const steps = 6;
+      for (let i = 0; i < steps; i += 1) {
+        const z0 = lerp(-0.105, 0.105, i / steps);
+        const z1 = lerp(-0.105, 0.105, (i + 1) / steps);
+        out.flat(v3(0.0116, -0.028, z0), v3(0.0116, 0.028, z0), v3(0.0116, 0.028, z1), v3(0.0116, -0.028, z1), n, P.rubber);
+      }
+    }
     return out;
   });
 }
@@ -767,7 +827,7 @@ export function brakeLight(detail) {
     if (detail >= 3) {
       out.roundedBox(v3(0.009, 0, 0), [0.01, 0.016, 0.18], 0.008, P.gloss_black);
       out.roundedBox(v3(0.0185, 0, 0), [0.0015, 0.008, 0.165], 0.0012, P.lamp_red);
-    } else out.box(v3(0.01, 0, 0), [0.011, 0.014, 0.17], P.lamp_red);
+    } else out.roundedBox(v3(0.009, 0, 0), [0.01, 0.012, 0.17], 0.007, P.lamp_red);
     return out;
   });
 }
