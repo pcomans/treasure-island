@@ -1348,7 +1348,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // millimetres from a ring or a column round a tight corner left a sliver
   // turned over.
   const regionEps = inner ? LINING_SNAP_M : inset > 0 ? REGION_SNAP_M.far : REGION_SNAP_M[levelName];
-  const epsOf = (fn) => (lines.includes(fn) ? EPS : regionEps);
+  // (At the far level the arches are cut as closely as the lines: snapped by
+  // its centimetre, their border ran off the arch's line and left a dark wedge
+  // ahead of and above the front wheels.)
+  const epsOf = (fn) => (lines.includes(fn) || (fn === fArch && detail === 0) ? EPS : regionEps);
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset, eps = EPS) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
