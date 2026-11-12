@@ -6,8 +6,11 @@
 // shut lines broken into fragments or ending in a wedge wider than the groove
 // (a dark notch), see-through spots (a ray from where a
 // player or a camera stands, around and above the car, whose first hit on the
-// body is a face seen from behind) and side windows painted over (a ray
-// straight in at a side window that meets anything but glass first).
+// body is a face seen from behind), side windows painted over (a ray
+// straight in at a side window that meets anything but glass first), number
+// plates hidden (a ray straight in at either plate that meets anything but the
+// plate or its characters first) and, at the hero level, the cabin poking out
+// (a seat, dashboard or lining point with neither shell nor glass above it).
 //
 //   node tools/check_street_car_meshes.mjs [CLUTTER_KIT.glb HERO_KIT.glb]
 //
@@ -18,7 +21,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { CAR_BODIES, bodyShape } from "./lib/street-car-kit.mjs";
+import { CALIPER_ANGLE, CAR_BODIES, bodyShape } from "./lib/street-car-kit.mjs";
 import { CAR_PARTS } from "./lib/street-car-parts.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -34,6 +37,13 @@ const MIN_GAP_RUN_M = 0.04;
 // A groove's triangle no wider than this (m: twice its area over its longest
 // edge) at the hero level and the others; the groove is 7 mm and 12 mm across.
 const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
+// A pixel's width (m) at the nearest distance each level is drawn from
+// (1440 pixels across a 70 degree view): the hero level from about 0.4 m, the
+// near level (a seventh car within the hero range draws it) from about 2 m,
+// the far level from 43 m (game/scripts/world/street_clutter_kit.gd
+// LOD_NEAR_M less half the diagonal of a 24 m clutter cell). A see-through
+// crack narrower than that is not judged.
+const FOOTPRINT_M = { hero: 4e-4, near: 2e-3, far: 0.04 };
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);
 const VERBOSE = process.env.CAR_CHECK_VERBOSE === "1";
@@ -77,12 +87,21 @@ const cross = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const length = (a) => Math.hypot(a[0], a[1], a[2]);
 
-// Triangles of a mesh (optionally moved: [x, y, z] offset, flipped round Y for a left wheel).
-function triangles(mesh, { offset = [0, 0, 0], turned = false } = {}) {
+// Triangles of a mesh (optionally moved: turned rotX radians round X, then
+// flipped round Y for a left wheel, then offset by [x, y, z]).
+function triangles(mesh, { offset = [0, 0, 0], turned = false, rotX = 0 } = {}) {
   const { positions: P, normals: N, uvs: U, indices: I } = mesh;
   const out = [];
-  const place = (i) => (turned ? [offset[0] - P[i * 3], offset[1] + P[i * 3 + 1], offset[2] - P[i * 3 + 2]] : [offset[0] + P[i * 3], offset[1] + P[i * 3 + 1], offset[2] + P[i * 3 + 2]]);
-  const turn = (i) => (turned ? [-N[i * 3], N[i * 3 + 1], -N[i * 3 + 2]] : [N[i * 3], N[i * 3 + 1], N[i * 3 + 2]]);
+  const [c, s] = [Math.cos(rotX), Math.sin(rotX)];
+  const spin = (v) => {
+    const r = [v[0], v[1] * c - v[2] * s, v[1] * s + v[2] * c];
+    return turned ? [-r[0], r[1], -r[2]] : r;
+  };
+  const place = (i) => {
+    const r = spin([P[i * 3], P[i * 3 + 1], P[i * 3 + 2]]);
+    return [offset[0] + r[0], offset[1] + r[1], offset[2] + r[2]];
+  };
+  const turn = (i) => spin([N[i * 3], N[i * 3 + 1], N[i * 3 + 2]]);
   for (let t = 0; t < I.length; t += 3) {
     const ids = [I[t], I[t + 1], I[t + 2]];
     const p = ids.map(place);
@@ -240,8 +259,40 @@ function rayCaster(tris, bounds) {
 
 // See-through: rays from round the car at a player's and a chase camera's
 // heights, aimed into its box; the first face each meets must face it.
-function seeThrough(tris, bounds, name = "") {
+function seeThrough(tris, bounds, name = "", footprint = 0) {
   const hit = rayCaster(tris, bounds);
+  // The first face drawn along a ray: the game culls back faces, so a cabin
+  // face seen from behind (a seat or the lining poking out through the shell)
+  // is not drawn and the ray goes on to whatever is drawn behind it.
+  const drawn = (origin, unit) => {
+    let from = origin;
+    let tri = hit(from, unit);
+    for (let skip = 0; tri && skip < 8 && INTERIOR.has(tri.part) && dot(tri.face, unit) > 0; skip += 1) {
+      const t = dot(sub(tri.p[0], from), tri.face) / dot(unit, tri.face);
+      from = [from[0] + unit[0] * (t + 1e-5), from[1] + unit[1] * (t + 1e-5), from[2] + unit[2] * (t + 1e-5)];
+      tri = hit(from, unit);
+    }
+    return tri;
+  };
+  // Is a back face seen along this ray and most of its neighbours a pixel
+  // around it (footprint metres apart)? A crack narrower than a pixel at the
+  // nearest distance the level is drawn from shows nothing.
+  const seenBehind = (origin, unit) => {
+    const tri = drawn(origin, unit);
+    return tri !== null && dot(tri.face, unit) > 0;
+  };
+  const wide = (origin, unit) => {
+    if (footprint <= 0) return true;
+    const side = length(cross(unit, [0, 1, 0])) > 0.1 ? cross(unit, [0, 1, 0]) : cross(unit, [1, 0, 0]);
+    const u = side.map((v) => v / length(side));
+    const w = cross(unit, u);
+    let behind = 0;
+    for (const a of [-0.5, 0, 0.5]) for (const b of [-0.5, 0, 0.5]) {
+      const o = [0, 1, 2].map((k) => origin[k] + (u[k] * a + w[k] * b) * footprint);
+      if (seenBehind(o, unit)) behind += 1;
+    }
+    return behind >= 5;
+  };
   const centre = [(bounds.lo[0] + bounds.hi[0]) / 2, (bounds.lo[1] + bounds.hi[1]) / 2, (bounds.lo[2] + bounds.hi[2]) / 2];
   const reach = length(sub(bounds.hi, bounds.lo));
   let random = 12345;
@@ -259,10 +310,10 @@ function seeThrough(tris, bounds, name = "") {
     const dir = sub(target, origin);
     const l = length(dir);
     const unit = [dir[0] / l, dir[1] / l, dir[2] / l];
-    const tri = hit(origin, unit);
+    const tri = drawn(origin, unit);
     if (!tri) continue;
     faults.rays += 1;
-    if (dot(tri.face, unit) > 0) {
+    if (dot(tri.face, unit) > 0 && wide(origin, unit)) {
       faults.backFirst += 1;
       faults.where.push([`seen from behind (${tri.part})`, tri.p[0]]);
       if (VERBOSE) console.log(`  ${name}: ray from ${origin.map((v) => v.toFixed(3))} to ${target.map((v) => v.toFixed(3))} meets the back of ${tri.part} ${tri.p.map((q) => q.map((v) => v.toFixed(3)).join(",")).join(" | ")}`);
@@ -291,8 +342,10 @@ function paintedWindows(tris, bounds, bodyName, hero) {
   for (let zf = cab.windshield_top + 0.1; zf < end - 0.25; zf += 0.12) {
     if ([body.pillars.b, body.pillars.c].some((pillar) => pillar && Math.abs(zf - pillar) < 0.12)) continue;
     const belt = shape.top(zf);
+    // A high-roof van's side glass stops at glass_top, under its painted side.
+    const top = cab.glass_top ? cab.glass_top - 0.02 : cab.roof;
     for (const up of [0.3, 0.5, 0.7]) {
-      const y = lerp(belt, cab.roof, up);
+      const y = lerp(belt, top, up);
       for (const side of [1, -1]) {
         const tri = hit([side * (shape.W + 1), y, zf - shape.L / 2], [-side, 0, 0]);
         faults.rays += 1;
@@ -300,6 +353,80 @@ function paintedWindows(tris, bounds, bodyName, hero) {
         faults.painted += 1;
         faults.where.push([`${tri ? tri.part : "nothing"} where the side glass is`, [side * shape.W, y, zf - shape.L / 2]]);
       }
+    }
+  }
+  return faults;
+}
+
+// Number plates: rays straight in at each face's plate, over a grid across
+// it; the first face each meets must be the plate or its characters.
+const PLATE_PARTS = new Set(["plate", "rubber"]);
+function hiddenPlates(tris, bounds) {
+  const hit = rayCaster(tris, bounds);
+  const faults = { rays: 0, hidden: 0, where: [] };
+  for (const front of [true, false]) {
+    const plate = tris.filter((tri) => tri.part === "plate" && (front ? tri.p[0][2] < 0 : tri.p[0][2] > 0));
+    if (plate.length === 0) {
+      faults.hidden += 1;
+      faults.where.push([`no ${front ? "front" : "rear"} plate`, [0, 0, front ? bounds.lo[2] : bounds.hi[2]]]);
+      continue;
+    }
+    const { lo, hi } = boundsOf(plate);
+    for (let i = 1; i < 12; i += 1) {
+      for (let j = 1; j < 6; j += 1) {
+        const x = lerp(lo[0], hi[0], i / 12);
+        const y = lerp(lo[1], hi[1], j / 6);
+        const tri = hit([x, y, front ? bounds.lo[2] - 1 : bounds.hi[2] + 1], [0, 0, front ? 1 : -1]);
+        faults.rays += 1;
+        if (tri && PLATE_PARTS.has(tri.part)) continue;
+        faults.hidden += 1;
+        faults.where.push([`${tri ? tri.part : "nothing"} over the ${front ? "front" : "rear"} plate`, [x, y, front ? lo[2] : hi[2]]]);
+      }
+    }
+  }
+  return faults;
+}
+
+// The cabin inside the shell: from every seat, dashboard and lining point
+// higher than a sill (0.6 m), a ray straight up must meet the shell or the
+// glass, or the point pokes out through the roof, a pillar or the glass.
+const SILL_Y_M = 0.6;
+function cabinOutside(interior, shell) {
+  const cell = 0.1;
+  const grid = new Map();
+  shell.forEach((tri, index) => {
+    const xs = tri.p.map((q) => q[0]);
+    const zs = tri.p.map((q) => q[2]);
+    for (let x = Math.floor(Math.min(...xs) / cell); x <= Math.floor(Math.max(...xs) / cell); x += 1)
+      for (let z = Math.floor(Math.min(...zs) / cell); z <= Math.floor(Math.max(...zs) / cell); z += 1) {
+        const key = `${x},${z}`;
+        if (!grid.has(key)) grid.set(key, []);
+        grid.get(key).push(index);
+      }
+  });
+  // The height of a triangle over a plan point, or null outside it.
+  const above = (q, tri) => {
+    const [a, b, c] = tri.p;
+    const d = (b[2] - c[2]) * (a[0] - c[0]) + (c[0] - b[0]) * (a[2] - c[2]);
+    if (Math.abs(d) < 1e-14) return null;
+    const l1 = ((b[2] - c[2]) * (q[0] - c[0]) + (c[0] - b[0]) * (q[2] - c[2])) / d;
+    const l2 = ((c[2] - a[2]) * (q[0] - c[0]) + (a[0] - c[0]) * (q[2] - c[2])) / d;
+    const l3 = 1 - l1 - l2;
+    if (l1 < 0 || l2 < 0 || l3 < 0) return null;
+    return l1 * a[1] + l2 * b[1] + l3 * c[1];
+  };
+  const faults = { points: 0, outside: 0, where: [] };
+  const seen = new Set();
+  for (const tri of interior) {
+    for (const q of tri.p) {
+      const key = q.join();
+      if (q[1] < SILL_Y_M || seen.has(key)) continue;
+      seen.add(key);
+      faults.points += 1;
+      const near = grid.get(`${Math.floor(q[0] / cell)},${Math.floor(q[2] / cell)}`) ?? [];
+      if (near.some((index) => (above(q, shell[index]) ?? -Infinity) > q[1] + 1e-4)) continue;
+      faults.outside += 1;
+      faults.where.push([`${tri.part} with no shell or glass above it`, q]);
     }
   }
   return faults;
@@ -338,10 +465,16 @@ function main() {
     if (heroBody && front && rear) {
       const shell = [...triangles(heroBody), ...triangles(hero.meshes.get(`car_${body}_hero_glass`))];
       const tyre = hero.meshes.get(`car_${body}_hero_tyre`);
+      const brake = hero.meshes.get(`car_${body}_hero_brake`);
+      // Wheels and brakes as the game places them (street_clutter_kit.gd
+      // wheel_transforms): a left brake turned so its caliper stays behind.
       for (const centre of [front, rear]) {
         shell.push(...triangles(tyre, { offset: centre }), ...triangles(tyre, { offset: [-centre[0], centre[1], centre[2]], turned: true }));
+        shell.push(...triangles(brake, { offset: centre }), ...triangles(brake, { offset: [-centre[0], centre[1], centre[2]], turned: true, rotX: 2 * CALIPER_ANGLE - Math.PI }));
       }
       levels.push([`car_${body}_hero`, shell, true]);
+      const c = cabinOutside(shell.filter((tri) => INTERIOR.has(tri.part)), shell.filter((tri) => !INTERIOR.has(tri.part)));
+      if (c.outside) report(`car_${body}_hero`, `cabin points of ${c.points} poking out of the shell`, c.outside, c.where);
       for (const piece of ["glass", "tyre", "brake"]) levels.push([`car_${body}_hero_${piece}`, triangles(hero.meshes.get(`car_${body}_hero_${piece}`)), false]);
     }
     for (const [name, tris, rays] of levels) {
@@ -352,10 +485,12 @@ function main() {
       if (s.gapFragments) report(name, "broken panel gaps", s.gapFragments, s.where.filter(([w]) => w.startsWith("broken")));
       if (s.gapWedges) report(name, "groove triangles wider than the groove", s.gapWedges, s.where.filter(([w]) => w.startsWith("wedge")));
       if (rays) {
-        const r = seeThrough(tris, boundsOf(tris), name);
+        const r = seeThrough(tris, boundsOf(tris), name, FOOTPRINT_M[name.endsWith("_hero") ? "hero" : name.endsWith("_lod1") ? "far" : "near"]);
         if (r.backFirst || r.interiorFirst) report(name, `see-through hits of ${r.rays} rays`, r.backFirst + r.interiorFirst, r.where);
         const w = paintedWindows(tris, boundsOf(tris), body, name.endsWith("_hero"));
         if (w.painted) report(name, `side-window rays of ${w.rays} meeting no glass`, w.painted, w.where);
+        const p = hiddenPlates(tris, boundsOf(tris));
+        if (p.hidden) report(name, `plate rays of ${p.rays} meeting no plate`, p.hidden, p.where);
       }
     }
   }

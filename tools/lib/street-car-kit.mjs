@@ -489,8 +489,20 @@ export function bodyShape(name) {
 // from the surface. options: inner (the cabin's lining: the shell a little
 // inside, facing in, open where the glass is), inset (metres inside the
 // surface: the shadow caster).
-// How far in from the shoulder a lid crease must lie to get a column of its own (m).
+// How far in from the shoulder a lid crease is looked for (m), and how wide
+// each column before it must stay when one is pulled onto it.
 const CREASE_CLEAR_M = 0.003;
+const CREASE_COLUMN_MIN_M = 0.006;
+// How deep a head lamp's and a tail lamp's bowls are at most (m).
+const HEAD_BOWL_M = 0.03;
+const TAIL_BOWL_M = 0.015;
+// How close to a region's outline a vertex counts as on it, by level (m).
+const REGION_SNAP_M = Object.freeze({ hero: 1.5e-3, near: 3e-3, mid: 6e-3, far: 0.012 });
+// How far behind the deck line's start a tonneau cover begins (m).
+const TONNEAU_SET_BACK_M = 0.04;
+// The gap between a pickup's cab and its bed or service body, from the cab
+// back's foot (m): it runs across the top and down both sides.
+const BED_GAP_M = 0.05;
 function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const shape = bodyShape(name);
   const { body, L, W, axles, archRadius, wall, lid, zqAt, rowZf } = shape;
@@ -545,6 +557,8 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   }
   const hoodEndZq = rowZq(hoodEndA);
   if (detail >= 2) keys.push(cab.windshield_base - 0.065, cab.rear_base + 0.05, roofBack, hoodEndZq);
+  // A tonneau cover's front edge runs along a row of its own.
+  if (body.bed === "tonneau") keys.push(cab.rear_base + 0.05 + TONNEAU_SET_BACK_M);
   const steps = Math.max(2, Math.ceil((sideTo - sideFrom) / level.step));
   const regular = [];
   for (let i = 1; i < steps; i += 1) regular.push(1 + i / steps);
@@ -682,6 +696,11 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
         const a = rowA(r);
         const w = a < 1 ? clamp((a - 0.5) / 0.5, 0, 1) : a > 2 ? clamp((2.5 - a) / 0.5, 0, 1) : 1;
         const want = lerp(was, xi, w);
+        // Not where the columns before it would be squeezed narrower than
+        // CREASE_COLUMN_MIN_M each (a crease close by the shoulder, which
+        // column 0 already follows): the cuts crossing such a strip left
+        // slivers turned over.
+        if (want * rowShoulder[r].x < CREASE_COLUMN_MIN_M * cr) continue;
         // Columns before it squeeze or stretch toward the shoulder, those after toward the centre line.
         for (let c = 1; c < C; c += 1) {
           if (c < cr) table[c] = (table[c] / was) * want;
@@ -902,7 +921,14 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     (rec) => !rec.wall && (shape.hasTrunk || body.bed !== undefined) && Math.abs(rec.dist - 0.07) < LINE_END_NEAR_M,
     (rec) => rec.zq - deckFrom,
   );
-  const fTonneau = region((rec) => !rec.wall && body.bed === "tonneau", (rec) => Math.max(deckFrom + 0.04 - rec.zq, 0.075 - rec.dist));
+  const fTonneau = region((rec) => !rec.wall && body.bed === "tonneau", (rec) => Math.max(deckFrom + TONNEAU_SET_BACK_M - rec.zq, 0.075 - rec.dist));
+  // A pickup's cab and its bed are two bodies: the gap between them (where the
+  // cab back's foot, the bed's front and the sides meet, a fan of thin
+  // triangles caught the light) reads dark. Its edges are rows and stations.
+  const fBedGap = region((rec) => body.bed !== undefined && (rec.wall ? onSide(rec) : true), (rec) => {
+    const at = rec.wall ? rec.zf : rec.zq;
+    return Math.max(cab.rear_base - at, at - (cab.rear_base + BED_GAP_M));
+  });
   const sill = (rec) => rec.bottom + 0.105;
   // A door seam stops on the sill line's centre, the sill line on the first
   // and last seams' centres: both are cut, so no triangle straddles an end.
@@ -1028,6 +1054,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (body.grille !== "none") cut(fGrille, ...(detail >= 2 ? [0, -0.018] : [0]));
     if (detail >= 1) cut(fIntake, ...(detail >= 3 ? [0, -0.018] : [0]));
     if (body.bed === "tonneau") cut(fTonneau);
+    if (body.bed !== undefined && detail >= 2) cut(fBedGap);
     if (detail >= 1) cut(fCowl);
     if (detail >= 2) {
       cut(fDrl, 9);
@@ -1036,7 +1063,8 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       for (const fn of seamLines) line(fn);
       line(sillLine);
       line(hoodLine);
-      line(deckLine);
+      // A tonneau cover's edge is the bed's line; a shut line beside it left slivers.
+      if (body.bed !== "tonneau") line(deckLine);
       for (const fn of lockerLines) line(fn);
       if (service) cut(fLockerRail);
     }
@@ -1116,13 +1144,19 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // A vertex this close to an outline (metres, the regions' unit) counts as on
   // it: no crossing is made a hair beside it, which would leave a sliver.
   const EPS = SNAP_M;
+  // A region's outline (not a groove line) snaps onto a vertex this close to
+  // it, more loosely the further the level is seen from: a crossing a few
+  // millimetres from a ring or a column round a tight corner left a sliver
+  // turned over.
+  const regionEps = inner || inset > 0 ? REGION_SNAP_M[inner ? "mid" : "far"] : REGION_SNAP_M[levelName];
+  const epsOf = (fn) => (lines.includes(fn) ? EPS : regionEps);
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
-  const cutAlong = (fn, offset) => {
+  const cutAlong = (fn, offset, eps = EPS) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
     const read = (rec) => (rec && fn.where(rec) ? fn.fn(rec) - offset : NaN);
     const wallValue = verts.map(read);
     const lidValue = twins.map((twin, id) => (twin ? read(twin) : wallValue[id]));
-    if (![...wallValue, ...lidValue].some((x) => x > EPS) || ![...wallValue, ...lidValue].some((x) => x < -EPS)) return;
+    if (![...wallValue, ...lidValue].some((x) => x > eps) || ![...wallValue, ...lidValue].some((x) => x < -eps)) return;
     const made = new Map();
     const crossing = (i, j, value) => {
       const key = edgeKey(i, j);
@@ -1175,7 +1209,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       const tri = tris[t];
       const value = onLidPatch[t] ? lidValue : wallValue;
       if (Number.isNaN(value[tri[0]]) || Number.isNaN(value[tri[1]]) || Number.isNaN(value[tri[2]])) continue;
-      const sign = tri.map((id) => (value[id] > EPS ? 1 : value[id] < -EPS ? -1 : 0));
+      const sign = tri.map((id) => (value[id] > eps ? 1 : value[id] < -eps ? -1 : 0));
       const pos = sign.filter((x) => x > 0).length;
       const neg = sign.filter((x) => x < 0).length;
       if (pos === 0 || neg === 0) continue;
@@ -1211,13 +1245,14 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   };
   const precut = new Set();
   for (const [fn, offsets] of cuts) {
+    const eps = epsOf(fn);
     for (const pre of fn.pre ?? []) {
       if (precut.has(pre)) continue;
       precut.add(pre);
-      cutAlong(pre, 0);
+      cutAlong(pre, 0, eps);
     }
     // An offset of 9 asks for the region's pre-cuts only.
-    for (const offset of offsets) if (offset !== 9) cutAlong(fn, offset);
+    for (const offset of offsets) if (offset !== 9) cutAlong(fn, offset, eps);
   }
 
   // --- What each triangle is. Every outline it could straddle has been cut,
@@ -1235,7 +1270,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       if (!recs.every((rec) => fn.where(rec))) value = fn(mid);
       else {
         const values = recs.map((rec) => fn.fn(rec));
-        value = values.every((x) => Math.abs(x) <= EPS) ? fn(mid) : (values[0] + values[1] + values[2]) / 3;
+        value = values.every((x) => Math.abs(x) <= epsOf(fn)) ? fn(mid) : (values[0] + values[1] + values[2]) / 3;
       }
       cache.set(fn, value);
       return value;
@@ -1254,6 +1289,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
     if (inset > 0) return { part: P.paint };
     if (detail >= 2 && lines.some((fn) => Math.abs(R(fn)) < gapHalf)) return { part: P.gap, ao: 0.3, groove: detail >= 3 };
+    if (body.bed !== undefined && detail >= 2 && R(fBedGap) < 0) return { part: P.under, ao: 0.3 };
     const side = R(fSide);
     if (side < 0) {
       if (detail >= 1 && R(fPillar) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
@@ -1305,7 +1341,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (!rec.wall) return 0;
     let d = Math.max(0.03 * ramp(fGrille(rec) + 0.018, 0.014), 0.03 * ramp(fIntake(rec), 0.018));
     // A lamp's bowl, no deeper than a quarter of the corner it wraps (a truck's tail lamp sits on a tight corner).
-    d = Math.max(d, Math.min(0.05, 0.25 * nose.corner) * ramp(fHead(rec), 0.014), Math.min(0.03, 0.25 * tail.corner) * ramp(fTail(rec), 0.014));
+    d = Math.max(d, Math.min(HEAD_BOWL_M, 0.25 * nose.corner) * ramp(fHead(rec), 0.014), Math.min(TAIL_BOWL_M, 0.25 * tail.corner) * ramp(fTail(rec), 0.014));
     return Math.max(d, 0.016 * ramp(fPocket(rec), 0.014));
   };
   const pressed = (rec) => {
@@ -1314,7 +1350,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     // deeper all over, its offset would turn inside out round the tight roof
     // rails and pillars.
     if (inner) return 0.012 + recessed(rec);
-    if (inset > 0) return inset;
+    if (inset > 0) return 0;
     if (detail < 3) return 0;
     let d = 0;
     for (const fn of lines) d = Math.max(d, GROOVE_M * clamp(1 - Math.abs(fn(rec)) / gapHalf, 0, 1));
@@ -1622,6 +1658,25 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
     out.append(mapped);
   };
+  if (inset > 0) {
+    // The shadow caster: the shell drawn `inset` inside the body by shrinking
+    // it toward the middle of its box (an offset along the normals turned
+    // over round the tight rolls and corners, and a fold left a hole in the
+    // shadow).
+    const sx = 1 - inset / W;
+    const sz = 1 - inset / (L / 2);
+    const yc = (body.height + body.clearance) / 2;
+    const sy = 1 - inset / ((body.height - body.clearance) / 2);
+    for (let i = 0; i < body3.positions.length; i += 3) {
+      body3.positions[i] *= sx;
+      body3.positions[i + 1] = yc + (body3.positions[i + 1] - yc) * sy;
+      body3.positions[i + 2] *= sz;
+      const n = vnorm(v3(body3.normals[i] / sx, body3.normals[i + 1] / sy, body3.normals[i + 2] / sz));
+      body3.normals[i] = n[0];
+      body3.normals[i + 1] = n[1];
+      body3.normals[i + 2] = n[2];
+    }
+  }
   return { body: body3, glass, shape, lampSpot, truck, drape, sideStationAt, faceStationAt, wallFrame };
 }
 
@@ -1861,7 +1916,7 @@ export function buildCarParts(name, levelName) {
     // Two projectors in each head lamp's bowl: a bright ring round a dark lens.
     for (const along of shell.truck ? [-0.35, 0.35] : [-0.45, 0.1]) {
       const spot = shell.lampSpot(along);
-      const centre = vsub(spot.point, vscale(spot.normal, 0.05));
+      const centre = vsub(spot.point, vscale(spot.normal, HEAD_BOWL_M + 0.01));
       const r = shell.truck ? 0.05 : 0.036;
       half.revolve(centre, spot.normal, [[r + 0.008, 0], [r + 0.008, 0.03], [r, 0.034], [r - 0.004, 0.022]], 14, () => P.chrome, { crease: 50 });
       half.revolve(centre, spot.normal, [[r - 0.004, 0.022], [r * 0.6, 0.03], [0, 0.033]], 14, () => P.mirror);

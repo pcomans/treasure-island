@@ -383,8 +383,11 @@ export function buildBrake(body) {
   const discR = rimR - 0.035;
   const a1 = tw / 2 - 0.075;
   const a0 = a1 - 0.026;
-  out.revolve(o, X, [[0.085, a1 + 0.02], [0.085, a1], [discR, a1], [discR, a0], [0.07, a0]], 28, (i) => P.brake_disc, { crease: 30, vOf: (i) => (i >= 3 ? 0.5 : 1) });
-  out.revolve(o, X, [[0, a1 + 0.024], [0.085, a1 + 0.02]], 28, () => P.exhaust);
+  // The disc and its hat, their profiles run so their faces turn outward (the
+  // other way round, the disc was drawn inside out and its far face showed
+  // through its near one).
+  out.revolve(o, X, [[0.07, a0], [discR, a0], [discR, a1], [0.085, a1], [0.085, a1 + 0.02]], 28, (i) => P.brake_disc, { crease: 30, vOf: (i) => (i <= 1 ? 0.5 : 1) });
+  out.revolve(o, X, [[0.085, a1 + 0.02], [0, a1 + 0.024]], 28, () => P.exhaust);
   // Caliper: a block bent round the disc's edge.
   const span = (56 * Math.PI) / 180;
   const steps = 6;
@@ -409,6 +412,10 @@ export function buildBrake(body) {
 }
 
 // ---------------------------------------------------------------- cabin
+// The top of a front seat's cushion over the cabin floor, and the driver's
+// eyes over it (game/scripts/vehicles/car_driver.gd), in metres.
+const CUSHION_TOP_M = 0.335;
+const DRIVER_EYES_M = 0.52;
 // The cabin seen through the glass: floor, dashboard with its screens, steering
 // wheel, console, seats with headrests and a rear shelf or load cover. `shape`
 // is the body's shape (street-car-kit.mjs bodyShape); zf runs from the front
@@ -424,14 +431,28 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   // 0.32 m under the cowl, so the driver (car_driver.gd: eyes 0.52 m over the
   // cushion) shows over the door and the windshield's foot (a pickup's, a
   // utility's or a van's high cab).
-  const floor = Math.max(body.clearance + 0.14, belt - 0.735, cowl - 0.655);
+  // A high-roof van's driver sits higher still, eyes about two fifths up its
+  // tall windshield, as a van's cab is built (and so he shows through it).
+  const vanFloor = cab.glass_top ? cowl + 0.4 * (cab.glass_top - cowl) - DRIVER_EYES_M - CUSHION_TOP_M : -Infinity;
+  const floor = Math.max(body.clearance + 0.14, belt - 0.735, cowl - 0.655, vanFloor);
   const inner = W - 0.14;
   const rows = body.pillars.cargo_from ? 1 : 2;
   const cabinEnd = body.pillars.cargo_from ? body.pillars.cargo_from : cab.rear_base - 0.12;
   const dashZ = cab.windshield_base + 0.22;
   // Floor and the bulkhead behind the seats (a van's partition, a pickup's cab back).
   const up = Y;
-  out.flat(at(-inner, floor, dashZ), at(-inner, floor, cabinEnd), at(inner, floor, cabinEnd), at(inner, floor, dashZ), up, P.cabin, 0.5);
+  // The floor, narrower over each wheel well, whose wall it stays inside of.
+  {
+    const wellX = W - 0.035 - body.tire_width - 0.06;
+    const zs = [dashZ, cabinEnd];
+    for (const axle of shape.axles) for (const edge of [axle - shape.archRadius, axle + shape.archRadius]) if (edge > dashZ && edge < cabinEnd) zs.push(edge);
+    zs.sort((p, q) => p - q);
+    for (let i = 0; i < zs.length - 1; i += 1) {
+      const mid = (zs[i] + zs[i + 1]) / 2;
+      const half = shape.axles.some((axle) => Math.abs(mid - axle) < shape.archRadius) ? Math.min(inner, wellX) : inner;
+      out.flat(at(-half, floor, zs[i]), at(-half, floor, zs[i + 1]), at(half, floor, zs[i + 1]), at(half, floor, zs[i]), up, P.cabin, 0.5);
+    }
+  }
   if (body.pillars.cargo_from || body.bed) {
     // Up to just under the roof all the way across, so nothing past it shows
     // over its top and no corner of it pokes out through a cab's roof rail.
@@ -507,7 +528,7 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   const seatX = Math.min(0.39, inner * 0.5);
   seat(-seatX, seatZ, 0.5, false);
   // The driver's seat: the top of its cushion's middle, and the wheel's grips.
-  const seated = { seat: at(-seatX, floor + 0.27 + 0.065, seatZ - 0.04), hands: [grip(-1), grip(1)] };
+  const seated = { seat: at(-seatX, floor + CUSHION_TOP_M, seatZ - 0.04), hands: [grip(-1), grip(1)] };
   seat(seatX, seatZ, 0.5, false);
   if (rows === 2) {
     // The rear seat comes forward until its headrests clear the roof and glass
@@ -604,6 +625,20 @@ export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08) {
     const [ya, yb] = [height(za), height(zb)];
     const n = vnorm(v3(0, -1, (yb - ya) / Math.max(1e-6, zb - za)));
     out.flat(v3(-ha, ya, zOf(za)), v3(ha, ya, zOf(za)), v3(hb, yb, zOf(zb)), v3(-hb, yb, zOf(zb)), n, P.under, ao);
+    // Between the wheels a skirt runs from the sheet's edge down to the
+    // wall's lower edge, so no ray slips in over the sill's inside.
+    if (!inWell(mid)) {
+      for (const side of [1, -1]) {
+        const ea = Math.max(ha, halfAt(za));
+        const eb = Math.max(hb, halfAt(zb));
+        const ba = Math.min(ya, shape.bottom(za));
+        const bb = Math.min(yb, shape.bottom(zb));
+        if (ea - ha < 1e-4 && eb - hb < 1e-4 && ya - ba < 1e-4 && yb - bb < 1e-4) continue;
+        // Facing down and in, square to the strip (out by ea - ha, down by ya - ba).
+        const sn = vnorm(v3(-side * (ya - ba + 1e-3), -(ea - ha + 1e-3), 0));
+        out.flat(v3(side * ha, ya, zOf(za)), v3(side * ea, ba, zOf(za)), v3(side * eb, bb, zOf(zb)), v3(side * hb, yb, zOf(zb)), sn, P.under, ao);
+      }
+    }
   }
   // A valance at each end, from the floor up into the bumper.
   for (const [zf, n] of [[cuts[0], v3(0, 0, -1)], [cuts.at(-1), v3(0, 0, 1)]]) {
