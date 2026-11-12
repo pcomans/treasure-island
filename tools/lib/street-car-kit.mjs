@@ -607,14 +607,15 @@ const SLIVER_M = 0.003;
 // edges shorter than `minEdge` (m) stay. The hero level round both ends'
 // corners and on the glass; the near level (which the web build draws for
 // every car within 60 m) on the painted panels round the rear corners only,
-// the D pillars.
+// the D pillars, as finely as the hero's (edges down to 12 mm: coarser, the
+// D pillar's tight roll drew a zigzag highlight).
 // Half the height (a share of the wall's) of the side's crease, a smoothstep.
 const CREASE_HALF_F = 0.035;
 // How far along the side from each corner (in a, the side being 1) refining runs.
 const REFINE_SIDE_A = 0.15;
 const REFINE = Object.freeze({
   hero: { turn: 2, sag: 0.004, minEdge: 0.012, passes: 3, front: true, glass: true, panels: false },
-  near: { turn: 3, sag: 0.008, minEdge: 0.025, passes: 3, front: false, glass: false, panels: true },
+  near: { turn: 3, sag: 0.008, minEdge: 0.012, passes: 3, front: false, glass: false, panels: true },
 });
 // How far off the arch's line (m) an edge of the shell's border round an arch still gets a lip.
 const LIP_REACH_M = 0.012;
