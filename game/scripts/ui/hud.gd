@@ -25,6 +25,10 @@ const CREDITS_MAX_WIDTH_PX := 860.0
 ## is no smaller than the controls screen's. Licence texts are in the fine print.
 const CREDITS_TOUCH_EXTRA_PX := 2
 const CREDITS_FINE_PRINT_PX := 14
+## The Licences' headings: a section's, and each engine licence text's, the gap
+## above them included (px).
+const CREDITS_SECTION_PX := 48.0
+const CREDITS_LICENCE_HEADING_PX := 44.0
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
@@ -44,17 +48,18 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var controls_sections: VBoxContainer = $ControlsScreen/Center/ControlsPanel/ControlsLayout/Sections
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
-## behind its Godot Engine licences button, the engine's own licence and notices.
-## A solid panel over the dimmed game, like the controls screen.
+## behind its Licences button, the licence texts that ship with the game and the
+## engine's own licence and notices. A solid panel over the dimmed game, like the
+## controls screen.
 @onready var credits_screen: Control = $CreditsScreen
 @onready var credits_panel: PanelContainer = $CreditsScreen/Center/CreditsPanel
 @onready var credits_layout: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout
 @onready var credits_title: Label = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Title
 @onready var credits_list: ScrollContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/ListScroll
 @onready var credits_entries: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/ListScroll/Entries
-@onready var credits_engine: ScrollContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll
-@onready var credits_engine_text: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll/EngineText
-@onready var credits_engine_button: Button = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons/EngineButton
+@onready var credits_licences: ScrollContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/LicencesScroll
+@onready var credits_licence_text: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/LicencesScroll/LicenceText
+@onready var credits_licences_button: Button = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons/LicencesButton
 @onready var credits_back_button: Button = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons/BackButton
 @onready var load_controls_button: Button = $LoadPanel/LoadLayout/LoadStack/ControlsButton
 ## The loading screen's credit line: the credits marked loading_screen (OSM's,
@@ -76,6 +81,9 @@ var _paused := false
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
+## The licence texts the list's entries ship (their licence_file), as [title, text],
+## for the Licences view.
+var _licence_files: Array = []
 
 
 func _ready() -> void:
@@ -86,9 +94,9 @@ func _ready() -> void:
 	load_controls_button.pressed.connect(show_controls)
 	back_button.pressed.connect(hide_controls)
 	credits_button.pressed.connect(show_credits)
-	credits_engine_button.pressed.connect(show_engine_licences)
+	credits_licences_button.pressed.connect(show_licences)
 	credits_back_button.pressed.connect(credits_back)
-	for scroll: ScrollContainer in [credits_list, credits_engine]:
+	for scroll: ScrollContainer in [credits_list, credits_licences]:
 		scroll.gui_input.connect(_on_credits_scroll_input.bind(scroll))
 	_fill_controls()
 	_fill_credits()
@@ -173,6 +181,8 @@ func set_paused(paused: bool) -> void:
 	pause_panel.visible = paused and not controls_screen.visible and not credits_screen.visible
 	if not paused:
 		controls_screen.hide()
+		if credits_licences.visible:
+			_show_credits_view(false)
 		credits_screen.hide()
 	prompt_panel.visible = not paused and not prompt_text.text.is_empty()
 	if pause_panel.visible:
@@ -207,20 +217,20 @@ func show_credits() -> void:
 	credits_back_button.grab_focus()
 
 
-## The engine's own licence, and the software by other authors it includes with
-## their licences, as the engine gives them (Godot's "Complying with licenses"),
-## in place of the credits list.
-func show_engine_licences() -> void:
+## The licence texts that ship with the game, then the engine's own licence and the
+## software by other authors it includes with their licences, as the engine gives
+## them (Godot's "Complying with licenses"), in place of the credits list.
+func show_licences() -> void:
 	_show_credits_view(true)
 	credits_back_button.grab_focus()
 
 
-## Back on the credits screen (its button, or Esc in main.gd): from the engine's
-## licences to the list, and from the list to the pause menu.
+## Back on the credits screen (its button, or Esc in main.gd): from the Licences to
+## the list, and from the list to the pause menu.
 func credits_back() -> void:
-	if credits_engine.visible:
+	if credits_licences.visible:
 		_show_credits_view(false)
-		credits_engine_button.grab_focus()
+		credits_licences_button.grab_focus()
 		return
 	credits_screen.hide()
 	if _paused:
@@ -232,34 +242,41 @@ func credits_visible() -> bool:
 	return credits_screen.visible
 
 
-## The credits view shown: the engine's licences or the list, at its top. The
-## engine's text is built the first time it is shown.
-func _show_credits_view(engine: bool) -> void:
-	if engine and credits_engine_text.get_child_count() == 0:
-		_fill_engine_licences()
-	credits_list.visible = not engine
-	credits_engine.visible = engine
-	credits_engine_button.visible = not engine
-	credits_title.text = "Godot Engine licences" if engine else "Credits"
+## The credits view shown, at its top: the Licences, built as they open, or the
+## list, with the Licences' labels freed (about 240 labels and 80 KB of text).
+func _show_credits_view(licences: bool) -> void:
+	if licences and credits_licence_text.get_child_count() == 0:
+		_fill_licences()
+	elif not licences:
+		_free_children(credits_licence_text)
+	credits_list.visible = not licences
+	credits_licences.visible = licences
+	credits_licences_button.visible = not licences
+	credits_title.text = "Licences" if licences else "Credits"
 	_credits_finger = -1
 	credits_scroll().scroll_vertical = 0
 
 
-## The credits view on show (the list or the engine's licences).
+## The credits view on show (the list or the Licences).
 func credits_scroll() -> ScrollContainer:
-	return credits_engine if credits_engine.visible else credits_list
+	return credits_licences if credits_licences.visible else credits_list
+
+
+func _free_children(view: Control) -> void:
+	for child: Node in view.get_children():
+		view.remove_child(child)
+		child.queue_free()
 
 
 ## Fills the credits list from CREDITS_PATH: each entry's title, its credit, its
-## licence and link, what the game uses it for and any licence text that ships
-## with the game; and the loading screen's line from the entries marked
-## loading_screen. Links show without their https://. Again on a touch screen
-## (set_touch_instructions), larger, with the engine's licences built afresh.
+## licence, its link on a line of its own, and what the game uses it for; keeps any
+## licence text it ships for the Licences; and fills the loading screen's line from
+## the entries marked loading_screen. Links show without their https://. Again on a
+## touch screen (set_touch_instructions), larger, with the Licences built afresh.
 func _fill_credits() -> void:
-	for view: Control in [credits_entries, credits_engine_text]:
-		for child: Node in view.get_children():
-			view.remove_child(child)
-			child.queue_free()
+	_free_children(credits_entries)
+	_free_children(credits_licence_text)
+	_licence_files.clear()
 	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(CREDITS_PATH))
 	var entries: Array = (data as Dictionary).get("entries", []) if data is Dictionary else []
 	if entries.is_empty():
@@ -273,45 +290,55 @@ func _fill_credits() -> void:
 		var link := str(entry.get("url", "")).trim_prefix("https://")
 		_credits_label(block, str(entry.get("title", "")), 20 + extra, CONTROLS_HEADING_COLOR)
 		_credits_label(block, str(entry.get("credit", "")), 18 + extra, Color.WHITE)
-		var terms := PackedStringArray()
 		for part: String in [str(entry.get("licence", "")), link]:
 			if not part.is_empty():
-				terms.append(part)
-		if not terms.is_empty():
-			_credits_label(block, "  ·  ".join(terms), 16 + extra, CONTROLS_KEY_COLOR)
+				_credits_label(block, part, 16 + extra, CONTROLS_KEY_COLOR)
 		_credits_label(block, str(entry.get("used_for", "")), 16 + extra, CREDITS_NOTE_COLOR)
 		var licence_file := str(entry.get("licence_file", ""))
 		if not licence_file.is_empty():
 			var licence_text := FileAccess.get_file_as_string(licence_file).strip_edges()
 			if licence_text.is_empty():
 				push_error("The licence text %s is not in the game." % licence_file)
-			_credits_label(block, _reflowed(licence_text), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+			_licence_files.append([str(entry.get("title", "")), licence_text])
 		if bool(entry.get("loading_screen", false)):
 			loading.append("%s  ·  %s" % [entry.get("credit", ""), link])
 	load_credit.text = "\n".join(loading)
 
 
-## The engine's licence text, then each of its components with its copyright
-## holders and licence, then the text of each of those licences: the engine's own
-## calls, so nothing here goes stale when the engine changes.
-func _fill_engine_licences() -> void:
+## The Licences: each licence text the list's entries ship, under the entry's
+## title; then the engine's licence, each of its components with its copyright
+## holders and licence, and the text of each of those licences, from the engine's
+## own calls, so nothing here goes stale when the engine changes. Every licence's
+## heading has a gap above it.
+func _fill_licences() -> void:
 	var extra := CREDITS_TOUCH_EXTRA_PX if _touch else 0
-	_credits_label(credits_engine_text, "This game uses Godot Engine, available under the following license:", 18 + extra, Color.WHITE)
-	_credits_label(credits_engine_text, _reflowed(Engine.get_license_text().strip_edges()), 16 + extra, CREDITS_NOTE_COLOR)
-	_credits_label(credits_engine_text, "Components and their copyright holders", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 48.0
+	var view := credits_licence_text
+	for licence_file: Array in _licence_files:
+		_credits_label(view, str(licence_file[0]), 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+		_credits_label(view, _reflowed(str(licence_file[1])), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+	_credits_label(view, "Godot Engine", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+	_credits_label(view, "This game uses Godot Engine, available under the following licence:", 18 + extra, Color.WHITE)
+	_credits_label(view, _reflowed(Engine.get_license_text().strip_edges()), 16 + extra, CREDITS_NOTE_COLOR)
+	_credits_label(view, "Components and their copyright holders", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
 	for component: Dictionary in Engine.get_copyright_info():
 		var lines := PackedStringArray()
 		for part: Dictionary in component.parts:
 			for holder: String in part.copyright:
 				lines.append("© " + holder)
 			lines.append("Licence: " + str(part.license))
-		_credits_label(credits_engine_text, str(component.name), 17 + extra, CONTROLS_KEY_COLOR)
-		_credits_label(credits_engine_text, "\n".join(lines), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
-	_credits_label(credits_engine_text, "Licence texts", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 48.0
+		_credits_label(view, str(component.name), 17 + extra, CONTROLS_KEY_COLOR)
+		_credits_label(view, "\n".join(lines), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+	_credits_label(view, "Licence texts", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
 	var licences := Engine.get_license_info()
 	for licence: String in licences:
-		_credits_label(credits_engine_text, licence, 17 + extra, CONTROLS_KEY_COLOR)
-		_credits_label(credits_engine_text, _reflowed(str(licences[licence]).strip_edges()), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+		_credits_label(view, licence, 17 + extra, CONTROLS_KEY_COLOR).custom_minimum_size.y = CREDITS_LICENCE_HEADING_PX + extra
+		_credits_label(view, _reflowed(unescaped(str(licences[licence]).strip_edges())), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+
+
+## A licence text with a literal backslash-n (the engine's X11 text has one) made
+## the line break it stands for.
+static func unescaped(text: String) -> String:
+	return text.replace("\\n", "\n")
 
 
 ## A licence text for a label that wraps at the screen's width: a line wrapped at
@@ -358,7 +385,7 @@ func _fit_credits() -> void:
 	var view := Vector2(minf(CREDITS_MAX_WIDTH_PX, size.x - 2.0 * CREDITS_MARGIN_PX - chrome.x), size.y - 2.0 * CREDITS_MARGIN_PX - chrome.y - fixed)
 	view = view.max(Vector2.ZERO)
 	credits_list.custom_minimum_size = view
-	credits_engine.custom_minimum_size = view
+	credits_licences.custom_minimum_size = view
 
 
 ## Keys scroll the credits screen's text: the arrows a line, Page Up and Page Down
@@ -505,7 +532,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Button in [resume_button, controls_button, credits_button, exit_button, back_button, load_controls_button, credits_engine_button, credits_back_button]:
+	for button: Button in [resume_button, controls_button, credits_button, exit_button, back_button, load_controls_button, credits_licences_button, credits_back_button]:
 		button.custom_minimum_size.y = 64.0
 	pause_box.custom_minimum_size.x = 420.0
 	_fill_credits()

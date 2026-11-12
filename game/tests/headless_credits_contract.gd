@@ -5,18 +5,21 @@ extends SceneTree
 ## and, on a phone, headless_touch_drive.gd's):
 ##   - game/resources/ui/credits.json, the only list, reads and is complete: every
 ##     folder under game/ and generated/ that holds a licence or provenance file,
-##     fonts, sounds, videos or 3D models, or sits directly in a vendor, addons or
+##     fonts, sounds, videos or 3D models, image data under a name that isn't an
+##     image's (a PNG kept as .dat, as the Bulgarian Wall mural is), or a file an
+##     export preset's include_filter adds, or sits directly in a vendor, addons or
 ##     third_party folder, is credited by an entry or marked as the project's own
 ##     work, and every folder it names is there;
 ##   - every licence text an entry shows ships with the game: each export preset's
 ##     include_filter lists it;
 ##   - the pause menu's Credits button, between Controls and Exit, opens the credits
 ##     screen in the menu's place. It shows every entry (title, credit, licence,
-##     link, use, licence text) and, behind Godot Engine licences, the engine's own
-##     licence, every component's copyright holders and every licence text the
-##     engine gives; Back goes back a step at a time, to the pause menu;
-##   - keys alone work it: Back has the focus, Left reaches Godot Engine licences and
-##     Enter opens it; the arrows, Page Up and Down, Home and End scroll;
+##     link, use) and, behind Licences, each licence text an entry ships, the
+##     engine's own licence, every component's copyright holders and every licence
+##     text the engine gives; Back goes back a step at a time, to the pause menu,
+##     and leaving the Licences frees their labels;
+##   - keys alone work it: Back has the focus, Left reaches Licences and Enter opens
+##     it; the arrows, Page Up and Down, Home and End scroll;
 ##   - the wheel and a finger's drag scroll each view, the finger one for one and
 ##     the container's own touch drag kept out (hud.gd);
 ##   - the loading screen shows the credits marked for it;
@@ -26,6 +29,8 @@ extends SceneTree
 ## The first failure stops the run.
 
 const HUD_SCENE := "res://game/scenes/ui/hud.tscn"
+## The build content audit's own image test: image extensions and image bytes.
+const AUDIT := preload("res://game/tests/shared/build_content_audit.gd")
 const PRESETS_PATH := "res://export_presets.cfg"
 ## Text files whose name starts with one of these hold a licence or provenance note.
 const LICENCE_NAMES := ["LICENSE", "LICENCE", "COPYING", "NOTICE", "PROVENANCE", "ATTRIBUTION", "AUTHORS", "CREDITS", "OFL"]
@@ -48,6 +53,8 @@ var _hud: GameHUD
 ## Runs of whitespace: the screen reflows hard-wrapped licence paragraphs, so a
 ## licence text is compared word for word (_squashed).
 var _whitespace := RegEx.create_from_string("\\s+")
+## The files every export preset's include_filter adds, as res://-relative globs.
+var _shipped_filters := PackedStringArray()
 ## The views that were long enough to scroll, and so had their scrolling checked.
 var _scrolled: Array[String] = []
 
@@ -82,9 +89,9 @@ func _run() -> void:
 			return _finish()
 		if not await _check_screen(entries, shape):
 			return _finish()
-	if not _require(_scrolled.has("upright: the list") and _scrolled.has("desktop: the engine's licences"), "Too little to scroll: the list must outrun an upright phone's view and the engine's licences the desktop's (scrolled: %s)." % [_scrolled]):
+	if not _require(_scrolled.has("upright: the list") and _scrolled.has("desktop: the Licences"), "Too little to scroll: the list must outrun an upright phone's view and the Licences the desktop's (scrolled: %s)." % [_scrolled]):
 		return _finish()
-	print("PASS: credits: %s lists %d entries and covers %d folders (%s); its licence texts ship in every export; the pause menu's Credits (between Controls and Exit) opens them in its place and Back returns a step at a time; Godot Engine licences shows the engine's licence, %d components and %d licence texts; keys alone work it; keys, the wheel and a finger scroll it (%s); the loading screen shows OSM's credit; it fits the desktop frame and an iPhone upright and sideways, thumb-sized on touch" % [GameHUD.CREDITS_PATH, entries.size(), declared.size(), ", ".join(PackedStringArray(declared.keys())), Engine.get_copyright_info().size(), Engine.get_license_info().size(), ", ".join(PackedStringArray(_scrolled))])
+	print("PASS: credits: %s lists %d entries and covers %d folders (%s); its licence texts ship in every export; the pause menu's Credits (between Controls and Exit) opens them in its place and Back returns a step at a time; Licences shows the licence texts the game ships, the engine's licence, %d components and %d licence texts, and leaving frees them; keys alone work it; keys, the wheel and a finger scroll it (%s); the loading screen shows OSM's credit; it fits the desktop frame and an iPhone upright and sideways, thumb-sized on touch" % [GameHUD.CREDITS_PATH, entries.size(), declared.size(), ", ".join(PackedStringArray(declared.keys())), Engine.get_copyright_info().size(), Engine.get_license_info().size(), ", ".join(PackedStringArray(_scrolled))])
 	_finish()
 
 
@@ -140,6 +147,13 @@ func _check_folders(data: Dictionary) -> Dictionary:
 	for folder: String in declared:
 		if not _require(DirAccess.dir_exists_absolute("res://" + folder), "%s names %s, which is gone: drop it (credits list what ships)." % [GameHUD.CREDITS_PATH, folder]):
 			return {}
+	var presets := ConfigFile.new()
+	if not _require(presets.load(PRESETS_PATH) == OK, "%s did not load." % PRESETS_PATH):
+		return {}
+	for section: String in presets.get_sections():
+		if section.begins_with("preset.") and not section.ends_with(".options"):
+			for filter: String in str(presets.get_value(section, "include_filter", "")).split(",", false):
+				_shipped_filters.append(filter.strip_edges())
 	var needed := {}
 	for root_path: String in SCANNED_ROOTS:
 		_scan(root_path, needed)
@@ -149,23 +163,32 @@ func _check_folders(data: Dictionary) -> Dictionary:
 	return declared
 
 
-## Adds every folder under dir_path that needs a credit decision, with the reason.
+## Adds every folder under dir_path that needs a credit decision, with the reasons.
 func _scan(dir_path: String, needed: Dictionary) -> void:
 	var dir := DirAccess.open(dir_path)
 	if dir == null:
 		return
 	var folder := dir_path.trim_prefix("res://")
 	if folder.get_base_dir().get_file() in THIRD_PARTY_PARENTS:
-		needed[folder] = "sits in %s/" % folder.get_base_dir()
+		_flag(needed, folder, "sits in %s/" % folder.get_base_dir())
 	for file: String in dir.get_files():
+		var path := folder.path_join(file)
 		var extension := file.get_extension().to_lower()
 		var stem := file.get_basename().to_upper()
 		if extension in TEXT_EXTENSIONS and LICENCE_NAMES.any(func(name: String) -> bool: return stem.begins_with(name)):
-			needed[folder] = "holds a licence or provenance note, %s" % file
+			_flag(needed, folder, "holds a licence or provenance note, %s" % file)
 		elif extension in ASSET_EXTENSIONS:
-			needed[folder] = "holds a font, sound, video or 3D model, %s" % file
+			_flag(needed, folder, "holds a font, sound, video or 3D model, %s" % file)
+		elif not extension in AUDIT.IMAGE_EXTENSIONS and AUDIT.has_image_bytes(path):
+			_flag(needed, folder, "holds image data under a name that isn't an image's, %s" % file)
+		if Array(_shipped_filters).any(func(filter: String) -> bool: return path.match(filter)):
+			_flag(needed, folder, "holds %s, which an export preset's include_filter ships" % file)
 	for sub: String in dir.get_directories():
 		_scan(dir_path.path_join(sub), needed)
+
+
+func _flag(needed: Dictionary, folder: String, reason: String) -> void:
+	needed[folder] = reason if not needed.has(folder) else "%s; %s" % [needed[folder], reason]
 
 
 ## Each licence text an entry shows is there, and every export preset ships it.
@@ -202,7 +225,7 @@ func _check_loading_line(entries: Array) -> bool:
 
 
 ## The pause menu's Credits at this window shape: the menu's order, the screen in
-## its place with every entry, the engine's licences, the keys, the scrolling, the
+## its place with every entry, the Licences, the keys, the scrolling, the
 ## fit, and Back to the pause menu.
 func _check_screen(entries: Array, shape: String) -> bool:
 	var hud := _hud
@@ -217,42 +240,48 @@ func _check_screen(entries: Array, shape: String) -> bool:
 		return false
 	hud.credits_button.pressed.emit()
 	await _frames(2)
-	if not _require(hud.credits_visible() and not hud.pause_panel.visible and hud.credits_list.visible and not hud.credits_engine.visible and hud.credits_title.text == "Credits", "%s: Credits must show the credits list in place of the pause menu." % shape) \
+	if not _require(hud.credits_visible() and not hud.pause_panel.visible and hud.credits_list.visible and not hud.credits_licences.visible and hud.credits_title.text == "Credits", "%s: Credits must show the credits list in place of the pause menu." % shape) \
 	or not _require(hud.credits_back_button.has_focus(), "%s: Back must have the focus when Credits opens, as on the controls screen." % shape):
 		return false
-	# Keys alone: Left takes the focus from Back to Godot Engine licences, and Enter
-	# opens it (on touch the button opens it, as a tap does).
+	# Keys alone: Left takes the focus from Back to Licences, and Enter opens it (on
+	# touch the button opens it, as a tap does).
 	if touch:
-		hud.credits_engine_button.pressed.emit()
+		hud.credits_licences_button.pressed.emit()
 	else:
 		_key(KEY_LEFT)
-		if not _require(hud.credits_engine_button.has_focus(), "%s: Left must move the focus from Back to Godot Engine licences." % shape):
+		if not _require(hud.credits_licences_button.has_focus(), "%s: Left must move the focus from Back to Licences." % shape):
 			return false
 		_key(KEY_ENTER)
 	await _frames(2)
-	if not _require(hud.credits_engine.visible and not hud.credits_list.visible and not hud.credits_engine_button.visible and hud.credits_title.text == "Godot Engine licences" and hud.credits_back_button.has_focus(), "%s: Godot Engine licences must show the engine's licences in the list's place, Back focused." % shape):
+	if not _require(hud.credits_licences.visible and not hud.credits_list.visible and not hud.credits_licences_button.visible and hud.credits_title.text == "Licences" and hud.credits_back_button.has_focus(), "%s: Licences must show the licences in the list's place, Back focused." % shape):
 		return false
-	var engine := _texts(hud.credits_engine_text)
+	var engine := _texts(hud.credits_licence_text)
 	var engine_words := _squashed(engine)
-	if not _require(engine_words.contains(_squashed(Engine.get_license_text())), "%s: the engine's licences do not show Engine.get_license_text()." % shape):
+	for entry: Dictionary in entries:
+		var licence_file := str(entry.get("licence_file", ""))
+		if not licence_file.is_empty() and not _require(engine.contains(str(entry.title)) and engine_words.contains(_squashed(FileAccess.get_file_as_string(licence_file))), "%s: the Licences do not show %s's licence text %s under its title." % [shape, entry.id, licence_file]):
+			return false
+	if not _require(engine_words.contains(_squashed(Engine.get_license_text())), "%s: the Licences do not show Engine.get_license_text()." % shape):
 		return false
 	for component: Dictionary in Engine.get_copyright_info():
-		if not _require(engine.contains(str(component.name)), "%s: the engine's licences do not name the component %s." % [shape, component.name]):
+		if not _require(engine.contains(str(component.name)), "%s: the Licences do not name the component %s." % [shape, component.name]):
 			return false
 		for part: Dictionary in component.parts:
 			for holder: String in part.copyright:
-				if not _require(engine.contains("© " + holder), "%s: the engine's licences do not show %s's holder %s." % [shape, component.name, holder]):
+				if not _require(engine.contains("© " + holder), "%s: the Licences do not show %s's holder %s." % [shape, component.name, holder]):
 					return false
 	var licences := Engine.get_license_info()
 	for licence: String in licences:
-		if not _require(engine.contains(licence) and engine_words.contains(_squashed(str(licences[licence]))), "%s: the engine's licences do not show the %s licence text." % [shape, licence]):
+		if not _require(engine.contains(licence) and engine_words.contains(_squashed(GameHUD.unescaped(str(licences[licence])))), "%s: the Licences do not show the %s licence text." % [shape, licence]):
 			return false
-	if not _check_fit(shape, hud.credits_engine, touch) or not await _check_scrolling(hud.credits_engine, "%s: the engine's licences" % shape):
+	if not _check_fit(shape, hud.credits_licences, touch) or not await _check_scrolling(hud.credits_licences, "%s: the Licences" % shape):
 		return false
-	# Back a step at a time: to the list, then to the pause menu.
+	# Back a step at a time: to the list, with the Licences' labels freed, then to the
+	# pause menu.
 	hud.credits_back_button.pressed.emit()
 	await _frames(2)
-	if not _require(hud.credits_visible() and hud.credits_list.visible and not hud.credits_engine.visible and hud.credits_engine_button.visible and hud.credits_title.text == "Credits", "%s: Back on the engine's licences must go back to the credits list." % shape):
+	if not _require(hud.credits_visible() and hud.credits_list.visible and not hud.credits_licences.visible and hud.credits_licences_button.visible and hud.credits_title.text == "Credits", "%s: Back on the Licences must go back to the credits list." % shape) \
+	or not _require(hud.credits_licence_text.get_child_count() == 0, "%s: leaving the Licences must free their %d labels." % [shape, hud.credits_licence_text.get_child_count()]):
 		return false
 	var shown := _texts(hud.credits_entries)
 	for entry: Dictionary in entries:
@@ -261,9 +290,6 @@ func _check_screen(entries: Array, shape: String) -> bool:
 			var text := str(entry[key]).trim_prefix("https://")
 			if not text.is_empty() and not _require(shown.contains(text), "%s: the credits do not show %s's %s \"%s\"." % [shape, entry.id, key, text]):
 				return false
-		var licence_file := str(entry.get("licence_file", ""))
-		if not licence_file.is_empty() and not _require(_squashed(shown).contains(_squashed(FileAccess.get_file_as_string(licence_file))), "%s: the credits do not show %s's licence text %s." % [shape, entry.id, licence_file]):
-			return false
 	if not _check_fit(shape, hud.credits_list, touch) or not await _check_scrolling(hud.credits_list, "%s: the list" % shape):
 		return false
 	hud.credits_back_button.pressed.emit()

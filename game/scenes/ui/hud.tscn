@@ -283,12 +283,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 18
 
-[node name="EngineScroll" type="ScrollContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
+[node name="LicencesScroll" type="ScrollContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
 visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="EngineText" type="VBoxContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll"]
+[node name="LicenceText" type="VBoxContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/LicencesScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 6
@@ -298,10 +298,10 @@ layout_mode = 2
 theme_override_constants/separation = 16
 alignment = 1
 
-[node name="EngineButton" type="Button" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons"]
+[node name="LicencesButton" type="Button" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons"]
 custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
-text = "Godot Engine licences"
+text = "Licences"
 
 [node name="BackButton" type="Button" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons"]
 custom_minimum_size = Vector2(220, 40)

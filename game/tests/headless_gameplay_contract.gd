@@ -448,8 +448,8 @@ func _check_prompt_beside_car(main: GameMain, world: WorldLoader) -> String:
 ## The credits screen (owner, 2026-11-12) in the loaded game. With the ball rolling,
 ## Esc pauses and the pause menu's Credits opens the credits in its place: the game
 ## stays frozen (the clock at 0, the world, player, sky and cars stopped, the ball
-## still) through the list and the engine's licences. Esc goes back a step at a time
-## (the engine's licences, the list, the pause menu, still paused), as does Back;
+## still) through the list and the Licences. Esc goes back a step at a time (the
+## Licences, the list, the pause menu, still paused), as does Back;
 ## Resume plays on with the clock back, the ball rolling on, and no prompt away from
 ## a car. Returns a summary, or "" after failing.
 func _check_credits_screen(main: GameMain) -> String:
@@ -476,7 +476,7 @@ func _check_credits_screen(main: GameMain) -> String:
 	or moving.any(func(node: Node) -> bool: return node.can_process()):
 		_fail("The pause menu's Credits must show the credits in the menu's place with the game frozen (paused %s, time scale %s, credits %s, pause menu %s)." % [paused, Engine.time_scale, hud.credits_visible(), hud.pause_panel.visible])
 		return ""
-	hud.credits_engine_button.pressed.emit()
+	hud.credits_licences_button.pressed.emit()
 	for _tick in 60:
 		await physics_frame
 	if ball.global_position != rolled_to or not paused or Engine.time_scale != 0.0:
@@ -486,7 +486,7 @@ func _check_credits_screen(main: GameMain) -> String:
 	var steps := PackedStringArray()
 	for expected: String in ["list", "pause menu"]:
 		_push_key(KEY_ESCAPE)
-		var at := "pause menu" if not hud.credits_visible() and hud.pause_panel.visible else ("list" if hud.credits_list.visible and not hud.credits_engine.visible else "engine's licences")
+		var at := "pause menu" if not hud.credits_visible() and hud.pause_panel.visible else ("list" if hud.credits_list.visible and not hud.credits_licences.visible else "Licences")
 		if at != expected or not paused:
 			_fail("Esc on the credits must go back a step, to the %s, still paused (it went to the %s, paused %s)." % [expected, at, paused])
 			return ""
@@ -509,7 +509,7 @@ func _check_credits_screen(main: GameMain) -> String:
 	if hud.prompt_panel.visible and not main.vehicles.can_enter():
 		_fail("After Resume from the credits, away from any car, the prompt \"%s\" shows." % hud.prompt_text.text)
 		return ""
-	return "frozen through the list and the engine's licences, Esc back to the %s, Back and Resume" % " then ".join(steps)
+	return "frozen through the list and the Licences, Esc back to the %s, Back and Resume" % " then ".join(steps)
 
 
 ## Every line the controls screen shows, headings and rows.

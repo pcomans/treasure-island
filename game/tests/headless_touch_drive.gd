@@ -8,8 +8,8 @@ extends SceneTree
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
-##   - the touch pause button, the pause menu's Credits and its Godot Engine
-##     licences (owner, 2026-11-12): each view lies inside the page with thumb-sized
+##   - the touch pause button, the pause menu's Credits and its Licences (owner,
+##     2026-11-12): each view lies inside the page with thumb-sized
 ##     buttons and a finger's drag scrolls it; Back twice and Resume play on;
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
@@ -72,7 +72,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Credits and its Godot Engine licences, which lay inside the page with thumb-sized buttons and scrolled under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Credits and its Licences, which lay inside the page with thumb-sized buttons and scrolled under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -214,7 +214,7 @@ func _pause_and_resume(label: String) -> bool:
 
 
 ## The pause menu's Credits on a phone, as the player taps it: the touch pause
-## button, Credits, then Godot Engine licences. Each view lies inside the page, the
+## button, Credits, then Licences. Each view lies inside the page, the
 ## game still paused, with its buttons at least THUMB_PX tall, and a finger dragging
 ## it up scrolls it as far. Back twice returns to the pause menu, and Resume to play,
 ## where no keyboard prompt shows and nothing of the HUD lies over a touch control.
@@ -227,17 +227,17 @@ func _credits_and_resume(shape: String) -> bool:
 	if not _require(paused and hud.pause_panel.visible, "%s: the touch pause button did not pause before Credits." % shape):
 		return false
 	hud.credits_button.pressed.emit()
-	for view: ScrollContainer in [hud.credits_list, hud.credits_engine]:
-		if view == hud.credits_engine:
-			hud.credits_engine_button.pressed.emit()
+	for view: ScrollContainer in [hud.credits_list, hud.credits_licences]:
+		if view == hud.credits_licences:
+			hud.credits_licences_button.pressed.emit()
 		for _frame in 2:
 			await process_frame
-		var label := "%s, the credits' %s" % [shape, "engine licences" if view == hud.credits_engine else "list"]
+		var label := "%s, the credits' %s" % [shape, "Licences" if view == hud.credits_licences else "list"]
 		var page := Rect2(Vector2.ZERO, hud.get_viewport_rect().size)
 		var panel := hud.credits_panel.get_global_rect()
 		if not _require(paused and hud.credits_visible() and view.is_visible_in_tree() and page.encloses(panel), "%s: shows at %s, not inside the page %s (paused %s)." % [label, panel, page, paused]):
 			return false
-		for button: Button in [hud.credits_engine_button, hud.credits_back_button]:
+		for button: Button in [hud.credits_licences_button, hud.credits_back_button]:
 			if button.is_visible_in_tree() and not _require(button.size.y >= THUMB_PX and panel.encloses(button.get_global_rect()), "%s: %s must lie in the panel and be at least %d px tall (%s)." % [label, button.text, THUMB_PX, button.get_global_rect()]):
 				return false
 		var bar := view.get_v_scroll_bar()
@@ -249,7 +249,7 @@ func _credits_and_resume(shape: String) -> bool:
 				return false
 	hud.credits_back_button.pressed.emit()
 	hud.credits_back_button.pressed.emit()
-	if not _require(paused and not hud.credits_visible() and hud.pause_panel.visible, "%s: Back twice on the engine's licences must go back to the pause menu, still paused." % shape):
+	if not _require(paused and not hud.credits_visible() and hud.pause_panel.visible, "%s: Back twice on the Licences must go back to the pause menu, still paused." % shape):
 		return false
 	hud.resume_button.pressed.emit()
 	await process_frame
