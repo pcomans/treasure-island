@@ -428,12 +428,14 @@ export function bodyShape(name) {
     const yBottom = bottom(clamp(o.zf, 0, L));
     const h = Math.max(0.08, yTop - yBottom);
     const widest = lerp(0.5, FACE_F, e);
-    // A box's tail (a service body's, its corner a few centimetres round) is
-    // square to the ground: its side's tuck under at the sill runs out along
-    // the side before the corner, and its face has none. Tucked round so tight
-    // a corner, the two twisted its foot into a dark crack.
-    const boxTail = !front && tail.corner < BOX_TAIL_CORNER_M;
-    const sillTuck = boxTail ? 1 - tuck : 1;
+    // A box body behind the cab (a service body, its tail's corner a few
+    // centimetres round) stands square to the ground: no tuck under along its
+    // sides or across its tail, the change hidden in the slot between it and
+    // the cab. Tucked in 9 cm along the normal round a 6 cm corner, its foot
+    // turned inside out (a dark crack at the near level).
+    const boxBody = body.bed !== undefined && tail.corner < BOX_TAIL_CORNER_M;
+    const sillTuck = boxBody ? 1 - smoothstep(cab.rear_base, cab.rear_base + BED_GAP_M, o.zf) : 1;
+    const boxTail = boxBody && !front;
     // Inward along the plan normal: the tuck under at the sill, the roll in at the shoulder, a crease below it.
     let inward = sillTuck * lerp(0.05, 0, e) * Math.max(0, (widest - f) / widest) ** 2.2 + 0.04 * Math.max(0, (0.07 - f) / 0.07) ** 2;
     const leanSlope = (end.lean * es * 1.8) / ((1 - FACE_F) * h);
@@ -578,7 +580,7 @@ const REFINE = Object.freeze({
 });
 // How far off the arch's line (m) an edge of the shell's border round an arch still gets a lip.
 const LIP_REACH_M = 0.012;
-// A tail corner tighter than this (m) is a box's: square to the ground.
+// A bed's tail corner tighter than this (m) is a box body's: square to the ground.
 const BOX_TAIL_CORNER_M = 0.1;
 // At the far level, between these angles (degrees) of a corner's smooth
 // normal from the mean of its faces, the normal turns to that mean.
@@ -1036,8 +1038,15 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const fRear = region(onLid, (rec) => smax(max3(roofBack - rec.zq, rec.zq - (cab.rear_base - Math.min(0.045, 0.25 * rearSpan)), rec.k + 0.03 - rec.g, 0.03), shape.tailTop + 0.05 - rec.y, 0.03));
   const fGlassRoof = region((rec) => !rec.wall && body.glass_roof === true, (rec) => max3(cab.windshield_top + 0.1 - rec.zq, rec.zq - (cab.roof_end - 0.1), rec.k + 0.07 - rec.g, 0.05));
   const fRoof = region(onLid, (rec) => Math.max(cab.windshield_top - 0.035 - rec.zq, rec.zq - roofBack, -(rec.g + rec.k * 0.6)));
-  const fCowl = region(onLid, (rec) => Math.max(Math.abs(rec.zq - cab.windshield_base) - 0.065, 0.02 - rec.g));
-  fCowl.pre = [region(onLid, (rec) => rec.zq - (cab.windshield_base - 0.065)), region(onLid, (rec) => rec.zq - (cab.windshield_base + 0.065))];
+  // Below the hero level the cowl's band ends where the windshield's glass
+  // starts (wb + 0.06): it ended 5 mm further up, and the two cuts so close
+  // across the coarser triangles left a band of slivers that shaded as a
+  // sawtooth along a van's steep glass. (The hero level's frit covers the
+  // glass's foot, and its finer grid turned a face over at the van's A pillar
+  // with the one cut.)
+  const cowlTop = cab.windshield_base + (detail >= 3 ? 0.065 : 0.06);
+  const fCowl = region(onLid, (rec) => Math.max(cab.windshield_base - 0.065 - rec.zq, rec.zq - cowlTop, 0.02 - rec.g));
+  fCowl.pre = [region(onLid, (rec) => rec.zq - (cab.windshield_base - 0.065)), region(onLid, (rec) => rec.zq - cowlTop)];
   const hoodLine = lineEnds(
     region((rec) => !rec.wall && rec.zq < hoodEndZq + SNAP_M, (rec) => rec.dist - 0.075),
     (rec) => !rec.wall && Math.abs(rec.dist - 0.075) < LINE_END_NEAR_M,
@@ -2297,18 +2306,28 @@ function centreFittings(out, name, detail) {
   if (detail >= 2) {
     // Wipers parked on the cowl: an arm and a blade each, lying along the
     // glass's (bowed) foot, their outer tips well inside the A pillars.
+    // Each follows the glass in several straight pieces, standing off it along
+    // the glass's own normal: a straight blade over a crowned glass, lifted
+    // straight up off a van's steep one, sank into it (a sawtooth along the
+    // glass's foot) and floated clear of it in pieces.
     for (const [x0, x1] of [[-0.62, -0.05], [0.02, 0.6]]) {
       const span = W * 0.8;
-      const at = (x) => {
+      const onGlass = (x, off) => {
         const zf = shape.rowZf(cab.windshield_base + 0.09 + 0.03 * ((x - x0 * span) / ((x1 - x0) * span)), Math.abs(x));
-        return v3(x, shape.lid(Math.abs(x), zf).y + 0.014, zOf(zf));
+        const ax = Math.max(Math.abs(x), 1e-3);
+        const h = 4e-4;
+        const y = shape.lid(ax, zf).y;
+        const gx = (shape.lid(ax + h, zf).y - shape.lid(Math.max(0, ax - h), zf).y) / (ax - h < 0 ? ax + h : 2 * h);
+        const gz = (shape.lid(ax, zf + h).y - shape.lid(ax, zf - h).y) / (2 * h);
+        const n = vnorm(v3(-gx * Math.sign(x || 1), 1, -gz));
+        return vadd(v3(x, y, zOf(zf)), vscale(n, off));
       };
-      const a = at(x0 * span);
-      const b = at(x1 * span);
+      const pieces = detail >= 3 ? 8 : 5;
+      const blade = (r, t0, t1, lift = 0) => Array.from({ length: pieces + 1 }, (_, i) => onGlass(lerp(x0, x1, lerp(t0, t1, i / pieces)) * span, r + 0.002 + lift));
       if (detail >= 3) {
-        out.tube([a, at(lerp(x0, x1, 0.5) * span), b], 0.006, 5, P.rubber);
-        out.tube([vadd(a, v3(0.02, 0.012, -0.03)), vadd(at(lerp(x0, x1, 0.55) * span), v3(0, 0.012, 0))], 0.005, 4, P.trim);
-      } else out.tube([a, b], 0.008, 3, P.trim, { caps: false });
+        out.tube(blade(0.006, 0, 1), 0.006, 5, P.rubber);
+        out.tube(blade(0.005, 0.04, 0.55, 0.012), 0.005, 4, P.trim);
+      } else out.tube(blade(0.008, 0, 1), 0.008, 3, P.trim, { caps: false });
     }
     // Antenna fin at the back of the roof.
     if (!body.bed) {
