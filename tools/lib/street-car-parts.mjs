@@ -42,6 +42,14 @@ export class CarMesh extends MeshBuilder {
     super(CAR_PART_COUNT);
   }
 
+  // A triangle with no area, or with an edge shorter than the welding's grain
+  // (MeshBuilder.result()), draws nothing: it is left out.
+  triangle(a, b, c, normals, part, ao) {
+    const n = vcross(vsub(b, a), vsub(c, a));
+    if (vlen(n) < 2e-9 || Math.min(vlen(vsub(b, a)), vlen(vsub(c, b)), vlen(vsub(a, c))) < 3e-5) return;
+    super.triangle(a, b, c, normals, part, ao);
+  }
+
   // One triangle with its three normals, wound to face them.
   face(a, b, c, na, nb, nc, part, aoA = 1, aoB = aoA, aoC = aoA) {
     const n = vcross(vsub(b, a), vsub(c, a));
@@ -483,7 +491,18 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   seat(-seatX, seatZ, 0.5, false);
   seat(seatX, seatZ, 0.5, false);
   if (rows === 2) {
-    const rearZ = Math.min(cabinEnd - 0.5, seatZ + 0.95);
+    // The rear seat comes forward until its headrests clear the glass above
+    // them (a fastback's or a saloon's rear glass falls steeply over them).
+    const headroom = (zf) => shape.lid(inner * 0.35, zf).y - 0.07;
+    const headTop = (zf) => {
+      const hip = floor + 0.27;
+      const backH = Math.min(0.31, (body.cabin.roof - 0.3 - hip) / 2);
+      const back = vadd(at(0, hip + 0.03, zf + 0.25), vscale(seatAxes[1], backH + 0.02));
+      const head = vadd(back, vscale(seatAxes[1], backH + 0.115));
+      return { y: head[1] + 0.085, zf: head[2] + L / 2 + 0.05 };
+    };
+    let rearZ = Math.min(cabinEnd - 0.5, seatZ + 0.95);
+    while (rearZ > seatZ + 0.62 && headTop(rearZ).y > headroom(headTop(rearZ).zf)) rearZ -= 0.02;
     if (rearZ > seatZ + 0.6) seat(0, rearZ, Math.min(1.36, 2 * inner - 0.1), true);
     // Rear shelf (a saloon) or load cover (a hatch) behind the rear seat.
     const shelfY = shape.top(Math.min(L, cab.rear_base)) - 0.07;
@@ -498,6 +517,63 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
 }
 
 // ---------------------------------------------------------------- underbody
+// The floor under the car: its height by detail (the hero level's underbody
+// floor, the others' dark sheet), and the sheet itself from zf0 to zf1 at half
+// width hw, narrowed at each wheel to the well's wall so it never shows
+// through an arch.
+export function underFloorY(body, detail) {
+  return body.clearance + (detail >= 3 ? 0.1 : 0.03);
+}
+export function underFloor(out, shape, y, zf0, zf1, hw, ao) {
+  const { body, L, W, axles, archRadius } = shape;
+  const zOf = (zf) => zf - L / 2;
+  const well = W - 0.035 - body.tire_width - 0.055;
+  // The body's bottom edge in plan (its half width at each zf), from the wall's lowest ring.
+  const edge = [];
+  for (let i = 0; i <= 600; i += 1) {
+    const p = shape.wall((3 * i) / 600, 0);
+    edge.push([p.zf, p.x]);
+  }
+  const halfAt = (zf) => {
+    let best = 0;
+    for (let i = 0; i < edge.length - 1; i += 1) {
+      const [za, xa] = edge[i];
+      const [zb, xb] = edge[i + 1];
+      if ((za - zf) * (zb - zf) <= 0 && za !== zb) best = Math.max(best, lerp(xa, xb, (zf - za) / (zb - za)));
+    }
+    return best;
+  };
+  // It rises into the overhangs to just above the bumpers' lower edge and keeps
+  // inside the body's bottom edge, so it never shows from beside or behind; at
+  // each wheel it narrows to the well's wall.
+  const zs = [];
+  const steps = Math.max(8, Math.ceil((zf1 - zf0) / 0.08));
+  for (let i = 0; i <= steps; i += 1) zs.push(lerp(zf0, zf1, i / steps));
+  // The notch for each wheel ends exactly where the well's liner comes down to the floor.
+  const linerR = archRadius + 0.004;
+  const notch = linerR * Math.cos(Math.asin(clamp((body.wheel_radius - y) / linerR, -1, 1)));
+  for (const axle of axles) zs.push(axle - notch, axle + notch);
+  const cuts = zs.filter((z) => z >= zf0 && z <= zf1).sort((a, b) => a - b).filter((z, i, all) => i === 0 || z - all[i - 1] > 1e-4);
+  const inWell = (zf) => axles.some((axle) => Math.abs(zf - axle) < notch - 1e-6);
+  const down = v3(0, -1, 0);
+  const height = (zf) => Math.max(y, shape.bottom(zf) + 0.01);
+  for (let i = 0; i < cuts.length - 1; i += 1) {
+    const [za, zb] = [cuts[i], cuts[i + 1]];
+    const mid = (za + zb) / 2;
+    const half = (zf) => Math.max(0.05, Math.min(hw, halfAt(zf) - 0.03, inWell(mid) ? well : Infinity));
+    const [ha, hb] = [half(za), half(zb)];
+    const [ya, yb] = [height(za), height(zb)];
+    const n = vnorm(v3(0, -1, (yb - ya) / Math.max(1e-6, zb - za)));
+    out.flat(v3(-ha, ya, zOf(za)), v3(ha, ya, zOf(za)), v3(hb, yb, zOf(zb)), v3(-hb, yb, zOf(zb)), n, P.under, ao);
+  }
+  // A valance at each end, from the floor up into the bumper.
+  for (const [zf, n] of [[cuts[0], v3(0, 0, -1)], [cuts.at(-1), v3(0, 0, 1)]]) {
+    const half = Math.max(0.05, Math.min(hw, halfAt(zf) - 0.03));
+    const from = height(zf);
+    const to = shape.bottom(zf) + 0.06;
+    if (to > from + 0.005) out.flat(v3(-half, from, zOf(zf)), v3(half, from, zOf(zf)), v3(half, to, zOf(zf)), v3(-half, to, zOf(zf)), n, P.under, ao);
+  }
+}
 // What shows under a car from low down or when it lies on its roof: the floor
 // with its tunnel, the subframes and suspension arms at each axle, and (unless
 // electric) the exhaust with its silencer and tailpipe.
@@ -509,10 +585,10 @@ export function buildUnderbody(out, body, shape) {
   const y0 = body.clearance + 0.1;
   const R = body.wheel_radius;
   const down = v3(0, -1, 0);
-  const z0 = body.nose.corner * 0.6;
-  const z1 = L - body.tail.corner * 0.6;
+  const z0 = 0.07;
+  const z1 = L - 0.07;
   const hw = W - 0.2;
-  out.flat(at(-hw, y0, z0), at(hw, y0, z0), at(hw, y0, z1), at(-hw, y0, z1), down, P.under, 0.35);
+  underFloor(out, shape, y0, z0, z1, hw, 0.35);
   // Sill rails and the tunnel.
   for (const x of [-hw + 0.08, hw - 0.08]) out.roundedBox(at(x, y0 - 0.02, (axles[0] + axles[1]) / 2), [0.06, 0.03, (axles[1] - axles[0]) / 2 - R - 0.1], 0.02, P.under, { ao: 0.5 });
   out.roundedBox(at(0, y0 - 0.012, (axles[0] + axles[1]) / 2), [0.13, 0.025, (axles[1] - axles[0]) / 2 - 0.1], 0.02, P.under, { ao: 0.45 });
@@ -533,7 +609,10 @@ export function buildUnderbody(out, body, shape) {
     const pipeY = y0 - 0.045;
     // The silencer lies across the tail, or ahead of the rear axle under a truck's high bed.
     const muffZ = body.bed ? axles[1] - R - 0.45 : L - body.tail.corner - 0.32;
-    out.tube(body.bed ? [at(0.2, pipeY, axles[0] + 0.45), at(0.2, pipeY, muffZ - 0.2)] : [at(0.2, pipeY, axles[0] + 0.45), at(0.2, pipeY, axles[1] - 0.5), at(0.3, pipeY - 0.01, axles[1] + 0.25), at(0.3, pipeY, muffZ - 0.2)], 0.028, 6, P.exhaust, { ao: 0.6 });
+    // The pipe only ever runs rearward (a short tail puts the silencer ahead of the axle's kink).
+    const route = body.bed ? [at(0.2, pipeY, axles[0] + 0.45), at(0.2, pipeY, muffZ - 0.2)] : [at(0.2, pipeY, axles[0] + 0.45), at(0.2, pipeY, axles[1] - 0.5), at(0.3, pipeY - 0.01, axles[1] + 0.25), at(0.3, pipeY, muffZ - 0.2)];
+    const pipe = route.filter((p, i) => i === route.length - 1 || route.slice(i + 1).every((q) => q[2] > p[2] + 0.05));
+    out.tube(pipe, 0.028, 6, P.exhaust, { ao: 0.6 });
     out.roundedBox(at(0.1, pipeY - 0.02, muffZ), [0.36, 0.075, 0.13], 0.06, P.exhaust, { ao: 0.6 });
     // The tailpipe shows just under the bumper.
     const tipX = W - 0.36;
@@ -544,4 +623,135 @@ export function buildUnderbody(out, body, shape) {
     // An electric car's flat battery tray.
     out.roundedBox(at(0, y0 - 0.02, (axles[0] + axles[1]) / 2), [hw - 0.16, 0.025, (axles[1] - axles[0]) / 2 - R - 0.12], 0.02, P.under, { ao: 0.5 });
   }
+}
+
+// ---------------------------------------------------------------- fittings
+// The fittings every car has, each modelled once in its own frame (x out of
+// the body's surface, y up it, z along it, round the fitting's centre) and
+// laid on each body's surface where its layout puts it (street-car-kit.mjs
+// drape), so a filler door, a handle or a number plate is the same part on
+// every car and nothing is cut into the body for it.
+
+// A rounded rectangle's outline in the (z, y) plane: [z, y] points, the same
+// count and order for any size (straight runs in `runs` steps, corners in
+// `steps`), so rings between two outlines join up.
+function roundedRect(hz, hy, r, steps, runs = 4) {
+  const pts = [];
+  const corners = [[hz - r, hy - r], [-(hz - r), hy - r], [-(hz - r), -(hy - r)], [hz - r, -(hy - r)]];
+  corners.forEach(([cz, cy], q) => {
+    for (let i = 0; i <= steps; i += 1) {
+      const t = ((q + i / steps) * Math.PI) / 2;
+      pts.push([cz + r * Math.cos(t), cy + r * Math.sin(t)]);
+    }
+    // The straight run to the next corner.
+    const [nz, ny] = corners[(q + 1) % 4];
+    const t1 = (((q + 1) % 4) * Math.PI) / 2;
+    const from = pts.at(-1);
+    const to = [nz + r * Math.cos(t1), ny + r * Math.sin(t1)];
+    for (let i = 1; i < runs; i += 1) pts.push([lerp(from[0], to[0], i / runs), lerp(from[1], to[1], i / runs)]);
+  });
+  return pts;
+}
+// A band between two outlines (outer at height xa, inner at xb), facing out
+// (+x), tilted where it climbs.
+function band(out, outer, inner, xa, xb, part, ao = 1) {
+  for (let i = 0; i < outer.length; i += 1) {
+    const j = (i + 1) % outer.length;
+    const a = v3(xa, outer[i][1], outer[i][0]);
+    const b = v3(xa, outer[j][1], outer[j][0]);
+    const c = v3(xb, inner[j][1], inner[j][0]);
+    const d = v3(xb, inner[i][1], inner[i][0]);
+    const radial = vnorm(v3(0, outer[i][1] - inner[i][1], outer[i][0] - inner[i][0]));
+    const width = Math.hypot(outer[i][1] - inner[i][1], outer[i][0] - inner[i][0]) || 1;
+    const n = vnorm(vadd(v3(1, 0, 0), vscale(radial, (xb - xa) / width)));
+    out.flat(a, b, c, d, n, part, ao);
+  }
+}
+// A flat disc filling an outline at height x: rings of the outline scaled in
+// toward its middle, then a small fan, so a draped disc follows its surface.
+function disc(out, outline, x, part, ao = 1) {
+  const scales = [1, 0.78, 0.56, 0.36, 0.18];
+  for (let i = 0; i < scales.length - 1; i += 1) {
+    band(out, outline.map(([z, y]) => [z * scales[i], y * scales[i]]), outline.map(([z, y]) => [z * scales[i + 1], y * scales[i + 1]]), x, x, part, ao);
+  }
+  const last = scales.at(-1);
+  out.fan(v3(x, 0, 0), outline.map(([z, y]) => v3(x, y * last, z * last)), v3(1, 0, 0), part, ao);
+}
+
+const fittingCache = new Map();
+const cached = (key, build) => {
+  if (!fittingCache.has(key)) fittingCache.set(key, build());
+  return fittingCache.get(key);
+};
+
+// The filler door (a charge port door on the electric fastback): a painted
+// flap a millimetre proud of the panel, its shut line dark round it.
+export const FILLER_DOOR = Object.freeze({ half_along: 0.085, half_up: 0.075, radius: 0.035 });
+export function fillerDoor() {
+  return cached("filler", () => {
+    const out = new CarMesh();
+    const { half_along: hz, half_up: hy, radius: r } = FILLER_DOOR;
+    const gap = 0.0035;
+    const outer = roundedRect(hz + gap, hy + gap, r + gap, 6);
+    const edge = roundedRect(hz, hy, r, 6);
+    const face = roundedRect(hz - 0.0015, hy - 0.0015, r - 0.0015, 6);
+    band(out, outer, edge, 0.0008, 0.0008, P.gap, 0.35);
+    band(out, edge, face, 0.0008, 0.0016, P.paint, 0.85);
+    disc(out, face, 0.0016, P.paint);
+    return out;
+  });
+}
+
+// A door handle: a pull bar standing off a dark pocket plate (the hero level),
+// or the bar alone (near).
+export function doorHandle(detail) {
+  return cached(`handle${detail >= 3 ? 3 : 2}`, () => {
+    const out = new CarMesh();
+    if (detail >= 3) {
+      const pocket = roundedRect(0.1, 0.026, 0.024, 5);
+      const inner = roundedRect(0.094, 0.02, 0.018, 5);
+      band(out, pocket, inner, 0.0008, 0.001, P.under, 0.5);
+      disc(out, inner, 0.001, P.under, 0.45);
+      out.roundedBox(v3(0.012, 0, 0), [0.011, 0.014, 0.085], 0.01, P.paint);
+    } else {
+      out.box(v3(0.009, 0, 0), [0.01, 0.014, 0.08], P.trim);
+    }
+    return out;
+  });
+}
+
+// A US number plate (12 by 6 inches) in a black frame, standing off its mount.
+export function numberPlate(detail) {
+  return cached(`plate${detail}`, () => {
+    const out = new CarMesh();
+    if (detail >= 1) out.roundedBox(v3(0.002, 0, 0), [0.006, 0.086, 0.162], 0.004, P.trim, { ao: 0.8 });
+    else out.box(v3(0.002, 0, 0), [0.006, 0.084, 0.16], P.trim);
+    disc(out, roundedRect(0.1525, 0.076, 0.012, detail >= 2 ? 4 : 1), 0.0085, P.plate);
+    return out;
+  });
+}
+
+// A rear side reflector on the bumper's end.
+export function sideReflector() {
+  return cached("reflector", () => {
+    const out = new CarMesh();
+    const edge = roundedRect(0.045, 0.014, 0.01, 4);
+    const face = roundedRect(0.042, 0.011, 0.007, 4);
+    band(out, edge, face, 0.0004, 0.002, P.tail_lamp, 0.8);
+    disc(out, face, 0.002, P.tail_lamp);
+    return out;
+  });
+}
+
+// The third brake light: a red bar at the top of the rear glass (or a cab
+// back), along the car's width.
+export function brakeLight(detail) {
+  return cached(`brake${detail >= 3 ? 3 : 2}`, () => {
+    const out = new CarMesh();
+    if (detail >= 3) {
+      out.roundedBox(v3(0.009, 0, 0), [0.01, 0.016, 0.18], 0.008, P.gloss_black);
+      out.roundedBox(v3(0.0185, 0, 0), [0.0015, 0.008, 0.165], 0.0012, P.lamp_red);
+    } else out.box(v3(0.01, 0, 0), [0.011, 0.014, 0.17], P.lamp_red);
+    return out;
+  });
 }

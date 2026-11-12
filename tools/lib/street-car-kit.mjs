@@ -26,7 +26,7 @@
 // the front bumper (z + length / 2).
 
 import { clamp, curve, lerp, smooth, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./kit-mesh.mjs";
-import { CALIPER_ANGLE, CAR_PART_AS_BASE, CAR_PART_COUNT, CAR_PARTS, CarMesh, P, buildBrake, buildCabin, buildUnderbody, buildWheel } from "./street-car-parts.mjs";
+import { CALIPER_ANGLE, CAR_PART_AS_BASE, CAR_PART_COUNT, CAR_PARTS, CarMesh, FILLER_DOOR, P, brakeLight, buildBrake, buildCabin, buildUnderbody, buildWheel, doorHandle, fillerDoor, numberPlate, sideReflector, underFloor, underFloorY } from "./street-car-parts.mjs";
 
 export { CALIPER_ANGLE, CAR_PART_COUNT, CAR_PARTS };
 
@@ -131,9 +131,11 @@ export const CAR_BODIES = Object.freeze({
     nose: { bumper_bottom: 0.38, lean: 0.06, corner: 0.3, face_top: 1.12 },
     tail: { bumper_bottom: 0.5, lean: 0.0, corner: 0.06, face_top: 1.42 },
     hood: [[0.0, 1.12], [0.25, 1.18], [1.2, 1.22], [1.75, 1.25]],
-    belt: [[1.75, 1.25], [3.78, 1.28]],
+    // The cab's belt ends where its back pillar starts, so the step up to the service body's side spans its pillar.
+    belt: [[1.75, 1.25], [3.72, 1.28]],
     deck: [[3.84, 1.5], [6.2, 1.5]],
-    cabin: { windshield_base: 1.75, windshield_top: 2.38, roof_end: 3.7, rear_base: 3.8, roof: 1.95, crown: 0.02, tumblehome: 0.16, rear_drop: 0.03 },
+    // The cab back comes down onto the service body's top (rear_base where the body starts).
+    cabin: { windshield_base: 1.75, windshield_top: 2.38, roof_end: 3.7, rear_base: 3.84, roof: 1.95, crown: 0.02, tumblehome: 0.16, rear_drop: 0.03 },
     pillars: { b: 2.92, c: null, quarter_glass: false },
     cladding: 0.0, roof_rails: false, grille: "truck", bed: "service",
   },
@@ -297,7 +299,8 @@ export function bodyShape(name) {
     const down = 1 - smoothstep(sideEnd - 0.05, sideEnd + 0.32, zf);
     const round = front ? 1 : 1 - smoothstep(0.2, 0.85, e);
     const zeta = up * down * round;
-    const bed = body.bed ? smoothstep(bedFrom, bedFrom + 0.08, zf) * round : 0;
+    // A pickup's tailgate top is square like its bed rails, so the bed's style carries round onto it.
+    const bed = body.bed ? smoothstep(bedFrom, bedFrom + 0.08, zf) * (front ? round : 1) : 0;
     // The lid's rise from the shoulder where it is not the side glass: gentle
     // over a hood or a deck, as steep as the hatch behind a body without a trunk.
     const roll = lerp(front ? 0.9 : lerp(0.9, tailSlope, smoothstep(0.2, 0.85, e)), 2.6, bed);
@@ -326,6 +329,40 @@ export function bodyShape(name) {
     return (glassRise * (-(1 - GLASS_BARREL) + Math.sqrt((1 - GLASS_BARREL) ** 2 + 4 * GLASS_BARREL * u))) / (2 * GLASS_BARREL);
   };
 
+  // The roof surface: the centre profile (hood, windshield, roof, rear glass,
+  // deck), bowed in plan (the windshield's sides sit further back, a saloon's
+  // rear glass's further forward) and crowned across the car. The bow eases in
+  // from the nose and out before the tail, and never changes by as much as the
+  // car's length does (|bowAt'| < 1), so the lid's rows can follow it: each row
+  // is a line of constant zq = zf - bowAt(zf) (x / W)^2 from the shoulder to the
+  // centre line. A hatch's glass and a pickup's cab back run straight across.
+  const frontBow = 0.2;
+  const rearBow = hasTrunk && !body.bed ? 0.12 : 0;
+  // The end faces bulge by NOSE_BOW_M and TAIL_BOW_M at the centre line (u²
+  // across, as the plan outline), and the rows near them follow that bulge; the
+  // windshield's and rear glass's bow is flat at the shoulder (u²(2 - u²)), so
+  // rows leave the shoulder square to the side and never run along it.
+  const across = (x) => (x / W) ** 2;
+  const acrossFlat = (x) => {
+    const s = (x / W) ** 2;
+    return s * (2 - s);
+  };
+  const endBow = (zf) => NOSE_BOW_M * (1 - smoothstep(nose.corner, nose.corner + 0.5, zf)) - TAIL_BOW_M * smoothstep(L - tail.corner - 0.5, L - tail.corner, zf);
+  const cabinBow = (zf) =>
+    frontBow * smoothstep(nose.corner, Math.max(nose.corner + 0.3, cab.windshield_base - 0.1), zf) * (1 - smoothstep(cab.windshield_top - 0.15, cab.windshield_top + 0.45, zf)) -
+    rearBow * smoothstep(cab.roof_end - 0.45, cab.roof_end + 0.02, zf) * (1 - smoothstep(Math.min(cab.rear_base, L - tail.corner - 0.45), L - tail.corner, zf));
+  const bowOffset = (x, zf) => endBow(zf) * across(x) + cabinBow(zf) * acrossFlat(x);
+  const zqAt = (x, zf) => zf - bowOffset(x, zf);
+  // The zf where the row of constant zq crosses x.
+  const rowZf = (zq, x) => {
+    let zf = zq;
+    for (let i = 0; i < 32; i += 1) {
+      const next = zq + bowOffset(x, zf);
+      if (Math.abs(next - zf) < 1e-10) return next;
+      zf = next;
+    }
+    return zf;
+  };
   // A point of the wall: a round the outline, f from its lower edge (0) to the shoulder (1).
   const FACE_F = 0.3;
   const wall = (a, f) => {
@@ -337,7 +374,9 @@ export function bodyShape(name) {
     const sign = front ? 1 : -1;
     const zfTop = clamp(o.zf + sign * end.lean * es, 0, L);
     const st = styleAt(zfTop, e, front);
-    const yTop = top(zfTop) - st.drop;
+    // The shoulder's height follows the lid's (bowed) contours, so the hood
+    // and the deck meet it level and never dip inside it.
+    const yTop = top(clamp(zqAt(o.x, zfTop), 0, L)) - st.drop;
     const yBottom = bottom(clamp(o.zf, 0, L));
     const h = Math.max(0.08, yTop - yBottom);
     const widest = lerp(0.5, FACE_F, e);
@@ -386,15 +425,9 @@ export function bodyShape(name) {
     return { dist: Math.sqrt(best), y: lerp(p.y, q.y, t), zeta: lerp(p.zeta, q.zeta, t), bed: lerp(p.bed, q.bed, t), k: lerp(p.k, q.k, t), slope: lerp(p.slope, q.slope, t) };
   };
 
-  // The roof surface: the centre profile (hood, windshield, roof, rear glass,
-  // deck), bowed in plan (the windshield's sides sit further back, the rear
-  // glass's further forward) and crowned across the car.
-  const frontBow = 0.2;
-  const rearBow = hasTrunk ? 0.12 : 0.05;
   const roofHalf = W - cab.tumblehome + 0.08;
   const roofAt = (x, zf) => {
-    const bow = frontBow * (1 - smoothstep(cab.windshield_top - 0.15, cab.windshield_top + 0.45, zf)) - rearBow * smoothstep(cab.roof_end - 0.45, cab.roof_end + 0.02, zf);
-    const zq = zf - bow * (x / W) ** 2;
+    const zq = zqAt(x, zf);
     const hood = top(clamp(zq, 0, L)) + 0.03;
     const roof = zq > cab.windshield_base && zq < cab.rear_base ? roofLine(zq) + crown * smoothstep(0, 0.2, roofLine(zq) - top(clamp(zq, 0, L))) : -1;
     const cabin = smoothstep(0.02, 0.3, roof - hood);
@@ -406,7 +439,13 @@ export function bodyShape(name) {
     const nb = nearest(x, zf);
     const side = nb.y + lerp(nb.slope * nb.dist, glassHeight(nb.dist), nb.zeta);
     const roof = roofAt(x, zf);
-    return { y: smin(roof.y, side, nb.k), g: side - roof.y, zq: roof.zq, dist: nb.dist, belt: nb.y, zeta: nb.zeta, bed: nb.bed, k: nb.k };
+    // Never below the shoulder it rises from (the roof's crown keeps falling
+    // past the roof's own width, over a deck or a rear glass's foot).
+    const surface = smax(roof.y, nb.y, 0.012);
+    // The blend's radius grows from nothing at the shoulder, where the lid must
+    // start at the wall's top (a full radius there dips up to k/4 below it).
+    const k = nb.k * smooth(nb.dist / nb.k);
+    return { y: smin(surface, side, Math.max(1e-4, k)), g: side - surface, zq: roof.zq, dist: nb.dist, belt: nb.y, zeta: nb.zeta, bed: nb.bed, k: nb.k };
   };
 
   // Arc length along the outline from the front centre line, by a.
@@ -422,7 +461,7 @@ export function bodyShape(name) {
     const i = Math.min(ARC_STEPS - 1, Math.floor(s));
     return lerp(arc[i], arc[i + 1], s - i);
   };
-  const shape = { body, L, W, axles, archRadius, top, bottom, roofLine, peakZ, crown, cowl, tailTop, hasTrunk, sideEnd, outline, wall, lid, roofAt, arcAt, arcTotal: arc[ARC_STEPS], glassInset, FACE_F };
+  const shape = { body, L, W, axles, archRadius, top, bottom, roofLine, peakZ, crown, cowl, tailTop, hasTrunk, sideEnd, outline, wall, lid, roofAt, zqAt, rowZf, arcAt, arcTotal: arc[ARC_STEPS], glassInset, FACE_F };
   shapeCache.set(name, shape);
   return shape;
 }
@@ -435,7 +474,7 @@ export function bodyShape(name) {
 // surface: the shadow caster).
 function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const shape = bodyShape(name);
-  const { body, L, W, axles, archRadius, wall, lid } = shape;
+  const { body, L, W, axles, archRadius, wall, lid, zqAt, rowZf } = shape;
   const level = LEVELS[levelName];
   const detail = inner ? 1 : inset > 0 ? 0 : level.detail;
   const cab = body.cabin;
@@ -443,29 +482,60 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const tail = body.tail;
   const R = body.wheel_radius;
 
-  // --- Stations round the outline.
+  // --- Stations round the outline: the wall's columns. Each end face gets as
+  // many as the lid has columns, for the face is the lid's first (last) row.
+  const C = level.lid;
   const stations = [];
-  for (let i = 0; i <= level.face; i += 1) stations.push((0.5 * i) / level.face);
+  for (let i = 0; i <= C; i += 1) stations.push((0.5 * i) / C);
   for (let i = 1; i <= level.corner; i += 1) stations.push(0.5 + (0.5 * i) / level.corner);
   const sideFrom = nose.corner;
   const sideTo = L - tail.corner;
+  // A station's lid row runs at the zq of its shoulder point; the lid's keys
+  // (its creases) are zq values, put on the side station whose row has that zq.
+  const rowZq = (a) => {
+    const edge = wall(a, 1);
+    return zqAt(edge.x, edge.zf);
+  };
+  const sideStation = (zq) => {
+    let lo = 1;
+    let hi = 2;
+    for (let i = 0; i < 40; i += 1) {
+      const mid = (lo + hi) / 2;
+      if (rowZq(mid) < zq) lo = mid;
+      else hi = mid;
+    }
+    return (lo + hi) / 2;
+  };
   const keys = [shape.peakZ, cab.windshield_base, cab.windshield_top, cab.roof_end, cab.rear_base];
   if (detail >= 2) keys.push(cab.windshield_base - 0.07, cab.rear_base + 0.04, cab.roof_end + 0.04);
   const steps = Math.max(2, Math.ceil((sideTo - sideFrom) / level.step));
   const regular = [];
-  for (let i = 1; i < steps; i += 1) regular.push(lerp(sideFrom, sideTo, i / steps));
-  const minGap = level.step * 0.3;
-  const sideZ = keys.filter((zf) => zf > sideFrom + 0.02 && zf < sideTo - 0.02);
-  for (const zf of regular) if (sideZ.every((key) => Math.abs(key - zf) > minGap)) sideZ.push(zf);
-  sideZ.sort((a, b) => a - b);
-  for (const zf of sideZ) stations.push(1 + (zf - sideFrom) / (sideTo - sideFrom));
+  for (let i = 1; i < steps; i += 1) regular.push(1 + i / steps);
+  const minGap = (level.step * 0.3) / (sideTo - sideFrom);
+  const sideA = keys.filter((zq) => zq > rowZq(1) + 0.02 && zq < rowZq(2) - 0.02).map(sideStation);
+  for (const a of regular) if (sideA.every((key) => Math.abs(key - a) > minGap)) sideA.push(a);
+  // A station at every dip and crest of the centre line (a cab back meeting a
+  // service body, a cowl), so no triangle bridges one.
+  const centreHeight = (a) => lid(0, rowZq(a)).y;
+  {
+    const SAMPLES = 600;
+    const heights = [];
+    for (let i = 0; i <= SAMPLES; i += 1) heights.push(centreHeight(1 + i / SAMPLES));
+    for (let i = 1; i < SAMPLES; i += 1) {
+      const d0 = heights[i] - heights[i - 1];
+      const d1 = heights[i + 1] - heights[i];
+      const a = 1 + i / SAMPLES;
+      if (d0 * d1 < 0 && Math.abs(d0 - d1) > 2e-4 && sideA.every((b) => Math.abs(b - a) > 0.4 / SAMPLES)) sideA.push(a);
+    }
+  }
+  sideA.sort((a, b) => a - b);
+  for (const a of sideA) stations.push(a);
   for (let i = 0; i <= level.corner; i += 1) stations.push(2 + (0.5 * i) / level.corner);
-  for (let i = 1; i <= level.face; i += 1) stations.push(2.5 + (0.5 * i) / level.face);
+  for (let i = 1; i <= C; i += 1) stations.push(2.5 + (0.5 * i) / C);
   // More stations where the roof line is steep (a windshield, a hatch, a van's
-  // back), so no triangle spans much of its height.
-  const centreHeight = (a) => lid(0, wall(a, 1).zf).y;
+  // back), so no triangle spans much of its height; never on an end face.
   const maxDrop = { hero: 0.13, near: 0.2, mid: 0.3, far: 0.5 }[levelName];
-  for (let i = 0; i < stations.length - 1; i += 1) {
+  for (let i = C; i < stations.length - C - 1; i += 1) {
     if (stations[i + 1] - stations[i] > 2e-4 && Math.abs(centreHeight(stations[i + 1]) - centreHeight(stations[i])) > maxDrop) {
       stations.splice(i + 1, 0, (stations[i] + stations[i + 1]) / 2);
       i -= 1;
@@ -474,55 +544,191 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const K = stations.length;
   const wallF = level.wall;
   const nW = wallF.length - 1;
-  const nL = level.lid;
-
-  // --- Each station's lid points, spread by the section's length so the steep
-  // side glass and the roof rail get their share.
-  const spread = stations.map((a) => {
-    const edge = wall(a, 1);
+  // The lid: rows 0..NR across the car, each a line of constant zq from the
+  // shoulder (column 0) to the centre line (column C). Row 0 is the front face's
+  // shoulder (its stations, from its edge in to the centre line), row NR the
+  // rear face's, and every row between is a corner or side station's. So the
+  // lid's steep bands (the roll over a bumper, the side glass, a windshield, a
+  // cab back) run along its rows and columns, never across a triangle.
+  const FRONT_EDGE = C;
+  const REAR_EDGE = K - 1 - C;
+  const NR = REAR_EDGE - FRONT_EDGE;
+  const rowA = (r) => stations[FRONT_EDGE + r];
+  const faceA = (r, cf) => (r === 0 ? (0.5 * (C - cf)) / C : 2.5 + (0.5 * cf) / C);
+  const rowShoulder = [];
+  for (let r = 0; r <= NR; r += 1) {
+    const edge = wall(rowA(r), 1);
+    rowShoulder.push({ x: edge.x, zq: zqAt(edge.x, edge.zf) });
+  }
+  // A row's points along it: spread by the section's length, so the steep side
+  // glass and the roof rail get their share, turning to even steps toward the
+  // end faces (whose columns are their stations).
+  const columnTable = rowShoulder.map((shoulder, r) => {
+    const even = Array.from({ length: C + 1 }, (_, c) => c / C);
+    if (r === 0 || r === NR) return even;
     const samples = 40;
     const lengths = [0];
-    let last = [edge.x, edge.y];
+    let last = [shoulder.x, lid(shoulder.x, rowZf(shoulder.zq, shoulder.x)).y];
     for (let i = 1; i <= samples; i += 1) {
-      const x = edge.x * (1 - i / samples);
-      const y = i === 0 ? edge.y : lid(x, edge.zf).y;
+      const x = shoulder.x * (1 - i / samples);
+      const y = lid(x, rowZf(shoulder.zq, x)).y;
       lengths.push(lengths[i - 1] + Math.hypot(x - last[0], y - last[1]));
       last = [x, y];
     }
     const total = lengths[samples] || 1;
     const table = [0];
     let s = 0;
-    for (let j = 1; j < nL; j += 1) {
-      const want = j / nL;
+    for (let j = 1; j < C; j += 1) {
+      const want = j / C;
       while (s < samples - 1 && 0.7 * (lengths[s + 1] / total) + 0.3 * ((s + 1) / samples) < want) s += 1;
       const lo = 0.7 * (lengths[s] / total) + 0.3 * (s / samples);
       const hi = 0.7 * (lengths[s + 1] / total) + 0.3 * ((s + 1) / samples);
       table.push((s + (hi > lo ? (want - lo) / (hi - lo) : 0)) / samples);
     }
     table.push(1);
-    return table;
+    const a = rowA(r);
+    const w = a < 1 ? clamp((a - 0.5) / 0.5, 0, 1) : a > 2 ? clamp((2.5 - a) / 0.5, 0, 1) : 1;
+    return table.map((xi, c) => lerp(even[c], xi, w));
   });
+  // The lid's crease all round (where the roll up from the shoulder meets the
+  // top surface: a hood's or a deck's edge, the A pillars, the roof rails, the
+  // C and D pillars) runs along one column, so no triangle bridges it.
+  {
+    const creaseXi = (r) => {
+      const shoulder = rowShoulder[r];
+      const g = (xi) => {
+        const x = shoulder.x * (1 - xi);
+        return lid(x, rowZf(shoulder.zq, x)).g;
+      };
+      const SAMPLES = 80;
+      let prev = g(0.002);
+      for (let i = 1; i <= SAMPLES; i += 1) {
+        const xi = 0.002 + (0.6 * i) / SAMPLES;
+        const here = g(xi);
+        if (prev < 0 !== here < 0) {
+          let lo = xi - 0.6 / SAMPLES;
+          let hi = xi;
+          for (let k = 0; k < 30; k += 1) {
+            const mid = (lo + hi) / 2;
+            if (g(mid) < 0 === prev < 0) lo = mid;
+            else hi = mid;
+          }
+          return (lo + hi) / 2;
+        }
+        prev = here;
+      }
+      return null;
+    };
+    const found = [];
+    for (let r = 1; r < NR; r += 1) found.push([r, creaseXi(r)]);
+    const known = found.filter(([, xi]) => xi !== null).map(([, xi]) => xi).sort((p, q) => p - q);
+    if (known.length > 0) {
+      const median = known[Math.floor(known.length / 2)];
+      // The column whose share along a side row is nearest the crease's.
+      const sideRow = Math.floor(NR / 2);
+      let cr = 1;
+      for (let c = 1; c < C; c += 1) if (Math.abs(columnTable[sideRow][c] - median) < Math.abs(columnTable[sideRow][cr] - median)) cr = c;
+      for (const [r, xi] of found) {
+        if (xi === null) continue;
+        const table = columnTable[r];
+        const was = table[cr];
+        const a = rowA(r);
+        const w = a < 1 ? clamp((a - 0.5) / 0.5, 0, 1) : a > 2 ? clamp((2.5 - a) / 0.5, 0, 1) : 1;
+        const want = lerp(was, xi, w);
+        // Columns before it squeeze or stretch toward the shoulder, those after toward the centre line.
+        for (let c = 1; c < C; c += 1) {
+          if (c < cr) table[c] = (table[c] / was) * want;
+          else if (c > cr) table[c] = want + ((table[c] - was) / (1 - was)) * (1 - want);
+        }
+        table[cr] = want;
+      }
+    }
+  }
+  // Rows never cross: an inner row whose shoulder sits at or before the row in
+  // front of it (a face leaning back round its corner) runs a hair behind it,
+  // leaving its own shoulder point within its first column.
+  const faceZq = (r) => {
+    let best = r === 0 ? -Infinity : Infinity;
+    for (let c = 0; c <= C; c += 1) {
+      const p = wall(faceA(r, c), 1);
+      const zq = zqAt(p.x, p.zf);
+      best = r === 0 ? Math.max(best, zq) : Math.min(best, zq);
+    }
+    return best;
+  };
+  const rowZqInner = rowShoulder.map((shoulder) => shoulder.zq);
+  {
+    // Rows whose shoulder lies at or past an end face's line (a face that
+    // rolls over further than its corner) are spread evenly between the last
+    // row clear of it and the face.
+    const ROW_GAP = 2e-3;
+    const front = faceZq(0) + ROW_GAP;
+    const rear = faceZq(NR) - ROW_GAP;
+    let first = 1;
+    while (first < NR && rowZqInner[first] <= front + ROW_GAP * (first - 1)) first += 1;
+    for (let r = 1; r < first; r += 1) rowZqInner[r] = lerp(front, rowZqInner[first], (r - 1) / Math.max(1, first - 1));
+    let last = NR - 1;
+    while (last > 0 && rowZqInner[last] >= rear - ROW_GAP * (NR - 1 - last)) last -= 1;
+    for (let r = NR - 1; r > last; r -= 1) rowZqInner[r] = lerp(rear, rowZqInner[last], (r - (NR - 1)) / Math.min(-1, last - (NR - 1)));
+    // A corner whose face leans back can turn its shoulder a hair backwards:
+    // rows keep at least a fraction of a millimetre apart.
+    const STEP = 2e-4;
+    for (let r = 1; r < NR; r += 1) rowZqInner[r] = Math.max(rowZqInner[r], (r === 1 ? faceZq(0) : rowZqInner[r - 1]) + STEP);
+    for (let r = NR - 1; r >= 1; r -= 1) rowZqInner[r] = Math.min(rowZqInner[r], (r === NR - 1 ? faceZq(NR) : rowZqInner[r + 1]) - STEP);
+    for (let r = 1; r < NR; r += 1) {
+      if (rowZqInner[r] <= (r === 1 ? faceZq(0) : rowZqInner[r - 1]) || rowZqInner[r] >= faceZq(NR)) throw new Error(`${name} ${levelName}: lid rows ${r - 1} and ${r} cross`);
+    }
+  }
+  // [x, zq] on row r (an integer) at column cf.
+  const rowPoint = (r, cf) => {
+    if (r === 0 || r === NR) {
+      const p = wall(faceA(r, cf), 1);
+      return [p.x, zqAt(p.x, p.zf)];
+    }
+    const table = columnTable[r];
+    const c0 = clamp(Math.floor(cf), 0, C - 1);
+    const xi = lerp(table[c0], table[c0 + 1], cf - c0);
+    const zq = cf >= 1 ? rowZqInner[r] : lerp(rowShoulder[r].zq, rowZqInner[r], cf);
+    return [rowShoulder[r].x * (1 - xi), zq];
+  };
 
-  // --- A record of the surface at (station, ring): position and what the regions read.
+  // --- Records of the surface: position and what the regions read. A wall
+  // record sits at (station, ring) of the wall's grid, a lid record at (row,
+  // column) of the lid's; the seam between them (the wall's top ring, the
+  // lid's column 0 and end rows) is the wall's own top, read from either side.
   const record = (kf, v) => {
     const k0 = clamp(Math.floor(kf), 0, K - 2);
     const t = kf - k0;
     const a = lerp(stations[k0], stations[k0 + 1], t);
-    if (v <= nW) {
-      const j = clamp(Math.floor(v), 0, nW - 1);
-      const f = lerp(wallF[j], wallF[j + 1], v - j);
-      const p = wall(a, f);
-      const w = shape.arcAt(a);
-      return { kf, v, wall: true, a, f, x: p.x, y: p.y, zf: p.zf, e: p.e, front: p.front, top: p.yTop, bottom: p.yBottom, h: p.h, w, wr: shape.arcTotal - w, zeta: p.st.zeta, bed: p.st.bed };
-    }
-    const u = v - nW;
-    const j = clamp(Math.floor(u), 0, nL - 1);
-    const xi = lerp(lerp(spread[k0][j], spread[k0][j + 1], u - j), lerp(spread[k0 + 1][j], spread[k0 + 1][j + 1], u - j), t);
-    const edge = wall(a, 1);
-    const x = edge.x * (1 - xi);
-    const at = lid(x, edge.zf);
-    return { kf, v, wall: false, a, x, y: at.y, zf: edge.zf, zq: at.zq, g: at.g, dist: at.dist, belt: at.belt, zeta: at.zeta, bed: at.bed, k: at.k, front: a < 1.5, e: edge.e };
+    const j = clamp(Math.floor(v), 0, nW - 1);
+    const f = lerp(wallF[j], wallF[j + 1], v - j);
+    const p = wall(a, f);
+    const w = shape.arcAt(a);
+    return { kf, v, wall: true, a, f, x: p.x, y: p.y, zf: p.zf, e: p.e, front: p.front, top: p.yTop, bottom: p.yBottom, h: p.h, w, wr: shape.arcTotal - w, zeta: p.st.zeta, bed: p.st.bed };
   };
+  const lidRecord = (rf, cf) => {
+    const r0 = clamp(Math.floor(rf), 0, NR - 1);
+    const t = rf - r0;
+    const p0 = rowPoint(r0, cf);
+    const p1 = rowPoint(r0 + 1, cf);
+    let x = lerp(p0[0], p1[0], t);
+    let zq = lerp(p0[1], p1[1], t);
+    if (cf < 1 && t > 0 && t < 1) {
+      // Near the shoulder the lid follows the wall's top between stations, not its chord.
+      const q0 = rowPoint(r0, 0);
+      const q1 = rowPoint(r0 + 1, 0);
+      const seam = wall(lerp(rowA(r0), rowA(r0 + 1), t), 1);
+      const w = 1 - cf;
+      x += w * (seam.x - lerp(q0[0], q1[0], t));
+      zq += w * (zqAt(seam.x, seam.zf) - lerp(q0[1], q1[1], t));
+    }
+    x = Math.max(0, x);
+    const zf = rowZf(zq, x);
+    const at = lid(x, zf);
+    return { rf, cf, wall: false, x, y: at.y, zf, zq: at.zq, g: at.g, dist: at.dist, belt: at.belt, zeta: at.zeta, bed: at.bed, k: at.k, front: zf < L / 2, e: 0 };
+  };
+  // A record in a patch's own parameters.
+  const recordIn = (lidPatch, p0, p1) => (lidPatch ? lidRecord(p0, p1) : record(p0, p1));
   // The surface normal at a record (outward).
   const baseNormal = (rec) => {
     if (rec.wall) {
@@ -575,7 +781,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const onSide = (rec) => rec.wall && rec.e <= 0.3;
   const seams = doorSeams(body);
   const gapHalf = detail >= 3 ? 0.0035 : 0.006;
-  const sideGlassEnd = body.pillars.cargo_from ? body.pillars.cargo_from - 0.05 : body.bed ? cab.rear_base - 0.1 : body.pillars.quarter_glass ? cab.rear_base - 0.16 : cab.roof_end + 0.1;
+  // Where the side glass ends: a van's cab door, a pickup's cab back less its
+  // corner pillar, otherwise a real C or D pillar's width ahead of the rear
+  // glass, so the roof never floats on glass that wraps round the corner.
+  const sideGlassEnd = body.pillars.cargo_from ? body.pillars.cargo_from - 0.05 : body.bed ? cab.rear_base - 0.1 : body.pillars.quarter_glass ? cab.roof_end - 0.12 : cab.roof_end - 0.05;
   const max3 = (a, b, c, k) => smax(smax(a, b, k), c, k);
   const archDistance = (rec) => Math.min(Math.hypot(rec.zf - axles[0], rec.y - R), Math.hypot(rec.zf - axles[1], rec.y - R));
   const nearArch = (rec) => rec.wall && (Math.abs(rec.zf - axles[0]) < archRadius + 0.25 || Math.abs(rec.zf - axles[1]) < archRadius + 0.25);
@@ -605,8 +814,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const deckLine = region((rec) => !rec.wall && (shape.hasTrunk || body.bed !== undefined) && rec.zq > deckFrom, (rec) => rec.dist - 0.07);
   const fTonneau = region((rec) => !rec.wall && body.bed === "tonneau", (rec) => Math.max(deckFrom + 0.04 - rec.zq, 0.075 - rec.dist));
   const sill = (rec) => rec.bottom + 0.105;
-  const seamLines = seams.map((zf) => region((rec) => onSide(rec) && rec.y > sill(rec) - 0.004, (rec) => rec.zf - zf));
-  const sillLine = region((rec) => onSide(rec) && rec.zf > seams[0] - 0.004 && rec.zf < seams.at(-1) + 0.004, (rec) => rec.y - sill(rec));
+  // A door seam stops on the sill line's centre, the sill line on the first
+  // and last seams' centres: both are cut, so no triangle straddles an end.
+  const seamLines = seams.map((zf) => region((rec) => onSide(rec) && rec.y >= sill(rec) - 1e-7, (rec) => rec.zf - zf));
+  const sillLine = region((rec) => onSide(rec) && rec.zf >= seams[0] - 1e-7 && rec.zf <= seams.at(-1) + 1e-7, (rec) => rec.y - sill(rec));
   const cladding = body.cladding > 0;
   const fClad = region((rec) => rec.wall && cladding, (rec) => Math.min(rec.y - (rec.bottom + 0.15), archDistance(rec) - (archRadius + 0.06)));
   // Front face: w is the distance round the outline from the centre line.
@@ -634,7 +845,6 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const fIntake = boxRegion(onNoseFace, (rec) => rec.x, (rec) => rec.y - (rec.bottom + 0.14 * rec.h), body.grille === "none" ? 0.34 : 0.46, 0.085 * faceHigh, 0.025, [[0.018, 3]]);
   const fFog = boxRegion(onNose, (rec) => rec.w - (noseEdge + 0.12), (rec) => rec.y - (rec.bottom + 0.14 * rec.h), 0.11, 0.07 * faceHigh, 0.025);
   const plateY = (rec) => rec.bottom + (truck ? 0.34 : 0.45) * rec.h;
-  const fPlateFront = boxRegion(onNoseFace, (rec) => rec.x, (rec) => rec.y - plateY(rec), 0.153, 0.077, 0.012, [[0.009, 3]]);
   // Rear face: wr is the distance round the outline from the rear centre line.
   const tailEdge = W - tail.corner;
   const onTail = (rec) => rec.wall && !rec.front;
@@ -653,19 +863,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   fReverse.pre = [region(inTail, (rec) => fTail.fn(rec) + 0.05), region(inTail, (rec) => rec.wr - (tailCentre - tailHalf + 0.16))];
   const rearPlateY = (rec) => rec.bottom + (body.bed ? 0.16 : 0.56) * rec.h;
   const fPocket = boxRegion(onTailFace, (rec) => rec.x, (rec) => rec.y - rearPlateY(rec), 0.25, 0.105, 0.03, [[0.014, 3]]);
-  const fPlateRear = boxRegion(onTailFace, (rec) => rec.x, (rec) => rec.y - rearPlateY(rec), 0.153, 0.077, 0.012, [[0.009, 3]]);
   const fGarnish = boxRegion((rec) => onTailFace(rec) && !body.bed, (rec) => rec.x, (rec) => rec.y - (rearPlateY(rec) + 0.135), Math.min(0.34, tailCentre - tailHalf - 0.03), 0.014, 0.012);
-  const fReflector = boxRegion(onTail, (rec) => rec.wr - (tailEdge + 0.05), (rec) => rec.y - (rec.bottom + 0.15), 0.1, 0.018, 0.012);
   const bumperLine = region((rec) => onTail(rec) && !body.bed && rec.wr < tailEdge + tail.corner * 1.2, (rec) => rec.y - (rec.bottom + 0.34 * rec.h));
-  const gateLine = region((rec) => onTailFace(rec) && rec.y > rec.bottom + 0.34 * rec.h - 0.004 && rec.y < tailY(rec) - tailHigh + 0.02, (rec) => rec.x - (tailCentre - tailHalf - 0.012));
-  const fBrake = boxRegion((rec) => !rec.wall && rearSpan > 0.2, (rec) => rec.x, (rec) => rec.zq - (cab.roof_end + 0.012), 0.2, 0.008, 0.004);
-  // Door handles' pockets and the filler door.
-  const handles = seams.slice(1).map((zf) => zf - 0.2);
-  const handleBoxes = handles.map((zf) => boxRegion(onSide, (rec) => rec.zf - zf, (rec) => rec.y - (rec.top - 0.115), 0.1, 0.026, 0.024, [[0.012, 3]]));
-  const fHandle = region(onSide, (rec) => Math.min(BIG, ...handleBoxes.map((fn) => fn.fn(rec))));
-  fHandle.pre = handleBoxes.flatMap((fn) => fn.pre);
-  const fuelZ = axles[1] + archRadius + 0.2;
-  const fuelLine = region((rec) => rec.wall && rec.e < 0.5 && !body.bed, (rec) => box2(rec.zf - fuelZ, rec.y - (rec.top - 0.22), 0.085, 0.075, 0.035));
+  // The tailgate's sides stop on the bumper line's centre (cut), not near it.
+  // On a bed the tailgate's sides run up to its top (its lamps are on the corner posts).
+  const gateTop = (rec) => (body.bed ? rec.top - 0.03 : tailY(rec) - tailHigh + 0.02);
+  const gateLine = region((rec) => onTailFace(rec) && rec.y >= rec.bottom + 0.34 * rec.h - 1e-7 && rec.y < gateTop(rec), (rec) => rec.x - (tailCentre - tailHalf - 0.012));
   // A service body's compartment doors.
   const service = body.bed === "service";
   const lockerLines = service ? [4.3, 5.0, 5.75].map((zf) => region((rec) => onSide(rec) && rec.y > 0.6 && rec.y < 1.4, (rec) => rec.zf - zf)) : [];
@@ -677,7 +880,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const lines = [];
   const line = (fn) => {
     lines.push(fn);
-    cut(fn, -gapHalf, gapHalf);
+    cut(fn, -gapHalf, 0, gapHalf);
   };
   const frit = detail >= 3 ? 0.022 : null;
   if (!inner) cut(fArch);
@@ -694,20 +897,14 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (cladding) cut(fClad);
     cut(fHead);
     cut(fTail);
-    cut(fPlateFront);
-    cut(fPlateRear);
     if (body.grille !== "none") cut(fGrille, ...(detail >= 2 ? [0, -0.018] : [0]));
     if (detail >= 1) cut(fIntake, ...(detail >= 3 ? [0, -0.018] : [0]));
     if (body.bed === "tonneau") cut(fTonneau);
-    if (detail >= 1) {
-      cut(fCowl);
-      cut(fReflector);
-    }
+    if (detail >= 1) cut(fCowl);
     if (detail >= 2) {
       cut(fDrl, 9);
       cut(fTailBar, 9);
       cut(fGarnish);
-      cut(fBrake);
       for (const fn of seamLines) line(fn);
       line(sillLine);
       line(hoodLine);
@@ -724,38 +921,73 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       line(gateLine);
       cut(fHead, -0.014);
       cut(fTail, -0.014);
-      cut(fPlateFront, -0.009);
-      cut(fPlateRear, -0.009);
-      cut(fHandle, 9);
-      for (const fn of handleBoxes) cut(fn, 0, -0.012);
-      line(fuelLine);
     }
   }
 
-  // --- The grid, then the cuts. A vertex on the seam between wall and lid has
-  // a lid twin, so each triangle reads the regions of its own patch.
+  const zOf = (zf) => zf - L / 2;
+  const point = (rec) => v3(rec.x, rec.y, zOf(rec.zf));
+  // --- The grid, then the cuts. A vertex on the wall's top ring has a lid
+  // twin (the same point read as lid), so each triangle reads the regions of
+  // its own patch, and its parameters in either patch.
   const verts = [];
   const twins = [];
   const tris = [];
   const onLidPatch = [];
-  const addVertex = (rec) => {
+  const addVertex = (rec, twin = null) => {
     verts.push(rec);
-    twins.push(rec.wall && rec.v === nW ? record(rec.kf, nW + 1e-9) : null);
+    twins.push(twin);
     return verts.length - 1;
   };
-  const ids = [];
+  const seamRC = (k) => (k <= FRONT_EDGE ? [0, FRONT_EDGE - k] : k >= REAR_EDGE ? [NR, k - REAR_EDGE] : [k - FRONT_EDGE, 0]);
+  const wallIds = [];
   for (let k = 0; k < K; k += 1) {
+    const ring = [];
+    for (let v = 0; v <= nW; v += 1) ring.push(addVertex(record(k, v), v === nW ? lidRecord(...seamRC(k)) : null));
+    wallIds.push(ring);
+  }
+  const lidIds = [];
+  for (let r = 0; r <= NR; r += 1) {
     const row = [];
-    for (let v = 0; v <= nW + nL; v += 1) row.push(addVertex(record(k, v)));
-    ids.push(row);
-  }
-  for (let k = 0; k < K - 1; k += 1) {
-    for (let v = 0; v < nW + nL; v += 1) {
-      tris.push([ids[k][v], ids[k + 1][v], ids[k + 1][v + 1]], [ids[k][v], ids[k + 1][v + 1], ids[k][v + 1]]);
-      onLidPatch.push(v >= nW, v >= nW);
+    for (let c = 0; c <= C; c += 1) {
+      const seam = r === 0 ? FRONT_EDGE - c : r === NR ? REAR_EDGE + c : c === 0 ? FRONT_EDGE + r : -1;
+      row.push(seam >= 0 ? wallIds[seam][nW] : addVertex(lidRecord(r, c)));
     }
+    lidIds.push(row);
   }
-  const EPS = 2e-5;
+  // Each grid quad (a, b, c, d, counterclockwise in its parameters, so facing
+  // in) is split along whichever diagonal leaves both halves facing as the
+  // surface does: where the shoulder line bends, one diagonal folds the quad.
+  const facing = (ids) => {
+    const [pa, pb, pc] = ids.map((id) => point(verts[id]));
+    const n = vcross(vsub(pc, pa), vsub(pb, pa));
+    const l = vlen(n);
+    if (l < 1e-14) return -1;
+    const s = vadd(vadd(baseNormal(verts[ids[0]]), baseNormal(verts[ids[1]])), baseNormal(verts[ids[2]]));
+    return vdot(n, s) / (l * (vlen(s) || 1));
+  };
+  const quad = (a, b, c, d, lidPatch) => {
+    const first = Math.min(facing([a, b, c]), facing([a, c, d]));
+    const second = Math.min(facing([a, b, d]), facing([b, c, d]));
+    if (second > first + 1e-9) tris.push([a, b, d], [b, c, d]);
+    else tris.push([a, b, c], [a, c, d]);
+    onLidPatch.push(lidPatch, lidPatch);
+  };
+  for (let k = 0; k < K - 1; k += 1) {
+    for (let v = 0; v < nW; v += 1) quad(wallIds[k][v], wallIds[k + 1][v], wallIds[k + 1][v + 1], wallIds[k][v + 1], false);
+  }
+  for (let r = 0; r < NR; r += 1) {
+    for (let c = 0; c < C; c += 1) quad(lidIds[r][c], lidIds[r + 1][c], lidIds[r + 1][c + 1], lidIds[r][c + 1], true);
+  }
+  // A vertex's parameters in a patch (a seam vertex's lid ones are its twin's).
+  const paramsIn = (id, lidPatch) => {
+    if (!lidPatch) return [verts[id].kf, verts[id].v];
+    const rec = twins[id] ?? verts[id];
+    return [rec.rf, rec.cf];
+  };
+  const onSeam = (id) => twins[id] !== null;
+  // A vertex this close to an outline (metres, the regions' unit) counts as on
+  // it: no crossing is made a hair beside it, which would leave a sliver.
+  const EPS = 1.5e-3;
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
@@ -767,21 +999,26 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const crossing = (i, j, value) => {
       const key = edgeKey(i, j);
       if (made.has(key)) return made.get(key);
-      // Find the outline's true place on the edge in the surface's own parameters.
-      const lid = value === lidValue;
+      // Find the outline's true place on the edge in the surface's own
+      // parameters: an edge along the seam in the wall's (its top exactly).
+      const seam = onSeam(i) && onSeam(j);
+      const lidPatch = value === lidValue && !seam;
       const lo = value[i] < 0 ? i : j;
       const hi = value[i] < 0 ? j : i;
-      const lift = (id) => (lid && twins[id] ? nW + 1e-9 : verts[id].v);
-      let a = [verts[lo].kf, lift(lo)];
-      let b = [verts[hi].kf, lift(hi)];
+      let a = paramsIn(lo, lidPatch);
+      let b = paramsIn(hi, lidPatch);
+      const a0 = a;
+      const b0 = b;
       let fa = value[lo];
       let fb = value[hi];
       let rec = null;
+      let m = a;
       for (let step = 0; step < 16; step += 1) {
         const t = clamp(fa / (fa - fb), 0.1, 0.9);
-        const m = [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
-        rec = record(m[0], m[1]);
-        const fm = fn.where(rec) ? fn.fn(rec) - offset : fb;
+        m = [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+        rec = recordIn(lidPatch, m[0], m[1]);
+        const read2 = value === lidValue && seam ? lidRecordAlong(lo, hi, a0, b0, m) : rec;
+        const fm = fn.where(read2) ? fn.fn(read2) - offset : fb;
         if (Math.abs(fm) < 1e-6) break;
         if (fm < 0) {
           a = m;
@@ -791,13 +1028,19 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
           fb = fm;
         }
       }
-      // A crossing on the seam itself is a seam vertex again.
-      if (verts[i].v === nW && verts[j].v === nW) rec = record(rec.kf, nW);
-      const id = addVertex(rec);
+      // A crossing on the seam itself is a seam vertex again, with its lid twin.
+      const id = seam ? addVertex(record(m[0], nW), lidRecordAlong(lo, hi, a0, b0, m)) : addVertex(rec);
       wallValue.push(0);
       lidValue.push(0);
       made.set(key, id);
       return id;
+    };
+    // The lid twin of a point on a seam edge, at the same share of the edge in the lid's parameters.
+    const lidRecordAlong = (lo, hi, a0, b0, m) => {
+      const t = Math.abs(b0[0] - a0[0]) > 1e-12 ? (m[0] - a0[0]) / (b0[0] - a0[0]) : 0;
+      const p = paramsIn(lo, true);
+      const q = paramsIn(hi, true);
+      return lidRecord(lerp(p[0], q[0], t), lerp(p[1], q[1], t));
     };
     const count = tris.length;
     for (let t = 0; t < count; t += 1) {
@@ -849,85 +1092,103 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     for (const offset of offsets) if (offset !== 9) cutAlong(fn, offset);
   }
 
-  // --- What each triangle is, by its middle.
-  const lineAt = (rec) => lines.some((fn) => Math.abs(fn(rec)) < gapHalf);
-  const classify = (rec) => {
-    if (!inner && fArch(rec) < 0) return null;
+  // --- What each triangle is. Every outline it could straddle has been cut,
+  // so a region's values at a triangle's corners all lie on one side of its
+  // outline: R(fn) is their mean (read on the triangle's own patch, as the cut
+  // read them). Only where a corner is outside a region's domain (never cut
+  // there) does the triangle's middle decide.
+  const cornerRecords = (tri, lidPatch) => tri.map((id) => (lidPatch && twins[id] ? twins[id] : verts[id]));
+  const reader = (tri, lidPatch, mid) => {
+    const recs = cornerRecords(tri, lidPatch);
+    const cache = new Map();
+    return (fn) => {
+      if (cache.has(fn)) return cache.get(fn);
+      let value;
+      if (!recs.every((rec) => fn.where(rec))) value = fn(mid);
+      else {
+        const values = recs.map((rec) => fn.fn(rec));
+        value = values.every((x) => Math.abs(x) <= EPS) ? fn(mid) : (values[0] + values[1] + values[2]) / 3;
+      }
+      cache.set(fn, value);
+      return value;
+    };
+  };
+  const classify = (rec, R) => {
+    if (!inner && R(fArch) < 0) return null;
     if (inner) {
       // The lining: the cabin's length only, down to the floor.
-      if ((rec.wall ? rec.zf < cab.windshield_base + 0.05 : rec.zq < cab.windshield_base + 0.04) || (shape.hasTrunk && rec.zf > cab.rear_base + 0.05) || (body.bed && rec.zf > cab.rear_base) || (rec.wall && rec.f < 0.12)) return null;
-      if (fSide(rec) < 0 && fPillar(rec) > 0) return null;
-      if (fWind(rec) < 0 || fRear(rec) < 0 || fGlassRoof(rec) < 0) return null;
+      if ((rec.wall ? rec.zf < cab.windshield_base + 0.05 : rec.zq < cab.windshield_base + 0.04) || (shape.hasTrunk && rec.zf > cab.rear_base + 0.05) || (body.bed && rec.zf > cab.rear_base) || (body.pillars.cargo_from && rec.zf > body.pillars.cargo_from + 0.02) || (rec.wall && rec.f < 0.12)) return null;
+      // Not down into the wheel arches, where it would show from outside.
+      if (rec.wall && archDistance(rec) < archRadius + 0.06) return null;
+      if (R(fSide) < 0 && R(fPillar) > 0) return null;
+      if (R(fWind) < 0 || R(fRear) < 0 || R(fGlassRoof) < 0) return null;
       return { part: rec.wall ? P.cabin : P.headliner };
     }
     if (inset > 0) return { part: P.paint };
-    if (detail >= 2 && lineAt(rec)) return { part: P.gap, ao: 0.3, groove: detail >= 3 };
-    const side = fSide(rec);
+    if (detail >= 2 && lines.some((fn) => Math.abs(R(fn)) < gapHalf)) return { part: P.gap, ao: 0.3, groove: detail >= 3 };
+    const side = R(fSide);
     if (side < 0) {
-      if (detail >= 1 && fPillar(rec) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
+      if (detail >= 1 && R(fPillar) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
       // Door glass runs in seals, without a frit band.
       return { part: P.glass, glass: true, frit: false, dark: rec.zf > (body.pillars.b ?? L) };
     }
     for (const [fn, dark] of [[fWind, false], [fRear, true], [fGlassRoof, true]]) {
-      const f = fn(rec);
-      if (f < 0) return { part: P.glass, glass: true, frit: frit !== null && (f > -frit || (fn === fWind && rec.zq < cab.windshield_base + 0.12)), dark };
+      const f = R(fn);
+      if (f < 0) return { part: P.glass, glass: true, frit: frit !== null && (f > -frit || (fn === fWind && R(fritFoot) < 0)), dark };
     }
-    if (detail >= 2 && fBrake(rec) < 0) return { part: P.lamp_red };
     if (!rec.wall) {
-      if (detail >= 1 && fCowl(rec) < 0) return { part: P.trim, ao: 0.7 };
-      if (fTonneau(rec) < 0) return { part: P.trim };
-      if (fRoof(rec) < 0) return { part: P.roof };
+      if (detail >= 1 && R(fCowl) < 0) return { part: P.trim, ao: 0.7 };
+      if (R(fTonneau) < 0) return { part: P.trim };
+      if (R(fRoof) < 0) return { part: P.roof };
       return { part: P.paint };
     }
-    const head = fHead(rec);
+    const head = R(fHead);
     if (head < 0) {
-      if (detail >= 3 && fAmber(rec) < 0) return { part: P.lamp_amber, lens: P.head_lamp, lamp: true };
-      if (detail >= 2 && fDrl(rec) < 0) return { part: P.lamp_drl, lens: P.head_lamp, lamp: true, proud: true };
+      if (detail >= 3 && R(fAmber) < 0) return { part: P.lamp_amber, lens: P.head_lamp, lamp: true };
+      if (detail >= 2 && R(fDrl) < 0) return { part: P.lamp_drl, lens: P.head_lamp, lamp: true, proud: true };
       return { part: detail >= 3 ? P.lamp_housing : P.head_lamp, lens: P.head_lamp, lamp: true };
     }
-    const tailLamp = fTail(rec);
+    const tailLamp = R(fTail);
     if (tailLamp < 0) {
-      if (detail >= 3 && fReverse(rec) < 0) return { part: P.lamp_white, lens: P.tail_lamp, lamp: true };
-      if (detail >= 2 && fTailBar(rec) < 0) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: true };
+      if (detail >= 3 && R(fReverse) < 0) return { part: P.lamp_white, lens: P.tail_lamp, lamp: true };
+      if (detail >= 2 && R(fTailBar) < 0) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: true };
       return { part: P.tail_lamp, lens: P.tail_lamp, lamp: true };
     }
-    const plate = Math.min(fPlateFront(rec), fPlateRear(rec));
-    if (plate < 0) return { part: detail >= 3 && plate > -0.009 ? P.trim : P.plate };
-    if (detail >= 3 && fPocket(rec) < 0) return { part: P.trim, ao: 0.7 };
-    const grille = fGrille(rec);
+    if (detail >= 3 && R(fPocket) < 0) return { part: P.trim, ao: 0.7 };
+    const grille = R(fGrille);
     if (grille < 0) return { part: detail >= 2 && grille > -0.018 ? (truck || body.grille === "sedan" ? P.chrome : P.gloss_black) : P.grille, ao: grille > -0.018 ? 1 : 0.6 };
-    if (detail >= 1 && fIntake(rec) < 0) return { part: P.grille, ao: 0.55 };
-    if (detail >= 3 && fFog(rec) < 0) return { part: P.grille, ao: 0.6 };
-    if (detail >= 2 && fGarnish(rec) < 0) return { part: P.chrome };
-    if (detail >= 1 && fReflector(rec) < 0) return { part: P.tail_lamp };
-    if (detail >= 3 && fHandle(rec) < 0) return { part: P.under, ao: 0.5 };
-    if (service && detail >= 2 && fLockerRail(rec) < 0) return { part: P.chrome };
-    if (fClad(rec) < 0) return { part: P.trim };
+    if (detail >= 1 && R(fIntake) < 0) return { part: P.grille, ao: 0.55 };
+    if (detail >= 3 && R(fFog) < 0) return { part: P.grille, ao: 0.6 };
+    if (detail >= 2 && R(fGarnish) < 0) return { part: P.chrome };
+    if (service && detail >= 2 && R(fLockerRail) < 0) return { part: P.chrome };
+    if (R(fClad) < 0) return { part: P.trim };
     return { part: P.paint };
   };
-  // How far in (metres) the surface is pressed at a record: grooves, sunk grilles and lamp bowls, raised plates.
+  // How far in (metres) the surface is pressed at a record: V grooves, sunk
+  // grilles, lamp bowls and the rear plate's pocket; every depth runs smoothly
+  // from zero at its outline, so no vertex jumps.
   const ramp = (f, width) => clamp(-f / width, 0, 1);
+  const GROOVE_M = 0.004;
   const pressed = (rec) => {
-    if (inner) return 0.03;
+    // The lining sits 12 mm inside: deeper, its offset would turn inside out round the tight roof rails and pillars.
+    if (inner) return 0.012;
     if (inset > 0) return inset;
     if (detail < 3) return 0;
     let d = 0;
-    for (const fn of lines) if (Math.abs(fn(rec)) < gapHalf * 0.98) d = Math.max(d, 0.004);
+    for (const fn of lines) d = Math.max(d, GROOVE_M * clamp(1 - Math.abs(fn(rec)) / gapHalf, 0, 1));
     if (rec.wall) {
-      d = Math.max(d, 0.03 * ramp(fGrille(rec) + 0.018, 0.014), 0.03 * ramp(fIntake(rec), 0.018), 0.012 * ramp(fHandle(rec), 0.012));
-      d = Math.max(d, 0.05 * ramp(fHead(rec), 0.014), 0.03 * ramp(fTail(rec), 0.014));
+      d = Math.max(d, 0.03 * ramp(fGrille(rec) + 0.018, 0.014), 0.03 * ramp(fIntake(rec), 0.018));
+      // A lamp's bowl, no deeper than a quarter of the corner it wraps (a truck's tail lamp sits on a tight corner).
+      d = Math.max(d, Math.min(0.05, 0.25 * nose.corner) * ramp(fHead(rec), 0.014), Math.min(0.03, 0.25 * tail.corner) * ramp(fTail(rec), 0.014));
       d = Math.max(d, 0.016 * ramp(fPocket(rec), 0.014));
-      // The rear plate stands off its pocket's floor; the front one lies in the bumper's face, the body's foremost.
-      d -= 0.006 * ramp(fPlateRear(rec), 0.003);
     }
     return d;
   };
 
   // --- Write the triangles out: positions pressed along the surface normal,
-  // each corner's normal taken a step inside its own triangle (so a crease or
-  // a pressed edge keeps its two sides), then welded where they agree.
-  const zOf = (zf) => zf - L / 2;
-  const point = (rec) => v3(rec.x, rec.y, zOf(rec.zf));
+  // each corner's normal taken a hair inside its own triangle (so a crease or
+  // a pressed edge keeps its two sides), then welded where they agree. The
+  // winding is the grid's own (the cuts keep it), so neighbours always agree.
   const normalCache = new Map();
   const vertexNormal = (id) => {
     if (!normalCache.has(id)) normalCache.set(id, baseNormal(verts[id]));
@@ -940,22 +1201,29 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     return placeCache.get(id);
   };
   const moving = detail >= 3 && !inner && inset === 0;
-  const cornerNormal = (tri, corner) => {
-    const rec = verts[tri[corner]];
-    const mid = [(verts[tri[0]].kf + verts[tri[1]].kf + verts[tri[2]].kf) / 3, (verts[tri[0]].v + verts[tri[1]].v + verts[tri[2]].v) / 3];
-    const at = record(lerp(rec.kf, mid[0], 0.06), lerp(rec.v, mid[1], 0.06));
+  // A triangle's middle in its own patch's parameters.
+  const middleOf = (tri, lidPatch) => {
+    const ps = tri.map((id) => paramsIn(id, lidPatch));
+    return [(ps[0][0] + ps[1][0] + ps[2][0]) / 3, (ps[0][1] + ps[1][1] + ps[2][1]) / 3];
+  };
+  const cornerNormal = (tri, corner, lidPatch) => {
+    const here = paramsIn(tri[corner], lidPatch);
+    const mid = middleOf(tri, lidPatch);
+    const step = Math.min(0.06, 0.002 / Math.max(1e-9, Math.hypot(mid[0] - here[0], mid[1] - here[1])));
+    const p0 = lerp(here[0], mid[0], step);
+    const p1 = lerp(here[1], mid[1], step);
+    const at = recordIn(lidPatch, p0, p1);
     const n = baseNormal(at);
     if (!moving) return n;
     // Is the surface pressed unevenly here? Then the normal of the pressed surface.
     const h = 4e-3;
+    const span = lidPatch ? [NR, C] : [K - 1, nW];
     const samples = [[h, 0], [-h, 0], [0, h], [0, -h]].map(([dk, dv]) => {
-      const lo = at.wall ? 0 : nW + 1e-6;
-      const hi = at.wall ? nW : nW + nL;
-      const r = record(clamp(at.kf + dk, 0, K - 1), clamp(at.v + dv, lo, hi));
+      const r = recordIn(lidPatch, clamp(p0 + dk, 0, span[0]), clamp(p1 + dv, 0, span[1]));
       return [r, pressed(r)];
     });
-    const here = pressed(at);
-    if (samples.every(([, d]) => Math.abs(d - here) < 1e-5)) return n;
+    const depth = pressed(at);
+    if (samples.every(([, d]) => Math.abs(d - depth) < 1e-5)) return n;
     const pts = samples.map(([r, d]) => placed(r, n, d));
     const m = vcross(vsub(pts[2], pts[3]), vsub(pts[0], pts[1]));
     if (vlen(m) < 1e-14) return n;
@@ -965,11 +1233,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const body3 = new CarMesh();
   const glass = new CarMesh();
   const kept = [];
-  for (const tri of tris) {
-    const mid = record((verts[tri[0]].kf + verts[tri[1]].kf + verts[tri[2]].kf) / 3, (verts[tri[0]].v + verts[tri[1]].v + verts[tri[2]].v) / 3);
-    const kind = classify(mid);
-    if (kind) kept.push({ tri, kind, normals: [0, 1, 2].map((corner) => cornerNormal(tri, corner)) });
-  }
+  tris.forEach((tri, t) => {
+    const lidPatch = onLidPatch[t];
+    const mid = recordIn(lidPatch, ...middleOf(tri, lidPatch));
+    const kind = classify(mid, reader(tri, lidPatch, mid));
+    if (kind) kept.push({ tri, kind, normals: [0, 1, 2].map((corner) => cornerNormal(tri, corner, lidPatch)) });
+  });
   // Weld each vertex's corner normals that agree within the crease angle.
   const corners = new Map();
   for (const entry of kept) {
@@ -1004,9 +1273,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const low = rec.wall ? lerp(0.8, 1, smoothstep(0, 0.22, rec.f)) : 1;
     return low * (1 - Math.min(0.4, 6 * Math.max(0, pressed(rec))));
   };
+  // The grid runs round the outline and up the wall, then in over the lid:
+  // counterclockwise in (station, ring) it faces in, so the outer shell is
+  // written the other way round and the lining as it is.
   const emit = (mesh, pts, normals, part, ao) => {
-    if (inner) mesh.face(pts[0], pts[1], pts[2], vscale(normals[0], -1), vscale(normals[1], -1), vscale(normals[2], -1), part, ao[0], ao[1], ao[2]);
-    else mesh.face(pts[0], pts[1], pts[2], normals[0], normals[1], normals[2], part, ao[0], ao[1], ao[2]);
+    if (inner) mesh.triangle(pts[0], pts[1], pts[2], normals.map((n) => vscale(n, -1)), part, ao);
+    else mesh.triangle(pts[0], pts[2], pts[1], [normals[0], normals[2], normals[1]], part, [ao[0], ao[2], ao[1]]);
   };
   const edgeOwner = new Map();
   for (const entry of kept) {
@@ -1070,7 +1342,64 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const rec = { wall: true, a, f, x: at.x, y: at.y, zf: at.zf };
     return { point: point(rec), normal: baseNormal(rec) };
   };
-  return { body: body3, glass, shape, lampSpot, truck };
+  // --- Draping: a fitting modelled once in its own frame (x out of the
+  // surface, y up it, z along it) is laid on this level's surface, pressing
+  // included, so it sits the same on every body and never floats or sinks.
+  const wallRecordAt = (a, f) => {
+    const p = wall(a, f);
+    const w = shape.arcAt(a);
+    return { wall: true, a, f, x: p.x, y: p.y, zf: p.zf, e: p.e, front: p.front, top: p.yTop, bottom: p.yBottom, h: p.h, w, wr: shape.arcTotal - w, zeta: p.st.zeta, bed: p.st.bed };
+  };
+  // A frame on the wall at station a, height y: point (pressed), normal, and unit
+  // tangents along the outline (toward larger a) and up the wall.
+  const wallFrame = (a, y) => {
+    const top = wall(a, 1);
+    const f = clamp((y - top.yBottom) / top.h, 0, 1);
+    const rec = wallRecordAt(a, f);
+    const n = baseNormal(rec);
+    const p = placed(rec, n, pressed(rec));
+    const ha = 2e-4;
+    const along = vnorm(vsub(point(wallRecordAt(a + ha, f)), point(wallRecordAt(a - ha, f))));
+    // (n, up, along) right-handed, as the fittings' (x, y, z).
+    const up = vnorm(vcross(along, n));
+    return { p, n, along: vnorm(vcross(n, up)), up };
+  };
+  // Station a at plan zf along the right side, or at distance w round an end face from its centre line.
+  const sideStationAt = (zf) => 1 + clamp((zf - nose.corner) / (L - tail.corner - nose.corner), 0, 1);
+  const faceStationAt = (front, w) => {
+    let lo = front ? 0 : 2;
+    let hi = front ? 1 : 3;
+    for (let i = 0; i < 40; i += 1) {
+      const mid = (lo + hi) / 2;
+      const at = front ? shape.arcAt(mid) : shape.arcTotal - shape.arcAt(mid);
+      if (front ? at < w : at > w) lo = mid;
+      else hi = mid;
+    }
+    return (lo + hi) / 2;
+  };
+  // Lays `part` (a CarMesh in its own frame) into `out`, centred at station a0,
+  // height y0; its z runs along the outline (dz metres of arc per metre), x out.
+  const drape = (out, part, a0, y0, { flipAlong = false } = {}) => {
+    const arcPerA = (shape.arcAt(a0 + 1e-3) - shape.arcAt(a0 - 1e-3)) / 2e-3;
+    const mapped = new CarMesh();
+    for (let i = 0; i < part.positions.length; i += 3) {
+      const [lx, ly, lz] = [part.positions[i], part.positions[i + 1], part.positions[i + 2]];
+      const frame = wallFrame(a0 + (flipAlong ? -lz : lz) / arcPerA, y0 + ly);
+      const along = flipAlong ? vscale(frame.along, -1) : frame.along;
+      mapped.positions.push(...vadd(frame.p, vscale(frame.n, lx)));
+      const [nx, ny, nz] = [part.normals[i], part.normals[i + 1], part.normals[i + 2]];
+      mapped.normals.push(...vnorm(vadd(vscale(frame.n, nx), vadd(vscale(frame.up, ny), vscale(along, nz)))));
+    }
+    mapped.uvs.push(...part.uvs);
+    // The frame (out, up, along) has the handedness of (x, y, z) on the right
+    // side (along toward the rear); turned round, the winding flips.
+    for (let i = 0; i < part.indices.length; i += 3) {
+      if (flipAlong) mapped.indices.push(part.indices[i], part.indices[i + 2], part.indices[i + 1]);
+      else mapped.indices.push(part.indices[i], part.indices[i + 1], part.indices[i + 2]);
+    }
+    out.append(mapped);
+  };
+  return { body: body3, glass, shape, lampSpot, truck, drape, sideStationAt, faceStationAt, wallFrame };
 }
 
 // ---------------------------------------------------------------- assembly
@@ -1110,9 +1439,29 @@ function rightHalfFittings(out, name, detail) {
   for (const axle of axles) {
     const centre = v3(0, R, zOf(axle));
     const r = archRadius + 0.004;
-    out.revolve(centre, X, [[r, W - 0.035], [r, innerX]], sides, () => P.under, { from: sides / 2 - 1, to: sides + 1, vOf: (i) => (i === 0 ? 0.45 : 0.25) });
+    // The liner runs from the floor in front of the wheel over it to the floor
+    // behind, so with the wall and the floor it closes the well.
+    const floor = underFloorY(body, detail);
+    const reach = Math.asin(clamp((R - floor) / r, -1, 1));
+    const rows = [];
+    const normals = [];
+    for (let i = 0; i <= sides; i += 1) {
+      const t = Math.PI - reach + ((Math.PI + 2 * reach) * i) / sides;
+      const out3 = v3(0, -Math.sin(t), Math.cos(t));
+      const at = (x) => vadd(centre, v3(x, -r * Math.sin(t), r * Math.cos(t)));
+      // Its outer edge just inside the body's skin there, so no slot opens between them.
+      const zf = axle + r * Math.cos(t);
+      const y = R - r * Math.sin(t);
+      const a = 1 + clamp((zf - body.nose.corner) / (L - body.tail.corner - body.nose.corner), 0, 1);
+      const skin = shape.wall(a, clamp((y - shape.bottom(zf)) / Math.max(0.05, shape.wall(a, 1).yTop - shape.bottom(zf)), 0, 1)).x;
+      rows.push([at(Math.max(innerX + 0.02, skin - 0.008)), at(innerX)]);
+      normals.push([vscale(out3, -1), vscale(out3, -1)]);
+    }
+    out.grid(rows, normals, P.under, (i, j) => (j === 0 ? 0.45 : 0.25));
     const n = v3(1, 0, 0);
-    out.flat(v3(innerX, 0.12, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle + archRadius)), v3(innerX, 0.12, zOf(axle + archRadius)), n, P.under, 0.3);
+    // The wall stands on the floor (never below the sills, where it would show as a flap).
+    const floorY = underFloorY(body, detail);
+    out.flat(v3(innerX, floorY, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle - archRadius)), v3(innerX, R + archRadius, zOf(axle + archRadius)), v3(innerX, floorY, zOf(axle + archRadius)), n, P.under, 0.3);
   }
   if (detail >= 2) {
     // Mirror: a housing on a foot at the front corner of the side glass, its glass toward the rear.
@@ -1127,13 +1476,6 @@ function rightHalfFittings(out, name, detail) {
     } else {
       out.box(centre, [(reach - inner) / 2, 0.055, 0.042], (face) => (face === "+z" ? P.glass : P.paint));
       out.box(v3(W - 0.06, belt + 0.025, zOf(zf + 0.01)), [0.05, 0.02, 0.035], P.trim);
-    }
-    // Door handles: a bar over each pocket.
-    for (const seam of doorSeams(body).slice(1)) {
-      const hz = seam - 0.2;
-      const point = shape.wall(1 + (hz - body.nose.corner) / (L - body.tail.corner - body.nose.corner), 1 - 0.115 / Math.max(0.3, shape.top(hz) - shape.bottom(hz)));
-      if (detail >= 3) out.roundedBox(v3(point.x + 0.006, point.y, zOf(hz)), [0.012, 0.014, 0.085], 0.01, P.paint);
-      else out.box(v3(point.x + 0.004, point.y, zOf(hz)), [0.01, 0.014, 0.08], P.trim);
     }
   }
   if (body.roof_rails && detail >= 1) {
@@ -1176,11 +1518,7 @@ function centreFittings(out, name, detail) {
   const zOf = (zf) => zf - L / 2;
   if (detail < 3) {
     // The underside as one dark sheet (the hero level has an underbody).
-    const y = body.clearance + 0.03;
-    const down = v3(0, -1, 0);
-    const z0 = zOf(body.nose.corner * 0.7);
-    const z1 = zOf(L - body.tail.corner * 0.7);
-    out.flat(v3(-W + 0.1, y, z0), v3(W - 0.1, y, z0), v3(W - 0.1, y, z1), v3(-W + 0.1, y, z1), down, P.under, 0.35);
+    underFloor(out, shape, body.clearance + 0.03, 0.07, L - 0.07, W - 0.1, 0.35);
   }
   if (detail >= 2) {
     // Wipers parked on the cowl: an arm and a blade each, lying along the glass's foot.
@@ -1208,6 +1546,70 @@ function centreFittings(out, name, detail) {
   }
 }
 
+// Where each body's fittings go (the same parts on every car, street-car-parts.mjs):
+// handles on the doors, the filler door on one side (none on the service
+// body), number plates on both faces, side reflectors on the rear bumper's
+// ends and the third brake light at the top of the rear glass.
+const FUEL_SIDE = Object.freeze({ crossover: 1, suv: -1, sedan: -1, fastback: -1, hatchback: 1, wagon: 1, pickup: -1, utility: 0, van: -1 });
+function placeFittings(name, detail, shell, half, centre, oneSide) {
+  const shape = shell.shape;
+  const { body, L, axles, archRadius } = shape;
+  const cab = body.cabin;
+  if (detail >= 2) {
+    for (const seam of doorSeams(body).slice(1)) {
+      const a = shell.sideStationAt(seam - 0.2);
+      shell.drape(half, doorHandle(detail), a, shape.wall(a, 1).yTop - 0.115);
+    }
+  }
+  if (detail >= 3 && FUEL_SIDE[name] !== 0) {
+    // Behind the rear arch where the quarter has room, else over the arch's back; on a van ahead of it.
+    const { half_along: hz, half_up: hy } = FILLER_DOOR;
+    const behind = axles[1] + archRadius + 0.035 + hz;
+    const room = L - body.tail.corner - 0.04 - hz;
+    const zf = body.pillars.cargo_from ? axles[1] - archRadius - 0.06 - hz : Math.min(behind, room);
+    const a = shell.sideStationAt(zf);
+    const top = shape.wall(a, 1).yTop;
+    // Clear of the arch below it by 3 cm, and of the shoulder above by 10 cm.
+    const dz = Math.max(0, Math.abs(zf - axles[1]) - hz);
+    const archTop = dz < archRadius ? body.wheel_radius + Math.sqrt(archRadius ** 2 - dz ** 2) : 0;
+    const y = Math.max(archTop + 0.03 + hy, Math.min(top - 0.22, top - 0.1 - hy));
+    shell.drape(oneSide, fillerDoor(), a, y);
+  }
+  if (detail >= 3) {
+    const zf = L - body.tail.corner - 0.07;
+    const a = shell.sideStationAt(zf);
+    shell.drape(half, sideReflector(), a, shape.wall(a, 1).yBottom + 0.15);
+  }
+  // Number plates, centred on each face.
+  for (const front of [true, false]) {
+    const a = front ? 0 : 3;
+    const top = shape.wall(a, 1);
+    const share = front ? (body.grille === "truck" ? 0.34 : 0.45) : body.bed ? 0.16 : 0.56;
+    shell.drape(centre, numberPlate(detail), a, top.yBottom + share * top.h, { flipAlong: !front });
+  }
+  if (detail >= 2) {
+    // The third brake light, on the lid at the top of the rear glass (a cab back's top).
+    const zq = cab.roof_end + 0.03;
+    const y = shape.lid(0, zq).y;
+    const h = 4e-3;
+    const slope = (shape.lid(0, zq + h).y - shape.lid(0, zq - h).y) / (2 * h);
+    const n = vnorm(v3(0, 1, -slope));
+    const along = v3(1, 0, 0);
+    const up = vnorm(vcross(along, n));
+    const part = brakeLight(detail);
+    for (let i = 0; i < part.indices.length; i += 3) {
+      const ids = [part.indices[i], part.indices[i + 1], part.indices[i + 2]];
+      const pt = ids.map((k) => {
+        const [lx, ly, lz] = [part.positions[k * 3], part.positions[k * 3 + 1], part.positions[k * 3 + 2]];
+        return vadd(v3(0, y, zq - L / 2), vadd(vscale(n, lx - 0.004), vadd(vscale(up, ly), vscale(along, lz))));
+      });
+      const nm = ids.map((k) => vnorm(vadd(vscale(n, part.normals[k * 3]), vadd(vscale(up, part.normals[k * 3 + 1]), vscale(along, part.normals[k * 3 + 2])))));
+      const partOf = Math.floor(part.uvs[ids[0] * 2] * CAR_PART_COUNT);
+      centre.face(pt[0], pt[1], pt[2], nm[0], nm[1], nm[2], partOf, part.uvs[ids[0] * 2 + 1], part.uvs[ids[1] * 2 + 1], part.uvs[ids[2] * 2 + 1]);
+    }
+  }
+}
+
 const builtCache = new Map();
 // The meshes of one body at one level:
 //   hero: {body, glass, wheel, brake}; other levels: {car (wheels and all), chassis (without), wheel}.
@@ -1222,7 +1624,12 @@ export function buildCarParts(name, levelName) {
   const detail = shadow ? 0 : level.detail;
   const half = new CarMesh();
   half.append(shell.body);
-  if (!shadow) rightHalfFittings(half, name, detail);
+  const centre = new CarMesh();
+  const oneSide = new CarMesh();
+  if (!shadow) {
+    rightHalfFittings(half, name, detail);
+    placeFittings(name, detail, shell, half, centre, oneSide);
+  }
   if (levelName === "hero") {
     // Two projectors in each head lamp's bowl: a bright ring round a dark lens.
     for (const along of shell.truck ? [-0.35, 0.35] : [-0.45, 0.1]) {
@@ -1235,6 +1642,10 @@ export function buildCarParts(name, levelName) {
   }
   const chassis = new CarMesh();
   both(chassis, half);
+  chassis.append(centre);
+  // A one-sided fitting (the filler door) is laid on the right; on the left it is mirrored over.
+  if (FUEL_SIDE[name] < 0) chassis.append(oneSide, mirrorX, true);
+  else chassis.append(oneSide);
   if (!shadow) centreFittings(chassis, name, detail);
   let result;
   if (levelName === "hero") {
