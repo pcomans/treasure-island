@@ -400,12 +400,16 @@ export function bodyShape(name) {
   // mid-corner, where the corner runs back slowest: the shoulder stalled and
   // turned in a bend a centimetre round, and the hood's shut line, 7.5 cm in,
   // came to a point; under the tail the far level's corner showed a wedge.)
-  // The tail's lean, a few centimetres, still fades round its corner as
-  // e^1.5: faded along the side, it twisted the rear quarter between two
-  // stations into a ridge that stood through the filler door.
+  // The nose's lean fades over at least a metre of the side (five times the
+  // lean): over 0.3 m the side's top ran back almost as fast as the side ran
+  // on, and bunched into a fold on the front fender (a 2 cm radius on the
+  // fastback). The tail's lean, a few centimetres, still fades round its
+  // corner as e^1.5: faded along the side, it twisted the rear quarter between
+  // two stations into a ridge that stood through the filler door; its tuck
+  // under the bumper line (5 cm) fades over 0.3 m of the side.
   const sideRun = L - tail.corner - nose.corner;
   const endShare = (a, front) => {
-    const fade = Math.max(0.3, 1.5 * (front ? nose : tail).lean) / sideRun;
+    const fade = (front ? Math.max(1, 5 * nose.lean) : Math.max(0.3, 1.5 * tail.lean)) / sideRun;
     return front ? 1 - smoothstep(1, 1 + fade, a) : smoothstep(2 - fade, 2, a);
   };
   const wall = (a, f) => {
