@@ -13,7 +13,12 @@
 // windshield, the rear glass and each head and tail lamp, aimed where the
 // near level draws them, that meets anything else first, at every level)
 // and, at the hero level, the cabin poking out (a seat, dashboard or lining
-// point with neither shell nor glass above it).
+// point with neither shell nor glass above it). And in each body's own shape
+// (tools/lib/street-car-kit.mjs bodyShape), round each corner of the
+// shoulder, the lid's rise from it must run between its values at the
+// corner's two ends: one dipping or bulging past both (a profile that is the
+// product of two blends turning together) is a bulge or dimple at a pillar's
+// foot, the crumpled reflection at the D pillar.
 //
 //   node tools/check_street_car_meshes.mjs [CLUTTER_KIT.glb HERO_KIT.glb]
 //
@@ -52,6 +57,8 @@ const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
 const PIXEL_PER_M = (2 * Math.tan((35 * Math.PI) / 180)) / 2170;
 const FOOTPRINT_M = { hero: 0.4 * PIXEL_PER_M, near: 0.4 * PIXEL_PER_M, far: 43 * PIXEL_PER_M };
 const CRACK_RAYS = 3;
+// How far (a share of the larger end value) the lid's rise round a corner may run past both its ends.
+const CORNER_PROFILE_PAST = 0.01;
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);
 const VERBOSE = process.env.CAR_CHECK_VERBOSE === "1";
@@ -517,6 +524,34 @@ function boundsOf(tris) {
   return { lo, hi };
 }
 
+// The lid's rise from the shoulder (st.slope) round the front (a 0.5 to 1)
+// and rear (a 2 to 2.5) corners of a body's own shape, sampled finely: the
+// furthest it runs past both its end values, as a share of the larger.
+function cornerProfiles(name) {
+  const shape = bodyShape(name);
+  const faults = [];
+  for (const [label, a0, a1] of [["front", 0.5, 1], ["rear", 2, 2.5]]) {
+    const N = 200;
+    const v = [];
+    for (let i = 0; i <= N; i += 1) v.push(shape.wall(a0 + ((a1 - a0) * i) / N, 1).st.slope);
+    const lo = Math.min(v[0], v[N]);
+    const hi = Math.max(v[0], v[N]);
+    let worst = 0;
+    let at = 0;
+    for (let i = 0; i <= N; i += 1) {
+      const past = Math.max(lo - v[i], v[i] - hi) / hi;
+      if (past > worst) {
+        worst = past;
+        at = a0 + ((a1 - a0) * i) / N;
+      }
+    }
+    if (worst > CORNER_PROFILE_PAST) {
+      const w = shape.wall(at, 1);
+      faults.push([`${label} corner's lid rise ${(100 * worst).toFixed(1)}% past both ends (${v[0].toFixed(2)} to ${v[N].toFixed(2)})`, [w.x, w.y, w.zf - shape.L / 2]]);
+    }
+  }
+  return faults;
+}
 function main() {
   const clutter = readGlb(clutterPath);
   const hero = readGlb(heroPath);
@@ -528,6 +563,8 @@ function main() {
     failures.push(`${name}: ${count} ${kind}${at ? ` (${at})` : ""}`);
   };
   for (const body of bodies) {
+    const corners = cornerProfiles(body);
+    if (corners.length) report(`car_${body} shape`, "corners whose profile bulges or dips", corners.length, corners);
     const levels = [];
     for (const suffix of ["lod0", "lod1", "shadow", "chassis_lod0", "tyre_lod0"]) {
       const mesh = clutter.meshes.get(`car_${body}_${suffix}`);

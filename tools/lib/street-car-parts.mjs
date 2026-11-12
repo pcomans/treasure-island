@@ -257,9 +257,12 @@ export class CarMesh extends MeshBuilder {
 // segments along a spoke, lug nuts and a hollow barrel (the brake shows through).
 export const WHEEL_LEVELS = Object.freeze({
   hero: { sides: 36, section: 13, spokeSeg: 5, spokeSection: 6, lugs: true, barrel: true },
-  near: { sides: 20, section: 7, spokeSeg: 2, spokeSection: 4, lugs: false, barrel: false },
+  // (Sixteen sides: the desktop draws it from 13 m out, the hero level nearer;
+  // what it saves pays for the near level's refined D pillars on the web.)
+  near: { sides: 16, section: 7, spokeSeg: 2, spokeSection: 4, lugs: false, barrel: false },
   mid: { sides: 16, section: 7, spokeSeg: 1, spokeSection: 2, lugs: false, barrel: false },
-  far: { sides: 12, section: 0, spokeSeg: 0, spokeSection: 0, lugs: false, barrel: false },
+  // (Ten sides: a far wheel is 13 to 17 pixels across, and its spokes cost the difference.)
+  far: { sides: 10, section: 0, spokeSeg: 0, spokeSection: 0, lugs: false, barrel: false },
   // The shadow caster's: the far level's tyre with a plain disc (spokes cast nothing seen).
   shadow: { sides: 12, section: 0, spokeSeg: 0, spokeSection: 0, lugs: false, barrel: false, plain: true },
 });

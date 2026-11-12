@@ -330,8 +330,18 @@ export function bodyShape(name) {
     // A pickup's tailgate top is square like its bed rails, so the bed's style carries round onto it.
     const bed = body.bed ? smoothstep(bedFrom, bedFrom + 0.08, zf) * (front ? round : 1) : 0;
     // The lid's rise from the shoulder where it is not the side glass: gentle
-    // over a hood or a deck, as steep as the hatch behind a body without a trunk.
-    const roll = lerp(front ? 0.9 : lerp(0.9, tailSlope, smoothstep(0.05, 0.98, e)), 2.6, bed);
+    // over a hood or a deck, as steep as the hatch behind a body without a
+    // trunk. Round the rear corner the lid's profile (the side glass's where
+    // it reaches the corner, blended by zeta with this roll) runs linearly
+    // from the side's to the tail's: the roll there is what makes that so.
+    // (Turning the roll from the deck's 0.9 to the hatch's while zeta faded,
+    // the product of the two dipped a fifth less steep mid-corner: a bulge
+    // at the D pillar's foot that crumpled its reflection.)
+    const s = front ? 0 : smoothstep(0.05, 0.98, e);
+    const sideZeta = up * down;
+    const open = 1 - zeta;
+    const rearRoll = open > 1e-6 ? ((1 - s) * (1 - sideZeta) * 0.9 + s * tailSlope) / open : tailSlope;
+    const roll = lerp(front ? 0.9 : rearRoll, 2.6, bed);
     return {
       zeta,
       bed,
@@ -571,12 +581,15 @@ const SLIVER_M = 0.003;
 // Where the near and hero shells halve an edge: the surface's normal at its
 // middle turning more than `turn` degrees from the normal drawn there (its
 // ends' blended), or the surface standing more than `sag` (m) off the edge;
-// edges shorter than `minEdge` (m) stay.
+// edges shorter than `minEdge` (m) stay. The hero level round both ends'
+// corners and on the glass; the near level (which the web build draws for
+// every car within 60 m) on the painted panels round the rear corners only,
+// the D pillars.
 // How far along the side from each corner (in a, the side being 1) refining runs.
 const REFINE_SIDE_A = 0.15;
 const REFINE = Object.freeze({
-  hero: { turn: 2, sag: 0.004, minEdge: 0.012, passes: 3 },
-  near: { turn: 3, sag: 0.008, minEdge: 0.025, passes: 3 },
+  hero: { turn: 2, sag: 0.004, minEdge: 0.012, passes: 3, front: true, glass: true, panels: false },
+  near: { turn: 3, sag: 0.008, minEdge: 0.025, passes: 3, front: false, glass: false, panels: true },
 });
 // How far off the arch's line (m) an edge of the shell's border round an arch still gets a lip.
 const LIP_REACH_M = 0.012;
@@ -887,7 +900,11 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const j = clamp(Math.floor(v), 0, nW - 1);
     const f = lerp(wallF[j], wallF[j + 1], v - j);
     if (creaseRing === null || v <= creaseRing - 1 || v >= creaseRing + 1) return f;
-    const c = clamp(1 - 0.17 / wall(a, 1).h, lerp(wallF[creaseRing - 1], wallF[creaseRing], 0.3), lerp(wallF[creaseRing], wallF[creaseRing + 1], 0.7));
+    // (Only where the crease is: it fades out round the corners, and moved
+    // across an end face the ring cut its lamps into slivers.)
+    const top = wall(a, 1);
+    const want = clamp(1 - 0.17 / top.h, lerp(wallF[creaseRing - 1], wallF[creaseRing], 0.3), lerp(wallF[creaseRing], wallF[creaseRing + 1], 0.7));
+    const c = lerp(wallF[creaseRing], want, 1 - smoothstep(0.5, 0.9, top.e));
     return v < creaseRing ? lerp(wallF[creaseRing - 1], c, v - (creaseRing - 1)) : lerp(c, wallF[creaseRing + 1], v - creaseRing);
   };
   const record = (kf, v) => {
@@ -1720,7 +1737,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     // Round the corners and the ends of the side next to them (where the
     // pillars, the rolls and the lamps meet), on the wall and on the lid's
     // rows there; along the side the grid follows the surface well enough.
-    const cornerA = (a) => (a > 0.45 && a < 1 + REFINE_SIDE_A) || (a > 2 - REFINE_SIDE_A && a < 2.55);
+    const cornerA = (a) => (refine.front && a > 0.45 && a < 1 + REFINE_SIDE_A) || (a > 2 - REFINE_SIDE_A && a < 2.55);
     const inCorner = (id, lidPatch) => {
       if (!lidPatch) return cornerA(verts[id].a ?? 0);
       const rf = paramsIn(id, true)[0];
@@ -1750,9 +1767,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
         if ((!seamEdge && patches.length > 1) || sunk(i) || sunk(j)) continue;
         // Never a groove or a lit strip (their widths are their look).
         if (users.some((u) => [P.gap, P.lamp_drl, P.lamp_red].includes(kept[u].kind.part))) continue;
+        if (refine.panels && users.some((u) => kept[u].kind.part !== P.paint && kept[u].kind.part !== P.roof)) continue;
         // Round the corners; the glass anywhere (its reflection wobbled across a windshield's coarse triangles).
         const allGlass = users.every((u) => kept[u].kind.glass);
-        if (!allGlass && !patches.some((lidPatch) => inCorner(i, lidPatch) || inCorner(j, lidPatch))) continue;
+        if (!(allGlass && refine.glass) && !patches.some((lidPatch) => inCorner(i, lidPatch) || inCorner(j, lidPatch))) continue;
         const pi = point(verts[i]);
         const pj = point(verts[j]);
         if (vlen(vsub(pi, pj)) < refine.minEdge) continue;

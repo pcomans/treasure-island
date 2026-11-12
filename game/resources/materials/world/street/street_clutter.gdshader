@@ -133,6 +133,11 @@ void fragment() {
 		float gone = smoothstep(0.012, 0.028, pixel);
 		albedo = mix(albedo, texture(palette, vec2(paint_u, 0.75)).rgb, gone);
 		roughness = mix(roughness, 0.5, gone);
+		// Its darkening goes with it (the gap's own occlusion kept a grey
+		// line), and past halfway it takes the paint's finish (clear coat,
+		// flakes, dust) as the paint round it does.
+		occlusion = mix(occlusion, 1.0, gone);
+		painted = painted || gone > 0.5;
 	}
 	if (p == P_ROOF && black_roof) {
 		roughness = 0.08;
