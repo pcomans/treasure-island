@@ -1142,6 +1142,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // The light bar: a ring inside the lamp's edge; the reversing lamp its inner end.
   const fTailBar = region(inTail, (rec) => Math.max(fTail.fn(rec) + 0.02, -(fTail.fn(rec) + 0.042)));
   fTailBar.pre = [region(inTail, (rec) => fTail.fn(rec) + 0.02), region(inTail, (rec) => fTail.fn(rec) + 0.042)];
+  // The far level's tail lamp is lit above its middle: about the share of it the
+  // near level's lit bar covers (lit all over, it glowed brighter at the hand-over).
+  const fTailMid = region((rec) => onTail(rec) && fTail.fn(rec) < 0.01, (rec) => rec.y - tailY(rec));
   const fReverse = region(inTail, (rec) => Math.max(fTail.fn(rec) + 0.05, rec.wr - (tailCentre - tailHalf + 0.16)));
   fReverse.pre = [region(inTail, (rec) => fTail.fn(rec) + 0.05), region(inTail, (rec) => rec.wr - (tailCentre - tailHalf + 0.16))];
   const rearPlateY = (rec) => rec.bottom + (body.bed || barn ? 0.16 : 0.56) * rec.h;
@@ -1195,9 +1198,14 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const cuts = [];
   const cut = (fn, ...offsets) => cuts.push([fn, offsets.length ? offsets : [0]]);
   const lines = [];
-  const line = (fn) => {
+  // A groove's middle is cut where it is pressed in (the hero level) and on
+  // the lid's rolls (the hood's and deck's lines, whose 12 mm across in plan
+  // stand twice that on a steep roll); elsewhere below the hero level a
+  // groove is flat colour on a flat panel, and the middle cut only split
+  // triangles (780 of the near level's on each car).
+  const line = (fn, middle = false) => {
     lines.push(fn);
-    cut(fn, -gapHalf, 0, gapHalf);
+    cut(fn, ...(detail >= 3 || middle ? [-gapHalf, 0, gapHalf] : [-gapHalf, gapHalf]));
   };
   const frit = detail >= 3 ? 0.022 : null;
   // No frit on a near-upright rear window (a pickup's cab back): its outline
@@ -1235,19 +1243,23 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (body.bed === "tonneau") cut(fTonneau);
     if (slot) cut(fBedGap);
     if (detail >= 1) cut(fCowl);
-    // The far level's head lamp lit above its daytime strip's foot, its tail lamp
-    // lit all over: as bright, seen from 45 m, as the near level's strips (its
-    // plain lamps went dim at the hand-over); one cut, not the strips' three.
-    if (detail === 0) cut(fDrlFoot);
+    // The far level's head lamp lit above its daytime strip's foot, its tail
+    // lamp above its middle: about as bright, seen from 45 m, as the near
+    // level's strips (its plain lamps went dim at the hand-over); a cut each,
+    // not the strips' three.
+    if (detail === 0) {
+      cut(fDrlFoot);
+      cut(fTailMid);
+    }
     if (detail >= 2) {
       cut(fDrl, 9);
       cut(fTailBar, 9);
       cut(fGarnish);
       for (const fn of seamLines) line(fn);
       line(sillLine);
-      line(hoodLine);
+      line(hoodLine, true);
       // A tonneau cover's edge is the bed's line; a shut line beside it left slivers.
-      if (body.bed !== "tonneau") line(deckLine);
+      if (body.bed !== "tonneau") line(deckLine, true);
       for (const fn of lockerLines) line(fn);
       for (const fn of barnLines) line(fn);
       if (service) cut(fLockerRail);
@@ -1336,10 +1348,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // millimetres from a ring or a column round a tight corner left a sliver
   // turned over.
   const regionEps = inner ? LINING_SNAP_M : inset > 0 ? REGION_SNAP_M.far : REGION_SNAP_M[levelName];
-  // (The arches are cut as closely as the lines at every level: snapped by a
-  // centimetre at the far level, their border ran off the arch's line and
-  // opened a crack beside it into the wheel well.)
-  const epsOf = (fn) => (lines.includes(fn) || fn === fArch ? EPS : regionEps);
+  const epsOf = (fn) => (lines.includes(fn) ? EPS : regionEps);
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset, eps = EPS) => {
     // NaN outside the region's domain: a triangle with such a corner is left whole.
@@ -1524,7 +1533,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const tailLamp = R(fTail);
     if (tailLamp < 0) {
       if (detail >= 3 && R(fReverse) < 0) return { part: P.lamp_white, lens: P.tail_lamp, lamp: true };
-      if (detail === 0 || (detail >= 2 && R(fTailBar) < 0)) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: detail >= 2 };
+      if (detail === 0 ? R(fTailMid) > 0 : detail >= 2 && R(fTailBar) < 0) return { part: P.lamp_red, lens: P.tail_lamp, lamp: true, proud: detail >= 2 };
       return { part: P.tail_lamp, lens: P.tail_lamp, lamp: true };
     }
     if (detail >= 2 && R(fPocket) < 0) return { part: P.trim, ao: 0.7 };

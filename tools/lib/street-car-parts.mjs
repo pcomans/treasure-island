@@ -290,7 +290,7 @@ export function buildWheel(body, levelName) {
     // a black dot beside the near level's spoked wheel at the hand-over.
     const face = tw / 2;
     const lipR = rimR * 0.86;
-    out.revolve(o, X, [[R, -tw / 2], [R, tw / 2 - 0.04], [R - 0.05, tw / 2], [rimR, tw / 2]], sides, () => P.tire);
+    out.revolve(o, X, [[R, -tw / 2], [R, tw / 2 - 0.02], [rimR, tw / 2]], sides, () => P.tire);
     if (level.plain) {
       out.revolve(o, X, [[rimR, face], [0, face - 0.03]], sides, () => P.hub);
       out.revolve(o, X, [[0, -tw / 2], [R, -tw / 2]], sides, () => P.hub);
