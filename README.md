@@ -127,6 +127,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
+- **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ## More
 
@@ -189,8 +190,8 @@ the container crash. That override is not in the deployed game.
 On a touch-capable browser, play starts as soon as the island has loaded. Drag the
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
-**II** button pauses; **Play / Resume** continues and **Controls** lists the touch
-controls. Movement, look and buttons
+**II** button pauses; **Play / Resume** continues, **Controls** lists the touch
+controls and **Credits** the game's sources (drag to scroll). Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.

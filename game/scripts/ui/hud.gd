@@ -7,6 +7,27 @@ signal exit_requested
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
 const CONTROLS_KEY_COLOR := Color(1.0, 0.86, 0.55)
+## The sources the game acknowledges: the only list, which the credits screen and
+## the loading screen's credit line read (its notes describe the entries).
+const CREDITS_PATH := "res://game/resources/ui/credits.json"
+## The credits screen: titles and licences in the controls screen's colours, notes
+## and licence texts in this one.
+const CREDITS_NOTE_COLOR := Color(0.8, 0.84, 0.88)
+## How far an arrow key scrolls the credits (px), and the share of the view a page
+## key scrolls.
+const CREDITS_LINE_PX := 40.0
+const CREDITS_PAGE_SHARE := 0.9
+## The credits panel keeps this far from the screen's edges (px) at any window
+## shape, and its text at most this wide.
+const CREDITS_MARGIN_PX := 24.0
+const CREDITS_MAX_WIDTH_PX := 860.0
+## On a touch screen the credits' text is this much larger (px), so on a phone it
+## is no smaller than the controls screen's. Licence texts are in the fine print.
+const CREDITS_TOUCH_EXTRA_PX := 2
+const CREDITS_FINE_PRINT_PX := 14
+## In a licence text, a line at least this share of its paragraph's longest was
+## wrapped at a fixed width (_reflowed).
+const REFLOW_FULL_SHARE := 0.6
 
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
@@ -15,13 +36,30 @@ const CONTROLS_KEY_COLOR := Color(1.0, 0.86, 0.55)
 @onready var pause_box: PanelContainer = $PausePanel/Center/Box
 @onready var resume_button: Button = $PausePanel/Center/Box/PauseLayout/ResumeButton
 @onready var controls_button: Button = $PausePanel/Center/Box/PauseLayout/ControlsButton
+@onready var credits_button: Button = $PausePanel/Center/Box/PauseLayout/CreditsButton
 @onready var exit_button: Button = $PausePanel/Center/Box/PauseLayout/ExitButton
 ## The controls screen, opened from the pause menu or the loading screen: a
 ## solid panel over the dimmed game.
 @onready var controls_screen: Control = $ControlsScreen
 @onready var controls_sections: VBoxContainer = $ControlsScreen/Center/ControlsPanel/ControlsLayout/Sections
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
+## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
+## behind its Godot Engine licences button, the engine's own licence and notices.
+## A solid panel over the dimmed game, like the controls screen.
+@onready var credits_screen: Control = $CreditsScreen
+@onready var credits_panel: PanelContainer = $CreditsScreen/Center/CreditsPanel
+@onready var credits_layout: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout
+@onready var credits_title: Label = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Title
+@onready var credits_list: ScrollContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/ListScroll
+@onready var credits_entries: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/ListScroll/Entries
+@onready var credits_engine: ScrollContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll
+@onready var credits_engine_text: VBoxContainer = $CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll/EngineText
+@onready var credits_engine_button: Button = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons/EngineButton
+@onready var credits_back_button: Button = $CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons/BackButton
 @onready var load_controls_button: Button = $LoadPanel/LoadLayout/LoadStack/ControlsButton
+## The loading screen's credit line: the credits marked loading_screen (OSM's,
+## which OSMF's attribution guidelines ask a game to show at startup).
+@onready var load_credit: Label = $LoadPanel/LoadLayout/LoadStack/LoadCredit
 @onready var load_panel: PanelContainer = $LoadPanel
 @onready var load_text: Label = $LoadPanel/LoadLayout/LoadStack/LoadText
 ## The loading screen's treasure chest, the app icon (game/resources/ui/PROVENANCE.md).
@@ -36,6 +74,8 @@ var _evidence: RuntimeEvidence
 var _capture_hint: Button
 var _paused := false
 var _touch := false
+## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
+var _credits_finger := -1
 
 
 func _ready() -> void:
@@ -45,14 +85,23 @@ func _ready() -> void:
 	controls_button.pressed.connect(show_controls)
 	load_controls_button.pressed.connect(show_controls)
 	back_button.pressed.connect(hide_controls)
+	credits_button.pressed.connect(show_credits)
+	credits_engine_button.pressed.connect(show_engine_licences)
+	credits_back_button.pressed.connect(credits_back)
+	for scroll: ScrollContainer in [credits_list, credits_engine]:
+		scroll.gui_input.connect(_on_credits_scroll_input.bind(scroll))
 	_fill_controls()
+	_fill_credits()
 	feedback_panel.hide()
 	pause_panel.hide()
 	controls_screen.hide()
+	credits_screen.hide()
 	debug_panel.hide()
 	prompt_panel.hide()
 	resized.connect(_fit_load_icon)
 	_fit_load_icon()
+	resized.connect(_fit_credits)
+	_fit_credits()
 
 
 ## The chest on the loading screen is a quarter of the screen's shorter side, at
@@ -117,12 +166,14 @@ func set_prompt(text: String) -> void:
 
 
 ## The pause menu, in place of play's prompt. A controls screen opened from the
-## loading screen stays over the pause (main.gd), and the menu shows when it closes.
+## loading screen stays over the pause (main.gd), and the menu shows when it closes;
+## so does an open credits screen when the game pauses again (a lost focus).
 func set_paused(paused: bool) -> void:
 	_paused = paused
-	pause_panel.visible = paused and not controls_screen.visible
+	pause_panel.visible = paused and not controls_screen.visible and not credits_screen.visible
 	if not paused:
 		controls_screen.hide()
+		credits_screen.hide()
 	prompt_panel.visible = not paused and not prompt_text.text.is_empty()
 	if pause_panel.visible:
 		resume_button.grab_focus()
@@ -145,6 +196,219 @@ func hide_controls() -> void:
 
 func controls_visible() -> bool:
 	return controls_screen.visible
+
+
+## Shows the credits screen in place of the pause menu, at the top of its list.
+## Back, or Esc (main.gd), goes back a step (credits_back).
+func show_credits() -> void:
+	pause_panel.hide()
+	_show_credits_view(false)
+	credits_screen.show()
+	credits_back_button.grab_focus()
+
+
+## The engine's own licence, and the software by other authors it includes with
+## their licences, as the engine gives them (Godot's "Complying with licenses"),
+## in place of the credits list.
+func show_engine_licences() -> void:
+	_show_credits_view(true)
+	credits_back_button.grab_focus()
+
+
+## Back on the credits screen (its button, or Esc in main.gd): from the engine's
+## licences to the list, and from the list to the pause menu.
+func credits_back() -> void:
+	if credits_engine.visible:
+		_show_credits_view(false)
+		credits_engine_button.grab_focus()
+		return
+	credits_screen.hide()
+	if _paused:
+		pause_panel.show()
+		credits_button.grab_focus()
+
+
+func credits_visible() -> bool:
+	return credits_screen.visible
+
+
+## The credits view shown: the engine's licences or the list, at its top. The
+## engine's text is built the first time it is shown.
+func _show_credits_view(engine: bool) -> void:
+	if engine and credits_engine_text.get_child_count() == 0:
+		_fill_engine_licences()
+	credits_list.visible = not engine
+	credits_engine.visible = engine
+	credits_engine_button.visible = not engine
+	credits_title.text = "Godot Engine licences" if engine else "Credits"
+	_credits_finger = -1
+	credits_scroll().scroll_vertical = 0
+
+
+## The credits view on show (the list or the engine's licences).
+func credits_scroll() -> ScrollContainer:
+	return credits_engine if credits_engine.visible else credits_list
+
+
+## Fills the credits list from CREDITS_PATH: each entry's title, its credit, its
+## licence and link, what the game uses it for and any licence text that ships
+## with the game; and the loading screen's line from the entries marked
+## loading_screen. Links show without their https://. Again on a touch screen
+## (set_touch_instructions), larger, with the engine's licences built afresh.
+func _fill_credits() -> void:
+	for view: Control in [credits_entries, credits_engine_text]:
+		for child: Node in view.get_children():
+			view.remove_child(child)
+			child.queue_free()
+	var data: Variant = JSON.parse_string(FileAccess.get_file_as_string(CREDITS_PATH))
+	var entries: Array = (data as Dictionary).get("entries", []) if data is Dictionary else []
+	if entries.is_empty():
+		push_error("The credits list %s could not be read." % CREDITS_PATH)
+	var extra := CREDITS_TOUCH_EXTRA_PX if _touch else 0
+	var loading := PackedStringArray()
+	for entry: Dictionary in entries:
+		var block := VBoxContainer.new()
+		block.add_theme_constant_override("separation", 2)
+		credits_entries.add_child(block)
+		var link := str(entry.get("url", "")).trim_prefix("https://")
+		_credits_label(block, str(entry.get("title", "")), 20 + extra, CONTROLS_HEADING_COLOR)
+		_credits_label(block, str(entry.get("credit", "")), 18 + extra, Color.WHITE)
+		var terms := PackedStringArray()
+		for part: String in [str(entry.get("licence", "")), link]:
+			if not part.is_empty():
+				terms.append(part)
+		if not terms.is_empty():
+			_credits_label(block, "  ·  ".join(terms), 16 + extra, CONTROLS_KEY_COLOR)
+		_credits_label(block, str(entry.get("used_for", "")), 16 + extra, CREDITS_NOTE_COLOR)
+		var licence_file := str(entry.get("licence_file", ""))
+		if not licence_file.is_empty():
+			var licence_text := FileAccess.get_file_as_string(licence_file).strip_edges()
+			if licence_text.is_empty():
+				push_error("The licence text %s is not in the game." % licence_file)
+			_credits_label(block, _reflowed(licence_text), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+		if bool(entry.get("loading_screen", false)):
+			loading.append("%s  ·  %s" % [entry.get("credit", ""), link])
+	load_credit.text = "\n".join(loading)
+
+
+## The engine's licence text, then each of its components with its copyright
+## holders and licence, then the text of each of those licences: the engine's own
+## calls, so nothing here goes stale when the engine changes.
+func _fill_engine_licences() -> void:
+	var extra := CREDITS_TOUCH_EXTRA_PX if _touch else 0
+	_credits_label(credits_engine_text, "This game uses Godot Engine, available under the following license:", 18 + extra, Color.WHITE)
+	_credits_label(credits_engine_text, _reflowed(Engine.get_license_text().strip_edges()), 16 + extra, CREDITS_NOTE_COLOR)
+	_credits_label(credits_engine_text, "Components and their copyright holders", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 48.0
+	for component: Dictionary in Engine.get_copyright_info():
+		var lines := PackedStringArray()
+		for part: Dictionary in component.parts:
+			for holder: String in part.copyright:
+				lines.append("© " + holder)
+			lines.append("Licence: " + str(part.license))
+		_credits_label(credits_engine_text, str(component.name), 17 + extra, CONTROLS_KEY_COLOR)
+		_credits_label(credits_engine_text, "\n".join(lines), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+	_credits_label(credits_engine_text, "Licence texts", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 48.0
+	var licences := Engine.get_license_info()
+	for licence: String in licences:
+		_credits_label(credits_engine_text, licence, 17 + extra, CONTROLS_KEY_COLOR)
+		_credits_label(credits_engine_text, _reflowed(str(licences[licence]).strip_edges()), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+
+
+## A licence text for a label that wraps at the screen's width: a line wrapped at
+## a fixed width (at least REFLOW_FULL_SHARE of its paragraph's longest, and not
+## ending a sentence) runs on into the next, so a narrow screen doesn't break every
+## line twice; titles, copyright lines and list items keep their breaks. The words
+## are the licence's own.
+static func _reflowed(text: String) -> String:
+	var paragraphs := PackedStringArray()
+	var blank_lines := RegEx.create_from_string("\\n[ \\t]*(?:\\n[ \\t]*)+")
+	for paragraph: String in blank_lines.sub(text.replace("\r\n", "\n"), "\n\n", true).split("\n\n"):
+		var lines := paragraph.split("\n")
+		var longest := 0
+		for line: String in lines:
+			longest = maxi(longest, line.strip_edges().length())
+		var flowed := lines[0]
+		for i in range(1, lines.size()):
+			var previous := lines[i - 1].strip_edges()
+			if previous.length() >= REFLOW_FULL_SHARE * longest and not previous.ends_with("."):
+				flowed = flowed.rstrip(" \t") + " " + lines[i].strip_edges()
+			else:
+				flowed += "\n" + lines[i]
+		paragraphs.append(flowed)
+	return "\n\n".join(paragraphs)
+
+
+func _credits_label(parent: Control, text: String, font_size: int, color: Color) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
+	label.add_theme_font_size_override("font_size", font_size)
+	label.add_theme_color_override("font_color", color)
+	parent.add_child(label)
+	return label
+
+
+## The credits panel fills the screen less CREDITS_MARGIN_PX all round, its text
+## at most CREDITS_MAX_WIDTH_PX wide, at any window shape; its views scroll.
+func _fit_credits() -> void:
+	var chrome := credits_panel.get_theme_stylebox("panel").get_minimum_size()
+	var gaps := 2.0 * float(credits_layout.get_theme_constant("separation"))
+	var fixed := credits_title.get_combined_minimum_size().y + credits_back_button.get_combined_minimum_size().y + gaps
+	var view := Vector2(minf(CREDITS_MAX_WIDTH_PX, size.x - 2.0 * CREDITS_MARGIN_PX - chrome.x), size.y - 2.0 * CREDITS_MARGIN_PX - chrome.y - fixed)
+	view = view.max(Vector2.ZERO)
+	credits_list.custom_minimum_size = view
+	credits_engine.custom_minimum_size = view
+
+
+## Keys scroll the credits screen's text: the arrows a line, Page Up and Page Down
+## most of a page, Home and End to either end. Taken before the menus see them, so
+## Left, Right and Tab still move between its buttons.
+func _input(event: InputEvent) -> void:
+	if not credits_screen.visible:
+		return
+	var bar := credits_scroll().get_v_scroll_bar()
+	var step := 0.0
+	if event.is_action_pressed("ui_down", true):
+		step = CREDITS_LINE_PX
+	elif event.is_action_pressed("ui_up", true):
+		step = -CREDITS_LINE_PX
+	elif event.is_action_pressed("ui_page_down", true):
+		step = bar.page * CREDITS_PAGE_SHARE
+	elif event.is_action_pressed("ui_page_up", true):
+		step = -bar.page * CREDITS_PAGE_SHARE
+	elif event.is_action_pressed("ui_end"):
+		step = bar.max_value
+	elif event.is_action_pressed("ui_home"):
+		step = -bar.max_value
+	else:
+		return
+	bar.value += step
+	get_viewport().set_input_as_handled()
+
+
+## A finger dragging a credits view scrolls it, one for one, with no fling. The
+## container's own touch drag (Godot 4.7.2 scene/gui/scroll_container.cpp) times
+## its fling by the process step and divides by it, and the pause makes that step
+## 0 (main.gd's PauseClock), so the left-button presses and moves it reads, which
+## a touch screen makes from the finger, stop here. The wheel goes on to it, and
+## the scroll bar, its own child, takes its presses before they come here.
+func _on_credits_scroll_input(event: InputEvent, scroll: ScrollContainer) -> void:
+	var bar := scroll.get_v_scroll_bar()
+	if event is InputEventScreenTouch:
+		var touch := event as InputEventScreenTouch
+		if touch.pressed and not (bar.visible and bar.get_rect().has_point(touch.position)):
+			_credits_finger = touch.index
+		elif touch.index == _credits_finger:
+			_credits_finger = -1
+		scroll.accept_event()
+	elif event is InputEventScreenDrag:
+		var drag := event as InputEventScreenDrag
+		if drag.index == _credits_finger:
+			bar.value -= drag.relative.y
+		scroll.accept_event()
+	elif event is InputEventMouseMotion or (event is InputEventMouseButton and (event as InputEventMouseButton).button_index == MOUSE_BUTTON_LEFT):
+		scroll.accept_event()
 
 
 ## Fills the controls screen with the bindings as they are: the keyboard and
@@ -235,15 +499,17 @@ func toggle_debug() -> void:
 	debug_panel.visible = not debug_panel.visible
 
 
-## On a touch screen (main.gd): the controls screen lists the touch controls, and
-## the menus' buttons are big enough for a thumb.
+## On a touch screen (main.gd): the controls screen lists the touch controls, the
+## menus' buttons are big enough for a thumb and the credits' text is larger.
 func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Button in [resume_button, controls_button, exit_button, back_button, load_controls_button]:
+	for button: Button in [resume_button, controls_button, credits_button, exit_button, back_button, load_controls_button, credits_engine_button, credits_back_button]:
 		button.custom_minimum_size.y = 64.0
 	pause_box.custom_minimum_size.x = 420.0
+	_fill_credits()
+	_fit_credits()
 
 
 func set_pointer_capture_hint(show_hint: bool) -> void:

@@ -120,6 +120,11 @@ custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
 text = "Controls"
 
+[node name="CreditsButton" type="Button" parent="PausePanel/Center/Box/PauseLayout"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "Credits"
+
 [node name="ExitButton" type="Button" parent="PausePanel/Center/Box/PauseLayout"]
 custom_minimum_size = Vector2(0, 44)
 layout_mode = 2
@@ -164,6 +169,13 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 20
 text = "Controls"
+
+[node name="LoadCredit" type="Label" parent="LoadPanel/LoadLayout/LoadStack"]
+modulate = Color(1, 1, 1, 0.7)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3
 
 [node name="ControlsScreen" type="Control" parent="."]
 process_mode = 3
@@ -216,6 +228,84 @@ layout_mode = 2
 custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
+text = "Back"
+
+[node name="CreditsScreen" type="Control" parent="."]
+process_mode = 3
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+
+[node name="Dim" type="ColorRect" parent="CreditsScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.01, 0.02, 0.03, 0.6)
+
+[node name="Center" type="CenterContainer" parent="CreditsScreen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CreditsPanel" type="PanelContainer" parent="CreditsScreen/Center"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_controls")
+
+[node name="CreditsLayout" type="VBoxContainer" parent="CreditsScreen/Center/CreditsPanel"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Title" type="Label" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "Credits"
+horizontal_alignment = 1
+
+[node name="ListScroll" type="ScrollContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="Entries" type="VBoxContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 18
+
+[node name="EngineScroll" type="ScrollContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
+visible = false
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="EngineText" type="VBoxContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/EngineScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 6
+
+[node name="Buttons" type="HBoxContainer" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="EngineButton" type="Button" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons"]
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
+text = "Godot Engine licences"
+
+[node name="BackButton" type="Button" parent="CreditsScreen/Center/CreditsPanel/CreditsLayout/Buttons"]
+custom_minimum_size = Vector2(220, 40)
+layout_mode = 2
 text = "Back"
 
 [node name="DebugPanel" type="PanelContainer" parent="."]

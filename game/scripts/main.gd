@@ -132,6 +132,12 @@ func _unhandled_input(event: InputEvent) -> void:
 		hud.hide_controls()
 		get_viewport().set_input_as_handled()
 		return
+	if event.is_action_pressed("pause") and hud.credits_visible():
+		# Esc on the credits screen goes back a step: from the engine's licences to
+		# the list, from the list to the pause menu.
+		hud.credits_back()
+		get_viewport().set_input_as_handled()
+		return
 	if event.is_action_pressed("pause") and _world_ready:
 		# Browser Escape may also arrive after its pointer-lock loss callback.
 		# Never turn that same unlock gesture into a new capture request.
@@ -433,6 +439,14 @@ func _publish_web_state(_args: Array) -> void:
 		"controls": hud.controls_visible(),
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
 		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
+		# The credits screen (open or not), its view and how far it is scrolled, and
+		# the buttons that open, switch and close it.
+		"credits": hud.credits_visible(),
+		"credits_view": "engine" if hud.credits_engine.visible else "list",
+		"credits_scroll": hud.credits_scroll().scroll_vertical,
+		"credits_button": [hud.credits_button.get_global_rect().get_center().x, hud.credits_button.get_global_rect().get_center().y],
+		"credits_engine_button": [hud.credits_engine_button.get_global_rect().get_center().x, hud.credits_engine_button.get_global_rect().get_center().y],
+		"credits_back_button": [hud.credits_back_button.get_global_rect().get_center().x, hud.credits_back_button.get_global_rect().get_center().y],
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
 	}
