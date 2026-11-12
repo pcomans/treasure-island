@@ -2,12 +2,12 @@
 
 - **`mural.png`**: the mural on Mersea's courtyard container (`mersea_live_attachment.gd`
   hands it to `mersea_model.gd`).
-  - It reconstructs a real artwork, the floral mural on the restaurant's container.
-    Its artist is not established: neither the study notes nor the restaurant's
-    site names the mural's painter. The site's About page (checked 2026-11-12) says
-    "Artwork by famous New York street artist - @TomBobNYC" without saying which
-    artwork. The game credits the mural by what and where it is in
-    `game/resources/ui/credits.json` (Public art).
+  - It reconstructs a real artwork: *Rocky Purslane* by Nathaniel J. Bice, painted
+    in fall 2023. The artist's murals page, <https://njbice.com/murals/> (checked
+    2026-11-12), says: "“Rocky Purslane” is a 22′ wide shipping container mural
+    created for Mersea restaurant on Treasure Island." The mural's own "BY NJ BICE"
+    lettering is in the reconstruction too. The game credits it in
+    `game/resources/ui/credits.json` (Murals).
   - Made in this project on 2026-10-02 with the built-in image-generation tool,
     from the restaurant's own photograph of the mural, as source-inspired game art
     on a flat grey ground: not a scan or an exact copy. No photograph is in the

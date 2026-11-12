@@ -3,7 +3,7 @@
   "notes": [
     "The sources the game draws on and acknowledges: the pause menu's Credits screen (game/scripts/ui/hud.gd) shows every entry, in this order. This file is the only list; no scene or script repeats it.",
     "An entry: id, title, credit (the line to show), licence and url (empty if none), required (true where the licence asks for the acknowledgement, false where it is a courtesy) and used_for. Optional: licence_file, a licence text that ships with the game and shows under the screen's Licences button (export_presets.cfg's include_filter must list it); engine, for Godot Engine, whose own licence and its third-party notices come from Engine.get_license_text(), get_copyright_info() and get_license_info(), also under Licences; loading_screen, a credit the loading screen shows too; folders, the project folders the entry covers.",
-    "game/tests/headless_credits_contract.gd fails when a folder under game/ or generated/ holds a licence or provenance file (LICENSE, LICENCE, COPYING, NOTICE, PROVENANCE, ATTRIBUTION, AUTHORS, CREDITS, OFL), fonts, sounds, videos or 3D models, image data under a name that isn't an image's (a PNG kept as .dat), or a file an export preset's include_filter adds, or sits directly in a vendor, addons or third_party folder, and is listed neither in an entry's folders nor in own_work (things made in this project, which need no credit). It fails too when a listed folder is gone.",
+    "game/tests/headless_credits_contract.gd fails when a folder under game/ or generated/ holds a licence or provenance file (LICENSE, LICENCE, COPYING, NOTICE, PROVENANCE, ATTRIBUTION, AUTHORS, CREDITS, OFL), fonts, sounds, videos or 3D models, image data under a name that isn't an image's (a PNG kept as .dat), or a file an export preset's include_filter adds, or sits directly in a vendor, addons or third_party folder, or is a folder under game/resources/ that holds images, and is listed neither in an entry's folders nor in own_work (things made in this project, which need no credit, each with how it was made). The match is exact: a folder never covers the folders inside it. It fails too when a listed folder is gone.",
     "Not listed because nothing of them ships: reference photos and Street View (looked at, never in the game), the Kenney Nature Kit and the NAIP-placed placeholder vegetation (both removed), and the npm packages and tools that generate the world offline."
   ],
   "entries": [
@@ -65,17 +65,34 @@
       "url": "https://polyhaven.com/license",
       "required": false,
       "used_for": "Road asphalt, pavements and paved areas, the grass detail, wall plaster and flat roofs.",
-      "folders": ["game/resources/textures/world/polyhaven"]
+      "folders": [
+        "game/resources/textures/world/polyhaven",
+        "game/resources/textures/world/polyhaven/bitumen",
+        "game/resources/textures/world/polyhaven/clean_asphalt",
+        "game/resources/textures/world/polyhaven/concrete_floor_03",
+        "game/resources/textures/world/polyhaven/concrete_pavement",
+        "game/resources/textures/world/polyhaven/plaster_grey_04",
+        "game/resources/textures/world/polyhaven/sparse_grass"
+      ]
     },
     {
       "id": "public_art",
       "title": "Public art",
-      "credit": "Point of Infinity by Hiroshi Sugimoto (Yerba Buena Island); Canopy of Sky by Ned Kahn (Cityside Park); Bulgaria in the USA by Oleg Gotchev (the handball courts at Ninth Street and Avenue D); the floral mural on the Mersea restaurant's container, Treasure Island (its artist not established)",
+      "credit": "Point of Infinity by Hiroshi Sugimoto (Yerba Buena Island)\nCanopy of Sky by Ned Kahn (Cityside Park)",
       "licence": "",
       "url": "",
       "required": false,
-      "used_for": "The sculptures are modelled after the real works; the two murals are painted reconstructions of the real murals, made from photographs of them, as game art rather than exact copies.",
-      "folders": ["game/resources/models/bulgarian_wall", "game/resources/mersea"]
+      "used_for": "Modelled after the real works, which stand on the islands."
+    },
+    {
+      "id": "murals",
+      "title": "Murals",
+      "credit": "Bulgaria in the USA by Oleg Gotchev (the handball courts at Ninth Street and Avenue D)\nRocky Purslane by Nathaniel J. Bice (Mersea restaurant, Treasure Island)\nThe mural on the north-northwest end wall of Building 201 (Island Cove Market, 800 Avenue I), Treasure Island; its artist is not established",
+      "licence": "",
+      "url": "",
+      "required": false,
+      "used_for": "Painted reconstructions of the real murals, as game art rather than exact copies: Bulgaria in the USA and Rocky Purslane from photographs of them, Building 201's from a written description of photographs.",
+      "folders": ["game/resources/models/bulgarian_wall", "game/resources/mersea", "game/resources/textures/world/b201"]
     }
   ],
   "own_work": [
@@ -89,7 +106,71 @@
     },
     {
       "folder": "game/resources/ui",
-      "made_by": "the app icon, which the owner supplied, and the touch icons tools/draw_touch_icons.sh draws; the touch art in selgesel/ is credited above"
+      "made_by": "the app icon, which the owner supplied (ui/PROVENANCE.md); the touch art in selgesel/ is credited above"
+    },
+    {
+      "folder": "game/resources/ui/touch",
+      "made_by": "the touch use button's icons, drawn by tools/draw_touch_icons.sh (ui/PROVENANCE.md)"
+    },
+    {
+      "folder": "game/resources/textures/context/fresh_bay",
+      "made_by": "the Bay Area horizon's art, generated with gpt-image (each file carries C2PA content credentials; textures/context/PROVENANCE.md); the layout behind it is OpenStreetMap's, credited above"
+    },
+    {
+      "folder": "game/resources/textures/player",
+      "made_by": "the chest avatar's wood and gold, generated with tools/generate-texture from text prompts (textures/player/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/aracely",
+      "made_by": "the Aracely Cafe's art, generated with tools/generate-texture from text prompts; aracely_lawn.png is Poly Haven's sparse_grass (CC0, credited above) through the ground shader's masks (aracely/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/d1_b225_repair_v1",
+      "made_by": "a cladding albedo generated with the built-in image-generation tool from no reference image (evidence/first-playable/d1-b225-standalone-cladding-repair-v1-2026-09-04/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/facade_shared_v1",
+      "made_by": "the generated-texture pilot's brick, generated from text prompts only (discovery/facades/GENAI_TEXTURE_PILOT_V1.md, GENAI_TEXTURE_PHASE2_ISLE_HOUSE.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/ferry",
+      "made_by": "the ferry's livery, drawn by tools/draw_ferry_livery.sh"
+    },
+    {
+      "folder": "game/resources/textures/world/genai_pilot_v1",
+      "made_by": "the generated-texture pilot's albedos, generated from text prompts only (discovery/facades/GENAI_TEXTURE_PILOT_V1.md); left out of every export"
+    },
+    {
+      "folder": "game/resources/textures/world/ground_cover",
+      "made_by": "cover_map.png and marsh_map.png drawn by tools/build_ground_cover_map.mjs from tools/config/ground-cover.json; marsh_grain.png from this project's generated marsh plant images (vegetation/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/maceo_may",
+      "made_by": "the Maceo May wall tiles, generated with tools/generate-texture from text prompts (maceo_may/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/shoreline",
+      "made_by": "the riprap and boulder textures, generated with tools/generate-texture from text prompts (shoreline/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/site_12_housing",
+      "made_by": "a copy of the generated-texture pilot's stucco, generated from text prompts only (site_12_housing/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/street",
+      "made_by": "the street textures, generated with tools/generate-texture from text prompts, and markings, signs and flags drawn with ImageMagick by tools/draw_street_legends.sh and tools/draw_pole_flag_texture.sh (street/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/vegetation",
+      "made_by": "the plants' textures, generated with tools/generate-texture from text prompts and packed into atlases (vegetation/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/vegetation/impostors",
+      "made_by": "far impostors of this project's plant models, baked by tools/vegetation/bake_impostors.gd (vegetation/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/water",
+      "made_by": "the bay's wave and shore maps, baked by tools/bake_water_waves.mjs and tools/build_water_shore_map.mjs"
     }
   ]
 }

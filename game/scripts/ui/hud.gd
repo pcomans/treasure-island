@@ -314,12 +314,12 @@ func _fill_licences() -> void:
 	var extra := CREDITS_TOUCH_EXTRA_PX if _touch else 0
 	var view := credits_licence_text
 	for licence_file: Array in _licence_files:
-		_credits_label(view, str(licence_file[0]), 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+		_credits_section(view, str(licence_file[0]), extra)
 		_credits_label(view, _reflowed(str(licence_file[1])), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
-	_credits_label(view, "Godot Engine", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+	_credits_section(view, "Godot Engine", extra)
 	_credits_label(view, "This game uses Godot Engine, available under the following licence:", 18 + extra, Color.WHITE)
-	_credits_label(view, _reflowed(Engine.get_license_text().strip_edges()), 16 + extra, CREDITS_NOTE_COLOR)
-	_credits_label(view, "Components and their copyright holders", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+	_credits_label(view, _reflowed(Engine.get_license_text().strip_edges()), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
+	_credits_section(view, "Components and their copyright holders", extra)
 	for component: Dictionary in Engine.get_copyright_info():
 		var lines := PackedStringArray()
 		for part: Dictionary in component.parts:
@@ -328,17 +328,18 @@ func _fill_licences() -> void:
 			lines.append("Licence: " + str(part.license))
 		_credits_label(view, str(component.name), 17 + extra, CONTROLS_KEY_COLOR)
 		_credits_label(view, "\n".join(lines), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
-	_credits_label(view, "Licence texts", 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = CREDITS_SECTION_PX
+	_credits_section(view, "Licence texts", extra)
 	var licences := Engine.get_license_info()
 	for licence: String in licences:
 		_credits_label(view, licence, 17 + extra, CONTROLS_KEY_COLOR).custom_minimum_size.y = CREDITS_LICENCE_HEADING_PX + extra
 		_credits_label(view, _reflowed(unescaped(str(licences[licence]).strip_edges())), CREDITS_FINE_PRINT_PX + extra, CREDITS_NOTE_COLOR)
 
 
-## A licence text with a literal backslash-n (the engine's X11 text has one) made
-## the line break it stands for.
+## A licence text with each literal backslash-n (the engine's X11 text has one,
+## inside a sentence) and the spaces after it read as one space, so the sentence
+## runs on; nothing else in the text changes.
 static func unescaped(text: String) -> String:
-	return text.replace("\\n", "\n")
+	return RegEx.create_from_string("\\\\n *").sub(text, " ", true)
 
 
 ## A licence text for a label that wraps at the screen's width: a line wrapped at
@@ -363,6 +364,12 @@ static func _reflowed(text: String) -> String:
 				flowed += "\n" + lines[i]
 		paragraphs.append(flowed)
 	return "\n\n".join(paragraphs)
+
+
+## A section's heading in the Licences, with a gap above it unless it opens the view.
+func _credits_section(view: Control, text: String, extra: int) -> void:
+	var first := view.get_child_count() == 0
+	_credits_label(view, text, 20 + extra, CONTROLS_HEADING_COLOR).custom_minimum_size.y = 0.0 if first else CREDITS_SECTION_PX
 
 
 func _credits_label(parent: Control, text: String, font_size: int, color: Color) -> Label:

@@ -8,8 +8,9 @@ extends SceneTree
 ##     fonts, sounds, videos or 3D models, image data under a name that isn't an
 ##     image's (a PNG kept as .dat, as the Bulgarian Wall mural is), or a file an
 ##     export preset's include_filter adds, or sits directly in a vendor, addons or
-##     third_party folder, is credited by an entry or marked as the project's own
-##     work, and every folder it names is there;
+##     third_party folder, and every folder under game/resources/ that holds images,
+##     is credited by an entry or marked as the project's own work (an exact match:
+##     a folder never covers those inside it), and every folder it names is there;
 ##   - every licence text an entry shows ships with the game: each export preset's
 ##     include_filter lists it;
 ##   - the pause menu's Credits button, between Controls and Exit, opens the credits
@@ -40,6 +41,11 @@ const ASSET_EXTENSIONS := ["ttf", "otf", "woff", "woff2", "fnt", "wav", "ogg", "
 ## A folder directly in one of these holds someone else's code or assets.
 const THIRD_PARTY_PARENTS := ["vendor", "addons", "third_party", "thirdparty"]
 const SCANNED_ROOTS := ["res://game", "res://generated"]
+## Every folder under this that holds images needs a credit or an own-work line.
+const IMAGE_ROOT := "game/resources/"
+## The engine's X11 licence text holds one literal backslash-n inside a sentence;
+## the screen reads it, and the spaces after it, as one space (hud.gd unescaped).
+const LITERAL_NEWLINE := "\\\\n *"
 ## The desktop frame, and an iPhone's Safari page held upright and sideways in the
 ## 720 px layout main.gd gives a touch browser (as headless_touch_drive.gd).
 const DESKTOP := Vector2i(1440, 900)
@@ -69,8 +75,11 @@ func _run() -> void:
 	if data.is_empty():
 		return _finish()
 	var entries: Array = data.entries
-	var declared := _check_folders(data)
-	if declared.is_empty() or not _check_licence_files_ship(entries):
+	var presets := ConfigFile.new()
+	if not _require(presets.load(PRESETS_PATH) == OK, "%s did not load." % PRESETS_PATH):
+		return _finish()
+	var declared := _check_folders(data, presets)
+	if declared.is_empty() or not _check_licence_files_ship(entries, presets):
 		return _finish()
 	root.content_scale_size = DESKTOP
 	root.size = DESKTOP
@@ -137,7 +146,7 @@ func _read_credits() -> Dictionary:
 ## Every folder that needs a credit decision is credited or marked own work, and
 ## every folder the file names is there. Returns the declared folders (folder ->
 ## the entry or own work), or {} after failing.
-func _check_folders(data: Dictionary) -> Dictionary:
+func _check_folders(data: Dictionary, presets: ConfigFile) -> Dictionary:
 	var declared := {}
 	for entry: Dictionary in data.entries:
 		for folder: String in entry.get("folders", []):
@@ -147,9 +156,6 @@ func _check_folders(data: Dictionary) -> Dictionary:
 	for folder: String in declared:
 		if not _require(DirAccess.dir_exists_absolute("res://" + folder), "%s names %s, which is gone: drop it (credits list what ships)." % [GameHUD.CREDITS_PATH, folder]):
 			return {}
-	var presets := ConfigFile.new()
-	if not _require(presets.load(PRESETS_PATH) == OK, "%s did not load." % PRESETS_PATH):
-		return {}
 	for section: String in presets.get_sections():
 		if section.begins_with("preset.") and not section.ends_with(".options"):
 			for filter: String in str(presets.get_value(section, "include_filter", "")).split(",", false):
@@ -181,6 +187,8 @@ func _scan(dir_path: String, needed: Dictionary) -> void:
 			_flag(needed, folder, "holds a font, sound, video or 3D model, %s" % file)
 		elif not extension in AUDIT.IMAGE_EXTENSIONS and AUDIT.has_image_bytes(path):
 			_flag(needed, folder, "holds image data under a name that isn't an image's, %s" % file)
+		if folder.begins_with(IMAGE_ROOT) and extension in AUDIT.IMAGE_EXTENSIONS:
+			_flag(needed, folder, "holds images, %s" % file)
 		if Array(_shipped_filters).any(func(filter: String) -> bool: return path.match(filter)):
 			_flag(needed, folder, "holds %s, which an export preset's include_filter ships" % file)
 	for sub: String in dir.get_directories():
@@ -192,10 +200,7 @@ func _flag(needed: Dictionary, folder: String, reason: String) -> void:
 
 
 ## Each licence text an entry shows is there, and every export preset ships it.
-func _check_licence_files_ship(entries: Array) -> bool:
-	var presets := ConfigFile.new()
-	if not _require(presets.load(PRESETS_PATH) == OK, "%s did not load." % PRESETS_PATH):
-		return false
+func _check_licence_files_ship(entries: Array, presets: ConfigFile) -> bool:
 	var preset_sections := Array(presets.get_sections()).filter(func(section: String) -> bool: return section.begins_with("preset.") and not section.ends_with(".options"))
 	if not _require(not preset_sections.is_empty(), "%s has no export presets." % PRESETS_PATH):
 		return false
@@ -272,7 +277,8 @@ func _check_screen(entries: Array, shape: String) -> bool:
 					return false
 	var licences := Engine.get_license_info()
 	for licence: String in licences:
-		if not _require(engine.contains(licence) and engine_words.contains(_squashed(GameHUD.unescaped(str(licences[licence])))), "%s: the Licences do not show the %s licence text." % [shape, licence]):
+		var shown_text := RegEx.create_from_string(LITERAL_NEWLINE).sub(str(licences[licence]), " ", true)
+		if not _require(engine.contains(licence) and engine_words.contains(_squashed(shown_text)) and not engine.contains("\\n"), "%s: the Licences do not show the %s licence text." % [shape, licence]):
 			return false
 	if not _check_fit(shape, hud.credits_licences, touch) or not await _check_scrolling(hud.credits_licences, "%s: the Licences" % shape):
 		return false
@@ -296,14 +302,18 @@ func _check_screen(entries: Array, shape: String) -> bool:
 	await _frames(1)
 	if not _require(not hud.credits_visible() and hud.pause_panel.visible and hud.credits_button.has_focus(), "%s: Back on the credits list must go back to the pause menu, Credits focused." % shape):
 		return false
-	# Paused again while it is open (a lost focus) it stays, the menu hidden; play
-	# hides it.
+	# Paused again while it is open (a lost focus) it stays, the menu hidden. Play
+	# going on with the Licences open hides the screen, frees their labels and shows
+	# no prompt.
 	hud.credits_button.pressed.emit()
 	hud.set_paused(true)
 	if not _require(hud.credits_visible() and not hud.pause_panel.visible, "%s: a pause while the credits are open must keep them, the pause menu hidden." % shape):
 		return false
+	hud.credits_licences_button.pressed.emit()
+	await _frames(1)
 	hud.set_paused(false)
-	return _require(not hud.credits_visible() and not hud.pause_panel.visible, "%s: play must hide the credits." % shape)
+	await _frames(1)
+	return _require(not hud.credits_visible() and not hud.pause_panel.visible and hud.credits_licence_text.get_child_count() == 0 and not hud.prompt_panel.visible, "%s: play going on with the Licences open must hide the credits, free their %d labels and show no prompt (prompt shown %s)." % [shape, hud.credits_licence_text.get_child_count(), hud.prompt_panel.visible])
 
 
 ## The panel inside the page, no line past its view's text, and on touch the
