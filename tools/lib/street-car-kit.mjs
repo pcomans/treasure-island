@@ -176,7 +176,7 @@ const TAIL_BOW_M = 0.04;
 // station step along the sides, the wall's height fractions and the lid's
 // points from shoulder to centre line.
 const LEVELS = Object.freeze({
-  hero: { face: 6, corner: 7, step: 0.11, wall: [0, 0.035, 0.09, 0.18, 0.3, 0.42, 0.54, 0.66, 0.77, 0.86, 0.93, 0.97, 1], lid: 12, detail: 3, wheel: "hero" },
+  hero: { face: 6, corner: 9, step: 0.11, wall: [0, 0.035, 0.09, 0.18, 0.3, 0.42, 0.54, 0.66, 0.77, 0.86, 0.93, 0.97, 1], lid: 12, detail: 3, wheel: "hero" },
   near: { face: 4, corner: 5, step: 0.19, wall: [0, 0.05, 0.14, 0.3, 0.48, 0.66, 0.82, 0.93, 1], lid: 8, detail: 2, wheel: "near" },
   mid: { face: 3, corner: 3, step: 0.34, wall: [0, 0.08, 0.3, 0.6, 0.88, 1], lid: 6, detail: 1, wheel: "mid" },
   // (The far level's ring at 0.8 runs through the lamps under the shoulder.)
@@ -322,13 +322,16 @@ export function bodyShape(name) {
   const styleAt = (zf, e, front) => {
     const up = smoothstep(cab.windshield_base - UP_BLEND_M, cab.windshield_base + 0.06, zf);
     const down = 1 - smoothstep(sideEnd - 0.05, sideEnd + 0.32, zf);
-    const round = front ? 1 : 1 - smoothstep(0.2, 0.85, e);
+    // Round the rear corner the side glass's style gives way to the tailgate's
+    // over nearly all of the corner (over its middle third, the D pillar's
+    // foot creased, with a dimple at the belt).
+    const round = front ? 1 : 1 - smoothstep(0.05, 0.98, e);
     const zeta = up * down * round;
     // A pickup's tailgate top is square like its bed rails, so the bed's style carries round onto it.
     const bed = body.bed ? smoothstep(bedFrom, bedFrom + 0.08, zf) * (front ? round : 1) : 0;
     // The lid's rise from the shoulder where it is not the side glass: gentle
     // over a hood or a deck, as steep as the hatch behind a body without a trunk.
-    const roll = lerp(front ? 0.9 : lerp(0.9, tailSlope, smoothstep(0.2, 0.85, e)), 2.6, bed);
+    const roll = lerp(front ? 0.9 : lerp(0.9, tailSlope, smoothstep(0.05, 0.98, e)), 2.6, bed);
     return {
       zeta,
       bed,
@@ -517,6 +520,8 @@ export function bodyShape(name) {
 // each column before it must stay when one is pulled onto it.
 const CREASE_CLEAR_M = 0.003;
 const CREASE_COLUMN_MIN_M = 0.006;
+// A turned-over sliver no taller than this across its long edge is laid flat on it (m).
+const SLIVER_M = 0.003;
 // How deep a head lamp's and a tail lamp's bowls are at most (m).
 const HEAD_BOWL_M = 0.03;
 const TAIL_BOWL_M = 0.015;
@@ -575,7 +580,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // has vertices inside it at every level: without one the far level's
   // windshield (and a saloon's rear glass) had none, and was drawn in paint.
   keys.push(lerp(cab.windshield_base, cab.windshield_top, 0.5));
-  if (cab.rear_base - cab.roof_end > 0.15) keys.push(lerp(cab.roof_end, cab.rear_base, 0.5));
+  if (cab.rear_base - cab.roof_end > 0.05) keys.push(lerp(cab.roof_end, cab.rear_base, 0.5));
   // Rows on the cowl's, the deck's and the roof's back edges themselves (fCowl;
   // the deck line's start; fRoof and fRear), so their cuts run along a row
   // instead of a few millimetres beside one.
@@ -588,7 +593,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     let hi = sideStation(cab.windshield_base + 0.06);
     for (let i = 0; i < 40; i += 1) {
       const mid = (lo + hi) / 2;
-      if (wall(mid, 1).st.zeta < 0.6) lo = mid;
+      if (wall(mid, 1).st.zeta < 0.995) lo = mid;
       else hi = mid;
     }
     hoodEndA = (lo + hi) / 2;
@@ -1089,13 +1094,16 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     cut(fn, -gapHalf, 0, gapHalf);
   };
   const frit = detail >= 3 ? 0.022 : null;
+  // No frit on a near-upright rear window (a pickup's cab back): its outline
+  // there is measured along the car, and 22 mm of it was 11 cm of glass.
+  const rearFrit = frit !== null && cab.rear_base - cab.roof_end > 0.25;
   if (!inner) cut(fArch);
   if (inset === 0) {
     cut(fSide);
     if (detail >= 1) cut(fPillar, 9);
     cut(fWind, ...(frit ? [0, -frit] : [0]));
     if (frit) cut(fritFoot);
-    if (!barn) cut(fRear, ...(frit ? [0, -frit] : [0]));
+    if (!barn) cut(fRear, ...(rearFrit ? [0, -frit] : [0]));
     if (body.glass_roof) cut(fGlassRoof, ...(frit ? [0, -frit] : [0]));
   }
   // The lining's edges (the cabin's length, down to the floor; positive inside
@@ -1381,7 +1389,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
     for (const [fn, dark] of barn ? [[fWind, false], [fGlassRoof, true]] : [[fWind, false], [fRear, true], [fGlassRoof, true]]) {
       const f = R(fn);
-      if (f < 0) return { part: P.glass, glass: true, frit: frit !== null && (f > -frit || (fn === fWind && R(fritFoot) < 0)), dark };
+      if (f < 0) return { part: P.glass, glass: true, frit: frit !== null && (fn !== fRear || rearFrit) && (f > -frit || (fn === fWind && R(fritFoot) < 0)), dark };
     }
     if (!rec.wall) {
       if (detail >= 1 && R(fCowl) < 0) return { part: P.trim, ao: 0.7 };
@@ -1575,6 +1583,28 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     });
     if (flipped === 0) break;
   }
+  // A sliver still turned over (its far corner within SLIVER_M of its long
+  // edge: a cut close by a grid line round a tight bend) has that corner laid
+  // on the edge: it vanishes, and its neighbours move by less than a pixel.
+  for (const entry of kept) {
+    if (facingOf(entry.tri, entry.lidPatch) >= 0) continue;
+    const pts = entry.tri.map(place);
+    let longest = -1;
+    let at = 0;
+    for (let c = 0; c < 3; c += 1) {
+      const l = vlen(vsub(pts[(c + 1) % 3], pts[c]));
+      if (l > longest) {
+        longest = l;
+        at = c;
+      }
+    }
+    const [a, b, far] = [pts[at], pts[(at + 1) % 3], pts[(at + 2) % 3]];
+    const area = vlen(vcross(vsub(b, a), vsub(far, a))) / 2;
+    if ((2 * area) / longest > SLIVER_M) continue;
+    const ab = vsub(b, a);
+    const t = clamp(vdot(vsub(far, a), ab) / vdot(ab, ab), 0, 1);
+    placeCache.set(entry.tri[(at + 2) % 3], vadd(a, vscale(ab, t)));
+  }
   for (const entry of kept) entry.normals = [0, 1, 2].map((corner) => cornerNormal(entry.tri, corner, entry.lidPatch));
   // Weld each vertex's corner normals that agree within the crease angle.
   const corners = new Map();
@@ -1602,6 +1632,21 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       if (verts[id].x < 1e-7) n[0] = 0;
       const welded = vnorm(n);
       for (const [entry, corner] of group.members) entry.normals[corner] = welded;
+    }
+  }
+  // A corner whose normal turns 60 to 90 degrees from its own triangle's face
+  // (a coarse triangle spanning a roll, its corner on one side of it: the far
+  // level's A pillar shaded as its windshield and caught the sky) takes the
+  // face's normal halfway. (Past 90 degrees the triangle is turned over: a
+  // fault for the mesh check, left as it is.)
+  for (const entry of kept) {
+    const [p0, p1, p2] = entry.tri.map(place);
+    const face = vcross(vsub(p2, p0), vsub(p1, p0));
+    if (vlen(face) < 1e-12) continue;
+    const nf = vnorm(face);
+    for (let c = 0; c < 3; c += 1) {
+      const d = vdot(entry.normals[c], nf);
+      if (d >= 0 && d < 0.5) entry.normals[c] = vnorm(vadd(entry.normals[c], nf));
     }
   }
   const shade = (rec, kind) => {
@@ -1695,7 +1740,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
   }
   // The wheel arches' lips: the cut edge turned in toward the wheel.
-  if (!inner && inset === 0 && detail >= 1) {
+  if (!inner && inset === 0) {
     const lipDepth = 0.035;
     for (const [i, j, part] of edgeOwner.values()) {
       const a = verts[i];
@@ -1946,7 +1991,9 @@ function rightHalfFittings(out, name, detail) {
     out.grid(pts, nrm, P.trim);
     if (detail >= 2) {
       const down = v3(0, -1, 0);
-      for (let i = 1; i < steps - 1; i += 1) out.flat(pts[i][0], pts[i][5], pts[i + 1][5], pts[i + 1][0], down, P.trim, 0.6);
+      // Its underside closed end to end, the feet too (open there, a ray under
+      // the bar from the side met its inner face from behind).
+      for (let i = 0; i < steps; i += 1) out.flat(pts[i][0], pts[i][5], pts[i + 1][5], pts[i + 1][0], down, P.trim, 0.6);
       for (const i of [0, steps]) {
         const n = v3(0, 0, i === 0 ? -1 : 1);
         out.flat(pts[i][0], pts[i][1], pts[i][4], pts[i][5], n, P.trim);
@@ -1965,7 +2012,7 @@ function centreFittings(out, name, detail) {
   if (detail < 3) {
     // The underside as one dark sheet (the hero level has an underbody), in
     // longer steps the further the level is seen from.
-    underFloor(out, shape, body.clearance + 0.03, 0.07, L - 0.07, W - 0.1, 0.35, [0.6, 0.35, 0.15][detail]);
+    underFloor(out, shape, body.clearance + 0.03, 0.07, L - 0.07, W - 0.1, 0.35, [0.6, 0.35, 0.15][detail], LEVELS[["far", "mid", "near"][detail]].wall[1]);
   }
   if (detail >= 2) {
     // Wipers parked on the cowl: an arm and a blade each, lying along the

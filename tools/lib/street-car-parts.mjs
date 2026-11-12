@@ -585,7 +585,13 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
 export function underFloorY(body, detail) {
   return body.clearance + (detail >= 3 ? 0.1 : 0.03);
 }
-export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08) {
+// How far inside the wall the underside's skirt meets it (m), and where the
+// hero level's underbody meets it (its wall's first ring).
+const SKIRT_INSET_M = 0.004;
+const UNDERBODY_SEAT_F = 0.035;
+// seatF: the share of the wall's height of its level's first ring above the
+// lower edge, where the skirt meets it (on the drawn wall at any level).
+export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08, seatF = 0.05) {
   const { body, L, W, axles, archRadius } = shape;
   const zOf = (zf) => zf - L / 2;
   const well = W - 0.035 - body.tire_width - 0.055;
@@ -595,6 +601,26 @@ export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08) {
     const p = shape.wall((3 * i) / 600, 0);
     edge.push([p.zf, p.x]);
   }
+  // The wall a little way up from that edge, inside it: where the skirt meets it.
+  const seat = [];
+  for (let i = 0; i <= 600; i += 1) {
+    const p = shape.wall((3 * i) / 600, seatF);
+    const o = shape.outline((3 * i) / 600);
+    seat.push([p.zf, p.x - o.nx * SKIRT_INSET_M, p.y]);
+  }
+  const seatAt = (zf) => {
+    let best = null;
+    for (let i = 0; i < seat.length - 1; i += 1) {
+      const [za, xa, ya] = seat[i];
+      const [zb, xb, yb] = seat[i + 1];
+      if ((za - zf) * (zb - zf) <= 0 && za !== zb) {
+        const t = (zf - za) / (zb - za);
+        const x = lerp(xa, xb, t);
+        if (!best || x > best[0]) best = [x, lerp(ya, yb, t)];
+      }
+    }
+    return best;
+  };
   const halfAt = (zf) => {
     let best = 0;
     for (let i = 0; i < edge.length - 1; i += 1) {
@@ -626,14 +652,17 @@ export function underFloor(out, shape, y, zf0, zf1, hw, ao, step = 0.08) {
     const [ya, yb] = [height(za), height(zb)];
     const n = vnorm(v3(0, -1, (yb - ya) / Math.max(1e-6, zb - za)));
     out.flat(v3(-ha, ya, zOf(za)), v3(ha, ya, zOf(za)), v3(hb, yb, zOf(zb)), v3(-hb, yb, zOf(zb)), n, P.under, ao);
-    // Between the wheels a skirt runs from the sheet's edge down to the
-    // wall's lower edge, so no ray slips in over the sill's inside.
-    if (!inWell(mid)) {
+    // Between the wheels a skirt runs from the sheet's edge out to the wall a
+    // little way up from its lower edge, just inside it, above the tucked-under
+    // lowest band (edge to edge with the lower edge it left a crack a ray
+    // slipped through over the sill's inside).
+    const [sa, sb] = [seatAt(za), seatAt(zb)];
+    if (!inWell(mid) && sa && sb) {
       for (const side of [1, -1]) {
-        const ea = Math.max(ha, halfAt(za));
-        const eb = Math.max(hb, halfAt(zb));
-        const ba = Math.min(ya, shape.bottom(za));
-        const bb = Math.min(yb, shape.bottom(zb));
+        const ea = Math.max(ha, sa[0]);
+        const eb = Math.max(hb, sb[0]);
+        const ba = sa[1];
+        const bb = sb[1];
         if (ea - ha < 1e-4 && eb - hb < 1e-4 && ya - ba < 1e-4 && yb - bb < 1e-4) continue;
         // Facing down and in, square to the strip (out by ea - ha, down by ya - ba).
         const sn = vnorm(v3(-side * (ya - ba + 1e-3), -(ea - ha + 1e-3), 0));
@@ -663,7 +692,7 @@ export function buildUnderbody(out, body, shape) {
   const z0 = 0.07;
   const z1 = L - 0.07;
   const hw = W - 0.2;
-  underFloor(out, shape, y0, z0, z1, hw, 0.35);
+  underFloor(out, shape, y0, z0, z1, hw, 0.35, 0.08, UNDERBODY_SEAT_F);
   // Sill rails and the tunnel.
   for (const x of [-hw + 0.08, hw - 0.08]) out.roundedBox(at(x, y0 - 0.02, (axles[0] + axles[1]) / 2), [0.06, 0.03, (axles[1] - axles[0]) / 2 - R - 0.1], 0.02, P.under, { ao: 0.5 });
   out.roundedBox(at(0, y0 - 0.012, (axles[0] + axles[1]) / 2), [0.13, 0.025, (axles[1] - axles[0]) / 2 - 0.1], 0.02, P.under, { ao: 0.45 });
@@ -761,9 +790,15 @@ function strip(out, hz, hy, x, cols, part, ao = 1) {
     out.flat(v3(x, -hy, z0), v3(x, hy, z0), v3(x, hy, z1), v3(x, -hy, z1), n, part, ao);
   }
 }
-// A box from x0 (against its mount, left open) to x1, in cols columns along z.
+// A box from x0 (against its mount) to x1, in cols columns along z, closed
+// behind too (where the mount curves away under it, its back shows).
 function slab(out, hz, hy, x0, x1, cols, part, ao = 1) {
   strip(out, hz, hy, x1, cols, part, ao);
+  for (let i = 0; i < cols; i += 1) {
+    const z0 = lerp(-hz, hz, i / cols);
+    const z1 = lerp(-hz, hz, (i + 1) / cols);
+    out.flat(v3(x0, -hy, z0), v3(x0, hy, z0), v3(x0, hy, z1), v3(x0, -hy, z1), v3(-1, 0, 0), part, ao * 0.6);
+  }
   for (let i = 0; i < cols; i += 1) {
     const z0 = lerp(-hz, hz, i / cols);
     const z1 = lerp(-hz, hz, (i + 1) / cols);

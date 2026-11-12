@@ -9,8 +9,11 @@
 // body is a face seen from behind), side windows painted over (a ray
 // straight in at a side window that meets anything but glass first), number
 // plates hidden (a ray straight in at either plate that meets anything but the
-// plate or its characters first) and, at the hero level, the cabin poking out
-// (a seat, dashboard or lining point with neither shell nor glass above it).
+// plate or its characters first), regions in the wrong material (a ray at the
+// windshield, the rear glass and each head and tail lamp, aimed where the
+// near level draws them, that meets anything else first, at every level)
+// and, at the hero level, the cabin poking out (a seat, dashboard or lining
+// point with neither shell nor glass above it).
 //
 //   node tools/check_street_car_meshes.mjs [CLUTTER_KIT.glb HERO_KIT.glb]
 //
@@ -37,13 +40,17 @@ const MIN_GAP_RUN_M = 0.04;
 // A groove's triangle no wider than this (m: twice its area over its longest
 // edge) at the hero level and the others; the groove is 7 mm and 12 mm across.
 const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
-// A pixel's width (m) at the nearest distance each level is drawn from
-// (1440 pixels across a 70 degree view): the hero level from about 0.4 m, the
-// near level (a seventh car within the hero range draws it) from about 2 m,
-// the far level from 43 m (game/scripts/world/street_clutter_kit.gd
-// LOD_NEAR_M less half the diagonal of a 24 m clutter cell). A see-through
-// crack narrower than that is not judged.
-const FOOTPRINT_M = { hero: 4e-4, near: 2e-3, far: 0.04 };
+// A pixel's height (m) on the owner's display (a Mac drawing about 2170 rows
+// over a 70 degree view: 0.645 mm a metre away) at the nearest distance each
+// level is drawn from: the hero level from about 0.4 m, the near level (a
+// seventh car within the hero range draws it) from about 2 m, the far level
+// from 43 m (game/scripts/world/street_clutter_kit.gd LOD_NEAR_M less half
+// the diagonal of a 24 m clutter cell). A see-through hit counts when at
+// least CRACK_RAYS of nine rays half a pixel apart round it see a back face
+// too, so a crack a third of a pixel wide fails and only a pinhole passes.
+const PIXEL_PER_M = (2 * Math.tan((35 * Math.PI) / 180)) / 2170;
+const FOOTPRINT_M = { hero: 0.4 * PIXEL_PER_M, near: 2 * PIXEL_PER_M, far: 43 * PIXEL_PER_M };
+const CRACK_RAYS = 3;
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);
 const VERBOSE = process.env.CAR_CHECK_VERBOSE === "1";
@@ -291,7 +298,7 @@ function seeThrough(tris, bounds, name = "", footprint = 0) {
       const o = [0, 1, 2].map((k) => origin[k] + (u[k] * a + w[k] * b) * footprint);
       if (seenBehind(o, unit)) behind += 1;
     }
-    return behind >= 5;
+    return behind >= CRACK_RAYS;
   };
   const centre = [(bounds.lo[0] + bounds.hi[0]) / 2, (bounds.lo[1] + bounds.hi[1]) / 2, (bounds.lo[2] + bounds.hi[2]) / 2];
   const reach = length(sub(bounds.hi, bounds.lo));
@@ -387,6 +394,72 @@ function hiddenPlates(tris, bounds) {
   return faults;
 }
 
+// Materials: every level of every body draws its windshield and (unless a
+// van's rear doors stand there) rear glass as glass, its head and tail lamps
+// as lamps, both sides. Each region's probe is the near level's own triangle
+// nearest that region's middle; a ray straight in at it must meet the
+// region's material first at each level.
+const HEAD_PARTS = new Set(["head_lamp", "lamp_housing", "lamp_drl", "lamp_amber", "chrome", "mirror"]);
+const TAIL_PARTS = new Set(["tail_lamp", "lamp_red", "lamp_white"]);
+function materialProbes(near, bodyName) {
+  const unit = (v) => {
+    const l = length(v);
+    return l > 0 ? v.map((x) => x / l) : v;
+  };
+  const probe = (label, keep, want) => {
+    const picked = near.filter((tri) => tri.area > 1e-6 && keep(tri, unit(tri.face)));
+    if (picked.length === 0) return { label, want, missing: true };
+    let area = 0;
+    const mid = [0, 0, 0];
+    for (const tri of picked) {
+      area += tri.area;
+      for (let k = 0; k < 3; k += 1) mid[k] += (tri.area * (tri.p[0][k] + tri.p[1][k] + tri.p[2][k])) / 3;
+    }
+    const centre = mid.map((v) => v / area);
+    let best = null;
+    let bestD = Infinity;
+    for (const tri of picked) {
+      const c = [0, 1, 2].map((k) => (tri.p[0][k] + tri.p[1][k] + tri.p[2][k]) / 3);
+      const d = length(sub(c, centre));
+      if (d < bestD) {
+        bestD = d;
+        best = { point: c, normal: unit(tri.face) };
+      }
+    }
+    return { label, want, ...best };
+  };
+  const glass = (tri) => tri.part === "glass";
+  const probes = [
+    probe("windshield", (tri, n) => glass(tri) && n[2] < -0.3 && n[1] > 0.15, new Set(["glass"])),
+  ];
+  if (CAR_BODIES[bodyName].doors?.rear !== "barn") probes.push(probe("rear glass", (tri, n) => glass(tri) && n[2] > 0.3 && Math.abs(n[0]) < 0.7, new Set(["glass", "grille"])));
+  // Lamps: outboard (not the third brake light) and within 0.7 m of their end.
+  const { lo, hi } = boundsOf(near);
+  const middle = (tri) => [0, 1, 2].map((k) => (tri.p[0][k] + tri.p[1][k] + tri.p[2][k]) / 3);
+  for (const [side, sign] of [["right", 1], ["left", -1]]) {
+    probes.push(probe(`${side} head lamp`, (tri, n) => HEAD_PARTS.has(tri.part) && tri.part !== "chrome" && tri.part !== "mirror" && sign * middle(tri)[0] > 0.3 && middle(tri)[2] < lo[2] + 0.7 && n[2] < -0.2, HEAD_PARTS));
+    probes.push(probe(`${side} tail lamp`, (tri, n) => TAIL_PARTS.has(tri.part) && sign * middle(tri)[0] > 0.3 && middle(tri)[2] > hi[2] - 0.7 && n[2] > 0.2, TAIL_PARTS));
+  }
+  return probes;
+}
+function wrongMaterials(tris, bounds, probes) {
+  const hit = rayCaster(tris, bounds);
+  const faults = { rays: 0, wrong: 0, where: [] };
+  for (const p of probes) {
+    faults.rays += 1;
+    if (p.missing) {
+      faults.wrong += 1;
+      faults.where.push([`no ${p.label} at the near level`, [0, 0, 0]]);
+      continue;
+    }
+    const tri = hit(p.point.map((v, k) => v + p.normal[k] * 0.6), p.normal.map((v) => -v));
+    if (tri && p.want.has(tri.part)) continue;
+    faults.wrong += 1;
+    faults.where.push([`${tri ? tri.part : "nothing"} where the ${p.label} is`, p.point]);
+  }
+  return faults;
+}
+
 // The cabin inside the shell: from every seat, dashboard and lining point
 // higher than a sill (0.6 m), a ray straight up must meet the shell or the
 // glass, or the point pokes out through the roof, a pillar or the glass.
@@ -477,6 +550,8 @@ function main() {
       if (c.outside) report(`car_${body}_hero`, `cabin points of ${c.points} poking out of the shell`, c.outside, c.where);
       for (const piece of ["glass", "tyre", "brake"]) levels.push([`car_${body}_hero_${piece}`, triangles(hero.meshes.get(`car_${body}_hero_${piece}`)), false]);
     }
+    const nearMesh = clutter.meshes.get(`car_${body}_lod0`);
+    const probes = nearMesh ? materialProbes(triangles(nearMesh), body) : [];
     for (const [name, tris, rays] of levels) {
       const s = surfaceFaults(tris, name.includes("_hero") ? MAX_GAP_WIDTH_M.hero : MAX_GAP_WIDTH_M.other);
       if (s.degenerate) report(name, "triangles with no area", s.degenerate, s.where.filter(([w]) => w === "degenerate"));
@@ -491,6 +566,8 @@ function main() {
         if (w.painted) report(name, `side-window rays of ${w.rays} meeting no glass`, w.painted, w.where);
         const p = hiddenPlates(tris, boundsOf(tris));
         if (p.hidden) report(name, `plate rays of ${p.rays} meeting no plate`, p.hidden, p.where);
+        const m = wrongMaterials(tris, boundsOf(tris), probes);
+        if (m.wrong) report(name, `material probes of ${m.rays} meeting the wrong material`, m.wrong, m.where);
       }
     }
   }
