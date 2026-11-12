@@ -39,6 +39,8 @@ export { CALIPER_ANGLE, CAR_PART_COUNT, CAR_PARTS };
 //     to, under a painted cap that carries on up to the roof
 //   deck: [distance, top] behind the cabin (trunk, bed or tailgate top)
 //   nose/tail: bumper bottom, face lean (top set back), corner radius in plan
+//   doors (a cargo van): slider "right" (a sliding door on that side only) and
+//     rear "barn" (two rear doors up to the roof's edge, no rear glass)
 // Dimensions are production inference: typical 2020s Bay Area models
 // photographed parked in the pilot zones (Sep and Nov 2025 Street View).
 export const CAR_BODIES = Object.freeze({
@@ -151,6 +153,11 @@ export const CAR_BODIES = Object.freeze({
     deck: [[5.85, 1.28], [5.93, 1.24]],
     cabin: { windshield_base: 0.98, windshield_top: 1.42, glass_top: 1.95, roof_end: 5.82, rear_base: 5.9, roof: 2.62, crown: 0.03, tumblehome: 0.12, rear_drop: 0.03 },
     pillars: { b: 2.12, c: 2.2, quarter_glass: false, cargo_from: 2.2 },
+    // Its cargo doors (production inference, a US cargo van of this class: the
+    // Sep 2025 photo shows only the right side's plain rear quarter): a sliding
+    // door on the right (kerb) side only, nothing behind the left cab door,
+    // and two full-height rear doors split down the middle, unglazed.
+    doors: { slider: "right", rear: "barn" },
     cladding: 0.22, roof_rails: false, grille: "wide",
   },
 });
@@ -161,6 +168,8 @@ export const CAR_BODIES = Object.freeze({
 const WHEEL_INSET_M = 0.035;
 const MIRROR_REACH_M = 0.14;
 const NOSE_BOW_M = 0.06;
+const UP_BLEND_M = 0.6;
+
 const TAIL_BOW_M = 0.04;
 
 // Detail levels: stations across each end face and round each corner, the
@@ -170,7 +179,8 @@ const LEVELS = Object.freeze({
   hero: { face: 6, corner: 7, step: 0.11, wall: [0, 0.035, 0.09, 0.18, 0.3, 0.42, 0.54, 0.66, 0.77, 0.86, 0.93, 0.97, 1], lid: 12, detail: 3, wheel: "hero" },
   near: { face: 4, corner: 5, step: 0.19, wall: [0, 0.05, 0.14, 0.3, 0.48, 0.66, 0.82, 0.93, 1], lid: 8, detail: 2, wheel: "near" },
   mid: { face: 3, corner: 3, step: 0.34, wall: [0, 0.08, 0.3, 0.6, 0.88, 1], lid: 6, detail: 1, wheel: "mid" },
-  far: { face: 2, corner: 2, step: 0.7, wall: [0, 0.3, 0.75, 1], lid: 4, detail: 0, wheel: "far" },
+  // (The far level's ring at 0.8 runs through the lamps under the shoulder.)
+  far: { face: 2, corner: 2, step: 0.7, wall: [0, 0.3, 0.8, 1], lid: 4, detail: 0, wheel: "far" },
 });
 export const CAR_LEVELS = Object.freeze(Object.keys(LEVELS));
 
@@ -195,8 +205,11 @@ function doorSeams(body) {
   const cab = body.cabin;
   const seams = [cab.windshield_base + 0.07];
   if (body.pillars.b) seams.push(body.pillars.b);
-  if (body.pillars.cargo_from) seams.push(body.pillars.cargo_from + 1.25);
-  else if (body.bed) seams.push(cab.rear_base - 0.08);
+  // A cargo van's side behind its cab doors is its own (placeFittings: a
+  // sliding door on one side only).
+  if (body.pillars.cargo_from) {
+    // nothing
+  } else if (body.bed) seams.push(cab.rear_base - 0.08);
   else if (body.pillars.c) seams.push(body.pillars.c - 0.04);
   else seams.push(cab.roof_end + 0.08);
   return seams;
@@ -307,7 +320,7 @@ export function bodyShape(name) {
   // glass (the wall rolls a little into the glass plane), 0 along the hood,
   // deck and end faces (it rolls over into the lid); square along a bed.
   const styleAt = (zf, e, front) => {
-    const up = smoothstep(cab.windshield_base - 0.34, cab.windshield_base + 0.06, zf);
+    const up = smoothstep(cab.windshield_base - UP_BLEND_M, cab.windshield_base + 0.06, zf);
     const down = 1 - smoothstep(sideEnd - 0.05, sideEnd + 0.32, zf);
     const round = front ? 1 : 1 - smoothstep(0.2, 0.85, e);
     const zeta = up * down * round;
@@ -377,11 +390,22 @@ export function bodyShape(name) {
   };
   // A point of the wall: a round the outline, f from its lower edge (0) to the shoulder (1).
   const FACE_F = 0.3;
+  // How much of its end's lean a station carries: all of it across the face
+  // and round the corner (the shoulder's corner is the outline's, moved back),
+  // fading only along the side, where moving the top along the side moves it
+  // along itself. (e^1.5 faded it round the corner, fastest mid-corner, where
+  // the corner runs back slowest: the shoulder stalled and turned in a bend a
+  // centimetre round, and the hood's shut line, 7.5 cm in, came to a point.)
+  const sideRun = L - tail.corner - nose.corner;
+  const leanShare = (a, front) => {
+    const fade = Math.max(0.3, 1.5 * (front ? nose : tail).lean) / sideRun;
+    return front ? 1 - smoothstep(1, 1 + fade, a) : smoothstep(2 - fade, 2, a);
+  };
   const wall = (a, f) => {
     const o = outline(a);
     const front = a < 1.5;
     const e = Math.abs(o.nz);
-    const es = e ** 1.5;
+    const es = leanShare(a, front);
     const end = front ? nose : tail;
     const sign = front ? 1 : -1;
     const zfTop = clamp(o.zf + sign * end.lean * es, 0, L);
@@ -496,6 +520,11 @@ const CREASE_COLUMN_MIN_M = 0.006;
 // How deep a head lamp's and a tail lamp's bowls are at most (m).
 const HEAD_BOWL_M = 0.03;
 const TAIL_BOWL_M = 0.015;
+// In the lining, an outline crossing an edge this near one end goes through the
+// end, and one this close to a vertex counts as on it (m): its openings' edges
+// sit behind the pillars, and slivers beside them turned over once pressed in.
+const LINING_END_SNAP = 0.1;
+const LINING_SNAP_M = 0.015;
 // How close to a region's outline a vertex counts as on it, by level (m).
 const REGION_SNAP_M = Object.freeze({ hero: 1.5e-3, near: 3e-3, mid: 6e-3, far: 0.012 });
 // How far behind the deck line's start a tonneau cover begins (m).
@@ -503,6 +532,7 @@ const TONNEAU_SET_BACK_M = 0.04;
 // The gap between a pickup's cab and its bed or service body, from the cab
 // back's foot (m): it runs across the top and down both sides.
 const BED_GAP_M = 0.05;
+const BED_SLOT_DEPTH_M = 0.06;
 function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const shape = bodyShape(name);
   const { body, L, W, axles, archRadius, wall, lid, zqAt, rowZf } = shape;
@@ -512,6 +542,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const nose = body.nose;
   const tail = body.tail;
   const R = body.wheel_radius;
+  const barn = body.doors?.rear === "barn";
+  // A pickup's cab and its bed are two bodies with a slot between them (the near and hero levels).
+  const slot = body.bed !== undefined && !inner && inset === 0 && detail >= 2;
 
   // --- Stations round the outline: the wall's columns. Each end face gets as
   // many as the lid has columns, for the face is the lid's first (last) row.
@@ -538,6 +571,11 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     return (lo + hi) / 2;
   };
   const keys = [shape.peakZ, cab.windshield_base, cab.windshield_top, cab.roof_end, cab.rear_base];
+  // A row through the middle of the windshield and of the rear glass, so each
+  // has vertices inside it at every level: without one the far level's
+  // windshield (and a saloon's rear glass) had none, and was drawn in paint.
+  keys.push(lerp(cab.windshield_base, cab.windshield_top, 0.5));
+  if (cab.rear_base - cab.roof_end > 0.15) keys.push(lerp(cab.roof_end, cab.rear_base, 0.5));
   // Rows on the cowl's, the deck's and the roof's back edges themselves (fCowl;
   // the deck line's start; fRoof and fRear), so their cuts run along a row
   // instead of a few millimetres beside one.
@@ -701,6 +739,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
         // column 0 already follows): the cuts crossing such a strip left
         // slivers turned over.
         if (want * rowShoulder[r].x < CREASE_COLUMN_MIN_M * cr) continue;
+        // The lining needs no crisp creases, and a column pulled over to one
+        // row by row turned its coarse lid inside out round the A pillars.
+        if (inner) continue;
         // Columns before it squeeze or stretch toward the shoulder, those after toward the centre line.
         for (let c = 1; c < C; c += 1) {
           if (c < cr) table[c] = (table[c] / was) * want;
@@ -883,7 +924,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const sideGlassEnd = body.pillars.cargo_from ? body.pillars.cargo_from - 0.05 : body.bed ? cab.rear_base - 0.1 : body.pillars.quarter_glass ? cab.roof_end - 0.12 : cab.roof_end - 0.05;
   const max3 = (a, b, c, k) => smax(smax(a, b, k), c, k);
   const archDistance = (rec) => Math.min(Math.hypot(rec.zf - axles[0], rec.y - R), Math.hypot(rec.zf - axles[1], rec.y - R));
-  const nearArch = (rec) => rec.wall && (Math.abs(rec.zf - axles[0]) < archRadius + 0.25 || Math.abs(rec.zf - axles[1]) < archRadius + 0.25);
+  // Every wall triangle near an arch is cut along it: the far level's long
+  // triangles reach well past the arch, and one left whole when a corner lay
+  // outside a narrower domain was dropped whole, a black wedge by the wheel.
+  const nearArch = (rec) => rec.wall && (Math.abs(rec.zf - axles[0]) < archRadius + 1.2 || Math.abs(rec.zf - axles[1]) < archRadius + 1.2);
   const fArch = region(nearArch, (rec) => archDistance(rec) - archRadius);
   // A high-roof van's door glass stops at glass_top, under the painted side.
   const sideGlassTop = cab.glass_top ?? Infinity;
@@ -922,9 +966,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     (rec) => rec.zq - deckFrom,
   );
   const fTonneau = region((rec) => !rec.wall && body.bed === "tonneau", (rec) => Math.max(deckFrom + TONNEAU_SET_BACK_M - rec.zq, 0.075 - rec.dist));
-  // A pickup's cab and its bed are two bodies: the gap between them (where the
-  // cab back's foot, the bed's front and the sides meet, a fan of thin
-  // triangles caught the light) reads dark. Its edges are rows and stations.
+  // A pickup's cab and its bed are two bodies: the slot between them, from the
+  // cab back's foot, across the top and down both sides (where they meet, a
+  // fan of thin triangles crumpled the corners). Its edges are rows and
+  // stations; the shell is open over it, and a channel closes it below.
   const fBedGap = region((rec) => body.bed !== undefined && (rec.wall ? onSide(rec) : true), (rec) => {
     const at = rec.wall ? rec.zf : rec.zq;
     return Math.max(cab.rear_base - at, at - (cab.rear_base + BED_GAP_M));
@@ -988,9 +1033,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   fTailBar.pre = [region(inTail, (rec) => fTail.fn(rec) + 0.02), region(inTail, (rec) => fTail.fn(rec) + 0.042)];
   const fReverse = region(inTail, (rec) => Math.max(fTail.fn(rec) + 0.05, rec.wr - (tailCentre - tailHalf + 0.16)));
   fReverse.pre = [region(inTail, (rec) => fTail.fn(rec) + 0.05), region(inTail, (rec) => rec.wr - (tailCentre - tailHalf + 0.16))];
-  const rearPlateY = (rec) => rec.bottom + (body.bed ? 0.16 : 0.56) * rec.h;
+  const rearPlateY = (rec) => rec.bottom + (body.bed || barn ? 0.16 : 0.56) * rec.h;
   const fPocket = boxRegion(onTailFace, (rec) => rec.x, (rec) => rec.y - rearPlateY(rec), 0.25, 0.105, 0.03, [[0.014, 3]]);
-  const fGarnish = boxRegion((rec) => onTailFace(rec) && !body.bed, (rec) => rec.x, (rec) => rec.y - (rearPlateY(rec) + 0.135), Math.min(0.34, tailCentre - tailHalf - 0.03), 0.014, 0.012);
+  const fGarnish = boxRegion((rec) => onTailFace(rec) && !body.bed && !barn, (rec) => rec.x, (rec) => rec.y - (rearPlateY(rec) + 0.135), Math.min(0.34, tailCentre - tailHalf - 0.03), 0.014, 0.012);
   const bumperLine = lineEnds(
     region((rec) => onTail(rec) && !body.bed && rec.wr < tailEdge + tail.corner * 1.2 + SNAP_M, (rec) => rec.y - (rec.bottom + 0.34 * rec.h)),
     (rec) => onTail(rec) && !body.bed && Math.abs(rec.y - (rec.bottom + 0.34 * rec.h)) < LINE_END_NEAR_M,
@@ -1003,6 +1048,24 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // Its ends are cut too, so the groove stops square.
   const nearGate = (rec) => onTailFace(rec) && Math.abs(rec.x - (tailCentre - tailHalf - 0.012)) < LINE_END_NEAR_M;
   gateLine.pre = [region(nearGate, (rec) => rec.y - (rec.bottom + 0.34 * rec.h)), region(nearGate, (rec) => rec.y - gateTop(rec))];
+  // A van's rear doors (doors.rear "barn"): from the bumper line up to under
+  // the roof's rear edge, on the face below its shoulder and up the rear drop
+  // above it; split down the middle, their outer edges where the tailgate's
+  // would be, just inside the lamps.
+  const doorTop = cab.roof - 0.1;
+  const bumperY = (rec) => rec.bottom + 0.34 * rec.h;
+  const onRearDrop = (rec) => !rec.wall && rec.zq > cab.roof_end - 0.03;
+  const rearDoorX = tailCentre - tailHalf - 0.012;
+  const onRearDoors = (rec) => barn && ((onTailFace(rec) && rec.y >= bumperY(rec) - SNAP_M) || (onRearDrop(rec) && rec.y <= doorTop + SNAP_M));
+  const nearRearDoors = (rec) => barn && (onTailFace(rec) || onRearDrop(rec));
+  const barnEnds = [(rec) => (rec.wall ? rec.y - bumperY(rec) : 1), (rec) => (rec.wall ? -1 : rec.y - doorTop)];
+  const barnLines = barn
+    ? [
+        lineEnds(region(onRearDoors, (rec) => rec.x), (rec) => nearRearDoors(rec) && rec.x < LINE_END_NEAR_M, ...barnEnds),
+        lineEnds(region(onRearDoors, (rec) => rec.x - rearDoorX), (rec) => nearRearDoors(rec) && Math.abs(rec.x - rearDoorX) < LINE_END_NEAR_M, ...barnEnds),
+        lineEnds(region((rec) => barn && onRearDrop(rec) && rec.x <= rearDoorX + SNAP_M, (rec) => rec.y - doorTop), (rec) => barn && onRearDrop(rec) && Math.abs(rec.y - doorTop) < LINE_END_NEAR_M, (rec) => rec.x - rearDoorX),
+      ]
+    : [];
   // A service body's compartment doors.
   const service = body.bed === "service";
   const lockerLines = service
@@ -1032,13 +1095,13 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (detail >= 1) cut(fPillar, 9);
     cut(fWind, ...(frit ? [0, -frit] : [0]));
     if (frit) cut(fritFoot);
-    cut(fRear, ...(frit ? [0, -frit] : [0]));
+    if (!barn) cut(fRear, ...(frit ? [0, -frit] : [0]));
     if (body.glass_roof) cut(fGlassRoof, ...(frit ? [0, -frit] : [0]));
   }
   // The lining's edges (the cabin's length, down to the floor; positive inside
   // it), cut so they run straight: a van's ends at its bulkhead under the roof,
   // in plain sight through the windshield.
-  const liningEnd = body.pillars.cargo_from ? body.pillars.cargo_from + 0.02 : body.bed ? cab.rear_base : shape.hasTrunk ? cab.rear_base + 0.05 : null;
+  const liningEnd = body.pillars.cargo_from ? body.pillars.cargo_from + 0.02 : body.bed ? cab.rear_base - 0.03 : shape.hasTrunk ? cab.rear_base + 0.05 : null;
   const liningEdges = [
     region((rec) => rec.wall, (rec) => rec.zf - (cab.windshield_base + 0.05)),
     region(onLid, (rec) => rec.zq - (cab.windshield_base + 0.04)),
@@ -1054,7 +1117,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     if (body.grille !== "none") cut(fGrille, ...(detail >= 2 ? [0, -0.018] : [0]));
     if (detail >= 1) cut(fIntake, ...(detail >= 3 ? [0, -0.018] : [0]));
     if (body.bed === "tonneau") cut(fTonneau);
-    if (body.bed !== undefined && detail >= 2) cut(fBedGap);
+    if (slot) cut(fBedGap);
     if (detail >= 1) cut(fCowl);
     if (detail >= 2) {
       cut(fDrl, 9);
@@ -1066,6 +1129,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       // A tonneau cover's edge is the bed's line; a shut line beside it left slivers.
       if (body.bed !== "tonneau") line(deckLine);
       for (const fn of lockerLines) line(fn);
+      for (const fn of barnLines) line(fn);
       if (service) cut(fLockerRail);
     }
     if (detail >= 3) {
@@ -1074,7 +1138,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       cut(fFog);
       cut(fPocket, 0, -0.014);
       line(bumperLine);
-      line(gateLine);
+      if (!barn) line(gateLine);
       cut(fHead, -0.014);
       cut(fTail, -0.014);
     }
@@ -1148,7 +1212,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // it, more loosely the further the level is seen from: a crossing a few
   // millimetres from a ring or a column round a tight corner left a sliver
   // turned over.
-  const regionEps = inner || inset > 0 ? REGION_SNAP_M[inner ? "mid" : "far"] : REGION_SNAP_M[levelName];
+  const regionEps = inner ? LINING_SNAP_M : inset > 0 ? REGION_SNAP_M.far : REGION_SNAP_M[levelName];
   const epsOf = (fn) => (lines.includes(fn) ? EPS : regionEps);
   const edgeKey = (i, j) => (i < j ? i * 1e7 + j : j * 1e7 + i);
   const cutAlong = (fn, offset, eps = EPS) => {
@@ -1157,6 +1221,25 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const wallValue = verts.map(read);
     const lidValue = twins.map((twin, id) => (twin ? read(twin) : wallValue[id]));
     if (![...wallValue, ...lidValue].some((x) => x > eps) || ![...wallValue, ...lidValue].some((x) => x < -eps)) return;
+    // In the lining (seen only through the glass, and pressed in along its
+    // normals), an outline crossing an edge within a tenth of its length of
+    // one end goes through that end: the sliver beside it turned over.
+    if (inner) {
+      for (let t = 0; t < tris.length; t += 1) {
+        const value = onLidPatch[t] ? lidValue : wallValue;
+        const tri = tris[t];
+        for (let c = 0; c < 3; c += 1) {
+          const i = tri[c];
+          const j = tri[(c + 1) % 3];
+          const a = value[i];
+          const b = value[j];
+          if (!((a > eps && b < -eps) || (a < -eps && b > eps))) continue;
+          const share = a / (a - b);
+          if (share < LINING_END_SNAP) value[i] = 0;
+          else if (share > 1 - LINING_END_SNAP) value[j] = 0;
+        }
+      }
+    }
     const made = new Map();
     const crossing = (i, j, value) => {
       const key = edgeKey(i, j);
@@ -1284,19 +1367,19 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       // Not down into the wheel arches, where it would show from outside.
       if (rec.wall && archDistance(rec) < archRadius + 0.06) return null;
       if (R(fSide) < 0 && R(fPillar) > 0) return null;
-      if (R(fWind) < 0 || R(fRear) < 0 || R(fGlassRoof) < 0) return null;
+      if (R(fWind) < 0 || (!barn && R(fRear) < 0) || R(fGlassRoof) < 0) return null;
       return { part: rec.wall ? P.cabin : P.headliner };
     }
     if (inset > 0) return { part: P.paint };
     if (detail >= 2 && lines.some((fn) => Math.abs(R(fn)) < gapHalf)) return { part: P.gap, ao: 0.3, groove: detail >= 3 };
-    if (body.bed !== undefined && detail >= 2 && R(fBedGap) < 0) return { part: P.under, ao: 0.3 };
+    if (slot && R(fBedGap) < 0) return null;
     const side = R(fSide);
     if (side < 0) {
       if (detail >= 1 && R(fPillar) < 0) return { part: detail >= 2 ? P.gloss_black : P.trim };
       // Door glass runs in seals, without a frit band.
       return { part: P.glass, glass: true, frit: false, dark: rec.zf > (body.pillars.b ?? L) };
     }
-    for (const [fn, dark] of [[fWind, false], [fRear, true], [fGlassRoof, true]]) {
+    for (const [fn, dark] of barn ? [[fWind, false], [fGlassRoof, true]] : [[fWind, false], [fRear, true], [fGlassRoof, true]]) {
       const f = R(fn);
       if (f < 0) return { part: P.glass, glass: true, frit: frit !== null && (f > -frit || (fn === fWind && R(fritFoot) < 0)), dark };
     }
@@ -1557,6 +1640,60 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       }
     }
   }
+  // The slot between a pickup's cab and its bed: the shell's edges round the
+  // opening turned in BED_SLOT_DEPTH_M along the surface's normal (the cab's
+  // back and the bed's front), and a floor across the bottom.
+  if (slot) {
+    const uses = new Map();
+    for (const { tri } of kept) {
+      for (let c = 0; c < 3; c += 1) {
+        const i = tri[c];
+        const j = tri[(c + 1) % 3];
+        const key = i < j ? i * 1e7 + j : j * 1e7 + i;
+        uses.set(key, (uses.get(key) ?? 0) + 1);
+      }
+    }
+    const across = (id) => {
+      const rec = verts[id];
+      return rec.wall ? rec.zf : (twins[id] ?? rec).zq ?? rec.zq;
+    };
+    const onEdge = (id, at) => Math.abs(across(id) - at) < 2e-3;
+    const front = cab.rear_base;
+    const back = cab.rear_base + BED_GAP_M;
+    // In along the surface's normal, kept square to the car's length so the
+    // cab's back and the bed's front stand flat across it.
+    const sunk = (id) => {
+      const n = vertexNormal(id);
+      return vsub(place(id), vscale(vnorm(v3(n[0], n[1], 0)), BED_SLOT_DEPTH_M));
+    };
+    for (const { tri } of kept) {
+      for (let c = 0; c < 3; c += 1) {
+        const i = tri[c];
+        const j = tri[(c + 1) % 3];
+        if (uses.get(i < j ? i * 1e7 + j : j * 1e7 + i) !== 1) continue;
+        for (const [at, dir] of [[front, 1], [back, -1]]) {
+          if (!onEdge(i, at) || !onEdge(j, at)) continue;
+          // The wall hangs from the shell's edge, wound against the shell
+          // there (written i to j, the shell j to i) so the two meet as one
+          // surface, facing across the slot; the floor faces out of it.
+          const [pi, pj, si, sj] = [place(i), place(j), sunk(i), sunk(j)];
+          const flat = (a, b, c, part, ao) => {
+            const n = vcross(vsub(b, a), vsub(c, a));
+            if (vlen(n) < 1e-12) return;
+            const u = vnorm(n);
+            body3.triangle(a, b, c, [u, u, u], part, ao);
+          };
+          flat(pi, pj, sj, P.paint, [0.55, 0.55, 0.2]);
+          flat(pi, sj, si, P.paint, [0.55, 0.2, 0.2]);
+          if (dir > 0) {
+            const shift = v3(0, 0, BED_GAP_M + 0.01);
+            flat(si, sj, vadd(sj, shift), P.under, [0.2, 0.2, 0.2]);
+            flat(si, vadd(sj, shift), vadd(si, shift), P.under, [0.2, 0.2, 0.2]);
+          }
+        }
+      }
+    }
+  }
   // The wheel arches' lips: the cut edge turned in toward the wheel.
   if (!inner && inset === 0 && detail >= 1) {
     const lipDepth = 0.035;
@@ -1618,6 +1755,32 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     const up = vnorm(vcross(along, n));
     return { p, n, along: vnorm(vcross(n, up)), up };
   };
+  // A frame on the right side at plan zf and height y: on the wall up to its
+  // top, above it on the lid's side (a van's tall cargo side), pressing
+  // included; along toward the rear, up the surface.
+  const lidRecordAtPlan = (x, zf) => {
+    const at = lid(x, zf);
+    return { wall: false, x, y: at.y, zf, zq: at.zq, g: at.g, dist: at.dist, belt: at.belt, zeta: at.zeta, bed: at.bed, k: at.k, inward: at.inward, front: zf < L / 2, e: 0 };
+  };
+  const sideFrame = (zf, y) => {
+    const a = sideStationAt(zf);
+    const top = wall(a, 1);
+    if (y <= top.y) return wallFrame(a, y);
+    // In from the shoulder to where the side reaches y (it rises as x falls).
+    let lo = 0.3 * W;
+    let hi = top.x;
+    for (let i = 0; i < 40; i += 1) {
+      const mid = (lo + hi) / 2;
+      if (lid(mid, zf).y > y) lo = mid;
+      else hi = mid;
+    }
+    const rec = lidRecordAtPlan((lo + hi) / 2, zf);
+    const n = baseNormal(rec);
+    const p = placed(rec, n, pressed(rec));
+    const along0 = vnorm(vsub(v3(0, 0, 1), vscale(n, n[2])));
+    const up = vnorm(vcross(along0, n));
+    return { p, n, along: vnorm(vcross(n, up)), up };
+  };
   // Station a at plan zf along the right side, or at distance w round an end face from its centre line.
   const sideStationAt = (zf) => 1 + clamp((zf - nose.corner) / (L - tail.corner - nose.corner), 0, 1);
   const faceStationAt = (front, w) => {
@@ -1677,7 +1840,7 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       body3.normals[i + 2] = n[2];
     }
   }
-  return { body: body3, glass, shape, lampSpot, truck, drape, sideStationAt, faceStationAt, wallFrame };
+  return { body: body3, glass, shape, lampSpot, truck, drape, sideStationAt, faceStationAt, wallFrame, sideFrame };
 }
 
 // ---------------------------------------------------------------- assembly
@@ -1836,7 +1999,20 @@ function centreFittings(out, name, detail) {
 // body), number plates on both faces, side reflectors on the rear bumper's
 // ends and the third brake light at the top of the rear glass.
 const FUEL_SIDE = Object.freeze({ crossover: 1, suv: -1, sedan: -1, fastback: -1, hatchback: 1, wagon: 1, pickup: -1, utility: 0, van: -1 });
-function placeFittings(name, detail, shell, half, centre, oneSide) {
+// A dark line laid on the surface through frames (p, n, along, up), w wide
+// across `across` ("along" or "up"), standing 1.5 mm off it.
+function surfaceLine(out, frames, across, w, part = P.gap, ao = 0.3) {
+  for (let i = 0; i < frames.length - 1; i += 1) {
+    const [a, b] = [frames[i], frames[i + 1]];
+    const pa = vadd(a.p, vscale(a.n, 0.0015));
+    const pb = vadd(b.p, vscale(b.n, 0.0015));
+    const ua = vscale(a[across], w / 2);
+    const ub = vscale(b[across], w / 2);
+    out.face(vsub(pa, ua), vadd(pa, ua), vadd(pb, ub), a.n, a.n, b.n, part, ao);
+    out.face(vsub(pa, ua), vadd(pb, ub), vsub(pb, ub), a.n, b.n, b.n, part, ao);
+  }
+}
+function placeFittings(name, detail, shell, half, centre, oneSide, rightOnly) {
   const shape = shell.shape;
   const { body, L, axles, archRadius } = shape;
   const cab = body.cabin;
@@ -1845,6 +2021,42 @@ function placeFittings(name, detail, shell, half, centre, oneSide) {
       const a = shell.sideStationAt(seam - 0.2);
       shell.drape(half, doorHandle(detail), a, shape.wall(a, 1).yTop - 0.115);
     }
+  }
+  // A cargo van's sliding door, on the right (kerb) side only: its shut lines
+  // from the sill line up to under the roof, a handle by its front edge and
+  // the track it runs on along the side behind it, at the belt.
+  if (body.doors?.slider === "right" && detail >= 2) {
+    const width = detail >= 3 ? 0.007 : 0.012;
+    const step = detail >= 3 ? 0.04 : 0.12;
+    const from = body.pillars.cargo_from + 0.03;
+    const to = body.pillars.cargo_from + 1.3;
+    const top = cab.roof - 0.17;
+    const sillAt = (zf) => shape.wall(shell.sideStationAt(zf), 0).y + 0.105;
+    const upLine = (zf) => {
+      const y0 = sillAt(zf);
+      const n = Math.max(2, Math.ceil((top - y0) / step));
+      return Array.from({ length: n + 1 }, (_, i) => shell.sideFrame(zf, lerp(y0, top, i / n)));
+    };
+    const alongLine = (yAt, z0, z1) => {
+      const n = Math.max(2, Math.ceil((z1 - z0) / step));
+      return Array.from({ length: n + 1 }, (_, i) => {
+        const zf = lerp(z0, z1, i / n);
+        return shell.sideFrame(zf, yAt(zf));
+      });
+    };
+    surfaceLine(rightOnly, upLine(from), "along", width);
+    surfaceLine(rightOnly, upLine(to), "along", width);
+    surfaceLine(rightOnly, alongLine(() => top, from, to), "up", width);
+    surfaceLine(rightOnly, alongLine(sillAt, from, to), "up", width);
+    const trackY = shape.top(to) - 0.07;
+    surfaceLine(rightOnly, alongLine(() => trackY, to, L - body.tail.corner - 0.12), "up", detail >= 3 ? 0.016 : 0.02, P.trim, 0.5);
+    const a = shell.sideStationAt(from + 0.14);
+    shell.drape(rightOnly, doorHandle(detail), a, shape.wall(a, 1).yTop - 0.115);
+  }
+  // The right rear door's handle beside the split (a van's rear doors).
+  if (body.doors?.rear === "barn" && detail >= 2) {
+    const a = shell.faceStationAt(false, 0.14);
+    shell.drape(rightOnly, doorHandle(detail), a, shape.wall(a, 1).yTop - 0.14, { flipAlong: true });
   }
   if (detail >= 3 && FUEL_SIDE[name] !== 0) {
     // Behind the rear arch where the quarter has room, else over the arch's back; on a van ahead of it.
@@ -1869,7 +2081,7 @@ function placeFittings(name, detail, shell, half, centre, oneSide) {
   for (const front of [true, false]) {
     const a = front ? 0 : 3;
     const top = shape.wall(a, 1);
-    const share = front ? (body.grille === "truck" ? 0.34 : 0.45) : body.bed ? 0.16 : 0.56;
+    const share = front ? (body.grille === "truck" ? 0.34 : 0.45) : body.bed || body.doors?.rear === "barn" ? 0.16 : 0.56;
     shell.drape(centre, numberPlate(detail), a, top.yBottom + share * top.h, { flipAlong: !front });
   }
   if (detail >= 2) {
@@ -1911,9 +2123,10 @@ export function buildCarParts(name, levelName) {
   half.append(shell.body);
   const centre = new CarMesh();
   const oneSide = new CarMesh();
+  const rightOnly = new CarMesh();
   if (!shadow) {
     rightHalfFittings(half, name, detail);
-    placeFittings(name, detail, shell, half, centre, oneSide);
+    placeFittings(name, detail, shell, half, centre, oneSide, rightOnly);
   }
   if (levelName === "hero") {
     // Two projectors in each head lamp's bowl: a bright ring round a dark lens.
@@ -1931,6 +2144,8 @@ export function buildCarParts(name, levelName) {
   // A one-sided fitting (the filler door) is laid on the right; on the left it is mirrored over.
   if (FUEL_SIDE[name] < 0) chassis.append(oneSide, mirrorX, true);
   else chassis.append(oneSide);
+  // Fittings on the right side only, never mirrored (a van's sliding door).
+  chassis.append(rightOnly);
   if (!shadow) centreFittings(chassis, name, detail);
   let result;
   if (levelName === "hero") {
