@@ -29,7 +29,7 @@ import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { CALIPER_ANGLE, CAR_BODIES, bodyShape } from "./lib/street-car-kit.mjs";
+import { BED_GAP_M, CALIPER_ANGLE, CAR_BODIES, bodyShape } from "./lib/street-car-kit.mjs";
 import { CAR_PARTS } from "./lib/street-car-parts.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -57,6 +57,12 @@ const MAX_GAP_WIDTH_M = { hero: 0.0085, other: 0.014 };
 const PIXEL_PER_M = (2 * Math.tan((35 * Math.PI) / 180)) / 2170;
 const FOOTPRINT_M = { hero: 0.4 * PIXEL_PER_M, near: 0.4 * PIXEL_PER_M, far: 43 * PIXEL_PER_M };
 const CRACK_RAYS = 3;
+// How far (degrees) the normal drawn on a body's wall may turn from the
+// modelled surface's own, at the near and hero levels.
+const NORMAL_FOLLOW_DEG = 5;
+// The width (m) of a slot's rim either side of it: where the shell turns in,
+// and where a cab's shoulder rises to a service body's top.
+const SLOT_RIM_M = 0.06;
 // How far (a share of the larger end value) the lid's rise round a corner may run past both its ends.
 const CORNER_PROFILE_PAST = 0.01;
 // Interior parts (seen through the glass, never from outside directly).
@@ -229,7 +235,7 @@ function rayCaster(tris, bounds) {
         }
   });
   // The nearest face along a ray: the grid's cells walked in order (3D DDA).
-  const hit = (origin, dir) => {
+  const hit = (origin, dir, out = null) => {
     let best = Infinity;
     let found = null;
     const seen = new Set();
@@ -260,6 +266,7 @@ function rayCaster(tris, bounds) {
         if (t > 1e-6 && t < best) {
           best = t;
           found = tri;
+          if (out) Object.assign(out, { t, u, v });
         }
       }
       const k = next[0] < next[1] ? (next[0] < next[2] ? 0 : 2) : next[1] < next[2] ? 1 : 2;
@@ -524,6 +531,64 @@ function boundsOf(tris) {
   return { lo, hi };
 }
 
+// The drawn normal follows the modelled surface: over each body's side
+// (bodyShape's wall from the nose corner's end to a third of the way round
+// the tail's corner, the D pillar's foot, from the sill to the foot of the
+// shoulder's roll (86% of the wall's height), the right side; not the end
+// faces with their lamps, the shoulder's roll into the lid, nor the rims of a
+// pickup's slot between cab and bed), a ray straight in
+// along the surface's own normal at each point of a fine grid meets the
+// paint drawn there, and the normal the paint draws at that point (its
+// triangle's corners' blended) turns no more than NORMAL_FOLLOW_DEG from the
+// surface's. Stepped or rippled reflections along a side (the drawn normal
+// jumping between stations where a crease, a cut or a fitting crowds the
+// triangles) and dents the triangles make in a smooth panel fail it. A ray
+// meeting anything else first (a gap, a lamp, glass, a wheel, a fitting
+// standing proud, an arch's opening) is not judged.
+function normalsOffSurface(tris, bodyName) {
+  const shape = bodyShape(bodyName);
+  const hit = rayCaster(tris, boundsOf(tris));
+  const P = (a, f) => {
+    const w = shape.wall(a, f);
+    return [w.x, w.y, w.zf - shape.L / 2];
+  };
+  const faults = { samples: 0, off: 0, worst: 0, where: [] };
+  const A_STEPS = 200;
+  const F_STEPS = 22;
+  const body = CAR_BODIES[bodyName];
+  const slot = body.bed !== undefined ? [body.cabin.rear_base - SLOT_RIM_M, body.cabin.rear_base + BED_GAP_M + SLOT_RIM_M] : null;
+  for (let i = 0; i <= A_STEPS; i += 1) {
+    const a = 1 + (1.15 * i) / A_STEPS;
+    for (let j = 0; j <= F_STEPS; j += 1) {
+      const f = 0.08 + (0.78 * j) / F_STEPS;
+      const p = P(a, f);
+      if (slot && p[2] + shape.L / 2 > slot[0] && p[2] + shape.L / 2 < slot[1]) continue;
+      const c = cross(sub(P(a, f + 1e-3), P(a, f - 1e-3)), sub(P(a + 2e-4, f), P(a - 2e-4, f)));
+      const l = length(c);
+      if (l < 1e-12) continue;
+      const n = c.map((v) => v / l);
+      const out = {};
+      const tri = hit(p.map((v, k) => v + n[k] * 0.03), n.map((v) => -v), out);
+      // Paint on the surface or a chord's sag under it (a few millimetres on a
+      // tight bend), never standing proud of it: a fitting laid on the surface
+      // (a filler door, 0.8 mm and more proud) draws its own bevels.
+      // (And the surface itself, not a face standing across it: an arch's lip
+      // turned in toward the wheel, a fitting's side.)
+      if (!tri || tri.part !== "paint" || out.t < 0.03 - 0.0007 || out.t > 0.03 + 0.006 || dot(tri.face, n) < 0.7 * length(tri.face)) continue;
+      const w = [1 - out.u - out.v, out.u, out.v];
+      const drawn = [0, 1, 2].map((k) => w[0] * tri.n[0][k] + w[1] * tri.n[1][k] + w[2] * tri.n[2][k]);
+      const angle = (Math.acos(Math.max(-1, Math.min(1, dot(drawn, n) / (length(drawn) || 1)))) * 180) / Math.PI;
+      faults.samples += 1;
+      faults.worst = Math.max(faults.worst, angle);
+      if (angle > NORMAL_FOLLOW_DEG) {
+        faults.off += 1;
+        faults.where.push([`normal drawn ${angle.toFixed(1)} deg off the surface's (a ${a.toFixed(3)}, f ${f.toFixed(2)})`, p]);
+      }
+    }
+  }
+  faults.where.sort((p, q) => parseFloat(q[0].slice(13)) - parseFloat(p[0].slice(13)));
+  return faults;
+}
 // The lid's rise from the shoulder (st.slope) round the front (a 0.5 to 1)
 // and rear (a 2 to 2.5) corners of a body's own shape, sampled finely: the
 // furthest it runs past both its end values, as a share of the larger.
@@ -597,6 +662,11 @@ function main() {
       if (s.foldEdges) report(name, "edges whose two faces are wound against each other", s.foldEdges, s.where.filter(([w]) => w.startsWith("wound")));
       if (s.gapFragments) report(name, "broken panel gaps", s.gapFragments, s.where.filter(([w]) => w.startsWith("broken")));
       if (s.gapWedges) report(name, "groove triangles wider than the groove", s.gapWedges, s.where.filter(([w]) => w.startsWith("wedge")));
+      if (rays && !name.endsWith("_lod1")) {
+        const o = normalsOffSurface(tris, body);
+        if (o.off) report(name, `wall points of ${o.samples} whose drawn normal turns more than ${NORMAL_FOLLOW_DEG} deg from the surface's`, o.off, o.where);
+        if (VERBOSE) console.log(`  ${name}: normals follow the surface at ${o.samples} wall points, worst ${o.worst.toFixed(2)} deg`);
+      }
       if (rays) {
         const r = seeThrough(tris, boundsOf(tris), name, FOOTPRINT_M[name.endsWith("_hero") ? "hero" : name.endsWith("_lod1") ? "far" : "near"]);
         if (r.backFirst || r.interiorFirst) report(name, `see-through hits of ${r.rays} rays`, r.backFirst + r.interiorFirst, r.where);

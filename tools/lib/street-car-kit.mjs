@@ -169,15 +169,18 @@ const WHEEL_INSET_M = 0.035;
 const MIRROR_REACH_M = 0.14;
 const NOSE_BOW_M = 0.06;
 const UP_BLEND_M = 0.6;
+// The fastest the lid's rise from the shoulder may change ahead of the windshield (per metre).
+const UP_RATE = 8;
 
 const TAIL_BOW_M = 0.04;
 
 // Detail levels: stations across each end face and round each corner, the
 // station step along the sides, the wall's height fractions and the lid's
-// points from shoulder to centre line.
+// points from shoulder to centre line. (A ring at 0.07, where the roll under
+// the sill and the bumper ends, so no triangle spans its edge.)
 const LEVELS = Object.freeze({
-  hero: { face: 6, corner: 9, step: 0.11, wall: [0, 0.035, 0.09, 0.18, 0.3, 0.42, 0.54, 0.66, 0.77, 0.86, 0.93, 0.97, 1], lid: 12, detail: 3, wheel: "hero" },
-  near: { face: 4, corner: 5, step: 0.19, wall: [0, 0.05, 0.14, 0.3, 0.48, 0.66, 0.82, 0.93, 1], lid: 8, detail: 2, wheel: "near" },
+  hero: { face: 6, corner: 9, step: 0.11, wall: [0, 0.035, 0.07, 0.18, 0.3, 0.42, 0.54, 0.66, 0.77, 0.86, 0.93, 0.97, 1], lid: 12, detail: 3, wheel: "hero" },
+  near: { face: 4, corner: 5, step: 0.19, wall: [0, 0.07, 0.14, 0.3, 0.48, 0.66, 0.82, 0.93, 1], lid: 8, detail: 2, wheel: "near" },
   mid: { face: 3, corner: 3, step: 0.34, wall: [0, 0.08, 0.3, 0.6, 0.88, 1], lid: 6, detail: 1, wheel: "mid" },
   // (The far level's ring at 0.8 runs through the lamps under the shoulder.)
   far: { face: 2, corner: 2, step: 0.7, wall: [0, 0.3, 0.8, 1], lid: 4, detail: 0, wheel: "far" },
@@ -320,7 +323,7 @@ export function bodyShape(name) {
   // glass (the wall rolls a little into the glass plane), 0 along the hood,
   // deck and end faces (it rolls over into the lid); square along a bed.
   const styleAt = (zf, e, front) => {
-    const up = smoothstep(cab.windshield_base - UP_BLEND_M, cab.windshield_base + 0.06, zf);
+    const up = smoothstep(cab.windshield_base - upBlend, cab.windshield_base + 0.06, zf);
     const down = 1 - smoothstep(sideEnd - 0.05, sideEnd + 0.32, zf);
     // Round the rear corner the side glass's style gives way to the tailgate's
     // over nearly all of the corner (over its middle third, the D pillar's
@@ -328,7 +331,8 @@ export function bodyShape(name) {
     const round = front ? 1 : 1 - smoothstep(0.05, 0.98, e);
     const zeta = up * down * round;
     // A pickup's tailgate top is square like its bed rails, so the bed's style carries round onto it.
-    const bed = body.bed ? smoothstep(bedFrom, bedFrom + 0.08, zf) * (front ? round : 1) : 0;
+    // (Within the slot between cab and bed, so neither's drawn wall bends at its edge.)
+    const bed = body.bed ? smoothstep(bedFrom, bedFrom + BED_GAP_M, zf) * (front ? round : 1) : 0;
     // The lid's rise from the shoulder where it is not the side glass: gentle
     // over a hood or a deck, as steep as the hatch behind a body without a
     // trunk. Round the rear corner the lid's profile (the side glass's where
@@ -361,6 +365,15 @@ export function bodyShape(name) {
   const glassInset = Math.max(0.07, cab.tumblehome - 0.045);
   const GLASS_BARREL = 0.25;
   const GLASS_START_SLOPE = glassRise / ((1 - GLASS_BARREL) * glassInset);
+  // How far ahead of the windshield the shoulder turns from the hood's roll to
+  // the side glass's (styleAt's up): long enough that the lid's rise from the
+  // shoulder changes by no more than UP_RATE per metre, so a steep side glass
+  // over a long flat hood (a pickup's) is not turned to within half a metre,
+  // which puckered the fender ahead of the mirror. A body whose hood cannot
+  // hold so long a turn (the van's short nose under near-upright glass) keeps
+  // UP_BLEND_M.
+  const upNeed = (1.5 * (GLASS_START_SLOPE - 0.9)) / UP_RATE;
+  const upBlend = upNeed <= 0.8 * cab.windshield_base ? Math.max(UP_BLEND_M, upNeed) : UP_BLEND_M;
   const glassHeight = (d) => {
     const u = d / glassInset;
     if (u >= 1) return glassRise * (1 + (u - 1) / (1 + GLASS_BARREL));
@@ -422,6 +435,7 @@ export function bodyShape(name) {
     const fade = (front ? Math.max(1, 5 * nose.lean) : Math.max(0.3, 1.5 * tail.lean)) / sideRun;
     return front ? 1 - smoothstep(1, 1 + fade, a) : smoothstep(2 - fade, 2, a);
   };
+  let creaseF = null;
   const wall = (a, f) => {
     const o = outline(a);
     const front = a < 1.5;
@@ -451,8 +465,16 @@ export function bodyShape(name) {
     const leanSlope = (end.lean * es * 1.8) / ((1 - FACE_F) * h);
     const power = clamp((Math.max(0.08, 1 / st.slope - leanSlope) * h * (1 - widest)) / st.dUp, 1.6, 14);
     inward += st.dUp * Math.max(0, (f - widest) / (1 - widest)) ** power;
-    const crease = 1 - 0.17 / h;
-    inward += 0.007 * (1 - e) * (1 - st.bed) * smoothstep(crease - 0.035, crease + 0.035, f);
+    // The side's crease (the shoulder's character line) at one share of the
+    // wall's height all along the car: 17 cm under the shoulder at the side's
+    // middle. (At 17 cm under it everywhere, its share changed with the wall's
+    // height from station to station, and the triangles' rings could not
+    // follow it: the stepped reflections along the sides.)
+    if (creaseF === null) {
+      creaseF = 0;
+      creaseF = 1 - 0.17 / wall(1.5, 1).h;
+    }
+    inward += 0.007 * (1 - e) * (1 - st.bed) * smoothstep(creaseF - CREASE_HALF_F, creaseF + CREASE_HALF_F, f);
     // Along the car at the ends: the face leans back above the bumper line and tucks under below it.
     const lean = f < FACE_F ? 0 : ((f - FACE_F) / (1 - FACE_F)) ** 1.8;
     const under = f < FACE_F ? ((FACE_F - f) / FACE_F) ** 2 : 0;
@@ -561,7 +583,8 @@ export function bodyShape(name) {
     const i = Math.min(ARC_STEPS - 1, Math.floor(s));
     return lerp(arc[i], arc[i + 1], s - i);
   };
-  const shape = { body, L, W, axles, archRadius, top, bottom, roofLine, peakZ, crown, cowl, tailTop, hasTrunk, sideEnd, outline, wall, lid, roofAt, zqAt, rowZf, arcAt, arcTotal: arc[ARC_STEPS], glassInset, FACE_F };
+  wall(1.5, 1);
+  const shape = { body, L, W, axles, archRadius, top, bottom, roofLine, peakZ, crown, cowl, tailTop, hasTrunk, sideEnd, outline, wall, lid, roofAt, zqAt, rowZf, arcAt, arcTotal: arc[ARC_STEPS], glassInset, FACE_F, creaseF };
   shapeCache.set(name, shape);
   return shape;
 }
@@ -585,6 +608,8 @@ const SLIVER_M = 0.003;
 // corners and on the glass; the near level (which the web build draws for
 // every car within 60 m) on the painted panels round the rear corners only,
 // the D pillars.
+// Half the height (a share of the wall's) of the side's crease, a smoothstep.
+const CREASE_HALF_F = 0.035;
 // How far along the side from each corner (in a, the side being 1) refining runs.
 const REFINE_SIDE_A = 0.15;
 const REFINE = Object.freeze({
@@ -612,7 +637,7 @@ const REGION_SNAP_M = Object.freeze({ hero: 1.5e-3, near: 3e-3, mid: 6e-3, far: 
 const TONNEAU_SET_BACK_M = 0.04;
 // The gap between a pickup's cab and its bed or service body, from the cab
 // back's foot (m): it runs across the top and down both sides.
-const BED_GAP_M = 0.05;
+export const BED_GAP_M = 0.05;
 const BED_SLOT_DEPTH_M = 0.06;
 function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   const shape = bodyShape(name);
@@ -712,7 +737,18 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
   }
   const K = stations.length;
-  const wallF = level.wall;
+  // At the near and hero levels three of the wall's rings run along the side's
+  // crease (its middle and its two edges; it sits at one share of the wall's
+  // height, bodyShape's creaseF), and none other within 2.5 cm of its band:
+  // with the crease between two rings, the triangles carried its turn of the
+  // normal over ten centimetres, and wherever a cut (a shut line, an arch's
+  // top) added points inside the band, the reflection jumped (the stepped
+  // highlights along the sides).
+  let wallF = level.wall;
+  if (detail >= 2 && !inner && inset === 0) {
+    const c = shape.creaseF;
+    wallF = [...wallF.filter((f) => Math.abs(f - c) > CREASE_HALF_F + 0.025), c - CREASE_HALF_F, c, c + CREASE_HALF_F].sort((p, q) => p - q);
+  }
   const nW = wallF.length - 1;
   // The lid: rows 0..NR across the car, each a line of constant zq from the
   // shoulder (column 0) to the centre line (column C). Row 0 is the front face's
@@ -884,28 +920,9 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // record sits at (station, ring) of the wall's grid, a lid record at (row,
   // column) of the lid's; the seam between them (the wall's top ring, the
   // lid's column 0 and end rows) is the wall's own top, read from either side.
-  // At the near and hero levels the wall's ring nearest the side's crease
-  // (the shoulder's character line, whose height on the wall changes with the
-  // wall's) runs along the crease at each station, and the rings beside it
-  // follow: crossing the rings, the crease zigzagged through the triangles
-  // and rippled the reflection along the rear quarter.
-  const creaseRing = detail >= 2 && !inner && inset === 0 ? (() => {
-    const mid = wall(1.5, 1);
-    const c0 = 1 - 0.17 / mid.h;
-    let jc = 1;
-    for (let j = 1; j < nW; j += 1) if (Math.abs(wallF[j] - c0) < Math.abs(wallF[jc] - c0)) jc = j;
-    return jc;
-  })() : null;
   const ringF = (a, v) => {
     const j = clamp(Math.floor(v), 0, nW - 1);
-    const f = lerp(wallF[j], wallF[j + 1], v - j);
-    if (creaseRing === null || v <= creaseRing - 1 || v >= creaseRing + 1) return f;
-    // (Only where the crease is: it fades out round the corners, and moved
-    // across an end face the ring cut its lamps into slivers.)
-    const top = wall(a, 1);
-    const want = clamp(1 - 0.17 / top.h, lerp(wallF[creaseRing - 1], wallF[creaseRing], 0.3), lerp(wallF[creaseRing], wallF[creaseRing + 1], 0.7));
-    const c = lerp(wallF[creaseRing], want, 1 - smoothstep(0.5, 0.9, top.e));
-    return v < creaseRing ? lerp(wallF[creaseRing - 1], c, v - (creaseRing - 1)) : lerp(c, wallF[creaseRing + 1], v - creaseRing);
+    return lerp(wallF[j], wallF[j + 1], v - j);
   };
   const record = (kf, v) => {
     const k0 = clamp(Math.floor(kf), 0, K - 2);
@@ -1915,6 +1932,30 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
       const d = vdot(entry.normals[c], nf);
       if (d >= 0 && d < 0.5) entry.normals[c] = vnorm(vadd(entry.normals[c], nf));
     }
+  }
+  // A sliver no taller than SLIVER_M that the welded normals still turn over
+  // (its corners' normals summed facing against it: a cut close by a ring in
+  // a lamp's bowl, where the corners are pressed by different amounts) has its
+  // far corner laid on its long edge, as before the weld: it vanishes.
+  for (const entry of kept) {
+    const pts = entry.tri.map(place);
+    const face = vcross(vsub(pts[2], pts[0]), vsub(pts[1], pts[0]));
+    const sum = vadd(vadd(entry.normals[0], entry.normals[1]), entry.normals[2]);
+    if (vlen(face) < 1e-14 || vdot(face, sum) >= 0) continue;
+    let longest = -1;
+    let at = 0;
+    for (let c = 0; c < 3; c += 1) {
+      const l = vlen(vsub(pts[(c + 1) % 3], pts[c]));
+      if (l > longest) {
+        longest = l;
+        at = c;
+      }
+    }
+    if (vlen(face) / longest > SLIVER_M) continue;
+    const [a, b] = [pts[at], pts[(at + 1) % 3]];
+    const ab = vsub(b, a);
+    const t = clamp(vdot(vsub(pts[(at + 2) % 3], a), ab) / vdot(ab, ab), 0, 1);
+    placeCache.set(entry.tri[(at + 2) % 3], vadd(a, vscale(ab, t)));
   }
   const shade = (rec, kind) => {
     if (kind.ao !== undefined) return kind.ao;
