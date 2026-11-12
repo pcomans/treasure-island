@@ -83,7 +83,7 @@ func build(document: Dictionary) -> Dictionary:
 			prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 			items += 1
 			continue
-		var parts := kit.parts(prop, params if params is Dictionary else {})
+		var parts := kit.parts(prop, params if params is Dictionary else {}, str(row.get("id", "")))
 		if not parts.ok:
 			root.free()
 			return {"ok": false, "code": "street_clutter_prop", "message": "%s: %s" % [row.get("id", "?"), parts.message], "source_keys": []}

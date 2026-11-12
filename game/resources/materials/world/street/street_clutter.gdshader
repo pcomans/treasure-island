@@ -10,15 +10,18 @@ shader_type spatial;
 // palette column) and style (g: bit 0-1 finish, bit 2 black roof, bit 3 dark
 // rims) and carries its suspension twist (b, metres): the front-left and
 // rear-right wheels rise by it, the other two drop by it, so all four tyres
-// stand on uneven ground. A dumpster takes the instance paint the same way,
-// with finish 3: matte, weathered painted steel; a nonzero a picks its own
-// palette column for the roof part (a dumpster's lids).
+// stand on uneven ground, and how dirty it is (a, 0 just washed to 1 filthy).
+// A dumpster takes the instance paint the same way, with finish 3: matte,
+// weathered painted steel; there a nonzero a picks its own palette column for
+// the roof part (a dumpster's lids).
 //
 // Car paint is a base coat under a clear coat: the clear coat keeps the smooth
 // surface normal while the base coat's normal is tilted flake by flake on the
 // metallic and pearl finishes (sparkle up close, fading out with distance), a
 // pearl also shifting hue toward grazing angles. Road dust lies on the lower
-// body. Nothing here depends on where the sun is.
+// body; a dirtier car has more of it and higher, a film of it on its hood,
+// roof and trunk, grime streaking down its sides and brake dust on its rims,
+// all from the car's own frame. Nothing here depends on where the sun is.
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -58,14 +61,20 @@ varying flat int part;
 varying flat float paint_u;
 varying flat float roof_u;
 varying flat int style;
+varying flat float dirt;
 varying vec3 local_position;
+varying vec3 local_normal;
 
 void vertex() {
 	part = clamp(int(UV.x * 32.0), 0, 31);
 	paint_u = INSTANCE_CUSTOM.r;
-	roof_u = INSTANCE_CUSTOM.a;
 	style = int(INSTANCE_CUSTOM.g * 16.0);
+	// a: a matte instance's lid paint, a car's dirt.
+	bool matte = (style & 3) == 3;
+	roof_u = matte ? INSTANCE_CUSTOM.a : 0.0;
+	dirt = matte ? 0.0 : clamp(INSTANCE_CUSTOM.a, 0.0, 1.0);
 	local_position = VERTEX;
+	local_normal = NORMAL;
 	// Tyre, rim and hub: the wheel follows the ground (front is -Z, right +X).
 	if (part >= P_TIRE && part <= P_HUB) {
 		VERTEX.y += INSTANCE_CUSTOM.b * sign(VERTEX.x) * sign(VERTEX.z);
@@ -152,14 +161,35 @@ void fragment() {
 		roughness = 0.42;
 	}
 	if ((painted && finish != 3) || p == P_TRIM || (p == P_ROOF && black_roof)) {
-		// Road dust on a car's lower body, thicker low down and in patches.
-		float low = 1.0 - smoothstep(0.1, 0.62, local_position.y);
+		// Road dust on a car's lower body, thicker low down and in patches,
+		// reaching higher on a dirtier car.
+		float low = 1.0 - smoothstep(0.1, mix(0.5, 0.95, dirt), local_position.y);
 		float patches = value_noise(local_position * vec3(7.0, 3.0, 7.0)) * 0.6 + value_noise(local_position * 31.0) * 0.4;
-		float dust = low * low * (0.3 + 0.7 * patches) * 0.6;
+		float dust = low * low * (0.3 + 0.7 * patches) * mix(0.35, 0.95, dirt);
+		vec3 n = normalize(local_normal);
+		// A film of it on what faces up (the car's own up), on a dirty car.
+		float up = smoothstep(0.55, 0.9, n.y);
+		dust = max(dust, up * dirt * dirt * (0.3 + 0.7 * patches) * 0.65);
+		// Grime streaking down the sides and the back: fine across, long down.
+		float streaks = value_noise(vec3(local_position.x * 13.0, local_position.y * 0.9, local_position.z * 13.0));
+		float upright = 1.0 - smoothstep(0.35, 0.7, abs(n.y));
+		float grime = upright * dirt * smoothstep(0.45, 0.85, streaks) * (0.35 + 0.65 * patches) * 0.55;
 		albedo = mix(albedo, vec3(0.3, 0.27, 0.23), dust * 0.75);
-		roughness = mix(roughness, 0.9, dust);
-		metallic *= 1.0 - dust;
-		clearcoat *= 1.0 - dust;
+		albedo = mix(albedo, vec3(0.2, 0.18, 0.15), grime);
+		float dull = max(dust, grime);
+		roughness = mix(roughness, 0.9, dull);
+		metallic *= 1.0 - dull;
+		clearcoat *= 1.0 - dull;
+	}
+	if ((p == P_RIM || p == P_HUB) && dirt > 0.0) {
+		// Brake dust: rims darken and dull as a car goes unwashed.
+		albedo *= 1.0 - 0.45 * dirt;
+		roughness = mix(roughness, 0.75, dirt * 0.6);
+		metallic *= 1.0 - 0.4 * dirt;
+	}
+	if (p == P_TIRE && dirt > 0.0) {
+		// Dried road dust on the sidewalls.
+		albedo = mix(albedo, vec3(0.3, 0.27, 0.23) * 0.6, dirt * 0.35);
 	}
 	if (p == P_GRILLE) {
 		// Slats across a grille or an intake.

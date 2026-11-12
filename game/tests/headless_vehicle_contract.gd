@@ -3,9 +3,11 @@ extends SceneTree
 ## (run with --headless and --fixed-fps 60). The places come from
 ## game/tests/shared/vehicle_cases.json. Cases, in order; the first failure
 ## stops the run (later cases need the earlier ones):
-##   1. enter and exit with F: with the game paused F beside a parked car does
-##      nothing; unpaused, the stock player presses F
-##      and drives it (avatar hidden, capsule off, the parked box gone), the view
+##   1. enter and exit with F: the parked cars differ in how dirty they are
+##      (some just washed, some filthy); with the game paused F beside a parked
+##      car does nothing; unpaused, the stock player presses F
+##      and drives it (avatar hidden, capsule off, the parked box gone, and it
+##      looks as it did parked: paint, finish and dirt), the view
 ##      blending from the on-foot camera to the chase camera, which sees as far
 ##      (the distant horizon); F again stands the
 ##      player on the ground beside it, walking as before, the view blending
@@ -142,6 +144,22 @@ func _case_enter_exit() -> bool:
 	if not _require(not entry.is_empty() and str(entry.prop) == "parked_car", "Fixture car %s is not a swappable parked car." % id):
 		return false
 	var parked: Transform3D = entry.transform
+	# Cars differ in how dirty they are (by their row ids): some just washed,
+	# some filthy, the same car always the same.
+	var cars := 0
+	var clean := 0
+	var filthy := 0
+	for other: String in _vehicles.swappable_ids():
+		var other_entry: Dictionary = _vehicles.row(other)
+		if str(other_entry.get("prop", "")) != "parked_car":
+			continue
+		var dirt := (other_entry.custom as Color).a
+		cars += 1
+		clean += 1 if dirt < 0.2 else 0
+		filthy += 1 if dirt > 0.5 else 0
+	print("DIRT %d parked cars: %d nearly clean, %d dirty" % [cars, clean, filthy])
+	if not _require(cars > 20 and clean >= cars / 5 and filthy >= cars / 7, "Parked cars should differ in how dirty they are (%d cars, %d nearly clean, %d dirty)." % [cars, clean, filthy]):
+		return false
 	# The stock player 1.6 m off the driver's (left) door, walking.
 	var door := parked.origin - parked.basis.x * 1.6
 	if not await _stand_player(Vector2(door.x, door.z)) or not await _avatar_with_player("before getting in"):
@@ -165,6 +183,12 @@ func _case_enter_exit() -> bool:
 	or not _require(_player.is_driving() and not (_player.get_node("AvatarPivot") as Node3D).visible and (_player.get_node("CollisionShape3D") as CollisionShape3D).disabled, "Driving, the avatar must hide and the capsule stop colliding.") \
 	or not _require(shape.disabled, "The parked box must be gone once the live car stands in for it.") \
 	or not _require(not _player.is_processing_unhandled_input(), "The stock controller must stop while driving."):
+		return false
+	# It looks as it did parked: paint, finish, roof, rims and dirt (its twist
+	# aside, which its suspension takes up now).
+	var parked_look: Variant = _parked_custom(entry)
+	var driven_look := (car.get_node("Visual/Chassis") as MultiMeshInstance3D).multimesh.get_instance_custom_data(0)
+	if not _require(parked_look is Color and is_equal_approx((parked_look as Color).r, driven_look.r) and is_equal_approx((parked_look as Color).g, driven_look.g) and is_equal_approx((parked_look as Color).a, driven_look.a), "The driven car must look as it did parked (parked %s, driven %s)." % [parked_look, driven_look]):
 		return false
 	# The view starts where the on-foot camera was and ends behind the car.
 	var rig := _vehicles.driving_camera()
@@ -1873,6 +1897,16 @@ func _release_driving() -> void:
 func _release() -> void:
 	for action: String in VEHICLE_ACTIONS:
 		Input.action_release(action)
+
+
+## The parked car's instance custom data (its look) in the clutter's MultiMesh, or null.
+func _parked_custom(entry: Dictionary) -> Variant:
+	var clutter := _world.street_detail_layer("clutter").get_node_or_null("GeneratedStreetClutter")
+	if clutter == null or (entry.instances as Array).is_empty():
+		return null
+	var ref: Array = entry.instances[0]
+	var instance := clutter.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
+	return instance.multimesh.get_instance_custom_data(int(ref[1])) if instance != null else null
 
 
 func _parked_shape(entry: Dictionary) -> CollisionShape3D:

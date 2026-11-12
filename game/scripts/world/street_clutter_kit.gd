@@ -167,10 +167,22 @@ static func hero_level_enabled() -> bool:
 	return not OS.has_feature("web") and ResourceLoader.exists(HERO_KIT_PATH)
 
 
-## A parked car's instance custom data (paint, style, suspension twist) from its
-## row params: {ok, custom} or {ok: false, message}. A drivable car takes the
-## same paint with no twist (its suspension takes up the ground).
-static func car_custom(params: Dictionary, twist_override: Variant = null) -> Dictionary:
+## How dirty a car is, 0 (just washed) to 1 (filthy), from its row's id: so a
+## car looks the same wherever it is drawn, at every level and when it is
+## driven. Most cars are fairly clean, a few filthy (the square of an even
+## spread).
+static func car_dirt(row_id: String) -> float:
+	if row_id == "":
+		return 0.0
+	var u := float(row_id.hash() & 0xFFFF) / 65535.0
+	return u * u
+
+
+## A parked car's instance custom data (paint, style, suspension twist, dirt)
+## from its row params and id: {ok, custom} or {ok: false, message}. A drivable
+## car takes the same with no twist (its suspension takes up the ground). An
+## optional params.dirt (0 to 1) stands in for the id's (a gallery's own levels).
+static func car_custom(params: Dictionary, twist_override: Variant = null, row_id := "") -> Dictionary:
 	var body := str(params.get("body", ""))
 	var paint := str(params.get("paint", ""))
 	var finish := FINISHES.find(str(params.get("finish", "")))
@@ -184,8 +196,11 @@ static func car_custom(params: Dictionary, twist_override: Variant = null) -> Di
 	var twist: Variant = params.get("twist", 0.0) if twist_override == null else twist_override
 	if not (twist is float or twist is int) or absf(float(twist)) > MAX_TWIST_M:
 		return {"ok": false, "message": "parked_car twist must be a number within %.2f m: %s" % [MAX_TWIST_M, params]}
+	var dirt: Variant = params.get("dirt", car_dirt(row_id))
+	if not (dirt is float or dirt is int) or float(dirt) < 0.0 or float(dirt) > 1.0:
+		return {"ok": false, "message": "parked_car dirt must be a number from 0 to 1: %s" % [params]}
 	var paint_index := paint_names().find(paint)
-	return {"ok": true, "custom": Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), 0.0)}
+	return {"ok": true, "custom": Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), float(dirt))}
 
 
 ## The parts of a body that a drivable car draws (tools/lib/street-car-kit.mjs
@@ -371,14 +386,14 @@ func preview(prop: String, params: Dictionary, level: String, placement: Transfo
 ## shape, shape_transform, range_m, shadow, and for a car shadow_mesh: what
 ## casts its shadow while the near mesh draws, and shapes: [{shape,
 ## transform}] its collision pieces, which stand in for the box shape} or
-## {ok: false, message}.
-func parts(prop: String, params: Dictionary) -> Dictionary:
+## {ok: false, message}. row_id: the placed row's id (a car's dirt).
+func parts(prop: String, params: Dictionary, row_id := "") -> Dictionary:
 	if not PROPS.has(prop):
 		return {"ok": false, "message": "unknown street-clutter prop %s" % prop}
 	var result := {"ok": true, "range_m": float(PROPS[prop].range_m), "shadow": bool(PROPS[prop].shadow), "custom": Color(0, 0, 0, 0)}
 	var base := ""
 	if prop == "parked_car":
-		var car := car_custom(params)
+		var car := car_custom(params, null, row_id)
 		if not car.ok:
 			return car
 		base = "car_%s" % params.body

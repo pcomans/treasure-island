@@ -1,5 +1,5 @@
 {
- "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's and the white utility's left side; the owner's white truck is the utility). Paint and clay looks; the clay sun rakes across each view. Driven cars (the hero level with the driver at the wheel) at z 160, seen through the side glass and the windshield.",
+ "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's and the white utility's left side; the owner's white truck is the utility). Paint and clay looks; the clay sun rakes across each view. Driven cars (the hero level with the driver at the wheel) at z 160, seen through the side glass and the windshield. The dirt rows (z 240 hero, z 280 near): the same navy crossover just washed, a little, quite and very dirty (params.dirt 0, 0.35, 0.7, 1; the world's cars take theirs from their row ids), and a filthy white pickup; --only dirt shoots just those.",
  "looks": [
   "paint",
   "clay"
@@ -442,6 +442,141 @@
     160.0
    ],
    "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.0
+   },
+   "level": "hero",
+   "xz": [
+    -36.0,
+    240.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.0
+   },
+   "level": "lod0",
+   "xz": [
+    -36.0,
+    280.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.35
+   },
+   "level": "hero",
+   "xz": [
+    -12.0,
+    240.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.35
+   },
+   "level": "lod0",
+   "xz": [
+    -12.0,
+    280.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.7
+   },
+   "level": "hero",
+   "xz": [
+    12.0,
+    240.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 0.7
+   },
+   "level": "lod0",
+   "xz": [
+    12.0,
+    280.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 1.0
+   },
+   "level": "hero",
+   "xz": [
+    36.0,
+    240.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "navy",
+    "finish": "metallic",
+    "dirt": 1.0
+   },
+   "level": "lod0",
+   "xz": [
+    36.0,
+    280.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "white",
+    "finish": "solid",
+    "dirt": 1.0
+   },
+   "level": "hero",
+   "xz": [
+    60.0,
+    240.0
+   ],
+   "yaw_deg": 0
   }
  ],
  "views": [
@@ -752,6 +887,202 @@
     159.7
    ],
    "fov": 40
+  },
+  {
+   "name": "dirt-000-hero-front",
+   "camera_xyz": [
+    -39.8,
+    1.6,
+    235.4
+   ],
+   "target_xyz": [
+    -36.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-000-lod0-front",
+   "camera_xyz": [
+    -39.8,
+    1.6,
+    275.4
+   ],
+   "target_xyz": [
+    -36.0,
+    0.8,
+    280.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-000-hero-rear",
+   "camera_xyz": [
+    -32.2,
+    1.6,
+    244.6
+   ],
+   "target_xyz": [
+    -36.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-035-hero-front",
+   "camera_xyz": [
+    -15.8,
+    1.6,
+    235.4
+   ],
+   "target_xyz": [
+    -12.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-035-lod0-front",
+   "camera_xyz": [
+    -15.8,
+    1.6,
+    275.4
+   ],
+   "target_xyz": [
+    -12.0,
+    0.8,
+    280.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-035-hero-rear",
+   "camera_xyz": [
+    -8.2,
+    1.6,
+    244.6
+   ],
+   "target_xyz": [
+    -12.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-070-hero-front",
+   "camera_xyz": [
+    8.2,
+    1.6,
+    235.4
+   ],
+   "target_xyz": [
+    12.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-070-lod0-front",
+   "camera_xyz": [
+    8.2,
+    1.6,
+    275.4
+   ],
+   "target_xyz": [
+    12.0,
+    0.8,
+    280.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-070-hero-rear",
+   "camera_xyz": [
+    15.8,
+    1.6,
+    244.6
+   ],
+   "target_xyz": [
+    12.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-100-hero-front",
+   "camera_xyz": [
+    32.2,
+    1.6,
+    235.4
+   ],
+   "target_xyz": [
+    36.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-100-lod0-front",
+   "camera_xyz": [
+    32.2,
+    1.6,
+    275.4
+   ],
+   "target_xyz": [
+    36.0,
+    0.8,
+    280.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-100-hero-rear",
+   "camera_xyz": [
+    39.8,
+    1.6,
+    244.6
+   ],
+   "target_xyz": [
+    36.0,
+    0.8,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-100-white-pickup-front",
+   "camera_xyz": [
+    55.6,
+    1.7,
+    234.6
+   ],
+   "target_xyz": [
+    60.0,
+    0.9,
+    240.0
+   ],
+   "fov": 50
+  },
+  {
+   "name": "dirt-100-white-pickup-rear",
+   "camera_xyz": [
+    64.4,
+    1.7,
+    245.4
+   ],
+   "target_xyz": [
+    60.0,
+    0.9,
+    240.0
+   ],
+   "fov": 50
   }
  ],
  "rings": [

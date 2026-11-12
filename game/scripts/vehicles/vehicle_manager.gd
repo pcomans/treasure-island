@@ -460,7 +460,7 @@ func _make_live(id: String) -> Node3D:
 func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	var params: Dictionary = entry.params
 	var parts := _kit.drivable(str(params.get("body", "")))
-	var custom := KIT.car_custom(params, 0.0)
+	var custom := KIT.car_custom(params, 0.0, id)
 	if not parts.ok or not custom.ok:
 		push_warning("Vehicle %s: %s" % [id, parts.get("message", custom.get("message", ""))])
 		return null
