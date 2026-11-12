@@ -1,17 +1,20 @@
 extends SceneTree
 ## The sun's shadow quality on the pause menu's Options screen (owner, 2026-11-12:
 ## "make shadow quality configurable in-game ... sort of an options item"),
-## headless. Each check makes main.tscn and frees it within a few frames, long
-## before its world finishes loading, on failure too (the pause and Resume in the
-## loaded game are headless_gameplay_contract.gd's):
-##   - the default is the game as it was: with no saved choice, main puts on Medium,
-##     whose sun settings are main.tscn's Sun's and whose shadow map and filter are
-##     project.godot's (the engine's own);
+## headless. Each check makes main.tscn and frees it when the check ends, on failure
+## too. The first lives a few frames, through the options-screen checks, and its
+## world finishes loading meanwhile (the run prints WORLD_READY and PLAY_READY);
+## each later one is made and freed with no frame between, before its world starts
+## loading. The pause and Resume in the loaded game are headless_gameplay_contract.gd's.
+##   - the default: with no saved choice, main puts on Medium, whose sun settings are
+##     main.tscn's Sun's and whose shadow map and filter are project.godot's (the
+##     engine's own);
 ##   - each level puts on exactly the settings it claims (ShadowQuality.settings_of):
 ##     the sun's shadow settings, and the shadow map and filter it hands the engine
 ##     (recorded by a stand-in); Off has no sun shadows; Low keeps Medium's map and
-##     filter over fewer splits and a shorter range; High has a bigger map, a finer
-##     filter and a nearer first split, over Medium's split count and reach;
+##     filter over fewer splits and a shorter range; High has a bigger map and a
+##     finer filter, its nearest split no deeper than Medium's, over Medium's split
+##     count and reach;
 ##   - the pause menu's Options, between Controls and Credits, opens the options
 ##     screen in its place with the level on pressed and focused; Right then Enter
 ##     choose the next level, which goes on at once; the level in use, and only it,
@@ -21,8 +24,8 @@ extends SceneTree
 ##     chosen again replaces it, and an unknown saved level, a missing file or a
 ##     file that can't be written fall back quietly;
 ##   - the shared capture harness's main.use_saved_settings = false gets the default,
-##     and a test driver that leaves saved settings on with the player's settings
-##     file is caught (GameMain.saved_settings_problem: its run logs an error);
+##     and a test or capture driver that would read or write the player's settings
+##     file is caught (GameMain.player_settings_problem: its run logs an error);
 ##   - the web's one level (Off) leaves the pause menu without Options.
 ## Uses its own settings file, removed at the end. The first failure stops the run.
 
@@ -135,14 +138,14 @@ func _run() -> void:
 	if not _require(main.shadows.current == ShadowQuality.default_id(), "With use_saved_settings off the game must put on the default, not the kept %s." % main.shadows.current):
 		return _finish()
 	_free_main()
-	# A test driver that leaves saved settings on is caught unless it brought a
-	# settings file of its own (this check runs main.gd's own rule, not main).
+	# A test or capture driver (this run) that would read or write the player's
+	# settings file is caught, unless it brought a file of its own: main.gd's own
+	# rule, run here without main, as main would report it with an error.
 	ShadowQuality.settings_path = ShadowQuality.DEFAULT_SETTINGS_PATH
-	var caught := GameMain.saved_settings_problem(true, self)
-	var off_ok := GameMain.saved_settings_problem(false, self)
+	var caught := GameMain.player_settings_problem(self, "chose a shadow level, writing")
 	ShadowQuality.settings_path = _settings_file
-	var own_file_ok := GameMain.saved_settings_problem(true, self)
-	if not _require(not caught.is_empty() and off_ok.is_empty() and own_file_ok.is_empty(), "A test driver with saved settings on and the player's file must be caught, and one with them off or its own file let be (caught \"%s\", off \"%s\", own file \"%s\")." % [caught, off_ok, own_file_ok]):
+	var own_file_ok := GameMain.player_settings_problem(self, "chose a shadow level, writing")
+	if not _require(not caught.is_empty() and own_file_ok.is_empty(), "A driver using the player's settings file must be caught, and one with its own file let be (caught \"%s\", own file \"%s\")." % [caught, own_file_ok]):
 		return _finish()
 	# The web's levels (Off alone) leave the pause menu without Options.
 	var web_hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
@@ -165,7 +168,7 @@ func _run() -> void:
 	ShadowQuality.settings_path = _settings_file
 	if not _require([unknown, missing, unwritten] == [ShadowQuality.default_id(), ShadowQuality.default_id(), ShadowQuality.default_id()], "An unknown kept level, a missing file and an unwritable one must all give the default, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the game as it was); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a test driver left on the player's settings is caught; the web's Off alone leaves no Options; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; the web's Off alone leaves no Options; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
 	_finish()
 
 
@@ -195,7 +198,7 @@ func _shows_only(hud: GameHUD, id: String, when: String) -> bool:
 		if button.button_pressed:
 			pressed.append(button.name)
 	var marker := (hud.shadow_levels.get_node(id) as Button).get_theme_stylebox("pressed") as StyleBoxFlat
-	return _require(pressed == PackedStringArray([id]) and marker != null and marker.bg_color == GameHUD.CONTROLS_HEADING_COLOR and hud.shadow_note.text == str(hud.shadow_levels.get_node(id).get_meta("note")), "%s the options screen must show %s alone pressed, in the headings' blue, with its note (pressed: %s)." % [when.capitalize(), id, pressed])
+	return _require(pressed == PackedStringArray([id]) and marker != null and marker.bg_color == GameHUD.CONTROLS_HEADING_COLOR and hud.shadow_note.text == str(hud.shadow_levels.get_node(id).get_meta("note")), "The options screen must show %s alone pressed, in the headings' blue, with its note, %s (pressed: %s)." % [id, when, pressed])
 
 
 ## main.tscn's Sun as the scene has it, outside the tree.
@@ -237,7 +240,7 @@ func _check_levels() -> bool:
 		ids[level.id] = level
 	var own := (ids.medium as Dictionary).keys().filter(func(key: String) -> bool: return not key in ["id", "name", "note", "web"])
 	var web := ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web).map(func(level: Dictionary) -> String: return level.id)
-	if not _require(own.is_empty(), "Medium must set nothing of its own (it is the game as it was), but sets %s." % [own]) \
+	if not _require(own.is_empty(), "Medium must set nothing of its own (it is main.tscn's Sun with project.godot's map and filter), but sets %s." % [own]) \
 	or not _require(ShadowQuality.default_id() == "medium" and ShadowQuality.offered().size() == ShadowQuality.LEVELS.size(), "On desktop the default must be Medium, with every level offered.") \
 	or not _require(web == ["off"], "The web must offer Off, its default, alone (its Compatibility renderer brightened sunlit surfaces with sun shadows on), not %s." % [web]):
 		return false
@@ -248,8 +251,11 @@ func _check_levels() -> bool:
 	var medium := levels.settings_of("medium")
 	var high := levels.settings_of("high")
 	sun.free()
-	if not _require(high.enabled and int(high.atlas) > int(medium.atlas) and int(high.filter) > int(medium.filter) and float((high.splits as Array)[0]) < float((medium.splits as Array)[0]) \
-			and int(high.mode) == int(medium.mode) and is_equal_approx(float(high.max_distance), float(medium.max_distance)), "High must be finer than Medium near the player: a bigger shadow map, a finer filter and a nearer first split, with Medium's split count and reach."):
+	# The scene's split comes back as a 32-bit float (0.02 reads 0.0199999...).
+	var high_first := float((high.splits as Array)[0])
+	var medium_first := float((medium.splits as Array)[0])
+	if not _require(high.enabled and int(high.atlas) > int(medium.atlas) and int(high.filter) > int(medium.filter) and (high_first < medium_first or is_equal_approx(high_first, medium_first)) \
+			and int(high.mode) == int(medium.mode) and is_equal_approx(float(high.max_distance), float(medium.max_distance)), "High must be finer than Medium: a bigger shadow map and a finer filter, its nearest split no deeper than Medium's, with Medium's split count and reach (High's nearest split %s, Medium's %s)." % [high_first, medium_first]):
 		return false
 	return _require(not off.enabled, "Off must turn the sun's shadows off.") \
 		and _require(low.enabled and int(low.atlas) == int(medium.atlas) and int(low.filter) == int(medium.filter) and int(low.mode) < int(medium.mode) and float(low.max_distance) < float(medium.max_distance), "Low must draw Medium's own map and filter (a smaller map and the cheapest filter striped and crawled), and be lighter by fewer splits over a shorter range.")
