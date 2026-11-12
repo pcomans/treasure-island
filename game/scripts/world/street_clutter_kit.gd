@@ -24,6 +24,7 @@ extends RefCounted
 const KIT_SCENE := preload("res://game/resources/models/street/street_clutter_kit.glb")
 const SHADER := preload("res://game/resources/materials/world/street/street_clutter.gdshader")
 const GLASS_SHADER := preload("res://game/resources/materials/world/street/street_car_glass.gdshader")
+const CAR_DRIVER := preload("res://game/scripts/vehicles/car_driver.gd")
 ## Loaded only where the hero level draws (never preloaded: the web pack has no such file).
 const HERO_KIT_PATH := "res://game/resources/models/street/street_car_hero_kit.glb"
 
@@ -153,9 +154,10 @@ func _read_scene(packed: PackedScene) -> void:
 	var scene := packed.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh
-	for node: Node in scene.find_children("car_*_axle_*", "Node3D", true, false):
-		if not node is MeshInstance3D:
-			_markers[str(node.name)] = (node as Node3D).position
+	for pattern: String in ["car_*_axle_*", "car_*_driver_*"]:
+		for node: Node in scene.find_children(pattern, "Node3D", true, false):
+			if not node is MeshInstance3D:
+				_markers[str(node.name)] = (node as Node3D).position
 	scene.free()
 
 
@@ -257,6 +259,10 @@ func hero(body: String) -> Dictionary:
 		if packed != null:
 			_read_scene(packed)
 	var found := {"ok": true, "front": _markers.get("car_%s_axle_front" % body), "rear": _markers.get("car_%s_axle_rear" % body)}
+	# Where a driver sits and holds the wheel (car_driver.gd), where the kit marks it.
+	for marker: String in ["seat", "hand_left", "hand_right"]:
+		if _markers.has("car_%s_driver_%s" % [body, marker]):
+			found["driver_" + marker] = _markers["car_%s_driver_%s" % [body, marker]]
 	for piece: String in ["body", "glass", "tyre", "brake"]:
 		var mesh: Variant = _meshes.get("car_%s_hero_%s" % [body, piece], null)
 		if not mesh is Mesh:
@@ -316,12 +322,17 @@ func hero_visual(body: String, custom: Color, twist: float = 0.0) -> Node3D:
 	root.add_child(instance_node("Glass", found.glass, one, plain, _glass_material, off))
 	root.add_child(instance_node("Wheels", found.tyre, wheel_transforms(found.front, found.rear, twist), plain, _wheel_material, off))
 	root.add_child(instance_node("Brakes", found.brake, wheel_transforms(found.front, found.rear, twist, 2.0 * CALIPER_ANGLE - PI), plain, _material, off))
+	# Where a driver goes (the driven car seats car_driver.gd's figure there).
+	for marker: String in ["driver_seat", "driver_hand_left", "driver_hand_right"]:
+		if found.has(marker):
+			root.set_meta(marker, found[marker])
 	return root
 
 
 ## What the world draws for one item at a detail level ("hero", "lod0", "lod1",
-## or "shadow" for a car's shadow caster drawn as itself), at any distance, at
-## placement: for the kit gallery (game/tests/shared/kit_gallery.gd).
+## "shadow" for a car's shadow caster drawn as itself, or "driven": the hero
+## level with its driver at the wheel), at any distance, at placement: for the
+## kit gallery (game/tests/shared/kit_gallery.gd).
 func preview(prop: String, params: Dictionary, level: String, placement: Transform3D) -> Node3D:
 	var built := parts(prop, params)
 	if not built.ok:
@@ -337,8 +348,11 @@ func preview(prop: String, params: Dictionary, level: String, placement: Transfo
 	if level == "shadow" and caster is Mesh:
 		root.add_child(instance_node("Shadow", caster, one, custom, _material, on))
 		return root
-	if level == "hero" and prop == "parked_car":
+	if level in ["hero", "driven"] and prop == "parked_car":
 		var visual := hero_visual(str(params.body), custom, float(params.get("twist", 0.0)))
+		if visual != null and level == "driven" and visual.has_meta("driver_seat"):
+			# A driven car: its driver at the wheel.
+			visual.add_child(CAR_DRIVER.build(visual.get_meta("driver_seat"), visual.get_meta("driver_hand_left"), visual.get_meta("driver_hand_right")))
 		if visual != null:
 			root.add_child(visual)
 			root.add_child(instance_node("Shadow", caster, one, custom, _material, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))

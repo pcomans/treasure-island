@@ -2,7 +2,9 @@
 // Writes the cars' hero level (tools/lib/street-car-kit.mjs carHeroKitMeshes)
 // as one binary glTF: game/resources/models/street/street_car_hero_kit.glb,
 // four meshes per body (car_<body>_hero_body, _hero_glass, _hero_tyre,
-// _hero_brake), positions, normals and the part/occlusion UVs, no materials.
+// _hero_brake), positions, normals and the part/occlusion UVs, no materials,
+// and three empty nodes where a driver sits and holds the wheel
+// (car_<body>_driver_seat, _driver_hand_left, _driver_hand_right).
 // The desktop builds ship it; the web export leaves it out (export_presets.cfg)
 // and draws the near level instead (street_clutter_kit.gd hero_level_enabled).
 // The output is deterministic; rerun after changing the car kit and commit both.
@@ -28,8 +30,9 @@ function main() {
   const target = resolve(projectRoot, STREET_CAR_HERO_KIT_PATH);
   mkdirSync(dirname(target), { recursive: true });
   writeFileSync(target, glb);
-  const triangles = meshes.reduce((sum, mesh) => sum + mesh.indices.length / 3, 0);
-  console.log(`wrote ${STREET_CAR_HERO_KIT_PATH} (${glb.length} bytes, ${meshes.length} meshes, ${triangles} triangles)`);
+  const drawn = meshes.filter((mesh) => !mesh.marker);
+  const triangles = drawn.reduce((sum, mesh) => sum + mesh.indices.length / 3, 0);
+  console.log(`wrote ${STREET_CAR_HERO_KIT_PATH} (${glb.length} bytes, ${drawn.length} meshes, ${meshes.length - drawn.length} markers, ${triangles} triangles)`);
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main();

@@ -1,5 +1,5 @@
 {
- "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's and the white utility's left side; the owner's white truck is the utility). Paint and clay looks; the clay sun rakes across each view.",
+ "notes": "Every car body at the hero and near levels, each alone (hero at z 0, near at z 80, 40 m apart along x), shot from a ring of close cameras: eye height round the car, four from above the roof, two low at the rear quarters; and three hero views posed like the owner's Mac screenshots of 2026-11-11 (grey pickup from behind and above, dark SUV's rear quarter close, white pickup's and the white utility's left side; the owner's white truck is the utility). Paint and clay looks; the clay sun rakes across each view. Driven cars (the hero level with the driver at the wheel) at z 160, seen through the side glass and the windshield.",
  "looks": [
   "paint",
   "clay"
@@ -316,6 +316,132 @@
     120
    ],
    "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "crossover",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "driven",
+   "xz": [
+    -160.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "suv",
+    "paint": "navy",
+    "finish": "metallic"
+   },
+   "level": "driven",
+   "xz": [
+    -120.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "sedan",
+    "paint": "light_grey",
+    "finish": "metallic"
+   },
+   "level": "driven",
+   "xz": [
+    -80.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "fastback",
+    "paint": "white",
+    "finish": "pearl"
+   },
+   "level": "driven",
+   "xz": [
+    -40.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "hatchback",
+    "paint": "red",
+    "finish": "solid"
+   },
+   "level": "driven",
+   "xz": [
+    0.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "wagon",
+    "paint": "silver",
+    "finish": "metallic"
+   },
+   "level": "driven",
+   "xz": [
+    40.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "pickup",
+    "paint": "grey",
+    "finish": "metallic"
+   },
+   "level": "driven",
+   "xz": [
+    80.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "utility",
+    "paint": "white",
+    "finish": "solid"
+   },
+   "level": "driven",
+   "xz": [
+    120.0,
+    160.0
+   ],
+   "yaw_deg": 0
+  },
+  {
+   "prop": "parked_car",
+   "params": {
+    "body": "van",
+    "paint": "dark_grey",
+    "finish": "solid"
+   },
+   "level": "driven",
+   "xz": [
+    160.0,
+    160.0
+   ],
+   "yaw_deg": 0
   }
  ],
  "views": [
@@ -374,6 +500,258 @@
     120.6
    ],
    "fov": 50
+  },
+  {
+   "name": "crossover-driven-side",
+   "camera_xyz": [
+    -163.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    -160.4,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "crossover-driven-front",
+   "camera_xyz": [
+    -161.2,
+    1.7,
+    154.69
+   ],
+   "target_xyz": [
+    -160.35,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "suv-driven-side",
+   "camera_xyz": [
+    -123.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    -120.4,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "suv-driven-front",
+   "camera_xyz": [
+    -121.2,
+    1.7,
+    154.51
+   ],
+   "target_xyz": [
+    -120.35,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "sedan-driven-side",
+   "camera_xyz": [
+    -83.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    -80.4,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "sedan-driven-front",
+   "camera_xyz": [
+    -81.2,
+    1.7,
+    154.59
+   ],
+   "target_xyz": [
+    -80.35,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "fastback-driven-side",
+   "camera_xyz": [
+    -43.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    -40.4,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "fastback-driven-front",
+   "camera_xyz": [
+    -41.2,
+    1.7,
+    154.64
+   ],
+   "target_xyz": [
+    -40.35,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "hatchback-driven-side",
+   "camera_xyz": [
+    -3.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    -0.4,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "hatchback-driven-front",
+   "camera_xyz": [
+    -1.2,
+    1.7,
+    154.81
+   ],
+   "target_xyz": [
+    -0.35,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "wagon-driven-side",
+   "camera_xyz": [
+    37.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    39.6,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "wagon-driven-front",
+   "camera_xyz": [
+    38.8,
+    1.7,
+    154.57
+   ],
+   "target_xyz": [
+    39.65,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "pickup-driven-side",
+   "camera_xyz": [
+    77.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    79.6,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "pickup-driven-front",
+   "camera_xyz": [
+    78.8,
+    1.7,
+    154.07
+   ],
+   "target_xyz": [
+    79.65,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "utility-driven-side",
+   "camera_xyz": [
+    117.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    119.6,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "utility-driven-front",
+   "camera_xyz": [
+    118.8,
+    1.7,
+    153.9
+   ],
+   "target_xyz": [
+    119.65,
+    1.05,
+    159.7
+   ],
+   "fov": 40
+  },
+  {
+   "name": "van-driven-side",
+   "camera_xyz": [
+    157.0,
+    1.55,
+    159.7
+   ],
+   "target_xyz": [
+    159.6,
+    1.0,
+    159.7
+   ],
+   "fov": 45
+  },
+  {
+   "name": "van-driven-front",
+   "camera_xyz": [
+    158.8,
+    1.7,
+    154.035
+   ],
+   "target_xyz": [
+    159.65,
+    1.05,
+    159.7
+   ],
+   "fov": 40
   }
  ],
  "rings": [

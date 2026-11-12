@@ -868,7 +868,10 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // The tailgate's sides stop on the bumper line's centre (cut), not near it.
   // On a bed the tailgate's sides run up to its top (its lamps are on the corner posts).
   const gateTop = (rec) => (body.bed ? rec.top - 0.03 : tailY(rec) - tailHigh + 0.02);
-  const gateLine = region((rec) => onTailFace(rec) && rec.y >= rec.bottom + 0.34 * rec.h - 1e-7 && rec.y < gateTop(rec), (rec) => rec.x - (tailCentre - tailHalf - 0.012));
+  const gateLine = region((rec) => onTailFace(rec) && rec.y >= rec.bottom + 0.34 * rec.h - 1e-7 && rec.y <= gateTop(rec) + 1e-7, (rec) => rec.x - (tailCentre - tailHalf - 0.012));
+  // Its ends are cut too, so the groove stops square.
+  const nearGate = (rec) => onTailFace(rec) && Math.abs(rec.x - (tailCentre - tailHalf - 0.012)) < 0.05;
+  gateLine.pre = [region(nearGate, (rec) => rec.y - (rec.bottom + 0.34 * rec.h)), region(nearGate, (rec) => rec.y - gateTop(rec))];
   // A service body's compartment doors.
   const service = body.bed === "service";
   const lockerLines = service ? [4.3, 5.0, 5.75].map((zf) => region((rec) => onSide(rec) && rec.y > 0.6 && rec.y < 1.4, (rec) => rec.zf - zf)) : [];
@@ -1653,9 +1656,9 @@ export function buildCarParts(name, levelName) {
     both(glass, shell.glass);
     const lining = buildShell(name, "mid", { inner: true });
     both(chassis, lining.body);
-    buildCabin(chassis, body, shell.shape);
+    const driver = buildCabin(chassis, body, shell.shape);
     buildUnderbody(chassis, body, shell.shape);
-    result = { body: chassis, glass, wheel: buildWheel(body, "hero"), brake: buildBrake(body) };
+    result = { body: chassis, glass, wheel: buildWheel(body, "hero"), brake: buildBrake(body), driver };
   } else {
     const wheel = buildWheel(body, level.wheel);
     const car = new CarMesh();
@@ -1717,6 +1720,10 @@ export function carHeroKitMeshes() {
     meshes.push({ name: `car_${name}_hero_glass`, ...parts.glass.result() });
     meshes.push({ name: `car_${name}_hero_tyre`, ...parts.wheel.result() });
     meshes.push({ name: `car_${name}_hero_brake`, ...parts.brake.result() });
+    // Where a driver sits and holds the wheel (game/scripts/vehicles/car_driver.gd).
+    meshes.push({ name: `car_${name}_driver_seat`, marker: true, translation: parts.driver.seat });
+    meshes.push({ name: `car_${name}_driver_hand_left`, marker: true, translation: parts.driver.hands[0] });
+    meshes.push({ name: `car_${name}_driver_hand_right`, marker: true, translation: parts.driver.hands[1] });
   }
   return meshes;
 }
@@ -1769,7 +1776,7 @@ export function carBodyGeometry(name) {
 // last 0.36 m), so a driven car meets kerbs and ramps as before. Each piece is
 // a mesh car_<body>_hull<n> whose vertices are its hull's points (a loft of
 // convex cross-sections); the runtime takes the hull of those points.
-const HULL_SECTION_POINTS = 16;
+const HULL_SECTION_POINTS = 24;
 export function carHullMeshes(name) {
   const shape = bodyShape(name);
   const { body, L } = shape;
@@ -1856,37 +1863,28 @@ function convexHull2(points) {
   return [...lower.slice(0, -1), ...upper.slice(0, -1)];
 }
 
-// n points along a closed polygon's boundary, its corners among them where it has few.
+// n points evenly along a closed polygon's boundary (by arc length, from its
+// highest point), so a gently crowned roof keeps its share of them.
 function resampleConvex(poly, n) {
-  if (poly.length >= n) {
-    // Keep the corners that turn most.
-    const turn = poly.map((p, i) => {
-      const a = poly[(i + poly.length - 1) % poly.length];
-      const b = poly[(i + 1) % poly.length];
-      const u = vnorm(v3(p[0] - a[0], p[1] - a[1], 0));
-      const w = vnorm(v3(b[0] - p[0], b[1] - p[1], 0));
-      return [1 - vdot(u, w), i];
-    });
-    const keep = new Set(turn.sort((a, b) => b[0] - a[0]).slice(0, n).map(([, i]) => i));
-    return poly.filter((_, i) => keep.has(i));
+  let start = 0;
+  for (let i = 1; i < poly.length; i += 1) if (poly[i][1] > poly[start][1]) start = i;
+  const ring = [...poly.slice(start), ...poly.slice(0, start)];
+  const lengths = [0];
+  for (let i = 0; i < ring.length; i += 1) {
+    const a = ring[i];
+    const b = ring[(i + 1) % ring.length];
+    lengths.push(lengths[i] + Math.hypot(b[0] - a[0], b[1] - a[1]));
   }
-  const out = poly.map((p) => p);
-  while (out.length < n) {
-    // Split the longest edge.
-    let best = 0;
-    let len = -1;
-    for (let i = 0; i < out.length; i += 1) {
-      const a = out[i];
-      const b = out[(i + 1) % out.length];
-      const l = Math.hypot(b[0] - a[0], b[1] - a[1]);
-      if (l > len) {
-        len = l;
-        best = i;
-      }
-    }
-    const a = out[best];
-    const b = out[(best + 1) % out.length];
-    out.splice(best + 1, 0, [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]);
+  const total = lengths.at(-1);
+  const out = [];
+  let k = 0;
+  for (let j = 0; j < n; j += 1) {
+    const want = (total * j) / n;
+    while (k < ring.length - 1 && lengths[k + 1] < want) k += 1;
+    const a = ring[k];
+    const b = ring[(k + 1) % ring.length];
+    const t = (want - lengths[k]) / Math.max(1e-12, lengths[k + 1] - lengths[k]);
+    out.push([lerp(a[0], b[0], t), lerp(a[1], b[1], t)]);
   }
   return out;
 }

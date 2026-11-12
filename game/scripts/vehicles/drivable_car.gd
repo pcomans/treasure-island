@@ -47,6 +47,7 @@ signal recovered(cause: String, from_position: Vector3)
 signal splashed(at: Vector3, speed: float)
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const CAR_DRIVER := preload("res://game/scripts/vehicles/car_driver.gd")
 
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_STREET_PROP := 1 << 3
@@ -205,7 +206,11 @@ var body := ""
 var drive_input := 0.0
 var steer_input := 0.0
 var handbrake := false
-var occupied := false
+var occupied := false:
+	set(value):
+		occupied = value
+		if _driver != null:
+			_driver.visible = value
 ## The playable outline and the drawn ground (set by the vehicle manager).
 var boundary: WorldBoundary
 var visible_ground: VisibleGround
@@ -266,6 +271,8 @@ var _prev := Transform3D.IDENTITY
 var _curr := Transform3D.IDENTITY
 var _visual: Node3D
 var _wheels: MultiMesh
+## The hero level's driver at the wheel (shown while occupied), where it draws.
+var _driver: Node3D
 ## The hero level's wheels and brakes, where it draws.
 var _hero_wheels: MultiMesh
 var _hero_brakes: MultiMesh
@@ -399,6 +406,12 @@ func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: N
 			piece.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 		_hero_wheels = (hero.get_node("Wheels") as MultiMeshInstance3D).multimesh
 		_hero_brakes = (hero.get_node("Brakes") as MultiMeshInstance3D).multimesh
+		if hero.has_meta("driver_seat"):
+			_driver = CAR_DRIVER.build(hero.get_meta("driver_seat"), hero.get_meta("driver_hand_left"), hero.get_meta("driver_hand_right"))
+			_driver.visible = occupied
+			for piece: Node in _driver.find_children("*", "GeometryInstance3D", true, false):
+				(piece as GeometryInstance3D).visibility_range_end = near_from
+			hero.add_child(_driver)
 		_visual.add_child(hero)
 	_visual.add_child(_instance("Chassis", parts.chassis, 1, custom, material, bounds, near_from, LOD_NEAR_M, off))
 	var wheels := _instance("Wheels", parts.tyre, 4, custom, material, bounds, near_from, LOD_NEAR_M, off)

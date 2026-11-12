@@ -444,9 +444,12 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   out.roundedBox(at(driver, dashTop + 0.025, dashZ + 0.2), [0.19, 0.05, 0.1], 0.04, P.cabin, { ao: 0.8 });
   out.box(at(driver, dashTop + 0.02, dashZ + 0.305), [0.13, 0.04, 0.004], P.screen);
   out.roundedBox(at(0, dashTop + 0.055, dashZ + 0.32), [0.16, 0.085, 0.012], 0.01, (k, sign) => (k === 2 && sign > 0 ? P.screen : P.gloss_black));
-  // Steering wheel: rim, hub and spokes on a raked column.
+  // The front seats: by the B pillar, but clear of the dashboard (a van's or a
+  // pickup's short cab put them into it).
+  const seatZ = Math.max(body.pillars.b ? body.pillars.b - 0.42 : cab.windshield_top + 0.35, dashZ + 0.36 + 0.42);
+  // Steering wheel: rim, hub and spokes on a raked column, no further back than a driver's reach.
   const rake = (24 * Math.PI) / 180;
-  const wheelC = at(driver, dashTop - 0.05, dashZ + 0.5);
+  const wheelC = at(driver, dashTop - 0.05, Math.min(dashZ + 0.5, seatZ - 0.25));
   const axis = vnorm(v3(0, Math.sin(rake), Math.cos(rake)));
   const side = X;
   const upW = vcross(axis, side);
@@ -458,6 +461,8 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
     ring.push(vadd(wheelC, vadd(vscale(side, ringR * Math.cos(a)), vscale(upW, ringR * Math.sin(a)))));
   }
   out.tube(ring, 0.015, detail ? 7 : 4, P.cabin, { closed: true, ao: 0.9 });
+  // Where a driver's hands hold it: ten to two.
+  const grip = (side) => vadd(wheelC, vadd(vscale(X, side * ringR * Math.cos(Math.PI / 6)), vscale(upW, ringR * Math.sin(Math.PI / 6))));
   const hubC = vadd(wheelC, vscale(axis, -0.045));
   out.roundedBox(hubC, [0.075, 0.05, 0.03], 0.025, P.cabin, { axes: [side, upW, axis] });
   for (const a of [0, Math.PI, -Math.PI / 2]) {
@@ -466,7 +471,6 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   }
   out.tube([hubC, vadd(hubC, vscale(axis, -0.32))], 0.03, 6, P.cabin, { caps: false, ao: 0.6 });
   // Centre console with its armrest, between the front seats.
-  const seatZ = body.pillars.b ? body.pillars.b - 0.42 : cab.windshield_top + 0.35;
   out.roundedBox(at(0, floor + 0.2, (dashZ + 0.3 + seatZ + 0.3) / 2), [0.11, 0.2, (seatZ + 0.3 - dashZ - 0.3) / 2], 0.03, P.cabin, { ao: 0.75 });
   out.roundedBox(at(0, floor + 0.44, seatZ + 0.12), [0.1, 0.035, 0.17], 0.03, P.seat);
   // Seats.
@@ -489,6 +493,8 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   };
   const seatX = Math.min(0.39, inner * 0.5);
   seat(-seatX, seatZ, 0.5, false);
+  // The driver's seat: the top of its cushion's middle, and the wheel's grips.
+  const seated = { seat: at(-seatX, floor + 0.27 + 0.065, seatZ - 0.04), hands: [grip(-1), grip(1)] };
   seat(seatX, seatZ, 0.5, false);
   if (rows === 2) {
     // The rear seat comes forward until its headrests clear the glass above
@@ -514,6 +520,7 @@ export function buildCabin(out, body, shape, { detail = 1 } = {}) {
   }
   // Rear-view mirror under the windshield's top.
   out.roundedBox(at(0, cab.roof - 0.09, cab.windshield_top - 0.02), [0.11, 0.032, 0.012], 0.01, (k, sign) => (k === 2 && sign > 0 ? P.mirror : P.cabin));
+  return seated;
 }
 
 // ---------------------------------------------------------------- underbody
@@ -726,7 +733,7 @@ export function numberPlate(detail) {
     const out = new CarMesh();
     if (detail >= 1) out.roundedBox(v3(0.002, 0, 0), [0.006, 0.086, 0.162], 0.004, P.trim, { ao: 0.8 });
     else out.box(v3(0.002, 0, 0), [0.006, 0.084, 0.16], P.trim);
-    disc(out, roundedRect(0.1525, 0.076, 0.012, detail >= 2 ? 4 : 1), 0.0085, P.plate);
+    disc(out, roundedRect(0.1525, 0.076, 0.012, detail >= 2 ? 4 : 1), 0.0125, P.plate);
     return out;
   });
 }

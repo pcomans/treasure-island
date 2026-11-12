@@ -80,11 +80,11 @@ func _run() -> void:
 				player.set_gameplay_enabled(false)
 				var feet := player.global_position
 				var centre := feet + Vector3.UP * radius
-				var line := "STANCE %s %s %s: feet at %.3f over the ground, on a floor %s" % [body, way, spot, feet.y, player.is_on_floor()]
+				var line := "STANCE %s %s %s: feet at (%.3f, %.3f, %.3f) (the spot's z %.3f), on a floor %s" % [body, way, spot, feet.x, feet.y, feet.z, z, player.is_on_floor()]
 				var ok := player.is_on_floor() and absf(feet.x) < 0.2 and absf(feet.z - z) < 0.2
 				for level: String in drawn:
 					var gap := _distance(drawn[level] as PackedVector3Array, centre) - radius
-					line += ", %.3f m from the %s level" % [gap, level]
+					line += ", %.3f m from the %s level (%.3f straight down)" % [gap, level, feet.y - _height(drawn[level] as PackedVector3Array, feet + Vector3.UP * 0.5)]
 					ok = ok and absf(gap) <= STANCE_TOLERANCE_M
 				print(line)
 				if not ok:
