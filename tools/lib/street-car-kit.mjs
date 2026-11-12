@@ -393,14 +393,18 @@ export function bodyShape(name) {
   };
   // A point of the wall: a round the outline, f from its lower edge (0) to the shoulder (1).
   const FACE_F = 0.3;
-  // How much of its end's lean a station carries: all of it across the face
-  // and round the corner (the shoulder's corner is the outline's, moved back),
-  // fading only along the side, where moving the top along the side moves it
-  // along itself. (e^1.5 faded it round the corner, fastest mid-corner, where
-  // the corner runs back slowest: the shoulder stalled and turned in a bend a
-  // centimetre round, and the hood's shut line, 7.5 cm in, came to a point.)
+  // How much of its end's lean and tuck a station carries: all of it across
+  // the face and round the corner (the shoulder's corner is the outline's,
+  // moved back), fading only along the side, where moving the top along the
+  // side moves it along itself. (e^1.5 faded it round the corner, fastest
+  // mid-corner, where the corner runs back slowest: the shoulder stalled and
+  // turned in a bend a centimetre round, and the hood's shut line, 7.5 cm in,
+  // came to a point; under the tail the far level's corner showed a wedge.)
+  // The tail's lean, a few centimetres, still fades round its corner as
+  // e^1.5: faded along the side, it twisted the rear quarter between two
+  // stations into a ridge that stood through the filler door.
   const sideRun = L - tail.corner - nose.corner;
-  const leanShare = (a, front) => {
+  const endShare = (a, front) => {
     const fade = Math.max(0.3, 1.5 * (front ? nose : tail).lean) / sideRun;
     return front ? 1 - smoothstep(1, 1 + fade, a) : smoothstep(2 - fade, 2, a);
   };
@@ -408,7 +412,8 @@ export function bodyShape(name) {
     const o = outline(a);
     const front = a < 1.5;
     const e = Math.abs(o.nz);
-    const es = leanShare(a, front);
+    const tuck = endShare(a, front);
+    const es = front ? tuck : e ** 1.5;
     const end = front ? nose : tail;
     const sign = front ? 1 : -1;
     const zfTop = clamp(o.zf + sign * end.lean * es, 0, L);
@@ -429,7 +434,7 @@ export function bodyShape(name) {
     // Along the car at the ends: the face leans back above the bumper line and tucks under below it.
     const lean = f < FACE_F ? 0 : ((f - FACE_F) / (1 - FACE_F)) ** 1.8;
     const under = f < FACE_F ? ((FACE_F - f) / FACE_F) ** 2 : 0;
-    const shift = sign * es * (end.lean * lean + 0.05 * under);
+    const shift = sign * (es * end.lean * lean + tuck * 0.05 * under);
     return { x: o.x - o.nx * inward, y: yBottom + f * h, zf: o.zf - o.nz * inward + shift, e, front, yTop, yBottom, h, st };
   };
 
@@ -522,6 +527,9 @@ const CREASE_CLEAR_M = 0.003;
 const CREASE_COLUMN_MIN_M = 0.006;
 // A turned-over sliver no taller than this across its long edge is laid flat on it (m).
 const SLIVER_M = 0.003;
+// At the far level, between these angles (degrees) of a corner's smooth
+// normal from the mean of its faces, the normal turns to that mean.
+const FAR_FACES_DEG = [5, 15];
 // How deep a head lamp's and a tail lamp's bowls are at most (m).
 const HEAD_BOWL_M = 0.03;
 const TAIL_BOWL_M = 0.015;
@@ -1620,8 +1628,11 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
   // corner disagrees with the face drawn: looking across the roll it faced
   // away from a camera that sees the face, which then reflected the sky's
   // ground colour at full Fresnel (a tan sliver). There each welded corner
-  // takes the mean of its triangles' faces (by area), which turns as the
-  // drawn surface does; the crease groups stay those of the smooth normals.
+  // turns to the mean of its triangles' faces (by area), which turns as the
+  // drawn surface does: wholly where the two differ by FAR_FACES_DEG[1] or
+  // more, not at all within FAR_FACES_DEG[0] (on the flatter panels, where
+  // the mean of the faces banded along the cuts). The crease groups stay
+  // those of the smooth normals.
   const meanOfFaces = detail === 0;
   const faceOf = (entry) => {
     const [p0, p1, p2] = entry.tri.map(place);
@@ -1642,7 +1653,12 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     }
     for (const group of groups) {
       let n = vnorm(group.sum);
-      if (meanOfFaces && vlen(group.faces) > 1e-12 && vdot(group.faces, n) > 0) n = vnorm(group.faces);
+      if (meanOfFaces && vlen(group.faces) > 1e-12 && vdot(group.faces, n) > 0) {
+        const mean = vnorm(group.faces);
+        const off = (Math.acos(clamp(vdot(mean, n), -1, 1)) * 180) / Math.PI;
+        const w = smoothstep(FAR_FACES_DEG[0], FAR_FACES_DEG[1], off);
+        n = vnorm(vadd(vscale(n, 1 - w), vscale(mean, w)));
+      }
       if (verts[id].x < 1e-7) n[0] = 0;
       const welded = vnorm(n);
       for (const [entry, corner] of group.members) entry.normals[corner] = welded;
