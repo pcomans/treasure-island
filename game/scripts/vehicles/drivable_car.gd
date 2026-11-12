@@ -201,6 +201,9 @@ const SEAT := Vector3(-0.38, 0.55, -0.15)
 
 var row_id := ""
 var body := ""
+## What it is drawn with at every level, as setup() was given it (instance
+## custom data: paint, style, twist and dirt; street_clutter_kit.gd car_custom).
+var look := Color()
 ## Driver input, set each tick by the vehicle manager: drive -1..1 (S..W),
 ## steer -1..1 (A..D, positive right), handbrake.
 var drive_input := 0.0
@@ -284,6 +287,7 @@ var _hull_query := PhysicsShapeQueryParameters3D.new()
 ## fences it drives through and their debris).
 func setup(car_body: String, parts: Dictionary, material: Material, custom: Color, placement: Transform3D, excludes: Array[RID], hero: Node3D = null) -> void:
 	body = car_body
+	look = custom
 	var spec: Dictionary = BODIES[car_body]
 	var front: Vector3 = parts.front
 	var rear: Vector3 = parts.rear

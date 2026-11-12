@@ -185,10 +185,10 @@ func _case_enter_exit() -> bool:
 	or not _require(not _player.is_processing_unhandled_input(), "The stock controller must stop while driving."):
 		return false
 	# It looks as it did parked: paint, finish, roof, rims and dirt (its twist
-	# aside, which its suspension takes up now).
-	var parked_look: Variant = _parked_custom(entry)
-	var driven_look := (car.get_node("Visual/Chassis") as MultiMeshInstance3D).multimesh.get_instance_custom_data(0)
-	if not _require(parked_look is Color and is_equal_approx((parked_look as Color).r, driven_look.r) and is_equal_approx((parked_look as Color).g, driven_look.g) and is_equal_approx((parked_look as Color).a, driven_look.a), "The driven car must look as it did parked (parked %s, driven %s)." % [parked_look, driven_look]):
+	# aside, which its suspension takes up now). Read from what each was given,
+	# not the MultiMeshes: the headless renderer keeps no instance data.
+	var parked_look: Color = entry.custom
+	if not _require(is_equal_approx(parked_look.r, car.look.r) and is_equal_approx(parked_look.g, car.look.g) and is_equal_approx(parked_look.a, car.look.a), "The driven car must look as it did parked (parked %s, driven %s)." % [parked_look, car.look]):
 		return false
 	# The view starts where the on-foot camera was and ends behind the car.
 	var rig := _vehicles.driving_camera()
@@ -1897,16 +1897,6 @@ func _release_driving() -> void:
 func _release() -> void:
 	for action: String in VEHICLE_ACTIONS:
 		Input.action_release(action)
-
-
-## The parked car's instance custom data (its look) in the clutter's MultiMesh, or null.
-func _parked_custom(entry: Dictionary) -> Variant:
-	var clutter := _world.street_detail_layer("clutter").get_node_or_null("GeneratedStreetClutter")
-	if clutter == null or (entry.instances as Array).is_empty():
-		return null
-	var ref: Array = entry.instances[0]
-	var instance := clutter.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
-	return instance.multimesh.get_instance_custom_data(int(ref[1])) if instance != null else null
 
 
 func _parked_shape(entry: Dictionary) -> CollisionShape3D:

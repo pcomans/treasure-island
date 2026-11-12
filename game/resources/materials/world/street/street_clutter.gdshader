@@ -170,12 +170,15 @@ void fragment() {
 		// A film of it on what faces up (the car's own up), on a dirty car.
 		float up = smoothstep(0.55, 0.9, n.y);
 		dust = max(dust, up * dirt * dirt * (0.3 + 0.7 * patches) * 0.65);
-		// Grime streaking down the sides and the back: fine across, long down.
-		float streaks = value_noise(vec3(local_position.x * 13.0, local_position.y * 0.9, local_position.z * 13.0));
+		// Grime streaking down the sides and the back in places (a mask a
+		// metre or so across, shifted by the car's own dirt so no two cars
+		// share it), thin across and long down, heavier low down.
+		float places = smoothstep(0.45, 0.8, value_noise(local_position * 1.3 + vec3(dirt * 41.0, 0.0, dirt * 23.0)));
+		float streaks = smoothstep(0.55, 0.9, value_noise(vec3(local_position.x * 11.0, local_position.y * 1.1, local_position.z * 11.0)));
 		float upright = 1.0 - smoothstep(0.35, 0.7, abs(n.y));
-		float grime = upright * dirt * smoothstep(0.45, 0.85, streaks) * (0.35 + 0.65 * patches) * 0.55;
+		float grime = upright * dirt * places * streaks * mix(1.0, 0.5, smoothstep(0.5, 1.4, local_position.y)) * 0.32;
 		albedo = mix(albedo, vec3(0.3, 0.27, 0.23), dust * 0.75);
-		albedo = mix(albedo, vec3(0.2, 0.18, 0.15), grime);
+		albedo = mix(albedo, vec3(0.22, 0.2, 0.17), grime);
 		float dull = max(dust, grime);
 		roughness = mix(roughness, 0.9, dull);
 		metallic *= 1.0 - dull;
