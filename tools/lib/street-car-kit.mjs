@@ -1615,30 +1615,43 @@ function buildShell(name, levelName, { inner = false, inset = 0 } = {}) {
     });
   }
   const cosWeld = Math.cos((24 * Math.PI) / 180);
+  // The far level's coarse triangles span whole rolls (an A pillar's foot and
+  // the cowl, a bumper's corner), where the smooth surface's normal at a
+  // corner disagrees with the face drawn: looking across the roll it faced
+  // away from a camera that sees the face, which then reflected the sky's
+  // ground colour at full Fresnel (a tan sliver). There each welded corner
+  // takes the mean of its triangles' faces (by area), which turns as the
+  // drawn surface does; the crease groups stay those of the smooth normals.
+  const meanOfFaces = detail === 0;
+  const faceOf = (entry) => {
+    const [p0, p1, p2] = entry.tri.map(place);
+    return vcross(vsub(p2, p0), vsub(p1, p0));
+  };
   for (const [id, list] of corners) {
     const groups = [];
     for (const [entry, corner] of list) {
       const n = entry.normals[corner];
       let group = groups.find((g) => vdot(g.first, n) > cosWeld);
       if (!group) {
-        group = { first: n, sum: v3(0, 0, 0), members: [] };
+        group = { first: n, sum: v3(0, 0, 0), faces: v3(0, 0, 0), members: [] };
         groups.push(group);
       }
       group.sum = vadd(group.sum, n);
+      if (meanOfFaces) group.faces = vadd(group.faces, faceOf(entry));
       group.members.push([entry, corner]);
     }
     for (const group of groups) {
-      const n = vnorm(group.sum);
+      let n = vnorm(group.sum);
+      if (meanOfFaces && vlen(group.faces) > 1e-12 && vdot(group.faces, n) > 0) n = vnorm(group.faces);
       if (verts[id].x < 1e-7) n[0] = 0;
       const welded = vnorm(n);
       for (const [entry, corner] of group.members) entry.normals[corner] = welded;
     }
   }
   // A corner whose normal turns 60 to 90 degrees from its own triangle's face
-  // (a coarse triangle spanning a roll, its corner on one side of it: the far
-  // level's A pillar shaded as its windshield and caught the sky) takes the
-  // face's normal halfway. (Past 90 degrees the triangle is turned over: a
-  // fault for the mesh check, left as it is.)
+  // (a coarse triangle spanning a roll, its corner on one side of it) takes
+  // the face's normal halfway. (Past 90 degrees the triangle is turned over:
+  // a fault for the mesh check, left as it is.)
   for (const entry of kept) {
     const [p0, p1, p2] = entry.tri.map(place);
     const face = vcross(vsub(p2, p0), vsub(p1, p0));
