@@ -56,7 +56,7 @@ Limits:
 - The web build marches the same 40 steps as native, at the view's own resolution, because the Compatibility renderer has no half-resolution sky pass. Its cost in a real browser hasn't been measured.
 - Glow is on in both renderers (additive, intensity 0.35, threshold 1.0). Its cost in a real browser hasn't been measured either; the fallback is `glow_enabled = false` for the web in `main.gd`.
 - The cumulus are smooth at their edges from close up (the march runs at half resolution), the cirrus is a stretched noise that can read as brush strokes high in the sky, and one weather tile repeats every 24 km.
-- The sun's first shadow split now ends at 40 m (was 80 m) with the splits blended and `shadow_blur` 0.5: shadows within 40 m are finer, and those from 40 to 80 m and from 120 to 160 m fall in a coarser split than before.
+- The sun's first shadow split now ends at 16 m, then 40 m and 120 m (the owner's default of 2026-11-12; 40, 120 and 320 m from the 2026-11-09 sky pass until then, and 80 m first before that), with the splits blended and `shadow_blur` 0.5. What that trades is under the shadow quality option below.
 - Not rebaked or retuned: the tree impostors (baked under the old ambient), the water's `glitter_gain`, the distant art's haze. None of their inputs moved except the ambient light's make-up.
 
 ## Lighting (`game/scenes/main.tscn`, the look pass of 2026-11-07)
@@ -163,6 +163,16 @@ Non-blocking notes from the reviews:
 - In the Compatibility renderer (web) YBI costs up to 37% more frame time in the worst YBI-facing view.
 - The plants' nominal heights are kept twice, in the street-vegetation kit and its Node mirror (`STREET_VEGETATION_PROPS`); the game checks that they agree only at load.
 - The Point of Infinity draws its true geometry, so from Treasure Island its upper reach is fainter than a pixel (the owner's choice, 2026-11-08).
+
+## Shadow quality option (`game/scripts/settings/shadow_quality.gd`, 2026-11-12)
+
+- Medium, the default, is main.tscn's Sun with project.godot's map and filter. Its splits are the owner's choice of 2026-11-12, after the player's own shadow looked chunky and a palm's pixelated on the Mac: the nearest split now ends at 16 m, then 40 m and 120 m. Near the player that gives about 2.2 by 4 cm of ground per shadow texel, where the old nearest split (40 m) gave 5.5 by 10 cm, coarser than the avatar's 8 to 9 cm legs (computed from the engine's split fit, with the sun 33 degrees up). The player's and nearby palms' shadows come out visibly cleaner, though not as clean as High's. In exchange, shadows from about 50 to 300 m are up to 2.5 times coarser than before (computed; past 120 m they share one split), clearest from the air. Its median GPU time per frame was 1.2 ms under to 0.1 ms over the old Medium's at nine fixed views (dev machine only: Radeon 780M, Forward+, 1440 x 900, other engines sharing the GPU). The barricades' beaded edges (below) had the same cause as the old chunkiness.
+- High doubles the map, uses the soft-high filter and splits at 16, 48 and 200 m: about half of Medium's texel near the player, and a finer map at every distance. Its median GPU time was 1.3 to 4.4 ms over Medium's at the same views. Thin casters that Medium drops, such as the temporary fences' rails, now cast fine dotted lines. Not measured on the Mac.
+- Low draws Medium's map and filter over two splits out to 200 m, so nothing farther casts. Its median GPU time was 0 to 2.8 ms under Medium's.
+- The first frame after a level is chosen takes about 0.17 s longer (205 to 234 ms against 47 to 62 ms just before, on the dev machine), whichever level, whether or not the map's size changes. A review driver's two slower frames after other switches were its own image saves.
+- The web build keeps its sun shadows off and offers no levels. In the Compatibility renderer (native, on the dev machine) turning them on also brightened every sunlit surface by about 40% (road 88 to 123 in sRGB) while Forward+ stayed the same, which looks like the shadowed sun drawn on top of the unshadowed one. The cause in the engine is not established.
+- A level's shadow map size and soft-shadow filter are engine-wide, so they also reach building_shots.gd's neutral light; the shared capture harness always takes the default (`main.use_saved_settings = false`).
+- The far-tree impostors were tone-matched under the old splits: `tools/vegetation/bake_impostors.gd` copies main.tscn's Sun, splits included, into the scene where it matches an impostor's tone to its near level. A re-bake from now on matches them under the new default; none has been done.
 
 ## Causeway join and token closure (`tools/lib/ybi-context-generation.mjs`, the `road_closure_barricade` prop, 2026-11-08)
 

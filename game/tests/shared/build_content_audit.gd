@@ -46,14 +46,14 @@ func _check(path: String) -> String:
 	for name: String in SUSPICIOUS_NAMES:
 		if name in source.get_file().to_lower():
 			return "%s looks like a reference photo" % path
-	var is_image := source.get_extension().to_lower() in IMAGE_EXTENSIONS or _has_image_bytes(path)
+	var is_image := source.get_extension().to_lower() in IMAGE_EXTENSIONS or has_image_bytes(path)
 	if is_image and not source.begins_with(IMAGE_FOLDER) and not path.begins_with(".godot/"):
 		return "%s is an image outside %s" % [path, IMAGE_FOLDER]
 	return ""
 
 
 ## True when the file starts like a PNG, JPEG, WebP, GIF or BMP, whatever its name.
-func _has_image_bytes(path: String) -> bool:
+static func has_image_bytes(path: String) -> bool:
 	var file := FileAccess.open("res://" + path, FileAccess.READ)
 	if file == null or file.get_length() < 12:
 		return false

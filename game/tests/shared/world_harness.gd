@@ -39,6 +39,8 @@ func load_world(street_detail: Variant = null) -> String:
 	var packed := load("res://game/scenes/main.tscn") as PackedScene
 	main = packed.instantiate() as GameMain
 	main.capture_mouse_on_ready = false
+	# Captures always have the default shadows, whatever a player last chose here.
+	main.use_saved_settings = false
 	world = main.get_node("WorldRoot") as WorldLoader
 	if typeof(street_detail) != TYPE_NIL:
 		world.street_detail_request = street_detail
@@ -506,7 +508,7 @@ func release_input() -> void:
 func clean_hud() -> void:
 	tree.paused = false
 	hud.set_paused(false)
-	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel, hud.controls_screen, hud.prompt_panel]:
+	for panel: Control in [hud.debug_panel, hud.feedback_panel, hud.load_panel, hud.pause_panel, hud.controls_screen, hud.options_screen, hud.credits_screen, hud.prompt_panel]:
 		panel.hide()
 
 
