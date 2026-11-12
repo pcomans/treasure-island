@@ -115,7 +115,7 @@ All development and checks run in the Linux devcontainer (`.devcontainer/`) on t
 - Tests and checks that need no pixels run `--headless`. Screenshots run without `--headless`.
 - Record what actually ran (`DisplayServer.get_name()`, `RenderingServer.get_video_adapter_name()`) rather than hardcoding a platform, renderer or GPU name, and never require a specific one.
 - Git: `post-create.sh` sets the bot's commit identity. `git push` goes over HTTPS through DevPod's credential helper. `gh` has no login of its own; for PRs and the API, pass a token per command without saving it: `GH_TOKEN=$(printf 'protocol=https\nhost=github.com\n\n' | git credential fill | sed -n 's/^password=//p') gh pr create ...`.
-- Textures: generate one with `tools/generate-texture "<description>" game/resources/<path>.png`. It runs Codex's image generation on the owner's ChatGPT plan (Codex logged in with `codex login --device-auth`), following the building-texture skill. Generated textures must be original, never a copy of a reference photo.
+- Textures: generate one with `tools/generate-texture "<description>" game/resources/<path>.png`. It runs Codex's image generation on the owner's ChatGPT plan (Codex logged in with `codex login --device-auth`), following the building-texture skill. Generated textures must be original, never a copy of a reference photo. A shipped texture or model that reconstructs a real artwork, such as a mural, gets a [credit](#hobby-project-filter) naming the work and, when a reliable source establishes it, the artist (otherwise what and where it is, artist not established), with a provenance note beside it (owner, 2026-11-12). Invented art is this project's own work and needs no credit.
 - `/tmp` is temporary: every container start deletes what in it has gone unused for 7 days (`tools/clean-tmp.sh`, run as `postStartCommand`; see [README](README.md)). Keep nothing there that must last: no reference photos, evidence or work products. The script skips Claude Code's session scratch under `/tmp/claude-*`, but that is not durable either.
 - The owner currently plays the web build. Deploy it only when asked (see [Web deploys](#web-deploys)). GitHub Actions builds the Mac app on every push to `main`; run `tools/build-mac.sh` locally only when asked (see [Mac builds](#mac-builds)).
 
@@ -350,6 +350,7 @@ Detailed camera tuning, visual style beyond approved simple initial massing and 
 - Avoid recurring services and production-scale infrastructure unless their value is unusually clear.
 - Do not spend time on storefront certification, monetization, analytics, live operations, extensive legal review, or public-release polish.
 - Keep lightweight provenance notes for reproducibility. Do not perform a legal audit.
+- Shipped third-party content is credited in `game/resources/ui/credits.json`, which the pause menu's Credits screen shows (owner, 2026-11-12); sounds or other assets added later go in the same list. `game/tests/headless_credits_contract.gd` fails on an uncredited third-party folder or an undeclared image folder, so a new source or image folder gets its entry, or an `own_work` line saying how it was made, in the same change.
 
 ## Resource and access requests
 
