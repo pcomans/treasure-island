@@ -1328,3 +1328,15 @@ The stock controller speeds each world axis up apart (`move_toward` per componen
 ## An Area3D reports a fast mover a tick late
 
 The pitch's ball pushes a character its touch area overlaps, but the area's overlap list is the last physics step's: at the stock full run, 20 m/s or a third of a metre a tick, the capsule was already past the ball's centre when the ball read it, so the push's closing test refused every full-speed kick (found 2026-11-11; the contract's run test started 4 m back and reached only 14 m/s). Test a contact at the speeds players reach, and judge an approach against the mover's position a tick earlier when the reach is under a tick's travel.
+
+## A NaN resets a running minimum in GDScript
+
+The car stance test (2026-11-12) found each spot's nearest drawn triangle with `best = minf(best, distance)`. One degenerate triangle in the imported mesh made a distance NaN; `minf(best, NaN)` returns NaN and the next `minf(NaN, d)` returns `d`, so "the nearest" became whatever triangle came after it: 0.68 m on hoods the feet stood 3 mm above, while a ray straight down from the same feet read the right height. Skip triangles with no area and any NaN before a running `minf`/`maxf`, and cross-check one such value outside the engine (the same mesh in Node gave 0.352 m) before blaming the geometry.
+
+## Check that a generated mesh puts the right part in the right place
+
+The car rework (2f01bb8b, 2026-11-11) placed the lid's crease column by the median crease over all rows; on a sedan or fastback, whose long hood and deck rows have their creases near the shoulder, that left the side glass a single strip of triangles that no cut reached, so the windows were painted over at every level (and every body's at the far level). Every face check passed (no degenerate, inside-out or folded faces), and three engine rounds went by because the reviewed views were the owner's three. A check of meaning caught it at once: a ray straight in at each side window must meet glass first, for every body and level, and it passed on the owner's committed kit. After a change to how a generated mesh is tessellated, run such checks across every variant (here `tools/check_street_car_meshes.mjs`), and compare them with the last good asset, before rendering.
+
+## A collision hull as round as the body rolls like a barrel
+
+Cars collided as two boxes until 2026-11-11; as lofts of the drawn body's sections (so a player stands on what is drawn) a car knocked over in the vehicle contract kept rolling over its crowned roof and rounded rails back onto its wheels on all three tries, where the boxes had stopped it on its roof. Keeping only each section's corners within 1.5 cm of the outline, symmetric, with the roof flat out to its rails at the drawn height 0.7 of the way out, stopped it on its roof again, with the whole contract passing and the player's feet within 2 cm of the drawn roof. When collision changes shape, run the dynamic cases (rolls, pushes, ramps), not only the stance.

@@ -162,23 +162,24 @@ void fragment() {
 	}
 	if ((painted && finish != 3) || p == P_TRIM || (p == P_ROOF && black_roof)) {
 		// Road dust on a car's lower body, thicker low down and in patches,
-		// reaching higher on a dirtier car.
-		float low = 1.0 - smoothstep(0.1, mix(0.5, 0.95, dirt), local_position.y);
+		// reaching higher and lying thicker on a dirtier car.
+		float low = 1.0 - smoothstep(0.1, mix(0.5, 1.1, dirt), local_position.y);
 		float patches = value_noise(local_position * vec3(7.0, 3.0, 7.0)) * 0.6 + value_noise(local_position * 31.0) * 0.4;
-		float dust = low * low * (0.3 + 0.7 * patches) * mix(0.35, 0.95, dirt);
+		float dust = pow(low, mix(2.0, 1.3, dirt)) * (0.3 + 0.7 * patches) * mix(0.35, 1.2, dirt);
 		vec3 n = normalize(local_normal);
 		// A film of it on what faces up (the car's own up), on a dirty car.
 		float up = smoothstep(0.55, 0.9, n.y);
-		dust = max(dust, up * dirt * dirt * (0.3 + 0.7 * patches) * 0.65);
+		dust = clamp(max(dust, up * dirt * dirt * (0.3 + 0.7 * patches) * 0.8), 0.0, 1.0);
 		// Grime streaking down the sides and the back in places (a mask a
 		// metre or so across, shifted by the car's own dirt so no two cars
-		// share it), thin across and long down, heavier low down.
-		float places = smoothstep(0.45, 0.8, value_noise(local_position * 1.3 + vec3(dirt * 41.0, 0.0, dirt * 23.0)));
-		float streaks = smoothstep(0.55, 0.9, value_noise(vec3(local_position.x * 11.0, local_position.y * 1.1, local_position.z * 11.0)));
+		// share it), thin across and long down, heavier low down: a mid tone,
+		// so it shows dark on a light car and pale on a dark one.
+		float places = smoothstep(0.35, 0.7, value_noise(local_position * 1.3 + vec3(dirt * 41.0, 0.0, dirt * 23.0)));
+		float streaks = smoothstep(0.45, 0.85, value_noise(vec3(local_position.x * 11.0, local_position.y * 1.1, local_position.z * 11.0)));
 		float upright = 1.0 - smoothstep(0.35, 0.7, abs(n.y));
-		float grime = upright * dirt * places * streaks * mix(1.0, 0.5, smoothstep(0.5, 1.4, local_position.y)) * 0.32;
-		albedo = mix(albedo, vec3(0.3, 0.27, 0.23), dust * 0.75);
-		albedo = mix(albedo, vec3(0.22, 0.2, 0.17), grime);
+		float grime = upright * dirt * places * streaks * mix(1.0, 0.5, smoothstep(0.5, 1.4, local_position.y)) * 0.5;
+		albedo = mix(albedo, vec3(0.33, 0.29, 0.24), dust * 0.8);
+		albedo = mix(albedo, vec3(0.3, 0.27, 0.23), grime);
 		float dull = max(dust, grime);
 		roughness = mix(roughness, 0.9, dull);
 		metallic *= 1.0 - dull;

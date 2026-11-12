@@ -12,8 +12,11 @@
   hatchback, wagon, pickup, utility, van), each as `car_<body>_lod0` (near, wheels
   and all), `_lod1` (far), `_shadow` (the far body a little inside the surface:
   what casts the car's shadow while a nearer level draws), `_chassis_lod0` and
-  `_tyre_lod0` (the near body without wheels and one wheel, for a driven car) and
-  two axle markers; then a traffic cone, an A-frame barricade, a dumpster and a
+  `_tyre_lod0` (the near body without wheels and one wheel, for a driven car),
+  `_hull0` to `_hull2` (the points of the convex pieces a parked or driven car
+  collides as: its drawn outline's corners within 1.5 cm, the roof flat out to
+  its rails; reworked 2026-11-12) and two axle markers; then a traffic cone, an
+  A-frame barricade, a dumpster and a
   stock-tank planter at two levels each. The cars come from
   `tools/lib/street-car-kit.mjs` and `street-car-parts.mjs` (rebuilt 2026-11-09):
   one smooth body surface per car with its regions cut in along their outlines,
@@ -39,7 +42,12 @@
   (shell with panel gaps, lamp bowls and projectors, cabin with seats, dashboard
   and steering wheel, underbody), `_hero_glass` (the see-through panes and lamp
   lenses, drawn with `street_car_glass.gdshader`), `_hero_tyre` (one wheel:
-  tyre, rim with spokes, hub and lug nuts) and `_hero_brake` (disc and caliper).
+  tyre, rim with spokes, hub and lug nuts) and `_hero_brake` (disc and caliper),
+  and three markers where a driver sits and holds the wheel
+  (`car_<body>_driver_seat`, `_driver_hand_left`, `_driver_hand_right`, for
+  `game/scripts/vehicles/car_driver.gd`; 2026-11-12). Fittings shared by every
+  body (filler door, door handles, number plates, side reflectors, third brake
+  light) are modelled once in `street-car-parts.mjs` and draped onto each body.
   The driven car and the few parked cars nearest the camera draw it
   (`game/scripts/vehicles/car_hero_level.gd`); a wheel and a brake are drawn four
   times each.
