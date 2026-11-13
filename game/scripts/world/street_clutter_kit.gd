@@ -217,9 +217,11 @@ static func car_custom(params: Dictionary, twist_override: Variant = null, row_i
 ## mesh, wheels and all), shadow (the shadow caster), front, rear (the
 ## right-hand front and rear wheel centres in the car frame; the left ones
 ## mirror them in x), radius, tyre_width, hulls (car_hull_points: what it
-## collides as) and hull_shapes (car_hulls: those pieces as the shapes every car
-## of the body shares)} or {ok: false, message}. The car's size comes from the
-## chassis and tyre boxes, the same at every level.
+## collides as) and hull_shapes (car_hulls: those pieces as shapes this kit makes
+## once per body, so every live car the vehicle manager builds from its kit
+## shares them; the clutter builder's own kit makes the parked rows')} or
+## {ok: false, message}. The car's size comes from the chassis and tyre boxes,
+## the same at every level.
 func drivable(body: String) -> Dictionary:
 	var chassis: Variant = _meshes.get("car_%s_chassis_lod0" % body, null)
 	var tyre: Variant = _meshes.get("car_%s_tyre_lod0" % body, null)

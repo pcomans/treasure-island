@@ -383,9 +383,10 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	set_meta("opaque", true)
 	set_meta("street_detail_id", row_id)
 	# A kit car collides as its drawn body (parts.hulls, in the kit's own shapes of
-	# those pieces where it gives them: parts.hull_shapes, shared by every car of the
-	# body, parked or live) while it stands still, and as its two simple hulls while
-	# it moves (_collide_as_drawn); a body without the pieces always as the hulls.
+	# those pieces where it gives them: parts.hull_shapes, which every live car of
+	# the body shares; the parked rows use the clutter builder's kit's) while it
+	# stands still, and as its two simple hulls while it moves (_collide_as_drawn);
+	# a body without the pieces always as the hulls.
 	var hulls: Array = parts.get("hulls", [])
 	var shared: Array = parts.get("hull_shapes", []) if not hulls.is_empty() else []
 	var simple := _hulls(spec)

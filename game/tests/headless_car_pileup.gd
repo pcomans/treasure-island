@@ -11,9 +11,11 @@ extends SceneTree
 ##      and the server's step: one a frame under --fixed-fps 60) over the 6 s of
 ##      pressing into the row is at most PILEUP_TICK_RATIO times the mean over the
 ##      same car's free run-up in the same process, so the bound is no figure of
-##      the machine's speed. On 2026-11-13 acdf5c88 took 100 to 340 times as long
-##      (each moving car queried its drawn hull pieces against its neighbours'
-##      every tick, milliseconds a pair), 42507a21 about 3.5 and the fix about 1.5.
+##      the machine's speed. On 2026-11-13 this test measured 174.5 times on
+##      acdf5c88's code, where each moving car queried its drawn hull pieces
+##      against its neighbours' every tick, milliseconds a pair
+##      (car-crash-perf-20261113 runs/T3-pileup-test-on-acdf5c88), and 1.5 times
+##      on the fix (code-review-car-crash-perf-20261113 runs/P3).
 ## The cars are the generated rows' (if the world moves them, re-aim DRIVER, ROW,
 ## HEADING and RUN_UP_M here).
 
