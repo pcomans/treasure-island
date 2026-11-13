@@ -7,10 +7,12 @@
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
 # 2. The street cars' mesh check (tools/check_street_car_meshes.mjs).
-# 3. The behaviour tests: the game parses, loads and plays, and every building
+# 3. tools/godot's wait for its private Weston (tools/check_godot_weston_wait.sh):
+#    it waits through a slow start and stops at once when Weston exits.
+# 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
-# 4. The generated-world checks, including the street-detail clearance check:
+# 5. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
 #    approaches, the spawn or the QA corridors. They run in the background
 #    beside the long Godot stages, and their results come last.
@@ -68,6 +70,12 @@ fi
 # and no cabin poking out of the hero shell. Node only, a few seconds.
 echo "== tools/check_street_car_meshes.mjs"
 node tools/check_street_car_meshes.mjs || failed+=("tools/check_street_car_meshes.mjs")
+
+# How tools/godot waits for its private Weston, with stand-ins for Weston and
+# Godot (no GPU or engine): through a slow start, and not after Weston has
+# exited. About 7 s.
+echo "== tools/check_godot_weston_wait.sh"
+tools/check_godot_weston_wait.sh || failed+=("tools/check_godot_weston_wait.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

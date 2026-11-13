@@ -51,14 +51,45 @@ cleanup() {
 }
 trap cleanup EXIT
 trap 'exit 143' INT TERM
-for _ in $(seq 50); do
-  [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ] && break
+# Wait for Weston's socket, unless Weston exits first. Without a GPU, Weston sets
+# up GL on Mesa's software renderer, and on a GitHub runner that outlasted the old
+# fixed 5 s wait twice (2026-11-13); a CPU-starved start here, on the same path,
+# took 8 s. So allow 120 s: far more than a slow start needs, and only a Weston
+# that hangs without exiting ever waits that long. A start over 1 s is reported.
+weston_wait_s=120
+# Weston's CPU time and disk reads so far: a start that is busy, one that waits on
+# the disk and one that is stuck look alike in its log.
+weston_usage() {
+  local proc_stat fields cpu disk
+  proc_stat="$(cat "/proc/${weston_pid}/stat" 2>/dev/null)" || { echo "Weston has exited"; return 0; }
+  read -r -a fields <<< "${proc_stat##*) }"
+  cpu=$(( (fields[11] + fields[12]) * 10 / $(getconf CLK_TCK) ))
+  disk="$(sed -n 's/^read_bytes: //p' "/proc/${weston_pid}/io" 2>/dev/null)" || true
+  echo "state ${fields[0]}, $(( cpu / 10 )).$(( cpu % 10 )) s CPU${disk:+, $(( disk / 1000000 )) MB read from disk}"
+}
+socket="${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}"
+started_us="${EPOCHREALTIME/[.,]/}"
+waited_us=0
+while [ ! -S "${socket}" ] && kill -0 "${weston_pid}" 2>/dev/null \
+  && [ "${waited_us}" -lt $(( weston_wait_s * 1000000 )) ]; do
   sleep 0.1
+  waited_us=$(( ${EPOCHREALTIME/[.,]/} - started_us ))
 done
-if [ ! -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ]; then
+waited="$(( waited_us / 1000000 )).$(( waited_us / 100000 % 10 )) s"
+if [ ! -S "${socket}" ]; then
   echo "tools/godot: Weston did not start:" >&2
   cat "${weston_log}" >&2
+  if kill -0 "${weston_pid}" 2>/dev/null; then
+    echo "tools/godot: gave up after ${waited}; Weston is still running ($(weston_usage))" >&2
+  else
+    weston_status=0
+    wait "${weston_pid}" || weston_status=$?
+    echo "tools/godot: Weston exited with status ${weston_status} after ${waited}" >&2
+  fi
   exit 1
+fi
+if [ "${waited_us}" -ge 1000000 ]; then
+  echo "NOTE: tools/godot: Weston took ${waited} to open its socket ($(weston_usage))" >&2
 fi
 # The GTK window-decoration plugin crashes inside the container.
 export LIBDECOR_PLUGIN_DIR="${LIBDECOR_PLUGIN_DIR:-/nonexistent}"
