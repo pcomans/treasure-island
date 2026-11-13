@@ -98,7 +98,7 @@
   "own_work": [
     {
       "folder": "game/resources/models/street",
-      "made_by": "tools/build_street_clutter_kit.mjs and tools/build_street_yard_kit.mjs, from this project's procedural kits"
+      "made_by": "tools/build_street_clutter_kit.mjs, tools/build_street_car_hero_kit.mjs and tools/build_street_yard_kit.mjs, from this project's procedural kits"
     },
     {
       "folder": "game/resources/textures/world/sky",

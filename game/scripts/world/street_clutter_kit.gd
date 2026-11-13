@@ -269,16 +269,24 @@ func material() -> ShaderMaterial:
 	return _material
 
 
+## Reads the hero kit once, where the hero level is on: the vehicle manager
+## calls it under the load screen, so the first approach to a car doesn't stop
+## the game to read it (about 11 MB).
+func load_hero() -> void:
+	if _hero_loaded or not hero_level_enabled():
+		return
+	_hero_loaded = true
+	var packed := load(HERO_KIT_PATH) as PackedScene
+	if packed != null:
+		_read_scene(packed)
+
+
 ## A body's hero level: {ok, body, glass, tyre, brake (meshes), front, rear
 ## (the right-hand wheel centres)} or {ok: false} where the hero level is off.
 func hero(body: String) -> Dictionary:
 	if not hero_level_enabled():
 		return {"ok": false}
-	if not _hero_loaded:
-		_hero_loaded = true
-		var packed := load(HERO_KIT_PATH) as PackedScene
-		if packed != null:
-			_read_scene(packed)
+	load_hero()
 	var found := {"ok": true, "front": _markers.get("car_%s_axle_front" % body), "rear": _markers.get("car_%s_axle_rear" % body)}
 	# Where a driver sits and holds the wheel (car_driver.gd), where the kit marks it.
 	for marker: String in ["seat", "hand_left", "hand_right"]:

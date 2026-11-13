@@ -65,6 +65,15 @@ const NORMAL_FOLLOW_DEG = 5;
 const SLOT_RIM_M = 0.06;
 // How far (a share of the larger end value) the lid's rise round a corner may run past both its ends.
 const CORNER_PROFILE_PAST = 0.01;
+// Rays cast all round a level for see-through cracks.
+const SEE_THROUGH_RAYS = 2400;
+// The least share of a ray check's rays that must land where it looks (on the
+// car, on the side glass, on the plates, on the modelled wall's paint), so a
+// change that sends them past the car, or leaves a check little to sample,
+// fails instead of passing by default.
+const MIN_LANDED = { seeThrough: 0.5, windows: 0.9, plates: 0.9, normals: 0.4 };
+// The least side-window rays a body's glass must take (two stations a side).
+const MIN_WINDOW_RAYS = 12;
 // Interior parts (seen through the glass, never from outside directly).
 const INTERIOR = new Set(["cabin", "seat", "headliner", "screen"]);
 const VERBOSE = process.env.CAR_CHECK_VERBOSE === "1";
@@ -322,8 +331,8 @@ function seeThrough(tris, bounds, name = "", footprint = 0) {
     random = (random * 1103515245 + 12345) % 2147483648;
     return random / 2147483648;
   };
-  const faults = { rays: 0, backFirst: 0, interiorFirst: 0, where: [] };
-  for (let i = 0; i < 2400; i += 1) {
+  const faults = { tried: SEE_THROUGH_RAYS, rays: 0, backFirst: 0, interiorFirst: 0, where: [] };
+  for (let i = 0; i < SEE_THROUGH_RAYS; i += 1) {
     // From 0.3 m to 4 m up, all round, 1.5 to 3 car lengths out.
     const turn = next() * Math.PI * 2;
     const out = reach * (0.75 + next() * 0.75);
@@ -552,7 +561,7 @@ function normalsOffSurface(tris, bodyName) {
     const w = shape.wall(a, f);
     return [w.x, w.y, w.zf - shape.L / 2];
   };
-  const faults = { samples: 0, off: 0, worst: 0, where: [] };
+  const faults = { tried: 0, samples: 0, off: 0, worst: 0, where: [] };
   const A_STEPS = 200;
   const F_STEPS = 22;
   const body = CAR_BODIES[bodyName];
@@ -563,6 +572,7 @@ function normalsOffSurface(tris, bodyName) {
       const f = 0.08 + (0.78 * j) / F_STEPS;
       const p = P(a, f);
       if (slot && p[2] + shape.L / 2 > slot[0] && p[2] + shape.L / 2 < slot[1]) continue;
+      faults.tried += 1;
       const c = cross(sub(P(a, f + 1e-3), P(a, f - 1e-3)), sub(P(a + 2e-4, f), P(a - 2e-4, f)));
       const l = length(c);
       if (l < 1e-12) continue;
@@ -627,6 +637,10 @@ function main() {
     const at = where.slice(0, 3).map(([what, p]) => `${what} at ${p.map((v) => v.toFixed(3)).join(",")}`).join("; ");
     failures.push(`${name}: ${count} ${kind}${at ? ` (${at})` : ""}`);
   };
+  const enough = (name, check, landed, tried, share) => {
+    if (VERBOSE) console.log(`  ${name}: ${check} ${landed} of ${tried} landed`);
+    if (tried === 0 || landed < share * tried) failures.push(`${name}: only ${landed} of ${tried} ${check} rays land where the check looks (at least ${Math.round(100 * share)}% needed)`);
+  };
   for (const body of bodies) {
     const corners = cornerProfiles(body);
     if (corners.length) report(`car_${body} shape`, "corners whose profile bulges or dips", corners.length, corners);
@@ -664,15 +678,19 @@ function main() {
       if (s.gapWedges) report(name, "groove triangles wider than the groove", s.gapWedges, s.where.filter(([w]) => w.startsWith("wedge")));
       if (rays && !name.endsWith("_lod1")) {
         const o = normalsOffSurface(tris, body);
+        enough(name, "normal", o.samples, o.tried, MIN_LANDED.normals);
         if (o.off) report(name, `wall points of ${o.samples} whose drawn normal turns more than ${NORMAL_FOLLOW_DEG} deg from the surface's`, o.off, o.where);
         if (VERBOSE) console.log(`  ${name}: normals follow the surface at ${o.samples} wall points, worst ${o.worst.toFixed(2)} deg`);
       }
       if (rays) {
         const r = seeThrough(tris, boundsOf(tris), name, FOOTPRINT_M[name.endsWith("_hero") ? "hero" : name.endsWith("_lod1") ? "far" : "near"]);
+        enough(name, "see-through", r.rays, r.tried, MIN_LANDED.seeThrough);
         if (r.backFirst || r.interiorFirst) report(name, `see-through hits of ${r.rays} rays`, r.backFirst + r.interiorFirst, r.where);
         const w = paintedWindows(tris, boundsOf(tris), body, name.endsWith("_hero"));
+        enough(name, "side-window", w.rays - w.painted, Math.max(w.rays, MIN_WINDOW_RAYS), MIN_LANDED.windows);
         if (w.painted) report(name, `side-window rays of ${w.rays} meeting no glass`, w.painted, w.where);
         const p = hiddenPlates(tris, boundsOf(tris));
+        enough(name, "plate", p.rays - p.hidden, Math.max(p.rays, 2 * 11 * 5), MIN_LANDED.plates);
         if (p.hidden) report(name, `plate rays of ${p.rays} meeting no plate`, p.hidden, p.where);
         const m = wrongMaterials(tris, boundsOf(tris), probes);
         if (m.wrong) report(name, `material probes of ${m.rays} meeting the wrong material`, m.wrong, m.where);

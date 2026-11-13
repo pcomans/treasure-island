@@ -178,6 +178,9 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 		_hero.name = "CarHeroLevel"
 		add_child(_hero)
 		_hero.configure(_kit, _clutter, _rows, _cells, GRID_M)
+		# The hero kit too, under the load screen, not on the first approach to
+		# a parked car (desktop only: the web has no hero level).
+		_kit.load_hero()
 	# The yard kit draws the yards' vehicles and K-rails once they go live: built
 	# here, under the load screen, not on the player's first approach to one.
 	for entry: Dictionary in _rows.values():
