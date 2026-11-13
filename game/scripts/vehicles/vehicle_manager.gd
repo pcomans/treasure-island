@@ -20,7 +20,7 @@ extends Node3D
 ## metadata, so this works on the world generated at startup and on the baked
 ## one alike. Freezing: DrivableCar._park (at rest, nobody in it) and
 ## _settle_barrier; waking: DrivableCar.wake from enter(), DrivableCar.place
-## (drive_from) and _wake (a hit in _shove).
+## (drive_from) and _wake (a hit: _reach_live).
 ##
 ## Driving: W/S drive, brake and reverse, A/D steer, Space the handbrake (its
 ## own action on the jetpack's key; the jetpack is off in a car), R puts the car
@@ -41,6 +41,13 @@ extends Node3D
 ## (street_fence_breaker.gd); on foot every intact bay stays solid. Shrubs and
 ## hedges have no collision and tree trunks do, so a car drives through a shrub
 ## and stops at a tree.
+##
+## The reach (owner, 2026-11-13: one check for what is round a car, not one per
+## kind of thing): each tick every moving live car or K-rail asks the physics
+## server once for what is round it (vehicle_reach.gd, _look_round) and hands each
+## thing found to its owner by physics body (_reach_owners): the clutter's rows
+## and the live bodies here (_reach_row, _reach_live), the fences and their
+## standing posts (street_fence_breaker.gd), and any loose prop (_push_loose).
 ##
 ## The manager pauses with the game (F and R do nothing in the pause menu).
 ##
@@ -135,10 +142,14 @@ var _recover_down := false
 var _nearest := ""
 var _prompt := ""
 var _exit_prompt_s := 0.0
-var _query := PhysicsShapeQueryParameters3D.new()
-var _loose_query := PhysicsShapeQueryParameters3D.new()
 ## A static row's reach box per drivable body (half width, height, half length).
 var _boxes: Dictionary = {}
+## What a moving body's reach finds, by its physics body's RID: the Callable
+## (reach: VehicleReach, hit: Dictionary) that judges it.
+var _reach_owners: Dictionary = {}
+var _reach := VehicleReach.new()
+var _reach_query := PhysicsShapeQueryParameters3D.new()
+var _reach_shape := BoxShape3D.new()
 
 
 func _init() -> void:
@@ -200,13 +211,16 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 		_breaker.configure(world.street_detail_layer("fences"))
 	_breakable_fences = _breaker.fence_bodies()
 	_fences = _breaker.all_fence_bodies()
+	_reach_owners.clear()
+	if _clutter != null:
+		for child: Node in _clutter.get_children():
+			if child is StaticBody3D:
+				_reach_owners[(child as StaticBody3D).get_rid()] = _reach_row
+	_reach_owners.merge(_breaker.reach_owners())
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
 	_camera.use_planes_of(_player.get_camera())
 	add_child(_camera)
-	_query.collision_mask = PHYSICS_STREET_PROP
-	_query.collide_with_areas = false
-	_query.collide_with_bodies = true
 
 
 ## On a touch screen (main.gd use_touch_controls) there is no F key, so no key
@@ -255,6 +269,11 @@ func fence_breaker() -> FENCE_BREAKER:
 	return _breaker
 
 
+## The most things one reach has found so far this session (tests read it).
+func reach_most_hits() -> int:
+	return _reach.most_hits
+
+
 func _physics_process(delta: float) -> void:
 	if _player == null:
 		return
@@ -268,24 +287,16 @@ func _physics_process(delta: float) -> void:
 		_drive(delta, enter_pressed, recover_pressed)
 	else:
 		_on_foot(enter_pressed)
-	# Every moving live car or K-rail (not only the driven one) sets moving what
-	# it is about to hit, and a shoved or rolling one breaks the fence bays it
-	# moves into (the driven car's are broken in _drive).
+	# Every moving live car or K-rail (not only the driven one) looks round itself
+	# once: it sets moving what it is about to hit, breaks the fence bays it moves
+	# into and pushes the ball.
 	for id: String in _live.keys():
 		var body := _live[id] as RigidBody3D
 		if body == null or body.freeze:
 			continue
-		var speed := body.linear_velocity.length()
-		if speed > SHOVE_SPEED_MPS:
-			_shove(body, LOOKAHEAD_S, LOOKAHEAD_MARGIN_M)
-		elif speed > SHOVE_CREEP_MPS or (body == _active and absf(_active.drive_input) > 0.1):
-			_shove(body, 0.0, CONTACT_MARGIN_M)
-		if body != _active and speed > BREAK_SPEED_MPS:
-			_breaker.break_overlaps(body)
+		_look_round(body, delta)
 		if not body is DRIVABLE_CAR:
 			_settle_barrier(body, delta)
-		elif speed > BREAK_SPEED_MPS:
-			_push_loose(body)
 
 
 func _on_foot(enter_pressed: bool) -> void:
@@ -321,7 +332,6 @@ func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
 	_player.global_position = car.seat_transform().origin
 	_exit_prompt_s = maxf(0.0, _exit_prompt_s - delta)
 	_set_prompt(PROMPT_EXIT if _exit_prompt_s > 0.0 and not _touch else "")
-	_breaker.break_overlaps(car)
 	# Sinking in the bay, the car takes the player back to land with it.
 	if exit_pressed and not car.is_sinking():
 		exit_car()
@@ -491,6 +501,7 @@ func _make_live(id: String) -> Node3D:
 	add_child(node)
 	entry.live = true
 	_live[id] = node
+	_reach_owners[node.get_rid()] = _reach_live
 	return node
 
 
@@ -596,68 +607,111 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 		barrier.set_meta("park_wait", 0.0)
 
 
-## Sets moving whatever parked car or K-rail a moving live body (car or K-rail)
-## is about to hit: its reach (DrivableCar.reach_queries: a car's box round its
-## hull) lookahead_s ahead, grown by margin (0 s: what it touches now). A static
-## row swaps for its live body; a live one that has come to rest and frozen wakes.
-func _shove(car: RigidBody3D, lookahead_s: float, margin: float) -> void:
-	var space := car.get_world_3d().direct_space_state
-	var ahead := Transform3D(car.global_transform.basis, car.global_position + car.linear_velocity * lookahead_s)
-	_query.exclude = [car.get_rid()]
-	for reach: Dictionary in DRIVABLE_CAR.reach_queries(car, margin):
-		_query.shape = reach.shape
-		_query.margin = reach.margin
-		_query.transform = ahead * (reach.transform as Transform3D)
-		for hit: Dictionary in space.intersect_shape(_query, 16):
-			var body := hit.get("collider") as CollisionObject3D
-			if body is RigidBody3D and body.get_parent() == self and (body as RigidBody3D).freeze:
-				_wake(body as RigidBody3D)
-				continue
-			if body == null or body.get_parent() != _clutter:
-				continue
-			var shape_owner := body.shape_find_owner(int(hit.get("shape", -1)))
-			var shape := body.shape_owner_get_owner(shape_owner) as Node if shape_owner >= 0 else null
-			if shape == null:
-				continue
-			var id := str(shape.get_meta("street_detail_id", ""))
-			if _rows.has(id) and not bool(_rows[id].live):
-				var node := _make_live(id)
-				if node is DRIVABLE_CAR:
-					(node as DRIVABLE_CAR).occupied = false
+## One look round a moving live body (vehicle_reach.gd), asking for what each
+## owner judged with a query of its own before 2026-11-13: above SHOVE_SPEED_MPS
+## it sets moving what it will reach within LOOKAHEAD_S (its box there grown by
+## LOOKAHEAD_MARGIN_M), slower what it touches (CONTACT_MARGIN_M) while it moves
+## at all or its driver presses on; the driven car, and any other above
+## BREAK_SPEED_MPS, breaks the fence bays it touches and fells their standing
+## posts (street_fence_breaker.gd); a car above BREAK_SPEED_MPS pushes the loose
+## props within LOOSE_PUSH_MARGIN_M. One query covers the box round all of it;
+## each owner judges what it is given against its own part.
+func _look_round(body: RigidBody3D, delta: float) -> void:
+	var reach := _reach
+	reach.look_from(body, delta)
+	var speed := reach.speed
+	reach.driven = body == _active
+	reach.ahead = speed > SHOVE_SPEED_MPS
+	reach.touch = not reach.ahead and (speed > SHOVE_CREEP_MPS or (reach.driven and absf(_active.drive_input) > 0.1))
+	reach.breaks = reach.driven or speed > BREAK_SPEED_MPS
+	reach.pushes = body is DRIVABLE_CAR and speed > BREAK_SPEED_MPS
+	if not (reach.ahead or reach.touch or reach.breaks or reach.pushes):
+		return
+	var margin := 0.0
+	if reach.touch:
+		margin = CONTACT_MARGIN_M
+	if reach.breaks:
+		margin = maxf(margin, FENCE_BREAKER.BAY_MARGIN_M)
+	if reach.pushes:
+		margin = maxf(margin, LOOSE_PUSH_MARGIN_M)
+	var region := reach.box.grow(margin)
+	if reach.ahead:
+		region = region.merge(AABB(reach.box.position + reach.local_velocity * LOOKAHEAD_S, reach.box.size).grow(LOOKAHEAD_MARGIN_M))
+	for hit: Dictionary in reach.find(_reach_query, _reach_shape, region):
+		var owner: Callable = _reach_owners.get(hit.get("rid", RID()), Callable())
+		if owner.is_valid():
+			owner.call(reach, hit)
+		elif reach.pushes:
+			var prop := hit.get("collider") as RigidBody3D
+			if prop != null and prop.collision_layer & PHYSICS_LOOSE_PROP:
+				_push_loose(reach, prop)
 
 
-## Pushes the loose props (the pitch's ball) a moving car's hull is about to
-## meet, as a bumper: see LOOSE_PUSH_REBOUND.
-func _push_loose(car: RigidBody3D) -> void:
-	var space := car.get_world_3d().direct_space_state
-	_loose_query.collision_mask = PHYSICS_LOOSE_PROP
-	_loose_query.collide_with_areas = false
-	_loose_query.margin = LOOSE_PUSH_MARGIN_M
-	_loose_query.exclude = [car.get_rid()]
-	var pushed := {}
-	for owner_id in car.get_shape_owners():
-		if car.is_shape_owner_disabled(owner_id):
-			continue
-		for index in car.shape_owner_get_shape_count(owner_id):
-			_loose_query.shape = car.shape_owner_get_shape(owner_id, index)
-			_loose_query.transform = car.global_transform * car.shape_owner_get_transform(owner_id)
-			for hit: Dictionary in space.intersect_shape(_loose_query, 4):
-				var prop := hit.get("collider") as RigidBody3D
-				if prop == null or pushed.has(prop):
-					continue
-				pushed[prop] = true
-				var offset := prop.global_position - car.global_position
-				var normal := Vector3(offset.x, 0.0, offset.z)
-				if normal.length_squared() < 0.000001:
-					continue
-				normal = normal.normalized()
-				var closing := (car.linear_velocity - prop.linear_velocity).dot(normal)
-				if closing <= 0.0:
-					continue
-				var target := minf(car.linear_velocity.dot(normal) + LOOSE_PUSH_REBOUND * closing, LOOSE_PUSH_MAX_MPS)
-				var change := target - prop.linear_velocity.dot(normal)
-				if change > 0.0:
-					prop.apply_central_impulse((normal + Vector3.UP * LOOSE_PUSH_LIFT) * change * prop.mass)
+## A static row's collision piece in a moving body's reach: a parked car's or
+## K-rail's row goes live where the body shoves it (_shoves).
+func _reach_row(reach: VehicleReach, hit: Dictionary) -> void:
+	if not (reach.ahead or reach.touch):
+		return
+	var body := hit.get("collider") as CollisionObject3D
+	var shape_owner := body.shape_find_owner(int(hit.get("shape", -1))) if body != null else -1
+	var shape := body.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
+	if shape == null:
+		return
+	var id := str(shape.get_meta("street_detail_id", ""))
+	if not _rows.has(id) or bool(_rows[id].live) or not _shoves(reach, shape.global_transform, shape.shape):
+		return
+	var node := _make_live(id)
+	if node is DRIVABLE_CAR:
+		(node as DRIVABLE_CAR).occupied = false
+
+
+## A live body's collision piece in a moving body's reach: a frozen one (come to
+## rest) wakes where the body shoves it (_shoves).
+func _reach_live(reach: VehicleReach, hit: Dictionary) -> void:
+	if not (reach.ahead or reach.touch):
+		return
+	var other := hit.get("collider") as RigidBody3D
+	if other == null or not other.freeze or other.get_parent() != self:
+		return
+	var shape_owner := other.shape_find_owner(int(hit.get("shape", -1)))
+	if shape_owner < 0 or other.shape_owner_get_shape_count(shape_owner) == 0:
+		return
+	if _shoves(reach, other.global_transform * other.shape_owner_get_transform(shape_owner), other.shape_owner_get_shape(shape_owner, 0)):
+		_wake(other)
+
+
+## Whether a collision piece (shape at shape_xf in the world) lies where the body
+## shoves this tick: its box LOOKAHEAD_S ahead grown by LOOKAHEAD_MARGIN_M (ahead),
+## or its box now grown by CONTACT_MARGIN_M (touch). The piece counts by the box
+## round it.
+func _shoves(reach: VehicleReach, shape_xf: Transform3D, shape: Shape3D) -> bool:
+	var piece := VehicleReach.shape_box(shape)
+	var piece_xf := shape_xf * Transform3D(Basis.IDENTITY, piece.get_center())
+	if reach.ahead:
+		var ahead := Transform3D(reach.box_xf.basis, reach.box_xf.origin + reach.velocity * LOOKAHEAD_S)
+		return VehicleReach.boxes_overlap(ahead, reach.half + Vector3.ONE * LOOKAHEAD_MARGIN_M, piece_xf, piece.size * 0.5)
+	return reach.touch and reach.overlaps(piece_xf, piece.size * 0.5, CONTACT_MARGIN_M)
+
+
+## Pushes a loose prop (the pitch's ball) a moving car's reach found within
+## LOOSE_PUSH_MARGIN_M of its box, as a bumper: see LOOSE_PUSH_REBOUND.
+func _push_loose(reach: VehicleReach, prop: RigidBody3D) -> void:
+	var car := reach.body
+	var radius := VehicleReach.reach_box(prop).size.x * 0.5
+	if reach.distance_to(prop.global_position) > radius + LOOSE_PUSH_MARGIN_M:
+		return
+	var offset := prop.global_position - car.global_position
+	var normal := Vector3(offset.x, 0.0, offset.z)
+	if normal.length_squared() < 0.000001:
+		return
+	normal = normal.normalized()
+	var closing := (car.linear_velocity - prop.linear_velocity).dot(normal)
+	if closing <= 0.0:
+		return
+	var target := minf(car.linear_velocity.dot(normal) + LOOSE_PUSH_REBOUND * closing, LOOSE_PUSH_MAX_MPS)
+	var change := target - prop.linear_velocity.dot(normal)
+	if change > 0.0:
+		prop.apply_central_impulse((normal + Vector3.UP * LOOSE_PUSH_LIFT) * change * prop.mass)
 
 
 ## A live car or K-rail that came to rest and froze, set moving again by a hit

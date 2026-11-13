@@ -16,8 +16,13 @@ extends SceneTree
 ##      against its neighbours' every tick, milliseconds a pair
 ##      (car-crash-perf-20261113 runs/T3-pileup-test-on-acdf5c88), and 1.5 times
 ##      on the fix (code-review-car-crash-perf-20261113 runs/P3).
+##   4. a crowd cannot hide a car (owner, 2026-11-13: one look round a moving car
+##      for everything in its reach, vehicle_reach.gd): with CROWD small boxes on
+##      the reach layer, which nothing collides with, between the sedan and a
+##      parked car it is driven into from across the road, that car is set
+##      moving, and the sedan's reach found the whole crowd at once.
 ## The cars are the generated rows' (if the world moves them, re-aim DRIVER, ROW,
-## HEADING and RUN_UP_M here).
+## HEADING, RUN_UP_M and the CROWD_ fixture here).
 
 const DRIVER := "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_029"
 const ROW := "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_024"
@@ -31,6 +36,15 @@ const PRESS_TICKS := 360
 const CONTACT_LIMIT_TICKS := 600
 const REST_LIMIT_TICKS := 600
 const PILEUP_TICK_RATIO := 40.0
+## The crowd check's parked car, approached across the road from CROWD_START along
+## CROWD_HEADING (the vehicle contract's side shove), and the crowd: CROWD boxes
+## of CROWD_BOX_M in a cloud CROWD_AHEAD_M short of the car's middle on the way in.
+const CROWD_ROW := "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_005"
+const CROWD_START := Vector2(-284.6, 308.0)
+const CROWD_HEADING := Vector2(0.613, -0.79)
+const CROWD := 300
+const CROWD_BOX_M := 0.1
+const CROWD_AHEAD_M := 2.6
 
 var _main: GameMain
 var _vehicles: VehicleManager
@@ -125,7 +139,53 @@ func _run() -> void:
 	print("PILEUP physics tick: free run-up mean %.3f ms over %d ticks; pile-up mean %.3f ms, 95th percentile %.3f ms, longest %.3f ms over %d ticks; %.1f times the run-up's (at most %.0f)" % [free_mean, free.size(), pile_mean, pileup[int(pileup.size() * 0.95)], pileup[-1], pileup.size(), ratio, PILEUP_TICK_RATIO])
 	if ratio > PILEUP_TICK_RATIO:
 		_failures.append("The pile-up's mean physics tick took %.1f times the free run-up's (at most %.0f): pressing a car into a row of parked cars is too costly" % [ratio, PILEUP_TICK_RATIO])
-	_finish("")
+	_finish(await _crowd())
+
+
+## A crowd of things in reach between the sedan and a parked car: the car is still
+## set moving and the reach found the whole crowd at once. "" or what failed.
+func _crowd() -> String:
+	if _vehicles.row(CROWD_ROW).is_empty() or _vehicles.live_node(CROWD_ROW) != null:
+		return "%s is not a static parked car in this world: re-aim the crowd fixture." % CROWD_ROW
+	var heading := CROWD_HEADING.normalized()
+	var problem := _vehicles.drive_from(DRIVER, CROWD_START, heading)
+	if problem != "":
+		return "Could not put the sedan at the crowd check's start: %s" % problem
+	for _tick in 45:
+		await physics_frame
+	var target: Transform3D = _vehicles.row(CROWD_ROW).transform
+	var along := Vector3(heading.x, 0.0, heading.y)
+	var across := along.cross(Vector3.UP)
+	var middle := target.origin - along * CROWD_AHEAD_M
+	var crowd := StaticBody3D.new()
+	crowd.name = "ReachCrowd"
+	crowd.collision_layer = VehicleReach.PHYSICS_REACH
+	crowd.collision_mask = 0
+	var box := BoxShape3D.new()
+	box.size = Vector3.ONE * CROWD_BOX_M
+	var random := RandomNumberGenerator.new()
+	random.seed = 20261113
+	for index in CROWD:
+		var piece := CollisionShape3D.new()
+		piece.shape = box
+		piece.position = middle + along * random.randf_range(-0.8, 0.8) + across * random.randf_range(-0.6, 0.6) + Vector3.UP * random.randf_range(0.4, 1.3)
+		crowd.add_child(piece)
+	root.add_child(crowd)
+	Input.action_press("move_forward")
+	var live_at := -1
+	for tick in 300:
+		await physics_frame
+		if _vehicles.live_node(CROWD_ROW) != null:
+			live_at = tick
+			break
+	Input.action_release("move_forward")
+	crowd.queue_free()
+	print("CROWD %s set moving at tick %d with %d boxes in reach; the most one reach found %d" % [CROWD_ROW.rsplit(":", true, 1)[-1], live_at, CROWD, _vehicles.reach_most_hits()])
+	if live_at < 0:
+		return "Driven into %s through a crowd of %d things in its reach, the sedan did not set it moving: the crowd pushed it out of what the reach found." % [CROWD_ROW, CROWD]
+	if _vehicles.reach_most_hits() < CROWD:
+		return "The sedan's reach found at most %d of the %d things in it at once: a full list must be asked again with room for more (vehicle_reach.gd find), unless the crowd fixture no longer stands in its way." % [_vehicles.reach_most_hits(), CROWD]
+	return ""
 
 
 func _on_physics_frame() -> void:
@@ -146,7 +206,7 @@ func _finish(problem: String) -> void:
 		_failures.append(problem)
 	Input.action_release("move_forward")
 	if _failures.is_empty():
-		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's" % PILEUP_TICK_RATIO)
+		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, CROWD])
 		quit(0)
 	else:
 		for failure in _failures:
