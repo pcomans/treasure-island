@@ -16,10 +16,12 @@
 #                     game's loading screen chest (game/scenes/ui/hud.tscn).
 # The background stays transparent. Fully transparent pixels are made black (the
 # art's outline colour) so a resize that doesn't premultiply alpha draws no light
-# fringe. The exporters resize the imported image, so app_icon.png.import keeps
-# that black with process/fix_alpha_border off: on, it would fill them from the
-# art's grey anti-aliased rim, a light rim on the .icns. Needs ImageMagick; the
-# output is deterministic for a given ImageMagick version.
+# fringe. The exporters and the loading screen use the imported images, so both
+# .import files keep process/fix_alpha_border off
+# (game/tests/headless_world_material_contract.gd checks it): on, the import would
+# refill those pixels from the art's grey anti-aliased rim, a light rim on the
+# icons. Needs ImageMagick; the output is deterministic for a given ImageMagick
+# version.
 #   tools/make_app_icon.sh [owner-picture]   with the owner's picture, rebuilds the
 #                                            master from it first; with no argument,
 #                                            rebuilds app_icon_360.png from the
@@ -39,8 +41,15 @@ if [ "$#" -ge 1 ]; then
   magick "$1" -background black -alpha background \
     -background none -gravity center -extent "${master}x${master}" "${png[@]}" "PNG32:${ui}/app_icon.png"
 fi
-# Alpha under half an 8-bit step (Lanczos' faint ringing) is zeroed first, so every
-# pixel saved transparent is also black.
-magick "${ui}/app_icon.png" -filter Lanczos -resize 360x360 \
-  -channel A -black-threshold 0.2% +channel \
-  -background black -alpha background "${png[@]}" "PNG32:${ui}/app_icon_360.png"
+# Lanczos leaves faint alpha round the art in whatever colour the resize gave it,
+# some near white, and the PNG writer truncates alpha to 8 bits. So the resize is
+# written at 8 bits and read back, and every pixel whose stored alpha is under
+# 20/255 (the transparent ones and that faint fringe; the cut Godot's own
+# alpha-border fix uses) takes the outline's black: a filter or resize that
+# doesn't premultiply alpha (the loading screen's, the exporters') then draws no
+# light specks, and correctly blended they change by under 8 grey levels. Every
+# pixel keeps its alpha, so the outline's anti-aliased edge stays at full weight.
+# (This replaces "-channel A -black-threshold 0.2%", which in ImageMagick 7 zeroed
+# every alpha below fully opaque and so cut the outline's outer edge away.)
+magick "${ui}/app_icon.png" -filter Lanczos -resize 360x360 -depth 8 png32:- \
+  | magick png:- -channel RGB -fx 'a < 19.5/255 ? 0 : u' +channel "${png[@]}" "PNG32:${ui}/app_icon_360.png"
