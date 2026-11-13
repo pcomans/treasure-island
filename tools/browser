@@ -38,7 +38,9 @@ weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
   --width=1600 --height=1000 --idle-time=0 \
   >"${XDG_RUNTIME_DIR}/weston.log" 2>&1 &
 weston_pid=$!
-for _ in {1..50}; do
+# Weston's GL setup can take seconds on a slow or busy machine (see tools/godot):
+# wait up to about 120 s for its socket, unless Weston exits first.
+for _ in {1..1200}; do
   [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ] && break
   kill -0 "${weston_pid}" 2>/dev/null || break
   sleep 0.1
