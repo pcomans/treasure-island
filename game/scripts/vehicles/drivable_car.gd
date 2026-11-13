@@ -244,9 +244,10 @@ var occupied := false:
 var boundary: WorldBoundary
 var visible_ground: VisibleGround
 var water_y := -0.12
-## The breakable fence bodies it passes through (set by the vehicle manager);
-## its righting may end overlapping one, never an unbreakable one.
-var breakable_fences: Array[RID] = []
+## The bodies it passes through (set by the vehicle manager): the breakable
+## fences and the trunks of the small trees that bend; its righting may end
+## overlapping one, never an unbreakable fence or a big tree.
+var pass_through: Array[RID] = []
 
 var length_m := 4.5
 var width_m := 1.8
@@ -893,7 +894,7 @@ func _right_target(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> Transfo
 func _hulls_clear(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> bool:
 	_hull_query.collision_mask = GROUND_MASK
 	var skip: Array[RID] = [get_rid()]
-	skip.append_array(breakable_fences)
+	skip.append_array(pass_through)
 	_hull_query.exclude = skip
 	_hull_query.margin = 0.02
 	for owner_id in get_shape_owners():

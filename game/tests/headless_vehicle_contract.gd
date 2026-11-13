@@ -44,8 +44,15 @@ extends SceneTree
 ##      and its gap opens on foot; then the turf pitch's windscreen: the car
 ##      breaks its bay and stops at the ball-stop net behind it, whose rows are
 ##      breakable: false;
-##   7. plants: the car drives through a shrub without slowing and stops at a
-##      palm's trunk;
+##   7. plants: the car drives through a shrub without slowing; through Cityside
+##      Park's windrow of young gums (small trees, their trunks thinner than the
+##      vegetation kit's BENDING_TRUNK_RADIUS_M) on the stock W it keeps going, every
+##      gum leaning away (BEND_LEAN_DEG at least) and standing exactly as it was
+##      within BEND_STAND_S; stopped with one of them under it, the car holds it
+##      down for HELD_S with no input, and driven on it stands again within
+##      BEND_STAND_S; a palm's trunk stops it, and so does the thinnest established
+##      tree (a pohutukawa, just over the line); on foot a young gum stops the
+##      stock player as before;
 ##   7b. street lamps (owner, 2026-11-13): crept into, pressed against at full
 ##      throttle and tapped on the stock W from 0.6 m, a lamp stands and stops
 ##      the car; driven at from 20 m back on the stock W, another falls, the car
@@ -120,6 +127,13 @@ const AVATAR_REACH_M := 2.0
 const HULL_READ_M := 0.01
 const HULL_LENGTH_MARGIN_M := 0.15
 const HULL_TOP_MARGIN_M := 0.35
+## The least each young gum of the windrow must lean while the car pushes
+## through (degrees), and how soon after the car has passed every one must stand
+## as it was (s).
+const BEND_LEAN_DEG := 20.0
+const BEND_STAND_S := 4.0
+## How long a car stopped on a young gum must hold it down with no input (s).
+const HELD_S := 2.0
 ## A car that knocks a lamp over keeps at least this share of its speed: a lamp
 ## takes its share of the car's momentum (street_furniture_breaker.gd, about a
 ## tenth for a cobra lamp and a crossover).
@@ -175,7 +189,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1317,19 +1331,141 @@ func _case_plants() -> bool:
 	print("SHRUB %.2f m/s before, %.2f m/s after" % [speed_before, speed_after])
 	if not _require(speed_after >= 0.9 * speed_before and speed_before > 5.0, "The car did not drive straight through the shrub (%.2f -> %.2f m/s)." % [speed_before, speed_after]):
 		return false
-	# The palm: its trunk stops the car.
-	start = Vector2(_cases.tree.start_xz[0], _cases.tree.start_xz[1])
-	heading = Vector2(_cases.tree.heading_xz[0], _cases.tree.heading_xz[1]).normalized()
-	var tree := Vector2(_cases.tree.at_xz[0], _cases.tree.at_xz[1])
+	# The young gums: through the windrow, each leaning away and standing again.
+	var bender := _vehicles.tree_bender()
+	var first: Dictionary = bender.tree(str(_cases.small_trees.first))
+	var last: Dictionary = bender.tree(str(_cases.small_trees.last))
+	if not _require(not first.is_empty() and not last.is_empty(), "Fixture trees %s and %s are not small trees that bend." % [_cases.small_trees.first, _cases.small_trees.last]):
+		return false
+	var a := Vector2((first.foot as Vector3).x, (first.foot as Vector3).z)
+	var b := Vector2((last.foot as Vector3).x, (last.foot as Vector3).z)
+	heading = (b - a).normalized()
+	var line_m := (b - a).length()
+	# The windrow's trees: the bending trees standing on the line from first to last.
+	var line_ids: Array = bender.bending_ids().filter(func(id: String) -> bool:
+		var foot: Vector3 = bender.tree(id).foot
+		var off := Vector2(foot.x, foot.z) - a
+		return off.dot(heading) > -0.5 and off.dot(heading) < line_m + 0.5 and absf(off.dot(Vector2(-heading.y, heading.x))) < 0.5)
+	start = a - heading * float(_cases.small_trees.run_up_m)
 	if not await _drive_from(car, start, heading):
 		return false
-	reach = (tree - start).dot(heading)
+	var slowest := INF
+	var through := false
+	Input.action_press("move_forward")
+	for _tick in 600:
+		# Along the windrow's line: toward a point on it 8 m ahead of the car.
+		_steer_toward(car, a + heading * ((Vector2(car.global_position.x, car.global_position.z) - a).dot(heading) + 8.0))
+		await physics_frame
+		var along := (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading)
+		if along > 0.0:
+			slowest = minf(slowest, car.linear_velocity.length())
+		if along > line_m + car.length_m:
+			through = true
+			break
+	_release_driving()
+	var leaned: Array = line_ids.filter(func(id: String) -> bool: return bender.most_lean_degrees(id) >= BEND_LEAN_DEG)
+	var standing_s := -1.0
+	for tick in int(BEND_STAND_S * 60.0):
+		await physics_frame
+		if line_ids.all(func(id: String) -> bool: return bender.lean_degrees(id) == 0.0):
+			standing_s = tick / 60.0
+			break
+	var least_lean := INF
+	for id: String in line_ids:
+		least_lean = minf(least_lean, bender.most_lean_degrees(id))
+	print("SMALL_TREES through the windrow's %d young gums: through %s, slowest %.2f m/s past the first, each leaned %.0f degrees at least (%d of %d over %.0f), all standing again %.2f s after" % [line_ids.size(), through, slowest, least_lean, leaned.size(), line_ids.size(), BEND_LEAN_DEG, standing_s])
+	if not _require(line_ids.size() >= 5 and through and slowest > 5.0, "The young gums stopped or held up the car (%d trees, through %s, slowest %.2f m/s)." % [line_ids.size(), through, slowest]) \
+	or not _require(leaned.size() == line_ids.size(), "Not every young gum leaned away from the car (%d of %d over %.0f degrees)." % [leaned.size(), line_ids.size(), BEND_LEAN_DEG]) \
+	or not _require(standing_s >= 0.0, "The young gums did not all stand again within %.0f s." % BEND_STAND_S) \
+	or not await _held_tree(car, str(_cases.small_trees.held), a, heading):
+		return false
+	# The palm, and the thinnest established tree: their trunks stop the car.
+	if not await _stopped_by_trunk(car, Vector2(_cases.tree.start_xz[0], _cases.tree.start_xz[1]), Vector2(_cases.tree.heading_xz[0], _cases.tree.heading_xz[1]).normalized(), Vector2(_cases.tree.at_xz[0], _cases.tree.at_xz[1]), "the palm"):
+		return false
+	var thin_at: Vector2 = _ground_xz_of(str(_cases.thin_big_tree.row))
+	var thin_heading := Vector2(_cases.thin_big_tree.heading_xz[0], _cases.thin_big_tree.heading_xz[1]).normalized()
+	if not _require(thin_at.is_finite() and bender.tree(str(_cases.thin_big_tree.row)).is_empty(), "Fixture tree %s is missing or bends." % _cases.thin_big_tree.row) \
+	or not await _stopped_by_trunk(car, thin_at - thin_heading * float(_cases.thin_big_tree.run_up_m), thin_heading, thin_at, "the pohutukawa %s" % _cases.thin_big_tree.row):
+		return false
+	if not _require(_recoveries.size() == recoveries_before, "A recovery fired at the plants.") or not await _stop_and_exit(car, "plants"):
+		return false
+	# On foot a young gum still stops the stock player.
+	return await _walk_along_x(bender.tree(str(_cases.small_trees.walk)).foot, false, "the young gum %s" % _cases.small_trees.walk)
+
+
+## The car stopped with the young gum held under it (along the windrow's line from
+## a along heading): with no input, and so no reach looking round the car, the gum
+## stays down for HELD_S; driven on at a walking pace it stands again within
+## BEND_STAND_S, once the car and its chase camera have passed it.
+func _held_tree(car: DRIVABLE_CAR, held: String, a: Vector2, heading: Vector2) -> bool:
+	var bender := _vehicles.tree_bender()
+	var foot: Vector3 = bender.tree(held).get("foot", Vector3.INF)
+	if not _require(foot.is_finite(), "Fixture tree %s is not a small tree that bends." % held):
+		return false
+	var foot_along := (Vector2(foot.x, foot.z) - a).dot(heading)
+	if not await _drive_from(car, a + heading * (foot_along - 10.0), heading):
+		return false
+	var stopping := false
+	Input.action_press("move_forward")
+	for _tick in 600:
+		var along := (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading)
+		_steer_toward(car, a + heading * (along + 8.0))
+		if not stopping:
+			if car.linear_velocity.length() > 5.0:
+				Input.action_release("move_forward")
+			else:
+				Input.action_press("move_forward")
+			if along >= foot_along - 1.6:
+				# The car's middle 1.6 m short of the gum: on the brakes, to stop over it.
+				stopping = true
+				_release_driving()
+				Input.action_press("move_back")
+		await physics_frame
+		if stopping and car.linear_velocity.length() < 0.3:
+			break
+	_release_driving()
+	var short_m := foot_along - (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading)
+	var least := INF
+	for _tick in int(HELD_S * 60.0):
+		await physics_frame
+		least = minf(least, bender.lean_degrees(held))
+	# Driven on at a walking pace until the car's middle is 12 m past it.
+	Input.action_press("move_forward")
+	for _tick in 600:
+		var along := (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading)
+		_steer_toward(car, a + heading * (along + 8.0))
+		if car.linear_velocity.length() > 4.0:
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
+		await physics_frame
+		if along > foot_along + 12.0:
+			break
+	_release_driving()
+	var standing_s := -1.0
+	for tick in int(BEND_STAND_S * 60.0):
+		await physics_frame
+		if bender.lean_degrees(held) == 0.0:
+			standing_s = tick / 60.0
+			break
+	print("SMALL_TREES held: the car stopped with %s %.2f m ahead of its middle; with no input it leaned %.1f degrees at least over %.1f s; driven on 12 m past it, standing again %.2f s after" % [held, short_m, least, HELD_S, standing_s])
+	return _require(absf(short_m) < car.length_m * 0.5 - 0.3, "The car did not stop over %s (its middle %.2f m short of it)." % [held, short_m]) \
+	and _require(least >= BEND_LEAN_DEG, "A young gum under a stopped car stood up through it (%.1f degrees)." % least) \
+	and _require(standing_s >= 0.0, "The young gum did not stand again within %.0f s of the car driving on." % BEND_STAND_S)
+
+
+## The car on the stock W from start along heading at a tree trunk at at: it must
+## hit it at speed and be stopped by it.
+func _stopped_by_trunk(car: DRIVABLE_CAR, start: Vector2, heading: Vector2, at: Vector2, label: String) -> bool:
+	if not await _drive_from(car, start, heading):
+		return false
+	var reach := (at - start).dot(heading)
 	var approach := 0.0
 	var furthest := -INF
 	var hit_tick := -1
 	Input.action_press("move_forward")
 	for tick in 420:
-		_steer_toward(car, tree)
+		_steer_toward(car, at)
 		await physics_frame
 		var along := (Vector2(car.global_position.x, car.global_position.z) - start).dot(heading)
 		furthest = maxf(furthest, along)
@@ -1341,12 +1477,18 @@ func _case_plants() -> bool:
 			break
 	_release_driving()
 	var after := car.linear_velocity.length()
-	print("TREE approached at %.2f m/s, %.2f m/s after the hit, front reached %.2f of %.2f m, up %.3f" % [approach, after, furthest + car.length_m * 0.5, reach, car.global_transform.basis.y.y])
-	if not _require(hit_tick >= 0 and approach > 8.0, "The car never hit the palm (approach %.2f m/s)." % approach) \
-	or not _require(furthest < reach and after < 0.3 * approach, "The palm's trunk did not stop the car.") \
-	or not _require(_recoveries.size() == recoveries_before, "A recovery fired at the plants."):
-		return false
-	return await _stop_and_exit(car, "plants")
+	print("TREE %s approached at %.2f m/s, %.2f m/s after the hit, front reached %.2f of %.2f m, up %.3f" % [label, approach, after, furthest + car.length_m * 0.5, reach, car.global_transform.basis.y.y])
+	return _require(hit_tick >= 0 and approach > 8.0, "The car never hit %s (approach %.2f m/s)." % [label, approach]) \
+	and _require(furthest < reach and after < 0.3 * approach, "The trunk of %s did not stop the car." % label)
+
+
+## A street-detail row's position in plan (INF if there is none).
+func _ground_xz_of(id: String) -> Vector2:
+	var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/street_detail.json"))
+	for row: Dictionary in document.rows:
+		if str(row.get("id", "")) == id and row.get("position_m") is Array:
+			return Vector2(float(row.position_m[0]), float(row.position_m[2]))
+	return Vector2.INF
 
 
 # --- 7b. Street lamps: one met at driving speed falls, a slow nudge stops at one.
@@ -1486,7 +1628,7 @@ func _walk_along_x(foot: Vector3, open: bool, label: String) -> bool:
 		await physics_frame
 	_release()
 	var past := _player.global_position.x - foot.x
-	print("LAMP on foot at %s: %.2f m past the foot along x, %.2f m off its line" % [label, past, absf(_player.global_position.z - foot.z)])
+	print("ON FOOT at %s: %.2f m past the foot along x, %.2f m off its line" % [label, past, absf(_player.global_position.z - foot.z)])
 	if open:
 		return _require(past > 0.5, "The stock player could not walk through %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_gone")
 	return _require(past < 0.0 and past > -1.0, "The stock player was not stopped by %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_standing")

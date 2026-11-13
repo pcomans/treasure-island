@@ -41,8 +41,11 @@ extends Node3D
 ## (street_fence_breaker.gd); on foot every intact bay stays solid. A street lamp
 ## met at driving speed falls and the car carries on a little slower; a slow
 ## nudge stops at it (street_furniture_breaker.gd). Shrubs and hedges have no
-## collision and tree trunks do, so a car drives through a shrub and stops at a
-## tree.
+## collision, so a car drives through a shrub. A small tree (its trunk thinner
+## than the vegetation kit's BENDING_TRUNK_RADIUS_M) bends out of the way and
+## springs back (street_tree_bender.gd: a live car or K-rail has an exception per
+## bending trunk body, as for the breakable fences); a bigger tree stops the car.
+## On foot every tree stays solid.
 ##
 ## The reach (owner, 2026-11-13: one check for what is round a car, not one per
 ## kind of thing): each tick every moving live car or K-rail asks the physics
@@ -50,7 +53,8 @@ extends Node3D
 ## thing found to its owner by physics body (_reach_owners): the clutter's rows
 ## and the live bodies here (_reach_row, _reach_live), the fences and their
 ## standing posts (street_fence_breaker.gd), the street lamps
-## (street_furniture_breaker.gd), and any loose prop (_push_loose).
+## (street_furniture_breaker.gd), the small trees that bend
+## (street_tree_bender.gd), and any loose prop (_push_loose).
 ##
 ## The manager pauses with the game (F and R do nothing in the pause menu).
 ##
@@ -68,6 +72,7 @@ const CAR_HERO_LEVEL := preload("res://game/scripts/vehicles/car_hero_level.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const FURNITURE_BREAKER := preload("res://game/scripts/vehicles/street_furniture_breaker.gd")
+const TREE_BENDER := preload("res://game/scripts/vehicles/street_tree_bender.gd")
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_CAMERA := preload("res://game/scripts/vehicles/vehicle_camera.gd")
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
@@ -134,12 +139,14 @@ var _camera: VEHICLE_CAMERA
 var _visible_ground := VisibleGround.new()
 var _breaker: FENCE_BREAKER
 var _furniture: FURNITURE_BREAKER
+var _bender: TREE_BENDER
 ## Draws the parked cars nearest the camera at the hero level (desktop only).
 var _hero: CAR_HERO_LEVEL
-## The breakable fence bodies (live bodies' collision exceptions) and every
-## fence body (what the wheels' rays skip).
-var _breakable_fences: Array[RID] = []
-var _fences: Array[RID] = []
+## The bodies a live car or K-rail passes through (its collision exceptions: the
+## breakable fences and the bending trees' trunks), and those its wheels' rays skip
+## (every fence, and the bending trunks).
+var _pass_through: Array[RID] = []
+var _ray_skip: Array[RID] = []
 var _enter_down := false
 var _recover_down := false
 ## The car F would get into now, on foot ("" none): the prompt's and the touch
@@ -214,14 +221,21 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	add_child(_breaker)
 	if "fences" in world.get_street_detail_layers():
 		_breaker.configure(world.street_detail_layer("fences"))
-	_breakable_fences = _breaker.fence_bodies()
-	_fences = _breaker.all_fence_bodies()
 	VehicleReach.forget_shapes()
 	_furniture = FURNITURE_BREAKER.new()
 	_furniture.name = "FurnitureBreaker"
 	add_child(_furniture)
 	if "furniture" in world.get_street_detail_layers():
 		_furniture.configure(world.street_detail_layer("furniture"))
+	_bender = TREE_BENDER.new()
+	_bender.name = "TreeBender"
+	add_child(_bender)
+	if "vegetation" in world.get_street_detail_layers():
+		_bender.configure(world.street_detail_layer("vegetation"))
+	_pass_through = _breaker.fence_bodies()
+	_pass_through.append_array(_bender.trunk_bodies())
+	_ray_skip = _breaker.all_fence_bodies()
+	_ray_skip.append_array(_bender.trunk_bodies())
 	_reach_owners.clear()
 	if _clutter != null:
 		for child: Node in _clutter.get_children():
@@ -229,10 +243,13 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 				_reach_owners[(child as StaticBody3D).get_rid()] = _reach_row
 	_reach_owners.merge(_breaker.reach_owners())
 	_reach_owners.merge(_furniture.reach_owners())
+	_reach_owners.merge(_bender.reach_owners())
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
 	_camera.use_planes_of(_player.get_camera())
+	_camera.arm_skips = _bender.trunk_bodies()
 	add_child(_camera)
+	_bender.view = _camera
 
 
 ## On a touch screen (main.gd use_touch_controls) there is no F key, so no key
@@ -283,6 +300,10 @@ func fence_breaker() -> FENCE_BREAKER:
 
 func furniture_breaker() -> FURNITURE_BREAKER:
 	return _furniture
+
+
+func tree_bender() -> TREE_BENDER:
+	return _bender
 
 
 ## The most things one reach has found so far this session (tests read it).
@@ -536,13 +557,13 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.boundary = _world.get_boundary()
 	car.visible_ground = _visible_ground
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
-	car.breakable_fences = _breakable_fences
+	car.pass_through = _pass_through
 	# A car draws its hero level nearest (where it is on), with its driver at the wheel.
-	car.setup(drivable_body(id), parts, _kit.material() if parked else _yard_kit().material(), custom.custom, entry.transform, _fences, _kit.hero_visual(drivable_body(id), custom.custom) if parked else null)
+	car.setup(drivable_body(id), parts, _kit.material() if parked else _yard_kit().material(), custom.custom, entry.transform, _ray_skip, _kit.hero_visual(drivable_body(id), custom.custom) if parked else null)
 	car.recovered.connect(_on_car_recovered.bind(car))
 	car.splashed.connect(_splash.bind(car))
-	for fence: RID in _breakable_fences:
-		PhysicsServer3D.body_add_collision_exception(car.get_rid(), fence)
+	for passed: RID in _pass_through:
+		PhysicsServer3D.body_add_collision_exception(car.get_rid(), passed)
 	return car
 
 
@@ -600,8 +621,8 @@ func _new_barrier(id: String, entry: Dictionary) -> RigidBody3D:
 		collision.transform = shape_entry.transform
 		barrier.add_child(collision)
 	barrier.set_meta("park_wait", 0.0)
-	for fence: RID in _breakable_fences:
-		PhysicsServer3D.body_add_collision_exception(barrier.get_rid(), fence)
+	for passed: RID in _pass_through:
+		PhysicsServer3D.body_add_collision_exception(barrier.get_rid(), passed)
 	return barrier
 
 
@@ -631,8 +652,9 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 ## BREAK_SPEED_MPS, breaks the fence bays it touches and fells their standing
 ## posts (street_fence_breaker.gd); a car above BREAK_SPEED_MPS pushes the loose
 ## props within LOOSE_PUSH_MARGIN_M; a street lamp falls when the body meets it at
-## driving speed (street_furniture_breaker.gd, within the look-ahead's box). One
-## query covers the box round all of it; each owner judges what it is given
+## driving speed (street_furniture_breaker.gd, within the look-ahead's box); a
+## small tree within the bender's BEND_MARGIN_M bends away (street_tree_bender.gd).
+## One query covers the box round all of it; each owner judges what it is given
 ## against its own part.
 func _look_round(body: RigidBody3D, delta: float) -> void:
 	var reach := _reach
@@ -652,6 +674,7 @@ func _look_round(body: RigidBody3D, delta: float) -> void:
 		margin = maxf(margin, FENCE_BREAKER.BAY_MARGIN_M)
 	if reach.pushes:
 		margin = maxf(margin, LOOSE_PUSH_MARGIN_M)
+	margin = maxf(margin, TREE_BENDER.BEND_MARGIN_M)
 	var region := reach.box.grow(margin)
 	if reach.ahead:
 		region = region.merge(AABB(reach.box.position + reach.local_velocity * LOOKAHEAD_S, reach.box.size).grow(LOOKAHEAD_MARGIN_M))

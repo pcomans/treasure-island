@@ -24,7 +24,10 @@ extends SceneTree
 ##      lamps over as it goes with the fence within its reach; it must fell at
 ##      least DENSE_MIN_LAMPS and have a fence bay within its reach for at least
 ##      DENSE_MIN_FENCE_TICKS ticks, and its mean physics tick there is at most
-##      DENSE_TICK_RATIO times the pile-up's free run-up's;
+##      DENSE_TICK_RATIO times the pile-up's free run-up's; then along Cityside
+##      Park's windrow of young gums (small trees that bend) at up to
+##      DENSE_TREES_MPS, at least DENSE_MIN_TREES of which lean away, within the
+##      same bound;
 ##   5. a crowd cannot hide a car (owner, 2026-11-13: one look round a moving car
 ##      for everything in its reach, vehicle_reach.gd): with CROWD small boxes on
 ##      the reach layer, which nothing collides with, between the sedan and a
@@ -57,6 +60,14 @@ const DENSE_PAST_M := 2.0
 const DENSE_MIN_LAMPS := 5
 const DENSE_MIN_FENCE_TICKS := 30
 const DENSE_TICK_RATIO := 4.0
+## The windrow of young gums: its first and last tree, the run-up, and how many
+## must lean away (street_tree_bender.gd) for the leg to count.
+const DENSE_TREES_FIRST := "scatter:cityside_park:bbq_windrow_gums:line_o0_s001"
+const DENSE_TREES_LAST := "scatter:cityside_park:bbq_windrow_gums:line_o0_s012"
+const DENSE_TREES_RUN_UP_M := 14.0
+const DENSE_MIN_TREES := 8
+## Its speed (m/s): a park's pace, and the car stops well short of the shore past it.
+const DENSE_TREES_MPS := 12.0
 ## The crowd check's parked car, approached across the road from CROWD_START along
 ## CROWD_HEADING (the vehicle contract's side shove), and the crowd: CROWD boxes
 ## of CROWD_BOX_M in a cloud CROWD_AHEAD_M short of the car's middle on the way in.
@@ -163,6 +174,9 @@ func _run() -> void:
 	var dense := await _dense(free_mean)
 	if dense != "":
 		_failures.append(dense)
+	var trees := await _dense_trees(free_mean)
+	if trees != "":
+		_failures.append(trees)
 	_finish(await _crowd())
 
 
@@ -248,6 +262,72 @@ func _dense(free_mean: float) -> String:
 	return ""
 
 
+## Along the windrow of young gums: they lean away, and the mean physics tick
+## stays within DENSE_TICK_RATIO of the free run-up's (free_mean, ms). "" or what
+## failed.
+func _dense_trees(free_mean: float) -> String:
+	var bender := _vehicles.tree_bender()
+	var first: Dictionary = bender.tree(DENSE_TREES_FIRST)
+	var last: Dictionary = bender.tree(DENSE_TREES_LAST)
+	if first.is_empty() or last.is_empty():
+		return "%s or %s is not a small tree that bends in this world: re-aim the windrow fixture." % [DENSE_TREES_FIRST, DENSE_TREES_LAST]
+	var a := Vector2((first.foot as Vector3).x, (first.foot as Vector3).z)
+	var b := Vector2((last.foot as Vector3).x, (last.foot as Vector3).z)
+	var heading := (b - a).normalized()
+	var problem := _vehicles.drive_from(DRIVER, a - heading * DENSE_TREES_RUN_UP_M, heading)
+	if problem != "":
+		return "Could not put the sedan at the windrow's start: %s" % problem
+	for _tick in 45:
+		await physics_frame
+	var car := _vehicles.active_car()
+	var ids: Array = bender.bending_ids()
+	var leaned_before := ids.filter(func(id: String) -> bool: return bender.most_lean_degrees(id) > 20.0).size()
+	var spent_ticks: Array[float] = []
+	physics_frame.connect(_on_physics_frame)
+	Input.action_press("move_forward")
+	for _frame in 900:
+		var along := (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading)
+		var target := a + heading * (along + 8.0)
+		var forward := -car.global_transform.basis.z
+		var angle := Vector2(forward.x, forward.z).angle_to(target - Vector2(car.global_position.x, car.global_position.z))
+		Input.action_release("move_left")
+		Input.action_release("move_right")
+		if angle > deg_to_rad(2.0):
+			Input.action_press("move_right")
+		elif angle < deg_to_rad(-2.0):
+			Input.action_press("move_left")
+		if car.linear_velocity.length() > DENSE_TREES_MPS:
+			Input.action_release("move_forward")
+		else:
+			Input.action_press("move_forward")
+		_steps = 0
+		await process_frame
+		if _steps == 1:
+			spent_ticks.append(float(Time.get_ticks_usec() - _signal_us) / 1000.0)
+		if along > (b - a).length() + DENSE_PAST_M:
+			break
+	Input.action_release("move_forward")
+	Input.action_release("move_left")
+	Input.action_release("move_right")
+	physics_frame.disconnect(_on_physics_frame)
+	Input.action_press("move_back")
+	for _tick in 180:
+		await physics_frame
+		if car.linear_velocity.length() < 0.5:
+			break
+	Input.action_release("move_back")
+	var leaned := ids.filter(func(id: String) -> bool: return bender.most_lean_degrees(id) > 20.0).size() - leaned_before
+	var mean := _mean(spent_ticks)
+	spent_ticks.sort()
+	var ratio := mean / maxf(free_mean, 0.001)
+	print("DENSE_TREES along the windrow of young gums: %d leaned away; physics tick mean %.3f ms, 95th percentile %.3f ms, longest %.3f ms over %d ticks; %.1f times the free run-up's (at most %.0f)" % [leaned, mean, spent_ticks[int(spent_ticks.size() * 0.95)] if not spent_ticks.is_empty() else NAN, spent_ticks[-1] if not spent_ticks.is_empty() else NAN, spent_ticks.size(), ratio, DENSE_TICK_RATIO])
+	if leaned < DENSE_MIN_TREES:
+		return "Along the windrow only %d young gums leaned away (at least %d): re-aim the windrow fixture." % [leaned, DENSE_MIN_TREES]
+	if ratio > DENSE_TICK_RATIO:
+		return "Along the windrow of young gums the mean physics tick took %.1f times the free run-up's (at most %.0f): bending small trees is too costly" % [ratio, DENSE_TICK_RATIO]
+	return ""
+
+
 ## A crowd of things in reach between the sedan and a parked car: the car is still
 ## set moving and the reach found the whole crowd at once. "" or what failed.
 func _crowd() -> String:
@@ -312,7 +392,7 @@ func _finish(problem: String) -> void:
 		_failures.append(problem)
 	Input.action_release("move_forward")
 	if _failures.is_empty():
-		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; along a lamp line beside a fence it knocks the lamps over within %.0f times; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, DENSE_TICK_RATIO, CROWD])
+		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; along a lamp line beside a fence it knocks the lamps over, and through a windrow of young gums they lean away, within %.0f times; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, DENSE_TICK_RATIO, CROWD])
 		quit(0)
 	else:
 		for failure in _failures:

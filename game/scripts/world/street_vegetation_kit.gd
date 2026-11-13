@@ -133,6 +133,16 @@ const WELL_LIFT_M := 0.015
 ## turn away a generated scale of exactly 0.8.
 const SCALE_MIN := 0.8
 const SCALE_MAX := 1.25
+## A tree whose trunk as its row places it (its first collision capsule's radius
+## times the row's scale) is thinner than this bends out of a car's way and springs
+## back (game/scripts/vehicles/street_tree_bender.gd); a thicker one stops a car.
+## The line falls in the gap between the young plantings (the young gums and island
+## oaks, the two smaller young cypresses of Cityside Park's beds and the young
+## Norfolk pine, 0.044 to 0.122 m) and the thinnest established trees (the
+## pohutukawa from 0.133 m, the plaza's young conical cypress from 0.148 m, every
+## palm from 0.20 m). Production inference (owner, 2026-11-13: "Could you just
+## bend them out of the way").
+const BENDING_TRUNK_RADIUS_M := 0.127
 const MAX_FOOT_SPREAD_M := 0.25
 const MAX_LIFT_M := 0.6
 ## How far above the ground a plant may stand in a planter's soil (stand_m).
