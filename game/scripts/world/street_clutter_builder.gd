@@ -8,9 +8,15 @@ extends RefCounted
 ## the cell's centre, the far mesh beyond, to the prop's range (Godot measures
 ## visibility ranges to the MultiMesh bounds centre; the far range is extended by
 ## the farthest instance's offset from that centre so no item vanishes early).
-## Every item has a box on the street-prop physics layer: the player collides
-## with it and the spray ray stops on it (never a receiver), while the camera arm
-## ignores it, as for the street furniture.
+## A car's near mesh casts no shadow: its shadow caster (the kit's far body a
+## little inside the surface) does, over the same range, so the detailed levels
+## are not drawn again in the shadow passes. The parked cars nearest the camera
+## swap their near instance for the hero level at run time
+## (game/scripts/vehicles/car_hero_level.gd), their shadow caster staying.
+## Every item has a box on the street-prop physics layer (a car the convex
+## pieces of its drawn body, street_clutter_kit.gd car_hulls): the player
+## collides with it and the spray ray stops on it (never a receiver), while the
+## camera arm ignores it, as for the street furniture.
 ## The yard kit's props (street_yard_kit.gd: containers, container walls, shed
 ## rows, yard vehicles, fabric sheds, equipment, piles, berms, pole flags and
 ## barges) are built the same way from their rows: each row becomes the kit's
@@ -25,12 +31,12 @@ extends RefCounted
 ## parked cars and the yards' vans, trucks and RVs, which the player drives and a
 ## driven car shoves, and the jersey water barriers, which it shoves) are listed
 ## in the root's swappable_rows metadata: id -> {prop, params, transform, custom,
-## footprint, instances: [[MultiMeshInstance3D name, instance index], ...],
-## shapes: [[body name, CollisionShape3D name], ...]}, a yard row also its seed
-## and a yard vehicle its body (street_yard_kit.gd drivable_name), so a static
-## row can be hidden and replaced by a live body in the world generated at
-## startup and in the baked one alike (the dummy renderer reads no MultiMesh
-## transforms back).
+## footprint, instances: [[MultiMeshInstance3D name, instance index] (and
+## "shadow" for a car's shadow caster), ...], shapes: [[body name,
+## CollisionShape3D name], ...]}, a yard row also its seed and a yard vehicle its
+## body (street_yard_kit.gd drivable_name), so a static row can be hidden and
+## replaced by a live body in the world generated at startup and in the baked
+## one alike (the dummy renderer reads no MultiMesh transforms back).
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
@@ -78,7 +84,7 @@ func build(document: Dictionary) -> Dictionary:
 			prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 			items += 1
 			continue
-		var parts := kit.parts(prop, params if params is Dictionary else {})
+		var parts := kit.parts(prop, params if params is Dictionary else {}, str(row.get("id", "")))
 		if not parts.ok:
 			root.free()
 			return {"ok": false, "code": "street_clutter_prop", "message": "%s: %s" % [row.get("id", "?"), parts.message], "source_keys": []}
@@ -96,7 +102,7 @@ func build(document: Dictionary) -> Dictionary:
 		var placement := Transform3D(basis, Vector3(float(position[0]), float(position[1]) + float(surface.get("bias_m", 0.0)) + lift, float(position[2])))
 		var key := str(parts.mesh_key)
 		if not batches.has(key):
-			batches[key] = {"meshes": parts.meshes, "range_m": float(parts.range_m), "shadow": bool(parts.shadow), "material": kit.material(), "lod_near_m": KIT.LOD_NEAR_M, "cells": {}}
+			batches[key] = {"meshes": parts.meshes, "range_m": float(parts.range_m), "shadow": bool(parts.shadow), "material": kit.material(), "lod_near_m": KIT.LOD_NEAR_M, "cells": {}, "shadow_mesh": parts.get("shadow_mesh", null)}
 		var cells: Dictionary = batches[key].cells
 		var cell := _cell(position, CELL_M)
 		if not cells.has(cell):
@@ -107,7 +113,11 @@ func build(document: Dictionary) -> Dictionary:
 		var physics_cell := _cell(position, PHYSICS_CELL_M)
 		if not shapes.has(physics_cell):
 			shapes[physics_cell] = []
-		(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": parts.shape, "transform": placement * (parts.shape_transform as Transform3D)})
+		if parts.has("shapes"):
+			for piece: Dictionary in parts.shapes:
+				(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": piece.shape, "transform": placement * (piece.transform as Transform3D)})
+		else:
+			(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": parts.shape, "transform": placement * (parts.shape_transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		items += 1
 	var multimeshes := 0
@@ -129,32 +139,42 @@ func build(document: Dictionary) -> Dictionary:
 			var slack := 0.0
 			for entry: Array in entries:
 				slack = maxf(slack, ((entry[0] as Transform3D) * near_box).get_center().distance_to(bounds.get_center()))
-			for level in 2:
+			# Near, far, and a car's shadow caster over the near range.
+			var caster: Variant = batch.get("shadow_mesh", null)
+			var on := GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			var levels := [
+				{"name": "lod0", "mesh": batch.meshes[0], "begin": 0.0, "end": float(batch.lod_near_m), "cast": GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if caster is Mesh else on},
+				{"name": "lod1", "mesh": batch.meshes[1], "begin": float(batch.lod_near_m), "end": float(batch.range_m) + ceilf(slack), "cast": on},
+			]
+			if caster is Mesh:
+				levels.append({"name": "shadow", "mesh": caster, "begin": 0.0, "end": float(batch.lod_near_m), "cast": GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY})
+			for level: Dictionary in levels:
 				var multimesh := MultiMesh.new()
 				multimesh.transform_format = MultiMesh.TRANSFORM_3D
 				multimesh.use_custom_data = true
-				multimesh.mesh = batch.meshes[level]
+				multimesh.mesh = level.mesh
 				multimesh.instance_count = entries.size()
 				for index in entries.size():
 					multimesh.set_instance_transform(index, entries[index][0])
 					multimesh.set_instance_custom_data(index, entries[index][1])
 				multimesh.custom_aabb = bounds
 				var instance := MultiMeshInstance3D.new()
-				instance.name = "%s_lod%d__c%s" % [key, level, cell]
+				instance.name = "%s_%s__c%s" % [key, level.name, cell]
 				for index in entries.size():
 					if swappable.has(entries[index][2]):
-						(swappable[entries[index][2]].instances as Array).append([str(instance.name), index])
+						var ref := [str(instance.name), index]
+						if level.name == "shadow":
+							ref.append("shadow")
+						(swappable[entries[index][2]].instances as Array).append(ref)
 				instance.multimesh = multimesh
 				instance.material_override = batch.material
 				instance.layers = RENDER_WORLD_VISIBLE
-				instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+				instance.cast_shadow = level.cast
 				# No margins: a margin is hysteresis, which would let both levels
 				# (or neither) draw for a moment at the hand-over.
-				if level == 0:
-					instance.visibility_range_end = float(batch.lod_near_m)
-				else:
-					instance.visibility_range_begin = float(batch.lod_near_m)
-					instance.visibility_range_end = float(batch.range_m) + ceilf(slack)
+				if float(level.begin) > 0.0:
+					instance.visibility_range_begin = float(level.begin)
+				instance.visibility_range_end = float(level.end)
 				instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 				instance.set_meta("street_detail_layer", "clutter")
 				instance.set_meta("placement_count", entries.size())

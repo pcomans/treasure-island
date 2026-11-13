@@ -1,0 +1,322 @@
+{
+ "area": "cars-hd",
+ "notes": "The rebuilt street cars in the island: a red wagon on Avenue of the Palms and the white utility in the Building 1 forecourt lot (the owner's 2026-11-11 screenshot): the stock player beside each, standing on it, seated at the wheel seen through the side glass and the windshield, and the chase camera on a short drive. The standing views drop the player onto the car from just above it (settle_player stands it only on the ground) and film it coming to rest there. car_start's heading_xz is the parked car's own facing (a direction, as vehicle_cases.json gives it), so each car keeps its place and the cameras see its driver's side. Run with --fixed-fps 60 --show-player --street-detail on.",
+ "views": [
+  {
+   "name": "street-beside",
+   "player_xz": [
+    -280.63,
+    288.76
+   ],
+   "target_xyz": [
+    -278.4,
+    3.9,
+    288.3
+   ]
+  },
+  {
+   "name": "street-standing-on",
+   "player_xz": [
+    -280.63,
+    288.76
+   ],
+   "target_xyz": [
+    -278.4,
+    5.23,
+    288.3
+   ],
+   "camera_xyz": [
+    -283.08,
+    5.6,
+    290.12
+   ],
+   "fov": 50,
+   "start_xyz": [
+    -278.4,
+    5.73,
+    288.3
+   ],
+   "camera_fixed": true,
+   "every": 40,
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 120
+    }
+   ]
+  },
+  {
+   "name": "street-seated-side",
+   "player_xz": [
+    -280.63,
+    288.76
+   ],
+   "target_xyz": [
+    -278.75,
+    4.0,
+    288.48
+   ],
+   "camera_xyz": [
+    -281.03,
+    4.55,
+    289.3
+   ],
+   "camera_fixed": true,
+   "fov": 45,
+   "every": 30,
+   "car_start": {
+    "car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_004",
+    "xz": [
+     -278.4,
+     288.3
+    ],
+    "heading_xz": [
+     -0.4529,
+     -0.8916
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 60
+    }
+   ]
+  },
+  {
+   "name": "street-seated-front",
+   "player_xz": [
+    -280.63,
+    288.76
+   ],
+   "target_xyz": [
+    -278.75,
+    4.0,
+    288.48
+   ],
+   "camera_xyz": [
+    -281.1,
+    4.75,
+    284.96
+   ],
+   "camera_fixed": true,
+   "fov": 45,
+   "every": 30,
+   "car_start": {
+    "car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_004",
+    "xz": [
+     -278.4,
+     288.3
+    ],
+    "heading_xz": [
+     -0.4529,
+     -0.8916
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 60
+    }
+   ]
+  },
+  {
+   "name": "street-chase",
+   "player_xz": [
+    -280.63,
+    288.76
+   ],
+   "target_xyz": [
+    -278.4,
+    3.9,
+    288.3
+   ],
+   "every": 30,
+   "car_start": {
+    "car": "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_004",
+    "xz": [
+     -278.4,
+     288.3
+    ],
+    "heading_xz": [
+     -0.4529,
+     -0.8916
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 30
+    },
+    {
+     "hold": [
+      "move_forward"
+     ],
+     "ticks": 90,
+     "steer_to": [
+      -283.83,
+      277.6
+     ],
+     "max_mps": 6
+    }
+   ]
+  },
+  {
+   "name": "lot-beside",
+   "player_xz": [
+    -54.12,
+    777.26
+   ],
+   "target_xyz": [
+    -53.7,
+    5.5,
+    779.5
+   ]
+  },
+  {
+   "name": "lot-standing-on",
+   "player_xz": [
+    -54.12,
+    777.26
+   ],
+   "target_xyz": [
+    -55.41,
+    7.17,
+    780.33
+   ],
+   "camera_xyz": [
+    -55.43,
+    7.2,
+    774.78
+   ],
+   "fov": 50,
+   "start_xyz": [
+    -55.41,
+    7.67,
+    780.33
+   ],
+   "camera_fixed": true,
+   "every": 40,
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 120
+    }
+   ]
+  },
+  {
+   "name": "lot-seated-side",
+   "player_xz": [
+    -54.12,
+    777.26
+   ],
+   "target_xyz": [
+    -53.87,
+    5.6,
+    779.15
+   ],
+   "camera_xyz": [
+    -54.65,
+    6.15,
+    776.85
+   ],
+   "camera_fixed": true,
+   "fov": 45,
+   "every": 30,
+   "car_start": {
+    "car": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0056",
+    "xz": [
+     -53.7,
+     779.5
+    ],
+    "heading_xz": [
+     0.9001,
+     -0.4357
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 60
+    }
+   ]
+  },
+  {
+   "name": "lot-seated-front",
+   "player_xz": [
+    -54.12,
+    777.26
+   ],
+   "target_xyz": [
+    -53.87,
+    5.6,
+    779.15
+   ],
+   "camera_xyz": [
+    -50.31,
+    6.35,
+    776.86
+   ],
+   "camera_fixed": true,
+   "fov": 45,
+   "every": 30,
+   "car_start": {
+    "car": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0056",
+    "xz": [
+     -53.7,
+     779.5
+    ],
+    "heading_xz": [
+     0.9001,
+     -0.4357
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 60
+    }
+   ]
+  },
+  {
+   "name": "lot-chase",
+   "player_xz": [
+    -54.12,
+    777.26
+   ],
+   "target_xyz": [
+    -53.7,
+    5.5,
+    779.5
+   ],
+   "every": 30,
+   "car_start": {
+    "car": "scatter:building_1_forecourt:forecourt_lot_cars:w1473253282_right_s0056",
+    "xz": [
+     -53.7,
+     779.5
+    ],
+    "heading_xz": [
+     0.9001,
+     -0.4357
+    ]
+   },
+   "moves": [
+    {
+     "hold": [],
+     "ticks": 30
+    },
+    {
+     "hold": [
+      "move_forward"
+     ],
+     "ticks": 90,
+     "steer_to": [
+      -42.9,
+      774.27
+     ],
+     "max_mps": 6
+    }
+   ]
+  }
+ ]
+}

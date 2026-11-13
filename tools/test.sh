@@ -6,10 +6,11 @@
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
-# 2. The behaviour tests: the game parses, loads and plays, and every building
+# 2. The street cars' mesh check (tools/check_street_car_meshes.mjs).
+# 3. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
-# 3. The generated-world checks, including the street-detail clearance check:
+# 4. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
 #    approaches, the spawn or the QA corridors. They run in the background
 #    beside the long Godot stages, and their results come last.
@@ -59,6 +60,14 @@ else
     echo "PASS"
   fi
 fi
+
+# The street cars' meshes as committed (street_clutter_kit.glb and
+# street_car_hero_kit.glb): no face turned over, no broken or wedge-ended
+# groove, no see-through crack wider than a third of the owner's pixel, the
+# side windows, plates, glass and lamps in their materials at every level,
+# and no cabin poking out of the hero shell. Node only, a few seconds.
+echo "== tools/check_street_car_meshes.mjs"
+node tools/check_street_car_meshes.mjs || failed+=("tools/check_street_car_meshes.mjs")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
@@ -148,6 +157,7 @@ for test in \
   game/tests/headless_shore_lift.gd \
   game/tests/headless_fast_drop.gd \
   game/tests/headless_vehicle_contract.gd \
+  game/tests/headless_car_stance.gd \
   game/tests/headless_touch_drive.gd \
   game/tests/automated_route_qa.gd \
   game/tests/shared/island_test.gd

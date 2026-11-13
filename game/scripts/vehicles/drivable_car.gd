@@ -48,6 +48,7 @@ signal recovered(cause: String, from_position: Vector3)
 signal splashed(at: Vector3, speed: float)
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const CAR_DRIVER := preload("res://game/scripts/vehicles/car_driver.gd")
 
 const PHYSICS_WORLD_SOLID := 1
 const PHYSICS_STREET_PROP := 1 << 3
@@ -223,12 +224,19 @@ const SEAT := Vector3(-0.38, 0.55, -0.15)
 
 var row_id := ""
 var body := ""
+## What it is drawn with at every level, as setup() was given it (instance
+## custom data: paint, style, twist and dirt; street_clutter_kit.gd car_custom).
+var look := Color()
 ## Driver input, set each tick by the vehicle manager: drive -1..1 (S..W),
 ## steer -1..1 (A..D, positive right), handbrake.
 var drive_input := 0.0
 var steer_input := 0.0
 var handbrake := false
-var occupied := false
+var occupied := false:
+	set(value):
+		occupied = value
+		if _driver != null:
+			_driver.visible = value
 ## The playable outline and the drawn ground (set by the vehicle manager).
 var boundary: WorldBoundary
 var visible_ground: VisibleGround
@@ -291,6 +299,11 @@ var _visual: Node3D
 ## The wheels: all four, or the front two where the rear ones are another mesh
 ## (_rear_wheels: a truck's twin tyres).
 var _wheels: MultiMesh
+## The hero level's driver at the wheel (shown while occupied), where it draws.
+var _driver: Node3D
+## The hero level's wheels and brakes, where it draws.
+var _hero_wheels: MultiMesh
+var _hero_brakes: MultiMesh
 var _rear_wheels: MultiMesh
 ## The front of the body (its chassis mesh's) in the car frame, where a boxy
 ## body's outline is measured from.
@@ -307,8 +320,9 @@ static func spec_of(car_body: String) -> Dictionary:
 ## Builds the car for a kit body (KIT.drivable(body)) in its paint and puts it
 ## at placement; excludes are bodies its wheels and its own queries skip (the
 ## fences it drives through and their debris).
-func setup(car_body: String, parts: Dictionary, material: Material, custom: Color, placement: Transform3D, excludes: Array[RID]) -> void:
+func setup(car_body: String, parts: Dictionary, material: Material, custom: Color, placement: Transform3D, excludes: Array[RID], hero: Node3D = null) -> void:
 	body = car_body
+	look = custom
 	var spec := spec_of(car_body)
 	var front: Vector3 = parts.front
 	var rear: Vector3 = parts.rear
@@ -347,7 +361,9 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	set_meta("receiver_kind", "none")
 	set_meta("opaque", true)
 	set_meta("street_detail_id", row_id)
-	for hull: PackedVector3Array in _hulls(spec):
+	# A kit car collides as its drawn body (parts.hulls); a body without them as two boxes.
+	var hulls: Array = parts.get("hulls", [])
+	for hull: PackedVector3Array in (hulls if not hulls.is_empty() else _hulls(spec)):
 		var shape := ConvexPolygonShape3D.new()
 		shape.points = hull
 		var collision := CollisionShape3D.new()
@@ -360,7 +376,7 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	_ray.hit_back_faces = false
 	_ray.collide_with_areas = false
 	set_excludes(excludes)
-	_build_visual(parts, material, custom)
+	_build_visual(parts, material, custom, hero)
 	transform = placement
 	_prev = placement
 	_curr = placement
@@ -440,26 +456,53 @@ func _box_hulls(boxes: Array) -> Array[PackedVector3Array]:
 	return hulls
 
 
-func _build_visual(parts: Dictionary, material: Material, custom: Color) -> void:
+## The car's drawn levels, each over its own range from the car: the hero level
+## (hero: the kit's hero_visual, where it is on) nearest, then the near chassis
+## with its wheels (a boxy body's rear wheels apart, parts.tyre_rear), then the
+## far mesh. Only the shadow caster and the far mesh cast a shadow; a body
+## without a shadow caster (a yard vehicle) casts its own from its near level.
+func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: Node3D) -> void:
 	_visual = Node3D.new()
 	_visual.name = "Visual"
 	_visual.top_level = true
 	add_child(_visual)
 	var bounds := AABB(Vector3(-width_m, -0.5, -length_m), Vector3(width_m * 2.0, height_m + 1.5, length_m * 2.0))
+	var off := GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var near_from := 0.0
+	if hero != null:
+		near_from = KIT.HERO_FAR_M
+		for child: Node in hero.get_children():
+			var piece := child as MultiMeshInstance3D
+			piece.multimesh.custom_aabb = bounds
+			piece.visibility_range_end = near_from
+			piece.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+		_hero_wheels = (hero.get_node("Wheels") as MultiMeshInstance3D).multimesh
+		_hero_brakes = (hero.get_node("Brakes") as MultiMeshInstance3D).multimesh
+		if hero.has_meta("driver_seat"):
+			_driver = CAR_DRIVER.build(hero.get_meta("driver_seat"), hero.get_meta("driver_hand_left"), hero.get_meta("driver_hand_right"))
+			_driver.visible = occupied
+			for piece: Node in _driver.find_children("*", "GeometryInstance3D", true, false):
+				(piece as GeometryInstance3D).visibility_range_end = near_from
+			hero.add_child(_driver)
+		_visual.add_child(hero)
 	var near_m := float(parts.get("lod_near_m", LOD_NEAR_M))
-	_visual.add_child(_instance("Chassis", parts.chassis, 1, custom, material, bounds, 0.0, near_m))
-	var wheels := _instance("Wheels", parts.tyre, 2 if parts.has("tyre_rear") else 4, custom, material, bounds, 0.0, near_m)
+	var shadow_caster: Variant = parts.get("shadow")
+	var near_shadows := off if shadow_caster is Mesh else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	_visual.add_child(_instance("Chassis", parts.chassis, 1, custom, material, bounds, near_from, near_m, near_shadows))
+	var wheels := _instance("Wheels", parts.tyre, 2 if parts.has("tyre_rear") else 4, custom, material, bounds, near_from, near_m, near_shadows)
 	_wheels = wheels.multimesh
 	_visual.add_child(wheels)
 	if parts.has("tyre_rear"):
-		var rear_wheels := _instance("RearWheels", parts.tyre_rear, 2, custom, material, bounds, 0.0, near_m)
+		var rear_wheels := _instance("RearWheels", parts.tyre_rear, 2, custom, material, bounds, near_from, near_m, near_shadows)
 		_rear_wheels = rear_wheels.multimesh
 		_visual.add_child(rear_wheels)
-	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, near_m, float(parts.get("range_m", FAR_RANGE_M))))
+	if shadow_caster is Mesh:
+		_visual.add_child(_instance("Shadow", shadow_caster, 1, custom, material, bounds, 0.0, near_m, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
+	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, near_m, float(parts.get("range_m", FAR_RANGE_M)), GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
 	_update_wheels()
 
 
-static func _instance(node_name: String, mesh: Mesh, count: int, custom: Color, material: Material, bounds: AABB, begin_m: float, end_m: float) -> MultiMeshInstance3D:
+static func _instance(node_name: String, mesh: Mesh, count: int, custom: Color, material: Material, bounds: AABB, begin_m: float, end_m: float, shadows: int) -> MultiMeshInstance3D:
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.use_custom_data = true
@@ -474,7 +517,7 @@ static func _instance(node_name: String, mesh: Mesh, count: int, custom: Color, 
 	instance.multimesh = multimesh
 	instance.material_override = material
 	instance.layers = RENDER_WORLD_VISIBLE
-	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	instance.cast_shadow = shadows
 	instance.visibility_range_begin = begin_m
 	instance.visibility_range_end = end_m
 	instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
@@ -1084,7 +1127,9 @@ func _process(_delta: float) -> void:
 
 
 ## Wheel transforms in the car frame: travel, steering and spin; the left ones
-## turned round so the rim faces out.
+## turned round so the rim faces out. The hero level's wheels take the same,
+## its brakes the same without the spin (a left one's caliper turned round to
+## the rear, as the right one's).
 func _update_wheels() -> void:
 	if _wheels == null or _wheel_rest.size() != 4:
 		return
@@ -1099,3 +1144,6 @@ func _update_wheels() -> void:
 			_rear_wheels.set_instance_transform(i - 2, placed)
 		else:
 			_wheels.set_instance_transform(i, placed)
+		if _hero_wheels != null:
+			_hero_wheels.set_instance_transform(i, placed)
+			_hero_brakes.set_instance_transform(i, Transform3D(steer * face * (Basis(Vector3.RIGHT, 2.0 * KIT.CALIPER_ANGLE - PI) if left else Basis.IDENTITY), centre))

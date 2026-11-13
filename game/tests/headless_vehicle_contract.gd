@@ -3,9 +3,11 @@ extends SceneTree
 ## (run with --headless and --fixed-fps 60). The places come from
 ## game/tests/shared/vehicle_cases.json. Cases, in order; the first failure
 ## stops the run (later cases need the earlier ones):
-##   1. enter and exit with F: with the game paused F beside a parked car does
-##      nothing; unpaused, the stock player presses F
-##      and drives it (avatar hidden, capsule off, the parked box gone), the view
+##   1. enter and exit with F: the parked cars differ in how dirty they are
+##      (most nearly clean, a few dirty); with the game paused F beside a parked
+##      car does nothing; unpaused, the stock player presses F
+##      and drives it (avatar hidden, capsule off, the parked box gone, and it
+##      looks as it did parked: paint, finish and dirt), the view
 ##      blending from the on-foot camera to the chase camera, which sees as far
 ##      (the distant horizon); F again stands the
 ##      player on the ground beside it, walking as before, the view blending
@@ -173,6 +175,23 @@ func _case_enter_exit() -> bool:
 	if not _require(not entry.is_empty() and str(entry.prop) == "parked_car", "Fixture car %s is not a swappable parked car." % id):
 		return false
 	var parked: Transform3D = entry.transform
+	# Cars differ in how dirty they are (by their row ids), the same car always
+	# the same: most nearly clean, a few dirty, but not many (owner, 2026-11-13:
+	# fewer dirty cars).
+	var cars := 0
+	var clean := 0
+	var dirty := 0
+	for other: String in _vehicles.swappable_ids():
+		var other_entry: Dictionary = _vehicles.row(other)
+		if str(other_entry.get("prop", "")) != "parked_car":
+			continue
+		var dirt := (other_entry.custom as Color).a
+		cars += 1
+		clean += 1 if dirt < 0.2 else 0
+		dirty += 1 if dirt > 0.5 else 0
+	print("DIRT %d parked cars: %d nearly clean, %d dirty" % [cars, clean, dirty])
+	if not _require(cars > 20 and clean >= cars / 2 and dirty >= cars / 30 and dirty <= cars / 5, "Most parked cars should be nearly clean and a few dirty (%d cars, %d nearly clean, %d dirty)." % [cars, clean, dirty]):
+		return false
 	# The stock player 1.6 m off the driver's (left) door, walking.
 	var door := parked.origin - parked.basis.x * 1.6
 	if not await _stand_player(Vector2(door.x, door.z)) or not await _avatar_with_player("before getting in"):
@@ -196,6 +215,12 @@ func _case_enter_exit() -> bool:
 	or not _require(_player.is_driving() and not (_player.get_node("AvatarPivot") as Node3D).visible and (_player.get_node("CollisionShape3D") as CollisionShape3D).disabled, "Driving, the avatar must hide and the capsule stop colliding.") \
 	or not _require(shape.disabled, "The parked box must be gone once the live car stands in for it.") \
 	or not _require(not _player.is_processing_unhandled_input(), "The stock controller must stop while driving."):
+		return false
+	# It looks as it did parked: paint, finish, roof, rims and dirt (its twist
+	# aside, which its suspension takes up now). Read from what each was given,
+	# not the MultiMeshes: the headless renderer keeps no instance data.
+	var parked_look: Color = entry.custom
+	if not _require(is_equal_approx(parked_look.r, car.look.r) and is_equal_approx(parked_look.g, car.look.g) and is_equal_approx(parked_look.a, car.look.a), "The driven car must look as it did parked (parked %s, driven %s)." % [parked_look, car.look]):
 		return false
 	# The view starts where the on-foot camera was and ends behind the car.
 	var rig := _vehicles.driving_camera()

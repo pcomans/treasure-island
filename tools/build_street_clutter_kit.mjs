@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // Writes the street-clutter kit (tools/lib/street-clutter-kit.mjs) as one
 // binary glTF: game/resources/models/street/street_clutter_kit.glb, one node
-// and mesh per kit mesh (car_<body>_lod<n>, <prop>_lod<n>), positions, normals
-// and the part/occlusion UVs, no materials (the runtime shader colours them).
+// and mesh per kit mesh (car_<body>_lod<n>, car_<body>_shadow, <prop>_lod<n>, a
+// driven car's chassis, tyre and axle markers), positions, normals and the
+// part/occlusion UVs, no materials (the runtime shader colours them). The cars'
+// hero level is a file of its own (tools/build_street_car_hero_kit.mjs).
 // The output is deterministic; rerun after changing the kit and commit both.
 //
 //   node tools/build_street_clutter_kit.mjs

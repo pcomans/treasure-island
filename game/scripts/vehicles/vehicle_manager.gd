@@ -54,6 +54,7 @@ signal exited(row_id: String)
 signal car_recovered(cause: String, from_position: Vector3)
 
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const CAR_HERO_LEVEL := preload("res://game/scripts/vehicles/car_hero_level.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
@@ -121,6 +122,8 @@ var _active: DRIVABLE_CAR
 var _camera: VEHICLE_CAMERA
 var _visible_ground := VisibleGround.new()
 var _breaker: FENCE_BREAKER
+## Draws the parked cars nearest the camera at the hero level (desktop only).
+var _hero: CAR_HERO_LEVEL
 ## The breakable fence bodies (live bodies' collision exceptions) and every
 ## fence body (what the wheels' rays skip).
 var _breakable_fences: Array[RID] = []
@@ -167,6 +170,17 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			if not _cells.has(cell):
 				_cells[cell] = []
 			(_cells[cell] as Array).append(id)
+	if _hero != null:
+		_hero.queue_free()
+		_hero = null
+	if _clutter != null and KIT.hero_level_enabled():
+		_hero = CAR_HERO_LEVEL.new()
+		_hero.name = "CarHeroLevel"
+		add_child(_hero)
+		_hero.configure(_kit, _clutter, _rows, _cells, GRID_M)
+		# The hero kit too, under the load screen, not on the first approach to
+		# a parked car (desktop only: the web has no hero level).
+		_kit.load_hero()
 	# The yard kit draws the yards' vehicles and K-rails once they go live: built
 	# here, under the load screen, not on the player's first approach to one.
 	for entry: Dictionary in _rows.values():
@@ -458,6 +472,8 @@ func _make_live(id: String) -> Node3D:
 		node = _new_barrier(id, entry)
 	if node == null:
 		return null
+	if _hero != null:
+		_hero.release(id)
 	for ref: Array in entry.instances:
 		var instance := _clutter.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
 		if instance != null and instance.multimesh != null:
@@ -476,8 +492,9 @@ func _make_live(id: String) -> Node3D:
 func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	var parked := str(entry.prop) == "parked_car"
 	var parts := _parts(id)
-	# A yard vehicle keeps its parked paint; a car its paint with no twist.
-	var custom: Dictionary = KIT.car_custom(entry.params, 0.0) if parked else {"ok": true, "custom": entry.custom}
+	# A yard vehicle keeps its parked paint; a car its paint and dirt (by its id)
+	# with no twist.
+	var custom: Dictionary = KIT.car_custom(entry.params, 0.0, id) if parked else {"ok": true, "custom": entry.custom}
 	if not parts.ok or not custom.ok:
 		push_warning("Vehicle %s: %s" % [id, parts.get("message", custom.get("message", ""))])
 		return null
@@ -488,7 +505,8 @@ func _new_car(id: String, entry: Dictionary) -> DRIVABLE_CAR:
 	car.visible_ground = _visible_ground
 	car.water_y = GeneratedWorldContract.STREET_DETAIL_WATER_Y_M
 	car.breakable_fences = _breakable_fences
-	car.setup(drivable_body(id), parts, _kit.material() if parked else _yard_kit().material(), custom.custom, entry.transform, _fences)
+	# A car draws its hero level nearest (where it is on), with its driver at the wheel.
+	car.setup(drivable_body(id), parts, _kit.material() if parked else _yard_kit().material(), custom.custom, entry.transform, _fences, _kit.hero_visual(drivable_body(id), custom.custom) if parked else null)
 	car.recovered.connect(_on_car_recovered.bind(car))
 	car.splashed.connect(_splash.bind(car))
 	for fence: RID in _breakable_fences:
