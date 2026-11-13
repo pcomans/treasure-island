@@ -55,7 +55,9 @@ extends SceneTree
 ##      stock player as before;
 ##   7b. street lamps (owner, 2026-11-13): crept into, pressed against at full
 ##      throttle and tapped on the stock W from 0.6 m, a lamp stands and stops
-##      the car; driven at from 20 m back on the stock W, another falls, the car
+##      the car; driven at from 20 m back on the stock W, another falls, goes over
+##      where it stood (its base at rest within LAMP_REST_M of its foot) and is
+##      frozen on the ground within LAMP_SETTLE_S of the hit, the car
 ##      carrying on through with most of its speed (the lamp's share of its
 ##      momentum taken) and still driving half a second later; crept back through
 ##      where it stood, nothing stops the car; on foot the stock player walks
@@ -134,6 +136,11 @@ const BEND_LEAN_DEG := 20.0
 const BEND_STAND_S := 4.0
 ## How long a car stopped on a young gum must hold it down with no input (s).
 const HELD_S := 2.0
+## A felled lamp's base comes to rest within this of where it stood (m), frozen on
+## the ground within this of the hit (s): it goes over where it stood, not carried
+## down the street (visual review, 2026-11-13).
+const LAMP_REST_M := 5.0
+const LAMP_SETTLE_S := 9.0
 ## A car that knocks a lamp over keeps at least this share of its speed: a lamp
 ## takes its share of the car's momentum (street_furniture_breaker.gd, about a
 ## tenth for a cobra lamp and a crossover).
@@ -1572,6 +1579,23 @@ func _case_lamps() -> bool:
 	if not _require(fell_tick >= 0 and speed_in > FURNITURE_BREAKER.FELL_SPEED_MPS, "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [fell, float(_cases.lamps.run_up_m), lamps.is_felled(fell), speed_in]) \
 	or not _require(speed_out >= LAMP_KEEP * speed_in and later > 5.0 and front > 2.0, "The car did not carry on through %s (%.2f -> %.2f m/s, %.2f m/s half a second later, front %.2f m past its axis)." % [fell, speed_in, speed_out, later, front]) \
 	or not _require(lamps.get_child_count() > debris_before, "Felling %s dropped no debris." % fell):
+		return false
+	# It goes over where it stood and comes to rest there, frozen on the ground.
+	var lying: RigidBody3D = null
+	for child: Node in lamps.get_children():
+		if child is RigidBody3D and str(child.get_meta("street_detail_id", "")) == fell:
+			lying = child
+	var settled_s := -1.0
+	for tick in int(LAMP_SETTLE_S * 60.0) - 30:
+		if lying == null or lying.freeze:
+			settled_s = (tick + 30) / 60.0
+			break
+		await physics_frame
+	var base := lying.global_position if lying != null else Vector3.INF
+	var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
+	print("LAMP REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood" % [fell, lying != null and lying.freeze, settled_s, rest_m])
+	if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [fell, LAMP_SETTLE_S]) \
+	or not _require(rest_m <= LAMP_REST_M, "The felled %s came to rest %.2f m from where it stood (at most %.1f m): carried along, not knocked over." % [fell, rest_m, LAMP_REST_M]):
 		return false
 	# Crept back through where it stood (slower than a lamp falls to), nothing
 	# stops the car: on until its rear is 2 m past the foot, clear of the walk.

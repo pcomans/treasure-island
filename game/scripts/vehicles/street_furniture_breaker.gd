@@ -1,11 +1,11 @@
 extends Node3D
 ## Street furniture a car knocks over (owner, 2026-11-13: the street lamps; sign
-## poles and the like could follow with an entry in the furniture kit's FELLABLE
-## and its fell_head). street_furniture_builder.gd lists every such row in its
-## root's fellable_rows metadata (its prop, params and placement, its pieces'
-## instances in the cell MultiMeshes, its collision shapes and its name blades'
-## labels), so one can be felled in the world generated at startup and in the
-## baked one alike while every standing one stays batched as before.
+## poles and the like could follow with an entry in the furniture kit's
+## FELLABLE). street_furniture_builder.gd lists every such row in its root's
+## fellable_rows metadata (its prop, params and placement, its pieces' instances
+## in the cell MultiMeshes, its collision shapes and its name blades' labels), so
+## one can be felled in the world generated at startup and in the baked one alike
+## while every standing one stays batched as before.
 ##
 ## Each tick a moving live car's or K-rail's reach (vehicle_reach.gd) hands this
 ## breaker the poles it found (reach_pole). One its box meets within the next
@@ -13,20 +13,26 @@ extends Node3D
 ## falls before the physics step can stop the car on it: its instances draw at
 ## zero scale, its shapes are disabled (it no longer stops a car, a player or the
 ## chase camera where it stood), its name blades go with it, and it is built
-## alone as a debris body, launched the way the car went at the car's speed and
-## toward the side of the car it stood on, tipping over that way. It is on no
-## physics layer and scans the world and the street props: Godot Physics pushes a
-## body only by what is in its own mask, so a car or K-rail that meets it shoves
-## it aside and is never pushed back, it can come to rest against a prop, and
-## nothing (car, player, chase camera, a reach, other debris) ever meets it. Come
-## to rest on the ground (REST_S, or after SETTLE_MAX_S) it is frozen with its
-## shapes off, so felled lamps lying about cost no physics; one resting on
-## something else (a parked car, a fence) only sleeps, so it falls if that moves.
-## It stays down for the session (a restart rebuilds the world). The body that
-## felled it keeps going with the felled prop's share of its momentum taken (its
-## speed times mass / (mass + the prop's mass)). Slower than FELL_SPEED_MPS a lamp
-## stops a car as it always did: a slow nudge does not fell it, nor does pressing
-## on against it.
+## alone as a debris body that goes over where it stood (visual review,
+## 2026-11-13: not carried down the street on the bumper): its foot knocked on a
+## little the way the car went and out toward the side of the car's middle line it
+## stood on, it tips over about its foot toward that side and somewhat ahead, and
+## the body that felled it passes through it (a collision exception) and carries
+## on. It is on no physics layer and scans the world and the street props: Godot
+## Physics pushes a body only by what is in its own mask, so another car or K-rail
+## that meets it shoves it aside and is never pushed back, it can come to rest
+## against a prop, and nothing (car, player, chase camera, a reach, other debris)
+## ever meets it. It collides as the convex hulls of what is drawn of it, slice by
+## slice up its height (the furniture kit's fall_slices), so it lies on its drawn
+## pole and head, neither in the ground nor held over it. Come to rest (REST_S, or at most SETTLE_MAX_S
+## after it fell or last woke) on the ground it is frozen with its shapes off, so
+## felled lamps lying about cost no physics; one resting on something else (a
+## parked car, a fence) is put to sleep, so it costs none either and falls if that
+## moves, and settles again from there. It stays down for the session (a restart
+## rebuilds the world). The body that felled it keeps going with the felled
+## prop's share of its momentum taken (its speed times mass / (mass + the prop's
+## mass)). Slower than FELL_SPEED_MPS a lamp stops a car as it always did: a slow
+## nudge does not fell it, nor does pressing on against it.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
 const PHYSICS_WORLD_SOLID := 1
@@ -37,21 +43,25 @@ const PHYSICS_STREET_PROP := 1 << 3
 ## KNOWN_ISSUES.md. Production inference.
 const FELL_SPEED_MPS := 4.0
 const FELL_TICKS := 1.0
-## How the felled prop leaves: the body's speed along its way after the hit
-## (CARRY of it), ASIDE_MPS toward the side of the body's middle line it stood
-## on, a pop up (m/s), and a tip toward where it goes, TIP_ASIDE of the way to
-## that side (rad/s at 10 m/s; scaled by speed within 0.5 to 1.5 times). Its
-## damping (1/s) and grip bring it to rest within some metres of where it lands.
-const CARRY := 1.0
-const ASIDE_MPS := 2.0
-const POP_MPS := 0.8
-const TIP_RADPS := 1.3
-const TIP_ASIDE := 0.6
+## How the felled prop goes over: its foot knocked on FOOT_CARRY of the body's
+## speed after the hit along its way (at most FOOT_MAX_MPS), FOOT_ASIDE_MPS toward
+## the side of the body's middle line it stood on and a pop up (m/s); it tips
+## about its foot toward that side, FALL_AHEAD of the way the body went, at
+## TIP_RADPS (rad/s at 10 m/s; scaled by speed within 0.7 to 1.4 times), its weight
+## MASS_HEIGHT of its pole's height up. Its damping (1/s) and grip bring it to rest
+## where it lands.
+const FOOT_CARRY := 0.25
+const FOOT_MAX_MPS := 4.0
+const FOOT_ASIDE_MPS := 1.5
+const POP_MPS := 0.4
+const TIP_RADPS := 1.0
+const FALL_AHEAD := 0.7
+const MASS_HEIGHT := 0.5
 const LINEAR_DAMP := 0.6
 const ANGULAR_DAMP := 0.8
 const FRICTION := 1.0
-## Debris settles (frozen, no collision) after this long at rest, or at most after
-## SETTLE_MAX_S.
+## Debris settles after this long at rest, or at most SETTLE_MAX_S after it fell
+## or last woke: frozen with no collision on the ground, asleep on anything else.
 const REST_S := 0.6
 const SETTLE_MAX_S := 8.0
 
@@ -65,11 +75,14 @@ var _shape_rows: Dictionary = {}
 ## that knocked it over ("" for none).
 var _felled: Dictionary = {}
 var _settling: Array[RigidBody3D] = []
+## The hulls a felled prop's mesh collides as (_hulls), by mesh.
+var _hulls_by_mesh: Dictionary = {}
 
 
 func configure(furniture_layer: Node) -> void:
 	_rows.clear()
 	_shape_rows.clear()
+	_hulls_by_mesh.clear()
 	var root := furniture_layer.get_node_or_null("GeneratedStreetFurniture") as Node3D
 	if root == null:
 		return
@@ -182,6 +195,8 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 	debris.collision_layer = 0
 	debris.collision_mask = PHYSICS_WORLD_SOLID | PHYSICS_STREET_PROP
 	debris.mass = float(row.mass)
+	debris.center_of_mass_mode = RigidBody3D.CENTER_OF_MASS_MODE_CUSTOM
+	debris.center_of_mass = Vector3.UP * float(row.height) * MASS_HEIGHT
 	debris.can_sleep = true
 	debris.linear_damp = LINEAR_DAMP
 	debris.angular_damp = ANGULAR_DAMP
@@ -208,33 +223,26 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 		mesh.cast_shadow = instance.cast_shadow
 		mesh.visibility_range_end = float(row.range_m)
 		debris.add_child(mesh)
+		# It lies on what is drawn of it.
+		for hull: ConvexPolygonShape3D in _hulls(instance.multimesh.mesh):
+			var collision := CollisionShape3D.new()
+			collision.shape = hull
+			collision.transform = ref[2]
+			debris.add_child(collision)
 	for collision: CollisionShape3D in row.shapes:
 		if is_instance_valid(collision):
 			collision.disabled = true
-	# It lies on its pole's capsule and the box round its head.
-	var pole_shape := CapsuleShape3D.new()
-	pole_shape.radius = float(row.radius)
-	pole_shape.height = maxf(float(row.height), float(row.radius) * 2.0)
-	var pole := CollisionShape3D.new()
-	pole.shape = pole_shape
-	pole.position = Vector3.UP * pole_shape.height * 0.5
-	debris.add_child(pole)
-	var head := KIT.fell_head(str(row.prop), row.params)
-	if head.size != Vector3.ZERO:
-		var head_shape := BoxShape3D.new()
-		head_shape.size = head.size
-		var head_collision := CollisionShape3D.new()
-		head_collision.shape = head_shape
-		head_collision.position = head.get_center()
-		debris.add_child(head_collision)
 	debris.transform = placement
 	add_child(debris)
 	for label: Label3D in row.labels:
 		if is_instance_valid(label):
 			label.reparent(debris, true)
-	_settling.append(debris)
+	debris.sleeping_state_changed.connect(_on_debris_sleeping.bind(debris))
+	_settle(debris)
 	if by == null:
 		return
+	# The body that felled it carries on through it.
+	debris.add_collision_exception_with(by)
 	var velocity := by.linear_velocity
 	var way := Vector3(velocity.x, 0.0, velocity.z)
 	var speed := way.length()
@@ -246,10 +254,50 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 	# Off the body's middle line, toward the side of it the prop stood on.
 	var right := way.cross(Vector3.UP)
 	var aside := right if (placement.origin - by.global_position).dot(right) >= 0.0 else -right
-	debris.linear_velocity = way * speed * keep * CARRY + aside * ASIDE_MPS + Vector3.UP * POP_MPS
-	# Turning about UP x toward tips its top toward where it goes.
-	var toward := (way + aside * TIP_ASIDE).normalized()
-	debris.angular_velocity = Vector3.UP.cross(toward) * TIP_RADPS * clampf(speed / 10.0, 0.5, 1.5)
+	var foot := way * minf(speed * keep * FOOT_CARRY, FOOT_MAX_MPS) + aside * FOOT_ASIDE_MPS + Vector3.UP * POP_MPS
+	# Turning about UP x toward tips its top toward where it goes, about its foot:
+	# its weight moves on by the turn round the foot as well as the foot's own way.
+	var toward := (aside + way * FALL_AHEAD).normalized()
+	var spin := Vector3.UP.cross(toward) * TIP_RADPS * clampf(speed / 10.0, 0.7, 1.4)
+	debris.angular_velocity = spin
+	debris.linear_velocity = foot + spin.cross(placement.basis * debris.center_of_mass)
+
+
+## The convex hulls a mesh collides as when felled: one a slice the furniture kit
+## kept of it (fall_slices), or its box if it kept none. By mesh, once.
+func _hulls(mesh: Mesh) -> Array:
+	if _hulls_by_mesh.has(mesh):
+		return _hulls_by_mesh[mesh]
+	var hulls: Array = []
+	for points: PackedVector3Array in mesh.get_meta("fall_slices", []):
+		var hull := ConvexPolygonShape3D.new()
+		hull.points = points
+		hulls.append(hull)
+	if hulls.is_empty():
+		var box := mesh.get_aabb()
+		var corners := PackedVector3Array()
+		for corner in 8:
+			corners.append(box.get_endpoint(corner))
+		var hull := ConvexPolygonShape3D.new()
+		hull.points = corners
+		hulls.append(hull)
+	_hulls_by_mesh[mesh] = hulls
+	return hulls
+
+
+## Tracks a debris body until it settles (again: one woken from its sleep).
+func _settle(debris: RigidBody3D) -> void:
+	debris.set_meta("age", 0.0)
+	debris.set_meta("rest", 0.0)
+	debris.contact_monitor = true
+	if not _settling.has(debris):
+		_settling.append(debris)
+
+
+## A sleeping debris body woken (what it lay on moved): it settles again.
+func _on_debris_sleeping(debris: RigidBody3D) -> void:
+	if is_instance_valid(debris) and not debris.sleeping and not debris.freeze:
+		_settle(debris)
 
 
 func _physics_process(delta: float) -> void:
@@ -268,6 +316,8 @@ func _physics_process(delta: float) -> void:
 			var grounded := _on_the_ground(debris)
 			debris.contact_monitor = false
 			if not grounded:
+				# Propped on something that can move: asleep until that moves.
+				debris.sleeping = true
 				continue
 			debris.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 			debris.freeze = true
