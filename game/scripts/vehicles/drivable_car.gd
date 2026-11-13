@@ -35,10 +35,11 @@ extends RigidBody3D
 ## bottoms out on the crest slides on over it). Come to rest on the island with
 ## nobody in it, it freezes (static, as solid as a parked car) and does no
 ## per-frame work until wake(): getting in, being put down, or a hit
-## (vehicle_manager.gd _shove). Its visual is a top-level node moved each frame
-## between the last two physics states (Engine.get_physics_interpolation_fraction),
-## so it stays smooth when the frame rate and the 60 Hz physics differ (the web
-## build).
+## (vehicle_manager.gd _shove). A street car collides as its drawn body while it
+## is frozen and as two simple hulls while it moves (_drawn_pieces). Its visual
+## is a top-level node moved each frame between the last two physics states
+## (Engine.get_physics_interpolation_fraction), so it stays smooth when the frame
+## rate and the 60 Hz physics differ (the web build).
 ##
 ## Handling numbers are production inference for arcade feel, not measured.
 
@@ -319,6 +320,16 @@ var _hull_query := PhysicsShapeQueryParameters3D.new()
 ## margin it has been asked for (reach_queries).
 var _reach_box := AABB()
 var _reach_shapes: Dictionary = {}
+## A kit car's collision while it stands still (its drawn body's pieces, so a
+## player stands on what is drawn) and while it moves (its two simple hulls, as
+## every live car had before 2026-11-13: the same underside, so kerbs and ramps
+## meet it alike, and flat enough to stop on its roof or side). Godot Physics
+## tests two touching drawn bodies over every pair of their edges: with moving
+## cars as drawn, a pile-up of cars pressed side by side took about 4.6 ms a
+## physics step on the web against 0.4 ms (2026-11-13). Empty for a body
+## without the pieces.
+var _drawn_pieces: Array[CollisionShape3D] = []
+var _moving_pieces: Array[CollisionShape3D] = []
 
 
 ## The BODIES entry a body drives with (through ALIASES), or {} for a body
@@ -371,26 +382,33 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	set_meta("receiver_kind", "none")
 	set_meta("opaque", true)
 	set_meta("street_detail_id", row_id)
-	# A kit car collides as its drawn body (parts.hulls), in the kit's own shapes of
-	# those pieces where it gives them (parts.hull_shapes, shared by every car of the
-	# body, parked or live); a body without them as two boxes.
+	# A kit car collides as its drawn body (parts.hulls, in the kit's own shapes of
+	# those pieces where it gives them: parts.hull_shapes, shared by every car of the
+	# body, parked or live) while it stands still, and as its two simple hulls while
+	# it moves (_collide_as_drawn); a body without the pieces always as the hulls.
 	var hulls: Array = parts.get("hulls", [])
 	var shared: Array = parts.get("hull_shapes", []) if not hulls.is_empty() else []
-	var pieces: Array = hulls if not hulls.is_empty() else _hulls(spec)
+	var simple := _hulls(spec)
+	var sets: Array = [hulls, simple] if not hulls.is_empty() else [simple]
 	var boxed := false
-	for index in pieces.size():
-		var hull: PackedVector3Array = pieces[index]
-		var shape: Shape3D = shared[index] if index < shared.size() else null
-		if shape == null:
-			var built := ConvexPolygonShape3D.new()
-			built.points = hull
-			shape = built
-		var collision := CollisionShape3D.new()
-		collision.shape = shape
-		add_child(collision)
-		for point: Vector3 in hull:
-			_reach_box = _reach_box.expand(point) if boxed else AABB(point, Vector3.ZERO)
-			boxed = true
+	for set_index in sets.size():
+		var pieces: Array = sets[set_index]
+		for index in pieces.size():
+			var hull: PackedVector3Array = pieces[index]
+			var shape: Shape3D = shared[index] if set_index == 0 and index < shared.size() else null
+			if shape == null:
+				var built := ConvexPolygonShape3D.new()
+				built.points = hull
+				shape = built
+			var collision := CollisionShape3D.new()
+			collision.shape = shape
+			add_child(collision)
+			if sets.size() == 2:
+				(_drawn_pieces if set_index == 0 else _moving_pieces).append(collision)
+			for point: Vector3 in hull:
+				_reach_box = _reach_box.expand(point) if boxed else AABB(point, Vector3.ZERO)
+				boxed = true
+	_collide_as_drawn(true)
 	_ray.collision_mask = GROUND_MASK
 	_below.collision_mask = PHYSICS_CAR_GROUND
 	_below.hit_back_faces = false
@@ -432,6 +450,8 @@ static func reach_queries(body: RigidBody3D, margin: float) -> Array[Dictionary]
 		queries.append({"shape": car._reach_shapes[margin], "transform": Transform3D(Basis.IDENTITY, car._reach_box.get_center()), "margin": 0.0})
 		return queries
 	for owner_id in body.get_shape_owners():
+		if body.is_shape_owner_disabled(owner_id):
+			continue
 		for index in body.shape_owner_get_shape_count(owner_id):
 			queries.append({"shape": body.shape_owner_get_shape(owner_id, index), "transform": body.shape_owner_get_transform(owner_id), "margin": margin})
 	return queries
@@ -894,6 +914,8 @@ func _hulls_clear(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> bool:
 	_hull_query.exclude = skip
 	_hull_query.margin = 0.02
 	for owner_id in get_shape_owners():
+		if is_shape_owner_disabled(owner_id):
+			continue
 		for index in shape_owner_get_shape_count(owner_id):
 			_hull_query.shape = shape_owner_get_shape(owner_id, index)
 			_hull_query.transform = xf * shape_owner_get_transform(owner_id)
@@ -1154,6 +1176,7 @@ func _park() -> void:
 	_park_wait = 0.0
 	freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 	freeze = true
+	_collide_as_drawn(true)
 	_prev = global_transform
 	_curr = global_transform
 	if _visual != null:
@@ -1170,8 +1193,24 @@ func wake() -> void:
 	_prev = global_transform
 	_curr = global_transform
 	freeze = false
+	_collide_as_drawn(false)
 	set_process(true)
 	set_physics_process(true)
+
+
+## Standing still (frozen) a kit car collides as its drawn body, moving as its two
+## simple hulls (_drawn_pieces).
+func _collide_as_drawn(drawn: bool) -> void:
+	for piece: CollisionShape3D in _drawn_pieces:
+		piece.disabled = not drawn
+	for piece: CollisionShape3D in _moving_pieces:
+		piece.disabled = drawn
+
+
+func _ready() -> void:
+	# Built frozen it stands as drawn; added unfrozen (a parked car a hit sets
+	# moving) it moves.
+	_collide_as_drawn(freeze)
 
 
 func _process(_delta: float) -> void:

@@ -636,6 +636,8 @@ func _push_loose(car: RigidBody3D) -> void:
 	_loose_query.exclude = [car.get_rid()]
 	var pushed := {}
 	for owner_id in car.get_shape_owners():
+		if car.is_shape_owner_disabled(owner_id):
+			continue
 		for index in car.shape_owner_get_shape_count(owner_id):
 			_loose_query.shape = car.shape_owner_get_shape(owner_id, index)
 			_loose_query.transform = car.global_transform * car.shape_owner_get_transform(owner_id)
