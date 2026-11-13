@@ -16,8 +16,10 @@
 #                     game's loading screen chest (game/scenes/ui/hud.tscn).
 # The background stays transparent. Fully transparent pixels are made black (the
 # art's outline colour) so a resize that doesn't premultiply alpha draws no light
-# fringe. Needs ImageMagick; the output is deterministic for a given ImageMagick
-# version.
+# fringe. The exporters resize the imported image, so app_icon.png.import keeps
+# that black with process/fix_alpha_border off: on, it would fill them from the
+# art's grey anti-aliased rim, a light rim on the .icns. Needs ImageMagick; the
+# output is deterministic for a given ImageMagick version.
 #   tools/make_app_icon.sh [owner-picture]   with the owner's picture, rebuilds the
 #                                            master from it first; with no argument,
 #                                            rebuilds app_icon_360.png from the
