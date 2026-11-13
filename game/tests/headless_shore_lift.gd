@@ -37,6 +37,8 @@ func _initialize() -> void:
 func _run() -> void:
 	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
 	main.capture_mouse_on_ready = false
+	# The default shadows, never a level saved in the shared user folder (main.gd).
+	main.use_saved_settings = false
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var player := main.get_node("Player") as PlayerController
 	var load_failures: Array[String] = []

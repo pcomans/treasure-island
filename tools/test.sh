@@ -146,6 +146,8 @@ for test in \
   game/tests/validate_generated_world.gd \
   game/tests/headless_gameplay_contract.gd \
   game/tests/headless_touch_controls.gd \
+  game/tests/headless_credits_contract.gd \
+  game/tests/headless_shadow_options_contract.gd \
   game/tests/headless_world_material_contract.gd \
   game/tests/headless_ground_dressing_contract.gd \
   game/tests/headless_facade_meter_uv_adapter_contract.gd \

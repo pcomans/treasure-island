@@ -1,13 +1,16 @@
 # Building 201 textures
 
-Original art for the City Building 201 / Island Cove Market model
-(`game/scripts/world/facades/b201_market_model.gd`). Nothing here is a copy of a
-reference photo.
+Art for the City Building 201 / Island Cove Market model
+(`game/scripts/world/facades/b201_market_model.gd`). No reference photo was given to
+the generator or copied into these files. `mural_nnw` reconstructs the building's
+real mural by description (see [PROVENANCE.md](PROVENANCE.md)); the rest is original.
 
 - `stucco_paint`, `roof_membrane`, `lot_worn`, `apron_concrete`, `market_interior`,
   `shop_posters`: generated with `tools/generate-texture`, resized. `stucco_paint` has
   its broad stains filtered out so the short tile does not show as a repeat.
-- `mural_nnw`: generated mural pieces at their natural aspect on a plain generated wall.
+- `mural_nnw`: the real mural on the building's north-northwest end wall, reconstructed by
+  description: generated pieces at their natural aspect on a plain generated wall
+  ([PROVENANCE.md](PROVENANCE.md)).
 - `banner`: the middle band of a generated sunset banner, faded.
 - `sign_sheet`, `sign_plain`: a generated faded metal tile with procedural streaks;
   `sign_sheet` also has seam lines and painted lettering.
