@@ -122,6 +122,8 @@ var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
 ## A car body's collision pieces (car_hulls): body -> Array of ConvexPolygonShape3D.
 var _hulls: Dictionary = {}
+## Their points (car_hull_points): body -> Array[PackedVector3Array], read once.
+var _hull_points: Dictionary = {}
 ## The kit's empty nodes by name: the drivable car's wheel centres.
 var _markers: Dictionary = {}
 var _hero_loaded := false
@@ -215,8 +217,11 @@ static func car_custom(params: Dictionary, twist_override: Variant = null, row_i
 ## mesh, wheels and all), shadow (the shadow caster), front, rear (the
 ## right-hand front and rear wheel centres in the car frame; the left ones
 ## mirror them in x), radius, tyre_width, hulls (car_hull_points: what it
-## collides as)} or {ok: false, message}. The car's size comes from the chassis
-## and tyre boxes, the same at every level.
+## collides as) and hull_shapes (car_hulls: those pieces as shapes this kit makes
+## once per body, so every live car the vehicle manager builds from its kit
+## shares them; the clutter builder's own kit makes the parked rows')} or
+## {ok: false, message}. The car's size comes from the chassis and tyre boxes,
+## the same at every level.
 func drivable(body: String) -> Dictionary:
 	var chassis: Variant = _meshes.get("car_%s_chassis_lod0" % body, null)
 	var tyre: Variant = _meshes.get("car_%s_tyre_lod0" % body, null)
@@ -229,21 +234,27 @@ func drivable(body: String) -> Dictionary:
 		"ok": true, "chassis": chassis, "tyre": tyre, "far": far, "shadow": shadow,
 		"front": _markers["car_%s_axle_front" % body], "rear": _markers["car_%s_axle_rear" % body],
 		"radius": tyre_box.size.y * 0.5, "tyre_width": tyre_box.size.x,
-		"hulls": car_hull_points(body),
+		"hulls": car_hull_points(body), "hull_shapes": car_hulls(body),
 	}
 
 
 ## A car body's collision pieces in the car frame (tools/lib/street-car-kit.mjs
 ## carHullMeshes): the nose to the cowl, the cabin, the deck or bed, each the
 ## hull of the drawn body over its stretch above the driven car's lower hull's
-## bottom, so the player stands on what is drawn. One point list per piece.
+## bottom, so the player stands on what is drawn. One point list per piece,
+## read once per body: surface_get_arrays reads a mesh back from the renderer's
+## buffers (both renderers), which a parked car going live used to do each time.
+## Callers must not change the lists.
 func car_hull_points(body: String) -> Array[PackedVector3Array]:
+	if _hull_points.has(body):
+		return _hull_points[body]
 	var pieces: Array[PackedVector3Array] = []
 	var index := 0
 	while _meshes.has("car_%s_hull%d" % [body, index]):
 		var mesh := _meshes["car_%s_hull%d" % [body, index]] as Mesh
 		pieces.append(mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX] as PackedVector3Array)
 		index += 1
+	_hull_points[body] = pieces
 	return pieces
 
 
