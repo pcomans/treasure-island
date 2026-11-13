@@ -138,27 +138,28 @@ func felled_keys() -> Array:
 	return _felled.keys()
 
 
-## Breaks every intact bay the car's (or K-rail's) hull overlaps now.
+## Breaks every intact bay the car's (or K-rail's) reach overlaps now
+## (DrivableCar.reach_queries: a car's box round its hull, whose pieces queried
+## against the cars beside it cost milliseconds a tick).
 func break_overlaps(car: RigidBody3D) -> void:
 	if _bodies.is_empty() or car == null:
 		return
 	var space := car.get_world_3d().direct_space_state
 	_query.exclude = [car.get_rid()]
-	_query.margin = 0.05
-	for owner_id in car.get_shape_owners():
-		for index in car.shape_owner_get_shape_count(owner_id):
-			_query.shape = car.shape_owner_get_shape(owner_id, index)
-			_query.transform = car.global_transform * car.shape_owner_get_transform(owner_id)
-			for hit: Dictionary in space.intersect_shape(_query, 16):
-				var rid: RID = hit.get("rid", RID())
-				if not _bodies.has(rid):
-					continue
-				var fence: StaticBody3D = _bodies[rid].body
-				var shape_owner := fence.shape_find_owner(int(hit.get("shape", -1)))
-				var shape := fence.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
-				if shape != null and not shape.disabled:
-					break_bay(_bodies[rid].group, shape, car.linear_velocity)
-					car.linear_velocity *= 1.0 - SPEED_SHARE_PER_BAY
+	for reach: Dictionary in DrivableCar.reach_queries(car, 0.05):
+		_query.shape = reach.shape
+		_query.margin = reach.margin
+		_query.transform = car.global_transform * (reach.transform as Transform3D)
+		for hit: Dictionary in space.intersect_shape(_query, 16):
+			var rid: RID = hit.get("rid", RID())
+			if not _bodies.has(rid):
+				continue
+			var fence: StaticBody3D = _bodies[rid].body
+			var shape_owner := fence.shape_find_owner(int(hit.get("shape", -1)))
+			var shape := fence.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
+			if shape != null and not shape.disabled:
+				break_bay(_bodies[rid].group, shape, car.linear_velocity)
+				car.linear_velocity *= 1.0 - SPEED_SHARE_PER_BAY
 	_fell_touched_posts(car)
 
 

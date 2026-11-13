@@ -170,6 +170,11 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			if not _cells.has(cell):
 				_cells[cell] = []
 			(_cells[cell] as Array).append(id)
+	# The cars' collision pieces (read back from the renderer once per body) under
+	# the load screen, not at the first hit on a parked car of each body.
+	if _clutter != null:
+		for body: String in KIT.CAR_BODIES:
+			_kit.car_hulls(body)
 	if _hero != null:
 		_hero.queue_free()
 		_hero = null
@@ -592,34 +597,33 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 
 
 ## Sets moving whatever parked car or K-rail a moving live body (car or K-rail)
-## is about to hit: its hull lookahead_s ahead, grown by margin (0 s: what it
-## touches now). A static row swaps for its live body; a live one that has come
-## to rest and frozen wakes.
+## is about to hit: its reach (DrivableCar.reach_queries: a car's box round its
+## hull) lookahead_s ahead, grown by margin (0 s: what it touches now). A static
+## row swaps for its live body; a live one that has come to rest and frozen wakes.
 func _shove(car: RigidBody3D, lookahead_s: float, margin: float) -> void:
 	var space := car.get_world_3d().direct_space_state
 	var ahead := Transform3D(car.global_transform.basis, car.global_position + car.linear_velocity * lookahead_s)
-	_query.margin = margin
 	_query.exclude = [car.get_rid()]
-	for owner_id in car.get_shape_owners():
-		for index in car.shape_owner_get_shape_count(owner_id):
-			_query.shape = car.shape_owner_get_shape(owner_id, index)
-			_query.transform = ahead * car.shape_owner_get_transform(owner_id)
-			for hit: Dictionary in space.intersect_shape(_query, 16):
-				var body := hit.get("collider") as CollisionObject3D
-				if body is RigidBody3D and body.get_parent() == self and (body as RigidBody3D).freeze:
-					_wake(body as RigidBody3D)
-					continue
-				if body == null or body.get_parent() != _clutter:
-					continue
-				var shape_owner := body.shape_find_owner(int(hit.get("shape", -1)))
-				var shape := body.shape_owner_get_owner(shape_owner) as Node if shape_owner >= 0 else null
-				if shape == null:
-					continue
-				var id := str(shape.get_meta("street_detail_id", ""))
-				if _rows.has(id) and not bool(_rows[id].live):
-					var node := _make_live(id)
-					if node is DRIVABLE_CAR:
-						(node as DRIVABLE_CAR).occupied = false
+	for reach: Dictionary in DRIVABLE_CAR.reach_queries(car, margin):
+		_query.shape = reach.shape
+		_query.margin = reach.margin
+		_query.transform = ahead * (reach.transform as Transform3D)
+		for hit: Dictionary in space.intersect_shape(_query, 16):
+			var body := hit.get("collider") as CollisionObject3D
+			if body is RigidBody3D and body.get_parent() == self and (body as RigidBody3D).freeze:
+				_wake(body as RigidBody3D)
+				continue
+			if body == null or body.get_parent() != _clutter:
+				continue
+			var shape_owner := body.shape_find_owner(int(hit.get("shape", -1)))
+			var shape := body.shape_owner_get_owner(shape_owner) as Node if shape_owner >= 0 else null
+			if shape == null:
+				continue
+			var id := str(shape.get_meta("street_detail_id", ""))
+			if _rows.has(id) and not bool(_rows[id].live):
+				var node := _make_live(id)
+				if node is DRIVABLE_CAR:
+					(node as DRIVABLE_CAR).occupied = false
 
 
 ## Pushes the loose props (the pitch's ball) a moving car's hull is about to

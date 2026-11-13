@@ -235,6 +235,8 @@ var handbrake := false
 var occupied := false:
 	set(value):
 		occupied = value
+		if value and _driver == null:
+			_build_driver()
 		if _driver != null:
 			_driver.visible = value
 ## The playable outline and the drawn ground (set by the vehicle manager).
@@ -299,8 +301,12 @@ var _visual: Node3D
 ## The wheels: all four, or the front two where the rear ones are another mesh
 ## (_rear_wheels: a truck's twin tyres).
 var _wheels: MultiMesh
-## The hero level's driver at the wheel (shown while occupied), where it draws.
+## The hero level's driver at the wheel (shown while occupied), where it draws:
+## built the first time the car is occupied (_build_driver), as its meshes take
+## about 18 ms to build on the desktop and a shoved car never shows one.
 var _driver: Node3D
+## The hero level's node, where it draws.
+var _hero: Node3D
 ## The hero level's wheels and brakes, where it draws.
 var _hero_wheels: MultiMesh
 var _hero_brakes: MultiMesh
@@ -309,6 +315,10 @@ var _rear_wheels: MultiMesh
 ## body's outline is measured from.
 var _front_z := -2.25
 var _hull_query := PhysicsShapeQueryParameters3D.new()
+## The box round its collision pieces in the car frame, and that box grown by each
+## margin it has been asked for (reach_queries).
+var _reach_box := AABB()
+var _reach_shapes: Dictionary = {}
 
 
 ## The BODIES entry a body drives with (through ALIASES), or {} for a body
@@ -361,14 +371,26 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	set_meta("receiver_kind", "none")
 	set_meta("opaque", true)
 	set_meta("street_detail_id", row_id)
-	# A kit car collides as its drawn body (parts.hulls); a body without them as two boxes.
+	# A kit car collides as its drawn body (parts.hulls), in the kit's own shapes of
+	# those pieces where it gives them (parts.hull_shapes, shared by every car of the
+	# body, parked or live); a body without them as two boxes.
 	var hulls: Array = parts.get("hulls", [])
-	for hull: PackedVector3Array in (hulls if not hulls.is_empty() else _hulls(spec)):
-		var shape := ConvexPolygonShape3D.new()
-		shape.points = hull
+	var shared: Array = parts.get("hull_shapes", []) if not hulls.is_empty() else []
+	var pieces: Array = hulls if not hulls.is_empty() else _hulls(spec)
+	var boxed := false
+	for index in pieces.size():
+		var hull: PackedVector3Array = pieces[index]
+		var shape: Shape3D = shared[index] if index < shared.size() else null
+		if shape == null:
+			var built := ConvexPolygonShape3D.new()
+			built.points = hull
+			shape = built
 		var collision := CollisionShape3D.new()
 		collision.shape = shape
 		add_child(collision)
+		for point: Vector3 in hull:
+			_reach_box = _reach_box.expand(point) if boxed else AABB(point, Vector3.ZERO)
+			boxed = true
 	_ray.collision_mask = GROUND_MASK
 	_below.collision_mask = PHYSICS_CAR_GROUND
 	_below.hit_back_faces = false
@@ -386,6 +408,33 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 	_safe = [{"transform": placement, "time": -INF, "road": false}]
 	for i in 4:
 		_compression[i] = _droop
+
+
+## What a moving live body's per-tick queries test (vehicle_manager.gd _shove,
+## street_fence_breaker.gd break_overlaps), each {shape, transform (in the body's
+## frame), margin}: a car the box round its collision pieces, grown by margin,
+## queried with no margin of its own; anything else (a K-rail) its own shapes at
+## margin. In plan the box is the pieces' own outline (each keeps the car's
+## collision width down to its floor along its whole length); it stands taller
+## only over the nose, the deck and the bed. The pieces themselves, queried
+## against another car's at a margin, made Godot Physics test every pair of the
+## two hulls' vertices and edges: 1.5 to 13.5 ms a pair of touching cars on the
+## desktop, so a pile-up on the web ran 7 or 8 physics steps of about 50 ms a
+## frame (2026-11-13). Against the box it is microseconds.
+static func reach_queries(body: RigidBody3D, margin: float) -> Array[Dictionary]:
+	var queries: Array[Dictionary] = []
+	if body is DrivableCar:
+		var car := body as DrivableCar
+		if not car._reach_shapes.has(margin):
+			var box := BoxShape3D.new()
+			box.size = car._reach_box.size + Vector3.ONE * (2.0 * margin)
+			car._reach_shapes[margin] = box
+		queries.append({"shape": car._reach_shapes[margin], "transform": Transform3D(Basis.IDENTITY, car._reach_box.get_center()), "margin": 0.0})
+		return queries
+	for owner_id in body.get_shape_owners():
+		for index in body.shape_owner_get_shape_count(owner_id):
+			queries.append({"shape": body.shape_owner_get_shape(owner_id, index), "transform": body.shape_owner_get_transform(owner_id), "margin": margin})
+	return queries
 
 
 ## The bodies the wheels and the car's queries skip, besides itself.
@@ -478,12 +527,9 @@ func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: N
 			piece.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 		_hero_wheels = (hero.get_node("Wheels") as MultiMeshInstance3D).multimesh
 		_hero_brakes = (hero.get_node("Brakes") as MultiMeshInstance3D).multimesh
-		if hero.has_meta("driver_seat"):
-			_driver = CAR_DRIVER.build(hero.get_meta("driver_seat"), hero.get_meta("driver_hand_left"), hero.get_meta("driver_hand_right"))
-			_driver.visible = occupied
-			for piece: Node in _driver.find_children("*", "GeometryInstance3D", true, false):
-				(piece as GeometryInstance3D).visibility_range_end = near_from
-			hero.add_child(_driver)
+		_hero = hero
+		if occupied:
+			_build_driver()
 		_visual.add_child(hero)
 	var near_m := float(parts.get("lod_near_m", LOD_NEAR_M))
 	var shadow_caster: Variant = parts.get("shadow")
@@ -500,6 +546,18 @@ func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: N
 		_visual.add_child(_instance("Shadow", shadow_caster, 1, custom, material, bounds, 0.0, near_m, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY))
 	_visual.add_child(_instance("Far", parts.far, 1, custom, material, bounds, near_m, float(parts.get("range_m", FAR_RANGE_M)), GeometryInstance3D.SHADOW_CASTING_SETTING_ON))
 	_update_wheels()
+
+
+## The driver at the wheel of the hero level, where the kit seats one (the first
+## time the car is occupied).
+func _build_driver() -> void:
+	if _hero == null or _driver != null or not _hero.has_meta("driver_seat"):
+		return
+	_driver = CAR_DRIVER.build(_hero.get_meta("driver_seat"), _hero.get_meta("driver_hand_left"), _hero.get_meta("driver_hand_right"))
+	_driver.visible = occupied
+	for piece: Node in _driver.find_children("*", "GeometryInstance3D", true, false):
+		(piece as GeometryInstance3D).visibility_range_end = KIT.HERO_FAR_M
+	_hero.add_child(_driver)
 
 
 static func _instance(node_name: String, mesh: Mesh, count: int, custom: Color, material: Material, bounds: AABB, begin_m: float, end_m: float, shadows: int) -> MultiMeshInstance3D:
