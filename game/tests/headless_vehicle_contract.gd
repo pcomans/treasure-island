@@ -4,7 +4,7 @@ extends SceneTree
 ## game/tests/shared/vehicle_cases.json. Cases, in order; the first failure
 ## stops the run (later cases need the earlier ones):
 ##   1. enter and exit with F: the parked cars differ in how dirty they are
-##      (some just washed, some filthy); with the game paused F beside a parked
+##      (most nearly clean, a few dirty); with the game paused F beside a parked
 ##      car does nothing; unpaused, the stock player presses F
 ##      and drives it (avatar hidden, capsule off, the parked box gone, and it
 ##      looks as it did parked: paint, finish and dirt), the view
@@ -175,11 +175,12 @@ func _case_enter_exit() -> bool:
 	if not _require(not entry.is_empty() and str(entry.prop) == "parked_car", "Fixture car %s is not a swappable parked car." % id):
 		return false
 	var parked: Transform3D = entry.transform
-	# Cars differ in how dirty they are (by their row ids): some just washed,
-	# some filthy, the same car always the same.
+	# Cars differ in how dirty they are (by their row ids), the same car always
+	# the same: most nearly clean, a few dirty, but not many (owner, 2026-11-13:
+	# fewer dirty cars).
 	var cars := 0
 	var clean := 0
-	var filthy := 0
+	var dirty := 0
 	for other: String in _vehicles.swappable_ids():
 		var other_entry: Dictionary = _vehicles.row(other)
 		if str(other_entry.get("prop", "")) != "parked_car":
@@ -187,9 +188,9 @@ func _case_enter_exit() -> bool:
 		var dirt := (other_entry.custom as Color).a
 		cars += 1
 		clean += 1 if dirt < 0.2 else 0
-		filthy += 1 if dirt > 0.5 else 0
-	print("DIRT %d parked cars: %d nearly clean, %d dirty" % [cars, clean, filthy])
-	if not _require(cars > 20 and clean >= cars / 5 and filthy >= cars / 7, "Parked cars should differ in how dirty they are (%d cars, %d nearly clean, %d dirty)." % [cars, clean, filthy]):
+		dirty += 1 if dirt > 0.5 else 0
+	print("DIRT %d parked cars: %d nearly clean, %d dirty" % [cars, clean, dirty])
+	if not _require(cars > 20 and clean >= cars / 2 and dirty >= cars / 30 and dirty <= cars / 5, "Most parked cars should be nearly clean and a few dirty (%d cars, %d nearly clean, %d dirty)." % [cars, clean, dirty]):
 		return false
 	# The stock player 1.6 m off the driver's (left) door, walking.
 	var door := parked.origin - parked.basis.x * 1.6

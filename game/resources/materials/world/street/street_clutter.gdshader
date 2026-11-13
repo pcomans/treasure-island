@@ -19,9 +19,10 @@ shader_type spatial;
 // surface normal while the base coat's normal is tilted flake by flake on the
 // metallic and pearl finishes (sparkle up close, fading out with distance), a
 // pearl also shifting hue toward grazing angles. Road dust lies on the lower
-// body; a dirtier car has more of it and higher, a film of it on its hood,
-// roof and trunk, grime streaking down its sides and brake dust on its rims,
-// all from the car's own frame. Nothing here depends on where the sun is.
+// body, rising higher on a dirtier car, with a haze up its tail, a film on its
+// hood, roof and trunk when it is filthy, and brake dust on its rims, all from
+// the car's own frame; a car with no dirt is clean. Nothing here depends on
+// where the sun is.
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
@@ -80,6 +81,9 @@ void vertex() {
 		VERTEX.y += INSTANCE_CUSTOM.b * sign(VERTEX.x) * sign(VERTEX.z);
 	}
 }
+
+// A rotation that turns a noise lattice off the car's own axes.
+const mat3 TURN = mat3(vec3(0.0, 0.8, 0.6), vec3(-0.8, 0.36, -0.48), vec3(-0.6, -0.48, 0.64));
 
 float hash13(vec3 p) {
 	p = fract(p * 0.1031);
@@ -174,40 +178,46 @@ void fragment() {
 		metallic = 0.5;
 		roughness = 0.42;
 	}
-	if ((painted && finish != 3) || p == P_TRIM || (p == P_ROOF && black_roof)) {
-		// Road dust on a car's lower body, thicker low down and in patches,
-		// reaching higher and lying thicker on a dirtier car.
-		float low = 1.0 - smoothstep(0.1, mix(0.5, 1.1, dirt), local_position.y);
-		float patches = value_noise(local_position * vec3(7.0, 3.0, 7.0)) * 0.6 + value_noise(local_position * 31.0) * 0.4;
-		float dust = pow(low, mix(2.0, 1.3, dirt)) * (0.3 + 0.7 * patches) * mix(0.35, 1.2, dirt);
-		vec3 n = normalize(local_normal);
-		// A film of it on what faces up (the car's own up), on a dirty car.
-		float up = smoothstep(0.55, 0.9, n.y);
-		dust = clamp(max(dust, up * dirt * dirt * (0.3 + 0.7 * patches) * 0.8), 0.0, 1.0);
-		// Grime streaking down the sides and the back in places (a mask a
-		// metre or so across, shifted by the car's own dirt so no two cars
-		// share it), thin across and long down, heavier low down: a mid tone,
-		// so it shows dark on a light car and pale on a dark one.
-		float places = smoothstep(0.35, 0.7, value_noise(local_position * 1.3 + vec3(dirt * 41.0, 0.0, dirt * 23.0)));
-		float streaks = smoothstep(0.45, 0.85, value_noise(vec3(local_position.x * 11.0, local_position.y * 1.1, local_position.z * 11.0)));
-		float upright = 1.0 - smoothstep(0.35, 0.7, abs(n.y));
-		float grime = upright * dirt * places * streaks * mix(1.0, 0.5, smoothstep(0.5, 1.4, local_position.y)) * 0.5;
-		albedo = mix(albedo, vec3(0.33, 0.29, 0.24), dust * 0.8);
-		albedo = mix(albedo, vec3(0.3, 0.27, 0.23), grime);
-		float dull = max(dust, grime);
-		roughness = mix(roughness, 0.9, dull);
-		metallic *= 1.0 - dull;
-		clearcoat *= 1.0 - dull;
-	}
-	if ((p == P_RIM || p == P_HUB) && dirt > 0.0) {
-		// Brake dust: rims darken and dull as a car goes unwashed.
-		albedo *= 1.0 - 0.45 * dirt;
-		roughness = mix(roughness, 0.75, dirt * 0.6);
-		metallic *= 1.0 - 0.4 * dirt;
-	}
-	if (p == P_TIRE && dirt > 0.0) {
-		// Dried road dust on the sidewalls.
-		albedo = mix(albedo, vec3(0.3, 0.27, 0.23) * 0.6, dirt * 0.35);
+	if (dirt > 0.0) {
+		// A car's dirt (only a car carries any: every other instance's a is 0,
+		// a dumpster's is its lids' paint and reads as none), all in the car's
+		// own frame. On the paint, trim and a black roof, road dust thrown up
+		// from the wheels: a film thickest at the sills that thins out toward
+		// an uneven top, higher on a dirtier car and toward the rear, broken
+		// into soft blotches up there and spattered finely down low; a haze
+		// up the tail, and on a really dirty car a light film on what faces up.
+		if ((painted && finish != 3) || p == P_TRIM || (p == P_ROOF && black_roof)) {
+			vec3 n = normalize(local_normal);
+			vec3 seed = dirt * vec3(37.0, 11.0, 23.0);
+			// Pale dust shows on dark paint; on light paint a darker, browner
+			// grime, lying thicker and holding higher (a pale dust wouldn't show).
+			float light_paint = smoothstep(0.25, 0.75, dot(albedo, vec3(0.3, 0.59, 0.11)));
+			float line = mix(0.38, 0.9, dirt) + 0.1 * dirt * smoothstep(-1.5, 2.0, local_position.z) + 0.14 * (value_noise(local_position * vec3(1.4, 0.0, 1.4) + seed) - 0.5);
+			float up_film = clamp((local_position.y - 0.12) / max(0.05, line - 0.12), 0.0, 1.0);
+			float blot = smoothstep(0.3, 0.7, value_noise(local_position * vec3(2.6, 3.4, 2.6) + seed));
+			// (The spatter's lattice turned off the car's axes, so its cells
+			// don't line up into squares along the panels.)
+			float spatter = (value_noise(TURN * local_position * 27.0 + seed) - 0.5) * (1.0 - smoothstep(0.012, 0.04, pixel));
+			float film = pow(1.0 - smoothstep(0.0, 1.0, up_film), mix(1.3, 0.9, light_paint)) * mix(1.0, blot, smoothstep(0.15, 0.8, up_film)) * (1.0 + 0.35 * spatter);
+			float up_tail = clamp((local_position.y - 0.12) / max(0.05, line + 0.33), 0.0, 1.0);
+			float tail = smoothstep(0.35, 0.85, n.z) * pow(1.0 - smoothstep(0.0, 1.0, up_tail), 1.1) * (0.7 + 0.3 * value_noise(local_position * 3.0 + seed)) * 0.75;
+			float top = smoothstep(0.55, 0.9, n.y) * smoothstep(0.55, 1.0, dirt) * 0.25 * (0.8 + 0.2 * blot);
+			float dust = clamp(max(film, max(tail, top)) * dirt, 0.0, 1.0);
+			albedo = mix(albedo, mix(vec3(0.47, 0.44, 0.38), vec3(0.16, 0.135, 0.105), light_paint), dust * mix(0.7, 0.95, light_paint));
+			roughness = mix(roughness, 0.9, dust);
+			metallic *= 1.0 - dust;
+			clearcoat *= 1.0 - dust;
+		}
+		if (p == P_RIM || p == P_HUB) {
+			// Brake dust: rims darken and dull as a car goes unwashed.
+			albedo *= 1.0 - 0.45 * dirt;
+			roughness = mix(roughness, 0.75, dirt * 0.6);
+			metallic *= 1.0 - 0.4 * dirt;
+		}
+		if (p == P_TIRE) {
+			// Dried road dust on the sidewalls.
+			albedo = mix(albedo, vec3(0.3, 0.27, 0.23) * 0.6, dirt * 0.35);
+		}
 	}
 	if (p == P_GRILLE) {
 		// Slats across a grille or an intake.

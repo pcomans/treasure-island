@@ -169,13 +169,19 @@ static func hero_level_enabled() -> bool:
 
 ## How dirty a car is, 0 (just washed) to 1 (filthy), from its row's id: so a
 ## car looks the same wherever it is drawn, at every level and when it is
-## driven. Most cars are fairly clean, a few filthy (the square of an even
-## spread).
+## driven. The id's hash is mixed first (ids next to each other in a row differ
+## only in its low bits, which left whole rows equally dirty), and the sixth
+## power of that even spread keeps most cars nearly clean and a few dirty
+## (owner, 2026-11-13: fewer dirty cars): about three in four below 0.2, one in
+## eleven over 0.5.
 static func car_dirt(row_id: String) -> float:
 	if row_id == "":
 		return 0.0
-	var u := float(row_id.hash() & 0xFFFF) / 65535.0
-	return u * u
+	var h := row_id.hash() & 0xFFFFFFFF
+	h = (((h >> 16) ^ h) * 0x45D9F3B) & 0xFFFFFFFF
+	h = (((h >> 16) ^ h) * 0x45D9F3B) & 0xFFFFFFFF
+	h = (h >> 16) ^ h
+	return pow(float(h & 0xFFFF) / 65535.0, 6.0)
 
 
 ## A parked car's instance custom data (paint, style, suspension twist, dirt)
