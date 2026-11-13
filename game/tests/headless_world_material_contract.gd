@@ -56,6 +56,12 @@ const LOSSLESS_DATA_TEXTURES := {
 ## UI images draw at their own size on screen: every image under this folder imports
 ## lossless with mipmaps off.
 const UI_TEXTURES := "res://game/resources/ui/"
+## The app icon's images keep process/fix_alpha_border off. The exporters and the
+## loading screen use the imported image, and with it on the import refills the
+## pixels round the art, which tools/make_app_icon.sh makes black, from the art's
+## grey anti-aliased rim; resizes and filters that don't premultiply alpha then
+## draw a light rim round the chest.
+const APP_ICON_IMAGES := ["res://game/resources/ui/app_icon.png", "res://game/resources/ui/app_icon_360.png"]
 ## One generated record per ground route: feature kind, material key, source
 ## key and the family it must use ("" keeps the builder's own material).
 const GROUND_ROUTES := [
@@ -100,7 +106,7 @@ func _initialize() -> void:
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, and the shader-data and UI textures stay lossless" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, the shader-data and UI textures stay lossless, and the app icon's images import with the alpha-border fill off" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -392,7 +398,8 @@ func _shoreline_material_matches(builder: WorldChunkBuilder) -> bool:
 ## the editor switches a texture to VRAM compression the first time a 3D material
 ## uses it, block-compressing a lossless data or UI texture. Every block-compressed
 ## texture is a multiple of 4 on both sides (BLOCK_COMPRESSED_MODES), on the Web too.
-## LOSSLESS_DATA_TEXTURES and every image under UI_TEXTURES stay lossless.
+## LOSSLESS_DATA_TEXTURES and every image under UI_TEXTURES stay lossless, and
+## APP_ICON_IMAGES keep process/fix_alpha_border off.
 func _texture_imports_match() -> bool:
 	var problems: Array[String] = []
 	var sizes := {}
@@ -451,6 +458,12 @@ func _texture_imports_match() -> bool:
 			problems.append("%s is listed as lossless shader data but has no import file." % texture)
 		elif int(config.get_value("params", "compress/mode", -1)) != 0:
 			problems.append("%s must stay lossless (compress/mode=0): %s." % [texture, LOSSLESS_DATA_TEXTURES[texture]])
+	for image: String in APP_ICON_IMAGES:
+		var config := ConfigFile.new()
+		if config.load(image + ".import") != OK:
+			problems.append("%s has no import file." % image)
+		elif bool(config.get_value("params", "process/fix_alpha_border", true)):
+			problems.append("%s imports with process/fix_alpha_border on; turn it off (Import dock: Process > Fix Alpha Border), or the import refills the black pixels round the chest from the art's grey rim and the icons get a light rim (tools/make_app_icon.sh)." % image)
 	for problem in problems:
 		_require(false, problem)
 	return problems.is_empty()
