@@ -277,13 +277,13 @@ the rows below are rated only where a record names the prop.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Cobra-head street lamp | Island-wide by rule (Seven Seas, Cravath, Bruton, Johnson), TI Road south, Trade Winds link, Avenue of the Palms | 3 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 4: materials |
-| Davit street lamp (`lamp_cobra`, davit rules) | Island-wide by rule in the housing streets | 4 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 5: wear |
+| Cobra-head street lamp | Island-wide by rule (Seven Seas, Cravath, Bruton, Johnson), TI Road south, Trade Winds link, Avenue of the Palms | 3 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827`. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | 4: materials |
+| Davit street lamp (`lamp_cobra`, davit rules) | Island-wide by rule in the housing streets | 4 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827`. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | 5: wear |
 | Utility pole | 245 island-wide, from OSM and the strip pole set piece | 4 (visual-review-objects) | Final check at `4377e33f`; the strip pole 3 | 5: wear |
 | Power wires | 243 spans between the utility poles | 4 (visual-review-objects) | Delta PASS at `f4a6f827`: L4 accepted, L5 open. Shader keeps a minimum width at distance | 5: check for shimmer in motion (near wires about 1 px) |
 | Transformer pad | 32 OSM street cabinets island-wide | 3 (visual-review-objects) | Final check at `4377e33f` | 4: materials |
-| Lot lamp | Building 1 forecourt | 2 est. | Step 2 fix round, delta PASS; its post-top lantern is inferred from a soft, low-resolution photo | 3: the head from a sharper dated photo |
-| Plaza lamp | ferry plaza; two floodlight set pieces on 9th Street (#1) | | No prop-specific verdict | Rate |
+| Lot lamp | Building 1 forecourt | 2 est. | Step 2 fix round, delta PASS; its post-top lantern is inferred from a soft, low-resolution photo. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | 3: the head from a sharper dated photo |
+| Plaza lamp | ferry plaza; two floodlight set pieces on 9th Street (#1) | | No prop-specific verdict. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | Rate |
 | Signal mast | TI Road south, Clipper Cove Way, Seven Seas Avenue | 3 (visual-review-objects) | Final check at `4377e33f`; step 2: the signal heads held up in 2–3x native crops | 4: materials |
 | Signal cabinet | TI Road south | 2 est. | Step 2: rendered 1.6x too bright and green against three dated photos, re-tinted in the fix round (PASS) | 3: door and pad detail close up |
 | Stop sign | 100 island-wide, from OSM and the junction rules | 4 (visual-review-objects) | Final check at `4377e33f`; delta PASS at `f4a6f827` | 5: wear |
@@ -301,8 +301,8 @@ the rows below are rated only where a record names the prop.
 | Adirondack chair | ferry plaza, Cityside and Mersea promenade set pieces (the owner: the promenade chairs are the shared model, 2026-11-08) | 2 est. | Owner: the blue chairs "need a lot of work". Rebuilt with the flat-topped back and water-facing row of photos 24 and 25, colour sampled against them, feet settled (plaza-chairs PASS at `1be722c2`) | 3: slat and joint detail close up |
 | Bike rack | Avenue of the Palms set piece, OSM racks | 2 (visual-review-clutter-rollout) | Second look at `e1306ea4`; hoop rows and flanges added after it | 3: secondary parts close up |
 | Canopy of Sky (artwork) | Cityside set piece | | Whole-park PASS only; the r04 view named for it was not framed on it | Rate against ph05 |
-| Disc lamp | Cityside set pieces | | Whole-park PASS only | Rate |
-| Fork lamp | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o2, o3 |
+| Disc lamp | Cityside set pieces | | Whole-park PASS only. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | Rate |
+| Fork lamp | Garden Walk, by rule | | New 2026-11-07, not yet reviewed. A car or K-rail that meets it at 4 m/s or more knocks it over (2026-11-13, `knock-over-lamps-20261113`); the fall is not yet reviewed | Rate against owner photos o2, o3 |
 | Steel bollard | Garden Walk, by rule | | New 2026-11-07, not yet reviewed | Rate against owner photos o1, o3 |
 | Event pole | Cityside set pieces | | Whole-park PASS only | Rate |
 | Portable light tower (`light_tower`) | The rugby field (Avenue H), Páirc na nGael (its 11th Street corner) and the turf pitch, set pieces | | New 2026-11-08, not yet reviewed | Rate against Avenue H Sep 2025, 11th St Mar 2025 and 9th St Sep 2025 |

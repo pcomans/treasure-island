@@ -383,6 +383,19 @@ const BLADE_POST_TOP_M := 3.03
 ## How far a blade clamped beside a lamp pole starts from the pole's axis.
 const LAMP_BLADE_REACH_M := 0.14
 const BLADE_MARGIN_M := 0.09
+## The street furniture a car knocks over (owner, 2026-11-13: the street lamps;
+## sign poles and the like could follow with an entry here and a fell_head):
+## each prop's mass (kg), whose share of a car's momentum the felled prop takes
+## (game/scripts/vehicles/street_furniture_breaker.gd). Production inference for a
+## galvanised davit pole with its arm and head, the slimmer lot and plaza poles
+## and the park's disc and fork lamps.
+const FELLABLE := {
+	"lamp_cobra": {"mass_kg": 180.0},
+	"lamp_lot": {"mass_kg": 90.0},
+	"lamp_plaza": {"mass_kg": 150.0},
+	"lamp_disc": {"mass_kg": 70.0},
+	"lamp_fork": {"mass_kg": 110.0},
+}
 
 var _opaque: StandardMaterial3D
 var _lit: StandardMaterial3D
@@ -782,8 +795,38 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 
 
 func _number(params: Dictionary, key: String, fallback: float) -> float:
+	return _param(params, key, fallback)
+
+
+static func _param(params: Dictionary, key: String, fallback: float) -> float:
 	var value: Variant = params.get(key, fallback)
 	return float(value) if (value is float or value is int) and is_finite(float(value)) else fallback
+
+
+## The box round a fellable prop's head in its own frame (a lamp's arm and
+## luminaire, as parts() draws them from the same params): what its felled pole
+## lies on beside its shaft's capsule (street_furniture_breaker.gd), so the head
+## never sinks into the ground. An empty box for any other prop.
+static func fell_head(prop: String, params: Dictionary) -> AABB:
+	match prop:
+		"lamp_cobra":
+			# The arm rises a little past height_m as it reaches out arm_m toward -Z
+			# and the head hangs on 0.7 m beyond it (_lamp_cobra, _append_bend).
+			var height := _param(params, "height_m", 9.2)
+			var arm := _param(params, "arm_m", 2.6)
+			return AABB(Vector3(-0.2, height - 1.4, -arm - 0.75), Vector3(0.4, 1.85, arm + 0.85))
+		"lamp_lot":
+			var lot_height := _param(params, "height_m", 6.0)
+			return AABB(Vector3(-0.22, lot_height - 0.6, -0.22), Vector3(0.44, 0.65, 0.44))
+		"lamp_plaza":
+			# Bells out to either side on curved brackets, down to 3.35 m below the top.
+			var plaza_height := _param(params, "height_m", 8.0)
+			return AABB(Vector3(-0.7, plaza_height - 3.5, -0.35), Vector3(1.4, 4.1, 0.7))
+		"lamp_disc":
+			return AABB(Vector3(-0.45, 4.1, -0.45), Vector3(0.9, 0.24, 0.9))
+		"lamp_fork":
+			return AABB(Vector3(-0.45, 5.25, -0.42), Vector3(0.9, 0.97, 0.84))
+	return AABB()
 
 
 ## A soccer goal's frame, width by height (m): full size unless the row's params

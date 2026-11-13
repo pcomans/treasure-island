@@ -18,6 +18,15 @@ extends RefCounted
 ## a rigid body of its own (soccer_ball.gd) resting on its spot; it is handed every
 ## goal row's placement and mouth (the kit's goal_mouth), so it knows a goal when it
 ## goes into any of them.
+##
+## The rows a car knocks over (the kit's FELLABLE props: the street lamps) are
+## listed in the root's fellable_rows metadata: id -> {prop, params, transform,
+## instances: [[MultiMeshInstance3D name, instance index, the piece's frame in
+## the prop's], ...], shapes: [[body name, CollisionShape3D name], ...], labels:
+## [[group name, Label3D name], ...]}, so one can be hidden and dropped as a
+## body of its own in the world generated at startup and in the baked one alike
+## (game/scripts/vehicles/street_furniture_breaker.gd), its standing neighbours
+## batched as before.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
 const SOCCER_BALL := preload("res://game/scripts/world/soccer_ball.gd")
@@ -52,6 +61,9 @@ func build(document: Dictionary) -> Dictionary:
 	var balls: Array[Transform3D] = []
 	# Every goal: {id, prop, transform, half_m, height_m, crossbar_m, depth_m}.
 	var goals: Array = []
+	# id -> the fellable row's entry, its refs by batch key, cell and index until
+	# the nodes are named.
+	var fellable: Dictionary = {}
 	var props := 0
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
@@ -99,6 +111,11 @@ func build(document: Dictionary) -> Dictionary:
 		var cell := _cell(position, minf(CELL_MAX_M, range_m * CELL_RANGE_SHARE))
 		var physics_cell := _cell(position, PHYSICS_CELL_M)
 		var label_cell := _cell(position, minf(CELL_MAX_M, KIT.LABEL_RANGE_M * CELL_RANGE_SHARE))
+		var fells := KIT.FELLABLE.has(prop)
+		var entry: Dictionary = {}
+		if fells:
+			entry = {"prop": prop, "params": (params as Dictionary).duplicate(true) if params is Dictionary else {}, "transform": placement, "instances": [], "shapes": [], "labels": []}
+			fellable[str(row.id)] = entry
 		for piece: Dictionary in parts.pieces:
 			var key := str(piece.key)
 			if not batches.has(key):
@@ -106,14 +123,20 @@ func build(document: Dictionary) -> Dictionary:
 			var cells: Dictionary = batches[key].cells
 			if not cells.has(cell):
 				cells[cell] = []
+			if fells:
+				(entry.instances as Array).append([key, cell, (cells[cell] as Array).size(), piece.transform])
 			(cells[cell] as Array).append(placement * (piece.transform as Transform3D))
 		for shape: Dictionary in parts.shapes:
 			if not shapes.has(physics_cell):
 				shapes[physics_cell] = []
+			if fells:
+				(entry.shapes as Array).append([physics_cell, (shapes[physics_cell] as Array).size()])
 			(shapes[physics_cell] as Array).append({"id": str(row.id), "shape": shape.shape, "transform": placement * (shape.transform as Transform3D)})
 		for label: Dictionary in parts.labels:
 			if not labels.has(label_cell):
 				labels[label_cell] = []
+			if fells:
+				(entry.labels as Array).append([label_cell, (labels[label_cell] as Array).size()])
 			(labels[label_cell] as Array).append({"id": str(row.id), "text": str(label.text), "color": label.get("color", Color(0.96, 0.97, 0.95)), "range_m": float(label.get("range_m", KIT.LABEL_RANGE_M)), "transform": placement * (label.transform as Transform3D)})
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		props += 1
@@ -219,6 +242,13 @@ func build(document: Dictionary) -> Dictionary:
 		root.add_child(group)
 	for spot: Transform3D in balls:
 		root.add_child(SOCCER_BALL.create(spot, goals))
+	# The fellable rows' refs by the names their nodes were given above.
+	for id: String in fellable:
+		var entry: Dictionary = fellable[id]
+		entry.instances = (entry.instances as Array).map(func(ref: Array) -> Array: return ["%s__c%s" % [str(ref[0]).replace(".", "p"), ref[1]], ref[2], ref[3]])
+		entry.shapes = (entry.shapes as Array).map(func(ref: Array) -> Array: return ["Collision__c%s" % ref[0], "Shape%d" % ref[1]])
+		entry.labels = (entry.labels as Array).map(func(ref: Array) -> Array: return ["Names__c%s" % ref[0], "Name%d" % ref[1]])
+	root.set_meta("fellable_rows", fellable)
 	root.set_meta("props", props)
 	root.set_meta("prop_counts", prop_counts)
 	root.set_meta("wire_spans", wires.spans)

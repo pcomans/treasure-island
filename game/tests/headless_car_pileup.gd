@@ -16,13 +16,22 @@ extends SceneTree
 ##      against its neighbours' every tick, milliseconds a pair
 ##      (car-crash-perf-20261113 runs/T3-pileup-test-on-acdf5c88), and 1.5 times
 ##      on the fix (code-review-car-crash-perf-20261113 runs/P3).
-##   4. a crowd cannot hide a car (owner, 2026-11-13: one look round a moving car
+##   4. a dense spot stays cheap (owner, 2026-11-13: one look round a moving car
+##      for everything in its reach, not one check per kind of thing, so a new
+##      kind's own check that grows expensive fails here): the same sedan on the
+##      stock W along Bruton Street's lamp line, DENSE_OFFSET_M toward the Cultural
+##      Park's screened fence, which runs about 2 m from the lamps, knocking the
+##      lamps over as it goes with the fence within its reach; it must fell at
+##      least DENSE_MIN_LAMPS and have a fence bay within its reach for at least
+##      DENSE_MIN_FENCE_TICKS ticks, and its mean physics tick there is at most
+##      DENSE_TICK_RATIO times the pile-up's free run-up's;
+##   5. a crowd cannot hide a car (owner, 2026-11-13: one look round a moving car
 ##      for everything in its reach, vehicle_reach.gd): with CROWD small boxes on
 ##      the reach layer, which nothing collides with, between the sedan and a
 ##      parked car it is driven into from across the road, that car is set
 ##      moving, and the sedan's reach found the whole crowd at once.
-## The cars are the generated rows' (if the world moves them, re-aim DRIVER, ROW,
-## HEADING, RUN_UP_M and the CROWD_ fixture here).
+## The cars and lamps are the generated rows' (if the world moves them, re-aim
+## DRIVER, ROW, HEADING, RUN_UP_M and the DENSE_ and CROWD_ fixtures here).
 
 const DRIVER := "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_029"
 const ROW := "scatter:avenue_of_the_palms:palms_parked_cars:w1001544697_left_024"
@@ -36,6 +45,18 @@ const PRESS_TICKS := 360
 const CONTACT_LIMIT_TICKS := 600
 const REST_LIMIT_TICKS := 600
 const PILEUP_TICK_RATIO := 40.0
+## The dense spot: the first and last of Bruton Street's lamps in a line (the
+## Cultural Park's screened fence about 2 m from it, toward which the sedan runs
+## DENSE_OFFSET_M off the line, the kerb cars 3 m the other way), the run-up to
+## the first, and how far the sedan goes past the last.
+const DENSE_FIRST := "scatter:island:bruton_lamps:w1212176122_right_005"
+const DENSE_LAST := "scatter:island:bruton_lamps:w1212176122_right_011"
+const DENSE_RUN_UP_M := 14.0
+const DENSE_OFFSET_M := 0.75
+const DENSE_PAST_M := 2.0
+const DENSE_MIN_LAMPS := 5
+const DENSE_MIN_FENCE_TICKS := 30
+const DENSE_TICK_RATIO := 4.0
 ## The crowd check's parked car, approached across the road from CROWD_START along
 ## CROWD_HEADING (the vehicle contract's side shove), and the crowd: CROWD boxes
 ## of CROWD_BOX_M in a cloud CROWD_AHEAD_M short of the car's middle on the way in.
@@ -126,7 +147,7 @@ func _run() -> void:
 		if resting:
 			break
 	var short_ids := shoved.map(func(id: String) -> String: return id.rsplit(":", true, 1)[-1])
-	print("PILEUP %d cars set moving %s; %d free ticks, %d pile-up ticks" % [shoved.size(), short_ids, free.size(), pileup.size()])
+	print("PILEUP %d cars set moving %s, %d street lamps knocked over; %d free ticks, %d pile-up ticks" % [shoved.size(), short_ids, _vehicles.furniture_breaker().felled_ids().size(), free.size(), pileup.size()])
 	if shoved.size() < 2:
 		return _finish("The shoved car set nothing more moving (%s): no pile-up to measure." % [short_ids])
 	if not resting:
@@ -139,7 +160,92 @@ func _run() -> void:
 	print("PILEUP physics tick: free run-up mean %.3f ms over %d ticks; pile-up mean %.3f ms, 95th percentile %.3f ms, longest %.3f ms over %d ticks; %.1f times the run-up's (at most %.0f)" % [free_mean, free.size(), pile_mean, pileup[int(pileup.size() * 0.95)], pileup[-1], pileup.size(), ratio, PILEUP_TICK_RATIO])
 	if ratio > PILEUP_TICK_RATIO:
 		_failures.append("The pile-up's mean physics tick took %.1f times the free run-up's (at most %.0f): pressing a car into a row of parked cars is too costly" % [ratio, PILEUP_TICK_RATIO])
+	var dense := await _dense(free_mean)
+	if dense != "":
+		_failures.append(dense)
 	_finish(await _crowd())
+
+
+## Along Bruton Street's lamp line beside the screened fence: the lamps fall, the
+## fence is in reach, and the mean physics tick stays within DENSE_TICK_RATIO of
+## the free run-up's (free_mean, ms). "" or what failed.
+func _dense(free_mean: float) -> String:
+	var lamps := _vehicles.furniture_breaker()
+	var first: Dictionary = lamps.pole(DENSE_FIRST)
+	var last: Dictionary = lamps.pole(DENSE_LAST)
+	if first.is_empty() or last.is_empty():
+		return "%s or %s is not a street lamp a car knocks over in this world: re-aim the dense fixture." % [DENSE_FIRST, DENSE_LAST]
+	var a := Vector2((first.foot as Vector3).x, (first.foot as Vector3).z)
+	var b := Vector2((last.foot as Vector3).x, (last.foot as Vector3).z)
+	var heading := (b - a).normalized()
+	var aside := Vector2(-heading.y, heading.x) * DENSE_OFFSET_M
+	var problem := _vehicles.drive_from(DRIVER, a - heading * DENSE_RUN_UP_M + aside, heading)
+	if problem != "":
+		return "Could not put the sedan at the dense spot's start: %s" % problem
+	for _tick in 45:
+		await physics_frame
+	var car := _vehicles.active_car()
+	var fences := {}
+	for rid: RID in _vehicles.fence_breaker().fence_bodies():
+		fences[rid] = true
+	var probe := PhysicsShapeQueryParameters3D.new()
+	var probe_box := BoxShape3D.new()
+	probe.shape = probe_box
+	probe.collision_mask = VehicleReach.PHYSICS_STREET_PROP
+	var felled_before := lamps.felled_ids().size()
+	var spent_ticks: Array[float] = []
+	var fence_ticks := 0
+	var length := (b - a).length()
+	physics_frame.connect(_on_physics_frame)
+	Input.action_press("move_forward")
+	for _frame in 900:
+		var at := Vector2(car.global_position.x, car.global_position.z)
+		var target := b + heading * 30.0 + aside
+		var forward := -car.global_transform.basis.z
+		var angle := Vector2(forward.x, forward.z).angle_to(target - at)
+		Input.action_release("move_left")
+		Input.action_release("move_right")
+		if angle > deg_to_rad(2.0):
+			Input.action_press("move_right")
+		elif angle < deg_to_rad(-2.0):
+			Input.action_press("move_left")
+		_steps = 0
+		await process_frame
+		var spent := float(Time.get_ticks_usec() - _signal_us) / 1000.0
+		if _steps == 1:
+			spent_ticks.append(spent)
+		# A fence bay within the reach's largest margin (the look-ahead's) of the
+		# car's box: asked here, after the tick's time is taken.
+		var box := VehicleReach.reach_box(car)
+		probe_box.size = box.size + Vector3.ONE * 0.8
+		probe.transform = car.global_transform * Transform3D(Basis.IDENTITY, box.get_center())
+		probe.exclude = [car.get_rid()]
+		for hit: Dictionary in car.get_world_3d().direct_space_state.intersect_shape(probe, 64):
+			if fences.has(hit.get("rid", RID())):
+				fence_ticks += 1
+				break
+		if (Vector2(car.global_position.x, car.global_position.z) - a).dot(heading) > length + DENSE_PAST_M:
+			break
+	Input.action_release("move_forward")
+	Input.action_release("move_left")
+	Input.action_release("move_right")
+	physics_frame.disconnect(_on_physics_frame)
+	Input.action_press("move_back")
+	for _tick in 180:
+		await physics_frame
+		if car.linear_velocity.length() < 0.5:
+			break
+	Input.action_release("move_back")
+	var felled := lamps.felled_ids().size() - felled_before
+	var mean := _mean(spent_ticks)
+	spent_ticks.sort()
+	var ratio := mean / maxf(free_mean, 0.001)
+	print("DENSE along Bruton Street's lamps beside the fence: %d lamps felled, a fence bay in reach %d ticks; physics tick mean %.3f ms, 95th percentile %.3f ms, longest %.3f ms over %d ticks; %.1f times the free run-up's (at most %.0f)" % [felled, fence_ticks, mean, spent_ticks[int(spent_ticks.size() * 0.95)] if not spent_ticks.is_empty() else NAN, spent_ticks[-1] if not spent_ticks.is_empty() else NAN, spent_ticks.size(), ratio, DENSE_TICK_RATIO])
+	if felled < DENSE_MIN_LAMPS or fence_ticks < DENSE_MIN_FENCE_TICKS:
+		return "Along Bruton Street the sedan felled %d lamps (at least %d) and had a fence bay in reach %d ticks (at least %d): re-aim the dense fixture." % [felled, DENSE_MIN_LAMPS, fence_ticks, DENSE_MIN_FENCE_TICKS]
+	if ratio > DENSE_TICK_RATIO:
+		return "Along Bruton Street's lamps beside the fence the mean physics tick took %.1f times the free run-up's (at most %.0f): what a moving car finds round it is too costly to judge" % [ratio, DENSE_TICK_RATIO]
+	return ""
 
 
 ## A crowd of things in reach between the sedan and a parked car: the car is still
@@ -206,7 +312,7 @@ func _finish(problem: String) -> void:
 		_failures.append(problem)
 	Input.action_release("move_forward")
 	if _failures.is_empty():
-		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, CROWD])
+		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; along a lamp line beside a fence it knocks the lamps over within %.0f times; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, DENSE_TICK_RATIO, CROWD])
 		quit(0)
 	else:
 		for failure in _failures:

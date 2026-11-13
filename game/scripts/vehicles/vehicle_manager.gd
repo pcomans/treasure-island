@@ -38,16 +38,19 @@ extends Node3D
 ##
 ## Fences: a live car or K-rail passes through the breakable fences' collision
 ## (an exception per fence body) and breaks each bay it overlaps while it moves
-## (street_fence_breaker.gd); on foot every intact bay stays solid. Shrubs and
-## hedges have no collision and tree trunks do, so a car drives through a shrub
-## and stops at a tree.
+## (street_fence_breaker.gd); on foot every intact bay stays solid. A street lamp
+## met at driving speed falls and the car carries on a little slower; a slow
+## nudge stops at it (street_furniture_breaker.gd). Shrubs and hedges have no
+## collision and tree trunks do, so a car drives through a shrub and stops at a
+## tree.
 ##
 ## The reach (owner, 2026-11-13: one check for what is round a car, not one per
 ## kind of thing): each tick every moving live car or K-rail asks the physics
 ## server once for what is round it (vehicle_reach.gd, _look_round) and hands each
 ## thing found to its owner by physics body (_reach_owners): the clutter's rows
 ## and the live bodies here (_reach_row, _reach_live), the fences and their
-## standing posts (street_fence_breaker.gd), and any loose prop (_push_loose).
+## standing posts (street_fence_breaker.gd), the street lamps
+## (street_furniture_breaker.gd), and any loose prop (_push_loose).
 ##
 ## The manager pauses with the game (F and R do nothing in the pause menu).
 ##
@@ -64,6 +67,7 @@ const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const CAR_HERO_LEVEL := preload("res://game/scripts/vehicles/car_hero_level.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
 const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
+const FURNITURE_BREAKER := preload("res://game/scripts/vehicles/street_furniture_breaker.gd")
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_CAMERA := preload("res://game/scripts/vehicles/vehicle_camera.gd")
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
@@ -129,6 +133,7 @@ var _active: DRIVABLE_CAR
 var _camera: VEHICLE_CAMERA
 var _visible_ground := VisibleGround.new()
 var _breaker: FENCE_BREAKER
+var _furniture: FURNITURE_BREAKER
 ## Draws the parked cars nearest the camera at the hero level (desktop only).
 var _hero: CAR_HERO_LEVEL
 ## The breakable fence bodies (live bodies' collision exceptions) and every
@@ -211,12 +216,18 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 		_breaker.configure(world.street_detail_layer("fences"))
 	_breakable_fences = _breaker.fence_bodies()
 	_fences = _breaker.all_fence_bodies()
+	_furniture = FURNITURE_BREAKER.new()
+	_furniture.name = "FurnitureBreaker"
+	add_child(_furniture)
+	if "furniture" in world.get_street_detail_layers():
+		_furniture.configure(world.street_detail_layer("furniture"))
 	_reach_owners.clear()
 	if _clutter != null:
 		for child: Node in _clutter.get_children():
 			if child is StaticBody3D:
 				_reach_owners[(child as StaticBody3D).get_rid()] = _reach_row
 	_reach_owners.merge(_breaker.reach_owners())
+	_reach_owners.merge(_furniture.reach_owners())
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
 	_camera.use_planes_of(_player.get_camera())
@@ -269,6 +280,10 @@ func fence_breaker() -> FENCE_BREAKER:
 	return _breaker
 
 
+func furniture_breaker() -> FURNITURE_BREAKER:
+	return _furniture
+
+
 ## The most things one reach has found so far this session (tests read it).
 func reach_most_hits() -> int:
 	return _reach.most_hits
@@ -289,7 +304,7 @@ func _physics_process(delta: float) -> void:
 		_on_foot(enter_pressed)
 	# Every moving live car or K-rail (not only the driven one) looks round itself
 	# once: it sets moving what it is about to hit, breaks the fence bays it moves
-	# into and pushes the ball.
+	# into, knocks over the street lamps it meets at speed and pushes the ball.
 	for id: String in _live.keys():
 		var body := _live[id] as RigidBody3D
 		if body == null or body.freeze:
@@ -614,8 +629,10 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 ## at all or its driver presses on; the driven car, and any other above
 ## BREAK_SPEED_MPS, breaks the fence bays it touches and fells their standing
 ## posts (street_fence_breaker.gd); a car above BREAK_SPEED_MPS pushes the loose
-## props within LOOSE_PUSH_MARGIN_M. One query covers the box round all of it;
-## each owner judges what it is given against its own part.
+## props within LOOSE_PUSH_MARGIN_M; a street lamp falls when the body meets it at
+## driving speed (street_furniture_breaker.gd, within the look-ahead's box). One
+## query covers the box round all of it; each owner judges what it is given
+## against its own part.
 func _look_round(body: RigidBody3D, delta: float) -> void:
 	var reach := _reach
 	reach.look_from(body, delta)

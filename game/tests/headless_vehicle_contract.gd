@@ -46,6 +46,13 @@ extends SceneTree
 ##      breakable: false;
 ##   7. plants: the car drives through a shrub without slowing and stops at a
 ##      palm's trunk;
+##   7b. street lamps (owner, 2026-11-13): crept into, pressed against at full
+##      throttle and tapped on the stock W from 0.6 m, a lamp stands and stops
+##      the car; driven at from 20 m back on the stock W, another falls, the car
+##      carrying on through with most of its speed (the lamp's share of its
+##      momentum taken) and still driving half a second later; crept back through
+##      where it stood, nothing stops the car; on foot the stock player walks
+##      through where it stood, and the standing one stops the player;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
 ##      the side at speed and a K-rail hit end on are set moving; each comes to
@@ -87,6 +94,7 @@ extends SceneTree
 const CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 const DRIVABLE_CAR := preload("res://game/scripts/vehicles/drivable_car.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+const FURNITURE_BREAKER := preload("res://game/scripts/vehicles/street_furniture_breaker.gd")
 const BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
 const SPOTS := preload("res://game/tests/shared/vehicle_spots.gd")
 const YARD_KIT := preload("res://game/scripts/world/street_yard_kit.gd")
@@ -112,6 +120,10 @@ const AVATAR_REACH_M := 2.0
 const HULL_READ_M := 0.01
 const HULL_LENGTH_MARGIN_M := 0.15
 const HULL_TOP_MARGIN_M := 0.35
+## A car that knocks a lamp over keeps at least this share of its speed: a lamp
+## takes its share of the car's momentum (street_furniture_breaker.gd, about a
+## tenth for a cobra lamp and a crossover).
+const LAMP_KEEP := 0.8
 ## A yard vehicle's drive from rest (DRIVE_S under full throttle) must cover at
 ## least this share of the distance and speed its own launch acceleration and top
 ## speed give (drivable_car.gd BODIES): the throttle and the tyres' grip build up
@@ -160,10 +172,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and stopped by a palm, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1335,6 +1347,149 @@ func _case_plants() -> bool:
 	or not _require(_recoveries.size() == recoveries_before, "A recovery fired at the plants."):
 		return false
 	return await _stop_and_exit(car, "plants")
+
+
+# --- 7b. Street lamps: one met at driving speed falls, a slow nudge stops at one.
+
+func _case_lamps() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var lamps := _vehicles.furniture_breaker()
+	var nudge := str(_cases.lamps.nudge)
+	var fell := str(_cases.lamps.fell)
+	var recoveries_before := _recoveries.size()
+	for id: String in [nudge, fell]:
+		if not _require(not lamps.pole(id).is_empty() and not lamps.is_felled(id), "Fixture lamp %s is not a standing street lamp a car knocks over." % id):
+			return false
+	# A slow nudge: crept into, then pressed on at full throttle.
+	var heading := Vector2(_cases.lamps.nudge_heading_xz[0], _cases.lamps.nudge_heading_xz[1]).normalized()
+	var pole: Dictionary = lamps.pole(nudge)
+	if not await _drive_from(car, _short_of(pole, heading, 2.0, car), heading):
+		return false
+	var creep_top := 0.0
+	var stopped := false
+	for tick in 600:
+		var speed := car.linear_velocity.length()
+		if speed < 0.8:
+			Input.action_press("move_forward")
+		elif speed > 1.2:
+			Input.action_release("move_forward")
+		await physics_frame
+		creep_top = maxf(creep_top, car.linear_velocity.length())
+		if tick > 30 and car.linear_velocity.length() < 0.15:
+			stopped = true
+			break
+	Input.action_press("move_forward")
+	for _tick in 120:
+		await physics_frame
+	_release_driving()
+	var front := _front_past(pole, heading, car)
+	print("LAMP NUDGE crept into %s at up to %.2f m/s, stopped %s, then 2 s of full throttle against it: felled %s, the car's front %.2f m past its axis" % [nudge, creep_top, stopped, lamps.is_felled(nudge), front])
+	if not _require(stopped and creep_top < FURNITURE_BREAKER.FELL_SPEED_MPS and not lamps.is_felled(nudge) and front < 0.0, "Creeping into %s and pressing on felled it or got past it (top %.2f m/s, felled %s, front %.2f m past its axis)." % [nudge, creep_top, lamps.is_felled(nudge), front]):
+		return false
+	# A tap: the stock W from 0.6 m, held.
+	if not await _drive_from(car, _short_of(pole, heading, 0.6, car), heading):
+		return false
+	var tap_top := 0.0
+	Input.action_press("move_forward")
+	for _tick in 120:
+		await physics_frame
+		tap_top = maxf(tap_top, car.linear_velocity.length())
+	_release_driving()
+	front = _front_past(pole, heading, car)
+	print("LAMP TAP W held from 0.6 m short of %s: up to %.2f m/s, felled %s, the car's front %.2f m past its axis" % [nudge, tap_top, lamps.is_felled(nudge), front])
+	if not _require(not lamps.is_felled(nudge) and front < 0.0, "A tap on the stock W from 0.6 m felled %s or got past it (up to %.2f m/s, front %.2f m past its axis)." % [nudge, tap_top, front]):
+		return false
+	# At driving speed: on the stock W from run_up_m back, along the lamps' line.
+	heading = Vector2(_cases.lamps.fell_heading_xz[0], _cases.lamps.fell_heading_xz[1]).normalized()
+	pole = lamps.pole(fell)
+	var foot: Vector3 = pole.foot
+	if not await _drive_from(car, _short_of(pole, heading, float(_cases.lamps.run_up_m), car), heading):
+		return false
+	var debris_before := lamps.get_child_count()
+	var speed_in := 0.0
+	var speed_out := 0.0
+	var later := 0.0
+	var fell_tick := -1
+	var last := 0.0
+	Input.action_press("move_forward")
+	for tick in 360:
+		_steer_toward(car, Vector2(foot.x, foot.z) + heading * 200.0)
+		await physics_frame
+		var speed := car.linear_velocity.length()
+		if fell_tick < 0 and lamps.is_felled(fell):
+			fell_tick = tick
+			speed_in = last
+			speed_out = speed
+		last = speed
+		if fell_tick >= 0 and tick >= fell_tick + 30:
+			later = speed
+			break
+	_release_driving()
+	front = _front_past(pole, heading, car)
+	print("LAMP FELL %s at %.2f m/s: %.2f m/s the tick after (%.0f%% kept), %.2f m/s half a second later, the car's front %.2f m past its axis, debris %d" % [fell, speed_in, speed_out, 100.0 * speed_out / maxf(speed_in, 0.01), later, front, lamps.get_child_count() - debris_before])
+	if not _require(fell_tick >= 0 and speed_in > FURNITURE_BREAKER.FELL_SPEED_MPS, "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [fell, float(_cases.lamps.run_up_m), lamps.is_felled(fell), speed_in]) \
+	or not _require(speed_out >= LAMP_KEEP * speed_in and later > 5.0 and front > 2.0, "The car did not carry on through %s (%.2f -> %.2f m/s, %.2f m/s half a second later, front %.2f m past its axis)." % [fell, speed_in, speed_out, later, front]) \
+	or not _require(lamps.get_child_count() > debris_before, "Felling %s dropped no debris." % fell):
+		return false
+	# Crept back through where it stood (slower than a lamp falls to), nothing
+	# stops the car: on until its rear is 2 m past the foot, clear of the walk.
+	if not await _drive_from(car, _short_of(pole, heading, 3.0, car), heading):
+		return false
+	var crept := false
+	var crawl_top := 0.0
+	for _tick in 600:
+		var speed := car.linear_velocity.length()
+		if speed < 1.6:
+			Input.action_press("move_forward")
+		elif speed > 2.2:
+			Input.action_release("move_forward")
+		await physics_frame
+		crawl_top = maxf(crawl_top, car.linear_velocity.length())
+		if _front_past(pole, heading, car) > car.length_m + 2.0:
+			crept = true
+			break
+	_release_driving()
+	print("LAMP GONE crept through where %s stood at up to %.2f m/s: through %s, the car's front %.2f m past its axis" % [fell, crawl_top, crept, _front_past(pole, heading, car)])
+	if not _require(crept, "Creeping through where %s stood, the car was stopped." % fell) \
+	or not _require(_recoveries.size() == recoveries_before, "A recovery fired at the lamps."):
+		return false
+	if not await _stop_and_exit(car, "lamps"):
+		return false
+	# On foot: through where the felled one stood, stopped by the standing one.
+	if not await _walk_along_x(foot, true, "where %s stood" % fell):
+		return false
+	return await _walk_along_x(lamps.pole(nudge).foot, false, "the standing %s" % nudge)
+
+
+## Where to put a car's middle so that, facing heading, its front stands gap m
+## short of a pole's side.
+func _short_of(pole: Dictionary, heading: Vector2, gap: float, car: DRIVABLE_CAR) -> Vector2:
+	var foot: Vector3 = pole.foot
+	return Vector2(foot.x, foot.z) - heading * (gap + float(pole.radius) + car.length_m * 0.5)
+
+
+## How far the car's front is past a pole's axis along heading (negative: short of it).
+func _front_past(pole: Dictionary, heading: Vector2, car: DRIVABLE_CAR) -> float:
+	var foot: Vector3 = pole.foot
+	return Vector2(car.global_position.x - foot.x, car.global_position.z - foot.z).dot(heading) + car.length_m * 0.5
+
+
+## The stock player walks along +X at a pole's foot from 2.5 m short of it: past
+## it when nothing stands there (open), stopped against it when it stands.
+func _walk_along_x(foot: Vector3, open: bool, label: String) -> bool:
+	if not await _stand_player(Vector2(foot.x - 2.5, foot.z)):
+		return false
+	var rig := _player.get_node("CameraPivot") as Node3D
+	rig.rotation.y = -PI * 0.5
+	Input.action_press("move_forward")
+	for _tick in 75:
+		await physics_frame
+	_release()
+	var past := _player.global_position.x - foot.x
+	print("LAMP on foot at %s: %.2f m past the foot along x, %.2f m off its line" % [label, past, absf(_player.global_position.z - foot.z)])
+	if open:
+		return _require(past > 0.5, "The stock player could not walk through %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_gone")
+	return _require(past < 0.0 and past > -1.0, "The stock player was not stopped by %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_standing")
 
 
 # --- 8. Shoving parked cars and a K-rail.

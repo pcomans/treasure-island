@@ -7,10 +7,11 @@ extends RefCounted
 ## reach this tick, and hands each thing found to whoever owns it: a parked car's
 ## or K-rail's row goes live and a frozen live one wakes (vehicle_manager.gd), a
 ## fence bay breaks and a broken bay's standing post goes down
-## (street_fence_breaker.gd), the pitch's ball is pushed. Each owner judges its
-## own things against the body's box with its own margin (overlaps,
-## distance_to): plain arithmetic on the shapes' boxes, so a new kind of
-## breakable thing adds an owner, not another query. Things nothing collides with but a reach should
+## (street_fence_breaker.gd), a street lamp falls (street_furniture_breaker.gd),
+## the pitch's ball is pushed. Each owner judges its own things against the
+## body's box with its own margin (overlaps, distance_to, pole_contact): plain
+## arithmetic on the shapes' boxes, so a new kind of breakable thing adds an
+## owner, not another query. Things nothing collides with but a reach should
 ## find (a broken fence's standing posts) stand on PHYSICS_REACH, which only
 ## this query looks at.
 ##
@@ -26,8 +27,8 @@ const PHYSICS_REACH := 1 << 6
 ## What a reach looks for.
 const MASK := PHYSICS_STREET_PROP | PHYSICS_LOOSE_PROP | PHYSICS_REACH
 ## The hits asked for at first; a full list is asked again with room for four
-## times as many (up to MAX_HITS), so a crowded spot never pushes a car or a
-## bay out of it.
+## times as many (up to MAX_HITS), so a crowded spot never pushes a car, a bay
+## or a lamp out of it.
 const FIRST_HITS := 32
 const MAX_HITS := 2048
 
@@ -102,6 +103,65 @@ func overlaps(other_xf: Transform3D, other_half: Vector3, margin: float) -> bool
 func distance_to(point: Vector3) -> float:
 	var local := box_xf.inverse() * point
 	return Vector3(maxf(absf(local.x) - half.x, 0.0), maxf(absf(local.y) - half.y, 0.0), maxf(absf(local.z) - half.z, 0.0)).length()
+
+
+## When the body's box, moving as it moves now (its turn left out), first meets an
+## upright pole (a capsule of radius on the world-vertical line from foot up to
+## height): {t (s from now, 0 if it does already), closing (m/s: the body's speed
+## into the face of its box it meets the pole with)}, or {} if not within limit_s.
+## Worked in plan in the body's frame, where the pole's line crosses the middle
+## height of the box; a body tipped far over (on its side or roof) gets {}, so
+## physics alone meets the pole.
+func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float) -> Dictionary:
+	var to_local := xf.inverse()
+	var bottom := to_local * foot
+	var top := to_local * (foot + Vector3.UP * height)
+	var rise := top.y - bottom.y
+	if rise < height * 0.7:
+		return {}
+	var middle := box.get_center().y
+	if middle < bottom.y - radius or middle > top.y + radius:
+		return {}
+	var at := bottom.lerp(top, clampf((middle - bottom.y) / rise, 0.0, 1.0))
+	# The pole moves against the body at -local_velocity; the box grown by radius.
+	var mover := Vector2(-local_velocity.x, -local_velocity.z)
+	var start := Vector2(at.x, at.z)
+	var low := Vector2(box.position.x - radius, box.position.z - radius)
+	var high := Vector2(box.end.x + radius, box.end.z + radius)
+	var enter := 0.0
+	var leave := limit_s
+	var normal := Vector2.ZERO
+	for axis in 2:
+		var p := start[axis]
+		var w := mover[axis]
+		if absf(w) < 1e-6:
+			if p < low[axis] or p > high[axis]:
+				return {}
+			continue
+		var t_low := (low[axis] - p) / w
+		var t_high := (high[axis] - p) / w
+		# The face it comes in through: low when moving up the axis.
+		var face := Vector2.ZERO
+		face[axis] = -1.0 if w > 0.0 else 1.0
+		var t_in := minf(t_low, t_high)
+		var t_out := maxf(t_low, t_high)
+		if t_in > enter:
+			enter = t_in
+			normal = face
+		leave = minf(leave, t_out)
+		if enter > leave:
+			return {}
+	if normal == Vector2.ZERO:
+		# Already inside the grown box: the face it is nearest to.
+		var gaps := [start.x - low.x, high.x - start.x, start.y - low.y, high.y - start.y]
+		var nearest := 0
+		for index in range(1, 4):
+			if gaps[index] < gaps[nearest]:
+				nearest = index
+		normal = [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(0, 1)][nearest]
+	# The body's speed out through that face of its box (toward the pole).
+	var closing := Vector2(local_velocity.x, local_velocity.z).dot(normal)
+	return {"t": enter, "closing": closing, "normal": normal}
 
 
 ## The box round a live body's collision pieces in its frame: a car's
