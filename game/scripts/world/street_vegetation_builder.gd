@@ -28,6 +28,15 @@ extends RefCounted
 ## have none, so the jetpack flies through a crown. A tree standing in paving
 ## gets its round mulch pit, drawn just above the paving's plane.
 ##
+## A tree whose trunk is thinner than the kit's BENDING_TRUNK_RADIUS_M (as its row
+## places it) bends out of a car's way (game/scripts/vehicles/street_tree_bender.gd):
+## its capsules go on bodies of their own (BendingTrunks__c, meta bends_under_cars),
+## the same layers, so the player still stops at it while a live car passes through,
+## and the root's bending_rows metadata lists each such tree: id -> {transform,
+## radius, top, instances: [[MultiMeshInstance3D name, instance index], ...] (every
+## detail level and its shadow mesh), shapes: [[body name, CollisionShape3D name],
+## ...]}, in the world generated at startup and in the baked one alike.
+##
 ## A hedge row (a vegetation line row of kind hedge carrying a hedge prop; the
 ## kit's hedge_into lays it) is cut into pieces of HEDGE_PIECE_STATIONS
 ## stations, and the pieces in each tree cell are merged into one mesh per
@@ -64,8 +73,13 @@ func build(document: Dictionary, shared_kit: RefCounted = null) -> Dictionary:
 	var batches: Dictionary = {}
 	# batch key -> {mesh, end_m, cells: {shadow cell -> [Transform3D]}}
 	var shadows: Dictionary = {}
-	# physics cell -> [{id, shape, transform}]
+	# physics cell -> [{id, shape, transform}], and the same for the trunks that bend
+	# under a car
 	var shapes: Dictionary = {}
+	var bend_shapes: Dictionary = {}
+	# id -> a bending tree's entry, its refs by batch key, cell and index until the
+	# nodes are named
+	var bending: Dictionary = {}
 	# render cell -> [{center, radius, slope}]
 	var wells: Dictionary = {}
 	var capsules: Dictionary = {}
@@ -115,6 +129,14 @@ func build(document: Dictionary, shared_kit: RefCounted = null) -> Dictionary:
 		var cells: Dictionary = batches[key].cells
 		if not cells.has(cell):
 			cells[cell] = []
+		# A tree with a trunk thinner than BENDING_TRUNK_RADIUS_M bends under a car.
+		var trunk_m := float((proto.capsules as Array)[0].radius_m) * scale if not (proto.capsules as Array).is_empty() else 0.0
+		var bends := trunk_m > 0.0 and trunk_m < KIT.BENDING_TRUNK_RADIUS_M
+		var entry: Dictionary = {}
+		if bends:
+			entry = {"transform": placement, "radius": trunk_m, "top": float(proto.get("top_m", 0.0)) * scale, "instances": [], "shapes": []}
+			bending[str(row.id)] = entry
+			(entry.instances as Array).append(["levels", key, cell, (cells[cell] as Array).size()])
 		(cells[cell] as Array).append(placement)
 		if proto.has("shadow"):
 			if not shadows.has(key):
@@ -123,12 +145,17 @@ func build(document: Dictionary, shared_kit: RefCounted = null) -> Dictionary:
 			var shadow_cell := _cell(foot, SHADOW_CELL_M)
 			if not shadow_cells.has(shadow_cell):
 				shadow_cells[shadow_cell] = []
+			if bends:
+				(entry.instances as Array).append(["shadow", key, shadow_cell, (shadow_cells[shadow_cell] as Array).size()])
 			(shadow_cells[shadow_cell] as Array).append(placement)
 		var physics_cell := _cell(foot, PHYSICS_CELL_M)
+		var trunk_shapes := bend_shapes if bends else shapes
 		for capsule: Dictionary in proto.capsules:
-			if not shapes.has(physics_cell):
-				shapes[physics_cell] = []
-			(shapes[physics_cell] as Array).append(_capsule(capsules, str(row.id), placement * (capsule.from as Vector3), placement * (capsule.to as Vector3), float(capsule.radius_m) * scale))
+			if not trunk_shapes.has(physics_cell):
+				trunk_shapes[physics_cell] = []
+			if bends:
+				(entry.shapes as Array).append([physics_cell, (trunk_shapes[physics_cell] as Array).size()])
+			(trunk_shapes[physics_cell] as Array).append(_capsule(capsules, str(row.id), placement * (capsule.from as Vector3), placement * (capsule.to as Vector3), float(capsule.radius_m) * scale))
 		var well := float(params.get("well_m", 0.0))
 		if well > 0.0:
 			var slope: Array = params.well_slope
@@ -208,29 +235,46 @@ func build(document: Dictionary, shared_kit: RefCounted = null) -> Dictionary:
 	for cell: String in hedge_cells:
 		_build_hedge_cell(root, kit, cell, hedges[cell])
 	var shape_count := 0
-	var shape_cells: Array = shapes.keys()
-	shape_cells.sort()
-	for cell: String in shape_cells:
-		var body := StaticBody3D.new()
-		body.name = "Trunks__c%s" % cell
-		body.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
-		body.collision_mask = 0
-		body.set_meta("feature_kind", "street_vegetation")
-		body.set_meta("receiver_kind", "none")
-		body.set_meta("opaque", true)
-		var ids := PackedStringArray()
-		for entry: Dictionary in shapes[cell]:
-			var collision := CollisionShape3D.new()
-			collision.name = "Shape%d" % body.get_child_count()
-			collision.shape = entry.shape
-			collision.transform = entry.transform
-			collision.set_meta("street_detail_id", entry.id)
-			body.add_child(collision)
-			if not ids.has(str(entry.id)):
-				ids.append(str(entry.id))
-			shape_count += 1
-		body.set_meta("street_detail_ids", ids)
-		root.add_child(body)
+	for trunk_set: Array in [[shapes, "Trunks__c%s", false], [bend_shapes, "BendingTrunks__c%s", true]]:
+		var by_cell: Dictionary = trunk_set[0]
+		var shape_cells: Array = by_cell.keys()
+		shape_cells.sort()
+		for cell: String in shape_cells:
+			var body := StaticBody3D.new()
+			body.name = str(trunk_set[1]) % cell
+			body.collision_layer = PHYSICS_STREET_PROP | PHYSICS_SPRAY_SURFACE
+			body.collision_mask = 0
+			body.set_meta("feature_kind", "street_vegetation")
+			body.set_meta("receiver_kind", "none")
+			body.set_meta("opaque", true)
+			if bool(trunk_set[2]):
+				body.set_meta("bends_under_cars", true)
+			var ids := PackedStringArray()
+			for entry: Dictionary in by_cell[cell]:
+				var collision := CollisionShape3D.new()
+				collision.name = "Shape%d" % body.get_child_count()
+				collision.shape = entry.shape
+				collision.transform = entry.transform
+				collision.set_meta("street_detail_id", entry.id)
+				body.add_child(collision)
+				if not ids.has(str(entry.id)):
+					ids.append(str(entry.id))
+				shape_count += 1
+			body.set_meta("street_detail_ids", ids)
+			root.add_child(body)
+	# The bending trees' refs by the names their nodes were given above.
+	for id: String in bending:
+		var entry: Dictionary = bending[id]
+		var named: Array = []
+		for ref: Array in entry.instances:
+			if str(ref[0]) == "shadow":
+				named.append(["%s_shadow__c%s" % [ref[1], ref[2]], ref[3]])
+			else:
+				for level: Dictionary in batches[ref[1]].levels:
+					named.append(["%s_%s__c%s" % [ref[1], level.name, ref[2]], ref[3]])
+		entry.instances = named
+		entry.shapes = (entry.shapes as Array).map(func(ref: Array) -> Array: return ["BendingTrunks__c%s" % ref[0], "Shape%d" % ref[1]])
+	root.set_meta("bending_rows", bending)
 	root.set_meta("trees", trees)
 	root.set_meta("shrubs", shrubs)
 	root.set_meta("grass_clumps", grass)

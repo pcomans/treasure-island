@@ -244,9 +244,10 @@ var occupied := false:
 var boundary: WorldBoundary
 var visible_ground: VisibleGround
 var water_y := -0.12
-## The breakable fence bodies it passes through (set by the vehicle manager);
-## its righting may end overlapping one, never an unbreakable one.
-var breakable_fences: Array[RID] = []
+## The bodies it passes through (set by the vehicle manager): the breakable
+## fences and the trunks of the small trees that bend; its righting may end
+## overlapping one, never an unbreakable fence or a big tree.
+var pass_through: Array[RID] = []
 
 var length_m := 4.5
 var width_m := 1.8
@@ -316,10 +317,8 @@ var _rear_wheels: MultiMesh
 ## body's outline is measured from.
 var _front_z := -2.25
 var _hull_query := PhysicsShapeQueryParameters3D.new()
-## The box round its collision pieces in the car frame, and that box grown by each
-## margin it has been asked for (reach_queries).
+## The box round its collision pieces in the car frame (reach_aabb).
 var _reach_box := AABB()
-var _reach_shapes: Dictionary = {}
 ## A kit car's collision while it stands still (its drawn body's pieces, so a
 ## player stands on what is drawn) and while it moves (its two simple hulls, as
 ## every live car had before 2026-11-13: the same underside, so kerbs and ramps
@@ -429,33 +428,17 @@ func setup(car_body: String, parts: Dictionary, material: Material, custom: Colo
 		_compression[i] = _droop
 
 
-## What a moving live body's per-tick queries test (vehicle_manager.gd _shove,
-## street_fence_breaker.gd break_overlaps), each {shape, transform (in the body's
-## frame), margin}: a car the box round its collision pieces, grown by margin,
-## queried with no margin of its own; anything else (a K-rail) its own shapes at
-## margin. In plan the box is the pieces' own outline (each keeps the car's
-## collision width down to its floor along its whole length); it stands taller
-## only over the nose, the deck and the bed. The pieces themselves, queried
-## against another car's at a margin, made Godot Physics test every pair of the
-## two hulls' vertices and edges: 1.5 to 13.5 ms a pair of touching cars on the
-## desktop, so a pile-up on the web ran 7 or 8 physics steps of about 50 ms a
-## frame (2026-11-13). Against the box it is microseconds.
-static func reach_queries(body: RigidBody3D, margin: float) -> Array[Dictionary]:
-	var queries: Array[Dictionary] = []
-	if body is DrivableCar:
-		var car := body as DrivableCar
-		if not car._reach_shapes.has(margin):
-			var box := BoxShape3D.new()
-			box.size = car._reach_box.size + Vector3.ONE * (2.0 * margin)
-			car._reach_shapes[margin] = box
-		queries.append({"shape": car._reach_shapes[margin], "transform": Transform3D(Basis.IDENTITY, car._reach_box.get_center()), "margin": 0.0})
-		return queries
-	for owner_id in body.get_shape_owners():
-		if body.is_shape_owner_disabled(owner_id):
-			continue
-		for index in body.shape_owner_get_shape_count(owner_id):
-			queries.append({"shape": body.shape_owner_get_shape(owner_id, index), "transform": body.shape_owner_get_transform(owner_id), "margin": margin})
-	return queries
+## The box round its collision pieces (drawn and moving) in the car frame: what
+## a moving car's reach (vehicle_reach.gd) is judged by each tick. In plan it is
+## the pieces' own outline (each keeps the car's collision width down to its floor
+## along its whole length); it stands taller only over the nose, the deck and the
+## bed. The pieces themselves, queried against another car's at a margin, made
+## Godot Physics test every pair of the two hulls' vertices and edges: 1.5 to
+## 13.5 ms a pair of touching cars on the desktop, so a pile-up on the web ran 7
+## or 8 physics steps of about 50 ms a frame (2026-11-13). Against the box it is
+## microseconds.
+func reach_aabb() -> AABB:
+	return _reach_box
 
 
 ## The bodies the wheels and the car's queries skip, besides itself.
@@ -911,7 +894,7 @@ func _right_target(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> Transfo
 func _hulls_clear(space: PhysicsDirectSpaceState3D, xf: Transform3D) -> bool:
 	_hull_query.collision_mask = GROUND_MASK
 	var skip: Array[RID] = [get_rid()]
-	skip.append_array(breakable_fences)
+	skip.append_array(pass_through)
 	_hull_query.exclude = skip
 	_hull_query.margin = 0.02
 	for owner_id in get_shape_owners():

@@ -383,6 +383,24 @@ const BLADE_POST_TOP_M := 3.03
 ## How far a blade clamped beside a lamp pole starts from the pole's axis.
 const LAMP_BLADE_REACH_M := 0.14
 const BLADE_MARGIN_M := 0.09
+## The street furniture a car knocks over (owner, 2026-11-13: the street lamps;
+## sign poles and the like could follow with an entry here):
+## each prop's mass (kg), whose share of a car's momentum the felled prop takes
+## (game/scripts/vehicles/street_furniture_breaker.gd). Production inference for a
+## galvanised davit pole with its arm and head, the slimmer lot and plaza poles
+## and the park's disc and fork lamps.
+const FELLABLE := {
+	"lamp_cobra": {"mass_kg": 180.0},
+	"lamp_lot": {"mass_kg": 90.0},
+	"lamp_plaza": {"mass_kg": 150.0},
+	"lamp_disc": {"mass_kg": 70.0},
+	"lamp_fork": {"mass_kg": 110.0},
+}
+## A fellable prop's mesh keeps its drawn shape in this many slices up its height
+## (meta fall_slices: each slice's points, Builder.slices), so its felled body lies
+## on what is drawn (street_furniture_breaker.gd), with no read back from the
+## renderer.
+const FELL_SLICES := 4
 
 var _opaque: StandardMaterial3D
 var _lit: StandardMaterial3D
@@ -494,7 +512,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# davits' smooth crook by default, a tight knee for a near-straight
 			# upswept arm (the owner lot's island lamp).
 			var bend := snappedf(clampf(_number(params, "bend_m", 1.2), 0.2, 1.2), 0.05)
-			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend))
+			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend), Transform3D.IDENTITY, null, true, true)
 			# blades: a junction's name blades clamped beside the pole at mid-height
 			# (Avenue B at Gateview Avenue, Nov 2025), each reaching out along its street.
 			var lamp_blades: Variant = params.get("blades", null)
@@ -503,12 +521,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_capsule(result, 0.13, height - 0.9)
 		"lamp_lot":
 			var lot_height := _number(params, "height_m", 6.0)
-			_piece(result, "lamp_lot_h%.1f" % lot_height, func(b: Builder) -> void: _lamp_lot(b, lot_height))
+			_piece(result, "lamp_lot_h%.1f" % lot_height, func(b: Builder) -> void: _lamp_lot(b, lot_height), Transform3D.IDENTITY, null, true, true)
 			_capsule(result, 0.08, lot_height)
 		"lamp_plaza":
 			var plaza_height := _number(params, "height_m", 8.0)
 			var heads := int(_number(params, "heads", 4))
-			_piece(result, "lamp_plaza_h%.1f_n%d" % [plaza_height, heads], func(b: Builder) -> void: _lamp_plaza(b, plaza_height, heads))
+			_piece(result, "lamp_plaza_h%.1f_n%d" % [plaza_height, heads], func(b: Builder) -> void: _lamp_plaza(b, plaza_height, heads), Transform3D.IDENTITY, null, true, true)
 			_capsule(result, 0.1, plaza_height)
 		"signal_mast":
 			var mast_arm := _number(params, "arm_m", 4.0)
@@ -619,10 +637,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				var angle := PI * 0.25 + PI * 0.5 * float(index)
 				_capsule(result, 0.11, 4.0, Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_POLE_RADIUS_M)
 		"lamp_disc":
-			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b))
+			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b), Transform3D.IDENTITY, null, true, true)
 			_capsule(result, 0.07, 4.2)
 		"lamp_fork":
-			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b))
+			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b), Transform3D.IDENTITY, null, true, true)
 			_capsule(result, 0.1, 5.4)
 		"bollard_steel":
 			_piece(result, "bollard_steel", func(b: Builder) -> void: _bollard_steel(b))
@@ -812,13 +830,16 @@ func goal_mouth(prop: String, params: Dictionary) -> Dictionary:
 
 ## The prop's mesh for `key`, drawn once; `material` replaces the shared atlas
 ## material for the shaded surface; `shadow` false keeps the piece out of the
-## sun's shadow when its prop casts one (glass).
-func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true) -> void:
+## sun's shadow when its prop casts one (glass); `fells` keeps its slices on the
+## mesh (fall_slices) for a prop a car knocks over.
+func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true, fells := false) -> void:
 	if not _meshes.has(key):
 		var builder := Builder.new(CELL_WHITE)
 		draw.call(builder)
 		var mesh := builder.commit(material if material != null else _opaque, _lit)
 		mesh.resource_name = key
+		if fells:
+			mesh.set_meta("fall_slices", builder.slices(FELL_SLICES))
 		_meshes[key] = mesh
 	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform, "shadow": shadow})
 
@@ -2904,6 +2925,59 @@ class Builder:
 	## How many vertices one surface holds so far.
 	func vertex_count(surface: int) -> int:
 		return (_surfaces[surface].vertices as PackedVector3Array).size()
+
+	## What it draws in `count` slices of equal height from its lowest point to its
+	## top: of each slice's vertices and the points where its triangles' edges cross
+	## the slice's bottom and top (so a pole's straight run is in its slices), the
+	## farthest straight up and down and in 16 directions round it, each tilted 15
+	## degrees up and down (so a pole's slice keeps its top and bottom rims): at most
+	## 34 points, whose convex hull is cheap to collide and comes within 2 % of a
+	## round part's radius of what is drawn. Slices with no points are left out.
+	func slices(count: int) -> Array:
+		var low := INF
+		var high := -INF
+		for data: Dictionary in _surfaces:
+			for point: Vector3 in data.vertices:
+				low = minf(low, point.y)
+				high = maxf(high, point.y)
+		var step := maxf((high - low) / count, 0.001)
+		var lists: Array = []
+		for _slice in count:
+			lists.append([])
+		for data: Dictionary in _surfaces:
+			var points: PackedVector3Array = data.vertices
+			var indices: PackedInt32Array = data.indices
+			for start in range(0, indices.size(), 3):
+				for corner in 3:
+					var a := points[indices[start + corner]]
+					var b := points[indices[start + (corner + 1) % 3]]
+					var from := clampi(int((a.y - low) / step), 0, count - 1)
+					var to := clampi(int((b.y - low) / step), 0, count - 1)
+					(lists[from] as Array).append(a)
+					# Where the edge crosses each slice boundary between its ends.
+					for boundary in range(mini(from, to) + 1, maxi(from, to) + 1):
+						var cut := a.lerp(b, (low + step * boundary - a.y) / (b.y - a.y))
+						(lists[boundary - 1] as Array).append(cut)
+						(lists[boundary] as Array).append(cut)
+		var directions: Array[Vector3] = [Vector3.UP, Vector3.DOWN]
+		for turn in 16:
+			var around := Vector3(cos(TAU * turn / 16.0), 0.0, sin(TAU * turn / 16.0))
+			directions.append(around + Vector3.UP * tan(deg_to_rad(15.0)))
+			directions.append(around - Vector3.UP * tan(deg_to_rad(15.0)))
+		var result: Array = []
+		for list: Array in lists:
+			if list.size() < 4:
+				continue
+			var kept := PackedVector3Array()
+			for direction: Vector3 in directions:
+				var farthest: Vector3 = list[0]
+				for point: Vector3 in list:
+					if point.dot(direction) > farthest.dot(direction):
+						farthest = point
+				if not kept.has(farthest):
+					kept.append(farthest)
+			result.append(kept)
+		return result
 
 	func commit(opaque: Material, lit: Material) -> ArrayMesh:
 		var mesh := ArrayMesh.new()

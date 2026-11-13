@@ -5,8 +5,10 @@ extends Node3D
 ## Camera3D with the gameplay camera's field of view, near and far planes and
 ## the arm's margin (game/scenes/player/player.tscn). Its arm stops at the world
 ## and at street props, parked cars among them, so it never sits inside one; the
-## driven car itself is left out. It is current only while driving; the on-foot
-## rig (player_camera.gd) is left as it is.
+## driven car itself is left out, and so are the small trees' trunks that bend
+## out of a car's way (arm_skips, street_tree_bender.gd), which the car passes
+## through. It is current only while driving; the on-foot rig (player_camera.gd)
+## is left as it is.
 ##
 ## The pivot rides above the car as drawn this frame (the car's interpolated
 ## visual), so it moves smoothly whatever the frame rate, and never below the
@@ -81,6 +83,9 @@ const WATCH_END_S := 0.6
 
 var spring_arm: SpringArm3D
 var camera: Camera3D
+## Bodies the arm passes through, as the car does: the trunks of the small trees
+## that bend (set by the vehicle manager).
+var arm_skips: Array[RID] = []
 var _blend: Camera3D
 var _car: DRIVABLE_CAR
 var _yaw := 0.0
@@ -166,6 +171,8 @@ func attach(car: DRIVABLE_CAR, from_camera: Camera3D, take_view: bool = true) ->
 	_arm_length = 4.2 + 0.55 * car.length_m
 	spring_arm.clear_excluded_objects()
 	spring_arm.add_excluded_object(car.get_rid())
+	for skip: RID in arm_skips:
+		spring_arm.add_excluded_object(skip)
 	_place(0.0, true)
 	# The arm's end before its first physics update, so a blend starting now
 	# heads for the view behind the car, not the pivot over it.
@@ -200,6 +207,11 @@ func detach(to_camera: Camera3D, blend: bool = true) -> void:
 		# Another camera (a capture's) is showing: leave it be.
 		_blend_t = -1.0
 		set_process(false)
+
+
+## True while the chase view follows a car (not watching it off the island).
+func is_following() -> bool:
+	return _car != null and not _watching
 
 
 ## True while the view is between the on-foot camera and this one.
