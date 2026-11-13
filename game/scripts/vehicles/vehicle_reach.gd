@@ -56,6 +56,10 @@ var pushes := false
 ## The largest number of hits one find returned (a diagnostic for tests).
 var most_hits := 0
 
+## A shape's box in its own frame, by shape (shape_box). The shapes it is asked
+## about are the world's and the live bodies', which never change size once built;
+## the vehicle manager empties it when it takes a new world (forget_shapes), so it
+## holds no shape past its world.
 static var _shape_boxes: Dictionary = {}
 
 
@@ -84,13 +88,12 @@ func find(query: PhysicsShapeQueryParameters3D, shape: BoxShape3D, region: AABB)
 	query.exclude = [body.get_rid()]
 	var space := body.get_world_3d().direct_space_state
 	var limit := FIRST_HITS
-	while true:
-		var hits := space.intersect_shape(query, limit)
-		most_hits = maxi(most_hits, hits.size())
-		if hits.size() < limit or limit >= MAX_HITS:
-			return hits
+	var hits := space.intersect_shape(query, limit)
+	while hits.size() >= limit and limit < MAX_HITS:
 		limit *= 4
-	return []
+		hits = space.intersect_shape(query, limit)
+	most_hits = maxi(most_hits, hits.size())
+	return hits
 
 
 ## Whether a box (its centre frame in the world, unscaled, and half size)
@@ -166,7 +169,7 @@ func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float) -
 
 ## The box round a live body's collision pieces in its frame: a car's
 ## (DrivableCar._reach_box), or any other body's (a K-rail's), worked out once
-## from its shapes.
+## from its enabled shapes (a K-rail's and the ball's are never disabled).
 static func reach_box(target: RigidBody3D) -> AABB:
 	if target is DrivableCar:
 		return (target as DrivableCar).reach_aabb()
@@ -175,6 +178,8 @@ static func reach_box(target: RigidBody3D) -> AABB:
 	var result := AABB()
 	var first := true
 	for owner_id in target.get_shape_owners():
+		if target.is_shape_owner_disabled(owner_id):
+			continue
 		var owner_xf := target.shape_owner_get_transform(owner_id)
 		for index in target.shape_owner_get_shape_count(owner_id):
 			var piece := owner_xf * shape_box(target.shape_owner_get_shape(owner_id, index))
@@ -182,6 +187,11 @@ static func reach_box(target: RigidBody3D) -> AABB:
 			first = false
 	target.set_meta("reach_box", result)
 	return result
+
+
+## Empties the shape box cache (a new world).
+static func forget_shapes() -> void:
+	_shape_boxes.clear()
 
 
 ## A shape's box in its own frame (cached per shape).

@@ -216,6 +216,7 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 		_breaker.configure(world.street_detail_layer("fences"))
 	_breakable_fences = _breaker.fence_bodies()
 	_fences = _breaker.all_fence_bodies()
+	VehicleReach.forget_shapes()
 	_furniture = FURNITURE_BREAKER.new()
 	_furniture.name = "FurnitureBreaker"
 	add_child(_furniture)
@@ -655,9 +656,9 @@ func _look_round(body: RigidBody3D, delta: float) -> void:
 	if reach.ahead:
 		region = region.merge(AABB(reach.box.position + reach.local_velocity * LOOKAHEAD_S, reach.box.size).grow(LOOKAHEAD_MARGIN_M))
 	for hit: Dictionary in reach.find(_reach_query, _reach_shape, region):
-		var owner: Callable = _reach_owners.get(hit.get("rid", RID()), Callable())
-		if owner.is_valid():
-			owner.call(reach, hit)
+		var handler: Callable = _reach_owners.get(hit.get("rid", RID()), Callable())
+		if handler.is_valid():
+			handler.call(reach, hit)
 		elif reach.pushes:
 			var prop := hit.get("collider") as RigidBody3D
 			if prop != null and prop.collision_layer & PHYSICS_LOOSE_PROP:

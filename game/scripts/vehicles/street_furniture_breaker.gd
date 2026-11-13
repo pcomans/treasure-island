@@ -24,8 +24,9 @@ extends Node3D
 ## something else (a parked car, a fence) only sleeps, so it falls if that moves.
 ## It stays down for the session (a restart rebuilds the world). The body that
 ## felled it keeps going with the felled prop's share of its momentum taken (its
-## speed times mass / (mass + the prop's mass)). Slower than FELL_SPEED_MPS a lamp stops a car as it always did: a slow
-## nudge does not fell it, nor does pressing on against it.
+## speed times mass / (mass + the prop's mass)). Slower than FELL_SPEED_MPS a lamp
+## stops a car as it always did: a slow nudge does not fell it, nor does pressing
+## on against it.
 
 const KIT := preload("res://game/scripts/world/street_furniture_kit.gd")
 const PHYSICS_WORLD_SOLID := 1
@@ -83,6 +84,8 @@ func configure(furniture_layer: Node) -> void:
 			"mass": float(KIT.FELLABLE[prop].mass_kg), "range_m": float(KIT.PROPS[prop].range_m),
 			"instances": [], "shapes": [], "labels": [],
 		}
+		# Its shapes' indices in the physics server, kept once the row is accepted.
+		var indices: Array = []
 		for ref: Array in entry.instances:
 			var instance := root.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
 			if instance != null and instance.multimesh != null:
@@ -101,16 +104,19 @@ func configure(furniture_layer: Node) -> void:
 				row["radius"] = capsule.radius
 			for owner_id in body.get_shape_owners():
 				if body.shape_owner_get_owner(owner_id) == collision:
-					var by_index: Dictionary = _shape_rows.get(body.get_rid(), {})
-					by_index[body.shape_owner_get_shape_index(owner_id, 0)] = id
-					_shape_rows[body.get_rid()] = by_index
+					indices.append([body.get_rid(), body.shape_owner_get_shape_index(owner_id, 0)])
 		for ref: Array in entry.labels:
 			var group := root.get_node_or_null(str(ref[0]))
 			var label := group.get_node_or_null(str(ref[1])) as Label3D if group != null else null
 			if label != null:
 				(row.labels as Array).append(label)
-		if row.has("foot") and not (row.instances as Array).is_empty():
-			_rows[id] = row
+		if not row.has("foot") or (row.instances as Array).is_empty():
+			continue
+		_rows[id] = row
+		for ref: Array in indices:
+			var by_index: Dictionary = _shape_rows.get(ref[0], {})
+			by_index[ref[1]] = id
+			_shape_rows[ref[0]] = by_index
 
 
 ## What a moving body's reach hands this breaker, by physics body: the street
