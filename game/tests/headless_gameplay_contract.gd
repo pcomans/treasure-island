@@ -326,12 +326,15 @@ func _check_ferry_solidity() -> void:
 	var options := await _check_options_screen(main)
 	if options.is_empty():
 		return
+	var time_of_day := await _check_time_of_day(main)
+	if time_of_day.is_empty():
+		return
 	var prompt := await _check_prompt_beside_car(main, world)
 	if prompt.is_empty():
 		return
 	main.queue_free()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, prompt])
 	quit(0)
 
 
@@ -580,6 +583,79 @@ func _check_options_screen(main: GameMain) -> String:
 		return ""
 	main._on_shadow_quality_chosen("medium")
 	return "frozen while open, High on at once and kept, Esc back to the pause menu, Resume with High still on"
+
+
+## The time of day (owner, 2026-11-14) in the loaded game. This driver's clock holds
+## the recorded moment, as every test's, capture's and the web's does: the Sun is
+## main.tscn's exactly, its metadata's angles, and stays so however long the game
+## runs. On the options screen, with the game paused, the date and the time slider
+## move the Sun at once to the sun of their moment on the island's clock, and time
+## runs on from there with the system clock; Now goes back to the real time. Pinned
+## again, the Sun is main.tscn's. Returns a summary, or "" after failing.
+func _check_time_of_day(main: GameMain) -> String:
+	var hud := main.hud
+	var sun := main.get_node("Sun") as DirectionalLight3D
+	var scene := (load("res://game/scenes/main.tscn") as PackedScene).instantiate()
+	var scene_transform := (scene.get_node("Sun") as Node3D).transform
+	scene.free()
+	var recorded := Vector3(-float(sun.get_meta("solar_elevation_deg")), 180.0 - float(sun.get_meta("solar_azimuth_deg")), 0.0)
+	var held_at := DayClock.now()
+	var begun := Time.get_ticks_usec()
+	for _frame in 30:
+		await process_frame
+	# Real time inside a frame: this run's guard counts frames (--fixed-fps).
+	_hold_real(begun, 0.3)
+	await process_frame
+	if DayClock.is_running() or held_at != DayClock.RECORDED_UNIX or DayClock.now() != held_at \
+	or sun.transform != scene_transform or not sun.rotation_degrees.is_equal_approx(recorded) or main.day_sun.shown_unix != DayClock.RECORDED_UNIX:
+		_fail("A test driver's clock must hold the recorded moment and the Sun stay main.tscn's (%s, its metadata's %s), however long the game runs (clock %s then %s, running %s; Sun %s, shown for %s)." % [scene_transform.basis.get_euler() * 180.0 / PI, recorded, held_at, DayClock.now(), DayClock.is_running(), sun.rotation_degrees, main.day_sun.shown_unix])
+		return ""
+	_push_key(KEY_ESCAPE)
+	hud.options_button.pressed.emit()
+	if not paused or not hud.options_visible() or not hud.time_date_slider.is_visible_in_tree() or not hud.time_slider.is_visible_in_tree() or hud.time_label.text != "12:30 PST":
+		_fail("The options screen must offer the date and time on desktop, paused, at the recorded moment's 12:30 PST (time shown \"%s\")." % hud.time_label.text)
+		return ""
+	# A player's changes, as the slider's value_changed brings them, while paused.
+	var moves := PackedStringArray()
+	for move: Array in [["date", 172.0, "2026-06-21 12:30"], ["time", 570.0, "2026-06-21 09:30"], ["date", 355.0, "2026-12-21 09:30"], ["time", 1020.0, "2026-12-21 17:00"]]:
+		var slider := hud.time_date_slider if move[0] == "date" else hud.time_slider
+		slider.value = move[1]
+		var expected := DayClock.parse_local(move[2])
+		await process_frame
+		var shown := DaySun.shown_angles(DayClock.now())
+		var light := DaySun.rotation_for(shown)
+		if not paused or not DayClock.is_running() or absf(DayClock.now() - expected) > 1.0 or not sun.rotation_degrees.is_equal_approx(light) or not sun.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])):
+			_fail("The %s slider at %s must jump the clock to %s and the Sun to its sun at once, still paused (clock %s off, running %s; Sun %s, its sun %s; paused %s)." % [move[0], move[1], move[2], DayClock.now() - expected, DayClock.is_running(), sun.rotation_degrees, light, paused])
+			return ""
+		moves.append("%s %s (%.2f, %.2f%s)" % [move[0], move[2], shown[0], shown[1], ", held" if DaySun.is_held(DayClock.now()) else ""])
+	# Time runs on from the last move with the system clock.
+	var clock := DayClock.now()
+	var system := Time.get_unix_time_from_system()
+	_hold_real(Time.get_ticks_usec(), 0.3)
+	await process_frame
+	var ran := DayClock.now() - clock
+	var real := Time.get_unix_time_from_system() - system
+	hud.time_now_button.pressed.emit()
+	var real_gap := absf(DayClock.now() - Time.get_unix_time_from_system())
+	var now_running := DayClock.is_running()
+	DayClock.pin()
+	await process_frame
+	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform:
+		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun be main.tscn's (%s)." % [ran, real, real_gap, now_running, sun.rotation_degrees])
+		return ""
+	_push_key(KEY_ESCAPE)
+	hud.resume_button.pressed.emit()
+	await process_frame
+	if paused or hud.options_visible():
+		_fail("Resume after the time of day did not go back to play.")
+		return ""
+	return "held at the recorded moment with main.tscn's Sun; the sliders, paused, moved the Sun at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+
+
+## Waits, without a frame, until `seconds` of real time have passed since `since_usec`.
+func _hold_real(since_usec: int, seconds: float) -> void:
+	while Time.get_ticks_usec() - since_usec < int(seconds * 1000000.0):
+		pass
 
 
 ## Every line the controls screen shows, headings and rows.
