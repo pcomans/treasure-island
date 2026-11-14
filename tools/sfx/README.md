@@ -238,9 +238,11 @@ B ball, A ambient, U interface). Every event is served by a row or listed in
 `not_voiced` with the reason; the check enforces this.
 
 `retired_outputs` names the output pattern of every row taken out of the
-sheet, with which row it was and why (today the three coin rows). `--process`
-removes their takes from `game/` in every run. When a row leaves the sheet,
-add its output here. The validator refuses an output that a row still uses.
+sheet, with which row it was and why: today the three coin rows and
+`car_engine_stop`, whose event, getting out of a car, now fades the engine
+loops instead. `--process` removes their takes from `game/` in every run, and
+the manifest has no entry for them. When a row leaves the sheet, add its
+output here. The validator refuses an output that a row still uses.
 
 ## Levels
 

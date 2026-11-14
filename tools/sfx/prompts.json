@@ -5,7 +5,7 @@
     "Style: realistic. The player is a real wooden treasure chest full of gold coins, with iron straps, brass fittings and big leather-soled shoes, flying on a small twin-nozzle rocket backpack, not a cartoon. Cars and the world are realistic too. No music, and no sounds for things the game does not model (no horn, gulls, foghorn or traffic); spraying was removed from the game.",
     "Prompts follow ElevenLabs' guidance (checked 2026-11-14). Each prompt is one sound, described as an action, setting and performance in a short sentence of at most 450 characters, with recording-quality words. A prompt never asks for a number of repetitions (one footstep per generation), and a sequence is split into several prompts. The length, looping and prompt influence are set per row, not described in the text. Prompts use US English (tire, curb, gasoline), as sound libraries word them.",
     "Credits: credits_per_second for each second of the set duration, for every candidate generated (keep_takes x candidates_per_take). The dry run of tools/generate-sfx prints them per row, per tier and in total.",
-    "prompt_influence: 0.5 to 0.6 where takes must match each other or follow a narrow brief (the three engine loops, single footsteps, interface clicks); 0.35 to 0.45 where natural variety helps (impacts, ambience). The API default is 0.3.",
+    "prompt_influence: 0.5 to 0.6 where takes must match each other or follow a narrow brief (the three engine loops, single footsteps, interface clicks); 0.35 to 0.45 where natural variety helps (impacts, ambience); 0.7 where an audition showed the model straying from the brief (the high engine loop, the jump landing, the boulder rumble). The API default is 0.3.",
     "Event ids (P player, V vehicle, B ball, A ambient, U interface) follow the 2026-11-14 code inventory of f72d6b21. The hook named with each is where its sound would be played. Each event is voiced by at least one row or listed under not_voiced with the reason.",
     "The owner auditioned the first generation on 2026-11-14. The picks in picks.json (in the private output folder) are final for the rows they name, so those rows' prompts and settings stay as they were and their candidates stay valid. A row may keep fewer takes than keep_takes; the game then gets only the picked ones. keep_takes stays the most a row keeps, so candidate numbers and picks keep their meaning. Rows whose candidates were all rejected are reworded, with the owner's words in their notes, and are made again with --force-id.",
     "Coins have no sounds of their own and no coin layer in the chest's impacts: the owner dropped every coin sound after hearing them (2026-11-14). The accepted lid slam and chest rattle keep theirs.",
@@ -53,6 +53,16 @@
       "max_seconds": 0.3,
       "fade_in_ms": 2,
       "fade_out_ms": 40,
+      "peak_dbfs": -1
+    },
+    "oneshot_splash": {
+      "what": "A footstep in water: a splash, then a squelch. As oneshot_step, but it keeps the whole 0.5 s step, since the squelch runs past a dry step's 0.3 s, and fades out the end more slowly.",
+      "channels": 1,
+      "trim_start_db": -50,
+      "trim_end_db": -55,
+      "max_seconds": 0.5,
+      "fade_in_ms": 2,
+      "fade_out_ms": 60,
       "peak_dbfs": -1
     },
     "oneshot": {
@@ -140,7 +150,7 @@
     "P17": "Idle lid creak while standing (chest_avatar.gd breathing lid lift); the inventory lists this tier-3 event without an id, so it is named here",
     "P18": "Footstep in shallow water: the drainage ditch by Mersea (owner 2026-11-14). It would be chosen at P1's hook when the planted foot stands in the ditch's water. Only the ground shader draws that water (ground_cover.gdshader marsh_map, marsh_axis, marsh_floor_y), so this needs a CPU lookup, not yet built",
     "V1": "Get in: door and engine start (vehicle_manager.gd enter)",
-    "V2": "Get out: engine off and door (vehicle_manager.gd exit)",
+    "V2": "Get out: door, and the engine loops fade out with no engine-off sound of their own (vehicle_manager.gd exit)",
     "V3": "Engine following throttle and speed over top speed (drivable_car.gd _integrate_forces)",
     "V4": "Tire roll and road noise by surface (drivable_car.gd wheel hits, _lift)",
     "V5": "Tire skid following lateral slip and the handbrake (drivable_car.gd)",
@@ -208,7 +218,8 @@
   "retired_outputs": {
     "player/coins_jostle_{take}.ogg": "coins_jostle (P2), dropped by the owner on 2026-11-14.",
     "player/coin_spill_{take}.ogg": "coin_spill (P3), dropped by the owner on 2026-11-14.",
-    "player/coin_ground_{take}.ogg": "coin_ground (P4), dropped by the owner on 2026-11-14."
+    "player/coin_ground_{take}.ogg": "coin_ground (P4), dropped by the owner on 2026-11-14.",
+    "car/engine_stop_{take}.ogg": "car_engine_stop (V2's engine off), dropped by the owner after the second audition on 2026-11-14: \"None of these turn the engine off. I think we don't need this\". On getting out, the engine loops fade out instead."
   },
   "sounds": [
     {
@@ -247,17 +258,17 @@
       "id": "footstep_water",
       "tier": 1,
       "events": ["P18"],
-      "prompt": "High-quality, professionally recorded footstep foley: a single heavy step of a big leather-soled shoe into a few centimeters of still water in a muddy drainage ditch, a wet splash over a soft, sucking mud bottom, close-miked outdoors.",
+      "prompt": "High-quality, professionally recorded footstep foley: a single heavy, stomping step of a big leather-soled shoe slapping down into shallow, ankle-deep water in a muddy ditch, a loud, bright, wet splash with water spraying out, then a clear squelch of mud underfoot, crisp and close-miked.",
       "duration_seconds": 0.5,
       "loop": false,
-      "prompt_influence": 0.5,
+      "prompt_influence": 0.6,
       "keep_takes": 4,
-      "candidates_per_take": 2,
+      "candidates_per_take": 1,
       "output": "player/footstep_water_{take}.ogg",
       "loudness_class": "soft",
-      "level_db": -32,
-      "recipe": "oneshot_step",
-      "notes": "Owner request 2026-11-14: \"footsteps in like shallow water\", for the shallow water in the drainage ditch by Mersea. One step per generation, as for the other footsteps, with the heavy chest's weight. The game cannot yet tell a step in that water (P18): only the ground shader draws it."
+      "level_db": -31,
+      "recipe": "oneshot_splash",
+      "notes": "Owner request 2026-11-14: \"footsteps in like shallow water\", for the shallow water in the drainage ditch by Mersea. One step per generation, as for the other footsteps, with the heavy chest's weight. Round 2 (2026-11-14): \"These all sound really muted, then I would expect there to be like a more audible splash or squelch\". The prompt now asks for ankle-deep water, a loud, bright splash and then a clear squelch. The oneshot_splash recipe keeps the whole step, where oneshot_step would cut it at 0.3 s, during the squelch. The level stays in the soft class, as a footstep repeats, but moves to its top, -31, two dB above a dry step on asphalt. Four candidates, one for each kept take; the owner may pick fewer. The game cannot yet tell a step in that water (P18): only the ground shader draws it."
     },
     {
       "id": "landing",
@@ -353,7 +364,7 @@
       "loudness_class": "medium",
       "level_db": -29,
       "recipe": "oneshot",
-      "notes": "Getting in and getting out are sequences of door, engine and door, so each part is its own prompt."
+      "notes": "Getting in is a sequence of door, engine start and door, so each part is its own prompt. Getting out is door and door while the engine loops fade out: the owner dropped the engine-off sound (2026-11-14)."
     },
     {
       "id": "car_door_close",
@@ -385,22 +396,6 @@
       "level_db": -23,
       "recipe": "oneshot_lead_in",
       "notes": "Ends on idle and fades out under the idle loop."
-    },
-    {
-      "id": "car_engine_stop",
-      "tier": 1,
-      "events": ["V2"],
-      "prompt": "High-quality recording of the idling 2.5-liter four-cylinder gasoline engine of a 2014 Toyota RAV4 being switched off, its low hum quickly dying away into silence, recorded outside near the exhaust.",
-      "duration_seconds": 1.5,
-      "loop": false,
-      "prompt_influence": 0.6,
-      "keep_takes": 1,
-      "candidates_per_take": 3,
-      "output": "car/engine_stop_{take}.ogg",
-      "loudness_class": "medium",
-      "level_db": -27,
-      "recipe": "oneshot",
-      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"I don't know what this is supposed to sound like, but all of these are kinda weird and bad\"): one plain, short event, an idling engine switched off and dying away, with no steps in the prompt. It takes over from the idle loop as that fades out; one take is enough for a sound heard once per exit."
     },
     {
       "id": "car_engine_idle_loop",
@@ -853,17 +848,17 @@
       "id": "car_jump_landing",
       "tier": 2,
       "events": ["V8", "V14"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 slamming down hard on its wheels at the end of a jump, beginning right at the impact with a heavy thud and suspension bang, the body creaking as it settles, recorded close outdoors.",
+      "prompt": "Heavy vehicle impact, sound effects foley: a 2014 Toyota RAV4 landing hard on asphalt after a jump, its full weight slamming all four tires onto the road at once in a deep, booming thud, the suspension compressing and bottoming out with a metallic clunk, then the body and loose panels rattling as the car settles, close-miked.",
       "duration_seconds": 1.5,
       "loop": false,
-      "prompt_influence": 0.5,
+      "prompt_influence": 0.7,
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/jump_landing_{take}.ogg",
       "loudness_class": "crash",
       "level_db": -21,
       "recipe": "oneshot_impact",
-      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"The impact sound is too late\"): the impact is the first thing heard, by the wording and by the oneshot_impact recipe, which cuts everything before the hit. Also the end of a self-righting roll (V14), which drops the car back onto its wheels."
+      "notes": "Reworded twice after the owner's auditions (2026-11-14). Round 1: \"The impact sound is too late\"; the oneshot_impact recipe cuts everything before the hit. Round 2: \"All of these sound like a palm slapping on a table\". The prompt now names the impact class and the car's weight, then the sequence: tires on asphalt, the suspension bottoming out, the body rattling. Influence 0.7 holds the model to that brief. Also the end of a self-righting roll (V14), which drops the car back onto its wheels."
     },
     {
       "id": "tyre_gravel_loop",
@@ -885,17 +880,17 @@
       "id": "riprap_rumble_loop",
       "tier": 2,
       "events": ["V17"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 crawling slowly over a jumble of large boulders on a rocky seawall, its heavy tires crunching and thudding onto big rocks with a deep, low rumble and the weight of the vehicle shifting, recorded close outdoors.",
+      "prompt": "Sound effects foley, dry and close-miked: the heavy tires and steel underside of a 2014 Toyota RAV4 crawling slowly over large, rough boulders, a deep, continuous rumble of grinding crunches and thuds of rock against rubber and metal, the suspension creaking under the car's weight.",
       "duration_seconds": 4.0,
       "loop": true,
-      "prompt_influence": 0.5,
+      "prompt_influence": 0.7,
       "keep_takes": 1,
-      "candidates_per_take": 3,
+      "candidates_per_take": 4,
       "output": "car/riprap_rumble_loop_{take}.ogg",
       "loudness_class": "medium",
       "level_db": -30,
       "recipe": "loop_mono",
-      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"These all sound weird as if stones are being stirred in a pot\"): heavy tires over big boulders, weight and a low rumble. On the shore rocks (the cars' riprap ground)."
+      "notes": "Reworded twice after the owner's auditions (2026-11-14). Round 1: \"as if stones are being stirred in a pot\". Round 2: \"These are bad because it is also putting the ocean sounds in the background\". The setting words invited the sea: \"rocky seawall\" and \"recorded close outdoors\". The prompt now names no place at all, only the car's tires and underside on boulders, recorded dry and close as foley; the place names (shore, seawall, bay, riprap) stay out of the prompt, as for wind_bed. On the shore rocks (the cars' riprap ground)."
     },
     {
       "id": "car_sinking",
