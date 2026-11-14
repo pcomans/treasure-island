@@ -176,7 +176,7 @@ func _check_running() -> String:
 	system[0] += 600.0
 	var held := DayClock.now() - start
 	DayClock.start_now()
-	var stand_in_now := DayClock.now() - system[0]
+	var stand_in_now := DayClock.now() - float(system[0])
 	DayClock.use_system_clock()
 	DayClock.start_now()
 	var system_gap := absf(DayClock.now() - Time.get_unix_time_from_system())
