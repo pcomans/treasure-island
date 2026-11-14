@@ -836,6 +836,9 @@ func _sound_impact(car: DRIVABLE_CAR) -> void:
 	var hit := change.length()
 	if hit < IMPACT_LIGHT_MPS:
 		return
+	# The driven car's landing on its wheels is a sound of its own (car_sound.gd).
+	if car == _active and _car_sound.landed_within(car, CAR_SOUND.LAND_HUSH_S):
+		return
 	var at := car.global_position
 	if Sound.has_takes(&"car_tree_impact") and _hit_a_tree(car, change):
 		Sound.play(&"car_tree_impact", at, clampf(0.35 + hit / 12.0, 0.35, 1.0))

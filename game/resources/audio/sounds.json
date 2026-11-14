@@ -22,6 +22,8 @@
     "car_engine_low_loop": {"bus": "SFX", "space": "3d", "loop": true, "unit_m": 8.0, "max_m": 150.0},
     "car_engine_high_loop": {"bus": "SFX", "space": "3d", "loop": true, "unit_m": 8.0, "max_m": 150.0},
     "tyre_skid_loop": {"bus": "SFX", "space": "3d", "loop": true, "unit_m": 10.0, "max_m": 150.0},
+    "car_jump_landing": {"bus": "SFX", "space": "3d", "voices": 2, "min_gap_s": 0.3, "unit_m": 12.0, "max_m": 200.0, "pitch_jitter": 0.04, "gain_jitter_db": 1.0},
+    "riprap_rumble_loop": {"bus": "SFX", "space": "3d", "loop": true, "unit_m": 10.0, "max_m": 150.0},
     "car_impact_light": {"bus": "SFX", "space": "3d", "voices": 4, "min_gap_s": 0.08, "unit_m": 10.0, "max_m": 150.0, "pitch_jitter": 0.06, "gain_jitter_db": 1.5},
     "car_impact_heavy": {"bus": "SFX", "space": "3d", "voices": 3, "min_gap_s": 0.1, "unit_m": 14.0, "max_m": 250.0, "pitch_jitter": 0.05, "gain_jitter_db": 1.0},
     "car_tree_impact": {"bus": "SFX", "space": "3d", "voices": 3, "min_gap_s": 0.1, "unit_m": 12.0, "max_m": 200.0, "pitch_jitter": 0.06, "gain_jitter_db": 1.5},

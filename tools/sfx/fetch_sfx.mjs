@@ -261,22 +261,31 @@ export function apply(project, planned, { dryRun = false } = {}) {
 }
 
 // A URL, or a message with URLs in it (git's own), with any user or password
-// taken out of every URL.
+// taken out of every URL and the value of any Authorization header blanked.
 export function redact(text) {
-  return text.replace(/([a-z][a-z0-9+.-]*:\/\/)[^@/\s'"]*@/giu, "$1");
+  return text
+    .replace(/([a-z][a-z0-9+.-]*:\/\/)[^@/\s'"]*@/giu, "$1")
+    .replace(/(authorization:\s*[a-z]+\s+)[^\s'"]+/giu, "$1***");
 }
 
 // Clones a Git source (shallow) into a new temporary folder; returns {dir, source, commit}.
 function cloneSource(url, ref, token) {
   const dir = mkdtempSync(join(tmpdir(), "ti-sfx-"));
-  const env = { ...process.env, GIT_TERMINAL_PROMPT: "0" };
+  // No tracing of git's own (GIT_TRACE*, GIT_CURL_VERBOSE): it could print the
+  // header below.
+  const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_TRACE") && key !== "GIT_CURL_VERBOSE"));
+  env.GIT_TERMINAL_PROMPT = "0";
   if (token) {
     // git reads GIT_CONFIG_COUNT/KEY/VALUE as -c would set them (git 2.31+), so
-    // the header stays out of every process's command line.
+    // the header stays out of every process's command line. With a token no
+    // credential helper is asked (an empty helper resets the list): a refused
+    // token fails at once, never prompting or falling back to other credentials.
     const count = Number.parseInt(env.GIT_CONFIG_COUNT ?? "0", 10) || 0;
-    env.GIT_CONFIG_COUNT = String(count + 1);
+    env.GIT_CONFIG_COUNT = String(count + 2);
     env[`GIT_CONFIG_KEY_${count}`] = "http.extraHeader";
     env[`GIT_CONFIG_VALUE_${count}`] = `Authorization: Basic ${Buffer.from(`x-access-token:${token}`).toString("base64")}`;
+    env[`GIT_CONFIG_KEY_${count + 1}`] = "credential.helper";
+    env[`GIT_CONFIG_VALUE_${count + 1}`] = "";
   }
   const args = ["clone", "--depth", "1", "--quiet", "--no-tags"];
   if (ref) args.push("--branch", ref);
