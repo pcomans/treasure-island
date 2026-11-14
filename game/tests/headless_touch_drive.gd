@@ -8,10 +8,15 @@ extends SceneTree
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
-##   - the touch pause button, the pause menu's Options (the shadow levels) and its
-##     Credits and their Licences (owner, 2026-11-12): each lies inside the page
-##     with thumb-sized buttons and a finger's drag scrolls the credits; Back and
-##     Resume play on;
+##   - the touch pause button, the pause menu's Options and its Credits and their
+##     Licences (owner, 2026-11-12): each lies inside the page with thumb-sized
+##     buttons and a finger's drag scrolls the credits; Back and Resume play on.
+##     Options has the rows a touch screen gets, the web's (main.gd uses touch
+##     controls only in a touch browser): its graphics (owner, 2026-11-14) and the
+##     sound, no shadow levels or time of day; a finger's tap on a resolution puts
+##     it on;
+##   - the frame rate, shown throughout, sits at the top left of the touch
+##     controls' safe area, clear of every touch control;
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
 ##     RVs, vehicle_spots.gd yard_bodies(); a different one at each shape where
@@ -34,6 +39,8 @@ const SHAPES := {"upright": Vector2i(1206, 2148), "sideways": Vector2i(2622, 111
 ## and how far a finger drags the credits.
 const THUMB_PX := 64.0
 const CREDITS_DRAG_PX := 120.0
+## Where this run keeps the graphics its checks choose (never the player's file).
+const SETTINGS_PATH := "user://test-touch-drive-%d.cfg"
 
 var _failure := ""
 var _main: GameMain
@@ -47,6 +54,8 @@ var _checked: Array[String] = []
 
 func _initialize() -> void:
 	create_timer(900.0, true, false, true).timeout.connect(_on_timeout)
+	ShadowQuality.settings_path = SETTINGS_PATH % OS.get_process_id()
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	call_deferred("_run")
 
 
@@ -69,13 +78,19 @@ func _run() -> void:
 	_vehicles = _main.vehicles
 	if not _require(_vehicles != null and _touch.vehicles == _vehicles and _touch.visible, "main.gd did not hand the touch controls the cars and start them (visible %s)." % _touch.visible):
 		return _finish()
+	# The frame rate shown from here on: every HUD check below keeps it clear of the
+	# touch controls.
+	_main._on_graphics_chosen(GraphicsSettings.SHOW_FRAME_RATE_KEY, true)
 	await _ticks(10)
+	var corner := _main.hud.frame_rate_label.get_global_rect()
+	if not _require(_main.hud.frame_rate_label.visible and corner.position.is_equal_approx(_touch.safe_area().position + GameHUD.FRAME_RATE_TOUCH_INSET_PX), "On a touch screen the frame rate must show at the top left of the safe area %s, not at %s." % [_touch.safe_area(), corner]):
+		return _finish()
 	if not _check_hud("at the start"):
 		return _finish()
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options, Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout at the top left, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -229,16 +244,19 @@ func _credits_and_resume(shape: String) -> bool:
 	_finger(4, Vector2(at[0], at[1]), false)
 	if not _require(paused and hud.pause_panel.visible, "%s: the touch pause button did not pause before Options and Credits." % shape):
 		return false
-	# Options: the shadow levels inside the page, every button thumb-sized and clear
-	# of the others; Back to the pause menu.
+	# Options with the rows a touch screen (the web) gets, inside the page, every
+	# button thumb-sized and clear of the others; a finger's tap on 50 % puts it on
+	# and one on 100 % puts the full resolution back; Back to the pause menu.
+	_as_on_the_web(hud)
 	hud.options_button.pressed.emit()
 	for _frame in 2:
 		await process_frame
 	var page := Rect2(Vector2.ZERO, hud.get_viewport_rect().size)
 	var options := hud.options_panel.get_global_rect()
-	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]):
+	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]) \
+	or not _require(not hud.shadow_row.is_visible_in_tree() and not hud.time_row.is_visible_in_tree() and hud.resolutions.is_visible_in_tree() and hud.show_frame_rate.is_visible_in_tree() and hud.sound_volume.is_visible_in_tree(), "%s: a touch screen's Options must show the web's rows: graphics and sound, no shadow levels or time of day." % shape):
 		return false
-	var buttons: Array = hud.shadow_levels.get_children() + [hud.options_back_button]
+	var buttons: Array = (hud.frame_rates.get_children() if hud.frame_rates.is_visible_in_tree() else []) + hud.resolutions.get_children() + [hud.show_frame_rate, hud.sound_mute, hud.options_back_button]
 	for i in buttons.size():
 		var button := buttons[i] as Button
 		if not _require(button.size.y >= THUMB_PX and options.encloses(button.get_global_rect()), "%s: Options' %s must lie in the panel and be at least %d px tall (%s)." % [shape, button.text, THUMB_PX, button.get_global_rect()]):
@@ -246,6 +264,12 @@ func _credits_and_resume(shape: String) -> bool:
 		for other: Button in buttons.slice(i + 1):
 			if not _require(not button.get_global_rect().intersects(other.get_global_rect()), "%s: Options' %s and %s overlap." % [shape, button.text, other.text]):
 				return false
+	for id: String in ["50", "100"]:
+		_screen_tap(6, (hud.resolutions.get_node(id) as Control).get_global_rect().get_center())
+		await process_frame
+		var scale := _main.get_viewport().scaling_3d_scale
+		if not _require(paused and _main.graphics.current.resolution == id and (hud.resolutions.get_node(id) as Button).button_pressed and is_equal_approx(scale, float(GraphicsSettings.find(GraphicsSettings.RESOLUTION_KEY, id).get("scale", 1.0))), "%s: a finger's tap on Options' %s %% must put it on (on: %s, 3D scale %.2f, paused %s)." % [shape, id, _main.graphics.current.resolution, scale, paused]):
+			return false
 	hud.options_back_button.pressed.emit()
 	if not _require(not hud.options_visible() and hud.pause_panel.visible, "%s: Back on Options must go back to the pause menu." % shape):
 		return false
@@ -279,6 +303,26 @@ func _credits_and_resume(shape: String) -> bool:
 		return false
 	await _ticks(5)
 	return _check_hud("%s, after the credits and Resume" % shape)
+
+
+## The options rows a touch screen gets. main.gd uses touch controls only in a
+## touch browser, so they are the web's: Off alone (no shadow row), no time of day,
+## and the graphics as the web offers them (GraphicsSettings.offered).
+func _as_on_the_web(hud: GameHUD) -> void:
+	hud.set_shadow_levels(ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web), "off")
+	hud.set_time_controls(false)
+	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY, true), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY, true), _main.graphics.current)
+
+
+## A finger's tap at `at`, down and lifted, through the HUD's window as a touch
+## screen sends it (in the HUD's pixels).
+func _screen_tap(index: int, at: Vector2) -> void:
+	for down: bool in [true, false]:
+		var touch := InputEventScreenTouch.new()
+		touch.index = index
+		touch.position = at
+		touch.pressed = down
+		root.push_input(touch, true)
 
 
 ## A finger down at `from`, dragged `by` px down (negative: up) and lifted, through
@@ -359,6 +403,7 @@ func _on_timeout() -> void:
 func _finish() -> void:
 	for action: StringName in GameMain.GAMEPLAY_ACTIONS:
 		Input.action_release(action)
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	if _failure != "":
 		push_error("FAIL: " + _failure)
 		print("FAIL: " + _failure)

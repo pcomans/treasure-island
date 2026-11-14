@@ -15,13 +15,13 @@ const WATER_CAMERA_REACH_M := 2000.0
 const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
 ## The vehicle contract's places: its ball case drives along the full-size pitch.
 const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
-## Where this run keeps the shadow level its options check chooses.
+## Where this run keeps the shadow level and graphics its options check chooses.
 const OPTIONS_SETTINGS_PATH := "user://test-gameplay-contract-%d.cfg"
 
 
 func _initialize() -> void:
-	# The options check chooses a shadow level, which the game keeps: in a file of
-	# this run's own, never the shared user folder's.
+	# The options check chooses a shadow level and graphics, which the game keeps: in
+	# a file of this run's own, never the shared user folder's.
 	ShadowQuality.settings_path = OPTIONS_SETTINGS_PATH % OS.get_process_id()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	for action: String in REQUIRED_ACTIONS:
@@ -528,9 +528,11 @@ func _check_credits_screen(main: GameMain) -> String:
 ## The options screen (owner, 2026-11-12) in the loaded game. With the ball rolling,
 ## Esc pauses and the pause menu's Options opens the shadow levels in its place,
 ## the game frozen (the clock at 0, the world, player, sky and cars stopped, the
-## ball still). A level chosen there goes on at once, still paused, and is kept;
-## Esc goes back to the pause menu, still paused, and Resume plays on with the
-## clock back, the ball rolling on and the level still on. Medium is put back after.
+## ball still). A level chosen there goes on at once, still paused, and is kept, as
+## do a frame rate limit and a resolution (owner, 2026-11-14); Esc goes back to the
+## pause menu, still paused, and Resume plays on with the clock back, the ball
+## rolling on and the choices still on. Medium and the graphics defaults are put
+## back after.
 ## Returns a summary, or "" after failing.
 func _check_options_screen(main: GameMain) -> String:
 	var hud := main.hud
@@ -561,6 +563,14 @@ func _check_options_screen(main: GameMain) -> String:
 	if main.shadows.current != "high" or str(file.get_value(ShadowQuality.SECTION, ShadowQuality.KEY, "")) != "high" or not paused:
 		_fail("Choosing High on the options screen must put it on at once, still paused, and keep it (on: %s, kept: %s, paused %s)." % [main.shadows.current, file.get_value(ShadowQuality.SECTION, ShadowQuality.KEY, ""), paused])
 		return ""
+	# A frame rate limit and a resolution chosen there go on at once too, and are kept.
+	(hud.frame_rates.get_node("30") as Button).button_pressed = true
+	(hud.resolutions.get_node("50") as Button).button_pressed = true
+	file.load(ShadowQuality.settings_path)
+	var kept := [file.get_value(GraphicsSettings.SECTION, GraphicsSettings.FRAME_RATE_KEY, ""), file.get_value(GraphicsSettings.SECTION, GraphicsSettings.RESOLUTION_KEY, "")]
+	if Engine.max_fps != 30 or not is_equal_approx(main.get_viewport().scaling_3d_scale, 0.5) or kept != ["30", "50"] or not paused:
+		_fail("Choosing 30 and 50 %% on the options screen must put them on at once, still paused, and keep them (max_fps %d, 3D scale %.2f, kept %s, paused %s)." % [Engine.max_fps, main.get_viewport().scaling_3d_scale, kept, paused])
+		return ""
 	for _tick in 60:
 		await physics_frame
 	if ball.global_position != rolled_to or not paused or Engine.time_scale != 0.0:
@@ -573,8 +583,9 @@ func _check_options_screen(main: GameMain) -> String:
 		return ""
 	hud.resume_button.pressed.emit()
 	await process_frame
-	if paused or Engine.time_scale != scale or hud.options_visible() or hud.pause_panel.visible or main.shadows.current != "high" or not sun.shadow_enabled:
-		_fail("Resume after the options did not play on with the clock at %s and High still on (paused %s, time scale %s, on: %s)." % [scale, paused, Engine.time_scale, main.shadows.current])
+	if paused or Engine.time_scale != scale or hud.options_visible() or hud.pause_panel.visible or main.shadows.current != "high" or not sun.shadow_enabled \
+	or Engine.max_fps != 30 or not is_equal_approx(main.get_viewport().scaling_3d_scale, 0.5):
+		_fail("Resume after the options did not play on with the clock at %s and High, 30 and 50 %% still on (paused %s, time scale %s, on: %s, max_fps %d, 3D scale %.2f)." % [scale, paused, Engine.time_scale, main.shadows.current, Engine.max_fps, main.get_viewport().scaling_3d_scale])
 		return ""
 	for _tick in 10:
 		await physics_frame
@@ -582,7 +593,9 @@ func _check_options_screen(main: GameMain) -> String:
 		_fail("After Resume the ball did not roll on from %s." % rolled_to)
 		return ""
 	main._on_shadow_quality_chosen("medium")
-	return "frozen while open, High on at once and kept, Esc back to the pause menu, Resume with High still on"
+	main._on_graphics_chosen(GraphicsSettings.FRAME_RATE_KEY, "unlimited")
+	main._on_graphics_chosen(GraphicsSettings.RESOLUTION_KEY, "100")
+	return "frozen while open, High, 30 frames a second and 50 % on at once and kept, Esc back to the pause menu, Resume with them still on"
 
 
 ## The time of day (owner, 2026-11-14) in the loaded game. This driver's clock holds

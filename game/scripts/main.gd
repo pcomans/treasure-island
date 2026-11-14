@@ -39,14 +39,18 @@ var _pause_later_quiet := false
 var capture_mouse_on_ready := true
 ## The sun's shadow quality (the pause menu's Options), put on as the game starts.
 var shadows: ShadowQuality
+## The frame rate limit, 3D resolution and frame rate display (the pause menu's
+## Options), put on as the game starts.
+var graphics: GraphicsSettings
 ## The Sun pointed at the time of day (DaySun, DayClock): the real time as the game
 ## starts; the recorded moment on the web and for a test or capture driver.
 var day_sun: DaySun
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
-## Startup puts on the shadow level kept from the last run; the shared capture
-## harness turns this off, so its captures always have the default (a player's
-## choice is a global engine setting that would reach its neutral sun too).
+## Startup puts on the shadow level, graphics and sound kept from the last run; the
+## shared capture harness turns this off, so its captures always have the defaults
+## (a player's choice is a global engine setting that would reach its neutral sun,
+## its frame timing and its resolution too).
 var use_saved_settings := true
 
 
@@ -77,6 +81,13 @@ func _ready() -> void:
 	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
+	# The frame rate limit, 3D resolution and frame rate display: kept from the last
+	# run, or for a test or capture driver the defaults, which leave the engine as it
+	# started on desktop (the web's default resolution is its three quarters).
+	graphics = GraphicsSettings.new(get_viewport())
+	graphics.apply(GraphicsSettings.saved() if use_saved_settings and settings_problem.is_empty() else GraphicsSettings.defaults())
+	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY), graphics.current)
+	hud.graphics_chosen.connect(_on_graphics_chosen)
 	day_sun = DaySun.new($Sun)
 	add_child(day_sun)
 	hud.set_time_controls(not OS.has_feature("web"))
@@ -90,9 +101,8 @@ func _ready() -> void:
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
-		# everywhere).
+		# everywhere). Its 3D scale is the graphics' resolution (above).
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
-		get_viewport().scaling_3d_scale = 0.75
 		get_viewport().msaa_3d = Viewport.MSAA_2X
 		print("WEB_RENDER msaa_3d=%d scale=%.2f" % [get_viewport().msaa_3d, get_viewport().scaling_3d_scale])
 	get_tree().paused = false
@@ -407,6 +417,21 @@ func _on_shadow_quality_chosen(id: String) -> void:
 	hud.show_shadow_level(shadows.current)
 
 
+## A frame rate limit or resolution chosen on the options screen, or the frame rate
+## display switched: on at once, and kept for next time (but never by a driver in
+## the player's own settings file).
+func _on_graphics_chosen(key: String, value: Variant) -> void:
+	var choices := graphics.current.duplicate()
+	choices[key] = value
+	graphics.apply(choices)
+	var settings_problem := player_settings_problem(get_tree(), "chose a graphics setting, writing")
+	if settings_problem.is_empty():
+		GraphicsSettings.save(graphics.current)
+	else:
+		push_error(settings_problem)
+	hud.show_graphics(graphics.current)
+
+
 ## The master volume or mute changed on the options screen: on at once, and kept
 ## for next time when keep (once a drag ends; never by a driver in the player's
 ## own settings file).
@@ -547,6 +572,10 @@ func _publish_web_state(_args: Array) -> void:
 		"sun_shadows": ($Sun as DirectionalLight3D).shadow_enabled,
 		"options_button": [hud.options_button.get_global_rect().get_center().x, hud.options_button.get_global_rect().get_center().y],
 		"shadow_level_buttons": _shadow_level_buttons(),
+		# The graphics: the choices on, what the engine has (the frame limit, the
+		# window's 3D scale and mode, frames drawn a second), the frame rate shown or
+		# not, and the buttons and switch that choose them.
+		"graphics": _graphics_state(),
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
 		# The sound: the audio driver, the master volume and mute, the slider on the
@@ -560,11 +589,29 @@ func _publish_web_state(_args: Array) -> void:
 
 
 func _shadow_level_buttons() -> Dictionary:
+	return _button_centres(hud.shadow_levels)
+
+
+func _button_centres(row: Control) -> Dictionary:
 	var at := {}
-	for button: Node in hud.shadow_levels.get_children():
+	for button: Node in row.get_children():
 		var middle := (button as Control).get_global_rect().get_center()
 		at[str(button.name)] = [middle.x, middle.y]
 	return at
+
+
+func _graphics_state() -> Dictionary:
+	var shown := hud.show_frame_rate.get_global_rect().get_center()
+	var label := hud.frame_rate_label.get_global_rect()
+	return {
+		"choices": graphics.current, "max_fps": Engine.max_fps,
+		"scale": get_viewport().scaling_3d_scale, "mode": get_viewport().scaling_3d_mode,
+		"fps": Engine.get_frames_per_second(), "frames_drawn": Engine.get_frames_drawn(),
+		"frame_rate_shown": hud.frame_rate_label.visible, "frame_rate_text": hud.frame_rate_label.text,
+		"frame_rate_rect": [label.position.x, label.position.y, label.size.x, label.size.y],
+		"frame_rates_offered": hud.frame_rates.visible, "frame_rate_buttons": _button_centres(hud.frame_rates),
+		"resolution_buttons": _button_centres(hud.resolutions), "show_switch": [shown.x, shown.y],
+	}
 
 
 func _sound_state() -> Dictionary:

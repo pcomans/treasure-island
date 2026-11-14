@@ -96,6 +96,11 @@ func _layout() -> void:
 	use_button.size = Vector2(96, 96)
 	queue_redraw()
 
+## The screen less the browser's safe-area insets (a notch, the home bar), in
+## viewport pixels, as the controls are laid out in it.
+func safe_area() -> Rect2:
+	return _safe_rect
+
 func set_gameplay_active(active: bool) -> void:
 	_release_all()
 	_active = active

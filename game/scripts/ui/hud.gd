@@ -5,6 +5,10 @@ signal resume_requested
 signal exit_requested
 ## A shadow level chosen on the options screen (main.gd puts it on and keeps it).
 signal shadow_quality_chosen(id: String)
+## A frame rate limit or resolution chosen on the options screen (key and id, as
+## GraphicsSettings names them), or the frame rate display switched (its key and a
+## bool): main.gd puts it on and keeps it.
+signal graphics_chosen(key: String, value: Variant)
 ## The master volume (0..1) or mute changed on the options screen: main.gd puts
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
@@ -37,10 +41,14 @@ const CREDITS_BULLET_GAP_PX := 8
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
 const CREDITS_LICENCE_HEADING_PX := 44.0
-## The options screen's shadow level buttons are at least this wide (px), and the
-## one in use is filled in the headings' colour with this dark type.
+## The options screen's choice buttons (shadow levels, frame rate limits,
+## resolutions) are at least this wide (px), and the one in use is filled in the
+## headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
 const OPTIONS_ACTIVE_TEXT_COLOR := Color(0.04, 0.07, 0.1)
+## On a touch screen the frame rate sits this far into the top left of the touch
+## controls' safe area (px), where the move stick's column starts.
+const FRAME_RATE_TOUCH_INSET_PX := Vector2(20.0, 14.0)
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
@@ -65,16 +73,25 @@ const NIGHT_NOTE := "Night comes in a later update: the sun waits low."
 @onready var controls_screen: Control = $ControlsScreen
 @onready var controls_sections: VBoxContainer = $ControlsScreen/Center/ControlsPanel/ControlsLayout/Sections
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
-## The options screen, opened from the pause menu: the sun's shadow quality, a
-## button for each level main.gd offers here (set_shadow_levels), the level on
-## pressed and its note under them, where there is a choice to make; the time of
-## day, on desktop; then the sound's master volume and mute. A solid panel over the
-## dimmed game, which shows a change at once.
+## The options screen, opened from the pause menu. Under Graphics: the sun's shadow
+## quality, a button for each level main.gd offers here (set_shadow_levels), the
+## level on pressed and its note under them, where there is a choice to make; the
+## frame rate limit with the switch for the frame rate display, and the 3D
+## resolution (set_graphics), each choice a button like the shadow levels with its
+## note as its tooltip. Then the time of day, on desktop, and the sound's master
+## volume and mute. A solid panel over the dimmed game, which shows a change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
-@onready var shadows_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowsHeading
-@onready var shadow_levels: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowLevels
+@onready var graphics_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/GraphicsHeading
+@onready var shadow_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowRow
+@onready var shadow_levels: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowRow/ShadowLevels
 @onready var shadow_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowNote
+@onready var frame_rates: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow/FrameRates
+@onready var show_frame_rate: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow/ShowFrameRate
+@onready var resolutions: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ResolutionRow/Resolutions
+## The frame rate, when the player shows it: in the top right corner, or on a touch
+## screen at the top left of its safe area, clear of the pause button.
+@onready var frame_rate_label: Label = $FrameRate
 ## The time of day (DayClock): the island's date and time, each on a slider that
 ## jumps there as it moves (time runs on from there), and Now, back to the real
 ## time; the note says when night would be. Desktop only for now (set_time_controls).
@@ -127,8 +144,11 @@ var _credits_finger := -1
 ## The licence texts the list's entries ship (their licence_file), as [title, text],
 ## for the Licences view.
 var _licence_files: Array = []
-## The shadow level buttons: one pressed at a time.
+## The shadow level buttons: one pressed at a time; the same for the frame rate
+## limits and the resolutions.
 var _shadow_group := ButtonGroup.new()
+var _frame_rate_group := ButtonGroup.new()
+var _resolution_group := ButtonGroup.new()
 ## The pressed level's fill (_active_level_style).
 var _active_level_box: StyleBoxFlat
 ## Whether the volume slider is being dragged (sound_settings_changed's keep).
@@ -163,6 +183,7 @@ func _ready() -> void:
 		_sound_dragging = false
 		_sound_changed(true))
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
+	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
 	time_date_slider.value_changed.connect(_on_time_slid.bind(true))
 	time_slider.value_changed.connect(_on_time_slid.bind(false))
 	for slider: HSlider in [time_date_slider, time_slider]:
@@ -204,6 +225,8 @@ func _process(delta: float) -> void:
 		debug_text.text = _evidence.debug_text()
 	if options_screen.visible:
 		_show_time()
+	if frame_rate_label.visible:
+		_show_frame_rate()
 
 
 func bind_evidence(evidence: RuntimeEvidence) -> void:
@@ -295,7 +318,7 @@ func show_options() -> void:
 	_show_time(true)
 	options_screen.show()
 	var on := _shadow_group.get_pressed_button()
-	(on if on != null and shadow_levels.visible else sound_volume).grab_focus()
+	(on if on != null and shadow_row.visible else sound_volume).grab_focus()
 
 
 func hide_options() -> void:
@@ -312,32 +335,82 @@ func options_visible() -> bool:
 ## The shadow levels to offer, as ShadowQuality.offered() gives them, with the one
 ## on now pressed. Pressing another asks main.gd to put it on (shadow_quality_chosen).
 ## With no choice to make (the web's Off alone) the options screen shows no shadow
-## levels, only the sound, which every platform has.
+## row, only the other graphics rows and the sound, which every platform has.
 func set_shadow_levels(levels: Array, current: String) -> void:
-	for child: Node in shadow_levels.get_children():
-		shadow_levels.remove_child(child)
-		child.queue_free()
-	for level: Dictionary in levels:
-		var id := str(level.id)
-		var button := Button.new()
-		button.name = id
-		button.text = str(level.name)
-		button.toggle_mode = true
-		button.button_group = _shadow_group
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.custom_minimum_size = Vector2(OPTIONS_LEVEL_MIN_WIDTH_PX, 64.0 if _touch else 40.0)
-		button.set_meta("note", str(level.note))
-		_active_level_style(button)
-		button.toggled.connect(func(on: bool) -> void:
-			if on:
-				shadow_quality_chosen.emit(id))
-		_click_on_press(button)
-		shadow_levels.add_child(button)
+	_fill_choices(shadow_levels, _shadow_group, levels, func(id: String) -> void: shadow_quality_chosen.emit(id))
 	var choice := levels.size() > 1
-	for part: Control in [shadows_heading, shadow_levels, shadow_note]:
+	for part: Control in [shadow_row, shadow_note]:
 		part.visible = choice
 	options_button.visible = true
 	show_shadow_level(current)
+
+
+## The frame rate limits and resolutions to offer, as GraphicsSettings.offered()
+## gives them, with the choices on now pressed and the frame rate shown or not.
+## Pressing another, or the switch, asks main.gd to put it on (graphics_chosen).
+## With one frame rate alone there is no limit to choose: the row keeps its switch.
+func set_graphics(frame_rate_choices: Array, resolution_choices: Array, current: Dictionary) -> void:
+	_fill_choices(frame_rates, _frame_rate_group, frame_rate_choices, func(id: String) -> void: graphics_chosen.emit(GraphicsSettings.FRAME_RATE_KEY, id))
+	_fill_choices(resolutions, _resolution_group, resolution_choices, func(id: String) -> void: graphics_chosen.emit(GraphicsSettings.RESOLUTION_KEY, id))
+	for button: Node in frame_rates.get_children() + resolutions.get_children():
+		(button as Button).tooltip_text = str(button.get_meta("note"))
+	frame_rates.visible = frame_rate_choices.size() > 1
+	resolutions.visible = resolution_choices.size() > 1
+	show_graphics(current)
+
+
+## Shows the graphics choices on now, pressed without asking for them again, and the
+## frame rate in its corner or not.
+func show_graphics(current: Dictionary) -> void:
+	_press_only(frame_rates, str(current.get(GraphicsSettings.FRAME_RATE_KEY, "")))
+	_press_only(resolutions, str(current.get(GraphicsSettings.RESOLUTION_KEY, "")))
+	var shown := bool(current.get(GraphicsSettings.SHOW_FRAME_RATE_KEY, false))
+	show_frame_rate.set_pressed_no_signal(shown)
+	frame_rate_label.visible = shown
+	if shown:
+		_show_frame_rate()
+
+
+## The frame rate in its corner: frames a second over the last second (the engine's
+## count), at the top left of the touch controls' safe area on a touch screen.
+func _show_frame_rate() -> void:
+	frame_rate_label.text = "%d fps" % roundi(Engine.get_frames_per_second())
+	var touch := get_node_or_null("TouchControls") as TouchControls
+	if _touch and touch != null:
+		frame_rate_label.position = touch.safe_area().position + FRAME_RATE_TOUCH_INSET_PX
+
+
+## Fills a row with a toggle button for each choice ({id, name, note}), one pressed
+## at a time (group), at least OPTIONS_LEVEL_MIN_WIDTH_PX wide and thumb-sized on a
+## touch screen, the one in use in the headings' blue. Pressing one calls chosen
+## with its id.
+func _fill_choices(row: HBoxContainer, group: ButtonGroup, choices: Array, chosen: Callable) -> void:
+	for child: Node in row.get_children():
+		row.remove_child(child)
+		child.queue_free()
+	for choice: Dictionary in choices:
+		var id := str(choice.id)
+		var button := Button.new()
+		button.name = id
+		button.text = str(choice.name)
+		button.toggle_mode = true
+		button.button_group = group
+		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		button.custom_minimum_size = Vector2(OPTIONS_LEVEL_MIN_WIDTH_PX, 64.0 if _touch else 40.0)
+		button.set_meta("note", str(choice.note))
+		_active_level_style(button)
+		button.toggled.connect(func(on: bool) -> void:
+			if on:
+				chosen.call(id))
+		_click_on_press(button)
+		row.add_child(button)
+
+
+## Presses the row's button with this id and lets go of every other, without
+## asking for any choice again.
+func _press_only(row: HBoxContainer, id: String) -> void:
+	for button: Node in row.get_children():
+		(button as Button).set_pressed_no_signal(str(button.name) == id)
 
 
 ## The master volume (0..1) and mute on now, shown on the options screen without
@@ -419,8 +492,7 @@ func show_shadow_level(id: String) -> void:
 	var button := shadow_levels.get_node_or_null(id) as Button
 	if button == null:
 		return
-	for level: Node in shadow_levels.get_children():
-		(level as Button).set_pressed_no_signal(level == button)
+	_press_only(shadow_levels, id)
 	shadow_note.text = str(button.get_meta("note"))
 
 
@@ -782,16 +854,20 @@ func toggle_debug() -> void:
 
 
 ## On a touch screen (main.gd): the controls screen lists the touch controls, the
-## menus' buttons are big enough for a thumb and the credits' text is larger.
+## menus' buttons are big enough for a thumb, the credits' text is larger and the
+## frame rate, when shown, sits at the top left.
 func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate]:
 		button.custom_minimum_size.y = 64.0
-	for button: Node in shadow_levels.get_children():
+	for button: Node in shadow_levels.get_children() + frame_rates.get_children() + resolutions.get_children():
 		(button as Button).custom_minimum_size.y = 64.0
 	pause_box.custom_minimum_size.x = 420.0
+	# The touch pause button has the top right corner; the frame rate goes top left.
+	frame_rate_label.set_anchors_preset(Control.PRESET_TOP_LEFT)
+	frame_rate_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_fill_credits()
 	_fit_credits()
 
