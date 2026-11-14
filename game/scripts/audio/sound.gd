@@ -39,12 +39,10 @@ extends Node
 ## physics tick, with its pitch and position (the jet's flame, the driven car's
 ## engine and tyres); the loop starts when the level rises, follows it, fades when
 ## it falls and stops a moment after it is silent, or when its owner stops holding
-## it or is gone. A loop starts at a random point of its take, except on the web,
-## where it starts at the take's start: there the browser plays the takes (Godot's
-## sample playback), which starts a looping take again at the point it first
-## started from, so a loop started part-way would repeat only its take's tail,
-## jumping back each time (a 28 s bed repeated 0.78 s of it on the listening
-## build).
+## it or is gone. A loop starts at its take's start (owner, 2026-11-14: start
+## all loops at the beginning). On the web, where the browser plays the takes
+## (Godot's sample playback), a looping take starts again at the point it first
+## started from, so a loop started part-way would repeat only its take's tail.
 ##
 ## Beds: the wind (louder with the listener's height) and the bay's water, heard
 ## only by the water's edge (water_level), worked out four times a second, from
@@ -613,8 +611,8 @@ func _start_loop(voice: LoopVoice) -> void:
 	_world.add_child(player)
 	if player is AudioStreamPlayer3D and voice.at.is_finite():
 		(player as AudioStreamPlayer3D).global_position = voice.at
-	# At a random point of the take; on the web at its start (see the top).
-	player.call("play", 0.0 if OS.has_feature("web") else _rng.randf() * maxf(stream.get_length() - 0.05, 0.0))
+	# From the take's start (see the top).
+	player.call("play", 0.0)
 	voice.player = player
 	played_counts[voice.id] = int(played_counts.get(voice.id, 0)) + 1
 	if _recording:
