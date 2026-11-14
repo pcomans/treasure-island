@@ -137,6 +137,7 @@ node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.
 node_pids=()
 node_logs=""
 baked=""
+solar_table=""
 # A process and every process under it, each parent before its children.
 process_tree() {
   local child
@@ -155,6 +156,7 @@ cleanup() {
   for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
   [ -z "${node_logs}" ] || rm -rf "${node_logs}"
   [ -z "${baked}" ] || rm -f "${baked}"
+  [ -z "${solar_table}" ] || rm -f "${solar_table}"
 }
 trap cleanup EXIT
 start_node_checks() {
@@ -166,6 +168,12 @@ start_node_checks() {
   ( node tools/check_street_detail_clearance.mjs; exit ) >"${node_logs}/2" 2>&1 &
   node_pids[2]=$!
 }
+
+# The day-clock contract checks the game's sun against the sun tools/solar_position.mjs
+# gives, as it gives it now: printed here, outside the repository, and named to the
+# contract (removed on any exit, by cleanup).
+solar_table="$(mktemp)"
+node tools/solar_position.mjs --table > "${solar_table}" || echo "NOTE: tools/solar_position.mjs --table failed; the day-clock contract will say so"
 
 for test in \
   game/tests/headless_scene_parse.gd \
@@ -204,7 +212,9 @@ do
     time_limit=900
     start_node_checks
   fi
-  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
+  script_args=()
+  [ "${test}" != game/tests/headless_day_clock_contract.gd ] || script_args=(-- --solar-table "${solar_table}")
+  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" "${script_args[@]}"
 done
 
 # Desktop exports load a baked world instead of generating it at startup

@@ -17,8 +17,13 @@ extends RefCounted
 ## captures, the neutral light and the tests see today's look. A driver opts in to
 ## another moment with pin(), or to running time with start_at().
 ##
-## Real speed is the monotonic clock (Time.get_ticks_usec), so neither a pause
-## (Engine.time_scale 0), nor --fixed-fps, nor a system clock adjustment moves it.
+## Real speed is the system clock's (UTC, Time.get_unix_time_from_system): the game
+## keeps an offset from it, so its time runs on while the computer sleeps (a
+## MacBook's lid closed with the game open) and follows the system's corrections,
+## while a pause (Engine.time_scale 0) and --fixed-fps don't touch it. The
+## monotonic clock (Time.get_ticks_usec) would stop during sleep: Godot 4.7.2 reads
+## mach_absolute_time on macOS and CLOCK_MONOTONIC_RAW on Linux.
+##
 ## The island's clock is Pacific time by the US rule (PST, UTC-8; PDT, UTC-7 from
 ## 2:00 on the second Sunday of March to 2:00 on the first Sunday of November,
 ## since 2007), whatever the device's own time zone.
@@ -29,11 +34,16 @@ const LONGITUDE := -122.37
 ## 2026-11-13 12:30 PST: main.tscn's Sun (its solar_moment metadata).
 const RECORDED_UNIX := 1794601800.0
 
+## Where real time comes from: the system clock. A test may put a stand-in here
+## (a Callable returning Unix seconds) and use_system_clock() puts it back.
+static var system_clock := Callable(Time, &"get_unix_time_from_system")
+
 static var _started := false
 static var _running := false
-## The instant at _anchor_usec, and the monotonic clock then.
-static var _anchor_unix := RECORDED_UNIX
-static var _anchor_usec := 0
+## The instant while held; while running, how far the game's time is ahead of the
+## system clock's (s).
+static var _held_unix := RECORDED_UNIX
+static var _offset := 0.0
 ## Goes up by one at every jump (start_at, start_now, pin): DaySun redraws the sun
 ## at once, not at its next step.
 static var _revision := 0
@@ -43,8 +53,8 @@ static var _revision := 0
 static func now() -> float:
 	_start()
 	if not _running:
-		return _anchor_unix
-	return _anchor_unix + float(Time.get_ticks_usec() - _anchor_usec) / 1000000.0
+		return _held_unix
+	return float(system_clock.call()) + _offset
 
 
 ## Whether time runs (at real speed), or is held still.
@@ -66,7 +76,7 @@ static func start_at(unix: float) -> void:
 
 ## The real current time, running (the game's start; the Options screen's Now).
 static func start_now() -> void:
-	_jump(Time.get_unix_time_from_system(), true)
+	_jump(float(system_clock.call()), true)
 
 
 ## Holds the clock still at `unix`: the recorded moment unless a test or capture
@@ -88,10 +98,16 @@ static func _start() -> void:
 		start_now()
 
 
+## Real time from the system clock again, after a test's stand-in. Set the source
+## before a jump: the offset is kept from the source in use then.
+static func use_system_clock() -> void:
+	system_clock = Callable(Time, &"get_unix_time_from_system")
+
+
 static func _jump(unix: float, running: bool) -> void:
 	_started = true
-	_anchor_unix = unix
-	_anchor_usec = Time.get_ticks_usec()
+	_held_unix = unix
+	_offset = unix - float(system_clock.call())
 	_running = running
 	_revision += 1
 

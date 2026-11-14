@@ -6,9 +6,9 @@ extends Node
 ## light's settings; the sky draws its disc, halo and low-sun horizon from the light
 ## (bay_sky.gdshader).
 ##
-## While time runs the sun moves in steps of STEP_S, not every frame: any change of
-## the light makes Godot redraw the sky's radiance map (ambient light and every
-## reflection) over several frames, so a sun moved every frame would keep that
+## While time runs the sun moves in steps (step_seconds), not every frame: any
+## change of the light makes Godot redraw the sky's radiance map (ambient light and
+## every reflection) over several frames, so a sun moved every frame would keep that
 ## redraw going all the time. A jump of the clock (the Options screen's date and
 ## time, Now, a test) moves it at once.
 
@@ -20,22 +20,29 @@ extends Node
 ## (its horizon tint is near full from about 10 degrees) and its shadows about six
 ## times longer than they are tall.
 const DAYLIGHT_MIN_ELEVATION_DEG := 10.0
-## Seconds of clock time between steps while time runs: at real speed the sun moves
-## about 0.04 degrees in that time, so even the long shadows of a sun 10 degrees up
-## move only centimetres a step, and the radiance map redraws no more often than
-## the clouds already make it (sky_weather.gd, every 10 s).
+## Seconds of clock time between steps while time runs, with the sun at least
+## FULL_STEP_ELEVATION_DEG up: the sun moves about 0.04 degrees in that time, a
+## shadow's end a centimetre or two, and the radiance map redraws no more often
+## than the clouds already make it (sky_weather.gd, every 10 s).
 const STEP_S := 10.0
+## Lower, a step is shorter, with the square of the sine of the sun's height, down
+## to MIN_STEP_S: a shadow's far end moves by the change in the sun's height over
+## that square, so with the sun 10 degrees up a 10 s step moved the end of a 9.2 m
+## street lamp's shadow about 15 cm at once, a hop the eye catches near the camera
+## (measured 2026-11-14); a 1.2 s step keeps it to about 2 cm.
+const FULL_STEP_ELEVATION_DEG := 30.0
+const MIN_STEP_S := 1.0
 ## The angles are kept to this (degrees): the precision main.tscn's Sun was set to,
 ## so at the recorded moment the light is exactly the scene's. The sun takes 2 s to
 ## move that far.
 const ANGLE_STEP_DEG := 0.01
 
 var sun: DirectionalLight3D
-## Seconds between steps (STEP_S; a test may shorten it).
-var step_s := STEP_S
 ## The instant the sun is drawn for, and the clock's jump count then.
 var shown_unix := NAN
 var _revision := -1
+## Seconds until the next step, for the sun as drawn now.
+var _step := STEP_S
 
 
 func _init(scene_sun: DirectionalLight3D) -> void:
@@ -58,11 +65,22 @@ func _process(_delta: float) -> void:
 func follow(now := false) -> void:
 	var unix := DayClock.now()
 	var revision := DayClock.revision()
-	if not now and revision == _revision and absf(unix - shown_unix) < step_s:
+	if not now and revision == _revision and absf(unix - shown_unix) < _step:
 		return
 	_revision = revision
 	shown_unix = unix
-	sun.rotation_degrees = rotation_for(shown_angles(unix))
+	var angles := shown_angles(unix)
+	sun.rotation_degrees = rotation_for(angles)
+	# A light held at the edge of daylight doesn't move: a full step.
+	_step = STEP_S if is_held(unix) else step_seconds(angles[0])
+
+
+## Seconds between steps with the sun drawn `elevation_deg` up: STEP_S from
+## FULL_STEP_ELEVATION_DEG up, shorter below with the square of the sine of the
+## height, at least MIN_STEP_S.
+static func step_seconds(elevation_deg: float) -> float:
+	var share := sin(deg_to_rad(elevation_deg)) / sin(deg_to_rad(FULL_STEP_ELEVATION_DEG))
+	return clampf(STEP_S * share * share, MIN_STEP_S, STEP_S)
 
 
 ## A light's rotation_degrees shining from [elevation, azimuth] (degrees): worked

@@ -590,8 +590,8 @@ func _check_options_screen(main: GameMain) -> String:
 ## main.tscn's exactly, its metadata's angles, and stays so however long the game
 ## runs. On the options screen, with the game paused, the date and the time slider
 ## move the Sun at once to the sun of their moment on the island's clock, and time
-## runs on from there at real speed; Now goes back to the real time. Pinned again,
-## the Sun is main.tscn's. Returns a summary, or "" after failing.
+## runs on from there with the system clock; Now goes back to the real time. Pinned
+## again, the Sun is main.tscn's. Returns a summary, or "" after failing.
 func _check_time_of_day(main: GameMain) -> String:
 	var hud := main.hud
 	var sun := main.get_node("Sun") as DirectionalLight3D
@@ -628,20 +628,20 @@ func _check_time_of_day(main: GameMain) -> String:
 			_fail("The %s slider at %s must jump the clock to %s and the Sun to its sun at once, still paused (clock %s off, running %s; Sun %s, its sun %s; paused %s)." % [move[0], move[1], move[2], DayClock.now() - expected, DayClock.is_running(), sun.rotation_degrees, light, paused])
 			return ""
 		moves.append("%s %s (%.2f, %.2f%s)" % [move[0], move[2], shown[0], shown[1], ", held" if DaySun.is_held(DayClock.now()) else ""])
-	# Time runs on from the last move at real speed.
+	# Time runs on from the last move with the system clock.
 	var clock := DayClock.now()
-	begun = Time.get_ticks_usec()
-	_hold_real(begun, 0.3)
+	var system := Time.get_unix_time_from_system()
+	_hold_real(Time.get_ticks_usec(), 0.3)
 	await process_frame
 	var ran := DayClock.now() - clock
-	var real := float(Time.get_ticks_usec() - begun) / 1000000.0
+	var real := Time.get_unix_time_from_system() - system
 	hud.time_now_button.pressed.emit()
 	var real_gap := absf(DayClock.now() - Time.get_unix_time_from_system())
 	var now_running := DayClock.is_running()
 	DayClock.pin()
 	await process_frame
-	if absf(ran - real) > 0.02 or real_gap > 1.0 or not now_running or sun.transform != scene_transform:
-		_fail("After a move time must run on at real speed (%.3f s in %.3f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun be main.tscn's (%s)." % [ran, real, real_gap, now_running, sun.rotation_degrees])
+	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform:
+		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun be main.tscn's (%s)." % [ran, real, real_gap, now_running, sun.rotation_degrees])
 		return ""
 	_push_key(KEY_ESCAPE)
 	hud.resume_button.pressed.emit()
@@ -649,7 +649,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	if paused or hud.options_visible():
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
-	return "held at the recorded moment with main.tscn's Sun; the sliders, paused, moved the Sun at once (%s); time ran on at real speed; Now; pinned again" % ", ".join(moves)
+	return "held at the recorded moment with main.tscn's Sun; the sliders, paused, moved the Sun at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
 
 
 ## Waits, without a frame, until `seconds` of real time have passed since `since_usec`.

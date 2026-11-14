@@ -5,8 +5,8 @@ extends RefCounted
 ## method: Meeus' low-accuracy formulas for the sun's geometric mean longitude and
 ## anomaly, the equation of centre, the obliquity and its nutation correction, the
 ## equation of time, the hour angle from true solar time, then NOAA's atmospheric
-## refraction). The Node tool stays the reference; game/tests/headless_day_clock_contract.gd
-## checks this against a table it printed (game/tests/support/solar_table.json).
+## refraction). The Node tool stays the reference: game/tests/headless_day_clock_contract.gd
+## checks this against the table it prints in each tools/test.sh run (--table).
 ## Any date and any time, the sun below the horizon included.
 ##
 ## Azimuth is clockwise from true north, which is world -Z (tools/lib/coordinates.mjs:

@@ -18,10 +18,11 @@
 // for PDT.
 //
 // The game computes the sun with a GDScript port of solarPosition
-// (game/scripts/world/solar_position.gd), and this stays its reference: the table
-// game/tests/headless_day_clock_contract.gd checks the port against is printed by
+// (game/scripts/world/solar_position.gd), and this stays its reference:
+// tools/test.sh prints the table game/tests/headless_day_clock_contract.gd checks
+// the port against, each run, outside the repository:
 //
-//   node tools/solar_position.mjs --table > game/tests/support/solar_table.json
+//   node tools/solar_position.mjs --table > FILE   (the contract takes -- --solar-table FILE)
 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";

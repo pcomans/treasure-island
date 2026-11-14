@@ -6,29 +6,32 @@ extends SceneTree
 ##   - a test driver's clock is held at the recorded moment (main.tscn's Sun), and
 ##     the sun drawn there is main.tscn's Sun exactly;
 ##   - the game's sun (SolarPosition) is tools/solar_position.mjs's: within
-##     TOLERANCE_DEG of the table the Node tool printed (TABLE_PATH), every
+##     TOLERANCE_DEG of the table the Node tool prints (`--table`; tools/test.sh
+##     prints it outside the repository and names it: -- --solar-table FILE), every
 ##     13 h 7 min through 2026, day and night, and at moments in other years;
 ##   - the island's clock is Pacific time by the US rule, from the instant alone
 ##     (the device's time zone plays no part): the changes in March and November of
 ##     2026 and 2027 to the second, every day of 2026 there and back, the skipped
 ##     and the repeated hour;
-##   - the clock runs at real speed (the monotonic clock), a paused game's time
-##     scale of 0 included, holds still when pinned, and jumps;
-##   - DaySun points a light at the clock's sun: in steps while time runs, at once
-##     on a jump; below the daylight it draws, the light waits where the sun crossed
-##     its edge, on the evening's or the morning's side, with no jump as it gets there;
+##   - the clock runs with the system clock, a paused game's time scale of 0
+##     included; with a stand-in system clock, a sleep (the system clock jumping
+##     on) and a correction carry the game's time with them, to the microsecond;
+##     it holds still when pinned, and jumps;
+##   - DaySun points a light at the clock's sun: in steps while time runs (10 s with
+##     the sun high, shorter as it sinks), at once on a jump; below the daylight it
+##     draws, the light waits where the sun crossed its edge, on the evening's or the
+##     morning's side, with no jump as it gets there;
 ##   - the options screen's date and time read the island's clock (PST and PDT, the
 ##     night note), its sliders jump the clock and time runs on, Now goes back to
 ##     the real time, and the web's options screen has none of it.
 ## The first failure stops the run.
 
-const TABLE_PATH := "res://game/tests/support/solar_table.json"
 const MAIN_SCENE := "res://game/scenes/main.tscn"
 ## How far the GDScript sun may stray from the Node tool's (degrees): the same
 ## arithmetic in 64-bit floats, so only rounding differs.
 const TOLERANCE_DEG := 0.000001
-## How long a real-speed check lets the monotonic clock run (s), and how far the
-## game's clock may differ from it over that time (s).
+## How long a real-speed check lets real time run (s), and how far the game's clock
+## may differ from the system clock over that time (s).
 const REAL_SPAN_S := 0.3
 const REAL_SLACK_S := 0.005
 
@@ -69,10 +72,15 @@ func _run() -> void:
 	_finish()
 
 
-## The GDScript sun against the Node tool's table.
+## The GDScript sun against the table the Node tool printed for this run.
 func _check_reference() -> String:
-	var table: Variant = JSON.parse_string(FileAccess.get_file_as_string(TABLE_PATH))
-	if not _require(table is Dictionary and (table.get("samples") as Array).size() > 600, "The Node tool's reference table %s is missing or short." % TABLE_PATH):
+	var args := OS.get_cmdline_user_args()
+	var at := args.find("--solar-table")
+	var path := args[at + 1] if at >= 0 and at + 1 < args.size() else ""
+	if not _require(path != "" and FileAccess.file_exists(path), "Run this with -- --solar-table FILE, the table `node tools/solar_position.mjs --table` prints (tools/test.sh does), not %s." % [args]):
+		return ""
+	var table: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not _require(table is Dictionary and table.get("samples") is Array and (table.samples as Array).size() > 600, "The solar table %s is not the Node tool's table, or is short." % path):
 		return ""
 	var worst := [0.0, 0.0]
 	var nights := 0
@@ -138,7 +146,11 @@ func _check_island_clock() -> String:
 	return "the island's clock (PST and PDT changing on 2026-03-08, 2026-11-01, 2027-03-14 and 2027-11-07 to the second; %d dates and times there and back)" % trips
 
 
-## Real speed, a pause's time scale included; held still when pinned; jumps.
+## Real speed is the system clock's: the game's time runs with it, a pause's time
+## scale of 0 included. With a stand-in system clock, to the microsecond: a sleep
+## (the system clock jumping an hour on while the lid is closed) and a correction
+## carry the game's time with them, a pause doesn't stop it, a pinned clock holds
+## still, and Now is the system's time. Jumps are counted.
 func _check_running() -> String:
 	var revision := DayClock.revision()
 	var start := 1782050000.0
@@ -149,20 +161,36 @@ func _check_running() -> String:
 	Engine.time_scale = 0.0
 	var paused_span := _real_span()
 	Engine.time_scale = kept
-	var real_ok := absf(span.x - span.y) <= REAL_SLACK_S and absf(paused_span.x - paused_span.y) <= REAL_SLACK_S
+	var real_ok := absf(span.x - span.y) <= REAL_SLACK_S and absf(paused_span.x - paused_span.y) <= REAL_SLACK_S and span.y > 0.0
+	# A stand-in system clock, moved by hand.
+	var system := [1800000000.0]
+	DayClock.system_clock = func() -> float: return system[0]
+	DayClock.start_at(start)
+	var moves := []
+	for move: Array in [["running", 12.5], ["paused", 7.25], ["asleep an hour", 3600.0], ["corrected back", -2.0]]:
+		Engine.time_scale = 0.0 if move[0] == "paused" else kept
+		system[0] += float(move[1])
+		moves.append([move[0], DayClock.now() - start])
+	Engine.time_scale = kept
 	DayClock.pin(start)
-	var held := _real_span()
+	system[0] += 600.0
+	var held := DayClock.now() - start
+	DayClock.start_now()
+	var stand_in_now := DayClock.now() - system[0]
+	DayClock.use_system_clock()
 	DayClock.start_now()
 	var system_gap := absf(DayClock.now() - Time.get_unix_time_from_system())
 	var running_now := DayClock.is_running()
 	DayClock.pin()
-	if not _require(jumped >= start and jumped - start < REAL_SLACK_S, "start_at must jump the clock to %s, not %s." % [start, jumped]) \
-	or not _require(real_ok, "The clock must run at real speed, paused or not: over %.3f s it ran %.3f s (time scale 0: %.3f s over %.3f s)." % [span.y, span.x, paused_span.x, paused_span.y]) \
-	or not _require(held.x == 0.0 and not DayClock.is_running(), "A pinned clock must hold still (it moved %.6f s in %.3f s)." % [held.x, held.y]) \
+	var expected := [["running", 12.5], ["paused", 19.75], ["asleep an hour", 3619.75], ["corrected back", 3617.75]]
+	if not _require(absf(jumped - start) < REAL_SLACK_S, "start_at must jump the clock to %s, not %s." % [start, jumped]) \
+	or not _require(real_ok, "The game's time must run with the system clock, paused or not: the system ran %.4f s and the game %.4f s (time scale 0: %.4f s and %.4f s)." % [span.y, span.x, paused_span.y, paused_span.x]) \
+	or not _require(moves == expected, "With a stand-in system clock the game's time must follow it to the microsecond, a sleep and a correction included: %s, not %s." % [expected, moves]) \
+	or not _require(held == 0.0 and stand_in_now == 0.0, "A pinned clock must hold still while the system clock runs 600 s (it moved %s), and Now be the system's time (%s off)." % [held, stand_in_now]) \
 	or not _require(system_gap < 1.0 and running_now, "Now must be the real time, running (%.3f s off, running %s)." % [system_gap, running_now]) \
-	or not _require(DayClock.revision() == revision + 4 and DayClock.now() == DayClock.RECORDED_UNIX, "Every jump must count (%d counted, 4 made) and pin() go back to the recorded moment." % (DayClock.revision() - revision)):
+	or not _require(DayClock.revision() == revision + 6 and DayClock.now() == DayClock.RECORDED_UNIX, "Every jump must count (%d counted, 6 made) and pin() go back to the recorded moment." % (DayClock.revision() - revision)):
 		return ""
-	return "real speed (%.3f s over %.3f s, and %.3f s with the time scale at 0), held still when pinned, Now the real time" % [span.x, span.y, paused_span.x]
+	return "the system clock's speed (%.4f s against the system's %.4f s, and %.4f s with the time scale at 0); with a stand-in system clock, 12.5 s running, 7.25 s more paused, an hour asleep and a 2 s correction back carried the game's time exactly; held still when pinned; Now the real time" % [span.x, span.y, paused_span.x]
 
 
 ## DaySun on a light of its own.
@@ -220,30 +248,40 @@ func _check_day_sun() -> String:
 			last = shown
 	if not _require(largest < 0.3, "The light must not jump at the edge of the daylight: it moved %.3f degrees in a minute." % largest):
 		return ""
-	# Steps while time runs, a jump at once.
-	day_sun.step_s = 0.2
-	var start := DayClock.parse_local("2026-06-21 09:30")
-	DayClock.start_at(start)
-	await process_frame
-	var first := day_sun.shown_unix
-	# Real time passes inside a frame: headless frames come thousands a second, and
-	# this run's guard counts frames.
-	var begun := Time.get_ticks_usec()
-	_hold_real(begun, 0.1)
-	await process_frame
-	var within := day_sun.shown_unix
-	_hold_real(begun, 0.3)
-	await process_frame
-	var stepped := day_sun.shown_unix
-	DayClock.start_at(start + 3600.0)
+	# Steps while time runs, on a stand-in system clock: 10 s with the sun high,
+	# shorter as it sinks (step_seconds), a full step while it is held; a jump at once.
+	var system := [1800000000.0]
+	DayClock.system_clock = func() -> float: return system[0]
+	var steps := []
+	for trial: Array in [["2026-06-21 12:30", "high"], ["2026-11-14 15:50", "low"], ["2026-11-14 22:00", "held"]]:
+		var start := DayClock.parse_local(trial[0])
+		var step := DaySun.STEP_S if DaySun.is_held(start) else DaySun.step_seconds(DaySun.shown_angles(start)[0])
+		DayClock.start_at(start)
+		await process_frame
+		var first := day_sun.shown_unix
+		system[0] += step * 0.8
+		await process_frame
+		var within := day_sun.shown_unix
+		system[0] += step * 0.4
+		await process_frame
+		var stepped := day_sun.shown_unix
+		steps.append("%s %.2f s" % [trial[1], step])
+		if not _require(first == start and within == start and is_equal_approx(stepped - start, step * 1.2), "%s (%s): the sun must step after %.2f s and not before (shown at %s, %s, %s from %s)." % [trial[0], trial[1], step, first, within, stepped, start]):
+			DayClock.use_system_clock()
+			return ""
+	var jump_from := DayClock.parse_local("2026-06-21 12:30")
+	DayClock.start_at(jump_from + 3600.0)
 	await process_frame
 	var jumped := day_sun.shown_unix
+	DayClock.use_system_clock()
 	DayClock.pin()
 	await process_frame
 	var back := light.transform == scene_transform
-	if not _require(absf(first - start) < 0.1 and within == first and stepped >= first + 0.2 and absf(jumped - start - 3600.0) < 0.1 and back, "While time runs the sun must step every %.1f s and jump at once (shown %s, then %s within the step, %s after it, %s after a jump of an hour from %s; back at the recorded moment: %s)." % [day_sun.step_s, first, within, stepped, jumped, start, back]):
+	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0)]
+	if not _require(jumped == jump_from + 3600.0 and back, "A jump must move the sun at once (shown %s for %s), and pinned again it must be main.tscn's (%s)." % [jumped, jump_from + 3600.0, back]) \
+	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up and shorter as the sun sinks, to MIN_STEP_S: %s at 75, 30, 20, 10 and 5 degrees." % [shape]):
 		return ""
-	return "the light from the clock's sun at %d moments, waiting at %.0f degrees at night (%s), no jump at the edge (%.2f degrees a minute at most), in steps while time runs and at once on a jump" % [checked, DaySun.DAYLIGHT_MIN_ELEVATION_DEG, ", ".join(PackedStringArray(sides)), largest]
+	return "the light from the clock's sun at %d moments, waiting at %.0f degrees at night (%s), no jump at the edge (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees) and at once on a jump" % [checked, DaySun.DAYLIGHT_MIN_ELEVATION_DEG, ", ".join(PackedStringArray(sides)), largest, ", ".join(PackedStringArray(steps)), shape[3]]
 
 
 ## The options screen's date and time, on desktop and on the web.
@@ -287,21 +325,15 @@ func _check_options_rows() -> String:
 	return "the options screen's date and time (Fri 13 Nov 2026 12:30 PST; Sun 21 Jun 12:30 PDT from the date slider, 23:00 with the night note and 09:30 from the time slider; Now; none on the web)"
 
 
-## Waits, without a frame, until `seconds` of real time have passed since `since_usec`.
-func _hold_real(since_usec: int, seconds: float) -> void:
-	while Time.get_ticks_usec() - since_usec < int(seconds * 1000000.0):
-		pass
-
-
-## The real time a short wait takes and how far the clock ran meanwhile:
-## (clock seconds, real seconds), waited in one frame.
+## How far the game's clock and the system clock run while REAL_SPAN_S of real time
+## passes, waited inside one frame: (clock seconds, system seconds).
 func _real_span() -> Vector2:
 	var begun := Time.get_ticks_usec()
 	var clock := DayClock.now()
+	var system := Time.get_unix_time_from_system()
 	while Time.get_ticks_usec() - begun < int(REAL_SPAN_S * 1000000.0):
 		pass
-	var ended := Time.get_ticks_usec()
-	return Vector2(DayClock.now() - clock, float(ended - begun) / 1000000.0)
+	return Vector2(DayClock.now() - clock, Time.get_unix_time_from_system() - system)
 
 
 func _utc(year: int, month: int, day: int, hour: int, minute: int, second: int) -> int:

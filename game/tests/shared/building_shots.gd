@@ -82,7 +82,8 @@ extends SceneTree
 ##   loads the world and shoots everything at that moment instead, and a still view
 ##   (focused or street) may add "times": ["YYYY-MM-DD HH:MM", ...] to be shot at each
 ##   of those moments in turn, as NAME-at-YYYYMMDD-HHMM.png, in place of NAME.png.
-##   Mersea's reflection probes keep the moment the world loaded at.
+##   Mersea's reflection probes keep the moment the world loaded at. Neither goes
+##   with --neutral-lighting, whose fixed sun stands in for the game's.
 ## --neutral-lighting: screenshots only. Swaps in the fixed neutral daylight below
 ##   (NEUTRAL_ENVIRONMENT, NEUTRAL_SKY, NEUTRAL_SUN) for colour matching against
 ##   reference photos: a complete environment, sky and sun of its own, with Mersea's
@@ -250,13 +251,17 @@ func _run() -> void:
 			if state in street[kind] and state not in passes:
 				passes.append(state)
 	print("STREET_DETAIL_SHOTS " + " ".join(PackedStringArray(plan)))
+	if args.has("neutral-lighting") and (args.has("time") or _asks_times(args, batch)):
+		_fail("--time and a view's \"times\" move the game's sun, which --neutral-lighting hides behind a fixed sun of its own: use one or the other")
+		return
 	if args.has("time"):
 		var moment := DayClock.parse_local(str(args.time))
 		if is_nan(moment):
 			_fail("--time takes the island's own clock as \"YYYY-MM-DD HH:MM\"")
 			return
 		DayClock.pin(moment)
-	print(_sun_line())
+	if not args.has("neutral-lighting"):
+		print(_sun_line())
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
 	# Load with every layer on when any view wants it; the off views come after.
@@ -333,6 +338,20 @@ func _use_neutral_lighting() -> void:
 		await process_frame
 	await RenderingServer.frame_post_draw
 	print("LIGHTING: neutral (fixed colour-matching daylight, screenshots only)")
+
+
+## Whether a view in this run's plans (--views, --street-views, --views-batch) asks
+## for other moments ("times").
+func _asks_times(args: Dictionary, batch: Array[Dictionary]) -> bool:
+	var paths: Array = batch.map(func(entry: Dictionary) -> String: return str(entry.plan))
+	for key: String in ["views", "street-views"]:
+		if args.has(key):
+			paths.append(str(args[key]))
+	for path: String in paths:
+		var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+		if plan is Dictionary and plan.get("views") is Array and (plan.views as Array).any(func(view: Variant) -> bool: return view is Dictionary and view.has("times")):
+			return true
+	return false
 
 
 ## The moment the sun is drawn for and where it is drawn, for the log.
