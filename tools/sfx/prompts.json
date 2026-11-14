@@ -205,6 +205,11 @@
     "U8": "A failed load needs no sound.",
     "U10": "A developer toggle."
   },
+  "retired_outputs": {
+    "player/coins_jostle_{take}.ogg": "coins_jostle (P2), dropped by the owner on 2026-11-14.",
+    "player/coin_spill_{take}.ogg": "coin_spill (P3), dropped by the owner on 2026-11-14.",
+    "player/coin_ground_{take}.ogg": "coin_ground (P4), dropped by the owner on 2026-11-14."
+  },
   "sounds": [
     {
       "id": "footstep_hard",

@@ -37,14 +37,18 @@
 //   - A one-shot starts at its onset, is cut and is peak-normalised as decoded.
 //   - A loop's end runs on into its start, or the loop is kept as generated
 //     when its crossfade is 0.
-//   - Picks choose the takes. Picks recorded when --force-id set their set
-//     aside are refused while picks.json holds the same list, whatever the
-//     file times; a copied folder takes its picks. An id not in the sheet is
-//     named and ignored.
+//   - Picks choose the takes. Picks made only of the numbers recorded when
+//     --force-id set their set aside are refused, whatever the file times; a
+//     copied folder takes its picks. An id not in the sheet is named and ignored.
 //   - A near-silent candidate is named, and the other takes and rows go on;
 //     the run ends non-zero listing the failed rows.
-//   - game/ ends up holding exactly the manifest's takes; a row marked none
-//     good in audition-notes.json and not picked is left out.
+//   - Audition verdicts in the pages' shapes: round 2 decides over round 1, a
+//     pick overrides a mark, and a set made after the audition began goes in
+//     only once picked or judged. First candidates nobody picked are listed
+//     and marked picked: false.
+//   - A run removes only takes it decided on (past what a processed row keeps,
+//     a left-out row's) and retired rows' takes: never another row's, a
+//     refused row's, or anything because the manifest does not list it.
 //   - Raising a row's candidates adds new ones, made with the current prompt,
 //     beside the old ones and their picks.
 // - Git tracks no audio, and .gitignore keeps it out.
@@ -229,6 +233,8 @@ if (!problems.length) {
     ["loudness classes from quietest to loudest", (s) => { s.loudness.classes.reverse(); }, "from loudest to quietest"],
     ["overlapping loudness classes", (s) => { s.loudness.classes[1].max_db = s.loudness.classes[0].min_db + 1; }, "from loudest to quietest"],
     ["no loudness classes", (s) => { delete s.loudness; }, "loudness must give"],
+    ["a retired output a sound still uses", (s) => { s.retired_outputs = { [s.sounds[shotRow].output]: "A row the check pretends was dropped." }; }, "is still a sound's output"],
+    ["a retired output not shaped like one", (s) => { s.retired_outputs = { "coins.ogg": "A row the check pretends was dropped." }; }, "must be like group/name_{take}.ogg"],
   ];
   let caught = 0;
   for (const [what, mutate, expected] of broken) {
@@ -272,6 +278,7 @@ function fixtureSheet() {
     },
     events: { T1: "A test event.", T2: "Another test event.", T3: "A third test event.", T4: "A fourth test event." },
     not_voiced: {},
+    retired_outputs: { "test/coin_{take}.ogg": "A fixture row since dropped." },
     sounds: [
       { id: "shot", tier: 1, events: ["T1"], prompt: "High-quality foley one-shot: a single knock on a wooden door, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 2, candidates_per_take: 2, output: "test/shot_{take}.ogg", recipe: "shot", loudness_class: "mid", level_db: -24 },
       { id: "bed", tier: 2, events: ["T2"], prompt: "Ambience: soft steady rain on a tin roof, recorded close.", duration_seconds: 3.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 3, output: "test/bed_{take}.ogg", recipe: "bed", loudness_class: "quiet", level_db: -36 },
@@ -732,6 +739,10 @@ function synthesize(file, filter, inputs) {
     // A 441 Hz cosine of 2 s is whole cycles that start at full level (so no
     // silence is trimmed): a loop the model already made seamless.
     synthesize(join(rawDir, "bed_raw.c01.mp3"), ["-c:a", "libmp3lame", "-b:a", "192k"], ["aevalsrc=0.125*cos(2*PI*441*t):s=44100:d=2"]);
+    // A first run, with no manifest yet. game/ already holds a take numbered past
+    // the one bed keeps, a take of a retired row and a take of no row the tool knows.
+    mkdirSync(join(out, "game", "test"), { recursive: true });
+    for (const name of ["bed_02.ogg", "coin_01.ogg", "mystery_01.ogg"]) writeFileSync(join(out, "game", "test", name), "not audio\n");
     const processed = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
     check(processed.code === 0, `--process exited ${processed.code}: ${processed.all.trim()}`);
     const take = (name) => join(out, "game", "test", name);
@@ -767,12 +778,20 @@ function synthesize(file, filter, inputs) {
       for (const row of fixture.sounds) {
         const entry = manifest?.sounds?.[row.id];
         const measured = entry ? Math.max(...entry.takes.map((path) => measureLoudness(join(out, "game", path), row.loop))) : NaN;
-        const ok = entry && entry.takes.length > 0 && entry.takes.every((path) => existsSync(join(out, "game", path))) && entry.gain_db <= 0
+        const ok = entry && entry.takes.length > 0 && entry.takes.every((path) => existsSync(join(out, "game", path))) && entry.gain_db <= 0 && entry.picked === false
           && entry.level_db === row.level_db && entry.loudness_class === row.loudness_class && Math.abs(entry.loudness_lufs - measured) <= 0.3
           && Math.abs(entry.gain_db - Math.min(0, row.level_db - entry.loudness_lufs)) <= 0.02 && Math.abs(entry.shortfall_db - Math.max(0, row.level_db - entry.loudness_lufs)) <= 0.02;
         check(ok, `the manifest's entry for ${row.id} does not give its takes, its level and the gain from its measured loudness (${measured.toFixed(2)} LUFS): ${JSON.stringify(entry)}`);
       }
       check(manifest?.sounds?.hit?.shortfall_db > 0 && manifest.sounds.hit.gain_db === 0 && processed.stderr.includes("NOTE: hit: its takes reach only"), `a level the takes cannot reach was not reported as a shortfall: ${JSON.stringify(manifest?.sounds?.hit)}`);
+      // The run removed only what it decided: the take past the one bed keeps, and
+      // the retired row's. The take of no known row stays.
+      check(!existsSync(take("bed_02.ogg")) && processed.stdout.includes("removed game/test/bed_02.ogg: bed keeps 1 take now") && !existsSync(take("coin_01.ogg"))
+        && processed.stdout.includes("removed game/test/coin_01.ogg: a retired output") && existsSync(take("mystery_01.ogg")),
+      `a first run did not remove exactly the take past what bed keeps and the retired row's take, keeping the take of no known row: ${processed.stdout.trim()}`);
+      // Nobody picked anything yet: every row came from its first candidates, and the summary says so.
+      check(processed.stdout.includes("NOTE: processed from first candidates nobody picked: shot, bed, bed_raw, hit"), `the summary does not list the rows processed from first candidates nobody picked: ${processed.stdout.trim()}`);
+      passes.push("a first run with no manifest removed only the take past what bed keeps and a retired row's take, kept a take of no known row, and listed the rows processed from first candidates nobody picked (picked: false)");
       const raw = decode(join(bedDir, "bed.c01.mp3"));
       const bed = decode(take("bed_01.ogg"));
       const expected = raw.length - (fixture.recipes.bed.loop_crossfade_ms / 1000) * rate;
@@ -796,7 +815,8 @@ function synthesize(file, filter, inputs) {
       if (picked.code === 0) check(Math.abs(decode(take("shot_01.ogg")).length - shortest) <= 0.005 * rate, "the picked take did not come from candidate 2");
       // A run over one row updates its entry and keeps the others'.
       const updated = JSON.parse(readFileSync(manifestPath, "utf8")).sounds;
-      check(updated.shot?.takes?.length === 1 && ["bed", "bed_raw", "hit"].every((id) => updated[id]?.takes?.length), `a --process of shot alone did not update its entry and keep the others: ${Object.keys(updated).join(", ")}`);
+      check(updated.shot?.takes?.length === 1 && updated.shot.picked === true && ["bed", "bed_raw", "hit"].every((id) => updated[id]?.takes?.length && updated[id].picked === false),
+        `a --process of shot alone did not update its entry (picked) and keep the others: ${JSON.stringify(updated)}`);
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [9] }));
       // An impossible pick fails its row alone; the other rows are still processed.
       const badPick = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
@@ -806,29 +826,74 @@ function synthesize(file, filter, inputs) {
       passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), the impact recipe cut a quiet take's 0.2 s lead-in (onset ${(hitOnset * 1000).toFixed(1)} ms), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, one pick for a row of 2 gave exactly that take`);
       passes.push(`levels: a row's takes are loudness-matched (shot's two knocks within ${shotSpread.toFixed(2)} LU), the manifest game/sfx.json gives every sound its takes and the gain from its measured loudness to its level, an unreachable level is a reported shortfall, and a run over one row keeps the others' entries`);
 
-      // Afterwards game/ holds exactly the manifest's takes. A row marked none
-      // good in audition-notes.json and not picked is left out (a pick overrides
-      // the mark); takes of rows no longer in the sheet go; other files stay.
-      mkdirSync(join(out, "game", "gone"), { recursive: true });
-      cpSync(take("hit_01.ogg"), join(out, "game", "gone", "coin_01.ogg"));
-      cpSync(take("hit_01.ogg"), join(out, "game", "test", "coin_spill_02.ogg"));
-      writeFileSync(join(out, "game", "test", "notes.txt"), "not a take\n");
-      writeFileSync(join(out, "game", "test", "hit_01.ogg.import"), "not a take\n");
-      const marks = { bed: { none_good: true, note: "none of these", updated: new Date().toISOString() }, shot: { none_good: true }, coin_spill: { none_good: true } };
-      writeFileSync(join(out, "audition-notes.json"), JSON.stringify(marks));
-      writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [2] }));
-      const swept = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
-      const final = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")).sounds : {};
-      const listedTakes = Object.values(final).flatMap((entry) => entry.takes).sort();
-      const oggs = readdirSync(join(out, "game"), { recursive: true }).filter((path) => String(path).endsWith(".ogg")).map(String).sort();
-      check(swept.code === 0 && swept.stdout.includes("bed: marked none good in audition-notes.json and not picked") && !final.bed && !existsSync(take("bed_01.ogg")),
-        `a row marked none good and not picked was not left out of game/ and the manifest (exit ${swept.code}): ${swept.all.trim()}`);
-      check(final.shot?.takes?.length === 1 && existsSync(take("shot_01.ogg")) && final.bed_raw && final.hit, `a pick did not override the none-good mark, or an unmarked row went missing: ${JSON.stringify(Object.keys(final))}`);
-      check(!existsSync(join(out, "game", "gone", "coin_01.ogg")) && !existsSync(take("coin_spill_02.ogg")) && swept.stdout.includes("removed game/gone/coin_01.ogg") && swept.stdout.includes("removed game/test/coin_spill_02.ogg"),
-        `takes of rows no longer in the sheet were not removed and listed: ${swept.stdout.trim()}`);
-      check(existsSync(join(out, "game", "test", "notes.txt")) && existsSync(join(out, "game", "test", "hit_01.ogg.import")), "a file in game/ not named like a take was removed");
-      check(JSON.stringify(oggs) === JSON.stringify(listedTakes), `game/ holds other takes than the manifest lists: ${oggs.join(", ")} against ${listedTakes.join(", ")}`);
-      passes.push("game/ holds exactly the manifest's takes: a row marked none good and not picked is left out (a pick overrides the mark), takes of rows no longer in the sheet are removed and listed, other files stay");
+      // Verdicts in the shapes the audition pages write (audition/server.mjs):
+      // round 1 {none_good, note, updated}, round 2 under "round2"
+      // {still_not_right, note, updated}. Round 2 decides when present, a pick
+      // overrides a mark, and a set made after the audition began goes in only
+      // once picked or judged. The generation log dates each candidate.
+      const ver = join(scratch, "process-verdicts");
+      const verTake = (name) => join(ver, "game", "test", name);
+      const verSounds = () => (existsSync(join(ver, "game", "sfx.json")) ? JSON.parse(readFileSync(join(ver, "game", "sfx.json"), "utf8")).sounds : {});
+      cpSync(join(out, "candidates"), join(ver, "candidates"), { recursive: true });
+      const at = (minutes) => new Date(Date.parse("2026-11-14T06:00:00.000Z") + minutes * 60_000).toISOString();
+      const [beforeAudition, round1, madeAgain, round2] = [at(-120), at(0), at(60), at(90)];
+      // shot and bed were made before the audition; bed_raw and hit after it began.
+      const dated = { shot: [beforeAudition, 2], bed: [beforeAudition, 1], bed_raw: [madeAgain, 1], hit: [madeAgain, 1] };
+      const logLines = Object.entries(dated).flatMap(([id, [time, count]]) => Array.from({ length: count }, (_, index) => JSON.stringify({
+        time, id, candidate: index + 1, attempt: 1, file: candidate(fixture.sounds.find((row) => row.id === id), index + 1), status: "ok",
+      })));
+      writeFileSync(join(ver, "generation-log.jsonl"), `${logLines.join("\n")}\n`);
+      mkdirSync(join(ver, "game", "test"), { recursive: true });
+      for (const name of ["bed_01.ogg", "hit_01.ogg"]) cpSync(take("hit_01.ogg"), verTake(name));
+      writeFileSync(join(ver, "picks.json"), JSON.stringify({ shot: [2] }));
+      const verdicts = {
+        shot: { none_good: true, note: "too quiet", updated: round1 },
+        bed: { none_good: true, note: "not this", updated: round1 },
+        bed_raw: { none_good: true, note: "too much hiss", updated: round1, round2: { still_not_right: false, note: "better now", updated: round2 } },
+      };
+      writeFileSync(join(ver, "audition-notes.json"), JSON.stringify(verdicts));
+      const firstVerdicts = await runTool(["--out", ver, "--process", "--sheet", fixturePath]);
+      const afterFirst = verSounds();
+      check(firstVerdicts.code === 0 && afterFirst.shot?.picked === true, `a pick did not override a round-1 none-good mark (exit ${firstVerdicts.code}): ${firstVerdicts.all.trim()}`);
+      check(!afterFirst.bed && !existsSync(verTake("bed_01.ogg")) && firstVerdicts.stdout.includes("bed: left out of game/ and sfx.json, marked not good in round 1; removed game/test/bed_01.ogg"),
+        `a row marked none good in round 1 and never picked was not left out with its takes: ${firstVerdicts.stdout.trim()}`);
+      check(afterFirst.bed_raw?.picked === false && firstVerdicts.stdout.includes("NOTE: processed from first candidates nobody picked: bed_raw"),
+        `round 2's verdict (not rejected, saved after the set was made) did not decide over round 1's rejection: ${firstVerdicts.stdout.trim()}`);
+      check(!afterFirst.hit && !existsSync(verTake("hit_01.ogg")) && /^NOTE: left out of game\/, so the game plays nothing for them: .*hit \(unheard: its candidates were made after the audition began/mu.test(firstVerdicts.stdout),
+        `a set made after the audition began, never picked or judged, was not left out and named in the summary: ${firstVerdicts.stdout.trim()}`);
+      // Round 2 marks shot (still picked), bed_raw and the new hit still not right;
+      // bed's round-1 mark is gone, and its set was made before the audition.
+      verdicts.shot.round2 = { still_not_right: true, note: "", updated: round2 };
+      verdicts.bed_raw.round2 = { still_not_right: true, note: "still hiss", updated: round2 };
+      verdicts.hit = { round2: { still_not_right: true, note: "still not right", updated: round2 } };
+      delete verdicts.bed;
+      writeFileSync(join(ver, "audition-notes.json"), JSON.stringify(verdicts));
+      const secondVerdicts = await runTool(["--out", ver, "--process", "--sheet", fixturePath]);
+      const afterSecond = verSounds();
+      check(secondVerdicts.code === 0 && afterSecond.shot?.picked === true, `a pick did not override a round-2 mark (exit ${secondVerdicts.code}): ${secondVerdicts.all.trim()}`);
+      check(afterSecond.bed?.picked === false && secondVerdicts.stdout.includes("NOTE: processed from first candidates nobody picked: bed"),
+        `a set made before the audition, with no pick and no verdict, did not go in from its first candidates, listed: ${secondVerdicts.stdout.trim()}`);
+      check(!afterSecond.bed_raw && !existsSync(verTake("bed_raw_01.ogg")) && secondVerdicts.stdout.includes("bed_raw: left out of game/ and sfx.json, marked not good in round 2"),
+        `round 2's rejection did not decide: ${secondVerdicts.stdout.trim()}`);
+      check(!afterSecond.hit && secondVerdicts.stdout.includes("hit: left out of game/ and sfx.json, marked not good in round 2"), `a new row rejected in round 2 was not left out: ${secondVerdicts.stdout.trim()}`);
+      passes.push("audition verdicts in the pages' shapes: round 2 decides over round 1 either way, a pick overrides a mark of either round, a set made after the audition began with no pick or verdict since is left out and named, one made before it ships from first candidates, listed and marked picked: false");
+
+      // A run over one row keeps every other row's takes, even with no manifest to
+      // list them (the first run on a folder an earlier tool processed).
+      const sub = join(scratch, "process-subset");
+      const subTake = (name) => join(sub, "game", "test", name);
+      cpSync(join(out, "candidates"), join(sub, "candidates"), { recursive: true });
+      const whole = await runTool(["--out", sub, "--process", "--sheet", fixturePath]);
+      rmSync(join(sub, "game", "sfx.json"), { force: true });
+      for (const name of ["coin_02.ogg", "mystery_02.ogg"]) writeFileSync(subTake(name), "not audio\n");
+      const others = ["shot_01.ogg", "shot_02.ogg", "bed_01.ogg", "bed_raw_01.ogg", "mystery_02.ogg"];
+      const othersBefore = others.map((name) => (existsSync(subTake(name)) ? readFileSync(subTake(name)) : null));
+      const one = await runTool(["--out", sub, "--process", "--sheet", fixturePath, "--id", "hit"]);
+      const oneSounds = existsSync(join(sub, "game", "sfx.json")) ? Object.keys(JSON.parse(readFileSync(join(sub, "game", "sfx.json"), "utf8")).sounds) : [];
+      check(whole.code === 0 && one.code === 0 && others.every((name, index) => othersBefore[index] && existsSync(subTake(name)) && readFileSync(subTake(name)).equals(othersBefore[index])) && oneSounds.join() === "hit",
+        `--process --id hit with no manifest touched other rows' takes (exit ${whole.code}, ${one.code}; manifest ${oneSounds.join(", ")}): ${one.all.trim()}`);
+      check(!existsSync(subTake("coin_02.ogg")) && one.stdout.includes("removed game/test/coin_02.ogg: a retired output"), `a run over one row did not remove a retired row's take: ${one.stdout.trim()}`);
+      passes.push("a run over one row with no manifest kept every other row's takes and a take of no known row, and removed a retired row's take");
 
       // A quiet take (a -55 dBFS burst) is trimmed from its own peak, so it is
       // kept whole, not called silent.
@@ -845,8 +910,8 @@ function synthesize(file, filter, inputs) {
       passes.push(`a quiet take (a -55 dBFS burst of 0.08 s) is trimmed from its own peak and kept whole (${softSeconds.toFixed(3)} s)`);
 
       // A near-silent candidate (a -80 dBFS tone) is named by id and candidate;
-      // the rest of its row and the other rows are still processed, and the run
-      // ends non-zero listing the failed row.
+      // the other rows are still processed, its row gets no take made in this
+      // run, and the run ends non-zero listing the failed row.
       const quiet = join(scratch, "process-quiet");
       const quietShot = join(quiet, "candidates", "shot");
       mkdirSync(quietShot, { recursive: true });
@@ -857,11 +922,13 @@ function synthesize(file, filter, inputs) {
       const quietTake = (name) => join(quiet, "game", "test", name);
       check(quietRun.code === 1 && quietRun.stderr.includes("shot c01: silent after trimming; pick another take or regenerate"), `a near-silent candidate was not named as silent by id and candidate (exit ${quietRun.code}): ${quietRun.stderr.trim()}`);
       check(/failed rows: shot \(c01\)$/mu.test(quietRun.stderr), `the run did not end by listing exactly the failed row: ${quietRun.stderr.trim()}`);
-      check(["shot_02.ogg", "bed_01.ogg", "bed_raw_01.ogg", "hit_01.ogg"].every((name) => existsSync(quietTake(name))), "after the near-silent take, the rest of its row and the other rows were not processed");
-      passes.push("a near-silent candidate (-80 dBFS) is named (shot c01, silent after trimming); its row's other take and the other rows are processed, and the run exits 1 listing the failed row");
+      check(["bed_01.ogg", "bed_raw_01.ogg", "hit_01.ogg"].every((name) => existsSync(quietTake(name))) && !existsSync(quietTake("shot_01.ogg")) && !existsSync(quietTake("shot_02.ogg"))
+        && quietRun.stderr.includes("FAIL: shot: left as it was in game/ and sfx.json; its 1 other take made now is not used"),
+      `after the near-silent take, the other rows were not processed, or its row got part of a new set: ${quietRun.all.trim()}`);
+      passes.push("a near-silent candidate (-80 dBFS) is named (shot c01, silent after trimming); the other rows are processed, its row gets none of the takes made with it, and the run exits 1 listing the failed row");
 
-      // A take that fails takes its earlier output with it, named in the FAIL
-      // line, and a failed row keeps no stale takes either.
+      // A row with a take that fails is left as it was, its earlier takes and
+      // manifest entry included, and the FAIL line says so: never a mix of sets.
       const replace = join(scratch, "process-replace");
       const replaceShot = join(replace, "candidates", "shot");
       const replaceTake = (name) => join(replace, "game", "test", name);
@@ -869,12 +936,17 @@ function synthesize(file, filter, inputs) {
       for (const n of [1, 2]) cpSync(join(shotDir, `shot.c0${n}.wav`), join(replaceShot, `shot.c0${n}.wav`));
       const before = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
       check(before.code === 0 && existsSync(replaceTake("shot_01.ogg")) && existsSync(replaceTake("shot_02.ogg")), `the first --process of the replace case failed (exit ${before.code})`);
+      const earlierTakes = ["shot_01.ogg", "shot_02.ogg"].map((name) => (existsSync(replaceTake(name)) ? readFileSync(replaceTake(name)) : null));
+      const earlierEntry = existsSync(join(replace, "game", "sfx.json")) ? JSON.parse(readFileSync(join(replace, "game", "sfx.json"), "utf8")).sounds.shot : null;
       fromExpression(join(replaceShot, "shot.c02.wav"), NEAR_SILENT, 0.5);
       writeFileSync(join(replace, "picks.json"), JSON.stringify({ shot: [2] }));
       const after = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
-      check(after.code === 1 && after.stderr.includes("shot c02: silent after trimming") && after.stderr.includes("removed the earlier game/test/shot_01.ogg"), `a failed take did not remove and name its earlier output (exit ${after.code}): ${after.stderr.trim()}`);
-      check(!existsSync(replaceTake("shot_01.ogg")) && !existsSync(replaceTake("shot_02.ogg")), `the failed row left earlier takes in game/: ${listDir(join(replace, "game", "test")).join(", ")}`);
-      passes.push("a take that fails removes its earlier output and says so; a failed row keeps no stale takes");
+      const afterEntry = existsSync(join(replace, "game", "sfx.json")) ? JSON.parse(readFileSync(join(replace, "game", "sfx.json"), "utf8")).sounds.shot : null;
+      check(after.code === 1 && after.stderr.includes("shot c02: silent after trimming") && after.stderr.includes("FAIL: shot: left as it was in game/ and sfx.json; no take of it was made"),
+        `a failed take did not leave its row as it was, said so (exit ${after.code}): ${after.stderr.trim()}`);
+      check(["shot_01.ogg", "shot_02.ogg"].every((name, index) => earlierTakes[index] && existsSync(replaceTake(name)) && readFileSync(replaceTake(name)).equals(earlierTakes[index]))
+        && earlierEntry && JSON.stringify(afterEntry) === JSON.stringify(earlierEntry), `the failed row's earlier takes or manifest entry changed: ${listDir(join(replace, "game", "test")).join(", ")}; ${JSON.stringify(afterEntry)}`);
+      passes.push("a row with a take that fails is left as it was, takes and manifest entry, and says so");
 
       // Stand-ins that answer with real one-shot audio, like the API's 48 kHz
       // stereo WAV: request k gets a noise burst BURSTS[offset + k - 1] seconds
@@ -908,33 +980,42 @@ function synthesize(file, filter, inputs) {
       const morePath = shotVariant("more", (row) => { row.candidates_per_take = 3; });
 
       // Picks across --force-id, by recorded facts, not file times. The forced
-      // row's picks are recorded when its set goes aside; --process refuses them
-      // while picks.json holds the same list, however recently picks.json was
-      // saved, and takes picks made from the fresh set.
+      // row's picks are recorded when its set goes aside; --process refuses picks
+      // made only of those numbers (in any order, or fewer of them), however
+      // recently picks.json was saved, and takes picks made from the fresh set.
       const forcedOut = join(scratch, "process-forced");
       const forcedTake = (name) => join(forcedOut, "game", "test", name);
+      const heardTakes = () => ["shot_01.ogg", "shot_02.ogg"].map((name) => (existsSync(forcedTake(name)) ? readFileSync(forcedTake(name)) : null));
       let api = await burstApi(0);
       const firstSet = await runTool(["--out", forcedOut, "--generate", "--sheet", metalPath, "--id", "shot", "--concurrency", "1"], { env: withKey(api) });
       await api.close();
       writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1] }));
       const firstTakes = await runTool(["--out", forcedOut, "--process", "--sheet", metalPath, "--id", "shot"]);
-      const heard = existsSync(forcedTake("shot_01.ogg")) ? readFileSync(forcedTake("shot_01.ogg")) : null;
+      const heard = heardTakes();
       check(firstSet.code === 0 && firstTakes.code === 0 && burstOf(forcedTake("shot_01.ogg")) === 2, `the first set and its picked takes were not made (exit ${firstSet.code}, ${firstTakes.code}): ${firstTakes.all.trim()}`);
+      const stillHeard = () => heardTakes().every((bytes, index) => bytes && heard[index] && bytes.equals(heard[index]));
       // The prompt has changed since, so the complete set is forced without --force-again.
       api = await burstApi(4);
       const reworded = await runTool(["--out", forcedOut, "--generate", "--sheet", fixturePath, "--id", "shot", "--force-id", "shot", "--concurrency", "1"], { env: withKey(api) });
       await api.close();
       check(reworded.code === 0 && api.requests.length === shotGenerations, `--force-id of a set made with another prompt needed more than --force-id (exit ${reworded.code}, ${api.requests.length} requests): ${reworded.stderr.trim()}`);
-      // picks.json saved again later (another row picked, the file now newer than
-      // every candidate) still holds shot's old list: refused, and game/ keeps the heard take.
+      // A first full run with no manifest (as on a folder an earlier tool
+      // processed), picks.json saved again later for another row and now newer
+      // than every candidate: shot is refused and its heard takes stay untouched.
+      rmSync(join(forcedOut, "game", "sfx.json"), { force: true });
       writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1], gone: [1] }));
       const inAnHour = new Date(Date.now() + 3600_000);
       utimesSync(join(forcedOut, "picks.json"), inAnHour, inAnHour);
-      const stalePicks = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
-      check(stalePicks.code === 1 && stalePicks.stderr.includes("FAIL: shot: picks.json still picks c02, c01") && stalePicks.stderr.includes("Listen to them and update shot in picks.json")
-        && heard !== null && existsSync(forcedTake("shot_01.ogg")) && readFileSync(forcedTake("shot_01.ogg")).equals(heard),
-      `picks made before --force-id were taken for the new, unheard set after picks.json was saved again (exit ${stalePicks.code}): ${stalePicks.all.trim()}`);
+      const stalePicks = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath]);
+      check(stalePicks.code === 1 && stalePicks.stderr.includes("FAIL: shot: picks.json picks c02, c01, only numbers it had picked before --force-id") && stalePicks.stderr.includes("Listen to them and update shot in picks.json") && stillHeard(),
+        `picks made before --force-id were taken for the new, unheard set, or the refused row's heard takes were touched, on a full run with no manifest (exit ${stalePicks.code}): ${stalePicks.all.trim()}`);
       check(stalePicks.stderr.includes("names gone, which is not in the sheet; ignored"), `an id in picks.json that is not in the sheet was not named and ignored: ${stalePicks.stderr.trim()}`);
+      // Fewer of the recorded numbers, or the same in another order: still the old set's picks.
+      for (const list of [[1], [1, 2]]) {
+        writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: list }));
+        const partial = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
+        check(partial.code === 1 && partial.stderr.includes("only numbers it had picked before --force-id") && stillHeard(), `picks ${JSON.stringify(list)}, only numbers recorded before --force-id, were taken (exit ${partial.code}): ${partial.all.trim()}`);
+      }
       // Picked from the fresh set: taken.
       writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [4, 3] }));
       const repicked = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
@@ -944,11 +1025,12 @@ function synthesize(file, filter, inputs) {
       writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1] }));
       const sameNumbers = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
       const record = "candidates/shot/.picks-before-force.json";
-      check(sameNumbers.code === 1 && sameNumbers.stderr.includes(`delete ${record}`) && burstOf(forcedTake("shot_01.ogg")) === 8, `the old numbers picked again were not refused with the record to delete (exit ${sameNumbers.code}): ${sameNumbers.stderr.trim()}`);
+      check(sameNumbers.code === 1 && sameNumbers.stderr.includes(`delete ${record}, which is the only way past this check`) && burstOf(forcedTake("shot_01.ogg")) === 8,
+        `the old numbers picked again were not refused with the record to delete (exit ${sameNumbers.code}): ${sameNumbers.stderr.trim()}`);
       rmSync(join(forcedOut, record), { force: true });
       const confirmed = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
       check(confirmed.code === 0 && burstOf(forcedTake("shot_01.ogg")) === 6, `with the record deleted, the same numbers did not take the fresh candidates (exit ${confirmed.code}): ${confirmed.all.trim()}`);
-      passes.push("picks across --force-id: recorded as the set went aside; refused while picks.json holds the same list, even saved again later for another row (game/ kept the heard take); taken once picked from the fresh set, the same numbers once the record is deleted; a set made with another prompt is forced without --force-again; an id not in the sheet is named and ignored");
+      passes.push("picks across --force-id: recorded as the set went aside; picks made only of those numbers (all, fewer, reordered) refused, even with picks.json saved later and on a full run with no manifest, whose refused row kept its heard takes; taken once picked from the fresh set, the same numbers once the record is deleted; a set made with another prompt is forced without --force-again; an id not in the sheet is named and ignored");
 
       // A plain copy of the folder (new file times, picks.json the oldest file) takes its picks as they are.
       const copied = join(scratch, "process-copied");

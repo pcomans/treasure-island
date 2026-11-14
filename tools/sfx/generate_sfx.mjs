@@ -27,12 +27,12 @@
 //                                          the row's picks when --force-id set its candidates aside
 //   DIR/generation-log.jsonl               a line a request: id, prompt, model, settings, status, credits, time, file
 //   DIR/picks.json                         optional, by hand: {"<id>": [candidate numbers, in take order]}
-//   DIR/audition-notes.json                optional, from the audition page: {"<id>": {"none_good": true, ...}}
+//   DIR/audition-notes.json                optional, from the audition pages: each row's round-1 and round-2 verdicts
 //   DIR/game/<group>/<name>_NN.ogg         the processed takes for the game (--process, needs ffmpeg)
 //   DIR/game/sfx.json                      the manifest the game reads: each sound's gain and takes
 
 import { spawnSync } from "node:child_process";
-import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { open, rename } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
@@ -93,12 +93,9 @@ const FORCE_MARK = ".forced";
 // The picks a row had when --force-id set its candidates aside. It outlives the
 // fresh set, so --process can tell those picks from ones made of the new set.
 const PICKS_BEFORE_FORCE = ".picks-before-force.json";
-// The audition page's notes beside picks.json; a row marked none good and not
-// picked is left out of game/.
+// The audition pages' verdicts beside picks.json (round 1, and round 2 under
+// "round2"); a row they reject and nobody picked is left out of game/.
 const NOTES_NAME = "audition-notes.json";
-// What --process writes in game/: <group>/<name>_NN.ogg, as the rows' output patterns give.
-const GROUP_RE = /^[a-z]+$/u;
-const TAKE_FILE_RE = /^[a-z0-9_]+_\d{2}\.ogg$/u;
 // Post-processing: silence kept before a one-shot's onset and after its tail;
 // a take shorter than MIN_TAKE_S after trimming, or peaking at SILENT_DBFS or
 // below, counts as silent.
@@ -118,7 +115,7 @@ const MATCH_PASSES = 2;
 const MANIFEST_NAME = "sfx.json";
 export const MANIFEST_SCHEMA = "ti.sfx-manifest/1";
 
-const SHEET_FIELDS = ["car", "credits_per_second", "encode", "events", "loudness", "model_id", "not_voiced", "notes", "output_format", "plan", "recipes", "schema_version", "sounds"];
+const SHEET_FIELDS = ["car", "credits_per_second", "encode", "events", "loudness", "model_id", "not_voiced", "notes", "output_format", "plan", "recipes", "retired_outputs", "schema_version", "sounds"];
 const ROW_FIELDS = ["candidates_per_take", "duration_seconds", "events", "id", "keep_takes", "level_db", "loop", "loudness_class", "notes", "output", "prompt", "prompt_influence", "recipe", "tier"];
 const ONE_SHOT_RECIPE_FIELDS = ["channels", "fade_in_ms", "fade_out_ms", "max_seconds", "peak_dbfs", "trim_end_db", "trim_start_db", "what"];
 const LOOP_RECIPE_FIELDS = ["channels", "loop_crossfade_ms", "peak_dbfs", "trim_end_db", "trim_start_db", "what"];
@@ -288,6 +285,14 @@ export function validateSheet(sheet) {
     }
   });
   for (const name of Object.keys(recipes)) if (!usedRecipes.has(name)) problem(`recipe ${name} is not used by any sound`);
+  // The outputs of rows taken out of the sheet: --process removes their takes from game/.
+  const retired = sheet.retired_outputs ?? {};
+  if (!isObject(retired)) problem("retired_outputs must be an object (output pattern: which row it was and why it went)");
+  for (const [output, why] of Object.entries(isObject(retired) ? retired : {})) {
+    if (!OUTPUT_RE.test(output)) problem(`retired output ${output} must be like group/name_{take}.ogg`);
+    else if (outputs.has(output)) problem(`retired output ${output} is still a sound's output`);
+    if (typeof why !== "string" || !why.trim()) problem(`retired output ${output} needs a reason`);
+  }
   for (const [id, reason] of Object.entries(notVoiced)) {
     if (!Object.hasOwn(events, id)) problem(`not_voiced names unknown event ${id}`);
     if (typeof reason !== "string" || !reason.trim()) problem(`not_voiced ${id} needs a reason`);
@@ -340,7 +345,6 @@ const candidateFile = (out, sheet, row, n) => join(out, "candidates", row.id, ca
 const forceMark = (out, row) => join(out, "candidates", row.id, FORCE_MARK);
 const picksBeforeForce = (out, row) => join(out, "candidates", row.id, PICKS_BEFORE_FORCE);
 const presentOf = (out, sheet, row) => Array.from({ length: generationsOf(row) }, (_, i) => i + 1).filter((n) => existsSync(candidateFile(out, sheet, row, n)));
-const sameList = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value, index) => value === b[index]);
 
 // The rows a run works on, in sheet order. Unknown ids throw (a usage error).
 export function selectRows(sheet, { tiers = [], ids = [] } = {}) {
@@ -504,24 +508,29 @@ function resumeCommand(args, out) {
 
 // --- Dry run ---------------------------------------------------------------
 
+// The generation log's "ok" lines by file: each candidate's own line is the
+// last one naming its file, since a file made again after --force-id is logged
+// after the one it replaced. A line records the prompt, settings and time.
+function readLog(out) {
+  const logged = new Map();
+  const logPath = join(out, "generation-log.jsonl");
+  if (!existsSync(logPath)) return logged;
+  for (const line of readFileSync(logPath, "utf8").split("\n")) {
+    try {
+      const entry = JSON.parse(line);
+      if (entry?.status === "ok" && typeof entry.file === "string") logged.set(entry.file, entry);
+    } catch {
+      // A torn last line from an interrupted run; the file it named is checked on disk.
+    }
+  }
+  return logged;
+}
+
 // For each row: which candidates are on disk, which of them the generation log
 // shows were made with other settings than the sheet's (stale), and whether the
 // set is complete and logged as made entirely with the sheet's settings (current).
-// A candidate's own log line is the last "ok" line naming its file, since a
-// file made again after --force-id is logged after the one it replaced.
 function survey(out, sheet, rows, forced) {
-  const logged = new Map();
-  const logPath = join(out, "generation-log.jsonl");
-  if (existsSync(logPath)) {
-    for (const line of readFileSync(logPath, "utf8").split("\n")) {
-      try {
-        const entry = JSON.parse(line);
-        if (entry?.status === "ok" && typeof entry.file === "string") logged.set(entry.file, entry);
-      } catch {
-        // A torn last line from an interrupted run; the file it named is checked on disk.
-      }
-    }
-  }
+  const logged = readLog(out);
   return rows.map((row) => {
     const format = formatOf(sheet, row);
     const present = presentOf(out, sheet, row);
@@ -950,12 +959,42 @@ function readPicks(out, sheet) {
   return found;
 }
 
-// The rows audition-notes.json marks none good. The audition page writes
-// {"<id>": {"none_good": true, "note": "...", "updated": "<time>"}}; only
-// none_good is read, and ids not in the sheet are ignored.
-function readNoneGood(out, sheet) {
+// audition-notes.json as the audition pages write it (format in the README):
+//   {"<id>": {"none_good": <bool>, "note": "...", "updated": "<time>",                     round 1
+//             "round2": {"still_not_right": <bool>, "note": "...", "updated": "<time>"}}}   round 2
+// Returns the notes by id, and when the owner first saved any of them (ms, or
+// null when nothing is dated). A set made before then was there to be judged.
+function readNotes(out) {
   const notes = readObject(join(out, NOTES_NAME), "{\"<id>\": {\"none_good\": true, ...}}") ?? {};
-  return new Set(sheet.sounds.filter((row) => notes[row.id]?.none_good === true).map((row) => row.id));
+  const saved = Object.values(notes).flatMap((entry) => [entry?.updated, entry?.round2?.updated]).map((time) => Date.parse(time)).filter(Number.isFinite);
+  return { notes, auditionStart: saved.length ? Math.min(...saved) : null };
+}
+
+// The verdict that decides a row: round 2's when the row has one, otherwise
+// round 1's; null when it has neither. { round, rejected, at (ms, or NaN) }.
+function verdictOf(entry) {
+  if (isObject(entry?.round2)) return { round: 2, rejected: entry.round2.still_not_right === true, at: Date.parse(entry.round2.updated) };
+  if (isObject(entry) && typeof entry.none_good === "boolean") return { round: 1, rejected: entry.none_good, at: Date.parse(entry.updated) };
+  return null;
+}
+
+// When a row's current candidates were made: the latest time the generation
+// log records for them (ms), or null when one of them is not in the log.
+function madeOf(out, sheet, row, present, logged) {
+  const times = present.map((n) => Date.parse(logged.get(relative(out, candidateFile(out, sheet, row, n)))?.time));
+  return times.length && times.every(Number.isFinite) ? Math.max(...times) : null;
+}
+
+// Why the first candidates of a row nobody picked or rejected must stay out of
+// game/, or null when they may go in. They are unheard when the set was made,
+// or added to, after the audition began and no verdict on the row was saved
+// since. Before any dated verdict (no audition yet), the first candidates go in.
+function unheardWhy(verdict, made, auditionStart) {
+  if (auditionStart === null) return null;
+  if (made === null) return "unheard: the generation log does not date its candidates";
+  if (Number.isFinite(verdict?.at) && verdict.at >= made) return null;
+  if (made < auditionStart) return null;
+  return "unheard: its candidates were made after the audition began, and nobody has picked or judged them since";
 }
 
 // What --force-id recorded for a row: { picks } or null; { broken } when unreadable.
@@ -971,6 +1010,24 @@ function picksBeforeForceOf(out, row) {
   return { broken: true };
 }
 
+// Removes the takes of one output pattern (game/<group>/<name>_NN.ogg) numbered
+// above keep, all of them for 0: files only, in a real folder of game/.
+// Returns their paths relative to DIR.
+function removeTakes(out, output, keep) {
+  const [, group, name] = output.match(OUTPUT_RE);
+  const folder = join(out, "game", group);
+  if (!existsSync(folder) || !lstatSync(folder).isDirectory()) return [];
+  const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
+  const removed = [];
+  for (const file of readdirSync(folder, { withFileTypes: true })) {
+    const match = file.name.match(pattern);
+    if (!file.isFile() || !match || Number(match[1]) <= keep) continue;
+    unlinkSync(join(folder, file.name));
+    removed.push(relative(out, join(folder, file.name)));
+  }
+  return removed.sort();
+}
+
 function postProcess({ sheet, out, rows }) {
   for (const tool of ["ffmpeg", "ffprobe"]) {
     const probe = spawnSync(tool, ["-version"], { encoding: "utf8" });
@@ -984,18 +1041,29 @@ function postProcess({ sheet, out, rows }) {
     return 1;
   }
   const { picks, bad: badPicks } = readPicks(out, sheet);
-  const noneGood = readNoneGood(out, sheet);
+  const { notes, auditionStart } = readNotes(out);
+  const logged = readLog(out);
   const work = mkdtempSync(join(out, ".work-"));
-  // A take that fails is reported with its candidate; the rest of its row and
-  // the other rows still go on, and the failed rows are listed at the end. A
-  // refused row keeps its entry in game/sfx.json, and the takes it lists, as they were.
+  // A take that fails is reported with its candidate, and the other rows still
+  // go on; the failed rows are listed at the end. A failed row (refused before
+  // processing, or with a take that failed), a skipped row and every row
+  // outside the run keep their takes in game/ and their entry in game/sfx.json,
+  // if any, as they were.
   // A row with picks gets exactly the picked takes, fewer than keep_takes if
   // so picked: unpicked candidates never fill the gap.
   const failedRows = [];
   const entries = {};
   const leftOut = [];
+  const unpicked = [];
   let skipped = 0;
   let takes = 0;
+  // A row left out of game/: its takes go, and so does its manifest entry.
+  const leaveOut = (row, why) => {
+    const gone = removeTakes(out, row.output, 0);
+    entries[row.id] = null;
+    leftOut.push({ id: row.id, why });
+    console.log(`${row.id}: left out of game/ and ${MANIFEST_NAME}, ${why}${gone.length ? `; removed ${gone.join(", ")}` : ""}`);
+  };
   try {
     for (const row of rows) {
       const recipe = sheet.recipes[row.recipe];
@@ -1007,8 +1075,11 @@ function postProcess({ sheet, out, rows }) {
       }
       let chosen = picks[row.id];
       if (chosen) {
-        // Picks still the same as when --force-id set the row's candidates aside
-        // were made of that earlier set: they would now name candidates nobody has heard.
+        // A pick overrides a not-good mark: both audition pages clear a row's
+        // picks when they mark it, so a pick still there was saved after the mark.
+        // Picks made only of numbers the row had picked when --force-id set its
+        // candidates aside were picks of that set: those numbers now name new,
+        // unheard candidates.
         const before = picksBeforeForceOf(out, row);
         const record = relative(out, picksBeforeForce(out, row));
         if (before?.broken) {
@@ -1016,9 +1087,9 @@ function postProcess({ sheet, out, rows }) {
           failedRows.push(`${row.id} (${record} unreadable)`);
           continue;
         }
-        if (before && sameList(before.picks, chosen)) {
-          const names = chosen.map((n) => `c${pad2(n)}`).join(", ");
-          console.error(`FAIL: ${row.id}: picks.json still picks ${names}, the picks it had when --force-id set that set aside (to ${before.set_aside_in}); the candidates with those numbers now are new and unheard. Listen to them and update ${row.id} in picks.json. If you picked the same numbers again from the new set, delete ${record}.`);
+        if (before && chosen.every((n) => before.picks.includes(n))) {
+          const names = (list) => list.map((n) => `c${pad2(n)}`).join(", ");
+          console.error(`FAIL: ${row.id}: picks.json picks ${names(chosen)}, only numbers it had picked before --force-id set that set aside (${names(before.picks)}, now in ${before.set_aside_in}); the candidates with those numbers now are new and unheard. Listen to them and update ${row.id} in picks.json. If these numbers are right in the new set too, delete ${record}, which is the only way past this check.`);
           failedRows.push(`${row.id} (picks made before --force-id)`);
           continue;
         }
@@ -1028,18 +1099,25 @@ function postProcess({ sheet, out, rows }) {
           failedRows.push(`${row.id} (picked ${missing.map((n) => `c${pad2(n)}`).join(", ")} not on disk)`);
           continue;
         }
-      } else if (noneGood.has(row.id)) {
-        // The owner heard the set and kept none: the game plays nothing for it.
-        console.log(`${row.id}: marked none good in ${NOTES_NAME} and not picked, so it is left out of game/ and ${MANIFEST_NAME}; pick a candidate in picks.json to bring it back.`);
-        entries[row.id] = null;
-        leftOut.push(row.id);
-        continue;
-      } else if (present.length >= row.keep_takes) {
-        chosen = present.slice(0, row.keep_takes);
       } else {
-        console.error(`NOTE: ${row.id}: skipped, ${present.length} of the ${row.keep_takes} takes it keeps are on disk and picks.json names none; run --generate first`);
-        skipped += 1;
-        continue;
+        // Nobody picked: the deciding verdict may reject the row; otherwise its
+        // first candidates go in, unless nobody has heard them.
+        const verdict = verdictOf(notes[row.id]);
+        if (verdict?.rejected) {
+          leaveOut(row, `marked not good in round ${verdict.round}`);
+          continue;
+        }
+        if (present.length < row.keep_takes) {
+          console.error(`NOTE: ${row.id}: skipped, ${present.length} of the ${row.keep_takes} takes it keeps are on disk and picks.json names none; run --generate first`);
+          skipped += 1;
+          continue;
+        }
+        const unheard = unheardWhy(verdict, madeOf(out, sheet, row, present, logged), auditionStart);
+        if (unheard) {
+          leaveOut(row, unheard);
+          continue;
+        }
+        chosen = present.slice(0, row.keep_takes);
       }
       const [, group, name] = row.output.match(OUTPUT_RE);
       const folder = join(out, "game", group);
@@ -1055,13 +1133,17 @@ function postProcess({ sheet, out, rows }) {
           const gain = encodeTake(sheet, recipe, source, part, recipe.peak_dbfs - peak);
           made.push({ n, output, source, part, gain, seconds: samples / sheet.encode.sample_rate, loudness: loudnessOf(part, row.loop, ["-f", "ogg"]) });
         } catch (error) {
-          // An earlier run's take must not stay, unannounced, in place of the one that failed.
-          const earlier = existsSync(output);
-          if (earlier) unlinkSync(output);
-          console.error(`FAIL: ${row.id} c${pad2(n)}: ${error.message}${earlier ? `; removed the earlier ${relative(out, output)}` : ""}`);
+          console.error(`FAIL: ${row.id} c${pad2(n)}: ${error.message}`);
           bad.push(`c${pad2(n)}`);
         }
       });
+      // A row is replaced whole or not at all: with a take failed, its takes in
+      // game/ and its manifest entry stay as they were, and none made now is used.
+      if (bad.length) {
+        console.error(`FAIL: ${row.id}: left as it was in game/ and ${MANIFEST_NAME}; ${made.length ? `its ${plural(made.length, "other take")} made now ${made.length === 1 ? "is" : "are"} not used` : "no take of it was made"}`);
+        failedRows.push(`${row.id} (${bad.join(", ")})`);
+        continue;
+      }
       // Loudness-match the row's takes, so a randomly chosen take never jumps in
       // level: each louder than the quietest by more than MATCH_EPS_LU is turned
       // down to it, which only lowers its peak.
@@ -1085,47 +1167,28 @@ function postProcess({ sheet, out, rows }) {
       }
       for (const take of made) {
         renameSync(take.part, take.output);
-        console.log(`${relative(out, take.output)}  ${take.seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(take.n)}${picks[row.id] ? "" : " (first on disk)"}  ${take.loudness.toFixed(1)} LUFS`);
+        console.log(`${relative(out, take.output)}  ${take.seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(take.n)}${picks[row.id] ? "" : " (first on disk, nobody picked)"}  ${take.loudness.toFixed(1)} LUFS`);
         takes += 1;
       }
-      // Takes beyond the ones kept now (fewer picks than before) are stale, failed row or not.
-      const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
-      for (const file of readdirSync(folder)) {
-        const match = file.match(pattern);
-        if (match && Number(match[1]) > chosen.length) unlinkSync(join(folder, file));
-      }
-      if (bad.length) failedRows.push(`${row.id} (${bad.join(", ")})`);
-      entries[row.id] = made.length ? manifestEntry(sheet, row, recipe, made, join(out, "game")) : null;
+      // The row keeps only the takes made now: higher numbers (an earlier run's,
+      // when it kept more) go.
+      for (const path of removeTakes(out, row.output, chosen.length)) console.log(`removed ${path}: ${row.id} keeps ${plural(chosen.length, "take")} now`);
+      entries[row.id] = manifestEntry(sheet, row, recipe, made, join(out, "game"), Boolean(picks[row.id]));
+      if (!picks[row.id]) unpicked.push(row.id);
     }
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  const sounds = writeManifest(out, sheet, entries);
-  for (const path of sweepGame(out, sounds)) console.log(`removed game/${path}: no entry in ${MANIFEST_NAME} lists it`);
-  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped, ${leftOut.length} left out as none good. Levels: ${join(out, "game", MANIFEST_NAME)}`);
+  writeManifest(out, sheet, entries);
+  // Rows taken out of the sheet: their takes go, whatever the run's selection.
+  for (const [output, why] of Object.entries(sheet.retired_outputs ?? {})) {
+    for (const path of removeTakes(out, output, 0)) console.log(`removed ${path}: a retired output (${why})`);
+  }
+  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped, ${leftOut.length} left out. Levels: ${join(out, "game", MANIFEST_NAME)}`);
+  if (unpicked.length) console.log(`NOTE: processed from first candidates nobody picked: ${unpicked.join(", ")} ("picked": false in ${MANIFEST_NAME})`);
+  if (leftOut.length) console.log(`NOTE: left out of game/, so the game plays nothing for them: ${leftOut.map(({ id, why }) => `${id} (${why})`).join("; ")}`);
   if (failedRows.length) console.error(`FAIL: failed rows: ${failedRows.join("; ")}`);
   return failedRows.length || skipped ? 1 : 0;
-}
-
-// After --process, game/ holds exactly the takes the manifest lists, so a copy
-// of it ships exactly the manifest's set. Removed: any other file named like a
-// take (<group>/<name>_NN.ogg) directly in a folder of game/, such as the takes
-// of a row no longer in the sheet. Other files, links and deeper folders are
-// left alone. Returns the removed paths, relative to game/.
-function sweepGame(out, sounds) {
-  const game = join(out, "game");
-  const listed = new Set(Object.values(sounds).flatMap((entry) => (Array.isArray(entry?.takes) ? entry.takes : [])));
-  const removed = [];
-  for (const group of readdirSync(game, { withFileTypes: true })) {
-    if (!group.isDirectory() || !GROUP_RE.test(group.name)) continue;
-    for (const file of readdirSync(join(game, group.name), { withFileTypes: true })) {
-      const path = `${group.name}/${file.name}`;
-      if (!file.isFile() || !TAKE_FILE_RE.test(file.name) || listed.has(path)) continue;
-      unlinkSync(join(game, path));
-      removed.push(path);
-    }
-  }
-  return removed.sort();
 }
 
 // --- The manifest the game reads ---------------------------------------------
@@ -1134,12 +1197,14 @@ const MANIFEST_NOTES = Object.freeze([
   "Written by tools/generate-sfx --process from tools/sfx/prompts.json; the format is in tools/sfx/README.md. One entry a sound id.",
   "gain_db: the playback gain in dB for every take of the sound (Godot: volume_db), never above 0. It plays the takes at level_db, the row's planned loudness in LUFS: a one-shot's loudest momentary (400 ms) window, a loop's integrated loudness. In-engine modulation (impact strength, speed, distance) comes on top and should only lower it.",
   "loudness_lufs is the processed takes' measured loudness (the loudest take). A sound's takes are loudness-matched to within spread_lu. When shortfall_db is above 0, the takes cannot reach level_db within their peak ceiling, so the sound plays that much below its planned level.",
+  "picked: true when the owner picked the takes; false when they are the first candidates, which nobody picked.",
 ]);
 
 const round2 = (value) => Math.round(value * 100) / 100;
 
-// A row's manifest entry: its gain to its level from its loudest matched take.
-function manifestEntry(sheet, row, recipe, made, gameDir) {
+// A row's manifest entry: its gain to its level from its loudest matched take,
+// and whether its takes were picked or are first candidates nobody picked.
+function manifestEntry(sheet, row, recipe, made, gameDir, picked) {
   const loudest = Math.max(...made.map((take) => take.loudness));
   const spread = loudest - Math.min(...made.map((take) => take.loudness));
   const gain = Math.min(0, row.level_db - loudest);
@@ -1156,13 +1221,13 @@ function manifestEntry(sheet, row, recipe, made, gameDir) {
     shortfall_db: round2(shortfall),
     loop: row.loop,
     channels: recipe.channels,
+    picked,
     takes: made.map((take) => relative(gameDir, take.output)),
   };
 }
 
 // Updates DIR/game/sfx.json: entries for the rows just processed replace their
 // old ones (null drops one), rows no longer in the sheet go, the rest stay.
-// Returns the sounds it wrote.
 function writeManifest(out, sheet, entries) {
   const path = join(out, "game", MANIFEST_NAME);
   let sounds = {};
@@ -1181,7 +1246,6 @@ function writeManifest(out, sheet, entries) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(`${path}.part`, `${JSON.stringify({ schema_version: MANIFEST_SCHEMA, notes: MANIFEST_NOTES, sounds: kept }, null, 2)}\n`);
   renameSync(`${path}.part`, path);
-  return kept;
 }
 
 // --- Command line ----------------------------------------------------------
