@@ -73,7 +73,9 @@ extends SceneTree
 ##      (tipped past POLE_LIE_UP) within LAMP_SETTLE_S, its base within
 ##      POLE_REST_M of where it stood; a utility pole's wire spans now run from
 ##      the standing neighbours down to it, their felled ends within
-##      POLE_WIRE_DOWN_M of the ground; on foot the player walks through where it
+##      POLE_WIRE_DOWN_M of the ground; the run asks for its one hit sound
+##      (lamp_hit, from the felling code) and no car crash sound (the speed it
+##      took is no hit of the car's); on foot the player walks through where it
 ##      stood;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
@@ -188,6 +190,8 @@ var _shoreline_document: Dictionary
 
 func _initialize() -> void:
 	create_timer(900.0, true, false, true).timeout.connect(_on_timeout)
+	# Every sound request in the sound manager's log (7c's hits; silent: no takes).
+	Sound.record_requests = true
 	call_deferred("_run")
 
 
@@ -1734,6 +1738,7 @@ func _case_poles() -> bool:
 		# Driven at from run_up_m back on the stock W: it falls and the car carries on.
 		if not await _drive_from(car, _short_of_prop(pole, heading, float(fixture.run_up_m), car), heading):
 			return false
+		var sound_mark := Engine.get_process_frames()
 		var speed_in := 0.0
 		var speed_out := 0.0
 		var later := 0.0
@@ -1754,9 +1759,12 @@ func _case_poles() -> bool:
 				break
 		_release_driving()
 		var keep := props.keeps(id, car.mass)
-		print("POLE FELL %s at %.2f m/s: %.2f m/s the tick after (%.0f%% kept, its share %.0f%%), %.2f m/s half a second later" % [label, speed_in, speed_out, 100.0 * speed_out / maxf(speed_in, 0.01), 100.0 * keep, later])
+		var hit_sounds := _asked(&"lamp_hit", sound_mark)
+		var crash_sounds := _asked(&"car_impact_light", sound_mark) + _asked(&"car_impact_heavy", sound_mark) + _asked(&"car_tree_impact", sound_mark)
+		print("POLE FELL %s at %.2f m/s: %.2f m/s the tick after (%.0f%% kept, its share %.0f%%), %.2f m/s half a second later; %d hit sound, %d crash sounds" % [label, speed_in, speed_out, 100.0 * speed_out / maxf(speed_in, 0.01), 100.0 * keep, later, hit_sounds, crash_sounds])
 		if not _require(fell_tick >= 0 and speed_in >= fells_at, "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [label, float(fixture.run_up_m), props.is_felled(id), speed_in]) \
-		or not _require(speed_out >= (keep - POLE_KEEP_SLACK) * speed_in and later > 3.0, "The car did not carry on through %s (%.2f -> %.2f m/s, its share %.0f%%; %.2f m/s half a second later)." % [label, speed_in, speed_out, 100.0 * keep, later]):
+		or not _require(speed_out >= (keep - POLE_KEEP_SLACK) * speed_in and later > 3.0, "The car did not carry on through %s (%.2f -> %.2f m/s, its share %.0f%%; %.2f m/s half a second later)." % [label, speed_in, speed_out, 100.0 * keep, later]) \
+		or not _require(hit_sounds == 1 and crash_sounds == 0, "Knocking %s over asked for %d hit sounds (one) and %d car crash sounds (none)." % [label, hit_sounds, crash_sounds]):
 			return false
 		# It goes over where it stood and lies there, frozen on the ground.
 		var lying: RigidBody3D = null
@@ -1802,6 +1810,12 @@ func _poles_wires_down(props: FURNITURE_BREAKER, id: String, foot: Vector3, labe
 	print("POLE WIRES %s: %d spans now run from a standing neighbour down to it, their felled ends %.2f to %.2f m above where it stood" % [label, spans.size(), lowest, highest])
 	return _require(not spans.is_empty() and spans.all(func(span: Dictionary) -> bool: return not (span.get("wires", []) as Array).is_empty()), "The felled %s brought no wire span down with it (%s)." % [label, spans]) \
 	and _require(highest < POLE_WIRE_DOWN_M, "The felled %s's wires end %.2f m up, not down with it (under %.1f m)." % [label, highest, POLE_WIRE_DOWN_M])
+
+
+## How many times sound id was asked for since process frame mark, whatever came
+## of it (the contract has no takes: silent).
+func _asked(id: StringName, mark: int) -> int:
+	return _main.sound.requested(id).filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark).size()
 
 
 ## How far a prop reaches from its foot along a plan direction: a round pole's
