@@ -4,7 +4,7 @@
 // tools/generate-sfx, which puts the devcontainer's node on PATH.
 //
 //   tools/generate-sfx --out DIR [--tier 1,2] [--id ID,...]   dry run: what would be made, at what cost
-//   tools/generate-sfx --out DIR --generate [--force-id ID] [--concurrency N] [--tier ..] [--id ..]
+//   tools/generate-sfx --out DIR --generate [--force-id ID [--force-again]] [--concurrency N] [--tier ..] [--id ..]
 //                                                             make the candidates not yet in DIR
 //   tools/generate-sfx --out DIR --process [--tier ..] [--id ..]
 //                                                             trim, loop, normalise and encode the kept takes
@@ -14,17 +14,22 @@
 // this repository is public, so DIR must lie outside every Git work tree. A
 // candidate already in DIR is never requested again; --force-id ID first moves
 // that row's candidates into DIR/candidates/ID/replaced-<time>/, then makes a
-// fresh set (until that set is complete the same --force-id is refused, so a
-// rerun cannot pay for it twice). One --generate run at a time holds
-// DIR/.generate.lock. SIGTERM, SIGHUP or a first Ctrl-C stops new requests and
-// saves the ones in flight; a second Ctrl-C quits at once. The API key
-// (ELEVENLABS_API_KEY, from the environment or ~/.config/elevenlabs/.env) is
-// never printed or logged.
+// fresh set. So that a rerun cannot pay for a set twice, the same --force-id is
+// refused until that set is complete, and once a complete set was made with the
+// sheet's current prompt and settings it needs --force-again. One --generate run
+// at a time holds DIR/.generate.lock. SIGTERM, SIGHUP or a first Ctrl-C stops
+// new requests and saves the ones in flight; a second Ctrl-C quits at once. The
+// API key (ELEVENLABS_API_KEY, from the environment or ~/.config/elevenlabs/.env)
+// is never printed or logged.
 //
 //   DIR/candidates/<id>/<id>.cNN.<wav|mp3>  what ElevenLabs returned, one file a generation
+//   DIR/candidates/<id>/.picks-before-force.json
+//                                          the row's picks when --force-id set its candidates aside
 //   DIR/generation-log.jsonl               a line a request: id, prompt, model, settings, status, credits, time, file
 //   DIR/picks.json                         optional, by hand: {"<id>": [candidate numbers, in take order]}
+//   DIR/audition-notes.json                optional, from the audition page: {"<id>": {"none_good": true, ...}}
 //   DIR/game/<group>/<name>_NN.ogg         the processed takes for the game (--process, needs ffmpeg)
+//   DIR/game/sfx.json                      the manifest the game reads: each sound's gain and takes
 
 import { spawnSync } from "node:child_process";
 import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
@@ -85,6 +90,15 @@ const NOT_SENT_CODES = new Set(["ECONNREFUSED", "ENOTFOUND", "EAI_AGAIN", "UND_E
 // One --generate run at a time per output folder, and a forced set in progress.
 const LOCK_NAME = ".generate.lock";
 const FORCE_MARK = ".forced";
+// The picks a row had when --force-id set its candidates aside. It outlives the
+// fresh set, so --process can tell those picks from ones made of the new set.
+const PICKS_BEFORE_FORCE = ".picks-before-force.json";
+// The audition page's notes beside picks.json; a row marked none good and not
+// picked is left out of game/.
+const NOTES_NAME = "audition-notes.json";
+// What --process writes in game/: <group>/<name>_NN.ogg, as the rows' output patterns give.
+const GROUP_RE = /^[a-z]+$/u;
+const TAKE_FILE_RE = /^[a-z0-9_]+_\d{2}\.ogg$/u;
 // Post-processing: silence kept before a one-shot's onset and after its tail;
 // a take shorter than MIN_TAKE_S after trimming, or peaking at SILENT_DBFS or
 // below, counts as silent.
@@ -324,7 +338,9 @@ const formatOf = (sheet, row) => (row.loop ? sheet.output_format.loop : sheet.ou
 const candidateName = (sheet, row, n) => `${row.id}.c${pad2(n)}.${formatOf(sheet, row).split("_")[0]}`;
 const candidateFile = (out, sheet, row, n) => join(out, "candidates", row.id, candidateName(sheet, row, n));
 const forceMark = (out, row) => join(out, "candidates", row.id, FORCE_MARK);
+const picksBeforeForce = (out, row) => join(out, "candidates", row.id, PICKS_BEFORE_FORCE);
 const presentOf = (out, sheet, row) => Array.from({ length: generationsOf(row) }, (_, i) => i + 1).filter((n) => existsSync(candidateFile(out, sheet, row, n)));
+const sameList = (a, b) => Array.isArray(a) && Array.isArray(b) && a.length === b.length && a.every((value, index) => value === b[index]);
 
 // The rows a run works on, in sheet order. Unknown ids throw (a usage error).
 export function selectRows(sheet, { tiers = [], ids = [] } = {}) {
@@ -488,7 +504,11 @@ function resumeCommand(args, out) {
 
 // --- Dry run ---------------------------------------------------------------
 
-// For each row: which candidates are on disk, missing, or made from other settings.
+// For each row: which candidates are on disk, which of them the generation log
+// shows were made with other settings than the sheet's (stale), and whether the
+// set is complete and logged as made entirely with the sheet's settings (current).
+// A candidate's own log line is the last "ok" line naming its file, since a
+// file made again after --force-id is logged after the one it replaced.
 function survey(out, sheet, rows, forced) {
   const logged = new Map();
   const logPath = join(out, "generation-log.jsonl");
@@ -505,14 +525,13 @@ function survey(out, sheet, rows, forced) {
   return rows.map((row) => {
     const format = formatOf(sheet, row);
     const present = presentOf(out, sheet, row);
-    let stale = 0;
-    for (const n of present) {
-      const entry = logged.get(relative(out, candidateFile(out, sheet, row, n)));
-      if (entry && (entry.prompt !== row.prompt || entry.model_id !== sheet.model_id || entry.duration_seconds !== row.duration_seconds
-        || entry.loop !== row.loop || entry.prompt_influence !== row.prompt_influence || entry.output_format !== format)) stale += 1;
-    }
+    const made = present.map((n) => logged.get(relative(out, candidateFile(out, sheet, row, n))));
+    const matches = (entry) => entry.prompt === row.prompt && entry.model_id === sheet.model_id && entry.duration_seconds === row.duration_seconds
+      && entry.loop === row.loop && entry.prompt_influence === row.prompt_influence && entry.output_format === format;
+    const stale = present.filter((n, index) => made[index] && !matches(made[index]));
+    const current = present.length === generationsOf(row) && made.every((entry) => entry && matches(entry));
     const toMake = forced.has(row.id) ? generationsOf(row) : generationsOf(row) - present.length;
-    return { row, present, stale, toMake, toMakeCredits: Math.round(sheet.credits_per_second * row.duration_seconds * toMake) };
+    return { row, present, stale, current, toMake, toMakeCredits: Math.round(sheet.credits_per_second * row.duration_seconds * toMake) };
   });
 }
 
@@ -540,7 +559,9 @@ function printPlan(sheet, sheetPath, out, surveyed) {
   console.log(`total: ${plural(t.sounds, "sound")}, ${plural(t.gens, "generation")}, ${credits(t.credits)} credits; to make: ${credits(t.toMake)} (${sheet.plan.name} plan: ${credits(sheet.plan.credits_per_month)} credits a month)`);
   if (t.toMake > sheet.plan.credits_per_month) console.error(`NOTE: making all of this needs more than one month of the ${sheet.plan.name} plan's credits.`);
   for (const { row, stale } of surveyed) {
-    if (stale) console.error(`NOTE: ${row.id}: ${plural(stale, "candidate")} on disk came from other settings than the sheet's; --force-id ${row.id} makes a fresh set.`);
+    if (!stale.length) continue;
+    const names = stale.map((n) => `c${pad2(n)}`).join(", ");
+    console.error(`NOTE: ${row.id}: ${names} ${stale.length === 1 ? "was" : "were"} made with other settings than the sheet's (the generation log has each one's prompt). They stay, and new candidates use the sheet's; --force-id ${row.id} would set the whole set aside for a fresh one.`);
   }
   return t;
 }
@@ -569,13 +590,11 @@ function retryAfterSeconds(header) {
   return Number.isNaN(when) ? null : Math.min(RETRY_AFTER_CAP_S, Math.max(0, (when - Date.now()) / 1000));
 }
 
-// Moves every candidate file of a row aside (kept, never deleted), whatever its
-// number or format, so a set made when the row had more candidates, or another
-// output format, leaves no strays among the fresh set.
-function moveAside(out, sheet, row) {
-  const stamp = new Date().toISOString().replace(/[-:]/gu, "").replace(/\.\d+Z$/u, "Z");
+// Moves every candidate file of a row into the folder aside (kept, never
+// deleted), whatever its number or format, so a set made when the row had more
+// candidates, or another output format, leaves no strays among the fresh set.
+function moveAside(out, row, aside) {
   const folder = join(out, "candidates", row.id);
-  const aside = join(folder, `replaced-${stamp}`);
   const pattern = new RegExp(`^${row.id}\\.c\\d{2}\\.(?:wav|mp3)$`, "u");
   let moved = 0;
   for (const name of existsSync(folder) ? readdirSync(folder) : []) {
@@ -585,6 +604,18 @@ function moveAside(out, sheet, row) {
     moved += 1;
   }
   if (moved) console.log(`moved ${plural(moved, "candidate")} of ${row.id} to ${relative(out, aside)}`);
+}
+
+// Before a forced row's candidates go aside: records the picks that named them,
+// so --process can refuse those picks until they are made again from the fresh
+// set. A row without picks has nothing to record, and an older record goes.
+function recordPicksBeforeForce(out, row, picks, aside) {
+  const path = picksBeforeForce(out, row);
+  if (!Array.isArray(picks)) {
+    rmSync(path, { force: true });
+    return;
+  }
+  writeFileSync(path, `${JSON.stringify({ picks, set_aside_in: relative(out, aside), recorded: new Date().toISOString() })}\n`);
 }
 
 // The signals that stop a --generate run gently: no new requests, the ones in
@@ -599,7 +630,8 @@ class Interrupted extends Error {
 }
 
 // run: { stop, stopping, sending }, shared with main's signal handlers.
-async function generate({ sheet, out, surveyed, forced, key, base, concurrency, resume, run }) {
+// picked: picks.json as read before the run, for the forced rows' records.
+async function generate({ sheet, out, surveyed, forced, picked, key, base, concurrency, resume, run }) {
   const redact = (text) => String(text).split(key).join("[key]");
   const excerpt = (text) => redact(text).replace(/\s+/gu, " ").trim().slice(0, 400);
   const logPath = join(out, "generation-log.jsonl");
@@ -608,12 +640,16 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency, 
     console.error(`Stopped (${run.stop.message}) before any request; nothing was moved or made.`);
     return run.stop.exitCode;
   }
-  // A forced set is marked until it is complete, so the same --force-id cannot move it aside unfinished.
+  // A forced row's picks are recorded before its set goes aside, and the set is
+  // marked until it is complete, so the same --force-id cannot move it aside unfinished.
+  const stamp = new Date().toISOString().replace(/[-:]/gu, "").replace(/\.\d+Z$/u, "Z");
   for (const { row } of surveyed) {
     if (!forced.has(row.id)) continue;
+    const aside = join(out, "candidates", row.id, `replaced-${stamp}`);
     mkdirSync(join(out, "candidates", row.id), { recursive: true });
+    recordPicksBeforeForce(out, row, picked[row.id], aside);
     writeFileSync(forceMark(out, row), `${JSON.stringify({ started: new Date().toISOString(), pid: process.pid })}\n`);
-    moveAside(out, sheet, row);
+    moveAside(out, row, aside);
   }
   const unmarkComplete = () => {
     for (const { row } of surveyed) {
@@ -879,25 +915,60 @@ function shapeTake(sheet, recipe, input, stem) {
   return { source, samples, peak };
 }
 
-function readPicks(out, sheet) {
-  const path = join(out, "picks.json");
-  if (!existsSync(path)) return {};
-  let picks;
+// A JSON object from DIR, or null when the file is not there. Anything else
+// throws: the owner's choices in it cannot be read.
+function readObject(path, shape) {
+  if (!existsSync(path)) return null;
+  let value;
   try {
-    picks = JSON.parse(readFileSync(path, "utf8"));
+    value = JSON.parse(readFileSync(path, "utf8"));
   } catch (error) {
     throw new Error(`${path} is not valid JSON: ${error.message}`);
   }
-  if (!isObject(picks)) throw new Error(`${path} must be an object: {"<id>": [candidate numbers]}`);
+  if (!isObject(value)) throw new Error(`${path} must be an object: ${shape}`);
+  return value;
+}
+
+// picks.json: { picks: valid lists by id, bad: why a row's list cannot be right }.
+// An id not in the sheet (a row since dropped) is named and ignored.
+function readPicks(out, sheet) {
+  const path = join(out, "picks.json");
+  const found = { picks: {}, bad: new Map() };
+  const picks = readObject(path, "{\"<id>\": [candidate numbers]}") ?? {};
   const rows = new Map(sheet.sounds.map((row) => [row.id, row]));
   for (const [id, list] of Object.entries(picks)) {
     const row = rows.get(id);
-    if (!row) throw new Error(`${path} names ${id}, which is not in the sheet`);
+    if (!row) {
+      console.error(`NOTE: ${path} names ${id}, which is not in the sheet; ignored`);
+      continue;
+    }
     const valid = Array.isArray(list) && list.length >= 1 && list.length <= row.keep_takes && new Set(list).size === list.length
       && list.every((n) => Number.isInteger(n) && n >= 1 && n <= generationsOf(row));
-    if (!valid) throw new Error(`${path}: ${id} must list 1 to ${row.keep_takes} different candidate numbers from 1 to ${generationsOf(row)}`);
+    if (valid) found.picks[id] = list;
+    else found.bad.set(id, `${path} must list 1 to ${row.keep_takes} different candidate numbers from 1 to ${generationsOf(row)} for it`);
   }
-  return picks;
+  return found;
+}
+
+// The rows audition-notes.json marks none good. The audition page writes
+// {"<id>": {"none_good": true, "note": "...", "updated": "<time>"}}; only
+// none_good is read, and ids not in the sheet are ignored.
+function readNoneGood(out, sheet) {
+  const notes = readObject(join(out, NOTES_NAME), "{\"<id>\": {\"none_good\": true, ...}}") ?? {};
+  return new Set(sheet.sounds.filter((row) => notes[row.id]?.none_good === true).map((row) => row.id));
+}
+
+// What --force-id recorded for a row: { picks } or null; { broken } when unreadable.
+function picksBeforeForceOf(out, row) {
+  const path = picksBeforeForce(out, row);
+  if (!existsSync(path)) return null;
+  try {
+    const record = JSON.parse(readFileSync(path, "utf8"));
+    if (Array.isArray(record?.picks)) return record;
+  } catch {
+    // Reported as unreadable below.
+  }
+  return { broken: true };
 }
 
 function postProcess({ sheet, out, rows }) {
@@ -912,39 +983,57 @@ function postProcess({ sheet, out, rows }) {
     console.error(`FAIL: no candidates in ${out}; run ${TOOL} --out ${shellWord(out)} --generate first.`);
     return 1;
   }
-  const picks = readPicks(out, sheet);
-  const picksPath = join(out, "picks.json");
-  const picksTime = existsSync(picksPath) ? statSync(picksPath).mtimeMs : null;
+  const { picks, bad: badPicks } = readPicks(out, sheet);
+  const noneGood = readNoneGood(out, sheet);
   const work = mkdtempSync(join(out, ".work-"));
   // A take that fails is reported with its candidate; the rest of its row and
-  // the other rows still go on, and the failed rows are listed at the end.
+  // the other rows still go on, and the failed rows are listed at the end. A
+  // refused row keeps its entry in game/sfx.json, and the takes it lists, as they were.
   // A row with picks gets exactly the picked takes, fewer than keep_takes if
   // so picked: unpicked candidates never fill the gap.
   const failedRows = [];
   const entries = {};
+  const leftOut = [];
   let skipped = 0;
   let takes = 0;
   try {
     for (const row of rows) {
       const recipe = sheet.recipes[row.recipe];
       const present = presentOf(out, sheet, row);
+      if (badPicks.has(row.id)) {
+        console.error(`FAIL: ${row.id}: ${badPicks.get(row.id)}`);
+        failedRows.push(`${row.id} (its picks in picks.json)`);
+        continue;
+      }
       let chosen = picks[row.id];
       if (chosen) {
+        // Picks still the same as when --force-id set the row's candidates aside
+        // were made of that earlier set: they would now name candidates nobody has heard.
+        const before = picksBeforeForceOf(out, row);
+        const record = relative(out, picksBeforeForce(out, row));
+        if (before?.broken) {
+          console.error(`FAIL: ${row.id}: ${record} cannot be read, so it is unknown whether picks.json's picks for it were made from its current candidates. Once they are, delete ${record}.`);
+          failedRows.push(`${row.id} (${record} unreadable)`);
+          continue;
+        }
+        if (before && sameList(before.picks, chosen)) {
+          const names = chosen.map((n) => `c${pad2(n)}`).join(", ");
+          console.error(`FAIL: ${row.id}: picks.json still picks ${names}, the picks it had when --force-id set that set aside (to ${before.set_aside_in}); the candidates with those numbers now are new and unheard. Listen to them and update ${row.id} in picks.json. If you picked the same numbers again from the new set, delete ${record}.`);
+          failedRows.push(`${row.id} (picks made before --force-id)`);
+          continue;
+        }
         const missing = chosen.filter((n) => !present.includes(n));
         if (missing.length) {
           console.error(`FAIL: ${row.id}: picked candidates ${missing.join(", ")} are not on disk`);
           failedRows.push(`${row.id} (picked ${missing.map((n) => `c${pad2(n)}`).join(", ")} not on disk)`);
           continue;
         }
-        // A pick names a candidate as it was when picks.json was written. One
-        // made after that (a later --force-id moved the picked set aside) was never heard.
-        const unheard = chosen.filter((n) => statSync(candidateFile(out, sheet, row, n)).mtimeMs > picksTime);
-        if (unheard.length) {
-          const names = unheard.map((n) => `c${pad2(n)}`).join(", ");
-          console.error(`FAIL: ${row.id}: picks.json is older than ${names}, so its picks name an earlier set (one --force-id moved aside); listen to the new candidates and update picks.json. The row's takes in game/ are left as they were.`);
-          failedRows.push(`${row.id} (picks older than ${names})`);
-          continue;
-        }
+      } else if (noneGood.has(row.id)) {
+        // The owner heard the set and kept none: the game plays nothing for it.
+        console.log(`${row.id}: marked none good in ${NOTES_NAME} and not picked, so it is left out of game/ and ${MANIFEST_NAME}; pick a candidate in picks.json to bring it back.`);
+        entries[row.id] = null;
+        leftOut.push(row.id);
+        continue;
       } else if (present.length >= row.keep_takes) {
         chosen = present.slice(0, row.keep_takes);
       } else {
@@ -1011,10 +1100,32 @@ function postProcess({ sheet, out, rows }) {
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  writeManifest(out, sheet, entries);
-  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped. Levels: ${join(out, "game", MANIFEST_NAME)}`);
+  const sounds = writeManifest(out, sheet, entries);
+  for (const path of sweepGame(out, sounds)) console.log(`removed game/${path}: no entry in ${MANIFEST_NAME} lists it`);
+  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped, ${leftOut.length} left out as none good. Levels: ${join(out, "game", MANIFEST_NAME)}`);
   if (failedRows.length) console.error(`FAIL: failed rows: ${failedRows.join("; ")}`);
   return failedRows.length || skipped ? 1 : 0;
+}
+
+// After --process, game/ holds exactly the takes the manifest lists, so a copy
+// of it ships exactly the manifest's set. Removed: any other file named like a
+// take (<group>/<name>_NN.ogg) directly in a folder of game/, such as the takes
+// of a row no longer in the sheet. Other files, links and deeper folders are
+// left alone. Returns the removed paths, relative to game/.
+function sweepGame(out, sounds) {
+  const game = join(out, "game");
+  const listed = new Set(Object.values(sounds).flatMap((entry) => (Array.isArray(entry?.takes) ? entry.takes : [])));
+  const removed = [];
+  for (const group of readdirSync(game, { withFileTypes: true })) {
+    if (!group.isDirectory() || !GROUP_RE.test(group.name)) continue;
+    for (const file of readdirSync(join(game, group.name), { withFileTypes: true })) {
+      const path = `${group.name}/${file.name}`;
+      if (!file.isFile() || !TAKE_FILE_RE.test(file.name) || listed.has(path)) continue;
+      unlinkSync(join(game, path));
+      removed.push(path);
+    }
+  }
+  return removed.sort();
 }
 
 // --- The manifest the game reads ---------------------------------------------
@@ -1051,6 +1162,7 @@ function manifestEntry(sheet, row, recipe, made, gameDir) {
 
 // Updates DIR/game/sfx.json: entries for the rows just processed replace their
 // old ones (null drops one), rows no longer in the sheet go, the rest stay.
+// Returns the sounds it wrote.
 function writeManifest(out, sheet, entries) {
   const path = join(out, "game", MANIFEST_NAME);
   let sounds = {};
@@ -1069,6 +1181,7 @@ function writeManifest(out, sheet, entries) {
   mkdirSync(dirname(path), { recursive: true });
   writeFileSync(`${path}.part`, `${JSON.stringify({ schema_version: MANIFEST_SCHEMA, notes: MANIFEST_NOTES, sounds: kept }, null, 2)}\n`);
   renameSync(`${path}.part`, path);
+  return kept;
 }
 
 // --- Command line ----------------------------------------------------------
@@ -1077,8 +1190,9 @@ export class UsageError extends Error {}
 
 const USAGE = `usage: ${TOOL} --out DIR [--tier 1,2,3] [--id ID,...] [--sheet PATH]
          dry run (the default): prints each sound's credits and what is still to make; requests nothing
-       ${TOOL} --out DIR --generate [--force-id ID]... [--concurrency N] [--tier ..] [--id ..]
-         makes the candidates not yet in DIR (needs ELEVENLABS_API_KEY, from the environment or ~/.config/elevenlabs/.env)
+       ${TOOL} --out DIR --generate [--force-id ID]... [--force-again] [--concurrency N] [--tier ..] [--id ..]
+         makes the candidates not yet in DIR (needs ELEVENLABS_API_KEY, from the environment or ~/.config/elevenlabs/.env);
+         --force-id makes a fresh set of a sound, and --force-again lets it replace a complete set the sheet's current settings made
        ${TOOL} --out DIR --process [--tier ..] [--id ..]
          turns the kept takes into game-ready Ogg Vorbis files under DIR/game (needs ffmpeg)
 DIR must lie outside every Git work tree: the audio is private.`;
@@ -1096,6 +1210,7 @@ function parseCommandLine(argv) {
         tier: { type: "string", multiple: true },
         id: { type: "string", multiple: true },
         "force-id": { type: "string", multiple: true },
+        "force-again": { type: "boolean" },
         concurrency: { type: "string" },
         "dry-run": { type: "boolean" },
         generate: { type: "boolean" },
@@ -1112,6 +1227,7 @@ function parseCommandLine(argv) {
   const modes = ["dry-run", "generate", "process"].filter((mode) => values[mode]);
   if (modes.length > 1) throw new UsageError(`--${modes.join(" and --")} do not go together`);
   if (values["force-id"] && values.process) throw new UsageError("--force-id goes with --generate (or a dry run), not --process");
+  if (values["force-again"] && !values["force-id"]) throw new UsageError("--force-again goes with --force-id");
   if (values.concurrency !== undefined && !values.generate) throw new UsageError("--concurrency goes with --generate");
   if (!values.help && !values.out) throw new UsageError("--out DIR is required");
   return {
@@ -1121,6 +1237,7 @@ function parseCommandLine(argv) {
     tiers,
     ids: list(values.id),
     forced: list(values["force-id"]),
+    forceAgain: Boolean(values["force-again"]),
     concurrency: values.concurrency,
     mode: modes[0] ?? "dry-run",
   };
@@ -1179,23 +1296,33 @@ export async function main(argv = process.argv.slice(2)) {
   }
   const forced = new Set(args.forced);
   const surveyed = survey(out, sheet, rows, forced);
-  for (const { row, present } of surveyed) {
-    if (forced.has(row.id) && existsSync(forceMark(out, row)) && present.length < generationsOf(row)) {
+  for (const { row, present, current } of surveyed) {
+    if (!forced.has(row.id)) continue;
+    if (existsSync(forceMark(out, row)) && present.length < generationsOf(row)) {
       console.error(`${TOOL}: --force-id ${row.id} again would move aside its unfinished forced set (${present.length} of ${generationsOf(row)} candidates made) and pay for it twice. Finish it without --force-id: ${resumeCommand(args, out)}`);
       console.error(`To throw that set away and force a fresh one anyway, delete ${forceMark(out, row)} first.`);
       return 2;
     }
+    // A complete set that the sheet's current prompt and settings made would only be bought again.
+    if (current && !args.forceAgain) {
+      console.error(`${TOOL}: all ${generationsOf(row)} candidates of ${row.id} are made, and the generation log shows each was made with the sheet's current prompt and settings, so --force-id ${row.id} would pay for the same set again. To make a fresh set anyway, add --force-again.`);
+      return 2;
+    }
   }
-  // A forced row's picks will name the fresh set, which nobody has heard yet.
+  // A forced row's picks are recorded before its set goes aside: afterwards they
+  // would name the fresh set, which nobody has heard yet.
   let picked = {};
-  try {
-    if (forced.size) picked = JSON.parse(readFileSync(join(out, "picks.json"), "utf8"));
-  } catch {
-    // No picks yet, or picks --process will refuse with its own message.
+  if (forced.size) {
+    try {
+      picked = readObject(join(out, "picks.json"), "{\"<id>\": [candidate numbers]}") ?? {};
+    } catch (error) {
+      console.error(`${TOOL}: ${error.message}. --force-id records a forced sound's picks from it, so fix it first; nothing was done.`);
+      return 2;
+    }
   }
   for (const id of forced) {
-    if (!Array.isArray(picked?.[id])) continue;
-    console.error(`NOTE: picks.json picks ${id} ${picked[id].map((n) => `c${pad2(n)}`).join(", ")}. --force-id moves those candidates aside (kept in candidates/${id}/replaced-<time>/), and --process refuses ${id} until picks.json is updated from the fresh set.`);
+    if (!Array.isArray(picked[id])) continue;
+    console.error(`NOTE: picks.json picks ${id} ${picked[id].map((n) => `c${pad2(n)}`).join(", ")}. --force-id moves those candidates aside (kept in candidates/${id}/replaced-<time>/) and records these picks, so --process refuses ${id} until picks.json picks from the fresh set.`);
   }
   if (base !== API_BASE) console.log(`Requests go to ${base} (ELEVENLABS_API_BASE), not ${API_BASE}.`);
   printPlan(sheet, args.sheet, out, surveyed);
@@ -1240,7 +1367,7 @@ export async function main(argv = process.argv.slice(2)) {
       console.error(`FAIL: ${error.message}; nothing was requested.`);
       return 1;
     }
-    return await generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency, resume: resumeCommand(args, out), run });
+    return await generate({ sheet, out, surveyed, forced, picked, key: found.key, base, concurrency, resume: resumeCommand(args, out), run });
   } finally {
     for (const [signal, handler] of handlers) process.off(signal, handler);
     process.off("exit", release);

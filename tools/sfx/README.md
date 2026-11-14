@@ -61,17 +61,33 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
 - **Resuming.** A candidate already on disk is never requested again, so a
   stopped run resumes where it stopped; the stop message prints the command.
   Files are written to `.part` and then renamed, so a half-written download
-  never counts as made. If the sheet's prompt or settings for a row change
-  after its candidates were made, the dry run says so. `--force-id` then makes
-  a fresh set and moves every earlier candidate file of that row to
+  never counts as made.
+- **A fresh set.** If the sheet's prompt or settings for a row change after
+  its candidates were made, the dry run names the candidates made otherwise
+  (the generation log records each one's prompt and settings). `--force-id`
+  then makes a fresh set and moves every earlier candidate file of that row to
   `candidates/<id>/replaced-<time>/`: they are kept, never deleted, including
-  any numbered past the row's current count. Until the fresh set is complete,
-  the same `--force-id` is refused, so a rerun cannot move it aside and pay
-  again; the command without `--force-id` finishes it.
+  any numbered past the row's current count. So that a rerun of the same
+  command cannot pay for a set twice, `--force-id` is refused in two cases:
+  - **Unfinished.** The fresh set is not complete yet. The command without
+    `--force-id` finishes it.
+  - **Already current.** The set is complete, and the generation log shows
+    every candidate in it was made with the sheet's current prompt, length,
+    loop, influence, model and format. Add `--force-again` to pay for a fresh
+    set anyway.
+- **More candidates.** Raising a row's `candidates_per_take` adds the missing
+  numbers beside the candidates already made, which stay as they are, and
+  their picks keep their meaning. New candidates use the row's current
+  prompt, and the generation log names the prompt of each, so one set may mix
+  prompts. `ball_kick_hard` does this: the owner picked its c02, made from the
+  earlier prompt, and c07 to c12 come from the reworded one.
 - **Picking takes.** Listen to the candidates. Then, optionally, list the
   keepers in `~/ti-sfx/picks.json`, for example
   `{"footstep_hard": [3, 1, 4, 6, 8, 9, 12, 15]}`, in take order. Without
-  picks, `--process` uses the first candidates on disk.
+  picks, `--process` uses the first candidates on disk, unless the audition
+  notes mark the row none good (below). An id that is not in the sheet, such
+  as a dropped row's, is named and ignored. A list that cannot be right, such
+  as a candidate number past the row's count, fails that row alone.
   - **Fewer picks.** A row may pick fewer takes than its `keep_takes`, and the
     game then gets exactly those. Nothing is padded with unpicked candidates,
     and the row's older takes beyond them are removed. `keep_takes` stays the
@@ -79,10 +95,24 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
     meaning. Lowering it to match the picks would shrink the range of
     candidates, and a pick such as `tree_springback` [6] (3 takes x 2) would
     then fall outside it.
-  - **Stale picks.** Picks name candidates as they were when `picks.json` was
-    written. If a picked candidate is newer than `picks.json` (`--force-id`
-    made the set again after the pick), `--process` refuses that row until
-    `picks.json` is updated. Forcing a row that has picks says so up front.
+  - **Picks across a fresh set.** Picks name candidates of the set they were
+    made from. When `--force-id` sets a picked row's candidates aside, it
+    first records the row's picks in `candidates/<id>/.picks-before-force.json`
+    and says so. While `picks.json` still holds that same list for the row,
+    `--process` refuses the row: the candidates with those numbers are new and
+    unheard. Its entry in `game/sfx.json` stays as it was, so the earlier
+    takes keep playing. Pick again from the fresh set to proceed. If the same
+    numbers are the right ones in the fresh set too, delete the record, as the
+    message says. File times play no part in this, so saving `picks.json` for
+    another row or copying the folder changes nothing.
+  - **Audition notes.** The audition page may keep
+    `~/ti-sfx/audition-notes.json` beside `picks.json`:
+    `{"<id>": {"none_good": true, "note": "...", "updated": "<ISO time>"}}`.
+    `--process` reads only `none_good`. A row marked `true` with no pick in
+    `picks.json` is left out of `game/` and the manifest, so the game plays
+    nothing for it, and the run says so. A pick for the row overrides the
+    mark; ids not in the sheet are ignored. Clearing the mark is the audition
+    page's job.
 - **Processing.** `--process` turns each kept take into
   `~/ti-sfx/game/<group>/<name>_NN.ogg`, mono for positional sounds and
   stereo for the two ambience beds. The candidates themselves are only read,
@@ -99,6 +129,12 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
     with it, and the FAIL line says so. Takes beyond a row's current picks are
     removed even when the row fails, so `game/` never holds an unannounced
     mix of old and new takes.
+  - **Only the manifest's takes.** After `--process`, `game/` holds exactly
+    the takes `game/sfx.json` lists, so a copy of it ships exactly the
+    manifest's set. Any other file named like a take
+    (`<group>/<name>_NN.ogg`), such as a take of a row no longer in the sheet
+    or of one left out as none good, is removed and listed. Other files are
+    left alone.
 
 What the output folder holds:
 
@@ -107,7 +143,9 @@ What the output folder holds:
 | `candidates/<id>/<id>.cNN.wav` or `.mp3` | ElevenLabs' answer, one file a generation (WAV 48 kHz for one-shots; MP3 192 kbps for loops, the only format the docs offer for them) |
 | `generation-log.jsonl` | A line a request: time, id, candidate, attempt, file, prompt, model, settings, status (`ok`, `retry`, `error`), HTTP status, credits. `credits` is computed from the sheet (`credits_per_second` × the requested seconds); the API does not report it. |
 | `.generate.lock`, `candidates/<id>/.forced` | A run in progress (its pid and start); a forced set not yet complete |
+| `candidates/<id>/.picks-before-force.json` | The row's picks when `--force-id` set its candidates aside, and where they went |
 | `picks.json` | Optional, by hand: the candidates kept, in take order |
+| `audition-notes.json` | Optional, from the audition page: per id, whether none of the candidates was good |
 | `game/<group>/<name>_NN.ogg` | The processed takes |
 | `game/sfx.json` | The manifest the game reads: each sound's playback gain and takes (see Levels) |
 

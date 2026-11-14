@@ -15,8 +15,9 @@
 //     ~/.config/elevenlabs/.env), and no more run at once than allowed.
 //   - A 429 or 503 is waited out, and every attempt is logged. The summary's
 //     credits equal the log's, with several requests at once.
-//   - A rerun requests nothing. --force-id keeps the old set aside, and
-//     repeating it before its fresh set is complete is refused.
+//   - A rerun requests nothing. --force-id keeps the old set aside. It is
+//     refused for a set not yet complete, and for a complete set the sheet's
+//     current settings made unless --force-again is given.
 //   - A redirect is not followed: the other host never sees the key.
 //   - A 504, an answer lost while read, or an unwritable folder stops the run
 //     after one request and is logged. A 401 stops it, and a request waiting
@@ -36,9 +37,16 @@
 //   - A one-shot starts at its onset, is cut and is peak-normalised as decoded.
 //   - A loop's end runs on into its start, or the loop is kept as generated
 //     when its crossfade is 0.
-//   - Picks choose the takes.
+//   - Picks choose the takes. Picks recorded when --force-id set their set
+//     aside are refused while picks.json holds the same list, whatever the
+//     file times; a copied folder takes its picks. An id not in the sheet is
+//     named and ignored.
 //   - A near-silent candidate is named, and the other takes and rows go on;
 //     the run ends non-zero listing the failed rows.
+//   - game/ ends up holding exactly the manifest's takes; a row marked none
+//     good in audition-notes.json and not picked is left out.
+//   - Raising a row's candidates adds new ones, made with the current prompt,
+//     beside the old ones and their picks.
 // - Git tracks no audio, and .gitignore keeps it out.
 //
 //   node tools/check_sfx.mjs
@@ -397,12 +405,17 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   const again = await runTool(["--out", out, "--generate", "--sheet", fixturePath], { env, home });
   check(again.code === 0 && again.stdout.includes("Nothing to make") && api.requests.length === before, `a second run requested ${api.requests.length - before} more candidates (exit ${again.code})`);
 
-  // A candidate numbered past the row's count (made when it had more) goes aside
-  // with the rest, and a pick on the forced row is pointed out.
+  // Forcing a complete set the sheet's current settings made would buy the same
+  // set again: refused without a request or a move, unless --force-again.
   writeFileSync(join(out, "candidates", "shot", "shot.c07.wav"), MAGIC.wav);
   writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [1] }));
+  const same = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--force-id", "shot"], { env, home });
+  check(same.code === 2 && same.stderr.includes("add --force-again") && api.requests.length === before && !asideOf(out).length && shotCandidates(out).length === shotGenerations + 1,
+    `--force-id on a complete set made with the sheet's current settings was not refused before any request or move (exit ${same.code}, ${api.requests.length - before} requests): ${same.stderr.trim()}`);
+  // With --force-again: a candidate numbered past the row's count (made when it
+  // had more) goes aside with the rest, and a pick on the forced row is pointed out.
   api.maxInFlight = 0;
-  const forced = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--force-id", "shot"], { env, home });
+  const forced = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--force-id", "shot", "--force-again"], { env, home });
   check(api.maxInFlight <= fixture.plan.concurrency, `${api.maxInFlight} requests ran at once; the plan allows ${fixture.plan.concurrency}`);
   const aside = asideOf(out)[0];
   check(forced.code === 0 && api.requests.length === before + shotGenerations, `--force-id shot made ${api.requests.length - before} requests (exit ${forced.code}); expected ${shotGenerations}`);
@@ -414,7 +427,7 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   const printed = [first, again, forced].map((result) => result.all).join("\n");
   check(!printed.includes(key) && !logText(out).includes(key), "the API key was printed or logged");
   await api.close();
-  passes.push(`generation: model and settings sent, key read from ~/.config/elevenlabs/.env, ${firstAtOnce} at once with --concurrency 2 and ${api.maxInFlight} by the plan's ${fixture.plan.concurrency}, 429s waited out and logged, summary and log agree on ${logged} credits, rerun requested nothing, --force-id kept ${shotGenerations} aside`);
+  passes.push(`generation: model and settings sent, key read from ~/.config/elevenlabs/.env, ${firstAtOnce} at once with --concurrency 2 and ${api.maxInFlight} by the plan's ${fixture.plan.concurrency}, 429s waited out and logged, summary and log agree on ${logged} credits, rerun requested nothing, --force-id of a set the current settings made refused, with --force-again it kept ${shotGenerations} aside`);
 }
 
 // Repeating a --force-id whose fresh set is unfinished is refused; the printed command finishes it.
@@ -424,7 +437,9 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   const made = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot"], { env: withKey(full) });
   check(made.code === 0 && shotCandidates(out).length === shotGenerations, `the first shot set was not made (exit ${made.code})`);
   const stopping = await startStandIn((seen, arrival) => (arrival === 1 ? audioReply(seen) : errorReply(401, {}, "{\"detail\":\"invalid_api_key\"}")));
-  const forceArgs = ["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--force-id", "shot", "--concurrency", "1"];
+  // The first set was made with the current settings, so forcing it takes --force-again,
+  // which must not let a repeat move the unfinished fresh set aside.
+  const forceArgs = ["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--force-id", "shot", "--force-again", "--concurrency", "1"];
   const broken = await runTool(forceArgs, { env: withKey(stopping) });
   check(broken.code === 1 && shotCandidates(out).length === 1, `the forced run did not stop after one new candidate (exit ${broken.code}, ${shotCandidates(out).length} on disk)`);
   check(/To resume[^\n]*--generate/u.test(broken.stderr) && !/To resume[^\n]*--force-id/u.test(broken.stderr), `the stop message does not give a resume command without --force-id: ${broken.stderr.trim()}`);
@@ -435,11 +450,18 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   check(shotCandidates(out).length === 1 && asideOf(out).length === asideBefore, "the refused --force-id moved the new paid candidate aside");
   const finish = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--concurrency", "1"], { env: withKey(full) });
   check(finish.code === 0 && shotCandidates(out).length === shotGenerations && !existsSync(join(out, "candidates", "shot", ".forced")), `the run without --force-id did not finish the forced set (exit ${finish.code})`);
+  // Finished, the set was made with the sheet's current settings: forcing it
+  // again is refused (a dry run says so too) unless --force-again.
   const again = await runTool(["--out", out, "--sheet", fixturePath, "--id", "shot", "--force-id", "shot"]);
-  check(again.code === 0, `--force-id was still refused after its set was finished (exit ${again.code}): ${again.stderr.trim()}`);
+  check(again.code === 2 && again.stderr.includes("would pay for the same set again"), `--force-id of its finished set, made with the current settings, was not refused (exit ${again.code}): ${again.all.trim()}`);
+  const forceAgain = await runTool(["--out", out, "--sheet", fixturePath, "--id", "shot", "--force-id", "shot", "--force-again"]);
+  const fullCost = Math.round(fixture.credits_per_second * shotRow.duration_seconds * shotGenerations);
+  check(forceAgain.code === 0 && forceAgain.stdout.includes(`to make: ${fullCost} `), `--force-id with --force-again did not price a whole fresh set of ${fullCost} credits (exit ${forceAgain.code}): ${forceAgain.all.trim()}`);
+  const stray = await runTool(["--out", out, "--sheet", fixturePath, "--force-again"]);
+  check(stray.code === 2 && stray.stderr.includes("--force-again goes with --force-id"), `--force-again without --force-id was accepted (exit ${stray.code})`);
   await full.close();
   await stopping.close();
-  passes.push("repeating an unfinished --force-id is refused without a request; the command without it finishes the set");
+  passes.push("repeating an unfinished --force-id is refused without a request; the command without it finishes the set; forcing the finished set again needs --force-again");
 }
 
 // Answers that stop the run after one request, each logged; a 503 is waited out.
@@ -776,11 +798,37 @@ function synthesize(file, filter, inputs) {
       const updated = JSON.parse(readFileSync(manifestPath, "utf8")).sounds;
       check(updated.shot?.takes?.length === 1 && ["bed", "bed_raw", "hit"].every((id) => updated[id]?.takes?.length), `a --process of shot alone did not update its entry and keep the others: ${Object.keys(updated).join(", ")}`);
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [9] }));
+      // An impossible pick fails its row alone; the other rows are still processed.
       const badPick = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
-      check(badPick.code === 1 && badPick.stderr.includes("picks.json"), `an impossible pick was not refused (exit ${badPick.code})`);
+      check(badPick.code === 1 && /^FAIL: shot: .*picks\.json/mu.test(badPick.stderr) && /failed rows: shot \(its picks in picks\.json\)$/mu.test(badPick.stderr) && badPick.stdout.includes("test/bed_01.ogg"),
+        `an impossible pick did not fail its row alone (exit ${badPick.code}): ${badPick.all.trim()}`);
       const peaks = shots.map((samples) => (20 * Math.log10(peakOf(samples))).toFixed(2));
       passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), the impact recipe cut a quiet take's 0.2 s lead-in (onset ${(hitOnset * 1000).toFixed(1)} ms), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, one pick for a row of 2 gave exactly that take`);
       passes.push(`levels: a row's takes are loudness-matched (shot's two knocks within ${shotSpread.toFixed(2)} LU), the manifest game/sfx.json gives every sound its takes and the gain from its measured loudness to its level, an unreachable level is a reported shortfall, and a run over one row keeps the others' entries`);
+
+      // Afterwards game/ holds exactly the manifest's takes. A row marked none
+      // good in audition-notes.json and not picked is left out (a pick overrides
+      // the mark); takes of rows no longer in the sheet go; other files stay.
+      mkdirSync(join(out, "game", "gone"), { recursive: true });
+      cpSync(take("hit_01.ogg"), join(out, "game", "gone", "coin_01.ogg"));
+      cpSync(take("hit_01.ogg"), join(out, "game", "test", "coin_spill_02.ogg"));
+      writeFileSync(join(out, "game", "test", "notes.txt"), "not a take\n");
+      writeFileSync(join(out, "game", "test", "hit_01.ogg.import"), "not a take\n");
+      const marks = { bed: { none_good: true, note: "none of these", updated: new Date().toISOString() }, shot: { none_good: true }, coin_spill: { none_good: true } };
+      writeFileSync(join(out, "audition-notes.json"), JSON.stringify(marks));
+      writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [2] }));
+      const swept = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
+      const final = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")).sounds : {};
+      const listedTakes = Object.values(final).flatMap((entry) => entry.takes).sort();
+      const oggs = readdirSync(join(out, "game"), { recursive: true }).filter((path) => String(path).endsWith(".ogg")).map(String).sort();
+      check(swept.code === 0 && swept.stdout.includes("bed: marked none good in audition-notes.json and not picked") && !final.bed && !existsSync(take("bed_01.ogg")),
+        `a row marked none good and not picked was not left out of game/ and the manifest (exit ${swept.code}): ${swept.all.trim()}`);
+      check(final.shot?.takes?.length === 1 && existsSync(take("shot_01.ogg")) && final.bed_raw && final.hit, `a pick did not override the none-good mark, or an unmarked row went missing: ${JSON.stringify(Object.keys(final))}`);
+      check(!existsSync(join(out, "game", "gone", "coin_01.ogg")) && !existsSync(take("coin_spill_02.ogg")) && swept.stdout.includes("removed game/gone/coin_01.ogg") && swept.stdout.includes("removed game/test/coin_spill_02.ogg"),
+        `takes of rows no longer in the sheet were not removed and listed: ${swept.stdout.trim()}`);
+      check(existsSync(join(out, "game", "test", "notes.txt")) && existsSync(join(out, "game", "test", "hit_01.ogg.import")), "a file in game/ not named like a take was removed");
+      check(JSON.stringify(oggs) === JSON.stringify(listedTakes), `game/ holds other takes than the manifest lists: ${oggs.join(", ")} against ${listedTakes.join(", ")}`);
+      passes.push("game/ holds exactly the manifest's takes: a row marked none good and not picked is left out (a pick overrides the mark), takes of rows no longer in the sheet are removed and listed, other files stay");
 
       // A quiet take (a -55 dBFS burst) is trimmed from its own peak, so it is
       // kept whole, not called silent.
@@ -822,28 +870,122 @@ function synthesize(file, filter, inputs) {
       const before = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
       check(before.code === 0 && existsSync(replaceTake("shot_01.ogg")) && existsSync(replaceTake("shot_02.ogg")), `the first --process of the replace case failed (exit ${before.code})`);
       fromExpression(join(replaceShot, "shot.c02.wav"), NEAR_SILENT, 0.5);
-      const anHourAgo = new Date(Date.now() - 3600_000);
-      for (const n of [1, 2]) utimesSync(join(replaceShot, `shot.c0${n}.wav`), anHourAgo, anHourAgo);
       writeFileSync(join(replace, "picks.json"), JSON.stringify({ shot: [2] }));
       const after = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
       check(after.code === 1 && after.stderr.includes("shot c02: silent after trimming") && after.stderr.includes("removed the earlier game/test/shot_01.ogg"), `a failed take did not remove and name its earlier output (exit ${after.code}): ${after.stderr.trim()}`);
       check(!existsSync(replaceTake("shot_01.ogg")) && !existsSync(replaceTake("shot_02.ogg")), `the failed row left earlier takes in game/: ${listDir(join(replace, "game", "test")).join(", ")}`);
       passes.push("a take that fails removes its earlier output and says so; a failed row keeps no stale takes");
 
-      // Picks made before a candidate was made again (by --force-id) name an
-      // earlier set: the row is refused until picks.json is updated.
-      const stale = join(scratch, "process-stale-picks");
-      const staleShot = join(stale, "candidates", "shot");
-      mkdirSync(staleShot, { recursive: true });
-      for (const n of [1, 2]) cpSync(join(shotDir, `shot.c0${n}.wav`), join(staleShot, `shot.c0${n}.wav`));
-      writeFileSync(join(stale, "picks.json"), JSON.stringify({ shot: [2, 1] }));
-      utimesSync(join(stale, "picks.json"), anHourAgo, anHourAgo);
-      const twoHoursAgo = new Date(Date.now() - 7200_000);
-      utimesSync(join(staleShot, "shot.c01.wav"), twoHoursAgo, twoHoursAgo);
-      const staleRun = await runTool(["--out", stale, "--process", "--sheet", fixturePath, "--id", "shot"]);
-      check(staleRun.code === 1 && staleRun.stderr.includes("picks.json is older than c02") && !existsSync(join(stale, "game", "test", "shot_01.ogg")),
-        `picks older than a picked candidate were used (exit ${staleRun.code}): ${staleRun.all.trim()}`);
-      passes.push("picks.json older than a picked candidate (made again after the pick) refuses the row instead of using an unheard take");
+      // Stand-ins that answer with real one-shot audio, like the API's 48 kHz
+      // stereo WAV: request k gets a noise burst BURSTS[offset + k - 1] seconds
+      // long, so the length of a processed take tells which candidate it came from.
+      const BURSTS = [0.055, 0.08, 0.105, 0.13, 0.155, 0.18, 0.205, 0.23];
+      const burstAudio = BURSTS.map((seconds, index) => {
+        const file = join(scratch, `burst-${index + 1}.wav`);
+        fromExpression(file, `0.5*(2*random(0)-1)*between(t,0.1,${(0.1 + seconds).toFixed(3)})`, 0.5);
+        return readFileSync(file);
+      });
+      const burstApi = (offset) => startStandIn((seen, arrival) => (burstAudio[offset + arrival - 1]
+        ? { status: 200, headers: { "content-type": "audio/wav" }, body: burstAudio[offset + arrival - 1] }
+        : errorReply(418, {}, "{\"detail\":\"no more bursts\"}")));
+      // The burst (1-based) a take was cut from: the shot recipe keeps 3 ms before
+      // the onset and 10 ms after the tail; 0 when no burst is that close.
+      const burstOf = (file) => {
+        if (!existsSync(file)) return 0;
+        const seconds = decode(file).length / rate - 0.013;
+        const index = BURSTS.findIndex((length) => Math.abs(seconds - length) < 0.01);
+        return index + 1;
+      };
+      const shotVariant = (name, change) => {
+        const copy = fixtureSheet();
+        change(copy.sounds.find((row) => row.id === "shot"));
+        const path = join(scratch, `fixture-${name}.json`);
+        writeFileSync(path, `${JSON.stringify(copy, null, 2)}\n`);
+        return path;
+      };
+      const metalPrompt = "High-quality foley one-shot: a single knock on a metal door, close-miked.";
+      const metalPath = shotVariant("metal", (row) => { row.prompt = metalPrompt; });
+      const morePath = shotVariant("more", (row) => { row.candidates_per_take = 3; });
+
+      // Picks across --force-id, by recorded facts, not file times. The forced
+      // row's picks are recorded when its set goes aside; --process refuses them
+      // while picks.json holds the same list, however recently picks.json was
+      // saved, and takes picks made from the fresh set.
+      const forcedOut = join(scratch, "process-forced");
+      const forcedTake = (name) => join(forcedOut, "game", "test", name);
+      let api = await burstApi(0);
+      const firstSet = await runTool(["--out", forcedOut, "--generate", "--sheet", metalPath, "--id", "shot", "--concurrency", "1"], { env: withKey(api) });
+      await api.close();
+      writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1] }));
+      const firstTakes = await runTool(["--out", forcedOut, "--process", "--sheet", metalPath, "--id", "shot"]);
+      const heard = existsSync(forcedTake("shot_01.ogg")) ? readFileSync(forcedTake("shot_01.ogg")) : null;
+      check(firstSet.code === 0 && firstTakes.code === 0 && burstOf(forcedTake("shot_01.ogg")) === 2, `the first set and its picked takes were not made (exit ${firstSet.code}, ${firstTakes.code}): ${firstTakes.all.trim()}`);
+      // The prompt has changed since, so the complete set is forced without --force-again.
+      api = await burstApi(4);
+      const reworded = await runTool(["--out", forcedOut, "--generate", "--sheet", fixturePath, "--id", "shot", "--force-id", "shot", "--concurrency", "1"], { env: withKey(api) });
+      await api.close();
+      check(reworded.code === 0 && api.requests.length === shotGenerations, `--force-id of a set made with another prompt needed more than --force-id (exit ${reworded.code}, ${api.requests.length} requests): ${reworded.stderr.trim()}`);
+      // picks.json saved again later (another row picked, the file now newer than
+      // every candidate) still holds shot's old list: refused, and game/ keeps the heard take.
+      writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1], gone: [1] }));
+      const inAnHour = new Date(Date.now() + 3600_000);
+      utimesSync(join(forcedOut, "picks.json"), inAnHour, inAnHour);
+      const stalePicks = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(stalePicks.code === 1 && stalePicks.stderr.includes("FAIL: shot: picks.json still picks c02, c01") && stalePicks.stderr.includes("Listen to them and update shot in picks.json")
+        && heard !== null && existsSync(forcedTake("shot_01.ogg")) && readFileSync(forcedTake("shot_01.ogg")).equals(heard),
+      `picks made before --force-id were taken for the new, unheard set after picks.json was saved again (exit ${stalePicks.code}): ${stalePicks.all.trim()}`);
+      check(stalePicks.stderr.includes("names gone, which is not in the sheet; ignored"), `an id in picks.json that is not in the sheet was not named and ignored: ${stalePicks.stderr.trim()}`);
+      // Picked from the fresh set: taken.
+      writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [4, 3] }));
+      const repicked = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(repicked.code === 0 && burstOf(forcedTake("shot_01.ogg")) === 8 && burstOf(forcedTake("shot_02.ogg")) === 7, `picks made from the fresh set were not taken (exit ${repicked.code}): ${repicked.all.trim()}`);
+      // The old numbers picked again from the fresh set, on purpose: refused until
+      // the record is deleted, as the message says; then taken.
+      writeFileSync(join(forcedOut, "picks.json"), JSON.stringify({ shot: [2, 1] }));
+      const sameNumbers = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      const record = "candidates/shot/.picks-before-force.json";
+      check(sameNumbers.code === 1 && sameNumbers.stderr.includes(`delete ${record}`) && burstOf(forcedTake("shot_01.ogg")) === 8, `the old numbers picked again were not refused with the record to delete (exit ${sameNumbers.code}): ${sameNumbers.stderr.trim()}`);
+      rmSync(join(forcedOut, record), { force: true });
+      const confirmed = await runTool(["--out", forcedOut, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(confirmed.code === 0 && burstOf(forcedTake("shot_01.ogg")) === 6, `with the record deleted, the same numbers did not take the fresh candidates (exit ${confirmed.code}): ${confirmed.all.trim()}`);
+      passes.push("picks across --force-id: recorded as the set went aside; refused while picks.json holds the same list, even saved again later for another row (game/ kept the heard take); taken once picked from the fresh set, the same numbers once the record is deleted; a set made with another prompt is forced without --force-again; an id not in the sheet is named and ignored");
+
+      // A plain copy of the folder (new file times, picks.json the oldest file) takes its picks as they are.
+      const copied = join(scratch, "process-copied");
+      cpSync(join(out, "candidates", "shot"), join(copied, "candidates", "shot"), { recursive: true });
+      writeFileSync(join(copied, "picks.json"), JSON.stringify({ shot: [2] }));
+      const anHourAgo = new Date(Date.now() - 3600_000);
+      utimesSync(join(copied, "picks.json"), anHourAgo, anHourAgo);
+      const copiedRun = await runTool(["--out", copied, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      const copiedTake = join(copied, "game", "test", "shot_01.ogg");
+      check(copiedRun.code === 0 && existsSync(copiedTake) && Math.abs(decode(copiedTake).length - shortest) <= 0.005 * rate, `a copied folder, picks.json older than its candidates, did not take its picks (exit ${copiedRun.code}): ${copiedRun.all.trim()}`);
+      passes.push("a plain copy of the folder, picks.json older than its candidates, takes its picks");
+
+      // Raising a row's candidates_per_take adds candidates beside the old ones,
+      // made with the sheet's current prompt. The old ones stay as they were, a pick
+      // of one stays valid, and the generation log names each candidate's prompt.
+      const moreOut = join(scratch, "process-more");
+      const moreFile = (n) => join(moreOut, "candidates", "shot", `shot.c0${n}.wav`);
+      api = await burstApi(0);
+      const oldSet = await runTool(["--out", moreOut, "--generate", "--sheet", metalPath, "--id", "shot", "--concurrency", "1"], { env: withKey(api) });
+      await api.close();
+      const oldBytes = [1, 2, 3, 4].map((n) => (existsSync(moreFile(n)) ? readFileSync(moreFile(n)) : Buffer.alloc(0)));
+      writeFileSync(join(moreOut, "picks.json"), JSON.stringify({ shot: [2] }));
+      const moreDry = await runTool(["--out", moreOut, "--sheet", morePath, "--id", "shot"]);
+      const addCost = Math.round(fixture.credits_per_second * shotRow.duration_seconds * 2);
+      check(oldSet.code === 0 && moreDry.code === 0 && moreDry.stdout.includes(`to make: ${addCost} `) && moreDry.stderr.includes("NOTE: shot: c01, c02, c03, c04 were made with other settings"),
+        `the dry run of a row raised from 4 to 6 candidates did not price 2 (${addCost} credits) and name the 4 made with another prompt (exit ${oldSet.code}, ${moreDry.code}): ${moreDry.all.trim()}`);
+      api = await burstApi(4);
+      const added = await runTool(["--out", moreOut, "--generate", "--sheet", morePath, "--id", "shot", "--concurrency", "1"], { env: withKey(api) });
+      await api.close();
+      check(added.code === 0 && api.requests.length === 2 && api.requests.every((seen) => seen.body?.text === shotRow.prompt) && existsSync(moreFile(5)) && existsSync(moreFile(6)),
+        `raising candidates_per_take did not make exactly the 2 new candidates with the current prompt (exit ${added.code}, ${api.requests.length} requests): ${added.all.trim()}`);
+      check([1, 2, 3, 4].every((n, index) => existsSync(moreFile(n)) && readFileSync(moreFile(n)).equals(oldBytes[index])), "making the added candidates changed or moved the old ones");
+      const promptOf = (n) => logOf(moreOut).filter((entry) => entry.status === "ok" && entry.candidate === n).at(-1)?.prompt;
+      check([1, 2, 3, 4].every((n) => promptOf(n) === metalPrompt) && [5, 6].every((n) => promptOf(n) === shotRow.prompt), "the generation log does not name the prompt that made each candidate");
+      const morePicked = await runTool(["--out", moreOut, "--process", "--sheet", morePath, "--id", "shot"]);
+      check(morePicked.code === 0 && burstOf(join(moreOut, "game", "test", "shot_01.ogg")) === 2, `the pick of an old candidate was not taken once new ones were added (exit ${morePicked.code}): ${morePicked.all.trim()}`);
+      passes.push("raising candidates_per_take from 2 to 3 made only the 2 new candidates, with the current prompt, beside 4 untouched old ones; the log names each one's prompt and the pick of old c02 still stands");
     }
   }
 }
