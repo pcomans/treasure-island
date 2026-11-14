@@ -128,12 +128,14 @@ const PROMPT_ENTER := "F  Drive"
 const PROMPT_EXIT := "F  Get out"
 const PROMPT_EXIT_SHOW_S := 4.0
 ## A hit's sound (_sound_impact): from IMPACT_LIGHT_MPS of velocity change in a
-## tick a light knock, from IMPACT_HEAVY_MPS a crash; a standing tree's trunk
-## within TREE_TOUCH_M of a car's box this tick or the last makes it a tree's.
-## Production inference, to be tuned by ear.
+## tick a light knock, from IMPACT_HEAVY_MPS a crash; a standing tree's trunk the
+## car's reach found this tick or the last, within TREE_TOUCH_M of its box and on
+## the side the hit came from (within TREE_SIDE_DOT of its direction), makes it a
+## tree's. Production inference, to be tuned by ear.
 const IMPACT_LIGHT_MPS := 2.0
 const IMPACT_HEAVY_MPS := 6.0
 const TREE_TOUCH_M := 0.3
+const TREE_SIDE_DOT := 0.5
 const CAR_SOUND := preload("res://game/scripts/audio/car_sound.gd")
 ## Where the player gets out, in the car's level frame: the driver's side, the
 ## passenger's, behind, in front; the roof if all are blocked.
@@ -180,9 +182,17 @@ var _reach_query := PhysicsShapeQueryParameters3D.new()
 var _reach_shape := BoxShape3D.new()
 ## The driven car's doors, engine and tyres.
 var _car_sound: CAR_SOUND = CAR_SOUND.new()
-## The physics tick a moving body's reach last touched a standing tree's trunk,
-## by the body's RID.
+## The standing trees' trunks each moving body's reach found this tick and the
+## last, by the body's RID (_reach_solid_tree; tested only on a hit).
 var _tree_touch: Dictionary = {}
+
+
+## A moving body's trunk hits from its reach: this tick's and the last's.
+class TrunkHits:
+	extends RefCounted
+	var frame := -10
+	var now: Array[Dictionary] = []
+	var before: Array[Dictionary] = []
 
 
 func _init() -> void:
@@ -793,34 +803,72 @@ func _push_loose(reach: VehicleReach, prop: RigidBody3D) -> void:
 
 
 ## A standing tree's trunk in a moving body's reach (the reach already finds it,
-## on the street-prop layer): touched when within TREE_TOUCH_M of the body's box,
-## so a hit this tick or the next sounds as a tree's (_sound_impact).
+## on the street-prop layer): only noted here; whether the body touched it is
+## worked out on a hit (_hit_a_tree).
 func _reach_solid_tree(reach: VehicleReach, hit: Dictionary) -> void:
-	var body := hit.get("collider") as CollisionObject3D
-	var shape_owner := body.shape_find_owner(int(hit.get("shape", -1))) if body != null else -1
-	var trunk := body.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
-	if trunk == null or trunk.shape == null:
-		return
-	var piece := VehicleReach.shape_box(trunk.shape)
-	if reach.overlaps(trunk.global_transform * Transform3D(Basis.IDENTITY, piece.get_center()), piece.size * 0.5, TREE_TOUCH_M):
-		_tree_touch[reach.body.get_rid()] = Engine.get_physics_frames()
+	var rid := reach.body.get_rid()
+	var hits: TrunkHits = _tree_touch.get(rid)
+	if hits == null:
+		hits = TrunkHits.new()
+		_tree_touch[rid] = hits
+	var frame := Engine.get_physics_frames()
+	if hits.frame != frame:
+		# This tick's list becomes the last tick's; the two lists are reused.
+		var recycled := hits.before
+		recycled.clear()
+		if hits.frame != frame - 1:
+			hits.now.clear()
+		hits.before = hits.now
+		hits.now = recycled
+		hits.frame = frame
+	hits.now.append(hit)
 
 
 ## A moving live car's hit this tick, if any (DrivableCar.take_impact): a tree's
-## knock where its reach touched a standing trunk this tick or the last, else a
-## light knock or a crash by how hard. Rate and voices are the sound's own
-## (sounds.json), so a pile-up cannot flood the mix.
+## knock where it hit a standing trunk (_hit_a_tree), else a light knock or a
+## crash by how hard. Rate and voices are the sound's own (sounds.json), so a
+## pile-up cannot flood the mix.
 func _sound_impact(car: DRIVABLE_CAR) -> void:
-	var hit := car.take_impact()
+	var change := car.take_impact()
+	var hit := change.length()
 	if hit < IMPACT_LIGHT_MPS:
 		return
 	var at := car.global_position
-	if int(_tree_touch.get(car.get_rid(), -10)) >= Engine.get_physics_frames() - 1:
+	if _hit_a_tree(car, change):
 		Sound.play(&"car_tree_impact", at, clampf(0.35 + hit / 12.0, 0.35, 1.0))
 	elif hit >= IMPACT_HEAVY_MPS:
 		Sound.play(&"car_impact_heavy", at, clampf(0.6 + (hit - IMPACT_HEAVY_MPS) / 20.0, 0.6, 1.0))
 	else:
 		Sound.play(&"car_impact_light", at, clampf(0.35 + (hit - IMPACT_LIGHT_MPS) / 6.0, 0.35, 1.0))
+
+
+## Whether a car's hit (its velocity change) came from a standing trunk its reach
+## found this tick or the last: one within TREE_TOUCH_M of the car's box, on the
+## side the hit came from.
+func _hit_a_tree(car: DRIVABLE_CAR, change: Vector3) -> bool:
+	var hits: TrunkHits = _tree_touch.get(car.get_rid())
+	var frame := Engine.get_physics_frames()
+	if hits == null or hits.frame < frame - 1:
+		return false
+	var box := VehicleReach.reach_box(car)
+	var box_xf := car.global_transform * Transform3D(Basis.IDENTITY, box.get_center())
+	var from := Vector2(-change.x, -change.z)
+	# This tick's trunks and the last tick's (only the last's when none came this tick).
+	for list: Array[Dictionary] in ([hits.now, hits.before] if hits.frame == frame else [hits.now]):
+		for hit: Dictionary in list:
+			var body := hit.get("collider") as CollisionObject3D
+			var shape_owner := body.shape_find_owner(int(hit.get("shape", -1))) if is_instance_valid(body) else -1
+			var trunk := body.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
+			if trunk == null or trunk.shape == null:
+				continue
+			var piece := VehicleReach.shape_box(trunk.shape)
+			var trunk_xf := trunk.global_transform * Transform3D(Basis.IDENTITY, piece.get_center())
+			if not VehicleReach.boxes_overlap(box_xf, box.size * 0.5 + Vector3.ONE * TREE_TOUCH_M, trunk_xf, piece.size * 0.5):
+				continue
+			var toward := Vector2(trunk_xf.origin.x - box_xf.origin.x, trunk_xf.origin.z - box_xf.origin.z)
+			if from.length() < 0.01 or toward.length() < 0.01 or toward.normalized().dot(from.normalized()) >= TREE_SIDE_DOT:
+				return true
+	return false
 
 
 ## The driven car's sound (tests read its engine's rev).

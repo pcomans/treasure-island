@@ -14,13 +14,16 @@
 //      a token in TI_SFX_GIT_TOKEN is never printed, even when the clone fails;
 //   6. it refuses a sound folder that is a link out of the project, a source that
 //      is not a folder, and a source inside the project, changing nothing;
-//   7. --dry-run changes nothing.
+//   7. --dry-run changes nothing;
+//   8. a link in the folder is never written through: a left-over .part link to a
+//      file outside goes (the file stays as it was), and a take that is a link,
+//      even to the same bytes, is replaced by a plain copy.
 // A few seconds. Part of tools/test.sh.
 //
 //   node tools/check_fetch_sfx.mjs
 
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
+import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -177,6 +180,21 @@ try {
   const dryProject = makeProject("dry-project");
   result = run(["--project", dryProject, "--source", source, "--dry-run"]);
   check(result.status === 0 && /would fetch/u.test(result.out) && listing(join(dryProject, "game/resources/audio/sfx")).join() === "README.md", `7: --dry-run must change nothing: ${result.out}`);
+
+  // 8. Links in the folder.
+  const linkProject = makeProject("link-project");
+  const linkSfx = join(linkProject, "game/resources/audio/sfx");
+  const victim = join(work, "victim.txt");
+  const twin = join(work, "knock-twin.ogg");
+  write(victim, "victim");
+  write(twin, "knock");
+  // .part links where takes and the manifest are written, and one where nothing is.
+  for (const name of ["step_01.ogg.part", "hum_loop_01.ogg.part", "sfx.json.part", "step_02.ogg.part"]) symlinkSync(victim, join(linkSfx, name));
+  symlinkSync(twin, join(linkSfx, "knock_01.ogg"));
+  result = run(["--project", linkProject, "--source", source]);
+  const plain = (name) => existsSync(join(linkSfx, name)) && lstatSync(join(linkSfx, name)).isFile();
+  check(result.status === 0 && readFileSync(victim, "utf8") === "victim" && readFileSync(twin, "utf8") === "knock", `8: a link in the folder must never be written through (exit ${result.status}): ${result.out}`);
+  check(!listing(linkSfx).some((name) => name.endsWith(".part")) && plain("step_01.ogg") && plain("hum_loop_01.ogg") && plain("knock_01.ogg") && readFileSync(join(linkSfx, "knock_01.ogg"), "utf8") === "knock", `8: the .part links must go and every take must be a plain file: ${listing(linkSfx)}`);
 } finally {
   rmSync(work, { recursive: true, force: true });
 }
@@ -185,4 +203,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, and refuses a linked folder, a missing source and one inside the project");
+console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, and never writes through a link in the folder");

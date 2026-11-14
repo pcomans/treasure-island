@@ -16,8 +16,10 @@ extends SceneTree
 ##      the lid's rattle and lets it go with its tail; the landing thumps;
 ##   3. in a car: the doors and the engine's start getting in, then its loops,
 ##      climbing from idle with the throttle; the tyres skid in a handbrake turn;
-##      getting out the engine stops, the doors sound and every loop stops; the
-##      car crashing into a palm is a tree's crash, into a parked car a car's,
+##      getting out the engine stops, the doors sound and every loop stops; a jump
+##      off the dirt lot's ramp landing on the wheels, R on the road and the
+##      return from the bay (the vehicle contract's places) ask for no knock or
+##      crash; the car crashing into a palm is a tree's crash, into a parked car a car's,
 ##      while the windrow's young gums bend with neither (theirs is the tier-2
 ##      bend); a bay of each fence material breaks with its own sound; a lamp
 ##      knocked over hits and then clangs on the ground; a car's splash; the ball
@@ -41,6 +43,8 @@ const DITCH_SITE := "mersea_ditch_promenade"
 const LEVEL_ID := &"lamp_hit"
 const LEVEL_DB := -9.5
 const PILEUP_ID := &"car_impact_heavy"
+## A car's hits (vehicle_manager.gd _sound_impact).
+const IMPACT_IDS := ["car_tree_impact", "car_impact_light", "car_impact_heavy"]
 
 var _failure := ""
 var _main: GameMain
@@ -52,6 +56,8 @@ var _settings_file := ""
 var _folder := ""
 var _empty_folder := ""
 var _summary: Array[String] = []
+## Where the driven car was when _press_until saw its sound.
+var _pressed_to := Vector3.INF
 
 
 func _initialize() -> void:
@@ -61,6 +67,8 @@ func _initialize() -> void:
 	_empty_folder = "user://test-sfx-empty-%d" % OS.get_process_id()
 	ShadowQuality.settings_path = _settings_file
 	DirAccess.remove_absolute(_settings_file)
+	# Every request in the sound manager's log (the game keeps only counts).
+	Sound.record_requests = true
 	call_deferred("_run")
 
 
@@ -73,7 +81,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -351,6 +359,122 @@ func _check_car() -> bool:
 	return true
 
 
+## Nothing hit, no hit: a jump off the dirt lot's ramp landing on the wheels (as
+## the vehicle contract drives it: up to its speed, off the throttle from take-off,
+## on the brakes once down), R on the road after a run-up, and the car dropped on
+## the bay, sinking and back on land. Each asks for no knock or crash near the car.
+func _check_false_hits() -> bool:
+	var found := {}
+	var ramp: Dictionary = _cases.ramp
+	var start := Vector2(ramp.start_xz[0], ramp.start_xz[1])
+	var heading := Vector2(ramp.heading_xz[0], ramp.heading_xz[1]).normalized()
+	var car := await _drive_from(start, heading)
+	if car == null:
+		return false
+	var mark := Engine.get_process_frames()
+	var path: Array[Vector3] = []
+	var airborne := 0
+	var longest := 0
+	var off := -1
+	var took_off := -1
+	var landed := -1
+	for _tick in 600:
+		_steer_toward(car, start + heading * 300.0)
+		Input.action_release("move_forward")
+		if landed >= 0:
+			Input.action_press("move_back")
+		elif longest < 15 and car.linear_velocity.length() <= float(ramp.speed_mps):
+			Input.action_press("move_forward")
+		await physics_frame
+		path.append(car.global_position)
+		if car.grounded_wheels() == 0:
+			if airborne == 0:
+				off = Engine.get_process_frames()
+			airborne += 1
+			longest = maxi(longest, airborne)
+		else:
+			if airborne >= 15 and landed < 0:
+				landed = Engine.get_process_frames()
+				took_off = off
+			airborne = 0
+		if landed >= 0 and Engine.get_process_frames() >= landed + 90:
+			break
+	_release()
+	if not _require(longest >= 30 and landed >= 0 and car.grounded_wheels() >= 3, "The ramp did not fly the car onto its wheels (%.2f s in the air, %d wheels down)." % [longest / 60.0, car.grounded_wheels()]):
+		return false
+	found["ramp"] = _hits_along(mark, path, {"take-off": took_off, "landing": landed})
+	await _stop()
+	# R on the road after a run-up from the route's start.
+	var points: Array = _cases.route.points_xz
+	var from := Vector2(points[0][0], points[0][1])
+	var toward := Vector2(points[1][0], points[1][1])
+	car = await _drive_from(from, (toward - from).normalized())
+	if car == null:
+		return false
+	var causes := []
+	var on_back := func(cause: String, _from: Vector3) -> void: causes.append(cause)
+	car.recovered.connect(on_back)
+	mark = Engine.get_process_frames()
+	path = []
+	Input.action_press("move_forward")
+	for _tick in 150:
+		_steer_toward(car, toward)
+		await physics_frame
+		path.append(car.global_position)
+	_release()
+	var speed := car.linear_velocity.length()
+	var pressed := Engine.get_process_frames()
+	Input.action_press("recover")
+	await physics_frame
+	Input.action_release("recover")
+	for _tick in 120:
+		await physics_frame
+		path.append(car.global_position)
+	found["reset"] = _hits_along(mark, path, {"R": pressed})
+	if not _require(causes == ["manual"], "R at %.1f m/s must put the car back once (%s)." % [speed, causes]):
+		car.recovered.disconnect(on_back)
+		return false
+	# Dropped on the bay: the splash, the sink and the way back to land.
+	var bay: Dictionary = _cases.bay
+	mark = Engine.get_process_frames()
+	path = []
+	car.place(Transform3D(car.global_transform.basis, Vector3(bay.drop_xyz[0], bay.drop_xyz[1], bay.drop_xyz[2])))
+	var back := -1
+	for _tick in 600:
+		await physics_frame
+		path.append(car.global_position)
+		if back < 0 and causes.size() >= 2:
+			back = Engine.get_process_frames()
+		if back >= 0 and Engine.get_process_frames() >= back + 120:
+			break
+	car.recovered.disconnect(on_back)
+	found["bay"] = _hits_along(mark, path, {"back": back})
+	print("NOTE: false hits: the ramp (%.2f s in the air) %s; R at %.1f m/s %s; the bay %s" % [longest / 60.0, found.ramp, speed, found.reset, found.bay])
+	if not _require(causes == ["manual", "water"], "Dropped on the bay the car must come back to land once (%s)." % [causes]) \
+	or not _require(found.values().all(func(hits: Array) -> bool: return hits.is_empty()), "A landing on the wheels, R and the return from the bay must ask for no knock or crash (%s)." % [found]):
+		return false
+	_summary.append("no knock or crash for a %.2f s jump landing on its wheels, R at %.1f m/s or the return from the bay" % [longest / 60.0, speed])
+	return await _stop()
+
+
+## The knocks and crashes asked for since frame mark within 6 m of a point the car
+## passed (the cars shoved before may knock about elsewhere), each with its
+## strength, what came of it and its frame from the named frames.
+func _hits_along(mark: int, path: Array[Vector3], frames: Dictionary) -> Array[String]:
+	var hits: Array[String] = []
+	for entry: Dictionary in _sound.requests:
+		if int(entry.frame) < mark or not str(entry.id) in IMPACT_IDS:
+			continue
+		var at: Vector3 = entry.at
+		if not path.any(func(point: Vector3) -> bool: return point.distance_to(at) < 6.0):
+			continue
+		var when := PackedStringArray()
+		for name: String in frames:
+			when.append("%s %+d" % [name, int(entry.frame) - int(frames[name])])
+		hits.append("%s %.2f %s (%s)" % [entry.id, float(entry.strength), entry.result, ", ".join(when)])
+	return hits
+
+
 func _check_hits() -> bool:
 	# A palm's trunk stops the car: a tree's knock.
 	var tree: Dictionary = _cases.tree
@@ -360,7 +484,11 @@ func _check_hits() -> bool:
 		return false
 	var trees := await _press_until(&"car_tree_impact", mark, 360)
 	var crashes := _played(&"car_impact_light", mark) + _played(&"car_impact_heavy", mark)
-	if not _require(trees >= 1 and crashes == 0, "Driven into a palm the car must knock as on a tree (%d), not as on anything else (%d)." % [trees, crashes]):
+	# The false-hit check's look-up finds this real one by where the car was when
+	# it sounded.
+	var stopped_at: Array[Vector3] = [_pressed_to]
+	var seen := _hits_along(mark, stopped_at, {})
+	if not _require(trees >= 1 and crashes == 0 and not seen.is_empty(), "Driven into a palm the car must knock as on a tree (%d), not as on anything else (%d), and be found by the car (%s)." % [trees, crashes, seen]):
 		return false
 	# A parked car across the road: a crash.
 	var shove: Dictionary = _cases.shove
@@ -503,7 +631,7 @@ func _check_limits() -> bool:
 	# here: the log keeps only the last REQUEST_LOG_SIZE.
 	for _frame in 60:
 		for index in 20:
-			var result := str(_sound.request(PILEUP_ID, listener + Vector3(index, 0.0, 0.0), 1.0, 1.0).result)
+			var result := _sound.request(PILEUP_ID, listener + Vector3(index, 0.0, 0.0), 1.0, 1.0)
 			results[result] = int(results.get(result, 0)) + 1
 		most = maxi(most, _sound.voices_of(PILEUP_ID))
 		await process_frame
@@ -552,10 +680,21 @@ func _check_limits() -> bool:
 
 func _check_settings() -> bool:
 	var hud := _main.hud
+	var master := AudioServer.get_bus_index(&"Master")
+	# A drag on the slider: each step on at once, kept only where it ends.
+	hud.sound_volume.drag_started.emit()
+	hud.sound_volume.value = 70.0
+	var heard := AudioServer.get_bus_volume_linear(master)
+	var during := Sound.saved_settings()
+	hud.sound_volume.value = 55.0
+	hud.sound_volume.drag_ended.emit(true)
+	var ended := Sound.saved_settings()
+	if not _require(is_equal_approx(heard, 0.7) and not is_equal_approx(float(during.volume), 0.7) and is_equal_approx(float(ended.volume), 0.55), "A drag on the volume slider must put each step on at once (%.2f of 0.70) and keep only where it ends (kept %.2f during it, %.2f after it, of 0.55)." % [heard, float(during.volume), float(ended.volume)]):
+		return false
+	_summary.append("a drag on the volume slider is heard at each step and kept where it ends")
 	hud.sound_volume.value = 40.0
 	hud.sound_mute.button_pressed = true
 	await process_frame
-	var master := AudioServer.get_bus_index(&"Master")
 	var kept := Sound.saved_settings()
 	if not _require(is_equal_approx(AudioServer.get_bus_volume_linear(master), 0.4) and AudioServer.is_bus_mute(master) and is_equal_approx(float(kept.volume), 0.4) and bool(kept.muted), "The options screen's volume (40) and mute must hold the Master bus (%.2f, muted %s) and be kept (%s)." % [AudioServer.get_bus_volume_linear(master), AudioServer.is_bus_mute(master), kept]):
 		return false
@@ -636,7 +775,8 @@ func _asked(id: StringName, mark: int) -> int:
 	return _sound.requested(id).filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark and entry.result in ["played", "far"]).size()
 
 
-## Presses W until id (or also) has played since mark, at most limit ticks.
+## Presses W until id (or also) has played since mark, at most limit ticks; where
+## the car was then goes in _pressed_to (braking after, it may roll on).
 func _press_until(id: StringName, mark: int, limit: int, also: StringName = &"") -> int:
 	Input.action_press("move_forward")
 	var count := 0
@@ -645,6 +785,8 @@ func _press_until(id: StringName, mark: int, limit: int, also: StringName = &"")
 		count = _played(id, mark) + (_played(also, mark) if also != &"" else 0)
 		if count > 0:
 			break
+	var car := _vehicles.active_car()
+	_pressed_to = car.global_position if car != null else Vector3.INF
 	_release()
 	await _stop()
 	return count
@@ -748,6 +890,7 @@ func _finish(timeout_message := "") -> void:
 			DirAccess.remove_absolute(folder)
 	DirAccess.remove_absolute(_settings_file)
 	Sound.manifest_path = Sound.DEFAULT_MANIFEST_PATH
+	Sound.record_requests = false
 	if _failure != "":
 		push_error("FAIL: " + _failure)
 		print("FAIL: " + _failure)

@@ -194,15 +194,28 @@ function targetFolder(project) {
   return join(projectReal, TARGET);
 }
 
+// Whether b is a plain file (not a link) with a's bytes.
 function sameBytes(a, b) {
-  if (!isFile(b)) return false;
+  if (!isPlainFile(b)) return false;
   if (statSync(a).size !== statSync(b).size) return false;
   return readFileSync(a).equals(readFileSync(b));
 }
 
+function isPlainFile(path) {
+  try {
+    return lstatSync(path).isFile();
+  } catch {
+    return false;
+  }
+}
+
+// Writes a new file beside path and renames it over path (which replaces a link
+// there rather than following it). Whatever was at the .part name goes first, and
+// the new file is made exclusively, so a link left there is never written through.
 function writeAtomic(path, bytes) {
   const part = `${path}.part`;
-  writeFileSync(part, bytes);
+  rmSync(part, { force: true });
+  writeFileSync(part, bytes, { flag: "wx" });
   renameSync(part, path);
 }
 
@@ -224,7 +237,13 @@ export function apply(project, planned, { dryRun = false } = {}) {
   const present = existsSync(folder) ? readdirSync(folder) : [];
   for (const name of present) {
     const path = join(folder, name);
-    if (!lstatSync(path).isFile()) continue;
+    const stat = lstatSync(path);
+    // A left-over .part goes whatever it is (a link included: the link, not its target).
+    if (PART_RE.test(name) && stat.isSymbolicLink()) {
+      if (!dryRun) unlinkSync(path);
+      continue;
+    }
+    if (!stat.isFile()) continue;
     const stale = (TAKE_RE.test(name) && !wanted.has(name))
       || (IMPORT_RE.test(name) && !wanted.has(name.slice(0, -".import".length)))
       || PART_RE.test(name);

@@ -7,9 +7,12 @@ extends SceneTree
 ##     nor any of its feature overrides (driver.macos, driver.web, ...) may name
 ##     Dummy, so each platform plays through its own driver. Every development,
 ##     test, capture and build launch still runs on Dummy, by tools/godot's default
-##     and the --audio-driver Dummy that tools/test.sh and tools/build-mac.sh pass:
-##     this test's own process must be on it. (This test checked the opposite until
-##     the owner's 2026-11-14 decision changed its premise.)
+##     and the --audio-driver Dummy that tools/test.sh and tools/build-mac.sh pass.
+##     This test runs headless, and a headless Godot is on Dummy whatever it is
+##     told, so its own driver shows nothing about that default: the wrapper's
+##     guard is tools/check_godot_weston_wait.sh, which checks that tools/godot adds
+##     --audio-driver Dummy unless a driver is given. (This test checked the
+##     opposite until the owner's 2026-11-14 decision changed its premise.)
 ##   - The game's buses load from project.godot's bus layout: SFX, Ambience and UI,
 ##     each into Master (game/scripts/audio/sound.gd).
 ##   - The building catalog's scores read (below).
@@ -31,8 +34,10 @@ func _initialize() -> void:
 			if (key == "driver/driver" or key.begins_with("driver/driver.")) and str(project_config.get_value("audio", key, "")) == SILENT_DRIVER:
 				_fail("project.godot sets audio/%s to Dummy: the game has sound, so each platform must use its own driver (tools/godot keeps development and test runs on Dummy)." % key)
 				return
+	# Headless, Godot is on Dummy whatever it is told (see above): this only says
+	# the test did run headless; tools/check_godot_weston_wait.sh guards the wrapper.
 	if AudioServer.get_driver_name() != SILENT_DRIVER:
-		_fail("This test ran on the %s audio driver: every test and launch here must run on Dummy (tools/godot's default, or --audio-driver Dummy)." % AudioServer.get_driver_name())
+		_fail("This headless test ran on the %s audio driver, not Dummy: run it with --headless (tools/check_godot_weston_wait.sh checks tools/godot's Dummy default)." % AudioServer.get_driver_name())
 		return
 	var layout := str(ProjectSettings.get_setting("audio/buses/default_bus_layout", ""))
 	if not ResourceLoader.exists(layout) or not load(layout) is AudioBusLayout:
@@ -88,7 +93,7 @@ func _initialize() -> void:
 	if standing == 0:
 		_fail("The catalog lists no standing buildings.")
 		return
-	print("PASS: the game picks each platform's own audio driver (project.godot forces none) while this test runs on Dummy; buses %s load into Master; catalog score %d/%d (%d demolished)" % [", ".join(PackedStringArray(BUSES)), accepted, standing, units.size() - standing])
+	print("PASS: the game picks each platform's own audio driver (project.godot forces none; this headless run is on Dummy, as any headless run is, and tools/check_godot_weston_wait.sh checks tools/godot's own Dummy default); buses %s load into Master; catalog score %d/%d (%d demolished)" % [", ".join(PackedStringArray(BUSES)), accepted, standing, units.size() - standing])
 	quit(0)
 
 

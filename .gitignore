@@ -29,6 +29,6 @@ user-uploads/
 *.[aA][iI][fF][fF]
 *.[wW][eE][bB][aA]
 # The game's sound folder: everything tools/fetch-sfx writes there (the takes,
-# their import files and manifest.json) but the note that explains it.
+# their import files and sfx.json) but the note that explains it.
 /game/resources/audio/sfx/*
 !/game/resources/audio/sfx/README.md

@@ -398,9 +398,12 @@ func _on_shadow_quality_chosen(id: String) -> void:
 
 
 ## The master volume or mute changed on the options screen: on at once, and kept
-## for next time (but never by a driver in the player's own settings file).
-func _on_sound_settings_changed(volume: float, muted: bool) -> void:
+## for next time when keep (once a drag ends; never by a driver in the player's
+## own settings file).
+func _on_sound_settings_changed(volume: float, muted: bool, keep: bool) -> void:
 	sound.apply_settings(volume, muted)
+	if not keep:
+		return
 	var settings_problem := player_settings_problem(get_tree(), "changed the sound settings, writing")
 	if settings_problem.is_empty():
 		Sound.save_settings(sound.volume, sound.muted)
@@ -531,7 +534,7 @@ func _publish_web_state(_args: Array) -> void:
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
 		# The sound: the audio driver, the master volume and mute, the slider on the
-		# options screen, and how many of the last requests played and of which ids.
+		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
@@ -546,12 +549,8 @@ func _shadow_level_buttons() -> Dictionary:
 
 
 func _sound_state() -> Dictionary:
-	var played := {}
-	for entry: Dictionary in sound.requests:
-		if str(entry.result) in ["played", "loop_start"]:
-			played[str(entry.id)] = int(played.get(str(entry.id), 0)) + 1
 	var slider := hud.sound_volume.get_global_rect().get_center()
-	return {"driver": AudioServer.get_driver_name(), "volume": sound.volume, "muted": sound.muted, "played": played, "volume_slider": [slider.x, slider.y]}
+	return {"driver": AudioServer.get_driver_name(), "volume": sound.volume, "muted": sound.muted, "played": sound.played_counts, "volume_slider": [slider.x, slider.y]}
 
 
 func _ball_state() -> Dictionary:

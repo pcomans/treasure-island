@@ -50,10 +50,15 @@ extends Node
 ## so the listener moves smoothly with the picture; R and the return from the
 ## water move the car and the camera together, so the engine keeps its level.
 ##
-## Every request is kept in `requests` (the last REQUEST_LOG_SIZE) with what came
-## of it: played, silent (no takes), limited (min_gap_s), far, quiet (no
-## strength), unknown, or a loop's loop_start, loop_silent and loop_stop. Tests
-## read it; nothing in the game does.
+## What came of a request: played, silent (no takes), limited (min_gap_s, counted
+## from the last request let through, whether or not anything could play, so a
+## build without the audio does no more work for a flood than one with it), far,
+## quiet (no strength), unknown, or a loop's loop_start, loop_silent and
+## loop_stop. The game keeps only a count of what played, by sound
+## (played_counts, for the web's state readback); a test or evidence run that
+## sets record_requests before main is made also gets every request, newest last,
+## in `requests` (the last REQUEST_LOG_SIZE). Nothing is allocated per request
+## otherwise.
 
 const CATALOG_PATH := "res://game/resources/audio/sounds.json"
 const DEFAULT_MANIFEST_PATH := "res://game/resources/audio/sfx/sfx.json"
@@ -85,14 +90,22 @@ const BED_UPDATE_S := 0.25
 const BED_FOLLOW_S := 0.6
 const WIND_BED := &"wind_bed"
 const WATER_BED := &"bay_water_bed"
+## Read-only stand-ins for a sound with no settings or no takes.
+const _NO_SETTINGS: Dictionary = {}
+const _NO_TAKES: Array = []
 
 ## The manifest the bank reads; a test points it at one of its own first.
 static var manifest_path := DEFAULT_MANIFEST_PATH
+## Whether sound managers made from now on keep every request (tests, evidence).
+static var record_requests := false
 ## The sound manager playing now, or null.
 static var current: Sound
 
-## Every request, newest last (see above).
+## Every request, newest last, when record_requests was on (see above).
 var requests: Array[Dictionary] = []
+## How many plays (and loop starts) each sound has had.
+var played_counts: Dictionary = {}
+var _recording := false
 ## The master volume and mute on now.
 var volume := DEFAULT_VOLUME
 var muted := false
@@ -136,6 +149,7 @@ func _init() -> void:
 	name = "Sound"
 	# The menus' clicks play in the pause; the world's sounds pause (World).
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	_recording = record_requests
 	_rng.randomize()
 	_world = Node3D.new()
 	_world.name = "World"
@@ -241,7 +255,8 @@ func _read_manifest() -> void:
 	for id: StringName in _catalog:
 		var entry: Dictionary = sounds.get(String(id), {}) if sounds.get(String(id)) is Dictionary else {}
 		var gain: Variant = entry.get("gain_db")
-		_levels[id] = float(gain) if (gain is float or gain is int) and is_finite(float(gain)) else 0.0
+		# Never above 0 dB (tools/sfx/README.md "Levels"), whatever the manifest says.
+		_levels[id] = minf(0.0, float(gain)) if (gain is float or gain is int) and is_finite(float(gain)) else 0.0
 		var loop := bool(entry.get("loop", (_catalog[id] as Dictionary).get("loop", false)))
 		var takes: Array[AudioStream] = []
 		var listed: Array = entry.get("takes") if entry.get("takes") is Array else []
@@ -282,7 +297,7 @@ func prepare_for_play() -> void:
 
 
 func takes_of(id: StringName) -> int:
-	return (_takes.get(id, []) as Array).size()
+	return (_takes.get(id, _NO_TAKES) as Array).size()
 
 
 ## A sound's playback gain from the manifest (dB; 0 where it gives none).
@@ -292,25 +307,26 @@ func level_db(id: StringName) -> float:
 
 # --- One-shots.
 
-func request(id: StringName, at: Vector3, strength: float, pitch: float) -> Dictionary:
-	var entry := {"id": id, "at": at, "strength": strength}
-	var settings: Dictionary = _catalog.get(id, {})
+## A one-shot of id (see play): what came of it. Nothing is allocated unless it
+## plays or requests are recorded.
+func request(id: StringName, at: Vector3, strength: float, pitch: float) -> String:
+	var found: Variant = _catalog.get(id)
+	var settings: Dictionary = found if found is Dictionary else _NO_SETTINGS
 	if settings.is_empty() or bool(settings.get("loop", false)):
 		push_error("Sound: %s is not a one-shot in %s" % [id, CATALOG_PATH])
-		return _log(entry, "unknown")
+		return _noted(id, at, strength, "unknown")
 	var now := _clock(settings)
-	entry["time"] = now
-	entry["level_db"] = level_db(id)
 	if now - float(_last_played.get(id, -INF)) < float(settings.get("min_gap_s", 0.0)):
-		return _log(entry, "limited")
-	var takes: Array = _takes.get(id, [])
+		return _noted(id, at, strength, "limited")
+	_last_played[id] = now
+	var takes: Array = _takes.get(id, _NO_TAKES)
 	if takes.is_empty():
-		return _log(entry, "silent")
+		return _noted(id, at, strength, "silent")
 	if strength <= 0.0:
-		return _log(entry, "quiet")
+		return _noted(id, at, strength, "quiet")
 	var positional := str(settings.get("space", "3d")) == "3d"
 	if positional and at.is_finite() and _listener_distance(at) > float(settings.get("max_m", INF)):
-		return _log(entry, "far")
+		return _noted(id, at, strength, "far")
 	var pool: Array = _pools["3d" if positional else ("ui" if str(settings.get("bus", "")) == "UI" else "2d")]
 	var player := _voice(pool, id, int(settings.get("voices", 2)))
 	var take := _pick(id, takes.size())
@@ -333,9 +349,18 @@ func request(id: StringName, at: Vector3, strength: float, pitch: float) -> Dict
 	player.set_meta("sound_id", id)
 	player.set_meta("started", now)
 	player.call("play")
-	_last_played[id] = now
-	entry.merge({"gain_db": gain_db, "volume_db": volume_db, "pitch": pitch_scale, "take": take})
-	return _log(entry, "played")
+	played_counts[id] = int(played_counts.get(id, 0)) + 1
+	if _recording:
+		_log({"id": id, "at": at, "strength": strength, "time": now, "level_db": level_db(id), "gain_db": gain_db, "volume_db": volume_db, "pitch": pitch_scale, "take": take}, "played")
+	return "played"
+
+
+## A request that played nothing: recorded when requests are (see record_requests).
+func _noted(id: StringName, at: Vector3, strength: float, result: String) -> String:
+	if _recording:
+		var found: Variant = _catalog.get(id)
+		_log({"id": id, "at": at, "strength": strength, "time": _clock(found if found is Dictionary else _NO_SETTINGS), "level_db": level_db(id)}, result)
+	return result
 
 
 func schedule(delay_s: float, id: StringName, follow: Node3D, strength: float, pitch: float) -> void:
@@ -519,17 +544,18 @@ func _step_loop(held: Dictionary, key: StringName, voice: LoopVoice, delta: floa
 	voice.quiet_s += delta
 	if voice.quiet_s >= LOOP_STOP_AFTER_S or not alive:
 		if voice.player != null:
-			_log({"id": voice.id, "at": voice.at, "time": _game_s}, "loop_stop")
+			if _recording:
+				_log({"id": voice.id, "at": voice.at, "time": _game_s}, "loop_stop")
 			voice.player.queue_free()
 		held.erase(key)
 
 
 func _start_loop(voice: LoopVoice) -> void:
 	var settings: Dictionary = _catalog[voice.id]
-	var takes: Array = _takes.get(voice.id, [])
-	var entry := {"id": voice.id, "at": voice.at, "time": _game_s, "level_db": level_db(voice.id)}
+	var takes: Array = _takes.get(voice.id, _NO_TAKES)
 	if takes.is_empty():
-		_log(entry, "loop_silent")
+		if _recording:
+			_log({"id": voice.id, "at": voice.at, "time": _game_s, "level_db": level_db(voice.id)}, "loop_silent")
 		return
 	var positional := str(settings.get("space", "3d")) == "3d"
 	var player: Node
@@ -552,8 +578,9 @@ func _start_loop(voice: LoopVoice) -> void:
 		(player as AudioStreamPlayer3D).global_position = voice.at
 	player.call("play", _rng.randf() * maxf(stream.get_length() - 0.05, 0.0))
 	voice.player = player
-	entry["take"] = take
-	_log(entry, "loop_start")
+	played_counts[voice.id] = int(played_counts.get(voice.id, 0)) + 1
+	if _recording:
+		_log({"id": voice.id, "at": voice.at, "time": _game_s, "level_db": level_db(voice.id), "take": take}, "loop_start")
 
 
 # --- Beds.

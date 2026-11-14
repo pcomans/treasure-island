@@ -331,11 +331,11 @@ var _drawn_pieces: Array[CollisionShape3D] = []
 var _moving_pieces: Array[CollisionShape3D] = []
 ## For its sound (vehicle_manager.gd, car_sound.gd): how fast its tyres slide this
 ## tick (m/s, the fastest of those at their grip's limit), and the hardest hit
-## since the manager last took one (m/s: the velocity's change in a tick beyond
-## what its own forces, gravity and damping made, _predicted, which a crash into a
-## wall, another car or a tree shows though nothing reports the contact).
+## since the manager last took one (the velocity's change in a tick beyond what its
+## own forces, gravity and damping made, _predicted, which a crash into a wall,
+## another car or a tree shows though nothing reports the contact), as a vector.
 var _slip := 0.0
-var _impact := 0.0
+var _impact := Vector3.ZERO
 ## The velocity its own forces lead to at the next tick, the velocity it was made
 ## from, and whether it holds (a put-down, a righting or the water's own steps
 ## set the velocity themselves).
@@ -647,11 +647,11 @@ func slip() -> float:
 	return _slip
 
 
-## The hardest hit since the last call (m/s of velocity change in a tick that its
-## own forces did not make), and forgets it.
-func take_impact() -> float:
+## The hardest hit since the last call (the velocity change in a tick that its own
+## forces did not make, m/s), and forgets it.
+func take_impact() -> Vector3:
 	var hit := _impact
-	_impact = 0.0
+	_impact = Vector3.ZERO
 	return hit
 
 
@@ -703,7 +703,9 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	_clock += dt
 	# A hit since last tick: what the contacts did to the velocity (see _impact).
 	if _predicted_ok:
-		_impact = maxf(_impact, (state.linear_velocity - _predicted).length())
+		var change := state.linear_velocity - _predicted
+		if change.length_squared() > _impact.length_squared():
+			_impact = change
 	_predicted_ok = false
 	_slip = 0.0
 	if _teleport_pending:

@@ -5,9 +5,10 @@ signal resume_requested
 signal exit_requested
 ## A shadow level chosen on the options screen (main.gd puts it on and keeps it).
 signal shadow_quality_chosen(id: String)
-## The master volume (0..1) or mute changed on the options screen (main.gd puts
-## it on and keeps it).
-signal sound_settings_changed(volume: float, muted: bool)
+## The master volume (0..1) or mute changed on the options screen: main.gd puts
+## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
+## at each step).
+signal sound_settings_changed(volume: float, muted: bool, keep: bool)
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -113,6 +114,8 @@ var _licence_files: Array = []
 var _shadow_group := ButtonGroup.new()
 ## The pressed level's fill (_active_level_style).
 var _active_level_box: StyleBoxFlat
+## Whether the volume slider is being dragged (sound_settings_changed's keep).
+var _sound_dragging := false
 
 
 func _ready() -> void:
@@ -129,8 +132,12 @@ func _ready() -> void:
 	credits_back_button.pressed.connect(credits_back)
 	for scroll: ScrollContainer in [credits_list, credits_licences]:
 		scroll.gui_input.connect(_on_credits_scroll_input.bind(scroll))
-	sound_volume.value_changed.connect(func(_value: float) -> void: _sound_changed())
-	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed())
+	sound_volume.value_changed.connect(func(_value: float) -> void: _sound_changed(not _sound_dragging))
+	sound_volume.drag_started.connect(func() -> void: _sound_dragging = true)
+	sound_volume.drag_ended.connect(func(_moved: bool) -> void:
+		_sound_dragging = false
+		_sound_changed(true))
+	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
 	for button: Node in find_children("*", "BaseButton", true, false):
 		_click_on_press(button as BaseButton)
 	_fill_controls()
@@ -309,8 +316,8 @@ func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
 
 
-func _sound_changed() -> void:
-	sound_settings_changed.emit(sound_volume_share(), sound_mute.button_pressed)
+func _sound_changed(keep: bool) -> void:
+	sound_settings_changed.emit(sound_volume_share(), sound_mute.button_pressed, keep)
 
 
 ## The menus' click (game/scripts/audio/sound.gd) when a button is pressed.
