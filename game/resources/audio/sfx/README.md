@@ -5,7 +5,8 @@ This folder holds the takes of every sound the game plays, as
 here but this note: the sounds are generated with ElevenLabs, whose terms
 forbid making the output available as isolated audio files, and the repository
 is public (owner, 2026-11-14). The prompts and the tools that make the audio
-are public (`tools/sfx/README.md`); the audio stays private.
+are public; the audio stays private. `tools/sfx/README.md` explains why, with
+the terms quoted, and how to make your own set ("Make your own sound set").
 
 `tools/fetch-sfx` fills the folder from a private source given by
 `TI_SFX_SOURCE` or `--source`: the `game/` folder `tools/generate-sfx --process`
