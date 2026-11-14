@@ -57,7 +57,8 @@ extends SceneTree
 ##      throttle and tapped on the stock W from 0.6 m, a lamp stands and stops
 ##      the car; driven at from 20 m back on the stock W, another falls, goes over
 ##      where it stood (its base at rest within LAMP_REST_M of its foot) and is
-##      frozen on the ground within LAMP_SETTLE_S of the hit, the car
+##      frozen on the ground within LAMP_SETTLE_S of the hit, no deeper than
+##      POLE_BURIED_M under the ground drawn there (as 7c), the car
 ##      carrying on through with most of its speed (the lamp's share of its
 ##      momentum taken) and still driving half a second later; crept back through
 ##      where it stood, nothing stops the car; on foot the stock player walks
@@ -1630,9 +1631,11 @@ func _case_lamps() -> bool:
 		await physics_frame
 	var base := lying.global_position if lying != null else Vector3.INF
 	var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
-	print("LAMP REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood" % [fell, lying != null and lying.freeze, settled_s, rest_m])
+	var buried := _buried_m(lying) if lying != null else INF
+	print("LAMP REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, lifted %.3f m onto the ground drawn there and %.3f m deep at most under it" % [fell, lying != null and lying.freeze, settled_s, rest_m, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, buried])
 	if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [fell, LAMP_SETTLE_S]) \
-	or not _require(rest_m <= LAMP_REST_M, "The felled %s came to rest %.2f m from where it stood (at most %.1f m): carried along, not knocked over." % [fell, rest_m, LAMP_REST_M]):
+	or not _require(rest_m <= LAMP_REST_M, "The felled %s came to rest %.2f m from where it stood (at most %.1f m): carried along, not knocked over." % [fell, rest_m, LAMP_REST_M]) \
+	or not _require(buried <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [fell, buried, POLE_BURIED_M]):
 		return false
 	# Crept back through where it stood (slower than a lamp falls to), nothing
 	# stops the car: on until its rear is 2 m past the foot, clear of the walk.
