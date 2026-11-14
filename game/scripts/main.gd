@@ -38,6 +38,8 @@ var _pause_later := false
 var capture_mouse_on_ready := true
 ## The sun's shadow quality (the pause menu's Options), put on as the game starts.
 var shadows: ShadowQuality
+## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
+var sound: Sound
 ## Startup puts on the shadow level kept from the last run; the shared capture
 ## harness turns this off, so its captures always have the default (a player's
 ## choice is a global engine setting that would reach its neutral sun too).
@@ -71,6 +73,14 @@ func _ready() -> void:
 	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
+	# The sound: its takes loaded now, under the loading screen; the master volume
+	# and mute kept from the last run (the defaults for a test or capture driver).
+	sound = Sound.new()
+	add_child(sound)
+	var kept := Sound.saved_settings() if use_saved_settings and settings_problem.is_empty() else {"volume": Sound.DEFAULT_VOLUME, "muted": false}
+	sound.apply_settings(float(kept.volume), bool(kept.muted))
+	hud.set_sound_settings(sound.volume, sound.muted)
+	hud.sound_settings_changed.connect(_on_sound_settings_changed)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere).
@@ -212,6 +222,10 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# On the web the browser takes the sounds now, not at their first play; the
+	# ditch's drawn water is read back now, not at the first footstep near it.
+	sound.prepare_for_play()
+	StandingWater.prepare()
 	hud.show_loading("Preparing graphics…")
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")
@@ -227,6 +241,9 @@ func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
+	# The wind and the bay fade in: play has started (no "ready" sting, which would
+	# be music; owner, 2026-11-14).
+	sound.start_beds(world_root.get_boundary())
 	# A controls screen opened on the loading screen stays open, and play starts
 	# paused behind it: nothing moves and the mouse stays free until the player
 	# closes it (to the pause menu) and resumes.
@@ -338,6 +355,9 @@ func _set_paused(paused: bool) -> void:
 	if paused:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
+	if get_tree().paused != paused:
+		# The pause menu opening, a little lower closing.
+		Sound.play(&"ui_pause", Vector3.INF, 1.0, 1.0 if paused else 0.9)
 	get_tree().paused = paused
 	if paused:
 		_web_capture_pending = false
@@ -375,6 +395,17 @@ func _on_shadow_quality_chosen(id: String) -> void:
 	else:
 		push_error(settings_problem)
 	hud.show_shadow_level(shadows.current)
+
+
+## The master volume or mute changed on the options screen: on at once, and kept
+## for next time (but never by a driver in the player's own settings file).
+func _on_sound_settings_changed(volume: float, muted: bool) -> void:
+	sound.apply_settings(volume, muted)
+	var settings_problem := player_settings_problem(get_tree(), "changed the sound settings, writing")
+	if settings_problem.is_empty():
+		Sound.save_settings(sound.volume, sound.muted)
+	else:
+		push_error(settings_problem)
 
 
 func _set_paused_later() -> void:
@@ -499,6 +530,9 @@ func _publish_web_state(_args: Array) -> void:
 		"shadow_level_buttons": _shadow_level_buttons(),
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
+		# The sound: the audio driver, the master volume and mute, the slider on the
+		# options screen, and how many of the last requests played and of which ids.
+		"sound": _sound_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 
@@ -509,6 +543,15 @@ func _shadow_level_buttons() -> Dictionary:
 		var middle := (button as Control).get_global_rect().get_center()
 		at[str(button.name)] = [middle.x, middle.y]
 	return at
+
+
+func _sound_state() -> Dictionary:
+	var played := {}
+	for entry: Dictionary in sound.requests:
+		if str(entry.result) in ["played", "loop_start"]:
+			played[str(entry.id)] = int(played.get(str(entry.id), 0)) + 1
+	var slider := hud.sound_volume.get_global_rect().get_center()
+	return {"driver": AudioServer.get_driver_name(), "volume": sound.volume, "muted": sound.muted, "played": played, "volume_slider": [slider.x, slider.y]}
 
 
 func _ball_state() -> Dictionary:

@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Fills the game's sound folder, game/resources/audio/sfx/ (ignored by Git), with
+# the processed takes of the sounds the game plays (tools/sfx/fetch_sfx.mjs):
+#
+#   tools/fetch-sfx                          from TI_SFX_SOURCE; with none it does nothing
+#   tools/fetch-sfx --source DIR             a private folder of processed takes (<group>/<name>_NN.ogg)
+#   tools/fetch-sfx --source URL [--ref REF] [--subdir PATH]   a private Git repository
+#
+# The audio is generated with ElevenLabs and never goes in Git (tools/sfx/README.md).
+# Without a source the game, its tests and its builds run silent.
+set -euo pipefail
+# node lives here in the devcontainer (node feature); non-login shells lack it.
+export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+exec node "$(cd "$(dirname "$0")" && pwd)/sfx/fetch_sfx.mjs" "$@"

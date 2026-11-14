@@ -62,6 +62,14 @@ extends Node3D
 ## the use button shows instead, a car while can_enter() or driving, and a tap on
 ## it is F. In a car the touch stick drives and steers (its vector, not the WASD
 ## actions) and RISE, which presses the handbrake as Space does, brakes.
+##
+## Sound (game/scripts/audio/sound.gd): the driven car's doors, engine and tyres
+## (car_sound.gd); a hit of any moving live car, from the velocity change its own
+## physics step finds (DrivableCar.take_impact, no contact reporting or query of
+## its own): light or heavy by how hard, or a tree's when its reach touched a
+## standing tree's trunk this tick or the last (_reach_solid_tree, an owner of the
+## same reach; a small tree that bends is the bender's); a car's splash. Parked
+## cars have none of it: no player node is ever made on a car.
 
 signal entered(row_id: String)
 signal exited(row_id: String)
@@ -119,6 +127,14 @@ const BARRIER_PARK_S := 1.0
 const PROMPT_ENTER := "F  Drive"
 const PROMPT_EXIT := "F  Get out"
 const PROMPT_EXIT_SHOW_S := 4.0
+## A hit's sound (_sound_impact): from IMPACT_LIGHT_MPS of velocity change in a
+## tick a light knock, from IMPACT_HEAVY_MPS a crash; a standing tree's trunk
+## within TREE_TOUCH_M of a car's box this tick or the last makes it a tree's.
+## Production inference, to be tuned by ear.
+const IMPACT_LIGHT_MPS := 2.0
+const IMPACT_HEAVY_MPS := 6.0
+const TREE_TOUCH_M := 0.3
+const CAR_SOUND := preload("res://game/scripts/audio/car_sound.gd")
 ## Where the player gets out, in the car's level frame: the driver's side, the
 ## passenger's, behind, in front; the roof if all are blocked.
 const EXIT_SIDE_M := 0.75
@@ -162,6 +178,11 @@ var _reach_owners: Dictionary = {}
 var _reach := VehicleReach.new()
 var _reach_query := PhysicsShapeQueryParameters3D.new()
 var _reach_shape := BoxShape3D.new()
+## The driven car's doors, engine and tyres.
+var _car_sound: CAR_SOUND = CAR_SOUND.new()
+## The physics tick a moving body's reach last touched a standing tree's trunk,
+## by the body's RID.
+var _tree_touch: Dictionary = {}
 
 
 func _init() -> void:
@@ -244,6 +265,15 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	_reach_owners.merge(_breaker.reach_owners())
 	_reach_owners.merge(_furniture.reach_owners())
 	_reach_owners.merge(_bender.reach_owners())
+	# The standing trees' trunks (street_vegetation_builder.gd Trunks__c*: the
+	# street-prop layer the reach already looks at), for a hit's sound.
+	_tree_touch.clear()
+	if "vegetation" in world.get_street_detail_layers():
+		var vegetation := world.street_detail_layer("vegetation").get_node_or_null("GeneratedStreetVegetation")
+		if vegetation != null:
+			for child: Node in vegetation.get_children():
+				if child is StaticBody3D and str(child.get_meta("feature_kind", "")) == "street_vegetation" and not bool(child.get_meta("bends_under_cars", false)):
+					_reach_owners[(child as StaticBody3D).get_rid()] = _reach_solid_tree
 	_camera = VEHICLE_CAMERA.new()
 	_camera.name = "VehicleCamera"
 	_camera.use_planes_of(_player.get_camera())
@@ -334,6 +364,8 @@ func _physics_process(delta: float) -> void:
 		_look_round(body, delta)
 		if not body is DRIVABLE_CAR:
 			_settle_barrier(body, delta)
+		else:
+			_sound_impact(body as DRIVABLE_CAR)
 
 
 func _on_foot(enter_pressed: bool) -> void:
@@ -363,6 +395,7 @@ func _drive(delta: float, exit_pressed: bool, recover_pressed: bool) -> void:
 		car.drive_input = clampf(-stick.y, -1.0, 1.0)
 		car.steer_input = clampf(stick.x, -1.0, 1.0)
 	car.handbrake = Input.is_action_pressed("handbrake")
+	_car_sound.drive(car, delta)
 	if recover_pressed:
 		car.request_recover("manual")
 	# The player rides along at the seat (the grass bends there, the web state reads it).
@@ -392,6 +425,7 @@ func enter(id: String) -> bool:
 	_player.begin_driving()
 	_camera.attach(car, showing if take else null, take)
 	_exit_prompt_s = PROMPT_EXIT_SHOW_S
+	_car_sound.start(car)
 	entered.emit(id)
 	return true
 
@@ -418,6 +452,7 @@ func exit_car(blend: bool = true) -> void:
 		_player.get_recovery_controller().recover("vehicle_exit")
 	_camera.detach(_player.get_camera(), blend)
 	_set_prompt("")
+	_car_sound.stop(car)
 	exited.emit(car.row_id)
 
 
@@ -753,6 +788,44 @@ func _push_loose(reach: VehicleReach, prop: RigidBody3D) -> void:
 	var change := target - prop.linear_velocity.dot(normal)
 	if change > 0.0:
 		prop.apply_central_impulse((normal + Vector3.UP * LOOSE_PUSH_LIFT) * change * prop.mass)
+		if prop is SoccerBall:
+			(prop as SoccerBall).sound_kick(change)
+
+
+## A standing tree's trunk in a moving body's reach (the reach already finds it,
+## on the street-prop layer): touched when within TREE_TOUCH_M of the body's box,
+## so a hit this tick or the next sounds as a tree's (_sound_impact).
+func _reach_solid_tree(reach: VehicleReach, hit: Dictionary) -> void:
+	var body := hit.get("collider") as CollisionObject3D
+	var shape_owner := body.shape_find_owner(int(hit.get("shape", -1))) if body != null else -1
+	var trunk := body.shape_owner_get_owner(shape_owner) as CollisionShape3D if shape_owner >= 0 else null
+	if trunk == null or trunk.shape == null:
+		return
+	var piece := VehicleReach.shape_box(trunk.shape)
+	if reach.overlaps(trunk.global_transform * Transform3D(Basis.IDENTITY, piece.get_center()), piece.size * 0.5, TREE_TOUCH_M):
+		_tree_touch[reach.body.get_rid()] = Engine.get_physics_frames()
+
+
+## A moving live car's hit this tick, if any (DrivableCar.take_impact): a tree's
+## knock where its reach touched a standing trunk this tick or the last, else a
+## light knock or a crash by how hard. Rate and voices are the sound's own
+## (sounds.json), so a pile-up cannot flood the mix.
+func _sound_impact(car: DRIVABLE_CAR) -> void:
+	var hit := car.take_impact()
+	if hit < IMPACT_LIGHT_MPS:
+		return
+	var at := car.global_position
+	if int(_tree_touch.get(car.get_rid(), -10)) >= Engine.get_physics_frames() - 1:
+		Sound.play(&"car_tree_impact", at, clampf(0.35 + hit / 12.0, 0.35, 1.0))
+	elif hit >= IMPACT_HEAVY_MPS:
+		Sound.play(&"car_impact_heavy", at, clampf(0.6 + (hit - IMPACT_HEAVY_MPS) / 20.0, 0.6, 1.0))
+	else:
+		Sound.play(&"car_impact_light", at, clampf(0.35 + (hit - IMPACT_LIGHT_MPS) / 6.0, 0.35, 1.0))
+
+
+## The driven car's sound (tests read its engine's rev).
+func car_sound() -> CAR_SOUND:
+	return _car_sound
 
 
 ## A live car or K-rail that came to rest and froze, set moving again by a hit
@@ -787,6 +860,7 @@ func _splash(at: Vector3, speed: float, car: DRIVABLE_CAR) -> void:
 	splash.name = "Splash"
 	add_child(splash, true)
 	splash.start(at, speed, car.length_m)
+	Sound.play(&"car_splash", at, clampf(0.4 + speed / 15.0, 0.4, 1.0))
 
 
 ## Where the player gets out: {at, beside, blocked}. Beside the car (the

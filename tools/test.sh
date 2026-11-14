@@ -6,10 +6,12 @@
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
-# 2. The street cars' mesh check (tools/check_street_car_meshes.mjs) and the
-#    sound-effect prompt sheet and tool check (tools/check_sfx.mjs).
+# 2. The street cars' mesh check (tools/check_street_car_meshes.mjs), the
+#    sound-effect prompt sheet and tool check (tools/check_sfx.mjs) and the sound
+#    folder's fetch (tools/check_fetch_sfx.mjs).
 # 3. tools/godot's wait for its private Weston (tools/check_godot_weston_wait.sh):
-#    it waits through a slow start and stops at once when Weston exits.
+#    it waits through a slow start and stops at once when Weston exits; every run
+#    gets the Dummy audio driver unless it names its own.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -80,6 +82,13 @@ node tools/check_street_car_meshes.mjs || failed+=("tools/check_street_car_meshe
 # loop seams (when ffmpeg is on PATH); and Git tracks no audio. A few seconds.
 echo "== tools/check_sfx.mjs"
 node tools/check_sfx.mjs || failed+=("tools/check_sfx.mjs")
+
+# tools/fetch-sfx, offline in temporary folders: nothing without a source; from a
+# folder or a Git repository only the game's sounds' takes, with their manifest's
+# gains; safe to repeat, removing only its own stale takes; a token never
+# printed; a linked sound folder or a source in the project refused. Seconds.
+echo "== tools/check_fetch_sfx.mjs"
+node tools/check_fetch_sfx.mjs || failed+=("tools/check_fetch_sfx.mjs")
 
 # How tools/godot waits for its private Weston, with stand-ins for Weston and
 # Godot (no GPU or engine): through a slow start, and not after Weston has
@@ -178,6 +187,7 @@ for test in \
   game/tests/headless_car_stance.gd \
   game/tests/headless_car_pileup.gd \
   game/tests/headless_touch_drive.gd \
+  game/tests/headless_sound_contract.gd \
   game/tests/automated_route_qa.gd \
   game/tests/shared/island_test.gd
 do

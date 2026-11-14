@@ -329,6 +329,19 @@ var _reach_box := AABB()
 ## without the pieces.
 var _drawn_pieces: Array[CollisionShape3D] = []
 var _moving_pieces: Array[CollisionShape3D] = []
+## For its sound (vehicle_manager.gd, car_sound.gd): how fast its tyres slide this
+## tick (m/s, the fastest of those at their grip's limit), and the hardest hit
+## since the manager last took one (m/s: the velocity's change in a tick beyond
+## what its own forces, gravity and damping made, _predicted, which a crash into a
+## wall, another car or a tree shows though nothing reports the contact).
+var _slip := 0.0
+var _impact := 0.0
+## The velocity its own forces lead to at the next tick, the velocity it was made
+## from, and whether it holds (a put-down, a righting or the water's own steps
+## set the velocity themselves).
+var _predicted := Vector3.ZERO
+var _predicted_from := Vector3.ZERO
+var _predicted_ok := false
 
 
 ## The BODIES entry a body drives with (through ALIASES), or {} for a body
@@ -624,6 +637,24 @@ func is_holding() -> bool:
 	return _holding
 
 
+## Its body's top speed (m/s).
+func top_speed() -> float:
+	return _top
+
+
+## How fast its tyres slide this tick (m/s; 0 while they grip).
+func slip() -> float:
+	return _slip
+
+
+## The hardest hit since the last call (m/s of velocity change in a tick that its
+## own forces did not make), and forgets it.
+func take_impact() -> float:
+	var hit := _impact
+	_impact = 0.0
+	return hit
+
+
 ## The car's frame as drawn this frame (between the last two physics states).
 func visual_transform() -> Transform3D:
 	return _visual.global_transform if _visual != null else global_transform
@@ -670,6 +701,11 @@ func place(at: Transform3D) -> void:
 func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var dt := state.step
 	_clock += dt
+	# A hit since last tick: what the contacts did to the velocity (see _impact).
+	if _predicted_ok:
+		_impact = maxf(_impact, (state.linear_velocity - _predicted).length())
+	_predicted_ok = false
+	_slip = 0.0
 	if _teleport_pending:
 		_teleport_pending = false
 		_righting = -1.0
@@ -753,6 +789,8 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	# drives its quarter (a wheel in the air drives nothing).
 	var load_sum := 0.0
 	var driven := 4
+	# The forces applied this tick, for the velocity they lead to (_predicted).
+	var applied := Vector3.ZERO
 	for i in 4:
 		if hits[i] == null:
 			continue
@@ -774,6 +812,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		var contact: Vector3 = hits[i].point
 		var normal: Vector3 = (hits[i].normal as Vector3).normalized()
 		state.apply_force(up * force, contact - origin)
+		applied += up * force
 		load_sum += force
 		# The tyre frame on the ground: forward along the steered wheel.
 		var heading := forward.rotated(up, _steer) if front else forward
@@ -820,7 +859,12 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		var limit := grip * force
 		if tyre.length() > limit:
 			tyre *= limit / maxf(tyre.length(), 0.001)
+			# At its grip's limit the tyre slides: across, and along too when it is
+			# locked or braking (its sound, slip()).
+			if not held:
+				_slip = maxf(_slip, Vector2(v_lat, v_long if (locked or braking) else 0.0).length())
 		state.apply_force(side * tyre.x + along * tyre.y, contact - origin)
+		applied += side * tyre.x + along * tyre.y
 		_spin[i] = 0.0 if locked else _spin[i] - v_long / wheel_radius * dt
 	for i in 4:
 		if hits[i] == null:
@@ -829,8 +873,10 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	var speed_now := velocity.length()
 	if speed_now > 0.1:
 		state.apply_central_force(-velocity * speed_now * DRAG * mass)
+		applied += -velocity * speed_now * DRAG * mass
 	if _grounded >= 2:
 		state.apply_central_force(-up * DOWNFORCE * forward_speed_now * forward_speed_now * mass)
+		applied += -up * DOWNFORCE * forward_speed_now * forward_speed_now * mass
 	# Mild yaw assist on the wheels: damp the yaw beyond what the steering asks.
 	if _grounded >= 3 and not hand and occupied:
 		var wanted := forward_speed_now * tan(_steer) / maxf(wheelbase, 1.0)
@@ -841,6 +887,12 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 	if _wet >= 0.0:
 		# Rolling on in: the water slows the part of it that is in.
 		state.apply_central_force(-velocity * mass * WATER_DRAG * clampf((water_y - lowest_y(xf)) / maxf(height_m, 0.5), 0.0, 1.0))
+		applied += -velocity * mass * WATER_DRAG * clampf((water_y - lowest_y(xf)) / maxf(height_m, 0.5), 0.0, 1.0)
+	# What those forces, gravity and the damping make of the velocity by the next
+	# tick, as Godot Physics integrates it; whatever else changes it then is a hit.
+	_predicted = velocity * maxf(0.0, 1.0 - dt * state.total_linear_damp) + (state.total_gravity + applied / mass) * dt
+	_predicted_from = velocity
+	_predicted_ok = true
 	_watch_upright(state, dt)
 	_watch_recovery(state, dt)
 
@@ -944,6 +996,7 @@ func _set_state(state: PhysicsDirectBodyState3D, xf: Transform3D, velocity: Vect
 	state.transform = xf
 	state.linear_velocity = velocity
 	state.angular_velocity = Vector3.ZERO
+	_predicted_ok = false
 	_prev = xf
 	_curr = xf
 	# The visual goes there at once too, so a camera that reads it this frame,
@@ -1033,6 +1086,7 @@ func _start_sinking(state: PhysicsDirectBodyState3D) -> void:
 	_under_s = -1.0
 	_upright_wait = 0.0
 	state.linear_velocity *= WATER_IMPACT_KEEP
+	_predicted_ok = false
 
 
 ## Sinking: no wheels, held up by part of its weight once under, slowed, slid on
@@ -1141,6 +1195,12 @@ func _return_spot(space: PhysicsDirectSpaceState3D) -> Transform3D:
 func _physics_process(delta: float) -> void:
 	_prev = _curr
 	_curr = global_transform
+	# The vehicle manager, which runs first, may have taken some of its speed since
+	# its forces were worked out (a fence bay, a felled lamp, a bent tree): that is
+	# no hit, so it is moved into the prediction.
+	if _predicted_ok:
+		_predicted += linear_velocity - _predicted_from
+		_predicted_from = linear_velocity
 	if freeze:
 		return
 	# A car nobody drives freezes once it has come to rest on the island: it stays
@@ -1158,6 +1218,7 @@ func _physics_process(delta: float) -> void:
 ## wheels drawn there once, then no per-frame work until wake().
 func _park() -> void:
 	_park_wait = 0.0
+	_predicted_ok = false
 	freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 	freeze = true
 	_collide_as_drawn(true)
@@ -1176,6 +1237,7 @@ func wake() -> void:
 	_park_wait = 0.0
 	_prev = global_transform
 	_curr = global_transform
+	_predicted_ok = false
 	freeze = false
 	_collide_as_drawn(false)
 	set_process(true)

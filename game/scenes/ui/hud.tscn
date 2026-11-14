@@ -297,6 +297,32 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+[node name="SoundHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Sound"
+vertical_alignment = 2
+
+[node name="SoundRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SoundVolume" type="HSlider" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Volume"
+step = 5.0
+value = 100.0
+
+[node name="SoundMute" type="CheckButton" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+text = "Mute"
+
 [node name="BackButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 custom_minimum_size = Vector2(220, 40)
 layout_mode = 2

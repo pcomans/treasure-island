@@ -10,6 +10,10 @@ fi
 revision="$(git rev-parse HEAD)"
 mkdir -p build/linux
 touch build/.gdignore
+# Optional: the sound files from the private source in TI_SFX_SOURCE, into the
+# ignored game/resources/audio/sfx/ (tools/fetch-sfx). Without a source this does
+# nothing and the build plays whatever that folder holds, or nothing.
+tools/fetch-sfx
 baked=generated/native/static_world.scn
 work="$(mktemp -d)"
 trap 'rm -rf "$work"; rm -f "$baked"' EXIT

@@ -13,7 +13,7 @@ config/icon="res://game/resources/ui/app_icon_360.png"
 
 [audio]
 
-driver/driver="Dummy"
+buses/default_bus_layout="res://game/resources/audio/bus_layout.tres"
 
 [display]
 

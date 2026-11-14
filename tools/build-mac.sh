@@ -31,6 +31,10 @@ work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
 mkdir -p build/mac build/linux
 touch build/.gdignore
+# Optional: the sound files from the private source in TI_SFX_SOURCE, into the
+# ignored game/resources/audio/sfx/ (tools/fetch-sfx). Without a source this does
+# nothing and the build plays whatever that folder holds, or nothing.
+tools/fetch-sfx
 # A fresh checkout has nothing imported yet, and the bake and exports need it.
 # Godot can exit 0 after an import error, so check its output too, as tools/test.sh does.
 godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'

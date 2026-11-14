@@ -119,6 +119,18 @@ const SPILL_SCALE := 1.6
 ## The slow descent, which also follows walking off a ledge, is 1.5 m/s; a tap of
 ## C in the last metre or so before touchdown does not count.
 const POOF_SPEED_SHARE := 0.5
+## Sound (game/scripts/audio/sound.gd). A foot on the land where the drawn ground
+## stands at least FOOT_HARD_LIFT_M over it is on a road, path or painted yard or
+## park surface (VisibleGround: 0.078-0.1 m; areas 0.02-0.05 m), so it sounds
+## hard; on anything solid but the land (a roof, kerb, step, deck, prop or car)
+## too; on the land itself and the areas drawn low over it, soft; in the shallow
+## water the land's ground cover draws (StandingWater), wet. A landing coming down
+## at LANDING_SOUND_MPS or more thumps. A jet start sooner than JET_RESTART_S after
+## the last let-go is not played again (a tap of Space); the jet's and the lid's
+## rattle loops follow the flame.
+const FOOT_HARD_LIFT_M := 0.07
+const LANDING_SOUND_MPS := 1.0
+const JET_RESTART_S := 0.25
 
 var _player: CharacterBody3D
 var _materials: Parts.Materials
@@ -186,6 +198,14 @@ var _flame := 0.0
 var _puff_timer := 0.0
 var _puff_side := 1.0
 var _rng := RandomNumberGenerator.new()
+## The last ground hit's collider and the drawn ground's lift there (_ground_between).
+var _hit_collider: Object
+var _hit_lift := 0.0
+## The jet's thrust last tick, how long it has been held and how long since it
+## was let go (s).
+var _jet_on := false
+var _jet_held_s := 0.0
+var _jet_off_s := INF
 
 
 class Leg:
@@ -206,6 +226,9 @@ class Leg:
 	var current := Vector3.ZERO
 	var current_yaw := 0.0
 	var pitch := 0.0
+	## What the swing lands on: its collider and the drawn ground's lift there.
+	var ground: Object
+	var ground_lift := 0.0
 	## Avatar frame: the dangling foot while airborne, a damped spring.
 	var air := Vector3.ZERO
 	var air_velocity := Vector3.ZERO
@@ -520,14 +543,18 @@ func _ground_between(x: float, z: float, top: float, bottom: float, fallback_y: 
 	_ray.to = Vector3(x, bottom, z)
 	var hit := _space.intersect_ray(_ray)
 	_hit = not hit.is_empty()
+	_hit_collider = null
+	_hit_lift = 0.0
 	if not _hit:
 		_hit_normal = Vector3.UP
 		return Vector3(x, fallback_y, z)
 	_hit_normal = hit.normal
 	var position: Vector3 = hit.position
 	var collider := hit.get("collider") as Node
+	_hit_collider = collider
 	if collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
-		position.y += _visible_ground.lift_at(position.x, position.z)
+		_hit_lift = _visible_ground.lift_at(position.x, position.z)
+		position.y += _hit_lift
 	return position
 
 
@@ -563,7 +590,7 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 			leg.foot = leg.target
 			leg.normal = leg.target_normal
 			leg.yaw = yaw + leg.side * FOOT_TOE_OUT
-			_footstep(speed)
+			_footstep(speed, leg)
 		elif not in_stance and not leg.swinging:
 			leg.swinging = true
 			leg.lift = leg.foot
@@ -575,6 +602,8 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 		var aim := _rest_foot(xf, leg) + (planar * (remaining + stance_time * 0.5) if moving else Vector3.ZERO)
 		leg.target = _ground(aim, xf.origin.y)
 		leg.target_normal = _hit_normal
+		leg.ground = _hit_collider
+		leg.ground_lift = _hit_lift
 		var ease := u * u * (3.0 - 2.0 * u)
 		var rise := leg.target.y - leg.lift.y
 		# Step up quickly and down late, so the toe clears a stair's nosing.
@@ -590,7 +619,11 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 	return amplitude * 0.5 * pow(4.0 * PI * _cadence, 2.0) * cos(angle)
 
 
-func _footstep(speed: float) -> void:
+func _footstep(speed: float, leg: Leg) -> void:
+	# The step's sound where the sole lands: softer walking, full at the run, a
+	# shuffle when settling on the spot.
+	var loudness := clampf(0.35 + speed / 14.0, 0.35, 1.0) if speed > STAND_SPEED else 0.3
+	Sound.play(footstep_sound(leg.ground, leg.foot - Vector3.UP * leg.ground_lift, leg.ground_lift), leg.foot, loudness)
 	var strength := clampf((speed - 1.0) / 10.0, 0.12, 1.3)
 	_lid_speed += LID_STEP_KICK * strength
 	if speed > SPILL_SPEED and _rng.randf() < SPILL_CHANCE:
@@ -602,7 +635,21 @@ func _footstep(speed: float) -> void:
 				coin.spin_speed = _rng.randf_range(-14.0, 14.0)
 
 
+## The footstep sound for a foot on collider at point (on its collision, below any
+## drawn lift): see FOOT_HARD_LIFT_M.
+static func footstep_sound(collider: Object, point: Vector3, lift: float) -> StringName:
+	var body := collider as Node if is_instance_valid(collider) else null
+	var record := body.get_parent() if body != null else null
+	if record == null or str(record.get_meta("feature_kind", "")) != "land_ground":
+		return &"footstep_hard"
+	if StandingWater.covers(body, point):
+		return &"footstep_water"
+	return &"footstep_hard" if lift >= FOOT_HARD_LIFT_M else &"footstep_soft"
+
+
 func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
+	if fall_speed >= LANDING_SOUND_MPS:
+		Sound.play(&"landing", xf.origin, clampf(0.3 + fall_speed / 12.0, 0.3, 1.0))
 	var impact := clampf(fall_speed / 1.5, 0.2, 1.4)
 	_squash_speed -= LANDING_SQUASH * impact
 	if impact > 0.7:
@@ -641,6 +688,8 @@ func _take_off(xf: Transform3D, thrust: bool) -> void:
 
 func _reset(xf: Transform3D) -> void:
 	_reset_pending = false
+	_jet_on = false
+	_jet_off_s = INF
 	_space = get_world_3d().direct_space_state
 	var yaw := atan2(xf.basis.z.x, xf.basis.z.z)
 	_last_yaw = yaw
@@ -1026,6 +1075,24 @@ func _update_blobs(xf: Transform3D) -> void:
 func _update_jet(thrust: bool, delta: float) -> void:
 	_flame = _approach(_flame, 1.0 if thrust else 0.0, delta, 0.04 if thrust else 0.07)
 	_materials.flame.set_shader_parameter("intensity", _flame if _flame > 0.01 else 0.0)
+	# The jet's sound: a start (not for a tap straight after the last), the roar
+	# and the lid's rattle following the flame, a tail when let go.
+	var nozzles := global_position + Vector3.UP * 0.8
+	if thrust and not _jet_on:
+		_jet_held_s = 0.0
+		if _jet_off_s >= JET_RESTART_S:
+			Sound.play(&"jet_start", nozzles)
+	elif not thrust and _jet_on:
+		_jet_off_s = 0.0
+		Sound.play(&"jet_stop", nozzles, clampf(0.4 + _jet_held_s / 0.6, 0.4, 1.0))
+	_jet_on = thrust
+	if thrust:
+		_jet_held_s += delta
+	else:
+		_jet_off_s += delta
+	if _flame > 0.002:
+		Sound.hold(&"jet_loop", self, _flame, nozzles)
+		Sound.hold(&"chest_rattle_loop", self, _flame, global_position + Vector3.UP * 0.6)
 	if thrust:
 		_puff_timer -= delta
 		while _puff_timer <= 0.0:

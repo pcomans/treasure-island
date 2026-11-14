@@ -10,6 +10,13 @@
 # Without --headless, renders on the GPU through a private headless Weston
 # compositor. Under xvfb Godot silently falls back to llvmpipe (CPU), so xvfb
 # is not used.
+#
+# Sound: every run here uses Godot's Dummy audio driver (it still mixes, so
+# players and buses work, but nothing is heard), unless the command names an
+# --audio-driver of its own. The game itself has sound and takes each platform's
+# own driver (project.godot), but no development, test, capture or build launch
+# here has anything to hear it on, and a real driver failing to open in the
+# container would only add errors to the output.
 set -euo pipefail
 
 bin="${GODOT_BIN:-/opt/godot/4.7.2/godot}"
@@ -25,9 +32,11 @@ for arg in "$@"; do
   engine_args+=("${arg}")
 done
 has_flag() { local flag; for flag in "${engine_args[@]}"; do [ "${flag}" = "$1" ] && return 0; done; return 1; }
+audio=()
+has_flag --audio-driver || audio=(--audio-driver Dummy)
 
 if has_flag --headless; then
-  exec "${bin}" "$@"
+  exec "${bin}" "${audio[@]}" "$@"
 fi
 
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/xdg-$(id -u)}"
@@ -94,7 +103,7 @@ fi
 # The GTK window-decoration plugin crashes inside the container.
 export LIBDECOR_PLUGIN_DIR="${LIBDECOR_PLUGIN_DIR:-/nonexistent}"
 
-extra=()
+extra=("${audio[@]}")
 has_flag --display-driver || extra+=(--display-driver wayland)
 has_flag --rendering-driver || extra+=(--rendering-driver vulkan)
 # Godot 4.7.2 can hang at exit on Wayland. WaylandThread::destroy() sets

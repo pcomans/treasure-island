@@ -5,6 +5,9 @@ signal resume_requested
 signal exit_requested
 ## A shadow level chosen on the options screen (main.gd puts it on and keeps it).
 signal shadow_quality_chosen(id: String)
+## The master volume (0..1) or mute changed on the options screen (main.gd puts
+## it on and keeps it).
+signal sound_settings_changed(volume: float, muted: bool)
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -58,12 +61,16 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
 ## The options screen, opened from the pause menu: the sun's shadow quality, a
 ## button for each level main.gd offers here (set_shadow_levels), the level on
-## pressed and its note under them. A solid panel over the dimmed game, which shows
+## pressed and its note under them, where there is a choice to make; then the
+## sound's master volume and mute. A solid panel over the dimmed game, which shows
 ## a change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
+@onready var shadows_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowsHeading
 @onready var shadow_levels: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowLevels
 @onready var shadow_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowNote
+@onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
+@onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
 ## behind its Licences button, the licence texts that ship with the game and the
@@ -122,6 +129,10 @@ func _ready() -> void:
 	credits_back_button.pressed.connect(credits_back)
 	for scroll: ScrollContainer in [credits_list, credits_licences]:
 		scroll.gui_input.connect(_on_credits_scroll_input.bind(scroll))
+	sound_volume.value_changed.connect(func(_value: float) -> void: _sound_changed())
+	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed())
+	for button: Node in find_children("*", "BaseButton", true, false):
+		_click_on_press(button as BaseButton)
 	_fill_controls()
 	_fill_credits()
 	feedback_panel.hide()
@@ -234,13 +245,14 @@ func controls_visible() -> bool:
 	return controls_screen.visible
 
 
-## Shows the options screen in place of the pause menu, the level on now focused;
-## Back, or Esc (main.gd), returns.
+## Shows the options screen in place of the pause menu, the shadow level on now
+## focused (the volume where there is no shadow choice); Back, or Esc (main.gd),
+## returns.
 func show_options() -> void:
 	pause_panel.hide()
 	options_screen.show()
 	var on := _shadow_group.get_pressed_button()
-	(on if on != null else options_back_button).grab_focus()
+	(on if on != null and shadow_levels.visible else sound_volume).grab_focus()
 
 
 func hide_options() -> void:
@@ -256,7 +268,8 @@ func options_visible() -> bool:
 
 ## The shadow levels to offer, as ShadowQuality.offered() gives them, with the one
 ## on now pressed. Pressing another asks main.gd to put it on (shadow_quality_chosen).
-## With no choice to make the pause menu has no Options.
+## With no choice to make (the web's Off alone) the options screen shows no shadow
+## levels, only the sound, which every platform has.
 func set_shadow_levels(levels: Array, current: String) -> void:
 	for child: Node in shadow_levels.get_children():
 		shadow_levels.remove_child(child)
@@ -275,9 +288,39 @@ func set_shadow_levels(levels: Array, current: String) -> void:
 		button.toggled.connect(func(on: bool) -> void:
 			if on:
 				shadow_quality_chosen.emit(id))
+		_click_on_press(button)
 		shadow_levels.add_child(button)
-	options_button.visible = levels.size() > 1
+	var choice := levels.size() > 1
+	for part: Control in [shadows_heading, shadow_levels, shadow_note]:
+		part.visible = choice
+	options_button.visible = true
 	show_shadow_level(current)
+
+
+## The master volume (0..1) and mute on now, shown on the options screen without
+## asking for them again.
+func set_sound_settings(volume: float, muted: bool) -> void:
+	sound_volume.set_value_no_signal(roundf(clampf(volume, 0.0, 1.0) * sound_volume.max_value / sound_volume.step) * sound_volume.step)
+	sound_mute.set_pressed_no_signal(muted)
+
+
+## The volume as the slider shows it (0..1).
+func sound_volume_share() -> float:
+	return sound_volume.value / sound_volume.max_value
+
+
+func _sound_changed() -> void:
+	sound_settings_changed.emit(sound_volume_share(), sound_mute.button_pressed)
+
+
+## The menus' click (game/scripts/audio/sound.gd) when a button is pressed.
+func _click_on_press(button: BaseButton) -> void:
+	if button != null and not button.pressed.is_connected(_click):
+		button.pressed.connect(_click)
+
+
+func _click() -> void:
+	Sound.play(&"ui_click")
 
 
 ## Shows the level on now: its button pressed and every other let go (without
@@ -654,7 +697,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Button in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children():
 		(button as Button).custom_minimum_size.y = 64.0
@@ -674,5 +717,6 @@ func set_pointer_capture_hint(show_hint: bool) -> void:
 		_capture_hint.offset_top = 20.0
 		_capture_hint.offset_bottom = 68.0
 		_capture_hint.pressed.connect(func() -> void: resume_requested.emit())
+		_click_on_press(_capture_hint)
 	if _capture_hint != null:
 		_capture_hint.visible = show_hint
