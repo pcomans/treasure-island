@@ -137,6 +137,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
 - [KNOWN_ISSUES.md](KNOWN_ISSUES.md): known issues and planned work.
+- [tools/sfx/README.md](tools/sfx/README.md): the sound-effect prompts and the tool that makes the audio (`tools/generate-sfx`); the audio itself stays out of Git.
 - Older records: Git history and `evidence/`.
 
 

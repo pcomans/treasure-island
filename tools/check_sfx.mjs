@@ -1,0 +1,417 @@
+#!/usr/bin/env node
+// Checks the sound-effect prompt sheet and its tool (tools/sfx/, tools/generate-sfx)
+// offline: no engine, no network, no API key, no audio left behind.
+//
+// - The sheet is valid, and the validator rejects each kind of broken row it
+//   guards against (so a valid result means something).
+// - The dry run requests nothing and prices every row; its tier and total
+//   credits equal credits_per_second x seconds x candidates summed here.
+// - The tool refuses an --out inside the repository and a real run without a
+//   key, before any request.
+// - Against a stand-in for the ElevenLabs API on this machine's loopback: the
+//   requests carry the sheet's model and settings and the key (read from
+//   ~/.config/elevenlabs/.env); no more run at once than allowed; a 429 is
+//   waited out; a second run requests nothing (resumable, never paid twice);
+//   --force-id keeps the old candidates aside; an error stops the run; the key
+//   is never printed or logged.
+// - Post-processing (when ffmpeg is on PATH): a one-shot starts at its onset,
+//   is cut and peak-normalised; a loop's end runs on into its start; picks
+//   choose the takes. Without ffmpeg the tool says so.
+// - Git tracks no audio, and .gitignore keeps it out.
+//
+//   node tools/check_sfx.mjs
+//
+// Prints FAIL lines and exits 1 on any failure.
+
+import { spawn, spawnSync } from "node:child_process";
+import { createServer } from "node:http";
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { REPO_ROOT, SHEET_PATH, loadSheet, validateSheet } from "./sfx/generate_sfx.mjs";
+
+const TOOL_MODULE = resolve(dirname(fileURLToPath(import.meta.url)), "sfx", "generate_sfx.mjs");
+const WRAPPER = join(REPO_ROOT, "tools", "generate-sfx");
+const failures = [];
+const passes = [];
+const check = (ok, text) => (ok ? null : failures.push(text));
+const AUDIO_RE = /\.(?:wav|ogg|oga|mp3|flac|opus|m4a|aac|aif|aiff|weba)(?:\.import)?$/iu;
+
+const scratch = mkdtempSync(join(tmpdir(), "ti-sfx-check-"));
+// The child's environment: no real key, no GIT_ variables, a HOME of our own.
+const baseEnv = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith("ELEVENLABS_") && !key.startsWith("GIT_")));
+const emptyHome = join(scratch, "home-empty");
+mkdirSync(emptyHome);
+
+function runTool(args, { env = {}, home = emptyHome, wrapper = false } = {}) {
+  return new Promise((done) => {
+    const child = spawn(wrapper ? "bash" : process.execPath, [wrapper ? WRAPPER : TOOL_MODULE, ...args], {
+      cwd: REPO_ROOT,
+      env: { ...baseEnv, HOME: home, ...env },
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => { stdout += chunk; });
+    child.stderr.on("data", (chunk) => { stderr += chunk; });
+    child.on("close", (code) => done({ code, stdout, stderr, all: stdout + stderr }));
+  });
+}
+
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const sleep = (ms) => new Promise((done) => setTimeout(done, ms));
+
+// --- 1. The sheet ------------------------------------------------------------
+
+const { sheet, problems } = loadSheet(SHEET_PATH);
+if (!sheet) {
+  console.log(`FAIL ${problems.join("; ")}`);
+  process.exit(1);
+}
+for (const text of problems) failures.push(`tools/sfx/prompts.json: ${text}`);
+if (!problems.length) {
+  const longest = Math.max(...sheet.sounds.map((row) => row.prompt.length));
+  passes.push(`sheet valid: ${sheet.sounds.length} sounds, longest prompt ${longest} characters, every event voiced or explained`);
+}
+
+// Each broken copy must be rejected with the matching reason.
+{
+  const loopRow = sheet.sounds.findIndex((row) => row.loop);
+  const shotRow = sheet.sounds.findIndex((row) => !row.loop);
+  const shotRecipe = Object.keys(sheet.recipes).find((name) => !Object.hasOwn(sheet.recipes[name], "loop_crossfade_ms"));
+  const loopRecipe = Object.keys(sheet.recipes).find((name) => Object.hasOwn(sheet.recipes[name], "loop_crossfade_ms"));
+  const broken = [
+    ["a repeated id", (s) => { s.sounds[1].id = s.sounds[0].id; }, "id is used twice"],
+    ["a 31 s duration", (s) => { s.sounds[shotRow].duration_seconds = 31; }, "duration_seconds must be from"],
+    ["a 0.4 s duration", (s) => { s.sounds[shotRow].duration_seconds = 0.4; }, "duration_seconds must be from"],
+    ["a 451-character prompt", (s) => { s.sounds[shotRow].prompt = `High-quality foley ${"x".repeat(451)}`.slice(0, 451); }, "at most 450"],
+    ["a loop row with a one-shot recipe", (s) => { s.sounds[loopRow].recipe = shotRecipe; }, "a loop row needs a loop recipe"],
+    ["a one-shot row with a loop recipe", (s) => { s.sounds[shotRow].recipe = loopRecipe; }, "a one-shot row needs a one-shot recipe"],
+    ["a car prompt without the car", (s) => { s.sounds[shotRow].prompt = "High-quality recording of a car door closing."; }, "mentions a car without naming"],
+    ["loop in the prompt text", (s) => { s.sounds[loopRow].prompt += " Make it loop."; }, "says loop in the text"],
+    ["a length in the prompt text", (s) => { s.sounds[shotRow].prompt += " About 3 seconds long."; }, "gives a length in the text"],
+    ["a number of repetitions", (s) => { s.sounds[shotRow].prompt = "High-quality foley of four footsteps on gravel."; }, "number of repetitions"],
+    ["an event nobody voices", (s) => { s.events.Z9 = "An event added for the check"; }, "neither voiced by a sound nor listed"],
+    ["an unknown event", (s) => { s.sounds[shotRow].events = ["Z8"]; }, "unknown event Z8"],
+    ["no model_id", (s) => { delete s.model_id; }, "model_id must name the model"],
+    ["an output used twice", (s) => { s.sounds[1].output = s.sounds[0].output; }, "is used twice"],
+    ["an unknown row field", (s) => { s.sounds[shotRow].duration = 1; }, "unknown field duration"],
+    ["a loop too short for its crossfade", (s) => { s.sounds[loopRow].duration_seconds = 0.5; }, "too short for the recipe's"],
+  ];
+  let caught = 0;
+  for (const [what, mutate, expected] of broken) {
+    const copy = clone(sheet);
+    mutate(copy);
+    const found = validateSheet(copy);
+    if (found.some((text) => text.includes(expected))) caught += 1;
+    else failures.push(`the sheet validator accepted ${what} (expected "${expected}", got: ${found.join("; ") || "no problems"})`);
+  }
+  if (caught === broken.length) passes.push(`validator rejects all ${broken.length} kinds of broken sheet`);
+}
+
+// --- Stand-in API ------------------------------------------------------------
+
+const MAGIC = { wav: Buffer.from("RIFF\0\0\0\0WAVEfmt "), mp3: Buffer.from("ID3\u0004\0\0\0\0\0\0") };
+
+async function startStandIn(answer) {
+  const state = { requests: [], inFlight: 0, maxInFlight: 0 };
+  const server = createServer(async (request, response) => {
+    state.inFlight += 1;
+    state.maxInFlight = Math.max(state.maxInFlight, state.inFlight);
+    let body = "";
+    for await (const chunk of request) body += chunk;
+    const url = new URL(request.url, "http://stand-in");
+    let json = null;
+    try {
+      json = JSON.parse(body);
+    } catch {
+      // Recorded as null; the assertions below report it.
+    }
+    const seen = { method: request.method, path: url.pathname, format: url.searchParams.get("output_format"), key: request.headers["xi-api-key"], body: json };
+    const arrival = state.requests.push(seen);
+    await sleep(60);
+    const reply = answer(seen, arrival);
+    state.inFlight -= 1;
+    response.writeHead(reply.status, reply.headers ?? {});
+    response.end(reply.body ?? "");
+  });
+  await new Promise((done) => server.listen(0, "127.0.0.1", done));
+  state.base = `http://127.0.0.1:${server.address().port}`;
+  state.close = () => new Promise((done) => server.close(done));
+  return state;
+}
+
+const audioReply = (seen) => {
+  const kind = (seen.format ?? "").split("_")[0];
+  return { status: 200, headers: { "content-type": kind === "wav" ? "audio/wav" : "audio/mpeg" }, body: Buffer.concat([MAGIC[kind] ?? Buffer.from("?"), Buffer.from(JSON.stringify(seen.body ?? {}))]) };
+};
+
+// A small valid sheet, so these checks do not depend on the real sheet's rows.
+function fixtureSheet() {
+  return {
+    schema_version: sheet.schema_version,
+    notes: ["A fixture for tools/check_sfx.mjs."],
+    model_id: sheet.model_id,
+    credits_per_second: sheet.credits_per_second,
+    plan: { name: "Fixture", credits_per_month: 100000, concurrency: 3 },
+    output_format: { one_shot: "wav_48000", loop: "mp3_44100_192" },
+    car: { name: "Fixture Car", basis: "production_inference", why: "A fixture." },
+    encode: { codec: "libvorbis", quality: 5, sample_rate: 44100 },
+    recipes: {
+      shot: { what: "A short transient.", channels: 1, trim_start_db: -50, trim_end_db: -55, max_seconds: 0.3, fade_in_ms: 2, fade_out_ms: 40, peak_dbfs: -1 },
+      bed: { what: "A loop.", channels: 1, trim_start_db: -90, trim_end_db: -90, loop_crossfade_ms: 150, peak_dbfs: -1 },
+    },
+    events: { T1: "A test event.", T2: "Another test event." },
+    not_voiced: {},
+    sounds: [
+      { id: "shot", tier: 1, events: ["T1"], prompt: "High-quality foley one-shot: a single knock on a wooden door, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 2, candidates_per_take: 2, output: "test/shot_{take}.ogg", recipe: "shot" },
+      { id: "bed", tier: 2, events: ["T2"], prompt: "Ambience: soft steady rain on a tin roof, recorded close.", duration_seconds: 3.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 3, output: "test/bed_{take}.ogg", recipe: "bed" },
+    ],
+  };
+}
+
+const fixturePath = join(scratch, "fixture-sheet.json");
+writeFileSync(fixturePath, `${JSON.stringify(fixtureSheet(), null, 2)}\n`);
+const fixture = fixtureSheet();
+check(validateSheet(fixture).length === 0, `the fixture sheet is invalid: ${validateSheet(fixture).join("; ")}`);
+const fixtureGenerations = fixture.sounds.reduce((sum, row) => sum + row.keep_takes * row.candidates_per_take, 0);
+
+// --- 2 and 3. Dry run and refusals ---------------------------------------------
+
+const idle = await startStandIn(() => ({ status: 500, body: "the dry run and refusals must not call the API" }));
+const idleEnv = { ELEVENLABS_API_BASE: idle.base };
+{
+  const dry = await runTool(["--out", join(scratch, "dry")], { env: idleEnv });
+  const viaWrapper = await runTool(["--out", join(scratch, "dry")], { env: idleEnv, wrapper: true });
+  check(dry.code === 0, `the dry run exited ${dry.code}: ${dry.stderr.trim()}`);
+  check(dry.stdout.includes("Dry run: nothing was requested."), "the dry run did not say it requested nothing");
+  check(!existsSync(join(scratch, "dry")), "the dry run created its --out directory");
+  const sum = (rows) => rows.reduce((total, row) => total + sheet.credits_per_second * row.duration_seconds * row.keep_takes * row.candidates_per_take, 0);
+  const number = (text) => Number(text.replaceAll(",", ""));
+  const total = dry.stdout.match(/^total: \d+ sounds?, \d+ generations?, ([\d,]+) credits; to make: ([\d,]+)/mu);
+  check(total && number(total[1]) === Math.round(sum(sheet.sounds)) && number(total[2]) === number(total[1]), `the dry run's total line ${total?.[0] ?? "is missing"}; expected ${Math.round(sum(sheet.sounds))} credits, all still to make`);
+  for (const tier of [1, 2, 3]) {
+    const rows = sheet.sounds.filter((row) => row.tier === tier);
+    if (!rows.length) continue;
+    const line = dry.stdout.match(new RegExp(`^tier ${tier}: .*?, ([\\d,]+) credits;`, "mu"));
+    check(line && number(line[1]) === Math.round(sum(rows)), `the dry run's tier ${tier} line ${line?.[0] ?? "is missing"}; expected ${Math.round(sum(rows))} credits`);
+  }
+  const missingRows = sheet.sounds.filter((row) => !new RegExp(`^${row.id} +${row.tier} `, "mu").test(dry.stdout));
+  check(!missingRows.length, `the dry run did not list ${missingRows.map((row) => row.id).join(", ")}`);
+  check(viaWrapper.code === 0 && viaWrapper.stdout === dry.stdout, `tools/generate-sfx (the wrapper) exited ${viaWrapper.code} or printed something else than the module: ${viaWrapper.stderr.trim()}`);
+  if (total) passes.push(`dry run lists every sound; ${total[0].replace(/^total: /u, "")}`);
+
+  const inRepo = await runTool(["--out", join(REPO_ROOT, "build", "sfx-check-out"), "--generate"], { env: { ...idleEnv, ELEVENLABS_API_KEY: "check-key-never-used" } });
+  check(inRepo.code === 2 && inRepo.stderr.includes("refusing --out"), `an --out inside the repository was not refused (exit ${inRepo.code}): ${inRepo.all.trim()}`);
+  const noKeyOut = join(scratch, "no-key");
+  const noKey = await runTool(["--out", noKeyOut, "--generate"], { env: idleEnv });
+  check(noKey.code === 1 && noKey.stderr.includes("needs ELEVENLABS_API_KEY") && noKey.stderr.includes("nothing was requested"), `a real run without a key was not refused (exit ${noKey.code}): ${noKey.stderr.trim()}`);
+  check(!existsSync(noKeyOut), "a refused real run created its --out directory");
+  const usage = await runTool([]);
+  check(usage.code === 2 && usage.stderr.includes("--out DIR is required"), `a run without --out exited ${usage.code}`);
+  check(idle.requests.length === 0, `the dry run or a refused run sent ${idle.requests.length} requests`);
+  if (inRepo.code === 2 && noKey.code === 1 && idle.requests.length === 0) passes.push("refuses an in-repository --out (exit 2) and a real run without a key (exit 1), sending nothing");
+}
+await idle.close();
+
+// --- 4. Generation against the stand-in ------------------------------------------
+
+{
+  const key = "check-key-from-file-1a2b3c";
+  const home = join(scratch, "home-with-key");
+  mkdirSync(join(home, ".config", "elevenlabs"), { recursive: true });
+  writeFileSync(join(home, ".config", "elevenlabs", ".env"), `# test\nexport ELEVENLABS_API_KEY="${key}"\n`);
+  const out = join(scratch, "gen");
+  let throttled = 0;
+  const api = await startStandIn((seen, count) => {
+    if (count <= 2) {
+      throttled += 1;
+      return { status: 429, headers: { "content-type": "application/json", "retry-after": "0" }, body: JSON.stringify({ detail: { status: "too_many_concurrent_requests" } }) };
+    }
+    return audioReply(seen);
+  });
+  const env = { ELEVENLABS_API_BASE: api.base };
+  const first = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--concurrency", "2"], { env, home });
+  check(first.code === 0, `generation against the stand-in exited ${first.code}: ${first.stderr.trim()}`);
+  check(throttled === 2 && first.stderr.includes("HTTP 429"), "the 429 answers were not waited out with a NOTE");
+  const firstAtOnce = api.maxInFlight;
+  check(firstAtOnce <= 2, `${firstAtOnce} requests ran at once with --concurrency 2`);
+  const answered = api.requests.slice(throttled);
+  check(answered.length === fixtureGenerations, `${answered.length} answered requests for ${fixtureGenerations} candidates`);
+  const rowsById = new Map(fixture.sounds.map((row) => [row.id, row]));
+  for (const seen of api.requests) {
+    const row = fixture.sounds.find((item) => item.prompt === seen.body?.text);
+    const ok = seen.method === "POST" && seen.path === "/v1/sound-generation" && seen.key === key && row
+      && seen.body.model_id === fixture.model_id && seen.body.duration_seconds === row.duration_seconds && seen.body.loop === row.loop
+      && seen.body.prompt_influence === row.prompt_influence && seen.format === (row.loop ? fixture.output_format.loop : fixture.output_format.one_shot);
+    if (!ok) {
+      failures.push(`a request did not carry the sheet's model, settings and key: ${JSON.stringify({ ...seen, key: seen.key === key ? "(the key)" : "(something else)" })}`);
+      break;
+    }
+  }
+  const logPath = join(out, "generation-log.jsonl");
+  const log = existsSync(logPath) ? readFileSync(logPath, "utf8") : "";
+  const entries = log.split("\n").filter(Boolean).map((line) => JSON.parse(line));
+  for (const row of fixture.sounds) {
+    for (let n = 1; n <= row.keep_takes * row.candidates_per_take; n += 1) {
+      const file = `candidates/${row.id}/${row.id}.c${String(n).padStart(2, "0")}.${(row.loop ? fixture.output_format.loop : fixture.output_format.one_shot).split("_")[0]}`;
+      check(existsSync(join(out, file)), `candidate ${file} was not written`);
+      const entry = entries.find((item) => item.file === file && item.status === "ok");
+      check(entry && entry.id === row.id && entry.prompt === row.prompt && entry.model_id === fixture.model_id && entry.duration_seconds === row.duration_seconds
+        && entry.loop === row.loop && entry.prompt_influence === row.prompt_influence && entry.credits === fixture.credits_per_second * row.duration_seconds && !Number.isNaN(Date.parse(entry.time)),
+      `the generation log has no complete line for ${file}`);
+    }
+  }
+  check(!readdirSync(join(out, "candidates", "shot")).some((name) => name.endsWith(".part")), "a .part file was left behind");
+
+  const before = api.requests.length;
+  const again = await runTool(["--out", out, "--generate", "--sheet", fixturePath], { env, home });
+  check(again.code === 0 && again.stdout.includes("Nothing to make") && api.requests.length === before, `a second run requested ${api.requests.length - before} more candidates (exit ${again.code})`);
+
+  api.maxInFlight = 0;
+  const forced = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--force-id", "shot"], { env, home });
+  check(api.maxInFlight <= fixture.plan.concurrency, `${api.maxInFlight} requests ran at once; the plan allows ${fixture.plan.concurrency}`);
+  const shot = rowsById.get("shot");
+  const shotGenerations = shot.keep_takes * shot.candidates_per_take;
+  const aside = readdirSync(join(out, "candidates", "shot")).find((name) => name.startsWith("replaced-"));
+  check(forced.code === 0 && api.requests.length === before + shotGenerations, `--force-id shot made ${api.requests.length - before} requests (exit ${forced.code}); expected ${shotGenerations}`);
+  check(aside && readdirSync(join(out, "candidates", "shot", aside)).length === shotGenerations, "--force-id did not keep the replaced candidates aside");
+
+  const printed = [first, again, forced].map((result) => result.all).join("\n");
+  check(!printed.includes(key) && !readFileSync(logPath, "utf8").includes(key), "the API key was printed or logged");
+  await api.close();
+  passes.push(`generation: model and settings sent, key read from ~/.config/elevenlabs/.env, ${firstAtOnce} at once with --concurrency 2 and ${api.maxInFlight} by the plan's ${fixture.plan.concurrency}, 429s waited out, rerun requested nothing, --force-id kept ${shotGenerations} aside`);
+}
+
+// An error stops the run and names the status; a request waiting to retry a 429
+// is not sent after the stop; the key never shows, even when the answer echoes it.
+{
+  const key = "check-key-env-9z8y7x";
+  const out = join(scratch, "denied");
+  const api = await startStandIn((seen, arrival) => (arrival === 1
+    ? { status: 429, headers: { "content-type": "application/json", "retry-after": "1" }, body: "{}" }
+    : { status: 401, headers: { "content-type": "application/json" }, body: JSON.stringify({ detail: { status: "invalid_api_key", message: `Invalid API key: ${key}` } }) }));
+  const denied = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--concurrency", "2"], { env: { ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: key } });
+  const log = existsSync(join(out, "generation-log.jsonl")) ? readFileSync(join(out, "generation-log.jsonl"), "utf8") : "";
+  check(denied.code === 1 && denied.stderr.includes("HTTP 401") && denied.stderr.includes("[key]"), `a 401 did not stop the run with its status (exit ${denied.code}): ${denied.stderr.trim()}`);
+  check(api.requests.length === 2, `the run sent ${api.requests.length} requests; after the 401 the one waiting out its 429 should not have been sent again`);
+  check(!denied.all.includes(key) && !log.includes(key), "the API key echoed in an error was printed or logged");
+  check(log.includes("\"status\":\"error\""), "the stopping error was not logged");
+  await api.close();
+  if (denied.code === 1 && api.requests.length === 2) passes.push("an HTTP 401 stops the run; a request waiting out a 429 is not sent after the stop; the echoed key is redacted");
+}
+
+// --- 5. Post-processing --------------------------------------------------------
+
+const hasTool = (tool) => {
+  const probe = spawnSync(tool, ["-version"], { encoding: "utf8" });
+  return !probe.error && probe.status === 0;
+};
+
+function decode(file) {
+  const result = spawnSync("ffmpeg", ["-v", "error", "-nostdin", "-i", file, "-f", "f32le", "-ac", "1", "-"], { maxBuffer: 256 * 1024 * 1024 });
+  if (result.status !== 0) throw new Error(`could not decode ${file}`);
+  const bytes = result.stdout;
+  return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.length / 4);
+}
+
+const channelsOf = (file) => Number(spawnSync("ffprobe", ["-v", "error", "-select_streams", "a:0", "-show_entries", "stream=channels", "-of", "csv=p=0", file], { encoding: "utf8" }).stdout.trim());
+const peakOf = (samples) => samples.reduce((peak, value) => Math.max(peak, Math.abs(value)), 0);
+
+// The jump across the wrap (last sample to first) against the signal's own 99th-percentile step.
+function seamRatio(samples) {
+  const steps = [];
+  for (let i = 1; i < samples.length; i += 1) steps.push(Math.abs(samples[i] - samples[i - 1]));
+  steps.sort((a, b) => a - b);
+  return Math.abs(samples[0] - samples[samples.length - 1]) / steps[Math.floor(steps.length * 0.99)];
+}
+
+function synthesize(file, filter, inputs) {
+  const result = spawnSync("ffmpeg", ["-v", "error", "-nostdin", "-y", ...inputs.flatMap((input) => ["-f", "lavfi", "-i", input]), ...filter, file], { encoding: "utf8" });
+  if (result.status !== 0) throw new Error(`could not make ${file}: ${result.stderr}`);
+}
+
+{
+  const out = join(scratch, "process");
+  const noFfmpeg = await runTool(["--out", out, "--process", "--sheet", fixturePath], { env: { PATH: join(scratch, "empty-path") } });
+  check(noFfmpeg.code === 1 && noFfmpeg.stderr.includes("not on PATH"), `--process without ffmpeg did not say so (exit ${noFfmpeg.code}): ${noFfmpeg.stderr.trim()}`);
+  if (!hasTool("ffmpeg") || !hasTool("ffprobe")) {
+    console.log("NOTE sfx: ffmpeg or ffprobe is not on PATH, so post-processing was not checked (.devcontainer/post-create.sh does not install them yet)");
+  } else {
+    const shotDir = join(out, "candidates", "shot");
+    const bedDir = join(out, "candidates", "bed");
+    mkdirSync(shotDir, { recursive: true });
+    mkdirSync(bedDir, { recursive: true });
+    // Two knocks in silence: a 0.12 s and a 0.2 s burst, so each take shows its source.
+    for (const [n, lead, burst] of [[1, 0.3, 0.12], [2, 0.25, 0.2]]) {
+      synthesize(join(shotDir, `shot.c0${n}.wav`), ["-filter_complex", "[1:a]aformat=channel_layouts=stereo[n];[0:a][n][2:a]concat=n=3:v=0:a=1[o]", "-map", "[o]", "-c:a", "pcm_s16le"],
+        [`anullsrc=r=48000:cl=stereo:d=${lead}`, `anoisesrc=r=48000:a=0.5:d=${burst}:c=white:seed=${n}`, "anullsrc=r=48000:cl=stereo:d=0.4"]);
+    }
+    // A 437 Hz tone of 2.3 s ends mid-cycle, so as generated it would click at the seam.
+    synthesize(join(bedDir, "bed.c01.mp3"), ["-c:a", "libmp3lame", "-b:a", "192k"], ["sine=frequency=437:sample_rate=44100:duration=2.3"]);
+    const processed = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
+    check(processed.code === 0, `--process exited ${processed.code}: ${processed.all.trim()}`);
+    const take = (name) => join(out, "game", "test", name);
+    if (processed.code === 0) {
+      const recipe = fixture.recipes.shot;
+      const shots = ["shot_01.ogg", "shot_02.ogg"].map((name) => decode(take(name)));
+      for (const [index, samples] of shots.entries()) {
+        const seconds = samples.length / fixture.encode.sample_rate;
+        const peak = peakOf(samples);
+        const onset = samples.findIndex((value) => Math.abs(value) > peak * 0.1) / fixture.encode.sample_rate;
+        const peakDb = 20 * Math.log10(peak);
+        check(channelsOf(take(`shot_0${index + 1}.ogg`)) === recipe.channels, `shot_0${index + 1}.ogg is not ${recipe.channels}-channel`);
+        check(seconds > 0.05 && seconds <= recipe.max_seconds + 0.02, `shot_0${index + 1}.ogg lasts ${seconds.toFixed(3)} s; the recipe keeps at most ${recipe.max_seconds} s`);
+        check(onset <= 0.01, `shot_0${index + 1}.ogg starts ${(onset * 1000).toFixed(1)} ms before its onset; the silence before it should be cut`);
+        // Decoded, as the game hears it: at most a hair over the recipe's peak, never far under.
+        check(peakDb <= recipe.peak_dbfs + 0.35 && peakDb >= recipe.peak_dbfs - 1.5, `shot_0${index + 1}.ogg peaks at ${peakDb.toFixed(2)} dBFS decoded; the recipe asks ${recipe.peak_dbfs}`);
+        check(Math.abs(samples[samples.length - 1]) < peak * 0.05, `shot_0${index + 1}.ogg does not fade out at its end`);
+      }
+      check(shots[1].length > shots[0].length + 0.04 * fixture.encode.sample_rate, "the two takes are not cut from their own candidates");
+      const raw = decode(join(bedDir, "bed.c01.mp3"));
+      const bed = decode(take("bed_01.ogg"));
+      const expected = raw.length - (fixture.recipes.bed.loop_crossfade_ms / 1000) * fixture.encode.sample_rate;
+      check(seamRatio(raw) > 4, `the test tone does not jump at its seam (ratio ${seamRatio(raw).toFixed(2)}), so the loop check proves nothing`);
+      check(seamRatio(bed) <= 1.5, `bed_01.ogg jumps at its loop seam: ${seamRatio(bed).toFixed(2)} times its 99th-percentile step`);
+      check(Math.abs(bed.length - expected) <= 0.02 * fixture.encode.sample_rate, `bed_01.ogg has ${bed.length} samples; expected the candidate less the crossfade, about ${Math.round(expected)}`);
+      const shortest = shots[1].length;
+      // Picks choose the takes; fewer picks remove the takes beyond them.
+      writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [2] }));
+      const picked = await runTool(["--out", out, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(picked.code === 0 && existsSync(take("shot_01.ogg")) && !existsSync(take("shot_02.ogg")), `picks.json {"shot": [2]} did not give one take (exit ${picked.code})`);
+      if (picked.code === 0) check(Math.abs(decode(take("shot_01.ogg")).length - shortest) <= 0.005 * fixture.encode.sample_rate, "the picked take did not come from candidate 2");
+      writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [9] }));
+      const badPick = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
+      check(badPick.code === 1 && badPick.stderr.includes("picks.json"), `an impossible pick was not refused (exit ${badPick.code})`);
+      const peaks = shots.map((samples) => (20 * Math.log10(peakOf(samples))).toFixed(2));
+      passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / fixture.encode.sample_rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${fixture.recipes.shot.peak_dbfs}), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), picks choose takes`);
+    }
+  }
+}
+
+// --- 6. Git --------------------------------------------------------------------
+
+{
+  const tracked = spawnSync("git", ["-C", REPO_ROOT, "ls-files", "-z"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (tracked.status !== 0) failures.push(`git ls-files failed: ${tracked.stderr.trim()}`);
+  else {
+    const audio = tracked.stdout.split("\0").filter((path) => AUDIO_RE.test(path));
+    check(!audio.length, `Git tracks audio, which must stay out of this public repo: ${audio.slice(0, 10).join(", ")}`);
+  }
+  const samples = ["game/resources/audio/sfx/footstep_hard_01.ogg", "game/resources/audio/sfx/footstep_hard_01.ogg.import", "tools/sfx/take.WAV", "take.wav.import", "a.mp3", "a.mp3.import", "a.Flac", "a.opus", "a.m4a", "a.aac", "a.aiff", "a.oga", "a.weba"];
+  const ignored = spawnSync("git", ["-C", REPO_ROOT, "check-ignore", "--no-index", ...samples], { encoding: "utf8" });
+  const listed = new Set(ignored.stdout.split("\n").filter(Boolean));
+  const open = samples.filter((path) => !listed.has(path));
+  check(!open.length, `.gitignore does not keep these audio paths out of Git: ${open.join(", ")}`);
+  if (tracked.status === 0 && !open.length) passes.push("Git tracks no audio and .gitignore keeps it out");
+}
+
+rmSync(scratch, { recursive: true, force: true });
+if (failures.length) {
+  for (const text of failures) console.log(`FAIL ${text}`);
+  console.log(`FAIL sound effects: ${failures.length} problems`);
+  process.exit(1);
+}
+for (const text of passes) console.log(`PASS sfx ${text}`);

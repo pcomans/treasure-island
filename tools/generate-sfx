@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Makes the game's sound effects with ElevenLabs from the public prompt sheet,
+# tools/sfx/prompts.json (tools/sfx/README.md):
+#
+#   tools/generate-sfx --out ~/ti-sfx                # dry run: credits per sound and in total
+#   tools/generate-sfx --out ~/ti-sfx --generate     # make the candidates not yet there
+#   tools/generate-sfx --out ~/ti-sfx --process      # trim, loop, normalise, Ogg (ffmpeg)
+#
+# Nothing is requested or charged without --generate, which needs
+# ELEVENLABS_API_KEY in the environment or in ~/.config/elevenlabs/.env. The
+# audio is private and never goes in Git: --out must lie outside every work tree.
+set -euo pipefail
+# node lives here in the devcontainer (node feature); non-login shells lack it.
+export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+exec node "$(cd "$(dirname "$0")" && pwd)/sfx/generate_sfx.mjs" "$@"

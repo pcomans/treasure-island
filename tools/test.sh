@@ -6,7 +6,8 @@
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
-# 2. The street cars' mesh check (tools/check_street_car_meshes.mjs).
+# 2. The street cars' mesh check (tools/check_street_car_meshes.mjs) and the
+#    sound-effect prompt sheet and tool check (tools/check_sfx.mjs).
 # 3. tools/godot's wait for its private Weston (tools/check_godot_weston_wait.sh):
 #    it waits through a slow start and stops at once when Weston exits.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
@@ -70,6 +71,15 @@ fi
 # and no cabin poking out of the hero shell. Node only, a few seconds.
 echo "== tools/check_street_car_meshes.mjs"
 node tools/check_street_car_meshes.mjs || failed+=("tools/check_street_car_meshes.mjs")
+
+# The sound-effect prompt sheet and its tool (tools/sfx/), offline: the sheet
+# is valid; the dry run prices it; the tool refuses an in-repository --out and
+# a real run without a key; against a stand-in for the API on the loopback it
+# keeps to the plan's concurrency, waits out a 429, never requests a candidate
+# twice and never prints the key; its post-processing cuts one-shots and closes
+# loop seams (when ffmpeg is on PATH); and Git tracks no audio. A few seconds.
+echo "== tools/check_sfx.mjs"
+node tools/check_sfx.mjs || failed+=("tools/check_sfx.mjs")
 
 # How tools/godot waits for its private Weston, with stand-ins for Weston and
 # Godot (no GPU or engine): through a slow start, and not after Weston has

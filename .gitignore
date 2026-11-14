@@ -8,3 +8,23 @@ source_assets/context/sf_skyline_photo/
 generated/web/
 generated/native/
 user-uploads/
+
+# Audio, in any letter case, and Godot's import files beside it: every sound is
+# generated with ElevenLabs, whose terms forbid making the output available as
+# isolated audio files, and this repository is public (owner, 2026-11-14). The
+# prompts and the tool that makes the audio are here (tools/sfx/README.md); the
+# audio stays private. tools/check_sfx.mjs fails if Git tracks any.
+*.[wW][aA][vV]
+*.[wW][aA][vV].import
+*.[oO][gG][gG]
+*.[oO][gG][gG].import
+*.[oO][gG][aA]
+*.[mM][pP]3
+*.[mM][pP]3.import
+*.[fF][lL][aA][cC]
+*.[oO][pP][uU][sS]
+*.[mM]4[aA]
+*.[aA][aA][cC]
+*.[aA][iI][fF]
+*.[aA][iI][fF][fF]
+*.[wW][eE][bB][aA]
