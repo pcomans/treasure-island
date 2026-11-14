@@ -324,6 +324,11 @@ min_value = 1.0
 max_value = 365.0
 value = 1.0
 
+[node name="NowSpace" type="Control" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+
 [node name="TimeRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 layout_mode = 2
 theme_override_constants/separation = 16
