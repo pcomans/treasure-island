@@ -85,10 +85,12 @@ const NOT_SENT_CODES = new Set(["ECONNREFUSED", "ENOTFOUND", "EAI_AGAIN", "UND_E
 // One --generate run at a time per output folder, and a forced set in progress.
 const LOCK_NAME = ".generate.lock";
 const FORCE_MARK = ".forced";
-// Post-processing: silence kept before a one-shot's onset and after its tail,
-// and the level below which a trimmed take counts as silent.
+// Post-processing: silence kept before a one-shot's onset and after its tail;
+// a take shorter than MIN_TAKE_S after trimming, or peaking at SILENT_DBFS or
+// below, counts as silent.
 const LEAD_KEEP_S = 0.003;
 const TAIL_KEEP_S = 0.01;
+const MIN_TAKE_S = 0.01;
 const SILENT_DBFS = -70;
 // How far an encoded take's decoded peak may sit above the recipe's, and how
 // many encodings may be tried to bring it there.
@@ -364,25 +366,26 @@ function apiBase(env = process.env) {
 
 class LockError extends Error {}
 
-// When a process started, in ms since the epoch, from Linux's /proc; null elsewhere.
-function processStartMs(pid) {
+// A process's start in clock ticks since boot (field 22 of Linux's
+// /proc/<pid>/stat): fixed for the life of the process and untouched by changes
+// to the wall clock, so a reused pid shows a different start. null without /proc.
+function startTicks(pid) {
   try {
     const stat = readFileSync(`/proc/${pid}/stat`, "utf8");
-    // Field 22, starttime in clock ticks since boot; fields are counted after the ")" that ends the name.
+    // Fields are counted after the ")" that ends the process name, which may hold spaces.
     const ticks = Number(stat.slice(stat.lastIndexOf(")") + 2).split(" ")[19]);
-    const boot = Number(readFileSync("/proc/stat", "utf8").match(/^btime (\d+)$/mu)?.[1]);
-    const hz = Number(spawnSync("getconf", ["CLK_TCK"], { encoding: "utf8" }).stdout?.trim()) || 100;
-    return Number.isFinite(ticks) && Number.isFinite(boot) ? (boot + ticks / hz) * 1000 : null;
+    return Number.isSafeInteger(ticks) ? ticks : null;
   } catch {
     return null;
   }
 }
 
-// Whether a running pid is the tools/generate-sfx run that took a lock at
-// `started`: false when its command is something else or it began after the
-// lock was taken (the pid was reused), true when it fits, null where /proc
-// cannot tell (not Linux).
-function isLockOwner(pid, started) {
+// Whether a running pid is the tools/generate-sfx run that took the lock:
+// false when its command is something else or its start differs from the one
+// the lock stored (the pid was reused); true when it fits; null where there is
+// no /proc to tell (not Linux). A lock written without /proc stores no start,
+// and then the command is all there is to go on.
+function isLockOwner(pid, holder) {
   let command;
   try {
     command = readFileSync(`/proc/${pid}/cmdline`, "utf8").split("\0");
@@ -390,18 +393,16 @@ function isLockOwner(pid, started) {
     return null;
   }
   if (!command.some((word) => word.endsWith("generate_sfx.mjs"))) return false;
-  const began = processStartMs(pid);
-  const taken = Date.parse(started);
-  return !(began !== null && Number.isFinite(taken) && began > taken + 2000);
+  return Number.isSafeInteger(holder?.start_ticks) ? startTicks(pid) === holder.start_ticks : true;
 }
 
-// Takes DIR/.generate.lock (created exclusively, holding this pid) or throws a
-// LockError. A lock is never deleted here: one left by a run that has gone is
-// reported, and whoever runs the tool deletes it.
+// Takes DIR/.generate.lock (created exclusively, holding this pid and its start
+// in clock ticks) or throws a LockError. A lock is never deleted here: one left
+// by a run that has gone is reported, and whoever runs the tool deletes it.
 function takeLock(out) {
   const path = join(out, LOCK_NAME);
   try {
-    writeFileSync(path, `${JSON.stringify({ pid: process.pid, started: new Date().toISOString() })}\n`, { flag: "wx" });
+    writeFileSync(path, `${JSON.stringify({ pid: process.pid, start_ticks: startTicks(process.pid), started: new Date().toISOString() })}\n`, { flag: "wx" });
     return path;
   } catch (error) {
     if (error.code !== "EEXIST") throw error;
@@ -422,7 +423,7 @@ function takeLock(out) {
       alive = error.code === "EPERM";
     }
   }
-  const owner = alive ? isLockOwner(pid, holder?.started) : false;
+  const owner = alive ? isLockOwner(pid, holder) : false;
   if (owner !== false) {
     throw new LockError(`another --generate run (pid ${pid}, started ${holder.started ?? "?"}) is using ${out}; wait for it to end. If pid ${pid} is not a tools/generate-sfx run using this folder, delete ${path} and run again`);
   }
@@ -698,7 +699,10 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency, 
       const task = tasks[next];
       next += 1;
       try {
-        spent += await makeOne(task);
+        // Add after the await: `spent += await ...` reads spent before awaiting,
+        // and concurrent workers would then overwrite each other's credits.
+        const cost = await makeOne(task);
+        spent += cost;
         made += 1;
       } catch (error) {
         halt(error);
@@ -749,6 +753,13 @@ function peakDbfs(file, format = []) {
   return value.endsWith("inf") ? -Infinity : Number(value);
 }
 
+// A candidate with nothing, or next to nothing, left once its silence is trimmed.
+class SilentTake extends Error {
+  constructor() {
+    super("silent after trimming; pick another take or regenerate");
+  }
+}
+
 // One candidate through its recipe into an Ogg Vorbis take; returns its length (s).
 export function processTake(sheet, recipe, input, output, work) {
   const rate = sheet.encode.sample_rate;
@@ -768,6 +779,8 @@ export function processTake(sheet, recipe, input, output, work) {
   ffmpeg(["-v", "error", "-i", input, "-af", chain.join(","), "-ac", String(recipe.channels), "-c:a", "pcm_f32le", shaped]);
   let source = shaped;
   let samples = samplesOf(shaped);
+  // A near-silent candidate trims to nothing or a few samples, which cannot even be measured.
+  if (samples < MIN_TAKE_S * rate) throw new SilentTake();
   // A loop recipe with loop_crossfade_ms 0 keeps the generated loop as it is.
   const x = loop ? Math.round((recipe.loop_crossfade_ms / 1000) * rate) : 0;
   if (x > 0) {
@@ -783,7 +796,7 @@ export function processTake(sheet, recipe, input, output, work) {
     samples = samplesOf(looped);
   }
   const peak = peakDbfs(source);
-  if (!(peak > SILENT_DBFS)) throw new Error(`silent after trimming (peak ${peak} dBFS); pick another candidate`);
+  if (!(peak > SILENT_DBFS)) throw new SilentTake();
   // Lossy coding overshoots the peak of bright transients (white noise by about
   // 2.6 dB at quality 5), so the encoded take is measured and its gain lowered
   // until the decoded peak is within PEAK_OVER_DB of the recipe's.
@@ -839,7 +852,9 @@ function postProcess({ sheet, out, rows }) {
   }
   const picks = readPicks(out, sheet);
   const work = mkdtempSync(join(out, ".work-"));
-  let failed = 0;
+  // A take that fails is reported with its candidate; the rest of its row and
+  // the other rows still go on, and the failed rows are listed at the end.
+  const failedRows = [];
   let skipped = 0;
   let takes = 0;
   try {
@@ -851,7 +866,7 @@ function postProcess({ sheet, out, rows }) {
         const missing = chosen.filter((n) => !present.includes(n));
         if (missing.length) {
           console.error(`FAIL: ${row.id}: picked candidates ${missing.join(", ")} are not on disk`);
-          failed += 1;
+          failedRows.push(`${row.id} (picked ${missing.map((n) => `c${pad2(n)}`).join(", ")} not on disk)`);
           continue;
         }
       } else if (present.length >= row.keep_takes) {
@@ -864,29 +879,35 @@ function postProcess({ sheet, out, rows }) {
       const [, group, name] = row.output.match(OUTPUT_RE);
       const folder = join(out, "game", group);
       mkdirSync(folder, { recursive: true });
-      try {
-        chosen.forEach((n, index) => {
-          const output = join(folder, `${name}_${pad2(index + 1)}.ogg`);
+      const bad = [];
+      chosen.forEach((n, index) => {
+        const output = join(folder, `${name}_${pad2(index + 1)}.ogg`);
+        try {
           const seconds = processTake(sheet, recipe, candidateFile(out, sheet, row, n), output, work);
           console.log(`${relative(out, output)}  ${seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(n)}${picks[row.id] ? "" : " (first on disk)"}`);
           takes += 1;
-        });
-        // Takes beyond the ones kept now (fewer picks than before) are stale.
-        const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
-        for (const file of readdirSync(folder)) {
-          const match = file.match(pattern);
-          if (match && Number(match[1]) > chosen.length) unlinkSync(join(folder, file));
+        } catch (error) {
+          console.error(`FAIL: ${row.id} c${pad2(n)}: ${error.message}`);
+          bad.push(`c${pad2(n)}`);
         }
-      } catch (error) {
-        console.error(`FAIL: ${row.id}: ${error.message}`);
-        failed += 1;
+      });
+      if (bad.length) {
+        failedRows.push(`${row.id} (${bad.join(", ")})`);
+        continue;
+      }
+      // Takes beyond the ones kept now (fewer picks than before) are stale.
+      const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
+      for (const file of readdirSync(folder)) {
+        const match = file.match(pattern);
+        if (match && Number(match[1]) > chosen.length) unlinkSync(join(folder, file));
       }
     }
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failed} failed, ${skipped} skipped.`);
-  return failed || skipped ? 1 : 0;
+  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped.`);
+  if (failedRows.length) console.error(`FAIL: failed rows: ${failedRows.join("; ")}`);
+  return failedRows.length || skipped ? 1 : 0;
 }
 
 // --- Command line ----------------------------------------------------------
@@ -1037,10 +1058,7 @@ export async function main(argv = process.argv.slice(2)) {
     }
   };
   const handlers = Object.keys(STOP_SIGNALS).map((signal) => [signal, () => onSignal(signal)]);
-  // A closed terminal (SIGHUP) must not turn a failed console write into a crash that loses paid audio.
-  const ignore = () => {};
   for (const [signal, handler] of handlers) process.on(signal, handler);
-  for (const stream of [process.stdout, process.stderr]) stream.on("error", ignore);
   process.on("exit", release);
   try {
     try {
@@ -1053,12 +1071,15 @@ export async function main(argv = process.argv.slice(2)) {
     return await generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency, resume: resumeCommand(args, out), run });
   } finally {
     for (const [signal, handler] of handlers) process.off(signal, handler);
-    for (const stream of [process.stdout, process.stderr]) stream.off("error", ignore);
     process.off("exit", release);
     release();
   }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
+  // Output that cannot be written (a closed pipe or terminal) is dropped for the
+  // rest of the process: a late console line must neither crash a run that is
+  // saving paid audio nor change the exit code, which reports the run.
+  for (const stream of [process.stdout, process.stderr]) stream.on("error", () => {});
   process.exitCode = await main();
 }

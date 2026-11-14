@@ -49,11 +49,15 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
   output folder, and a second run there is refused. If a run was killed and
   left its lock, the tool says so and leaves the lock alone; delete it by hand
   once no run is using the folder. On Linux the tool also tells a running
-  `tools/generate-sfx` owner from a pid that was reused, by the process's
-  command and start time. Either way its message names the lock file to delete.
+  `tools/generate-sfx` owner from a pid that was reused. The lock stores the
+  owner's start in clock ticks since boot, compared exactly, so a change to
+  the wall clock does not matter. Either way its message names the lock file
+  to delete.
 - **Stopping.** SIGTERM, SIGHUP (a closed terminal) or a first Ctrl-C starts
   no new requests, lets the ones in flight finish, saves their audio and
   releases the lock. A second Ctrl-C quits at once, losing those requests.
+  Output that can no longer be written (a closed pipe or terminal) is dropped,
+  and the exit code still reports the run.
 - **Resuming.** A candidate already on disk is never requested again, so a
   stopped run resumes where it stopped; the stop message prints the command.
   Files are written to `.part` and then renamed, so a half-written download
@@ -70,17 +74,28 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
 - **Processing.** `--process` turns each kept take into
   `~/ti-sfx/game/<group>/<name>_NN.ogg`, mono for positional sounds and
   stereo for the two ambience beds. The candidates themselves are only read,
-  never changed.
+  never changed. A take that is near-silent is named by id and candidate:
+  "silent after trimming; pick another take or regenerate". Here near-silent
+  means under 10 ms is left once its silence is trimmed, or it peaks at
+  −70 dBFS or below. The rest of that row and the other rows are still
+  processed, and the run ends non-zero listing the failed rows.
 
 What the output folder holds:
 
 | Path | What |
 |---|---|
 | `candidates/<id>/<id>.cNN.wav` or `.mp3` | ElevenLabs' answer, one file a generation (WAV 48 kHz for one-shots; MP3 192 kbps for loops, the only format the docs offer for them) |
-| `generation-log.jsonl` | A line a request: time, id, candidate, attempt, file, prompt, model, settings, status (`ok`, `retry`, `error`), HTTP status, credits |
-| `.generate.lock`, `candidates/<id>/.forced` | A run in progress; a forced set not yet complete |
+| `generation-log.jsonl` | A line a request: time, id, candidate, attempt, file, prompt, model, settings, status (`ok`, `retry`, `error`), HTTP status, credits. `credits` is computed from the sheet (`credits_per_second` × the requested seconds); the API does not report it. |
+| `.generate.lock`, `candidates/<id>/.forced` | A run in progress (its pid and start); a forced set not yet complete |
 | `picks.json` | Optional, by hand: the candidates kept, in take order |
 | `game/<group>/<name>_NN.ogg` | The processed takes |
+
+Observed on 2026-11-14 in the first real run, on the Creator plan:
+
+- `wav_48000` works for one-shots. The answer is 16-bit PCM WAV, 48 kHz,
+  stereo.
+- Loops come back as MP3, 44.1 kHz, 192 kbps, at the requested length.
+- A 0.5 s request returns about 0.48 s of audio.
 
 ## The sheet
 

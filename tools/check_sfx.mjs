@@ -13,7 +13,8 @@
 // - Against stand-ins for the ElevenLabs API on this machine's loopback:
 //   - Requests carry the sheet's model and settings and the key (read from
 //     ~/.config/elevenlabs/.env), and no more run at once than allowed.
-//   - A 429 or 503 is waited out, and every attempt is logged.
+//   - A 429 or 503 is waited out, and every attempt is logged. The summary's
+//     credits equal the log's, with several requests at once.
 //   - A rerun requests nothing. --force-id keeps the old set aside, and
 //     repeating it before its fresh set is complete is refused.
 //   - A redirect is not followed: the other host never sees the key.
@@ -22,9 +23,11 @@
 //     to retry is not sent.
 //   - A run is refused while another holds the folder's lock, and the lock is
 //     left alone. The lock may be held by a running tools/generate-sfx run, or
-//     left behind by one whose pid has ended or was reused.
+//     left behind by one whose pid has ended or was reused. A reused pid is
+//     told by the start in clock ticks the lock stores, not by the wall clock.
 //   - A first Ctrl-C, SIGTERM or SIGHUP saves the requests in flight; a second
-//     Ctrl-C quits at once.
+//     Ctrl-C quits at once. With stdout closed, a run still saves, releases
+//     its lock and exits 0.
 //   - The key is never printed or logged.
 //   Every other run points at a trap stand-in that must stay unused, so no
 //   case can reach the real API.
@@ -34,6 +37,8 @@
 //   - A loop's end runs on into its start, or the loop is kept as generated
 //     when its crossfade is 0.
 //   - Picks choose the takes.
+//   - A near-silent candidate is named, and the other takes and rows go on;
+//     the run ends non-zero listing the failed rows.
 // - Git tracks no audio, and .gitignore keeps it out.
 //
 //   node tools/check_sfx.mjs
@@ -42,7 +47,7 @@
 
 import { spawn, spawnSync } from "node:child_process";
 import { createServer } from "node:http";
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -363,6 +368,10 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   check(retries.length === throttled, `the log has ${retries.length} lines for the ${throttled} throttled attempts; every attempt must be logged`);
   check(!listDir(join(out, "candidates", "shot")).some((name) => name.endsWith(".part")), "a .part file was left behind");
   check(!existsSync(join(out, ".generate.lock")), "the run left its lock behind");
+  // The summary's credits, made with 2 requests at once, equal the log's.
+  const logged = entries.filter((item) => item.status === "ok").reduce((sum, item) => sum + item.credits, 0);
+  const summary = first.stdout.match(/^Made (\d+) candidates? for ([\d,]+) credits\./mu);
+  check(summary && Number(summary[1]) === fixtureGenerations && Number(summary[2].replaceAll(",", "")) === logged, `the run's summary (${summary?.[0] ?? "missing"}) does not match the log: ${fixtureGenerations} candidates for ${logged} credits`);
 
   const before = api.requests.length;
   const again = await runTool(["--out", out, "--generate", "--sheet", fixturePath], { env, home });
@@ -379,7 +388,7 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   const printed = [first, again, forced].map((result) => result.all).join("\n");
   check(!printed.includes(key) && !logText(out).includes(key), "the API key was printed or logged");
   await api.close();
-  passes.push(`generation: model and settings sent, key read from ~/.config/elevenlabs/.env, ${firstAtOnce} at once with --concurrency 2 and ${api.maxInFlight} by the plan's ${fixture.plan.concurrency}, 429s waited out and logged, rerun requested nothing, --force-id kept ${shotGenerations} aside`);
+  passes.push(`generation: model and settings sent, key read from ~/.config/elevenlabs/.env, ${firstAtOnce} at once with --concurrency 2 and ${api.maxInFlight} by the plan's ${fixture.plan.concurrency}, 429s waited out and logged, summary and log agree on ${logged} credits, rerun requested nothing, --force-id kept ${shotGenerations} aside`);
 }
 
 // Repeating a --force-id whose fresh set is unfinished is refused; the printed command finishes it.
@@ -473,10 +482,20 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   if (denied.code === 1 && api.requests.length === 2) passes.push("an HTTP 401 stops the run; a request waiting out a 429 is not sent after the stop; the echoed key is redacted");
 }
 
-// The output folder's lock. A tools/generate-sfx run that holds it refuses another
-// run, naming the lock to delete if that pid is something else. A lock whose pid
-// can never run, is now another program, or is younger than the lock is reported
-// as left behind. Either way the lock is left as it was and nothing is requested.
+// A process's start in clock ticks since boot, read here from Linux's /proc
+// (field 22 of /proc/<pid>/stat, counted after the ")" that ends the name).
+const hasProc = existsSync("/proc/self/stat");
+const ticksOf = (pid) => {
+  const stat = readFileSync(`/proc/${pid}/stat`, "utf8");
+  return Number(stat.slice(stat.lastIndexOf(")") + 2).split(" ")[19]);
+};
+
+// The output folder's lock holds its owner's pid and start ticks. A running
+// tools/generate-sfx owner refuses another run whatever the wall clock says,
+// naming the lock to delete if that pid is something else. A lock is reported
+// as left behind when its pid can never run, is now another program, or started
+// at other ticks (the pid was reused). Either way the lock is left as it was and
+// nothing is requested.
 {
   const api = await startStandIn(audioReply);
   // Above Linux's largest possible pid (PID_MAX_LIMIT, 2^22) and macOS's (99998): never a live process.
@@ -488,26 +507,29 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
     holder.once("error", fail);
   });
   const now = new Date().toISOString();
-  const cases = [["a lock whose pid can never run", NEVER_A_PID, now, "has ended", false]];
-  if (existsSync("/proc/self/cmdline")) {
+  const cases = [["a lock whose pid can never run", { pid: NEVER_A_PID, start_ticks: 1, started: now }, "has ended", false]];
+  if (hasProc) {
+    const ticks = ticksOf(holder.pid);
     cases.push(
-      ["a lock held by a running generate-sfx run", holder.pid, now, "another --generate run", true],
-      ["a lock whose pid is now another program", process.pid, now, "is now a different process", false],
-      ["a lock older than the generate-sfx process now holding its pid", holder.pid, "2020-01-01T00:00:00.000Z", "is now a different process", false],
+      ["a lock held by a running generate-sfx run", { pid: holder.pid, start_ticks: ticks, started: now }, "another --generate run", true],
+      ["a running owner's lock dated years off (a clock step)", { pid: holder.pid, start_ticks: ticks, started: "2020-01-01T00:00:00.000Z" }, "another --generate run", true],
+      ["a running owner's lock written without /proc (no start)", { pid: holder.pid, start_ticks: null, started: now }, "another --generate run", true],
+      ["a lock whose pid is now another program", { pid: process.pid, start_ticks: ticksOf(process.pid), started: now }, "is now a different process", false],
+      ["a lock from an earlier process with the same pid", { pid: holder.pid, start_ticks: ticks - 1, started: now }, "is now a different process", false],
     );
   } else {
     console.log("NOTE sfx: no /proc here, so a running lock owner cannot be told from a reused pid; those cases were not checked");
   }
   try {
-    for (const [index, [what, pid, started, said, live]] of cases.entries()) {
+    for (const [index, [what, holding, said, live]] of cases.entries()) {
       const out = join(scratch, `lock-${index}`);
       const path = join(out, ".generate.lock");
       mkdirSync(out, { recursive: true });
-      const lock = `${JSON.stringify({ pid, started })}\n`;
+      const lock = `${JSON.stringify(holding)}\n`;
       writeFileSync(path, lock);
       const result = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot"], { env: withKey(api) });
       check(result.code === 1 && result.stderr.includes(said), `${what} did not refuse the run as "${said}" (exit ${result.code}): ${result.stderr.trim()}`);
-      if (live) check(result.stderr.includes(`delete ${path}`), `${what}: the message does not say which lock to delete if pid ${pid} is not a generate-sfx run: ${result.stderr.trim()}`);
+      if (live) check(result.stderr.includes(`delete ${path}`), `${what}: the message does not say which lock to delete if pid ${holding.pid} is not a generate-sfx run: ${result.stderr.trim()}`);
       check(existsSync(path) && readFileSync(path, "utf8") === lock, `${what}: the lock was changed or deleted`);
     }
   } finally {
@@ -515,21 +537,37 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   }
   check(api.requests.length === 0, `a locked folder still sent ${api.requests.length} requests`);
   await api.close();
-  passes.push(`${cases.length} locks refused the run and were left as they were: a running generate-sfx owner (naming the lock to delete otherwise), and as left behind a pid that can never run, a pid now another program, and a lock older than its pid's process`);
+  passes.push(`${cases.length} locks refused the run and were left as they were: a running generate-sfx owner by its start ticks (a clock step, or no ticks stored, changing nothing), and as left behind a pid that can never run, a pid now another program and an earlier process at the same pid`);
 }
 
 // A first Ctrl-C, SIGTERM or SIGHUP lets the requests in flight finish and saves
 // them, starts no more and releases the lock; a second Ctrl-C quits at once.
+// Meanwhile the lock holds the run's own pid and start ticks.
 {
   for (const [signal, code] of [["SIGINT", 130], ["SIGTERM", 143], ["SIGHUP", 129]]) {
     const out = join(scratch, `stop-by-${signal}`);
     let started = null;
-    const api = await startStandIn(audioReply, { delayMs: 700, onArrival: (arrival) => { if (arrival === 2) started.child.kill(signal); } });
+    let held = null;
+    let ownTicks = null;
+    const api = await startStandIn(audioReply, {
+      delayMs: 700,
+      onArrival: (arrival) => {
+        if (arrival !== 2) return;
+        try {
+          held = JSON.parse(readFileSync(join(out, ".generate.lock"), "utf8"));
+        } catch {
+          held = null;
+        }
+        if (hasProc) ownTicks = ticksOf(started.child.pid);
+        started.child.kill(signal);
+      },
+    });
     started = startTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--concurrency", "2"], { env: withKey(api) });
     const result = await started.done;
     check(result.code === code && api.requests.length === 2, `${signal} did not stop new requests gently (exit ${result.code}, signal ${result.signal}, ${api.requests.length} requests)`);
     check(shotCandidates(out).length === 2 && logOf(out).filter((entry) => entry.status === "ok").length === 2, `the requests in flight at ${signal} were not saved (${shotCandidates(out).length} on disk)`);
     check(!existsSync(join(out, ".generate.lock")), `a run stopped by ${signal} left its lock behind`);
+    check(held?.pid === started.child.pid && held?.start_ticks === (hasProc ? ownTicks : null), `the lock a run held did not carry its pid ${started.child.pid} and start ticks ${ownTicks}: ${JSON.stringify(held)}`);
     await api.close();
   }
 
@@ -551,7 +589,22 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   check(quit.code === 130 && took < 3000, `a second Ctrl-C did not quit at once (exit ${quit.code}, signal ${quit.signal}, ${took} ms)`);
   check(!shotCandidates(quitOut).length && !existsSync(join(quitOut, ".generate.lock")), "quitting at once left a candidate or the lock");
   await slow.close();
-  passes.push(`a first Ctrl-C, SIGTERM or SIGHUP each saved the 2 requests in flight, started no more and released the lock (exit 130, 143, 129); a second Ctrl-C quit after ${took} ms`);
+  passes.push(`a first Ctrl-C, SIGTERM or SIGHUP each saved the 2 requests in flight, started no more and released the lock (exit 130, 143, 129); a second Ctrl-C quit after ${took} ms; the lock held the run's pid and start ticks`);
+}
+
+// With stdout closed from the start (its reader gone), a run still saves every
+// candidate, releases its lock and exits 0; no EPIPE escapes.
+{
+  const out = join(scratch, "stdout-closed");
+  const api = await startStandIn(audioReply);
+  const started = startTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--concurrency", "2"], { env: withKey(api) });
+  started.child.stdout.destroy();
+  const result = await started.done;
+  const left = existsSync(join(out, ".generate.lock"));
+  check(result.code === 0 && shotCandidates(out).length === shotGenerations && !left && !result.stderr.includes("EPIPE"),
+    `with stdout closed a run exited ${result.code} (signal ${result.signal}) with ${shotCandidates(out).length} of ${shotGenerations} candidates${left ? " and its lock left behind" : ""}: ${result.stderr.trim().slice(0, 400)}`);
+  await api.close();
+  passes.push(`with stdout closed from the start a run saved all ${shotGenerations} candidates, released its lock and exited 0`);
 }
 
 // --- 4. Post-processing --------------------------------------------------------
@@ -649,6 +702,23 @@ function synthesize(file, filter, inputs) {
       check(badPick.code === 1 && badPick.stderr.includes("picks.json"), `an impossible pick was not refused (exit ${badPick.code})`);
       const peaks = shots.map((samples) => (20 * Math.log10(peakOf(samples))).toFixed(2));
       passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, picks choose takes`);
+
+      // A near-silent candidate (a -66 dBFS tone, below the trim level) is named
+      // by id and candidate; the rest of its row and the other rows are still
+      // processed, and the run ends non-zero listing the failed row.
+      const quiet = join(scratch, "process-quiet");
+      const quietShot = join(quiet, "candidates", "shot");
+      mkdirSync(quietShot, { recursive: true });
+      synthesize(join(quietShot, "shot.c01.wav"), ["-filter_complex", "[0:a][1:a][2:a]concat=n=3:v=0:a=1[o]", "-map", "[o]", "-ac", "2", "-c:a", "pcm_s16le"],
+        ["anullsrc=r=48000:cl=mono:d=0.1", "aevalsrc=0.0005*sin(2*PI*1000*t):s=48000:d=0.1", "anullsrc=r=48000:cl=mono:d=0.3"]);
+      cpSync(join(shotDir, "shot.c02.wav"), join(quietShot, "shot.c02.wav"));
+      for (const id of ["bed", "bed_raw"]) cpSync(join(out, "candidates", id), join(quiet, "candidates", id), { recursive: true });
+      const quietRun = await runTool(["--out", quiet, "--process", "--sheet", fixturePath]);
+      const quietTake = (name) => join(quiet, "game", "test", name);
+      check(quietRun.code === 1 && quietRun.stderr.includes("shot c01: silent after trimming; pick another take or regenerate"), `a near-silent candidate was not named as silent by id and candidate (exit ${quietRun.code}): ${quietRun.stderr.trim()}`);
+      check(/failed rows: shot \(c01\)/u.test(quietRun.stderr), `the run did not end by listing the failed row: ${quietRun.stderr.trim()}`);
+      check(existsSync(quietTake("shot_02.ogg")) && existsSync(quietTake("bed_01.ogg")) && existsSync(quietTake("bed_raw_01.ogg")), "after the near-silent take, the rest of its row and the other rows were not processed");
+      passes.push("a near-silent candidate is named (shot c01, silent after trimming); its row's other take and the other rows are processed, and the run exits 1 listing the failed row");
     }
   }
 }
