@@ -32,7 +32,14 @@ extends SceneTree
 ##      for everything in its reach, vehicle_reach.gd): with CROWD small boxes on
 ##      the reach layer, which nothing collides with, between the sedan and a
 ##      parked car it is driven into from across the road, that car is set
-##      moving, and the sedan's reach found the whole crowd at once.
+##      moving, and the sedan's reach found the whole crowd at once;
+##   6. a row of the props a car knocks over (owner, 2026-11-14: sign posts,
+##      signal masts, utility poles, bollards...) stays cheap to fell: the same
+##      sedan on the stock W down a power line, DENSE_POLES_OFFSET_M off its poles'
+##      line, knocking each pole over with its wires; at least DENSE_POLES_MIN
+##      fall, and the mean physics tick of the drive (the felled poles falling and
+##      settling round it, their wires following them down) is at most
+##      DENSE_TICK_RATIO times the pile-up's free run-up's.
 ## The cars and lamps are the generated rows' (if the world moves them, re-aim
 ## DRIVER, ROW, HEADING, RUN_UP_M and the DENSE_ and CROWD_ fixtures here).
 
@@ -68,6 +75,15 @@ const DENSE_TREES_RUN_UP_M := 14.0
 const DENSE_MIN_TREES := 8
 ## Its speed (m/s): a park's pace, and the car stops well short of the shore past it.
 const DENSE_TREES_MPS := 12.0
+## A run of five utility poles of a power line (osm:w1242463082, in order; clear
+## 0.4 m to the side of their line from one to the next in the
+## breakable-poles-20261114 site probe), the run-up to the first, how many must
+## fall and how far the drive goes past the last.
+const DENSE_POLES: Array[String] = ["osm:n11545781099", "osm:n11545781098", "osm:n11545781097", "osm:n11545781096", "osm:n11545781095"]
+const DENSE_POLES_OFFSET_M := 0.4
+const DENSE_POLES_RUN_UP_M := 20.0
+const DENSE_POLES_MIN := 4
+const DENSE_POLES_PAST_M := 4.0
 ## The crowd check's parked car, approached across the road from CROWD_START along
 ## CROWD_HEADING (the vehicle contract's side shove), and the crowd: CROWD boxes
 ## of CROWD_BOX_M in a cloud CROWD_AHEAD_M short of the car's middle on the way in.
@@ -177,6 +193,9 @@ func _run() -> void:
 	var trees := await _dense_trees(free_mean)
 	if trees != "":
 		_failures.append(trees)
+	var poles := await _dense_row("DENSE_POLES along a power line's poles", DENSE_POLES, DENSE_POLES_OFFSET_M, DENSE_POLES_RUN_UP_M, DENSE_POLES_MIN, free_mean)
+	if poles != "":
+		_failures.append(poles)
 	_finish(await _crowd())
 
 
@@ -328,6 +347,78 @@ func _dense_trees(free_mean: float) -> String:
 	return ""
 
 
+## Along a row of props a car knocks over (ids in order), offset m to the right of
+## their line, from run_up m short of the first on the stock W: at least least of
+## them fall, and the mean physics tick stays within DENSE_TICK_RATIO of the free
+## run-up's (free_mean, ms). "" or what failed.
+func _dense_row(label: String, ids: Array[String], offset: float, run_up: float, least: int, free_mean: float) -> String:
+	var props := _vehicles.furniture_breaker()
+	var feet: Array[Vector2] = []
+	for id: String in ids:
+		var pole: Dictionary = props.pole(id)
+		if pole.is_empty() or props.is_felled(id):
+			return "%s is not a standing prop a car knocks over in this world: re-aim the %s fixture." % [id, label]
+		feet.append(Vector2((pole.foot as Vector3).x, (pole.foot as Vector3).z))
+	# The line through the feet, offset to its right, one aim point per foot.
+	var aims: Array[Vector2] = []
+	for index in feet.size():
+		var along := (feet[mini(index + 1, feet.size() - 1)] - feet[maxi(index - 1, 0)]).normalized()
+		aims.append(feet[index] + Vector2(-along.y, along.x) * offset)
+	var first_heading := (aims[1] - aims[0]).normalized()
+	var last_heading := (aims[-1] - aims[-2]).normalized()
+	aims.append(aims[-1] + last_heading * (DENSE_POLES_PAST_M + 30.0))
+	var problem := _vehicles.drive_from(DRIVER, aims[0] - first_heading * run_up, first_heading)
+	if problem != "":
+		return "Could not put the sedan at the start of %s: %s" % [label, problem]
+	for _tick in 45:
+		await physics_frame
+	var car := _vehicles.active_car()
+	var felled_before := props.felled_ids().size()
+	var spent_ticks: Array[float] = []
+	var target := 0
+	physics_frame.connect(_on_physics_frame)
+	Input.action_press("move_forward")
+	for _frame in 1500:
+		var at := Vector2(car.global_position.x, car.global_position.z)
+		# Aim at the next point not yet passed.
+		while target < aims.size() - 1 and (at - aims[target]).dot((aims[target + 1] - aims[target]).normalized()) > 0.0:
+			target += 1
+		var forward := -car.global_transform.basis.z
+		var angle := Vector2(forward.x, forward.z).angle_to(aims[target] - at)
+		Input.action_release("move_left")
+		Input.action_release("move_right")
+		if angle > deg_to_rad(2.0):
+			Input.action_press("move_right")
+		elif angle < deg_to_rad(-2.0):
+			Input.action_press("move_left")
+		_steps = 0
+		await process_frame
+		if _steps == 1:
+			spent_ticks.append(float(Time.get_ticks_usec() - _signal_us) / 1000.0)
+		if (at - aims[-2]).dot(last_heading) > DENSE_POLES_PAST_M:
+			break
+	Input.action_release("move_forward")
+	Input.action_release("move_left")
+	Input.action_release("move_right")
+	physics_frame.disconnect(_on_physics_frame)
+	Input.action_press("move_back")
+	for _tick in 180:
+		await physics_frame
+		if car.linear_velocity.length() < 0.5:
+			break
+	Input.action_release("move_back")
+	var felled := props.felled_ids().size() - felled_before
+	var mean := _mean(spent_ticks)
+	spent_ticks.sort()
+	var ratio := mean / maxf(free_mean, 0.001)
+	print("%s: %d of %d felled; physics tick mean %.3f ms, 95th percentile %.3f ms, longest %.3f ms over %d ticks; %.1f times the free run-up's (at most %.0f)" % [label, felled, ids.size(), mean, spent_ticks[int(spent_ticks.size() * 0.95)] if not spent_ticks.is_empty() else NAN, spent_ticks[-1] if not spent_ticks.is_empty() else NAN, spent_ticks.size(), ratio, DENSE_TICK_RATIO])
+	if felled < least:
+		return "%s the sedan felled %d (at least %d): re-aim the fixture." % [label, felled, least]
+	if ratio > DENSE_TICK_RATIO:
+		return "%s the mean physics tick took %.1f times the free run-up's (at most %.0f): felling a row of them is too costly" % [label, ratio, DENSE_TICK_RATIO]
+	return ""
+
+
 ## A crowd of things in reach between the sedan and a parked car: the car is still
 ## set moving and the reach found the whole crowd at once. "" or what failed.
 func _crowd() -> String:
@@ -392,7 +483,7 @@ func _finish(problem: String) -> void:
 		_failures.append(problem)
 	Input.action_release("move_forward")
 	if _failures.is_empty():
-		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; along a lamp line beside a fence it knocks the lamps over, and through a windrow of young gums they lean away, within %.0f times; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, DENSE_TICK_RATIO, CROWD])
+		print("PASS car pile-up: a sedan driven into a row of parked cars shoves one into the next, every car it set moving comes to rest, and the pile-up's physics tick stays within %.0f times the free run-up's; along a lamp line beside a fence it knocks the lamps over, through a windrow of young gums they lean away, and down a power line it knocks its poles over, each within %.0f times; driven into a parked car through a crowd of %d things in its reach, it sets it moving" % [PILEUP_TICK_RATIO, DENSE_TICK_RATIO, CROWD])
 		quit(0)
 	else:
 		for failure in _failures:

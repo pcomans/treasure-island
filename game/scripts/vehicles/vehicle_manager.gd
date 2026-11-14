@@ -38,9 +38,11 @@ extends Node3D
 ##
 ## Fences: a live car or K-rail passes through the breakable fences' collision
 ## (an exception per fence body) and breaks each bay it overlaps while it moves
-## (street_fence_breaker.gd); on foot every intact bay stays solid. A street lamp
-## met at driving speed falls and the car carries on a little slower; a slow
-## nudge stops at it (street_furniture_breaker.gd). Shrubs and hedges have no
+## (street_fence_breaker.gd); on foot every intact bay stays solid. A street lamp,
+## sign post, signal mast, utility pole, bollard or light tower met fast enough
+## (its own speed: a sign post at a walking pace, a mast or pole only at a real
+## hit) falls and the car carries on slower; a slow nudge stops at it
+## (street_furniture_breaker.gd). Shrubs and hedges have no
 ## collision, so a car drives through a shrub. A small tree (its trunk thinner
 ## than the vegetation kit's BENDING_TRUNK_RADIUS_M) bends out of the way and
 ## springs back (street_tree_bender.gd: a live car or K-rail has an exception per
@@ -52,7 +54,7 @@ extends Node3D
 ## server once for what is round it (vehicle_reach.gd, _look_round) and hands each
 ## thing found to its owner by physics body (_reach_owners): the clutter's rows
 ## and the live bodies here (_reach_row, _reach_live), the fences and their
-## standing posts (street_fence_breaker.gd), the street lamps
+## standing posts (street_fence_breaker.gd), the street lamps, signs and poles
 ## (street_furniture_breaker.gd), the small trees that bend
 ## (street_tree_bender.gd), and any loose prop (_push_loose).
 ##
@@ -696,8 +698,8 @@ func _settle_barrier(barrier: RigidBody3D, delta: float) -> void:
 ## at all or its driver presses on; the driven car, and any other above
 ## BREAK_SPEED_MPS, breaks the fence bays it touches and fells their standing
 ## posts (street_fence_breaker.gd); a car above BREAK_SPEED_MPS pushes the loose
-## props within LOOSE_PUSH_MARGIN_M; a street lamp falls when the body meets it at
-## driving speed (street_furniture_breaker.gd, within the look-ahead's box); a
+## props within LOOSE_PUSH_MARGIN_M; a street lamp, sign or pole falls when the body
+## meets it fast enough (street_furniture_breaker.gd, within the look-ahead's box); a
 ## small tree within the bender's BEND_MARGIN_M bends away (street_tree_bender.gd).
 ## One query covers the box round all of it; each owner judges what it is given
 ## against its own part.

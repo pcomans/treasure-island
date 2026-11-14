@@ -62,6 +62,19 @@ extends SceneTree
 ##      momentum taken) and still driving half a second later; crept back through
 ##      where it stood, nothing stops the car; on foot the stock player walks
 ##      through where it stood, and the standing one stops the player;
+##   7c. the rest of the street props a car knocks over (owner, 2026-11-14: sign
+##      posts, signal masts, utility poles, bollards, light towers; and the park's
+##      event poles), one of each kind (vehicle_cases.json poles): it stops the
+##      stock player walking into it; nudged slower than it falls to (a sign post
+##      at a creep, a mast, pole or tower at a speed that fells a lamp) it stands
+##      and stops the car; driven at from run_up_m back on the stock W it falls,
+##      the car keeping at least its share of its speed less POLE_KEEP_SLACK and
+##      still driving half a second later, and it is frozen lying on the ground
+##      (tipped past POLE_LIE_UP) within LAMP_SETTLE_S, its base within
+##      POLE_REST_M of where it stood; a utility pole's wire spans now run from
+##      the standing neighbours down to it, their felled ends within
+##      POLE_WIRE_DOWN_M of the ground; on foot the player walks through where it
+##      stood;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
 ##      the side at speed and a K-rail hit end on are set moving; each comes to
@@ -145,6 +158,15 @@ const LAMP_SETTLE_S := 9.0
 ## takes its share of the car's momentum (street_furniture_breaker.gd, about a
 ## tenth for a cobra lamp and a crossover).
 const LAMP_KEEP := 0.8
+## A car that knocks one of the other props over keeps at least its share of its
+## speed (street_furniture_breaker.gd keeps) less this; the felled prop lies tipped
+## past this (its up's height) on the ground, its base within POLE_REST_M (m) of
+## where it stood; a felled utility pole's wires end within POLE_WIRE_DOWN_M (m)
+## of the ground where it stood.
+const POLE_KEEP_SLACK := 0.08
+const POLE_LIE_UP := 0.5
+const POLE_REST_M := 6.0
+const POLE_WIRE_DOWN_M := 2.5
 ## A yard vehicle's drive from rest (DRIVE_S under full throttle) must cover at
 ## least this share of the distance and speed its own launch acceleration and top
 ## speed give (drivable_car.gd BODIES): the throttle and the tyres' grip build up
@@ -193,10 +215,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1656,6 +1678,175 @@ func _walk_along_x(foot: Vector3, open: bool, label: String) -> bool:
 	if open:
 		return _require(past > 0.5, "The stock player could not walk through %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_gone")
 	return _require(past < 0.0 and past > -1.0, "The stock player was not stopped by %s (%.2f m past its foot)." % [label, past]) and await _rest("lamp_standing")
+
+
+# --- 7c. Sign posts, signal masts, utility poles, bollards, a light tower and an
+# event pole: each stands a nudge slower than it falls to and falls when driven at.
+
+func _case_poles() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var props := _vehicles.furniture_breaker()
+	var recoveries_before := _recoveries.size()
+	var kinds: Array[String] = []
+	for fixture: Dictionary in _cases.poles:
+		var id := str(fixture.row)
+		var pole: Dictionary = props.pole(id)
+		if not _require(not pole.is_empty() and not props.is_felled(id), "Fixture %s is not a standing prop a car knocks over." % id):
+			return false
+		var prop := props.prop_of(id)
+		kinds.append(prop)
+		var label := "%s %s" % [prop, id.rsplit(":", true, 1)[-1]]
+		var heading := Vector2(fixture.heading_xz[0], fixture.heading_xz[1]).normalized()
+		var fells_at := props.fell_speed(id)
+		var foot: Vector3 = pole.foot
+		var across_x := _extent(pole, Vector2(1.0, 0.0))
+		# On foot it stops the stock player.
+		if not await _walk_x(foot, across_x, false, label):
+			return false
+		# A nudge slower than it falls to: it stands and stops the car.
+		var nudge_mps := float(fixture.nudge_mps)
+		if not _require(nudge_mps < fells_at - 0.3, "%s: the nudge (%.1f m/s) is not slower than it falls to (%.1f m/s)." % [label, nudge_mps, fells_at]):
+			return false
+		if not await _drive_from(car, _short_of_prop(pole, heading, float(fixture.nudge_from_m), car), heading):
+			return false
+		var nudge_top := 0.0
+		var stopped := false
+		for tick in 600:
+			var speed := car.linear_velocity.length()
+			if speed < nudge_mps - 0.2:
+				Input.action_press("move_forward")
+			elif speed > nudge_mps + 0.2:
+				Input.action_release("move_forward")
+			_steer_toward(car, Vector2(foot.x, foot.z) + heading * 200.0)
+			await physics_frame
+			nudge_top = maxf(nudge_top, car.linear_velocity.length())
+			if tick > 60 and car.linear_velocity.length() < 0.15:
+				stopped = true
+				break
+		Input.action_press("move_forward")
+		for _tick in 90:
+			await physics_frame
+		_release_driving()
+		var front := _front_past_prop(pole, heading, car)
+		print("POLE NUDGE %s at up to %.2f m/s (it falls to %.1f m/s): stopped %s, then 1.5 s of full throttle against it: felled %s, the car's front %.2f m past its near side" % [label, nudge_top, fells_at, stopped, props.is_felled(id), front])
+		if not _require(stopped and nudge_top < fells_at and not props.is_felled(id) and front < 0.3, "Nudging %s at %.1f m/s and pressing on felled it or got past it (top %.2f m/s, felled %s, front %.2f m past its near side)." % [label, nudge_mps, nudge_top, props.is_felled(id), front]):
+			return false
+		# Driven at from run_up_m back on the stock W: it falls and the car carries on.
+		if not await _drive_from(car, _short_of_prop(pole, heading, float(fixture.run_up_m), car), heading):
+			return false
+		var speed_in := 0.0
+		var speed_out := 0.0
+		var later := 0.0
+		var fell_tick := -1
+		var last := 0.0
+		Input.action_press("move_forward")
+		for tick in 420:
+			_steer_toward(car, Vector2(foot.x, foot.z) + heading * 200.0)
+			await physics_frame
+			var speed := car.linear_velocity.length()
+			if fell_tick < 0 and props.is_felled(id):
+				fell_tick = tick
+				speed_in = last
+				speed_out = speed
+			last = speed
+			if fell_tick >= 0 and tick >= fell_tick + 30:
+				later = speed
+				break
+		_release_driving()
+		var keep := props.keeps(id, car.mass)
+		print("POLE FELL %s at %.2f m/s: %.2f m/s the tick after (%.0f%% kept, its share %.0f%%), %.2f m/s half a second later" % [label, speed_in, speed_out, 100.0 * speed_out / maxf(speed_in, 0.01), 100.0 * keep, later])
+		if not _require(fell_tick >= 0 and speed_in >= fells_at, "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [label, float(fixture.run_up_m), props.is_felled(id), speed_in]) \
+		or not _require(speed_out >= (keep - POLE_KEEP_SLACK) * speed_in and later > 3.0, "The car did not carry on through %s (%.2f -> %.2f m/s, its share %.0f%%; %.2f m/s half a second later)." % [label, speed_in, speed_out, 100.0 * keep, later]):
+			return false
+		# It goes over where it stood and lies there, frozen on the ground.
+		var lying: RigidBody3D = null
+		for child: Node in props.get_children():
+			if child is RigidBody3D and str(child.get_meta("street_detail_id", "")) == id:
+				lying = child
+		var settled_s := -1.0
+		for tick in int(LAMP_SETTLE_S * 60.0) - 30:
+			if lying == null or lying.freeze:
+				settled_s = (tick + 30) / 60.0
+				break
+			await physics_frame
+		var base := lying.global_position if lying != null else Vector3.INF
+		var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
+		var up := lying.global_transform.basis.y.y if lying != null else 1.0
+		print("POLE REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, its up %.2f" % [label, lying != null and lying.freeze, settled_s, rest_m, up])
+		if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [label, LAMP_SETTLE_S]) \
+		or not _require(rest_m <= POLE_REST_M and up < POLE_LIE_UP, "The felled %s did not go over where it stood (its base %.2f m away, at most %.1f m; its up %.2f, under %.2f)." % [label, rest_m, POLE_REST_M, up, POLE_LIE_UP]):
+			return false
+		if prop == "utility_pole" and not _poles_wires_down(props, id, foot, label):
+			return false
+		if not await _stop_and_exit(car, label):
+			return false
+		if not _require(_recoveries.size() == recoveries_before, "A recovery fired at %s: %s." % [label, _recoveries.slice(recoveries_before)]):
+			return false
+		# On foot: through where it stood.
+		if not await _walk_x(foot, across_x, true, label):
+			return false
+	return _require(kinds.has("name_sign") and kinds.has("stop_sign") and kinds.has("bollard_steel") and kinds.has("signal_mast") and kinds.has("utility_pole") and kinds.has("light_tower") and kinds.has("event_pole"), "The poles case must take one of each kind (it took %s)." % [kinds])
+
+
+## A felled utility pole's wire spans: each comes down from its standing
+## neighbour to the pole lying where it stood (none left hanging where it hung).
+func _poles_wires_down(props: FURNITURE_BREAKER, id: String, foot: Vector3, label: String) -> bool:
+	var spans := props.dropped_wires(id)
+	var lowest := INF
+	var highest := -INF
+	for span: Dictionary in spans:
+		for wire: Array in span.get("wires", []):
+			var fallen: Vector3 = wire[1]
+			lowest = minf(lowest, fallen.y - foot.y)
+			highest = maxf(highest, fallen.y - foot.y)
+	print("POLE WIRES %s: %d spans now run from a standing neighbour down to it, their felled ends %.2f to %.2f m above where it stood" % [label, spans.size(), lowest, highest])
+	return _require(not spans.is_empty() and spans.all(func(span: Dictionary) -> bool: return not (span.get("wires", []) as Array).is_empty()), "The felled %s brought no wire span down with it (%s)." % [label, spans]) \
+	and _require(highest < POLE_WIRE_DOWN_M, "The felled %s's wires end %.2f m up, not down with it (under %.1f m)." % [label, highest, POLE_WIRE_DOWN_M])
+
+
+## How far a prop reaches from its foot along a plan direction: a round pole's
+## radius, or its footprint's half size that way.
+func _extent(pole: Dictionary, direction: Vector2) -> float:
+	var footprint: Vector2 = pole.get("footprint", Vector2.ZERO)
+	if footprint == Vector2.ZERO:
+		return float(pole.radius)
+	var turn: Basis = (pole.footprint_xf as Transform3D).basis
+	return footprint.x * absf(direction.dot(Vector2(turn.x.x, turn.x.z))) + footprint.y * absf(direction.dot(Vector2(turn.z.x, turn.z.z)))
+
+
+## Where to put a car's middle so that, facing heading, its front stands gap m
+## short of a prop's near side.
+func _short_of_prop(pole: Dictionary, heading: Vector2, gap: float, car: DRIVABLE_CAR) -> Vector2:
+	var foot: Vector3 = pole.foot
+	return Vector2(foot.x, foot.z) - heading * (gap + _extent(pole, heading) + car.length_m * 0.5)
+
+
+## How far the car's front is past a prop's near side along heading (negative:
+## short of it).
+func _front_past_prop(pole: Dictionary, heading: Vector2, car: DRIVABLE_CAR) -> float:
+	var foot: Vector3 = pole.foot
+	return Vector2(car.global_position.x - foot.x, car.global_position.z - foot.z).dot(heading) + car.length_m * 0.5 + _extent(pole, heading)
+
+
+## The stock player walks along +X at a prop's foot from 2.5 m short of its side
+## (extent: how far it reaches along X): past it when nothing stands there (open),
+## stopped against it, short of its middle, when it stands.
+func _walk_x(foot: Vector3, extent: float, open: bool, label: String) -> bool:
+	if not await _stand_player(Vector2(foot.x - extent - 2.5, foot.z)):
+		return false
+	var rig := _player.get_node("CameraPivot") as Node3D
+	rig.rotation.y = -PI * 0.5
+	Input.action_press("move_forward")
+	for _tick in 120:
+		await physics_frame
+	_release()
+	var past := _player.global_position.x - foot.x
+	print("ON FOOT at %s (%s): %.2f m past its foot along x (it reaches %.2f m), %.2f m off its line" % [label, "felled" if open else "standing", past, extent, absf(_player.global_position.z - foot.z)])
+	if open:
+		return _require(past > extent + 0.5, "The stock player could not walk through where %s stood (%.2f m past its foot)." % [label, past]) and await _rest("pole_gone")
+	# Stopped short of its middle (a turned footprint's slanting side may slide the
+	# player along it a little).
+	return _require(past < 0.0 and past > -extent - 1.0, "The stock player was not stopped by %s (%.2f m past its foot, it reaches %.2f m)." % [label, past, extent]) and await _rest("pole_standing")
 
 
 # --- 8. Shoving parked cars and a K-rail.

@@ -110,22 +110,27 @@ func distance_to(point: Vector3) -> float:
 
 ## When the body's box, moving as it moves now (its turn left out), first meets an
 ## upright pole (a capsule of radius on the world-vertical line from foot up to
-## height): {t (s from now, 0 if it does already), closing (m/s: the body's speed
-## into the face of its box it meets the pole with)}, or {} if not within limit_s.
-## Worked in plan in the body's frame, where the pole's line crosses the middle
-## height of the box; a body tipped far over (on its side or roof) gets {}, so
-## physics alone meets the pole.
-func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float) -> Dictionary:
+## height) or, given a footprint, an upright post of that plan size (half sizes
+## along its frame's x and z; footprint_xf: its middle at the foot and its turn):
+## {t (s from now, 0 if it does already), closing (m/s: the body's speed toward it
+## across the face that meets it)}, or {} if not within limit_s or the box is
+## above or below it. Worked in plan in the body's frame, where the pole's line
+## crosses the middle height of the box (or the pole's own end nearest it, a
+## bollard below a van's); a body tipped far over (on its side or roof) gets {},
+## so physics alone meets the pole.
+func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float, footprint := Vector2.ZERO, footprint_xf := Transform3D.IDENTITY) -> Dictionary:
 	var to_local := xf.inverse()
 	var bottom := to_local * foot
 	var top := to_local * (foot + Vector3.UP * height)
 	var rise := top.y - bottom.y
 	if rise < height * 0.7:
 		return {}
-	var middle := box.get_center().y
-	if middle < bottom.y - radius or middle > top.y + radius:
+	if box.end.y < bottom.y - radius or box.position.y > top.y + radius:
 		return {}
+	var middle := box.get_center().y
 	var at := bottom.lerp(top, clampf((middle - bottom.y) / rise, 0.0, 1.0))
+	if footprint != Vector2.ZERO:
+		return _post_contact(at, to_local.basis * footprint_xf.basis.x, to_local.basis * footprint_xf.basis.z, footprint, limit_s)
 	# The pole moves against the body at -local_velocity; the box grown by radius.
 	var mover := Vector2(-local_velocity.x, -local_velocity.z)
 	var start := Vector2(at.x, at.z)
@@ -163,6 +168,49 @@ func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float) -
 				nearest = index
 		normal = [Vector2(-1, 0), Vector2(1, 0), Vector2(0, -1), Vector2(0, 1)][nearest]
 	# The body's speed out through that face of its box (toward the pole).
+	var closing := Vector2(local_velocity.x, local_velocity.z).dot(normal)
+	return {"t": enter, "closing": closing, "normal": normal}
+
+
+## pole_contact for a post with a plan footprint (a light tower's trailer): its
+## middle at `at` and its axes u and v in the body's frame, half sizes footprint,
+## moving against the body at -local_velocity. Swept in plan over the four axes
+## that can part two boxes there (the body box's two and the post's two); the
+## normal is the one it is met across, from the body toward the post.
+func _post_contact(at: Vector3, u3: Vector3, v3: Vector3, footprint: Vector2, limit_s: float) -> Dictionary:
+	var u := Vector2(u3.x, u3.z).normalized()
+	var v := Vector2(v3.x, v3.z).normalized()
+	var gap := Vector2(at.x - box.get_center().x, at.z - box.get_center().z)
+	var mover := Vector2(-local_velocity.x, -local_velocity.z)
+	var enter := 0.0
+	var leave := limit_s
+	var normal := Vector2.ZERO
+	# Already overlapping: the axis it is least deep along, toward the post.
+	var least := INF
+	var nearest := Vector2.ZERO
+	for axis: Vector2 in [Vector2(1.0, 0.0), Vector2(0.0, 1.0), u, v]:
+		var room := half.x * absf(axis.x) + half.z * absf(axis.y) + footprint.x * absf(u.dot(axis)) + footprint.y * absf(v.dot(axis))
+		var offset := gap.dot(axis)
+		var rate := mover.dot(axis)
+		if absf(offset) <= room and room - absf(offset) < least:
+			least = room - absf(offset)
+			nearest = axis * (1.0 if offset >= 0.0 else -1.0)
+		if absf(rate) < 1e-6:
+			if absf(offset) > room:
+				return {}
+			continue
+		var t_low := (-room - offset) / rate
+		var t_high := (room - offset) / rate
+		var t_in := minf(t_low, t_high)
+		if t_in > enter:
+			enter = t_in
+			# The post comes in moving along rate: from the axis's other side.
+			normal = axis * (-1.0 if rate > 0.0 else 1.0)
+		leave = minf(leave, maxf(t_low, t_high))
+		if enter > leave:
+			return {}
+	if normal == Vector2.ZERO:
+		normal = nearest
 	var closing := Vector2(local_velocity.x, local_velocity.z).dot(normal)
 	return {"t": enter, "closing": closing, "normal": normal}
 

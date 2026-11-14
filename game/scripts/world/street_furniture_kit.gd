@@ -383,18 +383,40 @@ const BLADE_POST_TOP_M := 3.03
 ## How far a blade clamped beside a lamp pole starts from the pole's axis.
 const LAMP_BLADE_REACH_M := 0.14
 const BLADE_MARGIN_M := 0.09
-## The street furniture a car knocks over (owner, 2026-11-13: the street lamps;
-## sign poles and the like could follow with an entry here):
-## each prop's mass (kg), whose share of a car's momentum the felled prop takes
-## (game/scripts/vehicles/street_furniture_breaker.gd). Production inference for a
-## galvanised davit pole with its arm and head, the slimmer lot and plaza poles
-## and the park's disc and fork lamps.
+## The street furniture a car knocks over (game/scripts/vehicles/
+## street_furniture_breaker.gd): the street lamps (owner, 2026-11-13), then the sign
+## posts, signal masts, utility poles and bollards (owner, 2026-11-14: "Sign posts,
+## signal masts, utility poles and bollards", "these all need to be breakable"), so
+## the pitches' light towers and the park's event light poles too. Per prop: its
+## mass (kg), whose share of a car's momentum the felled prop takes; fell_mps, how
+## fast (m/s) a moving car or K-rail must meet it, along the face of its box that
+## meets it, to knock it over (slower, it stops the car): a thin sign post or a
+## bollard at a walking pace, a lamp at 4 m/s, a signal mast, a wooden utility pole
+## or a light tower on its trailer only at a real hit; and, where they differ from
+## a lamp's, mass_height (its centre of mass up its height, as a share; 0.5),
+## mass_arm (its centre of mass out along its arm over the road, -Z, as a share of
+## the row's arm_m: a mast's heads weigh its arm down, so a felled mast rolls onto
+## it; 0), tip (how hard it is tipped over; 1) and pitch (its hit and fall sounds'; 1).
+## Production inference: a galvanised davit pole with its arm and head, the slimmer
+## lot and plaza poles and the park's disc and fork lamps; a 30 ft park pole; a
+## sign on its square post; a steel bollard; a steel mast-arm pole with its heads;
+## a 40 ft wood pole with its crossarms; a light tower's trailer, generator and
+## mast, its weight low on the trailer.
 const FELLABLE := {
-	"lamp_cobra": {"mass_kg": 180.0},
-	"lamp_lot": {"mass_kg": 90.0},
-	"lamp_plaza": {"mass_kg": 150.0},
-	"lamp_disc": {"mass_kg": 70.0},
-	"lamp_fork": {"mass_kg": 110.0},
+	"lamp_cobra": {"mass_kg": 180.0, "fell_mps": 4.0},
+	"lamp_lot": {"mass_kg": 90.0, "fell_mps": 4.0},
+	"lamp_plaza": {"mass_kg": 150.0, "fell_mps": 4.0},
+	"lamp_disc": {"mass_kg": 70.0, "fell_mps": 4.0},
+	"lamp_fork": {"mass_kg": 110.0, "fell_mps": 4.0},
+	"event_pole": {"mass_kg": 220.0, "fell_mps": 4.0},
+	"stop_sign": {"mass_kg": 25.0, "fell_mps": 1.5, "pitch": 1.25},
+	"name_sign": {"mass_kg": 20.0, "fell_mps": 1.5, "pitch": 1.25},
+	"post_sign": {"mass_kg": 20.0, "fell_mps": 1.5, "pitch": 1.25},
+	"bus_stop_sign": {"mass_kg": 25.0, "fell_mps": 1.5, "pitch": 1.25},
+	"bollard_steel": {"mass_kg": 50.0, "fell_mps": 2.0, "pitch": 1.15},
+	"signal_mast": {"mass_kg": 650.0, "fell_mps": 8.0, "mass_arm": 0.25, "pitch": 0.85},
+	"utility_pole": {"mass_kg": 550.0, "fell_mps": 8.0, "pitch": 0.75},
+	"light_tower": {"mass_kg": 1300.0, "fell_mps": 8.0, "mass_height": 0.13, "tip": 2.6, "pitch": 0.8},
 }
 ## A fellable prop's mesh keeps its drawn shape in this many slices up its height
 ## (meta fall_slices: each slice's points, Builder.slices), so its felled body lies
@@ -415,6 +437,8 @@ var _bleacher_mesh: ShaderMaterial
 var _mural: StandardMaterial3D
 var _meshes: Dictionary = {}
 var _shapes: Dictionary = {}
+## Whether the prop parts() draws now is FELLABLE: its pieces keep their slices.
+var _fells := false
 
 
 func _init() -> void:
@@ -500,6 +524,7 @@ func _init() -> void:
 func parts(prop: String, params: Dictionary) -> Dictionary:
 	if not PROPS.has(prop):
 		return {"ok": false, "message": "unknown street-furniture prop %s" % prop}
+	_fells = FELLABLE.has(prop)
 	var result := {"ok": true, "pieces": [], "shapes": [], "labels": [], "range_m": float(PROPS[prop].range_m), "shadow": bool(PROPS[prop].shadow)}
 	match prop:
 		"lamp_cobra":
@@ -596,7 +621,9 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				_shapes["cabinet_box"] = box
 			result.shapes.append({"shape": _shapes["cabinet_box"], "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, 0.725, 0.0))})
 		"bus_stop_sign":
-			_piece(result, "bus_stop_sign", func(b: Builder) -> void: _bus_stop_sign(b))
+			# The pad stays where it is when a car knocks the post over.
+			_piece(result, "bus_stop_pad", func(b: Builder) -> void: _bus_stop_pad(b), Transform3D.IDENTITY, null, true, false, true)
+			_piece(result, "bus_stop_sign", func(b: Builder) -> void: _muni_flag(b, Vector3.ZERO))
 			_capsule(result, 0.06, 3.0)
 		"bench_wedge":
 			var timber_seat := bool(params.get("timber", false))
@@ -830,18 +857,21 @@ func goal_mouth(prop: String, params: Dictionary) -> Dictionary:
 
 ## The prop's mesh for `key`, drawn once; `material` replaces the shared atlas
 ## material for the shaded surface; `shadow` false keeps the piece out of the
-## sun's shadow when its prop casts one (glass); `fells` keeps its slices on the
-## mesh (fall_slices) for a prop a car knocks over.
-func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true, fells := false) -> void:
-	if not _meshes.has(key):
+## sun's shadow when its prop casts one (glass); a piece of a prop a car knocks over
+## (FELLABLE, or `fells`) keeps its slices on the mesh (fall_slices), unless it
+## `stays` standing where the prop stood (a bus stop's pad).
+func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true, fells := false, stays := false) -> void:
+	var sliced := (fells or _fells) and not stays
+	if not _meshes.has(key) or (sliced and not (_meshes[key] as Mesh).has_meta("fall_slices")):
 		var builder := Builder.new(CELL_WHITE)
 		draw.call(builder)
-		var mesh := builder.commit(material if material != null else _opaque, _lit)
-		mesh.resource_name = key
-		if fells:
-			mesh.set_meta("fall_slices", builder.slices(FELL_SLICES))
-		_meshes[key] = mesh
-	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform, "shadow": shadow})
+		if not _meshes.has(key):
+			var mesh := builder.commit(material if material != null else _opaque, _lit)
+			mesh.resource_name = key
+			_meshes[key] = mesh
+		if sliced:
+			(_meshes[key] as Mesh).set_meta("fall_slices", builder.slices(FELL_SLICES))
+	result.pieces.append({"key": key, "mesh": _meshes[key], "transform": transform, "shadow": shadow, "stays": stays})
 
 
 ## A box shape at an offset in the prop's frame (moved with the prop's `rest`),
@@ -1227,12 +1257,12 @@ func _signal_cabinet(b: Builder) -> void:
 
 
 ## A Muni bus stop flag (the navy route 25 flag of Avenue B at Gateview Avenue,
-## Nov 2025) on a square galvanised post, printed on both faces and set across
-## the curb (its faces along the road) so approaching buses see it.
-func _bus_stop_sign(b: Builder) -> void:
-	# A small concrete pad under the post where it stands in a verge.
+## Nov 2025) on a square galvanised post (_muni_flag), printed on both faces and
+## set across the curb (its faces along the road) so approaching buses see it,
+## over a small concrete pad where it stands in a verge: the pad, a piece of its
+## own, so the post goes over without it.
+func _bus_stop_pad(b: Builder) -> void:
 	b.box(Vector3(0, 0.0, 0), Basis.IDENTITY, Vector3(0.9, 0.08, 0.9), PAD_CONCRETE, CELL_WHITE)
-	_muni_flag(b, Vector3.ZERO)
 
 
 ## The galvanised U-channel post of a Muni stop at `foot` (as at Avenue B and
