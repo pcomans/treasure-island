@@ -24,24 +24,43 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
 
 - **Cost.** Nothing is requested or charged without `--generate`. A
   generation costs 40 credits a second of its set length, and every candidate
-  is a generation. The whole sheet is 305 generations, 27,088 credits on
-  2026-11-14, about a fifth of a Creator month (121,000). The dry run prints
-  the current figures.
+  is a generation. The dry run prints each sound's credits, each tier's and
+  the total, and what is still to make.
 - **Key and output folder.** `--generate` reads `ELEVENLABS_API_KEY` from the
   environment, or from `~/.config/elevenlabs/.env` as
   `ELEVENLABS_API_KEY=...`. It never prints or logs the key. `--out` is
-  required and is refused inside any Git work tree.
+  required and is refused unless git confirms the folder lies outside every
+  repository; if git is missing or will not answer, the folder is refused.
 - **Calling the API.** It calls `POST https://api.elevenlabs.io/v1/sound-generation`
-  with `model_id` always set, since the API still defaults to v2. It runs at
-  most the plan's 6 requests at once. On a 429 or 5xx it waits (Retry-After,
-  else a doubling wait) and tries again. Any other error stops the run,
-  because a request that reached ElevenLabs may already have been charged.
+  with `model_id` always set, since the API still defaults to v2.
+  `ELEVENLABS_API_BASE` may pick another of the API's documented hosts
+  (`api.us.elevenlabs.io` or the EU, India and Singapore
+  `*.residency.elevenlabs.io` hosts) or plain http on this machine's loopback
+  (the offline check's stand-in). Nothing else is accepted, and a host other
+  than the default is printed.
+- **Retries and errors.** It runs at most the plan's 6 requests at once. Only
+  a 429 or 503 (the request was not processed) or a connection that never
+  opened is tried again, after Retry-After or a doubling wait. Any other
+  answer stops the run, a 504 or an answer lost while it was read included,
+  because that request may already have been charged. A redirect is never
+  followed, since the key would go with it. Every request leaves a line in
+  the generation log, whatever became of it.
+- **One run at a time.** A `--generate` run holds `.generate.lock` in the
+  output folder, and a second run there is refused. If a run was killed and
+  left its lock, the tool says so and leaves the lock alone; delete it by hand
+  once no run is using the folder.
+- **Ctrl-C.** The first Ctrl-C starts no new requests, lets the ones in
+  flight finish, and saves their audio. A second Ctrl-C quits at once, losing
+  those requests.
 - **Resuming.** A candidate already on disk is never requested again, so a
-  stopped run resumes where it stopped. Files are written to `.part` and then
-  renamed, so a half-written download never counts as made. If the sheet's
-  prompt or settings for a row change after its candidates were made, the dry
-  run says so; `--force-id` then makes a fresh set and moves the old one to
-  `candidates/<id>/replaced-<time>/`.
+  stopped run resumes where it stopped; the stop message prints the command.
+  Files are written to `.part` and then renamed, so a half-written download
+  never counts as made. If the sheet's prompt or settings for a row change
+  after its candidates were made, the dry run says so. `--force-id` then makes
+  a fresh set and moves the old one to `candidates/<id>/replaced-<time>/`.
+  Until the fresh set is complete, the same `--force-id` is refused, so a
+  rerun cannot move it aside and pay again; the command without `--force-id`
+  finishes it.
 - **Picking takes.** Listen to the candidates. Then, optionally, list the
   keepers in `~/ti-sfx/picks.json`, for example
   `{"footstep_hard": [3, 1, 4, 6, 8, 9, 12, 15]}`, in take order. Without
@@ -56,7 +75,8 @@ What the output folder holds:
 | Path | What |
 |---|---|
 | `candidates/<id>/<id>.cNN.wav` or `.mp3` | ElevenLabs' answer, one file a generation (WAV 48 kHz for one-shots; MP3 192 kbps for loops, the only format the docs offer for them) |
-| `generation-log.jsonl` | A line a generation: time, id, candidate, file, prompt, model, settings, credits, status |
+| `generation-log.jsonl` | A line a request: time, id, candidate, attempt, file, prompt, model, settings, status (`ok`, `retry`, `error`), HTTP status, credits |
+| `.generate.lock`, `candidates/<id>/.forced` | A run in progress; a forced set not yet complete |
 | `picks.json` | Optional, by hand: the candidates kept, in take order |
 | `game/<group>/<name>_NN.ogg` | The processed takes |
 
@@ -79,7 +99,10 @@ Each row of `sounds` is one family of files. Its fields:
 `recipes` holds the post-processing steps as data: channels, silence trims,
 a length cap, fades, a loop crossfade and a peak level. The peak is measured
 after encoding, because Vorbis overshoots bright transients by up to about
-2.6 dB. `events` lists every sound-carrying event in the code (P player, V
+2.6 dB. A loop recipe with `loop_crossfade_ms` 0 keeps a loop as generated. It
+is for a loop the model already made seamless, chosen by ear; give that row
+its own recipe. The sheet's output formats must be ones its plan can use, and
+loops must be MP3. `events` lists every sound-carrying event in the code (P player, V
 vehicle, B ball, A ambient, U interface). Every event is served by a row or
 listed in `not_voiced` with the reason; the check enforces this.
 

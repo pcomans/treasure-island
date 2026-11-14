@@ -11,7 +11,9 @@ sudo apt-get update -qq
 # weston: headless Wayland compositor that lets Godot render on the GPU (see tools/godot).
 # xvfb is deliberately absent: Godot silently falls back to llvmpipe (CPU) under it.
 # python3-yaml: required by the existing skill-creator quick_validate.py.
-sudo apt-get install -y -qq tmux unzip file git-lfs weston osmium-tool python3-yaml \
+# ffmpeg: tools/generate-sfx --process trims, loops and encodes the generated
+# sound effects; tools/check_sfx.mjs (in tools/test.sh) fails without it.
+sudo apt-get install -y -qq tmux unzip file git-lfs weston osmium-tool python3-yaml ffmpeg \
   libgl1 libvulkan1 mesa-vulkan-drivers vulkan-tools mesa-utils
 
 # Only evidence AVIs live in LFS; nothing at runtime needs them.

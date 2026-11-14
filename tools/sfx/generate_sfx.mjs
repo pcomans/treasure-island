@@ -14,19 +14,23 @@
 // this repository is public, so DIR must lie outside every Git work tree. A
 // candidate already in DIR is never requested again; --force-id ID first moves
 // that row's candidates into DIR/candidates/ID/replaced-<time>/, then makes a
-// fresh set. The API key (ELEVENLABS_API_KEY, from the environment or
-// ~/.config/elevenlabs/.env) is never printed or logged.
+// fresh set (until that set is complete the same --force-id is refused, so a
+// rerun cannot pay for it twice). One --generate run at a time holds
+// DIR/.generate.lock. The first Ctrl-C stops new requests and saves the ones in
+// flight; a second quits at once. The API key (ELEVENLABS_API_KEY, from the
+// environment or ~/.config/elevenlabs/.env) is never printed or logged.
 //
 //   DIR/candidates/<id>/<id>.cNN.<wav|mp3>  what ElevenLabs returned, one file a generation
-//   DIR/generation-log.jsonl               a line a generation: id, prompt, model, settings, credits, time, file
+//   DIR/generation-log.jsonl               a line a request: id, prompt, model, settings, status, credits, time, file
 //   DIR/picks.json                         optional, by hand: {"<id>": [candidate numbers, in take order]}
 //   DIR/game/<group>/<name>_NN.ogg         the processed takes for the game (--process, needs ffmpeg)
 
 import { spawnSync } from "node:child_process";
-import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, unlinkSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, unlinkSync, writeFileSync } from "node:fs";
 import { open, rename } from "node:fs/promises";
 import { homedir } from "node:os";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
 
@@ -40,24 +44,46 @@ export const SCHEMA = "ti.sfx-prompts/1";
 // POST /v1/sound-generation?output_format=<codec_rate[_bitrate]>, JSON body text,
 // model_id (defaults to eleven_text_to_sound_v2, so it is always sent),
 // duration_seconds ("Must be at least 0.5 and at most 30"), prompt_influence
-// (0 to 1) and loop. "MP3 with 192kbps bitrate requires ... Creator tier";
-// "PCM and WAV formats with 44.1kHz ... Pro tier". The answer is the audio.
+// (0 to 1) and loop. The answer is the audio.
 const API_BASE = "https://api.elevenlabs.io";
 const API_PATH = "/v1/sound-generation";
+// The servers that reference lists: production, US, and the EU, India and
+// Singapore data-residency hosts. ELEVENLABS_API_BASE may choose one of them,
+// or plain http on this machine's loopback (the offline check's stand-in); no
+// other host ever receives the key.
+const API_HOSTS = Object.freeze(["api.elevenlabs.io", "api.us.elevenlabs.io", "api.eu.residency.elevenlabs.io", "api.in.residency.elevenlabs.io", "api.sg.residency.elevenlabs.io"]);
+const LOOPBACK_HOSTS = Object.freeze(["127.0.0.1", "localhost", "[::1]"]);
 export const DURATION_RANGE = Object.freeze([0.5, 30]);
 // "There is a maximum length of 450 characters for your prompt" (help centre).
 export const PROMPT_MAX_CHARS = 450;
+// Plans from smallest to largest, and the smallest plan each output format
+// needs, from the same reference: "MP3 with 192kbps bitrate requires you to be
+// subscribed to Creator tier or above"; "PCM and WAV formats with 44.1kHz
+// sample rate requires you to be subscribed to Pro tier or above". Only MP3 and
+// WAV are listed, because the post-processing reads audio files, not raw PCM.
+// Loops must be MP3: the capabilities page offers WAV only "for non-looping effects".
+export const PLANS = Object.freeze(["Free", "Starter", "Creator", "Pro", "Scale", "Business", "Enterprise"]);
+const FORMAT_PLAN = Object.freeze({
+  mp3_22050_32: "Free", mp3_24000_48: "Free", mp3_44100_32: "Free", mp3_44100_64: "Free", mp3_44100_96: "Free", mp3_44100_128: "Free", mp3_44100_192: "Creator",
+  wav_8000: "Free", wav_16000: "Free", wav_22050: "Free", wav_24000: "Free", wav_32000: "Free", wav_44100: "Pro", wav_48000: "Free",
+});
 // Sound effects have their own concurrency per plan (6 on Creator); "Requests
 // beyond the limit and its reduced-priority queue return 429"
-// (https://elevenlabs.io/docs/changelog/2026/11/9). A 429 or 5xx is retried
-// after Retry-After or a doubling wait; so is a connection that never opened.
-// Anything else stops the run: a request that reached ElevenLabs and then
-// failed or timed out may have been charged, so it is not silently repeated.
+// (https://elevenlabs.io/docs/changelog/2026/11/9). Only a 429 or 503, which
+// mean the request was not processed, or a connection that never opened is
+// tried again, after Retry-After or a doubling wait. Anything else stops the
+// run, a 504 or an answer lost on the way included: that request may have been
+// charged, so it is not silently repeated. Redirects are never followed, since
+// the key would go with them.
+const RETRY_STATUSES = new Set([429, 503]);
 const MAX_ATTEMPTS = 8;
 const BACKOFF_CAP_S = 30;
 const RETRY_AFTER_CAP_S = 120;
 const REQUEST_TIMEOUT_MS = 300_000;
 const NOT_SENT_CODES = new Set(["ECONNREFUSED", "ENOTFOUND", "EAI_AGAIN", "UND_ERR_CONNECT_TIMEOUT"]);
+// One --generate run at a time per output folder, and a forced set in progress.
+const LOCK_NAME = ".generate.lock";
+const FORCE_MARK = ".forced";
 // Post-processing: silence kept before a one-shot's onset and after its tail,
 // and the level below which a trimmed take counts as silent.
 const LEAD_KEEP_S = 0.003;
@@ -87,13 +113,13 @@ const CAR_WORDS = /\b(?:car|cars|vehicle|vehicles|sedan|suv|crossover|truck|truc
 const ID_RE = /^[a-z][a-z0-9_]*$/u;
 const EVENT_RE = /^[A-Z][0-9]+$/u;
 const OUTPUT_RE = /^([a-z]+)\/([a-z0-9_]+)_\{take\}\.ogg$/u;
-const FORMAT_RE = /^(wav|mp3)_\d+(?:_\d+)?$/u;
 
 const isObject = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
 const isNumber = (value) => typeof value === "number" && Number.isFinite(value);
 const pad2 = (n) => String(n).padStart(2, "0");
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 const credits = (n) => Math.round(n).toLocaleString("en-US");
+const shellWord = (word) => (/^[\w./,:=@+-]+$/u.test(word) ? word : `'${word.replaceAll("'", "'\\''")}'`);
 
 // --- The sheet -------------------------------------------------------------
 
@@ -118,11 +144,19 @@ export function validateSheet(sheet) {
   if (typeof sheet.model_id !== "string" || !sheet.model_id.trim()) problem("model_id must name the model (the API would otherwise use its default)");
   if (!isNumber(sheet.credits_per_second) || sheet.credits_per_second <= 0) problem("credits_per_second must be a positive number");
   const plan = sheet.plan;
-  if (!isObject(plan) || typeof plan.name !== "string" || !Number.isInteger(plan.credits_per_month) || plan.credits_per_month <= 0 || !Number.isInteger(plan.concurrency) || plan.concurrency < 1) {
+  if (!isObject(plan) || !Number.isInteger(plan.credits_per_month) || plan.credits_per_month <= 0 || !Number.isInteger(plan.concurrency) || plan.concurrency < 1) {
     problem("plan must give name, credits_per_month and concurrency");
   }
+  const planKnown = PLANS.includes(plan?.name);
+  if (!planKnown) problem(`plan.name must be one of ${PLANS.join(", ")}`);
   for (const kind of ["one_shot", "loop"]) {
-    if (!FORMAT_RE.test(sheet.output_format?.[kind] ?? "")) problem(`output_format.${kind} must be a wav_ or mp3_ format the post-processing can read`);
+    const format = sheet.output_format?.[kind];
+    const needs = typeof format === "string" && Object.hasOwn(FORMAT_PLAN, format) ? FORMAT_PLAN[format] : null;
+    if (!needs) problem(`output_format.${kind} must be one of the API's MP3 or WAV formats: ${Object.keys(FORMAT_PLAN).join(", ")}`);
+    else if (planKnown && PLANS.indexOf(needs) > PLANS.indexOf(plan.name)) problem(`output_format.${kind} ${format} needs the ${needs} plan or above; the sheet's plan is ${plan.name}`);
+  }
+  if (typeof sheet.output_format?.loop === "string" && !sheet.output_format.loop.startsWith("mp3_")) {
+    problem("output_format.loop must be an MP3 format: ElevenLabs offers WAV only for effects that do not loop");
   }
   const car = sheet.car;
   if (!isObject(car) || typeof car.name !== "string" || !car.name.trim() || car.basis !== "production_inference" || typeof car.why !== "string" || !car.why.trim()) {
@@ -225,7 +259,8 @@ function validateRecipe(recipe) {
   }
   if (!isNumber(recipe.peak_dbfs) || recipe.peak_dbfs > 0 || recipe.peak_dbfs < -24) problems.push("peak_dbfs must be from -24 to 0");
   if (loop) {
-    if (!isNumber(recipe.loop_crossfade_ms) || recipe.loop_crossfade_ms <= 0) problems.push("loop_crossfade_ms must be positive");
+    // 0 keeps a loop as generated, for one the model already made seamless (chosen by ear).
+    if (!isNumber(recipe.loop_crossfade_ms) || recipe.loop_crossfade_ms < 0) problems.push("loop_crossfade_ms must be 0 (keep the loop as generated) or more");
   } else {
     if (recipe.max_seconds !== null && (!isNumber(recipe.max_seconds) || recipe.max_seconds <= 0)) problems.push("max_seconds must be null or positive");
     for (const key of ["fade_in_ms", "fade_out_ms"]) if (!isNumber(recipe[key]) || recipe[key] < 0) problems.push(`${key} must be 0 or more`);
@@ -248,6 +283,8 @@ export const creditsOf = (sheet, row) => Math.round(sheet.credits_per_second * r
 const formatOf = (sheet, row) => (row.loop ? sheet.output_format.loop : sheet.output_format.one_shot);
 const candidateName = (sheet, row, n) => `${row.id}.c${pad2(n)}.${formatOf(sheet, row).split("_")[0]}`;
 const candidateFile = (out, sheet, row, n) => join(out, "candidates", row.id, candidateName(sheet, row, n));
+const forceMark = (out, row) => join(out, "candidates", row.id, FORCE_MARK);
+const presentOf = (out, sheet, row) => Array.from({ length: generationsOf(row) }, (_, i) => i + 1).filter((n) => existsSync(candidateFile(out, sheet, row, n)));
 
 // The rows a run works on, in sheet order. Unknown ids throw (a usage error).
 export function selectRows(sheet, { tiers = [], ids = [] } = {}) {
@@ -259,7 +296,9 @@ export function selectRows(sheet, { tiers = [], ids = [] } = {}) {
 
 // --- Where the audio goes --------------------------------------------------
 
-// Why OUT may not be used (it lies in this repository or any Git work tree), or null.
+// Why OUT may not be used, or null. Fails closed: unless git answers that OUT
+// is in no repository, OUT is refused (git missing, or git refusing to look,
+// as for a repository it calls of dubious ownership).
 export function outProblem(out) {
   const target = resolve(out);
   let probe = target;
@@ -273,12 +312,15 @@ export function outProblem(out) {
   const repo = realpathSync(REPO_ROOT);
   if (real === repo || real.startsWith(repo + sep)) return `it lies inside this repository (${repo}), which is public`;
   const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => !key.startsWith("GIT_")));
-  const git = spawnSync("git", ["-C", realpathSync(probe), "rev-parse", "--is-inside-work-tree", "--is-inside-git-dir"], { encoding: "utf8", env });
-  if (git.status === 0 && git.stdout.split("\n").some((line) => line.trim() === "true")) return "it lies inside a Git work tree";
-  return null;
+  Object.assign(env, { LC_ALL: "C", LANGUAGE: "C", GIT_DISCOVERY_ACROSS_FILESYSTEM: "1" });
+  const git = spawnSync("git", ["-C", realpathSync(probe), "rev-parse", "--is-inside-work-tree"], { encoding: "utf8", env });
+  if (git.error) return `git could not run (${git.error.code ?? git.error.message}), so it cannot be checked that it lies outside every Git work tree`;
+  if (git.status === 128 && /not a git repository/u.test(git.stderr)) return null;
+  if (git.status === 0) return "it lies inside a Git repository";
+  return `git could not tell whether it lies in a Git work tree (exit ${git.status}: ${git.stderr.trim().split("\n")[0]})`;
 }
 
-// --- The key ---------------------------------------------------------------
+// --- The key and the server ------------------------------------------------
 
 export function findApiKey(env = process.env) {
   const fromEnv = env.ELEVENLABS_API_KEY?.trim();
@@ -299,20 +341,74 @@ export function findApiKey(env = process.env) {
   return null;
 }
 
-// ELEVENLABS_API_BASE may name another ElevenLabs host (its data-residency
-// servers) or, for the offline check, a stand-in on this machine's loopback.
 function apiBase(env = process.env) {
   const raw = env.ELEVENLABS_API_BASE?.trim();
   if (!raw) return API_BASE;
+  const allowed = `${API_HOSTS.map((host) => `https://${host}`).join(", ")}, or http on this machine's loopback`;
   let url;
   try {
     url = new URL(raw);
   } catch {
-    throw new UsageError("ELEVENLABS_API_BASE is not a URL");
+    throw new UsageError(`ELEVENLABS_API_BASE is not a URL; it may be ${allowed}`);
   }
-  const loopback = ["127.0.0.1", "localhost", "[::1]"].includes(url.hostname);
-  if (url.protocol !== "https:" && !(url.protocol === "http:" && loopback)) throw new UsageError("ELEVENLABS_API_BASE must be https (plain http only on this machine's loopback)");
+  const bare = !url.username && !url.password && url.pathname === "/" && !url.search && !url.hash;
+  const official = url.protocol === "https:" && url.port === "" && API_HOSTS.includes(url.hostname);
+  const loopback = url.protocol === "http:" && LOOPBACK_HOSTS.includes(url.hostname);
+  if (!bare || !(official || loopback)) throw new UsageError(`ELEVENLABS_API_BASE may only be ${allowed} (with no path, port or user)`);
   return url.origin;
+}
+
+// --- The output folder's lock and forced sets --------------------------------
+
+class LockError extends Error {}
+
+// Takes DIR/.generate.lock (created exclusively, holding this pid) or throws a
+// LockError. A lock is never deleted here: one left by a run that has gone is
+// reported, and whoever runs the tool deletes it.
+function takeLock(out) {
+  const path = join(out, LOCK_NAME);
+  try {
+    writeFileSync(path, `${JSON.stringify({ pid: process.pid, started: new Date().toISOString() })}\n`, { flag: "wx" });
+    return path;
+  } catch (error) {
+    if (error.code !== "EEXIST") throw error;
+  }
+  let holder = null;
+  try {
+    holder = JSON.parse(readFileSync(path, "utf8"));
+  } catch {
+    // Unreadable or torn: reported below as a lock of unknown owner.
+  }
+  const pid = Number.isInteger(holder?.pid) && holder.pid > 0 ? holder.pid : null;
+  let alive = false;
+  if (pid !== null) {
+    try {
+      process.kill(pid, 0);
+      alive = true;
+    } catch (error) {
+      alive = error.code === "EPERM";
+    }
+  }
+  if (alive) throw new LockError(`another --generate run (pid ${pid}, started ${holder.started ?? "?"}) is using ${out}; wait for it to end`);
+  throw new LockError(`${path} is left from a run that is not running any more (pid ${pid ?? "unknown"}); if no run is using ${out}, delete that file and run again`);
+}
+
+function releaseLock(path) {
+  try {
+    if (JSON.parse(readFileSync(path, "utf8")).pid === process.pid) rmSync(path, { force: true });
+  } catch {
+    // Already gone, or not ours: leave it.
+  }
+}
+
+// The same command without --force-id: it finishes a forced set without paying for it twice.
+function resumeCommand(args, out) {
+  const words = [TOOL, "--out", out, "--generate"];
+  if (args.sheet !== SHEET_PATH) words.push("--sheet", args.sheet);
+  if (args.tiers.length) words.push("--tier", args.tiers.join(","));
+  if (args.ids.length) words.push("--id", args.ids.join(","));
+  if (args.concurrency !== undefined) words.push("--concurrency", args.concurrency);
+  return words.map(shellWord).join(" ");
 }
 
 // --- Dry run ---------------------------------------------------------------
@@ -333,13 +429,10 @@ function survey(out, sheet, rows, forced) {
   }
   return rows.map((row) => {
     const format = formatOf(sheet, row);
-    const present = [];
+    const present = presentOf(out, sheet, row);
     let stale = 0;
-    for (let n = 1; n <= generationsOf(row); n += 1) {
-      const file = candidateFile(out, sheet, row, n);
-      if (!existsSync(file)) continue;
-      present.push(n);
-      const entry = logged.get(relative(out, file));
+    for (const n of present) {
+      const entry = logged.get(relative(out, candidateFile(out, sheet, row, n)));
       if (entry && (entry.prompt !== row.prompt || entry.model_id !== sheet.model_id || entry.duration_seconds !== row.duration_seconds
         || entry.loop !== row.loop || entry.prompt_influence !== row.prompt_influence || entry.output_format !== format)) stale += 1;
     }
@@ -391,7 +484,6 @@ async function writeAtomic(file, bytes) {
   await rename(part, file);
 }
 
-const sleep = (seconds) => new Promise((done) => setTimeout(done, seconds * 1000));
 const backoffSeconds = (attempt) => Math.round(Math.min(BACKOFF_CAP_S, 2 ** (attempt - 1)) * (1 + Math.random() * 0.25) * 10) / 10;
 
 function retryAfterSeconds(header) {
@@ -406,9 +498,8 @@ function moveAside(out, sheet, row) {
   const stamp = new Date().toISOString().replace(/[-:]/gu, "").replace(/\.\d+Z$/u, "Z");
   const aside = join(out, "candidates", row.id, `replaced-${stamp}`);
   let moved = 0;
-  for (let n = 1; n <= generationsOf(row); n += 1) {
+  for (const n of presentOf(out, sheet, row)) {
     const file = candidateFile(out, sheet, row, n);
-    if (!existsSync(file)) continue;
     mkdirSync(aside, { recursive: true });
     renameSync(file, join(aside, basename(file)));
     moved += 1;
@@ -416,12 +507,25 @@ function moveAside(out, sheet, row) {
   if (moved) console.log(`moved ${plural(moved, "candidate")} of ${row.id} to ${relative(out, aside)}`);
 }
 
-async function generate({ sheet, out, surveyed, forced, key, base, concurrency }) {
+class Interrupted extends Error {}
+
+async function generate({ sheet, out, surveyed, forced, key, base, concurrency, resume }) {
   const redact = (text) => String(text).split(key).join("[key]");
   const excerpt = (text) => redact(text).replace(/\s+/gu, " ").trim().slice(0, 400);
   const logPath = join(out, "generation-log.jsonl");
   const log = (entry) => appendFileSync(logPath, `${JSON.stringify(entry)}\n`);
-  for (const item of surveyed) if (forced.has(item.row.id)) moveAside(out, sheet, item.row);
+  // A forced set is marked until it is complete, so the same --force-id cannot move it aside unfinished.
+  for (const { row } of surveyed) {
+    if (!forced.has(row.id)) continue;
+    mkdirSync(join(out, "candidates", row.id), { recursive: true });
+    writeFileSync(forceMark(out, row), `${JSON.stringify({ started: new Date().toISOString(), pid: process.pid })}\n`);
+    moveAside(out, sheet, row);
+  }
+  const unmarkComplete = () => {
+    for (const { row } of surveyed) {
+      if (existsSync(forceMark(out, row)) && presentOf(out, sheet, row).length === generationsOf(row)) rmSync(forceMark(out, row), { force: true });
+    }
+  };
   const tasks = [];
   for (const { row } of surveyed) {
     for (let n = 1; n <= generationsOf(row); n += 1) {
@@ -430,6 +534,7 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency }
     }
   }
   if (!tasks.length) {
+    unmarkComplete();
     console.log(`Nothing to make: every candidate of the chosen sounds is already in ${out}.`);
     return 0;
   }
@@ -440,64 +545,118 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency }
   let stop = null;
   let made = 0;
   let spent = 0;
-  // A wait before a retry ends the task instead when the run has stopped meanwhile.
-  const waitToRetry = async (label, seconds) => {
-    await sleep(seconds);
-    if (stop !== null) throw new Error(`${label}: not retried, the run had stopped`);
+  let sending = 0;
+  const stopping = new AbortController();
+  const halt = (error) => {
+    if (stop !== null) return;
+    stop = error;
+    stopping.abort();
   };
-  const makeOne = async ({ row, n, file, format }) => {
+
+  // One request for a candidate: returns { cost } when saved or { wait } to try
+  // again; throws to stop the run. Every request leaves a line in the log.
+  const attemptOnce = async ({ row, n, file, format }, attempt) => {
     const label = `${row.id} c${pad2(n)}`;
-    const cost = Math.round(sheet.credits_per_second * row.duration_seconds);
     const settings = { model_id: sheet.model_id, duration_seconds: row.duration_seconds, loop: row.loop, prompt_influence: row.prompt_influence, output_format: format };
-    const record = (fields) => log({ time: new Date().toISOString(), id: row.id, candidate: n, file: relative(out, file), prompt: row.prompt, ...settings, ...fields });
+    const record = (fields) => log({ time: new Date().toISOString(), id: row.id, candidate: n, attempt, file: relative(out, file), prompt: row.prompt, ...settings, ...fields });
     const url = `${base}${API_PATH}?output_format=${encodeURIComponent(format)}`;
     const body = JSON.stringify({ text: row.prompt, model_id: sheet.model_id, duration_seconds: row.duration_seconds, prompt_influence: row.prompt_influence, loop: row.loop });
-    mkdirSync(dirname(file), { recursive: true });
-    for (let attempt = 1; ; attempt += 1) {
-      let response;
-      try {
-        response = await fetch(url, { method: "POST", headers: { "xi-api-key": key, "content-type": "application/json" }, body, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
-      } catch (error) {
-        // undici puts the system error code in cause; a timeout is a DOMException named TimeoutError.
-        const code = String(error?.cause?.code ?? error?.name ?? "error");
-        if (NOT_SENT_CODES.has(code) && attempt < MAX_ATTEMPTS) {
-          const wait = backoffSeconds(attempt);
-          console.error(`NOTE: ${label}: could not connect (${code}); trying again in ${wait} s`);
-          await waitToRetry(label, wait);
-          continue;
-        }
-        record({ status: "error", error: excerpt(`${code}: ${error?.message ?? ""}`) });
-        throw new Error(`${label}: the request failed (${excerpt(code)}); if it reached ElevenLabs it may have been charged, so it is not repeated`);
+    let response;
+    try {
+      response = await fetch(url, { method: "POST", redirect: "manual", headers: { "xi-api-key": key, "content-type": "application/json" }, body, signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS) });
+    } catch (error) {
+      // undici puts the system error code in cause; a timeout is a DOMException named TimeoutError.
+      const code = String(error?.cause?.code ?? error?.name ?? "error");
+      if (NOT_SENT_CODES.has(code) && attempt < MAX_ATTEMPTS) {
+        const wait = backoffSeconds(attempt);
+        record({ status: "retry", error: code, wait_seconds: wait });
+        console.error(`NOTE: ${label}: could not connect (${code}); trying again in ${wait} s`);
+        return { wait };
       }
-      if (response.status === 429 || response.status >= 500) {
-        const text = await response.text().catch(() => "");
-        if (attempt < MAX_ATTEMPTS) {
-          const wait = retryAfterSeconds(response.headers.get("retry-after")) ?? backoffSeconds(attempt);
-          console.error(`NOTE: ${label}: HTTP ${response.status}${response.status === 429 ? " (more requests than the plan runs at once)" : ""}; trying again in ${wait} s`);
-          await waitToRetry(label, wait);
-          continue;
-        }
-        record({ status: "error", http_status: response.status, error: excerpt(text) });
-        throw new Error(`${label}: HTTP ${response.status} after ${attempt} attempts: ${excerpt(text)}`);
+      record({ status: "error", error: excerpt(`${code}: ${error?.message ?? ""}`) });
+      throw new Error(`${label}: the request failed (${excerpt(code)}); if it reached ElevenLabs it may have been charged, so it is not repeated`);
+    }
+    const status = response.status;
+    if (response.type === "opaqueredirect" || (status >= 300 && status < 400)) {
+      const where = excerpt(response.headers.get("location") ?? "somewhere");
+      record({ status: "error", http_status: status, error: `redirect to ${where}, not followed` });
+      throw new Error(`${label}: HTTP ${status} redirect to ${where}; not followed, since the key would go with it`);
+    }
+    if (RETRY_STATUSES.has(status)) {
+      const text = await response.text().catch(() => "");
+      if (attempt < MAX_ATTEMPTS) {
+        const wait = retryAfterSeconds(response.headers.get("retry-after")) ?? backoffSeconds(attempt);
+        record({ status: "retry", http_status: status, error: excerpt(text), wait_seconds: wait });
+        console.error(`NOTE: ${label}: HTTP ${status}${status === 429 ? " (more requests than the plan runs at once)" : ""}; trying again in ${wait} s`);
+        return { wait };
       }
-      const type = response.headers.get("content-type") ?? "";
-      if (!response.ok || /json|text/u.test(type)) {
-        const text = await response.text().catch(() => "");
-        record({ status: "error", http_status: response.status, error: excerpt(text) });
-        throw new Error(`${label}: HTTP ${response.status}${response.ok ? ` but ${type} instead of audio` : ""}: ${excerpt(text)}`);
-      }
-      const bytes = Buffer.from(await response.arrayBuffer());
-      if (!bytes.length) {
-        record({ status: "error", http_status: response.status, error: "empty answer" });
-        throw new Error(`${label}: HTTP ${response.status} with no audio`);
-      }
+      record({ status: "error", http_status: status, error: excerpt(text) });
+      throw new Error(`${label}: HTTP ${status} after ${attempt} attempts: ${excerpt(text)}`);
+    }
+    const type = response.headers.get("content-type") ?? "";
+    if (!response.ok || /json|text/u.test(type)) {
+      const text = await response.text().catch(() => "");
+      record({ status: "error", http_status: status, error: excerpt(text) });
+      const charged = status >= 500 ? "; it may have been charged, so it is not repeated" : "";
+      throw new Error(`${label}: HTTP ${status}${response.ok ? ` but ${type} instead of audio` : ""}${charged}: ${excerpt(text)}`);
+    }
+    let bytes;
+    try {
+      bytes = Buffer.from(await response.arrayBuffer());
+    } catch (error) {
+      const why = excerpt(error?.cause?.code ?? error?.cause?.message ?? error?.message ?? String(error));
+      record({ status: "error", http_status: status, error: `reading the answer failed: ${why}` });
+      throw new Error(`${label}: the answer was lost while it was read (${why}); it may have been charged, so it is not repeated`);
+    }
+    if (!bytes.length) {
+      record({ status: "error", http_status: status, error: "empty answer" });
+      throw new Error(`${label}: HTTP ${status} with no audio`);
+    }
+    try {
       await writeAtomic(file, bytes);
-      record({ status: "ok", credits: cost });
-      console.log(`made ${relative(out, file)} (${cost} credits)`);
-      return cost;
+    } catch (error) {
+      record({ status: "error", http_status: status, error: excerpt(`writing ${relative(out, file)} failed: ${error?.code ?? error?.message}`) });
+      throw new Error(`${label}: the audio was paid for but could not be saved (${error?.code ?? error?.message})`);
+    }
+    const cost = Math.round(sheet.credits_per_second * row.duration_seconds);
+    record({ status: "ok", http_status: status, credits: cost });
+    console.log(`made ${relative(out, file)} (${cost} credits)`);
+    return { cost };
+  };
+
+  const makeOne = async (task) => {
+    mkdirSync(dirname(task.file), { recursive: true });
+    for (let attempt = 1; ; attempt += 1) {
+      sending += 1;
+      let result;
+      try {
+        result = await attemptOnce(task, attempt);
+      } finally {
+        sending -= 1;
+      }
+      if (result.cost !== undefined) return result.cost;
+      // A wait before a retry ends early once the run stops, and the task with it.
+      try {
+        await delay(result.wait * 1000, undefined, { signal: stopping.signal });
+      } catch {
+        // Cut short by the stop.
+      }
+      if (stop !== null) throw new Error(`${task.row.id} c${pad2(task.n)}: not retried, the run had stopped`);
     }
   };
 
+  let interrupts = 0;
+  const onInterrupt = () => {
+    interrupts += 1;
+    if (interrupts === 1) {
+      halt(new Interrupted("interrupted (Ctrl-C)"));
+      console.error(`NOTE: stopping: no new requests; ${plural(sending, "request")} in flight will finish and be saved. Ctrl-C again quits at once and loses them.`);
+      return;
+    }
+    console.error("Quit at once; requests in flight were not saved (they may have been charged).");
+    process.exit(130);
+  };
+  process.on("SIGINT", onInterrupt);
   const worker = async () => {
     while (stop === null && next < tasks.length) {
       const task = tasks[next];
@@ -506,18 +665,23 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency }
         spent += await makeOne(task);
         made += 1;
       } catch (error) {
-        stop ??= error;
+        halt(error);
       }
     }
   };
-  await Promise.all(Array.from({ length: Math.min(concurrency, tasks.length) }, worker));
+  try {
+    await Promise.all(Array.from({ length: Math.min(concurrency, tasks.length) }, worker));
+  } finally {
+    process.off("SIGINT", onInterrupt);
+    unmarkComplete();
+  }
   if (stop) {
-    console.error(`FAIL: ${redact(stop.message)}`);
-    console.error(`Stopped after making ${plural(made, "candidate")} (${credits(spent)} credits); no request was started after the stop. Run again to resume: candidates already made are kept and not requested again.`);
-    return 1;
+    console.error(`${stop instanceof Interrupted ? "Stopped" : "FAIL"}: ${redact(stop.message)}`);
+    console.error(`Made ${plural(made, "candidate")} (${credits(spent)} credits) before the stop; no request was started after it. To resume (candidates already made are kept and not requested again): ${resume}`);
+    return stop instanceof Interrupted ? 130 : 1;
   }
   console.log(`Made ${plural(made, "candidate")} for ${credits(spent)} credits. Log: ${relative(process.cwd(), logPath) || logPath}`);
-  console.log(`Next: listen, list the keepers in ${join(out, "picks.json")} (optional), then run ${TOOL} --out ${out} --process.`);
+  console.log(`Next: listen, list the keepers in ${join(out, "picks.json")} (optional), then run ${TOOL} --out ${shellWord(out)} --process.`);
   return 0;
 }
 
@@ -568,11 +732,12 @@ export function processTake(sheet, recipe, input, output, work) {
   ffmpeg(["-v", "error", "-i", input, "-af", chain.join(","), "-ac", String(recipe.channels), "-c:a", "pcm_f32le", shaped]);
   let source = shaped;
   let samples = samplesOf(shaped);
-  if (loop) {
+  // A loop recipe with loop_crossfade_ms 0 keeps the generated loop as it is.
+  const x = loop ? Math.round((recipe.loop_crossfade_ms / 1000) * rate) : 0;
+  if (x > 0) {
     // Crossfade the last X samples into the first X (equal power): the take
     // becomes original[X .. L-X] followed by the blend of original[L-X .. L]
     // into original[0 .. X], so its end runs on into its start without a jump.
-    const x = Math.round((recipe.loop_crossfade_ms / 1000) * rate);
     if (samples < 4 * x) throw new Error(`only ${(samples / rate).toFixed(2)} s after trimming, too short for a ${recipe.loop_crossfade_ms} ms crossfade`);
     const looped = join(work, "looped.wav");
     ffmpeg(["-v", "error", "-i", shaped, "-filter_complex",
@@ -628,12 +793,12 @@ function postProcess({ sheet, out, rows }) {
   for (const tool of ["ffmpeg", "ffprobe"]) {
     const probe = spawnSync(tool, ["-version"], { encoding: "utf8" });
     if (probe.error || probe.status !== 0) {
-      console.error(`FAIL: ${tool} is not on PATH; --process needs ffmpeg and ffprobe. .devcontainer/post-create.sh does not install them yet.`);
+      console.error(`FAIL: ${tool} is not on PATH; --process needs ffmpeg and ffprobe (.devcontainer/post-create.sh installs them).`);
       return 1;
     }
   }
   if (!existsSync(join(out, "candidates"))) {
-    console.error(`FAIL: no candidates in ${out}; run ${TOOL} --out ${out} --generate first.`);
+    console.error(`FAIL: no candidates in ${out}; run ${TOOL} --out ${shellWord(out)} --generate first.`);
     return 1;
   }
   const picks = readPicks(out, sheet);
@@ -644,8 +809,7 @@ function postProcess({ sheet, out, rows }) {
   try {
     for (const row of rows) {
       const recipe = sheet.recipes[row.recipe];
-      const present = [];
-      for (let n = 1; n <= generationsOf(row); n += 1) if (existsSync(candidateFile(out, sheet, row, n))) present.push(n);
+      const present = presentOf(out, sheet, row);
       let chosen = picks[row.id];
       if (chosen) {
         const missing = chosen.filter((n) => !present.includes(n));
@@ -797,6 +961,14 @@ export async function main(argv = process.argv.slice(2)) {
   }
   const forced = new Set(args.forced);
   const surveyed = survey(out, sheet, rows, forced);
+  for (const { row, present } of surveyed) {
+    if (forced.has(row.id) && existsSync(forceMark(out, row)) && present.length < generationsOf(row)) {
+      console.error(`${TOOL}: --force-id ${row.id} again would move aside its unfinished forced set (${present.length} of ${generationsOf(row)} candidates made) and pay for it twice. Finish it without --force-id: ${resumeCommand(args, out)}`);
+      console.error(`To throw that set away and force a fresh one anyway, delete ${forceMark(out, row)} first.`);
+      return 2;
+    }
+  }
+  if (base !== API_BASE) console.log(`Requests go to ${base} (ELEVENLABS_API_BASE), not ${API_BASE}.`);
   printPlan(sheet, args.sheet, out, surveyed);
   const found = findApiKey();
   if (args.mode === "dry-run") {
@@ -808,7 +980,22 @@ export async function main(argv = process.argv.slice(2)) {
     return 1;
   }
   mkdirSync(out, { recursive: true });
-  return generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency });
+  let lock;
+  try {
+    lock = takeLock(out);
+  } catch (error) {
+    if (!(error instanceof LockError)) throw error;
+    console.error(`FAIL: ${error.message}; nothing was requested.`);
+    return 1;
+  }
+  const release = () => releaseLock(lock);
+  process.on("exit", release);
+  try {
+    return await generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency, resume: resumeCommand(args, out) });
+  } finally {
+    process.off("exit", release);
+    release();
+  }
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {

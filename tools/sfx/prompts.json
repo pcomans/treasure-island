@@ -874,7 +874,7 @@
       "id": "ball_bounce",
       "tier": 2,
       "events": ["B2"],
-      "prompt": "High-quality, professionally recorded foley one-shot: a soccer ball bouncing off hard ground, a taut, hollow rubbery thump, close-miked outdoors.",
+      "prompt": "High-quality, professionally recorded foley one-shot: a single bounce of a soccer ball off hard ground, one taut, hollow rubbery thump, close-miked outdoors.",
       "duration_seconds": 0.5,
       "loop": false,
       "prompt_influence": 0.5,

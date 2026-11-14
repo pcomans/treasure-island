@@ -334,3 +334,18 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: official publishers only; a checksum mismatch stops setup-godot.sh and the build.
 - Verification and result: Godot reported `4.7.2.stable.official.ed1daf0bf`; the bake reported `BAKE_RENDERER Wayland / llvmpipe (LLVM 21.1.8, 256 bits)`; all four runs built, audited and launched the app.
 - Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the Mac releases with their `mac-*` tags.
+
+### 2026-11-14 — ffmpeg in the devcontainer setup
+
+- Date and time (UTC): 2026-11-14, the setup change. The package was already in this container: someone installed it by hand on 2026-10-26 at 00:43 UTC (`apt-get install -y -qq ffmpeg` in `/var/log/apt/history.log`), with no log entry and no setup line, so a rebuilt container would have lacked it.
+- Status: `completed`
+- Exact package and version: Ubuntu `ffmpeg` 7:8.0.1-3ubuntu2 (resolute/universe) with its apt-resolved libraries (`libavcodec62` 7:8.0.1-3ubuntu2 and others); it provides `ffmpeg` and `ffprobe` 8.0.1.
+- Publisher and source URL: Ubuntu archive, http://archive.ubuntu.com/ubuntu (resolute/universe).
+- Checksum, signature, notarization, or registry integrity evidence: apt's archive signature verification.
+- Exact command or installation method: `ffmpeg` added to the existing apt package list in `.devcontainer/post-create.sh`. Nothing was installed or rebuilt this time; the installed package was only checked (`dpkg-query`, `apt-cache policy`).
+- Purpose: `tools/generate-sfx --process` trims, loop-crossfades, peak-normalises and encodes the generated sound effects to Ogg Vorbis. `tools/check_sfx.mjs` (part of `tools/test.sh`) checks that step and fails when `ffmpeg` or `ffprobe` is missing.
+- Scope and install location: inside the container only (`/usr/bin/ffmpeg`, `/usr/bin/ffprobe`).
+- Authorizing decision or request: owner, 2026-11-14 (every sound generated with ElevenLabs; the trim, loop, normalise and convert step kept as a script); code-review fix assignment for `feature/sfx-prompts-20261114`, 2026-11-14.
+- Trust and malware checks: official Ubuntu archive only.
+- Verification and result: `ffmpeg -version` reports `8.0.1-3ubuntu2`; `node tools/check_sfx.mjs` passes its post-processing checks with it.
+- Removal steps: remove `ffmpeg` from the apt list in `post-create.sh`, then `sudo apt-get remove ffmpeg`.
