@@ -1,25 +1,230 @@
 # Sound effects
 
-Every sound effect in the game is generated with ElevenLabs from the prompts in
+Every sound effect in the game is generated with ElevenLabs' sound-effect
+model `eleven_text_to_sound_v3` from the prompts in
 [prompts.json](prompts.json) (owner decisions, 2026-11-14). The game's audio is
-a projection of these prompts: anyone with an ElevenLabs key can run them. The
-prompts and the tool are public; the audio they make stays private.
-ElevenLabs' terms forbid making output available "as isolated audio files or
-samples" (ElevenCreative Terms, Exhibit 4 §2), and this repository is public.
+a projection of these prompts: anyone with their own ElevenLabs account can run
+them. The prompts and the tools are public; the audio they make stays private
+(see [Why our audio is not in this repository](#why-our-audio-is-not-in-this-repository)).
 `.gitignore` keeps audio files and their Godot `.import` files out of Git, and
 `tools/check_sfx.mjs` (part of `tools/test.sh`) fails if any is tracked.
 
-Nothing here plays sound in the game yet. The audio driver is still `Dummy`,
-and wiring the sounds in is separate work.
+The game plays these sounds (`game/scripts/audio/sound.gd`, catalog
+`game/resources/audio/sounds.json`). `tools/fetch-sfx` copies the processed
+takes and their `sfx.json` from a private source (`TI_SFX_SOURCE`, a folder or
+Git URL) into the ignored `game/resources/audio/sfx/`; without a source the
+game is silent. Development and test runs stay on Dummy through `tools/godot`.
 
-## Run it
+## Make your own sound set
+
+A clone of this repository has no audio. The game, its tests and its builds
+all work without it; the game is just silent. To hear it, make your own set
+from the same prompts. Your set will not sound identical to ours: the model
+gives a different result every time it is run, even for the same prompt and
+settings (the endpoint takes no seed, and the candidates of one sound already
+differ from each other), and the takes we kept were picked by ear.
+
+### What you need
+
+- **This repository, Node, git and ffmpeg.** The devcontainer installs all of
+  them (`.devcontainer/post-create.sh`). `tools/generate-sfx --process` runs
+  `ffmpeg` and `ffprobe`, and the tool asks git whether its output folder lies
+  inside a repository.
+- **Your own ElevenLabs account and API key.** Put the key in
+  `~/.config/elevenlabs/.env`, outside every repository, as one line:
+
+  ```sh
+  ELEVENLABS_API_KEY=...
+  ```
+
+  or set `ELEVENLABS_API_KEY` in the environment. Never put it in this
+  repository or any file you share; ElevenLabs' API terms forbid committing a
+  credential ([below](#why-our-audio-is-not-in-this-repository)). The tool
+  never prints or logs it.
+- **A plan whose licence fits what you will do with the sounds.** ElevenLabs'
+  terms decide what you may do, not this repository. As checked on
+  2026-11-14 (quotes [below](#why-our-audio-is-not-in-this-repository)): on
+  the free plan you may use the service only for non-commercial purposes, and
+  content you publish must credit ElevenLabs in its title; paid plans include
+  a commercial licence, and content made while subscribed stays usable after
+  you cancel. Read your own agreement with ElevenLabs before you choose.
+- **A plan that can make the sheet's formats.** The sheet as committed is set
+  up for the Creator plan, which we use: its loops are requested as
+  `mp3_44100_192`, which ElevenLabs' API reference says needs the Creator plan
+  or above, and the tool runs up to that plan's 6 requests at once. The tool
+  refuses a sheet whose formats its `plan` cannot use. On a smaller plan, copy
+  the sheet somewhere outside the repository, set its `plan` (your plan's
+  name, monthly credits and sound-effect concurrency; ElevenLabs' changelog of
+  2026-11-09 gives 4 on Free and Starter) and an `output_format.loop` your plan
+  allows, such as `mp3_44100_128`, and pass `--sheet <your copy>` to every
+  `tools/generate-sfx` command below.
+
+### What it costs
+
+Run the dry run first; it requests nothing and charges nothing:
 
 ```sh
-tools/generate-sfx --out ~/ti-sfx                  # dry run: credits per sound, per tier, total
-tools/generate-sfx --out ~/ti-sfx --generate       # make every candidate not yet in ~/ti-sfx
+tools/generate-sfx --out ~/ti-sfx
+```
+
+It prints each sound's generations and credits, each tier's and the total. At
+this commit the sheet computes 59 sounds, 285 generations and 26,968 credits
+(tier 1: 33 sounds, 17,880 credits; tier 2: 18 sounds, 6,008; tier 3: 8 sounds,
+3,080), at 40 credits a second of each generation's set length. That is the
+sheet's own arithmetic at this commit, not a price from ElevenLabs: the sheet
+changes, ElevenLabs may change its rates, and the API does not report what it
+charged. Making a fresh set of a sound (`--force-id`) or more candidates costs
+more. `--tier 1` or `--id <id>,...` limits a run, and its cost, to those
+sounds.
+
+### Steps
+
+1. **Dry run**, as above. `--out` is your private output folder. It must lie
+   outside every Git repository; the tool refuses one inside this repository.
+2. **Generate.** This is the step that is charged:
+
+   ```sh
+   tools/generate-sfx --out ~/ti-sfx --generate
+   ```
+
+   Each sound gets several candidates in `~/ti-sfx/candidates/<id>/`. A
+   stopped run resumes where it stopped, and a candidate already there is never
+   requested again.
+3. **Listen and pick, or accept the first candidates.** Play the candidates in
+   any audio player. To choose, list the keepers of a sound in
+   `~/ti-sfx/picks.json`, in take order, for example
+   `{"footstep_hard": [3, 1, 4, 6, 8, 9, 12, 15]}`. Without `picks.json`,
+   every sound gets its first candidates. Once `picks.json` names any sound, a
+   sound it does not name gets its first candidates only if they were made
+   before you began picking (see "Rows nobody judged" below), so pick for every
+   sound you want. (`audition-notes.json` is written by our own audition pages,
+   which are not in this repository; you can leave it out.)
+4. **Process** the kept takes into game-ready Ogg Vorbis files and their
+   manifest, `~/ti-sfx/game/sfx.json`:
+
+   ```sh
+   tools/generate-sfx --out ~/ti-sfx --process
+   ```
+
+5. **Give the game a source.** Either point `TI_SFX_SOURCE` at the `game/`
+   folder that `--process` wrote:
+
+   ```sh
+   export TI_SFX_SOURCE=~/ti-sfx/game
+   ```
+
+   or keep that folder's contents in a private Git repository of your own, so
+   other checkouts and machines can fetch them. Put `sfx.json` and the group
+   folders at the repository's root (or name the folder with
+   `TI_SFX_SUBDIR`/`--subdir`), for example:
+
+   ```sh
+   git clone https://github.com/<you>/<your-private-sounds>.git ~/my-ti-sounds
+   rsync -a --delete --exclude .git ~/ti-sfx/game/ ~/my-ti-sounds/
+   git -C ~/my-ti-sounds add -A && git -C ~/my-ti-sounds commit -m "Sound set"
+   git -C ~/my-ti-sounds push
+   export TI_SFX_SOURCE=https://github.com/<you>/<your-private-sounds>.git
+   export TI_SFX_GIT_TOKEN=...   # a token that can read that repository
+   ```
+
+   `TI_SFX_GIT_TOKEN` is handed to git in its environment, never on a command
+   line, and never printed. Without it, git's own credential setup applies, so
+   an SSH URL or a credential helper works too. `TI_SFX_REF`/`--ref` picks a
+   branch or tag. Keep the repository private: making it public would publish
+   the audio files, which is what the next section explains we avoid.
+6. **Fetch.** `tools/fetch-sfx --dry-run` shows what would change;
+   `tools/fetch-sfx` copies the takes of every sound the game plays into
+   `game/resources/audio/sfx/` (ignored by Git) and writes its `sfx.json`. It
+   is safe to repeat. `tools/build-mac.sh`, `tools/build-linux.sh` and
+   `tools/build-web.sh` run it themselves from `TI_SFX_SOURCE` and then import
+   the files, so with the variable set a build has your sounds. `tools/fetch-sfx`
+   names each sound that has no takes and stays silent.
+
+Runs through `tools/godot` use Godot's Dummy audio driver unless the command
+names an `--audio-driver`, so you hear nothing there. To listen, play a build,
+or open the project in Godot 4.7.2 on a machine with sound after
+`tools/godot --headless --path . --import`.
+
+## Why our audio is not in this repository
+
+This repository is public, and ElevenLabs' terms for sound effects let us use
+the generated audio inside a game but not make it available as separate audio
+files. A public repository would do exactly that: anyone could browse and
+download each file. So we publish the prompts and the tools, keep the audio in
+a private store that the builds fetch from, and never commit credentials.
+
+What the terms say, checked on 2026-11-14 against the live pages:
+
+- **ElevenCreative Terms, Exhibit 4 (Sound Effects), §2 "Use of Output"**
+  (https://elevenlabs.io/creative-terms, "Last updated: 09 October 2026"):
+  "You may use, reproduce, modify, distribute, publicly perform, and display
+  Output, including by incorporating it into films, trailers, advertising,
+  video, games, applications, and other productions, subject to the Underlying
+  ElevenLabs Agreement and the Prohibited Use Policy, and for commercial
+  purposes only where your plan permits commercial use. You may exercise those
+  rights only in respect of Output combined with other material, and you may
+  not sell, resell, license, sublicense, distribute, or otherwise commercially
+  exploit Output, or any part of it, on a standalone basis, or make Output
+  available as isolated audio files or samples, or as part of any sound,
+  sample, effects, or music library or other collection of sounds. Those
+  restrictions do not apply to your making Output available through Community
+  Sharing, or to the rights granted under Section 4 (Community Sharing) of
+  these ElevenCreative Terms and Section 3 (Community Sharing) of this Exhibit
+  4, or to any other use ElevenLabs expressly permits in writing."
+- **The same terms, §1.1**, on their reach: they "cover the offerings defined in
+  the Exhibits and the functions those offerings make available through the
+  ElevenLabs dashboard, APIs, and other supported interfaces", so they apply to
+  audio made through the API, as ours is.
+- **Prohibited Use Policy, §12 "Commercial and Technical Restrictions"**
+  (https://elevenlabs.io/use-policy, "Last Updated: 09 October 2026") forbids
+  "Making our Services or Output available to your own end users or other
+  third parties on terms more permissive than those that apply to you". So
+  this repository's own terms cannot open up the audio either.
+- **ElevenAPI Terms, §2.1 "Security"** (https://elevenlabs.io/elevenapi-terms,
+  "Last updated: October 09, 2026"): "You shall not share credentials outside
+  your organization, expose them in third-party-accessible clients or
+  artifacts, or commit or distribute any credential or secret."
+- **Terms of Service, §1(c)** (https://elevenlabs.io/terms-of-use, the version
+  for users outside the EEA, Switzerland and the UK, "Last Updated: 09 October
+  2026"): "(i) if you access or use our Services free of charge (such a user, a
+  "Free User"), you may only use the Services for non-commercial purposes; (ii)
+  if you access or use our Services through a paid subscription plan (such a
+  user, a "Paid User"), you may use the Services for commercial purposes, but
+  in either case, your access and use of the Services and any Output must still
+  comply with the Prohibited Use Policy." Users in the EEA, Switzerland or the
+  UK have their own version of these terms.
+- **Help centre, "Can I publish the content I generate on the platform?"**
+  (https://elevenlabs.io/docs/help-center/legal/can-i-publish-the-content-i-generate-on-the-platform):
+  "If you publish content generated using our Services on a free plan or
+  without being signed-in to your account, you must attribute it to ElevenLabs
+  by including "elevenlabs.io" or "11.ai" in the title"; "All paid plans
+  include a commercial license, provided you're not using Beta Services.";
+  "Content generated during a paid subscription can be used commercially, and
+  indefinitely, subject to our Service-Specific Terms."
+- **Terms of Service, §10 "Disclaimers"** (same page): "the Services may
+  produce the same or similar Output for you and a third party."
+
+What we therefore do:
+
+- The prompt sheet, the generator, the fetch tool and these instructions are
+  public. Generated audio is never committed: `.gitignore` keeps it out and
+  `tools/check_sfx.mjs` fails if Git tracks any.
+- The audio lives in the owner's output folder and a private GitHub
+  repository, which `tools/fetch-sfx` reads when a build is made with
+  `TI_SFX_SOURCE` set. It reaches players only inside a built game, combined
+  with the rest of it.
+- The API key lives in `~/.config/elevenlabs/.env` on the owner's machine, and
+  the fetch token only in the environment of the command that uses it.
+
+This is a summary of what the terms say and of what this project does, not
+legal advice. If you make your own set, your obligations come from your own
+agreement with ElevenLabs, under the terms in force when you use it.
+
+## The generator in detail
+
+```sh
 tools/generate-sfx --out ~/ti-sfx --generate --tier 1 --concurrency 3
 tools/generate-sfx --out ~/ti-sfx --generate --force-id jet_loop   # a fresh set; the old one is kept aside
-tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg Vorbis (needs ffmpeg)
 ```
 
 - **Cost.** Nothing is requested or charged without `--generate`. A
@@ -107,7 +312,7 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
     message says, is the only way past the check. File times play no part in
     this, so saving `picks.json` for another row or copying the folder changes
     nothing.
-  - **Audition notes.** The audition pages keep
+  - **Audition notes.** Our audition pages (not in this repository) keep
     `~/ti-sfx/audition-notes.json` beside `picks.json`, one entry an id:
 
     ```json
