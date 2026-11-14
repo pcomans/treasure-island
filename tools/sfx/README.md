@@ -109,6 +109,7 @@ What the output folder holds:
 | `.generate.lock`, `candidates/<id>/.forced` | A run in progress (its pid and start); a forced set not yet complete |
 | `picks.json` | Optional, by hand: the candidates kept, in take order |
 | `game/<group>/<name>_NN.ogg` | The processed takes |
+| `game/sfx.json` | The manifest the game reads: each sound's playback gain and takes (see Levels) |
 
 Observed on 2026-11-14 in the first real run, on the Creator plan:
 
@@ -131,6 +132,7 @@ Each row of `sounds` is one family of files. Its fields:
 - `candidates_per_take`: how many are generated for each take kept.
 - `output`: the file pattern.
 - `recipe`: the post-processing to apply.
+- `loudness_class`, `level_db`: how loud the row plays (see Levels below).
 - `notes`: optional reasoning.
 
 `recipes` holds the post-processing steps as data: channels, silence trims,
@@ -145,9 +147,98 @@ a length cap, fades, a loop crossfade and a peak level.
   generated. It is for a loop the model already made seamless, chosen by ear;
   give that row its own recipe.
 - **Formats.** The sheet's output formats must be ones its plan can use, and
-  loops must be MP3. `events` lists every sound-carrying event in the code (P player, V
-vehicle, B ball, A ambient, U interface). Every event is served by a row or
-listed in `not_voiced` with the reason; the check enforces this.
+  loops must be MP3.
+
+`events` lists every sound-carrying event in the code (P player, V vehicle,
+B ball, A ambient, U interface). Every event is served by a row or listed in
+`not_voiced` with the reason; the check enforces this.
+
+## Levels
+
+Every row has a planned playback level, `level_db`, in LUFS (ITU-R BS.1770,
+as ffmpeg's `ebur128` measures it):
+
+- **What is measured.** For a one-shot, the loudest momentary (400 ms)
+  window, because a short sound's integrated loudness depends on how long
+  its tail runs. The sound is padded with silence so a whole window fits.
+  For a loop, integrated loudness, which is its average. On the first
+  generation, a loop's loudest moments ran 1 to 8 dB above that average.
+- **What it means.** It is how loud the sound plays at its source at full
+  strength: the hardest impact, at the closest distance. The game's
+  modulation (impact strength, speed, distance) only lowers it from there.
+
+Each row also has one of six `loudness_class`es, ordered and not overlapping.
+A row's level must lie inside its class, so no row can play louder than any
+row of a louder class. The validator enforces both.
+
+| Class | LUFS | What, and why there |
+|---|---|---|
+| `crash` | −21 to −15 | Big collisions, falls and splashes: rare, the loudest, and heard over a running engine. Fences and lamps are here because they are struck while the engine runs. |
+| `loud` | −26 to −21 | Engine under load, jetpack, skid, roof scrape and lighter collisions. Below the crashes because they last or repeat. |
+| `medium` | −31 to −26 | Doors, engine cruising and stopping, the chest's landing and lid, hard kicks, goals, scrapes and bends. |
+| `soft` | −36 to −31 | Footsteps (up to 10 a second), idling engine, the chest's rattle and creaks, ball bounces, the ferry. Well below their real loudness because they repeat; the owner already found a coin layer "annoying". |
+| `interface` | −39 to −36 | Menu clicks and the recovery whoosh: close, brief, mostly with the world paused. |
+| `ambience` | −50 to −39 | Wind, bay water and foliage: always on, so the quietest. |
+
+The scale's top is set by what the material can reach. Measured on the first
+generation (2026-11-14), a peak-normalised crash reached only −13 to
+−21 LUFS against −10 to −30 for everything else; its transients use up the
+peak. So the crash class tops out at −15, and every row's level sits at or
+below what its takes reach without being raised above their peak ceiling. The
+whole mix moves up or down together with the master volume. Raising the
+master above 0 dB would need a limiter on the master bus, since the loudest
+crashes then play near their files' full peak.
+
+**This is a reasoned starting mix for the owner's ear, not one verified by
+listening.**
+
+**How the level reaches the game (one mechanism).**
+
+- The files stay peak-normalised for headroom; no level is baked into the
+  audio.
+- `--process` loudness-matches each row's takes, so a randomly chosen take
+  never jumps in level: each take louder than the row's quietest by more than
+  0.25 LU is turned down to it, which only lowers peaks. The tolerance is
+  `within_row_spread_lu` (1 LU). On the first generation's picks, the measured
+  spread after matching was 0.2 LU at most.
+- `--process` then writes the playback gain to `DIR/game/sfx.json`, the
+  manifest the game reads. Mixing stays adjustable without re-encoding: change
+  a `level_db` and rerun `--process`.
+
+The manifest is JSON, rewritten atomically by every `--process`. It keeps the
+entries of rows not processed in that run, drops rows no longer in the sheet,
+and drops a row none of whose takes could be made.
+
+```json
+{
+  "schema_version": "ti.sfx-manifest/1",
+  "notes": ["..."],
+  "sounds": {
+    "car_impact_heavy": {
+      "gain_db": -0.5,
+      "level_db": -16,
+      "loudness_class": "crash",
+      "loudness_lufs": -15.5,
+      "spread_lu": 0.0,
+      "shortfall_db": 0,
+      "loop": false,
+      "channels": 1,
+      "takes": ["car/impact_heavy_01.ogg", "car/impact_heavy_02.ogg"]
+    }
+  }
+}
+```
+
+- **`gain_db`** (number, dB, never above 0) is the field the game applies:
+  the playback gain for every take of that sound id (Godot: `volume_db`).
+  In-engine modulation multiplies on top of it.
+- **`takes`** are paths relative to `DIR/game/`.
+- **`loudness_lufs`** is the loudest processed take's measured loudness, and
+  `gain_db = min(0, level_db − loudness_lufs)`.
+- **`shortfall_db`** above 0 means the takes cannot reach `level_db` within
+  their peak ceiling, so the sound plays that much below its planned level;
+  `--process` prints a NOTE for it.
+- **`spread_lu`** is the matched takes' loudness range.
 
 ## How the prompts are written
 

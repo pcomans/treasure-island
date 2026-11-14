@@ -212,6 +212,15 @@ if (!problems.length) {
     ["a format the API does not offer", (s) => { s.output_format.one_shot = "mp3_44100_320"; }, "must be one of the API's MP3 or WAV formats"],
     ["an unknown plan", (s) => { s.plan.name = "Hobby"; }, "plan.name must be one of"],
     ["a negative crossfade", (s) => { s.recipes[loopRecipe].loop_crossfade_ms = -1; }, "loop_crossfade_ms must be 0"],
+    ["a row without level_db", (s) => { delete s.sounds[shotRow].level_db; }, "level_db must be a number"],
+    ["an unknown loudness class", (s) => { s.sounds[shotRow].loudness_class = "deafening"; }, "unknown loudness class deafening"],
+    ["a row of the quietest class at the loudest class's level", (s) => {
+      const quietest = s.loudness.classes.at(-1).name;
+      s.sounds.find((row) => row.loudness_class === quietest).level_db = s.loudness.classes[0].max_db;
+    }, "outside its loudness class"],
+    ["loudness classes from quietest to loudest", (s) => { s.loudness.classes.reverse(); }, "from loudest to quietest"],
+    ["overlapping loudness classes", (s) => { s.loudness.classes[1].max_db = s.loudness.classes[0].min_db + 1; }, "from loudest to quietest"],
+    ["no loudness classes", (s) => { delete s.loudness; }, "loudness must give"],
   ];
   let caught = 0;
   for (const [what, mutate, expected] of broken) {
@@ -238,6 +247,15 @@ function fixtureSheet() {
     output_format: { one_shot: "wav_48000", loop: "mp3_44100_192" },
     car: { name: "Fixture Car", basis: "production_inference", why: "A fixture." },
     encode: { codec: "libvorbis", quality: 5, sample_rate: 44100 },
+    loudness: {
+      measure: "A fixture.",
+      within_row_spread_lu: 1,
+      classes: [
+        { name: "crash", max_db: -3, min_db: -12, what: "The loudest." },
+        { name: "mid", max_db: -12, min_db: -30, what: "The middle." },
+        { name: "quiet", max_db: -30, min_db: -50, what: "The quietest." },
+      ],
+    },
     recipes: {
       shot: { what: "A short transient.", channels: 1, trim_start_db: -50, trim_end_db: -55, max_seconds: 0.3, fade_in_ms: 2, fade_out_ms: 40, peak_dbfs: -1 },
       bed: { what: "A loop.", channels: 1, trim_start_db: -90, trim_end_db: -90, loop_crossfade_ms: 150, peak_dbfs: -1 },
@@ -247,10 +265,10 @@ function fixtureSheet() {
     events: { T1: "A test event.", T2: "Another test event.", T3: "A third test event.", T4: "A fourth test event." },
     not_voiced: {},
     sounds: [
-      { id: "shot", tier: 1, events: ["T1"], prompt: "High-quality foley one-shot: a single knock on a wooden door, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 2, candidates_per_take: 2, output: "test/shot_{take}.ogg", recipe: "shot" },
-      { id: "bed", tier: 2, events: ["T2"], prompt: "Ambience: soft steady rain on a tin roof, recorded close.", duration_seconds: 3.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 3, output: "test/bed_{take}.ogg", recipe: "bed" },
-      { id: "bed_raw", tier: 3, events: ["T3"], prompt: "Ambience: the steady low hum of a small electric fan, recorded close.", duration_seconds: 2.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 1, output: "test/bed_raw_{take}.ogg", recipe: "bed_raw" },
-      { id: "hit", tier: 3, events: ["T4"], prompt: "High-quality foley impact: a heavy wooden crate dropped onto concrete, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 1, candidates_per_take: 1, output: "test/hit_{take}.ogg", recipe: "hit" },
+      { id: "shot", tier: 1, events: ["T1"], prompt: "High-quality foley one-shot: a single knock on a wooden door, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 2, candidates_per_take: 2, output: "test/shot_{take}.ogg", recipe: "shot", loudness_class: "mid", level_db: -24 },
+      { id: "bed", tier: 2, events: ["T2"], prompt: "Ambience: soft steady rain on a tin roof, recorded close.", duration_seconds: 3.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 3, output: "test/bed_{take}.ogg", recipe: "bed", loudness_class: "quiet", level_db: -36 },
+      { id: "bed_raw", tier: 3, events: ["T3"], prompt: "Ambience: the steady low hum of a small electric fan, recorded close.", duration_seconds: 2.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 1, output: "test/bed_raw_{take}.ogg", recipe: "bed_raw", loudness_class: "quiet", level_db: -40 },
+      { id: "hit", tier: 3, events: ["T4"], prompt: "High-quality foley impact: a heavy wooden crate dropped onto concrete, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 1, candidates_per_take: 1, output: "test/hit_{take}.ogg", recipe: "hit", loudness_class: "crash", level_db: -4 },
     ],
   };
 }
@@ -629,6 +647,20 @@ function decode(file) {
   return new Float32Array(bytes.buffer, bytes.byteOffset, bytes.length / 4);
 }
 
+const isPlainObject = (value) => typeof value === "object" && value !== null && !Array.isArray(value);
+
+// Loudness measured here, from the files: a one-shot's loudest momentary
+// (400 ms) window, padded so a short sound fits one, or a loop's integrated
+// loudness (ITU-R BS.1770 as ffmpeg's ebur128 measures it).
+function measureLoudness(file, loop) {
+  const result = spawnSync("ffmpeg", ["-hide_banner", "-nostdin", "-nostats", "-v", "info", "-i", file, "-af", "apad=pad_dur=0.5,ebur128=framelog=info", "-f", "null", "-"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024 });
+  if (loop) {
+    const match = result.stderr.slice(result.stderr.lastIndexOf("Summary:")).match(/I:\s+(-?\d+(?:\.\d+)?) LUFS/u);
+    return match ? Number(match[1]) : -Infinity;
+  }
+  return Math.max(...[...result.stderr.matchAll(/\bM:\s*(-?\d+(?:\.\d+)?)/gu)].map((match) => Number(match[1])));
+}
+
 const channelsOf = (file) => Number(spawnSync("ffprobe", ["-v", "error", "-select_streams", "a:0", "-show_entries", "stream=channels", "-of", "csv=p=0", file], { encoding: "utf8" }).stdout.trim());
 const peakOf = (samples) => samples.reduce((peak, value) => Math.max(peak, Math.abs(value)), 0);
 
@@ -693,11 +725,32 @@ function synthesize(file, filter, inputs) {
         check(channelsOf(take(`shot_0${index + 1}.ogg`)) === recipe.channels, `shot_0${index + 1}.ogg is not ${recipe.channels}-channel`);
         check(seconds > 0.05 && seconds <= recipe.max_seconds + 0.02, `shot_0${index + 1}.ogg lasts ${seconds.toFixed(3)} s; the recipe keeps at most ${recipe.max_seconds} s`);
         check(onset <= 0.01, `shot_0${index + 1}.ogg starts ${(onset * 1000).toFixed(1)} ms before its onset; the silence before it should be cut`);
-        // Decoded, as the game hears it: at most a hair over the recipe's peak, never far under.
-        check(peakDb <= recipe.peak_dbfs + 0.35 && peakDb >= recipe.peak_dbfs - 1.5, `shot_0${index + 1}.ogg peaks at ${peakDb.toFixed(2)} dBFS decoded; the recipe asks ${recipe.peak_dbfs}`);
+        // Decoded, as the game hears it: never more than a hair over the recipe's peak.
+        check(peakDb <= recipe.peak_dbfs + 0.35, `shot_0${index + 1}.ogg peaks at ${peakDb.toFixed(2)} dBFS decoded; the recipe allows ${recipe.peak_dbfs}`);
         check(Math.abs(samples[samples.length - 1]) < peak * 0.05, `shot_0${index + 1}.ogg does not fade out at its end`);
       }
+      // Matching turns the louder take down; the quietest still reaches the recipe's peak.
+      const loudestPeak = Math.max(...shots.map((samples) => 20 * Math.log10(peakOf(samples))));
+      check(loudestPeak >= recipe.peak_dbfs - 1.5, `no take of shot reaches the recipe's peak: the highest is ${loudestPeak.toFixed(2)} dBFS for ${recipe.peak_dbfs}`);
       check(shots[1].length > shots[0].length + 0.04 * rate, "the two takes are not cut from their own candidates");
+      // The two knocks (0.12 s and 0.2 s of the same noise at the same peak) differ
+      // by about 2 LU as they come; matched, they land within the row's tolerance.
+      const shotLoudness = ["shot_01.ogg", "shot_02.ogg"].map((name) => measureLoudness(take(name), false));
+      const shotSpread = Math.max(...shotLoudness) - Math.min(...shotLoudness);
+      check(shotSpread <= fixture.loudness.within_row_spread_lu, `shot's takes differ by ${shotSpread.toFixed(2)} LU; within a row they must match within ${fixture.loudness.within_row_spread_lu}`);
+      // The manifest: each processed sound's playback gain, from its measured loudness to its level.
+      const manifestPath = join(out, "game", "sfx.json");
+      const manifest = existsSync(manifestPath) ? JSON.parse(readFileSync(manifestPath, "utf8")) : null;
+      check(manifest?.schema_version === "ti.sfx-manifest/1" && isPlainObject(manifest.sounds), `--process wrote no manifest at game/sfx.json: ${manifest ? JSON.stringify(manifest).slice(0, 200) : "missing"}`);
+      for (const row of fixture.sounds) {
+        const entry = manifest?.sounds?.[row.id];
+        const measured = entry ? Math.max(...entry.takes.map((path) => measureLoudness(join(out, "game", path), row.loop))) : NaN;
+        const ok = entry && entry.takes.length > 0 && entry.takes.every((path) => existsSync(join(out, "game", path))) && entry.gain_db <= 0
+          && entry.level_db === row.level_db && entry.loudness_class === row.loudness_class && Math.abs(entry.loudness_lufs - measured) <= 0.3
+          && Math.abs(entry.gain_db - Math.min(0, row.level_db - entry.loudness_lufs)) <= 0.02 && Math.abs(entry.shortfall_db - Math.max(0, row.level_db - entry.loudness_lufs)) <= 0.02;
+        check(ok, `the manifest's entry for ${row.id} does not give its takes, its level and the gain from its measured loudness (${measured.toFixed(2)} LUFS): ${JSON.stringify(entry)}`);
+      }
+      check(manifest?.sounds?.hit?.shortfall_db > 0 && manifest.sounds.hit.gain_db === 0 && processed.stderr.includes("NOTE: hit: its takes reach only"), `a level the takes cannot reach was not reported as a shortfall: ${JSON.stringify(manifest?.sounds?.hit)}`);
       const raw = decode(join(bedDir, "bed.c01.mp3"));
       const bed = decode(take("bed_01.ogg"));
       const expected = raw.length - (fixture.recipes.bed.loop_crossfade_ms / 1000) * rate;
@@ -716,14 +769,18 @@ function synthesize(file, filter, inputs) {
       // unpicked candidates, and the take beyond it removed.
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [2] }));
       const picked = await runTool(["--out", out, "--process", "--sheet", fixturePath, "--id", "shot"]);
-      check(picked.code === 0 && existsSync(take("shot_01.ogg")) && !existsSync(take("shot_02.ogg")) && /test\/shot_01\.ogg .*from c02$/mu.test(picked.stdout) && !picked.stdout.includes("first on disk"),
+      check(picked.code === 0 && existsSync(take("shot_01.ogg")) && !existsSync(take("shot_02.ogg")) && /test\/shot_01\.ogg .*from c02  -?\d/mu.test(picked.stdout) && !picked.stdout.includes("first on disk"),
         `picks.json {"shot": [2]} for a row that keeps 2 did not give exactly that one take (exit ${picked.code}): ${picked.all.trim()}`);
       if (picked.code === 0) check(Math.abs(decode(take("shot_01.ogg")).length - shortest) <= 0.005 * rate, "the picked take did not come from candidate 2");
+      // A run over one row updates its entry and keeps the others'.
+      const updated = JSON.parse(readFileSync(manifestPath, "utf8")).sounds;
+      check(updated.shot?.takes?.length === 1 && ["bed", "bed_raw", "hit"].every((id) => updated[id]?.takes?.length), `a --process of shot alone did not update its entry and keep the others: ${Object.keys(updated).join(", ")}`);
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [9] }));
       const badPick = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
       check(badPick.code === 1 && badPick.stderr.includes("picks.json"), `an impossible pick was not refused (exit ${badPick.code})`);
       const peaks = shots.map((samples) => (20 * Math.log10(peakOf(samples))).toFixed(2));
       passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), the impact recipe cut a quiet take's 0.2 s lead-in (onset ${(hitOnset * 1000).toFixed(1)} ms), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, one pick for a row of 2 gave exactly that take`);
+      passes.push(`levels: a row's takes are loudness-matched (shot's two knocks within ${shotSpread.toFixed(2)} LU), the manifest game/sfx.json gives every sound its takes and the gain from its measured loudness to its level, an unreachable level is a reported shortfall, and a run over one row keeps the others' entries`);
 
       // A quiet take (a -55 dBFS burst) is trimmed from its own peak, so it is
       // kept whole, not called silent.

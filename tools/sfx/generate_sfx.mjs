@@ -96,9 +96,16 @@ const SILENT_DBFS = -70;
 // many encodings may be tried to bring it there.
 const PEAK_OVER_DB = 0.3;
 const PEAK_PASSES = 3;
+// Takes of a row are loudness-matched: each louder than the row's quietest by
+// more than MATCH_EPS_LU is turned down to it (which only lowers peaks), in up
+// to MATCH_PASSES encodings. The manifest the game reads is DIR/game/sfx.json.
+const MATCH_EPS_LU = 0.25;
+const MATCH_PASSES = 2;
+const MANIFEST_NAME = "sfx.json";
+export const MANIFEST_SCHEMA = "ti.sfx-manifest/1";
 
-const SHEET_FIELDS = ["car", "credits_per_second", "encode", "events", "model_id", "not_voiced", "notes", "output_format", "plan", "recipes", "schema_version", "sounds"];
-const ROW_FIELDS = ["candidates_per_take", "duration_seconds", "events", "id", "keep_takes", "loop", "notes", "output", "prompt", "prompt_influence", "recipe", "tier"];
+const SHEET_FIELDS = ["car", "credits_per_second", "encode", "events", "loudness", "model_id", "not_voiced", "notes", "output_format", "plan", "recipes", "schema_version", "sounds"];
+const ROW_FIELDS = ["candidates_per_take", "duration_seconds", "events", "id", "keep_takes", "level_db", "loop", "loudness_class", "notes", "output", "prompt", "prompt_influence", "recipe", "tier"];
 const ONE_SHOT_RECIPE_FIELDS = ["channels", "fade_in_ms", "fade_out_ms", "max_seconds", "peak_dbfs", "trim_end_db", "trim_start_db", "what"];
 const LOOP_RECIPE_FIELDS = ["channels", "loop_crossfade_ms", "peak_dbfs", "trim_end_db", "trim_start_db", "what"];
 // Owner decision 2026-11-14, from ElevenLabs' prompting guidance: the length,
@@ -174,6 +181,30 @@ export function validateSheet(sheet) {
   for (const [name, recipe] of Object.entries(recipes)) {
     for (const text of validateRecipe(recipe)) problem(`recipe ${name}: ${text}`);
   }
+  // Loudness classes run from loudest to quietest without overlapping, so a
+  // row's level inside its class keeps it below every louder class.
+  const loudness = sheet.loudness;
+  const classes = new Map();
+  if (!isObject(loudness) || typeof loudness.measure !== "string" || !loudness.measure.trim() || !isNumber(loudness.within_row_spread_lu)
+    || loudness.within_row_spread_lu <= 0 || !Array.isArray(loudness.classes) || !loudness.classes.length) {
+    problem("loudness must give measure, within_row_spread_lu (above 0) and a list of classes");
+  } else {
+    let above = null;
+    for (const [index, entry] of loudness.classes.entries()) {
+      const label = `loudness class ${isObject(entry) && typeof entry.name === "string" ? entry.name : `#${index + 1}`}`;
+      if (!isObject(entry) || typeof entry.name !== "string" || !ID_RE.test(entry.name) || typeof entry.what !== "string" || !entry.what.trim()
+        || !isNumber(entry.max_db) || !isNumber(entry.min_db) || entry.min_db > entry.max_db || entry.max_db > 0) {
+        problem(`${label} must give name, what, max_db and min_db (min_db at most max_db, max_db at most 0)`);
+        continue;
+      }
+      if (classes.has(entry.name)) problem(`${label} is listed twice`);
+      if (above && entry.max_db > above.min_db) {
+        problem(`loudness classes must run from loudest to quietest without overlapping: ${entry.name} reaches ${entry.max_db}, above ${above.name}'s lowest, ${above.min_db}`);
+      }
+      classes.set(entry.name, entry);
+      above = entry;
+    }
+  }
   const events = isObject(sheet.events) ? sheet.events : {};
   if (!isObject(sheet.events) || !Object.keys(events).length) problem("events must list the game's sound events");
   for (const [id, text] of Object.entries(events)) {
@@ -210,6 +241,12 @@ export function validateSheet(sheet) {
       }
     }
     for (const text of validatePrompt(row.prompt, sheet.car?.name)) problem(`${label}: prompt ${text}`);
+    const loudClass = typeof row.loudness_class === "string" ? classes.get(row.loudness_class) : undefined;
+    if (!loudClass) problem(`${label}: unknown loudness class ${row.loudness_class}`);
+    if (!isNumber(row.level_db)) problem(`${label}: level_db must be a number, its playback loudness in LUFS`);
+    else if (loudClass && (row.level_db > loudClass.max_db || row.level_db < loudClass.min_db)) {
+      problem(`${label}: level_db ${row.level_db} lies outside its loudness class ${loudClass.name} (${loudClass.min_db} to ${loudClass.max_db}), against the classes' order`);
+    }
     const duration = row.duration_seconds;
     if (!isNumber(duration) || duration < DURATION_RANGE[0] || duration > DURATION_RANGE[1]) problem(`${label}: duration_seconds must be from ${DURATION_RANGE[0]} to ${DURATION_RANGE[1]}`);
     else if (Math.abs(duration * 10 - Math.round(duration * 10)) > 1e-9) problem(`${label}: duration_seconds must be a whole number of tenths`);
@@ -766,8 +803,38 @@ class SilentTake extends Error {
   }
 }
 
-// One candidate through its recipe into an Ogg Vorbis take; returns its length (s).
-export function processTake(sheet, recipe, input, output, work) {
+// Loudness in LUFS (ITU-R BS.1770, as ffmpeg's ebur128 measures it): a loop's
+// integrated loudness, a one-shot's loudest momentary (400 ms) window. The
+// sound is padded with silence so a short one-shot fits a whole window; the
+// silence is gated out of the integrated figure.
+function loudnessOf(file, loop, format = []) {
+  const result = ffmpeg(["-v", "info", "-nostats", ...format, "-i", file, "-af", "apad=pad_dur=0.5,ebur128=framelog=info", "-f", "null", "-"]);
+  if (loop) {
+    const summary = result.stderr.slice(result.stderr.lastIndexOf("Summary:"));
+    const match = summary.match(/I:\s+(-?\d+(?:\.\d+)?) LUFS/u);
+    return match ? Number(match[1]) : -Infinity;
+  }
+  const values = [...result.stderr.matchAll(/\bM:\s*(-?\d+(?:\.\d+)?)/gu)].map((match) => Number(match[1]));
+  return values.length ? Math.max(...values) : -Infinity;
+}
+
+// Encodes a shaped take to Ogg Vorbis at `gain` dB. Lossy coding overshoots the
+// peak of bright transients (white noise by about 2.6 dB at quality 5), so the
+// gain is lowered until the decoded peak is within PEAK_OVER_DB of the
+// recipe's; returns the gain used.
+function encodeTake(sheet, recipe, source, part, gain) {
+  for (let pass = 1; ; pass += 1) {
+    ffmpeg(["-v", "error", "-i", source, "-af", `volume=${gain.toFixed(2)}dB`, "-c:a", "libvorbis", "-q:a", String(sheet.encode.quality), "-ar", String(sheet.encode.sample_rate), "-f", "ogg", part]);
+    const decoded = peakDbfs(part, ["-f", "ogg"]);
+    if (decoded <= recipe.peak_dbfs + PEAK_OVER_DB) return gain;
+    if (pass === PEAK_PASSES) throw new Error(`still peaks at ${decoded.toFixed(2)} dBFS after ${pass} encodings; the recipe asks ${recipe.peak_dbfs}`);
+    gain -= decoded - recipe.peak_dbfs + 0.1;
+  }
+}
+
+// One candidate through its recipe up to the encode: returns the shaped float
+// WAV (stem.wav, or stem.loop.wav once crossfaded) and its length in samples.
+function shapeTake(sheet, recipe, input, stem) {
   const rate = sheet.encode.sample_rate;
   const loop = Object.hasOwn(recipe, "loop_crossfade_ms");
   // The candidate's own peak as generated: at SILENT_DBFS or below it is silent.
@@ -787,7 +854,7 @@ export function processTake(sheet, recipe, input, output, work) {
   if (!loop && recipe.fade_out_ms > 0) tail.push(`afade=t=in:d=${recipe.fade_out_ms / 1000}`);
   if (tail.length) chain.push("areverse", ...tail, "areverse");
   if (!loop && recipe.fade_in_ms > 0) chain.push(`afade=t=in:d=${recipe.fade_in_ms / 1000}`);
-  const shaped = join(work, "shaped.wav");
+  const shaped = `${stem}.wav`;
   ffmpeg(["-v", "error", "-i", input, "-af", chain.join(","), "-ac", String(recipe.channels), "-c:a", "pcm_f32le", shaped]);
   let source = shaped;
   let samples = samplesOf(shaped);
@@ -800,7 +867,7 @@ export function processTake(sheet, recipe, input, output, work) {
     // becomes original[X .. L-X] followed by the blend of original[L-X .. L]
     // into original[0 .. X], so its end runs on into its start without a jump.
     if (samples < 4 * x) throw new Error(`only ${(samples / rate).toFixed(2)} s after trimming, too short for a ${recipe.loop_crossfade_ms} ms crossfade`);
-    const looped = join(work, "looped.wav");
+    const looped = `${stem}.loop.wav`;
     ffmpeg(["-v", "error", "-i", shaped, "-filter_complex",
       `[0:a]asplit=2[a][b];[a]atrim=start_sample=${x},asetpts=PTS-STARTPTS[body];[b]atrim=end_sample=${x},asetpts=PTS-STARTPTS[head];[body][head]acrossfade=ns=${x}:c1=qsin:c2=qsin[out]`,
       "-map", "[out]", "-c:a", "pcm_f32le", looped]);
@@ -809,24 +876,7 @@ export function processTake(sheet, recipe, input, output, work) {
   }
   const peak = peakDbfs(source);
   if (!(peak > SILENT_DBFS)) throw new SilentTake();
-  // Lossy coding overshoots the peak of bright transients (white noise by about
-  // 2.6 dB at quality 5), so the encoded take is measured and its gain lowered
-  // until the decoded peak is within PEAK_OVER_DB of the recipe's.
-  const part = `${output}.part`;
-  let gain = recipe.peak_dbfs - peak;
-  try {
-    for (let pass = 1; ; pass += 1) {
-      ffmpeg(["-v", "error", "-i", source, "-af", `volume=${gain.toFixed(2)}dB`, "-c:a", "libvorbis", "-q:a", String(sheet.encode.quality), "-ar", String(rate), "-f", "ogg", part]);
-      const decoded = peakDbfs(part, ["-f", "ogg"]);
-      if (decoded <= recipe.peak_dbfs + PEAK_OVER_DB) break;
-      if (pass === PEAK_PASSES) throw new Error(`still peaks at ${decoded.toFixed(2)} dBFS after ${pass} encodings; the recipe asks ${recipe.peak_dbfs}`);
-      gain -= decoded - recipe.peak_dbfs + 0.1;
-    }
-    renameSync(part, output);
-  } finally {
-    rmSync(part, { force: true });
-  }
-  return samples / rate;
+  return { source, samples, peak };
 }
 
 function readPicks(out, sheet) {
@@ -871,6 +921,7 @@ function postProcess({ sheet, out, rows }) {
   // A row with picks gets exactly the picked takes, fewer than keep_takes if
   // so picked: unpicked candidates never fill the gap.
   const failedRows = [];
+  const entries = {};
   let skipped = 0;
   let takes = 0;
   try {
@@ -905,12 +956,15 @@ function postProcess({ sheet, out, rows }) {
       const folder = join(out, "game", group);
       mkdirSync(folder, { recursive: true });
       const bad = [];
+      const made = [];
       chosen.forEach((n, index) => {
         const output = join(folder, `${name}_${pad2(index + 1)}.ogg`);
+        const stem = join(work, `${row.id}_${pad2(index + 1)}`);
         try {
-          const seconds = processTake(sheet, recipe, candidateFile(out, sheet, row, n), output, work);
-          console.log(`${relative(out, output)}  ${seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(n)}${picks[row.id] ? "" : " (first on disk)"}`);
-          takes += 1;
+          const { source, samples, peak } = shapeTake(sheet, recipe, candidateFile(out, sheet, row, n), stem);
+          const part = `${stem}.ogg`;
+          const gain = encodeTake(sheet, recipe, source, part, recipe.peak_dbfs - peak);
+          made.push({ n, output, source, part, gain, seconds: samples / sheet.encode.sample_rate, loudness: loudnessOf(part, row.loop, ["-f", "ogg"]) });
         } catch (error) {
           // An earlier run's take must not stay, unannounced, in place of the one that failed.
           const earlier = existsSync(output);
@@ -919,6 +973,32 @@ function postProcess({ sheet, out, rows }) {
           bad.push(`c${pad2(n)}`);
         }
       });
+      // Loudness-match the row's takes, so a randomly chosen take never jumps in
+      // level: each louder than the quietest by more than MATCH_EPS_LU is turned
+      // down to it, which only lowers its peak.
+      for (let pass = 1; pass <= MATCH_PASSES && made.length > 1; pass += 1) {
+        const quietest = Math.min(...made.map((take) => take.loudness));
+        const louder = made.filter((take) => take.loudness - quietest > MATCH_EPS_LU);
+        if (!louder.length) break;
+        for (const take of louder) {
+          // Encoded beside the take, which is replaced only once the new one is measured.
+          const trial = `${take.part}.match`;
+          try {
+            const gain = encodeTake(sheet, recipe, take.source, trial, take.gain - (take.loudness - quietest));
+            const loudness = loudnessOf(trial, row.loop, ["-f", "ogg"]);
+            renameSync(trial, take.part);
+            Object.assign(take, { gain, loudness });
+          } catch (error) {
+            rmSync(trial, { force: true });
+            console.error(`NOTE: ${row.id} c${pad2(take.n)}: kept at ${take.loudness.toFixed(1)} LUFS, its matching encode failed: ${error.message}`);
+          }
+        }
+      }
+      for (const take of made) {
+        renameSync(take.part, take.output);
+        console.log(`${relative(out, take.output)}  ${take.seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(take.n)}${picks[row.id] ? "" : " (first on disk)"}  ${take.loudness.toFixed(1)} LUFS`);
+        takes += 1;
+      }
       // Takes beyond the ones kept now (fewer picks than before) are stale, failed row or not.
       const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
       for (const file of readdirSync(folder)) {
@@ -926,13 +1006,69 @@ function postProcess({ sheet, out, rows }) {
         if (match && Number(match[1]) > chosen.length) unlinkSync(join(folder, file));
       }
       if (bad.length) failedRows.push(`${row.id} (${bad.join(", ")})`);
+      entries[row.id] = made.length ? manifestEntry(sheet, row, recipe, made, join(out, "game")) : null;
     }
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped.`);
+  writeManifest(out, sheet, entries);
+  console.log(`Processed ${plural(takes, "take")} into ${join(out, "game")}; ${failedRows.length} ${failedRows.length === 1 ? "row" : "rows"} failed, ${skipped} skipped. Levels: ${join(out, "game", MANIFEST_NAME)}`);
   if (failedRows.length) console.error(`FAIL: failed rows: ${failedRows.join("; ")}`);
   return failedRows.length || skipped ? 1 : 0;
+}
+
+// --- The manifest the game reads ---------------------------------------------
+
+const MANIFEST_NOTES = Object.freeze([
+  "Written by tools/generate-sfx --process from tools/sfx/prompts.json; the format is in tools/sfx/README.md. One entry a sound id.",
+  "gain_db: the playback gain in dB for every take of the sound (Godot: volume_db), never above 0. It plays the takes at level_db, the row's planned loudness in LUFS: a one-shot's loudest momentary (400 ms) window, a loop's integrated loudness. In-engine modulation (impact strength, speed, distance) comes on top and should only lower it.",
+  "loudness_lufs is the processed takes' measured loudness (the loudest take). A sound's takes are loudness-matched to within spread_lu. When shortfall_db is above 0, the takes cannot reach level_db within their peak ceiling, so the sound plays that much below its planned level.",
+]);
+
+const round2 = (value) => Math.round(value * 100) / 100;
+
+// A row's manifest entry: its gain to its level from its loudest matched take.
+function manifestEntry(sheet, row, recipe, made, gameDir) {
+  const loudest = Math.max(...made.map((take) => take.loudness));
+  const spread = loudest - Math.min(...made.map((take) => take.loudness));
+  const gain = Math.min(0, row.level_db - loudest);
+  const shortfall = Math.max(0, row.level_db - loudest);
+  console.log(`${row.id}: ${plural(made.length, "take")} at ${loudest.toFixed(1)} LUFS (spread ${spread.toFixed(1)} LU); level ${row.level_db}, gain ${gain.toFixed(1)} dB`);
+  if (spread > sheet.loudness.within_row_spread_lu) console.error(`NOTE: ${row.id}: its takes still differ by ${spread.toFixed(1)} LU, more than ${sheet.loudness.within_row_spread_lu}`);
+  if (shortfall > 0) console.error(`NOTE: ${row.id}: its takes reach only ${loudest.toFixed(1)} LUFS at their peak ceiling, ${shortfall.toFixed(1)} dB short of its level ${row.level_db}; too quiet or too dynamic to reach it cleanly`);
+  return {
+    gain_db: round2(gain),
+    level_db: row.level_db,
+    loudness_class: row.loudness_class,
+    loudness_lufs: round2(loudest),
+    spread_lu: round2(spread),
+    shortfall_db: round2(shortfall),
+    loop: row.loop,
+    channels: recipe.channels,
+    takes: made.map((take) => relative(gameDir, take.output)),
+  };
+}
+
+// Updates DIR/game/sfx.json: entries for the rows just processed replace their
+// old ones (null drops one), rows no longer in the sheet go, the rest stay.
+function writeManifest(out, sheet, entries) {
+  const path = join(out, "game", MANIFEST_NAME);
+  let sounds = {};
+  try {
+    const old = JSON.parse(readFileSync(path, "utf8"));
+    if (old?.schema_version === MANIFEST_SCHEMA && isObject(old.sounds)) sounds = old.sounds;
+  } catch {
+    // None yet, or unreadable: written afresh.
+  }
+  for (const [id, entry] of Object.entries(entries)) {
+    if (entry === null) delete sounds[id];
+    else sounds[id] = entry;
+  }
+  const ids = new Set(sheet.sounds.map((row) => row.id));
+  const kept = Object.fromEntries(Object.entries(sounds).filter(([id]) => ids.has(id)).sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0)));
+  mkdirSync(dirname(path), { recursive: true });
+  writeFileSync(`${path}.part`, `${JSON.stringify({ schema_version: MANIFEST_SCHEMA, notes: MANIFEST_NOTES, sounds: kept }, null, 2)}\n`);
+  renameSync(`${path}.part`, path);
 }
 
 // --- Command line ----------------------------------------------------------

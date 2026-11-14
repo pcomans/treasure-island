@@ -32,6 +32,18 @@
     "quality": 5,
     "sample_rate": 44100
   },
+  "loudness": {
+    "measure": "LUFS (ITU-R BS.1770, K-weighted, as ffmpeg's ebur128 measures it): for a one-shot its loudest momentary (400 ms) window, for a loop its integrated loudness. level_db is how loud a row should play at its source, at full strength (the hardest impact, the closest distance); the game's modulation only lowers it from there. The scale is set so that each row's takes can reach their level without being raised above their peak ceiling: on the first generation (measured 2026-11-14) a peak-normalised crash reached only -13 to -21 LUFS against -10 to -30 for everything else, so the crash class tops out at -15. The whole mix moves up or down together with the master volume. This is a reasoned starting mix for the owner's ear, not one verified by listening.",
+    "within_row_spread_lu": 1,
+    "classes": [
+      { "name": "crash", "max_db": -15, "min_db": -21, "what": "Collisions, falls and splashes: rare and the loudest moments, heard over a running engine. Car crashes, a big tree, fences and lamps (struck while the engine runs), the chest's slam from a height, a car's landing after a jump." },
+      { "name": "loud", "max_db": -21, "min_db": -26, "what": "Power and sharp tire noise while driving or flying (the engine under load, the jetpack, a skid, a roof scrape) and lighter collisions. Held below the crashes because they last or repeat." },
+      { "name": "medium", "max_db": -26, "min_db": -31, "what": "Everyday actions: doors, the engine cruising and stopping, the chest's landing and lid, hard kicks and goals, scrapes, rolls and bends." },
+      { "name": "soft", "max_db": -31, "min_db": -36, "what": "Frequent or small sounds: footsteps (up to 10 a second), the idling engine, the chest's rattle and creaks, soft kicks and bounces, the ferry's creaks and slaps. Held well below their real loudness because they repeat." },
+      { "name": "interface", "max_db": -36, "min_db": -39, "what": "Menu clicks and the recovery whoosh: heard close and briefly, mostly with the world paused." },
+      { "name": "ambience", "max_db": -39, "min_db": -50, "what": "Beds and rustle under everything (wind, bay water, foliage): always on, so the quietest." }
+    ]
+  },
   "recipes": {
     "oneshot_step": {
       "what": "A short transient (footstep, kick). Cut the silence before it, keep at most max_seconds and fade out the end.",
@@ -126,6 +138,7 @@
     "P15": "Run versus walk (player_controller.gd): a modifier of the footsteps",
     "P16": "Pushing the soccer ball on foot (soccer_ball.gd, as B1)",
     "P17": "Idle lid creak while standing (chest_avatar.gd breathing lid lift); the inventory lists this tier-3 event without an id, so it is named here",
+    "P18": "Footstep in shallow water: the drainage ditch by Mersea (owner 2026-11-14). It would be chosen at P1's hook when the planted foot stands in the ditch's water. Only the ground shader draws that water (ground_cover.gdshader marsh_map, marsh_axis, marsh_floor_y), so this needs a CPU lookup, not yet built",
     "V1": "Get in: door and engine start (vehicle_manager.gd enter)",
     "V2": "Get out: engine off and door (vehicle_manager.gd exit)",
     "V3": "Engine following throttle and speed over top speed (drivable_car.gd _integrate_forces)",
@@ -154,6 +167,7 @@
     "V26": "Tree springs back (street_tree_bender.gd)",
     "V27": "Car drives through shrubs or hedges (no hook)",
     "V28": "Car pushes the ball (vehicle_manager.gd _push_loose)",
+    "V29": "Car hits a big tree, which stops it: a trunk radius of at least street_vegetation_kit.gd BENDING_TRUNK_RADIUS_M (0.127 m), on a Trunks__c body on the street-prop layer. No hook yet, as for V9: the delta-v test V9 needs would tell a tree trunk by its body",
     "B1": "Ball kick, debounced (soccer_ball.gd _push_from)",
     "B2": "Ball bounce or hit on a wall or post (soccer_ball.gd contacts)",
     "B3": "Ball rolling on turf (soccer_ball.gd on_ground)",
@@ -203,6 +217,8 @@
       "keep_takes": 8,
       "candidates_per_take": 2,
       "output": "player/footstep_hard_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -33,
       "recipe": "oneshot_step",
       "notes": "Roads, paths, kerbs and roofs. One footstep per generation; eight takes so 10 steps a second do not repeat audibly. Gain and pitch follow speed (run versus walk, P15)."
     },
@@ -217,8 +233,26 @@
       "keep_takes": 8,
       "candidates_per_take": 2,
       "output": "player/footstep_soft_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -35,
       "recipe": "oneshot_step",
       "notes": "Bare land and grass areas: the two surface sets the ground data already tells apart."
+    },
+    {
+      "id": "footstep_water",
+      "tier": 1,
+      "events": ["P18"],
+      "prompt": "High-quality, professionally recorded footstep foley: a single heavy step of a big leather-soled shoe into a few centimeters of still water in a muddy drainage ditch, a wet splash over a soft, sucking mud bottom, close-miked outdoors.",
+      "duration_seconds": 0.5,
+      "loop": false,
+      "prompt_influence": 0.5,
+      "keep_takes": 4,
+      "candidates_per_take": 2,
+      "output": "player/footstep_water_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -32,
+      "recipe": "oneshot_step",
+      "notes": "Owner request 2026-11-14: \"footsteps in like shallow water\", for the shallow water in the drainage ditch by Mersea. One step per generation, as for the other footsteps, with the heavy chest's weight. The game cannot yet tell a step in that water (P18): only the ground shader draws it."
     },
     {
       "id": "landing",
@@ -231,6 +265,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "player/landing_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot_impact",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"sounds like a tiny chest\"): a large, heavy chest, no coins, starting at the impact. Volume follows the landing's impact; the fast drop has its own heavier slam."
     },
@@ -245,6 +281,8 @@
       "keep_takes": 2,
       "candidates_per_take": 3,
       "output": "player/jet_start_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -21,
       "recipe": "oneshot_lead_in",
       "notes": "Plays over the jet loop's fade-in; a lift-off (P5) is a jet start. Stepping off an edge makes no sound of its own."
     },
@@ -259,6 +297,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "player/jet_loop_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -23,
       "recipe": "loop_mono",
       "notes": "The sustain. Its gain follows the flame (0.04 s up, 0.07 s down) so taps of any length work."
     },
@@ -273,6 +313,8 @@
       "keep_takes": 2,
       "candidates_per_take": 3,
       "output": "player/jet_stop_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -24,
       "recipe": "oneshot",
       "notes": "The release tail, played as the loop fades out."
     },
@@ -287,6 +329,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "player/chest_rattle_loop_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -33,
       "recipe": "loop_mono",
       "notes": "The 12 Hz lid rattle is too fast for one-shots; a layer under the jet loop, gain by the lid's speed. Kept apart from the jet: one sound per prompt."
     },
@@ -301,6 +345,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/door_open_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -29,
       "recipe": "oneshot",
       "notes": "Getting in and getting out are sequences of door, engine and door, so each part is its own prompt."
     },
@@ -315,6 +361,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/door_close_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot"
     },
     {
@@ -328,6 +376,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/engine_start_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -23,
       "recipe": "oneshot_lead_in",
       "notes": "Ends on idle and fades out under the idle loop."
     },
@@ -342,6 +392,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/engine_stop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"I don't know what this is supposed to sound like, but all of these are kinda weird and bad\"): one plain, short event, an idling engine switched off and dying away, with no steps in the prompt. It takes over from the idle loop as that fades out; one take is enough for a sound heard once per exit."
     },
@@ -356,6 +408,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/engine_idle_loop_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -32,
       "recipe": "loop_mono",
       "notes": "Engine, one of three: idle, low and high are steady-state loops of the same car from the same place behind it, crossfaded by a virtual rev from throttle and speed over top speed, each pitched within about a third of an octave. Three candidates each, to pick a trio that matches."
     },
@@ -370,6 +424,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/engine_low_loop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -26,
       "recipe": "loop_mono",
       "notes": "Engine, two of three; carries the asphalt road noise (V4), so tarmac needs no separate rolling loop."
     },
@@ -384,6 +440,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/engine_high_loop_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -22,
       "recipe": "loop_mono",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"these are all sounds of an engine revving\"): one constant high engine speed, held, described positively, since ElevenLabs' guidance gives no support for saying what a sound must not do. The game crossfades and pitches it, so it must hold one steady pitch. Engine, three of three. Reverse and coasting reuse the same loops at lower gain."
     },
@@ -398,6 +456,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/tyre_skid_loop_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -21,
       "recipe": "loop_mono",
       "notes": "One loop that always runs while driving, gain from the smoothed slip and handbrake (about 50 ms up, 150 ms down) and slight pitch from speed, so a flickering drift never restarts a sound. Hard braking slides through the same loop."
     },
@@ -412,6 +472,8 @@
       "keep_takes": 4,
       "candidates_per_take": 2,
       "output": "car/impact_light_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -24,
       "recipe": "oneshot",
       "notes": "Shoves, wakes and light crashes; volume from the speed change. Needs a voice cap in a pile-up."
     },
@@ -426,7 +488,25 @@
       "keep_takes": 4,
       "candidates_per_take": 2,
       "output": "car/impact_heavy_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -16,
       "recipe": "oneshot"
+    },
+    {
+      "id": "car_tree_impact",
+      "tier": 1,
+      "events": ["V29"],
+      "prompt": "High-quality recording of a 2014 Toyota RAV4 crashing into the solid trunk of a large tree, a heavy woody thud with bark cracking and the leafy canopy shaking overhead, recorded close outdoors.",
+      "duration_seconds": 2.0,
+      "loop": false,
+      "prompt_influence": 0.45,
+      "keep_takes": 3,
+      "candidates_per_take": 2,
+      "output": "car/tree_impact_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -17,
+      "recipe": "oneshot_impact",
+      "notes": "Owner request 2026-11-14: \"a car hitting a tree\". A big tree stops the car; a small one bends (tree_bend, tree_springback), and walls and cars have the car_impact rows. It starts at the impact. No hook reports a car hitting a tree yet (V29)."
     },
     {
       "id": "car_splash",
@@ -439,6 +519,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/splash_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -16,
       "recipe": "oneshot",
       "notes": "Heard from the shore watch camera; volume from the entry speed."
     },
@@ -453,6 +535,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/fence_chainlink_break_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -20,
       "recipe": "oneshot",
       "notes": "chain_link, chain_link_barbed, chain_link_screened, chain_link_slatted and construction_panel bays; a felled post (V21) plays the same family quieter."
     },
@@ -467,6 +551,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/fence_wood_break_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -18,
       "recipe": "oneshot",
       "notes": "wood_privacy bays and posts."
     },
@@ -481,6 +567,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/fence_steel_break_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -17,
       "recipe": "oneshot",
       "notes": "steel_picket bays and posts."
     },
@@ -495,6 +583,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/fence_net_break_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -22,
       "recipe": "oneshot",
       "notes": "ball_stop_net bays and poles."
     },
@@ -509,6 +599,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/lamp_hit_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -21,
       "recipe": "oneshot",
       "notes": "The hit and the fall are two prompts: a sequence is split."
     },
@@ -523,6 +615,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/lamp_fall_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -18,
       "recipe": "oneshot",
       "notes": "Volume from the lamp's mass (70 to 180 kg) and its speed at the ground contact."
     },
@@ -537,6 +631,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "ball/kick_soft_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -33,
       "recipe": "oneshot_step",
       "notes": "Dribbles and a car's nudge; the kick test runs every tick of overlap, so it needs a debounce."
     },
@@ -551,6 +647,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "ball/kick_hard_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -28,
       "recipe": "oneshot_step",
       "notes": "Reworded after the owner's audition (2026-11-14): only candidate 2 was usable and four of six were near-silent, so the prompt asks for a loud, close, punchy kick. Hard kicks and a car's push, by the speed added."
     },
@@ -565,6 +663,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "ball/goal_net_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -28,
       "recipe": "oneshot",
       "notes": "Goals with a net (soccer, GAA); rugby posts have none."
     },
@@ -579,6 +679,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "ball/goal_confetti_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -26,
       "recipe": "oneshot",
       "notes": "The burst the game shows (2.6 s of paper confetti); no crowd, since nobody is modelled."
     },
@@ -593,6 +695,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "world/wind_bed_{take}.ogg",
+      "loudness_class": "ambience",
+      "level_db": -41,
       "recipe": "loop_bed_stereo",
       "notes": "The 30 s cap is the bed's length: generated with loop set, then crossfaded over 2 s at the seam. One bed under everything, louder with the player's height. Place names stay out of the prompt so it does not add gulls or traffic."
     },
@@ -607,6 +711,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "world/bay_water_bed_{take}.ogg",
+      "loudness_class": "ambience",
+      "level_db": -42,
       "recipe": "loop_bed_stereo",
       "notes": "As the wind bed; gain from the distance to the shore at a low update rate. Three candidates because a lapping pattern that repeats is easy to hear."
     },
@@ -621,6 +727,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "ui/click_{take}.ogg",
+      "loudness_class": "interface",
+      "level_db": -37,
       "recipe": "ui",
       "notes": "Menu buttons, the shadow choice and resume."
     },
@@ -635,6 +743,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "ui/pause_{take}.ogg",
+      "loudness_class": "interface",
+      "level_db": -37,
       "recipe": "ui",
       "notes": "Opening the pause menu."
     },
@@ -649,6 +759,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "player/lid_slam_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -29,
       "recipe": "oneshot",
       "notes": "Volume from the lid's closing speed."
     },
@@ -663,6 +775,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "player/fastdrop_air_loop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -28,
       "recipe": "loop_mono",
       "notes": "Gain from the fall speed while C is held."
     },
@@ -677,6 +791,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "player/fastdrop_impact_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -20,
       "recipe": "oneshot_impact",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"The chest is too small and the coins are unnecessary\"): a big, heavy chest slamming down, no coins, starting at the impact. With the dust poof."
     },
@@ -691,6 +807,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "ui/recovery_whoosh_{take}.ogg",
+      "loudness_class": "interface",
+      "level_db": -37,
       "recipe": "oneshot",
       "notes": "Non-positional: the player or car is moved, so nothing in the world makes this sound."
     },
@@ -705,6 +823,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/brake_squeal_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot",
       "notes": "Coming to rest on the brakes; hard braking that slides uses the skid loop."
     },
@@ -719,6 +839,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "car/bump_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot",
       "notes": "Volume from the compression rate at the bump stop."
     },
@@ -733,6 +855,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/jump_landing_{take}.ogg",
+      "loudness_class": "crash",
+      "level_db": -21,
       "recipe": "oneshot_impact",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"The impact sound is too late\"): the impact is the first thing heard, by the wording and by the oneshot_impact recipe, which cuts everything before the hit. Also the end of a self-righting roll (V14), which drops the car back onto its wheels."
     },
@@ -747,6 +871,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "car/tyre_gravel_loop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -30,
       "recipe": "loop_mono",
       "notes": "Off the road (bare land), gain and pitch from speed."
     },
@@ -761,6 +887,8 @@
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/riprap_rumble_loop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -30,
       "recipe": "loop_mono",
       "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"These all sound weird as if stones are being stirred in a pot\"): heavy tires over big boulders, weight and a low rumble. On the shore rocks (the cars' riprap ground)."
     },
@@ -775,6 +903,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/sinking_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -27,
       "recipe": "oneshot",
       "notes": "One-shot at the start of sinking, which lasts 1 to 4 s; fade it with the car's depth."
     },
@@ -789,6 +919,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "world/krail_hit_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -22,
       "recipe": "oneshot",
       "notes": "The game's K-rail is a water-filled plastic jersey unit."
     },
@@ -803,6 +935,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "world/krail_scrape_loop_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -28,
       "recipe": "loop_mono",
       "notes": "While a shoved barrier slides, gain from its speed."
     },
@@ -817,6 +951,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/tree_bend_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -29,
       "recipe": "oneshot",
       "notes": "On a new touch of a bending tree."
     },
@@ -831,6 +967,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/tree_springback_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -32,
       "recipe": "oneshot",
       "notes": "Volume from the spring-back's angular speed."
     },
@@ -845,6 +983,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "ball/bounce_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -32,
       "recipe": "oneshot_step",
       "notes": "A new contact on the ground, a wall or a post; volume from the speed change."
     },
@@ -859,6 +999,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/ferry_creak_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -34,
       "recipe": "oneshot",
       "notes": "Timed one-shots at the boat, on the shader's 4 to 5 s roll and pitch, rather than one long loop. The ferry's engine is not modelled (she is docked)."
     },
@@ -873,6 +1015,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/ferry_fender_squeak_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -35,
       "recipe": "oneshot",
       "notes": "At the mooring dolphins' foam fenders, timed with the roll."
     },
@@ -887,6 +1031,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/float_water_slap_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -35,
       "recipe": "oneshot",
       "notes": "At the ferry float, timed with the heave."
     },
@@ -901,6 +1047,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "player/descent_air_loop_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -35,
       "recipe": "loop_mono",
       "notes": "The slow descent; the lid's flutter can borrow the rattle loop at low gain."
     },
@@ -915,6 +1063,8 @@
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "player/idle_lid_creak_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -36,
       "recipe": "oneshot",
       "notes": "Sparse, while standing. A real chest does not breathe, so there is no breath."
     },
@@ -929,6 +1079,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "car/roof_scrape_loop_{take}.ogg",
+      "loudness_class": "loud",
+      "level_db": -23,
       "recipe": "loop_mono",
       "notes": "While the car slides on its roof or side, gain from speed."
     },
@@ -943,6 +1095,8 @@
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "world/debris_clatter_{take}.ogg",
+      "loudness_class": "medium",
+      "level_db": -30,
       "recipe": "oneshot"
     },
     {
@@ -956,6 +1110,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "ball/roll_loop_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -36,
       "recipe": "loop_mono",
       "notes": "Gain from the ball's speed while it is on the ground."
     },
@@ -970,6 +1126,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "ball/reset_{take}.ogg",
+      "loudness_class": "soft",
+      "level_db": -35,
       "recipe": "oneshot_step"
     },
     {
@@ -983,6 +1141,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "world/foliage_rustle_loop_{take}.ogg",
+      "loudness_class": "ambience",
+      "level_db": -46,
       "recipe": "loop_bed_mono",
       "notes": "A few positional emitters near the player's nearest trees."
     },
@@ -997,6 +1157,8 @@
       "keep_takes": 1,
       "candidates_per_take": 2,
       "output": "ui/tick_{take}.ogg",
+      "loudness_class": "interface",
+      "level_db": -39,
       "recipe": "ui",
       "notes": "Focus moves, the F Drive prompt appearing and touch button presses."
     }
