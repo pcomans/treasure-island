@@ -28,13 +28,23 @@
 //      fails without printing either, and redact() takes them out of a message;
 //      with git's tracing asked for (GIT_TRACE, GIT_TRACE_CURL, GIT_TRACE_REDACT=0,
 //      GIT_CURL_VERBOSE), a clone a local server refuses (401) prints no trace and
-//      no Authorization header, and redact() blanks such a header's value.
+//      no Authorization header, and redact() blanks such a header's value;
+//  10. --require-all: a source with every sound's takes fills the folder; one
+//      without one sound's takes exits 3 naming it and changes nothing; no source
+//      exits 3 only under the flag; --result records each outcome (a Git source's
+//      full commit, never the token), and a failed run leaves no result behind;
+//  11. tools/deploy-web.sh's sound guard (--check-sfx-guard), with stand-in sources
+//      for the game's real catalog and a stand-in git that must never run: no
+//      source refuses; --silent-ok goes on with a warning; a source missing one
+//      sound's takes refuses, naming it, and goes on with --silent-ok, warning and
+//      naming it; a source that fails stops it even with --silent-ok; a complete
+//      source passes with its takes counted.
 // A few seconds. Part of tools/test.sh.
 //
 //   node tools/check_fetch_sfx.mjs
 
 import { spawn, spawnSync } from "node:child_process";
-import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -71,18 +81,14 @@ function manifestOf(project) {
 }
 
 // A project: the game's catalog (a two-take sound, a loop, a sound named by another
-// row, one whose row the sheet lacks), the sheet, the sound folder with its README.
-function makeProject(name) {
+// row, and, unless complete, one whose row the sheet lacks), the sheet, the sound
+// folder with its README.
+function makeProject(name, { complete = false } = {}) {
   const project = join(work, name);
   write(join(project, "project.godot"), "config_version=5\n");
-  write(join(project, "game/resources/audio/sounds.json"), JSON.stringify({
-    sounds: {
-      step: { space: "3d" },
-      hum_loop: { loop: true },
-      knock: { row: "door_knock" },
-      future: {},
-    },
-  }));
+  const sounds = { step: { space: "3d" }, hum_loop: { loop: true }, knock: { row: "door_knock" } };
+  if (!complete) sounds.future = {};
+  write(join(project, "game/resources/audio/sounds.json"), JSON.stringify({ sounds }));
   write(join(project, "tools/sfx/prompts.json"), JSON.stringify({
     sounds: [
       { id: "step", output: "player/step_{take}.ogg" },
@@ -242,6 +248,91 @@ try {
   } finally {
     server.kill();
   }
+
+  // 10. --require-all and --result.
+  const resultFile = join(work, "result.json");
+  const outcomeOf = () => (existsSync(resultFile) ? JSON.parse(readFileSync(resultFile, "utf8")) : null);
+  const fullProject = makeProject("full-project", { complete: true });
+  const fullSfx = join(fullProject, "game/resources/audio/sfx");
+  const fullSource = makeSource("full-source");
+  result = run(["--project", fullProject, "--require-all", "--result", resultFile], { TI_SFX_SOURCE: fullSource });
+  let outcome = outcomeOf();
+  const fullListing = ["README.md", "hum_loop_01.ogg", "knock_01.ogg", "sfx.json", "step_01.ogg", "step_02.ogg"];
+  check(result.status === 0 && listing(fullSfx).join() === fullListing.join(), `10: --require-all with every sound's takes in the source must fetch them (exit ${result.status}, has ${listing(fullSfx)}): ${result.out}`);
+  check(outcome?.schema_version === "ti.sfx-fetch-result/1" && outcome.complete === true && outcome.sounds === 3 && outcome.sounds_with_takes === 3 && outcome.takes === 4 && outcome.silent.length === 0 && outcome.source === fullSource && outcome.commit === null && outcome.dry_run === false, `10: the result of a complete fetch is wrong: ${JSON.stringify(outcome)}`);
+  const gapSource = makeSource("gap-source");
+  rmSync(join(gapSource, "car/knock_01.ogg"));
+  const folderState = () => listing(fullSfx).map((name) => `${name}:${statSync(join(fullSfx, name)).mtimeMs}:${readFileSync(join(fullSfx, name), "utf8")}`).join("|");
+  const beforeGap = folderState();
+  result = run(["--project", fullProject, "--require-all", "--result", resultFile], { TI_SFX_SOURCE: gapSource });
+  outcome = outcomeOf();
+  check(result.status === 3 && /--require-all: 1 of 3 sounds the game plays have no takes in \S*gap-source, so nothing was fetched/u.test(result.out) && /silent: knock: no takes in the source/u.test(result.out), `10: a source without one sound's takes must exit 3 under --require-all, naming it (exit ${result.status}): ${result.out}`);
+  check(folderState() === beforeGap, "10: a run --require-all refuses must leave the folder exactly as it was");
+  check(outcome?.complete === false && outcome.silent.map((entry) => entry.id).join() === "knock" && outcome.sounds_with_takes === 2 && outcome.takes === 3, `10: the refused run's result must name knock: ${JSON.stringify(outcome)}`);
+  result = run(["--project", fullProject, "--require-all", "--result", resultFile]);
+  outcome = outcomeOf();
+  check(result.status === 3 && /--require-all: there is no source/u.test(result.out) && folderState() === beforeGap, `10: --require-all without a source must exit 3, changing nothing (exit ${result.status}): ${result.out}`);
+  check(outcome?.source === null && outcome.complete === false && outcome.sounds === null && outcome.takes === 4, `10: the no-source result is wrong: ${JSON.stringify(outcome)}`);
+  result = run(["--project", fullProject]);
+  check(result.status === 0 && /nothing fetched/u.test(result.out), `10: without --require-all no source still does nothing and passes (exit ${result.status}): ${result.out}`);
+  const dryFull = makeProject("dry-full-project", { complete: true });
+  result = run(["--project", dryFull, "--dry-run", "--require-all", "--result", resultFile], { TI_SFX_SOURCE: fullSource });
+  outcome = outcomeOf();
+  check(result.status === 0 && /would fetch/u.test(result.out) && listing(join(dryFull, "game/resources/audio/sfx")).join() === "README.md" && outcome?.dry_run === true && outcome.complete === true, `10: --dry-run --require-all must check without fetching (exit ${result.status}): ${result.out} ${JSON.stringify(outcome)}`);
+  const repoHead = git(["rev-parse", "HEAD"]).stdout.trim();
+  result = run(["--project", gitProject, "--result", resultFile], { TI_SFX_SOURCE: `file://${repo}`, TI_SFX_SUBDIR: "game", TI_SFX_REF: "sounds", TI_SFX_GIT_TOKEN: TOKEN });
+  outcome = outcomeOf();
+  check(result.status === 0 && /^[0-9a-f]{40}$/u.test(repoHead) && outcome?.commit === repoHead && outcome.source === `file://${repo}` && outcome.ref === "sounds" && outcome.subdir === "game" && outcome.complete === false && outcome.silent.map((entry) => entry.id).join() === "future" && !readFileSync(resultFile, "utf8").includes(TOKEN), `10: a Git source's result must hold its full commit, ref and subdir, never the token: ${JSON.stringify(outcome)} ${result.out}`);
+  result = run(["--project", gitProject, "--require-all", "--result", resultFile], { TI_SFX_SOURCE: `file://${repo}`, TI_SFX_SUBDIR: "game", TI_SFX_REF: "sounds", TI_SFX_GIT_TOKEN: TOKEN });
+  check(result.status === 3 && /silent: future: no row future in tools\/sfx\/prompts\.json yet/u.test(result.out) && !result.out.includes(TOKEN), `10: a Git source without one sound must exit 3 under --require-all, naming it, never the token (exit ${result.status}): ${result.out}`);
+  write(resultFile, "stale");
+  result = run(["--project", fullProject, "--result", resultFile, "--source", join(work, "no-such-folder")]);
+  check(result.status === 1 && !existsSync(resultFile), `10: a failed run must leave no result behind (exit ${result.status}): ${result.out}`);
+  result = run(["--project", fullProject, "--result", work]);
+  check(result.status === 1 && /is a folder/u.test(result.out), `10: --result naming a folder must be refused (exit ${result.status}): ${result.out}`);
+
+  // 11. tools/deploy-web.sh's sound guard, offline: stand-in sources for the game's
+  // real catalog (one take a sound), and a stand-in git that must never run.
+  const { catalogRows } = await import(pathToFileURL(TOOL).href);
+  const realRows = catalogRows(JSON.parse(readFileSync(join(ROOT, "game/resources/audio/sounds.json"), "utf8")));
+  const ids = realRows.length;
+  const [gapId, gapRow] = realRows[0];
+  const standSource = (name, skipRow = null) => {
+    const folder = join(work, name);
+    const sounds = {};
+    for (const [, row] of realRows) {
+      sounds[row] = { gain_db: -1, loop: false, channels: 1, takes: [`stand/${row}_01.ogg`] };
+      if (row !== skipRow) write(join(folder, "stand", `${row}_01.ogg`), row);
+    }
+    write(join(folder, "sfx.json"), JSON.stringify({ schema_version: "ti.sfx-manifest/1", sounds }));
+    return folder;
+  };
+  const completeStand = standSource("stand-complete");
+  const gapStand = standSource("stand-gap", gapRow);
+  const standBin = join(work, "stand-bin");
+  const gitCalls = join(work, "git-calls.log");
+  write(join(standBin, "git"), `#!/bin/sh\necho "stand-in git: $*" >> '${gitCalls}'\nexit 97\n`);
+  chmodSync(join(standBin, "git"), 0o755);
+  const deploy = (args, env = {}) => {
+    const ran = spawnSync("bash", [join(ROOT, "tools", "deploy-web.sh"), ...args], { encoding: "utf8", timeout: 60000, env: { PATH: `${standBin}:${process.env.PATH}`, HOME: process.env.HOME, ...env } });
+    return { status: ran.status, out: `${ran.stdout}${ran.stderr}` };
+  };
+  const escapeRe = (text) => text.replace(/[.*+?^${}()|[\]\\]/gu, "\\$&");
+  let ran = deploy(["--check-sfx-guard"]);
+  check(ran.status === 1 && /FAIL: no sound source: TI_SFX_SOURCE is not set/u.test(ran.out) && !/PASS/u.test(ran.out), `11: with no sound source the deploy must refuse (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard", "--silent-ok"]);
+  check(ran.status === 0 && /^WARNING: SILENT DEPLOY \(--silent-ok\): TI_SFX_SOURCE is not set/mu.test(ran.out) && /^SOUNDS: NONE: no sound source/mu.test(ran.out) && /^PASS: the sound guard lets this deploy build/mu.test(ran.out), `11: --silent-ok without a source must go on with the warning (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard"], { TI_SFX_SOURCE: completeStand });
+  check(ran.status === 0 && new RegExp(`^SOUNDS: ${ids} takes for ${ids} of ${ids} sounds, from ${escapeRe(completeStand)}, a folder \\(no commit\\)$`, "mu").test(ran.out) && !/WARNING|FAIL/u.test(ran.out) && /^PASS: the sound guard/mu.test(ran.out), `11: a source with every sound's takes must pass, counting them (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard"], { TI_SFX_SOURCE: gapStand });
+  check(ran.status === 1 && new RegExp(`silent: ${gapId}: no takes in the source`, "u").test(ran.out) && /FAIL: the sound source has no takes for the sounds listed above/u.test(ran.out) && !/PASS/u.test(ran.out), `11: a source without one sound's takes must refuse, naming it (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard", "--silent-ok"], { TI_SFX_SOURCE: gapStand });
+  check(ran.status === 0 && /^WARNING: PARTLY SILENT DEPLOY \(--silent-ok\)/mu.test(ran.out) && new RegExp(`^SOUNDS: .*; SILENT \\(--silent-ok\\): (.*, )?${gapId}(,|$)`, "mu").test(ran.out) && /^PASS: the sound guard/mu.test(ran.out), `11: --silent-ok with a source missing one sound must go on, warning and naming it (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard", "--silent-ok"], { TI_SFX_SOURCE: join(work, "no-such-folder") });
+  check(ran.status === 1 && /FAIL: the sound fetch failed \(tools\/fetch-sfx exited 1\)/u.test(ran.out) && !/PASS/u.test(ran.out), `11: a source that fails must stop the deploy even with --silent-ok (exit ${ran.status}): ${ran.out}`);
+  ran = deploy(["--check-sfx-guard", "--dry-run"]);
+  check(ran.status === 2 && /usage:/u.test(ran.out), `11: --check-sfx-guard takes only --silent-ok (exit ${ran.status}): ${ran.out}`);
+  check(!existsSync(gitCalls), `11: --check-sfx-guard must never run git: ${existsSync(gitCalls) ? readFileSync(gitCalls, "utf8") : ""}`);
 } finally {
   rmSync(work, { recursive: true, force: true });
 }
@@ -250,4 +341,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, never writes through a link in the folder, and runs as the Mac build workflow runs it (empty variables do nothing; a repository holding the takes at its root fills the folder; a credentialed URL never shows its user or password, and git's tracing never shows the token's header)");
+console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, never writes through a link in the folder, and runs as the Mac build workflow runs it (empty variables do nothing; a repository holding the takes at its root fills the folder; a credentialed URL never shows its user or password, and git's tracing never shows the token's header); --require-all exits 3, changing nothing and naming each sound, when there is no source or a sound has no takes, and --result records the outcome with a Git source's full commit; tools/deploy-web.sh's sound guard refuses no source and a source missing a sound, goes on with a warning under --silent-ok, stops on a failed fetch even then, and never runs git");

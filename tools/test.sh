@@ -8,10 +8,12 @@
 #    the game's own asset folders (game/resources/, generated/).
 # 2. The street cars' mesh check (tools/check_street_car_meshes.mjs), the
 #    sound-effect prompt sheet and tool check (tools/check_sfx.mjs) and the sound
-#    folder's fetch (tools/check_fetch_sfx.mjs).
+#    folder's fetch with the web deploy's sound guard (tools/check_fetch_sfx.mjs).
 # 3. tools/godot's wait for its private Weston (tools/check_godot_weston_wait.sh):
 #    it waits through a slow start and stops at once when Weston exits; every run
-#    gets the Dummy audio driver unless it names its own.
+#    gets the Dummy audio driver unless it names its own. And how tools/browser
+#    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
+#    stops what is left, and nothing it starts holds its caller's lock.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -86,7 +88,9 @@ node tools/check_sfx.mjs || failed+=("tools/check_sfx.mjs")
 # tools/fetch-sfx, offline in temporary folders: nothing without a source; from a
 # folder or a Git repository only the game's sounds' takes, with their manifest's
 # gains; safe to repeat, removing only its own stale takes; a token never
-# printed; a linked sound folder or a source in the project refused. Seconds.
+# printed; a linked sound folder or a source in the project refused; with
+# --require-all, no source or a missing sound refused. And tools/deploy-web.sh's
+# sound guard, with stand-in sources (no git, Vercel or build). Seconds.
 echo "== tools/check_fetch_sfx.mjs"
 node tools/check_fetch_sfx.mjs || failed+=("tools/check_fetch_sfx.mjs")
 
@@ -95,6 +99,12 @@ node tools/check_fetch_sfx.mjs || failed+=("tools/check_fetch_sfx.mjs")
 # exited. About 7 s.
 echo "== tools/check_godot_weston_wait.sh"
 tools/check_godot_weston_wait.sh || failed+=("tools/check_godot_weston_wait.sh")
+
+# How tools/browser stops, with stand-ins for Weston and agent-browser (no GPU,
+# display or Chrome): it closes its sessions, names and stops a daemon left
+# running, and nothing it starts holds its caller's lock. About 7 s.
+echo "== tools/check_browser_cleanup.sh"
+tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

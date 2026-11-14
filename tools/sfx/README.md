@@ -13,7 +13,8 @@ The game plays these sounds (`game/scripts/audio/sound.gd`, catalog
 `game/resources/audio/sounds.json`). `tools/fetch-sfx` copies the processed
 takes and their `sfx.json` from a private source (`TI_SFX_SOURCE`, a folder or
 Git URL) into the ignored `game/resources/audio/sfx/`; without a source the
-game is silent. Development and test runs stay on Dummy through `tools/godot`.
+game is silent, and a web deploy refuses to build (step 6 below). Development
+and test runs stay on Dummy through `tools/godot`.
 
 ## Make your own sound set
 
@@ -140,6 +141,23 @@ sounds.
    `tools/build-web.sh` run it themselves from `TI_SFX_SOURCE` and then import
    the files, so with the variable set a build has your sounds. `tools/fetch-sfx`
    names each sound that has no takes and stays silent.
+
+   `--require-all` makes it refuse instead: it exits 3 and changes nothing when
+   there is no source or a sound the game plays has no takes in it, naming each.
+   `--result FILE` writes the outcome as JSON for scripts, with a Git source's
+   full commit and never a credential. Builds for players use them:
+   - `tools/build-mac.sh` fetches with `--require-all` whenever `TI_SFX_SOURCE`
+     is set, so in CI a source that lacks a sound stops the Mac build.
+   - `tools/deploy-web.sh` (a production deploy and its `--dry-run`) refuses to
+     build without `TI_SFX_SOURCE`, or with a source that lacks any sound, and
+     its build fetches with `--require-all`. `--silent-ok` is the one way past
+     this, for a deliberately silent or partly silent deploy, and prints a
+     warning. Its `SOUNDS` line names the source, its commit and the number of
+     takes the build fetched, for the release record.
+     `tools/deploy-web.sh --check-sfx-guard` runs that guard alone.
+
+   `tools/build-linux.sh`, `tools/build-web.sh` run by hand and the tests take
+   no flag: without a source they build silent.
 
 Runs through `tools/godot` use Godot's Dummy audio driver unless the command
 names an `--audio-driver`, so you hear nothing there. To listen, play a build,
