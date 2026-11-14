@@ -27,9 +27,10 @@ const DAYLIGHT_MIN_ELEVATION_DEG := 10.0
 const STEP_S := 10.0
 ## Lower, a step is shorter, with the square of the sine of the sun's height, down
 ## to MIN_STEP_S: a shadow's far end moves by the change in the sun's height over
-## that square, so with the sun 10 degrees up a 10 s step moved the end of a 9.2 m
-## street lamp's shadow about 15 cm at once, a hop the eye catches near the camera
-## (measured 2026-11-14); a 1.2 s step keeps it to about 2 cm.
+## that square. With the sun 10.3 degrees up a 10 s step moved the end of a 9.2 m
+## street lamp's shadow 10 to 15 cm at once, 5 to 6 px seen from 7 m, a hop the eye
+## catches; with steps of about a second the only hop left is the angles' rounding
+## to ANGLE_STEP_DEG, at most 5 cm (2 px) every few seconds (measured 2026-11-14).
 const FULL_STEP_ELEVATION_DEG := 30.0
 const MIN_STEP_S := 1.0
 ## The angles are kept to this (degrees): the precision main.tscn's Sun was set to,
