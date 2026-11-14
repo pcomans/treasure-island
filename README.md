@@ -116,7 +116,9 @@ generated with ElevenLabs from the public prompts in
 making the output available as separate audio files, so it stays private. A
 checkout or build without a sound source runs silent. `tools/fetch-sfx`, which
 the build scripts run, copies the sounds from the private source named by
-`TI_SFX_SOURCE` into the ignored `game/resources/audio/sfx/`. To make your own
+`TI_SFX_SOURCE` into the ignored `game/resources/audio/sfx/`. The Mac build on
+GitHub Actions does the same when the repository variable `TI_SFX_SOURCE` and,
+for a private repository, the secret `TI_SFX_GIT_TOKEN` are set. To make your own
 set with your own ElevenLabs account, follow
 [Make your own sound set](tools/sfx/README.md#make-your-own-sound-set); for the
 terms, see

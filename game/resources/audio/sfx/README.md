@@ -20,6 +20,10 @@ Run Godot's import afterwards (`tools/godot --headless --path . --import`; the
 build scripts and `tools/test.sh` do) so the game can load them.
 
 With the folder empty the game, its tests and its builds run silent: a sound
-with no takes plays nothing. `tools/build-mac.sh`, `tools/build-linux.sh` and
-`tools/build-web.sh` call `tools/fetch-sfx`, which does nothing without a
-source.
+with no takes plays nothing. `tools/build-linux.sh` and `tools/build-web.sh`
+call `tools/fetch-sfx`, which does nothing without a source. `tools/build-mac.sh`
+calls it only when `TI_SFX_SOURCE` is set, and otherwise logs how many takes this
+folder holds; the Mac build on GitHub Actions (`.github/workflows/mac-build.yml`)
+takes `TI_SFX_SOURCE`, `TI_SFX_SUBDIR` and `TI_SFX_REF` from the repository's
+variables and `TI_SFX_GIT_TOKEN` from its secrets, and is silent while they are
+unset.

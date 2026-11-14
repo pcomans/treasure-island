@@ -128,7 +128,8 @@ sounds.
    ```
 
    `TI_SFX_GIT_TOKEN` is handed to git in its environment, never on a command
-   line, and never printed. Without it, git's own credential setup applies, so
+   line, and never printed; with it, git asks no credential helper, so a token
+   it refuses fails at once. Without it, git's own credential setup applies, so
    an SSH URL or a credential helper works too. `TI_SFX_REF`/`--ref` picks a
    branch or tag. Keep the repository private: making it public would publish
    the audio files, which is what the next section explains we avoid.

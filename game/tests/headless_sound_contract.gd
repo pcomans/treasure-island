@@ -27,7 +27,8 @@ extends SceneTree
 ##      the rumble sounds at speed and falls silent at a crawl or off them; a jump
 ##      off the dirt lot's ramp lands once on the wheels (car_jump_landing) and,
 ##      with R on the road and the return from the bay (the vehicle contract's
-##      places), asks for no knock or crash, R and the bay landing not at all; the
+##      places), asks for no knock or crash, R and the bay landing not at all; a
+##      sideways hit at a landing still crashes; the
 ##      car crashing into a palm is a tree's crash, into a parked car a car's,
 ##      while the windrow's young gums bend with neither (theirs is the tier-2
 ##      bend); a bay of each fence material breaks with its own sound; a lamp
@@ -68,6 +69,10 @@ const SHORE_TOP_M := 2.0
 const QUICK_EXIT_TICKS := 3
 ## How fast the car is driven onto the shore's rocks (m/s).
 const RUMBLE_MPS := 4.0
+## The drop for the landing's hits (m, under CarSound.TELEPORT_M), and the
+## sideways hit given at touchdown (m/s of velocity change).
+const LANDING_DROP_M := 2.0
+const SIDEWAYS_HIT_MPS := 9.0
 ## How soon after getting out the engine's loops must be silent (ticks).
 const EXIT_SILENT_TICKS := 45
 
@@ -106,7 +111,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -435,7 +440,7 @@ func _check_car() -> bool:
 	mark = Engine.get_process_frames()
 	_vehicles.exit_car()
 	var silent_at := -1
-	for tick in 70:
+	for tick in 90:
 		await physics_frame
 		var level := 0.0
 		for loop: StringName in [CarSound.IDLE, CarSound.LOW, CarSound.HIGH, CarSound.SKID]:
@@ -589,6 +594,41 @@ func _check_riprap() -> bool:
 	if not _require(on_land == 0.0 and on_ticks >= 40 and heard > 0.2 and quiet >= 120 and after == 0.0 and not playing, "Driven onto the shore's rocks the rumble must be silent on the land (%.2f), sound with two wheels on the rocks at speed (%.2f over %d ticks) and be gone after two seconds at a crawl, off the rocks or in the water (%s; %d ticks running: level %.2f, playing %s)." % [on_land, heard, on_ticks, ended if ended != "" else "none of them", quiet, after, playing]):
 		return false
 	_summary.append("on the shore's rocks the rumble sounds at %.2f (silent on the land before them) and falls silent %s" % [heard, ended])
+	return await _stop()
+
+
+## A landing is one sound, but not a crash at the same moment (review note,
+## 2026-11-14): dropped LANDING_DROP_M onto the route's road the car lands once
+## with no hit (the ground's push lies along its up); dropped again with a
+## sideways hit given to it the tick it touches down (its own hit record, as a
+## wall or a car would leave it), the crash sounds beside the landing.
+func _check_landing_hits() -> bool:
+	var points: Array = _cases.route.points_xz
+	var start := Vector2(points[0][0], points[0][1])
+	var car := await _drive_from(start, (Vector2(points[1][0], points[1][1]) - start).normalized())
+	if car == null:
+		return false
+	var results := []
+	for sideways: bool in [false, true]:
+		var stood := car.global_transform
+		var mark := Engine.get_process_frames()
+		car.place(Transform3D(stood.basis, stood.origin + Vector3.UP * LANDING_DROP_M))
+		var air := 0
+		var touched := false
+		for _tick in 240:
+			await physics_frame
+			if car.grounded_wheels() == 0:
+				air += 1
+			elif air >= 20 and car.grounded_wheels() >= 2:
+				touched = true
+				if sideways:
+					car.set("_impact", car.global_transform.basis.x * SIDEWAYS_HIT_MPS)
+				break
+		await _ticks(60)
+		results.append({"touched": touched, "landings": _played(CarSound.LANDING, mark), "hits": _played(&"car_impact_light", mark) + _played(&"car_impact_heavy", mark)})
+	if not _require(results[0] == {"touched": true, "landings": 1, "hits": 0} and results[1].touched and results[1].landings == 1 and results[1].hits >= 1, "Dropped %.1f m the car must land once with no hit, and with a sideways hit at touchdown land once and crash too ([plain, sideways] %s)." % [LANDING_DROP_M, results]):
+		return false
+	_summary.append("dropped %.1f m the car lands once with no hit, and a sideways hit at touchdown crashes beside the landing" % LANDING_DROP_M)
 	return await _stop()
 
 
