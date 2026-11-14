@@ -63,22 +63,42 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
   Files are written to `.part` and then renamed, so a half-written download
   never counts as made. If the sheet's prompt or settings for a row change
   after its candidates were made, the dry run says so. `--force-id` then makes
-  a fresh set and moves the old one to `candidates/<id>/replaced-<time>/`.
-  Until the fresh set is complete, the same `--force-id` is refused, so a
-  rerun cannot move it aside and pay again; the command without `--force-id`
-  finishes it.
+  a fresh set and moves every earlier candidate file of that row to
+  `candidates/<id>/replaced-<time>/`: they are kept, never deleted, including
+  any numbered past the row's current count. Until the fresh set is complete,
+  the same `--force-id` is refused, so a rerun cannot move it aside and pay
+  again; the command without `--force-id` finishes it.
 - **Picking takes.** Listen to the candidates. Then, optionally, list the
   keepers in `~/ti-sfx/picks.json`, for example
   `{"footstep_hard": [3, 1, 4, 6, 8, 9, 12, 15]}`, in take order. Without
   picks, `--process` uses the first candidates on disk.
+  - **Fewer picks.** A row may pick fewer takes than its `keep_takes`, and the
+    game then gets exactly those. Nothing is padded with unpicked candidates,
+    and the row's older takes beyond them are removed. `keep_takes` stays the
+    most a row keeps, so candidate numbers and existing picks keep their
+    meaning. Lowering it to match the picks would shrink the range of
+    candidates, and a pick such as `tree_springback` [6] (3 takes x 2) would
+    then fall outside it.
+  - **Stale picks.** Picks name candidates as they were when `picks.json` was
+    written. If a picked candidate is newer than `picks.json` (`--force-id`
+    made the set again after the pick), `--process` refuses that row until
+    `picks.json` is updated. Forcing a row that has picks says so up front.
 - **Processing.** `--process` turns each kept take into
   `~/ti-sfx/game/<group>/<name>_NN.ogg`, mono for positional sounds and
   stereo for the two ambience beds. The candidates themselves are only read,
-  never changed. A take that is near-silent is named by id and candidate:
-  "silent after trimming; pick another take or regenerate". Here near-silent
-  means under 10 ms is left once its silence is trimmed, or it peaks at
-  −70 dBFS or below. The rest of that row and the other rows are still
-  processed, and the run ends non-zero listing the failed rows.
+  never changed.
+  - **Peak-relative trims.** Each candidate's peak is first brought to full
+    scale, so a recipe's trim levels count down from the take's own peak, and
+    a quiet take is trimmed like a loud one.
+  - **Silent takes.** A take that is near-silent is named by id and candidate:
+    "silent after trimming; pick another take or regenerate". Near-silent
+    means it peaks at −70 dBFS or below, or under 10 ms is left once its
+    silence is trimmed. The rest of that row and the other rows are still
+    processed, and the run ends non-zero listing the failed rows.
+  - **Failed takes.** A take that fails takes its output from an earlier run
+    with it, and the FAIL line says so. Takes beyond a row's current picks are
+    removed even when the row fails, so `game/` never holds an unannounced
+    mix of old and new takes.
 
 What the output folder holds:
 
@@ -114,12 +134,18 @@ Each row of `sounds` is one family of files. Its fields:
 - `notes`: optional reasoning.
 
 `recipes` holds the post-processing steps as data: channels, silence trims,
-a length cap, fades, a loop crossfade and a peak level. The peak is measured
-after encoding, because Vorbis overshoots bright transients by up to about
-2.6 dB. A loop recipe with `loop_crossfade_ms` 0 keeps a loop as generated. It
-is for a loop the model already made seamless, chosen by ear; give that row
-its own recipe. The sheet's output formats must be ones its plan can use, and
-loops must be MP3. `events` lists every sound-carrying event in the code (P player, V
+a length cap, fades, a loop crossfade and a peak level.
+
+- **Trims.** The trim levels are dB below each candidate's own peak.
+  `oneshot_impact` cuts everything before the first sample within 12 dB of
+  the peak, so a take played the moment something lands starts at its hit.
+- **Peak.** The peak is measured after encoding, because Vorbis overshoots
+  bright transients by up to about 2.6 dB.
+- **Loops.** A loop recipe with `loop_crossfade_ms` 0 keeps a loop as
+  generated. It is for a loop the model already made seamless, chosen by ear;
+  give that row its own recipe.
+- **Formats.** The sheet's output formats must be ones its plan can use, and
+  loops must be MP3. `events` lists every sound-carrying event in the code (P player, V
 vehicle, B ball, A ambient, U interface). Every event is served by a row or
 listed in `not_voiced` with the reason; the check enforces this.
 
@@ -128,6 +154,12 @@ listed in `not_voiced` with the reason; the check enforces this.
 - **Realistic.** The player is a real wooden treasure chest of gold coins with
   iron straps, brass fittings and big leather-soled shoes, flying on a small
   twin-nozzle rocket backpack. Cars and the world are realistic too.
+- **No coins.** Coins have no sounds of their own, and the chest's impacts
+  carry no coin layer. The owner dropped every coin sound after hearing them
+  on 2026-11-14: "I think it would get really annoying", "we don't need this".
+- **Owner's audition.** Rows the owner rejected in full are reworded, with
+  the owner's words in the row's notes, and made again with `--force-id`.
+  Rows with picks keep their prompts, so their candidates stay valid.
 - **One car.** Every prompt that mentions a car names the 2014 Toyota RAV4
   with its standard 2.5-liter four-cylinder gasoline engine. This is a
   production inference: the crossover is the island's most common parked

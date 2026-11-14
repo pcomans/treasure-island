@@ -532,14 +532,19 @@ function retryAfterSeconds(header) {
   return Number.isNaN(when) ? null : Math.min(RETRY_AFTER_CAP_S, Math.max(0, (when - Date.now()) / 1000));
 }
 
+// Moves every candidate file of a row aside (kept, never deleted), whatever its
+// number or format, so a set made when the row had more candidates, or another
+// output format, leaves no strays among the fresh set.
 function moveAside(out, sheet, row) {
   const stamp = new Date().toISOString().replace(/[-:]/gu, "").replace(/\.\d+Z$/u, "Z");
-  const aside = join(out, "candidates", row.id, `replaced-${stamp}`);
+  const folder = join(out, "candidates", row.id);
+  const aside = join(folder, `replaced-${stamp}`);
+  const pattern = new RegExp(`^${row.id}\\.c\\d{2}\\.(?:wav|mp3)$`, "u");
   let moved = 0;
-  for (const n of presentOf(out, sheet, row)) {
-    const file = candidateFile(out, sheet, row, n);
+  for (const name of existsSync(folder) ? readdirSync(folder) : []) {
+    if (!pattern.test(name)) continue;
     mkdirSync(aside, { recursive: true });
-    renameSync(file, join(aside, basename(file)));
+    renameSync(join(folder, name), join(aside, name));
     moved += 1;
   }
   if (moved) console.log(`moved ${plural(moved, "candidate")} of ${row.id} to ${relative(out, aside)}`);
@@ -745,10 +750,11 @@ function samplesOf(file) {
 
 // The sample peak in dBFS, measured in float (astats), so an overshoot above
 // full scale reads as such; volumedetect works on 16-bit samples and caps it at 0.
+// astats prints no level for a stream with (next to) no samples: that is silence.
 function peakDbfs(file, format = []) {
   const result = ffmpeg(["-v", "info", "-nostats", ...format, "-i", file, "-af", "astats=measure_perchannel=none:measure_overall=Peak_level", "-f", "null", "-"]);
   const matches = [...result.stderr.matchAll(/Peak level dB:\s*(-?(?:\d+(?:\.\d+)?|inf))/gu)];
-  if (!matches.length) throw new Error(`no level measured for ${file}`);
+  if (!matches.length) return -Infinity;
   const value = matches.at(-1)[1];
   return value.endsWith("inf") ? -Infinity : Number(value);
 }
@@ -764,7 +770,13 @@ class SilentTake extends Error {
 export function processTake(sheet, recipe, input, output, work) {
   const rate = sheet.encode.sample_rate;
   const loop = Object.hasOwn(recipe, "loop_crossfade_ms");
-  const chain = [`aresample=${rate}`];
+  // The candidate's own peak as generated: at SILENT_DBFS or below it is silent.
+  // Otherwise its peak is brought to full scale before anything is trimmed, so
+  // the recipe's trim levels count down from the take's own peak and a quiet
+  // take is trimmed like a loud one.
+  const level = peakDbfs(input);
+  if (!(level > SILENT_DBFS)) throw new SilentTake();
+  const chain = [`aresample=${rate}`, "aformat=sample_fmts=flt", `volume=${(-level).toFixed(3)}dB`];
   if (recipe.trim_start_db !== null) {
     chain.push(`silenceremove=start_periods=1:start_threshold=${recipe.trim_start_db}dB:start_silence=${loop ? 0 : LEAD_KEEP_S}:detection=peak`, "asetpts=PTS-STARTPTS");
   }
@@ -851,9 +863,13 @@ function postProcess({ sheet, out, rows }) {
     return 1;
   }
   const picks = readPicks(out, sheet);
+  const picksPath = join(out, "picks.json");
+  const picksTime = existsSync(picksPath) ? statSync(picksPath).mtimeMs : null;
   const work = mkdtempSync(join(out, ".work-"));
   // A take that fails is reported with its candidate; the rest of its row and
   // the other rows still go on, and the failed rows are listed at the end.
+  // A row with picks gets exactly the picked takes, fewer than keep_takes if
+  // so picked: unpicked candidates never fill the gap.
   const failedRows = [];
   let skipped = 0;
   let takes = 0;
@@ -867,6 +883,15 @@ function postProcess({ sheet, out, rows }) {
         if (missing.length) {
           console.error(`FAIL: ${row.id}: picked candidates ${missing.join(", ")} are not on disk`);
           failedRows.push(`${row.id} (picked ${missing.map((n) => `c${pad2(n)}`).join(", ")} not on disk)`);
+          continue;
+        }
+        // A pick names a candidate as it was when picks.json was written. One
+        // made after that (a later --force-id moved the picked set aside) was never heard.
+        const unheard = chosen.filter((n) => statSync(candidateFile(out, sheet, row, n)).mtimeMs > picksTime);
+        if (unheard.length) {
+          const names = unheard.map((n) => `c${pad2(n)}`).join(", ");
+          console.error(`FAIL: ${row.id}: picks.json is older than ${names}, so its picks name an earlier set (one --force-id moved aside); listen to the new candidates and update picks.json. The row's takes in game/ are left as they were.`);
+          failedRows.push(`${row.id} (picks older than ${names})`);
           continue;
         }
       } else if (present.length >= row.keep_takes) {
@@ -887,20 +912,20 @@ function postProcess({ sheet, out, rows }) {
           console.log(`${relative(out, output)}  ${seconds.toFixed(2)} s ${recipe.channels === 1 ? "mono" : "stereo"}${row.loop ? " loop" : ""}  from c${pad2(n)}${picks[row.id] ? "" : " (first on disk)"}`);
           takes += 1;
         } catch (error) {
-          console.error(`FAIL: ${row.id} c${pad2(n)}: ${error.message}`);
+          // An earlier run's take must not stay, unannounced, in place of the one that failed.
+          const earlier = existsSync(output);
+          if (earlier) unlinkSync(output);
+          console.error(`FAIL: ${row.id} c${pad2(n)}: ${error.message}${earlier ? `; removed the earlier ${relative(out, output)}` : ""}`);
           bad.push(`c${pad2(n)}`);
         }
       });
-      if (bad.length) {
-        failedRows.push(`${row.id} (${bad.join(", ")})`);
-        continue;
-      }
-      // Takes beyond the ones kept now (fewer picks than before) are stale.
+      // Takes beyond the ones kept now (fewer picks than before) are stale, failed row or not.
       const pattern = new RegExp(`^${name}_(\\d{2})\\.ogg$`, "u");
       for (const file of readdirSync(folder)) {
         const match = file.match(pattern);
         if (match && Number(match[1]) > chosen.length) unlinkSync(join(folder, file));
       }
+      if (bad.length) failedRows.push(`${row.id} (${bad.join(", ")})`);
     }
   } finally {
     rmSync(work, { recursive: true, force: true });
@@ -1024,6 +1049,17 @@ export async function main(argv = process.argv.slice(2)) {
       console.error(`To throw that set away and force a fresh one anyway, delete ${forceMark(out, row)} first.`);
       return 2;
     }
+  }
+  // A forced row's picks will name the fresh set, which nobody has heard yet.
+  let picked = {};
+  try {
+    if (forced.size) picked = JSON.parse(readFileSync(join(out, "picks.json"), "utf8"));
+  } catch {
+    // No picks yet, or picks --process will refuse with its own message.
+  }
+  for (const id of forced) {
+    if (!Array.isArray(picked?.[id])) continue;
+    console.error(`NOTE: picks.json picks ${id} ${picked[id].map((n) => `c${pad2(n)}`).join(", ")}. --force-id moves those candidates aside (kept in candidates/${id}/replaced-<time>/), and --process refuses ${id} until picks.json is updated from the fresh set.`);
   }
   if (base !== API_BASE) console.log(`Requests go to ${base} (ELEVENLABS_API_BASE), not ${API_BASE}.`);
   printPlan(sheet, args.sheet, out, surveyed);

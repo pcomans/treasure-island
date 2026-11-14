@@ -47,7 +47,7 @@
 
 import { spawn, spawnSync } from "node:child_process";
 import { createServer } from "node:http";
-import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
+import { chmodSync, cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, symlinkSync, utimesSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -242,13 +242,15 @@ function fixtureSheet() {
       shot: { what: "A short transient.", channels: 1, trim_start_db: -50, trim_end_db: -55, max_seconds: 0.3, fade_in_ms: 2, fade_out_ms: 40, peak_dbfs: -1 },
       bed: { what: "A loop.", channels: 1, trim_start_db: -90, trim_end_db: -90, loop_crossfade_ms: 150, peak_dbfs: -1 },
       bed_raw: { what: "A loop kept as generated.", channels: 1, trim_start_db: -90, trim_end_db: -90, loop_crossfade_ms: 0, peak_dbfs: -1 },
+      hit: { what: "A one-shot that starts at its impact.", channels: 1, trim_start_db: -12, trim_end_db: -60, max_seconds: null, fade_in_ms: 2, fade_out_ms: 40, peak_dbfs: -1 },
     },
-    events: { T1: "A test event.", T2: "Another test event.", T3: "A third test event." },
+    events: { T1: "A test event.", T2: "Another test event.", T3: "A third test event.", T4: "A fourth test event." },
     not_voiced: {},
     sounds: [
       { id: "shot", tier: 1, events: ["T1"], prompt: "High-quality foley one-shot: a single knock on a wooden door, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 2, candidates_per_take: 2, output: "test/shot_{take}.ogg", recipe: "shot" },
       { id: "bed", tier: 2, events: ["T2"], prompt: "Ambience: soft steady rain on a tin roof, recorded close.", duration_seconds: 3.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 3, output: "test/bed_{take}.ogg", recipe: "bed" },
       { id: "bed_raw", tier: 3, events: ["T3"], prompt: "Ambience: the steady low hum of a small electric fan, recorded close.", duration_seconds: 2.0, loop: true, prompt_influence: 0.35, keep_takes: 1, candidates_per_take: 1, output: "test/bed_raw_{take}.ogg", recipe: "bed_raw" },
+      { id: "hit", tier: 3, events: ["T4"], prompt: "High-quality foley impact: a heavy wooden crate dropped onto concrete, close-miked.", duration_seconds: 0.5, loop: false, prompt_influence: 0.5, keep_takes: 1, candidates_per_take: 1, output: "test/hit_{take}.ogg", recipe: "hit" },
     ],
   };
 }
@@ -377,13 +379,19 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   const again = await runTool(["--out", out, "--generate", "--sheet", fixturePath], { env, home });
   check(again.code === 0 && again.stdout.includes("Nothing to make") && api.requests.length === before, `a second run requested ${api.requests.length - before} more candidates (exit ${again.code})`);
 
+  // A candidate numbered past the row's count (made when it had more) goes aside
+  // with the rest, and a pick on the forced row is pointed out.
+  writeFileSync(join(out, "candidates", "shot", "shot.c07.wav"), MAGIC.wav);
+  writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [1] }));
   api.maxInFlight = 0;
   const forced = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--force-id", "shot"], { env, home });
   check(api.maxInFlight <= fixture.plan.concurrency, `${api.maxInFlight} requests ran at once; the plan allows ${fixture.plan.concurrency}`);
   const aside = asideOf(out)[0];
   check(forced.code === 0 && api.requests.length === before + shotGenerations, `--force-id shot made ${api.requests.length - before} requests (exit ${forced.code}); expected ${shotGenerations}`);
-  check(aside && listDir(join(out, "candidates", "shot", aside)).length === shotGenerations, "--force-id did not keep the replaced candidates aside");
+  check(aside && listDir(join(out, "candidates", "shot", aside)).length === shotGenerations + 1 && !existsSync(join(out, "candidates", "shot", "shot.c07.wav")),
+    `--force-id did not keep every earlier candidate aside, the one numbered past the row's count included: ${aside ? listDir(join(out, "candidates", "shot", aside)).join(", ") : "nothing aside"}`);
   check(!existsSync(join(out, "candidates", "shot", ".forced")), "a complete forced set is still marked as in progress");
+  check(forced.stderr.includes("NOTE: picks.json picks shot c01") && forced.stderr.includes("--process refuses shot"), `forcing a picked row did not point out that its picks now name an unheard set: ${forced.stderr.trim()}`);
 
   const printed = [first, again, forced].map((result) => result.all).join("\n");
   check(!printed.includes(key) && !logText(out).includes(key), "the API key was printed or logged");
@@ -647,10 +655,19 @@ function synthesize(file, filter, inputs) {
   if (!hasTool("ffmpeg") || !hasTool("ffprobe")) {
     failures.push("ffmpeg or ffprobe is not on PATH; --process and this check need them (.devcontainer/post-create.sh installs ffmpeg)");
   } else {
+    // A candidate from one aevalsrc expression of t, written like the API's
+    // one-shots (48 kHz, 16-bit, stereo). Quiet signals must not go through
+    // concat here: its low-resolution sample format turned them into silence.
+    const fromExpression = (file, expression, seconds) => synthesize(file, ["-ac", "2", "-c:a", "pcm_s16le"], [`aevalsrc='${expression}':s=48000:d=${seconds}`]);
+    const NEAR_SILENT = "0.0001*sin(2*PI*1000*t)*between(t,0.1,0.2)";
     const shotDir = join(out, "candidates", "shot");
     const bedDir = join(out, "candidates", "bed");
     const rawDir = join(out, "candidates", "bed_raw");
-    for (const dir of [shotDir, bedDir, rawDir]) mkdirSync(dir, { recursive: true });
+    const hitDir = join(out, "candidates", "hit");
+    for (const dir of [shotDir, bedDir, rawDir, hitDir]) mkdirSync(dir, { recursive: true });
+    // A quiet take (impact at -26 dBFS) behind a softer lead-in (-50 dBFS): the
+    // impact recipe must cut the lead-in, whatever the take's level.
+    fromExpression(join(hitDir, "hit.c01.wav"), "0.00316*(2*random(0)-1)*lt(t,0.2)+0.05*(2*random(1)-1)*between(t,0.2,0.25)", 0.6);
     // Two knocks in silence: a 0.12 s and a 0.2 s burst, so each take shows its source.
     for (const [n, lead, burst] of [[1, 0.3, 0.12], [2, 0.25, 0.2]]) {
       synthesize(join(shotDir, `shot.c0${n}.wav`), ["-filter_complex", "[1:a]aformat=channel_layouts=stereo[n];[0:a][n][2:a]concat=n=3:v=0:a=1[o]", "-map", "[o]", "-c:a", "pcm_s16le"],
@@ -691,34 +708,85 @@ function synthesize(file, filter, inputs) {
       const rawOut = decode(take("bed_raw_01.ogg"));
       check(Math.abs(rawOut.length - rawIn.length) <= 0.01 * rate, `bed_raw_01.ogg has ${rawOut.length} samples for ${rawIn.length} generated; a 0 ms crossfade must keep the loop as generated`);
       check(seamRatio(rawOut) <= 1.5, `bed_raw_01.ogg, kept as generated, jumps at its seam: ${seamRatio(rawOut).toFixed(2)} times its 99th-percentile step`);
+      const hit = decode(take("hit_01.ogg"));
+      const hitOnset = hit.findIndex((value) => Math.abs(value) > peakOf(hit) * 0.1) / rate;
+      check(hitOnset <= 0.01 && hit.length / rate < 0.12, `hit_01.ogg does not start at its impact: onset ${(hitOnset * 1000).toFixed(1)} ms, ${(hit.length / rate).toFixed(3)} s long (the lead-in is 0.2 s)`);
       const shortest = shots[1].length;
-      // Picks choose the takes; fewer picks remove the takes beyond them.
+      // Fewer picks than keep_takes: exactly the picked take, nothing padded from
+      // unpicked candidates, and the take beyond it removed.
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [2] }));
       const picked = await runTool(["--out", out, "--process", "--sheet", fixturePath, "--id", "shot"]);
-      check(picked.code === 0 && existsSync(take("shot_01.ogg")) && !existsSync(take("shot_02.ogg")), `picks.json {"shot": [2]} did not give one take (exit ${picked.code})`);
+      check(picked.code === 0 && existsSync(take("shot_01.ogg")) && !existsSync(take("shot_02.ogg")) && /test\/shot_01\.ogg .*from c02$/mu.test(picked.stdout) && !picked.stdout.includes("first on disk"),
+        `picks.json {"shot": [2]} for a row that keeps 2 did not give exactly that one take (exit ${picked.code}): ${picked.all.trim()}`);
       if (picked.code === 0) check(Math.abs(decode(take("shot_01.ogg")).length - shortest) <= 0.005 * rate, "the picked take did not come from candidate 2");
       writeFileSync(join(out, "picks.json"), JSON.stringify({ shot: [9] }));
       const badPick = await runTool(["--out", out, "--process", "--sheet", fixturePath]);
       check(badPick.code === 1 && badPick.stderr.includes("picks.json"), `an impossible pick was not refused (exit ${badPick.code})`);
       const peaks = shots.map((samples) => (20 * Math.log10(peakOf(samples))).toFixed(2));
-      passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, picks choose takes`);
+      passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), the impact recipe cut a quiet take's 0.2 s lead-in (onset ${(hitOnset * 1000).toFixed(1)} ms), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, one pick for a row of 2 gave exactly that take`);
 
-      // A near-silent candidate (a -66 dBFS tone, below the trim level) is named
-      // by id and candidate; the rest of its row and the other rows are still
-      // processed, and the run ends non-zero listing the failed row.
+      // A quiet take (a -55 dBFS burst) is trimmed from its own peak, so it is
+      // kept whole, not called silent.
+      const soft = join(scratch, "process-soft");
+      mkdirSync(join(soft, "candidates", "shot"), { recursive: true });
+      fromExpression(join(soft, "candidates", "shot", "shot.c01.wav"), "0.00178*(2*random(0)-1)*between(t,0.1,0.18)", 0.5);
+      cpSync(join(shotDir, "shot.c02.wav"), join(soft, "candidates", "shot", "shot.c02.wav"));
+      const softRun = await runTool(["--out", soft, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      const softTake = softRun.code === 0 ? decode(join(soft, "game", "test", "shot_01.ogg")) : new Float32Array(0);
+      const softSeconds = softTake.length / rate;
+      const softOnset = softTake.findIndex((value) => Math.abs(value) > peakOf(softTake) * 0.1) / rate;
+      check(softRun.code === 0 && softSeconds > 0.07 && softSeconds < 0.12 && softOnset <= 0.01,
+        `a quiet take (a -55 dBFS burst of 0.08 s) was not kept whole: exit ${softRun.code}, ${softSeconds.toFixed(3)} s, onset ${(softOnset * 1000).toFixed(1)} ms: ${softRun.stderr.trim()}`);
+      passes.push(`a quiet take (a -55 dBFS burst of 0.08 s) is trimmed from its own peak and kept whole (${softSeconds.toFixed(3)} s)`);
+
+      // A near-silent candidate (a -80 dBFS tone) is named by id and candidate;
+      // the rest of its row and the other rows are still processed, and the run
+      // ends non-zero listing the failed row.
       const quiet = join(scratch, "process-quiet");
       const quietShot = join(quiet, "candidates", "shot");
       mkdirSync(quietShot, { recursive: true });
-      synthesize(join(quietShot, "shot.c01.wav"), ["-filter_complex", "[0:a][1:a][2:a]concat=n=3:v=0:a=1[o]", "-map", "[o]", "-ac", "2", "-c:a", "pcm_s16le"],
-        ["anullsrc=r=48000:cl=mono:d=0.1", "aevalsrc=0.0005*sin(2*PI*1000*t):s=48000:d=0.1", "anullsrc=r=48000:cl=mono:d=0.3"]);
+      fromExpression(join(quietShot, "shot.c01.wav"), NEAR_SILENT, 0.5);
       cpSync(join(shotDir, "shot.c02.wav"), join(quietShot, "shot.c02.wav"));
-      for (const id of ["bed", "bed_raw"]) cpSync(join(out, "candidates", id), join(quiet, "candidates", id), { recursive: true });
+      for (const id of ["bed", "bed_raw", "hit"]) cpSync(join(out, "candidates", id), join(quiet, "candidates", id), { recursive: true });
       const quietRun = await runTool(["--out", quiet, "--process", "--sheet", fixturePath]);
       const quietTake = (name) => join(quiet, "game", "test", name);
       check(quietRun.code === 1 && quietRun.stderr.includes("shot c01: silent after trimming; pick another take or regenerate"), `a near-silent candidate was not named as silent by id and candidate (exit ${quietRun.code}): ${quietRun.stderr.trim()}`);
-      check(/failed rows: shot \(c01\)/u.test(quietRun.stderr), `the run did not end by listing the failed row: ${quietRun.stderr.trim()}`);
-      check(existsSync(quietTake("shot_02.ogg")) && existsSync(quietTake("bed_01.ogg")) && existsSync(quietTake("bed_raw_01.ogg")), "after the near-silent take, the rest of its row and the other rows were not processed");
-      passes.push("a near-silent candidate is named (shot c01, silent after trimming); its row's other take and the other rows are processed, and the run exits 1 listing the failed row");
+      check(/failed rows: shot \(c01\)$/mu.test(quietRun.stderr), `the run did not end by listing exactly the failed row: ${quietRun.stderr.trim()}`);
+      check(["shot_02.ogg", "bed_01.ogg", "bed_raw_01.ogg", "hit_01.ogg"].every((name) => existsSync(quietTake(name))), "after the near-silent take, the rest of its row and the other rows were not processed");
+      passes.push("a near-silent candidate (-80 dBFS) is named (shot c01, silent after trimming); its row's other take and the other rows are processed, and the run exits 1 listing the failed row");
+
+      // A take that fails takes its earlier output with it, named in the FAIL
+      // line, and a failed row keeps no stale takes either.
+      const replace = join(scratch, "process-replace");
+      const replaceShot = join(replace, "candidates", "shot");
+      const replaceTake = (name) => join(replace, "game", "test", name);
+      mkdirSync(replaceShot, { recursive: true });
+      for (const n of [1, 2]) cpSync(join(shotDir, `shot.c0${n}.wav`), join(replaceShot, `shot.c0${n}.wav`));
+      const before = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(before.code === 0 && existsSync(replaceTake("shot_01.ogg")) && existsSync(replaceTake("shot_02.ogg")), `the first --process of the replace case failed (exit ${before.code})`);
+      fromExpression(join(replaceShot, "shot.c02.wav"), NEAR_SILENT, 0.5);
+      const anHourAgo = new Date(Date.now() - 3600_000);
+      for (const n of [1, 2]) utimesSync(join(replaceShot, `shot.c0${n}.wav`), anHourAgo, anHourAgo);
+      writeFileSync(join(replace, "picks.json"), JSON.stringify({ shot: [2] }));
+      const after = await runTool(["--out", replace, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(after.code === 1 && after.stderr.includes("shot c02: silent after trimming") && after.stderr.includes("removed the earlier game/test/shot_01.ogg"), `a failed take did not remove and name its earlier output (exit ${after.code}): ${after.stderr.trim()}`);
+      check(!existsSync(replaceTake("shot_01.ogg")) && !existsSync(replaceTake("shot_02.ogg")), `the failed row left earlier takes in game/: ${listDir(join(replace, "game", "test")).join(", ")}`);
+      passes.push("a take that fails removes its earlier output and says so; a failed row keeps no stale takes");
+
+      // Picks made before a candidate was made again (by --force-id) name an
+      // earlier set: the row is refused until picks.json is updated.
+      const stale = join(scratch, "process-stale-picks");
+      const staleShot = join(stale, "candidates", "shot");
+      mkdirSync(staleShot, { recursive: true });
+      for (const n of [1, 2]) cpSync(join(shotDir, `shot.c0${n}.wav`), join(staleShot, `shot.c0${n}.wav`));
+      writeFileSync(join(stale, "picks.json"), JSON.stringify({ shot: [2, 1] }));
+      utimesSync(join(stale, "picks.json"), anHourAgo, anHourAgo);
+      const twoHoursAgo = new Date(Date.now() - 7200_000);
+      utimesSync(join(staleShot, "shot.c01.wav"), twoHoursAgo, twoHoursAgo);
+      const staleRun = await runTool(["--out", stale, "--process", "--sheet", fixturePath, "--id", "shot"]);
+      check(staleRun.code === 1 && staleRun.stderr.includes("picks.json is older than c02") && !existsSync(join(stale, "game", "test", "shot_01.ogg")),
+        `picks older than a picked candidate were used (exit ${staleRun.code}): ${staleRun.all.trim()}`);
+      passes.push("picks.json older than a picked candidate (made again after the pick) refuses the row instead of using an unheard take");
     }
   }
 }

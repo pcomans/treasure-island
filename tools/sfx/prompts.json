@@ -6,7 +6,10 @@
     "Prompts follow ElevenLabs' guidance (checked 2026-11-14). Each prompt is one sound, described as an action, setting and performance in a short sentence of at most 450 characters, with recording-quality words. A prompt never asks for a number of repetitions (one footstep per generation), and a sequence is split into several prompts. The length, looping and prompt influence are set per row, not described in the text. Prompts use US English (tire, curb, gasoline), as sound libraries word them.",
     "Credits: credits_per_second for each second of the set duration, for every candidate generated (keep_takes x candidates_per_take). The dry run of tools/generate-sfx prints them per row, per tier and in total.",
     "prompt_influence: 0.5 to 0.6 where takes must match each other or follow a narrow brief (the three engine loops, single footsteps, interface clicks); 0.35 to 0.45 where natural variety helps (impacts, ambience). The API default is 0.3.",
-    "Event ids (P player, V vehicle, B ball, A ambient, U interface) follow the 2026-11-14 code inventory of f72d6b21. The hook named with each is where its sound would be played. Each event is voiced by at least one row or listed under not_voiced with the reason."
+    "Event ids (P player, V vehicle, B ball, A ambient, U interface) follow the 2026-11-14 code inventory of f72d6b21. The hook named with each is where its sound would be played. Each event is voiced by at least one row or listed under not_voiced with the reason.",
+    "The owner auditioned the first generation on 2026-11-14. The picks in picks.json (in the private output folder) are final for the rows they name, so those rows' prompts and settings stay as they were and their candidates stay valid. A row may keep fewer takes than keep_takes; the game then gets only the picked ones. keep_takes stays the most a row keeps, so candidate numbers and picks keep their meaning. Rows whose candidates were all rejected are reworded, with the owner's words in their notes, and are made again with --force-id.",
+    "Coins have no sounds of their own and no coin layer in the chest's impacts: the owner dropped every coin sound after hearing them (2026-11-14). The accepted lid slam and chest rattle keep theirs.",
+    "Recipe trim levels are dB below each candidate's own peak: --process brings a candidate's peak to full scale before trimming, so a quiet take is trimmed like a loud one. A candidate whose peak is at -70 dBFS or below is silent."
   ],
   "model_id": "eleven_text_to_sound_v3",
   "credits_per_second": 40,
@@ -40,20 +43,20 @@
       "fade_out_ms": 40,
       "peak_dbfs": -1
     },
-    "oneshot_short": {
-      "what": "A small ringing one-shot (coins). As oneshot_step, with room for the ring.",
-      "channels": 1,
-      "trim_start_db": -50,
-      "trim_end_db": -55,
-      "max_seconds": 0.5,
-      "fade_in_ms": 2,
-      "fade_out_ms": 60,
-      "peak_dbfs": -1
-    },
     "oneshot": {
       "what": "A positional one-shot (impact, door, splash). Cut the silence at both ends and fade out the tail.",
       "channels": 1,
       "trim_start_db": -50,
+      "trim_end_db": -60,
+      "max_seconds": null,
+      "fade_in_ms": 2,
+      "fade_out_ms": 80,
+      "peak_dbfs": -1
+    },
+    "oneshot_impact": {
+      "what": "A one-shot that must start at its impact, played the moment something lands. Cut everything before the first sample within 12 dB of the take's peak, so a softer lead-in never delays the hit, then fade out the tail.",
+      "channels": 1,
+      "trim_start_db": -12,
       "trim_end_db": -60,
       "max_seconds": null,
       "fade_in_ms": 2,
@@ -178,6 +181,9 @@
     "U10": "F3 runtime evidence toggle (main.gd)"
   },
   "not_voiced": {
+    "P2": "Dropped by the owner after hearing it (2026-11-14): \"I think it would get really annoying\" (coins jostling on every running step).",
+    "P3": "Dropped by the owner after hearing it (2026-11-14): \"we don't need this\".",
+    "P4": "Dropped by the owner after hearing it (2026-11-14): \"we don't need this\".",
     "A8": "Clouds make no sound.",
     "A9": "Nothing there moves in the game; a bridge or city hum would be a sound for something the game does not model (owner 2026-11-14).",
     "V27": "Nothing detects a car in a shrub (no hook); left for a pass that adds one.",
@@ -215,32 +221,18 @@
       "notes": "Bare land and grass areas: the two surface sets the ground data already tells apart."
     },
     {
-      "id": "coins_jostle",
-      "tier": 1,
-      "events": ["P2"],
-      "prompt": "High-quality, professionally recorded foley one-shot: a heap of gold coins inside a closed wooden treasure chest given a short sharp jolt, a quick bright jingle of coins muffled by the wood, close-miked.",
-      "duration_seconds": 0.5,
-      "loop": false,
-      "prompt_influence": 0.5,
-      "keep_takes": 6,
-      "candidates_per_take": 2,
-      "output": "player/coins_jostle_{take}.ogg",
-      "recipe": "oneshot_short",
-      "notes": "Layered on running footsteps above 6 m/s, at the coin hop's strength."
-    },
-    {
       "id": "landing",
       "tier": 1,
       "events": ["P6"],
-      "prompt": "High-quality, professionally recorded foley impact: a heavy iron-strapped wooden chest full of gold coins dropped upright onto pavement from knee height, a solid wooden thump with the coins clinking inside, close-miked.",
+      "prompt": "High-quality, professionally recorded foley impact: a large, heavy iron-strapped wooden treasure chest, the size of a steamer trunk, dropped upright onto pavement from knee height, a deep, solid, weighty wooden thud, close-miked.",
       "duration_seconds": 1.0,
       "loop": false,
-      "prompt_influence": 0.45,
-      "keep_takes": 4,
+      "prompt_influence": 0.5,
+      "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "player/landing_{take}.ogg",
-      "recipe": "oneshot",
-      "notes": "Volume follows the landing's impact; the fast drop has its own heavier slam."
+      "recipe": "oneshot_impact",
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"sounds like a tiny chest\"): a large, heavy chest, no coins, starting at the impact. Volume follows the landing's impact; the fast drop has its own heavier slam."
     },
     {
       "id": "jet_start",
@@ -343,15 +335,15 @@
       "id": "car_engine_stop",
       "tier": 1,
       "events": ["V2"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 with a 2.5-liter four-cylinder gasoline engine idling and then switched off: the engine shudders briefly and stops, leaving quiet, recorded outside near the exhaust.",
-      "duration_seconds": 2.0,
+      "prompt": "High-quality recording of the idling 2.5-liter four-cylinder gasoline engine of a 2014 Toyota RAV4 being switched off, its low hum quickly dying away into silence, recorded outside near the exhaust.",
+      "duration_seconds": 1.5,
       "loop": false,
-      "prompt_influence": 0.5,
-      "keep_takes": 2,
-      "candidates_per_take": 2,
+      "prompt_influence": 0.6,
+      "keep_takes": 1,
+      "candidates_per_take": 3,
       "output": "car/engine_stop_{take}.ogg",
       "recipe": "oneshot",
-      "notes": "Starts at idle, so it takes over from the idle loop as that fades out."
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"I don't know what this is supposed to sound like, but all of these are kinda weird and bad\"): one plain, short event, an idling engine switched off and dying away, with no steps in the prompt. It takes over from the idle loop as that fades out; one take is enough for a sound heard once per exit."
     },
     {
       "id": "car_engine_idle_loop",
@@ -385,15 +377,15 @@
       "id": "car_engine_high_loop",
       "tier": 1,
       "events": ["V3", "V4"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 with a 2.5-liter four-cylinder gasoline engine held at high revs under full throttle on asphalt, a steady strained engine roar with tire noise, recorded from outside following behind the vehicle.",
+      "prompt": "High-quality recording of a 2014 Toyota RAV4 with a 2.5-liter four-cylinder gasoline engine cruising on a highway in top gear, held at one constant high engine speed, an even, unchanging high engine drone with steady tire and wind noise, recorded from outside following behind the vehicle.",
       "duration_seconds": 8.0,
       "loop": true,
-      "prompt_influence": 0.6,
+      "prompt_influence": 0.7,
       "keep_takes": 1,
       "candidates_per_take": 3,
       "output": "car/engine_high_loop_{take}.ogg",
       "recipe": "loop_mono",
-      "notes": "Engine, three of three. Reverse and coasting reuse the same loops at lower gain."
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"these are all sounds of an engine revving\"): one constant high engine speed, held, described positively, since ElevenLabs' guidance gives no support for saying what a sound must not do. The game crossfades and pitches it, so it must hold one steady pitch. Engine, three of three. Reverse and coasting reuse the same loops at lower gain."
     },
     {
       "id": "tyre_skid_loop",
@@ -552,15 +544,15 @@
       "id": "ball_kick_hard",
       "tier": 1,
       "events": ["B1", "P16", "V28"],
-      "prompt": "High-quality, professionally recorded foley one-shot: a size 5 leather soccer ball struck hard by a shoe on a grass field, a sharp punchy thwack, close-miked outdoors.",
+      "prompt": "High-quality, professionally recorded foley one-shot: a loud, powerful kick of a size 5 leather soccer ball struck hard by a shoe, a sharp, punchy, full-bodied thwack recorded very close on a grass field.",
       "duration_seconds": 0.5,
       "loop": false,
-      "prompt_influence": 0.5,
+      "prompt_influence": 0.6,
       "keep_takes": 3,
       "candidates_per_take": 2,
       "output": "ball/kick_hard_{take}.ogg",
       "recipe": "oneshot_step",
-      "notes": "Hard kicks and a car's push, by the speed added."
+      "notes": "Reworded after the owner's audition (2026-11-14): only candidate 2 was usable and four of six were near-silent, so the prompt asks for a loud, close, punchy kick. Hard kicks and a car's push, by the speed added."
     },
     {
       "id": "goal_net",
@@ -661,34 +653,6 @@
       "notes": "Volume from the lid's closing speed."
     },
     {
-      "id": "coin_spill",
-      "tier": 2,
-      "events": ["P3", "P5"],
-      "prompt": "High-quality, professionally recorded foley one-shot: a single gold coin flipped out over the wooden rim of a treasure chest, a bright light metallic tink, close-miked.",
-      "duration_seconds": 0.5,
-      "loop": false,
-      "prompt_influence": 0.5,
-      "keep_takes": 3,
-      "candidates_per_take": 2,
-      "output": "player/coin_spill_{take}.ogg",
-      "recipe": "oneshot_short",
-      "notes": "Coins thrown out at a run, a jet lift-off (P5) or a hard landing."
-    },
-    {
-      "id": "coin_ground",
-      "tier": 2,
-      "events": ["P4"],
-      "prompt": "High-quality, professionally recorded foley one-shot: a single heavy gold coin dropped onto asphalt, a bright metallic ting on impact with a short rattling bounce, close-miked outdoors.",
-      "duration_seconds": 0.5,
-      "loop": false,
-      "prompt_influence": 0.5,
-      "keep_takes": 6,
-      "candidates_per_take": 2,
-      "output": "player/coin_ground_{take}.ogg",
-      "recipe": "oneshot_short",
-      "notes": "Up to about 10 contacts a second: rate-limited, never the same take twice running."
-    },
-    {
       "id": "fastdrop_air_loop",
       "tier": 2,
       "events": ["P8"],
@@ -706,15 +670,15 @@
       "id": "fastdrop_impact",
       "tier": 2,
       "events": ["P7"],
-      "prompt": "High-quality, professionally recorded foley impact: a heavy iron-strapped wooden chest full of gold coins slamming upright into hard ground from a great height, a deep powerful thud with a gritty crunch and the coins crashing inside, close-miked.",
+      "prompt": "High-quality, professionally recorded foley impact: a large, very heavy iron-strapped wooden treasure chest, the size of a steamer trunk, slamming upright into hard ground from a great height, a deep, powerful, booming thud with a gritty crunch, close-miked.",
       "duration_seconds": 1.5,
       "loop": false,
-      "prompt_influence": 0.45,
+      "prompt_influence": 0.5,
       "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "player/fastdrop_impact_{take}.ogg",
-      "recipe": "oneshot",
-      "notes": "With the dust poof."
+      "recipe": "oneshot_impact",
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"The chest is too small and the coins are unnecessary\"): a big, heavy chest slamming down, no coins, starting at the impact. With the dust poof."
     },
     {
       "id": "recovery_whoosh",
@@ -762,15 +726,15 @@
       "id": "car_jump_landing",
       "tier": 2,
       "events": ["V8", "V14"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 landing hard on its wheels after a jump, a heavy thud and suspension bang with a creak of the body, recorded close outdoors.",
+      "prompt": "High-quality recording of a 2014 Toyota RAV4 slamming down hard on its wheels at the end of a jump, beginning right at the impact with a heavy thud and suspension bang, the body creaking as it settles, recorded close outdoors.",
       "duration_seconds": 1.5,
       "loop": false,
-      "prompt_influence": 0.45,
-      "keep_takes": 3,
+      "prompt_influence": 0.5,
+      "keep_takes": 2,
       "candidates_per_take": 2,
       "output": "car/jump_landing_{take}.ogg",
-      "recipe": "oneshot",
-      "notes": "Also the end of a self-righting roll (V14), which drops the car back onto its wheels."
+      "recipe": "oneshot_impact",
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"The impact sound is too late\"): the impact is the first thing heard, by the wording and by the oneshot_impact recipe, which cuts everything before the hit. Also the end of a self-righting roll (V14), which drops the car back onto its wheels."
     },
     {
       "id": "tyre_gravel_loop",
@@ -790,15 +754,15 @@
       "id": "riprap_rumble_loop",
       "tier": 2,
       "events": ["V17"],
-      "prompt": "High-quality recording of a 2014 Toyota RAV4 rolling slowly down large loose shoreline rocks, a continuous heavy rumble with rocks knocking and grinding under the tires, recorded close outdoors.",
+      "prompt": "High-quality recording of a 2014 Toyota RAV4 crawling slowly over a jumble of large boulders on a rocky seawall, its heavy tires crunching and thudding onto big rocks with a deep, low rumble and the weight of the vehicle shifting, recorded close outdoors.",
       "duration_seconds": 4.0,
       "loop": true,
-      "prompt_influence": 0.45,
+      "prompt_influence": 0.5,
       "keep_takes": 1,
-      "candidates_per_take": 2,
+      "candidates_per_take": 3,
       "output": "car/riprap_rumble_loop_{take}.ogg",
       "recipe": "loop_mono",
-      "notes": "On the shore rocks (the cars' riprap ground)."
+      "notes": "Reworded after the owner's audition (2026-11-14, all rejected: \"These all sound weird as if stones are being stirred in a pot\"): heavy tires over big boulders, weight and a low rumble. On the shore rocks (the cars' riprap ground)."
     },
     {
       "id": "car_sinking",
