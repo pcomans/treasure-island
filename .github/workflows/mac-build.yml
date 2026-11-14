@@ -1,26 +1,30 @@
 # Builds the Mac app on every push to main with tools/build-mac.sh (the same
 # script as in the devcontainer), signs it with the owner's Developer ID and has
-# Apple notarize it, launches it on an Apple Silicon Mac to check the island
-# loads, then publishes it as a new GitHub Release of its own, marked latest, so
-# this fixed link always gets the newest build:
+# Apple notarize it once the signing settings below exist, launches it on an
+# Apple Silicon Mac to check the island loads, then publishes it as a new GitHub
+# Release of its own, marked latest, so this fixed link always gets the newest
+# build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03; signing and notarization owner-requested 2026-11-07.
-# Run it by hand from the Actions tab (workflow_dispatch) to test it on a branch;
-# only main publishes.
+# Owner-approved 2026-11-03; signing and notarization owner-requested 2026-11-07,
+# the Apple ID route 2026-11-14. Only main signs and publishes. A run started by
+# hand (workflow_dispatch) on another branch builds the ad-hoc app and checks it
+# on Apple Silicon, as before, and skips both.
 #
 # Signing uses only Apple's own tools on the macOS runner (security, codesign,
-# xcrun notarytool and stapler, ditto). The sign job runs in the GitHub
-# Environment `mac-signing` (Settings -> Environments), which the owner creates
-# with Required reviewers = the owner and Deployment branches = main only, so
-# each signing run waits for the owner's approval and other branches never see
-# the key. To test a feature branch, add it to the deployment branches for that
-# run and remove it afterwards. Environment secrets in the `mac-signing`
-# environment, each set with gh from a pipe rather than the clipboard:
+# xcrun notarytool and stapler, ditto). The sign job runs only on main, in the
+# GitHub Environment `mac-signing` (Settings -> Environments), whose deployment
+# branch rule admits only main too. Required reviewers on it are optional: with
+# them every Mac build on main waits for an approval, signed or not, because the
+# job has to enter the environment to see whether its secrets exist. Keep these
+# secrets in the environment only: a repository secret of the same name reaches
+# every branch. Set each with gh, from a pipe or gh's own prompt rather than the
+# clipboard. The certificate:
 #   MACOS_CERTIFICATE_P12_BASE64  the "Developer ID Application" certificate with
 #                                 its private key, exported from Keychain Access as .p12:
 #     base64 -i cert.p12 | gh secret set MACOS_CERTIFICATE_P12_BASE64 --env mac-signing -R pcomans/treasure-island
 #   MACOS_CERTIFICATE_PASSWORD    the password chosen for that .p12 export (gh prompts):
 #     gh secret set MACOS_CERTIFICATE_PASSWORD --env mac-signing -R pcomans/treasure-island
+# and one notarization credential. Preferred, an App Store Connect team API key:
 #   APPSTORE_API_KEY_ID           an App Store Connect team API key (Users and
 #   APPSTORE_API_ISSUER_ID        Access -> Integrations -> Team Keys, Developer
 #   APPSTORE_API_KEY_P8_BASE64    role): its Key ID, the Issuer ID shown above the
@@ -28,16 +32,34 @@
 #     gh secret set APPSTORE_API_KEY_ID --env mac-signing -R pcomans/treasure-island
 #     gh secret set APPSTORE_API_ISSUER_ID --env mac-signing -R pcomans/treasure-island
 #     base64 -i AuthKey_<id>.p8 | gh secret set APPSTORE_API_KEY_P8_BASE64 --env mac-signing -R pcomans/treasure-island
-# and one variable, not a secret, so logs show it unmasked (environment or
+# Otherwise the team's Apple ID with an app-specific password (account.apple.com
+# -> Sign-In and Security -> App-Specific Passwords; changing the Apple Account
+# password revokes them all). Both are secrets: the Apple ID is never printed.
+#   APPLE_ID                      the Apple ID (e-mail) of the team's developer account:
+#     gh secret set APPLE_ID --env mac-signing -R pcomans/treasure-island
+#   APPLE_APP_SPECIFIC_PASSWORD   the app-specific password (gh prompts):
+#     gh secret set APPLE_APP_SPECIFIC_PASSWORD --env mac-signing -R pcomans/treasure-island
+# And one variable, not a secret, so logs show it unmasked (environment or
 # repository level; a secret of the same name still works as a fallback):
 #   APPLE_TEAM_ID                 the 10-character Team ID (developer.apple.com ->
 #                                 Account -> Membership details):
 #     gh variable set APPLE_TEAM_ID --env mac-signing --body <TEAMID> -R pcomans/treasure-island
-# With none of these set, the build stays ad-hoc signed and is not notarized (a
-# warning says so) and still publishes. With any of them set, all six are
-# required (a missing one fails the run, as with a misnamed certificate secret)
-# and any signing or notarization failure fails the run. The publish job uses
-# GITHUB_TOKEN.
+# The sign job's first step decides from which of the secrets are set, never
+# their values:
+#   none of them                  ad-hoc signed, not notarized, as before, with a
+#                                 warning; publishes (APPLE_TEAM_ID alone changes nothing)
+#   certificate + API key         Developer ID signed, notarized with the API key
+#                                 (also when the Apple ID pair is set as well)
+#   certificate + Apple ID pair   Developer ID signed, notarized with the Apple ID
+#   certificate alone             fails: a Developer ID app that is not notarized is
+#                                 still blocked by Gatekeeper after a download, and
+#                                 the owner's ID would vouch for a build Apple has not
+#                                 scanned, so no signed-only build is published
+#   a set only partly filled, a credential without the certificate, or the
+#   certificate without a valid APPLE_TEAM_ID: fails, naming what is missing
+# Any signing, notarization or stapling failure fails the run too. A failed run
+# publishes nothing, so the previous build stays at the fixed link. The publish
+# job uses GITHUB_TOKEN.
 #
 # The sounds come from the owner's private audio repository (owner, 2026-11-14):
 # its URL is the repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and
@@ -161,17 +183,24 @@ jobs:
   sign:
     name: Sign and notarize
     needs: build
+    # Only main. The signing secrets live in the environment below, whose branch
+    # rule admits only main as well. A branch run skips this job, so it never
+    # asks for the environment, and verify checks the ad-hoc build instead.
+    if: github.ref == 'refs/heads/main'
     runs-on: macos-26
     timeout-minutes: 60
-    # The signing secrets live only in this environment (see the header): it
-    # needs the owner's approval and admits only main.
     environment: mac-signing
     concurrency:
       group: mac-sign-${{ github.ref }}
       cancel-in-progress: true
     outputs:
+      # "adhoc" or "notarized"; the route is "api-key", "apple-id" or "none".
+      mode: ${{ steps.mode.outputs.mode }}
+      route: ${{ steps.mode.outputs.route }}
       # "true" only once Apple accepted the app and its ticket is stapled.
       notarized: ${{ steps.notarize.outputs.notarized || 'false' }}
+    # Each secret reaches only the run step that uses it, through that step's env:
+    # never the job's env, a command line or a step that runs an action.
     steps:
       - name: Check out the entitlements file only
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -183,41 +212,72 @@ jobs:
         env:
           GIT_LFS_SKIP_SMUDGE: "1"
 
-      - name: Check for the signing secrets
+      - name: Choose the signing mode
         id: mode
+        # This step sees only whether each secret is set ("true" or "false"),
+        # never a value. APPLE_TEAM_ID is a variable (a secret of that name is the
+        # fallback).
         env:
-          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
-          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          HAS_MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 != '' }}
+          HAS_MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD != '' }}
+          HAS_APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID != '' }}
+          HAS_APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID != '' }}
+          HAS_APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 != '' }}
+          HAS_APPLE_ID: ${{ secrets.APPLE_ID != '' }}
+          HAS_APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD != '' }}
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
-          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
-          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
-          APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
-        # Reports only which are set, never the secrets' values. APPLE_TEAM_ID is
-        # a variable (a secret of that name is the fallback).
+        # The decision table is in the header.
         run: |
-          missing=""
-          present=""
-          for name in MACOS_CERTIFICATE_P12_BASE64 MACOS_CERTIFICATE_PASSWORD APPLE_TEAM_ID APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64; do
-            if [ -n "${!name}" ]; then present="${present} ${name}"; else missing="${missing} ${name}"; fi
+          # Prints "none", "all", or "missing:" and the names that are not set.
+          filled() {
+            local name has count=0 missing=""
+            for name in "$@"; do
+              has="HAS_${name}"
+              if [ "${!has}" = "true" ]; then count=$((count + 1)); else missing="${missing} ${name}"; fi
+            done
+            if [ "${count}" -eq 0 ]; then echo none; elif [ -z "${missing}" ]; then echo all; else echo "missing:${missing}"; fi
+          }
+          certificate="$(filled MACOS_CERTIFICATE_P12_BASE64 MACOS_CERTIFICATE_PASSWORD)"
+          api_key="$(filled APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64)"
+          apple_id="$(filled APPLE_ID APPLE_APP_SPECIFIC_PASSWORD)"
+          partial=0
+          for set in "certificate=${certificate}" "App Store Connect API key=${api_key}" "Apple ID notarization=${apple_id}"; do
+            case "${set#*=}" in
+              missing:*) echo "::error::The ${set%%=*} is only partly set; missing:${set#*=missing:}. Set all of its secrets in the mac-signing environment, or none."; partial=1 ;;
+            esac
           done
-          if [ -z "${present}" ]; then
-            echo "::warning::No signing secrets or APPLE_TEAM_ID variable are set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
-            echo "sign=false" >> "${GITHUB_OUTPUT}"
-            exit 0
+          [ "${partial}" -eq 0 ] || exit 1
+
+          if [ "${certificate}" = none ]; then
+            if [ "${api_key}" = all ] || [ "${apple_id}" = all ]; then
+              echo "::error::A notarization credential is set but the certificate (MACOS_CERTIFICATE_P12_BASE64, MACOS_CERTIFICATE_PASSWORD) is not. Its secrets are probably misnamed; check their exact names in the mac-signing environment. Refusing to publish an unsigned build while signing is half configured."
+              exit 1
+            fi
+            mode=adhoc
+            route=none
+            line="ad-hoc signed, not notarized (no signing secrets are set in the mac-signing environment)"
+            echo "::warning::No signing secrets are set, so this build stays ad-hoc signed and is NOT notarized. Add the secrets listed at the top of mac-build.yml to sign and notarize it."
+          else
+            if ! [[ "${APPLE_TEAM_ID}" =~ ^[A-Z0-9]{10}$ ]]; then
+              echo "::error::The certificate is set, but APPLE_TEAM_ID (\"${APPLE_TEAM_ID}\") is not a 10-character Team ID (capital letters and digits). Set it as a variable of the mac-signing environment."
+              exit 1
+            fi
+            if [ "${api_key}" = all ]; then
+              route=api-key
+              line="sign with the Developer ID and notarize; credential route: App Store Connect API key"
+              [ "${apple_id}" = none ] || echo "::notice::Both notarization credentials are set; the App Store Connect API key is used and the Apple ID pair is ignored."
+            elif [ "${apple_id}" = all ]; then
+              route=apple-id
+              line="sign with the Developer ID and notarize; credential route: Apple ID with an app-specific password"
+            else
+              echo "::error::The certificate is set but no notarization credential is. Add APPSTORE_API_KEY_ID, APPSTORE_API_ISSUER_ID and APPSTORE_API_KEY_P8_BASE64, or APPLE_ID and APPLE_APP_SPECIFIC_PASSWORD. A Developer ID build that is not notarized is still blocked by Gatekeeper after a download, so none is published; to go back to ad-hoc builds, delete the certificate secrets."
+              exit 1
+            fi
+            mode=notarized
           fi
-          if [ -z "${MACOS_CERTIFICATE_P12_BASE64}" ]; then
-            echo "::error::Some of the signing settings are set (${present# }) but MACOS_CERTIFICATE_P12_BASE64 is not. The certificate secret is probably misnamed; check its exact name. Refusing to publish an unsigned build while signing is half configured."
-            exit 1
-          fi
-          if [ -n "${missing}" ]; then
-            echo "::error::MACOS_CERTIFICATE_P12_BASE64 is set, so the build must be signed and notarized, but these secrets or variables are missing:${missing}"
-            exit 1
-          fi
-          if ! [[ "${APPLE_TEAM_ID}" =~ ^[A-Z0-9]{10}$ ]]; then
-            echo "::error::APPLE_TEAM_ID (${APPLE_TEAM_ID}) is not a 10-character Team ID (capital letters and digits)."
-            exit 1
-          fi
-          echo "sign=true" >> "${GITHUB_OUTPUT}"
+          echo "mode=${mode}" >> "${GITHUB_OUTPUT}"
+          echo "route=${route}" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Mac signing mode::Chosen: ${line}"
 
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
@@ -226,27 +286,52 @@ jobs:
           path: in
 
       - name: Pass the ad-hoc build through unchanged (no signing secrets)
-        if: steps.mode.outputs.sign != 'true'
+        if: steps.mode.outputs.mode == 'adhoc'
         run: |
           mkdir out
           cp in/treasure-island-mac-*.zip out/
           ls -l out
 
       - name: Sign with the Developer ID (hardened runtime)
-        if: steps.mode.outputs.sign == 'true'
+        if: steps.mode.outputs.mode == 'notarized'
         env:
           MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
           MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
           APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
           KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
           CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
-        # A throwaway keychain holds the certificate for this step only; the last
-        # step deletes it however the job ends. The Godot export has one Mach-O
-        # executable (MoltenVK is linked in statically) and no nested code today;
-        # nested libraries or frameworks, as a GDExtension would add, are signed
-        # first, deepest first, instead of with codesign --deep, which Apple
-        # advises against for signing. Entitlements: tools/mac-entitlements.plist.
+        # A throwaway keychain holds the certificate for this step only, and this
+        # step deletes it however it ends (the last step does so again). The
+        # certificate's password and the keychain's reach security(1) through its
+        # standard input (security -i), never a command line. The Godot export has
+        # one Mach-O executable (MoltenVK is linked in statically) and no nested
+        # code today; nested libraries or frameworks, as a GDExtension would add,
+        # are signed first, deepest first, instead of with codesign --deep, which
+        # Apple advises against for signing. Entitlements: tools/mac-entitlements.plist.
         run: |
+          # One argument for a `security -i` command line. security splits each line
+          # itself: inside double quotes a backslash makes the next character literal
+          # (split_line in SecurityTool/macOS/security.c,
+          # https://github.com/apple-oss-distributions/Security).
+          quote() {
+            local in="$1" out="" c i
+            for ((i = 0; i < ${#in}; i++)); do
+              c="${in:i:1}"
+              case "${c}" in '\' | '"') out+="\\${c}" ;; *) out+="${c}" ;; esac
+            done
+            printf '"%s"' "${out}"
+          }
+          # One command per run: security -i exits with its last command's status.
+          keychain_command() { printf '%s\n' "$1" | security -i; }
+          cleanup() {
+            rm -f "${CERTIFICATE_FILE}"
+            if [ -e "${KEYCHAIN}" ]; then security delete-keychain "${KEYCHAIN}" || rm -f "${KEYCHAIN}"; fi
+          }
+          trap cleanup EXIT
+          case "${MACOS_CERTIFICATE_PASSWORD}" in
+            *$'\n'* | *$'\r'*) echo "::error::MACOS_CERTIFICATE_PASSWORD contains a line break. Set it again without one (gh secret set prompts for it)."; exit 1 ;;
+          esac
+
           zips=(in/treasure-island-mac-*.zip)
           [ "${#zips[@]}" -eq 1 ] || { echo "::error::expected one zip from the build job, found ${#zips[@]}"; exit 1; }
           ditto -x -k "${zips[0]}" work
@@ -257,14 +342,17 @@ jobs:
 
           keychain_password="$(uuidgen)"
           echo "::add-mask::${keychain_password}"
-          security create-keychain -p "${keychain_password}" "${KEYCHAIN}"
+          keychain_command "create-keychain -p $(quote "${keychain_password}") $(quote "${KEYCHAIN}")"
           security set-keychain-settings -lut 3600 "${KEYCHAIN}"
-          security unlock-keychain -p "${keychain_password}" "${KEYCHAIN}"
-          printf '%s' "${MACOS_CERTIFICATE_P12_BASE64}" | tr -d ' \r\n' | base64 --decode > "${CERTIFICATE_FILE}"
-          security import "${CERTIFICATE_FILE}" -k "${KEYCHAIN}" -f pkcs12 -P "${MACOS_CERTIFICATE_PASSWORD}" -T /usr/bin/codesign >/dev/null
+          keychain_command "unlock-keychain -p $(quote "${keychain_password}") $(quote "${KEYCHAIN}")"
+          # Only the decoded key file is private to this user (the app's own files keep
+          # the runner's usual permissions).
+          ( umask 077 && printf '%s' "${MACOS_CERTIFICATE_P12_BASE64}" | tr -d ' \r\n' | base64 --decode > "${CERTIFICATE_FILE}" )
+          keychain_command "import $(quote "${CERTIFICATE_FILE}") -k $(quote "${KEYCHAIN}") -f pkcs12 -P $(quote "${MACOS_CERTIFICATE_PASSWORD}") -T /usr/bin/codesign" >/dev/null \
+            || { echo "::error::Importing the certificate failed (security's message is above). Check MACOS_CERTIFICATE_PASSWORD, and that MACOS_CERTIFICATE_P12_BASE64 is the base64 of the exported .p12."; exit 1; }
           rm -f "${CERTIFICATE_FILE}"
           # Lets codesign use the key without a permission dialog.
-          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "${keychain_password}" "${KEYCHAIN}" >/dev/null
+          keychain_command "set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $(quote "${keychain_password}") $(quote "${KEYCHAIN}")" >/dev/null
           # codesign finds the intermediate certificates through the search list.
           existing=()
           while IFS= read -r line; do
@@ -303,22 +391,164 @@ jobs:
           grep -Eq '^CodeDirectory .*flags=0x[0-9a-f]*\(.*runtime' <<< "${details}" || { echo "::error::the signature lacks the hardened runtime"; exit 1; }
           echo "Entitlements:"
           codesign -d --entitlements - --xml "${app}" 2>/dev/null || true; echo
-          security delete-keychain "${KEYCHAIN}"
 
       - name: Notarize, staple and zip
         id: notarize
-        if: steps.mode.outputs.sign == 'true'
+        if: steps.mode.outputs.mode == 'notarized'
         env:
-          APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
-          APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID }}
-          APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 }}
+          ROUTE: ${{ steps.mode.outputs.route }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
+          # Only the chosen route's secrets reach this step; the others stay empty.
+          APPSTORE_API_KEY_ID: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_KEY_ID || '' }}
+          APPSTORE_API_ISSUER_ID: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_ISSUER_ID || '' }}
+          APPSTORE_API_KEY_P8_BASE64: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_KEY_P8_BASE64 || '' }}
+          APPLE_ID: ${{ steps.mode.outputs.route == 'apple-id' && secrets.APPLE_ID || '' }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ steps.mode.outputs.route == 'apple-id' && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
           API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
+          NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
+          NOTARY_PROFILE: treasure-island-notary
+        # notarytool takes either credential (notarytool(1); Apple TN3147,
+        # https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool).
+        # The API key goes in as a file. The app-specific password never goes on a
+        # command line: notarytool store-credentials, given --apple-id and
+        # --team-id without --password, asks for it at a secure prompt and keeps
+        # the credentials as a profile in a throwaway keychain (--keychain), which
+        # submit and log then read. A pseudo-terminal answers that prompt. The
+        # Apple ID itself is on notarytool's command line, as notarytool has no
+        # other way to take it; it is never printed. This step deletes the key
+        # file and the keychain however it ends (the last step does so again).
         run: |
+          quote() {
+            local in="$1" out="" c i
+            for ((i = 0; i < ${#in}; i++)); do
+              c="${in:i:1}"
+              case "${c}" in '\' | '"') out+="\\${c}" ;; *) out+="${c}" ;; esac
+            done
+            printf '"%s"' "${out}"
+          }
+          keychain_command() { printf '%s\n' "$1" | security -i; }
+          cleanup() {
+            rm -f "${API_KEY_FILE}"
+            if [ -e "${NOTARY_KEYCHAIN}" ]; then security delete-keychain "${NOTARY_KEYCHAIN}" || rm -f "${NOTARY_KEYCHAIN}"; fi
+          }
+          trap cleanup EXIT
+          # Runs notarytool store-credentials on a pseudo-terminal and types the
+          # password once its prompt has turned echo off. The prompt flushes pending
+          # input (TCSAFLUSH) when it does so, so typing earlier would be lost.
+          store_credentials() {
+            python3 -I - <<'PY'
+          import os, pty, re, select, signal, sys, termios, time
+
+          # A pasted value may end in a line break; neither can contain whitespace.
+          apple_id = os.environ["APPLE_ID"].strip()
+          password = os.environ["APPLE_APP_SPECIFIC_PASSWORD"].strip()
+          for name, value in (("APPLE_ID", apple_id), ("APPLE_APP_SPECIFIC_PASSWORD", password)):
+              if not value or any(c.isspace() or ord(c) < 32 or ord(c) == 127 for c in value):
+                  print(f"::error::{name} is empty or contains a space or a control character. Set it again.")
+                  sys.exit(1)
+          argv = ["xcrun", "notarytool", "store-credentials", os.environ["NOTARY_PROFILE"],
+                  "--apple-id", apple_id, "--team-id", os.environ["APPLE_TEAM_ID"],
+                  "--keychain", os.environ["NOTARY_KEYCHAIN"]]
+          # notarytool needs neither secret in its environment.
+          env = {k: v for k, v in os.environ.items() if k not in ("APPLE_ID", "APPLE_APP_SPECIFIC_PASSWORD")}
+
+          def scrub(text):
+              text = text.replace(password, "***")
+              return re.sub(re.escape(apple_id), "<APPLE_ID>", text, flags=re.IGNORECASE)
+
+          pid, fd = pty.fork()
+          if pid == 0:
+              try:
+                  os.execvpe(argv[0], argv, env)
+              finally:
+                  os._exit(127)
+
+          output = b""
+          typed = False
+          closed = False
+          deadline = time.monotonic() + 300
+          while True:
+              if time.monotonic() > deadline:
+                  os.kill(pid, signal.SIGKILL)
+                  os.waitpid(pid, 0)
+                  print(scrub(output.decode(errors="replace")))
+                  print("::error::notarytool store-credentials did not finish within 300 s"
+                        + ("." if typed else ": its password prompt never turned echo off."))
+                  sys.exit(1)
+              if closed:
+                  time.sleep(0.1)
+              else:
+                  ready, _, _ = select.select([fd], [], [], 0.1)
+                  if ready:
+                      try:
+                          chunk = os.read(fd, 4096)
+                      except OSError:
+                          chunk = b""
+                      if chunk:
+                          output += chunk
+                      else:
+                          closed = True
+                  if not typed and not closed:
+                      try:
+                          echo = termios.tcgetattr(fd)[3] & termios.ECHO
+                      except termios.error:
+                          echo = termios.ECHO
+                      if not echo:
+                          os.write(fd, password.encode() + b"\n")
+                          typed = True
+              done, status = os.waitpid(pid, os.WNOHANG)
+              if done:
+                  break
+          while not closed:
+              ready, _, _ = select.select([fd], [], [], 0)
+              if not ready:
+                  break
+              try:
+                  chunk = os.read(fd, 4096)
+              except OSError:
+                  chunk = b""
+              if not chunk:
+                  break
+              output += chunk
+          print(scrub(output.decode(errors="replace")))
+          code = os.WEXITSTATUS(status) if os.WIFEXITED(status) else 128 + os.WTERMSIG(status)
+          if code != 0 or not typed:
+              print(f"::error::notarytool store-credentials failed (exit {code}"
+                    + ("" if typed else ", without asking for the password")
+                    + "), so nothing is published. Apple's own message is above: an HTTP 401 means"
+                    + " the Apple ID or app-specific password is wrong; a 403 means Apple does not let"
+                    + " this Apple ID notarize for APPLE_TEAM_ID (a new membership Apple has not finished"
+                    + " setting up, or an agreement waiting at developer.apple.com/account).")
+              sys.exit(1)
+          PY
+          }
+
           app="$(cat app-path.txt)"
           zips=(in/treasure-island-mac-*.zip)
           name="$(basename "${zips[0]}")"
-          printf '%s' "${APPSTORE_API_KEY_P8_BASE64}" | tr -d ' \r\n' | base64 --decode > "${API_KEY_FILE}"
-          auth=(--key "${API_KEY_FILE}" --key-id "${APPSTORE_API_KEY_ID}" --issuer "${APPSTORE_API_ISSUER_ID}")
+          case "${ROUTE}" in
+            api-key)
+              route_name="App Store Connect API key"
+              ( umask 077 && printf '%s' "${APPSTORE_API_KEY_P8_BASE64}" | tr -d ' \r\n' | base64 --decode > "${API_KEY_FILE}" )
+              auth=(--key "${API_KEY_FILE}" --key-id "${APPSTORE_API_KEY_ID}" --issuer "${APPSTORE_API_ISSUER_ID}")
+              ;;
+            apple-id)
+              route_name="Apple ID with an app-specific password"
+              command -v python3 >/dev/null || { echo "::error::python3 is needed to answer notarytool's password prompt and is not on this runner."; exit 1; }
+              keychain_password="$(uuidgen)"
+              echo "::add-mask::${keychain_password}"
+              keychain_command "create-keychain -p $(quote "${keychain_password}") $(quote "${NOTARY_KEYCHAIN}")"
+              security set-keychain-settings -lut 3600 "${NOTARY_KEYCHAIN}"
+              keychain_command "unlock-keychain -p $(quote "${keychain_password}") $(quote "${NOTARY_KEYCHAIN}")"
+              store_credentials
+              auth=(--keychain-profile "${NOTARY_PROFILE}" --keychain "${NOTARY_KEYCHAIN}")
+              ;;
+            *)
+              echo "::error::Unknown notarization route \"${ROUTE}\"."
+              exit 1
+              ;;
+          esac
+          echo "Notarizing with the ${route_name}."
 
           ditto -c -k --keepParent "${app}" notarize.zip
           status=0
@@ -331,10 +561,11 @@ jobs:
               echo "Notary log for ${id}:"
               xcrun notarytool log "${id}" "${auth[@]}" || true
             fi
-            echo "::error::Notarization did not succeed (notarytool exited ${status}, status \"${result:-none}\")."
+            # Nothing is published: a Developer ID build that is not notarized is
+            # still blocked by Gatekeeper, so the last good build stays at the link.
+            echo "::error::Notarization did not succeed with the ${route_name} (notarytool exited ${status}, status \"${result:-none}\"), so nothing is published. Apple's own message is above: an HTTP 401 means Apple refused the key or password; a 403 means it does not let this account notarize for APPLE_TEAM_ID (a new membership Apple has not finished setting up, or an agreement waiting at developer.apple.com/account). \"In Progress\" means Apple was still checking the app after 45 minutes, which can happen to a new team's first submissions; Apple keeps checking it, and a later run submits again."
             exit 1
           fi
-          rm -f "${API_KEY_FILE}"
 
           # The ticket can take a moment to reach Apple's ticket service after
           # acceptance, so try stapling a few times.
@@ -349,6 +580,7 @@ jobs:
           ditto -c -k --keepParent "${app}" "out/${name}"
           ls -l out
           echo "notarized=true" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Mac signing mode::Done: Developer ID signed, notarized with the ${route_name} (submission ${id}) and stapled"
 
       - name: Upload the release app
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
@@ -359,19 +591,29 @@ jobs:
           compression-level: 0
           retention-days: 1
 
-      - name: Delete the keychain and key files
+      - name: Delete the keychains and key files
         if: always()
         env:
           KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
+          NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
           CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
           API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
         run: |
-          if [ -e "${KEYCHAIN}" ]; then security delete-keychain "${KEYCHAIN}" || rm -f "${KEYCHAIN}"; fi
+          for keychain in "${KEYCHAIN}" "${NOTARY_KEYCHAIN}"; do
+            if [ -e "${keychain}" ]; then security delete-keychain "${keychain}" || rm -f "${keychain}"; fi
+          done
           rm -f "${CERTIFICATE_FILE}" "${API_KEY_FILE}"
 
   verify:
     name: Load on Apple Silicon
-    needs: sign
+    needs: [build, sign]
+    # On main the sign job's build, whatever its mode. On a branch run the sign
+    # job is skipped and this checks the ad-hoc build, as before. A failed or
+    # cancelled sign job stops it, and with it the publish job.
+    if: >-
+      ${{ !cancelled() && needs.build.result == 'success' &&
+      (needs.sign.result == 'success' ||
+      (needs.sign.result == 'skipped' && github.ref != 'refs/heads/main')) }}
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
@@ -381,7 +623,7 @@ jobs:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mac-app-release
+          name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
       - name: Launch it headless on arm64 and check the island loads
         # The same rule as the Linux launch check in tools/build-mac.sh: the game
@@ -389,6 +631,7 @@ jobs:
         # build must also pass Gatekeeper and carry its stapled ticket.
         env:
           NOTARIZED: ${{ needs.sign.outputs.notarized }}
+          ROUTE: ${{ needs.sign.outputs.route }}
         run: |
           echo "$(sw_vers -productName) $(sw_vers -productVersion), $(uname -m)"
           df -h .
@@ -399,10 +642,19 @@ jobs:
           echo "${exe}: $(lipo -archs "${exe}")"
           codesign --verify --deep --strict --verbose=2 "${app}"
           if [ "${NOTARIZED}" = "true" ]; then
-            spctl --assess --type execute -vv "${app}" || { echo "FAIL: Gatekeeper rejects the notarized app" >&2; exit 1; }
+            codesign -dvv "${app}" 2>&1 | grep -E '^(Authority|TeamIdentifier|Timestamp)=' || true
+            assessment="$(spctl --assess --type execute -vv "${app}" 2>&1)" || { echo "${assessment}"; echo "FAIL: Gatekeeper rejects the notarized app" >&2; exit 1; }
+            echo "${assessment}"
+            # With Gatekeeper switched off on the runner spctl accepts anything, so
+            # its verdict would prove nothing; the ticket check below still counts.
+            if grep -q 'override=security disabled' <<< "${assessment}"; then
+              echo "::warning::Gatekeeper assessments are switched off on this runner, so spctl's verdict proves nothing here."
+            fi
             xcrun stapler validate "${app}" || { echo "FAIL: the notarization ticket is not stapled" >&2; exit 1; }
+            echo "::notice title=Mac signing mode::This build is Developer ID signed and notarized (credential route: ${ROUTE}), and passes Gatekeeper."
           else
             echo "Ad-hoc signed, not notarized: skipping the Gatekeeper and ticket checks."
+            echo "::notice title=Mac signing mode::This build is ad-hoc signed and not notarized."
           fi
           log=launch.log
           arch -arm64 "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
