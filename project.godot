@@ -138,6 +138,14 @@ sky_cloud_drift={
 "type": "vec3",
 "value": Vector3(0, 0, 0)
 }
+horizon_light={
+"type": "float",
+"value": 1.0
+}
+vegetation_sheen={
+"type": "float",
+"value": 1.0
+}
 
 [treasure_island]
 

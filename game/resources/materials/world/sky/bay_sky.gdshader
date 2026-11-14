@@ -49,6 +49,12 @@ uniform float ground_energy = 1.0;
 uniform vec3 land_bounce_color : source_color = vec3(0.68, 0.62, 0.50);
 // The horizon toward a low sun.
 uniform vec3 low_sun_horizon_color : source_color = vec3(1.0, 0.80, 0.60);
+// The sun's afterglow on the clouds: after sunset the cumulus bases and the
+// cirrus, a kilometre or more up, still catch reddened sunlight from under the
+// horizon while the island no longer does. Added to the sun's own light for the
+// clouds, as colour times energy; none by day (game/scripts/world/day_light.gd).
+uniform vec3 cloud_glow : source_color = vec3(0.0);
+uniform float cloud_glow_energy = 0.0;
 
 // The sun: its disc's radius (degrees, a little larger than the real 0.27) and
 // brightness, in units of the sun light's colour times energy, and its halo.
@@ -299,6 +305,11 @@ void sky() {
 	vec3 horizon = mix(scene_color(sky_horizon_color), scene_color(low_sun_horizon_color), low_sun * 0.7 * mix(0.3, 1.0, toward_sun * toward_sun));
 	vec3 sky_light = mix(horizon, top, 0.4) * cloud_sky_gain;
 	vec3 cloud_sun = sun_color * cloud_sun_gain;
+	vec3 glow = vec3(0.0);
+	if (cloud_glow_energy > 0.0) {
+		glow = scene_color(cloud_glow) * cloud_glow_energy;
+		cloud_sun += glow * cloud_sun_gain;
+	}
 
 #if CURRENT_RENDERER != RENDERER_COMPATIBILITY
 	if (AT_HALF_RES_PASS) {
@@ -321,6 +332,9 @@ void sky() {
 		color += sun_color * halo * sun_halo;
 		float streaks = cirrus(dir, drift);
 		vec3 cirrus_light = sun_color * (0.5 + 0.35 * henyey_greenstein(cos_sun, 0.6)) + sky_light * 0.35;
+		if (cloud_glow_energy > 0.0) {
+			cirrus_light += glow * (0.5 + 0.35 * henyey_greenstein(cos_sun, 0.6));
+		}
 		color = mix(color, cirrus_light, streaks * 0.22);
 		if (!AT_CUBEMAP_PASS) {
 			float disc = 1.0 - smoothstep(radians(sun_disc_deg) * 0.8, radians(sun_disc_deg), angle);

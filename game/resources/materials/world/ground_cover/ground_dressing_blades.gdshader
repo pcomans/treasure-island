@@ -85,6 +85,8 @@ uniform float normal_up_near = 0.6;
 uniform vec2 detail_m = vec2(30.0, 80.0);
 uniform float roughness = 0.75;
 uniform float specular = 0.25;
+// The time of day's scale on the specular, as vegetation_foliage.gdshader's.
+global uniform float vegetation_sheen;
 uniform float translucency = 0.3;
 
 varying vec3 tint;
@@ -212,7 +214,7 @@ void fragment() {
 	ALPHA_SCISSOR_THRESHOLD = 0.4;
 #endif
 	ROUGHNESS = roughness;
-	SPECULAR = specular;
+	SPECULAR = specular * vegetation_sheen;
 	// The renderer flips NORMAL on back faces of double-sided materials; a blade is
 	// lit the same on both sides.
 	if (!FRONT_FACING) {
