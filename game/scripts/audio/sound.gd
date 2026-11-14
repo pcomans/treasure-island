@@ -219,6 +219,13 @@ static func play_after(delay_s: float, id: StringName, follow: Node3D, strength:
 		current.schedule(delay_s, id, follow, strength, pitch)
 
 
+## Drops the plays of id still to come for follow (play_after): the player got
+## out of a car before its door had shut.
+static func cancel_after(id: StringName, follow: Node3D) -> void:
+	if current != null:
+		current.unschedule(id, follow)
+
+
 ## Holds the loop id of holder at level (0 silent, 1 as the take is) this tick,
 ## at a world position when it is positional, at pitch.
 static func hold(id: StringName, holder: Object, level: float, at: Vector3 = Vector3.INF, pitch: float = 1.0) -> void:
@@ -384,6 +391,13 @@ func _noted(id: StringName, at: Vector3, strength: float, result: String) -> Str
 func schedule(delay_s: float, id: StringName, follow: Node3D, strength: float, pitch: float) -> void:
 	var at := follow.global_position if is_instance_valid(follow) and follow.is_inside_tree() else Vector3.INF
 	_pending.append({"due": _game_s + delay_s, "id": id, "follow": weakref(follow), "at": at, "strength": strength, "pitch": pitch})
+
+
+func unschedule(id: StringName, follow: Node3D) -> void:
+	for index in range(_pending.size() - 1, -1, -1):
+		var due: Dictionary = _pending[index]
+		if due.id == id and (due.follow as WeakRef).get_ref() == follow:
+			_pending.remove_at(index)
 
 
 ## The voice for a new play of id: the oldest of its own when it has its cap,

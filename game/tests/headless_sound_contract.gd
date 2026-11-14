@@ -20,12 +20,15 @@ extends SceneTree
 ##      climbing from idle with the throttle; a car taken with W already down has
 ##      its engine started and a loop sounding before it has gone ENGINE_FIRST_M
 ##      (owner, 2026-11-14: the car moved before its start played); the tyres skid
-##      in a handbrake turn;
-##      getting out the doors sound and the engine and tyre loops fade to
-##      silence, with no other car sound (the owner wants no stop sound); a jump
-##      off the dirt lot's ramp landing on the wheels, R on the road and the
-##      return from the bay (the vehicle contract's places) ask for no knock or
-##      crash; the car crashing into a palm is a tree's crash, into a parked car a car's,
+##      in a handbrake turn; getting out the doors sound and the engine and tyre
+##      loops fade to silence, with no other car sound (the owner wants no stop
+##      sound), and out again at once the start and the first door close never
+##      play; on the road no landing and no rocks' rumble; on the shore's rocks
+##      the rumble sounds at speed and falls silent at a crawl or off them; a jump
+##      off the dirt lot's ramp lands once on the wheels (car_jump_landing) and,
+##      with R on the road and the return from the bay (the vehicle contract's
+##      places), asks for no knock or crash, R and the bay landing not at all; the
+##      car crashing into a palm is a tree's crash, into a parked car a car's,
 ##      while the windrow's young gums bend with neither (theirs is the tier-2
 ##      bend); a bay of each fence material breaks with its own sound; a lamp
 ##      knocked over hits and then clangs on the ground; a car's splash; the ball
@@ -60,6 +63,11 @@ const GAP_ID := &"ball_kick_soft"
 const ENGINE_FIRST_M := 0.3
 ## Where the shore's top is for the water bed (m inside the outline).
 const SHORE_TOP_M := 2.0
+## How soon after getting in the quick exit gets out (ticks: before the start's
+## 0.1 s).
+const QUICK_EXIT_TICKS := 3
+## How fast the car is driven onto the shore's rocks (m/s).
+const RUMBLE_MPS := 4.0
 ## How soon after getting out the engine's loops must be silent (ticks).
 const EXIT_SILENT_TICKS := 45
 
@@ -98,7 +106,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -395,6 +403,7 @@ func _check_car() -> bool:
 	var start := Vector2(points[0][0], points[0][1])
 	var heading := (Vector2(points[1][0], points[1][1]) - start).normalized()
 	var mark := Engine.get_process_frames()
+	var drive_mark := mark
 	var car := await _drive_from(start, heading)
 	if car == null:
 		return false
@@ -440,7 +449,12 @@ func _check_car() -> bool:
 	var quiet := not (_sound.loop_playing(CarSound.IDLE, car) or _sound.loop_playing(CarSound.LOW, car) or _sound.loop_playing(CarSound.HIGH, car) or _sound.loop_playing(CarSound.SKID, car))
 	if not _require(car_plays == {"car_door_open": 1, "car_door_close": 1} and silent_at > 0 and silent_at <= EXIT_SILENT_TICKS and quiet, "Getting out must open and shut the door once each and play no other car sound (%s), and the engine and tyre loops must fade to silence within %d ticks (at %d) and stop (%s)." % [car_plays, EXIT_SILENT_TICKS, silent_at, quiet]):
 		return false
-	_summary.append("getting in, the engine climbing to a rev of %.2f, a skid, getting out with only the doors, the engine silent %.2f s after" % [rev, silent_at / 60.0])
+	# On the road, from getting in to getting out: no landing, no rocks' rumble.
+	var road_landings := _played(CarSound.LANDING, drive_mark)
+	var road_rumble := _sound.requested(CarSound.RIPRAP).filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= drive_mark).size()
+	if not _require(road_landings == 0 and road_rumble == 0, "Getting in, driving on the road and getting out must neither land (%d) nor rumble as on the rocks (%d requests)." % [road_landings, road_rumble]):
+		return false
+	_summary.append("getting in, the engine climbing to a rev of %.2f, a skid, getting out with only the doors, the engine silent %.2f s after, and on the road no landing and no rocks' rumble" % [rev, silent_at / 60.0])
 	return true
 
 
@@ -478,18 +492,115 @@ func _check_engine_first() -> bool:
 			break
 	_release()
 	await _stop()
-	if not _require(gone >= ENGINE_FIRST_M and started == 1 and level > 0.0, "Taken with W already down, by the time the car has gone %.1f m (%.2f m in %d ticks) its engine must have started (%d) and a loop must sound (level %.2f)." % [ENGINE_FIRST_M, gone, ticks, started, level]):
+	var landed := _played(CarSound.LANDING, mark)
+	if not _require(gone >= ENGINE_FIRST_M and started == 1 and level > 0.0 and landed == 0, "Taken with W already down, by the time the car has gone %.1f m (%.2f m in %d ticks) its engine must have started (%d) and a loop must sound (level %.2f), with no landing (%d)." % [ENGINE_FIRST_M, gone, ticks, started, level, landed]):
 		return false
 	_summary.append("taken with W already down, the car's engine has started and a loop sounds at %.2f by %.1f m (%.2f s in)" % [level, ENGINE_FIRST_M, ticks / 60.0])
 	return true
+
+
+## Out again at once (review note, 2026-11-14): the parked car taken and left
+## QUICK_EXIT_TICKS later, before its start (0.1 s) and its door's close (0.25 s)
+## were due: neither plays, only the getting-out doors do.
+func _check_quick_exit() -> bool:
+	if _vehicles.is_driving():
+		_vehicles.exit_car(false)
+	await _ticks(120)
+	var id := str(_cases.enter.car)
+	var mark := Engine.get_process_frames()
+	if not _require(_vehicles.enter(id), "Could not take %s again." % id):
+		return false
+	await _ticks(QUICK_EXIT_TICKS)
+	_vehicles.exit_car(false)
+	var out := Engine.get_process_frames()
+	await _ticks(90)
+	var after := {}
+	for entry: Dictionary in _sound.requests:
+		if int(entry.frame) >= out and str(entry.id) in ["car_door_open", "car_door_close", "car_engine_start"] and entry.result == "played":
+			after[str(entry.id)] = int(after.get(str(entry.id), 0)) + 1
+	var opened := _played(&"car_door_open", mark)
+	if not _require(after == {"car_door_open": 1, "car_door_close": 1} and opened == 2, "Out %d ticks after getting in, neither the start nor the door's close may play after (after getting out %s; door opened %d of 2)." % [QUICK_EXIT_TICKS, after, opened]):
+		return false
+	_summary.append("out %d ticks after getting in, neither the start nor the first door close plays after" % QUICK_EXIT_TICKS)
+	return true
+
+
+## The shore's rocks (riprap_rumble_loop, owner's pick, 2026-11-14): driven from
+## the vehicle contract's shore fixture at up to RUMBLE_MPS over the crest and onto
+## the cars' ground over the riprap, the rumble is silent on the land before it
+## and sounds once two wheels are on the rocks at speed; on the handbrake it falls
+## silent, at a crawl on the rocks or in the water off them.
+func _check_riprap() -> bool:
+	var shore: Dictionary = _cases.shore
+	var start := Vector2(shore.start_xz[0], shore.start_xz[1])
+	var heading := Vector2(shore.heading_xz[0], shore.heading_xz[1]).normalized()
+	var car := await _drive_from(start, heading)
+	if car == null:
+		return false
+	var on_land := 0.0
+	var heard := 0.0
+	var on_ticks := 0
+	Input.action_press("move_forward")
+	for _tick in 900:
+		_steer_toward(car, start + heading * 200.0)
+		if car.linear_velocity.length() > RUMBLE_MPS:
+			Input.action_release("move_forward")
+		elif not Input.is_action_pressed("move_forward"):
+			Input.action_press("move_forward")
+		await physics_frame
+		var wheels := CarSound.riprap_wheels(car)
+		var level := _sound.loop_level(CarSound.RIPRAP, car)
+		if wheels == 0 and on_ticks == 0:
+			on_land = maxf(on_land, level)
+		elif wheels >= 2 and car.speed() >= 1.0:
+			on_ticks += 1
+			if on_ticks >= 20:
+				heard = maxf(heard, level)
+			if on_ticks >= 40:
+				break
+	# The handbrake, until the rumble's rule says silent for two seconds running:
+	# at a crawl on the rocks (under CarSound.RUMBLE_FROM_MPS), off them or in the
+	# water (and back on land from it). Then the rumble is gone: it falls over
+	# CarSound.RUMBLE_DOWN_S, the loop fades and stops.
+	_release()
+	Input.action_press("handbrake")
+	var reasons := PackedStringArray()
+	var quiet := 0
+	var after := -1.0
+	var playing := true
+	for _tick in 480:
+		await physics_frame
+		var reason := ""
+		if car.is_sinking():
+			reason = "in the water"
+		elif CarSound.riprap_wheels(car) == 0:
+			reason = "off the rocks"
+		elif car.speed() < CarSound.RUMBLE_FROM_MPS:
+			reason = "at a crawl on the rocks"
+		quiet = quiet + 1 if reason != "" else 0
+		if reason != "" and not reason in reasons:
+			reasons.append(reason)
+		if quiet >= 120:
+			after = _sound.loop_level(CarSound.RIPRAP, car)
+			playing = _sound.loop_playing(CarSound.RIPRAP, car)
+			break
+	_release()
+	var ended := ", then ".join(reasons)
+	if not _require(on_land == 0.0 and on_ticks >= 40 and heard > 0.2 and quiet >= 120 and after == 0.0 and not playing, "Driven onto the shore's rocks the rumble must be silent on the land (%.2f), sound with two wheels on the rocks at speed (%.2f over %d ticks) and be gone after two seconds at a crawl, off the rocks or in the water (%s; %d ticks running: level %.2f, playing %s)." % [on_land, heard, on_ticks, ended if ended != "" else "none of them", quiet, after, playing]):
+		return false
+	_summary.append("on the shore's rocks the rumble sounds at %.2f (silent on the land before them) and falls silent %s" % [heard, ended])
+	return await _stop()
 
 
 ## Nothing hit, no hit: a jump off the dirt lot's ramp landing on the wheels (as
 ## the vehicle contract drives it: up to its speed, off the throttle from take-off,
 ## on the brakes once down), R on the road after a run-up, and the car dropped on
 ## the bay, sinking and back on land. Each asks for no knock or crash near the car.
+## The jump lands once (car_jump_landing, owner's pick, 2026-11-14); R and the
+## bay do not land.
 func _check_false_hits() -> bool:
 	var found := {}
+	var landings := {}
 	var ramp: Dictionary = _cases.ramp
 	var start := Vector2(ramp.start_xz[0], ramp.start_xz[1])
 	var heading := Vector2(ramp.heading_xz[0], ramp.heading_xz[1]).normalized()
@@ -528,6 +639,8 @@ func _check_false_hits() -> bool:
 	if not _require(longest >= 30 and landed >= 0 and car.grounded_wheels() >= 3, "The ramp did not fly the car onto its wheels (%.2f s in the air, %d wheels down)." % [longest / 60.0, car.grounded_wheels()]):
 		return false
 	found["ramp"] = _hits_along(mark, path, {"take-off": took_off, "landing": landed})
+	landings["ramp"] = _played(CarSound.LANDING, mark)
+	var landed_at: Array = _sound.requested(CarSound.LANDING).filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark and entry.result == "played").map(func(entry: Dictionary) -> String: return "%.2f at landing %+d" % [float(entry.strength), int(entry.frame) - landed])
 	await _stop()
 	# R on the road after a run-up from the route's start.
 	var points: Array = _cases.route.points_xz
@@ -556,6 +669,7 @@ func _check_false_hits() -> bool:
 		await physics_frame
 		path.append(car.global_position)
 	found["reset"] = _hits_along(mark, path, {"R": pressed})
+	landings["reset"] = _played(CarSound.LANDING, mark)
 	if not _require(causes == ["manual"], "R at %.1f m/s must put the car back once (%s)." % [speed, causes]):
 		car.recovered.disconnect(on_back)
 		return false
@@ -574,11 +688,13 @@ func _check_false_hits() -> bool:
 			break
 	car.recovered.disconnect(on_back)
 	found["bay"] = _hits_along(mark, path, {"back": back})
-	print("NOTE: false hits: the ramp (%.2f s in the air) %s; R at %.1f m/s %s; the bay %s" % [longest / 60.0, found.ramp, speed, found.reset, found.bay])
+	landings["bay"] = _played(CarSound.LANDING, mark)
+	print("NOTE: false hits: the ramp (%.2f s in the air) %s; R at %.1f m/s %s; the bay %s; landings %s (the ramp's: strength %s)" % [longest / 60.0, found.ramp, speed, found.reset, found.bay, landings, landed_at])
 	if not _require(causes == ["manual", "water"], "Dropped on the bay the car must come back to land once (%s)." % [causes]) \
-	or not _require(found.values().all(func(hits: Array) -> bool: return hits.is_empty()), "A landing on the wheels, R and the return from the bay must ask for no knock or crash (%s)." % [found]):
+	or not _require(found.values().all(func(hits: Array) -> bool: return hits.is_empty()), "A landing on the wheels, R and the return from the bay must ask for no knock or crash (%s)." % [found]) \
+	or not _require(landings == {"ramp": 1, "reset": 0, "bay": 0}, "The ramp's jump must land once (car_jump_landing) and R and the return from the bay not at all (%s)." % [landings]):
 		return false
-	_summary.append("no knock or crash for a %.2f s jump landing on its wheels, R at %.1f m/s or the return from the bay" % [longest / 60.0, speed])
+	_summary.append("a %.2f s jump lands once (car_jump_landing, strength %s) with no knock or crash; R at %.1f m/s and the return from the bay neither land nor knock" % [longest / 60.0, landed_at, speed])
 	return await _stop()
 
 

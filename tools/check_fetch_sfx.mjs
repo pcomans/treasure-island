@@ -25,12 +25,15 @@
 //      from a repository holding the processed folder at its root (the private
 //      audio repository's layout) with TI_SFX_SUBDIR and TI_SFX_REF empty it fills
 //      the folder; a URL with a user and password in it that cannot be cloned
-//      fails without printing either, and redact() takes them out of a message.
+//      fails without printing either, and redact() takes them out of a message;
+//      with git's tracing asked for (GIT_TRACE, GIT_TRACE_CURL, GIT_TRACE_REDACT=0,
+//      GIT_CURL_VERBOSE), a clone a local server refuses (401) prints no trace and
+//      no Authorization header, and redact() blanks such a header's value.
 // A few seconds. Part of tools/test.sh.
 //
 //   node tools/check_fetch_sfx.mjs
 
-import { spawnSync } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -52,8 +55,10 @@ function write(path, text) {
   writeFileSync(path, text);
 }
 
+// The tool as a process; one that runs past 60 s (a clone waiting on something)
+// is stopped, and its status is then null.
 function run(args, env = {}) {
-  const result = spawnSync(process.execPath, [TOOL, ...args], { encoding: "utf8", env: { PATH: process.env.PATH, HOME: process.env.HOME, ...env } });
+  const result = spawnSync(process.execPath, [TOOL, ...args], { encoding: "utf8", timeout: 60000, env: { PATH: process.env.PATH, HOME: process.env.HOME, ...env } });
   return { status: result.status, out: `${result.stdout}${result.stderr}` };
 }
 
@@ -224,6 +229,19 @@ try {
   const { redact } = await import(pathToFileURL(TOOL).href);
   const said = redact(`fatal: unable to access 'https://ci-user:${URL_SECRET}@example.invalid/audio.git/': refused; see https://example.invalid/help`);
   check(!said.includes(URL_SECRET) && !said.includes("ci-user") && said.includes("'https://example.invalid/audio.git/'") && said.includes("see https://example.invalid/help"), `9: redact() must take a user and password out of a URL inside a message, and nothing else: ${said}`);
+  const header = Buffer.from(`x-access-token:${TOKEN}`).toString("base64");
+  const blanked = redact(`=> Send header: Authorization: Basic ${header}\n< WWW-Authenticate: Basic realm=audio`);
+  check(!blanked.includes(header) && blanked.includes("Authorization: Basic ***") && blanked.includes("WWW-Authenticate: Basic realm=audio"), `9: redact() must blank an Authorization header's value, and nothing else: ${blanked}`);
+  // A local server (its own process: the check itself waits on git) that refuses
+  // every request, so git sends its headers and fails.
+  const server = spawn(process.execPath, ["-e", "const s = require('node:http').createServer((q, r) => { r.writeHead(401, { 'WWW-Authenticate': 'Basic realm=audio' }); r.end(); }); s.listen(0, '127.0.0.1', () => console.log(s.address().port));"], { stdio: ["ignore", "pipe", "inherit"] });
+  try {
+    const port = await new Promise((done) => server.stdout.once("data", (chunk) => done(String(chunk).trim())));
+    const traced = run(["--project", ciProject], { ...ciEmpty, TI_SFX_SOURCE: `http://127.0.0.1:${port}/audio.git`, TI_SFX_GIT_TOKEN: TOKEN, GIT_TRACE: "1", GIT_TRACE_CURL: "1", GIT_TRACE_REDACT: "0", GIT_CURL_VERBOSE: "1" });
+    check(traced.status === 1 && /could not clone http:\/\/127\.0\.0\.1:/u.test(traced.out) && !traced.out.includes(header) && !traced.out.includes(TOKEN) && !/Send header|authorization:/iu.test(traced.out), `9: with git's tracing asked for, a refused clone must print no trace and no Authorization header: ${traced.out}`);
+  } finally {
+    server.kill();
+  }
 } finally {
   rmSync(work, { recursive: true, force: true });
 }
@@ -232,4 +250,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, never writes through a link in the folder, and runs as the Mac build workflow runs it (empty variables do nothing; a repository holding the takes at its root fills the folder; a credentialed URL never shows its user or password)");
+console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, never writes through a link in the folder, and runs as the Mac build workflow runs it (empty variables do nothing; a repository holding the takes at its root fills the folder; a credentialed URL never shows its user or password, and git's tracing never shows the token's header)");

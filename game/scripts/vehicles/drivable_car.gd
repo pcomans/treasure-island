@@ -264,6 +264,9 @@ var _accel := 9.0
 var _ray := PhysicsRayQueryParameters3D.new()
 var _compression := PackedFloat32Array([0.0, 0.0, 0.0, 0.0])
 var _contact := [false, false, false, false]
+## The body each wheel last stood on (its ray's last hit; null once sinking): for
+## its sound (car_sound.gd: the shore's rocks under it, through a bounce).
+var _wheel_ground: Array[Object] = [null, null, null, null]
 var _spin := PackedFloat32Array([0.0, 0.0, 0.0, 0.0])
 var _steer := 0.0
 var _grounded := 0
@@ -613,6 +616,11 @@ func grounded_wheels() -> int:
 	return _grounded
 
 
+## The body wheel i last stood on, or null.
+func wheel_ground(i: int) -> Object:
+	return _wheel_ground[i]
+
+
 func up_dot() -> float:
 	return global_transform.basis.y.dot(Vector3.UP)
 
@@ -785,6 +793,7 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 		var distance := (mount - point).dot(up) - lift
 		_compression[i] = clampf(reach - distance, 0.0, travel + 0.08)
 		_contact[i] = true
+		_wheel_ground[i] = hit.collider
 		hits[i] = {"point": point + up * lift, "normal": hit.normal}
 		_grounded += 1
 	# Pass 2: suspension, anti-roll and tyre forces; each wheel on the ground
@@ -1100,6 +1109,7 @@ func _step_sinking(state: PhysicsDirectBodyState3D, dt: float) -> void:
 	for i in 4:
 		_contact[i] = false
 		_compression[i] = 0.0
+		_wheel_ground[i] = null
 	var xf := state.transform
 	var under := clampf((water_y - lowest_y(xf)) / maxf(height_m, 0.5), 0.0, 1.0)
 	state.apply_central_force(Vector3.UP * mass * _gravity() * SINK_BUOYANCY * under)
