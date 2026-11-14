@@ -16,9 +16,10 @@
 // that row's candidates into DIR/candidates/ID/replaced-<time>/, then makes a
 // fresh set (until that set is complete the same --force-id is refused, so a
 // rerun cannot pay for it twice). One --generate run at a time holds
-// DIR/.generate.lock. The first Ctrl-C stops new requests and saves the ones in
-// flight; a second quits at once. The API key (ELEVENLABS_API_KEY, from the
-// environment or ~/.config/elevenlabs/.env) is never printed or logged.
+// DIR/.generate.lock. SIGTERM, SIGHUP or a first Ctrl-C stops new requests and
+// saves the ones in flight; a second Ctrl-C quits at once. The API key
+// (ELEVENLABS_API_KEY, from the environment or ~/.config/elevenlabs/.env) is
+// never printed or logged.
 //
 //   DIR/candidates/<id>/<id>.cNN.<wav|mp3>  what ElevenLabs returned, one file a generation
 //   DIR/generation-log.jsonl               a line a request: id, prompt, model, settings, status, credits, time, file
@@ -296,9 +297,10 @@ export function selectRows(sheet, { tiers = [], ids = [] } = {}) {
 
 // --- Where the audio goes --------------------------------------------------
 
-// Why OUT may not be used, or null. Fails closed: unless git answers that OUT
-// is in no repository, OUT is refused (git missing, or git refusing to look,
-// as for a repository it calls of dubious ownership).
+// Why OUT may not be used, or null. Fails closed: OUT passes only on git's
+// exact answer for a folder in no repository; anything else is refused (git
+// missing, a repository of dubious ownership, a .git file pointing nowhere,
+// which git answers with "not a git repository: (null)").
 export function outProblem(out) {
   const target = resolve(out);
   let probe = target;
@@ -315,7 +317,7 @@ export function outProblem(out) {
   Object.assign(env, { LC_ALL: "C", LANGUAGE: "C", GIT_DISCOVERY_ACROSS_FILESYSTEM: "1" });
   const git = spawnSync("git", ["-C", realpathSync(probe), "rev-parse", "--is-inside-work-tree"], { encoding: "utf8", env });
   if (git.error) return `git could not run (${git.error.code ?? git.error.message}), so it cannot be checked that it lies outside every Git work tree`;
-  if (git.status === 128 && /not a git repository/u.test(git.stderr)) return null;
+  if (git.status === 128 && /^fatal: not a git repository \(or any of the parent directories\): \.git$/mu.test(git.stderr)) return null;
   if (git.status === 0) return "it lies inside a Git repository";
   return `git could not tell whether it lies in a Git work tree (exit ${git.status}: ${git.stderr.trim().split("\n")[0]})`;
 }
@@ -362,6 +364,37 @@ function apiBase(env = process.env) {
 
 class LockError extends Error {}
 
+// When a process started, in ms since the epoch, from Linux's /proc; null elsewhere.
+function processStartMs(pid) {
+  try {
+    const stat = readFileSync(`/proc/${pid}/stat`, "utf8");
+    // Field 22, starttime in clock ticks since boot; fields are counted after the ")" that ends the name.
+    const ticks = Number(stat.slice(stat.lastIndexOf(")") + 2).split(" ")[19]);
+    const boot = Number(readFileSync("/proc/stat", "utf8").match(/^btime (\d+)$/mu)?.[1]);
+    const hz = Number(spawnSync("getconf", ["CLK_TCK"], { encoding: "utf8" }).stdout?.trim()) || 100;
+    return Number.isFinite(ticks) && Number.isFinite(boot) ? (boot + ticks / hz) * 1000 : null;
+  } catch {
+    return null;
+  }
+}
+
+// Whether a running pid is the tools/generate-sfx run that took a lock at
+// `started`: false when its command is something else or it began after the
+// lock was taken (the pid was reused), true when it fits, null where /proc
+// cannot tell (not Linux).
+function isLockOwner(pid, started) {
+  let command;
+  try {
+    command = readFileSync(`/proc/${pid}/cmdline`, "utf8").split("\0");
+  } catch {
+    return null;
+  }
+  if (!command.some((word) => word.endsWith("generate_sfx.mjs"))) return false;
+  const began = processStartMs(pid);
+  const taken = Date.parse(started);
+  return !(began !== null && Number.isFinite(taken) && began > taken + 2000);
+}
+
 // Takes DIR/.generate.lock (created exclusively, holding this pid) or throws a
 // LockError. A lock is never deleted here: one left by a run that has gone is
 // reported, and whoever runs the tool deletes it.
@@ -389,8 +422,12 @@ function takeLock(out) {
       alive = error.code === "EPERM";
     }
   }
-  if (alive) throw new LockError(`another --generate run (pid ${pid}, started ${holder.started ?? "?"}) is using ${out}; wait for it to end`);
-  throw new LockError(`${path} is left from a run that is not running any more (pid ${pid ?? "unknown"}); if no run is using ${out}, delete that file and run again`);
+  const owner = alive ? isLockOwner(pid, holder?.started) : false;
+  if (owner !== false) {
+    throw new LockError(`another --generate run (pid ${pid}, started ${holder.started ?? "?"}) is using ${out}; wait for it to end. If pid ${pid} is not a tools/generate-sfx run using this folder, delete ${path} and run again`);
+  }
+  const why = pid === null ? "its owner cannot be read" : alive ? `pid ${pid} is now a different process` : `pid ${pid} has ended`;
+  throw new LockError(`${path} is left from a run that is not running any more (${why}); if no run is using ${out}, delete that file and run again`);
 }
 
 function releaseLock(path) {
@@ -507,13 +544,27 @@ function moveAside(out, sheet, row) {
   if (moved) console.log(`moved ${plural(moved, "candidate")} of ${row.id} to ${relative(out, aside)}`);
 }
 
-class Interrupted extends Error {}
+// The signals that stop a --generate run gently: no new requests, the ones in
+// flight finish and are saved, the lock is released. A second Ctrl-C quits at once.
+const STOP_SIGNALS = Object.freeze({ SIGHUP: 1, SIGINT: 2, SIGTERM: 15 });
 
-async function generate({ sheet, out, surveyed, forced, key, base, concurrency, resume }) {
+class Interrupted extends Error {
+  constructor(signal) {
+    super(`stopped by ${signal}`);
+    this.exitCode = 128 + STOP_SIGNALS[signal];
+  }
+}
+
+// run: { stop, stopping, sending }, shared with main's signal handlers.
+async function generate({ sheet, out, surveyed, forced, key, base, concurrency, resume, run }) {
   const redact = (text) => String(text).split(key).join("[key]");
   const excerpt = (text) => redact(text).replace(/\s+/gu, " ").trim().slice(0, 400);
   const logPath = join(out, "generation-log.jsonl");
   const log = (entry) => appendFileSync(logPath, `${JSON.stringify(entry)}\n`);
+  if (run.stop !== null) {
+    console.error(`Stopped (${run.stop.message}) before any request; nothing was moved or made.`);
+    return run.stop.exitCode;
+  }
   // A forced set is marked until it is complete, so the same --force-id cannot move it aside unfinished.
   for (const { row } of surveyed) {
     if (!forced.has(row.id)) continue;
@@ -542,15 +593,12 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency, 
   console.log(`Making ${plural(tasks.length, "candidate")} for ${credits(planned)} credits, up to ${concurrency} at a time.`);
 
   let next = 0;
-  let stop = null;
   let made = 0;
   let spent = 0;
-  let sending = 0;
-  const stopping = new AbortController();
   const halt = (error) => {
-    if (stop !== null) return;
-    stop = error;
-    stopping.abort();
+    if (run.stop !== null) return;
+    run.stop = error;
+    run.stopping.abort();
   };
 
   // One request for a candidate: returns { cost } when saved or { wait } to try
@@ -627,38 +675,26 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency, 
   const makeOne = async (task) => {
     mkdirSync(dirname(task.file), { recursive: true });
     for (let attempt = 1; ; attempt += 1) {
-      sending += 1;
+      run.sending += 1;
       let result;
       try {
         result = await attemptOnce(task, attempt);
       } finally {
-        sending -= 1;
+        run.sending -= 1;
       }
       if (result.cost !== undefined) return result.cost;
       // A wait before a retry ends early once the run stops, and the task with it.
       try {
-        await delay(result.wait * 1000, undefined, { signal: stopping.signal });
+        await delay(result.wait * 1000, undefined, { signal: run.stopping.signal });
       } catch {
         // Cut short by the stop.
       }
-      if (stop !== null) throw new Error(`${task.row.id} c${pad2(task.n)}: not retried, the run had stopped`);
+      if (run.stop !== null) throw new Error(`${task.row.id} c${pad2(task.n)}: not retried, the run had stopped`);
     }
   };
 
-  let interrupts = 0;
-  const onInterrupt = () => {
-    interrupts += 1;
-    if (interrupts === 1) {
-      halt(new Interrupted("interrupted (Ctrl-C)"));
-      console.error(`NOTE: stopping: no new requests; ${plural(sending, "request")} in flight will finish and be saved. Ctrl-C again quits at once and loses them.`);
-      return;
-    }
-    console.error("Quit at once; requests in flight were not saved (they may have been charged).");
-    process.exit(130);
-  };
-  process.on("SIGINT", onInterrupt);
   const worker = async () => {
-    while (stop === null && next < tasks.length) {
+    while (run.stop === null && next < tasks.length) {
       const task = tasks[next];
       next += 1;
       try {
@@ -672,13 +708,13 @@ async function generate({ sheet, out, surveyed, forced, key, base, concurrency, 
   try {
     await Promise.all(Array.from({ length: Math.min(concurrency, tasks.length) }, worker));
   } finally {
-    process.off("SIGINT", onInterrupt);
     unmarkComplete();
   }
+  const stop = run.stop;
   if (stop) {
     console.error(`${stop instanceof Interrupted ? "Stopped" : "FAIL"}: ${redact(stop.message)}`);
     console.error(`Made ${plural(made, "candidate")} (${credits(spent)} credits) before the stop; no request was started after it. To resume (candidates already made are kept and not requested again): ${resume}`);
-    return stop instanceof Interrupted ? 130 : 1;
+    return stop instanceof Interrupted ? stop.exitCode : 1;
   }
   console.log(`Made ${plural(made, "candidate")} for ${credits(spent)} credits. Log: ${relative(process.cwd(), logPath) || logPath}`);
   console.log(`Next: listen, list the keepers in ${join(out, "picks.json")} (optional), then run ${TOOL} --out ${shellWord(out)} --process.`);
@@ -980,19 +1016,44 @@ export async function main(argv = process.argv.slice(2)) {
     return 1;
   }
   mkdirSync(out, { recursive: true });
-  let lock;
-  try {
-    lock = takeLock(out);
-  } catch (error) {
-    if (!(error instanceof LockError)) throw error;
-    console.error(`FAIL: ${error.message}; nothing was requested.`);
-    return 1;
-  }
-  const release = () => releaseLock(lock);
+  // The stop signals are caught before the lock is taken, so none can leave it behind:
+  // SIGHUP, SIGTERM and a first Ctrl-C stop new requests, let the ones in flight
+  // finish and be saved, and release the lock; a second Ctrl-C quits at once.
+  const run = { stop: null, stopping: new AbortController(), sending: 0 };
+  let lock = null;
+  const release = () => {
+    if (lock) releaseLock(lock);
+  };
+  const onSignal = (signal) => {
+    if (run.stop === null) {
+      run.stop = new Interrupted(signal);
+      run.stopping.abort();
+      console.error(`NOTE: ${signal}: stopping; no new requests, and ${plural(run.sending, "request")} in flight will finish and be saved.${signal === "SIGINT" ? " Ctrl-C again quits at once and loses them." : ""}`);
+    } else if (signal !== "SIGINT") {
+      console.error(`NOTE: ${signal}: already stopping; waiting for ${plural(run.sending, "request")} in flight.`);
+    } else {
+      console.error("Quit at once; requests in flight were not saved (they may have been charged).");
+      process.exit(130);
+    }
+  };
+  const handlers = Object.keys(STOP_SIGNALS).map((signal) => [signal, () => onSignal(signal)]);
+  // A closed terminal (SIGHUP) must not turn a failed console write into a crash that loses paid audio.
+  const ignore = () => {};
+  for (const [signal, handler] of handlers) process.on(signal, handler);
+  for (const stream of [process.stdout, process.stderr]) stream.on("error", ignore);
   process.on("exit", release);
   try {
-    return await generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency, resume: resumeCommand(args, out) });
+    try {
+      lock = takeLock(out);
+    } catch (error) {
+      if (!(error instanceof LockError)) throw error;
+      console.error(`FAIL: ${error.message}; nothing was requested.`);
+      return 1;
+    }
+    return await generate({ sheet, out, surveyed, forced, key: found.key, base, concurrency, resume: resumeCommand(args, out), run });
   } finally {
+    for (const [signal, handler] of handlers) process.off(signal, handler);
+    for (const stream of [process.stdout, process.stderr]) stream.off("error", ignore);
     process.off("exit", release);
     release();
   }

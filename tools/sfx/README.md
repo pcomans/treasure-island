@@ -48,10 +48,12 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
 - **One run at a time.** A `--generate` run holds `.generate.lock` in the
   output folder, and a second run there is refused. If a run was killed and
   left its lock, the tool says so and leaves the lock alone; delete it by hand
-  once no run is using the folder.
-- **Ctrl-C.** The first Ctrl-C starts no new requests, lets the ones in
-  flight finish, and saves their audio. A second Ctrl-C quits at once, losing
-  those requests.
+  once no run is using the folder. On Linux the tool also tells a running
+  `tools/generate-sfx` owner from a pid that was reused, by the process's
+  command and start time. Either way its message names the lock file to delete.
+- **Stopping.** SIGTERM, SIGHUP (a closed terminal) or a first Ctrl-C starts
+  no new requests, lets the ones in flight finish, saves their audio and
+  releases the lock. A second Ctrl-C quits at once, losing those requests.
 - **Resuming.** A candidate already on disk is never requested again, so a
   stopped run resumes where it stopped; the stop message prints the command.
   Files are written to `.part` and then renamed, so a half-written download

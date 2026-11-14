@@ -7,8 +7,9 @@
 // - The dry run requests nothing and prices every row; its tier and total
 //   credits equal credits_per_second x seconds x candidates summed here.
 // - The tool refuses, before any request: an --out inside the repository, an
-//   --out it cannot check (no git), a real run without a key, and an
-//   ELEVENLABS_API_BASE other than the API's own hosts or the loopback.
+//   --out it cannot check (no git, or a .git file pointing nowhere), a real run
+//   without a key, and an ELEVENLABS_API_BASE other than the API's own hosts
+//   or the loopback.
 // - Against stand-ins for the ElevenLabs API on this machine's loopback:
 //   - Requests carry the sheet's model and settings and the key (read from
 //     ~/.config/elevenlabs/.env), and no more run at once than allowed.
@@ -19,9 +20,11 @@
 //   - A 504, an answer lost while read, or an unwritable folder stops the run
 //     after one request and is logged. A 401 stops it, and a request waiting
 //     to retry is not sent.
-//   - A run is refused while another holds the folder's lock, live or left
-//     behind, and the lock is left alone.
-//   - The first Ctrl-C saves the requests in flight; a second quits at once.
+//   - A run is refused while another holds the folder's lock, and the lock is
+//     left alone. The lock may be held by a running tools/generate-sfx run, or
+//     left behind by one whose pid has ended or was reused.
+//   - A first Ctrl-C, SIGTERM or SIGHUP saves the requests in flight; a second
+//     Ctrl-C quits at once.
 //   - The key is never printed or logged.
 //   Every other run points at a trap stand-in that must stay unused, so no
 //   case can reach the real API.
@@ -286,13 +289,20 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   check(inRepo.code === 2 && inRepo.stderr.includes("refusing --out"), `an --out inside the repository was not refused (exit ${inRepo.code}): ${inRepo.all.trim()}`);
   const noGit = await runTool(["--out", join(scratch, "no-git")], { env: { PATH: emptyPath } });
   check(noGit.code === 2 && noGit.stderr.includes("git could not run"), `an --out that git could not check was not refused (exit ${noGit.code}): ${noGit.all.trim()}`);
+  // Under a .git file that points nowhere git answers "not a git repository: (null)",
+  // not its answer for a folder in no repository, so the folder is refused.
+  const dangling = join(scratch, "dangling-gitfile");
+  mkdirSync(dangling);
+  writeFileSync(join(dangling, ".git"), "gitdir: /nonexistent/ti-sfx-check\n");
+  const danglingRun = await runTool(["--out", join(dangling, "out")]);
+  check(danglingRun.code === 2 && danglingRun.stderr.includes("git could not tell"), `an --out under a .git file pointing nowhere was not refused (exit ${danglingRun.code}): ${danglingRun.all.trim()}`);
   const noKeyOut = join(scratch, "no-key");
   const noKey = await runTool(["--out", noKeyOut, "--generate"]);
   check(noKey.code === 1 && noKey.stderr.includes("needs ELEVENLABS_API_KEY") && noKey.stderr.includes("nothing was requested"), `a real run without a key was not refused (exit ${noKey.code}): ${noKey.stderr.trim()}`);
   check(!existsSync(noKeyOut), "a refused real run created its --out directory");
   const usage = await runTool([]);
   check(usage.code === 2 && usage.stderr.includes("--out DIR is required"), `a run without --out exited ${usage.code}`);
-  passes.push("refuses an in-repository --out and one git cannot check (exit 2) and a real run without a key (exit 1)");
+  passes.push("refuses an in-repository --out, one git cannot check and one under a .git file pointing nowhere (exit 2), and a real run without a key (exit 1)");
 
   // ELEVENLABS_API_BASE: only the API's documented hosts, or http on the loopback.
   const refusedBases = ["https://example.com", "https://api.elevenlabs.io.example.com", "https://api.elevenlabs.io:8443", "http://api.elevenlabs.io", "https://user:secret@api.elevenlabs.io", "https://api.elevenlabs.io/v2", "not a url"];
@@ -463,35 +473,65 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   if (denied.code === 1 && api.requests.length === 2) passes.push("an HTTP 401 stops the run; a request waiting out a 429 is not sent after the stop; the echoed key is redacted");
 }
 
-// The output folder's lock: a live holder or one left behind refuses the run, and the lock stays.
+// The output folder's lock. A tools/generate-sfx run that holds it refuses another
+// run, naming the lock to delete if that pid is something else. A lock whose pid
+// can never run, is now another program, or is younger than the lock is reported
+// as left behind. Either way the lock is left as it was and nothing is requested.
 {
   const api = await startStandIn(audioReply);
-  const gone = spawnSync(process.execPath, ["-e", ""]).pid;
-  for (const [what, pid, said] of [["a running holder", process.pid, "another --generate run"], ["a lock left behind", gone, "not running any more"]]) {
-    const out = join(scratch, `lock-${pid}`);
-    mkdirSync(out, { recursive: true });
-    const lock = `${JSON.stringify({ pid, started: "2026-11-14T00:00:00.000Z" })}\n`;
-    writeFileSync(join(out, ".generate.lock"), lock);
-    const result = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot"], { env: withKey(api) });
-    check(result.code === 1 && result.stderr.includes(said), `${what} did not refuse the run (exit ${result.code}): ${result.stderr.trim()}`);
-    check(existsSync(join(out, ".generate.lock")) && readFileSync(join(out, ".generate.lock"), "utf8") === lock, `${what}: the lock was changed or deleted`);
+  // Above Linux's largest possible pid (PID_MAX_LIMIT, 2^22) and macOS's (99998): never a live process.
+  const NEVER_A_PID = 2 ** 22 + 1;
+  // A stand-in for a run of the tool: a live process whose command names generate_sfx.mjs.
+  const holder = spawn(process.execPath, ["-e", "setTimeout(() => {}, 120000)", "generate_sfx.mjs"], { stdio: "ignore" });
+  await new Promise((done, fail) => {
+    holder.once("spawn", done);
+    holder.once("error", fail);
+  });
+  const now = new Date().toISOString();
+  const cases = [["a lock whose pid can never run", NEVER_A_PID, now, "has ended", false]];
+  if (existsSync("/proc/self/cmdline")) {
+    cases.push(
+      ["a lock held by a running generate-sfx run", holder.pid, now, "another --generate run", true],
+      ["a lock whose pid is now another program", process.pid, now, "is now a different process", false],
+      ["a lock older than the generate-sfx process now holding its pid", holder.pid, "2020-01-01T00:00:00.000Z", "is now a different process", false],
+    );
+  } else {
+    console.log("NOTE sfx: no /proc here, so a running lock owner cannot be told from a reused pid; those cases were not checked");
+  }
+  try {
+    for (const [index, [what, pid, started, said, live]] of cases.entries()) {
+      const out = join(scratch, `lock-${index}`);
+      const path = join(out, ".generate.lock");
+      mkdirSync(out, { recursive: true });
+      const lock = `${JSON.stringify({ pid, started })}\n`;
+      writeFileSync(path, lock);
+      const result = await runTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot"], { env: withKey(api) });
+      check(result.code === 1 && result.stderr.includes(said), `${what} did not refuse the run as "${said}" (exit ${result.code}): ${result.stderr.trim()}`);
+      if (live) check(result.stderr.includes(`delete ${path}`), `${what}: the message does not say which lock to delete if pid ${pid} is not a generate-sfx run: ${result.stderr.trim()}`);
+      check(existsSync(path) && readFileSync(path, "utf8") === lock, `${what}: the lock was changed or deleted`);
+    }
+  } finally {
+    holder.kill();
   }
   check(api.requests.length === 0, `a locked folder still sent ${api.requests.length} requests`);
   await api.close();
-  passes.push("a lock held by a running process or left behind refuses the run and is left as it was");
+  passes.push(`${cases.length} locks refused the run and were left as they were: a running generate-sfx owner (naming the lock to delete otherwise), and as left behind a pid that can never run, a pid now another program, and a lock older than its pid's process`);
 }
 
-// Ctrl-C: the first lets the requests in flight finish and saves them; a second quits at once.
+// A first Ctrl-C, SIGTERM or SIGHUP lets the requests in flight finish and saves
+// them, starts no more and releases the lock; a second Ctrl-C quits at once.
 {
-  const out = join(scratch, "interrupt");
-  let started = null;
-  const api = await startStandIn(audioReply, { delayMs: 700, onArrival: (arrival) => { if (arrival === 2) started.child.kill("SIGINT"); } });
-  started = startTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--concurrency", "2"], { env: withKey(api) });
-  const result = await started.done;
-  check(result.code === 130 && api.requests.length === 2, `the first Ctrl-C did not stop new requests (exit ${result.code}, signal ${result.signal}, ${api.requests.length} requests)`);
-  check(shotCandidates(out).length === 2 && logOf(out).filter((entry) => entry.status === "ok").length === 2, `the requests in flight at Ctrl-C were not saved (${shotCandidates(out).length} on disk)`);
-  check(!existsSync(join(out, ".generate.lock")), "an interrupted run left its lock behind");
-  await api.close();
+  for (const [signal, code] of [["SIGINT", 130], ["SIGTERM", 143], ["SIGHUP", 129]]) {
+    const out = join(scratch, `stop-by-${signal}`);
+    let started = null;
+    const api = await startStandIn(audioReply, { delayMs: 700, onArrival: (arrival) => { if (arrival === 2) started.child.kill(signal); } });
+    started = startTool(["--out", out, "--generate", "--sheet", fixturePath, "--id", "shot", "--concurrency", "2"], { env: withKey(api) });
+    const result = await started.done;
+    check(result.code === code && api.requests.length === 2, `${signal} did not stop new requests gently (exit ${result.code}, signal ${result.signal}, ${api.requests.length} requests)`);
+    check(shotCandidates(out).length === 2 && logOf(out).filter((entry) => entry.status === "ok").length === 2, `the requests in flight at ${signal} were not saved (${shotCandidates(out).length} on disk)`);
+    check(!existsSync(join(out, ".generate.lock")), `a run stopped by ${signal} left its lock behind`);
+    await api.close();
+  }
 
   const quitOut = join(scratch, "quit");
   let quitting = null;
@@ -511,7 +551,7 @@ const withKey = (api) => ({ ELEVENLABS_API_BASE: api.base, ELEVENLABS_API_KEY: k
   check(quit.code === 130 && took < 3000, `a second Ctrl-C did not quit at once (exit ${quit.code}, signal ${quit.signal}, ${took} ms)`);
   check(!shotCandidates(quitOut).length && !existsSync(join(quitOut, ".generate.lock")), "quitting at once left a candidate or the lock");
   await slow.close();
-  passes.push(`Ctrl-C: the first saved the 2 requests in flight and started no more (exit 130); a second quit after ${took} ms`);
+  passes.push(`a first Ctrl-C, SIGTERM or SIGHUP each saved the 2 requests in flight, started no more and released the lock (exit 130, 143, 129); a second Ctrl-C quit after ${took} ms`);
 }
 
 // --- 4. Post-processing --------------------------------------------------------
