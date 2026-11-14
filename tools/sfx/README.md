@@ -225,6 +225,9 @@ a length cap, fades, a loop crossfade and a peak level.
 - **Trims.** The trim levels are dB below each candidate's own peak.
   `oneshot_impact` cuts everything before the first sample within 12 dB of
   the peak, so a take played the moment something lands starts at its hit.
+  `oneshot_door_close` cuts everything more than 30 dB under the peak. The
+  picked door shuts carried 0.30 to 0.47 s of room tone before the latch and
+  slam, and with this cut the slam comes 23 to 33 ms in, latch included.
 - **Peak.** The peak is measured after encoding, because Vorbis overshoots
   bright transients by up to about 2.6 dB.
 - **Loops.** A loop recipe with `loop_crossfade_ms` 0 keeps a loop as
