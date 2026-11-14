@@ -75,6 +75,16 @@
       "fade_out_ms": 80,
       "peak_dbfs": -1
     },
+    "oneshot_door_close": {
+      "what": "A door shutting, played the moment it is shut: cut the room tone and handle noise before the slam (everything more than 30 dB under the take's peak), keep the latch that leads into it, fade out the tail.",
+      "channels": 1,
+      "trim_start_db": -30,
+      "trim_end_db": -60,
+      "max_seconds": null,
+      "fade_in_ms": 2,
+      "fade_out_ms": 80,
+      "peak_dbfs": -1
+    },
     "oneshot_impact": {
       "what": "A one-shot that must start at its impact, played the moment something lands. Cut everything before the first sample within 12 dB of the take's peak, so a softer lead-in never delays the hit, then fade out the tail.",
       "channels": 1,
@@ -379,7 +389,8 @@
       "output": "car/door_close_{take}.ogg",
       "loudness_class": "medium",
       "level_db": -27,
-      "recipe": "oneshot"
+      "recipe": "oneshot_door_close",
+      "notes": "The owner's picks (c03, c02) hold 0.44 s and 0.30 s of room tone and handle noise before the latch and slam, which made the slam land late in the game (found by the sound integration, 2026-11-14). oneshot_door_close cuts everything more than 30 dB under the take's peak; c02's noise reaches 40 dB under its peak from its first millisecond, so -40 would cut nothing there."
     },
     {
       "id": "car_engine_start",
