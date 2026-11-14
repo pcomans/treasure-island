@@ -31,8 +31,9 @@ var _web_pointer_locked := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
 ## A pause or resume asked for inside a physics tick, put off to the idle step
-## (_set_paused): true pauses, false resumes.
+## (_set_paused): true pauses, false resumes; quiet without the pause's sound.
 var _pause_later := false
+var _pause_later_quiet := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
@@ -341,7 +342,9 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 	push_error("WORLD_FAILED: code=%s message=%s sources=%s" % [code, message, source_keys])
 
 
-func _set_paused(paused: bool) -> void:
+## Pauses or resumes the game, with the pause's sound unless quiet (the page
+## hidden: nobody hears it).
+func _set_paused(paused: bool, quiet := false) -> void:
 	# The tree pauses and resumes only in the idle step. Resumed inside a physics
 	# tick (a deferred call, such as the web's pointer-lock grant, is flushed
 	# there) after a pause from the idle step, the physics server re-adds every
@@ -349,13 +352,14 @@ func _set_paused(paused: bool) -> void:
 	# tick's remainder at the paused clock's zero step.
 	if Engine.is_in_physics_frame():
 		_pause_later = paused
+		_pause_later_quiet = quiet
 		if not get_tree().process_frame.is_connected(_set_paused_later):
 			get_tree().process_frame.connect(_set_paused_later, CONNECT_ONE_SHOT)
 		return
 	if paused:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
-	if get_tree().paused != paused:
+	if get_tree().paused != paused and not quiet:
 		# The pause menu opening, a little lower closing.
 		Sound.play(&"ui_pause", Vector3.INF, 1.0, 1.0 if paused else 0.9)
 	get_tree().paused = paused
@@ -412,7 +416,7 @@ func _on_sound_settings_changed(volume: float, muted: bool, keep: bool) -> void:
 
 
 func _set_paused_later() -> void:
-	_set_paused(_pause_later)
+	_set_paused(_pause_later, _pause_later_quiet)
 
 
 func _resume_game() -> void:
@@ -483,9 +487,15 @@ func _on_web_blur(_arguments: Array) -> void:
 		_set_paused.call_deferred(true)
 
 
+## The page hidden (another tab in front, the window minimized, another app on a
+## phone): it draws no frames then, so a deferred pause (the blur's) would wait
+## until it is shown again while the browser went on playing the loops (Godot's
+## web sample playback starts a looping take again in JavaScript), and the
+## frames it then catches up would sound. It pauses now, which stops every
+## world sound at once, and quietly.
 func _on_web_visibility(_arguments: Array) -> void:
-	if bool(JavaScriptBridge.get_interface("document").hidden):
-		_on_web_blur([])
+	if _world_ready and bool(JavaScriptBridge.get_interface("document").hidden):
+		_set_paused(true, true)
 
 
 func _publish_web_state(_args: Array) -> void:
