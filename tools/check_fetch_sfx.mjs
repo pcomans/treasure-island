@@ -290,6 +290,8 @@ try {
   check(result.status === 1 && !existsSync(resultFile), `10: a failed run must leave no result behind (exit ${result.status}): ${result.out}`);
   result = run(["--project", fullProject, "--result", work]);
   check(result.status === 1 && /is a folder/u.test(result.out), `10: --result naming a folder must be refused (exit ${result.status}): ${result.out}`);
+  result = run(["--project", fullProject, "--result", join(work, "no-such-folder", "result.json")]);
+  check(result.status === 1 && /its folder does not exist/u.test(result.out), `10: --result in a missing folder must be refused (exit ${result.status}): ${result.out}`);
 
   // 11. tools/deploy-web.sh's sound guard, offline: stand-in sources for the game's
   // real catalog (one take a sound), and a stand-in git that must never run.

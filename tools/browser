@@ -63,7 +63,7 @@ live_sessions() {
   local pidfile pid
   for pidfile in "${XDG_RUNTIME_DIR}/agent-browser"/*.pid; do
     [ -f "${pidfile}" ] || continue
-    pid="$(< "${pidfile}")"
+    { pid="$(< "${pidfile}")"; } 2>/dev/null
     [[ "${pid}" =~ ^[0-9]+$ ]] && owned "${pid}" || continue
     pidfile="${pidfile##*/}"
     echo "${pidfile%.pid}"
@@ -94,7 +94,7 @@ cleanup() {
   local name pid comm left
   if [ "${browser_started}" = true ]; then
     while IFS= read -r name; do
-      timeout 30 agent-browser --session "${name}" close
+      timeout 30 agent-browser --session "${name}" close </dev/null
     done < <(live_sessions)
   fi
   if [ -n "${weston_pid}" ]; then

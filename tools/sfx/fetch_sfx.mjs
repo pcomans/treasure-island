@@ -378,6 +378,7 @@ export function main(argv = process.argv.slice(2), env = process.env) {
     }
     if (stat?.isDirectory()) throw new FetchError(`--result ${resultPath} is a folder; give a file`);
     if (stat) unlinkSync(resultPath);
+    else if (!existsSync(dirname(resultPath))) throw new FetchError(`--result ${resultPath}: its folder does not exist`);
   }
   const project = resolve(values.project ?? REPO_ROOT);
   if (!existsSync(join(project, "project.godot"))) throw new FetchError(`${project} is not the game's project (no project.godot)`);
