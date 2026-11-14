@@ -257,6 +257,7 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 	VehicleReach.forget_shapes()
 	_furniture = FURNITURE_BREAKER.new()
 	_furniture.name = "FurnitureBreaker"
+	_furniture.visible_ground = _visible_ground
 	add_child(_furniture)
 	if "furniture" in world.get_street_detail_layers():
 		_furniture.configure(world.street_detail_layer("furniture"))

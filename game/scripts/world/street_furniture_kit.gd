@@ -537,7 +537,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# davits' smooth crook by default, a tight knee for a near-straight
 			# upswept arm (the owner lot's island lamp).
 			var bend := snappedf(clampf(_number(params, "bend_m", 1.2), 0.2, 1.2), 0.05)
-			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend), Transform3D.IDENTITY, null, true, true)
+			_piece(result, "lamp_cobra_h%.1f_a%.1f_c%d_b%.2f" % [height, arm, int(classic), bend], func(b: Builder) -> void: _lamp_cobra(b, height, arm, classic, bend))
 			# blades: a junction's name blades clamped beside the pole at mid-height
 			# (Avenue B at Gateview Avenue, Nov 2025), each reaching out along its street.
 			var lamp_blades: Variant = params.get("blades", null)
@@ -546,12 +546,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_capsule(result, 0.13, height - 0.9)
 		"lamp_lot":
 			var lot_height := _number(params, "height_m", 6.0)
-			_piece(result, "lamp_lot_h%.1f" % lot_height, func(b: Builder) -> void: _lamp_lot(b, lot_height), Transform3D.IDENTITY, null, true, true)
+			_piece(result, "lamp_lot_h%.1f" % lot_height, func(b: Builder) -> void: _lamp_lot(b, lot_height))
 			_capsule(result, 0.08, lot_height)
 		"lamp_plaza":
 			var plaza_height := _number(params, "height_m", 8.0)
 			var heads := int(_number(params, "heads", 4))
-			_piece(result, "lamp_plaza_h%.1f_n%d" % [plaza_height, heads], func(b: Builder) -> void: _lamp_plaza(b, plaza_height, heads), Transform3D.IDENTITY, null, true, true)
+			_piece(result, "lamp_plaza_h%.1f_n%d" % [plaza_height, heads], func(b: Builder) -> void: _lamp_plaza(b, plaza_height, heads))
 			_capsule(result, 0.1, plaza_height)
 		"signal_mast":
 			var mast_arm := _number(params, "arm_m", 4.0)
@@ -622,7 +622,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			result.shapes.append({"shape": _shapes["cabinet_box"], "transform": Transform3D(Basis.IDENTITY, Vector3(0.0, 0.725, 0.0))})
 		"bus_stop_sign":
 			# The pad stays where it is when a car knocks the post over.
-			_piece(result, "bus_stop_pad", func(b: Builder) -> void: _bus_stop_pad(b), Transform3D.IDENTITY, null, true, false, true)
+			_piece(result, "bus_stop_pad", func(b: Builder) -> void: _bus_stop_pad(b), Transform3D.IDENTITY, null, true, true)
 			_piece(result, "bus_stop_sign", func(b: Builder) -> void: _muni_flag(b, Vector3.ZERO))
 			_capsule(result, 0.06, 3.0)
 		"bench_wedge":
@@ -664,10 +664,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				var angle := PI * 0.25 + PI * 0.5 * float(index)
 				_capsule(result, 0.11, 4.0, Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_POLE_RADIUS_M)
 		"lamp_disc":
-			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b), Transform3D.IDENTITY, null, true, true)
+			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b))
 			_capsule(result, 0.07, 4.2)
 		"lamp_fork":
-			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b), Transform3D.IDENTITY, null, true, true)
+			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b))
 			_capsule(result, 0.1, 5.4)
 		"bollard_steel":
 			_piece(result, "bollard_steel", func(b: Builder) -> void: _bollard_steel(b))
@@ -858,10 +858,10 @@ func goal_mouth(prop: String, params: Dictionary) -> Dictionary:
 ## The prop's mesh for `key`, drawn once; `material` replaces the shared atlas
 ## material for the shaded surface; `shadow` false keeps the piece out of the
 ## sun's shadow when its prop casts one (glass); a piece of a prop a car knocks over
-## (FELLABLE, or `fells`) keeps its slices on the mesh (fall_slices), unless it
-## `stays` standing where the prop stood (a bus stop's pad).
-func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true, fells := false, stays := false) -> void:
-	var sliced := (fells or _fells) and not stays
+## (FELLABLE) keeps its slices on the mesh (fall_slices), unless it `stays`
+## standing where the prop stood (a bus stop's pad).
+func _piece(result: Dictionary, key: String, draw: Callable, transform := Transform3D.IDENTITY, material: Material = null, shadow := true, stays := false) -> void:
+	var sliced := _fells and not stays
 	if not _meshes.has(key) or (sliced and not (_meshes[key] as Mesh).has_meta("fall_slices")):
 		var builder := Builder.new(CELL_WHITE)
 		draw.call(builder)

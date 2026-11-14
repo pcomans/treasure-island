@@ -64,14 +64,21 @@ extends SceneTree
 ##      through where it stood, and the standing one stops the player;
 ##   7c. the rest of the street props a car knocks over (owner, 2026-11-14: sign
 ##      posts, signal masts, utility poles, bollards, light towers; and the park's
-##      event poles), one of each kind (vehicle_cases.json poles): it stops the
+##      event poles), one of each kind (vehicle_cases.json poles: a street-name post,
+##      a stop sign, a post sign, a Muni stop flag, whose concrete pad is no piece
+##      of what falls, a bollard, a mast, a utility pole, a light tower and an
+##      event pole): it stops the
 ##      stock player walking into it; nudged slower than it falls to (a sign post
 ##      at a creep, a mast, pole or tower at a speed that fells a lamp) it stands
 ##      and stops the car; driven at from run_up_m back on the stock W it falls,
 ##      the car keeping at least its share of its speed less POLE_KEEP_SLACK and
 ##      still driving half a second later, and it is frozen lying on the ground
 ##      (tipped past POLE_LIE_UP) within LAMP_SETTLE_S, its base within
-##      POLE_REST_M of where it stood; a utility pole's wire spans now run from
+##      POLE_REST_M of where it stood and its lowest drawn points no deeper than
+##      POLE_BURIED_M under the ground drawn there (a paved walk or road is drawn a
+##      few centimetres over the land's collision, VisibleGround: visual review,
+##      2026-11-14, saw a felled bollard half sunk in Garden Walk's paving); a
+##      utility pole's wire spans now run from
 ##      the standing neighbours down to it, their felled ends within
 ##      POLE_WIRE_DOWN_M of the ground; the run asks for its one hit sound
 ##      (lamp_hit, from the felling code) and no car crash sound (the speed it
@@ -169,6 +176,8 @@ const POLE_KEEP_SLACK := 0.08
 const POLE_LIE_UP := 0.5
 const POLE_REST_M := 6.0
 const POLE_WIRE_DOWN_M := 2.5
+## How deep a felled prop at rest may lie under the ground drawn under it (m).
+const POLE_BURIED_M := 0.02
 ## A yard vehicle's drive from rest (DRIVE_S under full throttle) must cover at
 ## least this share of the distance and speed its own launch acceleration and top
 ## speed give (drivable_car.gd BODIES): the throttle and the tyres' grip build up
@@ -186,6 +195,8 @@ var _cases: Dictionary
 var _recoveries: Array[Dictionary] = []
 ## The expanded generated shoreline (_shoreline), read once.
 var _shoreline_document: Dictionary
+## The ground drawn over the land (_buried_m), indexed once.
+var _drawn: VisibleGround
 
 
 func _initialize() -> void:
@@ -222,7 +233,7 @@ func _run() -> void:
 	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1559,7 +1570,7 @@ func _case_lamps() -> bool:
 	_release_driving()
 	var front := _front_past(pole, heading, car)
 	print("LAMP NUDGE crept into %s at up to %.2f m/s, stopped %s, then 2 s of full throttle against it: felled %s, the car's front %.2f m past its axis" % [nudge, creep_top, stopped, lamps.is_felled(nudge), front])
-	if not _require(stopped and creep_top < FURNITURE_BREAKER.FELL_SPEED_MPS and not lamps.is_felled(nudge) and front < 0.0, "Creeping into %s and pressing on felled it or got past it (top %.2f m/s, felled %s, front %.2f m past its axis)." % [nudge, creep_top, lamps.is_felled(nudge), front]):
+	if not _require(stopped and creep_top < lamps.fell_speed(nudge) and not lamps.is_felled(nudge) and front < 0.0, "Creeping into %s and pressing on felled it or got past it (top %.2f m/s, felled %s, front %.2f m past its axis)." % [nudge, creep_top, lamps.is_felled(nudge), front]):
 		return false
 	# A tap: the stock W from 0.6 m, held.
 	if not await _drive_from(car, _short_of(pole, heading, 0.6, car), heading):
@@ -1602,7 +1613,7 @@ func _case_lamps() -> bool:
 	_release_driving()
 	front = _front_past(pole, heading, car)
 	print("LAMP FELL %s at %.2f m/s: %.2f m/s the tick after (%.0f%% kept), %.2f m/s half a second later, the car's front %.2f m past its axis, debris %d" % [fell, speed_in, speed_out, 100.0 * speed_out / maxf(speed_in, 0.01), later, front, lamps.get_child_count() - debris_before])
-	if not _require(fell_tick >= 0 and speed_in > FURNITURE_BREAKER.FELL_SPEED_MPS, "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [fell, float(_cases.lamps.run_up_m), lamps.is_felled(fell), speed_in]) \
+	if not _require(fell_tick >= 0 and speed_in > lamps.fell_speed(fell), "Driven at %s from %.0f m back, the car did not knock it over (felled %s at %.2f m/s)." % [fell, float(_cases.lamps.run_up_m), lamps.is_felled(fell), speed_in]) \
 	or not _require(speed_out >= LAMP_KEEP * speed_in and later > 5.0 and front > 2.0, "The car did not carry on through %s (%.2f -> %.2f m/s, %.2f m/s half a second later, front %.2f m past its axis)." % [fell, speed_in, speed_out, later, front]) \
 	or not _require(lamps.get_child_count() > debris_before, "Felling %s dropped no debris." % fell):
 		return false
@@ -1700,6 +1711,9 @@ func _case_poles() -> bool:
 		var prop := props.prop_of(id)
 		kinds.append(prop)
 		var label := "%s %s" % [prop, id.rsplit(":", true, 1)[-1]]
+		# A Muni stop's concrete pad stays where it is: it is no piece of what falls.
+		if prop == "bus_stop_sign" and not _require(props.piece_names(id).has("bus_stop_sign") and not props.piece_names(id).has("bus_stop_pad"), "The Muni stop %s would fall with its pad (its falling pieces %s)." % [id, props.piece_names(id)]):
+			return false
 		var heading := Vector2(fixture.heading_xz[0], fixture.heading_xz[1]).normalized()
 		var fells_at := props.fell_speed(id)
 		var foot: Vector3 = pole.foot
@@ -1780,9 +1794,11 @@ func _case_poles() -> bool:
 		var base := lying.global_position if lying != null else Vector3.INF
 		var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
 		var up := lying.global_transform.basis.y.y if lying != null else 1.0
-		print("POLE REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, its up %.2f" % [label, lying != null and lying.freeze, settled_s, rest_m, up])
+		var buried := _buried_m(lying) if lying != null else INF
+		print("POLE REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, its up %.2f, lifted %.3f m onto the ground drawn there and %.3f m deep at most under it" % [label, lying != null and lying.freeze, settled_s, rest_m, up, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, buried])
 		if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [label, LAMP_SETTLE_S]) \
-		or not _require(rest_m <= POLE_REST_M and up < POLE_LIE_UP, "The felled %s did not go over where it stood (its base %.2f m away, at most %.1f m; its up %.2f, under %.2f)." % [label, rest_m, POLE_REST_M, up, POLE_LIE_UP]):
+		or not _require(rest_m <= POLE_REST_M and up < POLE_LIE_UP, "The felled %s did not go over where it stood (its base %.2f m away, at most %.1f m; its up %.2f, under %.2f)." % [label, rest_m, POLE_REST_M, up, POLE_LIE_UP]) \
+		or not _require(buried <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [label, buried, POLE_BURIED_M]):
 			return false
 		if prop == "utility_pole" and not _poles_wires_down(props, id, foot, label):
 			return false
@@ -1793,7 +1809,7 @@ func _case_poles() -> bool:
 		# On foot: through where it stood.
 		if not await _walk_x(foot, across_x, true, label):
 			return false
-	return _require(kinds.has("name_sign") and kinds.has("stop_sign") and kinds.has("bollard_steel") and kinds.has("signal_mast") and kinds.has("utility_pole") and kinds.has("light_tower") and kinds.has("event_pole"), "The poles case must take one of each kind (it took %s)." % [kinds])
+	return _require(kinds.has("name_sign") and kinds.has("stop_sign") and kinds.has("post_sign") and kinds.has("bus_stop_sign") and kinds.has("bollard_steel") and kinds.has("signal_mast") and kinds.has("utility_pole") and kinds.has("light_tower") and kinds.has("event_pole"), "The poles case must take one of each kind (it took %s)." % [kinds])
 
 
 ## A felled utility pole's wire spans: each comes down from its standing
@@ -1810,6 +1826,40 @@ func _poles_wires_down(props: FURNITURE_BREAKER, id: String, foot: Vector3, labe
 	print("POLE WIRES %s: %d spans now run from a standing neighbour down to it, their felled ends %.2f to %.2f m above where it stood" % [label, spans.size(), lowest, highest])
 	return _require(not spans.is_empty() and spans.all(func(span: Dictionary) -> bool: return not (span.get("wires", []) as Array).is_empty()), "The felled %s brought no wire span down with it (%s)." % [label, spans]) \
 	and _require(highest < POLE_WIRE_DOWN_M, "The felled %s's wires end %.2f m up, not down with it (under %.1f m)." % [label, highest, POLE_WIRE_DOWN_M])
+
+
+## How deep a felled prop's lowest drawn points lie under the ground drawn under
+## them (m; 0 when none does): each of its hulls' points within 0.3 m of its
+## lowest looks straight down from 0.5 m over it; the land's collision there is
+## drawn as high as the road, path or area over it stands (VisibleGround), any
+## other solid as it is.
+func _buried_m(debris: RigidBody3D) -> float:
+	if _drawn == null:
+		_drawn = VisibleGround.new()
+		_drawn.build([_world.ground_and_areas, _world.roads_and_paths])
+	var points := PackedVector3Array()
+	var lowest := INF
+	for child: Node in debris.get_children():
+		var collision := child as CollisionShape3D
+		if collision == null or not collision.shape is ConvexPolygonShape3D:
+			continue
+		var xf := debris.global_transform * collision.transform
+		for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
+			points.append(xf * point)
+			lowest = minf(lowest, (xf * point).y)
+	var deepest := 0.0
+	for at: Vector3 in points:
+		if at.y > lowest + 0.3:
+			continue
+		var hit := _ray(at + Vector3.UP * 0.5, at - Vector3.UP * 0.5, 1)
+		if hit.is_empty():
+			continue
+		var ground := (hit.position as Vector3).y
+		var collider := hit.get("collider") as Node
+		if collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
+			ground += _drawn.lift_at(at.x, at.z)
+		deepest = maxf(deepest, ground - at.y)
+	return deepest
 
 
 ## How many times sound id was asked for since process frame mark, whatever came

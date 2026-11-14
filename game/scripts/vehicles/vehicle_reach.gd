@@ -113,11 +113,13 @@ func distance_to(point: Vector3) -> float:
 ## height) or, given a footprint, an upright post of that plan size (half sizes
 ## along its frame's x and z; footprint_xf: its middle at the foot and its turn):
 ## {t (s from now, 0 if it does already), closing (m/s: the body's speed toward it
-## across the face that meets it)}, or {} if not within limit_s or the box is
-## above or below it. Worked in plan in the body's frame, where the pole's line
-## crosses the middle height of the box (or the pole's own end nearest it, a
-## bollard below a van's); a body tipped far over (on its side or roof) gets {},
-## so physics alone meets the pole.
+## across the face that meets it)}, or {} if not within limit_s or the pole is
+## not where the body would hit it: its foot must stand at or below the box's
+## middle height (not a lamp on a ledge beside the body's roof) and its top reach
+## the box's bottom (a 1 m bollard below a van's middle still counts). Worked in
+## plan in the body's frame, where the pole's line crosses the middle height of
+## the box (or the pole's own end nearest it); a body tipped far over (on its side
+## or roof) gets {}, so physics alone meets the pole.
 func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float, footprint := Vector2.ZERO, footprint_xf := Transform3D.IDENTITY) -> Dictionary:
 	var to_local := xf.inverse()
 	var bottom := to_local * foot
@@ -125,9 +127,9 @@ func pole_contact(foot: Vector3, height: float, radius: float, limit_s: float, f
 	var rise := top.y - bottom.y
 	if rise < height * 0.7:
 		return {}
-	if box.end.y < bottom.y - radius or box.position.y > top.y + radius:
-		return {}
 	var middle := box.get_center().y
+	if middle < bottom.y - radius or box.position.y > top.y + radius:
+		return {}
 	var at := bottom.lerp(top, clampf((middle - bottom.y) / rise, 0.0, 1.0))
 	if footprint != Vector2.ZERO:
 		return _post_contact(at, to_local.basis * footprint_xf.basis.x, to_local.basis * footprint_xf.basis.z, footprint, limit_s)

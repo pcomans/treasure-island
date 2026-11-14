@@ -81,6 +81,25 @@ const FRICTION := 1.0
 ## or last woke: frozen with no collision on the ground, asleep on anything else.
 const REST_S := 0.6
 const SETTLE_MAX_S := 8.0
+## Frozen on the ground, it is put on the drawn ground (_onto_drawn_ground): each of
+## its hulls' points within REST_BAND_M of its lowest, one a REST_CELL_M square in
+## plan, looks once straight down from REST_RAY_M over it to as far under it; a lift
+## of more than REST_LIFT_MAX_M is something over it, not ground, and is skipped.
+const REST_BAND_M := 0.3
+const REST_CELL_M := 0.25
+const REST_RAY_M := 0.5
+const REST_LIFT_MAX_M := 0.3
+## A felled utility pole's wires hang slack from the standing pole: sagging up to
+## DROP_SAG of their length (as it goes over, from their own sag standing), in
+## DROP_PIECES pieces at least, and never into the ground, taken as a straight line
+## between the two poles' feet.
+const DROP_SAG := 0.07
+const DROP_PIECES := 14
+## The material lit parts (a signal head's green lens, a pedestrian head's hand)
+## show while the prop stands (the furniture kit's lit surface, by its resource
+## name); felled, they are drawn shaded and darkened by LENS_OFF: off.
+const LIT_MATERIAL := "street_furniture_lit"
+const LENS_OFF := Color(0.3, 0.3, 0.3)
 ## Sound (game/scripts/audio/sound.gd): the hit as it goes over, louder the faster
 ## the body that felled it and the heavier the prop (a lamp's as before; a light
 ## sign post's softer, a mast's or pole's at least a heavy lamp's), and the clang of
@@ -116,6 +135,11 @@ var _hulls_by_mesh: Dictionary = {}
 var _spans: Array = []
 ## The shared wire mesh, from the built wires.
 var _wire_mesh: Mesh
+## The drawn ground over the land (VisibleGround: how far the roads, paths and
+## areas drawn over it stand above its collision), set by the vehicle manager.
+var visible_ground: VisibleGround
+## The lit parts' material once a prop is felled (LENS_OFF), made at the first.
+static var _lenses_off: StandardMaterial3D
 
 
 func configure(furniture_layer: Node) -> void:
@@ -276,6 +300,16 @@ func pole(id: String) -> Dictionary:
 	return {} if row.is_empty() else {"foot": row.foot, "height": row.height, "radius": row.radius, "footprint": row.footprint, "footprint_xf": row.footprint_xf}
 
 
+## The meshes (their resource names) of the pieces that go over with a row: not a
+## piece that stays where it stood (a bus stop's pad). [] for a row that is not
+## fellable.
+func piece_names(id: String) -> PackedStringArray:
+	var names := PackedStringArray()
+	for ref: Array in (_rows.get(id, {}) as Dictionary).get("instances", []):
+		names.append((ref[0] as MultiMeshInstance3D).multimesh.mesh.resource_name)
+	return names
+
+
 ## Whether every piece of a fellable row keeps the slices it lies on when felled
 ## (its mesh's fall_slices, which the baked world must carry too): the ids of the
 ## rows with a piece that has none.
@@ -374,6 +408,11 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 		mesh.layers = instance.layers
 		mesh.cast_shadow = instance.cast_shadow
 		mesh.visibility_range_end = float(row.range_m)
+		# Its lit lenses go out.
+		for surface_index in mesh.mesh.get_surface_count():
+			var lit := mesh.mesh.surface_get_material(surface_index)
+			if lit != null and lit.resource_name == LIT_MATERIAL:
+				mesh.set_surface_override_material(surface_index, _lens_off_material(lit))
 		debris.add_child(mesh)
 		# It lies on what is drawn of it.
 		for hull: ConvexPolygonShape3D in _hulls(instance.multimesh.mesh):
@@ -422,6 +461,24 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 	debris.linear_velocity = foot + spin.cross(placement * debris.center_of_mass - pivot)
 
 
+## What a felled prop's lit parts are drawn with: the lit material's atlas and
+## vertex colours, shaded and darkened (LENS_OFF), as a lens with its lamp off.
+static func _lens_off_material(lit: Material) -> StandardMaterial3D:
+	if _lenses_off == null:
+		_lenses_off = StandardMaterial3D.new()
+		_lenses_off.resource_name = "street_furniture_lens_off"
+		var source := lit as BaseMaterial3D
+		if source != null:
+			_lenses_off.albedo_texture = source.albedo_texture
+			_lenses_off.texture_filter = source.texture_filter
+			_lenses_off.texture_repeat = source.texture_repeat
+		_lenses_off.vertex_color_use_as_albedo = true
+		_lenses_off.vertex_color_is_srgb = true
+		_lenses_off.albedo_color = LENS_OFF
+		_lenses_off.roughness = 0.35
+	return _lenses_off
+
+
 ## The hit's loudness for a prop of mass (kg) met at speed (m/s): a lamp's
 ## (70 to 180 kg) as it always was, a lighter prop's softer, a heavier one's louder.
 static func hit_strength(speed: float, mass: float) -> float:
@@ -450,9 +507,10 @@ func _hulls(mesh: Mesh) -> Array:
 	return hulls
 
 
-## A felled pole's wire spans: each hung from a standing pole now runs from that
-## pole to this one's debris (a MultiMesh of its own, the standing pieces hidden);
-## one whose other pole fell before is gone.
+## A felled pole's wire spans: each hung from a standing pole now runs slack from
+## that pole down to this one's debris (a MultiMesh of its own), its standing
+## pieces drawn at zero scale where each was; one whose other pole fell before is
+## gone.
 func _drop_wires(id: String, debris: RigidBody3D) -> void:
 	var row: Dictionary = _rows[id]
 	var to_pole := (row.transform as Transform3D).affine_inverse()
@@ -465,11 +523,7 @@ func _drop_wires(id: String, debris: RigidBody3D) -> void:
 			span.dropped = null
 			span.gone = true
 			continue
-		for ref: Array in span.pieces:
-			var pieces := ref[0] as MultiMeshInstance3D
-			if is_instance_valid(pieces):
-				for piece in range(int(ref[1]), int(ref[1]) + int(ref[2])):
-					pieces.multimesh.set_instance_transform(piece, Transform3D(Basis().scaled(Vector3.ZERO), debris.global_position))
+		_hide_span(span)
 		if _wire_mesh == null:
 			span.gone = true
 			continue
@@ -478,12 +532,18 @@ func _drop_wires(id: String, debris: RigidBody3D) -> void:
 		var count := 0
 		for wire: Array in span.wires:
 			local.append(to_pole * (wire[end] as Vector3))
-			count += int(wire[4])
+			count += maxi(int(wire[4]), DROP_PIECES)
 		var multimesh := MultiMesh.new()
 		multimesh.transform_format = MultiMesh.TRANSFORM_3D
 		multimesh.use_custom_data = true
 		multimesh.mesh = _wire_mesh
 		multimesh.instance_count = count
+		# Each piece's radius, for the wire shader, once.
+		var at := 0
+		for wire: Array in span.wires:
+			for _piece in maxi(int(wire[4]), DROP_PIECES):
+				multimesh.set_instance_custom_data(at, Color(float(wire[3]), 0.0, 0.0, 0.0))
+				at += 1
 		var drawn := MultiMeshInstance3D.new()
 		drawn.name = "Wires%d" % index
 		drawn.multimesh = multimesh
@@ -494,8 +554,42 @@ func _drop_wires(id: String, debris: RigidBody3D) -> void:
 		span.debris = debris
 		span.end = end
 		span.local = local
+		# The ground under its ends: the standing pole's foot and this one's.
+		var standing: Dictionary = _rows.get(str(span.poles[1 - end]), {})
+		var foot_y := (row.transform as Transform3D).origin.y
+		span.floors = [(standing.transform as Transform3D).origin.y if not standing.is_empty() else foot_y, foot_y]
 		_hang_dropped(span)
 	debris.set_meta("spans", row.spans)
+
+
+## Draws a span's standing pieces at zero scale, each where it hung (worked out
+## again from its wires as the builder hung them, cell by cell), so the cells'
+## batches keep their bounds.
+func _hide_span(span: Dictionary) -> void:
+	var runs: Array = span.pieces
+	var origins: Array = []
+	var run_of := {}
+	for run_index in runs.size():
+		origins.append([])
+		var instance := runs[run_index][0] as MultiMeshInstance3D
+		if is_instance_valid(instance):
+			run_of[String(instance.name)] = run_index
+	for wire: Array in span.wires:
+		var middles: Array[Vector3] = []
+		var pieces := BUILDER.wire_pieces(wire[0], wire[1], float(wire[2]), float(wire[3]), int(wire[4]), middles)
+		for piece_index in pieces.size():
+			var middle := middles[piece_index]
+			var run_index := int(run_of.get("power_wire__c%d_%d" % [floori(middle.x / BUILDER.CELL_MAX_M), floori(middle.z / BUILDER.CELL_MAX_M)], -1))
+			if run_index >= 0:
+				(origins[run_index] as Array).append(pieces[piece_index].origin)
+	for run_index in runs.size():
+		var instance := runs[run_index][0] as MultiMeshInstance3D
+		if not is_instance_valid(instance):
+			continue
+		var placed: Array = origins[run_index]
+		for k in int(runs[run_index][2]):
+			var origin: Vector3 = placed[k] if k < placed.size() else (span.wires[0][0] as Vector3)
+			instance.multimesh.set_instance_transform(int(runs[run_index][1]) + k, Transform3D(Basis().scaled(Vector3.ZERO), origin))
 
 
 ## A wire of a dropped span: [from (at the standing pole), to (at the felled one)].
@@ -506,18 +600,23 @@ func _wire_ends(span: Dictionary, wire_index: int) -> Array:
 	return [wire[1 - int(span.end)], fallen]
 
 
-## Draws a dropped span's wires where its felled pole is now.
+## Draws a dropped span's wires where its felled pole is now: slacker the further
+## it has gone over (from their own sag standing to DROP_SAG lying), never under
+## the ground between the two poles' feet.
 func _hang_dropped(span: Dictionary) -> void:
 	var drawn := span.dropped as MultiMeshInstance3D
 	if drawn == null:
 		return
+	var debris := span.debris as RigidBody3D
+	var over := clampf(1.0 - debris.global_transform.basis.y.y, 0.0, 1.0) if is_instance_valid(debris) else 1.0
+	var floors: Array = span.floors
+	var unused: Array[Vector3] = []
 	var at := 0
 	for wire_index in (span.wires as Array).size():
 		var wire: Array = span.wires[wire_index]
 		var ends := _wire_ends(span, wire_index)
-		for piece: Transform3D in BUILDER.wire_pieces(ends[0], ends[1], float(wire[2]), float(wire[3]), int(wire[4])):
+		for piece: Transform3D in BUILDER.wire_pieces(ends[0], ends[1], lerpf(float(wire[2]), DROP_SAG, over), float(wire[3]), maxi(int(wire[4]), DROP_PIECES), unused, float(floors[0]), float(floors[1])):
 			drawn.multimesh.set_instance_transform(at, piece)
-			drawn.multimesh.set_instance_custom_data(at, Color(float(wire[3]), 0.0, 0.0, 0.0))
 			at += 1
 
 
@@ -562,8 +661,69 @@ func _physics_process(delta: float) -> void:
 				continue
 			debris.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
 			debris.freeze = true
+			var lift := _onto_drawn_ground(debris)
+			debris.set_meta("drawn_lift_m", lift)
+			if lift > 0.0:
+				# Its wires end on its lifted crossarm.
+				for span_index: int in debris.get_meta("spans", []):
+					var span: Dictionary = _spans[span_index]
+					if span.dropped != null and span.debris == debris:
+						_hang_dropped(span)
 			for shape: Node in debris.find_children("*", "CollisionShape3D", false, false):
 				(shape as CollisionShape3D).disabled = true
+
+
+## A felled prop come to rest on the ground, put on the ground that is drawn there:
+## the roads, paths and areas drawn over the land stand a few centimetres above its
+## collision (VisibleGround), so a prop lying on the land would lie in a paved walk
+## by that much. Each of its hulls' lowest points (REST_BAND_M over the lowest, one
+## a REST_CELL_M square) looks straight down once, at rest, never while it moves:
+## where it finds the land, the ground drawn there is the land's height and the
+## drawn lift over it; anything else solid (a kerb, steps, a wall's foot) is drawn
+## where it is. The prop is lifted by the deepest point's depth under that ground
+## (no more than REST_LIFT_MAX_M: deeper is something over it, not ground). The
+## lift (m), 0 when none.
+func _onto_drawn_ground(debris: RigidBody3D) -> float:
+	var lowest := INF
+	var points := PackedVector3Array()
+	for child: Node in debris.get_children():
+		var collision := child as CollisionShape3D
+		if collision == null or not collision.shape is ConvexPolygonShape3D:
+			continue
+		var xf := debris.global_transform * collision.transform
+		for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
+			var at := xf * point
+			points.append(at)
+			lowest = minf(lowest, at.y)
+	# The lowest point in each REST_CELL_M square.
+	var cells := {}
+	for at: Vector3 in points:
+		if at.y > lowest + REST_BAND_M:
+			continue
+		var cell := Vector2i(floori(at.x / REST_CELL_M), floori(at.z / REST_CELL_M))
+		if not cells.has(cell) or at.y < (cells[cell] as Vector3).y:
+			cells[cell] = at
+	var space := debris.get_world_3d().direct_space_state
+	var ray := PhysicsRayQueryParameters3D.new()
+	ray.collision_mask = PHYSICS_WORLD_SOLID
+	ray.hit_back_faces = false
+	var lift := 0.0
+	for at: Vector3 in cells.values():
+		ray.from = at + Vector3.UP * REST_RAY_M
+		ray.to = at - Vector3.UP * REST_RAY_M
+		var hit := space.intersect_ray(ray)
+		if hit.is_empty():
+			continue
+		var ground := (hit.position as Vector3).y
+		var collider := hit.get("collider") as Node
+		if visible_ground != null and collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
+			ground += visible_ground.lift_at(at.x, at.z)
+		var depth := ground - at.y
+		if depth <= REST_LIFT_MAX_M:
+			lift = maxf(lift, depth)
+	if lift > 0.0:
+		debris.global_position += Vector3.UP * lift
+	return lift
 
 
 ## The felled prop's head meeting the ground, once (see FALL_LEAN_UP).

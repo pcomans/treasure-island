@@ -394,14 +394,20 @@ static func wire_piece_count(a: Vector3, b: Vector3) -> int:
 ## The pieces of one wire from a to b, sagging `sag` of its length at mid span:
 ## each the unit wire tube's frame (along +Z from one end of the piece to the
 ## other, `radius` across), in order from a; each piece's midpoint goes in middles.
-static func wire_pieces(a: Vector3, b: Vector3, sag: float, radius: float, pieces: int, middles: Array[Vector3] = []) -> Array[Transform3D]:
+## Given the heights of the ground under its two ends (floor_a and floor_b, both
+## finite), no point of it comes lower than the line between them, so a slack wire
+## down to a felled pole lies on the ground (street_furniture_breaker.gd).
+static func wire_pieces(a: Vector3, b: Vector3, sag: float, radius: float, pieces: int, middles: Array[Vector3] = [], floor_a := INF, floor_b := INF) -> Array[Transform3D]:
 	var result: Array[Transform3D] = []
 	var length := a.distance_to(b)
 	var drop := length * sag
+	var floored := is_finite(floor_a) and is_finite(floor_b)
 	var previous := a
 	for step in range(1, pieces + 1):
 		var t := float(step) / float(pieces)
 		var point := a.lerp(b, t) - Vector3(0.0, 4.0 * drop * t * (1.0 - t), 0.0)
+		if floored:
+			point.y = maxf(point.y, lerpf(floor_a, floor_b, t) + radius)
 		var along := point - previous
 		var x := along.cross(Vector3.UP)
 		if x.length() < 1e-6:
