@@ -122,7 +122,7 @@ All development and checks run in the Linux devcontainer (`.devcontainer/`) on t
 
 ## Approved product brief
 
-- Personal hobby project for private use; no public release is planned.
+- The owner intends a public release for everyone on the internet. A notarized Mac build is a precondition for announcing it; while there is none, Mac builds are published ad-hoc signed and not notarized ([Mac builds](#mac-builds)).
 - World boundary: Treasure Island, San Francisco is the only playable area. Yerba Buena Island is non-playable L1 scenery (see the horizon context below), and the player's block toward it is unchanged. Playing on Yerba Buena Island or the bridge approaches is out of scope unless later approved.
 - World coverage: model Treasure Island at island scale using a frozen latest-available OpenStreetMap snapshot as the authoritative horizontal layout inventory. Represent all Treasure Island terrain/shoreline features, roads/paths, major public spaces/land use, and exterior building footprints in that snapshot. Use the approved bounded USGS 3DEP bare-earth source for vertical terrain on Treasure Island and YBI. Individual apartments, floor plans, rooms, and interiors are out of scope.
 - Time setting: broadly present day as represented by that latest OSM snapshot. Do not reconcile it against a separate 2026 ground-truth inventory or reject it because reality may differ.
@@ -359,7 +359,7 @@ Detailed camera tuning, visual style beyond approved simple initial massing and 
 - Prefer free, already available, inexpensive one-time, and easily reversible resources.
 - Use simple massing for inventory coverage; for assigned building-quality work, judge the complete visible result against dated real-world references, not placeholder parity.
 - Avoid recurring services and production-scale infrastructure unless their value is unusually clear.
-- Do not spend time on storefront certification, monetization, analytics, live operations, extensive legal review, or public-release polish.
+- Do not spend time on storefront certification, monetization, analytics, live operations, extensive legal review, or public-release polish beyond Mac notarization.
 - Keep lightweight provenance notes for reproducibility. Do not perform a legal audit.
 - Shipped third-party content is credited in `game/resources/ui/credits.json`, which the pause menu's Credits screen shows (owner, 2026-11-12); sounds or other assets added later go in the same list. `game/tests/headless_credits_contract.gd` fails on an uncredited third-party folder or an undeclared image folder, so a new source or image folder gets its entry, or an `own_work` line saying how it was made, in the same change.
 
