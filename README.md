@@ -108,6 +108,22 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+## Sound
+
+The game has sound effects, but this repository holds none: every sound is
+generated with ElevenLabs from the public prompts in
+[tools/sfx/prompts.json](tools/sfx/prompts.json), and ElevenLabs' terms forbid
+making the output available as separate audio files, so it stays private. A
+checkout or build without a sound source runs silent. `tools/fetch-sfx`, which
+the build scripts run, copies the sounds from the private source named by
+`TI_SFX_SOURCE` into the ignored `game/resources/audio/sfx/`. The Mac build on
+GitHub Actions does the same when the repository variable `TI_SFX_SOURCE` and,
+for a private repository, the secret `TI_SFX_GIT_TOKEN` are set. To make your own
+set with your own ElevenLabs account, follow
+[Make your own sound set](tools/sfx/README.md#make-your-own-sound-set); for the
+terms, see
+[Why our audio is not in this repository](tools/sfx/README.md#why-our-audio-is-not-in-this-repository).
+
 ## Controls
 
 - `WASD` or the arrow keys move; hold `Shift` to run.
@@ -137,7 +153,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
 - [KNOWN_ISSUES.md](KNOWN_ISSUES.md): known issues and planned work.
-- [tools/sfx/README.md](tools/sfx/README.md): the sound-effect prompts and the tool that makes the audio (`tools/generate-sfx`); the audio itself stays out of Git.
+- [tools/sfx/README.md](tools/sfx/README.md): the sound-effect prompts, the tools that make and fetch the audio (`tools/generate-sfx`, `tools/fetch-sfx`), how to make your own set, and why the audio itself stays out of Git.
 - Older records: Git history and `evidence/`.
 
 

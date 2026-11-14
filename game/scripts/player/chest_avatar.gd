@@ -214,6 +214,9 @@ class Leg:
 	var side := 1.0
 	var phase_offset := 0.0
 	var swinging := false
+	## Whether this swing began while the chest moved: its landing sounds. A
+	## settling step begun standing still is silent.
+	var sounds := false
 	## World: the planted sole centre, the ground normal under it, the shoe's yaw.
 	var foot := Vector3.ZERO
 	var normal := Vector3.UP
@@ -560,12 +563,16 @@ func _ground_between(x: float, z: float, top: float, bottom: float, fallback_y: 
 	return position
 
 
+## Whether leg's planted foot is off its standing spot (SETTLE_DISTANCE across the
+## ground, or 0.3 m from the chest's height): standing, it takes a settling step.
+func _off_spot(xf: Transform3D, leg: Leg) -> bool:
+	var rest := _rest_foot(xf, leg)
+	return Vector2(leg.foot.x - rest.x, leg.foot.z - rest.z).length() > SETTLE_DISTANCE or absf(leg.foot.y - xf.origin.y) > 0.3
+
+
 func _needs_settle(xf: Transform3D) -> bool:
 	for leg in _legs:
-		if leg.swinging:
-			return true
-		var rest := _rest_foot(xf, leg)
-		if Vector2(leg.foot.x - rest.x, leg.foot.z - rest.z).length() > SETTLE_DISTANCE or absf(leg.foot.y - xf.origin.y) > 0.3:
+		if leg.swinging or _off_spot(xf, leg):
 			return true
 	return false
 
@@ -593,8 +600,12 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 			leg.normal = leg.target_normal
 			leg.yaw = yaw + leg.side * FOOT_TOE_OUT
 			_footstep(speed, leg)
-		elif not in_stance and not leg.swinging:
+		elif not in_stance and not leg.swinging and (moving or _off_spot(xf, leg)):
+			# Standing, a foot on its spot stays down, so the settling ends once
+			# both are: the standing duty, half a stride, leaves no moment with
+			# both feet down to end it otherwise.
 			leg.swinging = true
+			leg.sounds = moving
 			leg.lift = leg.foot
 			leg.lift_yaw = leg.yaw
 		if not leg.swinging:
@@ -622,10 +633,12 @@ func _update_gait(xf: Transform3D, planar: Vector3, speed: float, yaw: float, de
 
 
 func _footstep(speed: float, leg: Leg) -> void:
-	# The step's sound where the sole lands: softer walking, full at the run, a
-	# shuffle when settling on the spot.
-	var loudness := clampf(0.35 + speed / 14.0, 0.35, 1.0) if speed > STAND_SPEED else 0.3
-	Sound.play(footstep_sound(leg.ground, leg.foot - Vector3.UP * leg.ground_lift, leg.ground_lift), leg.foot, loudness)
+	# The step's sound where the sole lands: softer walking, full at the run, soft
+	# for the foot still in the air as the chest stops; none for a settling step
+	# begun standing still (Leg.sounds).
+	if leg.sounds:
+		var loudness := clampf(0.35 + speed / 14.0, 0.35, 1.0) if speed > STAND_SPEED else 0.3
+		Sound.play(footstep_sound(leg.ground, leg.foot - Vector3.UP * leg.ground_lift, leg.ground_lift), leg.foot, loudness)
 	var strength := clampf((speed - 1.0) / 10.0, 0.12, 1.3)
 	_lid_speed += LID_STEP_KICK * strength
 	if speed > SPILL_SPEED and _rng.randf() < SPILL_CHANCE:

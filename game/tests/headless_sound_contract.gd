@@ -15,7 +15,11 @@ extends SceneTree
 ##   2. on foot: steps (hard or soft) as the player walks, wet ones in the ditch by
 ##      Mersea's water (StandingWater); Space starts the jet, holds its roar and
 ##      the lid's rattle and lets it go with its tail; the landing thumps; a fast
-##      drop (C) slams instead;
+##      drop (C) slams instead; running and letting go, the steps end with the
+##      chest (owner, 2026-11-14: on the web they went on after it stopped): once
+##      the player stands still only a foot then in the air lands with a step,
+##      the feet are soon down on their spots, and from then no step is asked for
+##      or waits to play;
 ##   3. in a car: the doors and the engine's start getting in, then its loops,
 ##      climbing from idle with the throttle; a car taken with W already down has
 ##      its engine started and a loop sounding before it has gone ENGINE_FIRST_M
@@ -27,7 +31,8 @@ extends SceneTree
 ##      the rumble sounds at speed and falls silent at a crawl or off them; a jump
 ##      off the dirt lot's ramp lands once on the wheels (car_jump_landing) and,
 ##      with R on the road and the return from the bay (the vehicle contract's
-##      places), asks for no knock or crash, R and the bay landing not at all; the
+##      places), asks for no knock or crash, R and the bay landing not at all; a
+##      sideways hit at a landing still crashes; the
 ##      car crashing into a palm is a tree's crash, into a parked car a car's,
 ##      while the windrow's young gums bend with neither (theirs is the tier-2
 ##      bend); a bay of each fence material breaks with its own sound; a lamp
@@ -68,8 +73,26 @@ const SHORE_TOP_M := 2.0
 const QUICK_EXIT_TICKS := 3
 ## How fast the car is driven onto the shore's rocks (m/s).
 const RUMBLE_MPS := 4.0
+## The drop for the landing's hits (m, under CarSound.TELEPORT_M), and the
+## sideways hit given at touchdown (m/s of velocity change).
+const LANDING_DROP_M := 2.0
+const SIDEWAYS_HIT_MPS := 9.0
 ## How soon after getting out the engine's loops must be silent (ticks).
 const EXIT_SILENT_TICKS := 45
+## Running and letting go (_check_steps_stop): how long the run is held (ticks),
+## how soon the player must stand still after (ticks; the brakes stop the run in
+## about 0.5 s), the steps after that (at most one a foot, each within
+## STEP_TAIL_S: a foot still in the air finishing its step, a standing swing of
+## (1 - WALK_DUTY) / 2.8 s = 0.18 s plus the avatar's few ticks of smoothed
+## speed), how soon both feet must be down on their spots (SETTLE_LIMIT_S: a
+## settling step of the other foot, half a standing stride after) and how long
+## no step may be asked for after (ticks).
+const RUN_STOP_TICKS := 90
+const STOP_LIMIT_TICKS := 90
+const STEP_TAIL_S := 0.25
+const SETTLE_LIMIT_S := 0.5
+const STEPS_WATCH_TICKS := 180
+const STEP_IDS: Array[StringName] = [&"footstep_hard", &"footstep_soft", &"footstep_water"]
 
 var _failure := ""
 var _main: GameMain
@@ -106,7 +129,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -315,6 +338,65 @@ func _check_on_foot() -> bool:
 	return true
 
 
+## Runs at the on-foot spot and lets go: from the tick the player stands still on
+## the ground, at most a step a foot (a foot then in the air landing), each within
+## STEP_TAIL_S; the gait idle (both feet down, its phase still) within
+## SETTLE_LIMIT_S and staying so; from then no step asked for, whatever came of
+## it, and none waiting to play.
+func _check_steps_stop() -> bool:
+	var spot: Dictionary = _cases.on_foot
+	if not await _stand_player(Vector2(spot.at_xz[0], spot.at_xz[1])):
+		return false
+	var avatar := _avatar() as ChestAvatar
+	var mark := Engine.get_process_frames()
+	Input.action_press("run")
+	Input.action_press("move_forward")
+	await _ticks(RUN_STOP_TICKS)
+	var ran := _steps_since(mark).size()
+	_release()
+	var stop_frame := -1
+	for _tick in STOP_LIMIT_TICKS:
+		await physics_frame
+		var velocity := _player.get_real_velocity()
+		if _player.is_on_floor() and Vector2(velocity.x, velocity.z).length() < ChestAvatar.STAND_SPEED:
+			stop_frame = Engine.get_process_frames()
+			break
+	if not _require(ran >= 3 and stop_frame >= 0, "Running %d ticks must step (stepped %d) and the player must stand still on the ground within %d ticks of letting go (%s)." % [RUN_STOP_TICKS, ran, STOP_LIMIT_TICKS, stop_frame >= 0]):
+		return false
+	var in_air: Array = avatar.describe().swinging
+	var phase := float(avatar.describe().phase)
+	var idle_frame := -1
+	var restarted := -1
+	for _tick in STEPS_WATCH_TICKS:
+		await physics_frame
+		var state := avatar.describe()
+		var idle := not (state.swinging as Array).has(true) and float(state.phase) == phase
+		phase = float(state.phase)
+		if idle and idle_frame < 0:
+			idle_frame = Engine.get_process_frames()
+		elif not idle and idle_frame >= 0 and restarted < 0:
+			restarted = Engine.get_process_frames()
+	var rate := float(Engine.physics_ticks_per_second)
+	var tail: Array = _steps_since(stop_frame).map(func(entry: Dictionary) -> float: return (int(entry.frame) - stop_frame) / rate)
+	var after: Array = _steps_since(idle_frame).map(func(entry: Dictionary) -> String: return "%s %s at +%.2f s" % [entry.id, entry.result, (int(entry.frame) - stop_frame) / rate]) if idle_frame >= 0 else []
+	# Nothing the sound manager holds back to play later (Sound.play_after) is a step.
+	var waiting := _sound._pending.filter(func(due: Dictionary) -> bool: return due.id in STEP_IDS).size()
+	var idle_s := (idle_frame - stop_frame) / rate if idle_frame >= 0 else INF
+	if not _require(tail.size() <= 2 and tail.all(func(at: float) -> bool: return at <= STEP_TAIL_S) and idle_s <= SETTLE_LIMIT_S and restarted < 0 and after.is_empty() and waiting == 0, "Running and letting go: from the player standing still (feet in the air then %s) at most a step a foot within %.2f s (steps at %s s), the feet down and the gait idle within %.2f s (%.2f s) and staying so (stepping again at frame %d, %d after the stop), then no step asked for (%s) and none waiting to play (%d)." % [in_air, STEP_TAIL_S, tail, SETTLE_LIMIT_S, idle_s, restarted, restarted - stop_frame, after, waiting]):
+		return false
+	_summary.append("running 1.5 s (%d steps) and letting go, the player standing still: %d step(s) after (at %s s; feet in the air then %s), the feet down %.2f s after, then no step in %.0f s and none waiting" % [ran, tail.size(), ", ".join(PackedStringArray(tail.map(func(at: float) -> String: return "+%.2f" % at))), in_air, idle_s, STEPS_WATCH_TICKS / rate])
+	return true
+
+
+## The footsteps asked for since frame mark, whatever came of them.
+func _steps_since(mark: int) -> Array[Dictionary]:
+	var found: Array[Dictionary] = []
+	for entry: Dictionary in _sound.requests:
+		if int(entry.frame) >= mark and StringName(entry.id) in STEP_IDS:
+			found.append(entry)
+	return found
+
+
 ## The ditch by Mersea: where the land's ground cover draws its shallow water, the
 ## player's steps are wet.
 func _check_ditch() -> bool:
@@ -435,7 +517,7 @@ func _check_car() -> bool:
 	mark = Engine.get_process_frames()
 	_vehicles.exit_car()
 	var silent_at := -1
-	for tick in 70:
+	for tick in 90:
 		await physics_frame
 		var level := 0.0
 		for loop: StringName in [CarSound.IDLE, CarSound.LOW, CarSound.HIGH, CarSound.SKID]:
@@ -589,6 +671,41 @@ func _check_riprap() -> bool:
 	if not _require(on_land == 0.0 and on_ticks >= 40 and heard > 0.2 and quiet >= 120 and after == 0.0 and not playing, "Driven onto the shore's rocks the rumble must be silent on the land (%.2f), sound with two wheels on the rocks at speed (%.2f over %d ticks) and be gone after two seconds at a crawl, off the rocks or in the water (%s; %d ticks running: level %.2f, playing %s)." % [on_land, heard, on_ticks, ended if ended != "" else "none of them", quiet, after, playing]):
 		return false
 	_summary.append("on the shore's rocks the rumble sounds at %.2f (silent on the land before them) and falls silent %s" % [heard, ended])
+	return await _stop()
+
+
+## A landing is one sound, but not a crash at the same moment (review note,
+## 2026-11-14): dropped LANDING_DROP_M onto the route's road the car lands once
+## with no hit (the ground's push lies along its up); dropped again with a
+## sideways hit given to it the tick it touches down (its own hit record, as a
+## wall or a car would leave it), the crash sounds beside the landing.
+func _check_landing_hits() -> bool:
+	var points: Array = _cases.route.points_xz
+	var start := Vector2(points[0][0], points[0][1])
+	var car := await _drive_from(start, (Vector2(points[1][0], points[1][1]) - start).normalized())
+	if car == null:
+		return false
+	var results := []
+	for sideways: bool in [false, true]:
+		var stood := car.global_transform
+		var mark := Engine.get_process_frames()
+		car.place(Transform3D(stood.basis, stood.origin + Vector3.UP * LANDING_DROP_M))
+		var air := 0
+		var touched := false
+		for _tick in 240:
+			await physics_frame
+			if car.grounded_wheels() == 0:
+				air += 1
+			elif air >= 20 and car.grounded_wheels() >= 2:
+				touched = true
+				if sideways:
+					car.set("_impact", car.global_transform.basis.x * SIDEWAYS_HIT_MPS)
+				break
+		await _ticks(60)
+		results.append({"touched": touched, "landings": _played(CarSound.LANDING, mark), "hits": _played(&"car_impact_light", mark) + _played(&"car_impact_heavy", mark)})
+	if not _require(results[0] == {"touched": true, "landings": 1, "hits": 0} and results[1].touched and results[1].landings == 1 and results[1].hits >= 1, "Dropped %.1f m the car must land once with no hit, and with a sideways hit at touchdown land once and crash too ([plain, sideways] %s)." % [LANDING_DROP_M, results]):
+		return false
+	_summary.append("dropped %.1f m the car lands once with no hit, and a sideways hit at touchdown crashes beside the landing" % LANDING_DROP_M)
 	return await _stop()
 
 

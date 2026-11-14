@@ -26,17 +26,20 @@ extends RefCounted
 ## under the wheels (RIPRAP) have sounds of their own (owner's picks, 2026-11-14).
 
 ## After getting in (s): the start, just after the door's first sound; the door
-## shutting (the picked takes' slam comes 0.3 to 0.43 s into them).
+## shutting, its slam (about 30 ms into the takes since the sheet's
+## oneshot_door_close trim) between the start's crank and its catch.
 const ENGINE_START_S := 0.1
-const DOOR_CLOSE_S := 0.25
+const DOOR_CLOSE_S := 0.5
 ## The loops come in from ENGINE_LOOPS_S after getting in, about when the start
 ## catches, over ENGINE_FADE_S; from the first throttle before that, over
 ## ENGINE_THROTTLE_FADE_S.
 const ENGINE_LOOPS_S := 0.7
 const ENGINE_FADE_S := 0.3
 const ENGINE_THROTTLE_FADE_S := 0.1
+## After getting out (s): the door opening, and shutting where its slam fell
+## before the takes' trim (about 1.25 s).
 const EXIT_DOOR_OPEN_S := 0.25
-const EXIT_DOOR_CLOSE_S := 0.9
+const EXIT_DOOR_CLOSE_S := 1.25
 const REV_UP_S := 0.25
 const REV_DOWN_S := 0.45
 ## The rev where the low loop is alone (the idle below it, the high above).
@@ -61,12 +64,16 @@ const UPDATE_S := 1.0 / 30.0
 ## back from the water: a move of TELEPORT_M or more in one physics tick), being
 ## held after R, sinking or being righted start it again, so none of them lands.
 ## A landing is one sound: for LAND_HUSH_S after it the vehicle manager plays no
-## hit for this car (landed_within). Production inference, to be tuned by ear.
+## hit for this car whose velocity change lies mostly along the car's up (a share
+## over LAND_HUSH_UP: the ground stopping the fall), so a crash sideways into a
+## wall or a car at touchdown still sounds (landing_hushes). Production inference,
+## to be tuned by ear.
 const LANDING := &"car_jump_landing"
 const LAND_AIR_S := 0.35
 const LAND_MIN_MPS := 2.5
 const LAND_FULL_MPS := 10.0
 const LAND_HUSH_S := 0.2
+const LAND_HUSH_UP := 0.7
 const TELEPORT_M := 3.0
 ## The shore's rocks (riprap_rumble_loop): while a wheel stands on the cars'
 ## ground over the riprap (shoreline_builder.gd's CarGround, whose feature_kind is
@@ -210,9 +217,10 @@ func _watch_landing(car: DrivableCar, delta: float) -> void:
 	_fall_mps = 0.0
 
 
-## Whether car, driven now, landed (car_jump_landing) within the last seconds.
-func landed_within(car: Node, seconds: float) -> bool:
-	return car == _car and _clock - _landed_at <= seconds
+## Whether a hit to car (its velocity change) is its landing's own: car, driven
+## now, landed within LAND_HUSH_S and the change lies mostly along its up.
+func landing_hushes(car: Node3D, change: Vector3) -> bool:
+	return car == _car and _clock - _landed_at <= LAND_HUSH_S and absf(change.normalized().dot(car.global_transform.basis.y)) > LAND_HUSH_UP
 
 
 ## A landing's strength at the speed it came down at (m/s).
