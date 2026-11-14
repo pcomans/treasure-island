@@ -41,9 +41,9 @@ extends Node
 ## it falls and stops a moment after it is silent, or when its owner stops holding
 ## it or is gone. A loop starts at a random point of its take.
 ##
-## Beds: the wind (louder with height) and the bay's water (by the listener's
-## distance to the island's outline, worked out four times a second), from the
-## moment play starts (start_beds), fading in.
+## Beds: the wind (louder with the listener's height) and the bay's water, heard
+## only by the water's edge (water_level), worked out four times a second, from
+## the moment play starts (start_beds), fading in.
 ##
 ## The listener is Godot's own: the camera showing. Getting in and out of a car
 ## and the watch from the shore are blends between cameras (vehicle_camera.gd),
@@ -51,14 +51,14 @@ extends Node
 ## water move the car and the camera together, so the engine keeps its level.
 ##
 ## What came of a request: played, silent (no takes), limited (min_gap_s, counted
-## from the last request let through, whether or not anything could play, so a
+## from the last play, or for a sound with no takes from its last request, so a
 ## build without the audio does no more work for a flood than one with it), far,
-## quiet (no strength), unknown, or a loop's loop_start, loop_silent and
-## loop_stop. The game keeps only a count of what played, by sound
-## (played_counts, for the web's state readback); a test or evidence run that
-## sets record_requests before main is made also gets every request, newest last,
-## in `requests` (the last REQUEST_LOG_SIZE). Nothing is allocated per request
-## otherwise.
+## quiet (no strength; neither far nor quiet takes a play's place), unknown, or a
+## loop's loop_start, loop_silent and loop_stop. The game keeps only a count of
+## what played, by sound (played_counts, for the web's state readback); a test or
+## evidence run that sets record_requests before main is made also gets every
+## request, newest last, in `requests` (the last REQUEST_LOG_SIZE). Nothing is
+## allocated per request otherwise.
 
 const CATALOG_PATH := "res://game/resources/audio/sounds.json"
 const DEFAULT_MANIFEST_PATH := "res://game/resources/audio/sfx/sfx.json"
@@ -90,6 +90,17 @@ const BED_UPDATE_S := 0.25
 const BED_FOLLOW_S := 0.6
 const WIND_BED := &"wind_bed"
 const WATER_BED := &"bay_water_bed"
+## The bay's water is heard only by the water's edge (owner, 2026-11-14; it was
+## full within 12 m of the outline and faded out 150 m inland): at full level
+## within WATER_FULL_M of the waterline, silent from WATER_SILENT_M, measured in
+## three dimensions from the player (on foot, or in the car's seat) to a waterline
+## WATERLINE_M beyond the island's outline at the bay's surface. The outline is
+## the shore's top; generated/world/shoreline.json puts the waterline 5 to 15 m
+## beyond it. So the water is about full on the shore's top, about 0.4 five metres
+## inland, silent from about ten metres inland, up in the air or out over the bay.
+const WATER_FULL_M := 7.0
+const WATER_SILENT_M := 18.0
+const WATERLINE_M := 8.0
 ## Read-only stand-ins for a sound with no settings or no takes.
 const _NO_SETTINGS: Dictionary = {}
 const _NO_TAKES: Array = []
@@ -125,6 +136,9 @@ var _pending: Array[Dictionary] = []
 var _game_s := 0.0
 var _beds_from := -1.0
 var _boundary: WorldBoundary
+## Whose distance to the water the water bed follows (the player), or null for
+## the listener.
+var _focus: Node3D
 var _bed_clock := 0.0
 var _bed_targets := {WIND_BED: 0.0, WATER_BED: 0.0}
 var _bed_levels := {WIND_BED: 0.0, WATER_BED: 0.0}
@@ -318,15 +332,19 @@ func request(id: StringName, at: Vector3, strength: float, pitch: float) -> Stri
 	var now := _clock(settings)
 	if now - float(_last_played.get(id, -INF)) < float(settings.get("min_gap_s", 0.0)):
 		return _noted(id, at, strength, "limited")
-	_last_played[id] = now
 	var takes: Array = _takes.get(id, _NO_TAKES)
 	if takes.is_empty():
+		# Limited as a play would be (see above).
+		_last_played[id] = now
 		return _noted(id, at, strength, "silent")
+	# A request too quiet or too far to hear takes no play's place: a near one
+	# right after it still sounds.
 	if strength <= 0.0:
 		return _noted(id, at, strength, "quiet")
 	var positional := str(settings.get("space", "3d")) == "3d"
 	if positional and at.is_finite() and _listener_distance(at) > float(settings.get("max_m", INF)):
 		return _noted(id, at, strength, "far")
+	_last_played[id] = now
 	var pool: Array = _pools["3d" if positional else ("ui" if str(settings.get("bus", "")) == "UI" else "2d")]
 	var player := _voice(pool, id, int(settings.get("voices", 2)))
 	var take := _pick(id, takes.size())
@@ -585,12 +603,24 @@ func _start_loop(voice: LoopVoice) -> void:
 
 # --- Beds.
 
-## Play has started: the beds fade in, the water's by the distance from the
-## listener to this outline.
-func start_beds(boundary: WorldBoundary) -> void:
+## Play has started: the beds fade in, the water's by focus's distance (the
+## player's; the listener's without one) to the water beyond this outline.
+func start_beds(boundary: WorldBoundary, focus: Node3D = null) -> void:
 	_boundary = boundary
+	_focus = focus
 	_beds_from = _game_s
 	_bed_clock = BED_UPDATE_S
+
+
+## How loud the bay's water bed is for someone at a position, 0..1 (see
+## WATER_FULL_M): 0 without an outline.
+static func water_level(boundary: WorldBoundary, at: Vector3) -> float:
+	if boundary == null or not boundary.is_configured() or not at.is_finite():
+		return 0.0
+	var edge := boundary.edge_distance(at)
+	var across := edge + WATERLINE_M if boundary.contains_position(at) else absf(WATERLINE_M - edge)
+	var above := maxf(0.0, at.y - GeneratedWorldContract.STREET_DETAIL_WATER_Y_M)
+	return 1.0 - smoothstep(WATER_FULL_M, WATER_SILENT_M, Vector2(across, above).length())
 
 
 func _step_beds(delta: float) -> void:
@@ -603,13 +633,14 @@ func _step_beds(delta: float) -> void:
 		if at.is_finite():
 			# Louder with height (the jetpack): open air, no shelter.
 			_bed_targets[WIND_BED] = 0.45 + 0.55 * smoothstep(8.0, 70.0, at.y)
-			var shore := 0.0
-			if _boundary != null and _boundary.is_configured() and _boundary.contains_position(at):
-				shore = _boundary.edge_distance(at)
-			_bed_targets[WATER_BED] = (1.0 - smoothstep(12.0, 150.0, shore)) * (1.0 - 0.6 * smoothstep(20.0, 120.0, at.y))
+		var player := _focus.global_position if is_instance_valid(_focus) and _focus.is_inside_tree() else at
+		_bed_targets[WATER_BED] = water_level(_boundary, player)
 	var fade := clampf((_game_s - _beds_from) / BED_FADE_IN_S, 0.0, 1.0)
 	for bed: StringName in _bed_levels:
-		_bed_levels[bed] = lerpf(float(_bed_levels[bed]), float(_bed_targets[bed]), 1.0 - exp(-delta / BED_FOLLOW_S))
+		var target := float(_bed_targets[bed])
+		var level := lerpf(float(_bed_levels[bed]), target, 1.0 - exp(-delta / BED_FOLLOW_S))
+		# Faded out all the way: silent, so its loop stops.
+		_bed_levels[bed] = 0.0 if target <= 0.0 and level < SILENT_LEVEL else level
 		hold_loop(bed, self, float(_bed_levels[bed]) * fade, Vector3.INF, 1.0)
 
 

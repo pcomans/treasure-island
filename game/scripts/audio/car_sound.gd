@@ -6,24 +6,34 @@ extends RefCounted
 ## player gets out. Only the driven car has these: a parked or shoved car has no
 ## sound of its own but its hits (vehicle_manager.gd _sound_impact).
 ##
-## Getting in: the door opens and shuts, the engine starts, and its loops come in
-## under the start's tail. Getting out: the engine stops, the door opens and
-## shuts. The engine: three steady loops of the same car (idle, low, high),
-## crossfaded (equal power) by a virtual rev made from the throttle and the speed
-## over the body's top speed, each pitched within about a third of an octave of
-## its take, never one loop across the whole range (tools/sfx/README.md). With
-## the throttle down the rev runs a little above the speed's, and with the wheels
-## in the air it follows the throttle alone; it rises in REV_UP_S and falls in
-## REV_DOWN_S. A loop with no takes leaves its band to its neighbour, so a missing
-## take never drops the engine out. The tyres: one skid loop whose gain follows the
-## tyres' sliding speed (DrivableCar.slip, smoothed in SKID_UP_S and SKID_DOWN_S),
-## so a flickering drift never restarts a sound. In the bay the engine dies.
+## Getting in: the door opens, the engine starts at once (its takes crank from
+## their first moment and catch about 0.7 s in), the door shuts and the loops
+## come in under the start as it catches; the throttle brings them in at once,
+## so the engine is heard as the car first moves (owner, 2026-11-14: the car was
+## already moving when the start played). Getting out: the engine's loops fade
+## out (the owner wants no stop sound, 2026-11-14) and the door opens and shuts.
+## The engine: three steady loops of the same car (idle, low, high), crossfaded
+## (equal power) by a virtual rev made from the throttle and the speed over the
+## body's top speed, each pitched within about a third of an octave of its take,
+## never one loop across the whole range (tools/sfx/README.md). With the
+## throttle down the rev runs a little above the speed's, and with the wheels in
+## the air it follows the throttle alone; it rises in REV_UP_S and falls in
+## REV_DOWN_S. A loop with no takes leaves its band to its neighbour, so a
+## missing take never drops the engine out. The tyres: one skid loop whose gain
+## follows the tyres' sliding speed (DrivableCar.slip, smoothed in SKID_UP_S and
+## SKID_DOWN_S), so a flickering drift never restarts a sound. In the bay the
+## engine dies.
 
-const DOOR_CLOSE_S := 0.45
-const ENGINE_START_S := 0.7
-## The loops come in from ENGINE_LOOPS_S after getting in, over ENGINE_FADE_S.
-const ENGINE_LOOPS_S := 0.9
-const ENGINE_FADE_S := 0.5
+## After getting in (s): the start, just after the door's first sound; the door
+## shutting (the picked takes' slam comes 0.3 to 0.43 s into them).
+const ENGINE_START_S := 0.1
+const DOOR_CLOSE_S := 0.25
+## The loops come in from ENGINE_LOOPS_S after getting in, about when the start
+## catches, over ENGINE_FADE_S; from the first throttle before that, over
+## ENGINE_THROTTLE_FADE_S.
+const ENGINE_LOOPS_S := 0.7
+const ENGINE_FADE_S := 0.3
+const ENGINE_THROTTLE_FADE_S := 0.1
 const EXIT_DOOR_OPEN_S := 0.25
 const EXIT_DOOR_CLOSE_S := 0.9
 const REV_UP_S := 0.25
@@ -50,7 +60,9 @@ var _clock := 0.0
 var _due := 0.0
 var _rev := 0.0
 var _skid := 0.0
-var _engine := 0.0
+## When the loops come in after getting in (s), and over how long.
+var _loops_from := ENGINE_LOOPS_S
+var _loops_fade := ENGINE_FADE_S
 ## Whether the idle and high loops have takes (looked up once a drive).
 var _has_idle := true
 var _has_high := true
@@ -63,7 +75,8 @@ func start(car: DrivableCar) -> void:
 	_due = UPDATE_S
 	_rev = 0.0
 	_skid = 0.0
-	_engine = 0.0
+	_loops_from = ENGINE_LOOPS_S
+	_loops_fade = ENGINE_FADE_S
 	_has_idle = Sound.has_takes(IDLE)
 	_has_high = Sound.has_takes(HIGH)
 	# Where it is drawn: a car just put down (DrivableCar.place) moves its body at
@@ -75,8 +88,6 @@ func start(car: DrivableCar) -> void:
 
 ## The player got out of car.
 func stop(car: DrivableCar) -> void:
-	if _engine > 0.0:
-		Sound.play(&"car_engine_stop", car.visual_transform().origin)
 	Sound.play_after(EXIT_DOOR_OPEN_S, &"car_door_open", car)
 	Sound.play_after(EXIT_DOOR_CLOSE_S, &"car_door_close", car)
 	for loop: StringName in [IDLE, LOW, HIGH, SKID]:
@@ -94,9 +105,12 @@ func drive(car: DrivableCar, delta: float) -> void:
 		return
 	var step := _due
 	_due = 0.0
-	var running := 0.0 if car.is_sinking() else clampf((_clock - ENGINE_LOOPS_S) / ENGINE_FADE_S, 0.0, 1.0)
-	_engine = running
 	var throttle := absf(car.drive_input) if absf(car.drive_input) > 0.1 and not car.is_holding() else 0.0
+	# A throttle before the loops' time brings them in now.
+	if throttle > 0.0 and _clock < _loops_from:
+		_loops_from = _clock
+		_loops_fade = ENGINE_THROTTLE_FADE_S
+	var running := 0.0 if car.is_sinking() else clampf((_clock - _loops_from) / _loops_fade, 0.0, 1.0)
 	var share := clampf(absf(car.forward_speed()) / maxf(car.top_speed(), 1.0), 0.0, 1.0)
 	var target := clampf(share * (0.85 + 0.15 * throttle) + 0.15 * throttle, 0.35 * throttle, 1.0)
 	var wheels := car.grounded_wheels()

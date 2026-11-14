@@ -3,7 +3,12 @@
 # the island loads, then publishes it as a new GitHub Release of its own, marked
 # latest, so this fixed link always gets the newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03. No secrets: the publish job uses GITHUB_TOKEN.
+# Owner-approved 2026-11-03. The publish job uses GITHUB_TOKEN. The sounds come
+# from the owner's private audio repository (owner, 2026-11-14): its URL is the
+# repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and TI_SFX_REF, both
+# optional) and a read-only token for it the secret TI_SFX_GIT_TOKEN, which only
+# the build step's own script sees (tools/build-mac.sh, tools/fetch-sfx). With the
+# variable unset the build fetches nothing and the app is silent, as before.
 name: Mac build
 
 on:
@@ -83,6 +88,14 @@ jobs:
         env:
           # tools/godot puts its private Weston socket here.
           XDG_RUNTIME_DIR: ${{ runner.temp }}/xdg
+          # The private audio (tools/fetch-sfx): here only, never job-wide or on a
+          # step that runs an action. An unset variable or secret is empty, and
+          # build-mac.sh then fetches nothing; it logs one line saying what it
+          # fetched, never the token, and drops the token once fetched.
+          TI_SFX_SOURCE: ${{ vars.TI_SFX_SOURCE }}
+          TI_SFX_SUBDIR: ${{ vars.TI_SFX_SUBDIR }}
+          TI_SFX_REF: ${{ vars.TI_SFX_REF }}
+          TI_SFX_GIT_TOKEN: ${{ secrets.TI_SFX_GIT_TOKEN }}
         # Its Linux launch check runs headless here: rendering the island on the
         # CPU takes minutes. The Apple Silicon job then launches the Mac app itself.
         run: tools/build-mac.sh --headless-launch

@@ -260,9 +260,10 @@ export function apply(project, planned, { dryRun = false } = {}) {
   return counts;
 }
 
-// A URL with any user or password taken out, for messages.
-export function redact(url) {
-  return url.replace(/^([a-z+]+:\/\/)[^@/]*@/iu, "$1");
+// A URL, or a message with URLs in it (git's own), with any user or password
+// taken out of every URL.
+export function redact(text) {
+  return text.replace(/([a-z][a-z0-9+.-]*:\/\/)[^@/\s'"]*@/giu, "$1");
 }
 
 // Clones a Git source (shallow) into a new temporary folder; returns {dir, source, commit}.
@@ -326,7 +327,9 @@ export function main(argv = process.argv.slice(2), env = process.env) {
   if (!existsSync(join(project, "project.godot"))) throw new FetchError(`${project} is not the game's project (no project.godot)`);
   const source = values.source ?? env.TI_SFX_SOURCE ?? "";
   if (source === "") {
-    console.log(`${TOOL}: no source (--source or TI_SFX_SOURCE): nothing fetched, ${TARGET} left as it is`);
+    const folder = join(project, TARGET);
+    const takes = existsSync(folder) ? readdirSync(folder).filter((name) => TAKE_RE.test(name)).length : 0;
+    console.log(`${TOOL}: no source (--source or TI_SFX_SOURCE): nothing fetched; ${TARGET} holds ${takes} takes, left as they are`);
     return 0;
   }
   const subdir = values.subdir ?? env.TI_SFX_SUBDIR ?? "";

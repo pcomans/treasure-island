@@ -242,8 +242,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
 	# The wind and the bay fade in: play has started (no "ready" sting, which would
-	# be music; owner, 2026-11-14).
-	sound.start_beds(world_root.get_boundary())
+	# be music; owner, 2026-11-14). The bay is heard by the player at its edge.
+	sound.start_beds(world_root.get_boundary(), player)
 	# A controls screen opened on the loading screen stays open, and play starts
 	# paused behind it: nothing moves and the mouse stays free until the player
 	# closes it (to the pause menu) and resumes.

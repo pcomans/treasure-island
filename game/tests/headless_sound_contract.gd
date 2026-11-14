@@ -9,14 +9,20 @@ extends SceneTree
 ## vehicle_cases.json's and the ditch by Mersea's.
 ##   1. with the folder filled: every sound has its takes; no audio player sits
 ##      anywhere but under the sound manager (none on the parked cars, nor on any
-##      car); the wind and the bay's water fade in from play, the water's loud by
-##      the shore; the menus click and the pause sounds;
+##      car); the wind and the bay's water fade in from play, the water loud on the
+##      shore's top and silent (its loop stopped) inland and up in the air (owner,
+##      2026-11-14: only by the water's edge); the menus click and the pause sounds;
 ##   2. on foot: steps (hard or soft) as the player walks, wet ones in the ditch by
 ##      Mersea's water (StandingWater); Space starts the jet, holds its roar and
-##      the lid's rattle and lets it go with its tail; the landing thumps;
+##      the lid's rattle and lets it go with its tail; the landing thumps; a fast
+##      drop (C) slams instead;
 ##   3. in a car: the doors and the engine's start getting in, then its loops,
-##      climbing from idle with the throttle; the tyres skid in a handbrake turn;
-##      getting out the engine stops, the doors sound and every loop stops; a jump
+##      climbing from idle with the throttle; a car taken with W already down has
+##      its engine started and a loop sounding before it has gone ENGINE_FIRST_M
+##      (owner, 2026-11-14: the car moved before its start played); the tyres skid
+##      in a handbrake turn;
+##      getting out the doors sound and the engine and tyre loops fade to
+##      silence, with no other car sound (the owner wants no stop sound); a jump
 ##      off the dirt lot's ramp landing on the wheels, R on the road and the
 ##      return from the bay (the vehicle contract's places) ask for no knock or
 ##      crash; the car crashing into a palm is a tree's crash, into a parked car a car's,
@@ -25,13 +31,15 @@ extends SceneTree
 ##      knocked over hits and then clangs on the ground; a car's splash; the ball
 ##      kicked softly and hard; a goal's net and confetti;
 ##   4. a synthetic pile-up (twenty crashes a frame for a second) keeps to the
-##      crash sound's rate and voices; takes never repeat twice running; a play's
+##      crash sound's rate and voices; a request too far or too quiet to hear
+##      takes no play's place; takes never repeat twice running; a play's
 ##      gain is the gain its manifest gives (0 dB where it gives none), lowered by
 ##      its strength and jitter, never raised;
 ##   5. the master volume and mute chosen on the options screen hold the Master
 ##      bus and are kept: a restart puts them on again;
 ##   6. that restart has an empty sound folder: the game loads and plays, every
-##      request is silent and nothing plays, with no error.
+##      request is silent (and still limited by its gap) and nothing plays, with
+##      no error.
 ## Its own settings file and folders, removed at the end. The first failure stops
 ## the run.
 
@@ -45,6 +53,15 @@ const LEVEL_DB := -9.5
 const PILEUP_ID := &"car_impact_heavy"
 ## A car's hits (vehicle_manager.gd _sound_impact).
 const IMPACT_IDS := ["car_tree_impact", "car_impact_light", "car_impact_heavy"]
+## A positional sound with a minimum gap and a reach, asked for at once after
+## requests that cannot be heard (_check_limits).
+const GAP_ID := &"ball_kick_soft"
+## How far a car taken with W already down may go before its engine is heard.
+const ENGINE_FIRST_M := 0.3
+## Where the shore's top is for the water bed (m inside the outline).
+const SHORE_TOP_M := 2.0
+## How soon after getting out the engine's loops must be silent (ticks).
+const EXIT_SILENT_TICKS := 45
 
 var _failure := ""
 var _main: GameMain
@@ -81,7 +98,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_ditch, _check_car, _check_engine_first, _check_false_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -189,13 +206,35 @@ func _check_startup() -> bool:
 
 
 func _check_beds_and_menus() -> bool:
+	# On the west shore's top: from the bay fixture's start, along its heading to
+	# the water, to SHORE_TOP_M inside the outline.
 	var bay: Dictionary = _cases.bay
-	if not await _stand_player(Vector2(bay.start_xz[0], bay.start_xz[1])):
+	var boundary := _main.world_root.get_boundary()
+	var heading := Vector2(bay.heading_xz[0], bay.heading_xz[1]).normalized()
+	var shore := Vector2(bay.start_xz[0], bay.start_xz[1])
+	for _step in 400:
+		var at := Vector3(shore.x, 0.0, shore.y)
+		if not boundary.contains_position(at) or boundary.edge_distance(at) <= SHORE_TOP_M:
+			break
+		shore += heading * 0.5
+	if not await _stand_player(shore):
 		return false
 	await _frames(150)
 	var wind := _sound.requested(Sound.WIND_BED).any(func(entry: Dictionary) -> bool: return entry.result == "loop_start")
 	var water := _sound.requested(Sound.WATER_BED).any(func(entry: Dictionary) -> bool: return entry.result == "loop_start")
-	if not _require(wind and water and _sound.bed_level(Sound.WATER_BED) > 0.5 and _sound.bed_level(Sound.WIND_BED) > 0.3, "By the west shore the wind and the bay's water must have faded in (wind %s at %.2f, water %s at %.2f)." % [wind, _sound.bed_level(Sound.WIND_BED), water, _sound.bed_level(Sound.WATER_BED)]):
+	var by_water := _sound.bed_level(Sound.WATER_BED)
+	if not _require(wind and water and by_water > 0.5 and _sound.bed_level(Sound.WIND_BED) > 0.3, "On the west shore's top at %s (%.1f m inside the outline) the wind and the bay's water must have faded in (wind %s at %.2f, water %s at %.2f)." % [shore, boundary.edge_distance(Vector3(shore.x, 0.0, shore.y)), wind, _sound.bed_level(Sound.WIND_BED), water, by_water]):
+		return false
+	# Inland (the on-foot spot, about 80 m from the outline), and up in the air
+	# above the shore: the water is silent and its loop stops.
+	var spot: Dictionary = _cases.on_foot
+	if not await _stand_player(Vector2(spot.at_xz[0], spot.at_xz[1])):
+		return false
+	await _frames(360)
+	var inland := _sound.bed_level(Sound.WATER_BED)
+	var inland_playing := _sound.loop_playing(Sound.WATER_BED, _sound)
+	var above := Sound.water_level(boundary, Vector3(shore.x, 30.0, shore.y))
+	if not _require(inland == 0.0 and not inland_playing and above == 0.0, "Inland at %s the bay's water must be silent (level %.4f, loop playing %s), and so 30 m above the shore's top (%.2f)." % [spot.at_xz, inland, inland_playing, above]):
 		return false
 	var mark := Engine.get_process_frames()
 	_main._set_paused(true)
@@ -212,7 +251,7 @@ func _check_beds_and_menus() -> bool:
 	var pauses := _played(&"ui_pause", mark)
 	if not _require(clicks >= 2 and pauses == 2, "Options and Back must click (%d) and the pause and Resume must sound (%d of 2)." % [clicks, pauses]):
 		return false
-	_summary.append("the wind and the bay's water fade in from play (water %.2f by the west shore), the menus click and the pause sounds" % _sound.bed_level(Sound.WATER_BED))
+	_summary.append("the wind and the bay's water fade in from play (water %.2f on the west shore's top, 0 inland and up in the air), the menus click and the pause sounds" % by_water)
 	return true
 
 
@@ -246,7 +285,25 @@ func _check_on_foot() -> bool:
 	var roared := _sound.requested(&"jet_loop").any(func(entry: Dictionary) -> bool: return entry.result == "loop_start" and int(entry.frame) >= mark)
 	if not _require(started == 1 and roared and holding and stopped == 1 and landed, "Space must start the jet once (%d), hold its roar and rattle (started %s, both playing %s), let it go with its tail (%d) and the landing must thump (%s)." % [started, roared, holding, stopped, landed]):
 		return false
-	_summary.append("%d steps walking 1.5 s; the jet's start, roar, rattle and tail; the landing" % steps)
+	# A fast drop: up on the jet, then C held to the ground. Its landing (the poof's)
+	# slams, with no landing's thump.
+	mark = Engine.get_process_frames()
+	Input.action_press("jetpack")
+	await _ticks(60)
+	Input.action_release("jetpack")
+	Input.action_press("fast_drop")
+	var slammed := false
+	for _tick in 240:
+		await physics_frame
+		if _played(&"fastdrop_impact", mark) > 0:
+			slammed = true
+			break
+	_release()
+	await _ticks(20)
+	var thumped := _played(&"landing", mark)
+	if not _require(slammed and thumped == 0, "A fast drop to the ground must slam (%s), with no landing's thump (%d)." % [slammed, thumped]):
+		return false
+	_summary.append("%d steps walking 1.5 s; the jet's start, roar, rattle and tail; the landing; a fast drop's slam" % steps)
 	return true
 
 
@@ -363,14 +420,67 @@ func _check_car() -> bool:
 	_release()
 	if not _require(rev > 0.4 and climbing and skidding, "At speed the engine's rev must climb past 0.4 (%.2f) into its low and high loops (%s), and a handbrake turn must skid (%s)." % [rev, climbing, skidding]):
 		return false
+	# Getting out (owner, 2026-11-14: no engine stop sound): the engine and tyre
+	# loops fade to silence within EXIT_SILENT_TICKS and stop, and only the doors
+	# sound, once each.
 	mark = Engine.get_process_frames()
 	_vehicles.exit_car()
-	await _ticks(70)
-	var getting_out := [_played(&"car_engine_stop", mark), _played(&"car_door_open", mark), _played(&"car_door_close", mark)]
+	var silent_at := -1
+	for tick in 70:
+		await physics_frame
+		var level := 0.0
+		for loop: StringName in [CarSound.IDLE, CarSound.LOW, CarSound.HIGH, CarSound.SKID]:
+			level = maxf(level, _sound.loop_level(loop, car))
+		if silent_at < 0 and level == 0.0:
+			silent_at = tick + 1
+	var car_plays := {}
+	for entry: Dictionary in _sound.requests:
+		if int(entry.frame) >= mark and str(entry.id).begins_with("car_") and entry.result == "played":
+			car_plays[str(entry.id)] = int(car_plays.get(str(entry.id), 0)) + 1
 	var quiet := not (_sound.loop_playing(CarSound.IDLE, car) or _sound.loop_playing(CarSound.LOW, car) or _sound.loop_playing(CarSound.HIGH, car) or _sound.loop_playing(CarSound.SKID, car))
-	if not _require(getting_out == [1, 1, 1] and quiet, "Getting out must stop the engine and open and shut the door, once each (%s: %s), and every engine and tyre loop must stop (%s)." % [getting_out, _results([&"car_engine_stop", &"car_door_open", &"car_door_close"], mark), quiet]):
+	if not _require(car_plays == {"car_door_open": 1, "car_door_close": 1} and silent_at > 0 and silent_at <= EXIT_SILENT_TICKS and quiet, "Getting out must open and shut the door once each and play no other car sound (%s), and the engine and tyre loops must fade to silence within %d ticks (at %d) and stop (%s)." % [car_plays, EXIT_SILENT_TICKS, silent_at, quiet]):
 		return false
-	_summary.append("getting in, the engine climbing to a rev of %.2f, a skid, getting out" % rev)
+	_summary.append("getting in, the engine climbing to a rev of %.2f, a skid, getting out with only the doors, the engine silent %.2f s after" % [rev, silent_at / 60.0])
+	return true
+
+
+## The engine is heard as the car first moves (owner, 2026-11-14: the car was
+## already moving when its start played): parked on the route's open road, the car
+## is taken as F takes it (VehicleManager.enter) with W already down; by the time
+## it has gone ENGINE_FIRST_M in plan its start has played and an engine loop
+## sounds.
+func _check_engine_first() -> bool:
+	var points: Array = _cases.route.points_xz
+	var start := Vector2(points[0][0], points[0][1])
+	var car := await _drive_from(start, (Vector2(points[1][0], points[1][1]) - start).normalized())
+	if car == null:
+		return false
+	_vehicles.exit_car(false)
+	await _ticks(120)
+	var id := str(_cases.enter.car)
+	var from := Vector2(car.global_position.x, car.global_position.z)
+	var mark := Engine.get_process_frames()
+	Input.action_press("move_forward")
+	if not _require(_vehicles.enter(id), "Could not take %s again." % id):
+		_release()
+		return false
+	var gone := 0.0
+	var level := 0.0
+	var started := 0
+	var ticks := 0
+	for _tick in 120:
+		await physics_frame
+		ticks += 1
+		gone = Vector2(car.global_position.x, car.global_position.z).distance_to(from)
+		if gone >= ENGINE_FIRST_M:
+			level = maxf(_sound.loop_level(CarSound.IDLE, car), _sound.loop_level(CarSound.LOW, car))
+			started = _played(&"car_engine_start", mark)
+			break
+	_release()
+	await _stop()
+	if not _require(gone >= ENGINE_FIRST_M and started == 1 and level > 0.0, "Taken with W already down, by the time the car has gone %.1f m (%.2f m in %d ticks) its engine must have started (%d) and a loop must sound (level %.2f)." % [ENGINE_FIRST_M, gone, ticks, started, level]):
+		return false
+	_summary.append("taken with W already down, the car's engine has started and a loop sounds at %.2f by %.1f m (%.2f s in)" % [level, ENGINE_FIRST_M, ticks / 60.0])
 	return true
 
 
@@ -668,6 +778,12 @@ func _check_limits() -> bool:
 	var cap := ceili(1.0 / float(settings.min_gap_s)) + 1
 	if not _require(played >= 2 and played <= cap and played + limited == 1200 and most <= int(settings.voices), "Twenty crashes a frame for a second must play at most %d and drop the rest (%s) and never sound more than %d at once (%d)." % [cap, results, settings.voices, most]):
 		return false
+	# A request too far or too quiet to hear takes no play's place: a near one
+	# asked for at once after them still plays (and the next is limited).
+	var reach := float((Sound.load_catalog()[GAP_ID] as Dictionary).max_m)
+	var gap_results := [_sound.request(GAP_ID, listener + Vector3(reach + 30.0, 0.0, 0.0), 1.0, 1.0), _sound.request(GAP_ID, listener, 0.0, 1.0), _sound.request(GAP_ID, listener, 1.0, 1.0), _sound.request(GAP_ID, listener, 1.0, 1.0)]
+	if not _require(gap_results == ["far", "quiet", "played", "limited"], "A far and a quiet request of %s must not take a play's place: a near one at once after them plays and the next is limited ([far, quiet, near, near] %s)." % [GAP_ID, gap_results]):
+		return false
 	# Takes never repeat twice running.
 	var mark := Engine.get_process_frames()
 	for _step in 16:
@@ -700,7 +816,7 @@ func _check_limits() -> bool:
 	or not _require(not over.is_empty() and float(over.volume_db) <= LEVEL_DB + 0.001, "A strength above 1 must not raise %s above its manifest's %.1f dB (%s)." % [LEVEL_ID, LEVEL_DB, over]) \
 	or not _require(not plain.is_empty() and is_zero_approx(float((plain[0] as Dictionary).level_db)) and float((plain[0] as Dictionary).volume_db) <= 0.001, "A sound its manifest gives no gain must play at 0 dB at most (%s)." % [plain]):
 		return false
-	_summary.append("a synthetic pile-up of 1200 crashes in a second plays %d, at most %d at once; takes never repeat; %s plays at its manifest's %.1f dB, lowered, never raised" % [played, most, LEVEL_ID, LEVEL_DB])
+	_summary.append("a synthetic pile-up of 1200 crashes in a second plays %d, at most %d at once; a far or quiet request takes no play's place; takes never repeat; %s plays at its manifest's %.1f dB, lowered, never raised" % [played, most, LEVEL_ID, LEVEL_DB])
 	return true
 
 
@@ -740,6 +856,11 @@ func _check_restart_silent() -> bool:
 	for id: StringName in Sound.load_catalog():
 		if not _require(_sound.takes_of(id) == 0, "With an empty sound folder %s still has takes." % id):
 			return false
+	# A sound with no takes is still limited by its gap, as a play would be.
+	var listener := root.get_camera_3d().global_position
+	var silent_results := [_sound.request(GAP_ID, listener, 1.0, 1.0), _sound.request(GAP_ID, listener, 1.0, 1.0)]
+	if not _require(silent_results == ["silent", "limited"], "With no takes %s must still be limited by its gap ([first, second at once] %s)." % [GAP_ID, silent_results]):
+		return false
 	var mark := Engine.get_process_frames()
 	var spot: Dictionary = _cases.on_foot
 	if not await _stand_player(Vector2(spot.at_xz[0], spot.at_xz[1])):

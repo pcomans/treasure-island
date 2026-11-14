@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-// Checks tools/fetch-sfx offline, in temporary folders (no Godot, no network):
-//   1. without a source it does nothing, and leaves the sound folder as it is;
+// Checks tools/fetch-sfx offline, in temporary folders (no Godot, and no network
+// but one refused connection to 127.0.0.1):
+//   1. without a source it does nothing, leaves the sound folder as it is and
+//      says how many takes it holds;
 //   2. from a folder with a manifest (sfx.json) it copies the takes of the game's
 //      sounds only (not of rows the game does not play), renamed <id>_NN.ogg in
 //      the manifest's order, and writes the folder's sfx.json with each entry's
@@ -17,7 +19,13 @@
 //   7. --dry-run changes nothing;
 //   8. a link in the folder is never written through: a left-over .part link to a
 //      file outside goes (the file stays as it was), and a take that is a link,
-//      even to the same bytes, is replaced by a plain copy.
+//      even to the same bytes, is replaced by a plain copy;
+//   9. as the Mac build workflow runs it (unset repository variables and secret
+//      come as empty strings): with every TI_SFX_ variable empty it does nothing;
+//      from a repository holding the processed folder at its root (the private
+//      audio repository's layout) with TI_SFX_SUBDIR and TI_SFX_REF empty it fills
+//      the folder; a URL with a user and password in it that cannot be cloned
+//      fails without printing either, and redact() takes them out of a message.
 // A few seconds. Part of tools/test.sh.
 //
 //   node tools/check_fetch_sfx.mjs
@@ -26,7 +34,7 @@ import { spawnSync } from "node:child_process";
 import { existsSync, lstatSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TOOL = join(ROOT, "tools", "sfx", "fetch_sfx.mjs");
@@ -109,7 +117,7 @@ try {
   const project = makeProject("project");
   const sfx = join(project, "game/resources/audio/sfx");
   let result = run(["--project", project]);
-  check(result.status === 0 && /nothing fetched/u.test(result.out) && listing(sfx).join() === "README.md", `1: with no source it must do nothing (exit ${result.status}, folder ${listing(sfx)}): ${result.out}`);
+  check(result.status === 0 && /nothing fetched; game\/resources\/audio\/sfx holds 0 takes/u.test(result.out) && listing(sfx).join() === "README.md", `1: with no source it must do nothing and say the folder holds 0 takes (exit ${result.status}, folder ${listing(sfx)}): ${result.out}`);
 
   // 2. A folder with a manifest.
   const source = makeSource("source");
@@ -195,6 +203,27 @@ try {
   const plain = (name) => existsSync(join(linkSfx, name)) && lstatSync(join(linkSfx, name)).isFile();
   check(result.status === 0 && readFileSync(victim, "utf8") === "victim" && readFileSync(twin, "utf8") === "knock", `8: a link in the folder must never be written through (exit ${result.status}): ${result.out}`);
   check(!listing(linkSfx).some((name) => name.endsWith(".part")) && plain("step_01.ogg") && plain("hum_loop_01.ogg") && plain("knock_01.ogg") && readFileSync(join(linkSfx, "knock_01.ogg"), "utf8") === "knock", `8: the .part links must go and every take must be a plain file: ${listing(linkSfx)}`);
+
+  // 9. As the Mac build workflow runs it.
+  const ciEmpty = { TI_SFX_SOURCE: "", TI_SFX_SUBDIR: "", TI_SFX_REF: "", TI_SFX_GIT_TOKEN: "" };
+  const ciProject = makeProject("ci-project");
+  const ciSfx = join(ciProject, "game/resources/audio/sfx");
+  result = run(["--project", ciProject], ciEmpty);
+  check(result.status === 0 && /nothing fetched/u.test(result.out) && listing(ciSfx).join() === "README.md", `9: with every TI_SFX_ variable empty it must do nothing (exit ${result.status}): ${result.out}`);
+  const rootRepo = join(work, "root-repo");
+  mkdirSync(rootRepo, { recursive: true });
+  git(["init", "--quiet", "--initial-branch=main"], rootRepo);
+  makeSource("root-repo");
+  git(["add", "."], rootRepo);
+  git(["commit", "--quiet", "-m", "takes"], rootRepo);
+  result = run(["--project", ciProject], { ...ciEmpty, TI_SFX_SOURCE: `file://${rootRepo}`, TI_SFX_GIT_TOKEN: TOKEN });
+  check(result.status === 0 && listing(ciSfx).join() === expected.join() && /fetched from file:.* into game\/resources\/audio\/sfx: 3 of 4 sounds with takes, 4 takes/u.test(result.out) && !result.out.includes(TOKEN), `9: a repository with the processed folder at its root, TI_SFX_SUBDIR and TI_SFX_REF empty, must fill the folder as a folder does, never printing the token (exit ${result.status}, has ${listing(ciSfx)}): ${result.out}`);
+  const URL_SECRET = "pw-in-the-url-0123456789";
+  result = run(["--project", ciProject], { ...ciEmpty, TI_SFX_SOURCE: `https://ci-user:${URL_SECRET}@127.0.0.1:9/audio.git`, TI_SFX_GIT_TOKEN: TOKEN });
+  check(result.status === 1 && /could not clone https:\/\/127\.0\.0\.1:9\/audio\.git/u.test(result.out) && !result.out.includes(URL_SECRET) && !result.out.includes("ci-user") && !result.out.includes(TOKEN), `9: a credentialed URL that cannot be cloned must fail without printing its user, password or the token: ${result.out}`);
+  const { redact } = await import(pathToFileURL(TOOL).href);
+  const said = redact(`fatal: unable to access 'https://ci-user:${URL_SECRET}@example.invalid/audio.git/': refused; see https://example.invalid/help`);
+  check(!said.includes(URL_SECRET) && !said.includes("ci-user") && said.includes("'https://example.invalid/audio.git/'") && said.includes("see https://example.invalid/help"), `9: redact() must take a user and password out of a URL inside a message, and nothing else: ${said}`);
 } finally {
   rmSync(work, { recursive: true, force: true });
 }
@@ -203,4 +232,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, and never writes through a link in the folder");
+console.log("PASS: tools/fetch-sfx does nothing without a source; from a folder or a Git repository it copies the game's sounds' takes only, in the manifest's order, with their gains and loops, silent where a row or take is missing; it repeats without change, removes only its own stale takes, finds takes by the sheet's patterns without a manifest, never prints a token, refuses a linked folder, a missing source and one inside the project, never writes through a link in the folder, and runs as the Mac build workflow runs it (empty variables do nothing; a repository holding the takes at its root fills the folder; a credentialed URL never shows its user or password)");

@@ -125,9 +125,10 @@ const POOF_SPEED_SHARE := 0.5
 ## hard; on anything solid but the land (a roof, kerb, step, deck, prop or car)
 ## too; on the land itself and the areas drawn low over it, soft; in the shallow
 ## water the land's ground cover draws (StandingWater), wet. A landing coming down
-## at LANDING_SOUND_MPS or more thumps. A jet start sooner than JET_RESTART_S after
-## the last let-go is not played again (a tap of Space); the jet's and the lid's
-## rattle loops follow the flame.
+## at LANDING_SOUND_MPS or more thumps; a fast drop's landing (the one with the
+## poof) slams instead (fastdrop_impact, the thump while that has no takes). A
+## jet start sooner than JET_RESTART_S after the last let-go is not played again
+## (a tap of Space); the jet's and the lid's rattle loops follow the flame.
 const FOOT_HARD_LIFT_M := 0.07
 const LANDING_SOUND_MPS := 1.0
 const JET_RESTART_S := 0.25
@@ -487,8 +488,9 @@ func _physics_process(delta: float) -> void:
 		_fall_speed = maxf(0.0, -velocity.y)
 	if _airborne and on_floor:
 		_airborne = false
-		_land(xf, _fall_speed, yaw)
-		if dropping and _fall_speed >= POOF_SPEED_SHARE * _fast_drop_speed():
+		var slam := dropping and _fall_speed >= POOF_SPEED_SHARE * _fast_drop_speed()
+		_land(xf, _fall_speed, yaw, slam)
+		if slam:
 			_poof.burst(_ground(xf.origin, xf.origin.y))
 	elif not _airborne and not on_floor and (thrust or velocity.y > 1.0 or _air_time > AIR_GRACE):
 		_airborne = true
@@ -648,8 +650,10 @@ static func footstep_sound(collider: Object, point: Vector3, lift: float) -> Str
 	return &"footstep_hard" if lift >= FOOT_HARD_LIFT_M else &"footstep_soft"
 
 
-func _land(xf: Transform3D, fall_speed: float, yaw: float) -> void:
-	if fall_speed >= LANDING_SOUND_MPS:
+func _land(xf: Transform3D, fall_speed: float, yaw: float, slam: bool = false) -> void:
+	if slam and Sound.has_takes(&"fastdrop_impact"):
+		Sound.play(&"fastdrop_impact", xf.origin)
+	elif fall_speed >= LANDING_SOUND_MPS:
 		Sound.play(&"landing", xf.origin, clampf(0.3 + fall_speed / 12.0, 0.3, 1.0))
 	var impact := clampf(fall_speed / 1.5, 0.2, 1.4)
 	_squash_speed -= LANDING_SQUASH * impact
