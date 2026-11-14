@@ -64,6 +64,15 @@ const FRICTION := 1.0
 ## or last woke: frozen with no collision on the ground, asleep on anything else.
 const REST_S := 0.6
 const SETTLE_MAX_S := 8.0
+## Sound (game/scripts/audio/sound.gd): the hit as it goes over, louder the faster
+## the body that felled it, and the clang of its head on the ground, louder the
+## heavier the prop: the tick its turning drops to FALL_STOP_SHARE or less of the
+## last tick's once it leans past FALL_LEAN_UP (its up's height: past about 60
+## degrees), or once it lies past FALL_FLAT_UP, whichever comes first.
+const FALL_LEAN_UP := 0.5
+const FALL_FLAT_UP := 0.2
+const FALL_STOP_SHARE := 0.6
+const FALL_SPIN_MIN := 0.5
 
 ## Rows by id: {prop, params, transform, mass, range_m, foot, height, radius,
 ## instances: [[MultiMeshInstance3D, index, piece frame]], shapes:
@@ -207,6 +216,11 @@ func fell(id: String, by: RigidBody3D = null) -> void:
 	debris.set_meta("street_detail_id", id)
 	debris.set_meta("age", 0.0)
 	debris.set_meta("rest", 0.0)
+	debris.set_meta("height", float(row.height))
+	debris.set_meta("spin", 0.0)
+	debris.set_meta("landed", false)
+	var hit_speed := by.linear_velocity.length() if by != null else 8.0
+	Sound.play(&"lamp_hit", (row.foot as Vector3) + Vector3.UP * 0.9, clampf(0.4 + hit_speed / 25.0, 0.4, 1.0))
 	var surface := PhysicsMaterial.new()
 	surface.friction = FRICTION
 	surface.bounce = 0.1
@@ -308,6 +322,7 @@ func _physics_process(delta: float) -> void:
 			continue
 		var age := float(debris.get_meta("age", 0.0)) + delta
 		debris.set_meta("age", age)
+		_sound_landing(debris)
 		var resting := debris.linear_velocity.length() < 0.15 and debris.angular_velocity.length() < 0.2
 		var rest := float(debris.get_meta("rest", 0.0)) + delta if resting else 0.0
 		debris.set_meta("rest", rest)
@@ -323,6 +338,21 @@ func _physics_process(delta: float) -> void:
 			debris.freeze = true
 			for shape: Node in debris.find_children("*", "CollisionShape3D", false, false):
 				(shape as CollisionShape3D).disabled = true
+
+
+## The felled prop's head meeting the ground, once (see FALL_LEAN_UP).
+static func _sound_landing(debris: RigidBody3D) -> void:
+	if bool(debris.get_meta("landed", true)):
+		return
+	var up := debris.global_transform.basis.y.y
+	var spin := debris.angular_velocity.length()
+	var was := float(debris.get_meta("spin", 0.0))
+	debris.set_meta("spin", spin)
+	if not ((up < FALL_LEAN_UP and was > FALL_SPIN_MIN and spin <= was * FALL_STOP_SHARE) or up < FALL_FLAT_UP):
+		return
+	debris.set_meta("landed", true)
+	var head := debris.global_transform * (Vector3.UP * float(debris.get_meta("height", 4.0)) * 0.75)
+	Sound.play(&"lamp_fall", head, clampf(0.45 + debris.mass / 300.0, 0.5, 1.0))
 
 
 ## Whether a body at rest touches only the world (the ground, a wall), nothing on

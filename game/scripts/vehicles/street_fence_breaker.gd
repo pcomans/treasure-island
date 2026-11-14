@@ -62,6 +62,14 @@ const DEBRIS_KEEP := 400
 const DEBRIS_RANGE_M := 150.0
 ## The car keeps going: each bay takes this share of its speed.
 const SPEED_SHARE_PER_BAY := 0.03
+## The sound of a bay breaking, by fence type's material (game/scripts/audio/
+## sound.gd); a felled post sounds the same, quieter (POST_SOUND_SHARE). A run of
+## bays broken back to back is held to the sound's own rate and voices.
+const BREAK_SOUNDS := {
+	"chain_link": &"fence_chainlink_break", "chain_link_barbed": &"fence_chainlink_break", "chain_link_screened": &"fence_chainlink_break", "chain_link_slatted": &"fence_chainlink_break",
+	"construction_panel": &"fence_steel_break", "steel_picket": &"fence_steel_break", "wood_privacy": &"fence_wood_break", "ball_stop_net": &"fence_net_break",
+}
+const POST_SOUND_SHARE := 0.6
 
 var _kit: FENCE_KIT
 ## Breakable fence bodies by RID; their bays by shape owner.
@@ -221,6 +229,7 @@ func break_bay(group: Node3D, shape: CollisionShape3D, velocity: Vector3) -> Arr
 	_broken[fence_id(group, key)] = true
 	_collapse_ranges(group, bay.get("ranges", []))
 	_drop_debris(group, bay, velocity)
+	_break_sound(str(bay.get("type", group.get_meta("fence_type", ""))), to_global(((bay.a as Vector3) + (bay.b as Vector3)) * 0.5 + Vector3.UP * 0.6), velocity, 1.0)
 	var posts: Dictionary = group.get_meta("fence_posts", {})
 	for post_key: Variant in bay.get("posts", []):
 		var id := fence_id(group, str(post_key))
@@ -268,6 +277,13 @@ func fell_post(group: Node3D, post_key: String, velocity: Vector3) -> void:
 	_forget_post(id)
 	_collapse_ranges(group, post.get("ranges", []))
 	_drop_post(group, post, velocity)
+	_break_sound(str(group.get_meta("fence_type", "")), to_global((post.frame.foot as Vector3) + Vector3.UP * 0.8), velocity, POST_SOUND_SHARE)
+
+
+## A bay's or post's break: its material's sound, louder the faster the car.
+static func _break_sound(type: String, at: Vector3, velocity: Vector3, share: float) -> void:
+	if BREAK_SOUNDS.has(type):
+		Sound.play(BREAK_SOUNDS[type], at, share * clampf(0.45 + velocity.length() / 25.0, 0.45, 1.0))
 
 
 ## Collapses each of [[mesh instance, surface, first vertex, count], ...].

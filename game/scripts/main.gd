@@ -31,13 +31,16 @@ var _web_pointer_locked := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
 ## A pause or resume asked for inside a physics tick, put off to the idle step
-## (_set_paused): true pauses, false resumes.
+## (_set_paused): true pauses, false resumes; quiet without the pause's sound.
 var _pause_later := false
+var _pause_later_quiet := false
 # Shared automation keeps the pointer visible while retaining normal startup.
 # Ordinary gameplay uses the default and captures the mouse as before.
 var capture_mouse_on_ready := true
 ## The sun's shadow quality (the pause menu's Options), put on as the game starts.
 var shadows: ShadowQuality
+## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
+var sound: Sound
 ## Startup puts on the shadow level kept from the last run; the shared capture
 ## harness turns this off, so its captures always have the default (a player's
 ## choice is a global engine setting that would reach its neutral sun too).
@@ -71,6 +74,14 @@ func _ready() -> void:
 	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
+	# The sound: its takes loaded now, under the loading screen; the master volume
+	# and mute kept from the last run (the defaults for a test or capture driver).
+	sound = Sound.new()
+	add_child(sound)
+	var kept := Sound.saved_settings() if use_saved_settings and settings_problem.is_empty() else {"volume": Sound.DEFAULT_VOLUME, "muted": false}
+	sound.apply_settings(float(kept.volume), bool(kept.muted))
+	hud.set_sound_settings(sound.volume, sound.muted)
+	hud.sound_settings_changed.connect(_on_sound_settings_changed)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere).
@@ -212,6 +223,10 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# On the web the browser takes the sounds now, not at their first play; the
+	# ditch's drawn water is read back now, not at the first footstep near it.
+	sound.prepare_for_play()
+	StandingWater.prepare()
 	hud.show_loading("Preparing graphics…")
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")
@@ -227,6 +242,9 @@ func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
 	player.set_gameplay_enabled(true)
+	# The wind and the bay fade in: play has started (no "ready" sting, which would
+	# be music; owner, 2026-11-14). The bay is heard by the player at its edge.
+	sound.start_beds(world_root.get_boundary(), player)
 	# A controls screen opened on the loading screen stays open, and play starts
 	# paused behind it: nothing moves and the mouse stays free until the player
 	# closes it (to the pause menu) and resumes.
@@ -324,7 +342,9 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 	push_error("WORLD_FAILED: code=%s message=%s sources=%s" % [code, message, source_keys])
 
 
-func _set_paused(paused: bool) -> void:
+## Pauses or resumes the game, with the pause's sound unless quiet (the page
+## hidden: nobody hears it).
+func _set_paused(paused: bool, quiet := false) -> void:
 	# The tree pauses and resumes only in the idle step. Resumed inside a physics
 	# tick (a deferred call, such as the web's pointer-lock grant, is flushed
 	# there) after a pause from the idle step, the physics server re-adds every
@@ -332,12 +352,16 @@ func _set_paused(paused: bool) -> void:
 	# tick's remainder at the paused clock's zero step.
 	if Engine.is_in_physics_frame():
 		_pause_later = paused
+		_pause_later_quiet = quiet
 		if not get_tree().process_frame.is_connected(_set_paused_later):
 			get_tree().process_frame.connect(_set_paused_later, CONNECT_ONE_SHOT)
 		return
 	if paused:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
+	if get_tree().paused != paused and not quiet:
+		# The pause menu opening, a little lower closing.
+		Sound.play(&"ui_pause", Vector3.INF, 1.0, 1.0 if paused else 0.9)
 	get_tree().paused = paused
 	if paused:
 		_web_capture_pending = false
@@ -377,8 +401,22 @@ func _on_shadow_quality_chosen(id: String) -> void:
 	hud.show_shadow_level(shadows.current)
 
 
+## The master volume or mute changed on the options screen: on at once, and kept
+## for next time when keep (once a drag ends; never by a driver in the player's
+## own settings file).
+func _on_sound_settings_changed(volume: float, muted: bool, keep: bool) -> void:
+	sound.apply_settings(volume, muted)
+	if not keep:
+		return
+	var settings_problem := player_settings_problem(get_tree(), "changed the sound settings, writing")
+	if settings_problem.is_empty():
+		Sound.save_settings(sound.volume, sound.muted)
+	else:
+		push_error(settings_problem)
+
+
 func _set_paused_later() -> void:
-	_set_paused(_pause_later)
+	_set_paused(_pause_later, _pause_later_quiet)
 
 
 func _resume_game() -> void:
@@ -449,9 +487,15 @@ func _on_web_blur(_arguments: Array) -> void:
 		_set_paused.call_deferred(true)
 
 
+## The page hidden (another tab in front, the window minimized, another app on a
+## phone): it draws no frames then, so a deferred pause (the blur's) would wait
+## until it is shown again while the browser went on playing the loops (Godot's
+## web sample playback starts a looping take again in JavaScript), and the
+## frames it then catches up would sound. It pauses now, which stops every
+## world sound at once, and quietly.
 func _on_web_visibility(_arguments: Array) -> void:
-	if bool(JavaScriptBridge.get_interface("document").hidden):
-		_on_web_blur([])
+	if _world_ready and bool(JavaScriptBridge.get_interface("document").hidden):
+		_set_paused(true, true)
 
 
 func _publish_web_state(_args: Array) -> void:
@@ -499,6 +543,9 @@ func _publish_web_state(_args: Array) -> void:
 		"shadow_level_buttons": _shadow_level_buttons(),
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
+		# The sound: the audio driver, the master volume and mute, the slider on the
+		# options screen, and how many times each sound has played.
+		"sound": _sound_state(),
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 
@@ -509,6 +556,11 @@ func _shadow_level_buttons() -> Dictionary:
 		var middle := (button as Control).get_global_rect().get_center()
 		at[str(button.name)] = [middle.x, middle.y]
 	return at
+
+
+func _sound_state() -> Dictionary:
+	var slider := hud.sound_volume.get_global_rect().get_center()
+	return {"driver": AudioServer.get_driver_name(), "volume": sound.volume, "muted": sound.muted, "played": sound.played_counts, "volume_slider": [slider.x, slider.y]}
 
 
 func _ball_state() -> Dictionary:

@@ -26,7 +26,10 @@ extends SceneTree
 ##   - the shared capture harness's main.use_saved_settings = false gets the default,
 ##     and a test or capture driver that would read or write the player's settings
 ##     file is caught (GameMain.player_settings_problem: its run logs an error);
-##   - the web's one level (Off) leaves the pause menu without Options.
+##   - the web's one level (Off) leaves the options screen without the shadow
+##     levels, while the pause menu keeps Options for the sound's volume, which
+##     every platform has, focused when Options opens (owner, 2026-11-14: a volume
+##     option on the web too; until then this checked that the web had no Options).
 ## Uses its own settings file, removed at the end. The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -147,13 +150,20 @@ func _run() -> void:
 	var own_file_ok := GameMain.player_settings_problem(self, "chose a shadow level, writing")
 	if not _require(not caught.is_empty() and own_file_ok.is_empty(), "A driver using the player's settings file must be caught, and one with its own file let be (caught \"%s\", own file \"%s\")." % [caught, own_file_ok]):
 		return _finish()
-	# The web's levels (Off alone) leave the pause menu without Options.
+	# The web's levels (Off alone) leave the options screen without shadow levels,
+	# and the pause menu with Options for the sound, the volume focused.
 	var web_hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
 	root.add_child(web_hud)
 	web_hud.set_shadow_levels(ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web), "off")
+	web_hud.show_world_ready()
+	web_hud.set_paused(true)
+	web_hud.options_button.pressed.emit()
+	await process_frame
 	var web_options := web_hud.options_button.visible
+	var web_shadows := web_hud.shadow_levels.is_visible_in_tree() or web_hud.shadows_heading.is_visible_in_tree() or web_hud.shadow_note.is_visible_in_tree()
+	var web_volume := web_hud.sound_volume.is_visible_in_tree() and web_hud.sound_volume.has_focus() and web_hud.sound_mute.is_visible_in_tree()
 	web_hud.free()
-	if not _require(not web_options, "With the web's one level (Off) the pause menu must not show Options."):
+	if not _require(web_options and not web_shadows and web_volume, "With the web's one level (Off) the pause menu must keep Options (shown %s) for the sound, its volume shown and focused (%s), with no shadow levels on it (shown %s)." % [web_options, web_volume, web_shadows]):
 		return _finish()
 	# Quiet fallbacks: an unknown kept level, a missing file, a file that can't be written.
 	var file := ConfigFile.new()
@@ -168,7 +178,7 @@ func _run() -> void:
 	ShadowQuality.settings_path = _settings_file
 	if not _require([unknown, missing, unwritten] == [ShadowQuality.default_id(), ShadowQuality.default_id(), ShadowQuality.default_id()], "An unknown kept level, a missing file and an unwritable one must all give the default, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; the web's Off alone leaves no Options; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; the web's Off alone leaves Options with the sound's volume and no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next])
 	_finish()
 
 

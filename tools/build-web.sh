@@ -33,6 +33,10 @@ trap 'rm -rf "${work}"' EXIT
 project="${work}/project"
 mkdir -p "${project}" "${work}/mount"
 git archive "${revision}" | tar -xf - -C "${project}"
+# Optional: the sound files from the private source in TI_SFX_SOURCE, into this
+# copy's game/resources/audio/sfx/ (tools/fetch-sfx; never in Git, so not in the
+# archive). Without a source this does nothing and the web build is silent.
+tools/fetch-sfx --project "${project}"
 
 # Godot can exit 0 after an import error, so check its output too.
 import_project() {

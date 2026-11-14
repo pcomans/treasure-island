@@ -108,6 +108,22 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+## Sound
+
+The game has sound effects, but this repository holds none: every sound is
+generated with ElevenLabs from the public prompts in
+[tools/sfx/prompts.json](tools/sfx/prompts.json), and ElevenLabs' terms forbid
+making the output available as separate audio files, so it stays private. A
+checkout or build without a sound source runs silent. `tools/fetch-sfx`, which
+the build scripts run, copies the sounds from the private source named by
+`TI_SFX_SOURCE` into the ignored `game/resources/audio/sfx/`. The Mac build on
+GitHub Actions does the same when the repository variable `TI_SFX_SOURCE` and,
+for a private repository, the secret `TI_SFX_GIT_TOKEN` are set. To make your own
+set with your own ElevenLabs account, follow
+[Make your own sound set](tools/sfx/README.md#make-your-own-sound-set); for the
+terms, see
+[Why our audio is not in this repository](tools/sfx/README.md#why-our-audio-is-not-in-this-repository).
+
 ## Controls
 
 - `WASD` or the arrow keys move; hold `Shift` to run.
@@ -127,7 +143,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far). The web build keeps its sun shadows off and has no Options item (with them on, its renderer also brightened every sunlit surface). A choice applies at once and is kept between runs in `user://settings.cfg`; the shared capture harness always takes the default.
+- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far). It also sets the sound's volume and mute, on every platform. The web build keeps its sun shadows off, so its Options has only the sound (with shadows on, its renderer also brightened every sunlit surface). A choice applies at once and is kept between runs in `user://settings.cfg`; the shared capture harness always takes the default.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ## More
@@ -137,6 +153,7 @@ The bake merges each building's opaque surfaces into far fewer draws
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
 - [KNOWN_ISSUES.md](KNOWN_ISSUES.md): known issues and planned work.
+- [tools/sfx/README.md](tools/sfx/README.md): the sound-effect prompts, the tools that make and fetch the audio (`tools/generate-sfx`, `tools/fetch-sfx`), how to make your own set, and why the audio itself stays out of Git.
 - Older records: Git history and `evidence/`.
 
 
@@ -192,8 +209,8 @@ On a touch-capable browser, play starts as soon as the island has loaded. Drag t
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues, **Controls** lists the touch
-controls and **Credits** lists the game's sources (drag to scroll); the web build has
-no **Options**, as its sun shadows stay off. Movement, look and buttons
+controls and **Credits** lists the game's sources (drag to scroll); **Options** has only the
+sound's volume and mute, as the web's sun shadows stay off. Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.

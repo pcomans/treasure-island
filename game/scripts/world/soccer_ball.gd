@@ -61,6 +61,12 @@ const MOUTH_MARGIN_M := 0.5
 const CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
 const WHITE := Color(0.93, 0.93, 0.9)
 const BLACK := Color(0.07, 0.07, 0.08)
+## Sound (game/scripts/audio/sound.gd): a push that changes the ball's speed by
+## KICK_SOUND_MPS or more is a kick, a hard one from HARD_KICK_MPS; the push is
+## tested every tick a character overlaps the ball, so the sound's own rate holds
+## a dribble to a few taps a second. A goal is the net and the confetti's pop.
+const KICK_SOUND_MPS := 1.0
+const HARD_KICK_MPS := 7.0
 
 ## Where it starts and goes back to: on the centre spot, resting on the ground.
 @export var spot := Transform3D.IDENTITY
@@ -303,7 +309,21 @@ func _score(goal: Dictionary) -> void:
 	confetti.name = "GoalConfetti"
 	get_parent().add_child(confetti, true)
 	confetti.start(goal.transform, float(goal.half_m), float(goal.crossbar_m))
+	var mouth := (goal.transform as Transform3D) * Vector3(0.0, minf(float(goal.crossbar_m), float(goal.height_m)) * 0.5, 0.5)
+	Sound.play(&"goal_net", global_position, clampf(0.4 + linear_velocity.length() / 20.0, 0.4, 1.0))
+	Sound.play(&"goal_confetti", mouth)
 	scored.emit(str(goal.id))
+
+
+## A push that changed the ball's speed by change (m/s) along its contact: a kick's
+## sound if it is one (KICK_SOUND_MPS), soft or hard.
+func sound_kick(change: float) -> void:
+	if change < KICK_SOUND_MPS:
+		return
+	if change < HARD_KICK_MPS:
+		Sound.play(&"ball_kick_soft", global_position, clampf(0.35 + change / HARD_KICK_MPS * 0.65, 0.35, 1.0))
+	else:
+		Sound.play(&"ball_kick_hard", global_position, clampf(0.6 + (change - HARD_KICK_MPS) / 20.0, 0.6, 1.0))
 
 
 ## Out of play: off the island's playable outline (the riprap, the bay) or fallen
@@ -362,6 +382,7 @@ func _push_from(character: CharacterBody3D) -> void:
 	var change := target - linear_velocity.dot(normal)
 	if change > 0.0:
 		apply_central_impulse(normal * change * mass)
+		sound_kick(change)
 
 
 ## The character's first capsule in world space: {bottom, top, radius}, its axis's ends.

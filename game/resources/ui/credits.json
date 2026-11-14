@@ -93,6 +93,16 @@
       "required": false,
       "used_for": "Painted reconstructions of the real murals, as game art rather than exact copies: Bulgaria in the USA and Rocky Purslane from photographs of them, Building 201's from a written description of photographs.",
       "folders": ["game/resources/models/bulgarian_wall", "game/resources/mersea", "game/resources/textures/world/b201"]
+    },
+    {
+      "id": "elevenlabs_sound_effects",
+      "title": "Sound effects",
+      "credit": "Generated with ElevenLabs from this project's own prompts (tools/sfx/prompts.json)",
+      "licence": "",
+      "url": "https://elevenlabs.io",
+      "required": false,
+      "used_for": "The game's sounds: footsteps, the jetpack, the cars' doors, engines, tyres and crashes, splashes, breaking fences, falling lamps, the ball and the goals, the wind and the bay, and the menus' clicks.",
+      "folders": ["game/resources/audio/sfx"]
     }
   ],
   "own_work": [
