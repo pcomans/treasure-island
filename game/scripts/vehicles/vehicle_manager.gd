@@ -826,15 +826,16 @@ func _reach_solid_tree(reach: VehicleReach, hit: Dictionary) -> void:
 
 ## A moving live car's hit this tick, if any (DrivableCar.take_impact): a tree's
 ## knock where it hit a standing trunk (_hit_a_tree), else a light knock or a
-## crash by how hard. Rate and voices are the sound's own (sounds.json), so a
-## pile-up cannot flood the mix.
+## crash by how hard; while the tree's knock has no takes, a tree is hit like
+## anything else, never in silence. Rate and voices are the sound's own
+## (sounds.json), so a pile-up cannot flood the mix.
 func _sound_impact(car: DRIVABLE_CAR) -> void:
 	var change := car.take_impact()
 	var hit := change.length()
 	if hit < IMPACT_LIGHT_MPS:
 		return
 	var at := car.global_position
-	if _hit_a_tree(car, change):
+	if Sound.has_takes(&"car_tree_impact") and _hit_a_tree(car, change):
 		Sound.play(&"car_tree_impact", at, clampf(0.35 + hit / 12.0, 0.35, 1.0))
 	elif hit >= IMPACT_HEAVY_MPS:
 		Sound.play(&"car_impact_heavy", at, clampf(0.6 + (hit - IMPACT_HEAVY_MPS) / 20.0, 0.6, 1.0))

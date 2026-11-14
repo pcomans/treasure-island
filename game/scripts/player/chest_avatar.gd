@@ -636,13 +636,14 @@ func _footstep(speed: float, leg: Leg) -> void:
 
 
 ## The footstep sound for a foot on collider at point (on its collision, below any
-## drawn lift): see FOOT_HARD_LIFT_M.
+## drawn lift): see FOOT_HARD_LIFT_M. A wet step while the water's step has no
+## takes is the ground's own, never silent.
 static func footstep_sound(collider: Object, point: Vector3, lift: float) -> StringName:
 	var body := collider as Node if is_instance_valid(collider) else null
 	var record := body.get_parent() if body != null else null
 	if record == null or str(record.get_meta("feature_kind", "")) != "land_ground":
 		return &"footstep_hard"
-	if StandingWater.covers(body, point):
+	if Sound.has_takes(&"footstep_water") and StandingWater.covers(body, point):
 		return &"footstep_water"
 	return &"footstep_hard" if lift >= FOOT_HARD_LIFT_M else &"footstep_soft"
 

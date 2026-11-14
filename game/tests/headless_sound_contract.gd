@@ -266,7 +266,22 @@ func _check_ditch() -> bool:
 	var wet := _played(&"footstep_water", mark)
 	if not _require(wet >= 1, "Walking in the ditch's water at %s must make wet steps (made %d; hard %d, soft %d)." % [spot, wet, _played(&"footstep_hard", mark), _played(&"footstep_soft", mark)]):
 		return false
-	_summary.append("%d wet steps in the ditch by Mersea at (%.1f, %.1f)" % [wet, spot.x, spot.z])
+	# While the water's step has no takes (a source without them), the same walk
+	# steps as on the ground, never in silence.
+	var kept: Variant = _sound._takes.get(&"footstep_water")
+	_sound._takes[&"footstep_water"] = []
+	var settled := await _stand_player(Vector2(spot.x, spot.z))
+	mark = Engine.get_process_frames()
+	if settled:
+		_player.touch_input_vector = Vector2(0.0, -0.25)
+		await _ticks(120)
+		_player.touch_input_vector = Vector2.ZERO
+	_sound._takes[&"footstep_water"] = kept
+	var dry := _played(&"footstep_soft", mark) + _played(&"footstep_hard", mark)
+	var asked := _sound.requested(&"footstep_water").filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark).size()
+	if not settled or not _require(dry >= 1 and asked == 0, "With no takes of its own a step in the ditch's water must sound as on the ground (%d steps), never as a silent wet one (%d asked)." % [dry, asked]):
+		return false
+	_summary.append("%d wet steps in the ditch by Mersea at (%.1f, %.1f), %d ground steps there while the wet one has no takes" % [wet, spot.x, spot.z, dry])
 	return true
 
 
@@ -490,6 +505,19 @@ func _check_hits() -> bool:
 	var seen := _hits_along(mark, stopped_at, {})
 	if not _require(trees >= 1 and crashes == 0 and not seen.is_empty(), "Driven into a palm the car must knock as on a tree (%d), not as on anything else (%d), and be found by the car (%s)." % [trees, crashes, seen]):
 		return false
+	# While the tree's knock has no takes (a source without them), the same palm
+	# knocks as anything else does, never in silence.
+	var kept: Variant = _sound._takes.get(&"car_tree_impact")
+	_sound._takes[&"car_tree_impact"] = []
+	mark = Engine.get_process_frames()
+	car = await _drive_from(Vector2(tree.start_xz[0], tree.start_xz[1]), Vector2(tree.heading_xz[0], tree.heading_xz[1]))
+	var instead := 0
+	if car != null:
+		instead = await _press_until(&"car_impact_light", mark, 360, &"car_impact_heavy")
+	_sound._takes[&"car_tree_impact"] = kept
+	var asked := _sound.requested(&"car_tree_impact").filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark).size()
+	if car == null or not _require(instead >= 1 and asked == 0, "With no takes of its own a palm must knock as anything else does (%d), never as a silent tree (%d asked)." % [instead, asked]):
+		return false
 	# A parked car across the road: a crash.
 	var shove: Dictionary = _cases.shove
 	mark = Engine.get_process_frames()
@@ -536,7 +564,7 @@ func _check_hits() -> bool:
 		return Geometry2D.get_closest_point_to_segment(Vector2(at.x, at.z), from, a + along * (line_m + 10.0)).distance_to(Vector2(at.x, at.z)) < 8.0)
 	if not _require(bent >= 4 and hits.is_empty(), "Through the windrow of young gums (%d bent) the car must not crash, into a tree or anything else (%s; the car ended at %s)." % [bent, hits, car.global_position]):
 		return false
-	_summary.append("a palm crashes as a tree, a parked car as a car (%d), and %d young gums bend with neither" % [crashes, bent])
+	_summary.append("a palm crashes as a tree (as a car while the tree's knock has no takes), a parked car as a car (%d), and %d young gums bend with neither" % [crashes, bent])
 	return await _stop()
 
 
