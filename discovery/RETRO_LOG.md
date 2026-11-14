@@ -26038,3 +26038,27 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The bug was audible from round 1. R2-W05 recorded 37 soft steps after a 2 s walk, and I took them for walking steps instead of asking how a 2 s walk could make 37. My first web reproduction drove keys with agent-browser, which barely moved the player (0.7 m in 4 s), and its CDP start hook recorded nothing, so it showed the game's requests but not the browser's starts.
 - What the team should change next time: When a sound follows a motion, the contract should check that it stops when the motion stops, not only that it plays during the motion. Before trusting a web count, confirm that the input actually moved the player.
 - Also found by the page's start hook: a 28 s wind take started again every 0.78 s with no play by the game. Godot's web sample playback restarts a looping take at the point it first started from, so my random loop start (a desktop idea) made web loops repeat only their tails. Web loops now start at 0. The lesson: check a web build's loops by when the browser starts them (once per take length), not only that they play.
+
+### mac-notarize — 2026-11-07 — Developer ID signing and notarization in the Mac build
+
+- What worked well: Inspecting the owner's downloaded release first settled the entitlements: Godot's ad-hoc export already runs with the hardened runtime and an empty entitlement dictionary, and MoltenVK is linked in statically, so an empty plist and a single top-level signature were justified by the shipped app, not guessed. A local ad-hoc dry run of the signing script caught nothing new but proved the nested-code loop, runtime-flag check and `plutil` JSON parsing on real files.
+- What did not work well: The macOS jobs can't run before the owner adds the secrets, so keychain import, notarytool and stapling are unexercised. `runner.temp` isn't available in job-level `env`, which I first wrote and caught on review; actionlint still flags the pre-existing `ubuntu-26.04` label it doesn't know.
+- What the team should change next time: After the secrets exist, run the workflow by hand on this branch before merging, and read the notary log once even when accepted.
+
+### mac-notarize-docs — 2026-11-07 — AGENTS.md "Mac builds" for Developer ID signing
+
+- What worked well: Reading the workflow header and job graph first gave the exact six secret names and the sign -> verify -> publish order, so one sentence replaced the stale "no signing identity, notarization" claim without restating the workflow.
+- What did not work well: The signing description now lives in three places (workflow header, README, AGENTS); only a grep across them showed CLAUDE.md had no conflicting line.
+- What the team should change next time: When the signing secrets or job names change, update the workflow header, README "Build for the Mac" and AGENTS "Mac builds" in the same commit.
+
+### mac-notarize code review — 2026-11-07 — independent review of ef02d816
+
+- What worked well: The diff was self-contained (one new job, two rewired artifact names, one output), so tracing the fail-closed path (P12 present -> every failure exits non-zero -> verify and publish skipped) took one read; the commit message stated plainly that the macOS jobs are unexercised.
+- What did not work well: No signed or ad-hoc app was available locally, so the entitlement argument (the ad-hoc export already runs with the hardened runtime) rests on the author's inspection, and the CI launch check is headless, so it can't confirm the GPU path under the new signature.
+- What the team should change next time: After the first notarized release, have the owner launch it with rendering on the Mac once before calling signing done; fail the mode check when signing secrets other than the P12 are set without it.
+
+### mac-notarize security re-check — 2026-11-07 — follow-up review of daae395a
+
+- What worked well: The commit kept the security fix narrow: one `environment:` line, one `vars || secrets` expression used in both steps that read the Team ID, and a cache that holds only archives, so the pinned `sha256sum -c` path is the same for a cache hit, a miss and the devcontainer.
+- What did not work well: GitHub makes repository-level secrets visible inside an environment job too, so the "other branches never see the key" claim depends on the owner not keeping repository copies; the docs don't say to delete them. A main-only environment also fails the sign job on manual branch runs, which skips the Apple Silicon launch check there.
+- What the team should change next time: When moving secrets into an environment, say in the same doc line to delete any repository-level copies, and state what a branch run without the branch allowed will show.

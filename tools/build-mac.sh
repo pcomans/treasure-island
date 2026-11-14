@@ -4,8 +4,10 @@
 #   tools/build-mac.sh                    -> build/mac/treasure-island-mac-<commit>.zip
 #   tools/build-mac.sh --headless-launch  the same, with step 3 headless (CI has no GPU)
 #
-# Unzip on the Mac. The app is ad-hoc signed, not notarized: after a browser
-# download, allow its first launch in System Settings -> Privacy & Security.
+# Unzip on the Mac. This local build is ad-hoc signed, not notarized: after a
+# browser download, allow its first launch in System Settings -> Privacy &
+# Security. CI re-signs the same export with the owner's Developer ID and
+# notarizes it (.github/workflows/mac-build.yml) once the signing secrets exist.
 # Before handing it over this
 #   1. exports the macOS build and a Linux build of the same commit,
 #   2. checks both data packs contain only game files (no reference photos,
