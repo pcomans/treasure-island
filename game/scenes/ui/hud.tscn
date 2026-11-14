@@ -297,6 +297,63 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+[node name="TimeHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+custom_minimum_size = Vector2(0, 26)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Time of day"
+vertical_alignment = 2
+
+[node name="DateRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DateLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="DateSlider" type="HSlider" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Date"
+min_value = 1.0
+max_value = 365.0
+value = 1.0
+
+[node name="TimeRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TimeLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="TimeSlider" type="HSlider" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Time"
+max_value = 1435.0
+step = 5.0
+
+[node name="NowButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+tooltip_text = "Back to the real time"
+text = "Now"
+
+[node name="TimeNote" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+autowrap_mode = 3
+
 [node name="SoundHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2

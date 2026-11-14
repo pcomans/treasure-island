@@ -44,6 +44,11 @@ const OPTIONS_ACTIVE_TEXT_COLOR := Color(0.04, 0.07, 0.1)
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
+## The options screen's date: weekday, day, month and year on the island's clock.
+const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+## Under the time while the sun is held at the edge of daylight (DaySun).
+const NIGHT_NOTE := "Night comes in a later update: the sun waits low."
 
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
@@ -62,14 +67,26 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var back_button: Button = $ControlsScreen/Center/ControlsPanel/ControlsLayout/BackButton
 ## The options screen, opened from the pause menu: the sun's shadow quality, a
 ## button for each level main.gd offers here (set_shadow_levels), the level on
-## pressed and its note under them, where there is a choice to make; then the
-## sound's master volume and mute. A solid panel over the dimmed game, which shows
-## a change at once.
+## pressed and its note under them, where there is a choice to make; the time of
+## day, on desktop; then the sound's master volume and mute. A solid panel over the
+## dimmed game, which shows a change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
 @onready var shadows_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowsHeading
 @onready var shadow_levels: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowLevels
 @onready var shadow_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowNote
+## The time of day (DayClock): the island's date and time, each on a slider that
+## jumps there as it moves (time runs on from there), and Now, back to the real
+## time; the note says when night would be. Desktop only for now (set_time_controls).
+@onready var time_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeading
+@onready var time_date_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow
+@onready var time_date_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateLabel
+@onready var time_date_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateSlider
+@onready var time_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow
+@onready var time_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeLabel
+@onready var time_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider
+@onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
+@onready var time_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeNote
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
@@ -116,6 +133,14 @@ var _shadow_group := ButtonGroup.new()
 var _active_level_box: StyleBoxFlat
 ## Whether the volume slider is being dragged (sound_settings_changed's keep).
 var _sound_dragging := false
+## Whether the options screen offers the date and time (set_time_controls).
+var _time_controls := true
+## The clock minute and jump count the date and time show (_show_time), and
+## whether _show_time is writing the sliders (their changes aren't the player's).
+var _time_shown := []
+var _showing_time := false
+## Whether the date or time slider is being dragged.
+var _time_dragging := false
 
 
 func _ready() -> void:
@@ -138,6 +163,14 @@ func _ready() -> void:
 		_sound_dragging = false
 		_sound_changed(true))
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
+	time_date_slider.value_changed.connect(_on_time_slid.bind(true))
+	time_slider.value_changed.connect(_on_time_slid.bind(false))
+	for slider: HSlider in [time_date_slider, time_slider]:
+		slider.drag_started.connect(func() -> void: _time_dragging = true)
+		slider.drag_ended.connect(func(_moved: bool) -> void: _time_dragging = false)
+	time_now_button.pressed.connect(func() -> void:
+		DayClock.start_now()
+		_show_time())
 	for button: Node in find_children("*", "BaseButton", true, false):
 		_click_on_press(button as BaseButton)
 	_fill_controls()
@@ -169,6 +202,8 @@ func _process(delta: float) -> void:
 			feedback_panel.hide()
 	if debug_panel.visible and _evidence != null:
 		debug_text.text = _evidence.debug_text()
+	if options_screen.visible:
+		_show_time()
 
 
 func bind_evidence(evidence: RuntimeEvidence) -> void:
@@ -257,6 +292,7 @@ func controls_visible() -> bool:
 ## returns.
 func show_options() -> void:
 	pause_panel.hide()
+	_show_time(true)
 	options_screen.show()
 	var on := _shadow_group.get_pressed_button()
 	(on if on != null and shadow_levels.visible else sound_volume).grab_focus()
@@ -314,6 +350,53 @@ func set_sound_settings(volume: float, muted: bool) -> void:
 ## The volume as the slider shows it (0..1).
 func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
+
+
+## Whether the options screen offers the date and time: on desktop; the web keeps
+## the recorded moment for now (owner, 2026-11-14: "Mac first, web later").
+func set_time_controls(shown: bool) -> void:
+	_time_controls = shown
+	for part: Control in [time_heading, time_date_row, time_row, time_note]:
+		part.visible = shown
+	_show_time(true)
+
+
+func time_controls_shown() -> bool:
+	return _time_controls
+
+
+## The options screen's date and time as the clock reads them, in their labels and
+## on their sliders (left alone while one is dragged), and the night note while the
+## sun is held at the edge of daylight. Only when the minute or a jump changed it,
+## unless `now`.
+func _show_time(now := false) -> void:
+	if not _time_controls:
+		return
+	var unix := DayClock.now()
+	var shown := [floori(unix / 60.0), DayClock.revision()]
+	if shown == _time_shown and not now:
+		return
+	_time_shown = shown
+	var at := DayClock.local(unix)
+	_showing_time = true
+	time_date_slider.max_value = DayClock.days_in_year(int(at.year))
+	if not _time_dragging:
+		time_date_slider.set_value_no_signal(int(at.day_of_year))
+		time_slider.set_value_no_signal(int(at.minutes))
+	_showing_time = false
+	time_date_label.text = "%s %d %s %d" % [WEEKDAYS[int(at.weekday)], int(at.day), MONTHS[int(at.month) - 1], int(at.year)]
+	time_label.text = "%02d:%02d %s" % [int(at.hour), int(at.minute), at.zone]
+	time_note.text = NIGHT_NOTE if DaySun.is_held(unix) else ""
+
+
+## A date (day of the year) or time (minutes into the day) chosen on its slider: the
+## clock jumps to it on the island's clock, keeping the other, and runs on from there.
+func _on_time_slid(value: float, date: bool) -> void:
+	if _showing_time:
+		return
+	var at := DayClock.local(DayClock.now())
+	DayClock.start_at(DayClock.unix_from_local(int(at.year), int(value) if date else int(at.day_of_year), float(at.minutes) if date else value))
+	_show_time(true)
 
 
 func _sound_changed(keep: bool) -> void:
@@ -704,7 +787,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children():
 		(button as Button).custom_minimum_size.y = 64.0

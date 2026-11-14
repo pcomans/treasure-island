@@ -38,6 +38,9 @@ var _pause_later := false
 var capture_mouse_on_ready := true
 ## The sun's shadow quality (the pause menu's Options), put on as the game starts.
 var shadows: ShadowQuality
+## The Sun pointed at the time of day (DaySun, DayClock): the real time as the game
+## starts; the recorded moment on the web and for a test or capture driver.
+var day_sun: DaySun
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
 ## Startup puts on the shadow level kept from the last run; the shared capture
@@ -73,6 +76,9 @@ func _ready() -> void:
 	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
+	day_sun = DaySun.new($Sun)
+	add_child(day_sun)
+	hud.set_time_controls(not OS.has_feature("web"))
 	# The sound: its takes loaded now, under the loading screen; the master volume
 	# and mute kept from the last run (the defaults for a test or capture driver).
 	sound = Sound.new()
@@ -536,6 +542,9 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
+		# The time of day: the clock's instant, whether it runs, the Sun's rotation
+		# and whether the options screen offers the date and time.
+		"time": {"unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 

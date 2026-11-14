@@ -16,6 +16,12 @@
 //
 // --utc-offset is hours east of UTC for the stated local time: -8 for PST, -7
 // for PDT.
+//
+// The game computes the sun with a GDScript port of solarPosition
+// (game/scripts/world/solar_position.gd), and this stays its reference: the table
+// game/tests/headless_day_clock_contract.gd checks the port against is printed by
+//
+//   node tools/solar_position.mjs --reference-table > game/tests/support/solar_reference.json
 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -90,8 +96,35 @@ export function solarPosition({ year, month, day, hour, minute, utcOffsetHours, 
   };
 }
 
+// The reference table: the sun over the island at UTC instants every 13 h 7 min
+// through 2026, so every hour of the day and every part of the year is sampled,
+// day and night, and at a few moments in other years. Each sample is
+// [unix seconds, elevation_deg (refracted), azimuth_deg] at full precision.
+function referenceTable() {
+  const latitude = 37.82;
+  const longitude = -122.37;
+  const instants = [];
+  for (let k = 0; k < 670; k++) instants.push(Date.UTC(2026, 0, 1) / 1000 + k * (13 * 3600 + 7 * 60));
+  for (const moment of ["1969-07-20T20:17:00Z", "1990-06-21T20:00:00Z", "2000-01-01T12:00:00Z", "2050-12-21T20:00:00Z", "2100-03-20T08:00:00Z"]) {
+    instants.push(Date.parse(moment) / 1000);
+  }
+  const rows = instants.map((unix) => {
+    const date = new Date(unix * 1000);
+    const sun = solarPosition({
+      year: date.getUTCFullYear(), month: date.getUTCMonth() + 1, day: date.getUTCDate(),
+      hour: date.getUTCHours(), minute: date.getUTCMinutes(), utcOffsetHours: 0, latitude, longitude,
+    });
+    return `    ${JSON.stringify([unix, sun.elevation_deg, sun.azimuth_deg])}`;
+  });
+  return `{\n  "generated_by": "node tools/solar_position.mjs --reference-table",\n  "latitude": ${latitude},\n  "longitude": ${longitude},\n  "samples": [\n${rows.join(",\n")}\n  ]\n}\n`;
+}
+
 function main() {
   const args = process.argv.slice(2);
+  if (args[0] === "--reference-table") {
+    process.stdout.write(referenceTable());
+    return;
+  }
   const option = (name, fallback) => {
     const index = args.indexOf(name);
     return index >= 0 ? Number(args[index + 1]) : fallback;
