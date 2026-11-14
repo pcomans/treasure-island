@@ -26,14 +26,16 @@ extends SceneTree
 ##      (owner, 2026-11-14: the car moved before its start played); the tyres skid
 ##      in a handbrake turn; getting out the doors sound and the engine and tyre
 ##      loops fade to silence, with no other car sound (the owner wants no stop
-##      sound), and out again at once the start and the first door close never
-##      play; on the road no landing and no rocks' rumble; on the shore's rocks
+##      sound), out again at once the start and the first door close never play,
+##      and back in before the getting out's door has shut that close never
+##      plays; on the road no landing and no rocks' rumble; on the shore's rocks
 ##      the rumble sounds at speed and falls silent at a crawl or off them; a jump
 ##      off the dirt lot's ramp lands once on the wheels (car_jump_landing) and,
 ##      with R on the road and the return from the bay (the vehicle contract's
-##      places), asks for no knock or crash, R and the bay landing not at all; a
-##      sideways hit at a landing still crashes; the
-##      car crashing into a palm is a tree's crash, into a parked car a car's,
+##      places), asks for no knock or crash, R and the bay landing not at all,
+##      and back from the bay the engine starts again; a sideways hit at a
+##      landing still crashes; the car crashing into a palm is a tree's crash,
+##      into a parked car a car's,
 ##      while the windrow's young gums bend with neither (theirs is the tier-2
 ##      bend); a bay of each fence material breaks with its own sound; a lamp
 ##      knocked over hits and then clangs on the ground; a car's splash; the ball
@@ -69,8 +71,10 @@ const ENGINE_FIRST_M := 0.3
 ## Where the shore's top is for the water bed (m inside the outline).
 const SHORE_TOP_M := 2.0
 ## How soon after getting in the quick exit gets out (ticks: before the start's
-## 0.1 s).
+## 0.1 s), and how soon after getting out the quick return gets back in (ticks:
+## after the getting out's door opened, 0.25 s, before it shut, 1.25 s).
 const QUICK_EXIT_TICKS := 3
+const REENTER_TICKS := 36
 ## How fast the car is driven onto the shore's rocks (m/s).
 const RUMBLE_MPS := 4.0
 ## The drop for the landing's hits (m, under CarSound.TELEPORT_M), and the
@@ -129,7 +133,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_quick_reentry, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -582,7 +586,7 @@ func _check_engine_first() -> bool:
 
 
 ## Out again at once (review note, 2026-11-14): the parked car taken and left
-## QUICK_EXIT_TICKS later, before its start (0.1 s) and its door's close (0.25 s)
+## QUICK_EXIT_TICKS later, before its start (0.1 s) and its door's close (0.5 s)
 ## were due: neither plays, only the getting-out doors do.
 func _check_quick_exit() -> bool:
 	if _vehicles.is_driving():
@@ -604,6 +608,36 @@ func _check_quick_exit() -> bool:
 	if not _require(after == {"car_door_open": 1, "car_door_close": 1} and opened == 2, "Out %d ticks after getting in, neither the start nor the door's close may play after (after getting out %s; door opened %d of 2)." % [QUICK_EXIT_TICKS, after, opened]):
 		return false
 	_summary.append("out %d ticks after getting in, neither the start nor the first door close plays after" % QUICK_EXIT_TICKS)
+	return true
+
+
+## Back in at once (review note, 2026-11-14): the parked car left and taken again
+## REENTER_TICKS later, after the getting out's door opened and before it shut:
+## that close never plays, only the getting in's, once; the doors open twice and
+## the engine starts once.
+func _check_quick_reentry() -> bool:
+	if _vehicles.is_driving():
+		_vehicles.exit_car(false)
+	await _ticks(120)
+	var id := str(_cases.enter.car)
+	if not _require(_vehicles.enter(id), "Could not take %s again." % id):
+		return false
+	await _ticks(60)
+	var out := Engine.get_process_frames()
+	_vehicles.exit_car(false)
+	await _ticks(REENTER_TICKS)
+	var back := Engine.get_process_frames()
+	if not _require(_vehicles.enter(id), "Could not take %s back %d ticks after leaving it." % [id, REENTER_TICKS]):
+		return false
+	await _ticks(120)
+	var closes: Array = _sound.requested(&"car_door_close").filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= out and entry.result == "played").map(func(entry: Dictionary) -> int: return int(entry.frame) - back)
+	var opened := _played(&"car_door_open", out)
+	var started := _played(&"car_engine_start", back)
+	_vehicles.exit_car(false)
+	await _ticks(90)
+	if not _require(closes.size() == 1 and int(closes[0]) >= 0 and opened == 2 and started == 1, "Back in %d ticks after getting out, only the getting in's door close may play (closes at %s ticks from getting back in), the door opening twice (%d) and the engine starting once (%d)." % [REENTER_TICKS, closes, opened, started]):
+		return false
+	_summary.append("back in %.1f s after getting out, the door shuts once, %.2f s after getting back in" % [REENTER_TICKS / 60.0, int(closes[0]) / 60.0])
 	return true
 
 
@@ -714,7 +748,7 @@ func _check_landing_hits() -> bool:
 ## on the brakes once down), R on the road after a run-up, and the car dropped on
 ## the bay, sinking and back on land. Each asks for no knock or crash near the car.
 ## The jump lands once (car_jump_landing, owner's pick, 2026-11-14); R and the
-## bay do not land.
+## bay do not land. Back on land from the bay the engine starts again.
 func _check_false_hits() -> bool:
 	var found := {}
 	var landings := {}
@@ -796,9 +830,12 @@ func _check_false_hits() -> bool:
 	path = []
 	car.place(Transform3D(car.global_transform.basis, Vector3(bay.drop_xyz[0], bay.drop_xyz[1], bay.drop_xyz[2])))
 	var back := -1
+	var sank := -1
 	for _tick in 600:
 		await physics_frame
 		path.append(car.global_position)
+		if sank < 0 and car.is_sinking():
+			sank = Engine.get_process_frames()
 		if back < 0 and causes.size() >= 2:
 			back = Engine.get_process_frames()
 		if back >= 0 and Engine.get_process_frames() >= back + 120:
@@ -806,12 +843,17 @@ func _check_false_hits() -> bool:
 	car.recovered.disconnect(on_back)
 	found["bay"] = _hits_along(mark, path, {"back": back})
 	landings["bay"] = _played(CarSound.LANDING, mark)
+	# Back from the bay the engine starts again (review note, 2026-11-14: its loops
+	# came back with no start), once, after it died there, and its loops come back.
+	var restarts: Array = _sound.requested(&"car_engine_start").filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark and entry.result == "played").map(func(entry: Dictionary) -> int: return int(entry.frame) - back)
+	var running := maxf(_sound.loop_level(CarSound.IDLE, car), _sound.loop_level(CarSound.LOW, car))
 	print("NOTE: false hits: the ramp (%.2f s in the air) %s; R at %.1f m/s %s; the bay %s; landings %s (the ramp's: strength %s)" % [longest / 60.0, found.ramp, speed, found.reset, found.bay, landings, landed_at])
 	if not _require(causes == ["manual", "water"], "Dropped on the bay the car must come back to land once (%s)." % [causes]) \
 	or not _require(found.values().all(func(hits: Array) -> bool: return hits.is_empty()), "A landing on the wheels, R and the return from the bay must ask for no knock or crash (%s)." % [found]) \
-	or not _require(landings == {"ramp": 1, "reset": 0, "bay": 0}, "The ramp's jump must land once (car_jump_landing) and R and the return from the bay not at all (%s)." % [landings]):
+	or not _require(landings == {"ramp": 1, "reset": 0, "bay": 0}, "The ramp's jump must land once (car_jump_landing) and R and the return from the bay not at all (%s)." % [landings]) \
+	or not _require(sank >= 0 and restarts.size() == 1 and int(restarts[0]) > sank - back and running > 0.0, "Back from the bay the engine must start again once, after it sank (sank %d ticks from the return; starts at %s ticks from it; asked for %s), and its loops come back (level %.2f)." % [sank - back, restarts, _results([&"car_engine_start"], mark), running]):
 		return false
-	_summary.append("a %.2f s jump lands once (car_jump_landing, strength %s) with no knock or crash; R at %.1f m/s and the return from the bay neither land nor knock" % [longest / 60.0, landed_at, speed])
+	_summary.append("a %.2f s jump lands once (car_jump_landing, strength %s) with no knock or crash; R at %.1f m/s and the return from the bay neither land nor knock, and back from the bay the engine starts again (%+d ticks from the return) and its loops come back (%.2f)" % [longest / 60.0, landed_at, speed, int(restarts[0]), running])
 	return await _stop()
 
 

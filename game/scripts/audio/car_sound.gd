@@ -22,8 +22,10 @@ extends RefCounted
 ## missing take never drops the engine out. The tyres: one skid loop whose gain
 ## follows the tyres' sliding speed (DrivableCar.slip, smoothed in SKID_UP_S and
 ## SKID_DOWN_S), so a flickering drift never restarts a sound. In the bay the
-## engine dies. A jump's landing on the wheels (LAND_AIR_S) and the shore's rocks
-## under the wheels (RIPRAP) have sounds of their own (owner's picks, 2026-11-14).
+## engine dies; back on land it starts again, its loops coming in under the
+## start as on getting in. A jump's landing on the wheels (LAND_AIR_S) and the
+## shore's rocks under the wheels (RIPRAP) have sounds of their own (owner's
+## picks, 2026-11-14).
 
 ## After getting in (s): the start, just after the door's first sound; the door
 ## shutting, its slam (about 30 ms into the takes since the sheet's
@@ -111,6 +113,8 @@ var _last_at := Vector3.INF
 ## The rocks' rumble now (0..1) and the time since it was last looked at.
 var _rumble := 0.0
 var _rumble_due := 0.0
+## Whether the engine died in the bay and has not started again since.
+var _drowned := false
 
 
 ## The player got into car.
@@ -130,6 +134,11 @@ func start(car: DrivableCar) -> void:
 	_last_at = Vector3.INF
 	_rumble = 0.0
 	_rumble_due = RUMBLE_UPDATE_S
+	_drowned = false
+	# Back in before the last getting out's door had opened or shut: neither plays
+	# after (review note, 2026-11-14), only this getting in's.
+	Sound.cancel_after(&"car_door_open", car)
+	Sound.cancel_after(&"car_door_close", car)
 	# Where it is drawn: a car just put down (DrivableCar.place) moves its body at
 	# the next physics step, its visual at once.
 	Sound.play(&"car_door_open", car.visual_transform().origin)
@@ -154,6 +163,17 @@ func drive(car: DrivableCar, delta: float) -> void:
 	if car != _car:
 		start(car)
 	_clock += delta
+	# The engine died in the bay; back on land it starts again as on getting in
+	# (review note, 2026-11-14: its loops came back with no start), the start
+	# ENGINE_START_S on, where the car and the camera are by then (the camera
+	# snaps behind the car a moment after it is put back).
+	if car.is_sinking():
+		_drowned = true
+	elif _drowned:
+		_drowned = false
+		Sound.play_after(ENGINE_START_S, &"car_engine_start", car)
+		_loops_from = _clock + ENGINE_LOOPS_S
+		_loops_fade = ENGINE_FADE_S
 	_watch_landing(car, delta)
 	_rumble_due += delta
 	if _rumble_due >= RUMBLE_UPDATE_S:
