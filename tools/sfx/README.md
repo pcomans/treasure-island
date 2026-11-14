@@ -127,24 +127,33 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
     reads them so:
     - **A pick overrides a mark** of either round. Since marking clears the
       picks, a pick that is there was saved after the mark.
-    - **The deciding verdict** is round 2's when the row has a `round2`,
-      otherwise round 1's. A row that it marks not good (`still_not_right` or
-      `none_good` true), with no pick, is left out of `game/` and the manifest,
-      so the game plays nothing for it. The run says so.
+    - **A row the audition touched and nobody picked stays out.** That is any
+      entry, a verdict or a note, in either round. Such a row is left out of
+      `game/` and the manifest, so the game plays nothing for it, and the run
+      names it with the reason. The reason comes from the deciding verdict,
+      round 2's when the row has a `round2` and otherwise round 1's: "marked
+      not good in round N" when it rejects the row (`still_not_right` or
+      `none_good` true), otherwise "noted in round N but not picked". So a
+      note never ships candidates the owner did not choose.
     - Ids not in the sheet are ignored. A notes file that is not a JSON object
       stops the run, since its verdicts cannot be read.
-  - **Unheard sets.** A row with no pick and no rejection gets its first
-    candidates. The summary lists it ("processed from first candidates nobody
-    picked"), and the manifest marks it `"picked": false`. But a set nobody
-    has heard is left out instead and named: one whose candidates were made,
-    or added to, after the audition began, with no verdict on the row saved
-    since. A set's time is the latest time the generation log records for its
-    current candidates. The audition began at the earliest `updated` in the
-    notes. A set made before then was there to be judged, so it keeps the
-    first-candidates default, as does every row while no verdict is dated at
-    all. These are times recorded inside the log and the notes, never file
-    times. A pick carries no time, so an audition that saved only picks starts
-    no clock.
+  - **Rows nobody judged.** A row with no pick and no entry in the notes gets
+    its first candidates. The summary lists it ("processed from first
+    candidates nobody picked"), and the manifest marks it `"picked": false`.
+    That happens only while no audition has happened (`picks.json` names
+    nothing and the notes hold no entry), or when all its current candidates
+    predate the audition. Otherwise it is left out and named as unheard. A
+    set's time is the latest time the generation log records for its current
+    candidates. How the audition is dated:
+    - **By the notes,** when they hold a time: it began at their earliest
+      `updated`, so the set must be older than that.
+    - **By picks alone,** when the notes are missing, emptied or undated but
+      `picks.json` names something. Picks carry no time, so the set must come
+      from the generation log's first session: its lines, in time order, up to
+      the first pause of more than 15 minutes. Within one run, lines come at
+      most minutes apart.
+
+    These are times recorded inside the log and the notes, never file times.
 - **Processing.** `--process` turns each kept take into
   `~/ti-sfx/game/<group>/<name>_NN.ogg`, mono for positional sounds and
   stereo for the two ambience beds. The candidates themselves are only read,
@@ -164,7 +173,7 @@ tools/generate-sfx --out ~/ti-sfx --process        # trim, loop, normalise, Ogg 
   - **What a run removes from `game/`.** It removes only these, and lists
     each file:
     - takes numbered past what a row processed in this run keeps;
-    - every take of a row this run leaves out (not good, or unheard);
+    - every take of a row this run leaves out (judged without a pick, or unheard);
     - in every run, the takes of `retired_outputs`, the rows taken out of the
       sheet.
 
@@ -287,8 +296,8 @@ listening.**
 
 The manifest is JSON, rewritten atomically by every `--process`. It keeps the
 entries of rows outside the run and of failed or skipped rows as they were,
-drops rows no longer in the sheet, and drops a row the run leaves out (not
-good, or unheard).
+drops rows no longer in the sheet, and drops a row the run leaves out (judged
+without a pick, or unheard).
 
 ```json
 {
@@ -322,7 +331,7 @@ good, or unheard).
   `--process` prints a NOTE for it.
 - **`spread_lu`** is the matched takes' loudness range.
 - **`picked`** is true when the owner picked the takes, and false when they
-  are a row's first candidates, which nobody picked (see Unheard sets).
+  are a row's first candidates, which nobody picked (see Rows nobody judged).
 
 ## How the prompts are written
 

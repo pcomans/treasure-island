@@ -42,10 +42,11 @@
 //     copied folder takes its picks. An id not in the sheet is named and ignored.
 //   - A near-silent candidate is named, and the other takes and rows go on;
 //     the run ends non-zero listing the failed rows.
-//   - Audition verdicts in the pages' shapes: round 2 decides over round 1, a
-//     pick overrides a mark, and a set made after the audition began goes in
-//     only once picked or judged. First candidates nobody picked are listed
-//     and marked picked: false.
+//   - Audition notes in the pages' shapes: a pick overrides a mark; a row with
+//     any entry and no pick stays out, named; a row nobody judged gets its
+//     first candidates (listed, picked: false) only when they predate the
+//     audition, dated by the notes or, with picks alone, by the generation
+//     log's first session; with no picks and no notes, every row goes in.
 //   - A run removes only takes it decided on (past what a processed row keeps,
 //     a left-out row's) and retired rows' takes: never another row's, a
 //     refused row's, or anything because the manifest does not list it.
@@ -739,6 +740,14 @@ function synthesize(file, filter, inputs) {
     // A 441 Hz cosine of 2 s is whole cycles that start at full level (so no
     // silence is trimmed): a loop the model already made seamless.
     synthesize(join(rawDir, "bed_raw.c01.mp3"), ["-c:a", "libmp3lame", "-b:a", "192k"], ["aevalsrc=0.125*cos(2*PI*441*t):s=44100:d=2"]);
+    // The generation log dates these candidates, all in one session, as a real
+    // run would: once picks show an audition happened, only dated sets made
+    // before it may go in unpicked.
+    const firstSession = Date.parse("2026-11-14T03:00:00.000Z");
+    const madeLines = [["shot", 1], ["shot", 2], ["bed", 1], ["bed_raw", 1], ["hit", 1]].map(([id, n], index) => JSON.stringify({
+      time: new Date(firstSession + index * 1000).toISOString(), id, candidate: n, attempt: 1, file: candidate(fixture.sounds.find((row) => row.id === id), n), status: "ok",
+    }));
+    writeFileSync(join(out, "generation-log.jsonl"), `${madeLines.join("\n")}\n`);
     // A first run, with no manifest yet. game/ already holds a take numbered past
     // the one bed keeps, a take of a retired row and a take of no row the tool knows.
     mkdirSync(join(out, "game", "test"), { recursive: true });
@@ -826,18 +835,27 @@ function synthesize(file, filter, inputs) {
       passes.push(`post-processing: one-shots start at their onset (${shots.map((s) => (s.length / rate).toFixed(2)).join(" s, ")} s; decoded peaks ${peaks.join(", ")} dBFS for ${recipe.peak_dbfs}), the impact recipe cut a quiet take's 0.2 s lead-in (onset ${(hitOnset * 1000).toFixed(1)} ms), loop seam ${seamRatio(bed).toFixed(2)} x a normal step (was ${seamRatio(raw).toFixed(2)}), a 0 ms crossfade keeps the loop as generated, one pick for a row of 2 gave exactly that take`);
       passes.push(`levels: a row's takes are loudness-matched (shot's two knocks within ${shotSpread.toFixed(2)} LU), the manifest game/sfx.json gives every sound its takes and the gain from its measured loudness to its level, an unreachable level is a reported shortfall, and a run over one row keeps the others' entries`);
 
-      // Verdicts in the shapes the audition pages write (audition/server.mjs):
-      // round 1 {none_good, note, updated}, round 2 under "round2"
-      // {still_not_right, note, updated}. Round 2 decides when present, a pick
-      // overrides a mark, and a set made after the audition began goes in only
-      // once picked or judged. The generation log dates each candidate.
+      // Verdicts and notes in the shapes the audition pages write
+      // (audition/server.mjs): round 1 {none_good, note, updated}, round 2 under
+      // "round2" {still_not_right, note, updated}. A pick overrides a mark; a row
+      // the audition touched without a pick stays out; a row it never touched
+      // gets its first candidates only if they predate the audition. The
+      // generation log dates each candidate: shot and bed come from the first
+      // generation session, before the audition; bed_raw and hit were made after it began.
       const ver = join(scratch, "process-verdicts");
       const verTake = (name) => join(ver, "game", "test", name);
       const verSounds = () => (existsSync(join(ver, "game", "sfx.json")) ? JSON.parse(readFileSync(join(ver, "game", "sfx.json"), "utf8")).sounds : {});
+      const verRun = async (notes, picks) => {
+        for (const [name, value] of [["audition-notes.json", notes], ["picks.json", picks]]) {
+          if (value === undefined) rmSync(join(ver, name), { force: true });
+          else writeFileSync(join(ver, name), JSON.stringify(value));
+        }
+        const result = await runTool(["--out", ver, "--process", "--sheet", fixturePath]);
+        return { ...result, sounds: verSounds() };
+      };
       cpSync(join(out, "candidates"), join(ver, "candidates"), { recursive: true });
       const at = (minutes) => new Date(Date.parse("2026-11-14T06:00:00.000Z") + minutes * 60_000).toISOString();
       const [beforeAudition, round1, madeAgain, round2] = [at(-120), at(0), at(60), at(90)];
-      // shot and bed were made before the audition; bed_raw and hit after it began.
       const dated = { shot: [beforeAudition, 2], bed: [beforeAudition, 1], bed_raw: [madeAgain, 1], hit: [madeAgain, 1] };
       const logLines = Object.entries(dated).flatMap(([id, [time, count]]) => Array.from({ length: count }, (_, index) => JSON.stringify({
         time, id, candidate: index + 1, attempt: 1, file: candidate(fixture.sounds.find((row) => row.id === id), index + 1), status: "ok",
@@ -845,38 +863,46 @@ function synthesize(file, filter, inputs) {
       writeFileSync(join(ver, "generation-log.jsonl"), `${logLines.join("\n")}\n`);
       mkdirSync(join(ver, "game", "test"), { recursive: true });
       for (const name of ["bed_01.ogg", "hit_01.ogg"]) cpSync(take("hit_01.ogg"), verTake(name));
-      writeFileSync(join(ver, "picks.json"), JSON.stringify({ shot: [2] }));
+      const leftOutFor = (result, id, why) => result.stdout.includes(`${id}: left out of game/ and sfx.json, ${why}`) && !result.sounds[id] && !existsSync(verTake(`${id}_01.ogg`));
+      // Round 1 rejected all three; round 2 only noted bed_raw ("better now", not
+      // rejected, no pick: the reproduced car_jump_landing case). hit is a new set.
       const verdicts = {
         shot: { none_good: true, note: "too quiet", updated: round1 },
         bed: { none_good: true, note: "not this", updated: round1 },
         bed_raw: { none_good: true, note: "too much hiss", updated: round1, round2: { still_not_right: false, note: "better now", updated: round2 } },
       };
-      writeFileSync(join(ver, "audition-notes.json"), JSON.stringify(verdicts));
-      const firstVerdicts = await runTool(["--out", ver, "--process", "--sheet", fixturePath]);
-      const afterFirst = verSounds();
-      check(firstVerdicts.code === 0 && afterFirst.shot?.picked === true, `a pick did not override a round-1 none-good mark (exit ${firstVerdicts.code}): ${firstVerdicts.all.trim()}`);
-      check(!afterFirst.bed && !existsSync(verTake("bed_01.ogg")) && firstVerdicts.stdout.includes("bed: left out of game/ and sfx.json, marked not good in round 1; removed game/test/bed_01.ogg"),
-        `a row marked none good in round 1 and never picked was not left out with its takes: ${firstVerdicts.stdout.trim()}`);
-      check(afterFirst.bed_raw?.picked === false && firstVerdicts.stdout.includes("NOTE: processed from first candidates nobody picked: bed_raw"),
-        `round 2's verdict (not rejected, saved after the set was made) did not decide over round 1's rejection: ${firstVerdicts.stdout.trim()}`);
-      check(!afterFirst.hit && !existsSync(verTake("hit_01.ogg")) && /^NOTE: left out of game\/, so the game plays nothing for them: .*hit \(unheard: its candidates were made after the audition began/mu.test(firstVerdicts.stdout),
-        `a set made after the audition began, never picked or judged, was not left out and named in the summary: ${firstVerdicts.stdout.trim()}`);
-      // Round 2 marks shot (still picked), bed_raw and the new hit still not right;
-      // bed's round-1 mark is gone, and its set was made before the audition.
+      const run1 = await verRun(verdicts, { shot: [2] });
+      check(run1.code === 0 && run1.sounds.shot?.picked === true, `a pick did not override a round-1 none-good mark (exit ${run1.code}): ${run1.all.trim()}`);
+      check(leftOutFor(run1, "bed", "marked not good in round 1; removed game/test/bed_01.ogg"), `a row marked none good in round 1 and never picked was not left out with its takes: ${run1.stdout.trim()}`);
+      check(leftOutFor(run1, "bed_raw", "noted in round 2 but not picked"), `a row rejected in round 1 with only a round-2 note (not rejected, no pick) was not left out: ${run1.stdout.trim()}`);
+      check(leftOutFor(run1, "hit", "unheard: made after the audition began (2026-11-14T06:00:00.000Z)") && /^NOTE: left out of game\/, so the game plays nothing for them: .*hit \(unheard/mu.test(run1.stdout),
+        `a set made after the audition began, never picked or judged, was not left out and named in the summary: ${run1.stdout.trim()}`);
+      // Round 2 marks shot (still picked), bed_raw and hit still not right; bed's entry is gone.
       verdicts.shot.round2 = { still_not_right: true, note: "", updated: round2 };
       verdicts.bed_raw.round2 = { still_not_right: true, note: "still hiss", updated: round2 };
       verdicts.hit = { round2: { still_not_right: true, note: "still not right", updated: round2 } };
       delete verdicts.bed;
-      writeFileSync(join(ver, "audition-notes.json"), JSON.stringify(verdicts));
-      const secondVerdicts = await runTool(["--out", ver, "--process", "--sheet", fixturePath]);
-      const afterSecond = verSounds();
-      check(secondVerdicts.code === 0 && afterSecond.shot?.picked === true, `a pick did not override a round-2 mark (exit ${secondVerdicts.code}): ${secondVerdicts.all.trim()}`);
-      check(afterSecond.bed?.picked === false && secondVerdicts.stdout.includes("NOTE: processed from first candidates nobody picked: bed"),
-        `a set made before the audition, with no pick and no verdict, did not go in from its first candidates, listed: ${secondVerdicts.stdout.trim()}`);
-      check(!afterSecond.bed_raw && !existsSync(verTake("bed_raw_01.ogg")) && secondVerdicts.stdout.includes("bed_raw: left out of game/ and sfx.json, marked not good in round 2"),
-        `round 2's rejection did not decide: ${secondVerdicts.stdout.trim()}`);
-      check(!afterSecond.hit && secondVerdicts.stdout.includes("hit: left out of game/ and sfx.json, marked not good in round 2"), `a new row rejected in round 2 was not left out: ${secondVerdicts.stdout.trim()}`);
-      passes.push("audition verdicts in the pages' shapes: round 2 decides over round 1 either way, a pick overrides a mark of either round, a set made after the audition began with no pick or verdict since is left out and named, one made before it ships from first candidates, listed and marked picked: false");
+      const run2 = await verRun(verdicts, { shot: [2] });
+      check(run2.code === 0 && run2.sounds.shot?.picked === true, `a pick did not override a round-2 mark (exit ${run2.code}): ${run2.all.trim()}`);
+      check(run2.sounds.bed?.picked === false && run2.stdout.includes("NOTE: processed from first candidates nobody picked: bed ("),
+        `a row nobody judged, made before the audition, did not go in from its first candidates, listed: ${run2.stdout.trim()}`);
+      check(leftOutFor(run2, "bed_raw", "marked not good in round 2") && leftOutFor(run2, "hit", "marked not good in round 2"), `round 2's rejections did not decide: ${run2.stdout.trim()}`);
+      // A round-1 note without a rejection, and no pick: out as well.
+      const run3 = await verRun({ bed: { none_good: false, note: "maybe", updated: round1 } }, { shot: [2] });
+      check(run3.code === 0 && leftOutFor(run3, "bed", "noted in round 1 but not picked"), `a row with only a round-1 note and no pick was not left out: ${run3.stdout.trim()}`);
+      // Picks show an audition happened even with the notes gone or emptied. With
+      // nothing to date it, only sets from the log's first generation session go in.
+      for (const [what, notes] of [["no notes file", undefined], ["an emptied notes file", {}]]) {
+        const run = await verRun(notes, { shot: [2] });
+        check(run.code === 0 && run.sounds.shot?.picked === true && run.sounds.bed?.picked === false && run.stdout.includes("NOTE: processed from first candidates nobody picked: bed (")
+          && ["bed_raw", "hit"].every((id) => leftOutFor(run, id, "unheard: made after the log's first generation session, and nothing in the notes dates the audition")),
+        `with picks and ${what}, rows made after the first generation session were not left out, or bed did not go in: ${run.stdout.trim()}`);
+      }
+      // No picks and no notes: no audition yet, so every row gets its first candidates.
+      const run6 = await verRun(undefined, undefined);
+      check(run6.code === 0 && run6.stdout.includes("NOTE: processed from first candidates nobody picked: shot, bed, bed_raw, hit (") && ["shot", "bed", "bed_raw", "hit"].every((id) => run6.sounds[id]?.picked === false),
+        `with no audition yet, the rows did not all go in from their first candidates: ${run6.stdout.trim()}`);
+      passes.push("audition notes in the pages' shapes: a pick overrides a mark of either round; a row with any entry and no pick (rejected, or only a note in round 1 or 2) stays out and is named; a row nobody judged goes in, listed and picked: false, only when made before the audition began, or, with picks but no notes (missing or emptied), in the log's first generation session; with no picks and no notes, every row goes in");
 
       // A run over one row keeps every other row's takes, even with no manifest to
       // list them (the first run on a folder an earlier tool processed).
@@ -885,6 +911,7 @@ function synthesize(file, filter, inputs) {
       cpSync(join(out, "candidates"), join(sub, "candidates"), { recursive: true });
       const whole = await runTool(["--out", sub, "--process", "--sheet", fixturePath]);
       rmSync(join(sub, "game", "sfx.json"), { force: true });
+      mkdirSync(join(sub, "game", "test"), { recursive: true });
       for (const name of ["coin_02.ogg", "mystery_02.ogg"]) writeFileSync(subTake(name), "not audio\n");
       const others = ["shot_01.ogg", "shot_02.ogg", "bed_01.ogg", "bed_raw_01.ogg", "mystery_02.ogg"];
       const othersBefore = others.map((name) => (existsSync(subTake(name)) ? readFileSync(subTake(name)) : null));

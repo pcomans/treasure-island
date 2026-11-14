@@ -93,9 +93,14 @@ const FORCE_MARK = ".forced";
 // The picks a row had when --force-id set its candidates aside. It outlives the
 // fresh set, so --process can tell those picks from ones made of the new set.
 const PICKS_BEFORE_FORCE = ".picks-before-force.json";
-// The audition pages' verdicts beside picks.json (round 1, and round 2 under
-// "round2"); a row they reject and nobody picked is left out of game/.
+// The audition pages' verdicts and notes beside picks.json (round 1, and round 2
+// under "round2"); a row they touched and nobody picked is left out of game/.
 const NOTES_NAME = "audition-notes.json";
+// Generation sessions in the log are told apart by a pause: lines more than 15
+// minutes apart. Within one run lines come at most minutes apart (a request
+// times out after 5 minutes, a retry waits at most 2), and an audition takes
+// longer than that between the first session and anything made after it.
+const SESSION_GAP_MS = 15 * 60 * 1000;
 // Post-processing: silence kept before a one-shot's onset and after its tail;
 // a take shorter than MIN_TAKE_S after trimming, or peaking at SILENT_DBFS or
 // below, counts as silent.
@@ -508,29 +513,42 @@ function resumeCommand(args, out) {
 
 // --- Dry run ---------------------------------------------------------------
 
-// The generation log's "ok" lines by file: each candidate's own line is the
-// last one naming its file, since a file made again after --force-id is logged
-// after the one it replaced. A line records the prompt, settings and time.
+// The generation log. byFile: the "ok" lines by file, each candidate's own line
+// being the last one naming its file, since a file made again after --force-id
+// is logged after the one it replaced (a line records the prompt, settings and
+// time). firstSessionEnd: when the first generation session ended (ms, or null
+// with no dated line): the time of the last line, of any status, before the
+// first gap of more than SESSION_GAP_MS between lines in time order.
 function readLog(out) {
-  const logged = new Map();
+  const byFile = new Map();
+  const times = [];
   const logPath = join(out, "generation-log.jsonl");
-  if (!existsSync(logPath)) return logged;
-  for (const line of readFileSync(logPath, "utf8").split("\n")) {
-    try {
-      const entry = JSON.parse(line);
-      if (entry?.status === "ok" && typeof entry.file === "string") logged.set(entry.file, entry);
-    } catch {
-      // A torn last line from an interrupted run; the file it named is checked on disk.
+  if (existsSync(logPath)) {
+    for (const line of readFileSync(logPath, "utf8").split("\n")) {
+      try {
+        const entry = JSON.parse(line);
+        const time = Date.parse(entry?.time);
+        if (Number.isFinite(time)) times.push(time);
+        if (entry?.status === "ok" && typeof entry.file === "string") byFile.set(entry.file, entry);
+      } catch {
+        // A torn last line from an interrupted run; the file it named is checked on disk.
+      }
     }
   }
-  return logged;
+  times.sort((a, b) => a - b);
+  let firstSessionEnd = times.length ? times[0] : null;
+  for (const time of times) {
+    if (time - firstSessionEnd > SESSION_GAP_MS) break;
+    firstSessionEnd = time;
+  }
+  return { byFile, firstSessionEnd };
 }
 
 // For each row: which candidates are on disk, which of them the generation log
 // shows were made with other settings than the sheet's (stale), and whether the
 // set is complete and logged as made entirely with the sheet's settings (current).
 function survey(out, sheet, rows, forced) {
-  const logged = readLog(out);
+  const logged = readLog(out).byFile;
   return rows.map((row) => {
     const format = formatOf(sheet, row);
     const present = presentOf(out, sheet, row);
@@ -938,12 +956,13 @@ function readObject(path, shape) {
   return value;
 }
 
-// picks.json: { picks: valid lists by id, bad: why a row's list cannot be right }.
+// picks.json: { picks: valid lists by id, bad: why a row's list cannot be right,
+// any: whether it names any id at all, which shows an audition has happened }.
 // An id not in the sheet (a row since dropped) is named and ignored.
 function readPicks(out, sheet) {
   const path = join(out, "picks.json");
-  const found = { picks: {}, bad: new Map() };
   const picks = readObject(path, "{\"<id>\": [candidate numbers]}") ?? {};
+  const found = { picks: {}, bad: new Map(), any: Object.keys(picks).length > 0 };
   const rows = new Map(sheet.sounds.map((row) => [row.id, row]));
   for (const [id, list] of Object.entries(picks)) {
     const row = rows.get(id);
@@ -963,19 +982,30 @@ function readPicks(out, sheet) {
 //   {"<id>": {"none_good": <bool>, "note": "...", "updated": "<time>",                     round 1
 //             "round2": {"still_not_right": <bool>, "note": "...", "updated": "<time>"}}}   round 2
 // Returns the notes by id, and when the owner first saved any of them (ms, or
-// null when nothing is dated). A set made before then was there to be judged.
+// null when nothing is dated): when the audition began.
 function readNotes(out) {
   const notes = readObject(join(out, NOTES_NAME), "{\"<id>\": {\"none_good\": true, ...}}") ?? {};
   const saved = Object.values(notes).flatMap((entry) => [entry?.updated, entry?.round2?.updated]).map((time) => Date.parse(time)).filter(Number.isFinite);
   return { notes, auditionStart: saved.length ? Math.min(...saved) : null };
 }
 
+// Whether the audition touched a row: an entry for it of any kind, a verdict or a note, in either round.
+const judged = (entry) => isObject(entry) && Object.keys(entry).length > 0;
+
 // The verdict that decides a row: round 2's when the row has one, otherwise
-// round 1's; null when it has neither. { round, rejected, at (ms, or NaN) }.
+// round 1's; null when it has neither. { round, rejected }.
 function verdictOf(entry) {
-  if (isObject(entry?.round2)) return { round: 2, rejected: entry.round2.still_not_right === true, at: Date.parse(entry.round2.updated) };
-  if (isObject(entry) && typeof entry.none_good === "boolean") return { round: 1, rejected: entry.none_good, at: Date.parse(entry.updated) };
+  if (isObject(entry?.round2)) return { round: 2, rejected: entry.round2.still_not_right === true };
+  if (isObject(entry) && typeof entry.none_good === "boolean") return { round: 1, rejected: entry.none_good };
   return null;
+}
+
+// Why a row the audition touched, but nobody picked, stays out of game/: the
+// owner rejected it, or heard it and chose nothing, so it never ships unchosen.
+function judgedWhy(entry) {
+  const verdict = verdictOf(entry);
+  if (verdict?.rejected) return `marked not good in round ${verdict.round}`;
+  return `${verdict ? `noted in round ${verdict.round}` : "noted in the audition"} but not picked`;
 }
 
 // When a row's current candidates were made: the latest time the generation
@@ -985,16 +1015,20 @@ function madeOf(out, sheet, row, present, logged) {
   return times.length && times.every(Number.isFinite) ? Math.max(...times) : null;
 }
 
-// Why the first candidates of a row nobody picked or rejected must stay out of
-// game/, or null when they may go in. They are unheard when the set was made,
-// or added to, after the audition began and no verdict on the row was saved
-// since. Before any dated verdict (no audition yet), the first candidates go in.
-function unheardWhy(verdict, made, auditionStart) {
-  if (auditionStart === null) return null;
+// Why the first candidates of a row nobody picked or judged must stay out of
+// game/, or null when they may go in. They go in while no audition has
+// happened (no picks, no notes), and afterwards only when all of them predate
+// it: when the notes date it, made before its earliest save; when only picks
+// show it happened (they carry no time), made in the log's first generation
+// session. made is the row's latest candidate time from the log.
+function unheardWhy(audition, made) {
+  if (!audition.happened) return null;
   if (made === null) return "unheard: the generation log does not date its candidates";
-  if (Number.isFinite(verdict?.at) && verdict.at >= made) return null;
-  if (made < auditionStart) return null;
-  return "unheard: its candidates were made after the audition began, and nobody has picked or judged them since";
+  if (audition.start !== null) {
+    return made < audition.start ? null : `unheard: made after the audition began (${new Date(audition.start).toISOString()}), and nobody has picked or judged it`;
+  }
+  return audition.firstSessionEnd !== null && made <= audition.firstSessionEnd ? null
+    : "unheard: made after the log's first generation session, and nothing in the notes dates the audition";
 }
 
 // What --force-id recorded for a row: { picks } or null; { broken } when unreadable.
@@ -1040,9 +1074,11 @@ function postProcess({ sheet, out, rows }) {
     console.error(`FAIL: no candidates in ${out}; run ${TOOL} --out ${shellWord(out)} --generate first.`);
     return 1;
   }
-  const { picks, bad: badPicks } = readPicks(out, sheet);
+  const { picks, bad: badPicks, any: anyPicks } = readPicks(out, sheet);
   const { notes, auditionStart } = readNotes(out);
-  const logged = readLog(out);
+  const { byFile: logged, firstSessionEnd } = readLog(out);
+  // An audition has happened once picks.json names anything or the notes hold an entry.
+  const audition = { happened: anyPicks || Object.values(notes).some(judged), start: auditionStart, firstSessionEnd };
   const work = mkdtempSync(join(out, ".work-"));
   // A take that fails is reported with its candidate, and the other rows still
   // go on; the failed rows are listed at the end. A failed row (refused before
@@ -1100,11 +1136,11 @@ function postProcess({ sheet, out, rows }) {
           continue;
         }
       } else {
-        // Nobody picked: the deciding verdict may reject the row; otherwise its
-        // first candidates go in, unless nobody has heard them.
-        const verdict = verdictOf(notes[row.id]);
-        if (verdict?.rejected) {
-          leaveOut(row, `marked not good in round ${verdict.round}`);
+        // Nobody picked. A row the audition touched (a verdict or a note, either
+        // round) stays out; one it never touched gets its first candidates,
+        // unless nobody can have heard them.
+        if (judged(notes[row.id])) {
+          leaveOut(row, judgedWhy(notes[row.id]));
           continue;
         }
         if (present.length < row.keep_takes) {
@@ -1112,7 +1148,7 @@ function postProcess({ sheet, out, rows }) {
           skipped += 1;
           continue;
         }
-        const unheard = unheardWhy(verdict, madeOf(out, sheet, row, present, logged), auditionStart);
+        const unheard = unheardWhy(audition, madeOf(out, sheet, row, present, logged));
         if (unheard) {
           leaveOut(row, unheard);
           continue;
