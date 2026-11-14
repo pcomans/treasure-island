@@ -32,7 +32,9 @@ extends Node3D
 ## a prop, and nothing (car, player, chase camera, a reach, other debris) ever
 ## meets it. It collides as the convex hulls of what is drawn of it, slice by
 ## slice up its height (the furniture kit's fall_slices), so it lies on its drawn
-## pole and head, neither in the ground nor held over it. Come to rest (REST_S, or
+## pole and head, neither in the ground nor held over it, and it falls through the
+## invisible ramps in front of the kerbs' faces onto the gutter and against the
+## kerb that are drawn (_pass_kerb_ramps). Come to rest (REST_S, or
 ## at most SETTLE_MAX_S after it fell or last woke) on the ground it is frozen with
 ## its shapes off, so felled props lying about cost no physics; one resting on
 ## something else (a parked car, a fence) is put to sleep, so it costs none either
@@ -81,14 +83,22 @@ const FRICTION := 1.0
 ## or last woke: frozen with no collision on the ground, asleep on anything else.
 const REST_S := 0.6
 const SETTLE_MAX_S := 8.0
-## Frozen on the ground, it is put on the drawn ground (_onto_drawn_ground): each of
-## its hulls' points within REST_BAND_M of its lowest, one a REST_CELL_M square in
-## plan, looks once straight down from REST_RAY_M over it to as far under it; a lift
-## of more than REST_LIFT_MAX_M is something over it, not ground, and is skipped.
-const REST_BAND_M := 0.3
+## Frozen on the ground, it is put on the drawn ground (_onto_drawn_ground): the
+## lowest of its hulls' points in each REST_CELL_M square in plan looks once
+## straight down from REST_RAY_M over it to as far under it, and only the land
+## counts; a lift of more than REST_LIFT_MAX_M is something over it, not ground,
+## and is skipped.
 const REST_CELL_M := 0.25
 const REST_RAY_M := 0.5
 const REST_LIFT_MAX_M := 0.3
+## The ground a felled prop is lifted onto (its collider's parent's feature_kind),
+## and the invisible ramps in front of the kerbs' faces (there so the stock player
+## walks on and off a kerb), which it falls through: those within its height and
+## RAMP_REACH_M of where it falls (at most RAMP_QUERY_MAX world bodies looked at).
+const LAND_KIND := "land_ground"
+const KERB_RAMP_KIND := "street_kerb_support"
+const RAMP_REACH_M := 2.0
+const RAMP_QUERY_MAX := 64
 ## A felled utility pole's wires hang slack from the standing pole: sagging up to
 ## DROP_SAG of their length (as it goes over, from their own sag standing), in
 ## DROP_PIECES pieces at least, and never into the ground, taken as a straight line
@@ -641,6 +651,8 @@ func _physics_process(delta: float) -> void:
 		if not is_instance_valid(debris):
 			_settling.remove_at(index)
 			continue
+		if not debris.has_meta("kerb_ramps"):
+			_pass_kerb_ramps(debris)
 		var age := float(debris.get_meta("age", 0.0)) + delta
 		debris.set_meta("age", age)
 		_sound_landing(debris)
@@ -676,16 +688,18 @@ func _physics_process(delta: float) -> void:
 ## A felled prop come to rest on the ground, put on the ground that is drawn there:
 ## the roads, paths and areas drawn over the land stand a few centimetres above its
 ## collision (VisibleGround), so a prop lying on the land would lie in a paved walk
-## by that much. Each of its hulls' lowest points (REST_BAND_M over the lowest, one
-## a REST_CELL_M square) looks straight down once, at rest, never while it moves:
-## where it finds the land, the ground drawn there is the land's height and the
-## drawn lift over it; anything else solid (a kerb, steps, a wall's foot) is drawn
-## where it is. The prop is lifted by the deepest point's depth under that ground
-## (no more than REST_LIFT_MAX_M: deeper is something over it, not ground). The
-## lift (m), 0 when none.
+## by that much. The lowest of its hulls' points in each REST_CELL_M square (under
+## all of it, so a long pole's uphill end is looked under too) looks straight down
+## once, at rest, never while it moves, through the invisible kerb ramps: only the
+## land counts, its ground drawn there its height and the drawn lift over it.
+## Anything else solid (a kerb, steps, a plinth) is drawn where its collision is,
+## and a point over one is skipped, so a prop lying in a gutter against a kerb's
+## face is not lifted to the kerb's top (code review, 2026-11-14). The prop is
+## lifted as a whole by the deepest point's depth under the drawn land (no more
+## than REST_LIFT_MAX_M: deeper is something over it, not ground). The lift (m), 0
+## when none.
 func _onto_drawn_ground(debris: RigidBody3D) -> float:
-	var lowest := INF
-	var points := PackedVector3Array()
+	var cells := {}
 	for child: Node in debris.get_children():
 		var collision := child as CollisionShape3D
 		if collision == null or not collision.shape is ConvexPolygonShape3D:
@@ -693,37 +707,66 @@ func _onto_drawn_ground(debris: RigidBody3D) -> float:
 		var xf := debris.global_transform * collision.transform
 		for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
 			var at := xf * point
-			points.append(at)
-			lowest = minf(lowest, at.y)
-	# The lowest point in each REST_CELL_M square.
-	var cells := {}
-	for at: Vector3 in points:
-		if at.y > lowest + REST_BAND_M:
-			continue
-		var cell := Vector2i(floori(at.x / REST_CELL_M), floori(at.z / REST_CELL_M))
-		if not cells.has(cell) or at.y < (cells[cell] as Vector3).y:
-			cells[cell] = at
+			var cell := Vector2i(floori(at.x / REST_CELL_M), floori(at.z / REST_CELL_M))
+			if not cells.has(cell) or at.y < (cells[cell] as Vector3).y:
+				cells[cell] = at
 	var space := debris.get_world_3d().direct_space_state
-	var ray := PhysicsRayQueryParameters3D.new()
-	ray.collision_mask = PHYSICS_WORLD_SOLID
-	ray.hit_back_faces = false
 	var lift := 0.0
 	for at: Vector3 in cells.values():
-		ray.from = at + Vector3.UP * REST_RAY_M
-		ray.to = at - Vector3.UP * REST_RAY_M
-		var hit := space.intersect_ray(ray)
-		if hit.is_empty():
+		var hit := _ground_under(space, at, debris.get_meta("kerb_ramps", []))
+		if hit.is_empty() or feature_kind(hit.collider) != LAND_KIND:
 			continue
-		var ground := (hit.position as Vector3).y
-		var collider := hit.get("collider") as Node
-		if visible_ground != null and collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
-			ground += visible_ground.lift_at(at.x, at.z)
-		var depth := ground - at.y
+		var depth := (hit.position as Vector3).y + (visible_ground.lift_at(at.x, at.z) if visible_ground != null else 0.0) - at.y
 		if depth <= REST_LIFT_MAX_M:
 			lift = maxf(lift, depth)
 	if lift > 0.0:
 		debris.global_position += Vector3.UP * lift
 	return lift
+
+
+## The first world solid straight under a point (from REST_RAY_M over it to as far
+## under it) that is not an invisible kerb ramp: {} or the ray's hit.
+static func _ground_under(space: PhysicsDirectSpaceState3D, at: Vector3, ramps: Array) -> Dictionary:
+	var ray := PhysicsRayQueryParameters3D.create(at + Vector3.UP * REST_RAY_M, at - Vector3.UP * REST_RAY_M, PHYSICS_WORLD_SOLID)
+	ray.hit_back_faces = false
+	var exclude: Array[RID] = []
+	exclude.assign(ramps)
+	for _attempt in 3:
+		ray.exclude = exclude
+		var hit := space.intersect_ray(ray)
+		if hit.is_empty() or feature_kind(hit.collider) != KERB_RAMP_KIND:
+			return hit
+		exclude.append(hit.rid)
+	return {}
+
+
+## The kind of world feature a world body belongs to (its parent's feature_kind:
+## the generated chunk records' collision bodies), "" for any other body.
+static func feature_kind(body: Variant) -> String:
+	var node := body as Node
+	return str(node.get_parent().get_meta("feature_kind", "")) if node != null and node.get_parent() != null else ""
+
+
+## A felled prop falls through the invisible ramps in front of the kerbs' faces
+## (code review, 2026-11-14: they are there so the stock player walks on and off a
+## kerb; resting on one, a prop in a gutter lay up to a kerb's height over the
+## gutter that is drawn), onto the gutter and against the kerb's face: those within
+## its height and RAMP_REACH_M of where it is on its first tick down (where it
+## stood), looked for once. Their RIDs in its kerb_ramps metadata.
+func _pass_kerb_ramps(debris: RigidBody3D) -> void:
+	var sphere := SphereShape3D.new()
+	sphere.radius = float(debris.get_meta("height", 4.0)) + RAMP_REACH_M
+	var query := PhysicsShapeQueryParameters3D.new()
+	query.shape = sphere
+	query.transform = Transform3D(Basis.IDENTITY, debris.global_position)
+	query.collision_mask = PHYSICS_WORLD_SOLID
+	var ramps: Array[RID] = []
+	for hit: Dictionary in debris.get_world_3d().direct_space_state.intersect_shape(query, RAMP_QUERY_MAX):
+		var body := hit.get("collider") as PhysicsBody3D
+		if body != null and feature_kind(body) == KERB_RAMP_KIND and not ramps.has(body.get_rid()):
+			debris.add_collision_exception_with(body)
+			ramps.append(body.get_rid())
+	debris.set_meta("kerb_ramps", ramps)
 
 
 ## The felled prop's head meeting the ground, once (see FALL_LEAN_UP).

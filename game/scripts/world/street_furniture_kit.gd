@@ -1528,9 +1528,10 @@ func _lamp_fork(b: Builder) -> void:
 
 
 ## Garden Walk's steel bollards (owner photos o2, o3, o4): a round galvanised post
-## with a rounded head, about a metre tall.
+## with a rounded head, about a metre tall; its buried foot is capped too, so a
+## felled one shows no open tube end.
 func _bollard_steel(b: Builder) -> void:
-	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0), Vector3(0, 1.0, 0)]), PackedFloat32Array([0.07, 0.07, 0.06, 0.02]), 12, GALVANIZED, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, 0.94, 0), Vector3(0, 0.98, 0), Vector3(0, 1.0, 0)]), PackedFloat32Array([0.07, 0.07, 0.06, 0.02]), 12, GALVANIZED, CELL_METAL, true, true)
 
 
 ## The 30 ft event light poles round the lawn (2024 art-location plan label

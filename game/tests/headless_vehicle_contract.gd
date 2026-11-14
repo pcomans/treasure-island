@@ -75,16 +75,31 @@ extends SceneTree
 ##      the car keeping at least its share of its speed less POLE_KEEP_SLACK and
 ##      still driving half a second later, and it is frozen lying on the ground
 ##      (tipped past POLE_LIE_UP) within LAMP_SETTLE_S, its base within
-##      POLE_REST_M of where it stood and its lowest drawn points no deeper than
+##      POLE_REST_M of where it stood and its drawn points no deeper than
 ##      POLE_BURIED_M under the ground drawn there (a paved walk or road is drawn a
 ##      few centimetres over the land's collision, VisibleGround: visual review,
-##      2026-11-14, saw a felled bollard half sunk in Garden Walk's paving); a
+##      2026-11-14, saw a felled bollard half sunk in Garden Walk's paving; only the
+##      land counts, as a kerb, a sidewalk's top or a step is drawn where its
+##      collision is); a
 ##      utility pole's wire spans now run from
 ##      the standing neighbours down to it, their felled ends within
 ##      POLE_WIRE_DOWN_M of the ground; the run asks for its one hit sound
 ##      (lamp_hit, from the felling code) and no car crash sound (the speed it
 ##      took is no hit of the car's); on foot the player walks through where it
 ##      stood;
+##   7d. a felled prop at rest in a gutter against a kerb (code review,
+##      2026-11-14): no thin prop stands where a car fells it into a gutter (the
+##      street-name posts nearest a kerb stand half a metre behind its face, on the
+##      walk; the bollards on Garden Walk's paths), so a felled bollard
+##      (vehicle_cases.json pole_kerb row) is let fall lying over a real gutter
+##      along the kerb's face (pole_kerb face_xz, out_xz toward the road; a level
+##      ray finds the face there), POLE_KERB_OFF_M off it and POLE_KERB_DROP_M
+##      over the kerb's top, and comes to rest on its own: it falls through the
+##      invisible ramp in front of the face (there for the stock player's step up)
+##      onto the gutter, is frozen within LAMP_SETTLE_S with its nearest point
+##      within POLE_KERB_GAP_M of the face, and lies no deeper than POLE_BURIED_M
+##      under the ground drawn under it and its lowest no higher than
+##      POLE_LIFTED_M over it: not lifted to the kerb's or the ramp's top;
 ##   8. shoves: a car creeping into a parked car and then pressing on at full
 ##      throttle pushes it, and again once it has frozen; a parked car hit from
 ##      the side at speed and a K-rail hit end on are set moving; each comes to
@@ -177,8 +192,17 @@ const POLE_KEEP_SLACK := 0.08
 const POLE_LIE_UP := 0.5
 const POLE_REST_M := 6.0
 const POLE_WIRE_DOWN_M := 2.5
-## How deep a felled prop at rest may lie under the ground drawn under it (m).
+## How deep a felled prop at rest may lie under the ground drawn under it (m), and
+## (the kerb case, lying in a gutter) how far over the gutter drawn under it its
+## lowest point may lie (m).
 const POLE_BURIED_M := 0.02
+const POLE_LIFTED_M := 0.02
+## The kerb case (7d): the felled prop let fall lying along the kerb's face over
+## its gutter, POLE_KERB_OFF_M off the face and POLE_KERB_DROP_M over the kerb's
+## top; at rest its nearest point within POLE_KERB_GAP_M of the face.
+const POLE_KERB_OFF_M := 0.005
+const POLE_KERB_DROP_M := 0.02
+const POLE_KERB_GAP_M := 0.05
 ## A yard vehicle's drive from rest (DRIVE_S under full throttle) must cover at
 ## least this share of the distance and speed its own launch acceleration and top
 ## speed give (drivable_car.gd BODIES): the throttle and the tyres' grip build up
@@ -231,7 +255,7 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
 	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
@@ -1631,11 +1655,11 @@ func _case_lamps() -> bool:
 		await physics_frame
 	var base := lying.global_position if lying != null else Vector3.INF
 	var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
-	var buried := _buried_m(lying) if lying != null else INF
-	print("LAMP REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, lifted %.3f m onto the ground drawn there and %.3f m deep at most under it" % [fell, lying != null and lying.freeze, settled_s, rest_m, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, buried])
+	var on_drawn := _rest_on_drawn(lying) if lying != null else Vector2(INF, INF)
+	print("LAMP REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, lifted %.3f m onto the ground drawn there, %.3f m deep at most under the land drawn under it, its lowest over that land %.3f m over it" % [fell, lying != null and lying.freeze, settled_s, rest_m, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, on_drawn.x, on_drawn.y])
 	if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [fell, LAMP_SETTLE_S]) \
 	or not _require(rest_m <= LAMP_REST_M, "The felled %s came to rest %.2f m from where it stood (at most %.1f m): carried along, not knocked over." % [fell, rest_m, LAMP_REST_M]) \
-	or not _require(buried <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [fell, buried, POLE_BURIED_M]):
+	or not _require(on_drawn.x <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [fell, on_drawn.x, POLE_BURIED_M]):
 		return false
 	# Crept back through where it stood (slower than a lamp falls to), nothing
 	# stops the car: on until its rear is 2 m past the foot, clear of the walk.
@@ -1797,11 +1821,11 @@ func _case_poles() -> bool:
 		var base := lying.global_position if lying != null else Vector3.INF
 		var rest_m := Vector2(base.x - foot.x, base.z - foot.z).length()
 		var up := lying.global_transform.basis.y.y if lying != null else 1.0
-		var buried := _buried_m(lying) if lying != null else INF
-		print("POLE REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, its up %.2f, lifted %.3f m onto the ground drawn there and %.3f m deep at most under it" % [label, lying != null and lying.freeze, settled_s, rest_m, up, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, buried])
+		var on_drawn := _rest_on_drawn(lying) if lying != null else Vector2(INF, INF)
+		print("POLE REST %s: frozen %s %.2f s after the hit, its base %.2f m from where it stood, its up %.2f, lifted %.3f m onto the ground drawn there, %.3f m deep at most under the land drawn under it, its lowest over that land %.3f m over it" % [label, lying != null and lying.freeze, settled_s, rest_m, up, float(lying.get_meta("drawn_lift_m", 0.0)) if lying != null else NAN, on_drawn.x, on_drawn.y])
 		if not _require(lying != null and lying.freeze and settled_s >= 0.0, "The felled %s was not frozen on the ground within %.0f s of the hit." % [label, LAMP_SETTLE_S]) \
 		or not _require(rest_m <= POLE_REST_M and up < POLE_LIE_UP, "The felled %s did not go over where it stood (its base %.2f m away, at most %.1f m; its up %.2f, under %.2f)." % [label, rest_m, POLE_REST_M, up, POLE_LIE_UP]) \
-		or not _require(buried <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [label, buried, POLE_BURIED_M]):
+		or not _require(on_drawn.x <= POLE_BURIED_M, "The felled %s lies %.3f m deep in the ground drawn under it (at most %.2f m)." % [label, on_drawn.x, POLE_BURIED_M]):
 			return false
 		if prop == "utility_pole" and not _poles_wires_down(props, id, foot, label):
 			return false
@@ -1813,6 +1837,92 @@ func _case_poles() -> bool:
 		if not await _walk_x(foot, across_x, true, label):
 			return false
 	return _require(kinds.has("name_sign") and kinds.has("stop_sign") and kinds.has("post_sign") and kinds.has("bus_stop_sign") and kinds.has("bollard_steel") and kinds.has("signal_mast") and kinds.has("utility_pole") and kinds.has("light_tower") and kinds.has("event_pole"), "The poles case must take one of each kind (it took %s)." % [kinds])
+
+
+## 7d: a felled bollard at rest in a gutter against a kerb's face (see the top).
+func _case_pole_kerb() -> bool:
+	var props := _vehicles.furniture_breaker()
+	var fixture: Dictionary = _cases.pole_kerb
+	var id := str(fixture.row)
+	if not _require(not props.pole(id).is_empty() and not props.is_felled(id), "Fixture %s is not a standing prop a car knocks over (fellable %s, felled %s)." % [id, not props.pole(id).is_empty(), props.is_felled(id)]):
+		return false
+	var out := Vector3(fixture.out_xz[0], 0.0, fixture.out_xz[1]).normalized()
+	var along := Vector3.UP.cross(out)
+	var face := _kerb_face(Vector2(fixture.face_xz[0], fixture.face_xz[1]), out)
+	if not _require(not face.is_empty(), "No kerb face at %s facing %s." % [fixture.face_xz, out]):
+		return false
+	props.fell(id)
+	var lying: RigidBody3D = null
+	for child: Node in props.get_children():
+		if child is RigidBody3D and str(child.get_meta("street_detail_id", "")) == id:
+			lying = child
+	if not _require(lying != null, "Felling %s dropped no debris." % id):
+		return false
+	# Its length along the face (its own up), its middle at the face point: lying
+	# over the gutter POLE_KERB_OFF_M off the face and POLE_KERB_DROP_M over the
+	# kerb's top, so it falls through the ramp in front of the face.
+	var low := INF
+	var high := -INF
+	var radius := 0.0
+	for child: Node in lying.get_children():
+		var collision := child as CollisionShape3D
+		if collision != null and collision.shape is ConvexPolygonShape3D:
+			for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
+				var local := collision.transform * point
+				low = minf(low, local.y)
+				high = maxf(high, local.y)
+				radius = maxf(radius, Vector2(local.x, local.z).length())
+	var face_at: Vector3 = face.at
+	lying.global_transform = Transform3D(Basis(out, along, Vector3.UP), face_at + out * (radius + POLE_KERB_OFF_M) + Vector3.UP * (float(face.top) - face_at.y + radius + POLE_KERB_DROP_M) - along * (low + high) * 0.5)
+	lying.linear_velocity = Vector3.ZERO
+	lying.angular_velocity = Vector3.ZERO
+	var settled_s := -1.0
+	for tick in int(LAMP_SETTLE_S * 60.0):
+		await physics_frame
+		if lying.freeze:
+			settled_s = tick / 60.0
+			break
+	# Its nearest point to the face (negative: pressed into it), and what stands
+	# straight over its lowest point (what a lift that counted it would have taken).
+	var gap := INF
+	var lowest := Vector3(0.0, INF, 0.0)
+	for child: Node in lying.get_children():
+		var collision := child as CollisionShape3D
+		if collision != null and collision.shape is ConvexPolygonShape3D:
+			for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
+				var at := lying.global_transform * collision.transform * point
+				gap = minf(gap, (at - face_at).dot(out))
+				if at.y < lowest.y:
+					lowest = at
+	var over := _ray(lowest + Vector3.UP * 0.5, lowest - Vector3.UP * 0.5, 1)
+	var on_drawn := _rest_on_drawn(lying)
+	print("POLE KERB %s at the kerb face %s (its top %.3f m over the gutter's land, a ramp in front of it %s): frozen %s %.2f s after it was put down, its nearest point %.3f m off the face, lifted %.3f m onto the ground drawn there, %.3f m deep at most under it and its lowest %.3f m over it; straight over its lowest is %s at %.3f m over it" % [id, face_at, float(face.top) - face_at.y, face.ramp, lying.freeze, settled_s, gap, float(lying.get_meta("drawn_lift_m", NAN)), on_drawn.x, on_drawn.y, _feature_kind(over.get("collider")), (over.position as Vector3).y - lowest.y if not over.is_empty() else NAN])
+	return _require(lying.freeze and settled_s >= 0.0, "The bollard put down in the gutter at %s was not frozen within %.0f s." % [face_at, LAMP_SETTLE_S]) \
+	and _require(gap <= POLE_KERB_GAP_M, "The bollard put down in the gutter came to rest %.3f m off the kerb's face (at most %.2f m): not against it." % [gap, POLE_KERB_GAP_M]) \
+	and _require(on_drawn.x <= POLE_BURIED_M and on_drawn.y <= POLE_LIFTED_M, "The bollard at rest in the gutter against the kerb lies %.3f m deep in the ground drawn under it (at most %.2f m), its lowest %.3f m over it (at most %.2f m)." % [on_drawn.x, POLE_BURIED_M, on_drawn.y, POLE_LIFTED_M])
+
+
+## The kerb's face at a plan point, facing out (toward the road): the land 0.6 m
+## out (a ray down), the kerb's top 0.15 m in (a ray down: a street kerb), and a
+## level ray in toward the face halfway between them, past the invisible ramp in
+## front of it, meets a street kerb's near-upright face within 5 cm of the point.
+## {at: on the face at the gutter's land height, top: the kerb's top, ramp: whether
+## a ramp stood in front of it} or {}.
+func _kerb_face(xz: Vector2, out: Vector3) -> Dictionary:
+	var point := Vector3(xz.x, 0.0, xz.y)
+	var gutter := _ray(point + out * 0.6 + Vector3.UP * 100.0, point + out * 0.6 - Vector3.UP * 100.0, 1)
+	var top := _ray(point - out * 0.15 + Vector3.UP * 100.0, point - out * 0.15 - Vector3.UP * 100.0, 1)
+	if gutter.is_empty() or top.is_empty() or _feature_kind(gutter.collider) != "land_ground" or _feature_kind(top.collider) != "street_kerb":
+		return {}
+	var land := (gutter.position as Vector3).y
+	var level := (land + (top.position as Vector3).y) * 0.5
+	var from := point + out * 0.6 + Vector3.UP * level
+	var first := _ray(from, from - out * 1.2, 1)
+	var hit := _ray_past_ramps(from, from - out * 1.2)
+	if hit.is_empty() or _feature_kind(hit.collider) != "street_kerb" or absf((hit.normal as Vector3).y) > 0.3 or absf(((hit.position as Vector3) - point).dot(out)) > 0.05:
+		return {}
+	var at := hit.position as Vector3
+	return {"at": Vector3(at.x, land, at.z), "top": (top.position as Vector3).y, "ramp": not first.is_empty() and _feature_kind(first.collider) == "street_kerb_support"}
 
 
 ## A felled utility pole's wire spans: each comes down from its standing
@@ -1831,38 +1941,54 @@ func _poles_wires_down(props: FURNITURE_BREAKER, id: String, foot: Vector3, labe
 	and _require(highest < POLE_WIRE_DOWN_M, "The felled %s's wires end %.2f m up, not down with it (under %.1f m)." % [label, highest, POLE_WIRE_DOWN_M])
 
 
-## How deep a felled prop's lowest drawn points lie under the ground drawn under
-## them (m; 0 when none does): each of its hulls' points within 0.3 m of its
-## lowest looks straight down from 0.5 m over it; the land's collision there is
-## drawn as high as the road, path or area over it stands (VisibleGround), any
-## other solid as it is.
-func _buried_m(debris: RigidBody3D) -> float:
+## How a felled prop at rest lies on the ground drawn under it: x, how deep its
+## points lie under it at most (m; 0 when none does); y, how far over it its
+## lowest lies (m; INF when none is over the land). Every point of its hulls looks
+## straight down from 0.5 m over it, through the invisible ramps in front of the
+## kerbs' faces; only the land counts, drawn as high as the road, path or area
+## over it stands (VisibleGround). A kerb, a step or a plinth is drawn where its
+## collision is, so a point over one is left out.
+func _rest_on_drawn(debris: RigidBody3D) -> Vector2:
 	if _drawn == null:
 		_drawn = VisibleGround.new()
 		_drawn.build([_world.ground_and_areas, _world.roads_and_paths])
-	var points := PackedVector3Array()
-	var lowest := INF
+	var buried := 0.0
+	var lifted := INF
 	for child: Node in debris.get_children():
 		var collision := child as CollisionShape3D
 		if collision == null or not collision.shape is ConvexPolygonShape3D:
 			continue
 		var xf := debris.global_transform * collision.transform
 		for point: Vector3 in (collision.shape as ConvexPolygonShape3D).points:
-			points.append(xf * point)
-			lowest = minf(lowest, (xf * point).y)
-	var deepest := 0.0
-	for at: Vector3 in points:
-		if at.y > lowest + 0.3:
-			continue
-		var hit := _ray(at + Vector3.UP * 0.5, at - Vector3.UP * 0.5, 1)
-		if hit.is_empty():
-			continue
-		var ground := (hit.position as Vector3).y
-		var collider := hit.get("collider") as Node
-		if collider != null and collider.get_parent() != null and str(collider.get_parent().get_meta("feature_kind", "")) == "land_ground":
-			ground += _drawn.lift_at(at.x, at.z)
-		deepest = maxf(deepest, ground - at.y)
-	return deepest
+			var at := xf * point
+			var hit := _ray_past_ramps(at + Vector3.UP * 0.5, at - Vector3.UP * 0.5)
+			if hit.is_empty() or _feature_kind(hit.collider) != "land_ground":
+				continue
+			var ground := (hit.position as Vector3).y + _drawn.lift_at(at.x, at.z)
+			buried = maxf(buried, ground - at.y)
+			lifted = minf(lifted, at.y - ground)
+	return Vector2(buried, lifted)
+
+
+## A ray's first world solid that is not an invisible kerb ramp ({} if none).
+func _ray_past_ramps(from: Vector3, to: Vector3) -> Dictionary:
+	var query := PhysicsRayQueryParameters3D.create(from, to, 1, [_player.get_rid()])
+	query.hit_back_faces = false
+	var exclude: Array[RID] = [_player.get_rid()]
+	for _attempt in 4:
+		query.exclude = exclude
+		var hit := _main.get_world_3d().direct_space_state.intersect_ray(query)
+		if hit.is_empty() or _feature_kind(hit.collider) != "street_kerb_support":
+			return hit
+		exclude.append(hit.rid)
+	return {}
+
+
+## A world body's kind (its parent's feature_kind: a generated chunk record's
+## collision body), "" for any other body.
+func _feature_kind(body: Variant) -> String:
+	var node := body as Node
+	return str(node.get_parent().get_meta("feature_kind", "")) if node != null and node.get_parent() != null else ""
 
 
 ## How many times sound id was asked for since process frame mark, whatever came
