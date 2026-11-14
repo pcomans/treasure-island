@@ -21,7 +21,7 @@
 // (game/scripts/world/solar_position.gd), and this stays its reference: the table
 // game/tests/headless_day_clock_contract.gd checks the port against is printed by
 //
-//   node tools/solar_position.mjs --reference-table > game/tests/support/solar_reference.json
+//   node tools/solar_position.mjs --table > game/tests/support/solar_table.json
 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -100,7 +100,7 @@ export function solarPosition({ year, month, day, hour, minute, utcOffsetHours, 
 // through 2026, so every hour of the day and every part of the year is sampled,
 // day and night, and at a few moments in other years. Each sample is
 // [unix seconds, elevation_deg (refracted), azimuth_deg] at full precision.
-function referenceTable() {
+function solarTable() {
   const latitude = 37.82;
   const longitude = -122.37;
   const instants = [];
@@ -116,13 +116,13 @@ function referenceTable() {
     });
     return `    ${JSON.stringify([unix, sun.elevation_deg, sun.azimuth_deg])}`;
   });
-  return `{\n  "generated_by": "node tools/solar_position.mjs --reference-table",\n  "latitude": ${latitude},\n  "longitude": ${longitude},\n  "samples": [\n${rows.join(",\n")}\n  ]\n}\n`;
+  return `{\n  "generated_by": "node tools/solar_position.mjs --table",\n  "latitude": ${latitude},\n  "longitude": ${longitude},\n  "samples": [\n${rows.join(",\n")}\n  ]\n}\n`;
 }
 
 function main() {
   const args = process.argv.slice(2);
-  if (args[0] === "--reference-table") {
-    process.stdout.write(referenceTable());
+  if (args[0] === "--table") {
+    process.stdout.write(solarTable());
     return;
   }
   const option = (name, fallback) => {

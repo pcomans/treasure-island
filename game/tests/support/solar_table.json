@@ -1,5 +1,5 @@
 {
-  "generated_by": "node tools/solar_position.mjs --reference-table",
+  "generated_by": "node tools/solar_position.mjs --table",
   "latitude": 37.82,
   "longitude": -122.37,
   "samples": [

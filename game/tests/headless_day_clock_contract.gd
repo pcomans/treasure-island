@@ -6,7 +6,7 @@ extends SceneTree
 ##   - a test driver's clock is held at the recorded moment (main.tscn's Sun), and
 ##     the sun drawn there is main.tscn's Sun exactly;
 ##   - the game's sun (SolarPosition) is tools/solar_position.mjs's: within
-##     TOLERANCE_DEG of the table the Node tool printed (REFERENCE_PATH), every
+##     TOLERANCE_DEG of the table the Node tool printed (TABLE_PATH), every
 ##     13 h 7 min through 2026, day and night, and at moments in other years;
 ##   - the island's clock is Pacific time by the US rule, from the instant alone
 ##     (the device's time zone plays no part): the changes in March and November of
@@ -22,7 +22,7 @@ extends SceneTree
 ##     the real time, and the web's options screen has none of it.
 ## The first failure stops the run.
 
-const REFERENCE_PATH := "res://game/tests/support/solar_reference.json"
+const TABLE_PATH := "res://game/tests/support/solar_table.json"
 const MAIN_SCENE := "res://game/scenes/main.tscn"
 ## How far the GDScript sun may stray from the Node tool's (degrees): the same
 ## arithmetic in 64-bit floats, so only rounding differs.
@@ -71,8 +71,8 @@ func _run() -> void:
 
 ## The GDScript sun against the Node tool's table.
 func _check_reference() -> String:
-	var table: Variant = JSON.parse_string(FileAccess.get_file_as_string(REFERENCE_PATH))
-	if not _require(table is Dictionary and (table.get("samples") as Array).size() > 600, "The Node tool's reference table %s is missing or short." % REFERENCE_PATH):
+	var table: Variant = JSON.parse_string(FileAccess.get_file_as_string(TABLE_PATH))
+	if not _require(table is Dictionary and (table.get("samples") as Array).size() > 600, "The Node tool's reference table %s is missing or short." % TABLE_PATH):
 		return ""
 	var worst := [0.0, 0.0]
 	var nights := 0
