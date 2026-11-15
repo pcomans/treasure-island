@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" path="res://game/resources/ui/app_icon_360.png" id="2_icon"]
@@ -13,6 +13,17 @@ corner_radius_top_left = 8
 corner_radius_top_right = 8
 corner_radius_bottom_right = 8
 corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_track"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(1, 1, 1, 0.16)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -279,26 +290,144 @@ theme_override_font_sizes/font_size = 28
 text = "Options"
 horizontal_alignment = 1
 
-[node name="ShadowsHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+[node name="GraphicsHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 custom_minimum_size = Vector2(0, 26)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 20
-text = "Sun shadows"
+text = "Graphics"
 vertical_alignment = 2
 
-[node name="ShadowLevels" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+[node name="ShadowRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ShadowLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Sun shadows"
+vertical_alignment = 1
+
+[node name="ShadowLevels" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowRow"]
+layout_mode = 2
+size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
 [node name="ShadowNote" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
-custom_minimum_size = Vector2(0, 52)
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 autowrap_mode = 3
 
+[node name="FrameRateRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="FrameRateLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Frame rate"
+vertical_alignment = 1
+
+[node name="FrameRates" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="ShowFrameRate" type="CheckButton" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+tooltip_text = "Show the frame rate in a corner of the screen"
+text = "Show fps"
+
+[node name="ResolutionRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ResolutionLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/ResolutionRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Resolution"
+vertical_alignment = 1
+
+[node name="Resolutions" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/ResolutionRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="TimeHeadingRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TimeHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeadingRow"]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Time of day"
+
+[node name="TimeNote" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeadingRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2
+
+[node name="DateRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="DateLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="DateSlider" type="HSlider" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Date"
+theme_override_styles/slider = SubResource("StyleBoxFlat_track")
+min_value = 1.0
+max_value = 365.0
+value = 1.0
+
+[node name="NowSpace" type="Control" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TimeRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="TimeLabel" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+
+[node name="TimeSlider" type="HSlider" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(240, 40)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+tooltip_text = "Time"
+theme_override_styles/slider = SubResource("StyleBoxFlat_track")
+max_value = 1435.0
+step = 5.0
+
+[node name="NowButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
+custom_minimum_size = Vector2(80, 40)
+layout_mode = 2
+tooltip_text = "Back to the real time"
+text = "Now"
+
 [node name="SoundHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
-custom_minimum_size = Vector2(0, 26)
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
 theme_override_font_sizes/font_size = 20
@@ -315,6 +444,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
 tooltip_text = "Volume"
+theme_override_styles/slider = SubResource("StyleBoxFlat_track")
 step = 5.0
 value = 100.0
 
@@ -419,3 +549,21 @@ mouse_filter = 2
 layout_mode = 2
 theme_override_font_sizes/font_size = 13
 text = "Runtime evidence"
+
+[node name="FrameRate" type="Label" parent="."]
+visible = false
+modulate = Color(1, 1, 1, 0.8)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -140.0
+offset_top = 14.0
+offset_right = -18.0
+offset_bottom = 38.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 2

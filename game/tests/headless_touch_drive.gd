@@ -7,16 +7,22 @@ extends SceneTree
 ## screenshot) and then turned sideways. First, as on a touch browser (owner,
 ## 2026-11-15), play waits behind the start prompt: the game paused, the pause
 ## menu showing only its "Tap to play" button under the game's name, a big
-## target inside the page held upright and sideways, no touch control and no
-## bed sounding; its tap starts play: the touch controls show, the menu is
-## the pause menu again and the beds come in. Then at each shape:
+## target inside the page held upright and sideways, no touch control, no bed
+## sounding and no frame rate (switched on before play); its tap starts play:
+## the touch controls and the frame rate show, the menu is the pause menu again
+## and the beds come in. Then at each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
-##   - the touch pause button, the pause menu's Options (the shadow levels) and its
-##     Credits and their Licences (owner, 2026-11-12): each lies inside the page
-##     with thumb-sized buttons and a finger's drag scrolls the credits; Back and
-##     Resume play on;
+##   - the touch pause button, the pause menu's Options and its Credits and their
+##     Licences (owner, 2026-11-12): each lies inside the page with thumb-sized
+##     buttons and a finger's drag scrolls the credits; Back and Resume play on.
+##     Options has the rows a touch screen gets, the web's (main.gd uses touch
+##     controls only in a touch browser): its graphics (owner, 2026-11-14) and the
+##     sound, no shadow levels or time of day; a finger's tap on a resolution puts
+##     it on;
+##   - the frame rate, shown throughout, mirrors the pause button in the other top
+##     corner of the touch controls' safe area, clear of every touch control;
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
 ##     RVs, vehicle_spots.gd yard_bodies(); a different one at each shape where
@@ -39,6 +45,8 @@ const SHAPES := {"upright": Vector2i(1206, 2148), "sideways": Vector2i(2622, 111
 ## and how far a finger drags the credits.
 const THUMB_PX := 64.0
 const CREDITS_DRAG_PX := 120.0
+## Where this run keeps the graphics its checks choose (never the player's file).
+const SETTINGS_PATH := "user://test-touch-drive-%d.cfg"
 
 var _failure := ""
 var _main: GameMain
@@ -52,6 +60,8 @@ var _checked: Array[String] = []
 
 func _initialize() -> void:
 	create_timer(900.0, true, false, true).timeout.connect(_on_timeout)
+	ShadowQuality.settings_path = SETTINGS_PATH % OS.get_process_id()
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	call_deferred("_run")
 
 
@@ -68,6 +78,10 @@ func _run() -> void:
 	root.add_child(_main)
 	# As main.gd's _ready does on a touch browser, before the world is ready.
 	_touch = _main.use_touch_controls()
+	# The frame rate shown from the start, as for a player who switched it on
+	# before: hidden behind the start prompt, then every HUD check below keeps it
+	# clear of the touch controls.
+	_main._on_graphics_chosen(GraphicsSettings.SHOW_FRAME_RATE_KEY, true)
 	var started := Time.get_ticks_msec()
 	while not _main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
 		await process_frame
@@ -79,24 +93,27 @@ func _run() -> void:
 	if not _require(_vehicles != null and _touch.vehicles == _vehicles and _touch.visible, "main.gd did not hand the touch controls the cars and start them (visible %s)." % _touch.visible):
 		return _finish()
 	await _ticks(10)
+	if not _check_frame_rate_corner("at the start"):
+		return _finish()
 	if not _check_hud("at the start"):
 		return _finish()
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing) and its tap started play; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options, Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing and no frame rate though it was switched on) and its tap started play, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
 ## The start prompt as play is ready, held upright and then sideways: the game
-## paused with no touch control and no wind playing, the pause menu showing
+## paused with no touch control, no wind playing and no frame rate (switched on
+## before play, it stays hidden behind the prompt), the pause menu showing
 ## only "Tap to play" under the game's name (no line of desktop controls), a
 ## button inside the page at least THUMB_PX tall, the panel over the top
 ## START_PANEL_SHARE of the page (the sky, clear of the chest) and the island
 ## only lightly dimmed; Esc there (an iPad's keyboard) does nothing. Then its
 ## tap (from the idle step, where input arrives) starts play, ends the prompt
-## (the menu centred and the pause's dim back for a later pause) and lets the
-## wind in.
+## (the menu centred and the pause's dim back for a later pause), shows the
+## frame rate and lets the wind in.
 func _start_prompt() -> bool:
 	var hud := _main.hud
 	for shape: String in ["sideways", "upright"]:
@@ -107,7 +124,7 @@ func _start_prompt() -> bool:
 		var panel := hud.pause_box.get_global_rect()
 		var page := hud.get_viewport_rect()
 		var others := [hud.controls_button, hud.options_button, hud.credits_button, hud.exit_button].filter(func(control: Control) -> bool: return control.visible)
-		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and hud.find_child("StartControls", true, false) == null and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, controls line %s, touch controls %s, wind playing %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), hud.find_child("StartControls", true, false) != null, _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and hud.find_child("StartControls", true, false) == null and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound) and not hud.frame_rate_label.visible, "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, controls line %s, touch controls %s, wind playing %s, frame rate shown %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), hud.find_child("StartControls", true, false) != null, _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound), hud.frame_rate_label.visible]):
 			return false
 		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0 and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0 and hud.pause_dim.color.a <= GameHUD.START_DIM_ALPHA, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall, its panel within the top %.2f of the page, the island lightly dimmed (button %s, panel %s, page %s, dim %.2f)." % [shape, int(THUMB_PX), GameHUD.START_PANEL_SHARE, button, panel, page, hud.pause_dim.color.a]):
 			return false
@@ -122,10 +139,21 @@ func _start_prompt() -> bool:
 	await process_frame
 	hud.resume_button.pressed.emit()
 	await _ticks(60)
-	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back) and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind playing %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _main.sound.loop_playing(Sound.WIND_BED, _main.sound) and hud.frame_rate_label.visible, "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back), show the frame rate and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind playing %s, frame rate shown %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _main.sound.loop_playing(Sound.WIND_BED, _main.sound), hud.frame_rate_label.visible]):
 		return false
 	_checked.append("the start prompt")
 	return true
+
+
+## On a touch screen the frame rate mirrors the pause button in the other top corner
+## of the safe area: its left edge as far in as the button's disc is from the right,
+## level with the disc's centre.
+func _check_frame_rate_corner(when: String) -> bool:
+	var safe := _touch.safe_area()
+	var label := _main.hud.frame_rate_label.get_global_rect()
+	var pause: Array = _touch.describe().pause
+	var disc_gap := safe.end.x - (float(pause[0]) + TouchControls.PAUSE_RADIUS_PX)
+	return _require(_main.hud.frame_rate_label.visible and is_equal_approx(label.position.x - safe.position.x, disc_gap) and is_equal_approx(label.get_center().y, float(pause[1])), "%s: the frame rate must mirror the pause button (%s) in the safe area %s, not sit at %s." % [when, pause, safe, label])
 
 
 ## One window shape: the page turned to it, a pause and Resume, then every
@@ -136,6 +164,8 @@ func _check_shape(shape: String) -> bool:
 		await process_frame
 	var screen := _main.hud.get_viewport_rect().size
 	var upright := shape == "upright"
+	if not _check_frame_rate_corner(shape):
+		return false
 	if not _require((screen.y > screen.x) == upright and is_equal_approx(minf(screen.x, screen.y), float(GameMain.TOUCH_LAYOUT_PX)), "The %s page laid out at %s, not %s with its short side %d px." % [shape, screen, "upright" if upright else "sideways", GameMain.TOUCH_LAYOUT_PX]):
 		return false
 	if not await _pause_and_resume(shape) or not _check_hud("%s, after the pause and Resume" % shape) \
@@ -278,16 +308,19 @@ func _credits_and_resume(shape: String) -> bool:
 	_finger(4, Vector2(at[0], at[1]), false)
 	if not _require(paused and hud.pause_panel.visible, "%s: the touch pause button did not pause before Options and Credits." % shape):
 		return false
-	# Options: the shadow levels inside the page, every button thumb-sized and clear
-	# of the others; Back to the pause menu.
+	# Options with the rows a touch screen (the web) gets, inside the page, every
+	# button thumb-sized and clear of the others; a finger's tap on 50 % puts it on
+	# and one on 100 % puts the full resolution back; Back to the pause menu.
+	_as_on_the_web(hud)
 	hud.options_button.pressed.emit()
 	for _frame in 2:
 		await process_frame
 	var page := Rect2(Vector2.ZERO, hud.get_viewport_rect().size)
 	var options := hud.options_panel.get_global_rect()
-	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]):
+	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]) \
+	or not _require(not hud.shadow_row.is_visible_in_tree() and not hud.time_row.is_visible_in_tree() and hud.resolutions.is_visible_in_tree() and hud.show_frame_rate.is_visible_in_tree() and hud.sound_volume.is_visible_in_tree(), "%s: a touch screen's Options must show the web's rows: graphics and sound, no shadow levels or time of day." % shape):
 		return false
-	var buttons: Array = hud.shadow_levels.get_children() + [hud.options_back_button]
+	var buttons: Array = (hud.frame_rates.get_children() if hud.frame_rates.is_visible_in_tree() else []) + hud.resolutions.get_children() + [hud.show_frame_rate, hud.sound_mute, hud.options_back_button]
 	for i in buttons.size():
 		var button := buttons[i] as Button
 		if not _require(button.size.y >= THUMB_PX and options.encloses(button.get_global_rect()), "%s: Options' %s must lie in the panel and be at least %d px tall (%s)." % [shape, button.text, THUMB_PX, button.get_global_rect()]):
@@ -295,6 +328,12 @@ func _credits_and_resume(shape: String) -> bool:
 		for other: Button in buttons.slice(i + 1):
 			if not _require(not button.get_global_rect().intersects(other.get_global_rect()), "%s: Options' %s and %s overlap." % [shape, button.text, other.text]):
 				return false
+	for id: String in ["50", "100"]:
+		_screen_tap(6, (hud.resolutions.get_node(id) as Control).get_global_rect().get_center())
+		await process_frame
+		var scale := _main.get_viewport().scaling_3d_scale
+		if not _require(paused and _main.graphics.current.resolution == id and (hud.resolutions.get_node(id) as Button).button_pressed and is_equal_approx(scale, float(GraphicsSettings.find(GraphicsSettings.RESOLUTION_KEY, id).get("scale", 1.0))), "%s: a finger's tap on Options' %s %% must put it on (on: %s, 3D scale %.2f, paused %s)." % [shape, id, _main.graphics.current.resolution, scale, paused]):
+			return false
 	hud.options_back_button.pressed.emit()
 	if not _require(not hud.options_visible() and hud.pause_panel.visible, "%s: Back on Options must go back to the pause menu." % shape):
 		return false
@@ -328,6 +367,26 @@ func _credits_and_resume(shape: String) -> bool:
 		return false
 	await _ticks(5)
 	return _check_hud("%s, after the credits and Resume" % shape)
+
+
+## The options rows a touch screen gets. main.gd uses touch controls only in a
+## touch browser, so they are the web's: Off alone (no shadow row), no time of day,
+## and the graphics as the web offers them (GraphicsSettings.offered).
+func _as_on_the_web(hud: GameHUD) -> void:
+	hud.set_shadow_levels(ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web), "off")
+	hud.set_time_controls(false)
+	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY, true), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY, true), _main.graphics.current)
+
+
+## A finger's tap at `at`, down and lifted, through the HUD's window as a touch
+## screen sends it (in the HUD's pixels).
+func _screen_tap(index: int, at: Vector2) -> void:
+	for down: bool in [true, false]:
+		var touch := InputEventScreenTouch.new()
+		touch.index = index
+		touch.position = at
+		touch.pressed = down
+		root.push_input(touch, true)
 
 
 ## A finger down at `from`, dragged `by` px down (negative: up) and lifted, through
@@ -408,6 +467,7 @@ func _on_timeout() -> void:
 func _finish() -> void:
 	for action: StringName in GameMain.GAMEPLAY_ACTIONS:
 		Input.action_release(action)
+	DirAccess.remove_absolute(ShadowQuality.settings_path)
 	if _failure != "":
 		push_error("FAIL: " + _failure)
 		print("FAIL: " + _failure)

@@ -14,6 +14,10 @@ uniform float desaturate : hint_range(0.0, 1.0) = 0.0;
 uniform float alpha_cutoff : hint_range(0.05, 0.95) = 0.45;
 uniform float roughness : hint_range(0.0, 1.0) = 0.82;
 uniform float specular : hint_range(0.0, 1.0) = 0.3;
+// The time of day's scale on the specular (game/scripts/world/day_light.gd): 1 by day,
+// less with a low sun, whose grazing Fresnel off upturned leaves washed a backlit
+// crown pale grey.
+global uniform float vegetation_sheen;
 uniform vec4 translucency : source_color = vec4(0.16, 0.2, 0.07, 1.0);
 uniform vec2 texture_size = vec2(1024.0);
 // Alpha gained per sampled mip level. The packed atlases keep about the same
@@ -51,7 +55,7 @@ void fragment() {
 	vec3 albedo = tex.rgb * tint.rgb * COLOR.rgb;
 	ALBEDO = mix(albedo, vec3(dot(albedo, vec3(0.2126, 0.7152, 0.0722))), desaturate);
 	ROUGHNESS = roughness;
-	SPECULAR = specular;
+	SPECULAR = specular * vegetation_sheen;
 	// The renderer flips NORMAL on back faces of double-sided materials;
 	// undo that so a card is lit by its authored crown normal on both sides.
 	if (!FRONT_FACING) {

@@ -9,6 +9,8 @@ uniform sampler2D albedo_texture : source_color, filter_linear_mipmap_anisotropi
 uniform vec4 tint : source_color = vec4(1.0);
 uniform float roughness : hint_range(0.0, 1.0) = 0.95;
 uniform float specular : hint_range(0.0, 1.0) = 0.25;
+// The time of day's scale on the specular, as vegetation_foliage.gdshader's.
+global uniform float vegetation_sheen;
 
 void vertex() {
 	VERTEX += vegetation_wind(VERTEX, NORMAL, UV2, MODEL_MATRIX, TIME);
@@ -17,5 +19,5 @@ void vertex() {
 void fragment() {
 	ALBEDO = texture(albedo_texture, UV).rgb * tint.rgb * COLOR.rgb;
 	ROUGHNESS = roughness;
-	SPECULAR = specular;
+	SPECULAR = specular * vegetation_sheen;
 }
