@@ -8,11 +8,13 @@
 //   level    a flat elevation (a lawn, a pad)
 //   profile  control elevations along a line (a promenade)
 //   sink     lowered by depth_m with a side_run_m rim (basins, swales, forebays)
+//   raise    lifted by height_m with a side_run_m rim (a landform mound), the mirror of sink
 // The site's grade is the smoothest surface (a harmonic membrane on a grid_m grid)
 // that takes the generated land's height B everywhere outside the scope and the
 // level and profile targets inside their shapes: the 32 m grid's waves across the
 // scope smooth out and the designed surfaces meet the surroundings in gentle
-// ramps. Sinks are cut into that grade. The correction D = F (grade - sinks - B)
+// ramps. Sinks are cut into that grade and raises built up on it, each only
+// within its own shape, so neither spreads through the membrane. The correction D = F (grade - sinks - B)
 // fades to exactly zero over edge_blend_m at the scope's edge (F), so the land
 // outside the scope and on the coastline keeps its generated surface.
 //
@@ -45,7 +47,9 @@ import { invariant, roundCoordinate, sha256File } from "./world-contract.mjs";
 export const TERRAIN_OVERRIDES_SCHEMA = "ti.terrain-overrides/1";
 export const TERRAIN_OVERRIDES_PATH = "tools/config/terrain-overrides.json";
 
-const RULE_KINDS = Object.freeze(["level", "profile", "sink"]);
+const RULE_KINDS = Object.freeze(["level", "profile", "sink", "raise"]);
+// Rules shaped on the grade after it is solved, within their own shapes and rims.
+const RIM_RULE_KINDS = Object.freeze(["sink", "raise"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
 // Central-difference steps for shading normals (m): the raster's, as the coarse
 // land (mesh-output.mjs terrainNormal), and the correction's.
@@ -105,6 +109,11 @@ function validateRule(rule, shape, label) {
     exactKeys(rule, ["elevations_m", "kind"], `${label} profile rule`);
     invariant(shape.line_xz, `${label} profile needs a line shape`);
     invariant(Array.isArray(rule.elevations_m) && rule.elevations_m.length === shape.line_xz.length && rule.elevations_m.every(isFiniteNumber), `${label} profile needs one elevation per line point`);
+  } else if (rule.kind === "raise") {
+    exactKeys(rule, ["height_m", "kind", "side_run_m"], `${label} raise rule`);
+    invariant(isFiniteNumber(rule.height_m) && rule.height_m > 0 && isFiniteNumber(rule.side_run_m) && rule.side_run_m > 0, `${label} raise needs positive height_m and side_run_m`);
+    // As a sink's sides: well under the stock player's 48 degrees at the steepest.
+    invariant(Math.atan2(rule.height_m * 1.5, rule.side_run_m) <= (35 * Math.PI) / 180, `${label} raise side is steeper than 35 degrees at its steepest`);
   } else {
     exactKeys(rule, ["depth_m", "kind", "side_run_m"], `${label} sink rule`);
     invariant(isFiniteNumber(rule.depth_m) && rule.depth_m > 0 && isFiniteNumber(rule.side_run_m) && rule.side_run_m > 0, `${label} sink needs positive depth_m and side_run_m`);
@@ -283,7 +292,7 @@ function harmonicGrade(grade, scope, land, regions, baseAt) {
     }
   }
   const free = [];
-  const constraints = regions.filter((region) => region.rule.kind !== "sink");
+  const constraints = regions.filter((region) => !RIM_RULE_KINDS.includes(region.rule.kind));
   for (let j = 0; j < height; j += 1) {
     for (let i = 0; i < width; i += 1) {
       const point = [x0 + i * step, y0 + j * step];
@@ -483,11 +492,13 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     if (fade === 0) return null;
     let surface = site.grade.at(point);
     for (const region of site.regions) {
-      if (region.rule.kind !== "sink") continue;
+      if (!RIM_RULE_KINDS.includes(region.rule.kind)) continue;
       const bounds = region.field.bounds;
       if (point[0] < bounds.min_x || point[0] > bounds.max_x || point[1] < bounds.min_y || point[1] > bounds.max_y) continue;
       const signed = region.field.signed(point);
-      if (signed < 0) surface -= region.rule.depth_m * smoothstep(0, region.rule.side_run_m, -signed);
+      if (signed >= 0) continue;
+      const rim = smoothstep(0, region.rule.side_run_m, -signed);
+      surface += region.rule.kind === "raise" ? region.rule.height_m * rim : -region.rule.depth_m * rim;
     }
     return { fade, surface };
   };

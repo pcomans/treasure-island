@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 335251
+    "sample_points": 335181
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "b572afe2d0f6862d3ab7026760395451fa239ee28c2ad0551be426ee55676b25"
+      "sha256": "a13c90f3f2bdc94329ecd2fe9ea774ef9897b572eb03131fa6475db98765d2a5"
     },
     "corrected_cells": 229,
-    "leaves": 6493,
+    "leaves": 6499,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 361,
+    "neighbour_edge_vertices": 364,
     "refined_cell_bounds_m": [
       [
         0,
@@ -1599,14 +1599,14 @@
       ]
     ],
     "refined_cells": 229,
-    "refined_triangles": 15268,
+    "refined_triangles": 15275,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16140,
+          "free_nodes": 16765,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -1643,9 +1643,17 @@
           {
             "id": "z7_forebay",
             "rule": "sink"
+          },
+          {
+            "id": "isle_house_park_chair_slope",
+            "rule": "level"
+          },
+          {
+            "id": "isle_house_park_mound",
+            "rule": "raise"
           }
         ],
-        "scope_area_m2": 23141
+        "scope_area_m2": 23812.7
       },
       {
         "edge_blend_m": 8,

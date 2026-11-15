@@ -71,7 +71,7 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   island_oak_young: vegetationProp(["tree"], 3, 0.3, true),
   mexican_fan_palm: vegetationProp(["palm_slot", "tree"], 6, 0.45, true),
   monterey_cypress: vegetationProp(["tree"], 5, 0.8, true, [13.0, 11.0, 4.6, 3.4, 2.6]),
-  monterey_pine: vegetationProp(["tree"], 6, 0.6, true, [10.0, 12.0, 13.6, 6.0, 6.8, 7.6]),
+  monterey_pine: vegetationProp(["tree"], 9, 0.6, true, [10.0, 12.0, 13.6, 6.0, 6.8, 7.6, 2.4, 2.9, 3.4]),
   norfolk_island_pine: vegetationProp(["tree"], 2, 0.2, true),
   nz_christmas_tree: vegetationProp(["tree"], 2, 0.5, true, [7.0, 8.5]),
   nz_flax: vegetationProp(LOW_PLANT_KINDS, 4, 0.25, false),
@@ -95,6 +95,14 @@ export const STREET_VEGETATION_PROPS = Object.freeze({
   marsh_fringe: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
   marsh_stones: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
   young_planting: vegetationProp(LOW_PLANT_KINDS, 4, 0.2, false),
+  // The park outside Isle House (owner video, 2026-11-15); species unconfirmed, so
+  // named by their photographed form (street_vegetation_kit.gd).
+  staked_sapling: vegetationProp(["tree"], 3, 0.3, true),
+  red_stem_shrub: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
+  coastal_mound_shrub: vegetationProp(["planting_slot"], 3, 0.5, false),
+  magenta_rosette: vegetationProp(LOW_PLANT_KINDS, 3, 0.15, false),
+  california_fuchsia: vegetationProp(LOW_PLANT_KINDS, 3, 0.25, false),
+  silver_cushion: vegetationProp(LOW_PLANT_KINDS, 3, 0.2, false),
 });
 // How far the kit runs a trunk on below its foot (street_vegetation_kit.gd BURY_M):
 // the visible ground round a foot may rise at most this far above it.

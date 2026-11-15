@@ -17,7 +17,7 @@
       "id": "cityside_park",
       "name": "Cityside Park",
       "basis": "production_inference",
-      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade.",
+      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade. The lot south-east of the park, fenced until 2026, is built as a park (owner video 2026-11-15): its wedge by the notch and its north-west corner (west of the cells beside Isle House) join the scope, and its mound is a raise.",
       "scope": {
         "source_keys": [
           "w1428380753"
@@ -40,6 +40,20 @@
               -383.98,
               339.91
             ]
+          ],
+          [
+            [
+              -207.0,
+              561.3
+            ],
+            [
+              -192.5,
+              540.9
+            ],
+            [
+              -192.5,
+              586.1
+            ]
           ]
         ],
         "exclude_ways": [
@@ -52,27 +66,6 @@
           }
         ],
         "exclude_xz": [
-          {
-            "points_xz": [
-              [
-                -215.5,
-                547.3
-              ],
-              [
-                -177,
-                512.2
-              ],
-              [
-                -170.5,
-                512.6
-              ],
-              [
-                -205,
-                563
-              ]
-            ],
-            "reason": "The fenced lawn lot south-east of the park (Jun 2026 pano p10, aerial 2026-05-26): the OSM park polygon takes in its north-west corner up to the construction-panel fence, which is not part of the opened park."
-          },
           {
             "points_xz": [
               [
@@ -513,6 +506,45 @@
           },
           "min_leaf_m": 1,
           "reason": "The oval stormwater forebay beside the pump station (CMG plan label, aerial 2025-08-29 and 2026-05-26: about 7.5 by 4.7 m)."
+        },
+        {
+          "id": "isle_house_park_chair_slope",
+          "shape": {
+            "center_xz": [
+              -203.45,
+              553.34
+            ],
+            "radii_m": [
+              7.0,
+              2.2
+            ],
+            "rotation_deg": 62.2
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.35
+          },
+          "reason": "The foot of the mound's slope where the chairs stand, held level a little above the bike path so they stand upright (owner video 2026-11-15, f_100-f_108; height production inference from the ground beside it)."
+        },
+        {
+          "id": "isle_house_park_mound",
+          "shape": {
+            "center_xz": [
+              -198.67,
+              546.53
+            ],
+            "radii_m": [
+              8.0,
+              6.0
+            ],
+            "rotation_deg": 62.2
+          },
+          "rule": {
+            "kind": "raise",
+            "height_m": 1.0,
+            "side_run_m": 6.5
+          },
+          "reason": "The park outside Isle House's raised lawn at its north-west end, its mulch slope with the chairs falling to the bike path (owner video 2026-11-15, f_100-f_110). Height about 1 m and extent are production inference: the frames show the slope from the bike path, not the mound's top or north-east side."
         }
       ]
     },

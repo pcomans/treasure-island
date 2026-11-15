@@ -76,6 +76,9 @@ export const STREET_GROUND_FEATURE_KINDS = Object.freeze(["street_kerb", "street
 // mulch and crushed rock.
 export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_asphalt: "park-asphalt",
+  park_chips: "park-chips",
+  park_chips_damp: "park-chips-damp",
+  park_chips_pale: "park-chips-pale",
   park_concrete: "park-concrete",
   park_dg: "park-dg",
   park_gravel: "park-gravel",

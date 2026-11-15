@@ -648,6 +648,18 @@ export function loadStreetDetailZones(projectRoot) {
     } else {
       throw new Error(`Street detail zone ${zone.id} shape must be polygon or corridor`);
     }
+    // A zone drawn where the frozen OSM snapshot has nothing of its kind (the park outside
+    // Isle House, an untagged lot in the snapshot) records that exception as a street-ground
+    // lot does (tools/lib/street-ground-generation.mjs): the reason, the owner's approval,
+    // the dated source (an aerial or footage) and the outline, which is the zone's own.
+    if (zone.osm_exception !== undefined) {
+      const exception = zone.osm_exception;
+      const dated = exception && "footage" in exception ? "footage" : "aerial";
+      invariant(exception != null && typeof exception === "object" && JSON.stringify(Object.keys(exception).sort()) === JSON.stringify([dated, "approved", "outline_xz", "reason"].sort()),
+        `Street detail zone ${zone.id} osm_exception must have exactly {reason, approved, aerial or footage, outline_xz}`);
+      invariant([dated, "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== ""), `Street detail zone ${zone.id} osm_exception needs its dated source, approval and reason`);
+      invariant(shape.type === "polygon" && JSON.stringify(exception.outline_xz) === JSON.stringify(shape.points_xz), `Street detail zone ${zone.id} osm_exception outline must be the zone's polygon`);
+    }
     invariant(Array.isArray(zone.scatter), `Street detail zone ${zone.id} scatter must be a list`);
     const ruleIds = new Set();
     for (const rule of zone.scatter) validateScatterRule(rule, zone.id, ruleIds);
