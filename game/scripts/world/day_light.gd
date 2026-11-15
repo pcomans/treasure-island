@@ -18,13 +18,15 @@ extends RefCounted
 ## Colours are as the engine's properties take them (sRGB, alpha unused). The
 ## distant horizon's art (game/resources/textures/context/fresh_bay) draws unlit
 ## and without fog, so one global factor dims it (horizon_light, owner 2026-11-14:
-## one simple brightness factor). Leaves, bark, impostors and grass scale their
-## specular by another (vegetation_sheen): with a low sun behind a crown, the
-## grazing Fresnel off its leaves (the engine's specular rises toward 0.7 at a
-## grazing angle) washed it pale grey, which a crown without specular did not
-## show (2026-11-14). As the sun comes level with the facades, its specular
-## (sun_specular) and the glow's luminance cap (glow_cap) come down, so a glass
-## curtain wall's sun glint and its bloom stay a glint.
+## one simple brightness factor), and as it falls the art turns grey and fades into
+## the sky's horizon colour (horizon_haze), a hazy silhouette at sunset and a dark
+## shape at night rather than daylight's teal hills pasted on a pink sky. Leaves,
+## bark, impostors and grass scale their specular by another (vegetation_sheen):
+## with a low sun behind a crown, the grazing Fresnel off its leaves (the engine's
+## specular rises toward 0.7 at a grazing angle) washed it pale grey, which a crown
+## without specular did not show (2026-11-14). As the sun comes level with the
+## facades, its specular (sun_specular) and the glow's luminance cap (glow_cap)
+## come down, so a glass curtain wall's sun glint and its bloom stay a glint.
 
 ## From this height up the look is daylight's: main.tscn's.
 const FULL_DAY_ELEVATION_DEG := 30.0
@@ -70,7 +72,7 @@ const KEYS: Array[Dictionary] = [
 	# their bloom held in as the sun comes level with the facades.
 	{
 		"elevation": 15.0,
-		"sun_color": Color(1.0, 0.93, 0.82), "sun_energy": 1.2, "sun_specular": 0.42,
+		"sun_color": Color(1.0, 0.91, 0.78), "sun_energy": 1.2, "sun_specular": 0.42,
 		"sky_top": Color(0.225, 0.43, 0.765), "sky_horizon": Color(0.75, 0.79, 0.83),
 		"sky_low_sun": Color(1.0, 0.80, 0.58),
 		"ground_bottom": Color(0.39, 0.39, 0.36), "ground_horizon": Color(0.50, 0.66, 0.80),
@@ -78,12 +80,12 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.74, 0.73, 0.72), "ambient_energy": 0.52,
 		"fog_color": Color(0.75, 0.79, 0.83), "fog_energy": 0.85, "fog_sun_scatter": 0.05,
 		"exposure": 1.18, "glow_cap": 6.0,
-		"horizon_light": 1.0, "vegetation_sheen": 0.4,
+		"horizon_light": 0.95, "vegetation_sheen": 0.4,
 	},
 	# Golden hour: warm sun, blue shade, a warm haze toward the sun.
 	{
 		"elevation": 6.0,
-		"sun_color": Color(1.0, 0.85, 0.66), "sun_energy": 1.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.81, 0.6), "sun_energy": 1.0, "sun_specular": 0.3,
 		"sky_top": Color(0.2, 0.38, 0.69), "sky_horizon": Color(0.77, 0.76, 0.76),
 		"sky_low_sun": Color(1.0, 0.74, 0.48),
 		"ground_bottom": Color(0.36, 0.35, 0.33), "ground_horizon": Color(0.48, 0.6, 0.72),
@@ -91,11 +93,11 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.66, 0.68, 0.78), "ambient_energy": 0.5,
 		"fog_color": Color(0.77, 0.76, 0.77), "fog_energy": 0.8, "fog_sun_scatter": 0.2,
 		"exposure": 1.21, "glow_cap": 3.0,
-		"horizon_light": 0.92, "vegetation_sheen": 0.12,
+		"horizon_light": 0.66, "vegetation_sheen": 0.12,
 	},
 	{
 		"elevation": 3.0,
-		"sun_color": Color(1.0, 0.77, 0.54), "sun_energy": 0.8, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.74, 0.5), "sun_energy": 0.8, "sun_specular": 0.3,
 		"sky_top": Color(0.18, 0.33, 0.61), "sky_horizon": Color(0.76, 0.70, 0.67),
 		"sky_low_sun": Color(1.0, 0.66, 0.40),
 		"ground_bottom": Color(0.33, 0.31, 0.30), "ground_horizon": Color(0.44, 0.52, 0.64),
@@ -103,11 +105,11 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.62, 0.62, 0.74), "ambient_energy": 0.48,
 		"fog_color": Color(0.76, 0.70, 0.67), "fog_energy": 0.75, "fog_sun_scatter": 0.3,
 		"exposure": 1.24, "glow_cap": 3.0,
-		"horizon_light": 0.8, "vegetation_sheen": 0.12,
+		"horizon_light": 0.5, "vegetation_sheen": 0.12,
 	},
 	{
 		"elevation": 1.0,
-		"sun_color": Color(1.0, 0.67, 0.42), "sun_energy": 0.48, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.65, 0.4), "sun_energy": 0.48, "sun_specular": 0.3,
 		"sky_top": Color(0.155, 0.28, 0.53), "sky_horizon": Color(0.72, 0.62, 0.58),
 		"sky_low_sun": Color(1.0, 0.58, 0.32),
 		"ground_bottom": Color(0.28, 0.26, 0.26), "ground_horizon": Color(0.38, 0.44, 0.56),
@@ -115,7 +117,7 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.56, 0.56, 0.70), "ambient_energy": 0.46,
 		"fog_color": Color(0.72, 0.62, 0.58), "fog_energy": 0.7, "fog_sun_scatter": 0.3,
 		"exposure": 1.27, "glow_cap": 3.0,
-		"horizon_light": 0.62, "vegetation_sheen": 0.12,
+		"horizon_light": 0.4, "vegetation_sheen": 0.12,
 	},
 	# The disc gone under the horizon: no sunlight on the island; the clouds, a
 	# kilometre and more up, still in it.
@@ -129,7 +131,7 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.5, 0.52, 0.66), "ambient_energy": 0.46,
 		"fog_color": Color(0.62, 0.55, 0.55), "fog_energy": 0.66, "fog_sun_scatter": 0.0,
 		"exposure": 1.31, "glow_cap": 3.0,
-		"horizon_light": 0.45, "vegetation_sheen": 0.12,
+		"horizon_light": 0.3, "vegetation_sheen": 0.12,
 	},
 	# Civil dusk: the glow low in the west, the clouds' afterglow fading.
 	{
@@ -142,7 +144,7 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.36, 0.40, 0.56), "ambient_energy": 0.52,
 		"fog_color": Color(0.40, 0.38, 0.45), "fog_energy": 0.62, "fog_sun_scatter": 0.0,
 		"exposure": 1.4, "glow_cap": 3.0,
-		"horizon_light": 0.18, "vegetation_sheen": 0.12,
+		"horizon_light": 0.14, "vegetation_sheen": 0.12,
 	},
 	{
 		"elevation": -6.0,
@@ -154,7 +156,7 @@ const KEYS: Array[Dictionary] = [
 		"ambient_color": Color(0.27, 0.31, 0.44), "ambient_energy": 0.74,
 		"fog_color": Color(0.22, 0.24, 0.32), "fog_energy": 0.6, "fog_sun_scatter": 0.0,
 		"exposure": 1.52, "glow_cap": 3.0,
-		"horizon_light": 0.07, "vegetation_sheen": 0.12,
+		"horizon_light": 0.06, "vegetation_sheen": 0.12,
 	},
 	NIGHT_FLOOR,
 ]
@@ -183,15 +185,17 @@ const ENVIRONMENT_PROPERTIES := {
 }
 ## ... the Sun's...
 const SUN_PROPERTIES := {"sun_color": &"light_color", "sun_energy": &"light_energy", "sun_specular": &"light_specular"}
-## ... or a global shader uniform (project.godot's shader_globals, 1.0 there).
-const GLOBALS := {"horizon_light": &"horizon_light", "vegetation_sheen": &"vegetation_sheen"}
+## ... or a global shader uniform (project.godot's shader_globals): the two factors,
+## 1.0 there, and horizon_haze, the sky's horizon colour in linear RGB (horizon_haze()),
+## that the distant art fades into as horizon_light falls.
+const GLOBALS := {"horizon_light": &"horizon_light", "vegetation_sheen": &"vegetation_sheen", "horizon_haze": &"horizon_haze"}
 
 ## The keys in use: KEYS. A probe may put others here (the same shape, the night
 ## floor last) to try a look without editing these.
 static var keys: Array[Dictionary] = KEYS
 
 
-## The look with the sun `elevation_deg` up: every value in VALUES.
+## The look with the sun `elevation_deg` up: every value in VALUES, and horizon_haze.
 static func at(elevation_deg: float) -> Dictionary:
 	if elevation_deg >= float(keys[0].elevation):
 		return _values(keys[0])
@@ -205,6 +209,7 @@ static func at(elevation_deg: float) -> Dictionary:
 				var from: Variant = lower[value]
 				var to: Variant = upper[value]
 				look[value] = (from as Color).lerp(to as Color, t) if from is Color else lerpf(float(from), float(to), t)
+			look["horizon_haze"] = horizon_haze(look.sky_horizon)
 			return look
 	return _values(keys[keys.size() - 1])
 
@@ -214,8 +219,16 @@ static func is_floor(elevation_deg: float) -> bool:
 	return elevation_deg <= float(keys[keys.size() - 1].elevation)
 
 
+## The haze the distant art fades into at dusk: the sky's horizon colour (sRGB, as
+## the sky material takes it), in linear RGB, as the art's shaders work.
+static func horizon_haze(sky_horizon: Color) -> Vector3:
+	var linear := sky_horizon.srgb_to_linear()
+	return Vector3(linear.r, linear.g, linear.b)
+
+
 static func _values(key: Dictionary) -> Dictionary:
 	var look := {}
 	for value: String in VALUES:
 		look[value] = key[value]
+	look["horizon_haze"] = horizon_haze(key.sky_horizon)
 	return look

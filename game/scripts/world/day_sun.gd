@@ -55,6 +55,10 @@ const FINE_ANGLE_STEP_DEG := 0.001
 const PROBE_RECAPTURE_DEG := 2.0
 const PROBE_RECAPTURE_S := 5.0
 
+## Where the look's global uniforms go: the RenderingServer, or a test's stand-in
+## that records them (the engine gives a global's value back only in the editor).
+static var set_global := Callable(RenderingServer, &"global_shader_parameter_set")
+
 var sun: DirectionalLight3D
 ## Where the rest of the look goes: main.tscn's own environment and its sky
 ## material, kept from the start, so a neutral environment a capture swaps in is
@@ -68,7 +72,7 @@ var lit_elevation := NAN
 var _revision := -1
 ## Seconds until the next step, for the sun as drawn now.
 var _step := STEP_S
-## The global factors as last set: project.godot's values until DaySun sets one.
+## The global uniforms as last set; the first look sets every one.
 var _globals := {}
 ## The probes captured again as the light changes (watch_reflections), the sun's
 ## height at their last capture, when that was (Time.get_ticks_msec) and whether a
@@ -84,9 +88,6 @@ func _init(scene_sun: DirectionalLight3D, scene_environment: Environment = null)
 	environment = scene_environment
 	if environment != null and environment.sky != null:
 		sky = environment.sky.sky_material as ShaderMaterial
-	for value: String in DayLight.GLOBALS:
-		var setting: Variant = ProjectSettings.get_setting("shader_globals/%s" % DayLight.GLOBALS[value], {})
-		_globals[value] = float((setting as Dictionary).get("value", 1.0)) if setting is Dictionary else 1.0
 	name = "DaySun"
 	# The Options screen's date and time move the sun while the game is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -114,11 +115,12 @@ func follow(now := false) -> void:
 	var angles := shown_angles(unix)
 	sun.rotation_degrees = rotation_for(angles)
 	light(angles[0])
-	_step = step_seconds(angles[0])
+	_step = step_for(angles[0])
 
 
 ## Puts on the look of a sun `elevation_deg` up (DayLight.at), writing only what
-## differs from what is on: at the recorded moment, nothing.
+## differs from what is on (at the recorded moment, nothing but the global uniforms,
+## which the first look always sets, to the values project.godot gives them).
 func light(elevation_deg: float) -> void:
 	if elevation_deg == lit_elevation:
 		return
@@ -138,9 +140,9 @@ func light(elevation_deg: float) -> void:
 			if not same(current, look[value]):
 				sky.set_shader_parameter(parameter, look[value])
 	for value: String in DayLight.GLOBALS:
-		if not is_equal_approx(float(_globals[value]), float(look[value])):
-			_globals[value] = float(look[value])
-			RenderingServer.global_shader_parameter_set(DayLight.GLOBALS[value], float(look[value]))
+		if not _globals.has(value) or not same(_globals[value], look[value]):
+			_globals[value] = look[value]
+			set_global.call(DayLight.GLOBALS[value], look[value])
 	if DayClock.is_running() and not reflection_probes.is_empty() and absf(elevation_deg - captured_elevation) >= PROBE_RECAPTURE_DEG \
 	and not (DayLight.is_floor(elevation_deg) and DayLight.is_floor(captured_elevation)):
 		_capture_due = true
@@ -166,6 +168,11 @@ func _capture_reflections() -> void:
 	_capture_due = false
 
 
+## The global uniforms to the RenderingServer again, after a test's stand-in.
+static func use_engine_globals() -> void:
+	set_global = Callable(RenderingServer, &"global_shader_parameter_set")
+
+
 ## Whether two of the look's values are the same, a colour's alpha aside (a sky
 ## colour may come back as a Vector3).
 static func same(a: Variant, b: Variant) -> bool:
@@ -183,6 +190,13 @@ static func same(a: Variant, b: Variant) -> bool:
 func _put(object: Object, property: StringName, value: Variant) -> void:
 	if not same(object.get(property), value):
 		object.set(property, value)
+
+
+## Seconds to the next step with the sun drawn `elevation_deg` up: step_seconds, but
+## STEP_S through the night floor, whose light doesn't change (each step there would
+## only turn a sun with no strength and redraw the radiance map for nothing).
+static func step_for(elevation_deg: float) -> float:
+	return STEP_S if DayLight.is_floor(elevation_deg) else step_seconds(elevation_deg)
 
 
 ## Seconds between steps with the sun drawn `elevation_deg` up (or down): STEP_S
