@@ -324,7 +324,7 @@ func set_start_prompt(text: String) -> void:
 			button.hide()
 		frame_rate_label.hide()
 	_start_text = text
-	pause_title.text = "Treasure Island"
+	pause_title.text = str(ProjectSettings.get_setting("application/config/name"))
 	resume_button.text = text
 	resume_button.custom_minimum_size.y = START_BUTTON_PX
 	resume_button.add_theme_font_size_override("font_size", START_FONT_PX)
