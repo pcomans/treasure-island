@@ -231,7 +231,7 @@ func _run() -> void:
 	var fallback := [ShadowQuality.default_id(), GraphicsSettings.defaults()]
 	if not _require([unknown, missing, unwritten] == [fallback, fallback, fallback], "An unknown kept level or graphics setting, a missing file and an unwritable one must all give the defaults, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed, Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; the web's Off alone leaves Options with its graphics rows (No limit and 75 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed and focused, its focus ring showing when opened with Enter and hidden when by a click, every level's note as many lines as the others' (the panel keeps its height), Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; the web's Off alone leaves Options with its graphics rows (No limit and 75 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics])
 	_finish()
 
 
@@ -351,7 +351,7 @@ func _check_graphics() -> String:
 	window = main.get_viewport()
 	if not _require(main.graphics.current == desktop and _engine(window) == [project.max_fps, snappedf(project.scale, 0.01), project.mode] and not main.hud.frame_rate_label.visible, "With use_saved_settings off the game must put on the graphics defaults and leave the engine as it started, not the kept %s (engine %s)." % [main.graphics.current, _engine(window)]):
 		return ""
-	return "the graphics: with nothing kept the engine as it started (max_fps %d, 3D scale %.2f, mode %d), vsync untouched, and no frame rate shown; each choice on at once (%s), the switch shows the frame rate; 30, 50 %% and the display kept over a restart, and the capture harness gets the defaults" % [project.max_fps, project.scale, project.mode, "; ".join(applied)]
+	return "the graphics: with nothing kept the engine as it started (max_fps %d, 3D scale %.2f, mode %d), vsync untouched, and no frame rate shown; each choice on at once (%s), a choice's focus ring showing on its fill in use or not and changing over with it, the switch shows the frame rate; 30, 50 %% and the display kept over a restart, and the capture harness gets the defaults" % [project.max_fps, project.scale, project.mode, "; ".join(applied)]
 
 
 ## The frame limit and the window's 3D scale (to a hundredth: the window keeps a
