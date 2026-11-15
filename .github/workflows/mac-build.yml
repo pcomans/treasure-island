@@ -696,9 +696,25 @@ jobs:
           exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
           echo "${exe}: $(lipo -archs "${exe}")"
           codesign --verify --deep --strict --verbose=2 "${app}"
-          details="$(codesign -dvv "${app}" 2>&1)"
+          dvv_status=0
+          details="$(codesign -dvv "${app}" 2>&1)" || dvv_status=$?
+          # On a failed signature check: what codesign -dvv said, filtered. Its
+          # Authority= lines name a certificate holder, so only their number and
+          # whether one is a Developer ID are printed, never their text.
+          signature_report() {
+            local authorities developer_id=no
+            echo "codesign -dvv exited ${dvv_status}; its signature lines:"
+            grep -E '^(Identifier|Format|Signature|TeamIdentifier)=|^Signature size=|^CodeDirectory ' <<< "${details}" || echo "  (none)"
+            authorities="$(grep -c '^Authority=' <<< "${details}" || true)"
+            if grep -q '^Authority=Developer ID' <<< "${details}"; then developer_id=yes; fi
+            echo "Authority lines: ${authorities}; any Developer ID: ${developer_id}"
+          }
           if [ "${NOTARIZED}" = "true" ]; then
-            grep -q '^Authority=Developer ID Application: ' <<< "${details}" || { echo "FAIL: the notarized build has no Developer ID signature" >&2; exit 1; }
+            if [ "${dvv_status}" -ne 0 ] || ! grep -q '^Authority=Developer ID Application: ' <<< "${details}"; then
+              signature_report
+              echo "FAIL: the notarized build has no Developer ID signature" >&2
+              exit 1
+            fi
             grep -E '^(TeamIdentifier|Timestamp)=' <<< "${details}" || true
             status=0
             assessment="$(spctl --assess --type execute -vv "${app}" 2>&1)" || status=$?
@@ -712,8 +728,16 @@ jobs:
             xcrun stapler validate "${app}" || { echo "FAIL: the notarization ticket is not stapled" >&2; exit 1; }
             echo "::notice title=Mac signing mode::This build is Developer ID signed and notarized (credential route: ${ROUTE}), and passes Gatekeeper."
           else
-            if ! grep -q '^Signature=adhoc$' <<< "${details}" || grep -q '^Authority=Developer ID' <<< "${details}"; then
-              echo "FAIL: this build is not notarized, so it must be the build job's ad-hoc app, but its signature is not ad-hoc" >&2
+            # Godot's built-in signer (codesign/codesign=1 in export_presets.cfg) gives
+            # each code directory the flags adhoc,runtime, no team and an empty
+            # signature blob (editor/export/codesign.cpp). For a code directory with
+            # the adhoc flag, Apple's codesign prints "Signature=adhoc" and no
+            # Authority= line; those come only with a certificate signature
+            # (cs_dump.cpp in Apple's security_systemkeychain source). So an
+            # Authority= line of any kind means the app is not the ad-hoc build.
+            if [ "${dvv_status}" -ne 0 ] || ! grep -q '^Signature=adhoc$' <<< "${details}" || grep -q '^Authority=' <<< "${details}"; then
+              signature_report
+              echo "FAIL: this build is not notarized, so it must be the build job's ad-hoc app, but codesign does not show an ad-hoc signature without certificates (see above)" >&2
               exit 1
             fi
             echo "::notice title=Mac signing mode::This build is ad-hoc signed and not notarized${FALLBACK:+ (reason: ${FALLBACK})}."
