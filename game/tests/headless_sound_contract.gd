@@ -12,6 +12,10 @@ extends SceneTree
 ##      car); the wind and the bay's water fade in from play, the water loud on the
 ##      shore's top and silent (its loop stopped) inland and up in the air (owner,
 ##      2026-11-14: only by the water's edge); the menus click and the pause sounds;
+##      while the web's audio does not run yet (Sound.audio_running, which the
+##      page's shell sets there; owner, 2026-11-15: nothing sounded on an iPhone or
+##      iPad until the pause menu) a one-shot is dropped, not queued, and a held
+##      loop waits, starting once it runs, with nothing dropped sounding then;
 ##   2. on foot: steps (hard or soft) as the player walks, wet ones in the ditch by
 ##      Mersea's water (StandingWater); Space starts the jet, holds its roar and
 ##      the lid's rattle and lets it go with its tail; the landing thumps; a fast
@@ -133,7 +137,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_quick_reentry, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_audio_waits, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_quick_reentry, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -237,6 +241,40 @@ func _check_startup() -> bool:
 		if _vehicles.live_node(id) == null:
 			cars += 1
 	_summary.append("%d sounds with their takes, every player under the sound manager and none on the %d parked rows" % [catalog.size(), cars])
+	return true
+
+
+## The web's audio not running yet (a browser starts it only after a user gesture):
+## with Sound.audio_running off, a menu click and a footstep asked for are
+## dropped (suspended), and the jet's roar held by a stand-in holder waits; once
+## it runs, the roar starts and neither dropped sound plays, so nothing asked for
+## while it waited sounds all at once when it starts.
+func _check_audio_waits() -> bool:
+	var holder := Node3D.new()
+	root.add_child(holder)
+	holder.global_position = _player.global_position
+	var mark := Engine.get_process_frames()
+	_sound.audio_running = false
+	Sound.play(&"ui_click")
+	Sound.play(&"footstep_hard", _player.global_position)
+	for _frame in 20:
+		Sound.hold(&"jet_loop", holder, 1.0, holder.global_position)
+		await process_frame
+	var waiting := not _sound.loop_playing(&"jet_loop", holder)
+	var dropped: Array = _results([&"ui_click", &"footstep_hard"], mark).values()
+	_sound.audio_running = true
+	for _frame in 20:
+		Sound.hold(&"jet_loop", holder, 1.0, holder.global_position)
+		await process_frame
+	var started := _sound.loop_playing(&"jet_loop", holder)
+	var replayed := _played(&"ui_click", mark) + _played(&"footstep_hard", mark)
+	Sound.release(&"jet_loop", holder)
+	for _frame in 30:
+		await process_frame
+	holder.queue_free()
+	if not _require(waiting and dropped == [["suspended"], ["suspended"]] and started and replayed == 0, "While the web's audio does not run a one-shot must be dropped (%s) and a held loop wait (%s); once it runs the loop must start (%s) and nothing dropped play (%d)." % [dropped, waiting, started, replayed]):
+		return false
+	_summary.append("while the web's audio does not run a click and a step are dropped and the jet's roar waits, starting once it runs, with nothing dropped sounding then")
 	return true
 
 

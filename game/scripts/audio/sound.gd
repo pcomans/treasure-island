@@ -48,12 +48,21 @@ extends Node
 ## only by the water's edge (water_level), worked out four times a second, from
 ## the moment play starts (start_beds), fading in.
 ##
+## On the web the browser starts the audio only after a user gesture (Safari on
+## iOS only after a tap, never the end of a slide), and the page's shell resumes
+## it at the first one anywhere (game/web/shell.html, window.__tiAudio). Until it
+## runs (audio_running), a one-shot is dropped rather than queued, since every one
+## queued would sound at once the moment the audio started, and a loop waits to
+## start until then (owner, 2026-11-15: on an iPhone or iPad nothing sounded until
+## the pause menu).
+##
 ## The listener is Godot's own: the camera showing. Getting in and out of a car
 ## and the watch from the shore are blends between cameras (vehicle_camera.gd),
 ## so the listener moves smoothly with the picture; R and the return from the
 ## water move the car and the camera together, so the engine keeps its level.
 ##
-## What came of a request: played, silent (no takes), limited (min_gap_s, counted
+## What came of a request: played, silent (no takes), suspended (the web's audio
+## not running yet), limited (min_gap_s, counted
 ## from the last play, or for a sound with no takes from its last request, so a
 ## build without the audio does no more work for a flood than one with it), far,
 ## quiet (no strength; neither far nor quiet takes a play's place), unknown, or a
@@ -146,6 +155,11 @@ var _bed_clock := 0.0
 var _bed_targets := {WIND_BED: 0.0, WATER_BED: 0.0}
 var _bed_levels := {WIND_BED: 0.0, WATER_BED: 0.0}
 var _registered := false
+## Whether the audio runs (see the top): always on the desktop; on the web as the
+## page's shell reports it. Tests set it.
+var audio_running := true
+var _web_audio: JavaScriptObject
+var _web_audio_callback: JavaScriptObject
 
 
 class LoopVoice:
@@ -180,6 +194,27 @@ func _init() -> void:
 	_catalog = load_catalog()
 	_read_manifest()
 	_limit_master()
+	_watch_web_audio()
+
+
+## On the web: whether the page's audio runs now and each time that changes (the
+## shell's window.__tiAudio; without it, as on the desktop, it runs).
+func _watch_web_audio() -> void:
+	if not OS.has_feature("web") or not bool(JavaScriptBridge.eval("typeof window.__tiAudio === 'object'")):
+		return
+	_web_audio = JavaScriptBridge.get_interface("__tiAudio")
+	_web_audio_callback = JavaScriptBridge.create_callback(_on_web_audio_state)
+	_web_audio.onchange = _web_audio_callback
+	audio_running = bool(_web_audio.running())
+
+
+func _on_web_audio_state(_arguments: Array) -> void:
+	audio_running = bool(_web_audio.running())
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_PREDELETE and _web_audio != null:
+		_web_audio.onchange = null
 
 
 ## A hard limiter on Master, once (desktop; the web's browser playback runs no bus
@@ -339,6 +374,9 @@ func request(id: StringName, at: Vector3, strength: float, pitch: float) -> Stri
 	if settings.is_empty() or bool(settings.get("loop", false)):
 		push_error("Sound: %s is not a one-shot in %s" % [id, CATALOG_PATH])
 		return _noted(id, at, strength, "unknown")
+	# Before the web's audio runs: dropped, not queued (see the top).
+	if not audio_running:
+		return _noted(id, at, strength, "suspended")
 	var now := _clock(settings)
 	if now - float(_last_played.get(id, -INF)) < float(settings.get("min_gap_s", 0.0)):
 		return _noted(id, at, strength, "limited")
@@ -567,7 +605,8 @@ func _step_loop(held: Dictionary, key: StringName, voice: LoopVoice, delta: floa
 		voice.level = 0.0
 	if voice.level > SILENT_LEVEL:
 		voice.quiet_s = 0.0
-		if not voice.started:
+		# Before the web's audio runs a loop waits (see the top).
+		if not voice.started and audio_running:
 			voice.started = true
 			_start_loop(voice)
 		if voice.player != null:
