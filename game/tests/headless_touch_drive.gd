@@ -90,9 +90,13 @@ func _run() -> void:
 
 ## The start prompt as play is ready, held upright and then sideways: the game
 ## paused with no touch control and no wind playing, the pause menu showing
-## only "Tap to play" under the game's name, a button inside the page at least
-## THUMB_PX tall; then its tap (from the idle step, where input arrives) starts
-## play, ends the prompt and lets the wind in.
+## only "Tap to play" under the game's name (no line of desktop controls), a
+## button inside the page at least THUMB_PX tall, the panel over the top
+## START_PANEL_SHARE of the page (the sky, clear of the chest) and the island
+## only lightly dimmed; Esc there (an iPad's keyboard) does nothing. Then its
+## tap (from the idle step, where input arrives) starts play, ends the prompt
+## (the menu centred and the pause's dim back for a later pause) and lets the
+## wind in.
 func _start_prompt() -> bool:
 	var hud := _main.hud
 	for shape: String in ["sideways", "upright"]:
@@ -100,16 +104,25 @@ func _start_prompt() -> bool:
 		for _frame in 3:
 			await process_frame
 		var button := hud.resume_button.get_global_rect()
+		var panel := hud.pause_box.get_global_rect()
 		var page := hud.get_viewport_rect()
 		var others := [hud.controls_button, hud.options_button, hud.credits_button, hud.exit_button].filter(func(control: Control) -> bool: return control.visible)
-		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, touch controls %s, wind playing %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and hud.find_child("StartControls", true, false) == null and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, controls line %s, touch controls %s, wind playing %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), hud.find_child("StartControls", true, false) != null, _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
 			return false
-		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall (button %s, page %s)." % [shape, int(THUMB_PX), button, page]):
+		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0 and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0 and hud.pause_dim.color.a <= GameHUD.START_DIM_ALPHA, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall, its panel within the top %.2f of the page, the island lightly dimmed (button %s, panel %s, page %s, dim %.2f)." % [shape, int(THUMB_PX), GameHUD.START_PANEL_SHARE, button, panel, page, hud.pause_dim.color.a]):
 			return false
+	for pressed: bool in [true, false]:
+		var esc := InputEventAction.new()
+		esc.action = &"pause"
+		esc.pressed = pressed
+		Input.parse_input_event(esc)
+		await _ticks(2)
+	if not _require(paused and hud.start_prompt_text() == "Tap to play", "Esc at the start prompt must do nothing (paused %s, prompt %s)." % [paused, hud.start_prompt_text()]):
+		return false
 	await process_frame
 	hud.resume_button.pressed.emit()
 	await _ticks(60)
-	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "The start prompt's tap must start play with the touch controls showing, end the prompt and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, wind playing %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back) and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind playing %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
 		return false
 	_checked.append("the start prompt")
 	return true

@@ -15,6 +15,10 @@ const TOUCH_LAYOUT_PX := 720
 ## The gameplay actions a pause lets go of, so none is still held when play goes
 ## on: a key let go while the window was away, or a touch button's own press.
 const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"move_left", &"move_right", &"run", &"jetpack", &"fast_drop", &"recover", &"vehicle_enter_exit", &"handbrake"]
+## The line shown, and for how long (s), when the browser refuses the start
+## prompt's capture of the mouse and play goes on with the pointer free.
+const POINTER_FREE_LINE := "This browser won't let the mouse turn the view: Esc, then Resume, asks again."
+const POINTER_FREE_LINE_S := 8.0
 
 var _world_ready := false
 var _startup_failed := false
@@ -28,6 +32,9 @@ var _web_visibility_callback: JavaScriptObject
 var _web_pointer_lock_callback: JavaScriptObject
 var _web_capture_pending := false
 var _web_pointer_locked := false
+## The browser refused the start prompt's capture (_sync_web_pointer_lock), so
+## play goes on with the pointer free until a later Resume gets the lock.
+var _web_pointer_free := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
 ## A pause or resume asked for inside a physics tick, put off to the idle step
@@ -172,6 +179,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("pause") and _world_ready:
+		# The start prompt waits for its tap or click, the gesture that lets the
+		# browser start the sound: Esc there (an iPad's keyboard) does nothing.
+		if not hud.start_prompt_text().is_empty():
+			get_viewport().set_input_as_handled()
+			return
 		# Browser Escape may also arrive after its pointer-lock loss callback.
 		# Never turn that same unlock gesture into a new capture request.
 		_set_paused(true if OS.has_feature("web") and _touch_controls == null else not get_tree().paused)
@@ -377,7 +389,7 @@ func _set_paused(paused: bool, quiet := false) -> void:
 	if paused:
 		_web_capture_pending = false
 		_web_pointer_locked = false
-	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
+	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null or _web_pointer_free else Input.MOUSE_MODE_CAPTURED
 	if Input.mouse_mode != mouse_mode:
 		Input.mouse_mode = mouse_mode
 	if _touch_controls != null:
@@ -481,11 +493,21 @@ func _sync_web_pointer_lock() -> void:
 		if _web_capture_pending:
 			_web_capture_pending = false
 			_web_pointer_locked = true
+			_web_pointer_free = false
 			_set_paused(false)
 		elif get_tree().paused or not _web_pointer_locked:
 			# Escape/cancel can precede an asynchronous grant. Release it, don't resume.
 			JavaScriptBridge.get_interface("document").exitPointerLock()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif _web_capture_pending and not hud.start_prompt_text().is_empty():
+		# The browser refused the start prompt's capture (an embedding frame without
+		# the permission, a kiosk, some Linux setups): play goes on with the pointer
+		# free, as before the prompt; Esc and the pause menu's Resume ask again.
+		_web_capture_pending = false
+		_web_pointer_locked = false
+		_web_pointer_free = true
+		_set_paused(false)
+		hud.show_feedback(POINTER_FREE_LINE, false, POINTER_FREE_LINE_S)
 	else:
 		_web_pointer_locked = false
 		_set_paused(true)
@@ -533,8 +555,12 @@ func _publish_web_state(_args: Array) -> void:
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
 		# The controls screen (open or not) and the buttons that open and close it.
 		"controls": hud.controls_visible(),
-		# The start prompt (play waiting for its first tap or click) and its words.
+		# The start prompt (play waiting for its first tap or click) and its words;
+		# whether play goes on with the pointer free (its capture refused), and the
+		# feedback line showing.
 		"start_prompt": hud.start_prompt_text(),
+		"pointer_free": _web_pointer_free,
+		"feedback": hud.feedback_text.text if hud.feedback_panel.visible else "",
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
 		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
 		# The credits screen (open or not), its view and how far it is scrolled, and

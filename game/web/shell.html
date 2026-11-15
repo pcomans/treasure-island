@@ -146,7 +146,11 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	if (!Base) return;
 	const contexts = [];
 	const audio = window.__tiAudio = {
-		running: () => contexts.length > 0 && contexts.every((context) => context.state === 'running'),
+		// Whether every context still open runs (a closed one counts for nothing).
+		running: () => {
+			const open = contexts.filter((context) => context.state !== 'closed');
+			return open.length > 0 && open.every((context) => context.state === 'running');
+		},
 		onchange: null,
 	};
 	class TrackedAudioContext extends Base {

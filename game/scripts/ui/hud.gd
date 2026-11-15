@@ -37,9 +37,17 @@ const CREDITS_BULLET_GAP_PX := 8
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
 const CREDITS_LICENCE_HEADING_PX := 44.0
-## The start prompt's Play button is this tall (px): a big target for a thumb or a
-## click (set_start_prompt).
+## The start prompt (set_start_prompt): its Play button this tall (px), a big
+## target for a thumb or a click, its label this size; its panel centred in the
+## top START_PANEL_SHARE of the screen, over the sky, clear of the chest; the
+## island dimmed only this much (a later pause dims as the scene does); and with
+## a mouse, one line of the controls under the button (the controls screen's
+## keys).
 const START_BUTTON_PX := 80.0
+const START_FONT_PX := 30
+const START_PANEL_SHARE := 0.44
+const START_DIM_ALPHA := 0.12
+const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look · F drive · Esc pause"
 ## The options screen's shadow level buttons are at least this wide (px), and the
 ## one in use is filled in the headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
@@ -52,6 +60,8 @@ const REFLOW_FULL_SHARE := 0.6
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
 ## The pause menu: like the controls screen, a solid panel over the dimmed game.
 @onready var pause_panel: Control = $PausePanel
+@onready var pause_dim: ColorRect = $PausePanel/Dim
+@onready var pause_center: CenterContainer = $PausePanel/Center
 @onready var pause_box: PanelContainer = $PausePanel/Center/Box
 @onready var pause_title: Label = $PausePanel/Center/Box/PauseLayout/Title
 @onready var resume_button: Button = $PausePanel/Center/Box/PauseLayout/ResumeButton
@@ -112,6 +122,8 @@ var _paused := false
 ## menu buttons showed before it.
 var _start_text := ""
 var _menu_before := {}
+## The start prompt's line of controls (with a mouse), made the first time.
+var _start_controls: Label
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -206,13 +218,13 @@ func show_load_error(code: String, message: String, source_keys: Array) -> void:
 	load_panel.show()
 
 
-## A short message near the bottom of the screen, tinted green or red. (No tick or
-## cross: the web build's font has neither.)
-func show_feedback(message: String, success: bool) -> void:
+## A short message near the bottom of the screen, tinted green or red, for
+## seconds. (No tick or cross: the web build's font has neither.)
+func show_feedback(message: String, success: bool, seconds := 2.0) -> void:
 	feedback_text.text = message
 	feedback_text.modulate = Color("d9ffe9") if success else Color("ffe1d9")
 	feedback_panel.show()
-	_feedback_seconds = 2.0
+	_feedback_seconds = seconds
 
 
 ## A short key hint near the bottom of the screen ("F  Drive" beside a car);
@@ -225,12 +237,16 @@ func set_prompt(text: String) -> void:
 
 
 ## The start prompt (main.gd, on the web): until play first starts, the pause
-## menu shows only its Play button, bigger and worded for the screen ("Tap to
-## play", "Click to play"), under the game's name, so that the first tap or click
-## starts play through the menu's own Resume. Play's first start ends it.
+## menu shows only its Play button, under the game's name, worded for the screen
+## ("Tap to play", "Click to play"), so that the first tap or click starts play
+## through the menu's own Resume. It is the first thing a web player sees, so the
+## island shows through: the panel sits over the sky, the dim is light, and the
+## button is the main action, big and filled in the options screen's selected
+## blue; with a mouse a line of the controls follows it. Play's first start ends
+## it.
 func set_start_prompt(text: String) -> void:
 	if _start_text.is_empty():
-		_menu_before = {"text": resume_button.text, "title": pause_title.text, "height": resume_button.custom_minimum_size.y}
+		_menu_before = {"text": resume_button.text, "title": pause_title.text, "height": resume_button.custom_minimum_size.y, "dim": pause_dim.color.a}
 		for button: Control in [controls_button, options_button, credits_button, exit_button]:
 			_menu_before[button] = button.visible
 			button.hide()
@@ -238,6 +254,33 @@ func set_start_prompt(text: String) -> void:
 	pause_title.text = "Treasure Island"
 	resume_button.text = text
 	resume_button.custom_minimum_size.y = START_BUTTON_PX
+	resume_button.add_theme_font_size_override("font_size", START_FONT_PX)
+	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
+		resume_button.add_theme_stylebox_override(state, _start_button_box(state))
+	for colour: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+		resume_button.add_theme_color_override(colour, OPTIONS_ACTIVE_TEXT_COLOR)
+	pause_center.set_anchor_and_offset(SIDE_BOTTOM, START_PANEL_SHARE, 0.0)
+	pause_dim.color.a = START_DIM_ALPHA
+	if not _touch:
+		if _start_controls == null:
+			_start_controls = Label.new()
+			_start_controls.name = "StartControls"
+			_start_controls.text = START_CONTROLS
+			_start_controls.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			_start_controls.add_theme_color_override("font_color", CONTROLS_KEY_COLOR)
+			resume_button.add_sibling(_start_controls)
+		_start_controls.show()
+
+
+## The start prompt's Play button in a state: the options screen's selected
+## level's fill (_active_level_style), a little lighter under the pointer and
+## darker pressed.
+func _start_button_box(state: String) -> StyleBoxFlat:
+	var base := resume_button.get_theme_stylebox("pressed")
+	var box := base.duplicate() as StyleBoxFlat if base is StyleBoxFlat else StyleBoxFlat.new()
+	box.bg_color = CONTROLS_HEADING_COLOR.lightened(0.12) if state == "hover" else (CONTROLS_HEADING_COLOR.darkened(0.12) if state.ends_with("pressed") else CONTROLS_HEADING_COLOR)
+	box.border_color = box.bg_color
+	return box
 
 
 ## The start prompt's words while it shows, else "".
@@ -252,6 +295,15 @@ func _end_start_prompt() -> void:
 	resume_button.text = _menu_before.text
 	pause_title.text = _menu_before.title
 	resume_button.custom_minimum_size.y = _menu_before.height
+	resume_button.remove_theme_font_size_override("font_size")
+	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
+		resume_button.remove_theme_stylebox_override(state)
+	for colour: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+		resume_button.remove_theme_color_override(colour)
+	pause_center.set_anchor_and_offset(SIDE_BOTTOM, 1.0, 0.0)
+	pause_dim.color.a = _menu_before.dim
+	if _start_controls != null:
+		_start_controls.hide()
 	for button: Control in [controls_button, options_button, credits_button, exit_button]:
 		button.visible = _menu_before[button]
 

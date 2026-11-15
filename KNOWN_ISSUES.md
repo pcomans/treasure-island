@@ -177,6 +177,7 @@ Limits:
 - The small trees a car bends make no sound, and the storage yards' ponds give no wet steps or splash: the water step plays only in the marsh water the ground shader draws (`game/scripts/world/standing_water.gd`).
 - `car_tree_impact` plays about 5.4 dB under its planned level: its picked takes fall that far short of it (the processed manifest's `shortfall_db`).
 - Web: after the page is minimised and shown again, Resume pauses again until the page has focus (a click in it), because the browser grants pointer lock only to a focused page (code review, 2026-11-14).
+- Web, with a mouse: where the browser never grants pointer lock (an embedding frame without the permission, a kiosk, some Linux setups), "Click to play" starts play with the pointer free and a line saying the mouse won't turn the view, so the view cannot be turned with the mouse. After Esc, the pause menu's Resume asks for the lock again and, refused, stays paused, as before the start prompt (2026-11-15).
 - The bay's water sound at the causeway barrier and the riprap rumble on the north slipway: see [Drivable cars](#drivable-cars-gamescriptsvehicles-2026-11-08).
 
 ## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
