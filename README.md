@@ -115,6 +115,40 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+## Where the builds go
+
+Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
+has two files, built and checked from the same commit, and these links always get
+the newest:
+
+- the Mac app: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
+- the Linux build: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
+  (unpack it and run the `.x86_64` program in its `treasure-island-linux` folder;
+  its `.pck` must stay beside it)
+
+The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
+the Mac app, with the same sounds.
+
+After each release, CI's `itch` job also puts both builds on the itch.io page
+[phpp/grand-treasure-island](https://phpp.itch.io/grand-treasure-island): the
+Mac app goes to channel `mac` and the Linux build to channel `linux`, with the
+release's date and commit (such as `2026-11-15-c9746e7`) as the version. The job
+uses itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded
+from itch's own distribution site and checked against a pinned SHA-256. It
+pushes the exact files of the GitHub release: it unpacks the Mac app with
+`ditto`, checks it with `codesign --verify --deep --strict`, and pushes it.
+Once itch.io has processed the build, it downloads what itch.io serves and
+compares it, file by file, with what was pushed. It needs the repository secret
+`BUTLER_API_KEY`; without it the job does nothing but say so. It runs on `main`
+only. A failed push never affects the GitHub release: the job reports it, and
+the run still succeeds. To push an existing release again, or for the first
+time, start the workflow by hand on `main` with that release's tag. Such a run
+builds nothing:
+
+```sh
+gh workflow run mac-build.yml --ref main -f itch_release_tag=mac-2026-11-15-c9746e7
+```
+
 ## Sound
 
 The game has sound effects, but this repository holds none: every sound is

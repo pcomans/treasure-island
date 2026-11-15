@@ -1,11 +1,26 @@
 # Builds the Mac app on every push to main with tools/build-mac.sh (the same
 # script as in the devcontainer), launches it on an Apple Silicon Mac to check
 # the island loads, then publishes it as a new GitHub Release of its own, marked
-# latest, so this fixed link always gets the newest build:
+# latest, so these fixed links always get the newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03. A run started by hand (workflow_dispatch) on
-# another branch builds and checks the app and publishes nothing; on main, the
-# dry_run input does the same.
+#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
+# The Linux package is the Linux export that tools/build-mac.sh makes and
+# launch-checks from the same commit, with the same sounds. Owner-approved
+# 2026-11-03. A run started by hand (workflow_dispatch) on another branch builds
+# and checks the app and publishes nothing; on main, the dry_run input does the
+# same.
+#
+# After the release, the itch job (owner-requested 2026-11-15) pushes the same
+# two builds to the itch.io page phpp/grand-treasure-island with itch's butler:
+# the Mac app to channel "mac", the Linux build to channel "linux". It runs only
+# on main, and does nothing (with a notice) until the API key exists as the
+# secret BUTLER_API_KEY, best kept in the GitHub environment `itch` with
+# deployment branch main:
+#     gh secret set BUTLER_API_KEY --env itch -R pcomans/treasure-island   (gh prompts)
+# A failed itch push never touches the GitHub release: the job reports it and
+# the run still succeeds. To push an existing release (again), start this
+# workflow by hand on main with itch_release_tag set to its tag, for example
+# mac-2026-11-15-c9746e7: that run builds nothing and only does the itch job.
 #
 # Signing and notarization (owner-requested 2026-11-07; Apple ID route and
 # ad-hoc fallback 2026-11-14) happen in the sign job, on main only, and only
@@ -86,6 +101,10 @@ on:
         description: Build, sign and check, but publish nothing
         type: boolean
         default: false
+      itch_release_tag:
+        description: Only push this published release (for example mac-2026-11-15-c9746e7) to itch.io; build nothing
+        type: string
+        default: ""
 
 # Read-only everywhere; only the publish job may write (the release).
 permissions:
@@ -100,6 +119,9 @@ defaults:
 jobs:
   build:
     name: Build
+    # A run that only pushes an existing release to itch.io builds nothing, and
+    # with this job skipped so are sign, verify and publish.
+    if: ${{ !inputs.itch_release_tag }}
     runs-on: ubuntu-26.04
     timeout-minutes: 60
     # A group of its own: an older run's launch check, queued later, must not
@@ -185,6 +207,35 @@ jobs:
         with:
           name: mac-app
           path: build/mac/treasure-island-mac-*.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+      - name: Package the Linux build
+        # tools/build-mac.sh has just exported it from this commit, with the same
+        # sounds, audited its data pack and launched it. A player needs the
+        # executable and its .pck side by side in one folder; tar keeps the
+        # executable bit, which artifacts and plain zips can lose.
+        run: |
+          exes=(build/linux/*.x86_64)
+          [ "${#exes[@]}" -eq 1 ] && [ -f "${exes[0]}" ] || { echo "::error::expected one Linux executable in build/linux, found ${#exes[@]}"; exit 1; }
+          exe="${exes[0]}"
+          pck="${exe%.x86_64}.pck"
+          [ -f "${pck}" ] || { echo "::error::${pck} is missing: the Linux build needs its data pack beside the executable"; exit 1; }
+          folder=build/linux-package/treasure-island-linux
+          rm -rf build/linux-package
+          mkdir -p "${folder}"
+          cp "${exe}" "${pck}" "${folder}/"
+          chmod 0755 "${folder}/$(basename "${exe}")"
+          chmod 0644 "${folder}/$(basename "${pck}")"
+          tar -C build/linux-package -czf "build/linux-package/treasure-island-linux-$(git rev-parse --short HEAD).tar.gz" treasure-island-linux
+          tar -tvzf build/linux-package/treasure-island-linux-*.tar.gz
+
+      - name: Upload the Linux build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: linux-app
+          path: build/linux-package/treasure-island-linux-*.tar.gz
           if-no-files-found: error
           compression-level: 0
           retention-days: 1
@@ -777,13 +828,22 @@ jobs:
     concurrency:
       group: mac-publish
       cancel-in-progress: false
+    outputs:
+      # Set only once the release exists and the fixed links lead to it.
+      tag: ${{ steps.release.outputs.tag }}
     steps:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
+      - name: Download the Linux build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: linux-app
+
       - name: Publish this build as a new release
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -858,6 +918,8 @@ jobs:
             exit 0
           fi
           mv treasure-island-mac-*.zip "${name}"
+          linux_name=treasure-island-linux.tar.gz
+          mv treasure-island-linux-*.tar.gz "${linux_name}"
           notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ)."
           if [ -n "${signing}" ]; then
             notes="${notes}
@@ -867,9 +929,11 @@ jobs:
           notes="${notes}
 
           The newest build is always at ${site}/latest/download/${name}
-          For the first launch, see Build for the Mac in the README."
+          For the first launch, see Build for the Mac in the README.
+
+          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder. The newest is always at ${site}/latest/download/${linux_name}"
           title="Mac build ${day} (${short}${title_extra})"
-          gh release create "${tag}" "${name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
+          gh release create "${tag}" "${name}" "${linux_name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
             echo "::error::Publishing ${tag} failed, so the previous build normally stays at the fixed link. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
@@ -877,6 +941,7 @@ jobs:
           for _ in $(seq 12); do
             if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
               echo "Published ${site}/tag/${tag}"
+              echo "tag=${tag}" >> "${GITHUB_OUTPUT}"
               {
                 echo "### Published ${tag}: ${title}"
                 echo ""
@@ -888,3 +953,228 @@ jobs:
           done
           echo "::error::${tag} is published, but the fixed link does not lead to it."
           exit 1
+
+  itch:
+    name: Publish to itch.io
+    needs: [publish]
+    # After a release on main, or by hand on main for a published release (input
+    # itch_release_tag), never on a dry run. Never on another branch, so never for
+    # a pull request or a fork. The API key is the repository secret
+    # BUTLER_API_KEY, which only the butler steps see. A failure here never
+    # touches the GitHub release: continue-on-error keeps the run green, and the
+    # job reports what failed.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
+    runs-on: macos-26
+    timeout-minutes: 60
+    continue-on-error: true
+    permissions:
+      contents: read
+    concurrency:
+      group: itch-publish
+      cancel-in-progress: false
+    env:
+      ITCH_TARGET: phpp/grand-treasure-island
+    steps:
+      - name: Check for the itch.io API key
+        id: key
+        # Sees only whether the secret is set, never its value.
+        env:
+          HAS_BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY != '' }}
+        run: |
+          if [ "${HAS_BUTLER_API_KEY}" = true ]; then
+            echo "enabled=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::notice title=itch.io::No BUTLER_API_KEY secret is set, so nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (no BUTLER_API_KEY secret)" >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Download the release's builds
+        id: builds
+        if: steps.key.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.publish.outputs.tag || inputs.itch_release_tag }}
+        # The exact files of the GitHub release, each checked against the SHA-256
+        # GitHub recorded when it was uploaded.
+        run: |
+          if ! [[ "${TAG}" =~ ^mac-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]{7}$ ]]; then
+            echo "::error::\"${TAG}\" is not a Mac build tag such as mac-2026-11-15-c9746e7."
+            exit 1
+          fi
+          mkdir release
+          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
+          for file in release/*; do
+            name="$(basename "${file}")"
+            recorded="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq ".assets[] | select(.name == \"${name}\") | .digest")"
+            actual="sha256:$(shasum -a 256 "${file}" | cut -d' ' -f1)"
+            echo "${name}: ${actual}"
+            if [ -z "${recorded}" ] || [ "${recorded}" = null ]; then
+              echo "::warning::GitHub recorded no digest for ${name}, so the download could not be checked."
+            elif [ "${recorded}" != "${actual}" ]; then
+              echo "::error::${name} does not match the digest GitHub recorded (${recorded})."
+              exit 1
+            fi
+          done
+          [ -f release/treasure-island-mac.zip ] || { echo "::error::${TAG} has no treasure-island-mac.zip."; exit 1; }
+          if [ -f release/treasure-island-linux.tar.gz ]; then
+            echo "linux=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::notice title=itch.io::${TAG} has no Linux build (releases before the Linux package have none), so only the mac channel is pushed."
+          fi
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+          # The release's date and commit, as in its tag.
+          echo "version=${TAG#mac-}" >> "${GITHUB_OUTPUT}"
+
+      - name: Install butler
+        if: steps.builds.outcome == 'success'
+        env:
+          # itch's own build from broth (https://itch.io/docs/butler/installing.html).
+          # itch publishes no checksum for it: this SHA-256 is of the 15.32.0
+          # archive as broth served it on 2026-11-15, whose butler executable and
+          # 7-zip libraries are byte-identical to those in the v15.32.0 release of
+          # github.com/itchio/butler, for which GitHub records the zip's digest.
+          BUTLER_VERSION: "15.32.0"
+          BUTLER_SHA256: f1c460f08c02686b49f8da74344e5578ece9ea1a8bae1779445b5d98e0a794b3
+        run: |
+          dir="${RUNNER_TEMP}/butler"
+          mkdir -p "${dir}"
+          curl -fsSL --retry 3 -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-arm64/${BUTLER_VERSION}/archive/default"
+          echo "${BUTLER_SHA256}  ${dir}/butler.zip" | shasum -a 256 -c -
+          unzip -q -o "${dir}/butler.zip" -d "${dir}"
+          chmod 0755 "${dir}/butler"
+          "${dir}/butler" version
+          echo "${dir}" >> "${GITHUB_PATH}"
+
+      - name: Stage the Mac app and check its signature
+        id: mac
+        if: steps.builds.outcome == 'success'
+        # What is pushed is this folder, exactly: the app as ditto unpacks it from
+        # the release zip, checked with codesign here. butler keeps symlinks and
+        # permissions and only adds missing execute bits to executables
+        # (https://itch.io/docs/itch/integrating/platforms/macos.html).
+        run: |
+          ditto -x -k release/treasure-island-mac.zip stage/mac
+          apps=(stage/mac/*.app)
+          [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in the Mac zip"; exit 1; }
+          [ "$(find stage/mac -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1 ] || { echo "::error::the Mac zip holds more than the app"; exit 1; }
+          codesign --verify --deep --strict --verbose=2 "${apps[0]}"
+          # A list of what is pushed (type, mode, SHA-256 or link target, path), to
+          # compare with what itch.io serves afterwards.
+          cat > "${RUNNER_TEMP}/manifest.py" <<'PY'
+          import hashlib, os, stat, sys
+          root = sys.argv[1]
+          for top, dirs, files in os.walk(root):
+              dirs.sort()
+              for name in sorted(dirs) + sorted(files):
+                  path = os.path.join(top, name)
+                  info = os.lstat(path)
+                  rel = os.path.relpath(path, root)
+                  if stat.S_ISLNK(info.st_mode):
+                      print("link", oct(info.st_mode & 0o777), os.readlink(path), rel)
+                  elif stat.S_ISDIR(info.st_mode):
+                      print("dir ", oct(info.st_mode & 0o777), "-", rel)
+                  else:
+                      digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+                      print("file", oct(info.st_mode & 0o777), digest, rel)
+          PY
+          python3 -I "${RUNNER_TEMP}/manifest.py" stage/mac > mac-pushed.txt
+          cat mac-pushed.txt
+
+      - name: Push the Mac app to itch.io
+        id: push_mac
+        if: steps.mac.outcome == 'success'
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.builds.outputs.version }}
+        run: butler push stage/mac "${ITCH_TARGET}:mac" --userversion "${VERSION}" --if-changed
+
+      - name: Stage the Linux build
+        id: linux
+        if: steps.builds.outcome == 'success' && steps.builds.outputs.linux == 'true'
+        run: |
+          mkdir -p stage/linux
+          tar -xzf release/treasure-island-linux.tar.gz -C stage/linux
+          folder=stage/linux/treasure-island-linux
+          exes=("${folder}"/*.x86_64)
+          [ "${#exes[@]}" -eq 1 ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
+          [ -f "${exes[0]%.x86_64}.pck" ] || { echo "::error::the Linux package lacks the .pck beside its executable"; exit 1; }
+          ls -l "${folder}"
+
+      - name: Push the Linux build to itch.io
+        id: push_linux
+        if: steps.linux.outcome == 'success'
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.builds.outputs.version }}
+        run: butler push stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" --userversion "${VERSION}" --if-changed
+
+      - name: Check the Mac app itch.io serves
+        id: served
+        if: steps.push_mac.outcome == 'success'
+        timeout-minutes: 30
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+        # butler fetch downloads the channel's latest build as itch.io serves it,
+        # once itch.io has processed it (until then it says "still processing").
+        # The fetched app must pass codesign and match what was pushed, file for
+        # file. A mismatch or a timeout is reported, not a failure: the push itself
+        # succeeded, and a newer push may already be the channel's latest build.
+        run: |
+          fetched=""
+          for _ in $(seq 1 25); do
+            rm -rf served
+            status=0
+            answer="$(butler fetch "${ITCH_TARGET}:mac" served 2>&1)" || status=$?
+            if [ "${status}" -eq 0 ]; then fetched=yes; break; fi
+            tail -n 3 <<< "${answer}"
+            grep -q "still processing" <<< "${answer}" || break
+            sleep 60
+          done
+          if [ -z "${fetched}" ]; then
+            echo "::warning title=itch.io::The Mac build was pushed, but itch.io did not serve it within 25 minutes (or butler fetch failed, above), so the app it serves was not checked."
+            echo "check=not-done" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          apps=(served/*.app)
+          if [ "${#apps[@]}" -eq 1 ] && codesign --verify --deep --strict --verbose=2 "${apps[0]}"; then
+            signature=ok
+          else
+            signature=failed
+          fi
+          python3 -I "${RUNNER_TEMP}/manifest.py" served > mac-served.txt
+          if [ "${signature}" = ok ] && diff mac-pushed.txt mac-served.txt; then
+            echo "check=same" >> "${GITHUB_OUTPUT}"
+            echo "The Mac app itch.io serves is the one pushed, file for file, and passes codesign --verify --deep --strict."
+          else
+            echo "check=different" >> "${GITHUB_OUTPUT}"
+            echo "::warning title=itch.io::The Mac app itch.io serves differs from the one pushed (codesign: ${signature}; differences above). A newer push may be the channel's latest build; otherwise look at the mac channel on itch.io."
+          fi
+
+      - name: Report
+        if: always() && steps.key.outputs.enabled == 'true'
+        env:
+          TAG: ${{ steps.builds.outputs.tag }}
+          RETRY_TAG: ${{ needs.publish.outputs.tag || inputs.itch_release_tag }}
+          BUILDS: ${{ steps.builds.outcome }}
+          PUSH_MAC: ${{ steps.push_mac.outcome }}
+          PUSH_LINUX: ${{ steps.push_linux.outcome }}
+          LINUX: ${{ steps.builds.outputs.linux }}
+          SERVED: ${{ steps.served.outputs.check }}
+        run: |
+          {
+            echo "### itch.io: ${ITCH_TARGET} for ${TAG:-${RETRY_TAG}}"
+            echo ""
+            echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
+            if [ "${LINUX}" = true ]; then
+              echo "- linux channel: ${PUSH_LINUX:-not pushed}"
+            else
+              echo "- linux channel: not pushed (no Linux build in this release)"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+          if [ "${BUILDS}" != success ] || [ "${PUSH_MAC}" != success ] || { [ "${LINUX}" = true ] && [ "${PUSH_LINUX}" != success ]; }; then
+            echo "::error title=itch.io::Pushing to itch.io failed (see the steps above). The GitHub release is complete and unaffected. To try again, start this workflow by hand on main with itch_release_tag=${RETRY_TAG}."
+            exit 1
+          fi
