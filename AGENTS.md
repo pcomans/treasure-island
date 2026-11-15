@@ -1,4 +1,4 @@
-# Treasure Island Game — Agent Working Agreement
+# Grand Treasure Island — Agent Working Agreement
 
 At task start, read the relevant lessons in [LEARNINGS.md](LEARNINGS.md). When a repeated or generalizable mistake is exposed, add or refine a concise lesson there with observed evidence, known cause or uncertainty, and a practical prevention check; keep routine round history in RETRO.
 
@@ -105,7 +105,7 @@ edit/render/review loop and ordinary notes; add no checklist, image quota or gat
 
 ## Current phase
 
-Implementation authorized for named executing subagents. On 2026-08-27 the owner explicitly approved the exact Godot bundle in `discovery/APPROACH_PROPOSAL.md`, including its vetted, logged downloads. Build and verify the first playable while preserving the approved product brief and the source-ID coverage contract; this authorization never makes the primary `/root` agent an executor.
+Implementation authorized for named executing subagents. On 2026-08-27 the owner explicitly approved the exact Godot bundle in `discovery/APPROACH_PROPOSAL.md`, including its vetted, logged downloads. Build and verify Grand Treasure Island while preserving the approved product brief and the source-ID coverage contract; this authorization never makes the primary `/root` agent an executor.
 
 ## Development environment
 
