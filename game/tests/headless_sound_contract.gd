@@ -29,7 +29,11 @@ extends SceneTree
 ##      climbing from idle with the throttle; a car taken with W already down has
 ##      its engine started and a loop sounding before it has gone ENGINE_FIRST_M
 ##      (owner, 2026-11-14: the car moved before its start played); the tyres skid
-##      in a handbrake turn; getting out the doors sound and the engine and tyre
+##      in a handbrake turn, and steering alone (a full-lock slalom on a level
+##      floor) never squeals below CarSound.STEER_SQUEAL_SHARE of the car's top
+##      speed but does over it, while a handbrake turn and a hard brake squeal
+##      from half of it (owner, 2026-11-15: no squeal from steering below 90 %);
+##      getting out the doors sound and the engine and tyre
 ##      loops fade to silence, with no other car sound (the owner wants no stop
 ##      sound), out again at once the start and the first door close never play,
 ##      and back in before the getting out's door has shut that close never
@@ -88,6 +92,19 @@ const LANDING_DROP_M := 2.0
 const SIDEWAYS_HIT_MPS := 9.0
 ## How soon after getting out the engine's loops must be silent (ticks).
 const EXIT_SILENT_TICKS := 45
+## Steering's squeal (_check_steer_squeal): its floor's height over the on-foot
+## place and half size (m); the shares of the top speed a full-lock slalom holds,
+## silent under CarSound.STEER_SQUEAL_SHARE and squealing over it; how long each
+## side's lock is held (ticks) and how many sides; the share the handbrake turn
+## and the hard brake start from, and how long they last (ticks).
+const STEER_FLOOR_Y := 150.0
+const STEER_FLOOR_HALF_M := 250.0
+const STEER_QUIET_SHARES: Array[float] = [0.5, 0.85]
+const STEER_LOUD_SHARE := 0.95
+const SLALOM_SIDE_TICKS := 40
+const SLALOM_SIDES := 6
+const STEER_OTHER_SHARE := 0.5
+const STEER_OTHER_TICKS := 60
 ## Running and letting go (_check_steps_stop): how long the run is held (ticks),
 ## how soon the player must stand still after (ticks; the brakes stop the run in
 ## about 0.5 s), the steps after that (at most one a foot, each within
@@ -138,7 +155,7 @@ func _run() -> void:
 	Sound.manifest_path = _folder.path_join("sfx.json")
 	if not await _load_main():
 		return _finish()
-	for check: Callable in [_check_startup, _check_beds_and_menus, _check_audio_waits, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_quick_reentry, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings]:
+	for check: Callable in [_check_startup, _check_beds_and_menus, _check_audio_waits, _check_on_foot, _check_steps_stop, _check_ditch, _check_car, _check_engine_first, _check_quick_exit, _check_quick_reentry, _check_riprap, _check_false_hits, _check_landing_hits, _check_hits, _check_world_sounds, _check_limits, _check_settings, _check_steer_squeal]:
 		if not await check.call():
 			return _finish()
 	# The restart, with an empty sound folder: the kept settings, and silence.
@@ -1071,6 +1088,122 @@ func _check_world_sounds() -> bool:
 		return false
 	_summary.append("a bay of each fence material breaks with its own sound (%s); a lamp hits and clangs down; a splash; a soft and a hard kick; a goal" % ", ".join(PackedStringArray(tested.keys())))
 	return true
+
+
+## Steering's squeal (owner, 2026-11-15: the tyres should not squeal while the
+## player steers below 90 % of the car's top speed): on a level floor of this
+## check's own, STEER_FLOOR_Y over the on-foot place where nothing else is, a
+## parked sedan is put down, given a share of its top speed and driven in a
+## full-lock slalom with W held while it is slower than that. From each of
+## STEER_QUIET_SHARES its tyres slide as they did when they squealed, and its skid
+## loop never sounds; from STEER_LOUD_SHARE it does. From STEER_OTHER_SHARE a
+## handbrake turn and a hard brake squeal. It runs last: the restart's new world
+## takes away its floor and the car left on it.
+func _check_steer_squeal() -> bool:
+	var spot: Dictionary = _cases.on_foot
+	var at := Vector2(spot.at_xz[0], spot.at_xz[1])
+	var ids := _vehicles.swappable_ids().filter(func(id: String) -> bool: return _vehicles.drivable_body(id) == "sedan" and _vehicles.live_node(id) == null)
+	if not _require(not ids.is_empty(), "No parked sedan to drive."):
+		return false
+	ids.sort()
+	# Nothing of the world's where the floor and a car on it go.
+	var room := PhysicsShapeQueryParameters3D.new()
+	var space_box := BoxShape3D.new()
+	space_box.size = Vector3(STEER_FLOOR_HALF_M * 2.0, 8.0, STEER_FLOOR_HALF_M * 2.0)
+	room.shape = space_box
+	room.transform = Transform3D(Basis.IDENTITY, Vector3(at.x, STEER_FLOOR_Y + 2.0, at.y))
+	var crowd := _main.get_world_3d().direct_space_state.intersect_shape(room, 1)
+	if not _require(crowd.is_empty(), "Something of the world's stands where the steering check's floor goes, %.0f m up: %s." % [STEER_FLOOR_Y, crowd]):
+		return false
+	var ground := StaticBody3D.new()
+	ground.name = "SteerSquealFloor"
+	ground.collision_layer = DrivableCar.PHYSICS_WORLD_SOLID
+	ground.collision_mask = 0
+	var shape := CollisionShape3D.new()
+	var box := BoxShape3D.new()
+	box.size = Vector3(STEER_FLOOR_HALF_M * 2.0, 2.0, STEER_FLOOR_HALF_M * 2.0)
+	shape.shape = box
+	ground.add_child(shape)
+	_main.add_child(ground)
+	ground.global_position = Vector3(at.x, STEER_FLOOR_Y - 1.0, at.y)
+	await physics_frame
+	# [what, the share of the top speed given, keys, slalom]
+	var plans: Array[Array] = []
+	for share: float in STEER_QUIET_SHARES:
+		plans.append(["a slalom at %d %%" % roundi(share * 100.0), share, [], true])
+	plans.append(["a slalom at %d %%" % roundi(STEER_LOUD_SHARE * 100.0), STEER_LOUD_SHARE, [], true])
+	plans.append(["a handbrake turn", STEER_OTHER_SHARE, [&"handbrake", &"move_right"], false])
+	plans.append(["a hard brake", STEER_OTHER_SHARE, [&"move_back"], false])
+	var drives := {}
+	for plan: Array in plans:
+		var drive := await _squeal_drive(str(ids[0]), at, plan[1], plan[2], plan[3])
+		if drive.is_empty():
+			break
+		drives[plan[0]] = drive
+	_vehicles.force_exit()
+	ground.free()
+	if not _failure.is_empty():
+		return false
+	var heard := PackedStringArray()
+	for what: String in drives:
+		var drive: Dictionary = drives[what]
+		heard.append("%s: %.2f to %.2f of the top speed, the tyres sliding at up to %.1f m/s, the skid at up to %.2f" % [what, drive.low, drive.high, drive.slip, drive.level])
+	var quiet := true
+	for plan: Array in plans.slice(0, STEER_QUIET_SHARES.size()):
+		var drive: Dictionary = drives[plan[0]]
+		quiet = quiet and drive.level == 0.0 and drive.slip > CarSound.SKID_FROM_MPS and drive.high < CarSound.STEER_SQUEAL_SHARE
+	var loud := true
+	for plan: Array in plans.slice(STEER_QUIET_SHARES.size()):
+		loud = loud and float((drives[plan[0]] as Dictionary).level) > 0.0
+	if not _require(quiet and loud, "Steering alone must never squeal under %.0f %% of the car's top speed (its tyres sliding as when they squealed, the car kept under it) but must over it, and a handbrake turn and a hard brake must squeal (%s)." % [CarSound.STEER_SQUEAL_SHARE * 100.0, "; ".join(heard)]):
+		return false
+	_summary.append("steering's squeal: %s" % "; ".join(heard))
+	return true
+
+
+## One drive of _check_steer_squeal on its floor: the car of row id put down at xz
+## heading +x and settled (the skid of the drive before gone), then given share of
+## its top speed straight ahead, and the keys held for STEER_OTHER_TICKS, or
+## (slalom) a full lock switched every SLALOM_SIDE_TICKS for SLALOM_SIDES sides
+## with W held while the car is slower than share. What it heard: the skid loop's
+## loudest level, the tyres' fastest slide (m/s) and the car's slowest and fastest
+## speed (shares of its top speed); {} if it could not start.
+func _squeal_drive(id: String, xz: Vector2, share: float, keys: Array, slalom: bool) -> Dictionary:
+	var error := _vehicles.drive_from(id, xz, Vector2.RIGHT)
+	if not _require(error == "", "Could not start a drive at %s: %s." % [xz, error]):
+		return {}
+	await _ticks(45)
+	var car := _vehicles.active_car()
+	# The skid of the drive before fades out: the sound's first tick in the car
+	# still had that drive's slide (DrivableCar.place moves the car at the next
+	# physics step).
+	for _tick in 120:
+		if _sound.loop_level(CarSound.SKID, car) == 0.0:
+			break
+		await physics_frame
+	var top := car.top_speed()
+	var found := {"level": _sound.loop_level(CarSound.SKID, car), "slip": 0.0, "low": INF, "high": 0.0}
+	if not _require(found.level == 0.0, "The skid of the steering check's drive before still sounded 2.75 s into the next one (%.3f)." % found.level):
+		return {}
+	car.linear_velocity = -car.global_transform.basis.z * share * top
+	for key: StringName in keys:
+		Input.action_press(key)
+	for tick in (SLALOM_SIDES * SLALOM_SIDE_TICKS if slalom else STEER_OTHER_TICKS):
+		if slalom:
+			var right := tick % (2 * SLALOM_SIDE_TICKS) < SLALOM_SIDE_TICKS
+			Input.action_release("move_left" if right else "move_right")
+			Input.action_press("move_right" if right else "move_left")
+			if car.speed() < share * top:
+				Input.action_press("move_forward")
+			else:
+				Input.action_release("move_forward")
+		await physics_frame
+		found.level = maxf(found.level, _sound.loop_level(CarSound.SKID, car))
+		found.slip = maxf(found.slip, car.slip())
+		found.low = minf(found.low, car.speed() / top)
+		found.high = maxf(found.high, car.speed() / top)
+	_release()
+	return found
 
 
 # --- 4. Limits, takes and levels.
