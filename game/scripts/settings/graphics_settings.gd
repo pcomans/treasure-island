@@ -7,12 +7,12 @@ extends RefCounted
 ## possible"). A limit lets the GPU rest between frames and a lower resolution draws
 ## fewer pixels a frame: less heat, fan noise and battery.
 ##
-## The defaults are the game as it was: no limit but the screen's own refresh (vsync,
-## which project.godot leaves on), the world drawn at the window's full resolution
-## on desktop and at three quarters on the web (its fixed scale since 2026-10-19,
-## 2226762c), no frame rate shown. A choice applies at once and is kept in ShadowQuality.settings_path,
-## section graphics, beside the shadow level; a test or capture driver gets the
-## defaults (main.gd's use_saved_settings and player_settings_problem).
+## The defaults: no limit but the screen's own refresh (vsync, which project.godot
+## leaves on), the world drawn at the window's full resolution on desktop and at two
+## thirds on the web (owner, 2026-11-15), no frame rate shown. A choice applies at
+## once and is kept in ShadowQuality.settings_path, section graphics, beside the
+## shadow level; a test or capture driver gets the defaults (main.gd's
+## use_saved_settings and player_settings_problem).
 ##
 ## The limit is Engine.max_fps. Godot 4.7.2 sleeps its main loop to that rate
 ## (OS::add_frame_delay, core/os/os.cpp), and on the Mac's Metal driver also shows
@@ -91,9 +91,11 @@ static func offered(key: String, web := OS.has_feature("web")) -> Array:
 	return choices.filter(func(choice: Dictionary) -> bool: return not web or bool(choice.web))
 
 
-## The choices of a player who never made one: the game as it was.
+## The choices of a player who never made one. A saved choice is kept as it is:
+## save() writes all three together, so a web player who changed any of them keeps
+## the resolution the game had then.
 static func defaults(web := OS.has_feature("web")) -> Dictionary:
-	return {FRAME_RATE_KEY: "unlimited", RESOLUTION_KEY: "75" if web else "100", SHOW_FRAME_RATE_KEY: false}
+	return {FRAME_RATE_KEY: "unlimited", RESOLUTION_KEY: "67" if web else "100", SHOW_FRAME_RATE_KEY: false}
 
 
 ## The offered frame rate limit or resolution with this id, or {}.
