@@ -62,10 +62,10 @@ extends Node
 ## so the listener moves smoothly with the picture; R and the return from the
 ## water move the car and the camera together, so the engine keeps its level.
 ##
-## What came of a request: played, silent (no takes), suspended (the web's audio
-## not running yet), limited (min_gap_s, counted
-## from the last play, or for a sound with no takes from its last request, so a
-## build without the audio does no more work for a flood than one with it), far,
+## What came of a request: played, silent (no takes), suspended (a world sound
+## while the web's audio does not run yet), limited (min_gap_s, counted from the
+## last play, or for a sound with no takes from its last request, so a build
+## without the audio does no more work for a flood than one with it), far,
 ## quiet (no strength; neither far nor quiet takes a play's place), unknown, or a
 ## loop's loop_start, loop_silent and loop_stop. The game keeps only a count of
 ## what played, by sound (played_counts, for the web's state readback); a test or
