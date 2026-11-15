@@ -35,7 +35,15 @@ extends SceneTree
 ##     headless_vehicle_contract.gd's);
 ##   - the options screen's date and time read the island's clock (PST and PDT),
 ##     its sliders jump the clock and time runs on, Now goes back to the real time,
-##     and the web's options screen has none of it.
+##     and the web's options screen has none of it;
+##   - the switch (DayClock.enabled; owner, 2026-11-15: the whole time of day
+##     behind one flag): --no-time-of-day on the command line, the project setting
+##     off and the web build each turn it off, and nothing else; with the setting
+##     turned off as a run starts the clock holds the recorded moment whatever
+##     jumps it, DaySun writes nothing to main.tscn's Sun and look, nor any global
+##     uniform, and keeps the Sun lighting land and sky and the shadows' whole
+##     reach even with the clock pinned at night, and NightLights is neither wanted
+##     nor makes a light.
 ## The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -98,7 +106,10 @@ func _run() -> void:
 	var menu := await _check_options_rows()
 	if menu.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, lights, menu])
+	var switch := await _check_switch_off()
+	if switch.is_empty():
+		return _finish()
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, lights, menu, switch])
 	_finish()
 
 
@@ -574,18 +585,18 @@ func _check_night_lights() -> String:
 	var pitches: Array[float] = [NightLights.flash_pitch(-8.0), NightLights.flash_pitch(-60.0), NightLights.flash_pitch(25.0)]
 	var day := float(DayLight.at(33.43).night)
 	var night_floor := float(DayLight.at(DayLight.FLOOR_ELEVATION_DEG).night)
-	# This is a test run: time of day held, so no night lights (main.gd makes them only
-	# where NightLights.wanted()).
-	var switched_off := DayClock.starts_pinned() and not NightLights.wanted()
+	# This is a test run: the time of day on but held (scripted), so no night lights
+	# (main.gd makes them only where NightLights.wanted()).
+	var held := DayClock.enabled() and DayClock.scripted() and not NightLights.wanted()
 	var on_at := _height_at_night(NightLights.ON_AT)
 	var off_at := _height_at_night(NightLights.OFF_AT)
 	if not _require(states == wanted, "The night lights must come on at %.2f, stay on above %.2f and go off at it: %s for darkness 0, 0.49, 0.5, 0.4, 0.36, 0.35, 0.45, 0.6, 1, 0 (wanted %s)." % [NightLights.ON_AT, NightLights.OFF_AT, states, wanted]) \
 	or not _require(levels == [0.0, 0.5, 1.0, 0.75] and not made, "The night lights must fade over FADE_S (levels %s, wanted 0, 0.5, 1, 0.75) and, with no player or car, make no light (made %s)." % [levels, made]) \
 	or not _require(is_equal_approx(pitches[0], NightLights.FLASH_PITCH_DEG - 8.0 * NightLights.FLASH_PITCH_SHARE) and pitches[0] < -5.0 and pitches[1] < pitches[0] and pitches[1] >= NightLights.FLASH_PITCH_MIN_DEG and pitches[2] == NightLights.FLASH_PITCH_MAX_DEG and NightLights.FLASH_PITCH_MAX_DEG < 0.0, "The flashlight's pitch must be FLASH_PITCH_DEG plus FLASH_PITCH_SHARE of the camera's, down at the camera's rest, lower looking down, never above FLASH_PITCH_MAX_DEG (under the horizon) looking up: %s for the camera at -8, -60 and 25 degrees." % [pitches]) \
 	or not _require(day == 0.0 and night_floor == 1.0 and on_at < -3.0 and on_at > -8.0 and off_at > on_at, "Darkness must be 0 by day and 1 at the night floor (%.2f, %.2f), the lights coming on between 3 and 8 degrees under the horizon (%.2f) and going off higher up (%.2f)." % [day, night_floor, on_at, off_at]) \
-	or not _require(switched_off, "In a test run (time of day held) the night lights' switch must be off (held %s, wanted %s)." % [DayClock.starts_pinned(), NightLights.wanted()]):
+	or not _require(held, "In a test run (the time of day on, held) the night lights must not be wanted (on %s, scripted %s, wanted %s)." % [DayClock.enabled(), DayClock.scripted(), NightLights.wanted()]):
 		return ""
-	return "the night lights on at darkness %.2f (the sun %.1f degrees under the horizon) and off under %.2f (%.1f degrees), fading over %.1f s, none made without a player, and none wanted in a test run; the flashlight's pitch %.1f, %.0f and %.0f degrees for the camera's -8, -60 and 25" % [NightLights.ON_AT, -on_at, NightLights.OFF_AT, -off_at, NightLights.FADE_S, pitches[0], pitches[1], pitches[2]]
+	return "the night lights on at darkness %.2f (the sun %.1f degrees under the horizon) and off under %.2f (%.1f degrees), fading over %.1f s, none made without a player, and none wanted in a test run (held); the flashlight's pitch %.1f, %.0f and %.0f degrees for the camera's -8, -60 and 25" % [NightLights.ON_AT, -on_at, NightLights.OFF_AT, -off_at, NightLights.FADE_S, pitches[0], pitches[1], pitches[2]]
 
 
 ## The highest sun height (degrees, to a hundredth) at which DayLight's darkness
@@ -636,6 +647,84 @@ func _check_options_rows() -> String:
 	if not _require(hidden and not hud.time_controls_shown(), "On the web the options screen must show no date or time."):
 		return ""
 	return "the options screen's date and time (Fri 13 Nov 2026 12:30 PST; Sun 21 Jun 12:30 PDT from the date slider, 23:00 and 09:30 from the time slider, with no note; Now; none on the web)"
+
+
+## The switch (DayClock.enabled): on unless --no-time-of-day is on the command line,
+## the project setting is false or the build is the web's. With the setting turned
+## off at run time and the clock started again, as a run starts: the clock holds the
+## recorded moment, not running, and start_at, start_now and pin move it nowhere; a
+## DaySun on copies of main.tscn's Sun and look writes nothing through frames and a
+## follow(true) (the Sun's transform and light and the look main.tscn's daylight, no
+## global uniform handed over, nothing shown, not processing). Then the setting and
+## the clock as they were: on, held for this driver at the recorded moment.
+func _check_switch_off() -> String:
+	var reasons := [
+		DayClock.off_reason_for(PackedStringArray(["--solar-table", "table.json"]), true, false),
+		DayClock.off_reason_for(PackedStringArray([DayClock.OFF_ARGUMENT]), true, false),
+		DayClock.off_reason_for(PackedStringArray(), false, false),
+		DayClock.off_reason_for(PackedStringArray(), true, true),
+	]
+	var kept: Variant = ProjectSettings.get_setting(DayClock.ENABLED_SETTING)
+	if not _require(reasons[0] == "" and not reasons.slice(1).has("") and DayClock.enabled() and kept == true, "The time of day must be on unless %s is on the command line, %s is false or the build is the web's (reasons %s; on now %s, project.godot's setting %s)." % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING, reasons, DayClock.enabled(), kept]):
+		return ""
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, false)
+	DayClock.restart()
+	var off := [DayClock.enabled(), DayClock.off_reason(), DayClock.now(), DayClock.is_running()]
+	var revision := DayClock.revision()
+	DayClock.start_at(DayClock.parse_local("2026-06-21 20:30"))
+	DayClock.start_now()
+	DayClock.pin(DayClock.parse_local("2026-12-21 17:00"))
+	var jumped := [DayClock.now(), DayClock.is_running(), DayClock.revision() - revision]
+	# DaySun on copies of main.tscn's Sun (its transform set whole, not taken apart)
+	# and its environment with the sky material.
+	var scene := (load(MAIN_SCENE) as PackedScene).instantiate()
+	var scene_sun := scene.get_node("Sun") as DirectionalLight3D
+	var light := DirectionalLight3D.new()
+	light.transform = scene_sun.transform
+	for property: StringName in [&"light_color", &"light_energy", &"light_specular"]:
+		light.set(property, scene_sun.get(property))
+	var scene_transform := light.transform
+	var environment := (scene.get_node("WorldEnvironment") as WorldEnvironment).environment.duplicate(true) as Environment
+	scene.free()
+	root.add_child(light)
+	_nodes.append(light)
+	var written := _record_globals()
+	var day_sun := DaySun.new(light, environment)
+	# The player's shadow option, which a look at night would give a shorter reach.
+	var quality := ShadowQuality.new(light)
+	quality.apply("medium")
+	var medium_distance := light.directional_shadow_max_distance
+	day_sun.shadow_quality = quality
+	root.add_child(day_sun)
+	_nodes.append(day_sun)
+	for _frame in 3:
+		await process_frame
+	day_sun.follow(true)
+	# The night lights, made as a driver would: nothing at all, even told it is dark.
+	var lights := NightLights.new(day_sun, null, null)
+	root.add_child(lights)
+	_nodes.append(lights)
+	DayClock.pin(DayClock.parse_local("2026-11-14 22:00"))
+	for _frame in 3:
+		await process_frame
+	day_sun.follow(true)
+	day_sun.night = 1.0
+	lights.update(1.0)
+	var lights_off := [NightLights.wanted(), lights.is_processing(), lights.on, lights.level]
+	day_sun.night = 0.0
+	var differences := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
+	var inert := [light.transform == scene_transform, differences.is_empty(), written.size(), is_nan(day_sun.shown_unix), is_nan(day_sun.lit_elevation), day_sun.is_processing(),
+		light.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY, quality.reach == 1.0 and light.directional_shadow_max_distance == medium_distance]
+	DaySun.use_engine_globals()
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, kept)
+	DayClock.restart()
+	var back := [DayClock.enabled(), DayClock.now(), DayClock.is_running()]
+	if not _require(off == [false, reasons[2], DayClock.RECORDED_UNIX, false] and jumped == [DayClock.RECORDED_UNIX, false, 0], "With %s false the time of day must be off for that reason and its clock hold the recorded moment whatever jumps it (off: %s; after start_at, start_now and pin: %s)." % [DayClock.ENABLED_SETTING, off, jumped]) \
+	or not _require(inert == [true, true, 0, true, true, false, true, true], "With the time of day off DaySun must write nothing, even with the clock pinned at night: main.tscn's Sun and look untouched (the stars and the parked cars' lamps among them), no global handed over, nothing shown and no processing, the Sun lighting land and sky and the shadows' whole reach (transform kept, look kept, globals, nothing shown, nothing lit, processing, light and sky, whole reach: %s; the look differs in %s)." % [inert, differences]) \
+	or not _require(lights_off == [false, false, false, 0.0], "With the time of day off the night lights must not be wanted, and one a driver makes must do nothing, even told it is dark ([wanted, processing, on, level] %s)." % [lights_off]) \
+	or not _require(back == [true, DayClock.RECORDED_UNIX, false], "With the setting back the time of day must be on again, the clock held for this driver at the recorded moment (%s)." % [back]):
+		return ""
+	return "the switch: on unless %s, the setting %s false or the web; turned off, the clock held at the recorded moment through start_at, start_now and pin (22:00 among them), DaySun writing nothing to main.tscn's Sun, its look (the stars among it) or the globals (the parked cars' lamps among them), the Sun lighting land and sky, the shadows' whole reach, and the night lights neither wanted nor doing anything where a driver makes them" % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING]
 
 
 ## How far the game's clock and the system clock run while REAL_SPAN_S of real time

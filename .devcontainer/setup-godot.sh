@@ -2,6 +2,10 @@
 # Installs the pinned Godot 4.7.2 Linux editor and the Linux, macOS and Web
 # export templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see devcontainer.json).
 # Skips anything already present, so it is safe to re-run.
+#
+# With GODOT_DOWNLOAD_CACHE set to a directory (CI), the downloaded archives are
+# kept there and reused, but their pinned SHA-256 is checked on every run before
+# they are extracted.
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -19,8 +23,17 @@ tmp="$(mktemp -d)"
 trap 'rm -rf "${tmp}"' EXIT
 
 fetch() { # url sha256 out
-  curl -fsSL -o "$3" "$1"
-  echo "$2  $3" | sha256sum -c --quiet
+  local file="$3"
+  if [ -n "${GODOT_DOWNLOAD_CACHE:-}" ]; then
+    mkdir -p "${GODOT_DOWNLOAD_CACHE}"
+    file="${GODOT_DOWNLOAD_CACHE}/${1##*/}"
+  fi
+  if [ ! -f "${file}" ]; then
+    curl -fsSL -o "${file}.part" "$1"
+    mv "${file}.part" "${file}"
+  fi
+  echo "$2  ${file}" | sha256sum -c --quiet
+  [ "${file}" = "$3" ] || ln -s "${file}" "$3"
 }
 
 if [ ! -x "${DEST}/godot" ]; then

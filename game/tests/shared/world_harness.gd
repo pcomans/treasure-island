@@ -107,7 +107,10 @@ func street_detail_summary() -> String:
 ## What is wrong with the loaded street-detail state: a layer that is off must
 ## hold nothing (its nodes and collision were freed), and the vegetation, the
 ## street furniture, the fences and the clutter must be there
-## while their layers are on. [] when all is well.
+## while their layers are on, and every street-furniture prop a car knocks over
+## must keep what it lies on when felled (the furniture kit's fall_slices, which
+## the baked world must carry too: without them it would collide as its mesh's
+## box). [] when all is well.
 func street_detail_problems() -> Array[String]:
 	var problems: Array[String] = []
 	var on := world.get_street_detail_layers()
@@ -125,6 +128,13 @@ func street_detail_problems() -> Array[String]:
 		problems.append("street-detail fences are on but empty")
 	if "clutter" in on and world.street_detail_layer("clutter").get_child_count() == 0:
 		problems.append("street-detail clutter is on but empty")
+	if "furniture" in on and main.vehicles != null:
+		var furniture := main.vehicles.furniture_breaker()
+		var unsliced := furniture.rows_without_slices()
+		if furniture.fellable_ids().is_empty():
+			problems.append("street-detail furniture is on but nothing in it can be knocked over")
+		elif not unsliced.is_empty():
+			problems.append("%d street-furniture rows a car knocks over have a piece with no fall slices (%s)" % [unsliced.size(), ", ".join(PackedStringArray(unsliced.slice(0, 5)))])
 	return problems
 
 

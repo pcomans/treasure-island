@@ -4,8 +4,10 @@
 #   tools/build-mac.sh                    -> build/mac/treasure-island-mac-<commit>.zip
 #   tools/build-mac.sh --headless-launch  the same, with step 3 headless (CI has no GPU)
 #
-# Unzip on the Mac. The app is ad-hoc signed, not notarized: after a browser
-# download, allow its first launch in System Settings -> Privacy & Security.
+# Unzip on the Mac. This local build is ad-hoc signed, not notarized: after a
+# browser download, allow its first launch in System Settings -> Privacy &
+# Security. CI re-signs the same export with the owner's Developer ID and
+# notarizes it (.github/workflows/mac-build.yml) once the signing secrets exist.
 # Before handing it over this
 #   1. exports the macOS build and a Linux build of the same commit,
 #   2. checks both data packs contain only game files (no reference photos,
@@ -34,10 +36,12 @@ touch build/.gdignore
 # Optional: the sound files from the private source in TI_SFX_SOURCE (a folder, or
 # a Git repository with TI_SFX_SUBDIR, TI_SFX_REF and a read-only TI_SFX_GIT_TOKEN),
 # into the ignored game/resources/audio/sfx/ (tools/fetch-sfx), which logs one line
-# of what it fetched. Without a source nothing is fetched (and nothing needs node)
-# and the build plays whatever that folder holds: in CI, nothing.
+# of what it fetched. With a source set, every sound in the game's catalog must get
+# its takes (--require-all): a source that lacks any stops the build, naming them,
+# rather than shipping them silent. Without a source nothing is fetched (and nothing
+# needs node) and the build plays whatever that folder holds: in CI, nothing.
 if [ -n "${TI_SFX_SOURCE:-}" ]; then
-  tools/fetch-sfx
+  tools/fetch-sfx --require-all
 else
   takes="$(find game/resources/audio/sfx -maxdepth 1 -name '*.ogg' 2>/dev/null | wc -l || true)"
   echo "tools/build-mac.sh: no TI_SFX_SOURCE, no sounds fetched; game/resources/audio/sfx holds ${takes} takes"

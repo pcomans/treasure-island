@@ -72,6 +72,15 @@ extends SceneTree
 ##   so a drift in the machine's load falls on both: one FRAME_TIME line per state.
 ##   A moving view may add "frame_time_frames" too: the frames are timed after
 ##   its last step, from the camera in use then (in a car, the driving camera).
+##   A still view may add "resolutions": ["50", ...] (GraphicsSettings resolution
+##   ids) to be shot again at each of those 3D resolutions, through the game's own
+##   setting, as NAME-res-ID.png; and "measure_graphics": N (30-3000) to time N
+##   frames at each resolution, then at the lowest and the full resolution with each
+##   frame rate limit, with vsync off (a screen faster than the frames, which only a limit
+##   holds back), in three blocks taken in turn: one FRAME_TIME line per setting
+##   with wall, render CPU and GPU times, frames a second, the GPU's busy share and
+##   whether a limit held (never in a --fixed-fps run, which does not wait for
+##   one). Both put the game's defaults back after.
 ## --views-batch FILE: only the focused views of several buildings in one world load,
 ## [{"source": "KEY", "plan": "views.json"}, ...], each plan a --views file for its
 ## source, saved to OUT/KEY/detail-NAME.png. Fixed-pose views only (no closeup,
@@ -83,7 +92,8 @@ extends SceneTree
 ##   (focused or street) may add "times": ["YYYY-MM-DD HH:MM", ...] to be shot at each
 ##   of those moments in turn, as NAME-at-YYYYMMDD-HHMM.png, in place of NAME.png.
 ##   Mersea's reflection probes keep the moment the world loaded at. Neither goes
-##   with --neutral-lighting, whose fixed sun stands in for the game's.
+##   with --neutral-lighting, whose fixed sun stands in for the game's, nor with the
+##   time of day off (DayClock.enabled: --no-time-of-day or the project setting).
 ## --neutral-lighting: screenshots only. Swaps in the fixed neutral daylight below
 ##   (NEUTRAL_ENVIRONMENT, NEUTRAL_SKY, NEUTRAL_SUN) for colour matching against
 ##   reference photos: a complete environment, sky and sun of its own, with Mersea's
@@ -253,6 +263,9 @@ func _run() -> void:
 	print("STREET_DETAIL_SHOTS " + " ".join(PackedStringArray(plan)))
 	if args.has("neutral-lighting") and (args.has("time") or _asks_times(args, batch)):
 		_fail("--time and a view's \"times\" move the game's sun, which --neutral-lighting hides behind a fixed sun of its own: use one or the other")
+		return
+	if not DayClock.enabled() and (args.has("time") or _asks_times(args, batch)):
+		_fail("--time and a view's \"times\" move the game's sun, which stays at the recorded moment with the time of day off (%s)" % DayClock.off_reason())
 		return
 	if args.has("time"):
 		var moment := DayClock.parse_local(str(args.time))
@@ -781,6 +794,10 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 			await process_frame
 	if error == "" and view.has("frame_time_frames"):
 		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename(), str(view.get("frame_time_layer", "")))
+	if error == "" and view.has("resolutions"):
+		error = await _shoot_resolutions(view.resolutions, path)
+	if error == "" and view.has("measure_graphics"):
+		error = await _measure_graphics(view.measure_graphics, path.get_file().get_basename())
 	if error == "" and view.get("dressing_maps", false):
 		error = _save_dressing_maps(path.get_basename())
 	if error == "" and view.has("measure_dressing"):
@@ -893,6 +910,86 @@ func _measure_dressing(view: Dictionary, label: String) -> String:
 		print("DRESSING_CAPTURE view=%s gpu_ms=%s" % [label, cost])
 	RenderingServer.viewport_set_measure_render_time(window, false)
 	_restore_frames(uncapped)
+	return ""
+
+
+## Shoots the view again at each of these GraphicsSettings resolutions, as
+## NAME-res-ID.png, through the game's own setting; then puts the game's defaults
+## back. Returns an error, or "".
+func _shoot_resolutions(ids: Variant, path: String) -> String:
+	if not ids is Array or (ids as Array).is_empty() or (ids as Array).any(func(id: Variant) -> bool: return GraphicsSettings.find(GraphicsSettings.RESOLUTION_KEY, str(id)).is_empty()):
+		return "resolutions must list GraphicsSettings resolution ids"
+	var graphics := _h.main.graphics
+	var error := ""
+	for id: Variant in ids:
+		graphics.apply({GraphicsSettings.RESOLUTION_KEY: str(id)})
+		print("RESOLUTION id=%s scale=%.2f mode=%d window=%s" % [id, root.scaling_3d_scale, root.scaling_3d_mode, root.get_visible_rect().size])
+		error = await _h.save_screenshot("%s-res-%s.png" % [path.get_basename(), id])
+		if error != "":
+			break
+	graphics.apply(GraphicsSettings.defaults())
+	return error
+
+
+## Times the view's camera at each GraphicsSettings resolution, then at the lowest
+## and the full resolution with each frame rate limit, with vsync off, `frames` frames a setting
+## in three blocks taken in turn so a drift in the machine's load falls on all.
+## Prints one FRAME_TIME line per setting: wall, render CPU and GPU times, frames a
+## second, the GPU's busy share (its time over the wall time) and, for a limit,
+## whether the frames kept to it (a --fixed-fps run never waits for a limit:
+## Main::iteration in main/main.cpp). Puts the game's defaults back. Returns an
+## error, or "".
+func _measure_graphics(frames: Variant, label: String) -> String:
+	if not _numbers([frames], 1) or float(frames) < 30.0 or float(frames) > 3000.0:
+		return "measure_graphics needs 30-3000 frames"
+	var graphics := _h.main.graphics
+	var settings: Array[Dictionary] = []
+	var resolutions := GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY)
+	for resolution: Dictionary in resolutions:
+		settings.append({GraphicsSettings.RESOLUTION_KEY: resolution.id})
+	# The limits at the lowest and the full resolution: a limit saves work only where
+	# the frames come faster than it.
+	for resolution: Dictionary in [resolutions.front(), resolutions.back()]:
+		for rate: Dictionary in GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY):
+			if rate.has("max_fps"):
+				settings.append({GraphicsSettings.RESOLUTION_KEY: resolution.id, GraphicsSettings.FRAME_RATE_KEY: rate.id})
+	var window := root.get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(window, true)
+	var uncapped := _uncap_frames()
+	# Arrays, not packed arrays, inside the rows: a packed array read out of a
+	# Dictionary is a copy (LEARNINGS).
+	var rows: Array[Dictionary] = []
+	for setting in settings:
+		rows.append({"wall": [], "cpu": [], "gpu": []})
+	var blocks := 3
+	for block in blocks:
+		for index in settings.size():
+			graphics.apply(settings[index])
+			for _i in 20:
+				await RenderingServer.frame_post_draw
+			var row := rows[index]
+			var last := Time.get_ticks_usec()
+			for _i in maxi(10, int(frames) / blocks):
+				await RenderingServer.frame_post_draw
+				var now := Time.get_ticks_usec()
+				(row.wall as Array).append(float(now - last) / 1000.0)
+				(row.cpu as Array).append(RenderingServer.viewport_get_measured_render_time_cpu(window) + RenderingServer.get_frame_setup_time_cpu())
+				(row.gpu as Array).append(RenderingServer.viewport_get_measured_render_time_gpu(window))
+				last = now
+	graphics.apply(GraphicsSettings.defaults())
+	_restore_frames(uncapped)
+	RenderingServer.viewport_set_measure_render_time(window, false)
+	for index in settings.size():
+		var row := rows[index]
+		var wall := _frame_stats(PackedFloat64Array(row.wall))
+		var cpu := _frame_stats(PackedFloat64Array(row.cpu))
+		var gpu := _frame_stats(PackedFloat64Array(row.gpu))
+		var on := GraphicsSettings.valid(settings[index])
+		var limit := int(GraphicsSettings.find(GraphicsSettings.FRAME_RATE_KEY, on.frame_rate).get("max_fps", 0))
+		var held := "-" if limit == 0 else str(wall.mean >= 0.95 * 1000.0 / limit)
+		print("FRAME_TIME view=%s resolution=%s frame_rate=%s frames=%d wall_mean_ms=%.2f wall_median_ms=%.2f wall_p95_ms=%.2f fps=%.1f cpu_median_ms=%.2f gpu_median_ms=%.2f gpu_mean_ms=%.2f gpu_busy=%.0f%% limit_held=%s renderer=%s/%s" % [
+			label, on.resolution, on.frame_rate, wall.frames, wall.mean, wall.median, wall.p95, 1000.0 / wall.mean, cpu.median, gpu.median, gpu.mean,
+			100.0 * gpu.mean / wall.mean, held, RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name()])
 	return ""
 
 

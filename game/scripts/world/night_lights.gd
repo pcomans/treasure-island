@@ -12,11 +12,12 @@ extends Node
 ## clock dragged back and forth over the line does not flicker them, fading over
 ## FADE_S either way. By day nothing is made and nothing is done each frame.
 ##
-## One switch, wanted(), says whether a run has them at all (owner, 2026-11-15:
+## They hang off the time of day's one switch (DayClock.enabled; owner, 2026-11-15:
 ## "all features that are relating to dynamic time of day ... behind some form of a
-## feature flag"): main.gd makes this node only where it is on. With time of day
-## off the look holds the recorded moment's daylight, so the rest of the night
-## (stars, the parked cars' lamps, the Sun lighting the sky alone) stays off with it.
+## feature flag"): main.gd makes this node only where wanted(), and one made with
+## the switch off does nothing (_ready). With the switch off DaySun puts on no look,
+## so the rest of the night (the stars, the parked cars' lamps put out, the Sun
+## lighting the sky alone) stays off with it.
 ##
 ## The flashlight is a spot carried at the chest and pointed where the camera
 ## looks: the camera's heading, and its pitch at FLASH_PITCH_SHARE of the camera's
@@ -119,13 +120,20 @@ func _init(sun: DaySun, the_player: PlayerController, the_vehicles: VehicleManag
 		_ray.exclude = [player.get_rid()]
 
 
-## Whether this run has night lights at all: the one switch they hang off. For now
-## the clock's own (DayClock.starts_pinned): none on the web and none in a test or
-## capture run, which hold the recorded moment; such a driver opts in by making
-## this node itself, as it opts in to another moment with DayClock.pin(). Point this
-## at the time-of-day switch when it lands.
+## Whether this run has night lights at all: with the time of day on
+## (DayClock.enabled: not with its switch off, nor on the web) and not in a test or
+## capture run (DayClock.scripted), which holds the recorded moment; such a driver
+## opts in by making this node itself, as it opts in to another moment with
+## DayClock.pin().
 static func wanted() -> bool:
-	return not DayClock.starts_pinned()
+	return DayClock.enabled() and not DayClock.scripted()
+
+
+## With the time of day off this node does nothing at all, even where a driver makes
+## it: no process, no light.
+func _ready() -> void:
+	if not DayClock.enabled():
+		set_process(false)
 
 
 func _process(delta: float) -> void:
@@ -134,8 +142,10 @@ func _process(delta: float) -> void:
 
 ## The rule and the fade for `delta` seconds, then every light put where it goes
 ## (tests call this with their own steps). By day, with every light off and none
-## on a car, it does nothing more.
+## on a car, it does nothing more; with the time of day off, nothing at all.
 func update(delta: float) -> void:
+	if not DayClock.enabled():
+		return
 	var night := day_sun.night if day_sun != null else 0.0
 	if night <= 0.0 and level <= 0.0 and car == null:
 		on = false

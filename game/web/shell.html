@@ -129,6 +129,51 @@ body {
 const GODOT_CONFIG = $GODOT_CONFIG;
 const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
+// Web Audio and the first gesture (owner, 2026-11-15: on an iPhone or iPad no
+// sound until the pause menu). A browser lets the engine's AudioContext start
+// only in a user gesture, and Safari on iOS only in a tap's touchend (never a
+// touchstart, nor the end of a slide), a click or a key; Godot resumes it only
+// from its own events on the canvas. The loading screen covers the canvas until
+// play is ready, so a tap on it resumed nothing, and play on a touch screen
+// started with the stick, whose slides never count. Play now waits for the
+// start prompt's tap or click (game/scripts/main.gd), and every such event
+// anywhere on the page resumes the engine's audio while it is not running:
+// suspended, or iOS's interrupted (after a call, the lock or the background).
+// window.__tiAudio tells the game whether its audio runs
+// (game/scripts/audio/sound.gd).
+(function () {
+	const Base = window.AudioContext || window.webkitAudioContext;
+	if (!Base) return;
+	const contexts = [];
+	const audio = window.__tiAudio = {
+		// Whether every context still open runs (a closed one counts for nothing).
+		running: () => {
+			const open = contexts.filter((context) => context.state !== 'closed');
+			return open.length > 0 && open.every((context) => context.state === 'running');
+		},
+		onchange: null,
+	};
+	class TrackedAudioContext extends Base {
+		constructor(...args) {
+			super(...args);
+			contexts.push(this);
+			this.addEventListener('statechange', () => {
+				if (typeof audio.onchange === 'function') audio.onchange(this.state);
+			});
+		}
+	}
+	window.AudioContext = TrackedAudioContext;
+	if (window.webkitAudioContext) window.webkitAudioContext = TrackedAudioContext;
+	const resume = () => {
+		for (const context of contexts) {
+			if (context.state !== 'running' && context.state !== 'closed') context.resume().catch(() => {});
+		}
+	};
+	for (const type of ['touchend', 'pointerup', 'click', 'keydown', 'mousedown']) {
+		document.addEventListener(type, resume, {capture: true, passive: true});
+	}
+}());
+
 (function () {
 	const statusOverlay = document.getElementById('status');
 	const statusProgress = document.getElementById('status-progress');
