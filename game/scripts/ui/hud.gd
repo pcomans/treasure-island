@@ -523,9 +523,10 @@ func _active_level_style(button: Button) -> void:
 		var pressed := button.get_theme_stylebox("pressed")
 		_active_level_box = pressed.duplicate() as StyleBoxFlat if pressed is StyleBoxFlat else StyleBoxFlat.new()
 		_active_level_box.bg_color = CONTROLS_HEADING_COLOR
-		var focus := button.get_theme_stylebox("focus")
-		_choice_focus_box = focus.duplicate() as StyleBoxFlat if focus is StyleBoxFlat else StyleBoxFlat.new()
+		# The fill's own shape, so on a choice in use the ring lies within the fill.
+		_choice_focus_box = _active_level_box.duplicate() as StyleBoxFlat
 		_choice_focus_box.draw_center = false
+		_choice_focus_box.set_border_width_all(2)
 		_choice_focus_box.border_color = CONTROLS_HEADING_COLOR
 	for state: String in ["pressed", "hover_pressed"]:
 		button.add_theme_stylebox_override(state, _active_level_box)
