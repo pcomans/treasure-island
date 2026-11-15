@@ -8,10 +8,12 @@
 #    the game's own asset folders (game/resources/, generated/).
 # 2. The street cars' mesh check (tools/check_street_car_meshes.mjs), the
 #    sound-effect prompt sheet and tool check (tools/check_sfx.mjs) and the sound
-#    folder's fetch (tools/check_fetch_sfx.mjs).
+#    folder's fetch with the web deploy's sound guard (tools/check_fetch_sfx.mjs).
 # 3. tools/godot's wait for its private Weston (tools/check_godot_weston_wait.sh):
 #    it waits through a slow start and stops at once when Weston exits; every run
-#    gets the Dummy audio driver unless it names its own.
+#    gets the Dummy audio driver unless it names its own. And how tools/browser
+#    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
+#    stops what is left, and nothing it starts holds its caller's lock.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -86,7 +88,9 @@ node tools/check_sfx.mjs || failed+=("tools/check_sfx.mjs")
 # tools/fetch-sfx, offline in temporary folders: nothing without a source; from a
 # folder or a Git repository only the game's sounds' takes, with their manifest's
 # gains; safe to repeat, removing only its own stale takes; a token never
-# printed; a linked sound folder or a source in the project refused. Seconds.
+# printed; a linked sound folder or a source in the project refused; with
+# --require-all, no source or a missing sound refused. And tools/deploy-web.sh's
+# sound guard, with stand-in sources (no git, Vercel or build). Seconds.
 echo "== tools/check_fetch_sfx.mjs"
 node tools/check_fetch_sfx.mjs || failed+=("tools/check_fetch_sfx.mjs")
 
@@ -95,6 +99,12 @@ node tools/check_fetch_sfx.mjs || failed+=("tools/check_fetch_sfx.mjs")
 # exited. About 7 s.
 echo "== tools/check_godot_weston_wait.sh"
 tools/check_godot_weston_wait.sh || failed+=("tools/check_godot_weston_wait.sh")
+
+# How tools/browser stops, with stand-ins for Weston and agent-browser (no GPU,
+# display or Chrome): it closes its sessions, names and stops a daemon left
+# running, and nothing it starts holds its caller's lock. About 7 s.
+echo "== tools/check_browser_cleanup.sh"
+tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
@@ -137,6 +147,7 @@ node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.
 node_pids=()
 node_logs=""
 baked=""
+solar_table=""
 # A process and every process under it, each parent before its children.
 process_tree() {
   local child
@@ -155,6 +166,7 @@ cleanup() {
   for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
   [ -z "${node_logs}" ] || rm -rf "${node_logs}"
   [ -z "${baked}" ] || rm -f "${baked}"
+  [ -z "${solar_table}" ] || rm -f "${solar_table}"
 }
 trap cleanup EXIT
 start_node_checks() {
@@ -167,6 +179,12 @@ start_node_checks() {
   node_pids[2]=$!
 }
 
+# The day-clock contract checks the game's sun against the sun tools/solar_position.mjs
+# gives, as it gives it now: printed here, outside the repository, and named to the
+# contract (removed on any exit, by cleanup).
+solar_table="$(mktemp)"
+node tools/solar_position.mjs --table > "${solar_table}" || echo "NOTE: tools/solar_position.mjs --table failed; the day-clock contract will say so"
+
 for test in \
   game/tests/headless_scene_parse.gd \
   game/tests/headless_startup_configuration_contract.gd \
@@ -175,6 +193,7 @@ for test in \
   game/tests/headless_touch_controls.gd \
   game/tests/headless_credits_contract.gd \
   game/tests/headless_shadow_options_contract.gd \
+  game/tests/headless_day_clock_contract.gd \
   game/tests/headless_world_material_contract.gd \
   game/tests/headless_ground_dressing_contract.gd \
   game/tests/headless_facade_meter_uv_adapter_contract.gd \
@@ -204,7 +223,9 @@ do
     time_limit=900
     start_node_checks
   fi
-  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}"
+  script_args=()
+  [ "${test}" != game/tests/headless_day_clock_contract.gd ] || script_args=(-- --solar-table "${solar_table}")
+  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" "${script_args[@]}"
 done
 
 # Desktop exports load a baked world instead of generating it at startup

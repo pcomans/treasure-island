@@ -3,8 +3,22 @@
 # Usage: tools/browser <session> <url>
 # Run the printed command prefix from another terminal/tool call; stop this
 # foreground handle with Ctrl-C (or TERM) to close both owned processes.
+#
+# Nothing it starts outlives it unseen. It hands what it starts no descriptor but
+# stdin, stdout and stderr: agent-browser's daemon and Chrome run on after the
+# command that starts them, and a daemon that inherited a caller's lock (an engine
+# slot's flock) would hold that lock until it exits. When stopped, it closes every
+# agent-browser session in its private runtime directory whose daemon still runs
+# (its own, and any opened through the printed prefix), never one already gone
+# (closing that would start a new daemon), then stops Weston. Anything started
+# under that directory and still running a few seconds later (a daemon that did
+# not close, its Chrome, a command aimed at it) is named on stderr and stopped. Its
+# last line says whether anything was left. tools/check_browser_cleanup.sh checks
+# this with stand-ins.
 set -euo pipefail
-export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+# agent-browser lives here in the devcontainer (node feature); non-login shells
+# lack it. Appended, so that a stand-in earlier on PATH is used by the check.
+export PATH="${PATH}:/usr/local/share/nvm/current/bin"
 if [ "${1:-}" = capture ]; then
   shift
   exec python3 "$(dirname "$0")/browser-capture.py" "$@"
@@ -13,6 +27,19 @@ if [ "$#" -ne 2 ] || [[ ! "$1" =~ ^[a-zA-Z0-9_-]+$ ]]; then
   echo "usage: tools/browser <session-name> <url>" >&2
   exit 2
 fi
+# Close every inherited descriptor above stderr that a child would inherit (bash's
+# own, such as this script on 255, are closed on exec and stay).
+for fd_path in /proc/$$/fd/*; do
+  fd="${fd_path##*/}"
+  [ "${fd}" -gt 2 ] || continue
+  flags=""
+  while read -r key value; do
+    if [ "${key}" = flags: ]; then flags="${value}"; break; fi
+  done 2>/dev/null < "/proc/$$/fdinfo/${fd}" || continue
+  if [ -n "${flags}" ] && (( (8#${flags} & 8#2000000) == 0 )); then
+    exec {fd}>&-
+  fi
+done
 browser_session="$1"
 command -v agent-browser >/dev/null
 command -v weston >/dev/null
@@ -20,16 +47,80 @@ export XDG_RUNTIME_DIR
 XDG_RUNTIME_DIR="$(mktemp -d /tmp/ti-browser-XXXXXX)"
 export WAYLAND_DISPLAY="reference-browser"
 export AGENT_BROWSER_NO_XVFB=1
+# Its sessions' sockets and pid files go in the private directory the printed prefix names.
+unset AGENT_BROWSER_SOCKET_DIR AGENT_BROWSER_NAMESPACE
 weston_pid=""
 browser_started=false
+
+# Whether a process started under the private runtime directory: its environment
+# names it (an agent-browser daemon, its Chrome, Weston, commands run with the prefix).
+owned() {
+  grep -qzxF "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}" "/proc/$1/environ" 2>/dev/null
+}
+# The sessions whose daemon still runs: a daemon keeps <session>.pid in
+# agent-browser/ while it runs.
+live_sessions() {
+  local pidfile pid
+  for pidfile in "${XDG_RUNTIME_DIR}/agent-browser"/*.pid; do
+    [ -f "${pidfile}" ] || continue
+    { pid="$(< "${pidfile}")"; } 2>/dev/null
+    [[ "${pid}" =~ ^[0-9]+$ ]] && owned "${pid}" || continue
+    pidfile="${pidfile##*/}"
+    echo "${pidfile%.pid}"
+  done
+}
+# The PIDs of every process started under the private runtime directory. grep runs
+# without the variable, so it never lists itself.
+owned_processes() {
+  local path pids=()
+  for path in $(env -u XDG_RUNTIME_DIR grep -lzxF "XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR}" /proc/[0-9]*/environ 2>/dev/null); do
+    path="${path#/proc/}"
+    pids+=("${path%/environ}")
+  done
+  echo "${pids[*]}"
+}
+# Waits up to $1 tenths of a second for every owned process to end; prints those left.
+wait_owned() {
+  local left tenths
+  left="$(owned_processes)"
+  for (( tenths = 0; tenths < $1 && ${#left} > 0; tenths++ )); do
+    sleep 0.1
+    left="$(owned_processes)"
+  done
+  echo "${left}"
+}
 cleanup() {
   set +e
+  local name pid comm left
   if [ "${browser_started}" = true ]; then
-    agent-browser --session "${browser_session}" close
+    while IFS= read -r name; do
+      timeout 30 agent-browser --session "${name}" close </dev/null
+    done < <(live_sessions)
   fi
   if [ -n "${weston_pid}" ]; then
     kill "${weston_pid}" 2>/dev/null
     wait "${weston_pid}" 2>/dev/null
+  fi
+  left="$(wait_owned 50)"
+  if [ -z "${left}" ]; then
+    echo "tools/browser: stopped; nothing it started is still running"
+    return
+  fi
+  for pid in ${left}; do
+    comm="?"
+    read -r comm 2>/dev/null < "/proc/${pid}/comm"
+    echo "tools/browser: LEFT RUNNING after its sessions closed: PID ${pid} (${comm}); stopping it" >&2
+  done
+  kill ${left} 2>/dev/null
+  left="$(wait_owned 30)"
+  if [ -n "${left}" ]; then
+    kill -KILL ${left} 2>/dev/null
+    left="$(wait_owned 20)"
+  fi
+  if [ -n "${left}" ]; then
+    echo "tools/browser: STILL RUNNING after KILL: PID ${left}" >&2
+  else
+    echo "tools/browser: stopped; what it had left running is stopped too (named above)"
   fi
 }
 trap cleanup EXIT

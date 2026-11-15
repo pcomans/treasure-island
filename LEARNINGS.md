@@ -676,7 +676,7 @@ On 2026-10-17 the stage checklist still showed U or stale L2 for seven Mariner/B
 
 ## Compare shots across commits only through fixed cameras
 
-A 2026-10-17 Gateview B rework recheck showed 9–28% AE on closeups and up to 237k changed pixels on context views between the same units' before and after, although the real change was four reshaped drives. `building_shots.gd` places its closeup and context cameras from the source's visual-mesh bounds (about lines 110–144), so any change to the source's own geometry, including attached drives, pads and canopies, moves those cameras, and the cascaded shadows re-fit with them. Rendering itself is deterministic: same-code pairs are AE 0, and the sun and sky are static. Compare across commits with the island views and focused `--views`, which use fixed poses. When the source changed, judge closeup and context pairs by eye, not by AE.
+A 2026-10-17 Gateview B rework recheck showed 9–28% AE on closeups and up to 237k changed pixels on context views between the same units' before and after, although the real change was four reshaped drives. `building_shots.gd` places its closeup and context cameras from the source's visual-mesh bounds (about lines 110–144), so any change to the source's own geometry, including attached drives, pads and canopies, moves those cameras, and the cascaded shadows re-fit with them. The capture drivers hold the sun and clouds still, but the bay's waves, the grass and the trees' sway move with shader time, so two runs of the same code are not pixel-identical: on 2026-11-14 every before/after difference of the day-clock runs lay on them, as between two same-code runs. For a pixel claim, shoot a same-code control pair and count only the change outside its motion mask. Compare across commits with the island views and focused `--views`, which use fixed poses. When the source changed, judge closeup and context pairs by eye, not by AE.
 
 ## Inferred non-residential sides still need entrances
 
@@ -1398,3 +1398,23 @@ The sound integration's tests ran on a complete synthetic set of takes, so every
 ## State the number of candidates and the credits before a paid generation
 
 The first ElevenLabs runs (2026-11-14) made 305 candidates for 27,088 credits; the dry run had priced them per tier, but the owner had not been told the count, and was upset to learn it afterward. Before any paid generation, give the owner the number of candidates (rows × takes × candidates per take) and the credits from `tools/generate-sfx`'s dry run, in the same message that asks to spend them.
+
+## Make a build that fetches private assets fail when they are missing
+
+`tools/fetch-sfx` fetches nothing when `TI_SFX_SOURCE` is unset, and the build goes on silent (the build scripts' documented behaviour for a checkout without the sounds). So `tools/deploy-web.sh` run without the variable would have put a silent build on the live site with every check green; on 2026-11-14 only the integrator reading the wrapper before the release caught it (`integrator-batch-20261114a`; a silent pack is about 2.5 MB smaller). When a release ships fetched content, make the release path fail without it, or require an explicit flag for a build without it, and gate on what was fetched (the fetch line's take count, the pack's size) rather than printing it. Check that rule by running the release path once with the source unset and seeing it stop.
+
+## A daemon started under a lock holds the lock
+
+On 2026-11-14 agent-browser daemons left behind by the sound release's web legs held engine locks after their steps ended: two from stage 1 held engine-B for about an hour and blocked another agent's suite until ROOT noticed, and three from stage 2 held engine-D until the integrator closed them (`integrator-batch-20261114a`, stage 2). The cause, shown by experiment under a scratch `flock` (`deploy-sfx-guard-20261114`): a daemon and its Chrome started inside a `flock` step inherit the lock's file descriptor and keep the lock after `flock` exits. `tools/browser` now closes inherited descriptors at start and every live session of its own when stopped (`tools/check_browser_cleanup.sh` checks both). Take locks with `flock -o`, so no child gets the descriptor, and after a step probe its lock with `flock -n LOCK true` rather than trusting the step's own release line.
+
+## Time a real-time clock by the system clock, not a monotonic tick counter
+
+The day clock (2026-11-14) must keep the real time across a MacBook's sleep. `Time.get_ticks_usec()` stops while the computer sleeps: Godot 4.7.2 reads `mach_absolute_time` on macOS and `CLOCK_MONOTONIC_RAW` on Linux. `DayClock` keeps an offset from `Time.get_unix_time_from_system()` instead, so it runs on through sleep and follows the system's corrections, while a pause and `--fixed-fps` don't touch it. Use the monotonic counter for durations inside a run and the system clock for "what time is it now". Make the clock source replaceable (`DayClock.system_clock`) so a test can check a pause, a sleep and a correction without waiting.
+
+## Vector2 and Vector3 hold 32-bit floats
+
+GDScript's `float` is 64-bit, but `Vector2` and `Vector3` store 32-bit components. Building the Sun's rotation through a Vector2 on 2026-11-14 made 180 − 190.32 miss `main.tscn`'s −10.32 by 7 ULPs, and the gameplay contract checks the Sun to the bit. When a transform must match exactly, derive its angles in 64-bit floats (`DaySun.rotation_for` takes an `Array[float]`) and convert to a vector only at the end.
+
+## Test a paid or irreversible step's premise in the cheapest real way first
+
+The Mac notarization work (2026-11-14) planned on the claim that notarizing with an Apple ID and an app-specific password needs no App Store Connect access. A one-minute local `xcrun notarytool history` with the owner's credential answered HTTP 403, which no documentation had settled. Before secrets go into CI, money is spent or a step is hard to undo, find the smallest real check of the claim it rests on and run it, and keep the plan open until it passes.

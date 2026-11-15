@@ -3,18 +3,89 @@
 # the island loads, then publishes it as a new GitHub Release of its own, marked
 # latest, so this fixed link always gets the newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03. The publish job uses GITHUB_TOKEN. The sounds come
-# from the owner's private audio repository (owner, 2026-11-14): its URL is the
-# repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and TI_SFX_REF, both
-# optional) and a read-only token for it the secret TI_SFX_GIT_TOKEN, which only
-# the build step's own script sees (tools/build-mac.sh, tools/fetch-sfx). With the
-# variable unset the build fetches nothing and the app is silent, as before.
+# Owner-approved 2026-11-03. A run started by hand (workflow_dispatch) on
+# another branch builds and checks the app and publishes nothing; on main, the
+# dry_run input does the same.
+#
+# Signing and notarization (owner-requested 2026-11-07; Apple ID route and
+# ad-hoc fallback 2026-11-14) happen in the sign job, on main only, and only
+# while the repository variable MAC_SIGNING is "on". With it unset the sign job
+# is skipped, no build waits for the environment's approval, and verify and
+# publish take the build job's ad-hoc app. The sign job uses only Apple's own
+# tools on the macOS runner (security, codesign, xcrun notarytool and stapler,
+# ditto), in the GitHub Environment `mac-signing` (Settings -> Environments),
+# whose deployment branch rule admits only main. Keep its secrets in the
+# environment only: a repository secret of the same name reaches every branch.
+# Set each with gh, from a pipe or gh's own prompt rather than the clipboard.
+# The certificate:
+#   MACOS_CERTIFICATE_P12_BASE64  the "Developer ID Application" certificate with
+#                                 its private key, exported from Keychain Access as .p12:
+#     base64 -i cert.p12 | gh secret set MACOS_CERTIFICATE_P12_BASE64 --env mac-signing -R pcomans/treasure-island
+#   MACOS_CERTIFICATE_PASSWORD    the password chosen for that .p12 export (gh prompts):
+#     gh secret set MACOS_CERTIFICATE_PASSWORD --env mac-signing -R pcomans/treasure-island
+# and one notarization credential. Preferred, an App Store Connect team API key:
+#   APPSTORE_API_KEY_ID           an App Store Connect team API key (Users and
+#   APPSTORE_API_ISSUER_ID        Access -> Integrations -> Team Keys, Developer
+#   APPSTORE_API_KEY_P8_BASE64    role): its Key ID, the Issuer ID shown above the
+#                                 key list, and the downloaded AuthKey_<id>.p8:
+#     gh secret set APPSTORE_API_KEY_ID --env mac-signing -R pcomans/treasure-island
+#     gh secret set APPSTORE_API_ISSUER_ID --env mac-signing -R pcomans/treasure-island
+#     base64 -i AuthKey_<id>.p8 | gh secret set APPSTORE_API_KEY_P8_BASE64 --env mac-signing -R pcomans/treasure-island
+# Otherwise the team's Apple ID with an app-specific password (account.apple.com
+# -> Sign-In and Security -> App-Specific Passwords; changing the Apple Account
+# password revokes them all). Both are secrets; the Apple ID is never printed.
+#   APPLE_ID                      the Apple ID (e-mail) of the team's developer account:
+#     gh secret set APPLE_ID --env mac-signing -R pcomans/treasure-island
+#   APPLE_APP_SPECIFIC_PASSWORD   the app-specific password (gh prompts):
+#     gh secret set APPLE_APP_SPECIFIC_PASSWORD --env mac-signing -R pcomans/treasure-island
+# And one variable, not a secret, so logs show it unmasked (environment or
+# repository level; a secret of the same name still works as a fallback):
+#   APPLE_TEAM_ID                 the 10-character Team ID (developer.apple.com ->
+#                                 Account -> Membership details):
+#     gh variable set APPLE_TEAM_ID --env mac-signing --body XXXXXXXXXX -R pcomans/treasure-island
+# The switch, a repository variable (a job's condition cannot see environment ones):
+#     gh variable set MAC_SIGNING --body on -R pcomans/treasure-island
+#
+# What the sign job does. Its first step sees only which secrets are set:
+#   certificate + API key, or certificate + Apple ID pair (the API key wins when
+#     both are set): checks the credential with Apple (notarytool history)
+#     before it touches the certificate, then signs, notarizes and staples.
+#   Anything that keeps the build from being notarized publishes the build
+#     job's ad-hoc zip unchanged, never a Developer ID build that is not
+#     notarized, with a "Mac build NOT notarized" warning and the reason in the
+#     release title and notes. The reason (output "fallback") is one of:
+#       no-credential           the certificate or the credential is not set
+#       credential-refused      Apple answered 401 or 403 to the credential
+#       notary-error            Apple's notary service failed in another way
+#       signing-failed          importing the certificate or signing failed
+#       notarization-rejected   Apple's verdict was Invalid or Rejected
+#       notarization-timeout    no verdict within 35 minutes
+#       staple-failed           the ticket could not be stapled or validated
+#   Fails, publishing nothing: a set only partly filled, a credential without
+#     the certificate, the certificate without a valid APPLE_TEAM_ID, a password
+#     with a line break, or a build artifact that is not one zip holding one app.
+# As always, a notarized build that fails one of verify's checks, a failed island
+# load check or a publish guard also stops the run. A stopped run publishes
+# nothing, so the previous build stays at the fixed link. The publish job uses
+# GITHUB_TOKEN.
+#
+# The sounds come from the owner's private audio repository (owner, 2026-11-14):
+# its URL is the repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and
+# TI_SFX_REF, both optional) and a read-only token for it the secret
+# TI_SFX_GIT_TOKEN, which only the build step's own script sees
+# (tools/build-mac.sh, tools/fetch-sfx). With the variable unset the build
+# fetches nothing and the app is silent, as before.
 name: Mac build
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Build, sign and check, but publish nothing
+        type: boolean
+        default: false
 
 # Read-only everywhere; only the publish job may write (the release).
 permissions:
@@ -65,23 +136,32 @@ jobs:
           sudo chown "$(id -u):$(id -g)" /opt/godot
           echo "version=$(sed -n 's/^VERSION=//p' .devcontainer/setup-godot.sh)" >> "${GITHUB_OUTPUT}"
 
-      - name: Restore Godot from the cache
+      # The cache holds only the downloaded archives, never the installed Godot:
+      # setup-godot.sh checks their pinned SHA-256 and extracts them on every run,
+      # so a restored cache is verified again before its macOS template reaches a
+      # signed release.
+      - name: Restore the Godot downloads from the cache
         id: cache
         uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /opt/godot/${{ steps.godot.outputs.version }}
+          path: ${{ runner.temp }}/godot-downloads
           # setup-godot.sh pins the version and both SHA-256 hashes, so its hash keys the cache.
-          key: godot-${{ steps.godot.outputs.version }}-${{ hashFiles('.devcontainer/setup-godot.sh') }}
+          key: godot-downloads-${{ steps.godot.outputs.version }}-${{ hashFiles('.devcontainer/setup-godot.sh') }}
 
-      - name: Install Godot and its export templates (downloads are SHA-256 checked)
+      - name: Install Godot and its export templates (archives are SHA-256 checked on every run)
+        env:
+          GODOT_DOWNLOAD_CACHE: ${{ runner.temp }}/godot-downloads
         run: .devcontainer/setup-godot.sh
 
-      - name: Save Godot to the cache
+      - name: Save the Godot downloads to the cache
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
-          path: /opt/godot/${{ steps.godot.outputs.version }}
+          path: ${{ runner.temp }}/godot-downloads
           key: ${{ steps.cache.outputs.cache-primary-key }}
+
+      - name: Free the disk the Godot downloads used
+        run: rm -rf "${RUNNER_TEMP:?}/godot-downloads"
 
       - name: Build the Mac app (tools/build-mac.sh)
         timeout-minutes: 45
@@ -113,9 +193,479 @@ jobs:
         if: always()
         run: df -h / && du -sh .git . /opt/godot || true
 
+  sign:
+    name: Sign and notarize
+    needs: build
+    # Only on main, and only while the repository variable MAC_SIGNING is "on".
+    # Otherwise this job is skipped, so nothing waits for the environment's
+    # approval, and verify and publish take the build job's app. The signing
+    # secrets live in the environment below, whose branch rule admits only main.
+    if: github.ref == 'refs/heads/main' && vars.MAC_SIGNING == 'on'
+    runs-on: macos-26
+    timeout-minutes: 60
+    environment: mac-signing
+    concurrency:
+      group: mac-sign-${{ github.ref }}
+      cancel-in-progress: true
+    outputs:
+      # "true" only for the signed, notarized and stapled app. Otherwise the job
+      # hands on the build job's own zip, unchanged, and "fallback" names why
+      # (the list is in the header).
+      notarized: ${{ steps.result.outputs.notarized }}
+      fallback: ${{ steps.result.outputs.fallback }}
+      # "api-key", "apple-id" or "none".
+      route: ${{ steps.mode.outputs.route }}
+    # Each secret reaches only the run step that uses it, through that step's env:
+    # never the job's env or a step that runs an action. The probe, sign and
+    # notarize steps may fail without failing the job (continue-on-error); each
+    # later one runs only after the one before it succeeded and said "ok", and
+    # "Choose the build to publish" decides from their outcomes and outputs.
+    steps:
+      - name: Check out the entitlements file only
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/mac-entitlements.plist
+          sparse-checkout-cone-mode: false
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Choose the signing mode
+        id: mode
+        # This step sees only whether each secret is set ("true" or "false"),
+        # never a value. APPLE_TEAM_ID is a variable (a secret of that name is the
+        # fallback).
+        env:
+          HAS_MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 != '' }}
+          HAS_MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD != '' }}
+          HAS_APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID != '' }}
+          HAS_APPSTORE_API_ISSUER_ID: ${{ secrets.APPSTORE_API_ISSUER_ID != '' }}
+          HAS_APPSTORE_API_KEY_P8_BASE64: ${{ secrets.APPSTORE_API_KEY_P8_BASE64 != '' }}
+          HAS_APPLE_ID: ${{ secrets.APPLE_ID != '' }}
+          HAS_APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD != '' }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
+        # The decision table is in the header.
+        run: |
+          # Prints "none", "all", or "missing:" and the names that are not set.
+          filled() {
+            local name has count=0 missing=""
+            for name in "$@"; do
+              has="HAS_${name}"
+              if [ "${!has}" = "true" ]; then count=$((count + 1)); else missing="${missing} ${name}"; fi
+            done
+            if [ "${count}" -eq 0 ]; then echo none; elif [ -z "${missing}" ]; then echo all; else echo "missing:${missing}"; fi
+          }
+          certificate="$(filled MACOS_CERTIFICATE_P12_BASE64 MACOS_CERTIFICATE_PASSWORD)"
+          api_key="$(filled APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64)"
+          apple_id="$(filled APPLE_ID APPLE_APP_SPECIFIC_PASSWORD)"
+          partial=0
+          for set in "certificate=${certificate}" "App Store Connect API key=${api_key}" "Apple ID notarization=${apple_id}"; do
+            case "${set#*=}" in
+              missing:*) echo "::error::The ${set%%=*} is only partly set; missing:${set#*=missing:}. Set all of its secrets in the mac-signing environment, or none."; partial=1 ;;
+            esac
+          done
+          [ "${partial}" -eq 0 ] || exit 1
+
+          mode=adhoc
+          route=none
+          fallback=no-credential
+          if [ "${certificate}" = none ]; then
+            if [ "${api_key}" = all ] || [ "${apple_id}" = all ]; then
+              echo "::error::A notarization credential is set but the certificate (MACOS_CERTIFICATE_P12_BASE64, MACOS_CERTIFICATE_PASSWORD) is not. Its secrets are probably misnamed; check their exact names in the mac-signing environment."
+              exit 1
+            fi
+            line="ad-hoc, not notarized: no signing secrets are set in the mac-signing environment"
+          else
+            if ! [[ "${APPLE_TEAM_ID}" =~ ^[A-Z0-9]{10}$ ]]; then
+              echo "::error::The certificate is set, but APPLE_TEAM_ID (\"${APPLE_TEAM_ID}\") is not a 10-character Team ID (capital letters and digits). Set it as a variable of the mac-signing environment."
+              exit 1
+            fi
+            if [ "${api_key}" = all ]; then
+              mode=sign route=api-key fallback=""
+              line="sign with the Developer ID and notarize; credential route: App Store Connect API key"
+              [ "${apple_id}" = none ] || echo "::notice::Both notarization credentials are set; the App Store Connect API key is used and the Apple ID pair is ignored."
+            elif [ "${apple_id}" = all ]; then
+              mode=sign route=apple-id fallback=""
+              line="sign with the Developer ID and notarize; credential route: Apple ID with an app-specific password"
+            else
+              line="ad-hoc, not notarized: the certificate is set but no notarization credential is"
+            fi
+          fi
+          echo "mode=${mode}" >> "${GITHUB_OUTPUT}"
+          echo "route=${route}" >> "${GITHUB_OUTPUT}"
+          echo "fallback=${fallback}" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Mac signing mode::Chosen: ${line}"
+
+      - name: Download the Mac app
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: mac-app
+          path: in
+
+      - name: Unpack the build job's app
+        run: |
+          zips=(in/treasure-island-mac-*.zip)
+          [ "${#zips[@]}" -eq 1 ] && [ -f "${zips[0]}" ] || { echo "::error::expected one zip from the build job, found ${#zips[@]}"; exit 1; }
+          ditto -x -k "${zips[0]}" work
+          apps=(work/*.app)
+          [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in ${zips[0]}"; exit 1; }
+          echo "${apps[0]}" > app-path.txt
+
+      - name: Check the notarization credential with Apple
+        id: probe
+        if: steps.mode.outputs.mode == 'sign'
+        continue-on-error: true
+        env:
+          ROUTE: ${{ steps.mode.outputs.route }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
+          # Only the chosen route's secrets reach this step; the others stay empty.
+          APPSTORE_API_KEY_ID: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_KEY_ID || '' }}
+          APPSTORE_API_ISSUER_ID: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_ISSUER_ID || '' }}
+          APPSTORE_API_KEY_P8_BASE64: ${{ steps.mode.outputs.route == 'api-key' && secrets.APPSTORE_API_KEY_P8_BASE64 || '' }}
+          APPLE_ID: ${{ steps.mode.outputs.route == 'apple-id' && secrets.APPLE_ID || '' }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ steps.mode.outputs.route == 'apple-id' && secrets.APPLE_APP_SPECIFIC_PASSWORD || '' }}
+          API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
+          NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
+          NOTARY_PROFILE: treasure-island-notary
+        # Runs before the certificate is touched. notarytool store-credentials
+        # (notarytool(1); Apple TN3147,
+        # https://developer.apple.com/documentation/technotes/tn3147-migrating-to-the-latest-notarization-tool)
+        # checks the credential with Apple and keeps it as a profile in a
+        # throwaway keychain, so the notarize step needs no secret; then
+        # notarytool history asks Apple once more with that profile. The API key
+        # goes in as a file, deleted at once; the Apple ID and app-specific
+        # password go on notarytool's command line, the form Apple documents
+        # ("Customizing the notarization workflow"), on this single-use runner.
+        # Apple's answers are printed with any e-mail address replaced. An answer
+        # that refuses the credential writes "fallback" and leaves "ok" unset; the
+        # step still succeeds, and the build is published ad-hoc.
+        run: |
+          quote() {
+            local in="$1" out="" c i
+            for ((i = 0; i < ${#in}; i++)); do
+              c="${in:i:1}"
+              case "${c}" in '\' | '"') out+="\\${c}" ;; *) out+="${c}" ;; esac
+            done
+            printf '"%s"' "${out}"
+          }
+          keychain_command() { printf '%s\n' "$1" | security -i; }
+          show() { printf '%s\n' "$1" | sed -E 's/[[:alnum:]._%+-]+@[[:alnum:].-]+/<e-mail>/g'; }
+          refused() {
+            if grep -q 'HTTP status code: 40[13]' <<< "$1"; then reason=credential-refused; else reason=notary-error; fi
+            echo "fallback=${reason}" >> "${GITHUB_OUTPUT}"
+            echo "::warning title=Mac build NOT notarized::Apple did not accept the notarization credential (${reason}; its answer is in this step's log), so this run publishes the build job's ad-hoc app."
+            exit 0
+          }
+          # The key file goes however the step ends; the keychain stays for the
+          # notarize step only when the credential was accepted.
+          trap 'rc=$?; rm -f "${API_KEY_FILE}"; if [ "${rc}" -ne 0 ] || ! grep -q "^ok=true$" "${GITHUB_OUTPUT}"; then if [ -e "${NOTARY_KEYCHAIN}" ]; then security delete-keychain "${NOTARY_KEYCHAIN}" || rm -f "${NOTARY_KEYCHAIN}"; fi; fi' EXIT
+          for name in APPLE_ID APPLE_APP_SPECIFIC_PASSWORD; do
+            case "${!name}" in
+              *[[:space:]]* | *[[:cntrl:]]*) echo "invalid=${name}" >> "${GITHUB_OUTPUT}"; echo "::error::${name} contains a space or a line break. Set it again without one."; exit 0 ;;
+            esac
+          done
+
+          keychain_password="$(uuidgen)"
+          echo "::add-mask::${keychain_password}"
+          keychain_command "create-keychain -p $(quote "${keychain_password}") $(quote "${NOTARY_KEYCHAIN}")"
+          security set-keychain-settings -lut 7200 "${NOTARY_KEYCHAIN}"
+          keychain_command "unlock-keychain -p $(quote "${keychain_password}") $(quote "${NOTARY_KEYCHAIN}")"
+          case "${ROUTE}" in
+            api-key)
+              ( umask 077 && printf '%s' "${APPSTORE_API_KEY_P8_BASE64}" | tr -d ' \r\n' | base64 --decode > "${API_KEY_FILE}" )
+              credential=(--key "${API_KEY_FILE}" --key-id "${APPSTORE_API_KEY_ID}" --issuer "${APPSTORE_API_ISSUER_ID}")
+              route_name="App Store Connect API key"
+              ;;
+            apple-id)
+              credential=(--apple-id "${APPLE_ID}" --password "${APPLE_APP_SPECIFIC_PASSWORD}" --team-id "${APPLE_TEAM_ID}")
+              route_name="Apple ID with an app-specific password"
+              ;;
+            *) echo "::error::Unknown notarization route \"${ROUTE}\"."; exit 1 ;;
+          esac
+          status=0
+          answer="$(xcrun notarytool store-credentials "${NOTARY_PROFILE}" "${credential[@]}" --keychain "${NOTARY_KEYCHAIN}" 2>&1)" || status=$?
+          credential=()
+          unset APPSTORE_API_KEY_ID APPSTORE_API_ISSUER_ID APPSTORE_API_KEY_P8_BASE64 APPLE_ID APPLE_APP_SPECIFIC_PASSWORD
+          rm -f "${API_KEY_FILE}"
+          show "${answer}"
+          [ "${status}" -eq 0 ] || refused "${answer}"
+          answer="$(xcrun notarytool history --keychain-profile "${NOTARY_PROFILE}" --keychain "${NOTARY_KEYCHAIN}" 2>&1)" || status=$?
+          show "${answer%%$'\n'*}"
+          [ "${status}" -eq 0 ] || refused "${answer}"
+          echo "Apple accepts the ${route_name} for notarization."
+          echo "ok=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Sign with the Developer ID (hardened runtime)
+        id: sign
+        if: steps.probe.outcome == 'success' && steps.probe.outputs.ok == 'true'
+        continue-on-error: true
+        env:
+          MACOS_CERTIFICATE_P12_BASE64: ${{ secrets.MACOS_CERTIFICATE_P12_BASE64 }}
+          MACOS_CERTIFICATE_PASSWORD: ${{ secrets.MACOS_CERTIFICATE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ vars.APPLE_TEAM_ID || secrets.APPLE_TEAM_ID }}
+          KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
+          CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
+        # A throwaway keychain holds the certificate for this step only, and this
+        # step deletes it however it ends (the last step does so again). The
+        # certificate's password and the keychain's reach security(1) through its
+        # standard input (security -i), never a command line. The Godot export has
+        # one Mach-O executable (MoltenVK is linked in statically) and no nested
+        # code today; nested libraries or frameworks, as a GDExtension would add,
+        # are signed first, deepest first, instead of with codesign --deep, which
+        # Apple advises against for signing. Entitlements: tools/mac-entitlements.plist.
+        # The log names the signature's team, never the certificate holder.
+        run: |
+          # One argument for a `security -i` command line. security splits each line
+          # itself: inside double quotes a backslash makes the next character literal
+          # (split_line in SecurityTool/macOS/security.c,
+          # https://github.com/apple-oss-distributions/Security).
+          quote() {
+            local in="$1" out="" c i
+            for ((i = 0; i < ${#in}; i++)); do
+              c="${in:i:1}"
+              case "${c}" in '\' | '"') out+="\\${c}" ;; *) out+="${c}" ;; esac
+            done
+            printf '"%s"' "${out}"
+          }
+          # One command per run: security -i exits with its last command's status.
+          keychain_command() { printf '%s\n' "$1" | security -i; }
+          cleanup() {
+            rm -f "${CERTIFICATE_FILE}"
+            if [ -e "${KEYCHAIN}" ]; then security delete-keychain "${KEYCHAIN}" || rm -f "${KEYCHAIN}"; fi
+          }
+          trap cleanup EXIT
+          case "${MACOS_CERTIFICATE_PASSWORD}" in
+            *$'\n'* | *$'\r'*) echo "invalid=MACOS_CERTIFICATE_PASSWORD" >> "${GITHUB_OUTPUT}"; echo "::error::MACOS_CERTIFICATE_PASSWORD contains a line break. Set it again without one (gh secret set prompts for it)."; exit 0 ;;
+          esac
+          app="$(cat app-path.txt)"
+
+          keychain_password="$(uuidgen)"
+          echo "::add-mask::${keychain_password}"
+          keychain_command "create-keychain -p $(quote "${keychain_password}") $(quote "${KEYCHAIN}")"
+          security set-keychain-settings -lut 3600 "${KEYCHAIN}"
+          keychain_command "unlock-keychain -p $(quote "${keychain_password}") $(quote "${KEYCHAIN}")"
+          # Only the decoded key file is private to this user (the app's own files keep
+          # the runner's usual permissions).
+          ( umask 077 && printf '%s' "${MACOS_CERTIFICATE_P12_BASE64}" | tr -d ' \r\n' | base64 --decode > "${CERTIFICATE_FILE}" )
+          keychain_command "import $(quote "${CERTIFICATE_FILE}") -k $(quote "${KEYCHAIN}") -f pkcs12 -P $(quote "${MACOS_CERTIFICATE_PASSWORD}") -T /usr/bin/codesign" >/dev/null \
+            || { echo "::error::Importing the certificate failed (security's message is above). Check MACOS_CERTIFICATE_PASSWORD, and that MACOS_CERTIFICATE_P12_BASE64 is the base64 of the exported .p12."; exit 1; }
+          rm -f "${CERTIFICATE_FILE}"
+          unset MACOS_CERTIFICATE_P12_BASE64 MACOS_CERTIFICATE_PASSWORD
+          # Lets codesign use the key without a permission dialog.
+          keychain_command "set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $(quote "${keychain_password}") $(quote "${KEYCHAIN}")" >/dev/null
+          # codesign finds the intermediate certificates through the search list.
+          existing=()
+          while IFS= read -r line; do
+            line="${line#"${line%%[![:space:]]*}"}"
+            existing+=("${line//\"/}")
+          done < <(security list-keychains -d user)
+          security list-keychains -d user -s "${KEYCHAIN}" "${existing[@]}"
+
+          identities="$(security find-identity -v -p codesigning "${KEYCHAIN}" | grep "Developer ID Application: .*(${APPLE_TEAM_ID})" || true)"
+          if [ "$(grep -c . <<< "${identities}")" -ne 1 ]; then
+            echo "::error::Expected exactly one valid \"Developer ID Application\" identity for APPLE_TEAM_ID in the certificate; found $(grep -c . <<< "${identities}"). Check that the .p12 holds that certificate with its private key, and that macOS can reach its issuer: a missing \"Developer ID Certification Authority (G2)\" intermediate certificate also leaves the identity invalid."
+            security find-identity -v -p codesigning "${KEYCHAIN}" | tail -1
+            exit 1
+          fi
+          identity="$(awk '{print $2}' <<< "${identities}")"
+
+          # Stray extended attributes make codesign fail ("detritus not allowed").
+          xattr -cr "${app}"
+          sign() { codesign --force --timestamp --options runtime --keychain "${KEYCHAIN}" --sign "${identity}" "$@"; }
+          nested=()
+          while IFS= read -r -d '' path; do
+            nested+=("${path}")
+          done < <(find "${app}/Contents" -depth \
+            \( -name '*.framework' -o -name '*.dylib' -o -name '*.so' -o -name '*.bundle' -o -name '*.app' -o -name '*.xpc' \) -print0)
+          for path in "${nested[@]}"; do
+            echo "Signing nested ${path#"${app}/"}"
+            sign "${path}"
+          done
+          sign --entitlements tools/mac-entitlements.plist "${app}"
+
+          codesign --verify --deep --strict --verbose=2 "${app}"
+          details="$(codesign -dvv "${app}" 2>&1)"
+          grep -E '^(Identifier|Format|TeamIdentifier|Runtime Version)=' <<< "${details}"
+          grep -q "^TeamIdentifier=${APPLE_TEAM_ID}$" <<< "${details}" || { echo "::error::the signature does not carry APPLE_TEAM_ID"; exit 1; }
+          grep -q '^Authority=Developer ID Application: ' <<< "${details}" || { echo "::error::the signature is not a Developer ID Application signature"; exit 1; }
+          grep -q '^Timestamp=' <<< "${details}" || { echo "::error::the signature has no secure timestamp"; exit 1; }
+          grep -Eq '^CodeDirectory .*flags=0x[0-9a-f]*\(.*runtime' <<< "${details}" || { echo "::error::the signature lacks the hardened runtime"; exit 1; }
+          echo "Signed with the Developer ID of team ${APPLE_TEAM_ID}: secure timestamp and hardened runtime present."
+          echo "Entitlements:"
+          codesign -d --entitlements - --xml "${app}" 2>/dev/null || true; echo
+          echo "ok=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Notarize, staple and zip
+        id: notarize
+        if: steps.sign.outcome == 'success' && steps.sign.outputs.ok == 'true'
+        continue-on-error: true
+        env:
+          ROUTE: ${{ steps.mode.outputs.route }}
+          NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
+          NOTARY_PROFILE: treasure-island-notary
+        # No secret here: notarytool reads the profile the probe step stored in
+        # the throwaway keychain, which this step deletes however it ends (the
+        # last step does so again). Only a stapled, validated app reaches out/.
+        # A verdict that keeps the build from being notarized writes "fallback";
+        # the step still succeeds, and the build is published ad-hoc.
+        run: |
+          show() { printf '%s\n' "$1" | sed -E 's/[[:alnum:]._%+-]+@[[:alnum:].-]+/<e-mail>/g'; }
+          not_notarized() {
+            rm -rf out
+            echo "fallback=$1" >> "${GITHUB_OUTPUT}"
+            echo "::warning title=Mac build NOT notarized::$2, so this run publishes the build job's ad-hoc app."
+            exit 0
+          }
+          trap 'if [ -e "${NOTARY_KEYCHAIN}" ]; then security delete-keychain "${NOTARY_KEYCHAIN}" || rm -f "${NOTARY_KEYCHAIN}"; fi' EXIT
+          app="$(cat app-path.txt)"
+          zips=(in/treasure-island-mac-*.zip)
+          name="$(basename "${zips[0]}")"
+          auth=(--keychain-profile "${NOTARY_PROFILE}" --keychain "${NOTARY_KEYCHAIN}")
+
+          ditto -c -k --keepParent "${app}" notarize.zip
+          status=0
+          xcrun notarytool submit notarize.zip "${auth[@]}" --wait --timeout 35m --output-format json > notary.json 2> notary.err || status=$?
+          show "$(cat notary.json notary.err)"
+          id="$(plutil -extract id raw -o - notary.json 2>/dev/null || true)"
+          result="$(plutil -extract status raw -o - notary.json 2>/dev/null || true)"
+          echo "notarytool exited ${status}; submission ${id:-none}, status ${result:-none}"
+          if [ -n "${id}" ]; then
+            echo "Notary log for ${id}:"
+            show "$(xcrun notarytool log "${id}" "${auth[@]}" 2>&1 || true)"
+          fi
+          case "${result}" in
+            Accepted) ;;
+            Invalid | Rejected) not_notarized notarization-rejected "Apple's notary service did not accept this build (${result}; the notary log is above)" ;;
+            *)
+              if grep -q 'HTTP status code: 40[13]' notary.json notary.err; then
+                not_notarized credential-refused "Apple refused the notarization credential at submission"
+              elif [ -n "${id}" ]; then
+                not_notarized notarization-timeout "Apple had not finished checking submission ${id} after 35 minutes; a later run submits again"
+              else
+                not_notarized notary-error "notarytool could not submit the app (its message is above)"
+              fi
+              ;;
+          esac
+
+          # The ticket can take a moment to reach Apple's ticket service after
+          # acceptance, so try stapling a few times.
+          stapled=no
+          for attempt in 1 2 3 4 5; do
+            if xcrun stapler staple "${app}"; then stapled=yes; break; fi
+            if [ "${attempt}" -lt 5 ]; then sleep 20; fi
+          done
+          [ "${stapled}" = yes ] || not_notarized staple-failed "Stapling the notarization ticket failed"
+          xcrun stapler validate "${app}" || not_notarized staple-failed "The stapled ticket does not validate"
+
+          rm -rf out
+          mkdir out
+          ditto -c -k --keepParent "${app}" "out/${name}"
+          ls -l out
+          echo "notarized=true" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Mac signing mode::Done: Developer ID signed, notarized (submission ${id}) and stapled; credential route: ${ROUTE}"
+
+      - name: Choose the build to publish
+        id: result
+        env:
+          MODE: ${{ steps.mode.outputs.mode }}
+          MODE_FALLBACK: ${{ steps.mode.outputs.fallback }}
+          PROBE_OUTCOME: ${{ steps.probe.outcome }}
+          PROBE_OK: ${{ steps.probe.outputs.ok }}
+          PROBE_FALLBACK: ${{ steps.probe.outputs.fallback }}
+          PROBE_INVALID: ${{ steps.probe.outputs.invalid }}
+          SIGN_OUTCOME: ${{ steps.sign.outcome }}
+          SIGN_OK: ${{ steps.sign.outputs.ok }}
+          SIGN_INVALID: ${{ steps.sign.outputs.invalid }}
+          NOTARIZE_OUTCOME: ${{ steps.notarize.outcome }}
+          NOTARIZED: ${{ steps.notarize.outputs.notarized }}
+          NOTARIZE_FALLBACK: ${{ steps.notarize.outputs.fallback }}
+        # The signed app reaches out/ only when it is notarized and stapled.
+        # Otherwise out/ holds the build job's zip, byte for byte, with the reason
+        # in "fallback". A secret with a line break stops the run instead.
+        run: |
+          if [ -n "${PROBE_INVALID}${SIGN_INVALID}" ]; then
+            echo "::error::${PROBE_INVALID}${SIGN_INVALID:+ }${SIGN_INVALID} must be set again (see the error above). Nothing is published."
+            exit 1
+          fi
+          reason=""
+          if [ "${MODE}" != sign ]; then
+            reason="${MODE_FALLBACK}"
+          elif [ "${PROBE_OUTCOME}" != success ]; then
+            reason=notary-error
+          elif [ "${PROBE_OK}" != true ]; then
+            reason="${PROBE_FALLBACK:-notary-error}"
+          elif [ "${SIGN_OUTCOME}" != success ] || [ "${SIGN_OK}" != true ]; then
+            reason=signing-failed
+          elif [ "${NOTARIZE_OUTCOME}" != success ]; then
+            reason=notary-error
+          elif [ "${NOTARIZED}" != true ]; then
+            reason="${NOTARIZE_FALLBACK:-notary-error}"
+          fi
+          case "${reason}" in
+            "") why="" ;;
+            no-credential) why="the certificate or the notarization credential is not set" ;;
+            credential-refused) why="Apple refused the notarization credential" ;;
+            notary-error) why="Apple's notary service could not be used" ;;
+            signing-failed) why="signing with the Developer ID failed" ;;
+            notarization-rejected) why="Apple's notary service did not accept the build" ;;
+            notarization-timeout) why="Apple had not finished checking the build in time" ;;
+            staple-failed) why="the notarization ticket could not be stapled" ;;
+            *) echo "::error::Unknown fallback reason \"${reason}\"."; exit 1 ;;
+          esac
+          if [ -z "${reason}" ]; then
+            zips=(out/treasure-island-mac-*.zip)
+            [ "${#zips[@]}" -eq 1 ] && [ -f "${zips[0]}" ] || { echo "::error::the notarized zip is missing from out/"; exit 1; }
+            echo "notarized=true" >> "${GITHUB_OUTPUT}"
+            echo "fallback=" >> "${GITHUB_OUTPUT}"
+            echo "### Mac build: Developer ID signed and notarized" >> "${GITHUB_STEP_SUMMARY}"
+          else
+            rm -rf out
+            mkdir out
+            cp in/treasure-island-mac-*.zip out/
+            echo "notarized=false" >> "${GITHUB_OUTPUT}"
+            echo "fallback=${reason}" >> "${GITHUB_OUTPUT}"
+            echo "::warning title=Mac build NOT notarized::${why} (${reason}). This run hands on the build job's ad-hoc app, unchanged."
+            {
+              echo "### Mac build NOT notarized"
+              echo ""
+              echo "Reason: \`${reason}\`: ${why}. The build job's ad-hoc app goes on to verify and publish, unchanged."
+            } >> "${GITHUB_STEP_SUMMARY}"
+          fi
+          ls -l out
+
+      - name: Upload the release app
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mac-app-release
+          path: out/treasure-island-mac-*.zip
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+      - name: Delete the keychains and key files
+        if: always()
+        env:
+          KEYCHAIN: ${{ runner.temp }}/signing.keychain-db
+          NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
+          CERTIFICATE_FILE: ${{ runner.temp }}/developer-id.p12
+          API_KEY_FILE: ${{ runner.temp }}/notary-api-key.p8
+        run: |
+          for keychain in "${KEYCHAIN}" "${NOTARY_KEYCHAIN}"; do
+            if [ -e "${keychain}" ]; then security delete-keychain "${keychain}" || rm -f "${keychain}"; fi
+          done
+          rm -f "${CERTIFICATE_FILE}" "${API_KEY_FILE}"
+
   verify:
     name: Load on Apple Silicon
-    needs: build
+    needs: [build, sign]
+    # The sign job's app when it ran; the build job's app when it was skipped (a
+    # branch run, or MAC_SIGNING not "on"). A failed or cancelled sign job stops
+    # this job, and with it the publish job.
+    if: >-
+      ${{ !cancelled() && needs.build.result == 'success' &&
+      (needs.sign.result == 'success' ||
+      (needs.sign.result == 'skipped' && !(github.ref == 'refs/heads/main' && vars.MAC_SIGNING == 'on'))) }}
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
@@ -125,11 +675,18 @@ jobs:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mac-app
+          name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
       - name: Launch it headless on arm64 and check the island loads
         # The same rule as the Linux launch check in tools/build-mac.sh: the game
-        # loads the island, quits with 0 and prints no engine errors.
+        # loads the island, quits with 0 and prints no engine errors. A notarized
+        # build must also pass Gatekeeper and carry its stapled ticket; any other
+        # build must be the ad-hoc one, never a Developer ID build that is not
+        # notarized. The log names the signature's team, never the certificate holder.
+        env:
+          NOTARIZED: ${{ needs.sign.outputs.notarized }}
+          ROUTE: ${{ needs.sign.outputs.route }}
+          FALLBACK: ${{ needs.sign.outputs.fallback }}
         run: |
           echo "$(sw_vers -productName) $(sw_vers -productVersion), $(uname -m)"
           df -h .
@@ -139,6 +696,28 @@ jobs:
           exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
           echo "${exe}: $(lipo -archs "${exe}")"
           codesign --verify --deep --strict --verbose=2 "${app}"
+          details="$(codesign -dvv "${app}" 2>&1)"
+          if [ "${NOTARIZED}" = "true" ]; then
+            grep -q '^Authority=Developer ID Application: ' <<< "${details}" || { echo "FAIL: the notarized build has no Developer ID signature" >&2; exit 1; }
+            grep -E '^(TeamIdentifier|Timestamp)=' <<< "${details}" || true
+            status=0
+            assessment="$(spctl --assess --type execute -vv "${app}" 2>&1)" || status=$?
+            grep -E 'accepted|rejected|^source=|^override=' <<< "${assessment}" || true
+            [ "${status}" -eq 0 ] || { echo "FAIL: Gatekeeper rejects the notarized app" >&2; exit 1; }
+            # With Gatekeeper switched off on the runner spctl accepts anything, so
+            # its verdict would prove nothing; the ticket check below still counts.
+            if grep -q 'override=security disabled' <<< "${assessment}"; then
+              echo "::warning::Gatekeeper assessments are switched off on this runner, so spctl's verdict proves nothing here."
+            fi
+            xcrun stapler validate "${app}" || { echo "FAIL: the notarization ticket is not stapled" >&2; exit 1; }
+            echo "::notice title=Mac signing mode::This build is Developer ID signed and notarized (credential route: ${ROUTE}), and passes Gatekeeper."
+          else
+            if ! grep -q '^Signature=adhoc$' <<< "${details}" || grep -q '^Authority=Developer ID' <<< "${details}"; then
+              echo "FAIL: this build is not notarized, so it must be the build job's ad-hoc app, but its signature is not ad-hoc" >&2
+              exit 1
+            fi
+            echo "::notice title=Mac signing mode::This build is ad-hoc signed and not notarized${FALLBACK:+ (reason: ${FALLBACK})}."
+          fi
           log=launch.log
           arch -arm64 "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
           pid=$!
@@ -158,8 +737,13 @@ jobs:
 
   publish:
     name: Publish
-    needs: [build, verify]
-    if: github.ref == 'refs/heads/main'
+    needs: [build, sign, verify]
+    # Main only, never on a dry run. The sign job's app when it ran; the build
+    # job's app when MAC_SIGNING is not "on" and the sign job was skipped.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      needs.build.result == 'success' && needs.verify.result == 'success' &&
+      (needs.sign.result == 'success' || (needs.sign.result == 'skipped' && vars.MAC_SIGNING != 'on')) }}
     runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:
@@ -173,12 +757,15 @@ jobs:
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
-          name: mac-app
+          name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
       - name: Publish this build as a new release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
+          SIGN_RESULT: ${{ needs.sign.result }}
+          NOTARIZED: ${{ needs.sign.outputs.notarized }}
+          FALLBACK: ${{ needs.sign.outputs.fallback }}
         # Each build gets a tag and release of its own, and nothing here replaces a
         # published build. gh uploads to a draft and then publishes it, so the fixed
         # link never reaches a release without its zip. If the reply to that publish
@@ -191,7 +778,32 @@ jobs:
         # may change workflows, and GITHUB_TOKEN never may. A commit that edits a
         # workflow is fine while it is the head of main, because then it matches main.
         # See https://docs.github.com/en/rest/releases/releases#create-a-release
+        #
+        # The release title and notes say whether the build is notarized, from
+        # fixed text for each fallback reason; nothing from Apple's tools reaches
+        # them. With MAC_SIGNING off they are as they were before signing existed.
         run: |
+          signing=""
+          title_extra=""
+          if [ "${SIGN_RESULT}" = success ]; then
+            if [ "${NOTARIZED}" = true ]; then
+              signing="Signed and notarized (Developer ID)."
+            else
+              case "${FALLBACK}" in
+                no-credential) why="notarization is not set up (the certificate or the notarization credential is missing)" ;;
+                credential-refused) why="notarization is not available yet (Apple refused the notarization credential)" ;;
+                notary-error) why="Apple's notary service could not be used for this build" ;;
+                signing-failed) why="signing with the Developer ID failed for this build" ;;
+                notarization-rejected) why="Apple's notary service did not accept this build" ;;
+                notarization-timeout) why="Apple had not finished checking this build in time" ;;
+                staple-failed) why="Apple's notarization ticket could not be attached to this build" ;;
+                *) echo "::error::Unknown fallback reason from the sign job; refusing to publish."; exit 1 ;;
+              esac
+              signing="Ad-hoc signed, NOT notarized: ${why}. macOS blocks the first launch after a browser download; see Build for the Mac in the README."
+              title_extra=", not notarized"
+              echo "::warning title=Mac build NOT notarized::${signing}"
+            fi
+          fi
           name=treasure-island-mac.zip
           api="repos/${GITHUB_REPOSITORY}"
           site="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases"
@@ -222,11 +834,18 @@ jobs:
             exit 0
           fi
           mv treasure-island-mac-*.zip "${name}"
-          notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ).
+          notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ)."
+          if [ -n "${signing}" ]; then
+            notes="${notes}
+
+          ${signing}"
+          fi
+          notes="${notes}
 
           The newest build is always at ${site}/latest/download/${name}
           For the first launch, see Build for the Mac in the README."
-          gh release create "${tag}" "${name}" --target "${GITHUB_SHA}" --latest --title "Mac build ${day} (${short})" --notes "${notes}" || {
+          title="Mac build ${day} (${short}${title_extra})"
+          gh release create "${tag}" "${name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
             echo "::error::Publishing ${tag} failed, so the previous build normally stays at the fixed link. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
@@ -234,6 +853,11 @@ jobs:
           for _ in $(seq 12); do
             if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
               echo "Published ${site}/tag/${tag}"
+              {
+                echo "### Published ${tag}: ${title}"
+                echo ""
+                echo "${signing:-Ad-hoc signed, not notarized (MAC_SIGNING is not on, so no signing was tried).}"
+              } >> "${GITHUB_STEP_SUMMARY}"
               exit 0
             fi
             sleep 5
