@@ -24,9 +24,23 @@ extends RefCounted
 ## bark, impostors and grass scale their specular by another (vegetation_sheen):
 ## with a low sun behind a crown, the grazing Fresnel off its leaves (the engine's
 ## specular rises toward 0.7 at a grazing angle) washed it pale grey, which a crown
-## without specular did not show (2026-11-14). As the sun comes level with the
-## facades, its specular (sun_specular) and the glow's luminance cap (glow_cap)
-## come down, so a glass curtain wall's sun glint and its bloom stay a glint.
+## without specular did not show (2026-11-14).
+##
+## The sun's glint on glass and on the water, and its bloom, stay daylight's while
+## the sun is up (owner, 2026-11-15, of the Hawkins tower's glare from the ferry at a
+## 10-degree sun: keep it; windows across the bay glow at sunset): the Sun's specular
+## is main.tscn's at every height (it is none of the look's values), and the glow's
+## luminance cap (glow_cap) stays daylight's until the disc has set, then comes down
+## to the night's by 3 degrees under the horizon, where the lamps and the night
+## lights were tuned with it. The Sun's specular scales the leaves' sun specular too:
+## the engine's dielectric f0 (0.16 x SPECULAR squared) and its grazing f90 (49.5 x
+## f0, under 1) both go with the square of a material's SPECULAR, so a leaf's sun
+## specular goes with the Sun's specular times vegetation_sheen squared. From 15
+## degrees down to the disc's setting the sheen keys hold that at what the pale-crown
+## fix was reviewed with (2026-11-14, under a Sun specular of 0.42 at 15 degrees and
+## 0.3 from 6 down): the reviewed sheen times the square root of that specular over
+## 0.5, so the crowns keep their green. From 3 degrees under the horizon down, with
+## no sunlight, the sheen is the night's again.
 ##
 ## The night (owner, 2026-11-15: "a dark night with stars, a flashlight that turns
 ## on by itself and headlights on the car you drive... No glowing street lamps or
@@ -54,7 +68,7 @@ const FULL_DAY_ELEVATION_DEG := 30.0
 const FLOOR_ELEVATION_DEG := -18.0
 const NIGHT_FLOOR := {
 	"elevation": FLOOR_ELEVATION_DEG,
-	"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0, "sun_specular": 0.3,
+	"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0,
 	"sky_top": Color(0.016, 0.024, 0.055), "sky_horizon": Color(0.075, 0.085, 0.115),
 	"sky_low_sun": Color(0.075, 0.085, 0.115),
 	"ground_bottom": Color(0.02, 0.02, 0.022), "ground_horizon": Color(0.05, 0.055, 0.075),
@@ -71,7 +85,7 @@ const KEYS: Array[Dictionary] = [
 	# Daylight: main.tscn's Sun, sky material and environment, exactly.
 	{
 		"elevation": FULL_DAY_ELEVATION_DEG,
-		"sun_color": Color(1.0, 0.96, 0.89), "sun_energy": 1.3, "sun_specular": 0.5,
+		"sun_color": Color(1.0, 0.96, 0.89), "sun_energy": 1.3,
 		"sky_top": Color(0.235, 0.445, 0.785), "sky_horizon": Color(0.74, 0.80, 0.86),
 		"sky_low_sun": Color(1.0, 0.80, 0.60),
 		"ground_bottom": Color(0.40, 0.40, 0.37), "ground_horizon": Color(0.50, 0.68, 0.84),
@@ -82,97 +96,97 @@ const KEYS: Array[Dictionary] = [
 		"horizon_light": 1.0, "vegetation_sheen": 1.0,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
-	# The afternoon sun warming through more air; shade cooler. Glass glints and
-	# their bloom held in as the sun comes level with the facades.
+	# The afternoon sun warming through more air; shade cooler.
 	{
 		"elevation": 15.0,
-		"sun_color": Color(1.0, 0.91, 0.78), "sun_energy": 1.2, "sun_specular": 0.42,
+		"sun_color": Color(1.0, 0.91, 0.78), "sun_energy": 1.2,
 		"sky_top": Color(0.225, 0.43, 0.765), "sky_horizon": Color(0.75, 0.79, 0.83),
 		"sky_low_sun": Color(1.0, 0.80, 0.58),
 		"ground_bottom": Color(0.39, 0.39, 0.36), "ground_horizon": Color(0.50, 0.66, 0.80),
 		"cloud_glow": Color(0.0, 0.0, 0.0), "cloud_glow_energy": 0.0,
 		"ambient_color": Color(0.74, 0.73, 0.72), "ambient_energy": 0.52,
 		"fog_color": Color(0.75, 0.79, 0.83), "fog_energy": 0.85, "fog_sun_scatter": 0.05,
-		"exposure": 1.18, "glow_cap": 6.0,
-		"horizon_light": 0.95, "vegetation_sheen": 0.4,
+		"exposure": 1.18, "glow_cap": 12.0,
+		"horizon_light": 0.95, "vegetation_sheen": 0.366606,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
 	# The sun's shadows reach the shadow option's whole distance down to here; lower,
 	# where a low sun's long shadows across the whole distance cost the most, they reach
 	# less (shadow_reach, measured 2026-11-15). Every other value is the straight line
-	# between the 15 and 6 degree keys, so the look between them is unchanged.
+	# between the 15 and 6 degree keys, so the look between them is unchanged, but
+	# vegetation_sheen, which holds the leaves' sun specular here too (see the top).
 	{
 		"elevation": 10.0,
-		"sun_color": Color(1, 0.854444, 0.68), "sun_energy": 1.088889, "sun_specular": 0.353333,
+		"sun_color": Color(1, 0.854444, 0.68), "sun_energy": 1.088889,
 		"sky_top": Color(0.211111, 0.402222, 0.723333), "sky_horizon": Color(0.761111, 0.773333, 0.791111),
 		"sky_low_sun": Color(1, 0.766667, 0.524444),
 		"ground_bottom": Color(0.373333, 0.367778, 0.343333), "ground_horizon": Color(0.488889, 0.626667, 0.755556),
 		"cloud_glow": Color(0, 0, 0), "cloud_glow_energy": 0.0,
 		"ambient_color": Color(0.695556, 0.702222, 0.753333), "ambient_energy": 0.508889,
 		"fog_color": Color(0.761111, 0.773333, 0.796667), "fog_energy": 0.822222, "fog_sun_scatter": 0.133333,
-		"exposure": 1.196667, "glow_cap": 4.333333,
-		"horizon_light": 0.788889, "vegetation_sheen": 0.244444,
+		"exposure": 1.196667, "glow_cap": 12.0,
+		"horizon_light": 0.788889, "vegetation_sheen": 0.205488,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
 	# Golden hour: warm sun, blue shade, a warm haze toward the sun.
 	{
 		"elevation": 6.0,
-		"sun_color": Color(1.0, 0.81, 0.6), "sun_energy": 1.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.81, 0.6), "sun_energy": 1.0,
 		"sky_top": Color(0.2, 0.38, 0.69), "sky_horizon": Color(0.77, 0.76, 0.76),
 		"sky_low_sun": Color(1.0, 0.74, 0.48),
 		"ground_bottom": Color(0.36, 0.35, 0.33), "ground_horizon": Color(0.48, 0.6, 0.72),
 		"cloud_glow": Color(0.0, 0.0, 0.0), "cloud_glow_energy": 0.0,
 		"ambient_color": Color(0.66, 0.68, 0.78), "ambient_energy": 0.5,
 		"fog_color": Color(0.77, 0.76, 0.77), "fog_energy": 0.8, "fog_sun_scatter": 0.2,
-		"exposure": 1.21, "glow_cap": 3.0,
-		"horizon_light": 0.66, "vegetation_sheen": 0.12,
+		"exposure": 1.21, "glow_cap": 12.0,
+		"horizon_light": 0.66, "vegetation_sheen": 0.092952,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 0.75, "daylight_fill": 1.0,
 	},
 	{
 		"elevation": 3.0,
-		"sun_color": Color(1.0, 0.74, 0.5), "sun_energy": 0.8, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.74, 0.5), "sun_energy": 0.8,
 		"sky_top": Color(0.18, 0.33, 0.61), "sky_horizon": Color(0.76, 0.70, 0.67),
 		"sky_low_sun": Color(1.0, 0.66, 0.40),
 		"ground_bottom": Color(0.33, 0.31, 0.30), "ground_horizon": Color(0.44, 0.52, 0.64),
 		"cloud_glow": Color(0.0, 0.0, 0.0), "cloud_glow_energy": 0.0,
 		"ambient_color": Color(0.62, 0.62, 0.74), "ambient_energy": 0.48,
 		"fog_color": Color(0.76, 0.70, 0.67), "fog_energy": 0.75, "fog_sun_scatter": 0.3,
-		"exposure": 1.24, "glow_cap": 3.0,
-		"horizon_light": 0.5, "vegetation_sheen": 0.12,
+		"exposure": 1.24, "glow_cap": 12.0,
+		"horizon_light": 0.5, "vegetation_sheen": 0.092952,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 0.5, "shadow_reach": 0.7, "daylight_fill": 1.0,
 	},
 	{
 		"elevation": 1.0,
-		"sun_color": Color(1.0, 0.65, 0.4), "sun_energy": 0.48, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.65, 0.4), "sun_energy": 0.48,
 		"sky_top": Color(0.155, 0.28, 0.53), "sky_horizon": Color(0.72, 0.62, 0.58),
 		"sky_low_sun": Color(1.0, 0.58, 0.32),
 		"ground_bottom": Color(0.28, 0.26, 0.26), "ground_horizon": Color(0.38, 0.44, 0.56),
 		"cloud_glow": Color(1.0, 0.55, 0.35), "cloud_glow_energy": 0.15,
 		"ambient_color": Color(0.56, 0.56, 0.70), "ambient_energy": 0.46,
 		"fog_color": Color(0.72, 0.62, 0.58), "fog_energy": 0.7, "fog_sun_scatter": 0.3,
-		"exposure": 1.27, "glow_cap": 3.0,
-		"horizon_light": 0.4, "vegetation_sheen": 0.12,
+		"exposure": 1.27, "glow_cap": 12.0,
+		"horizon_light": 0.4, "vegetation_sheen": 0.092952,
 		"stars": 0.0, "night": 0.0, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.6,
 	},
 	# The disc gone under the horizon: no sunlight on the island; the clouds, a
 	# kilometre and more up, still in it.
 	{
 		"elevation": -0.5,
-		"sun_color": Color(1.0, 0.6, 0.36), "sun_energy": 0.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.6, 0.36), "sun_energy": 0.0,
 		"sky_top": Color(0.13, 0.23, 0.46), "sky_horizon": Color(0.64, 0.54, 0.53),
 		"sky_low_sun": Color(0.95, 0.5, 0.28),
 		"ground_bottom": Color(0.24, 0.22, 0.22), "ground_horizon": Color(0.33, 0.37, 0.48),
 		"cloud_glow": Color(1.0, 0.48, 0.32), "cloud_glow_energy": 0.35,
 		"ambient_color": Color(0.5, 0.52, 0.66), "ambient_energy": 0.46,
 		"fog_color": Color(0.62, 0.55, 0.55), "fog_energy": 0.66, "fog_sun_scatter": 0.0,
-		"exposure": 1.31, "glow_cap": 3.0,
-		"horizon_light": 0.3, "vegetation_sheen": 0.12,
+		"exposure": 1.31, "glow_cap": 12.0,
+		"horizon_light": 0.3, "vegetation_sheen": 0.092952,
 		"stars": 0.0, "night": 0.05, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.3,
 	},
 	# Civil dusk: the glow low in the west, the clouds' afterglow fading.
 	{
 		"elevation": -3.0,
-		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0,
 		"sky_top": Color(0.08, 0.14, 0.31), "sky_horizon": Color(0.42, 0.38, 0.44),
 		"sky_low_sun": Color(0.66, 0.38, 0.27),
 		"ground_bottom": Color(0.14, 0.13, 0.14), "ground_horizon": Color(0.22, 0.25, 0.33),
@@ -185,7 +199,7 @@ const KEYS: Array[Dictionary] = [
 	},
 	{
 		"elevation": -6.0,
-		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0,
 		"sky_top": Color(0.055, 0.09, 0.2), "sky_horizon": Color(0.24, 0.25, 0.33),
 		"sky_low_sun": Color(0.34, 0.25, 0.26),
 		"ground_bottom": Color(0.07, 0.07, 0.075), "ground_horizon": Color(0.15, 0.17, 0.23),
@@ -200,7 +214,7 @@ const KEYS: Array[Dictionary] = [
 	# horizon, the island lit by the sky alone; the first stars.
 	{
 		"elevation": -8.0,
-		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0,
 		"sky_top": Color(0.045, 0.07, 0.15), "sky_horizon": Color(0.17, 0.2, 0.27),
 		"sky_low_sun": Color(0.17, 0.2, 0.27),
 		"ground_bottom": Color(0.05, 0.05, 0.055), "ground_horizon": Color(0.12, 0.14, 0.19),
@@ -214,7 +228,7 @@ const KEYS: Array[Dictionary] = [
 	# Nautical dusk: the last of the twilight low in the west.
 	{
 		"elevation": -12.0,
-		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0, "sun_specular": 0.3,
+		"sun_color": Color(1.0, 0.56, 0.32), "sun_energy": 0.0,
 		"sky_top": Color(0.026, 0.04, 0.09), "sky_horizon": Color(0.11, 0.125, 0.17),
 		"sky_low_sun": Color(0.11, 0.125, 0.17),
 		"ground_bottom": Color(0.03, 0.03, 0.035), "ground_horizon": Color(0.08, 0.09, 0.12),
@@ -230,7 +244,7 @@ const KEYS: Array[Dictionary] = [
 
 ## Every value a key holds, besides its elevation.
 const VALUES: Array[String] = [
-	"sun_color", "sun_energy", "sun_specular", "sky_top", "sky_horizon", "sky_low_sun", "ground_bottom",
+	"sun_color", "sun_energy", "sky_top", "sky_horizon", "sky_low_sun", "ground_bottom",
 	"ground_horizon", "cloud_glow", "cloud_glow_energy", "ambient_color", "ambient_energy",
 	"fog_color", "fog_energy", "fog_sun_scatter", "exposure", "glow_cap", "horizon_light",
 	"vegetation_sheen", "stars", "night", "parked_lamps", "shadow_reach", "daylight_fill",
@@ -251,7 +265,7 @@ const ENVIRONMENT_PROPERTIES := {
 	"glow_cap": &"glow_hdr_luminance_cap",
 }
 ## ... the Sun's...
-const SUN_PROPERTIES := {"sun_color": &"light_color", "sun_energy": &"light_energy", "sun_specular": &"light_specular"}
+const SUN_PROPERTIES := {"sun_color": &"light_color", "sun_energy": &"light_energy"}
 ## ... or a global shader uniform (project.godot's shader_globals): the factors,
 ## 1.0 there, and horizon_haze, the sky's horizon colour in linear RGB (horizon_haze()),
 ## that the distant art fades into as horizon_light falls. night goes nowhere in the
