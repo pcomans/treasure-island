@@ -43,13 +43,13 @@ const FADE_S := 1.2
 
 const FLASH_HEIGHT_M := 1.25
 const FLASH_AHEAD_M := 0.4
-const FLASH_ENERGY := 5.5
+const FLASH_ENERGY := 4.5
 const FLASH_RANGE_M := 48.0
 ## The cone's half angle (degrees) and how its light falls off toward the edge and
 ## with distance (SpotLight3D spot_angle_attenuation, spot_attenuation: under 1 a
 ## softer edge and a gentler fall with distance).
 const FLASH_ANGLE_DEG := 40.0
-const FLASH_ANGLE_ATTENUATION := 0.35
+const FLASH_ANGLE_ATTENUATION := 0.5
 const FLASH_ATTENUATION := 0.6
 const FLASH_PITCH_DEG := -2.0
 const FLASH_PITCH_SHARE := 0.5
