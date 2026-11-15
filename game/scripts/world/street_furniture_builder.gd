@@ -19,12 +19,17 @@ extends RefCounted
 ## goal row's placement and mouth (the kit's goal_mouth), so it knows a goal when it
 ## goes into any of them.
 ##
-## The rows a car knocks over (the kit's FELLABLE props: the street lamps) are
+## The rows a car knocks over (the kit's FELLABLE props: the street lamps, sign
+## posts, signal masts, utility poles, bollards, light towers and event poles) are
 ## listed in the root's fellable_rows metadata: id -> {prop, params, transform,
 ## instances: [[MultiMeshInstance3D name, instance index, the piece's frame in
-## the prop's], ...], shapes: [[body name, CollisionShape3D name], ...], labels:
-## [[group name, Label3D name], ...]}, so one can be hidden and dropped as a
-## body of its own in the world generated at startup and in the baked one alike
+## the prop's], ...] (not a piece that stays, a bus stop's pad), shapes: [[body
+## name, CollisionShape3D name], ...], labels: [[group name, Label3D name], ...],
+## and for a utility pole spans: [the index of each wire span it holds up in the
+## root's fellable_wires: {poles: [id, id], pieces: [[power_wire MultiMeshInstance3D
+## name, first index, count], ...], wires: [[from, to, sag, radius, pieces], ...]}]},
+## so one can be hidden and dropped as a body of its own, its wires with it, in the
+## world generated at startup and in the baked one alike
 ## (game/scripts/vehicles/street_furniture_breaker.gd), its standing neighbours
 ## batched as before.
 
@@ -123,7 +128,7 @@ func build(document: Dictionary) -> Dictionary:
 			var cells: Dictionary = batches[key].cells
 			if not cells.has(cell):
 				cells[cell] = []
-			if fells:
+			if fells and not bool(piece.get("stays", false)):
 				(entry.instances as Array).append([key, cell, (cells[cell] as Array).size(), piece.transform])
 			(cells[cell] as Array).append(placement * (piece.transform as Transform3D))
 		for shape: Dictionary in parts.shapes:
@@ -248,7 +253,19 @@ func build(document: Dictionary) -> Dictionary:
 		entry.instances = (entry.instances as Array).map(func(ref: Array) -> Array: return ["%s__c%s" % [str(ref[0]).replace(".", "p"), ref[1]], ref[2], ref[3]])
 		entry.shapes = (entry.shapes as Array).map(func(ref: Array) -> Array: return ["Collision__c%s" % ref[0], "Shape%d" % ref[1]])
 		entry.labels = (entry.labels as Array).map(func(ref: Array) -> Array: return ["Names__c%s" % ref[0], "Name%d" % ref[1]])
+	# The wire spans a fellable pole holds up, by their index in fellable_wires.
+	var spans: Array = wires.fellable
+	for index in spans.size():
+		var span: Dictionary = spans[index]
+		span.pieces = (span.pieces as Array).map(func(ref: Array) -> Array: return ["power_wire__c%s" % ref[0], ref[1], ref[2]])
+		for pole: String in span.poles:
+			if fellable.has(pole):
+				var entry: Dictionary = fellable[pole]
+				if not entry.has("spans"):
+					entry["spans"] = []
+				(entry.spans as Array).append(index)
 	root.set_meta("fellable_rows", fellable)
+	root.set_meta("fellable_wires", spans)
 	root.set_meta("props", props)
 	root.set_meta("prop_counts", prop_counts)
 	root.set_meta("wire_spans", wires.spans)
@@ -265,14 +282,17 @@ func build(document: Dictionary) -> Dictionary:
 
 
 ## The wire pieces of the power lines and spurs: {ok, spans, cells: {cell ->
-## [Transform3D]}, custom: {cell -> [Color(radius, 0, 0, 0)]}} for the shared
-## wire mesh (a unit tube along +Z; its shader reads each piece's radius from
-## the custom data). Each line's
+## [Transform3D]}, custom: {cell -> [Color(radius, 0, 0, 0)]}, fellable} for the
+## shared wire mesh (a unit tube along +Z; its shader reads each piece's radius
+## from the custom data). Each line's
 ## prop_params.poles lists its poles in order along it (null where a vertex has
 ## none); a span joins each two consecutive built poles, and each spur its two
 ## poles. At each end it takes the crossarm squarest to the span, and pairs the
 ## two ends' insulators in order across the span, so no two conductors cross;
-## the lower cable hangs from the poles' brackets.
+## the lower cable hangs from the poles' brackets. fellable lists every span for
+## a car felling one of its poles (street_furniture_breaker.gd): {poles: [id, id],
+## pieces: [[cell, first index, count]] (a span's pieces in a cell are one run),
+## wires: [[from, to, sag, radius, pieces]]}.
 func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> Dictionary:
 	# [from id, to id, owner id] for every span.
 	var pairs: Array = []
@@ -289,6 +309,7 @@ func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> D
 	var cells: Dictionary = {}
 	var custom: Dictionary = {}
 	var spans := 0
+	var fellable: Array = []
 	for pair: Array in pairs:
 		if not poles.has(pair[0]) or not poles.has(pair[1]):
 			return {"ok": false, "code": "street_furniture_prop", "message": "%s: span pole %s or %s is not a built utility pole" % [pair[2], pair[0], pair[1]], "source_keys": []}
@@ -303,13 +324,15 @@ func _wire_pieces(rows: Array[Dictionary], spurs: Array, poles: Dictionary) -> D
 		var across := Vector3.UP.cross(span.normalized())
 		var tops_a := _across_order(_attachments(a, span), across)
 		var tops_b := _across_order(_attachments(b, -span), across)
+		var hung := {"poles": [pair[0], pair[1]], "pieces": [], "wires": []}
 		for conductor in mini(tops_a.size(), tops_b.size()):
-			_hang(cells, custom, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M)
+			_hang(cells, custom, tops_a[conductor], tops_b[conductor], KIT.WIRE_SAG, KIT.WIRE_RADIUS_M, hung)
 		var lower_a: Vector3 = (a.placement as Transform3D) * (a.wires.lower as Vector3)
 		var lower_b: Vector3 = (b.placement as Transform3D) * (b.wires.lower as Vector3)
-		_hang(cells, custom, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M)
+		_hang(cells, custom, lower_a, lower_b, KIT.WIRE_LOWER_SAG, KIT.WIRE_LOWER_RADIUS_M, hung)
+		fellable.append(hung)
 		spans += 1
-	return {"ok": true, "spans": spans, "cells": cells, "custom": custom}
+	return {"ok": true, "spans": spans, "cells": cells, "custom": custom, "fellable": fellable}
 
 
 ## The world insulator tops of the crossarm of a pole squarest to a span
@@ -338,15 +361,53 @@ func _across_order(points: Array[Vector3], across: Vector3) -> Array[Vector3]:
 
 ## One wire from a to b, sagging `sag` of its length at mid span, as straight
 ## pieces of the unit wire tube (radius `radius`, also kept in custom for the
-## shader), filed by their midpoint's cell.
-func _hang(cells: Dictionary, custom: Dictionary, a: Vector3, b: Vector3, sag: float, radius: float) -> void:
+## shader), filed by their midpoint's cell; noted in span (its pieces' runs in
+## their cells, and the wire) for a felled pole.
+func _hang(cells: Dictionary, custom: Dictionary, a: Vector3, b: Vector3, sag: float, radius: float, span: Dictionary) -> void:
+	var pieces := wire_piece_count(a, b)
+	var middles: Array[Vector3] = []
+	var hung := wire_pieces(a, b, sag, radius, pieces, middles)
+	for index in hung.size():
+		var middle := middles[index]
+		var cell := "%d_%d" % [floori(middle.x / CELL_MAX_M), floori(middle.z / CELL_MAX_M)]
+		if not cells.has(cell):
+			cells[cell] = []
+			custom[cell] = []
+		var run: Array = []
+		for noted: Array in span.pieces:
+			if noted[0] == cell and int(noted[1]) + int(noted[2]) == (cells[cell] as Array).size():
+				run = noted
+		if run.is_empty():
+			(span.pieces as Array).append([cell, (cells[cell] as Array).size(), 1])
+		else:
+			run[2] = int(run[2]) + 1
+		(cells[cell] as Array).append(hung[index])
+		(custom[cell] as Array).append(Color(radius, 0.0, 0.0, 0.0))
+	(span.wires as Array).append([a, b, sag, radius, pieces])
+
+
+## How many straight pieces a wire from a to b hangs in.
+static func wire_piece_count(a: Vector3, b: Vector3) -> int:
+	return maxi(4, ceili(a.distance_to(b) / KIT.WIRE_SEGMENT_M))
+
+
+## The pieces of one wire from a to b, sagging `sag` of its length at mid span:
+## each the unit wire tube's frame (along +Z from one end of the piece to the
+## other, `radius` across), in order from a; each piece's midpoint goes in middles.
+## Given the heights of the ground under its two ends (floor_a and floor_b, both
+## finite), no point of it comes lower than the line between them, so a slack wire
+## down to a felled pole lies on the ground (street_furniture_breaker.gd).
+static func wire_pieces(a: Vector3, b: Vector3, sag: float, radius: float, pieces: int, middles: Array[Vector3] = [], floor_a := INF, floor_b := INF) -> Array[Transform3D]:
+	var result: Array[Transform3D] = []
 	var length := a.distance_to(b)
-	var pieces := maxi(4, ceili(length / KIT.WIRE_SEGMENT_M))
 	var drop := length * sag
+	var floored := is_finite(floor_a) and is_finite(floor_b)
 	var previous := a
 	for step in range(1, pieces + 1):
 		var t := float(step) / float(pieces)
 		var point := a.lerp(b, t) - Vector3(0.0, 4.0 * drop * t * (1.0 - t), 0.0)
+		if floored:
+			point.y = maxf(point.y, lerpf(floor_a, floor_b, t) + radius)
 		var along := point - previous
 		var x := along.cross(Vector3.UP)
 		if x.length() < 1e-6:
@@ -354,11 +415,7 @@ func _hang(cells: Dictionary, custom: Dictionary, a: Vector3, b: Vector3, sag: f
 		x = x.normalized() * radius
 		# Right-handed (x, y, along), so the tube keeps its winding.
 		var y := along.cross(x).normalized() * radius
-		var middle := (previous + point) * 0.5
-		var cell := "%d_%d" % [floori(middle.x / CELL_MAX_M), floori(middle.z / CELL_MAX_M)]
-		if not cells.has(cell):
-			cells[cell] = []
-			custom[cell] = []
-		(cells[cell] as Array).append(Transform3D(Basis(x, y, along), previous))
-		(custom[cell] as Array).append(Color(radius, 0.0, 0.0, 0.0))
+		result.append(Transform3D(Basis(x, y, along), previous))
+		middles.append((previous + point) * 0.5)
 		previous = point
+	return result
