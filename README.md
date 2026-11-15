@@ -1,10 +1,96 @@
-# Treasure Island
+# Grand Treasure Island
 
-A private Godot game of Treasure Island, San Francisco, built autonomously by
-agents: as a treasure chest full of gold on rubber-hose legs, walk, run and
-jetpack (the owner removed spraying tags on 2026-11-11). The whole island
-comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
-time so they look like the real ones.
+I modeled an entire island with Claude. It took 3 months and about 50 billion tokens.
+
+Any similarities to upcoming blockbusters are purely coincidental.
+
+[![Grand Treasure Island: watch the video](https://grandtreasureisland.vercel.app/trailer/first.webp)](https://youtu.be/8WEn3Bm2Ckw)
+
+Step into the shoes of Chester Schatz and live a life of leisure, exploration and light trespassing on Treasure Island.
+
+## Play it
+
+- **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
+- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip) (a zip of about 229 MB). It is not notarized, so after a browser download open System Settings > Privacy & Security and click "Open Anyway".
+
+The downloadable version looks nicer.
+
+`WASD` move, `Shift` runs, hold `Space` for the jetpack, `C` in the air drops fast, `F` gets in and out of a parked car, `Esc` pauses. [All controls](#controls).
+
+## Why Treasure Island
+
+Since January I've been living on Treasure Island in the middle of the San Francisco Bay, and I love it here. The view, the waves, the beautiful parks and the grungy shipping containers. It's a very special place. I asked myself: how hard would it be to get Claude to model all of this as a video game? Turns out pretty hard. But it is possible. I'm excited to show the first version of Grand Treasure Island. It's an entire island with 16 miles of road and almost 200 buildings, modeled by Claude Opus 5.5.
+
+## What's in the game
+
+| | |
+|---|---|
+| Area | 0.63 square miles |
+| Road | 16 miles |
+| Buildings | 199 |
+| Street signs and street furniture | 540 |
+| Kinds of plants | 35 |
+| Cars | 458 |
+
+All playable. Walk, run, fly the jetpack, drop fast, drive any parked car (over the ramps, through fences, into the bay) and kick the ball into the goals.
+
+## Real and modeled
+
+<table>
+<tr><th>Real</th><th>In the game</th></tr>
+<tr><td><img src="https://grandtreasureisland.vercel.app/compare/maceo-may-real.webp" alt="Maceo May, south end: photo"></td><td><img src="https://grandtreasureisland.vercel.app/compare/maceo-may-game.webp" alt="Maceo May, south end: in the game"></td></tr>
+<tr><td colspan="2">Maceo May, south end</td></tr>
+<tr><td><img src="https://grandtreasureisland.vercel.app/compare/mersea-court-real.webp" alt="Mersea, the courtyard: photo"></td><td><img src="https://grandtreasureisland.vercel.app/compare/mersea-court-game.webp" alt="Mersea, the courtyard: in the game"></td></tr>
+<tr><td colspan="2">Mersea, the courtyard</td></tr>
+<tr><td><img src="https://grandtreasureisland.vercel.app/compare/mersea-ditch-real.webp" alt="Mersea, the ditch by the lot: photo"></td><td><img src="https://grandtreasureisland.vercel.app/compare/mersea-ditch-game.webp" alt="Mersea, the ditch by the lot: in the game"></td></tr>
+<tr><td colspan="2">Mersea, the ditch by the lot</td></tr>
+</table>
+
+Even in a world with Street View, good photos are hard to come by. The areas where I supplied my own photos ended up looking a lot better.
+
+## How it's built
+
+Deterministic code, public data, OpenStreetMap for the layout, USGS for the terrain. But saying agents do it is simplistic. Really, what makes a difference here is the subagent system.
+
+Agents would model one side of a building, leave the other side blank and be like, great job, job done. So the work is split up:
+
+1. The layout comes from a frozen OpenStreetMap snapshot and the terrain from USGS lidar.
+2. A deterministic world generator (Node) turns them into the island.
+3. Agents improve the buildings one at a time, in shared families of similar buildings.
+4. Independent agents review the code, compare the visuals with dated photos and judge the progress. The orchestrating agent never builds anything itself.
+5. A fit test walks the player up to every building. No detail is invented on a side without a dated photo.
+
+On Yerba Buena Island a road was going up the side of the hill, and the road surface was spilling over the side, because the road geometry and the laser-measured hill geometry didn't quite fit. You can tell the agent "this looks weird, fix it", and the agent acts as an environment artist in a game and fixes it as a one-off.
+
+[The agent harness: how the subagents work](AGENTS.md)
+
+## What it can't do yet
+
+The level of detail is sort of at GTA 3, GTA 4 level at this point.
+
+- Sides of buildings without a dated photo are left plain on purpose.
+- Phones are short on memory: an earlier build hit the iPhone's 2 GB limit.
+- The web build looks plainer than the Mac build.
+- More in [KNOWN_ISSUES.md](KNOWN_ISSUES.md).
+
+This is not a world model. This is a world created by an LLM. Maybe that's just fine.
+
+## Made with
+
+Modeled by Claude Opus 5.5, with images generated by GPT Image 2. Some structures modeled by GPT-6 Astra. Built from public and private photographic sources. Map data from OpenStreetMap, terrain from USGS geodata.
+
+- Map data © [OpenStreetMap](https://www.openstreetmap.org/copyright) contributors, under the Open Database License (ODbL).
+- Terrain: USGS 3D Elevation Program (3DEP), public domain.
+- Generated textures carry C2PA content credentials.
+- Sound effects are generated with ElevenLabs and are not in this repository; see [Sound](#sound).
+- Engine: Godot 4.7.2.
+- Reference photos are never shipped or committed.
+- Agents built it. I directed, reviewed and took the photos.
+- The game's **Credits** screen lists every source ([credits.json](game/resources/ui/credits.json)).
+
+## For developers
+
+The whole island comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a time so they look like the real ones.
 
 **Score:** the number of buildings that recognizably match their real
 counterparts, i.e. accepted buildings in [the building catalog](discovery/facades/facade-recognition-catalog.json),
@@ -12,7 +98,7 @@ out of the catalog's standing buildings (the frozen OSM buildings less those the
 demolished, [tools/config/demolished-buildings.json](tools/config/demolished-buildings.json)).
 `tools/test.sh` prints it.
 
-## Develop
+### Develop
 
 Development runs in the Linux devcontainer on the GMKtec (`.devcontainer/`), with
 GPU rendering:
@@ -48,7 +134,7 @@ dock; the same test lists the shader-data textures and checks `game/resources/ui
 Keep mipmaps if the shader samples them. Reimport and commit the `.import` file
 with the texture.
 
-## Check a building
+### Check a building
 
 ```sh
 # Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews.
@@ -69,7 +155,7 @@ tools/godot --fixed-fps 60 --path . --script game/tests/shared/building_fit_test
 is the Navy Chapel). [AGENTS.md](AGENTS.md#what-done-means-for-a-building) says
 when a building counts as done.
 
-## Build for the Mac
+### Build for the Mac
 
 Every push to `main` builds the Mac app on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
@@ -115,7 +201,7 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
-## Sound
+### Sound
 
 The game has sound effects, but this repository holds none: every sound is
 generated with ElevenLabs from the public prompts in
@@ -131,7 +217,7 @@ set with your own ElevenLabs account, follow
 terms, see
 [Why our audio is not in this repository](tools/sfx/README.md#why-our-audio-is-not-in-this-repository).
 
-## Controls
+### Controls
 
 - `WASD` or the arrow keys move; hold `Shift` to run.
 - Mouse looks around.
@@ -146,14 +232,14 @@ terms, see
 - Stepping off the island onto the shore rocks, or flying out over the water,
   lifts you about 5 m into the air where you are; float down and steer or
   jetpack back to land.
-- The mouse buttons do nothing: the owner removed the spray on 2026-11-11.
+- The mouse buttons do nothing; there is no spray.
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume, while the sun goes on following the clock; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
 - **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
-## More
+### More
 
 - [AGENTS.md](AGENTS.md): how agents work on this project. Read it before changing anything.
 - [CLAUDE.md](CLAUDE.md#persisted-entrypoints): agent roles and the building skill.
@@ -164,7 +250,7 @@ terms, see
 - Older records: Git history and `evidence/`.
 
 
-## Browser build
+### Browser build
 
 `tools/build-web.sh` exports the committed checkout to `build/web` and audits the
 pack for game-only content. Native builds retain Forward+; the browser uses
@@ -177,8 +263,8 @@ and with a mouse it captures the mouse to look around. WASD or the arrow keys
 move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
 and holding C in the air drops fast. F gets in or out of a parked car; in a car
 W/S drive, A/D steer (or the arrow keys) and Space is the handbrake. Esc
-releases the mouse and pauses; **Resume** captures it again and continues. The
-owner removed the spray on 2026-11-11. F3 shows actual FPS.
+releases the mouse and pauses; **Resume** captures it again and continues. There
+is no spray. F3 shows actual FPS.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
@@ -202,7 +288,7 @@ the WASM content type.
 
 Browser performance and pointer lock need checking on the playing machine.
 The development container's Chrome 154 on headless Weston has a reproducible
-pointer-lock crash; this is not evidence that the owner's Mac browser crashes.
+pointer-lock crash; this is not evidence that a Mac browser crashes.
 
 In the Linux development browser, mesh-size distance culling increased the
 observed spawn frame rate from13 to39–40FPS. Distant small building meshes can
@@ -213,7 +299,7 @@ Traversal smoke checks required a test-only pointer-lock override because of
 the container crash. That override is not in the deployed game.
 
 
-### Touch controls
+#### Touch controls
 
 On a touch-capable browser, **Tap to play** starts play once the island has loaded
 (that tap also starts the sound). Drag the
