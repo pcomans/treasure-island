@@ -8,10 +8,12 @@ extends SceneTree
 ## 2026-11-15), play waits behind the start prompt: the game paused, the pause
 ## menu showing only its "Tap to play" button under the game's name, a big
 ## target inside the page held upright and sideways, no touch control, no bed
-## sounding and no frame rate (switched on before play); its button holds the
+## started and no frame rate (switched on before play); its button holds the
 ## keyboard focus with a ring that shows on its blue, and Space (as its tap)
 ## starts play: the touch controls and the frame rate show, the menu is the pause
-## menu again and the beds come in. Then at each shape:
+## menu again and the beds come in (the wind starts, and plays where the sounds
+## are fetched; a checkout without them is silent, tools/sfx/README.md). Then at
+## each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
@@ -66,6 +68,8 @@ func _initialize() -> void:
 	create_timer(900.0, true, false, true).timeout.connect(_on_timeout)
 	ShadowQuality.settings_path = SETTINGS_PATH % OS.get_process_id()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
+	# The sound manager's log: when the wind's bed starts, with takes or silent.
+	Sound.record_requests = true
 	call_deferred("_run")
 
 
@@ -104,13 +108,14 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing and no frame rate though it was switched on, its button focused with a ring that shows on its blue) and Space on it started play as its tap does, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue) and Space on it started play and the wind (%s) as its tap does, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
 ## The start prompt as play is ready, held upright and then sideways: the game
-## paused with no touch control, no wind playing and no frame rate (switched on
-## before play, it stays hidden behind the prompt), the pause menu showing
+## paused with no touch control, the wind's bed not started and no frame rate
+## (switched on before play, it stays hidden behind the prompt), the pause menu
+## showing
 ## only "Tap to play" under the game's name (no line of desktop controls), a
 ## button inside the page at least THUMB_PX tall, the panel over the top
 ## START_PANEL_SHARE of the page (the sky, clear of the chest) and the island
@@ -118,7 +123,8 @@ func _run() -> void:
 ## has the keyboard focus, with a focus ring that shows on its blue, so Space
 ## (Enter does the same) starts play as its tap does: from the idle step, where
 ## input arrives, ending the prompt (the menu centred and the pause's dim back for
-## a later pause), showing the frame rate and letting the wind in.
+## a later pause), showing the frame rate and starting the wind: playing it where
+## the sounds are fetched, silent in a checkout without them (_wind_started).
 func _start_prompt() -> bool:
 	var hud := _main.hud
 	for shape: String in ["sideways", "upright"]:
@@ -129,7 +135,7 @@ func _start_prompt() -> bool:
 		var panel := hud.pause_box.get_global_rect()
 		var page := hud.get_viewport_rect()
 		var others := [hud.controls_button, hud.options_button, hud.credits_button, hud.exit_button].filter(func(control: Control) -> bool: return control.visible)
-		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and hud.find_child("StartControls", true, false) == null and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound) and not hud.frame_rate_label.visible, "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, controls line %s, touch controls %s, wind playing %s, frame rate shown %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), hud.find_child("StartControls", true, false) != null, _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound), hud.frame_rate_label.visible]):
+		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and hud.find_child("StartControls", true, false) == null and not _touch.visible and not _wind_started() and not hud.frame_rate_label.visible, "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, controls line %s, touch controls %s, wind started %s, frame rate shown %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), hud.find_child("StartControls", true, false) != null, _touch.visible, _wind_started(), hud.frame_rate_label.visible]):
 			return false
 		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0 and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0 and hud.pause_dim.color.a <= GameHUD.START_DIM_ALPHA, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall, its panel within the top %.2f of the page, the island lightly dimmed (button %s, panel %s, page %s, dim %.2f)." % [shape, int(THUMB_PX), GameHUD.START_PANEL_SHARE, button, panel, page, hud.pause_dim.color.a]):
 			return false
@@ -154,10 +160,17 @@ func _start_prompt() -> bool:
 		Input.parse_input_event(space)
 		await process_frame
 	await _ticks(60)
-	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _main.sound.loop_playing(Sound.WIND_BED, _main.sound) and hud.frame_rate_label.visible, "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back), show the frame rate and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind playing %s, frame rate shown %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _main.sound.loop_playing(Sound.WIND_BED, _main.sound), hud.frame_rate_label.visible]):
+	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _wind_started() and (_main.sound.loop_playing(Sound.WIND_BED, _main.sound) or not Sound.has_takes(Sound.WIND_BED)) and hud.frame_rate_label.visible, "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back), show the frame rate and start the wind, playing it where it has takes (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind started %s, playing %s, takes %s, frame rate shown %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _wind_started(), _main.sound.loop_playing(Sound.WIND_BED, _main.sound), Sound.has_takes(Sound.WIND_BED), hud.frame_rate_label.visible]):
 		return false
 	_checked.append("the start prompt")
 	return true
+
+
+## Whether the wind's bed has started: its loop_start in the sound manager's log
+## where it has takes, its loop_silent where it has none (a checkout without the
+## sounds).
+func _wind_started() -> bool:
+	return _main.sound.requested(Sound.WIND_BED).any(func(entry: Dictionary) -> bool: return entry.result in ["loop_start", "loop_silent"])
 
 
 ## On a touch screen the frame rate mirrors the pause button in the other top corner

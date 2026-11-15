@@ -19,7 +19,9 @@ and test runs stay on Dummy through `tools/godot`.
 ## Make your own sound set
 
 A clone of this repository has no audio. The game, its tests and its builds
-all work without it; the game is just silent. To hear it, make your own set
+all work without it; the game is just silent. `tools/test.sh` keeps that so:
+where the sounds are fetched, it runs the tests that read what the sound manager
+plays a second time with `--no-sfx` after `--`, which loads no takes. To hear it, make your own set
 from the same prompts. Your set will not sound identical to ours: the model
 gives a different result every time it is run, even for the same prompt and
 settings (the endpoint takes no seed, and the candidates of one sound already
