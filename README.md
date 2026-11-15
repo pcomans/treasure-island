@@ -150,7 +150,7 @@ terms, see
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume, while the sun goes on following the clock; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far). On desktop it also sets the time of day: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. Only daytime is drawn: with the sun below 10° the light waits low on the side of the sky where the sun set or will rise. Options also sets the sound's volume and mute, on every platform. The web build keeps its sun shadows off and the recorded moment (2026-11-13 12:30 PST), so its Options has only the sound (with shadows on, its renderer also brightened every sunlit surface). A shadow or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the default shadows and the recorded moment.
+- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 75 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. The light follows the sun's height down through sunset and dusk, and from 8° below the horizon until dawn the island holds a deep twilight you can still play in (no stars, flashlight or headlights). Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ## More
@@ -215,12 +215,13 @@ the container crash. That override is not in the deployed game.
 
 ### Touch controls
 
-On a touch-capable browser, play starts as soon as the island has loaded. Drag the
+On a touch-capable browser, **Tap to play** starts play once the island has loaded
+(that tap also starts the sound). Drag the
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues, **Controls** lists the touch
-controls and **Credits** lists the game's sources (drag to scroll); **Options** has only the
-sound's volume and mute, as the web keeps its sun shadows off and the recorded time of day. Movement, look and buttons
+controls and **Credits** lists the game's sources (drag to scroll); **Options** has the
+frame-rate limit, Show fps, the resolution and the sound (no shadows or time of day on the web). Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.

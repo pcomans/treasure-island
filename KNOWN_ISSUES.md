@@ -193,10 +193,12 @@ Limits:
 - iOS: with the ring/silent switch on silent, Safari mutes web audio (its default audio session). No change was made; `navigator.audioSession.type = 'playback'` would override it on iOS 17 and later.
 - iOS: Safari suspends or interrupts the audio when the page goes to the background or the device locks; it comes back on the next tap.
 - Only the driven car has engine, tyre and landing sounds; a parked or shoved car sounds only when it hits something.
+- The driven car's tyres squeal only with the handbrake, a hard brake, or at 90 % of its top speed or more (`CarSound.STEER_SQUEAL_SHARE`), so a car knocked sideways in a crash below that speed makes no squeal; the crash sound plays.
 - The small trees a car bends make no sound, and the storage yards' ponds give no wet steps or splash: the water step plays only in the marsh water the ground shader draws (`game/scripts/world/standing_water.gd`).
 - `car_tree_impact` plays about 5.4 dB under its planned level: its picked takes fall that far short of it (the processed manifest's `shortfall_db`).
 - Web: after the page is minimised and shown again, Resume pauses again until the page has focus (a click in it), because the browser grants pointer lock only to a focused page (code review, 2026-11-14).
 - Web, with a mouse: where the browser never grants pointer lock (an embedding frame without the permission, a kiosk, some Linux setups), "Click to play" starts play with the pointer free and a line saying the mouse won't turn the view, so the view cannot be turned with the mouse. After Esc, the pause menu's Resume asks for the lock again and, refused, stays paused, as before the start prompt (2026-11-15).
+- The web start prompt's pointer lock in a real desktop browser and its tap on a real iPhone are confirmed only on the owner's devices: the checks ran in headed Chromium (Safari's iOS rules emulated) and in the headless contracts.
 - The bay's water sound at the causeway barrier and the riprap rumble on the north slipway: see [Drivable cars](#drivable-cars-gamescriptsvehicles-2026-11-08).
 
 ## Mac notarization (`.github/workflows/mac-build.yml`, 2026-11-14)
@@ -220,6 +222,7 @@ Non-blocking notes from the reviews:
 - While the controls screen is open, the loading progress is hidden.
 - On the web, the first goal may hitch once while the confetti shader compiles (not verified).
 - Resuming (`_set_paused(false)` in `game/scripts/main.gd`) captures the mouse even when `capture_mouse_on_ready` is false, as the test harnesses set it (code review, 2026-11-11).
+- The Options choices' and the start prompt's keyboard focus rings are checked by contrast in the contracts (at least 3:1 against the fill under them), not seen in any capture.
 - `goal_confetti.gd`'s `on_screen` clamps the tone map's white only at 0.001 (`maxf(environment.tonemap_white, 0.001)`), not at 1.0 (code review, 2026-11-11).
 - The gameplay contract's glancing walk past the ball (`_check_soccer_ball` in `headless_gameplay_contract.gd`) allows up to 3 m/s along the walk; the bound could be tightened to under 1.0 (code review, 2026-11-11).
 
@@ -526,6 +529,7 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
   - What it means: at the nominal hold these limits admit a true speed of about 16.4 to 22.5 m/s, and 15.3 to 23.2 across the holds recorded. That is looser than 17 to 21 at both ends, by about 2 m/s at the top, so it catches a broken run rather than a slightly wrong one. Walk speed moves under 7 m. `headless_gameplay_contract.gd` and `run_speed_mps` still guard the exact value.
   - Limit of the method: distance isn't fully independent of the stall. A stall that delays no timer costs about 3 m: traced runs at a true 20 m/s moved 20.4 to 21.7 m, just inside the lower limit.
   - The 550 ms speed and a steady reading stay in the log as recorded readings, not gates.
+  - The web starts paused behind its start prompt ("Click to play" / "Tap to play"), so every live leg must press it before it drives, walks or reads sound; a leg that doesn't sees a paused game.
 - **World generator and validator:**
   - The terrain-override slope guard (`tools/lib/terrain-overrides.mjs`) checks the triangles of the 0.5 m sample grid, not the simplified triangles it writes out.
   - An `osm_way` fence rule with `offset_m` places its gates by distance along the unshifted OSM line, so they drift at bends (`tools/lib/street-fence-generation.mjs`).
