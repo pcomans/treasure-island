@@ -12,8 +12,10 @@ const BUTTON_COLOR := Color(0.9, 0.9, 0.9, 0.85)
 ## How long the player must be off the ground before the use button shows the
 ## drop arrow (s), so a step down a kerb doesn't flash it.
 const AIR_SHOW_S := 0.15
-## The pause button: a disc of this radius, and a tap within it (px).
+## The pause button: a disc of this radius, and a tap within it (px), centred this
+## far in from the safe area's top right corner along each side.
 const PAUSE_RADIUS_PX := 34.0
+const PAUSE_INSET_PX := 55.0
 ## A button's label sits LABEL_INSET_PX in from its left and on the use button's
 ## baseline (touch_use_button.gd LABEL_BASELINE_PX); the stick's MOVE label at
 ## this offset from the stick's corner.
@@ -84,7 +86,7 @@ func _layout() -> void:
 		var start := Vector2(float(insets[0]), float(insets[1])) * css_scale
 		var end := Vector2(float(insets[2]), float(insets[3])) * css_scale
 		_safe_rect = Rect2(start, size - start - end)
-	_pause_center = Vector2(_safe_rect.end.x - 55, _safe_rect.position.y + 55)
+	_pause_center = Vector2(_safe_rect.end.x - PAUSE_INSET_PX, _safe_rect.position.y + PAUSE_INSET_PX)
 	_move_stick.position = Vector2(_safe_rect.position.x + 20, _safe_rect.end.y - 250)
 	_move_stick.size = Vector2(220, 220)
 	_buttons[0].position = _safe_rect.end - Vector2(144, 208)

@@ -15,8 +15,8 @@ extends SceneTree
 ##     controls only in a touch browser): its graphics (owner, 2026-11-14) and the
 ##     sound, no shadow levels or time of day; a finger's tap on a resolution puts
 ##     it on;
-##   - the frame rate, shown throughout, sits at the top left of the touch
-##     controls' safe area, clear of every touch control;
+##   - the frame rate, shown throughout, mirrors the pause button in the other top
+##     corner of the touch controls' safe area, clear of every touch control;
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
 ##     RVs, vehicle_spots.gd yard_bodies(); a different one at each shape where
@@ -82,16 +82,26 @@ func _run() -> void:
 	# touch controls.
 	_main._on_graphics_chosen(GraphicsSettings.SHOW_FRAME_RATE_KEY, true)
 	await _ticks(10)
-	var corner := _main.hud.frame_rate_label.get_global_rect()
-	if not _require(_main.hud.frame_rate_label.visible and corner.position.is_equal_approx(_touch.safe_area().position + GameHUD.FRAME_RATE_TOUCH_INSET_PX), "On a touch screen the frame rate must show at the top left of the safe area %s, not at %s." % [_touch.safe_area(), corner]):
+	if not _check_frame_rate_corner("at the start"):
 		return _finish()
 	if not _check_hud("at the start"):
 		return _finish()
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout at the top left, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
+
+
+## On a touch screen the frame rate mirrors the pause button in the other top corner
+## of the safe area: its left edge as far in as the button's disc is from the right,
+## level with the disc's centre.
+func _check_frame_rate_corner(when: String) -> bool:
+	var safe := _touch.safe_area()
+	var label := _main.hud.frame_rate_label.get_global_rect()
+	var pause: Array = _touch.describe().pause
+	var disc_gap := safe.end.x - (float(pause[0]) + TouchControls.PAUSE_RADIUS_PX)
+	return _require(_main.hud.frame_rate_label.visible and is_equal_approx(label.position.x - safe.position.x, disc_gap) and is_equal_approx(label.get_center().y, float(pause[1])), "%s: the frame rate must mirror the pause button (%s) in the safe area %s, not sit at %s." % [when, pause, safe, label])
 
 
 ## One window shape: the page turned to it, a pause and Resume, then every
@@ -102,6 +112,8 @@ func _check_shape(shape: String) -> bool:
 		await process_frame
 	var screen := _main.hud.get_viewport_rect().size
 	var upright := shape == "upright"
+	if not _check_frame_rate_corner(shape):
+		return false
 	if not _require((screen.y > screen.x) == upright and is_equal_approx(minf(screen.x, screen.y), float(GameMain.TOUCH_LAYOUT_PX)), "The %s page laid out at %s, not %s with its short side %d px." % [shape, screen, "upright" if upright else "sideways", GameMain.TOUCH_LAYOUT_PX]):
 		return false
 	if not await _pause_and_resume(shape) or not _check_hud("%s, after the pause and Resume" % shape) \

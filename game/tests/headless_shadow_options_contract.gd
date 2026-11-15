@@ -269,7 +269,12 @@ func _check_graphics() -> String:
 	for child: Node in hud.options_panel.get_node("OptionsLayout").get_children():
 		if (child as Control).visible:
 			order.append(child.name)
-	if not _require(order.slice(0, 7) == PackedStringArray(["Title", "GraphicsHeading", "ShadowRow", "ShadowNote", "FrameRateRow", "ResolutionRow", "TimeHeading"]), "The options screen must read Options, then Graphics: the sun shadows, their note, the frame rate and the resolution, then the time of day (it reads %s)." % [order]):
+	if not _require(order.slice(0, 7) == PackedStringArray(["Title", "GraphicsHeading", "ShadowRow", "ShadowNote", "FrameRateRow", "ResolutionRow", "TimeHeadingRow"]), "The options screen must read Options, then Graphics: the sun shadows, their note, the frame rate and the resolution, then the time of day (it reads %s)." % [order]):
+		return ""
+	# The switches show their track when off, and a focused choice in use reads like
+	# any other in use: its focus outline is the fill's own blue.
+	var focus := (hud.shadow_levels.get_node("medium") as Button).get_theme_stylebox("focus") as StyleBoxFlat
+	if not _require(hud.show_frame_rate.has_theme_icon_override("unchecked") and hud.sound_mute.has_theme_icon_override("unchecked") and focus != null and focus.border_color == GameHUD.CONTROLS_HEADING_COLOR and not focus.draw_center, "The switches (Show fps, Mute) must draw their own Off track, and a choice's focus outline must be the headings' blue (focus %s)." % [focus]):
 		return ""
 	# Each choice on the options screen, as pressed there: on at once.
 	var applied := PackedStringArray()

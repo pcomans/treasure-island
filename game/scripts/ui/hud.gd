@@ -46,9 +46,11 @@ const CREDITS_LICENCE_HEADING_PX := 44.0
 ## headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
 const OPTIONS_ACTIVE_TEXT_COLOR := Color(0.04, 0.07, 0.1)
-## On a touch screen the frame rate sits this far into the top left of the touch
-## controls' safe area (px), where the move stick's column starts.
-const FRAME_RATE_TOUCH_INSET_PX := Vector2(20.0, 14.0)
+## The options screen's switches (Show fps, Mute) when off: the default theme's
+## toggle (its 32 x 16 shape) with its track drawn, where Godot's own leaves only a
+## faint knob on this dark panel. Rasterized for the screen's scale, as Godot's own
+## theme icons are (DPITexture).
+const SWITCH_OFF_SVG := "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"32\" height=\"16\"><rect width=\"29\" height=\"13\" x=\"1.5\" y=\"1.5\" rx=\"6.5\" fill=\"#fff\" fill-opacity=\".12\" stroke=\"#fff\" stroke-opacity=\".6\"/><circle cx=\"8\" cy=\"8\" r=\"4.5\" fill=\"#fff\" fill-opacity=\".85\"/></svg>"
 ## In a licence text, a line at least this share of its paragraph's longest was
 ## wrapped at a fixed width (_reflowed).
 const REFLOW_FULL_SHARE := 0.6
@@ -80,7 +82,8 @@ const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 ## frame rate limit with the switch for the frame rate display, and the 3D
 ## resolution (set_graphics), each choice a button like the shadow levels with its
 ## note as its tooltip. Then the time of day, on desktop, and the sound's master
-## volume and mute. A solid panel over the dimmed game, which shows a change at once.
+## volume and mute. Each section after the first stands as far below the one before.
+## A solid panel over the dimmed game, which shows a change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
 @onready var graphics_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/GraphicsHeading
@@ -91,12 +94,14 @@ const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 @onready var show_frame_rate: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/FrameRateRow/ShowFrameRate
 @onready var resolutions: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ResolutionRow/Resolutions
 ## The frame rate, when the player shows it: in the top right corner, or on a touch
-## screen at the top left of its safe area, clear of the pause button.
+## screen in the top left of its safe area, as far in as the pause button opposite.
 @onready var frame_rate_label: Label = $FrameRate
 ## The time of day (DayClock): the island's date and time, each on a slider that
 ## jumps there as it moves (time runs on from there), and Now, back to the real
-## time; the note says when night would be. Desktop only for now (set_time_controls).
-@onready var time_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeading
+## time; beside the heading, the note on what night is for now. Desktop only for now
+## (set_time_controls).
+@onready var time_heading_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeadingRow
+@onready var time_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeadingRow/TimeHeading
 @onready var time_date_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow
 @onready var time_date_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateLabel
 @onready var time_date_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateSlider
@@ -104,7 +109,7 @@ const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 @onready var time_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeLabel
 @onready var time_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider
 @onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
-@onready var time_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeNote
+@onready var time_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeadingRow/TimeNote
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
@@ -150,8 +155,9 @@ var _licence_files: Array = []
 var _shadow_group := ButtonGroup.new()
 var _frame_rate_group := ButtonGroup.new()
 var _resolution_group := ButtonGroup.new()
-## The pressed level's fill (_active_level_style).
+## The pressed choice's fill and the focused choice's outline (_active_level_style).
 var _active_level_box: StyleBoxFlat
+var _choice_focus_box: StyleBoxFlat
 ## Whether the volume slider is being dragged (sound_settings_changed's keep).
 var _sound_dragging := false
 ## Whether the options screen offers the date and time (set_time_controls).
@@ -185,6 +191,9 @@ func _ready() -> void:
 		_sound_changed(true))
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
 	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
+	var switch_off := DPITexture.create_from_string(SWITCH_OFF_SVG)
+	for switch: CheckButton in [show_frame_rate, sound_mute]:
+		switch.add_theme_icon_override("unchecked", switch_off)
 	time_date_slider.value_changed.connect(_on_time_slid.bind(true))
 	time_slider.value_changed.connect(_on_time_slid.bind(false))
 	for slider: HSlider in [time_date_slider, time_slider]:
@@ -373,12 +382,21 @@ func show_graphics(current: Dictionary) -> void:
 
 
 ## The frame rate in its corner: frames a second over the last second (the engine's
-## count), at the top left of the touch controls' safe area on a touch screen.
+## count), on a touch screen opposite the pause button (frame_rate_touch_position).
 func _show_frame_rate() -> void:
 	frame_rate_label.text = "%d fps" % roundi(Engine.get_frames_per_second())
 	var touch := get_node_or_null("TouchControls") as TouchControls
 	if _touch and touch != null:
-		frame_rate_label.position = touch.safe_area().position + FRAME_RATE_TOUCH_INSET_PX
+		frame_rate_label.position = frame_rate_touch_position(touch.safe_area(), frame_rate_label.size)
+
+
+## Where the frame rate label (of this size) goes on a touch screen: mirroring the
+## pause button in the other top corner of the safe area, its left edge as far from
+## the safe area's left as the button's disc is from its right, and level with the
+## disc's centre.
+static func frame_rate_touch_position(safe: Rect2, label_size: Vector2) -> Vector2:
+	var inset := TouchControls.PAUSE_INSET_PX
+	return safe.position + Vector2(inset - TouchControls.PAUSE_RADIUS_PX, inset - label_size.y * 0.5)
 
 
 ## Fills a row with a toggle button for each choice ({id, name, note}), one pressed
@@ -430,7 +448,7 @@ func sound_volume_share() -> float:
 ## the recorded moment for now (owner, 2026-11-14: "Mac first, web later").
 func set_time_controls(shown: bool) -> void:
 	_time_controls = shown
-	for part: Control in [time_heading, time_date_row, time_row, time_note]:
+	for part: Control in [time_heading_row, time_date_row, time_row]:
 		part.visible = shown
 	_show_time(true)
 
@@ -496,15 +514,22 @@ func show_shadow_level(id: String) -> void:
 	shadow_note.text = str(button.get_meta("note"))
 
 
-## The level in use: filled in the headings' blue with dark type, so it never reads
-## as the keyboard focus, which outlines a button white.
+## The choice in use: filled in the headings' blue with dark type. The keyboard
+## focus outlines a choice in the same blue, so the focused choice in use (the shadow
+## level as Options opens) reads like every other one in use, and a focused other
+## choice shows a blue ring.
 func _active_level_style(button: Button) -> void:
 	if _active_level_box == null:
 		var pressed := button.get_theme_stylebox("pressed")
 		_active_level_box = pressed.duplicate() as StyleBoxFlat if pressed is StyleBoxFlat else StyleBoxFlat.new()
 		_active_level_box.bg_color = CONTROLS_HEADING_COLOR
+		var focus := button.get_theme_stylebox("focus")
+		_choice_focus_box = focus.duplicate() as StyleBoxFlat if focus is StyleBoxFlat else StyleBoxFlat.new()
+		_choice_focus_box.draw_center = false
+		_choice_focus_box.border_color = CONTROLS_HEADING_COLOR
 	for state: String in ["pressed", "hover_pressed"]:
 		button.add_theme_stylebox_override(state, _active_level_box)
+	button.add_theme_stylebox_override("focus", _choice_focus_box)
 	for colour: String in ["font_pressed_color", "font_hover_pressed_color"]:
 		button.add_theme_color_override(colour, OPTIONS_ACTIVE_TEXT_COLOR)
 
