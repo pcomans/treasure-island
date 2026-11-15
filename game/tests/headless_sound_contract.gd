@@ -14,8 +14,9 @@ extends SceneTree
 ##      2026-11-14: only by the water's edge); the menus click and the pause sounds;
 ##      while the web's audio does not run yet (Sound.audio_running, which the
 ##      page's shell sets there; owner, 2026-11-15: nothing sounded on an iPhone or
-##      iPad until the pause menu) a one-shot is dropped, not queued, and a held
-##      loop waits, starting once it runs, with nothing dropped sounding then;
+##      iPad until the pause menu) a world one-shot is dropped, not queued, a menu
+##      click still plays, and a held loop waits, starting once it runs, with
+##      nothing dropped sounding then;
 ##   2. on foot: steps (hard or soft) as the player walks, wet ones in the ditch by
 ##      Mersea's water (StandingWater); Space starts the jet, holds its roar and
 ##      the lid's rattle and lets it go with its tail; the landing thumps; a fast
@@ -245,10 +246,11 @@ func _check_startup() -> bool:
 
 
 ## The web's audio not running yet (a browser starts it only after a user gesture):
-## with Sound.audio_running off, a menu click and a footstep asked for are
-## dropped (suspended), and the jet's roar held by a stand-in holder waits; once
-## it runs, the roar starts and neither dropped sound plays, so nothing asked for
-## while it waited sounds all at once when it starts.
+## with Sound.audio_running off, a footstep asked for is dropped (suspended) while
+## a menu click still plays (it comes from the tap that starts the audio), and the
+## jet's roar held by a stand-in holder waits; once it runs, the roar starts and
+## the dropped step never plays, so nothing asked for while it waited sounds all
+## at once when it starts.
 func _check_audio_waits() -> bool:
 	var holder := Node3D.new()
 	root.add_child(holder)
@@ -261,20 +263,20 @@ func _check_audio_waits() -> bool:
 		Sound.hold(&"jet_loop", holder, 1.0, holder.global_position)
 		await process_frame
 	var waiting := not _sound.loop_playing(&"jet_loop", holder)
-	var dropped: Array = _results([&"ui_click", &"footstep_hard"], mark).values()
+	var asked: Dictionary = _results([&"ui_click", &"footstep_hard"], mark)
 	_sound.audio_running = true
 	for _frame in 20:
 		Sound.hold(&"jet_loop", holder, 1.0, holder.global_position)
 		await process_frame
 	var started := _sound.loop_playing(&"jet_loop", holder)
-	var replayed := _played(&"ui_click", mark) + _played(&"footstep_hard", mark)
+	var replayed := _played(&"footstep_hard", mark)
 	Sound.release(&"jet_loop", holder)
 	for _frame in 30:
 		await process_frame
 	holder.queue_free()
-	if not _require(waiting and dropped == [["suspended"], ["suspended"]] and started and replayed == 0, "While the web's audio does not run a one-shot must be dropped (%s) and a held loop wait (%s); once it runs the loop must start (%s) and nothing dropped play (%d)." % [dropped, waiting, started, replayed]):
+	if not _require(waiting and asked == {"ui_click": ["played"], "footstep_hard": ["suspended"]} and started and replayed == 0, "While the web's audio does not run a footstep must be dropped and a menu click play (%s) and a held loop wait (%s); once it runs the loop must start (%s) and the dropped step never play (%d)." % [asked, waiting, started, replayed]):
 		return false
-	_summary.append("while the web's audio does not run a click and a step are dropped and the jet's roar waits, starting once it runs, with nothing dropped sounding then")
+	_summary.append("while the web's audio does not run a step is dropped, a menu click plays and the jet's roar waits, starting once it runs, with the dropped step never sounding")
 	return true
 
 

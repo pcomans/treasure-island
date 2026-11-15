@@ -51,10 +51,11 @@ extends Node
 ## On the web the browser starts the audio only after a user gesture (Safari on
 ## iOS only after a tap, never the end of a slide), and the page's shell resumes
 ## it at the first one anywhere (game/web/shell.html, window.__tiAudio). Until it
-## runs (audio_running), a one-shot is dropped rather than queued, since every one
-## queued would sound at once the moment the audio started, and a loop waits to
-## start until then (owner, 2026-11-15: on an iPhone or iPad nothing sounded until
-## the pause menu).
+## runs (audio_running), a world one-shot is dropped rather than queued, since
+## every one queued would sound at once the moment the audio started, and a loop
+## waits to start until then; the menus' own sounds (the UI bus) still go through,
+## as they come from the tap that starts it, such as the pause button's (owner,
+## 2026-11-15: on an iPhone or iPad nothing sounded until the pause menu).
 ##
 ## The listener is Godot's own: the camera showing. Getting in and out of a car
 ## and the watch from the shore are blends between cameras (vehicle_camera.gd),
@@ -374,8 +375,8 @@ func request(id: StringName, at: Vector3, strength: float, pitch: float) -> Stri
 	if settings.is_empty() or bool(settings.get("loop", false)):
 		push_error("Sound: %s is not a one-shot in %s" % [id, CATALOG_PATH])
 		return _noted(id, at, strength, "unknown")
-	# Before the web's audio runs: dropped, not queued (see the top).
-	if not audio_running:
+	# Before the web's audio runs a world sound is dropped, not queued (see the top).
+	if not audio_running and str(settings.get("bus", "")) != "UI":
 		return _noted(id, at, strength, "suspended")
 	var now := _clock(settings)
 	if now - float(_last_played.get(id, -INF)) < float(settings.get("min_gap_s", 0.0)):
