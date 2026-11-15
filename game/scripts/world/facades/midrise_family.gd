@@ -290,6 +290,9 @@ static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Arr
 	_make_blocks(ctx)
 	if not ctx.errors.is_empty():
 		return
+	_check_open_covers(ctx)
+	if not ctx.errors.is_empty():
+		return
 	var levels: Array = []
 	for block: Block in ctx.blocks:
 		levels.append_array(Array(_block_levels(block, block.cfg.get("faces", {}), ctx.cfg.get("schemes", {}))))
@@ -865,8 +868,10 @@ static func _pieces_around_holes(block: Block) -> Array[PackedVector2Array]:
 
 # ------------------------------------------------------------------- exposure
 
-## Station intervals of block edge i that rise above neighbours or the ground.
-static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
+## The neighbouring blocks that hide part of block edge i: [lo, hi, roof_y, floor,
+## block] per run of a neighbour's edge lying against it (stations along edge i).
+## A neighbour hides the band from its floor (_cover_floor) up to its roof.
+static func _covers(ctx: Ctx, block: Block, i: int) -> Array:
 	var a := block.poly[i]
 	var b := block.poly[(i + 1) % block.poly.size()]
 	var length := a.distance_to(b)
@@ -887,7 +892,43 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 			var lo := maxf(0.0, minf((qa - a).dot(d), (qb - a).dot(d)))
 			var hi := minf(length, maxf((qa - a).dot(d), (qb - a).dot(d)))
 			if hi - lo > 0.001:
-				covers.append([lo, hi, other.roof_y, _cover_floor(other)])
+				covers.append([lo, hi, other.roof_y, _cover_floor(other), other])
+	return covers
+
+
+## A block with open sides (an `open` face scheme: posts, no wall) hides the walls it
+## lies against like any block, unless it is open_sided, a pergola or a flat deck. A
+## walled neighbour then has a gap in its wall that the posts do not close, and as its
+## other walls are single-sided, the building is see-through there (899 13th St's
+## carport, w291196367, 2026-11-15). Such a build fails: mark the open block
+## open_sided or give it walls.
+static func _check_open_covers(ctx: Ctx) -> void:
+	var schemes: Dictionary = ctx.cfg.get("schemes", {})
+	for block: Block in ctx.blocks:
+		if not _names_scheme(block, schemes, false):
+			continue
+		for i in block.poly.size():
+			for cover: Array in _covers(ctx, block, i):
+				var other: Block = cover[4]
+				if _names_scheme(other, schemes, true) and not (other.form == "flat" and other.cfg.has("deck")):
+					ctx.errors.append("block %s has open sides but hides the wall of block %s without one of its own: mark it open_sided or give it walls" % [other.id, block.id])
+					return
+
+
+## Whether a block's faces name an open scheme (want_open) or a walled one (not want_open).
+static func _names_scheme(block: Block, schemes: Dictionary, want_open: bool) -> bool:
+	var faces: Dictionary = block.cfg.get("faces", {})
+	for name: Variant in faces.values():
+		var scheme: Variant = schemes.get(str(name))
+		if scheme is Dictionary and (scheme as Dictionary).has("open") == want_open:
+			return true
+	return false
+
+
+## Station intervals of block edge i that rise above neighbours or the ground.
+static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
+	var length := block.poly[i].distance_to(block.poly[(i + 1) % block.poly.size()])
+	var covers := _covers(ctx, block, i)
 	var cuts: Array = [0.0, length]
 	for cover: Array in covers:
 		cuts.append(cover[0])

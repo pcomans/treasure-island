@@ -11942,8 +11942,56 @@
         "building:w291196367:wall"
       ],
       "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "identity_or_reference_research_required",
+      "reference_records": [
+        {
+          "observation_id": "367-SV01",
+          "observed_regions": [
+            "September 2025 WSW long side and the open south canopy, from 13th Street"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "https://www.google.com/maps/@?api=1&map_action=pano&pano=Spfk1idrxel-cLsXjCOREg&heading=23&pitch=0&fov=75 (Google Street View, 899 13th St, Sep 2025); retained in sheds-20261017/references/w291196367.png and north-tip-building-20261115/refs/sv-spfk-h23.png",
+          "supports": [
+            "long beige corrugated shed under a rusty, partly grey corrugated gable roof",
+            "south end an open canopy under the continued roof: heavy timber corner post, eave beam on the WSW side, header across the gable"
+          ]
+        },
+        {
+          "observation_id": "367-SV02",
+          "observed_regions": [
+            "March 2025 WSW long side and the south canopy, from the same 13th Street viewpoint"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View time travel at pano Spfk1idrxel-cLsXjCOREg, 899 13th St, Mar 2025; retained in north-tip-building-20261115/refs/sv-13th-end-mar2025.png",
+          "supports": [
+            "sunlit roof of rusty and pale grey corrugated sheets",
+            "canopy corner post, WSW eave beam and gable header"
+          ]
+        },
+        {
+          "observation_id": "367-SV03",
+          "observed_regions": [
+            "April 2019 south canopy front and WSW wall, from the same 13th Street viewpoint"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Google Street View time travel at pano Spfk1idrxel-cLsXjCOREg, 899 13th St, Apr 2019; retained in north-tip-building-20261115/refs/sv-13th-end-apr2019.png",
+          "supports": [
+            "open canopy front: a deep header across the gable on two timber corner posts, none between them"
+          ]
+        },
+        {
+          "observation_id": "367-AE01",
+          "observed_regions": [
+            "May 2026 aerial, roof and footprint"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "Esri World Imagery level 19, Vantor capture 2026-05-26 (0.24 m); retained in north-tip-building-20261115/refs/aerial-may2026-367.png",
+          "supports": [
+            "gable roof over the WSW strip, grey with rust toward the south end",
+            "a roofed annex in the middle step of the ENE side, form unknown; no dated photo of the ENE side or the NNW end"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

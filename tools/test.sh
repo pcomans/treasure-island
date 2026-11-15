@@ -181,6 +181,7 @@ for test in \
   game/tests/headless_building_study_geometry_contract.gd \
   game/tests/headless_bake_merge_contract.gd \
   game/tests/headless_facade_grid_contract.gd \
+  game/tests/headless_midrise_open_cover_contract.gd \
   game/tests/headless_shore_lift.gd \
   game/tests/headless_fast_drop.gd \
   game/tests/headless_vehicle_contract.gd \

@@ -211,9 +211,9 @@
     },
     "roof_rust": {
       "rgb": [
-        0.58,
-        0.51,
-        0.46
+        0.52,
+        0.46,
+        0.37
       ],
       "roughness": 0.85,
       "metallic": 0.1
@@ -401,7 +401,7 @@
         }
       ]
     },
-    "carport": {
+    "canopy_post": {
       "material": "beige",
       "parapet_material": "beige",
       "module": 60.0,
@@ -409,9 +409,20 @@
         "kind": "blank"
       },
       "open": {
-        "post_w": 0.18,
-        "module": 3.6,
+        "post_w": 0.3,
+        "module": 13.0,
         "post_material": "timber"
+      }
+    },
+    "canopy_open": {
+      "material": "beige",
+      "parapet_material": "beige",
+      "module": 60.0,
+      "ground": {
+        "kind": "blank"
+      },
+      "open": {
+        "posts": false
       }
     }
   },
@@ -473,7 +484,8 @@
       },
       "roof_material": "roof_rust",
       "faces": {
-        "default": "carport"
+        "e0": "canopy_open",
+        "default": "canopy_post"
       },
       "open_sided": true
     },
@@ -509,7 +521,7 @@
       }
     },
     {
-      "id": "carport",
+      "id": "annex",
       "storeys": 1,
       "ground_h": 3.0,
       "clip": [
@@ -525,17 +537,17 @@
         "h": 0.0
       },
       "roof": {
-        "form": "gable",
-        "ridge_edge": 6,
-        "pitch_deg": 14.0,
-        "overhang": 0.3,
-        "t": 0.12,
+        "form": "mono",
+        "low_edge": 6,
+        "pitch_deg": 6.0,
+        "overhang": 0.25,
+        "t": 0.1,
         "under": "soffit",
         "fascia": "fascia"
       },
       "roof_material": "roof_rust",
       "faces": {
-        "default": "carport"
+        "default": "inner"
       }
     },
     {
@@ -569,10 +581,47 @@
       }
     }
   ],
+  "parts": [
+    {
+      "kind": "box",
+      "edge": 1,
+      "s": [
+        0.3,
+        12.39
+      ],
+      "d": [
+        0.0,
+        0.3
+      ],
+      "y": [
+        3.75,
+        4.2
+      ],
+      "material": "timber"
+    },
+    {
+      "kind": "box",
+      "edge": 0,
+      "s": [
+        32.59,
+        36.786
+      ],
+      "d": [
+        0.0,
+        0.3
+      ],
+      "y": [
+        3.9,
+        4.28
+      ],
+      "material": "timber"
+    }
+  ],
   "study_notes": {
-    "observed": "Sep 2025 899 13th St: long beige corrugated shed with a rusty gable roof and an open gabled carport on timber posts beside parking.",
-    "inferred": "Lean-to annexes in the other two steps of the ENE side, doors, roll-ups and louvres; pitches and heights.",
-    "footprint": "Frozen 12-edge ring kept; the 12.69 m WSW strip is the gable shed, the stepped ENE side splits into two lean-tos and the open carport.",
-    "m4_canopy": "2026-10-28 M4 re-check: the Sep 2025 photo shows the street (south) end as an open timber canopy under the continued rust gable roof, with the enclosed gable wall set back about 4.5 m; a camera fitted to the eave corner, canopy apex and canopy eaves (rms 1.4 px) puts the canopy front on the frozen south footprint edge, so the last 4.5 m of the shed block becomes an open canopy_s block on timber posts (carport scheme)"
+    "observed": "Street View from 13th St of the WSW long side and the south end: Sep 2025 (pano Spfk1idrxel-cLsXjCOREg, heading 23), Mar 2025 and Apr 2019 from the same viewpoint. A long beige corrugated shed under a rusty, partly grey corrugated gable roof; its south end is an open canopy under the continued roof, on heavy timber corner posts with a deep header across the gable and an eave beam along the WSW side. May 2026 aerial (Esri level 19, 2026-05-26): the gable roof, grey with rust toward the south end, and a roofed annex in the middle step of the ENE side.",
+    "inferred": "The ENE side and the NNW end have no dated photo: the two lean-tos and the plain annex fill the ENE steps; doors, roll-ups and louvres on the long side and both gables; pitches, heights and the canopy frame's sizes.",
+    "footprint": "Frozen 12-edge ring kept; the 12.69 m WSW strip is the gable shed, its south 4.5 m the open canopy, and the stepped ENE side holds two lean-tos and the plain annex.",
+    "m4_canopy": "2026-10-28 M4 re-check: the Sep 2025 photo shows the street (south) end as an open timber canopy under the continued rust gable roof, with the enclosed gable wall set back about 4.5 m; a camera fitted to the eave corner, canopy apex and canopy eaves (rms 1.4 px) puts the canopy front on the frozen south footprint edge, so the last 4.5 m of the shed block becomes an open canopy_s block on timber posts (carport scheme)",
+    "fix_20261115": "Owner report 2026-11-15. The carport block was a second copy of the photographed south canopy, put in the middle ENE step with no photo (the 2026-10-28 re-check added canopy_s and kept it); being open, it hid 7 m of the shed's ENE wall and the shed was see-through there. It is now the plain enclosed annex the May 2026 aerial shows there (form unknown): closed walls, no openings, a mono roof falling to e6 under the shed's eave. canopy_s as in the Apr 2019, Mar 2025 and Sep 2025 photos: one 0.3 m timber post at each front corner (a post module longer than the face puts one at each face start; none on the WSW side, where the shed's corner carries the eave beam), a 0.45 m header across the front and a 0.3 m eave beam along the WSW side (parts); the canopy's ENE side has no photo and keeps only its corner post and roof edge. Roof colour, set under neutral lighting at the matched pose and from above: a warm grey-brown of hue about 31 degrees, between the street photos' rust-tan (about 22) and the aerial's rusty south end (about 39; its ENE slope reads neutral grey), so the slope in shade no longer reads pink in game; about 10% darker than the brighter-exposed Mar 2025 photo. Walls and timber unchanged (in game, the timber posts render within the photos' range)."
   }
 }
