@@ -13,6 +13,8 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
+## The loading screen put up a line (show_loading): main.gd's loading steps.
+signal loading_shown(text: String)
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -145,6 +147,8 @@ const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
 @onready var load_credit: Label = $LoadPanel/LoadLayout/LoadStack/LoadCredit
 @onready var load_panel: PanelContainer = $LoadPanel
 @onready var load_text: Label = $LoadPanel/LoadLayout/LoadStack/LoadText
+## The loading line's note, smaller and dimmer under it (show_loading).
+@onready var load_note: Label = $LoadPanel/LoadLayout/LoadStack/LoadNote
 ## The loading screen's treasure chest, the app icon (game/resources/ui/PROVENANCE.md).
 @onready var load_icon: TextureRect = $LoadPanel/LoadLayout/LoadStack/LoadIcon
 @onready var debug_panel: PanelContainer = $DebugPanel
@@ -267,13 +271,16 @@ func bind_evidence(evidence: RuntimeEvidence) -> void:
 	_evidence = evidence
 
 
-func show_loading(message: String = "Validating complete Treasure Island world…") -> void:
-	load_text.text = message
-	load_panel.show()
-
-
-func update_load_progress(loaded: int, total: int) -> void:
-	load_text.text = "Building complete world… %d / %d" % [loaded, total]
+## The loading screen's line: the step under way (main.gd's LOADING_STEPS), its
+## first line in full and any further lines as a note under it (main.gd's
+## FIRST_LAUNCH_NOTES). The screen itself shows from the start (hud.tscn) until play
+## (show_world_ready), opaque, so nothing of the island is seen before play; a new
+## line only changes its text.
+func show_loading(message: String) -> void:
+	var lines := message.split("\n", true, 1)
+	load_text.text = lines[0]
+	load_note.text = lines[1] if lines.size() > 1 else ""
+	loading_shown.emit(message)
 
 
 ## Play starts. A controls screen opened from the loading screen stays open
@@ -287,6 +294,7 @@ func show_load_error(code: String, message: String, source_keys: Array) -> void:
 	if not source_keys.is_empty():
 		source_suffix = "\nSources: %s" % ", ".join(source_keys)
 	load_text.text = "WORLD LOAD BLOCKED\n[%s] %s%s\n\nNo partial world was started." % [code, message, source_suffix]
+	load_note.text = ""
 	load_panel.show()
 
 

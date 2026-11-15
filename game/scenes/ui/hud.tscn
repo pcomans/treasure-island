@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=6 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Texture2D" path="res://game/resources/ui/app_icon_360.png" id="2_icon"]
@@ -24,6 +24,9 @@ corner_radius_top_left = 4
 corner_radius_top_right = 4
 corner_radius_bottom_right = 4
 corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_loading"]
+bg_color = Color(0.243, 0.337, 0.404, 1)
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -154,6 +157,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_loading")
 
 [node name="LoadLayout" type="CenterContainer" parent="LoadPanel"]
 layout_mode = 2
@@ -171,12 +175,19 @@ expand_mode = 1
 stretch_mode = 5
 
 [node name="LoadText" type="Label" parent="LoadPanel/LoadLayout/LoadStack"]
-custom_minimum_size = Vector2(680, 160)
+custom_minimum_size = Vector2(680, 96)
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
-text = "Validating complete Treasure Island world…"
 horizontal_alignment = 1
-vertical_alignment = 1
+vertical_alignment = 2
+autowrap_mode = 2
+
+[node name="LoadNote" type="Label" parent="LoadPanel/LoadLayout/LoadStack"]
+modulate = Color(1, 1, 1, 0.72)
+custom_minimum_size = Vector2(680, 52)
+layout_mode = 2
+theme_override_font_sizes/font_size = 17
+horizontal_alignment = 1
 autowrap_mode = 2
 
 [node name="ControlsButton" type="Button" parent="LoadPanel/LoadLayout/LoadStack"]

@@ -236,6 +236,16 @@ Non-blocking notes from the reviews:
 - `goal_confetti.gd`'s `on_screen` clamps the tone map's white only at 0.001 (`maxf(environment.tonemap_white, 0.001)`), not at 1.0 (code review, 2026-11-11).
 - The gameplay contract's glancing walk past the ball (`_check_soccer_ball` in `headless_gameplay_contract.gd`) allows up to 3 m/s along the walk; the bound could be tightened to under 1.0 (code review, 2026-11-11).
 
+## Loading screen (`game/scripts/main.gd`, `game/web/shell.html`, 2026-11-15)
+
+Each startup step has its own line on the loading screen, which covers the island until play (`LOADING_STEPS` and `COMPILE_GROUPS` in `main.gd`; on the web the page first shows the download in megabytes and **Starting the engine…**). Each line goes up before its step's work starts, and the work waits a frame so the line can be drawn. On the web the shaders are compiled a group of the world at a time, each group hidden until its frame, and the split costs about half a second of the load. What it can't show:
+
+- On desktop the engine's own boot splash, with no line, stays up while the engine starts and loads the main scene (about 2.5 to 3.5 s on the devcontainer), before any game script runs. A line there would need a boot splash image of its own, and the web page shows that image during its download.
+- No step shows how far along it is beyond its count. The island's load is one `load()` of the baked world, and each shader group's first frame compiles its shaders in one draw: the longest, the nearer half of the buildings, about 4 s on the web here. Counting further would mean a threaded load, or drawing a group's materials a few at a time.
+- Nothing on the screen moves while a step runs, because each step holds the main thread (on the web the progress bar ends with the download).
+- A line is seen only once the frame that puts it up has been drawn, so the rest of that frame's work runs under the line before it. On the web about 2 s of the engine's own work on the newly loaded island, at the end of the load's frame, runs under **Loading the island…**. On a desktop's first launch the frame that puts up **Compiling shaders…** takes about 2 s under **Setting up the island…**, most likely the grass's first capture of the ground from above compiling its shaders.
+- On a desktop the shaders are one step, **Compiling shaders…**: Godot compiles most of them as the island loads (on a first launch about 4.6 s of **Loading the island…**, which its second line says), and each group then draws in about 25 ms, so a line per group would only flicker. That compiling inside the island's load can't have a line of its own without a threaded load.
+
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
 - YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.

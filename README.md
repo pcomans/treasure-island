@@ -118,6 +118,15 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+At startup the window shows the engine's boot splash while Godot starts, then the
+loading screen, which covers the island until play and names the step under way:
+**Loading the island…**, **Setting up the island…**, **Compiling shaders…**, then
+**Rendering reflections…** (`LOADING_STEPS` in `game/scripts/main.gd`). The
+island's load and the reflections add a smaller, dimmer note, as on a first launch
+they also compile shaders; a run that builds the island from the generated sources
+shows **Building the island…** first. [KNOWN_ISSUES](KNOWN_ISSUES.md) lists what
+the loading screen can't show.
+
 ## Sound
 
 The game has sound effects, but this repository holds none: every sound is
@@ -173,8 +182,13 @@ terms, see
 pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
-Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-then **Click to play** (on a touch screen, **Tap to play**) starts play: that
+Open https://treasure-island-five.vercel.app/ and wait for the island to load:
+the page names each step as it runs, the download with the megabytes so far
+(about 200 MB), **Starting the engine…**, the island's load and setup, the
+shaders compiled a group of the world at a time (**Compiling shaders: sky and
+player…** to **…the ferry and the view across the bay…**, the buildings counted
+in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
+reflections…**. Then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys
 move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
@@ -209,8 +223,9 @@ pointer-lock crash; this is not evidence that the owner's Mac browser crashes.
 
 In the Linux development browser, mesh-size distance culling increased the
 observed spawn frame rate from13 to39–40FPS. Distant small building meshes can
-disappear; complete source inventory and collisions remain loaded. Initial
-world construction took about90seconds. These measurements used Chrome154,
+disappear; complete source inventory and collisions remain loaded. From a local
+server the page reached the start prompt in about 28 to 29 s, 19 to 20 s of it
+compiling shaders a group at a time and rendering reflections (2026-11-15). These measurements used Chrome154,
 AMD Radeon780M and headless Weston; they do not predict Mac performance.
 Traversal smoke checks required a test-only pointer-lock override because of
 the container crash. That override is not in the deployed game.
