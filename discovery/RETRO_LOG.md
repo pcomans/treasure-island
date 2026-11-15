@@ -26407,6 +26407,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: A secret-name grep across the whole merge range flagged main's documented signing-secret instructions (names only, no values). The scan has to run on the branch's own change against main, not the merge range.
 - What the team should change next time: Run privacy greps on `git diff <main> <head>`, not on a range that includes a merge from main.
 
+#### Low-sun glare, `look/low-sun-glare-20261115` cf9192ed..8f3d05d0 — PASS WITH NOTES
+
+- What worked well: I checked the sheen rescale by hand for each key (0.4 x sqrt(0.42/0.5) = 0.366606, 0.12 x sqrt(0.3/0.5) = 0.092952, 0.244444 x sqrt(0.353333/0.5) = 0.205488), and a tree-wide grep for `sun_specular` and `light_specular` showed no writer left. That settled the stale-value question by reading.
+- What did not work well: The rescale argument holds a leaf's specular from the sun. Its specular from the sky and reflections doesn't go through the Sun's specular, so it falls with the new sheen squared (to 0.84 of the reviewed value at 15 degrees, 0.6 from 6 down). The code comment presents the change as the crowns staying as reviewed.
+- What the team should change next time: When rescaling a material factor to cancel a light change, list every lighting term the factor feeds (sun, sky, reflections, other lights), and say which ones move.
+
 ### day-clock-visual-review-20261114 — 2026-11-14 — independent visual review of `feature/day-clock-20261114` at 534e309b (time of day, batch A)
 
 - What worked well: The author's base/branch pairs plus two same-code control runs (A1/A2, B1/B2) let "the recorded moment is unchanged" be settled from pixels without a render of my own: base-to-branch RMSE was within the run-to-run spread in every view I measured, the changed pixels sat only on water, grass and trees in the overlays, and a raw base/branch crop of the chapel's west close-up was indistinguishable. Checking the run records' elevation and azimuth by hand against a quick solar calculation (21 Jun 13:00 PDT 75.4 degrees, 21 Dec noon 28.6 degrees), then reading each capture's shadow direction against the camera's own heading from its recorded camera and target, made the plausibility check a calculation rather than an impression. The four fixed views across three dates were enough: no rendering runs were needed.
