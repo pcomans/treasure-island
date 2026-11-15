@@ -565,9 +565,11 @@ func _publish_web_state(_args: Array) -> void:
 		"credits_button": [hud.credits_button.get_global_rect().get_center().x, hud.credits_button.get_global_rect().get_center().y],
 		"credits_licences_button": [hud.credits_licences_button.get_global_rect().get_center().x, hud.credits_licences_button.get_global_rect().get_center().y],
 		"credits_back_button": [hud.credits_back_button.get_global_rect().get_center().x, hud.credits_back_button.get_global_rect().get_center().y],
-		# The options screen (open or not), the shadow level on, and the buttons
-		# that open it and choose each level.
+		# The options screen (open or not) and where its panel and Back button are,
+		# the shadow level on, and the buttons that open it and choose each level.
 		"options": hud.options_visible(),
+		"options_panel": _rect(hud.options_panel),
+		"options_back_button": [hud.options_back_button.get_global_rect().get_center().x, hud.options_back_button.get_global_rect().get_center().y],
 		"shadow_quality": shadows.current,
 		"sun_shadows": ($Sun as DirectionalLight3D).shadow_enabled,
 		"options_button": [hud.options_button.get_global_rect().get_center().x, hud.options_button.get_global_rect().get_center().y],
@@ -602,16 +604,21 @@ func _button_centres(row: Control) -> Dictionary:
 
 func _graphics_state() -> Dictionary:
 	var shown := hud.show_frame_rate.get_global_rect().get_center()
-	var label := hud.frame_rate_label.get_global_rect()
 	return {
 		"choices": graphics.current, "max_fps": Engine.max_fps,
 		"scale": get_viewport().scaling_3d_scale, "mode": get_viewport().scaling_3d_mode,
 		"fps": Engine.get_frames_per_second(), "frames_drawn": Engine.get_frames_drawn(),
 		"frame_rate_shown": hud.frame_rate_label.visible, "frame_rate_text": hud.frame_rate_label.text,
-		"frame_rate_rect": [label.position.x, label.position.y, label.size.x, label.size.y],
+		"frame_rate_rect": _rect(hud.frame_rate_label),
 		"frame_rates_offered": hud.frame_rates.visible, "frame_rate_buttons": _button_centres(hud.frame_rates),
 		"resolution_buttons": _button_centres(hud.resolutions), "show_switch": [shown.x, shown.y],
 	}
+
+
+## A control's rect in the viewport, as [x, y, width, height].
+func _rect(control: Control) -> Array:
+	var at := control.get_global_rect()
+	return [at.position.x, at.position.y, at.size.x, at.size.y]
 
 
 func _sound_state() -> Dictionary:
