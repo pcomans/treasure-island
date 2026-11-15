@@ -25942,3 +25942,15 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Reading the engine source answered most questions without a Godot run. `renderer_scene_cull.cpp:3376` shows a zero-energy sun still renders its shadow cascades and that a `SKY_ONLY` directional light skips them. `sky.cpp`'s light comparison shows which steps redraw the radiance map. `ReflectionProbe::set_update_mode` re-sends the mode with no equality check, so setting ONCE again forces a re-capture. The author's alternating-block timing pairs (R08/R09) on a quiet machine were directly usable: no change at the recorded moment, and the low-sun redraw cost was measured.
 - What did not work well: The cost of the half-second low-sun redraws (+0.9 ms mean GPU at 0.5 to 5 degrees on the 780M) was in the author's own timing lines but not in KNOWN_ISSUES, so I had to rebuild it from raw `TIME_REAL` lines. The tests check DaySun's cached copy of the global uniforms, not what the engine holds.
 - What the team should change next time: When a change adds recurring GPU work, put the measured cost next to the behaviour in KNOWN_ISSUES. Check process-wide state (global shader uniforms, shared scene resources) against the engine's value, not the writer's own cache.
+
+#### Dusk fix round, `feature/day-dusk-20261114` 633aa710..8f401a8b — PASS WITH NOTES
+
+- What worked well: My batch B notes came back as code and tests: 10 s steps through the night floor, every global written on the first look, the low-sun redraw cost in KNOWN_ISSUES, and a recorder for the globals in the contract. Reading the author's per-tree region means (glitter A 229.99/230.00 against B 229.81/229.86) was enough to test the attribution of the one outlier view without an engine run.
+- What did not work well: The outlier was put down to water phase, but the means are steady within each tree and shifted between trees, and the same view showed 39 px in round 1. The numbers point to a small systematic difference, not phase.
+- What the team should change next time: Before blaming motion for an outside-the-mask difference, compare within-tree and between-tree spread of a region mean. If the between-tree gap is several times larger, call it systematic, and either find it or report it as unexplained.
+
+#### Graphics options, `feature/graphics-options-20261114` 65e75d49..48df3eb9 — PASS WITH NOTES
+
+- What worked well: The settings ride the existing saved-settings guard, so test and capture runs get the defaults without a new mechanism. The author's run with a hostile real-path settings file and the `--fixed-fps` early return in `Main::iteration` settled pinning. `git merge-tree` against the dusk branch showed the two conflicts (a doc comment and the `DaySun.new` line in `main.gd`) without touching a worktree.
+- What did not work well: The feature reaches the web's phones, where a 100 % choice draws at full device pixels; its iPhone memory is unmeasured, beside a known 2 GB kill.
+- What the team should change next time: When a setting can raise memory on a platform with a hard limit, gate or measure it there before offering it.
