@@ -26382,6 +26382,24 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: To fix that one programmatic focus, the polish made the ring on a selected choice the fill's own blue. That also hides the keyboard focus on the selected choice, and nobody looked at the change from a keyboard player's side. The SVG switch icon was rendered only in desktop captures, not in a web build.
 - What the team should change next time: When restyling focus, check a keyboard-only walk through the menu, and before restyling look for the engine's own control over when the ring shows (here `grab_focus(true)`). Put a new runtime-generated asset path (SVG through `DPITexture`) through the web smoke before calling it done.
 
+#### Time of day batch C (the night), `feature/day-night-20261115` 8f401a8b..d7df7c73 — PASS WITH NOTES (merge-time changes required)
+
+- What worked well: A trial `git merge-tree` against the kill-switch branch (aebf24d9) found the four real conflicts (`day_clock.gd`, `main.gd`, `hud.gd`, the day-clock contract) and showed that `NightLights.wanted()` would bypass the new switch, all before any merge. The author's Part 1 runs settled the batch B outlier: four runs of one commit span the whole gap.
+- What did not work well: Two features in flight at once (the night and the switch) each assumed the other's API: `starts_pinned()` here, `enabled()`/`_scripted()` there. The vehicle contract calls a `--script` run "time of day off", which the switch now calls "held".
+- What the team should change next time: When a switch lands while a dependent branch is open, give the dependent branch a one-line merge checklist (which predicate to use, what each test asserts) in the switch's own handoff.
+
+#### Time of day batch C delta, `feature/day-night-20261115` d7df7c73..a38e6495 — PASS WITH NOTES
+
+- What worked well: A ten-line Python parse of `day_light.gd` checked the new 10-degree key against the straight line between the 15 and 6 degree keys for every value (all within 1e-6; only `shadow_reach` departs, as intended), so I didn't have to trust the comment. Grepping every `cull_mask`, `layers =` and render-layer constant showed that no other mesh uses layer 20 and that the only masks that exclude layers (Mersea's probes 3, its decal 2) don't include it.
+- What did not work well: The masked pinned comparison grew from 2,211 to 8,818 px, with clusters of 16-66 levels on vegetation edges, while no code path acts by day. A comparison whose noise can be that large can't tell a real sub-level change from wind.
+- What the team should change next time: For pinned before/after comparisons, freeze shader time for the captured frames (the game already freezes it with `Engine.time_scale = 0` while paused) once the scene has settled, so motion drops out and any remaining difference is real.
+
+#### Time of day batch C, merge and glow rule, `feature/day-night-20261115` a38e6495..274857ce — PASS WITH NOTES
+
+- What worked well: For every file, I compared the merge's change against each parent's own change. That narrowed the merge review to the files both sides touched. Listing main-side lines missing from the merge, after removing the ones the night branch had deleted on purpose, left only the expected time-note removals. Reading `merge_baked_buildings.gd`'s signature code showed that a material's metadata is part of its merge signature and its colour is not, so the bake-merge test really proves a role keeps glows apart.
+- What did not work well: A secret-name grep across the whole merge range flagged main's documented signing-secret instructions (names only, no values). The scan has to run on the branch's own change against main, not the merge range.
+- What the team should change next time: Run privacy greps on `git diff <main> <head>`, not on a range that includes a merge from main.
+
 ### day-clock-visual-review-20261114 — 2026-11-14 — independent visual review of `feature/day-clock-20261114` at 534e309b (time of day, batch A)
 
 - What worked well: The author's base/branch pairs plus two same-code control runs (A1/A2, B1/B2) let "the recorded moment is unchanged" be settled from pixels without a render of my own: base-to-branch RMSE was within the run-to-run spread in every view I measured, the changed pixels sat only on water, grass and trees in the overlays, and a raw base/branch crop of the chapel's west close-up was indistinguishable. Checking the run records' elevation and azimuth by hand against a quick solar calculation (21 Jun 13:00 PDT 75.4 degrees, 21 Dec noon 28.6 degrees), then reading each capture's shadow direction against the camera's own heading from its recorded camera and target, made the plausibility check a calculation rather than an impression. The four fixed views across three dates were enough: no rendering runs were needed.
