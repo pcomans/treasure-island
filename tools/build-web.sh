@@ -14,7 +14,10 @@
 #   1. exports the single-threaded web build, which needs no special headers,
 #   2. checks the data pack contains only game files (no reference photos,
 #      research or evidence),
-#   3. writes vercel.json so browsers cache the large files for good, and a
+#   3. checks the page and Godot's loader fetch every file by a path relative to
+#      the page (tools/check_web_paths.py): players reach the game in a folder of
+#      its website, https://grandtreasureisland.vercel.app/game/,
+#   4. writes vercel.json so browsers cache the large files for good, and a
 #      .vercelignore so the Vercel CLI never uploads an .env file.
 set -euo pipefail
 fetch_args=()
@@ -104,6 +107,9 @@ mv "${out}/${name}.html" "${out}/index.html"
 
 # Run from an empty folder so Godot sees only the pack, not the source project.
 (cd "${work}/mount" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
+# The website serves the game from its /game/ folder, so a file named from the
+# site's root or another origin would not load there.
+python3 -I tools/check_web_paths.py "${out}/index.html" "${out}"
 
 cat >"${out}/vercel.json" <<'EOF'
 {

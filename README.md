@@ -323,7 +323,7 @@ terms, see
 pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
-Open https://treasure-island-five.vercel.app/ and wait for the island to load;
+Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load;
 then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys
@@ -343,12 +343,16 @@ tools/deploy-web.sh --dry-run   # the same checks and build; prints the Vercel c
 It refuses unless the checkout is clean and HEAD is `origin/main`, and unless
 `TI_SFX_SOURCE` names the [sound source](#sound) and that source has takes for
 every sound the game plays; `--silent-ok` deploys without them on purpose. If `build/web`
-isn't linked yet, it links it to the existing `treasure-island` Vercel project (never
-a new one). Then it runs `tools/build-web.sh`, deploys `build/web` to production with
+isn't linked yet, it links it to the existing `treasure-island` Vercel project in the
+team `philippcomans-1463` (never a new one), and it refuses a link to any other team or
+project; to relink, delete `build/web/.vercel` and run
+`cd build/web && npx vercel@64.5.0 link --team philippcomans-1463 --project treasure-island`.
+Then it runs `tools/build-web.sh`, deploys `build/web` to production with
 the pinned Vercel CLI (`npx vercel@64.5.0`) and prints the deployment URL. It uses
-your saved Vercel CLI login (`npx vercel@64.5.0 login`, once). If that login has
-more than one team, link once by hand:
-`cd build/web && npx vercel@64.5.0 link --team <slug> --project treasure-island`.
+your saved Vercel CLI login (`npx vercel@64.5.0 login`, once). The project's
+production domain, https://play-grandtreasureisland.vercel.app, is the deploy origin
+the website serves at `/game/`; after a deploy, `tools/check-web-live.sh <commit>`
+loads the game at both addresses.
 Only `build/web` is uploaded, never the source checkout, reference imagery or
 evidence. The web exporter writes immutable caching for commit-named assets and
 the WASM content type.
