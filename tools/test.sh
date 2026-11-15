@@ -13,7 +13,9 @@
 #    it waits through a slow start and stops at once when Weston exits; every run
 #    gets the Dummy audio driver unless it names its own. And how tools/browser
 #    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
-#    stops what is left, and nothing it starts holds its caller's lock.
+#    stops what is left, and nothing it starts holds its caller's lock. And
+#    tools/build-number (tools/check_build_number.sh): each newer head of main
+#    gets a larger build number, and a shallow clone is refused.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -109,6 +111,13 @@ tools/check_godot_weston_wait.sh || failed+=("tools/check_godot_weston_wait.sh")
 # running, and nothing it starts holds its caller's lock. About 7 s.
 echo "== tools/check_browser_cleanup.sh"
 tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
+
+# tools/build-number, the releases' build number, in a throwaway repository
+# shaped like main's history (commits, merges, a fast-forward to a branch that
+# merged main): each newer head gets a larger number, a partial clone gives the
+# same, and a shallow clone is refused. About a second.
+echo "== tools/check_build_number.sh"
+tools/check_build_number.sh || failed+=("tools/check_build_number.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Prints a commit's build number: the number of commits in its history
+# (git rev-list --count). A commit's history holds all of its ancestors' and
+# itself, so a newer commit on main always has a larger number than every
+# older one (main's ruleset refuses force pushes and deletion), and every build
+# of one commit, the Mac app, the Linux build and the web build, gets the same
+# number. Not --first-parent: main also fast-forwards to branches that merged
+# it, and their first-parent line can be shorter than main's was.
+#
+# A shallow clone lacks part of the history and would give too small a number,
+# so this refuses one. A partial clone (--filter=blob:none) has every commit
+# and works.
+#
+#   tools/build-number            -> HEAD's build number, such as 1914
+#   tools/build-number <commit>   -> that commit's
+set -euo pipefail
+if [ "$#" -gt 1 ]; then
+  echo "usage: tools/build-number [<commit>]" >&2
+  exit 2
+fi
+shallow="$(git rev-parse --is-shallow-repository)"
+if [ "${shallow}" != false ]; then
+  echo "FAIL: this clone is shallow, so it lacks part of the history and would give too small a build number. Fetch the whole history first: git fetch --unshallow (in GitHub Actions, check out with fetch-depth: 0)" >&2
+  exit 1
+fi
+git rev-list --count "${1:-HEAD}^{commit}" --

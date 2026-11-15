@@ -12,6 +12,8 @@
 #
 # Only a clean checkout whose HEAD is origin/main is deployed. To try the script
 # on a branch, --dry-run --any-commit skips that one check; a real deploy never does.
+# The PASS line names the commit's build number (tools/build-number, the same as
+# on its GitHub release); a shallow clone has none, so it stops the deploy.
 #
 # Sounds: the build fetches the game's sounds from the private source named by
 # TI_SFX_SOURCE (tools/sfx/README.md), so every deploy sets it. Before anything
@@ -160,6 +162,7 @@ if [ "${head}" != "${main}" ]; then
   fi
   echo "NOTE: --any-commit: HEAD ${head:0:8} is not origin/main ${main:0:8}; dry run only"
 fi
+build="$(tools/build-number "${head}")"
 
 # build/web/.vercel is the Vercel CLI's link to the project. tools/build-web.sh
 # keeps it and clears everything else, so link first: the link's other files
@@ -223,7 +226,7 @@ deploy=("${vercel[@]}" deploy --prod --json)
 if [ "${dry_run}" = true ]; then
   echo "DRY RUN: in build/web, would run: ${deploy[*]}"
   sound_lines
-  echo "PASS: dry run for ${head:0:8}; nothing was linked or uploaded"
+  echo "PASS: dry run for build ${build} (${head:0:8}); nothing was linked or uploaded"
   exit 0
 fi
 
@@ -255,6 +258,6 @@ if state != ["ok", "READY", "production"] or not urls[0] or deployment.get("erro
 print("%s (deployment %s)" % tuple(urls))
 ' <<< "${output}")" || return 1
   sound_lines
-  echo "PASS: deployed ${head:0:8} to production: ${url}"
+  echo "PASS: deployed build ${build} (${head:0:8}) to production: ${url}"
 }
 deploy_to_production "${deploy[@]}"

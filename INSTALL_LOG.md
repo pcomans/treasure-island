@@ -333,7 +333,7 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Authorizing decision or request: owner, 2026-11-03: build on every push to `main`, newest build at one fixed link.
 - Trust and malware checks: official publishers only; a checksum mismatch stops setup-godot.sh and the build.
 - Verification and result: Godot reported `4.7.2.stable.official.ed1daf0bf`; the bake reported `BAKE_RENDERER Wayland / llvmpipe (LLVM 21.1.8, 256 bits)`; all four runs built, audited and launched the app.
-- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the Mac releases with their `mac-*` tags.
+- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the releases with their `mac-*` and `build-*` tags.
 
 ### 2026-11-14 — ffmpeg in the devcontainer setup
 
@@ -349,3 +349,18 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: official Ubuntu archive only.
 - Verification and result: `ffmpeg -version` reports `8.0.1-3ubuntu2`; `node tools/check_sfx.mjs` passes its post-processing checks with it.
 - Removal steps: remove `ffmpeg` from the apt list in `post-create.sh`, then `sudo apt-get remove ffmpeg`.
+
+### 2026-11-15 — butler on the itch job's runner (GitHub Actions)
+
+- Date and time (UTC): 2026-11-15, the workflow change. Every run of the `itch` job installs it; none has run yet.
+- Status: `planned`
+- Exact package and version: itch.io's `butler` 15.32.0, darwin-arm64 build.
+- Publisher and source URL: itch.io's own distribution site, `https://broth.itch.zone/butler/darwin-arm64/15.32.0/archive/default` (https://itch.io/docs/butler/installing.html).
+- Checksum, signature, notarization, or registry integrity evidence: itch.io publishes no checksum for it. The workflow pins the archive's SHA-256 as itch.io served it on 2026-11-15, `f1c460f08c02686b49f8da74344e5578ece9ea1a8bae1779445b5d98e0a794b3`; that archive's butler executable and 7-zip libraries are byte-identical to those in `butler-darwin-arm64.zip` of the `v15.32.0` release of https://github.com/itchio/butler (published 2026-10-06), whose digest GitHub records as `sha256:b1983cd1d0460cd39f8e6f1d6858c14f49ea0352ae34f0d40a56ffc30007399e`. A mismatch stops the job before butler runs.
+- Exact command or installation method: the `Install butler` step of `.github/workflows/mac-build.yml`: `curl -fsSL --retry 3` into `$RUNNER_TEMP/butler`, `shasum -a 256 -c`, `unzip`, then that folder goes on the job's `PATH`.
+- Purpose: push each release's Mac app and Linux build to the itch.io page phpp/grand-treasure-island, and fetch back what itch.io serves to compare it.
+- Scope and install location: the ephemeral GitHub-hosted `macos-26` runner of the `itch` job only, under `$RUNNER_TEMP/butler`; nothing changes in the devcontainer or on the owner's machines.
+- Authorizing decision or request: owner, 2026-11-15: put the Mac and Linux builds on itch.io after each release.
+- Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
+- Verification and result: not run yet; the job logs `butler version` on each run.
+- Removal steps: delete the `itch` job and the `itch_release_tag` input from `.github/workflows/mac-build.yml`, and the secret `BUTLER_API_KEY` of the GitHub environment `itch`.
