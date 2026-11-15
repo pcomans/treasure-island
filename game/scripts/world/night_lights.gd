@@ -43,14 +43,16 @@ const FADE_S := 1.2
 
 const FLASH_HEIGHT_M := 1.25
 const FLASH_AHEAD_M := 0.4
-const FLASH_ENERGY := 4.5
+const FLASH_ENERGY := 2.2
 const FLASH_RANGE_M := 48.0
 ## The cone's half angle (degrees) and how its light falls off toward the edge and
 ## with distance (SpotLight3D spot_angle_attenuation, spot_attenuation: under 1 a
-## softer edge and a gentler fall with distance).
+## softer edge and a gentler fall with distance). The fall with distance is gentle
+## so that ground 20 m ahead stays lit without a pale wall a few metres away
+## burning to white.
 const FLASH_ANGLE_DEG := 40.0
 const FLASH_ANGLE_ATTENUATION := 0.5
-const FLASH_ATTENUATION := 0.6
+const FLASH_ATTENUATION := 0.35
 const FLASH_PITCH_DEG := -2.0
 const FLASH_PITCH_SHARE := 0.5
 const FLASH_PITCH_MIN_DEG := -45.0
@@ -58,7 +60,7 @@ const FLASH_PITCH_MAX_DEG := -1.0
 const FLASH_COLOR := Color(1.0, 0.95, 0.86)
 ## The spill: a wide, faint cone round the beam, at SPILL_SHARE of its energy.
 const SPILL_ANGLE_DEG := 60.0
-const SPILL_SHARE := 0.1
+const SPILL_SHARE := 0.2
 const SPILL_RANGE_M := 12.0
 ## The chest's fill: a small omni light behind and above the chest on the camera's
 ## side, lighting only what is on FILL_LAYER (the chest's meshes).
