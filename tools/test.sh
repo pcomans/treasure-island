@@ -17,6 +17,10 @@
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
+#    Where the private sounds are fetched, the tests marked "# sfx:
+#    takes-dependent" run again without them (--no-sfx): a checkout without the
+#    sounds must pass too, and a test that reads what the sound manager plays
+#    without the mark or takes of its own fails the suite.
 # 5. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
 #    approaches, the spawn or the QA corridors. They run in the background
@@ -185,47 +189,100 @@ start_node_checks() {
 solar_table="$(mktemp)"
 node tools/solar_position.mjs --table > "${solar_table}" || echo "NOTE: tools/solar_position.mjs --table failed; the day-clock contract will say so"
 
-for test in \
-  game/tests/headless_scene_parse.gd \
-  game/tests/headless_startup_configuration_contract.gd \
-  game/tests/validate_generated_world.gd \
-  game/tests/headless_gameplay_contract.gd \
-  game/tests/headless_touch_controls.gd \
-  game/tests/headless_credits_contract.gd \
-  game/tests/headless_shadow_options_contract.gd \
-  game/tests/headless_day_clock_contract.gd \
-  game/tests/headless_world_material_contract.gd \
-  game/tests/headless_ground_dressing_contract.gd \
-  game/tests/headless_facade_meter_uv_adapter_contract.gd \
-  game/tests/headless_building_study_geometry_contract.gd \
-  game/tests/headless_bake_merge_contract.gd \
-  game/tests/headless_facade_grid_contract.gd \
-  game/tests/headless_shore_lift.gd \
-  game/tests/headless_fast_drop.gd \
-  game/tests/headless_vehicle_contract.gd \
-  game/tests/headless_car_stance.gd \
-  game/tests/headless_car_pileup.gd \
-  game/tests/headless_touch_drive.gd \
-  game/tests/headless_sound_contract.gd \
-  game/tests/automated_route_qa.gd \
+tests=(
+  game/tests/headless_scene_parse.gd
+  game/tests/headless_startup_configuration_contract.gd
+  game/tests/validate_generated_world.gd
+  game/tests/headless_gameplay_contract.gd
+  game/tests/headless_touch_controls.gd
+  game/tests/headless_credits_contract.gd
+  game/tests/headless_shadow_options_contract.gd
+  game/tests/headless_day_clock_contract.gd
+  game/tests/headless_world_material_contract.gd
+  game/tests/headless_ground_dressing_contract.gd
+  game/tests/headless_facade_meter_uv_adapter_contract.gd
+  game/tests/headless_building_study_geometry_contract.gd
+  game/tests/headless_bake_merge_contract.gd
+  game/tests/headless_facade_grid_contract.gd
+  game/tests/headless_shore_lift.gd
+  game/tests/headless_fast_drop.gd
+  game/tests/headless_vehicle_contract.gd
+  game/tests/headless_car_stance.gd
+  game/tests/headless_car_pileup.gd
+  game/tests/headless_touch_drive.gd
+  game/tests/headless_sound_contract.gd
+  game/tests/automated_route_qa.gd
   game/tests/shared/island_test.gd
-do
-  echo "== ${test}"
+)
+# One of the tests above as the suite runs it, recorded as NAME, with any further
+# user arguments after its own.
+#   run_test NAME TEST [USER_ARGUMENTS...]
+run_test() {
+  local name="$1" test="$2" display_args=(--headless) time_limit=600 user_args=() script_args=()
+  shift 2
   # --fixed-fps 60: physics (the island test's walk-ups) runs as fast as the CPU allows.
-  display_args=(--headless)
-  time_limit=600
   # The dummy renderer does not retain the visible MultiMesh transforms that
   # the shared island fit check compares against collision and stock movement.
   # It walks every scored building, so its hang guard is longer than the others'.
   if [ "${test}" = game/tests/shared/island_test.gd ]; then
     display_args=()
     time_limit=900
-    start_node_checks
   fi
-  script_args=()
-  [ "${test}" != game/tests/headless_day_clock_contract.gd ] || script_args=(-- --solar-table "${solar_table}")
-  check_godot "${test}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" "${script_args[@]}"
+  [ "${test}" != game/tests/headless_day_clock_contract.gd ] || user_args=(--solar-table "${solar_table}")
+  user_args+=("$@")
+  [ "${#user_args[@]}" -eq 0 ] || script_args=(-- "${user_args[@]}")
+  check_godot "${name}" "${time_limit}" tools/godot "${display_args[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script "${test}" "${script_args[@]}"
+}
+# A checkout without the private sounds runs the game, its tests and its builds
+# silent (tools/sfx/README.md), so a test that reads what the sound manager plays
+# from the real takes says so with the line "# sfx: takes-dependent", and where
+# tools/fetch-sfx has filled the sound folder it runs a second time with --no-sfx,
+# which loads no takes (the silent pass, after the tests). A listed test whose
+# code (its comment lines aside) reads the play state (sfx_reads) with neither
+# that line nor a manifest of its own (Sound.manifest_path) fails the suite here,
+# so no such test can be added outside the silent pass.
+sfx_reads='loop_playing|has_takes|takes_of|played_counts|voices_of|loop_level|bed_level|"played"|loop_start'
+# Prints the tests given that carry the line; names each one that reads the play
+# state without it or takes of its own, and then returns 1.
+#   sfx_selection TEST...
+sfx_selection() {
+  local test code status=0
+  for test in "$@"; do
+    code="$(grep -vE '^[[:space:]]*#' "${test}")"
+    if grep -qx '# sfx: takes-dependent' "${test}"; then
+      echo "${test}"
+    elif grep -qE "${sfx_reads}" <<< "${code}" && ! grep -q 'Sound.manifest_path =' <<< "${code}"; then
+      echo "FAIL: ${test} reads what the sound manager plays but has neither the line '# sfx: takes-dependent' (the silent pass) nor takes of its own (Sound.manifest_path)" >&2
+      status=1
+    fi
+  done
+  return "${status}"
+}
+echo "== sound-state tests"
+silent_tests=()
+if selection="$(sfx_selection "${tests[@]}")"; then
+  shown="${selection//$'\n'/ }"
+  echo "PASS: the silent pass takes ${shown:-no test}"
+else
+  failed+=("sound-state tests")
+fi
+[ -z "${selection}" ] || mapfile -t silent_tests <<< "${selection}"
+
+for test in "${tests[@]}"; do
+  echo "== ${test}"
+  [ "${test}" != game/tests/shared/island_test.gd ] || start_node_checks
+  run_test "${test}" "${test}"
 done
+
+echo "== silent pass (--no-sfx)"
+if [ ! -f game/resources/audio/sfx/sfx.json ]; then
+  echo "NOTE: no sounds fetched (game/resources/audio/sfx/sfx.json), so the pass above was silent: ${silent_tests[*]:-no test}"
+else
+  for test in "${silent_tests[@]}"; do
+    echo "== ${test} -- --no-sfx"
+    run_test "${test} (silent)" "${test}" --no-sfx
+  done
+fi
 
 # Desktop exports load a baked world instead of generating it at startup
 # (tools/build-linux.sh, tools/build-mac.sh). Bake it the same way and run the

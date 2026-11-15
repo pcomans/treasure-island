@@ -75,6 +75,10 @@ extends Node
 
 const CATALOG_PATH := "res://game/resources/audio/sounds.json"
 const DEFAULT_MANIFEST_PATH := "res://game/resources/audio/sfx/sfx.json"
+## After -- on the command line: no takes, the game as a checkout without the
+## sounds runs it (tools/test.sh runs the contracts that read what plays this way
+## too, where the sounds are fetched).
+const NO_SFX_ARGUMENT := "--no-sfx"
 ## The hard limiter on Master (desktop): its ceiling (dB).
 const LIMITER_CEILING_DB := -0.3
 ## The player's master volume (0..1) and mute, in the settings file.
@@ -118,8 +122,9 @@ const WATERLINE_M := 8.0
 const _NO_SETTINGS: Dictionary = {}
 const _NO_TAKES: Array = []
 
-## The manifest the bank reads; a test points it at one of its own first.
-static var manifest_path := DEFAULT_MANIFEST_PATH
+## The manifest the bank reads (none with NO_SFX_ARGUMENT); a test points it at
+## one of its own first.
+static var manifest_path := "" if OS.get_cmdline_user_args().has(NO_SFX_ARGUMENT) else DEFAULT_MANIFEST_PATH
 ## Whether sound managers made from now on keep every request (tests, evidence).
 static var record_requests := false
 ## The sound manager playing now, or null.

@@ -226,7 +226,7 @@ var _drawn: VisibleGround
 
 func _initialize() -> void:
 	create_timer(900.0, true, false, true).timeout.connect(_on_timeout)
-	# Every sound request in the sound manager's log (7c's hits; silent: no takes).
+	# Every sound request in the sound manager's log (7c's hits), with takes or without.
 	Sound.record_requests = true
 	call_deferred("_run")
 
@@ -1992,7 +1992,7 @@ func _feature_kind(body: Variant) -> String:
 
 
 ## How many times sound id was asked for since process frame mark, whatever came
-## of it (the contract has no takes: silent).
+## of it (played, or silent in a checkout without the sounds).
 func _asked(id: StringName, mark: int) -> int:
 	return _main.sound.requested(id).filter(func(entry: Dictionary) -> bool: return int(entry.frame) >= mark).size()
 
