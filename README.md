@@ -166,8 +166,9 @@ gets the newest release:
 https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 
 The [releases page](https://github.com/pcomans/treasure-island/releases) lists
-each build by date and commit, and older builds stay there. Downloaded with curl
-or `gh`, the zip has no quarantine flag, so the unzipped app opens directly:
+each build by build number, date and commit, and older builds stay there.
+Downloaded with curl or `gh`, the zip has no quarantine flag, so the unzipped app
+opens directly:
 
 ```sh
 curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
@@ -199,6 +200,73 @@ Desktop builds (this and `tools/build-linux.sh`) first bake the island with
 instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
+
+### Where the builds go
+
+Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
+has two files, built and checked from the same commit, and these links always get
+the newest:
+
+- the Mac app: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
+- the Linux build: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
+  (unpack it and run the `.x86_64` program in its `treasure-island-linux` folder;
+  its `.pck` must stay beside it)
+
+The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
+the Mac app, with the same sounds.
+
+Every build has a build number: the number of commits in its commit's history,
+from [`tools/build-number`](tools/build-number). A newer build of `main` always
+has a larger number, and the Mac app, the Linux build and the web build of one
+commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
+with the game's name, the commit's date and its short hash, such as "Grand
+Treasure Island, build 1918 (2026-11-16, 1a2b3c4)", and so does its tag, with
+the number padded to six digits so that tags sort by it:
+`build-001918-2026-11-16-1a2b3c4`. Releases from before build numbers keep their
+`mac-<date>-<commit>` tags. `tools/build-number` refuses a shallow clone, which
+would give too small a number.
+
+After each release, CI's `itch` job also puts both builds on the itch.io page
+[phpp/grand-treasure-island](https://phpp.itch.io/grand-treasure-island): the
+Mac app, notarized or not, goes to channel `mac` and the Linux build to channel
+`linux`, with the build number (such as `1918`) as their version. The job uses
+itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
+itch's own distribution site and checked against a pinned SHA-256. It pushes the
+exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
+it with `codesign --verify --deep --strict` (a failed check stops the Mac push),
+and pushes it. Once
+itch.io has processed the build, it downloads what itch.io serves and compares
+it, file by file, with what was pushed. It runs on `main` only. A failed push
+never affects the GitHub release: the job reports it, and the run still
+succeeds. To push an existing release again, or for the first time, start the
+workflow by hand on `main` with that release's tag (a release from before build
+numbers gets its date and commit as its version). Such a run builds nothing:
+
+```sh
+gh workflow run mac-build.yml --ref main -f itch_release_tag=<tag>   # such as build-001918-2026-11-16-1a2b3c4
+```
+
+CI's `virustotal` job also submits both files of each release to
+[VirusTotal](https://www.virustotal.com), and the `virustotal-notes` job adds
+each file's SHA-256 and VirusTotal report link to the release notes. The link is
+by hash, so it works while the analysis is still running; the notes say when
+that was the case. Anyone can check a download the same way:
+`shasum -a 256 treasure-island-mac.zip`, then open
+`https://www.virustotal.com/gui/file/<that hash>`. The job uses VirusTotal's
+free public API, which is for non-commercial use and allows 4 requests a minute
+and 500 a day. VirusTotal shares uploaded files with its security partners, so
+only the already public release files are sent. The notes and the job's summary
+carry links, never verdicts or counts; a file that VirusTotal flags is a warning
+for a person to look at, never a failure: game-engine exports do get false
+positives.
+
+Both jobs take their keys, `BUTLER_API_KEY` and `VIRUSTOTAL_API_KEY`, from the
+GitHub environment `itch`, whose deployment branch rule admits only `main` (no
+required reviewers): a repository secret could be read by a workflow on any
+branch. Each job first reads that rule through GitHub's API and uses its key
+only while the environment admits `main` alone; without the key it does nothing
+but say so. The top of [mac-build.yml](.github/workflows/mac-build.yml) has the
+`gh` commands that set the keys.
 
 ### Sound
 
