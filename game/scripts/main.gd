@@ -45,6 +45,10 @@ var sound: Sound
 ## harness turns this off, so its captures always have the default (a player's
 ## choice is a global engine setting that would reach its neutral sun too).
 var use_saved_settings := true
+## Whether play waits behind the start prompt (_on_world_ready): on the web, for
+## a touch screen and a mouse alike. Tests of touch play set it as a browser
+## would.
+var start_prompt := OS.has_feature("web")
 
 
 func _init() -> void:
@@ -252,14 +256,21 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if capture_mouse_on_ready and not OS.has_feature("web") and _touch_controls == null and not controls_open:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
-	# Touch plays immediately; the desktop web walks with a visible pointer until
-	# a deliberate click requests look capture. Never auto-request browser lock.
-	if _touch_controls != null:
-		_touch_controls.set_gameplay_active(true)
-	elif OS.has_feature("web"):
-		hud.set_pointer_capture_hint(true)
-	if controls_open:
-		_set_paused(true)
+	# On the web, touch or mouse, play waits behind one start prompt (owner,
+	# 2026-11-15): the game starts paused, its pause menu showing only Play,
+	# worded for the screen. That tap or click is the gesture that lets the
+	# browser start the sound (game/web/shell.html) and, with a mouse, take the
+	# mouse for the look, through the menu's own Resume (_resume_game): a refused
+	# capture leaves it waiting there, as the pause menu does. The loading screen
+	# hands over to it as play is ready. Never auto-request browser lock.
+	if start_prompt:
+		hud.set_start_prompt("Tap to play" if _touch_controls != null else "Click to play")
+		_set_paused(true, true)
+	else:
+		if _touch_controls != null:
+			_touch_controls.set_gameplay_active(true)
+		if controls_open:
+			_set_paused(true)
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
@@ -372,8 +383,6 @@ func _set_paused(paused: bool, quiet := false) -> void:
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(not paused and _world_ready)
 	hud.set_paused(paused)
-	if OS.has_feature("web") and _touch_controls == null:
-		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
 
 
 ## Why this run must not use the player's settings file, or "". A test or capture
@@ -524,6 +533,8 @@ func _publish_web_state(_args: Array) -> void:
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
 		# The controls screen (open or not) and the buttons that open and close it.
 		"controls": hud.controls_visible(),
+		# The start prompt (play waiting for its first tap or click) and its words.
+		"start_prompt": hud.start_prompt_text(),
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
 		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
 		# The credits screen (open or not), its view and how far it is scrolled, and

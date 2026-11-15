@@ -37,6 +37,9 @@ const CREDITS_BULLET_GAP_PX := 8
 ## above them included (px).
 const CREDITS_SECTION_PX := 48.0
 const CREDITS_LICENCE_HEADING_PX := 44.0
+## The start prompt's Play button is this tall (px): a big target for a thumb or a
+## click (set_start_prompt).
+const START_BUTTON_PX := 80.0
 ## The options screen's shadow level buttons are at least this wide (px), and the
 ## one in use is filled in the headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
@@ -50,6 +53,7 @@ const REFLOW_FULL_SHARE := 0.6
 ## The pause menu: like the controls screen, a solid panel over the dimmed game.
 @onready var pause_panel: Control = $PausePanel
 @onready var pause_box: PanelContainer = $PausePanel/Center/Box
+@onready var pause_title: Label = $PausePanel/Center/Box/PauseLayout/Title
 @onready var resume_button: Button = $PausePanel/Center/Box/PauseLayout/ResumeButton
 @onready var controls_button: Button = $PausePanel/Center/Box/PauseLayout/ControlsButton
 @onready var options_button: Button = $PausePanel/Center/Box/PauseLayout/OptionsButton
@@ -102,8 +106,12 @@ const REFLOW_FULL_SHARE := 0.6
 
 var _feedback_seconds := 0.0
 var _evidence: RuntimeEvidence
-var _capture_hint: Button
 var _paused := false
+## The start prompt's words while it shows (set_start_prompt), else "", and what
+## the menu's title and Play button read, the button's height and which other
+## menu buttons showed before it.
+var _start_text := ""
+var _menu_before := {}
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -216,11 +224,46 @@ func set_prompt(text: String) -> void:
 	prompt_panel.visible = not text.is_empty() and not _paused
 
 
+## The start prompt (main.gd, on the web): until play first starts, the pause
+## menu shows only its Play button, bigger and worded for the screen ("Tap to
+## play", "Click to play"), under the game's name, so that the first tap or click
+## starts play through the menu's own Resume. Play's first start ends it.
+func set_start_prompt(text: String) -> void:
+	if _start_text.is_empty():
+		_menu_before = {"text": resume_button.text, "title": pause_title.text, "height": resume_button.custom_minimum_size.y}
+		for button: Control in [controls_button, options_button, credits_button, exit_button]:
+			_menu_before[button] = button.visible
+			button.hide()
+	_start_text = text
+	pause_title.text = "Treasure Island"
+	resume_button.text = text
+	resume_button.custom_minimum_size.y = START_BUTTON_PX
+
+
+## The start prompt's words while it shows, else "".
+func start_prompt_text() -> String:
+	return _start_text
+
+
+func _end_start_prompt() -> void:
+	if _start_text.is_empty():
+		return
+	_start_text = ""
+	resume_button.text = _menu_before.text
+	pause_title.text = _menu_before.title
+	resume_button.custom_minimum_size.y = _menu_before.height
+	for button: Control in [controls_button, options_button, credits_button, exit_button]:
+		button.visible = _menu_before[button]
+
+
 ## The pause menu, in place of play's prompt. A controls screen opened from the
 ## loading screen stays over the pause (main.gd), and the menu shows when it closes;
 ## so does an open options or credits screen when the game pauses again (a lost focus).
+## Play's first start ends the start prompt.
 func set_paused(paused: bool) -> void:
 	_paused = paused
+	if not paused:
+		_end_start_prompt()
 	pause_panel.visible = paused and not controls_screen.visible and not options_screen.visible and not credits_screen.visible
 	if not paused:
 		controls_screen.hide()
@@ -665,13 +708,12 @@ func _control_rows() -> Array:
 				["II (top right)", "Pause"],
 			]],
 		]
-	# The browser lets go of the mouse on Esc; Click to look takes it again.
+	# The browser lets go of the mouse on Esc; the pause menu's Resume takes it
+	# again.
 	var web := OS.has_feature("web")
 	var any_time := [["Esc", "Pause and free the mouse" if web else "Pause"], ["F3", "Debug info"]]
 	if not web:
 		any_time.append(["Q (while paused)", "Quit"])
-	else:
-		any_time.push_front(["Click to look (top)", "Let the mouse turn the view"])
 	return [
 		["On foot", [
 			["W A S D or arrow keys", "Move"],
@@ -711,19 +753,3 @@ func set_touch_instructions() -> void:
 	pause_box.custom_minimum_size.x = 420.0
 	_fill_credits()
 	_fit_credits()
-
-
-func set_pointer_capture_hint(show_hint: bool) -> void:
-	if _capture_hint == null and show_hint:
-		_capture_hint = Button.new()
-		_capture_hint.text = "Click to look"
-		add_child(_capture_hint)
-		_capture_hint.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
-		_capture_hint.offset_left = -110.0
-		_capture_hint.offset_right = 110.0
-		_capture_hint.offset_top = 20.0
-		_capture_hint.offset_bottom = 68.0
-		_capture_hint.pressed.connect(func() -> void: resume_requested.emit())
-		_click_on_press(_capture_hint)
-	if _capture_hint != null:
-		_capture_hint.visible = show_hint

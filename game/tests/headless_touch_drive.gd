@@ -4,7 +4,12 @@ extends SceneTree
 ## player into the vans beside it). Headless in the generated world (run with
 ## --fixed-fps 60): main set up for touch play by its own use_touch_controls(), as
 ## on a touch browser, in an iPhone's Safari window held upright (the owner's
-## screenshot) and then turned sideways. At each:
+## screenshot) and then turned sideways. First, as on a touch browser (owner,
+## 2026-11-15), play waits behind the start prompt: the game paused, the pause
+## menu showing only its "Tap to play" button under the game's name, a big
+## target inside the page held upright and sideways, no touch control and no
+## bed sounding; its tap starts play: the touch controls show, the menu is
+## the pause menu again and the beds come in. Then at each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
@@ -56,6 +61,8 @@ func _run() -> void:
 	_main.capture_mouse_on_ready = false
 	# The default shadows, never a level saved in the shared user folder (main.gd).
 	_main.use_saved_settings = false
+	# As on a touch browser: play waits behind the start prompt.
+	_main.start_prompt = true
 	var load_failures: Array[String] = []
 	(_main.get_node("WorldRoot") as WorldLoader).world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
 	root.add_child(_main)
@@ -67,6 +74,8 @@ func _run() -> void:
 	if not _require(load_failures.is_empty() and _main.is_play_ready(), "World did not reach play: %s" % [load_failures]):
 		return _finish()
 	_vehicles = _main.vehicles
+	if not await _start_prompt():
+		return _finish()
 	if not _require(_vehicles != null and _touch.vehicles == _vehicles and _touch.visible, "main.gd did not hand the touch controls the cars and start them (visible %s)." % _touch.visible):
 		return _finish()
 	await _ticks(10)
@@ -75,8 +84,35 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options, Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing) and its tap started play; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options, Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
+
+
+## The start prompt as play is ready, held upright and then sideways: the game
+## paused with no touch control and no wind playing, the pause menu showing
+## only "Tap to play" under the game's name, a button inside the page at least
+## THUMB_PX tall; then its tap (from the idle step, where input arrives) starts
+## play, ends the prompt and lets the wind in.
+func _start_prompt() -> bool:
+	var hud := _main.hud
+	for shape: String in ["sideways", "upright"]:
+		root.size = SHAPES[shape]
+		for _frame in 3:
+			await process_frame
+		var button := hud.resume_button.get_global_rect()
+		var page := hud.get_viewport_rect()
+		var others := [hud.controls_button, hud.options_button, hud.credits_button, hud.exit_button].filter(func(control: Control) -> bool: return control.visible)
+		if not _require(paused and hud.pause_panel.visible and hud.start_prompt_text() == "Tap to play" and hud.resume_button.text == "Tap to play" and hud.pause_title.text == "Treasure Island" and others.is_empty() and not _touch.visible and not _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "%s: play must wait behind the start prompt (paused %s, menu %s, prompt %s, button %s, title %s, other buttons %d, touch controls %s, wind playing %s)." % [shape, paused, hud.pause_panel.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, others.size(), _touch.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+			return false
+		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall (button %s, page %s)." % [shape, int(THUMB_PX), button, page]):
+			return false
+	await process_frame
+	hud.resume_button.pressed.emit()
+	await _ticks(60)
+	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and _main.sound.loop_playing(Sound.WIND_BED, _main.sound), "The start prompt's tap must start play with the touch controls showing, end the prompt and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, wind playing %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, _main.sound.loop_playing(Sound.WIND_BED, _main.sound)]):
+		return false
+	_checked.append("the start prompt")
+	return true
 
 
 ## One window shape: the page turned to it, a pause and Resume, then every

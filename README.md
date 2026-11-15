@@ -164,13 +164,14 @@ pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-play starts by itself. WASD or the arrow keys move, Shift runs, Space rises with the jetpack,
-releasing Space descends slowly and holding C in the air drops fast. F gets
-in or out of a parked car; in a car W/S drive, A/D steer (or the arrow keys)
-and Space is the handbrake. Click
-**Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
-again and continues. The owner removed the spray on 2026-11-11.
-F3 shows actual FPS.
+then **Click to play** (on a touch screen, **Tap to play**) starts play: that
+first click or tap also starts the sound, which a browser allows only after one,
+and with a mouse it captures the mouse to look around. WASD or the arrow keys
+move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
+and holding C in the air drops fast. F gets in or out of a parked car; in a car
+W/S drive, A/D steer (or the arrow keys) and Space is the handbrake. Esc
+releases the mouse and pauses; **Resume** captures it again and continues. The
+owner removed the spray on 2026-11-11. F3 shows actual FPS.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
