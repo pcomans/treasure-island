@@ -47,8 +47,9 @@ const FINE_ANGLE_STEP_DEG := 0.001
 ## height has moved this far (degrees) since their last capture, though not through
 ## the night floor, where the light stays the same; at most once every
 ## PROBE_RECAPTURE_S of real time, the last move caught up when that has passed. A
-## capture of both took no frame time that stood out from the frame-to-frame spread
-## (2026-11-14), and the engine spreads its filtering over the next few frames. A
+## capture of both added up to about 10 ms to one or two frames of a 50 ms view on
+## the dev machine (2026-11-14), and the engine spreads its filtering over the next
+## few frames. A
 ## held clock (a test's, a capture's, the web's) never captures them again, so a
 ## capture at other moments keeps the reflections the world loaded with.
 const PROBE_RECAPTURE_DEG := 2.0
