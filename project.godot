@@ -119,6 +119,7 @@ toggle_debug={
 3d_physics/layer_7="reach"
 3d_render/layer_1="world_visible"
 3d_render/layer_2="building_wall_decal"
+3d_render/layer_20="avatar_fill"
 
 [physics]
 

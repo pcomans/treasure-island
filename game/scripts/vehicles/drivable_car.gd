@@ -715,14 +715,25 @@ func set_lamps_lit(lit: bool) -> void:
 			geometry.material_override = to
 
 
-## Whether any of its pieces is drawn with its lamps lit (set_lamps_lit).
+## Whether every kit-drawn piece is drawn with its lamps lit (set_lamps_lit).
 func are_lamps_lit() -> bool:
-	if _visual == null or _lit_material == null:
-		return false
+	var pieces := lamp_pieces()
+	return pieces.x > 0 and pieces.y == 0
+
+
+## Its kit-drawn pieces: how many are drawn with its own lamps lit (x) and how many
+## with the parked cars' (y). Both 0 for a yard vehicle.
+func lamp_pieces() -> Vector2i:
+	var pieces := Vector2i.ZERO
+	if _visual == null or _kit_material == null:
+		return pieces
 	for piece: Node in _visual.find_children("*", "GeometryInstance3D", true, false):
-		if (piece as GeometryInstance3D).material_override == _lit_material:
-			return true
-	return false
+		var material := (piece as GeometryInstance3D).material_override
+		if material != null and material == _lit_material:
+			pieces.x += 1
+		elif material == _kit_material:
+			pieces.y += 1
+	return pieces
 
 
 func describe() -> Dictionary:

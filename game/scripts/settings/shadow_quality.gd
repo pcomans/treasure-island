@@ -61,6 +61,13 @@ var sun: DirectionalLight3D
 var server: Object = RenderingServer
 ## The level on now ("" until one is applied).
 var current := ""
+## The time of day's share of the level's shadow distance (DayLight's shadow_reach,
+## put on by DaySun): 1 by day; less with the sun low, where the long shadows
+## across a level's whole distance cost the most (set_reach).
+var reach := 1.0
+## The most a split moved for the reach may be of the next one out (shares stay in
+## order and under the whole).
+const MAX_REACH_SPLIT := 0.95
 ## Medium's settings: the scene Sun's and project.godot's, as this was made.
 var _medium := {}
 
@@ -126,14 +133,39 @@ func apply(id: String) -> void:
 	if not is_offered(id):
 		id = default_id()
 	var settings := settings_of(id)
-	var splits: Array = settings.splits
 	sun.shadow_enabled = bool(settings.enabled)
 	sun.set("directional_shadow_mode", int(settings.mode))
-	sun.directional_shadow_split_1 = float(splits[0])
-	sun.directional_shadow_split_2 = float(splits[1])
-	sun.directional_shadow_split_3 = float(splits[2])
-	sun.directional_shadow_max_distance = float(settings.max_distance)
+	_put_reach(settings)
 	# The engine ignores a size or filter it already has.
 	server.directional_shadow_atlas_set_size(int(settings.atlas), bool(settings.bits_16))
 	server.directional_soft_shadow_filter_set_quality(int(settings.filter))
 	current = id
+
+
+## The time of day's share of the level's shadow distance, put on at once (only a
+## change is written): the sun casts shadows out to the level's distance times it.
+func set_reach(share: float) -> void:
+	if share == reach:
+		return
+	reach = share
+	if current != "":
+		_put_reach(settings_of(current))
+
+
+## The level's splits and distance with the time of day's reach: the distance times
+## reach, and each split moved so it ends as far from the camera as before (its
+## share over reach, below the next), so only the farthest split shrinks and the
+## near shadows stay as they are. At reach 1, the level's own exactly.
+func _put_reach(settings: Dictionary) -> void:
+	var splits: Array = settings.splits
+	var shares: Array[float] = []
+	var ceiling := MAX_REACH_SPLIT
+	for index in range(2, -1, -1):
+		var share := float(splits[index]) if reach == 1.0 else minf(float(splits[index]) / reach, ceiling)
+		shares.push_front(share)
+		# A split the level puts where the next one is (Low's) stays with it.
+		ceiling = share if index > 0 and float(splits[index - 1]) == float(splits[index]) else share * MAX_REACH_SPLIT
+	sun.directional_shadow_split_1 = shares[0]
+	sun.directional_shadow_split_2 = shares[1]
+	sun.directional_shadow_split_3 = shares[2]
+	sun.directional_shadow_max_distance = float(settings.max_distance) * reach

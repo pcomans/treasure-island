@@ -54,7 +54,7 @@ const JUMP_BOUND_DEG := 0.6
 const STEP_BOUNDS := {
 	"sun_energy": 0.01, "ambient": 0.001, "fog": 0.002, "sky_horizon": 0.002,
 	"sky_top": 0.001, "exposure": 0.002, "horizon_light": 0.004,
-	"stars": 0.01, "night": 0.01, "parked_lamps": 0.01,
+	"stars": 0.01, "night": 0.01, "parked_lamps": 0.01, "shadow_reach": 0.02,
 }
 ## The measures that only rise as the sun sinks; every other one must not rise.
 const RISING := ["exposure", "stars", "night"]
@@ -306,9 +306,18 @@ func _check_day_sun() -> String:
 	_nodes.append(light)
 	var written := _record_globals()
 	var day_sun := DaySun.new(light, environment)
+	# The player's shadow option, which takes the look's shadow reach.
+	var quality := ShadowQuality.new(light)
+	quality.apply("medium")
+	var medium_distance := float(quality.settings_of("medium").max_distance)
+	var near_split_m := float((quality.settings_of("medium").splits as Array)[0]) * medium_distance
+	day_sun.shadow_quality = quality
 	root.add_child(day_sun)
 	_nodes.append(day_sun)
 	await process_frame
+	if not _require(quality.reach == 1.0 and light.directional_shadow_max_distance == medium_distance, "At the recorded moment the sun's shadows must reach the shadow option's whole distance (reach %s, %.1f m of %.1f)." % [quality.reach, light.directional_shadow_max_distance, medium_distance]):
+		DaySun.use_engine_globals()
+		return ""
 	# Its first look hands the engine every global, at the recorded moment the values
 	# project.godot gives them.
 	var first_globals := written.duplicate()
@@ -338,6 +347,7 @@ func _check_day_sun() -> String:
 			var differences := _look_differences(light, environment, written, DayLight.at(shown[0]))
 			if not _require(shown == true_sun and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)) and light.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])), "At %s %s the light must shine from the sun at %s (%s), not from rotation %s." % [day, time, true_sun, shown, light.rotation_degrees]) \
 			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]) \
+			or not _require(is_equal_approx(light.directional_shadow_max_distance, medium_distance * float(DayLight.at(shown[0]).shadow_reach)) and is_equal_approx(light.directional_shadow_split_1 * light.directional_shadow_max_distance, near_split_m), "At %s %s (the sun %.2f degrees up) the sun's shadows must reach the shadow option's distance times that height's shadow reach (%.1f m, not %.1f), the nearest split still ending %.1f m out (not %.1f)." % [day, time, shown[0], medium_distance * float(DayLight.at(shown[0]).shadow_reach), light.directional_shadow_max_distance, near_split_m, light.directional_shadow_split_1 * light.directional_shadow_max_distance]) \
 			or not _require(light.sky_mode == DaySun.sky_mode_for(float(DayLight.at(shown[0]).sun_energy)) and day_sun.night == float(DayLight.at(shown[0]).night), "At %s %s (the sun %.2f degrees up, energy %.3f) the light must light the sky alone only with no strength (sky mode %d) and DaySun keep that height's darkness (%.3f, not %.3f)." % [day, time, shown[0], light.light_energy, light.sky_mode, float(DayLight.at(shown[0]).night), day_sun.night]):
 				DaySun.use_engine_globals()
 				return ""
@@ -499,8 +509,8 @@ func _check_day_light() -> String:
 
 ## How much each of the look's lights changes by: the sun's energy; the ambient
 ## light, the fog and the sky's horizon and zenith as linear luminance times
-## energy; the exposure; the horizon art's factor; the stars, the darkness and the
-## parked cars' lamps.
+## energy; the exposure; the horizon art's factor; the stars, the darkness, the
+## parked cars' lamps and the sun's shadow reach.
 func _measures(look: Dictionary) -> Dictionary:
 	return {
 		"sun_energy": float(look.sun_energy),
@@ -513,6 +523,7 @@ func _measures(look: Dictionary) -> Dictionary:
 		"stars": float(look.stars),
 		"night": float(look.night),
 		"parked_lamps": float(look.parked_lamps),
+		"shadow_reach": float(look.shadow_reach),
 	}
 
 

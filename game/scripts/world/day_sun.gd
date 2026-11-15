@@ -74,6 +74,9 @@ var shown_unix := NAN
 var lit_elevation := NAN
 ## How dark that look is (DayLight's night: 0 by day, 1 at night).
 var night := 0.0
+## The player's shadow option, which takes the look's shadow reach (main.gd sets
+## it; null for a bare light, a test's).
+var shadow_quality: ShadowQuality
 var _revision := -1
 ## Seconds until the next step, for the sun as drawn now.
 var _step := STEP_S
@@ -137,6 +140,8 @@ func light(elevation_deg: float) -> void:
 	var mode := sky_mode_for(float(look.sun_energy))
 	if sun.sky_mode != mode:
 		sun.sky_mode = mode
+	if shadow_quality != null:
+		shadow_quality.set_reach(float(look.shadow_reach))
 	if environment != null:
 		for value: String in DayLight.ENVIRONMENT_PROPERTIES:
 			_put(environment, DayLight.ENVIRONMENT_PROPERTIES[value], look[value])

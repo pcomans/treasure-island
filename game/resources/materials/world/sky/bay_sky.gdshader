@@ -299,9 +299,10 @@ float pixel_noise(vec2 pixel) {
 // Stars: a grid of STAR_CELLS by STAR_CELLS cells on each face of a cube round the
 // sky (about 0.4 degrees a cell), each holding a star by chance (STAR_SHARE, less
 // near a face's corner, where cells are smaller, so the field is even), at a random
-// spot in it with a random brightness, most of them faint, and a colour from
-// blue-white to warm. A star is drawn about a pixel across whatever the view's
-// width (`pixel`, the angle a pixel spans), so it neither shimmers nor grows.
+// spot in it with a random brightness, most of them faint and about one in twenty
+// bright, and a colour from blue-white to warm. A star is drawn about a pixel
+// across whatever the view's width (`pixel`, the angle a pixel spans), so it does
+// not grow with the view.
 const float STAR_CELLS = 220.0;
 const float STAR_SHARE = 0.0075;
 
@@ -343,7 +344,7 @@ vec3 stars(vec3 dir, float pixel) {
 			vec3 s = face < 2.0 ? vec3(face < 1.0 ? 1.0 : -1.0, at) : (face < 4.0 ? vec3(at.x, face < 3.0 ? 1.0 : -1.0, at.y) : vec3(at, face < 5.0 ? 1.0 : -1.0));
 			float d = length(dir - normalize(s)) / pixel;
 			vec3 g = star_hash(vec3(cell.yx, face + 3.7));
-			float brightness = 0.05 + 2.4 * pow(g.x, 7.0);
+			float brightness = 0.035 + 4.0 * pow(g.x, 14.0);
 			vec3 tint = mix(vec3(0.74, 0.84, 1.0), vec3(1.0, 0.88, 0.72), g.y);
 			light += tint * brightness * exp(-d * d * 1.6);
 		}

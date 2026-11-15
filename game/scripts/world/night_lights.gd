@@ -18,19 +18,22 @@ extends Node
 ## off the look holds the recorded moment's daylight, so the rest of the night
 ## (stars, the parked cars' lamps, the Sun lighting the sky alone) stays off with it.
 ##
-## The flashlight is one spot carried at the chest and pointed where the camera
+## The flashlight is a spot carried at the chest and pointed where the camera
 ## looks: the camera's heading, and its pitch at FLASH_PITCH_SHARE of the camera's
 ## below FLASH_PITCH_DEG, held between FLASH_PITCH_MIN_DEG and FLASH_PITCH_MAX_DEG.
 ## The third-person camera sits behind and above the chest looking the same way, so
 ## the lit patch lies ahead of the chest, in the lower middle of the view, whichever
 ## way the chest itself faces; the way the camera looks is where the player is
-## going. It shines from FLASH_AHEAD_M in front of the chest (less if a wall is
-## nearer, so it never starts inside one), at FLASH_HEIGHT_M, and casts shadows
-## (FLASH_SHADOWS: 0.1 to 0.2 ms of GPU time on the dev machine's Radeon 780M in a
-## park, at a building's door and at the ferry spawn, 2026-11-15), so it lights
-## nothing through a wall. Hidden while the player is in a car. The headlights cast
-## none: what they reach through a wall within HEAD_RANGE_M is behind that wall from
-## the chase camera too.
+## going. On flat ground its beam reaches about 20 m ahead, with a soft edge, and a
+## faint wide spill (SPILL_*) lights a few metres round the player. It shines from
+## FLASH_AHEAD_M in front of the chest (less if a wall is nearer, so it never starts
+## inside one), at FLASH_HEIGHT_M, and casts shadows when the player's shadow option
+## is not Off (ShadowQuality; about 0.1 to 0.2 ms of GPU time on the dev machine's
+## Radeon 780M, 2026-11-15), so it lights nothing through a wall. A small fill on the
+## chest itself (FILL_*), lighting only the chest (its own render layer, the light's
+## cull mask), shows its back and lid in front of the beam. Hidden while the player
+## is in a car. The headlights cast no shadows: what they reach through a wall
+## within HEAD_RANGE_M is behind that wall from the chase camera too.
 
 ## Darkness (DaySun.night) at which the lights come on, and back under which they go off.
 const ON_AT := 0.5
@@ -40,25 +43,36 @@ const FADE_S := 1.2
 
 const FLASH_HEIGHT_M := 1.25
 const FLASH_AHEAD_M := 0.4
-const FLASH_ENERGY := 5.0
-const FLASH_RANGE_M := 30.0
+const FLASH_ENERGY := 5.5
+const FLASH_RANGE_M := 48.0
 ## The cone's half angle (degrees) and how its light falls off toward the edge and
-## with distance (SpotLight3D spot_attenuation, OmniLight-style light attenuation).
-const FLASH_ANGLE_DEG := 30.0
-const FLASH_ANGLE_ATTENUATION := 0.6
-const FLASH_ATTENUATION := 1.0
-const FLASH_PITCH_DEG := -6.0
-const FLASH_PITCH_SHARE := 0.6
+## with distance (SpotLight3D spot_angle_attenuation, spot_attenuation: under 1 a
+## softer edge and a gentler fall with distance).
+const FLASH_ANGLE_DEG := 40.0
+const FLASH_ANGLE_ATTENUATION := 0.35
+const FLASH_ATTENUATION := 0.6
+const FLASH_PITCH_DEG := -2.0
+const FLASH_PITCH_SHARE := 0.5
 const FLASH_PITCH_MIN_DEG := -45.0
-const FLASH_PITCH_MAX_DEG := -2.0
+const FLASH_PITCH_MAX_DEG := -1.0
 const FLASH_COLOR := Color(1.0, 0.95, 0.86)
-const FLASH_SHADOWS := true
+## The spill: a wide, faint cone round the beam, at SPILL_SHARE of its energy.
+const SPILL_ANGLE_DEG := 60.0
+const SPILL_SHARE := 0.1
+const SPILL_RANGE_M := 12.0
+## The chest's fill: a small omni light behind and above the chest on the camera's
+## side, lighting only what is on FILL_LAYER (the chest's meshes).
+const FILL_ENERGY := 0.4
+const FILL_RANGE_M := 2.6
+const FILL_BACK_M := 0.9
+const FILL_UP_M := 1.5
+const FILL_LAYER := 1 << 19
 
-const HEAD_ENERGY := 7.0
-const HEAD_RANGE_M := 60.0
+const HEAD_ENERGY := 8.0
+const HEAD_RANGE_M := 75.0
 const HEAD_ANGLE_DEG := 28.0
 const HEAD_ANGLE_ATTENUATION := 0.7
-const HEAD_ATTENUATION := 1.0
+const HEAD_ATTENUATION := 0.8
 const HEAD_PITCH_DEG := -2.0
 const HEAD_COLOR := Color(1.0, 0.96, 0.9)
 
@@ -68,27 +82,39 @@ const WALLS_MASK := 1
 var day_sun: DaySun
 var player: PlayerController
 var vehicles: VehicleManager
+## The player's shadow option: the flashlight casts shadows unless it is Off.
+var shadows: ShadowQuality
 ## Whether the lights are on (the darkness rule, with its hysteresis), and how far
 ## they have faded in: 0 off to 1 fully on.
 var on := false
 var level := 0.0
-## The flashlight, made the first time it is needed (none by day).
+## The flashlight, its spill and the chest's fill, made the first time they are
+## needed (none by day).
 var flashlight: SpotLight3D
+var spill: SpotLight3D
+var fill: OmniLight3D
 ## The car whose headlights are on, and its two headlights.
 var car: DrivableCar
 var headlights: Array[SpotLight3D] = []
 var _ray := PhysicsRayQueryParameters3D.new()
+## The chest and heading the wall's pull-back was last found for, and its result.
+var _ray_chest := Vector3.INF
+var _ray_forward := Vector3.ZERO
+var _ahead := FLASH_AHEAD_M
 
 
-func _init(sun: DaySun, the_player: PlayerController, the_vehicles: VehicleManager) -> void:
+func _init(sun: DaySun, the_player: PlayerController, the_vehicles: VehicleManager, the_shadows: ShadowQuality = null) -> void:
 	day_sun = sun
 	player = the_player
 	vehicles = the_vehicles
+	shadows = the_shadows
 	name = "NightLights"
 	# The Options screen's time moves the light while the game is paused.
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_ray.collision_mask = WALLS_MASK
 	_ray.hit_back_faces = false
+	if player != null:
+		_ray.exclude = [player.get_rid()]
 
 
 ## Whether this run has night lights at all: the one switch they hang off. For now
@@ -128,32 +154,67 @@ static func flash_pitch(camera_pitch_deg: float) -> float:
 	return clampf(FLASH_PITCH_DEG + FLASH_PITCH_SHARE * camera_pitch_deg, FLASH_PITCH_MIN_DEG, FLASH_PITCH_MAX_DEG)
 
 
+## Whether the flashlight casts shadows: unless the player's shadow option is Off.
+func flash_shadows() -> bool:
+	return shadows == null or shadows.current != "off"
+
+
 func _update_flashlight() -> void:
 	var shown := level > 0.0 and player != null and player.is_inside_tree() and player.visible and not player.is_driving()
 	if not shown:
 		if flashlight != null:
 			flashlight.visible = false
+			fill.visible = false
 		return
 	if flashlight == null:
-		flashlight = _spot("Flashlight", FLASH_COLOR, FLASH_RANGE_M, FLASH_ANGLE_DEG, FLASH_ANGLE_ATTENUATION, FLASH_ATTENUATION, FLASH_SHADOWS)
-		add_child(flashlight)
+		_make_flashlight()
 	var rig := player.camera_rig
 	var forward := -rig.global_basis.z
 	forward.y = 0.0
 	forward = forward.normalized() if forward.length_squared() > 1e-6 else Vector3.FORWARD
 	var heading := Basis.looking_at(forward, Vector3.UP)
 	var chest := player.global_position + Vector3.UP * FLASH_HEIGHT_M
-	var ahead := FLASH_AHEAD_M
-	_ray.from = chest
-	_ray.to = chest + forward * FLASH_AHEAD_M
-	_ray.exclude = [player.get_rid()]
-	var hit := player.get_world_3d().direct_space_state.intersect_ray(_ray)
-	if not hit.is_empty():
-		ahead = maxf(0.0, chest.distance_to(hit.position) - 0.1)
+	# Pulled back before a wall: looked for again only once the chest or the
+	# heading has moved.
+	if chest.distance_squared_to(_ray_chest) > 1e-4 or forward.dot(_ray_forward) < 0.99995:
+		_ray_chest = chest
+		_ray_forward = forward
+		_ray.from = chest
+		_ray.to = chest + forward * FLASH_AHEAD_M
+		var hit := player.get_world_3d().direct_space_state.intersect_ray(_ray)
+		_ahead = FLASH_AHEAD_M if hit.is_empty() else maxf(0.0, chest.distance_to(hit.position) - 0.1)
 	var pitch := flash_pitch(rad_to_deg(rig.spring_arm.rotation.x))
-	flashlight.global_transform = Transform3D(heading * Basis(Vector3.RIGHT, deg_to_rad(pitch)), chest + forward * ahead)
+	flashlight.global_transform = Transform3D(heading * Basis(Vector3.RIGHT, deg_to_rad(pitch)), chest + forward * _ahead)
 	flashlight.light_energy = FLASH_ENERGY * level
+	spill.light_energy = FLASH_ENERGY * SPILL_SHARE * level
+	var cast := flash_shadows()
+	if flashlight.shadow_enabled != cast:
+		flashlight.shadow_enabled = cast
 	flashlight.visible = true
+	fill.global_position = player.global_position + Vector3.UP * FILL_UP_M - forward * FILL_BACK_M
+	fill.light_energy = FILL_ENERGY * level
+	fill.visible = true
+
+
+## The flashlight with its spill (riding with it), and the chest's fill, which
+## lights only the chest's meshes (put on FILL_LAYER as well as their own).
+func _make_flashlight() -> void:
+	flashlight = _spot("Flashlight", FLASH_COLOR, FLASH_RANGE_M, FLASH_ANGLE_DEG, FLASH_ANGLE_ATTENUATION, FLASH_ATTENUATION, flash_shadows())
+	add_child(flashlight)
+	spill = _spot("Spill", FLASH_COLOR, SPILL_RANGE_M, SPILL_ANGLE_DEG, 1.0, 1.0, false)
+	spill.visible = true
+	flashlight.add_child(spill)
+	fill = OmniLight3D.new()
+	fill.name = "ChestFill"
+	fill.light_color = FLASH_COLOR
+	fill.omni_range = FILL_RANGE_M
+	fill.light_cull_mask = FILL_LAYER
+	fill.shadow_enabled = false
+	fill.light_energy = 0.0
+	fill.visible = false
+	add_child(fill)
+	for piece: Node in player.avatar_pivot.find_children("*", "GeometryInstance3D", true, false):
+		(piece as GeometryInstance3D).layers |= FILL_LAYER
 
 
 func _update_headlights() -> void:
@@ -185,7 +246,7 @@ func _drop_headlights() -> void:
 	car = null
 
 
-static func _spot(node_name: String, color: Color, range_m: float, angle_deg: float, angle_attenuation: float, attenuation: float, shadows: bool) -> SpotLight3D:
+static func _spot(node_name: String, color: Color, range_m: float, angle_deg: float, angle_attenuation: float, attenuation: float, cast_shadows: bool) -> SpotLight3D:
 	var spot := SpotLight3D.new()
 	spot.name = node_name
 	spot.light_color = color
@@ -193,7 +254,7 @@ static func _spot(node_name: String, color: Color, range_m: float, angle_deg: fl
 	spot.spot_angle = angle_deg
 	spot.spot_angle_attenuation = angle_attenuation
 	spot.spot_attenuation = attenuation
-	spot.shadow_enabled = shadows
+	spot.shadow_enabled = cast_shadows
 	spot.light_energy = 0.0
 	spot.visible = false
 	return spot

@@ -83,6 +83,7 @@ func _ready() -> void:
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
 	day_sun = DaySun.new($Sun, ($WorldEnvironment as WorldEnvironment).environment)
+	day_sun.shadow_quality = shadows
 	add_child(day_sun)
 	hud.set_time_controls(not OS.has_feature("web"))
 	# The sound: its takes loaded now, under the loading screen; the master volume
@@ -235,7 +236,7 @@ func _on_world_ready(_report: Dictionary) -> void:
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
 	if night_lights == null and NightLights.wanted():
-		night_lights = NightLights.new(day_sun, player, vehicles)
+		night_lights = NightLights.new(day_sun, player, vehicles, shadows)
 		add_child(night_lights)
 	# On the web the browser takes the sounds now, not at their first play; the
 	# ditch's drawn water is read back now, not at the first footstep near it.
