@@ -149,6 +149,20 @@ builds nothing:
 gh workflow run mac-build.yml --ref main -f itch_release_tag=mac-2026-11-15-c9746e7
 ```
 
+CI's `virustotal` job also submits both files of each release to
+[VirusTotal](https://www.virustotal.com) and adds each file's SHA-256 and
+VirusTotal report link to the release notes. The link is by hash, so it works
+while the analysis is still running; the notes say when that was the case.
+Anyone can check a download the same way: `shasum -a 256 treasure-island-mac.zip`,
+then open `https://www.virustotal.com/gui/file/<that hash>`. The job needs the
+repository secret `VIRUSTOTAL_API_KEY` and uses VirusTotal's free public API,
+which is for non-commercial use and allows 4 requests a minute and 500 a day.
+VirusTotal shares uploaded files with its security partners, so only the
+already public release files are sent. The release notes carry links, not
+verdicts; the job's summary counts the engines' verdicts without naming
+engines. An engine flagging a build is a warning for a person to look at,
+never a failure: game-engine exports do get false positives.
+
 ## Sound
 
 The game has sound effects, but this repository holds none: every sound is

@@ -26592,3 +26592,16 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: A small release stayed small: the fix and its review retro merged without conflict onto cf9192ed, the review's one wording note went in as a single-line edit to the tests README, and the one check the owner left in place (the Options contract, after an import) ran under an engine lock in under a minute and passed.
 - What did not work well: The review's retro branch was cut on top of the fix branch rather than on main, so its own file list (against main) showed the code files too; only the log of its commits beyond the fix showed it adds nothing but RETRO_LOG.
 - What the team should change next time: Cut review retro branches from main, or name the branch they sit on in the handback, so the integrator's "RETRO_LOG only" check reads true at a glance.
+
+### itch-publish-20261115 — 2026-11-15 — Linux package, itch.io push and VirusTotal reports for each release (branch `ci/itch-publish-20261115`)
+
+- What worked well: Primary sources settled each design question before any YAML existed:
+  - butler's own docs and source showed it accepts a folder or a zip, keeps symlinks, only adds execute bits to Mach-O, ELF and shebang files, auto-wraps a pushed `.app`, and reads `BUTLER_API_KEY` before any key file;
+  - butler's `login` asks itch for an OAuth key with scope `wharf`, while keys made on the settings page are unscoped;
+  - broth publishes no checksum, but its 15.32.0 archives hold byte-identical files to the itchio/butler v15.32.0 GitHub release, whose zip digests GitHub records, so pinning the archive hash has a cross-check;
+  - reading the current Mac release's central directory over HTTP ranges showed seven files, no symlinks and the executable at 0755 without downloading 240 MB;
+  - VirusTotal's public-API page and Google's SecOps service terms (§3) gave the limits and the rules on sharing results, which shaped the notes: links, never verdicts.
+
+  The existing dry walk took the new jobs with a few stand-ins (butler, gh's release download, view and edit, VirusTotal's API, shasum). It ran the itch job through 14 situations and the VirusTotal job through nine.
+- What did not work well: My first harness run of the itch cases failed on its own bugs: a static check that predated the new secrets, and a keyword passed twice. Nothing has run on a macOS runner, against itch.io or against VirusTotal. butler fetch's timing, itch's processing of a draft page, VirusTotal's analysis time for 200-240 MB archives and `gh release edit` on a release made by the same run are all unverified until the first release on main. VirusTotal's terms leave open whether even verdict counts in a public job summary count as "making results accessible"; I kept counts, without engine names, and flagged it.
+- What the team should change next time: For any third-party upload, read the service's current terms page and its service-specific terms, not a summary page, before designing what the job publishes; they decide what may go into public notes. When a tool's distribution site publishes no checksum, look for a second channel run by the same publisher (here GitHub release digests) before pinning a hash on first use.

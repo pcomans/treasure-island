@@ -22,6 +22,13 @@
 # workflow by hand on main with itch_release_tag set to its tag, for example
 # mac-2026-11-15-c9746e7: that run builds nothing and only does the itch job.
 #
+# Also after the release, the virustotal job (owner-requested 2026-11-15)
+# submits the release's two files to VirusTotal's public API and adds each
+# file's SHA-256 and VirusTotal report link to the release notes, with the
+# repository secret VIRUSTOTAL_API_KEY; without it the job only gives a notice.
+# Detections are warnings for a person to look at, never failures, and a
+# VirusTotal problem never touches the published files.
+#
 # Signing and notarization (owner-requested 2026-11-07; Apple ID route and
 # ad-hoc fallback 2026-11-14) happen in the sign job, on main only, and only
 # while the repository variable MAC_SIGNING is "on". With it unset the sign job
@@ -1176,5 +1183,242 @@ jobs:
           } >> "${GITHUB_STEP_SUMMARY}"
           if [ "${BUILDS}" != success ] || [ "${PUSH_MAC}" != success ] || { [ "${LINUX}" = true ] && [ "${PUSH_LINUX}" != success ]; }; then
             echo "::error title=itch.io::Pushing to itch.io failed (see the steps above). The GitHub release is complete and unaffected. To try again, start this workflow by hand on main with itch_release_tag=${RETRY_TAG}."
+            exit 1
+          fi
+
+  virustotal:
+    name: Scan on VirusTotal
+    needs: [publish]
+    # After a release on main; never on a dry run, another branch, a pull request
+    # or a fork. Submits the release's own files to VirusTotal's public API, then
+    # adds each file's SHA-256 and report link to the release notes. The key is
+    # the repository secret VIRUSTOTAL_API_KEY, seen only by the two VirusTotal
+    # steps. Detections, timeouts, quota limits and outages never fail the run or
+    # touch the published files (continue-on-error); the job reports them.
+    #
+    # VirusTotal's terms, as they stood on 2026-11-15: the public API is for
+    # non-commercial use, at most 4 requests a minute and 500 a day, in workflows
+    # that contribute new files (https://docs.virustotal.com/reference/public-vs-premium-api);
+    # uploaded files are shared with VirusTotal's partners and premium customers,
+    # so only these already public release files are sent; results may not be
+    # passed on to third parties or publicly attributed to a named engine vendor
+    # (Google SecOps service terms, section 3, https://cloud.google.com/terms/secops/service-terms).
+    # So the release notes carry links to VirusTotal's own reports, never
+    # verdicts, and the job's summary gives counts only, never engine names.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      needs.publish.outputs.tag != '' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 45
+    continue-on-error: true
+    permissions:
+      # Only for adding the VirusTotal section to the release notes.
+      contents: write
+    concurrency:
+      group: virustotal
+      cancel-in-progress: false
+    steps:
+      - name: Check for the VirusTotal API key
+        id: key
+        # Sees only whether the secret is set, never its value.
+        env:
+          HAS_VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY != '' }}
+        run: |
+          if [ "${HAS_VIRUSTOTAL_API_KEY}" = true ]; then
+            echo "enabled=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::notice title=VirusTotal::No VIRUSTOTAL_API_KEY secret is set, so the release is not submitted to VirusTotal."
+            echo "### VirusTotal: skipped (no VIRUSTOTAL_API_KEY secret)" >> "${GITHUB_STEP_SUMMARY}"
+          fi
+
+      - name: Download the release's files
+        id: files
+        if: steps.key.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.publish.outputs.tag }}
+        # Exactly the published files, each checked against the SHA-256 GitHub
+        # recorded for it; nothing else is ever uploaded.
+        run: |
+          mkdir release
+          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
+          for file in release/*; do
+            name="$(basename "${file}")"
+            recorded="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq ".assets[] | select(.name == \"${name}\") | .digest")"
+            actual="sha256:$(sha256sum "${file}" | cut -d' ' -f1)"
+            if [ "${recorded}" != "${actual}" ]; then
+              echo "::error::${name} does not match the digest GitHub recorded (${recorded:-none})."
+              exit 1
+            fi
+            echo "${name} ${actual#sha256:}"
+          done | tee files.txt
+
+      - name: Submit the files to VirusTotal
+        id: submit
+        if: steps.files.outcome == 'success'
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        # One request at a time, at most four a minute. The key goes to curl on
+        # standard input (-H @-), never on its command line. A file VirusTotal
+        # already has is not uploaded again. Results go to results.txt:
+        # name, SHA-256, state (submitted, known, quota or failed), analysis id.
+        run: |
+          api=https://www.virustotal.com/api/v3
+          last=0
+          # vt METHOD URL [curl arguments]: the reply goes to reply.json, the HTTP
+          # status to ${code}; 000 means no answer at all.
+          vt() {
+            local wait=$(( last + 16 - $(date +%s) ))
+            if [ "${wait}" -gt 0 ]; then sleep "${wait}"; fi
+            last="$(date +%s)"
+            code="$(printf 'x-apikey: %s\n' "${VIRUSTOTAL_API_KEY}" | curl -sS --max-time 900 -o reply.json -w '%{http_code}' -H @- -X "$1" "$2" "${@:3}")" || code=000
+          }
+          state_of() { # an HTTP status that is not a success
+            if [ "$1" = 429 ]; then echo quota; else echo failed; fi
+          }
+          : > results.txt
+          while read -r name sha; do
+            vt GET "${api}/files/${sha}"
+            if [ "${code}" = 200 ]; then
+              jq -c '.data.attributes.last_analysis_stats' reply.json > "stats-${sha}.json"
+              echo "${name} ${sha} known -" >> results.txt
+              continue
+            elif [ "${code}" != 404 ]; then
+              echo "::warning title=VirusTotal::Looking up ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            vt GET "${api}/files/upload_url"
+            url="$(jq -r '.data // empty' reply.json 2>/dev/null || true)"
+            if [ "${code}" != 200 ] || [ -z "${url}" ]; then
+              echo "::warning title=VirusTotal::Getting an upload address for ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            vt POST "${url}" -F "file=@release/${name}"
+            analysis="$(jq -r '.data.id // empty' reply.json 2>/dev/null || true)"
+            if [ "${code}" != 200 ] || [ -z "${analysis}" ]; then
+              echo "::warning title=VirusTotal::Uploading ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            echo "${name} ${sha} submitted ${analysis}" >> results.txt
+          done < files.txt
+          cat results.txt
+
+      - name: Wait for VirusTotal's analyses
+        id: wait
+        if: steps.submit.outcome == 'success'
+        timeout-minutes: 25
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        # Asks about each unfinished analysis about once a minute, for up to 20
+        # minutes. An analysis still running then stays unfinished here; its
+        # report on VirusTotal completes on its own.
+        run: |
+          api=https://www.virustotal.com/api/v3
+          last=0
+          vt() {
+            local wait=$(( last + 16 - $(date +%s) ))
+            if [ "${wait}" -gt 0 ]; then sleep "${wait}"; fi
+            last="$(date +%s)"
+            code="$(printf 'x-apikey: %s\n' "${VIRUSTOTAL_API_KEY}" | curl -sS --max-time 120 -o reply.json -w '%{http_code}' -H @- -X "$1" "$2" "${@:3}")" || code=000
+          }
+          deadline=$(( $(date +%s) + 1200 ))
+          while :; do
+            pending=0
+            while read -r name sha state analysis; do
+              [ "${state}" = submitted ] && [ ! -f "stats-${sha}.json" ] || continue
+              vt GET "${api}/analyses/${analysis}"
+              status="$(jq -r '.data.attributes.status // empty' reply.json 2>/dev/null || true)"
+              if [ "${code}" = 200 ] && [ "${status}" = completed ]; then
+                jq -c '.data.attributes.stats' reply.json > "stats-${sha}.json"
+                echo "${name}: analysis completed"
+              else
+                pending=$((pending + 1))
+                echo "${name}: ${status:-HTTP ${code}}"
+              fi
+            done < results.txt
+            if [ "${pending}" -eq 0 ] || [ "$(date +%s)" -ge "${deadline}" ]; then break; fi
+            sleep 30
+          done
+
+      - name: Add the reports to the release notes
+        id: notes
+        if: always() && steps.files.outcome == 'success'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.publish.outputs.tag }}
+        # Every file gets its SHA-256 and VirusTotal's report link by that hash,
+        # with a fixed note on its state; no verdicts. Re-running replaces the
+        # section instead of adding a second one.
+        run: |
+          [ -f results.txt ] || while read -r name sha; do echo "${name} ${sha} failed -"; done < files.txt > results.txt
+          {
+            echo "VirusTotal reports, by each file's SHA-256 (submitted after publishing):"
+            while read -r name sha state _; do
+              link="https://www.virustotal.com/gui/file/${sha}"
+              case "${state}" in
+                submitted | known)
+                  if [ -f "stats-${sha}.json" ]; then note=""; else note=" (the analysis was still running when this was written; the report completes on its own)"; fi ;;
+                quota) note=" (not submitted: VirusTotal's daily request limit was reached; the link finds the file once anyone submits it)" ;;
+                *) note=" (not submitted: VirusTotal could not be reached; the link finds the file once anyone submits it)" ;;
+              esac
+              echo "- ${name}: SHA-256 ${sha}, ${link}${note}"
+            done < results.txt
+          } > section.md
+          gh release view "${TAG}" --json body --jq .body > body.md
+          # Drop an earlier VirusTotal section (the last paragraph of the notes).
+          python3 -I - body.md <<'PY'
+          import sys
+          path = sys.argv[1]
+          text = open(path).read().rstrip("\n")
+          marker = "\n\nVirusTotal reports, by each file's SHA-256"
+          if marker in text:
+              text = text[:text.index(marker)]
+          open(path, "w").write(text + "\n\n")
+          PY
+          cat section.md >> body.md
+          gh release edit "${TAG}" --notes-file body.md >/dev/null
+          cat section.md
+
+      - name: Report
+        if: always() && steps.key.outputs.enabled == 'true'
+        env:
+          TAG: ${{ needs.publish.outputs.tag }}
+          NOTES: ${{ steps.notes.outcome }}
+        # Counts only, as VirusTotal's own report shows them; engine names stay on
+        # VirusTotal. Any engine flagging a file is a warning for a person to look
+        # at (game engines' export templates do get false positives), never a
+        # failure.
+        run: |
+          {
+            echo "### VirusTotal for ${TAG}"
+            echo ""
+            if [ -f results.txt ]; then
+              while read -r name sha state _; do
+                link="https://www.virustotal.com/gui/file/${sha}"
+                if [ -f "stats-${sha}.json" ]; then
+                  counts="$(jq -r '"malicious \(.malicious // 0), suspicious \(.suspicious // 0), undetected \(.undetected // 0), harmless \(.harmless // 0), unsupported \(.["type-unsupported"] // 0), timeouts \((.timeout // 0) + (.["confirmed-timeout"] // 0)), failures \(.failure // 0)"' "stats-${sha}.json")"
+                  flagged="$(jq -r '(.malicious // 0) + (.suspicious // 0)' "stats-${sha}.json")"
+                  echo "- [${name}](${link}): ${counts}"
+                  if [ "${flagged}" -gt 0 ]; then
+                    echo "::warning title=VirusTotal::${flagged} engine(s) flag ${name} as malicious or suspicious. A person should look at the report before anyone relies on it (false positives on game engine builds happen): ${link}"
+                  fi
+                else
+                  echo "- [${name}](${link}): ${state}, no completed analysis yet"
+                fi
+              done < results.txt
+            else
+              echo "- nothing was submitted (see the steps above)"
+            fi
+            echo ""
+            echo "Release notes updated: ${NOTES:-no}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+          tail -n 8 "${GITHUB_STEP_SUMMARY}"
+          if [ "${NOTES}" != success ]; then
+            echo "::error title=VirusTotal::The VirusTotal section could not be added to the release notes of ${TAG}. The release itself is complete and unaffected."
             exit 1
           fi
