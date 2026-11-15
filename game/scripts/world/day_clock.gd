@@ -27,12 +27,32 @@ extends RefCounted
 ## The island's clock is Pacific time by the US rule (PST, UTC-8; PDT, UTC-7 from
 ## 2:00 on the second Sunday of March to 2:00 on the first Sunday of November,
 ## since 2007), whatever the device's own time zone.
+##
+## The switch for the whole time of day (owner, 2026-11-15: all of it behind one
+## flag that is easy to turn off), for the developers and the owner, not a
+## player's option: the project setting ENABLED_SETTING (true unless project.godot
+## sets it false), or OFF_ARGUMENT on the command line for one run
+## (`tools/godot --path . -- --no-time-of-day`). The web build counts as off (it
+## holds the recorded moment, "Mac first, web later"). Off, the game is the web's:
+## the clock holds RECORDED_UNIX and nothing moves it, DaySun writes nothing (the
+## Sun and the whole look stay main.tscn's), Mersea's probes are never captured
+## again and the Options screen has no time of day. Everything that depends on the
+## time of day asks enabled() first and, when it is false, makes and runs nothing
+## (no node, no light, no process): DaySun and the Options screen's date and time
+## now, and the night's flashlight, the driven car's headlights, the parked cars'
+## lamps put out at night, the stars and a sky-only sun when they come. Each run
+## prints one line as it reads the switch: TIME_OF_DAY on, held (a --script run)
+## or off, and why.
 
 ## Treasure Island, as tools/solar_position.mjs takes it.
 const LATITUDE := 37.82
 const LONGITUDE := -122.37
 ## 2026-11-13 12:30 PST: main.tscn's Sun (its solar_moment metadata).
 const RECORDED_UNIX := 1794601800.0
+## The switch (see the top): the project setting, and the command line's argument
+## that turns the time of day off for one run.
+const ENABLED_SETTING := "treasure_island/time_of_day/enabled"
+const OFF_ARGUMENT := "--no-time-of-day"
 
 ## Where real time comes from: the system clock. A test may put a stand-in here
 ## (a Callable returning Unix seconds) and use_system_clock() puts it back.
@@ -47,6 +67,62 @@ static var _offset := 0.0
 ## Goes up by one at every jump (start_at, start_now, pin): DaySun redraws the sun
 ## at once, not at its next step.
 static var _revision := 0
+## Why the time of day is off in this run ("" when it is on), read once.
+static var _off := ""
+static var _switch_read := false
+
+
+## Whether the time of day is on in this run (see the top): what everything that
+## depends on it asks first.
+static func enabled() -> bool:
+	_read_switch()
+	return _off.is_empty()
+
+
+## Why the time of day is off in this run, or "" when it is on.
+static func off_reason() -> String:
+	_read_switch()
+	return _off
+
+
+## Why the time of day is off with these command-line arguments, this value of
+## ENABLED_SETTING and on the web or not, or "" when it is on.
+static func off_reason_for(arguments: PackedStringArray, setting: Variant, web: bool) -> String:
+	if arguments.has(OFF_ARGUMENT):
+		return "%s on the command line" % OFF_ARGUMENT
+	if not bool(setting):
+		return "the project setting %s is false" % ENABLED_SETTING
+	if web:
+		return "the web build holds the recorded moment"
+	return ""
+
+
+## Reads the switch and starts the clock again as a run does: for a test that
+## turns the switch over (ProjectSettings) between its checks.
+static func restart() -> void:
+	_switch_read = false
+	_started = false
+
+
+static func _read_switch() -> void:
+	if _switch_read:
+		return
+	_switch_read = true
+	_off = off_reason_for(OS.get_cmdline_user_args(), ProjectSettings.get_setting(ENABLED_SETTING, true), OS.has_feature("web"))
+	var at := local(RECORDED_UNIX)
+	var recorded := "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
+	if not _off.is_empty():
+		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, recorded])
+	elif _scripted():
+		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % recorded)
+	else:
+		print("TIME_OF_DAY on: the clock runs from the real time")
+
+
+## Whether this run is a test or capture driver's (its SceneTree scripted).
+static func _scripted() -> bool:
+	var tree := Engine.get_main_loop() as SceneTree
+	return tree == null or tree.get_script() != null
 
 
 ## The instant now (UTC, Unix seconds).
@@ -86,16 +162,14 @@ static func pin(unix: float = RECORDED_UNIX) -> void:
 
 
 ## The clock as a run starts: the real time in play, the recorded moment, held,
-## for the web and for every test or capture driver.
+## with the time of day off (the web's too) and for every test or capture driver.
 static func _start() -> void:
 	if _started:
 		return
-	_started = true
-	var tree := Engine.get_main_loop() as SceneTree
-	if OS.has_feature("web") or tree == null or tree.get_script() != null:
-		pin()
+	if not enabled() or _scripted():
+		_set_clock(RECORDED_UNIX, false)
 	else:
-		start_now()
+		_set_clock(float(system_clock.call()), true)
 
 
 ## Real time from the system clock again, after a test's stand-in. Set the source
@@ -104,7 +178,16 @@ static func use_system_clock() -> void:
 	system_clock = Callable(Time, &"get_unix_time_from_system")
 
 
+## A jump; with the time of day off nothing moves the clock from the recorded
+## moment.
 static func _jump(unix: float, running: bool) -> void:
+	if not enabled():
+		_start()
+		return
+	_set_clock(unix, running)
+
+
+static func _set_clock(unix: float, running: bool) -> void:
 	_started = true
 	_held_unix = unix
 	_offset = unix - float(system_clock.call())

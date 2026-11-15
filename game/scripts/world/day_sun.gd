@@ -19,6 +19,11 @@ extends Node
 ## radiance map (ambient light and every reflection) over several frames, so a sun
 ## moved every frame would keep that redraw going all the time. A jump of the clock
 ## (the Options screen's date and time, Now, a test) moves it at once.
+##
+## With the time of day off (DayClock.enabled: its switch, and the web) it does
+## nothing at all: no look is put on, so the Sun, the environment, the sky and the
+## global uniforms stay main.tscn's and project.godot's, and no probe is captured
+## again.
 
 ## Seconds of clock time between steps while time runs, with the sun at least
 ## FULL_STEP_ELEVATION_DEG up or down: the sun moves about 0.04 degrees in that
@@ -94,6 +99,9 @@ func _init(scene_sun: DirectionalLight3D, scene_environment: Environment = null)
 
 
 func _ready() -> void:
+	if not DayClock.enabled():
+		set_process(false)
+		return
 	follow(true)
 
 
@@ -104,8 +112,11 @@ func _process(_delta: float) -> void:
 
 
 ## Points the sun at the clock's instant and puts on its light: at once after a
-## jump of the clock, or when `now` is true; else once a step has gone by.
+## jump of the clock, or when `now` is true; else once a step has gone by. Nothing
+## with the time of day off.
 func follow(now := false) -> void:
+	if not DayClock.enabled():
+		return
 	var unix := DayClock.now()
 	var revision := DayClock.revision()
 	if not now and revision == _revision and absf(unix - shown_unix) < _step:

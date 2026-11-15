@@ -156,3 +156,4 @@ horizon_haze={
 ground_dressing/density="medium"
 street_detail/enabled=true
 street_detail/layers="vegetation,furniture,fences,clutter"
+time_of_day/enabled=true

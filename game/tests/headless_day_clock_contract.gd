@@ -27,7 +27,13 @@ extends SceneTree
 ##     night; dawn the same as dusk at the same height; and DaySun putting it on;
 ##   - the options screen's date and time read the island's clock (PST and PDT, the
 ##     night note), its sliders jump the clock and time runs on, Now goes back to
-##     the real time, and the web's options screen has none of it.
+##     the real time, and the web's options screen has none of it;
+##   - the switch (DayClock.enabled; owner, 2026-11-15: the whole time of day
+##     behind one flag): --no-time-of-day on the command line, the project setting
+##     off and the web build each turn it off, and nothing else; with the setting
+##     turned off as a run starts the clock holds the recorded moment whatever
+##     jumps it, and DaySun writes nothing to main.tscn's Sun and look, nor any
+##     global uniform.
 ## The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -84,7 +90,10 @@ func _run() -> void:
 	var menu := await _check_options_rows()
 	if menu.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, menu])
+	var switch := await _check_switch_off()
+	if switch.is_empty():
+		return _finish()
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, menu, switch])
 	_finish()
 
 
@@ -550,6 +559,65 @@ func _check_options_rows() -> String:
 	if not _require(hidden and not hud.time_controls_shown(), "On the web the options screen must show no date or time."):
 		return ""
 	return "the options screen's date and time (Fri 13 Nov 2026 12:30 PST; Sun 21 Jun 12:30 PDT from the date slider, 23:00 with the night note and 09:30 from the time slider; Now; none on the web)"
+
+
+## The switch (DayClock.enabled): on unless --no-time-of-day is on the command line,
+## the project setting is false or the build is the web's. With the setting turned
+## off at run time and the clock started again, as a run starts: the clock holds the
+## recorded moment, not running, and start_at, start_now and pin move it nowhere; a
+## DaySun on copies of main.tscn's Sun and look writes nothing through frames and a
+## follow(true) (the Sun's transform and light and the look main.tscn's daylight, no
+## global uniform handed over, nothing shown, not processing). Then the setting and
+## the clock as they were: on, held for this driver at the recorded moment.
+func _check_switch_off() -> String:
+	var reasons := [
+		DayClock.off_reason_for(PackedStringArray(["--solar-table", "table.json"]), true, false),
+		DayClock.off_reason_for(PackedStringArray([DayClock.OFF_ARGUMENT]), true, false),
+		DayClock.off_reason_for(PackedStringArray(), false, false),
+		DayClock.off_reason_for(PackedStringArray(), true, true),
+	]
+	var kept: Variant = ProjectSettings.get_setting(DayClock.ENABLED_SETTING)
+	if not _require(reasons[0] == "" and not reasons.slice(1).has("") and DayClock.enabled() and kept == true, "The time of day must be on unless %s is on the command line, %s is false or the build is the web's (reasons %s; on now %s, project.godot's setting %s)." % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING, reasons, DayClock.enabled(), kept]):
+		return ""
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, false)
+	DayClock.restart()
+	var off := [DayClock.enabled(), DayClock.off_reason(), DayClock.now(), DayClock.is_running()]
+	var revision := DayClock.revision()
+	DayClock.start_at(DayClock.parse_local("2026-06-21 20:30"))
+	DayClock.start_now()
+	DayClock.pin(DayClock.parse_local("2026-12-21 17:00"))
+	var jumped := [DayClock.now(), DayClock.is_running(), DayClock.revision() - revision]
+	# DaySun on copies of main.tscn's Sun (its transform set whole, not taken apart)
+	# and its environment with the sky material.
+	var scene := (load(MAIN_SCENE) as PackedScene).instantiate()
+	var scene_sun := scene.get_node("Sun") as DirectionalLight3D
+	var light := DirectionalLight3D.new()
+	light.transform = scene_sun.transform
+	for property: StringName in [&"light_color", &"light_energy", &"light_specular"]:
+		light.set(property, scene_sun.get(property))
+	var scene_transform := light.transform
+	var environment := (scene.get_node("WorldEnvironment") as WorldEnvironment).environment.duplicate(true) as Environment
+	scene.free()
+	root.add_child(light)
+	_nodes.append(light)
+	var written := _record_globals()
+	var day_sun := DaySun.new(light, environment)
+	root.add_child(day_sun)
+	_nodes.append(day_sun)
+	for _frame in 3:
+		await process_frame
+	day_sun.follow(true)
+	var differences := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
+	var inert := [light.transform == scene_transform, differences.is_empty(), written.size(), is_nan(day_sun.shown_unix), is_nan(day_sun.lit_elevation), day_sun.is_processing()]
+	DaySun.use_engine_globals()
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, kept)
+	DayClock.restart()
+	var back := [DayClock.enabled(), DayClock.now(), DayClock.is_running()]
+	if not _require(off == [false, reasons[2], DayClock.RECORDED_UNIX, false] and jumped == [DayClock.RECORDED_UNIX, false, 0], "With %s false the time of day must be off for that reason and its clock hold the recorded moment whatever jumps it (off: %s; after start_at, start_now and pin: %s)." % [DayClock.ENABLED_SETTING, off, jumped]) \
+	or not _require(inert == [true, true, 0, true, true, false], "With the time of day off DaySun must write nothing: main.tscn's Sun and look untouched, no global handed over, nothing shown and no processing (transform kept, look kept, globals, nothing shown, nothing lit, processing: %s; the look differs in %s)." % [inert, differences]) \
+	or not _require(back == [true, DayClock.RECORDED_UNIX, false], "With the setting back the time of day must be on again, the clock held for this driver at the recorded moment (%s)." % [back]):
+		return ""
+	return "the switch: on unless %s, the setting %s false or the web; turned off, the clock held at the recorded moment through start_at, start_now and pin, and DaySun writing nothing to main.tscn's Sun, its look or the globals" % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING]
 
 
 ## How far the game's clock and the system clock run while REAL_SPAN_S of real time

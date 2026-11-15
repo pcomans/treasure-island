@@ -92,7 +92,8 @@ extends SceneTree
 ##   (focused or street) may add "times": ["YYYY-MM-DD HH:MM", ...] to be shot at each
 ##   of those moments in turn, as NAME-at-YYYYMMDD-HHMM.png, in place of NAME.png.
 ##   Mersea's reflection probes keep the moment the world loaded at. Neither goes
-##   with --neutral-lighting, whose fixed sun stands in for the game's.
+##   with --neutral-lighting, whose fixed sun stands in for the game's, nor with the
+##   time of day off (DayClock.enabled: --no-time-of-day or the project setting).
 ## --neutral-lighting: screenshots only. Swaps in the fixed neutral daylight below
 ##   (NEUTRAL_ENVIRONMENT, NEUTRAL_SKY, NEUTRAL_SUN) for colour matching against
 ##   reference photos: a complete environment, sky and sun of its own, with Mersea's
@@ -262,6 +263,9 @@ func _run() -> void:
 	print("STREET_DETAIL_SHOTS " + " ".join(PackedStringArray(plan)))
 	if args.has("neutral-lighting") and (args.has("time") or _asks_times(args, batch)):
 		_fail("--time and a view's \"times\" move the game's sun, which --neutral-lighting hides behind a fixed sun of its own: use one or the other")
+		return
+	if not DayClock.enabled() and (args.has("time") or _asks_times(args, batch)):
+		_fail("--time and a view's \"times\" move the game's sun, which stays at the recorded moment with the time of day off (%s)" % DayClock.off_reason())
 		return
 	if args.has("time"):
 		var moment := DayClock.parse_local(str(args.time))

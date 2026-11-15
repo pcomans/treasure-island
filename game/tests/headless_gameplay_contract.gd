@@ -333,8 +333,12 @@ func _check_ferry_solidity() -> void:
 	if prompt.is_empty():
 		return
 	main.queue_free()
+	await process_frame
+	var time_off := _check_time_of_day_off()
+	if time_off.is_empty():
+		return
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, time_off, prompt])
 	quit(0)
 
 
@@ -676,6 +680,48 @@ func _check_time_of_day(main: GameMain) -> String:
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
 	return "held at the recorded moment with main.tscn's Sun and daylight; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+
+
+## The time of day's switch off (DayClock.enabled; owner, 2026-11-15: all of it
+## behind one flag) in a main made with the project setting turned off as a run
+## starts: the clock holds the recorded moment, DaySun writes nothing (the Sun and
+## its light, the environment and the sky main.tscn's, no global uniform handed
+## over, nothing shown and nothing processing) and the options screen has no time
+## of day (its heading, the date and time sliders, Now and the night note absent,
+## the sound's rows there after the graphics'). The main is made and freed with no
+## frame between, before its world starts loading; the setting and the clock go
+## back after. Returns a summary, or "" after failing.
+func _check_time_of_day_off() -> String:
+	var kept: Variant = ProjectSettings.get_setting(DayClock.ENABLED_SETTING)
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, false)
+	DayClock.restart()
+	var written := {}
+	DaySun.set_global = func(global: StringName, value: Variant) -> void: written[global] = value
+	var scene := (ResourceLoader.load("res://game/scenes/main.tscn", "", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene).instantiate()
+	var scene_transform := (scene.get_node("Sun") as Node3D).transform
+	var scene_look := _look_of(scene.get_node("Sun") as DirectionalLight3D, (scene.get_node("WorldEnvironment") as WorldEnvironment).environment)
+	scene.free()
+	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
+	main.capture_mouse_on_ready = false
+	main.use_saved_settings = false
+	root.add_child(main)
+	var hud := main.hud
+	var sun := main.get_node("Sun") as DirectionalLight3D
+	hud.show_world_ready()
+	hud.set_paused(true)
+	hud.options_button.pressed.emit()
+	var time_parts: Array[Control] = [hud.time_heading_row, hud.time_date_row, hud.time_row, hud.time_date_slider, hud.time_slider, hud.time_now_button, hud.time_note]
+	var shown := time_parts.filter(func(part: Control) -> bool: return part.is_visible_in_tree()).map(func(part: Control) -> String: return str(part.name))
+	var state := [DayClock.enabled(), DayClock.now() == DayClock.RECORDED_UNIX, DayClock.is_running(), is_nan(main.day_sun.shown_unix), main.day_sun.is_processing(), written.size(),
+		sun.transform == scene_transform, _look_of(sun, (main.get_node("WorldEnvironment") as WorldEnvironment).environment) == scene_look, hud.time_controls_shown(), hud.options_visible(), hud.sound_volume.is_visible_in_tree()]
+	main.free()
+	DaySun.use_engine_globals()
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, kept)
+	DayClock.restart()
+	if state != [false, true, false, true, false, 0, true, true, false, true, true] or not shown.is_empty() or not DayClock.enabled():
+		_fail("With the time of day switched off (%s false) the clock must hold the recorded moment, DaySun write nothing (main.tscn's Sun and look, no global, nothing shown or processing) and Options show the sound but no time of day ([on, held at the recorded moment, running, nothing shown, processing, globals, the Sun's transform, its look, time controls, Options shown, the volume shown] %s; time of day showing: %s; on again after %s)." % [DayClock.ENABLED_SETTING, state, shown, DayClock.enabled()])
+		return ""
+	return "the clock held at the recorded moment, DaySun writing nothing, main.tscn's Sun and look, and Options with the sound and no time of day"
 
 
 ## The light DayLight puts on, as a Sun, an environment and its sky material hold it.

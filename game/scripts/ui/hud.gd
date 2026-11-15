@@ -546,8 +546,10 @@ func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
 
 
-## Whether the options screen offers the date and time: on desktop; the web keeps
-## the recorded moment for now (owner, 2026-11-14: "Mac first, web later").
+## Whether the options screen offers the date and time: with the time of day on
+## (main.gd, DayClock.enabled): on desktop; not on the web, which keeps the recorded
+## moment for now (owner, 2026-11-14: "Mac first, web later"), nor with its switch
+## off.
 func set_time_controls(shown: bool) -> void:
 	_time_controls = shown
 	for part: Control in [time_heading_row, time_date_row, time_row]:

@@ -50,8 +50,9 @@ var shadows: ShadowQuality
 ## Options), put on as the game starts.
 var graphics: GraphicsSettings
 ## The Sun pointed at the time of day, with its light (DaySun, DayClock, DayLight):
-## the real time as the game starts; the recorded moment on the web and for a test
-## or capture driver.
+## the real time as the game starts; the recorded moment for a test or capture
+## driver; with the time of day off (DayClock.enabled: its switch, and the web)
+## main.tscn's Sun and look, untouched.
 var day_sun: DaySun
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
@@ -102,7 +103,7 @@ func _ready() -> void:
 	hud.graphics_chosen.connect(_on_graphics_chosen)
 	day_sun = DaySun.new($Sun, ($WorldEnvironment as WorldEnvironment).environment)
 	add_child(day_sun)
-	hud.set_time_controls(not OS.has_feature("web"))
+	hud.set_time_controls(DayClock.enabled())
 	# The sound: its takes loaded now, under the loading screen; the master volume
 	# and mute kept from the last run (the defaults for a test or capture driver).
 	sound = Sound.new()
@@ -628,9 +629,10 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
-		# The time of day: the clock's instant, whether it runs, the Sun's rotation
-		# and whether the options screen offers the date and time.
-		"time": {"unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
+		# The time of day: whether it is on (DayClock.enabled), the clock's instant,
+		# whether it runs, the Sun's rotation and whether the options screen offers
+		# the date and time.
+		"time": {"enabled": DayClock.enabled(), "unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 
