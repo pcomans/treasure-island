@@ -115,7 +115,7 @@ body {
 	right: 0;
 	bottom: calc(10% + 1.5rem);
 	width: max-content;
-	max-width: calc(100% - 4rem);
+	max-width: calc(100% - 2rem);
 	margin: 0 auto;
 	box-sizing: border-box;
 }
@@ -218,12 +218,13 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	}
 
 	// While the game downloads (the engine and the game's data): the bytes so far, of
-	// the total the exporter wrote down, over the progress bar.
+	// the total the exporter wrote down, over the progress bar. The count keeps to one
+	// line (no-break spaces), so a narrow phone breaks the line after "game:".
 	function showDownload(current, total) {
 		statusNotice.className = 'download';
 		statusNotice.style.display = 'block';
 		statusNotice.textContent = total > 0
-			? 'Downloading the game: ' + Math.floor(current / MB) + ' of ' + Math.round(total / MB) + ' MB'
+			? 'Downloading the game: ' + Math.floor(current / MB) + ' of ' + Math.round(total / MB) + ' MB'
 			: 'Downloading the game…';
 		if (!downloadShown) {
 			downloadShown = true;

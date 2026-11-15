@@ -236,6 +236,15 @@ Non-blocking notes from the reviews:
 - `goal_confetti.gd`'s `on_screen` clamps the tone map's white only at 0.001 (`maxf(environment.tonemap_white, 0.001)`), not at 1.0 (code review, 2026-11-11).
 - The gameplay contract's glancing walk past the ball (`_check_soccer_ball` in `headless_gameplay_contract.gd`) allows up to 3 m/s along the walk; the bound could be tightened to under 1.0 (code review, 2026-11-11).
 
+## Loading screen (`game/scripts/main.gd`, `game/web/shell.html`, 2026-11-15)
+
+Each startup step has its own line on the loading screen (`LOADING_STEPS` in `main.gd`; on the web the page first shows the download in megabytes and **Starting the game…**). Each line goes up before its step's work starts, and the work waits a frame so the line can be drawn. What it can't show:
+
+- On desktop the engine's own boot splash, with no line, stays up while the engine starts and loads the main scene (about 2.5 s on the devcontainer, 3 s on a first launch), before any game script runs. A line there would need a boot splash image of its own, and the web page shows that image during its download.
+- No step shows how far along it is. The island's load is one `load()` of the baked world, and the island's first frame prepares every shader in its view in one draw (about 15.5 s of the web's **Preparing graphics…** here). Counting either would need the work split across frames: a threaded load, or the island drawn a part at a time.
+- Nothing on the screen moves while a step runs, because each step holds the main thread (on the web the progress bar ends with the download).
+- A line is seen only once the frame that puts it up has been drawn, so the rest of that frame's work runs under the line before it. On the web about 2 s of the engine's own work on the newly loaded island, at the end of the load's frame, runs under **Loading the island…** (a screencast shows **Setting up the island…** 2.1 s after the game puts it up). On a first desktop launch the frame that puts up **Preparing graphics…** takes about 2 s (0.2 s on a second launch) under **Setting up the island…**, most likely the grass's first capture of the ground from above compiling its shaders.
+
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
 - YBI reads hazier than the dated photos (the scene's haze floor); the owner kept the haze.
