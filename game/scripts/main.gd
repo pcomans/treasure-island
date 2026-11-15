@@ -15,6 +15,10 @@ const TOUCH_LAYOUT_PX := 720
 ## The gameplay actions a pause lets go of, so none is still held when play goes
 ## on: a key let go while the window was away, or a touch button's own press.
 const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"move_left", &"move_right", &"run", &"jetpack", &"fast_drop", &"recover", &"vehicle_enter_exit", &"handbrake"]
+## The line shown, and for how long (s), when the browser refuses the start
+## prompt's capture of the mouse and play goes on with the pointer free.
+const POINTER_FREE_LINE := "This browser won't let the mouse turn the view: Esc, then Resume, asks again."
+const POINTER_FREE_LINE_S := 8.0
 
 var _world_ready := false
 var _startup_failed := false
@@ -28,6 +32,9 @@ var _web_visibility_callback: JavaScriptObject
 var _web_pointer_lock_callback: JavaScriptObject
 var _web_capture_pending := false
 var _web_pointer_locked := false
+## The browser refused the start prompt's capture (_sync_web_pointer_lock), so
+## play goes on with the pointer free until a later Resume gets the lock.
+var _web_pointer_free := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
 ## A pause or resume asked for inside a physics tick, put off to the idle step
@@ -39,12 +46,25 @@ var _pause_later_quiet := false
 var capture_mouse_on_ready := true
 ## The sun's shadow quality (the pause menu's Options), put on as the game starts.
 var shadows: ShadowQuality
+## The frame rate limit, 3D resolution and frame rate display (the pause menu's
+## Options), put on as the game starts.
+var graphics: GraphicsSettings
+## The Sun pointed at the time of day, with its light (DaySun, DayClock, DayLight):
+## the real time as the game starts; the recorded moment for a test or capture
+## driver; with the time of day off (DayClock.enabled: its switch, and the web)
+## main.tscn's Sun and look, untouched.
+var day_sun: DaySun
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
-## Startup puts on the shadow level kept from the last run; the shared capture
-## harness turns this off, so its captures always have the default (a player's
-## choice is a global engine setting that would reach its neutral sun too).
+## Startup puts on the shadow level, graphics and sound kept from the last run; the
+## shared capture harness turns this off, so its captures always have the defaults
+## (a player's choice is a global engine setting that would reach its neutral sun,
+## its frame timing and its resolution too).
 var use_saved_settings := true
+## Whether play waits behind the start prompt (_on_world_ready): on the web, for
+## a touch screen and a mouse alike. Tests of touch play set it as a browser
+## would.
+var start_prompt := OS.has_feature("web")
 
 
 func _init() -> void:
@@ -74,6 +94,16 @@ func _ready() -> void:
 	shadows.apply(ShadowQuality.saved_id() if use_saved_settings and settings_problem.is_empty() else ShadowQuality.default_id())
 	hud.set_shadow_levels(ShadowQuality.offered(), shadows.current)
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
+	# The frame rate limit, 3D resolution and frame rate display: kept from the last
+	# run, or for a test or capture driver the defaults, which leave the engine as it
+	# started on desktop (the web's default resolution is its three quarters).
+	graphics = GraphicsSettings.new(get_viewport())
+	graphics.apply(GraphicsSettings.saved() if use_saved_settings and settings_problem.is_empty() else GraphicsSettings.defaults())
+	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY), graphics.current)
+	hud.graphics_chosen.connect(_on_graphics_chosen)
+	day_sun = DaySun.new($Sun, ($WorldEnvironment as WorldEnvironment).environment)
+	add_child(day_sun)
+	hud.set_time_controls(DayClock.enabled())
 	# The sound: its takes loaded now, under the loading screen; the master volume
 	# and mute kept from the last run (the defaults for a test or capture driver).
 	sound = Sound.new()
@@ -84,9 +114,8 @@ func _ready() -> void:
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
-		# everywhere).
+		# everywhere). Its 3D scale is the graphics' resolution (above).
 		get_viewport().size_changed.connect(func() -> void: _web_view_revision += 1)
-		get_viewport().scaling_3d_scale = 0.75
 		get_viewport().msaa_3d = Viewport.MSAA_2X
 		print("WEB_RENDER msaa_3d=%d scale=%.2f" % [get_viewport().msaa_3d, get_viewport().scaling_3d_scale])
 	get_tree().paused = false
@@ -168,6 +197,11 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 	if event.is_action_pressed("pause") and _world_ready:
+		# The start prompt waits for its tap or click, the gesture that lets the
+		# browser start the sound: Esc there (an iPad's keyboard) does nothing.
+		if not hud.start_prompt_text().is_empty():
+			get_viewport().set_input_as_handled()
+			return
 		# Browser Escape may also arrive after its pointer-lock loss callback.
 		# Never turn that same unlock gesture into a new capture request.
 		_set_paused(true if OS.has_feature("web") and _touch_controls == null else not get_tree().paused)
@@ -252,14 +286,21 @@ func _on_world_ready(_report: Dictionary) -> void:
 	if capture_mouse_on_ready and not OS.has_feature("web") and _touch_controls == null and not controls_open:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
-	# Touch plays immediately; the desktop web walks with a visible pointer until
-	# a deliberate click requests look capture. Never auto-request browser lock.
-	if _touch_controls != null:
-		_touch_controls.set_gameplay_active(true)
-	elif OS.has_feature("web"):
-		hud.set_pointer_capture_hint(true)
-	if controls_open:
-		_set_paused(true)
+	# On the web, touch or mouse, play waits behind one start prompt (owner,
+	# 2026-11-15): the game starts paused, its pause menu showing only Play,
+	# worded for the screen. That tap or click is the gesture that lets the
+	# browser start the sound (game/web/shell.html) and, with a mouse, take the
+	# mouse for the look, through the menu's own Resume (_resume_game): a refused
+	# capture leaves it waiting there, as the pause menu does. The loading screen
+	# hands over to it as play is ready. Never auto-request browser lock.
+	if start_prompt:
+		hud.set_start_prompt("Tap to play" if _touch_controls != null else "Click to play")
+		_set_paused(true, true)
+	else:
+		if _touch_controls != null:
+			_touch_controls.set_gameplay_active(true)
+		if controls_open:
+			_set_paused(true)
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
@@ -318,6 +359,13 @@ func _prepare_initial_graphics() -> String:
 		# Draw the player-visible initial scene with those reflections, input still off.
 		await RenderingServer.frame_post_draw
 		STARTUP_MARKS.mark("graphics_initial_view_submitted")
+	# From now on the probes are captured again as the time of day changes the light
+	# while time runs (DaySun; never with the clock held, as a test's, a capture's or
+	# the web's is).
+	var settled: Array[ReflectionProbe] = []
+	for probe: ReflectionProbe in probes:
+		settled.append(probe)
+	day_sun.watch_reflections(settled)
 	# Submission coverage of this tested initial view only: no physical-display,
 	# all-future-variant, driver-idle or general cubemap-completion guarantee.
 	return ""
@@ -366,14 +414,12 @@ func _set_paused(paused: bool, quiet := false) -> void:
 	if paused:
 		_web_capture_pending = false
 		_web_pointer_locked = false
-	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null else Input.MOUSE_MODE_CAPTURED
+	var mouse_mode := Input.MOUSE_MODE_VISIBLE if paused or _touch_controls != null or _web_pointer_free else Input.MOUSE_MODE_CAPTURED
 	if Input.mouse_mode != mouse_mode:
 		Input.mouse_mode = mouse_mode
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(not paused and _world_ready)
 	hud.set_paused(paused)
-	if OS.has_feature("web") and _touch_controls == null:
-		hud.set_pointer_capture_hint(not paused and _world_ready and not _web_pointer_locked)
 
 
 ## Why this run must not use the player's settings file, or "". A test or capture
@@ -399,6 +445,21 @@ func _on_shadow_quality_chosen(id: String) -> void:
 	else:
 		push_error(settings_problem)
 	hud.show_shadow_level(shadows.current)
+
+
+## A frame rate limit or resolution chosen on the options screen, or the frame rate
+## display switched: on at once, and kept for next time (but never by a driver in
+## the player's own settings file).
+func _on_graphics_chosen(key: String, value: Variant) -> void:
+	var choices := graphics.current.duplicate()
+	choices[key] = value
+	graphics.apply(choices)
+	var settings_problem := player_settings_problem(get_tree(), "chose a graphics setting, writing")
+	if settings_problem.is_empty():
+		GraphicsSettings.save(graphics.current)
+	else:
+		push_error(settings_problem)
+	hud.show_graphics(graphics.current)
 
 
 ## The master volume or mute changed on the options screen: on at once, and kept
@@ -472,11 +533,21 @@ func _sync_web_pointer_lock() -> void:
 		if _web_capture_pending:
 			_web_capture_pending = false
 			_web_pointer_locked = true
+			_web_pointer_free = false
 			_set_paused(false)
 		elif get_tree().paused or not _web_pointer_locked:
 			# Escape/cancel can precede an asynchronous grant. Release it, don't resume.
 			JavaScriptBridge.get_interface("document").exitPointerLock()
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	elif _web_capture_pending and not hud.start_prompt_text().is_empty():
+		# The browser refused the start prompt's capture (an embedding frame without
+		# the permission, a kiosk, some Linux setups): play goes on with the pointer
+		# free, as before the prompt; Esc and the pause menu's Resume ask again.
+		_web_capture_pending = false
+		_web_pointer_locked = false
+		_web_pointer_free = true
+		_set_paused(false)
+		hud.show_feedback(POINTER_FREE_LINE, false, POINTER_FREE_LINE_S)
 	else:
 		_web_pointer_locked = false
 		_set_paused(true)
@@ -524,6 +595,12 @@ func _publish_web_state(_args: Array) -> void:
 		"resume_button": [hud.resume_button.get_global_rect().get_center().x, hud.resume_button.get_global_rect().get_center().y],
 		# The controls screen (open or not) and the buttons that open and close it.
 		"controls": hud.controls_visible(),
+		# The start prompt (play waiting for its first tap or click) and its words;
+		# whether play goes on with the pointer free (its capture refused), and the
+		# feedback line showing.
+		"start_prompt": hud.start_prompt_text(),
+		"pointer_free": _web_pointer_free,
+		"feedback": hud.feedback_text.text if hud.feedback_panel.visible else "",
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],
 		"back_button": [hud.back_button.get_global_rect().get_center().x, hud.back_button.get_global_rect().get_center().y],
 		# The credits screen (open or not), its view and how far it is scrolled, and
@@ -534,28 +611,61 @@ func _publish_web_state(_args: Array) -> void:
 		"credits_button": [hud.credits_button.get_global_rect().get_center().x, hud.credits_button.get_global_rect().get_center().y],
 		"credits_licences_button": [hud.credits_licences_button.get_global_rect().get_center().x, hud.credits_licences_button.get_global_rect().get_center().y],
 		"credits_back_button": [hud.credits_back_button.get_global_rect().get_center().x, hud.credits_back_button.get_global_rect().get_center().y],
-		# The options screen (open or not), the shadow level on, and the buttons
-		# that open it and choose each level.
+		# The options screen (open or not) and where its panel and Back button are,
+		# the shadow level on, and the buttons that open it and choose each level.
 		"options": hud.options_visible(),
+		"options_panel": _rect(hud.options_panel),
+		"options_back_button": [hud.options_back_button.get_global_rect().get_center().x, hud.options_back_button.get_global_rect().get_center().y],
 		"shadow_quality": shadows.current,
 		"sun_shadows": ($Sun as DirectionalLight3D).shadow_enabled,
 		"options_button": [hud.options_button.get_global_rect().get_center().x, hud.options_button.get_global_rect().get_center().y],
 		"shadow_level_buttons": _shadow_level_buttons(),
+		# The graphics: the choices on, what the engine has (the frame limit, the
+		# window's 3D scale and mode, frames drawn a second), the frame rate shown or
+		# not, and the buttons and switch that choose them.
+		"graphics": _graphics_state(),
 		# The pitch's ball: where it is and how many goals it has gone into.
 		"ball": _ball_state(),
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
+		# The time of day: whether it is on (DayClock.enabled), the clock's instant,
+		# whether it runs, the Sun's rotation and whether the options screen offers
+		# the date and time.
+		"time": {"enabled": DayClock.enabled(), "unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 
 
 func _shadow_level_buttons() -> Dictionary:
+	return _button_centres(hud.shadow_levels)
+
+
+func _button_centres(row: Control) -> Dictionary:
 	var at := {}
-	for button: Node in hud.shadow_levels.get_children():
+	for button: Node in row.get_children():
 		var middle := (button as Control).get_global_rect().get_center()
 		at[str(button.name)] = [middle.x, middle.y]
 	return at
+
+
+func _graphics_state() -> Dictionary:
+	var shown := hud.show_frame_rate.get_global_rect().get_center()
+	return {
+		"choices": graphics.current, "max_fps": Engine.max_fps,
+		"scale": get_viewport().scaling_3d_scale, "mode": get_viewport().scaling_3d_mode,
+		"fps": Engine.get_frames_per_second(), "frames_drawn": Engine.get_frames_drawn(),
+		"frame_rate_shown": hud.frame_rate_label.visible, "frame_rate_text": hud.frame_rate_label.text,
+		"frame_rate_rect": _rect(hud.frame_rate_label),
+		"frame_rates_offered": hud.frame_rates.visible, "frame_rate_buttons": _button_centres(hud.frame_rates),
+		"resolution_buttons": _button_centres(hud.resolutions), "show_switch": [shown.x, shown.y],
+	}
+
+
+## A control's rect in the viewport, as [x, y, width, height].
+func _rect(control: Control) -> Array:
+	var at := control.get_global_rect()
+	return [at.position.x, at.position.y, at.size.x, at.size.y]
 
 
 func _sound_state() -> Dictionary:

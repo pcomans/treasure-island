@@ -21,7 +21,8 @@ extends RefCounted
 ## REV_DOWN_S. A loop with no takes leaves its band to its neighbour, so a
 ## missing take never drops the engine out. The tyres: one skid loop whose gain
 ## follows the tyres' sliding speed (DrivableCar.slip, smoothed in SKID_UP_S and
-## SKID_DOWN_S), so a flickering drift never restarts a sound. In the bay the
+## SKID_DOWN_S), so a flickering drift never restarts a sound; plain steering
+## squeals only from STEER_SQUEAL_SHARE of the car's top speed. In the bay the
 ## engine dies; back on land it starts again, its loops coming in under the
 ## start as on getting in. A jump's landing on the wheels (LAND_AIR_S) and the
 ## shore's rocks under the wheels (RIPRAP) have sounds of their own (owner's
@@ -52,6 +53,13 @@ const SKID_DOWN_S := 0.15
 ## it to full.
 const SKID_FROM_MPS := 1.2
 const SKID_RANGE_MPS := 4.0
+## Plain steering squeals only from this share of the driven car's own top speed
+## (owner, 2026-11-15: no squeal from steering below 90 %); the handbrake and a
+## hard brake (the pedal against the way the car rolls) squeal at any speed
+## (squeals). How far the car slides off its heading tells nothing apart: steering
+## alone swings a sedan's tail 15 to 28 degrees off it in a full-lock slalom
+## from half to 85 % of its top speed.
+const STEER_SQUEAL_SHARE := 0.9
 const IDLE := &"car_engine_idle_loop"
 const LOW := &"car_engine_low_loop"
 const HIGH := &"car_engine_high_loop"
@@ -209,7 +217,7 @@ func drive(car: DrivableCar, delta: float) -> void:
 	Sound.hold(LOW, car, level * weights.y, at, clampf(1.0 + 0.45 * (_rev - LOW_REV), 0.85, 1.2))
 	Sound.hold(HIGH, car, level * weights.z, at, clampf(1.0 + 0.45 * (_rev - 0.9), 0.85, 1.12))
 	var speed := car.speed()
-	var sliding := car.slip() if wheels >= 2 and speed > 1.5 else 0.0
+	var sliding := car.slip() if wheels >= 2 and speed > 1.5 and squeals(car) else 0.0
 	_skid = lerpf(_skid, sliding, 1.0 - exp(-step / (SKID_UP_S if sliding > _skid else SKID_DOWN_S)))
 	Sound.hold(SKID, car, clampf((_skid - SKID_FROM_MPS) / SKID_RANGE_MPS, 0.0, 1.0), at, 0.95 + 0.1 * clampf(speed / 30.0, 0.0, 1.0))
 	Sound.hold(RIPRAP, car, _rumble, at, 0.9 + 0.2 * clampf(speed / RUMBLE_FULL_MPS, 0.0, 1.0))
@@ -256,6 +264,20 @@ static func riprap_wheels(car: DrivableCar) -> int:
 		if is_instance_valid(ground) and ground is Node and str((ground as Node).get_meta("feature_kind", "")) == RIPRAP_KIND:
 			count += 1
 	return count
+
+
+## Whether car's sliding tyres may squeal now (see STEER_SQUEAL_SHARE): its
+## handbrake held, its pedal pressed against the way it rolls (a hard brake, as
+## DrivableCar's braking), or its speed at STEER_SQUEAL_SHARE of its top speed or
+## over. The tyres' slide alone (DrivableCar.slip) cannot tell steering from
+## these: a turn at the grip's limit slides them as they do.
+static func squeals(car: DrivableCar) -> bool:
+	if car.handbrake:
+		return true
+	var along := car.forward_speed()
+	if (car.drive_input < -0.1 and along > 1.0) or (car.drive_input > 0.1 and along < -1.0):
+		return true
+	return car.speed() >= STEER_SQUEAL_SHARE * car.top_speed()
 
 
 ## The rocks' rumble with wheels on them at speed (m/s): half with one wheel,
