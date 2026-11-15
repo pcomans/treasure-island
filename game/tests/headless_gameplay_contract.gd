@@ -690,7 +690,7 @@ func _check_time_of_day(main: GameMain) -> String:
 ## starts: the clock holds the recorded moment, DaySun writes nothing (the Sun and
 ## its light, the environment and the sky main.tscn's, no global uniform handed
 ## over, nothing shown and nothing processing) and the options screen has no time
-## of day (its heading, the date and time sliders, Now and the night note absent,
+## of day (its heading, the date and time sliders and Now absent,
 ## the sound's rows there after the graphics'). The main is made and freed with no
 ## frame between, before this run loads any world (as the shadow options contract
 ## makes its mains); the setting and the clock go back after. Returns a summary,
@@ -714,7 +714,7 @@ func _check_time_of_day_off() -> String:
 	hud.show_world_ready()
 	hud.set_paused(true)
 	hud.show_options()
-	var time_parts: Array[Control] = [hud.time_heading_row, hud.time_date_row, hud.time_row, hud.time_date_slider, hud.time_slider, hud.time_now_button, hud.time_note]
+	var time_parts: Array[Control] = [hud.time_heading, hud.time_date_row, hud.time_row, hud.time_date_slider, hud.time_slider, hud.time_now_button]
 	var shown := time_parts.filter(func(part: Control) -> bool: return part.is_visible_in_tree()).map(func(part: Control) -> String: return str(part.name))
 	var state := [DayClock.enabled(), DayClock.now() == DayClock.RECORDED_UNIX, DayClock.is_running(), is_nan(main.day_sun.shown_unix), main.day_sun.is_processing(), written.size(),
 		sun.transform == scene_transform, _look_of(sun, (main.get_node("WorldEnvironment") as WorldEnvironment).environment) == scene_look, hud.time_controls_shown(), hud.options_visible(), hud.sound_volume.is_visible_in_tree()]

@@ -770,6 +770,7 @@ static func string_lights(parent: Node3D,land: Dictionary) -> void:
 	bulb.emission_enabled=true
 	bulb.emission=Color("e9c77d")
 	bulb.emission_energy_multiplier=0.35
+	bulb.set_meta(DaySun.NIGHT_ROLE,DaySun.LAMP)
 	for z in [-5.8,0.0,5.5,11.0]:
 		var a:=site_point(-11.2,z)
 		var b:=site_point(3.0,z)

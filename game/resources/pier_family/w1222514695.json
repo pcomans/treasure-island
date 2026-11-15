@@ -222,6 +222,7 @@
         0.05
       ],
       "emission_energy": 6.0,
+      "night_role": "lamp",
       "roughness": 0.6
     },
     "sign_red": {

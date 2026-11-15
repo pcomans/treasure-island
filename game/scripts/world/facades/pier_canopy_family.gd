@@ -732,7 +732,12 @@ static func _make_materials(ctx: Ctx) -> void:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
 		var emission: Array = entry.get("emission", [])
-		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), emission, entry.get("emission_energy", 1.0)]
+		# A glowing entry says what it is at night (DaySun): a lamp, or a daylight fill.
+		var night_role := str(entry.get("night_role", ""))
+		if emission.size() == 3 and night_role != DaySun.LAMP and night_role != DaySun.DAYLIGHT_FILL:
+			ctx.errors.append("palette %s glows, so it needs a night_role: %s or %s" % [key, DaySun.LAMP, DaySun.DAYLIGHT_FILL])
+			return
+		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), emission, entry.get("emission_energy", 1.0), night_role]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Pier_" + key
@@ -746,6 +751,7 @@ static func _make_materials(ctx: Ctx) -> void:
 				material.emission_enabled = true
 				material.emission = Color(float(emission[0]), float(emission[1]), float(emission[2]))
 				material.emission_energy_multiplier = float(entry.get("emission_energy", 1.0))
+				material.set_meta(DaySun.NIGHT_ROLE, night_role)
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

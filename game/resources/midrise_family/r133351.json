@@ -709,7 +709,8 @@
         0.62
       ],
       "roughness": 0.4,
-      "emission": 0.9
+      "emission": 0.9,
+      "night_role": "lamp"
     },
     "mech_metal": {
       "rgb": [
@@ -855,7 +856,8 @@
       ],
       "roughness": 0.8,
       "texture": "res://game/resources/textures/world/aracely/aracely_interior.png",
-      "emission": 0.55
+      "emission": 0.55,
+      "night_role": "daylight_fill"
     },
     "slab_face": {
       "rgb": [

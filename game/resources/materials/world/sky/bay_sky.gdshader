@@ -56,6 +56,10 @@ uniform vec3 low_sun_horizon_color : source_color = vec3(1.0, 0.80, 0.60);
 uniform vec3 cloud_glow : source_color = vec3(0.0);
 uniform float cloud_glow_energy = 0.0;
 
+// The night's stars, 0 by day (game/scripts/world/day_light.gd fades them in
+// through dusk): a fixed field in the visible sky only, not in the radiance map.
+uniform float star_energy = 0.0;
+
 // The sun: its disc's radius (degrees, a little larger than the real 0.27) and
 // brightness, in units of the sun light's colour times energy, and its halo.
 uniform float sun_disc_deg = 0.42;
@@ -292,6 +296,62 @@ float pixel_noise(vec2 pixel) {
 	return fract(52.9829189 * fract(dot(pixel, vec2(0.06711056, 0.00583715))));
 }
 
+// Stars: a grid of STAR_CELLS by STAR_CELLS cells on each face of a cube round the
+// sky (about 0.4 degrees a cell), each holding a star by chance (STAR_SHARE, less
+// near a face's corner, where cells are smaller, so the field is even), at a random
+// spot in it with a random brightness, most of them faint and about one in twenty
+// bright, and a colour from blue-white to warm. A star is drawn about a pixel
+// across whatever the view's width (`pixel`, the angle a pixel spans), so it does
+// not grow with the view.
+const float STAR_CELLS = 220.0;
+const float STAR_SHARE = 0.0075;
+
+vec3 star_hash(vec3 p) {
+	p = fract(p * vec3(0.1031, 0.1030, 0.0973));
+	p += dot(p, p.yxz + 33.33);
+	return fract((p.xxy + p.yxx) * p.zyx);
+}
+
+vec3 stars(vec3 dir, float pixel) {
+	vec3 a = abs(dir);
+	float face;
+	vec2 uv;
+	if (a.x >= a.y && a.x >= a.z) {
+		face = dir.x > 0.0 ? 0.0 : 1.0;
+		uv = dir.yz / a.x;
+	} else if (a.y >= a.z) {
+		face = dir.y > 0.0 ? 2.0 : 3.0;
+		uv = dir.xz / a.y;
+	} else {
+		face = dir.z > 0.0 ? 4.0 : 5.0;
+		uv = dir.xy / a.z;
+	}
+	vec2 grid = (uv * 0.5 + 0.5) * STAR_CELLS;
+	vec3 light = vec3(0.0);
+	// The cell this direction is in and its neighbours on the same face, so a star
+	// near a cell's edge is not cut off.
+	for (int j = -1; j <= 1; j++) {
+		for (int i = -1; i <= 1; i++) {
+			vec2 cell = floor(grid) + vec2(float(i), float(j));
+			if (cell.x < 0.0 || cell.y < 0.0 || cell.x >= STAR_CELLS || cell.y >= STAR_CELLS) {
+				continue;
+			}
+			vec3 h = star_hash(vec3(cell, face * 257.0 + 11.0));
+			vec2 at = (cell + 0.15 + 0.7 * h.xy) / STAR_CELLS * 2.0 - 1.0;
+			if (h.z > STAR_SHARE * pow(1.0 + dot(at, at), -1.5) * 2.6) {
+				continue;
+			}
+			vec3 s = face < 2.0 ? vec3(face < 1.0 ? 1.0 : -1.0, at) : (face < 4.0 ? vec3(at.x, face < 3.0 ? 1.0 : -1.0, at.y) : vec3(at, face < 5.0 ? 1.0 : -1.0));
+			float d = length(dir - normalize(s)) / pixel;
+			vec3 g = star_hash(vec3(cell.yx, face + 3.7));
+			float brightness = 0.035 + 4.0 * pow(g.x, 14.0);
+			vec3 tint = mix(vec3(0.74, 0.84, 1.0), vec3(1.0, 0.88, 0.72), g.y);
+			light += tint * brightness * exp(-d * d * 1.6);
+		}
+	}
+	return light;
+}
+
 void sky() {
 	vec3 dir = normalize(EYEDIR);
 	vec3 sun = LIGHT0_ENABLED ? LIGHT0_DIRECTION : vec3(0.0, 1.0, 0.0);
@@ -339,6 +399,12 @@ void sky() {
 		if (!AT_CUBEMAP_PASS) {
 			float disc = 1.0 - smoothstep(radians(sun_disc_deg) * 0.8, radians(sun_disc_deg), angle);
 			color += sun_color * sun_disc_energy * disc * (1.0 - streaks * 0.5);
+			if (star_energy > 0.0) {
+				// Fewer toward the horizon, through more air and the cities' glow; the
+				// cirrus veils them and the cumulus, laid over below, hides them.
+				float pixel = max(length(dFdx(dir)), length(dFdy(dir)));
+				color += stars(dir, max(pixel, 1e-5)) * star_energy * smoothstep(0.03, 0.32, dir.y) * (1.0 - streaks);
+			}
 		}
 		// Clouds hide the disc and its glare faster than they hide the sky.
 		float through = 1.0 - clouds.a;

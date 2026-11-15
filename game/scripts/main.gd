@@ -54,6 +54,11 @@ var graphics: GraphicsSettings
 ## driver; with the time of day off (DayClock.enabled: its switch, and the web)
 ## main.tscn's Sun and look, untouched.
 var day_sun: DaySun
+## The flashlight and the driven car's headlights, on by themselves at night
+## (NightLights), once the world is loaded where NightLights.wanted(): with the time
+## of day on (DayClock.enabled: not with its switch off or on the web) and not in a
+## test or capture run (DayClock.scripted), which keeps the recorded moment.
+var night_lights: NightLights
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
 ## Startup puts on the shadow level, graphics and sound kept from the last run; the
@@ -102,6 +107,7 @@ func _ready() -> void:
 	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY), graphics.current)
 	hud.graphics_chosen.connect(_on_graphics_chosen)
 	day_sun = DaySun.new($Sun, ($WorldEnvironment as WorldEnvironment).environment)
+	day_sun.shadow_quality = shadows
 	add_child(day_sun)
 	hud.set_time_controls(DayClock.enabled())
 	# The sound: its takes loaded now, under the loading screen; the master volume
@@ -257,6 +263,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# The buildings' daylight fills, found once now the world is loaded, go out at
+	# night with the look (DaySun; nothing with the time of day off).
+	day_sun.collect_fills(world_root.buildings)
+	if night_lights == null and NightLights.wanted():
+		night_lights = NightLights.new(day_sun, player, vehicles, shadows)
+		add_child(night_lights)
 	# On the web the browser takes the sounds now, not at their first play; the
 	# ditch's drawn water is read back now, not at the first footstep near it.
 	sound.prepare_for_play()
@@ -630,9 +642,10 @@ func _publish_web_state(_args: Array) -> void:
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
 		# The time of day: whether it is on (DayClock.enabled), the clock's instant,
-		# whether it runs, the Sun's rotation and whether the options screen offers
-		# the date and time.
-		"time": {"enabled": DayClock.enabled(), "unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
+		# whether it runs, the Sun's rotation and sky mode, whether the options screen
+		# offers the date and time, and whether there are night lights (none on the
+		# web).
+		"time": {"enabled": DayClock.enabled(), "unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "sky_mode": ($Sun as DirectionalLight3D).sky_mode, "controls": hud.time_controls_shown(), "night_lights": night_lights != null},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 

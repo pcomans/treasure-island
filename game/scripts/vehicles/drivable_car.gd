@@ -312,6 +312,10 @@ var _wheels: MultiMesh
 var _driver: Node3D
 ## The hero level's node, where it draws.
 var _hero: Node3D
+## The kit's shared material its pieces are drawn with (street_clutter.gdshader; null
+## for a yard vehicle), and its copy with the car's own lamps lit (set_lamps_lit).
+var _kit_material: ShaderMaterial
+var _lit_material: ShaderMaterial
 ## The hero level's wheels and brakes, where it draws.
 var _hero_wheels: MultiMesh
 var _hero_brakes: MultiMesh
@@ -531,6 +535,8 @@ func _box_hulls(boxes: Array) -> Array[PackedVector3Array]:
 ## far mesh. Only the shadow caster and the far mesh cast a shadow; a body
 ## without a shadow caster (a yard vehicle) casts its own from its near level.
 func _build_visual(parts: Dictionary, material: Material, custom: Color, hero: Node3D) -> void:
+	var shader_material := material as ShaderMaterial
+	_kit_material = shader_material if shader_material != null and shader_material.shader == KIT.SHADER else null
 	_visual = Node3D.new()
 	_visual.name = "Visual"
 	_visual.top_level = true
@@ -670,6 +676,64 @@ func visual_transform() -> Transform3D:
 
 func seat_transform() -> Transform3D:
 	return Transform3D(Basis.IDENTITY, global_transform * SEAT)
+
+
+## Where its headlights shine from, in the drawn car's frame (front -Z): just ahead
+## of the front of its body, a little in from each side, at about two fifths of its
+## height (a car's lamps, a van's or a truck's higher up).
+func headlight_mounts() -> Array[Vector3]:
+	var x := maxf(width_m * 0.5 - 0.3, 0.3)
+	var y := clampf(height_m * 0.42, 0.55, 1.2)
+	var z := _front_z - 0.1
+	var mounts: Array[Vector3] = [Vector3(-x, y, z), Vector3(x, y, z)]
+	return mounts
+
+
+## The node its drawn levels hang from (top level, moved between physics states
+## each frame): what rides with the car as drawn, its headlights among them.
+func visual_root() -> Node3D:
+	return _visual
+
+
+## Its own day-running and tail lamps lit whatever the hour (NightLights, while it is
+## driven), or following the parked cars' (DayLight's parked_lamps): its kit-drawn
+## pieces drawn with a copy of the kit's material with lamps_lit on, or with the
+## kit's own. A yard vehicle has no lit lamps.
+func set_lamps_lit(lit: bool) -> void:
+	if _visual == null or _kit_material == null:
+		return
+	if lit and _lit_material == null:
+		_lit_material = _kit_material.duplicate() as ShaderMaterial
+		_lit_material.set_shader_parameter(&"lamps_lit", true)
+	var from: Material = _kit_material if lit else _lit_material
+	var to: Material = _lit_material if lit else _kit_material
+	if from == null:
+		return
+	for piece: Node in _visual.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := piece as GeometryInstance3D
+		if geometry.material_override == from:
+			geometry.material_override = to
+
+
+## Whether every kit-drawn piece is drawn with its lamps lit (set_lamps_lit).
+func are_lamps_lit() -> bool:
+	var pieces := lamp_pieces()
+	return pieces.x > 0 and pieces.y == 0
+
+
+## Its kit-drawn pieces: how many are drawn with its own lamps lit (x) and how many
+## with the parked cars' (y). Both 0 for a yard vehicle.
+func lamp_pieces() -> Vector2i:
+	var pieces := Vector2i.ZERO
+	if _visual == null or _kit_material == null:
+		return pieces
+	for piece: Node in _visual.find_children("*", "GeometryInstance3D", true, false):
+		var material := (piece as GeometryInstance3D).material_override
+		if material != null and material == _lit_material:
+			pieces.x += 1
+		elif material == _kit_material:
+			pieces.y += 1
+	return pieces
 
 
 func describe() -> Dictionary:

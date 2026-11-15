@@ -38,9 +38,11 @@ extends RefCounted
 ## Sun and the whole look stay main.tscn's), Mersea's probes are never captured
 ## again and the Options screen has no time of day. Everything that depends on the
 ## time of day asks enabled() first and, when it is false, makes and runs nothing
-## (no node, no light, no process): DaySun and the Options screen's date and time
-## now, and the night's flashlight, the driven car's headlights, the parked cars'
-## lamps put out at night, the stars and a sky-only sun when they come. Each run
+## (no node, no light, no process): DaySun, which alone writes the look (the night,
+## the stars, the Sun lighting the sky alone, the parked cars' lamps put out, the
+## buildings' daylight fills put out, the shadows' reach), the Options screen's
+## date and time, and NightLights (the flashlight and the driven car's
+## headlights), which a scripted run doesn't make either (scripted()). Each run
 ## prints one line as it reads the switch: TIME_OF_DAY on, held (a --script run)
 ## or off, and why.
 
@@ -113,14 +115,16 @@ static func _read_switch() -> void:
 	var recorded := "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
 	if not _off.is_empty():
 		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, recorded])
-	elif _scripted():
+	elif scripted():
 		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % recorded)
 	else:
 		print("TIME_OF_DAY on: the clock runs from the real time")
 
 
-## Whether this run is a test or capture driver's (its SceneTree scripted).
-static func _scripted() -> bool:
+## Whether this run is a test or capture driver's (its SceneTree scripted): the
+## clock holds the recorded moment unless that driver moves it, and the night's
+## lights are not made (NightLights.wanted).
+static func scripted() -> bool:
 	var tree := Engine.get_main_loop() as SceneTree
 	return tree == null or tree.get_script() != null
 
@@ -166,7 +170,7 @@ static func pin(unix: float = RECORDED_UNIX) -> void:
 static func _start() -> void:
 	if _started:
 		return
-	if not enabled() or _scripted():
+	if not enabled() or scripted():
 		_set_clock(RECORDED_UNIX, false)
 	else:
 		_set_clock(float(system_clock.call()), true)

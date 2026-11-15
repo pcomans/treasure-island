@@ -255,10 +255,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -380,6 +380,169 @@ func _case_enter_exit() -> bool:
 	if not _require(not _player.is_driving(), "F did not get out the second time."):
 		return false
 	return await _rest("enter_exit")
+
+
+# --- 1b. The night lights (owner, 2026-11-15: "a flashlight that turns on by
+# itself and headlights on the car you drive"; NightLights), and the buildings'
+# glows at night ("Keep real lamps, darken glass"; DaySun's daylight fills).
+
+## (a) Held: this test run has the time of day on but scripted (DayClock.scripted),
+## so NightLights.wanted() is false and no night light is made, by day or at night.
+## (b) Off: with the switch's setting off (and DayClock.restart()) nothing is wanted;
+## a NightLights a driver makes does nothing, even in the dark; the clock stays at
+## the recorded moment whatever pins it, and DaySun writes nothing: the Sun lights
+## land and sky, no global is written, and the stars, the darkness, the shadows'
+## reach and the buildings' daylight fills stay the day's. The setting goes back.
+## (c) Made as play makes them: by day nothing is lit or made; at night (the clock
+## pinned at 22:00, the sun far under the horizon) the flashlight fades on by itself
+## at the chest, shining from a little ahead of it where the camera looks, down
+## toward the ground, and turns with the camera; the Sun lights the sky alone and
+## the parked cars' lamps go out (the global DaySun hands the engine); every glowing
+## building material is a lamp or a daylight fill, the fills dark and the lamps as
+## they were. In a car the flashlight hides and the car's two headlights shine
+## ahead from its front, its own lamps lit; out of it they are gone and its lamps
+## follow the parked cars' again. Back to the recorded moment every light fades off,
+## the Sun lights the island again and every fill has its own emission back.
+func _case_night_lights() -> bool:
+	var sun := _main.get_node("Sun") as DirectionalLight3D
+	# (a) Held.
+	if not _require(DayClock.enabled() and DayClock.scripted() and not NightLights.wanted() and _main.night_lights == null and _night_light_count() == 0, "With the time of day held (a test run: on %s, scripted %s) no night light may be wanted or made (wanted %s, made %s, %d spot and omni lights)." % [DayClock.enabled(), DayClock.scripted(), NightLights.wanted(), _main.night_lights != null, _night_light_count()]):
+		return false
+	DayClock.pin(DayClock.parse_local("2026-11-14 22:00"))
+	for _frame in int(NightLights.FADE_S * 60.0) + 10:
+		await process_frame
+	var spots_at_night := _night_light_count()
+	DayClock.pin()
+	await process_frame
+	if not _require(spots_at_night == 0 and _main.night_lights == null, "With the time of day held no night light may be made at night either (%d spot and omni lights)." % spots_at_night):
+		return false
+	# The buildings' glows as the day has them, for (b) and (c).
+	var glows := DaySun.building_glows(_main.world_root.buildings)
+	# Each glow's own emission (a lamp drawn by its own shader has none to keep).
+	var own := {}
+	for material: Material in glows[DaySun.LAMP] + glows[DaySun.DAYLIGHT_FILL]:
+		if material is BaseMaterial3D:
+			own[material] = (material as BaseMaterial3D).emission_energy_multiplier
+	var fills: Array = glows[DaySun.DAYLIGHT_FILL]
+	print("NIGHT building glows: %d lamps (%s), %d daylight fills (%s), untagged %s" % [glows[DaySun.LAMP].size(), ", ".join(glows[DaySun.LAMP].map(func(material: Material) -> String: return material.resource_name)), fills.size(), ", ".join(fills.map(func(material: Material) -> String: return material.resource_name)), glows.untagged])
+	if not _require((glows.untagged as Array).is_empty() and not (glows[DaySun.LAMP] as Array).is_empty() and not fills.is_empty() and _main.day_sun.fills.size() == fills.size() and fills.all(func(material: Material) -> bool: return _main.day_sun.fills.has(material)), "Every glowing building material must be a lamp or a daylight fill (untagged: %s), there must be both, and DaySun must have found every fill (%d of %d)." % [glows.untagged, _main.day_sun.fills.size(), fills.size()]):
+		return false
+	# (b) Off.
+	var kept: Variant = ProjectSettings.get_setting(DayClock.ENABLED_SETTING)
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, false)
+	DayClock.restart()
+	var written := {}
+	DaySun.set_global = func(global: StringName, value: Variant) -> void:
+		written[global] = value
+		RenderingServer.global_shader_parameter_set(global, value)
+	var inert := NightLights.new(_main.day_sun, _player, _vehicles, _main.shadows)
+	_main.add_child(inert)
+	DayClock.pin(DayClock.parse_local("2026-11-14 22:00"))
+	# Dark as the night's, by hand (the clock can't get there): still nothing.
+	var night_before := _main.day_sun.night
+	_main.day_sun.night = 1.0
+	for _frame in int(NightLights.FADE_S * 60.0) + 10:
+		await process_frame
+	inert.update(1.0)
+	var sky_material := (_main.get_node("WorldEnvironment") as WorldEnvironment).environment.sky.sky_material as ShaderMaterial
+	var stars: Variant = sky_material.get_shader_parameter(DayLight.SKY_PARAMETERS.stars)
+	var day := DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0])
+	var off := [DayClock.enabled(), NightLights.wanted(), DayClock.now() == DayClock.RECORDED_UNIX, inert.is_processing(), inert.flashlight == null and inert.headlights.is_empty(), _night_light_count(),
+		sun.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY, written.size(), stars == null or DaySun.same(stars, day.stars), _main.shadows.reach == 1.0, _main.day_sun.fill_share == 1.0, own.keys().all(func(material: BaseMaterial3D) -> bool: return material.emission_energy_multiplier == own[material])]
+	_main.day_sun.night = night_before
+	inert.free()
+	DaySun.use_engine_globals()
+	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, kept)
+	DayClock.restart()
+	if not _require(off == [false, false, true, false, true, 0, true, 0, true, true, true, true] and DayClock.enabled() and DayClock.now() == DayClock.RECORDED_UNIX, "With the time of day's switch off (%s false) nothing may be wanted, a NightLights a driver makes must do nothing even in the dark, the clock stay at the recorded moment and DaySun write nothing: the Sun lighting land and sky, no global, the stars, the shadows' reach and the daylight fills the day's ([on, wanted, held at the recorded moment, processing, nothing made, spot and omni lights, light and sky, globals written, stars, whole reach, fill share 1, every glow its own] %s; on again after %s)." % [DayClock.ENABLED_SETTING, off, DayClock.enabled()]):
+		return false
+	# (c) As play has them: this driver opts in, as it opts in to a moment with pin().
+	_main.night_lights = NightLights.new(_main.day_sun, _player, _vehicles, _main.shadows)
+	_main.add_child(_main.night_lights)
+	var lights := _main.night_lights
+	if not _require(lights != null and lights.flashlight == null and not lights.on and lights.headlights.is_empty() and sun.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY, "By day the night lights must be off with no flashlight made, and the Sun lighting the island (lights %s, sky mode %d)." % [lights, sun.sky_mode]):
+		return false
+	written.clear()
+	DaySun.set_global = func(global: StringName, value: Variant) -> void:
+		written[global] = value
+		RenderingServer.global_shader_parameter_set(global, value)
+	DayClock.pin(DayClock.parse_local("2026-11-14 22:00"))
+	for _frame in int(NightLights.FADE_S * 60.0) + 10:
+		await process_frame
+	var flashlight := lights.flashlight
+	var rig := _player.camera_rig
+	var forward := -rig.global_basis.z
+	forward.y = 0.0
+	forward = forward.normalized()
+	var chest := _player.global_position + Vector3.UP * NightLights.FLASH_HEIGHT_M
+	var beam := -flashlight.global_basis.z if flashlight != null else Vector3.ZERO
+	var at := flashlight.global_position if flashlight != null else Vector3.INF
+	var ahead := Vector2(at.x - chest.x, at.z - chest.z)
+	var fills_dark := fills.all(func(material: BaseMaterial3D) -> bool: return material.emission_energy_multiplier == 0.0)
+	var lamps_lit := (glows[DaySun.LAMP] as Array).all(func(material: Material) -> bool: return not own.has(material) or (material as BaseMaterial3D).emission_energy_multiplier == own[material])
+	print("NIGHT flashlight at %s (chest %s), beam %s, camera forward %s, level %.2f, sky mode %d, parked lamps %s, fills dark %s, lamps lit %s" % [at, chest, beam, forward, lights.level, sun.sky_mode, written.get(&"parked_lamps"), fills_dark, lamps_lit])
+	if not _require(lights.on and lights.level == 1.0 and flashlight != null and flashlight.visible and is_equal_approx(flashlight.light_energy, NightLights.FLASH_ENERGY), "At night the flashlight must have faded on by itself (on %s, level %.2f, made %s)." % [lights.on, lights.level, flashlight != null]) \
+	or not _require(absf(at.y - chest.y) < 0.01 and ahead.length() <= NightLights.FLASH_AHEAD_M + 0.01 and (ahead.length() < 0.05 or ahead.normalized().dot(Vector2(forward.x, forward.z)) > 0.99), "The flashlight must shine from the chest, at most FLASH_AHEAD_M ahead where the camera looks (at %s, chest %s)." % [at, chest]) \
+	or not _require(Vector2(beam.x, beam.z).normalized().dot(Vector2(forward.x, forward.z)) > 0.99 and beam.y < -0.05, "The flashlight must point where the camera looks, down toward the ground (beam %s, camera forward %s)." % [beam, forward]) \
+	or not _require(sun.sky_mode == DirectionalLight3D.SKY_MODE_SKY_ONLY and written.get(&"parked_lamps") == 0.0, "At night the Sun must light the sky alone and the parked cars' lamps be out (sky mode %d, parked lamps %s)." % [sun.sky_mode, written.get(&"parked_lamps")]) \
+	or not _require(fills_dark and lamps_lit, "At night every building's daylight fill must be dark and every lamp as it was (fills dark %s, lamps lit %s)." % [fills_dark, lamps_lit]):
+		DaySun.use_engine_globals()
+		return false
+	# It turns with the camera (turned back after, for the cases that walk).
+	var yaw := rig.rotation.y
+	rig.rotation.y += 1.2
+	await process_frame
+	var turned := -rig.global_basis.z
+	turned.y = 0.0
+	beam = -flashlight.global_basis.z
+	rig.rotation.y = yaw
+	if not _require(Vector2(beam.x, beam.z).normalized().dot(Vector2(turned.x, turned.z).normalized()) > 0.99, "The flashlight must turn with the camera (beam %s, camera forward %s)." % [beam, turned]):
+		DaySun.use_engine_globals()
+		return false
+	# Its shadow follows the player's shadow option at once: none with Off.
+	var level_before := _main.shadows.current
+	var cast_before := flashlight.shadow_enabled
+	_main.shadows.apply("off")
+	await process_frame
+	var cast_off := flashlight.shadow_enabled
+	_main.shadows.apply(level_before)
+	await process_frame
+	if not _require(cast_before and not cast_off and flashlight.shadow_enabled, "The flashlight must cast shadows unless the shadow option is Off, following a change at once (at %s %s, at Off %s, back %s)." % [level_before, cast_before, cast_off, flashlight.shadow_enabled]):
+		DaySun.use_engine_globals()
+		return false
+	# In a car: the flashlight hides, the headlights come on, the car's own lamps lit.
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var points: Array = _cases.route.points_xz
+	var start := Vector2(points[0][0], points[0][1])
+	if not await _drive_from(car, start, Vector2(points[1][0], points[1][1]) - start):
+		DaySun.use_engine_globals()
+		return false
+	await process_frame
+	var mounted := lights.headlights.filter(func(lamp: SpotLight3D) -> bool: return lamp.get_parent() == car.visual_root() and lamp.visible and is_equal_approx(lamp.light_energy, NightLights.HEAD_ENERGY) and (-lamp.global_basis.z).dot(-car.visual_transform().basis.z) > 0.99)
+	print("NIGHT in car %s: flashlight shown %s, headlights %d (%d mounted ahead), kit pieces lit and not %s" % [car.row_id, flashlight.visible, lights.headlights.size(), mounted.size(), car.lamp_pieces()])
+	if not _require(not flashlight.visible and lights.car == car and lights.headlights.size() == 2 and mounted.size() == 2 and car.are_lamps_lit(), "In a car at night the flashlight must hide and the car's two headlights shine ahead, every one of its kit pieces drawn with its lamps lit (flashlight shown %s, headlights %d, %d mounted ahead, pieces lit and not %s)." % [flashlight.visible, lights.headlights.size(), mounted.size(), car.lamp_pieces()]):
+		DaySun.use_engine_globals()
+		return false
+	_vehicles.force_exit()
+	await process_frame
+	if not _require(lights.headlights.is_empty() and lights.car == null and car.lamp_pieces().x == 0 and car.lamp_pieces().y > 0 and flashlight.visible, "Out of the car its headlights must go and every piece's lamps follow the parked cars' again, the flashlight back (headlights %d, pieces lit and not %s, flashlight shown %s)." % [lights.headlights.size(), car.lamp_pieces(), flashlight.visible]):
+		DaySun.use_engine_globals()
+		return false
+	# Back to the recorded moment: every light fades off; the Sun lights the island;
+	# every glow has its own emission back.
+	DayClock.pin()
+	for _frame in int(NightLights.FADE_S * 60.0) + 10:
+		await process_frame
+	DaySun.use_engine_globals()
+	var glows_back := own.keys().all(func(material: BaseMaterial3D) -> bool: return material.emission_energy_multiplier == own[material])
+	if not _require(not lights.on and lights.level == 0.0 and not flashlight.visible and sun.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY and written.get(&"parked_lamps") == 1.0 and glows_back and _main.day_sun.fill_share == 1.0, "By day again every night light must be off and the Sun light the island, the parked cars' lamps lit and every building glow its own emission again (on %s, level %.2f, flashlight shown %s, sky mode %d, parked lamps %s, glows back %s, fill share %s)." % [lights.on, lights.level, flashlight.visible, sun.sky_mode, written.get(&"parked_lamps"), glows_back, _main.day_sun.fill_share]):
+		return false
+	return await _rest("night_lights")
+
+
+## The spot and omni lights in the game: the night lights' kinds (the Sun aside).
+func _night_light_count() -> int:
+	return root.find_children("*", "SpotLight3D", true, false).size() + root.find_children("*", "OmniLight3D", true, false).size()
 
 
 # --- 2. A run on Seven Seas Avenue, and a handbrake slide.

@@ -119,6 +119,7 @@ toggle_debug={
 3d_physics/layer_7="reach"
 3d_render/layer_1="world_visible"
 3d_render/layer_2="building_wall_decal"
+3d_render/layer_20="avatar_fill"
 
 [physics]
 
@@ -149,6 +150,10 @@ vegetation_sheen={
 horizon_haze={
 "type": "vec3",
 "value": Vector3(0.5070785, 0.6038273, 0.7105665)
+}
+parked_lamps={
+"type": "float",
+"value": 1.0
 }
 
 [treasure_island]

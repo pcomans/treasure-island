@@ -296,7 +296,7 @@ func _check_graphics() -> String:
 	for child: Node in hud.options_panel.get_node("OptionsLayout").get_children():
 		if (child as Control).visible:
 			order.append(child.name)
-	if not _require(order.slice(0, 7) == PackedStringArray(["Title", "GraphicsHeading", "ShadowRow", "ShadowNote", "FrameRateRow", "ResolutionRow", "TimeHeadingRow"]), "The options screen must read Options, then Graphics: the sun shadows, their note, the frame rate and the resolution, then the time of day (it reads %s)." % [order]):
+	if not _require(order.slice(0, 7) == PackedStringArray(["Title", "GraphicsHeading", "ShadowRow", "ShadowNote", "FrameRateRow", "ResolutionRow", "TimeHeading"]), "The options screen must read Options, then Graphics: the sun shadows, their note, the frame rate and the resolution, then the time of day (it reads %s)." % [order]):
 		return ""
 	# The switches show their track when off. A choice's keyboard focus ring lies on
 	# the fill's own shape and shows on it in use or not: against the blue of the one
