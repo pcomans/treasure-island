@@ -119,8 +119,8 @@ At startup the window shows the engine's boot splash while Godot starts, then th
 loading screen, which covers the island until play and names the step under way:
 **Loading the island…**, **Setting up the island…**, **Compiling shaders…**, then
 **Rendering reflections…** (`LOADING_STEPS` in `game/scripts/main.gd`). The
-island's load and the reflections add a second line, as on a first launch they
-also compile shaders; a run that builds the island from the generated sources
+island's load and the reflections add a smaller, dimmer note, as on a first launch
+they also compile shaders; a run that builds the island from the generated sources
 shows **Building the island…** first. [KNOWN_ISSUES](KNOWN_ISSUES.md) lists what
 the loading screen can't show.
 
@@ -183,8 +183,8 @@ Open https://treasure-island-five.vercel.app/ and wait for the island to load:
 the page names each step as it runs, the download with the megabytes so far
 (about 200 MB), **Starting the engine…**, the island's load and setup, the
 shaders compiled a group of the world at a time (**Compiling shaders: sky and
-player…** to **…the bay and its shores…**, the buildings counted in three
-batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
+player…** to **…the ferry and the view across the bay…**, the buildings counted
+in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
 reflections…**. Then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys

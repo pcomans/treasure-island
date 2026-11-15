@@ -216,12 +216,14 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
 	// While the game downloads (the engine and the game's data): the bytes so far, of
 	// the total the exporter wrote down, over the progress bar. The count keeps to one
-	// line (no-break spaces), so a narrow phone breaks the line after "game:".
+	// line (no-break spaces), so a narrow phone breaks the line after "game:"; like
+	// the game's lines (keep_last_words_together, game/scripts/main.gd), the others
+	// keep their last two words together.
 	function showDownload(current, total) {
 		statusNotice.style.display = 'block';
 		statusNotice.textContent = total > 0
 			? 'Downloading the game: ' + Math.round(current / MB) + '\u00a0of\u00a0' + Math.round(total / MB) + '\u00a0MB'
-			: 'Downloading the game…';
+			: 'Downloading the\u00a0game…';
 		if (!downloadShown) {
 			downloadShown = true;
 			mark('step:Downloading the game');
@@ -248,7 +250,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			mark('download_complete');
 		}
 		phase = 'preparing';
-		showStep('Starting the engine…');
+		showStep('Starting the\u00a0engine…');
 		showChest();
 		mark('status_changed');
 	}

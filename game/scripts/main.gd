@@ -49,27 +49,33 @@ const LOADING_STEP_PRINT := "LOADING_STEP "
 ## camera first. The first group shows nothing: its frame is the first with 3D on,
 ## the sky, the light, the player and the screen's effects. A missing node is
 ## skipped (the grass and the cars' near detail are desktop only). The groups and
-## batches follow what each cost on the web (2026-11-15: from the sky's 1.9 s to the
-## bay's 0.6 s, the buildings' batches 4.2, 0.5 and 1.4 s); groups that cost next to
-## nothing are folded into a neighbour, so no line flashes by.
+## batches follow how long each line stayed on screen on the web (2026-11-15: from
+## the sky's 1.9 s to the ferry's 0.6 s); groups that cost next to nothing are folded
+## into a neighbour, and the buildings come in two batches (about 4.2 and 1.8 s), as
+## the middle one of three stayed up only 0.4 s.
 const COMPILE_GROUPS: Array[Dictionary] = [
 	{"words": "sky and player", "paths": []},
-	{"words": "water and shore", "paths": ["WorldRoot/ContextWorld/Water", "WorldRoot/ContextWorld/Shoreline"]},
+	{"words": "water and shoreline rocks", "paths": ["WorldRoot/ContextWorld/Water", "WorldRoot/ContextWorld/Shoreline"]},
 	{"words": "ground and roads", "paths": ["WorldRoot/PlayableWorld/GroundAndAreas", "WorldRoot/PlayableWorld/RoadsAndPaths"]},
-	{"words": "buildings", "paths": ["WorldRoot/PlayableWorld/Buildings"], "batches": 3},
+	{"words": "buildings", "paths": ["WorldRoot/PlayableWorld/Buildings"], "batches": 2},
 	{"words": "trees and plants", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Vegetation", "GroundDressing"]},
 	{"words": "street furniture and fences", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Furniture", "WorldRoot/PlayableWorld/StreetDetail/Fences"]},
 	{"words": "parked cars and street clutter", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Clutter", "Vehicles"]},
-	{"words": "the bay and its shores", "paths": ["WorldRoot/ContextWorld/FerryTerminal", "WorldRoot/ContextWorld/YerbaBuenaIsland", "WorldRoot/ContextWorld/BoundaryAttachedVisuals", "WorldRoot/ContextWorld/BayBridge", "WorldRoot/ContextWorld/BayAreaHorizon"]},
+	# The ferry terminal and what is seen across the water: Yerba Buena Island, the
+	# roads and piers at the island's edge, the Bay Bridge and the distant shores.
+	{"words": "the ferry and the view across the bay", "paths": ["WorldRoot/ContextWorld/FerryTerminal", "WorldRoot/ContextWorld/YerbaBuenaIsland", "WorldRoot/ContextWorld/BoundaryAttachedVisuals", "WorldRoot/ContextWorld/BayBridge", "WorldRoot/ContextWorld/BayAreaHorizon"]},
 ]
 ## The line for the shaders all at once (compile_by_group off).
 const COMPILE_ALL_LINE := "Compiling shaders…"
-## A second line under a step that runs long on a desktop's first launch (2026-11-15,
-## on the devcontainer: the island's load 7 to 8 s and the reflections 9 to 10 s,
-## against 3 s and under 1 s on the next launch, which reuses the compiled shaders).
+## Joins words a loading line keeps together on a wrap (keep_last_words_together).
+const NO_BREAK_SPACE := "\u00a0"
+## A second line under a step that runs long on a desktop's first launch, smaller
+## and dimmer (hud.gd's load_note); 2026-11-15, on the devcontainer: the island's
+## load 7 to 8 s and the reflections 9 to 10 s, against 3 s and under 1 s on the next
+## launch, which reuses the compiled shaders.
 const FIRST_LAUNCH_NOTES := {
-	&"load": "On a first launch this also compiles its shaders.",
-	&"reflections": "On a first launch this also compiles their shaders.",
+	&"load": "On a first launch this also compiles the island's shaders.",
+	&"reflections": "On a first launch this also compiles the shaders for the reflections.",
 }
 
 var _world_ready := false
@@ -321,8 +327,21 @@ func _show_loading_step(step: StringName) -> void:
 ## step that runs long on a first launch, with its note (FIRST_LAUNCH_NOTES).
 static func loading_line(step: StringName) -> String:
 	if not OS.has_feature("web") and FIRST_LAUNCH_NOTES.has(step):
-		return "%s\n%s" % [LOADING_STEPS[step], FIRST_LAUNCH_NOTES[step]]
-	return LOADING_STEPS[step]
+		return keep_last_words_together("%s\n%s" % [LOADING_STEPS[step], FIRST_LAUNCH_NOTES[step]])
+	return keep_last_words_together(LOADING_STEPS[step])
+
+
+## A loading line with each of its lines' last two words joined by a no-break space,
+## so a narrow screen never leaves a word alone on a line of its own (2026-11-15: at
+## 375 px "roads…" was). A line whose last word is already joined to the one before
+## (a count, as compile_plan writes it) is kept as it is.
+static func keep_last_words_together(text: String) -> String:
+	var lines := text.split("\n")
+	for index in lines.size():
+		var space := lines[index].rfind(" ")
+		if space >= 0 and not lines[index].substr(space + 1).contains(NO_BREAK_SPACE):
+			lines[index] = lines[index].left(space) + NO_BREAK_SPACE + lines[index].substr(space + 1)
+	return "\n".join(lines)
 
 
 ## Puts up a line on the loading screen, and prints it for the web page, which shows
@@ -345,7 +364,7 @@ func compile_plan(by_group: bool) -> Array[Dictionary]:
 				var node := get_node_or_null(path) as Node3D
 				if node != null:
 					every.append(node)
-		plan.append({"line": COMPILE_ALL_LINE, "nodes": every})
+		plan.append({"line": keep_last_words_together(COMPILE_ALL_LINE), "nodes": every})
 		return plan
 	var eye := player.get_camera().global_position
 	for group: Dictionary in COMPILE_GROUPS:
@@ -368,7 +387,7 @@ func compile_plan(by_group: bool) -> Array[Dictionary]:
 					children.append(child as Node3D)
 		var count := mini(batches, children.size())
 		if count <= 1:
-			plan.append({"line": "Compiling shaders: %s…" % group.words, "nodes": nodes})
+			plan.append({"line": keep_last_words_together("Compiling shaders: %s…" % group.words), "nodes": nodes})
 			continue
 		var away := {}
 		for child: Node3D in children:
@@ -377,7 +396,8 @@ func compile_plan(by_group: bool) -> Array[Dictionary]:
 		for index in count:
 			var part: Array[Node3D] = []
 			part.assign(children.slice(index * children.size() / count, (index + 1) * children.size() / count))
-			plan.append({"line": "Compiling shaders: %s (%d of %d)…" % [group.words, index + 1, count], "nodes": part})
+			# The count kept whole and with the word before it, as one on a wrap.
+			plan.append({"line": "Compiling shaders: %s\u00a0(%d\u00a0of\u00a0%d)…" % [group.words, index + 1, count], "nodes": part})
 	return plan
 
 
@@ -407,10 +427,10 @@ func _reflection_probes() -> Array[Node]:
 func _compile_by_group() -> bool:
 	compile_steps = compile_plan(compile_by_group)
 	for step: Dictionary in compile_steps:
-		for node: Node3D in step.nodes:
+		for node: Variant in step.nodes:
 			_hide_until_shown(node)
 	for probe: Node in _reflection_probes():
-		_hide_until_shown(probe as Node3D)
+		_hide_until_shown(probe)
 	_show_loading_line(compile_steps[0].line)
 	await _paint_loading_step()
 	if not _loading_goes_on():
@@ -421,7 +441,8 @@ func _compile_by_group() -> bool:
 	if STARTUP_MARKS.enabled():
 		_mark_first_submitted_frame()
 	for index in compile_steps.size():
-		for node: Node3D in compile_steps[index].nodes:
+		# A group's node may be freed meanwhile; the helpers pass over it.
+		for node: Variant in compile_steps[index].nodes:
 			_show_hidden(node)
 		_show_loading_line(compile_steps[index + 1].line if index + 1 < compile_steps.size() else loading_line(&"reflections"))
 		# Called in an idle step: this frame draws the group shown, then the next comes.
@@ -429,7 +450,7 @@ func _compile_by_group() -> bool:
 		if not _loading_goes_on():
 			return false
 	for probe: Node in _reflection_probes():
-		_show_hidden(probe as Node3D)
+		_show_hidden(probe)
 	return true
 
 
@@ -438,18 +459,19 @@ func _loading_goes_on() -> bool:
 	return is_inside_tree() and not _startup_failed and world_root.is_world_validated()
 
 
-## Hides a node until its step shows it (_show_hidden), keeping its own visible flag.
-func _hide_until_shown(node: Node3D) -> void:
-	if not _loading_hidden.has(node):
-		_loading_hidden[node] = node.visible
-		node.visible = false
+## Hides a node until its step shows it (_show_hidden), keeping its own visible
+## flag; a node already freed is passed over.
+func _hide_until_shown(node: Variant) -> void:
+	if is_instance_valid(node) and node is Node3D and not _loading_hidden.has(node):
+		_loading_hidden[node] = (node as Node3D).visible
+		(node as Node3D).visible = false
 
 
-## Shows a node the loading screen hid, as it was.
-func _show_hidden(node: Node3D) -> void:
+## Shows a node the loading screen hid, as it was; a node freed meanwhile is just forgotten.
+func _show_hidden(node: Variant) -> void:
 	if _loading_hidden.has(node):
 		if is_instance_valid(node):
-			node.visible = _loading_hidden[node]
+			(node as Node3D).visible = _loading_hidden[node]
 		_loading_hidden.erase(node)
 
 

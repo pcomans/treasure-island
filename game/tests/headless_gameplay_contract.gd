@@ -366,7 +366,7 @@ func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
 	hud.loading_shown.connect(func(text: String) -> void:
 		var style := panel.get_theme_stylebox("panel") as StyleBoxFlat
 		var line := {"text": text, "frame": Engine.get_process_frames(), "no_3d": main.get_viewport().disable_3d, "play": main.is_play_ready(),
-			"covered": panel.is_visible_in_tree() and style != null and is_equal_approx(style.bg_color.a, 1.0)}
+			"covered": panel.is_visible_in_tree() and style != null and is_equal_approx(style.bg_color.a, 1.0), "shown": [hud.load_text.text, hud.load_note.text]}
 		if text.begins_with("Compiling shaders: "):
 			if not seen.watching:
 				seen.watching = true
@@ -424,10 +424,30 @@ func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) 
 	expected.append(GameMain.loading_line(&"reflections"))
 	var lines: Array = seen.lines
 	var texts := lines.map(func(line: Dictionary) -> String: return line.text)
-	var words := steps.map(func(step: Dictionary) -> String: return str(step.line))
-	if texts != expected or steps.size() < 6 or not str(steps[0].line).contains("sky") \
+	# The steps' words as read: the no-break spaces that keep words together as spaces.
+	var words := steps.map(func(step: Dictionary) -> String: return str(step.line).replace(GameMain.NO_BREAK_SPACE, " "))
+	if texts != expected or words.is_empty() or not str(words[0]).contains("sky") \
 	or not words.any(func(line: String) -> bool: return line.contains("buildings (1 of ")) or not words.any(func(line: String) -> bool: return line.contains("ground and roads")):
 		_fail("The loading screen must put up the island's, its setup's, a line for each shader step from the sky's (the buildings' counted) and the reflections', in that order and nothing else; it put up %s (steps %s)." % [texts, words])
+		return ""
+	# Each line, and a note under it, keeps its last two words together on a wrap,
+	# and a count whole with the word before it (no-break spaces); the screen shows a
+	# note under its line, smaller and dimmer (on a desktop the reflections' has one).
+	var line_size := main.hud.load_text.get_theme_font_size(&"font_size")
+	var note_size := main.hud.load_note.get_theme_font_size(&"font_size")
+	var notes := 0
+	for line: Dictionary in lines:
+		var parts := str(line.text).split("\n", true, 1)
+		var count := parts[0].get_slice("(", 1) if parts[0].contains("(") else ""
+		var loose := Array(parts).any(func(part: String) -> bool: return part.rfind(" ") > part.rfind(GameMain.NO_BREAK_SPACE)) \
+		or count.contains(" ") or (not count.is_empty() and not parts[0].contains(GameMain.NO_BREAK_SPACE + "("))
+		notes += parts.size() - 1
+		if loose or line.shown != [parts[0], parts[1] if parts.size() > 1 else ""] \
+		or (parts.size() > 1 and not (note_size < line_size and main.hud.load_note.modulate.a < 1.0)):
+			_fail("Each loading line must keep its last two words and any count together (no-break spaces, here ~) and show a note under it, smaller and dimmer: %s shown as %s, sizes %d and %d." % [str(line.text).replace(GameMain.NO_BREAK_SPACE, "~"), line.shown, line_size, note_size])
+			return ""
+	if notes == 0:
+		_fail("On a desktop the reflections' line must carry its first launch's note: %s." % [texts[-1]])
 		return ""
 	for line: Dictionary in lines:
 		if line.play or not line.covered:
@@ -479,11 +499,11 @@ func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) 
 	for group: Dictionary in GameMain.COMPILE_GROUPS:
 		for path: String in group.paths:
 			roots += int(main.get_node_or_null(path) is Node3D)
-	if single.size() != 1 or single[0].line != GameMain.COMPILE_ALL_LINE or (single[0].nodes as Array).size() != roots \
+	if single.size() != 1 or single[0].line != GameMain.keep_last_words_together(GameMain.COMPILE_ALL_LINE) or (single[0].nodes as Array).size() != roots \
 	or not (single[0].nodes as Array).has(world.buildings):
 		_fail("With the shaders all at once there must be one step, \"%s\", showing every group's %d nodes (it has %s)." % [GameMain.COMPILE_ALL_LINE, roots, single.map(func(step: Dictionary) -> String: return "%s: %d nodes" % [step.line, (step.nodes as Array).size()])])
 		return ""
-	return "%d lines in order (%s ... %s), each a frame before its work, the island unseen behind the opaque screen until play, %d shader steps a group at a time (one step of %d groups all at once), every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4)), texts[-1], steps.size(), roots]
+	return "%d lines in order (%s ... %s), each a frame before its work, their last words and counts kept together, the first launch's notes (%d) under their lines, smaller and dimmer, the island unseen behind the opaque screen until play, %d shader steps a group at a time (one step of %d groups all at once), every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4).map(func(text: String) -> String: return text.get_slice("\n", 0))), str(texts[-1]).get_slice("\n", 0), notes, steps.size(), roots]
 
 
 ## The controls screen opened on the loading screen (pressed as the world loads)

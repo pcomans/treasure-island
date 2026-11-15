@@ -4,6 +4,8 @@ extends RefCounted
 
 ## The two probes that settle on one capture; see _settle_reflection.
 const REFLECTION_PROBES: Array[String] = ["MerseaExteriorReflection", "MerseaBarReflection"]
+## The most drawn frames a probe's settling waits for it to be shown (_settle_reflection).
+const SETTLE_FRAME_LIMIT := 240
 
 static var _materials: Dictionary = {}
 
@@ -1036,12 +1038,20 @@ static func _settle_reflection(probe: ReflectionProbe, material_root: Node = nul
 	if not is_instance_valid(probe) or not probe.is_inside_tree():return
 	print("MERSEA_REFLECTION_IMAGES_AVAILABLE probe=%s rendered=%d textures=%d" % [probe.name,Engine.get_frames_drawn(),textures.size()])
 	# Eight frames that draw the probe: frames while startup's loading screen keeps it
-	# hidden (main.gd's _compile_by_group) don't count.
+	# hidden (main.gd's _compile_by_group, about ten) don't count. A probe still
+	# hidden after SETTLE_FRAME_LIMIT drawn frames is settled anyway, with a warning,
+	# so startup, which waits for it, never waits for good.
 	var settled := 0
+	var drawn := 0
 	while settled < 8:
 		await RenderingServer.frame_post_draw
 		if not is_instance_valid(probe) or not probe.is_inside_tree():return
-		if probe.is_visible_in_tree():settled += 1
+		drawn += 1
+		if probe.is_visible_in_tree():
+			settled += 1
+		elif drawn >= SETTLE_FRAME_LIMIT:
+			push_warning("Mersea reflection %s stayed hidden for %d drawn frames: set to update once without its eight settling frames" % [probe.name,drawn])
+			break
 	probe.update_mode=ReflectionProbe.UPDATE_ONCE
 	probe.set_meta("startup_reflection", "final_mode_set")
 	print("MERSEA_REFLECTION_UPDATE_ONCE probe=%s rendered=%d" % [probe.name,Engine.get_frames_drawn()])
