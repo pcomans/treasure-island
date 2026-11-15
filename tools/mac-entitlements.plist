@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Entitlements for the Developer ID signature that .github/workflows/mac-build.yml
+  gives the Mac app (hardened runtime, notarized). Deliberately empty.
+
+  This matches what the Godot export already ships: the "macOS Private" preset
+  keeps every codesign/entitlements/* option at its default (off), and its
+  ad-hoc signed app has the hardened runtime flag with an empty entitlement
+  dictionary. That app loads the island in CI and is the build the owner plays.
+
+  Left out on purpose, each one a hardened-runtime exception the game does not use:
+  - com.apple.security.cs.allow-jit / allow-unsigned-executable-memory: Godot needs
+    them only for C# (.NET); GDScript runs in its own interpreter. Vulkan goes through
+    MoltenVK, statically linked into the executable, which compiles shaders through
+    Metal and writes no executable memory itself.
+  - com.apple.security.cs.disable-library-validation: needed only to load libraries
+    signed by another team. The app links only system frameworks; any GDExtension
+    library added later sits inside the bundle and is signed with the same identity.
+  - com.apple.security.cs.allow-dyld-environment-variables: not used.
+  - com.apple.security.device.audio-input / camera, and the app sandbox: not used.
+  - com.apple.security.get-task-allow (debugging): the notary service rejects it.
+-->
+<plist version="1.0">
+<dict/>
+</plist>

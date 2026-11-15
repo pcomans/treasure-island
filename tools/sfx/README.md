@@ -589,7 +589,8 @@ the engine:
 - **Skid.** One loop runs whenever the car is driven. Its gain follows the
   smoothed slip and the handbrake (about 50 ms up, 150 ms down), so a
   flickering drift never restarts a sound. Hard braking that slides uses the
-  same loop.
+  same loop. Steering alone squeals only from 90 % of the car's top speed
+  (owner, 2026-11-15); the handbrake and a hard brake squeal at any speed.
 - **Jetpack.** There are three parts: a start that fades out under a sustain
   loop, the sustain loop itself, and a stop tail. The loop's gain follows
   the flame's 0.04 s attack and 0.07 s release, so taps of any length work.

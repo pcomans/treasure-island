@@ -32,6 +32,8 @@ uniform float sky_lean : hint_range(0.0, 5.0) = 0.8;
 uniform sampler2D high_texture : source_color, filter_linear_mipmap, repeat_disable;
 uniform ivec2 high_grid = ivec2(1, 1);
 uniform float high_frame_m = 0.0;
+// The time of day's scale on the specular, as vegetation_foliage.gdshader's.
+global uniform float vegetation_sheen;
 
 // The camera's height angle (radians) where the crossfade to the views from above runs.
 const float HIGH_FADE_START = 0.21;
@@ -108,7 +110,7 @@ void fragment() {
 	}
 	ALBEDO = tex.rgb * tint.rgb;
 	ROUGHNESS = roughness;
-	SPECULAR = 0.2;
+	SPECULAR = 0.2 * vegetation_sheen;
 	if (!FRONT_FACING) {
 		NORMAL = -NORMAL;
 	}

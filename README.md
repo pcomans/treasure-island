@@ -89,8 +89,15 @@ curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/tr
 gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
 
-The app is not notarized, so after a browser download macOS blocks the first
-launch: open System Settings → Privacy & Security and click "Open Anyway".
+A release whose notes say "Signed and notarized (Developer ID)" opens directly
+after a browser download. Every other build, from CI or `tools/build-mac.sh`, is
+ad-hoc signed and not notarized (CI adds "not notarized" to the release title
+when it tried to notarize and could not), so after a browser download macOS
+blocks its first launch: open System Settings → Privacy & Security and click
+"Open Anyway". CI signs and notarizes only while the repository variable
+`MAC_SIGNING` is `on`, with the secrets of the GitHub environment `mac-signing`;
+the top of [mac-build.yml](.github/workflows/mac-build.yml) lists them with the
+`gh` commands that set them.
 
 To build it in the devcontainer instead:
 
@@ -141,9 +148,9 @@ terms, see
   jetpack back to land.
 - The mouse buttons do nothing: the owner removed the spray on 2026-11-11.
 - `R` recovers to a safe position.
-- `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume; `Q` quits while paused; `F3` toggles runtime evidence.
+- `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume, while the sun goes on following the clock; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far). It also sets the sound's volume and mute, on every platform. The web build keeps its sun shadows off, so its Options has only the sound (with shadows on, its renderer also brightened every sunlit surface). A choice applies at once and is kept between runs in `user://settings.cfg`; the shared capture harness always takes the default.
+- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 75 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. The light follows the sun's height down through sunset and dusk, and from 8° below the horizon until dawn the island holds a deep twilight you can still play in (no stars, flashlight or headlights). Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ## More
@@ -164,13 +171,14 @@ pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
 Open https://treasure-island-five.vercel.app/ and wait for the island to load;
-play starts by itself. WASD or the arrow keys move, Shift runs, Space rises with the jetpack,
-releasing Space descends slowly and holding C in the air drops fast. F gets
-in or out of a parked car; in a car W/S drive, A/D steer (or the arrow keys)
-and Space is the handbrake. Click
-**Click to look** at the top to capture the mouse and look around. Esc releases the mouse and pauses; **Resume** captures it
-again and continues. The owner removed the spray on 2026-11-11.
-F3 shows actual FPS.
+then **Click to play** (on a touch screen, **Tap to play**) starts play: that
+first click or tap also starts the sound, which a browser allows only after one,
+and with a mouse it captures the mouse to look around. WASD or the arrow keys
+move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
+and holding C in the air drops fast. F gets in or out of a parked car; in a car
+W/S drive, A/D steer (or the arrow keys) and Space is the handbrake. Esc
+releases the mouse and pauses; **Resume** captures it again and continues. The
+owner removed the spray on 2026-11-11. F3 shows actual FPS.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
@@ -179,7 +187,9 @@ tools/deploy-web.sh             # build origin/main and deploy it to production
 tools/deploy-web.sh --dry-run   # the same checks and build; prints the Vercel commands instead
 ```
 
-It refuses unless the checkout is clean and HEAD is `origin/main`. If `build/web`
+It refuses unless the checkout is clean and HEAD is `origin/main`, and unless
+`TI_SFX_SOURCE` names the [sound source](#sound) and that source has takes for
+every sound the game plays; `--silent-ok` deploys without them on purpose. If `build/web`
 isn't linked yet, it links it to the existing `treasure-island` Vercel project (never
 a new one). Then it runs `tools/build-web.sh`, deploys `build/web` to production with
 the pinned Vercel CLI (`npx vercel@64.5.0`) and prints the deployment URL. It uses
@@ -205,12 +215,13 @@ the container crash. That override is not in the deployed game.
 
 ### Touch controls
 
-On a touch-capable browser, play starts as soon as the island has loaded. Drag the
+On a touch-capable browser, **Tap to play** starts play once the island has loaded
+(that tap also starts the sound). Drag the
 left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
 upward and release it to descend, and hold **RUN** while moving to run. The
 **II** button pauses; **Play / Resume** continues, **Controls** lists the touch
-controls and **Credits** lists the game's sources (drag to scroll); **Options** has only the
-sound's volume and mute, as the web's sun shadows stay off. Movement, look and buttons
+controls and **Credits** lists the game's sources (drag to scroll); **Options** has the
+frame-rate limit, Show fps, the resolution and the sound (no shadows or time of day on the web). Movement, look and buttons
 accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.
