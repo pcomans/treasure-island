@@ -2,6 +2,12 @@
 # Builds the game for web browsers, from the current commit.
 #
 #   tools/build-web.sh            -> build/web/ (index.html and the files it loads)
+#   tools/build-web.sh --sfx-require-all --sfx-result FILE
+#                                 the same, for players (tools/deploy-web.sh): the sound
+#                                 fetch must give every sound the game plays its takes, or
+#                                 the build stops there (tools/fetch-sfx --require-all), and
+#                                 it writes what it fetched to FILE as JSON (--result).
+#                                 Either flag may be given alone.
 #
 # build/web is a static site: serve it locally or deploy it to Vercel. Godot's web platform only has the Compatibility
 # renderer (WebGL 2). Before handing it over this
@@ -11,6 +17,18 @@
 #   3. writes vercel.json so browsers cache the large files for good, and a
 #      .vercelignore so the Vercel CLI never uploads an .env file.
 set -euo pipefail
+fetch_args=()
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --sfx-require-all) fetch_args+=(--require-all) ;;
+    --sfx-result)
+      [ "$#" -ge 2 ] || { echo "tools/build-web.sh: --sfx-result needs a file" >&2; exit 2; }
+      fetch_args+=(--result "$2")
+      shift ;;
+    *) echo "usage: tools/build-web.sh [--sfx-require-all] [--sfx-result FILE]" >&2; exit 2 ;;
+  esac
+  shift
+done
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
 if [ -n "$(git status --porcelain)" ]; then
@@ -33,10 +51,13 @@ trap 'rm -rf "${work}"' EXIT
 project="${work}/project"
 mkdir -p "${project}" "${work}/mount"
 git archive "${revision}" | tar -xf - -C "${project}"
-# Optional: the sound files from the private source in TI_SFX_SOURCE, into this
-# copy's game/resources/audio/sfx/ (tools/fetch-sfx; never in Git, so not in the
-# archive). Without a source this does nothing and the web build is silent.
-tools/fetch-sfx --project "${project}"
+# The sound files from the private source in TI_SFX_SOURCE, into this copy's
+# game/resources/audio/sfx/ (tools/fetch-sfx; never in Git, so not in the archive).
+# Without a source this does nothing and the web build is silent, unless
+# --sfx-require-all asked for every sound.
+tools/fetch-sfx --project "${project}" "${fetch_args[@]}"
+# The token was for the fetch alone.
+unset TI_SFX_GIT_TOKEN
 
 # Godot can exit 0 after an import error, so check its output too.
 import_project() {

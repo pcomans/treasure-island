@@ -10,6 +10,26 @@
 //                                             a Git repository holding that folder (at PATH)
 //   tools/fetch-sfx --project DIR             fill another checkout's folder (tools/build-web.sh's copy)
 //   tools/fetch-sfx --dry-run                 print what would change and change nothing
+//   tools/fetch-sfx --require-all             refuse (exit 3), changing nothing, unless there is a source
+//                                             and it gives every sound the game plays its takes
+//   tools/fetch-sfx --result FILE             also write the outcome to FILE as JSON (below)
+//
+// Exit status: 0 done; 1 the fetch failed (a source that cannot be read or cloned,
+// a refused folder); 2 a usage error; 3 --require-all refused: there is no source,
+// or a sound the game plays has no takes in it (each is named on a "silent:" line).
+// Builds for players use --require-all (tools/deploy-web.sh, and tools/build-mac.sh
+// when a source is set), so a source that lacks a sound stops them instead of
+// shipping it silent; a developer's build without the flag stays silent where takes
+// are missing.
+//
+// --result FILE (written whenever the run reaches an outcome, exit 0 or 3, and
+// removed first so a failed run leaves none) is for scripts: {schema_version:
+// "ti.sfx-fetch-result/1", source (the folder, or the URL with any user or password
+// taken out; null with no source), ref, subdir, commit (the full commit of a Git
+// source, else null), dry_run, sounds (how many sound ids the catalog has; null with
+// no source), sounds_with_takes, takes (how many takes the run fetched, or would
+// have; with no source, how many the folder holds), silent ([{id, why}]), complete
+// (true only when there is a source and every sound has takes)}.
 //
 // The audio is generated with ElevenLabs, whose terms forbid making it available
 // as isolated audio files, and this repository is public (owner, 2026-11-14), so
@@ -53,6 +73,10 @@ export const TARGET = "game/resources/audio/sfx";
 // The manifest's name and schema, in the source and in the folder alike.
 export const MANIFEST = "sfx.json";
 export const MANIFEST_SCHEMA = "ti.sfx-manifest/1";
+// The --result file's schema.
+export const RESULT_SCHEMA = "ti.sfx-fetch-result/1";
+// The exit status of a run --require-all refuses.
+export const EXIT_INCOMPLETE = 3;
 // A sheet row's output pattern (tools/sfx/generate_sfx.mjs OUTPUT_RE).
 const OUTPUT_RE = /^([a-z]+)\/([a-z0-9_]+)_\{take\}\.ogg$/u;
 const ID_RE = /^[a-z0-9_]+$/u;
@@ -268,7 +292,8 @@ export function redact(text) {
     .replace(/(authorization:\s*[a-z]+\s+)[^\s'"]+/giu, "$1***");
 }
 
-// Clones a Git source (shallow) into a new temporary folder; returns {dir, source, commit}.
+// Clones a Git source (shallow) into a new temporary folder; returns {dir, source,
+// commit (short, for the log line), fullCommit}.
 function cloneSource(url, ref, token) {
   const dir = mkdtempSync(join(tmpdir(), "ti-sfx-"));
   // No tracing of git's own (GIT_TRACE*, GIT_CURL_VERBOSE): it could print the
@@ -297,8 +322,14 @@ function cloneSource(url, ref, token) {
     if (token) said = said.split(token).join("***");
     throw new FetchError(`git could not clone ${redact(url)}${ref ? ` at ${ref}` : ""}: ${redact(said) || `exit ${cloned.status}`}`);
   }
-  const commit = spawnSync("git", ["-C", join(dir, "source"), "rev-parse", "--short", "HEAD"], { encoding: "utf8" }).stdout?.trim() ?? "";
-  return { dir, source: join(dir, "source"), commit };
+  const revParse = (...args) => spawnSync("git", ["-C", join(dir, "source"), "rev-parse", ...args, "HEAD"], { encoding: "utf8" }).stdout?.trim() ?? "";
+  return { dir, source: join(dir, "source"), commit: revParse("--short"), fullCommit: revParse() };
+}
+
+// Writes the --result file (see the header). Nothing is written without a path.
+function writeResult(path, result) {
+  if (!path) return;
+  writeAtomic(path, `${JSON.stringify({ schema_version: RESULT_SCHEMA, ...result }, null, 2)}\n`);
 }
 
 function readJson(path, what) {
@@ -324,13 +355,30 @@ export function main(argv = process.argv.slice(2), env = process.env) {
       ref: { type: "string" },
       project: { type: "string" },
       "dry-run": { type: "boolean", default: false },
+      "require-all": { type: "boolean", default: false },
+      result: { type: "string" },
       help: { type: "boolean", default: false },
     },
     strict: true,
   });
   if (values.help) {
-    console.log(`usage: ${TOOL} [--source DIR|URL] [--subdir PATH] [--ref REF] [--project DIR] [--dry-run]`);
+    console.log(`usage: ${TOOL} [--source DIR|URL] [--subdir PATH] [--ref REF] [--project DIR] [--dry-run] [--require-all] [--result FILE]`);
     return 0;
+  }
+  const dryRun = values["dry-run"];
+  const requireAll = values["require-all"];
+  // A failed run must leave no earlier result behind for a script to read.
+  const resultPath = values.result === undefined ? null : resolve(values.result);
+  if (resultPath) {
+    let stat = null;
+    try {
+      stat = lstatSync(resultPath);
+    } catch {
+      stat = null;
+    }
+    if (stat?.isDirectory()) throw new FetchError(`--result ${resultPath} is a folder; give a file`);
+    if (stat) unlinkSync(resultPath);
+    else if (!existsSync(dirname(resultPath))) throw new FetchError(`--result ${resultPath}: its folder does not exist`);
   }
   const project = resolve(values.project ?? REPO_ROOT);
   if (!existsSync(join(project, "project.godot"))) throw new FetchError(`${project} is not the game's project (no project.godot)`);
@@ -339,6 +387,11 @@ export function main(argv = process.argv.slice(2), env = process.env) {
     const folder = join(project, TARGET);
     const takes = existsSync(folder) ? readdirSync(folder).filter((name) => TAKE_RE.test(name)).length : 0;
     console.log(`${TOOL}: no source (--source or TI_SFX_SOURCE): nothing fetched; ${TARGET} holds ${takes} takes, left as they are`);
+    writeResult(resultPath, { source: null, ref: null, subdir: null, commit: null, dry_run: dryRun, sounds: null, sounds_with_takes: null, takes, silent: [], complete: false });
+    if (requireAll) {
+      console.error(`${TOOL}: --require-all: there is no source, so no sound the game plays gets its takes`);
+      return EXIT_INCOMPLETE;
+    }
     return 0;
   }
   const subdir = values.subdir ?? env.TI_SFX_SUBDIR ?? "";
@@ -361,13 +414,33 @@ export function main(argv = process.argv.slice(2), env = process.env) {
       described = from;
     }
     const planned = plan(catalog, sheet, from);
-    const counts = apply(project, planned, { dryRun: values["dry-run"] });
     const ids = Object.keys(planned.sounds).length;
     const withTakes = Object.values(planned.sounds).filter((entry) => entry.takes.length > 0).length;
     const gains = Object.values(planned.sounds).filter((entry) => "gain_db" in entry).length;
-    console.log(`${TOOL}: ${values["dry-run"] ? "would fetch" : "fetched"} from ${described} into ${TARGET}: ${withTakes} of ${ids} sounds with takes, ${planned.files.length} takes (${counts.copied} copied, ${counts.unchanged} unchanged, ${counts.removed} removed), ${gains} with a playback gain`);
+    const outcome = {
+      source: clone ? redact(source) : from,
+      ref: clone ? ref || null : null,
+      subdir: subdir || null,
+      commit: clone ? clone.fullCommit || null : null,
+      dry_run: dryRun,
+      sounds: ids,
+      sounds_with_takes: withTakes,
+      takes: planned.files.length,
+      silent: planned.silent.map(([id, why]) => ({ id, why })),
+      complete: planned.silent.length === 0,
+    };
+    if (requireAll && !outcome.complete) {
+      // Checked before anything is written, so a refused run leaves the folder as it was.
+      console.error(`${TOOL}: --require-all: ${planned.silent.length} of ${ids} sounds the game plays have no takes in ${described}, so nothing was fetched:`);
+      for (const [id, why] of planned.silent) console.error(`  silent: ${id}: ${why}`);
+      writeResult(resultPath, outcome);
+      return EXIT_INCOMPLETE;
+    }
+    const counts = apply(project, planned, { dryRun });
+    console.log(`${TOOL}: ${dryRun ? "would fetch" : "fetched"} from ${described} into ${TARGET}: ${withTakes} of ${ids} sounds with takes, ${planned.files.length} takes (${counts.copied} copied, ${counts.unchanged} unchanged, ${counts.removed} removed), ${gains} with a playback gain`);
     if (!planned.manifest) console.log(`NOTE: ${TOOL}: the source has no ${MANIFEST} (processed before the level plan): no playback gains, every sound plays at 0 dB`);
     for (const [id, why] of planned.silent) console.log(`  silent: ${id}: ${why}`);
+    writeResult(resultPath, outcome);
     return 0;
   } finally {
     if (clone) rmSync(clone.dir, { recursive: true, force: true });

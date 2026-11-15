@@ -36,10 +36,12 @@ touch build/.gdignore
 # Optional: the sound files from the private source in TI_SFX_SOURCE (a folder, or
 # a Git repository with TI_SFX_SUBDIR, TI_SFX_REF and a read-only TI_SFX_GIT_TOKEN),
 # into the ignored game/resources/audio/sfx/ (tools/fetch-sfx), which logs one line
-# of what it fetched. Without a source nothing is fetched (and nothing needs node)
-# and the build plays whatever that folder holds: in CI, nothing.
+# of what it fetched. With a source set, every sound in the game's catalog must get
+# its takes (--require-all): a source that lacks any stops the build, naming them,
+# rather than shipping them silent. Without a source nothing is fetched (and nothing
+# needs node) and the build plays whatever that folder holds: in CI, nothing.
 if [ -n "${TI_SFX_SOURCE:-}" ]; then
-  tools/fetch-sfx
+  tools/fetch-sfx --require-all
 else
   takes="$(find game/resources/audio/sfx -maxdepth 1 -name '*.ogg' 2>/dev/null | wc -l || true)"
   echo "tools/build-mac.sh: no TI_SFX_SOURCE, no sounds fetched; game/resources/audio/sfx holds ${takes} takes"
