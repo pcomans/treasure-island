@@ -9,8 +9,8 @@ extends RefCounted
 ##
 ## The defaults are the game as it was: no limit but the screen's own refresh (vsync,
 ## which project.godot leaves on), the world drawn at the window's full resolution
-## on desktop and at three quarters on the web (its fixed scale until now), no frame
-## rate shown. A choice applies at once and is kept in ShadowQuality.settings_path,
+## on desktop and at three quarters on the web (its fixed scale since 2026-10-19,
+## 2226762c), no frame rate shown. A choice applies at once and is kept in ShadowQuality.settings_path,
 ## section graphics, beside the shadow level; a test or capture driver gets the
 ## defaults (main.gd's use_saved_settings and player_settings_problem).
 ##
@@ -18,10 +18,14 @@ extends RefCounted
 ## (OS::add_frame_delay, core/os/os.cpp), and on the Mac's Metal driver also shows
 ## each frame no sooner than 1/rate after the last (RenderingDevice::_set_max_fps,
 ## presentDrawableAfterMinimumDuration in drivers/metal/rendering_context_driver_metal.cpp).
-## Vsync stays on, so a limit can only lower the rate: No limit is the screen's own
-## (up to 120 a second on a MacBook Pro's display), and 30 and 60 divide 60 and
-## 120 Hz screens evenly, so frames stay evenly spaced. A --fixed-fps run (every
-## test) never sleeps for it (Main::iteration, main/main.cpp).
+## In a browser it skips animation frames until the next one is due
+## (main_loop_callback, platform/web/web_main.cpp): in Chrome (2026-11-14) 30 held
+## 30 frames a second with each frame's work unchanged, so the page's main thread
+## idled between them instead of waiting busily. Vsync stays on, so a limit can only
+## lower the rate: No limit is the screen's own (up to 120 a second on a MacBook
+## Pro's display), and 30 and 60 divide 60 and 120 Hz screens evenly, so frames stay
+## evenly spaced. A --fixed-fps run (every test) never waits for it (Main::iteration,
+## main/main.cpp).
 ##
 ## The resolution is the window's 3D scale: the world is drawn with that share of the
 ## window's width and height, the HUD and menus at the window's own. Forward+ upscales
