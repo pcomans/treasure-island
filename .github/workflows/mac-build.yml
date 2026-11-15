@@ -14,9 +14,9 @@
 # two builds to the itch.io page phpp/grand-treasure-island with itch's butler:
 # the Mac app to channel "mac", the Linux build to channel "linux". It runs only
 # on main, and does nothing (with a notice) until the API key exists as the
-# secret BUTLER_API_KEY, best kept in the GitHub environment `itch` with
-# deployment branch main:
-#     gh secret set BUTLER_API_KEY --env itch -R pcomans/treasure-island   (gh prompts)
+# repository secret BUTLER_API_KEY. The job names no environment, so it cannot
+# read a secret kept in one:
+#     gh secret set BUTLER_API_KEY -R pcomans/treasure-island   (gh prompts)
 # A failed itch push never touches the GitHub release: the job reports it and
 # the run still succeeds. To push an existing release (again), start this
 # workflow by hand on main with itch_release_tag set to its tag, for example
