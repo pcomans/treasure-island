@@ -19,6 +19,24 @@ const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"mo
 ## prompt's capture of the mouse and play goes on with the pointer free.
 const POINTER_FREE_LINE := "This browser won't let the mouse turn the view: Esc, then Resume, asks again."
 const POINTER_FREE_LINE_S := 8.0
+## The loading screen's lines, one for each step of startup, in the order they show
+## (_show_loading_step): the island loaded (the baked world: the web build and the
+## desktop exports) or built (from the generated sources: development and tests);
+## the island set up for play (the physics' first steps with the whole island, the
+## player settling on the ground, the cars, the grass, on the web the sounds handed
+## to the browser); then the graphics (the island's first frames, which prepare its
+## shaders and the reflections). Each goes up, and gets a frame to be seen, before
+## its step's work starts, and stays until the next; play takes the screen away. On
+## the web the page shows the download and the engine's start before them, and
+## these lines on its own loading screen (game/web/shell.html).
+const LOADING_STEPS := {
+	&"load": "Loading the island…",
+	&"build": "Building the island…",
+	&"setup": "Setting up the island…",
+	&"graphics": "Preparing graphics…",
+}
+## The start of each loading-step line printed for the web page (game/web/shell.html).
+const LOADING_STEP_PRINT := "LOADING_STEP "
 
 var _world_ready := false
 var _startup_failed := false
@@ -142,14 +160,18 @@ func _ready() -> void:
 	if OS.has_feature("web") and STARTUP_MARKS.enabled():
 		_web_debug_callback = JavaScriptBridge.create_callback(_publish_web_state)
 		JavaScriptBridge.get_interface("window").__tiReadback = _web_debug_callback
-	hud.show_loading()
+	# Until the graphics step the view draws no 3D, only the loading screen: so the
+	# frames that show each step's line never draw the island, whose first frame
+	# prepares its shaders for seconds (the graphics step turns 3D back on).
+	get_viewport().disable_3d = true
+	_show_loading_step(&"load" if world_root.uses_prebuilt_world() else &"build")
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.load_progress.connect(hud.update_load_progress)
 	world_root.world_ready.connect(_on_world_ready)
 	world_root.world_failed.connect(_on_world_failed)
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
-	world_root.call_deferred("load_world")
+	_load_world_after_paint.call_deferred()
 	STARTUP_MARKS.mark("main_ready_end")
 
 
@@ -231,8 +253,41 @@ func _notification(what: int) -> void:
 		_set_paused(true)
 
 
+## Loads the island (world_root.load_world, which holds the main thread for
+## seconds) once its loading line has had a frame to be seen.
+func _load_world_after_paint() -> void:
+	await _paint_loading_step()
+	if is_inside_tree() and not _startup_failed:
+		world_root.load_world()
+
+
+## Puts up a loading step's line (LOADING_STEPS) on the loading screen, and prints
+## it for the web page, which shows it on its own loading screen over the game's.
+func _show_loading_step(step: StringName) -> void:
+	var text: String = LOADING_STEPS[step]
+	hud.show_loading(text)
+	STARTUP_MARKS.mark("step_" + step)
+	print(LOADING_STEP_PRINT + text)
+
+
+## Returns once the loading line just put up has had a frame to be seen, before
+## work that holds the main thread starts: a drawn frame of the loading screen on
+## desktop (no 3D yet), and on the web, where each frame is a separate turn of the
+## browser's, a turn in which the browser paints the page. Called in a physics step,
+## that is the next frame's idle step; in an idle step, the next one. It waits for
+## frames to be processed, not drawn, so a window that can't draw (minimized or
+## covered) never holds up loading.
+func _paint_loading_step() -> void:
+	if Engine.is_in_physics_frame():
+		await get_tree().process_frame
+	await get_tree().process_frame
+
+
 func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.probe_building_materials(world_root.buildings)
+	# Loaded in an idle step: the player settles in the next frame's physics, after
+	# a frame has shown this line.
+	_show_loading_step(&"setup")
 	STARTUP_MARKS.mark("grounding_begin")
 	player.configure_world(world_root.get_spawn_transform(), world_root.get_boundary())
 	await player.startup_grounded
@@ -273,7 +328,14 @@ func _on_world_ready(_report: Dictionary) -> void:
 	# ditch's drawn water is read back now, not at the first footstep near it.
 	sound.prepare_for_play()
 	StandingWater.prepare()
-	hud.show_loading("Preparing graphics…")
+	# The island's first frame draws for seconds (on the web, a quarter of a minute)
+	# while it prepares the shaders of everything in view: its line goes up on a
+	# frame that still draws only the loading screen, then 3D comes back on.
+	_show_loading_step(&"graphics")
+	await _paint_loading_step()
+	if not is_inside_tree() or _startup_failed or not world_root.is_world_validated():
+		return
+	get_viewport().disable_3d = false
 	STARTUP_MARKS.mark("world_ready")
 	print("WORLD_READY")
 	if STARTUP_MARKS.enabled():

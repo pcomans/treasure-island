@@ -174,7 +174,6 @@ stretch_mode = 5
 custom_minimum_size = Vector2(680, 160)
 layout_mode = 2
 theme_override_font_sizes/font_size = 21
-text = "Validating complete Treasure Island world…"
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2

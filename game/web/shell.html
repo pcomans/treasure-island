@@ -106,6 +106,19 @@ body {
 	text-align: center;
 	z-index: 1;
 }
+
+/* While the game downloads: how much has come, just above the progress bar and
+   clear of the boot splash. */
+#status-notice.download {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: calc(10% + 1.5rem);
+	width: max-content;
+	max-width: calc(100% - 4rem);
+	margin: 0 auto;
+	box-sizing: border-box;
+}
 		</style>
 		$GODOT_HEAD_INCLUDE
 	</head>
@@ -181,13 +194,41 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
 	let phase = 'download';
 	let downloadComplete = false;
+	let downloadShown = false;
 	const mark = (name) => performance.mark('TI_BOOT:' + name);
+	// The start of the game's loading-step lines (LOADING_STEP_PRINT, game/scripts/main.gd).
+	const STEP_PRINT = 'LOADING_STEP ';
+	const MB = 1e6;
 
 	function showNotice(text) {
 		statusOverlay.style.visibility = 'visible';
 		statusProgress.style.display = 'none';
+		statusNotice.className = '';
 		statusNotice.style.display = 'block';
 		statusNotice.textContent = text;
+	}
+
+	// The loading screen's line: the step under way, put up as it starts. The page
+	// names the download and the engine's start; the game names its own steps
+	// (LOADING_STEPS, game/scripts/main.gd), printing each before its work starts and
+	// then letting a frame end, so the browser paints it in time.
+	function showStep(text) {
+		showNotice(text);
+		mark('step:' + text);
+	}
+
+	// While the game downloads (the engine and the game's data): the bytes so far, of
+	// the total the exporter wrote down, over the progress bar.
+	function showDownload(current, total) {
+		statusNotice.className = 'download';
+		statusNotice.style.display = 'block';
+		statusNotice.textContent = total > 0
+			? 'Downloading the game: ' + Math.floor(current / MB) + ' of ' + Math.round(total / MB) + ' MB'
+			: 'Downloading the game…';
+		if (!downloadShown) {
+			downloadShown = true;
+			mark('step:Downloading the game');
+		}
 	}
 
 	// Godot's boot splash shows while the game downloads; then the game's own
@@ -201,6 +242,8 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		}
 	}
 
+	// The download is complete: the engine starts (its WebAssembly made ready, then
+	// the game's start, up to its first loading step).
 	function preparing() {
 		if (phase !== 'download') return;
 		if (!downloadComplete) {
@@ -208,7 +251,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			mark('download_complete');
 		}
 		phase = 'preparing';
-		showNotice('Preparing graphics…');
+		showStep('Starting the game…');
 		showChest();
 		mark('status_changed');
 	}
@@ -227,17 +270,22 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			if (current > 0 && total > 0) {
 				statusProgress.value = current;
 				statusProgress.max = total;
+				showDownload(current, total);
 				if (current >= total) preparing();
 			} else {
 				statusProgress.removeAttribute('value');
 				statusProgress.removeAttribute('max');
+				showDownload(0, 0);
 			}
 		},
 		onPrint(...args) {
 			console.log(...args);
+			const line = args.join(' ');
+			// The game's loading steps, until play.
+			if (line.startsWith(STEP_PRINT) && phase === 'preparing') showStep(line.slice(STEP_PRINT.length));
 			// Existing game-owned markers, delivered through the public Engine API.
-			if (args.join(' ') === 'WORLD_READY') mark('game_preparing');
-			if (args.join(' ') === 'PLAY_READY' && phase !== 'error') {
+			if (line === 'WORLD_READY') mark('game_preparing');
+			if (line === 'PLAY_READY' && phase !== 'error') {
 				phase = 'ready';
 				mark('play_ready');
 				// The synchronous game callback finishes its Resume/menu setup first.

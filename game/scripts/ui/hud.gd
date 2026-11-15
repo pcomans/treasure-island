@@ -13,6 +13,8 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
+## The loading screen put up a line (show_loading): main.gd's loading steps.
+signal loading_shown(text: String)
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -267,9 +269,12 @@ func bind_evidence(evidence: RuntimeEvidence) -> void:
 	_evidence = evidence
 
 
-func show_loading(message: String = "Validating complete Treasure Island world…") -> void:
+## The loading screen's line: the step under way (main.gd's LOADING_STEPS). The
+## screen itself shows from the start (hud.tscn) until play (show_world_ready); a
+## new line only changes its text.
+func show_loading(message: String) -> void:
 	load_text.text = message
-	load_panel.show()
+	loading_shown.emit(message)
 
 
 func update_load_progress(loaded: int, total: int) -> void:

@@ -266,6 +266,7 @@ func _check_ferry_solidity() -> void:
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	var loading := _watch_loading(main, world)
 	root.add_child(main)
 	# The loading screen's Controls button, pressed while the world loads.
 	main.hud.load_controls_button.pressed.emit()
@@ -274,6 +275,9 @@ func _check_ferry_solidity() -> void:
 		await process_frame
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
+		return
+	var loading_lines := await _check_loading_lines(main, world, loading)
+	if loading_lines.is_empty():
 		return
 	var opened := await _check_controls_from_loading(main)
 	if opened.is_empty():
@@ -341,8 +345,60 @@ func _check_ferry_solidity() -> void:
 		return
 	main.queue_free()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the loading screen (%s), the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [loading_lines, ", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
 	quit(0)
+
+
+## Watches a main's startup from before it enters the tree, for
+## _check_loading_lines: each line its loading screen puts up (the text, the
+## frame, whether 3D was off and play had started then), and the frames in which
+## the world finished loading, the player settled and the loading screen went
+## away (with 3D on or not).
+func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
+	var seen := {"lines": [], "world": -1, "grounded": -1, "hidden": -1, "hidden_3d": false}
+	var hud := main.get_node("Interface/HUD") as GameHUD
+	var panel := hud.get_node("LoadPanel") as Control
+	hud.loading_shown.connect(func(text: String) -> void:
+		seen.lines.append({"text": text, "frame": Engine.get_process_frames(), "no_3d": main.get_viewport().disable_3d, "play": main.is_play_ready()}))
+	world.world_ready.connect(func(_report: Dictionary) -> void: seen.world = Engine.get_process_frames())
+	(main.get_node("Player") as PlayerController).startup_grounded.connect(func() -> void: seen.grounded = Engine.get_process_frames())
+	panel.visibility_changed.connect(func() -> void:
+		if not panel.visible and seen.hidden < 0:
+			seen.hidden = Engine.get_process_frames()
+			seen.hidden_3d = not main.get_viewport().disable_3d)
+	return seen
+
+
+## The loading screen as a player sees it (main.gd's LOADING_STEPS): one line for
+## each step in order (the island, here built from the generated sources; its
+## setup; the graphics), each put up before its work with a frame between in which
+## it can be drawn (Engine.get_process_frames counts frames: the island finished
+## loading, the player settled and play started each in a later frame than their
+## line went up), no 3D under any of them, 3D on as play starts, and nothing more
+## once play has started. Returns a summary, or "" after failing.
+func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) -> String:
+	var island: StringName = &"load" if world.uses_prebuilt_world() else &"build"
+	var expected := [GameMain.LOADING_STEPS[island], GameMain.LOADING_STEPS[&"setup"], GameMain.LOADING_STEPS[&"graphics"]]
+	var lines: Array = seen.lines
+	var texts := lines.map(func(line: Dictionary) -> String: return line.text)
+	if texts != expected:
+		_fail("The loading screen must put up %s, in that order, and nothing else; it put up %s." % [expected, texts])
+		return ""
+	for line: Dictionary in lines:
+		if line.play or not line.no_3d:
+			_fail("Every loading line must go up before play, with 3D still off: %s." % [lines])
+			return ""
+	var frames: Array = lines.map(func(line: Dictionary) -> int: return line.frame)
+	if not (frames[0] < seen.world and frames[1] == seen.world and seen.world < seen.grounded \
+	and frames[2] >= seen.grounded and seen.hidden > frames[2] and seen.hidden_3d):
+		_fail("Each loading line must go up before its step's work, a frame ahead of it: lines at frames %s (%s), the island loaded at %d, the player settled at %d, the loading screen gone at %d with 3D %s." % [frames, texts, seen.world, seen.grounded, seen.hidden, "on" if seen.hidden_3d else "off"])
+		return ""
+	for _frame in 3:
+		await process_frame
+	if seen.lines.size() != expected.size() or main.hud.load_panel.visible or main.get_viewport().disable_3d:
+		_fail("Once play has started the loading screen must be gone for good, with 3D on (lines %s, loading screen shown %s, 3D off %s)." % [seen.lines.size(), main.hud.load_panel.visible, main.get_viewport().disable_3d])
+		return ""
+	return "%s, each a frame before its work, 3D off until play" % ", ".join(texts)
 
 
 ## The controls screen opened on the loading screen (pressed as the world loads)

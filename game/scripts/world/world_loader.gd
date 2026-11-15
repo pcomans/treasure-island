@@ -63,7 +63,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	if not street_choice.ok:
 		_fail("street_detail_toggle", str(street_choice.message), [])
 		return
-	if OS.has_feature("web") or OS.has_feature("prebuilt_native_world") or OS.get_cmdline_user_args().has("--use-prebuilt-world"):
+	if uses_prebuilt_world():
 		_load_prebuilt(street_choice)
 		return
 	var validation := GeneratedWorldContract.load_and_validate(manifest_path)
@@ -220,6 +220,13 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	ready_report["street_detail"] = street_detail_report()
 	runtime_evidence.finish_load(ready_report)
 	world_ready.emit(ready_report)
+
+
+## Whether load_world loads the baked world, as the web build and the desktop
+## exports do (and a run given --use-prebuilt-world), rather than building it from
+## the generated sources.
+func uses_prebuilt_world() -> bool:
+	return OS.has_feature("web") or OS.has_feature("prebuilt_native_world") or OS.get_cmdline_user_args().has("--use-prebuilt-world")
 
 
 func _load_prebuilt(street_choice: Dictionary) -> void:
