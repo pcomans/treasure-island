@@ -57,6 +57,10 @@ const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look �
 ## headings' colour with this dark type.
 const OPTIONS_LEVEL_MIN_WIDTH_PX := 100.0
 const OPTIONS_ACTIVE_TEXT_COLOR := Color(0.04, 0.07, 0.1)
+## The keyboard focus ring on a choice button and the start prompt's Play button:
+## this wide (px), on the button's own shape, in the dark type's colour on a blue
+## fill and the headings' blue on any other, so it shows on either.
+const FOCUS_RING_PX := 2
 ## The options screen's switches (Show fps, Mute) when off: the default theme's
 ## toggle (its 32 x 16 shape) with its track drawn, where Godot's own leaves only a
 ## faint knob on this dark panel. Rasterized for the screen's scale, as Godot's own
@@ -175,9 +179,15 @@ var _licence_files: Array = []
 var _shadow_group := ButtonGroup.new()
 var _frame_rate_group := ButtonGroup.new()
 var _resolution_group := ButtonGroup.new()
-## The pressed choice's fill and the focused choice's outline (_active_level_style).
+## The pressed choice's fill and the focused choice's ring, blue on a choice not in
+## use and dark on the one in use (_active_level_style).
 var _active_level_box: StyleBoxFlat
 var _choice_focus_box: StyleBoxFlat
+var _choice_focus_on_box: StyleBoxFlat
+## Whether the last press was a pointer's (a mouse button or a finger) rather than
+## a key's (_input): a menu focused for it hides its focus ring (grab_focus's
+## hide_focus), which the keys then show as they move it. Until a press, a pointer's.
+var _pointer_last := true
 ## Whether the volume slider is being dragged (sound_settings_changed's keep).
 var _sound_dragging := false
 ## Whether the options screen offers the date and time (set_time_controls).
@@ -326,6 +336,7 @@ func set_start_prompt(text: String) -> void:
 	resume_button.add_theme_font_size_override("font_size", START_FONT_PX)
 	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
 		resume_button.add_theme_stylebox_override(state, _start_button_box(state))
+	resume_button.add_theme_stylebox_override("focus", _focus_ring(_start_button_box("normal"), OPTIONS_ACTIVE_TEXT_COLOR))
 	for colour: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
 		resume_button.add_theme_color_override(colour, OPTIONS_ACTIVE_TEXT_COLOR)
 	pause_center.set_anchor_and_offset(SIDE_BOTTOM, START_PANEL_SHARE, 0.0)
@@ -365,7 +376,7 @@ func _end_start_prompt() -> void:
 	pause_title.text = _menu_before.title
 	resume_button.custom_minimum_size.y = _menu_before.height
 	resume_button.remove_theme_font_size_override("font_size")
-	for state: String in ["normal", "hover", "pressed", "hover_pressed"]:
+	for state: String in ["normal", "hover", "pressed", "hover_pressed", "focus"]:
 		resume_button.remove_theme_stylebox_override(state)
 	for colour: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
 		resume_button.remove_theme_color_override(colour)
@@ -395,7 +406,7 @@ func set_paused(paused: bool) -> void:
 		credits_screen.hide()
 	prompt_panel.visible = not paused and not prompt_text.text.is_empty()
 	if pause_panel.visible:
-		resume_button.grab_focus()
+		resume_button.grab_focus(_pointer_last)
 
 
 ## Shows the controls screen in place of the pause menu (or over the loading
@@ -403,14 +414,14 @@ func set_paused(paused: bool) -> void:
 func show_controls() -> void:
 	pause_panel.hide()
 	controls_screen.show()
-	back_button.grab_focus()
+	back_button.grab_focus(_pointer_last)
 
 
 func hide_controls() -> void:
 	controls_screen.hide()
 	if _paused:
 		pause_panel.show()
-		controls_button.grab_focus()
+		controls_button.grab_focus(_pointer_last)
 
 
 func controls_visible() -> bool:
@@ -418,21 +429,22 @@ func controls_visible() -> bool:
 
 
 ## Shows the options screen in place of the pause menu, the shadow level on now
-## focused (the volume where there is no shadow choice); Back, or Esc (main.gd),
-## returns.
+## focused (the volume where there is no shadow choice), its focus ring showing
+## only when Options was opened from the keys (_pointer_last); Back, or Esc
+## (main.gd), returns.
 func show_options() -> void:
 	pause_panel.hide()
 	_show_time(true)
 	options_screen.show()
 	var on := _shadow_group.get_pressed_button()
-	(on if on != null and shadow_row.visible else sound_volume).grab_focus()
+	(on if on != null and shadow_row.visible else sound_volume).grab_focus(_pointer_last)
 
 
 func hide_options() -> void:
 	options_screen.hide()
 	if _paused:
 		pause_panel.show()
-		options_button.grab_focus()
+		options_button.grab_focus(_pointer_last)
 
 
 func options_visible() -> bool:
@@ -521,6 +533,7 @@ func _fill_choices(row: HBoxContainer, group: ButtonGroup, choices: Array, chose
 		button.set_meta("note", str(choice.note))
 		_active_level_style(button)
 		button.toggled.connect(func(on: bool) -> void:
+			_show_choice_focus(button)
 			if on:
 				chosen.call(id))
 		_click_on_press(button)
@@ -532,6 +545,7 @@ func _fill_choices(row: HBoxContainer, group: ButtonGroup, choices: Array, chose
 func _press_only(row: HBoxContainer, id: String) -> void:
 	for button: Node in row.get_children():
 		(button as Button).set_pressed_no_signal(str(button.name) == id)
+		_show_choice_focus(button as Button)
 
 
 ## The master volume (0..1) and mute on now, shown on the options screen without
@@ -619,24 +633,38 @@ func show_shadow_level(id: String) -> void:
 
 
 ## The choice in use: filled in the headings' blue with dark type. The keyboard
-## focus outlines a choice in the same blue, so the focused choice in use (the shadow
-## level as Options opens) reads like every other one in use, and a focused other
-## choice shows a blue ring.
+## focus rings a choice on the fill's own shape: in the dark type's colour on the
+## one in use, so it shows on the blue (the shadow level in use is focused as
+## Options opens), and in the blue on any other (_show_choice_focus).
 func _active_level_style(button: Button) -> void:
 	if _active_level_box == null:
 		var pressed := button.get_theme_stylebox("pressed")
 		_active_level_box = pressed.duplicate() as StyleBoxFlat if pressed is StyleBoxFlat else StyleBoxFlat.new()
 		_active_level_box.bg_color = CONTROLS_HEADING_COLOR
 		# The fill's own shape, so on a choice in use the ring lies within the fill.
-		_choice_focus_box = _active_level_box.duplicate() as StyleBoxFlat
-		_choice_focus_box.draw_center = false
-		_choice_focus_box.set_border_width_all(2)
-		_choice_focus_box.border_color = CONTROLS_HEADING_COLOR
+		_choice_focus_box = _focus_ring(_active_level_box, CONTROLS_HEADING_COLOR)
+		_choice_focus_on_box = _focus_ring(_active_level_box, OPTIONS_ACTIVE_TEXT_COLOR)
 	for state: String in ["pressed", "hover_pressed"]:
 		button.add_theme_stylebox_override(state, _active_level_box)
-	button.add_theme_stylebox_override("focus", _choice_focus_box)
+	_show_choice_focus(button)
 	for colour: String in ["font_pressed_color", "font_hover_pressed_color"]:
 		button.add_theme_color_override(colour, OPTIONS_ACTIVE_TEXT_COLOR)
+
+
+## A choice's focus ring for whether it is in use: dark on the blue of the one in
+## use, blue on any other.
+func _show_choice_focus(button: Button) -> void:
+	button.add_theme_stylebox_override("focus", _choice_focus_on_box if button.button_pressed else _choice_focus_box)
+
+
+## A keyboard focus ring in this colour on a fill's own shape: FOCUS_RING_PX wide,
+## nothing filled in.
+static func _focus_ring(fill: StyleBoxFlat, colour: Color) -> StyleBoxFlat:
+	var ring := fill.duplicate() as StyleBoxFlat
+	ring.draw_center = false
+	ring.set_border_width_all(FOCUS_RING_PX)
+	ring.border_color = colour
+	return ring
 
 
 ## Shows the credits screen in place of the pause menu, at the top of its list.
@@ -645,7 +673,7 @@ func show_credits() -> void:
 	pause_panel.hide()
 	_show_credits_view(false)
 	credits_screen.show()
-	credits_back_button.grab_focus()
+	credits_back_button.grab_focus(_pointer_last)
 
 
 ## The licence texts that ship with the game, then the engine's own licence and the
@@ -653,7 +681,7 @@ func show_credits() -> void:
 ## them (Godot's "Complying with licenses"), in place of the credits list.
 func show_licences() -> void:
 	_show_credits_view(true)
-	credits_back_button.grab_focus()
+	credits_back_button.grab_focus(_pointer_last)
 
 
 ## Back on the credits screen (its button, or Esc in main.gd): from the Licences to
@@ -661,12 +689,12 @@ func show_licences() -> void:
 func credits_back() -> void:
 	if credits_licences.visible:
 		_show_credits_view(false)
-		credits_licences_button.grab_focus()
+		credits_licences_button.grab_focus(_pointer_last)
 		return
 	credits_screen.hide()
 	if _paused:
 		pause_panel.show()
-		credits_button.grab_focus()
+		credits_button.grab_focus(_pointer_last)
 
 
 func credits_visible() -> bool:
@@ -845,10 +873,16 @@ func _fit_credits() -> void:
 	credits_licences.custom_minimum_size = view
 
 
-## Keys scroll the credits screen's text: the arrows a line, Page Up and Page Down
-## most of a page, Home and End to either end. Taken before the menus see them, so
-## Left, Right and Tab still move between its buttons.
+## Whether a press came from a pointer or a key (_pointer_last), before the menus
+## see it. Keys scroll the credits screen's text: the arrows a line, Page Up and
+## Page Down most of a page, Home and End to either end. Taken before the menus see
+## them, so Left, Right and Tab still move between its buttons.
 func _input(event: InputEvent) -> void:
+	if event.is_pressed() and not event.is_echo():
+		if event is InputEventKey or event is InputEventJoypadButton:
+			_pointer_last = false
+		elif event is InputEventMouseButton or event is InputEventScreenTouch:
+			_pointer_last = true
 	if not credits_screen.visible:
 		return
 	var bar := credits_scroll().get_v_scroll_bar()

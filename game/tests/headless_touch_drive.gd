@@ -8,9 +8,10 @@ extends SceneTree
 ## 2026-11-15), play waits behind the start prompt: the game paused, the pause
 ## menu showing only its "Tap to play" button under the game's name, a big
 ## target inside the page held upright and sideways, no touch control, no bed
-## sounding and no frame rate (switched on before play); its tap starts play:
-## the touch controls and the frame rate show, the menu is the pause menu again
-## and the beds come in. Then at each shape:
+## sounding and no frame rate (switched on before play); its button holds the
+## keyboard focus with a ring that shows on its blue, and Space (as its tap)
+## starts play: the touch controls and the frame rate show, the menu is the pause
+## menu again and the beds come in. Then at each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
@@ -45,6 +46,9 @@ const SHAPES := {"upright": Vector2i(1206, 2148), "sideways": Vector2i(2622, 111
 ## and how far a finger drags the credits.
 const THUMB_PX := 64.0
 const CREDITS_DRAG_PX := 120.0
+## The least contrast the start prompt's focus ring must have on its blue (WCAG 2's
+## 3:1 for a control's parts).
+const FOCUS_CONTRAST := 3.0
 ## Where this run keeps the graphics its checks choose (never the player's file).
 const SETTINGS_PATH := "user://test-touch-drive-%d.cfg"
 
@@ -100,7 +104,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing and no frame rate though it was switched on) and its tap started play, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, no bed playing and no frame rate though it was switched on, its button focused with a ring that shows on its blue) and Space on it started play as its tap does, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % [_size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -110,10 +114,11 @@ func _run() -> void:
 ## only "Tap to play" under the game's name (no line of desktop controls), a
 ## button inside the page at least THUMB_PX tall, the panel over the top
 ## START_PANEL_SHARE of the page (the sky, clear of the chest) and the island
-## only lightly dimmed; Esc there (an iPad's keyboard) does nothing. Then its
-## tap (from the idle step, where input arrives) starts play, ends the prompt
-## (the menu centred and the pause's dim back for a later pause), shows the
-## frame rate and lets the wind in.
+## only lightly dimmed; Esc there (an iPad's keyboard) does nothing. Its button
+## has the keyboard focus, with a focus ring that shows on its blue, so Space
+## (Enter does the same) starts play as its tap does: from the idle step, where
+## input arrives, ending the prompt (the menu centred and the pause's dim back for
+## a later pause), showing the frame rate and letting the wind in.
 func _start_prompt() -> bool:
 	var hud := _main.hud
 	for shape: String in ["sideways", "upright"]:
@@ -136,8 +141,18 @@ func _start_prompt() -> bool:
 		await _ticks(2)
 	if not _require(paused and hud.start_prompt_text() == "Tap to play", "Esc at the start prompt must do nothing (paused %s, prompt %s)." % [paused, hud.start_prompt_text()]):
 		return false
+	var ring := hud.resume_button.get_theme_stylebox("focus") as StyleBoxFlat
+	var contrast := _contrast(ring.border_color, GameHUD.CONTROLS_HEADING_COLOR) if ring != null else 0.0
+	if not _require(hud.resume_button.has_focus() and ring != null and not ring.draw_center and contrast >= FOCUS_CONTRAST, "The start prompt's button must have the keyboard focus, with a focus ring of at least %.0f:1 on its blue (focused %s, ring %s, contrast %.1f)." % [FOCUS_CONTRAST, hud.resume_button.has_focus(), ring, contrast]):
+		return false
 	await process_frame
-	hud.resume_button.pressed.emit()
+	for down: bool in [true, false]:
+		var space := InputEventKey.new()
+		space.keycode = KEY_SPACE
+		space.physical_keycode = KEY_SPACE
+		space.pressed = down
+		Input.parse_input_event(space)
+		await process_frame
 	await _ticks(60)
 	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _main.sound.loop_playing(Sound.WIND_BED, _main.sound) and hud.frame_rate_label.visible, "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back), show the frame rate and let the wind in (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind playing %s, frame rate shown %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _main.sound.loop_playing(Sound.WIND_BED, _main.sound), hud.frame_rate_label.visible]):
 		return false
@@ -376,6 +391,13 @@ func _as_on_the_web(hud: GameHUD) -> void:
 	hud.set_shadow_levels(ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web), "off")
 	hud.set_time_controls(false)
 	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY, true), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY, true), _main.graphics.current)
+
+
+## WCAG's contrast ratio of two colours (sRGB, alpha aside): 1 to 21.
+static func _contrast(a: Color, b: Color) -> float:
+	var lighter := maxf(a.srgb_to_linear().get_luminance(), b.srgb_to_linear().get_luminance())
+	var darker := minf(a.srgb_to_linear().get_luminance(), b.srgb_to_linear().get_luminance())
+	return (lighter + 0.05) / (darker + 0.05)
 
 
 ## A finger's tap at `at`, down and lifted, through the HUD's window as a touch

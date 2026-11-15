@@ -16,10 +16,12 @@ extends SceneTree
 ##     finer filter, its nearest split no deeper than Medium's, over Medium's split
 ##     count and reach;
 ##   - the pause menu's Options, between Controls and Credits, opens the options
-##     screen in its place with the level on pressed and focused; Right then Enter
-##     choose the next level, which goes on at once; the level in use, and only it,
-##     shows pressed, in the headings' blue, whoever changes it; Back returns to
-##     the pause menu;
+##     screen in its place with the level on pressed and focused, its focus ring
+##     showing when Options was opened from the keys and hidden when by a click
+##     (review note, 2026-11-15); Right then Enter choose the next level, which goes
+##     on at once; the level in use, and only it, shows pressed, in the headings'
+##     blue, whoever changes it; each level's note takes as many lines as every
+##     other's, so the panel never jumps; Back returns to the pause menu;
 ##   - the choice survives a restart of the scene (the settings file), a level
 ##     chosen again replaces it, and an unknown saved level, a missing file or a
 ##     file that can't be written fall back quietly;
@@ -36,7 +38,10 @@ extends SceneTree
 ##     engine as it started (no frame limit, project.godot's 3D scale and mode,
 ##     vsync untouched) and no frame rate shown; each choice on the options screen
 ##     puts on exactly what it claims at once (FSR below full scale on Forward+),
-##     the switch shows the frame rate, and all three are kept: a restart puts them
+##     a choice's keyboard focus ring shows on it in use or not (at least
+##     FOCUS_CONTRAST against the fill under it: the blue of the one in use, the
+##     panel's dark round any other), the switch shows the frame rate, and all
+##     three are kept: a restart puts them
 ##     on again, the capture harness's opt-out gets the defaults, and unknown,
 ##     missing and unwritable settings fall back quietly; the web offers them with
 ##     its own default resolution (three quarters, its fixed scale until now).
@@ -44,6 +49,9 @@ extends SceneTree
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
 const SUN_KEYS := ["enabled", "mode", "splits", "max_distance"]
+## The least contrast a focus ring must have against what it lies on (WCAG 2's 3:1
+## for a control's parts).
+const FOCUS_CONTRAST := 3.0
 
 var _failure := ""
 var _settings_file := ""
@@ -114,11 +122,21 @@ func _run() -> void:
 			order.append(child.name)
 	if not _require(order == PackedStringArray(["ResumeButton", "ControlsButton", "OptionsButton", "CreditsButton", "ExitButton"]) and hud.options_button.visible, "The pause menu must read Resume, Controls, Options, Credits, Exit (it has %s, Options shown %s)." % [order, hud.options_button.visible]):
 		return _finish()
-	hud.options_button.pressed.emit()
+	# Opened from the keys (Enter on Options): the level's focus ring shows.
+	hud.options_button.grab_focus()
+	_key(KEY_ENTER)
 	await process_frame
 	var levels := hud.shadow_levels.get_children()
 	var medium_button := hud.shadow_levels.get_node("medium") as Button
-	if not _require(hud.options_visible() and not hud.pause_panel.visible and levels.size() == ShadowQuality.offered().size() and medium_button.button_pressed and medium_button.has_focus() and hud.shadow_note.text == str(medium.note), "Options must show the shadow levels in the pause menu's place, Medium pressed and focused with its note (shown %s, menu %s, %d buttons, note \"%s\")." % [hud.options_visible(), hud.pause_panel.visible, levels.size(), hud.shadow_note.text]):
+	if not _require(hud.options_visible() and not hud.pause_panel.visible and levels.size() == ShadowQuality.offered().size() and medium_button.button_pressed and medium_button.has_focus(true) and hud.shadow_note.text == str(medium.note), "Options opened with Enter must show the shadow levels in the pause menu's place, Medium pressed and focused with its focus ring showing and its note (shown %s, menu %s, %d buttons, focused %s, ring showing %s, note \"%s\")." % [hud.options_visible(), hud.pause_panel.visible, levels.size(), medium_button.has_focus(), medium_button.has_focus(true), hud.shadow_note.text]):
+		return _finish()
+	# Each level's note as many lines as every other's: the panel keeps its height.
+	var note_lines := {}
+	for level: Dictionary in ShadowQuality.offered():
+		hud.show_shadow_level(str(level.id))
+		note_lines[level.id] = hud.shadow_note.get_line_count()
+	hud.show_shadow_level("medium")
+	if not _require(note_lines.values().all(func(lines: int) -> bool: return lines == note_lines.medium), "Every shadow level's note must take as many lines as the others, so the options panel keeps its height as the level changes (lines %s)." % [note_lines]):
 		return _finish()
 	var next := str(levels[levels.find(medium_button) + 1].name)
 	_key(KEY_RIGHT)
@@ -137,6 +155,15 @@ func _run() -> void:
 	hud.options_back_button.pressed.emit()
 	await process_frame
 	if not _require(not hud.options_visible() and hud.pause_panel.visible and hud.options_button.has_focus(), "Back on the options screen must go back to the pause menu, Options focused."):
+		return _finish()
+	# Opened by a click: the level in use focused, its ring hidden until a key moves it.
+	_click(hud.options_button.get_global_rect().get_center())
+	await process_frame
+	var clicked := hud.shadow_levels.get_node(next) as Button
+	var by_click := [hud.options_visible(), clicked.has_focus(), clicked.has_focus(true)]
+	hud.options_back_button.pressed.emit()
+	await process_frame
+	if not _require(by_click == [true, true, false], "Options opened by a click must focus the level in use with its focus ring hidden ([shown, focused, ring showing] %s)." % [by_click]):
 		return _finish()
 	# A restart keeps the choice; choosing again replaces it.
 	main = _make_main()
@@ -271,10 +298,26 @@ func _check_graphics() -> String:
 			order.append(child.name)
 	if not _require(order.slice(0, 7) == PackedStringArray(["Title", "GraphicsHeading", "ShadowRow", "ShadowNote", "FrameRateRow", "ResolutionRow", "TimeHeadingRow"]), "The options screen must read Options, then Graphics: the sun shadows, their note, the frame rate and the resolution, then the time of day (it reads %s)." % [order]):
 		return ""
-	# The switches show their track when off, and a focused choice in use reads like
-	# any other in use: its focus outline is the fill's own blue.
-	var focus := (hud.shadow_levels.get_node("medium") as Button).get_theme_stylebox("focus") as StyleBoxFlat
-	if not _require(hud.show_frame_rate.has_theme_icon_override("unchecked") and hud.sound_mute.has_theme_icon_override("unchecked") and focus != null and focus.border_color == GameHUD.CONTROLS_HEADING_COLOR and not focus.draw_center, "The switches (Show fps, Mute) must draw their own Off track, and a choice's focus outline must be the headings' blue (focus %s)." % [focus]):
+	# The switches show their track when off. A choice's keyboard focus ring lies on
+	# the fill's own shape and shows on it in use or not: against the blue of the one
+	# in use (Medium), and against the panel under any other's own fill (High); the
+	# rings change over with the choice.
+	var rings := []
+	for id: String in ["medium", "high"]:
+		var button := hud.shadow_levels.get_node(id) as Button
+		var ring := button.get_theme_stylebox("focus") as StyleBoxFlat
+		var normal := button.get_theme_stylebox("normal") as StyleBoxFlat
+		var panel := (hud.options_panel.get_theme_stylebox("panel") as StyleBoxFlat).bg_color
+		var under := GameHUD.CONTROLS_HEADING_COLOR if button.button_pressed else (panel.blend(normal.bg_color) if normal != null else panel)
+		rings.append([id, button.button_pressed, ring != null and not ring.draw_center and ring.border_width_top >= 2 and ring.expand_margin_top == 0.0, snappedf(_contrast(ring.border_color, under), 0.1) if ring != null else 0.0])
+	var medium_button := hud.shadow_levels.get_node("medium") as Button
+	var high_button := hud.shadow_levels.get_node("high") as Button
+	var before := [medium_button.get_theme_stylebox("focus"), high_button.get_theme_stylebox("focus")]
+	high_button.button_pressed = true
+	var changed_over := [high_button.get_theme_stylebox("focus"), medium_button.get_theme_stylebox("focus")] == before
+	medium_button.button_pressed = true
+	var rings_ok := rings.all(func(ring: Array) -> bool: return ring[2] and ring[3] >= FOCUS_CONTRAST) and rings[0][1] and not rings[1][1] and changed_over
+	if not _require(hud.show_frame_rate.has_theme_icon_override("unchecked") and hud.sound_mute.has_theme_icon_override("unchecked") and rings_ok, "The switches (Show fps, Mute) must draw their own Off track, and a choice's focus ring lie on its fill's shape with at least %.0f:1 against the fill under it, in use or not, and change over with the choice ([id, in use, on the fill's shape, contrast] %s; changed over %s)." % [FOCUS_CONTRAST, rings, changed_over]):
 		return ""
 	# Each choice on the options screen, as pressed there: on at once.
 	var applied := PackedStringArray()
@@ -395,6 +438,25 @@ func _check_levels() -> bool:
 		return false
 	return _require(not off.enabled, "Off must turn the sun's shadows off.") \
 		and _require(low.enabled and int(low.atlas) == int(medium.atlas) and int(low.filter) == int(medium.filter) and int(low.mode) < int(medium.mode) and float(low.max_distance) < float(medium.max_distance), "Low must draw Medium's own map and filter (a smaller map and the cheapest filter striped and crawled), and be lighter by fewer splits over a shorter range.")
+
+
+## WCAG's contrast ratio of two colours (sRGB, alpha aside): 1 to 21.
+static func _contrast(a: Color, b: Color) -> float:
+	var lighter := maxf(a.srgb_to_linear().get_luminance(), b.srgb_to_linear().get_luminance())
+	var darker := minf(a.srgb_to_linear().get_luminance(), b.srgb_to_linear().get_luminance())
+	return (lighter + 0.05) / (darker + 0.05)
+
+
+## A left click (down and up) at `at`, in the HUD's pixels.
+func _click(at: Vector2) -> void:
+	for pressed: bool in [true, false]:
+		var button := InputEventMouseButton.new()
+		button.button_index = MOUSE_BUTTON_LEFT
+		button.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+		button.position = at
+		button.global_position = at
+		button.pressed = pressed
+		root.push_input(button, true)
 
 
 func _key(keycode: Key) -> void:
