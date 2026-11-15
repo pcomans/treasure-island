@@ -186,7 +186,9 @@ tools/deploy-web.sh             # build origin/main and deploy it to production
 tools/deploy-web.sh --dry-run   # the same checks and build; prints the Vercel commands instead
 ```
 
-It refuses unless the checkout is clean and HEAD is `origin/main`. If `build/web`
+It refuses unless the checkout is clean and HEAD is `origin/main`, and unless
+`TI_SFX_SOURCE` names the [sound source](#sound) and that source has takes for
+every sound the game plays; `--silent-ok` deploys without them on purpose. If `build/web`
 isn't linked yet, it links it to the existing `treasure-island` Vercel project (never
 a new one). Then it runs `tools/build-web.sh`, deploys `build/web` to production with
 the pinned Vercel CLI (`npx vercel@64.5.0`) and prints the deployment URL. It uses
