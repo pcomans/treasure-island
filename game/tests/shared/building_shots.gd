@@ -368,7 +368,8 @@ func _sun_line() -> String:
 	var unix := DayClock.now()
 	var at := DayClock.local(unix)
 	var shown := DaySun.shown_angles(unix)
-	return "SUN moment=%04d-%02d-%02d %02d:%02d %s elevation=%.2f azimuth=%.2f held=%s running=%s" % [int(at.year), int(at.month), int(at.day), int(at.hour), int(at.minute), at.zone, shown[0], shown[1], DaySun.is_held(unix), DayClock.is_running()]
+	var look := DayLight.at(shown[0])
+	return "SUN moment=%04d-%02d-%02d %02d:%02d %s elevation=%.2f azimuth=%.2f sun_energy=%.3f exposure=%.3f horizon_light=%.3f night_floor=%s running=%s" % [int(at.year), int(at.month), int(at.day), int(at.hour), int(at.minute), at.zone, shown[0], shown[1], float(look.sun_energy), float(look.exposure), float(look.horizon_light), DayLight.is_floor(shown[0]), DayClock.is_running()]
 
 
 func _with_settings(object: Object, settings: Dictionary) -> Object:

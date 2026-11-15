@@ -17,10 +17,14 @@ extends SceneTree
 ##     included; with a stand-in system clock, a sleep (the system clock jumping
 ##     on) and a correction carry the game's time with them, to the microsecond;
 ##     it holds still when pinned, and jumps;
-##   - DaySun points a light at the clock's sun: in steps while time runs (10 s with
-##     the sun high, shorter as it sinks), at once on a jump; below the daylight it
-##     draws, the light waits where the sun crossed its edge, on the evening's or the
-##     morning's side, with no jump as it gets there;
+##   - DaySun points a light at the clock's sun, by day and by night: in steps while
+##     time runs (10 s with the sun high or deep, shorter near the horizon), at once
+##     on a jump, with no jump of its own through sunset, sunrise and midnight;
+##   - the light of the sun's height (DayLight's curves): main.tscn's daylight exactly
+##     at and above the full-day height, the recorded moment included, where DaySun
+##     writes nothing to the Sun, the environment or the sky; dimming through sunset
+##     without a step larger than its bound, to the night floor, which holds all
+##     night; dawn the same as dusk at the same height; and DaySun putting it on;
 ##   - the options screen's date and time read the island's clock (PST and PDT, the
 ##     night note), its sliders jump the clock and time runs on, Now goes back to
 ##     the real time, and the web's options screen has none of it.
@@ -34,6 +38,15 @@ const TOLERANCE_DEG := 0.000001
 ## may differ from the system clock over that time (s).
 const REAL_SPAN_S := 0.3
 const REAL_SLACK_S := 0.005
+## The most the light may turn in a minute of clock time (degrees).
+const JUMP_BOUND_DEG := 0.6
+## The most one step of the sun (DaySun.step_seconds, at most 10 s) may change each of
+## the look's lights by on the way down (_measures): far less than the eye sees
+## change at once.
+const STEP_BOUNDS := {
+	"sun_energy": 0.01, "ambient": 0.001, "fog": 0.002, "sky_horizon": 0.002,
+	"sky_top": 0.001, "exposure": 0.002, "horizon_light": 0.004,
+}
 
 var _failure := ""
 var _nodes: Array[Node] = []
@@ -65,10 +78,13 @@ func _run() -> void:
 	var sun := await _check_day_sun()
 	if sun.is_empty():
 		return _finish()
+	var light := await _check_day_light()
+	if light.is_empty():
+		return _finish()
 	var menu := await _check_options_rows()
 	if menu.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, menu])
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, menu])
 	_finish()
 
 
@@ -96,7 +112,9 @@ func _check_reference() -> String:
 	return "the sun as tools/solar_position.mjs gives it at %d moments (%d with the sun below the horizon), within %s and %s degrees" % [(table.samples as Array).size(), nights, String.num_scientific(worst[0]), String.num_scientific(worst[1])]
 
 
-## The recorded moment: main.tscn's Sun, its metadata and its light exactly.
+## The recorded moment: main.tscn's Sun, its metadata and its light exactly, and
+## the look there main.tscn's daylight exactly (DayLight's first key, from
+## FULL_DAY_ELEVATION_DEG up).
 func _check_recorded_moment() -> String:
 	var main := (load(MAIN_SCENE) as PackedScene).instantiate()
 	var scene_sun := main.get_node("Sun") as DirectionalLight3D
@@ -106,10 +124,73 @@ func _check_recorded_moment() -> String:
 	var same := light.transform == scene_sun.transform
 	var metadata: Array[float] = [float(scene_sun.get_meta("solar_elevation_deg")), float(scene_sun.get_meta("solar_azimuth_deg"))]
 	light.free()
+	var differences := _look_differences(scene_sun, (main.get_node("WorldEnvironment") as WorldEnvironment).environment, _project_globals(), DayLight.at(kept[0]))
 	main.free()
-	if not _require(kept == metadata and same, "At the recorded moment the sun must be main.tscn's Sun: its metadata %s and its rotation exactly, not %s (rotation the same: %s)." % [metadata, kept, same]):
+	if not _require(kept == metadata and same, "At the recorded moment the sun must be main.tscn's Sun: its metadata %s and its rotation exactly, not %s (rotation the same: %s)." % [metadata, kept, same]) \
+	or not _require(kept[0] >= DayLight.FULL_DAY_ELEVATION_DEG and differences.is_empty(), "At the recorded moment (%.2f degrees up, full day from %.0f) the look must be main.tscn's daylight exactly; it differs in %s." % [kept[0], DayLight.FULL_DAY_ELEVATION_DEG, differences]):
 		return ""
-	return "the recorded moment is main.tscn's Sun exactly (%.2f, %.2f)" % [kept[0], kept[1]]
+	return "the recorded moment is main.tscn's Sun exactly (%.2f, %.2f), and its look main.tscn's daylight exactly (%d values)" % [kept[0], kept[1], DayLight.VALUES.size()]
+
+
+## Where `look` differs from what a Sun, an environment with its sky material and
+## the global uniforms hold, each value as the engine holds it (a light's energy,
+## for one, is a 32-bit float): [] when it is the same in every one.
+func _look_differences(sun: DirectionalLight3D, environment: Environment, globals: Dictionary, look: Dictionary) -> Array[String]:
+	var differences: Array[String] = []
+	var sky := environment.sky.sky_material as ShaderMaterial
+	var held_light := DirectionalLight3D.new()
+	var held_environment := Environment.new()
+	for value: String in DayLight.SUN_PROPERTIES:
+		var property: StringName = DayLight.SUN_PROPERTIES[value]
+		held_light.set(property, look[value])
+		if held_light.get(property) != sun.get(property):
+			differences.append("%s (%s, the Sun's %s)" % [value, held_light.get(property), sun.get(property)])
+	for value: String in DayLight.ENVIRONMENT_PROPERTIES:
+		var property: StringName = DayLight.ENVIRONMENT_PROPERTIES[value]
+		held_environment.set(property, look[value])
+		if held_environment.get(property) != environment.get(property):
+			differences.append("%s (%s, the environment's %s)" % [value, held_environment.get(property), environment.get(property)])
+	for value: String in DayLight.SKY_PARAMETERS:
+		var stored: Variant = sky.get_shader_parameter(DayLight.SKY_PARAMETERS[value])
+		var wanted: Variant = look[value]
+		var equal := stored is Color and wanted is Color and [stored.r, stored.g, stored.b] == [wanted.r, wanted.g, wanted.b]
+		if stored is float and (wanted is float or wanted is int):
+			equal = stored == float(wanted)
+		if not equal:
+			differences.append("%s (%s, the sky material's %s)" % [value, wanted, stored])
+	for value: String in globals:
+		var held: Variant = globals[value]
+		var equal: bool = held is float and held == float(look[value])
+		if held is Vector3 and look[value] is Vector3:
+			equal = (held as Vector3).is_equal_approx(look[value])
+		if not equal:
+			differences.append("%s (%s, the global's %s)" % [value, look[value], held])
+	held_light.free()
+	return differences
+
+
+## project.godot's global uniforms by DayLight's names: what a scene shows before
+## DaySun's first look, and what every tool without DaySun shows (horizon_haze, the
+## daylight sky's horizon colour in linear RGB, acts only once horizon_light falls
+## below 1).
+func _project_globals() -> Dictionary:
+	var globals := {}
+	for value: String in DayLight.GLOBALS:
+		var setting: Variant = ProjectSettings.get_setting("shader_globals/%s" % DayLight.GLOBALS[value], {})
+		globals[value] = (setting as Dictionary).get("value") if setting is Dictionary else null
+	return globals
+
+
+## The global uniforms DaySun hands the engine (DaySun.set_global), recorded here:
+## the engine gives a global's value back only in the editor. Keyed by DayLight's
+## names; DaySun.use_engine_globals() puts the engine back.
+func _record_globals() -> Dictionary:
+	var written := {}
+	DaySun.set_global = func(global: StringName, value: Variant) -> void:
+		for name: String in DayLight.GLOBALS:
+			if DayLight.GLOBALS[name] == global:
+				written[name] = value
+	return written
 
 
 ## Pacific time, from the instant alone.
@@ -193,52 +274,63 @@ func _check_running() -> String:
 	return "the system clock's speed (%.4f s against the system's %.4f s, and %.4f s with the time scale at 0); with a stand-in system clock, 12.5 s running, 7.25 s more paused, an hour asleep and a 2 s correction back carried the game's time exactly; held still when pinned; Now the real time" % [span.x, span.y, paused_span.x]
 
 
-## DaySun on a light of its own.
+## DaySun on a Sun, an environment and a sky material of its own, copies of
+## main.tscn's.
 func _check_day_sun() -> String:
+	var scene := (load(MAIN_SCENE) as PackedScene).instantiate()
+	var scene_sun := scene.get_node("Sun") as DirectionalLight3D
+	var scene_environment := (scene.get_node("WorldEnvironment") as WorldEnvironment).environment
+	var scene_transform := scene_sun.transform
+	# A light of its own with the Sun's colour and strength (a duplicate would take
+	# the Sun's transform apart into a rotation and a scale a rounding off 1).
 	var light := DirectionalLight3D.new()
+	light.light_color = scene_sun.light_color
+	light.light_energy = scene_sun.light_energy
+	var environment := scene_environment.duplicate(true) as Environment
+	scene.free()
 	root.add_child(light)
 	_nodes.append(light)
-	var day_sun := DaySun.new(light)
+	var written := _record_globals()
+	var day_sun := DaySun.new(light, environment)
 	root.add_child(day_sun)
 	_nodes.append(day_sun)
-	var scene := (load(MAIN_SCENE) as PackedScene).instantiate()
-	var scene_transform := (scene.get_node("Sun") as Node3D).transform
-	scene.free()
 	await process_frame
-	if not _require(light.transform == scene_transform, "At the recorded moment DaySun must leave the light exactly as main.tscn's Sun."):
+	# Its first look hands the engine every global, at the recorded moment the values
+	# project.godot gives them.
+	var first_globals := written.duplicate()
+	var recorded := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
+	var project_globals := _project_globals()
+	# The factors exactly; horizon_haze, worked out in 32-bit floats, to within
+	# is_equal_approx of project.godot's (given there to 7 digits).
+	var project := project_globals.keys().filter(func(value: String) -> bool: return not ((first_globals.get(value) is float and first_globals[value] == float(project_globals[value])) or (first_globals.get(value) is Vector3 and project_globals[value] is Vector3 and (first_globals[value] as Vector3).is_equal_approx(project_globals[value]))))
+	if not _require(light.transform == scene_transform and recorded.is_empty() and project.is_empty() and first_globals.size() == DayLight.GLOBALS.size() and day_sun.sky == environment.sky.sky_material, "At the recorded moment DaySun must leave the light exactly as main.tscn's Sun and its look main.tscn's daylight, and its first look hand the engine every global (%s) at project.godot's values (it differs in %s; from project.godot in %s)." % [first_globals.keys(), recorded, project]):
+		DaySun.use_engine_globals()
 		return ""
-	# Morning, noon, afternoon and evening on the longest and shortest days and on
-	# 2026-11-14: the light from the clock's sun, through east (+X) from north (-Z).
+	# Morning, noon, afternoon, dusk and night on the longest and shortest days and
+	# on 2026-11-14: the light from the clock's sun (under the horizon too), through
+	# east (+X) from north (-Z), and the look of its height on.
 	var checked := 0
+	var nights := 0
 	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
-		for time: String in ["09:30", "12:30", "15:30", "16:30"]:
+		for time: String in ["05:00", "09:30", "12:30", "15:30", "16:30", "17:00", "17:30", "20:30", "22:00"]:
 			var unix := DayClock.parse_local("%s %s" % [day, time])
 			DayClock.pin(unix)
 			await process_frame
 			var sun := SolarPosition.at(unix, DayClock.LATITUDE, DayClock.LONGITUDE)
 			var shown := DaySun.shown_angles(unix)
-			var true_sun: Array[float] = [snappedf(float(sun.elevation_deg), DaySun.ANGLE_STEP_DEG), snappedf(float(sun.azimuth_deg), DaySun.ANGLE_STEP_DEG)]
-			if DaySun.is_held(unix):
-				continue
-			if not _require(shown == true_sun and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)) and light.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])), "At %s %s the light must shine from the sun at %s (%s), not from rotation %s." % [day, time, true_sun, shown, light.rotation_degrees]):
+			var kept_to := DaySun.angle_step(float(sun.elevation_deg))
+			var true_sun: Array[float] = [snappedf(float(sun.elevation_deg), kept_to), snappedf(float(sun.azimuth_deg), kept_to)]
+			var differences := _look_differences(light, environment, written, DayLight.at(shown[0]))
+			if not _require(shown == true_sun and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)) and light.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])), "At %s %s the light must shine from the sun at %s (%s), not from rotation %s." % [day, time, true_sun, shown, light.rotation_degrees]) \
+			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]):
+				DaySun.use_engine_globals()
 				return ""
 			checked += 1
-	# Night: the light waits where the sun crossed the edge of the daylight drawn,
-	# west after sunset, east before sunrise.
-	var sides := []
-	for night: Array in [["2026-11-14 22:00", true], ["2026-11-15 05:00", false], ["2026-06-21 23:50", true], ["2026-06-22 03:00", false]]:
-		var unix := DayClock.parse_local(night[0])
-		DayClock.pin(unix)
-		await process_frame
-		var shown := DaySun.shown_angles(unix)
-		var west := shown[1] > 180.0
-		if not _require(DaySun.is_held(unix) and is_equal_approx(shown[0], DaySun.DAYLIGHT_MIN_ELEVATION_DEG) and west == night[1] and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)), "At %s the light must wait at %.0f degrees on the %s side, not at %s." % [night[0], DaySun.DAYLIGHT_MIN_ELEVATION_DEG, "west" if night[1] else "east", shown]):
-			return ""
-		sides.append("%s %.1f" % [night[0].right(5), shown[1]])
-	# No jump as the sun reaches the edge or leaves it: minute by minute through
-	# 2026-11-14's sunset and 2026-11-15's sunrise.
+			nights += 1 if shown[0] < 0.0 else 0
+	# No jump: minute by minute through 2026-11-14's sunset and dusk, its solar
+	# midnight, and 2026-11-15's dawn and sunrise.
 	var largest := 0.0
-	for span: Array in [["2026-11-14 15:30", 120], ["2026-11-15 06:30", 150]]:
+	for span: Array in [["2026-11-14 15:30", 150], ["2026-11-14 23:15", 80], ["2026-11-15 05:45", 120]]:
 		var unix := DayClock.parse_local(span[0])
 		var last := DaySun.shown_angles(unix)
 		for minute in int(span[1]):
@@ -246,16 +338,22 @@ func _check_day_sun() -> String:
 			var shown := DaySun.shown_angles(unix)
 			largest = maxf(largest, rad_to_deg(SolarPosition.direction_to(last[0], last[1]).angle_to(SolarPosition.direction_to(shown[0], shown[1]))))
 			last = shown
-	if not _require(largest < 0.3, "The light must not jump at the edge of the daylight: it moved %.3f degrees in a minute." % largest):
+	# The sun moves at most about 0.25 degrees a minute along its path; just under the
+	# horizon the refraction NOAA adds (SolarPosition) falls off quickly and the drawn
+	# sun sinks up to twice as fast for a few minutes (0.34 degrees in a minute on
+	# 2026-11-14). A jump, as midnight's side swap was, is tens of degrees.
+	if not _require(largest < JUMP_BOUND_DEG, "The light must not jump through sunset, midnight or sunrise: it moved %.3f degrees in a minute (bound %.1f)." % [largest, JUMP_BOUND_DEG]):
+		DaySun.use_engine_globals()
 		return ""
-	# Steps while time runs, on a stand-in system clock: 10 s with the sun high,
-	# shorter as it sinks (step_seconds), a full step while it is held; a jump at once.
+	# Steps while time runs, on a stand-in system clock: 10 s with the sun high or
+	# deep, shorter near the horizon (step_seconds), 10 s through the night floor
+	# (step_for); a jump at once.
 	var system := [1800000000.0]
 	DayClock.system_clock = func() -> float: return system[0]
 	var steps := []
-	for trial: Array in [["2026-06-21 12:30", "high"], ["2026-11-14 15:50", "low"], ["2026-11-14 22:00", "held"]]:
+	for trial: Array in [["2026-06-21 12:30", "high"], ["2026-11-14 16:50", "setting"], ["2026-11-14 17:55", "floor"], ["2026-11-14 22:00", "night"]]:
 		var start := DayClock.parse_local(trial[0])
-		var step := DaySun.STEP_S if DaySun.is_held(start) else DaySun.step_seconds(DaySun.shown_angles(start)[0])
+		var step := DaySun.step_for(DaySun.shown_angles(start)[0])
 		DayClock.start_at(start)
 		await process_frame
 		var first := day_sun.shown_unix
@@ -268,6 +366,7 @@ func _check_day_sun() -> String:
 		steps.append("%s %.2f s" % [trial[1], step])
 		if not _require(first == start and within == start and is_equal_approx(stepped - start, step * 1.2), "%s (%s): the sun must step after %.2f s and not before (shown at %s, %s, %s from %s)." % [trial[0], trial[1], step, first, within, stepped, start]):
 			DayClock.use_system_clock()
+			DaySun.use_engine_globals()
 			return ""
 	var jump_from := DayClock.parse_local("2026-06-21 12:30")
 	DayClock.start_at(jump_from + 3600.0)
@@ -276,12 +375,140 @@ func _check_day_sun() -> String:
 	DayClock.use_system_clock()
 	DayClock.pin()
 	await process_frame
-	var back := light.transform == scene_transform
-	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0)]
-	if not _require(jumped == jump_from + 3600.0 and back, "A jump must move the sun at once (shown %s for %s), and pinned again it must be main.tscn's (%s)." % [jumped, jump_from + 3600.0, back]) \
-	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up and shorter as the sun sinks, to MIN_STEP_S: %s at 75, 30, 20, 10 and 5 degrees." % [shape]):
+	var back := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
+	DaySun.use_engine_globals()
+	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0), DaySun.step_seconds(-6.0), DaySun.step_seconds(-40.0), DaySun.step_for(-6.0), DaySun.step_for(-10.0)]
+	if not _require(jumped == jump_from + 3600.0 and light.transform == scene_transform and back.is_empty(), "A jump must move the sun at once (shown %s for %s), and pinned again the light must be main.tscn's Sun with main.tscn's daylight (it differs in %s)." % [jumped, jump_from + 3600.0, back]) \
+	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S and shape[5] < shape[3] and shape[6] == DaySun.STEP_S and shape[7] == shape[5] and shape[8] == DaySun.STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up or down and shorter near the horizon, to MIN_STEP_S, and STEP_S through the night floor: %s at 75, 30, 20, 10, 5, -6 and -40 degrees, then step_for at -6 and -10." % [shape]):
 		return ""
-	return "the light from the clock's sun at %d moments, waiting at %.0f degrees at night (%s), no jump at the edge (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees) and at once on a jump" % [checked, DaySun.DAYLIGHT_MIN_ELEVATION_DEG, ", ".join(PackedStringArray(sides)), largest, ", ".join(PackedStringArray(steps)), shape[3]]
+	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned" % [checked, nights, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
+
+
+## The light's curves (DayLight): their table, full day from FULL_DAY_ELEVATION_DEG
+## up, the way down through sunset in DaySun's own steps, the night floor through
+## the night, and dawn the same as dusk.
+func _check_day_light() -> String:
+	# The table: every value in every key, falling heights, the floor last.
+	var keys := DayLight.KEYS
+	if not _require(float(keys[0].elevation) == DayLight.FULL_DAY_ELEVATION_DEG and keys[keys.size() - 1] == DayLight.NIGHT_FLOOR and float(DayLight.NIGHT_FLOOR.elevation) == DayLight.FLOOR_ELEVATION_DEG, "DayLight's keys must start at full day (%.1f) and end with the night floor (%.1f)." % [DayLight.FULL_DAY_ELEVATION_DEG, DayLight.FLOOR_ELEVATION_DEG]):
+		return ""
+	for index in keys.size():
+		var key: Dictionary = keys[index]
+		var named := key.keys()
+		named.erase("elevation")
+		named.sort()
+		var wanted: Array = DayLight.VALUES.duplicate()
+		wanted.sort()
+		var typed := named == wanted and DayLight.VALUES.all(func(value: String) -> bool: return typeof(key[value]) == typeof(DayLight.NIGHT_FLOOR[value]) and typeof(key[value]) in [TYPE_COLOR, TYPE_FLOAT])
+		if not _require(typed and (index == 0 or float(key.elevation) < float(keys[index - 1].elevation)), "DayLight's key %d (at %s degrees) must hold every value, each a colour or a float as the floor's, below the key before it." % [index, key.get("elevation")]):
+			return ""
+	# Full day: the first key exactly at any height from there up.
+	for height: float in [DayLight.FULL_DAY_ELEVATION_DEG, 33.43, 52.3, 75.6, 90.0]:
+		if not _require(DayLight.at(height) == DayLight.at(DayLight.FULL_DAY_ELEVATION_DEG), "At %.2f degrees, above full day, the look must be daylight's exactly." % height):
+			return ""
+	# Down through sunset in DaySun's steps on three dates, from full day to the
+	# floor: nothing brightens as the sun sinks, the exposure only rises, and no
+	# step changes a value by more than its bound (BOUNDS: sun energy, ambient
+	# light, fog, sky, exposure and the horizon's factor).
+	var worst := {}
+	for name: String in STEP_BOUNDS:
+		worst[name] = 0.0
+	var steps := 0
+	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
+		var unix := _crossing(DayClock.parse_local("%s 12:00" % day), DayLight.FULL_DAY_ELEVATION_DEG, true)
+		var last := _measures(DayLight.at(DaySun.shown_angles(unix)[0]))
+		while DaySun.shown_angles(unix)[0] > DayLight.FLOOR_ELEVATION_DEG - 0.5:
+			unix += DaySun.step_seconds(DaySun.shown_angles(unix)[0])
+			var now := _measures(DayLight.at(DaySun.shown_angles(unix)[0]))
+			steps += 1
+			for name: String in STEP_BOUNDS:
+				var change: float = now[name] - last[name]
+				worst[name] = maxf(worst[name], absf(change))
+				var wrong_way := change < -1e-9 if name == "exposure" else change > 1e-9
+				if not _require(not wrong_way and absf(change) <= float(STEP_BOUNDS[name]), "On %s at %.2f degrees, one step of the sun changed %s by %.5f (bound %.4f; it must %s as the sun sinks)." % [day, DaySun.shown_angles(unix)[0], name, change, STEP_BOUNDS[name], "only rise" if name == "exposure" else "not rise"]):
+					return ""
+			last = now
+	# The night floor: reached at FLOOR_ELEVATION_DEG and held all night, solar
+	# midnight included, every five minutes until dawn comes back past it.
+	var floor_look := DayLight.at(DayLight.FLOOR_ELEVATION_DEG)
+	var floor_values := DayLight.VALUES.all(func(value: String) -> bool: return floor_look[value] == DayLight.NIGHT_FLOOR[value])
+	if not _require(floor_values and DayLight.at(-75.0) == floor_look, "At and under %.1f degrees the look must be the night floor's." % DayLight.FLOOR_ELEVATION_DEG):
+		return ""
+	var night_samples := 0
+	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
+		var dusk := _crossing(DayClock.parse_local("%s 12:00" % day), DayLight.FLOOR_ELEVATION_DEG, true)
+		var dawn := _crossing(DayClock.parse_local("%s 12:00" % day) + 86400.0, DayLight.FLOOR_ELEVATION_DEG, false)
+		var unix := dusk + 1.0
+		while unix < dawn - 1.0:
+			var height := DaySun.shown_angles(unix)[0]
+			if not _require(DayLight.is_floor(height) and DayLight.at(height) == floor_look, "The night of %s must hold the night floor (at %.2f degrees, %s)." % [day, height, DayClock.local(unix)]):
+				return ""
+			night_samples += 1
+			unix += 300.0
+	# Dawn mirrors dusk: the same height morning and evening gives the same look,
+	# put on by DaySun.
+	var light := DirectionalLight3D.new()
+	root.add_child(light)
+	_nodes.append(light)
+	var scene := (load(MAIN_SCENE) as PackedScene).instantiate()
+	var environment := (scene.get_node("WorldEnvironment") as WorldEnvironment).environment.duplicate(true) as Environment
+	scene.free()
+	var written := _record_globals()
+	var day_sun := DaySun.new(light, environment)
+	root.add_child(day_sun)
+	_nodes.append(day_sun)
+	var mirrored := 0
+	for height: float in [25.0, 20.0, 10.0, 5.0, 2.0, 0.5, 0.0, -1.0, -3.0, -6.0]:
+		var noon := DayClock.parse_local("2026-11-14 12:00")
+		var evening := _crossing(noon, height, true)
+		var morning := _crossing(noon, height, false)
+		var looks := []
+		for unix: float in [evening, morning]:
+			DayClock.pin(unix)
+			await process_frame
+			looks.append([DaySun.shown_angles(unix)[0], environment.ambient_light_color, environment.ambient_light_energy, environment.fog_light_color, environment.tonemap_exposure, light.light_color, light.light_energy, environment.sky.sky_material.get_shader_parameter(&"sky_horizon_color"), written.duplicate()])
+		if not _require(looks[0] == looks[1], "At %.1f degrees dawn must look as dusk does: %s in the evening, %s in the morning." % [height, looks[0], looks[1]]):
+			DaySun.use_engine_globals()
+			return ""
+		mirrored += 1
+	DaySun.use_engine_globals()
+	DayClock.pin()
+	await process_frame
+	var bounds := PackedStringArray()
+	for name: String in STEP_BOUNDS:
+		bounds.append("%s %.4f (bound %.3f)" % [name, worst[name], STEP_BOUNDS[name]])
+	return "the light's curves: daylight from %.0f degrees up, %d steps of the sun from there to the floor on three dates with nothing brightening and the largest changes a step %s, the night floor from %.0f degrees all night (%d samples, solar midnight among them), dawn the same as dusk at %d heights" % [DayLight.FULL_DAY_ELEVATION_DEG, steps, ", ".join(bounds), DayLight.FLOOR_ELEVATION_DEG, night_samples, mirrored]
+
+
+## How much each of the look's lights changes by: the sun's energy; the ambient
+## light, the fog and the sky's horizon and zenith as linear luminance times
+## energy; the exposure; the horizon art's factor.
+func _measures(look: Dictionary) -> Dictionary:
+	return {
+		"sun_energy": float(look.sun_energy),
+		"ambient": (look.ambient_color as Color).srgb_to_linear().get_luminance() * float(look.ambient_energy),
+		"fog": (look.fog_color as Color).srgb_to_linear().get_luminance() * float(look.fog_energy),
+		"sky_horizon": (look.sky_horizon as Color).srgb_to_linear().get_luminance(),
+		"sky_top": (look.sky_top as Color).srgb_to_linear().get_luminance(),
+		"exposure": float(look.exposure),
+		"horizon_light": float(look.horizon_light),
+	}
+
+
+## The instant after (evening) or before (morning) solar noon nearest `around`
+## when the sun's true height is `height_deg`, to a millisecond.
+func _crossing(around: float, height_deg: float, evening: bool) -> float:
+	var sun := SolarPosition.at(around, DayClock.LATITUDE, DayClock.LONGITUDE)
+	var noon := around - float(sun.hour_angle_deg) / 15.0 * 3600.0
+	var high := noon
+	var low := noon + (12.0 if evening else -12.0) * 3600.0
+	for _halving in 40:
+		var middle := 0.5 * (low + high)
+		if float(SolarPosition.at(middle, DayClock.LATITUDE, DayClock.LONGITUDE).elevation_deg) >= height_deg:
+			high = middle
+		else:
+			low = middle
+	return high
 
 
 ## The options screen's date and time, on desktop and on the web.

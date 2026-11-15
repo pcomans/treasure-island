@@ -600,16 +600,22 @@ func _check_options_screen(main: GameMain) -> String:
 
 ## The time of day (owner, 2026-11-14) in the loaded game. This driver's clock holds
 ## the recorded moment, as every test's, capture's and the web's does: the Sun is
-## main.tscn's exactly, its metadata's angles, and stays so however long the game
-## runs. On the options screen, with the game paused, the date and the time slider
-## move the Sun at once to the sun of their moment on the island's clock, and time
-## runs on from there with the system clock; Now goes back to the real time. Pinned
-## again, the Sun is main.tscn's. Returns a summary, or "" after failing.
+## main.tscn's exactly, its metadata's angles, the light on it, the environment and
+## the sky main.tscn's daylight exactly (DayLight), and they stay so however long the
+## game runs. On the options screen, with the game paused, the date and the time
+## slider move the Sun at once to the sun of their moment on the island's clock,
+## with the light of its height (a December dusk among them), and time runs on from
+## there with the system clock; Now goes back to the real time. Pinned again, the
+## Sun and its light are main.tscn's. Returns a summary, or "" after failing.
 func _check_time_of_day(main: GameMain) -> String:
 	var hud := main.hud
 	var sun := main.get_node("Sun") as DirectionalLight3D
-	var scene := (load("res://game/scenes/main.tscn") as PackedScene).instantiate()
+	var environment := (main.get_node("WorldEnvironment") as WorldEnvironment).environment
+	# main.tscn as saved: its environment is a resource the running game shares, so
+	# a copy loaded apart from it.
+	var scene := (ResourceLoader.load("res://game/scenes/main.tscn", "", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene).instantiate()
 	var scene_transform := (scene.get_node("Sun") as Node3D).transform
+	var scene_look := _look_of(scene.get_node("Sun") as DirectionalLight3D, (scene.get_node("WorldEnvironment") as WorldEnvironment).environment)
 	scene.free()
 	var recorded := Vector3(-float(sun.get_meta("solar_elevation_deg")), 180.0 - float(sun.get_meta("solar_azimuth_deg")), 0.0)
 	var held_at := DayClock.now()
@@ -622,6 +628,9 @@ func _check_time_of_day(main: GameMain) -> String:
 	if DayClock.is_running() or held_at != DayClock.RECORDED_UNIX or DayClock.now() != held_at \
 	or sun.transform != scene_transform or not sun.rotation_degrees.is_equal_approx(recorded) or main.day_sun.shown_unix != DayClock.RECORDED_UNIX:
 		_fail("A test driver's clock must hold the recorded moment and the Sun stay main.tscn's (%s, its metadata's %s), however long the game runs (clock %s then %s, running %s; Sun %s, shown for %s)." % [scene_transform.basis.get_euler() * 180.0 / PI, recorded, held_at, DayClock.now(), DayClock.is_running(), sun.rotation_degrees, main.day_sun.shown_unix])
+		return ""
+	if _look_of(sun, environment) != scene_look or main.day_sun.environment != environment:
+		_fail("At the recorded moment the Sun's light, the environment and the sky must be main.tscn's daylight exactly: %s, not %s." % [scene_look, _look_of(sun, environment)])
 		return ""
 	_push_key(KEY_ESCAPE)
 	hud.options_button.pressed.emit()
@@ -640,7 +649,11 @@ func _check_time_of_day(main: GameMain) -> String:
 		if not paused or not DayClock.is_running() or absf(DayClock.now() - expected) > 1.0 or not sun.rotation_degrees.is_equal_approx(light) or not sun.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])):
 			_fail("The %s slider at %s must jump the clock to %s and the Sun to its sun at once, still paused (clock %s off, running %s; Sun %s, its sun %s; paused %s)." % [move[0], move[1], move[2], DayClock.now() - expected, DayClock.is_running(), sun.rotation_degrees, light, paused])
 			return ""
-		moves.append("%s %s (%.2f, %.2f%s)" % [move[0], move[2], shown[0], shown[1], ", held" if DaySun.is_held(DayClock.now()) else ""])
+		var look := DayLight.at(shown[0])
+		if not is_equal_approx(sun.light_energy, float(look.sun_energy)) or not sun.light_color.is_equal_approx(look.sun_color) or not is_equal_approx(environment.tonemap_exposure, float(look.exposure)) or not environment.ambient_light_color.is_equal_approx(look.ambient_color) or not is_equal_approx(environment.fog_light_energy, float(look.fog_energy)):
+			_fail("The %s slider at %s must put on the light of the sun's height, %.2f degrees, at once (sun energy %s for %s, exposure %s for %s)." % [move[0], move[2], shown[0], sun.light_energy, look.sun_energy, environment.tonemap_exposure, look.exposure])
+			return ""
+		moves.append("%s %s (%.2f, %.2f, sun energy %.2f%s)" % [move[0], move[2], shown[0], shown[1], sun.light_energy, ", night floor" if DayLight.is_floor(shown[0]) else ""])
 	# Time runs on from the last move with the system clock.
 	var clock := DayClock.now()
 	var system := Time.get_unix_time_from_system()
@@ -653,8 +666,8 @@ func _check_time_of_day(main: GameMain) -> String:
 	var now_running := DayClock.is_running()
 	DayClock.pin()
 	await process_frame
-	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform:
-		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun be main.tscn's (%s)." % [ran, real, real_gap, now_running, sun.rotation_degrees])
+	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform or _look_of(sun, environment) != scene_look:
+		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun and its light be main.tscn's (%s; light %s)." % [ran, real, real_gap, now_running, sun.rotation_degrees, _look_of(sun, environment)])
 		return ""
 	_push_key(KEY_ESCAPE)
 	hud.resume_button.pressed.emit()
@@ -662,7 +675,19 @@ func _check_time_of_day(main: GameMain) -> String:
 	if paused or hud.options_visible():
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
-	return "held at the recorded moment with main.tscn's Sun; the sliders, paused, moved the Sun at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+	return "held at the recorded moment with main.tscn's Sun and daylight; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+
+
+## The light DayLight puts on, as a Sun, an environment and its sky material hold it.
+func _look_of(sun: DirectionalLight3D, environment: Environment) -> Array:
+	var look := [sun.light_color, sun.light_energy, sun.light_specular]
+	for value: String in DayLight.ENVIRONMENT_PROPERTIES:
+		look.append(environment.get(DayLight.ENVIRONMENT_PROPERTIES[value]))
+	var sky := environment.sky.sky_material as ShaderMaterial
+	for value: String in DayLight.SKY_PARAMETERS:
+		var parameter: Variant = sky.get_shader_parameter(DayLight.SKY_PARAMETERS[value])
+		look.append([parameter.r, parameter.g, parameter.b] if parameter is Color else parameter)
+	return look
 
 
 ## Waits, without a frame, until `seconds` of real time have passed since `since_usec`.

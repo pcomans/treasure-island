@@ -55,8 +55,9 @@ const REFLOW_FULL_SHARE := 0.6
 ## The options screen's date: weekday, day, month and year on the island's clock.
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-## Under the time while the sun is held at the edge of daylight (DaySun).
-const NIGHT_NOTE := "Night comes in a later update: the sun waits low."
+## Under the time while the night floor holds (DayLight): night stays a deep
+## twilight for now.
+const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
@@ -440,8 +441,7 @@ func time_controls_shown() -> bool:
 
 ## The options screen's date and time as the clock reads them, in their labels and
 ## on their sliders (left alone while one is dragged), and the night note while the
-## sun is held at the edge of daylight. Only when the minute or a jump changed it,
-## unless `now`.
+## night floor holds. Only when the minute or a jump changed it, unless `now`.
 func _show_time(now := false) -> void:
 	if not _time_controls:
 		return
@@ -459,7 +459,7 @@ func _show_time(now := false) -> void:
 	_showing_time = false
 	time_date_label.text = "%s %d %s %d" % [WEEKDAYS[int(at.weekday)], int(at.day), MONTHS[int(at.month) - 1], int(at.year)]
 	time_label.text = "%02d:%02d %s" % [int(at.hour), int(at.minute), at.zone]
-	time_note.text = NIGHT_NOTE if DaySun.is_held(unix) else ""
+	time_note.text = NIGHT_NOTE if DayLight.is_floor(DaySun.shown_angles(unix)[0]) else ""
 
 
 ## A date (day of the year) or time (minutes into the day) chosen on its slider: the

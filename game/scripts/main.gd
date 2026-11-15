@@ -42,8 +42,9 @@ var shadows: ShadowQuality
 ## The frame rate limit, 3D resolution and frame rate display (the pause menu's
 ## Options), put on as the game starts.
 var graphics: GraphicsSettings
-## The Sun pointed at the time of day (DaySun, DayClock): the real time as the game
-## starts; the recorded moment on the web and for a test or capture driver.
+## The Sun pointed at the time of day, with its light (DaySun, DayClock, DayLight):
+## the real time as the game starts; the recorded moment on the web and for a test
+## or capture driver.
 var day_sun: DaySun
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
@@ -88,7 +89,7 @@ func _ready() -> void:
 	graphics.apply(GraphicsSettings.saved() if use_saved_settings and settings_problem.is_empty() else GraphicsSettings.defaults())
 	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY), graphics.current)
 	hud.graphics_chosen.connect(_on_graphics_chosen)
-	day_sun = DaySun.new($Sun)
+	day_sun = DaySun.new($Sun, ($WorldEnvironment as WorldEnvironment).environment)
 	add_child(day_sun)
 	hud.set_time_controls(not OS.has_feature("web"))
 	# The sound: its takes loaded now, under the loading screen; the master volume
@@ -334,6 +335,13 @@ func _prepare_initial_graphics() -> String:
 		# Draw the player-visible initial scene with those reflections, input still off.
 		await RenderingServer.frame_post_draw
 		STARTUP_MARKS.mark("graphics_initial_view_submitted")
+	# From now on the probes are captured again as the time of day changes the light
+	# while time runs (DaySun; never with the clock held, as a test's, a capture's or
+	# the web's is).
+	var settled: Array[ReflectionProbe] = []
+	for probe: ReflectionProbe in probes:
+		settled.append(probe)
+	day_sun.watch_reflections(settled)
 	# Submission coverage of this tested initial view only: no physical-display,
 	# all-future-variant, driver-idle or general cubemap-completion guarantee.
 	return ""
