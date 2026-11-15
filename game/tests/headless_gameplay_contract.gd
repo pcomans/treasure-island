@@ -350,17 +350,49 @@ func _check_ferry_solidity() -> void:
 
 
 ## Watches a main's startup from before it enters the tree, for
-## _check_loading_lines: each line its loading screen puts up (the text, the
-## frame, whether 3D was off and play had started then), and the frames in which
-## the world finished loading, the player settled and the loading screen went
-## away (with 3D on or not).
+## _check_loading_lines: each line its loading screen puts up (the text, the frame,
+## whether 3D was off, play had started and the loading screen showed, opaque, then,
+## and for a shader line which of its own and the later steps' nodes and of the
+## island's meshes were seen), the frame each step's nodes and the reflection probes
+## were shown in, the island's nodes' own visible flags as it finished loading, and
+## the frames in which it finished loading, the player settled and the loading
+## screen went away (with 3D on or not).
 func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
-	var seen := {"lines": [], "world": -1, "grounded": -1, "hidden": -1, "hidden_3d": false}
+	var seen := {"lines": [], "world": -1, "grounded": -1, "hidden": -1, "hidden_3d": false, "flags": {}, "shown": {}, "probes": [], "watching": false}
 	var hud := main.get_node("Interface/HUD") as GameHUD
 	var panel := hud.get_node("LoadPanel") as Control
 	hud.loading_shown.connect(func(text: String) -> void:
-		seen.lines.append({"text": text, "frame": Engine.get_process_frames(), "no_3d": main.get_viewport().disable_3d, "play": main.is_play_ready()}))
-	world.world_ready.connect(func(_report: Dictionary) -> void: seen.world = Engine.get_process_frames())
+		var style := panel.get_theme_stylebox("panel") as StyleBoxFlat
+		var line := {"text": text, "frame": Engine.get_process_frames(), "no_3d": main.get_viewport().disable_3d, "play": main.is_play_ready(),
+			"covered": panel.is_visible_in_tree() and style != null and is_equal_approx(style.bg_color.a, 1.0)}
+		if text.begins_with("Compiling shaders: "):
+			if not seen.watching:
+				seen.watching = true
+				# The shaders' first line: every step's nodes now hidden; watch them be shown.
+				for step: Dictionary in main.compile_steps:
+					for node: Node3D in step.nodes:
+						node.visibility_changed.connect(func() -> void:
+							if node.is_visible_in_tree() and not seen.shown.has(node):
+								seen.shown[node] = Engine.get_process_frames())
+				for probe: Node in world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
+					seen.probes.append(probe)
+					(probe as Node3D).visibility_changed.connect(func() -> void:
+						if (probe as Node3D).is_visible_in_tree() and not seen.shown.has(probe):
+							seen.shown[probe] = Engine.get_process_frames())
+			var index: int = seen.lines.filter(func(earlier: Dictionary) -> bool: return earlier.text.begins_with("Compiling shaders: ")).size()
+			var later_seen := 0
+			for step_index in range(index, main.compile_steps.size()):
+				for node: Node3D in main.compile_steps[step_index].nodes:
+					later_seen += int(node.is_visible_in_tree())
+			line["later_seen"] = later_seen
+			if index == 0:
+				line["meshes_seen"] = world.find_children("*", "GeometryInstance3D", true, false).filter(func(mesh: Node3D) -> bool: return mesh.is_visible_in_tree()).size()
+		line["probes_seen"] = seen.probes.filter(func(probe: Node3D) -> bool: return probe.is_visible_in_tree()).size()
+		seen.lines.append(line))
+	world.world_ready.connect(func(_report: Dictionary) -> void:
+		seen.world = Engine.get_process_frames()
+		for node: Node in world.find_children("*", "Node3D", true, false):
+			seen.flags[node] = (node as Node3D).visible)
 	(main.get_node("Player") as PlayerController).startup_grounded.connect(func() -> void: seen.grounded = Engine.get_process_frames())
 	panel.visibility_changed.connect(func() -> void:
 		if not panel.visible and seen.hidden < 0:
@@ -369,36 +401,77 @@ func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
 	return seen
 
 
-## The loading screen as a player sees it (main.gd's LOADING_STEPS): one line for
-## each step in order (the island, here built from the generated sources; its
-## setup; the graphics), each put up before its work with a frame between in which
-## it can be drawn (Engine.get_process_frames counts frames: the island finished
-## loading, the player settled and play started each in a later frame than their
-## line went up), no 3D under any of them, 3D on as play starts, and nothing more
-## once play has started. Returns a summary, or "" after failing.
+## The loading screen as a player sees it (main.gd's LOADING_STEPS and
+## COMPILE_GROUPS), each line put up before its work with a frame between in which
+## it can be drawn (Engine.get_process_frames counts frames). In order: the island
+## (here built from the generated sources), a frame before its load; its setup, as
+## it loaded and a frame before the player settled; a line for each step of the
+## shaders (main.compile_steps, from the sky and the player's to the distant
+## shores'), the first with 3D still off and every step's nodes and every mesh of
+## the island hidden, 3D on from the next, each step's nodes shown in the frame
+## after its line went up (as the next line goes up) and no later step's seen
+## before; then the reflections, the probes shown in a later frame. The loading
+## screen covers it all, opaque, and goes as play starts, 3D on, with every node
+## of the island as it was when it loaded and nothing more put up. Returns a
+## summary, or "" after failing.
 func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) -> String:
 	var island: StringName = &"load" if world.uses_prebuilt_world() else &"build"
-	var expected := [GameMain.LOADING_STEPS[island], GameMain.LOADING_STEPS[&"setup"], GameMain.LOADING_STEPS[&"graphics"]]
+	var steps: Array[Dictionary] = main.compile_steps
+	var expected: Array = [GameMain.LOADING_STEPS[island], GameMain.LOADING_STEPS[&"setup"]]
+	expected.append_array(steps.map(func(step: Dictionary) -> String: return step.line))
+	expected.append(GameMain.LOADING_STEPS[&"reflections"])
 	var lines: Array = seen.lines
 	var texts := lines.map(func(line: Dictionary) -> String: return line.text)
-	if texts != expected:
-		_fail("The loading screen must put up %s, in that order, and nothing else; it put up %s." % [expected, texts])
+	var words := steps.map(func(step: Dictionary) -> String: return str(step.line))
+	if texts != expected or steps.size() < 6 or not str(steps[0].line).contains("sky") \
+	or not words.any(func(line: String) -> bool: return line.contains("buildings (1 of ")) or not words.any(func(line: String) -> bool: return line.contains("ground and roads")):
+		_fail("The loading screen must put up the island's, its setup's, a line for each shader step from the sky's (the buildings' counted) and the reflections', in that order and nothing else; it put up %s (steps %s)." % [texts, words])
 		return ""
 	for line: Dictionary in lines:
-		if line.play or not line.no_3d:
-			_fail("Every loading line must go up before play, with 3D still off: %s." % [lines])
+		if line.play or not line.covered:
+			_fail("Every loading line must go up before play, the loading screen showing and opaque: %s." % [line])
 			return ""
 	var frames: Array = lines.map(func(line: Dictionary) -> int: return line.frame)
-	if not (frames[0] < seen.world and frames[1] == seen.world and seen.world < seen.grounded \
-	and frames[2] >= seen.grounded and seen.hidden > frames[2] and seen.hidden_3d):
-		_fail("Each loading line must go up before its step's work, a frame ahead of it: lines at frames %s (%s), the island loaded at %d, the player settled at %d, the loading screen gone at %d with 3D %s." % [frames, texts, seen.world, seen.grounded, seen.hidden, "on" if seen.hidden_3d else "off"])
+	var first := 2
+	if not (frames[0] < seen.world and frames[1] == seen.world and seen.world < seen.grounded and frames[first] >= seen.grounded \
+	and lines[0].no_3d and lines[1].no_3d and lines[first].no_3d and not lines[first + 1].no_3d and frames[first + 1] > frames[first]):
+		_fail("The island's and the setup's lines must each go up a frame before their work, and 3D come on a frame after the shaders' first line: lines at frames %s (%s), 3D off at each %s, the island loaded at %d, the player settled at %d." % [frames, texts, lines.map(func(line: Dictionary) -> bool: return line.no_3d), seen.world, seen.grounded])
+		return ""
+	if int(lines[first].meshes_seen) != 0 or int(lines[first].later_seen) != 0:
+		_fail("As the shaders' first line goes up nothing of the island may be seen: %d meshes and %d step nodes showing." % [lines[first].meshes_seen, lines[first].later_seen])
+		return ""
+	for index in range(1, steps.size()):
+		var line: Dictionary = lines[first + index]
+		var next_frame: int = frames[first + index + 1]
+		if int(line.later_seen) != 0 or int(line.probes_seen) != 0:
+			_fail("As %s goes up, nothing of it or of a later step may be seen yet (%d of their nodes, %d probes showing)." % [line.text, line.later_seen, line.probes_seen])
+			return ""
+		for node: Node3D in steps[index].nodes:
+			# A node the island loaded hidden stays hidden (checked at play).
+			if not seen.flags.get(node, true):
+				continue
+			if not seen.shown.has(node) or seen.shown[node] != next_frame or next_frame <= line.frame:
+				_fail("%s's nodes must be shown in the frame after its line, as the next goes up (line at %d, next line at %d, %s shown at %s)." % [line.text, line.frame, next_frame, node.name, seen.shown.get(node, "never")])
+				return ""
+	var reflections: Dictionary = lines[-1]
+	for probe: Node3D in seen.probes:
+		if int(reflections.probes_seen) != 0 or not seen.shown.has(probe) or seen.shown[probe] <= reflections.frame:
+			_fail("The reflection probes must stay hidden until the reflections' line is up, and be shown a frame later (probes showing then %d, %s shown at %s)." % [reflections.probes_seen, probe.name, seen.shown.get(probe, "never")])
+			return ""
+	if seen.probes.is_empty() or not (seen.hidden > reflections.frame and seen.hidden_3d):
+		_fail("The loading screen must go after the reflections' line, with 3D on (probes %d, line at %d, screen gone at %d, 3D %s)." % [seen.probes.size(), reflections.frame, seen.hidden, "on" if seen.hidden_3d else "off"])
 		return ""
 	for _frame in 3:
 		await process_frame
-	if seen.lines.size() != expected.size() or main.hud.load_panel.visible or main.get_viewport().disable_3d:
-		_fail("Once play has started the loading screen must be gone for good, with 3D on (lines %s, loading screen shown %s, 3D off %s)." % [seen.lines.size(), main.hud.load_panel.visible, main.get_viewport().disable_3d])
+	var changed: Array[String] = []
+	for node: Variant in seen.flags:
+		if is_instance_valid(node) and (node as Node3D).visible != seen.flags[node]:
+			changed.append(str((node as Node).get_path()))
+	if seen.lines.size() != expected.size() or main.hud.load_panel.visible or main.get_viewport().disable_3d or not changed.is_empty() \
+	or not (main.get_node("Vehicles") as Node3D).visible:
+		_fail("Once play has started the loading screen must be gone for good, with 3D on and every node shown as it was (lines %s, loading screen shown %s, 3D off %s, changed %s)." % [seen.lines.size(), main.hud.load_panel.visible, main.get_viewport().disable_3d, changed.slice(0, 5)])
 		return ""
-	return "%s, each a frame before its work, 3D off until play" % ", ".join(texts)
+	return "%d lines in order (%s ... %s), each a frame before its work, the island unseen behind the opaque screen until play, %d shader steps, every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4)), texts[-1], steps.size()]
 
 
 ## The controls screen opened on the loading screen (pressed as the world loads)

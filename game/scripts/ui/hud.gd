@@ -270,15 +270,12 @@ func bind_evidence(evidence: RuntimeEvidence) -> void:
 
 
 ## The loading screen's line: the step under way (main.gd's LOADING_STEPS). The
-## screen itself shows from the start (hud.tscn) until play (show_world_ready); a
-## new line only changes its text.
+## screen itself shows from the start (hud.tscn) until play (show_world_ready),
+## opaque, so nothing of the island is seen before play; a new line only changes
+## its text.
 func show_loading(message: String) -> void:
 	load_text.text = message
 	loading_shown.emit(message)
-
-
-func update_load_progress(loaded: int, total: int) -> void:
-	load_text.text = "Building complete world… %d / %d" % [loaded, total]
 
 
 ## Play starts. A controls screen opened from the loading screen stays open

@@ -20,26 +20,62 @@ const GAMEPLAY_ACTIONS: Array[StringName] = [&"move_forward", &"move_back", &"mo
 const POINTER_FREE_LINE := "This browser won't let the mouse turn the view: Esc, then Resume, asks again."
 const POINTER_FREE_LINE_S := 8.0
 ## The loading screen's lines, one for each step of startup, in the order they show
-## (_show_loading_step): the island loaded (the baked world: the web build and the
-## desktop exports) or built (from the generated sources: development and tests);
-## the island set up for play (the physics' first steps with the whole island, the
-## player settling on the ground, the cars, the grass, on the web the sounds handed
-## to the browser); then the graphics (the island's first frames, which prepare its
-## shaders and the reflections). Each goes up, and gets a frame to be seen, before
-## its step's work starts, and stays until the next; play takes the screen away. On
-## the web the page shows the download and the engine's start before them, and
-## these lines on its own loading screen (game/web/shell.html).
+## (_show_loading_step), each naming the work that runs while it shows: the island
+## loaded (the baked world: the web build and the desktop exports) or built (from
+## the generated sources: development and tests); the island set up for play (the
+## physics' first steps with the whole island, the player settling on the ground,
+## the cars, the grass, on the web the sounds handed to the browser); the shaders
+## compiled a group of the world at a time (COMPILE_GROUPS); then the reflections
+## rendered. Each goes up, and gets a frame to be seen, before its step's work
+## starts, and stays until the next; play takes the screen away. On the web the page
+## shows the download and the engine's start before them, and these lines on its own
+## loading screen (game/web/shell.html).
 const LOADING_STEPS := {
 	&"load": "Loading the island…",
 	&"build": "Building the island…",
 	&"setup": "Setting up the island…",
-	&"graphics": "Preparing graphics…",
+	&"reflections": "Rendering reflections…",
 }
 ## The start of each loading-step line printed for the web page (game/web/shell.html).
 const LOADING_STEP_PRINT := "LOADING_STEP "
+## The shaders compiled a group of the world at a time (owner, 2026-11-15: the one
+## graphics step was "too monolithic", and its line must say what runs). The
+## island's first frame compiles the shader of everything in view, a quarter of a
+## minute on the web. So every group starts hidden behind the loading screen and
+## shows one frame after another, and the frame that first draws a group compiles
+## its shaders under its own line. In order: each group's words on the line, the
+## nodes (paths from main) it shows, and over how many frames ("batches", counted on
+## the line) the children of its one node show, nearest the camera first. The first
+## group shows nothing: its frame is the first with 3D on, the sky, the light, the
+## player and the screen's effects. A missing node is skipped (the grass and the
+## cars' near detail are desktop only), and a group with none is left out.
+const COMPILE_GROUPS: Array[Dictionary] = [
+	{"words": "sky and player", "paths": []},
+	{"words": "water and shore", "paths": ["WorldRoot/ContextWorld/Water", "WorldRoot/ContextWorld/Shoreline"]},
+	{"words": "ground and roads", "paths": ["WorldRoot/PlayableWorld/GroundAndAreas", "WorldRoot/PlayableWorld/RoadsAndPaths"]},
+	{"words": "buildings", "paths": ["WorldRoot/PlayableWorld/Buildings"], "batches": 12},
+	{"words": "trees and plants", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Vegetation"], "batches": 3},
+	{"words": "grass", "paths": ["GroundDressing"]},
+	{"words": "street furniture and fences", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Furniture", "WorldRoot/PlayableWorld/StreetDetail/Fences"]},
+	{"words": "parked cars and street clutter", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Clutter", "Vehicles"]},
+	{"words": "ferry", "paths": ["WorldRoot/ContextWorld/FerryTerminal"]},
+	{"words": "Yerba Buena Island", "paths": ["WorldRoot/ContextWorld/YerbaBuenaIsland", "WorldRoot/ContextWorld/BoundaryAttachedVisuals"]},
+	{"words": "Bay Bridge", "paths": ["WorldRoot/ContextWorld/BayBridge"]},
+	{"words": "distant shores", "paths": ["WorldRoot/ContextWorld/BayAreaHorizon"]},
+]
 
 var _world_ready := false
 var _startup_failed := false
+## This load's shader steps (_compile_plan), each {"line": its words on the loading
+## screen, "nodes": the Node3Ds its frame shows}, in order; set as they begin.
+var compile_steps: Array[Dictionary] = []
+## The nodes the loading screen keeps hidden until their step, each with its own
+## visible flag, which _show_hidden puts back (and _end_loading_view, any left).
+var _loading_hidden := {}
+## The viewport whose 3D drawing the loading screen turns off until the shaders'
+## step, and the flag it had (_end_loading_view puts it back).
+var _loading_viewport: Viewport
+var _loading_viewport_3d_off := false
 var _touch_controls: TouchControls
 ## The grass round the camera (ground_dressing.gd), null where it isn't drawn.
 var ground_dressing: GROUND_DRESSING
@@ -160,13 +196,14 @@ func _ready() -> void:
 	if OS.has_feature("web") and STARTUP_MARKS.enabled():
 		_web_debug_callback = JavaScriptBridge.create_callback(_publish_web_state)
 		JavaScriptBridge.get_interface("window").__tiReadback = _web_debug_callback
-	# Until the graphics step the view draws no 3D, only the loading screen: so the
+	# Until the shaders' step the view draws no 3D, only the loading screen: so the
 	# frames that show each step's line never draw the island, whose first frame
-	# prepares its shaders for seconds (the graphics step turns 3D back on).
-	get_viewport().disable_3d = true
+	# compiles its shaders for seconds (_compile_by_group turns 3D back on).
+	_loading_viewport = get_viewport()
+	_loading_viewport_3d_off = _loading_viewport.disable_3d
+	_loading_viewport.disable_3d = true
 	_show_loading_step(&"load" if world_root.uses_prebuilt_world() else &"build")
 	hud.bind_evidence(world_root.get_runtime_evidence())
-	world_root.load_progress.connect(hud.update_load_progress)
 	world_root.world_ready.connect(_on_world_ready)
 	world_root.world_failed.connect(_on_world_failed)
 	hud.resume_requested.connect(_resume_game)
@@ -261,13 +298,139 @@ func _load_world_after_paint() -> void:
 		world_root.load_world()
 
 
-## Puts up a loading step's line (LOADING_STEPS) on the loading screen, and prints
-## it for the web page, which shows it on its own loading screen over the game's.
+## Puts up a loading step's line (LOADING_STEPS).
 func _show_loading_step(step: StringName) -> void:
-	var text: String = LOADING_STEPS[step]
+	_show_loading_line(LOADING_STEPS[step])
+
+
+## Puts up a line on the loading screen, and prints it for the web page, which shows
+## it on its own loading screen over the game's.
+func _show_loading_line(text: String) -> void:
 	hud.show_loading(text)
-	STARTUP_MARKS.mark("step_" + step)
+	STARTUP_MARKS.mark("line " + text)
 	print(LOADING_STEP_PRINT + text)
+
+
+## The shaders' steps for the world as loaded (COMPILE_GROUPS), in order, as
+## {"line": the words on the loading screen, "nodes": the Node3Ds its frame shows}.
+func _compile_plan() -> Array[Dictionary]:
+	var plan: Array[Dictionary] = []
+	var eye := player.get_camera().global_position
+	for group: Dictionary in COMPILE_GROUPS:
+		var nodes: Array[Node3D] = []
+		for path: String in group.paths:
+			var node := get_node_or_null(path) as Node3D
+			if node != null:
+				nodes.append(node)
+		if nodes.is_empty() and not (group.paths as Array).is_empty():
+			continue
+		var batches := int(group.get("batches", 1))
+		var parent: Node3D = nodes[0] if nodes.size() == 1 else null
+		# Spread over the children where the one node holds a single wrapper.
+		while parent != null and parent.get_child_count() == 1 and parent.get_child(0) is Node3D:
+			parent = parent.get_child(0) as Node3D
+		var children: Array[Node3D] = []
+		if parent != null and batches > 1:
+			for child: Node in parent.get_children():
+				if child is Node3D:
+					children.append(child as Node3D)
+		var count := mini(batches, children.size())
+		if count <= 1:
+			plan.append({"line": "Compiling shaders: %s…" % group.words, "nodes": nodes})
+			continue
+		var away := {}
+		for child: Node3D in children:
+			away[child] = _centre_of(child).distance_squared_to(eye)
+		children.sort_custom(func(a: Node3D, b: Node3D) -> bool: return away[a] < away[b])
+		for index in count:
+			var part: Array[Node3D] = []
+			part.assign(children.slice(index * children.size() / count, (index + 1) * children.size() / count))
+			plan.append({"line": "Compiling shaders: %s (%d of %d)…" % [group.words, index + 1, count], "nodes": part})
+	return plan
+
+
+## Where a node's drawing is: the middle of its first mesh (or of itself), else its origin.
+static func _centre_of(node: Node3D) -> Vector3:
+	var geometry := node as GeometryInstance3D
+	if geometry == null:
+		var found := node.find_children("*", "GeometryInstance3D", true, false)
+		if found.is_empty():
+			return node.global_position
+		geometry = found[0] as GeometryInstance3D
+	return geometry.global_transform * geometry.get_aabb().get_center()
+
+
+## The reflection probes startup renders before play: Mersea's two.
+func _reflection_probes() -> Array[Node]:
+	return world_root.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false)
+
+
+## The shaders compiled a group of the world at a time (COMPILE_GROUPS), behind the
+## loading screen, which covers the view until play; then the reflection probes
+## shown for their rendering. Hides every group's nodes and the probes, puts up the
+## first group's line and, a frame later, turns 3D on; then each frame shows one
+## group and puts up the next line. So the frame that first draws a group, and
+## compiles its shaders, does so under that group's line, put up a frame before.
+## Returns false if startup stopped meanwhile.
+func _compile_by_group() -> bool:
+	compile_steps = _compile_plan()
+	for step: Dictionary in compile_steps:
+		for node: Node3D in step.nodes:
+			_hide_until_shown(node)
+	for probe: Node in _reflection_probes():
+		_hide_until_shown(probe as Node3D)
+	_show_loading_line(compile_steps[0].line)
+	await _paint_loading_step()
+	if not _loading_goes_on():
+		return false
+	_loading_viewport.disable_3d = _loading_viewport_3d_off
+	STARTUP_MARKS.mark("world_ready")
+	print("WORLD_READY")
+	if STARTUP_MARKS.enabled():
+		_mark_first_submitted_frame()
+	for index in compile_steps.size():
+		for node: Node3D in compile_steps[index].nodes:
+			_show_hidden(node)
+		_show_loading_line(compile_steps[index + 1].line if index + 1 < compile_steps.size() else LOADING_STEPS[&"reflections"])
+		# Called in an idle step: this frame draws the group shown, then the next comes.
+		await get_tree().process_frame
+		if not _loading_goes_on():
+			return false
+	for probe: Node in _reflection_probes():
+		_show_hidden(probe as Node3D)
+	return true
+
+
+## Whether startup is still on its way to play.
+func _loading_goes_on() -> bool:
+	return is_inside_tree() and not _startup_failed and world_root.is_world_validated()
+
+
+## Hides a node until its step shows it (_show_hidden), keeping its own visible flag.
+func _hide_until_shown(node: Node3D) -> void:
+	if not _loading_hidden.has(node):
+		_loading_hidden[node] = node.visible
+		node.visible = false
+
+
+## Shows a node the loading screen hid, as it was.
+func _show_hidden(node: Node3D) -> void:
+	if _loading_hidden.has(node):
+		if is_instance_valid(node):
+			node.visible = _loading_hidden[node]
+		_loading_hidden.erase(node)
+
+
+## Puts back all the loading screen changed in the view, as startup ends whichever
+## way (play, a failure, main leaving the tree): every node it hid, and 3D drawing.
+func _end_loading_view() -> void:
+	for node: Variant in _loading_hidden.keys():
+		if is_instance_valid(node):
+			(node as Node3D).visible = _loading_hidden[node]
+	_loading_hidden.clear()
+	if is_instance_valid(_loading_viewport):
+		_loading_viewport.disable_3d = _loading_viewport_3d_off
+		_loading_viewport = null
 
 
 ## Returns once the loading line just put up has had a frame to be seen, before
@@ -328,24 +491,18 @@ func _on_world_ready(_report: Dictionary) -> void:
 	# ditch's drawn water is read back now, not at the first footstep near it.
 	sound.prepare_for_play()
 	StandingWater.prepare()
-	# The island's first frame draws for seconds (on the web, a quarter of a minute)
-	# while it prepares the shaders of everything in view: its line goes up on a
-	# frame that still draws only the loading screen, then 3D comes back on.
-	_show_loading_step(&"graphics")
-	await _paint_loading_step()
-	if not is_inside_tree() or _startup_failed or not world_root.is_world_validated():
+	# The island's first frame would compile the shaders of everything in view for
+	# seconds (on the web, a quarter of a minute): a group at a time instead, each
+	# under its own line, with 3D back on; then the reflections.
+	if not await _compile_by_group():
 		return
-	get_viewport().disable_3d = false
-	STARTUP_MARKS.mark("world_ready")
-	print("WORLD_READY")
-	if STARTUP_MARKS.enabled():
-		_mark_first_submitted_frame()
 	var graphics_error := await _prepare_initial_graphics()
 	if not graphics_error.is_empty():
 		_on_world_failed("graphics_preparation", graphics_error, [])
 		return
-	if not is_inside_tree() or _startup_failed or not world_root.is_world_validated():
+	if not _loading_goes_on():
 		return
+	_end_loading_view()
 	_world_ready = true
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
@@ -391,7 +548,7 @@ func _prepare_initial_graphics() -> String:
 	# Mersea's two probes are the only startup reflection producers, and shared startup
 	# must not depend on one building: without them there is nothing to settle, and a
 	# probe whose images failed keeps updating every frame (Mersea's own fallback).
-	var probes := world_root.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false)
+	var probes := _reflection_probes()
 	if probes.is_empty():
 		STARTUP_MARKS.mark("graphics_no_reflection_probe")
 	for probe: ReflectionProbe in probes:
@@ -455,6 +612,7 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 	_startup_failed = true
 	_web_capture_pending = false
 	_world_ready = false
+	_end_loading_view()
 	if _touch_controls != null:
 		_touch_controls.set_gameplay_active(false)
 	player.hide()
@@ -776,6 +934,8 @@ class PauseClock extends Node:
 
 
 func _exit_tree() -> void:
+	# A main freed mid-load gives the shared viewport its 3D back, and its nodes their looks.
+	_end_loading_view()
 	if _web_debug_callback != null:
 		JavaScriptBridge.eval("delete window.__tiReadback; delete window.__tiState")
 	_web_capture_pending = false

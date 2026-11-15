@@ -1035,9 +1035,13 @@ static func _settle_reflection(probe: ReflectionProbe, material_root: Node = nul
 		await probe.get_tree().process_frame
 	if not is_instance_valid(probe) or not probe.is_inside_tree():return
 	print("MERSEA_REFLECTION_IMAGES_AVAILABLE probe=%s rendered=%d textures=%d" % [probe.name,Engine.get_frames_drawn(),textures.size()])
-	for frame in range(8):
+	# Eight frames that draw the probe: frames while startup's loading screen keeps it
+	# hidden (main.gd's _compile_by_group) don't count.
+	var settled := 0
+	while settled < 8:
 		await RenderingServer.frame_post_draw
 		if not is_instance_valid(probe) or not probe.is_inside_tree():return
+		if probe.is_visible_in_tree():settled += 1
 	probe.update_mode=ReflectionProbe.UPDATE_ONCE
 	probe.set_meta("startup_reflection", "final_mode_set")
 	print("MERSEA_REFLECTION_UPDATE_ONCE probe=%s rendered=%d" % [probe.name,Engine.get_frames_drawn()])
