@@ -898,31 +898,39 @@ static func _covers(ctx: Ctx, block: Block, i: int) -> Array:
 
 ## A block with open sides (an `open` face scheme: posts, no wall) hides the walls it
 ## lies against like any block, unless it is open_sided, a pergola or a flat deck. A
-## walled neighbour then has a gap in its wall that the posts do not close, and as its
-## other walls are single-sided, the building is see-through there (899 13th St's
-## carport, w291196367, 2026-11-15). Such a build fails: mark the open block
-## open_sided or give it walls.
+## neighbour's edge whose own scheme is walled then has a gap that the posts do not
+## close, and as the other walls are single-sided, the building is see-through there
+## (899 13th St's carport, w291196367, 2026-11-15). Such a build fails: mark the open
+## block open_sided or give it walls.
 static func _check_open_covers(ctx: Ctx) -> void:
 	var schemes: Dictionary = ctx.cfg.get("schemes", {})
 	for block: Block in ctx.blocks:
-		if not _names_scheme(block, schemes, false):
-			continue
 		for i in block.poly.size():
+			# The scheme this edge's wall takes where it reaches the ground.
+			var scheme: Variant = schemes.get(_scheme_name(block, i, str(_face_key(ctx, block, i, false)[0])))
+			if not scheme is Dictionary or (scheme as Dictionary).has("open"):
+				continue
 			for cover: Array in _covers(ctx, block, i):
 				var other: Block = cover[4]
-				if _names_scheme(other, schemes, true) and not (other.form == "flat" and other.cfg.has("deck")):
+				if _has_open_side(other, schemes) and not _has_deck(other):
 					ctx.errors.append("block %s has open sides but hides the wall of block %s without one of its own: mark it open_sided or give it walls" % [other.id, block.id])
 					return
 
 
-## Whether a block's faces name an open scheme (want_open) or a walled one (not want_open).
-static func _names_scheme(block: Block, schemes: Dictionary, want_open: bool) -> bool:
+## Whether any of a block's faces names an open (posts) scheme.
+static func _has_open_side(block: Block, schemes: Dictionary) -> bool:
 	var faces: Dictionary = block.cfg.get("faces", {})
 	for name: Variant in faces.values():
 		var scheme: Variant = schemes.get(str(name))
-		if scheme is Dictionary and (scheme as Dictionary).has("open") == want_open:
+		if scheme is Dictionary and (scheme as Dictionary).has("open"):
 			return true
 	return false
+
+
+## Whether a block is a flat deck: a non-empty "deck" on a flat block, whose slab hides a
+## neighbour's wall only from its underside up (_cover_floor).
+static func _has_deck(block: Block) -> bool:
+	return block.form == "flat" and not (block.cfg.get("deck", {}) as Dictionary).is_empty()
 
 
 ## Station intervals of block edge i that rise above neighbours or the ground.
@@ -970,19 +978,49 @@ static func _spans(ctx: Ctx, block: Block, i: int) -> Array:
 static func _cover_floor(block: Block) -> float:
 	if block.stacked:
 		return block.floors[0]
-	var deck: Dictionary = block.cfg.get("deck", {})
-	if block.form != "flat" or deck.is_empty():
+	if not _has_deck(block):
 		return -INF
-	return block.roof_y - float(deck.get("t", 0.3))
+	return block.roof_y - float((block.cfg.deck as Dictionary).get("t", 0.3))
+
+
+## The faces key of block edge i with its footprint edge: ["e<k>", k] where the edge
+## lies along footprint edge k (within FACE_BAND_M, facing the same way), else
+## ["court", -1] for a face only above neighbouring roofs (raised_only) or
+## ["return", -1]. Opt-in "face_key": "overlap": an edge keys a face only where the
+## face also lies alongside that edge, not merely within FACE_BAND_M of its infinite
+## line, so the parallel jogs of a stepped frontage keep their own keys and stations.
+static func _face_key(ctx: Ctx, block: Block, i: int, raised_only: bool) -> Array:
+	var a := block.poly[i]
+	var b := block.poly[(i + 1) % block.poly.size()]
+	var n := _outward(block.poly, i)
+	var overlap := str(ctx.cfg.get("face_key", "line")) == "overlap"
+	for k in ctx.edges.size():
+		var edge: Edge = ctx.edges[k]
+		if n.dot(edge.n) < FACE_COS:
+			continue
+		var da := edge.depth(a)
+		var db := edge.depth(b)
+		if da < -0.01 or db < -0.01 or da > FACE_BAND_M or db > FACE_BAND_M:
+			continue
+		if overlap:
+			var sa := edge.station(a)
+			var sb := edge.station(b)
+			if maxf(sa, sb) < 0.01 or minf(sa, sb) > edge.length - 0.01:
+				continue
+		return ["e%d" % k, k]
+	return ["court" if raised_only else "return", -1]
+
+
+## The scheme name block edge i takes for faces key `key`: its opt-in "p<i>" entry
+## (one outline edge, for the facets of a curved plan), else the key's, else "default".
+static func _scheme_name(block: Block, i: int, key: String) -> String:
+	var faces_cfg: Dictionary = block.cfg.get("faces", {})
+	return str(faces_cfg.get("p%d" % i, faces_cfg.get(key, faces_cfg.get("default", ""))))
 
 
 static func _block_faces(ctx: Ctx, block: Block) -> void:
 	var faces_cfg: Dictionary = block.cfg.get("faces", {})
 	var schemes: Dictionary = ctx.cfg.get("schemes", {})
-	# Opt-in "face_key": "overlap": an edge keys a face only where the face also lies
-	# alongside that edge, not merely within FACE_BAND_M of its infinite line, so the
-	# parallel jogs of a stepped frontage keep their own keys and stations.
-	var overlap := str(ctx.cfg.get("face_key", "line")) == "overlap"
 	for i in block.poly.size():
 		var spans := _spans(ctx, block, i)
 		if spans.is_empty():
@@ -998,31 +1036,14 @@ static func _block_faces(ctx: Ctx, block: Block) -> void:
 		face.poly_index = i
 		face.index = ctx.faces
 		ctx.faces += 1
-		face.key = "return"
 		var all_raised := true
 		for span: Dictionary in spans:
 			if bool(span.ground):
 				all_raised = false
-		if all_raised:
-			face.key = "court"
-		for k in ctx.edges.size():
-			var edge: Edge = ctx.edges[k]
-			if face.n.dot(edge.n) < FACE_COS:
-				continue
-			var da := edge.depth(face.a)
-			var db := edge.depth(b)
-			if da < -0.01 or db < -0.01 or da > FACE_BAND_M or db > FACE_BAND_M:
-				continue
-			if overlap:
-				var sa := edge.station(face.a)
-				var sb := edge.station(b)
-				if maxf(sa, sb) < 0.01 or minf(sa, sb) > edge.length - 0.01:
-					continue
-			face.key = "e%d" % k
-			face.edge = k
-			break
-		# Opt-in "p<i>" keys name one outline edge, for facets of a curved plan.
-		var scheme_name := str(faces_cfg.get("p%d" % i, faces_cfg.get(face.key, faces_cfg.get("default", ""))))
+		var keyed := _face_key(ctx, block, i, all_raised)
+		face.key = keyed[0]
+		face.edge = keyed[1]
+		var scheme_name := _scheme_name(block, i, face.key)
 		if not schemes.has(scheme_name):
 			ctx.errors.append("block %s face %s has no scheme" % [block.id, face.key])
 			return

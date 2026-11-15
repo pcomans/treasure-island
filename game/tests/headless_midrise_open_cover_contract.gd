@@ -4,8 +4,10 @@ extends SceneTree
 ## hand-built 20 x 10 m footprint split into a hall and a porch: a porch with open
 ## (posts) sides that is not open_sided, a pergola or a flat deck hides the hall's wall
 ## with only posts in its place, which left 899 13th St see-through (2026-11-15), so
-## its build fails, flat or pitched, and with one walled side too. Each exemption, a
-## walled porch and two open blocks side by side still build. The cases run the
+## its build fails, flat or pitched, with one walled side too, and with an empty deck,
+## which is no deck. Each exemption, a walled porch, two open blocks side by side and
+## an open hall whose only wall is on its far side still build: what counts is the
+## scheme of the hidden edge itself. The cases run the
 ## producer's own build steps (_build_all), so an expected failure is read from its
 ## error list instead of printed as an engine error, which the suite counts as a
 ## failure; the cases that should build also go through build() and must be valid.
@@ -24,7 +26,7 @@ func _run() -> void:
 	for failure: String in failures:
 		print("FAIL: mid-rise open cover: ", failure)
 	if failures.is_empty():
-		print("PASS: mid-rise open cover: an open porch that hides a walled block's wall fails the build; open_sided, pergola, flat deck, walled and all-open neighbours build")
+		print("PASS: mid-rise open cover: an open porch that hides a walled edge fails the build, an empty deck included; open_sided, pergola, flat deck, walled and open neighbours and an open hidden edge build")
 	quit(0 if failures.is_empty() else 1)
 
 
@@ -38,6 +40,8 @@ static func run_checks() -> Array:
 	_expect_fails(failures, "pitched open porch", _config(gable_hall, mono_porch, "posts"))
 	# One walled side does not close the hall's wall behind the posts.
 	_expect_fails(failures, "porch with one walled side", _config(flat_hall, {"faces": {"e2": "wall", "default": "posts"}}, "posts"))
+	# An empty deck is no deck (_cover_floor): the porch still hides the hall's wall from the ground.
+	_expect_fails(failures, "flat porch with an empty deck", _config(flat_hall, {"deck": {}}, "posts"))
 	# Exemptions: open_sided and pergola leave the hall's wall standing; a flat deck hides
 	# only its slab band, which its fascia closes.
 	_expect_builds(failures, "open_sided porch", _config(flat_hall, {"open_sided": true}, "posts"))
@@ -47,6 +51,8 @@ static func run_checks() -> Array:
 	# A walled porch, and two open blocks with no wall between them to lose.
 	_expect_builds(failures, "walled porch", _config(flat_hall, {}, "wall"))
 	_expect_builds(failures, "open hall and porch", _config({"faces": {"default": "posts"}}, {}, "posts"))
+	# The hidden edge's own scheme counts: a hall walled only on its far side (e0) loses no wall.
+	_expect_builds(failures, "open porch beside an open hall edge", _config({"faces": {"e0": "wall", "default": "posts"}}, {}, "posts"))
 	return failures
 
 
