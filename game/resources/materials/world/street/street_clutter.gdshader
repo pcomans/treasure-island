@@ -29,6 +29,12 @@ uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
 // A hero wheel's own mesh, its axle along X through the origin: the tyre gets
 // its tread and sidewall detail.
 uniform bool wheel_local = false;
+// A car's day-running and tail lamps: a parked car's are lit by day and go out as
+// the sun sets (parked_lamps, 1 by day to 0, game/scripts/world/day_light.gd); the
+// car being driven is drawn with a copy of this material with lamps_lit on, so its
+// own stay lit (drivable_car.gd set_lamps_lit).
+global uniform float parked_lamps;
+uniform bool lamps_lit = false;
 
 // Parts (tools/lib/street-car-parts.mjs CAR_PARTS): paint, roof, glass, tire,
 // rim, hub, trim, chrome, head_lamp, tail_lamp, plate, under, grille, orange,
@@ -250,6 +256,9 @@ void fragment() {
 		emission = vec3(1.0, 0.04, 0.02) * 1.3;
 	} else if (p == P_SCREEN) {
 		emission = vec3(0.05, 0.09, 0.14);
+	}
+	if ((p == P_DRL || p == P_LAMP_RED) && !lamps_lit && parked_lamps < 1.0) {
+		emission *= parked_lamps;
 	}
 	ALBEDO = albedo;
 	ROUGHNESS = roughness;

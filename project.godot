@@ -150,6 +150,10 @@ horizon_haze={
 "type": "vec3",
 "value": Vector3(0.5070785, 0.6038273, 0.7105665)
 }
+parked_lamps={
+"type": "float",
+"value": 1.0
+}
 
 [treasure_island]
 

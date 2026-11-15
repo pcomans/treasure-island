@@ -12,7 +12,10 @@ extends Node
 ## and from DayLight.FLOOR_ELEVATION_DEG down the night floor holds until dawn
 ## comes back up past it. Under the horizon the light still points at the sun,
 ## with no strength: the sky's twilight glow and the clouds' afterglow are drawn
-## toward it.
+## toward it. With no strength the Sun lights the sky alone (sky_mode SKY_ONLY), so
+## its shadow splits stop rendering at night; ShadowQuality still owns whether it
+## casts them. night, the look's darkness, is kept for the lights that follow it
+## (NightLights).
 ##
 ## While time runs the sun moves in steps (step_seconds), not every frame: any
 ## change of the light or of the sky's material makes Godot redraw the sky's
@@ -69,6 +72,8 @@ var sky: ShaderMaterial
 var shown_unix := NAN
 ## The sun's height (degrees) whose look is on now.
 var lit_elevation := NAN
+## How dark that look is (DayLight's night: 0 by day, 1 at night).
+var night := 0.0
 var _revision := -1
 ## Seconds until the next step, for the sun as drawn now.
 var _step := STEP_S
@@ -126,8 +131,12 @@ func light(elevation_deg: float) -> void:
 		return
 	lit_elevation = elevation_deg
 	var look := DayLight.at(elevation_deg)
+	night = float(look.night)
 	for value: String in DayLight.SUN_PROPERTIES:
 		_put(sun, DayLight.SUN_PROPERTIES[value], look[value])
+	var mode := sky_mode_for(float(look.sun_energy))
+	if sun.sky_mode != mode:
+		sun.sky_mode = mode
 	if environment != null:
 		for value: String in DayLight.ENVIRONMENT_PROPERTIES:
 			_put(environment, DayLight.ENVIRONMENT_PROPERTIES[value], look[value])
@@ -166,6 +175,12 @@ func _capture_reflections() -> void:
 	captured_elevation = lit_elevation
 	_captured_msec = Time.get_ticks_msec()
 	_capture_due = false
+
+
+## The Sun's sky mode for its strength: the sky alone with none (no shadow splits
+## drawn, the sky's light direction kept), light and sky otherwise (main.tscn's).
+static func sky_mode_for(energy: float) -> DirectionalLight3D.SkyMode:
+	return DirectionalLight3D.SKY_MODE_SKY_ONLY if energy <= 0.0 else DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY
 
 
 ## The global uniforms to the RenderingServer again, after a test's stand-in.

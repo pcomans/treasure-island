@@ -47,9 +47,6 @@ const REFLOW_FULL_SHARE := 0.6
 ## The options screen's date: weekday, day, month and year on the island's clock.
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-## Under the time while the night floor holds (DayLight): night stays a deep
-## twilight for now.
-const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
@@ -78,7 +75,7 @@ const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 @onready var shadow_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/ShadowNote
 ## The time of day (DayClock): the island's date and time, each on a slider that
 ## jumps there as it moves (time runs on from there), and Now, back to the real
-## time; the note says when night would be. Desktop only for now (set_time_controls).
+## time. Desktop only for now (set_time_controls).
 @onready var time_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeading
 @onready var time_date_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow
 @onready var time_date_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateLabel
@@ -87,7 +84,6 @@ const NIGHT_NOTE := "Full night, with a flashlight, comes in a later update."
 @onready var time_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeLabel
 @onready var time_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider
 @onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
-@onready var time_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeNote
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
@@ -357,7 +353,7 @@ func sound_volume_share() -> float:
 ## the recorded moment for now (owner, 2026-11-14: "Mac first, web later").
 func set_time_controls(shown: bool) -> void:
 	_time_controls = shown
-	for part: Control in [time_heading, time_date_row, time_row, time_note]:
+	for part: Control in [time_heading, time_date_row, time_row]:
 		part.visible = shown
 	_show_time(true)
 
@@ -367,8 +363,8 @@ func time_controls_shown() -> bool:
 
 
 ## The options screen's date and time as the clock reads them, in their labels and
-## on their sliders (left alone while one is dragged), and the night note while the
-## night floor holds. Only when the minute or a jump changed it, unless `now`.
+## on their sliders (left alone while one is dragged). Only when the minute or a jump
+## changed it, unless `now`.
 func _show_time(now := false) -> void:
 	if not _time_controls:
 		return
@@ -386,7 +382,6 @@ func _show_time(now := false) -> void:
 	_showing_time = false
 	time_date_label.text = "%s %d %s %d" % [WEEKDAYS[int(at.weekday)], int(at.day), MONTHS[int(at.month) - 1], int(at.year)]
 	time_label.text = "%02d:%02d %s" % [int(at.hour), int(at.minute), at.zone]
-	time_note.text = NIGHT_NOTE if DayLight.is_floor(DaySun.shown_angles(unix)[0]) else ""
 
 
 ## A date (day of the year) or time (minutes into the day) chosen on its slider: the

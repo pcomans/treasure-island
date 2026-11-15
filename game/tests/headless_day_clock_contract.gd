@@ -19,15 +19,23 @@ extends SceneTree
 ##     it holds still when pinned, and jumps;
 ##   - DaySun points a light at the clock's sun, by day and by night: in steps while
 ##     time runs (10 s with the sun high or deep, shorter near the horizon), at once
-##     on a jump, with no jump of its own through sunset, sunrise and midnight;
+##     on a jump, with no jump of its own through sunset, sunrise and midnight; with
+##     no strength it lights the sky alone (no shadow splits), and it keeps the
+##     look's darkness for the night lights;
 ##   - the light of the sun's height (DayLight's curves): main.tscn's daylight exactly
 ##     at and above the full-day height, the recorded moment included, where DaySun
 ##     writes nothing to the Sun, the environment or the sky; dimming through sunset
-##     without a step larger than its bound, to the night floor, which holds all
-##     night; dawn the same as dusk at the same height; and DaySun putting it on;
-##   - the options screen's date and time read the island's clock (PST and PDT, the
-##     night note), its sliders jump the clock and time runs on, Now goes back to
-##     the real time, and the web's options screen has none of it.
+##     and dusk without a step larger than its bound (the stars and the darkness
+##     only rising, the parked cars' lamps only going out), to the night floor,
+##     which holds all night; dawn the same as dusk at the same height; and DaySun
+##     putting it on;
+##   - the night lights' rule (NightLights): on at ON_AT, off again only under
+##     OFF_AT, fading over FADE_S, off by day and on at night; the flashlight's
+##     pitch from the camera's (the lights in the loaded game are
+##     headless_vehicle_contract.gd's);
+##   - the options screen's date and time read the island's clock (PST and PDT),
+##     its sliders jump the clock and time runs on, Now goes back to the real time,
+##     and the web's options screen has none of it.
 ## The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -46,7 +54,10 @@ const JUMP_BOUND_DEG := 0.6
 const STEP_BOUNDS := {
 	"sun_energy": 0.01, "ambient": 0.001, "fog": 0.002, "sky_horizon": 0.002,
 	"sky_top": 0.001, "exposure": 0.002, "horizon_light": 0.004,
+	"stars": 0.01, "night": 0.01, "parked_lamps": 0.01,
 }
+## The measures that only rise as the sun sinks; every other one must not rise.
+const RISING := ["exposure", "stars", "night"]
 
 var _failure := ""
 var _nodes: Array[Node] = []
@@ -81,10 +92,13 @@ func _run() -> void:
 	var light := await _check_day_light()
 	if light.is_empty():
 		return _finish()
+	var lights := _check_night_lights()
+	if lights.is_empty():
+		return _finish()
 	var menu := await _check_options_rows()
 	if menu.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, menu])
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, lights, menu])
 	_finish()
 
 
@@ -311,6 +325,7 @@ func _check_day_sun() -> String:
 	# east (+X) from north (-Z), and the look of its height on.
 	var checked := 0
 	var nights := 0
+	var sky_only := 0
 	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
 		for time: String in ["05:00", "09:30", "12:30", "15:30", "16:30", "17:00", "17:30", "20:30", "22:00"]:
 			var unix := DayClock.parse_local("%s %s" % [day, time])
@@ -322,11 +337,13 @@ func _check_day_sun() -> String:
 			var true_sun: Array[float] = [snappedf(float(sun.elevation_deg), kept_to), snappedf(float(sun.azimuth_deg), kept_to)]
 			var differences := _look_differences(light, environment, written, DayLight.at(shown[0]))
 			if not _require(shown == true_sun and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)) and light.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])), "At %s %s the light must shine from the sun at %s (%s), not from rotation %s." % [day, time, true_sun, shown, light.rotation_degrees]) \
-			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]):
+			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]) \
+			or not _require(light.sky_mode == DaySun.sky_mode_for(float(DayLight.at(shown[0]).sun_energy)) and day_sun.night == float(DayLight.at(shown[0]).night), "At %s %s (the sun %.2f degrees up, energy %.3f) the light must light the sky alone only with no strength (sky mode %d) and DaySun keep that height's darkness (%.3f, not %.3f)." % [day, time, shown[0], light.light_energy, light.sky_mode, float(DayLight.at(shown[0]).night), day_sun.night]):
 				DaySun.use_engine_globals()
 				return ""
 			checked += 1
 			nights += 1 if shown[0] < 0.0 else 0
+			sky_only += 1 if light.sky_mode == DirectionalLight3D.SKY_MODE_SKY_ONLY else 0
 	# No jump: minute by minute through 2026-11-14's sunset and dusk, its solar
 	# midnight, and 2026-11-15's dawn and sunrise.
 	var largest := 0.0
@@ -351,7 +368,7 @@ func _check_day_sun() -> String:
 	var system := [1800000000.0]
 	DayClock.system_clock = func() -> float: return system[0]
 	var steps := []
-	for trial: Array in [["2026-06-21 12:30", "high"], ["2026-11-14 16:50", "setting"], ["2026-11-14 17:55", "floor"], ["2026-11-14 22:00", "night"]]:
+	for trial: Array in [["2026-06-21 12:30", "high"], ["2026-11-14 16:50", "setting"], ["2026-11-14 17:55", "dusk"], ["2026-11-14 18:40", "floor"], ["2026-11-14 22:00", "night"]]:
 		var start := DayClock.parse_local(trial[0])
 		var step := DaySun.step_for(DaySun.shown_angles(start)[0])
 		DayClock.start_at(start)
@@ -377,11 +394,11 @@ func _check_day_sun() -> String:
 	await process_frame
 	var back := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
 	DaySun.use_engine_globals()
-	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0), DaySun.step_seconds(-6.0), DaySun.step_seconds(-40.0), DaySun.step_for(-6.0), DaySun.step_for(-10.0)]
+	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0), DaySun.step_seconds(-6.0), DaySun.step_seconds(-40.0), DaySun.step_for(-12.0), DaySun.step_for(-20.0)]
 	if not _require(jumped == jump_from + 3600.0 and light.transform == scene_transform and back.is_empty(), "A jump must move the sun at once (shown %s for %s), and pinned again the light must be main.tscn's Sun with main.tscn's daylight (it differs in %s)." % [jumped, jump_from + 3600.0, back]) \
-	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S and shape[5] < shape[3] and shape[6] == DaySun.STEP_S and shape[7] == shape[5] and shape[8] == DaySun.STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up or down and shorter near the horizon, to MIN_STEP_S, and STEP_S through the night floor: %s at 75, 30, 20, 10, 5, -6 and -40 degrees, then step_for at -6 and -10." % [shape]):
+	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S and shape[5] < shape[3] and shape[6] == DaySun.STEP_S and shape[7] == DaySun.step_seconds(-12.0) and shape[7] < DaySun.STEP_S and shape[8] == DaySun.STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up or down and shorter near the horizon, to MIN_STEP_S, and STEP_S through the night floor: %s at 75, 30, 20, 10, 5, -6 and -40 degrees, then step_for at -12 (above the floor) and -20." % [shape]):
 		return ""
-	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned" % [checked, nights, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
+	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon, %d of them lighting the sky alone; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned" % [checked, nights, sky_only, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
 
 
 ## The light's curves (DayLight): their table, full day from FULL_DAY_ELEVATION_DEG
@@ -424,8 +441,8 @@ func _check_day_light() -> String:
 			for name: String in STEP_BOUNDS:
 				var change: float = now[name] - last[name]
 				worst[name] = maxf(worst[name], absf(change))
-				var wrong_way := change < -1e-9 if name == "exposure" else change > 1e-9
-				if not _require(not wrong_way and absf(change) <= float(STEP_BOUNDS[name]), "On %s at %.2f degrees, one step of the sun changed %s by %.5f (bound %.4f; it must %s as the sun sinks)." % [day, DaySun.shown_angles(unix)[0], name, change, STEP_BOUNDS[name], "only rise" if name == "exposure" else "not rise"]):
+				var wrong_way := change < -1e-9 if name in RISING else change > 1e-9
+				if not _require(not wrong_way and absf(change) <= float(STEP_BOUNDS[name]), "On %s at %.2f degrees, one step of the sun changed %s by %.5f (bound %.4f; it must %s as the sun sinks)." % [day, DaySun.shown_angles(unix)[0], name, change, STEP_BOUNDS[name], "only rise" if name in RISING else "not rise"]):
 					return ""
 			last = now
 	# The night floor: reached at FLOOR_ELEVATION_DEG and held all night, solar
@@ -458,7 +475,7 @@ func _check_day_light() -> String:
 	root.add_child(day_sun)
 	_nodes.append(day_sun)
 	var mirrored := 0
-	for height: float in [25.0, 20.0, 10.0, 5.0, 2.0, 0.5, 0.0, -1.0, -3.0, -6.0]:
+	for height: float in [25.0, 20.0, 10.0, 5.0, 2.0, 0.5, 0.0, -1.0, -3.0, -6.0, -9.0, -12.0, -15.0]:
 		var noon := DayClock.parse_local("2026-11-14 12:00")
 		var evening := _crossing(noon, height, true)
 		var morning := _crossing(noon, height, false)
@@ -466,7 +483,7 @@ func _check_day_light() -> String:
 		for unix: float in [evening, morning]:
 			DayClock.pin(unix)
 			await process_frame
-			looks.append([DaySun.shown_angles(unix)[0], environment.ambient_light_color, environment.ambient_light_energy, environment.fog_light_color, environment.tonemap_exposure, light.light_color, light.light_energy, environment.sky.sky_material.get_shader_parameter(&"sky_horizon_color"), written.duplicate()])
+			looks.append([DaySun.shown_angles(unix)[0], environment.ambient_light_color, environment.ambient_light_energy, environment.fog_light_color, environment.tonemap_exposure, light.light_color, light.light_energy, environment.sky.sky_material.get_shader_parameter(&"sky_horizon_color"), environment.sky.sky_material.get_shader_parameter(&"star_energy"), light.sky_mode, day_sun.night, written.duplicate()])
 		if not _require(looks[0] == looks[1], "At %.1f degrees dawn must look as dusk does: %s in the evening, %s in the morning." % [height, looks[0], looks[1]]):
 			DaySun.use_engine_globals()
 			return ""
@@ -482,7 +499,8 @@ func _check_day_light() -> String:
 
 ## How much each of the look's lights changes by: the sun's energy; the ambient
 ## light, the fog and the sky's horizon and zenith as linear luminance times
-## energy; the exposure; the horizon art's factor.
+## energy; the exposure; the horizon art's factor; the stars, the darkness and the
+## parked cars' lamps.
 func _measures(look: Dictionary) -> Dictionary:
 	return {
 		"sun_energy": float(look.sun_energy),
@@ -492,6 +510,9 @@ func _measures(look: Dictionary) -> Dictionary:
 		"sky_top": (look.sky_top as Color).srgb_to_linear().get_luminance(),
 		"exposure": float(look.exposure),
 		"horizon_light": float(look.horizon_light),
+		"stars": float(look.stars),
+		"night": float(look.night),
+		"parked_lamps": float(look.parked_lamps),
 	}
 
 
@@ -511,6 +532,60 @@ func _crossing(around: float, height_deg: float, evening: bool) -> float:
 	return high
 
 
+## The night lights' rule (NightLights), on a DaySun out of the tree whose darkness
+## is set by hand: on at ON_AT, still on above OFF_AT, off at it and staying off
+## below ON_AT; a fade of FADE_S each way; off at the recorded moment's look and on
+## at the night floor's; the flashlight's pitch from the camera's.
+func _check_night_lights() -> String:
+	var light := DirectionalLight3D.new()
+	var sun := DaySun.new(light, null)
+	var lights := NightLights.new(sun, null, null)
+	var states: Array[bool] = []
+	for night: float in [0.0, 0.49, 0.5, 0.4, 0.36, 0.35, 0.45, 0.6, 1.0, 0.0]:
+		sun.night = night
+		lights.update(0.0)
+		states.append(lights.on)
+	var wanted: Array[bool] = [false, false, true, true, true, false, false, true, true, false]
+	sun.night = 1.0
+	lights.update(0.0)
+	var levels: Array[float] = [lights.level]
+	lights.update(NightLights.FADE_S * 0.5)
+	levels.append(lights.level)
+	lights.update(NightLights.FADE_S)
+	levels.append(lights.level)
+	sun.night = 0.0
+	lights.update(NightLights.FADE_S * 0.25)
+	levels.append(lights.level)
+	var made := lights.flashlight != null or not lights.headlights.is_empty()
+	lights.free()
+	sun.free()
+	light.free()
+	var pitches: Array[float] = [NightLights.flash_pitch(-8.0), NightLights.flash_pitch(-60.0), NightLights.flash_pitch(25.0)]
+	var day := float(DayLight.at(33.43).night)
+	var night_floor := float(DayLight.at(DayLight.FLOOR_ELEVATION_DEG).night)
+	# This is a test run: time of day held, so no night lights (main.gd makes them only
+	# where NightLights.wanted()).
+	var switched_off := DayClock.starts_pinned() and not NightLights.wanted()
+	var on_at := _height_at_night(NightLights.ON_AT)
+	var off_at := _height_at_night(NightLights.OFF_AT)
+	if not _require(states == wanted, "The night lights must come on at %.2f, stay on above %.2f and go off at it: %s for darkness 0, 0.49, 0.5, 0.4, 0.36, 0.35, 0.45, 0.6, 1, 0 (wanted %s)." % [NightLights.ON_AT, NightLights.OFF_AT, states, wanted]) \
+	or not _require(levels == [0.0, 0.5, 1.0, 0.75] and not made, "The night lights must fade over FADE_S (levels %s, wanted 0, 0.5, 1, 0.75) and, with no player or car, make no light (made %s)." % [levels, made]) \
+	or not _require(is_equal_approx(pitches[0], NightLights.FLASH_PITCH_DEG - 8.0 * NightLights.FLASH_PITCH_SHARE) and pitches[0] < -5.0 and pitches[1] < pitches[0] and pitches[1] >= NightLights.FLASH_PITCH_MIN_DEG and pitches[2] == NightLights.FLASH_PITCH_MAX_DEG and NightLights.FLASH_PITCH_MAX_DEG < 0.0, "The flashlight's pitch must be FLASH_PITCH_DEG plus FLASH_PITCH_SHARE of the camera's, down at the camera's rest, lower looking down, never above FLASH_PITCH_MAX_DEG (under the horizon) looking up: %s for the camera at -8, -60 and 25 degrees." % [pitches]) \
+	or not _require(day == 0.0 and night_floor == 1.0 and on_at < -3.0 and on_at > -8.0 and off_at > on_at, "Darkness must be 0 by day and 1 at the night floor (%.2f, %.2f), the lights coming on between 3 and 8 degrees under the horizon (%.2f) and going off higher up (%.2f)." % [day, night_floor, on_at, off_at]) \
+	or not _require(switched_off, "In a test run (time of day held) the night lights' switch must be off (held %s, wanted %s)." % [DayClock.starts_pinned(), NightLights.wanted()]):
+		return ""
+	return "the night lights on at darkness %.2f (the sun %.1f degrees under the horizon) and off under %.2f (%.1f degrees), fading over %.1f s, none made without a player, and none wanted in a test run; the flashlight's pitch %.1f, %.0f and %.0f degrees for the camera's -8, -60 and 25" % [NightLights.ON_AT, -on_at, NightLights.OFF_AT, -off_at, NightLights.FADE_S, pitches[0], pitches[1], pitches[2]]
+
+
+## The highest sun height (degrees, to a hundredth) at which DayLight's darkness
+## reaches `night`, from full day down.
+func _height_at_night(night: float) -> float:
+	var height := DayLight.FULL_DAY_ELEVATION_DEG
+	while height > DayLight.FLOOR_ELEVATION_DEG and float(DayLight.at(height).night) < night:
+		height -= 0.01
+	return snappedf(height, 0.01)
+
+
 ## The options screen's date and time, on desktop and on the web.
 func _check_options_rows() -> String:
 	var hud := (load("res://game/scenes/ui/hud.tscn") as PackedScene).instantiate() as GameHUD
@@ -521,21 +596,21 @@ func _check_options_rows() -> String:
 	hud.set_paused(true)
 	hud.options_button.pressed.emit()
 	await process_frame
-	var rows := [hud.time_heading, hud.time_date_row, hud.time_row, hud.time_note]
+	var rows := [hud.time_heading, hud.time_date_row, hud.time_row]
 	var shown := rows.all(func(row: Control) -> bool: return row.is_visible_in_tree())
-	var recorded := [hud.time_date_label.text, hud.time_label.text, hud.time_note.text, hud.time_date_slider.value, hud.time_slider.value]
-	if not _require(shown and recorded == ["Fri 13 Nov 2026", "12:30 PST", "", 317.0, 750.0], "The options screen must show the date and time at the recorded moment: Fri 13 Nov 2026, 12:30 PST, day 317 and minute 750 on the sliders, no night note (shown %s: %s)." % [shown, recorded]):
+	var recorded := [hud.time_date_label.text, hud.time_label.text, hud.time_date_slider.value, hud.time_slider.value]
+	if not _require(shown and recorded == ["Fri 13 Nov 2026", "12:30 PST", 317.0, 750.0], "The options screen must show the date and time at the recorded moment: Fri 13 Nov 2026, 12:30 PST, day 317 and minute 750 on the sliders (shown %s: %s)." % [shown, recorded]):
 		return ""
 	# The date slider (a player's change): the same time on 21 June, PDT, running.
 	hud.time_date_slider.value = 172
 	var june := [hud.time_date_label.text, hud.time_label.text, DayClock.is_running(), DayClock.now() - DayClock.parse_local("2026-06-21 12:30")]
 	hud.time_slider.value = 1380
-	var night := [hud.time_label.text, hud.time_note.text, DayClock.now() - DayClock.parse_local("2026-06-21 23:00")]
+	var night := [hud.time_label.text, DayClock.now() - DayClock.parse_local("2026-06-21 23:00")]
 	hud.time_slider.value = 570
-	var morning := [hud.time_label.text, hud.time_note.text]
+	var morning := [hud.time_label.text]
 	if not _require(june.slice(0, 3) == ["Sun 21 Jun 2026", "12:30 PDT", true] and absf(june[3]) < 1.0, "The date slider at day 172 must jump the clock to Sun 21 Jun 2026 12:30 PDT, running, not %s." % [june]) \
-	or not _require(night.slice(0, 2) == ["23:00 PDT", GameHUD.NIGHT_NOTE] and absf(night[2]) < 1.0, "The time slider at 23:00 must jump there and say night comes later, not %s." % [night]) \
-	or not _require(morning == ["09:30 PDT", ""], "The time slider at 09:30 must jump there, with no night note, not %s." % [morning]):
+	or not _require(night[0] == "23:00 PDT" and absf(night[1]) < 1.0, "The time slider at 23:00 must jump there, not %s." % [night]) \
+	or not _require(morning == ["09:30 PDT"], "The time slider at 09:30 must jump there, not %s." % [morning]):
 		return ""
 	hud.time_now_button.pressed.emit()
 	var real := absf(DayClock.now() - Time.get_unix_time_from_system())
@@ -549,7 +624,7 @@ func _check_options_rows() -> String:
 	var hidden := rows.all(func(row: Control) -> bool: return not row.is_visible_in_tree())
 	if not _require(hidden and not hud.time_controls_shown(), "On the web the options screen must show no date or time."):
 		return ""
-	return "the options screen's date and time (Fri 13 Nov 2026 12:30 PST; Sun 21 Jun 12:30 PDT from the date slider, 23:00 with the night note and 09:30 from the time slider; Now; none on the web)"
+	return "the options screen's date and time (Fri 13 Nov 2026 12:30 PST; Sun 21 Jun 12:30 PDT from the date slider, 23:00 and 09:30 from the time slider, with no note; Now; none on the web)"
 
 
 ## How far the game's clock and the system clock run while REAL_SPAN_S of real time

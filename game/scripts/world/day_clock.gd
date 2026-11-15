@@ -85,14 +85,21 @@ static func pin(unix: float = RECORDED_UNIX) -> void:
 	_jump(unix, false)
 
 
+## Whether this run holds the recorded moment from its start: the web build and
+## every test or capture driver (a --script run, its SceneTree scripted); play
+## starts at the real time.
+static func starts_pinned() -> bool:
+	var tree := Engine.get_main_loop() as SceneTree
+	return OS.has_feature("web") or tree == null or tree.get_script() != null
+
+
 ## The clock as a run starts: the real time in play, the recorded moment, held,
 ## for the web and for every test or capture driver.
 static func _start() -> void:
 	if _started:
 		return
 	_started = true
-	var tree := Engine.get_main_loop() as SceneTree
-	if OS.has_feature("web") or tree == null or tree.get_script() != null:
+	if starts_pinned():
 		pin()
 	else:
 		start_now()

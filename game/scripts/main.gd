@@ -43,6 +43,10 @@ var shadows: ShadowQuality
 ## the real time as the game starts; the recorded moment on the web and for a test
 ## or capture driver.
 var day_sun: DaySun
+## The flashlight and the driven car's headlights, on by themselves at night
+## (NightLights), once the world is loaded where NightLights.wanted(): not on the
+## web or in a test or capture run, which keep the recorded moment.
+var night_lights: NightLights
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
 ## Startup puts on the shadow level kept from the last run; the shared capture
@@ -230,6 +234,9 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	if night_lights == null and NightLights.wanted():
+		night_lights = NightLights.new(day_sun, player, vehicles)
+		add_child(night_lights)
 	# On the web the browser takes the sounds now, not at their first play; the
 	# ditch's drawn water is read back now, not at the first footstep near it.
 	sound.prepare_for_play()
@@ -560,9 +567,10 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
-		# The time of day: the clock's instant, whether it runs, the Sun's rotation
-		# and whether the options screen offers the date and time.
-		"time": {"unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "controls": hud.time_controls_shown()},
+		# The time of day: the clock's instant, whether it runs, the Sun's rotation and
+		# sky mode, whether the options screen offers the date and time, and whether
+		# there are night lights (none on the web).
+		"time": {"unix": DayClock.now(), "running": DayClock.is_running(), "sun": [($Sun as Node3D).rotation_degrees.x, ($Sun as Node3D).rotation_degrees.y], "sky_mode": ($Sun as DirectionalLight3D).sky_mode, "controls": hud.time_controls_shown(), "night_lights": night_lights != null},
 	}
 	JavaScriptBridge.get_interface("window").__tiState = JSON.stringify(state)
 
