@@ -1,7 +1,7 @@
 # Tests
 
 Run everything with `tools/test.sh` in the devcontainer (see the [README](../../README.md#develop)).
-It must pass before anything is pushed to `main`, with the private sounds fetched or without them: where `tools/fetch-sfx` has filled `game/resources/audio/sfx/`, the tests that read what the sound manager plays (and bring no takes of their own) run a second time with `--no-sfx` after `--`, which loads no takes, as a checkout without the sounds runs.
+It must pass before anything is pushed to `main`, with the private sounds fetched or without them: a test that reads what the sound manager plays from the real takes carries the line `# sfx: takes-dependent`, and where `tools/fetch-sfx` has filled `game/resources/audio/sfx/` it runs a second time with `--no-sfx` after `--`, which loads no takes, as a checkout without the sounds runs. A listed test whose code reads the play state (`loop_playing`, `has_takes`, `takes_of`, `played_counts`, `voices_of`, `loop_level`, `bed_level`, `"played"`, `loop_start`) with neither that line nor takes of its own (`Sound.manifest_path`) fails the suite.
 
 | Test | Checks |
 | --- | --- |

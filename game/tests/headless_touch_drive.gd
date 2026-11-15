@@ -38,6 +38,10 @@ extends SceneTree
 ##     nothing else of the HUD lies over a touch control.
 ## The first failure stops the run.
 
+# It reads what the sound manager plays from the real takes (the wind's bed), so
+# tools/test.sh runs it a second time with --no-sfx where the sounds are fetched.
+# sfx: takes-dependent
+
 const SPOTS := preload("res://game/tests/shared/vehicle_spots.gd")
 const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 ## An iPhone's Safari page in device pixels: upright as in the owner's screenshot
