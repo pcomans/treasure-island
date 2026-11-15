@@ -1,0 +1,8 @@
+diff --git a/tools/godot b/tools/godot
+--- a/tools/godot
++++ b/tools/godot
+@@ -29,3 +29,3 @@
+-if has_flag --headless; then
++if [ "$(uname -s)" = Darwin ] || has_flag --headless; then
+   exec "${bin}" "$@"
+ fi
