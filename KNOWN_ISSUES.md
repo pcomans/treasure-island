@@ -186,7 +186,8 @@ Limits:
 ## Sound (`game/scripts/audio/`, 2026-11-14)
 
 - The audio is not in Git (see [README](README.md#sound)): a checkout or build without `TI_SFX_SOURCE` is silent, and so is a Mac build from GitHub Actions while the repository variable `TI_SFX_SOURCE` is unset.
-- On the web the sounds cost page memory, as the browser holds every take decoded from startup: with the round-2 set the browser's renderer process took about 92 MiB more before the first click and 122 MiB more after it than the silent release (means of two pairs, integration run `R2-W05-web-memory`). The shipped set has 81 takes, about 3 minutes of mono audio (about 41 MB as 32-bit samples). The owner accepted the cost ("Ship as is", 2026-11-14).
+- On the web the sounds cost page memory, as the browser holds every take decoded from startup: with the round-2 set the browser's renderer process took about 92 MiB more before the first click and 122 MiB more after it than the silent release (means of two pairs, integration run `R2-W05-web-memory`). The shipped set has 81 takes, 176 s at 44.1 kHz (79 mono, 2 stereo; durations read from the private set's file headers at ca17d45), and the web engine registers every take as two channels of 32-bit samples (integration review, 2026-11-14): about 62 MB decoded. The owner accepted the cost ("Ship as is", 2026-11-14).
+- On the live site after the 2026-11-14 release, the JS heap read 32.8, 33.2 and 33.4 MB after forced collections over 5.5 minutes with the engine loops running: 0.6 MB of garbage, not a leak. The car mostly sat against an obstacle, so this is not a reading under hard driving (integrator-batch-20261114a, stage 2).
 - The Mac app now opens CoreAudio. On 2026-08-31 a Mac launch hung in CoreAudio while the host's audio daemon was stopped, which is why `project.godot` forced the Dummy driver until now. No check can see that hang again: the Mac CI launch runs `--headless` and every local run gets the Dummy driver from `tools/godot`, so a normal Finder launch on the owner's Mac is the only check.
 - On an iPhone or iPad, only the owner's device can confirm the web's sound. Safari there starts a page's audio only from a tap (never the end of a slide, a look drag or a held button), which the start prompt's "Tap to play" now is; the shell also starts it from any later tap anywhere (2026-11-15). That was checked in headed Chromium with Safari's iOS rules emulated, not in Safari. The levels have not been confirmed by ear on the Mac.
 - iOS: with the ring/silent switch on silent, Safari mutes web audio (its default audio session). No change was made; `navigator.audioSession.type = 'playback'` would override it on iOS 17 and later.
@@ -197,6 +198,12 @@ Limits:
 - Web: after the page is minimised and shown again, Resume pauses again until the page has focus (a click in it), because the browser grants pointer lock only to a focused page (code review, 2026-11-14).
 - Web, with a mouse: where the browser never grants pointer lock (an embedding frame without the permission, a kiosk, some Linux setups), "Click to play" starts play with the pointer free and a line saying the mouse won't turn the view, so the view cannot be turned with the mouse. After Esc, the pause menu's Resume asks for the lock again and, refused, stays paused, as before the start prompt (2026-11-15).
 - The bay's water sound at the causeway barrier and the riprap rumble on the north slipway: see [Drivable cars](#drivable-cars-gamescriptsvehicles-2026-11-08).
+
+## Mac notarization (`.github/workflows/mac-build.yml`, 2026-11-14)
+
+- Mac builds are ad-hoc signed and not notarized: the workflow's sign job runs only while the repository variable `MAC_SIGNING` is `on`, and it is unset (see [AGENTS](AGENTS.md#mac-builds)).
+- The owner's Apple ID with an app-specific password answered HTTP 403 to a local `notarytool history` check (2026-11-14), so no working notarization credential exists yet.
+- The sign job has never run on a macOS runner: it was walked on Linux with stand-ins for Apple's tools, so the first signing run on `main` is its first real test.
 
 ## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
 
@@ -509,7 +516,6 @@ Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 ## Deferred by the owner
 
 - Fences island-wide from the map data: not picked for this release. Today only fences in the street-detail zones are built; the rest stay data. The street reviews saw three that are missing: a container wall at 11th Street, a container wall at 4th Street / Avenue M, and wooden fences at 13th Street / Gateview Avenue, which hide a shelter in the photo.
-- Mac notarization: later. It needs a paid Apple Developer membership.
 - The pelican rider variant of the player: paused.
 
 ## Code and tooling cleanup (low priority)
