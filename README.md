@@ -1,10 +1,10 @@
-# Treasure Island
+# Grand Treasure Island
 
-A private Godot game of Treasure Island, San Francisco, built autonomously by
-agents: as a treasure chest full of gold on rubber-hose legs, walk, run and
-jetpack (the owner removed spraying tags on 2026-11-11). The whole island
-comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
-time so they look like the real ones.
+Grand Treasure Island is a private Godot game of Treasure Island, San Francisco,
+built autonomously by agents: as a treasure chest full of gold on rubber-hose
+legs, walk, run and jetpack (the owner removed spraying tags on 2026-11-11). The
+whole island comes from a frozen OpenStreetMap snapshot; agents improve its
+buildings one at a time so they look like the real ones.
 
 **Score:** the number of buildings that recognizably match their real
 counterparts, i.e. accepted buildings in [the building catalog](discovery/facades/facade-recognition-catalog.json),
@@ -88,6 +88,9 @@ or `gh`, the zip has no quarantine flag, so the unzipped app opens directly:
 curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
+
+The zip holds `Grand Treasure Island.app`. It keeps the options chosen in any
+earlier build, so an older `Treasure Island First Playable.app` can simply go.
 
 A release whose notes say "Signed and notarized (Developer ID)" opens directly
 after a browser download. Every other build, from CI or `tools/build-mac.sh`, is
