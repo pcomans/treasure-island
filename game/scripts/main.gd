@@ -101,7 +101,7 @@ func _ready() -> void:
 	hud.shadow_quality_chosen.connect(_on_shadow_quality_chosen)
 	# The frame rate limit, 3D resolution and frame rate display: kept from the last
 	# run, or for a test or capture driver the defaults, which leave the engine as it
-	# started on desktop (the web's default resolution is its three quarters).
+	# started on desktop (the web's default resolution is two thirds).
 	graphics = GraphicsSettings.new(get_viewport())
 	graphics.apply(GraphicsSettings.saved() if use_saved_settings and settings_problem.is_empty() else GraphicsSettings.defaults())
 	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY), graphics.current)

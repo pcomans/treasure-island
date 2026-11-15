@@ -44,7 +44,7 @@ extends SceneTree
 ##     three are kept: a restart puts them
 ##     on again, the capture harness's opt-out gets the defaults, and unknown,
 ##     missing and unwritable settings fall back quietly; the web offers them with
-##     its own default resolution (three quarters, its fixed scale until now).
+##     its own default resolution (two thirds, owner 2026-11-15).
 ## Uses its own settings file, removed at the end. The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -208,9 +208,9 @@ func _run() -> void:
 	var web_volume := web_hud.sound_volume.is_visible_in_tree() and web_hud.sound_volume.has_focus() and web_hud.sound_mute.is_visible_in_tree()
 	var web_graphics := [web_hud.graphics_heading.is_visible_in_tree(), web_hud.frame_rates.is_visible_in_tree(), web_hud.frame_rates.get_child_count(), web_hud.show_frame_rate.is_visible_in_tree(), _pressed(web_hud.frame_rates), web_hud.resolutions.is_visible_in_tree(), _pressed(web_hud.resolutions), web_hud.frame_rate_label.visible]
 	web_hud.free()
-	var web_expected := [true, web_rates.size() > 1, web_rates.size(), true, PackedStringArray(["unlimited"]), true, PackedStringArray(["75"]), false]
+	var web_expected := [true, web_rates.size() > 1, web_rates.size(), true, PackedStringArray(["unlimited"]), true, PackedStringArray(["67"]), false]
 	if not _require(web_options and not web_shadows and web_volume, "With the web's one level (Off) the pause menu must keep Options (shown %s) for the sound, its volume shown and focused (%s), with no shadow levels on it (shown %s)." % [web_options, web_volume, web_shadows]) \
-	or not _require(web_graphics == web_expected and web_resolutions.size() == GraphicsSettings.RESOLUTIONS.size(), "The web's options screen must show the Graphics heading, its frame rate limits (%d) with the display switch, every resolution and its defaults (No limit, 75 %%), no frame rate shown: expected %s, shows %s." % [web_rates.size(), web_expected, web_graphics]):
+	or not _require(web_graphics == web_expected and web_resolutions.size() == GraphicsSettings.RESOLUTIONS.size(), "The web's options screen must show the Graphics heading, its frame rate limits (%d) with the display switch, every resolution and its defaults (No limit, 67 %%), no frame rate shown: expected %s, shows %s." % [web_rates.size(), web_expected, web_graphics]):
 		return _finish()
 	# Quiet fallbacks: an unknown kept level, a missing file, a file that can't be
 	# written; the graphics the same (a kept value of the wrong kind too).
@@ -231,7 +231,7 @@ func _run() -> void:
 	var fallback := [ShadowQuality.default_id(), GraphicsSettings.defaults()]
 	if not _require([unknown, missing, unwritten] == [fallback, fallback, fallback], "An unknown kept level or graphics setting, a missing file and an unwritable one must all give the defaults, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed and focused, its focus ring showing when opened with Enter and hidden when by a click, every level's note as many lines as the others' (the panel keeps its height), Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; the web's Off alone leaves Options with its graphics rows (No limit and 75 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed and focused, its focus ring showing when opened with Enter and hidden when by a click, every level's note as many lines as the others' (the panel keeps its height), Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; the web's Off alone leaves Options with its graphics rows (No limit and 67 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics])
 	_finish()
 
 
@@ -275,7 +275,7 @@ func _check_graphics() -> String:
 	var web := GraphicsSettings.defaults(true)
 	if not _require(limits.all(func(choice: Dictionary) -> bool: return int(choice.max_fps) > 0) and limits.size() == GraphicsSettings.FRAME_RATES.size() - 1 and not GraphicsSettings.FRAME_RATES.back().has("max_fps"), "Every frame rate limit but the last (No limit) must be a rate, and No limit must set none.") \
 	or not _require(scales.all(func(choice: Dictionary) -> bool: return float(choice.scale) > 0.0 and float(choice.scale) < 1.0) and scales.size() == GraphicsSettings.RESOLUTIONS.size() - 1 and not GraphicsSettings.RESOLUTIONS.back().has("scale"), "Every resolution but the last (100 %) must be a share below one, and 100 % must set none.") \
-	or not _require(desktop == {"frame_rate": "unlimited", "resolution": "100", "show_frame_rate": false} and web == {"frame_rate": "unlimited", "resolution": "75", "show_frame_rate": false}, "The defaults must be the game as it was: No limit and 100 %% on desktop, No limit and 75 %% (its fixed scale until now) on the web, no frame rate shown (are %s and %s)." % [desktop, web]) \
+	or not _require(desktop == {"frame_rate": "unlimited", "resolution": "100", "show_frame_rate": false} and web == {"frame_rate": "unlimited", "resolution": "67", "show_frame_rate": false}, "The defaults must be No limit and 100 %% on desktop (the game as it was) and No limit and 67 %% on the web (owner, 2026-11-15), no frame rate shown (are %s and %s)." % [desktop, web]) \
 	or not _require(GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY, true).any(func(choice: Dictionary) -> bool: return choice.id == web.resolution) and GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY, true).any(func(choice: Dictionary) -> bool: return choice.id == web.frame_rate) and GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY).size() == GraphicsSettings.RESOLUTIONS.size() and GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY).size() == GraphicsSettings.FRAME_RATES.size(), "Desktop must offer every frame rate limit and resolution, and the web its own defaults."):
 		return ""
 	# Nothing kept: the engine as it started, project.godot's (no --max-fps here).
