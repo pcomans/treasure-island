@@ -316,7 +316,7 @@ func _check_graphics() -> String:
 	high_button.button_pressed = true
 	var changed_over := [high_button.get_theme_stylebox("focus"), medium_button.get_theme_stylebox("focus")] == before
 	medium_button.button_pressed = true
-	var rings_ok := rings.all(func(ring: Array) -> bool: return ring[2] and ring[3] >= FOCUS_CONTRAST) and rings[0][1] and not rings[1][1] and changed_over
+	var rings_ok: bool = rings.all(func(ring: Array) -> bool: return ring[2] and ring[3] >= FOCUS_CONTRAST) and rings[0][1] and not rings[1][1] and changed_over
 	if not _require(hud.show_frame_rate.has_theme_icon_override("unchecked") and hud.sound_mute.has_theme_icon_override("unchecked") and rings_ok, "The switches (Show fps, Mute) must draw their own Off track, and a choice's focus ring lie on its fill's shape with at least %.0f:1 against the fill under it, in use or not, and change over with the choice ([id, in use, on the fill's shape, contrast] %s; changed over %s)." % [FOCUS_CONTRAST, rings, changed_over]):
 		return ""
 	# Each choice on the options screen, as pressed there: on at once.

@@ -18,6 +18,9 @@ const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 ## Where this run keeps the shadow level and graphics its options check chooses.
 const OPTIONS_SETTINGS_PATH := "user://test-gameplay-contract-%d.cfg"
 
+## The time of day switched off (_check_time_of_day_off), for the PASS line.
+var _time_off := ""
+
 
 func _initialize() -> void:
 	# The options check chooses a shadow level and graphics, which the game keeps: in
@@ -254,6 +257,10 @@ func _initialize() -> void:
 ## none).
 func _check_ferry_solidity() -> void:
 	create_timer(240.0, true, false, true).timeout.connect(func() -> void: _fail("The ferry solidity check timed out."))
+	# First, before any world loads: a main with the time of day switched off.
+	_time_off = _check_time_of_day_off()
+	if _time_off.is_empty():
+		return
 	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
 	main.capture_mouse_on_ready = false
 	var world := main.get_node("WorldRoot") as WorldLoader
@@ -333,12 +340,8 @@ func _check_ferry_solidity() -> void:
 	if prompt.is_empty():
 		return
 	main.queue_free()
-	await process_frame
-	var time_off := _check_time_of_day_off()
-	if time_off.is_empty():
-		return
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, time_off, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
 	quit(0)
 
 
@@ -689,8 +692,9 @@ func _check_time_of_day(main: GameMain) -> String:
 ## over, nothing shown and nothing processing) and the options screen has no time
 ## of day (its heading, the date and time sliders, Now and the night note absent,
 ## the sound's rows there after the graphics'). The main is made and freed with no
-## frame between, before its world starts loading; the setting and the clock go
-## back after. Returns a summary, or "" after failing.
+## frame between, before this run loads any world (as the shadow options contract
+## makes its mains); the setting and the clock go back after. Returns a summary,
+## or "" after failing.
 func _check_time_of_day_off() -> String:
 	var kept: Variant = ProjectSettings.get_setting(DayClock.ENABLED_SETTING)
 	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, false)
@@ -709,7 +713,7 @@ func _check_time_of_day_off() -> String:
 	var sun := main.get_node("Sun") as DirectionalLight3D
 	hud.show_world_ready()
 	hud.set_paused(true)
-	hud.options_button.pressed.emit()
+	hud.show_options()
 	var time_parts: Array[Control] = [hud.time_heading_row, hud.time_date_row, hud.time_row, hud.time_date_slider, hud.time_slider, hud.time_now_button, hud.time_note]
 	var shown := time_parts.filter(func(part: Control) -> bool: return part.is_visible_in_tree()).map(func(part: Control) -> String: return str(part.name))
 	var state := [DayClock.enabled(), DayClock.now() == DayClock.RECORDED_UNIX, DayClock.is_running(), is_nan(main.day_sun.shown_unix), main.day_sun.is_processing(), written.size(),
