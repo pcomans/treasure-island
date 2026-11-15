@@ -1097,12 +1097,15 @@ static func surface_material(key: String) -> Material:
 			dim.emission_enabled = true
 			dim.emission = Color(0.45, 0.39, 0.30)
 			dim.emission_energy_multiplier = 0.12
+			# Lobby glass lit to read by day: dark at night (DaySun).
+			dim.set_meta(DaySun.NIGHT_ROLE, DaySun.DAYLIGHT_FILL)
 			material = dim
 		"lobby_top":
 			var band := _plain(Color(0.42, 0.38, 0.31), 0.1, 0.2)
 			band.emission_enabled = true
 			band.emission = Color(0.6, 0.5, 0.38)
 			band.emission_energy_multiplier = 0.3
+			band.set_meta(DaySun.NIGHT_ROLE, DaySun.DAYLIGHT_FILL)
 			material = band
 		_:
 			material = preload("res://game/resources/materials/world/hawkins/hawkins_pearl_plain.tres")

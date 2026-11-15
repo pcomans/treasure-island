@@ -26,9 +26,9 @@ extends SceneTree
 ##     at and above the full-day height, the recorded moment included, where DaySun
 ##     writes nothing to the Sun, the environment or the sky; dimming through sunset
 ##     and dusk without a step larger than its bound (the stars and the darkness
-##     only rising, the parked cars' lamps only going out), to the night floor,
-##     which holds all night; dawn the same as dusk at the same height; and DaySun
-##     putting it on;
+##     only rising, the parked cars' lamps and the buildings' daylight fills only
+##     going out), to the night floor, which holds all night; dawn the same as dusk
+##     at the same height; and DaySun putting it on;
 ##   - the night lights' rule (NightLights): on at ON_AT, off again only under
 ##     OFF_AT, fading over FADE_S, off by day and on at night; the flashlight's
 ##     pitch from the camera's (the lights in the loaded game are
@@ -41,9 +41,9 @@ extends SceneTree
 ##     off and the web build each turn it off, and nothing else; with the setting
 ##     turned off as a run starts the clock holds the recorded moment whatever
 ##     jumps it, DaySun writes nothing to main.tscn's Sun and look, nor any global
-##     uniform, and keeps the Sun lighting land and sky and the shadows' whole
-##     reach even with the clock pinned at night, and NightLights is neither wanted
-##     nor makes a light.
+##     uniform, and keeps the day's darkness (0), the shadows' whole reach and the
+##     buildings' daylight fills lit even with the clock pinned at night, and
+##     NightLights is neither wanted nor makes a light.
 ## The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
@@ -56,13 +56,16 @@ const REAL_SPAN_S := 0.3
 const REAL_SLACK_S := 0.005
 ## The most the light may turn in a minute of clock time (degrees).
 const JUMP_BOUND_DEG := 0.6
+## A daylight fill's and a lamp's own emission in the glow checks (_glow_fixture).
+const FILL_ENERGY := 0.45
+const LAMP_ENERGY := 0.5
 ## The most one step of the sun (DaySun.step_seconds, at most 10 s) may change each of
 ## the look's lights by on the way down (_measures): far less than the eye sees
 ## change at once.
 const STEP_BOUNDS := {
 	"sun_energy": 0.01, "ambient": 0.001, "fog": 0.002, "sky_horizon": 0.002,
 	"sky_top": 0.001, "exposure": 0.002, "horizon_light": 0.004,
-	"stars": 0.01, "night": 0.01, "parked_lamps": 0.01, "shadow_reach": 0.02,
+	"stars": 0.01, "night": 0.01, "parked_lamps": 0.01, "shadow_reach": 0.02, "daylight_fill": 0.02,
 }
 ## The measures that only rise as the sun sinks; every other one must not rise.
 const RISING := ["exposure", "stars", "night"]
@@ -329,6 +332,13 @@ func _check_day_sun() -> String:
 	if not _require(quality.reach == 1.0 and light.directional_shadow_max_distance == medium_distance, "At the recorded moment the sun's shadows must reach the shadow option's whole distance (reach %s, %.1f m of %.1f)." % [quality.reach, light.directional_shadow_max_distance, medium_distance]):
 		DaySun.use_engine_globals()
 		return ""
+	# A building's glows (DaySun.collect_fills): a daylight fill and a lamp, found at
+	# the recorded moment and left as they are there.
+	var glows := _glow_fixture()
+	day_sun.collect_fills(glows.root)
+	if not _require(day_sun.fills.size() == 1 and day_sun.fills.has(glows.fill) and day_sun.fill_share == 1.0 and glows.fill.emission_energy_multiplier == glows.fill_energy and glows.lamp.emission_energy_multiplier == glows.lamp_energy, "At the recorded moment DaySun must find the daylight fill alone and leave both glows as they are (fills %s, share %s, fill %s, lamp %s)." % [day_sun.fills.size(), day_sun.fill_share, glows.fill.emission_energy_multiplier, glows.lamp.emission_energy_multiplier]):
+		DaySun.use_engine_globals()
+		return ""
 	# Its first look hands the engine every global, at the recorded moment the values
 	# project.godot gives them.
 	var first_globals := written.duplicate()
@@ -346,6 +356,7 @@ func _check_day_sun() -> String:
 	var checked := 0
 	var nights := 0
 	var sky_only := 0
+	var fills_out := 0
 	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
 		for time: String in ["05:00", "09:30", "12:30", "15:30", "16:30", "17:00", "17:30", "20:30", "22:00"]:
 			var unix := DayClock.parse_local("%s %s" % [day, time])
@@ -359,9 +370,11 @@ func _check_day_sun() -> String:
 			if not _require(shown == true_sun and light.rotation_degrees.is_equal_approx(DaySun.rotation_for(shown)) and light.basis.z.is_equal_approx(SolarPosition.direction_to(shown[0], shown[1])), "At %s %s the light must shine from the sun at %s (%s), not from rotation %s." % [day, time, true_sun, shown, light.rotation_degrees]) \
 			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]) \
 			or not _require(is_equal_approx(light.directional_shadow_max_distance, medium_distance * float(DayLight.at(shown[0]).shadow_reach)) and is_equal_approx(light.directional_shadow_split_1 * light.directional_shadow_max_distance, near_split_m), "At %s %s (the sun %.2f degrees up) the sun's shadows must reach the shadow option's distance times that height's shadow reach (%.1f m, not %.1f), the nearest split still ending %.1f m out (not %.1f)." % [day, time, shown[0], medium_distance * float(DayLight.at(shown[0]).shadow_reach), light.directional_shadow_max_distance, near_split_m, light.directional_shadow_split_1 * light.directional_shadow_max_distance]) \
-			or not _require(light.sky_mode == DaySun.sky_mode_for(float(DayLight.at(shown[0]).sun_energy)) and day_sun.night == float(DayLight.at(shown[0]).night), "At %s %s (the sun %.2f degrees up, energy %.3f) the light must light the sky alone only with no strength (sky mode %d) and DaySun keep that height's darkness (%.3f, not %.3f)." % [day, time, shown[0], light.light_energy, light.sky_mode, float(DayLight.at(shown[0]).night), day_sun.night]):
+			or not _require(light.sky_mode == DaySun.sky_mode_for(float(DayLight.at(shown[0]).sun_energy)) and day_sun.night == float(DayLight.at(shown[0]).night), "At %s %s (the sun %.2f degrees up, energy %.3f) the light must light the sky alone only with no strength (sky mode %d) and DaySun keep that height's darkness (%.3f, not %.3f)." % [day, time, shown[0], light.light_energy, light.sky_mode, float(DayLight.at(shown[0]).night), day_sun.night]) \
+			or not _require(is_equal_approx(glows.fill.emission_energy_multiplier, glows.fill_energy * float(DayLight.at(shown[0]).daylight_fill)) and glows.lamp.emission_energy_multiplier == glows.lamp_energy, "At %s %s (the sun %.2f degrees up) the daylight fill must keep that height's share of its emission (%.3f of %.2f: %.4f) and the lamp all of its own (%.2f: %.4f)." % [day, time, shown[0], float(DayLight.at(shown[0]).daylight_fill), FILL_ENERGY, glows.fill.emission_energy_multiplier, LAMP_ENERGY, glows.lamp.emission_energy_multiplier]):
 				DaySun.use_engine_globals()
 				return ""
+			fills_out += 1 if glows.fill.emission_energy_multiplier == 0.0 else 0
 			checked += 1
 			nights += 1 if shown[0] < 0.0 else 0
 			sky_only += 1 if light.sky_mode == DirectionalLight3D.SKY_MODE_SKY_ONLY else 0
@@ -416,10 +429,10 @@ func _check_day_sun() -> String:
 	var back := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
 	DaySun.use_engine_globals()
 	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0), DaySun.step_seconds(-6.0), DaySun.step_seconds(-40.0), DaySun.step_for(-12.0), DaySun.step_for(-20.0)]
-	if not _require(jumped == jump_from + 3600.0 and light.transform == scene_transform and back.is_empty(), "A jump must move the sun at once (shown %s for %s), and pinned again the light must be main.tscn's Sun with main.tscn's daylight (it differs in %s)." % [jumped, jump_from + 3600.0, back]) \
+	if not _require(jumped == jump_from + 3600.0 and light.transform == scene_transform and back.is_empty() and glows.fill.emission_energy_multiplier == glows.fill_energy and day_sun.fill_share == 1.0 and fills_out > 0, "A jump must move the sun at once (shown %s for %s), and pinned again the light must be main.tscn's Sun with main.tscn's daylight (it differs in %s) and the daylight fill its own emission exactly (%s, share %s; out at %d moments)." % [jumped, jump_from + 3600.0, back, glows.fill.emission_energy_multiplier, day_sun.fill_share, fills_out]) \
 	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S and shape[5] < shape[3] and shape[6] == DaySun.STEP_S and shape[7] == DaySun.step_seconds(-12.0) and shape[7] < DaySun.STEP_S and shape[8] == DaySun.STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up or down and shorter near the horizon, to MIN_STEP_S, and STEP_S through the night floor: %s at 75, 30, 20, 10, 5, -6 and -40 degrees, then step_for at -12 (above the floor) and -20." % [shape]):
 		return ""
-	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon, %d of them lighting the sky alone; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned" % [checked, nights, sky_only, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
+	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon, %d of them lighting the sky alone, the daylight fill out at %d and the lamp lit at all; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned, the fill's own emission back exactly" % [checked, nights, sky_only, fills_out, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
 
 
 ## The light's curves (DayLight): their table, full day from FULL_DAY_ELEVATION_DEG
@@ -535,6 +548,7 @@ func _measures(look: Dictionary) -> Dictionary:
 		"night": float(look.night),
 		"parked_lamps": float(look.parked_lamps),
 		"shadow_reach": float(look.shadow_reach),
+		"daylight_fill": float(look.daylight_fill),
 	}
 
 
@@ -552,6 +566,29 @@ func _crossing(around: float, height_deg: float, evening: bool) -> float:
 		else:
 			low = middle
 	return high
+
+
+## A building's glows for DaySun to find: a daylight fill and a lamp, each on a box
+## under one root (in the tree, freed with the run's other nodes), with their own
+## emission as the materials hold it.
+func _glow_fixture() -> Dictionary:
+	var parent := Node3D.new()
+	var glows := {"root": parent}
+	for role: String in [DaySun.DAYLIGHT_FILL, DaySun.LAMP]:
+		var material := StandardMaterial3D.new()
+		material.emission_enabled = true
+		material.emission_energy_multiplier = FILL_ENERGY if role == DaySun.DAYLIGHT_FILL else LAMP_ENERGY
+		material.set_meta(DaySun.NIGHT_ROLE, role)
+		var box := MeshInstance3D.new()
+		box.mesh = BoxMesh.new()
+		box.material_override = material
+		parent.add_child(box)
+		var kind := "fill" if role == DaySun.DAYLIGHT_FILL else "lamp"
+		glows[kind] = material
+		glows[kind + "_energy"] = material.emission_energy_multiplier
+	root.add_child(parent)
+	_nodes.append(parent)
+	return glows
 
 
 ## The night lights' rule (NightLights), on a DaySun out of the tree whose darkness
@@ -700,6 +737,9 @@ func _check_switch_off() -> String:
 	for _frame in 3:
 		await process_frame
 	day_sun.follow(true)
+	# A building's glows, which a look at night would put out (its daylight fill).
+	var glows := _glow_fixture()
+	day_sun.collect_fills(glows.root)
 	# The night lights, made as a driver would: nothing at all, even told it is dark.
 	var lights := NightLights.new(day_sun, null, null)
 	root.add_child(lights)
@@ -714,17 +754,18 @@ func _check_switch_off() -> String:
 	day_sun.night = 0.0
 	var differences := _look_differences(light, environment, written, DayLight.at(DaySun.shown_angles(DayClock.RECORDED_UNIX)[0]))
 	var inert := [light.transform == scene_transform, differences.is_empty(), written.size(), is_nan(day_sun.shown_unix), is_nan(day_sun.lit_elevation), day_sun.is_processing(),
-		light.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY, quality.reach == 1.0 and light.directional_shadow_max_distance == medium_distance]
+		light.sky_mode == DirectionalLight3D.SKY_MODE_LIGHT_AND_SKY, quality.reach == 1.0 and light.directional_shadow_max_distance == medium_distance,
+		day_sun.fills.is_empty() and day_sun.fill_share == 1.0 and glows.fill.emission_energy_multiplier == glows.fill_energy]
 	DaySun.use_engine_globals()
 	ProjectSettings.set_setting(DayClock.ENABLED_SETTING, kept)
 	DayClock.restart()
 	var back := [DayClock.enabled(), DayClock.now(), DayClock.is_running()]
 	if not _require(off == [false, reasons[2], DayClock.RECORDED_UNIX, false] and jumped == [DayClock.RECORDED_UNIX, false, 0], "With %s false the time of day must be off for that reason and its clock hold the recorded moment whatever jumps it (off: %s; after start_at, start_now and pin: %s)." % [DayClock.ENABLED_SETTING, off, jumped]) \
-	or not _require(inert == [true, true, 0, true, true, false, true, true], "With the time of day off DaySun must write nothing, even with the clock pinned at night: main.tscn's Sun and look untouched (the stars and the parked cars' lamps among them), no global handed over, nothing shown and no processing, the Sun lighting land and sky and the shadows' whole reach (transform kept, look kept, globals, nothing shown, nothing lit, processing, light and sky, whole reach: %s; the look differs in %s)." % [inert, differences]) \
+	or not _require(inert == [true, true, 0, true, true, false, true, true, true], "With the time of day off DaySun must write nothing, even with the clock pinned at night: main.tscn's Sun and look untouched (the stars and the parked cars' lamps among them), no global handed over, nothing shown and no processing, the Sun lighting land and sky, the shadows' whole reach and a building's daylight fill neither found nor dimmed (transform kept, look kept, globals, nothing shown, nothing lit, processing, light and sky, whole reach, fill untouched: %s; the look differs in %s)." % [inert, differences]) \
 	or not _require(lights_off == [false, false, false, 0.0], "With the time of day off the night lights must not be wanted, and one a driver makes must do nothing, even told it is dark ([wanted, processing, on, level] %s)." % [lights_off]) \
 	or not _require(back == [true, DayClock.RECORDED_UNIX, false], "With the setting back the time of day must be on again, the clock held for this driver at the recorded moment (%s)." % [back]):
 		return ""
-	return "the switch: on unless %s, the setting %s false or the web; turned off, the clock held at the recorded moment through start_at, start_now and pin (22:00 among them), DaySun writing nothing to main.tscn's Sun, its look (the stars among it) or the globals (the parked cars' lamps among them), the Sun lighting land and sky, the shadows' whole reach, and the night lights neither wanted nor doing anything where a driver makes them" % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING]
+	return "the switch: on unless %s, the setting %s false or the web; turned off, the clock held at the recorded moment through start_at, start_now and pin (22:00 among them), DaySun writing nothing to main.tscn's Sun, its look (the stars among it) or the globals (the parked cars' lamps among them), the Sun lighting land and sky, the shadows' whole reach, a building's daylight fill neither found nor dimmed, and the night lights neither wanted nor doing anything where a driver makes them" % [DayClock.OFF_ARGUMENT, DayClock.ENABLED_SETTING]
 
 
 ## How far the game's clock and the system clock run while REAL_SPAN_S of real time

@@ -1,6 +1,7 @@
 extends SceneTree
 ## The bake's building merge (tools/merge_baked_buildings.gd) on a hand-built building:
-## the same triangles and colours come out, and everything that must stay separate does.
+## the same triangles and colours come out, and everything that must stay separate does,
+## a glow's night role (DaySun) among it.
 ## A part that leaves its source but never reaches a batch fails the merge, and the bake's
 ## prune frees only inert superseded nodes and fails when fewer bodies go than the
 ## housing family installer switched off.
@@ -104,8 +105,28 @@ func _run() -> void:
 	drawn_by_multimesh.multimesh.instance_count = 1
 	record.add_child(drawn_by_multimesh)
 
+	# A building's glows keep their night role through the merge (DaySun finds them by
+	# it in the baked world): a lamp and a daylight fill that differ only in it and in
+	# base colour stay apart, each merged material carrying its own (under a record of their own,
+	# so the walls checked below stay as they were).
+	var lamp_material := _material(Color(0.9, 0.8, 0.6))
+	lamp_material.emission_enabled = true
+	lamp_material.emission_energy_multiplier = 0.5
+	lamp_material.set_meta(DaySun.NIGHT_ROLE, DaySun.LAMP)
+	var fill_material := lamp_material.duplicate() as StandardMaterial3D
+	fill_material.albedo_color = Color(0.7, 0.6, 0.5)
+	fill_material.set_meta(DaySun.NIGHT_ROLE, DaySun.DAYLIGHT_FILL)
+	var glow_record := Node3D.new()
+	glow_record.set_meta("source_keys", ["w2"])
+	glow_record.set_meta("derived_object_key", "building:w2:wall")
+	top.add_child(glow_record)
+	var lamp_part := _box(glow_record, lamp_material, Transform3D(Basis.IDENTITY, Vector3(0, 5, 0)))
+	var fill_part := _box(glow_record, fill_material, Transform3D(Basis.IDENTITY, Vector3(0, 8, 0)))
+
 	var report := Merge.merge(buildings)
 	check((report.problems as PackedStringArray).is_empty(), "A clean merge must report no problems: %s" % report.problems)
+	var glows := DaySun.building_glows(buildings)
+	check(not is_instance_valid(lamp_part) and not is_instance_valid(fill_part) and (glows[DaySun.LAMP] as Array).size() == 1 and (glows[DaySun.DAYLIGHT_FILL] as Array).size() == 1 and (glows.untagged as Array).is_empty() and glows[DaySun.LAMP][0] != glows[DaySun.DAYLIGHT_FILL][0], "A lamp and a daylight fill must merge apart, each keeping its night role (lamps %s, fills %s, untagged %s)" % [glows[DaySun.LAMP], glows[DaySun.DAYLIGHT_FILL], glows.untagged])
 	check(int(report.get("taken_indices", 0)) > 0 and int(report.get("taken_vertices", 0)) > 0, "A merge must count what it takes from its sources: %s" % report)
 
 	check(is_instance_valid(overridden) and overridden.mesh.get_surface_count() == 2 and overridden.get_surface_override_material(0) == override_material, "A part with a surface override must stay whole")

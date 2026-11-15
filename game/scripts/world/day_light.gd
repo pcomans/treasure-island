@@ -35,7 +35,11 @@ extends RefCounted
 ## that turn on by themselves follow it (NightLights: the player's flashlight, the
 ## driven car's headlights); the parked cars' day-running and tail lamps go out as
 ## the sun sets (parked_lamps, a global uniform of street_clutter.gdshader; the car
-## being driven keeps its own lit).
+## being driven keeps its own lit). The buildings' glows that stand in for daylight
+## (lobby glass, a sign, an interior seen through a window) go out with it too
+## (daylight_fill, the share of their own emission DaySun leaves them; owner,
+## 2026-11-15: "Keep real lamps, darken glass"), while their lamps (string lights, a
+## cafe's bulbs, a pier's LED, a lamp by a door) stay lit.
 
 ## From this height up the look is daylight's: main.tscn's.
 const FULL_DAY_ELEVATION_DEG := 30.0
@@ -59,7 +63,7 @@ const NIGHT_FLOOR := {
 	"fog_color": Color(0.06, 0.07, 0.095), "fog_energy": 0.55, "fog_sun_scatter": 0.0,
 	"exposure": 1.58, "glow_cap": 3.0,
 	"horizon_light": 0.02, "vegetation_sheen": 0.12,
-	"stars": 1.0, "night": 1.0, "parked_lamps": 0.0, "shadow_reach": 0.7,
+	"stars": 1.0, "night": 1.0, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.0,
 }
 
 ## The look from high sun down to the night floor. Every key holds every value.
@@ -76,7 +80,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.74, 0.80, 0.86), "fog_energy": 0.85, "fog_sun_scatter": 0.0,
 		"exposure": 1.18, "glow_cap": 12.0,
 		"horizon_light": 1.0, "vegetation_sheen": 1.0,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
 	# The afternoon sun warming through more air; shade cooler. Glass glints and
 	# their bloom held in as the sun comes level with the facades.
@@ -91,7 +95,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.75, 0.79, 0.83), "fog_energy": 0.85, "fog_sun_scatter": 0.05,
 		"exposure": 1.18, "glow_cap": 6.0,
 		"horizon_light": 0.95, "vegetation_sheen": 0.4,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
 	# The sun's shadows reach the shadow option's whole distance down to here; lower,
 	# where a low sun's long shadows across the whole distance cost the most, they reach
@@ -108,7 +112,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.761111, 0.773333, 0.796667), "fog_energy": 0.822222, "fog_sun_scatter": 0.133333,
 		"exposure": 1.196667, "glow_cap": 4.333333,
 		"horizon_light": 0.788889, "vegetation_sheen": 0.244444,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 1.0, "daylight_fill": 1.0,
 	},
 	# Golden hour: warm sun, blue shade, a warm haze toward the sun.
 	{
@@ -122,7 +126,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.77, 0.76, 0.77), "fog_energy": 0.8, "fog_sun_scatter": 0.2,
 		"exposure": 1.21, "glow_cap": 3.0,
 		"horizon_light": 0.66, "vegetation_sheen": 0.12,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 0.75,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 1.0, "shadow_reach": 0.75, "daylight_fill": 1.0,
 	},
 	{
 		"elevation": 3.0,
@@ -135,7 +139,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.76, 0.70, 0.67), "fog_energy": 0.75, "fog_sun_scatter": 0.3,
 		"exposure": 1.24, "glow_cap": 3.0,
 		"horizon_light": 0.5, "vegetation_sheen": 0.12,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 0.5, "shadow_reach": 0.7,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 0.5, "shadow_reach": 0.7, "daylight_fill": 1.0,
 	},
 	{
 		"elevation": 1.0,
@@ -148,7 +152,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.72, 0.62, 0.58), "fog_energy": 0.7, "fog_sun_scatter": 0.3,
 		"exposure": 1.27, "glow_cap": 3.0,
 		"horizon_light": 0.4, "vegetation_sheen": 0.12,
-		"stars": 0.0, "night": 0.0, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.0, "night": 0.0, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.6,
 	},
 	# The disc gone under the horizon: no sunlight on the island; the clouds, a
 	# kilometre and more up, still in it.
@@ -163,7 +167,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.62, 0.55, 0.55), "fog_energy": 0.66, "fog_sun_scatter": 0.0,
 		"exposure": 1.31, "glow_cap": 3.0,
 		"horizon_light": 0.3, "vegetation_sheen": 0.12,
-		"stars": 0.0, "night": 0.05, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.0, "night": 0.05, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.3,
 	},
 	# Civil dusk: the glow low in the west, the clouds' afterglow fading.
 	{
@@ -177,7 +181,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.40, 0.38, 0.45), "fog_energy": 0.62, "fog_sun_scatter": 0.0,
 		"exposure": 1.4, "glow_cap": 3.0,
 		"horizon_light": 0.14, "vegetation_sheen": 0.12,
-		"stars": 0.05, "night": 0.25, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.05, "night": 0.25, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.0,
 	},
 	{
 		"elevation": -6.0,
@@ -190,7 +194,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.22, 0.24, 0.32), "fog_energy": 0.6, "fog_sun_scatter": 0.0,
 		"exposure": 1.52, "glow_cap": 3.0,
 		"horizon_light": 0.06, "vegetation_sheen": 0.12,
-		"stars": 0.3, "night": 0.55, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.3, "night": 0.55, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.0,
 	},
 	# The deep twilight (batch B's night floor): a dark blue sky lighter at the
 	# horizon, the island lit by the sky alone; the first stars.
@@ -205,7 +209,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.16, 0.18, 0.25), "fog_energy": 0.6, "fog_sun_scatter": 0.0,
 		"exposure": 1.58, "glow_cap": 3.0,
 		"horizon_light": 0.035, "vegetation_sheen": 0.12,
-		"stars": 0.55, "night": 0.75, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.55, "night": 0.75, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.0,
 	},
 	# Nautical dusk: the last of the twilight low in the west.
 	{
@@ -219,7 +223,7 @@ const KEYS: Array[Dictionary] = [
 		"fog_color": Color(0.1, 0.11, 0.15), "fog_energy": 0.58, "fog_sun_scatter": 0.0,
 		"exposure": 1.58, "glow_cap": 3.0,
 		"horizon_light": 0.025, "vegetation_sheen": 0.12,
-		"stars": 0.85, "night": 0.95, "parked_lamps": 0.0, "shadow_reach": 0.7,
+		"stars": 0.85, "night": 0.95, "parked_lamps": 0.0, "shadow_reach": 0.7, "daylight_fill": 0.0,
 	},
 	NIGHT_FLOOR,
 ]
@@ -229,7 +233,7 @@ const VALUES: Array[String] = [
 	"sun_color", "sun_energy", "sun_specular", "sky_top", "sky_horizon", "sky_low_sun", "ground_bottom",
 	"ground_horizon", "cloud_glow", "cloud_glow_energy", "ambient_color", "ambient_energy",
 	"fog_color", "fog_energy", "fog_sun_scatter", "exposure", "glow_cap", "horizon_light",
-	"vegetation_sheen", "stars", "night", "parked_lamps", "shadow_reach",
+	"vegetation_sheen", "stars", "night", "parked_lamps", "shadow_reach", "daylight_fill",
 ]
 
 ## Where each value goes: the sky material's shader parameter...
@@ -253,7 +257,9 @@ const SUN_PROPERTIES := {"sun_color": &"light_color", "sun_energy": &"light_ener
 ## that the distant art fades into as horizon_light falls. night goes nowhere in the
 ## engine: DaySun keeps it for the lights that follow it (NightLights). shadow_reach
 ## goes to the player's shadow option (ShadowQuality.set_reach): the share of its
-## shadow distance the sun casts out to, 1 by day.
+## shadow distance the sun casts out to, 1 by day. daylight_fill goes to the
+## buildings' daylight fills (DaySun.collect_fills): the share of its own emission
+## each keeps, 1 by day.
 const GLOBALS := {
 	"horizon_light": &"horizon_light", "vegetation_sheen": &"vegetation_sheen", "horizon_haze": &"horizon_haze",
 	"parked_lamps": &"parked_lamps",

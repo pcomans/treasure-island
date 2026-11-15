@@ -263,6 +263,9 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# The buildings' daylight fills, found once now the world is loaded, go out at
+	# night with the look (DaySun; nothing with the time of day off).
+	day_sun.collect_fills(world_root.buildings)
 	if night_lights == null and NightLights.wanted():
 		night_lights = NightLights.new(day_sun, player, vehicles, shadows)
 		add_child(night_lights)

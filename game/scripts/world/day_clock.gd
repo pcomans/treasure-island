@@ -40,9 +40,9 @@ extends RefCounted
 ## time of day asks enabled() first and, when it is false, makes and runs nothing
 ## (no node, no light, no process): DaySun, which alone writes the look (the night,
 ## the stars, the Sun lighting the sky alone, the parked cars' lamps put out, the
-## shadows' reach), the Options screen's date and time, and NightLights (the
-## flashlight and the driven car's headlights), which a scripted run doesn't make
-## either (scripted()). Each run
+## buildings' daylight fills put out, the shadows' reach), the Options screen's
+## date and time, and NightLights (the flashlight and the driven car's
+## headlights), which a scripted run doesn't make either (scripted()). Each run
 ## prints one line as it reads the switch: TIME_OF_DAY on, held (a --script run)
 ## or off, and why.
 

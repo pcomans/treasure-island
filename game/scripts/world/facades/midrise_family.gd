@@ -3568,9 +3568,14 @@ static func _make_materials(ctx: Ctx) -> void:
 			ctx.errors.append("palette %s needs rgb" % key)
 			return
 		var texture_path := str(entry.get("texture", ""))
+		# A glowing entry says what it is at night (DaySun): a lamp, or a daylight fill.
+		var night_role := str(entry.get("night_role", ""))
+		if float(entry.get("emission", 0.0)) > 0.0 and night_role != DaySun.LAMP and night_role != DaySun.DAYLIGHT_FILL:
+			ctx.errors.append("palette %s glows, so it needs a night_role: %s or %s" % [key, DaySun.LAMP, DaySun.DAYLIGHT_FILL])
+			return
 		var cache_key := "%s|%s|%s|%s|%s|%s|%s|%s" % [key, rgb[0], rgb[1], rgb[2], entry.get("alpha", 1.0), entry.get("roughness", 0.9), entry.get("metallic", 0.0), entry.get("receive_shadows", true)]
 		if not texture_path.is_empty() or entry.has("emission") or entry.has("specular"):
-			cache_key += "|%s|%s|%s|%s|%s|%s|%s" % [texture_path, entry.get("tile_m", []), entry.get("offset_m", [0.0, 0.0]), entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5)]
+			cache_key += "|%s|%s|%s|%s|%s|%s|%s|%s" % [texture_path, entry.get("tile_m", []), entry.get("offset_m", [0.0, 0.0]), entry.get("uv_scale", 1.0), entry.get("texture_alpha", false), entry.get("emission", 0.0), entry.get("specular", 0.5), night_role]
 		if not _material_cache.has(cache_key):
 			var material := StandardMaterial3D.new()
 			material.resource_name = "Midrise_" + key
@@ -3614,6 +3619,7 @@ static func _make_materials(ctx: Ctx) -> void:
 				# The image adds to the emission colour, so an image keeps it black.
 				material.emission = Color.BLACK if not texture_path.is_empty() else material.albedo_color
 				material.emission_energy_multiplier = float(entry.get("emission", 0.0))
+				material.set_meta(DaySun.NIGHT_ROLE, night_role)
 			_material_cache[cache_key] = material
 		ctx.materials[key] = _material_cache[cache_key]
 

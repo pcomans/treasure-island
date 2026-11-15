@@ -1839,6 +1839,8 @@ func _material(key: String) -> Material:
 					m.emission_enabled = true
 					m.emission_texture = m.albedo_texture
 					m.emission_energy_multiplier = 0.45
+					# A sign lit to read by day: dark at night (DaySun).
+					m.set_meta(DaySun.NIGHT_ROLE, DaySun.DAYLIGHT_FILL)
 			"mural":
 				m.albedo_texture = _texture(TEX + "mural_nnw.png")
 				m.roughness = 0.9
@@ -1863,6 +1865,7 @@ func _material(key: String) -> Material:
 				m.emission_enabled = true
 				m.emission = Color(1.0, 0.98, 0.9)
 				m.emission_energy_multiplier = 0.5
+				m.set_meta(DaySun.NIGHT_ROLE, DaySun.LAMP)
 			"rollup_grey", "rollup_white":
 				m.albedo_color = Color8(150, 154, 154) if key == "rollup_grey" else Color8(232, 230, 222)
 				m.albedo_texture = _pattern_texture("slat_rows")

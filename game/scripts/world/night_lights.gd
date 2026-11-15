@@ -17,7 +17,7 @@ extends Node
 ## feature flag"): main.gd makes this node only where wanted(), and one made with
 ## the switch off does nothing (_ready). With the switch off DaySun puts on no look,
 ## so the rest of the night (the stars, the parked cars' lamps put out, the Sun
-## lighting the sky alone) stays off with it.
+## lighting the sky alone, the buildings' daylight fills put out) stays off with it.
 ##
 ## The flashlight is a spot carried at the chest and pointed where the camera
 ## looks: the camera's heading, and its pitch at FLASH_PITCH_SHARE of the camera's

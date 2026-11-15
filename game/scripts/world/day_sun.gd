@@ -17,6 +17,14 @@ extends Node
 ## casts them. night, the look's darkness, is kept for the lights that follow it
 ## (NightLights).
 ##
+## The buildings' glowing materials each carry a night role (NIGHT_ROLE, put on by
+## the family builder that makes them): a LAMP stays as it is; a DAYLIGHT_FILL, a
+## glow that stands in for daylight (lobby glass, a sign, an interior seen through a
+## window), keeps the look's daylight_fill share of its own emission, 1 by day and
+## none at night. collect_fills() finds them once, after the world loads (the world
+## generated at startup and the baked one alike); a share is written only when it
+## changes, so the recorded moment never touches them.
+##
 ## While time runs the sun moves in steps (step_seconds), not every frame: any
 ## change of the light or of the sky's material makes Godot redraw the sky's
 ## radiance map (ambient light and every reflection) over several frames, so a sun
@@ -50,6 +58,10 @@ const MIN_STEP_S := 0.5
 ## FINE_ANGLE_STEP_DEG.
 const ANGLE_STEP_DEG := 0.01
 const FINE_ANGLE_STEP_DEG := 0.001
+## The meta a building's glowing material carries, and its two values (see the top).
+const NIGHT_ROLE := &"night_role"
+const LAMP := "lamp"
+const DAYLIGHT_FILL := "daylight_fill"
 ## Reflection probes that capture once (Mersea's two, handed over by main.gd once
 ## startup has settled them) are captured again, while time runs, when the sun's
 ## height has moved this far (degrees) since their last capture, though not through
@@ -82,6 +94,10 @@ var night := 0.0
 ## The player's shadow option, which takes the look's shadow reach (main.gd sets
 ## it; null for a bare light, a test's).
 var shadow_quality: ShadowQuality
+## The buildings' daylight fills (collect_fills), each with its own emission energy,
+## and the share of it they have on now (the look's daylight_fill).
+var fills := {}
+var fill_share := 1.0
 var _revision := -1
 ## Seconds until the next step, for the sun as drawn now.
 var _step := STEP_S
@@ -153,6 +169,7 @@ func light(elevation_deg: float) -> void:
 		sun.sky_mode = mode
 	if shadow_quality != null:
 		shadow_quality.set_reach(float(look.shadow_reach))
+	_put_fill(float(look.daylight_fill))
 	if environment != null:
 		for value: String in DayLight.ENVIRONMENT_PROPERTIES:
 			_put(environment, DayLight.ENVIRONMENT_PROPERTIES[value], look[value])
@@ -171,6 +188,69 @@ func light(elevation_deg: float) -> void:
 	if DayClock.is_running() and not reflection_probes.is_empty() and absf(elevation_deg - captured_elevation) >= PROBE_RECAPTURE_DEG \
 	and not (DayLight.is_floor(elevation_deg) and DayLight.is_floor(captured_elevation)):
 		_capture_due = true
+
+
+## Finds the daylight fills under `buildings` (main.gd, once the world is loaded)
+## and gives them the share of their emission the look has on now; fills found
+## before are given their own emission back first. Nothing with the time of day off.
+func collect_fills(buildings: Node) -> void:
+	if not DayClock.enabled():
+		return
+	var share := fill_share
+	_put_fill(1.0)
+	fills.clear()
+	for material: BaseMaterial3D in building_glows(buildings)[DAYLIGHT_FILL]:
+		fills[material] = material.emission_energy_multiplier
+	_put_fill(share)
+
+
+## Each daylight fill at `share` of its own emission, written only when the share
+## changes.
+func _put_fill(share: float) -> void:
+	if share == fill_share:
+		return
+	fill_share = share
+	for material: BaseMaterial3D in fills:
+		material.emission_energy_multiplier = float(fills[material]) * share
+
+
+## The glowing materials under `root`, each once (a geometry's override or overlay,
+## a mesh instance's surface override, or a surface of its mesh or its multimesh's):
+## a BaseMaterial3D with emission on, or a ShaderMaterial whose shader writes
+## EMISSION, by night role: {LAMP: [...], DAYLIGHT_FILL: [...], "untagged": [...]}.
+## A shader's glow can only be a lamp (its emission is its shader's own). One with no
+## role it can have is listed as untagged, as its node's path and its name.
+static func building_glows(root: Node) -> Dictionary:
+	var found := {LAMP: [], DAYLIGHT_FILL: [], "untagged": []}
+	var seen := {}
+	for node: Node in root.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		var materials: Array[Material] = [geometry.material_override, geometry.material_overlay]
+		var mesh: Mesh = null
+		if geometry is MeshInstance3D:
+			var instance := geometry as MeshInstance3D
+			mesh = instance.mesh
+			for surface in instance.get_surface_override_material_count():
+				materials.append(instance.get_surface_override_material(surface))
+		elif geometry is MultiMeshInstance3D and (geometry as MultiMeshInstance3D).multimesh != null:
+			mesh = (geometry as MultiMeshInstance3D).multimesh.mesh
+		if mesh != null:
+			for surface in mesh.get_surface_count():
+				materials.append(mesh.surface_get_material(surface))
+		for material: Material in materials:
+			if material == null or seen.has(material):
+				continue
+			seen[material] = true
+			var emits := material is BaseMaterial3D and (material as BaseMaterial3D).emission_enabled
+			var shader := (material as ShaderMaterial).shader if material is ShaderMaterial else null
+			if not emits and (shader == null or not shader.code.contains("EMISSION")):
+				continue
+			var role := str(material.get_meta(NIGHT_ROLE, ""))
+			if role == LAMP or (role == DAYLIGHT_FILL and emits):
+				(found[role] as Array).append(material)
+			else:
+				(found.untagged as Array).append("%s (%s, night role \"%s\")" % [geometry.get_path(), material.resource_name, role])
+	return found
 
 
 ## Captures `probes` again as the light changes from now on (their capture now is
