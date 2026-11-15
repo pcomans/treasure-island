@@ -266,6 +266,8 @@ func _check_ferry_solidity() -> void:
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	# The shaders a group at a time, as the web build compiles them.
+	main.compile_by_group = true
 	var loading := _watch_loading(main, world)
 	root.add_child(main)
 	# The loading screen's Controls button, pressed while the world loads.
@@ -417,9 +419,9 @@ func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
 func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) -> String:
 	var island: StringName = &"load" if world.uses_prebuilt_world() else &"build"
 	var steps: Array[Dictionary] = main.compile_steps
-	var expected: Array = [GameMain.LOADING_STEPS[island], GameMain.LOADING_STEPS[&"setup"]]
+	var expected: Array = [GameMain.loading_line(island), GameMain.loading_line(&"setup")]
 	expected.append_array(steps.map(func(step: Dictionary) -> String: return step.line))
-	expected.append(GameMain.LOADING_STEPS[&"reflections"])
+	expected.append(GameMain.loading_line(&"reflections"))
 	var lines: Array = seen.lines
 	var texts := lines.map(func(line: Dictionary) -> String: return line.text)
 	var words := steps.map(func(step: Dictionary) -> String: return str(step.line))
@@ -471,7 +473,17 @@ func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) 
 	or not (main.get_node("Vehicles") as Node3D).visible:
 		_fail("Once play has started the loading screen must be gone for good, with 3D on and every node shown as it was (lines %s, loading screen shown %s, 3D off %s, changed %s)." % [seen.lines.size(), main.hud.load_panel.visible, main.get_viewport().disable_3d, changed.slice(0, 5)])
 		return ""
-	return "%d lines in order (%s ... %s), each a frame before its work, the island unseen behind the opaque screen until play, %d shader steps, every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4)), texts[-1], steps.size()]
+	# A desktop's plan (compile_by_group off): one step, every group's nodes at once.
+	var single := main.compile_plan(false)
+	var roots := 0
+	for group: Dictionary in GameMain.COMPILE_GROUPS:
+		for path: String in group.paths:
+			roots += int(main.get_node_or_null(path) is Node3D)
+	if single.size() != 1 or single[0].line != GameMain.COMPILE_ALL_LINE or (single[0].nodes as Array).size() != roots \
+	or not (single[0].nodes as Array).has(world.buildings):
+		_fail("With the shaders all at once there must be one step, \"%s\", showing every group's %d nodes (it has %s)." % [GameMain.COMPILE_ALL_LINE, roots, single.map(func(step: Dictionary) -> String: return "%s: %d nodes" % [step.line, (step.nodes as Array).size()])])
+		return ""
+	return "%d lines in order (%s ... %s), each a frame before its work, the island unseen behind the opaque screen until play, %d shader steps a group at a time (one step of %d groups all at once), every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4)), texts[-1], steps.size(), roots]
 
 
 ## The controls screen opened on the loading screen (pressed as the world loads)

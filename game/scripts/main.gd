@@ -39,34 +39,48 @@ const LOADING_STEPS := {
 ## The start of each loading-step line printed for the web page (game/web/shell.html).
 const LOADING_STEP_PRINT := "LOADING_STEP "
 ## The shaders compiled a group of the world at a time (owner, 2026-11-15: the one
-## graphics step was "too monolithic", and its line must say what runs). The
-## island's first frame compiles the shader of everything in view, a quarter of a
-## minute on the web. So every group starts hidden behind the loading screen and
-## shows one frame after another, and the frame that first draws a group compiles
-## its shaders under its own line. In order: each group's words on the line, the
-## nodes (paths from main) it shows, and over how many frames ("batches", counted on
-## the line) the children of its one node show, nearest the camera first. The first
-## group shows nothing: its frame is the first with 3D on, the sky, the light, the
-## player and the screen's effects. A missing node is skipped (the grass and the
-## cars' near detail are desktop only), and a group with none is left out.
+## graphics step was "too monolithic", and its line must say what runs). On the web
+## the island's first frame compiles the shaders of everything in view, about 16 s
+## (WebGL compiles each as it is first drawn). So every group starts hidden behind
+## the loading screen and shows one frame after another, and the frame that first
+## draws a group compiles its shaders under its own line. In order: each group's
+## words on the line, the nodes (paths from main) it shows, and over how many frames
+## ("batches", counted on the line) the children of its one node show, nearest the
+## camera first. The first group shows nothing: its frame is the first with 3D on,
+## the sky, the light, the player and the screen's effects. A missing node is
+## skipped (the grass and the cars' near detail are desktop only). The groups and
+## batches follow what each cost on the web (2026-11-15: from the sky's 1.9 s to the
+## bay's 0.6 s, the buildings' batches 4.2, 0.5 and 1.4 s); groups that cost next to
+## nothing are folded into a neighbour, so no line flashes by.
 const COMPILE_GROUPS: Array[Dictionary] = [
 	{"words": "sky and player", "paths": []},
 	{"words": "water and shore", "paths": ["WorldRoot/ContextWorld/Water", "WorldRoot/ContextWorld/Shoreline"]},
 	{"words": "ground and roads", "paths": ["WorldRoot/PlayableWorld/GroundAndAreas", "WorldRoot/PlayableWorld/RoadsAndPaths"]},
-	{"words": "buildings", "paths": ["WorldRoot/PlayableWorld/Buildings"], "batches": 12},
-	{"words": "trees and plants", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Vegetation"], "batches": 3},
-	{"words": "grass", "paths": ["GroundDressing"]},
+	{"words": "buildings", "paths": ["WorldRoot/PlayableWorld/Buildings"], "batches": 3},
+	{"words": "trees and plants", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Vegetation", "GroundDressing"]},
 	{"words": "street furniture and fences", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Furniture", "WorldRoot/PlayableWorld/StreetDetail/Fences"]},
 	{"words": "parked cars and street clutter", "paths": ["WorldRoot/PlayableWorld/StreetDetail/Clutter", "Vehicles"]},
-	{"words": "ferry", "paths": ["WorldRoot/ContextWorld/FerryTerminal"]},
-	{"words": "Yerba Buena Island", "paths": ["WorldRoot/ContextWorld/YerbaBuenaIsland", "WorldRoot/ContextWorld/BoundaryAttachedVisuals"]},
-	{"words": "Bay Bridge", "paths": ["WorldRoot/ContextWorld/BayBridge"]},
-	{"words": "distant shores", "paths": ["WorldRoot/ContextWorld/BayAreaHorizon"]},
+	{"words": "the bay and its shores", "paths": ["WorldRoot/ContextWorld/FerryTerminal", "WorldRoot/ContextWorld/YerbaBuenaIsland", "WorldRoot/ContextWorld/BoundaryAttachedVisuals", "WorldRoot/ContextWorld/BayBridge", "WorldRoot/ContextWorld/BayAreaHorizon"]},
 ]
+## The line for the shaders all at once (compile_by_group off).
+const COMPILE_ALL_LINE := "Compiling shaders…"
+## A second line under a step that runs long on a desktop's first launch (2026-11-15,
+## on the devcontainer: the island's load 7 to 8 s and the reflections 9 to 10 s,
+## against 3 s and under 1 s on the next launch, which reuses the compiled shaders).
+const FIRST_LAUNCH_NOTES := {
+	&"load": "On a first launch this also compiles its shaders.",
+	&"reflections": "On a first launch this also compiles their shaders.",
+}
 
 var _world_ready := false
 var _startup_failed := false
-## This load's shader steps (_compile_plan), each {"line": its words on the loading
+## Whether the shaders are compiled a group at a time (COMPILE_GROUPS), each under
+## its own line: on the web, where WebGL compiles them as they are first drawn. A
+## desktop compiles most of them as the island loads, and each group then draws in
+## a frame (2026-11-15: 25 ms), so there they are compiled all at once under one line.
+## The gameplay contract sets it, as a browser would.
+var compile_by_group := OS.has_feature("web")
+## This load's shader steps (compile_plan), each {"line": its words on the loading
 ## screen, "nodes": the Node3Ds its frame shows}, in order; set as they begin.
 var compile_steps: Array[Dictionary] = []
 ## The nodes the loading screen keeps hidden until their step, each with its own
@@ -298,23 +312,41 @@ func _load_world_after_paint() -> void:
 		world_root.load_world()
 
 
-## Puts up a loading step's line (LOADING_STEPS).
+## Puts up a loading step's line (loading_line).
 func _show_loading_step(step: StringName) -> void:
-	_show_loading_line(LOADING_STEPS[step])
+	_show_loading_line(loading_line(step))
+
+
+## A loading step's line as it shows here (LOADING_STEPS): on a desktop, under a
+## step that runs long on a first launch, with its note (FIRST_LAUNCH_NOTES).
+static func loading_line(step: StringName) -> String:
+	if not OS.has_feature("web") and FIRST_LAUNCH_NOTES.has(step):
+		return "%s\n%s" % [LOADING_STEPS[step], FIRST_LAUNCH_NOTES[step]]
+	return LOADING_STEPS[step]
 
 
 ## Puts up a line on the loading screen, and prints it for the web page, which shows
 ## it on its own loading screen over the game's.
 func _show_loading_line(text: String) -> void:
 	hud.show_loading(text)
-	STARTUP_MARKS.mark("line " + text)
+	STARTUP_MARKS.mark("line " + text.get_slice("\n", 0))
 	print(LOADING_STEP_PRINT + text)
 
 
-## The shaders' steps for the world as loaded (COMPILE_GROUPS), in order, as
-## {"line": the words on the loading screen, "nodes": the Node3Ds its frame shows}.
-func _compile_plan() -> Array[Dictionary]:
+## The shaders' steps for the world as loaded, in order, as {"line": the words on the
+## loading screen, "nodes": the Node3Ds its frame shows}: a group at a time
+## (COMPILE_GROUPS), or with by_group off one step showing every group's nodes.
+func compile_plan(by_group: bool) -> Array[Dictionary]:
 	var plan: Array[Dictionary] = []
+	if not by_group:
+		var every: Array[Node3D] = []
+		for group: Dictionary in COMPILE_GROUPS:
+			for path: String in group.paths:
+				var node := get_node_or_null(path) as Node3D
+				if node != null:
+					every.append(node)
+		plan.append({"line": COMPILE_ALL_LINE, "nodes": every})
+		return plan
 	var eye := player.get_camera().global_position
 	for group: Dictionary in COMPILE_GROUPS:
 		var nodes: Array[Node3D] = []
@@ -373,7 +405,7 @@ func _reflection_probes() -> Array[Node]:
 ## compiles its shaders, does so under that group's line, put up a frame before.
 ## Returns false if startup stopped meanwhile.
 func _compile_by_group() -> bool:
-	compile_steps = _compile_plan()
+	compile_steps = compile_plan(compile_by_group)
 	for step: Dictionary in compile_steps:
 		for node: Node3D in step.nodes:
 			_hide_until_shown(node)
@@ -391,7 +423,7 @@ func _compile_by_group() -> bool:
 	for index in compile_steps.size():
 		for node: Node3D in compile_steps[index].nodes:
 			_show_hidden(node)
-		_show_loading_line(compile_steps[index + 1].line if index + 1 < compile_steps.size() else LOADING_STEPS[&"reflections"])
+		_show_loading_line(compile_steps[index + 1].line if index + 1 < compile_steps.size() else loading_line(&"reflections"))
 		# Called in an idle step: this frame draws the group shown, then the next comes.
 		await get_tree().process_frame
 		if not _loading_goes_on():
