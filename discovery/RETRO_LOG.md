@@ -26586,3 +26586,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The default lives in one function (`GraphicsSettings.defaults()`), and every reader (main.gd's apply, the HUD rows, `valid()`, `building_shots.gd`, the touch drive) goes through it or through `RESOLUTIONS` by id, so one grep for `"75"`, `0.75`, "three quarters" and `scaling_3d` over game/, tools/ and the docs settled that nothing else hard-codes the web scale. Verdict PASS WITH NOTES.
 - What did not work well: The tests README row still says the defaults are "as before" next to a web default that is new; small, but "as before" was only true while the defaults were the pre-options game.
 - What the team should change next time: When a default changes, reword "as before"/"as it was" phrases in the same pass (the author did this in the code and contract message, not in the README row).
+
+### integrator-batch-20261115b — 2026-11-15 — the web's default resolution at 67 % (branch `release/batch-20261115b`)
+
+- What worked well: A small release stayed small: the fix and its review retro merged without conflict onto cf9192ed, the review's one wording note went in as a single-line edit to the tests README, and the one check the owner left in place (the Options contract, after an import) ran under an engine lock in under a minute and passed.
+- What did not work well: The review's retro branch was cut on top of the fix branch rather than on main, so its own file list (against main) showed the code files too; only the log of its commits beyond the fix showed it adds nothing but RETRO_LOG.
+- What the team should change next time: Cut review retro branches from main, or name the branch they sit on in the handback, so the integrator's "RETRO_LOG only" check reads true at a glance.
