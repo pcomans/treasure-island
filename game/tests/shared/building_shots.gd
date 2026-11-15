@@ -75,8 +75,8 @@ extends SceneTree
 ##   A still view may add "resolutions": ["50", ...] (GraphicsSettings resolution
 ##   ids) to be shot again at each of those 3D resolutions, through the game's own
 ##   setting, as NAME-res-ID.png; and "measure_graphics": N (30-3000) to time N
-##   frames at each resolution, then at the full resolution with each frame rate
-##   limit, with vsync off (a screen faster than the frames, which only a limit
+##   frames at each resolution, then at the lowest and the full resolution with each
+##   frame rate limit, with vsync off (a screen faster than the frames, which only a limit
 ##   holds back), in three blocks taken in turn: one FRAME_TIME line per setting
 ##   with wall, render CPU and GPU times, frames a second, the GPU's busy share and
 ##   whether a limit held (never in a --fixed-fps run, which does not wait for
@@ -926,8 +926,8 @@ func _shoot_resolutions(ids: Variant, path: String) -> String:
 	return error
 
 
-## Times the view's camera at each GraphicsSettings resolution, then at the full
-## resolution with each frame rate limit, with vsync off, `frames` frames a setting
+## Times the view's camera at each GraphicsSettings resolution, then at the lowest
+## and the full resolution with each frame rate limit, with vsync off, `frames` frames a setting
 ## in three blocks taken in turn so a drift in the machine's load falls on all.
 ## Prints one FRAME_TIME line per setting: wall, render CPU and GPU times, frames a
 ## second, the GPU's busy share (its time over the wall time) and, for a limit,
@@ -939,11 +939,15 @@ func _measure_graphics(frames: Variant, label: String) -> String:
 		return "measure_graphics needs 30-3000 frames"
 	var graphics := _h.main.graphics
 	var settings: Array[Dictionary] = []
-	for resolution: Dictionary in GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY):
+	var resolutions := GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY)
+	for resolution: Dictionary in resolutions:
 		settings.append({GraphicsSettings.RESOLUTION_KEY: resolution.id})
-	for rate: Dictionary in GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY):
-		if rate.has("max_fps"):
-			settings.append({GraphicsSettings.RESOLUTION_KEY: "100", GraphicsSettings.FRAME_RATE_KEY: rate.id})
+	# The limits at the lowest and the full resolution: a limit saves work only where
+	# the frames come faster than it.
+	for resolution: Dictionary in [resolutions.front(), resolutions.back()]:
+		for rate: Dictionary in GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY):
+			if rate.has("max_fps"):
+				settings.append({GraphicsSettings.RESOLUTION_KEY: resolution.id, GraphicsSettings.FRAME_RATE_KEY: rate.id})
 	var window := root.get_viewport_rid()
 	RenderingServer.viewport_set_measure_render_time(window, true)
 	var uncapped := _uncap_frames()
