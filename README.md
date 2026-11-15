@@ -129,24 +129,36 @@ the newest:
 The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
 the Mac app, with the same sounds.
 
+Every build has a build number: the number of commits in its commit's history,
+from [`tools/build-number`](tools/build-number). A newer build of `main` always
+has a larger number, and the Mac app, the Linux build and the web build of one
+commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
+with the game's name, the commit's date and its short hash, such as "Grand
+Treasure Island, build 1918 (2026-11-16, 1a2b3c4)", and so does its tag, with
+the number padded to six digits so that tags sort by it:
+`build-001918-2026-11-16-1a2b3c4`. Releases from before build numbers keep their
+`mac-<date>-<commit>` tags. `tools/build-number` refuses a shallow clone, which
+would give too small a number.
+
 After each release, CI's `itch` job also puts both builds on the itch.io page
 [phpp/grand-treasure-island](https://phpp.itch.io/grand-treasure-island): the
 Mac app goes to channel `mac` and the Linux build to channel `linux`, with the
-release's date and commit (such as `2026-11-15-c9746e7`) as the version. The job
-uses itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded
-from itch's own distribution site and checked against a pinned SHA-256. It
-pushes the exact files of the GitHub release: it unpacks the Mac app with
-`ditto`, checks it with `codesign --verify --deep --strict`, and pushes it.
+build number (such as `1918`) as their version. The job uses itch's
+[butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from itch's
+own distribution site and checked against a pinned SHA-256. It pushes the exact
+files of the GitHub release: it unpacks the Mac app with `ditto`, checks it with
+`codesign --verify --deep --strict`, and pushes it.
 Once itch.io has processed the build, it downloads what itch.io serves and
 compares it, file by file, with what was pushed. It needs the repository secret
 `BUTLER_API_KEY`; without it the job does nothing but say so. It runs on `main`
 only. A failed push never affects the GitHub release: the job reports it, and
 the run still succeeds. To push an existing release again, or for the first
-time, start the workflow by hand on `main` with that release's tag. Such a run
+time, start the workflow by hand on `main` with that release's tag (a release
+from before build numbers gets its date and commit as its version). Such a run
 builds nothing:
 
 ```sh
-gh workflow run mac-build.yml --ref main -f itch_release_tag=mac-2026-11-15-c9746e7
+gh workflow run mac-build.yml --ref main -f itch_release_tag=<tag>   # such as build-001918-2026-11-16-1a2b3c4
 ```
 
 CI's `virustotal` job also submits both files of each release to
