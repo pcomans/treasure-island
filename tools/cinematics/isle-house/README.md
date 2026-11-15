@@ -25,7 +25,7 @@ opening=aerial  # or map
 GIT_LFS_SKIP_SMUDGE=1 git worktree add --detach "$project" cf9192edccdf86510da35152dac5170724989365
 mkdir "$out"
 git -C "$project" apply "$rig/godot-macos.patch"
-cp "$rig/isle_house_original_descent.gd" "$project/"
+cp "$rig/isle_house_original_descent.gd" "$rig/chester_capture_pose.gd" "$project/"
 mkdir -p "$project/.tools/godot/4.7.2"
 cp -R "$pinned" "$project/.tools/godot/4.7.2/Godot.app"
 touch "$project/.tools/godot/4.7.2/_sc_"
@@ -54,3 +54,20 @@ ffmpeg -nostdin -n -v error -i "$out/Treasure Island Trailer.mp4" \
 For a `map` take, apply `--last-nadir-frame N` only if native frames show the initial renderer hold at exact nadir. Use the measured last affected frame. The correction stays within the fixed-azimuth portion of the map opening. The aerial opening needs no nadir correction.
 
 If a map capture shows the isolated flare at frame 207 and its staged same-pose proof `frame-0207.png` is clean, run `python3 "$rig/repair_frame_207.py" "$out/native/frames.rgb" "$out/native/preview/frame-0207.png" "$out/repaired.rgb"` and finish from the repaired stream. This correction requires the same take's clean proof.
+
+## Repair the aerial ending
+
+The corrected take uses `aerial-tail` from the same capture checkout. It aims Chester's stock eye shader at the picture camera, drives the wink in that shader, and fits each rendered shoe sole to its own patch of pavement. These changes belong to the shot. The tail finisher shapes the smile and softens existing eye highlights.
+
+Start with the 966-frame aerial MP4 made by the `aerial` recipe above, or use the original aerial MP4 if you already have it. The finisher requires the matching H.264 stream settings and a clean keyframe at frame 600 (20 seconds). It keeps the first 600 encoded video packets unchanged.
+
+```bash
+original=/absolute/path/to/aerial.mp4
+python3 "$rig/run_native_slot.py" "$project" "$out/tail-render.log" 1800 --require-capture -- \
+  --rendering-driver metal --resolution 960x540 --disable-vsync --fixed-fps 30 \
+  --script res://isle_house_original_descent.gd -- "$out/tail" staged aerial-tail
+python3 -B "$rig/finish_contact.py" "$out/tail/frames.rgb" "$out/Treasure Island Trailer - Corrected.mp4" \
+  --original "$original" --work "$out/tail-encode"
+```
+
+After the staged stills pass review, write `GO` to `$out/tail/review-decision.txt`. The 310-frame tail capture includes ten frames of lead-in (590–599). The finished MP4 uses the corrected frames from 600 onward and preserves the 32.2-second runtime at 30 fps.

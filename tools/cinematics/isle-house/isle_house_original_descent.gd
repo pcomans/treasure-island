@@ -1,6 +1,7 @@
 extends SceneTree
 ## Standalone native Isle House trailer capture with a no-glow environment.
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const ChesterCapturePose := preload("res://chester_capture_pose.gd")
 const FRAME_SIZE := Vector2i(1920, 1080)
 const FRAME_COUNT := 900
 const HOLD_FRAMES := 27
@@ -18,6 +19,11 @@ const PROOF_FRAMES := [0, 26, 27, 28, 76, 77, 78, 79, 80, 90, 138, 206, 207, 208
 	211, 212, 213, 300, 420, 447, 448, 449, 450, 451, 452, 480, 510, 540, 600, 665, 715,
 	730, 740, 750, 800, 844, 850, 861, 875, 880, 888, 898, 899]
 const AERIAL_JOIN := 540
+const TAIL_START := 590
+const TAIL_PROOFS := [590, 598, 599, 600, 601, 602, 665, 715, 730, 739, 740, 741, 742,
+	743, 744, 745, 746, 747, 748, 749, 750, 765, 766, 767, 768, 769, 777, 781, 782, 783, 784, 785, 800, 850,
+	861, 875, 876, 877, 878, 879, 880, 881, 888, 898, 899]
+const CONTACT_PROOFS := [590, 730, 744, 767, 783, 899]
 const AERIAL_PROOFS := [0, 1, 2, 90, 180, 276, 360, 450, 478, 479, 480, 481,
 	510, 525, 536, 537, 538, 539, 540, 541, 542, 543, 544, 600, 665, 715, 730, 740,
 	750, 800, 844, 850, 861, 875, 876, 877, 878, 879, 880, 881, 888, 898, 899]
@@ -43,6 +49,8 @@ var actor_aim: Vector3
 var final_eye_y: float
 var stock_fog_density: float
 var aerial_intro := false
+var tail_repair := false
+var capture_chester: ChesterCapturePose
 var aerial_keys: Array[Array] = []
 var proof_frames: Array = PROOF_FRAMES
 
@@ -54,12 +62,13 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() not in [2, 3] or args[1] not in ["staged", "preview", "render"] \
-		or (args.size() == 3 and args[2] not in ["map", "aerial"]):
-		_stop("Usage: -- /absolute/new-output-dir staged|preview|render [map|aerial]")
+		or (args.size() == 3 and args[2] not in ["map", "aerial", "aerial-tail"]):
+		_stop("Usage: -- /absolute/new-output-dir staged|preview|render [map|aerial|aerial-tail]")
 		return
-	aerial_intro = args.size() == 3 and args[2] == "aerial"
+	tail_repair = args.size() == 3 and args[2] == "aerial-tail"
+	aerial_intro = args.size() == 3 and args[2] in ["aerial", "aerial-tail"]
 	if aerial_intro:
-		proof_frames = AERIAL_PROOFS
+		proof_frames = TAIL_PROOFS if tail_repair else AERIAL_PROOFS
 	var out := args[0]
 	if not out.is_absolute_path() or DirAccess.dir_exists_absolute(out):
 		_stop("Use a fresh absolute output directory.")
@@ -146,6 +155,11 @@ func _place_actor() -> String:
 	var face := FINAL_CAMERA_XZ - ACTOR_XZ
 	harness.player.avatar_pivot.rotation.y = atan2(face.x, face.y)
 	harness.player.avatar_pivot.show()
+	if tail_repair:
+		capture_chester = ChesterCapturePose.new()
+		var contact_failure := capture_chester.prepare(harness)
+		if not contact_failure.is_empty():
+			return contact_failure
 	print("SHOT_ACTOR grounded=", feet, " aim=", actor_aim, " final_eye_y=", final_eye_y)
 	return ""
 
@@ -364,6 +378,8 @@ func _pin_ground_dressing() -> void:
 func _draw(frame: int) -> void:
 	_pose(frame)
 	await process_frame
+	if capture_chester != null:
+		capture_chester.aim_eyes(frame, camera)
 	await RenderingServer.frame_post_draw
 
 
@@ -382,12 +398,14 @@ func _preview(out: String) -> bool:
 		return false
 	var previous := -2
 	# Establish the original opening before testing the nearby eye detail.
-	var proof_order := [0, FRAME_COUNT - 1]
+	var proof_order := [TAIL_START if tail_repair else 0, FRAME_COUNT - 1]
 	proof_order.append_array(proof_frames.slice(1, -1))
 	for frame: int in proof_order:
 		if frame != previous + 1:
 			await _warm(frame)
 		await _draw(frame)
+		if capture_chester != null and frame in CONTACT_PROOFS and not capture_chester.verify_contacts(frame):
+			return false
 		var pixels := _read_frame()
 		if pixels == null or pixels.save_png(folder.path_join("frame-%04d.png" % frame)) != OK:
 			return false
@@ -416,9 +434,12 @@ func _render(out: String) -> bool:
 	var raw := FileAccess.open(out.path_join("frames.rgb"), FileAccess.WRITE)
 	if raw == null:
 		return false
-	await _warm(0)
-	for frame in FRAME_COUNT:
+	var first := TAIL_START if tail_repair else 0
+	await _warm(first)
+	for frame in range(first, FRAME_COUNT):
 		await _draw(frame)
+		if capture_chester != null and frame in CONTACT_PROOFS and not capture_chester.verify_contacts(frame):
+			return false
 		var pixels := _read_frame()
 		if pixels == null:
 			return false
