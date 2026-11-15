@@ -1,5 +1,5 @@
 extends SceneTree
-## Standalone website trailer, composed from the map descent and Isle House approach.
+## Standalone native Isle House trailer capture with a no-glow environment.
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const FRAME_SIZE := Vector2i(1920, 1080)
 const FRAME_COUNT := 900
@@ -16,7 +16,19 @@ const ACTOR_XZ := Vector2(-132.0, 585.0)
 const FINAL_CAMERA_XZ := Vector2(-135.3, 589.0)
 const PROOF_FRAMES := [0, 26, 27, 28, 76, 77, 78, 79, 80, 90, 138, 206, 207, 208, 209, 210,
 	211, 212, 213, 300, 420, 447, 448, 449, 450, 451, 452, 480, 510, 540, 600, 665, 715,
-	750, 800, 850, 880, 898, 899]
+	730, 740, 750, 800, 844, 850, 861, 875, 880, 888, 898, 899]
+const AERIAL_JOIN := 540
+const AERIAL_PROOFS := [0, 1, 2, 90, 180, 276, 360, 450, 478, 479, 480, 481,
+	510, 525, 536, 537, 538, 539, 540, 541, 542, 543, 544, 600, 665, 715, 730, 740,
+	750, 800, 844, 850, 861, 875, 876, 877, 878, 879, 880, 881, 888, 898, 899]
+const AERIAL_KEYS := [
+	[0, Vector3(-760, 540, 1740), Vector3(19, -19, -29), Vector3(1, -1, -1),
+		Vector3(-100, 25, 50), Vector3(-0.4, -1, 14), Vector3.ZERO, 37.0, 0.006],
+	[276, Vector3(-550, 300, 1360), Vector3(30, -34, -54), Vector3.ZERO,
+		Vector3(-104, 23, 253), Vector3(-0.6, 0, 42), Vector3.ZERO, 40.0, 0.007],
+	[480, Vector3(-376, 110, 989), Vector3(26, -44, -30), Vector3(-3, 0, 4),
+		Vector3(-114, 26, 507), Vector3(0.3, 5, 38), Vector3(0, 0, -25), 43.35, -0.014],
+]
 const HORIZON := "ContextWorld/BayAreaHorizon"
 const JOIN_COLOR := "vec3(0.174, 0.215, 0.249)"
 const RIPRAP := "res://game/resources/materials/world/shoreline/riprap.gdshader"
@@ -30,6 +42,9 @@ var sun: DirectionalLight3D
 var actor_aim: Vector3
 var final_eye_y: float
 var stock_fog_density: float
+var aerial_intro := false
+var aerial_keys: Array[Array] = []
+var proof_frames: Array = PROOF_FRAMES
 
 
 func _initialize() -> void:
@@ -38,9 +53,13 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
-	if args.size() != 2 or args[1] not in ["staged", "preview", "render"]:
-		_stop("Usage: -- /absolute/new-output-dir staged|preview|render")
+	if args.size() not in [2, 3] or args[1] not in ["staged", "preview", "render"] \
+		or (args.size() == 3 and args[2] not in ["map", "aerial"]):
+		_stop("Usage: -- /absolute/new-output-dir staged|preview|render [map|aerial]")
 		return
+	aerial_intro = args.size() == 3 and args[2] == "aerial"
+	if aerial_intro:
+		proof_frames = AERIAL_PROOFS
 	var out := args[0]
 	if not out.is_absolute_path() or DirAccess.dir_exists_absolute(out):
 		_stop("Use a fresh absolute output directory.")
@@ -52,7 +71,9 @@ func _run() -> void:
 		_stop("Capture requires native Forward+ rendering.")
 		return
 	root.size = Vector2i(960, 540)
-	root.title = "Treasure Island · Original descent and Chester"
+	root.title = "Treasure Island · Isle House capture"
+	auto_accept_quit = false
+	root.close_requested.connect(func() -> void: _stop("Capture window close was requested."))
 	harness = WorldHarness.new(self)
 	print("SHOT_DEVICE ", DisplayServer.get_name(), " / ", RenderingServer.get_video_adapter_name())
 	var failure := await harness.load_world()
@@ -64,20 +85,30 @@ func _run() -> void:
 	if actor_failure != "":
 		_stop(actor_failure)
 		return
+	if aerial_intro and not _prepare_aerial_intro():
+		_stop("Aerial opening must descend continuously toward the source camera.")
+		return
 	var route_failure := _verify_low_route()
 	if route_failure != "":
 		_stop(route_failure)
 		return
 	var world_environment := harness.main.get_node("WorldEnvironment") as WorldEnvironment
 	environment = world_environment.environment.duplicate() as Environment
+	environment.glow_enabled = false
 	world_environment.environment = environment
 	stock_fog_density = environment.fog_density
 	_lock_world_detail()
 	if not _soften_horizon_join():
-		_stop("The scoped horizon materials did not match the pinned game source.")
+		_stop("The scoped horizon materials did not match latest main.")
 		return
 	_make_capture_viewport()
-	if not _verify_map_registration():
+	var active_camera := capture.get_camera_3d()
+	if active_camera != camera or active_camera.environment != environment or environment.glow_enabled:
+		_stop("Capture must use the isolated no-glow environment.")
+		return
+	print("SHOT_ENVIRONMENT glow=", active_camera.environment.glow_enabled,
+		" tonemap=", environment.tonemap_mode, " exposure=", environment.tonemap_exposure)
+	if not aerial_intro and not _verify_map_registration():
 		_stop("Opening view failed SVG registration.")
 		return
 
@@ -294,6 +325,7 @@ func _make_capture_viewport() -> void:
 	camera = Camera3D.new()
 	camera.name = "SiteOverviewCamera"
 	camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	camera.environment = environment
 	camera.near = 3.0
 	camera.far = FAR_M
 	capture.add_child(camera)
@@ -349,7 +381,10 @@ func _preview(out: String) -> bool:
 	if DirAccess.make_dir_recursive_absolute(folder) != OK:
 		return false
 	var previous := -2
-	for frame: int in PROOF_FRAMES:
+	# Establish the original opening before testing the nearby eye detail.
+	var proof_order := [0, FRAME_COUNT - 1]
+	proof_order.append_array(proof_frames.slice(1, -1))
+	for frame: int in proof_order:
 		if frame != previous + 1:
 			await _warm(frame)
 		await _draw(frame)
@@ -387,7 +422,7 @@ func _render(out: String) -> bool:
 		var pixels := _read_frame()
 		if pixels == null:
 			return false
-		if frame in PROOF_FRAMES:
+		if frame in proof_frames:
 			if pixels.save_png(out.path_join("frame-%04d.png" % frame)) != OK:
 				return false
 		pixels.convert(Image.FORMAT_RGB8)
@@ -439,6 +474,12 @@ func _fit_shadow_cascades(focus_depth: float) -> void:
 
 
 func _sample(frame: int) -> Dictionary:
+	if aerial_intro and frame < AERIAL_JOIN:
+		return _aerial_sample(frame)
+	return _established_sample(frame)
+
+
+func _established_sample(frame: int) -> Dictionary:
 	if frame < OVERVIEW_FRAME_COUNT:
 		return _overview_sample(frame)
 	var end := _overview_sample(OVERVIEW_FRAME_COUNT - 1)
@@ -454,6 +495,80 @@ func _sample(frame: int) -> Dictionary:
 	var lens := exp(lerpf(log(start_lens), log(end_lens), blend))
 	return {"position": position, "target": target, "direction": position.direction_to(target),
 		"screen_up": screen_up, "fov": 2.0 * rad_to_deg(atan(lens))}
+
+
+func _prepare_aerial_intro() -> bool:
+	for key: Array in AERIAL_KEYS:
+		aerial_keys.append([key[0], key[1], key[2], key[3], key[4], key[5], key[6],
+			Vector3(_log_lens(key[7]), 0, 0), Vector3(key[8], 0, 0), Vector3.ZERO])
+	var poses: Array[Dictionary] = []
+	for offset in range(-2, 3):
+		var pose := _established_sample(AERIAL_JOIN + offset)
+		pose["lens"] = Vector3(_log_lens(pose.fov), 0, 0)
+		poses.append(pose)
+	var end: Array = [AERIAL_JOIN]
+	# At 30 fps the 5-point derivative uses 30/12 and (30*30)/12.
+	# Centered differences avoid cancellation at world-scale coordinates.
+	for property: String in ["position", "target", "lens"]:
+		var center: Vector3 = poses[2][property]
+		var back: Vector3 = poses[1][property] - center
+		var back2: Vector3 = poses[0][property] - center
+		var ahead: Vector3 = poses[3][property] - center
+		var ahead2: Vector3 = poses[4][property] - center
+		var velocity := (back2 - 8.0 * back + 8.0 * ahead - ahead2) * 2.5
+		var acceleration := (16.0 * (back + ahead) - back2 - ahead2) * 75.0
+		end.append_array([center, velocity, acceleration])
+	aerial_keys.append(end)
+	var previous: Vector3 = _aerial_sample(0).position
+	for frame in range(1, AERIAL_JOIN + 1):
+		var current: Vector3 = _sample(frame).position
+		if current.x <= previous.x or current.y >= previous.y or current.z >= previous.z:
+			print("SHOT_AERIAL nonmonotonic at ", frame, " ", previous, " to ", current)
+			return false
+		previous = current
+	print("SHOT_AERIAL_JOIN frame=", AERIAL_JOIN, " position=", end[1], " velocity=", end[2],
+		" acceleration=", end[3], " target=", end[4], " fov=", poses[2].fov)
+	return true
+
+
+func _aerial_sample(frame: int) -> Dictionary:
+	var from: Array = aerial_keys[0]
+	var to: Array = aerial_keys[1]
+	for index in range(1, aerial_keys.size() - 1):
+		if frame < int(aerial_keys[index][0]):
+			break
+		from = aerial_keys[index]
+		to = aerial_keys[index + 1]
+	var span := float(to[0] - from[0])
+	var t := (float(frame) - float(from[0])) / span
+	var seconds := span / 30.0
+	var position := _quintic(from, to, 1, t, seconds)
+	var target := _quintic(from, to, 4, t, seconds)
+	var focal := _quintic(from, to, 7, t, seconds).x
+	var screen_up := Vector3.UP
+	if frame > 510:
+		var outgoing_up: Vector3 = _established_sample(frame).screen_up
+		screen_up = screen_up.lerp(outgoing_up, _window(float(frame), 510, AERIAL_JOIN)).normalized()
+	return {"position": position, "target": target, "direction": position.direction_to(target),
+		"screen_up": screen_up, "fov": 2.0 * rad_to_deg(atan(exp(focal)))}
+
+
+func _quintic(from: Array, to: Array, channel: int, t: float, seconds: float) -> Vector3:
+	# Each key stores value, velocity and acceleration for the three channels.
+	var a0: Vector3 = from[channel]
+	var a1: Vector3 = from[channel + 1] * seconds
+	var a2: Vector3 = from[channel + 2] * (0.5 * seconds * seconds)
+	var p: Vector3 = to[channel] - a0 - a1 - a2
+	var v: Vector3 = to[channel + 1] * seconds - a1 - 2.0 * a2
+	var a: Vector3 = to[channel + 2] * (seconds * seconds) - 2.0 * a2
+	var a3 := 10.0 * p - 4.0 * v + 0.5 * a
+	var a4 := -15.0 * p + 7.0 * v - a
+	var a5 := 6.0 * p - 3.0 * v + 0.5 * a
+	return a0 + t * (a1 + t * (a2 + t * (a3 + t * (a4 + t * a5))))
+
+
+func _log_lens(vertical_fov: float) -> float:
+	return log(tan(deg_to_rad(vertical_fov * 0.5)))
 
 
 func _overview_sample(frame: int) -> Dictionary:

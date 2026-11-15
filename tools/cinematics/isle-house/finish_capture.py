@@ -1,15 +1,10 @@
-"""Stabilize the early renderer drift and ease into the approved Chester portrait."""
+"""Pixel corrections for the map hold and final portrait framing."""
 
-import argparse
 import math
-from pathlib import Path
-import subprocess
 
 import numpy as np
 
 WIDTH, HEIGHT = 1920, 1080
-FRAME_BYTES = WIDTH * HEIGHT * 3
-FRAME_COUNT = 900
 OPENING_FRAMES = 27
 PORTRAIT_START = 777
 PORTRAIT_END = 876
@@ -85,34 +80,3 @@ def portrait_rgb(pixels, frame):
     across = cubic_axis(pixels, columns, 1)
     resized = cubic_axis(across, rows, 0)
     return np.clip(np.rint(resized), 0, 255).astype(np.uint8)
-
-
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("source", type=Path)
-    parser.add_argument("target", type=Path)
-    parser.add_argument("--last-affected", type=int,
-                        help="Last frame held at exact nadir, measured on this take")
-    args = parser.parse_args()
-    if args.source.stat().st_size != FRAME_COUNT * FRAME_BYTES or args.target.exists():
-        parser.error("Expected a full RGB24 source and a new copy destination.")
-    if args.last_affected is not None and not OPENING_FRAMES < args.last_affected < 87:
-        parser.error("The measured correction is only valid before the original azimuth rotates.")
-    # Clone on APFS and preserve both the original and unaffected frames.
-    subprocess.run(["/bin/cp", "-c", str(args.source), str(args.target)], check=True)
-    frames = np.memmap(args.target, dtype=np.uint8, mode="r+",
-                       shape=(FRAME_COUNT, HEIGHT, WIDTH, 3))
-    if args.last_affected is not None:
-        for frame in range(OPENING_FRAMES + 1, args.last_affected + 1):
-            dx, dy = nadir_bias(frame)
-            frames[frame] = translated_rgb(frames[frame], dx, dy)
-        print(f"Corrected frames {OPENING_FRAMES + 1}–{args.last_affected}; "
-              f"maximum sample offset {dx:.3f}, {dy:.3f} px.")
-    for frame in range(PORTRAIT_START + 1, FRAME_COUNT):
-        frames[frame] = portrait_rgb(frames[frame], frame)
-    frames.flush()
-    print(f"Portrait eases across frames {PORTRAIT_START}–{PORTRAIT_END}, then holds its framing.")
-
-
-if __name__ == "__main__":
-    main()

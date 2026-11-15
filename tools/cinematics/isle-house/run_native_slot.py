@@ -44,6 +44,7 @@ def run(args):
         proc = subprocess.Popen(command, cwd=path, env=env, start_new_session=True,
                                 stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         note(f"Native slot A acquired. Owned process PID {proc.pid}")
+        complete = False
         try:
             with selectors.DefaultSelector() as selector:
                 selector.register(proc.stdout, selectors.EVENT_READ)
@@ -64,9 +65,13 @@ def run(args):
                     for line in lines:
                         message = line.decode(errors="replace")
                         note(message)
+                        complete |= message.startswith("SHOT_COMPLETE ")
                         if "SHADER ERROR" in message or "SCRIPT ERROR" in message:
                             raise RuntimeError("Stopped on Godot shader or script error")
             result = proc.wait(timeout=5)
+            if not result and args.require_capture and not complete:
+                note("Engine exited without the required final SHOT_COMPLETE marker.")
+                result = 1
         except BaseException as error:
             note(f"Stopping: {error}")
             if proc.poll() is None:
@@ -95,6 +100,7 @@ if __name__ == "__main__":
     parser.add_argument("project")
     parser.add_argument("log")
     parser.add_argument("timeout", type=float)
+    parser.add_argument("--require-capture", action="store_true")
     separator = sys.argv.index("--")
     args = parser.parse_args(sys.argv[1:separator])
     args.flags = sys.argv[separator:]
