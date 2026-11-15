@@ -81,8 +81,9 @@ gets the newest release:
 https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 
 The [releases page](https://github.com/pcomans/treasure-island/releases) lists
-each build by date and commit, and older builds stay there. Downloaded with curl
-or `gh`, the zip has no quarantine flag, so the unzipped app opens directly:
+each build by build number, date and commit, and older builds stay there.
+Downloaded with curl or `gh`, the zip has no quarantine flag, so the unzipped app
+opens directly:
 
 ```sh
 curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
@@ -142,38 +143,45 @@ would give too small a number.
 
 After each release, CI's `itch` job also puts both builds on the itch.io page
 [phpp/grand-treasure-island](https://phpp.itch.io/grand-treasure-island): the
-Mac app goes to channel `mac` and the Linux build to channel `linux`, with the
-build number (such as `1918`) as their version. The job uses itch's
-[butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from itch's
-own distribution site and checked against a pinned SHA-256. It pushes the exact
-files of the GitHub release: it unpacks the Mac app with `ditto`, checks it with
-`codesign --verify --deep --strict`, and pushes it.
-Once itch.io has processed the build, it downloads what itch.io serves and
-compares it, file by file, with what was pushed. It needs the repository secret
-`BUTLER_API_KEY`; without it the job does nothing but say so. It runs on `main`
-only. A failed push never affects the GitHub release: the job reports it, and
-the run still succeeds. To push an existing release again, or for the first
-time, start the workflow by hand on `main` with that release's tag (a release
-from before build numbers gets its date and commit as its version). Such a run
-builds nothing:
+Mac app, notarized or not, goes to channel `mac` and the Linux build to channel
+`linux`, with the build number (such as `1918`) as their version. The job uses
+itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
+itch's own distribution site and checked against a pinned SHA-256. It pushes the
+exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
+it with `codesign --verify --deep --strict` (a failed check stops the Mac push),
+and pushes it. Once
+itch.io has processed the build, it downloads what itch.io serves and compares
+it, file by file, with what was pushed. It runs on `main` only. A failed push
+never affects the GitHub release: the job reports it, and the run still
+succeeds. To push an existing release again, or for the first time, start the
+workflow by hand on `main` with that release's tag (a release from before build
+numbers gets its date and commit as its version). Such a run builds nothing:
 
 ```sh
 gh workflow run mac-build.yml --ref main -f itch_release_tag=<tag>   # such as build-001918-2026-11-16-1a2b3c4
 ```
 
 CI's `virustotal` job also submits both files of each release to
-[VirusTotal](https://www.virustotal.com) and adds each file's SHA-256 and
-VirusTotal report link to the release notes. The link is by hash, so it works
-while the analysis is still running; the notes say when that was the case.
-Anyone can check a download the same way: `shasum -a 256 treasure-island-mac.zip`,
-then open `https://www.virustotal.com/gui/file/<that hash>`. The job needs the
-repository secret `VIRUSTOTAL_API_KEY` and uses VirusTotal's free public API,
-which is for non-commercial use and allows 4 requests a minute and 500 a day.
-VirusTotal shares uploaded files with its security partners, so only the
-already public release files are sent. The release notes carry links, not
-verdicts; the job's summary counts the engines' verdicts without naming
-engines. An engine flagging a build is a warning for a person to look at,
-never a failure: game-engine exports do get false positives.
+[VirusTotal](https://www.virustotal.com), and the `virustotal-notes` job adds
+each file's SHA-256 and VirusTotal report link to the release notes. The link is
+by hash, so it works while the analysis is still running; the notes say when
+that was the case. Anyone can check a download the same way:
+`shasum -a 256 treasure-island-mac.zip`, then open
+`https://www.virustotal.com/gui/file/<that hash>`. The job uses VirusTotal's
+free public API, which is for non-commercial use and allows 4 requests a minute
+and 500 a day. VirusTotal shares uploaded files with its security partners, so
+only the already public release files are sent. The notes and the job's summary
+carry links, never verdicts or counts; a file that VirusTotal flags is a warning
+for a person to look at, never a failure: game-engine exports do get false
+positives.
+
+Both jobs take their keys, `BUTLER_API_KEY` and `VIRUSTOTAL_API_KEY`, from the
+GitHub environment `itch`, whose deployment branch rule admits only `main` (no
+required reviewers): a repository secret could be read by a workflow on any
+branch. Each job first reads that rule through GitHub's API and uses its key
+only while the environment admits `main` alone; without the key it does nothing
+but say so. The top of [mac-build.yml](.github/workflows/mac-build.yml) has the
+`gh` commands that set the keys.
 
 ## Sound
 

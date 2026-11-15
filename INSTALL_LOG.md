@@ -363,4 +363,4 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Authorizing decision or request: owner, 2026-11-15: put the Mac and Linux builds on itch.io after each release.
 - Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
 - Verification and result: not run yet; the job logs `butler version` on each run.
-- Removal steps: delete the `itch` job and the `itch_release_tag` input from `.github/workflows/mac-build.yml`, and the repository secret `BUTLER_API_KEY`.
+- Removal steps: delete the `itch` job and the `itch_release_tag` input from `.github/workflows/mac-build.yml`, and the secret `BUTLER_API_KEY` of the GitHub environment `itch`.

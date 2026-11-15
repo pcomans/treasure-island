@@ -13,7 +13,10 @@ cd "$(dirname "$0")/.."
 tool="${PWD}/tools/build-number"
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"' EXIT
-# No user or system Git settings (signing, hooks, default branch) reach the check.
+# Nothing of the caller's Git reaches the check: not a repository it points at
+# (a hook sets GIT_DIR, for one), nor user or system settings (signing, hooks,
+# default branch).
+unset GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_COMMON_DIR GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES
 export GIT_CONFIG_GLOBAL=/dev/null GIT_CONFIG_NOSYSTEM=1
 export GIT_AUTHOR_NAME=check GIT_AUTHOR_EMAIL=check@example.invalid
 export GIT_COMMITTER_NAME=check GIT_COMMITTER_EMAIL=check@example.invalid
