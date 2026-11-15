@@ -26613,6 +26613,18 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The review's retro branch was cut on top of the fix branch rather than on main, so its own file list (against main) showed the code files too; only the log of its commits beyond the fix showed it adds nothing but RETRO_LOG.
 - What the team should change next time: Cut review retro branches from main, or name the branch they sit on in the handback, so the integrator's "RETRO_LOG only" check reads true at a glance.
 
+### ti-documentation — readme-for-visitors — 2026-11-15 — README rewritten for visitors, developer sections kept (branch `docs/readme-for-visitors`)
+
+- What worked well: Building the visitor part only from the owner's supplied sentences, then listing every sentence that is not his in the PR, kept the voice his and made the rewrite list short. Checking anchors by computing GitHub's slugs from the new README against every `README.md#` link in tracked files (AGENTS, KNOWN_ISSUES, PLAYTEST, game/tests/README) settled the "keep the anchors" rule in one pass; demoting the kept sections to `###` under "For developers" changed no slug. Checking every external image and download URL with curl before use caught nothing, which is the point.
+- What did not work well: The worktree guard refused a plain curl loop because a URL contained the repository's GitHub path; a small script in the scratchpad with the URL as an argument got round it without loosening anything. The developer "Browser build" section still names the older `treasure-island-five` web URL; both URLs answer, and I left it because the brief allowed only insider-wording edits there.
+- What the team should change next time: Briefs that move linked sections should name the anchor check as a computed slug list, not a grep of headings, since heading level and nesting can change while the slug must not.
+
+### ti-documentation — readme-pr22-followup — 2026-11-15 — eight owner-approved factual fixes to the visitor README (branch `docs/readme-for-visitors`)
+
+- What worked well: The brief gave exact replacement sentences, so a scripted replace that asserted each old string occurred exactly once applied all eight without touching the owner's other wording.
+- What did not work well: The branch was already checked out in another agent's worktree, so `git switch -c --track` failed; working detached at origin's tip and pushing `HEAD:docs/readme-for-visitors` avoided disturbing that worktree.
+- What the team should change next time: Follow-up briefs on a shared branch should say whether another worktree holds it, or default to a detached checkout plus explicit refspec push.
+
 ### itch-publish-20261115 — 2026-11-15 — Linux package, itch.io push and VirusTotal reports for each release (branch `ci/itch-publish-20261115`)
 
 - What worked well: Primary sources settled each design question before any YAML existed:
@@ -26656,6 +26668,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: With no game code in the branch, the owner waived the full suite ("We should just push the latest build to itch"), so the release took its two quick checks (`tools/check_build_number.sh`, `node tools/check_fetch_sfx.mjs`, both PASS) and `git diff --check`, in seconds and with no engine lock, in a worktree of its own while the content batch's suite ran. Both retro branches merged through the RETRO_LOG placer, every line kept.
 - What did not work well: Nothing to note before the push; the workflow's first real run is the test of this release, and its result is in the handback.
 - What the team should change next time: Keep releases that touch only workflows and tools apart from content batches, as here, so a first run of a new pipeline can be read on its own.
+
+### pr22-merge-20261116 — 2026-11-16 — main merged into the visitors' README (PR #22, branch `docs/readme-for-visitors`), then fast-forwarded to main
+
+- What worked well: Comparing the README's developer part with main's, headings demoted, left exactly the PR's own three edits (the spray and Mac-browser lines), which showed the conflict resolution changed none of main's text and none of the owner's. Checking that neither parent lost a RETRO_LOG line (`git diff HEAD` and against main, no removed lines) settled "keep both sides" in one step. A small link checker that skips fenced code found every README anchor and every link into README resolving.
+- What did not work well: `git fetch origin` did not update `origin/docs/readme-for-visitors` in the shared checkout (its configured refspec), so the worktree command failed until the branch was fetched with an explicit refspec. My first link-check pattern also matched `tools/sfx/README.md#…` as the top README and reported two false failures.
+- What the team should change next time: Fetch a PR branch by explicit refspec and compare its head with `git ls-remote` before cutting a worktree. Anchor a link pattern on a path boundary before trusting a failure it reports.
 
 ### loading-messages-20261115 — 2026-11-15 — a loading-screen line for each startup step (branch `feature/loading-messages-20261115`)
 
