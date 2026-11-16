@@ -54,6 +54,11 @@ extends RefCounted
 ## Treasure Island, as tools/solar_position.mjs takes it.
 const LATITUDE := 37.82
 const LONGITUDE := -122.37
+## The sun's centre this far under the horizon (degrees, its geometric elevation,
+## before refraction) at sunrise and sunset (sun_times), as almanacs and the NOAA
+## Solar Calculator count them: the top of the disc on the horizon, lifted by 34'
+## of refraction, with the disc's 16' radius below it.
+const SUNRISE_ELEVATION_DEG := -0.833
 ## 2026-11-13 12:30 PST: main.tscn's Sun (its solar_moment metadata).
 const RECORDED_UNIX := 1794601800.0
 ## The switch (see the top): the project setting, and the command line's argument
@@ -288,6 +293,43 @@ static func parse_local(text: String) -> float:
 ## The number of days in `year`.
 static func days_in_year(year: int) -> int:
 	return 366 if (year % 4 == 0 and year % 100 != 0) or year % 400 == 0 else 365
+
+
+## The island's clock at `unix` in minutes into its day, the seconds a fraction of
+## a minute: the Options screen's time slider's scale.
+static func local_minutes(unix: float) -> float:
+	return float(local(unix).minutes) + fposmod(unix, 60.0) / 60.0
+
+
+## Sunrise and sunset on day `day_of_year` (1 on 1 January) of `year` on the
+## island's clock: [sunrise, sunset] (UTC, Unix seconds), the moments the sun's
+## centre crosses SUNRISE_ELEVATION_DEG (SolarPosition's geometric elevation),
+## rising before that day's solar noon and setting after it. The Options screen
+## marks them on its time slider (hud.gd).
+static func sun_times(year: int, day_of_year: int) -> Array[float]:
+	# Solar noon, where the hour angle is 0: it turns 15 degrees an hour, so from the
+	# island's noon two steps settle it to well under a second.
+	var noon := unix_from_local(year, day_of_year, 720.0)
+	for _step in 2:
+		noon -= float(SolarPosition.at(noon, LATITUDE, LONGITUDE).hour_angle_deg) / 15.0 * 3600.0
+	var times: Array[float] = [_horizon_crossing(noon, -1.0), _horizon_crossing(noon, 1.0)]
+	return times
+
+
+## The moment the sun's centre crosses SUNRISE_ELEVATION_DEG between solar noon and
+## the solar midnight before it (side -1) or after it (side 1), halved down to well
+## under a millisecond: at the island's latitude the sun is up at every noon and
+## down at every midnight, and climbs (or sinks) all the way between.
+static func _horizon_crossing(noon: float, side: float) -> float:
+	var up := noon
+	var down := noon + side * 43200.0
+	for _halving in 36:
+		var middle := 0.5 * (up + down)
+		if float(SolarPosition.at(middle, LATITUDE, LONGITUDE).geometric_elevation_deg) >= SUNRISE_ELEVATION_DEG:
+			up = middle
+		else:
+			down = middle
+	return 0.5 * (up + down)
 
 
 ## Midnight UTC on the nth Sunday of a month.

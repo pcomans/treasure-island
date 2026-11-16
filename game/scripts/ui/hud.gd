@@ -74,6 +74,16 @@ const REFLOW_FULL_SHARE := 0.6
 ## The options screen's date: weekday, day, month and year on the island's clock.
 const WEEKDAYS := ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+## The time slider's day and night (_draw_daylight): the track before sunrise and
+## after sunset in one steady dark blue, opaque, so neither the handle's place nor
+## its fill (or the fill's hover and focus highlight) changes it, a little lighter
+## than the panel so the track's ends still show; the daytime between them lifted by
+## a light wash, so it reads brighter than the night wherever the handle is, its fill
+## still showing within it; and at sunrise and at sunset a mark in the keys' colour,
+## this wide and this tall (px), centred on the track.
+const NIGHT_TRACK_COLOR := Color(0.13, 0.15, 0.21)
+const DAY_TRACK_WASH := Color(1.0, 1.0, 1.0, 0.2)
+const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 
 @onready var feedback_panel: PanelContainer = $FeedbackPanel
 @onready var feedback_text: Label = $FeedbackPanel/FeedbackText
@@ -116,7 +126,11 @@ const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
 ## The time of day (DayClock): the island's date and time, each on a slider that
 ## jumps there as it moves (time runs on from there), and Now, a jump to the real
 ## date and time (play starts at 12:30 on the island's date, not at the real
-## time). Desktop only for now (set_time_controls).
+## time). The time slider marks the date's sunrise and sunset and darkens the night
+## either side (_draw_daylight), and directly under it says, always, that night is
+## experimental (owner, 2026-11-16: "a line ... before sunrise and after sunset to
+## sort of make it clear there's like a supported time of day and then Nighttime is
+## experimental"). Desktop only for now (set_time_controls).
 @onready var time_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeHeading
 @onready var time_date_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow
 @onready var time_date_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/DateRow/DateLabel
@@ -124,6 +138,9 @@ const MONTHS := ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
 @onready var time_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow
 @onready var time_label: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeLabel
 @onready var time_slider: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider
+## Hung under the time slider's track (hud.tscn: from the slider's middle, over the
+## gap below its row), so it takes no height of its own and nothing moves.
+@onready var night_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider/NightNote
 @onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
@@ -197,6 +214,15 @@ var _time_shown := []
 var _showing_time := false
 ## Whether the date or time slider is being dragged.
 var _time_dragging := false
+## The shown date's sunrise and sunset on the time slider's scale (minutes into the
+## island's day; DayClock.sun_times), and the [year, day of the year] they are for.
+var _daylight: Array[float] = []
+var _daylight_date := []
+## Whether the pointer is over the time slider, as the slider's own hover flag
+## follows it (scene/gui/slider.cpp's mouse_inside: set by the pointer's entering
+## and leaving, cleared when it is hidden or leaves the tree): its grabber's icon
+## (_time_grabber_icon).
+var _time_slider_hovered := false
 
 
 func _ready() -> void:
@@ -231,6 +257,10 @@ func _ready() -> void:
 	time_now_button.pressed.connect(func() -> void:
 		DayClock.start_now()
 		_show_time())
+	time_slider.draw.connect(_draw_daylight)
+	time_slider.mouse_entered.connect(func() -> void: _time_slider_hovered = true)
+	for unhover: Signal in [time_slider.mouse_exited, time_slider.visibility_changed, time_slider.tree_exiting]:
+		unhover.connect(func() -> void: _time_slider_hovered = false)
 	for button: Node in find_children("*", "BaseButton", true, false):
 		_click_on_press(button as BaseButton)
 	_fill_controls()
@@ -579,8 +609,8 @@ func time_controls_shown() -> bool:
 
 
 ## The options screen's date and time as the clock reads them, in their labels and
-## on their sliders (left alone while one is dragged). Only when the minute or a jump
-## changed it, unless `now`.
+## on their sliders (left alone while one is dragged), with the date's sunrise and
+## sunset on the time slider. Only when the minute or a jump changed it, unless `now`.
 func _show_time(now := false) -> void:
 	if not _time_controls:
 		return
@@ -590,6 +620,7 @@ func _show_time(now := false) -> void:
 		return
 	_time_shown = shown
 	var at := DayClock.local(unix)
+	_show_daylight(int(at.year), int(at.day_of_year))
 	_showing_time = true
 	time_date_slider.max_value = DayClock.days_in_year(int(at.year))
 	if not _time_dragging:
@@ -608,6 +639,120 @@ func _on_time_slid(value: float, date: bool) -> void:
 	var at := DayClock.local(DayClock.now())
 	DayClock.start_at(DayClock.unix_from_local(int(at.year), int(value) if date else int(at.day_of_year), float(at.minutes) if date else value))
 	_show_time(true)
+
+
+## The date's sunrise and sunset, marked on the time slider (_draw_daylight); worked
+## out again only when the date changes.
+func _show_daylight(year: int, day_of_year: int) -> void:
+	if _daylight_date == [year, day_of_year]:
+		return
+	_daylight_date = [year, day_of_year]
+	_daylight.clear()
+	for unix: float in DayClock.sun_times(year, day_of_year):
+		_daylight.append(DayClock.local_minutes(unix))
+	time_slider.queue_redraw()
+
+
+## The shown date's sunrise and sunset as the time slider marks them (minutes into
+## the island's day); empty until the options screen first shows the time of day.
+func daylight_minutes() -> Array[float]:
+	return _daylight.duplicate()
+
+
+## Where the time slider puts `minutes` (minutes into the day): the x (px, in the
+## slider) of its grabber's centre at that value, as Godot 4.7.2's Slider places it,
+## drawn and clicked alike (scene/gui/slider.cpp): half the grabber's width in from
+## either end, unless the theme centres the grabber on the ends.
+func time_slider_x(minutes: float) -> float:
+	var width := float(_time_grabber_icon().get_width())
+	var inset := 0.0 if time_slider.get_theme_constant("center_grabber") != 0 else width
+	var ratio := clampf(inverse_lerp(time_slider.min_value, time_slider.max_value, minutes), 0.0, 1.0)
+	return ratio * (floorf(time_slider.size.x) - inset) + inset / 2.0
+
+
+## Where the time slider marks the shown date's sunrise and sunset: the x of each
+## (px, in the slider; time_slider_x), the places _draw_daylight draws them at;
+## empty until the options screen first shows the time of day.
+func daylight_marks_x() -> Array[float]:
+	var marks: Array[float] = []
+	for minutes: float in _daylight:
+		marks.append(time_slider_x(minutes))
+	return marks
+
+
+## Over the time slider as it draws (its draw signal, after its track, fill and
+## grabber): the track before the shown date's sunrise and after its sunset in the
+## night's colour, the daytime between them lifted by its wash, and a mark at
+## sunrise and at sunset (daylight_marks_x). All keep off the grabber, which reads
+## the same by day and by night. The track is where Godot 4.7.2's Slider draws it
+## (scene/gui/slider.cpp): its style's minimum height, centred in whole pixels, the
+## slider's whole width, its ends rounded as the style rounds them.
+func _draw_daylight() -> void:
+	var marks := daylight_marks_x()
+	if marks.size() != 2:
+		return
+	var area := time_slider.size.floor()
+	var style := time_slider.get_theme_stylebox("slider")
+	var height := floorf(style.get_minimum_size().y)
+	var track := Rect2(0.0, floorf((area.y - height) / 2.0), area.x, height)
+	var radius := minf(float((style as StyleBoxFlat).corner_radius_top_left), height / 2.0) if style is StyleBoxFlat else 0.0
+	var grabber := _time_grabber_outline()
+	var outline := _rounded_outline(track, radius)
+	# [from, to, colour]: the night before sunrise and after sunset, the day between.
+	for span: Array in [[track.position.x, marks[0], NIGHT_TRACK_COLOR], [marks[1], track.end.x, NIGHT_TRACK_COLOR], [marks[0], marks[1], DAY_TRACK_WASH]]:
+		var from: float = span[0]
+		var to: float = span[1]
+		if to <= from:
+			continue
+		for piece: PackedVector2Array in Geometry2D.intersect_polygons(outline, _rounded_outline(Rect2(from, track.position.y, to - from, height), 0.0)):
+			for part: PackedVector2Array in Geometry2D.clip_polygons(piece, grabber):
+				time_slider.draw_colored_polygon(part, span[2])
+	for x: float in marks:
+		var mark := Rect2(Vector2(x, track.get_center().y) - DAYLIGHT_MARK_PX / 2.0, DAYLIGHT_MARK_PX)
+		for part: PackedVector2Array in Geometry2D.clip_polygons(_rounded_outline(mark, 0.0), grabber):
+			time_slider.draw_colored_polygon(part, CONTROLS_KEY_COLOR)
+
+
+## The time slider's grabber icon as the slider picks it (scene/gui/slider.cpp): its
+## highlight while the pointer is over it or it has visible focus, its disabled look
+## when the slider can't be changed, else its own.
+func _time_grabber_icon() -> Texture2D:
+	if not time_slider.editable:
+		return time_slider.get_theme_icon("grabber_disabled")
+	return time_slider.get_theme_icon("grabber_highlight" if _time_slider_hovered or time_slider.has_focus(true) else "grabber")
+
+
+## The time slider's grabber where the slider draws it at its value
+## (scene/gui/slider.cpp, in whole pixels: its left at the ratio times the travel,
+## truncated, its top `size.height / 2 - grabber->get_height() / 2` plus the theme's
+## offset, each half an integer division): a circle half a pixel inside the icon's
+## square, which takes in the default round icon whole, a circle of radius 7 in 16
+## px (scene/theme/icons/slider_grabber.svg) whose smoothed edge reaches half a pixel
+## beyond it.
+func _time_grabber_outline() -> PackedVector2Array:
+	var icon := _time_grabber_icon()
+	var centred := time_slider.get_theme_constant("center_grabber") != 0
+	var travel := floorf(time_slider.size.x) - (0.0 if centred else float(icon.get_width()))
+	var left := int(time_slider.get_as_ratio() * travel - (floorf(icon.get_width() / 2.0) if centred else 0.0))
+	var top := floori(floorf(time_slider.size.y) / 2.0) - floori(icon.get_height() / 2.0) + time_slider.get_theme_constant("grabber_offset")
+	var centre := Vector2(left, top) + icon.get_size() / 2.0
+	var points := PackedVector2Array()
+	for step in 24:
+		points.append(centre + Vector2.from_angle(TAU * step / 24.0) * (icon.get_width() / 2.0 - 0.5))
+	return points
+
+
+## A rect's outline, its corners rounded by `radius` (px) as a StyleBoxFlat rounds
+## them (none at 0).
+static func _rounded_outline(rect: Rect2, radius: float) -> PackedVector2Array:
+	if radius <= 0.0:
+		return PackedVector2Array([rect.position, Vector2(rect.end.x, rect.position.y), rect.end, Vector2(rect.position.x, rect.end.y)])
+	var corners := [rect.position + Vector2(radius, radius), Vector2(rect.end.x - radius, rect.position.y + radius), rect.end - Vector2(radius, radius), Vector2(rect.position.x + radius, rect.end.y - radius)]
+	var points := PackedVector2Array()
+	for corner in 4:
+		for step in 7:
+			points.append(corners[corner] + Vector2.from_angle(PI + TAU / 4.0 * (corner + step / 6.0)) * radius)
+	return points
 
 
 func _sound_changed(keep: bool) -> void:

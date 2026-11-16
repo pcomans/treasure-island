@@ -420,6 +420,16 @@ theme_override_styles/slider = SubResource("StyleBoxFlat_track")
 max_value = 1435.0
 step = 5.0
 
+[node name="NightNote" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/TimeSlider"]
+layout_mode = 1
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = 9.0
+offset_bottom = 9.0
+theme_override_colors/font_color = Color(1, 0.86, 0.55, 1)
+theme_override_font_sizes/font_size = 16
+text = "Night is experimental"
+
 [node name="NowButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow"]
 custom_minimum_size = Vector2(80, 40)
 layout_mode = 2
