@@ -105,6 +105,9 @@ fi
 (cd "${project}" && tools/godot --headless --path . --export-release "Web" "${root}/${out}/${name}.html")
 mv "${out}/${name}.html" "${out}/index.html"
 
+# Run from an empty folder so Godot sees only the pack, not the source project.
+(cd "${work}/mount" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
+
 # The sounds' memory on the web, where the browser plays the takes (Godot's sample
 # playback, game/scripts/audio/sound.gd): Godot 4.7.2's engine script copies a
 # take's whole decoded data into a new AudioBuffer for every play and every restart
@@ -114,8 +117,10 @@ mv "${out}/${name}.html" "${out}/index.html"
 # take's own buffer instead, as Godot 4.8 does (godotengine/godot#124857): a buffer
 # source never writes to its buffer, and nothing writes to a take's buffer once it
 # is registered. The setter must be there once too, so the buffer returned is the
-# one registered. This applies exactly once, or the build stops;
-# tools/check-web-live.sh checks the deployed engine script for it.
+# one registered. This applies exactly once, or the build stops. It runs here, apart
+# from any other change to the engine script after the export, so a merge that
+# joins the two can't drop it; tools/check-web-live.sh checks the deployed engine
+# script for it.
 python3 -I - "${out}/${name}.js" <<'EOF'
 import os, shutil, sys, tempfile
 path = sys.argv[1]
@@ -138,8 +143,6 @@ os.replace(temporary, path)
 print("PATCHED: %s shares each sound take's AudioBuffer among its plays" % path)
 EOF
 
-# Run from an empty folder so Godot sees only the pack, not the source project.
-(cd "${work}/mount" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
 # The website serves the game from its /game/ folder, so a file named from the
 # site's root or another origin would not load there.
 python3 -I tools/check_web_paths.py "${out}/index.html" "${out}"
