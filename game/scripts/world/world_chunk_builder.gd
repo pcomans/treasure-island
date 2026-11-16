@@ -138,6 +138,13 @@ const STREET_GROUND_SURFACES := {
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
 	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.545, 0.57)},
 	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.42, 0.405, 0.375)},
+	# The park outside Isle House (owner video, 2026-11-15): the same shredded chips,
+	# grey-brown in its beds, a pale grey gravel patch by the forked log (f_058), and
+	# dark where the stormwater basin stays damp. Tints set against the frames' ratios
+	# to the lawn and the bike path's asphalt; production inference.
+	"park_chips": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.7, 0.66, 0.62)},
+	"park_chips_pale": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.84, 0.83, 0.8)},
+	"park_chips_damp": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 0.92, "specular": 0.2, "tint": Color(0.52, 0.48, 0.44)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},

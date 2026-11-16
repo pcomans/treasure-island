@@ -64,6 +64,7 @@ const LEVELS := {
 const DRESS := {
 	"lawn": Vector3(1.0, 0.058, 0.0),
 	"park_lawn": Vector3(1.0, 0.052, 0.0),
+	"park_turf": Vector3(1.0, 0.052, 0.0),
 	"sports": Vector3(1.0, 0.045, 0.0),
 	"watered_pitch": Vector3(1.0, 0.048, 0.0),
 	# A mown pitch keeps its blades short whatever their colour.

@@ -178,45 +178,6 @@
       "reference": "ferry-shelter 21-sv-north-sw (185 Treasure Island Rd, Sep 2025)"
     },
     {
-      "id": "palms_barricade_1",
-      "kind": "barricade",
-      "prop": "barricade",
-      "params": {},
-      "xz": [
-        -183.12,
-        496.01
-      ],
-      "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
-    },
-    {
-      "id": "palms_barricade_2",
-      "kind": "barricade",
-      "prop": "barricade",
-      "params": {},
-      "xz": [
-        -178.99,
-        504.01
-      ],
-      "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
-    },
-    {
-      "id": "palms_barricade_3",
-      "kind": "barricade",
-      "prop": "barricade",
-      "params": {},
-      "xz": [
-        -168.66,
-        523.99
-      ],
-      "yaw": -2.665,
-      "reason": "Orange and white striped A-frame barricades with white sign panels stand at the back edge of the west sidewalk of Avenue of the Palms, against the planting verge beside the fenced Cityside Park lot, south of 338 Ave of the Palms.",
-      "reference": "isle-house ih05 (338 Ave of the Palms, Sep 2025): two barricades and one farther on, all at the walk's planting edge; street-fences refs p4b-aotp-338-sw-h228 (same panorama, Sep 2025)"
-    },
-    {
       "id": "palms_cone_1",
       "kind": "traffic_cone",
       "prop": "traffic_cone",
@@ -1383,6 +1344,296 @@
       "yaw": 2.406,
       "reason": "A movable blue Adirondack chair in a loose group on the lawn, turned to the skyline view.",
       "reference": "ph05 (Sep 2025); cmg12 (2025-2026); ph04 (Sep 2025)"
+    },
+    {
+     "id": "ihpark_mound_chair_1",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-203.0, 551.3],
+     "yaw": 2.05,
+     "reason": "A movable pale blue Adirondack chair in a loose group on the mulch apron at the foot of the mound by the north-west corner, turned to the bike path and the bay; two more stand on the lawn on top (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_2",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-200.8, 552.1],
+     "yaw": 1.85,
+     "reason": "A movable pale blue Adirondack chair in a loose group on the mulch apron at the foot of the mound by the north-west corner, turned to the bike path and the bay; two more stand on the lawn on top (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_3",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-202.5, 553.9],
+     "yaw": 2.15,
+     "reason": "A movable pale blue Adirondack chair in a loose group on the mulch apron at the foot of the mound by the north-west corner, turned to the bike path and the bay; two more stand on the lawn on top (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_4",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-200.1, 554.6],
+     "yaw": 1.95,
+     "reason": "A movable pale blue Adirondack chair in a loose group on the mulch apron at the foot of the mound by the north-west corner, turned to the bike path and the bay; two more stand on the lawn on top (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_5",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-199.7, 557.4],
+     "yaw": 1.75,
+     "reason": "A movable pale blue Adirondack chair in a loose group on the mulch apron at the foot of the mound by the north-west corner, turned to the bike path and the bay; two more stand on the lawn on top (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_6",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-197.6, 547.6],
+     "yaw": 2.3,
+     "reason": "A movable pale blue Adirondack chair, one of two on the lawn on top of the mound by the north-west corner (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_mound_chair_7",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-195.9, 546.1],
+     "yaw": 2.0,
+     "reason": "A movable pale blue Adirondack chair, one of two on the lawn on top of the mound by the north-west corner (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_100-f_108 (five in a loose group on the mulch apron, two on the lawn on top), f_110"
+    },
+    {
+     "id": "ihpark_chips_chair_1",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-184.58, 589.97],
+     "yaw": 2.196,
+     "reason": "A pair of blue Adirondack chairs on the pale chips by the bike path, side by side (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_076, f_077, f_058"
+    },
+    {
+     "id": "ihpark_chips_chair_2",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-183.78, 591.92],
+     "yaw": 1.951,
+     "reason": "A pair of blue Adirondack chairs on the pale chips by the bike path, side by side (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_076, f_077, f_058"
+    },
+    {
+     "id": "ihpark_lawn_chair_1",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-182.86, 574.36],
+     "yaw": 1.707,
+     "reason": "Blue Adirondack chairs on the lawn, two together and one apart, turned to the bay (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_070-f_077 (three on the lawn), f_058"
+    },
+    {
+     "id": "ihpark_lawn_chair_2",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-181.57, 575.95],
+     "yaw": 1.532,
+     "reason": "Blue Adirondack chairs on the lawn, two together and one apart, turned to the bay (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_070-f_077 (three on the lawn), f_058"
+    },
+    {
+     "id": "ihpark_lawn_chair_3",
+     "kind": "chair",
+     "prop": "adirondack_chair",
+     "params": {"colour": "powder"},
+     "xz": [-178.92, 578.84],
+     "yaw": 2.056,
+     "reason": "Blue Adirondack chairs on the lawn, two together and one apart, turned to the bay (positions production inference).",
+     "reference": "Owner video 2026-11-15, f_070-f_077 (three on the lawn), f_058"
+    },
+    {
+     "id": "ihpark_block_bench_1",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-170.57, 532.06],
+     "yaw": -0.972,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_2",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-165.02, 540.45],
+     "yaw": -1.078,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_3",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.5},
+     "xz": [-161.36, 549.57],
+     "yaw": -1.129,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_4",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-157.4, 558.25],
+     "yaw": -1.148,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_5",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-152.64, 566.29],
+     "yaw": -0.639,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_6",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.5},
+     "xz": [-147.37, 572.42],
+     "yaw": -1.958,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_7",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-148.05, 580.25],
+     "yaw": -1.385,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_block_bench_8",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "block", "size_m": 2.3},
+     "xz": [-146.42, 590.03],
+     "yaw": -1.747,
+     "reason": "A pale weathered timber block lying along the lawn's east edge as a bench, about every 10 m (spacing and size, about 2.3-2.5 by 0.5 by 0.45 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_025, f_028, f_038, f_051; Esri World Imagery 2026-05-26 (pale bars along the lawn's south-east edge)"
+    },
+    {
+     "id": "ihpark_log_1",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "weathered", "size_m": 5.0},
+     "xz": [-189.3, 574.37],
+     "yaw": -1.19,
+     "reason": "A straight weathered log lying in the bed between the bike path's verge and the lawn, about parallel to the path (one broken in two pieces); sizes and positions production inference.",
+     "reference": "Owner video 2026-11-15, f_086-f_099 (f_090: two of them), f_109"
+    },
+    {
+     "id": "ihpark_log_2",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "weathered", "size_m": 3.6},
+     "xz": [-184.93, 582.24],
+     "yaw": -0.911,
+     "reason": "A straight weathered log lying in the bed between the bike path's verge and the lawn, about parallel to the path (one broken in two pieces); sizes and positions production inference.",
+     "reference": "Owner video 2026-11-15, f_086-f_099 (f_090: two of them), f_109"
+    },
+    {
+     "id": "ihpark_log_3",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "weathered", "size_m": 2.6},
+     "xz": [-183.14, 586.05],
+     "yaw": -0.981,
+     "reason": "A straight weathered log lying in the bed between the bike path's verge and the lawn, about parallel to the path (one broken in two pieces); sizes and positions production inference.",
+     "reference": "Owner video 2026-11-15, f_086-f_099 (f_090: two of them), f_109"
+    },
+    {
+     "id": "ihpark_log_4",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "weathered", "size_m": 5.0},
+     "xz": [-178.95, 593.78],
+     "yaw": -1.155,
+     "reason": "A straight weathered log lying in the bed between the bike path's verge and the lawn, about parallel to the path (one broken in two pieces); sizes and positions production inference.",
+     "reference": "Owner video 2026-11-15, f_086-f_099 (f_090: two of them), f_109"
+    },
+    {
+     "id": "ihpark_log_5",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "weathered", "size_m": 5.0},
+     "xz": [-174.46, 602.72],
+     "yaw": -0.946,
+     "reason": "A straight weathered log lying in the bed between the bike path's verge and the lawn, about parallel to the path (one broken in two pieces); sizes and positions production inference.",
+     "reference": "Owner video 2026-11-15, f_086-f_099 (f_090: two of them), f_109"
+    },
+    {
+     "id": "ihpark_forked_log",
+     "kind": "bench",
+     "prop": "log_seat",
+     "params": {"form": "forked", "size_m": 7.5},
+     "xz": [-166.64, 621.21],
+     "yaw": 2.618,
+     "reason": "A long bleached forked log lying on the pale chips in the south of the park, its fork toward the north-west (length about 7-8 m, production inference).",
+     "reference": "Owner video 2026-11-15, f_058, f_066"
+    },
+    {
+     "id": "ihpark_basket_1",
+     "kind": "waste_basket",
+     "prop": "waste_basket",
+     "params": {"style": "black_slat"},
+     "xz": [-171.6, 523.6],
+     "yaw": -1.094,
+     "reason": "A black slatted litter can with a domed lid by the walk at the lawn's neck, the north tip (position production inference).",
+     "reference": "Owner video 2026-11-15, f_000, f_001"
+    },
+    {
+     "id": "ihpark_basket_2",
+     "kind": "waste_basket",
+     "prop": "waste_basket",
+     "params": {"style": "black_slat"},
+     "xz": [-156.6, 553.6],
+     "yaw": -1.094,
+     "reason": "A black slatted litter can with a domed lid by the avenue's walk at the lawn's east edge (position production inference).",
+     "reference": "Owner video 2026-11-15, f_030-f_032"
+    },
+    {
+     "id": "ihpark_basket_3",
+     "kind": "waste_basket",
+     "prop": "waste_basket",
+     "params": {"style": "black_slat"},
+     "xz": [-139.5, 586.6],
+     "yaw": -1.094,
+     "reason": "A black slatted litter can with a domed lid by the avenue's walk at the south-east corner (position production inference).",
+     "reference": "Owner video 2026-11-15, f_038"
     },
     {
       "id": "storage_9th_floodlight_west",

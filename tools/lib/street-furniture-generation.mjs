@@ -146,14 +146,22 @@ export function streetFurnitureFootprint(prop, params) {
   // The player walks through a cobble pile, so only its spine claims ground, unless it gives its spread.
   if (prop === "cobble_pile") return { x_m: roundCoordinate(number("length_m", 5.0, 1.0, 9.0) + 0.2), z_m: isFiniteNumber(params?.width_m) ? number("width_m", 1.0, 0.5, 2.5) : 0.4 };
   if (prop === "log_seat") {
-    const size = number("size_m", 3.2, 0.5, 5.0);
+    const size = number("size_m", 3.2, 0.5, params?.form === "forked" ? 8.0 : 5.0);
     if (params?.form === "stump") return { x_m: roundCoordinate(size + 0.06), z_m: roundCoordinate(size + 0.06) };
     if (params?.form === "slab") return { x_m: roundCoordinate(size + 0.1), z_m: roundCoordinate(size * 0.65) };
     if (params?.form === "baulk") return { x_m: roundCoordinate(size + 0.1), z_m: 0.72 };
+    // A pale timber block bench (street_furniture_kit.gd BLOCK_DEPTH_M) and a forked log,
+    // whose limbs splay FORK_SPLAY_RAD each side of the fork, FORK_LIMB_SHARE of its length out.
+    if (params?.form === "block") return { x_m: roundCoordinate(size + 0.1), z_m: 0.6 };
+    if (params?.form === "forked") return { x_m: roundCoordinate(size + 0.2), z_m: roundCoordinate(2 * Math.sin(FORK_SPLAY_RAD) * FORK_LIMB_SHARE * size + 0.5) };
     return { x_m: roundCoordinate(size + 0.1), z_m: 0.7 };
   }
   return STREET_FURNITURE_FOOTPRINTS[prop] ?? null;
 }
+// The forked log's shape, kept in step with street_furniture_kit.gd: FORK_SPLAY_RAD
+// there, and its limbs' share of the length, 1 - FORK_TRUNK_SHARE there.
+const FORK_SPLAY_RAD = 0.42;
+const FORK_LIMB_SHARE = 0.42;
 // Kit props that stand on legs: the flat bottom of each foot, {x, z, half_x,
 // half_z} in the prop's frame (front -Z, right +X), in the kit's leg order
 // (front-left, front-right, back-left, back-right). This is the one table of
