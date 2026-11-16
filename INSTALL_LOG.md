@@ -394,3 +394,18 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: official Ubuntu archive only.
 - Verification and result: `magick -version` reports `ImageMagick 7.1.2-18 Q16 x86_64`; `tools/build-web.sh` at 8c24b7b3 made the three icons with it (192 and 512 px, and the 512 px maskable one).
 - Removal steps: remove `imagemagick` from the apt list in `post-create.sh`, then `sudo apt-get remove imagemagick imagemagick-7.q16`.
+
+### 2026-11-16 — butler's darwin-amd64 build on the itch job's Intel runner (GitHub Actions)
+
+- Date and time (UTC): 2026-11-16, the workflow change that moves the `itch` job to `macos-26-intel`. Every run of the job installs it; the first release on `main` after the change is the first real run.
+- Status: `planned` (the pinned archive was installed and run once on `macos-26-intel` and on `macos-15-intel` by a keyless probe on branch `ci/mac-runner-intel-20261116`, run 43954153229: checksum OK, `butler version` printed `v15.32.0, built on Oct  6 2026 @ 04:11:54, ref 336f95416289de8fd17589000d48de5526c1a8f2`).
+- Exact package and version: itch.io's `butler` 15.32.0, darwin-amd64 build (replaces the darwin-arm64 build of the 2026-11-15 entry, as the job no longer runs on Apple Silicon). 15.32.0 is the newest version broth lists for darwin-amd64.
+- Publisher and source URL: itch.io's own distribution site, `https://broth.itch.zone/butler/darwin-amd64/15.32.0/archive/default` (https://itch.io/docs/butler/installing.html).
+- Checksum, signature, notarization, or registry integrity evidence: itch.io publishes no checksum for it. The workflow pins the archive's SHA-256 as broth served it twice on 2026-11-16 (from 20:44Z, 10,981,715 bytes, the same bytes both times), `a92947c9556c9bfb0cc9bdc3814f342b30e0ee7269efc418658894a916ca9584`. Its three files (`butler` SHA-256 `4f3a99672090599bb207d85521bd3268481cf4b65c54fc81ef172c51ccaa952c`, a Mach-O x86_64 executable; `7z.so`; `libc7zip.dylib`) are byte-identical to those in `butler-darwin-amd64.zip` of the `v15.32.0` release of https://github.com/itchio/butler (published 2026-10-06), whose digest GitHub records as `sha256:fe7607c6227cd735231e4a7376b8148666d84fba63b9e9e6a5e313c5da70466c`; the downloaded GitHub zip had that digest. The same check on the darwin-arm64 archive still gave the 2026-11-15 pin. A mismatch stops the job before butler runs.
+- Exact command or installation method: the `Install butler` step of `.github/workflows/mac-build.yml`: `curl -fsSL --retry 3 --retry-all-errors` into `$RUNNER_TEMP/butler`, `shasum -a 256 -c`, `unzip`, then that folder goes on the job's `PATH`.
+- Purpose: push each release's builds to the itch.io page phppco/grand-treasure-island and fetch back the Mac app itch.io serves, as before, from an Intel Mac.
+- Scope and install location: the ephemeral GitHub-hosted `macos-26-intel` runner of the `itch` job only, under `$RUNNER_TEMP/butler`; nothing changes in the devcontainer or on the owner's machines.
+- Authorizing decision or request: the owner's 2026-11-15 itch.io publishing decision; the runner move is ROOT's assignment ci/mac-runner-intel-20261116 (GitHub had no Apple Silicon runner for the sign and itch jobs on 2026-11-16), pending its reviews.
+- Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
+- Verification and result: see Status; the job logs `butler version` on each run.
+- Removal steps: as for the 2026-11-15 entry; to go back to an Apple Silicon runner, restore that entry's darwin-arm64 URL and SHA-256 with `runs-on: macos-26`.
