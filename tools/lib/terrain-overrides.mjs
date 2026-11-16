@@ -24,7 +24,11 @@
 // diagonal; where a smaller neighbour puts a vertex on a leaf edge, the leaf's
 // triangle is fanned through it, and coarse neighbour cells get the same vertices
 // on their shared edges (where D is zero, so their surface is unchanged): the
-// land stays watertight. Heights are production inference, not survey data.
+// land stays watertight. A site may name buildings in scope.fan_beside: a re-meshed
+// cell beside the land cell under one of them puts no vertex on their shared edge but
+// its corners (the leaves along it fanned to those corners), so that cell, and the
+// foundation that follows its facets, stay exactly as generated; the site keeps the
+// correction at zero along that edge. Heights are production inference, not survey data.
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -146,7 +150,10 @@ export function loadTerrainOverrides(projectRoot) {
     siteIds.add(site.id);
     invariant(site.basis === "production_inference", `${label} basis must be production_inference`);
     for (const field of ["name", "evidence"]) invariant(typeof site[field] === "string" && site[field].trim() !== "", `${label} needs ${field}`);
-    exactKeys(site.scope, ["add_xz", "edge_blend_m", "exclude_ways", "exclude_xz", "source_keys"], `${label} scope`);
+    exactKeys(site.scope, ["add_xz", "edge_blend_m", "exclude_ways", "exclude_xz", "source_keys", ...("fan_beside" in (site.scope ?? {}) ? ["fan_beside"] : [])], `${label} scope`);
+    // fan_beside: buildings (OSM keys) whose land cells the site's re-meshed cells must
+    // leave unsplit, fanning to the shared edges' corners (planTerrainOverrides).
+    invariant(!("fan_beside" in site.scope) || (Array.isArray(site.scope.fan_beside) && site.scope.fan_beside.length > 0 && site.scope.fan_beside.every((key) => /^[wr]\d+$/u.test(key))), `${label} scope fan_beside must list OSM building keys`);
     invariant(Array.isArray(site.scope.source_keys) && site.scope.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} scope source_keys must be OSM area keys`);
     invariant(Array.isArray(site.scope.add_xz) && site.scope.add_xz.every((ring) => Array.isArray(ring) && ring.length >= 3 && ring.every(isXZ)), `${label} scope add_xz must be polygons of [x, z] points`);
     invariant(site.scope.source_keys.length + site.scope.add_xz.length > 0, `${label} scope is empty`);
@@ -475,7 +482,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const fadeGeometry = differenceMultiPolygons(unionMultiPolygons(...parts), ...corridors);
     const geometry = intersectMultiPolygons(fadeGeometry, boundary);
     invariant(geometry.length > 0 && multiPolygonArea(geometry) > 1, `Terrain override site ${site.id} scope is empty`);
-    const scope = { geometry, fadeGeometry, edges: edgeIndex(fadeGeometry), bounds: multiPolygonBounds(geometry) };
+    const scope = { geometry, fadeGeometry, edges: edgeIndex(fadeGeometry), bounds: multiPolygonBounds(geometry), fan_beside: site.scope.fan_beside ?? [] };
     const regions = site.regions.map((region) => ({ id: region.id, rule: region.rule, field: shapeField(region.shape), minLeaf: region.min_leaf_m ?? null }));
     const grade = harmonicGrade(site.grade, scope, boundary, regions, baseAnywhere);
     return { id: site.id, name: site.name, edgeBlend: site.scope.edge_blend_m, scope, regions, grade, area_m2: multiPolygonArea(geometry) };
@@ -650,6 +657,67 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     audit.leaves += leaves.length;
   }
 
+  // A split coarse neighbour keeps its surface but gains edges, fanned from its
+  // new edge vertices across the cell. Under a building that no re-meshed cell
+  // reaches they would re-cut a foundation that otherwise stays as generated
+  // (it follows the land facets, and landmark forms match those wall records),
+  // so a site must leave such a neighbour unsplit: exclude the re-meshed cell
+  // beside it from the scope (scope.exclude_xz). A building that a re-meshed
+  // cell reaches has its foundation re-cut by that cell's facets anyway.
+  const remeshed = (geometry) => [...refined.values()].some((cell) => cell.mode === "leaves"
+    && multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(cell.west, cell.south, cell.west + cellSizeM, cell.south + cellSizeM), geometry)) > 1e-6);
+  const buildingRings = [];
+  for (const object of playableObjects.values()) {
+    if (!(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
+    const box = multiPolygonBounds(object.geometry);
+    const near = siteBoxes.some((site) => box.max_x > site.min_x - cellSizeM && box.min_x < site.max_x + cellSizeM && box.max_y > site.min_y - cellSizeM && box.min_y < site.max_y + cellSizeM);
+    if (!near || remeshed(object.geometry)) continue;
+    for (const polygon of object.geometry) {
+      for (const ring of polygon) {
+        const xs = ring.map((point) => point[0]);
+        const ys = ring.map((point) => point[1]);
+        buildingRings.push({ key: object.row.source_key, ring, box: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } });
+      }
+    }
+  }
+  // A re-meshed cell beside a coarse cell that holds a guarded building (one in
+  // buildingRings) puts no vertex on their shared edge but its two corners: the
+  // leaves along that edge are joined into one polygon fanned to those corners
+  // (refinedCellMesh), so the neighbour is never split and its land, and the
+  // foundation that follows it, stay exactly as generated. A site keeps the
+  // correction at zero along such an edge (scope.exclude_xz, faded by edge_blend_m),
+  // so the fan lies on the generated surface there.
+  // Only the buildings a site names in scope.fan_beside: other sites keep their output.
+  const fanKeys = new Set(sites.flatMap((site) => site.scope.fan_beside ?? []));
+  const holdsGuardedBuilding = (west, south) => buildingRings.some(({ key, box }) => fanKeys.has(key) && box.max_x > west && box.min_x < west + cellSizeM && box.max_y > south && box.min_y < south + cellSizeM);
+  const EDGE_STEPS = Object.freeze({ east: [cellSizeM, 0], west: [-cellSizeM, 0], north: [0, cellSizeM], south: [0, -cellSizeM] });
+  const guardedEdges = new Map();
+  for (const cell of refined.values()) {
+    if (cell.mode !== "leaves") continue;
+    const edges = Object.entries(EDGE_STEPS)
+      .filter(([, [dx, dy]]) => refined.get(cellKey(cell.west + dx, cell.south + dy))?.mode !== "leaves" && holdsGuardedBuilding(cell.west + dx, cell.south + dy))
+      .map(([edge]) => edge);
+    if (edges.length > 0) guardedEdges.set(cellKey(cell.west, cell.south), edges);
+  }
+  const edgesOf = (cell) => guardedEdges.get(cellKey(cell.west, cell.south)) ?? [];
+  // Whether point lies on one of the cell's guarded edges, strictly between its corners.
+  const insideGuardedEdge = (cell, point) => edgesOf(cell).some((edge) => {
+    const vertical = edge === "east" || edge === "west";
+    const line = edge === "east" ? cell.west + cellSizeM : edge === "west" ? cell.west : edge === "north" ? cell.south + cellSizeM : cell.south;
+    const [across, along, low] = vertical ? [point[0], point[1], cell.south] : [point[1], point[0], cell.west];
+    return Math.abs(across - line) <= 1e-6 && along > low + 1e-6 && along < low + cellSizeM - 1e-6;
+  });
+  // Whether point lies on a guarded edge's line, its corners included.
+  const onGuardedLine = (cell, point) => edgesOf(cell).some((edge) => {
+    const vertical = edge === "east" || edge === "west";
+    const line = edge === "east" ? cell.west + cellSizeM : edge === "west" ? cell.west : edge === "north" ? cell.south + cellSizeM : cell.south;
+    return Math.abs((vertical ? point[0] : point[1]) - line) <= 1e-6;
+  });
+  const touchesGuardedEdge = (cell, leaf) => edgesOf(cell).some((edge) => ({
+    east: leaf.x0 + leaf.size >= cell.west + cellSizeM - 1e-9, west: leaf.x0 <= cell.west + 1e-9,
+    north: leaf.y0 + leaf.size >= cell.south + cellSizeM - 1e-9, south: leaf.y0 <= cell.south + 1e-9,
+  })[edge]);
+
   // ---- vertices on grid lines (leaf corners, and coast points where leaves
   // are clipped), for T-junction-free edges.
   const lineX = new Map();
@@ -678,7 +746,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
       const whole = Math.abs(multiPolygonArea(polygons) - leaf.size * leaf.size) <= 1e-9;
       cell.leafPolygons.push({ leaf, polygons, whole });
-      for (const polygon of polygons) for (const point of polygon[0]) addLinePoint(point);
+      for (const polygon of polygons) for (const point of polygon[0]) if (!insideGuardedEdge(cell, point)) addLinePoint(point);
     }
   }
   const sortedLine = (map) => new Map([...map.entries()].map(([key, set]) => [key, [...set].sort((left, right) => left - right)]));
@@ -807,7 +875,30 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
   const refinedCellMesh = (cell, label) => {
     const mesh = newMesh();
     const emit = (a, b, c) => pushTriangle(mesh, vertexOf(mesh, a, cell), vertexOf(mesh, b, cell), vertexOf(mesh, c, cell));
+    const guarded = edgesOf(cell).length > 0;
+    if (guarded) {
+      // The leaves along the guarded edges, as one polygon fanned to the edges' corners.
+      const along = cell.leafPolygons.filter(({ leaf }) => touchesGuardedEdge(cell, leaf));
+      invariant(along.every(({ whole }) => whole), `${label}: a leaf on an edge beside a guarded building is clipped by the coast`);
+      const union = unionMultiPolygons(...along.map(({ leaf }) => rectangleMultiPolygon(leaf.x0, leaf.y0, leaf.x0 + leaf.size, leaf.y0 + leaf.size)));
+      invariant(union.length === 1 && union[0].length === 1, `${label}: the leaves beside a guarded building do not join into one polygon`);
+      let ring = union[0][0].map((point) => [roundCoordinate(point[0]), roundCoordinate(point[1])]);
+      if (signedRingArea(ring) < 0) ring = ring.slice().reverse();
+      const withExtras = [];
+      for (let index = 0; index < ring.length; index += 1) {
+        const a = ring[index];
+        const b = ring[(index + 1) % ring.length];
+        if (insideGuardedEdge(cell, a)) continue;
+        withExtras.push(a);
+        if (!(onGuardedLine(cell, a) && onGuardedLine(cell, b))) withExtras.push(...extrasBetween(a, b));
+      }
+      const cleaned = withExtras.filter((point, index) => vertexKey(point) !== vertexKey(withExtras[(index + 1) % withExtras.length]));
+      const triangles = clipEars(cleaned);
+      invariant(triangles, `${label} could not fan the leaves beside a guarded building: ${JSON.stringify(cleaned)}`);
+      for (const [a, b, c] of triangles) emit(a, b, c);
+    }
     for (const { leaf, polygons, whole } of cell.leafPolygons) {
+      if (guarded && touchesGuardedEdge(cell, leaf)) continue;
       const { x0, y0, size } = leaf;
       if (whole) {
         const sw = [x0, y0];
@@ -914,29 +1005,6 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     return { mesh: { vertices: out.vertices, normals: out.normals, uvs: out.uvs, indices: out.indices }, inserted };
   };
 
-  // A split coarse neighbour keeps its surface but gains edges, fanned from its
-  // new edge vertices across the cell. Under a building that no re-meshed cell
-  // reaches they would re-cut a foundation that otherwise stays as generated
-  // (it follows the land facets, and landmark forms match those wall records),
-  // so a site must leave such a neighbour unsplit: exclude the re-meshed cell
-  // beside it from the scope (scope.exclude_xz). A building that a re-meshed
-  // cell reaches has its foundation re-cut by that cell's facets anyway.
-  const remeshed = (geometry) => [...refined.values()].some((cell) => cell.mode === "leaves"
-    && multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(cell.west, cell.south, cell.west + cellSizeM, cell.south + cellSizeM), geometry)) > 1e-6);
-  const buildingRings = [];
-  for (const object of playableObjects.values()) {
-    if (!(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
-    const box = multiPolygonBounds(object.geometry);
-    const near = siteBoxes.some((site) => box.max_x > site.min_x - cellSizeM && box.min_x < site.max_x + cellSizeM && box.max_y > site.min_y - cellSizeM && box.min_y < site.max_y + cellSizeM);
-    if (!near || remeshed(object.geometry)) continue;
-    for (const polygon of object.geometry) {
-      for (const ring of polygon) {
-        const xs = ring.map((point) => point[0]);
-        const ys = ring.map((point) => point[1]);
-        buildingRings.push({ key: object.row.source_key, ring, box: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } });
-      }
-    }
-  }
   const orientation = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
   const crosses = (p, q, a, b) => {
     const d1 = orientation(a, b, p);
@@ -970,6 +1038,20 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     }
   };
 
+  // The land cell under a guarded building keeps exactly the triangles it was
+  // generated with: no vertex inserted, and the same triangles by position.
+  const assertGuardedCellKept = (west, south, coarse, split, label) => {
+    if (!holdsGuardedBuilding(west, south)) return;
+    const triangles = (mesh) => {
+      const list = [];
+      for (let offset = 0; offset < mesh.indices.length; offset += 3) {
+        list.push([0, 1, 2].map((k) => mesh.indices[offset + k] * 3).map((i) => `${mesh.vertices[i]},${mesh.vertices[i + 1]},${mesh.vertices[i + 2]}`).sort().join(";"));
+      }
+      return list.sort().join("|");
+    };
+    invariant(split.inserted === 0 && triangles(split.mesh) === triangles(coarse), `${label}: the land cell under a guarded building changed (${split.inserted} vertices inserted); a re-meshed cell beside it must fan to their shared edge's corners`);
+  };
+
   // Meshes for the generator's per-cell callback (griddedTerrainSurfaceMesh).
   let neighbourInserts = 0;
   let refinedTriangles = 0;
@@ -977,8 +1059,12 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const cell = refined.get(cellKey(west, south));
     if (cell) {
       invariant(JSON.stringify(clipped) === JSON.stringify(cell.polygon), `${label} land polygon differs from the terrain override plan`);
-      const mesh = cell.mode === "leaves" ? refinedCellMesh(cell, label) : splitCoarseMesh(coarse, label).mesh;
-      if (cell.mode === "coarse") assertBuildingsUncut(west, south, coarse, mesh, label);
+      const split = cell.mode === "leaves" ? null : splitCoarseMesh(coarse, label);
+      const mesh = split ? split.mesh : refinedCellMesh(cell, label);
+      if (cell.mode === "coarse") {
+        assertBuildingsUncut(west, south, coarse, mesh, label);
+        assertGuardedCellKept(west, south, coarse, split, label);
+      }
       refinedTriangles += mesh.indices.length / 3;
       return mesh;
     }
@@ -988,6 +1074,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const result = splitCoarseMesh(coarse, label);
     neighbourInserts += result.inserted;
     assertBuildingsUncut(west, south, coarse, result.mesh, label);
+    assertGuardedCellKept(west, south, coarse, result, label);
     return result.mesh;
   };
 

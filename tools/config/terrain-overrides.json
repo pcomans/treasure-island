@@ -17,45 +17,12 @@
       "id": "cityside_park",
       "name": "Cityside Park",
       "basis": "production_inference",
-      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade. The lot south-east of the park, fenced until 2026, is built as a park (owner video 2026-11-15): its wedge by the notch and its north-west corner (west of the cells beside Isle House) join the scope, and its mound is a raise.",
+      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade. The lot south-east of the park, fenced until 2026, is built as a park (owner video 2026-11-15): its wedge by the notch, its north-west corner and its north part join the scope (all but a strip along Isle House's land cell, whose shared edge the re-meshed cells fan to), its north tip and north-west end are levelled where the 2023 raster still has the fill stockpile, and its mound is a raise.",
       "scope": {
         "source_keys": [
           "w1428380753"
         ],
-        "add_xz": [
-          [
-            [
-              -352.78,
-              324.11
-            ],
-            [
-              -180.85,
-              663.85
-            ],
-            [
-              -212.05,
-              679.65
-            ],
-            [
-              -383.98,
-              339.91
-            ]
-          ],
-          [
-            [
-              -207.0,
-              561.3
-            ],
-            [
-              -192.5,
-              540.9
-            ],
-            [
-              -192.5,
-              586.1
-            ]
-          ]
-        ],
+        "add_xz": [[[-352.78, 324.11], [-180.85, 663.85], [-212.05, 679.65], [-383.98, 339.91]], [[-207.0, 561.3], [-192.5, 540.9], [-192.5, 586.1]], [[-192.5, 494.0], [-168.0, 494.0], [-168.0, 545.0], [-192.5, 545.0]]],
         "exclude_ways": [
           {
             "source_keys": [
@@ -69,7 +36,7 @@
           {
             "points_xz": [
               [
-                -192.5,
+                -168.0,
                 479.5
               ],
               [
@@ -81,13 +48,14 @@
                 544.5
               ],
               [
-                -192.5,
+                -168.0,
                 544.5
               ]
             ],
-            "reason": "The two land cells beside Isle House (w1249412094) stay as generated: re-meshing them would split the cells under the building and re-cut the foundation its landmark form matches. Only the park's edge strip by the avenue lies here, where the grade follows the USGS land anyway."
+            "reason": "A strip along the shared edge with Isle House's land cell (w1249412094) keeps the generated surface: the re-meshed park cells beside it fan to that edge's corners (tools/lib/terrain-overrides.mjs guarded edges), so Isle House's cell is never split, and with the correction zero along the edge the fan lies on the generated ground."
           }
         ],
+        "fan_beside": ["w1249412094"],
         "edge_blend_m": 3
       },
       "grade": {
@@ -525,6 +493,17 @@
             "elevation_m": 4.5
           },
           "reason": "The mulch apron at the foot of the mound where the loose group of chairs stands, held level so they stand upright (owner video 2026-11-15, f_100-f_108; height production inference from the ground beside it)."
+        },
+        {
+          "id": "isle_house_park_north_grade",
+          "shape": {
+            "points_xz": [[-212.5, 536.0], [-206.0, 506.0], [-200.0, 497.0], [-196.1, 498.6], [-186.0, 518.1], [-176.0, 537.5], [-178.0, 539.5], [-196.0, 541.0], [-207.0, 541.5]]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.7
+          },
+          "reason": "The park's north tip and north-west end are flat where the 2023 USGS raster still has the fill stockpile (up to about 8 m): level at about the lawn's height (owner video 2026-11-15, f_000-f_005 the flat north tip; f_051, f_090, f_103, f_107, f_112 a low lawn mound with cars seen over its crest). Height production inference."
         },
         {
           "id": "isle_house_park_mound",

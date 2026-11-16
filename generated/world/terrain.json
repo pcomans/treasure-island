@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 335181
+    "sample_points": 336224
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "1f5a3279b5fd345694904692f4d57e555557c80b2b623cef10f021bd831f3f26"
+      "sha256": "44a56c79e2ce09bb81af526d865679cf0f530e5ee9efc363467d72b398d997c0"
     },
-    "corrected_cells": 229,
-    "leaves": 6499,
+    "corrected_cells": 232,
+    "leaves": 6556,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 364,
+    "neighbour_edge_vertices": 346,
     "refined_cell_bounds_m": [
       [
         0,
@@ -1502,6 +1502,12 @@
         512
       ],
       [
+        -192,
+        480,
+        -160,
+        512
+      ],
+      [
         160,
         480,
         192,
@@ -1538,6 +1544,12 @@
         544
       ],
       [
+        -192,
+        512,
+        -160,
+        544
+      ],
+      [
         160,
         512,
         192,
@@ -1553,6 +1565,12 @@
         -224,
         544,
         -192,
+        576
+      ],
+      [
+        -192,
+        544,
+        -160,
         576
       ],
       [
@@ -1598,15 +1616,15 @@
         672
       ]
     ],
-    "refined_cells": 229,
-    "refined_triangles": 15275,
+    "refined_cells": 232,
+    "refined_triangles": 15413,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16773,
+          "free_nodes": 16570,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -1649,11 +1667,15 @@
             "rule": "level"
           },
           {
+            "id": "isle_house_park_north_grade",
+            "rule": "level"
+          },
+          {
             "id": "isle_house_park_mound",
             "rule": "raise"
           }
         ],
-        "scope_area_m2": 23812.7
+        "scope_area_m2": 24569.5
       },
       {
         "edge_blend_m": 8,

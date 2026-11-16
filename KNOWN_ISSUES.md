@@ -418,14 +418,18 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
 - Estimated, not measured: the number and places of the young pines (a scatter rule,
   about one per 70 to 90 m² of bed), the lamps' 17 m spacing, the mound's 0.7 m rise,
   the sizes of the block benches and logs, the chairs' places, and the basin's outline.
-- The park's north third still stands on the stockpile hill in the 2023 USGS data (up
-  to about 8 m at x -190, z 512, some 3.5 m above the lawn), where the video shows flat
-  ground (f_000 to f_005) and a low lawn mound at the north-west end (f_103, f_107,
-  f_112). Its two 32 m land cells (x -192 to -160, z 480 to 544) border Isle House's,
-  and re-meshing them would split Isle House's cell, which the terrain overrides'
-  foundation guard forbids (the Cityside site's exclusion). The avenue's hump beside it
-  stays too, and the basin, also beside those cells, is darker damp chips, not a hollow,
-  and holds no water (the video was shot after rain).
+- The park's north tip and north-west end are levelled (to about 4.7 m) where the 2023
+  USGS raster still had the fill stockpile (up to about 8 m): flat at the tip (f_000 to
+  f_005) with a 0.7 m lawn mound at the north-west end (f_103, f_107, f_112); heights
+  production inference. The Avenue of the Palms corridor keeps its generated ground
+  (13 m each side of the street), so a grassed bank of up to about 2.5 m still rises
+  from the levelled lawn to the avenue's west walk by the north tip, where the stockpile
+  reaches under the corridor; the avenue's hump beside it stays (see the road humps
+  above). Isle House's land cell is untouched: the re-meshed park cells fan to their
+  shared edge (`scope.fan_beside` in tools/config/terrain-overrides.json). The basin,
+  beside Isle House's cell, is darker damp chips, not a hollow, and holds no water (the
+  video was shot after rain). Levelling the north part lowered Cityside's notch and
+  the ground round its north-west forebay by up to 0.34 m.
 - The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
   sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
   saplings), not the park's own species.
