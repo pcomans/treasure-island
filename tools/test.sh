@@ -233,6 +233,7 @@ tests=(
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
   game/tests/headless_shore_lift.gd
+  game/tests/headless_breakwater_birds.gd
   game/tests/headless_fast_drop.gd
   game/tests/headless_vehicle_contract.gd
   game/tests/headless_car_stance.gd

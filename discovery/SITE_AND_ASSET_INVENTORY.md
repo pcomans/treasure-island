@@ -389,6 +389,20 @@ All are used round the whole island: ten segments and seven closures.
 | Young planting (`young_planting`) | The Mersea promenade's mulch on both sides | | From the owner's video, Nov 2026, crossed cards; not yet reviewed | Rate |
 | Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026, with its own baked far impostor; not yet reviewed | Rate |
 
+### Breakwater birds
+
+[`game/scripts/world/breakwater_birds.gd`](../game/scripts/world/breakwater_birds.gd), built
+under the ferry breakwater (OSM w1011830371) by `ferry_terminal.gd` (2026-11-15/16). The
+owner named the three birds and their poses, a standing and a sitting version of every bird,
+and about a hundred of them; forms and colours are production inference from public species
+photos. Placed by a seeded colony and cluster rule along the breakwater's cap.
+
+| Asset | Where used | Level | Evidence | Next level |
+|---|---|---|---|---|
+| Brown pelican (bill out, bill tucked, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`: "convincing"); the tucked and sitting poses reworked in round 3 (reviewed PASS WITH NOTES), the primaries given relief in round 4, not yet reviewed | Rate |
+| Double-crested cormorant (wings folded, wings spread to dry, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); the neck, bill and lying pose reworked in round 3 (reviewed PASS WITH NOTES), the head, neck and bill narrowed in round 4, not yet reviewed | Rate |
+| Western gull (standing, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); reworked in rounds 2 and 3 after the owner found the gulls too cute (darker slate back, smaller head, the sitting gull long and low; round 3 reviewed PASS WITH NOTES), the brow, breast, wing edge and neck refined in round 4, not yet reviewed | Rate |
+
 ### Player
 
 | Asset | Where used | Level | Evidence | Next level |
