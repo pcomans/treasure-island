@@ -27,6 +27,8 @@
 # clone, a missing folder) stops the deploy even with --silent-ok. The SOUNDS line
 # before the final PASS names the sound source, its commit and the number of takes
 # the build fetched, for the release record; credentials never appear in it.
+# CHANGES lines beside it show the build's entry in CHANGELOG.md, the players'
+# changelog (tools/changelog.py latest); they never stop a deploy.
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
@@ -168,6 +170,8 @@ if [ "${head}" != "${main}" ]; then
   echo "NOTE: --any-commit: HEAD ${head:0:8} is not origin/main ${main:0:8}; dry run only"
 fi
 build="$(tools/build-number "${head}")"
+changes="$(python3 -I tools/changelog.py latest 2>/dev/null)" \
+  || changes="CHANGES: none: CHANGELOG.md does not read (tools/changelog.py check says why)"
 
 # build/web/.vercel is the Vercel CLI's link to the project. tools/build-web.sh
 # keeps it and clears everything else, so link first: the link's other files
@@ -224,10 +228,12 @@ refuse_hidden_files() {
 }
 refuse_hidden_files || exit 1
 
-# The summary's sound lines: the warning again for a silent deploy, then SOUNDS.
+# The summary's lines: the warning again for a silent deploy, then SOUNDS and
+# the CHANGES lines.
 sound_lines() {
   [ -z "${silent_warning}" ] || loud "${silent_warning}"
   echo "${sounds}"
+  echo "${changes}"
 }
 
 deploy=("${vercel[@]}" deploy --prod --json)

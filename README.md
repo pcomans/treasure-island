@@ -290,6 +290,20 @@ publishes. Build numbers count every commit, so the commits of such pushes leave
 gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
 hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
+A release's notes start with what changed for players, "Changes in build
+<number>:" and the lines of every entry in [CHANGELOG.md](CHANGELOG.md) since the
+previous release. Whoever assembles a release writes its entry while assembling
+it, under the heading `tools/changelog.py next` suggests, and runs
+`tools/changelog.py check` before pushing it to `main`. The entry's number need
+not be exact: a build has its entry when the newest entry's number is above the
+newest released build in its history (its `build-*` tags) and at most its own,
+so a retro commit, a merge or GitHub's merge button after the entry changes
+nothing. A history without release tags fails the check (`git fetch --tags
+origin` first). On `main` the build job stops before building when a build has
+no entry; to recover, add the entry in one more commit (Markdown alone, so its
+push builds nothing; `tools/changelog.py check --hand-run` checks it) and start
+the workflow by hand. A push of Markdown alone needs no entry.
+
 After each release, CI's `itch` job also puts the builds on the itch.io page
 [phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
 Mac app, notarized or not, goes to channel `mac`, the Linux build to channel
@@ -297,9 +311,20 @@ Mac app, notarized or not, goes to channel `mac`, the Linux build to channel
 as `1918`) as their version. The job uses
 itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
 itch's own distribution site and checked against a pinned SHA-256. It pushes the
-exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
-it with `codesign --verify --deep --strict` (a failed check stops the Mac push),
-and pushes it. itch.io then processes each build, which for builds of this size
+exact files of the GitHub release, with the build's changes beside them as
+`CHANGELOG.txt` (outside the Mac app, so its signature is untouched), made from
+`CHANGELOG.md` on `main` and never read back from the release notes: it unpacks
+the Mac app with `ditto`, checks it with `codesign --verify --deep --strict` (a
+failed check stops the Mac push), and pushes it. A release whose Linux or
+Windows download holds anything but its executable and `.pck` in their folder,
+or any symbolic link, is not pushed. itch.io has no API
+or butler command that posts release notes or a devlog (checked 2026-11-16:
+[butler's push options](https://itch.io/docs/butler/pushing.html), and the
+[server-side API](https://itch.io/docs/api/serverside), which writes only
+collections), so the job's summary holds the changelog as a devlog text for the
+owner to post by hand on the game's Devlog page.
+
+itch.io then processes each build, which for builds of this size
 can take around 30 minutes, and refuses a new build on a channel until its
 latest one is done; the job then tries the push again once a minute for up to
 30 minutes. A build's state shows on the game's Edit page under Uploads (click
@@ -307,9 +332,9 @@ the channel), or with `butler status phppco/grand-treasure-island`. Until a new
 build is processed, itch.io serves the channel's previous one, so the job waits,
 up to 45 minutes, until `butler status` shows the pushed version as the
 channel's processed build; it then downloads what itch.io serves and compares
-it, file by file, with what was pushed. When a release's files equal the
-channel's processed build (a release that changed only workflows or tools, say),
-butler pushes nothing, so itch.io keeps showing that earlier build's version;
+it, file by file, with what was pushed. When the files equal the channel's
+processed build (the same release pushed again: each build's `CHANGELOG.txt`
+differs), butler pushes nothing, so itch.io keeps showing that build's version;
 the job then checks that build at once, and its summary names both versions. It
 runs on `main` only. A failed push
 never affects the GitHub release: the job reports it, and the run still
