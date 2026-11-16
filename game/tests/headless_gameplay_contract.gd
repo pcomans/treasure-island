@@ -266,6 +266,9 @@ func _check_ferry_solidity() -> void:
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	# The shaders a group at a time, as the web build compiles them.
+	main.compile_by_group = true
+	var loading := _watch_loading(main, world)
 	root.add_child(main)
 	# The loading screen's Controls button, pressed while the world loads.
 	main.hud.load_controls_button.pressed.emit()
@@ -274,6 +277,9 @@ func _check_ferry_solidity() -> void:
 		await process_frame
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
+		return
+	var loading_lines := await _check_loading_lines(main, world, loading)
+	if loading_lines.is_empty():
 		return
 	var opened := await _check_controls_from_loading(main)
 	if opened.is_empty():
@@ -341,8 +347,163 @@ func _check_ferry_solidity() -> void:
 		return
 	main.queue_free()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the loading screen (%s), the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [loading_lines, ", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
 	quit(0)
+
+
+## Watches a main's startup from before it enters the tree, for
+## _check_loading_lines: each line its loading screen puts up (the text, the frame,
+## whether 3D was off, play had started and the loading screen showed, opaque, then,
+## and for a shader line which of its own and the later steps' nodes and of the
+## island's meshes were seen), the frame each step's nodes and the reflection probes
+## were shown in, the island's nodes' own visible flags as it finished loading, and
+## the frames in which it finished loading, the player settled and the loading
+## screen went away (with 3D on or not).
+func _watch_loading(main: GameMain, world: WorldLoader) -> Dictionary:
+	var seen := {"lines": [], "world": -1, "grounded": -1, "hidden": -1, "hidden_3d": false, "flags": {}, "shown": {}, "probes": [], "watching": false}
+	var hud := main.get_node("Interface/HUD") as GameHUD
+	var panel := hud.get_node("LoadPanel") as Control
+	hud.loading_shown.connect(func(text: String) -> void:
+		var style := panel.get_theme_stylebox("panel") as StyleBoxFlat
+		var line := {"text": text, "frame": Engine.get_process_frames(), "no_3d": main.get_viewport().disable_3d, "play": main.is_play_ready(),
+			"covered": panel.is_visible_in_tree() and style != null and is_equal_approx(style.bg_color.a, 1.0), "shown": [hud.load_text.text, hud.load_note.text]}
+		if text.begins_with("Compiling shaders: "):
+			if not seen.watching:
+				seen.watching = true
+				# The shaders' first line: every step's nodes now hidden; watch them be shown.
+				for step: Dictionary in main.compile_steps:
+					for node: Node3D in step.nodes:
+						node.visibility_changed.connect(func() -> void:
+							if node.is_visible_in_tree() and not seen.shown.has(node):
+								seen.shown[node] = Engine.get_process_frames())
+				for probe: Node in world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
+					seen.probes.append(probe)
+					(probe as Node3D).visibility_changed.connect(func() -> void:
+						if (probe as Node3D).is_visible_in_tree() and not seen.shown.has(probe):
+							seen.shown[probe] = Engine.get_process_frames())
+			var index: int = seen.lines.filter(func(earlier: Dictionary) -> bool: return earlier.text.begins_with("Compiling shaders: ")).size()
+			var later_seen := 0
+			for step_index in range(index, main.compile_steps.size()):
+				for node: Node3D in main.compile_steps[step_index].nodes:
+					later_seen += int(node.is_visible_in_tree())
+			line["later_seen"] = later_seen
+			if index == 0:
+				line["meshes_seen"] = world.find_children("*", "GeometryInstance3D", true, false).filter(func(mesh: Node3D) -> bool: return mesh.is_visible_in_tree()).size()
+		line["probes_seen"] = seen.probes.filter(func(probe: Node3D) -> bool: return probe.is_visible_in_tree()).size()
+		seen.lines.append(line))
+	world.world_ready.connect(func(_report: Dictionary) -> void:
+		seen.world = Engine.get_process_frames()
+		for node: Node in world.find_children("*", "Node3D", true, false):
+			seen.flags[node] = (node as Node3D).visible)
+	(main.get_node("Player") as PlayerController).startup_grounded.connect(func() -> void: seen.grounded = Engine.get_process_frames())
+	panel.visibility_changed.connect(func() -> void:
+		if not panel.visible and seen.hidden < 0:
+			seen.hidden = Engine.get_process_frames()
+			seen.hidden_3d = not main.get_viewport().disable_3d)
+	return seen
+
+
+## The loading screen as a player sees it (main.gd's LOADING_STEPS and
+## COMPILE_GROUPS), each line put up before its work with a frame between in which
+## it can be drawn (Engine.get_process_frames counts frames). In order: the island
+## (here built from the generated sources), a frame before its load; its setup, as
+## it loaded and a frame before the player settled; a line for each step of the
+## shaders (main.compile_steps, from the sky and the player's to the distant
+## shores'), the first with 3D still off and every step's nodes and every mesh of
+## the island hidden, 3D on from the next, each step's nodes shown in the frame
+## after its line went up (as the next line goes up) and no later step's seen
+## before; then the reflections, the probes shown in a later frame. The loading
+## screen covers it all, opaque, and goes as play starts, 3D on, with every node
+## of the island as it was when it loaded and nothing more put up. Returns a
+## summary, or "" after failing.
+func _check_loading_lines(main: GameMain, world: WorldLoader, seen: Dictionary) -> String:
+	var island: StringName = &"load" if world.uses_prebuilt_world() else &"build"
+	var steps: Array[Dictionary] = main.compile_steps
+	var expected: Array = [GameMain.loading_line(island), GameMain.loading_line(&"setup")]
+	expected.append_array(steps.map(func(step: Dictionary) -> String: return step.line))
+	expected.append(GameMain.loading_line(&"reflections"))
+	var lines: Array = seen.lines
+	var texts := lines.map(func(line: Dictionary) -> String: return line.text)
+	# The steps' words as read: the no-break spaces that keep words together as spaces.
+	var words := steps.map(func(step: Dictionary) -> String: return str(step.line).replace(GameMain.NO_BREAK_SPACE, " "))
+	if texts != expected or words.is_empty() or not str(words[0]).contains("sky") \
+	or not words.any(func(line: String) -> bool: return line.contains("buildings (1 of ")) or not words.any(func(line: String) -> bool: return line.contains("ground and roads")):
+		_fail("The loading screen must put up the island's, its setup's, a line for each shader step from the sky's (the buildings' counted) and the reflections', in that order and nothing else; it put up %s (steps %s)." % [texts, words])
+		return ""
+	# Each line, and a note under it, keeps its last two words together on a wrap,
+	# and a count whole with the word before it (no-break spaces); the screen shows a
+	# note under its line, smaller and dimmer (on a desktop the reflections' has one).
+	var line_size := main.hud.load_text.get_theme_font_size(&"font_size")
+	var note_size := main.hud.load_note.get_theme_font_size(&"font_size")
+	var notes := 0
+	for line: Dictionary in lines:
+		var parts := str(line.text).split("\n", true, 1)
+		var count := parts[0].get_slice("(", 1) if parts[0].contains("(") else ""
+		var loose := Array(parts).any(func(part: String) -> bool: return part.rfind(" ") > part.rfind(GameMain.NO_BREAK_SPACE)) \
+		or count.contains(" ") or (not count.is_empty() and not parts[0].contains(GameMain.NO_BREAK_SPACE + "("))
+		notes += parts.size() - 1
+		if loose or line.shown != [parts[0], parts[1] if parts.size() > 1 else ""] \
+		or (parts.size() > 1 and not (note_size < line_size and main.hud.load_note.modulate.a < 1.0)):
+			_fail("Each loading line must keep its last two words and any count together (no-break spaces, here ~) and show a note under it, smaller and dimmer: %s shown as %s, sizes %d and %d." % [str(line.text).replace(GameMain.NO_BREAK_SPACE, "~"), line.shown, line_size, note_size])
+			return ""
+	if notes == 0:
+		_fail("On a desktop the reflections' line must carry its first launch's note: %s." % [texts[-1]])
+		return ""
+	for line: Dictionary in lines:
+		if line.play or not line.covered:
+			_fail("Every loading line must go up before play, the loading screen showing and opaque: %s." % [line])
+			return ""
+	var frames: Array = lines.map(func(line: Dictionary) -> int: return line.frame)
+	var first := 2
+	if not (frames[0] < seen.world and frames[1] == seen.world and seen.world < seen.grounded and frames[first] >= seen.grounded \
+	and lines[0].no_3d and lines[1].no_3d and lines[first].no_3d and not lines[first + 1].no_3d and frames[first + 1] > frames[first]):
+		_fail("The island's and the setup's lines must each go up a frame before their work, and 3D come on a frame after the shaders' first line: lines at frames %s (%s), 3D off at each %s, the island loaded at %d, the player settled at %d." % [frames, texts, lines.map(func(line: Dictionary) -> bool: return line.no_3d), seen.world, seen.grounded])
+		return ""
+	if int(lines[first].meshes_seen) != 0 or int(lines[first].later_seen) != 0:
+		_fail("As the shaders' first line goes up nothing of the island may be seen: %d meshes and %d step nodes showing." % [lines[first].meshes_seen, lines[first].later_seen])
+		return ""
+	for index in range(1, steps.size()):
+		var line: Dictionary = lines[first + index]
+		var next_frame: int = frames[first + index + 1]
+		if int(line.later_seen) != 0 or int(line.probes_seen) != 0:
+			_fail("As %s goes up, nothing of it or of a later step may be seen yet (%d of their nodes, %d probes showing)." % [line.text, line.later_seen, line.probes_seen])
+			return ""
+		for node: Node3D in steps[index].nodes:
+			# A node the island loaded hidden stays hidden (checked at play).
+			if not seen.flags.get(node, true):
+				continue
+			if not seen.shown.has(node) or seen.shown[node] != next_frame or next_frame <= line.frame:
+				_fail("%s's nodes must be shown in the frame after its line, as the next goes up (line at %d, next line at %d, %s shown at %s)." % [line.text, line.frame, next_frame, node.name, seen.shown.get(node, "never")])
+				return ""
+	var reflections: Dictionary = lines[-1]
+	for probe: Node3D in seen.probes:
+		if int(reflections.probes_seen) != 0 or not seen.shown.has(probe) or seen.shown[probe] <= reflections.frame:
+			_fail("The reflection probes must stay hidden until the reflections' line is up, and be shown a frame later (probes showing then %d, %s shown at %s)." % [reflections.probes_seen, probe.name, seen.shown.get(probe, "never")])
+			return ""
+	if seen.probes.is_empty() or not (seen.hidden > reflections.frame and seen.hidden_3d):
+		_fail("The loading screen must go after the reflections' line, with 3D on (probes %d, line at %d, screen gone at %d, 3D %s)." % [seen.probes.size(), reflections.frame, seen.hidden, "on" if seen.hidden_3d else "off"])
+		return ""
+	for _frame in 3:
+		await process_frame
+	var changed: Array[String] = []
+	for node: Variant in seen.flags:
+		if is_instance_valid(node) and (node as Node3D).visible != seen.flags[node]:
+			changed.append(str((node as Node).get_path()))
+	if seen.lines.size() != expected.size() or main.hud.load_panel.visible or main.get_viewport().disable_3d or not changed.is_empty() \
+	or not (main.get_node("Vehicles") as Node3D).visible:
+		_fail("Once play has started the loading screen must be gone for good, with 3D on and every node shown as it was (lines %s, loading screen shown %s, 3D off %s, changed %s)." % [seen.lines.size(), main.hud.load_panel.visible, main.get_viewport().disable_3d, changed.slice(0, 5)])
+		return ""
+	# A desktop's plan (compile_by_group off): one step, every group's nodes at once.
+	var single := main.compile_plan(false)
+	var roots := 0
+	for group: Dictionary in GameMain.COMPILE_GROUPS:
+		for path: String in group.paths:
+			roots += int(main.get_node_or_null(path) is Node3D)
+	if single.size() != 1 or single[0].line != GameMain.keep_last_words_together(GameMain.COMPILE_ALL_LINE) or (single[0].nodes as Array).size() != roots \
+	or not (single[0].nodes as Array).has(world.buildings):
+		_fail("With the shaders all at once there must be one step, \"%s\", showing every group's %d nodes (it has %s)." % [GameMain.COMPILE_ALL_LINE, roots, single.map(func(step: Dictionary) -> String: return "%s: %d nodes" % [step.line, (step.nodes as Array).size()])])
+		return ""
+	return "%d lines in order (%s ... %s), each a frame before its work, their last words and counts kept together, the first launch's notes (%d) under their lines, smaller and dimmer, the island unseen behind the opaque screen until play, %d shader steps a group at a time (one step of %d groups all at once), every node as it was at play" % [texts.size(), ", ".join(texts.slice(0, 4).map(func(text: String) -> String: return text.get_slice("\n", 0))), str(texts[-1]).get_slice("\n", 0), notes, steps.size(), roots]
 
 
 ## The controls screen opened on the loading screen (pressed as the world loads)
@@ -609,11 +770,16 @@ func _check_options_screen(main: GameMain) -> String:
 ## the recorded moment, as every test's, capture's and the web's does: the Sun is
 ## main.tscn's exactly, its metadata's angles, the light on it, the environment and
 ## the sky main.tscn's daylight exactly (DayLight), and they stay so however long the
-## game runs. On the options screen, with the game paused, the date and the time
-## slider move the Sun at once to the sun of their moment on the island's clock,
-## with the light of its height (a December dusk among them), and time runs on from
-## there with the system clock; Now goes back to the real time. Pinned again, the
-## Sun and its light are main.tscn's. Returns a summary, or "" after failing.
+## game runs. Play's start (DayClock.start_for, owner 2026-11-16) puts the clock at
+## 12:30 on the island's date at the real time, running, whatever that time is
+## (today's, and on a stand-in system clock a night in 2027 and a leap day's), with
+## the Sun at its sun at once and the options screen showing that date and 12:30;
+## the clock is pinned again after. On the options screen, with the game paused,
+## the date and the time slider move the Sun
+## at once to the sun of their moment on the island's clock, with the light of its
+## height (a December dusk among them), and time runs on from there with the system
+## clock; Now jumps to the real time. Pinned again, the Sun and its light are
+## main.tscn's. Returns a summary, or "" after failing.
 func _check_time_of_day(main: GameMain) -> String:
 	var hud := main.hud
 	var sun := main.get_node("Sun") as DirectionalLight3D
@@ -644,6 +810,33 @@ func _check_time_of_day(main: GameMain) -> String:
 	if not paused or not hud.options_visible() or not hud.time_date_slider.is_visible_in_tree() or not hud.time_slider.is_visible_in_tree() or hud.time_label.text != "12:30 PST":
 		_fail("The options screen must offer the date and time on desktop, paused, at the recorded moment's 12:30 PST (time shown \"%s\")." % hud.time_label.text)
 		return ""
+	# Play's start, as a run that is not a test's starts its clock: 12:30 on the
+	# island's date at the real time, whatever that is, running; the Sun at its sun
+	# at once, and the options screen showing that date and 12:30. For today's real
+	# time, then on a stand-in system clock a night in 2027 and a leap day's night.
+	# Pinned again after, so the slider moves below (in 2026) never depend on the
+	# real date.
+	var starts := PackedStringArray()
+	for real_text: String in ["", "2027-01-01 03:00", "2028-02-29 23:30"]:
+		var real_now := Time.get_unix_time_from_system() if real_text.is_empty() else DayClock.parse_local(real_text)
+		if not real_text.is_empty():
+			DayClock.system_clock = func() -> float: return real_now
+		var start := DayClock.start_for(true, false, real_now)
+		DayClock.start_at(float(start[0]))
+		await process_frame
+		var today := DayClock.local(float(start[0]))
+		var start_shown := DaySun.shown_angles(DayClock.now())
+		var date_text := "%s %d %s %d" % [GameHUD.WEEKDAYS[int(today.weekday)], int(today.day), GameHUD.MONTHS[int(today.month) - 1], int(today.year)]
+		var opened := [hud.time_date_label.text, hud.time_label.text, hud.time_date_slider.value, hud.time_slider.value]
+		if start[1] != true or absf(DayClock.now() - float(start[0])) > 1.0 or not DayClock.is_running() or DayClock.local(real_now).day_of_year != today.day_of_year \
+		or opened != [date_text, "12:30 %s" % today.zone, float(today.day_of_year), 750.0] or not sun.rotation_degrees.is_equal_approx(DaySun.rotation_for(start_shown)):
+			DayClock.use_system_clock()
+			_fail("Play's start must be 12:30 on the island's date at the real time (%s for the real time %s), running, the options screen showing it (%s, not %s) and the Sun at its sun at once (%s, not %s)." % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), [date_text, "12:30 %s" % today.zone, today.day_of_year, 750], opened, DaySun.rotation_for(start_shown), sun.rotation_degrees])
+			return ""
+		starts.append("%s for the real time %s" % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now)])
+	DayClock.use_system_clock()
+	DayClock.pin()
+	await process_frame
 	# A player's changes, as the slider's value_changed brings them, while paused.
 	var moves := PackedStringArray()
 	for move: Array in [["date", 172.0, "2026-06-21 12:30"], ["time", 570.0, "2026-06-21 09:30"], ["date", 355.0, "2026-12-21 09:30"], ["time", 1020.0, "2026-12-21 17:00"]]:
@@ -674,7 +867,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	DayClock.pin()
 	await process_frame
 	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform or _look_of(sun, environment) != scene_look:
-		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun and its light be main.tscn's (%s; light %s)." % [ran, real, real_gap, now_running, sun.rotation_degrees, _look_of(sun, environment)])
+		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now jump to the real time (%.3f s off, running %s), and pinned again the Sun and its light be main.tscn's (%s; light %s)." % [ran, real, real_gap, now_running, sun.rotation_degrees, _look_of(sun, environment)])
 		return ""
 	_push_key(KEY_ESCAPE)
 	hud.resume_button.pressed.emit()
@@ -682,7 +875,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	if paused or hud.options_visible():
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
-	return "held at the recorded moment with main.tscn's Sun and daylight; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+	return "held at the recorded moment with main.tscn's Sun and daylight; play's start at %s, the options showing it and the Sun there at once; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now the real time; pinned again" % ["; ".join(starts), ", ".join(moves)]
 
 
 ## The time of day's switch off (DayClock.enabled; owner, 2026-11-15: all of it

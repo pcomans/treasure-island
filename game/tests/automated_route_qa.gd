@@ -180,6 +180,8 @@ func _run() -> void:
 	var rig := player.get_node("CameraPivot") as PlayerCamera
 	var arm := rig.get_node("SpringArm3D") as SpringArm3D
 	if not _route_capture_output.is_empty():
+		# The loading screen covers the island until play: capture from then on.
+		while not main.is_play_ready() and load_failures.is_empty(): await process_frame
 		_steer_camera(rig, player.global_position, ROUTE[1].xz)
 		arm.rotation.x = CAPTURE_PITCH_RADIANS
 		if not await _capture_checkpoint(ROUTE[0], player):

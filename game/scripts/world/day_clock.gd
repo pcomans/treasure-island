@@ -3,12 +3,16 @@ extends RefCounted
 ## The game's time of day: the instant (UTC, Unix seconds) the sun is drawn for
 ## (DaySun), and Treasure Island's own clock for the menu (Pacific time).
 ##
-## Owner, 2026-11-14: the game opens at the real date and time on the island and
-## runs at real speed, one minute of play a minute of real time, whatever the game
-## is doing (a pause too: the sun keeps the real time); the Options screen's date
-## and time jump to any moment of the year, and time runs on from there; "Now"
-## comes back to the real time. Nothing of it is kept between runs. The web build
-## holds the recorded moment ("Mac first, web later").
+## The game opens on the island's date today at the recorded moment's time of day,
+## 12:30 (start_instant; owner, 2026-11-16: "always start the game during a time
+## with nice lighting", rather than at the real time, which may be the middle of
+## the night), so the sun's height follows the season but it is always early
+## afternoon. From there time runs at real speed, one minute of play a minute of
+## real time, whatever the game is doing (a pause too: the sun keeps time; owner,
+## 2026-11-14); the Options screen's date and time jump to any moment of the year,
+## and time runs on from there; "Now" jumps to the real date and time. Nothing of
+## it is kept between runs: every run starts so. The web build holds the recorded
+## moment ("Mac first, web later").
 ##
 ## The one switch for everything that must stay the same from run to run: every
 ## test or capture driver (a --script run, its SceneTree scripted, as
@@ -43,8 +47,9 @@ extends RefCounted
 ## buildings' daylight fills put out, the shadows' reach), the Options screen's
 ## date and time, and NightLights (the flashlight and the driven car's
 ## headlights), which a scripted run doesn't make either (scripted()). Each run
-## prints one line as it reads the switch: TIME_OF_DAY on, held (a --script run)
-## or off, and why.
+## prints one TIME_OF_DAY line: off, and why, or held (a --script run) as it reads
+## the switch; on, as its clock starts, with the moment it starts at and the real
+## time then.
 
 ## Treasure Island, as tools/solar_position.mjs takes it.
 const LATITUDE := 37.82
@@ -111,14 +116,10 @@ static func _read_switch() -> void:
 		return
 	_switch_read = true
 	_off = off_reason_for(OS.get_cmdline_user_args(), ProjectSettings.get_setting(ENABLED_SETTING, true), OS.has_feature("web"))
-	var at := local(RECORDED_UNIX)
-	var recorded := "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
 	if not _off.is_empty():
-		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, recorded])
+		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, moment_text(RECORDED_UNIX)])
 	elif scripted():
-		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % recorded)
-	else:
-		print("TIME_OF_DAY on: the clock runs from the real time")
+		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % moment_text(RECORDED_UNIX))
 
 
 ## Whether this run is a test or capture driver's (its SceneTree scripted): the
@@ -154,7 +155,7 @@ static func start_at(unix: float) -> void:
 	_jump(unix, true)
 
 
-## The real current time, running (the game's start; the Options screen's Now).
+## The real current time, running (the Options screen's Now).
 static func start_now() -> void:
 	_jump(float(system_clock.call()), true)
 
@@ -165,15 +166,40 @@ static func pin(unix: float = RECORDED_UNIX) -> void:
 	_jump(unix, false)
 
 
-## The clock as a run starts: the real time in play, the recorded moment, held,
-## with the time of day off (the web's too) and for every test or capture driver.
+## The clock as a run starts (start_for), with its TIME_OF_DAY line when it runs.
 static func _start() -> void:
 	if _started:
 		return
-	if not enabled() or scripted():
-		_set_clock(RECORDED_UNIX, false)
-	else:
-		_set_clock(float(system_clock.call()), true)
+	var real := float(system_clock.call())
+	var start := start_for(enabled(), scripted(), real)
+	_set_clock(float(start[0]), bool(start[1]))
+	if _running:
+		print("TIME_OF_DAY on: the clock starts at %s, the recorded moment's time of day on the island's date, and runs at real speed (the real time %s)" % [moment_text(float(start[0])), moment_text(real)])
+
+
+## [instant, running] a run's clock starts at, with the time of day on or off, in a
+## test or capture driver's run or not, the real time (the system clock) being
+## `real_unix`: in play, start_instant(real_unix), running; held at the recorded
+## moment with the time of day off (the web's too) and for every test or capture
+## driver.
+static func start_for(on: bool, is_scripted: bool, real_unix: float) -> Array:
+	if not on or is_scripted:
+		return [RECORDED_UNIX, false]
+	return [start_instant(real_unix), true]
+
+
+## The instant play starts at, the real time being `real_unix`: the island's date
+## then at the recorded moment's time of day (12:30, PST or PDT as that date has
+## it).
+static func start_instant(real_unix: float) -> float:
+	var today := local(real_unix)
+	return unix_from_local(int(today.year), int(today.day_of_year), float(local(RECORDED_UNIX).minutes))
+
+
+## The island's clock at `unix` as "YYYY-MM-DD HH:MM ZONE".
+static func moment_text(unix: float) -> String:
+	var at := local(unix)
+	return "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
 
 
 ## Real time from the system clock again, after a test's stand-in. Set the source
