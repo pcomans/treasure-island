@@ -134,15 +134,17 @@ Limits:
 - The visual review flagged the rhythm of the breakwater's base.
 - The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
-## Breakwater birds (`game/scripts/world/breakwater_birds.gd`, 2026-11-15)
+## Breakwater birds (`game/scripts/world/breakwater_birds.gd`, 2026-11-15/16)
 
 - Only on the ferry terminal's breakwater (OSM w1011830371), the wall the dated 2021 photos show with birds along its cap. The island's own riprap edge, which OSM also tags `man_made=breakwater`, and the north tip's rock jetty (w26767328) have none.
 - Static scenery: no idle motion, no flight, no sound and no collision. The breakwater lies 79 to 93 m off the float, the pier and the island's edge, beyond the 10 m a lifted player may float from the shore (`recovery_controller.gd`), and a car sinks at the shore, so nothing reaches them or walks through them. If a player ever could, birds that take off as one comes near would be the smallest follow-up.
-- One adult plumage per species: a western gull, a double-crested cormorant and a brown pelican with a dark hindneck. No juveniles, California gulls or Brandt's cormorants (owner, 2026-11-15: two models per bird).
+- One adult plumage per species: a western gull, a double-crested cormorant and a brown pelican with a dark hindneck. No juveniles, California gulls or Brandt's cormorants. Every bird has a standing and a sitting version (owner, 2026-11-15): the pelican lies as one photographed on Pismo Beach pier does, head on its shoulders and bill down its breast; the cormorant's is the low lying rest a few take among standing birds on a dated rock photo, so the rule gives it fewer resting cormorants than resting pelicans and gulls get.
+- About a hundred birds (owner, 2026-11-15: "we can probably use twice as many birds"): the rule asks for 24 pelicans, 50 cormorants and 28 gulls, and the odd bird that finds no room in its cluster is left out.
 - No droppings on the cap, though real roosts are whitewashed: that would be a decal or a change to the breakwater's own material.
 - Most face into the street trees' default wind direction (`vegetation_wind.gdshaderinc`), not any live wind.
-- Past 30 to 40 m from the camera their legs and feet draw in to a point inside the body, so no sub-pixel legs sparkle; every gameplay view is farther than that.
-- Cost on the dev machine's Radeon 780M (1440 x 900, the birds shown and hidden in alternating blocks in one run, 2026-11-16): in Forward+ the spawn 51.3 against 50.9 ms (within its noise), the ferry plaza's shore 7.26 against 7.20 ms, standing on the cap among them 4.75 against 4.67 ms; in the web's Compatibility renderer 39.2 against 39.5, 4.05 against 4.05 and 3.41 against 3.33 ms. 12, 18 and 30 more draw calls there (six MultiMeshes in each pass that sees them) and about 62,500 instanced triangles. No texture. Not measured on the Mac or in a browser.
+- Past 30 to 40 m from the camera their legs and feet rise into the body, so no sub-pixel legs sparkle; every gameplay view is farther than that. Shadows keep the legs.
+- The web's Compatibility renderer keeps a MultiMesh's custom data and colours as half floats and multiplies every vertex colour by the instance colour: the birds keep only each one's tone and size in the custom data, and every bird has a white instance colour (without one they rendered black).
+- Cost on the dev machine's Radeon 780M (1440 x 900, the birds shown and hidden in alternating blocks in one run, 2026-11-16, 100 birds): in Forward+ the spawn 50.38 against 50.48 ms (within its noise), the ferry plaza's shore 7.29 against 7.22 ms, standing on the cap among them 4.98 against 4.84 ms; in the web's Compatibility renderer 38.02 against 38.32, 3.94 against 3.81 and 3.41 against 3.25 ms. 16, 24 and 40 more draw calls (eight MultiMeshes in each pass that sees them). About 110,000 instanced triangles, drawn once per pass: from the plaza shore the web renderer draws 620,000 primitives with them and 289,000 without. No level of detail: the time is small, but a weaker web device that struggles there would want a lower-poly bird for far views, which needs the MultiMeshes split along the cap. No texture. Not measured on the Mac or in a browser.
 
 ## Drivable cars (`game/scripts/vehicles/`, 2026-11-08)
 

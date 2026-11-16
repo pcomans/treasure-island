@@ -72,7 +72,7 @@ extends SceneTree
 ##   so a drift in the machine's load falls on both: one FRAME_TIME line per state.
 ##   "frame_time_node": "PATH" (a Node3D under the world root, such as
 ##   "ContextWorld/FerryTerminal/FerryTerminal/Breakwater/Birds") does the same for
-##   that node.
+##   that node; a view gives one or the other.
 ##   A moving view may add "frame_time_frames" too: the frames are timed after
 ##   its last step, from the camera in use then (in a car, the driving camera).
 ##   A still view may add "resolutions": ["50", ...] (GraphicsSettings resolution
@@ -1005,6 +1005,8 @@ func _measure_graphics(frames: Variant, label: String) -> String:
 func _frame_time(frames: Variant, label: String, layer := "", node_path := "") -> String:
 	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
 		return "frame_time_frames must be a whole number from 10 to 3000"
+	if node_path != "" and layer != "":
+		return "a view times one thing shown and hidden: frame_time_node or frame_time_layer, not both"
 	if node_path != "":
 		var node := _h.world.get_node_or_null(node_path) as Node3D
 		if node == null:

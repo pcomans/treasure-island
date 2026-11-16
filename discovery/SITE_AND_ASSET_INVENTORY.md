@@ -391,15 +391,16 @@ All are used round the whole island: ten segments and seven closures.
 ### Breakwater birds
 
 [`game/scripts/world/breakwater_birds.gd`](../game/scripts/world/breakwater_birds.gd), built
-under the ferry breakwater (OSM w1011830371) by `ferry_terminal.gd` (2026-11-15). The owner
-named the three birds and their two poses each; forms and colours are production inference
-from public species photos. Placed by a seeded cluster rule along the breakwater's cap.
+under the ferry breakwater (OSM w1011830371) by `ferry_terminal.gd` (2026-11-15/16). The
+owner named the three birds and their poses, a standing and a sitting version of every bird,
+and about a hundred of them; forms and colours are production inference from public species
+photos. Placed by a seeded colony and cluster rule along the breakwater's cap.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Brown pelican (bill out, bill tucked) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
-| Double-crested cormorant (wings folded, wings spread to dry) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
-| Western gull (standing, sitting) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
+| Brown pelican (bill out, bill tucked, sitting) | the ferry breakwater's cap | | Round 1 visual review PASS WITH NOTES (`57157271`); reworked and the sitting pose added in round 2, not yet reviewed | Rate |
+| Double-crested cormorant (wings folded, wings spread to dry, sitting) | the ferry breakwater's cap | | As above | Rate |
+| Western gull (standing, sitting) | the ferry breakwater's cap | | As above; reworked after the owner found the round-1 gulls too cute | Rate |
 
 ### Player
 

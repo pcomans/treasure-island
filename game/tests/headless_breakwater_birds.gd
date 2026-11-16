@@ -1,19 +1,21 @@
 extends SceneTree
 ## The pelicans, cormorants and gulls resting on the ferry breakwater
-## (game/scripts/world/breakwater_birds.gd), in the real generated world, headless:
+## (game/scripts/world/breakwater_birds.gd), in the real world, headless (generated
+## at startup, or with -- --use-prebuilt-world the baked one desktop exports load,
+## which WorldLoader reads itself):
 ##   1. the placement is the rule's: its seed gives the same birds twice and as
 ##      built (the Birds node's placements, with the line from the generated
 ##      context and the cap from ferry_terminal.gd), and another seed gives others;
 ##   2. every bird stands on the cap: a ray down from above each of its rest
-##      points (a foot, or a sitting gull's belly) and round their edges meets the
+##      points (a foot, or a sitting bird's belly) and round their edges meets the
 ##      breakwater's own collision first, at the bird's level within 1 cm, and the
 ##      bird's lowest point is that level: nothing of it lies below the cap's top
 ##      or floats above it;
 ##   3. no two birds touch: the plan-view outlines of their meshes (every vertex of
 ##      their pose, turned, sized and placed as the bird) keep at least 2 cm apart;
-##   4. all three species are there; each pose's MultiMesh holds exactly that
-##      pose's birds; the birds have no collision; and they are not drawn from the
-##      middle of the island.
+##   4. every species is there both standing and sitting; each pose's MultiMesh
+##      holds exactly that pose's birds; the birds have no collision; and they are
+##      not drawn from the middle of the island.
 ## Physics and data only (run with --headless): the dummy renderer's MultiMesh
 ## readback is not trusted, so the birds are read from the placements the
 ## MultiMeshes were built from.
@@ -73,8 +75,9 @@ func _run() -> void:
 		return
 	var counts := {}
 	for bird: Dictionary in placements:
-		counts[bird.species] = int(counts.get(bird.species, 0)) + 1
-	print("PASS: %d birds rest on the ferry breakwater's cap (%s), the same for the same seed and other for another; every foot or sitting belly is over the cap's own collision at the bird's level, none of them below the cap or above it, no two birds' outlines within %d cm, each pose's MultiMesh holds just its birds, none has collision, and none is drawn from the middle of the island" % [placements.size(), ", ".join(PackedStringArray(counts.keys().map(func(species: String) -> String: return "%s %d" % [species, counts[species]]))), roundi(GAP_M * 100.0)])
+		counts[bird.pose] = int(counts.get(bird.pose, 0)) + 1
+	var world_kind := "baked" if OS.get_cmdline_user_args().has("--use-prebuilt-world") else "generated"
+	print("PASS: %d birds rest on the ferry breakwater's cap in the %s world (%s), every species standing and sitting, the same for the same seed and other for another; every foot or sitting belly is over the cap's own collision at the bird's level, none of them below the cap or above it, no two birds' outlines within %d cm, each pose's MultiMesh holds just its birds, none has collision, and none is drawn from the middle of the island" % [placements.size(), world_kind, ", ".join(PackedStringArray(counts.keys().map(func(pose: String) -> String: return "%s %d" % [pose, counts[pose]]))), roundi(GAP_M * 100.0)])
 	_finish(main)
 
 
@@ -99,8 +102,9 @@ func _placement_problem(placements: Array) -> String:
 	if _same_birds(BIRDS.place(a, b, cap_y, half, BIRDS.SEED + 1), first):
 		return "Another seed gave the same birds: the seed does not drive the rule."
 	for species: String in BIRDS.SPECIES_ORDER:
-		if not placements.any(func(bird: Dictionary) -> bool: return bird.species == species):
-			return "No %s rests on the breakwater." % species
+		for sitting: bool in [true, false]:
+			if not placements.any(func(bird: Dictionary) -> bool: return bird.species == species and (str(bird.pose) in BIRDS.SITTING_POSES) == sitting):
+				return "No %s %s on the breakwater." % [species, "sits" if sitting else "stands"]
 	return ""
 
 

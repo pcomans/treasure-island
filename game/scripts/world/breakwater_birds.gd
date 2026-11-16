@@ -5,26 +5,36 @@ extends RefCounted
 ## in the water NW of the float). Owner, 2026-11-15: "There are usually three types
 ## of birds sitting on the breakwater. Pelicans, cormorants, and seagulls"; the
 ## Commons photos of the new breakwater (7 Aug 2021) show loose rows of dark birds
-## along its cap, with gaps. Two models each (owner, 2026-11-15): the pelican with
-## its bill out and with it tucked, the cormorant with its wings folded and with
-## them spread to dry, the gull standing and sitting low with its legs folded.
+## along its cap, with gaps. The owner chose the models: a standing and a sitting
+## version of every bird, the pelican standing with its bill out and with it
+## tucked, the cormorant standing with its wings folded and with them spread to
+## dry; about a hundred birds (2026-11-16).
 ##
 ## Forms, sizes and colours are production inference from public photos of the
 ## species (shape, proportion, posture and colour only): a Pacific brown pelican
-## about 0.78 m to the crown with its bill out, the bill 0.32 m; a double-crested
-## cormorant 0.65 m upright, 0.82 m across its spread wings; a western gull 0.39 m
-## standing. Adults, one plumage each. Plumage is vertex colour, one material for
-## all (breakwater_birds.gdshader); no texture.
+## about 0.84 m to the crown with its bill out, its bill 0.37 m, the heaviest of
+## the three; a double-crested cormorant 0.65 m upright, 0.82 m across its spread
+## wings; a western gull 0.40 m standing, 0.69 m from bill to wingtip, with a long
+## flat-backed body, crossed black wingtips, a big flat-crowned head, a deep
+## hooked bill and a pale eye. Sitting, a pelican lies on its belly with its bill
+## laid down its breast and a cormorant lies low with its tail along the stone and
+## its neck drawn in (the Pismo Beach pier and Niagara rock photos); a gull
+## settles its long body on the stone. Adults, one plumage each. Plumage is vertex
+## colour, one material for all (breakwater_birds.gdshader); no texture. Folded
+## wings are painted on the body, so its outline stays whole from any side; only
+## the long primaries stand free, crossed over the tail.
 ##
-## Placement is a rule (place()), seeded so it is the same every run: each species
-## gathers in clusters along the cap (centres at random along its length, a
-## Poisson number of birds round each, spread normally along it), so there are
-## bunches, rows and gaps; gulls in many small loose clusters, cormorants in a few
-## long ones, pelicans in a few small bunches; where clusters overlap the species
-## mix. A cluster mostly faces one way, most clusters into the prevailing westerly,
-## and each bird turns a little from it or, now and then, its own way. Every bird
-## keeps its feet on the cap, and no two birds' footprints (the capsule round each
-## pose's plan-view outline, spread wings included) come within CLEARANCE_M of each
+## Placement is a rule (place()), seeded so it is the same every run: a few
+## colonies along the cap, where most of each species' clusters gather (a
+## Poisson number of birds round each cluster's centre, spread normally along
+## the cap); some clusters, most of all the gulls', settle anywhere. So there are
+## bunches, rows and clear gaps, and where clusters meet the species mix. A
+## cluster is resting (its birds mostly sitting or tucked) or alert (mostly
+## standing), and never one pose throughout once it has three birds. A cluster
+## mostly faces one way, most into the prevailing westerly, each bird turning a
+## little from it or, now and then, its own way. Every bird keeps its feet (or
+## belly) on the cap, and no two birds' footprints (the capsule round each pose's
+## plan-view outline, spread wings included) come within CLEARANCE_M of each
 ## other: a bird that would is moved along the cap, or left out.
 ##
 ## Scenery: no collision, no sound, no motion. The breakwater lies 79 to 93 m off
@@ -33,30 +43,47 @@ extends RefCounted
 
 const SHADER := preload("res://game/resources/materials/world/birds/breakwater_birds.gdshader")
 
-## The six models, two per species (owner, 2026-11-15).
+## The eight models (owner, 2026-11-15/16): every bird standing and sitting.
 const POSES := [
-	"pelican_bill_out", "pelican_bill_tucked",
-	"cormorant_wings_folded", "cormorant_wings_spread",
+	"pelican_bill_out", "pelican_bill_tucked", "pelican_sitting",
+	"cormorant_wings_folded", "cormorant_wings_spread", "cormorant_sitting",
 	"gull_standing", "gull_sitting",
 ]
+const SITTING_POSES := ["pelican_sitting", "cormorant_sitting", "gull_sitting"]
 const SPECIES_ORDER := ["pelican", "cormorant", "gull"]
 
 ## The rule's seed and its numbers (production inference: the 2021 photos and the
-## owner's "usually three types" set the character, not counts). Each species:
-## how many clusters, the mean number of birds in one and its bounds, how far its
-## birds spread along the cap (standard deviation, m), its poses with their
-## weights, the share of clusters facing into the wind, the share of a cluster's
-## birds facing its way, and the spread of sizes.
+## owner's "usually three types" and "twice as many birds" set the character).
+## Colonies: how many (one in each stretch of the cap), and how far each spreads
+## its clusters along it (standard deviation, between the two values). Each
+## species: how many birds (its clusters keep coming until they are drawn; a few
+## that find no room are left out), the share of its clusters that settle anywhere
+## rather than at a colony, the mean number of birds in one and its bounds, how
+## far they spread along the cap (standard deviation, m), the share of clusters
+## resting, the poses a resting and an alert cluster take with their weights, the
+## share of clusters facing into the wind, the share of a cluster's birds facing
+## its way, and the spread of sizes.
 const SEED := 1115
+const COLONIES := 5
+const COLONY_SPREAD_M := Vector2(3.0, 9.0)
 const SPECIES := {
-	"pelican": {"clusters": 4, "mean": 3.2, "min": 1, "max": 6, "spread_m": 2.2,
-		"poses": [["pelican_bill_out", 0.6], ["pelican_bill_tucked", 0.4]],
+	"pelican": {"birds": 24, "loners": 0.1, "mean": 4.5, "min": 1, "max": 9, "spread_m": 2.5, "rest": 0.5,
+		"poses": {
+			"resting": [["pelican_sitting", 0.5], ["pelican_bill_tucked", 0.35], ["pelican_bill_out", 0.15]],
+			"alert": [["pelican_bill_out", 0.65], ["pelican_bill_tucked", 0.2], ["pelican_sitting", 0.15]],
+		},
 		"into_wind": 0.6, "follow": 0.8, "scale_sd": 0.035},
-	"cormorant": {"clusters": 5, "mean": 6.5, "min": 2, "max": 12, "spread_m": 3.6,
-		"poses": [["cormorant_wings_folded", 0.75], ["cormorant_wings_spread", 0.25]],
+	"cormorant": {"birds": 50, "loners": 0.1, "mean": 6.8, "min": 2, "max": 15, "spread_m": 3.8, "rest": 0.4,
+		"poses": {
+			"resting": [["cormorant_wings_folded", 0.5], ["cormorant_sitting", 0.35], ["cormorant_wings_spread", 0.15]],
+			"alert": [["cormorant_wings_folded", 0.6], ["cormorant_wings_spread", 0.3], ["cormorant_sitting", 0.1]],
+		},
 		"into_wind": 0.6, "follow": 0.8, "scale_sd": 0.04},
-	"gull": {"clusters": 10, "mean": 1.6, "min": 1, "max": 4, "spread_m": 6.0,
-		"poses": [["gull_standing", 0.55], ["gull_sitting", 0.45]],
+	"gull": {"birds": 28, "loners": 0.45, "mean": 2.0, "min": 1, "max": 5, "spread_m": 6.0, "rest": 0.5,
+		"poses": {
+			"resting": [["gull_sitting", 0.7], ["gull_standing", 0.3]],
+			"alert": [["gull_standing", 0.75], ["gull_sitting", 0.25]],
+		},
 		"into_wind": 0.75, "follow": 0.7, "scale_sd": 0.05},
 }
 ## The westerly the street trees sway in (vegetation_wind.gdshaderinc's
@@ -74,7 +101,11 @@ const ACROSS_SD_M := 0.14
 ## along the cap (steps of NUDGE_M either way, NUDGES times) before it is left out.
 const CLEARANCE_M := 0.06
 const NUDGE_M := 0.2
-const NUDGES := 12
+const NUDGES := 20
+## How far one bird's plumage may sit lighter or darker than another's.
+const TONE_SPREAD := 0.06
+## The pelican models' size over the shapes they are drawn in below.
+const PELICAN_SIZE := 1.15
 
 ## Drawn to this far from the breakwater's middle (and out to the margin past it):
 ## the ferry plaza, the pier and the west shore near them, not the far island.
@@ -83,35 +114,35 @@ const VISIBLE_MARGIN_M := 30.0
 
 ## Colours (sRGB; alpha is gloss). Western gull.
 const GULL_WHITE := Color(0.93, 0.94, 0.94, 0.0)
-const GULL_MANTLE := Color(0.35, 0.37, 0.41, 0.0)
-const GULL_PRIMARY := Color(0.07, 0.07, 0.08, 0.1)
-const GULL_MIRROR := Color(0.9, 0.9, 0.9, 0.0)
-const GULL_BILL := Color(0.96, 0.8, 0.26, 0.9)
-const GULL_GONYS := Color(0.86, 0.22, 0.12, 0.9)
-const GULL_LEG := Color(0.87, 0.63, 0.6, 0.6)
-const GULL_EYE := Color(0.24, 0.2, 0.12, 0.9)
+const GULL_MANTLE := Color(0.33, 0.35, 0.39, 0.0)
+const GULL_PRIMARY := Color(0.06, 0.06, 0.07, 0.1)
+const GULL_MIRROR := Color(0.88, 0.88, 0.88, 0.0)
+const GULL_BILL := Color(0.95, 0.79, 0.27, 0.8)
+const GULL_GONYS := Color(0.84, 0.2, 0.12, 0.8)
+const GULL_LEG := Color(0.85, 0.6, 0.58, 0.5)
+const GULL_IRIS := Color(0.92, 0.88, 0.6, 0.9)
+const GULL_PUPIL := Color(0.07, 0.06, 0.05, 1.0)
 ## Double-crested cormorant.
-const CORMORANT_BLACK := Color(0.06, 0.065, 0.06, 0.35)
-const CORMORANT_COVERT := Color(0.2, 0.18, 0.13, 0.25)
-const CORMORANT_FLIGHT := Color(0.1, 0.09, 0.08, 0.15)
-const CORMORANT_GULAR := Color(0.95, 0.58, 0.18, 0.6)
-const CORMORANT_BILL := Color(0.3, 0.29, 0.27, 0.8)
-const CORMORANT_EYE := Color(0.12, 0.6, 0.52, 1.0)
-const CORMORANT_FOOT := Color(0.07, 0.07, 0.07, 0.4)
+const CORMORANT_BLACK := Color(0.06, 0.065, 0.06, 0.3)
+const CORMORANT_COVERT := Color(0.2, 0.18, 0.13, 0.2)
+const CORMORANT_FLIGHT := Color(0.1, 0.09, 0.08, 0.1)
+const CORMORANT_GULAR := Color(0.84, 0.54, 0.24, 0.15)
+const CORMORANT_BILL := Color(0.3, 0.29, 0.27, 0.6)
+const CORMORANT_EYE := Color(0.1, 0.42, 0.34, 0.6)
+const CORMORANT_FOOT := Color(0.07, 0.07, 0.07, 0.3)
 ## Brown pelican (a Pacific adult: the head white with a yellow wash, a dark
-## hindneck, silvery grey-brown back, dark belly and wing tips).
+## stripe down the hindneck, silvery grey-brown back, dark belly and wing tips).
 const PELICAN_WHITE := Color(0.95, 0.94, 0.9, 0.0)
 const PELICAN_CROWN := Color(0.95, 0.86, 0.58, 0.0)
 const PELICAN_HINDNECK := Color(0.33, 0.2, 0.12, 0.0)
-const PELICAN_BACK := Color(0.56, 0.53, 0.49, 0.05)
-const PELICAN_STREAK := Color(0.4, 0.37, 0.33, 0.05)
+const PELICAN_BACK := Color(0.56, 0.53, 0.49, 0.0)
 const PELICAN_BELLY := Color(0.2, 0.17, 0.14, 0.0)
-const PELICAN_PRIMARY := Color(0.13, 0.11, 0.1, 0.1)
-const PELICAN_BILL := Color(0.72, 0.66, 0.6, 0.7)
-const PELICAN_BILL_TIP := Color(0.85, 0.45, 0.25, 0.8)
-const PELICAN_POUCH := Color(0.33, 0.32, 0.27, 0.5)
-const PELICAN_LEG := Color(0.17, 0.17, 0.17, 0.4)
-const PELICAN_EYE := Color(0.3, 0.3, 0.28, 0.9)
+const PELICAN_PRIMARY := Color(0.13, 0.11, 0.1, 0.05)
+const PELICAN_BILL := Color(0.72, 0.66, 0.6, 0.6)
+const PELICAN_BILL_TIP := Color(0.85, 0.45, 0.25, 0.6)
+const PELICAN_POUCH := Color(0.33, 0.32, 0.27, 0.4)
+const PELICAN_LEG := Color(0.17, 0.17, 0.17, 0.3)
+const PELICAN_EYE := Color(0.82, 0.82, 0.76, 0.8)
 
 static var _models := {}
 static var _meshes := {}
@@ -133,14 +164,14 @@ static func build(a: Vector3, b: Vector3, cap_y: float, half_width: float, repor
 	node.set_meta("placements", placements)
 	var middle := Vector3((a.x + b.x) * 0.5, 0.0, (a.z + b.z) * 0.5)
 	var counts := {}
-	for species: String in SPECIES_ORDER:
-		counts[species] = 0
 	for pose: String in POSES:
 		var mine := placements.filter(func(bird: Dictionary) -> bool: return bird.pose == pose)
+		counts[pose] = mine.size()
 		if mine.is_empty():
 			continue
 		var multimesh := MultiMesh.new()
 		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.use_colors = true
 		multimesh.use_custom_data = true
 		multimesh.mesh = mesh(pose)
 		multimesh.instance_count = mine.size()
@@ -148,9 +179,9 @@ static func build(a: Vector3, b: Vector3, cap_y: float, half_width: float, repor
 			var bird: Dictionary = mine[index]
 			var at: Vector3 = bird.position
 			multimesh.set_instance_transform(index, Transform3D(turn(float(bird.yaw), float(bird.scale)), at - middle))
-			# The shader reads the bird's world position and size (its distance and tone).
-			multimesh.set_instance_custom_data(index, Color(at.x, at.y, at.z, float(bird.scale)))
-			counts[str(bird.species)] += 1
+			multimesh.set_instance_color(index, Color.WHITE)
+			# The shader reads the bird's tone (r) and size (a).
+			multimesh.set_instance_custom_data(index, Color(_tone(at), 0.0, 0.0, float(bird.scale)))
 		var instance := MultiMeshInstance3D.new()
 		instance.name = pose.to_pascal_case()
 		instance.multimesh = multimesh
@@ -163,8 +194,14 @@ static func build(a: Vector3, b: Vector3, cap_y: float, half_width: float, repor
 		report.mesh_instances = int(report.get("mesh_instances", 0)) + 1
 		report.surfaces = int(report.get("surfaces", 0)) + 1
 		report.triangles = int(report.get("triangles", 0)) + int(model(pose).triangles) * mine.size()
-	node.set_meta("species_counts", counts)
+	node.set_meta("pose_counts", counts)
 	return node
+
+
+## A bird's own tone, 1 give or take TONE_SPREAD, the same for the same spot.
+static func _tone(at: Vector3) -> float:
+	var noise := fposmod(sin(at.x * 12.9898 + at.z * 78.233) * 43758.5453, 1.0)
+	return 1.0 + TONE_SPREAD * (noise * 2.0 - 1.0)
 
 
 ## A bird's turn about +Y (it faces -Z at yaw 0) and size: its instance basis.
@@ -182,25 +219,50 @@ static func place(a: Vector2, b: Vector2, cap_y: float, half_width: float, seed:
 	var along := (b - a) / length
 	var across := Vector2(-along.y, along.x)
 	var wind_yaw := _yaw_facing(-WIND_TOWARD)
+	# One colony in each of COLONIES stretches of the cap, anywhere in its middle
+	# three fifths: so no long end stays bare, yet each is its own size.
+	var colonies: Array[Vector2] = []
+	var stretch := (length - 2.0 * END_MARGIN_M) / float(COLONIES)
+	for index in COLONIES:
+		var centre := END_MARGIN_M + stretch * (float(index) + rng.randf_range(0.2, 0.8))
+		colonies.append(Vector2(centre, rng.randf_range(COLONY_SPREAD_M.x, COLONY_SPREAD_M.y)))
 	var candidates: Array[Dictionary] = []
 	for species: String in SPECIES_ORDER:
 		var rule: Dictionary = SPECIES[species]
-		for _cluster in int(rule.clusters):
-			var centre := rng.randf_range(END_MARGIN_M, length - END_MARGIN_M)
+		var drawn := 0
+		while drawn < int(rule.birds):
+			var centre := 0.0
+			if rng.randf() < float(rule.loners):
+				centre = rng.randf_range(END_MARGIN_M, length - END_MARGIN_M)
+			else:
+				var colony := colonies[rng.randi_range(0, colonies.size() - 1)]
+				centre = colony.x + rng.randfn(0.0, colony.y)
+			var mood := "resting" if rng.randf() < float(rule.rest) else "alert"
+			var weighted: Array = rule.poses[mood]
 			var heading := wind_yaw if rng.randf() < float(rule.into_wind) else rng.randf_range(-PI, PI)
-			var count := clampi(_poisson(rng, float(rule.mean)), int(rule.min), int(rule.max))
+			var count := mini(clampi(_poisson(rng, float(rule.mean)), int(rule.min), int(rule.max)), int(rule.birds) - drawn)
+			drawn += count
+			var cluster: Array[Dictionary] = []
 			for _bird in count:
 				var yaw := heading + deg_to_rad(rng.randfn(0.0, HEADING_SD_DEG))
 				if rng.randf() >= float(rule.follow):
 					yaw = rng.randf_range(-PI, PI)
-				candidates.append({
+				cluster.append({
 					"species": species,
-					"pose": _pick(rng, rule.poses),
+					"pose": _pick(rng, weighted),
 					"s": centre + rng.randfn(0.0, float(rule.spread_m)),
 					"t": rng.randfn(0.0, ACROSS_SD_M),
 					"yaw": wrapf(yaw, -PI, PI),
 					"scale": clampf(1.0 + rng.randfn(0.0, float(rule.scale_sd)), 0.88, 1.12),
 				})
+			# A cluster of three or more is never one pose throughout: its last bird
+			# takes the mood's likeliest other pose.
+			if cluster.size() >= 3 and cluster.all(func(bird: Dictionary) -> bool: return bird.pose == cluster[0].pose):
+				for entry: Array in _by_weight(weighted):
+					if entry[0] != cluster[0].pose:
+						cluster[-1].pose = entry[0]
+						break
+			candidates.append_array(cluster)
 	var placed: Array[Dictionary] = []
 	var shapes: Array[Dictionary] = []
 	for candidate: Dictionary in candidates:
@@ -217,6 +279,13 @@ static func place(a: Vector2, b: Vector2, cap_y: float, half_width: float, seed:
 			"scale": float(candidate.scale),
 		})
 	return placed
+
+
+## The weighted poses, the heaviest first.
+static func _by_weight(weighted: Array) -> Array:
+	var sorted := weighted.duplicate()
+	sorted.sort_custom(func(one: Array, other: Array) -> bool: return float(one[1]) > float(other[1]))
+	return sorted
 
 
 ## Where on the cap a candidate stands: its own spot (a spot past an end reflected
@@ -338,7 +407,7 @@ static func material() -> ShaderMaterial:
 
 ## A pose's model: {arrays (Mesh.ARRAY_MAX: vertex, normal, colour, UV2, index),
 ## contacts (where it rests on the stone: [{at, r}], points on y = 0 and the radius
-## round each: the feet, or a sitting bird's belly), footprint (the capsule round
+## round each: its feet, or a sitting bird's belly), footprint (the capsule round
 ## its plan-view outline: segment ends a and b in local XZ and radius r),
 ## triangles, height}. Built once. Nothing of it lies below y = 0.
 static func model(pose: String) -> Dictionary:
@@ -350,21 +419,29 @@ static func model(pose: String) -> Dictionary:
 			_gull(m, false)
 		"gull_sitting":
 			_gull(m, true)
-			# The belly rests on the stone where its lowest rings meet it.
-			m.contacts.append({"at": Vector3(0.0, 0.0, 0.045), "r": 0.05})
 		"cormorant_wings_folded":
 			_cormorant(m, false)
 		"cormorant_wings_spread":
 			_cormorant(m, true)
+		"cormorant_sitting":
+			_cormorant_sitting(m)
 		"pelican_bill_out":
-			_pelican(m, false)
+			_pelican(m, "out")
 		"pelican_bill_tucked":
-			_pelican(m, true)
+			_pelican(m, "tucked")
+		"pelican_sitting":
+			_pelican(m, "sitting")
 		_:
 			push_error("BreakwaterBirds: no pose %s" % pose)
 			return {}
-	# A belly pressed on the stone is flat: no ring between two that meet it dips under.
+	if pose.begins_with("pelican"):
+		m.scale_all(PELICAN_SIZE)
+	# A belly pressed on the stone is flat: no ring between two that meet it dips
+	# under; and the model's lowest point is on the stone.
 	m.floor_at(0.0)
+	m.settle()
+	if m.contacts.is_empty():
+		m.contacts.append(m.belly())
 	var height := 0.0
 	for point: Vector3 in m.points:
 		height = maxf(height, point.y)
@@ -421,11 +498,13 @@ func preview(prop: String, params: Dictionary, _level: String, placement: Transf
 	var size := float(params.get("scale", 1.0))
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
+	multimesh.use_colors = true
 	multimesh.use_custom_data = true
 	multimesh.mesh = mesh(prop)
 	multimesh.instance_count = 1
 	multimesh.set_instance_transform(0, Transform3D(placement.basis.scaled(Vector3.ONE * size), placement.origin))
-	multimesh.set_instance_custom_data(0, Color(placement.origin.x, placement.origin.y, placement.origin.z, size))
+	multimesh.set_instance_color(0, Color.WHITE)
+	multimesh.set_instance_custom_data(0, Color(1.0, 0.0, 0.0, size))
 	var instance := MultiMeshInstance3D.new()
 	instance.name = prop.to_pascal_case()
 	instance.multimesh = multimesh
@@ -437,114 +516,121 @@ func preview(prop: String, params: Dictionary, _level: String, placement: Transf
 
 # ------------------------------------------------------------------ western gull
 
-## A western gull facing -Z, its feet on y = 0: standing on pink legs, or sitting
-## low with its belly on the stone, its legs folded out of sight and its head drawn
-## in onto its shoulders.
+## A western gull facing -Z, its feet on y = 0: a long, flat-backed body, the folded
+## wings painted dark slate along its back and sides, the black primaries crossed
+## over the tail and reaching past it, a big flat-crowned head with a sloping
+## forehead, a pale eye under a heavy brow and a deep, hooked yellow bill with the
+## red gonys spot. Standing on thick pink legs, or sitting with its body low on the
+## stone, its head drawn in and its legs folded out of sight.
 static func _gull(m: Mesher, sitting: bool) -> void:
-	var body := [
-		_ring(Vector3(0.0, 0.176, 0.205), Vector3.UP, 0.03, 0.022),
-		_ring(Vector3(0.0, 0.173, 0.15), Vector3.UP, 0.058, 0.05),
-		_ring(Vector3(0.0, 0.178, 0.08), Vector3.UP, 0.08, 0.072),
-		_ring(Vector3(0.0, 0.189, 0.01), Vector3.UP, 0.088, 0.085),
-		_ring(Vector3(0.0, 0.205, -0.055), Vector3.UP, 0.082, 0.082),
-		_ring(Vector3(0.0, 0.229, -0.105), Vector3.UP, 0.064, 0.068),
-		_ring(Vector3(0.0, 0.259, -0.13), Vector3.UP, 0.04, 0.046),
+	# The body: [z, y, half width, half height], from the tail to the breast.
+	var body_rings := [
+		[0.255, 0.205, 0.028, 0.016], [0.2, 0.205, 0.05, 0.033], [0.13, 0.205, 0.072, 0.052],
+		[0.05, 0.203, 0.082, 0.068], [-0.03, 0.202, 0.084, 0.075], [-0.1, 0.21, 0.077, 0.076],
+		[-0.15, 0.232, 0.058, 0.062], [-0.175, 0.262, 0.04, 0.044],
 	]
-	var neck := [
-		_ring(Vector3(0.0, 0.24, -0.09), Vector3.BACK, 0.054, 0.054),
-		_ring(Vector3(0.0, 0.282, -0.118), Vector3.BACK, 0.047, 0.049),
-		_ring(Vector3(0.0, 0.312, -0.128), Vector3(0.0, 0.3, 1.0), 0.042, 0.044),
-		_ring(Vector3(0.0, 0.338, -0.136), Vector3(0.0, 0.8, 0.8), 0.038, 0.04),
+	var neck_rings := [
+		[0.25, -0.13, 0.056, 0.056, Vector3.BACK], [0.29, -0.15, 0.05, 0.052, Vector3.BACK],
+		[0.322, -0.16, 0.047, 0.049, Vector3(0.0, 0.4, 1.0)],
 	]
-	# The head's rise over a standing gull's.
+	# How much lower the head sits than a standing gull's.
 	var head_y := 0.0
 	if sitting:
-		# Settled and fluffed: fuller, the breast lower, the belly flat on the stone,
-		# no neck showing.
-		body = [
-			_ring(Vector3(0.0, 0.074, 0.205), Vector3.UP, 0.032, 0.024),
-			_ring(Vector3(0.0, 0.07, 0.15), Vector3.UP, 0.064, 0.058),
-			_ring(Vector3(0.0, 0.075, 0.08), Vector3.UP, 0.09, 0.075),
-			_ring(Vector3(0.0, 0.082, 0.01), Vector3.UP, 0.095, 0.082),
-			_ring(Vector3(0.0, 0.093, -0.055), Vector3.UP, 0.088, 0.08),
-			_ring(Vector3(0.0, 0.115, -0.105), Vector3.UP, 0.068, 0.068),
-			_ring(Vector3(0.0, 0.145, -0.13), Vector3.UP, 0.042, 0.046),
+		body_rings = [
+			[0.255, 0.1, 0.028, 0.016], [0.2, 0.097, 0.054, 0.035], [0.13, 0.09, 0.078, 0.055],
+			[0.05, 0.081, 0.088, 0.073], [-0.03, 0.08, 0.09, 0.08], [-0.1, 0.09, 0.082, 0.08],
+			[-0.15, 0.116, 0.062, 0.066], [-0.175, 0.148, 0.042, 0.046],
 		]
-		neck = [
-			_ring(Vector3(0.0, 0.135, -0.09), Vector3.BACK, 0.054, 0.054),
-			_ring(Vector3(0.0, 0.17, -0.112), Vector3.BACK, 0.048, 0.05),
-			_ring(Vector3(0.0, 0.19, -0.124), Vector3(0.0, 0.6, 1.0), 0.043, 0.045),
-			_ring(Vector3(0.0, 0.203, -0.136), Vector3(0.0, 0.9, 0.7), 0.039, 0.041),
+		neck_rings = [
+			[0.135, -0.13, 0.057, 0.057, Vector3.BACK], [0.17, -0.15, 0.052, 0.053, Vector3.BACK],
+			[0.2, -0.163, 0.048, 0.049, Vector3(0.0, 0.5, 1.0)],
 		]
-		head_y = -0.137
+		head_y = -0.117
+	var body := []
+	for ring: Array in body_rings:
+		body.append(_ring(Vector3(0.0, float(ring[1]), float(ring[0])), Vector3.UP, float(ring[2]), float(ring[3])))
 	var tail: Dictionary = body[0]
 	var tail_top := float((tail.c as Vector3).y) + float(tail.h)
 	var body_paint := func(t: float, up: float, _side: float) -> Color:
-		# The grey mantle along the back; the tail end white.
-		return GULL_MANTLE if up > 0.55 and t > 0.12 and t < 0.92 else GULL_WHITE
-	var front: Dictionary = body[-1]
-	m.loft(body, 12, 2, body_paint, Vector3(0.0, (tail.c as Vector3).y, 0.228), (front.c as Vector3) + Vector3(0.0, 0.016, -0.012))
-	# Neck and head in one: up from inside the breast, then forward to a flat
-	# crown and a sloping forehead.
-	var head := neck.duplicate()
-	for ring: Array in [
-		[0.352, -0.156, 0.036, 0.036], [0.355, -0.18, 0.033, 0.032],
-		[0.349, -0.203, 0.026, 0.026], [0.343, -0.218, 0.017, 0.019],
-	]:
-		head.append(_ring(Vector3(0.0, float(ring[0]) + head_y, float(ring[1])), Vector3.UP, float(ring[2]), float(ring[3])))
-	m.loft(head, 10, 2, _solid(GULL_WHITE), null, Vector3(0.0, 0.341 + head_y, -0.225))
-	# The strong bill: deep at the base, the gonys' angle and its red spot near the tip.
-	var bill_paint := func(t: float, up: float, _side: float) -> Color:
-		return GULL_GONYS if up < -0.35 and t > 0.5 and t < 0.85 else GULL_BILL
-	m.loft([
-		_ring(Vector3(0.0, 0.343 + head_y, -0.212), Vector3.UP, 0.0105, 0.0155),
-		_ring(Vector3(0.0, 0.341 + head_y, -0.232), Vector3.UP, 0.0088, 0.014),
-		_ring(Vector3(0.0, 0.338 + head_y, -0.251), Vector3.UP, 0.007, 0.0122),
-		_ring(Vector3(0.0, 0.339 + head_y, -0.265), Vector3.UP, 0.005, 0.0082),
-	], 8, 1, bill_paint, null, Vector3(0.0, 0.334 + head_y, -0.274))
-	_eyes(m, Vector3(0.028, 0.359 + head_y, -0.186), 0.0055, GULL_EYE)
-	# The folded wings along the upper flanks: grey coverts, the narrow white
-	# tertial crescent, then the black primaries with a white mirror and tip,
-	# crossed over the tail and reaching well past it.
-	var wing_paint := func(t: float, _up: float, _side: float) -> Color:
-		if t < 0.5:
-			return GULL_MANTLE
-		if t < 0.535:
+		if t < 0.1:
 			return GULL_WHITE
-		if t > 0.965 or (t > 0.86 and t < 0.9):
-			return GULL_MIRROR
-		return GULL_PRIMARY
+		# The narrow white tertial crescent at the back of the grey.
+		if t > 0.19 and t < 0.25 and up > 0.35:
+			return GULL_WHITE
+		# The folded wing covers the upper side down to about its middle, the lower
+		# flank white, rising to the top of the shoulder over the white breast.
+		var edge := lerpf(0.1, 0.8, smoothstep(0.62, 1.0, t))
+		return GULL_MANTLE if up > edge else GULL_WHITE
+	var front: Dictionary = body[-1]
+	m.loft(body, 12, 2, body_paint, Vector3(0.0, (tail.c as Vector3).y, 0.275), (front.c as Vector3) + Vector3(0.0, 0.023, -0.013))
+	# Neck and head in one: up from inside the breast, then forward to a flat crown
+	# and a sloping forehead.
+	var head := []
+	for ring: Array in neck_rings:
+		head.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])), ring[4], float(ring[2]), float(ring[3])))
+	for ring: Array in [
+		[0.35, -0.168, 0.046, 0.046, Vector3(0.0, 0.9, 0.5)], [0.362, -0.19, 0.045, 0.042, Vector3.UP],
+		[0.358, -0.214, 0.039, 0.036, Vector3.UP], [0.349, -0.236, 0.028, 0.027, Vector3(0.0, 1.0, -0.2)],
+		[0.341, -0.252, 0.018, 0.02, Vector3(0.0, 1.0, -0.3)],
+	]:
+		head.append(_ring(Vector3(0.0, float(ring[0]) + head_y, float(ring[1])), ring[4], float(ring[2]), float(ring[3])))
+	m.loft(head, 10, 2, _solid(GULL_WHITE), null, Vector3(0.0, 0.339 + head_y, -0.258))
+	# The bill: a deep upper mandible with a hooked tip, and the lower mandible
+	# swelling at the gonys, its red spot there.
+	var upper := []
+	for ring: Array in [[0.343, -0.246, 0.011, 0.0095], [0.342, -0.27, 0.009, 0.0082], [0.34, -0.29, 0.0072, 0.007], [0.337, -0.305, 0.0052, 0.0055]]:
+		upper.append(_ring(Vector3(0.0, float(ring[0]) + head_y, float(ring[1])), Vector3.UP, float(ring[2]), float(ring[3])))
+	m.loft(upper, 8, 1, _solid(GULL_BILL), null, Vector3(0.0, 0.329 + head_y, -0.318))
+	var lower := []
+	for ring: Array in [[0.331, -0.248, 0.0098, 0.0085], [0.327, -0.272, 0.0084, 0.0078], [0.323, -0.29, 0.0068, 0.0088], [0.328, -0.304, 0.0042, 0.0048]]:
+		lower.append(_ring(Vector3(0.0, float(ring[0]) + head_y, float(ring[1])), Vector3.UP, float(ring[2]), float(ring[3])))
+	var gonys := func(t: float, _up: float, _side: float) -> Color:
+		return GULL_GONYS if t > 0.45 and t < 0.85 else GULL_BILL
+	m.loft(lower, 8, 1, gonys, null, Vector3(0.0, 0.331 + head_y, -0.311))
+	# The pale eye under a heavy brow, its dark pupil.
 	for side: float in [1.0, -1.0]:
+		var eye := Vector3(0.037 * side, 0.371 + head_y, -0.206)
+		_ball(m, eye, 0.0046, GULL_IRIS)
+		_ball(m, eye + Vector3(0.0035 * side, 0.0004, -0.0012), 0.0018, GULL_PUPIL)
 		m.loft([
-			_wing_on(body, 4.7, 42.0, 0.004, 0.03, 0.009, side),
-			_wing_on(body, 4.0, 38.0, 0.007, 0.045, 0.011, side),
-			_wing_on(body, 3.0, 36.0, 0.009, 0.048, 0.011, side),
-			_wing_on(body, 2.0, 38.0, 0.009, 0.04, 0.01, side),
-			_wing_on(body, 1.2, 50.0, 0.008, 0.03, 0.008, side),
-			_wing_on(body, 0.4, 68.0, 0.007, 0.022, 0.006, side),
-			_ring(Vector3(0.012 * side, tail_top + 0.006, 0.255), Vector3(0.25 * side, 1.0, 0.0), 0.016, 0.005),
-		], 6, 2, wing_paint, null, Vector3(0.004 * side, tail_top + 0.004, 0.335))
+			_ring(Vector3(0.0345 * side, 0.3815 + head_y, -0.195), Vector3(0.5 * side, 1.0, 0.0), 0.0065, 0.0045),
+			_ring(Vector3(0.0355 * side, 0.3805 + head_y, -0.208), Vector3(0.5 * side, 1.0, 0.0), 0.0075, 0.005),
+			_ring(Vector3(0.031 * side, 0.3775 + head_y, -0.222), Vector3(0.5 * side, 1.0, 0.0), 0.0055, 0.004),
+		], 6, 1, _solid(GULL_WHITE), null, null)
+	# The black primaries, from inside the body out over the tail, crossed past it,
+	# a small white mirror near the tip.
+	var lift := tail_top - 0.221
+	var primaries := func(t: float, up: float, _side: float) -> Color:
+		return GULL_MIRROR if t > 0.76 and t < 0.84 and up > 0.3 else GULL_PRIMARY
+	for side: float in [1.0, -1.0]:
+		var low := 0.0 if side > 0.0 else -0.004
+		m.loft([
+			_ring(Vector3(0.05 * side, 0.245 + lift + low, 0.06), Vector3.UP, 0.022, 0.006),
+			_ring(Vector3(0.042 * side, 0.248 + lift + low, 0.16), Vector3.UP, 0.024, 0.006),
+			_ring(Vector3(0.025 * side, 0.243 + lift + low, 0.25), Vector3.UP, 0.018, 0.005),
+			_ring(Vector3(0.008 * side, 0.238 + lift + low, 0.31), Vector3.UP, 0.01, 0.004),
+		], 6, 2, primaries, null, Vector3(-0.008 * side, 0.234 + lift + low, 0.37))
 	if sitting:
 		return
-	# Pink legs from inside the belly to webbed feet flat on the stone; far off
-	# they draw in to a point inside the belly.
+	# Thick pink legs from inside the belly, bent at the ankle, to webbed feet flat
+	# on the stone; far off they slide up into the body.
 	for side: float in [1.0, -1.0]:
-		m.thin_to = 0.15
+		m.thin_to = 0.2
 		m.loft([
-			_ring(Vector3(0.027 * side, 0.13, 0.012), Vector3.BACK, 0.0068, 0.0068),
-			_ring(Vector3(0.029 * side, 0.07, 0.006), Vector3.BACK, 0.0058, 0.0058),
-			_ring(Vector3(0.03 * side, 0.008, 0.0), Vector3.BACK, 0.0055, 0.0055),
-		], 5, 1, _solid(GULL_LEG), null, null)
-		_foot(m, Vector3(0.03 * side, 0.0, -0.002), 1.0, side, GULL_LEG)
+			_ring(Vector3(0.028 * side, 0.14, 0.004), Vector3.BACK, 0.0092, 0.0092),
+			_ring(Vector3(0.03 * side, 0.075, 0.012), Vector3.BACK, 0.0082, 0.0082),
+			_ring(Vector3(0.031 * side, 0.01, 0.0), Vector3.BACK, 0.0075, 0.0075),
+		], 6, 1, _solid(GULL_LEG), null, null)
+		_foot(m, Vector3(0.031 * side, 0.0, -0.004), 1.15, side, GULL_LEG)
 		m.thin_to = NAN
 
 
 # ------------------------------------------------------------------ double-crested cormorant
 
 ## A double-crested cormorant facing -Z, upright on short legs and big webbed
-## feet, its stiff tail down to the stone behind; wings folded close along its
-## back and sides, or held out half open to dry with the wrists high and the
-## hands hanging.
+## feet, its stiff tail down to the stone behind, a slim kinked neck and the
+## orange skin under its hooked bill; its folded wings painted bronze-brown on its
+## back, or held out half open to dry with the wrists high and the hands hanging.
 static func _cormorant(m: Mesher, spread: bool) -> void:
 	var dorsal := Vector3(0.0, 0.39, 0.92)
 	var body := [
@@ -556,61 +642,22 @@ static func _cormorant(m: Mesher, spread: bool) -> void:
 		_ring(Vector3(0.0, 0.375, -0.073), dorsal, 0.055, 0.052),
 		_ring(Vector3(0.0, 0.41, -0.085), dorsal, 0.04, 0.04),
 	]
-	var body_paint := func(t: float, up: float, side: float) -> Color:
-		# The bronze-brown, scaled wing coverts on the back between the wings.
-		if up > 0.45 and absf(side) < 0.9 and t > 0.25 and t < 0.92:
-			return CORMORANT_COVERT
-		return CORMORANT_BLACK
-	m.loft(body, 12, 2, body_paint, Vector3(0.0, 0.068, 0.058), Vector3(0.0, 0.428, -0.092))
+	m.loft(body, 12, 2, _cormorant_paint(), Vector3(0.0, 0.068, 0.058), Vector3(0.0, 0.428, -0.092))
 	# The stiff tail, down and back until its tip rests on the stone.
 	m.loft([
 		_ring(Vector3(0.0, 0.1, 0.062), Vector3(0.0, 0.8, 0.6), 0.03, 0.012),
 		_ring(Vector3(0.0, 0.052, 0.125), Vector3(0.0, 0.8, 0.6), 0.026, 0.008),
 		_ring(Vector3(0.0, 0.016, 0.18), Vector3(0.0, 0.8, 0.6), 0.02, 0.006),
 	], 6, 1, _solid(CORMORANT_FLIGHT), null, Vector3(0.0, 0.0, 0.208))
-	# Neck (the kink of a cormorant at rest) and the small head, the orange gular
-	# skin under the bill's base.
-	var head_paint := func(t: float, up: float, _side: float) -> Color:
-		return CORMORANT_GULAR if t > 0.83 and up < -0.25 else CORMORANT_BLACK
-	m.loft([
-		_ring(Vector3(0.0, 0.38, -0.07), Vector3.BACK, 0.045, 0.045),
-		_ring(Vector3(0.0, 0.435, -0.08), Vector3.BACK, 0.036, 0.038),
-		_ring(Vector3(0.0, 0.485, -0.082), Vector3.BACK, 0.03, 0.032),
-		_ring(Vector3(0.0, 0.53, -0.075), Vector3.BACK, 0.027, 0.028),
-		_ring(Vector3(0.0, 0.57, -0.072), Vector3(0.0, 0.3, 1.0), 0.026, 0.027),
-		_ring(Vector3(0.0, 0.602, -0.085), Vector3(0.0, 1.0, 0.7), 0.028, 0.03),
-		_ring(Vector3(0.0, 0.62, -0.105), Vector3(0.0, 1.0, 0.2), 0.03, 0.032),
-		_ring(Vector3(0.0, 0.625, -0.128), Vector3.UP, 0.026, 0.027),
-		_ring(Vector3(0.0, 0.62, -0.148), Vector3.UP, 0.017, 0.019),
-	], 10, 2, head_paint, null, Vector3(0.0, 0.617, -0.157))
-	# The slim hooked bill, held a little up.
-	var bill_paint := func(t: float, up: float, _side: float) -> Color:
-		return CORMORANT_GULAR if t < 0.25 and up < 0.0 else CORMORANT_BILL
-	m.loft([
-		_ring(Vector3(0.0, 0.616, -0.143), Vector3.UP, 0.0105, 0.011),
-		_ring(Vector3(0.0, 0.62, -0.168), Vector3.UP, 0.0072, 0.0082),
-		_ring(Vector3(0.0, 0.624, -0.194), Vector3.UP, 0.0055, 0.0062),
-		_ring(Vector3(0.0, 0.626, -0.21), Vector3.UP, 0.0046, 0.0052),
-	], 6, 1, bill_paint, null, Vector3(0.0, 0.621, -0.219))
-	_eyes(m, Vector3(0.0225, 0.628, -0.127), 0.0045, CORMORANT_EYE)
-	var tips := (body[0].c as Vector3) + dorsal * (float(body[0].h) + 0.004)
+	_cormorant_head(m, [
+		[0.38, -0.07, 0.04, 0.04, Vector3.BACK], [0.435, -0.08, 0.03, 0.032, Vector3.BACK],
+		[0.485, -0.082, 0.025, 0.027, Vector3.BACK], [0.53, -0.075, 0.022, 0.024, Vector3.BACK],
+		[0.57, -0.072, 0.022, 0.023, Vector3(0.0, 0.3, 1.0)],
+	], Vector3.ZERO)
 	for side: float in [1.0, -1.0]:
 		if spread:
 			_spread_wing(m, side)
-		else:
-			# The folded wing close along the back and side, its dark flight
-			# feathers meeting over the tail's base.
-			var wing_paint := func(t: float, _up: float, _side: float) -> Color:
-				return CORMORANT_COVERT if t < 0.55 else CORMORANT_FLIGHT
-			m.loft([
-				_wing_on(body, 5.2, 40.0, 0.003, 0.03, 0.008, side),
-				_wing_on(body, 4.4, 36.0, 0.005, 0.042, 0.01, side),
-				_wing_on(body, 3.5, 34.0, 0.006, 0.046, 0.01, side),
-				_wing_on(body, 2.5, 36.0, 0.006, 0.042, 0.009, side),
-				_wing_on(body, 1.6, 45.0, 0.005, 0.032, 0.008, side),
-				_wing_on(body, 0.8, 60.0, 0.004, 0.02, 0.006, side),
-			], 6, 2, wing_paint, null, tips + Vector3(0.006 * side, 0.0, 0.0))
-		m.thin_to = 0.19
+		m.thin_to = 0.16
 		m.loft([
 			_ring(Vector3(0.033 * side, 0.13, 0.012), Vector3.BACK, 0.012, 0.012),
 			_ring(Vector3(0.035 * side, 0.065, 0.0), Vector3.BACK, 0.009, 0.009),
@@ -618,6 +665,59 @@ static func _cormorant(m: Mesher, spread: bool) -> void:
 		], 5, 1, _solid(CORMORANT_FOOT), null, null)
 		_foot(m, Vector3(0.036 * side, 0.0, -0.01), 1.55, side, CORMORANT_FOOT)
 		m.thin_to = NAN
+
+
+## A double-crested cormorant lying low on the stone, as a few do on the Niagara
+## rock among the standing birds: its body near level with the belly down, its tail
+## along the stone behind, its neck drawn into a short S and its head up.
+static func _cormorant_sitting(m: Mesher) -> void:
+	var body := _axis_body(Vector3(0.0, 0.04, 0.11), 12.0, [
+		[0.0, 0.036, 0.03], [0.05, 0.062, 0.055], [0.11, 0.078, 0.07], [0.18, 0.08, 0.072],
+		[0.25, 0.07, 0.064], [0.3, 0.052, 0.05], [0.33, 0.036, 0.036],
+	])
+	m.loft(body, 12, 2, _cormorant_paint(), (body[0].c as Vector3) + Vector3(0.0, -0.004, 0.02), (body[-1].c as Vector3) + Vector3(0.0, 0.004, -0.02))
+	m.loft([
+		_ring(Vector3(0.0, 0.03, 0.12), Vector3(0.0, 1.0, 0.15), 0.028, 0.008),
+		_ring(Vector3(0.0, 0.012, 0.19), Vector3(0.0, 1.0, 0.15), 0.024, 0.006),
+		_ring(Vector3(0.0, 0.006, 0.245), Vector3(0.0, 1.0, 0.15), 0.019, 0.005),
+	], 6, 1, _solid(CORMORANT_FLIGHT), null, Vector3(0.0, 0.003, 0.28))
+	_cormorant_head(m, [
+		[0.12, -0.19, 0.04, 0.04, Vector3.BACK], [0.165, -0.212, 0.03, 0.032, Vector3.BACK],
+		[0.21, -0.216, 0.025, 0.027, Vector3(0.0, 0.3, 1.0)], [0.245, -0.208, 0.022, 0.024, Vector3(0.0, 0.5, 1.0)],
+	], Vector3(0.0, -0.33, -0.133))
+
+
+static func _cormorant_paint() -> Callable:
+	return func(t: float, up: float, side: float) -> Color:
+		# The bronze-brown, scaled wing coverts on the back.
+		if up > 0.3 and absf(side) < 0.95 and t > 0.2 and t < 0.92:
+			return CORMORANT_COVERT
+		return CORMORANT_BLACK
+
+
+## A cormorant's neck (`neck`: [y, z, half width, half height, dorsal] rings, up
+## from inside its breast), its small head and its slim hooked bill, the head
+## `shift` from where a standing bird's is.
+static func _cormorant_head(m: Mesher, neck: Array, shift: Vector3) -> void:
+	var head_paint := func(t: float, up: float, _side: float) -> Color:
+		return CORMORANT_GULAR if t > 0.83 and up < -0.25 else CORMORANT_BLACK
+	var rings := []
+	for ring: Array in neck:
+		rings.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])), ring[4], float(ring[2]), float(ring[3])))
+	for ring: Array in [
+		[0.602, -0.085, 0.025, 0.027, Vector3(0.0, 1.0, 0.7)], [0.62, -0.105, 0.028, 0.03, Vector3(0.0, 1.0, 0.2)],
+		[0.625, -0.128, 0.025, 0.026, Vector3.UP], [0.62, -0.148, 0.017, 0.019, Vector3.UP],
+	]:
+		rings.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + shift, ring[4], float(ring[2]), float(ring[3])))
+	m.loft(rings, 10, 2, head_paint, null, Vector3(0.0, 0.617, -0.157) + shift)
+	var bill_paint := func(t: float, up: float, _side: float) -> Color:
+		return CORMORANT_GULAR if t < 0.25 and up < 0.0 else CORMORANT_BILL
+	var bill := []
+	for ring: Array in [[0.616, -0.143, 0.0105, 0.011], [0.62, -0.168, 0.0072, 0.0082], [0.624, -0.194, 0.0055, 0.0062], [0.626, -0.21, 0.0046, 0.0052]]:
+		bill.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + shift, Vector3.UP, float(ring[2]), float(ring[3])))
+	m.loft(bill, 6, 1, bill_paint, null, Vector3(0.0, 0.621, -0.219) + shift)
+	for side: float in [1.0, -1.0]:
+		_ball(m, Vector3(0.0225 * side, 0.628, -0.127) + shift, 0.0045, CORMORANT_EYE)
 
 
 ## One spread wing (side +1 the bird's right, +X): a thin sheet between its
@@ -669,95 +769,117 @@ const PELICAN_BODY := [
 	[0.34, 0.158, 0.128], [0.44, 0.15, 0.126], [0.52, 0.126, 0.11], [0.58, 0.09, 0.084],
 ]
 
-## A brown pelican facing -Z on short dark legs: its body raised at the breast,
-## the neck up in an S with the long bill held down in front of it (bill out), or
-## the body low and level, the neck folded and the head laid back on the
-## shoulders with the bill under the scapulars (bill tucked).
-static func _pelican(m: Mesher, tucked: bool) -> void:
-	# The body's axis from the tail's tip toward the breast, and its back.
-	var origin := Vector3(0.0, 0.16, 0.33) if tucked else Vector3(0.0, 0.07, 0.33)
-	var lean := deg_to_rad(8.0 if tucked else 32.0)
-	var axis := Vector3(0.0, sin(lean), -cos(lean))
-	var dorsal := Vector3(0.0, cos(lean), sin(lean))
-	var body := []
-	for ring: Array in PELICAN_BODY:
-		body.append(_ring(origin + axis * float(ring[0]), dorsal, float(ring[1]), float(ring[2])))
-	var body_paint := func(_t: float, up: float, _side: float) -> Color:
+## A brown pelican facing -Z (drawn here PELICAN_SIZE times smaller than it
+## stands): "out", on short stout legs with its breast raised, its slim neck up in
+## an S and the long bill held down in front of it; "tucked", crouched low with the
+## neck folded and the head laid back on the shoulders, the bill under the
+## scapulars; "sitting", lying on its belly with its head on its shoulders and the
+## bill laid down its breast (the Pismo Beach pier photo). The folded wings are
+## painted silvery on the back, the dark primaries crossed over the tail.
+static func _pelican(m: Mesher, pose: String) -> void:
+	var origin := Vector3(0.0, 0.02, 0.33)
+	var lean := 32.0
+	if pose == "tucked":
+		origin = Vector3(0.0, 0.115, 0.33)
+		lean = 8.0
+	elif pose == "sitting":
+		origin = Vector3(0.0, 0.1, 0.33)
+		lean = 4.0
+	var body := _axis_body(origin, lean, PELICAN_BODY)
+	var axis := Vector3(0.0, sin(deg_to_rad(lean)), -cos(deg_to_rad(lean)))
+	var dorsal := Vector3(0.0, cos(deg_to_rad(lean)), sin(deg_to_rad(lean)))
+	var body_paint := func(t: float, up: float, _side: float) -> Color:
 		if up < -0.45:
 			return PELICAN_BELLY
 		if up < -0.15:
 			return PELICAN_BELLY.lerp(PELICAN_BACK, (up + 0.45) / 0.3)
+		# The dark secondaries and tail at the back.
+		if t < 0.2:
+			return PELICAN_PRIMARY.lerp(PELICAN_BACK, t / 0.2)
 		return PELICAN_BACK
 	m.loft(body, 12, 2, body_paint, origin - axis * 0.02, origin + axis * 0.64)
-	# The folded wings over the sides and back: silvery coverts, darker along the
-	# lower edge, then the dark secondaries and primaries crossing over the tail.
+	# The dark primaries, from inside the body out over the tail, crossed at its tip.
 	for side: float in [1.0, -1.0]:
-		var wing_paint := func(t: float, _up: float, lateral: float) -> Color:
-			if t > 0.6:
-				return PELICAN_PRIMARY
-			return PELICAN_STREAK if lateral * side < -0.4 else PELICAN_BACK
-		m.loft([
-			_wing_on(body, 6.6, 58.0, 0.006, 0.05, 0.016, side),
-			_wing_on(body, 5.8, 50.0, 0.009, 0.085, 0.019, side),
-			_wing_on(body, 4.8, 45.0, 0.011, 0.1, 0.02, side),
-			_wing_on(body, 3.8, 44.0, 0.011, 0.098, 0.019, side),
-			_wing_on(body, 2.8, 48.0, 0.01, 0.08, 0.016, side),
-			_wing_on(body, 1.8, 58.0, 0.009, 0.055, 0.012, side),
-			_wing_on(body, 1.0, 72.0, 0.007, 0.035, 0.009, side),
-			_ring(origin - axis * 0.02 + dorsal * 0.03 + Vector3(0.02 * side, 0.0, 0.0), dorsal + Vector3(0.3 * side, 0.0, 0.0), 0.022, 0.007),
-		], 6, 2, wing_paint, null, origin - axis * 0.07 + dorsal * 0.022 + Vector3(0.005 * side, 0.0, 0.0))
+		var low := 0.0 if side > 0.0 else -0.005
+		var rings := []
+		for step: Array in [[0.2, 0.08, 0.08], [0.1, 0.06, 0.075], [0.02, 0.03, 0.052], [-0.04, 0.01, 0.042]]:
+			rings.append(_ring(origin + axis * float(step[0]) + Vector3(float(step[1]) * side, 0.0, 0.0) + dorsal * (float(step[2]) + low), dorsal, lerpf(0.012, 0.035, clampf(float(step[0]) / 0.2, 0.0, 1.0)), 0.008))
+		m.loft(rings, 6, 2, _solid(PELICAN_PRIMARY), null, origin - axis * 0.09 + Vector3(-0.008 * side, 0.0, 0.0) + dorsal * (0.036 + low))
 	var neck_paint := func(t: float, up: float, _side: float) -> Color:
-		# White in front, the dark hindneck behind, up to the white head with its
+		# White in front, a dark stripe down the hindneck, the white head with its
 		# yellow-washed crown.
-		if t > 0.62:
+		if t > 0.6:
 			return PELICAN_CROWN if up > 0.45 and t < 0.9 else PELICAN_WHITE
-		return PELICAN_HINDNECK if up > 0.2 else PELICAN_WHITE
-	if tucked:
-		# The neck folded up from the breast and back over the shoulders, the head
-		# lying on them facing back: the hindneck is the outside of the fold, so its
-		# dark stripe shows at the front, under the head.
-		m.loft([
-			_ring(Vector3(0.0, 0.25, -0.24), Vector3(0.0, 0.2, -1.0), 0.08, 0.075),
-			_ring(Vector3(0.0, 0.31, -0.262), Vector3(0.0, 0.3, -1.0), 0.074, 0.07),
-			_ring(Vector3(0.0, 0.365, -0.245), Vector3(0.0, 0.8, -0.6), 0.069, 0.065),
-			_ring(Vector3(0.0, 0.392, -0.2), Vector3(0.0, 1.0, -0.1), 0.064, 0.06),
-			_ring(Vector3(0.0, 0.398, -0.155), Vector3.UP, 0.058, 0.052),
-			_ring(Vector3(0.0, 0.396, -0.115), Vector3.UP, 0.055, 0.05),
-			_ring(Vector3(0.0, 0.39, -0.08), Vector3.UP, 0.046, 0.044),
-			_ring(Vector3(0.0, 0.381, -0.055), Vector3.UP, 0.032, 0.032),
-		], 10, 2, neck_paint, null, Vector3(0.0, 0.377, -0.042))
-		# The bill laid back along the shoulders, sinking under the scapulars.
-		_pelican_bill(m, Vector3(0.0, 0.383, -0.05), Vector3(0.0, -0.6, 1.0).normalized(), Vector3(0.0, 1.0, 0.6).normalized(), 0.3)
-		_eyes(m, Vector3(0.039, 0.398, -0.072), 0.006, PELICAN_EYE)
-	else:
-		# The neck raised in a gentle S from the breast, the long head on top.
-		m.loft([
-			_ring(Vector3(0.0, 0.38, -0.135), Vector3(0.0, 0.2, 1.0), 0.08, 0.075),
-			_ring(Vector3(0.0, 0.46, -0.165), Vector3(0.0, 0.1, 1.0), 0.07, 0.066),
-			_ring(Vector3(0.0, 0.54, -0.172), Vector3.BACK, 0.058, 0.056),
-			_ring(Vector3(0.0, 0.61, -0.158), Vector3.BACK, 0.051, 0.05),
-			_ring(Vector3(0.0, 0.665, -0.138), Vector3(0.0, 0.4, 1.0), 0.048, 0.048),
-			_ring(Vector3(0.0, 0.708, -0.128), Vector3(0.0, 1.0, 0.6), 0.05, 0.051),
-			_ring(Vector3(0.0, 0.733, -0.148), Vector3(0.0, 1.0, 0.2), 0.049, 0.048),
-			_ring(Vector3(0.0, 0.734, -0.178), Vector3(0.0, 1.0, -0.1), 0.044, 0.043),
-			_ring(Vector3(0.0, 0.721, -0.204), Vector3(0.0, 1.0, -0.3), 0.036, 0.036),
-			_ring(Vector3(0.0, 0.704, -0.225), Vector3(0.0, 1.0, -0.5), 0.026, 0.028),
-		], 10, 2, neck_paint, null, Vector3(0.0, 0.697, -0.236))
-		# The bill held down in front of the neck, about 52 degrees below level.
-		_pelican_bill(m, Vector3(0.0, 0.706, -0.215), Vector3(0.0, -0.788, -0.616), Vector3(0.0, 0.616, -0.788), 0.32)
-		_eyes(m, Vector3(0.032, 0.728, -0.198), 0.006, PELICAN_EYE)
-	# Short thick legs and broad webbed feet; far off they draw in to a point inside
-	# the belly.
-	var hip := 0.15 if tucked else 0.18
+		return PELICAN_HINDNECK if up > 0.62 else PELICAN_WHITE
+	match pose:
+		"tucked":
+			# The neck folded up from the breast and back over the shoulders, the head
+			# lying on them facing back: the hindneck is the outside of the fold, so
+			# its dark stripe shows at the front, under the head.
+			m.loft([
+				_ring(Vector3(0.0, 0.205, -0.24), Vector3(0.0, 0.2, -1.0), 0.08, 0.075),
+				_ring(Vector3(0.0, 0.265, -0.262), Vector3(0.0, 0.3, -1.0), 0.074, 0.07),
+				_ring(Vector3(0.0, 0.32, -0.245), Vector3(0.0, 0.8, -0.6), 0.069, 0.065),
+				_ring(Vector3(0.0, 0.347, -0.2), Vector3(0.0, 1.0, -0.1), 0.064, 0.06),
+				_ring(Vector3(0.0, 0.353, -0.155), Vector3.UP, 0.058, 0.052),
+				_ring(Vector3(0.0, 0.351, -0.115), Vector3.UP, 0.055, 0.05),
+				_ring(Vector3(0.0, 0.345, -0.08), Vector3.UP, 0.046, 0.044),
+				_ring(Vector3(0.0, 0.336, -0.055), Vector3.UP, 0.032, 0.032),
+			], 10, 2, neck_paint, null, Vector3(0.0, 0.332, -0.042))
+			# The bill laid back along the shoulders, sinking under the scapulars.
+			_pelican_bill(m, Vector3(0.0, 0.338, -0.05), Vector3(0.0, -0.6, 1.0).normalized(), Vector3(0.0, 1.0, 0.6).normalized(), 0.3)
+			_pelican_eyes(m, Vector3(0.039, 0.353, -0.072))
+		"sitting":
+			# The head resting on the shoulders, the bill laid down the breast.
+			m.loft([
+				_ring(Vector3(0.0, 0.2, -0.205), Vector3(0.0, 0.3, 1.0), 0.078, 0.074),
+				_ring(Vector3(0.0, 0.27, -0.24), Vector3(0.0, 0.2, 1.0), 0.064, 0.062),
+				_ring(Vector3(0.0, 0.325, -0.235), Vector3(0.0, 0.5, 1.0), 0.056, 0.055),
+				_ring(Vector3(0.0, 0.36, -0.215), Vector3(0.0, 1.0, 0.5), 0.051, 0.05),
+				_ring(Vector3(0.0, 0.372, -0.235), Vector3.UP, 0.048, 0.047),
+				_ring(Vector3(0.0, 0.364, -0.258), Vector3(0.0, 1.0, -0.4), 0.04, 0.04),
+				_ring(Vector3(0.0, 0.348, -0.278), Vector3(0.0, 1.0, -0.7), 0.028, 0.03),
+			], 10, 2, neck_paint, null, Vector3(0.0, 0.34, -0.29))
+			_pelican_bill(m, Vector3(0.0, 0.345, -0.27), Vector3(0.0, -0.906, -0.423), Vector3(0.0, 0.423, -0.906), 0.3)
+			_pelican_eyes(m, Vector3(0.036, 0.37, -0.25))
+		_:
+			# The slim neck up from the breast in an S, the long head on top.
+			m.loft([
+				_ring(Vector3(0.0, 0.32, -0.12), Vector3(0.0, 0.2, 1.0), 0.075, 0.07),
+				_ring(Vector3(0.0, 0.38, -0.17), Vector3(0.0, 0.1, 1.0), 0.058, 0.056),
+				_ring(Vector3(0.0, 0.45, -0.19), Vector3.BACK, 0.047, 0.046),
+				_ring(Vector3(0.0, 0.52, -0.175), Vector3.BACK, 0.042, 0.042),
+				_ring(Vector3(0.0, 0.58, -0.145), Vector3.BACK, 0.04, 0.041),
+				_ring(Vector3(0.0, 0.63, -0.13), Vector3(0.0, 0.5, 1.0), 0.042, 0.044),
+				_ring(Vector3(0.0, 0.683, -0.148), Vector3(0.0, 1.0, 0.2), 0.049, 0.048),
+				_ring(Vector3(0.0, 0.684, -0.178), Vector3(0.0, 1.0, -0.1), 0.044, 0.043),
+				_ring(Vector3(0.0, 0.671, -0.204), Vector3(0.0, 1.0, -0.3), 0.036, 0.036),
+				_ring(Vector3(0.0, 0.654, -0.225), Vector3(0.0, 1.0, -0.5), 0.026, 0.028),
+			], 10, 2, neck_paint, null, Vector3(0.0, 0.647, -0.236))
+			# The bill held down in front of the neck, about 52 degrees below level.
+			_pelican_bill(m, Vector3(0.0, 0.656, -0.215), Vector3(0.0, -0.788, -0.616), Vector3(0.0, 0.616, -0.788), 0.32)
+			_pelican_eyes(m, Vector3(0.032, 0.678, -0.198))
+	if pose == "sitting":
+		return
+	# Short stout legs and broad webbed feet; far off they slide up into the body.
+	var hip := 0.07 if pose == "tucked" else 0.11
 	for side: float in [1.0, -1.0]:
-		m.thin_to = 0.17 if tucked else 0.21
+		m.thin_to = 0.15 if pose == "tucked" else 0.2
 		m.loft([
-			_ring(Vector3(0.062 * side, hip, 0.03), Vector3.BACK, 0.02, 0.02),
-			_ring(Vector3(0.07 * side, hip * 0.5, -0.004), Vector3.BACK, 0.016, 0.016),
-			_ring(Vector3(0.075 * side, 0.012, -0.012), Vector3.BACK, 0.014, 0.014),
+			_ring(Vector3(0.062 * side, hip, 0.03), Vector3.BACK, 0.024, 0.024),
+			_ring(Vector3(0.068 * side, hip * 0.5, 0.0), Vector3.BACK, 0.02, 0.02),
+			_ring(Vector3(0.074 * side, 0.012, -0.012), Vector3.BACK, 0.018, 0.018),
 		], 6, 1, _solid(PELICAN_LEG), null, null)
 		_foot(m, Vector3(0.075 * side, 0.0, -0.018), 2.0, side, PELICAN_LEG)
 		m.thin_to = NAN
+
+
+## A pelican's pale eyes with their dark pupils, mirrored about x = 0.
+static func _pelican_eyes(m: Mesher, right: Vector3) -> void:
+	for side: float in [1.0, -1.0]:
+		var eye := Vector3(right.x * side, right.y, right.z)
+		_ball(m, eye, 0.006, PELICAN_EYE)
+		_ball(m, eye + Vector3(0.0045 * side, 0.0, -0.0015), 0.0022, GULL_PUPIL)
 
 
 ## The pelican's bill from `base` along `direction` for `length`: the flat upper
@@ -788,37 +910,26 @@ static func _solid(color: Color) -> Callable:
 	return func(_t: float, _up: float, _side: float) -> Color: return color
 
 
-## A folded wing's ring lying on a body (its rings from the tail forward): at
-## `at` rings along it (2.5: half way from ring 2 to ring 3), its middle
-## `angle_deg` up round the body from the side toward the back, `lift` off its
-## surface, `depth` across the wing and `thickness` through it (half extents);
-## side +1 the right.
-static func _wing_on(body: Array, at: float, angle_deg: float, lift: float, depth: float, thickness: float, side: float) -> Dictionary:
-	var index := clampi(int(floor(at)), 0, body.size() - 2)
-	var f := clampf(at - float(index), 0.0, 1.0)
-	var back: Dictionary = body[index]
-	var front: Dictionary = body[index + 1]
-	var centre := (back.c as Vector3).lerp(front.c, f)
-	var along := ((front.c as Vector3) - (back.c as Vector3)).normalized()
-	var up := (back.u as Vector3).lerp(front.u, f)
-	up = (up - along * up.dot(along)).normalized()
-	var across := along.cross(up).normalized() * side
-	var w := lerpf(back.w, front.w, f)
-	var h := lerpf(back.h, front.h, f)
-	var angle := deg_to_rad(angle_deg)
-	var normal := (across * (h * cos(angle)) + up * (w * sin(angle))).normalized()
-	return _ring(centre + across * (w * cos(angle)) + up * (h * sin(angle)) + normal * lift, normal, depth, thickness)
+## A body's rings along an axis from `origin` (its tail end), leaning up
+## `lean_deg` toward -Z: `profile` is [distance along the axis, half width, half
+## height] per ring, the dorsal side square to the axis, up and back.
+static func _axis_body(origin: Vector3, lean_deg: float, profile: Array) -> Array:
+	var lean := deg_to_rad(lean_deg)
+	var axis := Vector3(0.0, sin(lean), -cos(lean))
+	var dorsal := Vector3(0.0, cos(lean), sin(lean))
+	var rings := []
+	for ring: Array in profile:
+		rings.append(_ring(origin + axis * float(ring[0]), dorsal, float(ring[1]), float(ring[2])))
+	return rings
 
 
-## Both eyes (small balls), mirrored about x = 0.
-static func _eyes(m: Mesher, right: Vector3, radius: float, color: Color) -> void:
-	for side: float in [1.0, -1.0]:
-		var centre := Vector3(right.x * side, right.y, right.z)
-		m.loft([
-			_ring(centre + Vector3(-radius * 0.7, 0.0, 0.0), Vector3.UP, radius * 0.71, radius * 0.71),
-			_ring(centre, Vector3.UP, radius, radius),
-			_ring(centre + Vector3(radius * 0.7, 0.0, 0.0), Vector3.UP, radius * 0.71, radius * 0.71),
-		], 6, 1, _solid(color), centre - Vector3(radius, 0.0, 0.0), centre + Vector3(radius, 0.0, 0.0))
+## A small ball (an eye, a pupil) at `centre`, of `radius`.
+static func _ball(m: Mesher, centre: Vector3, radius: float, color: Color) -> void:
+	m.loft([
+		_ring(centre + Vector3(-radius * 0.7, 0.0, 0.0), Vector3.UP, radius * 0.71, radius * 0.71),
+		_ring(centre, Vector3.UP, radius, radius),
+		_ring(centre + Vector3(radius * 0.7, 0.0, 0.0), Vector3.UP, radius * 0.71, radius * 0.71),
+	], 6, 1, _solid(color), centre - Vector3(radius, 0.0, 0.0), centre + Vector3(radius, 0.0, 0.0))
 
 
 ## A webbed foot flat on y = 0 at `heel`, toes forward (-Z), `size` times a
@@ -851,15 +962,15 @@ class Mesher:
 	## Where the model rests: [{at, r}] (the feet).
 	var contacts: Array[Dictionary] = []
 	## While set, added vertices belong to a thin part (legs, feet) that far off
-	## draws in to the point this high (bird units) over the bird's feet, inside its
-	## body: UV2 (1, the height). NAN: not thin.
+	## slides straight up to this height (bird units), inside the body: UV2 (1, the
+	## rise). NAN: not thin.
 	var thin_to := NAN
 
 	func add(point: Vector3, color: Color) -> int:
 		points.append(point)
 		normals.append(Vector3.ZERO)
 		colors.append(color)
-		uv2s.append(Vector2.ZERO if is_nan(thin_to) else Vector2(1.0, thin_to))
+		uv2s.append(Vector2.ZERO if is_nan(thin_to) else Vector2(1.0, thin_to - point.y))
 		return points.size() - 1
 
 	## One triangle whose front faces `outward` (wound as the kits' Builder.triangle
@@ -1014,6 +1125,40 @@ class Mesher:
 			var outward := (points[front_p] + points[front_q]) * 0.5 - middle
 			tri(front_p, front_q, back_q, outward)
 			tri(front_p, back_q, back_p, outward)
+
+	## Scales the whole model about its feet: its points, the rise of its thin parts
+	## and where it rests.
+	func scale_all(factor: float) -> void:
+		for index in points.size():
+			points[index] = points[index] * factor
+			uv2s[index] = Vector2(uv2s[index].x, uv2s[index].y * factor)
+		for contact: Dictionary in contacts:
+			contact.at = (contact.at as Vector3) * factor
+			contact.r = float(contact.r) * factor
+
+	## Where a bird lying on the stone rests: the middle of its points within 2 mm of
+	## it and the radius round them.
+	func belly() -> Dictionary:
+		var low := PackedVector3Array()
+		for point: Vector3 in points:
+			if point.y <= 0.002:
+				low.append(Vector3(point.x, 0.0, point.z))
+		var centre := Vector3.ZERO
+		for point: Vector3 in low:
+			centre += point
+		centre /= maxf(1.0, float(low.size()))
+		var radius := 0.0
+		for point: Vector3 in low:
+			radius = maxf(radius, centre.distance_to(point))
+		return {"at": centre, "r": radius}
+
+	## Lowers the model until its lowest point is at y = 0.
+	func settle() -> void:
+		var lowest := INF
+		for point: Vector3 in points:
+			lowest = minf(lowest, point.y)
+		for index in points.size():
+			points[index] = Vector3(points[index].x, points[index].y - lowest, points[index].z)
 
 	## Raises every point below `y` to it.
 	func floor_at(y: float) -> void:
