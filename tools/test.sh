@@ -18,7 +18,9 @@
 #    tools/build-number (tools/check_build_number.sh): each newer head of main
 #    gets a larger build number, and a shallow clone is refused. And
 #    tools/docs-only (tools/check_docs_only.sh): only Markdown counts as
-#    documentation, so only a push of Markdown alone skips the Mac build.
+#    documentation, so only a push of Markdown alone skips the Mac build. And
+#    the web build's path check (tools/check_web_paths_selftest.sh): a page
+#    that loads a file from outside its own folder fails.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -127,6 +129,13 @@ tools/check_build_number.sh || failed+=("tools/check_build_number.sh")
 # images, scripts, Godot settings and generated data are code. Instant.
 echo "== tools/check_docs_only.sh"
 tools/check_docs_only.sh || failed+=("tools/check_docs_only.sh")
+
+# tools/check_web_paths.py, which tools/build-web.sh runs on the exported page,
+# on a page shaped like Godot's export: it passes, a link out of the game
+# included, and fails a script from the site's root, a pack from another origin,
+# a <base> element and a missing file. Offline, under a second.
+echo "== tools/check_web_paths_selftest.sh"
+tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
