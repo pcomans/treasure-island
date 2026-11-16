@@ -169,11 +169,11 @@ function tiBuildFiles(build, env) {
 	// Downloads, as the engine's own: 4 attempts, a second apart.
 	const ATTEMPTS = 4;
 	// Bytes waiting for the disk: past this the download waits for it, and a disk that
-	// makes no room for STALL_MS loses the store, never the download. Adjacent pieces of
-	// one buffer (the pack's) go to the disk together, up to WRITE_MAX at a time, so that
-	// what is left when the download ends takes few writes: the engine's start keeps the
-	// page busy for seconds right after it.
-	const QUEUE_LIMIT = 16 * 1024 * 1024;
+	// makes no room for STALL_MS loses the store, never the download. What waits goes to
+	// the disk in one write (up to WRITE_MAX): the engine's start keeps the page busy for
+	// seconds right after a fast download, with time for few writes, and the bytes still
+	// waiting then are held in memory at its peak.
+	const QUEUE_LIMIT = 4 * 1024 * 1024;
 	const WRITE_MAX = 8 * 1024 * 1024;
 	const STALL_MS = 15000;
 	// Each file's latest store (a retried download stores again, after the last one ends).
@@ -250,11 +250,27 @@ function tiBuildFiles(build, env) {
 				for (;;) {
 					if (state === 'failed') throw new Error('the download failed');
 					if (queue.length > 0) {
-						let chunk = queue.shift();
-						while (queue.length > 0 && queue[0].buffer === chunk.buffer
-							&& queue[0].byteOffset === chunk.byteOffset + chunk.byteLength
-							&& chunk.byteLength + queue[0].byteLength <= WRITE_MAX) {
-							chunk = new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength + queue.shift().byteLength);
+						// The pack's pieces are adjacent views of its buffer, written as one view;
+						// other chunks (the WebAssembly's, from the network) are copied into one.
+						const parts = [queue.shift()];
+						let length = parts[0].byteLength;
+						while (queue.length > 0 && length + queue[0].byteLength <= WRITE_MAX) {
+							length += queue[0].byteLength;
+							parts.push(queue.shift());
+						}
+						const first = parts[0];
+						const adjacent = parts.every((part, i) => i === 0 || (part.buffer === first.buffer
+							&& part.byteOffset === parts[i - 1].byteOffset + parts[i - 1].byteLength));
+						let chunk = first;
+						if (parts.length > 1 && adjacent) {
+							chunk = new Uint8Array(first.buffer, first.byteOffset, length);
+						} else if (parts.length > 1) {
+							chunk = new Uint8Array(length);
+							let at = 0;
+							for (const part of parts) {
+								chunk.set(part, at);
+								at += part.byteLength;
+							}
 						}
 						await writable.write(chunk);
 						bytes += chunk.byteLength;

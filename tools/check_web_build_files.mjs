@@ -16,7 +16,8 @@
 //   - without the lock (another tab is storing) a tab uses complete copies but writes
 //     nothing; with no storage, storage that throws, or no writable streams, the files
 //     come from the network as before;
-//   - a disk slower than the download holds the download back without losing data.
+//   - a disk slower than the download holds the download back without losing data,
+//     and what waits for it goes in few writes.
 // Node only, no network and no engine; a few seconds. Part of tools/test.sh.
 //
 //   node tools/check_web_build_files.mjs [SHELL]   (SHELL: another copy of the page's shell)
@@ -55,6 +56,7 @@ class Storage {
     this.failWriteAfter = Infinity;
     this.writeDelayMs = 0;
     this.shortRead = new Set();
+    this.writes = {};
   }
   async getDirectory() { return this.root; }
   folder(...path) { let f = this.root; for (const p of path) { f = f.entries.get(p); if (!(f instanceof Folder)) return null; } return f; }
@@ -103,6 +105,7 @@ class FileHandle {
         if (written + chunk.byteLength > storage.failWriteAfter) throw Object.assign(new Error('disk full'), {name: 'QuotaExceededError'});
         chunks.push(chunk.slice());
         written += chunk.byteLength;
+        storage.writes[name] = (storage.writes[name] || 0) + 1;
       },
       async close() {
         const entry = folder.entries.get(name);
@@ -286,7 +289,9 @@ const B = build('treasure-island-bbbbbbb', 310000, 1100005, 7);
   const storage = new Storage(); storage.writeDelayMs = 2;
   const server = serverFor(big);
   const r = await load(big, {storage, locks: new Locks(), server});
-  check(got(r, big) && stored(storage, big, 'pack'), 'slow disk: the pack was not loaded and stored complete');
+  check(got(r, big) && stored(storage, big, 'pack') && stored(storage, big, 'wasm'), 'slow disk: the files were not loaded and stored complete');
+  const chunks = Math.ceil(big.pack[1].byteLength / 65536);
+  check(storage.writes[big.pack[0]] < chunks / 4, `slow disk: the pack's ${chunks} chunks took ${storage.writes[big.pack[0]]} writes`);
 }
 
 if (failures.length > 0) {
