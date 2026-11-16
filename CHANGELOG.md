@@ -4,6 +4,11 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2176 (2026-11-16)
+
+- Avenue of the Palms beside the Isle House park is level now; the hill under the road is gone.
+- The park's north-west corner is level and planted, without the grass bank beside the avenue or the berm by the cycle track.
+
 ## Build 2144 (2026-11-16)
 
 - On the web, the game's data is kept on your device after the first visit, so later launches skip the big download until a new build is out. Not yet on iPhone and iPad.
