@@ -2,16 +2,11 @@
 # Keyless: no secret, no environment, contents: read only. Runs only on a push
 # to that branch that changes this file.
 #
-# intel: on each Intel macOS label, prints the Apple tool versions the sign,
-# verify and itch jobs use; checks the latest public release's Mac app with
-# codesign, spctl and stapler (and staples a copy whose ticket was removed, which
-# asks Apple's ticket service, as the sign job does); re-zips it with ditto;
-# installs the darwin-amd64 butler pin; and launches the app headless on x86_64.
-# Nothing is printed from codesign beyond its format and signature kind.
-#
-# cancel-*: a job cancelled while it waits in a concurrency group, never having
-# had a runner, and two jobs that need it with `!cancelled()`, to see whether a
-# job-level cancellation makes cancelled() true for the jobs after it.
+# Second run: GitHub's handling of the YAML aliases mac-build.yml now uses: a
+# job's `if:` (a folded scalar holding ${{ }}) and its `steps:` list, given an
+# anchor in one job and an alias in another, with a job-level env that differs.
+# The never-* pair checks that an aliased `if:` is really evaluated: both must
+# be skipped (a dropped `if:` would default to success() and run).
 name: Intel Mac probe (temporary)
 
 on:
@@ -27,220 +22,69 @@ defaults:
     shell: bash
 
 jobs:
-  intel:
-    name: Probe ${{ matrix.label }}
-    strategy:
-      fail-fast: false
-      matrix:
-        label: [macos-26-intel, macos-15-intel]
-    runs-on: ${{ matrix.label }}
-    timeout-minutes: 40
+  first:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    outputs:
+      value: ${{ steps.out.outputs.value }}
     steps:
-      - name: Tool versions
-        run: |
-          echo "$(sw_vers -productName) $(sw_vers -productVersion) ($(sw_vers -buildVersion)), uname -m: $(uname -m), $(sysctl -n machdep.cpu.brand_string), $(sysctl -n hw.ncpu) CPUs"
-          echo "ImageOS=${ImageOS:-unset} ImageVersion=${ImageVersion:-unset}"
-          echo "xcode-select -p: $(xcode-select -p)"
-          xcodebuild -version
-          for tool in notarytool stapler codesign ditto; do echo "xcrun --find ${tool}: $(xcrun --find "${tool}" 2>&1)"; done
-          echo "notarytool --version: $(xcrun notarytool --version 2>&1)"
-          pkgutil --pkg-info=com.apple.pkg.CLTools_Executables | grep -E '^(package-id|version)' || true
-          for bin in /usr/bin/codesign /usr/bin/ditto /usr/bin/security /usr/sbin/spctl "$(xcrun --find stapler)" "$(xcrun --find notarytool)"; do
-            echo "${bin}: $(file -b "${bin}" | cut -c1-100); $(what "${bin}" | sed -n '2p' | tr -s '[:space:]' ' ')"
-          done
-          echo "spctl --status: $(spctl --status 2>&1)"
-          bash --version | head -1
-          python3 --version
-          jq --version
-          unzip -v | head -1
-          curl --version | head -1
-          shasum --version
-          man codesign 2>/dev/null | col -b | grep -A3 -- '--all-architectures' || echo "(no --all-architectures in man codesign)"
-          df -h . | tail -1
+      - id: out
+        run: echo "value=from-first" >> "${GITHUB_OUTPUT}"
 
-      - name: Download the latest release's Mac app
+  check-a:
+    name: Check A
+    needs: [first]
+    if: &probe-check-if >-
+      ${{ !cancelled() && needs.first.result == 'success' &&
+      (github.ref == 'refs/heads/ci/mac-runner-intel-20261116' ||
+      (github.ref == 'refs/heads/main' && vars.MAC_SIGNING == 'never-set')) }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 5
+    env:
+      LAUNCH_ARCH: x86_64
+    steps: &probe-check-steps
+      - name: Show the job's own values
         env:
-          GH_TOKEN: ${{ github.token }}
-          GH_REPO: ${{ github.repository }}
+          FROM_NEEDS: ${{ needs.first.outputs.value }}
         run: |
-          gh api "repos/${GH_REPO}/releases/latest" > latest.json
-          tag="$(jq -r .tag_name latest.json)"
-          name="$(jq -r '.assets[] | select(.name | test("^grand-treasure-island-mac-build-[0-9]+[.]zip$")) | .name' latest.json)"
-          digest="$(jq -r --arg name "${name}" '.assets[] | select(.name == $name) | .digest' latest.json)"
-          echo "latest release ${tag}: ${name}; notes say notarized: $(jq -r '.body | test("Signed and notarized")' latest.json)"
-          gh release download "${tag}" --pattern "${name}" --dir release
-          actual="sha256:$(shasum -a 256 "release/${name}" | cut -d' ' -f1)"
-          [ "${actual}" = "${digest}" ] || { echo "::error::${name} is not the file GitHub recorded"; exit 1; }
-          echo "${name} matches GitHub's digest"
-          start=$SECONDS
-          ditto -x -k "release/${name}" app
-          echo "ditto -x took $((SECONDS - start)) s"
-          echo "release/${name}" > zip-path.txt
+          echo "job ${GITHUB_JOB}: LAUNCH_ARCH=${LAUNCH_ARCH}, needs.first.outputs.value=${FROM_NEEDS}"
 
-      - name: Signature, Gatekeeper and the stapled ticket
-        run: |
-          app="$(ls -d app/*.app)"
-          exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
-          echo "lipo -archs: $(lipo -archs "${exe}")"
-          start=$SECONDS
-          codesign --verify --deep --strict --verbose=2 "${app}"
-          echo "codesign --verify took $((SECONDS - start)) s"
-          for arch in x86_64 arm64; do
-            status=0
-            codesign --verify --strict --architecture "${arch}" "${app}" 2>&1 || status=$?
-            echo "codesign --verify --architecture ${arch}: exit ${status}"
-          done
-          details="$(codesign -dvv "${app}" 2>&1)" || true
-          grep -E '^Format=' <<< "${details}" || true
-          echo "Authority lines: $(grep -c '^Authority=' <<< "${details}" || true); Developer ID Application: $(grep -q '^Authority=Developer ID Application: ' <<< "${details}" && echo yes || echo no); timestamp: $(grep -q '^Timestamp=' <<< "${details}" && echo yes || echo no)"
-          start=$SECONDS
-          status=0
-          assessment="$(spctl --assess --type execute -vv "${app}" 2>&1)" || status=$?
-          grep -E 'accepted|rejected|^source=|^override=' <<< "${assessment}" || true
-          echo "spctl --assess exit ${status}, $((SECONDS - start)) s"
-          ls -l "${app}/Contents/CodeResources" || echo "no stapled ticket file"
-          start=$SECONDS
-          status=0
-          xcrun stapler validate "${app}" || status=$?
-          echo "stapler validate exit ${status}, $((SECONDS - start)) s"
-
-      - name: Staple a copy whose ticket was removed (asks Apple's ticket service)
-        run: |
-          app="$(ls -d app/*.app)"
-          mkdir staple
-          ditto "${app}" "staple/$(basename "${app}")"
-          copy="staple/$(basename "${app}")"
-          rm "${copy}/Contents/CodeResources"
-          status=0
-          xcrun stapler validate "${copy}" > /dev/null 2>&1 || status=$?
-          echo "without its ticket, stapler validate exits ${status}"
-          try() {
-            local attempt status start
-            for attempt in 1 2 3 4 5; do
-              start=$SECONDS
-              status=0
-              xcrun stapler staple "${copy}" > staple.log 2>&1 || status=$?
-              echo "$1 attempt ${attempt}: stapler staple exit ${status}, $((SECONDS - start)) s"
-              if [ "${status}" -eq 0 ]; then return 0; fi
-              grep -i -E 'error|lost|cloudkit' staple.log | head -5 || true
-              sleep 20
-            done
-            return 1
-          }
-          if try "over the runner's network"; then
-            echo "STAPLE: ok without any workaround"
-          else
-            echo "STAPLE: failed five times; blocking outgoing UDP 443 (actions/runner-images#14924) and trying again"
-            echo "block return out quick proto udp from any to any port 443" | sudo pfctl -f - 2>&1 | tail -2
-            sudo pfctl -E 2>&1 | tail -1
-            if try "with UDP 443 blocked"; then echo "STAPLE: ok only with UDP 443 blocked"; else echo "STAPLE: failed either way"; fi
-          fi
-          status=0
-          xcrun stapler validate "${copy}" || status=$?
-          echo "stapler validate of the re-stapled copy: exit ${status}"
-          cmp "${app}/Contents/CodeResources" "${copy}/Contents/CodeResources" && echo "the fetched ticket equals the release's own" || echo "the fetched ticket differs from the release's own"
-
-      - name: Re-zip with ditto and compare the entries
-        run: |
-          app="$(ls -d app/*.app)"
-          zip="$(cat zip-path.txt)"
-          start=$SECONDS
-          ditto -c -k --keepParent "${app}" rezip.zip
-          echo "ditto -c took $((SECONDS - start)) s; sizes: release $(stat -f %z "${zip}"), rezip $(stat -f %z rezip.zip)"
-          entries() { python3 -I -c 'import sys, zipfile
-          for i in sorted(zipfile.ZipFile(sys.argv[1]).infolist(), key=lambda i: i.filename):
-              print(i.filename, oct(i.external_attr >> 16), i.CRC, i.file_size)' "$1"; }
-          entries "${zip}" > a.txt
-          entries rezip.zip > b.txt
-          if diff a.txt b.txt > /dev/null; then echo "same entries, modes, CRCs and sizes ($(wc -l < a.txt) entries)"; else diff a.txt b.txt | head -20; fi
-
-      - name: Install butler (darwin-amd64 pin)
-        env:
-          BUTLER_VERSION: "15.32.0"
-          BUTLER_SHA256: a92947c9556c9bfb0cc9bdc3814f342b30e0ee7269efc418658894a916ca9584
-        run: |
-          dir="${RUNNER_TEMP}/butler"
-          mkdir -p "${dir}"
-          curl -fsSL --retry 3 --retry-all-errors -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-amd64/${BUTLER_VERSION}/archive/default"
-          echo "${BUTLER_SHA256}  ${dir}/butler.zip" | shasum -a 256 -c -
-          unzip -q -o "${dir}/butler.zip" -d "${dir}"
-          chmod 0755 "${dir}/butler"
-          file -b "${dir}/butler"
-          "${dir}/butler" version
-
-      - name: Launch it headless on x86_64
-        timeout-minutes: 15
-        run: |
-          app="$(ls -d app/*.app)"
-          exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
-          start=$SECONDS
-          arch -x86_64 "${exe}" --headless -- --quit-on-ready > launch.log 2>&1 &
-          pid=$!
-          ( for _ in $(seq 600); do sleep 1; kill -0 "${pid}" || exit 0; done; kill "${pid}" ) 2>/dev/null &
-          watchdog=$!
-          status=0
-          wait "${pid}" || status=$?
-          wait "${watchdog}" || true
-          cat launch.log
-          errors="$(grep -E '^ERROR|SCRIPT ERROR' launch.log | grep -v 'Parameter "ss" is null' || true)"
-          echo "exit ${status} after $((SECONDS - start)) s; WORLD_READY $(grep -c '^WORLD_READY' launch.log || true), PLAY_READY $(grep -c '^PLAY_READY' launch.log || true), error lines $(grep -c . <<< "${errors}" || true)"
-
-  cancel-holder:
+  check-b:
+    name: Check B
+    needs: [first]
+    if: *probe-check-if
     runs-on: ubuntu-26.04
-    timeout-minutes: 10
-    concurrency:
-      group: intel-probe-cancel-${{ github.run_id }}
-      cancel-in-progress: false
-    steps:
-      - run: sleep 150
+    timeout-minutes: 5
+    env:
+      LAUNCH_ARCH: arm64
+    steps: *probe-check-steps
 
-  cancel-wait-a:
+  never-a:
+    needs: [first]
+    if: &probe-never-if >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
-      - run: sleep 20
+      - run: echo "never-a ran"
 
-  cancel-wait-b:
+  never-b:
+    needs: [first]
+    if: *probe-never-if
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
-      - run: sleep 70
+      - run: echo "never-b ran"
 
-  # Queued behind the holder; cancelled while pending when cancel-newer arrives.
-  cancel-victim:
-    needs: [cancel-wait-a]
-    runs-on: ubuntu-26.04
-    timeout-minutes: 5
-    concurrency:
-      group: intel-probe-cancel-${{ github.run_id }}
-      cancel-in-progress: false
-    steps:
-      - run: echo "the victim ran"
-
-  cancel-newer:
-    needs: [cancel-wait-b]
-    runs-on: ubuntu-26.04
-    timeout-minutes: 10
-    concurrency:
-      group: intel-probe-cancel-${{ github.run_id }}
-      cancel-in-progress: false
-    steps:
-      - run: echo "the newer job ran"
-
-  cancel-after:
-    needs: [cancel-victim]
+  after:
+    needs: [check-a, check-b, never-a, never-b]
     if: ${{ !cancelled() }}
     runs-on: ubuntu-26.04
     timeout-minutes: 5
     steps:
       - env:
-          RESULT: ${{ needs.cancel-victim.result }}
-        run: echo "ran with !cancelled(); needs.cancel-victim.result=${RESULT}"
-
-  cancel-after-strict:
-    needs: [cancel-victim]
-    if: ${{ !cancelled() && needs.cancel-victim.result == 'cancelled' }}
-    runs-on: ubuntu-26.04
-    timeout-minutes: 5
-    steps:
-      - run: echo "ran with !cancelled() && needs.cancel-victim.result == 'cancelled'"
+          A: ${{ needs.check-a.result }}
+          B: ${{ needs.check-b.result }}
+          NA: ${{ needs.never-a.result }}
+          NB: ${{ needs.never-b.result }}
+        run: echo "check-a ${A}, check-b ${B}, never-a ${NA}, never-b ${NB}"
