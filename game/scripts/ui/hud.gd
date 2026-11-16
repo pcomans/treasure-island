@@ -22,6 +22,8 @@ const CONTROLS_KEY_COLOR := Color(1.0, 0.86, 0.55)
 ## The sources the game acknowledges: the only list, which the credits screen and
 ## the loading screen's credit line read (its notes describe the entries).
 const CREDITS_PATH := "res://game/resources/ui/credits.json"
+## The build the pause menu names, from the stamp a build carries.
+const BuildStamp := preload("res://game/scripts/ui/build_stamp.gd")
 ## The credits screen: titles and licences in the controls screen's colours, notes
 ## and licence texts in this one.
 const CREDITS_NOTE_COLOR := Color(0.8, 0.84, 0.88)
@@ -98,6 +100,8 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var options_button: Button = $PausePanel/Center/Box/PauseLayout/OptionsButton
 @onready var credits_button: Button = $PausePanel/Center/Box/PauseLayout/CreditsButton
 @onready var exit_button: Button = $PausePanel/Center/Box/PauseLayout/ExitButton
+## The menu's last line, small and dim: the build (show_build).
+@onready var build_label: Label = $PausePanel/Center/Box/PauseLayout/BuildLabel
 ## The controls screen, opened from the pause menu or the loading screen: a
 ## solid panel over the dimmed game.
 @onready var controls_screen: Control = $ControlsScreen
@@ -265,6 +269,7 @@ func _ready() -> void:
 		_click_on_press(button as BaseButton)
 	_fill_controls()
 	_fill_credits()
+	show_build(BuildStamp.read(), OS.has_feature("template"))
 	feedback_panel.hide()
 	pause_panel.hide()
 	controls_screen.hide()
@@ -358,7 +363,7 @@ func set_prompt(text: String) -> void:
 func set_start_prompt(text: String) -> void:
 	if _start_text.is_empty():
 		_menu_before = {"text": resume_button.text, "title": pause_title.text, "height": resume_button.custom_minimum_size.y, "dim": pause_dim.color.a}
-		for button: Control in [controls_button, options_button, credits_button, exit_button]:
+		for button: Control in [controls_button, options_button, credits_button, exit_button, build_label]:
 			_menu_before[button] = button.visible
 			button.hide()
 		frame_rate_label.hide()
@@ -417,7 +422,7 @@ func _end_start_prompt() -> void:
 	pause_dim.color.a = _menu_before.dim
 	if _start_controls != null:
 		_start_controls.hide()
-	for button: Control in [controls_button, options_button, credits_button, exit_button]:
+	for button: Control in [controls_button, options_button, credits_button, exit_button, build_label]:
 		button.visible = _menu_before[button]
 	frame_rate_label.visible = show_frame_rate.button_pressed
 
@@ -440,6 +445,14 @@ func set_paused(paused: bool) -> void:
 	prompt_panel.visible = not paused and not prompt_text.text.is_empty()
 	if pause_panel.visible:
 		resume_button.grab_focus(_pointer_last)
+
+
+## The build on the pause menu's last line (owner, 2026-11-16: "Show the build
+## version in the pause menu pls"), for a stamp (BuildStamp.read) in a build
+## (exported) or a run from source: _ready shows this run's, a test others. The
+## start prompt hides it with the menu's other buttons.
+func show_build(stamp: Dictionary, exported: bool) -> void:
+	build_label.text = BuildStamp.text(stamp, exported)
 
 
 ## Shows the controls screen in place of the pause menu (or over the loading

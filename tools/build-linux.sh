@@ -8,6 +8,12 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 revision="$(git rev-parse HEAD)"
+# The build the pause menu names: the export plugin stamps the pack with this
+# commit's build number and commit, and the content audit checks the stamp
+# (game/scripts/ui/build_stamp.gd).
+TI_BUILD_NUMBER="$(tools/build-number "$revision")"
+TI_BUILD_COMMIT="$revision"
+export TI_BUILD_NUMBER TI_BUILD_COMMIT
 mkdir -p build/linux
 touch build/.gdignore
 # Optional: the sound files from the private source in TI_SFX_SOURCE, into the

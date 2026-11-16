@@ -42,6 +42,13 @@ fi
 # reuses a cached file name.
 revision="$(git rev-parse HEAD)"
 name="treasure-island-$(git rev-parse --short HEAD)"
+# The build the pause menu names: the export plugin stamps the pack with this
+# commit's build number and commit (the copy exported below has no Git history,
+# so they come from here), and the content audit checks the stamp
+# (game/scripts/ui/build_stamp.gd).
+TI_BUILD_NUMBER="$(tools/build-number "${revision}")"
+TI_BUILD_COMMIT="${revision}"
+export TI_BUILD_NUMBER TI_BUILD_COMMIT
 out=build/web
 mkdir -p "${out}"
 # Clear the previous build but keep .vercel, the Vercel CLI's link to the project.
