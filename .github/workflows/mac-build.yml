@@ -1,11 +1,63 @@
-# Builds the Mac app on every push to main with tools/build-mac.sh (the same
-# script as in the devcontainer), launches it on an Apple Silicon Mac to check
-# the island loads, then publishes it as a new GitHub Release of its own, marked
-# latest, so this fixed link always gets the newest build:
+# Builds the Mac app on every push to main that changes more than documentation
+# with tools/build-mac.sh (the same script as in the devcontainer), launches it
+# on an Apple Silicon Mac to check the island loads, then publishes it as a new
+# GitHub Release of its own, marked latest, so these fixed links always get the
+# newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-# Owner-approved 2026-11-03. A run started by hand (workflow_dispatch) on
-# another branch builds and checks the app and publishes nothing; on main, the
-# dry_run input does the same.
+#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
+# The Linux package is the Linux export that tools/build-mac.sh makes and
+# launch-checks from the same commit, with the same sounds. Owner-approved
+# 2026-11-03. A run started by hand (workflow_dispatch) on another branch builds
+# and checks the app and publishes nothing; on main, the dry_run input does the
+# same.
+#
+# A push to main that changes only documentation, that is only Markdown files
+# (tools/docs-only; owner-requested 2026-11-15), builds and releases nothing:
+# the changes job says so in the run, and the other jobs show as skipped. A run
+# started by hand always builds. Because such a push builds nothing, a build
+# whose commit main has passed only by documentation is still the newest one,
+# and publishes (the publish job checks).
+#
+# Every build has a build number (owner-requested 2026-11-15) from
+# tools/build-number: the number of commits in its commit's history. A newer
+# build of main always has a larger number, and the Mac, Linux and web builds
+# of one commit share it. The build job checks out the whole history for it
+# (commits and trees only); tools/build-number refuses a shallow clone, whose
+# number would be too small. A release's tag is build-<number, six
+# digits>-<commit date>-<short commit>, so tags sort by number, and its title
+# is "<config/name in project.godot>, build <number> (<commit date>, <short
+# commit>)": for example build-001918-2026-11-16-1a2b3c4 and "Grand Treasure
+# Island, build 1918 (2026-11-16, 1a2b3c4)". Older releases keep their
+# mac-<date>-<commit> tags.
+#
+# After the release, the itch job (owner-requested 2026-11-15) pushes the same
+# two builds to the itch.io page phppco/grand-treasure-island with itch's butler:
+# the Mac app, notarized or not, to channel "mac" and the Linux build to channel
+# "linux", with the build number as their version.
+#
+# The itch.io and VirusTotal keys live in the GitHub Environment `itch`, whose
+# deployment branch rule admits only main and which has no required reviewers:
+# a repository secret could be read by a workflow on any branch, an environment
+# secret only by jobs that the environment's rule lets in. Set them from gh's
+# own prompt, and keep no repository secret of the same names:
+#     gh secret set BUTLER_API_KEY --env itch -R pcomans/treasure-island
+#     gh secret set VIRUSTOTAL_API_KEY --env itch -R pcomans/treasure-island
+# GitHub creates a missing environment, with no rule and no secret, the first
+# time a job names it. So before using a key each job reads the environment's
+# rule through the API, and pushes or submits nothing, with a warning, unless it
+# admits the branch main alone; without a key it gives a notice and does
+# nothing. A failed itch push never touches the GitHub release: the job reports
+# it and the run still succeeds. To push an existing release (again), start this
+# workflow by hand on main with itch_release_tag set to its tag: that run builds
+# nothing and only does the itch job.
+#
+# Also after the release, the virustotal job (owner-requested 2026-11-15)
+# submits the release's two files to VirusTotal's public API with the key
+# VIRUSTOTAL_API_KEY, and the virustotal-notes job, which has no key, adds each
+# file's SHA-256 and VirusTotal report link to the release notes. Links only,
+# never verdicts or counts; a file that VirusTotal flags is a warning for a
+# person to look at, never a failure, and a VirusTotal problem never touches the
+# published files.
 #
 # Signing and notarization (owner-requested 2026-11-07; Apple ID route and
 # ad-hoc fallback 2026-11-14) happen in the sign job, on main only, and only
@@ -86,6 +138,10 @@ on:
         description: Build, sign and check, but publish nothing
         type: boolean
         default: false
+      itch_release_tag:
+        description: Only push this published release to itch.io (its tag, such as build-001918-2026-11-16-1a2b3c4); build nothing
+        type: string
+        default: ""
 
 # Read-only everywhere; only the publish job may write (the release).
 permissions:
@@ -98,23 +154,129 @@ defaults:
 # Concurrency is per job, not per workflow: a newer push cancels an older run's
 # build or launch check, but never a publish that is under way.
 jobs:
+  changes:
+    name: Decide whether to build
+    # A push to main that changes only documentation (Markdown files, as
+    # tools/docs-only decides) builds and releases nothing: this job says so in
+    # a notice and the run's summary, and every other job shows as skipped. Any
+    # other push, and every run started by hand, builds. The changed files are
+    # GitHub's comparison of the commit before the push with the pushed one, so
+    # a push of several commits, merges among them, counts every file any of
+    # them changed. A comparison that fails or lists 300 files or more (GitHub
+    # lists no more) builds, and so does anything else this job cannot decide.
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    outputs:
+      build: ${{ steps.decide.outputs.build }}
+    steps:
+      - name: Check out tools/docs-only
+        if: github.event_name == 'push'
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/docs-only
+          sparse-checkout-cone-mode: false
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Decide from the files the push changed
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          build() {
+            echo "build=true" >> "${GITHUB_OUTPUT}"
+            echo "This run builds: $1."
+          }
+          if [ "${EVENT}" != push ]; then
+            build "it was started by hand"
+            exit 0
+          fi
+          if ! [[ "${BEFORE}" =~ ^[0-9a-f]{40}$ ]] || [[ "${BEFORE}" =~ ^0+$ ]]; then
+            build "the push has no earlier commit to compare with"
+            exit 0
+          fi
+          if [ ! -x tools/docs-only ]; then
+            build "tools/docs-only could not be checked out"
+            exit 0
+          fi
+          if ! gh api "repos/${GITHUB_REPOSITORY}/compare/${BEFORE}...${GITHUB_SHA}" > compare.json; then
+            build "GitHub's comparison of the push failed (above)"
+            exit 0
+          fi
+          status="$(jq -r .status compare.json)"
+          count="$(jq '.files // [] | length' compare.json)"
+          if [ "${status}" != ahead ] || [ "${count}" -ge 300 ]; then
+            build "GitHub's comparison of the push is \"${status}\" with ${count} files, not a step forward with under 300"
+            exit 0
+          fi
+          jq -r '.files // [] | .[] | .filename, (.previous_filename // empty)' compare.json > paths.txt
+          if ! verdict="$(tools/docs-only < paths.txt)"; then
+            build "${verdict}"
+            exit 0
+          fi
+          echo "build=false" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Not built: documentation only::This push changes only Markdown files (${count}), so nothing is built, released, pushed to itch.io or sent to VirusTotal. The next push with any other change builds."
+          {
+            echo "### Not built: documentation only"
+            echo ""
+            echo "This push changes only Markdown files, which nothing in the build or the game reads, so no build, release, itch.io push or VirusTotal upload runs. The next push with any other change builds, and its build number counts these commits too. To build anyway, start this workflow by hand on main."
+            echo ""
+            sed 's/^/- /' paths.txt
+          } >> "${GITHUB_STEP_SUMMARY}"
+
   build:
     name: Build
+    needs: [changes]
+    # A push of documentation alone builds nothing (the changes job). A run that
+    # only pushes an existing release to itch.io builds nothing either. With this
+    # job skipped so are sign, verify and publish.
+    if: ${{ !inputs.itch_release_tag && needs.changes.outputs.build == 'true' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 60
     # A group of its own: an older run's launch check, queued later, must not
     # cancel a newer run's build.
     concurrency:
-      group: mac-build-${{ github.ref }}
+      group: mac-build-${{ github.ref }}-${{ needs.changes.outputs.build }}
       cancel-in-progress: true
+    outputs:
+      # The release's tag and title use them (publish job).
+      build_number: ${{ steps.number.outputs.number }}
+      game_name: ${{ steps.number.outputs.game_name }}
     steps:
       - name: Check out without LFS (only evidence videos live there)
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           lfs: false
           persist-credentials: false
+          # The whole history, which the build number counts, without old file
+          # contents (on 2026-11-15 every commit and tree came to a few MB, every
+          # version of every file to about 2 GB). The checked-out files download
+          # as before.
+          fetch-depth: 0
+          filter: blob:none
         env:
           GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Work out the build number
+        id: number
+        # tools/build-number counts the commits in this commit's history and
+        # refuses a shallow clone. The release title also names the game, as
+        # project.godot's config/name does.
+        run: |
+          number="$(tools/build-number)" || { echo "::error::No build number (tools/build-number, above), so this build could not be published."; exit 1; }
+          name="$(sed -n 's/^config\/name="\([^"\\]*\)"$/\1/p' project.godot)"
+          if ! [[ "${number}" =~ ^[1-9][0-9]*$ ]] || [ -z "${name}" ] || [ "$(wc -l <<< "${name}")" -ne 1 ]; then
+            echo "::error::Expected a build number and one plain config/name=\"...\" line in project.godot; got \"${number}\" and \"${name}\"."
+            exit 1
+          fi
+          echo "number=${number}" >> "${GITHUB_OUTPUT}"
+          echo "game_name=${name}" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Build number::${name}, build ${number} (commit ${GITHUB_SHA:0:7})"
 
       - name: Install Weston and Mesa
         # The graphics packages of .devcontainer/post-create.sh. The static-world
@@ -189,6 +351,35 @@ jobs:
           compression-level: 0
           retention-days: 1
 
+      - name: Package the Linux build
+        # tools/build-mac.sh has just exported it from this commit, with the same
+        # sounds, audited its data pack and launched it. A player needs the
+        # executable and its .pck side by side in one folder; tar keeps the
+        # executable bit, which artifacts and plain zips can lose.
+        run: |
+          exes=(build/linux/*.x86_64)
+          [ "${#exes[@]}" -eq 1 ] && [ -f "${exes[0]}" ] || { echo "::error::expected one Linux executable in build/linux, found ${#exes[@]}"; exit 1; }
+          exe="${exes[0]}"
+          pck="${exe%.x86_64}.pck"
+          [ -f "${pck}" ] || { echo "::error::${pck} is missing: the Linux build needs its data pack beside the executable"; exit 1; }
+          folder=build/linux-package/treasure-island-linux
+          rm -rf build/linux-package
+          mkdir -p "${folder}"
+          cp "${exe}" "${pck}" "${folder}/"
+          chmod 0755 "${folder}/$(basename "${exe}")"
+          chmod 0644 "${folder}/$(basename "${pck}")"
+          tar -C build/linux-package -czf "build/linux-package/treasure-island-linux-$(git rev-parse --short HEAD).tar.gz" treasure-island-linux
+          tar -tvzf build/linux-package/treasure-island-linux-*.tar.gz
+
+      - name: Upload the Linux build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: linux-app
+          path: build/linux-package/treasure-island-linux-*.tar.gz
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
       - name: Disk use
         if: always()
         run: df -h / && du -sh .git . /opt/godot || true
@@ -205,7 +396,7 @@ jobs:
     timeout-minutes: 60
     environment: mac-signing
     concurrency:
-      group: mac-sign-${{ github.ref }}
+      group: mac-sign-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     outputs:
       # "true" only for the signed, notarized and stapled app. Otherwise the job
@@ -669,7 +860,7 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
-      group: mac-verify-${{ github.ref }}
+      group: mac-verify-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     steps:
       - name: Download the Mac app
@@ -777,36 +968,74 @@ jobs:
     concurrency:
       group: mac-publish
       cancel-in-progress: false
+    outputs:
+      # Set only once the release exists and the fixed links lead to it. The
+      # SHA-256 of each file as uploaded: the itch and VirusTotal jobs check
+      # their downloads against these.
+      tag: ${{ steps.release.outputs.tag }}
+      build_number: ${{ steps.release.outputs.build_number }}
+      mac_sha256: ${{ steps.release.outputs.mac_sha256 }}
+      linux_sha256: ${{ steps.release.outputs.linux_sha256 }}
     steps:
+      # For the head-of-main check below; without it that check counts any later
+      # commit on main as more than documentation.
+      - name: Check out tools/docs-only
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/docs-only
+          sparse-checkout-cone-mode: false
+          path: docs-only
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
+      - name: Download the Linux build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: linux-app
+
       - name: Publish this build as a new release
+        id: release
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           SIGN_RESULT: ${{ needs.sign.result }}
           NOTARIZED: ${{ needs.sign.outputs.notarized }}
           FALLBACK: ${{ needs.sign.outputs.fallback }}
+          BUILD_NUMBER: ${{ needs.build.outputs.build_number }}
+          GAME_NAME: ${{ needs.build.outputs.game_name }}
         # Each build gets a tag and release of its own, and nothing here replaces a
         # published build. gh uploads to a draft and then publishes it, so the fixed
         # link never reaches a release without its zip. If the reply to that publish
         # is lost, gh deletes the release it just published and the tag stays, so a
         # tag with no release stops the step for a person to look at.
         #
-        # Only the head of main publishes. An older build must not take the fixed
-        # link from a newer one. GitHub also refuses (HTTP 404 or 403) a release whose
-        # commit has .github/workflows files that differ from main's, unless the token
-        # may change workflows, and GITHUB_TOKEN never may. A commit that edits a
-        # workflow is fine while it is the head of main, because then it matches main.
-        # See https://docs.github.com/en/rest/releases/releases#create-a-release
+        # Only the newest build of main publishes: the head of main, or a commit
+        # after which main has changed only documentation, since a push of
+        # documentation alone builds nothing (the changes job). An older build must
+        # not take the fixed link from a newer one. GitHub also refuses (HTTP 404 or
+        # 403) a release whose commit has .github/workflows files that differ from
+        # main's, unless the token may change workflows, and GITHUB_TOKEN never may.
+        # A commit that edits a workflow is fine while it is the newest build,
+        # because then its workflows match main's (documentation never includes a
+        # workflow). See https://docs.github.com/en/rest/releases/releases#create-a-release
         #
-        # The release title and notes say whether the build is notarized, from
-        # fixed text for each fallback reason; nothing from Apple's tools reaches
-        # them. With MAC_SIGNING off they are as they were before signing existed.
+        # The tag and title carry the build number (build job), and the title the
+        # game's name. The title and notes say whether the build is notarized,
+        # from fixed text for each fallback reason; nothing from Apple's tools
+        # reaches them. With MAC_SIGNING off they say nothing about signing.
         run: |
+          if ! [[ "${BUILD_NUMBER}" =~ ^[1-9][0-9]*$ ]] || [ -z "${GAME_NAME}" ]; then
+            echo "::error::The build job gave no build number or game name, so this build has no tag or title; refusing to publish."
+            exit 1
+          fi
           signing=""
           title_extra=""
           if [ "${SIGN_RESULT}" = success ]; then
@@ -832,11 +1061,11 @@ jobs:
           api="repos/${GITHUB_REPOSITORY}"
           site="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases"
           # The commit's date, not today's: a re-run on a later day must find the same
-          # tag, and stop.
+          # tag, and stop. Six digits, so that tags sort by build number.
           committed="$(gh api "${api}/commits/${GITHUB_SHA}" --jq .commit.committer.date)"
           day="${committed%%T*}"
           short="${GITHUB_SHA:0:7}"
-          tag="mac-${day}-${short}"
+          tag="$(printf 'build-%06d-%s-%s' "${BUILD_NUMBER}" "${day}" "${short}")"
           if gh api "${api}/git/ref/tags/${tag}" --silent 2>/dev/null; then
             if lookup="$(gh api "${api}/releases/tags/${tag}" --silent 2>&1)"; then
               echo "::error::Tag ${tag} already exists, with its release. Stopping: a re-run never replaces a published build, and nothing was changed."
@@ -854,11 +1083,26 @@ jobs:
           fi
           head="$(gh api "${api}/commits/main" --jq .sha)"
           if [ "${head}" != "${GITHUB_SHA}" ]; then
-            echo "::notice::SKIP: ${GITHUB_SHA} is no longer the head of main (${head}); the newer run publishes if it passes."
-            exit 0
+            # What main has changed since this commit, from GitHub's comparison; one
+            # that fails or lists 300 files or more counts as more than documentation.
+            since=code
+            if gh api "${api}/compare/${GITHUB_SHA}...${head}" > later.json \
+              && [ "$(jq -r .status later.json)" = ahead ] && [ "$(jq '.files // [] | length' later.json)" -lt 300 ] \
+              && jq -r '.files // [] | .[] | .filename, (.previous_filename // empty)' later.json | docs-only/tools/docs-only; then
+              since=documentation
+            fi
+            if [ "${since}" != documentation ]; then
+              echo "::notice::SKIP: ${GITHUB_SHA} is no longer the head of main (${head}), and main has changed more than documentation since; the newer run publishes if it passes."
+              exit 0
+            fi
+            echo "main is at ${head}, but has changed only documentation since ${GITHUB_SHA}, so this is still the newest build and it publishes."
           fi
           mv treasure-island-mac-*.zip "${name}"
-          notes="Built from commit ${GITHUB_SHA} (committed ${committed}) by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ)."
+          linux_name=treasure-island-linux.tar.gz
+          mv treasure-island-linux-*.tar.gz "${linux_name}"
+          mac_sha256="$(sha256sum "${name}" | cut -d' ' -f1)"
+          linux_sha256="$(sha256sum "${linux_name}" | cut -d' ' -f1)"
+          notes="${GAME_NAME}, build ${BUILD_NUMBER}: commit ${GITHUB_SHA} (committed ${committed}), built by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ). The build number counts the commits in main's history, so a newer build always has a larger one."
           if [ -n "${signing}" ]; then
             notes="${notes}
 
@@ -867,9 +1111,11 @@ jobs:
           notes="${notes}
 
           The newest build is always at ${site}/latest/download/${name}
-          For the first launch, see Build for the Mac in the README."
-          title="Mac build ${day} (${short}${title_extra})"
-          gh release create "${tag}" "${name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
+          For the first launch, see Build for the Mac in the README.
+
+          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder. The newest is always at ${site}/latest/download/${linux_name}"
+          title="${GAME_NAME}, build ${BUILD_NUMBER} (${day}, ${short}${title_extra})"
+          gh release create "${tag}" "${name}" "${linux_name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
             echo "::error::Publishing ${tag} failed, so the previous build normally stays at the fixed link. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
@@ -877,6 +1123,12 @@ jobs:
           for _ in $(seq 12); do
             if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
               echo "Published ${site}/tag/${tag}"
+              {
+                echo "tag=${tag}"
+                echo "build_number=${BUILD_NUMBER}"
+                echo "mac_sha256=${mac_sha256}"
+                echo "linux_sha256=${linux_sha256}"
+              } >> "${GITHUB_OUTPUT}"
               {
                 echo "### Published ${tag}: ${title}"
                 echo ""
@@ -888,3 +1140,727 @@ jobs:
           done
           echo "::error::${tag} is published, but the fixed link does not lead to it."
           exit 1
+
+  itch:
+    name: Publish to itch.io
+    needs: [publish]
+    # After a release on main, or by hand on main for a published release (input
+    # itch_release_tag), never on a dry run. Never on another branch, so never for
+    # a pull request or a fork. The API key is the secret BUTLER_API_KEY of the
+    # environment itch, whose deployment branch rule admits only main, and only
+    # the butler steps see it. The first step lets the job go on only while that
+    # rule stands: GitHub creates a missing environment, with no rule and no
+    # secret, the first time a job names it, and then this job pushes nothing and
+    # says why. A failure here never touches the GitHub release: continue-on-error
+    # keeps the run green, and the job reports what failed.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
+    runs-on: macos-26
+    timeout-minutes: 150
+    continue-on-error: true
+    environment: itch
+    permissions:
+      contents: read
+      # Only to read the environment's deployment branch rule.
+      actions: read
+    concurrency:
+      group: itch-publish
+      cancel-in-progress: false
+    env:
+      # The page as butler names it, user/game (https://phppco.itch.io/grand-treasure-island).
+      # Every butler step and message takes it from here.
+      ITCH_TARGET: phppco/grand-treasure-island
+    steps:
+      - name: Check the release tag, the API key and the environment
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.publish.outputs.tag || inputs.itch_release_tag }}
+          # Only whether the secret is set, never its value.
+          HAS_BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY != '' }}
+        # The tag is checked before anything prints it. The version on itch.io is
+        # the build number in the tag; a release from before build numbers has
+        # its date and commit instead, as in its mac-<date>-<commit> tag.
+        run: |
+          if [[ "${TAG}" =~ ^build-([0-9]{6,})-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]{7}$ ]]; then
+            version="$((10#${BASH_REMATCH[1]}))"
+          elif [[ "${TAG}" =~ ^mac-[0-9]{4}-[0-9]{2}-[0-9]{2}-[0-9a-f]{7}$ ]]; then
+            version="${TAG#mac-}"
+          else
+            echo "::error title=itch.io::The release tag is not one such as build-001918-2026-11-16-1a2b3c4 (or an older mac-2026-11-15-c9746e7), so nothing was pushed."
+            exit 1
+          fi
+          echo "tag=${TAG}" >> "${GITHUB_OUTPUT}"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+          if [ "${HAS_BUTLER_API_KEY}" != true ]; then
+            echo "::notice title=itch.io::No BUTLER_API_KEY secret is set, so nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (no BUTLER_API_KEY secret)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          # The environment's rule, from the API: custom branch rules, exactly one,
+          # for the branch main.
+          custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
+          rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=itch.io::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
+            echo "::warning title=itch.io::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          echo "enabled=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Download the release's builds
+        id: builds
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.check.outputs.tag }}
+          # What the publish job uploaded. Empty in a run by hand, which checks
+          # against the SHA-256 GitHub recorded at upload instead.
+          PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
+          PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
+        run: |
+          mkdir release
+          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
+          for file in release/*; do
+            name="$(basename "${file}")"
+            actual="$(shasum -a 256 "${file}" | cut -d' ' -f1)"
+            echo "${name}: SHA-256 ${actual}"
+            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+            source="the publish job uploaded"
+            if [ -z "${expected}" ]; then
+              recorded="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq ".assets[] | select(.name == \"${name}\") | .digest")"
+              expected="${recorded#sha256:}"
+              source="GitHub recorded"
+            fi
+            if [ -z "${expected}" ] || [ "${expected}" = null ]; then
+              echo "::warning::GitHub recorded no digest for ${name}, so the download could not be checked."
+            elif [ "${expected}" != "${actual}" ]; then
+              echo "::error::${name} is not the file ${source} (SHA-256 ${expected})."
+              exit 1
+            fi
+          done
+          [ -f release/treasure-island-mac.zip ] || { echo "::error::${TAG} has no treasure-island-mac.zip."; exit 1; }
+          if [ -f release/treasure-island-linux.tar.gz ]; then
+            echo "linux=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::notice title=itch.io::${TAG} has no Linux build (releases before the Linux package have none), so the linux channel gets nothing."
+          fi
+
+      - name: Install butler
+        id: butler
+        if: steps.builds.outcome == 'success'
+        env:
+          # itch's own build from broth (https://itch.io/docs/butler/installing.html).
+          # itch publishes no checksum for it: this SHA-256 is of the 15.32.0
+          # archive as broth served it on 2026-11-15, whose butler executable and
+          # 7-zip libraries are byte-identical to those in the v15.32.0 release of
+          # github.com/itchio/butler, for which GitHub records the zip's digest.
+          BUTLER_VERSION: "15.32.0"
+          BUTLER_SHA256: f1c460f08c02686b49f8da74344e5578ece9ea1a8bae1779445b5d98e0a794b3
+        run: |
+          dir="${RUNNER_TEMP}/butler"
+          mkdir -p "${dir}"
+          curl -fsSL --retry 3 -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-arm64/${BUTLER_VERSION}/archive/default"
+          echo "${BUTLER_SHA256}  ${dir}/butler.zip" | shasum -a 256 -c -
+          unzip -q -o "${dir}/butler.zip" -d "${dir}"
+          chmod 0755 "${dir}/butler"
+          "${dir}/butler" version
+          echo "${dir}" >> "${GITHUB_PATH}"
+          # push-when-ready DIR TARGET:CHANNEL VERSION pushes with butler. itch.io
+          # refuses a new build on a channel while that channel's latest build is
+          # still processing ("…: channel mac's latest build is still processing,
+          # try again later"); processing a large build can take around 30 minutes
+          # (https://itch.io/docs/butler/pushing.html). That answer is tried again
+          # once a minute for up to 30 minutes; any other failure stops at once.
+          # With --if-changed, butler pushes nothing when the files equal the
+          # channel's latest processed build ("No changes and --if-changed used,
+          # not pushing anything", butler 15.32.0); the step's output skipped=true
+          # then says so, since no build of this version will appear.
+          cat > "${dir}/push-when-ready" <<'SH'
+          #!/usr/bin/env bash
+          set -uo pipefail
+          tries=31
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            butler push "$1" "$2" --userversion "$3" --if-changed 2>&1 | tee push.log || status=$?
+            if [ "${status}" -eq 0 ]; then
+              if grep -q "No changes and --if-changed used" push.log; then
+                echo "skipped=true" >> "${GITHUB_OUTPUT}"
+              fi
+              exit 0
+            fi
+            if ! grep -q "latest build is still processing" push.log; then exit "${status}"; fi
+            if [ "${attempt}" -eq "${tries}" ]; then
+              echo "itch.io was still processing the channel's previous build after 30 minutes, so this build was not pushed."
+              exit "${status}"
+            fi
+            echo "itch.io is still processing the channel's previous build; trying again in a minute (attempt ${attempt} of ${tries})."
+            sleep 60
+          done
+          SH
+          chmod 0755 "${dir}/push-when-ready"
+
+      - name: Stage the Mac app and check its signature
+        id: mac
+        if: steps.builds.outcome == 'success'
+        # What is pushed is this folder, exactly: the app as ditto unpacks it from
+        # the release zip, checked with codesign here, notarized or not (owner,
+        # 2026-11-15: the itch app is the route for the build that is not). A
+        # signature that fails the check stops the Mac push. butler keeps symlinks
+        # and permissions and only adds missing execute bits to executables
+        # (https://itch.io/docs/itch/integrating/platforms/macos.html).
+        run: |
+          ditto -x -k release/treasure-island-mac.zip stage/mac
+          apps=(stage/mac/*.app)
+          [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in the Mac zip"; exit 1; }
+          [ "$(find stage/mac -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1 ] || { echo "::error::the Mac zip holds more than the app"; exit 1; }
+          codesign --verify --deep --strict --verbose=2 "${apps[0]}"
+          # A list of what is pushed, to compare with what itch.io serves later:
+          # each file's path, SHA-256 and whether it is executable, and each link's
+          # target. Other permission bits are left out, so that itch.io normalising
+          # them is no difference.
+          cat > "${RUNNER_TEMP}/manifest.py" <<'PY'
+          import hashlib, os, stat, sys
+          root = sys.argv[1]
+          for top, dirs, files in os.walk(root):
+              dirs.sort()
+              for name in sorted(dirs) + sorted(files):
+                  path = os.path.join(top, name)
+                  info = os.lstat(path)
+                  rel = os.path.relpath(path, root)
+                  if stat.S_ISLNK(info.st_mode):
+                      print("link", os.readlink(path), rel)
+                  elif stat.S_ISDIR(info.st_mode):
+                      print("dir ", rel)
+                  else:
+                      executable = "x" if info.st_mode & 0o111 else "-"
+                      digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
+                      print("file", executable, digest, rel)
+          PY
+          python3 -I "${RUNNER_TEMP}/manifest.py" stage/mac > mac-pushed.txt
+          cat mac-pushed.txt
+
+      - name: Push the Mac app to itch.io
+        id: push_mac
+        if: steps.mac.outcome == 'success'
+        timeout-minutes: 40
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.check.outputs.version }}
+        run: push-when-ready stage/mac "${ITCH_TARGET}:mac" "${VERSION}"
+
+      # The linux channel does not depend on the mac one: these steps run even
+      # when the Mac app's check or push failed.
+      - name: Stage the Linux build
+        id: linux
+        if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.linux == 'true' }}
+        run: |
+          mkdir -p stage/linux
+          tar -xzf release/treasure-island-linux.tar.gz -C stage/linux
+          folder=stage/linux/treasure-island-linux
+          exes=("${folder}"/*.x86_64)
+          [ "${#exes[@]}" -eq 1 ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
+          [ -f "${exes[0]%.x86_64}.pck" ] || { echo "::error::the Linux package lacks the .pck beside its executable"; exit 1; }
+          ls -l "${folder}"
+
+      - name: Push the Linux build to itch.io
+        id: push_linux
+        if: ${{ !cancelled() && steps.linux.outcome == 'success' }}
+        timeout-minutes: 40
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.check.outputs.version }}
+        run: push-when-ready stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" "${VERSION}"
+
+      - name: Check the Mac app itch.io serves
+        id: served
+        if: ${{ !cancelled() && steps.push_mac.outcome == 'success' }}
+        timeout-minutes: 55
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.check.outputs.version }}
+          SKIPPED: ${{ steps.push_mac.outputs.skipped }}
+        # itch.io serves a build only once it has processed it, which for a large
+        # build can take around 30 minutes (https://itch.io/docs/butler/pushing.html);
+        # until then it serves the channel's previous build, or, for a channel's
+        # first build, answers "invalid channel" (seen on 2026-11-16, build 1929).
+        # So this step asks butler status, once a minute for up to 45 minutes,
+        # until the channel's latest processed build is the one pushed: its user
+        # version is this release's version and its state "completed" (butler
+        # 15.32.0's --json status gives both). Only then does butler fetch download
+        # it, to pass codesign and match what was pushed, file for file. When the
+        # time runs out the warning says what itch.io serves meanwhile. When butler
+        # pushed nothing because the files were unchanged, no build of this version
+        # will appear, so the step takes the channel's processed build, whatever
+        # its version, as the one to check, and says if a build is pending. A
+        # mismatch or a timeout is reported, not a failure: the push itself
+        # succeeded. The output head names the version itch.io serves.
+        run: |
+          tries=45
+          if [ "${SKIPPED}" = true ]; then tries=3; fi
+          live=""
+          seen=""
+          pending=""
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            answer="$(butler --json status "${ITCH_TARGET}" 2>&1)" || status=$?
+            channel="$(jq -R -c 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "mac")' <<< "${answer}" | tail -n 1)"
+            head="$(jq -r '.head // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            pending="$(jq -r '.pending // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            linux_head="$(jq -R -r 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "linux") | .head.userVersion // empty' <<< "${answer}" | tail -n 1)"
+            if [ "${status}" -eq 0 ] && [ "${head}" = "${VERSION} completed" ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ] && [ "${SKIPPED}" = true ] && [ "${head##* }" = completed ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ]; then
+              seen="${head}"
+              echo "Attempt ${attempt}: the mac channel's latest processed build is ${head:-none yet}${pending:+; pending: ${pending}}."
+            else
+              echo "Attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            fi
+            if [ "${attempt}" -lt "${tries}" ]; then sleep 60; fi
+          done
+          state="The build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}."
+          echo "linux_head=${linux_head}" >> "${GITHUB_OUTPUT}"
+          if [ -z "${live}" ]; then
+            if [ -n "${seen}" ]; then
+              why="itch.io still serves another build, version ${seen% *}${pending:+, while version ${pending% *} is ${pending##* }}"
+            elif [ "${status}" -eq 0 ]; then
+              why="itch.io was still processing it (the channel has no processed build yet)"
+            else
+              case "${answer}" in
+                *"invalid target"*) why="itch.io did not recognise ${ITCH_TARGET} (a renamed account or game page?)" ;;
+                *) why="butler status kept failing (its last answer is above)" ;;
+              esac
+            fi
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler pushed nothing for the Mac build (version ${VERSION}), as its files equal the mac channel's processed build, but that build could not be checked: ${why}. ${state}"
+            else
+              echo "::warning title=itch.io::The Mac build (version ${VERSION}) was pushed, but itch.io did not serve it within 45 minutes: ${why}. ${state} The app it serves was not checked."
+            fi
+            echo "check=not-done" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          served_version="${head% *}"
+          echo "head=${served_version}" >> "${GITHUB_OUTPUT}"
+          if [ "${SKIPPED}" = true ] && [ -n "${pending}" ]; then
+            echo "::notice title=itch.io::The mac channel also has version ${pending% *} ${pending##* }; until it is done itch.io serves version ${served_version}, which the files of version ${VERSION} equal."
+          fi
+          fetched=""
+          for attempt in 1 2 3; do
+            rm -rf served
+            status=0
+            answer="$(butler fetch "${ITCH_TARGET}:mac" served 2>&1)" || status=$?
+            if [ "${status}" -eq 0 ]; then fetched=yes; break; fi
+            echo "Fetch attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            if [ "${attempt}" -lt 3 ]; then sleep 30; fi
+          done
+          if [ -z "${fetched}" ]; then
+            echo "::warning title=itch.io::itch.io serves version ${served_version} of the Mac build, but butler fetch could not download it (its last answer is above), so the app it serves was not checked."
+            echo "check=not-done" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          apps=(served/*.app)
+          if [ "${#apps[@]}" -eq 1 ] && codesign --verify --deep --strict --verbose=2 "${apps[0]}"; then
+            signature=ok
+          else
+            signature=failed
+          fi
+          python3 -I "${RUNNER_TEMP}/manifest.py" served > mac-served.txt
+          if [ "${signature}" = ok ] && diff mac-pushed.txt mac-served.txt; then
+            echo "check=same" >> "${GITHUB_OUTPUT}"
+            echo "The Mac app itch.io serves as version ${served_version} is, file for file, the one of version ${VERSION}, and passes codesign --verify --deep --strict."
+          else
+            echo "check=different" >> "${GITHUB_OUTPUT}"
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler found no changes and pushed nothing, yet the Mac app itch.io serves as version ${served_version} differs from version ${VERSION}'s (codesign: ${signature}; differences above). ${state}"
+            else
+              echo "::warning title=itch.io::The Mac app itch.io serves as version ${VERSION} differs from the one pushed (codesign: ${signature}; differences above), unless a newer push replaced it since. ${state}"
+            fi
+          fi
+
+      - name: Report
+        if: always()
+        env:
+          CHECK: ${{ steps.check.outcome }}
+          ENABLED: ${{ steps.check.outputs.enabled }}
+          TAG: ${{ steps.check.outputs.tag }}
+          VERSION: ${{ steps.check.outputs.version }}
+          BUILDS: ${{ steps.builds.outcome }}
+          LINUX: ${{ steps.builds.outputs.linux }}
+          PUSH_MAC: ${{ steps.push_mac.outcome }}
+          PUSH_LINUX: ${{ steps.push_linux.outcome }}
+          MAC_SKIPPED: ${{ steps.push_mac.outputs.skipped }}
+          LINUX_SKIPPED: ${{ steps.push_linux.outputs.skipped }}
+          MAC_HEAD: ${{ steps.served.outputs.head }}
+          LINUX_HEAD: ${{ steps.served.outputs.linux_head }}
+          SERVED: ${{ steps.served.outputs.check }}
+        # Prints only the tag the first step accepted. A channel that butler left
+        # alone (its files equal the channel's processed build) keeps showing that
+        # build's version on itch.io; the report names both.
+        run: |
+          if [ "${CHECK}" != success ]; then
+            echo "### itch.io: nothing pushed (the release tag was not accepted)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 1
+          fi
+          [ "${ENABLED}" = true ] || exit 0
+          {
+            echo "### itch.io: ${ITCH_TARGET}, version ${VERSION}, for ${TAG}"
+            echo ""
+            if [ "${MAC_SKIPPED}" = true ]; then
+              echo "- mac channel: unchanged since version ${MAC_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)${SERVED:+; the app itch.io serves: ${SERVED}}"
+            else
+              echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
+            fi
+            if [ "${LINUX}" = true ] && [ "${LINUX_SKIPPED}" = true ]; then
+              echo "- linux channel: unchanged since version ${LINUX_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)"
+            elif [ "${LINUX}" = true ]; then
+              echo "- linux channel: ${PUSH_LINUX:-not pushed}"
+            else
+              echo "- linux channel: not pushed (no Linux build in this release)"
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"
+          failed=no
+          [ "${BUILDS}" = success ] || failed=yes
+          [ "${PUSH_MAC}" = success ] || failed=yes
+          [ "${LINUX}" != true ] || [ "${PUSH_LINUX}" = success ] || failed=yes
+          if [ "${failed}" = yes ]; then
+            echo "::error title=itch.io::Pushing to itch.io failed (see the steps above). The GitHub release is complete and unaffected. To try again, start this workflow by hand on main with itch_release_tag=${TAG}."
+            exit 1
+          fi
+
+  virustotal:
+    name: Scan on VirusTotal
+    needs: [publish]
+    # After a release on main; never on a dry run, another branch, a pull request
+    # or a fork. Submits the release's own files to VirusTotal's public API. The
+    # key is the secret VIRUSTOTAL_API_KEY of the environment itch (deployment
+    # branch main only), seen only by the two VirusTotal steps; as in the itch job,
+    # the first step lets the job go on only while that rule stands. This job may
+    # not write: the job after it puts each file's SHA-256 and report link into the
+    # release notes, without the key. Detections, timeouts, quota limits and
+    # outages never fail the run or touch the published files (continue-on-error);
+    # the job reports them.
+    #
+    # VirusTotal's terms, as they stood on 2026-11-15: the public API is for
+    # non-commercial use, at most 4 requests a minute and 500 a day, in workflows
+    # that contribute new files (https://docs.virustotal.com/reference/public-vs-premium-api);
+    # uploaded files are shared with VirusTotal's partners and premium customers,
+    # so only these already public release files are sent; results may not be
+    # passed on to third parties or publicly attributed to a named engine vendor
+    # (Google SecOps service terms, section 3, https://cloud.google.com/terms/secops/service-terms).
+    # So the notes and this job's summary carry links to VirusTotal's own reports,
+    # never verdicts or counts.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      needs.publish.outputs.tag != '' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 45
+    continue-on-error: true
+    environment: itch
+    permissions:
+      contents: read
+      # Only to read the environment's deployment branch rule.
+      actions: read
+    concurrency:
+      group: virustotal
+      cancel-in-progress: false
+    outputs:
+      # One line per file, for the notes job: its name, SHA-256, whether it was
+      # submitted (submitted, known, quota or failed) and whether its analysis
+      # completed (completed, running or -).
+      results: ${{ steps.results.outputs.results }}
+    steps:
+      - name: Check the API key and the environment
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+          # Only whether the secret is set, never its value.
+          HAS_VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY != '' }}
+        run: |
+          if [ "${HAS_VIRUSTOTAL_API_KEY}" != true ]; then
+            echo "::notice title=VirusTotal::No VIRUSTOTAL_API_KEY secret is set, so the release is not submitted to VirusTotal."
+            echo "### VirusTotal: skipped (no VIRUSTOTAL_API_KEY secret)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          # The environment's rule, from the API: custom branch rules, exactly one,
+          # for the branch main.
+          custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
+          rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=VirusTotal::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to VirusTotal. The release is complete."
+            echo "### VirusTotal: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
+            echo "::warning title=VirusTotal::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to VirusTotal. The release is complete."
+            echo "### VirusTotal: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          echo "enabled=true" >> "${GITHUB_OUTPUT}"
+
+      - name: Download the release's files
+        id: files
+        if: steps.check.outputs.enabled == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.publish.outputs.tag }}
+          PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
+          PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
+        # Exactly the published files, each checked against the SHA-256 the
+        # publish job computed before uploading it; nothing else is ever uploaded.
+        run: |
+          mkdir release
+          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
+          for name in treasure-island-mac.zip treasure-island-linux.tar.gz; do
+            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+            actual="$(sha256sum "release/${name}" | cut -d' ' -f1)"
+            if [ -z "${expected}" ] || [ "${actual}" != "${expected}" ]; then
+              echo "::error::${name} is not the file the publish job uploaded (SHA-256 ${expected:-unknown})."
+              exit 1
+            fi
+            echo "${name} ${actual}"
+          done | tee files.txt
+
+      - name: Submit the files to VirusTotal
+        id: submit
+        if: steps.files.outcome == 'success'
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        # One request at a time, at most four a minute. The key goes to curl on
+        # standard input (-H @-), never on its command line, and only ever over
+        # https to virustotal.com or a host under it. A file VirusTotal already has
+        # is not uploaded again. Results go to results.txt: name, SHA-256, state
+        # (submitted, known, quota, refused or failed), analysis id.
+        #
+        # A file over 32 MB goes to the address GET /files/upload_url returns.
+        # VirusTotal's reference for it (docs.virustotal.com/reference/files-upload-url,
+        # updated 2026-09-24) shows http://www.virustotal.com/_ah/upload/..., and says
+        # the upload has the format of POST /files, whose x-apikey header is required;
+        # VirusTotal's own clients (vt-py, vt-go) send the key there too, so it goes
+        # with the file. The address is accepted when it is https (or http, sent over
+        # https), has no user name and no port, and its host is virustotal.com or a
+        # host under it, matched whole label by label: every host under
+        # virustotal.com is VirusTotal's own, the party the key belongs to, and the
+        # check exists to keep the key from a third party named in a tampered
+        # reply. curl then speaks https alone and follows no redirect. Any other
+        # address is refused. Either way the address's scheme and host (never its
+        # path or query, which carry a signed upload token) are printed.
+        run: |
+          api=https://www.virustotal.com/api/v3
+          last=0
+          # vt METHOD URL [curl arguments]: the reply goes to reply.json, the HTTP
+          # status to ${code}; 000 means no answer at all.
+          vt() {
+            local wait=$(( last + 16 - $(date +%s) ))
+            if [ "${wait}" -gt 0 ]; then sleep "${wait}"; fi
+            last="$(date +%s)"
+            code="$(printf 'x-apikey: %s\n' "${VIRUSTOTAL_API_KEY}" | curl -sS --max-time 900 -o reply.json -w '%{http_code}' -H @- -X "$1" "$2" "${@:3}")" || code=000
+          }
+          state_of() { # an HTTP status that is not a success
+            if [ "$1" = 429 ]; then echo quota; else echo failed; fi
+          }
+          : > results.txt
+          while read -r name sha; do
+            vt GET "${api}/files/${sha}"
+            if [ "${code}" = 200 ]; then
+              jq -c '.data.attributes.last_analysis_stats' reply.json > "stats-${sha}.json"
+              echo "${name} ${sha} known -" >> results.txt
+              continue
+            elif [ "${code}" != 404 ]; then
+              echo "::warning title=VirusTotal::Looking up ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            vt GET "${api}/files/upload_url"
+            url="$(jq -r '.data // empty' reply.json 2>/dev/null || true)"
+            if [ "${code}" != 200 ] || [ -z "${url}" ]; then
+              echo "::warning title=VirusTotal::Getting an upload address for ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            if [[ "${url}" =~ ^([A-Za-z][A-Za-z0-9+.-]*)://([A-Za-z0-9.-]+)(:[0-9]+)?(/|\?|$) ]]; then
+              where="${BASH_REMATCH[1]}://${BASH_REMATCH[2]}${BASH_REMATCH[3]}"
+            else
+              where="an address not of the form scheme://host/"
+            fi
+            echo "VirusTotal's upload address for ${name} is on ${where}."
+            accepted=""
+            if [[ "${url}" =~ ^(https?)://([A-Za-z0-9.-]+)(/.*)?$ ]]; then
+              scheme="${BASH_REMATCH[1]}"
+              host="${BASH_REMATCH[2],,}"
+              if [[ "${host}" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)*virustotal\.com$ ]]; then
+                accepted=yes
+                if [ "${scheme}" = http ]; then url="https://${url#http://}"; fi
+              fi
+            fi
+            if [ -z "${accepted}" ]; then
+              echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is on ${where}, not https on virustotal.com or a host under it with no user name or port, so neither the file nor the key was sent there."
+              echo "${name} ${sha} refused -" >> results.txt
+              continue
+            fi
+            vt POST "${url}" --proto =https -F "file=@release/${name}"
+            analysis="$(jq -r '.data.id // empty' reply.json 2>/dev/null || true)"
+            if [ "${code}" != 200 ] || [ -z "${analysis}" ]; then
+              echo "::warning title=VirusTotal::Uploading ${name} failed (HTTP ${code})."
+              echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
+              continue
+            fi
+            echo "${name} ${sha} submitted ${analysis}" >> results.txt
+          done < files.txt
+          cat results.txt
+
+      - name: Wait for VirusTotal's analyses
+        id: wait
+        if: steps.submit.outcome == 'success'
+        timeout-minutes: 25
+        env:
+          VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
+        # Asks about each unfinished analysis about once a minute, for up to 20
+        # minutes. An analysis still running then stays unfinished here; its
+        # report on VirusTotal completes on its own.
+        run: |
+          api=https://www.virustotal.com/api/v3
+          last=0
+          vt() {
+            local wait=$(( last + 16 - $(date +%s) ))
+            if [ "${wait}" -gt 0 ]; then sleep "${wait}"; fi
+            last="$(date +%s)"
+            code="$(printf 'x-apikey: %s\n' "${VIRUSTOTAL_API_KEY}" | curl -sS --max-time 120 -o reply.json -w '%{http_code}' -H @- -X "$1" "$2" "${@:3}")" || code=000
+          }
+          deadline=$(( $(date +%s) + 1200 ))
+          while :; do
+            pending=0
+            while read -r name sha state analysis; do
+              [ "${state}" = submitted ] && [ ! -f "stats-${sha}.json" ] || continue
+              vt GET "${api}/analyses/${analysis}"
+              status="$(jq -r '.data.attributes.status // empty' reply.json 2>/dev/null || true)"
+              if [ "${code}" = 200 ] && [ "${status}" = completed ]; then
+                jq -c '.data.attributes.stats' reply.json > "stats-${sha}.json"
+                echo "${name}: analysis completed"
+              else
+                pending=$((pending + 1))
+                echo "${name}: ${status:-HTTP ${code}}"
+              fi
+            done < results.txt
+            if [ "${pending}" -eq 0 ] || [ "$(date +%s)" -ge "${deadline}" ]; then break; fi
+            sleep 30
+          done
+
+      - name: Report
+        id: results
+        if: always() && steps.files.outcome == 'success'
+        env:
+          TAG: ${{ needs.publish.outputs.tag }}
+          BUILD_NUMBER: ${{ needs.publish.outputs.build_number }}
+        # Links only, as VirusTotal shows them; no verdicts or counts. A file that
+        # any engine flags as malicious or suspicious gets a warning without
+        # numbers, for a person to look at (game engines' export templates do get
+        # false positives); it never fails the run. The same lines go to the notes
+        # job as this job's output.
+        run: |
+          # Every downloaded file gets a line, even when the submit step stopped part
+          # way: a file with no result counts as failed.
+          touch results.txt
+          while read -r name sha; do
+            grep -m 1 -F "${name} ${sha} " results.txt || echo "${name} ${sha} failed -"
+          done < files.txt > merged.txt
+          : > lines.txt
+          {
+            echo "### VirusTotal for build ${BUILD_NUMBER} (${TAG})"
+            echo ""
+          } >> "${GITHUB_STEP_SUMMARY}"
+          while read -r name sha state _; do
+            link="https://www.virustotal.com/gui/file/${sha}"
+            analysis=-
+            case "${state}" in
+              submitted | known)
+                if [ -f "stats-${sha}.json" ]; then analysis=completed; said="analysis completed"; else analysis=running; said="analysis still running"; fi ;;
+              quota) said="not submitted: VirusTotal's daily request limit was reached" ;;
+              refused) said="not submitted: the upload address was not accepted" ;;
+              *) said="not submitted: VirusTotal could not be reached" ;;
+            esac
+            echo "- [${name}](${link}): ${said}" >> "${GITHUB_STEP_SUMMARY}"
+            if [ "${analysis}" = completed ] && [ "$(jq -r '(.malicious // 0) + (.suspicious // 0)' "stats-${sha}.json")" -gt 0 ]; then
+              echo "::warning title=VirusTotal::VirusTotal flags ${name} of build ${BUILD_NUMBER}; a person should look before anyone relies on it (game engine builds do get false positives): ${link}"
+            fi
+            echo "${name} ${sha} ${state} ${analysis}" >> lines.txt
+          done < merged.txt
+          {
+            echo "results<<VIRUSTOTAL_RESULTS"
+            cat lines.txt
+            echo "VIRUSTOTAL_RESULTS"
+          } >> "${GITHUB_OUTPUT}"
+          cat lines.txt
+
+  virustotal-notes:
+    name: Add the VirusTotal links to the release notes
+    needs: [publish, virustotal]
+    # Writes what the VirusTotal job found into the release notes. It sees no
+    # secret: only this job may write (the release notes), and it never gets the
+    # key. Never on a dry run, another branch, a pull request or a fork.
+    if: >-
+      ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
+      needs.publish.outputs.tag != '' && needs.virustotal.outputs.results != '' }}
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    continue-on-error: true
+    permissions:
+      contents: write
+    steps:
+      - name: Add the VirusTotal section to the release notes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.publish.outputs.tag }}
+          RESULTS: ${{ needs.virustotal.outputs.results }}
+        # Every file gets its SHA-256 and VirusTotal's report link by that hash,
+        # with a fixed note on its state; no verdicts. A result line in any other
+        # form changes nothing. Re-running replaces the section instead of adding
+        # a second one.
+        run: |
+          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
+          while read -r line; do
+            [ -n "${line}" ] || continue
+            if ! [[ "${line}" =~ ${pattern} ]]; then
+              echo "::error title=VirusTotal::A result from the VirusTotal job is not in the expected form, so the release notes of ${TAG} were not changed."
+              exit 1
+            fi
+          done <<< "${RESULTS}"
+          {
+            echo "VirusTotal reports, by each file's SHA-256 (submitted after publishing):"
+            while read -r name sha state analysis; do
+              [ -n "${name}" ] || continue
+              case "${state}:${analysis}" in
+                *:completed) note="" ;;
+                submitted:* | known:*) note=" (the analysis was still running when this was written; the report completes on its own)" ;;
+                quota:*) note=" (not submitted: VirusTotal's daily request limit was reached; the link finds the file once anyone submits it)" ;;
+                refused:*) note=" (not submitted: the upload address was not accepted; the link finds the file once anyone submits it)" ;;
+                *) note=" (not submitted: VirusTotal could not be reached; the link finds the file once anyone submits it)" ;;
+              esac
+              echo "- ${name}: SHA-256 ${sha}, https://www.virustotal.com/gui/file/${sha}${note}"
+            done <<< "${RESULTS}"
+          } > section.md
+          gh release view "${TAG}" --json body --jq .body > body.md
+          # Drop an earlier VirusTotal section (the last paragraph of the notes).
+          python3 -I - body.md <<'PY'
+          import sys
+          path = sys.argv[1]
+          text = open(path).read().rstrip("\n")
+          marker = "\n\nVirusTotal reports, by each file's SHA-256"
+          if marker in text:
+              text = text[:text.index(marker)]
+          open(path, "w").write(text + "\n\n")
+          PY
+          cat section.md >> body.md
+          if ! gh release edit "${TAG}" --notes-file body.md > /dev/null; then
+            echo "::error title=VirusTotal::The VirusTotal section could not be added to the release notes of ${TAG}. The release itself is complete and unaffected."
+            exit 1
+          fi
+          cat section.md

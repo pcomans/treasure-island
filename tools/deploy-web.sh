@@ -12,6 +12,8 @@
 #
 # Only a clean checkout whose HEAD is origin/main is deployed. To try the script
 # on a branch, --dry-run --any-commit skips that one check; a real deploy never does.
+# The PASS line names the commit's build number (tools/build-number, the same as
+# on its GitHub release); a shallow clone has none, so it stops the deploy.
 #
 # Sounds: the build fetches the game's sounds from the private source named by
 # TI_SFX_SOURCE (tools/sfx/README.md), so every deploy sets it. Before anything
@@ -31,7 +33,12 @@ cd "${root}"
 # npm/node live here in the devcontainer (node feature); non-login shells lack it.
 export PATH="/usr/local/share/nvm/current/bin:${PATH}"
 
+# The Vercel project and its team, by name and by id (`vercel teams ls --json`
+# lists the team's id; the link, build/web/.vercel/project.json, holds both ids).
+team=philippcomans-1463
+team_id=team_kFFTY651JGRsGcm8IFDga6hK
 project=treasure-island
+project_id=prj_hGqh6hLgWlSxrmMZ5ZfffePpYv1z
 # The pinned CLI with only the saved login and build/web's own link: no token,
 # team or project taken from the environment, and never the sound source's token.
 vercel=(env -u VERCEL_TOKEN -u VERCEL_ORG_ID -u VERCEL_PROJECT_ID -u NOW_ORG_ID -u NOW_PROJECT_ID
@@ -160,35 +167,39 @@ if [ "${head}" != "${main}" ]; then
   fi
   echo "NOTE: --any-commit: HEAD ${head:0:8} is not origin/main ${main:0:8}; dry run only"
 fi
+build="$(tools/build-number "${head}")"
 
 # build/web/.vercel is the Vercel CLI's link to the project. tools/build-web.sh
 # keeps it and clears everything else, so link first: the link's other files
 # (a .gitignore, and a .env.local holding a VERCEL_OIDC_TOKEN) are then gone
-# before the upload.
+# before the upload. The link must hold the team's id and the project's id: a
+# link to any other team or project (the CLI keeps a link until it is deleted)
+# stops the deploy, and its dry run, before the build.
 link_file=build/web/.vercel/project.json
-linked_project() {
-  python3 -I -c 'import json, sys; print(json.load(open(sys.argv[1])).get("projectName", ""))' \
-    "${link_file}" 2>/dev/null || true
+# The link's team and project ids; nothing without a link; "unreadable" if it
+# does not read.
+linked_ids() {
+  [ -e "${link_file}" ] || return 0
+  python3 -I -c 'import json, sys; link = json.load(open(sys.argv[1])); print(link["orgId"], link["projectId"])' \
+    "${link_file}" 2>/dev/null || echo unreadable
 }
-linked="$(linked_project)"
-if [ -z "${linked}" ]; then
-  # --non-interactive without --yes links an existing project only, never a new
-  # one, and stops if the login has several teams: then link once by hand with --team.
-  link=("${vercel[@]}" link --non-interactive --project "${project}")
-  if [ "${dry_run}" = true ]; then
-    echo "DRY RUN: in build/web, would run: ${link[*]}"
-  else
+# --non-interactive without --yes links an existing project only, never a new
+# one; --team names the team, whatever other teams the login has.
+link=("${vercel[@]}" link --non-interactive --team "${team}" --project "${project}")
+linked="$(linked_ids)"
+if [ -z "${linked}" ] && [ "${dry_run}" = true ]; then
+  echo "DRY RUN: in build/web, would run: ${link[*]}"
+else
+  if [ -z "${linked}" ]; then
     mkdir -p build/web
     (cd build/web && "${link[@]}")
-    linked="$(linked_project)"
-    if [ "${linked}" != "${project}" ]; then
-      echo "FAIL: linking did not link build/web to ${project}" >&2
-      exit 1
-    fi
+    linked="$(linked_ids)"
   fi
-elif [ "${linked}" != "${project}" ]; then
-  echo "FAIL: build/web is linked to the Vercel project '${linked}', not '${project}'" >&2
-  exit 1
+  if [ "${linked}" != "${team_id} ${project_id}" ]; then
+    echo "FAIL: build/web is linked to the Vercel team and project ids ${linked:-(none)}, not the team ${team} (${team_id}) and the project ${project} (${project_id}); nothing was built or uploaded. Relink it: delete build/web/.vercel, then in build/web run: ${link[*]}" >&2
+    exit 1
+  fi
+  echo "LINK: build/web is linked to the Vercel project ${project} (${project_id}) in the team ${team} (${team_id})"
 fi
 
 tools/build-web.sh "${build_args[@]}"
@@ -223,7 +234,7 @@ deploy=("${vercel[@]}" deploy --prod --json)
 if [ "${dry_run}" = true ]; then
   echo "DRY RUN: in build/web, would run: ${deploy[*]}"
   sound_lines
-  echo "PASS: dry run for ${head:0:8}; nothing was linked or uploaded"
+  echo "PASS: dry run for build ${build} (${head:0:8}); nothing was linked or uploaded"
   exit 0
 fi
 
@@ -255,6 +266,6 @@ if state != ["ok", "READY", "production"] or not urls[0] or deployment.get("erro
 print("%s (deployment %s)" % tuple(urls))
 ' <<< "${output}")" || return 1
   sound_lines
-  echo "PASS: deployed ${head:0:8} to production: ${url}"
+  echo "PASS: deployed build ${build} (${head:0:8}) to production: ${url}"
 }
 deploy_to_production "${deploy[@]}"
