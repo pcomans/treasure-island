@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 345023
+    "sample_points": 338842
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "4a148ba79a233fbe4656b7ce81404d359d487ca58a5576c21d09d2610a0714b5"
+      "sha256": "ea861d7af164c3cf0cc6c95c7a05fbb5162ed3686654e93eb833b37bf3e578ad"
     },
-    "corrected_cells": 232,
-    "leaves": 6871,
+    "corrected_cells": 233,
+    "leaves": 6647,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -221,7 +221,7 @@
       "sample_m": 0.5,
       "tolerance_m": 0.08
     },
-    "neighbour_edge_vertices": 346,
+    "neighbour_edge_vertices": 345,
     "refined_cell_bounds_m": [
       [
         0,
@@ -1448,6 +1448,12 @@
         480
       ],
       [
+        -192,
+        448,
+        -160,
+        480
+      ],
+      [
         128,
         448,
         160,
@@ -1616,15 +1622,15 @@
         672
       ]
     ],
-    "refined_cells": 232,
-    "refined_triangles": 16239,
+    "refined_cells": 233,
+    "refined_triangles": 15654,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16198,
+          "free_nodes": 18003,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -1647,6 +1653,10 @@
             "rule": "sink"
           },
           {
+            "id": "z7_forebay_grade",
+            "rule": "level"
+          },
+          {
             "id": "z7_bioretention",
             "rule": "sink"
           },
@@ -1667,23 +1677,15 @@
             "rule": "level"
           },
           {
-            "id": "isle_house_park_north_grade",
-            "rule": "level"
-          },
-          {
             "id": "isle_house_park_mound",
             "rule": "raise"
           },
           {
-            "id": "cityside_track_leg_hold",
-            "rule": "profile"
-          },
-          {
-            "id": "isle_house_park_track_bank",
+            "id": "avenue_of_the_palms_hump",
             "rule": "profile"
           }
         ],
-        "scope_area_m2": 24706
+        "scope_area_m2": 25945.3
       },
       {
         "edge_blend_m": 8,
