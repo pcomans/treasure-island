@@ -143,7 +143,7 @@ tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh
 # for the browser's file system, locks, HTTP cache and network: a stored pack loads
 # without a download, a new build replaces the old one, a short or failed download is
 # never stored, and without storage (or storage that never answers) the pack comes
-# from the network. Node only, about 25 s.
+# from the network. Node only, about 30 s.
 echo "== tools/check_web_build_files.mjs"
 node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mjs")
 

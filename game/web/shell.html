@@ -151,9 +151,9 @@ body {
 // before storing it (DOMCache::put), a second copy of the 160 MB pack on an iPhone
 // already near its memory limit; a file's writable stream takes each piece as it comes.
 // Storing needs FileSystemFileHandle.createWritable (Chrome 86, Firefox 111, Safari 26)
-// and Web Locks. Without them, in a private window, with storage full, or when a
-// storage call fails or doesn't answer within SETUP_MS, the pack comes from the network
-// as before.
+// and Web Locks, and is off on an iPhone or iPad for now (tiStoreOnThisDevice). Without
+// them, in a private window, with storage full, or when a storage call fails or doesn't
+// answer within SETUP_MS, the pack comes from the network as before.
 //
 // The pack goes into one buffer of its size, the only copy the page makes: the
 // engine's file system keeps that buffer (tools/build-web.sh), a failed or cut download
@@ -171,10 +171,12 @@ body {
 // in the browser's HTTP cache, unless that cache already has one.
 //
 //   tiBuildFiles(build, env) -> {pack(name, size, progress), saving(), saved(), finish()}
-//     env: {storage, locks, canWrite, fetch, mark, warn} (navigator.storage and
-//     .locks, whether FileSystemFileHandle.createWritable exists, ...)
+//     env: {store, storage, locks, canWrite, fetch, mark, warn} (whether to keep a copy
+//     on this device at all, navigator.storage and .locks, whether
+//     FileSystemFileHandle.createWritable exists, ...)
 //   tiLoadingLine(loading) -> the loading screen's line while the files come in
 //   tiAfterDownload(files, onStep) -> its step once they are in
+//   tiStoreOnThisDevice(search, appleTouch), tiAppleTouchDevice(agent, maxTouchPoints)
 // tools/check_web_build_files.mjs runs these with stand-ins for the browser's.
 function tiBuildFiles(build, env) {
 	const FOLDER = 'grand-treasure-island-builds';
@@ -198,7 +200,7 @@ function tiBuildFiles(build, env) {
 
 	// This build's folder, and whether this tab writes: it holds the lock until finish().
 	const cache = within((async () => {
-		if (!env.canWrite || !env.locks || !env.storage || !env.storage.getDirectory) return null;
+		if (!env.store || !env.canWrite || !env.locks || !env.storage || !env.storage.getDirectory) return null;
 		const root = await env.storage.getDirectory();
 		const top = await root.getDirectoryHandle(FOLDER, {create: true});
 		const dir = await top.getDirectoryHandle(build, {create: true});
@@ -215,7 +217,7 @@ function tiBuildFiles(build, env) {
 		return null;
 	}), null).then((c) => {
 		setupOver = true;
-		if (!c) env.mark('cache:none');
+		if (!c) env.mark(env.store ? 'cache:none' : 'cache:off');
 		return c;
 	});
 
@@ -239,6 +241,8 @@ function tiBuildFiles(build, env) {
 	// returns null when this tab doesn't write: write(view) queues each piece of the
 	// pack's buffer as it arrives, and end(complete) closes the file, checks its size
 	// and only then writes its marker. Anything else removes the file and its marker.
+	// Its entry says when the writing is over (over, writing: as soon as it succeeds or
+	// fails, before any clean-up) and when the store is done (done: true when stored).
 	async function startStore(name, size) {
 		const c = await cache;
 		if (!c || !c.owner) return null;
@@ -252,6 +256,14 @@ function tiBuildFiles(build, env) {
 			if (next === 'failed') queue.length = 0;
 			poke();
 		};
+		const entry = {writing: true};
+		let ended = () => {};
+		entry.over = new Promise((resolve) => {
+			ended = () => {
+				entry.writing = false;
+				resolve();
+			};
+		});
 		const written = (async () => {
 			if (previous) await previous.done;
 			await c.dir.removeEntry(name + '.complete').catch(() => {});
@@ -281,6 +293,7 @@ function tiBuildFiles(build, env) {
 				if (bytes !== size) throw new Error(bytes + ' of ' + size + ' bytes');
 				await writable.close();
 			} catch (err) {
+				ended();
 				await writable.abort().catch(() => {});
 				throw err;
 			}
@@ -289,11 +302,12 @@ function tiBuildFiles(build, env) {
 			await marker.write(String(size));
 			await marker.close();
 		})();
-		const entry = {pending: true};
 		entry.done = written.then(() => {
+			ended();
 			env.mark('cache:pack:stored');
 			return true;
 		}, async (err) => {
+			ended();
 			state = 'failed';
 			queue.length = 0;
 			await c.dir.removeEntry(name + '.complete').catch(() => {});
@@ -301,9 +315,6 @@ function tiBuildFiles(build, env) {
 			env.mark('cache:pack:not_stored');
 			env.warn('The game was not stored on this device:', name, err);
 			return false;
-		}).then((ok) => {
-			entry.pending = false;
-			return ok;
 		});
 		store = entry;
 		return {
@@ -382,10 +393,11 @@ function tiBuildFiles(build, env) {
 	}
 
 	// The download. While this tab stores the pack: the browser's HTTP cache copy when
-	// it has one ('only-if-cached' never goes to the network), else the network without
-	// a second copy in that cache ('no-store'); if the store then fails, the next
-	// launch downloads again where the HTTP cache might have kept the pack. Otherwise a
-	// plain fetch, as before.
+	// it has one ('only-if-cached' should never go to the network), else the network
+	// without a second copy in that cache ('no-store'); if the store then fails, the
+	// next launch downloads again where the HTTP cache might have kept the pack. WebKit
+	// answers 'only-if-cached' with the whole download from the network: that answer is
+	// the download, read and stored as one. Otherwise a plain fetch, as before.
 	async function download(name, storing, attempt) {
 		if (!storing) return env.fetch(name);
 		if (attempt === 1) {
@@ -438,9 +450,10 @@ function tiBuildFiles(build, env) {
 		}
 	}
 
-	// Whether this tab is still writing this device's copy, and when it is done.
-	const saving = () => Boolean(store && store.pending);
-	const saved = () => (store ? store.done.then(() => {}) : Promise.resolve());
+	// Whether this tab is still writing this device's copy, and when that is over
+	// (written, or failed: the line moves on before any clean-up).
+	const saving = () => Boolean(store && store.writing);
+	const saved = () => (store ? store.over : Promise.resolve());
 
 	// Once the page has the pack: waits for this tab's store and, when this build's pack
 	// is stored (that store succeeded, or it came from the device), removes every other
@@ -478,6 +491,26 @@ function tiAfterDownload(files, onStep) {
 	}
 	onStep('saving');
 	files.saved().then(() => onStep('starting'));
+}
+
+// Whether this page keeps a copy of the pack on the device: everywhere it can, but not
+// on an iPhone or iPad until that is measured on one. In WebKit on Linux, storing as the
+// download came in raised the browser's network process from about 250 to about
+// 700 MiB for a second or two, and iOS limits that process on its own (KNOWN_ISSUES).
+// ?store=1 or ?store=0 in the page's address turns it on or off, on any browser, for a
+// test on a device.
+const STORE_ON_IPHONE_AND_IPAD = false;
+function tiStoreOnThisDevice(search, appleTouch) {
+	const forced = new URLSearchParams(search).get('store');
+	if (forced === '1') return true;
+	if (forced === '0') return false;
+	return STORE_ON_IPHONE_AND_IPAD || !appleTouch;
+}
+
+// An iPhone, iPod or iPad: an iPad asks for desktop sites by default and then says
+// Macintosh, but has touch. The start prompt's iPhone and iPad notes use it too.
+function tiAppleTouchDevice(agent, maxTouchPoints) {
+	return /\b(iPhone|iPod|iPad)\b/.test(agent) || (/\bMacintosh\b/.test(agent) && maxTouchPoints > 1);
 }
 
 // The loading screen's line while the engine and the game's data come in, from
@@ -753,6 +786,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		})();
 		mark('engine_init_begin');
 		files = tiBuildFiles(executable, {
+			store: tiStoreOnThisDevice(window.location.search, tiAppleTouchDevice(navigator.userAgent, navigator.maxTouchPoints)),
 			storage: navigator.storage,
 			locks: navigator.locks,
 			canWrite: typeof FileSystemFileHandle === 'function' && 'createWritable' in FileSystemFileHandle.prototype,

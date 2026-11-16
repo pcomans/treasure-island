@@ -423,7 +423,8 @@ browser's own cache. A new build replaces the kept one on its first launch. The 
 itself always comes from the network, so a release or a rollback shows on the next
 load. Storing needs a browser with file system writable streams (Safari 26, Chrome
 86, Firefox 111); in others every launch downloads as before, and a private window's
-storage ends with it. See `tiBuildFiles` in `game/web/shell.html`.
+storage ends with it. It is off on an iPhone and iPad for now (KNOWN_ISSUES; `?store=1`
+in the address turns it on for a test). See `tiBuildFiles` in `game/web/shell.html`.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
