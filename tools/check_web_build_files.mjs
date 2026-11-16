@@ -20,13 +20,19 @@
 //   - one buffer holds the pack through retries and a stored copy that reads short;
 //   - a stored copy whose data comes after the page was busy for longer than the stall
 //     limit is still used, and one that stops coming falls back to the network;
-//   - once the pack is in, "Saving…" lasts only until the copy is written;
+//   - once the pack is in, "Saving…" lasts only until the copy is written, never shows
+//     for a store that already failed, and ends as soon as one fails;
+//   - with storing off (an iPhone or iPad, or ?store=0) the page makes no storage call,
+//     reads no stored copy and downloads as before, and the switch reads ?store=1 or
+//     ?store=0 first;
+//   - a browser that answers 'only-if-cached' from the network (WebKit) still gets one
+//     download, read and stored as such;
 //   - a disk slower than the download loses nothing, and what waits for it goes in few
 //     writes;
 //   - the loading line: never blank once anything reports, "Loading the game…" while the
 //     pack's source isn't known, "Downloading" only once the pack comes over the network,
 //     "from this device" only when it comes from there, a percentage once every size is known.
-// Node only, no network and no engine; about twenty-five seconds, mostly the page's
+// Node only, no network and no engine; about thirty seconds, mostly the page's
 // waits between download attempts and for storage that doesn't answer. Part of tools/test.sh.
 //
 //   node tools/check_web_build_files.mjs [SHELL]   (SHELL: another copy of the page's shell)
@@ -49,7 +55,8 @@ class CountingUint8Array extends Uint8Array {
     if (args[0] === packBuffers.size) packBuffers.made += 1;
   }
 }
-const {tiBuildFiles, tiLoadingLine, tiAfterDownload} = new Function('Uint8Array', `${script}\nreturn {tiBuildFiles, tiLoadingLine, tiAfterDownload};`)(CountingUint8Array);
+const {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice} = new Function('Uint8Array',
+  `${script}\nreturn {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice};`)(CountingUint8Array);
 
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
@@ -68,8 +75,9 @@ const later = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // file only on close(), as the browser's swap file does. Knobs: failWriteAfter (a write
 // past that many bytes throws, as a full disk does), writeDelayMs, shortRead (file names
 // whose stored copy reads short), hangDirectory (getDirectory never answers),
-// hangOnce (file names whose next getFile never answers) and readPlan (file names whose
-// stored copy reads as plannedStream says).
+// hangOnce (file names whose next getFile never answers), readPlan (file names whose
+// stored copy reads as plannedStream says) and removeDelayMs (removing what is there
+// takes that long); directoryCalls counts getDirectory calls.
 class Storage {
   constructor() {
     this.root = new Folder(this);
@@ -79,9 +87,14 @@ class Storage {
     this.hangDirectory = false;
     this.hangOnce = new Set();
     this.readPlan = {};
+    this.removeDelayMs = 0;
+    this.directoryCalls = 0;
     this.writes = {};
   }
-  getDirectory() { return this.hangDirectory ? never() : Promise.resolve(this.root); }
+  getDirectory() {
+    this.directoryCalls += 1;
+    return this.hangDirectory ? never() : Promise.resolve(this.root);
+  }
   folder(...path) { let f = this.root; for (const p of path) { f = f.entries.get(p); if (!(f instanceof Folder)) return null; } return f; }
 }
 class Folder {
@@ -101,6 +114,7 @@ class Folder {
   async removeEntry(name, {recursive = false} = {}) {
     const entry = this.entries.get(name);
     if (!entry) throw notFound();
+    if (this.storage.removeDelayMs) await later(this.storage.removeDelayMs);
     if (entry instanceof Folder && entry.entries.size > 0 && !recursive) throw new Error('not empty');
     this.entries.delete(name);
   }
@@ -188,10 +202,11 @@ function plannedStream(data, {blockMs = 0, stopAfter = Infinity} = {}) {
   });
 }
 // Web Locks with ifAvailable: busy denies every request, as when another tab holds it;
-// hang never answers.
+// hang never answers; requests counts them.
 class Locks {
-  constructor({busy = false, hang = false} = {}) { this.busy = busy; this.hang = hang; this.held = new Set(); }
+  constructor({busy = false, hang = false} = {}) { this.busy = busy; this.hang = hang; this.held = new Set(); this.requests = 0; }
   async request(name, options, callback) {
+    this.requests += 1;
     if (this.hang) return never();
     if (this.busy || this.held.has(name)) return callback(null);
     this.held.add(name);
@@ -202,17 +217,18 @@ class Locks {
 // byte stream like a browser's download (a BYOB reader reads it through its own
 // buffer), or with byteStreams false a plain stream of chunks. A plain fetch keeps a
 // complete download in the HTTP cache; 'no-store' doesn't; 'only-if-cached' answers from
-// it or fails, never from the network. downloads counts the network's answers, hits the
-// cache's. truncate[name] = n: the next n downloads of it end cleanly at half;
-// fail[name] = n: the next n error at half.
+// it or fails, never from the network, unless onlyIfCachedDownloads (as WebKit does: a
+// whole download). downloads counts the network's answers, hits the cache's.
+// truncate[name] = n: the next n downloads of it end cleanly at half; fail[name] = n:
+// the next n error at half.
 class Server {
-  constructor(files) { Object.assign(this, {files, downloads: {}, hits: {}, modes: {}, truncate: {}, fail: {}, httpCache: new Set(), byteStreams: true}); }
+  constructor(files) { Object.assign(this, {files, downloads: {}, hits: {}, modes: {}, truncate: {}, fail: {}, httpCache: new Set(), byteStreams: true, onlyIfCachedDownloads: false}); }
   count(name) { return this.downloads[name] || 0; }
   fetch(name, init = {}) {
     const mode = init.cache || 'default';
     (this.modes[name] ||= []).push(mode);
     const data = this.files[name];
-    if (mode === 'only-if-cached') {
+    if (mode === 'only-if-cached' && !this.onlyIfCachedDownloads) {
       if (!this.httpCache.has(name)) return Promise.reject(new TypeError('Failed to fetch'));
       this.hits[name] = (this.hits[name] || 0) + 1;
       return Promise.resolve(this.respond(data, null));
@@ -253,9 +269,9 @@ const build = (name, size = 1000003, seed = 1) => ({name, pack: [`${name}.pck`, 
 const serverFor = (...builds) => new Server(Object.fromEntries(builds.map((b) => b.pack)));
 // One page load of build B, as the shell does it: the pack's buffer, then finish().
 // Returns what the page got, where from, and how long it took.
-async function load(b, {storage, locks, server, canWrite = true, stallMs}) {
+async function load(b, {storage, locks, server, canWrite = true, stallMs, store = true}) {
   const marks = [];
-  const env = {storage, locks, canWrite, stallMs, fetch: (n, init) => server.fetch(n, init), mark: (m) => marks.push(m), warn: () => {}};
+  const env = {store, storage, locks, canWrite, stallMs, fetch: (n, init) => server.fetch(n, init), mark: (m) => marks.push(m), warn: () => {}};
   const files = tiBuildFiles(b.name, env);
   const from = new Set();
   let progress = 0;
@@ -406,7 +422,7 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
 { // Once the pack is in, "Saving…" lasts only until the copy is written, though the
   // engine may still be getting ready; without a store the engine starts at once.
   const storage = new Storage(); storage.writeDelayMs = 5; const locks = new Locks(); const server = serverFor(A);
-  const env = {storage, locks, canWrite: true, fetch: (n, init) => server.fetch(n, init), mark: () => {}, warn: () => {}};
+  const env = {store: true, storage, locks, canWrite: true, fetch: (n, init) => server.fetch(n, init), mark: () => {}, warn: () => {}};
   const files = tiBuildFiles(A.name, env);
   await files.pack(A.pack[0], A.pack[1].byteLength, () => {});
   const steps = [];
@@ -423,6 +439,65 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
   tiAfterDownload(again, (step) => steps2.push(step));
   check(steps2.join() === 'starting', `a launch from the device: steps ${steps2}`);
   await again.finish();
+}
+{ // A store that fails: "Saving…" doesn't show once it has failed, and ends at once when
+  // it fails while shown, before its clean-up (here a slow one) is over.
+  const make = () => {
+    const storage = new Storage(); const server = serverFor(A);
+    const env = {store: true, storage, locks: new Locks(), canWrite: true, fetch: (n, init) => server.fetch(n, init), mark: () => {}, warn: () => {}};
+    return {storage, files: tiBuildFiles(A.name, env)};
+  };
+  const early = make();
+  early.storage.failWriteAfter = 200000;
+  early.storage.removeDelayMs = 1500;
+  await early.files.pack(A.pack[0], A.pack[1].byteLength, () => {});
+  await later(50);
+  const steps = [];
+  tiAfterDownload(early.files, (step) => steps.push(step));
+  check(steps.join() === 'starting', `a store that failed during the download: steps ${steps}, not "starting" at once`);
+  await early.files.finish();
+  const late = make();
+  late.storage.writeDelayMs = 40;
+  late.storage.failWriteAfter = A.pack[1].byteLength - 1000;
+  late.storage.removeDelayMs = 1500;
+  await late.files.pack(A.pack[0], A.pack[1].byteLength, () => {});
+  const steps2 = [];
+  const shown = Date.now();
+  tiAfterDownload(late.files, (step) => steps2.push([step, Date.now() - shown]));
+  for (let i = 0; i < 300 && steps2.length < 2; i += 1) await later(5);
+  check(steps2.length === 2 && steps2[0][0] === 'saving' && steps2[1][0] === 'starting' && steps2[1][1] < 1000, `a store that fails while "Saving…" shows: ${JSON.stringify(steps2)}, not "starting" before its clean-up`);
+  await late.files.finish();
+  check(!marked(late.storage, A) && late.storage.folder(FOLDER, A.name)?.entries.has(A.pack[0]) !== true, 'a store that failed left its file');
+}
+{ // Storing off (an iPhone or iPad, or ?store=0): no storage call, no stored copy read,
+  // a plain download as before; and the switch.
+  const storage = new Storage(); const locks = new Locks(); const server = serverFor(A);
+  await load(A, {storage, locks, server});
+  const callsBefore = storage.directoryCalls; const requestsBefore = locks.requests;
+  const off = await load(A, {storage, locks, server, store: false});
+  check(got(off, A) && off.from.join() === 'network' && server.modes[A.pack[0]].slice(-1).join() === 'default' && server.modes[A.pack[0]].length === 3, `storing off: came from ${off.from}, fetched ${server.modes[A.pack[0]]}`);
+  check(storage.directoryCalls === callsBefore && locks.requests === requestsBefore && off.marks.includes('cache:off'), `storing off: ${storage.directoryCalls - callsBefore} file system and ${locks.requests - requestsBefore} lock calls`);
+  check(!off.savingAfterPack && off.buffers === 1, `storing off: saving() ${off.savingAfterPack}, ${off.buffers} buffers of the pack's size`);
+  const iPhone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1';
+  const iPad = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Safari/605.1.15';
+  const android = 'Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Mobile Safari/537.36';
+  const decisions = [
+    ['an iPhone', tiStoreOnThisDevice('', tiAppleTouchDevice(iPhone, 5)), false],
+    ['an iPad asking for desktop sites', tiStoreOnThisDevice('', tiAppleTouchDevice(iPad, 5)), false],
+    ['a Mac', tiStoreOnThisDevice('', tiAppleTouchDevice(iPad, 0)), true],
+    ['an Android phone', tiStoreOnThisDevice('', tiAppleTouchDevice(android, 5)), true],
+    ['an iPhone with ?store=1', tiStoreOnThisDevice('?store=1', tiAppleTouchDevice(iPhone, 5)), true],
+    ['a Mac with ?store=0', tiStoreOnThisDevice('?x=2&store=0', tiAppleTouchDevice(iPad, 0)), false],
+  ];
+  for (const [what, shownStore, want] of decisions) check(shownStore === want, `the switch on ${what}: ${shownStore}, not ${want}`);
+}
+{ // A browser that answers 'only-if-cached' from the network (WebKit): that answer is the
+  // download, read and stored as one, with no second request.
+  const storage = new Storage(); const server = serverFor(A);
+  server.onlyIfCachedDownloads = true;
+  const r = await load(A, {storage, locks: new Locks(), server});
+  check(got(r, A) && r.from.join() === 'network' && r.progress === A.pack[1].byteLength && stored(storage, A), `only-if-cached from the network: came from ${r.from}, stored ${stored(storage, A)}`);
+  check(server.count(A.pack[0]) === 1 && server.modes[A.pack[0]].join() === 'only-if-cached', `only-if-cached from the network: ${server.count(A.pack[0])} downloads, fetched ${server.modes[A.pack[0]]}`);
 }
 { // A disk that fails while storing loses the store, not the download, and keeps the old build.
   const storage = new Storage(); const locks = new Locks(); const server = serverFor(A, B);
@@ -463,4 +538,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, leaves "Saving…" once the copy is written, and its loading line is never blank and says "Downloading" only for the network');
+console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, shows "Saving…" only while a store is writing, makes no storage call with storing off (an iPhone or iPad, ?store=0), takes an only-if-cached answer from the network as its one download, and its loading line is never blank and says "Downloading" only for the network');
