@@ -2,7 +2,7 @@
   "schema_version": "ti.terrain-overrides/1",
   "notes": [
     "Local corrections of the generated land where the frozen 2023 USGS raster predates what was built (tools/lib/terrain-overrides.mjs). World metres: +X east, +Z south.",
-    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge, so the land outside the scope and on the coastline keeps its generated surface.",
+    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways: half_width_m each side; a single-way entry may list spans, metres along the way from its first node, where the left or right side of its direction is narrower; along a span the land leaves that join kept and corrected ground are 1 m, so the way's own ground more than 1.5 m inside the narrowed edge stays exactly as generated) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge, so the land outside the scope and on the coastline keeps its generated surface.",
     "The site's grade is a harmonic membrane on a grid_m grid (relaxation over-relaxation factor, a fixed number of iterations): it takes the generated land outside the scope and the level and profile targets inside their shapes, and is as smooth as possible everywhere else, so the 32 m land grid's waves smooth out and designed surfaces meet their surroundings in gentle ramps. Regions apply in order: level holds a flat elevation_m inside its shape, profile holds control elevations_m along its line, sink cuts depth_m below the grade with a smoothstep rim side_run_m wide. Shapes: points_xz (optionally grown by buffer_m, negative to inset), line_xz with width_m, or an ellipse (center_xz, radii_m, rotation_deg turning +X toward +Z).",
     "Every 32 m land cell the correction reaches is re-meshed as a quadtree of leaves down to min_leaf_m, split until each leaf's two triangles stay within tolerance_m of the corrected surface (sampled every sample_m); shared edges stay watertight, coarse neighbours keep their surface.",
     "All elevations, depths and rims here are production inference for game art, traced from the designer's plan and dated photos, not survey data."
@@ -29,7 +29,16 @@
               "w1001544697"
             ],
             "half_width_m": 13,
-            "reason": "Avenue of the Palms: its carriageway, parking lanes, curbs, sidewalks and the street ground beside them (planting strips, verges, the west palms) keep their generated surface; the cycle track runs inside this corridor."
+            "reason": "Avenue of the Palms: its carriageway, parking lanes, curbs, sidewalks and the street ground beside them (planting strips, verges, the west palms) keep their generated surface; the cycle track runs inside this corridor.",
+            "spans": [
+              {
+                "from_m": 268,
+                "to_m": 310,
+                "left_half_width_m": 13,
+                "right_half_width_m": 9.75,
+                "reason": "Beside the park outside Isle House the park (west) side stops just behind the west sidewalk (w1212173444; its kerb at 5.5 m and the back of its verge at 8.0-8.1 m from the way), more than a 1 m edge leaf's diagonal past the verge so the sidewalk's land stays exactly as generated, and the old stockpile's flank between the sidewalk and the level lawn grades down from there (owner video 2026-11-15, f_000-f_005, f_051, f_090, f_103, f_107, f_112: level ground there). The carriageway, kerbs, the sidewalk and the east side keep their generated ground, which still stands on the 2023 raster's hump (sidewalk up to about 6.8 m against the lawn's 4.8 m)."
+              }
+            ]
           }
         ],
         "exclude_xz": [
@@ -503,7 +512,7 @@
             "kind": "level",
             "elevation_m": 4.7
           },
-          "reason": "The park's north tip and north-west end are flat where the 2023 USGS raster still has the fill stockpile (up to about 8 m): level at about the lawn's height (owner video 2026-11-15, f_000-f_005 the flat north tip; f_051, f_090, f_103, f_107, f_112 a low lawn mound with cars seen over its crest). Height production inference."
+          "reason": "The park's north tip and north-west end are flat where the 2023 USGS raster still has the fill stockpile (up to about 8 m): level at about the lawn's height (owner video 2026-11-15, f_000-f_005 the flat north tip; f_051, f_090, f_103, f_107, f_112 a low lawn mound with cars seen over its crest). Height production inference. Between this level and the avenue's west sidewalk the grade falls from just behind the sidewalk (the avenue corridor's span): the sidewalk and the carriageway stand on the raster's hump, up to 2.0 m above this level, and keep their generated ground."
         },
         {
           "id": "isle_house_park_mound",

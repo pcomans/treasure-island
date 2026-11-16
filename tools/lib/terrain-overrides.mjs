@@ -3,7 +3,8 @@
 //
 // The island's land is a 32 m grid of triangles sampled from the 2023 USGS raster
 // (griddedTerrainSurfaceMesh). A site lists a scope (OSM areas plus traced
-// polygons, minus protected way corridors and traced polygons, inside the land)
+// polygons, minus protected way corridors and traced polygons, inside the land;
+// a corridor can be narrower on either side along spans of its way)
 // and ordered regions, each a shape with a rule:
 //   level    a flat elevation (a lawn, a pad)
 //   profile  control elevations along a line (a promenade)
@@ -63,6 +64,10 @@ const RASTER_NORMAL_STEP_M = 2;
 const MAX_CORRECTED_RISE = Math.tan((48 * Math.PI) / 180);
 const DELTA_NORMAL_STEP_M = 0.5;
 const MM = 1000;
+// Leaves along a narrowed corridor span: no leaf larger than this joins kept and
+// corrected ground within this reach of the span's cut (planTerrainOverrides).
+const SPAN_EDGE_LEAF_M = 1;
+const SPAN_EDGE_REACH_M = 1.5;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -164,9 +169,26 @@ export function loadTerrainOverrides(projectRoot) {
     invariant(isFiniteNumber(site.scope.edge_blend_m) && site.scope.edge_blend_m > 0, `${label} scope needs a positive edge_blend_m`);
     invariant(Array.isArray(site.scope.exclude_ways), `${label} exclude_ways must be a list`);
     for (const corridor of site.scope.exclude_ways) {
-      exactKeys(corridor, ["half_width_m", "reason", "source_keys"], `${label} exclude_ways entry`);
+      exactKeys(corridor, ["half_width_m", "reason", "source_keys", ...("spans" in (corridor ?? {}) ? ["spans"] : [])], `${label} exclude_ways entry`);
       invariant(Array.isArray(corridor.source_keys) && corridor.source_keys.length > 0 && corridor.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} exclude_ways needs OSM way keys`);
       invariant(isFiniteNumber(corridor.half_width_m) && corridor.half_width_m > 0 && typeof corridor.reason === "string" && corridor.reason.trim() !== "", `${label} exclude_ways needs half_width_m and a reason`);
+      if (!("spans" in corridor)) continue;
+      // spans: stretches of one way (from_m to to_m, metres along it from its first
+      // node) where one or both sides of the corridor are narrower than half_width_m
+      // (left and right of the way's direction); see corridorArea in planTerrainOverrides.
+      invariant(corridor.source_keys.length === 1, `${label} exclude_ways spans need exactly one way`);
+      invariant(Array.isArray(corridor.spans) && corridor.spans.length > 0, `${label} exclude_ways spans must be a non-empty list`);
+      let lastEnd = 0;
+      for (const span of corridor.spans) {
+        exactKeys(span, ["from_m", "left_half_width_m", "reason", "right_half_width_m", "to_m"], `${label} exclude_ways span`);
+        invariant(isFiniteNumber(span.from_m) && isFiniteNumber(span.to_m) && span.from_m >= lastEnd && span.to_m > span.from_m, `${label} exclude_ways spans must run forward along the way without overlapping (from_m ${span.from_m}, to_m ${span.to_m})`);
+        lastEnd = span.to_m;
+        for (const side of ["left_half_width_m", "right_half_width_m"]) {
+          invariant(isFiniteNumber(span[side]) && span[side] > 0 && span[side] <= corridor.half_width_m, `${label} exclude_ways span ${side} must be in (0, half_width_m]`);
+        }
+        invariant(span.left_half_width_m < corridor.half_width_m || span.right_half_width_m < corridor.half_width_m, `${label} exclude_ways span from ${span.from_m} m narrows neither side`);
+        invariant(typeof span.reason === "string" && span.reason.trim() !== "", `${label} exclude_ways span needs a reason`);
+      }
     }
     invariant(Array.isArray(site.regions) && site.regions.length > 0, `${label} needs regions`);
     const regionIds = new Set();
@@ -260,6 +282,52 @@ function shapeField(shape) {
     },
     bounds: { min_x: center[0] - reach, min_y: center[1] - reach, max_x: center[0] + reach, max_y: center[1] + reach },
   };
+}
+
+// The band one side of a way's corridor loses along a span: between offset width
+// and past the corridor's edge (half + 1 m), from from_m to to_m along the line
+// (east/north points, the way's direction; sign +1 left, -1 right), with a mitred
+// wedge on the outside of each bend, less everything within width of the line.
+function spanSideCut(line, fromM, toM, width, half, sign, label) {
+  const cumulative = [0];
+  for (let index = 1; index < line.length; index += 1) cumulative.push(cumulative[index - 1] + Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]));
+  const total = cumulative.at(-1);
+  invariant(toM <= total + 1e-6, `${label} ends ${toM} m along a way of ${total.toFixed(2)} m`);
+  const pointAt = (metres) => {
+    let index = 1;
+    while (index < line.length - 1 && cumulative[index] < metres) index += 1;
+    const t = (metres - cumulative[index - 1]) / (cumulative[index] - cumulative[index - 1]);
+    return [line[index - 1][0] + (line[index][0] - line[index - 1][0]) * t, line[index - 1][1] + (line[index][1] - line[index - 1][1]) * t];
+  };
+  const clipped = [pointAt(fromM), ...line.filter((_, index) => cumulative[index] > fromM + 1e-6 && cumulative[index] < toM - 1e-6), pointAt(Math.min(toM, total))];
+  const reach = half + 1;
+  const ccw = (ring) => (signedRingArea(ring) < 0 ? ring.slice().reverse() : ring);
+  const normals = [];
+  const pieces = [];
+  for (let index = 1; index < clipped.length; index += 1) {
+    const [a, b] = [clipped[index - 1], clipped[index]];
+    const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    invariant(length > 1e-6, `${label} has a zero-length piece`);
+    const normal = [(-(b[1] - a[1]) / length) * sign, ((b[0] - a[0]) / length) * sign];
+    normals.push(normal);
+    const at = (point, offset) => [point[0] + normal[0] * offset, point[1] + normal[1] * offset];
+    pieces.push([[ccw([at(a, width), at(b, width), at(b, reach), at(a, reach)])]]);
+  }
+  for (let index = 1; index < normals.length; index += 1) {
+    const [before, after] = [normals[index - 1], normals[index]];
+    const turn = Math.acos(Math.max(-1, Math.min(1, before[0] * after[0] + before[1] * after[1])));
+    invariant(turn <= Math.PI / 3, `${label} bends by more than 60 degrees`);
+    // Outside the bend the two pieces leave a gap; a mitred wedge closes it.
+    const cross = before[0] * after[1] - before[1] * after[0];
+    if (cross * sign >= 0 || turn < 1e-9) continue;
+    const vertex = clipped[index];
+    const mitre = [before[0] + after[0], before[1] + after[1]];
+    const scale = reach / Math.cos(turn / 2) / Math.hypot(...mitre);
+    pieces.push([[ccw([vertex, [vertex[0] + before[0] * reach, vertex[1] + before[1] * reach], [vertex[0] + mitre[0] * scale, vertex[1] + mitre[1] * scale], [vertex[0] + after[0] * reach, vertex[1] + after[1] * reach]])]]);
+  }
+  const cut = differenceMultiPolygons(unionMultiPolygons(...pieces), lineRibbon(clipped, width * 2, label));
+  invariant(cut.length > 0 && multiPolygonArea(cut) > 1e-3, `${label} cuts nothing`);
+  return cut;
 }
 
 // The arc-length position of the closest point on a line and its interpolated control value.
@@ -455,6 +523,19 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     throw new Error(`Terrain overrides find no land near ${point}`);
   };
 
+  // A way's protected corridor: a ribbon half_width_m each side (lineRibbon), less,
+  // along each of its spans, the band on a narrowed side between that side's half
+  // width and the ribbon's edge (its cuts). Outside the spans the ribbon is unchanged.
+  const corridorArea = (siteId, corridor, key) => {
+    const label = `terrain override ${siteId} corridor ${key}`;
+    const line = rawWayLine(rawOsm, key.slice(1));
+    const ribbon = lineRibbon(line, corridor.half_width_m * 2, label);
+    if (!corridor.spans) return { area: ribbon, cuts: [] };
+    const cuts = corridor.spans.flatMap((span) => [["left_half_width_m", 1], ["right_half_width_m", -1]]
+      .filter(([side]) => span[side] < corridor.half_width_m)
+      .map(([side, sign]) => spanSideCut(line, span.from_m, span.to_m, span[side], corridor.half_width_m, sign, `${label} span ${span.from_m}-${span.to_m} m ${side}`)));
+    return { area: differenceMultiPolygons(ribbon, ...cuts), cuts };
+  };
   const sites = config.sites.map((site) => {
     const parts = [
       ...site.scope.source_keys.map((key) => {
@@ -468,9 +549,9 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
         return [[points]];
       }),
     ];
+    const wayCorridors = site.scope.exclude_ways.flatMap((corridor) => corridor.source_keys.map((key) => corridorArea(site.id, corridor, key)));
     const corridors = [
-      ...site.scope.exclude_ways.flatMap((corridor) => corridor.source_keys.map((key) =>
-        lineRibbon(rawWayLine(rawOsm, key.slice(1)), corridor.half_width_m * 2, `terrain override ${site.id} corridor ${key}`))),
+      ...wayCorridors.map(({ area }) => area),
       ...site.scope.exclude_xz.map((entry) => {
         let points = entry.points_xz.map(([x, z]) => [x, -z]);
         if (signedRingArea(points) < 0) points = points.reverse();
@@ -485,7 +566,8 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const scope = { geometry, fadeGeometry, edges: edgeIndex(fadeGeometry), bounds: multiPolygonBounds(geometry), fan_beside: site.scope.fan_beside ?? [] };
     const regions = site.regions.map((region) => ({ id: region.id, rule: region.rule, field: shapeField(region.shape), minLeaf: region.min_leaf_m ?? null }));
     const grade = harmonicGrade(site.grade, scope, boundary, regions, baseAnywhere);
-    return { id: site.id, name: site.name, edgeBlend: site.scope.edge_blend_m, scope, regions, grade, area_m2: multiPolygonArea(geometry) };
+    const spanCuts = wayCorridors.flatMap(({ cuts }) => cuts).map((geometry) => ({ geometry, bounds: multiPolygonBounds(geometry) }));
+    return { id: site.id, name: site.name, edgeBlend: site.scope.edge_blend_m, scope, regions, grade, spanCuts, area_m2: multiPolygonArea(geometry) };
   });
 
   // The site correction at a point, given the coarse surface there.
@@ -562,6 +644,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
 
   // ---- quadtree leaves per refined cell
   const steps = Math.round(cellSizeM / sampleM);
+  const spanCuts = sites.flatMap((site) => site.spanCuts);
   const audit = { leaves: 0, cells: refined.size, maximum_raise_m: 0, maximum_cut_m: 0, sampled_points: 0 };
   for (const cell of refined.values()) {
     // Surface samples on the cell's grid (rows south to north).
@@ -641,11 +724,37 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
       return limit;
     };
+    // Along a narrowed span of a way's corridor (its cut, grown by SPAN_EDGE_REACH_M),
+    // a leaf larger than SPAN_EDGE_LEAF_M that holds both kept ground (no correction)
+    // and corrected ground splits, as a plane through both would tilt the kept side:
+    // the way's own ground, a leaf's diagonal or more inside the narrowed edge, keeps
+    // its generated surface exactly.
+    const nearSpanCut = (x0, y0, size) => spanCuts.some(({ geometry, bounds }) => {
+      const reach = SPAN_EDGE_REACH_M;
+      if (x0 + size + reach < bounds.min_x || x0 - reach > bounds.max_x || y0 + size + reach < bounds.min_y || y0 - reach > bounds.max_y) return false;
+      return multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(x0 - reach, y0 - reach, x0 + size + reach, y0 + size + reach), geometry)) > 1e-9;
+    });
+    const joinsKeptAndMoved = (x0, y0, size) => {
+      const n = Math.round(size / sampleM);
+      let kept = false;
+      let moved = false;
+      for (let j = 0; j <= n; j += 1) {
+        for (let i = 0; i <= n; i += 1) {
+          const index = sampleIndex(x0 + i * sampleM, y0 + j * sampleM);
+          if (!inside[index]) continue;
+          if (deltas[index] === 0) kept = true;
+          else moved = true;
+          if (kept && moved) return true;
+        }
+      }
+      return false;
+    };
     const leaves = [];
     const stack = [[cell.west, cell.south, cellSizeM]];
     while (stack.length > 0) {
       const [x0, y0, size] = stack.pop();
-      if (size > leafLimit(x0, y0, size) && nodeError(x0, y0, size) > tolerance) {
+      if ((size > leafLimit(x0, y0, size) && nodeError(x0, y0, size) > tolerance)
+        || (size > SPAN_EDGE_LEAF_M && nearSpanCut(x0, y0, size) && joinsKeptAndMoved(x0, y0, size))) {
         const half = size / 2;
         stack.push([x0, y0, half], [x0 + half, y0, half], [x0, y0 + half, half], [x0 + half, y0 + half, half]);
       } else {
