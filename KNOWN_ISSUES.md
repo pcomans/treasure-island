@@ -507,14 +507,16 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
 - Cityside's north-west beds: the stormwater swale and forebay keep their heights, and
   the event plaza's north-east end beside them, with the grade round the swale and
   forebay held level at 4.2 m (`z7_forebay_grade`, the 2023 raster's level there, 3.97 to
-  4.20 m). Against main (ba5ac01d): the forebay's floor 2.8 cm lower and its concrete rim
-  5.2 cm lower (3.78 m, beside the pump pad's 3.71 m), the swale's gravel 0.8 cm lower,
-  the pump pad unchanged, the event plaza within 6 m of (-231, 488) 2.3 cm higher (the
-  whole plaza 0.8 cm). The bioretention bed comes down 0.07 m on average south of z 495
-  and 0.44 m north of it (up to 1.07 m), where it lay on the old hump's flank by the
-  cycle-track leg. Each sink's floor below the ground 1 to 2 m outside it (main in
-  brackets): forebay 0.37 m (0.46), swale 0.12 m (0.14), bed 0.33 m (0.38); the ground
-  beyond the forebay's north rim no longer climbs toward the old hump.
+  4.20 m). Against main (ba5ac01d): the forebay's floor (its land more than 1 m inside
+  its outline) 1.9 cm lower, its drawn gravel 2.8 cm lower and its concrete rim 5.2 cm
+  lower (3.78 m, beside the pump pad's 3.71 m), the swale's gravel 0.8 cm lower, the pump
+  pad unchanged, the event plaza within 6 m of (-231, 488) 2.3 cm higher (the whole plaza
+  0.8 cm). Inside the bioretention bed's outline the land is about 5 cm lower on average
+  north of z 495 (its drawn mulch 5.1 cm) and about 35 cm lower south of it, on the old
+  hump's flank by the cycle-track leg, up to 1.39 m (the mulch 37 cm, up to 1.22 m). Each
+  sink's floor below the ground 1 to 2 m outside it (main in brackets): forebay 0.37 m
+  (0.46), swale 0.12 m (0.14), bed 0.33 m (0.38); the ground beyond the forebay's north
+  rim no longer climbs toward the old hump.
 - Where the lowered stretch starts, at about 255 m along the avenue, its east parking
   lane has a hairline gap about 5 m long and up to 5 mm wide (x -184, z 467 to 472):
   two pieces of the draped lane meet a land-mesh corner a few millimetres apart, and the
