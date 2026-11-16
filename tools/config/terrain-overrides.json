@@ -367,6 +367,78 @@
           "reason": "The central stormwater meadow (ph08 Sep 2025): a shallow planted basin round the decomposed-granite meander."
         },
         {
+          "id": "z7_forebay_grade",
+          "shape": {
+            "points_xz": [
+              [
+                -233.1,
+                500.8
+              ],
+              [
+                -225.8,
+                489.8
+              ],
+              [
+                -216.7,
+                485.7
+              ],
+              [
+                -213.1,
+                485.5
+              ],
+              [
+                -211.6,
+                488.2
+              ],
+              [
+                -210.2,
+                488.8
+              ],
+              [
+                -209.3,
+                488.6
+              ],
+              [
+                -209.6,
+                489.6
+              ],
+              [
+                -210.6,
+                490.6
+              ],
+              [
+                -211.8,
+                491
+              ],
+              [
+                -215.8,
+                491.3
+              ],
+              [
+                -222.4,
+                494.3
+              ],
+              [
+                -229.6,
+                501.4
+              ],
+              [
+                -231,
+                501.8
+              ],
+              [
+                -231.7,
+                501.7
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.2
+          },
+          "reason": "Keeps the stormwater swale and forebay, and the event plaza's north-east end beside them, at the accepted park's heights now that no held line along the cycle-track leg sets the grade there: level at 4.2 m, the 2023 raster's level round them (3.97 to 4.20 m). It stops 2 m short of the pump pad and 5.5 m short of the event plaza, so their own grades blend into it; the swale's, the forebay's and the bed's sinks are cut into it."
+        },
+        {
           "id": "z7_bioretention",
           "shape": {
             "points_xz": [

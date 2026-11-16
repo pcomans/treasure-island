@@ -209,7 +209,7 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "1fbebc8bb1984ca1e968d37d0e46afebf7bc0ab09ab25619c9d7cadf8e253b50"
+      "sha256": "ea861d7af164c3cf0cc6c95c7a05fbb5162ed3686654e93eb833b37bf3e578ad"
     },
     "corrected_cells": 233,
     "leaves": 6647,
@@ -1630,7 +1630,7 @@
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 18128,
+          "free_nodes": 18003,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -1651,6 +1651,10 @@
           {
             "id": "z4_meadow",
             "rule": "sink"
+          },
+          {
+            "id": "z7_forebay_grade",
+            "rule": "level"
           },
           {
             "id": "z7_bioretention",
