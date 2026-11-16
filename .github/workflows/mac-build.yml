@@ -1202,6 +1202,11 @@ jobs:
           # for the branch main.
           custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
           rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=itch.io::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
           if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
             echo "::warning title=itch.io::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
             echo "### itch.io: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1479,6 +1484,11 @@ jobs:
           # for the branch main.
           custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
           rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=VirusTotal::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to VirusTotal. The release is complete."
+            echo "### VirusTotal: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
           if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
             echo "::warning title=VirusTotal::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to VirusTotal. The release is complete."
             echo "### VirusTotal: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1519,7 +1529,18 @@ jobs:
         # standard input (-H @-), never on its command line, and only ever to
         # https://www.virustotal.com/. A file VirusTotal already has is not
         # uploaded again. Results go to results.txt: name, SHA-256, state
-        # (submitted, known, quota or failed), analysis id.
+        # (submitted, known, quota, refused or failed), analysis id.
+        #
+        # A file over 32 MB goes to the address GET /files/upload_url returns.
+        # VirusTotal's reference for it (docs.virustotal.com/reference/files-upload-url,
+        # updated 2026-09-24) shows only http://www.virustotal.com/_ah/upload/..., and
+        # says the upload has the format of POST /files, whose x-apikey header is
+        # required; VirusTotal's own clients (vt-py, vt-go) send the key there too.
+        # So the key goes with the file, and only to that host, over https: an
+        # anchored match on scheme and host, no user, no port, and curl follows no
+        # redirect and speaks https alone. Any other address is refused, and its
+        # scheme and host (never its path or query, which carry a signed upload
+        # token) are printed, so a run shows where VirusTotal sent it.
         run: |
           api=https://www.virustotal.com/api/v3
           last=0
@@ -1553,17 +1574,21 @@ jobs:
               echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
               continue
             fi
-            # VirusTotal's own documentation shows this address as http://; the key
-            # never goes over plain HTTP, nor to any other host.
+            if [[ "${url}" =~ ^([A-Za-z][A-Za-z0-9+.-]*)://([A-Za-z0-9.-]+)(:[0-9]+)?(/|\?|$) ]]; then
+              where="${BASH_REMATCH[1]}://${BASH_REMATCH[2]}${BASH_REMATCH[3]}"
+            else
+              where="an address not of the form scheme://host/"
+            fi
+            echo "VirusTotal's upload address for ${name} is on ${where}."
             case "${url}" in
               https://www.virustotal.com/*) ;;
               http://www.virustotal.com/*) url="https://${url#http://}" ;;
               *)
-                echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is not on https://www.virustotal.com/, so neither the file nor the key was sent there."
-                echo "${name} ${sha} failed -" >> results.txt
+                echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is on ${where}, not https://www.virustotal.com/ as VirusTotal documents it, so neither the file nor the key was sent there."
+                echo "${name} ${sha} refused -" >> results.txt
                 continue ;;
             esac
-            vt POST "${url}" -F "file=@release/${name}"
+            vt POST "${url}" --proto =https -F "file=@release/${name}"
             analysis="$(jq -r '.data.id // empty' reply.json 2>/dev/null || true)"
             if [ "${code}" != 200 ] || [ -z "${analysis}" ]; then
               echo "::warning title=VirusTotal::Uploading ${name} failed (HTTP ${code})."
@@ -1623,7 +1648,12 @@ jobs:
         # false positives); it never fails the run. The same lines go to the notes
         # job as this job's output.
         run: |
-          [ -f results.txt ] || while read -r name sha; do echo "${name} ${sha} failed -"; done < files.txt > results.txt
+          # Every downloaded file gets a line, even when the submit step stopped part
+          # way: a file with no result counts as failed.
+          touch results.txt
+          while read -r name sha; do
+            grep -m 1 -F "${name} ${sha} " results.txt || echo "${name} ${sha} failed -"
+          done < files.txt > merged.txt
           : > lines.txt
           {
             echo "### VirusTotal for build ${BUILD_NUMBER} (${TAG})"
@@ -1636,6 +1666,7 @@ jobs:
               submitted | known)
                 if [ -f "stats-${sha}.json" ]; then analysis=completed; said="analysis completed"; else analysis=running; said="analysis still running"; fi ;;
               quota) said="not submitted: VirusTotal's daily request limit was reached" ;;
+              refused) said="not submitted: the upload address was not accepted" ;;
               *) said="not submitted: VirusTotal could not be reached" ;;
             esac
             echo "- [${name}](${link}): ${said}" >> "${GITHUB_STEP_SUMMARY}"
@@ -1643,7 +1674,7 @@ jobs:
               echo "::warning title=VirusTotal::VirusTotal flags ${name} of build ${BUILD_NUMBER}; a person should look before anyone relies on it (game engine builds do get false positives): ${link}"
             fi
             echo "${name} ${sha} ${state} ${analysis}" >> lines.txt
-          done < results.txt
+          done < merged.txt
           {
             echo "results<<VIRUSTOTAL_RESULTS"
             cat lines.txt
@@ -1677,7 +1708,7 @@ jobs:
         # form changes nothing. Re-running replaces the section instead of adding
         # a second one.
         run: |
-          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|failed) (completed|running|-)$'
+          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
           while read -r line; do
             [ -n "${line}" ] || continue
             if ! [[ "${line}" =~ ${pattern} ]]; then
@@ -1693,6 +1724,7 @@ jobs:
                 *:completed) note="" ;;
                 submitted:* | known:*) note=" (the analysis was still running when this was written; the report completes on its own)" ;;
                 quota:*) note=" (not submitted: VirusTotal's daily request limit was reached; the link finds the file once anyone submits it)" ;;
+                refused:*) note=" (not submitted: the upload address was not accepted; the link finds the file once anyone submits it)" ;;
                 *) note=" (not submitted: VirusTotal could not be reached; the link finds the file once anyone submits it)" ;;
               esac
               echo "- ${name}: SHA-256 ${sha}, https://www.virustotal.com/gui/file/${sha}${note}"
