@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
-# Builds the game for the owner's Mac, from the current commit.
+# Builds the game for the owner's Mac, and the Linux and Windows builds of the
+# same commit.
 #
 #   tools/build-mac.sh                    -> build/mac/treasure-island-mac-<commit>.zip
+#                                            build/linux/treasure-island.x86_64 (+ .pck)
+#                                            build/windows/treasure-island-windows-<commit>.zip
 #   tools/build-mac.sh --headless-launch  the same, with step 3 headless (CI has no GPU)
 #
 # Unzip on the Mac. This local build is ad-hoc signed, not notarized: after a
@@ -9,11 +12,14 @@
 # Security. CI re-signs the same export with the owner's Developer ID and
 # notarizes it (.github/workflows/mac-build.yml) once the signing secrets exist.
 # Before handing it over this
-#   1. exports the macOS build and a Linux build of the same commit,
-#   2. checks both data packs contain only game files (no reference photos,
+#   1. exports the macOS build, and a Linux and a Windows (x86-64) build of the
+#      same commit; the Windows build is zipped as one folder holding the .exe
+#      and its .pck,
+#   2. checks all three data packs contain only game files (no reference photos,
 #      research or evidence),
 #   3. launches the Linux build on the GPU (or, with --headless-launch, without
-#      rendering) and checks the island loads.
+#      rendering) and checks the island loads. Nothing here can run the Windows
+#      build; CI launches it on a Windows runner (.github/workflows/mac-build.yml).
 set -euo pipefail
 case "$*" in
   "") launch=() ;;
@@ -31,7 +37,7 @@ commit="$(git rev-parse --short HEAD)"
 baked=generated/native/static_world.scn
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT
-mkdir -p build/mac build/linux
+mkdir -p build/mac build/linux build/windows
 touch build/.gdignore
 # Optional: the sound files from the private source in TI_SFX_SOURCE (a folder, or
 # a Git repository with TI_SFX_SUBDIR, TI_SFX_REF and a read-only TI_SFX_GIT_TOKEN),
@@ -65,17 +71,30 @@ if [ "$(git rev-parse HEAD)" != "${revision}" ] || [ -n "$(git status --porcelai
 fi
 zip="build/mac/treasure-island-mac-${commit}.zip"
 rm -f "${zip}"
+windows=build/windows/treasure-island-windows
+windows_zip="build/windows/treasure-island-windows-${commit}.zip"
+rm -rf "${windows}" "${windows_zip}"
+mkdir -p "${windows}"
 
 tools/godot --headless --path . --export-release "macOS Private" "${zip}"
 tools/godot --headless --path . --export-release "Linux Private" build/linux/treasure-island.x86_64
+tools/godot --headless --path . --export-release "Windows Private" "${windows}/treasure-island.exe"
+# What a Windows player unpacks: one folder with the .exe and its .pck side by side.
+contents="$(find "${windows}" -mindepth 1 -printf '%P\n' | sort | tr '\n' ' ')"
+if [ "${contents}" != "treasure-island.exe treasure-island.pck " ]; then
+  echo "FAIL: ${windows} should hold treasure-island.exe and treasure-island.pck alone, but holds: ${contents}"
+  exit 1
+fi
 
 unzip -q "${zip}" -d "${work}"
 mac_pck="$(find "${work}" -name '*.pck' -path '*Contents/Resources*' | head -1)"
 [ -n "${mac_pck}" ] || { echo "FAIL: no .pck inside the Mac build"; exit 1; }
-for pck in "${mac_pck}" "${root}/build/linux/treasure-island.pck"; do
+for pck in "${mac_pck}" "${root}/build/linux/treasure-island.pck" "${root}/${windows}/treasure-island.pck"; do
   # Run from an empty folder so Godot sees only the pack, not the source project.
   (cd "${work}" && timeout 120 "${root}/tools/godot" --headless --main-pack "${pck}" --script res://game/tests/shared/build_content_audit.gd)
 done
+(cd build/windows && zip -q -X -r "${windows_zip##*/}" treasure-island-windows)
+unzip -l "${windows_zip}"
 
 log="${work}/launch.log"
 # The only expected error: the game asks to capture a mouse the headless display doesn't have.
@@ -86,4 +105,4 @@ if ! GODOT_BIN="${root}/build/linux/treasure-island.x86_64" timeout 300 tools/go
   echo "FAIL: the exported build did not load the island cleanly and exit"
   exit 1
 fi
-echo "PASS: ${zip}"
+echo "PASS: ${zip}, build/linux/treasure-island.x86_64 and ${windows_zip}"
