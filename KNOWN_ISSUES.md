@@ -425,23 +425,39 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
 
 - Not filmed, or only from far off, so drawn plain from the rest of the park: the
   frontage along Avenue of the Palms seen from the Isle House side, the mound's
-  north-east side and top, the bed along Bruton Street's walk, the inside of the bed
-  triangle at the north tip, the basin's inlets and edges, and the park sign's face.
+  north-east side and top, the bed along Bruton Street's walk, the eastern inside of
+  the bed triangle at the north tip, the basin's inlets and edges, and the park sign's face.
 - Estimated, not measured: the number and places of the young pines (a scatter rule,
   about one per 70 to 90 m² of bed), the lamps' 17 m spacing, the mound's 0.7 m rise,
   the sizes of the block benches and logs, the chairs' places, and the basin's outline.
-- The park's north tip and north-west end are levelled (to about 4.7 m) where the 2023
-  USGS raster still had the fill stockpile (up to about 8 m): flat at the tip (f_000 to
-  f_005) with a 0.7 m lawn mound at the north-west end (f_103, f_107, f_112); heights
-  production inference. The Avenue of the Palms corridor keeps its generated ground
-  (13 m each side of the street), so a grassed bank of up to about 2.5 m still rises
-  from the levelled lawn to the avenue's west walk by the north tip, where the stockpile
-  reaches under the corridor; the avenue's hump beside it stays (see the road humps
-  above). Isle House's land cell is untouched: the re-meshed park cells fan to their
-  shared edge (`scope.fan_beside` in tools/config/terrain-overrides.json). The basin,
-  beside Isle House's cell, is darker damp chips, not a hollow, and holds no water (the
-  video was shot after rain). Levelling the north part lowered Cityside's notch and
-  the ground round its north-west forebay by up to 0.34 m.
+- The park's north tip and north-west end are levelled (to about 4.7 m, drawn at 4.8 m)
+  where the 2023 USGS raster still had the fill stockpile (up to about 8 m): flat at the
+  tip (f_000 to f_005) with a 0.7 m lawn mound at the north-west end (f_103, f_107,
+  f_112); heights production inference.
+- The bank by the north tip (owner, 2026-11-16: fill it with what the video shows). The
+  avenue itself stands on the stockpile there: from about 265 to 302 m along Avenue of
+  the Palms (w1001544697) its carriageway, west kerb and west sidewalk (w1212173444) are
+  generated on the raster's hump (the road humps above), the sidewalk up to 6.8 m at
+  280-285 m against the level ground's 4.8 m, where the video shows them level with the
+  lawn. Since round 5 the avenue's corridor stops just behind the sidewalk on the park
+  side along 268-310 m (a corridor span in tools/config/terrain-overrides.json), so the
+  old crest behind the sidewalk (up to 7.35 m) is gone and the ground falls in one slope
+  from about 0.2 m above the sidewalk's back to the level ground; the street and the
+  sidewalk keep their generated ground, so the step of up to 2.0 m stays until they are
+  lowered, which needs the owner's decision (asked 2026-11-16). The slope still shows the
+  bed's plain chips; the frames (f_000 and f_001 to the right, f_107, f_112) show the bed
+  triangle's western part planted with shrubs and grasses, not yet built.
+- Isle House's land cell is untouched: the re-meshed park cells fan to their shared edge
+  (`scope.fan_beside` in tools/config/terrain-overrides.json). The basin, beside Isle
+  House's cell, is darker damp chips, not a hollow, and holds no water (the video was
+  shot after rain).
+- Round 4's levelling of the north part also lowered Cityside's north-west corner, more
+  than first reported. Against main, the land in the bioretention bed by the notch
+  (`z7_bioretention`) fell by up to 0.88 m (at -206.3, 504.3), the swale and the forebay
+  by up to 0.19 m, the cycle track's leg west of the notch by 0.48 m at (-216.5, 511.5)
+  to 0.87 m at (-208.5, 512), and the ground by the shore at (-224.5, 508) by 0.24 m;
+  the pump pad (within 0.04 m) and the promenade are unchanged. Whether that corner
+  still reads right is round 5's item C, not yet assessed.
 - The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
   sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
   saplings), not the park's own species.
