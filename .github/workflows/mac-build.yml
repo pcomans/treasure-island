@@ -1,13 +1,17 @@
 # Builds the Mac app on every push to main that changes more than documentation
 # with tools/build-mac.sh (the same script as in the devcontainer), launches it
 # on an Apple Silicon Mac to check the island loads, then publishes it as a new
-# GitHub Release of its own, marked latest, so these fixed links always get the
-# newest build:
-#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
-# The Linux package is the Linux export that tools/build-mac.sh makes and
-# launch-checks from the same commit, with the same sounds. Owner-approved
-# 2026-11-03. A run started by hand (workflow_dispatch) on another branch builds
+# GitHub Release of its own, marked latest, so this page always has the newest
+# build: https://github.com/pcomans/treasure-island/releases/latest
+# Its two files are named after the game and the build number (owner,
+# 2026-11-16), for example grand-treasure-island-mac-build-1970.zip and
+# grand-treasure-island-linux-build-1970.tar.gz; releases from before then keep
+# treasure-island-mac.zip and treasure-island-linux.tar.gz. The Linux package is
+# the Linux export that tools/build-mac.sh makes and launch-checks from the same
+# commit, with the same sounds. Owner-approved 2026-11-03. Inside the build job
+# and its artifacts the files keep their working names (treasure-island-mac-
+# <commit>.zip from tools/build-mac.sh); the publish job gives them the release
+# names. A run started by hand (workflow_dispatch) on another branch builds
 # and checks the app and publishes nothing; on main, the dry_run input does the
 # same.
 #
@@ -118,7 +122,7 @@
 #     with a line break, or a build artifact that is not one zip holding one app.
 # As always, a notarized build that fails one of verify's checks, a failed island
 # load check or a publish guard also stops the run. A stopped run publishes
-# nothing, so the previous build stays at the fixed link. The publish job uses
+# nothing, so the previous build stays the latest release. The publish job uses
 # GITHUB_TOKEN.
 #
 # The sounds come from the owner's private audio repository (owner, 2026-11-14):
@@ -969,11 +973,13 @@ jobs:
       group: mac-publish
       cancel-in-progress: false
     outputs:
-      # Set only once the release exists and the fixed links lead to it. The
-      # SHA-256 of each file as uploaded: the itch and VirusTotal jobs check
-      # their downloads against these.
+      # Set only once the release exists and is GitHub's latest release, with
+      # exactly its two files. Their names and the SHA-256 of each as uploaded:
+      # the itch and VirusTotal jobs download and check these.
       tag: ${{ steps.release.outputs.tag }}
       build_number: ${{ steps.release.outputs.build_number }}
+      mac_name: ${{ steps.release.outputs.mac_name }}
+      linux_name: ${{ steps.release.outputs.linux_name }}
       mac_sha256: ${{ steps.release.outputs.mac_sha256 }}
       linux_sha256: ${{ steps.release.outputs.linux_sha256 }}
     steps:
@@ -1020,7 +1026,7 @@ jobs:
         # Only the newest build of main publishes: the head of main, or a commit
         # after which main has changed only documentation, since a push of
         # documentation alone builds nothing (the changes job). An older build must
-        # not take the fixed link from a newer one. GitHub also refuses (HTTP 404 or
+        # not become the latest release over a newer one. GitHub also refuses (HTTP 404 or
         # 403) a release whose commit has .github/workflows files that differ from
         # main's, unless the token may change workflows, and GITHUB_TOKEN never may.
         # A commit that edits a workflow is fine while it is the newest build,
@@ -1057,7 +1063,10 @@ jobs:
               echo "::warning title=Mac build NOT notarized::${signing}"
             fi
           fi
-          name=treasure-island-mac.zip
+          # The release's files carry the game and the build number; the app inside
+          # the zip and the folder inside the archive keep their own names.
+          name="grand-treasure-island-mac-build-${BUILD_NUMBER}.zip"
+          linux_name="grand-treasure-island-linux-build-${BUILD_NUMBER}.tar.gz"
           api="repos/${GITHUB_REPOSITORY}"
           site="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases"
           # The commit's date, not today's: a re-run on a later day must find the same
@@ -1098,7 +1107,6 @@ jobs:
             echo "main is at ${head}, but has changed only documentation since ${GITHUB_SHA}, so this is still the newest build and it publishes."
           fi
           mv treasure-island-mac-*.zip "${name}"
-          linux_name=treasure-island-linux.tar.gz
           mv treasure-island-linux-*.tar.gz "${linux_name}"
           mac_sha256="$(sha256sum "${name}" | cut -d' ' -f1)"
           linux_sha256="$(sha256sum "${linux_name}" | cut -d' ' -f1)"
@@ -1110,22 +1118,27 @@ jobs:
           fi
           notes="${notes}
 
-          The newest build is always at ${site}/latest/download/${name}
+          The Mac app is ${name}. The newest build is always on ${site}/latest, as the file whose name ends in .zip.
           For the first launch, see Build for the Mac in the README.
 
-          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder. The newest is always at ${site}/latest/download/${linux_name}"
+          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder. The newest is always on ${site}/latest, as the file whose name ends in .tar.gz."
           title="${GAME_NAME}, build ${BUILD_NUMBER} (${day}, ${short}${title_extra})"
           gh release create "${tag}" "${name}" "${linux_name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
-            echo "::error::Publishing ${tag} failed, so the previous build normally stays at the fixed link. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
+            echo "::error::Publishing ${tag} failed, so the previous build normally stays the latest release. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
-          # The fixed link must now lead to this build. Allow a moment for the redirect.
+          # GitHub's latest release must now be this one, holding exactly its two
+          # files, both uploaded. Allow a moment for GitHub to catch up.
+          want="${tag}|$(printf '%s\n' "${name}" "${linux_name}" | LC_ALL=C sort | paste -sd' ' -)"
           for _ in $(seq 12); do
-            if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
+            latest="$(gh api "${api}/releases/latest" --jq '.tag_name + "|" + ([.assets[] | select(.state == "uploaded") | .name] | sort | join(" "))' || true)"
+            if [ "${latest}" = "${want}" ]; then
               echo "Published ${site}/tag/${tag}"
               {
                 echo "tag=${tag}"
                 echo "build_number=${BUILD_NUMBER}"
+                echo "mac_name=${name}"
+                echo "linux_name=${linux_name}"
                 echo "mac_sha256=${mac_sha256}"
                 echo "linux_sha256=${linux_sha256}"
               } >> "${GITHUB_OUTPUT}"
@@ -1138,7 +1151,7 @@ jobs:
             fi
             sleep 5
           done
-          echo "::error::${tag} is published, but the fixed link does not lead to it."
+          echo "::error::${tag} is published, but GitHub's latest release is not it with exactly ${name} and ${linux_name} (GitHub answered \"${latest:-nothing}\")."
           exit 1
 
   itch:
@@ -1221,18 +1234,42 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ steps.check.outputs.tag }}
-          # What the publish job uploaded. Empty in a run by hand, which checks
+          VERSION: ${{ steps.check.outputs.version }}
+          # What the publish job uploaded: names and SHA-256. Empty in a run by
+          # hand, which finds the files by name in the release and checks them
           # against the SHA-256 GitHub recorded at upload instead.
+          PUBLISHED_MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          PUBLISHED_LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
           PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
           PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
+        # A release's files are grand-treasure-island-mac-build-<N>.zip and
+        # grand-treasure-island-linux-build-<N>.tar.gz, or, for releases from before
+        # 2026-11-16, treasure-island-mac.zip and treasure-island-linux.tar.gz. They
+        # are kept here as release/mac.zip and release/linux.tar.gz.
         run: |
+          if [ -n "${PUBLISHED_MAC_NAME}" ]; then
+            mac_name="${PUBLISHED_MAC_NAME}"
+            linux_name="${PUBLISHED_LINUX_NAME}"
+          else
+            assets="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq '.assets[].name')"
+            mac_name=""
+            linux_name=""
+            for candidate in "grand-treasure-island-mac-build-${VERSION}.zip" treasure-island-mac.zip; do
+              if grep -qxF "${candidate}" <<< "${assets}"; then mac_name="${candidate}"; break; fi
+            done
+            for candidate in "grand-treasure-island-linux-build-${VERSION}.tar.gz" treasure-island-linux.tar.gz; do
+              if grep -qxF "${candidate}" <<< "${assets}"; then linux_name="${candidate}"; break; fi
+            done
+          fi
+          [ -n "${mac_name}" ] || { echo "::error::${TAG} has no Mac zip (grand-treasure-island-mac-build-${VERSION}.zip or treasure-island-mac.zip)."; exit 1; }
           mkdir release
-          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
-          for file in release/*; do
-            name="$(basename "${file}")"
+          gh release download "${TAG}" --dir release --pattern "${mac_name}" ${linux_name:+--pattern "${linux_name}"}
+          for name in "${mac_name}" ${linux_name:+"${linux_name}"}; do
+            file="release/${name}"
+            [ -f "${file}" ] || { echo "::error::${name} was not downloaded from ${TAG}."; exit 1; }
             actual="$(shasum -a 256 "${file}" | cut -d' ' -f1)"
             echo "${name}: SHA-256 ${actual}"
-            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+            if [ "${name}" = "${mac_name}" ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
             source="the publish job uploaded"
             if [ -z "${expected}" ]; then
               recorded="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq ".assets[] | select(.name == \"${name}\") | .digest")"
@@ -1246,8 +1283,9 @@ jobs:
               exit 1
             fi
           done
-          [ -f release/treasure-island-mac.zip ] || { echo "::error::${TAG} has no treasure-island-mac.zip."; exit 1; }
-          if [ -f release/treasure-island-linux.tar.gz ]; then
+          mv "release/${mac_name}" release/mac.zip
+          if [ -n "${linux_name}" ]; then
+            mv "release/${linux_name}" release/linux.tar.gz
             echo "linux=true" >> "${GITHUB_OUTPUT}"
           else
             echo "::notice title=itch.io::${TAG} has no Linux build (releases before the Linux package have none), so the linux channel gets nothing."
@@ -1317,7 +1355,7 @@ jobs:
         # and permissions and only adds missing execute bits to executables
         # (https://itch.io/docs/itch/integrating/platforms/macos.html).
         run: |
-          ditto -x -k release/treasure-island-mac.zip stage/mac
+          ditto -x -k release/mac.zip stage/mac
           apps=(stage/mac/*.app)
           [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in the Mac zip"; exit 1; }
           [ "$(find stage/mac -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1 ] || { echo "::error::the Mac zip holds more than the app"; exit 1; }
@@ -1363,7 +1401,7 @@ jobs:
         if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.linux == 'true' }}
         run: |
           mkdir -p stage/linux
-          tar -xzf release/treasure-island-linux.tar.gz -C stage/linux
+          tar -xzf release/linux.tar.gz -C stage/linux
           folder=stage/linux/treasure-island-linux
           exes=("${folder}"/*.x86_64)
           [ "${#exes[@]}" -eq 1 ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
@@ -1611,15 +1649,18 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.publish.outputs.tag }}
+          MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
           PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
           PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
-        # Exactly the published files, each checked against the SHA-256 the
-        # publish job computed before uploading it; nothing else is ever uploaded.
+        # Exactly the published files, by the names the publish job gave them, each
+        # checked against the SHA-256 it computed before uploading it; nothing
+        # else is ever uploaded.
         run: |
           mkdir release
-          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
-          for name in treasure-island-mac.zip treasure-island-linux.tar.gz; do
-            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+          gh release download "${TAG}" --dir release --pattern "${MAC_NAME}" --pattern "${LINUX_NAME}"
+          for name in "${MAC_NAME}" "${LINUX_NAME}"; do
+            if [ "${name}" = "${MAC_NAME}" ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
             actual="$(sha256sum "release/${name}" | cut -d' ' -f1)"
             if [ -z "${expected}" ] || [ "${actual}" != "${expected}" ]; then
               echo "::error::${name} is not the file the publish job uploaded (SHA-256 ${expected:-unknown})."
@@ -1819,16 +1860,21 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.publish.outputs.tag }}
+          MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
           RESULTS: ${{ needs.virustotal.outputs.results }}
         # Every file gets its SHA-256 and VirusTotal's report link by that hash,
         # with a fixed note on its state; no verdicts. A result line in any other
         # form changes nothing. Re-running replaces the section instead of adding
         # a second one.
         run: |
-          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
+          # Each line: one of this release's two files by name, then its SHA-256 and
+          # states in a fixed form.
+          pattern='^[0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
           while read -r line; do
             [ -n "${line}" ] || continue
-            if ! [[ "${line}" =~ ${pattern} ]]; then
+            name="${line%% *}"
+            if { [ "${name}" != "${MAC_NAME}" ] && [ "${name}" != "${LINUX_NAME}" ]; } || ! [[ "${line#* }" =~ ${pattern} ]]; then
               echo "::error title=VirusTotal::A result from the VirusTotal job is not in the expected form, so the release notes of ${TAG} were not changed."
               exit 1
             fi

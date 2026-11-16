@@ -11,7 +11,7 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 ## Play it
 
 - **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
-- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip) (a zip of about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
+- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest): on that page, under Assets, take `grand-treasure-island-mac-build-<number>.zip` (about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
 
 The downloadable version looks nicer.
 
@@ -161,19 +161,18 @@ Every push to `main` that changes more than documentation (see
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
 headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
 Apple Silicon Mac has launched the app and loaded the island, the build becomes
-a new release of its own, unless a newer build has overtaken it. This link always
-gets the newest release:
+a new release of its own, unless a newer build has overtaken it. This page always
+shows the newest release, whose Mac app is `grand-treasure-island-mac-build-<number>.zip`:
 
-https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
+https://github.com/pcomans/treasure-island/releases/latest
 
 The [releases page](https://github.com/pcomans/treasure-island/releases) lists
 each build by build number, date and commit, and older builds stay there.
-Downloaded with curl or `gh`, the zip has no quarantine flag, so the unzipped app
-opens directly:
+Downloaded with `gh` (or curl, with the file's address from the release page), the
+zip has no quarantine flag, so the unzipped app opens directly:
 
 ```sh
-curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
+gh release download --pattern 'grand-treasure-island-mac-build-*.zip' --repo pcomans/treasure-island
 ```
 
 A release whose notes say "Signed and notarized (Developer ID)" opens directly
@@ -205,13 +204,18 @@ The bake merges each building's opaque surfaces into far fewer draws
 ### Where the builds go
 
 Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
-has two files, built and checked from the same commit, and these links always get
-the newest:
+has two files, built and checked from the same commit and named after the game
+and the build number, and https://github.com/pcomans/treasure-island/releases/latest
+always shows the newest release:
 
-- the Mac app: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-- the Linux build: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
-  (unpack it and run the `.x86_64` program in its `treasure-island-linux` folder;
-  its `.pck` must stay beside it)
+- the Mac app, `grand-treasure-island-mac-build-<number>.zip`;
+- the Linux build, `grand-treasure-island-linux-build-<number>.tar.gz` (unpack it
+  and run the `.x86_64` program in its `treasure-island-linux` folder; its `.pck`
+  must stay beside it).
+
+The number is the release's build number, as in its title and on itch.io; the
+release's tag and title also carry the commit's date and short hash. Older
+releases keep the names `treasure-island-mac.zip` and `treasure-island-linux.tar.gz`.
 
 The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
 the Mac app, with the same sounds.
@@ -274,7 +278,7 @@ CI's `virustotal` job also submits both files of each release to
 each file's SHA-256 and VirusTotal report link to the release notes. The link is
 by hash, so it works while the analysis is still running; the notes say when
 that was the case. Anyone can check a download the same way:
-`shasum -a 256 treasure-island-mac.zip`, then open
+`shasum -a 256 grand-treasure-island-mac-build-<number>.zip`, then open
 `https://www.virustotal.com/gui/file/<that hash>`. The job uses VirusTotal's
 free public API, which is for non-commercial use and allows 4 requests a minute
 and 500 a day. VirusTotal shares uploaded files with its security partners, so
