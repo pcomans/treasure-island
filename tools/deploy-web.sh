@@ -170,7 +170,8 @@ if [ "${head}" != "${main}" ]; then
   echo "NOTE: --any-commit: HEAD ${head:0:8} is not origin/main ${main:0:8}; dry run only"
 fi
 build="$(tools/build-number "${head}")"
-changes="$(python3 -I tools/changelog.py latest 2>&1)" || changes="CHANGES: none: ${changes##*$'\n'}"
+changes="$(python3 -I tools/changelog.py latest 2>/dev/null)" \
+  || changes="CHANGES: none: CHANGELOG.md does not read (tools/changelog.py check says why)"
 
 # build/web/.vercel is the Vercel CLI's link to the project. tools/build-web.sh
 # keeps it and clears everything else, so link first: the link's other files

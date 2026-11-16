@@ -3,47 +3,53 @@
 
 Every push to main that changes more than Markdown (tools/docs-only) is a build
 with a number (tools/build-number), which .github/workflows/mac-build.yml
-releases on GitHub and itch.io. CHANGELOG.md has an entry for each such build,
-written by whoever assembles the release, in the release head's own commit:
+releases on GitHub and itch.io and tags build-<six digits>-<date>-<commit>.
+Whoever assembles a release adds an entry to CHANGELOG.md:
 
     ## Build 2084 (2026-11-16)
 
     - The park outside Isle House is in.
     - Web: reflections take about 250 MB less graphics memory.
 
-The heading names the build number and the day (UTC) the entry was written.
-Under it come 1 to 12 lines, each "- " and one line of plain text for players,
-at most 300 characters, with no "@" (GitHub would notify an account of that
-name), no "<" and no control or invisible characters. A build that changes
-nothing players see says so ("- No changes to the game."). Entries go newest
-first, each number smaller than the one above it; anything before the first
-entry is the file's own introduction.
+The heading names a build number and the day (UTC) the entry was written. Under
+it come 1 to 12 lines, each "- " and one line of plain text for players: at most
+300 characters, with no "@" (GitHub would notify an account of that name), no
+"<" (HTML or comments), no "![" or "](" (images or links), and no control or
+invisible characters. A build that changes nothing players see says so ("- No
+changes to the game."). Entries go newest first, each number smaller than the
+one above it; anything before the first entry is the file's own introduction.
 
-A commit's build number is known before the commit is made: for an ordinary
-commit it is one more than its parent's. So the entry goes in the release head's
-own commit, and no second commit is needed once the number is known.
+The rule: a build N has its entry when the newest entry's number is above the
+newest released build before N (the highest build-* tag below N in N's history)
+and at most N. The number need not be exact: `next` suggests HEAD's number plus
+one, and commits that follow in the same release (a retro, a merge, GitHub's
+merge button) keep the entry valid. A history with no build-* tag fails, since
+it cannot tell which entries are new (locally: git fetch --tags origin).
 
-  tools/changelog.py next     the heading for a commit made on top of HEAD
-  tools/changelog.py check    PASS when the newest entry is HEAD's build, or when
-                              HEAD changes only Markdown since origin/main (that
-                              push builds nothing and needs no entry), and shows
-                              what the release notes will start with. Run it
-                              before pushing a release to main.
+A build's release notes start with "Changes in build N:" and the lines of every
+entry after the newest released build, up to N (at most 10 entries, newest first;
+"No changes to the game." is dropped when other lines come with it), between the
+lines "<!-- changelog: build N -->" and "<!-- /changelog -->", which GitHub shows
+as nothing.
+
+  tools/changelog.py next     the suggested heading for an entry made on HEAD
+  tools/changelog.py check [--hand-run]
+                              before pushing a release to main: PASS when HEAD's
+                              build has its entry, and shows the notes. When HEAD
+                              changes only Markdown since origin/main, the push
+                              builds nothing and needs no entry; check still says
+                              whether a run started by hand on HEAD would find
+                              one, and --hand-run makes that a failure.
   tools/changelog.py latest   the newest entry at or before HEAD's build, as
                               CHANGES lines (tools/deploy-web.sh prints them)
-  tools/changelog.py notes --build N --out DIR [--link URL]
-      For the build job: FAIL unless the newest entry is build N. Otherwise writes
-      DIR/notes.md, how the release notes start: build N's entry, then those of
-      the builds after the newest release tag (build-<six digits>-...) in its
-      history, which got no release of their own (at most 10 entries), between the
-      lines "<!-- changelog: build N -->" and "<!-- /changelog -->", which GitHub
-      shows as nothing; with URL, a last line links the whole changelog.
-  tools/changelog.py extract BODY --build N --out FILE
-      For the itch job: writes the lines between those two lines in the release
-      notes BODY to FILE (CHANGELOG.txt). Exits 3 when BODY has none, as a release
-      from before this changelog does.
+  tools/changelog.py notes --build N --out DIR [--link URL] [--published]
+      For the workflow: writes DIR/notes.md (the release notes' start, between
+      the two lines above; with URL, a last line links the whole changelog) and
+      DIR/CHANGELOG.txt (the same without those two lines, for the downloads).
+      Fails unless build N has its entry by the rule. --published is for a build
+      already released, from a later commit: it takes the entries after the
+      newest released build before N, up to N, and exits 3 when there are none.
 
-A missing or wrong entry is fixed in one more commit: `next` prints its heading.
 Nothing here prints a line of the changelog at the start of an output line, so a
 GitHub Actions log never reads one as a workflow command. tools/check_changelog.sh
 checks this script.
@@ -63,6 +69,7 @@ BULLET = re.compile(r"- (\S.*)")
 MAX_LINES = 12
 MAX_LENGTH = 300
 MAX_ENTRIES = 10
+NO_CHANGES = "No changes to the game."
 START = "<!-- changelog: build %d -->"
 END = "<!-- /changelog -->"
 # Control, format (invisible: zero-width, bidirectional overrides), line and
@@ -92,6 +99,8 @@ def problem_in(text):
         return 'it has an "@", which would notify the GitHub account of that name'
     if "<" in text:
         return 'it has a "<" (no HTML or comments)'
+    if "![" in text or "](" in text:
+        return 'it has "![" or "](" (no images or links)'
     for character in text:
         if unicodedata.category(character) in HIDDEN:
             return "it has the invisible or control character U+%04X" % ord(character)
@@ -172,56 +181,67 @@ def documentation_only():
     return None
 
 
-def wrong_entry(entries, number):
-    """The FAIL message when the newest entry is not build NUMBER's, or None."""
-    if entries and entries[0][0] == number:
-        return None
-    newest = "its newest is build %d's" % entries[0][0] if entries else "it has no entry"
-    heading = next_heading()
-    return ("%s has no entry for build %d (commit %s): %s. Each build needs its own entry, newest first. "
-            "Fix it in one more commit on top of %s, which will be build %s: give this release's entry "
-            "(renumbered, or new) the heading \"%s\", as tools/changelog.py next prints it"
-            % (NAME, number, short(), newest, short(), HEADING.fullmatch(heading).group(1), heading))
-
-
-def since_tag(number):
-    """The highest build number below NUMBER with a release tag in HEAD's history."""
+def released_before(number):
+    """The highest build number below NUMBER with a release tag in HEAD's history.
+    Bad when HEAD's history has no release tag below NUMBER at all."""
     tags = run("git", "tag", "--merged", "HEAD", "--list", "build-[0-9]*")
-    found = [int(m.group(1)) for m in map(RELEASE_TAG.fullmatch, tags.stdout.split()) if m] if tags.returncode == 0 else []
+    if tags.returncode != 0:
+        raise Bad("git tag failed: %s" % tags.stderr.strip())
+    found = [int(m.group(1)) for m in map(RELEASE_TAG.fullmatch, tags.stdout.split()) if m]
     found = [n for n in found if n < number]
-    return max(found) if found else None
+    if not found:
+        raise Bad("no release tag (build-<six digits>-...) below build %d is in HEAD's history, so which entries are new "
+                  "is unknown; fetch the tags first: git fetch --tags origin" % number)
+    return max(found)
 
 
-def notes_block(entries, number, link):
-    """The lines that start build NUMBER's release notes."""
-    since = since_tag(number)
-    chosen = [entry for entry in entries if entry[0] <= number and (since is None or entry[0] > since)]
-    chosen = chosen[:1] if since is None else chosen[:MAX_ENTRIES]
-    lines = [START % number]
-    for build, day, texts in chosen:
-        lines += ["Changes in build %d (%s):" % (build, day), ""] + ["- " + text for text in texts] + [""]
+def unreleased(entries, number):
+    """The newest released build before NUMBER, and the entries after it up to NUMBER."""
+    released = released_before(number)
+    return released, [entry for entry in entries if released < entry[0] <= number]
+
+
+def missing_entry(entries, number):
+    """Why build NUMBER has no entry by the rule, or None."""
+    released, chosen = unreleased(entries, number)
+    if entries and entries[0][0] > number:
+        return "%s's newest entry is build %d's, after build %d" % (NAME, entries[0][0], number)
+    if not chosen:
+        newest = "its newest is build %d's" % entries[0][0] if entries else "it has none"
+        return "%s has no entry since build %d, the newest released build: %s" % (NAME, released, newest)
+    return None
+
+
+def problem_for(entries, number):
+    """Why build NUMBER cannot be released with its entry, with the fix, or None."""
+    try:
+        problem = missing_entry(entries, number)
+    except Bad as error:
+        return str(error)
+    if problem:
+        return ("%s. To fix it, add the entry in one more commit, under a heading such as \"%s\" (tools/changelog.py next); "
+                "any number above the newest released build and at most the build's own will do" % (problem, next_heading()))
+    return None
+
+
+def notes_lines(entries, number, link):
+    """The release notes' start for build NUMBER, without the two marker lines."""
+    _, chosen = unreleased(entries, number)
+    lines = []
+    for _, _, texts in chosen[:MAX_ENTRIES]:
+        lines += [text for text in texts if text not in lines]
+    if len(lines) > 1 and NO_CHANGES in lines:
+        lines.remove(NO_CHANGES)
+    body = ["Changes in build %d:" % number, ""] + ["- " + text for text in lines]
     if link:
-        lines.append("Every build's changes: %s" % link)
-    else:
-        lines.pop()
-    return lines + [END]
+        body += ["", "Every build's changes: %s" % link]
+    return body
 
 
-def extract(body, number):
-    """The lines between build NUMBER's markers in release notes BODY, or None."""
-    lines = body.splitlines()
-    if START % number not in lines:
-        return None
-    start = lines.index(START % number)
-    if END not in lines[start:]:
-        raise Bad("build %d's changelog in the release notes has no end line %r" % (number, END))
-    inner = lines[start + 1:lines.index(END, start)]
-    if not any(line.strip() for line in inner) or sum(len(line) + 1 for line in inner) > 100000:
-        raise Bad("build %d's changelog in the release notes is empty or too long" % number)
-    for line in inner:
-        if any(unicodedata.category(c) in HIDDEN for c in line):
-            raise Bad("build %d's changelog in the release notes has an invisible or control character" % number)
-    return inner
+def write_notes(out, number, lines):
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "notes.md").write_text("\n".join([START % number] + lines + [END]) + "\n", encoding="utf-8")
+    (out / "CHANGELOG.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def positive(value):
@@ -233,65 +253,60 @@ def positive(value):
 def main(argv):
     parser = argparse.ArgumentParser(prog="tools/changelog.py", description="The players' changelog, CHANGELOG.md.")
     commands = parser.add_subparsers(dest="command", required=True)
-    commands.add_parser("next", help="the heading for a commit made on top of HEAD")
-    commands.add_parser("check", help="before pushing a release: the newest entry is HEAD's build")
+    commands.add_parser("next", help="the suggested heading for an entry made on HEAD")
+    check = commands.add_parser("check", help="before pushing a release: HEAD's build has its entry")
+    check.add_argument("--hand-run", action="store_true",
+                       help="also fail a push of Markdown alone whose head a run started by hand would stop on")
     commands.add_parser("latest", help="the newest entry at or before HEAD's build, as CHANGES lines")
-    notes = commands.add_parser("notes", help="the build job: build N's entry, as the release notes start")
+    notes = commands.add_parser("notes", help="the workflow: build N's release notes start and CHANGELOG.txt")
     notes.add_argument("--build", type=positive, required=True)
     notes.add_argument("--out", type=Path, required=True)
     notes.add_argument("--link")
-    pull = commands.add_parser("extract", help="the itch job: build N's changelog from its release notes")
-    pull.add_argument("body", type=Path)
-    pull.add_argument("--build", type=positive, required=True)
-    pull.add_argument("--out", type=Path, required=True)
+    notes.add_argument("--published", action="store_true", help="build N is already released (a re-push)")
     args = parser.parse_args(argv)
     try:
         if args.command == "next":
             print(next_heading())
         elif args.command == "check":
             entries = read_entries()
-            docs = documentation_only()
-            if docs:
-                print("PASS: %s reads well; %s, so the push builds nothing and needs no entry" % (NAME, docs))
-                return
             number = build_number()
-            message = wrong_entry(entries, number)
-            if message:
-                fail(message)
-            print("PASS: %s's newest entry is build %d's, this commit's (%s). Its release notes will start:" % (NAME, number, short()))
-            for line in notes_block(entries, number, None)[1:-1]:
+            docs = documentation_only()
+            problem = problem_for(entries, number)
+            if docs and not args.hand_run:
+                print("PASS: %s reads well; %s, so the push builds nothing and needs no entry" % (NAME, docs))
+                if problem:
+                    print("NOTE: a run started by hand on this head, build %d (%s), would stop: %s "
+                          "(tools/changelog.py check --hand-run fails on this)" % (number, short(), problem))
+                else:
+                    print("NOTE: a run started by hand on this head, build %d (%s), would find its entry" % (number, short()))
+                return
+            if problem:
+                fail("build %d (commit %s): %s" % (number, short(), problem))
+            print("PASS: build %d (commit %s) has its entry. Its release notes will start:" % (number, short()))
+            for line in notes_lines(entries, number, None):
                 print("  | " + line)
         elif args.command == "latest":
             number = build_number()
             entries = [entry for entry in read_entries() if entry[0] <= number]
             if not entries:
-                fail("%s has no entry at or before build %d" % (NAME, number))
+                print("CHANGES: none: %s has no entry at or before build %d" % (NAME, number))
+                return
             build, day, texts = entries[0]
             print("CHANGES: build %d (%s)%s:" % (build, day, "" if build == number else ", the newest entry at or before build %d" % number))
             for text in texts:
                 print("CHANGES:   - " + text)
-        elif args.command == "notes":
-            entries = read_entries()
-            message = wrong_entry(entries, args.build)
-            if message:
-                fail(message)
-            block = notes_block(entries, args.build, args.link)
-            args.out.mkdir(parents=True, exist_ok=True)
-            (args.out / "notes.md").write_text("\n".join(block) + "\n", encoding="utf-8")
-            builds = re.findall(r"^Changes in build ([0-9]+)", "\n".join(block), re.M)
-            print("PASS: %s has build %d's entry; %s holds how the release notes start, with the entries of builds %s"
-                  % (NAME, args.build, args.out / "notes.md", ", ".join(builds)))
         else:
-            try:
-                text = args.body.read_bytes().decode("utf-8")
-            except UnicodeDecodeError:
-                raise Bad("the release notes %s are not UTF-8" % args.body)
-            inner = extract(text, args.build)
-            if inner is None:
-                print("NONE: the release notes have no changelog for build %d (a release from before CHANGELOG.md)" % args.build)
-                sys.exit(3)
-            args.out.write_text("\n".join(inner) + "\n", encoding="utf-8")
-            print("PASS: wrote build %d's changelog from its release notes to %s (%d lines)" % (args.build, args.out, len(inner)))
+            entries = read_entries()
+            if args.published:
+                if not unreleased(entries, args.build)[1]:
+                    print("NONE: %s has no entry for build %d" % (NAME, args.build))
+                    sys.exit(3)
+            else:
+                problem = problem_for(entries, args.build)
+                if problem:
+                    fail("build %d (commit %s): %s" % (args.build, short(), problem))
+            write_notes(args.out, args.build, notes_lines(entries, args.build, args.link))
+            print("PASS: build %d's release notes start in %s and its CHANGELOG.txt beside it" % (args.build, args.out / "notes.md"))
     except Bad as error:
         fail(str(error))
 

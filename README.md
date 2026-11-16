@@ -290,15 +290,19 @@ publishes. Build numbers count every commit, so the commits of such pushes leave
 gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
 hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
-A release's notes start with what changed for players: the build's entry in
-[CHANGELOG.md](CHANGELOG.md), with the entries of any builds since the last
-release that got no release of their own. Whoever assembles a release writes the
-entry in the release head's own commit, under the heading `tools/changelog.py
-next` prints (a commit's build number is one more than its parent's), and runs
-`tools/changelog.py check` before pushing it to `main`. On `main` the build job
-stops before building when the newest entry is not its build's; to recover, add
-the entry in one more commit (Markdown alone, so its push builds nothing) and
-start the workflow by hand. A push of Markdown alone needs no entry.
+A release's notes start with what changed for players, "Changes in build
+<number>:" and the lines of every entry in [CHANGELOG.md](CHANGELOG.md) since the
+previous release. Whoever assembles a release writes its entry while assembling
+it, under the heading `tools/changelog.py next` suggests, and runs
+`tools/changelog.py check` before pushing it to `main`. The entry's number need
+not be exact: a build has its entry when the newest entry's number is above the
+newest released build in its history (its `build-*` tags) and at most its own,
+so a retro commit, a merge or GitHub's merge button after the entry changes
+nothing. A history without release tags fails the check (`git fetch --tags
+origin` first). On `main` the build job stops before building when a build has
+no entry; to recover, add the entry in one more commit (Markdown alone, so its
+push builds nothing; `tools/changelog.py check --hand-run` checks it) and start
+the workflow by hand. A push of Markdown alone needs no entry.
 
 After each release, CI's `itch` job also puts the builds on the itch.io page
 [phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
@@ -307,10 +311,13 @@ Mac app, notarized or not, goes to channel `mac`, the Linux build to channel
 as `1918`) as their version. The job uses
 itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
 itch's own distribution site and checked against a pinned SHA-256. It pushes the
-exact files of the GitHub release, with the release notes' changelog beside them
-as `CHANGELOG.txt` (outside the Mac app, so its signature is untouched): it
-unpacks the Mac app with `ditto`, checks it with `codesign --verify --deep
---strict` (a failed check stops the Mac push), and pushes it. itch.io has no API
+exact files of the GitHub release, with the build's changes beside them as
+`CHANGELOG.txt` (outside the Mac app, so its signature is untouched), made from
+`CHANGELOG.md` on `main` and never read back from the release notes: it unpacks
+the Mac app with `ditto`, checks it with `codesign --verify --deep --strict` (a
+failed check stops the Mac push), and pushes it. A release whose Linux or
+Windows download holds anything but its executable and `.pck` in their folder,
+or any symbolic link, is not pushed. itch.io has no API
 or butler command that posts release notes or a devlog (checked 2026-11-16:
 [butler's push options](https://itch.io/docs/butler/pushing.html), and the
 [server-side API](https://itch.io/docs/api/serverside), which writes only

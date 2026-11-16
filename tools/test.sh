@@ -140,10 +140,11 @@ echo "== tools/check_web_paths_selftest.sh"
 tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
 
 # tools/changelog.py, which the release workflow and the integrator run, in a
-# throwaway repository with tagged releases: a build with its entry passes and
-# one without fails, every break of CHANGELOG.md's format fails, the release
-# notes' changelog goes in and comes back out, and the repository's own
-# CHANGELOG.md reads well. Offline, about a second.
+# throwaway repository with tagged releases: a build with an entry since the
+# last release passes and one without fails, every break of CHANGELOG.md's
+# format fails, the notes carry the build's real number and every unreleased
+# entry, and the repository's own CHANGELOG.md reads well. Offline, a few
+# seconds.
 echo "== tools/check_changelog.sh"
 tools/check_changelog.sh || failed+=("tools/check_changelog.sh")
 
