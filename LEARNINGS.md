@@ -1418,3 +1418,9 @@ GDScript's `float` is 64-bit, but `Vector2` and `Vector3` store 32-bit component
 ## Test a paid or irreversible step's premise in the cheapest real way first
 
 The Mac notarization work (2026-11-14) planned on the claim that notarizing with an Apple ID and an app-specific password needs no App Store Connect access. A one-minute local `xcrun notarytool history` with the owner's credential answered HTTP 403, which no documentation had settled. Before secrets go into CI, money is spent or a step is hard to undo, find the smallest real check of the claim it rests on and run it, and keep the plan open until it passes.
+
+## Size a WebKit memory run for the phone before comparing it with the phone
+
+On Linux, WebKit's JavaScriptCore sizes its heap from the machine's RAM; on an iPhone it sizes it from the process's jetsam limit, and in the iOS Simulator from a fixed 1.5 GiB (`availableMemory()` in WebKit's `Source/WTF/wtf/AvailableMemory.cpp`, read 2026-11-16). With 28 GB here, the web build's WebKit web process ranged 2,033 to 3,301 MiB in play over three default runs, one of which sat 560 to 650 MiB above the others at the start prompt; with `JSC_forceRAMSize=2147483648` (the owner's 2,048 MB WebContent limit) two runs held 1,991 to 2,302 MiB (`webkit-memory-20261116`). Pass that option (`tools/web-memory/webkit-session.sh` documents it) before reading a Linux WebKit number against the iPhone, and say which sizing a number had.
+
+Moving a browser's temporary files out of `/tmp` can break its sockets: a Unix socket path holds at most 107 bytes. Chrome binds `TMPDIR/org.chromium.Chromium.XXXXXX/SingletonSocket`, so with TMPDIR in a round folder it exited at once with `Socket path too long` (the same round's S03); agent-browser and Wayland put sockets in `XDG_RUNTIME_DIR`. Before relocating TMPDIR or XDG_RUNTIME_DIR, add the longest socket name to the path and keep it under 100 bytes, or use a short directory such as `~/.cache/<name>`.
