@@ -26596,6 +26596,12 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The review's retro branch was cut on top of the fix branch rather than on main, so its own file list (against main) showed the code files too; only the log of its commits beyond the fix showed it adds nothing but RETRO_LOG.
 - What the team should change next time: Cut review retro branches from main, or name the branch they sit on in the handback, so the integrator's "RETRO_LOG only" check reads true at a glance.
 
+### ti-code-review — readme-pr22-review — 2026-11-15 — PR #22 (README for visitors, d6c84b93) reviewed read-only
+
+- What worked well: Checking the visitor claims against live sources rather than the PR text settled most of them quickly: `gh release view` gave the Mac zip size, curl with `Accept-Encoding` gave the web transfer (about 143 MB, pck and wasm), the catalog and demolished list gave 199 standing buildings, and `git merge-tree --write-tree` showed the README conflicts with the three pending branches without a checkout. A byte grep of every committed image showed only 5 of 250 carry C2PA, which a reading of credits.json alone would have missed.
+- What did not work well: The table figures (road miles, cars, furniture, plant kinds) live only on the owner's site, so the review could only confirm they match it, not the game. Saving fetched pages to the scratchpad was refused because the scratchpad is under /tmp; piping curl straight into grep was enough.
+- What the team should change next time: When a README states counts for strangers, have the author cite where each number comes from (a script, a data file, the site) in the PR body, so the reviewer checks the source instead of guessing it.
+
 ### ti-documentation — readme-for-visitors — 2026-11-15 — README rewritten for visitors, developer sections kept (branch `docs/readme-for-visitors`)
 
 - What worked well: Building the visitor part only from the owner's supplied sentences, then listing every sentence that is not his in the PR, kept the voice his and made the rewrite list short. Checking anchors by computing GitHub's slugs from the new README against every `README.md#` link in tracked files (AGENTS, KNOWN_ISSUES, PLAYTEST, game/tests/README) settled the "keep the anchors" rule in one pass; demoting the kept sections to `###` under "For developers" changed no slug. Checking every external image and download URL with curl before use caught nothing, which is the point.
