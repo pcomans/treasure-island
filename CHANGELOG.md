@@ -6,7 +6,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 ## Build 2144 (2026-11-16)
 
-- On the web, the game's data is kept on your device after the first visit, so later launches skip the big download until a new build is out.
+- On the web, the game's data is kept on your device after the first visit, so later launches skip the big download until a new build is out. Not yet on iPhone and iPad.
 - On the web, the loading line says whether the game is downloading or loading from your device.
 - Web: less memory churn from sound while you play.
 
