@@ -10,10 +10,12 @@
 # - check fails a build without its entry, passes a push of Markdown alone and
 #   says whether a run started by hand would stop (--hand-run fails then);
 # - the notes say "Changes in build N:" with N's real number and the lines of
-#   every unreleased entry, newest first, at most 10 entries, without "No
-#   changes to the game." beside other lines; notes --published re-makes a
-#   released build's notes from a later commit, or exits 3 without an entry;
-# - every rule of the format fails a file that breaks it;
+#   every unreleased entry, newest first, at most 10 entries, a shared line
+#   once, without "No changes to the game." beside other lines; notes
+#   --published re-makes a released build's notes from a later commit, or
+#   exits 3 without an entry;
+# - every rule of the format fails a file that breaks it, and a bare address
+#   passes;
 # - latest prints CHANGES lines, never FAIL;
 # - no output line starts with "::", so a GitHub Actions log never reads a line
 #   of the changelog as a workflow command.
@@ -122,7 +124,8 @@ stops "notes without a new entry" notes --build 6 --out "${work}/none"
 entries 5 4 3 2; passes "newest entry one above the release" check
 entries 6 4 3 2; passes "newest entry equal to the build" check
 entries 7 4 3 2; stops "newest entry above the build" check
-shows "after build 6" || fail "an entry above the build was not named: $(cat "${work}/out")"
+shows "after build 6" && shows "renumber that entry to at most 6" && ! shows "add the entry" \
+  || fail "an entry above the build was not named with the advice to renumber it: $(cat "${work}/out")"
 
 # An entry written at the suggested number, then a retro commit and a merge
 # commit (as the integrator's last steps and GitHub's merge button make): the
@@ -167,6 +170,13 @@ passes "eleven unreleased entries" notes --build "${top}" --out "${work}/eleven"
 { printf '# Changes\n\n## Build %s (2026-11-16)\n\n- No changes to the game.\n' "${top}"; } > "${repo}/CHANGELOG.md"
 passes "an entry of no changes alone" notes --build "${top}" --out "${work}/nochange"
 grep -q -F -- "- No changes to the game." "${work}/nochange/notes.md" || fail "an entry of \"No changes to the game.\" alone lost its line"
+# Two unreleased entries sharing a line: the notes carry it once, where the
+# newer entry has it.
+printf '# Changes\n\n## Build %s (2026-11-16)\n\n- Shared.\n- Newer.\n\n## Build %s (2026-11-16)\n\n- Older.\n- Shared.\n' \
+  "${top}" "$((top - 1))" > "${repo}/CHANGELOG.md"
+passes "two entries sharing a line" notes --build "${top}" --out "${work}/shared"
+printf 'Changes in build %s:\n\n- Shared.\n- Newer.\n- Older.\n' "${top}" | cmp -s - "${work}/shared/CHANGELOG.txt" \
+  || fail "the notes of two entries sharing a line do not carry it once: $(cat "${work}/shared/CHANGELOG.txt")"
 
 # A push of Markdown alone builds nothing and needs no entry; check says what a
 # run started by hand on it would need, and --hand-run fails then.
@@ -222,6 +232,12 @@ good | sed 's/^- Fine\.$/- Thanks @someone./' > "${work}/broken.md"; broken "an 
 good | sed 's/^- Fine\.$/- A <b>bold<\/b> change./' > "${work}/broken.md"; broken "HTML" 'has a "<"'
 good | sed 's/^- Fine\.$/- See ![a picture](x.png)./' > "${work}/broken.md"; broken "an image" 'no images or links'
 good | sed 's/^- Fine\.$/- See [the page](https:\/\/example.invalid)./' > "${work}/broken.md"; broken "a link" 'no images or links'
+good | sed 's/^- Fine\.$/- [page]: https:\/\/example.invalid/' > "${work}/broken.md"; broken "a link definition" 'no images or links'
+good | sed 's/^- Fine\.$/- Thanks \&#64;someone./' > "${work}/broken.md"; broken "an HTML entity" 'has an "&"'
+# A bare address stays allowed.
+good | sed 's/^- Fine\.$/- More at https:\/\/example.invalid\/page./' > "${repo}/CHANGELOG.md"
+passes "a bare address" latest
+shows "CHANGES:   - More at https://example.invalid/page." || fail "a bare address did not read: $(cat "${work}/out")"
 good | sed 's/^- Fine\.$/- Hidden\xe2\x80\x8bspace./' > "${work}/broken.md"; broken "a zero-width space" "U+200B"
 good | sed 's/^- Fine\.$/- Right\xe2\x80\xaeleft./' > "${work}/broken.md"; broken "a bidirectional override" "U+202E"
 good | sed "s/^- Fine\\.\$/- $(printf 'x%.0s' $(seq 301))/" > "${work}/broken.md"; broken "a line of 301 characters" "more than 300"

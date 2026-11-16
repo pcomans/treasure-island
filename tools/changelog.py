@@ -14,8 +14,9 @@ Whoever assembles a release adds an entry to CHANGELOG.md:
 The heading names a build number and the day (UTC) the entry was written. Under
 it come 1 to 12 lines, each "- " and one line of plain text for players: at most
 300 characters, with no "@" (GitHub would notify an account of that name), no
-"<" (HTML or comments), no "![" or "](" (images or links), and no control or
-invisible characters. A build that changes nothing players see says so ("- No
+"<" (HTML or comments), no "&" (HTML entities, such as one for "@"), no "![",
+"](" or "]:" (images, links and link definitions; a bare address is fine), and
+no control or invisible characters. A build that changes nothing players see says so ("- No
 changes to the game."). Entries go newest first, each number smaller than the
 one above it; anything before the first entry is the file's own introduction.
 
@@ -99,8 +100,10 @@ def problem_in(text):
         return 'it has an "@", which would notify the GitHub account of that name'
     if "<" in text:
         return 'it has a "<" (no HTML or comments)'
-    if "![" in text or "](" in text:
-        return 'it has "![" or "](" (no images or links)'
+    if "&" in text:
+        return 'it has an "&" (no HTML entities, such as one that renders an "@")'
+    if "![" in text or "](" in text or "]:" in text:
+        return 'it has "![", "](" or "]:" (no images or links; a bare address is fine)'
     for character in text:
         if unicodedata.category(character) in HIDDEN:
             return "it has the invisible or control character U+%04X" % ord(character)
@@ -202,26 +205,25 @@ def unreleased(entries, number):
 
 
 def missing_entry(entries, number):
-    """Why build NUMBER has no entry by the rule, or None."""
+    """Why build NUMBER has no entry by the rule, with the fix, or None."""
     released, chosen = unreleased(entries, number)
     if entries and entries[0][0] > number:
-        return "%s's newest entry is build %d's, after build %d" % (NAME, entries[0][0], number)
+        return ("%s's newest entry is build %d's, after build %d. To fix it, renumber that entry to at most %d "
+                "(and above %d, the newest released build)" % (NAME, entries[0][0], number, number, released))
     if not chosen:
         newest = "its newest is build %d's" % entries[0][0] if entries else "it has none"
-        return "%s has no entry since build %d, the newest released build: %s" % (NAME, released, newest)
+        return ("%s has no entry since build %d, the newest released build: %s. To fix it, add the entry in one more "
+                "commit, under a heading such as \"%s\" (tools/changelog.py next); any number above the newest released "
+                "build and at most the build's own will do" % (NAME, released, newest, next_heading()))
     return None
 
 
 def problem_for(entries, number):
     """Why build NUMBER cannot be released with its entry, with the fix, or None."""
     try:
-        problem = missing_entry(entries, number)
+        return missing_entry(entries, number)
     except Bad as error:
         return str(error)
-    if problem:
-        return ("%s. To fix it, add the entry in one more commit, under a heading such as \"%s\" (tools/changelog.py next); "
-                "any number above the newest released build and at most the build's own will do" % (problem, next_heading()))
-    return None
 
 
 def notes_lines(entries, number, link):

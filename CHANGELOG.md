@@ -2,7 +2,7 @@
 
 Every build of the game has a number, the one in its title on the [releases page](https://github.com/pcomans/treasure-island/releases) and in its version on [itch.io](https://phppco.itch.io/grand-treasure-island). Its entry here says what changed for players, newest build first; an entry's number is the build it was written for, and the release that first carries it may have a slightly larger one. For each build after 2084, the release's notes start with its changes, and its itch.io downloads carry them as `CHANGELOG.txt`.
 
-<!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text, no links or images. tools/changelog.py checks them, and its "next" suggests the next heading. -->
+<!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
 ## Build 2084 (2026-11-16)
 

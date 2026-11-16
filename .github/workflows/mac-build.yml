@@ -286,6 +286,10 @@ jobs:
           # as before.
           fetch-depth: 0
           filter: blob:none
+          # The release tags (build-*), which tools/changelog.py's rule reads.
+          # actions/checkout fetches every tag with fetch-depth 0 anyway; this
+          # says so rather than relying on that default.
+          fetch-tags: true
         env:
           GIT_LFS_SKIP_SMUDGE: "1"
 
@@ -1061,7 +1065,8 @@ jobs:
           top=(app/*)
           files=(app/treasure-island-windows/*)
           if [ "${top[*]}" != app/treasure-island-windows ] || [ "${files[*]}" != "app/treasure-island-windows/treasure-island.exe app/treasure-island-windows/treasure-island.pck" ]; then
-            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${top[*]}: ${files[*]}"
+            printf -v shown '%q ' "${top[@]}" : "${files[@]}"
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${shown}"
             exit 1
           fi
           userdir="$(cygpath -u "${APPDATA}")/Godot/app_userdata/Treasure Island First Playable"
@@ -1481,6 +1486,8 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
           filter: blob:none
+          # The release tags, which the rule reads (as in the build job).
+          fetch-tags: true
           sparse-checkout: |
             CHANGELOG.md
             tools/changelog.py
@@ -1629,7 +1636,9 @@ jobs:
         run: |
           dir="${RUNNER_TEMP}/butler"
           mkdir -p "${dir}"
-          curl -fsSL --retry 3 -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-arm64/${BUTLER_VERSION}/archive/default"
+          # --retry-all-errors: a reset connection is retried too (2026-11-16: "curl:
+          # (56) Recv failure: Connection reset by peer" 0.85 s into the download).
+          curl -fsSL --retry 3 --retry-all-errors -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-arm64/${BUTLER_VERSION}/archive/default"
           echo "${BUTLER_SHA256}  ${dir}/butler.zip" | shasum -a 256 -c -
           unzip -q -o "${dir}/butler.zip" -d "${dir}"
           chmod 0755 "${dir}/butler"
@@ -1795,7 +1804,8 @@ jobs:
           top=(stage/windows/*)
           files=(stage/windows/treasure-island-windows/*)
           if [ "${top[*]}" != stage/windows/treasure-island-windows ] || [ "${files[*]}" != "stage/windows/treasure-island-windows/treasure-island.exe stage/windows/treasure-island-windows/treasure-island.pck" ]; then
-            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${top[*]}: ${files[*]}"
+            printf -v shown '%q ' "${top[@]}" : "${files[@]}"
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${shown}"
             exit 1
           fi
           if [ "${CHANGELOG}" = true ]; then
