@@ -1526,21 +1526,24 @@ jobs:
         env:
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
         # One request at a time, at most four a minute. The key goes to curl on
-        # standard input (-H @-), never on its command line, and only ever to
-        # https://www.virustotal.com/. A file VirusTotal already has is not
-        # uploaded again. Results go to results.txt: name, SHA-256, state
+        # standard input (-H @-), never on its command line, and only ever over
+        # https to virustotal.com or a host under it. A file VirusTotal already has
+        # is not uploaded again. Results go to results.txt: name, SHA-256, state
         # (submitted, known, quota, refused or failed), analysis id.
         #
         # A file over 32 MB goes to the address GET /files/upload_url returns.
         # VirusTotal's reference for it (docs.virustotal.com/reference/files-upload-url,
-        # updated 2026-09-24) shows only http://www.virustotal.com/_ah/upload/..., and
-        # says the upload has the format of POST /files, whose x-apikey header is
-        # required; VirusTotal's own clients (vt-py, vt-go) send the key there too.
-        # So the key goes with the file, and only to that host, over https: an
-        # anchored match on scheme and host, no user, no port, and curl follows no
-        # redirect and speaks https alone. Any other address is refused, and its
-        # scheme and host (never its path or query, which carry a signed upload
-        # token) are printed, so a run shows where VirusTotal sent it.
+        # updated 2026-09-24) shows http://www.virustotal.com/_ah/upload/..., and says
+        # the upload has the format of POST /files, whose x-apikey header is required;
+        # VirusTotal's own clients (vt-py, vt-go) send the key there too, so it goes
+        # with the file. The address is accepted when it is https (or http, sent over
+        # https), has no user name and no port, and its host is virustotal.com or a
+        # host under it, matched whole label by label: every host under
+        # virustotal.com is VirusTotal's own, the party the key belongs to, and the
+        # check exists to keep the key from a third party named in a tampered
+        # reply. curl then speaks https alone and follows no redirect. Any other
+        # address is refused. Either way the address's scheme and host (never its
+        # path or query, which carry a signed upload token) are printed.
         run: |
           api=https://www.virustotal.com/api/v3
           last=0
@@ -1580,14 +1583,20 @@ jobs:
               where="an address not of the form scheme://host/"
             fi
             echo "VirusTotal's upload address for ${name} is on ${where}."
-            case "${url}" in
-              https://www.virustotal.com/*) ;;
-              http://www.virustotal.com/*) url="https://${url#http://}" ;;
-              *)
-                echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is on ${where}, not https://www.virustotal.com/ as VirusTotal documents it, so neither the file nor the key was sent there."
-                echo "${name} ${sha} refused -" >> results.txt
-                continue ;;
-            esac
+            accepted=""
+            if [[ "${url}" =~ ^(https?)://([A-Za-z0-9.-]+)(/.*)?$ ]]; then
+              scheme="${BASH_REMATCH[1]}"
+              host="${BASH_REMATCH[2],,}"
+              if [[ "${host}" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)*virustotal\.com$ ]]; then
+                accepted=yes
+                if [ "${scheme}" = http ]; then url="https://${url#http://}"; fi
+              fi
+            fi
+            if [ -z "${accepted}" ]; then
+              echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is on ${where}, not https on virustotal.com or a host under it with no user name or port, so neither the file nor the key was sent there."
+              echo "${name} ${sha} refused -" >> results.txt
+              continue
+            fi
             vt POST "${url}" --proto =https -F "file=@release/${name}"
             analysis="$(jq -r '.data.id // empty' reply.json 2>/dev/null || true)"
             if [ "${code}" != 200 ] || [ -z "${analysis}" ]; then
