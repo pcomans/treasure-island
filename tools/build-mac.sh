@@ -16,7 +16,8 @@
 #      same commit; the Windows build is zipped as one folder holding the .exe
 #      and its .pck,
 #   2. checks all three data packs contain only game files (no reference photos,
-#      research or evidence),
+#      research or evidence) and carry this commit's build stamp (the build
+#      number and commit the pause menu shows),
 #   3. launches the Linux build on the GPU (or, with --headless-launch, without
 #      rendering) and checks the island loads. Nothing here can run the Windows
 #      build; CI launches it on a Windows runner (.github/workflows/mac-build.yml).
@@ -34,6 +35,12 @@ if [ -n "$(git status --porcelain)" ]; then
 fi
 revision="$(git rev-parse HEAD)"
 commit="$(git rev-parse --short HEAD)"
+# The build the pause menu names: the export plugin stamps each pack with this
+# commit's build number and commit, and the content audit checks the stamp
+# (game/scripts/ui/build_stamp.gd).
+TI_BUILD_NUMBER="$(tools/build-number "${revision}")"
+TI_BUILD_COMMIT="${revision}"
+export TI_BUILD_NUMBER TI_BUILD_COMMIT
 baked=generated/native/static_world.scn
 work="$(mktemp -d)"
 trap 'rm -rf "${work}"; rm -f "${baked}"' EXIT

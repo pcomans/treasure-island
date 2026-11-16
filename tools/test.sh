@@ -234,6 +234,7 @@ tests=(
   game/tests/headless_gameplay_contract.gd
   game/tests/headless_touch_controls.gd
   game/tests/headless_credits_contract.gd
+  game/tests/headless_build_label_contract.gd
   game/tests/headless_shadow_options_contract.gd
   game/tests/headless_day_clock_contract.gd
   game/tests/headless_world_material_contract.gd

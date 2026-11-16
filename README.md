@@ -278,6 +278,16 @@ the number padded to six digits so that tags sort by it:
 `mac-<date>-<commit>` tags. `tools/build-number` refuses a shallow clone, which
 would give too small a number.
 
+The pause menu's last line shows the build, such as "Build 1918 (1a2b3c4)". Each
+build script (`tools/build-mac.sh`, which the release workflow runs,
+`tools/build-linux.sh` and `tools/build-web.sh`) gives the export the commit's
+build number and commit as `TI_BUILD_NUMBER` and `TI_BUILD_COMMIT`; the export
+plugin (`addons/generated_world_export`) writes them into the pack as
+`generated/build_stamp.json` when they read as a plain build number and a commit,
+and the content audit fails a pack without that stamp or with another build's.
+Nothing is written into the checkout, so a run from source shows "Build source",
+and an export made by hand in the editor "Build unknown".
+
 A push to `main` that changes only documentation, that is only Markdown files
 (`.md`, anywhere, as [`tools/docs-only`](tools/docs-only) decides), builds
 nothing: its run on the Actions page shows the job "Decide whether to build"
@@ -405,6 +415,7 @@ terms, see
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
 - **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at 12:30 island time on today's date on Treasure Island, so play always starts in early-afternoon light, and runs at real speed from there, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** jumps to the real date and time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
+- The pause menu's last line, in small type, names the build you are playing: its build number and the commit's first seven digits, such as "Build 2084 (ba5ac01)", on every platform, the web included ([where the number comes from](#where-the-builds-go)).
 
 ### More
 
