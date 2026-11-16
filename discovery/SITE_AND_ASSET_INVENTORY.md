@@ -398,9 +398,9 @@ photos. Placed by a seeded colony and cluster rule along the breakwater's cap.
 
 | Asset | Where used | Level | Evidence | Next level |
 |---|---|---|---|---|
-| Brown pelican (bill out, bill tucked, sitting) | the ferry breakwater's cap | | Round 1 visual review PASS WITH NOTES (`57157271`); reworked and the sitting pose added in round 2, not yet reviewed | Rate |
-| Double-crested cormorant (wings folded, wings spread to dry, sitting) | the ferry breakwater's cap | | As above | Rate |
-| Western gull (standing, sitting) | the ferry breakwater's cap | | As above; reworked after the owner found the round-1 gulls too cute | Rate |
+| Brown pelican (bill out, bill tucked, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`: "convincing"); the tucked and sitting poses reworked in round 3, not yet reviewed | Rate |
+| Double-crested cormorant (wings folded, wings spread to dry, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); the neck, bill and lying pose reworked in round 3, not yet reviewed | Rate |
+| Western gull (standing, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); reworked in rounds 2 and 3 after the owner found the gulls too cute (darker slate back, smaller head, the sitting gull long and low), not yet reviewed | Rate |
 
 ### Player
 

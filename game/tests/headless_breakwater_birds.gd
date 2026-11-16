@@ -12,10 +12,12 @@ extends SceneTree
 ##      bird's lowest point is that level: nothing of it lies below the cap's top
 ##      or floats above it;
 ##   3. no two birds touch: the plan-view outlines of their meshes (every vertex of
-##      their pose, turned, sized and placed as the bird) keep at least 2 cm apart;
-##   4. every species is there both standing and sitting; each pose's MultiMesh
-##      holds exactly that pose's birds; the birds have no collision; and they are
-##      not drawn from the middle of the island.
+##      their pose, turned, sized and placed as the bird) keep at least 2 cm apart,
+##      and the PASS line says how far apart the closest two are;
+##   4. every species is there both standing and sitting, and no placed cluster of
+##      three birds or more is all one pose; each pose's MultiMesh holds exactly
+##      that pose's birds; the birds have no collision; and they are not drawn from
+##      the middle of the island.
 ## Physics and data only (run with --headless): the dummy renderer's MultiMesh
 ## readback is not trusted, so the birds are read from the placements the
 ## MultiMeshes were built from.
@@ -30,6 +32,8 @@ const GAP_M := 0.02
 
 var _failure := ""
 var _finished := false
+## The closest two birds' outlines: {distance (m), one, other (the birds)}.
+var _closest := {}
 
 
 func _initialize() -> void:
@@ -67,6 +71,8 @@ func _run() -> void:
 	if problem.is_empty():
 		problem = _standing_problem(placements, body)
 	if problem.is_empty():
+		problem = _cluster_problem(placements)
+	if problem.is_empty():
 		problem = _overlap_problem(placements)
 	if problem.is_empty():
 		problem = _node_problem(placements, birds)
@@ -77,7 +83,9 @@ func _run() -> void:
 	for bird: Dictionary in placements:
 		counts[bird.pose] = int(counts.get(bird.pose, 0)) + 1
 	var world_kind := "baked" if OS.get_cmdline_user_args().has("--use-prebuilt-world") else "generated"
-	print("PASS: %d birds rest on the ferry breakwater's cap in the %s world (%s), every species standing and sitting, the same for the same seed and other for another; every foot or sitting belly is over the cap's own collision at the bird's level, none of them below the cap or above it, no two birds' outlines within %d cm, each pose's MultiMesh holds just its birds, none has collision, and none is drawn from the middle of the island" % [placements.size(), world_kind, ", ".join(PackedStringArray(counts.keys().map(func(pose: String) -> String: return "%s %d" % [pose, counts[pose]]))), roundi(GAP_M * 100.0)])
+	var one: Dictionary = _closest.one
+	var other: Dictionary = _closest.other
+	print("PASS: %d birds rest on the ferry breakwater's cap in the %s world (%s), every species standing and sitting, no cluster of three or more all one pose, the same for the same seed and other for another; every foot or sitting belly is over the cap's own collision at the bird's level, none of them below the cap or above it, no two birds' outlines within %d cm (the closest two %.1f cm apart: the %s at %s and the %s at %s), each pose's MultiMesh holds just its birds, none has collision, and none is drawn from the middle of the island" % [placements.size(), world_kind, ", ".join(PackedStringArray(counts.keys().map(func(pose: String) -> String: return "%s %d" % [pose, counts[pose]]))), roundi(GAP_M * 100.0), float(_closest.distance) * 100.0, one.pose, one.position, other.pose, other.position])
 	_finish(main)
 
 
@@ -148,9 +156,25 @@ func _standing_problem(placements: Array, body: StaticBody3D) -> String:
 	return ""
 
 
-## No two birds' plan-view outlines, each grown by half the gap, overlap.
+## No placed cluster of three birds or more all in one pose.
+func _cluster_problem(placements: Array) -> String:
+	var poses := {}
+	for bird: Dictionary in placements:
+		if not poses.has(bird.cluster):
+			poses[bird.cluster] = []
+		(poses[bird.cluster] as Array).append(bird.pose)
+	for cluster: int in poses:
+		var mine: Array = poses[cluster]
+		if mine.size() >= 3 and mine.all(func(pose: String) -> bool: return pose == mine[0]):
+			return "The %d birds of cluster %d are all %s." % [mine.size(), cluster, mine[0]]
+	return ""
+
+
+## No two birds' plan-view outlines, each grown by half the gap, overlap; and how
+## far apart the closest two are (_closest).
 func _overlap_problem(placements: Array) -> String:
 	var outlines: Array[PackedVector2Array] = []
+	var hulls: Array[PackedVector2Array] = []
 	var centres: Array[Vector2] = []
 	var radii: Array[float] = []
 	for bird: Dictionary in placements:
@@ -173,15 +197,34 @@ func _overlap_problem(placements: Array) -> String:
 		for corner: Vector2 in grown[0]:
 			radius = maxf(radius, centre.distance_to(corner))
 		outlines.append(grown[0])
+		hulls.append(hull)
 		centres.append(centre)
 		radii.append(radius)
+	_closest = {"distance": INF, "one": placements[0], "other": placements[0]}
 	for i in placements.size():
 		for j in range(i + 1, placements.size()):
-			if centres[i].distance_to(centres[j]) > radii[i] + radii[j]:
+			if centres[i].distance_to(centres[j]) > radii[i] + radii[j] + 1.0:
 				continue
 			if not Geometry2D.intersect_polygons(outlines[i], outlines[j]).is_empty():
 				return "The %s at %s and the %s at %s come within %d cm of each other." % [placements[i].pose, placements[i].position, placements[j].pose, placements[j].position, roundi(GAP_M * 100.0)]
+			var apart := _hull_distance(hulls[i], hulls[j])
+			if apart < float(_closest.distance):
+				_closest = {"distance": apart, "one": placements[i], "other": placements[j]}
 	return ""
+
+
+## How far apart two outlines that do not overlap are: the least distance from a
+## corner of either to an edge of the other.
+func _hull_distance(one: PackedVector2Array, other: PackedVector2Array) -> float:
+	var least := INF
+	for pair: Array in [[one, other], [other, one]]:
+		var corners: PackedVector2Array = pair[0]
+		var edges: PackedVector2Array = pair[1]
+		for corner: Vector2 in corners:
+			for index in edges.size():
+				var nearest := Geometry2D.get_closest_point_to_segment(corner, edges[index], edges[(index + 1) % edges.size()])
+				least = minf(least, corner.distance_to(nearest))
+	return least
 
 
 ## One MultiMesh per pose holding just that pose's birds, no collision under the

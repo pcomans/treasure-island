@@ -5,20 +5,25 @@
 // is (0 feathers, 1 bill and legs). The MultiMeshes carry white instance colours:
 // the Compatibility renderer multiplies COLOR by an instance colour whether or not
 // the MultiMesh has any (black without), and white leaves it as it is.
+// The colour is clamped to 0..1 before use: with MSAA the renderers take a pixel's
+// varyings at its centre even when only one of its samples lies in a triangle, so
+// on a far bird's sub-pixel triangle that runs from one colour to another (a
+// bill's yellow into its red spot, an eye) the colour is extrapolated far past
+// both, and the sRGB curve turned that into a pixel many times brighter than the
+// scene's light allows (2026-11-16, both renderers, at noon, dusk and night).
 // Each instance's custom data holds the bird's own tone (r) and its size (a),
 // numbers near 1 that the Compatibility renderer's half-float custom data keeps
 // closely enough; no positions, which it would round to a quarter metre out here.
-// Legs and feet carry UV2 (1, rise): from thin_start_m out they slide straight up
-// by rise (bird units) to a height inside the body, so a bird far off shows no
-// sub-pixel legs that would sparkle as the camera moves. The move is worked out
-// in world space from the vertex's own world position and turned back through
-// MODEL_MATRIX, which is right whether the renderer hands the vertex function
-// the bird's own VERTEX with a MODEL_MATRIX that includes its instance, or a
-// VERTEX already moved by the instance with the node's MODEL_MATRIX (see
-// street_wire.gdshader): MODEL_MATRIX * VERTEX is the same world point either
-// way, and a turn about +Y leaves "up" as it is. Under an orthographic
-// projection (a directional light's shadow pass, an orthographic camera) the
-// legs stay, so they cast their shadows.
+// Legs and feet carry UV2 (1, height): from thin_start_m out they draw in to one
+// point inside the body, that height (bird units) over the bird's feet, so a bird
+// far off shows no sub-pixel legs that would sparkle as the camera moves; drawn
+// in, their triangles have no area and are not drawn at all. Both renderers hand
+// the vertex function the bird's own VERTEX, with MODEL_MATRIX the node's and the
+// instance's together (Godot 4.7.2's Forward+ and Compatibility scene shaders put
+// a MultiMesh instance's transform into MODEL_MATRIX before this code runs), so
+// that point is (0, height, 0) and the bird's feet are MODEL_MATRIX's origin.
+// Under an orthographic projection (a directional light's shadow pass, an
+// orthographic camera) the legs stay, so they cast their shadows.
 shader_type spatial;
 render_mode cull_back, depth_draw_opaque;
 
@@ -38,14 +43,14 @@ vec3 srgb_to_linear(vec3 c) {
 void vertex() {
 	tone = INSTANCE_CUSTOM.r;
 	if (UV2.x > 0.5 && PROJECTION_MATRIX[3][3] < 0.5) {
-		vec3 world = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
-		float hide = smoothstep(thin_start_m, thin_end_m, distance(CAMERA_POSITION_WORLD, world));
-		VERTEX += inverse(mat3(MODEL_MATRIX)) * vec3(0.0, UV2.y * INSTANCE_CUSTOM.a * hide, 0.0);
+		float hide = smoothstep(thin_start_m, thin_end_m, distance(CAMERA_POSITION_WORLD, MODEL_MATRIX[3].xyz));
+		VERTEX = mix(VERTEX, vec3(0.0, UV2.y, 0.0), hide);
 	}
 }
 
 void fragment() {
-	ALBEDO = srgb_to_linear(COLOR.rgb) * tone;
-	ROUGHNESS = mix(feather_roughness, gloss_roughness, COLOR.a);
-	SPECULAR = mix(feather_specular, gloss_specular, COLOR.a);
+	vec4 paint = clamp(COLOR, vec4(0.0), vec4(1.0));
+	ALBEDO = min(srgb_to_linear(paint.rgb) * tone, vec3(1.0));
+	ROUGHNESS = mix(feather_roughness, gloss_roughness, paint.a);
+	SPECULAR = mix(feather_specular, gloss_specular, paint.a);
 }
