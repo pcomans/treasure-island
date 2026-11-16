@@ -657,6 +657,7 @@ func _case_palms_level() -> bool:
 		var rise := 0.0
 		var ride_low := INF
 		var ride_high := -INF
+		var missed := 0
 		Input.action_press("move_forward")
 		while ticks < int(float(level.time_s) * 60.0):
 			var at := Vector2(car.global_position.x, car.global_position.z)
@@ -680,14 +681,18 @@ func _case_palms_level() -> bool:
 			slowest = minf(slowest, car.linear_velocity.length())
 			rise = maxf(rise, car.linear_velocity.y)
 			var ride := _ride_height(car)
-			ride_low = minf(ride_low, ride)
-			ride_high = maxf(ride_high, ride)
+			if is_inf(ride):
+				missed += 1
+			else:
+				ride_low = minf(ride_low, ride)
+				ride_high = maxf(ride_high, ride)
 		_release_driving()
 		var reached := Vector2(car.global_position.x, car.global_position.z).distance_to(end) < 6.0
-		print("PALMS %s: %d ticks over the stretch, slowest %.2f m/s, fewest wheels %d, %d ticks under four, lowest up %.4f, fastest rise %.2f m/s, height over the land %.3f-%.3f m (%.3f at the start), recoveries %d, reached the end %s" % [run.name, in_ticks, slowest, fewest, unloaded, lowest_up, rise, ride_low, ride_high, ride0, _recoveries.size() - recoveries_before, reached])
+		print("PALMS %s: %d ticks over the stretch, slowest %.2f m/s, fewest wheels %d, %d ticks under four, lowest up %.4f, fastest rise %.2f m/s, height over the land %.3f-%.3f m (%.3f at the start), %d ticks with no ground under the ray, recoveries %d, reached the end %s" % [run.name, in_ticks, slowest, fewest, unloaded, lowest_up, rise, ride_low, ride_high, ride0, missed, _recoveries.size() - recoveries_before, reached])
 		if not _require(reached and in_ticks > 60, "The %s run on Avenue of the Palms did not cross the stretch to its end (%d ticks over it, reached %s)." % [run.name, in_ticks, reached]) \
 		or not _require(slowest >= float(level.min_speed_mps), "The %s run snagged on the stretch: %.2f m/s at its slowest (at least %.1f)." % [run.name, slowest, float(level.min_speed_mps)]) \
 		or not _require(fewest >= 3 and unloaded <= PALMS_UNLOADED_TICKS and lowest_up >= PALMS_UP, "The %s run left its wheels or tilted on the stretch (fewest wheels %d, %d ticks under four, lowest up %.4f)." % [run.name, fewest, unloaded, lowest_up]) \
+		or not _require(not is_inf(ride0) and missed == 0, "The %s run's downward ray found no solid ground under the car %s, so its height over the land went unmeasured." % [run.name, "at the start" if is_inf(ride0) else "on %d tick(s) over the stretch" % missed]) \
 		or not _require(rise <= PALMS_LAUNCH_MPS and ride_high - ride0 <= PALMS_RIDE_M and ride0 - ride_low <= PALMS_RIDE_M, "The %s run launched or sank on the stretch (fastest rise %.2f m/s, height over the land %.3f-%.3f m against %.3f at the start)." % [run.name, rise, ride_low, ride_high, ride0]) \
 		or not _require(_recoveries.size() == recoveries_before, "A recovery fired on the %s run." % run.name):
 			return false
@@ -695,7 +700,7 @@ func _case_palms_level() -> bool:
 
 
 ## The car's height over the land straight under it (the world's solid ground,
-## not street props or the car itself).
+## not street props or the car itself); INF when the ray finds none.
 func _ride_height(car: DRIVABLE_CAR) -> float:
 	var at := car.global_position
 	var hit := _ray(at + Vector3.UP * 3.0, at + Vector3.DOWN * 6.0, DRIVABLE_CAR.PHYSICS_WORLD_SOLID)
