@@ -26951,3 +26951,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The docs branch already held the Windows branch, the versioned-names branches and main, so the release was a fast-forward to its reviewed head, and the only merges were two retro branches placed where they put their lines. The checks matched the change: the release tooling's shell checks, and the two contracts that read the export presets and the startup settings, under one engine lock.
 - What did not work well: Nothing before the push; the run's first Windows export, launch and itch push on main are the test, and they are in the handback.
 - What the team should change next time: When a release adds a platform, list for the integrator which jobs and channels are new, so a first push or a first upload that behaves differently can be told apart from a fault.
+
+### integrator-batch-20261116c — 2026-11-16 — the breakwater birds (branch `release/batch-20261116c`)
+
+- What worked well: The birds branch already held main's d852b9ca, so its merge onto dd899095 conflicted only in RETRO_LOG, and every game file is the branch's own. The full suite ran on the merged head under the suite lock, as the rule asks for a game change, while the previous release's run was still on itch.io.
+- What did not work well: Nothing of note before the push; the run and the live check of the birds are in the handback.
+- What the team should change next time: Keep a live check of a new world feature (here the Birds node and its instance count, read through the web state) in the release brief, as this one had, since a web build can drop a node that the native tests see.
