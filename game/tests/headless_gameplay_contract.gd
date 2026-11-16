@@ -770,11 +770,14 @@ func _check_options_screen(main: GameMain) -> String:
 ## the recorded moment, as every test's, capture's and the web's does: the Sun is
 ## main.tscn's exactly, its metadata's angles, the light on it, the environment and
 ## the sky main.tscn's daylight exactly (DayLight), and they stay so however long the
-## game runs. On the options screen, with the game paused, the date and the time
-## slider move the Sun at once to the sun of their moment on the island's clock,
-## with the light of its height (a December dusk among them), and time runs on from
-## there with the system clock; Now goes back to the real time. Pinned again, the
-## Sun and its light are main.tscn's. Returns a summary, or "" after failing.
+## game runs. Play's start (DayClock.start_for, owner 2026-11-16) puts the clock at
+## 12:30 on the island's date today, running, whatever the real time, with the Sun
+## at its sun at once and the options screen showing that date and 12:30. On the
+## options screen, with the game paused, the date and the time slider move the Sun
+## at once to the sun of their moment on the island's clock, with the light of its
+## height (a December dusk among them), and time runs on from there with the system
+## clock; Now jumps to the real time. Pinned again, the Sun and its light are
+## main.tscn's. Returns a summary, or "" after failing.
 func _check_time_of_day(main: GameMain) -> String:
 	var hud := main.hud
 	var sun := main.get_node("Sun") as DirectionalLight3D
@@ -804,6 +807,21 @@ func _check_time_of_day(main: GameMain) -> String:
 	hud.options_button.pressed.emit()
 	if not paused or not hud.options_visible() or not hud.time_date_slider.is_visible_in_tree() or not hud.time_slider.is_visible_in_tree() or hud.time_label.text != "12:30 PST":
 		_fail("The options screen must offer the date and time on desktop, paused, at the recorded moment's 12:30 PST (time shown \"%s\")." % hud.time_label.text)
+		return ""
+	# Play's start, as a run that is not a test's starts its clock: 12:30 on the
+	# island's date today, whatever the real time, running; the Sun at its sun at
+	# once, and the options screen showing that date and 12:30.
+	var real_now := Time.get_unix_time_from_system()
+	var start := DayClock.start_for(true, false, real_now)
+	DayClock.start_at(float(start[0]))
+	await process_frame
+	var today := DayClock.local(float(start[0]))
+	var start_shown := DaySun.shown_angles(DayClock.now())
+	var date_text := "%s %d %s %d" % [GameHUD.WEEKDAYS[int(today.weekday)], int(today.day), GameHUD.MONTHS[int(today.month) - 1], int(today.year)]
+	var opened := [hud.time_date_label.text, hud.time_label.text, hud.time_date_slider.value, hud.time_slider.value]
+	if start[1] != true or absf(DayClock.now() - float(start[0])) > 1.0 or not DayClock.is_running() or DayClock.local(real_now).day_of_year != today.day_of_year \
+	or opened != [date_text, "12:30 %s" % today.zone, float(today.day_of_year), 750.0] or not sun.rotation_degrees.is_equal_approx(DaySun.rotation_for(start_shown)):
+		_fail("Play's start must be 12:30 on the island's date today (%s for the real time %s), running, the options screen showing it (%s, not %s) and the Sun at its sun at once (%s, not %s)." % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), [date_text, "12:30 %s" % today.zone, today.day_of_year, 750], opened, DaySun.rotation_for(start_shown), sun.rotation_degrees])
 		return ""
 	# A player's changes, as the slider's value_changed brings them, while paused.
 	var moves := PackedStringArray()
@@ -835,7 +853,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	DayClock.pin()
 	await process_frame
 	if absf(ran - real) > 0.005 or real < 0.25 or real_gap > 1.0 or not now_running or sun.transform != scene_transform or _look_of(sun, environment) != scene_look:
-		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now go back to the real time (%.3f s off, running %s), and pinned again the Sun and its light be main.tscn's (%s; light %s)." % [ran, real, real_gap, now_running, sun.rotation_degrees, _look_of(sun, environment)])
+		_fail("After a move time must run on with the system clock (%.4f s while it ran %.4f s), Now jump to the real time (%.3f s off, running %s), and pinned again the Sun and its light be main.tscn's (%s; light %s)." % [ran, real, real_gap, now_running, sun.rotation_degrees, _look_of(sun, environment)])
 		return ""
 	_push_key(KEY_ESCAPE)
 	hud.resume_button.pressed.emit()
@@ -843,7 +861,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	if paused or hud.options_visible():
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
-	return "held at the recorded moment with main.tscn's Sun and daylight; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now; pinned again" % ", ".join(moves)
+	return "held at the recorded moment with main.tscn's Sun and daylight; play's start at %s for the real time %s, the options showing it and the Sun there at once; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now the real time; pinned again" % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), ", ".join(moves)]
 
 
 ## The time of day's switch off (DayClock.enabled; owner, 2026-11-15: all of it

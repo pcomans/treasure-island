@@ -1,10 +1,16 @@
 extends SceneTree
-## The time of day (owner, 2026-11-14: the sun of the real date and time on the
-## island, running at real speed, with a date and a time slider), headless and
-## without the world. The Sun following it in the loaded game, and the sliders
+## The time of day (owner, 2026-11-14: the sun of the island's date and time,
+## running at real speed, with a date and a time slider; 2026-11-16: play always
+## starts in good light), headless and without the world. The Sun following it in the loaded game, and the sliders
 ## worked there, are headless_gameplay_contract.gd's.
 ##   - a test driver's clock is held at the recorded moment (main.tscn's Sun), and
 ##     the sun drawn there is main.tscn's Sun exactly;
+##   - play starts at the recorded moment's time of day, 12:30, on the island's
+##     date at the real time, whatever that time is (in the night, either side of
+##     midnight, an evening when the UTC date has already turned, either side of
+##     both daylight-saving changes), running; held at the recorded moment with
+##     the time of day off and in a test or capture run; from that start time runs
+##     on at real speed, and Now jumps to the real time;
 ##   - the game's sun (SolarPosition) is tools/solar_position.mjs's: within
 ##     TOLERANCE_DEG of the table the Node tool prints (`--table`; tools/test.sh
 ##     prints it outside the repository and names it: -- --solar-table FILE), every
@@ -36,8 +42,8 @@ extends SceneTree
 ##     pitch from the camera's (the lights in the loaded game are
 ##     headless_vehicle_contract.gd's);
 ##   - the options screen's date and time read the island's clock (PST and PDT),
-##     its sliders jump the clock and time runs on, Now goes back to the real time,
-##     and the web's options screen has none of it;
+##     its sliders jump the clock and time runs on, Now jumps to the real time, and
+##     the web's options screen has none of it;
 ##   - the switch (DayClock.enabled; owner, 2026-11-15: the whole time of day
 ##     behind one flag): --no-time-of-day on the command line, the project setting
 ##     off and the web build each turn it off, and nothing else; with the setting
@@ -99,6 +105,9 @@ func _run() -> void:
 	var running := _check_running()
 	if running.is_empty():
 		return _finish()
+	var start := _check_start()
+	if start.is_empty():
+		return _finish()
 	var sun := await _check_day_sun()
 	if sun.is_empty():
 		return _finish()
@@ -114,7 +123,7 @@ func _run() -> void:
 	var switch := await _check_switch_off()
 	if switch.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, lights, menu, switch])
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, start, sun, light, lights, menu, switch])
 	_finish()
 
 
@@ -302,6 +311,64 @@ func _check_running() -> String:
 	or not _require(DayClock.revision() == revision + 6 and DayClock.now() == DayClock.RECORDED_UNIX, "Every jump must count (%d counted, 6 made) and pin() go back to the recorded moment." % (DayClock.revision() - revision)):
 		return ""
 	return "the system clock's speed (%.4f s against the system's %.4f s, and %.4f s with the time scale at 0); with a stand-in system clock, 12.5 s running, 7.25 s more paused, an hour asleep and a 2 s correction back carried the game's time exactly; held still when pinned; Now the real time" % [span.x, span.y, paused_span.x]
+
+
+## Play's start (DayClock.start_for, start_instant; owner, 2026-11-16: "always start
+## the game during a time with nice lighting"): 12:30 on the island's date at the
+## real time, whatever the real time, running; held at the recorded moment with the
+## time of day off or in a test or capture run. From a start in the night, on a
+## stand-in system clock, time runs on at real speed, and Now jumps to the real
+## (night) time.
+func _check_start() -> String:
+	# [the real time on the island's clock, the start it must give].
+	var cases := [
+		["2026-11-16 23:30", "2026-11-16 12:30 PST"],
+		["2026-11-16 03:10", "2026-11-16 12:30 PST"],
+		["2026-11-16 17:00", "2026-11-16 12:30 PST"],
+		["2026-11-16 23:59", "2026-11-16 12:30 PST"],
+		["2026-11-17 00:00", "2026-11-17 12:30 PST"],
+		["2026-12-31 23:59", "2026-12-31 12:30 PST"],
+		["2027-01-01 00:01", "2027-01-01 12:30 PST"],
+		["2026-10-31 23:00", "2026-10-31 12:30 PDT"],
+		["2026-11-01 01:30", "2026-11-01 12:30 PST"],
+		["2026-11-01 03:00", "2026-11-01 12:30 PST"],
+		["2026-03-07 23:00", "2026-03-07 12:30 PST"],
+		["2026-03-08 01:30", "2026-03-08 12:30 PDT"],
+		["2026-03-08 03:30", "2026-03-08 12:30 PDT"],
+		["2026-06-21 12:30", "2026-06-21 12:30 PDT"],
+	]
+	var wrong := []
+	for case: Array in cases:
+		var real := DayClock.parse_local(case[0])
+		var start := DayClock.start_for(true, false, real)
+		var shown := DayClock.moment_text(float(start[0]))
+		if shown != case[1] or start[1] != true:
+			wrong.append("%s gave %s (running %s), not %s" % [case[0], shown, start[1], case[1]])
+	# 01:30 on 2026-11-01 comes twice; the second (PST, an hour later) starts the same day.
+	var second := DayClock.parse_local("2026-11-01 01:30") + 3600.0
+	if DayClock.moment_text(second) != "2026-11-01 01:30 PST" or DayClock.moment_text(DayClock.start_instant(second)) != "2026-11-01 12:30 PST":
+		wrong.append("the second 01:30 on 2026-11-01 (%s) gave %s" % [DayClock.moment_text(second), DayClock.moment_text(DayClock.start_instant(second))])
+	var night := DayClock.parse_local("2026-11-16 23:30")
+	var held := [DayClock.start_for(true, true, night), DayClock.start_for(false, false, night), DayClock.start_for(false, true, night)]
+	if not _require(wrong.is_empty(), "Play must start at 12:30 on the island's date at the real time: %s." % ", ".join(PackedStringArray(wrong))) \
+	or not _require(held.all(func(start: Array) -> bool: return start == [DayClock.RECORDED_UNIX, false]), "A test or capture run, and a run with the time of day off, must start held at the recorded moment: %s." % [held]):
+		return ""
+	# A start in the night, on a stand-in system clock: time runs on at real speed
+	# from 12:30, and Now jumps to the real night.
+	var system := [night]
+	DayClock.system_clock = func() -> float: return system[0]
+	var start_unix := float(DayClock.start_for(true, false, float(system[0]))[0])
+	DayClock.start_at(start_unix)
+	var at_start := [DayClock.now() - start_unix, DayClock.is_running()]
+	system[0] += 600.0
+	var later := DayClock.now() - start_unix
+	DayClock.start_now()
+	var at_now := [DayClock.now() - float(system[0]), DayClock.is_running(), DayClock.moment_text(DayClock.now())]
+	DayClock.use_system_clock()
+	DayClock.pin()
+	if not _require(at_start == [0.0, true] and later == 600.0 and at_now == [0.0, true, "2026-11-16 23:40 PST"], "Started at 12:30 from a real 23:30, time must run on with the system clock and Now jump to the real time (at the start %s, after 600 s %s, Now %s)." % [at_start, later, at_now]):
+		return ""
+	return "play starting at 12:30 on the island's date for %d real times (in the night, at 03:10, an evening past UTC's midnight, either side of midnight and of the new year, either side of November's and March's changes, the repeated 01:30 both times), held at the recorded moment in a test run and with the time of day off; from a start at a real 23:30 the time ran 600 s with the system clock and Now jumped to 23:40" % (cases.size() + 1)
 
 
 ## DaySun on a Sun, an environment and a sky material of its own, copies of
@@ -684,7 +751,7 @@ func _check_options_rows() -> String:
 	var real := absf(DayClock.now() - Time.get_unix_time_from_system())
 	var now_running := DayClock.is_running()
 	DayClock.pin()
-	if not _require(real < 1.0 and now_running, "Now must go back to the real time, running (%.3f s off, running %s)." % [real, now_running]):
+	if not _require(real < 1.0 and now_running, "Now must jump to the real time, running (%.3f s off, running %s)." % [real, now_running]):
 		return ""
 	# The web's options screen: none of it.
 	hud.set_time_controls(false)
