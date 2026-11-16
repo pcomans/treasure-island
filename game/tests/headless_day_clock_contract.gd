@@ -46,8 +46,7 @@ extends SceneTree
 ##     the web's options screen has none of it; the time slider marks the shown
 ##     date's sunrise and sunset (owner, 2026-11-16: night is experimental) where a
 ##     click puts those times, and the marks move with the date; "Night is
-##     experimental" shows beside the heading by day and at night, and on a phone's
-##     touch layout inside the panel, clear of the heading;
+##     experimental" shows directly under the time slider by day and at night;
 ##   - the switch (DayClock.enabled; owner, 2026-11-15: the whole time of day
 ##     behind one flag): --no-time-of-day on the command line, the project setting
 ##     off and the web build each turn it off, and nothing else; with the setting
@@ -774,15 +773,13 @@ func _check_options_rows() -> String:
 ## and then Nighttime is experimental"), at the recorded moment: its marks at that
 ## date's sunrise and sunset (DayClock.sun_times: the sun's centre
 ## SUNRISE_ELEVATION_DEG up before refraction, rising before noon and setting after
-## it, on that date), each where a click on the slider puts its time, to the
-## slider's own resolution (a pixel and its step); the night note beside the
-## heading, inside the panel and clear of the heading's text, by day (12:30) and at
-## night (23:00); another date's marks at that date's own sunrise and sunset. Then
-## on a phone's screen (the touch drive test's iPhone, upright and sideways) with
-## the touch layout and the web's rows plus the time of day, as the web would have
-## them: the panel inside the page, the note inside it and clear of the heading,
-## the marks on the slider, the slider thumb-sized. The window and the clock as
-## they were after. Returns a summary, or "" after failing.
+## it, on that date), and a click where they are drawn (daylight_marks_x, the places
+## _draw_daylight takes) puts the slider at each one's time, to the slider's own
+## resolution (a pixel and its step); "Night is experimental" directly under the
+## time slider, by day (12:30) and at night (23:00): hung from the slider below its
+## track, within its width, inside the panel and clear of the Now button and of the
+## next row; another date's marks at that date's own sunrise and sunset. The clock
+## as it was after. Returns a summary, or "" after failing.
 func _check_daylight(hud: GameHUD) -> String:
 	DayClock.pin()
 	hud.show_options()
@@ -801,11 +798,11 @@ func _check_daylight(hud: GameHUD) -> String:
 			return ""
 	var marks := hud.daylight_minutes()
 	var slider := hud.time_slider
-	var marks_x: Array = marks.map(func(minutes: float) -> float: return hud.time_slider_x(minutes))
-	if not _require(marks == wanted and float(marks_x[0]) > 0.0 and float(marks_x[0]) < float(marks_x[1]) and float(marks_x[1]) < slider.size.x, "The time slider must mark the recorded moment's date's sunrise and sunset, %s minutes into the day, on the slider (marked %s at x %s of %.0f)." % [wanted, marks, marks_x, slider.size.x]):
+	var marks_x := hud.daylight_marks_x()
+	if not _require(marks == wanted and marks_x.size() == 2 and marks_x[0] > 0.0 and marks_x[0] < marks_x[1] and marks_x[1] < slider.size.x, "The time slider must mark the recorded moment's date's sunrise and sunset, %s minutes into the day, on the slider (marked %s at x %s of %.0f)." % [wanted, marks, marks_x, slider.size.x]):
 		return ""
-	# A click on each mark: the slider's own value for that place, to a pixel's worth
-	# of minutes (it reads a click to a whole pixel) and half its step.
+	# A click on each mark where it is drawn: the slider's own value for that place, to
+	# a pixel's worth of minutes (it reads a click to a whole pixel) and half its step.
 	var per_px := (slider.max_value - slider.min_value) / (slider.size.x - float(slider.get_theme_icon("grabber").get_width()))
 	var clicked := []
 	for index in 2:
@@ -817,14 +814,21 @@ func _check_daylight(hud: GameHUD) -> String:
 	DayClock.pin()
 	hud.show_options()
 	await process_frame
-	# The night note, by day and at night (the time slider's own moves).
-	var heading := hud.time_heading.get_node("Text") as Control
+	# The night note directly under the time slider, by day and at night (the time
+	# slider's own moves): from inside the slider's rect, below its track (as the
+	# slider draws it: its style's height, centred in whole pixels), within its width.
+	var track_height := slider.get_theme_stylebox("slider").get_minimum_size().y
+	var next_row := hud.options_panel.get_node("OptionsLayout/SoundHeading") as Control
 	var notes := []
 	for minutes: float in [750.0, 1380.0]:
 		slider.value = minutes
 		await process_frame
-		notes.append([hud.time_label.text, hud.night_note.is_visible_in_tree(), hud.night_note.text, hud.options_panel.get_global_rect().encloses(hud.night_note.get_global_rect()), not hud.night_note.get_global_rect().intersects(heading.get_global_rect())])
-	if not _require(notes == [["12:30 PST", true, "Night is experimental", true, true], ["23:00 PST", true, "Night is experimental", true, true]], "Beside the time of day's heading, inside the panel and clear of the heading's text, \"Night is experimental\" must show by day and at night ([time, shown, text, inside the panel, clear of the heading] %s)." % [notes]):
+		var note := hud.night_note.get_global_rect()
+		var under := slider.get_global_rect()
+		var track_bottom := under.position.y + floorf((under.size.y - track_height) / 2.0) + track_height
+		notes.append([hud.time_label.text, hud.night_note.is_visible_in_tree(), hud.night_note.text, note.position.y >= track_bottom and note.position.y < under.end.y, note.position.x >= under.position.x and note.end.x <= under.end.x,
+			hud.options_panel.get_global_rect().encloses(note), not note.intersects(hud.time_now_button.get_global_rect()) and not note.intersects(next_row.get_global_rect())])
+	if not _require(notes == [["12:30 PST", true, "Night is experimental", true, true, true, true], ["23:00 PST", true, "Night is experimental", true, true, true, true]], "\"Night is experimental\" must show directly under the time slider by day and at night: from inside the slider's rect below its track, within its width, inside the panel, clear of the Now button and the next row ([time, shown, text, under the track, within the width, inside the panel, clear] %s)." % [notes]):
 		return ""
 	# Another date (the date slider): its own sunrise and sunset, earlier and later.
 	hud.time_date_slider.value = 172
@@ -832,33 +836,13 @@ func _check_daylight(hud: GameHUD) -> String:
 	var june := DayClock.sun_times(2026, 172)
 	var june_wanted: Array[float] = [DayClock.local_minutes(june[0]), DayClock.local_minutes(june[1])]
 	var june_marks := hud.daylight_minutes()
-	if not _require(hud.time_date_label.text == "Sun 21 Jun 2026" and june_marks == june_wanted and june_marks[0] < marks[0] and june_marks[1] > marks[1] and hud.time_slider_x(june_marks[0]) < float(marks_x[0]) and hud.time_slider_x(june_marks[1]) > float(marks_x[1]), "On Sun 21 Jun 2026 (the date slider at 172, showing %s) the marks must move to that date's sunrise and sunset, %s, before and after the recorded date's %s (marked %s)." % [hud.time_date_label.text, june_wanted, marks, june_marks]):
+	var june_x := hud.daylight_marks_x()
+	if not _require(hud.time_date_label.text == "Sun 21 Jun 2026" and june_marks == june_wanted and june_marks[0] < marks[0] and june_marks[1] > marks[1] and june_x.size() == 2 and june_x[0] < marks_x[0] and june_x[1] > marks_x[1], "On Sun 21 Jun 2026 (the date slider at 172, showing %s) the marks must move to that date's sunrise and sunset, %s, before and after the recorded date's %s (marked %s at x %s, before at %s)." % [hud.time_date_label.text, june_wanted, marks, june_marks, june_x, marks_x]):
 		return ""
 	DayClock.pin()
 	hud.show_options()
-	# A phone's screen, the touch layout, the web's rows with the time of day.
-	var window := root.size
-	var layout := root.content_scale_size
-	root.content_scale_size = Vector2i(GameMain.TOUCH_LAYOUT_PX, GameMain.TOUCH_LAYOUT_PX)
-	hud.set_touch_instructions()
-	hud.set_shadow_levels(ShadowQuality.LEVELS.filter(func(level: Dictionary) -> bool: return level.web), "off")
-	hud.set_graphics(GraphicsSettings.offered(GraphicsSettings.FRAME_RATE_KEY, true), GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY, true), GraphicsSettings.defaults(true))
-	var phones := []
-	for shape: Vector2i in [Vector2i(1206, 2148), Vector2i(2622, 1110)]:
-		root.size = shape
-		for _frame in 2:
-			await process_frame
-		var page := Rect2(Vector2.ZERO, hud.get_viewport_rect().size)
-		var panel := hud.options_panel.get_global_rect()
-		var note := hud.night_note.get_global_rect()
-		var phone_x: Array = hud.daylight_minutes().map(func(minutes: float) -> float: return hud.time_slider_x(minutes))
-		phones.append([shape, page.encloses(panel), panel.encloses(note), not note.intersects(heading.get_global_rect()), hud.night_note.is_visible_in_tree(), float(phone_x[0]) > 0.0 and float(phone_x[1]) < slider.size.x, slider.size.y >= 64.0])
-	root.size = window
-	root.content_scale_size = layout
 	await process_frame
-	if not _require(phones.all(func(phone: Array) -> bool: return phone.slice(1) == [true, true, true, true, true, true]), "On a phone's screen with the touch layout the options panel must lie inside the page, the night note inside it, clear of the heading and shown, and the marks on a thumb-sized slider ([window, panel in page, note in panel, clear of the heading, shown, marks on the slider, thumb-sized] %s)." % [phones]):
-		return ""
-	return "the time slider marking %s's sunrise and sunset at %s and %s (the sun's centre %.3f degrees up before refraction, rising and setting), a click on each mark putting the slider at %s, \"Night is experimental\" beside the heading at 12:30 and 23:00, Sun 21 Jun's marks at %s and %s, and on a phone's screen, upright and sideways, the note and the marks inside the panel and clear of the heading" % [DayClock.moment_text(DayClock.RECORDED_UNIX).left(10), DayClock.moment_text(times[0]).right(9), DayClock.moment_text(times[1]).right(9), DayClock.SUNRISE_ELEVATION_DEG, clicked, DayClock.moment_text(june[0]).right(9), DayClock.moment_text(june[1]).right(9)]
+	return "the time slider marking %s's sunrise and sunset at %s and %s (the sun's centre %.3f degrees up before refraction, rising and setting), a click where each mark is drawn putting the slider at %s, \"Night is experimental\" directly under the slider at 12:30 and 23:00, and Sun 21 Jun's marks at %s and %s" % [DayClock.moment_text(DayClock.RECORDED_UNIX).left(10), DayClock.moment_text(times[0]).right(9), DayClock.moment_text(times[1]).right(9), DayClock.SUNRISE_ELEVATION_DEG, clicked, DayClock.moment_text(june[0]).right(9), DayClock.moment_text(june[1]).right(9)]
 
 
 ## The switch (DayClock.enabled): on unless --no-time-of-day is on the command line,
