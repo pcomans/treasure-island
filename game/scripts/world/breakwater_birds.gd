@@ -606,18 +606,18 @@ static func _gull(m: Mesher, sitting: bool) -> void:
 	var head_shift := Vector3.ZERO
 	var tail_tip_z := 0.275
 	if sitting:
-		# Long and low, the breast down on the stone and the head drawn in onto the
-		# shoulders.
+		# Long and low, a full breast pushed forward on the stone, the shoulders up
+		# round a neck sunk between them.
 		body_rings = [
 			[0.27, 0.098, 0.026, 0.015], [0.2, 0.096, 0.054, 0.035], [0.13, 0.089, 0.078, 0.055],
-			[0.05, 0.081, 0.088, 0.073], [-0.03, 0.079, 0.09, 0.079], [-0.1, 0.084, 0.082, 0.078],
-			[-0.15, 0.1, 0.064, 0.066], [-0.175, 0.124, 0.044, 0.048],
+			[0.05, 0.082, 0.088, 0.075], [-0.03, 0.083, 0.09, 0.085], [-0.1, 0.088, 0.084, 0.082],
+			[-0.15, 0.098, 0.07, 0.07], [-0.18, 0.112, 0.056, 0.058], [-0.2, 0.13, 0.034, 0.038],
 		]
 		neck_rings = [
-			[0.125, -0.12, 0.056, 0.056, Vector3.BACK], [0.16, -0.137, 0.05, 0.051, Vector3.BACK],
-			[0.19, -0.146, 0.044, 0.046, Vector3(0.0, 0.5, 1.0)],
+			[0.12, -0.115, 0.058, 0.058, Vector3.BACK], [0.15, -0.13, 0.053, 0.054, Vector3.BACK],
+			[0.175, -0.138, 0.047, 0.048, Vector3(0.0, 0.5, 1.0)],
 		]
-		head_shift = Vector3(0.0, -0.13, 0.015)
+		head_shift = Vector3(0.0, -0.145, 0.022)
 		tail_tip_z = 0.29
 	var body := []
 	for ring: Array in body_rings:
@@ -643,8 +643,8 @@ static func _gull(m: Mesher, sitting: bool) -> void:
 	for ring: Array in neck_rings:
 		head.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])), ring[4], float(ring[2]), float(ring[3])))
 	for ring: Array in [
-		[0.3436, -0.1664, 0.0386, 0.0386, Vector3(0.0, 0.9, 0.5)], [0.3537, -0.1858, 0.0378, 0.0353, Vector3.UP],
-		[0.3503, -0.2069, 0.0328, 0.0302, Vector3.UP], [0.3428, -0.2263, 0.0235, 0.0227, Vector3(0.0, 1.0, -0.2)],
+		[0.3436, -0.1664, 0.0386, 0.0386, Vector3(0.0, 0.9, 0.5)], [0.352, -0.1858, 0.039, 0.032, Vector3.UP],
+		[0.349, -0.2069, 0.0335, 0.028, Vector3.UP], [0.3428, -0.2263, 0.0235, 0.0227, Vector3(0.0, 1.0, -0.2)],
 		[0.336, -0.2404, 0.0151, 0.0168, Vector3(0.0, 1.0, -0.3)],
 	]:
 		head.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + head_shift, ring[4], float(ring[2]), float(ring[3])))
@@ -661,16 +661,12 @@ static func _gull(m: Mesher, sitting: bool) -> void:
 	var gonys := func(t: float, _up: float, _side: float) -> Color:
 		return GULL_GONYS if t > 0.45 and t < 0.85 else GULL_BILL
 	m.loft(lower, 8, 1, gonys, null, Vector3(0.0, 0.3264, -0.2986) + head_shift)
-	# The small pale eye under a heavy brow, its dark pupil.
+	# The small pale eye, its dark pupil, set high under the edge of the flat crown
+	# (no drawn brow: the crown's own edge shades it).
 	for side: float in [1.0, -1.0]:
 		var eye := Vector3(0.0311 * side, 0.3612, -0.1999) + head_shift
 		_ball(m, eye, 0.004, GULL_IRIS)
 		_ball(m, eye + Vector3(0.0032 * side, 0.0004, -0.0011), 0.0016, GULL_PUPIL)
-		m.loft([
-			_ring(Vector3(0.029 * side, 0.37, -0.1902) + head_shift, Vector3(0.5 * side, 1.0, 0.0), 0.0055, 0.0038),
-			_ring(Vector3(0.0298 * side, 0.3692, -0.2016) + head_shift, Vector3(0.5 * side, 1.0, 0.0), 0.0063, 0.0042),
-			_ring(Vector3(0.026 * side, 0.3667, -0.2139) + head_shift, Vector3(0.5 * side, 1.0, 0.0), 0.0046, 0.0034),
-		], 6, 1, _solid(GULL_WHITE), null, null)
 	# The black primaries, from inside the body out over the tail, crossed past it,
 	# a small white mirror near the tip: standing, over the tail as the folded wing
 	# carries them; sitting, laid flat along the tail.
@@ -689,6 +685,19 @@ static func _gull(m: Mesher, sitting: bool) -> void:
 			_ring(Vector3(0.008 * side, float(rise[3]) + low, 0.31), Vector3.UP, 0.01, 0.004),
 		], 6, 2, primaries, null, Vector3(-0.008 * side, float(rise[4]) + low, 0.37))
 	if sitting:
+		# The folded wing's lower edge, a little proud of the white flank along the
+		# grey's lower line and rising to the shoulder: the line a resting gull's side
+		# shows from the front and from above.
+		for side: float in [1.0, -1.0]:
+			var out := Vector3(0.9 * side, 0.45, 0.0)
+			m.loft([
+				_ring(Vector3(0.0615 * side, 0.1129, 0.16), out, 0.0045, 0.0025),
+				_ring(Vector3(0.0751 * side, 0.1148, 0.09), out, 0.005, 0.0028),
+				_ring(Vector3(0.0805 * side, 0.1185, 0.01), out, 0.005, 0.0028),
+				_ring(Vector3(0.079 * side, 0.1228, -0.06), out, 0.005, 0.0028),
+				_ring(Vector3(0.076 * side, 0.1249, -0.1), out, 0.0045, 0.0025),
+				_ring(Vector3(0.0685 * side, 0.1277, -0.13), Vector3(0.8 * side, 0.6, 0.0), 0.004, 0.0022),
+			], 6, 2, _solid(GULL_MANTLE), Vector3(0.058 * side, 0.112, 0.18), Vector3(0.063 * side, 0.13, -0.145))
 		return
 	# Thick pink legs from inside the belly, bent at the ankle, to webbed feet flat
 	# on the stone; far off they draw in to a point inside the body.
@@ -728,9 +737,9 @@ static func _cormorant(m: Mesher, spread: bool) -> void:
 		_ring(Vector3(0.0, 0.016, 0.18), Vector3(0.0, 0.8, 0.6), 0.02, 0.006),
 	], 6, 1, _solid(CORMORANT_FLIGHT), null, Vector3(0.0, 0.0, 0.208))
 	_cormorant_head(m, [
-		[0.38, -0.07, 0.042, 0.04, Vector3.BACK], [0.435, -0.088, 0.026, 0.03, Vector3.BACK],
-		[0.485, -0.083, 0.021, 0.025, Vector3.BACK], [0.53, -0.07, 0.019, 0.022, Vector3.BACK],
-		[0.57, -0.07, 0.02, 0.022, Vector3(0.0, 0.3, 1.0)],
+		[0.38, -0.07, 0.04, 0.04, Vector3.BACK], [0.435, -0.092, 0.022, 0.027, Vector3.BACK],
+		[0.485, -0.086, 0.017, 0.021, Vector3.BACK], [0.53, -0.068, 0.016, 0.019, Vector3.BACK],
+		[0.57, -0.072, 0.017, 0.02, Vector3(0.0, 0.3, 1.0)],
 	], Vector3.ZERO)
 	for side: float in [1.0, -1.0]:
 		if spread:
@@ -761,9 +770,9 @@ static func _cormorant_sitting(m: Mesher) -> void:
 		_ring(Vector3(0.0, 0.006, 0.285), Vector3(0.0, 1.0, 0.15), 0.019, 0.005),
 	], 6, 1, _solid(CORMORANT_FLIGHT), null, Vector3(0.0, 0.003, 0.32))
 	_cormorant_head(m, [
-		[0.165, -0.19, 0.042, 0.042, Vector3.BACK], [0.22, -0.212, 0.027, 0.029, Vector3.BACK],
-		[0.265, -0.21, 0.021, 0.024, Vector3.BACK], [0.31, -0.196, 0.019, 0.021, Vector3.BACK],
-		[0.355, -0.188, 0.02, 0.021, Vector3(0.0, 0.3, 1.0)],
+		[0.165, -0.19, 0.04, 0.04, Vector3.BACK], [0.22, -0.214, 0.023, 0.026, Vector3.BACK],
+		[0.265, -0.212, 0.018, 0.021, Vector3.BACK], [0.31, -0.196, 0.016, 0.019, Vector3.BACK],
+		[0.355, -0.19, 0.017, 0.02, Vector3(0.0, 0.3, 1.0)],
 	], Vector3(0.0, -0.215, -0.115))
 
 
@@ -784,21 +793,22 @@ static func _cormorant_head(m: Mesher, neck: Array, shift: Vector3) -> void:
 	var rings := []
 	for ring: Array in neck:
 		rings.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])), ring[4], float(ring[2]), float(ring[3])))
+	# A narrow head, longer than it is wide.
 	for ring: Array in [
-		[0.6, -0.09, 0.024, 0.026, Vector3(0.0, 1.0, 0.7)], [0.618, -0.11, 0.026, 0.028, Vector3(0.0, 1.0, 0.2)],
-		[0.622, -0.132, 0.023, 0.024, Vector3.UP], [0.616, -0.152, 0.016, 0.018, Vector3.UP],
+		[0.6, -0.09, 0.019, 0.026, Vector3(0.0, 1.0, 0.7)], [0.618, -0.11, 0.021, 0.028, Vector3(0.0, 1.0, 0.2)],
+		[0.622, -0.132, 0.0185, 0.024, Vector3.UP], [0.616, -0.152, 0.013, 0.018, Vector3.UP],
 	]:
 		rings.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + shift, ring[4], float(ring[2]), float(ring[3])))
 	m.loft(rings, 10, 2, head_paint, null, Vector3(0.0, 0.612, -0.16) + shift)
-	# A heavy bill, deep at the base, its tip hooked down.
+	# A long, heavy bill held a little up, deep at the base, its tip hooked down.
 	var bill_paint := func(t: float, up: float, _side: float) -> Color:
 		return CORMORANT_GULAR if t < 0.25 and up < 0.0 else CORMORANT_BILL
 	var bill := []
-	for ring: Array in [[0.612, -0.146, 0.0115, 0.0125], [0.617, -0.17, 0.008, 0.0092], [0.621, -0.194, 0.0062, 0.0072], [0.623, -0.208, 0.0052, 0.006]]:
-		bill.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + shift, Vector3.UP, float(ring[2]), float(ring[3])))
-	m.loft(bill, 6, 1, bill_paint, null, Vector3(0.0, 0.613, -0.218) + shift)
+	for ring: Array in [[0.612, -0.146, 0.0105, 0.0125], [0.62, -0.172, 0.0074, 0.0092], [0.628, -0.198, 0.0058, 0.0072], [0.633, -0.216, 0.0048, 0.006]]:
+		bill.append(_ring(Vector3(0.0, float(ring[0]), float(ring[1])) + shift, Vector3(0.0, 1.0, 0.15), float(ring[2]), float(ring[3])))
+	m.loft(bill, 6, 1, bill_paint, null, Vector3(0.0, 0.626, -0.229) + shift)
 	for side: float in [1.0, -1.0]:
-		_ball(m, Vector3(0.0215 * side, 0.626, -0.128) + shift, 0.0042, CORMORANT_EYE)
+		_ball(m, Vector3(0.0175 * side, 0.626, -0.128) + shift, 0.0042, CORMORANT_EYE)
 
 
 ## One spread wing (side +1 the bird's right, +X): a thin sheet between its
@@ -884,13 +894,18 @@ static func _pelican(m: Mesher, pose: String) -> void:
 			return PELICAN_PRIMARY.lerp(PELICAN_BACK, t / 0.2)
 		return PELICAN_BACK
 	m.loft(body, 12, 2, body_paint, origin - axis * 0.02, origin + axis * 0.64)
-	# The dark primaries, from inside the body out over the tail, crossed at its tip.
+	# The dark primaries, from under the folded wing out over the tail, crossed at
+	# its tip: rounded and standing a little proud of the back, so they cast an edge,
+	# and greying into the wing's brown where they come out from under it.
+	var primary_paint := func(t: float, up: float, _side: float) -> Color:
+		var base := PELICAN_BACK.lerp(PELICAN_PRIMARY, smoothstep(0.0, 0.35, t))
+		return base.lerp(PELICAN_PRIMARY, 0.25) if up < -0.3 else base
 	for side: float in [1.0, -1.0]:
-		var low := 0.0 if side > 0.0 else -0.005
+		var low := 0.0 if side > 0.0 else -0.006
 		var rings := []
-		for step: Array in [[0.2, 0.08, 0.08], [0.1, 0.06, 0.075], [0.02, 0.03, 0.052], [-0.04, 0.01, 0.042]]:
-			rings.append(_ring(origin + axis * float(step[0]) + Vector3(float(step[1]) * side, 0.0, 0.0) + dorsal * (float(step[2]) + low), dorsal, lerpf(0.012, 0.035, clampf(float(step[0]) / 0.2, 0.0, 1.0)), 0.008))
-		m.loft(rings, 6, 2, _solid(PELICAN_PRIMARY), null, origin - axis * 0.09 + Vector3(-0.008 * side, 0.0, 0.0) + dorsal * (0.036 + low))
+		for step: Array in [[0.2, 0.08, 0.066], [0.1, 0.06, 0.083], [0.02, 0.03, 0.062], [-0.04, 0.01, 0.05]]:
+			rings.append(_ring(origin + axis * float(step[0]) + Vector3(float(step[1]) * side, 0.0, 0.0) + dorsal * (float(step[2]) + low), dorsal, lerpf(0.012, 0.032, clampf(float(step[0]) / 0.2, 0.0, 1.0)), 0.012))
+		m.loft(rings, 8, 2, primary_paint, null, origin - axis * 0.09 + Vector3(-0.008 * side, 0.0, 0.0) + dorsal * (0.042 + low))
 	var neck_paint := func(t: float, up: float, _side: float) -> Color:
 		# White in front, a dark stripe down the hindneck, the white head with its
 		# yellow-washed crown. Tucked, the hindneck shows only as a narrow dark patch
