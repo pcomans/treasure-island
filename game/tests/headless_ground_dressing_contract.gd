@@ -103,14 +103,37 @@ func _check_chip_window() -> void:
 		_require(reach <= GROUND_DRESSING.CHIP_WINDOW_M * 0.5, "The %s chip ring reaches %.1f m from the chips window's centre, past its half width." % [level, reach])
 
 
-## Chip cells stand only over a bed's bounds: those of the quadtree that touch it, and
-## none round a camera far from every bed.
+## Chip cells stand only over a bed: the quadtree cells over the ground cells its
+## triangles reach, every point of it among them, and none round a camera far from it.
 func _check_chip_cells() -> void:
-	var bounds: Array[Rect2] = [Rect2(10.0, 10.0, 6.0, 3.0)]
+	# A bed of 6 m by 3 m, and a strip 0.8 m wide and 40 m long on a slant.
+	var bed := PackedVector2Array([Vector2(10.0, 10.0), Vector2(16.0, 10.0), Vector2(16.0, 13.0), Vector2(10.0, 10.0), Vector2(16.0, 13.0), Vector2(10.0, 13.0)])
+	var along := Vector2(0.8, 0.6) * 40.0
+	var across := Vector2(-0.6, 0.8) * 0.8
+	var start := Vector2(-60.0, 30.0)
+	var strip := PackedVector2Array([start, start + along, start + along + across, start, start + along + across, start + across])
+	var ground := {}
+	GROUND_DRESSING.mulch_cells(bed, ground)
+	GROUND_DRESSING.mulch_cells(strip, ground)
+	ground = GROUND_DRESSING.grow_cells(ground, GROUND_DRESSING.MULCH_MARGIN_CELLS)
+	var cell_m: float = GROUND_DRESSING.CELL_M
+	for step in 81:
+		var point := start + along * (float(step) / 80.0) + across * 0.5
+		if not _require(ground.has(Vector2i(floori(point.x / cell_m), floori(point.y / cell_m))), "A point of the strip lies in a chip ground cell."):
+			return
+	for x in 13:
+		for z in 7:
+			var point := Vector2(10.0 + float(x) * 0.5, 10.0 + float(z) * 0.5)
+			if not _require(ground.has(Vector2i(floori(point.x / cell_m), floori(point.y / cell_m))), "A point of the bed lies in a chip ground cell."):
+				return
 	var cells := GROUND_DRESSING.cells_around(Vector3(12.0, 6.0, 11.0), 10.0)
-	var kept := GROUND_DRESSING.cells_over(cells, bounds)
+	var kept := GROUND_DRESSING.cells_over(cells, ground)
 	_require(not kept.is_empty() and kept.size() < cells.size(), "Chip cells over a bed are kept and the rest dropped.")
 	for cell: Vector3i in kept:
-		var size: float = GROUND_DRESSING.CELL_M * float(1 << cell.z)
-		_require(Rect2(float(cell.x) * size, float(cell.y) * size, size, size).intersects(bounds[0]), "A kept chip cell touches the bed.")
-	_require(GROUND_DRESSING.cells_over(GROUND_DRESSING.cells_around(Vector3(200.0, 6.0, 200.0), 10.0), bounds).is_empty(), "No chip cells far from every bed.")
+		var span := 1 << cell.z
+		var touches := false
+		for x in span:
+			for z in span:
+				touches = touches or ground.has(Vector2i(cell.x * span + x, cell.y * span + z))
+		_require(touches, "A kept chip cell lies over a chip ground cell.")
+	_require(GROUND_DRESSING.cells_over(GROUND_DRESSING.cells_around(Vector3(200.0, 6.0, 200.0), 10.0), ground).is_empty(), "No chip cells far from every bed.")

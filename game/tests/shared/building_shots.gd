@@ -139,9 +139,19 @@ extends SceneTree
 ##   and the frame cap off, from the view's camera: one FRAME_TIME line per level
 ##   with wall, render CPU and GPU times, and a DRESSING_CAPTURE line with what a
 ##   new capture costs.
+## Mulch (mulch_ground.gd): a still view may add "mulch_params": {"MATERIAL_KEY":
+##   {"uniform": value, ...}, ...} to set the shared mulch materials' uniforms (a list
+##   is a vector), kept for the views after it, to compare grades in one run. The
+##   ground dressing's loose chips keep the colour they were captured with, so shoot
+##   such views with "dressing": "off".
+## Resource counts: a still view may add "resource_counts": true to print a
+##   RESOURCE_COUNTS line after its shot: the scene's mesh and MultiMesh nodes, their
+##   distinct resources, MultiMesh instances and mesh surfaces, and the renderer's
+##   texture, buffer and video memory.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
 const VegetationKit := preload("res://game/scripts/world/street_vegetation_kit.gd")
 ## A gallery bed's ground textures (2 m tiles), its grid step and its lift over
 ## the drawn ground, in metres; each later bed lies BED_LAYER_M over the earlier.
@@ -764,6 +774,9 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var dressing_error := _apply_dressing(view)
 	if dressing_error != "":
 		return dressing_error
+	var mulch_error := _apply_mulch(view)
+	if mulch_error != "":
+		return mulch_error
 	if not view.get("times", []) is Array:
 		return "times must be a list of the island's own clock times"
 	var moments: Array = view.get("times", [])
@@ -805,10 +818,60 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 		error = _save_dressing_maps(path.get_basename())
 	if error == "" and view.has("measure_dressing"):
 		error = await _measure_dressing(view, path.get_file().get_basename())
+	if error == "" and view.get("resource_counts", false):
+		_print_resource_counts(path.get_file().get_basename())
 	if free != null:
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return error
+
+
+## Applies a view's "mulch_params" to the shared mulch materials. Returns an error, or "".
+func _apply_mulch(view: Dictionary) -> String:
+	if not view.has("mulch_params"):
+		return ""
+	if not view.mulch_params is Dictionary:
+		return "mulch_params maps a mulch material key to its uniforms"
+	var params: Dictionary = view.mulch_params
+	for key: String in params:
+		if not MULCH_GROUND.is_mulch(key) or not params[key] is Dictionary:
+			return "mulch_params: %s is not a mulch material key of mulch_ground.gd" % key
+		var material := MULCH_GROUND.material(key)
+		var uniforms: Dictionary = params[key]
+		for uniform: String in uniforms:
+			var value: Variant = uniforms[uniform]
+			if value is Array:
+				value = Vector2(value[0], value[1]) if (value as Array).size() == 2 else Vector3(value[0], value[1], value[2])
+			material.set_shader_parameter(uniform, value)
+	return ""
+
+
+## Prints what the loaded scene draws with: its mesh and MultiMesh nodes, their distinct
+## resources, MultiMesh instances and mesh surfaces, and the renderer's memory.
+func _print_resource_counts(label: String) -> void:
+	var mesh_nodes := 0
+	var multimesh_nodes := 0
+	var meshes := {}
+	var multimeshes := {}
+	for node: Node in root.find_children("*", "GeometryInstance3D", true, false):
+		if node is MeshInstance3D and (node as MeshInstance3D).mesh != null:
+			mesh_nodes += 1
+			meshes[(node as MeshInstance3D).mesh] = true
+		elif node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh != null:
+			multimesh_nodes += 1
+			multimeshes[(node as MultiMeshInstance3D).multimesh] = true
+	var surfaces := 0
+	for mesh: Mesh in meshes:
+		surfaces += mesh.get_surface_count()
+	var instances := 0
+	for multimesh: MultiMesh in multimeshes:
+		instances += multimesh.instance_count
+	print("RESOURCE_COUNTS view=%s mesh_nodes=%d meshes=%d surfaces=%d multimesh_nodes=%d multimeshes=%d multimesh_instances=%d texture_mem=%d buffer_mem=%d video_mem=%d renderer=%s" % [
+		label, mesh_nodes, meshes.size(), surfaces, multimesh_nodes, multimeshes.size(), instances,
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TEXTURE_MEM_USED),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_BUFFER_MEM_USED),
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED),
+		RenderingServer.get_current_rendering_method()])
 
 
 ## Applies a view's "dressing" level and "dressing_params". Returns an error, or "".

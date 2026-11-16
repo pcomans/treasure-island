@@ -21,8 +21,8 @@ extends Node3D
 ## (ground_dressing_chips.gdshader): a third capture, of the mulch alone from above over
 ## a smaller window (CHIP_WINDOW_M), says where they lie and how high (ground_chips), and
 ## the colour capture draws the bed's own colour for them to take on. Nothing grows on
-## mulch. Chip cells are only kept over the mulch's bounds, so the chips cost nothing
-## away from a bed.
+## mulch. Chip cells are only kept over the CELL_M ground cells a mulch surface reaches
+## (mulch_cells()), so the chips draw nothing away from a bed.
 ##
 ## The grass (ground_dressing_blades.gdshader) is opaque tufts of blades and the stones
 ## (ground_dressing_stones.gdshader) opaque low-poly rocks, each in MultiMesh cells.
@@ -119,8 +119,9 @@ const COLOUR_PIXELS := 768
 ## under a fifth of a metre, so chips stop at a bed's edge within a few centimetres.
 const CHIP_WINDOW_M := 96.0
 const CHIP_PIXELS := 512
-## Chip cells are kept within this distance of a mulch surface's bounds.
-const MULCH_MARGIN_M := 1.0
+## Chip cells are kept over the ground cells a mulch surface reaches and this many
+## cells round them.
+const MULCH_MARGIN_CELLS := 1
 const SNAP_M := 8.0
 const RECENTRE_M := 22.0
 ## The capture cameras' height. They look straight down through an orthographic lens,
@@ -182,8 +183,9 @@ var _blades: Dictionary
 var _cards: Dictionary
 var _stones: Dictionary
 var _chips: Dictionary
-## The mulch surfaces' bounds on the ground (x, z), grown by MULCH_MARGIN_M.
-var _mulch_bounds: Array[Rect2] = []
+## The CELL_M ground cells (Vector2i -> true) the mulch surfaces reach, grown by
+## MULCH_MARGIN_CELLS.
+var _mulch_cells := {}
 ## A mulch material -> its [colour capture, chips capture] materials.
 var _mulch_captures := {}
 ## The ring drawing the grass, _blades or _cards.
@@ -544,7 +546,8 @@ func configure(world: Node3D, player: Node3D, level: String) -> void:
 	_render_priority = int(ProjectSettings.get_setting(RENDER_PRIORITY_SETTING, 0))
 	var started := Time.get_ticks_msec()
 	_build_captures()
-	_chips.bounds = _mulch_bounds
+	_mulch_cells = grow_cells(_mulch_cells, MULCH_MARGIN_CELLS)
+	_chips.ground = _mulch_cells
 	print("GROUND_DRESSING level=%s surface_copies=%d colour_copies=%d mulch_copies=%d build_ms=%d" % [level, surface_viewport.get_child_count() - 1, colour_viewport.get_child_count() - 1, chips_viewport.get_child_count() - 1, Time.get_ticks_msec() - started])
 	_share_captures(blades)
 	_share_captures(stones)
@@ -611,7 +614,7 @@ func set_level(level: String) -> void:
 		_set_ring(_grass, float(settings.tufts_m2) * (CARD_TUFT_SHARE if _use_cards else 1.0), float(settings.ring_m))
 	if _draw_stones:
 		_set_ring(_stones, float(settings.stones_m2), float(settings.stone_ring_m))
-	if _draw_chips and not _mulch_bounds.is_empty():
+	if _draw_chips and not _mulch_cells.is_empty():
 		_set_ring(_chips, float(settings.chips_m2), float(settings.chip_ring_m))
 	(_grass.material as ShaderMaterial).set_shader_parameter("width_scale", float(settings.width_scale))
 	_warm_variants()
@@ -704,23 +707,53 @@ func _capture(at: Vector3) -> void:
 func _new_ring(material: ShaderMaterial, meshes: Array[Mesh], mesh_levels: bool) -> Dictionary:
 	# cells: Vector3i(x, z, level) -> its MultiMeshInstance3D; variants:
 	# Vector3i(level, tier, mesh level) -> MultiMesh; mesh_levels: whether a cell's mesh
-	# changes with distance (MESH_LEVELS), or it has the one; bounds: where its cells may
-	# stand (cells_over()), every cell when empty.
-	var bounds: Array[Rect2] = []
-	return {"material": material, "meshes": meshes, "mesh_levels": mesh_levels, "tile_points": 0, "ring_m": 0.0, "cells": {}, "variants": {}, "pool": [], "bounds": bounds}
+	# changes with distance (MESH_LEVELS), or it has the one; ground: the CELL_M ground
+	# cells its cells may stand over (cells_over()), everywhere when empty.
+	return {"material": material, "meshes": meshes, "mesh_levels": mesh_levels, "tile_points": 0, "ring_m": 0.0, "cells": {}, "variants": {}, "pool": [], "ground": {}}
 
 
-## The cells of a quadtree (cells_around()) that overlap any of these ground bounds (x, z).
-static func cells_over(cells: Dictionary, bounds: Array[Rect2]) -> Dictionary:
+## The cells of a quadtree (cells_around()) over any of these CELL_M ground cells
+## (Vector2i): a cell of level L holds 2^L by 2^L of them.
+static func cells_over(cells: Dictionary, ground: Dictionary) -> Dictionary:
 	var kept := {}
 	for cell: Vector3i in cells:
-		var size := CELL_M * float(1 << cell.z)
-		var area := Rect2(float(cell.x) * size, float(cell.y) * size, size, size)
-		for bound: Rect2 in bounds:
-			if area.intersects(bound):
-				kept[cell] = cells[cell]
+		var span := 1 << cell.z
+		var found := false
+		for x in span:
+			for z in span:
+				if ground.has(Vector2i(cell.x * span + x, cell.y * span + z)):
+					found = true
+					break
+			if found:
 				break
+		if found:
+			kept[cell] = cells[cell]
 	return kept
+
+
+## Adds to `into` the CELL_M ground cells (Vector2i -> true) these triangles (x, z,
+## three points each) reach: each sampled at under half a cell's spacing, so no cell
+## they cross is missed once the cells are grown by one (grow_cells()).
+static func mulch_cells(triangles: PackedVector2Array, into: Dictionary) -> void:
+	for corner in range(0, triangles.size() - 2, 3):
+		var a := triangles[corner]
+		var b := triangles[corner + 1]
+		var c := triangles[corner + 2]
+		var steps := maxi(1, ceili(maxf(a.distance_to(b), maxf(b.distance_to(c), c.distance_to(a))) / (CELL_M * 0.45)))
+		for i in steps + 1:
+			for j in steps + 1 - i:
+				var point := a + (b - a) * (float(i) / float(steps)) + (c - a) * (float(j) / float(steps))
+				into[Vector2i(floori(point.x / CELL_M), floori(point.y / CELL_M))] = true
+
+
+## The ground cells and every cell within `by` cells of one.
+static func grow_cells(cells: Dictionary, by: int) -> Dictionary:
+	var grown := {}
+	for cell: Vector2i in cells:
+		for x in range(-by, by + 1):
+			for z in range(-by, by + 1):
+				grown[cell + Vector2i(x, z)] = true
+	return grown
 
 
 func _set_ring(ring: Dictionary, points_m2: float, ring_m: float) -> void:
@@ -742,9 +775,9 @@ func _clear_ring(ring: Dictionary) -> void:
 func _select_cells(ring: Dictionary, at: Vector3) -> void:
 	var cells: Dictionary = ring.cells
 	var wanted := {} if int(ring.tile_points) == 0 else cells_around(at, float(ring.ring_m))
-	var bounds: Array[Rect2] = ring.bounds
-	if not bounds.is_empty():
-		wanted = cells_over(wanted, bounds)
+	var ground: Dictionary = ring.ground
+	if not ground.is_empty():
+		wanted = cells_over(wanted, ground)
 	for cell: Vector3i in cells.keys():
 		if not wanted.has(cell):
 			_release_cell(ring, cell)
@@ -931,8 +964,33 @@ func _copy_mesh(source: MeshInstance3D) -> void:
 		_add_copy(colour_viewport, source, colour_materials)
 	if on_mulch:
 		_add_copy(chips_viewport, source, chip_materials)
+		mulch_cells(_ground_triangles(source), _mulch_cells)
+
+
+## A ground record's triangles in world x, z, from data the world keeps on the CPU: a
+## draped record's footprint (VisibleGround's metadata), else a solid record's collision
+## faces (a raised planting strip), else its mesh's bounds as two triangles.
+func _ground_triangles(source: MeshInstance3D) -> PackedVector2Array:
+	var record := source.get_parent()
+	if record != null and record.has_meta(VisibleGround.FOOTPRINT_META):
+		var footprint: PackedVector2Array = record.get_meta(VisibleGround.FOOTPRINT_META)
+		return footprint
+	var triangles := PackedVector2Array()
+	if record != null:
+		for node: Node in record.find_children("*", "CollisionShape3D", true, false):
+			var shape := (node as CollisionShape3D).shape as ConcavePolygonShape3D
+			if shape == null:
+				continue
+			var to_world := (node as CollisionShape3D).global_transform
+			for corner: Vector3 in shape.get_faces():
+				var at := to_world * corner
+				triangles.append(Vector2(at.x, at.z))
+	if triangles.is_empty():
 		var box := source.global_transform * source.get_aabb()
-		_mulch_bounds.append(Rect2(box.position.x, box.position.z, box.size.x, box.size.z).grow(MULCH_MARGIN_M))
+		var low := Vector2(box.position.x, box.position.z)
+		var high := low + Vector2(box.size.x, box.size.z)
+		triangles = PackedVector2Array([low, Vector2(high.x, low.y), high, low, high, Vector2(low.x, high.y)])
+	return triangles
 
 
 ## A mulch surface's capture materials, [colour, chips], or [] for any other material:

@@ -26,7 +26,7 @@ packed with ImageMagick:
 | File | Use | Source prompt (short) |
 |---|---|---|
 | `street_concrete_panels.png` | sidewalk concrete: 2 x 2 poured panels (one UV unit = one 1.5 m panel) with saw-cut joints drawn on the panel edges; broom lines turned to run across the walk, each panel toned slightly differently; also the concrete driveway skin (`road_path_concrete`) in 1.5 m panels | seamless light grey broom-finished concrete, no joints |
-| `street_mulch.png` | planting strips, darkened and desaturated | seamless dark reddish-brown shredded bark mulch |
+| `street_mulch.png` | the plant galleries' `street_mulch` beds (`building_shots.gd`); the planting strips draw `mulch_chips.png` | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
 
 `street_legends.png` (2048 x 512, eight 256 x 512 cells, white on black) holds the
@@ -47,7 +47,7 @@ ImageMagick; both tile seamlessly over 2 m (world UV):
 |---|---|---|
 | `park_dg.png` | decomposed-granite paths through the beds | seamless tan decomposed granite path surface |
 | `promenade_aggregate.png` | the Mersea promenade's old road (1.15 m tiles) and fresh seal (0.62 m, flattened) under `promenade_pavement.gdshader`, from the owner's video, Nov 2026 | seamless very old sun-worn asphalt, the binder weathered away and small angular stones standing exposed in pale grey, tan and buff in a dark grey-brown matrix, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
-| `promenade_bark_mulch.png` | the promenade's verges (1.8 m tiles, owner video Nov 2026) | seamless fine weathered wood-chip mulch, small thin chips bleached pale grey-brown and silver-grey with a few warmer tan chips, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
+| `promenade_bark_mulch.png` | the pale grey gravel patch by the forked log in the park outside Isle House (`park_chips_pale`, 1.8 m tiles); the promenade's bark draws `mulch_chips.png` | seamless fine weathered wood-chip mulch, small thin chips bleached pale grey-brown and silver-grey with a few warmer tan chips, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
 | `yard_shoulder_gravel.png` | the Johnson St lot's shoulder at the ditch (1.67 m tiles, owner video Nov 2026) | seamless crushed grey angular rock with sand, soft even light (Codex through `tools/generate-texture`, Nov 2026) |
 | `park_asphalt.png` | the park's new dark asphalt paths, cycle track and lawn ring | seamless new dark charcoal asphalt with fine grey aggregate, no markings |
 
@@ -156,3 +156,13 @@ SPORTS, all painted straight on dark teal-green boards. Generated 2026-11-08 wit
 `tools/generate-texture` from a text prompt only (a second version, after review):
 an original design that echoes the field's 2025 murals (SF GAA photos), not a copy
 of them.
+
+## Wood-chip mulch
+
+`mulch_chips.png` is painted by `tools/bake_mulch_chips.mjs` (seeded, no image
+generation and no photograph): 1024 px per 1.25 m, shredded chips seen from above,
+RGB their colour and alpha the pile's height. `game/resources/materials/world/street/mulch.gdshader`
+lays it twice in world metres for every wood-mulch surface: the parks' beds and
+chips, the promenade's bark, the planting strips and the street trees' pits, graded
+per kind in `game/scripts/world/mulch_ground.gd`. Rerun the script to change it; the
+same seed paints the same image.

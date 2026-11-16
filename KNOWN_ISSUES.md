@@ -37,6 +37,18 @@ Coordinates are world x, z in metres (z points south), as in `generated/world/`.
 - A line of dry tufts on Building 2's WSW forecourt follows a dark streak in the ground texture (release review, 2026-11-07).
 - No close capture yet of the rubble mounds at `medium` density.
 
+## Wood-chip mulch (`game/scripts/world/mulch_ground.gd`, `mulch.gdshader`, 2026-11-16)
+
+Every wood-mulch surface draws one shared chip tile (`tools/bake_mulch_chips.mjs`), graded per kind from its dated photos: the park outside Isle House's beds and basin, the park beds of Cityside, Garden Walk, Maceo May and the 9th Street lot strip, the Mersea promenade's bark, the street planting strips and the street trees' pits. On desktop the ground dressing adds loose chips near the camera. What isn't there yet or is inferred:
+
+- The loose chips are desktop only. The web build draws the mulch without them (the ground dressing runs only on Forward+), and the tree pits get none on desktop either: their meshes are street detail, which the dressing's captures don't copy.
+- One grade (`park_mulch`) covers Cityside's beds, Garden Walk's, Maceo May's and the 9th Street lot strip, set between Cityside's two Sep 2025 contributor photos (ph08 darker, ph04 paler in full sun). The 9th Street Street View (Sep 2025) shows a flatter, browner worn mulch, and no close photo shows Garden Walk's or Maceo May's bare mulch.
+- The street strips' grade sits between ih02's Street View ratio to the sidewalk (0.53) and Cityside's ph08 (0.39 of the concrete beside it); Street View lifts shadows, so the ratio is uncertain. The tree pits copy it: no dated photo shows a pit's surface closely.
+- At f_090's matched pose (about 10 m) the bed's mean matches the frame's (124, 114, 104 against 126, 115, 101), but its darkest tenth is lighter and bluer (63, 53, 48 against 53, 43, 30) and its speckle flatter (luminance p10 to p90 68 to 161 against 61 to 170). At a walker's height the texture is already averaged there, so the gaps' darkening only shows within a few metres; the photo keeps its dark tail from chips' cast shadows and from browner clumps a hand or two across. A mean-keeping clump layer of that size is the next step (`procedural-mulch-20261116`, not yet rendered).
+- The promenade's chips have brighter highlights than IMG_0960 shows; the footage's HLG tone mapping compresses highlights, so how much of that is real is unknown.
+- The chip tile's height rides in its alpha, block-compressed with its colour (BC3 on desktop, ETC2 on phones), so the relief steps every 4 texels (5 mm) up close; not seen at gameplay distances.
+- No Metal or iPhone run: every cost so far is the Linux Radeon 780M, with the web's cost taken in the native Compatibility renderer.
+
 ## Sky and light (`game/resources/materials/world/sky/bay_sky.gdshader`, `game/scenes/main.tscn`, 2026-11-09)
 
 Couplings, for whoever changes one side:

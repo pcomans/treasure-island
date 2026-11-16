@@ -2,6 +2,17 @@ extends SceneTree
 
 const TEXTURE_ROOT := "res://game/resources/textures/world/polyhaven"
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
+const MULCH_SHADER_PATH := "res://game/resources/materials/world/street/mulch.gdshader"
+## One generated record per wood-chip mulch kind: feature kind, material key and
+## collision. Each must draw the shared mulch material of its key (mulch_ground.gd).
+const MULCH_ROUTES := [
+	["street_paint", "park_chips", "none"],
+	["street_paint", "park_chips_damp", "none"],
+	["street_paint", "park_mulch", "none"],
+	["street_paint", "promenade_mulch", "none"],
+	["street_kerb", "street_kerb_planting", "world_solid"],
+]
 const GROUND_COVER_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_cover.gdshader"
 const GROUND_COVER_MAP_PATH := "res://game/resources/textures/world/ground_cover/cover_map.png"
 const GROUND_COVER_CONFIG_PATH := "res://tools/config/ground-cover.json"
@@ -100,13 +111,16 @@ func _initialize() -> void:
 	if not _ground_families_match() or not _ground_cover_map_matches() or not _ground_routes_match(builder) or not _ground_overrides_name_generated_areas():
 		quit(1)
 		return
+	if not _mulch_routes_match(builder):
+		quit(1)
+		return
 	if not _shoreline_material_matches(builder):
 		quit(1)
 		return
 	if not _ybi_ground_matches():
 		quit(1)
 		return
-	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, the shader-data and UI textures stay lossless, and the app icon's images import with the alpha-border fill off" % EXPECTED_MATERIALS.size())
+	print("PASS: %d Poly Haven semantic materials retain official source dimensions and exact maps while using approved effective repeats, mipmapped filtering, and pinned subtle normals; land and area records use the shared ground-cover families, which read the ground-cover map over its configured rectangle; every mulch kind draws the shared wood-chip mulch; the shoreline slope and stones share one riprap shader with mipmapped textures, and its band and shoulder share the verge's ground cover; every texture import keeps Detect 3D off, every block-compressed texture is a multiple of 4 on both sides, as imported and as the Web build caps it, the shader-data and UI textures stay lossless, and the app icon's images import with the alpha-border fill off" % EXPECTED_MATERIALS.size())
 	quit(0)
 
 
@@ -314,6 +328,38 @@ func _ground_routes_match(builder: WorldChunkBuilder) -> bool:
 		record_node.free()
 		if not _require(material == expected, "%s %s did not get its %s material." % [route[1], route[2], family if family != "" else "own"]) \
 		or not _require(family == "" or has_tangents, "%s %s lacks tangents for its normal map." % [route[1], route[2]]):
+			return false
+	return true
+
+
+## Each mulch kind's record draws its shared mulch material, on the mulch shader.
+func _mulch_routes_match(builder: WorldChunkBuilder) -> bool:
+	for route: Array in MULCH_ROUTES:
+		var key := str(route[1])
+		var record := {
+			"object_key": "material-contract-%s" % key,
+			"source_keys": ["material-contract"],
+			"feature_kind": route[0],
+			"material_key": key,
+			"receiver_kind": "none",
+			"collision_kind": route[2],
+			"opaque": route[2] == "world_solid",
+			"surface_bias_m": 0.1,
+			"vertices": [0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 10.0],
+			"normals": [0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0],
+			"uvs": [0.0, 0.0, 1.0, 0.0, 0.0, 1.0],
+			"indices": [0, 2, 1],
+		}
+		if not _require(MULCH_GROUND.is_mulch(key), "%s has no mulch grade." % key):
+			return false
+		var result := builder._build_record(record, false)
+		if not _require(bool(result.get("ok", false)), "%s could not be built." % key):
+			return false
+		var record_node := result.node as Node3D
+		var material := ((record_node.get_node("Mesh") as MeshInstance3D).mesh as ArrayMesh).surface_get_material(0)
+		record_node.free()
+		var expected := MULCH_GROUND.material(key)
+		if not _require(material == expected and expected.shader.resource_path == MULCH_SHADER_PATH, "%s does not draw the shared mulch." % key):
 			return false
 	return true
 

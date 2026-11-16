@@ -249,4 +249,17 @@ const png = Buffer.concat([
 ]);
 writeFileSync(OUT, png);
 const count = SIZE * SIZE;
-console.log(`MULCH_CHIPS ${OUT} ${SIZE}x${SIZE} tile_m=${TILE_M} chips=${painted} mean_srgb=(${(sums[0] / count).toFixed(0)},${(sums[1] / count).toFixed(0)},${(sums[2] / count).toFixed(0)})`);
+// The gaps' rise as mulch.gdshaderinc reads it (smoothstep of the height up to
+// GAP_RISE), averaged over the tile weighted by each texel's brightness: what an
+// averaged pixel's light keeps of it far off (MulchGround.GAP_COVER).
+const GAP_RISE = 0.3;
+let lit = 0;
+let litRisen = 0;
+for (let i = 0; i < count; i += 1) {
+  const o = i * 4;
+  const luminance = 0.2126 * toLinear(pixels[o]) + 0.7152 * toLinear(pixels[o + 1]) + 0.0722 * toLinear(pixels[o + 2]);
+  const t = Math.min(1, pixels[o + 3] / 255 / GAP_RISE);
+  lit += luminance;
+  litRisen += luminance * t * t * (3 - 2 * t);
+}
+console.log(`MULCH_CHIPS ${OUT} ${SIZE}x${SIZE} tile_m=${TILE_M} chips=${painted} mean_srgb=(${(sums[0] / count).toFixed(0)},${(sums[1] / count).toFixed(0)},${(sums[2] / count).toFixed(0)}) gap_cover=${(litRisen / lit).toFixed(3)}`);
