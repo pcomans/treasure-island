@@ -1279,6 +1279,10 @@ jobs:
           # try again later"); processing a large build can take around 30 minutes
           # (https://itch.io/docs/butler/pushing.html). That answer is tried again
           # once a minute for up to 30 minutes; any other failure stops at once.
+          # With --if-changed, butler pushes nothing when the files equal the
+          # channel's latest processed build ("No changes and --if-changed used,
+          # not pushing anything", butler 15.32.0); the step's output skipped=true
+          # then says so, since no build of this version will appear.
           cat > "${dir}/push-when-ready" <<'SH'
           #!/usr/bin/env bash
           set -uo pipefail
@@ -1286,7 +1290,12 @@ jobs:
           for attempt in $(seq 1 "${tries}"); do
             status=0
             butler push "$1" "$2" --userversion "$3" --if-changed 2>&1 | tee push.log || status=$?
-            if [ "${status}" -eq 0 ]; then exit 0; fi
+            if [ "${status}" -eq 0 ]; then
+              if grep -q "No changes and --if-changed used" push.log; then
+                echo "skipped=true" >> "${GITHUB_OUTPUT}"
+              fi
+              exit 0
+            fi
             if ! grep -q "latest build is still processing" push.log; then exit "${status}"; fi
             if [ "${attempt}" -eq "${tries}" ]; then
               echo "itch.io was still processing the channel's previous build after 30 minutes, so this build was not pushed."
@@ -1377,6 +1386,7 @@ jobs:
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
+          SKIPPED: ${{ steps.push_mac.outputs.skipped }}
         # itch.io serves a build only once it has processed it, which for a large
         # build can take around 30 minutes (https://itch.io/docs/butler/pushing.html);
         # until then it serves the channel's previous build, or, for a channel's
@@ -1386,20 +1396,27 @@ jobs:
         # version is this release's version and its state "completed" (butler
         # 15.32.0's --json status gives both). Only then does butler fetch download
         # it, to pass codesign and match what was pushed, file for file. When the
-        # time runs out the warning says what itch.io serves meanwhile. A mismatch
-        # or a timeout is reported, not a failure: the push itself succeeded.
+        # time runs out the warning says what itch.io serves meanwhile. When butler
+        # pushed nothing because the files were unchanged, no build of this version
+        # will appear, so the step takes the channel's processed build, whatever
+        # its version, as the one to check, and says if a build is pending. A
+        # mismatch or a timeout is reported, not a failure: the push itself
+        # succeeded. The output head names the version itch.io serves.
         run: |
           tries=45
+          if [ "${SKIPPED}" = true ]; then tries=3; fi
           live=""
           seen=""
           pending=""
           for attempt in $(seq 1 "${tries}"); do
             status=0
-            answer="$(butler --json status "${ITCH_TARGET}:mac" 2>&1)" || status=$?
+            answer="$(butler --json status "${ITCH_TARGET}" 2>&1)" || status=$?
             channel="$(jq -R -c 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "mac")' <<< "${answer}" | tail -n 1)"
             head="$(jq -r '.head // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
             pending="$(jq -r '.pending // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            linux_head="$(jq -R -r 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "linux") | .head.userVersion // empty' <<< "${answer}" | tail -n 1)"
             if [ "${status}" -eq 0 ] && [ "${head}" = "${VERSION} completed" ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ] && [ "${SKIPPED}" = true ] && [ "${head##* }" = completed ]; then live=yes; break; fi
             if [ "${status}" -eq 0 ]; then
               seen="${head}"
               echo "Attempt ${attempt}: the mac channel's latest processed build is ${head:-none yet}${pending:+; pending: ${pending}}."
@@ -1409,6 +1426,7 @@ jobs:
             if [ "${attempt}" -lt "${tries}" ]; then sleep 60; fi
           done
           state="The build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}."
+          echo "linux_head=${linux_head}" >> "${GITHUB_OUTPUT}"
           if [ -z "${live}" ]; then
             if [ -n "${seen}" ]; then
               why="itch.io still serves another build, version ${seen% *}${pending:+, while version ${pending% *} is ${pending##* }}"
@@ -1420,9 +1438,18 @@ jobs:
                 *) why="butler status kept failing (its last answer is above)" ;;
               esac
             fi
-            echo "::warning title=itch.io::The Mac build (version ${VERSION}) was pushed, but itch.io did not serve it within 45 minutes: ${why}. ${state} The app it serves was not checked."
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler pushed nothing for the Mac build (version ${VERSION}), as its files equal the mac channel's processed build, but that build could not be checked: ${why}. ${state}"
+            else
+              echo "::warning title=itch.io::The Mac build (version ${VERSION}) was pushed, but itch.io did not serve it within 45 minutes: ${why}. ${state} The app it serves was not checked."
+            fi
             echo "check=not-done" >> "${GITHUB_OUTPUT}"
             exit 0
+          fi
+          served_version="${head% *}"
+          echo "head=${served_version}" >> "${GITHUB_OUTPUT}"
+          if [ "${SKIPPED}" = true ] && [ -n "${pending}" ]; then
+            echo "::notice title=itch.io::The mac channel also has version ${pending% *} ${pending##* }; until it is done itch.io serves version ${served_version}, which the files of version ${VERSION} equal."
           fi
           fetched=""
           for attempt in 1 2 3; do
@@ -1434,7 +1461,7 @@ jobs:
             if [ "${attempt}" -lt 3 ]; then sleep 30; fi
           done
           if [ -z "${fetched}" ]; then
-            echo "::warning title=itch.io::itch.io serves version ${VERSION} of the Mac build, but butler fetch could not download it (its last answer is above), so the app it serves was not checked."
+            echo "::warning title=itch.io::itch.io serves version ${served_version} of the Mac build, but butler fetch could not download it (its last answer is above), so the app it serves was not checked."
             echo "check=not-done" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
@@ -1447,10 +1474,14 @@ jobs:
           python3 -I "${RUNNER_TEMP}/manifest.py" served > mac-served.txt
           if [ "${signature}" = ok ] && diff mac-pushed.txt mac-served.txt; then
             echo "check=same" >> "${GITHUB_OUTPUT}"
-            echo "The Mac app itch.io serves as version ${VERSION} is the one pushed, file for file, and passes codesign --verify --deep --strict."
+            echo "The Mac app itch.io serves as version ${served_version} is, file for file, the one of version ${VERSION}, and passes codesign --verify --deep --strict."
           else
             echo "check=different" >> "${GITHUB_OUTPUT}"
-            echo "::warning title=itch.io::The Mac app itch.io serves as version ${VERSION} differs from the one pushed (codesign: ${signature}; differences above), unless a newer push replaced it since. ${state}"
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler found no changes and pushed nothing, yet the Mac app itch.io serves as version ${served_version} differs from version ${VERSION}'s (codesign: ${signature}; differences above). ${state}"
+            else
+              echo "::warning title=itch.io::The Mac app itch.io serves as version ${VERSION} differs from the one pushed (codesign: ${signature}; differences above), unless a newer push replaced it since. ${state}"
+            fi
           fi
 
       - name: Report
@@ -1464,8 +1495,14 @@ jobs:
           LINUX: ${{ steps.builds.outputs.linux }}
           PUSH_MAC: ${{ steps.push_mac.outcome }}
           PUSH_LINUX: ${{ steps.push_linux.outcome }}
+          MAC_SKIPPED: ${{ steps.push_mac.outputs.skipped }}
+          LINUX_SKIPPED: ${{ steps.push_linux.outputs.skipped }}
+          MAC_HEAD: ${{ steps.served.outputs.head }}
+          LINUX_HEAD: ${{ steps.served.outputs.linux_head }}
           SERVED: ${{ steps.served.outputs.check }}
-        # Prints only the tag the first step accepted.
+        # Prints only the tag the first step accepted. A channel that butler left
+        # alone (its files equal the channel's processed build) keeps showing that
+        # build's version on itch.io; the report names both.
         run: |
           if [ "${CHECK}" != success ]; then
             echo "### itch.io: nothing pushed (the release tag was not accepted)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1475,8 +1512,14 @@ jobs:
           {
             echo "### itch.io: ${ITCH_TARGET}, version ${VERSION}, for ${TAG}"
             echo ""
-            echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
-            if [ "${LINUX}" = true ]; then
+            if [ "${MAC_SKIPPED}" = true ]; then
+              echo "- mac channel: unchanged since version ${MAC_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)${SERVED:+; the app itch.io serves: ${SERVED}}"
+            else
+              echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
+            fi
+            if [ "${LINUX}" = true ] && [ "${LINUX_SKIPPED}" = true ]; then
+              echo "- linux channel: unchanged since version ${LINUX_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)"
+            elif [ "${LINUX}" = true ]; then
               echo "- linux channel: ${PUSH_LINUX:-not pushed}"
             else
               echo "- linux channel: not pushed (no Linux build in this release)"

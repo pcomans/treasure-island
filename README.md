@@ -255,7 +255,11 @@ the channel), or with `butler status phppco/grand-treasure-island`. Until a new
 build is processed, itch.io serves the channel's previous one, so the job waits,
 up to 45 minutes, until `butler status` shows the pushed version as the
 channel's processed build; it then downloads what itch.io serves and compares
-it, file by file, with what was pushed. It runs on `main` only. A failed push
+it, file by file, with what was pushed. When a release's files equal the
+channel's processed build (a release that changed only workflows or tools, say),
+butler pushes nothing, so itch.io keeps showing that earlier build's version;
+the job then checks that build at once, and its summary names both versions. It
+runs on `main` only. A failed push
 never affects the GitHub release: the job reports it, and the run still
 succeeds. To push an existing release again, or for the first time, start the
 workflow by hand on `main` with that release's tag (a release from before build
