@@ -17,6 +17,8 @@ const STREET_DETAIL_ZONES_PATH := "res://tools/config/street-detail-zones.json"
 const VEHICLE_CASES_PATH := "res://game/tests/shared/vehicle_cases.json"
 ## Where this run keeps the shadow level and graphics its options check chooses.
 const OPTIONS_SETTINGS_PATH := "user://test-gameplay-contract-%d.cfg"
+## The reflection atlas's slots; project.godot gives the web build its own count.
+const REFLECTION_SLOTS_SETTING := "rendering/reflections/reflection_atlas/reflection_count"
 
 ## The time of day switched off (_check_time_of_day_off), for the PASS line.
 var _time_off := ""
@@ -278,6 +280,9 @@ func _check_ferry_solidity() -> void:
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The world did not reach play for the ferry solidity check: %s" % [load_failures])
 		return
+	var reflection_slots := _check_web_reflection_slots()
+	if reflection_slots.is_empty():
+		return
 	var loading_lines := await _check_loading_lines(main, world, loading)
 	if loading_lines.is_empty():
 		return
@@ -347,8 +352,24 @@ func _check_ferry_solidity() -> void:
 		return
 	main.queue_free()
 	DirAccess.remove_absolute(ShadowQuality.settings_path)
-	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the loading screen (%s), the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [loading_lines, ", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
+	print("PASS: gameplay inputs (F drives, Space handbrake, arrow keys as WASD, no spray and nothing on the left mouse button), 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack and fast drop defaults, boundary cases, scene hierarchies, water visual-only contract, the distant horizon as scenery all round within the far plane, layer defaults, procedural daylight, the web build's reflection slots (%s), the loading screen (%s), the ferry terminal solid from above (%s), the pitch's ball (%s), the pause (%s; %s), the controls screen (%s; %s), the credits screen (%s), the options screen (%s), the time of day (%s), the time of day switched off (%s), nothing in the middle of the screen in play and the car prompt (%s)" % [reflection_slots, loading_lines, ", ".join(heights), ball, pause, resume, opened, controls, credits, options, time_of_day, _time_off, prompt])
 	quit(0)
+
+
+## The web build's reflection atlas has a slot for every reflection probe in the
+## loaded game. Godot 4.7.2's Compatibility renderer, the web's, allocates all of
+## the atlas's slots when a probe first renders (two 256 px cubemaps, 4 MiB, a
+## slot), so project.godot gives the web (.web) no more than the world needs; a
+## probe left without a slot gets no reflection, and engine errors every frame.
+## Desktop's Forward+ keeps Godot's default. Returns a summary, or "" after failing.
+func _check_web_reflection_slots() -> String:
+	var slots := int(ProjectSettings.get_setting(REFLECTION_SLOTS_SETTING + ".web", ProjectSettings.get_setting(REFLECTION_SLOTS_SETTING)))
+	var probes := root.find_children("*", "ReflectionProbe", true, false)
+	if probes.size() > slots:
+		var names := PackedStringArray(probes.map(func(probe: Node) -> String: return str(probe.name)))
+		_fail("The web build's reflection atlas has %d slots (project.godot's %s.web) for %d reflection probes (%s): give it a slot for each probe." % [slots, REFLECTION_SLOTS_SETTING, probes.size(), ", ".join(names)])
+		return ""
+	return "%d probes in %d slots" % [probes.size(), slots]
 
 
 ## Watches a main's startup from before it enters the tree, for
