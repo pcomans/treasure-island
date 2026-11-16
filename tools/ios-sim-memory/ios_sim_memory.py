@@ -407,7 +407,9 @@ def drive(udid):
             open(os.path.join(OUT, 'env.json'), 'w').write(env)
         if not ok:
             return drv, sid
-        log('HELPER', page.js('return ' + open(os.path.join(HERE, 'page-helper.js')).read().strip().rstrip(';') + ';', 60))
+        # The helper runs as statements (its file starts with comment lines: "return" followed by a line break
+        # would return before it), then the body reports whether it installed window.__pc.
+        log('HELPER', page.js(open(os.path.join(HERE, 'page-helper.js')).read() + '\nreturn window.__pc ? "installed" : "missing";', 60))
         log('SHIM', page.js('return window.__pc.installShim();'))
         before = json.loads(page.js("""return (() => { window.__tiReadback(); const s = JSON.parse(window.__tiState); const r = document.getElementById('canvas').getBoundingClientRect();
           return JSON.stringify({prompt: s.start_prompt, paused: s.paused, touch_visible: s.touch_visible, x: Math.round(r.left + s.resume_button[0] * r.width / s.viewport[0]),
