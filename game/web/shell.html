@@ -540,6 +540,8 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	const mark = (name) => performance.mark('TI_BOOT:' + name);
 	// The start of the game's loading-step lines (LOADING_STEP_PRINT, game/scripts/main.gd).
 	const STEP_PRINT = 'LOADING_STEP ';
+	// How long the engine's start waits for this device's copy to be written (below).
+	const STORE_WAIT_MS = 3000;
 	// The two large files so far: what the engine's own loader fetches (its WebAssembly,
 	// and the pack too when the page can't load it itself) and the pack. from: 'device'
 	// (this build's stored copy, tiBuildFiles), 'network', or null until known.
@@ -754,8 +756,11 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			packLoaded.then(() => mark('pack_loaded')),
 		]).then(async () => {
 			preparing();
-			// Finishes storing what came over the network, in the background.
-			files.finish();
+			// What came over the network goes on to this device's copy before the engine
+			// starts: its start keeps the page too busy to write until play, and a tab
+			// closed (or a phone out of memory) during the load would lose the copy. A
+			// slow disk gets STORE_WAIT_MS, then finishes during the start.
+			await Promise.race([files.finish(), new Promise((resolve) => setTimeout(resolve, STORE_WAIT_MS))]);
 			// rAF callbacks precede paint. Yield through a subsequent frame before
 			// synchronous game startup; actual screencast frames verify the result.
 			// This is a paint opportunity, not a timer or physical-display promise.
