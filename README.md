@@ -13,6 +13,7 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 - **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
 - **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB). Apple hasn't checked this build (it isn't notarized). Installed through the [itch app](https://itch.io/app), it should open without the macOS warning. Downloaded in the browser, macOS blocks it the first time you open it: click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest), under Assets, as `grand-treasure-island-mac-build-<number>.zip`.
 - **On Linux:** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Linux build.
+- **On Windows (64-bit):** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Windows build (about 215 MB). Downloaded in the browser, unzip it and run `treasure-island.exe`; its `.pck` must stay beside it. The build isn't signed, so the first time you start it Windows may show "Windows protected your PC": click **More info**, then **Run anyway**. Installed through the [itch app](https://itch.io/app), it should start without that warning. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest) as `grand-treasure-island-windows-build-<number>.zip`. No Windows machine has played it yet: CI starts it on Windows and loads the island, but has never seen it drawn on a Windows graphics card.
 
 The downloadable version looks nicer.
 
@@ -160,12 +161,15 @@ when a building counts as done.
 Players get the game from the [itch.io page](https://phppco.itch.io/grand-treasure-island), which CI fills with the same builds; on GitHub, https://github.com/pcomans/treasure-island/releases/latest always shows the newest release.
 
 Every push to `main` that changes more than documentation (see
-[Where the builds go](#where-the-builds-go)) builds the Mac app on GitHub Actions
-([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
-headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
-Apple Silicon Mac has launched the app and loaded the island, the build becomes
-a new release of its own, unless a newer build has overtaken it. This page always
-shows the newest release, whose Mac app is `grand-treasure-island-mac-build-<number>.zip`:
+[Where the builds go](#where-the-builds-go)) builds the Mac app, with the Linux
+and Windows builds of the same commit, on GitHub Actions
+([mac-build.yml](.github/workflows/mac-build.yml)). Its launch checks are
+headless (Linux on the build runner, the Mac app on an Apple Silicon Mac, the
+Windows build on a Windows runner), so CI never exercises the game's rendering
+on a Mac or a Windows graphics card. Once the Mac app and the Windows build have
+loaded the island there, the build becomes a new release of its own, unless a
+newer build has overtaken it. This page always shows the newest release, whose
+Mac app is `grand-treasure-island-mac-build-<number>.zip`:
 
 https://github.com/pcomans/treasure-island/releases/latest
 
@@ -194,12 +198,13 @@ the top of [mac-build.yml](.github/workflows/mac-build.yml) lists them with the
 To build it in the devcontainer instead:
 
 ```sh
-tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip
+tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip and build/windows/treasure-island-windows-<commit>.zip
 ```
 
-This exports the macOS build, checks it contains only game files (no research or
-evidence folders, no images outside `game/resources/`), and launches a Linux build of the same commit to confirm the island
-loads.
+This exports the macOS build and the Linux and Windows builds of the same
+commit, checks that each contains only game files (no research or evidence
+folders, no images outside `game/resources/`), and launches the Linux build to
+confirm the island loads. Nothing in the container can run the Windows build.
 
 Desktop builds (this and `tools/build-linux.sh`) first bake the island with
 `tools/prebuild-static-world.sh native` and load that baked world at startup
@@ -219,29 +224,47 @@ the loading screen can't show.
 ### Where the builds go
 
 Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
-has two files, built and checked from the same commit and named after the game
+has three files, built and checked from the same commit and named after the game
 and the build number, and https://github.com/pcomans/treasure-island/releases/latest
 always shows the newest release:
 
 - the Mac app, `grand-treasure-island-mac-build-<number>.zip`;
 - the Linux build, `grand-treasure-island-linux-build-<number>.tar.gz` (unpack it
   and run the `.x86_64` program in its `treasure-island-linux` folder; its `.pck`
-  must stay beside it).
+  must stay beside it);
+- the Windows build (64-bit), `grand-treasure-island-windows-build-<number>.zip`
+  (unzip it and run `treasure-island.exe` in its `treasure-island-windows` folder;
+  its `.pck` must stay beside it).
 
 The number is the release's build number, as in its title and on itch.io; the
 release's tag and title also carry the commit's date and short hash. Older
-releases keep the names `treasure-island-mac.zip` and `treasure-island-linux.tar.gz`.
+releases keep the names `treasure-island-mac.zip` and `treasure-island-linux.tar.gz`
+and have no Windows build.
 
-The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
-the Mac app, with the same sounds.
+The Linux and Windows builds are the ones `tools/build-mac.sh` exports next to
+the Mac app, with the same sounds; their data packs come out byte for byte the
+same. The Windows `.exe` is Godot's own Windows release template, with the
+game's icon and version information set by Godot's exporter; it is not
+code-signed (a code-signing certificate would be a purchase). Before the
+release, the `windows` job unzips
+the build on a GitHub Windows runner and starts it headless: it must load the
+island, quit cleanly and write Godot's log in
+`%APPDATA%\Godot\app_userdata\Treasure Island First Playable`, the folder that
+keeps players' options. The runner has no GPU, so the `windows-render` job, for
+information only, starts it with rendering: without Vulkan, Godot falls back to
+Direct3D 12, which the runner provides in software (WARP); its summary names the
+renderer Godot got and whether the island loaded. What no Windows machine has
+checked yet: drawing on a real graphics card (Vulkan, or Direct3D 12 where
+Vulkan is missing), mouse and keyboard, sound, saving the options, and
+SmartScreen's first-launch prompt.
 
-Players get both from the [itch.io page](https://phppco.itch.io/grand-treasure-island)
+Players get all three from the [itch.io page](https://phppco.itch.io/grand-treasure-island)
 (below), with the GitHub releases as the alternative.
 
 Every build has a build number: the number of commits in its commit's history,
 from [`tools/build-number`](tools/build-number). A newer build of `main` always
-has a larger number, and the Mac app, the Linux build and the web build of one
-commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
+has a larger number, and the Mac app, the Linux and Windows builds and the web
+build of one commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
 with the game's name, the commit's date and its short hash, such as "Grand
 Treasure Island, build 1918 (2026-11-16, 1a2b3c4)", and so does its tag, with
 the number padded to six digits so that tags sort by it:
@@ -261,10 +284,11 @@ publishes. Build numbers count every commit, so the commits of such pushes leave
 gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
 hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
-After each release, CI's `itch` job also puts both builds on the itch.io page
+After each release, CI's `itch` job also puts the builds on the itch.io page
 [phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
-Mac app, notarized or not, goes to channel `mac` and the Linux build to channel
-`linux`, with the build number (such as `1918`) as their version. The job uses
+Mac app, notarized or not, goes to channel `mac`, the Linux build to channel
+`linux` and the Windows build to channel `windows`, with the build number (such
+as `1918`) as their version. The job uses
 itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
 itch's own distribution site and checked against a pinned SHA-256. It pushes the
 exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
@@ -291,7 +315,7 @@ numbers gets its date and commit as its version). Such a run builds nothing:
 gh workflow run mac-build.yml --ref main -f itch_release_tag=<tag>   # such as build-001918-2026-11-16-1a2b3c4
 ```
 
-CI's `virustotal` job also submits both files of each release to
+CI's `virustotal` job also submits the files of each release to
 [VirusTotal](https://www.virustotal.com), and the `virustotal-notes` job adds
 each file's SHA-256 and VirusTotal report link to the release notes. The link is
 by hash, so it works while the analysis is still running; the notes say when
