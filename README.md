@@ -401,7 +401,8 @@ Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load:
 the page names each step as it runs, **Downloading the game** with how far along
 it is (about 145 MB travels, compressed), or **Loading the game from this device**
-when the browser already keeps this build (below), **Starting the engine…**, the
+when the browser already keeps this build's game data (below), **Saving the game on
+this device…** while it stores a download, **Starting the engine…**, the
 island's load and setup, the
 shaders compiled a group of the world at a time (**Compiling shaders: sky and
 player…** to **…the ferry and the view across the bay…**, the buildings counted
@@ -415,13 +416,14 @@ W/S drive, A/D steer (or the arrow keys) and Space is the handbrake. Esc
 releases the mouse and pauses; **Resume** captures it again and continues. There
 is no spray. F3 shows actual FPS.
 
-The page keeps the build's engine and game data in the site's own storage in the
-browser (OPFS), one build at a time, so the next launch of the same build doesn't
-download them again; a new build replaces the kept one on its first launch. The
-page itself always comes from the network, so a release or a rollback shows on the
-next load. Storing needs a browser with file system writable streams (Safari 26,
-Chrome 86, Firefox 111); in others every launch downloads as before, and a private
-window's storage ends with it. See `tiBuildFiles` in `game/web/shell.html`.
+The page keeps the build's game data (its 160 MB pack) in the site's own storage in
+the browser (OPFS), one build at a time, so the next launch of the same build doesn't
+download it again; the engine's WebAssembly (about 9.5 MB compressed) is left to the
+browser's own cache. A new build replaces the kept one on its first launch. The page
+itself always comes from the network, so a release or a rollback shows on the next
+load. Storing needs a browser with file system writable streams (Safari 26, Chrome
+86, Firefox 111); in others every launch downloads as before, and a private window's
+storage ends with it. See `tiBuildFiles` in `game/web/shell.html`.
 
 To deploy, as part of a [release](AGENTS.md#pushes-and-releases), push to `main`, check out a clean `main` and run:
 
