@@ -111,6 +111,9 @@ var _web_pointer_locked := false
 var _web_pointer_free := false
 var _web_view_revision := 0
 var _web_debug_callback: JavaScriptObject
+## Whether the start prompt's tap also puts the page full screen: on a phone or
+## tablet whose browser can (Android's), as the page decides (_show_start_notes).
+var _full_screen_on_start := false
 ## A pause or resume asked for inside a physics tick, put off to the idle step
 ## (_set_paused): true pauses, false resumes; quiet without the pause's sound.
 var _pause_later := false
@@ -229,6 +232,7 @@ func _ready() -> void:
 	world_root.world_failed.connect(_on_world_failed)
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
+	hud.home_screen_hint_dismissed.connect(_on_home_screen_hint_dismissed)
 	_load_world_after_paint.call_deferred()
 	STARTUP_MARKS.mark("main_ready_end")
 
@@ -581,6 +585,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 	# hands over to it as play is ready. Never auto-request browser lock.
 	if start_prompt:
 		hud.set_start_prompt("Tap to play" if _touch_controls != null else "Click to play")
+		if OS.has_feature("web") and _touch_controls != null:
+			_show_start_notes()
 		_set_paused(true, true)
 	else:
 		if _touch_controls != null:
@@ -776,7 +782,36 @@ func _resume_game() -> void:
 			# Resume is a deliberate user gesture. Stay paused until the async grant.
 			Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	else:
+		if _full_screen_on_start and not hud.start_prompt_text().is_empty():
+			# The start prompt's tap on an Android phone or tablet: full screen too, asked
+			# for in the tap itself (the web build handles a touch inside its event), as
+			# the browser requires; a refusal leaves the page as it was.
+			_full_screen_on_start = false
+			JavaScriptBridge.eval("window.__tiStartNotes && window.__tiStartNotes.enterFullScreen()")
 		_set_paused(false)
+
+
+## The start prompt's notes on a touch screen (owner, 2026-11-16), as the web page
+## decides them (game/web/shell.html's __tiStartNotes): on an iPhone or iPad, in
+## Safari outside a home screen app and until dismissed, how to play full screen
+## from the home screen; on any iPhone or iPad, that the sound needs the silent
+## mode off, unless the game's own sound is off (Options' mute or no volume); on an
+## Android phone or tablet nothing to read, the prompt's tap going full screen
+## (_resume_game). A page without the notes shows none.
+func _show_start_notes() -> void:
+	var notes: Variant = JSON.parse_string(str(JavaScriptBridge.eval("window.__tiStartNotes ? window.__tiStartNotes.read() : '{}'")))
+	if not notes is Dictionary:
+		return
+	_full_screen_on_start = bool(notes.get("full_screen", false))
+	var sound_on := not sound.muted and sound.volume > 0.0
+	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on)
+
+
+## The home screen hint's × (hud.gd): the page remembers it (localStorage), so the
+## hint never shows again in this browser.
+func _on_home_screen_hint_dismissed() -> void:
+	if OS.has_feature("web"):
+		JavaScriptBridge.eval("window.__tiStartNotes && window.__tiStartNotes.dismissHomeScreen()")
 
 
 func _exit_game() -> void:
@@ -886,6 +921,11 @@ func _publish_web_state(_args: Array) -> void:
 		# whether play goes on with the pointer free (its capture refused), and the
 		# feedback line showing.
 		"start_prompt": hud.start_prompt_text(),
+		# Its notes (which show, the home screen hint's ×), its panel, and whether its
+		# tap also goes full screen.
+		"start_notes": hud.start_notes_state(),
+		"start_panel": _rect(hud.pause_box),
+		"full_screen_on_start": _full_screen_on_start,
 		"pointer_free": _web_pointer_free,
 		"feedback": hud.feedback_text.text if hud.feedback_panel.visible else "",
 		"controls_button": [hud.controls_button.get_global_rect().get_center().x, hud.controls_button.get_global_rect().get_center().y],

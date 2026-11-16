@@ -21,11 +21,18 @@ must stay inside /game/:
   - string literals in the page's own scripts that look like a path from the
     root or an address, and any use of the page's host (location.origin, .host,
     .hostname). The engine script beside the page names its files from
-    GODOT_CONFIG alone.
+    GODOT_CONFIG alone;
+  - with FOLDER, the web app manifest a <link rel="manifest"> names, read from
+    the folder: its start_url and scope (start_url inside scope) and its
+    shortcuts' pages, and the images it fetches (icons, screenshots, the
+    shortcuts' icons), each resolved against the manifest's own address as a
+    browser resolves it; and no id, which a browser resolves against the site's
+    root. So the home screen app opens the page's folder at either address.
 The page must load a script and name an executable, so a page this cannot read
-fails. With FOLDER, every file the page and the loader fetch must be in it.
-Prints PASS with the files, or FAIL with each reference that leaves the folder,
-and exits 1 on any failure. --files prints only the files' names, one a line.
+fails. With FOLDER, every file the page, its manifest and the loader fetch must
+be in it. Prints PASS with the files, or FAIL with each reference that leaves the
+folder, and exits 1 on any failure. --files prints only the files' names, one a
+line.
 """
 import json
 import re
@@ -62,9 +69,13 @@ class Page(HTMLParser):
         self.styles = []
         self.script_sources = 0
         self.bases = 0
+        self.manifests = []  # the hrefs of <link rel="manifest">
         self._inline = None
 
     def handle_starttag(self, tag, attrs):
+        if tag == "link" and "manifest" in (dict(attrs).get("rel") or "").lower().split():
+            if dict(attrs).get("href") is not None:
+                self.manifests.append(dict(attrs)["href"])
         for name, value in attrs:
             if value is None:
                 continue
@@ -149,10 +160,11 @@ def godot_config(scripts):
     return None
 
 
-def resolve(value):
-    """Where a browser fetches VALUE from for a page at BASE: (file name, resolved)
-    with the name relative to the page; the name is None outside it; nothing for
-    a local scheme or a fragment."""
+def resolve(value, against=BASE):
+    """Where a browser fetches VALUE from when it reads it against AGAINST (the
+    page's address, BASE, unless given): (file name, resolved) with the name
+    relative to the page's folder; the name is None outside it; nothing for a
+    local scheme or a fragment."""
     # Browsers drop tabs and newlines, trim spaces and read "\" as "/" in http(s) URLs.
     value = re.sub(r"[\t\n\r]", "", value).strip().replace("\\", "/")
     if not value or value.startswith("#"):
@@ -160,12 +172,72 @@ def resolve(value):
     scheme = urlsplit(value).scheme.lower()
     if scheme in LOCAL_SCHEMES:
         return None
-    resolved = urljoin(BASE, value)
+    resolved = urljoin(against, value)
     parts = urlsplit(resolved)
     base = urlsplit(BASE)
     if (parts.scheme, parts.netloc) != (base.scheme, base.netloc) or not parts.path.startswith(base.path):
         return (None, resolved)
     return (unquote(parts.path[len(base.path):]), resolved)
+
+
+def manifest_files(name, address, folder, problems):
+    """The files the web app manifest NAME in FOLDER (fetched from ADDRESS) has a
+    browser fetch: its icons, screenshots and shortcuts' icons. Every address in
+    it must stay in the page's folder: those files, start_url and scope (start_url
+    inside scope, or a browser drops the scope) and the shortcuts' pages; and it
+    sets no id, which a browser resolves against the site's root, not the
+    manifest. Each problem goes in PROBLEMS."""
+    where = "the manifest %s" % name
+    try:
+        manifest = json.loads((folder / name).read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        problems.append("%s can't be read as JSON: %s" % (where, error))
+        return []
+    if not isinstance(manifest, dict):
+        problems.append("%s is not a JSON object" % where)
+        return []
+    shortcuts = manifest.get("shortcuts") if isinstance(manifest.get("shortcuts"), list) else []
+    pages = [(member, manifest.get(member)) for member in ("start_url", "scope")]
+    pages += [("a shortcut's url", shortcut.get("url")) for shortcut in shortcuts if isinstance(shortcut, dict)]
+    images = []
+    for member, entries in [("icons", manifest.get("icons")), ("screenshots", manifest.get("screenshots"))] + \
+            [("a shortcut's icons", shortcut.get("icons")) for shortcut in shortcuts if isinstance(shortcut, dict)]:
+        if entries is not None and not isinstance(entries, list):
+            problems.append("%s's %s is %r, not a list" % (where, member, entries))
+            continue
+        images += [(member, entry) for entry in entries or []]
+    resolved = {}
+    for member, value in pages:
+        if value is None:
+            continue
+        result = resolve(value, address) if isinstance(value, str) else None
+        if not isinstance(value, str):
+            problems.append("%s's %s is %r, not an address" % (where, member, value))
+        elif result is not None and result[0] is None:
+            problems.append("%s's %s is %r, which leads to %s, outside the page's folder" % (where, member, value, result[1]))
+        elif result is not None:
+            resolved[member] = urlsplit(result[1]).path
+    if "start_url" in resolved and "scope" in resolved and not resolved["start_url"].startswith(resolved["scope"]):
+        problems.append("%s's start_url %s is outside its scope %s, so a browser ignores the scope"
+                        % (where, resolved["start_url"], resolved["scope"]))
+    if "id" in manifest:
+        problems.append("%s sets id %r, which a browser resolves against the site's root, not the manifest: no id "
+                        "names the page's folder at the site's root and under /game/ alike, so leave it out (it is "
+                        "start_url then)" % (where, manifest["id"]))
+    files = []
+    for member, entry in images:
+        value = entry.get("src") if isinstance(entry, dict) else None
+        if not isinstance(value, str):
+            problems.append("%s's %s has an entry without a src: %r" % (where, member, entry))
+            continue
+        result = resolve(value, address)
+        if result is None:
+            continue
+        if result[0] is None:
+            problems.append("%s's %s has %r, which a browser fetches from %s, outside the page's folder" % (where, member, value, result[1]))
+        elif result[0] not in files:
+            files.append(result[0])
+    return files
 
 
 def main(argv):
@@ -218,6 +290,10 @@ def main(argv):
         elif name not in files:
             files.append(name)
     if folder is not None:
+        for href in page.manifests:
+            result = resolve(href)
+            if result is not None and result[0] is not None and (folder / result[0]).is_file():
+                files += [name for name in manifest_files(result[0], result[1], folder, problems) if name not in files]
         for name in files:
             if not (folder / name).is_file():
                 problems.append("the page or its loader fetches %s, which is not in %s" % (name, folder))

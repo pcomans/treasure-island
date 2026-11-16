@@ -5,6 +5,19 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, viewport-fit=cover">
 		<title>$GODOT_PROJECT_NAME</title>
+		<!-- The home screen (owner, 2026-11-16): Add to Home Screen opens the game on
+		     its own, full screen. tools/build-web.sh writes the manifest and its icons
+		     beside the page, named after the commit like the game's files, and puts the
+		     manifest's name in this link (an export without that script links none
+		     that exists). The exporter's head include, below the styles, adds the
+		     favicon and the iPhone's 180 x 180 apple-touch-icon. On an iPhone the
+		     status bar lies over the page (black-translucent), whose layout keeps to
+		     the safe area (env(safe-area-inset-*), --safe-* below). -->
+		<link rel="manifest" href="$TI_WEB_MANIFEST">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+		<meta name="apple-mobile-web-app-title" content="Treasure Island">
 		<style>
 html, body, #canvas {
 	margin: 0;
@@ -88,13 +101,14 @@ body {
 }
 
 #status-progress {
-	bottom: 10%;
+	bottom: calc(10% + var(--safe-bottom));
 	width: 50%;
 	margin: 0 auto;
 }
 
 /* The loading line, in one place from the download to play: just above the
-   download's progress bar, clear of the boot splash and the chest. A second line
+   download's progress bar, clear of the boot splash and the chest, and like the
+   bar inside the safe area (a phone's home indicator and notch). A second line
    (after a line break) is a note on the step. */
 #status-notice {
 	background-color: #242424;
@@ -109,11 +123,11 @@ body {
 	white-space: pre-line;
 	z-index: 1;
 	position: absolute;
-	left: 0;
-	right: 0;
-	bottom: calc(10% + 1.5rem);
+	left: var(--safe-left);
+	right: var(--safe-right);
+	bottom: calc(10% + 1.5rem + var(--safe-bottom));
 	width: max-content;
-	max-width: calc(100% - 2rem);
+	max-width: calc(100% - 2rem - var(--safe-left) - var(--safe-right));
 	margin: 0 auto;
 	box-sizing: border-box;
 }
@@ -183,6 +197,74 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	for (const type of ['touchend', 'pointerup', 'click', 'keydown', 'mousedown']) {
 		document.addEventListener(type, resume, {capture: true, passive: true});
 	}
+}());
+
+// The start prompt's notes on a touch screen (owner, 2026-11-16), which the game
+// asks for as play is ready and shows under its Tap to play button
+// (game/scripts/main.gd's _show_start_notes, hud.gd's set_start_notes).
+// window.__tiStartNotes.read() gives them as JSON:
+//   home_screen: how to play full screen, Share › Add to Home Screen. Only in
+//     Safari on an iPhone or iPad, the one browser there whose Share menu surely
+//     has it: not opened from the home screen already, not in another browser or
+//     an app's own browser (each names itself, or leaves out Safari's Version/ and
+//     Safari/), not in a frame, and not once dismissed (its ×,
+//     dismissHomeScreen(), kept in localStorage; without storage it comes back
+//     next visit). Safari opened inside an app (SFSafariViewController) says the
+//     same as Safari and gets it too.
+//   silent_mode: that the sound needs the silent mode off: on any iPhone or iPad,
+//     in Safari or from the home screen, as every browser there plays Web Audio in
+//     a session that the silent mode mutes, and no page can read the switch.
+//   full_screen: whether the prompt's tap also puts the page full screen
+//     (enterFullScreen(), which the game calls inside that tap): a phone or tablet
+//     (its main pointer a finger) whose browser can, Android's; an iPhone can't, an
+//     iPad gets the hint instead, and a desktop, touch screen or not (its main
+//     pointer a mouse or trackpad), changes nothing.
+// An iPad asks for desktop sites by default and then says Macintosh, but has touch.
+(function () {
+	const agent = navigator.userAgent;
+	const matches = (query) => typeof window.matchMedia === 'function' && window.matchMedia(query).matches;
+	const ios = /\b(iPhone|iPod|iPad)\b/.test(agent) || (/\bMacintosh\b/.test(agent) && navigator.maxTouchPoints > 1);
+	const homeScreen = navigator.standalone === true || matches('(display-mode: standalone)') || matches('(display-mode: fullscreen)');
+	const safari = /\bVersion\/[\d.]+.*\bSafari\//.test(agent)
+		&& !/\b(CriOS|FxiOS|EdgiOS|OPiOS|OPT|GSA|DuckDuckGo|Ddg|YaBrowser|FBAN|FBAV|FBIOS|Instagram|Line|Twitter|MicroMessenger|Snapchat|Pinterest|LinkedInApp|musical_ly|BytedanceWebview|KAKAOTALK|NAVER|Whale)\b/.test(agent);
+	const topLevel = window.top === window.self;
+	const root = document.documentElement;
+	const requestFullScreen = root.requestFullscreen || root.webkitRequestFullscreen;
+	const isFullScreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
+	const fullScreenOffered = !ios && !homeScreen && typeof requestFullScreen === 'function'
+		&& Boolean(document.fullscreenEnabled || document.webkitFullscreenEnabled) && matches('(pointer: coarse)');
+	const dismissedKey = 'grand-treasure-island.home-screen-hint-dismissed';
+	let dismissed = false;
+	try {
+		dismissed = window.localStorage.getItem(dismissedKey) === '1';
+	} catch (e) {
+		// No storage (a blocked or private page): the hint shows each visit.
+	}
+	window.__tiStartNotes = {
+		read: () => JSON.stringify({
+			home_screen: ios && safari && topLevel && !homeScreen && !dismissed,
+			silent_mode: ios,
+			full_screen: fullScreenOffered && !isFullScreen(),
+		}),
+		dismissHomeScreen: () => {
+			dismissed = true;
+			try {
+				window.localStorage.setItem(dismissedKey, '1');
+			} catch (e) {
+				// Dismissed for this visit only.
+			}
+		},
+		enterFullScreen: () => {
+			if (!fullScreenOffered || isFullScreen()) return false;
+			try {
+				const request = requestFullScreen.call(root, {navigationUI: 'hide'});
+				if (request && typeof request.catch === 'function') request.catch(() => {});
+				return true;
+			} catch (e) {
+				return false;
+			}
+		},
+	};
 }());
 
 (function () {

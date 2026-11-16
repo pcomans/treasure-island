@@ -15,6 +15,9 @@ signal graphics_chosen(key: String, value: Variant)
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
 signal loading_shown(text: String)
+## The start prompt's home screen hint was dismissed (its ×): main.gd has the page
+## remember it, so it never shows again in that browser.
+signal home_screen_hint_dismissed
 
 ## The controls screen: headings in this colour, keys and buttons in the other.
 const CONTROLS_HEADING_COLOR := Color(0.62, 0.85, 1.0)
@@ -54,6 +57,16 @@ const START_FONT_PX := 30
 const START_PANEL_SHARE := 0.44
 const START_DIM_ALPHA := 0.12
 const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look · F drive · Esc pause"
+## The start prompt's notes on an iPhone or iPad (set_start_notes, owner
+## 2026-11-16), under its Play button in the controls line's colour, this size
+## (px): how to play full screen from the home screen, with a × as tall and wide as
+## a touch screen's menu buttons that dismisses it, and that the sound needs the
+## silent mode off. In characters the web build's font has, which draws no others
+## ("›" for the menu step; headless_touch_drive.gd checks them).
+const START_HOME_SCREEN_NOTE := "For full screen: Share › Add to Home Screen"
+const START_SILENT_NOTE := "Turn off silent mode to hear sound"
+const START_NOTE_FONT_PX := 24
+const START_NOTE_DISMISS_PX := 64.0
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
 ## headings' colour with this dark type.
@@ -184,6 +197,11 @@ var _start_text := ""
 var _menu_before := {}
 ## The start prompt's line of controls (with a mouse), made the first time.
 var _start_controls: Label
+## The start prompt's notes (set_start_notes), made the first time: the home
+## screen hint's row (its line and ×) and the silent mode line.
+var _start_notes: VBoxContainer
+var _home_screen_hint: HBoxContainer
+var _silent_note: Label
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -401,10 +419,89 @@ func start_prompt_text() -> String:
 	return _start_text
 
 
+## The start prompt's notes under its Play button, which main.gd asks the web page
+## for on a touch screen (owner, 2026-11-16): home_screen, how to play full screen
+## from the home screen (Safari on an iPhone or iPad, outside a home screen app),
+## with a × that dismisses it for good (home_screen_hint_dismissed); silent_mode,
+## that the sound needs the silent mode off (any iPhone or iPad). Neither shows
+## without the prompt, and play's first start ends both with it.
+func set_start_notes(home_screen: bool, silent_mode: bool) -> void:
+	if _start_text.is_empty():
+		return
+	if _start_notes == null:
+		if not home_screen and not silent_mode:
+			return
+		_make_start_notes()
+	_home_screen_hint.visible = home_screen
+	_silent_note.visible = silent_mode
+	_start_notes.visible = home_screen or silent_mode
+
+
+## The notes' lines and the hint's ×, under the Play button.
+func _make_start_notes() -> void:
+	_start_notes = VBoxContainer.new()
+	_start_notes.name = "StartNotes"
+	_start_notes.add_theme_constant_override("separation", 0)
+	_home_screen_hint = HBoxContainer.new()
+	_home_screen_hint.name = "HomeScreenHint"
+	_home_screen_hint.alignment = BoxContainer.ALIGNMENT_CENTER
+	_home_screen_hint.add_child(_start_note_label(START_HOME_SCREEN_NOTE))
+	var dismiss := Button.new()
+	dismiss.name = "Dismiss"
+	dismiss.text = "×"
+	dismiss.flat = true
+	# A finger's control: the Play button keeps the keys' focus.
+	dismiss.focus_mode = Control.FOCUS_NONE
+	dismiss.custom_minimum_size = Vector2(START_NOTE_DISMISS_PX, START_NOTE_DISMISS_PX)
+	dismiss.add_theme_font_size_override("font_size", START_FONT_PX)
+	for colour: String in ["font_color", "font_hover_color", "font_pressed_color", "font_hover_pressed_color"]:
+		dismiss.add_theme_color_override(colour, CONTROLS_KEY_COLOR)
+	dismiss.pressed.connect(_dismiss_home_screen_hint)
+	_click_on_press(dismiss)
+	_home_screen_hint.add_child(dismiss)
+	_start_notes.add_child(_home_screen_hint)
+	_silent_note = _start_note_label(START_SILENT_NOTE)
+	_silent_note.name = "SilentNote"
+	_start_notes.add_child(_silent_note)
+	resume_button.add_sibling(_start_notes)
+
+
+func _start_note_label(text: String) -> Label:
+	var label := Label.new()
+	label.text = text
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.add_theme_font_size_override("font_size", START_NOTE_FONT_PX)
+	label.add_theme_color_override("font_color", CONTROLS_KEY_COLOR)
+	return label
+
+
+func _dismiss_home_screen_hint() -> void:
+	_home_screen_hint.hide()
+	_start_notes.visible = _silent_note.visible
+	home_screen_hint_dismissed.emit()
+
+
+## Which start prompt notes show and where the hint's × is (the web state
+## readback; a capture driver taps it there).
+func start_notes_state() -> Dictionary:
+	if _start_notes == null:
+		return {"home_screen": false, "silent_mode": false, "dismiss": []}
+	var dismiss := _home_screen_hint.get_node("Dismiss") as Control
+	var middle := dismiss.get_global_rect().get_center()
+	return {
+		"home_screen": _start_notes.is_visible_in_tree() and _home_screen_hint.visible,
+		"silent_mode": _start_notes.is_visible_in_tree() and _silent_note.visible,
+		"dismiss": [middle.x, middle.y],
+	}
+
+
 func _end_start_prompt() -> void:
 	if _start_text.is_empty():
 		return
 	_start_text = ""
+	if _start_notes != null:
+		_start_notes.hide()
 	resume_button.text = _menu_before.text
 	pause_title.text = _menu_before.title
 	resume_button.custom_minimum_size.y = _menu_before.height
