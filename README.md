@@ -11,7 +11,8 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 ## Play it
 
 - **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
-- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest): on that page, under Assets, take `grand-treasure-island-mac-build-<number>.zip` (about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
+- **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB). Apple hasn't checked this build (it isn't notarized). Installed through the [itch app](https://itch.io/app), it should open without the macOS warning. Downloaded in the browser, macOS blocks it the first time you open it: click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest), under Assets, as `grand-treasure-island-mac-build-<number>.zip`.
+- **On Linux:** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Linux build.
 
 The downloadable version looks nicer.
 
@@ -156,6 +157,8 @@ when a building counts as done.
 
 ### Build for the Mac
 
+Players get the game from the [itch.io page](https://phppco.itch.io/grand-treasure-island), which CI fills with the same builds; on GitHub, https://github.com/pcomans/treasure-island/releases/latest always shows the newest release.
+
 Every push to `main` that changes more than documentation (see
 [Where the builds go](#where-the-builds-go)) builds the Mac app on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
@@ -231,6 +234,9 @@ releases keep the names `treasure-island-mac.zip` and `treasure-island-linux.tar
 
 The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
 the Mac app, with the same sounds.
+
+Players get both from the [itch.io page](https://phppco.itch.io/grand-treasure-island)
+(below), with the GitHub releases as the alternative.
 
 Every build has a build number: the number of commits in its commit's history,
 from [`tools/build-number`](tools/build-number). A newer build of `main` always

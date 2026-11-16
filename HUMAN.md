@@ -5,4 +5,4 @@ item here only blocks what it names.
 
 | ID | Status | Blocks | Owner action |
 | --- | --- | --- | --- |
-| HUMAN-001 | Open | Nothing; feedback steers later work | Play the [newest Mac build](https://github.com/pcomans/treasure-island/releases/latest) (its `grand-treasure-island-mac-build-<number>.zip`) on the M1 Pro: does the island feel recognizable, do walk, run and jetpack feel right? Say which buildings look wrong. |
+| HUMAN-001 | Open | Nothing; feedback steers later work | Play the [newest Mac build](https://phppco.itch.io/grand-treasure-island) (or `grand-treasure-island-mac-build-<number>.zip` from [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest)) on the M1 Pro: does the island feel recognizable, do walk, run and jetpack feel right? Say which buildings look wrong. |
