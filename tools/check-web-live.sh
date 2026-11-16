@@ -163,7 +163,7 @@ if not page["href"].startswith(url):
 outside = [name for name in page["files"] if not name.startswith(url)]
 if outside:
     problems.append("it fetched from outside %s: %s" % (url, ", ".join(outside)))
-names = [name[len(url):].split("?")[0] for name in page["files"] if name.startswith(url)]
+names = list(dict.fromkeys(name[len(url):].split("?")[0] for name in page["files"] if name.startswith(url)))
 builds = sorted({name.split(".")[0] for name in names if name.startswith("treasure-island-")})
 if builds != ["treasure-island-" + commit]:
     problems.append("its files are named %s, not treasure-island-%s" % (builds or "nothing", commit))
@@ -176,10 +176,12 @@ print("READY %s; %d files, all from beside the page: %s" % (seen, len(names), ",
 ' "$1" "${commit}"
 }
 
-# The page in a fresh browser until it reaches the start prompt, then the browser stopped.
+# The page in a fresh browser until it reaches the start prompt, then the browser
+# stopped. The browser keeps the system's temporary folder: Chromium puts a socket
+# in TMPDIR, and a long one (a release folder) makes its path longer than Unix allows.
 browser_leg() {
   local url="$1" dir="$2" session="$3" xdg="" line="" last="" deadline stopped
-  "${root}/tools/browser" "${session}" "${url}?profile_startup=1" > "${dir}/browser.log" 2>&1 < /dev/null &
+  env -u TMPDIR "${root}/tools/browser" "${session}" "${url}?profile_startup=1" > "${dir}/browser.log" 2>&1 < /dev/null &
   handle=$!
   for _ in $(seq 120); do
     grep -q '^Browser commands: ' "${dir}/browser.log" && break
@@ -192,7 +194,7 @@ browser_leg() {
   else
     deadline=$(( $(date +%s) + 480 ))
     while :; do
-      line="$(printf '%s' "${probe}" | XDG_RUNTIME_DIR="${xdg}" timeout 30 agent-browser --json --session "${session}" eval --stdin 2>/dev/null \
+      line="$(printf '%s' "${probe}" | env -u TMPDIR XDG_RUNTIME_DIR="${xdg}" timeout 30 agent-browser --json --session "${session}" eval --stdin 2>/dev/null \
         | verdict "${url}")"
       if [ "${line}" != "${last}" ]; then
         echo "CHECK ${url} $(date -u +%T) ${line}"
