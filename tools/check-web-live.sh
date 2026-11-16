@@ -17,7 +17,9 @@
 # files the new one no longer serves), it names COMMIT's files and no others, by
 # paths relative to itself (tools/check_web_paths.py), and each of those loads
 # from beside it (200, cached for good, and compressed for the engine script, the
-# .wasm and the .pck). Then in a browser (tools/browser: a fresh profile on a
+# .wasm and the .pck). The engine script must be the build's patched one, whose
+# sound plays share each take's buffer (tools/build-web.sh: Godot 4.7.2 copies the
+# take for every play). Then in a browser (tools/browser: a fresh profile on a
 # private Weston, so run it in an engine slot like any other GPU work), the page
 # with ?profile_startup=1 must reach the start prompt within 8 minutes: the world
 # ready, the loading screen gone and the game paused on "Click to play". Every
@@ -112,6 +114,25 @@ http_leg() {
     esac
   done < "${dir}/files.txt"
   echo "CHECK ${url} serves treasure-island-${commit} by relative paths ($(wc -l < "${dir}/files.txt") files)"
+}
+
+# The engine script served: tools/build-web.sh's, whose sample playback shares each
+# sound take's AudioBuffer among its plays, not Godot 4.7.2's own, which copies the
+# take for every play. Drop this with that patch (Godot 4.8 shares it itself).
+engine_leg() {
+  local url="$1" dir="$2" name="treasure-island-${commit}.js" status
+  status="$(curl -sS --compressed -o "${dir}/engine.js" -w '%{http_code}' --max-time 60 "${url}${name}")" \
+    || status="no answer (curl exit $?)"
+  if [ "${status}" != 200 ]; then
+    fail "${url}${name} answered ${status}, not 200"
+  elif python3 -I -c 'import sys
+text = open(sys.argv[1], encoding="utf-8").read()
+sys.exit(text.count("getAudioBuffer(){return this._audioBuffer}") != 1
+         or "getAudioBuffer(){return this._duplicateAudioBuffer()}" in text)' "${dir}/engine.js"; then
+    echo "CHECK ${url}${name} shares each sound take's buffer among its plays"
+  else
+    fail "${url}${name} is not tools/build-web.sh's engine script: its sound plays do not share each take's buffer"
+  fi
 }
 
 # What the page shows, as JSON: the start-up marks, the game's readback
@@ -231,7 +252,10 @@ for url in "${urls[@]}"; do
   dir="${work}/${leg}"
   mkdir -p "${dir}"
   echo "CHECK ${url} $(date -u +%FT%TZ) for treasure-island-${commit}"
-  http_leg "${url}" "${dir}" && browser_leg "${url}" "${dir}" "live-check-$$-${leg}"
+  if http_leg "${url}" "${dir}"; then
+    engine_leg "${url}" "${dir}"
+    browser_leg "${url}" "${dir}" "live-check-$$-${leg}"
+  fi
 done
 if [ "${failures}" -gt 0 ]; then
   echo "FAIL: ${failures} failed check(s) for treasure-island-${commit} at ${urls[*]}"
