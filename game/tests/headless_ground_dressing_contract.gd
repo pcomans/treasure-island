@@ -18,6 +18,8 @@ func _initialize() -> void:
 	_check_nothing_from_high_above()
 	_check_every_family_is_dressed()
 	_check_tile_points()
+	_check_chip_window()
+	_check_chip_cells()
 	if _failed:
 		quit(1)
 		return
@@ -91,3 +93,24 @@ func _check_tile_points() -> void:
 			quarters[quarter] += 1
 		for share: int in quarters:
 			_require(absf(float(share) / float(count) - 0.25) < 0.1, "The first %d tile points spread evenly." % count)
+
+
+## The chips capture's window holds the chip ring wherever the camera can be before a
+## recapture, which comes once it is RECENTRE_M from the window's centre.
+func _check_chip_window() -> void:
+	for level: String in GROUND_DRESSING.LEVELS:
+		var reach := GROUND_DRESSING.RECENTRE_M + float(GROUND_DRESSING.LEVELS[level].chip_ring_m)
+		_require(reach <= GROUND_DRESSING.CHIP_WINDOW_M * 0.5, "The %s chip ring reaches %.1f m from the chips window's centre, past its half width." % [level, reach])
+
+
+## Chip cells stand only over a bed's bounds: those of the quadtree that touch it, and
+## none round a camera far from every bed.
+func _check_chip_cells() -> void:
+	var bounds: Array[Rect2] = [Rect2(10.0, 10.0, 6.0, 3.0)]
+	var cells := GROUND_DRESSING.cells_around(Vector3(12.0, 6.0, 11.0), 10.0)
+	var kept := GROUND_DRESSING.cells_over(cells, bounds)
+	_require(not kept.is_empty() and kept.size() < cells.size(), "Chip cells over a bed are kept and the rest dropped.")
+	for cell: Vector3i in kept:
+		var size: float = GROUND_DRESSING.CELL_M * float(1 << cell.z)
+		_require(Rect2(float(cell.x) * size, float(cell.y) * size, size, size).intersects(bounds[0]), "A kept chip cell touches the bed.")
+	_require(GROUND_DRESSING.cells_over(GROUND_DRESSING.cells_around(Vector3(200.0, 6.0, 200.0), 10.0), bounds).is_empty(), "No chip cells far from every bed.")

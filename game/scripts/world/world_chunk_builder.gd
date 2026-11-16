@@ -50,6 +50,8 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+## Wood-chip mulch surfaces (mulch_ground.gd GRADES): the shared chip shader.
+const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
 ## Yerba Buena Island's ground (context:ybi): its own shader and cover map.
 const YBI_GROUND := preload("res://game/scripts/world/ybi_ground.gd")
 ## YBI's photographed façades and its summit sculpture.
@@ -138,13 +140,10 @@ const STREET_GROUND_SURFACES := {
 	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
 	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.545, 0.57)},
 	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.42, 0.405, 0.375)},
-	# The park outside Isle House (owner video, 2026-11-15): the same shredded chips,
-	# grey-brown in its beds, a pale grey gravel patch by the forked log (f_058), and
-	# dark where the stormwater basin stays damp. Tints set against the frames' ratios
-	# to the lawn and the bike path's asphalt; production inference.
-	"park_chips": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.7, 0.66, 0.62)},
+	# The park outside Isle House (owner video, 2026-11-15): a pale grey gravel patch
+	# by the forked log (f_058), the bark texture paled. Its beds' chips and the damp
+	# stormwater basin are wood-chip mulch (MULCH_GROUND).
 	"park_chips_pale": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.84, 0.83, 0.8)},
-	"park_chips_damp": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 0.92, "specular": 0.2, "tint": Color(0.52, 0.48, 0.44)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
@@ -870,6 +869,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 		placeholder_material = _street_decal_material(str(record.material_key))
 	elif str(record.material_key) == PARK_BED_MATERIAL_KEY and not uvs.is_empty():
 		placeholder_material = _park_bed_material()
+	elif MULCH_GROUND.is_mulch(str(record.material_key)) and not uvs.is_empty():
+		placeholder_material = MULCH_GROUND.material(str(record.material_key))
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif PROMENADE_PAVEMENT.has(str(record.material_key)):

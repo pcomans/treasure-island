@@ -131,7 +131,7 @@ extends SceneTree
 ## Ground dressing (the grass of ground_dressing.gd; --ground-dressing LEVEL on the
 ##   command line, else the project setting): a still view may add "dressing":
 ##   "off", "low", "medium" or "high" to shoot at that density, "dressing_parts":
-##   {"cards": false, "grass": true, "stones": true} for what draws, "dressing_params":
+##   {"cards": false, "grass": true, "stones": true, "chips": true} for what draws, "dressing_params":
 ##   {"uniform": value, ...} to set grass uniforms (a list is a vector), all kept
 ##   for the views after it, "dressing_maps": true to save the ground captures
 ##   beside the shot, and "measure_dressing": N to time N frames at each of
@@ -825,7 +825,7 @@ func _apply_dressing(view: Dictionary) -> String:
 		dressing.set_level(level)
 	if view.has("dressing_parts"):
 		var parts: Dictionary = view.dressing_parts
-		dressing.set_parts(bool(parts.get("cards", false)), bool(parts.get("grass", true)), bool(parts.get("stones", true)))
+		dressing.set_parts(bool(parts.get("cards", false)), bool(parts.get("grass", true)), bool(parts.get("stones", true)), bool(parts.get("chips", true)))
 	var params: Dictionary = view.get("dressing_params", {})
 	for uniform: String in params:
 		var value: Variant = params[uniform]
