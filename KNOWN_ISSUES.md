@@ -405,6 +405,36 @@ photos of 2025 and Jun 2026. What isn't there yet:
 - Not modelled: the containers, sheds and the school bus round the rugby field,
   and the GAA field's strip of containers and sheds by Avenue E.
 
+## The park outside Isle House (`isle_house_park` zone, 2026-11-15): study with known gaps
+
+Built from the owner's video of 2026-11-15 (f_000 to f_114, kept outside Git) and the
+2026-05-26 aerial. The frozen OSM snapshot leaves the lot untagged; the zone records the
+owner's exception (`osm_exception`). What isn't there yet or is inferred:
+
+- Not filmed, or only from far off, so drawn plain from the rest of the park: the
+  frontage along Avenue of the Palms seen from the Isle House side, the mound's
+  north-east side and top, the bed along Bruton Street's walk, the inside of the bed
+  triangle at the north tip, the basin's inlets and edges, and the park sign's face.
+- Estimated, not measured: the number and places of the young pines (a scatter rule,
+  about one per 70 to 90 m² of bed), the lamps' 17 m spacing, the mound's 1 m rise,
+  the sizes of the block benches and logs, and the basin's outline.
+- The stockpile hill in the USGS elevation data at the north tip and the avenue's hump
+  beside it stay: their
+  32 m land cells border Isle House, whose foundation guard keeps them uncut. For the
+  same reason the basin is darker damp chips, not a hollow, and holds no water (the
+  video was shot after rain).
+- The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
+  sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
+  saplings), not the park's own species.
+- Not built: the kerb strip of palms and upright grasses along the avenue frontage
+  (it needs a street-ground change), the bike path's centre line and bike stencils,
+  the tactile pads at its crossings, and the white stepping pads in the east bed
+  (f_025).
+- The video shows cars parked at the avenue's west kerb by the park; the avenue's
+  rule leaves that kerb clear.
+- The mound's chairs stand where the aerial shows them, a few metres closer to the
+  bike path than in the video, where they sit higher up the mound (f_103).
+
 ## Street detail rollouts: landed 2026-11-06 with known gaps
 
 From the reviews of the shoreline, street ground, street objects, parked cars, vegetation ground layers and tree placement.

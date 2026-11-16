@@ -219,11 +219,12 @@ const BAULK_TOP := Color(0.29, 0.275, 0.25)
 const BAULK_END := Color(0.2, 0.16, 0.135)
 ## The pale weathered timber blocks used as benches along a park lawn's edge (the
 ## park outside Isle House, owner video 2026-11-15, f_025, f_028, f_038, f_051):
-## squared silver-grey timber, two pieces stacked, checked along the top, the sawn
+## squared silver-grey timber, two pieces stacked, their sides the weathered grain
+## (BLOCK_GRAIN on the atlas's pole wood), the tops worn paler and checked, the sawn
 ## ends a little warmer. Weathering only: the light comes from the sun. Size across
 ## and high are production inference from the frames (about 0.5 by 0.45 m).
-const BLOCK_SIDE := Color(0.6, 0.585, 0.55)
-const BLOCK_TOP := Color(0.68, 0.665, 0.63)
+const BLOCK_GRAIN := Color(1.0, 0.96, 0.9)
+const BLOCK_TOP := Color(0.7, 0.68, 0.63)
 const BLOCK_END := Color(0.66, 0.6, 0.51)
 const BLOCK_CHECK := Color(0.32, 0.3, 0.28)
 const BLOCK_DEPTH_M := 0.5
@@ -232,6 +233,12 @@ const BLOCK_HEIGHT_M := 0.45
 ## trunk runs this share of its whole length (the park outside Isle House, f_058).
 const FORK_SPLAY_RAD := 0.42
 const FORK_TRUNK_SHARE := 0.58
+## The park's lying logs (weathered, f_086-f_099) are grey checked timber: the pole
+## wood's grain along them, barely warmed, and their sawn ends darker; the forked log
+## (f_058) is the same grain left bleached.
+const LOG_GRAIN := Color(0.94, 0.92, 0.88)
+const LOG_GRAIN_BLEACHED := Color(1.0, 1.0, 0.98)
+const LOG_END_WEATHERED := Color(0.5, 0.46, 0.41)
 ## Sports goals on the pitches' goal lines (tools/lib/sports-pitch.mjs goal_lines;
 ## origin on the middle of the line, front -Z toward the pitch, nets behind +Z).
 ## The GAA goals of Pairc na nGael (SF GAA photos, Jun 2026): white round
@@ -709,7 +716,7 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			_box_shape(result, Vector3(0.78, 1.24, 0.54), Vector3(0.0, 0.62, 0.0))
 		"log_seat":
 			var form := str(params.get("form", "log"))
-			if not form in ["log", "stump", "slab", "baulk", "block", "forked"]:
+			if not form in ["log", "weathered", "stump", "slab", "baulk", "block", "forked"]:
 				form = "log"
 			var size := snappedf(clampf(_number(params, "size_m", 3.2), 0.5, 8.0 if form == "forked" else 5.0), 0.1)
 			_piece(result, "log_seat_%s_%.1f" % [form, size], func(b: Builder) -> void: _log_seat(b, form, size))
@@ -722,6 +729,8 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 					_box_shape(result, Vector3(size, 0.5, 0.62), Vector3(0.0, 0.25, 0.0))
 				"block":
 					_box_shape(result, Vector3(size, BLOCK_HEIGHT_M, BLOCK_DEPTH_M), Vector3(0.0, BLOCK_HEIGHT_M * 0.5, 0.0))
+				"weathered":
+					_box_shape(result, Vector3(size, 0.58, 0.62), Vector3(0.0, 0.29, 0.0))
 				"forked":
 					# The trunk along X, its foot at -X, and each limb along its own heading from the fork.
 					var trunk_m := size * FORK_TRUNK_SHARE
@@ -1906,8 +1915,9 @@ func _bbq_grill(b: Builder) -> void:
 ## ph02 and ph03, Sep 2025), the wood weathered pale and barkless: a long log
 ## lying along X, a stump stool, or a broad bean-shaped stump slab. size is the
 ## log's length or the stump's or slab's width (m). The promenade's tarred baulk,
-## and a park's pale timber block bench (block) and long forked log (forked, its
-## trunk's foot at -X, its two limbs splaying beyond the fork) share the prop.
+## and a park's pale timber block bench (block), long forked log (forked, its
+## trunk's foot at -X, its two limbs splaying beyond the fork) and weathered grey
+## log (weathered) share the prop.
 func _log_seat(b: Builder, form: String, size: float) -> void:
 	match form:
 		"stump":
@@ -1922,10 +1932,12 @@ func _log_seat(b: Builder, form: String, size: float) -> void:
 				b.tube(PackedVector3Array([center + Vector3(0, -0.05, 0), center + Vector3(0, 0.45, 0)]), PackedFloat32Array([radius + 0.02, radius]), 16, DRIFTWOOD, CELL_WHITE, false, false)
 				b.disc(center + Vector3(0, 0.45, 0), Vector3.UP, radius, 16, END_GRAIN)
 		"block":
-			# Two squared timbers stacked, weathered silver-grey, lying on the ground.
+			# Two squared timbers stacked, weathered silver-grey, lying on the ground. Each box
+			# is turned (its local X up, local Y along -X) so the cell's grain runs along it.
 			var low := BLOCK_HEIGHT_M * 0.5
-			b.box(Vector3(0, low * 0.5 - 0.04, 0), Basis.IDENTITY, Vector3(size, low + 0.08, BLOCK_DEPTH_M), BLOCK_SIDE * 0.94, CELL_WHITE)
-			b.box(Vector3(0, low * 1.5, 0), Basis.IDENTITY, Vector3(size - 0.02, low - 0.008, BLOCK_DEPTH_M - 0.012), BLOCK_SIDE, CELL_WHITE)
+			var along := Basis(Vector3.BACK, PI * 0.5)
+			b.box(Vector3(0, low * 0.5 - 0.04, 0), along, Vector3(low + 0.08, size, BLOCK_DEPTH_M), BLOCK_GRAIN * 0.9, CELL_POLE_WOOD)
+			b.box(Vector3(0, low * 1.5, 0), along, Vector3(low - 0.008, size - 0.02, BLOCK_DEPTH_M - 0.012), BLOCK_GRAIN, CELL_POLE_WOOD)
 			b.box(Vector3(0, BLOCK_HEIGHT_M - 0.004, 0), Basis.IDENTITY, Vector3(size - 0.04, 0.012, BLOCK_DEPTH_M - 0.03), BLOCK_TOP, CELL_WHITE)
 			# Long checks along the top and the upper sides, and the sawn ends.
 			for check: Array in [[0.1, 0.62, -0.08], [-0.05, 0.48, 0.11], [0.2, 0.3, 0.02]]:
@@ -1938,15 +1950,21 @@ func _log_seat(b: Builder, form: String, size: float) -> void:
 			var trunk_m := size * FORK_TRUNK_SHARE
 			var foot := Vector3(-size * 0.5, 0.21, 0.0)
 			var fork := Vector3(-size * 0.5 + trunk_m, 0.17, 0.03)
-			b.tube(PackedVector3Array([foot, foot.lerp(fork, 0.5) + Vector3(0, 0.0, -0.06), fork]), PackedFloat32Array([0.23, 0.2, 0.17]), 12, DRIFTWOOD, CELL_WHITE, false, false)
+			b.tube(PackedVector3Array([foot, foot.lerp(fork, 0.5) + Vector3(0, 0.0, -0.06), fork]), PackedFloat32Array([0.23, 0.2, 0.17]), 12, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
 			b.disc(foot, Vector3.LEFT, 0.23, 12, END_GRAIN)
 			for side: float in [-1.0, 1.0]:
 				var limb_m := size * (1.0 - FORK_TRUNK_SHARE) * (1.0 if side < 0.0 else 0.8)
 				var heading := Vector3(cos(side * FORK_SPLAY_RAD), 0.0, -sin(side * FORK_SPLAY_RAD))
 				var tip := Vector3(fork.x, 0.1, fork.z) + heading * limb_m
 				var bend := Vector3(fork.x, 0.0, fork.z).lerp(tip, 0.5) + Vector3(0, 0.15, 0) + Vector3(-heading.z, 0.0, heading.x) * 0.12 * side
-				b.tube(PackedVector3Array([fork - heading * 0.25, bend, tip]), PackedFloat32Array([0.16, 0.13, 0.09]), 10, DRIFTWOOD * 1.03, CELL_WHITE, false, false)
+				b.tube(PackedVector3Array([fork - heading * 0.25, bend, tip]), PackedFloat32Array([0.16, 0.13, 0.09]), 10, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
 				b.disc(tip, heading, 0.09, 10, END_GRAIN)
+		"weathered":
+			# A big grey log lying along X, a little bowed and swollen, its ends sawn.
+			var path := PackedVector3Array([Vector3(-size * 0.5, 0.29, 0), Vector3(-size * 0.15, 0.3, 0.03), Vector3(size * 0.2, 0.28, 0.02), Vector3(size * 0.5, 0.26, 0)])
+			b.tube(path, PackedFloat32Array([0.33, 0.32, 0.3, 0.29]), 14, LOG_GRAIN, CELL_POLE_WOOD, false, false)
+			b.disc(path[0], Vector3.LEFT, 0.33, 14, LOG_END_WEATHERED)
+			b.disc(path[3], Vector3.RIGHT, 0.29, 14, LOG_END_WEATHERED)
 		"baulk":
 			# A squared, tarred timber lying on the pavement, its sawn ends showing.
 			b.box(Vector3(0, 0.22, 0), Basis.IDENTITY, Vector3(size, 0.5, 0.62), BAULK_SIDE, CELL_WHITE)

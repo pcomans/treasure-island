@@ -371,7 +371,7 @@ const STAKE_RADIUS_M := 0.03
 ## The three-post frame round the young pines and basin saplings of the park outside
 ## Isle House: posts this far from the trunk, this thick (production inference, f_025).
 const FRAME_STAKE_RADIUS_M := 0.3
-const FRAME_STAKE_POST_M := 0.028
+const FRAME_STAKE_POST_M := 0.032
 ## Young island oaks in the beds (named on the 2024 art-location plan and in the
 ## 2025 acceptance minutes; no dated photo, so the form is a young oak of the
 ## species' habit, production inference): two or three stems parting from one root
@@ -804,17 +804,17 @@ const COASTAL_MOUNDS := [
 	{"seed": 682, "shape": "mound", "cell": "dark", "height": 0.9, "width": 1.3, "lobes": 4, "leaf": "hedge_clump_foliage"},
 	{"seed": 683, "shape": "mound", "cell": "dark", "height": 1.1, "width": 1.6, "lobes": 5, "leaf": "hedge_clump_foliage"},
 ]
-## Magenta flowers held high on bare stalks over low grey-green rosettes, in the corner
+## Magenta flowers on short bare stalks over low grey-green rosettes, a few in the corner
 ## garden and along the walk (f_107, f_110, f_112): the daisy's leaf rosette, flat, under
 ## the thrift's stalks, their heads tinted magenta.
 const MAGENTA_TINT := Color(0.95, 0.3, 0.78)
 const MAGENTA_ROSETTES := [
 	{"seed": 691, "layers": [{"kind": "shell", "cell": "daisy", "cards": 9, "card": 0.36, "width": 0.45, "height": 0.13, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
-		{"kind": "crossed", "cell": "thrift_stalks", "cards": 1, "width": 0.36, "height": 0.48, "base": 0.06, "flutter": 0.04, "tint": MAGENTA_TINT}]},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 1, "width": 0.36, "height": 0.34, "base": 0.06, "flutter": 0.04, "tint": MAGENTA_TINT}]},
 	{"seed": 692, "layers": [{"kind": "shell", "cell": "daisy", "cards": 11, "card": 0.34, "width": 0.6, "height": 0.15, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
-		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.46, "height": 0.6, "base": 0.06, "splay_deg": 8.0, "flutter": 0.045, "tint": MAGENTA_TINT}]},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.46, "height": 0.42, "base": 0.06, "splay_deg": 8.0, "flutter": 0.045, "tint": MAGENTA_TINT}]},
 	{"seed": 693, "lean": 0.06, "layers": [{"kind": "shell", "cell": "daisy", "cards": 13, "card": 0.32, "width": 0.75, "height": 0.17, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
-		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.56, "height": 0.7, "base": 0.08, "splay_deg": 10.0, "flutter": 0.05, "tint": MAGENTA_TINT}]},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.56, "height": 0.5, "base": 0.08, "splay_deg": 10.0, "flutter": 0.05, "tint": MAGENTA_TINT}]},
 ]
 ## Grey-green sub-shrubs with red-orange tubular flowers in the verge along the bike path
 ## (f_066, f_076, f_090; California fuchsia's look, Epilobium canum): the sage's grey
@@ -2992,10 +2992,13 @@ func _build_pine(p: Dictionary) -> Dictionary:
 		"capsules": [{"radius_m": trunk_radius * 1.1, "from": Vector3.ZERO, "to": fork}]}
 
 
-## A young staked pine (the park outside Isle House): a leaning whip of a trunk with
-## whorls of short upswept branches, each ending in a tuft of the pine's needle
-## crests, smaller up the tree, candles at the leader, and the three-post stake
-## frame round it. LOD1 keeps the trunk, every other tuft (grown) and the posts.
+## A young staked pine (the park outside Isle House, f_025, f_058): an open, leaning
+## whip of a trunk with a few whorls of long, thin branches swept steeply up, bare
+## along their length and each ending in one small round brush of light needles (a
+## second, smaller one on some), a few small brushes low on the trunk, candles at the
+## leader, and the three-post stake frame round it. The tufts take the lighter young
+## needles (pine_foliage_young). LOD1 keeps the trunk, every other tuft (grown) and
+## the posts.
 func _build_young_pine(p: Dictionary) -> Dictionary:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
@@ -3017,39 +3020,55 @@ func _build_young_pine(p: Dictionary) -> Dictionary:
 	var cards := []
 	var heart: Vector3 = axis.call(0.62)
 	var phase := rng.randf() * TAU
-	var tuft_w := clampf(spread * 0.36, 0.38, 0.62)
-	var cluster := 0
+	var tuft_w := clampf(spread * 0.24, 0.32, 0.4)
+	# The brushes' running number, in an array: a lambda's reassigned local would not
+	# carry from one call to the next.
+	var cluster := [0]
+	# Each brush is three small cards of the whole crest (whose tufts taper off on
+	# every side) turned 60 degrees apart round the way it points, so it reads round.
 	var add_tuft := func(at: Vector3, out: Vector3, size: float, shade: float, candles: bool) -> void:
 		var rise := (Vector3.UP * 0.8 + Vector3(out.x, 0.0, out.z) * 0.6).normalized()
 		var color := Color(shade, shade, shade)
 		var cell := PINE_CANDLES if candles else PINE_CREST
-		for normal in _cluster_normals(out, rng, 0.3):
-			var card := _card(at, normal, rise, tuft_w * size * (1.0 if rng.randf() < 0.5 else -1.0), tuft_w * size * 0.5, 0.25, rng.randf_range(-0.3, 0.3), cell, color, heart, cluster, 0.03)
-			card.root = 0.6
-			card.heart_weight = 0.6
+		var across := rise.cross(Vector3.RIGHT if absf(rise.x) < 0.9 else Vector3.BACK).normalized()
+		var turn := rng.randf() * PI
+		for k in 3:
+			var normal := across.rotated(rise, turn + PI * k / 3.0)
+			var card := _card(at, normal, rise, tuft_w * size * (1.0 if rng.randf() < 0.5 else -1.0), tuft_w * size * 0.44, 0.3, rng.randf_range(-0.2, 0.2), cell, color, heart, cluster[0], 0.03)
+			card.root = 0.7
+			card.heart_weight = 0.4
 			card.lod1_grow = 1.5
 			cards.append(card)
-		cluster += 1
+		cluster[0] += 1
 	for k in whorls:
 		var f := float(k) / maxf(1.0, float(whorls - 1))
-		var origin: Vector3 = axis.call(lerpf(0.26, 0.86, f))
+		var origin: Vector3 = axis.call(lerpf(0.3, 0.84, f))
 		var count := 3 if k % 2 == 0 else 4
 		for b in count:
 			var azimuth := phase + k * 0.9 + b * TAU / count + rng.randf_range(-0.35, 0.35)
 			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
-			var reach := spread * 0.5 * lerpf(1.0, 0.42, f) * rng.randf_range(0.8, 1.12)
-			var rise_angle := deg_to_rad(rng.randf_range(28.0, 46.0))
+			var reach := spread * 0.5 * lerpf(1.0, 0.55, f) * rng.randf_range(0.85, 1.1)
+			var rise_angle := deg_to_rad(rng.randf_range(44.0, 62.0))
 			var tip := origin + out * reach + Vector3.UP * (reach * tan(rise_angle))
-			var middle := origin.lerp(tip, 0.5) + Vector3.DOWN * (reach * 0.06)
-			branches.append({"depth": 2, "points": PackedVector3Array([origin, middle, tip]), "radii": PackedFloat32Array([lerpf(0.016, 0.009, f), 0.008, 0.004])})
-			var shade := rng.randf_range(0.88, 1.04) * lerpf(0.72, 1.0, f)
-			add_tuft.call(tip, (out + Vector3.UP * 0.3).normalized(), lerpf(1.0, 0.8, f) * rng.randf_range(0.9, 1.1), shade, false)
-			if reach > spread * 0.3:
-				add_tuft.call(origin.lerp(tip, 0.55) + Vector3.UP * 0.03, (out + Vector3.UP * 0.5).normalized(), 0.62, shade * 0.9, false)
-	# The leader: a crest round the top and its candles.
+			# Bowed a little down at first, then turning up to the brush.
+			var middle := origin.lerp(tip, 0.45) + Vector3.DOWN * (reach * 0.08)
+			branches.append({"depth": 2, "points": PackedVector3Array([origin, middle, tip]), "radii": PackedFloat32Array([lerpf(0.014, 0.009, f), 0.007, 0.004])})
+			var shade := rng.randf_range(0.9, 1.0) * lerpf(0.86, 1.0, f)
+			add_tuft.call(tip, (out + Vector3.UP * 0.6).normalized(), rng.randf_range(0.9, 1.1), shade, false)
+			if rng.randf() < 0.3:
+				add_tuft.call(origin.lerp(tip, 0.72) + out * 0.05, (out + Vector3.UP * 0.2).normalized(), 0.6, shade * 0.95, false)
+	# A few small brushes on short shoots low on the trunk.
+	for k in 2:
+		var at: Vector3 = axis.call(rng.randf_range(0.16, 0.26))
+		var azimuth := phase + PI * (0.4 + k)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var tip := at + out * 0.12 + Vector3.UP * 0.1
+		branches.append({"depth": 2, "points": PackedVector3Array([at, at.lerp(tip, 0.5), tip]), "radii": PackedFloat32Array([0.008, 0.006, 0.004])})
+		add_tuft.call(tip, (out + Vector3.UP * 0.4).normalized(), 0.6, 0.86, false)
+	# The leader: a brush round the top and its candles.
 	var top: Vector3 = axis.call(1.0)
-	add_tuft.call(top - Vector3.UP * 0.08, Vector3.UP, 0.85, 1.04, true)
-	add_tuft.call(top - Vector3.UP * 0.22, Vector3(cos(phase), 0.4, sin(phase)).normalized(), 0.7, 1.0, false)
+	add_tuft.call(top - Vector3.UP * 0.06, Vector3.UP, 1.0, 1.0, true)
+	add_tuft.call(top - Vector3.UP * 0.2, Vector3(cos(phase), 0.4, sin(phase)).normalized(), 0.75, 0.96, false)
 	var stake_m := float(p.stake_m)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
@@ -3061,7 +3080,7 @@ func _build_young_pine(p: Dictionary) -> Dictionary:
 		_emit_cards(leaves, cards, lod, height, sway_top)
 		_frame_stakes(stakes, stake_m, phase, lod, axis)
 		bark.commit(mesh, material("pine_bark"))
-		leaves.commit(mesh, material("pine_foliage"))
+		leaves.commit(mesh, material("pine_foliage_young"))
 		stakes.commit(mesh, material("gum_bark"))
 		meshes.append(mesh)
 	var capsules: Array = [{"radius_m": trunk_radius * 1.3, "from": Vector3.ZERO, "to": axis.call(minf(1.0, 1.8 / height))}]
@@ -3071,8 +3090,9 @@ func _build_young_pine(p: Dictionary) -> Dictionary:
 
 ## The three-post stake frame round a young tree (the park outside Isle House, owner
 ## video 2026-11-15, f_025, f_051, f_058): pale tan posts FRAME_STAKE_RADIUS_M apart
-## from the trunk, a board across each pair just under their tops, and black ties
-## from each post to the trunk at two heights. axis gives the trunk at t (0 foot, 1 top).
+## from the trunk, a board across each pair about two-thirds up, and black ties from
+## each post to the trunk just under the boards and low down. axis gives the trunk at
+## t (0 foot, 1 top).
 func _frame_stakes(s: Surf, stake_m: float, phase: float, lod: int, axis: Callable) -> void:
 	var wood := Color(0.86, 0.74, 0.56)
 	var sides := 5 if lod == 0 else 4
@@ -3080,17 +3100,17 @@ func _frame_stakes(s: Surf, stake_m: float, phase: float, lod: int, axis: Callab
 	for foot: Vector3 in posts:
 		_tube(s, PackedVector3Array([foot + Vector3.DOWN * BURY_M, foot + Vector3.UP * stake_m]), PackedFloat32Array([FRAME_STAKE_POST_M, FRAME_STAKE_POST_M * 0.92]),
 			PackedColorArray([wood * 0.78, wood]), PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), sides, 1.0, GUM_BARK_M)
-	var board_y := Vector3.UP * (stake_m - 0.14)
+	var board_y := Vector3.UP * (stake_m * 0.66)
 	for k in 3:
 		var a: Vector3 = posts[k] + board_y
 		var b: Vector3 = posts[(k + 1) % 3] + board_y
 		var inward := (a.lerp(b, 0.5) - board_y).normalized() * -0.03
-		_tube(s, PackedVector3Array([a + inward, b + inward]), PackedFloat32Array([0.022, 0.022]), PackedColorArray([wood * 0.92, wood * 0.92]),
+		_tube(s, PackedVector3Array([a + inward, b + inward]), PackedFloat32Array([0.026, 0.026]), PackedColorArray([wood * 0.92, wood * 0.92]),
 			PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), 4, 1.0, GUM_BARK_M)
 	if lod > 0:
 		return
 	var tie := Color(0.06, 0.06, 0.06)
-	for height_m: float in [0.85, stake_m - 0.55]:
+	for height_m: float in [0.45, stake_m * 0.66 - 0.06]:
 		var trunk: Vector3 = axis.call(0.0)
 		for foot: Vector3 in posts:
 			var at := foot + Vector3.UP * height_m
@@ -4728,6 +4748,9 @@ func material(key: String) -> Material:
 			made = _bark("pine_bark.png", Color(0.9, 0.88, 0.86))
 		"pine_foliage":
 			made = _crown_foliage("pine_foliage_atlas.png", Color(0.94, 0.98, 0.9), Color(0.06, 0.09, 0.03), Vector2(1024.0, 1024.0), 0.08, 0.9)
+		"pine_foliage_young":
+			# A young pine's new needles are a lighter, yellower green than the old trees'.
+			made = _crown_foliage("pine_foliage_atlas.png", Color(1.02, 1.08, 0.94), Color(0.08, 0.11, 0.04), Vector2(1024.0, 1024.0), 0.08, 0.9)
 		"broadleaf_bark":
 			made = _bark("broadleaf_bark.png", Color(0.92, 0.9, 0.88))
 		"christmas_bark":
