@@ -15,7 +15,9 @@
 #    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
 #    stops what is left, and nothing it starts holds its caller's lock. And
 #    tools/build-number (tools/check_build_number.sh): each newer head of main
-#    gets a larger build number, and a shallow clone is refused.
+#    gets a larger build number, and a shallow clone is refused. And the web
+#    build's path check (tools/check_web_paths_selftest.sh): a page that loads a
+#    file from outside its own folder fails.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -118,6 +120,13 @@ tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
 # same, and a shallow clone is refused. About a second.
 echo "== tools/check_build_number.sh"
 tools/check_build_number.sh || failed+=("tools/check_build_number.sh")
+
+# tools/check_web_paths.py, which tools/build-web.sh runs on the exported page,
+# on a page shaped like Godot's export: it passes, a link out of the game
+# included, and fails a script from the site's root, a pack from another origin,
+# a <base> element and a missing file. Offline, under a second.
+echo "== tools/check_web_paths_selftest.sh"
+tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

@@ -349,9 +349,9 @@ project; to relink, delete `build/web/.vercel` and run
 `cd build/web && npx vercel@64.5.0 link --team philippcomans-1463 --project treasure-island`.
 Then it runs `tools/build-web.sh`, deploys `build/web` to production with
 the pinned Vercel CLI (`npx vercel@64.5.0`) and prints the deployment URL. It uses
-your saved Vercel CLI login (`npx vercel@64.5.0 login`, once). The project's
-production domain, https://play-grandtreasureisland.vercel.app, is the deploy origin
-the website serves at `/game/`; after a deploy, `tools/check-web-live.sh <commit>`
+your saved Vercel CLI login (`npx vercel@64.5.0 login`, once). The project's deploy
+origin is https://play-grandtreasureisland.vercel.app, and players use
+https://grandtreasureisland.vercel.app/game/; after a deploy, `tools/check-web-live.sh <commit>`
 loads the game at both addresses.
 Only `build/web` is uploaded, never the source checkout, reference imagery or
 evidence. The web exporter writes immutable caching for commit-named assets and

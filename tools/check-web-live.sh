@@ -81,7 +81,9 @@ http_leg() {
   if [[ ! "${cache}" =~ (max-age=0|no-cache|no-store) ]]; then
     fail "${url}: browsers may keep the page (Cache-Control: ${cache:-none}), so they would not see a new deploy"
   fi
-  names="$(grep -o -E 'treasure-island-[0-9a-f]+' "${dir}/index.html" | sort -u | paste -s -d ' ')"
+  # A build's files are named treasure-island-<short commit>.*: a whole run of hex digits
+  # of a commit's length, so "treasure-island-five" or a longer word never counts.
+  names="$(grep -o -E 'treasure-island-[0-9a-f]{7,40}\b' "${dir}/index.html" | sort -u | paste -s -d ' ')"
   if [ "${names}" != "treasure-island-${commit}" ]; then
     fail "${url}: the page names ${names:-no treasure-island files}, not treasure-island-${commit} alone"
     return 1

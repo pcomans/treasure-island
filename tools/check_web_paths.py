@@ -12,7 +12,9 @@ files, so the page must name every file relative to itself.
 PAGE is the exported index.html, or a copy of a live page. Each reference is
 resolved as a browser resolves it for a page at https://site.invalid/game/, and
 must stay inside /game/:
-  - the page's src, href and other URL attributes, and url() in its styles;
+  - every attribute the browser loads a file from (src, srcset, a <link>'s href,
+    poster and the like), url() in the page's styles and a refresh's target; a
+    hyperlink (<a>, <area>) loads nothing, so it may lead anywhere;
   - the files Godot's loader fetches, from GODOT_CONFIG: its executable (the
     loader names the .wasm and the audio worklets after it), the pack, a service
     worker and GDExtension libraries if there are any;
@@ -33,8 +35,11 @@ from pathlib import Path
 from urllib.parse import unquote, urljoin, urlsplit
 
 BASE = "https://site.invalid/game/"
-URL_ATTRIBUTES = {"src", "href", "poster", "data", "action", "formaction", "manifest",
-                  "background", "cite", "longdesc", "usemap", "codebase", "xlink:href"}
+# The attributes a browser loads a file from. A hyperlink's href (<a>, <area>), a
+# form's action and a citation load nothing until someone follows them, so a link
+# out of the game is fine and none of them is checked.
+URL_ATTRIBUTES = {"src", "href", "poster", "data", "manifest", "background", "codebase", "xlink:href"}
+HYPERLINKS = {"a", "area"}
 SRCSET_ATTRIBUTES = {"srcset", "imagesrcset"}
 # Schemes that name no file on a server.
 LOCAL_SCHEMES = {"data", "blob", "about", "javascript", "mailto", "tel"}
@@ -64,7 +69,8 @@ class Page(HTMLParser):
             if value is None:
                 continue
             if name in URL_ATTRIBUTES:
-                self.references.append(("<%s %s>" % (tag, name), value))
+                if tag not in HYPERLINKS:
+                    self.references.append(("<%s %s>" % (tag, name), value))
             elif name in SRCSET_ATTRIBUTES:
                 for candidate in value.split(","):
                     if candidate.strip():
