@@ -15,7 +15,9 @@
 #    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
 #    stops what is left, and nothing it starts holds its caller's lock. And
 #    tools/build-number (tools/check_build_number.sh): each newer head of main
-#    gets a larger build number, and a shallow clone is refused.
+#    gets a larger build number, and a shallow clone is refused. And
+#    tools/docs-only (tools/check_docs_only.sh): only Markdown counts as
+#    documentation, so only a push of Markdown alone skips the Mac build.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -118,6 +120,12 @@ tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
 # same, and a shallow clone is refused. About a second.
 echo "== tools/check_build_number.sh"
 tools/check_build_number.sh || failed+=("tools/check_build_number.sh")
+
+# tools/docs-only, which lets a push to main of documentation alone skip the
+# Mac build: Markdown is documentation, and the building catalog JSON, workflow,
+# images, scripts, Godot settings and generated data are code. Instant.
+echo "== tools/check_docs_only.sh"
+tools/check_docs_only.sh || failed+=("tools/check_docs_only.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

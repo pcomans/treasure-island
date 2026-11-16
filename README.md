@@ -156,11 +156,12 @@ when a building counts as done.
 
 ### Build for the Mac
 
-Every push to `main` builds the Mac app on GitHub Actions
+Every push to `main` that changes more than documentation (see
+[Where the builds go](#where-the-builds-go)) builds the Mac app on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
 headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
 Apple Silicon Mac has launched the app and loaded the island, the build becomes
-a new release of its own, unless a newer push has overtaken it. This link always
+a new release of its own, unless a newer build has overtaken it. This link always
 gets the newest release:
 
 https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
@@ -225,6 +226,18 @@ the number padded to six digits so that tags sort by it:
 `build-001918-2026-11-16-1a2b3c4`. Releases from before build numbers keep their
 `mac-<date>-<commit>` tags. `tools/build-number` refuses a shallow clone, which
 would give too small a number.
+
+A push to `main` that changes only documentation, that is only Markdown files
+(`.md`, anywhere, as [`tools/docs-only`](tools/docs-only) decides), builds
+nothing: its run on the Actions page shows the job "Decide whether to build"
+with the notice "Not built: documentation only" and every other job skipped, so
+no release, itch.io push or VirusTotal upload follows. Everything else counts as
+code, the building catalog JSON among the notes in `discovery/` included, and a
+push that changes any of it builds, whatever else it changes. A build whose
+commit `main` has since passed by documentation alone is still the newest and
+publishes. Build numbers count every commit, so the commits of such pushes leave
+gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
+hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
 After each release, CI's `itch` job also puts both builds on the itch.io page
 [phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
