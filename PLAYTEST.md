@@ -1,6 +1,6 @@
 # Owner playtest
 
-1. Download the newest Mac build, which GitHub Actions publishes on every push to `main`: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip (older builds and the curl and `gh` commands are in the [README](README.md#build-for-the-mac)).
+1. Download the newest Mac build, which GitHub Actions publishes on every push to `main` that changes more than documentation: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip (older builds and the curl and `gh` commands are in the [README](README.md#build-for-the-mac)).
 2. Unzip it on the Mac.
 3. The app is not notarized, so after a browser download macOS blocks the first launch: open System Settings → Privacy & Security and click "Open Anyway". A zip fetched with curl or `gh` opens directly.
 4. Walk around. Things worth reporting:
