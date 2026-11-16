@@ -68,7 +68,7 @@
     "maximum_clearance_m": 0.081,
     "maximum_serialization_tolerance_m": 0.01,
     "minimum_clearance_m": 0.019,
-    "sample_points": 341747
+    "sample_points": 338842
   },
   "raster_bbox_wgs84": [
     -122.380001708984,
@@ -209,10 +209,10 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "84fdc4101fa8d302e8ff6ae9aae99ca60318b8adac6e38ef66c56132ad757838"
+      "sha256": "1fbebc8bb1984ca1e968d37d0e46afebf7bc0ab09ab25619c9d7cadf8e253b50"
     },
     "corrected_cells": 233,
-    "leaves": 6776,
+    "leaves": 6647,
     "maximum_cut_m": 20.205,
     "maximum_raise_m": 8.018,
     "mesh": {
@@ -1623,14 +1623,14 @@
       ]
     ],
     "refined_cells": 233,
-    "refined_triangles": 15952,
+    "refined_triangles": 15654,
     "schema_version": "ti.terrain-overrides/1",
     "sites": [
       {
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 17988,
+          "free_nodes": 18128,
           "kind": "harmonic"
         },
         "id": "cityside_park",
@@ -1681,7 +1681,7 @@
             "rule": "profile"
           }
         ],
-        "scope_area_m2": 25862.4
+        "scope_area_m2": 25945.3
       },
       {
         "edge_blend_m": 8,

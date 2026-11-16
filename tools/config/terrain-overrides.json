@@ -2,7 +2,7 @@
   "schema_version": "ti.terrain-overrides/1",
   "notes": [
     "Local corrections of the generated land where the frozen 2023 USGS raster predates what was built (tools/lib/terrain-overrides.mjs). World metres: +X east, +Z south.",
-    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways: half_width_m each side; a single-way entry may list spans, metres along the way from its first node, where the left or right side of its direction is narrower, or open at 0 (with both sides 0 the corridor stops there); along a span the land leaves that join kept and corrected ground are 1 m, so the way's own ground more than 1.5 m inside the narrowed edge stays exactly as generated) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge, so the land outside the scope and on the coastline keeps its generated surface.",
+    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways: half_width_m each side; a single-way entry may list spans, metres along the way from its first node, where the left or right side of its direction is narrower, or open at 0 (with both sides 0 the corridor stops there); along a span the land leaves that join kept and corrected ground are 1 m, so the way's own ground more than 1.5 m inside the narrowed edge stays exactly as generated) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge (from a traced exclusion that gives its own edge_blend_m, over that), so the land outside the scope and on the coastline keeps its generated surface.",
     "The site's grade is a harmonic membrane on a grid_m grid (relaxation over-relaxation factor, a fixed number of iterations): it takes the generated land outside the scope and the level and profile targets inside their shapes, and is as smooth as possible everywhere else, so the 32 m land grid's waves smooth out and designed surfaces meet their surroundings in gentle ramps. Regions apply in order: level holds a flat elevation_m inside its shape, profile holds control elevations_m along its line, sink cuts depth_m below the grade with a smoothstep rim side_run_m wide. Shapes: points_xz (optionally grown by buffer_m, negative to inset), line_xz with width_m, or an ellipse (center_xz, radii_m, rotation_deg turning +X toward +Z).",
     "Every 32 m land cell the correction reaches is re-meshed as a quadtree of leaves down to min_leaf_m, split until each leaf's two triangles stay within tolerance_m of the corrected surface (sampled every sample_m); shared edges stay watertight, coarse neighbours keep their surface.",
     "All elevations, depths and rims here are production inference for game art, traced from the designer's plan and dated photos, not survey data."
@@ -22,7 +22,7 @@
         "source_keys": [
           "w1428380753"
         ],
-        "add_xz": [[[-352.78, 324.11], [-180.85, 663.85], [-212.05, 679.65], [-383.98, 339.91]], [[-207.0, 561.3], [-192.5, 540.9], [-192.5, 586.1]], [[-192.5, 494.0], [-168.0, 494.0], [-168.0, 545.0], [-192.5, 545.0]], [[-200.35, 479.59], [-195.34, 477.0], [-160.0, 477.0], [-160.0, 517.0], [-173.71, 531.11]]],
+        "add_xz": [[[-352.78, 324.11], [-180.85, 663.85], [-212.05, 679.65], [-383.98, 339.91]], [[-207.0, 561.3], [-192.5, 540.9], [-192.5, 586.1]], [[-192.5, 494.0], [-168.0, 494.0], [-168.0, 545.0], [-192.5, 545.0]], [[-200.35, 479.59], [-195.34, 477.0], [-150.0, 477.0], [-150.0, 515.0], [-170.96, 536.44]]],
         "exclude_ways": [
           {
             "source_keys": [
@@ -33,10 +33,10 @@
             "spans": [
               {
                 "from_m": 254,
-                "to_m": 312,
+                "to_m": 318,
                 "left_half_width_m": 0,
                 "right_half_width_m": 0,
-                "reason": "Over the 2023 raster's stockpile hump the corridor is open on both sides: there a 32 m land-grid corner at (-192, 512) stands on the fill (8.3 m), so the generated carriageway rose to 6.1 m about 280 m along the way and the west sidewalk to 6.8 m, about 2 m over the road at either end. The carriageway, kerbs, sidewalks and verges between 254 and 312 m take this site's grade (the avenue_of_the_palms_hump profile), the hump's land east of them grades down to Isle House's land cells, and the park's ground runs level to the west sidewalk (owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange'; owner video 2026-11-15, f_103, f_107, f_112: the avenue level with the park). Outside the span the corridor keeps the road as generated, which already lies level there."
+                "reason": "Over the 2023 raster's stockpile hump the corridor is open on both sides: there a 32 m land-grid corner at (-192, 512) stands on the fill (8.3 m), so the generated carriageway rose to 6.1 m about 280 m along the way and the west sidewalk to 6.8 m, about 2 m over the road at either end. The carriageway, kerbs, sidewalks and verges between 254 and 318 m take this site's grade (the avenue_of_the_palms_hump profile), the hump's land east of them grades down to Isle House's land cells, and the park's ground runs level to the west sidewalk (owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange'; owner video 2026-11-15, f_103, f_107, f_112: the avenue level with the park). Outside the span the corridor keeps the road as generated, which already lies level there."
               }
             ]
           }
@@ -46,22 +46,23 @@
             "points_xz": [
               [
                 -160.0,
-                479.5
+                476.0
               ],
               [
-                -159.5,
-                479.5
+                -150.0,
+                476.0
               ],
               [
-                -159.5,
-                544.5
+                -150.0,
+                545.0
               ],
               [
                 -160.0,
-                544.5
+                545.0
               ]
             ],
-            "reason": "Isle House's land cells (w1249412094, east of x -160) keep their generated surface: the scope stops at their shared edge, where the correction is zero, and the re-meshed cells beside them fan to that edge's corners (tools/lib/terrain-overrides.mjs guarded edges), so Isle House's cells are never split and the fan lies on the generated ground there. The lowered avenue and the land beside it blend back to that edge over edge_blend_m."
+            "edge_blend_m": 1,
+            "reason": "Isle House's land cells (w1249412094, east of x -160) keep their generated surface: the scope stops at their shared edge, where the correction is zero, and the re-meshed cells beside them fan to that edge's corners (tools/lib/terrain-overrides.mjs guarded edges), so Isle House's cells are never split and the fan lies on the generated ground there. The lowered avenue and the land beside it blend back to that edge over 1 m, not the site's 3 m, so the hump's flank (rising about 0.14 m a metre from the edge) leaves no swell on the avenue's east sidewalk; the added scope reaches past the edge (to x -150) only so that this strip, not the scope's outline, is the edge there."
           }
         ],
         "fan_beside": ["w1249412094"],
@@ -525,9 +526,9 @@
         },
         {
           "id": "avenue_of_the_palms_hump",
-          "shape": {"line_xz": [[-187.97, 468.69], [-157.66, 527.32]], "width_m": 19},
-          "rule": {"kind": "profile", "elevations_m": [3.978, 4.056]},
-          "reason": "Avenue of the Palms over the 2023 raster's stockpile hump (w1001544697, from 250 to 316 m along it: its carriageway, parking lanes, kerbs, planting strip, sidewalks and verges, 10.5 m east and 8.5 m west of a line 1 m east of the way) on a straight grade between the untouched road at either end, the generated land at the line's ends (3.978 m and 4.056 m, a 0.12 % rise), and level across (the road at either end is within about 0.2 m of level across its width). The park's north tip and Cityside's north-west corner (the cycle-track leg, its walk, the bioretention bed's rim) take the site's grade between this, the pump pad and the park's lawn: level with the avenue and the track, as the owner's video shows (f_103, f_107, f_112), with no level or held region of their own. Owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange. I think we should just flatten it'."
+          "shape": {"line_xz": [[-187.97, 468.69], [-166.85, 509.55]], "width_m": 19},
+          "rule": {"kind": "profile", "elevations_m": [3.978, 4.032]},
+          "reason": "Avenue of the Palms over the 2023 raster's stockpile hump (w1001544697, from 250 to 296 m along it: its carriageway, parking lanes, kerbs, planting strip, sidewalks and verges, 10.5 m east and 8.5 m west of a line 1 m east of the way) on a straight grade from the untouched road at its north end (the generated land there, 3.978 m at 250 m) at 0.12 % (4.032 m at 296 m), level across. South of it the site's grade carries the road on to the generated road at about 318 m, whose west half rises about 2 % to the west kerb, over some 15 m instead of a short ramp at the scope's edge. The park's north tip and Cityside's north-west corner (the cycle-track leg, its walk, the bioretention bed's rim) take the site's grade between this, the pump pad and the park's lawn: level with the avenue and the track, as the owner's video shows (f_103, f_107, f_112), with no level or held region of their own. Owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange. I think we should just flatten it'."
         }
       ]
     },
