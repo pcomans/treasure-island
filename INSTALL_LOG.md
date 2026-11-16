@@ -379,3 +379,18 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: official publisher only; the pinned archive hash.
 - Verification and result: `godot --version` printed `4.7.2.stable.official.ed1daf0bf`; `tools/build-mac.sh` at 44922551 exported, audited and zipped the Windows build (`treasure-island.exe` with the game's icon and version information, and a `.pck` byte-identical to the Linux build's).
 - Removal steps: remove the name from `TEMPLATES` in `setup-godot.sh` and delete the file from `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/`.
+
+### 2026-11-16 — ImageMagick in the devcontainer setup
+
+- Date and time (UTC): 2026-11-16, the setup change. The package was already in this container: someone installed it by hand on 2026-10-16 at 05:23 UTC (`apt-get install -y --no-install-recommends imagemagick=8:7.1.2.18+dfsg1-1` in `/var/log/apt/history.log`), with no log entry and no setup line, so a rebuilt container would have lacked it.
+- Status: `completed`
+- Exact package and version: Ubuntu `imagemagick` 8:7.1.2.18+dfsg1-1 (resolute/universe), which depends on `imagemagick-7.q16` (with `imagemagick-7-common`, `libmagickcore-7.q16-10` and `libmagickwand-7.q16-10`, all 8:7.1.2.18+dfsg1-1); `imagemagick-7.q16` provides `/usr/bin/magick` through the alternatives system (`/usr/bin/magick-im7.q16`), and `magick -version` reports ImageMagick 7.1.2-18 Q16.
+- Publisher and source URL: Ubuntu archive, http://archive.ubuntu.com/ubuntu (resolute/universe).
+- Checksum, signature, notarization, or registry integrity evidence: apt's archive signature verification.
+- Exact command or installation method: `imagemagick` added to the existing apt package list in `.devcontainer/post-create.sh`. Nothing was installed or rebuilt this time; the installed package was only checked (`dpkg-query`, `apt-cache policy`, `update-alternatives --query magick`, `apt-get -s install`). The setup line installs the package's recommends (`ghostscript`, `netpbm`, `libmagickcore-7.q16-10-extra`), which the hand install left out; nothing here needs them.
+- Purpose: `tools/build-web.sh` makes the web build's home screen icons with `magick` (owner, 2026-11-16: add to home screen), and stops at once without it; `tools/make_app_icon.sh` and the `tools/draw_*.sh` scripts use it too.
+- Scope and install location: inside the container only (`/usr/bin/magick` and the ImageMagick 7 libraries).
+- Authorizing decision or request: owner, 2026-11-16 (the web build's home screen support); code-review fix for `web/home-screen-20261116`; AGENTS.md: needed project tool installations are owner-authorized.
+- Trust and malware checks: official Ubuntu archive only.
+- Verification and result: `magick -version` reports `ImageMagick 7.1.2-18 Q16 x86_64`; `tools/build-web.sh` at 8c24b7b3 made the three icons with it (192 and 512 px, and the 512 px maskable one).
+- Removal steps: remove `imagemagick` from the apt list in `post-create.sh`, then `sudo apt-get remove imagemagick imagemagick-7.q16`.

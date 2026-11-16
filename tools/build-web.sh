@@ -35,7 +35,7 @@ while [ "$#" -gt 0 ]; do
 done
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
-command -v magick > /dev/null || { echo "FAIL: the home screen icons need ImageMagick (magick), which the devcontainer has" >&2; exit 1; }
+command -v magick > /dev/null || { echo "FAIL: the home screen icons need ImageMagick's magick command, which .devcontainer/post-create.sh installs (apt package imagemagick)" >&2; exit 1; }
 if [ -n "$(git status --porcelain)" ]; then
   echo "FAIL: commit or stash your changes first; the build is named after the commit" >&2
   exit 1

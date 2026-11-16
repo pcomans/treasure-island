@@ -232,7 +232,6 @@ func _ready() -> void:
 	world_root.world_failed.connect(_on_world_failed)
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
-	hud.home_screen_hint_dismissed.connect(_on_home_screen_hint_dismissed)
 	_load_world_after_paint.call_deferred()
 	STARTUP_MARKS.mark("main_ready_end")
 
@@ -793,11 +792,11 @@ func _resume_game() -> void:
 
 ## The start prompt's notes on a touch screen (owner, 2026-11-16), as the web page
 ## decides them (game/web/shell.html's __tiStartNotes): on an iPhone or iPad, in
-## Safari outside a home screen app and until dismissed, how to play full screen
-## from the home screen; on any iPhone or iPad, that the sound needs the silent
-## mode off, unless the game's own sound is off (Options' mute or no volume); on an
-## Android phone or tablet nothing to read, the prompt's tap going full screen
-## (_resume_game). A page without the notes shows none.
+## Safari outside a home screen app, how to play full screen from the home screen;
+## on any iPhone or iPad, that the sound needs the silent mode off, unless the
+## game's own sound is off (Options' mute or no volume); on an Android phone or
+## tablet nothing to read, the prompt's tap going full screen (_resume_game). A
+## page without the notes shows none.
 func _show_start_notes() -> void:
 	var notes: Variant = JSON.parse_string(str(JavaScriptBridge.eval("window.__tiStartNotes ? window.__tiStartNotes.read() : '{}'")))
 	if not notes is Dictionary:
@@ -805,13 +804,6 @@ func _show_start_notes() -> void:
 	_full_screen_on_start = bool(notes.get("full_screen", false))
 	var sound_on := not sound.muted and sound.volume > 0.0
 	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on)
-
-
-## The home screen hint's × (hud.gd): the page remembers it (localStorage), so the
-## hint never shows again in this browser.
-func _on_home_screen_hint_dismissed() -> void:
-	if OS.has_feature("web"):
-		JavaScriptBridge.eval("window.__tiStartNotes && window.__tiStartNotes.dismissHomeScreen()")
 
 
 func _exit_game() -> void:
@@ -921,8 +913,7 @@ func _publish_web_state(_args: Array) -> void:
 		# whether play goes on with the pointer free (its capture refused), and the
 		# feedback line showing.
 		"start_prompt": hud.start_prompt_text(),
-		# Its notes (which show, the home screen hint's ×), its panel, and whether its
-		# tap also goes full screen.
+		# Its notes (which show), its panel, and whether its tap also goes full screen.
 		"start_notes": hud.start_notes_state(),
 		"start_panel": _rect(hud.pause_box),
 		"full_screen_on_start": _full_screen_on_start,

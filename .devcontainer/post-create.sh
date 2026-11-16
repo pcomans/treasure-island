@@ -13,8 +13,10 @@ sudo apt-get update -qq
 # python3-yaml: required by the existing skill-creator quick_validate.py.
 # ffmpeg: tools/generate-sfx --process trims, loops and encodes the generated
 # sound effects; tools/check_sfx.mjs (in tools/test.sh) fails without it.
+# imagemagick: its `magick` command (ImageMagick 7) makes the web build's home
+# screen icons (tools/build-web.sh) and the app icon (tools/make_app_icon.sh).
 sudo apt-get install -y -qq tmux unzip file git-lfs weston osmium-tool python3-yaml ffmpeg \
-  libgl1 libvulkan1 mesa-vulkan-drivers vulkan-tools mesa-utils
+  imagemagick libgl1 libvulkan1 mesa-vulkan-drivers vulkan-tools mesa-utils
 
 # Only evidence AVIs live in LFS; nothing at runtime needs them.
 git lfs install --skip-smudge

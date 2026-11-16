@@ -10,16 +10,14 @@ extends SceneTree
 ## target inside the page held upright and sideways, no touch control, no bed
 ## started and no frame rate (switched on before play); its button holds the
 ## keyboard focus with a ring that shows on its blue. With the notes an iPhone's
-## Safari page asks for (owner, 2026-11-16: the home screen hint and its ×, the
-## silent mode line) both lines lie under the button, clear of it and of each
-## other, inside the panel and the page, the panel still over the top of the page,
-## in characters the web build's font has; a finger's tap on the × takes the hint
-## away for good (main.gd has the page remember it) and leaves the silent mode
-## line, the prompt and the button's focus. Space (as its tap) starts play: the
-## touch controls and the frame rate show, the notes go with the prompt, the menu
-## is the pause menu again and the beds come in (the wind starts, and plays where
-## the sounds are fetched; a checkout without them is silent,
-## tools/sfx/README.md). Then at each shape:
+## Safari page asks for (owner, 2026-11-16: the home screen hint and the silent
+## mode line) both lines lie under the button, clear of it and of each other,
+## each centred on the panel, inside the panel and the page, the panel still over
+## the top of the page, in characters the web build's font has. Space (as its
+## tap) starts play: the touch controls and the frame rate show, the notes go with
+## the prompt, the menu is the pause menu again and the beds come in (the wind
+## starts, and plays where the sounds are fetched; a checkout without them is
+## silent, tools/sfx/README.md). Then at each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
@@ -118,7 +116,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; with an iPhone's notes, the home screen hint and its × and the silent mode line, under the button inside the panel and the page at both shapes, in the web font's characters, a tap on the × dismissing the hint alone) and Space on it started play and the wind (%s) as its tap does, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; with an iPhone's notes, the home screen hint and the silent mode line, each centred under the button inside the panel and the page at both shapes, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -155,18 +153,8 @@ func _start_prompt() -> bool:
 		root.size = SHAPES[shape]
 		for _frame in 3:
 			await process_frame
-		if not _check_start_notes(shape, true):
+		if not _check_start_notes(shape):
 			return false
-	var dismissals := [0]
-	hud.home_screen_hint_dismissed.connect(func() -> void: dismissals[0] += 1)
-	var dismiss: Array = hud.start_notes_state().dismiss
-	_screen_tap(5, Vector2(dismiss[0], dismiss[1]))
-	for _frame in 3:
-		await process_frame
-	if not _require(dismissals[0] == 1 and paused and hud.start_prompt_text() == "Tap to play" and hud.resume_button.has_focus(), "A tap on the home screen hint's × must dismiss it once (main.gd has the page remember it) and leave the start prompt waiting, its button focused (dismissed %d times, paused %s, prompt %s, button focused %s)." % [dismissals[0], paused, hud.start_prompt_text(), hud.resume_button.has_focus()]):
-		return false
-	if not _check_start_notes("upright, the hint dismissed", false):
-		return false
 	for pressed: bool in [true, false]:
 		var esc := InputEventAction.new()
 		esc.action = &"pause"
@@ -197,34 +185,30 @@ func _start_prompt() -> bool:
 	return true
 
 
-## The start prompt's notes at one window shape: the silent mode line and, until
-## dismissed, the home screen hint with its ×, showing as asked; each under the
-## Play button and clear of it, inside the panel and the page, the two lines clear
-## of each other; the × at least THUMB_PX each way; the panel still within the top
-## START_PANEL_SHARE of the page; and every character of the lines and the × in
-## the font the web build draws them with (it has no other).
-func _check_start_notes(shape: String, hint: bool) -> bool:
+## The start prompt's notes at one window shape: the home screen hint and the
+## silent mode line showing, each under the Play button and clear of it, inside the
+## panel and the page, the two clear of each other, each line's text centred on
+## the panel as the button is; the panel still within the top START_PANEL_SHARE of
+## the page; and every character of the lines in the font the web build draws them
+## with (it has no other).
+func _check_start_notes(shape: String) -> bool:
 	var hud := _main.hud
 	var state := hud.start_notes_state()
 	var notes := hud.find_child("StartNotes", true, false) as Control
-	if not _require(notes != null and state.home_screen == hint and state.silent_mode, "%s: the start prompt must show the silent mode line%s (%s)." % [shape, " and the home screen hint" if hint else " alone, the hint dismissed", state]):
+	if not _require(notes != null and state.home_screen and state.silent_mode, "%s: the start prompt must show the home screen hint and the silent mode line (%s)." % [shape, state]):
 		return false
 	var page := hud.get_viewport_rect()
 	var panel := hud.pause_box.get_global_rect()
 	var button := hud.resume_button.get_global_rect()
-	var row := (notes.get_node("HomeScreenHint") as Control).get_global_rect()
-	var line := (notes.get_node("SilentNote") as Control).get_global_rect()
-	var dismiss := (notes.get_node("HomeScreenHint/Dismiss") as Control).get_global_rect()
-	var shown: Array[Rect2] = [line]
-	if hint:
-		shown.append(row)
-	var placed := shown.all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
-	var apart := not hint or not row.intersects(line)
-	var thumb := not hint or (dismiss.size.x >= THUMB_PX and dismiss.size.y >= THUMB_PX)
-	if not _require(placed and apart and thumb and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, inside its panel (%s) and the page (%s), the hint's × at least %d px each way (%s), and the panel within the top %.2f of the page (hint %s, silent mode line %s)." % [shape, button, panel, page, int(THUMB_PX), dismiss, GameHUD.START_PANEL_SHARE, row if hint else "dismissed", line]):
+	var labels: Array[Label] = [notes.get_node("HomeScreenHint") as Label, notes.get_node("SilentNote") as Label]
+	var hint := labels[0].get_global_rect()
+	var line := labels[1].get_global_rect()
+	var placed := [hint, line].all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
+	var centred := labels.all(func(label: Label) -> bool: return label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and absf(label.get_global_rect().get_center().x - panel.get_center().x) < 1.0)
+	if not _require(placed and centred and not hint.intersects(line) and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, each centred on its panel (%s) inside it and the page (%s), and the panel within the top %.2f of the page (hint %s, silent mode line %s)." % [shape, button, panel, page, GameHUD.START_PANEL_SHARE, hint, line]):
 		return false
 	var missing := []
-	for text: String in [GameHUD.START_HOME_SCREEN_NOTE, GameHUD.START_SILENT_NOTE, "×"]:
+	for text: String in [GameHUD.START_HOME_SCREEN_NOTE, GameHUD.START_SILENT_NOTE]:
 		for index in text.length():
 			if not ThemeDB.fallback_font.has_char(text.unicode_at(index)):
 				missing.append(text[index])

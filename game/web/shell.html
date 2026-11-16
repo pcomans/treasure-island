@@ -203,14 +203,12 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 // asks for as play is ready and shows under its Tap to play button
 // (game/scripts/main.gd's _show_start_notes, hud.gd's set_start_notes).
 // window.__tiStartNotes.read() gives them as JSON:
-//   home_screen: how to play full screen, Share › Add to Home Screen. Only in
-//     Safari on an iPhone or iPad, the one browser there whose Share menu surely
-//     has it: not opened from the home screen already, not in another browser or
-//     an app's own browser (each names itself, or leaves out Safari's Version/ and
-//     Safari/), not in a frame, and not once dismissed (its ×,
-//     dismissHomeScreen(), kept in localStorage; without storage it comes back
-//     next visit). Safari opened inside an app (SFSafariViewController) says the
-//     same as Safari and gets it too.
+//   home_screen: how to play full screen, Share › Add to Home Screen, on every
+//     visit in Safari on an iPhone or iPad, the one browser there whose Share
+//     menu surely has it: not opened from the home screen already, not in another
+//     browser or an app's own browser (each names itself, or leaves out Safari's
+//     Version/ and Safari/), and not in a frame. Safari opened inside an app
+//     (SFSafariViewController) says the same as Safari and gets it too.
 //   silent_mode: that the sound needs the silent mode off: on any iPhone or iPad,
 //     in Safari or from the home screen, as every browser there plays Web Audio in
 //     a session that the silent mode mutes, and no page can read the switch.
@@ -233,27 +231,12 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	const isFullScreen = () => Boolean(document.fullscreenElement || document.webkitFullscreenElement);
 	const fullScreenOffered = !ios && !homeScreen && typeof requestFullScreen === 'function'
 		&& Boolean(document.fullscreenEnabled || document.webkitFullscreenEnabled) && matches('(pointer: coarse)');
-	const dismissedKey = 'grand-treasure-island.home-screen-hint-dismissed';
-	let dismissed = false;
-	try {
-		dismissed = window.localStorage.getItem(dismissedKey) === '1';
-	} catch (e) {
-		// No storage (a blocked or private page): the hint shows each visit.
-	}
 	window.__tiStartNotes = {
 		read: () => JSON.stringify({
-			home_screen: ios && safari && topLevel && !homeScreen && !dismissed,
+			home_screen: ios && safari && topLevel && !homeScreen,
 			silent_mode: ios,
 			full_screen: fullScreenOffered && !isFullScreen(),
 		}),
-		dismissHomeScreen: () => {
-			dismissed = true;
-			try {
-				window.localStorage.setItem(dismissedKey, '1');
-			} catch (e) {
-				// Dismissed for this visit only.
-			}
-		},
 		enterFullScreen: () => {
 			if (!fullScreenOffered || isFullScreen()) return false;
 			try {

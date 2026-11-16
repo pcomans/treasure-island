@@ -472,14 +472,14 @@ accept different fingers at the same time. Pausing, losing focus, resizing or
 cancelling a finger releases held touch input. Desktop mouse and keyboard
 controls are retained.
 
-On an iPhone or iPad the start prompt has a line or two under **Tap to play**.
-In Safari, **For full screen: Share › Add to Home Screen**: added to the home
-screen, the game opens on its own, full screen; the line's **×** hides it for
-good in that browser. On every visit, in Safari or from the home screen, **Turn
-off silent mode to hear sound**: the phone's silent mode mutes a web page's sound,
-and no page can see the switch (the line stays away while the game's own sound is
-muted or at zero in Options). On an Android phone or tablet, **Tap to play** also
-puts the page full screen; the back gesture leaves it.
+On an iPhone or iPad the start prompt has a line or two under **Tap to play**,
+on every visit. In Safari, **For full screen: Share › Add to Home Screen**: added
+to the home screen, the game opens on its own, full screen, and the line no longer
+shows there. In Safari and from the home screen alike, **Turn off silent mode to
+hear sound**: the phone's silent mode mutes a web page's sound, and no page can see
+the switch (the line stays away while the game's own sound is muted or at zero in
+Options). On an Android phone or tablet, **Tap to play** also puts the page full
+screen; the back gesture leaves it.
 
 A context button above **RISE** does what F and C do. Beside a parked car it
 shows a car, **DRIVE**: tap it to get in. In a car it shows **GET OUT**: tap it to
