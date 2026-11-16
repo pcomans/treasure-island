@@ -816,20 +816,20 @@ const MAGENTA_ROSETTES := [
 	{"seed": 693, "lean": 0.06, "layers": [{"kind": "shell", "cell": "daisy", "cards": 13, "card": 0.32, "width": 0.75, "height": 0.17, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
 		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.56, "height": 0.5, "base": 0.08, "splay_deg": 10.0, "flutter": 0.05, "tint": MAGENTA_TINT}]},
 ]
-## Grey-green sub-shrubs with red-orange tubular flowers in the verge along the bike path
-## (f_066, f_076, f_090; California fuchsia's look, Epilobium canum): the sage's grey
-## mound under the monkeyflower's flower stalks, tinted scarlet.
-const SCARLET_TINT := Color(1.0, 0.42, 0.22)
+## Loose grey-green sub-shrubs with small red tubular flowers in the verge along the bike
+## path (f_066, f_076, f_090; California fuchsia's look, Epilobium canum): the sage's grey
+## mound, loose, with the monkeyflower's flower stalks short among it, tinted red.
+const SCARLET_TINT := Color(0.9, 0.16, 0.12)
 const CALIFORNIA_FUCHSIAS := [
 	{"seed": 741, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.4},
 		{"kind": "shell", "cell": "sagebrush", "cards": 5, "card": 0.55, "width": 0.5, "height": 0.32, "tint": Color(0.7, 0.78, 0.68)},
-		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.5, "height": 0.45, "base": 0.06, "splay_deg": 10.0, "flutter": 0.04, "tint": SCARLET_TINT}]},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.4, "height": 0.3, "base": 0.14, "splay_deg": 14.0, "flutter": 0.04, "tint": SCARLET_TINT}]},
 	{"seed": 742, "lean": 0.08, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.55},
 		{"kind": "shell", "cell": "sagebrush", "cards": 6, "card": 0.52, "width": 0.72, "height": 0.42, "tint": Color(0.7, 0.78, 0.68)},
-		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.7, "height": 0.6, "base": 0.08, "splay_deg": 12.0, "flutter": 0.045, "tint": SCARLET_TINT}]},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.55, "height": 0.38, "base": 0.2, "splay_deg": 16.0, "flutter": 0.045, "tint": SCARLET_TINT}]},
 	{"seed": 743, "lean": 0.07, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.7},
 		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.5, "width": 0.95, "height": 0.52, "tint": Color(0.7, 0.78, 0.68)},
-		{"kind": "crossed", "cell": "monkey_stalks", "cards": 3, "width": 0.9, "height": 0.72, "base": 0.1, "splay_deg": 14.0, "flutter": 0.05, "tint": SCARLET_TINT}]},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 3, "width": 0.7, "height": 0.45, "base": 0.26, "splay_deg": 18.0, "flutter": 0.05, "tint": SCARLET_TINT}]},
 ]
 ## Low silver-grey cushions in the verge (f_076, f_090, f_103; a beach sagewort's look):
 ## the sagebrush's feathery silver leaves as a tight low dome.
@@ -3079,7 +3079,8 @@ func _build_young_pine(p: Dictionary) -> Dictionary:
 		_emit_limbs(bark, branches, lod, height, 0.3, sway_top, PINE_BARK_M, [[8, 5, 4], [5, 3, 3]], 0.0)
 		_emit_cards(leaves, cards, lod, height, sway_top)
 		_frame_stakes(stakes, stake_m, phase, lod, axis)
-		bark.commit(mesh, material("pine_bark"))
+		# A young pine's thin trunk is pale grey-tan (f_058), the gum's pale bark's look.
+		bark.commit(mesh, material("gum_bark"))
 		leaves.commit(mesh, material("pine_foliage_young"))
 		stakes.commit(mesh, material("gum_bark"))
 		meshes.append(mesh)

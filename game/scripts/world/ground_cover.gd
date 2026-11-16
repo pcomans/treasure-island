@@ -44,6 +44,9 @@ const FAMILIES := {
 	# Irrigated turf lawn, about 98 / 2 / 0: the ferry plaza and Cityside Park
 	# lawns, green in the Sep 2025 photos (24, 25) and both dated aerials.
 	"park_lawn": {"dry_threshold": 0.80, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 18.0, "bare_scale_m": 23.0},
+	# Freshly laid irrigated turf, all green: the park outside Isle House's lawn, even
+	# green to its edges in the owner's video (2026-11-15), with no dry patches.
+	"park_turf": {"dry_threshold": 2.0, "bare_threshold": 2.0, "green_dryness": 0.0, "patch_scale_m": 18.0, "bare_scale_m": 23.0},
 	# Irrigated ball fields, about 80 / 20 / 0: the Little League fields and the
 	# baseball pitch (green in both dated aerials).
 	"sports": {"dry_threshold": 0.64, "bare_threshold": 2.0, "green_dryness": 0.1, "patch_scale_m": 28.0, "bare_scale_m": 23.0},
@@ -113,6 +116,7 @@ const FAMILY_BY_MATERIAL_KEY := {
 	"major_area_amenity": "field",
 	# A park zone's lawn (tools/lib/street-ground-generation.mjs park surfaces).
 	"park_lawn": "park_lawn",
+	"park_lawn_turf": "park_turf",
 	# Terrain overlays on the land: the old sand courts and the marsh east of the
 	# Mersea lot.
 	"terrain_sand": "sand_pad",

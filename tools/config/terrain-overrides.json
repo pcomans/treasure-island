@@ -511,20 +511,20 @@
           "id": "isle_house_park_chair_slope",
           "shape": {
             "center_xz": [
-              -203.45,
-              553.34
+              -201.0,
+              554.2
             ],
             "radii_m": [
-              7.0,
-              2.2
+              4.6,
+              2.8
             ],
             "rotation_deg": 62.2
           },
           "rule": {
             "kind": "level",
-            "elevation_m": 4.35
+            "elevation_m": 4.5
           },
-          "reason": "The foot of the mound's slope where the chairs stand, held level a little above the bike path so they stand upright (owner video 2026-11-15, f_100-f_108; height production inference from the ground beside it)."
+          "reason": "The mulch apron at the foot of the mound where the loose group of chairs stands, held level so they stand upright (owner video 2026-11-15, f_100-f_108; height production inference from the ground beside it)."
         },
         {
           "id": "isle_house_park_mound",
@@ -541,7 +541,7 @@
           },
           "rule": {
             "kind": "raise",
-            "height_m": 1.0,
+            "height_m": 0.7,
             "side_run_m": 6.5
           },
           "reason": "The park outside Isle House's raised lawn at its north-west end, its mulch slope with the chairs falling to the bike path (owner video 2026-11-15, f_100-f_110). Height about 1 m and extent are production inference: the frames show the slope from the bike path, not the mound's top or north-east side."

@@ -209,7 +209,7 @@
     "basis": "production_inference",
     "config": {
       "path": "tools/config/terrain-overrides.json",
-      "sha256": "a13c90f3f2bdc94329ecd2fe9ea774ef9897b572eb03131fa6475db98765d2a5"
+      "sha256": "1f5a3279b5fd345694904692f4d57e555557c80b2b623cef10f021bd831f3f26"
     },
     "corrected_cells": 229,
     "leaves": 6499,
@@ -1606,7 +1606,7 @@
         "edge_blend_m": 3,
         "grade": {
           "final_sweep_change_m": 0,
-          "free_nodes": 16765,
+          "free_nodes": 16773,
           "kind": "harmonic"
         },
         "id": "cityside_park",

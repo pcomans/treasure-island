@@ -255,7 +255,7 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_on_foot_park, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
 	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
@@ -2493,6 +2493,61 @@ func _case_on_foot() -> bool:
 	if not _require(top_walk > 3.5 and top_walk < 4.8 and top_run > 19.0 and risen > 3.0 and drop > 10.0, "On foot the stock walk, run, jetpack or fast drop changed."):
 		return false
 	return await _rest("on_foot")
+
+
+## On foot in the park outside Isle House (vehicle_cases.json park_on_foot): walked
+## into an Adirondack chair from its front, one on the lawn and one on the mound's
+## slope, the stock player stops against it and walks back off (2026-11-16: a chair box
+## tilted with the ground, and then an upright one on the slope, held the player for
+## good); and a walk from the lawn over the mound reaches the bike path on the ground.
+func _case_on_foot_park() -> bool:
+	var rig := _player.get_node("CameraPivot") as Node3D
+	for chair: Dictionary in _cases.park_on_foot.chairs:
+		var at := _ground_xz_of(str(chair.row))
+		var heading := Vector2(chair.heading_xz[0], chair.heading_xz[1]).normalized()
+		if not _require(at != Vector2.INF, "No chair row %s." % chair.row) or not await _stand_player(at - heading * float(chair.run_up_m)):
+			return false
+		rig.rotation.y = atan2(-heading.x, -heading.y)
+		Input.action_press("move_forward")
+		var nearest := INF
+		for _tick in 240:
+			await physics_frame
+			nearest = minf(nearest, Vector2(_player.global_position.x, _player.global_position.z).distance_to(at))
+		var stop := Vector2(_player.global_position.x, _player.global_position.z)
+		_release()
+		rig.rotation.y += PI
+		Input.action_press("move_forward")
+		for _tick in 150:
+			await physics_frame
+		_release()
+		var away := Vector2(_player.global_position.x, _player.global_position.z).distance_to(stop)
+		print("ON_FOOT chair %s came within %.2f m, then walked %.2f m back off, on floor %s" % [chair.row, nearest, away, _player.is_on_floor()])
+		if not _require(nearest < 1.6, "Walking at chair %s never reached it (nearest %.2f m)." % [chair.row, nearest]) \
+		or not _require(away > 2.5 and _player.is_on_floor(), "The player could not walk back off chair %s (%.2f m)." % [chair.row, away]):
+			return false
+	var walk: Dictionary = _cases.park_on_foot.walk
+	var start := Vector2(walk.start_xz[0], walk.start_xz[1])
+	var end := Vector2(walk.end_xz[0], walk.end_xz[1])
+	if not await _stand_player(start):
+		return false
+	var direction := (end - start).normalized()
+	rig.rotation.y = atan2(-direction.x, -direction.y)
+	Input.action_press("move_forward")
+	var off_floor := 0
+	var ticks := 0
+	var highest := -INF
+	while ticks < int(walk.max_ticks) and Vector2(_player.global_position.x, _player.global_position.z).distance_to(end) > float(walk.radius_m):
+		await physics_frame
+		ticks += 1
+		highest = maxf(highest, _player.global_position.y)
+		if not _player.is_on_floor():
+			off_floor += 1
+	_release()
+	var left := Vector2(_player.global_position.x, _player.global_position.z).distance_to(end)
+	print("ON_FOOT park walk %d ticks, %.2f m from the bike path's end, highest %.2f m, %d ticks off the floor" % [ticks, left, highest, off_floor])
+	if not _require(left <= float(walk.radius_m) and off_floor <= 6, "The walk from the lawn over the mound to the bike path stopped %.2f m short (%d ticks off the floor)." % [left, off_floor]):
+		return false
+	return await _rest("on_foot_park")
 
 
 # --- 11. The browser's touch controls.

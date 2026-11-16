@@ -83,6 +83,7 @@ export const PARK_SURFACE_MATERIALS = Object.freeze({
   park_dg: "park-dg",
   park_gravel: "park-gravel",
   park_lawn: "park-lawn",
+  park_lawn_turf: "park-lawn-turf",
   park_mulch: "park-mulch",
   park_paint_pink: "park-paint-pink",
   park_plaza_lens: "park-plaza-lens",
@@ -643,15 +644,25 @@ const SHOULDER_STEP_M = 1;
 const SHOULDER_DRIFT_STEPS = 5;
 const SHOULDER_WANDER_M = 0.3;
 const SHOULDER_JOIN_M = 1;
-function expandLotPattern(lot) {
-  if (lot?.osm_exception === undefined) return lot;
-  const label = `Street ground lot ${lot.id}`;
-  invariant(EXCEPTION_LOT_IDS.includes(lot.id), `${label}: only ${EXCEPTION_LOT_IDS.join(", ")} are exceptions to the OSM layout`);
-  const exception = lot.osm_exception;
+// One check for a recorded exception to the snapshot, on a street-ground lot or a
+// street-detail zone (tools/lib/street-detail-generation.mjs EXCEPTION_ZONE_IDS): its
+// id must be on the code's list, so a new exception needs a code change, and
+// osm_exception holds exactly the reason, the approval, the dated source (an aerial or
+// footage) and the outline.
+export function validateOsmException(exception, id, allowedIds, label) {
+  invariant(allowedIds.includes(id), `${label}: only ${allowedIds.join(", ")} are exceptions to the OSM layout`);
+  invariant(exception != null && typeof exception === "object" && !Array.isArray(exception), `${label} osm_exception must be an object`);
   const dated = "footage" in exception ? "footage" : "aerial";
   exactKeys(exception, [dated, "approved", "outline_xz", "reason"], `${label} osm_exception`);
   invariant([dated, "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== "") &&
     Array.isArray(exception.outline_xz) && exception.outline_xz.length >= 3 && exception.outline_xz.every(isXZ), `${label} osm_exception needs its dated source, approval, reason and outline`);
+}
+
+function expandLotPattern(lot) {
+  if (lot?.osm_exception === undefined) return lot;
+  const label = `Street ground lot ${lot.id}`;
+  validateOsmException(lot.osm_exception, lot.id, EXCEPTION_LOT_IDS, label);
+  const exception = lot.osm_exception;
   if (lot.pattern === undefined) return lot;
   const pattern = lot.pattern;
   exactKeys(pattern, LOT_PATTERN_FIELDS, `${label} pattern`);

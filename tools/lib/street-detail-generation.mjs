@@ -29,7 +29,7 @@ import {
   validateFurnitureRules,
   validateIslandFurniture,
 } from "./street-furniture-generation.mjs";
-import { STREET_GROUND_RULES_PATH } from "./street-ground-generation.mjs";
+import { STREET_GROUND_RULES_PATH, validateOsmException } from "./street-ground-generation.mjs";
 import {
   PAVING_CLEAR_M,
   crownRadius,
@@ -128,6 +128,10 @@ export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "door",
   "approach",
 ]);
+
+// The street-detail zones that are recorded exceptions to the frozen OSM layout (owner
+// approval in each zone's osm_exception); a new one needs a code change here.
+const EXCEPTION_ZONE_IDS = Object.freeze(["isle_house_park"]);
 
 function pointKind(layer, footprintRadiusM, yawRule) {
   return Object.freeze({ layer, geometry: "point", footprint_radius_m: footprintRadiusM, yaw_rule: yawRule, overhead: false });
@@ -650,15 +654,11 @@ export function loadStreetDetailZones(projectRoot) {
     }
     // A zone drawn where the frozen OSM snapshot has nothing of its kind (the park outside
     // Isle House, an untagged lot in the snapshot) records that exception as a street-ground
-    // lot does (tools/lib/street-ground-generation.mjs): the reason, the owner's approval,
-    // the dated source (an aerial or footage) and the outline, which is the zone's own.
+    // lot does, with the same check (validateOsmException): its id on EXCEPTION_ZONE_IDS,
+    // the reason, the owner's approval, the dated source and the outline, the zone's own.
     if (zone.osm_exception !== undefined) {
-      const exception = zone.osm_exception;
-      const dated = exception && "footage" in exception ? "footage" : "aerial";
-      invariant(exception != null && typeof exception === "object" && JSON.stringify(Object.keys(exception).sort()) === JSON.stringify([dated, "approved", "outline_xz", "reason"].sort()),
-        `Street detail zone ${zone.id} osm_exception must have exactly {reason, approved, aerial or footage, outline_xz}`);
-      invariant([dated, "approved", "reason"].every((key) => typeof exception[key] === "string" && exception[key].trim() !== ""), `Street detail zone ${zone.id} osm_exception needs its dated source, approval and reason`);
-      invariant(shape.type === "polygon" && JSON.stringify(exception.outline_xz) === JSON.stringify(shape.points_xz), `Street detail zone ${zone.id} osm_exception outline must be the zone's polygon`);
+      validateOsmException(zone.osm_exception, zone.id, EXCEPTION_ZONE_IDS, `Street detail zone ${zone.id}`);
+      invariant(shape.type === "polygon" && JSON.stringify(zone.osm_exception.outline_xz) === JSON.stringify(shape.points_xz), `Street detail zone ${zone.id} osm_exception outline must be the zone's polygon`);
     }
     invariant(Array.isArray(zone.scatter), `Street detail zone ${zone.id} scatter must be a list`);
     const ruleIds = new Set();

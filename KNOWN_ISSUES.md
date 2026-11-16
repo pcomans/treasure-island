@@ -416,24 +416,31 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
   north-east side and top, the bed along Bruton Street's walk, the inside of the bed
   triangle at the north tip, the basin's inlets and edges, and the park sign's face.
 - Estimated, not measured: the number and places of the young pines (a scatter rule,
-  about one per 70 to 90 m² of bed), the lamps' 17 m spacing, the mound's 1 m rise,
-  the sizes of the block benches and logs, and the basin's outline.
-- The stockpile hill in the USGS elevation data at the north tip and the avenue's hump
-  beside it stay: their
-  32 m land cells border Isle House, whose foundation guard keeps them uncut. For the
-  same reason the basin is darker damp chips, not a hollow, and holds no water (the
-  video was shot after rain).
+  about one per 70 to 90 m² of bed), the lamps' 17 m spacing, the mound's 0.7 m rise,
+  the sizes of the block benches and logs, the chairs' places, and the basin's outline.
+- The park's north third still stands on the stockpile hill in the 2023 USGS data (up
+  to about 8 m at x -190, z 512, some 3.5 m above the lawn), where the video shows flat
+  ground (f_000 to f_005) and a low lawn mound at the north-west end (f_103, f_107,
+  f_112). Its two 32 m land cells (x -192 to -160, z 480 to 544) border Isle House's,
+  and re-meshing them would split Isle House's cell, which the terrain overrides'
+  foundation guard forbids (the Cityside site's exclusion). The avenue's hump beside it
+  stays too, and the basin, also beside those cells, is darker damp chips, not a hollow,
+  and holds no water (the video was shot after rain).
 - The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
   sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
   saplings), not the park's own species.
 - Not built: the kerb strip of palms and upright grasses along the avenue frontage
   (it needs a street-ground change), the bike path's centre line and bike stencils,
-  the tactile pads at its crossings, and the white stepping pads in the east bed
-  (f_025).
+  the yellow tactile pads at its crossings (the corner walk's among them, f_107), the
+  white stepping pads in the east bed (f_025) and the orange delineator posts by the
+  north tip (f_001 to f_005).
 - The video shows cars parked at the avenue's west kerb by the park; the avenue's
   rule leaves that kerb clear.
-- The mound's chairs stand where the aerial shows them, a few metres closer to the
-  bike path than in the video, where they sit higher up the mound (f_103).
+- The chairs are the island's Adirondack chair in a pale powder blue (the park's own,
+  f_103, f_107); Cityside's and the plaza's keep the azure of their photos.
+- Follow-up (shared kit): the road-closure barricade and its sign (`street_furniture_kit.gd`
+  `_closure_sign`) still tilt their collision boxes with the ground (`rest`), as the
+  chairs did when they caught the stock player on a slope; not seen to catch yet.
 
 ## Street detail rollouts: landed 2026-11-06 with known gaps
 

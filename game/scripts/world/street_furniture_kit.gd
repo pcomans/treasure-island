@@ -106,6 +106,13 @@ const FRAME_CHARCOAL := Color(0.16, 0.17, 0.18)
 ## 95 / 160 of 255 on their shaded faces in the overcast Sep 2025 photos 24 and
 ## 25 (hue about 210 degrees), paler where their tops catch the sky.
 const CHAIR_BLUE := Color(0.11, 0.43, 0.72)
+## The park outside Isle House has the same chairs in a pale, greyish powder blue
+## (owner video 2026-11-15, f_103 and f_107, overcast: about 105 / 145 / 180 of 255 on
+## their middle faces, 60 / 88 / 118 shaded), a set piece's "colour": "powder".
+const CHAIR_POWDER := Color(0.42, 0.58, 0.74)
+## The park outside Isle House's disc lamps stand on light grey poles (f_066, f_090),
+## a lamp's "pole": "light"; the other parks' poles are PARK_POLE_GREY.
+const PARK_POLE_LIGHT := Color(0.68, 0.69, 0.7)
 ## The chair's legs stand at x = +-CHAIR_LEG_X. Each placed chair settles on the
 ## visible ground under its feet: STREET_FURNITURE_FEET in
 ## tools/lib/street-furniture-generation.mjs is the one table of them (prop_feet
@@ -223,8 +230,8 @@ const BAULK_END := Color(0.2, 0.16, 0.135)
 ## (BLOCK_GRAIN on the atlas's pole wood), the tops worn paler and checked, the sawn
 ## ends a little warmer. Weathering only: the light comes from the sun. Size across
 ## and high are production inference from the frames (about 0.5 by 0.45 m).
-const BLOCK_GRAIN := Color(1.0, 0.96, 0.9)
-const BLOCK_TOP := Color(0.7, 0.68, 0.63)
+const BLOCK_GRAIN := Color(1.0, 0.9, 0.76)
+const BLOCK_TOP := Color(0.76, 0.68, 0.56)
 const BLOCK_END := Color(0.66, 0.6, 0.51)
 const BLOCK_CHECK := Color(0.32, 0.3, 0.28)
 const BLOCK_DEPTH_M := 0.5
@@ -238,7 +245,7 @@ const FORK_TRUNK_SHARE := 0.58
 ## (f_058) is the same grain left bleached.
 const LOG_GRAIN := Color(0.94, 0.92, 0.88)
 const LOG_GRAIN_BLEACHED := Color(1.0, 1.0, 0.98)
-const LOG_END_WEATHERED := Color(0.5, 0.46, 0.41)
+const LOG_END_WEATHERED := Color(0.3, 0.27, 0.24)
 ## How far an Adirondack chair's collision box reaches below its foot, so that on a
 ## slope (a park's mound) or a raised park surface (the row's bias) its low side still
 ## meets the colliding land.
@@ -673,10 +680,11 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# and single legs lengthened or shortened where the ground folds.
 			var rest := _rest(params)
 			var drops := _leg_drops(params)
-			var chair_key := "adirondack_chair"
+			var powder := str(params.get("colour", "")) == "powder"
+			var chair_key := "adirondack_chair_powder" if powder else "adirondack_chair"
 			for drop in drops:
 				chair_key += "_%d" % roundi(drop * 1000.0)
-			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops), rest, _plastic)
+			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops, CHAIR_POWDER if powder else CHAIR_BLUE), rest, _plastic)
 			# Its box takes the rest's lift but stays upright, and reaches CHAIR_SKIRT_M below
 			# the foot: tilted with the ground its edges leaned, and upright on a slope its
 			# low side's bottom edge stood clear of the ground; either way the stock
@@ -695,7 +703,8 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				var angle := PI * 0.25 + PI * 0.5 * float(index)
 				_capsule(result, 0.11, 4.0, Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_POLE_RADIUS_M)
 		"lamp_disc":
-			_piece(result, "lamp_disc", func(b: Builder) -> void: _lamp_disc(b))
+			var light := str(params.get("pole", "")) == "light"
+			_piece(result, "lamp_disc_light" if light else "lamp_disc", func(b: Builder) -> void: _lamp_disc(b, PARK_POLE_LIGHT if light else PARK_POLE_GREY))
 			_capsule(result, 0.07, 4.2)
 		"lamp_fork":
 			_piece(result, "lamp_fork", func(b: Builder) -> void: _lamp_fork(b))
@@ -936,7 +945,7 @@ func standing_vertices(prop: String) -> PackedVector3Array:
 	var builder := Builder.new(CELL_WHITE)
 	match prop:
 		"adirondack_chair":
-			_adirondack_chair(builder, PackedFloat32Array())
+			_adirondack_chair(builder, PackedFloat32Array(), CHAIR_BLUE)
 		"road_closure_barricade":
 			_road_closure_barricade(builder, PackedFloat32Array())
 		_:
@@ -1413,7 +1422,7 @@ func _map_board(b: Builder) -> void:
 ## 0.375 m up: production inference from the photos and common Adirondack
 ## proportions, not measured. `drops` (none, or the front-left, front-right,
 ## back-left and back-right legs) lengthens single legs.
-func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
+func _adirondack_chair(b: Builder, drops: PackedFloat32Array, colour: Color) -> void:
 	var bevel := 0.006
 	# Side frames, outlines in (z, y) and thick across X: the front leg with the
 	# bracket under the arm's front, the back leg, the seat rail inside the legs
@@ -1425,14 +1434,14 @@ func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
 		var front_drop := drops[index] if drops.size() == 4 else 0.0
 		var back_drop := drops[index + 2] if drops.size() == 4 else 0.0
 		var leg := Vector3(mirror * CHAIR_LEG_X, 0.0, 0.0)
-		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, -front_drop), Vector2(-0.26, -front_drop), Vector2(-0.26, 0.553), Vector2(-0.35, 0.553)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
-		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.47), Vector2(-0.35, 0.553), Vector2(-0.397, 0.553)]), [0.006], 1), 0.03, 0.004, CHAIR_BLUE)
-		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(0.333, -back_drop), Vector2(0.417, -back_drop), Vector2(0.262, 0.553), Vector2(0.178, 0.553)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
-		b.slab(Vector3(mirror * 0.265, 0.0, 0.0), side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.2525), Vector2(-0.35, 0.3525), Vector2(0.32, 0.21), Vector2(0.32, 0.11)]), [0.008], 2), 0.035, bevel, CHAIR_BLUE)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, -front_drop), Vector2(-0.26, -front_drop), Vector2(-0.26, 0.553), Vector2(-0.35, 0.553)]), [0.008], 2), 0.035, bevel, colour)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.47), Vector2(-0.35, 0.553), Vector2(-0.397, 0.553)]), [0.006], 1), 0.03, 0.004, colour)
+		b.slab(leg, side, Builder.rounded(PackedVector2Array([Vector2(0.333, -back_drop), Vector2(0.417, -back_drop), Vector2(0.262, 0.553), Vector2(0.178, 0.553)]), [0.008], 2), 0.035, bevel, colour)
+		b.slab(Vector3(mirror * 0.265, 0.0, 0.0), side, Builder.rounded(PackedVector2Array([Vector2(-0.35, 0.2525), Vector2(-0.35, 0.3525), Vector2(0.32, 0.21), Vector2(0.32, 0.11)]), [0.008], 2), 0.035, bevel, colour)
 		var arm := PackedVector2Array([Vector2(mirror * 0.26, 0.28), Vector2(mirror * 0.375, 0.28), Vector2(mirror * 0.375, -0.415), Vector2(mirror * 0.225, -0.415)])
-		b.slab(Vector3(0.0, 0.564, 0.0), plan, Builder.rounded(arm, [0.012, 0.012, 0.05, 0.05], 3), 0.022, bevel, CHAIR_BLUE)
+		b.slab(Vector3(0.0, 0.564, 0.0), plan, Builder.rounded(arm, [0.012, 0.012, 0.05, 0.05], 3), 0.022, bevel, colour)
 	# The arms' backs rest on a rail across the back of the chair.
-	b.slab(Vector3(0.0, 0.513, 0.2625), _frame(Vector3.RIGHT, Vector3.UP), Builder.rounded(_rectangle(0.75, 0.08), [0.01], 2), 0.025, bevel, CHAIR_BLUE)
+	b.slab(Vector3(0.0, 0.513, 0.2625), _frame(Vector3.RIGHT, Vector3.UP), Builder.rounded(_rectangle(0.75, 0.08), [0.01], 2), 0.025, bevel, colour)
 	# Seat: five slats on a plane falling 12 degrees toward the back from its
 	# front edge, 0.375 m up.
 	var fall := deg_to_rad(12.0)
@@ -1441,7 +1450,7 @@ func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
 	var seat := _frame(Vector3.RIGHT, down_seat)
 	for index in 5:
 		var center := Vector3(0.0, 0.375, -0.36) + down_seat * (0.092 * float(index) + 0.04) - seat_normal * 0.01
-		b.slab(center, seat, Builder.rounded(_rectangle(0.56, 0.08), [0.012], 2), 0.02, bevel, CHAIR_BLUE)
+		b.slab(center, seat, Builder.rounded(_rectangle(0.56, 0.08), [0.012], 2), 0.02, bevel, colour)
 	# Back, the modern poly kind of photos 24 and 25: a flat-topped rectangle
 	# 0.49 m wide leaning back 23 degrees from behind the seat, broad side boards
 	# with four closely spaced parallel slats between them, a band across its
@@ -1453,13 +1462,13 @@ func _adirondack_chair(b: Builder, drops: PackedFloat32Array) -> void:
 	var top := 0.79
 	for mirror: float in [-1.0, 1.0]:
 		var side_board := PackedVector2Array([Vector2(mirror * 0.155, 0.0), Vector2(mirror * 0.245, 0.0), Vector2(mirror * 0.245, top), Vector2(mirror * 0.155, top)])
-		b.slab(back_origin + back.z * 0.0125, back, Builder.rounded(side_board, [0.006, 0.006, 0.025, 0.008], 2), 0.025, bevel, CHAIR_BLUE)
+		b.slab(back_origin + back.z * 0.0125, back, Builder.rounded(side_board, [0.006, 0.006, 0.025, 0.008], 2), 0.025, bevel, colour)
 	for index in 4:
 		var middle := -0.113625 + 0.07575 * float(index)
 		var slat := PackedVector2Array([Vector2(middle - 0.034375, 0.0), Vector2(middle + 0.034375, 0.0), Vector2(middle + 0.034375, top), Vector2(middle - 0.034375, top)])
-		b.slab(back_origin + back.z * 0.01, back, Builder.rounded(slat, [0.006], 2), 0.02, 0.005, CHAIR_BLUE)
-	b.slab(back_origin + back.y * (top - 0.0375) + back.z * 0.0375, back, Builder.rounded(_rectangle(0.49, 0.075), [0.012], 2), 0.025, bevel, CHAIR_BLUE)
-	b.slab(back_origin + back.y * 0.035 + back.z * 0.04, back, Builder.rounded(_rectangle(0.495, 0.07), [0.01], 2), 0.03, bevel, CHAIR_BLUE)
+		b.slab(back_origin + back.z * 0.01, back, Builder.rounded(slat, [0.006], 2), 0.02, 0.005, colour)
+	b.slab(back_origin + back.y * (top - 0.0375) + back.z * 0.0375, back, Builder.rounded(_rectangle(0.49, 0.075), [0.012], 2), 0.025, bevel, colour)
+	b.slab(back_origin + back.y * 0.035 + back.z * 0.04, back, Builder.rounded(_rectangle(0.495, 0.07), [0.01], 2), 0.03, bevel, colour)
 
 
 ## An orthonormal basis whose X and Y span an outline's plane and whose Z
@@ -1547,12 +1556,12 @@ func _canopy_discs(b: Builder) -> void:
 ## Cityside Park's 14 ft path lights (2024 art-location plan label "Light Pole
 ## 14 ft"; ph08 and ph10, Sep 2025): a slender dark grey pole under a broad flat
 ## disc head.
-func _lamp_disc(b: Builder) -> void:
+func _lamp_disc(b: Builder, pole: Color) -> void:
 	var top := 4.27
-	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, top - 0.12, 0)]), PackedFloat32Array([0.055, 0.045]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
-	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.3, 0)]), PackedFloat32Array([0.085, 0.075]), 10, PARK_POLE_GREY, CELL_METAL, false, true)
-	b.tube(PackedVector3Array([Vector3(0, top - 0.12, 0), Vector3(0, top - 0.05, 0)]), PackedFloat32Array([0.42, 0.45]), 24, PARK_POLE_GREY, CELL_METAL, false, false)
-	b.tube(PackedVector3Array([Vector3(0, top - 0.05, 0), Vector3(0, top - 0.01, 0), Vector3(0, top + 0.03, 0)]), PackedFloat32Array([0.45, 0.38, 0.06]), 24, PARK_POLE_GREY, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.3, 0), Vector3(0, top - 0.12, 0)]), PackedFloat32Array([0.055, 0.045]), 10, pole, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, -0.05, 0), Vector3(0, 0.3, 0)]), PackedFloat32Array([0.085, 0.075]), 10, pole, CELL_METAL, false, true)
+	b.tube(PackedVector3Array([Vector3(0, top - 0.12, 0), Vector3(0, top - 0.05, 0)]), PackedFloat32Array([0.42, 0.45]), 24, pole, CELL_METAL, false, false)
+	b.tube(PackedVector3Array([Vector3(0, top - 0.05, 0), Vector3(0, top - 0.01, 0), Vector3(0, top + 0.03, 0)]), PackedFloat32Array([0.45, 0.38, 0.06]), 24, pole, CELL_METAL, false, true)
 	b.disc(Vector3(0, top - 0.12, 0), Vector3.DOWN, 0.42, 24, LENS_GREY)
 
 
@@ -1955,19 +1964,24 @@ func _log_seat(b: Builder, form: String, size: float) -> void:
 				b.box(Vector3(side * 0.12 * size, low * 1.55, side * (BLOCK_DEPTH_M * 0.5 - 0.004)), Basis.IDENTITY, Vector3(0.45 * size, 0.01, 0.012), BLOCK_CHECK, CELL_WHITE)
 				b.box(Vector3(side * (size * 0.5 - 0.003), low, 0), Basis.IDENTITY, Vector3(0.008, BLOCK_HEIGHT_M - 0.02, BLOCK_DEPTH_M - 0.03), BLOCK_END, CELL_WHITE)
 		"forked":
-			# A long bleached log lying on the ground: a tapering trunk, then two limbs from the fork.
+			# A long, thin, gnarled bleached log lying on the ground: a tapering trunk that
+			# wanders a little, then two thin crooked limbs from the fork; its ends dark.
 			var trunk_m := size * FORK_TRUNK_SHARE
-			var foot := Vector3(-size * 0.5, 0.21, 0.0)
-			var fork := Vector3(-size * 0.5 + trunk_m, 0.17, 0.03)
-			b.tube(PackedVector3Array([foot, foot.lerp(fork, 0.5) + Vector3(0, 0.0, -0.06), fork]), PackedFloat32Array([0.23, 0.2, 0.17]), 12, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
-			b.disc(foot, Vector3.LEFT, 0.23, 12, END_GRAIN)
+			var foot := Vector3(-size * 0.5, 0.17, 0.0)
+			var fork := Vector3(-size * 0.5 + trunk_m, 0.13, 0.03)
+			var trunk := PackedVector3Array([foot, foot.lerp(fork, 0.3) + Vector3(0, 0.01, -0.09), foot.lerp(fork, 0.62) + Vector3(0, -0.01, 0.07), fork])
+			b.tube(trunk, PackedFloat32Array([0.18, 0.15, 0.135, 0.12]), 12, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
+			b.disc(foot, Vector3.LEFT, 0.18, 12, LOG_END_WEATHERED)
 			for side: float in [-1.0, 1.0]:
 				var limb_m := size * (1.0 - FORK_TRUNK_SHARE) * (1.0 if side < 0.0 else 0.8)
 				var heading := Vector3(cos(side * FORK_SPLAY_RAD), 0.0, -sin(side * FORK_SPLAY_RAD))
-				var tip := Vector3(fork.x, 0.1, fork.z) + heading * limb_m
-				var bend := Vector3(fork.x, 0.0, fork.z).lerp(tip, 0.5) + Vector3(0, 0.15, 0) + Vector3(-heading.z, 0.0, heading.x) * 0.12 * side
-				b.tube(PackedVector3Array([fork - heading * 0.25, bend, tip]), PackedFloat32Array([0.16, 0.13, 0.09]), 10, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
-				b.disc(tip, heading, 0.09, 10, END_GRAIN)
+				var across := Vector3(-heading.z, 0.0, heading.x)
+				var tip := Vector3(fork.x, 0.07, fork.z) + heading * limb_m
+				var start := Vector3(fork.x, 0.0, fork.z)
+				var limb := PackedVector3Array([fork - heading * 0.2, start.lerp(tip, 0.35) + Vector3(0, 0.12, 0) + across * 0.14 * side,
+					start.lerp(tip, 0.7) + Vector3(0, 0.08, 0) - across * 0.1 * side, tip])
+				b.tube(limb, PackedFloat32Array([0.11, 0.09, 0.07, 0.05]), 10, LOG_GRAIN_BLEACHED, CELL_POLE_WOOD, false, false)
+				b.disc(tip, heading, 0.05, 10, LOG_END_WEATHERED)
 		"weathered":
 			# A big grey log lying along X, a little bowed and swollen, its ends sawn.
 			var path := PackedVector3Array([Vector3(-size * 0.5, 0.29, 0), Vector3(-size * 0.15, 0.3, 0.03), Vector3(size * 0.2, 0.28, 0.02), Vector3(size * 0.5, 0.26, 0)])
