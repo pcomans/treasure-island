@@ -168,11 +168,12 @@ function tiBuildFiles(build, env) {
 	const LOCK = 'grand-treasure-island-build-files';
 	// Downloads, as the engine's own: 4 attempts, a second apart.
 	const ATTEMPTS = 4;
-	// Bytes waiting for the disk: past this the download waits for it, and a disk that
-	// makes no room for STALL_MS loses the store, never the download. What waits goes to
-	// the disk in one write (up to WRITE_MAX): the engine's start keeps the page busy for
-	// seconds right after a fast download, with time for few writes, and the bytes still
-	// waiting then are held in memory at its peak.
+	// Bytes waiting for the disk: the WebAssembly's chunks as it streams through (past
+	// QUEUE_LIMIT its download waits, and a disk that makes no room for STALL_MS loses
+	// the store, never the download), and the pack's buffer, in views of it, once it is
+	// in. What waits goes to the disk in writes of up to WRITE_MAX: the engine's start
+	// keeps the page busy for seconds after the download, with time for few writes, and
+	// chunks still waiting then are held in memory at its peak.
 	const QUEUE_LIMIT = 4 * 1024 * 1024;
 	const WRITE_MAX = 8 * 1024 * 1024;
 	const STALL_MS = 15000;
@@ -334,25 +335,46 @@ function tiBuildFiles(build, env) {
 		};
 	}
 
-	// Reads STREAM into BUFFER, which it must fill exactly, calling onChunk(bytes so far,
-	// chunk) after each chunk and waiting for what it returns.
-	async function readInto(stream, buffer, onChunk) {
-		const reader = stream.getReader();
+	// Reads STREAM, which must hold exactly SIZE bytes, into one new ArrayBuffer and
+	// returns it, calling onBytes(bytes so far) as it goes. A byte stream (a download or
+	// a stored file, in Chrome) is read with a BYOB reader straight into the buffer, so
+	// no chunk is made: chunks copied in would be garbage the size of the pack that the
+	// page frees only seconds later, through the engine's start. A BYOB read moves the
+	// buffer to a new ArrayBuffer object each time; the last one holds the data. Other
+	// streams' chunks are copied in.
+	async function readInto(stream, size, onBytes) {
+		let buffer = new ArrayBuffer(size);
 		let offset = 0;
+		let byob = null;
+		try {
+			byob = stream.getReader({mode: 'byob'});
+		} catch (err) {
+			byob = null;
+		}
+		const reader = byob || stream.getReader();
 		try {
 			for (;;) {
-				const {done, value} = await reader.read();
-				if (done) break;
-				if (offset + value.byteLength > buffer.byteLength) throw new Error('more than the expected ' + buffer.byteLength + ' bytes');
-				buffer.set(value, offset);
-				offset += value.byteLength;
-				await onChunk(offset, value);
+				let result;
+				if (byob) {
+					// Past SIZE, one more byte means the stream holds more than SIZE.
+					result = await byob.read(offset < size ? new Uint8Array(buffer, offset, size - offset) : new Uint8Array(1));
+					if (offset < size && result.value) buffer = result.value.buffer;
+				} else {
+					result = await reader.read();
+				}
+				if (result.done) break;
+				const length = result.value.byteLength;
+				if (offset + length > size) throw new Error('more than the expected ' + size + ' bytes');
+				if (!byob) new Uint8Array(buffer, offset, length).set(result.value);
+				offset += length;
+				onBytes(offset);
 			}
 		} catch (err) {
 			reader.cancel().catch(() => {});
 			throw err;
 		}
-		if (offset !== buffer.byteLength) throw new Error(offset + ' of ' + buffer.byteLength + ' bytes');
+		if (offset !== size) throw new Error(offset + ' of ' + size + ' bytes');
+		return buffer;
 	}
 
 	// The engine's WebAssembly, as the response its loader streams it from
@@ -399,39 +421,35 @@ function tiBuildFiles(build, env) {
 
 	// The pack, in one buffer of its size: the only copy the page makes, which the
 	// engine's file system then takes as it is (tools/build-web.sh). Read from this
-	// device, or downloaded and stored as it comes in. progress(bytes, 'device' or
-	// 'network').
+	// device, or downloaded and then stored from that buffer, in views of it (a BYOB
+	// read moves the buffer, so the store can't hold views while the download runs).
+	// progress(bytes, 'device' or 'network').
 	async function pack(name, size, progress) {
-		const buffer = new Uint8Array(size);
 		const file = await storedFile(name, size);
 		if (file) {
 			try {
 				progress(0, 'device');
-				await readInto(file.stream(), buffer, (bytes) => progress(bytes, 'device'));
+				const buffer = await readInto(file.stream(), size, (bytes) => progress(bytes, 'device'));
 				env.mark('cache:pack:device');
-				return buffer.buffer;
+				return buffer;
 			} catch (err) {
 				env.warn('The stored game data did not read; downloading it:', err);
 			}
 		}
 		for (let attempt = 1; ; attempt += 1) {
-			let store = null;
 			try {
 				progress(0, 'network');
 				const response = await env.fetch(name);
 				if (!response.ok || !response.body) throw new Error('HTTP ' + response.status);
-				store = await startStore('pack', name, size);
-				await readInto(response.body, buffer, (bytes, chunk) => {
-					progress(bytes, 'network');
-					if (!store) return null;
-					// What just came, as a view of the buffer: no second copy waits for the disk.
-					store.write(buffer.subarray(bytes - chunk.byteLength, bytes));
-					return store.room();
-				});
-				if (store) store.end(true);
-				return buffer.buffer;
+				const buffer = await readInto(response.body, size, (bytes) => progress(bytes, 'network'));
+				// Written while the engine starts; finish() waits for it.
+				const store = await startStore('pack', name, size);
+				if (store) {
+					for (let at = 0; at < size; at += WRITE_MAX) store.write(new Uint8Array(buffer, at, Math.min(WRITE_MAX, size - at)));
+					store.end(true);
+				}
+				return buffer;
 			} catch (err) {
-				if (store) store.end(false);
 				if (attempt >= ATTEMPTS) throw new Error('Failed loading file \'' + name + '\': ' + (err instanceof Error ? err.message : err));
 				await new Promise((resolve) => setTimeout(resolve, 1000));
 			}

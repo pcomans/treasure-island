@@ -9,8 +9,8 @@
 //     build downloads nothing and gets the same bytes;
 //   - a new build downloads its own files and, once they are stored, removes the old
 //     build's folder (and a disk failure while storing keeps the old one);
-//   - a download that ends early or fails is never stored as complete: the pack is
-//     downloaded again and the next load downloads again;
+//   - a download that ends early, fails or holds more than the page expects is never
+//     stored as complete: the pack is downloaded again and the next load downloads again;
 //   - a marker naming another size, a stored file of another size, or a stored file
 //     that reads short is not used;
 //   - without the lock (another tab is storing) a tab uses complete copies but writes
@@ -18,7 +18,8 @@
 //     come from the network as before;
 //   - a disk slower than the download holds the download back without losing data,
 //     and what waits for it goes in few writes.
-// Node only, no network and no engine; a few seconds. Part of tools/test.sh.
+// Node only, no network and no engine; about ten seconds, mostly the page's waits
+// between download attempts. Part of tools/test.sh.
 //
 //   node tools/check_web_build_files.mjs [SHELL]   (SHELL: another copy of the page's shell)
 import {readFileSync} from 'node:fs';
@@ -124,10 +125,12 @@ class Locks {
     try { return await callback({name}); } finally { this.held.delete(name); }
   }
 }
-// The server: each file's bytes in 64 KiB chunks. truncate[name] = n: the next n
-// downloads of it end cleanly at half; fail[name] = n: the next n error at half.
+// The server: each file's bytes in 64 KiB chunks, as a byte stream like a browser's
+// download (a BYOB reader reads it straight into a buffer), or with byteStreams false a
+// plain stream of chunks. truncate[name] = n: the next n downloads of it end cleanly at
+// half; fail[name] = n: the next n error at half.
 class Server {
-  constructor(files) { this.files = files; this.calls = {}; this.truncate = {}; this.fail = {}; }
+  constructor(files) { this.files = files; this.calls = {}; this.truncate = {}; this.fail = {}; this.byteStreams = true; }
   count(name) { return this.calls[name] || 0; }
   fetch(name) {
     this.calls[name] = this.count(name) + 1;
@@ -137,13 +140,21 @@ class Server {
     let offset = 0;
     const stop = cut ? data.byteLength >> 1 : data.byteLength;
     return Promise.resolve(new Response(new ReadableStream({
+      type: this.byteStreams ? 'bytes' : undefined,
       pull(controller) {
         if (offset >= stop) {
           if (cut === 'error') controller.error(new TypeError('network error')); else controller.close();
+          if (controller.byobRequest) controller.byobRequest.respond(0);
           return;
         }
-        const n = Math.min(65536, stop - offset);
-        controller.enqueue(data.slice(offset, offset + n));
+        const request = controller.byobRequest;
+        const n = Math.min(65536, stop - offset, request ? request.view.byteLength : Infinity);
+        if (request) {
+          request.view.set(data.subarray(offset, offset + n));
+          request.respond(n);
+        } else {
+          controller.enqueue(data.slice(offset, offset + n));
+        }
         offset += n;
       },
     })));
@@ -240,6 +251,14 @@ const B = build('treasure-island-bbbbbbb', 310000, 1100005, 7);
   const r3 = await load(A, {storage: storage2, locks, server: server2});
   check(got(r3, A) && r3.packFrom.join() === 'network' && stored(storage2, A, 'pack'), 'after four short downloads the next load did not download and store the pack');
 }
+{ // A download that holds more than the size the page expects is never stored.
+  const long = build('treasure-island-ddddddd', 20000, 30000, 5);
+  const storage = new Storage(); const locks = new Locks();
+  const server = new Server({[long.wasm[0]]: bytes(20001, 5), [long.pack[0]]: bytes(30001, 6)});
+  const r = await load(long, {storage, locks, server});
+  check(r.error && /more than the expected/.test(r.error.message) && server.count(long.pack[0]) === 4, `a longer pack: ${r.error ? r.error.message : 'no error'}`);
+  check(!marked(storage, long, 'pack') && !marked(storage, long, 'wasm'), 'a longer download was marked complete');
+}
 { // A wrong marker, a stored file of another size or one that reads short is not used.
   for (const [which, harm] of [['pack', 'marker'], ['pack', 'size'], ['pack', 'short'], ['wasm', 'marker'], ['wasm', 'size']]) {
     const storage = new Storage(); const locks = new Locks(); const server = serverFor(A);
@@ -275,6 +294,13 @@ const B = build('treasure-island-bbbbbbb', 310000, 1100005, 7);
     if (storage instanceof Storage) check(storage.folder(FOLDER) === null, `${what}: wrote to storage`);
   }
 }
+{ // A download that isn't a byte stream (its chunks are copied in) loads and stores the same.
+  const storage = new Storage(); const locks = new Locks(); const server = serverFor(A);
+  server.byteStreams = false;
+  server.truncate[A.pack[0]] = 1;
+  const r = await load(A, {storage, locks, server});
+  check(got(r, A) && server.count(A.pack[0]) === 2 && stored(storage, A, 'pack') && stored(storage, A, 'wasm'), 'plain streams: not loaded, retried and stored');
+}
 { // A disk that fails while storing loses the store, not the download, and keeps the old build.
   const storage = new Storage(); const locks = new Locks(); const server = serverFor(A, B);
   await load(A, {storage, locks, server});
@@ -298,4 +324,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s files, loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short or failed download, ignores damaged copies, writes only with the lock, and falls back to the network without storage');
+console.log('PASS: the page\'s build cache stores a build\'s files, loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, and falls back to the network without storage');

@@ -142,7 +142,7 @@ tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh
 # The web page's build cache (tiBuildFiles in game/web/shell.html), with stand-ins
 # for the browser's file system, locks and network: a stored build loads without a
 # download, a new build replaces the old one, a short or failed download is never
-# stored, and without storage the files come from the network. Node only, seconds.
+# stored, and without storage the files come from the network. Node only, about 10 s.
 echo "== tools/check_web_build_files.mjs"
 node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mjs")
 
