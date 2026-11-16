@@ -7,6 +7,13 @@
 ; config/custom_user_dir_name pins Godot's own default path for that name on each
 ; platform (godot/app_userdata/<name> in the data folder; Godot/ on macOS and
 ; Windows). game/tests/headless_startup_configuration_contract.gd checks both.
+; The web build's reflection atlas has a slot for each reflection probe the world
+; has, Mersea's two (rendering/reflections/reflection_atlas/reflection_count.web):
+; the Compatibility renderer allocates every slot when the first probe renders, two
+; 256 px cubemaps with their mipmaps (4 MiB) a slot, so Godot's default of 64 held
+; 256 MiB of WebGL textures. A probe left without a slot gets no reflection, and
+; engine errors every frame; game/tests/headless_gameplay_contract.gd fails when
+; the world has more probes than the web has slots. Desktop builds keep the default.
 config_version=5
 
 [application]
@@ -138,6 +145,7 @@ common/enable_pause_aware_picking=true
 [rendering]
 
 renderer/rendering_method.web="gl_compatibility"
+reflections/reflection_atlas/reflection_count.web=2
 anti_aliasing/quality/msaa_3d=2
 textures/vram_compression/import_etc2_astc=true
 textures/default_filters/use_nearest_mipmap_filter=false
