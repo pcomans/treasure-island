@@ -7,10 +7,11 @@
 // cover (fade_gain times it, squared, no fainter than min_alpha), as a thin line
 // does against the sky: dark and thin close to, a conductor 60 to 100 m off
 // almost gone, as in the dated photos, but still continuous.
-// The growth is worked out in world space: Forward+ hands the vertex function a
-// VERTEX already moved by the instance transform (MODEL_MATRIX the node's),
-// Compatibility may hand it the unit tube (MODEL_MATRIX node and instance), and
-// MODEL_MATRIX * VERTEX is the same world point either way. Unshaded: the tube's
+// The growth is worked out in world space: both renderers hand the vertex
+// function the unit tube, with MODEL_MATRIX the node's and the instance's
+// together (Godot 4.7.2's Forward+ and Compatibility scene shaders put a
+// MultiMesh instance's transform into MODEL_MATRIX before this code runs), so
+// MODEL_MATRIX * VERTEX is the wire's world point. Unshaded: the tube's
 // four faces would each catch the sun and glint in dashes along a sagging span.
 shader_type spatial;
 render_mode cull_disabled, depth_draw_opaque, unshaded;

@@ -2,7 +2,8 @@ extends RefCounted
 ## The Treasure Island ferry terminal beyond the covered pier (owner decisions
 ## 2026-11-07): the steel float with its railed ramps, the aluminium gangway down
 ## to it from the pier's gate end, its guide piles, the two mooring dolphins with
-## their foam fenders, the breakwater in the water NW of it, and the Prop SF
+## their foam fenders, the breakwater in the water NW of it with the pelicans,
+## cormorants and gulls resting on its cap (breakwater_birds.gd), and the Prop SF
 ## catamaran Sammy J docked at the float, gently rocking. Built under
 ## ContextWorld/FerryTerminal from the context's ferry_terminal section
 ## (tools/lib/ferry-terminal.mjs: frozen OSM float w1036802529, gangway
@@ -28,6 +29,7 @@ extends RefCounted
 ## breakwater's bay face are inferred too. No unreadable sign text is invented.
 
 const BUILDER := preload("res://game/scripts/world/street_furniture_kit.gd").Builder
+const BIRDS := preload("res://game/scripts/world/breakwater_birds.gd")
 const BOAT_SHADER := preload("res://game/resources/materials/world/ferry/ferry_boat.gdshader")
 const LIVERY := preload("res://game/resources/textures/world/ferry/ferry_livery.png")
 ## The covered pier the gangway hangs from (pier_canopy_family.gd): its deck
@@ -689,6 +691,8 @@ static func _breakwater(line: Dictionary, water_y: float, material: Material, re
 	var body := _solid_body("BreakwaterCollision", [str(line.source_key)], "context:ferry-terminal:breakwater")
 	_box_shape(body, mid + Vector3.UP * (cap_top + foot) * 0.5, basis, Vector3(length, cap_top - foot, BREAKWATER_WIDTH_M))
 	node.add_child(body)
+	# The pelicans, cormorants and gulls resting on its cap (breakwater_birds.gd).
+	node.add_child(BIRDS.build(a, c, cap_top, BREAKWATER_WIDTH_M * 0.5, report))
 	return node
 
 
