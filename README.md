@@ -227,7 +227,7 @@ the number padded to six digits so that tags sort by it:
 would give too small a number.
 
 After each release, CI's `itch` job also puts both builds on the itch.io page
-[phpp/grand-treasure-island](https://phpp.itch.io/grand-treasure-island): the
+[phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
 Mac app, notarized or not, goes to channel `mac` and the Linux build to channel
 `linux`, with the build number (such as `1918`) as their version. The job uses
 itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from

@@ -23,7 +23,7 @@
 # mac-<date>-<commit> tags.
 #
 # After the release, the itch job (owner-requested 2026-11-15) pushes the same
-# two builds to the itch.io page phpp/grand-treasure-island with itch's butler:
+# two builds to the itch.io page phppco/grand-treasure-island with itch's butler:
 # the Mac app, notarized or not, to channel "mac" and the Linux build to channel
 # "linux", with the build number as their version.
 #
@@ -1055,7 +1055,9 @@ jobs:
       group: itch-publish
       cancel-in-progress: false
     env:
-      ITCH_TARGET: phpp/grand-treasure-island
+      # The page as butler names it, user/game (https://phppco.itch.io/grand-treasure-island).
+      # Every butler step and message takes it from here.
+      ITCH_TARGET: phppco/grand-treasure-island
     steps:
       - name: Check the release tag, the API key and the environment
         id: check
