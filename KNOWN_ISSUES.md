@@ -269,7 +269,7 @@ Non-blocking notes from the reviews:
 
 ## Loading screen (`game/scripts/main.gd`, `game/web/shell.html`, 2026-11-15)
 
-Each startup step has its own line on the loading screen, which covers the island until play (`LOADING_STEPS` and `COMPILE_GROUPS` in `main.gd`; on the web the page first shows the download in megabytes and **Starting the engine…**). Each line goes up before its step's work starts, and the work waits a frame so the line can be drawn. On the web the shaders are compiled a group of the world at a time, each group hidden until its frame, and the split costs about half a second of the load. What it can't show:
+Each startup step has its own line on the loading screen, which covers the island until play (`LOADING_STEPS` and `COMPILE_GROUPS` in `main.gd`; on the web the page first shows the download, or the load from this device, as a percentage, then **Saving the game on this device…** after a first download and **Starting the engine…**). Each line goes up before its step's work starts, and the work waits a frame so the line can be drawn. On the web the shaders are compiled a group of the world at a time, each group hidden until its frame, and the split costs about half a second of the load. What it can't show:
 
 - On desktop the engine's own boot splash, with no line, stays up while the engine starts and loads the main scene (about 2.5 to 3.5 s on the devcontainer), before any game script runs. A line there would need a boot splash image of its own, and the web page shows that image during its download.
 - No step shows how far along it is beyond its count. The island's load is one `load()` of the baked world, and each shader group's first frame compiles its shaders in one draw: the longest, the nearer half of the buildings, about 4 s on the web here. Counting further would mean a threaded load, or drawing a group's materials a few at a time.
@@ -277,6 +277,17 @@ Each startup step has its own line on the loading screen, which covers the islan
 - On the web the ferry group's line shows for only about 0.5 s (review note, 2026-11-15).
 - A line is seen only once the frame that puts it up has been drawn, so the rest of that frame's work runs under the line before it. On the web about 2 s of the engine's own work on the newly loaded island, at the end of the load's frame, runs under **Loading the island…**. On a desktop's first launch the frame that puts up **Compiling shaders…** takes about 2 s under **Setting up the island…**, most likely the grass's first capture of the ground from above compiling its shaders.
 - On a desktop the shaders are one step, **Compiling shaders…**: Godot compiles most of them as the island loads (on a first launch about 4.6 s of **Loading the island…**, which its second line says), and each group then draws in about 25 ms, so a line per group would only flicker. That compiling inside the island's load can't have a line of its own without a threaded load.
+
+## The web build's copy on the device (`game/web/shell.html`, `tiBuildFiles`, 2026-11-16)
+
+The page keeps the build's 160 MB pack in the site's own storage (OPFS), one build at a time, and the next launch of the same build reads it from there.
+
+- Storing needs file system writable streams: Safari 26 (iOS 26 on an iPhone or iPad), Chrome 86, Firefox 111. Older Safari downloads the pack on every launch, as before, unless its own HTTP cache keeps it.
+- The home screen app and the two public addresses (https://play-grandtreasureisland.vercel.app/ and https://grandtreasureisland.vercel.app/game/) each keep their own copy, so each downloads the pack once per build.
+- Only Chromium 154 on Linux has run it, against a local server. Safari (Mac and iPhone), Firefox and Windows Chrome are unverified, including whether Safari's downloads and stored files take a BYOB reader (without one the page copies each chunk in, and the chunks stay in memory until the next garbage collection) and the iPhone's memory while it stores.
+- While a tab stores the pack it downloads it with `cache: 'no-store'`, after asking the HTTP cache for a copy it already has. When that store then fails (storage full, the tab closed during the download), the next launch downloads again even where the browser's HTTP cache would have kept the pack.
+- A browser evicts the copy under storage pressure, and Safari deletes a site's script-writable storage after seven days of Safari use without a visit (WebKit, 2020; a home screen app keeps its own count of days); the next launch then downloads again.
+- On a launch from the device the line reads **Loading the game…** for about 0.2 s before **Starting the engine…** (Chrome here): the engine's WebAssembly reports before the pack's source is known, and the line names no source until it is. **Loading the game from this device** is put up but not painted there, since the 160 MB read ends before the next frame; a slower device may show it. A download over the local network ends as fast, so it can go by without a painted percentage too.
 
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 

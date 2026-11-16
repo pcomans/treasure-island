@@ -151,6 +151,380 @@ body {
 
 		<script src="$GODOT_URL"></script>
 		<script>
+// This device's copy of a build's game data pack (owner, 2026-11-16: "cache the
+// downloads on the local disk, keyed by ... the current build number"). It is kept in
+// the site's private file system (OPFS), in a folder named after the build's files
+// (treasure-island-<commit>, which names one build), so the next launch of the same
+// build reads it from the device instead of downloading about 134 MB again; storing a
+// build removes every other build's folder. The page itself still comes from the
+// network every time (no service worker), so a new release or a rollback names other
+// files and takes effect on the next load as before. The engine's WebAssembly (about
+// 9.5 MB compressed) is left to the browser's HTTP cache, which keeps a file that size.
+//
+// Not the Cache API: WebKit's Cache.put holds a whole response in the page's memory
+// before storing it (DOMCache::put), a second copy of the 160 MB pack on an iPhone
+// already near its memory limit; a file's writable stream takes each piece as it comes.
+// Storing needs FileSystemFileHandle.createWritable (Chrome 86, Firefox 111, Safari 26)
+// and Web Locks. Without them, in a private window, with storage full, or when a
+// storage call fails or doesn't answer within SETUP_MS, the pack comes from the network
+// as before.
+//
+// The pack goes into one buffer of its size, the only copy the page makes: the
+// engine's file system keeps that buffer (tools/build-web.sh), a failed or cut download
+// and a stored copy that reads short are read again into it, and the store writes
+// views of it. A byte stream (Chrome's downloads and stored files) is read with a BYOB
+// reader through one small reused buffer, so no chunk is made: chunks copied in would
+// be garbage the size of the pack that the page frees only seconds later, through the
+// engine's start.
+//
+// A stored pack counts only when its marker, written after the whole file was written,
+// closed and its size checked, names the size the page expects (GODOT_CONFIG.fileSizes)
+// and the file has that size; a download that ends early, fails or holds more is never
+// marked. Only the tab holding the lock writes or removes anything, so two tabs never
+// write one file. While this tab stores the pack it downloads it without a second copy
+// in the browser's HTTP cache, unless that cache already has one.
+//
+//   tiBuildFiles(build, env) -> {pack(name, size, progress), saving(), saved(), finish()}
+//     env: {storage, locks, canWrite, fetch, mark, warn} (navigator.storage and
+//     .locks, whether FileSystemFileHandle.createWritable exists, ...)
+//   tiLoadingLine(loading) -> the loading screen's line while the files come in
+//   tiAfterDownload(files, onStep) -> its step once they are in
+// tools/check_web_build_files.mjs runs these with stand-ins for the browser's.
+function tiBuildFiles(build, env) {
+	const FOLDER = 'grand-treasure-island-builds';
+	const LOCK = 'grand-treasure-island-build-files';
+	// Downloads, as the engine's own: 4 attempts, a second apart.
+	const ATTEMPTS = 4;
+	// A storage call that hasn't answered in this long counts as no storage, so the
+	// load never waits on one.
+	const SETUP_MS = 2000;
+	// A stored copy's read fails once no piece has come for this long of the time the
+	// page was free to take one (env.stallMs, for tests, shortens it).
+	const STALL_MS = env.stallMs || 10000;
+	// The BYOB reader's buffer, and the store's largest write.
+	const SCRATCH = 1024 * 1024;
+	const WRITE_MAX = 8 * 1024 * 1024;
+	let store = null;
+	let fromDevice = false;
+	let setupOver = false;
+	let unlock = () => {};
+	const within = (promise, fallback) => Promise.race([promise, new Promise((resolve) => setTimeout(() => resolve(fallback), SETUP_MS))]);
+
+	// This build's folder, and whether this tab writes: it holds the lock until finish().
+	const cache = within((async () => {
+		if (!env.canWrite || !env.locks || !env.storage || !env.storage.getDirectory) return null;
+		const root = await env.storage.getDirectory();
+		const top = await root.getDirectoryHandle(FOLDER, {create: true});
+		const dir = await top.getDirectoryHandle(build, {create: true});
+		const owner = await new Promise((resolve) => {
+			env.locks.request(LOCK, {ifAvailable: true}, (lock) => {
+				// A lock granted after SETUP_MS goes straight back.
+				resolve(Boolean(lock) && !setupOver);
+				return lock && !setupOver ? new Promise((release) => { unlock = release; }) : null;
+			}).catch(() => resolve(false));
+		});
+		return {top, dir, owner};
+	})().catch((err) => {
+		env.warn('No build cache on this device:', err);
+		return null;
+	}), null).then((c) => {
+		setupOver = true;
+		if (!c) env.mark('cache:none');
+		return c;
+	});
+
+	// The stored pack NAME, a File of SIZE bytes, or null.
+	function storedFile(name, size) {
+		return within((async () => {
+			const c = await cache;
+			if (!c) return null;
+			try {
+				const marker = await (await c.dir.getFileHandle(name + '.complete')).getFile();
+				if (await marker.text() !== String(size)) return null;
+				const file = await (await c.dir.getFileHandle(name)).getFile();
+				return file.size === size ? file : null;
+			} catch (err) {
+				return null;
+			}
+		})(), null);
+	}
+
+	// Starts this tab's store of NAME (SIZE bytes), after the one before it ends, or
+	// returns null when this tab doesn't write: write(view) queues each piece of the
+	// pack's buffer as it arrives, and end(complete) closes the file, checks its size
+	// and only then writes its marker. Anything else removes the file and its marker.
+	async function startStore(name, size) {
+		const c = await cache;
+		if (!c || !c.owner) return null;
+		const previous = store;
+		const queue = [];
+		let state = 'open';
+		let poke = () => {};
+		const stop = (next) => {
+			if (state !== 'open') return;
+			state = next;
+			if (next === 'failed') queue.length = 0;
+			poke();
+		};
+		const written = (async () => {
+			if (previous) await previous.done;
+			await c.dir.removeEntry(name + '.complete').catch(() => {});
+			const handle = await c.dir.getFileHandle(name, {create: true});
+			const writable = await handle.createWritable();
+			let bytes = 0;
+			try {
+				for (;;) {
+					if (state === 'failed') throw new Error('the download failed');
+					if (queue.length > 0) {
+						// Adjacent pieces go to the disk together, up to WRITE_MAX: the engine's
+						// start keeps the page busy for seconds, with time for few writes.
+						let view = queue.shift();
+						while (queue.length > 0 && queue[0].buffer === view.buffer
+							&& queue[0].byteOffset === view.byteOffset + view.byteLength
+							&& view.byteLength + queue[0].byteLength <= WRITE_MAX) {
+							view = new Uint8Array(view.buffer, view.byteOffset, view.byteLength + queue.shift().byteLength);
+						}
+						await writable.write(view);
+						bytes += view.byteLength;
+					} else if (state === 'complete') {
+						break;
+					} else {
+						await new Promise((resolve) => { poke = resolve; });
+					}
+				}
+				if (bytes !== size) throw new Error(bytes + ' of ' + size + ' bytes');
+				await writable.close();
+			} catch (err) {
+				await writable.abort().catch(() => {});
+				throw err;
+			}
+			if ((await handle.getFile()).size !== size) throw new Error('the stored file has another size');
+			const marker = await (await c.dir.getFileHandle(name + '.complete', {create: true})).createWritable();
+			await marker.write(String(size));
+			await marker.close();
+		})();
+		const entry = {pending: true};
+		entry.done = written.then(() => {
+			env.mark('cache:pack:stored');
+			return true;
+		}, async (err) => {
+			state = 'failed';
+			queue.length = 0;
+			await c.dir.removeEntry(name + '.complete').catch(() => {});
+			await c.dir.removeEntry(name).catch(() => {});
+			env.mark('cache:pack:not_stored');
+			env.warn('The game was not stored on this device:', name, err);
+			return false;
+		}).then((ok) => {
+			entry.pending = false;
+			return ok;
+		});
+		store = entry;
+		return {
+			write(view) {
+				if (state !== 'open') return;
+				queue.push(view);
+				poke();
+			},
+			end(complete) {
+				stop(complete ? 'complete' : 'failed');
+			},
+		};
+	}
+
+	// Reads STREAM, which must hold exactly BUFFER's length, into BUFFER, calling
+	// onBytes(bytes so far, the piece's length) after each piece. A byte stream is read
+	// with a BYOB reader through one small buffer that each read hands back; other
+	// streams' chunks are copied in. With STALL, a read fails once no piece has come for
+	// STALL ms of the time the page was free to take one: a watchdog ticks every tenth of
+	// it, and a tick that comes late (the page was busy, as during the engine's setup on a
+	// slow phone) counts only its own tenth and can't fail the read, so a busy page never
+	// gives up on data that is on its way; only an on-time tick, after a whole tick of
+	// free time with no piece, does.
+	async function readInto(stream, buffer, onBytes, stall) {
+		let byob = null;
+		try {
+			byob = stream.getReader({mode: 'byob'});
+		} catch (err) {
+			byob = null;
+		}
+		const reader = byob || stream.getReader();
+		let scratch = byob ? new ArrayBuffer(SCRATCH) : null;
+		let offset = 0;
+		let pieces = 0;
+		let fail = null;
+		const stalled = new Promise((resolve, reject) => { fail = reject; });
+		stalled.catch(() => {});
+		let watchdog = null;
+		if (stall) {
+			const tick = stall / 10;
+			let quiet = 0;
+			let seen = 0;
+			let last = Date.now();
+			watchdog = setInterval(() => {
+				const now = Date.now();
+				const late = now - last > 2 * tick;
+				last = now;
+				if (pieces !== seen) {
+					seen = pieces;
+					quiet = 0;
+					return;
+				}
+				quiet += tick;
+				if (!late && quiet >= stall) fail(new Error('no data for ' + stall + ' ms'));
+			}, tick);
+		}
+		try {
+			for (;;) {
+				const read = byob ? byob.read(new Uint8Array(scratch)) : reader.read();
+				const {done, value} = await (watchdog ? Promise.race([read, stalled]) : read);
+				pieces += 1;
+				if (byob && value) scratch = value.buffer;
+				if (done) break;
+				if (offset + value.byteLength > buffer.byteLength) throw new Error('more than the expected ' + buffer.byteLength + ' bytes');
+				buffer.set(value, offset);
+				offset += value.byteLength;
+				onBytes(offset, value.byteLength);
+			}
+		} catch (err) {
+			reader.cancel().catch(() => {});
+			throw err;
+		} finally {
+			clearInterval(watchdog);
+		}
+		if (offset !== buffer.byteLength) throw new Error(offset + ' of ' + buffer.byteLength + ' bytes');
+	}
+
+	// The download. While this tab stores the pack: the browser's HTTP cache copy when
+	// it has one ('only-if-cached' never goes to the network), else the network without
+	// a second copy in that cache ('no-store'); if the store then fails, the next
+	// launch downloads again where the HTTP cache might have kept the pack. Otherwise a
+	// plain fetch, as before.
+	async function download(name, storing, attempt) {
+		if (!storing) return env.fetch(name);
+		if (attempt === 1) {
+			try {
+				const cached = await env.fetch(name, {cache: 'only-if-cached', mode: 'same-origin'});
+				if (cached.ok && cached.body) return cached;
+			} catch (err) {
+				// Not in the HTTP cache.
+			}
+		}
+		return env.fetch(name, {cache: 'no-store'});
+	}
+
+	// The pack, in one buffer of its size (above): from this device's copy, or
+	// downloaded and stored as it comes. progress(bytes, 'device' or 'network').
+	async function pack(name, size, progress) {
+		const buffer = new Uint8Array(size);
+		const file = await storedFile(name, size);
+		if (file) {
+			try {
+				progress(0, 'device');
+				await readInto(file.stream(), buffer, (bytes) => progress(bytes, 'device'), STALL_MS);
+				fromDevice = true;
+				env.mark('cache:pack:device');
+				return buffer.buffer;
+			} catch (err) {
+				env.warn('The stored game did not read; downloading it:', err);
+			}
+		}
+		const c = await cache;
+		const storing = Boolean(c && c.owner);
+		for (let attempt = 1; ; attempt += 1) {
+			let writer = null;
+			try {
+				progress(0, 'network');
+				const response = await download(name, storing, attempt);
+				if (!response.ok || !response.body) throw new Error('HTTP ' + response.status);
+				writer = storing ? await startStore(name, size) : null;
+				await readInto(response.body, buffer, (bytes, length) => {
+					progress(bytes, 'network');
+					if (writer) writer.write(buffer.subarray(bytes - length, bytes));
+				});
+				if (writer) writer.end(true);
+				return buffer.buffer;
+			} catch (err) {
+				if (writer) writer.end(false);
+				if (attempt >= ATTEMPTS) throw new Error('Failed loading file \'' + name + '\': ' + (err instanceof Error ? err.message : err));
+				await new Promise((resolve) => setTimeout(resolve, 1000));
+			}
+		}
+	}
+
+	// Whether this tab is still writing this device's copy, and when it is done.
+	const saving = () => Boolean(store && store.pending);
+	const saved = () => (store ? store.done.then(() => {}) : Promise.resolve());
+
+	// Once the page has the pack: waits for this tab's store and, when this build's pack
+	// is stored (that store succeeded, or it came from the device), removes every other
+	// build's folder; then lets the lock go.
+	async function finish() {
+		const c = await cache;
+		try {
+			const stored = store ? await store.done : fromDevice;
+			if (c && c.owner && stored) {
+				const others = [];
+				for await (const name of c.top.keys()) {
+					if (name !== build) others.push(name);
+				}
+				for (const name of others) await c.top.removeEntry(name, {recursive: true}).catch(() => {});
+				if (others.length > 0) env.mark('cache:removed_other_builds');
+			}
+		} catch (err) {
+			env.warn('Build cache clean-up failed:', err);
+		} finally {
+			unlock();
+		}
+	}
+
+	return {pack, saving, saved, finish};
+}
+
+// The loading screen's step once every byte is in: onStep('saving') while this tab
+// still writes this device's copy of the pack, then onStep('starting') as soon as the
+// copy is written, though the engine may still be getting ready; else
+// onStep('starting') at once.
+function tiAfterDownload(files, onStep) {
+	if (!files || !files.saving()) {
+		onStep('starting');
+		return;
+	}
+	onStep('saving');
+	files.saved().then(() => onStep('starting'));
+}
+
+// The loading screen's line while the engine and the game's data come in, from
+// loading = {started, engine: {loaded, total}, pack: {loaded, total, from} or null}:
+// started once either reports, the engine's own downloads (its WebAssembly, and the
+// pack too when the page can't load it itself, pack null), and the page's pack, from
+// 'device', 'network' or null while not yet known. "Loading the game from this device"
+// when the pack comes from this device's copy, "Downloading the game" when it comes
+// over the network (or through the engine's loader), and "Loading the game" while that
+// isn't known yet: the line never stays blank once anything reports, and never says
+// it downloads what comes from the device. With how far along it is in percent of the
+// files' size once the source and every size are known. No megabytes: the server
+// compresses the files, so less than their size travels, and how much less isn't known
+// until the download ends. Null before anything reports.
+function tiLoadingLine(loading) {
+	if (!loading.started) return null;
+	const parts = [loading.engine, loading.pack].filter(Boolean);
+	const from = loading.pack ? loading.pack.from : 'network';
+	const step = from === 'device' ? 'Loading the game from this device' : from === 'network' ? 'Downloading the game' : 'Loading the game';
+	// Like the game's lines (keep_last_words_together, game/scripts/main.gd), the last
+	// two words keep together.
+	const words = step.replace(/ (\S+)$/, '\u00a0$1');
+	const known = from !== null && parts.every((part) => part.total > 0);
+	const total = parts.reduce((sum, part) => sum + part.total, 0);
+	const loaded = parts.reduce((sum, part) => sum + Math.min(part.loaded, part.total), 0);
+	return {
+		step, known, loaded, total,
+		done: known && loaded >= total,
+		text: known ? words + ': ' + Math.floor((100 * loaded) / total) + '%' : words + '…',
+	};
+}
+		</script>
+		<script>
 const GODOT_CONFIG = $GODOT_CONFIG;
 const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
@@ -257,11 +631,17 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
 	let phase = 'download';
 	let downloadComplete = false;
-	let downloadShown = false;
+	let loadingShown = '';
 	const mark = (name) => performance.mark('TI_BOOT:' + name);
 	// The start of the game's loading-step lines (LOADING_STEP_PRINT, game/scripts/main.gd).
 	const STEP_PRINT = 'LOADING_STEP ';
-	const MB = 1e6;
+	// How long the engine's start waits for this device's copy to be written (below).
+	const STORE_WAIT_MS = 3000;
+	// The large files so far (tiLoadingLine): what the engine's own loader fetches and
+	// the page's pack, with where the pack comes from.
+	const loading = {started: false, engine: {loaded: 0, total: 0}, pack: {loaded: 0, total: 0, from: null}};
+	// This build's pack, from this device or the network (tiBuildFiles), once loading starts.
+	let files = null;
 
 	function showNotice(text) {
 		statusOverlay.style.visibility = 'visible';
@@ -279,20 +659,26 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		mark('step:' + text);
 	}
 
-	// While the game downloads (the engine and the game's data): the bytes so far, of
-	// the total the exporter wrote down, over the progress bar. The count keeps to one
-	// line (no-break spaces), so a narrow phone breaks the line after "game:"; like
-	// the game's lines (keep_last_words_together, game/scripts/main.gd), the others
-	// keep their last two words together.
-	function showDownload(current, total) {
+	// While the engine and the game's data come in, the line tiLoadingLine gives, over
+	// the progress bar.
+	function showLoading() {
+		if (phase !== 'download') return;
+		const line = tiLoadingLine(loading);
+		if (!line) return;
 		statusNotice.style.display = 'block';
-		statusNotice.textContent = total > 0
-			? 'Downloading the game: ' + Math.round(current / MB) + '\u00a0of\u00a0' + Math.round(total / MB) + '\u00a0MB'
-			: 'Downloading the\u00a0game…';
-		if (!downloadShown) {
-			downloadShown = true;
-			mark('step:Downloading the game');
+		if (line.known) {
+			statusProgress.value = line.loaded;
+			statusProgress.max = line.total;
+		} else {
+			statusProgress.removeAttribute('value');
+			statusProgress.removeAttribute('max');
 		}
+		statusNotice.textContent = line.text;
+		if (loadingShown !== line.step) {
+			loadingShown = line.step;
+			mark('step:' + line.step);
+		}
+		if (line.done) downloaded();
 	}
 
 	// Godot's boot splash shows while the game downloads; then the game's own
@@ -306,10 +692,30 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		}
 	}
 
-	// The download is complete: the engine starts (its WebAssembly made ready, its
-	// setup and its load of the game's main scene, up to the game's first line).
-	function preparing() {
+	// Every byte is in. While this tab still writes this device's copy of the pack, the
+	// line says so (the engine's start waits for it, below), until the copy is written;
+	// then the engine starts (tiAfterDownload).
+	function downloaded() {
+		if (!downloadComplete) {
+			downloadComplete = true;
+			mark('download_complete');
+		}
 		if (phase !== 'download') return;
+		tiAfterDownload(files, (step) => {
+			if (step === 'saving' && phase === 'download') {
+				phase = 'saving';
+				showStep('Saving the game on this\u00a0device…');
+				showChest();
+			} else if (step === 'starting') {
+				preparing();
+			}
+		});
+	}
+
+	// The engine starts (its WebAssembly made ready, its setup and its load of the
+	// game's main scene, up to the game's first line).
+	function preparing() {
+		if (phase !== 'download' && phase !== 'saving') return;
 		if (!downloadComplete) {
 			downloadComplete = true;
 			mark('download_complete');
@@ -329,18 +735,13 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
 	const engine = new Engine({
 		...GODOT_CONFIG,
+		// What the engine's own loader fetches: its WebAssembly, and the pack when the page
+		// can't load the pack itself.
 		onProgress(current, total) {
-			if (phase !== 'download') return;
-			if (current > 0 && total > 0) {
-				statusProgress.value = current;
-				statusProgress.max = total;
-				showDownload(current, total);
-				if (current >= total) preparing();
-			} else {
-				statusProgress.removeAttribute('value');
-				statusProgress.removeAttribute('max');
-				showDownload(0, 0);
-			}
+			loading.started = true;
+			loading.engine.loaded = current;
+			loading.engine.total = total;
+			showLoading();
 		},
 		onPrint(...args) {
 			console.log(...args);
@@ -408,15 +809,50 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 	} else {
 		statusOverlay.style.visibility = 'visible';
 		statusProgress.style.display = 'block';
-		const pack = GODOT_CONFIG.mainPack || GODOT_CONFIG.executable + '.pck';
+		const executable = GODOT_CONFIG.executable;
+		const pack = GODOT_CONFIG.mainPack || executable + '.pck';
+		// The pack's size, as the exporter wrote it down; a stored copy must have it.
+		const packSize = (() => {
+			const size = (GODOT_CONFIG.fileSizes || {})[pack];
+			return Number.isSafeInteger(size) && size > 0 ? size : 0;
+		})();
 		mark('engine_init_begin');
+		files = tiBuildFiles(executable, {
+			storage: navigator.storage,
+			locks: navigator.locks,
+			canWrite: typeof FileSystemFileHandle === 'function' && 'createWritable' in FileSystemFileHandle.prototype,
+			fetch: (file, init) => fetch(file, init),
+			mark,
+			warn: (...args) => console.warn(...args),
+		});
+		// The page loads the pack itself, into the one buffer the engine's file system
+		// then keeps; without its size, the engine's loader downloads it as before.
+		let packLoaded;
+		if (packSize > 0) {
+			packLoaded = files.pack(pack, packSize, (bytes, from) => {
+				loading.started = true;
+				loading.pack.loaded = bytes;
+				loading.pack.total = packSize;
+				loading.pack.from = from;
+				showLoading();
+			}).then((buffer) => engine.preloadFile(buffer, pack));
+		} else {
+			loading.pack = null;
+			packLoaded = engine.preloadFile(pack, pack);
+		}
 		// Same parallel init/download as startGame, but defer callMain until the
 		// DOM status has had a rendering opportunity. Engine.load alone resolves
 		// at response headers and is NOT proof of a completed WASM download.
 		Promise.all([
-			engine.init(GODOT_CONFIG.executable).then(() => mark('engine_init_end')),
-			engine.preloadFile(pack, pack).then(() => mark('pack_loaded')),
+			engine.init(executable).then(() => mark('engine_init_end')),
+			packLoaded.then(() => mark('pack_loaded')),
 		]).then(async () => {
+			downloaded();
+			// This device's copy of the pack, if this tab writes one, is finished before the
+			// engine starts: its start keeps the page too busy to write until play, and a tab
+			// closed (or a phone out of memory) during the load would lose the copy. A slow
+			// disk gets STORE_WAIT_MS, then finishes during the start.
+			await Promise.race([files.finish(), new Promise((resolve) => setTimeout(resolve, STORE_WAIT_MS))]);
 			preparing();
 			// rAF callbacks precede paint. Yield through a subsequent frame before
 			// synchronous game startup; actual screencast frames verify the result.
@@ -428,7 +864,10 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			await engine.start({args: ['--main-pack', pack, ...(GODOT_CONFIG.args || [])]});
 			mark('game_start_resolved');
 			// Engine startup is not game readiness: only PLAY_READY hides the DOM.
-		}).catch(displayFailureNotice);
+		}).catch((err) => {
+			files.finish();
+			displayFailureNotice(err);
+		});
 	}
 }());
 		</script>
