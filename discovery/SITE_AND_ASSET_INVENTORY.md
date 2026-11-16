@@ -388,6 +388,19 @@ All are used round the whole island: ten segments and seven closures.
 | Young planting (`young_planting`) | The Mersea promenade's mulch on both sides | | From the owner's video, Nov 2026, crossed cards; not yet reviewed | Rate |
 | Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026, with its own baked far impostor; not yet reviewed | Rate |
 
+### Breakwater birds
+
+[`game/scripts/world/breakwater_birds.gd`](../game/scripts/world/breakwater_birds.gd), built
+under the ferry breakwater (OSM w1011830371) by `ferry_terminal.gd` (2026-11-15). The owner
+named the three birds and their two poses each; forms and colours are production inference
+from public species photos. Placed by a seeded cluster rule along the breakwater's cap.
+
+| Asset | Where used | Level | Evidence | Next level |
+|---|---|---|---|---|
+| Brown pelican (bill out, bill tucked) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
+| Double-crested cormorant (wings folded, wings spread to dry) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
+| Western gull (standing, sitting) | the ferry breakwater's cap | | Author's own, not yet reviewed | Rate |
+
 ### Player
 
 | Asset | Where used | Level | Evidence | Next level |

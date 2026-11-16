@@ -134,6 +134,16 @@ Limits:
 - The visual review flagged the rhythm of the breakwater's base.
 - The boat's compartments, its starboard side and the bay-facing faces are inferred. The owner approved mirroring the port side to starboard.
 
+## Breakwater birds (`game/scripts/world/breakwater_birds.gd`, 2026-11-15)
+
+- Only on the ferry terminal's breakwater (OSM w1011830371), the wall the dated 2021 photos show with birds along its cap. The island's own riprap edge, which OSM also tags `man_made=breakwater`, and the north tip's rock jetty (w26767328) have none.
+- Static scenery: no idle motion, no flight, no sound and no collision. The breakwater lies 79 to 93 m off the float, the pier and the island's edge, beyond the 10 m a lifted player may float from the shore (`recovery_controller.gd`), and a car sinks at the shore, so nothing reaches them or walks through them. If a player ever could, birds that take off as one comes near would be the smallest follow-up.
+- One adult plumage per species: a western gull, a double-crested cormorant and a brown pelican with a dark hindneck. No juveniles, California gulls or Brandt's cormorants (owner, 2026-11-15: two models per bird).
+- No droppings on the cap, though real roosts are whitewashed: that would be a decal or a change to the breakwater's own material.
+- Most face into the street trees' default wind direction (`vegetation_wind.gdshaderinc`), not any live wind.
+- Past 30 to 40 m from the camera their legs and feet draw in to a point inside the body, so no sub-pixel legs sparkle; every gameplay view is farther than that.
+- Cost on the dev machine's Radeon 780M (1440 x 900, the birds shown and hidden in alternating blocks in one run, 2026-11-16): in Forward+ the spawn 51.3 against 50.9 ms (within its noise), the ferry plaza's shore 7.26 against 7.20 ms, standing on the cap among them 4.75 against 4.67 ms; in the web's Compatibility renderer 39.2 against 39.5, 4.05 against 4.05 and 3.41 against 3.33 ms. 12, 18 and 30 more draw calls there (six MultiMeshes in each pass that sees them) and about 62,500 instanced triangles. No texture. Not measured on the Mac or in a browser.
+
 ## Drivable cars (`game/scripts/vehicles/`, 2026-11-08)
 
 - There's no animation for getting in or out: the player appears in the seat, and beside the door (owner: none needed). At the wheel the driver is the chest avatar's own parts, a little smaller, with no legs and no steering (`car_driver.gd`), drawn only at the hero level: past 13 to 15 m, and on the web, the near level's opaque glass hides it (2026-11-12). From the default chase camera, behind and above, the roof and the dark rear glass hide the driver in every body (the van has no rear windows): it shows from above as a drive starts and through the side glass on a mouse glance (owner capture set, 2026-11-13). The round-6 visual review did not check the van's or the utility truck's driver (2026-11-13).

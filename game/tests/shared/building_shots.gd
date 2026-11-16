@@ -70,6 +70,9 @@ extends SceneTree
 ##   "frame_time_layer": "clutter" (a street-detail layer that is on) the frames
 ##   are timed with that layer drawn and hidden, in three alternating blocks each
 ##   so a drift in the machine's load falls on both: one FRAME_TIME line per state.
+##   "frame_time_node": "PATH" (a Node3D under the world root, such as
+##   "ContextWorld/FerryTerminal/FerryTerminal/Breakwater/Birds") does the same for
+##   that node.
 ##   A moving view may add "frame_time_frames" too: the frames are timed after
 ##   its last step, from the camera in use then (in a car, the driving camera).
 ##   A still view may add "resolutions": ["50", ...] (GraphicsSettings resolution
@@ -793,7 +796,7 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 		for _i in 16:
 			await process_frame
 	if error == "" and view.has("frame_time_frames"):
-		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename(), str(view.get("frame_time_layer", "")))
+		error = await _frame_time(view.frame_time_frames, path.get_file().get_basename(), str(view.get("frame_time_layer", "")), str(view.get("frame_time_node", "")))
 	if error == "" and view.has("resolutions"):
 		error = await _shoot_resolutions(view.resolutions, path)
 	if error == "" and view.has("measure_graphics"):
@@ -996,16 +999,23 @@ func _measure_graphics(frames: Variant, label: String) -> String:
 ## Holds the view's camera for `frames` more drawn frames, with vsync and the
 ## frame cap off, and prints the wall time between them as a FRAME_TIME line
 ## (mean, median, 95th percentile and the mean's fps, and the last frame's
-## draw calls and primitives). Returns an error, or "".
-func _frame_time(frames: Variant, label: String, layer := "") -> String:
+## draw calls and primitives). With a street-detail `layer` that is on, or a
+## `node_path` under the world root, they are timed with it drawn and hidden.
+## Returns an error, or "".
+func _frame_time(frames: Variant, label: String, layer := "", node_path := "") -> String:
 	if not _numbers([frames], 1) or float(frames) != floorf(float(frames)) or float(frames) < 10.0 or float(frames) > 3000.0:
 		return "frame_time_frames must be a whole number from 10 to 3000"
+	if node_path != "":
+		var node := _h.world.get_node_or_null(node_path) as Node3D
+		if node == null:
+			return "frame_time_node must name a Node3D under the world root: %s" % node_path
+		return await _frame_time_shown_hidden(int(frames), label, node, "node=" + node_path)
 	if layer != "":
 		if not layer in WorldLoader.STREET_DETAIL_LAYERS:
 			return "frame_time_layer must be a street-detail layer: %s" % layer
 		# Only while the layer is on (the street-detail-on pass); off, time it plainly.
 		if layer in _h.world.get_street_detail_layers():
-			return await _frame_time_layer(int(frames), label, layer)
+			return await _frame_time_shown_hidden(int(frames), label, _h.world.street_detail_layer(layer), "layer=" + layer)
 	var uncapped := _uncap_frames()
 	# Let the change and any first-use work settle before timing.
 	var stats := _frame_stats(await _frame_times(int(frames), 30))
@@ -1019,11 +1029,11 @@ func _frame_time(frames: Variant, label: String, layer := "") -> String:
 	return ""
 
 
-## Times `frames` drawn frames with a street-detail layer drawn and as many with
-## it hidden (its collision stays), in three alternating blocks each, and prints
-## one FRAME_TIME line per state with the last frame's draw calls and primitives.
-func _frame_time_layer(frames: int, label: String, layer: String) -> String:
-	var node := _h.world.street_detail_layer(layer)
+## Times `frames` drawn frames with `node` (a street-detail layer, or any node of
+## the world) drawn and as many with it hidden (its collision stays), in three
+## alternating blocks each, and prints one FRAME_TIME line per state, `tag`
+## naming what was hidden, with the last frame's draw calls and primitives.
+func _frame_time_shown_hidden(frames: int, label: String, node: Node3D, tag: String) -> String:
 	var visible := node.visible
 	var uncapped := _uncap_frames()
 	var blocks := 3
@@ -1045,8 +1055,8 @@ func _frame_time_layer(frames: int, label: String, layer: String) -> String:
 	_restore_frames(uncapped)
 	for state: String in ["shown", "hidden"]:
 		var stats := _frame_stats(shown_times if state == "shown" else hidden_times)
-		print("FRAME_TIME %s layer=%s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f draw_calls=%d primitives=%d method=%s adapter=%s" % [
-			label, layer, state, stats.frames, stats.mean, stats.median, stats.p95, 1000.0 / stats.mean, info[state][0], info[state][1],
+		print("FRAME_TIME %s %s state=%s frames=%d mean_ms=%.2f median_ms=%.2f p95_ms=%.2f mean_fps=%.1f draw_calls=%d primitives=%d method=%s adapter=%s" % [
+			label, tag, state, stats.frames, stats.mean, stats.median, stats.p95, 1000.0 / stats.mean, info[state][0], info[state][1],
 			RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(),
 		])
 	return ""

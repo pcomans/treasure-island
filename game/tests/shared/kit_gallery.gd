@@ -31,8 +31,14 @@ extends SceneTree
 ## the camera's left) from straight behind the camera, so it rakes across
 ## whatever faces the camera.
 ## --only PREFIX[,PREFIX...] shoots only the views whose names start so.
+## "kit" names the kit whose preview() builds the items: "street_clutter" (the
+## default) or "birds" (breakwater_birds.gd, the breakwater's resting birds: a
+## prop is one of its POSES, one detail level, params may set "scale").
 
-const KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const KITS := {
+	"street_clutter": preload("res://game/scripts/world/street_clutter_kit.gd"),
+	"birds": preload("res://game/scripts/world/breakwater_birds.gd"),
+}
 const MAIN_SCENE := "res://game/scenes/main.tscn"
 
 
@@ -65,7 +71,12 @@ func _run() -> void:
 		_fail(lighting)
 		return
 	stage.add_child(_ground())
-	var kit := KIT.new()
+	var kit_name := str(plan.get("kit", "street_clutter"))
+	if not KITS.has(kit_name):
+		_fail("unknown kit %s (%s)" % [kit_name, ", ".join(PackedStringArray(KITS.keys()))])
+		return
+	# Untyped: each kit has its own preview(prop, params, level, placement).
+	var kit: Variant = (KITS[kit_name] as GDScript).new()
 	var item_nodes: Array[Node3D] = []
 	for item: Variant in plan.items:
 		if not item is Dictionary or not item.get("prop") is String or not item.get("xz") is Array:
