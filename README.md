@@ -11,7 +11,9 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 ## Play it
 
 - **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
-- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip) (a zip of about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
+- **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB). Apple hasn't checked this build (it isn't notarized). Installed through the [itch app](https://itch.io/app), it should open without the macOS warning. Downloaded in the browser, macOS blocks it the first time you open it: click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest), under Assets, as `grand-treasure-island-mac-build-<number>.zip`.
+- **On Linux:** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Linux build.
+- **On Windows (64-bit):** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Windows build (about 215 MB). Downloaded in the browser, unzip it and run `treasure-island.exe`; its `.pck` must stay beside it. The build isn't signed, so the first time you start it Windows may show "Windows protected your PC": click **More info**, then **Run anyway**. Installed through the [itch app](https://itch.io/app), it should start without that warning. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest) as `grand-treasure-island-windows-build-<number>.zip`. No Windows machine has played it yet: CI starts it on Windows and loads the island, but has never seen it drawn on a Windows graphics card.
 
 The downloadable version looks nicer.
 
@@ -156,25 +158,33 @@ when a building counts as done.
 
 ### Build for the Mac
 
-Every push to `main` that changes more than documentation (see
-[Where the builds go](#where-the-builds-go)) builds the Mac app on GitHub Actions
-([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
-headless, so CI never exercises the game's rendering on a Mac. Once a GitHub
-Apple Silicon Mac has launched the app and loaded the island, the build becomes
-a new release of its own, unless a newer build has overtaken it. This link always
-gets the newest release:
+Players get the game from the [itch.io page](https://phppco.itch.io/grand-treasure-island), which CI fills with the same builds; on GitHub, https://github.com/pcomans/treasure-island/releases/latest always shows the newest release.
 
-https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
+Every push to `main` that changes more than documentation (see
+[Where the builds go](#where-the-builds-go)) builds the Mac app, with the Linux
+and Windows builds of the same commit, on GitHub Actions
+([mac-build.yml](.github/workflows/mac-build.yml)). Its launch checks are
+headless (Linux on the build runner, the Mac app on an Apple Silicon Mac, the
+Windows build on a Windows runner), so CI never exercises the game's rendering
+on a Mac or a Windows graphics card. Once the Mac app has loaded the island
+there, the build becomes a new release of its own, unless a newer build has
+overtaken it; the Windows build joins it when it loaded the island on the
+Windows runner, and is left out otherwise. This page always shows the newest
+release, whose Mac app is `grand-treasure-island-mac-build-<number>.zip`:
+
+https://github.com/pcomans/treasure-island/releases/latest
 
 The [releases page](https://github.com/pcomans/treasure-island/releases) lists
 each build by build number, date and commit, and older builds stay there.
-Downloaded with curl or `gh`, the zip has no quarantine flag, so the unzipped app
-opens directly:
+Downloaded with `gh` (or curl, with the file's address from the release page), the
+zip has no quarantine flag, so the unzipped app opens directly:
 
 ```sh
-curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
+gh release download --pattern 'grand-treasure-island-mac-build-*.zip' --repo pcomans/treasure-island
 ```
+
+The zip holds `Grand Treasure Island.app`. It keeps the options chosen in any
+earlier build, so an older `Treasure Island First Playable.app` can simply go.
 
 A release whose notes say "Signed and notarized (Developer ID)" opens directly
 after a browser download. Every other build, from CI or `tools/build-mac.sh`, is
@@ -189,12 +199,13 @@ the top of [mac-build.yml](.github/workflows/mac-build.yml) lists them with the
 To build it in the devcontainer instead:
 
 ```sh
-tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip
+tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip and build/windows/treasure-island-windows-<commit>.zip
 ```
 
-This exports the macOS build, checks it contains only game files (no research or
-evidence folders, no images outside `game/resources/`), and launches a Linux build of the same commit to confirm the island
-loads.
+This exports the macOS build and the Linux and Windows builds of the same
+commit, checks that each contains only game files (no research or evidence
+folders, no images outside `game/resources/`), and launches the Linux build to
+confirm the island loads. Nothing in the container can run the Windows build.
 
 Desktop builds (this and `tools/build-linux.sh`) first bake the island with
 `tools/prebuild-static-world.sh native` and load that baked world at startup
@@ -202,24 +213,64 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+At startup the window shows the engine's boot splash while Godot starts, then the
+loading screen, which covers the island until play and names the step under way:
+**Loading the island…**, **Setting up the island…**, **Compiling shaders…**, then
+**Rendering reflections…** (`LOADING_STEPS` in `game/scripts/main.gd`). The
+island's load and the reflections add a smaller, dimmer note, as on a first launch
+they also compile shaders; a run that builds the island from the generated sources
+shows **Building the island…** first. [KNOWN_ISSUES](KNOWN_ISSUES.md) lists what
+the loading screen can't show.
+
 ### Where the builds go
 
 Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
-has two files, built and checked from the same commit, and these links always get
-the newest:
+has three files, built and checked from the same commit and named after the game
+and the build number (two, when the Windows build failed its launch check: the
+Mac and Linux builds never wait on it, and the notes then say "Windows build
+left out: its launch check failed"), and
+https://github.com/pcomans/treasure-island/releases/latest always shows the
+newest release:
 
-- the Mac app: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-- the Linux build: https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
-  (unpack it and run the `.x86_64` program in its `treasure-island-linux` folder;
-  its `.pck` must stay beside it)
+- the Mac app, `grand-treasure-island-mac-build-<number>.zip`;
+- the Linux build, `grand-treasure-island-linux-build-<number>.tar.gz` (unpack it
+  and run the `.x86_64` program in its `treasure-island-linux` folder; its `.pck`
+  must stay beside it);
+- the Windows build (64-bit), `grand-treasure-island-windows-build-<number>.zip`
+  (unzip it and run `treasure-island.exe` in its `treasure-island-windows` folder;
+  its `.pck` must stay beside it).
 
-The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
-the Mac app, with the same sounds.
+The number is the release's build number, as in its title and on itch.io; the
+release's tag and title also carry the commit's date and short hash. Older
+releases keep the names `treasure-island-mac.zip` and `treasure-island-linux.tar.gz`
+and have no Windows build.
+
+The Linux and Windows builds are the ones `tools/build-mac.sh` exports next to
+the Mac app, with the same sounds; their data packs come out byte for byte the
+same. The Windows `.exe` is Godot's own Windows release template, with the
+game's icon and version information set by Godot's exporter; it is not
+code-signed (a code-signing certificate would be a purchase). Before the
+release, the `windows` job unzips
+the build on a GitHub Windows runner and starts it headless: it must load the
+island, quit cleanly and write Godot's log in
+`%APPDATA%\Godot\app_userdata\Treasure Island First Playable`, the folder that
+keeps players' options. The runner has no GPU, so the `windows-render` job, for
+information only, starts it with rendering. There Vulkan fails (two error lines:
+no `VK_KHR_surface`), and Godot switches to Direct3D 12 on Microsoft's software
+renderer (WARP); in the first run, on 2026-11-16, the island loaded that way in
+about 3.5 minutes. The job's summary names the renderer Godot got and whether
+the island loaded. What no Windows machine has
+checked yet: drawing on a real graphics card (Vulkan, or Direct3D 12 where
+Vulkan is missing), mouse and keyboard, sound, saving the options, and
+SmartScreen's first-launch prompt.
+
+Players get all three from the [itch.io page](https://phppco.itch.io/grand-treasure-island)
+(below), with the GitHub releases as the alternative.
 
 Every build has a build number: the number of commits in its commit's history,
 from [`tools/build-number`](tools/build-number). A newer build of `main` always
-has a larger number, and the Mac app, the Linux build and the web build of one
-commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
+has a larger number, and the Mac app, the Linux and Windows builds and the web
+build of one commit share it (`tools/deploy-web.sh` prints it). A release's title gives it
 with the game's name, the commit's date and its short hash, such as "Grand
 Treasure Island, build 1918 (2026-11-16, 1a2b3c4)", and so does its tag, with
 the number padded to six digits so that tags sort by it:
@@ -239,10 +290,11 @@ publishes. Build numbers count every commit, so the commits of such pushes leave
 gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
 hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
-After each release, CI's `itch` job also puts both builds on the itch.io page
+After each release, CI's `itch` job also puts the builds on the itch.io page
 [phppco/grand-treasure-island](https://phppco.itch.io/grand-treasure-island): the
-Mac app, notarized or not, goes to channel `mac` and the Linux build to channel
-`linux`, with the build number (such as `1918`) as their version. The job uses
+Mac app, notarized or not, goes to channel `mac`, the Linux build to channel
+`linux` and the Windows build to channel `windows`, with the build number (such
+as `1918`) as their version. The job uses
 itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
 itch's own distribution site and checked against a pinned SHA-256. It pushes the
 exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
@@ -269,12 +321,12 @@ numbers gets its date and commit as its version). Such a run builds nothing:
 gh workflow run mac-build.yml --ref main -f itch_release_tag=<tag>   # such as build-001918-2026-11-16-1a2b3c4
 ```
 
-CI's `virustotal` job also submits both files of each release to
+CI's `virustotal` job also submits the files of each release to
 [VirusTotal](https://www.virustotal.com), and the `virustotal-notes` job adds
 each file's SHA-256 and VirusTotal report link to the release notes. The link is
 by hash, so it works while the analysis is still running; the notes say when
 that was the case. Anyone can check a download the same way:
-`shasum -a 256 treasure-island-mac.zip`, then open
+`shasum -a 256 grand-treasure-island-mac-build-<number>.zip`, then open
 `https://www.virustotal.com/gui/file/<that hash>`. The job uses VirusTotal's
 free public API, which is for non-commercial use and allows 4 requests a minute
 and 500 a day. VirusTotal shares uploaded files with its security partners, so
@@ -326,7 +378,7 @@ terms, see
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume, while the sun goes on following the clock; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
+- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at 12:30 island time on today's date on Treasure Island, so play always starts in early-afternoon light, and runs at real speed from there, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** jumps to the real date and time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ### More
@@ -346,8 +398,13 @@ terms, see
 pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
-Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load;
-then **Click to play** (on a touch screen, **Tap to play**) starts play: that
+Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load:
+the page names each step as it runs, the download with the megabytes so far
+(about 200 MB), **Starting the engine…**, the island's load and setup, the
+shaders compiled a group of the world at a time (**Compiling shaders: sky and
+player…** to **…the ferry and the view across the bay…**, the buildings counted
+in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
+reflections…**. Then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys
 move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
@@ -386,8 +443,9 @@ pointer-lock crash; this is not evidence that a Mac browser crashes.
 
 In the Linux development browser, mesh-size distance culling increased the
 observed spawn frame rate from13 to39–40FPS. Distant small building meshes can
-disappear; complete source inventory and collisions remain loaded. Initial
-world construction took about90seconds. These measurements used Chrome154,
+disappear; complete source inventory and collisions remain loaded. From a local
+server the page reached the start prompt in about 28 to 29 s, 19 to 20 s of it
+compiling shaders a group at a time and rendering reflections (2026-11-15). These measurements used Chrome154,
 AMD Radeon780M and headless Weston; they do not predict Mac performance.
 Traversal smoke checks required a test-only pointer-lock override because of
 the container crash. That override is not in the deployed game.

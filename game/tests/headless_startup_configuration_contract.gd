@@ -15,9 +15,19 @@ extends SceneTree
 ##     opposite until the owner's 2026-11-14 decision changed its premise.)
 ##   - The game's buses load from project.godot's bus layout: SFX, Ambience and UI,
 ##     each into Master (game/scripts/audio/sound.gd).
+##   - The game is called Grand Treasure Island (owner, 2026-11-15): project.godot's
+##     application name, which is also the main window's title. Players' saved
+##     settings (user://settings.cfg) stay in the folder Godot made for the game's
+##     earlier name: user:// is Godot's own default path for that name on this
+##     platform, and project.godot gives macOS its own (this run is not on a Mac).
 ##   - The building catalog's scores read (below).
 
 const SILENT_DRIVER := "Dummy"
+const GAME_NAME := "Grand Treasure Island"
+## Where players' settings are kept, in the data folder under Godot's own folder
+## (Godot on macOS and Windows, godot elsewhere): Godot's default user:// for the
+## game's earlier name.
+const USER_FOLDER := "app_userdata/Treasure Island First Playable"
 const BUSES := ["SFX", "Ambience", "UI"]
 const CATALOG_PATH := "res://discovery/facades/facade-recognition-catalog.json"
 const DEMOLISHED_PATH := "res://tools/config/demolished-buildings.json"
@@ -28,6 +38,16 @@ func _initialize() -> void:
 	var load_error := project_config.load("res://project.godot")
 	if load_error != OK:
 		_fail("Could not load project.godot: %s" % error_string(load_error))
+		return
+	var game_name := str(ProjectSettings.get_setting("application/config/name"))
+	if game_name != GAME_NAME or root.title != GAME_NAME:
+		_fail("The game is called %s, but project.godot's application/config/name is '%s' and the window title '%s'." % [GAME_NAME, game_name, root.title])
+		return
+	var godot_folder := "Godot" if OS.has_feature("macos") or OS.has_feature("windows") else "godot"
+	var settings_folder := OS.get_data_dir().path_join(godot_folder).path_join(USER_FOLDER)
+	var mac_folder := str(project_config.get_value("application", "config/custom_user_dir_name.macos", ""))
+	if OS.get_user_data_dir() != settings_folder or mac_folder != "Godot/" + USER_FOLDER:
+		_fail("Players' settings must stay in %s (user:// is %s) and, on macOS, in Godot/%s in its data folder (project.godot gives '%s')." % [settings_folder, OS.get_user_data_dir(), USER_FOLDER, mac_folder])
 		return
 	if project_config.has_section("audio"):
 		for key: String in project_config.get_section_keys("audio"):
@@ -93,7 +113,7 @@ func _initialize() -> void:
 	if standing == 0:
 		_fail("The catalog lists no standing buildings.")
 		return
-	print("PASS: the game picks each platform's own audio driver (project.godot forces none; this headless run is on Dummy, as any headless run is, and tools/check_godot_weston_wait.sh checks tools/godot's own Dummy default); buses %s load into Master; catalog score %d/%d (%d demolished)" % [", ".join(PackedStringArray(BUSES)), accepted, standing, units.size() - standing])
+	print("PASS: the game is %s (the window title too) and keeps players' settings in %s; it picks each platform's own audio driver (project.godot forces none; this headless run is on Dummy, as any headless run is, and tools/check_godot_weston_wait.sh checks tools/godot's own Dummy default); buses %s load into Master; catalog score %d/%d (%d demolished)" % [game_name, OS.get_user_data_dir(), ", ".join(PackedStringArray(BUSES)), accepted, standing, units.size() - standing])
 	quit(0)
 
 

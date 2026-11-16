@@ -364,3 +364,18 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
 - Verification and result: not run yet; the job logs `butler version` on each run.
 - Removal steps: delete the `itch` job and the `itch_release_tag` input from `.github/workflows/mac-build.yml`, and the secret `BUTLER_API_KEY` of the GitHub environment `itch`.
+
+### 2026-11-16 — Godot's Windows export template (devcontainer and CI)
+
+- Date and time (UTC): 2026-11-16T02:55:32Z to 02:55:48Z in the devcontainer, by running the extended `.devcontainer/setup-godot.sh`.
+- Status: `completed`
+- Exact package and version: `windows_release_x86_64.exe` (109,268,480 bytes, SHA-256 `d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562`; PE32+ x86-64, GUI) from Godot `4.7.2-stable`'s export templates, `Godot_v4.7.2-stable_export_templates.tpz`.
+- Publisher and source URL: Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable: the same archive the other export templates come from.
+- Checksum, signature, notarization, or registry integrity evidence: the archive's SHA-256 pinned in `setup-godot.sh` (`f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011`), checked before extraction; the extracted template's SHA-256 above. Nothing else was downloaded.
+- Exact command or installation method: `windows_release_x86_64.exe` added to the script's `TEMPLATES` list; the script fetched the archive into a temporary folder, checked its SHA-256, extracted only the missing template into `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/`, deleted the archive and printed `godot --version`. In CI the build job runs the same script; the Actions cache is keyed on the script's hash, so the first build after this change downloads the archive once (about 1.3 GB) and caches it again.
+- Purpose: the Windows (x86-64) build that `tools/build-mac.sh` exports for each release (owner, 2026-11-16: "Why no windows build"). Godot's own template modifier sets its icon and version information; no rcedit.
+- Scope and install location: the shared `/opt/godot/4.7.2` volume of the devcontainer, and the ephemeral `ubuntu-26.04` build runners. The new `windows` and `windows-render` jobs run on GitHub's `windows-2025` image (Windows Server 2025) and install nothing: they use its Git Bash and 7-Zip, and `actions/download-artifact` pinned as before.
+- Authorizing decision or request: owner, 2026-11-16, assignment `ci/windows-build-20261116`; AGENTS.md: needed project tool installations are owner-authorized, export templates through `setup-godot.sh`.
+- Trust and malware checks: official publisher only; the pinned archive hash.
+- Verification and result: `godot --version` printed `4.7.2.stable.official.ed1daf0bf`; `tools/build-mac.sh` at 44922551 exported, audited and zipped the Windows build (`treasure-island.exe` with the game's icon and version information, and a `.pck` byte-identical to the Linux build's).
+- Removal steps: remove the name from `TEMPLATES` in `setup-godot.sh` and delete the file from `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/`.

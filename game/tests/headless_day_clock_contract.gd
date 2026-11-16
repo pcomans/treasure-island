@@ -1,10 +1,16 @@
 extends SceneTree
-## The time of day (owner, 2026-11-14: the sun of the real date and time on the
-## island, running at real speed, with a date and a time slider), headless and
-## without the world. The Sun following it in the loaded game, and the sliders
+## The time of day (owner, 2026-11-14: the sun of the island's date and time,
+## running at real speed, with a date and a time slider; 2026-11-16: play always
+## starts in good light), headless and without the world. The Sun following it in the loaded game, and the sliders
 ## worked there, are headless_gameplay_contract.gd's.
 ##   - a test driver's clock is held at the recorded moment (main.tscn's Sun), and
 ##     the sun drawn there is main.tscn's Sun exactly;
+##   - play starts at the recorded moment's time of day, 12:30, on the island's
+##     date at the real time, whatever that time is (in the night, either side of
+##     midnight, an evening when the UTC date has already turned, either side of
+##     both daylight-saving changes), running; held at the recorded moment with
+##     the time of day off and in a test or capture run; from that start time runs
+##     on at real speed, and Now jumps to the real time;
 ##   - the game's sun (SolarPosition) is tools/solar_position.mjs's: within
 ##     TOLERANCE_DEG of the table the Node tool prints (`--table`; tools/test.sh
 ##     prints it outside the repository and names it: -- --solar-table FILE), every
@@ -21,7 +27,9 @@ extends SceneTree
 ##     time runs (10 s with the sun high or deep, shorter near the horizon), at once
 ##     on a jump, with no jump of its own through sunset, sunrise and midnight; with
 ##     no strength it lights the sky alone (no shadow splits), and it keeps the
-##     look's darkness for the night lights;
+##     look's darkness for the night lights; while the sun shines, low too, a glint
+##     on glass and its bloom are daylight's (owner, 2026-11-15: the Sun's specular
+##     and the glow's luminance cap main.tscn's);
 ##   - the light of the sun's height (DayLight's curves): main.tscn's daylight exactly
 ##     at and above the full-day height, the recorded moment included, where DaySun
 ##     writes nothing to the Sun, the environment or the sky; dimming through sunset
@@ -34,8 +42,8 @@ extends SceneTree
 ##     pitch from the camera's (the lights in the loaded game are
 ##     headless_vehicle_contract.gd's);
 ##   - the options screen's date and time read the island's clock (PST and PDT),
-##     its sliders jump the clock and time runs on, Now goes back to the real time,
-##     and the web's options screen has none of it;
+##     its sliders jump the clock and time runs on, Now jumps to the real time, and
+##     the web's options screen has none of it;
 ##   - the switch (DayClock.enabled; owner, 2026-11-15: the whole time of day
 ##     behind one flag): --no-time-of-day on the command line, the project setting
 ##     off and the web build each turn it off, and nothing else; with the setting
@@ -97,6 +105,9 @@ func _run() -> void:
 	var running := _check_running()
 	if running.is_empty():
 		return _finish()
+	var start := _check_start()
+	if start.is_empty():
+		return _finish()
 	var sun := await _check_day_sun()
 	if sun.is_empty():
 		return _finish()
@@ -112,7 +123,7 @@ func _run() -> void:
 	var switch := await _check_switch_off()
 	if switch.is_empty():
 		return _finish()
-	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, sun, light, lights, menu, switch])
+	print("PASS: day clock: %s; %s; %s; %s; %s; %s; %s; %s; %s; %s" % [solar, recorded, island, running, start, sun, light, lights, menu, switch])
 	_finish()
 
 
@@ -302,6 +313,64 @@ func _check_running() -> String:
 	return "the system clock's speed (%.4f s against the system's %.4f s, and %.4f s with the time scale at 0); with a stand-in system clock, 12.5 s running, 7.25 s more paused, an hour asleep and a 2 s correction back carried the game's time exactly; held still when pinned; Now the real time" % [span.x, span.y, paused_span.x]
 
 
+## Play's start (DayClock.start_for, start_instant; owner, 2026-11-16: "always start
+## the game during a time with nice lighting"): 12:30 on the island's date at the
+## real time, whatever the real time, running; held at the recorded moment with the
+## time of day off or in a test or capture run. From a start in the night, on a
+## stand-in system clock, time runs on at real speed, and Now jumps to the real
+## (night) time.
+func _check_start() -> String:
+	# [the real time on the island's clock, the start it must give].
+	var cases := [
+		["2026-11-16 23:30", "2026-11-16 12:30 PST"],
+		["2026-11-16 03:10", "2026-11-16 12:30 PST"],
+		["2026-11-16 17:00", "2026-11-16 12:30 PST"],
+		["2026-11-16 23:59", "2026-11-16 12:30 PST"],
+		["2026-11-17 00:00", "2026-11-17 12:30 PST"],
+		["2026-12-31 23:59", "2026-12-31 12:30 PST"],
+		["2027-01-01 00:01", "2027-01-01 12:30 PST"],
+		["2026-10-31 23:00", "2026-10-31 12:30 PDT"],
+		["2026-11-01 01:30", "2026-11-01 12:30 PST"],
+		["2026-11-01 03:00", "2026-11-01 12:30 PST"],
+		["2026-03-07 23:00", "2026-03-07 12:30 PST"],
+		["2026-03-08 01:30", "2026-03-08 12:30 PDT"],
+		["2026-03-08 03:30", "2026-03-08 12:30 PDT"],
+		["2026-06-21 12:30", "2026-06-21 12:30 PDT"],
+	]
+	var wrong := []
+	for case: Array in cases:
+		var real := DayClock.parse_local(case[0])
+		var start := DayClock.start_for(true, false, real)
+		var shown := DayClock.moment_text(float(start[0]))
+		if shown != case[1] or start[1] != true:
+			wrong.append("%s gave %s (running %s), not %s" % [case[0], shown, start[1], case[1]])
+	# 01:30 on 2026-11-01 comes twice; the second (PST, an hour later) starts the same day.
+	var second := DayClock.parse_local("2026-11-01 01:30") + 3600.0
+	if DayClock.moment_text(second) != "2026-11-01 01:30 PST" or DayClock.moment_text(DayClock.start_instant(second)) != "2026-11-01 12:30 PST":
+		wrong.append("the second 01:30 on 2026-11-01 (%s) gave %s" % [DayClock.moment_text(second), DayClock.moment_text(DayClock.start_instant(second))])
+	var night := DayClock.parse_local("2026-11-16 23:30")
+	var held := [DayClock.start_for(true, true, night), DayClock.start_for(false, false, night), DayClock.start_for(false, true, night)]
+	if not _require(wrong.is_empty(), "Play must start at 12:30 on the island's date at the real time: %s." % ", ".join(PackedStringArray(wrong))) \
+	or not _require(held.all(func(start: Array) -> bool: return start == [DayClock.RECORDED_UNIX, false]), "A test or capture run, and a run with the time of day off, must start held at the recorded moment: %s." % [held]):
+		return ""
+	# A start in the night, on a stand-in system clock: time runs on at real speed
+	# from 12:30, and Now jumps to the real night.
+	var system := [night]
+	DayClock.system_clock = func() -> float: return system[0]
+	var start_unix := float(DayClock.start_for(true, false, float(system[0]))[0])
+	DayClock.start_at(start_unix)
+	var at_start := [DayClock.now() - start_unix, DayClock.is_running()]
+	system[0] += 600.0
+	var later := DayClock.now() - start_unix
+	DayClock.start_now()
+	var at_now := [DayClock.now() - float(system[0]), DayClock.is_running(), DayClock.moment_text(DayClock.now())]
+	DayClock.use_system_clock()
+	DayClock.pin()
+	if not _require(at_start == [0.0, true] and later == 600.0 and at_now == [0.0, true, "2026-11-16 23:40 PST"], "Started at 12:30 from a real 23:30, time must run on with the system clock and Now jump to the real time (at the start %s, after 600 s %s, Now %s)." % [at_start, later, at_now]):
+		return ""
+	return "play starting at 12:30 on the island's date for %d real times (in the night, at 03:10, an evening past UTC's midnight, either side of midnight and of the new year, either side of November's and March's changes, the repeated 01:30 both times), held at the recorded moment in a test run and with the time of day off; from a start at a real 23:30 the time ran 600 s with the system clock and Now jumped to 23:40" % (cases.size() + 1)
+
+
 ## DaySun on a Sun, an environment and a sky material of its own, copies of
 ## main.tscn's.
 func _check_day_sun() -> String:
@@ -309,11 +378,14 @@ func _check_day_sun() -> String:
 	var scene_sun := scene.get_node("Sun") as DirectionalLight3D
 	var scene_environment := (scene.get_node("WorldEnvironment") as WorldEnvironment).environment
 	var scene_transform := scene_sun.transform
-	# A light of its own with the Sun's colour and strength (a duplicate would take
-	# the Sun's transform apart into a rotation and a scale a rounding off 1).
+	# A light of its own with the Sun's colour, strength and specular (a duplicate
+	# would take the Sun's transform apart into a rotation and a scale a rounding off 1).
 	var light := DirectionalLight3D.new()
 	light.light_color = scene_sun.light_color
 	light.light_energy = scene_sun.light_energy
+	light.light_specular = scene_sun.light_specular
+	# A glint on glass and its bloom: the Sun's specular and the glow's luminance cap.
+	var glint := [scene_sun.light_specular, scene_environment.glow_hdr_luminance_cap]
 	var environment := scene_environment.duplicate(true) as Environment
 	scene.free()
 	root.add_child(light)
@@ -357,6 +429,7 @@ func _check_day_sun() -> String:
 	var nights := 0
 	var sky_only := 0
 	var fills_out := 0
+	var low_glints := 0
 	for day: String in ["2026-06-21", "2026-12-21", "2026-11-14"]:
 		for time: String in ["05:00", "09:30", "12:30", "15:30", "16:30", "17:00", "17:30", "20:30", "22:00"]:
 			var unix := DayClock.parse_local("%s %s" % [day, time])
@@ -371,9 +444,11 @@ func _check_day_sun() -> String:
 			or not _require(day_sun.lit_elevation == shown[0] and differences.is_empty(), "At %s %s (the sun %.2f degrees up) DaySun must put on that height's look; it differs in %s." % [day, time, shown[0], differences]) \
 			or not _require(is_equal_approx(light.directional_shadow_max_distance, medium_distance * float(DayLight.at(shown[0]).shadow_reach)) and is_equal_approx(light.directional_shadow_split_1 * light.directional_shadow_max_distance, near_split_m), "At %s %s (the sun %.2f degrees up) the sun's shadows must reach the shadow option's distance times that height's shadow reach (%.1f m, not %.1f), the nearest split still ending %.1f m out (not %.1f)." % [day, time, shown[0], medium_distance * float(DayLight.at(shown[0]).shadow_reach), light.directional_shadow_max_distance, near_split_m, light.directional_shadow_split_1 * light.directional_shadow_max_distance]) \
 			or not _require(light.sky_mode == DaySun.sky_mode_for(float(DayLight.at(shown[0]).sun_energy)) and day_sun.night == float(DayLight.at(shown[0]).night), "At %s %s (the sun %.2f degrees up, energy %.3f) the light must light the sky alone only with no strength (sky mode %d) and DaySun keep that height's darkness (%.3f, not %.3f)." % [day, time, shown[0], light.light_energy, light.sky_mode, float(DayLight.at(shown[0]).night), day_sun.night]) \
-			or not _require(is_equal_approx(glows.fill.emission_energy_multiplier, glows.fill_energy * float(DayLight.at(shown[0]).daylight_fill)) and glows.lamp.emission_energy_multiplier == glows.lamp_energy, "At %s %s (the sun %.2f degrees up) the daylight fill must keep that height's share of its emission (%.3f of %.2f: %.4f) and the lamp all of its own (%.2f: %.4f)." % [day, time, shown[0], float(DayLight.at(shown[0]).daylight_fill), FILL_ENERGY, glows.fill.emission_energy_multiplier, LAMP_ENERGY, glows.lamp.emission_energy_multiplier]):
+			or not _require(is_equal_approx(glows.fill.emission_energy_multiplier, glows.fill_energy * float(DayLight.at(shown[0]).daylight_fill)) and glows.lamp.emission_energy_multiplier == glows.lamp_energy, "At %s %s (the sun %.2f degrees up) the daylight fill must keep that height's share of its emission (%.3f of %.2f: %.4f) and the lamp all of its own (%.2f: %.4f)." % [day, time, shown[0], float(DayLight.at(shown[0]).daylight_fill), FILL_ENERGY, glows.fill.emission_energy_multiplier, LAMP_ENERGY, glows.lamp.emission_energy_multiplier]) \
+			or not _require(light.light_energy <= 0.0 or [light.light_specular, environment.glow_hdr_luminance_cap] == glint, "At %s %s (the sun %.2f degrees up) the sun's glint on glass and its bloom must be daylight's while it shines (owner, 2026-11-15): the Sun's specular and the glow's luminance cap %s, not %s." % [day, time, shown[0], glint, [light.light_specular, environment.glow_hdr_luminance_cap]]):
 				DaySun.use_engine_globals()
 				return ""
+			low_glints += 1 if light.light_energy > 0.0 and shown[0] < 15.0 else 0
 			fills_out += 1 if glows.fill.emission_energy_multiplier == 0.0 else 0
 			checked += 1
 			nights += 1 if shown[0] < 0.0 else 0
@@ -430,9 +505,10 @@ func _check_day_sun() -> String:
 	DaySun.use_engine_globals()
 	var shape := [DaySun.step_seconds(75.0), DaySun.step_seconds(30.0), DaySun.step_seconds(20.0), DaySun.step_seconds(10.0), DaySun.step_seconds(5.0), DaySun.step_seconds(-6.0), DaySun.step_seconds(-40.0), DaySun.step_for(-12.0), DaySun.step_for(-20.0)]
 	if not _require(jumped == jump_from + 3600.0 and light.transform == scene_transform and back.is_empty() and glows.fill.emission_energy_multiplier == glows.fill_energy and day_sun.fill_share == 1.0 and fills_out > 0, "A jump must move the sun at once (shown %s for %s), and pinned again the light must be main.tscn's Sun with main.tscn's daylight (it differs in %s) and the daylight fill its own emission exactly (%s, share %s; out at %d moments)." % [jumped, jump_from + 3600.0, back, glows.fill.emission_energy_multiplier, day_sun.fill_share, fills_out]) \
+	or not _require(low_glints > 0, "The glint check must see the sun shining under 15 degrees at one moment at least (it saw %d)." % low_glints) \
 	or not _require(shape[0] == DaySun.STEP_S and shape[1] == DaySun.STEP_S and shape[2] < shape[1] and shape[3] < shape[2] and shape[3] < 1.5 and shape[4] == DaySun.MIN_STEP_S and shape[5] < shape[3] and shape[6] == DaySun.STEP_S and shape[7] == DaySun.step_seconds(-12.0) and shape[7] < DaySun.STEP_S and shape[8] == DaySun.STEP_S, "The step must be STEP_S from FULL_STEP_ELEVATION_DEG up or down and shorter near the horizon, to MIN_STEP_S, and STEP_S through the night floor: %s at 75, 30, 20, 10, 5, -6 and -40 degrees, then step_for at -12 (above the floor) and -20." % [shape]):
 		return ""
-	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon, %d of them lighting the sky alone, the daylight fill out at %d and the lamp lit at all; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned, the fill's own emission back exactly" % [checked, nights, sky_only, fills_out, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
+	return "the light from the clock's sun with its height's look at %d moments (%d with the sun under the horizon, %d of them lighting the sky alone, the daylight fill out at %d and the lamp lit at all, the glint daylight's wherever the sun shone, %d of them under 15 degrees; the first look hands the engine all %d globals at project.godot's values), no jump through sunset, midnight and sunrise (%.2f degrees a minute at most), in steps while time runs (%s; %.1f s at 10 degrees, 10 s through the floor) and at once on a jump, and main.tscn's again when pinned, the fill's own emission back exactly" % [checked, nights, sky_only, fills_out, low_glints, DayLight.GLOBALS.size(), largest, ", ".join(PackedStringArray(steps)), shape[3]]
 
 
 ## The light's curves (DayLight): their table, full day from FULL_DAY_ELEVATION_DEG
@@ -675,7 +751,7 @@ func _check_options_rows() -> String:
 	var real := absf(DayClock.now() - Time.get_unix_time_from_system())
 	var now_running := DayClock.is_running()
 	DayClock.pin()
-	if not _require(real < 1.0 and now_running, "Now must go back to the real time, running (%.3f s off, running %s)." % [real, now_running]):
+	if not _require(real < 1.0 and now_running, "Now must jump to the real time, running (%.3f s off, running %s)." % [real, now_running]):
 		return ""
 	# The web's options screen: none of it.
 	hud.set_time_controls(false)

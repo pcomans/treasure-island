@@ -1,15 +1,27 @@
 # Builds the Mac app on every push to main that changes more than documentation
-# with tools/build-mac.sh (the same script as in the devcontainer), launches it
-# on an Apple Silicon Mac to check the island loads, then publishes it as a new
-# GitHub Release of its own, marked latest, so these fixed links always get the
-# newest build:
-#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
-#   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
-# The Linux package is the Linux export that tools/build-mac.sh makes and
-# launch-checks from the same commit, with the same sounds. Owner-approved
-# 2026-11-03. A run started by hand (workflow_dispatch) on another branch builds
-# and checks the app and publishes nothing; on main, the dry_run input does the
-# same.
+# with tools/build-mac.sh (the same script as in the devcontainer), with the
+# Linux and Windows builds of the same commit; launches the Mac app on an Apple
+# Silicon Mac and the Windows build on a Windows runner to check the island
+# loads, then publishes them as a new GitHub Release of its own, marked latest,
+# so this page always has the newest build:
+# https://github.com/pcomans/treasure-island/releases/latest
+# The Windows build goes in only when its launch check passed; otherwise the Mac
+# and Linux builds publish without it and the release notes say so (owner,
+# 2026-11-16: shipping comes first).
+# Its files are named after the game and the build number (owner, 2026-11-16),
+# for example grand-treasure-island-mac-build-1970.zip,
+# grand-treasure-island-linux-build-1970.tar.gz and
+# grand-treasure-island-windows-build-1970.zip. Releases from before then keep
+# treasure-island-mac.zip and treasure-island-linux.tar.gz and have no Windows
+# build (owner, 2026-11-16: "Why no windows build"). The Linux package is the
+# Linux export that tools/build-mac.sh makes and launch-checks from the same
+# commit, with the same sounds (owner-approved 2026-11-03); the Windows build is
+# its x86-64 Windows export, a zip of one folder holding the .exe and its .pck.
+# Inside the build job and its artifacts the files keep their working names
+# (treasure-island-mac-<commit>.zip and treasure-island-windows-<commit>.zip
+# from tools/build-mac.sh); the publish job gives them the release names. A run
+# started by hand (workflow_dispatch) on another branch builds and checks the
+# app and publishes nothing; on main, the dry_run input does the same.
 #
 # A push to main that changes only documentation, that is only Markdown files
 # (tools/docs-only; owner-requested 2026-11-15), builds and releases nothing:
@@ -31,9 +43,10 @@
 # mac-<date>-<commit> tags.
 #
 # After the release, the itch job (owner-requested 2026-11-15) pushes the same
-# two builds to the itch.io page phppco/grand-treasure-island with itch's butler:
-# the Mac app, notarized or not, to channel "mac" and the Linux build to channel
-# "linux", with the build number as their version.
+# builds to the itch.io page phppco/grand-treasure-island with itch's butler:
+# the Mac app, notarized or not, to channel "mac", the Linux build to channel
+# "linux" and the Windows build to channel "windows" (butler tags a channel
+# named so as Windows), with the build number as their version.
 #
 # The itch.io and VirusTotal keys live in the GitHub Environment `itch`, whose
 # deployment branch rule admits only main and which has no required reviewers:
@@ -52,7 +65,7 @@
 # nothing and only does the itch job.
 #
 # Also after the release, the virustotal job (owner-requested 2026-11-15)
-# submits the release's two files to VirusTotal's public API with the key
+# submits the release's files to VirusTotal's public API with the key
 # VIRUSTOTAL_API_KEY, and the virustotal-notes job, which has no key, adds each
 # file's SHA-256 and VirusTotal report link to the release notes. Links only,
 # never verdicts or counts; a file that VirusTotal flags is a warning for a
@@ -118,7 +131,7 @@
 #     with a line break, or a build artifact that is not one zip holding one app.
 # As always, a notarized build that fails one of verify's checks, a failed island
 # load check or a publish guard also stops the run. A stopped run publishes
-# nothing, so the previous build stays at the fixed link. The publish job uses
+# nothing, so the previous build stays the latest release. The publish job uses
 # GITHUB_TOKEN.
 #
 # The sounds come from the owner's private audio repository (owner, 2026-11-14):
@@ -325,7 +338,7 @@ jobs:
       - name: Free the disk the Godot downloads used
         run: rm -rf "${RUNNER_TEMP:?}/godot-downloads"
 
-      - name: Build the Mac app (tools/build-mac.sh)
+      - name: Build the Mac, Linux and Windows builds (tools/build-mac.sh)
         timeout-minutes: 45
         env:
           # tools/godot puts its private Weston socket here.
@@ -376,6 +389,18 @@ jobs:
         with:
           name: linux-app
           path: build/linux-package/treasure-island-linux-*.tar.gz
+          if-no-files-found: error
+          compression-level: 0
+          retention-days: 1
+
+      # tools/build-mac.sh has just exported it from this commit, with the same
+      # sounds, audited its data pack and zipped the folder a player unpacks: the
+      # .exe and its .pck. The windows job launches it.
+      - name: Upload the Windows build
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: windows-app
+          path: build/windows/treasure-island-windows-*.zip
           if-no-files-found: error
           compression-level: 0
           retention-days: 1
@@ -950,11 +975,117 @@ jobs:
           fi
           echo "PASS: ${zip} loads the island on $(uname -m)"
 
+  windows:
+    name: Load on Windows
+    needs: [build]
+    # Every run that builds. The publish job takes the Windows build only when
+    # this job passes.
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: windows-2025
+    timeout-minutes: 20
+    concurrency:
+      group: windows-load-${{ github.ref }}-${{ needs.build.result }}
+      cancel-in-progress: true
+    steps:
+      - name: Download the Windows build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: windows-app
+
+      - name: Launch it headless on Windows and check the island loads
+        timeout-minutes: 10
+        # The same rule as the Mac and Linux launch checks: the game loads the
+        # island, quits with 0 and prints no engine errors. Headless, as the
+        # runner has no GPU: this shows that the .exe starts on Windows, mounts
+        # its .pck and loads the island, not that it renders (the windows-render
+        # job tries that). Godot's own log must also land in the folder
+        # project.godot pins for Windows players' saved settings, which shows
+        # where user:// is on Windows. Bash is Git for Windows'; 7-Zip is on the
+        # runner image.
+        run: |
+          echo "$(uname -s) $(uname -r), $(uname -m)"
+          zips=(treasure-island-windows-*.zip)
+          [ "${#zips[@]}" -eq 1 ] && [ -f "${zips[0]}" ] || { echo "::error::expected one Windows zip, found ${#zips[@]}"; exit 1; }
+          7z x -y -oapp "${zips[0]}" > /dev/null
+          shopt -s nullglob dotglob
+          top=(app/*)
+          files=(app/treasure-island-windows/*)
+          if [ "${top[*]}" != app/treasure-island-windows ] || [ "${files[*]}" != "app/treasure-island-windows/treasure-island.exe app/treasure-island-windows/treasure-island.pck" ]; then
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${top[*]}: ${files[*]}"
+            exit 1
+          fi
+          userdir="$(cygpath -u "${APPDATA}")/Godot/app_userdata/Treasure Island First Playable"
+          status=0
+          app/treasure-island-windows/treasure-island.exe --headless -- --quit-on-ready 2>&1 | tee launch.log || status=$?
+          errors="$(grep -E '^ERROR|SCRIPT ERROR' launch.log | grep -v 'Parameter "ss" is null' || true)"
+          if [ "${status}" -ne 0 ] || ! grep -q '^WORLD_READY' launch.log || ! grep -q '^PLAY_READY' launch.log || [ -n "${errors}" ]; then
+            echo "::error title=Windows build::The Windows build (headless) exited ${status} without loading the island cleanly; its output is above."
+            exit 1
+          fi
+          if ! grep -qs '^WORLD_READY' "${userdir}/logs/godot.log"; then
+            echo "::error title=Windows build::Godot's log is not in ${userdir}/logs, so user:// on Windows is not the folder project.godot pins."
+            exit 1
+          fi
+          echo "PASS: ${zips[0]} loads the island on Windows (headless); user:// is ${userdir}"
+
+  windows-render:
+    name: Try rendering on Windows (information only)
+    needs: [build]
+    # The runner has no GPU. Godot 4.7.2 starts this project on Vulkan and, where
+    # Vulkan does not work, falls back to Direct3D 12 (rendering/rendering_device/
+    # fallback_to_d3d12, on by default). On windows-2025, in the first run
+    # (43804401649, 2026-11-16), Vulkan failed (no VK_KHR_surface: two ERROR
+    # lines) and Godot switched to Direct3D 12 on "Microsoft Basic Render Driver"
+    # (WARP, Windows' software renderer); the island loaded in about 3.5 minutes.
+    # So this launches the build with rendering and reports which renderer it got
+    # and whether the island loaded. Rendering in software says something about
+    # the Direct3D 12 path, nothing about a player's GPU. Nothing waits for this
+    # job, and its failure never fails the run.
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: windows-2025
+    timeout-minutes: 25
+    continue-on-error: true
+    concurrency:
+      group: windows-render-${{ github.ref }}-${{ needs.build.result }}-${{ github.run_id }}
+      cancel-in-progress: true
+    steps:
+      - name: Download the Windows build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: windows-app
+
+      - name: Launch it with rendering
+        continue-on-error: true
+        timeout-minutes: 15
+        run: |
+          zips=(treasure-island-windows-*.zip)
+          7z x -y -oapp "${zips[0]}" > /dev/null
+          app/treasure-island-windows/treasure-island.exe --audio-driver Dummy -- --quit-on-ready 2>&1 | tee render.log
+
+      - name: Report
+        if: always()
+        run: |
+          touch render.log
+          renderer="$(grep -m 1 -E ' - (Forward\+|Mobile|Compatibility) - ' render.log | tr -d '\r' || true)"
+          errors="$(grep -E '^ERROR|SCRIPT ERROR' render.log | grep -c -v 'Parameter "ss" is null' || true)"
+          if grep -q '^WORLD_READY' render.log && grep -q '^PLAY_READY' render.log; then loaded=yes; else loaded=no; fi
+          {
+            echo "### Windows rendering, information only"
+            echo ""
+            echo "- renderer: ${renderer:-none reported}"
+            echo "- island loaded with rendering: ${loaded}"
+            echo "- engine error lines: ${errors:-0}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+          echo "::notice title=Windows rendering (information only)::renderer: ${renderer:-none reported}; island loaded: ${loaded}; engine error lines: ${errors:-0}"
+
   publish:
     name: Publish
-    needs: [build, sign, verify]
+    needs: [build, sign, verify, windows]
     # Main only, never on a dry run. The sign job's app when it ran; the build
-    # job's app when MAC_SIGNING is not "on" and the sign job was skipped.
+    # job's app when MAC_SIGNING is not "on" and the sign job was skipped. It
+    # waits for the Windows check but never depends on it: the Windows build goes
+    # in only when that check passed, and otherwise the Mac and Linux builds
+    # publish without it (owner, 2026-11-16: shipping comes first).
     if: >-
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       needs.build.result == 'success' && needs.verify.result == 'success' &&
@@ -969,13 +1100,18 @@ jobs:
       group: mac-publish
       cancel-in-progress: false
     outputs:
-      # Set only once the release exists and the fixed links lead to it. The
-      # SHA-256 of each file as uploaded: the itch and VirusTotal jobs check
-      # their downloads against these.
+      # Set only once the release exists and is GitHub's latest release, with
+      # exactly its files. Their names and the SHA-256 of each as uploaded: the
+      # itch and VirusTotal jobs download and check these. The Windows ones are
+      # empty when the release leaves the Windows build out.
       tag: ${{ steps.release.outputs.tag }}
       build_number: ${{ steps.release.outputs.build_number }}
+      mac_name: ${{ steps.release.outputs.mac_name }}
+      linux_name: ${{ steps.release.outputs.linux_name }}
+      windows_name: ${{ steps.release.outputs.windows_name }}
       mac_sha256: ${{ steps.release.outputs.mac_sha256 }}
       linux_sha256: ${{ steps.release.outputs.linux_sha256 }}
+      windows_sha256: ${{ steps.release.outputs.windows_sha256 }}
     steps:
       # For the head-of-main check below; without it that check counts any later
       # commit on main as more than documentation.
@@ -1001,6 +1137,12 @@ jobs:
         with:
           name: linux-app
 
+      - name: Download the Windows build
+        if: needs.windows.result == 'success'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: windows-app
+
       - name: Publish this build as a new release
         id: release
         env:
@@ -1011,16 +1153,19 @@ jobs:
           FALLBACK: ${{ needs.sign.outputs.fallback }}
           BUILD_NUMBER: ${{ needs.build.outputs.build_number }}
           GAME_NAME: ${{ needs.build.outputs.game_name }}
+          # success, or anything else (failure, cancelled, skipped), which leaves
+          # the Windows build out.
+          WINDOWS_RESULT: ${{ needs.windows.result }}
         # Each build gets a tag and release of its own, and nothing here replaces a
-        # published build. gh uploads to a draft and then publishes it, so the fixed
-        # link never reaches a release without its zip. If the reply to that publish
+        # published build. gh uploads to a draft and then publishes it, so no
+        # published release lacks its files. If the reply to that publish
         # is lost, gh deletes the release it just published and the tag stays, so a
         # tag with no release stops the step for a person to look at.
         #
         # Only the newest build of main publishes: the head of main, or a commit
         # after which main has changed only documentation, since a push of
         # documentation alone builds nothing (the changes job). An older build must
-        # not take the fixed link from a newer one. GitHub also refuses (HTTP 404 or
+        # not become the latest release over a newer one. GitHub also refuses (HTTP 404 or
         # 403) a release whose commit has .github/workflows files that differ from
         # main's, unless the token may change workflows, and GITHUB_TOKEN never may.
         # A commit that edits a workflow is fine while it is the newest build,
@@ -1057,7 +1202,15 @@ jobs:
               echo "::warning title=Mac build NOT notarized::${signing}"
             fi
           fi
-          name=treasure-island-mac.zip
+          # The release's files carry the game and the build number; the app inside
+          # the zip and the folder inside the archive keep their own names.
+          name="grand-treasure-island-mac-build-${BUILD_NUMBER}.zip"
+          linux_name="grand-treasure-island-linux-build-${BUILD_NUMBER}.tar.gz"
+          # The Windows build goes in only when its launch check passed.
+          windows_name=""
+          if [ "${WINDOWS_RESULT}" = success ]; then
+            windows_name="grand-treasure-island-windows-build-${BUILD_NUMBER}.zip"
+          fi
           api="repos/${GITHUB_REPOSITORY}"
           site="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/releases"
           # The commit's date, not today's: a re-run on a later day must find the same
@@ -1098,10 +1251,18 @@ jobs:
             echo "main is at ${head}, but has changed only documentation since ${GITHUB_SHA}, so this is still the newest build and it publishes."
           fi
           mv treasure-island-mac-*.zip "${name}"
-          linux_name=treasure-island-linux.tar.gz
           mv treasure-island-linux-*.tar.gz "${linux_name}"
           mac_sha256="$(sha256sum "${name}" | cut -d' ' -f1)"
           linux_sha256="$(sha256sum "${linux_name}" | cut -d' ' -f1)"
+          windows_sha256=""
+          if [ -n "${windows_name}" ]; then
+            mv treasure-island-windows-*.zip "${windows_name}"
+            windows_sha256="$(sha256sum "${windows_name}" | cut -d' ' -f1)"
+            windows_notes="The Windows build of the same commit is ${windows_name}: unzip it and run treasure-island.exe in its treasure-island-windows folder. It is not signed, so Windows may first show \"Windows protected your PC\": click More info, then Run anyway."
+          else
+            windows_notes="Windows build left out: its launch check failed."
+            echo "::warning title=Windows build left out::Windows build left out: its launch check failed (the windows job ended ${WINDOWS_RESULT:-without a result}). The Mac and Linux builds are published."
+          fi
           notes="${GAME_NAME}, build ${BUILD_NUMBER}: commit ${GITHUB_SHA} (committed ${committed}), built by ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID} on $(date -u +%Y-%m-%dT%H:%MZ). The build number counts the commits in main's history, so a newer build always has a larger one."
           if [ -n "${signing}" ]; then
             notes="${notes}
@@ -1110,35 +1271,50 @@ jobs:
           fi
           notes="${notes}
 
-          The newest build is always at ${site}/latest/download/${name}
-          For the first launch, see Build for the Mac in the README.
+          The Mac app is ${name}. For the first launch, see Build for the Mac in the README.
 
-          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder. The newest is always at ${site}/latest/download/${linux_name}"
+          The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder.
+
+          ${windows_notes}
+
+          The newest builds are always on ${site}/latest."
           title="${GAME_NAME}, build ${BUILD_NUMBER} (${day}, ${short}${title_extra})"
-          gh release create "${tag}" "${name}" "${linux_name}" --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
-            echo "::error::Publishing ${tag} failed, so the previous build normally stays at the fixed link. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
+          gh release create "${tag}" "${name}" "${linux_name}" ${windows_name:+"${windows_name}"} --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
+            echo "::error::Publishing ${tag} failed, so the previous build normally stays the latest release. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
-          # The fixed link must now lead to this build. Allow a moment for the redirect.
+          # GitHub's latest release must now be this one, holding exactly its files
+          # (two, or three with the Windows build), all uploaded. Allow a moment for
+          # GitHub to catch up.
+          want="${tag}|$(printf '%s\n' "${name}" "${linux_name}" ${windows_name:+"${windows_name}"} | LC_ALL=C sort | paste -sd' ' -)"
           for _ in $(seq 12); do
-            if [ "$(curl -sI -o /dev/null -w '%{redirect_url}' "${site}/latest/download/${name}")" = "${site}/download/${tag}/${name}" ]; then
+            latest="$(gh api "${api}/releases/latest" --jq '.tag_name + "|" + ([.assets[] | select(.state == "uploaded") | .name] | sort | join(" "))' || true)"
+            if [ "${latest}" = "${want}" ]; then
               echo "Published ${site}/tag/${tag}"
               {
                 echo "tag=${tag}"
                 echo "build_number=${BUILD_NUMBER}"
+                echo "mac_name=${name}"
+                echo "linux_name=${linux_name}"
+                echo "windows_name=${windows_name}"
                 echo "mac_sha256=${mac_sha256}"
                 echo "linux_sha256=${linux_sha256}"
+                echo "windows_sha256=${windows_sha256}"
               } >> "${GITHUB_OUTPUT}"
               {
                 echo "### Published ${tag}: ${title}"
                 echo ""
                 echo "${signing:-Ad-hoc signed, not notarized (MAC_SIGNING is not on, so no signing was tried).}"
+                if [ -z "${windows_name}" ]; then
+                  echo ""
+                  echo "Windows build left out: its launch check failed."
+                fi
               } >> "${GITHUB_STEP_SUMMARY}"
               exit 0
             fi
             sleep 5
           done
-          echo "::error::${tag} is published, but the fixed link does not lead to it."
+          echo "::error::${tag} is published, but GitHub's latest release is not it with exactly ${want#*|} (GitHub answered \"${latest:-nothing}\")."
           exit 1
 
   itch:
@@ -1157,7 +1333,7 @@ jobs:
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
     runs-on: macos-26
-    timeout-minutes: 150
+    timeout-minutes: 190
     continue-on-error: true
     environment: itch
     permissions:
@@ -1221,18 +1397,55 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ steps.check.outputs.tag }}
-          # What the publish job uploaded. Empty in a run by hand, which checks
+          VERSION: ${{ steps.check.outputs.version }}
+          # What the publish job uploaded: names and SHA-256. Empty in a run by
+          # hand, which finds the files by name in the release and checks them
           # against the SHA-256 GitHub recorded at upload instead.
+          PUBLISHED_MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          PUBLISHED_LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
+          PUBLISHED_WINDOWS_NAME: ${{ needs.publish.outputs.windows_name }}
           PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
           PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
+          PUBLISHED_WINDOWS_SHA256: ${{ needs.publish.outputs.windows_sha256 }}
+        # A release's files are grand-treasure-island-mac-build-<N>.zip,
+        # grand-treasure-island-linux-build-<N>.tar.gz and
+        # grand-treasure-island-windows-build-<N>.zip, or, for releases from before
+        # 2026-11-16, treasure-island-mac.zip and treasure-island-linux.tar.gz, with
+        # no Windows build. They are kept here as release/mac.zip,
+        # release/linux.tar.gz and release/windows.zip.
         run: |
+          if [ -n "${PUBLISHED_MAC_NAME}" ]; then
+            mac_name="${PUBLISHED_MAC_NAME}"
+            linux_name="${PUBLISHED_LINUX_NAME}"
+            windows_name="${PUBLISHED_WINDOWS_NAME}"
+          else
+            assets="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq '.assets[].name')"
+            mac_name=""
+            linux_name=""
+            windows_name=""
+            for candidate in "grand-treasure-island-mac-build-${VERSION}.zip" treasure-island-mac.zip; do
+              if grep -qxF "${candidate}" <<< "${assets}"; then mac_name="${candidate}"; break; fi
+            done
+            for candidate in "grand-treasure-island-linux-build-${VERSION}.tar.gz" treasure-island-linux.tar.gz; do
+              if grep -qxF "${candidate}" <<< "${assets}"; then linux_name="${candidate}"; break; fi
+            done
+            if grep -qxF "grand-treasure-island-windows-build-${VERSION}.zip" <<< "${assets}"; then
+              windows_name="grand-treasure-island-windows-build-${VERSION}.zip"
+            fi
+          fi
+          [ -n "${mac_name}" ] || { echo "::error::${TAG} has no Mac zip (grand-treasure-island-mac-build-${VERSION}.zip or treasure-island-mac.zip)."; exit 1; }
           mkdir release
-          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
-          for file in release/*; do
-            name="$(basename "${file}")"
+          gh release download "${TAG}" --dir release --pattern "${mac_name}" ${linux_name:+--pattern "${linux_name}"} ${windows_name:+--pattern "${windows_name}"}
+          for name in "${mac_name}" ${linux_name:+"${linux_name}"} ${windows_name:+"${windows_name}"}; do
+            file="release/${name}"
+            [ -f "${file}" ] || { echo "::error::${name} was not downloaded from ${TAG}."; exit 1; }
             actual="$(shasum -a 256 "${file}" | cut -d' ' -f1)"
             echo "${name}: SHA-256 ${actual}"
-            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+            case "${name}" in
+              "${mac_name}") expected="${PUBLISHED_MAC_SHA256}" ;;
+              "${linux_name}") expected="${PUBLISHED_LINUX_SHA256}" ;;
+              *) expected="${PUBLISHED_WINDOWS_SHA256}" ;;
+            esac
             source="the publish job uploaded"
             if [ -z "${expected}" ]; then
               recorded="$(gh api "repos/${GH_REPO}/releases/tags/${TAG}" --jq ".assets[] | select(.name == \"${name}\") | .digest")"
@@ -1246,11 +1459,18 @@ jobs:
               exit 1
             fi
           done
-          [ -f release/treasure-island-mac.zip ] || { echo "::error::${TAG} has no treasure-island-mac.zip."; exit 1; }
-          if [ -f release/treasure-island-linux.tar.gz ]; then
+          mv "release/${mac_name}" release/mac.zip
+          if [ -n "${linux_name}" ]; then
+            mv "release/${linux_name}" release/linux.tar.gz
             echo "linux=true" >> "${GITHUB_OUTPUT}"
           else
             echo "::notice title=itch.io::${TAG} has no Linux build (releases before the Linux package have none), so the linux channel gets nothing."
+          fi
+          if [ -n "${windows_name}" ]; then
+            mv "release/${windows_name}" release/windows.zip
+            echo "windows=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "::notice title=itch.io::${TAG} has no Windows build (releases before the Windows build have none, and a release whose Windows launch check failed leaves it out), so the windows channel gets nothing."
           fi
 
       - name: Install butler
@@ -1317,7 +1537,7 @@ jobs:
         # and permissions and only adds missing execute bits to executables
         # (https://itch.io/docs/itch/integrating/platforms/macos.html).
         run: |
-          ditto -x -k release/treasure-island-mac.zip stage/mac
+          ditto -x -k release/mac.zip stage/mac
           apps=(stage/mac/*.app)
           [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in the Mac zip"; exit 1; }
           [ "$(find stage/mac -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1 ] || { echo "::error::the Mac zip holds more than the app"; exit 1; }
@@ -1363,7 +1583,7 @@ jobs:
         if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.linux == 'true' }}
         run: |
           mkdir -p stage/linux
-          tar -xzf release/treasure-island-linux.tar.gz -C stage/linux
+          tar -xzf release/linux.tar.gz -C stage/linux
           folder=stage/linux/treasure-island-linux
           exes=("${folder}"/*.x86_64)
           [ "${#exes[@]}" -eq 1 ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
@@ -1378,6 +1598,32 @@ jobs:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
         run: push-when-ready stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" "${VERSION}"
+
+      # Nor does the windows channel depend on the others.
+      - name: Stage the Windows build
+        id: windows
+        if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.windows == 'true' }}
+        run: |
+          mkdir -p stage/windows
+          ditto -x -k release/windows.zip stage/windows
+          # Exactly what tools/build-mac.sh zipped: the folder with the .exe and its .pck.
+          shopt -s nullglob dotglob
+          top=(stage/windows/*)
+          files=(stage/windows/treasure-island-windows/*)
+          if [ "${top[*]}" != stage/windows/treasure-island-windows ] || [ "${files[*]}" != "stage/windows/treasure-island-windows/treasure-island.exe stage/windows/treasure-island-windows/treasure-island.pck" ]; then
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${top[*]}: ${files[*]}"
+            exit 1
+          fi
+          ls -l stage/windows/treasure-island-windows
+
+      - name: Push the Windows build to itch.io
+        id: push_windows
+        if: ${{ !cancelled() && steps.windows.outcome == 'success' }}
+        timeout-minutes: 40
+        env:
+          BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
+          VERSION: ${{ steps.check.outputs.version }}
+        run: push-when-ready stage/windows/treasure-island-windows "${ITCH_TARGET}:windows" "${VERSION}"
 
       - name: Check the Mac app itch.io serves
         id: served
@@ -1415,6 +1661,7 @@ jobs:
             head="$(jq -r '.head // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
             pending="$(jq -r '.pending // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
             linux_head="$(jq -R -r 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "linux") | .head.userVersion // empty' <<< "${answer}" | tail -n 1)"
+            windows_head="$(jq -R -r 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "windows") | .head.userVersion // empty' <<< "${answer}" | tail -n 1)"
             if [ "${status}" -eq 0 ] && [ "${head}" = "${VERSION} completed" ]; then live=yes; break; fi
             if [ "${status}" -eq 0 ] && [ "${SKIPPED}" = true ] && [ "${head##* }" = completed ]; then live=yes; break; fi
             if [ "${status}" -eq 0 ]; then
@@ -1427,6 +1674,7 @@ jobs:
           done
           state="The build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}."
           echo "linux_head=${linux_head}" >> "${GITHUB_OUTPUT}"
+          echo "windows_head=${windows_head}" >> "${GITHUB_OUTPUT}"
           if [ -z "${live}" ]; then
             if [ -n "${seen}" ]; then
               why="itch.io still serves another build, version ${seen% *}${pending:+, while version ${pending% *} is ${pending##* }}"
@@ -1493,12 +1741,16 @@ jobs:
           VERSION: ${{ steps.check.outputs.version }}
           BUILDS: ${{ steps.builds.outcome }}
           LINUX: ${{ steps.builds.outputs.linux }}
+          WINDOWS: ${{ steps.builds.outputs.windows }}
           PUSH_MAC: ${{ steps.push_mac.outcome }}
           PUSH_LINUX: ${{ steps.push_linux.outcome }}
+          PUSH_WINDOWS: ${{ steps.push_windows.outcome }}
           MAC_SKIPPED: ${{ steps.push_mac.outputs.skipped }}
           LINUX_SKIPPED: ${{ steps.push_linux.outputs.skipped }}
+          WINDOWS_SKIPPED: ${{ steps.push_windows.outputs.skipped }}
           MAC_HEAD: ${{ steps.served.outputs.head }}
           LINUX_HEAD: ${{ steps.served.outputs.linux_head }}
+          WINDOWS_HEAD: ${{ steps.served.outputs.windows_head }}
           SERVED: ${{ steps.served.outputs.check }}
         # Prints only the tag the first step accepted. A channel that butler left
         # alone (its files equal the channel's processed build) keeps showing that
@@ -1524,11 +1776,19 @@ jobs:
             else
               echo "- linux channel: not pushed (no Linux build in this release)"
             fi
+            if [ "${WINDOWS}" = true ] && [ "${WINDOWS_SKIPPED}" = true ]; then
+              echo "- windows channel: unchanged since version ${WINDOWS_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)"
+            elif [ "${WINDOWS}" = true ]; then
+              echo "- windows channel: ${PUSH_WINDOWS:-not pushed}"
+            else
+              echo "- windows channel: not pushed (no Windows build in this release)"
+            fi
           } >> "${GITHUB_STEP_SUMMARY}"
           failed=no
           [ "${BUILDS}" = success ] || failed=yes
           [ "${PUSH_MAC}" = success ] || failed=yes
           [ "${LINUX}" != true ] || [ "${PUSH_LINUX}" = success ] || failed=yes
+          [ "${WINDOWS}" != true ] || [ "${PUSH_WINDOWS}" = success ] || failed=yes
           if [ "${failed}" = yes ]; then
             echo "::error title=itch.io::Pushing to itch.io failed (see the steps above). The GitHub release is complete and unaffected. To try again, start this workflow by hand on main with itch_release_tag=${TAG}."
             exit 1
@@ -1560,7 +1820,7 @@ jobs:
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       needs.publish.outputs.tag != '' }}
     runs-on: ubuntu-26.04
-    timeout-minutes: 45
+    timeout-minutes: 60
     continue-on-error: true
     environment: itch
     permissions:
@@ -1611,15 +1871,25 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.publish.outputs.tag }}
+          MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
+          WINDOWS_NAME: ${{ needs.publish.outputs.windows_name }}
           PUBLISHED_MAC_SHA256: ${{ needs.publish.outputs.mac_sha256 }}
           PUBLISHED_LINUX_SHA256: ${{ needs.publish.outputs.linux_sha256 }}
-        # Exactly the published files, each checked against the SHA-256 the
-        # publish job computed before uploading it; nothing else is ever uploaded.
+          PUBLISHED_WINDOWS_SHA256: ${{ needs.publish.outputs.windows_sha256 }}
+        # Exactly the published files, by the names the publish job gave them, each
+        # checked against the SHA-256 it computed before uploading it; nothing
+        # else is ever uploaded. A release without the Windows build has no
+        # Windows name.
         run: |
           mkdir release
-          gh release download "${TAG}" --dir release --pattern treasure-island-mac.zip --pattern treasure-island-linux.tar.gz
-          for name in treasure-island-mac.zip treasure-island-linux.tar.gz; do
-            if [ "${name}" = treasure-island-mac.zip ]; then expected="${PUBLISHED_MAC_SHA256}"; else expected="${PUBLISHED_LINUX_SHA256}"; fi
+          gh release download "${TAG}" --dir release --pattern "${MAC_NAME}" --pattern "${LINUX_NAME}" ${WINDOWS_NAME:+--pattern "${WINDOWS_NAME}"}
+          for name in "${MAC_NAME}" "${LINUX_NAME}" ${WINDOWS_NAME:+"${WINDOWS_NAME}"}; do
+            case "${name}" in
+              "${MAC_NAME}") expected="${PUBLISHED_MAC_SHA256}" ;;
+              "${LINUX_NAME}") expected="${PUBLISHED_LINUX_SHA256}" ;;
+              *) expected="${PUBLISHED_WINDOWS_SHA256}" ;;
+            esac
             actual="$(sha256sum "release/${name}" | cut -d' ' -f1)"
             if [ -z "${expected}" ] || [ "${actual}" != "${expected}" ]; then
               echo "::error::${name} is not the file the publish job uploaded (SHA-256 ${expected:-unknown})."
@@ -1819,16 +2089,22 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
           TAG: ${{ needs.publish.outputs.tag }}
+          MAC_NAME: ${{ needs.publish.outputs.mac_name }}
+          LINUX_NAME: ${{ needs.publish.outputs.linux_name }}
+          WINDOWS_NAME: ${{ needs.publish.outputs.windows_name }}
           RESULTS: ${{ needs.virustotal.outputs.results }}
         # Every file gets its SHA-256 and VirusTotal's report link by that hash,
         # with a fixed note on its state; no verdicts. A result line in any other
         # form changes nothing. Re-running replaces the section instead of adding
         # a second one.
         run: |
-          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
+          # Each line: one of this release's three files by name, then its SHA-256
+          # and states in a fixed form.
+          pattern='^[0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
           while read -r line; do
             [ -n "${line}" ] || continue
-            if ! [[ "${line}" =~ ${pattern} ]]; then
+            name="${line%% *}"
+            if { [ "${name}" != "${MAC_NAME}" ] && [ "${name}" != "${LINUX_NAME}" ] && [ "${name}" != "${WINDOWS_NAME}" ]; } || ! [[ "${line#* }" =~ ${pattern} ]]; then
               echo "::error title=VirusTotal::A result from the VirusTotal job is not in the expected form, so the release notes of ${TAG} were not changed."
               exit 1
             fi
