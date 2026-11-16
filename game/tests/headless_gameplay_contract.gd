@@ -771,9 +771,11 @@ func _check_options_screen(main: GameMain) -> String:
 ## main.tscn's exactly, its metadata's angles, the light on it, the environment and
 ## the sky main.tscn's daylight exactly (DayLight), and they stay so however long the
 ## game runs. Play's start (DayClock.start_for, owner 2026-11-16) puts the clock at
-## 12:30 on the island's date today, running, whatever the real time, with the Sun
-## at its sun at once and the options screen showing that date and 12:30. On the
-## options screen, with the game paused, the date and the time slider move the Sun
+## 12:30 on the island's date at the real time, running, whatever that time is
+## (today's, and on a stand-in system clock a night in 2027 and a leap day's), with
+## the Sun at its sun at once and the options screen showing that date and 12:30;
+## the clock is pinned again after. On the options screen, with the game paused,
+## the date and the time slider move the Sun
 ## at once to the sun of their moment on the island's clock, with the light of its
 ## height (a December dusk among them), and time runs on from there with the system
 ## clock; Now jumps to the real time. Pinned again, the Sun and its light are
@@ -809,20 +811,32 @@ func _check_time_of_day(main: GameMain) -> String:
 		_fail("The options screen must offer the date and time on desktop, paused, at the recorded moment's 12:30 PST (time shown \"%s\")." % hud.time_label.text)
 		return ""
 	# Play's start, as a run that is not a test's starts its clock: 12:30 on the
-	# island's date today, whatever the real time, running; the Sun at its sun at
-	# once, and the options screen showing that date and 12:30.
-	var real_now := Time.get_unix_time_from_system()
-	var start := DayClock.start_for(true, false, real_now)
-	DayClock.start_at(float(start[0]))
+	# island's date at the real time, whatever that is, running; the Sun at its sun
+	# at once, and the options screen showing that date and 12:30. For today's real
+	# time, then on a stand-in system clock a night in 2027 and a leap day's night.
+	# Pinned again after, so the slider moves below (in 2026) never depend on the
+	# real date.
+	var starts := PackedStringArray()
+	for real_text: String in ["", "2027-01-01 03:00", "2028-02-29 23:30"]:
+		var real_now := Time.get_unix_time_from_system() if real_text.is_empty() else DayClock.parse_local(real_text)
+		if not real_text.is_empty():
+			DayClock.system_clock = func() -> float: return real_now
+		var start := DayClock.start_for(true, false, real_now)
+		DayClock.start_at(float(start[0]))
+		await process_frame
+		var today := DayClock.local(float(start[0]))
+		var start_shown := DaySun.shown_angles(DayClock.now())
+		var date_text := "%s %d %s %d" % [GameHUD.WEEKDAYS[int(today.weekday)], int(today.day), GameHUD.MONTHS[int(today.month) - 1], int(today.year)]
+		var opened := [hud.time_date_label.text, hud.time_label.text, hud.time_date_slider.value, hud.time_slider.value]
+		if start[1] != true or absf(DayClock.now() - float(start[0])) > 1.0 or not DayClock.is_running() or DayClock.local(real_now).day_of_year != today.day_of_year \
+		or opened != [date_text, "12:30 %s" % today.zone, float(today.day_of_year), 750.0] or not sun.rotation_degrees.is_equal_approx(DaySun.rotation_for(start_shown)):
+			DayClock.use_system_clock()
+			_fail("Play's start must be 12:30 on the island's date at the real time (%s for the real time %s), running, the options screen showing it (%s, not %s) and the Sun at its sun at once (%s, not %s)." % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), [date_text, "12:30 %s" % today.zone, today.day_of_year, 750], opened, DaySun.rotation_for(start_shown), sun.rotation_degrees])
+			return ""
+		starts.append("%s for the real time %s" % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now)])
+	DayClock.use_system_clock()
+	DayClock.pin()
 	await process_frame
-	var today := DayClock.local(float(start[0]))
-	var start_shown := DaySun.shown_angles(DayClock.now())
-	var date_text := "%s %d %s %d" % [GameHUD.WEEKDAYS[int(today.weekday)], int(today.day), GameHUD.MONTHS[int(today.month) - 1], int(today.year)]
-	var opened := [hud.time_date_label.text, hud.time_label.text, hud.time_date_slider.value, hud.time_slider.value]
-	if start[1] != true or absf(DayClock.now() - float(start[0])) > 1.0 or not DayClock.is_running() or DayClock.local(real_now).day_of_year != today.day_of_year \
-	or opened != [date_text, "12:30 %s" % today.zone, float(today.day_of_year), 750.0] or not sun.rotation_degrees.is_equal_approx(DaySun.rotation_for(start_shown)):
-		_fail("Play's start must be 12:30 on the island's date today (%s for the real time %s), running, the options screen showing it (%s, not %s) and the Sun at its sun at once (%s, not %s)." % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), [date_text, "12:30 %s" % today.zone, today.day_of_year, 750], opened, DaySun.rotation_for(start_shown), sun.rotation_degrees])
-		return ""
 	# A player's changes, as the slider's value_changed brings them, while paused.
 	var moves := PackedStringArray()
 	for move: Array in [["date", 172.0, "2026-06-21 12:30"], ["time", 570.0, "2026-06-21 09:30"], ["date", 355.0, "2026-12-21 09:30"], ["time", 1020.0, "2026-12-21 17:00"]]:
@@ -861,7 +875,7 @@ func _check_time_of_day(main: GameMain) -> String:
 	if paused or hud.options_visible():
 		_fail("Resume after the time of day did not go back to play.")
 		return ""
-	return "held at the recorded moment with main.tscn's Sun and daylight; play's start at %s for the real time %s, the options showing it and the Sun there at once; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now the real time; pinned again" % [DayClock.moment_text(float(start[0])), DayClock.moment_text(real_now), ", ".join(moves)]
+	return "held at the recorded moment with main.tscn's Sun and daylight; play's start at %s, the options showing it and the Sun there at once; the sliders, paused, moved the Sun and its light at once (%s); time ran on with the system clock; Now the real time; pinned again" % ["; ".join(starts), ", ".join(moves)]
 
 
 ## The time of day's switch off (DayClock.enabled; owner, 2026-11-15: all of it
