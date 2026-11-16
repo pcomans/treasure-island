@@ -20,8 +20,9 @@
 //   - one buffer holds the pack through retries and a stored copy that reads short;
 //   - a disk slower than the download loses nothing, and what waits for it goes in few
 //     writes;
-//   - the loading line: never blank once anything reports, "from this device" only when
-//     the pack comes from there, a percentage once every size is known.
+//   - the loading line: never blank once anything reports, "Loading the game…" while the
+//     pack's source isn't known, "Downloading" only once the pack comes over the network,
+//     "from this device" only when it comes from there, a percentage once every size is known.
 // Node only, no network and no engine; about twenty seconds, mostly the page's waits
 // between download attempts and for storage that doesn't answer. Part of tools/test.sh.
 //
@@ -361,18 +362,21 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
   const line = (started, engine, pack) => tiLoadingLine({started, engine, pack});
   check(line(false, {loaded: 0, total: 0}, {loaded: 0, total: 0, from: null}) === null, 'line: shown before anything reported');
   const cases = [
-    [line(true, {loaded: 0, total: 100}, {loaded: 0, total: 0, from: null}), `Downloading the${nb}game…`, 'an unknown source'],
+    [line(true, {loaded: 0, total: 100}, {loaded: 0, total: 0, from: null}), `Loading the${nb}game…`, 'an unknown source'],
+    [line(true, {loaded: 60, total: 100}, {loaded: 0, total: 0, from: null}), `Loading the${nb}game…`, 'an unknown source while the engine loads'],
+    [line(true, {loaded: 100, total: 100}, {loaded: 300, total: 300, from: null}), `Loading the${nb}game…`, 'an unknown source with every size known'],
+    [line(true, {loaded: 0, total: 100}, {loaded: 0, total: 300, from: 'network'}), `Downloading the${nb}game: 0%`, 'the network, at the start'],
     [line(true, {loaded: 50, total: 100}, {loaded: 150, total: 300, from: 'network'}), `Downloading the${nb}game: 50%`, 'the network'],
     [line(true, {loaded: 100, total: 100}, {loaded: 300, total: 300, from: 'device'}), `Loading the game from this${nb}device: 100%`, 'the device'],
     [line(true, {loaded: 10, total: 100}, null), `Downloading the${nb}game: 10%`, 'the engine loading the pack'],
     [line(true, {loaded: 5, total: 0}, null), `Downloading the${nb}game…`, 'an export without sizes'],
   ];
   for (const [shown, want, what] of cases) check(shown && shown.text === want, `line for ${what}: ${shown ? JSON.stringify(shown.text) : 'none'}, not ${JSON.stringify(want)}`);
-  check(cases[2][0].done && !cases[1][0].done, 'line: done at 100% only');
+  check(cases[5][0].done && !cases[4][0].done && !cases[2][0].done, 'line: done at 100% only, never while the source is unknown');
 }
 
 if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, falls back to the network without storage or when storage never answers, and its loading line is never blank');
+console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, falls back to the network without storage or when storage never answers, and its loading line is never blank and says "Downloading" only for the network');

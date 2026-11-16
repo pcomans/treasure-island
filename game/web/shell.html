@@ -449,19 +449,22 @@ function tiBuildFiles(build, env) {
 // started once either reports, the engine's own downloads (its WebAssembly, and the
 // pack too when the page can't load it itself, pack null), and the page's pack, from
 // 'device', 'network' or null while not yet known. "Loading the game from this device"
-// when the pack comes from this device's copy, else "Downloading the game" (an unknown
-// source counts as the network, so the line never stays blank once anything reports),
-// with how far along it is in percent of the files' size once every size is known. No
-// megabytes: the server compresses the files, so less than their size travels, and how
-// much less isn't known until the download ends. Null before anything reports.
+// when the pack comes from this device's copy, "Downloading the game" when it comes
+// over the network (or through the engine's loader), and "Loading the game" while that
+// isn't known yet: the line never stays blank once anything reports, and never says
+// it downloads what comes from the device. With how far along it is in percent of the
+// files' size once the source and every size are known. No megabytes: the server
+// compresses the files, so less than their size travels, and how much less isn't known
+// until the download ends. Null before anything reports.
 function tiLoadingLine(loading) {
 	if (!loading.started) return null;
 	const parts = [loading.engine, loading.pack].filter(Boolean);
-	const step = loading.pack && loading.pack.from === 'device' ? 'Loading the game from this device' : 'Downloading the game';
+	const from = loading.pack ? loading.pack.from : 'network';
+	const step = from === 'device' ? 'Loading the game from this device' : from === 'network' ? 'Downloading the game' : 'Loading the game';
 	// Like the game's lines (keep_last_words_together, game/scripts/main.gd), the last
 	// two words keep together.
 	const words = step.replace(/ (\S+)$/, '\u00a0$1');
-	const known = parts.every((part) => part.total > 0);
+	const known = from !== null && parts.every((part) => part.total > 0);
 	const total = parts.reduce((sum, part) => sum + part.total, 0);
 	const loaded = parts.reduce((sum, part) => sum + Math.min(part.loaded, part.total), 0);
 	return {
