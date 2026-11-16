@@ -164,13 +164,16 @@ Every push to `main` that changes more than documentation (see
 [Where the builds go](#where-the-builds-go)) builds the Mac app, with the Linux
 and Windows builds of the same commit, on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Its launch checks are
-headless (Linux on the build runner, the Mac app on an Apple Silicon Mac, the
-Windows build on a Windows runner), so CI never exercises the game's rendering
-on a Mac or a Windows graphics card. Once the Mac app has loaded the island
-there, the build becomes a new release of its own, unless a newer build has
-overtaken it; the Windows build joins it when it loaded the island on the
-Windows runner, and is left out otherwise. This page always shows the newest
-release, whose Mac app is `grand-treasure-island-mac-build-<number>.zip`:
+headless (Linux on the build runner, the Mac app on an Intel Mac and on an
+Apple Silicon Mac, the Windows build on a Windows runner), so CI never exercises
+the game's rendering on a Mac or a Windows graphics card. Once the Mac app has
+loaded the island on both Macs, the build becomes a new release of its own,
+unless a newer build has overtaken it. When GitHub has no Apple Silicon Mac free,
+nothing is published until "Re-run failed jobs" on that run gets the Apple
+Silicon check through (within a day of the build). The Windows build joins the
+release when it loaded the island on the Windows runner, and is left out
+otherwise. This page always shows the newest release, whose Mac app is
+`grand-treasure-island-mac-build-<number>.zip`:
 
 https://github.com/pcomans/treasure-island/releases/latest
 

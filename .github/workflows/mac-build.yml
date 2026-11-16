@@ -1,9 +1,9 @@
 # Builds the Mac app on every push to main that changes more than documentation
 # with tools/build-mac.sh (the same script as in the devcontainer), with the
-# Linux and Windows builds of the same commit; launches the Mac app on an Apple
-# Silicon Mac and the Windows build on a Windows runner to check the island
-# loads, then publishes them as a new GitHub Release of its own, marked latest,
-# so this page always has the newest build:
+# Linux and Windows builds of the same commit; launches the Mac app on an Intel
+# Mac and on an Apple Silicon Mac and the Windows build on a Windows runner to
+# check the island loads, then publishes them as a new GitHub Release of its
+# own, marked latest, so this page always has the newest build:
 # https://github.com/pcomans/treasure-island/releases/latest
 # The Windows build goes in only when its launch check passed; otherwise the Mac
 # and Linux builds publish without it and the release notes say so (owner,
@@ -89,13 +89,14 @@
 # Signing and notarization (owner-requested 2026-11-07; Apple ID route and
 # ad-hoc fallback 2026-11-14) happen in the sign job, on main only, and only
 # while the repository variable MAC_SIGNING is "on". With it unset the sign job
-# is skipped, no build waits for the environment's approval, and verify and
-# publish take the build job's ad-hoc app. The sign job uses only Apple's own
-# tools on the macOS runner (security, codesign, xcrun notarytool and stapler,
-# ditto), in the GitHub Environment `mac-signing` (Settings -> Environments),
-# whose deployment branch rule admits only main. Keep its secrets in the
-# environment only: a repository secret of the same name reaches every branch.
-# Set each with gh, from a pipe or gh's own prompt rather than the clipboard.
+# is skipped, no build waits for the environment's approval, and the Mac checks
+# and publish take the build job's ad-hoc app. The sign job uses only Apple's own
+# tools on an Intel macOS runner (security, codesign, xcrun notarytool and
+# stapler, ditto), in the GitHub Environment `mac-signing` (Settings ->
+# Environments), whose deployment branch rule admits only main. Keep its
+# secrets in the environment only: a repository secret of the same name reaches
+# every branch. Set each with gh, from a pipe or gh's own prompt rather than
+# the clipboard.
 # The certificate:
 #   MACOS_CERTIFICATE_P12_BASE64  the "Developer ID Application" certificate with
 #                                 its private key, exported from Keychain Access as .p12:
@@ -143,10 +144,42 @@
 #   Fails, publishing nothing: a set only partly filled, a credential without
 #     the certificate, the certificate without a valid APPLE_TEAM_ID, a password
 #     with a line break, or a build artifact that is not one zip holding one app.
-# As always, a notarized build that fails one of verify's checks, a failed island
-# load check or a publish guard also stops the run. A stopped run publishes
-# nothing, so the previous build stays the latest release. The publish job uses
-# GITHUB_TOKEN.
+# As always, a notarized build that fails one of the Mac checks' signature
+# checks, a failed island load check or a publish guard also stops the run. A
+# stopped run publishes nothing, so the previous build stays the latest release.
+# The publish job uses GITHUB_TOKEN.
+#
+# Which Mac runs what (2026-11-16). GitHub is often short of Apple Silicon
+# (arm64) runners, and cancels a job that has waited 15 minutes for one ("The job
+# was not acquired by Runner of type hosted even after multiple attempts"). So
+# the sign job, the Intel check and the itch job run on an Intel Mac
+# (macos-26-intel, with the same Xcode 26.6 as macos-26): codesign, notarytool,
+# stapler and ditto do not depend on the Mac's chip, and codesign signs and
+# verifies every architecture of the universal app. Only the Apple Silicon check
+# runs on macos-26. The Intel check ("Check on an Intel Mac") and the Apple
+# Silicon check ("Load on Apple Silicon") run the same steps on the same app:
+# both halves of the universal app present, the signature checks above, then a
+# headless launch as x86_64 or as arm64 that must load the island. A release
+# needs both checks to pass (owner, 2026-11-16: wait for Apple Silicon).
+#
+# When GitHub finds no Apple Silicon Mac, that check ends cancelled and nothing
+# is published. Once GitHub has one again, open the run and choose "Re-run
+# failed jobs" (gh run rerun RUN_ID --failed), not "Re-run all jobs": it re-runs
+# the Apple Silicon check and the jobs after it (publish, itch, VirusTotal),
+# while the build, the sign job and the Intel check keep their results and
+# files, so nothing is built or signed again and no approval is asked for. Those
+# files (the artifacts mac-app, mac-app-release, linux-app, windows-app and
+# changelog) are kept for one day after they are uploaded (retention-days: 1).
+# After that the re-run's check stops at its download with an error saying so,
+# and only a new run on main publishes, building and signing main's head again
+# (with the owner's approval). Either way the publish job publishes only while
+# the build is still the newest of main (its head-of-main check).
+#
+# GitHub ends its Intel macOS images around August 2027
+# (https://github.com/actions/runner-images/issues/13045). From 2027-02-01 the
+# changes job warns in every run until the sign job, the itch job and the Intel
+# check no longer run on macos-26-intel (butler's darwin-arm64 pin for the itch
+# job is in INSTALL_LOG.md).
 #
 # The sounds come from the owner's private audio repository (owner, 2026-11-14):
 # its URL is the repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and
@@ -196,6 +229,17 @@ jobs:
     outputs:
       build: ${{ steps.decide.outputs.build }}
     steps:
+      - name: Remind about GitHub's Intel Macs
+        # GitHub ends its Intel macOS images around August 2027
+        # (https://github.com/actions/runner-images/issues/13045), and the sign
+        # job, the itch job and the Intel check run on macos-26-intel ("Which Mac
+        # runs what" in the header). From 2027-02-01 every run warns, by the
+        # runner's date, until they move; this step goes with them.
+        run: |
+          if [[ "$(date -u +%F)" > 2027-01-31 ]]; then
+            echo "::warning title=GitHub's Intel Macs end around August 2027::GitHub ends its Intel macOS images around August 2027 (https://github.com/actions/runner-images/issues/13045). Before then move the sign job and the itch job back to macos-26 (the itch job with butler's darwin-arm64 pin, in INSTALL_LOG.md) and remove or replace the Check on an Intel Mac job; then delete this reminder."
+          fi
+
       - name: Check out tools/docs-only
         if: github.event_name == 'push'
         continue-on-error: true
@@ -261,7 +305,7 @@ jobs:
     needs: [changes]
     # A push of documentation alone builds nothing (the changes job). A run that
     # only pushes an existing release to itch.io builds nothing either. With this
-    # job skipped so are sign, verify and publish.
+    # job skipped so are sign, the Mac checks and publish.
     if: ${{ !inputs.itch_release_tag && needs.changes.outputs.build == 'true' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 60
@@ -406,7 +450,7 @@ jobs:
           TI_SFX_REF: ${{ vars.TI_SFX_REF }}
           TI_SFX_GIT_TOKEN: ${{ secrets.TI_SFX_GIT_TOKEN }}
         # Its Linux launch check runs headless here: rendering the island on the
-        # CPU takes minutes. The Apple Silicon job then launches the Mac app itself.
+        # CPU takes minutes. The Mac checks then launch the Mac app itself.
         run: tools/build-mac.sh --headless-launch
 
       - name: Upload the Mac app
@@ -468,10 +512,13 @@ jobs:
     needs: build
     # Only on main, and only while the repository variable MAC_SIGNING is "on".
     # Otherwise this job is skipped, so nothing waits for the environment's
-    # approval, and verify and publish take the build job's app. The signing
-    # secrets live in the environment below, whose branch rule admits only main.
+    # approval, and the Mac checks and publish take the build job's app. The
+    # signing secrets live in the environment below, whose branch rule admits
+    # only main. An Intel Mac (see "Which Mac runs what" in the header): GitHub's
+    # 15 minutes for finding a runner start when the owner approves the job, so a
+    # shortage of Apple Silicon runners cost an approval each time.
     if: github.ref == 'refs/heads/main' && vars.MAC_SIGNING == 'on'
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 60
     environment: mac-signing
     concurrency:
@@ -770,6 +817,12 @@ jobs:
         id: notarize
         if: steps.sign.outcome == 'success' && steps.sign.outputs.ok == 'true'
         continue-on-error: true
+        # notarytool waits at most 35 minutes and stapling at most about 4 more,
+        # so this is a backstop: a step that hangs past it ends as a failure, and
+        # "Choose the build to publish" hands on the ad-hoc app (notary-error)
+        # within the job's 60 minutes, rather than the whole job timing out with
+        # nothing published and the owner's approval spent.
+        timeout-minutes: 50
         env:
           ROUTE: ${{ steps.mode.outputs.route }}
           NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
@@ -819,13 +872,26 @@ jobs:
           esac
 
           # The ticket can take a moment to reach Apple's ticket service after
-          # acceptance, so try stapling a few times.
-          stapled=no
-          for attempt in 1 2 3 4 5; do
-            if xcrun stapler staple "${app}"; then stapled=yes; break; fi
-            if [ "${attempt}" -lt 5 ]; then sleep 20; fi
-          done
-          [ "${stapled}" = yes ] || not_notarized staple-failed "Stapling the notarization ticket failed"
+          # acceptance, so try stapling a few times. On GitHub's Intel Macs that
+          # service's HTTP/3 connections (UDP port 443) have been seen to drop, so
+          # that stapler fails while HTTPS over TCP works
+          # (https://github.com/actions/runner-images/issues/14924, macos-15-intel,
+          # October 2026; stapling worked at once on macos-26-intel and
+          # macos-15-intel on 2026-11-16). So after five failures this job blocks
+          # outgoing UDP 443, as GitHub advises there, and tries five more times.
+          staple() {
+            local attempt
+            for attempt in 1 2 3 4 5; do
+              if xcrun stapler staple "${app}"; then return 0; fi
+              if [ "${attempt}" -lt 5 ]; then sleep 20; fi
+            done
+            return 1
+          }
+          if ! staple; then
+            echo "Stapling failed five times; blocking outgoing UDP 443 for this job (actions/runner-images#14924) and trying again."
+            { echo "block return out quick proto udp from any to any port 443" | sudo pfctl -f - && sudo pfctl -E && staple; } \
+              || not_notarized staple-failed "Stapling the notarization ticket failed"
+          fi
           xcrun stapler validate "${app}" || not_notarized staple-failed "The stapled ticket does not validate"
 
           rm -rf out
@@ -899,7 +965,7 @@ jobs:
             {
               echo "### Mac build NOT notarized"
               echo ""
-              echo "Reason: \`${reason}\`: ${why}. The build job's ad-hoc app goes on to verify and publish, unchanged."
+              echo "Reason: \`${reason}\`: ${why}. The build job's ad-hoc app goes on to the Mac checks and publish, unchanged."
             } >> "${GITHUB_STEP_SUMMARY}"
           fi
           ls -l out
@@ -926,46 +992,85 @@ jobs:
           done
           rm -f "${CERTIFICATE_FILE}" "${API_KEY_FILE}"
 
-  verify:
-    name: Load on Apple Silicon
+  verify-intel:
+    name: Check on an Intel Mac
     needs: [build, sign]
     # The sign job's app when it ran; the build job's app when it was skipped (a
     # branch run, or MAC_SIGNING not "on"). A failed or cancelled sign job stops
-    # this job, and with it the publish job.
-    if: >-
+    # this job and the Apple Silicon one, and with them the publish job, which
+    # needs this job to pass.
+    if: &mac-check-if >-
       ${{ !cancelled() && needs.build.result == 'success' &&
       (needs.sign.result == 'success' ||
       (needs.sign.result == 'skipped' && !(github.ref == 'refs/heads/main' && vars.MAC_SIGNING == 'on'))) }}
-    runs-on: macos-26
+    runs-on: macos-26-intel
     timeout-minutes: 20
     concurrency:
-      group: mac-verify-${{ github.ref }}-${{ needs.build.result }}
+      group: mac-verify-intel-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
-    steps:
+    env:
+      # The half of the universal app this Mac launches.
+      LAUNCH_ARCH: x86_64
+    # The Apple Silicon job runs these same steps (a YAML alias of this list).
+    steps: &mac-check-steps
       - name: Download the Mac app
+        id: download
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
 
-      - name: Launch it headless on arm64 and check the island loads
+      # A "Re-run failed jobs" more than a day after the build finds the app's
+      # artifact gone (retention-days: 1); say so instead of leaving only the
+      # download action's error.
+      - name: Explain a missing app
+        if: failure() && steps.download.outcome == 'failure'
+        env:
+          ARTIFACT: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
+        run: |
+          echo "::error title=Mac app not found::This run's artifact ${ARTIFACT} could not be downloaded (the download step's error is above). A run's build artifacts are kept for one day after upload, so a re-run of an older run cannot check or publish its build. The next run on main (a push, or gh workflow run mac-build.yml --ref main) builds and signs main's head again, with the owner's approval of the sign job."
+          exit 1
+
+      - name: Check the signature, launch it headless and check the island loads
         # The same rule as the Linux launch check in tools/build-mac.sh: the game
         # loads the island, quits with 0 and prints no engine errors. A notarized
         # build must also pass Gatekeeper and carry its stapled ticket; any other
         # build must be the ad-hoc one, never a Developer ID build that is not
-        # notarized. The log names the signature's team, never the certificate holder.
+        # notarized. codesign --verify checks every architecture of the universal
+        # app (its default). The log names the signature's team, never the
+        # certificate holder. The job's LAUNCH_ARCH is the Mac's own architecture
+        # and the half of the app it launches.
         env:
           NOTARIZED: ${{ needs.sign.outputs.notarized }}
           ROUTE: ${{ needs.sign.outputs.route }}
           FALLBACK: ${{ needs.sign.outputs.fallback }}
         run: |
           echo "$(sw_vers -productName) $(sw_vers -productVersion), $(uname -m)"
+          case "${LAUNCH_ARCH}" in
+            x86_64 | arm64) ;;
+            *) echo "::error::LAUNCH_ARCH is \"${LAUNCH_ARCH}\", not x86_64 or arm64."; exit 1 ;;
+          esac
+          if [ "$(uname -m)" != "${LAUNCH_ARCH}" ]; then
+            echo "::error::This job checks the app on ${LAUNCH_ARCH}, but the runner GitHub gave it is $(uname -m)."
+            exit 1
+          fi
           df -h .
           zip="$(ls treasure-island-mac-*.zip)"
           ditto -x -k "${zip}" app
           app="$(ls -d app/*.app)"
           exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
-          echo "${exe}: $(lipo -archs "${exe}")"
+          # Both halves of the universal app, whichever this Mac launches: a build
+          # that lost one fails both checks.
+          archs="$(lipo -archs "${exe}")"
+          echo "${exe}: ${archs}"
+          for want in x86_64 arm64; do
+            [[ " ${archs} " == *" ${want} "* ]] || { echo "FAIL: the app's executable has no ${want} half (lipo -archs: ${archs})" >&2; exit 1; }
+          done
           codesign --verify --deep --strict --verbose=2 "${app}"
+          # Each half's own signature, from its code directory (no Authority=
+          # lines, which name the certificate holder).
+          for half in x86_64 arm64; do
+            echo "${half}: $(codesign -dvv --architecture "${half}" "${app}" 2>&1 | grep -E '^(Format|CodeDirectory|Signature)' | tr '\n' ';' || true)"
+          done
           dvv_status=0
           details="$(codesign -dvv "${app}" 2>&1)" || dvv_status=$?
           # On a failed signature check: what codesign -dvv said, filtered. Its
@@ -996,7 +1101,7 @@ jobs:
               echo "::warning::Gatekeeper assessments are switched off on this runner, so spctl's verdict proves nothing here."
             fi
             xcrun stapler validate "${app}" || { echo "FAIL: the notarization ticket is not stapled" >&2; exit 1; }
-            echo "::notice title=Mac signing mode::This build is Developer ID signed and notarized (credential route: ${ROUTE}), and passes Gatekeeper."
+            echo "::notice title=Mac signing mode::This build is Developer ID signed and notarized (credential route: ${ROUTE}), and passes Gatekeeper on ${LAUNCH_ARCH}."
           else
             # Godot's built-in signer (codesign/codesign=1 in export_presets.cfg) gives
             # each code directory the flags adhoc,runtime, no team and an empty
@@ -1013,7 +1118,7 @@ jobs:
             echo "::notice title=Mac signing mode::This build is ad-hoc signed and not notarized${FALLBACK:+ (reason: ${FALLBACK})}."
           fi
           log=launch.log
-          arch -arm64 "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
+          arch "-${LAUNCH_ARCH}" "${exe}" --headless -- --quit-on-ready >"${log}" 2>&1 &
           pid=$!
           # Stop it after 300 s, as tools/build-mac.sh's timeout does.
           ( for _ in $(seq 300); do sleep 1; kill -0 "${pid}" || exit 0; done; kill "${pid}" ) 2>/dev/null &
@@ -1024,10 +1129,27 @@ jobs:
           cat "${log}"
           errors="$(grep -E '^ERROR|SCRIPT ERROR' "${log}" | grep -v 'Parameter "ss" is null' || true)"
           if [ "${status}" -ne 0 ] || ! grep -q '^WORLD_READY' "${log}" || ! grep -q '^PLAY_READY' "${log}" || [ -n "${errors}" ]; then
-            echo "FAIL: the Mac app (arm64, headless) exited ${status} without loading the island cleanly" >&2
+            echo "FAIL: the Mac app (${LAUNCH_ARCH}, headless) exited ${status} without loading the island cleanly" >&2
             exit 1
           fi
           echo "PASS: ${zip} loads the island on $(uname -m)"
+
+  verify:
+    name: Load on Apple Silicon
+    needs: [build, sign]
+    # The Intel check's condition and steps, on an Apple Silicon Mac. The
+    # publish job needs this job to pass too; when GitHub has no Apple Silicon
+    # Mac for it, "Re-run failed jobs" later ("Which Mac runs what" in the
+    # header).
+    if: *mac-check-if
+    runs-on: macos-26
+    timeout-minutes: 20
+    concurrency:
+      group: mac-verify-${{ github.ref }}-${{ needs.build.result }}
+      cancel-in-progress: true
+    env:
+      LAUNCH_ARCH: arm64
+    steps: *mac-check-steps
 
   windows:
     name: Load on Windows
@@ -1135,15 +1257,19 @@ jobs:
 
   publish:
     name: Publish
-    needs: [build, sign, verify, windows]
+    needs: [build, sign, verify-intel, verify, windows]
     # Main only, never on a dry run. The sign job's app when it ran; the build
     # job's app when MAC_SIGNING is not "on" and the sign job was skipped. It
     # waits for the Windows check but never depends on it: the Windows build goes
     # in only when that check passed, and otherwise the Mac and Linux builds
-    # publish without it (owner, 2026-11-16: shipping comes first).
+    # publish without it (owner, 2026-11-16: shipping comes first). Both Mac
+    # checks must pass, the Intel one and the Apple Silicon one; when the Apple
+    # Silicon one found no runner, "Re-run failed jobs" later ("Which Mac runs
+    # what" in the header).
     if: >-
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
-      needs.build.result == 'success' && needs.verify.result == 'success' &&
+      needs.build.result == 'success' && needs.verify-intel.result == 'success' &&
+      needs.verify.result == 'success' &&
       (needs.sign.result == 'success' || (needs.sign.result == 'skipped' && vars.MAC_SIGNING != 'on')) }}
     runs-on: ubuntu-26.04
     timeout-minutes: 15
@@ -1404,7 +1530,9 @@ jobs:
     if: >-
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
-    runs-on: macos-26
+    # An Intel Mac, as the sign job ("Which Mac runs what" in the header): its
+    # steps need ditto and codesign, not a particular chip.
+    runs-on: macos-26-intel
     timeout-minutes: 190
     continue-on-error: true
     environment: itch
@@ -1626,19 +1754,22 @@ jobs:
         id: butler
         if: steps.builds.outcome == 'success'
         env:
-          # itch's own build from broth (https://itch.io/docs/butler/installing.html).
-          # itch publishes no checksum for it: this SHA-256 is of the 15.32.0
-          # archive as broth served it on 2026-11-15, whose butler executable and
-          # 7-zip libraries are byte-identical to those in the v15.32.0 release of
-          # github.com/itchio/butler, for which GitHub records the zip's digest.
+          # itch's own build from broth (https://itch.io/docs/butler/installing.html),
+          # for the Intel Mac this job runs on (darwin-amd64). itch publishes no
+          # checksum for it: this SHA-256 is of the darwin-amd64 15.32.0 archive as
+          # broth served it on 2026-11-16 (twice, the same bytes), whose butler
+          # executable and 7-zip libraries are byte-identical to those in
+          # butler-darwin-amd64.zip of the v15.32.0 release of
+          # github.com/itchio/butler, for which GitHub records the zip's digest
+          # (sha256:fe7607c6227cd735231e4a7376b8148666d84fba63b9e9e6a5e313c5da70466c).
           BUTLER_VERSION: "15.32.0"
-          BUTLER_SHA256: f1c460f08c02686b49f8da74344e5578ece9ea1a8bae1779445b5d98e0a794b3
+          BUTLER_SHA256: a92947c9556c9bfb0cc9bdc3814f342b30e0ee7269efc418658894a916ca9584
         run: |
           dir="${RUNNER_TEMP}/butler"
           mkdir -p "${dir}"
           # --retry-all-errors: a reset connection is retried too (2026-11-16: "curl:
           # (56) Recv failure: Connection reset by peer" 0.85 s into the download).
-          curl -fsSL --retry 3 --retry-all-errors -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-arm64/${BUTLER_VERSION}/archive/default"
+          curl -fsSL --retry 3 --retry-all-errors -o "${dir}/butler.zip" "https://broth.itch.zone/butler/darwin-amd64/${BUTLER_VERSION}/archive/default"
           echo "${BUTLER_SHA256}  ${dir}/butler.zip" | shasum -a 256 -c -
           unzip -q -o "${dir}/butler.zip" -d "${dir}"
           chmod 0755 "${dir}/butler"
