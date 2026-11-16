@@ -20,7 +20,9 @@
 #    tools/docs-only (tools/check_docs_only.sh): only Markdown counts as
 #    documentation, so only a push of Markdown alone skips the Mac build. And
 #    the web build's path check (tools/check_web_paths_selftest.sh): a page
-#    that loads a file from outside its own folder fails.
+#    that loads a file from outside its own folder fails. And the web page's
+#    build cache (tools/check_web_build_files.mjs): a build stored on the device
+#    loads without a download, and a short or failed download is never stored.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -136,6 +138,13 @@ tools/check_docs_only.sh || failed+=("tools/check_docs_only.sh")
 # a <base> element and a missing file. Offline, under a second.
 echo "== tools/check_web_paths_selftest.sh"
 tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
+
+# The web page's build cache (tiBuildFiles in game/web/shell.html), with stand-ins
+# for the browser's file system, locks and network: a stored build loads without a
+# download, a new build replaces the old one, a short or failed download is never
+# stored, and without storage the files come from the network. Node only, seconds.
+echo "== tools/check_web_build_files.mjs"
+node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mjs")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

@@ -11,7 +11,8 @@
 #
 # build/web is a static site: serve it locally or deploy it to Vercel. Godot's web platform only has the Compatibility
 # renderer (WebGL 2). Before handing it over this
-#   1. exports the single-threaded web build, which needs no special headers,
+#   1. exports the single-threaded web build, which needs no special headers, and
+#      adapts Godot's loader to the page's build cache (game/web/shell.html),
 #   2. checks the data pack contains only game files (no reference photos,
 #      research or evidence),
 #   3. checks the page and Godot's loader fetch every file by a path relative to
@@ -104,6 +105,37 @@ fi
 
 (cd "${project}" && tools/godot --headless --path . --export-release "Web" "${root}/${out}/${name}.html")
 mv "${out}/${name}.html" "${out}/index.html"
+
+# Two changes to Godot's loader (the engine script beside the page) for the page's
+# build cache (game/web/shell.html, tiBuildFiles):
+#   - the engine's file system keeps a preloaded file's buffer instead of copying it
+#     (Emscripten's canOwn): GodotFS.copy_to_fs's FS.writeFile copied the 160 MB pack,
+#     and the page held two or three copies of it a few seconds into loading
+#     (iphone-memory-20261116). The page reads the pack into one buffer and never
+#     touches it again; whatever else calls copy_to_fs must not either.
+#   - the loader fetches through globalThis.__tiLoaderFetch when the page defines it,
+#     so that the page can give it the WebAssembly from this device.
+# Each must apply exactly once, or the build stops: check them again with a new Godot.
+python3 -I - "${out}/${name}.js" <<'EOF'
+import os, shutil, sys, tempfile
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    text = handle.read()
+for old, new in (
+    ("FS.writeFile(path,new Uint8Array(buffer))}",
+     "FS.writeFile(path,new Uint8Array(buffer),{canOwn:true})}"),
+    ("return fetch(file).then(function (response) {",
+     "return (typeof globalThis.__tiLoaderFetch === 'function' ? globalThis.__tiLoaderFetch(file) : fetch(file)).then(function (response) {"),
+):
+    if text.count(old) != 1:
+        sys.exit("FAIL: the engine script %s has %d of %r, not 1; Godot's loader changed" % (path, text.count(old), old))
+    text = text.replace(old, new)
+handle, temporary = tempfile.mkstemp(dir=os.path.dirname(path))
+with os.fdopen(handle, "w", encoding="utf-8") as out:
+    out.write(text)
+shutil.copymode(path, temporary)
+os.replace(temporary, path)
+EOF
 
 # Run from an empty folder so Godot sees only the pack, not the source project.
 (cd "${work}/mount" && timeout 120 "${root}/tools/godot" --headless --main-pack "${root}/${out}/${name}.pck" --script res://game/tests/shared/build_content_audit.gd)
