@@ -168,9 +168,13 @@ function tiBuildFiles(build, env) {
 	const LOCK = 'grand-treasure-island-build-files';
 	// Downloads, as the engine's own: 4 attempts, a second apart.
 	const ATTEMPTS = 4;
-	// Chunks waiting for the disk: past this the download waits for it, and a disk that
-	// makes no room for STALL_MS loses the store, never the download.
+	// Bytes waiting for the disk: past this the download waits for it, and a disk that
+	// makes no room for STALL_MS loses the store, never the download. Adjacent pieces of
+	// one buffer (the pack's) go to the disk together, up to WRITE_MAX at a time, so that
+	// what is left when the download ends takes few writes: the engine's start keeps the
+	// page busy for seconds right after it.
 	const QUEUE_LIMIT = 16 * 1024 * 1024;
+	const WRITE_MAX = 8 * 1024 * 1024;
 	const STALL_MS = 15000;
 	// Each file's latest store (a retried download stores again, after the last one ends).
 	const stores = new Map();
@@ -246,7 +250,12 @@ function tiBuildFiles(build, env) {
 				for (;;) {
 					if (state === 'failed') throw new Error('the download failed');
 					if (queue.length > 0) {
-						const chunk = queue.shift();
+						let chunk = queue.shift();
+						while (queue.length > 0 && queue[0].buffer === chunk.buffer
+							&& queue[0].byteOffset === chunk.byteOffset + chunk.byteLength
+							&& chunk.byteLength + queue[0].byteLength <= WRITE_MAX) {
+							chunk = new Uint8Array(chunk.buffer, chunk.byteOffset, chunk.byteLength + queue.shift().byteLength);
+						}
 						await writable.write(chunk);
 						bytes += chunk.byteLength;
 						queued -= chunk.byteLength;
@@ -399,7 +408,8 @@ function tiBuildFiles(build, env) {
 				await readInto(response.body, buffer, (bytes, chunk) => {
 					progress(bytes, 'network');
 					if (!store) return null;
-					store.write(chunk);
+					// What just came, as a view of the buffer: no second copy waits for the disk.
+					store.write(buffer.subarray(bytes - chunk.byteLength, bytes));
 					return store.room();
 				});
 				if (store) store.end(true);
