@@ -290,7 +290,7 @@ Sounds: `tools/build-mac.sh`, `tools/build-linux.sh` and `tools/build-web.sh` ru
 
 ### Web deploys
 
-Deploy only as part of a [release](#pushes-and-releases); feature-branch pushes never deploy. Run `tools/deploy-web.sh` from a clean checkout at `origin/main`, after `tools/test.sh` has passed for that commit. It builds with `tools/build-web.sh` and uploads `build/web` with the pinned Vercel CLI, using the owner's existing login; its PASS line names the commit's build number, and it refuses a shallow clone, which has none. The team is on Vercel Pro, with a 1 GB CLI upload limit. Pair each deploy with a quick browser screenshot of the deployed web build. Setup, linking and controls are in [README](README.md#browser-build). No release record or extra review is involved.
+Deploy only as part of a [release](#pushes-and-releases); feature-branch pushes never deploy. Run `tools/deploy-web.sh` from a clean checkout at `origin/main`, after `tools/test.sh` has passed for that commit, or for its latest ancestor that changed the game, its data or its tests. It builds with `tools/build-web.sh` and uploads `build/web` with the pinned Vercel CLI, using the owner's existing login; its PASS line names the commit's build number, and it refuses a shallow clone, which has none. The team is on Vercel Pro, with a 1 GB CLI upload limit. Pair each deploy with a quick browser screenshot of the deployed web build. Setup, linking and controls are in [README](README.md#browser-build). No release record or extra review is involved.
 
 ## Bounded subagent execution
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Runs every test. Must pass before anything is pushed to main.
+# Runs every test. Must pass before a change to the game, its data or its tests
+# is pushed to main (AGENTS.md, Tests).
 #
 #   tools/test.sh
 #
