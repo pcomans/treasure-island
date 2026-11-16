@@ -124,7 +124,8 @@ var shadows: ShadowQuality
 ## Options), put on as the game starts.
 var graphics: GraphicsSettings
 ## The Sun pointed at the time of day, with its light (DaySun, DayClock, DayLight):
-## the real time as the game starts; the recorded moment for a test or capture
+## 12:30 on the island's date as the game starts (DayClock.start_instant), time
+## running on from there; the recorded moment for a test or capture
 ## driver; with the time of day off (DayClock.enabled: its switch, and the web)
 ## main.tscn's Sun and look, untouched.
 var day_sun: DaySun
