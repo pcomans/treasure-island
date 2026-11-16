@@ -1,16 +1,24 @@
 extends SceneTree
 ## The pause menu's build line (owner, 2026-11-16: "Show the build version in the
 ## pause menu pls"), headless, on the HUD alone:
-##   - this run, from source, says "Build: source": only an export carries a stamp;
-##   - the menu shows a build's stamp, read from a file as the game reads its own
-##     (game/scripts/ui/build_stamp.gd): "Build 2084 (ba5ac01)", the commit's first
-##     seven digits as the release's tag has them; a build without a stamp, or with
-##     one that does not read, says "Build: unknown"; any stamp seen from source
-##     says "Build: source";
+##   - this run, from source, says "Build source": only an export carries a stamp;
+##   - the one rule for a stamp (game/scripts/ui/build_stamp.gd from_values), which
+##     the export plugin applies to the build script's TI_BUILD_NUMBER and
+##     TI_BUILD_COMMIT before it writes one, and the game to the stamp file it
+##     reads, takes a build number of plain digits from 1 to 999,999,999 and a
+##     commit of 7 to 64 lowercase hex digits, and nothing else: not "2084-rc",
+##     "v2084", "+2084", "02084", "0", ten digits or more, a line break after it, an
+##     empty number or commit, or a commit in capitals, too short or with other
+##     characters; the export plugin loads;
+##   - the menu shows a build's stamp, read from a file as the game reads its own,
+##     written as the export plugin writes it: "Build 2084 (ba5ac01)", the commit's
+##     first seven digits as the release's tag has them; a build without a stamp,
+##     or with one that does not read (a huge number among them), says "Build
+##     unknown"; any stamp seen from source says "Build source";
 ##   - the build content audit (game/tests/shared/build_content_audit.gd) passes
 ##     the stamp of the build its script made, and fails a pack without a stamp,
-##     another build's or commit's, and a run without the build's number and commit
-##     to compare;
+##     another build's or commit's, and a run without a build number and commit
+##     that the rule takes;
 ##   - the line is the menu's last, under Exit, in smaller type than its buttons,
 ##     whole, inside the panel and clear of the title and every button, the panel
 ##     inside the page, at the desktop frame and in a touch screen's 720 px layout
@@ -22,6 +30,8 @@ extends SceneTree
 const HUD_SCENE := "res://game/scenes/ui/hud.tscn"
 const BuildStamp := preload("res://game/scripts/ui/build_stamp.gd")
 const AUDIT := preload("res://game/tests/shared/build_content_audit.gd")
+## The export plugin that writes the stamp (only an export runs it).
+const PLUGIN_PATH := "res://addons/generated_world_export/generated_world_export.gd"
 ## The desktop frame, and an iPhone's Safari page held upright and sideways in the
 ## 720 px layout main.gd gives a touch browser (as headless_credits_contract.gd).
 const DESKTOP := Vector2i(1440, 900)
@@ -38,6 +48,8 @@ const STAMP_PATH := "user://test-build-stamp-%d.json"
 var _failure := ""
 var _hud: GameHUD
 var _stamp_path := ""
+## How many build number and commit pairs _check_values tried.
+var _value_cases := 0
 
 
 func _initialize() -> void:
@@ -52,9 +64,9 @@ func _run() -> void:
 	_hud = (load(HUD_SCENE) as PackedScene).instantiate() as GameHUD
 	root.add_child(_hud)
 	await _frames(2)
-	if not _require(_hud.build_label.text == "Build: source", "A run from source must say \"Build: source\", not \"%s\"." % _hud.build_label.text):
+	if not _require(_hud.build_label.text == "Build source", "A run from source must say \"Build source\", not \"%s\"." % _hud.build_label.text):
 		return _finish()
-	if not _check_stamps() or not _check_audit():
+	if not _check_values() or not _check_plugin() or not _check_stamps() or not _check_audit():
 		return _finish()
 	if not await _check_menu("desktop"):
 		return _finish()
@@ -70,26 +82,80 @@ func _run() -> void:
 			return _finish()
 	if not await _check_start_prompt():
 		return _finish()
-	print("PASS: build label: a run from source says \"Build: source\"; a build shows its stamp, read as the game reads its own (\"%s\"), one without a stamp or with a broken one \"Build: unknown\", and any stamp seen from source \"Build: source\"; the content audit passes the build's own stamp and fails a missing stamp, another build's or commit's and an unset number or commit; the line is the pause menu's last, under Exit, smaller than its buttons' type, whole, inside the panel and clear of the rest, at the desktop frame and on an iPhone upright and sideways; the start prompt hides it and play's first start brings it back" % STAMPED)
+	print("PASS: build label: a run from source says \"Build source\"; the stamp rule takes plain build numbers from 1 to 999,999,999 and lowercase hex commits only (%d cases), and the export plugin that applies it loads; a build shows its stamp, written as the plugin writes it and read as the game reads its own (\"%s\"), one without a stamp or with a broken or huge one \"Build unknown\", and any stamp seen from source \"Build source\"; the content audit passes the build's own stamp and fails a missing stamp, another build's or commit's, and a number or commit the rule refuses; the line is the pause menu's last, under Exit, smaller than its buttons' type, whole, inside the panel and clear of the rest, at the desktop frame and on an iPhone upright and sideways; the start prompt hides it and play's first start brings it back" % [_value_cases, STAMPED])
 	_finish()
+
+
+## The one rule for a stamp (BuildStamp.from_values), as the export plugin applies
+## it to the build script's variables and the game to its stamp file.
+func _check_values() -> bool:
+	var own := {"build": NUMBER, "commit": COMMIT}
+	# [TI_BUILD_NUMBER, TI_BUILD_COMMIT, the stamp they give, {} for none]
+	var cases := [
+		[str(NUMBER), COMMIT, own],
+		[str(NUMBER), COMMIT.left(7), {"build": NUMBER, "commit": COMMIT.left(7)}],
+		["1", COMMIT, {"build": 1, "commit": COMMIT}],
+		["999999999", COMMIT, {"build": 999999999, "commit": COMMIT}],
+		["v2084", COMMIT, {}],
+		["build", COMMIT, {}],
+		["2084-rc", COMMIT, {}],
+		["20x84", COMMIT, {}],
+		["2084.5", COMMIT, {}],
+		[" 2084", COMMIT, {}],
+		["2084\n", COMMIT, {}],
+		["+2084", COMMIT, {}],
+		["-2084", COMMIT, {}],
+		["02084", COMMIT, {}],
+		["0", COMMIT, {}],
+		["1000000000", COMMIT, {}],
+		["123456789012345678901234567890", COMMIT, {}],
+		["", COMMIT, {}],
+		[str(NUMBER), "", {}],
+		["", "", {}],
+		[str(NUMBER), COMMIT.to_upper(), {}],
+		[str(NUMBER), COMMIT.left(6), {}],
+		[str(NUMBER), "ba5ac01!", {}],
+		[str(NUMBER), "zzzzzzz", {}],
+		[str(NUMBER), COMMIT + "\n", {}],
+	]
+	_value_cases = cases.size()
+	for row: Array in cases:
+		var got := BuildStamp.from_values(row[0], row[1])
+		if not _require(got == row[2], "The stamp rule must give %s for build number \"%s\" and commit \"%s\", not %s." % [row[2], str(row[0]).c_escape(), str(row[1]).c_escape(), got]):
+			return false
+	return true
+
+
+## The export plugin, which writes the stamp only through that rule, loads: nothing
+## but an export runs it otherwise. Its classes are the editor's, which this binary
+## has (tools/godot runs the editor binary).
+func _check_plugin() -> bool:
+	if not ClassDB.class_exists("EditorExportPlugin"):
+		print("NOTE: this Godot binary has no editor classes, so the export plugin %s was not loaded" % PLUGIN_PATH)
+		return true
+	var plugin := load(PLUGIN_PATH) as GDScript
+	return _require(plugin != null and plugin.can_instantiate(), "The export plugin %s must load." % PLUGIN_PATH)
 
 
 ## Each stamp file as the menu shows it in a build and from source; it ends showing
 ## the build's own stamp, for the checks after.
 func _check_stamps() -> bool:
-	var own := JSON.stringify({"build": NUMBER, "commit": COMMIT})
+	# As the export plugin writes it.
+	var own := BuildStamp.file_text(BuildStamp.from_values(str(NUMBER), COMMIT))
 	# [the file's text, or null for no file; the line a build shows]
 	var cases := [
 		[own, STAMPED],
-		[null, "Build: unknown"],
-		["not json", "Build: unknown"],
-		["[%d, \"%s\"]" % [NUMBER, COMMIT], "Build: unknown"],
-		[JSON.stringify({"build": 0, "commit": COMMIT}), "Build: unknown"],
-		[JSON.stringify({"build": 2084.5, "commit": COMMIT}), "Build: unknown"],
-		[JSON.stringify({"build": str(NUMBER), "commit": COMMIT}), "Build: unknown"],
-		[JSON.stringify({"build": NUMBER, "commit": COMMIT.left(6)}), "Build: unknown"],
-		[JSON.stringify({"build": NUMBER, "commit": COMMIT.to_upper()}), "Build: unknown"],
-		[JSON.stringify({"build": NUMBER}), "Build: unknown"],
+		[null, "Build unknown"],
+		["not json", "Build unknown"],
+		["[\"%d\", \"%s\"]" % [NUMBER, COMMIT], "Build unknown"],
+		[JSON.stringify({"build": NUMBER, "commit": COMMIT}), "Build unknown"],
+		[JSON.stringify({"build": 1e30, "commit": COMMIT}), "Build unknown"],
+		[JSON.stringify({"build": "123456789012345678901234567890", "commit": COMMIT}), "Build unknown"],
+		[JSON.stringify({"build": "0", "commit": COMMIT}), "Build unknown"],
+		[JSON.stringify({"build": "2084-rc", "commit": COMMIT}), "Build unknown"],
+		[JSON.stringify({"build": str(NUMBER), "commit": COMMIT.left(6)}), "Build unknown"],
+		[JSON.stringify({"build": str(NUMBER), "commit": COMMIT.to_upper()}), "Build unknown"],
+		[JSON.stringify({"build": str(NUMBER)}), "Build unknown"],
 		[own, STAMPED],
 	]
 	for row: Array in cases:
@@ -102,7 +168,7 @@ func _check_stamps() -> bool:
 		_hud.show_build(stamp, false)
 		var from_source := _hud.build_label.text
 		_hud.show_build(stamp, true)
-		if not _require(_hud.build_label.text == row[1] and from_source == "Build: source", "A stamp file %s must give \"%s\" in a build and \"Build: source\" from source, not \"%s\" and \"%s\"." % ["holding %s" % row[0] if row[0] != null else "that is missing", row[1], _hud.build_label.text, from_source]):
+		if not _require(_hud.build_label.text == row[1] and from_source == "Build source", "A stamp file %s must give \"%s\" in a build and \"Build source\" from source, not \"%s\" and \"%s\"." % ["holding %s" % row[0] if row[0] != null else "that is missing", row[1], _hud.build_label.text, from_source]):
 			return false
 	var read := BuildStamp.read(_stamp_path)
 	return _require(read == {"build": NUMBER, "commit": COMMIT}, "The stamp must read back as build %d, commit %s, not %s." % [NUMBER, COMMIT, read])
@@ -121,6 +187,8 @@ func _check_audit() -> bool:
 		[stamp, str(NUMBER), COMMIT.replace("b", "c"), "another commit's stamp"],
 		[stamp, "", "", "a run without the build's number and commit"],
 		[stamp, "0", COMMIT, "a build number of 0"],
+		[stamp, str(NUMBER) + "-rc", COMMIT, "a build number that is not plain digits"],
+		[stamp, str(NUMBER), COMMIT.to_upper(), "a commit in capitals"],
 	]:
 		if not _require(not AUDIT.stamp_problem(row[0], row[1], row[2]).is_empty(), "The content audit must fail %s." % row[3]):
 			return false

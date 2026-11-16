@@ -63,14 +63,16 @@ func _check(path: String) -> String:
 
 ## Why a pack's build stamp (as BuildStamp.read gives it) is not the stamp of the
 ## build its script made, whose number (tools/build-number) and commit it gave the
-## export and this check as TI_BUILD_NUMBER and TI_BUILD_COMMIT; "" when it is.
+## export and this check as TI_BUILD_NUMBER and TI_BUILD_COMMIT, read by the
+## export's own rule (BuildStamp.from_values); "" when it is.
 static func stamp_problem(stamp: Dictionary, number: String, commit: String) -> String:
-	if not number.is_valid_int() or number.to_int() < 1 or commit.is_empty():
+	var expected := BuildStamp.from_values(number, commit)
+	if expected.is_empty():
 		return "TI_BUILD_NUMBER (\"%s\") and TI_BUILD_COMMIT (\"%s\") must give this build's number and commit: its build script sets them, for the export that stamps the pack and for this check" % [number, commit]
 	if stamp.is_empty():
 		return "%s is missing or unreadable: the export plugin (addons/generated_world_export) stamps each export with TI_BUILD_NUMBER and TI_BUILD_COMMIT" % BuildStamp.PATH
-	if stamp.build != number.to_int() or stamp.commit != commit:
-		return "%s names build %d, commit %s, not this build's %s, commit %s" % [BuildStamp.PATH, stamp.build, stamp.commit, number, commit]
+	if stamp != expected:
+		return "%s names build %d, commit %s, not this build's %d, commit %s" % [BuildStamp.PATH, stamp.build, stamp.commit, expected.build, expected.commit]
 	return ""
 
 

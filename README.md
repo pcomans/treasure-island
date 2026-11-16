@@ -283,10 +283,10 @@ build script (`tools/build-mac.sh`, which the release workflow runs,
 `tools/build-linux.sh` and `tools/build-web.sh`) gives the export the commit's
 build number and commit as `TI_BUILD_NUMBER` and `TI_BUILD_COMMIT`; the export
 plugin (`addons/generated_world_export`) writes them into the pack as
-`generated/build_stamp.json`, and the content audit fails a pack without that
-stamp or with another build's. Nothing is written into the checkout, so a run
-from source shows "Build: source", and an export made by hand in the editor
-"Build: unknown".
+`generated/build_stamp.json` when they read as a plain build number and a commit,
+and the content audit fails a pack without that stamp or with another build's.
+Nothing is written into the checkout, so a run from source shows "Build source",
+and an export made by hand in the editor "Build unknown".
 
 A push to `main` that changes only documentation, that is only Markdown files
 (`.md`, anywhere, as [`tools/docs-only`](tools/docs-only) decides), builds

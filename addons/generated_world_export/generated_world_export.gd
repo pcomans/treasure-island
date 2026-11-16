@@ -32,13 +32,16 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 
 ## The build stamp (game/scripts/ui/build_stamp.gd): the build number and commit
 ## the build script gives the export as TI_BUILD_NUMBER and TI_BUILD_COMMIT, at
-## BuildStamp.PATH. An export without them (by hand, in the editor) carries none:
-## the pause menu then says "Build: unknown". The export still completes, as without
-## the bake, and the build scripts' content audit fails a pack without its stamp.
+## BuildStamp.PATH, only when BuildStamp.from_values takes them as they are. An
+## export without them (by hand, in the editor), or with ones that don't read
+## ("2085-rc", "v2085", an empty commit), carries none: the pause menu then says
+## "Build unknown". The export still completes, as without the bake, and the build
+## scripts' content audit fails a pack without its stamp.
 func _add_build_stamp() -> void:
 	var number := OS.get_environment("TI_BUILD_NUMBER")
 	var commit := OS.get_environment("TI_BUILD_COMMIT")
-	if number.is_empty() or commit.is_empty():
-		push_error("No build stamp (TI_BUILD_NUMBER, TI_BUILD_COMMIT): export through the platform build script")
+	var stamp := BuildStamp.from_values(number, commit)
+	if stamp.is_empty():
+		push_error("No build stamp: TI_BUILD_NUMBER (\"%s\") and TI_BUILD_COMMIT (\"%s\") are no build number and commit; export through the platform build script" % [number, commit])
 		return
-	add_file(BuildStamp.PATH, JSON.stringify({"build": number.to_int(), "commit": commit}).to_utf8_buffer(), false)
+	add_file(BuildStamp.PATH, BuildStamp.file_text(stamp).to_utf8_buffer(), false)
