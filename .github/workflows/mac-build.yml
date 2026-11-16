@@ -1032,13 +1032,15 @@ jobs:
     name: Try rendering on Windows (information only)
     needs: [build]
     # The runner has no GPU. Godot 4.7.2 starts this project on Vulkan and, where
-    # Vulkan is missing, falls back to Direct3D 12 (rendering/rendering_device/
-    # fallback_to_d3d12, on by default); Direct3D 12 can run on WARP, Windows'
-    # software renderer, which Godot's driver accepts as a CPU device. So this
-    # launches the build with rendering and reports which renderer it got and
-    # whether the island loaded. Rendering in software says something about the
-    # Direct3D 12 path, nothing about a player's GPU. Nothing waits for this job,
-    # and its failure never fails the run.
+    # Vulkan does not work, falls back to Direct3D 12 (rendering/rendering_device/
+    # fallback_to_d3d12, on by default). On windows-2025, in the first run
+    # (43804401649, 2026-11-16), Vulkan failed (no VK_KHR_surface: two ERROR
+    # lines) and Godot switched to Direct3D 12 on "Microsoft Basic Render Driver"
+    # (WARP, Windows' software renderer); the island loaded in about 3.5 minutes.
+    # So this launches the build with rendering and reports which renderer it got
+    # and whether the island loaded. Rendering in software says something about
+    # the Direct3D 12 path, nothing about a player's GPU. Nothing waits for this
+    # job, and its failure never fails the run.
     if: ${{ !cancelled() && needs.build.result == 'success' }}
     runs-on: windows-2025
     timeout-minutes: 25

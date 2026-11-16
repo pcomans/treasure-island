@@ -255,9 +255,11 @@ the build on a GitHub Windows runner and starts it headless: it must load the
 island, quit cleanly and write Godot's log in
 `%APPDATA%\Godot\app_userdata\Treasure Island First Playable`, the folder that
 keeps players' options. The runner has no GPU, so the `windows-render` job, for
-information only, starts it with rendering: without Vulkan, Godot falls back to
-Direct3D 12, which the runner provides in software (WARP); its summary names the
-renderer Godot got and whether the island loaded. What no Windows machine has
+information only, starts it with rendering. There Vulkan fails (two error lines:
+no `VK_KHR_surface`), and Godot switches to Direct3D 12 on Microsoft's software
+renderer (WARP); in the first run, on 2026-11-16, the island loaded that way in
+about 3.5 minutes. The job's summary names the renderer Godot got and whether
+the island loaded. What no Windows machine has
 checked yet: drawing on a real graphics card (Vulkan, or Direct3D 12 where
 Vulkan is missing), mouse and keyboard, sound, saving the options, and
 SmartScreen's first-launch prompt.
