@@ -628,7 +628,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 (function () {
 	const agent = navigator.userAgent;
 	const matches = (query) => typeof window.matchMedia === 'function' && window.matchMedia(query).matches;
-	const ios = /\b(iPhone|iPod|iPad)\b/.test(agent) || (/\bMacintosh\b/.test(agent) && navigator.maxTouchPoints > 1);
+	const ios = tiAppleTouchDevice(agent, navigator.maxTouchPoints);
 	const homeScreen = navigator.standalone === true || matches('(display-mode: standalone)') || matches('(display-mode: fullscreen)');
 	const safari = /\bVersion\/[\d.]+.*\bSafari\//.test(agent)
 		&& !/\b(CriOS|FxiOS|EdgiOS|OPiOS|OPT|GSA|DuckDuckGo|Ddg|YaBrowser|FBAN|FBAV|FBIOS|Instagram|Line|Twitter|MicroMessenger|Snapchat|Pinterest|LinkedInApp|musical_ly|BytedanceWebview|KAKAOTALK|NAVER|Whale)\b/.test(agent);
