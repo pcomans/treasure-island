@@ -727,6 +727,21 @@ runtime supports or executes a diagnostic entrypoint. Before comparing an
 isolation, require actual changed-property counts and a before-draw marker; the
 subsequent query-gated game hook supplied both without modifying engine code.
 
+## Drive an exported pack with the editor binary, not the release template
+
+On 2026-11-16 the exported Linux build (Godot 4.7.2's release template), started
+with `--script /abs/capture_pause.gd`, ran its own main scene instead: none of the
+driver's lines, no image, and its one engine line was the mouse capture the driver
+turns off. It was stopped by PID after four minutes (`build-label-20261116`, run
+G4). The template holds the string `--script` but did not run the driver; the
+silent driver on the release web build (previous lesson) may share that cause,
+unverified. To check what an exported pack holds or does, run the editor binary on
+it from an empty folder with `--main-pack <pck> --script ...`, as the content audit
+does. There `OS.has_feature("template")` is false, so a check of export-only
+behaviour must take that branch explicitly and say so. Have a driver print a line
+from `_initialize` and stop the run when that line has not appeared within a
+minute, rather than waiting out the slot's limit.
+
 ## Preserve texture channels that carry shader data
 
 Reviewing the 2026-11-08 VRAM-compression change found that BC3 altered all four
