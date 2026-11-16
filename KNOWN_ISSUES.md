@@ -466,6 +466,9 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
   plants) stays over the bank's top, about 8 to 10.6 m from the avenue's centre line, to
   about 294 m. Lowering the avenue there is a follow-up the owner asked for after the
   park ships.
+- A small wedge of the bed's brown chips stays on the bank's crest where the concrete walk
+  beside the cycle track meets it, about 262 to 266 m along the avenue, on a slope of 3
+  to 8 degrees (s02).
 - The bed triangle at the north tip keeps plain chips with scattered bunchgrasses on its
   level ground; the frames (f_000 and f_001 to the right, f_107, f_112) show it planted
   with shrubs and grasses, not built.
@@ -482,17 +485,36 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
   for node at main's generated land (`cityside_track_leg_hold` in
   tools/config/terrain-overrides.json, the bed's cut added back on the rim), and the rest
   of the bed, the swale and the forebay relax back to main's grade. Against main the land
-  is within 0.5 cm on average on the track (3.7 cm at most on the asphalt, 6.4 cm on the
-  walk by its north end), 1.9 cm in the bed (6.9 cm at most), 2.8 cm in the swale, the
-  forebay and by the shore, and 1.3 cm on the pump pad and the promenade. The held track
-  stands on the 2023 stockpile's flank as on main, up to about 1.4 m above the park's
-  level north end beside it, so the park's ground east of it keeps the track's edge
-  height for 1 m and then falls at 1 in 4 (14 degrees) to the level: a lawn bank up to
-  about 6.7 m wide along about 16 to 52 m of the leg (`isle_house_park_track_bank`,
-  `track_bank_lawn`), where the video shows the ground level with the track and planted
-  (f_107, f_112). Between the avenue's bank and the track, at about 266 to 275 m along
-  the avenue, the ground is almost level at about 5.5 m instead of sloping down to the
-  park.
+  is within 0.2 cm on average on the asphalt (3.7 cm at most), 1.9 cm in the bed (6.9 cm
+  at most), 2.8 cm in the swale, the forebay and by the shore, and 1.3 cm on the pump
+  pad and the promenade. The drawn concrete walk is within 0.7 cm of main on average and
+  7.5 cm at most (the land under it 7.6 cm): its east edge 11 to 15 m from the leg's
+  bend lies just past the hold's last grid nodes, and 3 to 7 m from the bend the whole
+  walk is 2 to 6 cm low, where the hold's nodes lie in the avenue corridor's 3 m fade.
+  When the follow-up re-derives the hold (its derivation is below), it should reach a
+  grid cell past the walk's east edge and allow for that fade. Between the avenue's bank and the
+  track, at about 266 to 275 m along the avenue, the ground is almost level at about
+  5.5 m instead of sloping down to the park.
+- A turf berm runs along the east side of Cityside's held cycle-track leg, about 16 to
+  52 m from its bend, up to about 1.4 m high and 6.7 m wide: the held track stands on the
+  2023 stockpile's flank as on main, so the park's levelled north end keeps the track's
+  edge height for 1 m beside it and then falls at 1 in 4 (14 degrees) to the level
+  (`isle_house_park_track_bank`, `track_bank_lawn`). The real ground there is level with
+  the track and planted (f_107, f_112), and from inside the park the berm hides the
+  track (tb1). The owner chose to ship it (2026-11-16); it is flattened in the follow-up
+  that lowers the avenue and the track.
+- `cityside_track_leg_hold` and `isle_house_park_track_bank` in
+  tools/config/terrain-overrides.json carry heights derived from main's generated land
+  (a23ed049), with `z7_bioretention`'s cut added back on the bed's rim. A change to
+  `z7_bioretention`'s depth, side run or outline, to Cityside's other north-west regions,
+  or the lowering of the avenue and the track needs both re-derived. The derivation is
+  outside Git, in the study folder
+  /workspaces/landmark-progress-20261007/isle-house-park-20261115/study/work/r5g/:
+  `node make_hold.mjs <main's generated/world> <worktree> <out.json> 0.25` (with
+  grade_fit.mjs beside it for the cut and ../r5/probe.mjs for reading a world), and
+  check_serpentine.mjs confirms that each region's line catches no other grid node. The
+  regions' `reason` fields don't repeat this: generated/world/terrain.json records the
+  config file's SHA-256, so editing them changes generated output.
 - The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
   sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
   saplings), not the park's own species.
