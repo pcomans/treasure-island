@@ -272,6 +272,7 @@ The page keeps the build's 160 MB pack in the site's own storage (OPFS), one bui
 - Only Chromium 154 on Linux has run it, against a local server. Safari (Mac and iPhone), Firefox and Windows Chrome are unverified, including whether Safari's downloads and stored files take a BYOB reader (without one the page copies each chunk in, and the chunks stay in memory until the next garbage collection) and the iPhone's memory while it stores.
 - While a tab stores the pack it downloads it with `cache: 'no-store'`, after asking the HTTP cache for a copy it already has. When that store then fails (storage full, the tab closed during the download), the next launch downloads again even where the browser's HTTP cache would have kept the pack.
 - A browser evicts the copy under storage pressure, and Safari deletes a site's script-writable storage after seven days of Safari use without a visit (WebKit, 2020; a home screen app keeps its own count of days); the next launch then downloads again.
+- On a launch from the device the line reads **Downloading the game…** for about 0.2 s (0.17 to 0.24 s in Chrome here) before **Starting the engine…**: the engine's WebAssembly reports first, and a source not yet known counts as the network. **Loading the game from this device** is put up but not painted there, since the 160 MB read ends before the next frame; a slower device may show it.
 
 ## Yerba Buena Island (L1, `tools/lib/ybi-context-generation.mjs`, 2026-11-08)
 
