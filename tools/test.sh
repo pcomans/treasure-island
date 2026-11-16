@@ -20,7 +20,9 @@
 #    tools/docs-only (tools/check_docs_only.sh): only Markdown counts as
 #    documentation, so only a push of Markdown alone skips the Mac build. And
 #    the web build's path check (tools/check_web_paths_selftest.sh): a page
-#    that loads a file from outside its own folder fails.
+#    that loads a file from outside its own folder fails. And the players'
+#    changelog tool and CHANGELOG.md (tools/check_changelog.sh): a build
+#    without its entry, or a badly written entry, fails.
 # 4. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -136,6 +138,14 @@ tools/check_docs_only.sh || failed+=("tools/check_docs_only.sh")
 # a <base> element and a missing file. Offline, under a second.
 echo "== tools/check_web_paths_selftest.sh"
 tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
+
+# tools/changelog.py, which the release workflow and the integrator run, in a
+# throwaway repository with tagged releases: a build with its entry passes and
+# one without fails, every break of CHANGELOG.md's format fails, the release
+# notes' changelog goes in and comes back out, and the repository's own
+# CHANGELOG.md reads well. Offline, about a second.
+echo "== tools/check_changelog.sh"
+tools/check_changelog.sh || failed+=("tools/check_changelog.sh")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

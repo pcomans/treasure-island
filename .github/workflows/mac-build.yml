@@ -64,6 +64,15 @@
 # workflow by hand on main with itch_release_tag set to its tag: that run builds
 # nothing and only does the itch job.
 #
+# Every release's notes start with the build's entry in CHANGELOG.md, the
+# players' changelog (owner-requested 2026-11-16; tools/changelog.py). Before it
+# builds anything, the build job stops on main when the newest entry is not this
+# build's; it hands the entry to the publish job as a file, never through a run:
+# line, an output or an argument. The itch job copies it from the release notes
+# into each channel's folder as CHANGELOG.txt and into its summary as a devlog
+# for the owner to post by hand: itch.io has no API or butler command that posts
+# one. A push of Markdown alone builds nothing and needs no entry.
+#
 # Also after the release, the virustotal job (owner-requested 2026-11-15)
 # submits the release's files to VirusTotal's public API with the key
 # VIRUSTOTAL_API_KEY, and the virustotal-notes job, which has no key, adds each
@@ -290,6 +299,39 @@ jobs:
           echo "number=${number}" >> "${GITHUB_OUTPUT}"
           echo "game_name=${name}" >> "${GITHUB_OUTPUT}"
           echo "::notice title=Build number::${name}, build ${number} (commit ${GITHUB_SHA:0:7})"
+
+      - name: Check this build's changelog entry (tools/changelog.py)
+        id: changelog
+        # CHANGELOG.md's newest entry must be this build's before anything is
+        # built. The tool writes the start of the release notes to a file (this
+        # build's entry, with those of builds since the last release that got
+        # none); the entry's text never reaches a run: line, an output or the log.
+        # A run that publishes nothing (another branch, a dry run) goes on with a
+        # warning.
+        env:
+          BUILD_NUMBER: ${{ steps.number.outputs.number }}
+          PUBLISHES: ${{ github.ref == 'refs/heads/main' && !inputs.dry_run }}
+          LINK: ${{ github.server_url }}/${{ github.repository }}/blob/main/CHANGELOG.md
+        run: |
+          if python3 -I tools/changelog.py notes --build "${BUILD_NUMBER}" --out "${RUNNER_TEMP}/changelog" --link "${LINK}"; then
+            echo "ok=true" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          if [ "${PUBLISHES}" != true ]; then
+            echo "::warning title=No changelog entry::CHANGELOG.md gives build ${BUILD_NUMBER} no entry (why is above). This run publishes nothing, so it goes on."
+            exit 0
+          fi
+          echo "::error title=No changelog entry::CHANGELOG.md gives build ${BUILD_NUMBER} no entry (why is above), so nothing was built or published. To fix it: in one commit on main, write the entry under the heading that tools/changelog.py next prints there; push it (Markdown alone, so that push builds nothing); then start this workflow by hand on main (gh workflow run mac-build.yml --ref main). Or let the next release's entry say what this build changed."
+          exit 1
+
+      - name: Upload this build's changelog entry
+        if: steps.changelog.outputs.ok == 'true'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: changelog
+          path: ${{ runner.temp }}/changelog/notes.md
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Install Weston and Mesa
         # The graphics packages of .devcontainer/post-create.sh. The static-world
@@ -1143,6 +1185,14 @@ jobs:
         with:
           name: windows-app
 
+      # The start of the release notes, which the build job wrote from
+      # CHANGELOG.md. Without it nothing is published.
+      - name: Download this build's changelog entry
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: changelog
+          path: changelog
+
       - name: Publish this build as a new release
         id: release
         env:
@@ -1176,9 +1226,17 @@ jobs:
         # game's name. The title and notes say whether the build is notarized,
         # from fixed text for each fallback reason; nothing from Apple's tools
         # reaches them. With MAC_SIGNING off they say nothing about signing.
+        #
+        # The notes start with this build's changelog (changelog/notes.md, from
+        # CHANGELOG.md), and gh reads them from a file, so the changelog's text
+        # never passes through the shell.
         run: |
           if ! [[ "${BUILD_NUMBER}" =~ ^[1-9][0-9]*$ ]] || [ -z "${GAME_NAME}" ]; then
             echo "::error::The build job gave no build number or game name, so this build has no tag or title; refusing to publish."
+            exit 1
+          fi
+          if [ "$(head -n 1 changelog/notes.md)" != "<!-- changelog: build ${BUILD_NUMBER} -->" ]; then
+            echo "::error::changelog/notes.md does not hold build ${BUILD_NUMBER}'s changelog, so this build has no release notes; refusing to publish."
             exit 1
           fi
           signing=""
@@ -1279,7 +1337,8 @@ jobs:
 
           The newest builds are always on ${site}/latest."
           title="${GAME_NAME}, build ${BUILD_NUMBER} (${day}, ${short}${title_extra})"
-          gh release create "${tag}" "${name}" "${linux_name}" ${windows_name:+"${windows_name}"} --target "${GITHUB_SHA}" --latest --title "${title}" --notes "${notes}" || {
+          { cat changelog/notes.md; echo ""; printf '%s\n' "${notes}"; } > release-notes.md
+          gh release create "${tag}" "${name}" "${linux_name}" ${windows_name:+"${windows_name}"} --target "${GITHUB_SHA}" --latest --title "${title}" --notes-file release-notes.md || {
             echo "::error::Publishing ${tag} failed, so the previous build normally stays the latest release. If gh printed HTTP 404 or 403, the likely cause is that main changed .github/workflows during this publish: GitHub then refuses GITHUB_TOKEN for this commit, and the newer run publishes if it passes."
             exit 1
           }
@@ -1389,6 +1448,53 @@ jobs:
             exit 0
           fi
           echo "enabled=true" >> "${GITHUB_OUTPUT}"
+
+      # tools/changelog.py from this run's own commit on main (never from the
+      # release's tag), for the next step.
+      - name: Check out tools/changelog.py
+        id: changelog_tool
+        if: steps.check.outputs.enabled == 'true'
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/changelog.py
+          sparse-checkout-cone-mode: false
+          path: changelog-tool
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Read the build's changelog from its release notes
+        id: changelog
+        if: steps.changelog_tool.outcome == 'success'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.check.outputs.tag }}
+          VERSION: ${{ steps.check.outputs.version }}
+        # The lines that start the release notes (the publish job's, as edited on
+        # GitHub if anyone did) become CHANGELOG.txt in each channel's folder and
+        # the devlog text in this job's summary. They are data: the tool copies
+        # them into a file and nothing runs or prints them. A release from before
+        # CHANGELOG.md has none, and its channels get no CHANGELOG.txt.
+        run: |
+          if ! [[ "${VERSION}" =~ ^[1-9][0-9]*$ ]]; then
+            echo "::notice title=itch.io::${TAG} is from before build numbers and changelogs, so its channels get no CHANGELOG.txt."
+            exit 0
+          fi
+          if ! gh release view "${TAG}" --json body --jq .body > release-notes.md; then
+            echo "::warning title=itch.io::The release notes of ${TAG} could not be read (above), so its channels get no CHANGELOG.txt."
+            exit 0
+          fi
+          status=0
+          python3 -I changelog-tool/tools/changelog.py extract release-notes.md --build "${VERSION}" --out "${RUNNER_TEMP}/CHANGELOG.txt" || status=$?
+          case "${status}" in
+            0) echo "found=true" >> "${GITHUB_OUTPUT}" ;;
+            3) echo "::notice title=itch.io::The release notes of ${TAG} hold no changelog (a release from before CHANGELOG.md), so its channels get no CHANGELOG.txt." ;;
+            *) echo "::warning title=itch.io::The changelog in the release notes of ${TAG} could not be read (above), so its channels get no CHANGELOG.txt." ;;
+          esac
 
       - name: Download the release's builds
         id: builds
@@ -1535,13 +1641,17 @@ jobs:
         # 2026-11-15: the itch app is the route for the build that is not). A
         # signature that fails the check stops the Mac push. butler keeps symlinks
         # and permissions and only adds missing execute bits to executables
-        # (https://itch.io/docs/itch/integrating/platforms/macos.html).
+        # (https://itch.io/docs/itch/integrating/platforms/macos.html). The
+        # changelog goes beside the app, outside its signature.
+        env:
+          CHANGELOG: ${{ steps.changelog.outputs.found }}
         run: |
           ditto -x -k release/mac.zip stage/mac
           apps=(stage/mac/*.app)
           [ "${#apps[@]}" -eq 1 ] && [ -d "${apps[0]}" ] || { echo "::error::expected one .app in the Mac zip"; exit 1; }
           [ "$(find stage/mac -mindepth 1 -maxdepth 1 | wc -l | tr -d ' ')" -eq 1 ] || { echo "::error::the Mac zip holds more than the app"; exit 1; }
           codesign --verify --deep --strict --verbose=2 "${apps[0]}"
+          if [ "${CHANGELOG}" = true ]; then cp "${RUNNER_TEMP}/CHANGELOG.txt" stage/mac/; fi
           # A list of what is pushed, to compare with what itch.io serves later:
           # each file's path, SHA-256 and whether it is executable, and each link's
           # target. Other permission bits are left out, so that itch.io normalising
@@ -1581,6 +1691,8 @@ jobs:
       - name: Stage the Linux build
         id: linux
         if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.linux == 'true' }}
+        env:
+          CHANGELOG: ${{ steps.changelog.outputs.found }}
         run: |
           mkdir -p stage/linux
           tar -xzf release/linux.tar.gz -C stage/linux
@@ -1588,6 +1700,7 @@ jobs:
           exes=("${folder}"/*.x86_64)
           [ "${#exes[@]}" -eq 1 ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
           [ -f "${exes[0]%.x86_64}.pck" ] || { echo "::error::the Linux package lacks the .pck beside its executable"; exit 1; }
+          if [ "${CHANGELOG}" = true ]; then cp "${RUNNER_TEMP}/CHANGELOG.txt" "${folder}/"; fi
           ls -l "${folder}"
 
       - name: Push the Linux build to itch.io
@@ -1603,6 +1716,8 @@ jobs:
       - name: Stage the Windows build
         id: windows
         if: ${{ !cancelled() && steps.butler.outcome == 'success' && steps.builds.outputs.windows == 'true' }}
+        env:
+          CHANGELOG: ${{ steps.changelog.outputs.found }}
         run: |
           mkdir -p stage/windows
           ditto -x -k release/windows.zip stage/windows
@@ -1614,6 +1729,7 @@ jobs:
             echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${top[*]}: ${files[*]}"
             exit 1
           fi
+          if [ "${CHANGELOG}" = true ]; then cp "${RUNNER_TEMP}/CHANGELOG.txt" stage/windows/treasure-island-windows/; fi
           ls -l stage/windows/treasure-island-windows
 
       - name: Push the Windows build to itch.io
@@ -1752,9 +1868,11 @@ jobs:
           LINUX_HEAD: ${{ steps.served.outputs.linux_head }}
           WINDOWS_HEAD: ${{ steps.served.outputs.windows_head }}
           SERVED: ${{ steps.served.outputs.check }}
+          CHANGELOG: ${{ steps.changelog.outputs.found }}
         # Prints only the tag the first step accepted. A channel that butler left
         # alone (its files equal the channel's processed build) keeps showing that
-        # build's version on itch.io; the report names both.
+        # build's version on itch.io; the report names both. The changelog goes
+        # into the summary as a file's contents, never onto the log.
         run: |
           if [ "${CHECK}" != success ]; then
             echo "### itch.io: nothing pushed (the release tag was not accepted)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1782,6 +1900,20 @@ jobs:
               echo "- windows channel: ${PUSH_WINDOWS:-not pushed}"
             else
               echo "- windows channel: not pushed (no Windows build in this release)"
+            fi
+            if [ "${CHANGELOG}" = true ]; then
+              echo ""
+              echo "Each channel's folder holds CHANGELOG.txt, build ${VERSION}'s changelog from the release notes."
+              echo ""
+              echo "#### Devlog for build ${VERSION}, to post by hand"
+              echo ""
+              echo "itch.io has no API or butler command that posts a devlog. To show these changes on the game page, post them on the game's Devlog (Write a new post), titled \"Build ${VERSION}\":"
+              echo ""
+              echo "---"
+              echo ""
+              cat "${RUNNER_TEMP}/CHANGELOG.txt"
+              echo ""
+              echo "---"
             fi
           } >> "${GITHUB_STEP_SUMMARY}"
           failed=no
