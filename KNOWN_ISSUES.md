@@ -449,30 +449,50 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
   where the 2023 USGS raster still had the fill stockpile (up to about 8 m): flat at the
   tip (f_000 to f_005) with a 0.7 m lawn mound at the north-west end (f_103, f_107,
   f_112); heights production inference.
-- The bank by the north tip (owner, 2026-11-16: fill it with what the video shows). The
-  avenue itself stands on the stockpile there: from about 265 to 302 m along Avenue of
-  the Palms (w1001544697) its carriageway, west kerb and west sidewalk (w1212173444) are
-  generated on the raster's hump (the road humps above), the sidewalk up to 6.8 m at
-  280-285 m against the level ground's 4.8 m, where the video shows them level with the
-  lawn. Since round 5 the avenue's corridor stops just behind the sidewalk on the park
-  side along 268-310 m (a corridor span in tools/config/terrain-overrides.json), so the
-  old crest behind the sidewalk (up to 7.35 m) is gone and the ground falls in one slope
-  from about 0.2 m above the sidewalk's back to the level ground; the street and the
-  sidewalk keep their generated ground, so the step of up to 2.0 m stays until they are
-  lowered, which needs the owner's decision (asked 2026-11-16). The slope still shows the
-  bed's plain chips; the frames (f_000 and f_001 to the right, f_107, f_112) show the bed
-  triangle's western part planted with shrubs and grasses, not yet built.
+- The bank by the north tip. From about 265 to 302 m along Avenue of the Palms
+  (w1001544697) its carriageway, west kerb and west sidewalk (w1212173444) stand on the
+  2023 raster's stockpile hump (the road humps above), the sidewalk up to 6.8 m at
+  280-285 m against the park's level ground at 4.7-4.8 m, where the video shows them level
+  with the lawn. The park's ground falls from just behind the sidewalk (the avenue's
+  terrain corridor stops 9.75 m from its centre line on the park side along 268-310 m, a
+  corridor span in tools/config/terrain-overrides.json) to the level ground in a grass
+  bank of about 10 to 16 degrees (up to 20 in places) and up to 2.0 m high: the park's
+  lawn turf runs from behind the sidewalk's verge to just past the bank's foot
+  (`north_tip_bank_lawn` in Cityside's zone, `bank_lawn` in this one), and no plants
+  stand on it. The turf is laid in world coordinates seen from above, so on the bank's
+  steepest parts (about 20 degrees) it is stretched about 6 % down the slope; neither
+  that nor a seam against the flat lawn shows in the round's captures (n01, s01, Isle
+  House's west close-up). Cityside's planted buffer along the walk (mulch with its
+  plants) stays over the bank's top, about 8 to 10.6 m from the avenue's centre line, to
+  about 294 m. Lowering the avenue there is a follow-up the owner asked for after the
+  park ships.
+- The bed triangle at the north tip keeps plain chips with scattered bunchgrasses on its
+  level ground; the frames (f_000 and f_001 to the right, f_107, f_112) show it planted
+  with shrubs and grasses, not built.
 - Isle House's land cell is untouched: the re-meshed park cells fan to their shared edge
   (`scope.fan_beside` in tools/config/terrain-overrides.json). The basin, beside Isle
   House's cell, is darker damp chips, not a hollow, and holds no water (the video was
   shot after rain).
-- Round 4's levelling of the north part also lowered Cityside's north-west corner, more
-  than first reported. Against main, the land in the bioretention bed by the notch
-  (`z7_bioretention`) fell by up to 0.88 m (at -206.3, 504.3), the swale and the forebay
-  by up to 0.19 m, the cycle track's leg west of the notch by 0.48 m at (-216.5, 511.5)
-  to 0.87 m at (-208.5, 512), and the ground by the shore at (-224.5, 508) by 0.24 m;
-  the pump pad (within 0.04 m) and the promenade are unchanged. Whether that corner
-  still reads right is round 5's item C, not yet assessed.
+- Cityside's north-west corner stays at main's heights. Left to the site's grade, the
+  park's levelled north end lowers it (against main: up to 0.95 m on the cycle track's
+  leg west of the notch, 1.38 m at the concrete walk beside it, 0.75 m in the
+  bioretention bed by the track, 0.19 m in the swale and the forebay and 0.29 m by the
+  shore at (-224.5, 508)); so the leg (w1530615890: Cityside's asphalt track, the strip
+  beside it and the concrete walk on the way) and the bed's rim beside it are held node
+  for node at main's generated land (`cityside_track_leg_hold` in
+  tools/config/terrain-overrides.json, the bed's cut added back on the rim), and the rest
+  of the bed, the swale and the forebay relax back to main's grade. Against main the land
+  is within 0.5 cm on average on the track (3.7 cm at most on the asphalt, 6.4 cm on the
+  walk by its north end), 1.9 cm in the bed (6.9 cm at most), 2.8 cm in the swale, the
+  forebay and by the shore, and 1.3 cm on the pump pad and the promenade. The held track
+  stands on the 2023 stockpile's flank as on main, up to about 1.4 m above the park's
+  level north end beside it, so the park's ground east of it keeps the track's edge
+  height for 1 m and then falls at 1 in 4 (14 degrees) to the level: a lawn bank up to
+  about 6.7 m wide along about 16 to 52 m of the leg (`isle_house_park_track_bank`,
+  `track_bank_lawn`), where the video shows the ground level with the track and planted
+  (f_107, f_112). Between the avenue's bank and the track, at about 266 to 275 m along
+  the avenue, the ground is almost level at about 5.5 m instead of sloping down to the
+  park.
 - The planting is the vegetation kit's stand-ins (silver cushions, buckwheat, small
   sagebrush, California fuchsia, rushes, red-stem shrubs, young pines and gum-like
   saplings), not the park's own species.
