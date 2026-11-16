@@ -1,0 +1,77 @@
+# Memory of a web page in the iOS Simulator's Safari, measured from the host
+# (tools/ios-sim-memory/ios_sim_memory.py): on a GitHub-hosted Apple-silicon Mac,
+# boot a fresh iPhone simulator, open URL in Mobile Safari through Apple's
+# safaridriver, tap the game's start prompt with a real touch, play the desktop
+# study's route, and sample the phys_footprint (the number iOS's jetsam compares
+# with its limit) of the simulator's WebContent, GPU and Networking processes
+# every second. The numbers go to the job summary and, with screenshots and logs,
+# to an artifact.
+#
+# What it is and is not: the iOS build of WebKit, its JavaScriptCore and
+# WebAssembly, its process split and 16 KiB pages, on the runner's Metal device;
+# but the simulator has no jetsam (nothing is killed at an iPhone's limit), the
+# runner's GPU and memory are not a phone's, and the route is scripted. Read the
+# numbers as how close a page comes, not as an iPhone measurement.
+#
+# Started by hand only, never on a schedule, and never from main: a push to the
+# branch ci/ios-sim-memory-20261116 that changes this file runs it once (GitHub
+# runs a workflow_dispatch only for a workflow that exists on the default branch,
+# or that has already run on the branch); after that, start it with
+#   gh workflow run ios-sim-memory.yml --ref ci/ios-sim-memory-20261116 -f url=<page>
+# It uses no secrets and no environments, and only reads the repository.
+name: iOS Simulator memory
+
+on:
+  push:
+    branches: [ci/ios-sim-memory-20261116]
+    paths: [.github/workflows/ios-sim-memory.yml]
+  workflow_dispatch:
+    inputs:
+      url:
+        description: The page to open (the game's ?profile_startup=1 readback is added)
+        required: true
+        default: https://play-grandtreasureisland.vercel.app/
+      route:
+        description: full (start prompt, walk, drive, jetpack; about 7 min) or prompt (load and the start prompt only)
+        required: true
+        default: full
+      device:
+        description: iPhone model (the newest iOS runtime's list; another iPhone if this one is missing)
+        required: true
+        default: iPhone 17 Pro
+      runner:
+        description: Apple-silicon runner label
+        required: true
+        default: macos-26
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-sim-memory
+  cancel-in-progress: false
+
+jobs:
+  measure:
+    runs-on: ${{ inputs.runner || 'macos-26' }}
+    timeout-minutes: 50
+    steps:
+      - name: Check out the tool
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: tools/ios-sim-memory
+      - name: Measure
+        env:
+          URL: ${{ inputs.url || 'https://play-grandtreasureisland.vercel.app/' }}
+          ROUTE: ${{ inputs.route || 'full' }}
+          DEVICE: ${{ inputs.device || 'iPhone 17 Pro' }}
+        run: python3 tools/ios-sim-memory/ios_sim_memory.py "${RUNNER_TEMP}/ios-sim-memory"
+      - name: Keep the measurements
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ios-sim-memory-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/ios-sim-memory
+          retention-days: 14
+          if-no-files-found: warn
