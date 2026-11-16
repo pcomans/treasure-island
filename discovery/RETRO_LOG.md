@@ -26869,3 +26869,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The batch went to main as a plain fast-forward after its integration review, and the workflow's own jobs carried the release from there. On the owner's direction the full suite was not re-run after the start-at-midday merge: the suite passed on 8dca9680, and the six contracts that cover what came in since (startup configuration, gameplay, day clock, vehicles, shadow options, touch drive) passed on 61da0247.
 - What did not work well: The results of the release run and the web deploy are in the handback, not here: this entry goes in before the push, as main must carry it.
 - What the team should change next time: Keep the stage-2 retro entry of a release on its retro branch after the run, as before, when the run's results are the point of the entry.
+
+### versioned-release-files-docs-20261116 — 2026-11-16 — AGENTS.md for release files named by build number (branch `docs/versioned-release-files-20261116`, on 70867346 + main 402a56bb)
+
+- What worked well: The publish job states each claim in one place: the two names built from `BUILD_NUMBER`, the outputs `mac_name` and `linux_name` that the `itch` and `virustotal` jobs (and `virustotal-notes`) read, the check of `releases/latest` for exactly those two files, and the itch job's fallback to the old names for a hand-started `itch_release_tag` run. Merging main first put the wording on the current AGENTS.md; only RETRO_LOG.md conflicted, and neither side lost a line.
+- What did not work well: Nothing beyond the expected end-of-file RETRO conflict.
+- What the team should change next time: When file names change, grep the harness for the old names and for "fixed link" as one search, so wording about the old names cannot survive in another section.
