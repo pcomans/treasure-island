@@ -239,6 +239,10 @@ const FORK_TRUNK_SHARE := 0.58
 const LOG_GRAIN := Color(0.94, 0.92, 0.88)
 const LOG_GRAIN_BLEACHED := Color(1.0, 1.0, 0.98)
 const LOG_END_WEATHERED := Color(0.5, 0.46, 0.41)
+## How far an Adirondack chair's collision box reaches below its foot, so that on a
+## slope (a park's mound) or a raised park surface (the row's bias) its low side still
+## meets the colliding land.
+const CHAIR_SKIRT_M := 0.25
 ## Sports goals on the pitches' goal lines (tools/lib/sports-pitch.mjs goal_lines;
 ## origin on the middle of the line, front -Z toward the pitch, nets behind +Z).
 ## The GAA goals of Pairc na nGael (SF GAA photos, Jun 2026): white round
@@ -673,7 +677,12 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			for drop in drops:
 				chair_key += "_%d" % roundi(drop * 1000.0)
 			_piece(result, chair_key, func(b: Builder) -> void: _adirondack_chair(b, drops), rest, _plastic)
-			_box_shape(result, Vector3(0.74, 0.6, 0.84), Vector3(0.0, 0.3, 0.0), rest)
+			# Its box takes the rest's lift but stays upright, and reaches CHAIR_SKIRT_M below
+			# the foot: tilted with the ground its edges leaned, and upright on a slope its
+			# low side's bottom edge stood clear of the ground; either way the stock
+			# player's capsule, pressed against it, caught and could not move off (the
+			# park outside Isle House, walks of 2026-11-16 into its lawn and mound chairs).
+			_box_shape(result, Vector3(0.74, 0.6 + CHAIR_SKIRT_M, 0.84), Vector3(0.0, (0.6 - CHAIR_SKIRT_M) * 0.5, 0.0), Transform3D(Basis.IDENTITY, rest.origin))
 		"bike_rack":
 			# A row of hoops (params.hoops, OSM capacity / 2) along local Z, 0.9 m apart; one box for the row.
 			var hoops := clampi(roundi(_number(params, "hoops", 1.0)), 1, BIKE_RACK_MAX_HOOPS)
