@@ -27076,6 +27076,7 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The tool reuses `tools/build-number` and `tools/docs-only` rather than a second definition, so the build number and the Markdown-only rule cannot drift from the workflow's. Mutating a scratch copy of the tool (seven one-line edits) showed quickly which rules the selftest really guards and which it does not.
 - What did not work well: The branch head fails its own `tools/changelog.py check` (build 2085, newest entry 2084), and the exact-number rule breaks on merge commits, trailing retro commits and rebases; neither the selftest nor the docs cover a release head that is a merge.
 - What the team should change next time: Run `tools/changelog.py check` on the exact head handed to review, and add a selftest case for each way the release head is made (a merge commit, a tag outside HEAD's history, more than ten unreleased builds).
+- Round 2 (e358a093): Re-running the earlier mutations plus six new ones against the new selftest took a few seconds. Nine of the ten were caught; only duplicate-line removal goes untested. Next time, also name the CI checkout options a rule depends on (here: tags fetched with `fetch-depth: 0`) in the workflow itself, not just in comments.
 
 ### security-review: ci-build-changelog-20261116 — 2026-11-16 — security review of the changelog workflow change at c94ff3cb
 
