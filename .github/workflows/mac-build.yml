@@ -1157,7 +1157,7 @@ jobs:
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
     runs-on: macos-26
-    timeout-minutes: 60
+    timeout-minutes: 120
     continue-on-error: true
     environment: itch
     permissions:
@@ -1273,6 +1273,30 @@ jobs:
           chmod 0755 "${dir}/butler"
           "${dir}/butler" version
           echo "${dir}" >> "${GITHUB_PATH}"
+          # push-when-ready DIR TARGET:CHANNEL VERSION pushes with butler. itch.io
+          # refuses a new build on a channel while that channel's latest build is
+          # still processing ("…: channel mac's latest build is still processing,
+          # try again later"); processing a large build can take around 30 minutes
+          # (https://itch.io/docs/butler/pushing.html). That answer is tried again
+          # once a minute for up to 30 minutes; any other failure stops at once.
+          cat > "${dir}/push-when-ready" <<'SH'
+          #!/usr/bin/env bash
+          set -uo pipefail
+          tries=31
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            butler push "$1" "$2" --userversion "$3" --if-changed 2>&1 | tee push.log || status=$?
+            if [ "${status}" -eq 0 ]; then exit 0; fi
+            if ! grep -q "latest build is still processing" push.log; then exit "${status}"; fi
+            if [ "${attempt}" -eq "${tries}" ]; then
+              echo "itch.io was still processing the channel's previous build after 30 minutes, so this build was not pushed."
+              exit "${status}"
+            fi
+            echo "itch.io is still processing the channel's previous build; trying again in a minute (attempt ${attempt} of ${tries})."
+            sleep 60
+          done
+          SH
+          chmod 0755 "${dir}/push-when-ready"
 
       - name: Stage the Mac app and check its signature
         id: mac
@@ -1317,10 +1341,11 @@ jobs:
       - name: Push the Mac app to itch.io
         id: push_mac
         if: steps.mac.outcome == 'success'
+        timeout-minutes: 40
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
-        run: butler push stage/mac "${ITCH_TARGET}:mac" --userversion "${VERSION}" --if-changed
+        run: push-when-ready stage/mac "${ITCH_TARGET}:mac" "${VERSION}"
 
       # The linux channel does not depend on the mac one: these steps run even
       # when the Mac app's check or push failed.
@@ -1339,10 +1364,11 @@ jobs:
       - name: Push the Linux build to itch.io
         id: push_linux
         if: ${{ !cancelled() && steps.linux.outcome == 'success' }}
+        timeout-minutes: 40
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
-        run: butler push stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" --userversion "${VERSION}" --if-changed
+        run: push-when-ready stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" "${VERSION}"
 
       - name: Check the Mac app itch.io serves
         id: served
@@ -1352,12 +1378,16 @@ jobs:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
         # butler fetch downloads the channel's latest build as itch.io serves it,
         # once itch.io has processed it. Every failure is tried again, once a
-        # minute for up to 25 minutes, whatever butler's message says ("Channel
-        # mac's latest build is still processing" in 15.32.0, or a network
-        # error), so a change in its wording costs nothing but that wait. The
-        # fetched app must pass codesign and match what was pushed, file for file.
-        # A mismatch or a timeout is reported, not a failure: the push itself
-        # succeeded, and a newer push may already be the channel's latest build.
+        # minute for up to 25 minutes, whatever butler's message says, so a change
+        # in its wording costs nothing but that wait; the wording only chooses the
+        # warning when the time runs out. While a channel's first build is being
+        # processed itch.io answers "invalid channel" (seen on 2026-11-16, build
+        # 1929), and later "Channel mac's latest build is still processing"
+        # (butler 15.32.0's own words when a build has no archive yet): both mean
+        # itch.io is still processing. The fetched app must pass codesign and
+        # match what was pushed, file for file. A mismatch or a timeout is
+        # reported, not a failure: the push itself succeeded, and a newer push may
+        # already be the channel's latest build.
         run: |
           fetched=""
           for attempt in $(seq 1 25); do
@@ -1369,7 +1399,15 @@ jobs:
             if [ "${attempt}" -lt 25 ]; then sleep 60; fi
           done
           if [ -z "${fetched}" ]; then
-            echo "::warning title=itch.io::The Mac build was pushed, but itch.io did not serve it within 25 minutes (butler fetch's last answer is above), so the app it serves was not checked."
+            case "${answer}" in
+              *"still processing"* | *"invalid channel"*)
+                why="itch.io was still processing it (its last answer: \"$(tail -n 1 <<< "${answer}")\"); processing a large build can take around 30 minutes, and the build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}" ;;
+              *"invalid target"*)
+                why="itch.io did not recognise ${ITCH_TARGET} (a renamed account or game page?)" ;;
+              *)
+                why="butler fetch kept failing (its last answer is above)" ;;
+            esac
+            echo "::warning title=itch.io::The Mac build was pushed, but itch.io did not serve it within 25 minutes: ${why}. The app it serves was not checked."
             echo "check=not-done" >> "${GITHUB_OUTPUT}"
             exit 0
           fi

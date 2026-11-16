@@ -247,9 +247,13 @@ itch's [butler](https://itch.io/docs/butler/), version 15.32.0, downloaded from
 itch's own distribution site and checked against a pinned SHA-256. It pushes the
 exact files of the GitHub release: it unpacks the Mac app with `ditto`, checks
 it with `codesign --verify --deep --strict` (a failed check stops the Mac push),
-and pushes it. Once
-itch.io has processed the build, it downloads what itch.io serves and compares
-it, file by file, with what was pushed. It runs on `main` only. A failed push
+and pushes it. itch.io then processes each build, which for builds of this size
+can take around 30 minutes, and refuses a new build on a channel until its
+latest one is done; the job then tries the push again once a minute for up to
+30 minutes. A build's state shows on the game's Edit page under Uploads (click
+the channel), or with `butler status phppco/grand-treasure-island`. Once itch.io
+has processed the build, the job downloads what itch.io serves and compares it,
+file by file, with what was pushed. It runs on `main` only. A failed push
 never affects the GitHub release: the job reports it, and the run still
 succeeds. To push an existing release again, or for the first time, start the
 workflow by hand on `main` with that release's tag (a release from before build
