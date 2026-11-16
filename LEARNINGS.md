@@ -766,6 +766,12 @@ controls. Holding `Emulation.setTouchEmulationEnabled` from the check's own CDP 
 agent-browser's page before it opened the game and kept alive to the end, gave 5 touch points through the
 load and a later `set viewport` turn to landscape.
 
+On 2026-11-16 (`home-screen-20261116`) Chrome 154's `Emulation.setSafeAreaInsetsOverride`, held from that same
+session, gave the page an iPhone's `env(safe-area-inset-*)` (the shell's `--safe-*`). One turn went ahead before
+the new insets reached the page, and the touch controls, which read the insets only on a resize, kept the old
+ones: the pause button sat under the emulated status bar. A phone's rotation brings both at once, so set the
+insets, wait until the page itself reads them, then change the viewport.
+
 A new worktree may lack Git author identity even when prior bot commits exist.
 Before a build that requires a committed tree, check `git var GIT_AUTHOR_IDENT`;
 if absent, use the established bot identity on that commit command with `git -c`

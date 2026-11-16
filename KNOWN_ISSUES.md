@@ -216,7 +216,7 @@ Limits:
 - On the live site after the 2026-11-14 release, the JS heap read 32.8, 33.2 and 33.4 MB after forced collections over 5.5 minutes with the engine loops running: 0.6 MB of garbage, not a leak. The car mostly sat against an obstacle, so this is not a reading under hard driving (integrator-batch-20261114a, stage 2).
 - The Mac app now opens CoreAudio. On 2026-08-31 a Mac launch hung in CoreAudio while the host's audio daemon was stopped, which is why `project.godot` forced the Dummy driver until now. No check can see that hang again: the Mac CI launch runs `--headless` and every local run gets the Dummy driver from `tools/godot`, so a normal Finder launch on the owner's Mac is the only check.
 - On an iPhone or iPad, only the owner's device can confirm the web's sound. Safari there starts a page's audio only from a tap (never the end of a slide, a look drag or a held button), which the start prompt's "Tap to play" now is; the shell also starts it from any later tap anywhere (2026-11-15). That was checked in headed Chromium with Safari's iOS rules emulated, not in Safari. The levels have not been confirmed by ear on the Mac.
-- iOS: with the ring/silent switch on silent, Safari mutes web audio (its default audio session). No change was made; `navigator.audioSession.type = 'playback'` would override it on iOS 17 and later.
+- iOS: with the ring/silent switch on silent, Safari mutes web audio (its default audio session). The start prompt says so on an iPhone or iPad, "Turn off silent mode to hear sound" (owner, 2026-11-16); `navigator.audioSession.type = 'playback'` would override the switch on iOS 17 and later instead.
 - iOS: Safari suspends or interrupts the audio when the page goes to the background or the device locks; it comes back on the next tap.
 - Only the driven car has engine, tyre and landing sounds; a parked or shoved car sounds only when it hits something.
 - The driven car's tyres squeal only with the handbrake, a hard brake, or at 90 % of its top speed or more (`CarSound.STEER_SQUEAL_SHARE`), so a car knocked sideways in a crash below that speed makes no squeal; the crash sound plays.
@@ -238,6 +238,18 @@ Limits:
 - In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
 - Touch has no R: nothing resets a car to land or recovers the player on foot. A car on its roof rights itself, and one in the bay comes back on its own.
 - On a touch browser with a keyboard, pausing, resizing or lifting RISE lets go of the handbrake (and the jetpack) even while a physical Space is held, until Space is pressed again (code review, 2026-11-08).
+
+## Home screen and the start prompt's phone notes (`game/web/shell.html`, `tools/build-web.sh`, 2026-11-16)
+
+- Checked only in headed Chromium 154: an iPhone 16 Pro as agent-browser emulates it (Safari's user agent, touch, 3x), Safari's page 402 x 716 upright and 874 x 370 sideways, the home screen app 402 x 874 and 874 x 402 with safe-area insets set through Chrome's DevTools protocol (62 top and 34 bottom upright; 62 left and right and 21 bottom sideways) and a page script standing in for its `navigator.standalone`; a Pixel 9; a 1440 x 900 desktop. Safari's own Add to Home Screen, the home screen app on a real iPhone (its status bar over the game, its real insets), an iPad, and Android's full screen and install on a real phone are not seen.
+- The home screen hint also shows in Safari opened inside another app (SFSafariViewController), which reports Safari's user agent and may have no Add to Home Screen in its share sheet. In iOS 26's compact tab bar, Share is under the "⋯" button.
+- The silent mode note follows WebKit's documented behaviour (web audio plays in a session the silent mode mutes), not a test on a device; on an iPad it assumes the Control Center's silent mode does the same.
+- An iPhone's home screen app keeps its storage apart from Safari's (iOS's design, not checked here): expect its first launch to download the game again and its Options to start from the defaults.
+- The touch controls read the safe-area insets when the page changes size (`touch_controls.gd`, `_layout` on `resized`). A phone's turn changes both at once; insets that changed without a resize would wait for the next one (seen only in emulation, when the insets were set after the turn).
+- Sideways in Safari's 874 x 370 page, the start prompt's panel with both notes reaches to about 8 CSS px under the page's top edge (inside its top 44 %, as the prompt is designed).
+- The game's feedback line (bottom centre, `hud.tscn`'s FeedbackPanel, 34 px up) isn't moved for the home indicator: in the home screen app upright, the bottom of its panel falls inside the 34 px band (by arithmetic, not seen). Touch play shows it only after a recovery ("Recovered").
+- `tools/check-web-live.sh` checks the manifest's own file at both addresses, not the icons it names; the build's `tools/check_web_paths.py` checks those, and the 2026-11-16 local check loaded them at the root and under `/game/`.
+- The home screen label is "Treasure Island" (the manifest's `short_name`, `apple-mobile-web-app-title`); an iPhone may shorten it under the icon, and Add to Home Screen lets the player rename it.
 
 ## Pause menu and confetti polish (`game/scripts/ui/hud.gd`, `game/scripts/world/goal_confetti.gd`, 2026-11-11)
 
