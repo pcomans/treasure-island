@@ -3075,14 +3075,13 @@ func _build_young_pine(p: Dictionary) -> Dictionary:
 		var mesh := ArrayMesh.new()
 		var bark := Surf.new()
 		var leaves := Surf.new()
-		var stakes := Surf.new()
 		_emit_limbs(bark, branches, lod, height, 0.3, sway_top, PINE_BARK_M, [[8, 5, 4], [5, 3, 3]], 0.0)
 		_emit_cards(leaves, cards, lod, height, sway_top)
-		_frame_stakes(stakes, stake_m, phase, lod, axis)
-		# A young pine's thin trunk is pale grey-tan (f_058), the gum's pale bark's look.
+		# The stakes share the trunk's surface: a young pine's thin trunk is pale grey-tan
+		# (f_058), the gum's pale bark's look, as the posts are.
+		_frame_stakes(bark, stake_m, phase, lod, axis)
 		bark.commit(mesh, material("gum_bark"))
 		leaves.commit(mesh, material("pine_foliage_young"))
-		stakes.commit(mesh, material("gum_bark"))
 		meshes.append(mesh)
 	var capsules: Array = [{"radius_m": trunk_radius * 1.3, "from": Vector3.ZERO, "to": axis.call(minf(1.0, 1.8 / height))}]
 	capsules.append_array(_frame_stake_capsules(stake_m, phase))

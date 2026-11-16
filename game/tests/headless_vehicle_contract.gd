@@ -1714,6 +1714,33 @@ func _stopped_by_trunk(car: DRIVABLE_CAR, start: Vector2, heading: Vector2, at: 
 	and _require(furthest < reach and after < 0.3 * approach, "The trunk of %s did not stop the car." % label)
 
 
+## Solid street-detail rows within reach_m of the segment a-b, by id: furniture
+## (each its footprint's half diagonal) and planted trees (0.4 m for a trunk and its
+## stakes), what would stop the stock player walking along it.
+func _solid_rows_near(a: Vector2, b: Vector2, reach_m: float) -> Array[String]:
+	var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/street_detail.json"))
+	var found: Array[String] = []
+	for row: Dictionary in document.rows:
+		if str(row.get("layer", "")) != "furniture" or not row.get("position_m") is Array:
+			continue
+		var footprint: Dictionary = row.get("footprint_m", {}) if row.get("footprint_m") is Dictionary else {}
+		var half := 0.5 * Vector2(float(footprint.get("x_m", 0.6)), float(footprint.get("z_m", 0.6))).length()
+		var at := Vector2(float(row.position_m[0]), float(row.position_m[2]))
+		if Geometry2D.get_closest_point_to_segment(at, a, b).distance_to(at) < reach_m + half:
+			found.append(str(row.id))
+	var planting: Dictionary = document.planting_rows
+	var x := (planting.fields as Array).find("x")
+	var z := (planting.fields as Array).find("z")
+	for block: Dictionary in planting.blocks:
+		if str(block.get("kind", "")) != "tree":
+			continue
+		for values: Array in block.rows:
+			var at := Vector2(float(values[x]), float(values[z]))
+			if Geometry2D.get_closest_point_to_segment(at, a, b).distance_to(at) < reach_m + 0.4:
+				found.append("%s tree at (%.1f, %.1f)" % [block.get("id_prefix", "?"), at.x, at.y])
+	return found
+
+
 ## A street-detail row's position in plan (INF if there is none).
 func _ground_xz_of(id: String) -> Vector2:
 	var document: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/street_detail.json"))
@@ -2528,6 +2555,11 @@ func _case_on_foot_park() -> bool:
 	var walk: Dictionary = _cases.park_on_foot.walk
 	var start := Vector2(walk.start_xz[0], walk.start_xz[1])
 	var end := Vector2(walk.end_xz[0], walk.end_xz[1])
+	# The walk tests the ground, not the planting: a reseeded tree or a moved chair in
+	# its way means the fixture needs re-aiming, not that the park is unwalkable.
+	var blocking := _solid_rows_near(start, end, 0.6)
+	if not _require(blocking.is_empty(), "The park walk's line from %s to %s passes %s; re-aim the fixture (vehicle_cases.json park_on_foot.walk)." % [start, end, blocking]):
+		return false
 	if not await _stand_player(start):
 		return false
 	var direction := (end - start).normalized()

@@ -17,7 +17,7 @@
       {"row": "set_piece:ihpark_lawn_chair_1", "heading_xz": [0.95, -0.31], "run_up_m": 5.0},
       {"row": "set_piece:ihpark_mound_chair_3", "heading_xz": [0.837, -0.547], "run_up_m": 5.0}
     ],
-    "walk": {"start_xz": [-187.0, 549.8], "end_xz": [-212.6, 549.4], "radius_m": 1.5, "max_ticks": 480}
+    "walk": {"start_xz": [-187.0, 544.0], "end_xz": [-213.5, 545.5], "radius_m": 1.5, "max_ticks": 480}
   },
   "fence_shared": {"row": "osm:w1098437834", "bay": "0:8", "start_xz": [-209.71, -236.95], "heading_xz": [-0.466, -0.885]},
   "field_net": {"fence": "scatter:soccer_pitch:pitch_windscreen:line", "net": "scatter:soccer_pitch:pitch_net_southwest:line", "start_xz": [200.26, -151.57], "heading_xz": [0.8829, -0.4696]},

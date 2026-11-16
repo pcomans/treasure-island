@@ -680,7 +680,10 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 			# and single legs lengthened or shortened where the ground folds.
 			var rest := _rest(params)
 			var drops := _leg_drops(params)
-			var powder := str(params.get("colour", "")) == "powder"
+			# A colour other than the park's powder blue is a typo, not the default.
+			if params.has("colour") and str(params.colour) != "powder":
+				return {"ok": false, "message": "adirondack_chair colour must be \"powder\" or left out, not %s" % params.colour}
+			var powder := params.has("colour")
 			var chair_key := "adirondack_chair_powder" if powder else "adirondack_chair"
 			for drop in drops:
 				chair_key += "_%d" % roundi(drop * 1000.0)
@@ -703,7 +706,9 @@ func parts(prop: String, params: Dictionary) -> Dictionary:
 				var angle := PI * 0.25 + PI * 0.5 * float(index)
 				_capsule(result, 0.11, 4.0, Vector3(cos(angle), 0.0, sin(angle)) * CANOPY_POLE_RADIUS_M)
 		"lamp_disc":
-			var light := str(params.get("pole", "")) == "light"
+			if params.has("pole") and str(params.pole) != "light":
+				return {"ok": false, "message": "lamp_disc pole must be \"light\" or left out, not %s" % params.pole}
+			var light := params.has("pole")
 			_piece(result, "lamp_disc_light" if light else "lamp_disc", func(b: Builder) -> void: _lamp_disc(b, PARK_POLE_LIGHT if light else PARK_POLE_GREY))
 			_capsule(result, 0.07, 4.2)
 		"lamp_fork":
