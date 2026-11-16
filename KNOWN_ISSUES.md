@@ -464,8 +464,8 @@ owner's exception (`osm_exception`). What isn't there yet or is inferred:
 - Isle House's land cells are untouched: the re-meshed cells beside them fan to their
   shared edge's corners (`scope.fan_beside` in tools/config/terrain-overrides.json). Over
   the last 4 m before that edge the land stands at most 7.7 cm off the edge's generated
-  height where it was lowered (z 480 to 524, at most 7.7 cm at z 512), and 8.7 to 9.2 cm
-  above it at z 528 to 544, the generated slope there (about 2.3 %, as on main); no
+  height where it was lowered (z 480 to 524, the most at z 512), and 8.7 to 9.2 cm above
+  it at z 528 to 544, the generated slope there (about 2.3 %, as on main); no
   east-west grade in that band exceeds 3.6 %. The basin, beside Isle House's cell, is
   darker damp chips, not a hollow, and holds no water (the video was shot after rain).
 - Cityside's north-west beds: the stormwater swale and forebay keep their heights, and
