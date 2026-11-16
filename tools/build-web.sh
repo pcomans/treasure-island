@@ -19,6 +19,7 @@
 #      its website, https://grandtreasureisland.vercel.app/game/,
 #   4. writes vercel.json so browsers cache the large files for good, and a
 #      .vercelignore so the Vercel CLI never uploads an .env file.
+#   After step 2 it patches Godot's engine script so every play of a sound shares its take's buffer.
 set -euo pipefail
 fetch_args=()
 while [ "$#" -gt 0 ]; do

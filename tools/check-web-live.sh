@@ -17,9 +17,11 @@
 # files the new one no longer serves), it names COMMIT's files and no others, by
 # paths relative to itself (tools/check_web_paths.py), and each of those loads
 # from beside it (200, cached for good, and compressed for the engine script, the
-# .wasm and the .pck). The engine script must be the build's patched one, whose
-# sound plays share each take's buffer (tools/build-web.sh: Godot 4.7.2 copies the
-# take for every play). Then in a browser (tools/browser: a fresh profile on a
+# .wasm and the .pck). Where COMMIT's own tools/build-web.sh patches the engine
+# script so that sound plays share each take's buffer (Godot 4.7.2 copies the take
+# for every play), the engine script served must carry the patch; a build from an
+# older commit, such as a rollback, skips that check. COMMIT must be in this
+# checkout to tell. Then in a browser (tools/browser: a fresh profile on a
 # private Weston, so run it in an engine slot like any other GPU work), the page
 # with ?profile_startup=1 must reach the start prompt within 8 minutes: the world
 # ready, the loading screen gone and the game paused on "Click to play". Every
@@ -47,6 +49,19 @@ for url in "${urls[@]}"; do
     exit 2
   fi
 done
+# Whether COMMIT's own build patches Godot's sample playback so that every play of
+# a sound shares the take's buffer: yes where its tools/build-web.sh writes the
+# shared form, no for a commit from before the patch (a rollback to one), unknown
+# where COMMIT is not in this checkout.
+engine_patch_of() {
+  local full
+  full="$(git -C "${root}" rev-parse --verify --quiet "$1^{commit}")" || { echo unknown; return; }
+  case "$(git -C "${root}" show "${full}:tools/build-web.sh" 2>/dev/null)" in
+    *'getAudioBuffer(){return this._audioBuffer}'*) echo yes ;;
+    *) echo no ;;
+  esac
+}
+engine_patch="$(engine_patch_of "${commit}")"
 work="$(mktemp -d)"
 # The running tools/browser, if any: stopped (it closes its sessions and Weston)
 # however this ends.
@@ -116,11 +131,21 @@ http_leg() {
   echo "CHECK ${url} serves treasure-island-${commit} by relative paths ($(wc -l < "${dir}/files.txt") files)"
 }
 
-# The engine script served: tools/build-web.sh's, whose sample playback shares each
-# sound take's AudioBuffer among its plays, not Godot 4.7.2's own, which copies the
-# take for every play. Drop this with that patch (Godot 4.8 shares it itself).
+# The engine script served: for a commit whose build patches it (engine_patch),
+# tools/build-web.sh's, whose sample playback shares each sound take's AudioBuffer
+# among its plays, not Godot 4.7.2's own, which copies the take for every play. A
+# commit from before the patch serves Godot's own, so a rollback to one skips this.
+# Drop this with that patch (Godot 4.8 shares it itself).
 engine_leg() {
   local url="$1" dir="$2" name="treasure-island-${commit}.js" status
+  case "${engine_patch}" in
+    no)
+      echo "CHECK ${url}${name}: ${commit} predates the shared-AudioBuffer patch (its tools/build-web.sh has none); engine check skipped"
+      return ;;
+    unknown)
+      fail "${url}${name}: ${commit} is not a commit in this checkout, so whether its build patches the engine script is unknown; fetch it and check again"
+      return ;;
+  esac
   status="$(curl -sS --compressed -o "${dir}/engine.js" -w '%{http_code}' --max-time 60 "${url}${name}")" \
     || status="no answer (curl exit $?)"
   if [ "${status}" != 200 ]; then
