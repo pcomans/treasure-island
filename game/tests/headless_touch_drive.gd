@@ -9,11 +9,15 @@ extends SceneTree
 ## menu showing only its "Tap to play" button under the game's name, a big
 ## target inside the page held upright and sideways, no touch control, no bed
 ## started and no frame rate (switched on before play); its button holds the
-## keyboard focus with a ring that shows on its blue, and Space (as its tap)
-## starts play: the touch controls and the frame rate show, the menu is the pause
-## menu again and the beds come in (the wind starts, and plays where the sounds
-## are fetched; a checkout without them is silent, tools/sfx/README.md). Then at
-## each shape:
+## keyboard focus with a ring that shows on its blue. With the notes an iPhone's
+## Safari page asks for (owner, 2026-11-16: the home screen hint and the silent
+## mode line) both lines lie under the button, clear of it and of each other,
+## each centred on the panel, inside the panel and the page, the panel still over
+## the top of the page, in characters the web build's font has. Space (as its
+## tap) starts play: the touch controls and the frame rate show, the notes go with
+## the prompt, the menu is the pause menu again and the beds come in (the wind
+## starts, and plays where the sounds are fetched; a checkout without them is
+## silent, tools/sfx/README.md). Then at each shape:
 ##   - the touch pause button, then Resume, as the player taps them (the shipped
 ##     fault: Resume showed the HUD's prompt, whose label still held the scene's
 ##     "F  Drive", and nothing on a touch screen ever cleared it);
@@ -112,7 +116,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue) and Space on it started play and the wind (%s) as its tap does, the frame rate showing; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; with an iPhone's notes, the home screen hint and the silent mode line, each centred under the button inside the panel and the page at both shapes, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -143,6 +147,14 @@ func _start_prompt() -> bool:
 			return false
 		if not _require(page.encloses(button) and button.size.y >= THUMB_PX and absf(button.get_center().x - page.get_center().x) < 1.0 and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0 and hud.pause_dim.color.a <= GameHUD.START_DIM_ALPHA, "%s: the start prompt's button must lie inside the page, centred, at least %d px tall, its panel within the top %.2f of the page, the island lightly dimmed (button %s, panel %s, page %s, dim %.2f)." % [shape, int(THUMB_PX), GameHUD.START_PANEL_SHARE, button, panel, page, hud.pause_dim.color.a]):
 			return false
+	# The notes an iPhone's Safari page asks for (main.gd's _show_start_notes).
+	hud.set_start_notes(true, true)
+	for shape: String in ["sideways", "upright"]:
+		root.size = SHAPES[shape]
+		for _frame in 3:
+			await process_frame
+		if not _check_start_notes(shape):
+			return false
 	for pressed: bool in [true, false]:
 		var esc := InputEventAction.new()
 		esc.action = &"pause"
@@ -166,8 +178,41 @@ func _start_prompt() -> bool:
 	await _ticks(60)
 	if not _require(not paused and _touch.visible and hud.start_prompt_text().is_empty() and hud.resume_button.text == "Play / Resume" and hud.pause_title.text == "Paused" and hud.controls_button.visible and is_equal_approx(hud.pause_center.anchor_bottom, 1.0) and hud.pause_dim.color.a > GameHUD.START_DIM_ALPHA and _wind_started() and (_main.sound.loop_playing(Sound.WIND_BED, _main.sound) or not Sound.has_takes(Sound.WIND_BED)) and hud.frame_rate_label.visible, "The start prompt's tap must start play with the touch controls showing, end the prompt (the menu centred again, the pause's dim back), show the frame rate and start the wind, playing it where it has takes (paused %s, touch controls %s, prompt %s, button %s, title %s, Controls %s, menu bottom %.2f, dim %.2f, wind started %s, playing %s, takes %s, frame rate shown %s)." % [paused, _touch.visible, hud.start_prompt_text(), hud.resume_button.text, hud.pause_title.text, hud.controls_button.visible, hud.pause_center.anchor_bottom, hud.pause_dim.color.a, _wind_started(), _main.sound.loop_playing(Sound.WIND_BED, _main.sound), Sound.has_takes(Sound.WIND_BED), hud.frame_rate_label.visible]):
 		return false
+	var notes := hud.start_notes_state()
+	if not _require(not notes.home_screen and not notes.silent_mode, "Play's start must take the start prompt's notes away with it (%s)." % [notes]):
+		return false
 	_checked.append("the start prompt")
 	return true
+
+
+## The start prompt's notes at one window shape: the home screen hint and the
+## silent mode line showing, each under the Play button and clear of it, inside the
+## panel and the page, the two clear of each other, each line's text centred on
+## the panel as the button is; the panel still within the top START_PANEL_SHARE of
+## the page; and every character of the lines in the font the web build draws them
+## with (it has no other).
+func _check_start_notes(shape: String) -> bool:
+	var hud := _main.hud
+	var state := hud.start_notes_state()
+	var notes := hud.find_child("StartNotes", true, false) as Control
+	if not _require(notes != null and state.home_screen and state.silent_mode, "%s: the start prompt must show the home screen hint and the silent mode line (%s)." % [shape, state]):
+		return false
+	var page := hud.get_viewport_rect()
+	var panel := hud.pause_box.get_global_rect()
+	var button := hud.resume_button.get_global_rect()
+	var labels: Array[Label] = [notes.get_node("HomeScreenHint") as Label, notes.get_node("SilentNote") as Label]
+	var hint := labels[0].get_global_rect()
+	var line := labels[1].get_global_rect()
+	var placed := [hint, line].all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
+	var centred := labels.all(func(label: Label) -> bool: return label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and absf(label.get_global_rect().get_center().x - panel.get_center().x) < 1.0)
+	if not _require(placed and centred and not hint.intersects(line) and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, each centred on its panel (%s) inside it and the page (%s), and the panel within the top %.2f of the page (hint %s, silent mode line %s)." % [shape, button, panel, page, GameHUD.START_PANEL_SHARE, hint, line]):
+		return false
+	var missing := []
+	for text: String in [GameHUD.START_HOME_SCREEN_NOTE, GameHUD.START_SILENT_NOTE]:
+		for index in text.length():
+			if not ThemeDB.fallback_font.has_char(text.unicode_at(index)):
+				missing.append(text[index])
+	return _require(missing.is_empty(), "The start prompt's notes use characters the web build's font lacks: %s." % [missing])
 
 
 ## Whether the wind's bed has started: its loop_start in the sound manager's log
