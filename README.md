@@ -251,9 +251,11 @@ and pushes it. itch.io then processes each build, which for builds of this size
 can take around 30 minutes, and refuses a new build on a channel until its
 latest one is done; the job then tries the push again once a minute for up to
 30 minutes. A build's state shows on the game's Edit page under Uploads (click
-the channel), or with `butler status phppco/grand-treasure-island`. Once itch.io
-has processed the build, the job downloads what itch.io serves and compares it,
-file by file, with what was pushed. It runs on `main` only. A failed push
+the channel), or with `butler status phppco/grand-treasure-island`. Until a new
+build is processed, itch.io serves the channel's previous one, so the job waits,
+up to 45 minutes, until `butler status` shows the pushed version as the
+channel's processed build; it then downloads what itch.io serves and compares
+it, file by file, with what was pushed. It runs on `main` only. A failed push
 never affects the GitHub release: the job reports it, and the run still
 succeeds. To push an existing release again, or for the first time, start the
 workflow by hand on `main` with that release's tag (a release from before build

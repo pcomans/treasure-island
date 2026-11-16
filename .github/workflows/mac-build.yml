@@ -241,7 +241,7 @@ jobs:
     # A group of its own: an older run's launch check, queued later, must not
     # cancel a newer run's build.
     concurrency:
-      group: mac-build-${{ github.ref }}
+      group: mac-build-${{ github.ref }}-${{ needs.changes.outputs.build }}
       cancel-in-progress: true
     outputs:
       # The release's tag and title use them (publish job).
@@ -396,7 +396,7 @@ jobs:
     timeout-minutes: 60
     environment: mac-signing
     concurrency:
-      group: mac-sign-${{ github.ref }}
+      group: mac-sign-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     outputs:
       # "true" only for the signed, notarized and stapled app. Otherwise the job
@@ -860,7 +860,7 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
-      group: mac-verify-${{ github.ref }}
+      group: mac-verify-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     steps:
       - name: Download the Mac app
@@ -1157,7 +1157,7 @@ jobs:
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
     runs-on: macos-26
-    timeout-minutes: 120
+    timeout-minutes: 150
     continue-on-error: true
     environment: itch
     permissions:
@@ -1373,41 +1373,68 @@ jobs:
       - name: Check the Mac app itch.io serves
         id: served
         if: ${{ !cancelled() && steps.push_mac.outcome == 'success' }}
-        timeout-minutes: 30
+        timeout-minutes: 55
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        # butler fetch downloads the channel's latest build as itch.io serves it,
-        # once itch.io has processed it. Every failure is tried again, once a
-        # minute for up to 25 minutes, whatever butler's message says, so a change
-        # in its wording costs nothing but that wait; the wording only chooses the
-        # warning when the time runs out. While a channel's first build is being
-        # processed itch.io answers "invalid channel" (seen on 2026-11-16, build
-        # 1929), and later "Channel mac's latest build is still processing"
-        # (butler 15.32.0's own words when a build has no archive yet): both mean
-        # itch.io is still processing. The fetched app must pass codesign and
-        # match what was pushed, file for file. A mismatch or a timeout is
-        # reported, not a failure: the push itself succeeded, and a newer push may
-        # already be the channel's latest build.
+          VERSION: ${{ steps.check.outputs.version }}
+        # itch.io serves a build only once it has processed it, which for a large
+        # build can take around 30 minutes (https://itch.io/docs/butler/pushing.html);
+        # until then it serves the channel's previous build, or, for a channel's
+        # first build, answers "invalid channel" (seen on 2026-11-16, build 1929).
+        # So this step asks butler status, once a minute for up to 45 minutes,
+        # until the channel's latest processed build is the one pushed: its user
+        # version is this release's version and its state "completed" (butler
+        # 15.32.0's --json status gives both). Only then does butler fetch download
+        # it, to pass codesign and match what was pushed, file for file. When the
+        # time runs out the warning says what itch.io serves meanwhile. A mismatch
+        # or a timeout is reported, not a failure: the push itself succeeded.
         run: |
+          tries=45
+          live=""
+          seen=""
+          pending=""
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            answer="$(butler --json status "${ITCH_TARGET}:mac" 2>&1)" || status=$?
+            channel="$(jq -R -c 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "mac")' <<< "${answer}" | tail -n 1)"
+            head="$(jq -r '.head // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            pending="$(jq -r '.pending // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            if [ "${status}" -eq 0 ] && [ "${head}" = "${VERSION} completed" ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ]; then
+              seen="${head}"
+              echo "Attempt ${attempt}: the mac channel's latest processed build is ${head:-none yet}${pending:+; pending: ${pending}}."
+            else
+              echo "Attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            fi
+            if [ "${attempt}" -lt "${tries}" ]; then sleep 60; fi
+          done
+          state="The build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}."
+          if [ -z "${live}" ]; then
+            if [ -n "${seen}" ]; then
+              why="itch.io still serves another build, version ${seen% *}${pending:+, while version ${pending% *} is ${pending##* }}"
+            elif [ "${status}" -eq 0 ]; then
+              why="itch.io was still processing it (the channel has no processed build yet)"
+            else
+              case "${answer}" in
+                *"invalid target"*) why="itch.io did not recognise ${ITCH_TARGET} (a renamed account or game page?)" ;;
+                *) why="butler status kept failing (its last answer is above)" ;;
+              esac
+            fi
+            echo "::warning title=itch.io::The Mac build (version ${VERSION}) was pushed, but itch.io did not serve it within 45 minutes: ${why}. ${state} The app it serves was not checked."
+            echo "check=not-done" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
           fetched=""
-          for attempt in $(seq 1 25); do
+          for attempt in 1 2 3; do
             rm -rf served
             status=0
             answer="$(butler fetch "${ITCH_TARGET}:mac" served 2>&1)" || status=$?
             if [ "${status}" -eq 0 ]; then fetched=yes; break; fi
-            echo "Attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
-            if [ "${attempt}" -lt 25 ]; then sleep 60; fi
+            echo "Fetch attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            if [ "${attempt}" -lt 3 ]; then sleep 30; fi
           done
           if [ -z "${fetched}" ]; then
-            case "${answer}" in
-              *"still processing"* | *"invalid channel"*)
-                why="itch.io was still processing it (its last answer: \"$(tail -n 1 <<< "${answer}")\"); processing a large build can take around 30 minutes, and the build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}" ;;
-              *"invalid target"*)
-                why="itch.io did not recognise ${ITCH_TARGET} (a renamed account or game page?)" ;;
-              *)
-                why="butler fetch kept failing (its last answer is above)" ;;
-            esac
-            echo "::warning title=itch.io::The Mac build was pushed, but itch.io did not serve it within 25 minutes: ${why}. The app it serves was not checked."
+            echo "::warning title=itch.io::itch.io serves version ${VERSION} of the Mac build, but butler fetch could not download it (its last answer is above), so the app it serves was not checked."
             echo "check=not-done" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
@@ -1420,10 +1447,10 @@ jobs:
           python3 -I "${RUNNER_TEMP}/manifest.py" served > mac-served.txt
           if [ "${signature}" = ok ] && diff mac-pushed.txt mac-served.txt; then
             echo "check=same" >> "${GITHUB_OUTPUT}"
-            echo "The Mac app itch.io serves is the one pushed, file for file, and passes codesign --verify --deep --strict."
+            echo "The Mac app itch.io serves as version ${VERSION} is the one pushed, file for file, and passes codesign --verify --deep --strict."
           else
             echo "check=different" >> "${GITHUB_OUTPUT}"
-            echo "::warning title=itch.io::The Mac app itch.io serves differs from the one pushed (codesign: ${signature}; differences above). A newer push may be the channel's latest build; otherwise look at the mac channel on itch.io."
+            echo "::warning title=itch.io::The Mac app itch.io serves as version ${VERSION} differs from the one pushed (codesign: ${signature}; differences above), unless a newer push replaced it since. ${state}"
           fi
 
       - name: Report
