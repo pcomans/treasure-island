@@ -18,13 +18,16 @@
 //     nothing; with no storage, storage that throws, no writable streams, or a storage
 //     call that never answers, the pack comes from the network as before, within seconds;
 //   - one buffer holds the pack through retries and a stored copy that reads short;
+//   - a stored copy whose data comes after the page was busy for longer than the stall
+//     limit is still used, and one that stops coming falls back to the network;
+//   - once the pack is in, "Saving…" lasts only until the copy is written;
 //   - a disk slower than the download loses nothing, and what waits for it goes in few
 //     writes;
 //   - the loading line: never blank once anything reports, "Loading the game…" while the
 //     pack's source isn't known, "Downloading" only once the pack comes over the network,
 //     "from this device" only when it comes from there, a percentage once every size is known.
-// Node only, no network and no engine; about twenty seconds, mostly the page's waits
-// between download attempts and for storage that doesn't answer. Part of tools/test.sh.
+// Node only, no network and no engine; about twenty-five seconds, mostly the page's
+// waits between download attempts and for storage that doesn't answer. Part of tools/test.sh.
 //
 //   node tools/check_web_build_files.mjs [SHELL]   (SHELL: another copy of the page's shell)
 import {readFileSync} from 'node:fs';
@@ -46,7 +49,7 @@ class CountingUint8Array extends Uint8Array {
     if (args[0] === packBuffers.size) packBuffers.made += 1;
   }
 }
-const {tiBuildFiles, tiLoadingLine} = new Function('Uint8Array', `${script}\nreturn {tiBuildFiles, tiLoadingLine};`)(CountingUint8Array);
+const {tiBuildFiles, tiLoadingLine, tiAfterDownload} = new Function('Uint8Array', `${script}\nreturn {tiBuildFiles, tiLoadingLine, tiAfterDownload};`)(CountingUint8Array);
 
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
@@ -64,8 +67,9 @@ const later = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // The site's private file system: folders of files; a writable stream's chunks reach the
 // file only on close(), as the browser's swap file does. Knobs: failWriteAfter (a write
 // past that many bytes throws, as a full disk does), writeDelayMs, shortRead (file names
-// whose stored copy reads short), hangDirectory (getDirectory never answers) and
-// hangOnce (file names whose next getFile never answers).
+// whose stored copy reads short), hangDirectory (getDirectory never answers),
+// hangOnce (file names whose next getFile never answers) and readPlan (file names whose
+// stored copy reads as plannedStream says).
 class Storage {
   constructor() {
     this.root = new Folder(this);
@@ -74,6 +78,7 @@ class Storage {
     this.shortRead = new Set();
     this.hangDirectory = false;
     this.hangOnce = new Set();
+    this.readPlan = {};
     this.writes = {};
   }
   getDirectory() { return this.hangDirectory ? never() : Promise.resolve(this.root); }
@@ -109,6 +114,8 @@ class FileHandle {
     const entry = this.folder.entries.get(this.name);
     if (!entry || entry instanceof Folder) return Promise.reject(notFound());
     const file = new File([entry.data], this.name);
+    const plan = storage.readPlan[this.name];
+    if (plan) return Promise.resolve({size: file.size, text: () => file.text(), stream: () => plannedStream(entry.data, plan)});
     if (!storage.shortRead.has(this.name)) return Promise.resolve(file);
     const short = new File([entry.data.subarray(0, entry.data.byteLength >> 1)], this.name);
     return Promise.resolve({size: file.size, text: () => file.text(), stream: () => short.stream()});
@@ -134,6 +141,51 @@ class FileHandle {
       async abort() { chunks.length = 0; },
     };
   }
+}
+// A stored copy's read as a byte stream of 64 KiB pieces: with blockMs, its first
+// read keeps the page busy that long (a synchronous wait, as the engine's setup on a
+// slow phone) and its data then comes in a later task; with stopAfter, it gives that
+// many pieces and then nothing more.
+function plannedStream(data, {blockMs = 0, stopAfter = Infinity} = {}) {
+  let offset = 0;
+  let given = 0;
+  const give = (controller) => {
+    if (offset >= data.byteLength) {
+      controller.close();
+      if (controller.byobRequest) controller.byobRequest.respond(0);
+      return;
+    }
+    const request = controller.byobRequest;
+    const n = Math.min(65536, data.byteLength - offset, request ? request.view.byteLength : Infinity);
+    if (request) {
+      request.view.set(data.subarray(offset, offset + n));
+      request.respond(n);
+    } else {
+      controller.enqueue(data.slice(offset, offset + n));
+    }
+    offset += n;
+    given += 1;
+  };
+  return new ReadableStream({
+    type: 'bytes',
+    pull(controller) {
+      if (given >= stopAfter) return never();
+      if (blockMs > 0 && given === 0) {
+        const until = Date.now() + blockMs;
+        while (Date.now() < until) { /* the page is busy */ }
+        return new Promise((resolve) => setTimeout(() => {
+          try {
+            give(controller);
+          } catch (err) {
+            // The page gave up on the read and cancelled it.
+          }
+          resolve();
+        }, 0));
+      }
+      give(controller);
+      return undefined;
+    },
+  });
 }
 // Web Locks with ifAvailable: busy denies every request, as when another tab holds it;
 // hang never answers.
@@ -201,9 +253,9 @@ const build = (name, size = 1000003, seed = 1) => ({name, pack: [`${name}.pck`, 
 const serverFor = (...builds) => new Server(Object.fromEntries(builds.map((b) => b.pack)));
 // One page load of build B, as the shell does it: the pack's buffer, then finish().
 // Returns what the page got, where from, and how long it took.
-async function load(b, {storage, locks, server, canWrite = true}) {
+async function load(b, {storage, locks, server, canWrite = true, stallMs}) {
   const marks = [];
-  const env = {storage, locks, canWrite, fetch: (n, init) => server.fetch(n, init), mark: (m) => marks.push(m), warn: () => {}};
+  const env = {storage, locks, canWrite, stallMs, fetch: (n, init) => server.fetch(n, init), mark: (m) => marks.push(m), warn: () => {}};
   const files = tiBuildFiles(b.name, env);
   const from = new Set();
   let progress = 0;
@@ -340,6 +392,38 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
     if (what !== 'stored file') check(r.marks.includes('cache:none'), `${what} never answers: no 'cache:none' mark`);
   }
 }
+{ // A stored copy's read: data that comes after the page was busy for longer than the
+  // stall limit is still used; a read that stops falls back to the network soon after it.
+  const storage = new Storage(); const locks = new Locks(); const server = serverFor(A);
+  await load(A, {storage, locks, server});
+  storage.readPlan[A.pack[0]] = {blockMs: 2500};
+  const busy = await load(A, {storage, locks, server, stallMs: 300});
+  check(got(busy, A) && busy.from.join() === 'device' && server.count(A.pack[0]) === 1 && busy.ms >= 2500, `busy page during the read: came from ${busy.from} (${server.count(A.pack[0])} downloads in all) in ${busy.ms} ms`);
+  storage.readPlan[A.pack[0]] = {stopAfter: 2};
+  const stopped = await load(A, {storage, locks, server, stallMs: 300});
+  check(got(stopped, A) && stopped.from.join() === 'device,network' && server.count(A.pack[0]) === 2 && stopped.ms < 2000, `a read that stops: came from ${stopped.from} in ${stopped.ms} ms`);
+}
+{ // Once the pack is in, "Saving…" lasts only until the copy is written, though the
+  // engine may still be getting ready; without a store the engine starts at once.
+  const storage = new Storage(); storage.writeDelayMs = 5; const locks = new Locks(); const server = serverFor(A);
+  const env = {storage, locks, canWrite: true, fetch: (n, init) => server.fetch(n, init), mark: () => {}, warn: () => {}};
+  const files = tiBuildFiles(A.name, env);
+  await files.pack(A.pack[0], A.pack[1].byteLength, () => {});
+  const steps = [];
+  let engineReady = false;
+  tiAfterDownload(files, (step) => steps.push([step, files.saving(), engineReady]));
+  check(steps.length === 1 && steps[0][0] === 'saving' && steps[0][1], `after the download: ${JSON.stringify(steps)}, not "saving" while the copy is written`);
+  for (let i = 0; i < 400 && steps.length < 2; i += 1) await later(5);
+  check(steps.length === 2 && steps[1][0] === 'starting' && !steps[1][1] && !steps[1][2], `after the copy is written: ${JSON.stringify(steps)}, not "starting" before the engine is ready`);
+  engineReady = true;
+  await files.finish();
+  const again = tiBuildFiles(A.name, env);
+  await again.pack(A.pack[0], A.pack[1].byteLength, () => {});
+  const steps2 = [];
+  tiAfterDownload(again, (step) => steps2.push(step));
+  check(steps2.join() === 'starting', `a launch from the device: steps ${steps2}`);
+  await again.finish();
+}
 { // A disk that fails while storing loses the store, not the download, and keeps the old build.
   const storage = new Storage(); const locks = new Locks(); const server = serverFor(A, B);
   await load(A, {storage, locks, server});
@@ -379,4 +463,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, falls back to the network without storage or when storage never answers, and its loading line is never blank and says "Downloading" only for the network');
+console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, leaves "Saving…" once the copy is written, and its loading line is never blank and says "Downloading" only for the network');
