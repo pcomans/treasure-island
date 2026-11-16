@@ -166,10 +166,11 @@ and Windows builds of the same commit, on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Its launch checks are
 headless (Linux on the build runner, the Mac app on an Apple Silicon Mac, the
 Windows build on a Windows runner), so CI never exercises the game's rendering
-on a Mac or a Windows graphics card. Once the Mac app and the Windows build have
-loaded the island there, the build becomes a new release of its own, unless a
-newer build has overtaken it. This page always shows the newest release, whose
-Mac app is `grand-treasure-island-mac-build-<number>.zip`:
+on a Mac or a Windows graphics card. Once the Mac app has loaded the island
+there, the build becomes a new release of its own, unless a newer build has
+overtaken it; the Windows build joins it when it loaded the island on the
+Windows runner, and is left out otherwise. This page always shows the newest
+release, whose Mac app is `grand-treasure-island-mac-build-<number>.zip`:
 
 https://github.com/pcomans/treasure-island/releases/latest
 
@@ -225,8 +226,11 @@ the loading screen can't show.
 
 Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
 has three files, built and checked from the same commit and named after the game
-and the build number, and https://github.com/pcomans/treasure-island/releases/latest
-always shows the newest release:
+and the build number (two, when the Windows build failed its launch check: the
+Mac and Linux builds never wait on it, and the notes then say "Windows build
+left out: its launch check failed"), and
+https://github.com/pcomans/treasure-island/releases/latest always shows the
+newest release:
 
 - the Mac app, `grand-treasure-island-mac-build-<number>.zip`;
 - the Linux build, `grand-treasure-island-linux-build-<number>.tar.gz` (unpack it
