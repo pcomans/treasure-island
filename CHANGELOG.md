@@ -4,6 +4,15 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2117 (2026-11-16)
+
+- The release notes on GitHub and the itch.io downloads now say what changed in each build.
+- The pause menu shows the build number.
+- On an iPhone or iPad, the start screen says how to add the game to the home screen for full screen, and that silent mode must be off to hear sound.
+- Added to a phone's home screen, the game opens full screen, like an app.
+- On an Android phone or tablet, tapping to play also makes the game full screen.
+- The Mac app has been signed and notarized by Apple since build 2084.
+
 ## Build 2084 (2026-11-16)
 
 - The park outside Isle House is in: lawn, chip beds, young pines, timber benches, chairs and logs, with a grass bank beside Avenue of the Palms.
