@@ -168,11 +168,11 @@ headless (Linux on the build runner, the Mac app on an Intel Mac and on an
 Apple Silicon Mac, the Windows build on a Windows runner), so CI never exercises
 the game's rendering on a Mac or a Windows graphics card. Once the Mac app has
 loaded the island on both Macs, the build becomes a new release of its own,
-unless a newer build has overtaken it; when GitHub has no Apple Silicon Mac free,
-the Intel Mac's check is enough and the release notes say the app was not
-launched on Apple Silicon. The Windows build joins the release when it loaded
-the island on the Windows runner, and is left out otherwise. This page always
-shows the newest release, whose Mac app is
+unless a newer build has overtaken it. When GitHub has no Apple Silicon Mac free,
+nothing is published until "Re-run failed jobs" on that run gets the Apple
+Silicon check through (within a day of the build). The Windows build joins the
+release when it loaded the island on the Windows runner, and is left out
+otherwise. This page always shows the newest release, whose Mac app is
 `grand-treasure-island-mac-build-<number>.zip`:
 
 https://github.com/pcomans/treasure-island/releases/latest

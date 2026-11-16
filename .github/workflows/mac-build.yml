@@ -157,21 +157,29 @@
 # stapler and ditto do not depend on the Mac's chip, and codesign signs and
 # verifies every architecture of the universal app. Only the Apple Silicon check
 # runs on macos-26. The Intel check ("Check on an Intel Mac") and the Apple
-# Silicon check ("Load on Apple Silicon") run the same steps on the same app: the
-# signature checks above, then a headless launch as x86_64 or as arm64 that must
-# load the island. The publish job needs the Intel check to pass and waits for
-# the Apple Silicon one. An Apple Silicon check that failed, or that was
-# cancelled once it had a Mac, publishes nothing. When GitHub cancelled it for
-# want of an Apple Silicon Mac (the run's record of the job: cancelled, with no
-# runner, no step and GitHub's "not acquired" annotation), the build publishes
-# anyway, as the Mac and Linux builds do when the Windows check fails (shipping
-# comes first), and the release notes, the run's summary and a warning say that
-# the app was not launched on Apple Silicon for this build; the run itself still
-# shows as failed. To have such a build wait instead, set the repository variable
-#     gh variable set MAC_ARM64_LAUNCH --body required -R pcomans/treasure-island
-# (any value but an empty one counts as required). Such a build then publishes
-# nothing until "Re-run failed jobs" gets the Apple Silicon check through, which
-# needs no new approval while the sign job's app is kept (a day).
+# Silicon check ("Load on Apple Silicon") run the same steps on the same app:
+# both halves of the universal app present, the signature checks above, then a
+# headless launch as x86_64 or as arm64 that must load the island. A release
+# needs both checks to pass (owner, 2026-11-16: wait for Apple Silicon).
+#
+# When GitHub finds no Apple Silicon Mac, that check ends cancelled and nothing
+# is published. Once GitHub has one again, open the run and choose "Re-run
+# failed jobs" (gh run rerun RUN_ID --failed), not "Re-run all jobs": it re-runs
+# the Apple Silicon check and the jobs after it (publish, itch, VirusTotal),
+# while the build, the sign job and the Intel check keep their results and
+# files, so nothing is built or signed again and no approval is asked for. Those
+# files (the artifacts mac-app, mac-app-release, linux-app, windows-app and
+# changelog) are kept for one day after they are uploaded (retention-days: 1).
+# After that the re-run's check stops at its download with an error saying so,
+# and only a new run on main publishes, building and signing main's head again
+# (with the owner's approval). Either way the publish job publishes only while
+# the build is still the newest of main (its head-of-main check).
+#
+# GitHub ends its Intel macOS images around August 2027
+# (https://github.com/actions/runner-images/issues/13045). From 2027-02-01 the
+# changes job warns in every run until the sign job, the itch job and the Intel
+# check no longer run on macos-26-intel (butler's darwin-arm64 pin for the itch
+# job is in INSTALL_LOG.md).
 #
 # The sounds come from the owner's private audio repository (owner, 2026-11-14):
 # its URL is the repository variable TI_SFX_SOURCE (with TI_SFX_SUBDIR and
@@ -221,6 +229,17 @@ jobs:
     outputs:
       build: ${{ steps.decide.outputs.build }}
     steps:
+      - name: Remind about GitHub's Intel Macs
+        # GitHub ends its Intel macOS images around August 2027
+        # (https://github.com/actions/runner-images/issues/13045), and the sign
+        # job, the itch job and the Intel check run on macos-26-intel ("Which Mac
+        # runs what" in the header). From 2027-02-01 every run warns, by the
+        # runner's date, until they move; this step goes with them.
+        run: |
+          if [[ "$(date -u +%F)" > 2027-01-31 ]]; then
+            echo "::warning title=GitHub's Intel Macs end around August 2027::GitHub ends its Intel macOS images around August 2027 (https://github.com/actions/runner-images/issues/13045). Before then move the sign job and the itch job back to macos-26 (the itch job with butler's darwin-arm64 pin, in INSTALL_LOG.md) and remove or replace the Check on an Intel Mac job; then delete this reminder."
+          fi
+
       - name: Check out tools/docs-only
         if: github.event_name == 'push'
         continue-on-error: true
@@ -798,6 +817,12 @@ jobs:
         id: notarize
         if: steps.sign.outcome == 'success' && steps.sign.outputs.ok == 'true'
         continue-on-error: true
+        # notarytool waits at most 35 minutes and stapling at most about 4 more,
+        # so this is a backstop: a step that hangs past it ends as a failure, and
+        # "Choose the build to publish" hands on the ad-hoc app (notary-error)
+        # within the job's 60 minutes, rather than the whole job timing out with
+        # nothing published and the owner's approval spent.
+        timeout-minutes: 50
         env:
           ROUTE: ${{ steps.mode.outputs.route }}
           NOTARY_KEYCHAIN: ${{ runner.temp }}/notary.keychain-db
@@ -989,9 +1014,21 @@ jobs:
     # The Apple Silicon job runs these same steps (a YAML alias of this list).
     steps: &mac-check-steps
       - name: Download the Mac app
+        id: download
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
+
+      # A "Re-run failed jobs" more than a day after the build finds the app's
+      # artifact gone (retention-days: 1); say so instead of leaving only the
+      # download action's error.
+      - name: Explain a missing app
+        if: failure() && steps.download.outcome == 'failure'
+        env:
+          ARTIFACT: ${{ needs.sign.result == 'success' && 'mac-app-release' || 'mac-app' }}
+        run: |
+          echo "::error title=Mac app not found::This run's artifact ${ARTIFACT} could not be downloaded (the download step's error is above). A run's build artifacts are kept for one day after upload, so a re-run of an older run cannot check or publish its build. The next run on main (a push, or gh workflow run mac-build.yml --ref main) builds and signs main's head again, with the owner's approval of the sign job."
+          exit 1
 
       - name: Check the signature, launch it headless and check the island loads
         # The same rule as the Linux launch check in tools/build-mac.sh: the game
@@ -1021,8 +1058,19 @@ jobs:
           ditto -x -k "${zip}" app
           app="$(ls -d app/*.app)"
           exe="${app}/Contents/MacOS/$(/usr/libexec/PlistBuddy -c 'Print :CFBundleExecutable' "${app}/Contents/Info.plist")"
-          echo "${exe}: $(lipo -archs "${exe}")"
+          # Both halves of the universal app, whichever this Mac launches: a build
+          # that lost one fails both checks.
+          archs="$(lipo -archs "${exe}")"
+          echo "${exe}: ${archs}"
+          for want in x86_64 arm64; do
+            [[ " ${archs} " == *" ${want} "* ]] || { echo "FAIL: the app's executable has no ${want} half (lipo -archs: ${archs})" >&2; exit 1; }
+          done
           codesign --verify --deep --strict --verbose=2 "${app}"
+          # Each half's own signature, from its code directory (no Authority=
+          # lines, which name the certificate holder).
+          for half in x86_64 arm64; do
+            echo "${half}: $(codesign -dvv --architecture "${half}" "${app}" 2>&1 | grep -E '^(Format|CodeDirectory|Signature)' | tr '\n' ';' || true)"
+          done
           dvv_status=0
           details="$(codesign -dvv "${app}" 2>&1)" || dvv_status=$?
           # On a failed signature check: what codesign -dvv said, filtered. Its
@@ -1090,9 +1138,9 @@ jobs:
     name: Load on Apple Silicon
     needs: [build, sign]
     # The Intel check's condition and steps, on an Apple Silicon Mac. The
-    # publish job waits for this job; "Which Mac runs what" in the header says
-    # when it publishes without it. The publish job finds this job in the run by
-    # its name, so a new name goes there too.
+    # publish job needs this job to pass too; when GitHub has no Apple Silicon
+    # Mac for it, "Re-run failed jobs" later ("Which Mac runs what" in the
+    # header).
     if: *mac-check-if
     runs-on: macos-26
     timeout-minutes: 20
@@ -1214,25 +1262,19 @@ jobs:
     # job's app when MAC_SIGNING is not "on" and the sign job was skipped. It
     # waits for the Windows check but never depends on it: the Windows build goes
     # in only when that check passed, and otherwise the Mac and Linux builds
-    # publish without it (owner, 2026-11-16: shipping comes first). The Intel
-    # Mac check must pass. The Apple Silicon check must pass too, unless GitHub
-    # cancelled it for want of a runner, which the first step decides ("Which
-    # Mac runs what" in the header). Such a job-level cancel leaves cancelled()
-    # false here; only cancelling the run makes it true (a probe on a branch,
-    # run 43954153229, 2026-11-16).
+    # publish without it (owner, 2026-11-16: shipping comes first). Both Mac
+    # checks must pass, the Intel one and the Apple Silicon one; when the Apple
+    # Silicon one found no runner, "Re-run failed jobs" later ("Which Mac runs
+    # what" in the header).
     if: >-
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       needs.build.result == 'success' && needs.verify-intel.result == 'success' &&
-      (needs.verify.result == 'success' || needs.verify.result == 'cancelled') &&
+      needs.verify.result == 'success' &&
       (needs.sign.result == 'success' || (needs.sign.result == 'skipped' && vars.MAC_SIGNING != 'on')) }}
     runs-on: ubuntu-26.04
     timeout-minutes: 15
     permissions:
       contents: write
-      # Only for the first step: this run's record of the Apple Silicon job
-      # (actions) and GitHub's annotations on it (checks).
-      actions: read
-      checks: read
     # Never cancelled mid-publish. A newer publish waits for it, and replaces an
     # older one that is still waiting.
     concurrency:
@@ -1252,70 +1294,6 @@ jobs:
       linux_sha256: ${{ steps.release.outputs.linux_sha256 }}
       windows_sha256: ${{ steps.release.outputs.windows_sha256 }}
     steps:
-      - name: Check that the Apple Silicon check never got a Mac
-        id: arm64
-        if: needs.verify.result != 'success'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RESULT: ${{ needs.verify.result }}
-          # The verify job's name, as this run's record of its jobs shows it.
-          JOB_NAME: Load on Apple Silicon
-          ARM64_LAUNCH: ${{ vars.MAC_ARM64_LAUNCH }}
-        # The build publishes without the Apple Silicon launch only when GitHub
-        # cancelled that job before any Mac took it: this attempt's record of the
-        # job (GET .../actions/runs/{run}/attempts/{attempt}/jobs) says cancelled,
-        # with no runner (runner_id 0) and no step, and GitHub's annotations on it
-        # (GET .../check-runs/{id}/annotations) include the failure "The job was
-        # not acquired by Runner of type hosted even after multiple attempts", as
-        # on the sign and itch jobs of runs 43902928342 and 43937238479. A job
-        # cancelled while it waited in its concurrency group has no runner either,
-        # but its annotation is "Canceling since a higher priority waiting request
-        # for ... exists" (run 43954153229); that, or anything this step cannot
-        # read or does not recognise, publishes nothing. So does the repository
-        # variable MAC_ARM64_LAUNCH when set ("required"): then "Re-run failed
-        # jobs" publishes the build once the check passes.
-        run: |
-          refuse() {
-            echo "::error title=Apple Silicon launch check::$1 Nothing was published."
-            exit 1
-          }
-          if [ "${RESULT}" != cancelled ]; then
-            refuse "The Apple Silicon check ended \"${RESULT}\"."
-          fi
-          if [ -n "${ARM64_LAUNCH}" ]; then
-            refuse "The Apple Silicon check was cancelled, and the repository variable MAC_ARM64_LAUNCH (\"${ARM64_LAUNCH}\") makes a build wait for it. When GitHub has an Apple Silicon Mac again, re-run this run's failed jobs."
-          fi
-          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/attempts/${GITHUB_RUN_ATTEMPT}/jobs?per_page=100" > jobs.json \
-            || refuse "This run's record of its jobs could not be read (above), so whether the Apple Silicon check ever had a Mac is unknown."
-          jq --arg name "${JOB_NAME}" '[.jobs[]? | select(.name == $name)]' jobs.json > job.json
-          count="$(jq length job.json)"
-          [ "${count}" = 1 ] || refuse "This run's record lists ${count} jobs named \"${JOB_NAME}\", not one."
-          conclusion="$(jq -r '.[0].conclusion' job.json)"
-          runner_id="$(jq -r '.[0].runner_id // 0' job.json)"
-          steps="$(jq '.[0].steps // [] | length' job.json)"
-          check_run="$(jq -r '.[0].check_run_url' job.json)"
-          echo "${JOB_NAME}: conclusion ${conclusion}, runner_id ${runner_id}, ${steps} steps"
-          if [ "${conclusion}" != cancelled ] || [ "${runner_id}" != 0 ] || [ "${steps}" != 0 ]; then
-            refuse "This run's record of the Apple Silicon check says ${conclusion}, runner_id ${runner_id}, ${steps} steps: a Mac took it, so it had to pass."
-          fi
-          id="${check_run#"${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/check-runs/"}"
-          [[ "${id}" =~ ^[0-9]+$ ]] || refuse "The Apple Silicon job's check run (\"${check_run}\") is not one of this repository's."
-          # The annotation may come a moment after the job's end.
-          acquired=unknown
-          for attempt in 1 2 3; do
-            if gh api "repos/${GITHUB_REPOSITORY}/check-runs/${id}/annotations?per_page=100" > annotations.json; then
-              jq -r '.[]? | "  \(.annotation_level): \(.message)"' annotations.json
-              if [ "$(jq '[.[]? | select(.annotation_level == "failure" and (.message | startswith("The job was not acquired by Runner of type hosted")))] | length' annotations.json)" -gt 0 ]; then
-                acquired=no
-                break
-              fi
-            fi
-            if [ "${attempt}" -lt 3 ]; then sleep 10; fi
-          done
-          [ "${acquired}" = no ] || refuse "The Apple Silicon check was cancelled before a Mac took it, but GitHub's annotations on it (above) do not say that no runner was found, so it may have been cancelled for another reason."
-          echo "launch=not-run" >> "${GITHUB_OUTPUT}"
-          echo "::warning title=Apple Silicon launch check did not run::GitHub found no Apple Silicon runner for the job Load on Apple Silicon, so this build is published without being launched on Apple Silicon. The Intel Mac check passed."
-
       # For the head-of-main check below; without it that check counts any later
       # commit on main as more than documentation.
       - name: Check out tools/docs-only
@@ -1367,9 +1345,6 @@ jobs:
           # success, or anything else (failure, cancelled, skipped), which leaves
           # the Windows build out.
           WINDOWS_RESULT: ${{ needs.windows.result }}
-          # "passed", or "not-run" when the first step found that GitHub had no
-          # Apple Silicon Mac for that check. Anything else publishes nothing.
-          ARM64_LAUNCH: ${{ needs.verify.result == 'success' && 'passed' || steps.arm64.outputs.launch }}
         # Each build gets a tag and release of its own, and nothing here replaces a
         # published build. gh uploads to a draft and then publishes it, so no
         # published release lacks its files. If the reply to that publish
@@ -1403,11 +1378,6 @@ jobs:
             echo "::error::changelog/notes.md does not hold build ${BUILD_NUMBER}'s changelog, so this build has no release notes; refusing to publish."
             exit 1
           fi
-          case "${ARM64_LAUNCH}" in
-            passed) arm64_notes="" ;;
-            not-run) arm64_notes=" It was not launched on an Apple Silicon Mac before this release, because GitHub had none free; it loaded the island on an Intel Mac." ;;
-            *) echo "::error::The Apple Silicon check neither passed nor was found not to have run (\"${ARM64_LAUNCH}\"); refusing to publish."; exit 1 ;;
-          esac
           signing=""
           title_extra=""
           if [ "${SIGN_RESULT}" = success ]; then
@@ -1498,7 +1468,7 @@ jobs:
           fi
           notes="${notes}
 
-          The Mac app is ${name}. For the first launch, see Build for the Mac in the README.${arm64_notes}
+          The Mac app is ${name}. For the first launch, see Build for the Mac in the README.
 
           The Linux build of the same commit is ${linux_name}: unpack it and run the .x86_64 program in its treasure-island-linux folder.
 
@@ -1533,10 +1503,6 @@ jobs:
                 echo "### Published ${tag}: ${title}"
                 echo ""
                 echo "${signing:-Ad-hoc signed, not notarized (MAC_SIGNING is not on, so no signing was tried).}"
-                if [ "${ARM64_LAUNCH}" = not-run ]; then
-                  echo ""
-                  echo "Not launched on Apple Silicon: GitHub had no Apple Silicon runner free. The Intel Mac check passed."
-                fi
                 if [ -z "${windows_name}" ]; then
                   echo ""
                   echo "Windows build left out: its launch check failed."

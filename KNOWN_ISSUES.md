@@ -233,6 +233,13 @@ Limits:
 - The owner's Apple ID with an app-specific password answered HTTP 403 to a local `notarytool history` check (2026-11-14), so no working notarization credential exists yet.
 - The sign job has never run on a macOS runner: it was walked on Linux with stand-ins for Apple's tools, so the first signing run on `main` is its first real test.
 
+## Mac runners (`.github/workflows/mac-build.yml`, 2026-11-16)
+
+- Releases depend on GitHub's Intel macOS runners: the sign job, the `itch` job and the "Check on an Intel Mac" job run on `macos-26-intel`. GitHub ends its Intel macOS images around August 2027 ([runner-images#13045](https://github.com/actions/runner-images/issues/13045)). From 2027-02-01 the workflow's first job warns in every run until they move: the sign and `itch` jobs back to `macos-26` (the `itch` job with butler's darwin-arm64 pin, in `INSTALL_LOG.md`), the Intel check removed or replaced.
+- A shortage of Intel runners during signing still costs the owner's approval: GitHub's 15 minutes to find a runner start when the owner approves the sign job, and re-running it asks again.
+- A release waits for the Apple Silicon check (owner, 2026-11-16). When GitHub has no Apple Silicon runner, nothing is published until "Re-run failed jobs" gets that check through, within a day of the build (the artifacts' retention); after that only a new run on `main`, built, signed and approved again, publishes.
+- Signing, notarizing and stapling with the real certificate have not yet run on `macos-26-intel`: a keyless probe (2026-11-16) showed its tools and Apple's ticket service working, so the first release after the move is their first real test.
+
 ## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
 
 - In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
