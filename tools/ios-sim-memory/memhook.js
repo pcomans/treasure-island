@@ -39,6 +39,11 @@
     window[name] = Wrapped;
   }
   M.audioState = () => M.audio.contexts.map((c) => ({state: c.state, time: Math.round(c.currentTime * 1000) / 1000, rate: c.sampleRate, base: c.baseLatency ?? null}));
+  // tools/ios-sim-memory: when a WebGL context is lost or restored (the GPU process died, or the system took it back).
+  M.glEvents = [];
+  for (const type of ['webglcontextlost', 'webglcontextrestored']) {
+    window.addEventListener(type, (e) => { M.glEvents.push([type, Math.round(performance.now())]); }, true);
+  }
   const AC = window.BaseAudioContext && BaseAudioContext.prototype;
   if (AC && AC.createBuffer) {
     const origCreateBuffer = AC.createBuffer;
@@ -161,5 +166,5 @@
     };
   }
   M.dump = () => JSON.stringify({t0: M.t0, memDesc: M.memDesc || null, memExport: M.memExport || null, marks: M.marks, ticks: M.ticks, grows: M.grows,
-    gl: M.gl, pack: M.pack, audio: {buffers: M.audio.buffers, bytes: M.audio.bytes, sources: M.audio.sources, contexts: M.audioState()}, now: row('dump')});
+    gl: M.gl, pack: M.pack, audio: {buffers: M.audio.buffers, bytes: M.audio.bytes, sources: M.audio.sources, contexts: M.audioState()}, glEvents: M.glEvents, now: row('dump')});
 })();

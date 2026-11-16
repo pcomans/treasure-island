@@ -144,10 +144,14 @@ def host_info():
     parts = []
     for cmd in (['sw_vers'], ['uname', '-a'], ['sysctl', 'hw.memsize', 'hw.ncpu', 'hw.pagesize', 'machdep.cpu.brand_string'],
                 ['system_profiler', 'SPDisplaysDataType'], ['xcode-select', '-p'], ['xcodebuild', '-version'],
-                ['xcrun', 'simctl', 'list', 'runtimes']):
-        rc, out, err = sh(cmd, timeout=180, quiet=True)
-        parts.append('$ ' + ' '.join(cmd) + '\n' + out + err)
+                ['xcrun', 'simctl', 'list', 'runtimes'],
+                ['swift', '-e', 'import Metal; let d = MTLCreateSystemDefaultDevice(); print("METAL_DEVICE", d?.name ?? "none", "maxWorkingSet", d?.recommendedMaxWorkingSetSize ?? 0, "unifiedMemory", d?.hasUnifiedMemory ?? false)'],
+                ['ioreg', '-r', '-c', 'IOGPU', '-d', '1']):
+        rc, out, err = sh(cmd, timeout=240, quiet=True)
+        parts.append('$ ' + ' '.join(cmd) + '\n' + out[-4000:] + err[-1500:])
     text = '\n'.join(parts)
+    metal = re.search(r'METAL_DEVICE .*', text)
+    note('Metal device the host offers: ' + (metal.group(0) if metal else 'not reported (swift failed)'))
     open(os.path.join(OUT, 'system.txt'), 'w').write(text)
     gpu = re.findall(r'(Chipset Model|Metal Support|Metal Family|Total Number of Cores|Vendor):\s*(.+)', text)
     note('host: ' + ' / '.join(l.split(':', 1)[1].strip() for l in text.splitlines() if l.startswith('ProductVersion') or l.startswith('BuildVersion'))
@@ -249,7 +253,7 @@ READY_JS = """return (() => {
 STATE_JS = """return (() => { window.__tiReadback(); const s = JSON.parse(window.__tiState); return JSON.stringify({ready: s.ready, paused: s.paused,
   input: s.input, grounded: s.grounded, driving: s.driving, position: s.position, prompt: s.start_prompt, touch: s.touch_visible,
   fps: s.graphics && s.graphics.fps, scale: s.graphics && s.graphics.scale, sound: s.sound,
-  hook: window.__mem ? {wasm_mib: window.__mem.wasm ? window.__mem.wasm.buffer.byteLength / 1048576 : null, audio: {buffers: window.__mem.audio.buffers, mib: window.__mem.audio.bytes / 1048576, sources: window.__mem.audio.sources}, gl_tex_mib: window.__mem.gl ? window.__mem.gl.tex / 1048576 : null, gl_buf_mib: window.__mem.gl ? window.__mem.gl.buf / 1048576 : null, contexts: window.__mem.audioState ? window.__mem.audioState() : null} : null}); })()"""
+  hook: window.__mem ? {wasm_mib: window.__mem.wasm ? window.__mem.wasm.buffer.byteLength / 1048576 : null, audio: {buffers: window.__mem.audio.buffers, mib: window.__mem.audio.bytes / 1048576, sources: window.__mem.audio.sources}, gl_tex_mib: window.__mem.gl ? window.__mem.gl.tex / 1048576 : null, gl_buf_mib: window.__mem.gl ? window.__mem.gl.buf / 1048576 : null, contexts: window.__mem.audioState ? window.__mem.audioState() : null, glEvents: window.__mem.glEvents || null} : null}); })()"""
 ENV_JS = """return (() => { const c = document.createElement('canvas').getContext('webgl2'); const d = c && c.getExtension('WEBGL_debug_renderer_info'); const cv = document.getElementById('canvas');
   return JSON.stringify({webgl2: !!c, renderer: d ? c.getParameter(d.UNMASKED_RENDERER_WEBGL) : null, vendor: d ? c.getParameter(d.UNMASKED_VENDOR_WEBGL) : null,
     max_texture: c ? c.getParameter(c.MAX_TEXTURE_SIZE) : null, dpr: window.devicePixelRatio, canvas: cv ? [cv.width, cv.height] : null,
@@ -268,7 +272,7 @@ def start_session(udid):
                 break
         except WDError:
             time.sleep(1)
-    base = {'browserName': 'Safari', 'platformName': 'iOS', 'safari:useSimulator': True}
+    base = {'browserName': 'Safari', 'platformName': 'iOS', 'safari:useSimulator': True, 'unhandledPromptBehavior': 'accept and notify'}
     for extra, attempts in (({'safari:deviceUDID': udid}, (1, 2)), ({'safari:deviceName': DEVICE}, (1,)), ({}, (1,))):
         caps = dict(base, **extra)
         for attempt in attempts:
@@ -398,7 +402,7 @@ def drive(udid):
             log('HOOK', page.js(open(os.path.join(HERE, 'memhook.js')).read() + '\nreturn window.__mem ? "installed" : "missing";', 60))
         except WDError as e:
             note('the memory hook could not be installed: %s' % str(e)[:200])
-        ok = wait_ready(page, 900)
+        ok = wait_ready(page, 480)
         label('ready')
         screenshot(udid, 'prompt'); dump_sim_ps('ready')
         env = page.js(ENV_JS, 60) if ok else None
@@ -512,10 +516,13 @@ def summarize():
                 d['play_slope'] = sum((e - mx) * (v - my) for e, v in sel) / den * 60 if den else None
         d['lifetime_peak'] = max(p[3] for p in pts if p[3] is not None) if any(p[3] is not None for p in pts) else None
         d['max_sampled'] = max(p[2] for p in pts)
+        d['processes'] = len({p[1] for p in pts})
         out['kinds'][kind] = d
         md.append('| %s | %s | %s | %s | %s | %s | %s | %s |' % ({'web': 'WebContent', 'gpu': 'GPU', 'net': 'Networking', 'safari': 'MobileSafari'}[kind],
                   f(d.get('load_peak')), f(d.get('prompt_median')), f(d.get('play_min')), f(d.get('play_median')), f(d.get('play_max')),
                   '-' if d.get('play_slope') is None else '%.1f' % d['play_slope'], f(d.get('lifetime_peak'))))
+    md += ['', 'Processes seen per kind (a GPU process that dies takes its WebGL contexts with it): ' + ', '.join(
+        '%s %d' % (k, v['processes']) for k, v in out['kinds'].items())]
     md += ['', 'Phases (s after navigate): ' + ', '.join('%s %s' % (k, v) for k, v in out['labels'].items()), '',
            'The simulator has no jetsam: these processes are never killed at an iPhone\'s limit, and its GPU is the runner\'s '
            '(see system.txt), so read the numbers as how close the page comes, not as an iPhone measurement.']
@@ -524,6 +531,37 @@ def summarize():
     if os.environ.get('GITHUB_STEP_SUMMARY'):
         open(os.environ['GITHUB_STEP_SUMMARY'], 'a').write('\n'.join(md) + '\n')
     print('\n'.join(md))
+
+
+def collect_diagnostics(udid):
+    """Crash and jetsam reports written during the run (host and simulator), and the simulator's log lines about
+    WebKit's processes, so a lost WebGL context or a dead process has its cause beside the numbers."""
+    diag = os.path.join(OUT, 'diagnostics'); os.makedirs(diag, exist_ok=True)
+    home = os.path.expanduser('~')
+    dirs = [os.path.join(home, 'Library/Logs/DiagnosticReports'), '/Library/Logs/DiagnosticReports',
+            os.path.join(home, 'Library/Developer/CoreSimulator/Devices', udid, 'data/Library/Logs/CrashReporter')]
+    found = []
+    for d in dirs:
+        rc, out, _ = sh(['sudo', '-n', 'find', d, '-type', 'f', '-newermt', time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(START)), '-size', '-8M'], timeout=60, quiet=True)
+        for f in out.split():
+            if re.search(r'WebKit|WebContent|GPU|Networking|Safari|Jetsam|jetsam', f):
+                found.append(f)
+                sh(['sudo', '-n', 'cp', f, os.path.join(diag, os.path.basename(f))], timeout=30, quiet=True)
+    note('crash or jetsam reports from the run: %s' % (', '.join(os.path.basename(f) for f in found) or 'none'))
+    pred = ('process CONTAINS "WebKit" OR process CONTAINS "MobileSafari" OR eventMessage CONTAINS[c] "jetsam" OR '
+            'eventMessage CONTAINS[c] "memorystatus" OR eventMessage CONTAINS[c] "GPUProcess" OR eventMessage CONTAINS[c] "context lost"')
+    minutes = '%dm' % (int((time.time() - START) / 60) + 2)
+    for name, cmd in (('sim-log.txt', ['xcrun', 'simctl', 'spawn', udid, 'log', 'show', '--last', minutes, '--style', 'compact', '--predicate', pred]),
+                      ('host-memory-log.txt', ['log', 'show', '--last', minutes, '--style', 'compact', '--predicate',
+                                               'eventMessage CONTAINS[c] "jetsam" OR eventMessage CONTAINS[c] "memorystatus" OR eventMessage CONTAINS[c] "GPUExtension" OR eventMessage CONTAINS[c] "com.apple.WebKit.GPU"'])):
+        rc, out, err = sh(cmd, timeout=240, quiet=True)
+        with open(os.path.join(diag, name), 'w') as f:
+            f.write(out[-6000000:] + err[-2000:])
+        hits = [l for l in out.splitlines() if re.search(r'(?i)crash|terminat|jetsam|exit|killed|context lost|lost context|GPUProcess', l)]
+        log('DIAG', name, len(out.splitlines()), 'lines,', len(hits), 'about exits/crashes/jetsam')
+
+
+START = time.time()
 
 
 def main():
@@ -535,6 +573,9 @@ def main():
     if sampler.poll() is not None:
         note('the sampler did not start under sudo (rc %s); running it as the runner user' % sampler.returncode)
         sampler = subprocess.Popen([sys.executable, os.path.abspath(__file__), '--sample', os.path.join(OUT, 'footprint.jsonl')])
+    # A freshly booted simulator runs its first-boot work (indexing, app plug-ins) for a while: let it settle before
+    # Safari starts, so the page meets the runner's memory as it will stay (run 1 met 60 MiB free and 2 GB compressed).
+    time.sleep(90)
     drv = sid = None
     try:
         drv, sid = drive(udid)
@@ -546,6 +587,7 @@ def main():
                 for tool, args in (('footprint', [str(pid)]), ('vmmap', ['--summary', str(pid)])):
                     rc, out, err = sh(['sudo', '-n', tool] + args, timeout=180, quiet=True)
                     open(os.path.join(OUT, '%s-%s-%d.txt' % (tool, kind, pid)), 'w').write(out + err)
+        collect_diagnostics(udid)
         if sid:
             try:
                 wd('DELETE', '/session/' + sid, None, 60)
