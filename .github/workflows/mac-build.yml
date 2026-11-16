@@ -1,7 +1,8 @@
-# Builds the Mac app on every push to main with tools/build-mac.sh (the same
-# script as in the devcontainer), launches it on an Apple Silicon Mac to check
-# the island loads, then publishes it as a new GitHub Release of its own, marked
-# latest, so these fixed links always get the newest build:
+# Builds the Mac app on every push to main that changes more than documentation
+# with tools/build-mac.sh (the same script as in the devcontainer), launches it
+# on an Apple Silicon Mac to check the island loads, then publishes it as a new
+# GitHub Release of its own, marked latest, so these fixed links always get the
+# newest build:
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 #   https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-linux.tar.gz
 # The Linux package is the Linux export that tools/build-mac.sh makes and
@@ -9,6 +10,13 @@
 # 2026-11-03. A run started by hand (workflow_dispatch) on another branch builds
 # and checks the app and publishes nothing; on main, the dry_run input does the
 # same.
+#
+# A push to main that changes only documentation, that is only Markdown files
+# (tools/docs-only; owner-requested 2026-11-15), builds and releases nothing:
+# the changes job says so in the run, and the other jobs show as skipped. A run
+# started by hand always builds. Because such a push builds nothing, a build
+# whose commit main has passed only by documentation is still the newest one,
+# and publishes (the publish job checks).
 #
 # Every build has a build number (owner-requested 2026-11-15) from
 # tools/build-number: the number of commits in its commit's history. A newer
@@ -146,17 +154,94 @@ defaults:
 # Concurrency is per job, not per workflow: a newer push cancels an older run's
 # build or launch check, but never a publish that is under way.
 jobs:
+  changes:
+    name: Decide whether to build
+    # A push to main that changes only documentation (Markdown files, as
+    # tools/docs-only decides) builds and releases nothing: this job says so in
+    # a notice and the run's summary, and every other job shows as skipped. Any
+    # other push, and every run started by hand, builds. The changed files are
+    # GitHub's comparison of the commit before the push with the pushed one, so
+    # a push of several commits, merges among them, counts every file any of
+    # them changed. A comparison that fails or lists 300 files or more (GitHub
+    # lists no more) builds, and so does anything else this job cannot decide.
+    runs-on: ubuntu-26.04
+    timeout-minutes: 10
+    outputs:
+      build: ${{ steps.decide.outputs.build }}
+    steps:
+      - name: Check out tools/docs-only
+        if: github.event_name == 'push'
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/docs-only
+          sparse-checkout-cone-mode: false
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
+      - name: Decide from the files the push changed
+        id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          BEFORE: ${{ github.event.before }}
+        run: |
+          build() {
+            echo "build=true" >> "${GITHUB_OUTPUT}"
+            echo "This run builds: $1."
+          }
+          if [ "${EVENT}" != push ]; then
+            build "it was started by hand"
+            exit 0
+          fi
+          if ! [[ "${BEFORE}" =~ ^[0-9a-f]{40}$ ]] || [[ "${BEFORE}" =~ ^0+$ ]]; then
+            build "the push has no earlier commit to compare with"
+            exit 0
+          fi
+          if [ ! -x tools/docs-only ]; then
+            build "tools/docs-only could not be checked out"
+            exit 0
+          fi
+          if ! gh api "repos/${GITHUB_REPOSITORY}/compare/${BEFORE}...${GITHUB_SHA}" > compare.json; then
+            build "GitHub's comparison of the push failed (above)"
+            exit 0
+          fi
+          status="$(jq -r .status compare.json)"
+          count="$(jq '.files // [] | length' compare.json)"
+          if [ "${status}" != ahead ] || [ "${count}" -ge 300 ]; then
+            build "GitHub's comparison of the push is \"${status}\" with ${count} files, not a step forward with under 300"
+            exit 0
+          fi
+          jq -r '.files // [] | .[] | .filename, (.previous_filename // empty)' compare.json > paths.txt
+          if ! verdict="$(tools/docs-only < paths.txt)"; then
+            build "${verdict}"
+            exit 0
+          fi
+          echo "build=false" >> "${GITHUB_OUTPUT}"
+          echo "::notice title=Not built: documentation only::This push changes only Markdown files (${count}), so nothing is built, released, pushed to itch.io or sent to VirusTotal. The next push with any other change builds."
+          {
+            echo "### Not built: documentation only"
+            echo ""
+            echo "This push changes only Markdown files, which nothing in the build or the game reads, so no build, release, itch.io push or VirusTotal upload runs. The next push with any other change builds, and its build number counts these commits too. To build anyway, start this workflow by hand on main."
+            echo ""
+            sed 's/^/- /' paths.txt
+          } >> "${GITHUB_STEP_SUMMARY}"
+
   build:
     name: Build
-    # A run that only pushes an existing release to itch.io builds nothing, and
-    # with this job skipped so are sign, verify and publish.
-    if: ${{ !inputs.itch_release_tag }}
+    needs: [changes]
+    # A push of documentation alone builds nothing (the changes job). A run that
+    # only pushes an existing release to itch.io builds nothing either. With this
+    # job skipped so are sign, verify and publish.
+    if: ${{ !inputs.itch_release_tag && needs.changes.outputs.build == 'true' }}
     runs-on: ubuntu-26.04
     timeout-minutes: 60
     # A group of its own: an older run's launch check, queued later, must not
     # cancel a newer run's build.
     concurrency:
-      group: mac-build-${{ github.ref }}
+      group: mac-build-${{ github.ref }}-${{ needs.changes.outputs.build }}
       cancel-in-progress: true
     outputs:
       # The release's tag and title use them (publish job).
@@ -311,7 +396,7 @@ jobs:
     timeout-minutes: 60
     environment: mac-signing
     concurrency:
-      group: mac-sign-${{ github.ref }}
+      group: mac-sign-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     outputs:
       # "true" only for the signed, notarized and stapled app. Otherwise the job
@@ -775,7 +860,7 @@ jobs:
     runs-on: macos-26
     timeout-minutes: 20
     concurrency:
-      group: mac-verify-${{ github.ref }}
+      group: mac-verify-${{ github.ref }}-${{ needs.build.result }}
       cancel-in-progress: true
     steps:
       - name: Download the Mac app
@@ -892,6 +977,20 @@ jobs:
       mac_sha256: ${{ steps.release.outputs.mac_sha256 }}
       linux_sha256: ${{ steps.release.outputs.linux_sha256 }}
     steps:
+      # For the head-of-main check below; without it that check counts any later
+      # commit on main as more than documentation.
+      - name: Check out tools/docs-only
+        continue-on-error: true
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          lfs: false
+          persist-credentials: false
+          sparse-checkout: tools/docs-only
+          sparse-checkout-cone-mode: false
+          path: docs-only
+        env:
+          GIT_LFS_SKIP_SMUDGE: "1"
+
       - name: Download the Mac app
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
@@ -918,12 +1017,15 @@ jobs:
         # is lost, gh deletes the release it just published and the tag stays, so a
         # tag with no release stops the step for a person to look at.
         #
-        # Only the head of main publishes. An older build must not take the fixed
-        # link from a newer one. GitHub also refuses (HTTP 404 or 403) a release whose
-        # commit has .github/workflows files that differ from main's, unless the token
-        # may change workflows, and GITHUB_TOKEN never may. A commit that edits a
-        # workflow is fine while it is the head of main, because then it matches main.
-        # See https://docs.github.com/en/rest/releases/releases#create-a-release
+        # Only the newest build of main publishes: the head of main, or a commit
+        # after which main has changed only documentation, since a push of
+        # documentation alone builds nothing (the changes job). An older build must
+        # not take the fixed link from a newer one. GitHub also refuses (HTTP 404 or
+        # 403) a release whose commit has .github/workflows files that differ from
+        # main's, unless the token may change workflows, and GITHUB_TOKEN never may.
+        # A commit that edits a workflow is fine while it is the newest build,
+        # because then its workflows match main's (documentation never includes a
+        # workflow). See https://docs.github.com/en/rest/releases/releases#create-a-release
         #
         # The tag and title carry the build number (build job), and the title the
         # game's name. The title and notes say whether the build is notarized,
@@ -981,8 +1083,19 @@ jobs:
           fi
           head="$(gh api "${api}/commits/main" --jq .sha)"
           if [ "${head}" != "${GITHUB_SHA}" ]; then
-            echo "::notice::SKIP: ${GITHUB_SHA} is no longer the head of main (${head}); the newer run publishes if it passes."
-            exit 0
+            # What main has changed since this commit, from GitHub's comparison; one
+            # that fails or lists 300 files or more counts as more than documentation.
+            since=code
+            if gh api "${api}/compare/${GITHUB_SHA}...${head}" > later.json \
+              && [ "$(jq -r .status later.json)" = ahead ] && [ "$(jq '.files // [] | length' later.json)" -lt 300 ] \
+              && jq -r '.files // [] | .[] | .filename, (.previous_filename // empty)' later.json | docs-only/tools/docs-only; then
+              since=documentation
+            fi
+            if [ "${since}" != documentation ]; then
+              echo "::notice::SKIP: ${GITHUB_SHA} is no longer the head of main (${head}), and main has changed more than documentation since; the newer run publishes if it passes."
+              exit 0
+            fi
+            echo "main is at ${head}, but has changed only documentation since ${GITHUB_SHA}, so this is still the newest build and it publishes."
           fi
           mv treasure-island-mac-*.zip "${name}"
           linux_name=treasure-island-linux.tar.gz
@@ -1044,7 +1157,7 @@ jobs:
       ${{ !cancelled() && github.ref == 'refs/heads/main' && !inputs.dry_run &&
       (needs.publish.outputs.tag != '' || inputs.itch_release_tag != '') }}
     runs-on: macos-26
-    timeout-minutes: 60
+    timeout-minutes: 150
     continue-on-error: true
     environment: itch
     permissions:
@@ -1089,6 +1202,11 @@ jobs:
           # for the branch main.
           custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
           rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=itch.io::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
+            echo "### itch.io: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
           if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
             echo "::warning title=itch.io::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to itch.io. The GitHub release is complete."
             echo "### itch.io: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1155,6 +1273,39 @@ jobs:
           chmod 0755 "${dir}/butler"
           "${dir}/butler" version
           echo "${dir}" >> "${GITHUB_PATH}"
+          # push-when-ready DIR TARGET:CHANNEL VERSION pushes with butler. itch.io
+          # refuses a new build on a channel while that channel's latest build is
+          # still processing ("…: channel mac's latest build is still processing,
+          # try again later"); processing a large build can take around 30 minutes
+          # (https://itch.io/docs/butler/pushing.html). That answer is tried again
+          # once a minute for up to 30 minutes; any other failure stops at once.
+          # With --if-changed, butler pushes nothing when the files equal the
+          # channel's latest processed build ("No changes and --if-changed used,
+          # not pushing anything", butler 15.32.0); the step's output skipped=true
+          # then says so, since no build of this version will appear.
+          cat > "${dir}/push-when-ready" <<'SH'
+          #!/usr/bin/env bash
+          set -uo pipefail
+          tries=31
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            butler push "$1" "$2" --userversion "$3" --if-changed 2>&1 | tee push.log || status=$?
+            if [ "${status}" -eq 0 ]; then
+              if grep -q "No changes and --if-changed used" push.log; then
+                echo "skipped=true" >> "${GITHUB_OUTPUT}"
+              fi
+              exit 0
+            fi
+            if ! grep -q "latest build is still processing" push.log; then exit "${status}"; fi
+            if [ "${attempt}" -eq "${tries}" ]; then
+              echo "itch.io was still processing the channel's previous build after 30 minutes, so this build was not pushed."
+              exit "${status}"
+            fi
+            echo "itch.io is still processing the channel's previous build; trying again in a minute (attempt ${attempt} of ${tries})."
+            sleep 60
+          done
+          SH
+          chmod 0755 "${dir}/push-when-ready"
 
       - name: Stage the Mac app and check its signature
         id: mac
@@ -1199,10 +1350,11 @@ jobs:
       - name: Push the Mac app to itch.io
         id: push_mac
         if: steps.mac.outcome == 'success'
+        timeout-minutes: 40
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
-        run: butler push stage/mac "${ITCH_TARGET}:mac" --userversion "${VERSION}" --if-changed
+        run: push-when-ready stage/mac "${ITCH_TARGET}:mac" "${VERSION}"
 
       # The linux channel does not depend on the mac one: these steps run even
       # when the Mac app's check or push failed.
@@ -1221,37 +1373,95 @@ jobs:
       - name: Push the Linux build to itch.io
         id: push_linux
         if: ${{ !cancelled() && steps.linux.outcome == 'success' }}
+        timeout-minutes: 40
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
           VERSION: ${{ steps.check.outputs.version }}
-        run: butler push stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" --userversion "${VERSION}" --if-changed
+        run: push-when-ready stage/linux/treasure-island-linux "${ITCH_TARGET}:linux" "${VERSION}"
 
       - name: Check the Mac app itch.io serves
         id: served
         if: ${{ !cancelled() && steps.push_mac.outcome == 'success' }}
-        timeout-minutes: 30
+        timeout-minutes: 55
         env:
           BUTLER_API_KEY: ${{ secrets.BUTLER_API_KEY }}
-        # butler fetch downloads the channel's latest build as itch.io serves it,
-        # once itch.io has processed it. Every failure is tried again, once a
-        # minute for up to 25 minutes, whatever butler's message says ("Channel
-        # mac's latest build is still processing" in 15.32.0, or a network
-        # error), so a change in its wording costs nothing but that wait. The
-        # fetched app must pass codesign and match what was pushed, file for file.
-        # A mismatch or a timeout is reported, not a failure: the push itself
-        # succeeded, and a newer push may already be the channel's latest build.
+          VERSION: ${{ steps.check.outputs.version }}
+          SKIPPED: ${{ steps.push_mac.outputs.skipped }}
+        # itch.io serves a build only once it has processed it, which for a large
+        # build can take around 30 minutes (https://itch.io/docs/butler/pushing.html);
+        # until then it serves the channel's previous build, or, for a channel's
+        # first build, answers "invalid channel" (seen on 2026-11-16, build 1929).
+        # So this step asks butler status, once a minute for up to 45 minutes,
+        # until the channel's latest processed build is the one pushed: its user
+        # version is this release's version and its state "completed" (butler
+        # 15.32.0's --json status gives both). Only then does butler fetch download
+        # it, to pass codesign and match what was pushed, file for file. When the
+        # time runs out the warning says what itch.io serves meanwhile. When butler
+        # pushed nothing because the files were unchanged, no build of this version
+        # will appear, so the step takes the channel's processed build, whatever
+        # its version, as the one to check, and says if a build is pending. A
+        # mismatch or a timeout is reported, not a failure: the push itself
+        # succeeded. The output head names the version itch.io serves.
         run: |
+          tries=45
+          if [ "${SKIPPED}" = true ]; then tries=3; fi
+          live=""
+          seen=""
+          pending=""
+          for attempt in $(seq 1 "${tries}"); do
+            status=0
+            answer="$(butler --json status "${ITCH_TARGET}" 2>&1)" || status=$?
+            channel="$(jq -R -c 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "mac")' <<< "${answer}" | tail -n 1)"
+            head="$(jq -r '.head // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            pending="$(jq -r '.pending // empty | "\(.userVersion) \(.state)"' <<< "${channel:-null}")"
+            linux_head="$(jq -R -r 'fromjson? | select(.type == "result") | .value.channels[]? | select(.name == "linux") | .head.userVersion // empty' <<< "${answer}" | tail -n 1)"
+            if [ "${status}" -eq 0 ] && [ "${head}" = "${VERSION} completed" ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ] && [ "${SKIPPED}" = true ] && [ "${head##* }" = completed ]; then live=yes; break; fi
+            if [ "${status}" -eq 0 ]; then
+              seen="${head}"
+              echo "Attempt ${attempt}: the mac channel's latest processed build is ${head:-none yet}${pending:+; pending: ${pending}}."
+            else
+              echo "Attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            fi
+            if [ "${attempt}" -lt "${tries}" ]; then sleep 60; fi
+          done
+          state="The build's state shows on the game's Edit page under Uploads, or with butler status ${ITCH_TARGET}."
+          echo "linux_head=${linux_head}" >> "${GITHUB_OUTPUT}"
+          if [ -z "${live}" ]; then
+            if [ -n "${seen}" ]; then
+              why="itch.io still serves another build, version ${seen% *}${pending:+, while version ${pending% *} is ${pending##* }}"
+            elif [ "${status}" -eq 0 ]; then
+              why="itch.io was still processing it (the channel has no processed build yet)"
+            else
+              case "${answer}" in
+                *"invalid target"*) why="itch.io did not recognise ${ITCH_TARGET} (a renamed account or game page?)" ;;
+                *) why="butler status kept failing (its last answer is above)" ;;
+              esac
+            fi
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler pushed nothing for the Mac build (version ${VERSION}), as its files equal the mac channel's processed build, but that build could not be checked: ${why}. ${state}"
+            else
+              echo "::warning title=itch.io::The Mac build (version ${VERSION}) was pushed, but itch.io did not serve it within 45 minutes: ${why}. ${state} The app it serves was not checked."
+            fi
+            echo "check=not-done" >> "${GITHUB_OUTPUT}"
+            exit 0
+          fi
+          served_version="${head% *}"
+          echo "head=${served_version}" >> "${GITHUB_OUTPUT}"
+          if [ "${SKIPPED}" = true ] && [ -n "${pending}" ]; then
+            echo "::notice title=itch.io::The mac channel also has version ${pending% *} ${pending##* }; until it is done itch.io serves version ${served_version}, which the files of version ${VERSION} equal."
+          fi
           fetched=""
-          for attempt in $(seq 1 25); do
+          for attempt in 1 2 3; do
             rm -rf served
             status=0
             answer="$(butler fetch "${ITCH_TARGET}:mac" served 2>&1)" || status=$?
             if [ "${status}" -eq 0 ]; then fetched=yes; break; fi
-            echo "Attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
-            if [ "${attempt}" -lt 25 ]; then sleep 60; fi
+            echo "Fetch attempt ${attempt}: $(tail -n 1 <<< "${answer}")"
+            if [ "${attempt}" -lt 3 ]; then sleep 30; fi
           done
           if [ -z "${fetched}" ]; then
-            echo "::warning title=itch.io::The Mac build was pushed, but itch.io did not serve it within 25 minutes (butler fetch's last answer is above), so the app it serves was not checked."
+            echo "::warning title=itch.io::itch.io serves version ${served_version} of the Mac build, but butler fetch could not download it (its last answer is above), so the app it serves was not checked."
             echo "check=not-done" >> "${GITHUB_OUTPUT}"
             exit 0
           fi
@@ -1264,10 +1474,14 @@ jobs:
           python3 -I "${RUNNER_TEMP}/manifest.py" served > mac-served.txt
           if [ "${signature}" = ok ] && diff mac-pushed.txt mac-served.txt; then
             echo "check=same" >> "${GITHUB_OUTPUT}"
-            echo "The Mac app itch.io serves is the one pushed, file for file, and passes codesign --verify --deep --strict."
+            echo "The Mac app itch.io serves as version ${served_version} is, file for file, the one of version ${VERSION}, and passes codesign --verify --deep --strict."
           else
             echo "check=different" >> "${GITHUB_OUTPUT}"
-            echo "::warning title=itch.io::The Mac app itch.io serves differs from the one pushed (codesign: ${signature}; differences above). A newer push may be the channel's latest build; otherwise look at the mac channel on itch.io."
+            if [ "${SKIPPED}" = true ]; then
+              echo "::warning title=itch.io::butler found no changes and pushed nothing, yet the Mac app itch.io serves as version ${served_version} differs from version ${VERSION}'s (codesign: ${signature}; differences above). ${state}"
+            else
+              echo "::warning title=itch.io::The Mac app itch.io serves as version ${VERSION} differs from the one pushed (codesign: ${signature}; differences above), unless a newer push replaced it since. ${state}"
+            fi
           fi
 
       - name: Report
@@ -1281,8 +1495,14 @@ jobs:
           LINUX: ${{ steps.builds.outputs.linux }}
           PUSH_MAC: ${{ steps.push_mac.outcome }}
           PUSH_LINUX: ${{ steps.push_linux.outcome }}
+          MAC_SKIPPED: ${{ steps.push_mac.outputs.skipped }}
+          LINUX_SKIPPED: ${{ steps.push_linux.outputs.skipped }}
+          MAC_HEAD: ${{ steps.served.outputs.head }}
+          LINUX_HEAD: ${{ steps.served.outputs.linux_head }}
           SERVED: ${{ steps.served.outputs.check }}
-        # Prints only the tag the first step accepted.
+        # Prints only the tag the first step accepted. A channel that butler left
+        # alone (its files equal the channel's processed build) keeps showing that
+        # build's version on itch.io; the report names both.
         run: |
           if [ "${CHECK}" != success ]; then
             echo "### itch.io: nothing pushed (the release tag was not accepted)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1292,8 +1512,14 @@ jobs:
           {
             echo "### itch.io: ${ITCH_TARGET}, version ${VERSION}, for ${TAG}"
             echo ""
-            echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
-            if [ "${LINUX}" = true ]; then
+            if [ "${MAC_SKIPPED}" = true ]; then
+              echo "- mac channel: unchanged since version ${MAC_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)${SERVED:+; the app itch.io serves: ${SERVED}}"
+            else
+              echo "- mac channel: ${PUSH_MAC:-not pushed}${SERVED:+ (the app itch.io serves: ${SERVED})}"
+            fi
+            if [ "${LINUX}" = true ] && [ "${LINUX_SKIPPED}" = true ]; then
+              echo "- linux channel: unchanged since version ${LINUX_HEAD:-unknown} (version ${VERSION} has the same files, so butler pushed nothing)"
+            elif [ "${LINUX}" = true ]; then
               echo "- linux channel: ${PUSH_LINUX:-not pushed}"
             else
               echo "- linux channel: not pushed (no Linux build in this release)"
@@ -1366,6 +1592,11 @@ jobs:
           # for the branch main.
           custom="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch" --jq '.deployment_branch_policy.custom_branch_policies // false')" || custom=unknown
           rules="$(gh api "repos/${GITHUB_REPOSITORY}/environments/itch/deployment-branch-policies" --jq '[.branch_policies[] | "\(.type // "branch"):\(.name)"] | join(",")')" || rules=unknown
+          if [ "${custom}" = unknown ] || { [ "${custom}" = true ] && [ "${rules}" = unknown ]; }; then
+            echo "::warning title=VirusTotal::The deployment branch rule of the environment itch could not be read (GitHub's answer is above), so its key is not used and nothing goes to VirusTotal. The release is complete."
+            echo "### VirusTotal: skipped (the environment's rule could not be read)" >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
           if [ "${custom}" != true ] || [ "${rules}" != branch:main ]; then
             echo "::warning title=VirusTotal::The environment itch does not admit the branch main alone (Settings -> Environments -> itch -> Deployment branches and tags), so its key is not used and nothing goes to VirusTotal. The release is complete."
             echo "### VirusTotal: skipped (the environment itch is not limited to main)" >> "${GITHUB_STEP_SUMMARY}"
@@ -1403,10 +1634,24 @@ jobs:
         env:
           VIRUSTOTAL_API_KEY: ${{ secrets.VIRUSTOTAL_API_KEY }}
         # One request at a time, at most four a minute. The key goes to curl on
-        # standard input (-H @-), never on its command line, and only ever to
-        # https://www.virustotal.com/. A file VirusTotal already has is not
-        # uploaded again. Results go to results.txt: name, SHA-256, state
-        # (submitted, known, quota or failed), analysis id.
+        # standard input (-H @-), never on its command line, and only ever over
+        # https to virustotal.com or a host under it. A file VirusTotal already has
+        # is not uploaded again. Results go to results.txt: name, SHA-256, state
+        # (submitted, known, quota, refused or failed), analysis id.
+        #
+        # A file over 32 MB goes to the address GET /files/upload_url returns.
+        # VirusTotal's reference for it (docs.virustotal.com/reference/files-upload-url,
+        # updated 2026-09-24) shows http://www.virustotal.com/_ah/upload/..., and says
+        # the upload has the format of POST /files, whose x-apikey header is required;
+        # VirusTotal's own clients (vt-py, vt-go) send the key there too, so it goes
+        # with the file. The address is accepted when it is https (or http, sent over
+        # https), has no user name and no port, and its host is virustotal.com or a
+        # host under it, matched whole label by label: every host under
+        # virustotal.com is VirusTotal's own, the party the key belongs to, and the
+        # check exists to keep the key from a third party named in a tampered
+        # reply. curl then speaks https alone and follows no redirect. Any other
+        # address is refused. Either way the address's scheme and host (never its
+        # path or query, which carry a signed upload token) are printed.
         run: |
           api=https://www.virustotal.com/api/v3
           last=0
@@ -1440,17 +1685,27 @@ jobs:
               echo "${name} ${sha} $(state_of "${code}") -" >> results.txt
               continue
             fi
-            # VirusTotal's own documentation shows this address as http://; the key
-            # never goes over plain HTTP, nor to any other host.
-            case "${url}" in
-              https://www.virustotal.com/*) ;;
-              http://www.virustotal.com/*) url="https://${url#http://}" ;;
-              *)
-                echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is not on https://www.virustotal.com/, so neither the file nor the key was sent there."
-                echo "${name} ${sha} failed -" >> results.txt
-                continue ;;
-            esac
-            vt POST "${url}" -F "file=@release/${name}"
+            if [[ "${url}" =~ ^([A-Za-z][A-Za-z0-9+.-]*)://([A-Za-z0-9.-]+)(:[0-9]+)?(/|\?|$) ]]; then
+              where="${BASH_REMATCH[1]}://${BASH_REMATCH[2]}${BASH_REMATCH[3]}"
+            else
+              where="an address not of the form scheme://host/"
+            fi
+            echo "VirusTotal's upload address for ${name} is on ${where}."
+            accepted=""
+            if [[ "${url}" =~ ^(https?)://([A-Za-z0-9.-]+)(/.*)?$ ]]; then
+              scheme="${BASH_REMATCH[1]}"
+              host="${BASH_REMATCH[2],,}"
+              if [[ "${host}" =~ ^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)*virustotal\.com$ ]]; then
+                accepted=yes
+                if [ "${scheme}" = http ]; then url="https://${url#http://}"; fi
+              fi
+            fi
+            if [ -z "${accepted}" ]; then
+              echo "::warning title=VirusTotal::The upload address VirusTotal gave for ${name} is on ${where}, not https on virustotal.com or a host under it with no user name or port, so neither the file nor the key was sent there."
+              echo "${name} ${sha} refused -" >> results.txt
+              continue
+            fi
+            vt POST "${url}" --proto =https -F "file=@release/${name}"
             analysis="$(jq -r '.data.id // empty' reply.json 2>/dev/null || true)"
             if [ "${code}" != 200 ] || [ -z "${analysis}" ]; then
               echo "::warning title=VirusTotal::Uploading ${name} failed (HTTP ${code})."
@@ -1510,7 +1765,12 @@ jobs:
         # false positives); it never fails the run. The same lines go to the notes
         # job as this job's output.
         run: |
-          [ -f results.txt ] || while read -r name sha; do echo "${name} ${sha} failed -"; done < files.txt > results.txt
+          # Every downloaded file gets a line, even when the submit step stopped part
+          # way: a file with no result counts as failed.
+          touch results.txt
+          while read -r name sha; do
+            grep -m 1 -F "${name} ${sha} " results.txt || echo "${name} ${sha} failed -"
+          done < files.txt > merged.txt
           : > lines.txt
           {
             echo "### VirusTotal for build ${BUILD_NUMBER} (${TAG})"
@@ -1523,6 +1783,7 @@ jobs:
               submitted | known)
                 if [ -f "stats-${sha}.json" ]; then analysis=completed; said="analysis completed"; else analysis=running; said="analysis still running"; fi ;;
               quota) said="not submitted: VirusTotal's daily request limit was reached" ;;
+              refused) said="not submitted: the upload address was not accepted" ;;
               *) said="not submitted: VirusTotal could not be reached" ;;
             esac
             echo "- [${name}](${link}): ${said}" >> "${GITHUB_STEP_SUMMARY}"
@@ -1530,7 +1791,7 @@ jobs:
               echo "::warning title=VirusTotal::VirusTotal flags ${name} of build ${BUILD_NUMBER}; a person should look before anyone relies on it (game engine builds do get false positives): ${link}"
             fi
             echo "${name} ${sha} ${state} ${analysis}" >> lines.txt
-          done < results.txt
+          done < merged.txt
           {
             echo "results<<VIRUSTOTAL_RESULTS"
             cat lines.txt
@@ -1564,7 +1825,7 @@ jobs:
         # form changes nothing. Re-running replaces the section instead of adding
         # a second one.
         run: |
-          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|failed) (completed|running|-)$'
+          pattern='^treasure-island-(mac\.zip|linux\.tar\.gz) [0-9a-f]{64} (submitted|known|quota|refused|failed) (completed|running|-)$'
           while read -r line; do
             [ -n "${line}" ] || continue
             if ! [[ "${line}" =~ ${pattern} ]]; then
@@ -1580,6 +1841,7 @@ jobs:
                 *:completed) note="" ;;
                 submitted:* | known:*) note=" (the analysis was still running when this was written; the report completes on its own)" ;;
                 quota:*) note=" (not submitted: VirusTotal's daily request limit was reached; the link finds the file once anyone submits it)" ;;
+                refused:*) note=" (not submitted: the upload address was not accepted; the link finds the file once anyone submits it)" ;;
                 *) note=" (not submitted: VirusTotal could not be reached; the link finds the file once anyone submits it)" ;;
               esac
               echo "- ${name}: SHA-256 ${sha}, https://www.virustotal.com/gui/file/${sha}${note}"

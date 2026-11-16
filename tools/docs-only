@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Says whether a change is documentation only: reads the changed paths, one per
+# line, on standard input.
+#
+#   exit 0  every path is documentation
+#   exit 1  a path is not (it is printed)
+#   exit 2  no path at all
+#
+# Documentation is Markdown, a path ending in ".md", wherever it is: AGENTS.md,
+# CLAUDE.md, README.md, KNOWN_ISSUES.md, LEARNINGS.md, INSTALL_LOG.md,
+# discovery/RETRO_LOG.md, the notes in discovery/ and evidence/, the README and
+# PROVENANCE files beside the game's assets. Nothing that builds or runs the
+# game reads a Markdown file (checked 2026-11-15: the export leaves non-resource
+# files such as .md out, and the build scripts, world generator and game scripts
+# open none). Every other path counts as code, however documentary it looks:
+# discovery/facades/facade-recognition-catalog.json is read by the game and its
+# tests, an image beside a README may be shown or packed, and a .gdignore
+# changes what Godot imports. When in doubt a path is code, and the push builds.
+#
+# The Mac build workflow (.github/workflows/mac-build.yml) uses it to skip
+# pushes to main that change only documentation; tools/check_docs_only.sh
+# checks it.
+set -euo pipefail
+count=0
+while IFS= read -r path || [ -n "${path}" ]; do
+  [ -n "${path}" ] || continue
+  count=$((count + 1))
+  case "${path}" in
+    *.md) ;;
+    *)
+      printf 'not documentation: %s\n' "${path}"
+      exit 1 ;;
+  esac
+done
+if [ "${count}" -eq 0 ]; then
+  echo "no changed paths"
+  exit 2
+fi
+echo "documentation only: ${count} path(s)"
