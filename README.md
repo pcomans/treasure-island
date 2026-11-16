@@ -11,7 +11,8 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 ## Play it
 
 - **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
-- **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip) (a zip of about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
+- **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB). Apple hasn't checked this build (it isn't notarized). Installed through the [itch app](https://itch.io/app), it should open without the macOS warning. Downloaded in the browser, macOS blocks it the first time you open it: click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
+- **On Linux:** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Linux build.
 
 The downloadable version looks nicer.
 
@@ -156,6 +157,8 @@ when a building counts as done.
 
 ### Build for the Mac
 
+Players get the game from the [itch.io page](https://phppco.itch.io/grand-treasure-island), which CI fills with the same builds; on GitHub, https://github.com/pcomans/treasure-island/releases/latest always shows the newest release.
+
 Every push to `main` that changes more than documentation (see
 [Where the builds go](#where-the-builds-go)) builds the Mac app on GitHub Actions
 ([mac-build.yml](.github/workflows/mac-build.yml)). Both launch checks there are
@@ -175,6 +178,9 @@ opens directly:
 curl -fLO https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip
 gh release download --pattern treasure-island-mac.zip --repo pcomans/treasure-island   # or this
 ```
+
+The zip holds `Grand Treasure Island.app`. It keeps the options chosen in any
+earlier build, so an older `Treasure Island First Playable.app` can simply go.
 
 A release whose notes say "Signed and notarized (Developer ID)" opens directly
 after a browser download. Every other build, from CI or `tools/build-mac.sh`, is
@@ -202,6 +208,15 @@ instead of generating it; `tools/test.sh` runs the whole-island check on it too.
 The bake merges each building's opaque surfaces into far fewer draws
 (`tools/merge_baked_buildings.gd`); the same triangles, packed differently.
 
+At startup the window shows the engine's boot splash while Godot starts, then the
+loading screen, which covers the island until play and names the step under way:
+**Loading the island…**, **Setting up the island…**, **Compiling shaders…**, then
+**Rendering reflections…** (`LOADING_STEPS` in `game/scripts/main.gd`). The
+island's load and the reflections add a smaller, dimmer note, as on a first launch
+they also compile shaders; a run that builds the island from the generated sources
+shows **Building the island…** first. [KNOWN_ISSUES](KNOWN_ISSUES.md) lists what
+the loading screen can't show.
+
 ### Where the builds go
 
 Each release on the [releases page](https://github.com/pcomans/treasure-island/releases)
@@ -215,6 +230,9 @@ the newest:
 
 The Linux build is the one `tools/build-mac.sh` exports and launch-checks next to
 the Mac app, with the same sounds.
+
+Players get both from the [itch.io page](https://phppco.itch.io/grand-treasure-island)
+(below), with the GitHub releases as the alternative.
 
 Every build has a build number: the number of commits in its commit's history,
 from [`tools/build-number`](tools/build-number). A newer build of `main` always
@@ -326,7 +344,7 @@ terms, see
 - `R` recovers to a safe position.
 - `Esc` pauses: everything stops where it is (you, the cars, the ball, the ferry, the water, the trees and the clouds) until you resume, while the sun goes on following the clock; `Q` quits while paused; `F3` toggles runtime evidence.
 - **Controls** in the pause menu, or on the loading screen, lists these controls in the game; **Back** or `Esc` returns.
-- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at the real date and time on Treasure Island and runs at real speed, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** returns to the real time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
+- **Options** in the pause menu sets, under **Graphics**, the sun's shadow quality (`game/scripts/settings/shadow_quality.gd`): Off; Low (shadows within about 200 m only, lighter); Medium (the default: sharp near the player, softer in the distance); or High (a bigger shadow map: sharper still, near and far); a frame-rate limit (30, 60, or No limit, the default: the screen's own refresh); **Show fps** (off by default); and the resolution the world is drawn at (50, 67, 75 or 100 %: 100 % by default, 67 % on the web; `game/scripts/settings/graphics_settings.gd`). Under **Time of day**, on desktop, it sets the date and time: the game opens at 12:30 island time on today's date on Treasure Island, so play always starts in early-afternoon light, and runs at real speed from there, pause included; the date (this year) and time (island time, PST or PDT) sliders jump to any moment and time runs on from there, and **Now** jumps to the real date and time. The light follows the sun's height down through sunset and dusk into a dark night with stars, held from 18° below the horizon until dawn. Once it is dark a flashlight at your chest lights the way where the camera looks, and the car you drive has headlights; both come on by themselves. Street lamps and windows stay dark: a few buildings' small lamps (string lights, a café's bulbs, a pier's LED, a lamp by a door) stay lit, while their lit lobby glass, sign and café interior go dark. Under **Sound** it sets the volume and mute. The web build has no shadow row (its sun shadows stay off: with them on, its renderer also brightened every sunlit surface) and no time of day: it holds the recorded moment (2026-11-13 12:30 PST). A graphics or sound choice applies at once and is kept between runs in `user://settings.cfg`; the date and time are not kept. The shared capture harness always takes the defaults and the recorded moment. `treasure_island/time_of_day/enabled=false` in `project.godot`, or `--no-time-of-day` after `--` for one run, turns the whole time of day off: the game then holds the recorded moment as the web build does.
 - **Credits** in the pause menu acknowledges the sources the game draws on, from the one list in [game/resources/ui/credits.json](game/resources/ui/credits.json), and the Godot engine's own licences; a new third-party folder needs an entry there (`game/tests/headless_credits_contract.gd` checks).
 
 ### More
@@ -346,8 +364,13 @@ terms, see
 pack for game-only content. Native builds retain Forward+; the browser uses
 Godot's Compatibility/WebGL 2 renderer and single-threaded WebAssembly.
 
-Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load;
-then **Click to play** (on a touch screen, **Tap to play**) starts play: that
+Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load:
+the page names each step as it runs, the download with the megabytes so far
+(about 200 MB), **Starting the engine…**, the island's load and setup, the
+shaders compiled a group of the world at a time (**Compiling shaders: sky and
+player…** to **…the ferry and the view across the bay…**, the buildings counted
+in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
+reflections…**. Then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys
 move, Shift runs, Space rises with the jetpack, releasing Space descends slowly
@@ -386,8 +409,9 @@ pointer-lock crash; this is not evidence that a Mac browser crashes.
 
 In the Linux development browser, mesh-size distance culling increased the
 observed spawn frame rate from13 to39–40FPS. Distant small building meshes can
-disappear; complete source inventory and collisions remain loaded. Initial
-world construction took about90seconds. These measurements used Chrome154,
+disappear; complete source inventory and collisions remain loaded. From a local
+server the page reached the start prompt in about 28 to 29 s, 19 to 20 s of it
+compiling shaders a group at a time and rendering reflections (2026-11-15). These measurements used Chrome154,
 AMD Radeon780M and headless Weston; they do not predict Mac performance.
 Traversal smoke checks required a test-only pointer-lock override because of
 the container crash. That override is not in the deployed game.
