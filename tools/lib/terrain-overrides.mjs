@@ -4,7 +4,7 @@
 // The island's land is a 32 m grid of triangles sampled from the 2023 USGS raster
 // (griddedTerrainSurfaceMesh). A site lists a scope (OSM areas plus traced
 // polygons, minus protected way corridors and traced polygons, inside the land;
-// a corridor can be narrower on either side along spans of its way)
+// a corridor can be narrower on either side along spans of its way, or open there)
 // and ordered regions, each a shape with a rule:
 //   level    a flat elevation (a lawn, a pad)
 //   profile  control elevations along a line (a promenade)
@@ -175,7 +175,9 @@ export function loadTerrainOverrides(projectRoot) {
       if (!("spans" in corridor)) continue;
       // spans: stretches of one way (from_m to to_m, metres along it from its first
       // node) where one or both sides of the corridor are narrower than half_width_m
-      // (left and right of the way's direction); see corridorArea in planTerrainOverrides.
+      // (left and right of the way's direction); 0 opens that side, so with both
+      // sides 0 the corridor stops along the span and the way's own ground there is
+      // the site's wherever the scope's parts cover it; see corridorArea in planTerrainOverrides.
       invariant(corridor.source_keys.length === 1, `${label} exclude_ways spans need exactly one way`);
       invariant(Array.isArray(corridor.spans) && corridor.spans.length > 0, `${label} exclude_ways spans must be a non-empty list`);
       let lastEnd = 0;
@@ -184,7 +186,7 @@ export function loadTerrainOverrides(projectRoot) {
         invariant(isFiniteNumber(span.from_m) && isFiniteNumber(span.to_m) && span.from_m >= lastEnd && span.to_m > span.from_m, `${label} exclude_ways spans must run forward along the way without overlapping (from_m ${span.from_m}, to_m ${span.to_m})`);
         lastEnd = span.to_m;
         for (const side of ["left_half_width_m", "right_half_width_m"]) {
-          invariant(isFiniteNumber(span[side]) && span[side] > 0 && span[side] <= corridor.half_width_m, `${label} exclude_ways span ${side} must be in (0, half_width_m]`);
+          invariant(isFiniteNumber(span[side]) && span[side] >= 0 && span[side] <= corridor.half_width_m, `${label} exclude_ways span ${side} must be in [0, half_width_m]`);
         }
         invariant(span.left_half_width_m < corridor.half_width_m || span.right_half_width_m < corridor.half_width_m, `${label} exclude_ways span from ${span.from_m} m narrows neither side`);
         invariant(typeof span.reason === "string" && span.reason.trim() !== "", `${label} exclude_ways span needs a reason`);
@@ -287,7 +289,8 @@ function shapeField(shape) {
 // The band one side of a way's corridor loses along a span: between offset width
 // and past the corridor's edge (half + 1 m), from from_m to to_m along the line
 // (east/north points, the way's direction; sign +1 left, -1 right), with a mitred
-// wedge on the outside of each bend, less everything within width of the line.
+// wedge on the outside of each bend, less everything within width of the line
+// (nothing when width is 0: the side is open from the line out).
 function spanSideCut(line, fromM, toM, width, half, sign, label) {
   const cumulative = [0];
   for (let index = 1; index < line.length; index += 1) cumulative.push(cumulative[index - 1] + Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]));
@@ -325,7 +328,8 @@ function spanSideCut(line, fromM, toM, width, half, sign, label) {
     const scale = reach / Math.cos(turn / 2) / Math.hypot(...mitre);
     pieces.push([[ccw([vertex, [vertex[0] + before[0] * reach, vertex[1] + before[1] * reach], [vertex[0] + mitre[0] * scale, vertex[1] + mitre[1] * scale], [vertex[0] + after[0] * reach, vertex[1] + after[1] * reach]])]]);
   }
-  const cut = differenceMultiPolygons(unionMultiPolygons(...pieces), lineRibbon(clipped, width * 2, label));
+  const band = unionMultiPolygons(...pieces);
+  const cut = width > 0 ? differenceMultiPolygons(band, lineRibbon(clipped, width * 2, label)) : band;
   invariant(cut.length > 0 && multiPolygonArea(cut) > 1e-3, `${label} cuts nothing`);
   return cut;
 }
@@ -525,7 +529,8 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
 
   // A way's protected corridor: a ribbon half_width_m each side (lineRibbon), less,
   // along each of its spans, the band on a narrowed side between that side's half
-  // width and the ribbon's edge (its cuts). Outside the spans the ribbon is unchanged.
+  // width (the line itself where it is 0) and the ribbon's edge (its cuts). Outside
+  // the spans the ribbon is unchanged.
   const corridorArea = (siteId, corridor, key) => {
     const label = `terrain override ${siteId} corridor ${key}`;
     const line = rawWayLine(rawOsm, key.slice(1));

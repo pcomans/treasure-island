@@ -14,6 +14,10 @@ extends SceneTree
 ##      back; the car comes to rest, freezes and stays there; F gets back in;
 ##   2. a run along Seven Seas Avenue: up to speed, mostly on its wheels and
 ##      level, no recovery; then a handbrake turn that slides and stays upright;
+##   2b. Avenue of the Palms where the 2023 stockpile's hump stood (owner,
+##      2026-11-16: flattened): driven each way at speed in its own lane, the
+##      car crosses the stretch on its wheels and level, with no launch, snag
+##      or sink and no recovery (_case_palms_level);
 ##   3. the shore (Avenue N, where the verge falls to the riprap): driven off
 ##      it fast, and crept off it, the car goes over the crest and down the
 ##      rocks without stopping, never inside a stone, and splashes only where
@@ -210,6 +214,13 @@ const POLE_KERB_GAP_M := 0.05
 ## 2026-11-12; a stalled, dragging or wheel-less one keeps far less.
 const DRIVE_S := 1.5
 const DRIVE_SHARE := 0.6
+## Avenue of the Palms over the old hump (_case_palms_level): ticks the car may
+## run on fewer than four wheels there, its lowest up, its fastest rise (m/s) and
+## how far its height over the land may stray from where it stood (m).
+const PALMS_UNLOADED_TICKS := 6
+const PALMS_UP := 0.99
+const PALMS_LAUNCH_MPS := 1.5
+const PALMS_RIDE_M := 0.15
 
 var _failure := ""
 var _main: GameMain
@@ -255,10 +266,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_on_foot_park, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_palms_level, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_on_foot_park, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, a run each way on Avenue of the Palms where the stockpile's hump stood, on its wheels and level with no launch, snag or sink, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -610,6 +621,85 @@ func _case_route() -> bool:
 	if not _require(slip > 15.0 and turned > 45.0, "The handbrake turn did not slide (slip %.1f deg, turned %.1f deg)." % [slip, turned]):
 		return false
 	return await _stop_and_exit(car, "route")
+
+
+# --- 2b. Avenue of the Palms where the 2023 stockpile's hump stood.
+
+## Driven each way along Avenue of the Palms over the stretch where the 2023
+## raster's stockpile hump stood (vehicle_cases.json palms_level: owner,
+## 2026-11-16, flattened), in its own lane from a run-up at full throttle up to
+## max_mps: through the stretch (stretch_xz, along the road) the car goes no
+## slower than min_speed_mps (no snag), keeps all four wheels down on every tick
+## but at most PALMS_UNLOADED_TICKS (and three always), stays level (up at least
+## PALMS_UP), never rises faster than PALMS_LAUNCH_MPS (no launch) and keeps its
+## height over the land under it within PALMS_RIDE_M of where it stood at the
+## run's start (no launch, no sink), with no recovery, and reaches the run's end.
+func _case_palms_level() -> bool:
+	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
+	var level: Dictionary = _cases.palms_level
+	var stretch: Array = level.stretch_xz
+	var from := Vector2(stretch[0][0], stretch[0][1])
+	var along := Vector2(stretch[1][0], stretch[1][1]) - from
+	for run: Dictionary in level.runs:
+		var points: Array = run.points_xz
+		var start := Vector2(points[0][0], points[0][1])
+		var end := Vector2(points[1][0], points[1][1])
+		if not await _drive_from(car, start, end - start):
+			return false
+		var ride0 := _ride_height(car)
+		var recoveries_before := _recoveries.size()
+		var ticks := 0
+		var in_ticks := 0
+		var unloaded := 0
+		var fewest := 4
+		var lowest_up := 1.0
+		var slowest := INF
+		var rise := 0.0
+		var ride_low := INF
+		var ride_high := -INF
+		Input.action_press("move_forward")
+		while ticks < int(float(level.time_s) * 60.0):
+			var at := Vector2(car.global_position.x, car.global_position.z)
+			if at.distance_to(end) < 6.0:
+				break
+			_steer_toward(car, end)
+			if car.linear_velocity.length() > float(level.max_mps):
+				Input.action_release("move_forward")
+			else:
+				Input.action_press("move_forward")
+			await physics_frame
+			ticks += 1
+			var t := (Vector2(car.global_position.x, car.global_position.z) - from).dot(along) / along.length_squared()
+			if t < 0.0 or t > 1.0:
+				continue
+			in_ticks += 1
+			var wheels := car.grounded_wheels()
+			fewest = mini(fewest, wheels)
+			unloaded += 1 if wheels < 4 else 0
+			lowest_up = minf(lowest_up, car.up_dot())
+			slowest = minf(slowest, car.linear_velocity.length())
+			rise = maxf(rise, car.linear_velocity.y)
+			var ride := _ride_height(car)
+			ride_low = minf(ride_low, ride)
+			ride_high = maxf(ride_high, ride)
+		_release_driving()
+		var reached := Vector2(car.global_position.x, car.global_position.z).distance_to(end) < 6.0
+		print("PALMS %s: %d ticks over the stretch, slowest %.2f m/s, fewest wheels %d, %d ticks under four, lowest up %.4f, fastest rise %.2f m/s, height over the land %.3f-%.3f m (%.3f at the start), recoveries %d, reached the end %s" % [run.name, in_ticks, slowest, fewest, unloaded, lowest_up, rise, ride_low, ride_high, ride0, _recoveries.size() - recoveries_before, reached])
+		if not _require(reached and in_ticks > 60, "The %s run on Avenue of the Palms did not cross the stretch to its end (%d ticks over it, reached %s)." % [run.name, in_ticks, reached]) \
+		or not _require(slowest >= float(level.min_speed_mps), "The %s run snagged on the stretch: %.2f m/s at its slowest (at least %.1f)." % [run.name, slowest, float(level.min_speed_mps)]) \
+		or not _require(fewest >= 3 and unloaded <= PALMS_UNLOADED_TICKS and lowest_up >= PALMS_UP, "The %s run left its wheels or tilted on the stretch (fewest wheels %d, %d ticks under four, lowest up %.4f)." % [run.name, fewest, unloaded, lowest_up]) \
+		or not _require(rise <= PALMS_LAUNCH_MPS and ride_high - ride0 <= PALMS_RIDE_M and ride0 - ride_low <= PALMS_RIDE_M, "The %s run launched or sank on the stretch (fastest rise %.2f m/s, height over the land %.3f-%.3f m against %.3f at the start)." % [run.name, rise, ride_low, ride_high, ride0]) \
+		or not _require(_recoveries.size() == recoveries_before, "A recovery fired on the %s run." % run.name):
+			return false
+	return await _stop_and_exit(car, "palms_level")
+
+
+## The car's height over the land straight under it (the world's solid ground,
+## not street props or the car itself).
+func _ride_height(car: DRIVABLE_CAR) -> float:
+	var at := car.global_position
+	var hit := _ray(at + Vector3.UP * 3.0, at + Vector3.DOWN * 6.0, DRIVABLE_CAR.PHYSICS_WORLD_SOLID)
+	return at.y - (hit.position as Vector3).y if not hit.is_empty() else INF
 
 
 # --- 3. The shore: off it fast and slow, R by the rocks, on foot, and open water.
