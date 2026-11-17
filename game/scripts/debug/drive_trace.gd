@@ -183,6 +183,10 @@ func _ready() -> void:
 			elif arg.begins_with("--trace-laps="):
 				_laps = int(arg.trim_prefix("--trace-laps="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
+		# Natively, --trace-web-loading loads as the web build does (the shaders a group
+		# at a time, then the shader warm-up), to tell what that loading does on desktop.
+		if OS.get_cmdline_user_args().has("--trace-web-loading"):
+			_main.compile_by_group = true
 	_laps = clampi(_laps, 1, MAX_LAPS)
 	# The scripts' share of each step: probes first and last of all.
 	for at: int in [-1000000, 1000000]:
