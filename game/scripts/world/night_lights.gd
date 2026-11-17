@@ -32,17 +32,18 @@ extends Node
 ## is not Off (ShadowQuality; about 0.1 to 0.2 ms of GPU time on the dev machine's
 ## Radeon 780M, 2026-11-15), so it lights nothing through a wall. The chest casts no
 ## shadow in it (owner, 2026-11-17: "exclude Chester from things that can cast shadows
-## from a flashlight"). It shines from just in front of the closed lid's front edge,
-## and the sprung lid, thrown open as the chest sets off running, hops or lands, swung
-## that edge up through the light and blacked out most of the beam, flickering as the
-## lid flapped. Once the flashlight is made the chest's meshes are on CHEST_LAYER
-## alone, which the flashlight's shadow caster mask leaves out: it still lights the
-## chest, everything else still shadows its beam, and the Sun lights the chest and
-## casts its shadow as before. A small fill on the chest itself (FILL_*), lighting
-## only the chest (CHEST_LAYER is its cull mask), shows its back and lid in front of
-## the beam. Hidden while the player is in a car. The headlights cast no shadows: what
-## they reach through a wall within HEAD_RANGE_M is behind that wall from the chase
-## camera too.
+## from a flashlight"). It shines from just in front of the closed lid's front edge:
+## speeding up into a run the chest leans forward and its sprung lid swings open,
+## which brought that edge to within a few centimetres of the light, in front of it,
+## blacking out most of the beam and flickering with the gait's bob (the limbs stay
+## outside the beam's cone). Once the flashlight is made the chest's meshes are on
+## CHEST_LAYER alone, which the flashlight's shadow caster mask leaves out: it still
+## lights the chest, everything else still shadows its beam, and the Sun lights the
+## chest and casts its shadow as before. A small fill on the chest itself (FILL_*),
+## lighting only the chest (CHEST_LAYER is its cull mask), shows its back and lid in
+## front of the beam. Hidden while the player is in a car. The headlights cast no
+## shadows: what they reach through a wall within HEAD_RANGE_M is behind that wall
+## from the chase camera too.
 
 ## Darkness (DaySun.night) at which the lights come on, and back under which they go off.
 const ON_AT := 0.5
