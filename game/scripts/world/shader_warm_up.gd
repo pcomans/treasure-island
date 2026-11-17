@@ -59,7 +59,9 @@ static var _shared_shaders: Dictionary = {}
 ## layers}, "users": how many nodes, BaseMaterial3Ds and registrations led to it}. A use key is
 ## "PROBES INSTANCED SHADOW_ONLY", as 0 or 1 each (probes up to 2).
 var entries: Array[Dictionary] = []
-## Drawables of a kind this does not proxy, by class: {class name: count}.
+## What this could not proxy: drawables and materials of a kind it does not draw (by
+## class), and uses with no place inside their probes' boxes: {what: count}. The
+## warm-up contract fails on any.
 var unhandled: Dictionary = {}
 ## How many materials came from the registry.
 var registered_count := 0
@@ -320,6 +322,8 @@ func build(camera: Camera3D) -> void:
 				continue
 			var point: Variant = _point_inside(probes, int(entry.uses[use]))
 			if point == null:
+				var what := "no place inside %d probes for layers %d" % [probes, int(entry.uses[use])]
+				unhandled[what] = int(unhandled.get(what, 0)) + 1
 				continue
 			var at := str(point)
 			if not inside.has(at):

@@ -105,7 +105,7 @@ func _run() -> void:
 		_fail("Loading must put up the warm-up's line(s) (\"%s\") and its proxies; lines %d, proxies %d." % [WARM_UP_LINE, seen.lines, (seen.proxies as Array).size()])
 		return
 	if not (seen.unhandled as Dictionary).is_empty():
-		_fail("The warm-up met drawables or materials of a kind it does not proxy: %s. Teach ShaderWarmUp._take to draw them." % [seen.unhandled])
+		_fail("The warm-up could not proxy: %s (a drawable or material of a kind ShaderWarmUp._take does not draw, or a use with no place inside its probes' boxes)." % [seen.unhandled])
 		return
 	# The shader inspector names each BaseMaterial3D's shader a frame after it is asked.
 	await process_frame
