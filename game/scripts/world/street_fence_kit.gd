@@ -275,6 +275,16 @@ func _init() -> void:
 	_screen_shadow.cull_mode = BaseMaterial3D.CULL_DISABLED
 
 
+## The materials a broken bay's or post's debris is drawn with, outside the
+## shadow pass (commit's "solid" and "fabric" meshes): for the shader warm-up.
+func debris_materials() -> Array[Material]:
+	var materials: Array[Material] = [_metal, _wood, _net, _barbed, _banner, _banner_art]
+	for group: Dictionary in [_chains, _screens, _dense_screens, _slats]:
+		for material: Material in group.values():
+			materials.append(material)
+	return materials
+
+
 func _fabric_material(material_name: String, texture: Texture2D) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
 	material.resource_name = material_name

@@ -22,7 +22,11 @@ extends Node
 ## that slows for the bends (up to CRUISE_MPS); then out of the car, a walk, a run, a
 ## jetpack climb to about 70 m turning the view right round, a slow descent and a
 ## fast drop to the ground. With laps=2 (?trace=drive&laps=2) the car goes round the
-## loop twice before the foot leg, the second time past places already drawn.
+## loop twice before the foot leg, the second time past places already drawn. Then,
+## after the drive's analysed steps (the page's analysis ends at "landed"), the
+## triggers: each script that draws only in play shown by a camera of the trace's
+## own (TRIGGERS): a fence bay broken, a street prop felled, a car's splash, goal
+## confetti, and the web's 3D resolutions in turn, for the shaders they compile.
 ##
 ## The trace: for every frame, from the engine's own signals (physics_frame,
 ## process_frame, frame_pre_draw, frame_post_draw) and four probe nodes, the time of
@@ -73,7 +77,21 @@ const FLAG_RUNNING := 8
 const MEM_JUMP_MB := 0.25
 const SEND_MS := 1000.0
 ## The steps, in order (the record's step field is the index).
-const STEPS := ["wait", "baseline", "to_car", "drive", "stop", "out", "walk", "run", "rise", "hover", "drop", "landed", "done"]
+const STEPS := ["wait", "baseline", "to_car", "drive", "stop", "out", "walk", "run", "rise", "hover", "drop", "landed", "triggers", "done"]
+## The triggers step's parts, each [what, ticks it lasts]: a fence bay broken, a
+## street prop felled, a car's splash and goal confetti (each where the trace's
+## camera sees it, near the player), then the 3D resolution set to 100%, 50% and back
+## (applied, not saved).
+const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti", 150], ["resolution 100", 40], ["resolution 50", 40], ["resolution back", 40]]
+## What the splash and confetti triggers make (as the vehicle manager and the ball do).
+const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
+const GOAL_CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
+## The trace's camera stands this far from what it shows (m), this high above it.
+const TRIGGER_VIEW_M := 9.0
+const TRIGGER_VIEW_UP_M := 3.0
+## The engine's pipeline compilations by source (Forward+ and Mobile count them;
+## Compatibility does not): natively, a marker each frame any of them rises.
+const PIPELINE_SOURCES := {"canvas": RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_CANVAS, "mesh": RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_MESH, "surface": RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SURFACE, "draw": RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_DRAW, "specialization": RenderingServer.RENDERING_INFO_PIPELINE_COMPILATIONS_SPECIALIZATION}
 
 var _main: GameMain
 var _web := OS.has_feature("web")
@@ -135,6 +153,13 @@ var _census_rids: Array[RID] = []
 var _census_entries := {}
 var _census: Dictionary = {}
 var _vehicle_probes: Array[Node] = []
+## The triggers: which part, its tick, the trace's camera, the 3D resolution to put back.
+var _trigger := 0
+var _trigger_ticks := 0
+var _trigger_camera: Camera3D
+var _resolution_before := ""
+## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
+var _pipelines := {}
 
 
 func _init(main: GameMain) -> void:
@@ -443,6 +468,8 @@ func _finish_frame() -> void:
 			_event("mem", "buffer memory %+.2f MiB" % (buf_mb - _buf_mb), buf_mb - _buf_mb)
 	_tex_mb = tex_mb
 	_buf_mb = buf_mb
+	if not _web:
+		_mark_pipelines()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -470,6 +497,25 @@ func _finish_frame() -> void:
 
 func _event(kind: String, text: String, value: float) -> void:
 	_events.append([snappedf(_ms(_now_us()), 0.01), kind, text, value])
+
+
+## The pipeline compilations by source, now.
+static func _pipeline_counts() -> Dictionary:
+	var counts := {}
+	for source: String in PIPELINE_SOURCES:
+		counts[source] = RenderingServer.get_rendering_info(PIPELINE_SOURCES[source])
+	return counts
+
+
+## A marker for each source whose pipeline compilations rose since the last frame.
+func _mark_pipelines() -> void:
+	var counts := _pipeline_counts()
+	if not _pipelines.is_empty():
+		for source: String in counts:
+			var rise := int(counts[source]) - int(_pipelines[source])
+			if rise > 0:
+				_event("pipelines", "%s +%d" % [source, rise], rise)
+	_pipelines = counts
 
 
 ## Nodes added to or removed from the tree, counted by parent and class each frame.
@@ -560,6 +606,7 @@ func _header() -> Dictionary:
 		"audio_driver": AudioServer.get_driver_name(), "memory_static_mb": Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0,
 		"objects": Performance.get_monitor(Performance.OBJECT_COUNT), "nodes": Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
 		"video_mem_mb": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED) / 1048576.0,
+		"pipelines": _pipeline_counts(),
 	}
 
 
@@ -594,6 +641,7 @@ func _end_report(result: String) -> void:
 		"memory_static_mb": Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0,
 		"objects": Performance.get_monitor(Performance.OBJECT_COUNT), "nodes": Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
 		"video_mem_mb": RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED) / 1048576.0,
+		"pipelines": _pipeline_counts(),
 	}
 	if _js != null:
 		_js.end(JSON.stringify(summary))
@@ -759,8 +807,119 @@ func _physics_process(delta: float) -> void:
 		"landed":
 			if _step_ticks >= 180:
 				_release_all()
-				_set_step("done")
-				_end_report("complete" if _stucks == 0 else "complete_with_stops")
+				_trigger = 0
+				_trigger_ticks = 0
+				_set_step("triggers")
+		"triggers":
+			_triggers()
+
+
+## The triggers step (TRIGGERS): one part at a time, each started on its first tick
+## with a marker; then the player's camera back and the report's end.
+func _triggers() -> void:
+	_trigger_ticks += 1
+	if _trigger_ticks == 1:
+		var part := str(TRIGGERS[_trigger][0])
+		_event("trigger", "%s: %s" % [part, _start_trigger(part)], _trigger)
+	if _trigger_ticks < int(TRIGGERS[_trigger][1]):
+		return
+	_trigger += 1
+	_trigger_ticks = 0
+	if _trigger < TRIGGERS.size():
+		return
+	if is_instance_valid(_trigger_camera):
+		_trigger_camera.queue_free()
+	_main.player.get_camera().make_current()
+	_set_step("done")
+	_end_report("complete" if _stucks == 0 else "complete_with_stops")
+
+
+## Starts one trigger; returns what it did, for its marker.
+func _start_trigger(part: String) -> String:
+	var player := _main.player
+	var near := player.global_position
+	var vehicles := _main.vehicles
+	match part:
+		"fence":
+			var fences := _main.world_root.street_detail_layer("fences") if "fences" in _main.world_root.get_street_detail_layers() else null
+			var best: CollisionShape3D = null
+			var best_d := INF
+			if fences != null and vehicles != null:
+				for body: Node in fences.find_children("Collision", "StaticBody3D", true, false):
+					var group := body.get_parent() as Node3D
+					if group == null or not group.has_meta("fence_bays") or not bool(body.get_meta("breakable", true)):
+						continue
+					for child: Node in body.get_children():
+						var shape := child as CollisionShape3D
+						if shape != null and shape.has_meta("fence_bay") and not shape.disabled:
+							var d := shape.global_position.distance_to(near)
+							if d < best_d:
+								best_d = d
+								best = shape
+			if best == null:
+				return "no breakable bay"
+			_look_at_trigger(best.global_position)
+			vehicles.fence_breaker().break_bay(best.get_parent().get_parent() as Node3D, best, Vector3(4.0, 0.0, 0.0))
+			return "bay %s at %.0f m" % [str(best.get_meta("fence_bay")), best_d]
+		"furniture":
+			if vehicles == null:
+				return "no vehicles"
+			var breaker := vehicles.furniture_breaker()
+			var best_id := ""
+			var best_d := INF
+			for id: Variant in breaker.fellable_ids():
+				var pole := breaker.pole(str(id))
+				if pole.is_empty() or breaker.is_felled(str(id)):
+					continue
+				var d := (pole.foot as Vector3).distance_to(near)
+				if d < best_d:
+					best_d = d
+					best_id = str(id)
+			if best_id == "":
+				return "no fellable prop"
+			var pole := breaker.pole(best_id)
+			_look_at_trigger((pole.foot as Vector3) + Vector3.UP * float(pole.height) * 0.5)
+			breaker.fell(best_id)
+			return "%s (%s) at %.0f m" % [best_id, breaker.prop_of(best_id), best_d]
+		"splash":
+			var at := near + Vector3(4.0, 0.0, 0.0)
+			_look_at_trigger(at)
+			var splash: CAR_SPLASH = CAR_SPLASH.new()
+			splash.name = "TraceSplash"
+			_main.add_child(splash)
+			splash.start(at, 8.0, 4.5)
+			return "at %.0f, %.0f" % [at.x, at.z]
+		"confetti":
+			var at := near + Vector3(0.0, 0.0, 4.0)
+			_look_at_trigger(at + Vector3.UP * 1.5)
+			var confetti: GOAL_CONFETTI = GOAL_CONFETTI.new()
+			confetti.name = "TraceConfetti"
+			_main.add_child(confetti)
+			confetti.start(Transform3D(Basis.IDENTITY, at), 3.0, 2.4)
+			return "at %.0f, %.0f" % [at.x, at.z]
+		"resolution 100", "resolution 50", "resolution back":
+			var graphics := _main.graphics
+			if graphics == null:
+				return "no graphics settings"
+			if _resolution_before == "":
+				_resolution_before = str(graphics.current.get(GraphicsSettings.RESOLUTION_KEY, ""))
+			var choice := part.get_slice(" ", 1)
+			var choices: Dictionary = graphics.current.duplicate()
+			choices[GraphicsSettings.RESOLUTION_KEY] = _resolution_before if choice == "back" else choice
+			graphics.apply(choices)
+			return "3D resolution %s" % choices[GraphicsSettings.RESOLUTION_KEY]
+	return "unknown"
+
+
+## Puts the trace's camera TRIGGER_VIEW_M from a point, a little above, looking at it.
+func _look_at_trigger(at: Vector3) -> void:
+	if not is_instance_valid(_trigger_camera):
+		_trigger_camera = Camera3D.new()
+		_trigger_camera.name = "TraceTriggerCamera"
+		add_child(_trigger_camera)
+	var from := at + Vector3(0.0, TRIGGER_VIEW_UP_M, TRIGGER_VIEW_M)
+	_trigger_camera.global_transform = Transform3D(Basis.IDENTITY, from).looking_at(at, Vector3.UP)
+	_trigger_camera.make_current()
 
 
 ## Turns the on-foot camera (and so the walk) toward a direction on the ground.

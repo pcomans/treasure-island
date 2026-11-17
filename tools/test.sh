@@ -252,6 +252,7 @@ tests=(
   game/tests/headless_scene_parse.gd
   game/tests/headless_startup_configuration_contract.gd
   game/tests/headless_drive_trace_contract.gd
+  game/tests/headless_shader_warm_up_contract.gd
   game/tests/validate_generated_world.gd
   game/tests/headless_gameplay_contract.gd
   game/tests/headless_touch_controls.gd

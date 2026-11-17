@@ -71,6 +71,9 @@ const COMPILE_GROUPS: Array[Dictionary] = [
 ]
 ## The line for the shaders all at once (compile_by_group off).
 const COMPILE_ALL_LINE := "Compiling shaders…"
+## The words of the steps after the groups, a group at a time: every other shader
+## play may draw (ShaderWarmUp), in batches.
+const WARM_UP_WORDS := "everything else"
 ## Joins words a loading line keeps together on a wrap (keep_last_words_together).
 const NO_BREAK_SPACE := "\u00a0"
 ## A second line under a step that runs long on a desktop's first launch, smaller
@@ -91,8 +94,13 @@ var _startup_failed := false
 ## The gameplay contract sets it, as a browser would.
 var compile_by_group := OS.has_feature("web")
 ## This load's shader steps (compile_plan), each {"line": its words on the loading
-## screen, "nodes": the Node3Ds its frame shows}, in order; set as they begin.
+## screen, "nodes": the Node3Ds its frame shows}, in order; set as they begin. A
+## warm-up step ("warm_up": true) loses its nodes as loading ends, when they go.
 var compile_steps: Array[Dictionary] = []
+## Every shader play may draw, found as the island has loaded and drawn by tiny
+## proxies behind the loading screen (ShaderWarmUp), with the shaders a group at a
+## time (compile_by_group); null otherwise, and once loading has ended.
+var _warm_up: ShaderWarmUp
 ## The nodes the loading screen keeps hidden until their step, each with its own
 ## visible flag, which _show_hidden puts back (and _end_loading_view, any left).
 var _loading_hidden := {}
@@ -416,6 +424,14 @@ func compile_plan(by_group: bool) -> Array[Dictionary]:
 			part.assign(children.slice(index * children.size() / count, (index + 1) * children.size() / count))
 			# The count kept whole and with the word before it, as one on a wrap.
 			plan.append({"line": "Compiling shaders: %s\u00a0(%d\u00a0of\u00a0%d)…" % [group.words, index + 1, count], "nodes": part})
+	# Then every other shader play may draw (ShaderWarmUp): its proxies a batch a frame.
+	var batches: Array[Node3D] = []
+	if _warm_up != null:
+		batches = _warm_up.batches
+	for index in batches.size():
+		var line := "Compiling shaders: %s\u00a0(%d\u00a0of\u00a0%d)…" % [WARM_UP_WORDS, index + 1, batches.size()] if batches.size() > 1 else keep_last_words_together("Compiling shaders: %s…" % WARM_UP_WORDS)
+		var nodes: Array[Node3D] = [batches[index]]
+		plan.append({"line": line, "nodes": nodes, "warm_up": true})
 	return plan
 
 
@@ -441,8 +457,22 @@ func _reflection_probes() -> Array[Node]:
 ## first group's line and, a frame later, turns 3D on; then each frame shows one
 ## group and puts up the next line. So the frame that first draws a group, and
 ## compiles its shaders, does so under that group's line, put up a frame before.
-## Returns false if startup stopped meanwhile.
+## Shaders a group at a time, every other shader play may draw comes after the
+## groups (ShaderWarmUp): found now, while the setup's line still shows (the
+## engine's shader inspector answers a frame later), its proxies a batch a frame,
+## each hidden again once drawn. Returns false if startup stopped meanwhile.
 func _compile_by_group() -> bool:
+	if compile_by_group:
+		_warm_up = ShaderWarmUp.new()
+		_warm_up.name = "ShaderWarmUp"
+		add_child(_warm_up)
+		_warm_up.find(self, _reflection_probes())
+		await get_tree().process_frame
+		if not _loading_goes_on():
+			return false
+		_warm_up.resolve()
+		_warm_up.build(player.get_camera())
+		print("SHADER_WARM_UP %s" % JSON.stringify(_warm_up.summary()))
 	compile_steps = compile_plan(compile_by_group)
 	for step: Dictionary in compile_steps:
 		for node: Variant in step.nodes:
@@ -467,6 +497,11 @@ func _compile_by_group() -> bool:
 		await get_tree().process_frame
 		if not _loading_goes_on():
 			return false
+		if compile_steps[index].get("warm_up", false):
+			# A batch of proxies has been drawn once: all it is for.
+			for node: Variant in compile_steps[index].nodes:
+				if is_instance_valid(node):
+					(node as Node3D).visible = false
 	for probe: Node in _reflection_probes():
 		_show_hidden(probe)
 	return true
@@ -494,12 +529,23 @@ func _show_hidden(node: Variant) -> void:
 
 
 ## Puts back all the loading screen changed in the view, as startup ends whichever
-## way (play, a failure, main leaving the tree): every node it hid, and 3D drawing.
+## way (play, a failure, main leaving the tree): every node it hid, and 3D drawing;
+## and takes the shader warm-up's proxies away (the warm-up steps keep their lines).
 func _end_loading_view() -> void:
 	for node: Variant in _loading_hidden.keys():
 		if is_instance_valid(node):
 			(node as Node3D).visible = _loading_hidden[node]
 	_loading_hidden.clear()
+	if _warm_up != null:
+		for step: Dictionary in compile_steps:
+			if step.get("warm_up", false):
+				step.nodes = []
+		if is_instance_valid(_warm_up):
+			var camera: Camera3D = get_viewport().get_camera_3d() if is_inside_tree() else null
+			if camera != null and _warm_up.is_ancestor_of(camera) and is_instance_valid(player):
+				player.get_camera().make_current()
+			_warm_up.queue_free()
+		_warm_up = null
 	if is_instance_valid(_loading_viewport):
 		_loading_viewport.disable_3d = _loading_viewport_3d_off
 		_loading_viewport = null
@@ -574,6 +620,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 		return
 	if not _loading_goes_on():
 		return
+	# The shaders drawn inside the reflection probes' boxes, now that the probes have
+	# their images (ShaderWarmUp.probe_pass), under the reflections' line.
+	if _warm_up != null:
+		await _warm_up.probe_pass(player.get_camera())
+		if not _loading_goes_on():
+			return
 	_end_loading_view()
 	_world_ready = true
 	STARTUP_MARKS.mark("play_handoff")

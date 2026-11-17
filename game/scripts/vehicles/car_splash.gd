@@ -28,6 +28,8 @@ const RENDER_WORLD_VISIBLE := 1
 
 static var _dot: GradientTexture2D
 static var _ring_texture: GradientTexture2D
+## One of each material a splash draws, kept for the shader warm-up (register_warm_up).
+static var _warm_up_materials: Array[StandardMaterial3D] = []
 
 var _ring: MeshInstance3D
 var _ring_material: StandardMaterial3D
@@ -69,8 +71,7 @@ func start(at: Vector3, speed: float, car_length_m: float) -> void:
 	foam.emitting = true
 	var quad := PlaneMesh.new()
 	quad.size = Vector2(2.0, 2.0)
-	_ring_material = _sprite_material(_ring_sprite(), false)
-	_ring_material.billboard_mode = BaseMaterial3D.BILLBOARD_DISABLED
+	_ring_material = _ring_material_made()
 	quad.material = _ring_material
 	_ring = MeshInstance3D.new()
 	_ring.name = "Foam ring"
@@ -112,6 +113,24 @@ static func _curve(from: float, to: float) -> Curve:
 	curve.add_point(Vector2(0.0, from))
 	curve.add_point(Vector2(1.0, to))
 	return curve
+
+
+## A splash's materials, for the shader warm-up (ShaderWarmUp): one of each, made
+## as the island loads (the vehicle manager calls this), drawn only at a splash. The
+## spray and the foam are CPU particles (instances), the ring a mesh.
+static func register_warm_up() -> void:
+	if _warm_up_materials.is_empty():
+		_warm_up_materials = [_sprite_material(_dot_sprite(), true), _ring_material_made()]
+	ShaderWarmUp.add(_warm_up_materials[0], true)
+	ShaderWarmUp.add(_warm_up_materials[1], false)
+
+
+## The foam ring's material: a sprite lying flat on the water (each splash its own,
+## as it fades).
+static func _ring_material_made() -> StandardMaterial3D:
+	var material := _sprite_material(_ring_sprite(), false)
+	material.billboard_mode = BaseMaterial3D.BILLBOARD_DISABLED
+	return material
 
 
 ## A soft white sprite facing the camera, its alpha from the texture (and the

@@ -182,8 +182,9 @@ static func glazing(p: Node3D,x: float,w: float,open_bay: bool=false, sliding: b
 	# Perimeter depth replaces opaque fake infill. No furnished interior is authored.
 	# PREMUL_ALPHA_FACTOR keeps its default 1.0 and is not written: Godot 4.7.2's
 	# Compatibility (web) compiler never declares it, so writing it fails to compile.
-	var optical:=Shader.new()
-	optical.code="""shader_type spatial;
+	# One shader for every bay (ShaderWarmUp.shared_shader): a Shader each would be
+	# a shader each to the renderer, each compiling its own programs.
+	var optical:=ShaderWarmUp.shared_shader("""shader_type spatial;
 render_mode blend_premul_alpha, depth_draw_never, cull_back, fog_disabled;
 void fragment() {
 	float facing=clamp(dot(normalize(NORMAL),normalize(VIEW)),0.0,1.0);
@@ -196,7 +197,7 @@ void fragment() {
 	float fresnel=0.12+0.88*pow(1.0-facing,5.0);
 	ALPHA=mix(fresnel,0.48,deposits);
 }
-"""
+""")
 	var custom_glass := ShaderMaterial.new()
 	custom_glass.shader=optical
 	# The web build uses this same glass: it compiles in Compatibility (above).
@@ -290,8 +291,7 @@ void fragment() {
 		if sliding:
 			# Approximate crease self-occlusion from actual35mm folded geometry depth.
 			# AO affects ambient only; albedo stays uniformly pale, no painted lighting.
-			var weave:=Shader.new()
-			weave.code="""shader_type spatial;
+			var weave:=ShaderWarmUp.shared_shader("""shader_type spatial;
 varying float fold_depth;
 void vertex() { fold_depth = VERTEX.z; }
 void fragment() {
@@ -301,7 +301,7 @@ void fragment() {
 	AO = mix(0.42, 1.0, smoothstep(-0.325, -0.29, fold_depth));
 	AO_LIGHT_AFFECT = 0.0;
 }
-"""
+""")
 			var folded_cloth:=ShaderMaterial.new();folded_cloth.shader=weave;cloth=folded_cloth
 		for side in [-1,1]:
 			var curtain:=SurfaceTool.new();curtain.begin(Mesh.PRIMITIVE_TRIANGLES)

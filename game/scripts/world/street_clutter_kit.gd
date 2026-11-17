@@ -150,6 +150,12 @@ func _init() -> void:
 	_glass_material.resource_name = "street_car_glass"
 	_glass_material.shader = GLASS_SHADER
 	_read_scene(KIT_SCENE)
+	# A live car and the hero level draw these as instances, only after loading
+	# (the shader warm-up: ShaderWarmUp); the glass only at the hero level.
+	ShaderWarmUp.add(_material, true)
+	ShaderWarmUp.add(_wheel_material, true)
+	if hero_level_enabled():
+		ShaderWarmUp.add(_glass_material, true)
 
 
 func _read_scene(packed: PackedScene) -> void:

@@ -223,6 +223,27 @@ func configure(furniture_layer: Node) -> void:
 			var by_index: Dictionary = _shape_rows.get(ref[0], {})
 			by_index[ref[1]] = id
 			_shape_rows[ref[0]] = by_index
+	_register_warm_up()
+
+
+## What felled props draw, for the shader warm-up (ShaderWarmUp), as the island
+## loads: each fellable prop's meshes as a mesh of its own (_fell; standing, they
+## are instances), its lenses with their lamps off (made now, not at the first
+## fall) and a dropped span's wires (instances).
+func _register_warm_up() -> void:
+	var meshes := {}
+	for row: Dictionary in _rows.values():
+		for ref: Array in row.instances:
+			var instance := ref[0] as MultiMeshInstance3D
+			if is_instance_valid(instance) and instance.multimesh.mesh != null:
+				meshes[instance.multimesh.mesh] = true
+	for mesh: Mesh in meshes:
+		ShaderWarmUp.add_mesh(mesh, false)
+		for surface in mesh.get_surface_count():
+			var lit := mesh.surface_get_material(surface)
+			if lit != null and lit.resource_name == LIT_MATERIAL:
+				ShaderWarmUp.add(_lens_off_material(lit), false)
+	ShaderWarmUp.add_mesh(_wire_mesh, true)
 
 
 ## Where a row stands for the reach: a round pole (one upright capsule) by its

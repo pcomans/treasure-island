@@ -249,6 +249,8 @@ func configure(world: WorldLoader, player: PlayerController, hud: GameHUD, touch
 			_yard_kit()
 			break
 	_visible_ground.build([world.ground_and_areas, world.roads_and_paths])
+	# A splash's materials, for the shader warm-up (drawn only when a car goes in).
+	CAR_SPLASH.register_warm_up()
 	_breaker = FENCE_BREAKER.new()
 	_breaker.name = "FenceBreaker"
 	add_child(_breaker)

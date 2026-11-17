@@ -119,7 +119,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	return _last_result
 
 static func _siding_material(inf:Dictionary) -> ShaderMaterial:
-	var material:=ShaderMaterial.new();material.shader=MARKS;material.resource_name="inferred_quiet_cool_gray_horizontal_siding"
+	var material:=ShaderMaterial.new();material.shader=ShaderWarmUp.shared_shader(MARKS.code);material.resource_name="inferred_quiet_cool_gray_horizontal_siding"
 	material.set_shader_parameter("base_color",Color(.65,.69,.70));material.set_shader_parameter("seam_color",Color(.50,.55,.57));material.set_shader_parameter("roughness_value",.87)
 	material.set_shader_parameter("course_height_m",float(inf.siding_course_m));material.set_shader_parameter("phase_offset_m",float(inf.siding_phase_y));material.set_shader_parameter("seam_half_width_cycles",.006/(2.0*float(inf.siding_course_m)))
 	material.set_shader_parameter("relief_strength",.02);material.set_shader_parameter("color_variation",0.0)
@@ -167,7 +167,7 @@ static func _ground_material(label:String,albedo:Texture2D,rough:Texture2D,tint:
 	return material
 
 static func _lawn_material(spec:Dictionary) -> ShaderMaterial:
-	var material:=ShaderMaterial.new();material.shader=LAWN_TONE
+	var material:=ShaderMaterial.new();material.shader=ShaderWarmUp.shared_shader(LAWN_TONE.code)
 	material.resource_name="private_restrained_green_frontage_lawn"
 	material.set_shader_parameter("lawn_albedo",LAWN_ALBEDO)
 	material.set_shader_parameter("lawn_roughness",LAWN_ROUGHNESS)
