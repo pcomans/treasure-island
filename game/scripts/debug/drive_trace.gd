@@ -21,7 +21,8 @@ extends Node
 ## ferry plaza), steered toward a point ahead on the route (pure pursuit) at a speed
 ## that slows for the bends (up to CRUISE_MPS); then out of the car, a walk, a run, a
 ## jetpack climb to about 70 m turning the view right round, a slow descent and a
-## fast drop to the ground.
+## fast drop to the ground. With laps=2 (?trace=drive&laps=2) the car goes round the
+## loop twice before the foot leg, the second time past places already drawn.
 ##
 ## The trace: for every frame, from the engine's own signals (physics_frame,
 ## process_frame, frame_pre_draw, frame_post_draw) and four probe nodes, the time of
@@ -54,10 +55,15 @@ const BRAKE_MPS2 := 4.0
 const STUCK_M := 1.5
 const STUCK_S := 4.0
 const STUCK_LIMIT := 3
-## The drive gives up after this long (s of game time) and goes on to the foot leg.
+## The drive gives up after this long (s of game time) a lap and goes on to the foot leg.
 const DRIVE_LIMIT_S := 900.0
+## How many laps of the route the drive takes (?trace=drive&laps=N on the web,
+## --trace-laps=N natively; 1 by default, at most MAX_LAPS): a second lap passes the
+## same places with everything already drawn once, which tells what the first sight
+## of a place costs from what drawing it costs.
+const MAX_LAPS := 3
 ## A frame's record, in this order (the page's hook and the native file name them).
-const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs"]
+const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap"]
 ## flags: driving, the tree paused, nothing drawn this frame, the drive running.
 const FLAG_DRIVING := 1
 const FLAG_PAUSED := 2
@@ -114,6 +120,8 @@ var _s := 0.0
 var _stuck_from := Vector3.ZERO
 var _stuck_ticks := 0
 var _stucks := 0
+var _laps := 1
+var _lap := 1
 var _backing := 0
 var _drive_ticks := 0
 var _car: DrivableCar
@@ -134,11 +142,15 @@ func _ready() -> void:
 	_origin_us = Time.get_ticks_usec()
 	if _web:
 		_js = JavaScriptBridge.get_interface("__tiTrace")
+		_laps = int(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('laps') || '1'")))
 	else:
 		for arg: String in OS.get_cmdline_user_args():
 			if arg.begins_with("--trace-out="):
 				_out = FileAccess.open(arg.trim_prefix("--trace-out="), FileAccess.WRITE)
+			elif arg.begins_with("--trace-laps="):
+				_laps = int(arg.trim_prefix("--trace-laps="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
+	_laps = clampi(_laps, 1, MAX_LAPS)
 	# The scripts' share of each step: probes first and last of all.
 	for at: int in [-1000000, 1000000]:
 		var probe := TraceProbe.new(self, "script_first" if at < 0 else "script_last")
@@ -290,7 +302,7 @@ func _finish_frame() -> void:
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_OBJECTS_IN_FRAME),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) / 1000.0,
 		at.x, at.y, at.z, speed, flags, _step, _leg, _nadd, _nrem, tex_mb, buf_mb,
-		Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), Performance.get_monitor(Performance.PHYSICS_3D_COLLISION_PAIRS),
+		Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), Performance.get_monitor(Performance.PHYSICS_3D_COLLISION_PAIRS), _lap,
 	]
 	for value: Variant in row:
 		_rows.append(float(value))
@@ -382,7 +394,7 @@ func _header() -> Dictionary:
 	var stamp: Variant = ProjectSettings.get_setting("application/config/version", "")
 	return {
 		"fields": FIELDS, "steps": STEPS, "legs": ROUTE_LEGS, "route": route, "outline": outline,
-		"route_m": _cum[_cum.size() - 1], "car": CAR_ROW, "cruise_mps": CRUISE_MPS,
+		"route_m": _cum[_cum.size() - 1], "car": CAR_ROW, "cruise_mps": CRUISE_MPS, "laps": _laps,
 		"renderer": RenderingServer.get_current_rendering_method(), "adapter": RenderingServer.get_video_adapter_name(),
 		"vendor": RenderingServer.get_video_adapter_vendor(), "display": DisplayServer.get_name(), "os": OS.get_name(),
 		"engine": Engine.get_version_info().get("string", ""), "version": stamp,
@@ -645,7 +657,14 @@ func _drive(delta: float) -> void:
 	if leg != _leg:
 		_leg = leg
 		_event("leg", str(ROUTE_LEGS[leg][1]), leg)
-	if _s >= total - 4.0 or _drive_ticks * delta > DRIVE_LIMIT_S:
+	if _s >= total - 4.0 and _lap < _laps:
+		# The route ends where it starts: round again.
+		_lap += 1
+		_s = 0.0
+		_leg = -1
+		_event("lap", "lap %d" % _lap, _lap)
+		return
+	if _s >= total - 4.0 or _drive_ticks * delta > DRIVE_LIMIT_S * _laps:
 		if _s < total - 4.0:
 			_event("car", "drive time limit at %.0f m of %.0f" % [_s, total], _s)
 		_release_all()

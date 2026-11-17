@@ -179,7 +179,7 @@ body {
 // The frame record tiTraceFrames makes, a number list in this order.
 const TI_TRACE_FRAME = ['t', 'ms', 'x', 'z', 'speed', 'step', 'leg', 'flags', 'phys_n', 'pre', 'phys_engine', 'phys_vehicles',
 	'phys_scripts', 'proc_engine', 'proc_vehicles', 'proc_scripts', 'draw', 'compile', 'compile_n', 'upload', 'upload_kb', 'sync',
-	'outside', 'dc', 'prim_k', 'nadd', 'nrem', 'sources'];
+	'outside', 'dc', 'prim_k', 'nadd', 'nrem', 'sources', 'lap'];
 // The causes a long frame's time is named by, each with its class (above).
 const TI_TRACE_CAUSES = {
 	pre: ['engine before physics (input, the first tick\'s car physics)', 'engine'],
@@ -236,7 +236,7 @@ function tiTraceFrames(raf, rows, fields, origin, gl) {
 		out.push([start, ms, r[f.x], r[f.z], r[f.speed], r[f.step], r[f.leg], r[f.flags], r[f.phys_n], pre,
 			physEngine, r[f.vphys_ms], Math.max(0, r[f.sphys_ms] - r[f.vphys_ms]), procEngine, r[f.vproc_ms],
 			Math.max(0, r[f.sproc_ms] - r[f.vproc_ms]), draw, compile, g[1], upload, g[4], sync,
-			Math.max(0, ms - pre - busy), r[f.dc], r[f.prim_k], r[f.nadd], r[f.nrem], g[8]]);
+			Math.max(0, ms - pre - busy), r[f.dc], r[f.prim_k], r[f.nadd], r[f.nrem], g[8], f.lap === undefined ? 1 : r[f.lap]]);
 	}
 	return out;
 }
@@ -322,6 +322,32 @@ function tiTraceAnalyze(frames, events, programs, opts) {
 	}
 	result.long_per_min = result.long / (result.seconds / 60);
 	result.very_long_per_min = result.very_long / (result.seconds / 60);
+	// Spikes: frames far over the drive's median (at least twice it and 50 ms over it),
+	// which compare across devices whatever their median, and the drive's laps apart
+	// (a second lap passes places already drawn once).
+	result.spike_at_ms = Math.max(2 * base, base + 50);
+	result.spikes = 0;
+	result.spike_lost_ms = 0;
+	result.spike_causes = {};
+	result.laps = {};
+	for (const fr of live) {
+		const lap = result.laps[fr[F.lap]] || (result.laps[fr[F.lap]] = {frames: 0, ms: 0, spikes: 0, spike_lost_ms: 0, compiles: 0});
+		lap.frames += 1;
+		lap.ms += fr[F.ms];
+		lap.compiles += fr[F.compile_n];
+	}
+	for (const item of long) {
+		if (item.fr[F.ms] < result.spike_at_ms) continue;
+		result.spikes += 1;
+		result.spike_lost_ms += item.excess;
+		const c = result.spike_causes[item.cause] || (result.spike_causes[item.cause] = {frames: 0, lost_ms: 0});
+		c.frames += 1;
+		c.lost_ms += item.excess;
+		const lap = result.laps[item.fr[F.lap]];
+		lap.spikes += 1;
+		lap.spike_lost_ms += item.excess;
+	}
+	result.spikes_per_min = result.spikes / (result.seconds / 60);
 	result.points = long.map((item) => [item.fr[F.x], item.fr[F.z], Math.round(item.fr[F.ms]), item.cause]);
 	return result;
 }
@@ -341,6 +367,10 @@ function tiTraceText(env, a) {
 	lines.push(`Drive: ${r1(a.seconds)} s, ${a.frames} frames; frame time median ${r1(a.median_ms)} ms, 95% ${r1(a.p95_ms)}, 99% ${r1(a.p99_ms)}, worst ${r1(a.max_ms)}`);
 	lines.push(`Long frames (33 ms or more): ${a.long} (${r1(a.long_per_min)} a minute); 100 ms or more: ${a.very_long} (${r1(a.very_long_per_min)} a minute)`);
 	lines.push(`Time lost in long frames (over the median): ${r1(a.lost_ms / 1000)} s`);
+	lines.push(`Spikes (${Math.round(a.spike_at_ms)} ms or more: twice the median and 50 ms over it): ${a.spikes} (${r1(a.spikes_per_min)} a minute), ${r1(a.spike_lost_ms / 1000)} s over the median; by cause: ` + Object.entries(a.spike_causes).sort((x, y) => y[1].lost_ms - x[1].lost_ms).map(([k, c]) => `${TI_TRACE_CAUSES[k][0]} ${c.frames} (${r1(c.lost_ms / 1000)} s)`).join(', '));
+	if (Object.keys(a.laps).length > 1) {
+		for (const [n, lap] of Object.entries(a.laps)) lines.push(`  Lap ${n}: ${lap.frames} frames, mean ${r1(lap.ms / lap.frames)} ms, ${lap.spikes} spikes (${r1(lap.spike_lost_ms / 1000)} s), ${lap.compiles} shader programs compiled`);
+	}
 	lines.push('Frame times: ' + a.histogram.map((h) => `${h.from}-${h.to === Infinity ? '' : h.to} ms: ${h.frames}`).join(', '));
 	lines.push('');
 	lines.push('Causes of long frames (by lost time):');
