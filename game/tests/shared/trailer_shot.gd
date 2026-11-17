@@ -69,6 +69,9 @@ var chester_on := false
 var path_progress := 0.0
 var path_entry := -1
 var active_path: Array[Vector2] = []
+## The move Chester is making now ("walk" or "run"), "" while he stands.
+var moving := ""
+var walk_speed := 0.0
 var last_physics_frame := -1
 var last_camera := Vector3.INF
 var last_speed := -1.0
@@ -135,6 +138,10 @@ func _run() -> void:
 			return
 		ticks_per_frame = Engine.physics_ticks_per_second / fps
 		print("SHOT_BEGIN ", shot.name, " -> ", out_dir)
+		for key in keys:
+			if not key.follow:
+				var ground := harness.ray(key.position + Vector3.UP * 300.0, key.position + Vector3.DOWN * 300.0, harness.player.collision_mask)
+				print("SHOT_KEY t=%.2f position=%s ground_y=%s" % [key.t, key.position, "none" if ground.is_empty() else "%.2f" % (ground.position as Vector3).y])
 		failure = _set_sun()
 		if failure.is_empty():
 			failure = await _place_chester()
@@ -234,6 +241,7 @@ func _read_shot() -> String:
 	track.clear()
 	path_entry = -1
 	path_progress = 0.0
+	moving = ""
 	last_camera = Vector3.INF
 	last_speed = -1.0
 	worst_speed_change = 0.0
@@ -285,7 +293,10 @@ func _read_shot() -> String:
 				path.append(Vector2(float(point[0]), float(point[1])))
 			if move != "idle" and path.is_empty():
 				return "a walk or run needs a path"
-			track.append({"t": float(entry.t), "move": move, "path": path, "jetpack": bool(entry.get("jetpack", false))})
+			var speed := float(entry.get("speed", 0.0))
+			if speed < 0.0 or (speed > 0.0 and move != "walk") or speed > 4.0:
+				return "chester.track speed (m/s) is for a walk, at most the stock 4"
+			track.append({"t": float(entry.t), "move": move, "path": path, "speed": speed, "jetpack": bool(entry.get("jetpack", false))})
 		for i in range(1, track.size()):
 			if float(track[i].t) <= float(track[i - 1].t):
 				return "chester.track entries must have increasing t"
@@ -473,6 +484,13 @@ func _record() -> bool:
 		_pose(maxf(t, -handle_s - float(STILL_WARM_FRAMES) / fps))
 		if frame >= 0 and not _camera_clear(frame):
 			return false
+		if frame >= 0 and not moving.is_empty():
+			# A walk that something blocks stops dead: fail rather than film it.
+			var speed := Vector2(harness.player.velocity.x, harness.player.velocity.z).length()
+			var expected := harness.player.run_speed_mps if moving == "run" else (walk_speed if walk_speed > 0.0 else harness.player.walk_speed_mps)
+			if speed < expected * 0.8:
+				_fail("Chester's %s is blocked at frame %d (%s, %.2f m/s)" % [moving, frame, harness.player.global_position, speed])
+				return false
 		await RenderingServer.frame_post_draw
 		if frame < 0:
 			continue
@@ -498,6 +516,7 @@ func _record() -> bool:
 	if raw != null:
 		raw.close()
 	harness.release_input()
+	harness.player.touch_input_vector = Vector2.ZERO
 	return true
 
 
@@ -553,6 +572,8 @@ func _drive_chester(t: float) -> void:
 		active_path.append_array(entry.path)
 	_hold("jetpack", bool(entry.jetpack))
 	var move: String = entry.move
+	moving = ""
+	harness.player.touch_input_vector = Vector2.ZERO
 	if move == "idle":
 		_hold("move_forward", false)
 		_hold("run", false)
@@ -562,6 +583,8 @@ func _drive_chester(t: float) -> void:
 	var path := active_path
 	path_progress = maxf(path_progress, _project(path, here))
 	if _path_length(path) - path_progress < 0.15:
+		moving = ""
+		harness.player.touch_input_vector = Vector2.ZERO
 		_hold("move_forward", false)
 		_hold("run", false)
 		return
@@ -569,6 +592,15 @@ func _drive_chester(t: float) -> void:
 	if aim.length() < 0.001:
 		return
 	harness.player.camera_rig.rotation = Vector3(0.0, atan2(-aim.x, -aim.y), 0.0)
+	moving = move
+	walk_speed = float(entry.speed)
+	if walk_speed > 0.0:
+		# A slower walk through the controller's own analog input (the touch
+		# stick's), which it doesn't normalise; the keys always walk at 4 m/s.
+		harness.player.touch_input_vector = Vector2(0.0, -walk_speed / harness.player.walk_speed_mps)
+		_hold("move_forward", false)
+		_hold("run", false)
+		return
 	_hold("move_forward", true)
 	_hold("run", move == "run")
 
@@ -691,6 +723,15 @@ func _fit_shadow_cascades(focus_depth: float) -> void:
 func _camera_clear(frame: int) -> bool:
 	var at := camera.global_position
 	if at.y < CLEARANCE_CHECK_BELOW_M:
+		# The land is one-sided: from underneath, the sphere below meets nothing.
+		var overhead := harness.ray(at + Vector3.UP * 300.0, at, harness.player.collision_mask)
+		if not overhead.is_empty() and harness.ray(at, at + Vector3.DOWN * 300.0, harness.player.collision_mask).is_empty():
+			_fail("the camera is under %s at frame %d (%s)" % [_describe(overhead.collider), frame, at])
+			return false
+		var walls: Variant = _enclosing(at)
+		if walls != null:
+			_fail("the camera is inside %s at frame %d (%s)" % [_describe(walls), frame, at])
+			return false
 		var space := harness.player.get_world_3d().direct_space_state
 		var sphere := SphereShape3D.new()
 		sphere.radius = CAMERA_CLEARANCE_M
@@ -724,6 +765,22 @@ func _camera_clear(frame: int) -> bool:
 		if not harness.ray(at, chest, harness.player.collision_mask).is_empty():
 			obstructed_frames += 1
 	return true
+
+
+## What encloses the camera, or null: from inside a building's closed walls and
+## roof (one-sided, facing out) a sphere touches nothing, but rays up and to all
+## four sides meet only the backs of faces.
+func _enclosing(at: Vector3) -> Variant:
+	var space := harness.player.get_world_3d().direct_space_state
+	var found: Variant = null
+	for direction: Vector3 in [Vector3.UP, Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]:
+		var query := PhysicsRayQueryParameters3D.create(at, at + direction * 150.0, harness.player.collision_mask, [harness.player.get_rid()])
+		query.hit_back_faces = true
+		var hit := space.intersect_ray(query)
+		if hit.is_empty() or (hit.normal as Vector3).dot(direction) <= 0.0:
+			return null
+		found = hit.collider
+	return found
 
 
 ## A collider for a failure message: its node path and derived object key.

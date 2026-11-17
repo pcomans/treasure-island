@@ -1,6 +1,6 @@
 {
  "name": "01",
- "description": "Enjoy life on Treasure Island: Chester stands at the west shore; a slow push past him toward the bay and the San Francisco skyline.",
+ "description": "Enjoy life on Treasure Island: Chester stands at the west shore looking out; a slow push toward the bay past him, the San Francisco skyline across the water.",
  "duration": 3.0,
  "handle": 0.5,
  "fps": 30,
@@ -11,12 +11,12 @@
  "street_detail": true,
  "chester": {
   "at": [
-   -360.0,
-   296.0
+   -374.0,
+   284.0
   ],
   "facing": [
-   -1600.0,
-   -200.0
+   -444.711,
+   354.711
   ]
  },
  "camera": {
@@ -25,30 +25,30 @@
    {
     "t": -0.5,
     "position": [
-     -352.0,
-     3.2,
-     303.0
+     -367.424,
+     4.7,
+     279.969
     ],
     "target": [
-     -1600.0,
-     15.0,
-     -250.0
+     -2488.744,
+     -205.3,
+     2401.29
     ],
-    "fov": 30.0
+    "fov": 32.0
    },
    {
     "t": 3.5,
     "position": [
-     -357.0,
-     3.0,
-     299.0
+     -369.899,
+     4.7,
+     282.444
     ],
     "target": [
-     -1600.0,
-     15.0,
-     -250.0
+     -2491.219,
+     -205.3,
+     2403.765
     ],
-    "fov": 30.0
+    "fov": 32.0
    }
   ]
  }

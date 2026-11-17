@@ -6,11 +6,15 @@ per shot lives in `shots/`; one command renders it to an MP4.
 
 ```bash
 tools/trailer/render-shot.sh tools/trailer/shots/06.json ~/Movies/gti-trailer/renders/06.mp4
-tools/trailer/render-shot.sh tools/trailer/shots/06.json ~/Movies/gti-trailer/stills --stills
+tools/trailer/render-shot.sh --batch ~/Movies/gti-trailer/renders tools/trailer/shots/*.json
+tools/trailer/render-shot.sh --stills ~/Movies/gti-trailer/stills tools/trailer/shots/04a_building-one.json
 ```
 
-`--stills` saves only a few PNG frames (first, middle and last usable frames, both
-handle ends and a 10 fps run across each cut point) for composing a shot quickly.
+Loading the island takes about four minutes on the M1 Pro, so `--batch` and
+`--stills` render several shots in one load (`--batch` writes `NAME.mp4` for each).
+`--stills` saves only a few PNG frames per shot (first, middle and last usable
+frames, both handle ends and a 10 fps run across each cut point) for composing
+quickly; a shot that fails there doesn't stop the others.
 
 The game draws each frame into an offscreen 1920 × 1080 viewport (no HUD, touch or
 fps overlay can reach it), reads it back and writes it raw; ffmpeg encodes H.264
@@ -25,7 +29,7 @@ imported once first.
 
 ```json
 {
- "name": "04a_building-one",
+ "name": "example",
  "duration": 1.5,
  "handle": 0.5,
  "fps": 30,
@@ -61,7 +65,8 @@ imported once first.
   `street_detail` (default true).
 - `chester`: he stands at `at` (`[x, z]`, settled on the ground), turned towards
   `facing`. `track` entries, each from its time `t` until the next: `move` is
-  `idle`, `walk` (4 m/s) or `run` (20 m/s) along `path` (`[[x, z], ...]`, starting
+  `idle`, `walk` (4 m/s, or slower with `speed` in m/s, through the controller's
+  analog stick input) or `run` (20 m/s) along `path` (`[[x, z], ...]`, starting
   where he is when the entry begins), and `jetpack: true` holds Space. He is the
   stock player driven through its own input actions, so his animation is the
   game's. Start a move before `-handle` (the run starts at least 1.5 s before
@@ -75,12 +80,14 @@ imported once first.
   offsets from Chester's feet, for a camera that travels with him. `near`
   defaults to 0.2 m.
 
-The run stops with `SHOT_FAILED` if the camera comes within 0.3 m of anything
-solid below 80 m, if a frame is not exactly one clock step (a pause, or a missing
-`--fixed-fps`), or on any script or shader error. `SHOT_MOTION` reports the
-worst frame-to-frame change of camera speed and the frames in which something
-solid hides Chester; foliage, poles and composition still need a look at the
-frames.
+The run stops with `SHOT_FAILED` if, below 80 m, the camera comes within 0.3 m
+of anything solid, passes through it, or is under the ground or inside a
+building; if Chester's walk or run is blocked (he would stop dead); if a frame is
+not exactly one clock step (a pause, or a missing `--fixed-fps`); or on any
+script or shader error. `SHOT_KEY` prints the ground height under each camera
+key, `SHOT_MOTION` the worst frame-to-frame change of camera speed and the frames
+in which something solid hides Chester. Foliage, poles and composition still
+need a look at the frames.
 
 ## How it works
 

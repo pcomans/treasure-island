@@ -1,6 +1,6 @@
 {
  "name": "04a_building-one",
- "description": "Explore local landmarks: Building 1's west crescent fills the frame, Chester small in front, walking; slow crane up and drift south.",
+ "description": "Explore local landmarks: Building 1's west crescent across its forecourt fills the frame; Chester strolls north across the foreground; slow crane up with a slight push in.",
  "duration": 1.5,
  "handle": 0.5,
  "fps": 30,
@@ -11,20 +11,21 @@
  "street_detail": true,
  "chester": {
   "at": [
-   -75.0,
-   752.0
+   -77.0,
+   753.0
   ],
   "facing": [
-   -75.0,
+   -77.0,
    730.0
   ],
   "track": [
    {
     "t": -2.0,
     "move": "walk",
+    "speed": 1.6,
     "path": [
      [
-      -75.0,
+      -77.0,
       700.0
      ]
     ]
@@ -37,30 +38,30 @@
    {
     "t": -0.5,
     "position": [
-     -150.0,
-     3.0,
-     752.0
+     -88.0,
+     5.8,
+     746.0
     ],
     "target": [
-     -10.0,
+     -5.0,
      13.0,
-     744.0
+     746.0
     ],
-    "fov": 36.0
+    "fov": 46.0
    },
    {
     "t": 2.0,
     "position": [
-     -150.0,
-     4.6,
-     749.5
+     -86.6,
+     7.0,
+     745.6
     ],
     "target": [
-     -10.0,
-     13.3,
-     742.5
+     -5.0,
+     13.4,
+     746.0
     ],
-    "fov": 36.0
+    "fov": 46.0
    }
   ]
  }
