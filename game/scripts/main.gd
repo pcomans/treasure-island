@@ -139,6 +139,15 @@ var day_sun: DaySun
 var night_lights: NightLights
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
+## The page that sends the anonymous statistics (CrashReports.web_page(): on the web,
+## window.__tiReporting), or null where there is none; a test sets a stand-in before
+## adding main, as a browser would. Their switch, as main starts it, and the game's state
+## and timed stats for them (GameStats, made once the world is ready where there is a
+## page), from when the game started.
+var crash_page: Object = CrashReports.web_page()
+var crash_reports: CrashReports
+var game_stats: GameStats
+var _started_msec := Time.get_ticks_msec()
 ## Startup puts on the shadow level, graphics and sound kept from the last run; the
 ## shared capture harness turns this off, so its captures always have the defaults
 ## (a player's choice is a global engine setting that would reach its neutral sun,
@@ -160,6 +169,10 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	STARTUP_MARKS.mark("main_ready_begin")
+	# On desktop the anonymous statistics' page is the game's own (DesktopReports, through
+	# Sentry's Godot add-on), where this run may send them at all.
+	if crash_page == null and not OS.has_feature("web"):
+		crash_page = DesktopReports.make_page()
 	# Main runs always, for its pause menu and Esc. Everything that moves stops
 	# with the game: the world, the player and the sky (pausable in main.tscn),
 	# the cars and the grass added later, and shader time (PauseClock).
@@ -196,6 +209,15 @@ func _ready() -> void:
 	sound.apply_settings(float(kept.volume), bool(kept.muted))
 	hud.set_sound_settings(sound.volume, sound.muted)
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
+	# The anonymous statistics (CrashReports): the switch as kept here and on
+	# the page, off on either side winning, the page told and the result kept; Options
+	# shows the switch where there is a page (the web).
+	var reports_kept := CrashReports.saved() if use_saved_settings and settings_problem.is_empty() else true
+	crash_reports = CrashReports.new(crash_page, reports_kept)
+	if crash_reports.on != reports_kept and use_saved_settings and settings_problem.is_empty():
+		CrashReports.save(crash_reports.on)
+	hud.set_crash_reports(crash_page != null, crash_reports.on)
+	hud.crash_reports_chosen.connect(_on_crash_reports_chosen)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere). Its 3D scale is the graphics' resolution (above).
@@ -227,6 +249,10 @@ func _ready() -> void:
 	_loading_viewport_3d_off = _loading_viewport.disable_3d
 	_loading_viewport.disable_3d = true
 	_show_loading_step(&"load" if world_root.uses_prebuilt_world() else &"build")
+	# On desktop the line about the anonymous statistics stands at the foot of the
+	# loading screen until it has been seen once; play's start counts it seen.
+	if crash_reports.notice and not start_prompt:
+		hud.show_reports_note(GameHUD.START_REPORTS_NOTE)
 	hud.bind_evidence(world_root.get_runtime_evidence())
 	world_root.world_ready.connect(_on_world_ready)
 	world_root.world_failed.connect(_on_world_failed)
@@ -305,6 +331,11 @@ func _unhandled_input(event: InputEvent) -> void:
 ## player grounded and the initial graphics prepared.
 func is_play_ready() -> bool:
 	return _world_ready
+
+
+## Whether play uses the touch controls (a touch browser).
+func has_touch_controls() -> bool:
+	return _touch_controls != null
 
 
 func _notification(what: int) -> void:
@@ -506,6 +537,8 @@ func _paint_loading_step() -> void:
 
 func _on_world_ready(_report: Dictionary) -> void:
 	STARTUP_MARKS.probe_building_materials(world_root.buildings)
+	if crash_page is DesktopReports:
+		(crash_page as DesktopReports).world_ready()
 	# Loaded in an idle step: the player settles in the next frame's physics, after
 	# a frame has shown this line.
 	_show_loading_step(&"setup")
@@ -539,6 +572,14 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# The game's state and timed stats for the anonymous statistics (GameStats), where
+	# a page sends them: they count play only, from the start prompt's tap on.
+	if crash_page != null and game_stats == null:
+		game_stats = GameStats.new(self, _started_msec, CrashReports.web_adapter() if OS.has_feature("web") else RenderingServer.get_video_adapter_name())
+		game_stats.name = "GameStats"
+		game_stats.snapshot_changed.connect(crash_reports.snapshot)
+		game_stats.stats_due.connect(crash_reports.stats)
+		add_child(game_stats)
 	# The buildings' daylight fills, found once now the world is loaded, go out at
 	# night with the look (DaySun; nothing with the time of day off).
 	day_sun.collect_fills(world_root.buildings)
@@ -564,6 +605,12 @@ func _on_world_ready(_report: Dictionary) -> void:
 	_world_ready = true
 	STARTUP_MARKS.mark("play_handoff")
 	print("PLAY_READY")
+	# Without a start prompt (desktop) play starts now: the loading screen's line about
+	# the anonymous statistics has been on screen through the load, and they may go out.
+	if not start_prompt:
+		if hud.reports_note_shown():
+			crash_reports.notice_shown()
+		crash_reports.play_started()
 	player.set_gameplay_enabled(true)
 	# The wind and the bay fade in: play has started (no "ready" sting, which would
 	# be music; owner, 2026-11-14). The bay is heard by the player at its edge.
@@ -752,6 +799,19 @@ func _on_graphics_chosen(key: String, value: Variant) -> void:
 	else:
 		push_error(settings_problem)
 	hud.show_graphics(graphics.current)
+
+
+## The anonymous statistics switched on the options screen: on or off at
+## once on the page (CrashReports.choose), and kept for next time (never by a driver
+## in the player's own settings file).
+func _on_crash_reports_chosen(on: bool) -> void:
+	crash_reports.choose(on)
+	var settings_problem := player_settings_problem(get_tree(), "switched the crash reports, writing")
+	if settings_problem.is_empty():
+		CrashReports.save(crash_reports.on)
+	else:
+		push_error(settings_problem)
+	hud.show_crash_reports(crash_reports.on)
 
 
 ## The master volume or mute changed on the options screen: on at once, and kept

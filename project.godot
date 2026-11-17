@@ -14,6 +14,14 @@
 ; 256 MiB of WebGL textures. A probe left without a slot gets no reflection, and
 ; engine errors every frame; game/tests/headless_gameplay_contract.gd fails when
 ; the world has more probes than the web has slots. Desktop builds keep the default.
+; Sentry's Godot add-on (addons/sentry, release 2.5.1) loads in every desktop run but
+; starts only when DesktopReports starts it (game/scripts/reports/desktop_reports.gd):
+; sentry/options/auto_init is off and the desktop DSN is in
+; treasure_island/crash_reports/desktop_dsn, not the add-on's own setting. Its schema
+; version is set so the editor never rewrites this file to add it, its debug printing
+; is off, and GDScript tracks call stacks in release builds, which the add-on needs for
+; a script error's frames (without it the add-on turns it on and saves this file in
+; the editor, and reports an error in every exported run).
 config_version=5
 
 [application]
@@ -31,6 +39,10 @@ config/icon="res://game/resources/ui/app_icon_360.png"
 [audio]
 
 buses/default_bus_layout="res://game/resources/audio/bus_layout.tres"
+
+[debug]
+
+settings/gdscript/always_track_call_stacks=true
 
 [display]
 
@@ -151,6 +163,13 @@ textures/vram_compression/import_etc2_astc=true
 textures/default_filters/use_nearest_mipmap_filter=false
 environment/defaults/default_clear_color=Color(0.46, 0.69, 0.86, 1)
 
+[sentry]
+
+schema_version=5
+options/auto_init=false
+options/debug_printing=0
+options/attach_log=false
+
 [shader_globals]
 
 sky_cloud_drift={
@@ -176,6 +195,7 @@ parked_lamps={
 
 [treasure_island]
 
+crash_reports/desktop_dsn="https://28c0bb6204a856e9ac69218d0f4ab466@o4512444392013824.ingest.us.sentry.io/4512444474261504"
 ground_dressing/density="medium"
 street_detail/enabled=true
 street_detail/layers="vegetation,furniture,fences,clutter"

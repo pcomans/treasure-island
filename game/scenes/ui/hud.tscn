@@ -210,6 +210,15 @@ theme_override_font_sizes/font_size = 15
 horizontal_alignment = 1
 autowrap_mode = 3
 
+[node name="ReportsNote" type="Label" parent="LoadPanel/LoadLayout/LoadStack"]
+visible = false
+modulate = Color(1, 1, 1, 0.72)
+custom_minimum_size = Vector2(680, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+autowrap_mode = 3
+
 [node name="ControlsScreen" type="Control" parent="."]
 process_mode = 3
 visible = false
@@ -468,6 +477,27 @@ value = 100.0
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 text = "Mute"
+
+[node name="PrivacyHeading" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+visible = false
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.62, 0.85, 1, 1)
+theme_override_font_sizes/font_size = 20
+text = "Privacy"
+vertical_alignment = 2
+
+[node name="PrivacyRow" type="HBoxContainer" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="CrashReports" type="CheckButton" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+tooltip_text = "Anonymous statistics: crashes and errors, frame rate and load times, the area of the island you play in and how long you play, with the build and the device type. Nothing that identifies you."
+button_pressed = true
+text = "Send anonymous statistics"
 
 [node name="BackButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 custom_minimum_size = Vector2(220, 40)

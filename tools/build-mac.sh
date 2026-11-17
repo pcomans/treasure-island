@@ -13,11 +13,13 @@
 # notarizes it (.github/workflows/mac-build.yml) once the signing secrets exist.
 # Before handing it over this
 #   1. exports the macOS build, and a Linux and a Windows (x86-64) build of the
-#      same commit; the Windows build is zipped as one folder holding the .exe
-#      and its .pck,
+#      same commit; the Windows build is zipped as one folder holding the .exe,
+#      its .pck and Sentry's add-on (its library and crash handler files),
 #   2. checks all three data packs contain only game files (no reference photos,
 #      research or evidence) and carry this commit's build stamp (the build
-#      number and commit the pause menu shows),
+#      number and commit the pause menu shows), and that the Linux and Windows
+#      folders hold exactly the game and Sentry's add-on's files (the content
+#      audit's --beside),
 #   3. launches the Linux build on the GPU (or, with --headless-launch, without
 #      rendering) and checks the island loads. Nothing here can run the Windows
 #      build; CI launches it on a Windows runner (.github/workflows/mac-build.yml).
@@ -80,25 +82,26 @@ zip="build/mac/treasure-island-mac-${commit}.zip"
 rm -f "${zip}"
 windows=build/windows/treasure-island-windows
 windows_zip="build/windows/treasure-island-windows-${commit}.zip"
-rm -rf "${windows}" "${windows_zip}"
-mkdir -p "${windows}"
+rm -rf "${windows}" "${windows_zip}" build/linux
+mkdir -p "${windows}" build/linux
 
 tools/godot --headless --path . --export-release "macOS Private" "${zip}"
 tools/godot --headless --path . --export-release "Linux Private" build/linux/treasure-island.x86_64
 tools/godot --headless --path . --export-release "Windows Private" "${windows}/treasure-island.exe"
-# What a Windows player unpacks: one folder with the .exe and its .pck side by side.
-contents="$(find "${windows}" -mindepth 1 -printf '%P\n' | sort | tr '\n' ' ')"
-if [ "${contents}" != "treasure-island.exe treasure-island.pck " ]; then
-  echo "FAIL: ${windows} should hold treasure-island.exe and treasure-island.pck alone, but holds: ${contents}"
-  exit 1
-fi
+# What a Windows player unpacks: one folder with the .exe and its .pck side by side, and
+# Sentry's add-on beside them (its library, Crashpad's handler and its Windows Error
+# Reporting module); the content audit's --beside below checks exactly that list.
 
 unzip -q "${zip}" -d "${work}"
 mac_pck="$(find "${work}" -name '*.pck' -path '*Contents/Resources*' | head -1)"
 [ -n "${mac_pck}" ] || { echo "FAIL: no .pck inside the Mac build"; exit 1; }
-for pck in "${mac_pck}" "${root}/build/linux/treasure-island.pck" "${root}/${windows}/treasure-island.pck"; do
-  # Run from an empty folder so Godot sees only the pack, not the source project.
-  (cd "${work}" && timeout 120 "${root}/tools/godot" --headless --main-pack "${pck}" --script res://game/tests/shared/build_content_audit.gd)
+# Run from an empty folder so Godot sees only the pack, not the source project. The Linux
+# and Windows folders must hold exactly the game and Sentry's add-on's files (--beside);
+# the Mac app's Frameworks get its two dylibs (checked as the app is signed and verified
+# in .github/workflows/mac-build.yml).
+(cd "${work}" && timeout 120 "${root}/tools/godot" --headless --main-pack "${mac_pck}" --script res://game/tests/shared/build_content_audit.gd)
+for folder in "${root}/build/linux" "${root}/${windows}"; do
+  (cd "${work}" && timeout 120 "${root}/tools/godot" --headless --main-pack "$(find "${folder}" -maxdepth 1 -name '*.pck')" --script res://game/tests/shared/build_content_audit.gd -- --beside "${folder}")
 done
 (cd build/windows && zip -q -X -r "${windows_zip##*/}" treasure-island-windows)
 unzip -l "${windows_zip}"

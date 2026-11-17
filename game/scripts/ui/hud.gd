@@ -13,6 +13,9 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
+## The anonymous statistics switched on or off on the options screen
+## (main.gd tells the page and keeps it; CrashReports).
+signal crash_reports_chosen(on: bool)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
 signal loading_shown(text: String)
 
@@ -65,6 +68,17 @@ const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look �
 const START_HOME_SCREEN_NOTE := "For full screen: Share › Add to Home Screen"
 const START_SILENT_NOTE := "Turn off silent mode to hear sound"
 const START_NOTE_FONT_PX := 24
+## The start prompt's line about the anonymous statistics (owner, 2026-11-17), on the
+## web, until the page has recorded it shown (CrashReports): the last of the notes, in
+## the credits' notes' colour, at the notes' size on a touch screen and the controls
+## line's on a desktop. On one line where the page is wide enough (a phone as wide as an
+## iPhone 16 Pro held sideways), else wrapped to the page's width less
+## REPORTS_NOTE_SIDES_PX (a phone held upright). Wrapped on a page wider than tall (a
+## narrower phone held sideways), its second line would push three notes past the top of
+## the page, so the home screen hint gives way on that visit (it shows again on the next,
+## when this line no longer does). In the web font's characters, as the other notes.
+const START_REPORTS_NOTE := "Sends anonymous statistics with a random ID (device type, errors, frame rate, where in the game, time played). Turn off in Options."
+const REPORTS_NOTE_SIDES_PX := 96.0
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
 ## headings' colour with this dark type.
@@ -121,9 +135,11 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 ## level on pressed and its note under them, where there is a choice to make; the
 ## frame rate limit with the switch for the frame rate display, and the 3D
 ## resolution (set_graphics), each choice a button like the shadow levels with its
-## note as its tooltip. Then the time of day, on desktop, and the sound's master
-## volume and mute. Each section after the first stands as far below the one before.
-## A solid panel over the dimmed game, which shows a change at once.
+## note as its tooltip. Then the time of day, on desktop, the sound's master
+## volume and mute, and on the web, under Privacy, the switch for the crash and
+## performance reports (set_crash_reports). Each section after the first stands as
+## far below the one before. A solid panel over the dimmed game, which shows a
+## change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
 @onready var graphics_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/GraphicsHeading
@@ -157,6 +173,9 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
+@onready var privacy_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyHeading
+@onready var privacy_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow
+@onready var crash_reports: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/CrashReports
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
 ## behind its Licences button, the licence texts that ship with the game and the
@@ -180,6 +199,9 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var load_text: Label = $LoadPanel/LoadLayout/LoadStack/LoadText
 ## The loading line's note, smaller and dimmer under it (show_loading).
 @onready var load_note: Label = $LoadPanel/LoadLayout/LoadStack/LoadNote
+## On desktop, the line about the anonymous statistics at the foot of the loading
+## screen until it has been shown once (show_reports_note).
+@onready var load_reports_note: Label = $LoadPanel/LoadLayout/LoadStack/ReportsNote
 ## The loading screen's treasure chest, the app icon (game/resources/ui/PROVENANCE.md).
 @onready var load_icon: TextureRect = $LoadPanel/LoadLayout/LoadStack/LoadIcon
 @onready var debug_panel: PanelContainer = $DebugPanel
@@ -264,8 +286,9 @@ func _ready() -> void:
 		_sound_changed(true))
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
 	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
+	crash_reports.toggled.connect(func(on: bool) -> void: crash_reports_chosen.emit(on))
 	var switch_off := DPITexture.create_from_string(SWITCH_OFF_SVG)
-	for switch: CheckButton in [show_frame_rate, sound_mute]:
+	for switch: CheckButton in [show_frame_rate, sound_mute, crash_reports]:
 		switch.add_theme_icon_override("unchecked", switch_off)
 	time_date_slider.value_changed.connect(_on_time_slid.bind(true))
 	time_slider.value_changed.connect(_on_time_slid.bind(false))
@@ -331,6 +354,20 @@ func show_loading(message: String) -> void:
 	load_text.text = lines[0]
 	load_note.text = lines[1] if lines.size() > 1 else ""
 	loading_shown.emit(message)
+
+
+## On desktop, the line about the anonymous statistics (START_REPORTS_NOTE) at the
+## foot of the loading screen, where the first launch's notes are, until play starts
+## (main.gd: until it has been seen once, CrashReports.notice). The web shows it on its
+## start prompt instead (set_start_notes).
+func show_reports_note(text: String) -> void:
+	load_reports_note.text = text
+	load_reports_note.visible = not text.is_empty()
+
+
+## Whether the loading screen shows the line about the anonymous statistics.
+func reports_note_shown() -> bool:
+	return load_reports_note.is_visible_in_tree() and not load_reports_note.text.is_empty()
 
 
 ## Play starts. A controls screen opened from the loading screen stays open
@@ -668,6 +705,20 @@ func set_sound_settings(volume: float, muted: bool) -> void:
 ## The volume as the slider shows it (0..1).
 func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
+
+
+## The anonymous statistics' switch under Privacy, where main.gd offers it
+## (a web page that sends the reports; CrashReports), showing whether they are on.
+## Pressing it asks main.gd to switch them (crash_reports_chosen).
+func set_crash_reports(offered: bool, on: bool) -> void:
+	for part: Control in [privacy_heading, privacy_row]:
+		part.visible = offered
+	show_crash_reports(on)
+
+
+## Shows the reports on or off, without asking for it again.
+func show_crash_reports(on: bool) -> void:
+	crash_reports.set_pressed_no_signal(on)
 
 
 ## Whether the options screen offers the date and time: with the time of day on
@@ -1247,7 +1298,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children() + frame_rates.get_children() + resolutions.get_children():
 		(button as Button).custom_minimum_size.y = 64.0

@@ -38,6 +38,10 @@ if [ "$(git rev-parse HEAD)" != "$revision" ] || [ -n "$(git status --porcelain)
   echo "FAIL: source changed during the import or static-world bake" >&2
   exit 1
 fi
+rm -rf build/linux
+mkdir -p build/linux
 tools/godot --headless --path . --export-release "Linux Private" build/linux/treasure-island.x86_64
-(cd "$work" && "$root/tools/godot" --headless --main-pack "$root/build/linux/treasure-island.pck" --script res://game/tests/shared/build_content_audit.gd)
+# The pack holds only game files, and the folder exactly the game and Sentry's add-on
+# (its library and crash handler beside the executable).
+(cd "$work" && "$root/tools/godot" --headless --main-pack "$root/build/linux/treasure-island.pck" --script res://game/tests/shared/build_content_audit.gd -- --beside "$root/build/linux")
 echo "PASS: build/linux/treasure-island.x86_64"

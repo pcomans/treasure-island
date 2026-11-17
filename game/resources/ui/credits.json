@@ -29,6 +29,16 @@
       "used_for": "The game engine. Its full licence, and the software by other authors it includes with their licences, are under Licences."
     },
     {
+      "id": "sentry_godot_sdk",
+      "title": "Sentry SDK for Godot (desktop versions only)",
+      "credit": "Copyright (c) 2024 Sentry",
+      "licence": "MIT",
+      "url": "https://github.com/getsentry/sentry-godot",
+      "required": true,
+      "used_for": "On Mac, Linux and Windows, sends the anonymous statistics while Options' switch for them is on. It includes Sentry's native SDK (MIT) with Google's Crashpad (Apache License 2.0) on Linux and Windows, and Sentry's Cocoa SDK (MIT) on a Mac. Only the desktop versions include it (release 2.5.1), with its licence text in the game's files.",
+      "folders": ["addons/sentry"]
+    },
+    {
       "id": "selgesel_touch_controls",
       "title": "Godot 4 Third Person Controller (touch controls)",
       "credit": "Copyright (c) 2021 Selgesel",

@@ -71,6 +71,12 @@ else
       image/*|video/*)
         junk+="${path}  (an image or video, whatever its name; those belong in game/resources/)"$'\n'; continue ;;
     esac
+    # Sentry's Godot add-on, pinned to release 2.5.1 (owner, 2026-11-17; INSTALL_LOG.md),
+    # ships two libraries over 5 MB: the Linux debug library the editor and every test
+    # load, and the Cocoa SDK the Mac app loads. Those two paths only.
+    case "${path}" in
+      addons/sentry/bin/linux/x86_64/libsentry.linux.debug.x86_64.so|addons/sentry/bin/macos/libSentry.dylib) continue ;;
+    esac
     if [ "$(stat -c %s "${path}")" -gt 5000000 ]; then
       junk+="${path}  (over 5 MB)"$'\n'
     fi
@@ -244,6 +250,7 @@ tests=(
   game/tests/headless_gameplay_contract.gd
   game/tests/headless_touch_controls.gd
   game/tests/headless_credits_contract.gd
+  game/tests/headless_desktop_reports_contract.gd
   game/tests/headless_build_label_contract.gd
   game/tests/headless_shadow_options_contract.gd
   game/tests/headless_day_clock_contract.gd

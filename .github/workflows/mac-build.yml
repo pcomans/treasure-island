@@ -17,6 +17,12 @@
 # Linux export that tools/build-mac.sh makes and launch-checks from the same
 # commit, with the same sounds (owner-approved 2026-11-03); the Windows build is
 # its x86-64 Windows export, a zip of one folder holding the .exe and its .pck.
+# Beside the executable on Linux and Windows, and in the Mac app's
+# Contents/Frameworks, are the files of Sentry's Godot add-on (addons/sentry,
+# release 2.5.1, owner 2026-11-17) for the crash reports, exactly and nothing
+# else: on Linux libsentry.linux.release.x86_64.so and crashpad_handler, on Windows
+# libsentry.windows.release.x86_64.dll, crashpad_handler.exe and crashpad_wer.dll,
+# on a Mac libsentry.macos.release.dylib and libSentry.dylib (signed with the app).
 # Inside the build job and its artifacts the files keep their working names
 # (treasure-island-mac-<commit>.zip and treasure-island-windows-<commit>.zip
 # from tools/build-mac.sh); the publish job gives them the release names. A run
@@ -464,21 +470,25 @@ jobs:
 
       - name: Package the Linux build
         # tools/build-mac.sh has just exported it from this commit, with the same
-        # sounds, audited its data pack and launched it. A player needs the
-        # executable and its .pck side by side in one folder; tar keeps the
-        # executable bit, which artifacts and plain zips can lose.
+        # sounds, audited its data pack and folder and launched it. A player needs the
+        # executable, its .pck and Sentry's add-on (its library and Crashpad's
+        # handler) side by side in one folder; tar keeps the executable bits, which
+        # artifacts and plain zips can lose.
         run: |
           exes=(build/linux/*.x86_64)
           [ "${#exes[@]}" -eq 1 ] && [ -f "${exes[0]}" ] || { echo "::error::expected one Linux executable in build/linux, found ${#exes[@]}"; exit 1; }
           exe="${exes[0]}"
           pck="${exe%.x86_64}.pck"
           [ -f "${pck}" ] || { echo "::error::${pck} is missing: the Linux build needs its data pack beside the executable"; exit 1; }
+          for addon in libsentry.linux.release.x86_64.so crashpad_handler; do
+            [ -f "build/linux/${addon}" ] || { echo "::error::build/linux/${addon} is missing: the Linux build needs Sentry's add-on beside the executable"; exit 1; }
+          done
           folder=build/linux-package/treasure-island-linux
           rm -rf build/linux-package
           mkdir -p "${folder}"
-          cp "${exe}" "${pck}" "${folder}/"
-          chmod 0755 "${folder}/$(basename "${exe}")"
-          chmod 0644 "${folder}/$(basename "${pck}")"
+          cp "${exe}" "${pck}" build/linux/libsentry.linux.release.x86_64.so build/linux/crashpad_handler "${folder}/"
+          chmod 0755 "${folder}/$(basename "${exe}")" "${folder}/crashpad_handler"
+          chmod 0644 "${folder}/$(basename "${pck}")" "${folder}/libsentry.linux.release.x86_64.so"
           tar -C build/linux-package -czf "build/linux-package/treasure-island-linux-$(git rev-parse --short HEAD).tar.gz" treasure-island-linux
           tar -tvzf build/linux-package/treasure-island-linux-*.tar.gz
 
@@ -1065,6 +1075,13 @@ jobs:
           for want in x86_64 arm64; do
             [[ " ${archs} " == *" ${want} "* ]] || { echo "FAIL: the app's executable has no ${want} half (lipo -archs: ${archs})" >&2; exit 1; }
           done
+          # Its only nested code: Sentry's add-on, both halves of each dylib, signed
+          # with the app (codesign --verify --deep below checks their signatures).
+          frameworks="$(find "${app}/Contents/Frameworks" -mindepth 1 -maxdepth 1 -exec basename {} \; | LC_ALL=C sort | paste -sd' ' -)"
+          [ "${frameworks}" = "libSentry.dylib libsentry.macos.release.dylib" ] || { echo "FAIL: the app's Contents/Frameworks should hold exactly libSentry.dylib and libsentry.macos.release.dylib; it holds: ${frameworks}" >&2; exit 1; }
+          for dylib in libSentry.dylib libsentry.macos.release.dylib; do
+            echo "${dylib}: $(lipo -archs "${app}/Contents/Frameworks/${dylib}")"
+          done
           codesign --verify --deep --strict --verbose=2 "${app}"
           # Each half's own signature, from its code directory (no Authority=
           # lines, which name the certificate holder).
@@ -1170,6 +1187,8 @@ jobs:
 
       - name: Launch it headless on Windows and check the island loads
         timeout-minutes: 10
+        env:
+          WINDOWS_FILES: crashpad_handler.exe crashpad_wer.dll libsentry.windows.release.x86_64.dll treasure-island.exe treasure-island.pck
         # The same rule as the Mac and Linux launch checks: the game loads the
         # island, quits with 0 and prints no engine errors. Headless, as the
         # runner has no GPU: this shows that the .exe starts on Windows, mounts
@@ -1186,9 +1205,12 @@ jobs:
           shopt -s nullglob dotglob
           top=(app/*)
           files=(app/treasure-island-windows/*)
-          if [ "${top[*]}" != app/treasure-island-windows ] || [ "${files[*]}" != "app/treasure-island-windows/treasure-island.exe app/treasure-island-windows/treasure-island.pck" ]; then
+          # The .exe, its .pck and Sentry's add-on (its library, Crashpad's handler
+          # and its Windows Error Reporting module), by name in byte order.
+          names="$(printf '%s\n' "${files[@]##*/}" | LC_ALL=C sort | paste -sd' ' -)"
+          if [ "${top[*]}" != app/treasure-island-windows ] || [ "${names}" != "${WINDOWS_FILES}" ]; then
             printf -v shown '%q ' "${top[@]}" : "${files[@]}"
-            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${shown}"
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with exactly ${WINDOWS_FILES}; it holds ${shown}"
             exit 1
           fi
           userdir="$(cygpath -u "${APPDATA}")/Godot/app_userdata/Treasure Island First Playable"
@@ -1881,8 +1903,9 @@ jobs:
           mkdir -p stage/linux
           tar -xzf release/linux.tar.gz -C stage/linux
           folder=stage/linux/treasure-island-linux
-          # Exactly what the build job packed: the folder with the executable and
-          # its .pck alone, hidden files included, and no link anywhere.
+          # Exactly what the build job packed: the folder with the executable, its
+          # .pck and Sentry's add-on's two files alone, hidden files included, and no
+          # link anywhere.
           shopt -s nullglob dotglob
           top=(stage/linux/*)
           if [ "${top[*]}" != "${folder}" ] || [ -L "${folder}" ] || [ ! -d "${folder}" ] || [ -n "$(find stage/linux -type l)" ]; then
@@ -1893,9 +1916,10 @@ jobs:
           files=("${folder}"/*)
           exes=("${folder}"/*.x86_64)
           [ "${#exes[@]}" -eq 1 ] && [ -f "${exes[0]}" ] && [ -x "${exes[0]}" ] || { echo "::error::expected one executable .x86_64 in the Linux package"; exit 1; }
-          if [ "${#files[@]}" -ne 2 ] || [ ! -f "${exes[0]%.x86_64}.pck" ]; then
+          [ -f "${folder}/crashpad_handler" ] && [ -x "${folder}/crashpad_handler" ] || { echo "::error::expected Sentry's executable crashpad_handler in the Linux package"; exit 1; }
+          if [ "${#files[@]}" -ne 4 ] || [ ! -f "${exes[0]%.x86_64}.pck" ] || [ ! -f "${folder}/libsentry.linux.release.x86_64.so" ]; then
             printf -v shown '%q ' "${files[@]}"
-            echo "::error::the Linux package's folder should hold its executable and its .pck alone; it holds ${shown}"
+            echo "::error::the Linux package's folder should hold its executable, its .pck, libsentry.linux.release.x86_64.so and crashpad_handler alone; it holds ${shown}"
             exit 1
           fi
           if [ "${CHANGELOG}" = true ]; then
@@ -1934,13 +1958,16 @@ jobs:
           shopt -s nullglob dotglob
           top=(stage/windows/*)
           files=(stage/windows/treasure-island-windows/*)
-          if [ "${top[*]}" != stage/windows/treasure-island-windows ] || [ "${files[*]}" != "stage/windows/treasure-island-windows/treasure-island.exe stage/windows/treasure-island-windows/treasure-island.pck" ]; then
+          # The .exe, its .pck and Sentry's add-on's three files, by name in byte order.
+          names="$(printf '%s\n' "${files[@]##*/}" | LC_ALL=C sort | paste -sd' ' -)"
+          want="crashpad_handler.exe crashpad_wer.dll libsentry.windows.release.x86_64.dll treasure-island.exe treasure-island.pck"
+          if [ "${top[*]}" != stage/windows/treasure-island-windows ] || [ "${names}" != "${want}" ]; then
             printf -v shown '%q ' "${top[@]}" : "${files[@]}"
-            echo "::error::the Windows zip should hold the folder treasure-island-windows with treasure-island.exe and treasure-island.pck alone; it holds ${shown}"
+            echo "::error::the Windows zip should hold the folder treasure-island-windows with exactly ${want}; it holds ${shown}"
             exit 1
           fi
           if [ "${CHANGELOG}" = true ]; then
-            # Checked above: a real folder, holding only the .exe and the .pck.
+            # Checked above: a real folder, holding only the game's and Sentry's files.
             if [ -e stage/windows/treasure-island-windows/CHANGELOG.txt ] || [ -L stage/windows/treasure-island-windows/CHANGELOG.txt ]; then
               echo "::error::the Windows zip already holds a CHANGELOG.txt, so it is not pushed."
               exit 1
