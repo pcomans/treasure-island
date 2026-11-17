@@ -27458,3 +27458,9 @@ Comparing every record against the base commit found a change the author hadn't 
 
 - Grepping every user of the reserved files, not only their header comments, showed the seam: `chest_avatar.gd` also plays the player's footstep, landing and jetpack sounds and starts the landing dust, `chest_avatar_parts.gd` places the contact shadow, and `drivable_car.gd` and `street_clutter_kit.gd` preload `car_driver.gd`, so a licence line saying "replace the avatar" has to name what a replacement must provide; next time, list callers before writing that line.
 - Delta at a94413a8: the reserved-files sentence now names what a replacement must provide, and the ASSETS phrase matches the README; a Markdown-only delta re-checked in a few commands, nothing re-derived.
+
+### ti-documentation licence-chester-short-20261117 — 2026-11-17 — the Chester passage cut to one sentence (branch `docs/licence-chester-short-20261117`)
+
+- What worked well: Taking the two table rows straight from `git show 2342b99c:README.md` and diffing them against the result made "as before the Chester change" exact, not retyped. Each replaced sentence was matched once and asserted before writing.
+- What did not work well: Three review rounds went into a per-file reservation that the owner then found too heavy. The short form was always available. I built the long one because the brief asked for a file-level split, and I did not first ask whether one plain sentence would do.
+- What the team should change next time: For a licensing carve-out, show the owner the one-sentence version first and add file-level detail only if the owner asks for it.

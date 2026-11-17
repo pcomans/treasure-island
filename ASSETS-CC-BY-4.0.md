@@ -6,7 +6,7 @@ SPDX-License-Identifier: CC-BY-4.0
 
 The project's own assets in this repository (its textures and other images, materials, 3D model kits and the buildings' design data (the project's design choices in it; the OpenStreetMap ids, tags, addresses and footprint coordinates it repeats stay under the ODbL), as listed under [Licence](README.md#licence) in the README) are licensed under the Creative Commons Attribution 4.0 International licence (CC BY 4.0), whose legal code is below and at https://creativecommons.org/licenses/by/4.0/legalcode.
 
-This licence does not cover the project's source code, which is under the MIT licence in [LICENSE.md](LICENSE.md), or anything made by others: map data, elevation data, textures, code and the real artworks the game reproduces keep their own terms, as the [README](README.md#licence) and the game's credits list ([credits.json](game/resources/ui/credits.json)) say. It does not cover the app icon or the Chester character (his name, design and likeness, and the files that exist only to draw him, as the README lists them) either.
+This licence does not cover the project's source code, which is under the MIT licence in [LICENSE.md](LICENSE.md), or anything made by others: map data, elevation data, textures, code and the real artworks the game reproduces keep their own terms, as the [README](README.md#licence) and the game's credits list ([credits.json](game/resources/ui/credits.json)) say. It does not cover the app icon or the Chester character (his name, design and likeness) either.
 
 ## Required credit
 
