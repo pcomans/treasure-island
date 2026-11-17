@@ -427,7 +427,7 @@ function tiTraceText(env, a) {
 				const result = original.apply(this, args);
 				const ms = now() - t;
 				counters[1] += ms;
-				shaderMs.set(args[0], (shaderMs.get(args[0]) || 0) + ms);
+				if (args[0] && typeof args[0] === 'object') shaderMs.set(args[0], (shaderMs.get(args[0]) || 0) + ms);
 				return result;
 			});
 		}
