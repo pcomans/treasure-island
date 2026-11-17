@@ -27468,3 +27468,9 @@ Comparing every record against the base commit found a change the author hadn't 
 ### ti-code-review licence-chester-short-20261117 — 2026-11-17 — review of `docs/licence-chester-short-20261117` at 8785a2f4
 
 - Diffing the two table rows against `git show 2342b99c:README.md` and grepping the Markdown for the long form's phrases settled the cut-down in a handful of commands; the one remaining reader trap (the chest avatar's textures under CC BY beside the reserved character) is a wording note, not a re-audit.
+
+### ti-documentation web-shader-compile-research-20261117 — 2026-11-17 — the web shader-compilation research filed as `discovery/WEB_SHADER_COMPILE_RESEARCH.md` (branch `docs/web-shader-compile-research-20261117`)
+
+- What worked well: The edits were scripted as exact-match replacements, each asserted to occur once, and a line diff against the source report confirmed what changed: four lines replaced, four header lines added, findings untouched. One grep pass checked for local paths, tokens and e-mail addresses, and a URL parse checked the 36 external links without fetching any of them.
+- What did not work well: The report needed no rendering fixes. Its indented lines are deliberate nesting (list items, a table inside a list item), so "fix stray leading spaces" had to be judged line by line rather than applied blindly.
+- What the team should change next time: Have research agents write repository-relative paths, and name engine sources by version (for example "Godot 4.7.2 source"), from the start, so filing a report needs no path rewriting.
