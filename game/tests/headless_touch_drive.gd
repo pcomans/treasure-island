@@ -58,9 +58,10 @@ const ReportingPage := preload("res://game/tests/shared/reporting_page.gd")
 ## (1206 px wide, 2148 px under the status bar and over the address bar), and
 ## sideways (874 x 370 points at 3x).
 const SHAPES := {"upright": Vector2i(1206, 2148), "sideways": Vector2i(2622, 1110)}
-## A narrower phone's Safari page held sideways (an iPhone SE's, about 667 x 325 points at
-## 2x): the start prompt's notes only.
-const NARROW_SIDEWAYS := Vector2i(1334, 650)
+## A shorter-sided page held sideways, where the reports' line wraps (an iPhone SE's
+## page with the browser's bars hidden, 667 x 375 points at 2x): the start prompt's
+## notes only.
+const NARROW_SIDEWAYS := Vector2i(1334, 750)
 ## The height of a menu button on a touch screen (hud.gd's set_touch_instructions),
 ## and how far a finger drags the credits.
 const THUMB_PX := 64.0
@@ -205,6 +206,8 @@ func _start_prompt() -> bool:
 		return false
 	if not _require(_page.told == ["on", "notice shown", "play started"], "The page must hear that play started, once its line about the reports was on screen (it was told %s)." % [_page.told]):
 		return false
+	if not _require(_page.links.get("areas", [0]).is_empty(), "With the start prompt gone, no tap may open the privacy page (the page has %s)." % [_page.links]):
+		return false
 	_checked.append("the start prompt")
 	return true
 
@@ -227,25 +230,34 @@ func _check_start_notes(shape: String) -> bool:
 	var page := hud.get_viewport_rect()
 	var panel := hud.pause_box.get_global_rect()
 	var button := hud.resume_button.get_global_rect()
-	var labels: Array[Label] = []
+	var labels: Array[Control] = []
 	for label_name: String in ["HomeScreenHint", "SilentNote", "ReportsNote"]:
-		if (notes.get_node(label_name) as Label).visible:
-			labels.append(notes.get_node(label_name) as Label)
+		if (notes.get_node(label_name) as Control).visible:
+			labels.append(notes.get_node(label_name) as Control)
 	var rects: Array[Rect2] = []
-	for label: Label in labels:
+	for label: Control in labels:
 		rects.append(label.get_global_rect())
 	var placed := rects.all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
-	var centred := labels.all(func(label: Label) -> bool: return label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and absf(label.get_global_rect().get_center().x - panel.get_center().x) < 1.0)
+	# The two notes are Labels, centred; the reports' line is a RichTextLabel whose text is.
+	var centred := labels.all(func(label: Control) -> bool: return (label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER if label is Label else (label as RichTextLabel).text.begins_with("[center]")) and absf(label.get_global_rect().get_center().x - panel.get_center().x) < 1.0)
 	var apart := true
 	for i in rects.size():
 		for j in range(i + 1, rects.size()):
 			apart = apart and not rects[i].intersects(rects[j])
 	if not _require(placed and centred and apart and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, each centred on its panel (%s) inside it and the page (%s), and the panel within the top %.2f of the page (notes %s)." % [shape, button, panel, page, GameHUD.START_PANEL_SHARE, rects]):
 		return false
-	var reports_label := notes.get_node("ReportsNote") as Label
+	var reports_label := notes.get_node("ReportsNote") as RichTextLabel
 	var reports := reports_label.get_global_rect()
 	var fits := reports_label.get_line_count() == 1 if shape == "sideways" else (reports_label.get_line_count() > 1 if narrow else reports.size.x <= page.size.x - GameHUD.REPORTS_NOTE_SIDES_PX + 1.0)
 	if not _require(fits, "%s: the reports' line must take one line sideways, wrap on the narrower phone, and be no wider than the page less %d px upright (%d lines, %s on a page %s)." % [shape, int(GameHUD.REPORTS_NOTE_SIDES_PX), reports_label.get_line_count(), reports, page]):
+		return false
+	# The reports' line ends with the privacy page's address, which a tap on the line opens:
+	# the page has its area (shares of the page) and the address.
+	var area: Array = _page.links.get("areas", [[]])[0] if not _page.links.get("areas", []).is_empty() else []
+	var want := [reports.position.x / page.size.x, reports.position.y / page.size.y, reports.size.x / page.size.x, reports.size.y / page.size.y]
+	var same_area := area.size() == 4 and range(4).all(func(i: int) -> bool: return absf(float(area[i]) - want[i]) < 0.002)
+	if not _require(GameHUD.START_REPORTS_NOTE.ends_with(" " + GameStats.PRIVACY_URL.trim_prefix("https://")) and GameHUD.REPORTS_NOTE_ADDRESS == GameStats.PRIVACY_URL.trim_prefix("https://") \
+			and _page.links.get("url") == GameStats.PRIVACY_URL and _page.links.get("areas", []).size() == 1 and same_area, "%s: the reports' line must end with the privacy page's address and the page know its area alone, with the address (told %s, the line at %s)." % [shape, _page.links, want]):
 		return false
 	var missing := []
 	for text: String in [GameHUD.START_HOME_SCREEN_NOTE, GameHUD.START_SILENT_NOTE, GameHUD.START_REPORTS_NOTE]:
@@ -477,13 +489,19 @@ func _credits_and_resume(shape: String) -> bool:
 	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]) \
 	or not _require(not hud.shadow_row.is_visible_in_tree() and not hud.time_row.is_visible_in_tree() and hud.resolutions.is_visible_in_tree() and hud.show_frame_rate.is_visible_in_tree() and hud.sound_volume.is_visible_in_tree() and hud.crash_reports.is_visible_in_tree(), "%s: a touch screen's Options must show the web's rows: graphics, sound and the anonymous statistics' switch, no shadow levels or time of day." % shape):
 		return false
-	var buttons: Array = (hud.frame_rates.get_children() if hud.frame_rates.is_visible_in_tree() else []) + hud.resolutions.get_children() + [hud.show_frame_rate, hud.sound_mute, hud.crash_reports, hud.options_back_button]
+	var buttons: Array = (hud.frame_rates.get_children() if hud.frame_rates.is_visible_in_tree() else []) + hud.resolutions.get_children() + [hud.show_frame_rate, hud.sound_mute, hud.crash_reports, hud.privacy_link, hud.options_back_button]
+	var link := hud.privacy_link.get_global_rect()
+	var link_area: Array = _page.links.get("areas", [[]])[0] if _page.links.get("areas", []).size() == 1 else []
+	if not _require(hud.privacy_note.is_visible_in_tree() and options.encloses(hud.privacy_note.get_global_rect()) and hud.privacy_note.text == "Used only to fix and improve the game." \
+			and link_area.size() == 4 and absf(float(link_area[0]) * page.size.x - link.position.x) < 2.0 and absf(float(link_area[1]) * page.size.y - link.position.y) < 2.0, "%s: Options must show the privacy line inside its panel and the page know where its link is (line %s, link %s, the page told %s)." % [shape, hud.privacy_note.get_global_rect(), link, _page.links]):
+		return false
 	for i in buttons.size():
-		var button := buttons[i] as Button
-		if not _require(button.size.y >= THUMB_PX and options.encloses(button.get_global_rect()), "%s: Options' %s must lie in the panel and be at least %d px tall (%s)." % [shape, button.text, THUMB_PX, button.get_global_rect()]):
+		# Buttons, switches and the privacy page's link (a LinkButton, not a Button).
+		var button := buttons[i] as BaseButton
+		if not _require(button.size.y >= THUMB_PX and options.encloses(button.get_global_rect()), "%s: Options' %s must lie in the panel and be at least %d px tall (%s)." % [shape, button.get("text"), THUMB_PX, button.get_global_rect()]):
 			return false
-		for other: Button in buttons.slice(i + 1):
-			if not _require(not button.get_global_rect().intersects(other.get_global_rect()), "%s: Options' %s and %s overlap." % [shape, button.text, other.text]):
+		for other: BaseButton in buttons.slice(i + 1):
+			if not _require(not button.get_global_rect().intersects(other.get_global_rect()), "%s: Options' %s and %s overlap." % [shape, button.get("text"), other.get("text")]):
 				return false
 	for id: String in ["50", "100"]:
 		_screen_tap(6, (hud.resolutions.get_node(id) as Control).get_global_rect().get_center())

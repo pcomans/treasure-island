@@ -62,6 +62,10 @@ const MAX_FRAME_S := 2.0
 ## downloaded, the start prompt up, play started (its tap or click), and play still going
 ## after STATS_FIRST_S (the first timed stats).
 const FUNNEL_STEPS := ["page_opened", "download_finished", "start_prompt", "play_started", "playing_1min"]
+## The privacy page: what the statistics hold, the anonymous id and how to turn them
+## off. PRIVACY.md at the repository's root is its text, which the owner's website
+## publishes at this address; the start prompt's line and Options name it.
+const PRIVACY_URL := "https://grandtreasureisland.vercel.app/privacy"
 ## The anonymous id (owner, 2026-11-17: "Let's just switch to permanent IDs ... People can
 ## just turn off analytics if they don't like it"): ANONYMOUS_ID_BYTES random bytes, as
 ## hex, made the first time the statistics are sent and kept with the reporting state (on
@@ -273,6 +277,14 @@ static func coarse_gpu(adapter: String) -> String:
 	text = RegEx.create_from_string("(?i)\\b(Direct3D\\S*|D3D\\S*|vs_\\S+|ps_\\S+|OpenGL( ES)?\\S*|Vulkan\\S*|Unspecified Version)").sub(text, "", true)
 	text = RegEx.create_from_string("\\s+").sub(text, " ", true).strip_edges(true, true).trim_suffix(",").strip_edges()
 	return text.left(60) if not text.is_empty() else "unknown"
+
+
+## Opens the privacy page in the system's browser, for the desktop builds. On the web
+## the page opens it itself, inside the player's tap or click on the start prompt's line
+## or Options' link (CrashReports.link_areas): a browser lets a page open another only
+## inside the player's own gesture, which the game's input, handled a frame later, is not.
+static func open_privacy() -> void:
+	OS.shell_open(PRIVACY_URL)
 
 
 ## The anonymous id to use: KEPT when it is one (ANONYMOUS_ID_BYTES bytes as lowercase

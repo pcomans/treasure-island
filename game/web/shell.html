@@ -633,7 +633,7 @@ function tiLoadingLine(loading) {
 //   tiReporting(config, env) -> {start(), seen(), ended(), resumed(), phase(name),
 //       step(name, ms), error(value, kind), contextLost(), loadFailed(text),
 //       engineExit(code), read(), setEnabled(on), noticeShown(), playStarted(),
-//       snapshot(json), stats(json), status()}
+//       snapshot(json), stats(json), linkAreas(json), linkAt(x, y), status()}
 //     config: the build's settings (the ti-reporting block): {dsn, release, sdk,
 //       integrity, traces_sample_rate}, or {}.
 //     env: {storage (localStorage, or null), locks (navigator.locks, or null), now() (ms
@@ -710,6 +710,9 @@ function tiReporting(config, env) {
 	const seenErrors = new Set();
 	let loadSent = false;
 	let statsSent = 0;
+	// Where a tap or click opens the privacy page now (linkAreas): its address and the
+	// areas, [left, top, width, height] as shares of the page.
+	let links = {url: '', areas: []};
 	// What the transport let out this visit (capped again there).
 	const sent = {event: 0, transaction: 0};
 
@@ -1126,6 +1129,19 @@ function tiReporting(config, env) {
 			if (!stats || typeof stats !== 'object' || sdkState !== 'ready' || blocked()) return;
 			sendStats(stats);
 		},
+		// Where a tap or click opens the privacy page (the game's link areas, as JSON
+		// {url, areas}): only an https address, only areas of four numbers.
+		linkAreas(json) {
+			const value = parse(json);
+			const url = value && typeof value.url === 'string' && /^https:\/\/[^\s"'<>\\]+$/.test(value.url) ? value.url : '';
+			const areas = value && Array.isArray(value.areas) ? value.areas.filter((area) => Array.isArray(area) && area.length === 4 && area.every((number) => finite(number) !== null)) : [];
+			links = {url, areas: url ? areas : []};
+		},
+		// The privacy page's address if a tap or click at (X, Y), as shares of the page,
+		// falls on one of the link areas, else ''.
+		linkAt(x, y) {
+			return links.areas.some(([left, top, width, height]) => x >= left && x <= left + width && y >= top && y <= top + height) ? links.url : '';
+		},
 		status() {
 			return JSON.stringify({dsn: Boolean(dsn), storage, on: get(SWITCH) !== 'off', notice: Boolean(get(NOTICE)), noticeNow, playing, phase: pagePhase, blocked: blocked(),
 				sdk: sdkState, made, waiting: waiting.length, sent, loadSent, statsSent, steps: record.steps, snapshot: Boolean(snapshot), anonymousId: Boolean(get(ANONYMOUS_ID)),
@@ -1340,8 +1356,28 @@ const tiReports = (() => {
 		playStarted: () => reporting.playStarted(),
 		snapshot: (json) => reporting.snapshot(String(json)),
 		stats: (json) => reporting.stats(String(json)),
+		linkAreas: (json) => reporting.linkAreas(String(json)),
 		status: () => reporting.status(),
 	};
+	// A tap or click on the privacy page's link (the start prompt's line about the
+	// statistics, Options' link; the game says where, linkAreas) opens the page in a new
+	// tab, here inside the player's own gesture, which is the only time a page may open
+	// another; the game's own tab stays where it is. The game still gets the event, and
+	// the click a browser may send after a tap opens nothing more.
+	const canvas = document.getElementById('canvas');
+	let linkOpened = -Infinity;
+	const openLink = (x, y) => {
+		const box = canvas.getBoundingClientRect();
+		const url = box.width > 0 && box.height > 0 ? reporting.linkAt((x - box.left) / box.width, (y - box.top) / box.height) : '';
+		if (!url || performance.now() - linkOpened < 1000) return;
+		linkOpened = performance.now();
+		window.open(url, '_blank', 'noopener');
+	};
+	canvas.addEventListener('touchend', (event) => {
+		const touch = event.changedTouches[0];
+		if (touch) openLink(touch.clientX, touch.clientY);
+	}, {capture: true, passive: true});
+	canvas.addEventListener('click', (event) => openLink(event.clientX, event.clientY), {capture: true, passive: true});
 	reporting.start();
 	reporting.useEngine = (running) => {
 		engine = running;

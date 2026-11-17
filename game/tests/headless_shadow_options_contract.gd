@@ -272,7 +272,7 @@ func _check_crash_reports() -> String:
 	DirAccess.remove_absolute(_settings_file)
 	# No page (desktop): no Privacy section.
 	var main := _make_main()
-	if not _require(main.crash_reports.page == null and main.crash_reports.on and not main.hud.privacy_heading.visible and not main.hud.privacy_row.visible, "With no page to send them, Options must have no switch for the crash reports (heading shown %s, row shown %s)." % [main.hud.privacy_heading.visible, main.hud.privacy_row.visible]):
+	if not _require(main.crash_reports.page == null and main.crash_reports.on and not main.hud.privacy_heading.visible and not main.hud.privacy_row.visible and not main.hud.privacy_note.visible, "With no page to send them, Options must have no switch for the statistics (heading shown %s, row shown %s, line shown %s)." % [main.hud.privacy_heading.visible, main.hud.privacy_row.visible, main.hud.privacy_note.visible]):
 		return ""
 	# A page that never had the switch set: on, the page told so and asked for the notice.
 	var page := ReportingPage.new()
@@ -283,7 +283,8 @@ func _check_crash_reports() -> String:
 		if (child as Control).visible:
 			order.append(child.name)
 	if not _require(main.crash_reports.on and hud.crash_reports.button_pressed and hud.privacy_row.visible and page.told == ["on"] and main.crash_reports.notice, "With a page that never had it set, the reports must be on, the switch shown pressed, the page told on and the start prompt asked for the notice (on %s, pressed %s, shown %s, told %s, notice %s)." % [main.crash_reports.on, hud.crash_reports.button_pressed, hud.privacy_row.visible, page.told, main.crash_reports.notice]) \
-	or not _require(order.slice(order.size() - 5) == PackedStringArray(["SoundHeading", "SoundRow", "PrivacyHeading", "PrivacyRow", "BackButton"]) and hud.crash_reports.text == "Send anonymous statistics", "Options must end with Sound, then Privacy with \"Send anonymous statistics\", then Back (it reads %s, the switch \"%s\")." % [order, hud.crash_reports.text]):
+	or not _require(order.slice(order.size() - 6) == PackedStringArray(["SoundHeading", "SoundRow", "PrivacyHeading", "PrivacyRow", "PrivacyNote", "BackButton"]) and hud.crash_reports.text == "Send anonymous statistics" \
+			and hud.privacy_link.visible and hud.privacy_link.text == GameStats.PRIVACY_URL.trim_prefix("https://") and hud.privacy_note.text == "Used only to fix and improve the game.", "Options must end with Sound, then Privacy with \"Send anonymous statistics\", the privacy page's link beside it and \"Used only to fix and improve the game.\" under it, then Back (it reads %s, the switch \"%s\", the link \"%s\", the line \"%s\")." % [order, hud.crash_reports.text, hud.privacy_link.text, hud.privacy_note.text]):
 		return ""
 	# Switched off: the page told at once, the choice kept; a restart starts off.
 	hud.crash_reports.button_pressed = false
@@ -316,7 +317,7 @@ func _check_crash_reports() -> String:
 	main = _make_main(false, page)
 	if not _require(main.crash_reports.on and not CrashReports.saved(), "With use_saved_settings off the reports must start on (the default) and the settings file stay as it was (on %s, kept %s)." % [main.crash_reports.on, CrashReports.saved()]):
 		return ""
-	return "the crash reports' switch: none without a page; with one, under Privacy after the sound, on by default and the page told so and asked for the notice; switched off at once on the page and kept over a restart; off on either side winning and kept; switched on again with the page told the player read about them; the capture harness on by default, writing nothing"
+	return "the statistics' switch: none without a page; with one, under Privacy after the sound, with the privacy page's link and its line, on by default and the page told so and asked for the notice; switched off at once on the page and kept over a restart; off on either side winning and kept; switched on again with the page told the player read about them; the capture harness on by default, writing nothing"
 
 
 func _free_main() -> void:

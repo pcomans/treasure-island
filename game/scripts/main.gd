@@ -214,6 +214,13 @@ func _ready() -> void:
 		CrashReports.save(crash_reports.on)
 	hud.set_crash_reports(crash_page != null, crash_reports.on)
 	hud.crash_reports_chosen.connect(_on_crash_reports_chosen)
+	# The privacy page: on the web the page opens it inside the player's tap or click on
+	# the start prompt's line or Options' link, wherever the HUD says they are; a desktop
+	# build opens it in the system's browser (GameStats.open_privacy).
+	hud.link_areas_changed.connect(func(areas: Array) -> void: crash_reports.link_areas(areas, hud.get_viewport_rect().size))
+	hud.privacy_link_pressed.connect(func() -> void:
+		if not OS.has_feature("web"):
+			GameStats.open_privacy())
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere). Its 3D scale is the graphics' resolution (above).

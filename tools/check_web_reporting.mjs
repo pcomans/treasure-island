@@ -32,6 +32,7 @@
 //     new one after the switch goes off and on again;
 //   - a failed load, a lost WebGL context and the engine's error exit are each reported
 //     once, a failed load letting the SDK load before the start prompt;
+//   - the privacy page's link opens only an https address, only where the game says;
 //   - tiLoadSpans, tiDeviceTags and tiEnvironment on samples, and the page's names (funnel
 //     steps, snapshot fields, movements, the anonymous id's size) match GameStats'
 //     (game/scripts/reports/game_stats.gd).
@@ -450,6 +451,19 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   await settle();
   check((ofType(q.sdk, 'event')[0] || {}).message === 'load failed: Game stopped before startup completed (1).', 'a failed start: not reported with its first line');
 }
+{ // The privacy page's link: only an https address and areas of four numbers; a point in
+  // an area gives the address, anywhere else nothing.
+  const p = page();
+  await p.started;
+  const privacy = 'https://grandtreasureisland.vercel.app/privacy';
+  p.reporting.linkAreas(JSON.stringify({url: privacy, areas: [[0.1, 0.2, 0.3, 0.05], [1, 2], 'x']}));
+  const hits = [p.reporting.linkAt(0.2, 0.22), p.reporting.linkAt(0.5, 0.5)];
+  p.reporting.linkAreas(JSON.stringify({url: 'javascript:alert(1)', areas: [[0, 0, 1, 1]]}));
+  const scheme = p.reporting.linkAt(0.5, 0.5);
+  p.reporting.linkAreas(JSON.stringify({url: privacy, areas: []}));
+  const gone = p.reporting.linkAt(0.2, 0.22);
+  check(hits[0] === privacy && hits[1] === '' && scheme === '' && gone === '', `the privacy link: ${JSON.stringify([hits, scheme, gone])}`);
+}
 { // tiLoadSpans, tiDeviceTags, tiEnvironment.
   const names = tiLoadSpans(MARKS, 75000).map((span) => span.name);
   check(names.join('|') === 'page|Downloading the game|Starting the engine|Loading the island|Setting up the island|Compiling shaders: sky and player|Rendering reflections|start prompt|waiting to play',
@@ -485,4 +499,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s anonymous statistics load and send nothing with no DSN (its records still kept), with the switch off (this visit and the next), with unreadable storage, before the notice or before play in the visit that shows it; then the SDK loads once with narrow settings and what waited leaves: the load\'s transaction with the funnel\'s times, errors tagged with their phase, the anonymous id as every message\'s user and the session\'s distinct id; an earlier visit\'s unexpected end is reported once with its tags and snapshot (a background, clean or live one not), an earlier visit that ended before play once as a game visit of its build; the scrubbing leaves no query, host, path user name, request, cookie, user agent, breadcrumb, extra, other context, IP or stray tag, sessions only the anonymous id, no client reports; at most five error events per page load, each once, in the page and the transport; the switch off stops sending at once, closes the SDK and deletes the anonymous id, on again sends with a new one; the timed stats go as a transaction with cells and movements as spans and the numbers as measurements, none before the SDK, at most 48; the anonymous id is made only once a message may go, kept across visits and replaced after off and on; a failed load, a lost context and an error exit are each reported once; the load\'s steps, device tags and environment read right; the page\'s names match GameStats\'');
+console.log('PASS: the page\'s anonymous statistics load and send nothing with no DSN (its records still kept), with the switch off (this visit and the next), with unreadable storage, before the notice or before play in the visit that shows it; then the SDK loads once with narrow settings and what waited leaves: the load\'s transaction with the funnel\'s times, errors tagged with their phase, the anonymous id as every message\'s user and the session\'s distinct id; an earlier visit\'s unexpected end is reported once with its tags and snapshot (a background, clean or live one not), an earlier visit that ended before play once as a game visit of its build; the scrubbing leaves no query, host, path user name, request, cookie, user agent, breadcrumb, extra, other context, IP or stray tag, sessions only the anonymous id, no client reports; at most five error events per page load, each once, in the page and the transport; the switch off stops sending at once, closes the SDK and deletes the anonymous id, on again sends with a new one; the timed stats go as a transaction with cells and movements as spans and the numbers as measurements, none before the SDK, at most 48; the anonymous id is made only once a message may go, kept across visits and replaced after off and on; a failed load, a lost context and an error exit are each reported once; the privacy link opens only an https address where the game says; the load\'s steps, device tags and environment read right; the page\'s names match GameStats\'');

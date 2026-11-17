@@ -13,9 +13,16 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
-## The anonymous statistics switched on or off on the options screen
-## (main.gd tells the page and keeps it; CrashReports).
+## The anonymous statistics switched on or off on the options screen (main.gd tells
+## the page and keeps it; CrashReports).
 signal crash_reports_chosen(on: bool)
+## Options' link to the privacy page pressed (main.gd opens it on desktop; on the web
+## the page opens it inside the tap or click, link_areas_changed).
+signal privacy_link_pressed
+## Where a tap or click opens the privacy page now, in the HUD's pixels: the start
+## prompt's line about the statistics and Options' link, each while it shows (main.gd
+## tells the web page, which opens the page inside the player's own gesture).
+signal link_areas_changed(areas: Array)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
 signal loading_shown(text: String)
 
@@ -77,8 +84,12 @@ const START_NOTE_FONT_PX := 24
 ## narrower phone held sideways), its second line would push three notes past the top of
 ## the page, so the home screen hint gives way on that visit (it shows again on the next,
 ## when this line no longer does). In the web font's characters, as the other notes.
-const START_REPORTS_NOTE := "Sends anonymous statistics with a random ID (device type, errors, frame rate, where in the game, time played). Turn off in Options."
+const START_REPORTS_NOTE := "Sends anonymous statistics with a random ID. Turn off in Options. grandtreasureisland.vercel.app/privacy"
 const REPORTS_NOTE_SIDES_PX := 96.0
+## The line ends with the privacy page's address (GameStats.PRIVACY_URL, without its
+## scheme), drawn as a link in the headings' blue and underlined; a tap or click on the
+## line opens the page (link_areas_changed).
+const REPORTS_NOTE_ADDRESS := "grandtreasureisland.vercel.app/privacy"
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
 ## headings' colour with this dark type.
@@ -176,6 +187,8 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var privacy_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyHeading
 @onready var privacy_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow
 @onready var crash_reports: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/CrashReports
+@onready var privacy_link: LinkButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/PrivacyLink
+@onready var privacy_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyNote
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
 ## behind its Licences button, the licence texts that ship with the game and the
@@ -221,9 +234,13 @@ var _start_controls: Label
 var _start_notes: VBoxContainer
 var _home_screen_hint: Label
 var _silent_note: Label
-var _reports_note: Label
+var _reports_note: RichTextLabel
 ## Which notes main.gd asked for: [home_screen, silent_mode, reports].
 var _notes_asked := [false, false, false]
+## Whether the privacy page's link areas may have moved (_process reads them), and the
+## areas last handed on.
+var _links_dirty := false
+var _link_areas: Array = []
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -287,6 +304,7 @@ func _ready() -> void:
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
 	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
 	crash_reports.toggled.connect(func(on: bool) -> void: crash_reports_chosen.emit(on))
+	privacy_link.pressed.connect(func() -> void: privacy_link_pressed.emit())
 	var switch_off := DPITexture.create_from_string(SWITCH_OFF_SVG)
 	for switch: CheckButton in [show_frame_rate, sound_mute, crash_reports]:
 		switch.add_theme_icon_override("unchecked", switch_off)
@@ -319,6 +337,7 @@ func _ready() -> void:
 	resized.connect(_fit_credits)
 	_fit_credits()
 	resized.connect(_fit_reports_note)
+	resized.connect(_links_moved)
 
 
 ## The chest on the loading screen is a quarter of the screen's shorter side, at
@@ -329,6 +348,11 @@ func _fit_load_icon() -> void:
 
 
 func _process(delta: float) -> void:
+	# While a link to the privacy page can show (the start prompt's line, Options), its
+	# area is read each frame, after the layout has settled; once after it goes.
+	if _links_dirty or not _link_areas.is_empty() or options_screen.visible or (_reports_note != null and _reports_note.is_visible_in_tree()):
+		_links_dirty = false
+		_hand_on_link_areas()
 	if _feedback_seconds > 0.0:
 		_feedback_seconds -= delta
 		if _feedback_seconds <= 0.0:
@@ -463,6 +487,7 @@ func set_start_notes(home_screen: bool, silent_mode: bool, reports := false) -> 
 	_reports_note.visible = reports
 	_start_notes.visible = home_screen or silent_mode or reports
 	_fit_reports_note()
+	_links_moved()
 
 
 ## The notes' lines under the Play button, after the line of controls where there is
@@ -475,11 +500,18 @@ func _make_start_notes() -> void:
 	_start_notes.add_child(_home_screen_hint)
 	_silent_note = _start_note_label("SilentNote", START_SILENT_NOTE)
 	_start_notes.add_child(_silent_note)
-	_reports_note = _start_note_label("ReportsNote", START_REPORTS_NOTE)
-	_reports_note.add_theme_color_override("font_color", CREDITS_NOTE_COLOR)
+	# The line about the statistics: its address a link, in the headings' blue, underlined.
+	_reports_note = RichTextLabel.new()
+	_reports_note.name = "ReportsNote"
+	_reports_note.bbcode_enabled = true
+	_reports_note.fit_content = true
+	_reports_note.scroll_active = false
 	_reports_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	if not _touch:
-		_reports_note.remove_theme_font_size_override("font_size")
+	_reports_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_reports_note.text = "[center]%s[color=#%s][u]%s[/u][/color][/center]" % [START_REPORTS_NOTE.trim_suffix(REPORTS_NOTE_ADDRESS), CONTROLS_HEADING_COLOR.to_html(false), REPORTS_NOTE_ADDRESS]
+	_reports_note.add_theme_color_override("default_color", CREDITS_NOTE_COLOR)
+	if _touch:
+		_reports_note.add_theme_font_size_override("normal_font_size", START_NOTE_FONT_PX)
 	_start_notes.add_child(_reports_note)
 	(_start_controls if _start_controls != null else resume_button).add_sibling(_start_notes)
 	_fit_reports_note()
@@ -501,8 +533,9 @@ func _start_note_label(node_name: String, text: String) -> Label:
 func _fit_reports_note() -> void:
 	if _reports_note == null:
 		return
-	var font := _reports_note.get_theme_font("font")
-	var one_line := ceilf(font.get_string_size(_reports_note.text, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("font_size")).x)
+	var font := _reports_note.get_theme_font("normal_font")
+	# Its words' width on one line, and 2 px against rounding in the label's own layout.
+	var one_line := ceilf(font.get_string_size(START_REPORTS_NOTE, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("normal_font_size")).x) + 2.0
 	var room := maxf(0.0, size.x - REPORTS_NOTE_SIDES_PX)
 	_reports_note.custom_minimum_size.x = minf(one_line, room)
 	var wraps := _reports_note.visible and one_line > room and size.x > size.y
@@ -522,6 +555,7 @@ func start_notes_state() -> Dictionary:
 func _end_start_prompt() -> void:
 	if _start_text.is_empty():
 		return
+	_links_moved()
 	_start_text = ""
 	if _start_notes != null:
 		_start_notes.hide()
@@ -548,6 +582,7 @@ func _end_start_prompt() -> void:
 ## Play's first start ends the start prompt.
 func set_paused(paused: bool) -> void:
 	_paused = paused
+	_links_moved()
 	if not paused:
 		_end_start_prompt()
 	pause_panel.visible = paused and not controls_screen.visible and not options_screen.visible and not credits_screen.visible
@@ -594,6 +629,7 @@ func controls_visible() -> bool:
 ## only when Options was opened from the keys (_pointer_last); Back, or Esc
 ## (main.gd), returns.
 func show_options() -> void:
+	_links_moved()
 	pause_panel.hide()
 	_show_time(true)
 	options_screen.show()
@@ -602,6 +638,7 @@ func show_options() -> void:
 
 
 func hide_options() -> void:
+	_links_moved()
 	options_screen.hide()
 	if _paused:
 		pause_panel.show()
@@ -725,9 +762,32 @@ func sound_volume_share() -> float:
 ## (a web page that sends the reports; CrashReports), showing whether they are on.
 ## Pressing it asks main.gd to switch them (crash_reports_chosen).
 func set_crash_reports(offered: bool, on: bool) -> void:
-	for part: Control in [privacy_heading, privacy_row]:
+	for part: Control in [privacy_heading, privacy_row, privacy_note]:
 		part.visible = offered
 	show_crash_reports(on)
+	_links_moved()
+
+
+## The privacy page's link areas may have moved: _process reads them again.
+func _links_moved() -> void:
+	_links_dirty = true
+
+
+## Where a tap or click opens the privacy page now: the start prompt's line about the
+## statistics and Options' link, each while it shows (link_areas_changed, when changed).
+func _hand_on_link_areas() -> void:
+	var areas: Array = []
+	for link: Control in [_reports_note, privacy_link]:
+		if link != null and link.is_visible_in_tree():
+			areas.append(link.get_global_rect())
+	if areas != _link_areas:
+		_link_areas = areas
+		link_areas_changed.emit(areas.duplicate())
+
+
+## The privacy page's link areas as last handed on (link_areas_changed).
+func link_areas() -> Array:
+	return _link_areas.duplicate()
 
 
 ## Shows the reports on or off, without asking for it again.
@@ -1312,7 +1372,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports, privacy_link]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children() + frame_rates.get_children() + resolutions.get_children():
 		(button as Button).custom_minimum_size.y = 64.0

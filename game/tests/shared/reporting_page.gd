@@ -4,13 +4,15 @@ extends RefCounted
 ## crash_page, as a browser does: its own copy of the switch (kept: true, false or
 ## null when never set), whether it has recorded the start prompt's line about the
 ## statistics as shown, what it was told, in order ("on", "off", "notice shown",
-## "play started"), and the snapshots and stats it got (parsed).
+## "play started"), the snapshots and stats it got (parsed), and where a tap or click
+## would open the privacy page (link_areas, parsed: {"url", "areas"}).
 
 var kept: Variant = null
 var notice_recorded := false
 var told := []
 var snapshots := []
 var stats_got := []
+var links := {}
 
 
 func read() -> String:
@@ -37,3 +39,7 @@ func snapshot(json: String) -> void:
 
 func stats(json: String) -> void:
 	stats_got.append(JSON.parse_string(json))
+
+
+func link_areas(json: String) -> void:
+	links = JSON.parse_string(json)

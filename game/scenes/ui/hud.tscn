@@ -486,9 +486,22 @@ theme_override_constants/separation = 16
 [node name="CrashReports" type="CheckButton" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-tooltip_text = "Anonymous statistics: crashes and errors, frame rate and load times, the area of the island you play in and how long you play, with the build and the device type. Nothing that identifies you."
+tooltip_text = "Anonymous statistics with a random ID: crashes and errors, frame rate and load times, where in the game you play and for how long, the build and the device type. Used only to fix and improve the game."
 button_pressed = true
 text = "Send anonymous statistics"
+
+[node name="PrivacyLink" type="LinkButton" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 4
+tooltip_text = "What the statistics hold, the random ID, and how to turn them off"
+text = "grandtreasureisland.vercel.app/privacy"
+
+[node name="PrivacyNote" type="Label" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Used only to fix and improve the game."
 
 [node name="BackButton" type="Button" parent="OptionsScreen/Center/OptionsPanel/OptionsLayout"]
 custom_minimum_size = Vector2(220, 40)
