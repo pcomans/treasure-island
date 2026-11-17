@@ -50,6 +50,7 @@ game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg.i
 game/resources/textures/world/shoreline/boulder_albedo.png.import
 game/resources/textures/world/shoreline/riprap_albedo.png.import
 game/resources/textures/world/street/gaa_mural_wall.png.import
+game/resources/textures/world/street/mulch_chips.png.import
 game/resources/textures/world/street/paseo_aggregate.png.import
 game/resources/textures/world/street/paseo_brick.png.import
 game/resources/textures/world/street/paseo_walk.png.import

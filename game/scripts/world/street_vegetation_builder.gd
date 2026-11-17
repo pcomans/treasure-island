@@ -26,7 +26,8 @@ extends RefCounted
 ## player collides with and the spray ray stops on (never a receiver), while
 ## the camera arm ignores it, as for the street furniture. Crowns and low plants
 ## have none, so the jetpack flies through a crown. A tree standing in paving
-## gets its round mulch pit, drawn just above the paving's plane.
+## gets its round mulch pit, drawn just above the paving's plane in the shared
+## wood-chip mulch (mulch_ground.gd).
 ##
 ## A tree whose trunk is thinner than the kit's BENDING_TRUNK_RADIUS_M (as its row
 ## places it) bends out of a car's way (game/scripts/vehicles/street_tree_bender.gd):
@@ -44,7 +45,9 @@ extends RefCounted
 ## box like the trees'. Hedges have no collision.
 
 const KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
-const MULCH := preload("res://game/resources/textures/world/street/street_mulch.png")
+const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
+## The pits draw the street planting strips' mulch material (MULCH_GROUND).
+const WELL_MULCH_KEY := "street_kerb_planting"
 const TREE_CELL_M := 16.0
 const GRASS_CELL_M := 32.0
 const SHADOW_CELL_M := 48.0
@@ -55,8 +58,6 @@ const PHYSICS_STREET_PROP := 1 << 3
 ## Mulch pits draw within this range; they are flat and small.
 const WELL_RANGE_M := 140.0
 const WELL_SIDES := 16
-## The mulch texture's tile, as on the planting strips (world_chunk_builder.gd).
-const MULCH_TILE_M := 2.0
 
 
 static func _cell(position: Vector3, size_m: float) -> String:
@@ -434,7 +435,6 @@ func _capsule(cache: Dictionary, id: String, from: Vector3, to: Vector3, radius:
 func _wells_mesh(entries: Array, material: Material) -> ArrayMesh:
 	var vertices := PackedVector3Array()
 	var normals := PackedVector3Array()
-	var uvs := PackedVector2Array()
 	var colors := PackedColorArray()
 	var indices := PackedInt32Array()
 	for entry: Dictionary in entries:
@@ -446,7 +446,6 @@ func _wells_mesh(entries: Array, material: Material) -> ArrayMesh:
 		var lift := KIT.WELL_LIFT_M
 		vertices.append(center + Vector3(0.0, lift, 0.0))
 		normals.append(normal)
-		uvs.append(Vector2(center.x, center.z) / MULCH_TILE_M)
 		# Darker toward the trunk and at the rim, where the paving edge shades it.
 		colors.append(Color(0.82, 0.82, 0.82))
 		for side in WELL_SIDES:
@@ -454,7 +453,6 @@ func _wells_mesh(entries: Array, material: Material) -> ArrayMesh:
 			var offset := Vector2(cos(angle), sin(angle)) * radius
 			vertices.append(center + Vector3(offset.x, lift + slope.x * offset.x + slope.y * offset.y, offset.y))
 			normals.append(normal)
-			uvs.append(Vector2(center.x + offset.x, center.z + offset.y) / MULCH_TILE_M)
 			colors.append(Color(0.7, 0.7, 0.7))
 		for side in WELL_SIDES:
 			# Clockwise seen from above (Godot's front face), so the pit faces up.
@@ -463,7 +461,6 @@ func _wells_mesh(entries: Array, material: Material) -> ArrayMesh:
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = vertices
 	arrays[Mesh.ARRAY_NORMAL] = normals
-	arrays[Mesh.ARRAY_TEX_UV] = uvs
 	arrays[Mesh.ARRAY_COLOR] = colors
 	arrays[Mesh.ARRAY_INDEX] = indices
 	var mesh := ArrayMesh.new()
@@ -472,11 +469,7 @@ func _wells_mesh(entries: Array, material: Material) -> ArrayMesh:
 	return mesh
 
 
-func _well_material() -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.resource_name = "street_vegetation_mulch_pit"
-	material.albedo_texture = MULCH
-	material.vertex_color_use_as_albedo = true
-	material.roughness = 1.0
-	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
-	return material
+## The pits' material: the shared mulch, which takes the pits' vertex colour (the
+## shade toward the trunk and the rim) as a multiplier.
+func _well_material() -> ShaderMaterial:
+	return MULCH_GROUND.material(WELL_MULCH_KEY)
