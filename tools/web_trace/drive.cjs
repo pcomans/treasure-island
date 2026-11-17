@@ -6,8 +6,11 @@
 // what the page gathered in OUT: log.json (everything), analysis.json, results.txt, results.png, marks.json (the
 // page's and the game's startup marks: each loading line as it went up), readback-*.json (what the page and the
 // game draw at), console.txt, progress.txt. Nothing is sent anywhere: the page keeps its records on the device.
-// Env: OUT, URL, BROWSER webkit|chrome, PROFILE phone|phone1x|safari|desktop, THROTTLE, GL gpu|swiftshader,
-// PW_MODULE (Playwright), WK_EXEC (WebKit's MiniBrowser, or a wrapper starting it), CHROME_EXEC.
+// Env: OUT, URL, BROWSER webkit|chrome, PROFILE phone|phone1x|safari|iphone|desktop, THROTTLE, GL gpu|swiftshader,
+// PW_MODULE (Playwright), WK_EXEC (WebKit's MiniBrowser, or a wrapper starting it), CHROME_EXEC; KILL_AT_S: kill the
+// page's process once the trace is that many seconds in (WebKit: its web process; Chrome: its renderer), then open the
+// page again in the same browser and save what the unfinished-run panel shows (previous-panel.txt) and its Download
+// full log (previous-log.json), as after an iPhone's reload.
 'use strict';
 const fs = require('fs');
 const pw = require(process.env.PW_MODULE || 'playwright');
@@ -25,6 +28,8 @@ const PROFILES = {
   phone: {viewport: {width: 874, height: 402}, deviceScaleFactor: 3, hasTouch: true, isMobile: true, userAgent: PHONE_UA},
   phone1x: {viewport: {width: 874, height: 402}, deviceScaleFactor: 1, hasTouch: true, isMobile: true, userAgent: PHONE_UA},
   safari: {viewport: {width: 756, height: 352}, deviceScaleFactor: 3, hasTouch: true, isMobile: true, userAgent: PHONE_UA},
+  // The owner's iPhone in Safari held sideways with its toolbars showing, as their runs recorded it: 874 x 292 CSS px.
+  iphone: {viewport: {width: 874, height: 292}, deviceScaleFactor: 3, hasTouch: true, isMobile: true, userAgent: PHONE_UA},
   desktop: {viewport: {width: 1440, height: 900}, deviceScaleFactor: 1, hasTouch: false, isMobile: false},
 };
 let page = null; let browser = null; let crashed = false;
@@ -123,7 +128,9 @@ async function main() {
   const after = JSON.parse(await js('after', READBACK));
   log('AFTER_TAP', JSON.stringify(after.game));
   if (!after.game || after.game.paused !== false) throw new Error('the start prompt did not start play');
-  // The drive: leave the page alone until the trace ends.
+  // The drive: leave the page alone until the trace ends (or, with KILL_AT_S, until the kill).
+  const KILL_AT_S = +(process.env.KILL_AT_S || 0);
+  if (KILL_AT_S > 0) return await killAndReopen(context, cdp, KILL_AT_S);
   const t1 = Date.now(); let state = null;
   for (;;) {
     await sleep(10000);
@@ -148,6 +155,58 @@ async function main() {
   await shot('results');
   log('SAVED', 'log', full.length, 'analysis', analysis.length, 'text', text.length);
   return state.end.result === 'complete' ? 0 : 4;
+}
+
+// The page's process killed once the trace is KILL_AT_S s in, as iOS kills a page over its memory limit; then the
+// page opened again in the same browser (its storage kept), its unfinished-run panel and full log saved.
+async function killAndReopen(context, cdp, killAt) {
+  const traceS = "(() => { const l = window.__tiTrace && window.__tiTrace.log(); const r = l && l.rows[l.rows.length - 1]; return r ? r[0] / 1000 : -1; })()";
+  for (;;) {
+    await sleep(1000);
+    if (crashed) throw new Error('crashed before the kill');
+    const t = await js('trace_s', traceS, 30000);
+    if (typeof t === 'number' && t >= killAt) { log('KILL_AT', t.toFixed(1)); break; }
+  }
+  if (BROWSER === 'chrome') {
+    await cdp.send('Page.crash').catch(() => {});
+  } else {
+    // This browser session's web processes (its runtime directory), the biggest killed.
+    const xdg = process.env.XDG_RUNTIME_DIR;
+    let best = null;
+    for (const pid of fs.readdirSync('/proc').filter((d) => /^\d+$/.test(d))) {
+      try {
+        if (fs.readFileSync(`/proc/${pid}/comm`, 'utf8').trim() !== 'WebKitWebProces') continue;
+        if (!fs.readFileSync(`/proc/${pid}/environ`, 'utf8').split('\0').includes('XDG_RUNTIME_DIR=' + xdg)) continue;
+        const rss = +((fs.readFileSync(`/proc/${pid}/status`, 'utf8').match(/VmRSS:\s+(\d+)/) || [0, 0])[1]);
+        if (!best || rss > best.rss) best = {pid: +pid, rss};
+      } catch (e) { /* gone or not ours */ }
+    }
+    if (!best) throw new Error('no web process to kill');
+    log('KILL', 'pid', best.pid, 'rss_mib', Math.round(best.rss / 1024));
+    process.kill(best.pid, 'SIGKILL');
+  }
+  for (let i = 0; i < 30 && !crashed; i += 1) await sleep(1000);
+  log('KILLED', crashed ? 'page crash seen' : 'no crash event');
+  page = await context.newPage();
+  crashed = false;
+  page.on('crash', () => { crashed = true; log('PAGE_CRASH', now()); });
+  await page.goto(URL_, {waitUntil: 'commit', timeout: 90000});
+  await page.waitForSelector('#ti-trace-results textarea', {timeout: 120000});
+  const panel = await js('panel', "document.querySelector('#ti-trace-results textarea').value");
+  fs.writeFileSync(OUT + '/previous-panel.txt', panel);
+  log('PANEL', panel.length, 'chars');
+  const button = page.locator('#ti-trace-results button', {hasText: 'Download full log'});
+  await button.click();
+  for (let i = 0; i < 60; i += 1) {
+    const note = await js('note', "document.querySelector('#ti-trace-results > div:nth-child(3)').textContent");
+    if (/ready|Nothing/.test(String(note))) { log('NOTE', note); break; }
+    await sleep(1000);
+  }
+  const [download] = await Promise.all([page.waitForEvent('download', {timeout: 60000}), button.click()]);
+  await download.saveAs(OUT + '/previous-log.json');
+  const kept = JSON.parse(fs.readFileSync(OUT + '/previous-log.json', 'utf8'));
+  log('PREVIOUS_LOG', 'chunks', kept.chunks, 'rows', kept.rows.length, 'raf', kept.raf.length, 'events', kept.events.length, 'header', Boolean(kept.header));
+  return kept.rows.length > 0 && kept.header ? 0 : 5;
 }
 
 main().then(async (code) => {
