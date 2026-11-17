@@ -88,7 +88,7 @@ func _run() -> void:
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
-	var seen := {"needs": [], "proxies": [], "dropped": {}, "unhandled": {}, "lines": 0}
+	var seen := {"needs": [], "proxies": [], "unhandled": {}, "lines": 0}
 	(main.get_node("Interface/HUD") as GameHUD).loading_shown.connect(func(text: String) -> void:
 		if text.replace(GameMain.NO_BREAK_SPACE, " ").begins_with(WARM_UP_LINE):
 			seen.lines += 1
