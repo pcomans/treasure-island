@@ -67,7 +67,12 @@ imported once first.
   `facing`. `track` entries, each from its time `t` until the next: `move` is
   `idle`, `walk` (4 m/s, or slower with `speed` in m/s, through the controller's
   analog stick input) or `run` (20 m/s) along `path` (`[[x, z], ...]`, starting
-  where he is when the entry begins), and `jetpack: true` holds Space. He is the
+  where he is when the entry begins), and `jetpack: true` holds Space.
+  `lift` (metres) starts him that far above where he settled, in the air: with
+  no jetpack he then glides down at the stock 1.5 m/s, and a walk or run moves
+  him forward through the air. The avatar flails its arms while it rises (Space
+  held, or climbing faster than 1 m/s) and floats them out to the sides while
+  it descends, so a calm flying shot glides rather than climbs. He is the
   stock player driven through its own input actions, so his animation is the
   game's. Start a move before `-handle` (the run starts at least 1.5 s before
   the first frame) so he is already at speed in the first frame. Without

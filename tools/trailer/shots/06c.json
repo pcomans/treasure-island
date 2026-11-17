@@ -1,0 +1,71 @@
+{
+ "name": "06c",
+ "description": "See the island from above, travelling with Chester: he is already high over the north-end housing and glides forward and gently down (the avatar's calm descent pose, arms floating out; climbing on the jetpack flails), the camera following at a constant offset behind and above him as the island opens up below and ahead. Low warm sun.",
+ "duration": 4.0,
+ "handle": 0.5,
+ "fps": 30,
+ "resolution": [
+  1920,
+  1080
+ ],
+ "sun": "2026-11-13 16:05",
+ "street_detail": true,
+ "chester": {
+  "at": [
+   -625.0,
+   -430.0
+  ],
+  "lift": 70.0,
+  "facing": [
+   -615.937,
+   -425.774
+  ],
+  "track": [
+   {
+    "t": -2.0,
+    "move": "run",
+    "path": [
+     [
+      -81.2,
+      -176.4
+     ]
+    ]
+   }
+  ]
+ },
+ "camera": {
+  "near": 0.2,
+  "keys": [
+   {
+    "t": -0.5,
+    "position": [
+     -7.927,
+     3.2,
+     -1.931
+    ],
+    "target": [
+     54.378,
+     -18.0,
+     25.357
+    ],
+    "fov": 50.0,
+    "follow": true
+   },
+   {
+    "t": 4.5,
+    "position": [
+     -7.927,
+     3.2,
+     -1.931
+    ],
+    "target": [
+     54.378,
+     -18.0,
+     25.357
+    ],
+    "fov": 50.0,
+    "follow": true
+   }
+  ]
+ }
+}

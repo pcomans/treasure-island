@@ -281,6 +281,8 @@ func _read_shot() -> String:
 		var c := chester as Dictionary
 		if not _is_vec2(c.get("at")):
 			return "chester.at must be [x, z]"
+		if float(c.get("lift", 0.0)) < 0.0 or float(c.get("lift", 0.0)) > 300.0:
+			return "chester.lift must be 0 to 300 m"
 		for raw: Variant in c.get("track", []):
 			var entry := raw as Dictionary
 			if entry == null or not entry.has("t"):
@@ -343,6 +345,13 @@ func _place_chester() -> String:
 		avatar.rotation.y = atan2(face.x, face.y)
 	avatar.show()
 	print("SHOT_CHESTER grounded at ", harness.player.global_position, " yaw=", rad_to_deg(avatar.rotation.y))
+	var lift := float(c.get("lift", 0.0))
+	if lift > 0.0:
+		# Start in the air (the controller is off until the pre-roll, so he holds
+		# here): a shot can open on a glide without filming the climb.
+		harness.player.global_position += Vector3.UP * lift
+		harness.player.velocity = Vector3.ZERO
+		print("SHOT_CHESTER lifted to ", harness.player.global_position)
 	return ""
 
 
