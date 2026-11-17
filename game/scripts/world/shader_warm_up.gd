@@ -56,7 +56,7 @@ static var _shared_shaders: Dictionary = {}
 ## One entry a shader: {"key": String, "kind": "shader", "generated", "label" or
 ## "default", "material": a material drawn with it (null for a Label3D's and the
 ## default), "label": a Label3D's flags ({} otherwise), "uses": {use key: render
-## layers}, "users": how many nodes and registrations draw it}. A use key is
+## layers}, "users": how many nodes, BaseMaterial3Ds and registrations led to it}. A use key is
 ## "PROBES INSTANCED SHADOW_ONLY", as 0 or 1 each (probes up to 2).
 var entries: Array[Dictionary] = []
 ## Drawables of a kind this does not proxy, by class: {class name: count}.
