@@ -40,10 +40,14 @@ func _run() -> void:
 			if target != null and target.get_script() != null and str((target.get_script() as Script).resource_path) == GameMain.DRIVE_TRACE_PATH:
 				_fail("%s calls into the drive trace in a run that did not ask for it." % item[1])
 				return
-	# The trace's own node, made as main.gd makes it: before play it waits, with no
-	# frame or node signal connected and no action held.
+	# Freed in the frame it started, before its deferred load of the world begins.
+	main.free()
+	# The trace's own node, made as main.gd makes it (for a main that never starts,
+	# so never loads a world): before play it waits, with no frame or node signal
+	# connected and no action held.
+	main = (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
 	var trace := (load(GameMain.DRIVE_TRACE_PATH) as GDScript).new(main) as Node
-	main.add_child(trace)
+	root.add_child(trace)
 	for _frame in 3:
 		await process_frame
 	var steps: Array = (trace.get_script() as GDScript).get_script_constant_map()["STEPS"]
