@@ -20,8 +20,8 @@ extends RefCounted
 ## page gets the game's state (snapshot) and the timed stats (stats) from GameStats.
 ##
 ## The page: an object with read() (JSON {"on": true, false or null, "notice": bool}),
-## set_enabled(on), notice_shown(), play_started(), snapshot(json) and stats(json);
-## WebPage on the web, a stand-in in a test (as main.gd's crash_page).
+## set_enabled(on), notice_shown(), play_started(), snapshot(json), stats(json) and
+## link_areas(json); WebPage on the web, a stand-in in a test (as main.gd's crash_page).
 
 const SECTION := "privacy"
 const KEY := "crash_reports"
@@ -106,6 +106,19 @@ func stats(window: Dictionary) -> void:
 		page.stats(JSON.stringify(window))
 
 
+## Where a tap or click opens the privacy page now (the HUD's link areas, in pixels of
+## a page of PAGE_SIZE), for the web page to open it inside the player's own gesture: as
+## shares of the page, with the address (GameStats.PRIVACY_URL). Whether or not the
+## statistics are on, as Options' link shows either way.
+func link_areas(areas: Array, page_size: Vector2) -> void:
+	if page == null or page_size.x <= 0.0 or page_size.y <= 0.0:
+		return
+	var shares: Array = []
+	for area: Rect2 in areas:
+		shares.append([area.position.x / page_size.x, area.position.y / page_size.y, area.size.x / page_size.x, area.size.y / page_size.y])
+	page.link_areas(JSON.stringify({"url": GameStats.PRIVACY_URL, "areas": shares}))
+
+
 ## The web page's reporting, or null off the web or where the page has none.
 static func web_page() -> Object:
 	if not OS.has_feature("web") or not bool(JavaScriptBridge.eval("Boolean(window.__tiReporting)")):
@@ -143,3 +156,6 @@ class WebPage extends RefCounted:
 
 	func stats(json: String) -> void:
 		_reporting.stats(json)
+
+	func link_areas(json: String) -> void:
+		_reporting.linkAreas(json)

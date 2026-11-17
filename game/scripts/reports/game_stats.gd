@@ -24,8 +24,9 @@ extends Node
 ##     (anonymous_id), which the web page applies in its own code before the engine runs
 ##     (tools/check_web_reporting.mjs checks that it uses these names and sizes).
 ## Main adds it once the world is ready, where the statistics have somewhere to go (on the
-## web, a page that sends them). It runs only while play does (pausable), and does a few
-## additions a frame and the snapshot once a second.
+## web, a page that sends them); what it hands on goes out only once the player has said
+## yes (CrashReports). It runs only while play does (pausable), and does a few additions a
+## frame and the snapshot once a second.
 
 ## The snapshot's and the stats' contents, as sent.
 signal snapshot_changed(snapshot: Dictionary)
@@ -58,15 +59,36 @@ const TOP_AREAS := 8
 const MAX_CHANGES := 10
 ## A frame longer than this is not play (a stall of the page while hidden, say).
 const MAX_FRAME_S := 2.0
-## The loading funnel, in order: the page opened (with the statistics allowed), its files
-## downloaded, the start prompt up, play started (its tap or click), and play still going
-## after STATS_FIRST_S (the first timed stats).
+## The loading funnel, in order: the page opened, its files downloaded, the start prompt
+## up, play started (its tap or click), and play still going after STATS_FIRST_S (the
+## first timed stats). Counted only from a yes on: every step of a visit that began with
+## the yes given earlier, and on the visit the player says yes the steps after it.
 const FUNNEL_STEPS := ["page_opened", "download_finished", "start_prompt", "play_started", "playing_1min"]
+## Asking first (owner, 2026-11-17: "Ask once on first launch"): nothing is stored for
+## the statistics or sent until the player says yes; the default is no statistics. The
+## question the start prompt asks (with the privacy page's address under it) and its two
+## answers, of equal size and weight; Options' switch and the line under it. The answer is
+## kept as "yes" or "no" (nothing kept: not asked yet). Play started without an answer
+## counts one visit asked; after CONSENT_MAX_ASKS such visits the answer is "no" and the
+## question stops. Options' switch changes the answer either way at any time. The desktop
+## builds use the same words.
+const CONSENT_QUESTION := "Help improve the game? Send anonymous crash reports and statistics. You can change this in Options."
+const CONSENT_YES := "Yes, send"
+const CONSENT_NO := "No thanks"
+const CONSENT_SWITCH := "Send anonymous statistics"
+const CONSENT_OPTIONS_LINE := "Used only to fix and improve the game."
+const CONSENT_MAX_ASKS := 3
+
+## The privacy page: what the statistics hold, the anonymous id and how to change the
+## answer. PRIVACY.md at the repository's root is its text, which the owner's website
+## publishes at this address; the start prompt's question and Options link to it.
+const PRIVACY_URL := "https://grandtreasureisland.vercel.app/privacy"
 ## The anonymous id (owner, 2026-11-17: "Let's just switch to permanent IDs ... People can
 ## just turn off analytics if they don't like it"): ANONYMOUS_ID_BYTES random bytes, as
-## hex, made the first time the statistics are sent and kept with the reporting state (on
-## the web, the browser's storage for the site) until the player turns the statistics off,
-## which deletes it (turning them on again makes a new one), or clears the site's data.
+## hex, made the first time the statistics are sent (after a yes) and kept with the
+## reporting state (on the web, the browser's storage for the site) until the player turns
+## the statistics off, which deletes it (turning them on again makes a new one), or clears
+## the site's data.
 ## Never derived from anything about the device or the player; sent only in the reports,
 ## as their user id, so Sentry counts players and returning players.
 const ANONYMOUS_ID_BYTES := 16
@@ -273,6 +295,14 @@ static func coarse_gpu(adapter: String) -> String:
 	text = RegEx.create_from_string("(?i)\\b(Direct3D\\S*|D3D\\S*|vs_\\S+|ps_\\S+|OpenGL( ES)?\\S*|Vulkan\\S*|Unspecified Version)").sub(text, "", true)
 	text = RegEx.create_from_string("\\s+").sub(text, " ", true).strip_edges(true, true).trim_suffix(",").strip_edges()
 	return text.left(60) if not text.is_empty() else "unknown"
+
+
+## Opens the privacy page in the system's browser, for the desktop builds. On the web
+## the page opens it itself, inside the player's tap or click on the start prompt's
+## question's link or Options' (CrashReports.link_areas): a browser lets a page open another only
+## inside the player's own gesture, which the game's input, handled a frame later, is not.
+static func open_privacy() -> void:
+	OS.shell_open(PRIVACY_URL)
 
 
 ## The anonymous id to use: KEPT when it is one (ANONYMOUS_ID_BYTES bytes as lowercase
