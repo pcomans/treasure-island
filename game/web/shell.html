@@ -430,6 +430,20 @@ function tiTraceText(env, a) {
 	const sources = new WeakMap();
 	const attached = new WeakMap();
 	const shaderMs = new WeakMap();
+	// A shader stage's details from its source: which of Godot's GLES3 shaders it is
+	// (scene, sky, canvas, particles or another), every define it is built with (the
+	// specialization and variant defines Godot puts first, then the material's own), and
+	// every identifier of the material's own code (Godot prefixes them m_).
+	const details = (src) => {
+		const head = src.slice(0, 12000);
+		return {
+			kind: /SceneDataBlock/.test(src) ? 'scene' : /\bFrameData\b/.test(src) ? 'particles' : /DirectionalLights/.test(src) ? 'sky' : /canvas_/i.test(head) ? 'canvas' : 'other',
+			defines: [...head.matchAll(/^#define ([A-Za-z0-9_]+)\s*$/gm)].map((m) => m[1]),
+			ids: [...new Set([...src.matchAll(/\bm_([A-Za-z0-9_]+)/g)].map((m) => m[1]))],
+			size: src.length,
+		};
+	};
+	const detail = new WeakMap();
 	const name = (src) => {
 		// A shader's name from its source: the material's own uniforms (Godot prefixes
 		// them m_), the specialization defines Godot puts first, and its size.
@@ -447,7 +461,10 @@ function tiTraceText(env, a) {
 	}
 	for (const proto of [window.WebGL2RenderingContext && WebGL2RenderingContext.prototype].filter(Boolean)) {
 		wrap(proto, 'shaderSource', function (original, args) {
-			sources.set(args[0], name(String(args[1] || '')));
+			if (args[0] && typeof args[0] === 'object') {
+				sources.set(args[0], name(String(args[1] || '')));
+				detail.set(args[0], details(String(args[1] || '')));
+			}
 			return original.apply(this, args);
 		});
 		for (const method of ['compileShader', 'getShaderParameter']) {
@@ -480,7 +497,11 @@ function tiTraceText(env, a) {
 					const shaders = attached.get(args[0]) || [];
 					const total = shaders.reduce((s, sh) => s + (shaderMs.get(sh) || 0), (shaderMs.get(args[0]) || 0) + ms);
 					const frag = shaders.map((sh) => sources.get(sh)).filter(Boolean);
-					log.programs.push([round(now()), round(total), frag[frag.length - 1] || frag[0] || 'unknown']);
+					// Both stages: the same defines, and between them every identifier of the material's code.
+					const more = shaders.map((sh) => detail.get(sh)).filter(Boolean);
+					const d = more[0] || null;
+					log.programs.push([round(now()), round(total), frag[frag.length - 1] || frag[0] || 'unknown',
+						d ? {kind: d.kind, defines: d.defines.join(' '), ids: [...new Set(more.flatMap((x) => x.ids))].join(','), size: more.reduce((n, x) => n + x.size, 0)} : null]);
 					counters[0] += 1;
 				}
 				return result;
@@ -655,6 +676,9 @@ function tiTraceText(env, a) {
 			for (let i = 0; i + n <= batch.rows.length; i += n) log.rows.push(batch.rows.slice(i, i + n));
 			const origin = log.header ? log.header.page_ms_at_origin : 0;
 			for (const e of batch.events) log.events.push([round(origin + e[0]), e[1], e[2]]);
+		},
+		census(json) {
+			log.census = JSON.parse(json);
 		},
 		end(json) {
 			log.end = JSON.parse(json);

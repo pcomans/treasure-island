@@ -126,6 +126,14 @@ var _backing := 0
 var _drive_ticks := 0
 var _car: DrivableCar
 var _probes: Array[Node] = []
+## The census of the materials the world can draw (_start_census), taken before the
+## records start: BaseMaterial3D materials waiting for their generated shader's RID
+## (inspect_native_shader_code answers through the group below, in order), the RIDs as
+## they come, and the census itself.
+var _census_base: Array[Material] = []
+var _census_rids: Array[RID] = []
+var _census_entries := {}
+var _census: Dictionary = {}
 var _vehicle_probes: Array[Node] = []
 
 
@@ -161,6 +169,128 @@ func _ready() -> void:
 	_prepare_route()
 	_event("trace", "start", 0)
 	print("DRIVE_TRACE start web=%s route_m=%.0f" % [_web, _cum[_cum.size() - 1]])
+
+
+## Every material the world can draw as play starts, for telling which ones the shaders
+## compiled in play belong to: each material's kind, its shader (a file, or for a
+## StandardMaterial3D the code Godot generated for it, read through the engine's own
+## shader inspector, Material.inspect_native_shader_code, which answers the group
+## "_native_shader_source_visualizer" a frame later), the shader's uniform names, how
+## many nodes draw it and how many of them as MultiMesh instances, the shortest
+## visibility range among them, the 50 m cells they stand in, and where the spawn camera
+## looks. Taken in the frames before the records start, so its cost is not in them.
+func _start_census() -> void:
+	add_to_group("_native_shader_source_visualizer")
+	var camera := _main.player.get_camera()
+	_census = {"camera": [camera.global_position.x, camera.global_position.y, camera.global_position.z, -camera.global_basis.z.x, -camera.global_basis.z.y, -camera.global_basis.z.z, camera.fov, camera.far]}
+	for node: Node in _main.find_children("*", "GeometryInstance3D", true, false):
+		var geometry := node as GeometryInstance3D
+		var mesh: Mesh = null
+		var instanced := false
+		if geometry is MeshInstance3D:
+			mesh = (geometry as MeshInstance3D).mesh
+		elif geometry is MultiMeshInstance3D and (geometry as MultiMeshInstance3D).multimesh != null:
+			mesh = (geometry as MultiMeshInstance3D).multimesh.mesh
+			instanced = true
+		var used: Array[Material] = []
+		if geometry.material_override != null:
+			used.append(geometry.material_override)
+		elif mesh != null:
+			for surface in mesh.get_surface_count():
+				var material: Material = (geometry as MeshInstance3D).get_surface_override_material(surface) if geometry is MeshInstance3D else null
+				if material == null:
+					material = mesh.surface_get_material(surface)
+				if material != null:
+					used.append(material)
+		if geometry.material_overlay != null:
+			used.append(geometry.material_overlay)
+		var centre := geometry.global_transform * geometry.get_aabb().get_center()
+		var cell := "%d,%d" % [floori(centre.x / 50.0), floori(centre.z / 50.0)]
+		for first: Material in used:
+			var material := first
+			while material != null:
+				_census_add(material, geometry, instanced, cell)
+				material = material.next_pass
+
+
+func _census_add(material: Material, geometry: GeometryInstance3D, instanced: bool, cell: String) -> void:
+	var id := material.get_instance_id()
+	var entry: Dictionary = _census_entries.get(id, {})
+	if entry.is_empty():
+		entry = {"kind": material.get_class(), "path": material.resource_path, "shader": "", "uniforms": [], "users": 0, "instanced": 0, "range": 0.0, "cells": {}, "example": "%s/%s" % [geometry.get_parent().name, geometry.name]}
+		if material is ShaderMaterial and (material as ShaderMaterial).shader != null:
+			var shader := (material as ShaderMaterial).shader
+			entry.shader = shader.resource_path if not shader.resource_path.is_empty() else "built-in"
+			entry.uniforms = shader.get_shader_uniform_list().map(func(uniform: Dictionary) -> String: return str(uniform.name))
+		elif material is BaseMaterial3D:
+			entry["inspect"] = _census_base.size()
+			_census_base.append(material)
+			material.inspect_native_shader_code()
+			# The features that name the defines of its generated shader (what tells one
+			# StandardMaterial3D's programs from another's), in case the inspector's
+			# answers cannot be matched to the materials asked.
+			var base := material as BaseMaterial3D
+			var features: Array[String] = []
+			if base.cull_mode == BaseMaterial3D.CULL_DISABLED:
+				features.append("DO_SIDE_CHECK")
+			if base.vertex_color_use_as_albedo:
+				features.append("COLOR_USED")
+			if base.normal_enabled:
+				features.append("NORMAL_MAP_USED")
+			if base.backlight_enabled:
+				features.append("LIGHT_BACKLIGHT_USED")
+			if base.rim_enabled:
+				features.append("LIGHT_RIM_USED")
+			if base.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA_DEPTH_PRE_PASS:
+				features.append("USE_OPAQUE_PREPASS")
+			if base.shading_mode == BaseMaterial3D.SHADING_MODE_UNSHADED:
+				features.append("MODE_UNSHADED")
+			if base.billboard_mode != BaseMaterial3D.BILLBOARD_DISABLED:
+				features.append("billboard")
+			if base.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED:
+				features.append("transparency %d" % base.transparency)
+			entry["features"] = features
+		_census_entries[id] = entry
+	entry.users += 1
+	if instanced:
+		entry.instanced += 1
+	if geometry.visibility_range_end > 0.0:
+		entry.range = geometry.visibility_range_end if entry.range == 0.0 else minf(entry.range, geometry.visibility_range_end)
+	if (entry.cells as Dictionary).size() < 400:
+		entry.cells[cell] = true
+
+
+## The engine's shader inspector's answer: a material's shader, in the order asked.
+func _inspect_shader(shader: RID) -> void:
+	_census_rids.append(shader)
+
+
+func _finish_census() -> void:
+	remove_from_group("_native_shader_source_visualizer")
+	var uniform := RegEx.create_from_string("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
+	var render_mode := RegEx.create_from_string("render_mode\\s+([^;]*);")
+	var materials: Array = []
+	for entry: Dictionary in _census_entries.values():
+		if entry.has("inspect"):
+			var index := int(entry.inspect)
+			entry.erase("inspect")
+			if index < _census_rids.size():
+				var code := RenderingServer.shader_get_code(_census_rids[index])
+				entry.shader = "generated %d" % _census_rids[index].get_id()
+				entry.uniforms = uniform.search_all(code).map(func(found: RegExMatch) -> String: return found.get_string(1))
+				var mode := render_mode.search(code)
+				entry["render_mode"] = mode.get_string(1) if mode != null else ""
+		entry.cells = (entry.cells as Dictionary).keys()
+		materials.append(entry)
+	_census["materials"] = materials
+	# The inspector answers in the order asked only if every material asked had a shader.
+	_census["inspector"] = {"asked": _census_base.size(), "answered": _census_rids.size()}
+	_census_entries.clear()
+	_census_base.clear()
+	# To the page now, a tick before the records start, so its cost is in none of them.
+	if _js != null:
+		_js.census(JSON.stringify(_census))
+	print("DRIVE_TRACE census materials=%d inspected=%d" % [materials.size(), _census_rids.size()])
 
 
 ## The probes round the vehicles (the manager, its cars, breakers, the bending
@@ -430,6 +560,7 @@ func _begin_report() -> void:
 		_js.begin(JSON.stringify(header))
 	elif _out != null:
 		_out.store_line(JSON.stringify({"header": header}))
+		_out.store_line(JSON.stringify({"census": _census}))
 	print("DRIVE_TRACE header renderer=%s adapter=%s viewport=%s touch=%s" % [header.renderer, header.adapter, header.viewport, header.touch])
 
 
@@ -539,7 +670,10 @@ func _physics_process(delta: float) -> void:
 		"wait":
 			# Play has started: on the web after the start prompt's tap.
 			if _main.is_play_ready() and player.is_processing_unhandled_input():
-				if _step_ticks > 60:
+				if _step_ticks == 60:
+					_start_census()
+				elif _step_ticks > 60 and (_census_rids.size() >= _census_base.size() or _step_ticks > 120):
+					_finish_census()
 					_wrap_vehicles(_main.vehicles)
 					_begin_report()
 					_set_step("baseline")
