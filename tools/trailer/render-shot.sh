@@ -63,19 +63,27 @@ for summary in "${summaries[@]}"; do
   echo "Shot ${summary}"
 done
 echo "Log ${work}/render.log"
+status=0
 "${runner[@]}" "${work}/render.log" 7200 --require-complete -- "${engine[@]}" \
   --resolution 960x540 --disable-vsync --fixed-fps "${fps}" \
-  --script res://game/tests/shared/trailer_shot.gd -- "${flags[@]}"
+  --script res://game/tests/shared/trailer_shot.gd -- "${flags[@]}" || status=$?
 if [ "${mode}" = stills ]; then
   echo "Stills in ${capture}"
-  exit 0
+  exit "${status}"
 fi
 
 # The Isle House trailer's colour conversion: full-range RGB to limited BT.709.
 convert="scale=in_range=pc:out_range=tv:out_color_matrix=bt709:flags=accurate_rnd+full_chroma_int,format=yuv420p,setsar=1,setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709"
+# Shots the driver finished are encoded even when a later one failed.
 for summary in "${summaries[@]}"; do
   read -r name fps width height frames <<< "${summary}"
   raw="${capture}/${name}/frames.rgb"
+  if ! grep -q "^SHOT_DONE ${capture}/${name}\$" "${work}/render.log"; then
+    echo "${name}: not rendered (see ${work}/render.log)" >&2
+    rm -f "${raw}"
+    status=1
+    continue
+  fi
   expected=$(( width * height * 3 * frames ))
   actual=$(stat -f %z "${raw}" 2>/dev/null || stat -c %s "${raw}")
   [ "${actual}" = "${expected}" ] || { echo "${raw} is ${actual} bytes, expected ${expected}; kept" >&2; exit 1; }
@@ -92,3 +100,4 @@ for summary in "${summaries[@]}"; do
   rm -f "${raw}"
   echo "Wrote ${out}: ${encoded} frames at ${fps} fps ($(ffprobe -v error -show_entries format=duration -of csv=p=0 "${out}") s); raw frames deleted"
 done
+exit "${status}"

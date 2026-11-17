@@ -103,7 +103,11 @@ interest, fog thinned with altitude, glow off, and a fixed clock
 (`--fixed-fps`). It holds the first pose for 90 frames before anything moves:
 Metal compiles the first frames' pipelines for minutes on a fresh cache, so let
 a quiet run go on rather than restarting it. A capture never pauses: the game's
-pause on focus loss is kept off, and a pause would fail the run.
+pause on focus loss is kept off, and a pause would fail the run. macOS stops
+drawing a hidden or covered window while physics runs on, so the small capture
+window stays on top; don't minimise it or switch it to another desktop (the run
+fails rather than film a jump). `--batch` still encodes the shots that finished
+before a failed one.
 
 Later: a recorded-input track (car crashes) can join `chester.track` as another
 kind of entry without changing the rest.

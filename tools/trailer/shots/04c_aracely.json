@@ -1,6 +1,6 @@
 {
  "name": "04c_aracely",
- "description": "Explore local landmarks: Aracely Cafe at the south tip of Building 33 F, its sign, entrance and glazed run; Chester stands by the sign; slow lateral drift.",
+ "description": "Explore local landmarks: Aracely Cafe at the south tip of Building 33 F: its Aracely sign slab in front of the entrance and glazed frontage, Chester beside the sign; slow lateral drift.",
  "duration": 1.5,
  "handle": 0.5,
  "fps": 30,
@@ -11,12 +11,12 @@
  "street_detail": true,
  "chester": {
   "at": [
-   -252.0,
-   -432.0
+   -257.0,
+   -436.5
   ],
   "facing": [
-   -244.0,
-   -418.0
+   -251.5,
+   -428.0
   ]
  },
  "camera": {
@@ -25,28 +25,28 @@
    {
     "t": -0.5,
     "position": [
-     -246.5,
-     4.5,
-     -422.0
+     -251.0,
+     4.1,
+     -427.6
     ],
     "target": [
-     -272.0,
-     4.8,
-     -452.0
+     -286.64,
+     2.5,
+     -445.76
     ],
     "fov": 42.0
    },
    {
     "t": 2.0,
     "position": [
-     -248.0,
-     4.55,
-     -421.0
+     -251.8,
+     4.12,
+     -428.8
     ],
     "target": [
-     -273.2,
-     4.8,
-     -451.4
+     -287.118,
+     2.52,
+     -447.579
     ],
     "fov": 42.0
    }

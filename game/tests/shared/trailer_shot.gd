@@ -103,6 +103,8 @@ func _run() -> void:
 		_stop("trailer capture needs native Forward+ rendering (omit --headless)")
 		return
 	root.title = "Treasure Island trailer capture"
+	# A covered window stops drawing on macOS; keep the small capture window on top.
+	DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
 	auto_accept_quit = false
 	root.close_requested.connect(func() -> void: _stop("capture window close was requested"))
 	print("SHOT_DEVICE ", DisplayServer.get_name(), " / ", RenderingServer.get_video_adapter_name())
@@ -544,7 +546,9 @@ func _check_clock() -> String:
 		return "the game paused during the capture"
 	var physics := Engine.get_physics_frames()
 	if last_physics_frame >= 0 and physics != last_physics_frame + ticks_per_frame:
-		return "frame step ran %d physics ticks, not %d (run with --fixed-fps %d)" % [physics - last_physics_frame, ticks_per_frame, fps]
+		# macOS stops drawing a hidden or covered window while physics runs on, so
+		# frame_post_draw waits (an Isle House render paused this way).
+		return "frame step ran %d physics ticks, not %d: drawing stopped (was the capture window hidden or covered?) or --fixed-fps %d is missing" % [physics - last_physics_frame, ticks_per_frame, fps]
 	last_physics_frame = physics
 	if not is_equal_approx(root.get_process_delta_time(), 1.0 / fps):
 		return "frame step was %.5f s, not 1/%d (run with --fixed-fps %d)" % [root.get_process_delta_time(), fps, fps]
