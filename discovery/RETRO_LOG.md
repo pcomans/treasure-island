@@ -27464,3 +27464,7 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Taking the two table rows straight from `git show 2342b99c:README.md` and diffing them against the result made "as before the Chester change" exact, not retyped. Each replaced sentence was matched once and asserted before writing.
 - What did not work well: Three review rounds went into a per-file reservation that the owner then found too heavy. The short form was always available. I built the long one because the brief asked for a file-level split, and I did not first ask whether one plain sentence would do.
 - What the team should change next time: For a licensing carve-out, show the owner the one-sentence version first and add file-level detail only if the owner asks for it.
+
+### ti-code-review licence-chester-short-20261117 — 2026-11-17 — review of `docs/licence-chester-short-20261117` at 8785a2f4
+
+- Diffing the two table rows against `git show 2342b99c:README.md` and grepping the Markdown for the long form's phrases settled the cut-down in a handful of commands; the one remaining reader trap (the chest avatar's textures under CC BY beside the reserved character) is a wording note, not a re-audit.
