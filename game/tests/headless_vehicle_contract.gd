@@ -407,7 +407,11 @@ func _case_enter_exit() -> bool:
 ## (c) Made as play makes them: by day nothing is lit or made; at night (the clock
 ## pinned at 22:00, the sun far under the horizon) the flashlight fades on by itself
 ## at the chest, shining from a little ahead of it where the camera looks, down
-## toward the ground, and turns with the camera; the Sun lights the sky alone and
+## toward the ground, and turns with the camera; the chest casts no shadow in it
+## (owner, 2026-11-17): every piece of the chest is on NightLights.CHEST_LAYER alone,
+## which the flashlight's shadow caster mask leaves out and nothing else is on, while
+## the flashlight still lights the chest, the Sun lights it and casts its shadow and
+## the player's camera draws it; the Sun lights the sky alone and
 ## the parked cars' lamps go out (the global DaySun hands the engine); every glowing
 ## building material is a lamp or a daylight fill, the fills dark and the lamps as
 ## they were. In a car the flashlight hides and the car's two headlights shine
@@ -497,6 +501,23 @@ func _case_night_lights() -> bool:
 	or not _require(Vector2(beam.x, beam.z).normalized().dot(Vector2(forward.x, forward.z)) > 0.99 and beam.y < -0.05, "The flashlight must point where the camera looks, down toward the ground (beam %s, camera forward %s)." % [beam, forward]) \
 	or not _require(sun.sky_mode == DirectionalLight3D.SKY_MODE_SKY_ONLY and written.get(&"parked_lamps") == 0.0, "At night the Sun must light the sky alone and the parked cars' lamps be out (sky mode %d, parked lamps %s)." % [sun.sky_mode, written.get(&"parked_lamps")]) \
 	or not _require(fills_dark and lamps_lit, "At night every building's daylight fill must be dark and every lamp as it was (fills dark %s, lamps lit %s)." % [fills_dark, lamps_lit]):
+		DaySun.use_engine_globals()
+		return false
+	# The chest casts no shadow in its own flashlight. The engine leaves a mesh out of
+	# a light's shadows when none of the mesh's layers is in that light's shadow
+	# caster mask, so: every piece of the chest on the chest's layer alone, which the
+	# flashlight's caster mask leaves out (and only it, nothing else on that layer, so
+	# everything else still shadows the beam), its light cull mask keeps (the chest
+	# still lit), and the Sun lights and shadows and the player's camera draws.
+	var chest_layer := NightLights.CHEST_LAYER
+	var pieces := _player.avatar_pivot.find_children("*", "GeometryInstance3D", true, false)
+	var off_layer := pieces.filter(func(piece: GeometryInstance3D) -> bool: return piece.layers != chest_layer)
+	var casting := pieces.filter(func(piece: GeometryInstance3D) -> bool: return piece.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF)
+	var others := root.find_children("*", "GeometryInstance3D", true, false).filter(func(node: GeometryInstance3D) -> bool: return (node.layers & chest_layer) != 0 and not _player.avatar_pivot.is_ancestor_of(node))
+	var camera_mask := _player.get_camera().cull_mask
+	print("NIGHT chest layer %d: %d pieces, %d casting, %d off it, %d other nodes on it; flashlight casters %x, lights %x; Sun casters %x, lights %x; camera %x" % [chest_layer, pieces.size(), casting.size(), off_layer.size(), others.size(), flashlight.shadow_caster_mask, flashlight.light_cull_mask, sun.shadow_caster_mask, sun.light_cull_mask, camera_mask])
+	if not _require(not casting.is_empty() and off_layer.is_empty() and (flashlight.shadow_caster_mask & chest_layer) == 0 and (flashlight.shadow_caster_mask | chest_layer) == 0xFFFFFFFF and others.is_empty(), "The chest must cast no shadow in the flashlight: every piece on the chest's layer alone and the flashlight's shadow caster mask every layer but it, nothing else on it (pieces %d, casting %d, off the layer %s, flashlight casters %x, other nodes on it %s)." % [pieces.size(), casting.size(), off_layer, flashlight.shadow_caster_mask, others]) \
+	or not _require((flashlight.light_cull_mask & chest_layer) != 0 and (sun.light_cull_mask & chest_layer) != 0 and (sun.shadow_caster_mask & chest_layer) != 0 and (camera_mask & chest_layer) != 0, "The flashlight and the Sun must still light the chest, the Sun cast its shadow and the player's camera draw it (flashlight lights %x, Sun lights %x, Sun casters %x, camera %x)." % [flashlight.light_cull_mask, sun.light_cull_mask, sun.shadow_caster_mask, camera_mask]):
 		DaySun.use_engine_globals()
 		return false
 	# It turns with the camera (turned back after, for the cases that walk).
