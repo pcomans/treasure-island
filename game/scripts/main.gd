@@ -6,6 +6,10 @@ extends Node3D
 @onready var hud: GameHUD = $Interface/HUD
 
 const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
+## The drive trace: a scripted drive round the island with a record of every frame,
+## an opt-in diagnostic for the web build's hitches, made only when asked for
+## (drive_trace_requested) and never loaded otherwise.
+const DRIVE_TRACE_PATH := "res://game/scripts/debug/drive_trace.gd"
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
@@ -233,7 +237,17 @@ func _ready() -> void:
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
 	_load_world_after_paint.call_deferred()
+	if drive_trace_requested():
+		add_child((load(DRIVE_TRACE_PATH) as GDScript).new(self))
 	STARTUP_MARKS.mark("main_ready_end")
+
+
+## Whether this run is the drive trace (DRIVE_TRACE_PATH): ?trace=drive in the web
+## page's address, or --trace-drive after -- natively. Nothing else asks for it.
+static func drive_trace_requested() -> bool:
+	if OS.has_feature("web"):
+		return str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('trace')")) == "drive"
+	return OS.get_cmdline_user_args().has("--trace-drive")
 
 
 ## Touch play, as on a touch browser (navigator.maxTouchPoints > 0: _ready calls
