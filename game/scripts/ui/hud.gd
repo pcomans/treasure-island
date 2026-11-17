@@ -16,12 +16,15 @@ signal sound_settings_changed(volume: float, muted: bool, keep: bool)
 ## The anonymous statistics switched on or off on the options screen (main.gd tells
 ## the page and keeps it; CrashReports).
 signal crash_reports_chosen(on: bool)
-## Options' link to the privacy page pressed (main.gd opens it on desktop; on the web
-## the page opens it inside the tap or click, link_areas_changed).
+## The start prompt's question about them answered: "Yes, send" (true) or "No thanks"
+## (false); main.gd tells the page and keeps it, as for the switch.
+signal consent_answered(yes: bool)
+## A link to the privacy page pressed, the question's or Options' (main.gd opens it on
+## desktop; on the web the page opens it inside the tap or click, link_areas_changed).
 signal privacy_link_pressed
 ## Where a tap or click opens the privacy page now, in the HUD's pixels: the start
-## prompt's line about the statistics and Options' link, each while it shows (main.gd
-## tells the web page, which opens the page inside the player's own gesture).
+## prompt's question's link and Options' link, each while it shows (main.gd tells the
+## web page, which opens the page inside the player's own gesture).
 signal link_areas_changed(areas: Array)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
 signal loading_shown(text: String)
@@ -75,21 +78,24 @@ const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look �
 const START_HOME_SCREEN_NOTE := "For full screen: Share › Add to Home Screen"
 const START_SILENT_NOTE := "Turn off silent mode to hear sound"
 const START_NOTE_FONT_PX := 24
-## The start prompt's line about the anonymous statistics (owner, 2026-11-17), on the
-## web, until the page has recorded it shown (CrashReports): the last of the notes, in
-## the credits' notes' colour, at the notes' size on a touch screen and the controls
-## line's on a desktop. On one line where the page is wide enough (a phone as wide as an
-## iPhone 16 Pro held sideways), else wrapped to the page's width less
-## REPORTS_NOTE_SIDES_PX (a phone held upright). Wrapped on a page wider than tall (a
-## narrower phone held sideways), its second line would push three notes past the top of
-## the page, so the home screen hint gives way on that visit (it shows again on the next,
-## when this line no longer does). In the web font's characters, as the other notes.
-const START_REPORTS_NOTE := "Sends anonymous statistics with a random ID. Turn off in Options. grandtreasureisland.vercel.app/privacy"
-const REPORTS_NOTE_SIDES_PX := 96.0
-## The line ends with the privacy page's address (GameStats.PRIVACY_URL, without its
-## scheme), drawn as a link in the headings' blue and underlined; a tap or click on the
-## line opens the page (link_areas_changed).
-const REPORTS_NOTE_ADDRESS := "grandtreasureisland.vercel.app/privacy"
+## The start prompt's question about the anonymous statistics (owner, 2026-11-17: "Ask
+## once on first launch"; GameStats.CONSENT_QUESTION and its two answers), on the web
+## while the answer is still to come (CrashReports.should_ask): a section of its own under
+## the notes, the question at most CONSENT_WIDTH_EM of its size wide (two lines) and no
+## wider than the page less CONSENT_SIDES_PX, at the notes' size on a touch screen and
+## the controls line's on a desktop; under it the privacy page's address as a link; then
+## "Yes, send" and "No thanks" side by side, the same size and look (both as wide as the
+## wider's words, CONSENT_BUTTON_MIN_PX or more), neither filled nor focused, so neither
+## is the default. A tap on the section's words or between its buttons does nothing:
+## only an answer answers and only Play plays. The panel keeps START_EDGE_PX inside the
+## page: within the top START_PANEL_SHARE where it fits there, else reaching as far down
+## as it needs (the question makes it taller than that on a phone held sideways); where
+## even the page is too short for it, the home screen hint gives way.
+const CONSENT_WIDTH_EM := 29.0
+const CONSENT_SIDES_PX := 96.0
+const CONSENT_BUTTON_MIN_PX := 200.0
+const CONSENT_GAP_PX := 24
+const START_EDGE_PX := 16.0
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
 ## headings' colour with this dark type.
@@ -187,7 +193,8 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var privacy_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyHeading
 @onready var privacy_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow
 @onready var crash_reports: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/CrashReports
-@onready var privacy_link: LinkButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/PrivacyLink
+@onready var privacy_link_box: CenterContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/PrivacyLinkBox
+@onready var privacy_link: LinkButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/PrivacyLinkBox/PrivacyLink
 @onready var privacy_note: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyNote
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
@@ -230,12 +237,19 @@ var _menu_before := {}
 ## The start prompt's line of controls (with a mouse), made the first time.
 var _start_controls: Label
 ## The start prompt's notes (set_start_notes), made the first time: the home
-## screen hint's line, the silent mode line and the reports' line.
+## screen hint's line and the silent mode line; and the question about the anonymous
+## statistics (CONSENT_WIDTH_EM): its words, its link to the privacy page (in a box a
+## thumb's height on a touch screen, all of it the link's area) and its two answers.
 var _start_notes: VBoxContainer
 var _home_screen_hint: Label
 var _silent_note: Label
-var _reports_note: RichTextLabel
-## Which notes main.gd asked for: [home_screen, silent_mode, reports].
+var consent_question: VBoxContainer
+var _consent_text: Label
+var consent_link_box: CenterContainer
+var consent_link: LinkButton
+var consent_yes: Button
+var consent_no: Button
+## Which notes main.gd asked for: [home_screen, silent_mode, question].
 var _notes_asked := [false, false, false]
 ## Whether the privacy page's link areas may have moved (_process reads them), and the
 ## areas last handed on.
@@ -305,6 +319,10 @@ func _ready() -> void:
 	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
 	crash_reports.toggled.connect(func(on: bool) -> void: crash_reports_chosen.emit(on))
 	privacy_link.pressed.connect(func() -> void: privacy_link_pressed.emit())
+	crash_reports.text = GameStats.CONSENT_SWITCH
+	privacy_note.text = GameStats.CONSENT_OPTIONS_LINE
+	privacy_link.text = GameStats.PRIVACY_URL.trim_prefix("https://")
+	_style_link(privacy_link)
 	var switch_off := DPITexture.create_from_string(SWITCH_OFF_SVG)
 	for switch: CheckButton in [show_frame_rate, sound_mute, crash_reports]:
 		switch.add_theme_icon_override("unchecked", switch_off)
@@ -336,7 +354,7 @@ func _ready() -> void:
 	_fit_load_icon()
 	resized.connect(_fit_credits)
 	_fit_credits()
-	resized.connect(_fit_reports_note)
+	resized.connect(_fit_start_prompt)
 	resized.connect(_links_moved)
 
 
@@ -348,9 +366,10 @@ func _fit_load_icon() -> void:
 
 
 func _process(delta: float) -> void:
-	# While a link to the privacy page can show (the start prompt's line, Options), its
+	# While a link to the privacy page can show (the start prompt's question, Options), its
 	# area is read each frame, after the layout has settled; once after it goes.
-	if _links_dirty or not _link_areas.is_empty() or options_screen.visible or (_reports_note != null and _reports_note.is_visible_in_tree()):
+	_fit_start_prompt()
+	if _links_dirty or not _link_areas.is_empty() or options_screen.visible or (consent_question != null and consent_question.is_visible_in_tree()):
 		_links_dirty = false
 		_hand_on_link_areas()
 	if _feedback_seconds > 0.0:
@@ -472,26 +491,27 @@ func start_prompt_text() -> String:
 ## mouse), which main.gd asks the web page for (owner, 2026-11-16 and 2026-11-17):
 ## home_screen, how to play full screen from the home screen (Safari on an iPhone
 ## or iPad, outside a home screen app); silent_mode, that the sound needs the silent
-## mode off (any iPhone or iPad); reports, the line about the anonymous statistics
-## (any web page, until it has been shown once; START_REPORTS_NOTE). None shows
-## without the prompt, and play's first start ends them with it.
-func set_start_notes(home_screen: bool, silent_mode: bool, reports := false) -> void:
+## mode off (any iPhone or iPad); ask, the question about the anonymous statistics (any
+## web page, while it is still to be answered; CONSENT_WIDTH_EM). None shows without the
+## prompt, and play's first start ends them with it.
+func set_start_notes(home_screen: bool, silent_mode: bool, ask := false) -> void:
 	if _start_text.is_empty():
 		return
 	if _start_notes == null:
-		if not home_screen and not silent_mode and not reports:
+		if not home_screen and not silent_mode and not ask:
 			return
 		_make_start_notes()
-	_notes_asked = [home_screen, silent_mode, reports]
+	_notes_asked = [home_screen, silent_mode, ask]
+	_home_screen_hint.visible = home_screen
 	_silent_note.visible = silent_mode
-	_reports_note.visible = reports
-	_start_notes.visible = home_screen or silent_mode or reports
-	_fit_reports_note()
+	_start_notes.visible = home_screen or silent_mode
+	consent_question.visible = ask
+	_fit_start_prompt()
 	_links_moved()
 
 
 ## The notes' lines under the Play button, after the line of controls where there is
-## one, each centred on the panel.
+## one, each centred on the panel; then the question about the anonymous statistics.
 func _make_start_notes() -> void:
 	_start_notes = VBoxContainer.new()
 	_start_notes.name = "StartNotes"
@@ -500,21 +520,53 @@ func _make_start_notes() -> void:
 	_start_notes.add_child(_home_screen_hint)
 	_silent_note = _start_note_label("SilentNote", START_SILENT_NOTE)
 	_start_notes.add_child(_silent_note)
-	# The line about the statistics: its address a link, in the headings' blue, underlined.
-	_reports_note = RichTextLabel.new()
-	_reports_note.name = "ReportsNote"
-	_reports_note.bbcode_enabled = true
-	_reports_note.fit_content = true
-	_reports_note.scroll_active = false
-	_reports_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_reports_note.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_reports_note.text = "[center]%s[color=#%s][u]%s[/u][/color][/center]" % [START_REPORTS_NOTE.trim_suffix(REPORTS_NOTE_ADDRESS), CONTROLS_HEADING_COLOR.to_html(false), REPORTS_NOTE_ADDRESS]
-	_reports_note.add_theme_color_override("default_color", CREDITS_NOTE_COLOR)
-	if _touch:
-		_reports_note.add_theme_font_size_override("normal_font_size", START_NOTE_FONT_PX)
-	_start_notes.add_child(_reports_note)
 	(_start_controls if _start_controls != null else resume_button).add_sibling(_start_notes)
-	_fit_reports_note()
+	consent_question = VBoxContainer.new()
+	consent_question.name = "ConsentQuestion"
+	# Its words and the gaps between its buttons take a tap or click, and do nothing.
+	consent_question.mouse_filter = Control.MOUSE_FILTER_STOP
+	consent_question.add_theme_constant_override("separation", 8)
+	_consent_text = Label.new()
+	_consent_text.name = "Question"
+	_consent_text.text = GameStats.CONSENT_QUESTION
+	_consent_text.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_consent_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_consent_text.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	consent_question.add_child(_consent_text)
+	consent_link_box = CenterContainer.new()
+	consent_link_box.name = "PrivacyLinkBox"
+	consent_link_box.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	consent_link = LinkButton.new()
+	consent_link.name = "PrivacyLink"
+	consent_link.text = GameStats.PRIVACY_URL.trim_prefix("https://")
+	consent_link.tooltip_text = privacy_link.tooltip_text
+	consent_link.pressed.connect(func() -> void: privacy_link_pressed.emit())
+	_style_link(consent_link)
+	consent_link_box.add_child(consent_link)
+	consent_question.add_child(consent_link_box)
+	var answers := HBoxContainer.new()
+	answers.name = "Answers"
+	answers.alignment = BoxContainer.ALIGNMENT_CENTER
+	answers.add_theme_constant_override("separation", CONSENT_GAP_PX)
+	consent_yes = Button.new()
+	consent_yes.name = "Yes"
+	consent_yes.text = GameStats.CONSENT_YES
+	consent_yes.pressed.connect(func() -> void: consent_answered.emit(true))
+	consent_no = Button.new()
+	consent_no.name = "No"
+	consent_no.text = GameStats.CONSENT_NO
+	consent_no.pressed.connect(func() -> void: consent_answered.emit(false))
+	for answer: Button in [consent_yes, consent_no]:
+		answer.custom_minimum_size = Vector2(CONSENT_BUTTON_MIN_PX, 64.0 if _touch else 44.0)
+		answers.add_child(answer)
+		_click_on_press(answer)
+	consent_question.add_child(answers)
+	_start_notes.add_sibling(consent_question)
+	if _touch:
+		for part: Control in [_consent_text, consent_link, consent_yes, consent_no]:
+			part.add_theme_font_size_override("font_size", START_NOTE_FONT_PX)
+		consent_link_box.custom_minimum_size.y = 64.0
+	_fit_start_prompt()
 
 
 func _start_note_label(node_name: String, text: String) -> Label:
@@ -527,28 +579,62 @@ func _start_note_label(node_name: String, text: String) -> Label:
 	return label
 
 
-## The reports' line as wide as its words on one line, but no wider than the page
-## less REPORTS_NOTE_SIDES_PX, where it wraps; and the home screen hint, asked for,
-## shown unless that line wraps on a page wider than tall (START_REPORTS_NOTE).
-func _fit_reports_note() -> void:
-	if _reports_note == null:
+## A link to the privacy page in the headings' blue, a little lighter under the pointer.
+func _style_link(link: LinkButton) -> void:
+	for colour: String in ["font_color", "font_focus_color", "font_pressed_color"]:
+		link.add_theme_color_override(colour, CONTROLS_HEADING_COLOR)
+	for colour: String in ["font_hover_color", "font_hover_pressed_color"]:
+		link.add_theme_color_override(colour, CONTROLS_HEADING_COLOR.lightened(0.25))
+
+
+## The start prompt fitted to the page (CONSENT_WIDTH_EM), each frame while it shows: the
+## question's width and its answers' common one; the home screen hint, where asked, shown
+## unless the panel with it would not fit the page; and the panel within the top
+## START_PANEL_SHARE of the page where it fits there, else reaching as far down as it needs.
+func _fit_start_prompt() -> void:
+	if _start_text.is_empty():
 		return
-	var font := _reports_note.get_theme_font("normal_font")
-	# Its words' width on one line, and 2 px against rounding in the label's own layout.
-	var one_line := ceilf(font.get_string_size(START_REPORTS_NOTE, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("normal_font_size")).x) + 2.0
-	var room := maxf(0.0, size.x - REPORTS_NOTE_SIDES_PX)
-	_reports_note.custom_minimum_size.x = minf(one_line, room)
-	var wraps := _reports_note.visible and one_line > room and size.x > size.y
-	_home_screen_hint.visible = bool(_notes_asked[0]) and not wraps
+	if consent_question != null:
+		var font_size := _consent_text.get_theme_font_size("font_size")
+		var one_line := ceilf(_consent_text.get_theme_font("font").get_string_size(GameStats.CONSENT_QUESTION, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x) + 2.0
+		_consent_text.custom_minimum_size.x = minf(one_line, minf(roundf(CONSENT_WIDTH_EM * font_size), maxf(0.0, size.x - CONSENT_SIDES_PX)))
+		var width := maxf(CONSENT_BUTTON_MIN_PX, maxf(consent_yes.get_minimum_size().x, consent_no.get_minimum_size().x))
+		for answer: Button in [consent_yes, consent_no]:
+			answer.custom_minimum_size.x = width
+	var need := pause_box.get_combined_minimum_size().y
+	if _home_screen_hint != null and bool(_notes_asked[0]):
+		# The hint's share of the panel: its line, and the layout's gap where it is the
+		# only note.
+		var hint := _home_screen_hint.get_combined_minimum_size().y + (0.0 if _silent_note.visible else float(pause_box.get_node("PauseLayout").get_theme_constant("separation")))
+		var with_hint := need + (0.0 if _home_screen_hint.visible else hint)
+		var shown := with_hint <= size.y - 2.0 * START_EDGE_PX
+		_home_screen_hint.visible = shown
+		_start_notes.visible = shown or _silent_note.visible
+		need = with_hint if shown else with_hint - hint
+	var share := clampf((need + 2.0 * START_EDGE_PX) / maxf(1.0, size.y), START_PANEL_SHARE, 1.0)
+	if absf(pause_center.anchor_bottom - share) > 0.0005:
+		pause_center.set_anchor_and_offset(SIDE_BOTTOM, share, 0.0)
 
 
-## Which start prompt notes show (the web state readback).
+## The question answered (on the start prompt, or in Options before play): it goes, and
+## Play has the keyboard focus again.
+func end_consent_question() -> void:
+	if consent_question == null or not consent_question.visible:
+		return
+	consent_question.hide()
+	_notes_asked[2] = false
+	_links_moved()
+	if pause_panel.visible:
+		resume_button.grab_focus(_pointer_last)
+
+
+## Which start prompt notes show, and whether its question does (the web state readback).
 func start_notes_state() -> Dictionary:
 	var shown := _start_notes != null and _start_notes.is_visible_in_tree()
 	return {
 		"home_screen": shown and _home_screen_hint.visible,
 		"silent_mode": shown and _silent_note.visible,
-		"reports": shown and _reports_note.visible,
+		"question": consent_question != null and consent_question.is_visible_in_tree(),
 	}
 
 
@@ -559,6 +645,7 @@ func _end_start_prompt() -> void:
 	_start_text = ""
 	if _start_notes != null:
 		_start_notes.hide()
+		consent_question.hide()
 	resume_button.text = _menu_before.text
 	pause_title.text = _menu_before.title
 	resume_button.custom_minimum_size.y = _menu_before.height
@@ -758,9 +845,10 @@ func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
 
 
-## The anonymous statistics' switch under Privacy, where main.gd offers it
-## (a web page that sends the reports; CrashReports), showing whether they are on.
-## Pressing it asks main.gd to switch them (crash_reports_chosen).
+## The anonymous statistics' switch under Privacy, where main.gd offers it (a web page
+## that sends them; CrashReports), showing whether they are on (the player said yes), with
+## the privacy page's link beside it and GameStats.CONSENT_OPTIONS_LINE under it. Pressing
+## it asks main.gd to switch them (crash_reports_chosen).
 func set_crash_reports(offered: bool, on: bool) -> void:
 	for part: Control in [privacy_heading, privacy_row, privacy_note]:
 		part.visible = offered
@@ -773,11 +861,11 @@ func _links_moved() -> void:
 	_links_dirty = true
 
 
-## Where a tap or click opens the privacy page now: the start prompt's line about the
-## statistics and Options' link, each while it shows (link_areas_changed, when changed).
+## Where a tap or click opens the privacy page now: the start prompt's question's link
+## and Options' link, each box while it shows (link_areas_changed, when changed).
 func _hand_on_link_areas() -> void:
 	var areas: Array = []
-	for link: Control in [_reports_note, privacy_link]:
+	for link: Control in [consent_link_box, privacy_link_box]:
 		if link != null and link.is_visible_in_tree():
 			areas.append(link.get_global_rect())
 	if areas != _link_areas:
@@ -1372,7 +1460,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports, privacy_link]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports, privacy_link_box]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children() + frame_rates.get_children() + resolutions.get_children():
 		(button as Button).custom_minimum_size.y = 64.0

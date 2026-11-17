@@ -564,76 +564,86 @@ function tiLoadingLine(loading) {
 	};
 }
 
-// The anonymous statistics (owner, 2026-11-17: on by default, "Easier is better. Always
-// opt-out" and "we need an opt-out in settings"; what the owner wants to learn: how many
-// people play, on what systems, when it crashes, how it performs, where on the island
-// they spend their time and how long they play). Sentry's browser SDK sends them: a
-// pinned bundle that tools/build-web.sh puts beside the page (game/web/vendor/sentry),
-// loaded only once the start prompt is reached, and only while all of these hold:
+// The anonymous statistics (owner, 2026-11-17: "Ask once on first launch"; what the owner
+// wants to learn: how many people play, on what systems, when it crashes, how it performs,
+// where on the island they spend their time and how long they play). The game asks once,
+// on the start prompt (GameStats.CONSENT_QUESTION, "Yes, send" or "No thanks"), and until
+// the player says yes nothing is loaded for them, nothing is kept in this browser for them
+// and nothing is sent. The answer is kept here (CONSENT: 'yes' or 'no'; nothing kept is
+// not asked yet, never yes) and in the game's settings, which mirror each other since the
+// page can't read the engine's settings before the engine starts; 'no' on either side wins
+// (game/scripts/reports/crash_reports.gd). Sentry's browser SDK sends them: a pinned
+// bundle that tools/build-web.sh puts beside the page (game/web/vendor/sentry), loaded
+// only once the start prompt is reached (or the load failed), and only while all of these
+// hold:
 //   - the build names a DSN (tools/config/crash-reports.json). Without one the page loads
-//     no SDK and sends nothing, and keeps its own records below all the same;
-//   - this browser's storage works (localStorage, which the switch and the notice need);
-//   - the switch is on: SWITCH says 'off' once the player turns Options' "Send anonymous
-//     statistics" off, kept across visits. The game keeps the switch in its own settings
-//     and mirrors it here, since the page can't read the engine's settings before the
-//     engine starts; whichever side says off wins (game/scripts/reports/crash_reports.gd);
-//   - the start prompt's line about the statistics has been shown (NOTICE), and in the
-//     visit that first shows it, play has started, so the player had the chance to read it.
-// Until then an error report waits in this page, never more than MAX_EVENTS of them; with
-// the switch off, no DSN or no storage it is dropped at once. Turning the switch off stops
-// sending at once (the SDK closed, the transport refusing) and deletes the anonymous id;
-// turning it on resumes, with a new one.
+//     no SDK and sends nothing, and after a yes keeps its records all the same;
+//   - this browser's storage works (localStorage, which the answer needs; without it the
+//     game asks nothing);
+//   - the answer kept here is yes, read again before anything is kept or sent, so a no
+//     given in another tab stops this one too.
+// An error made after the yes waits in this page until the SDK is up, never more than
+// MAX_EVENTS of them; one made before the yes is dropped at once. A no (the question's "No
+// thanks", Options' switch turned off, or the third visit started without an answer)
+// stops everything at once: the SDK closed, the transport refusing, and every key of ours
+// but the answer deleted (the anonymous id, the visits' records, the reports waiting). A
+// later yes starts afresh, with a new anonymous id.
 //
-// What is sent (each message scrubbed by tiScrubEvent and tiScrubEnvelope):
+// What is sent after a yes (each message scrubbed by tiScrubEvent and tiScrubEnvelope):
 //   - errors: an error or unhandled rejection in the page (the engine's own aborts are
 //     these; Godot's printed errors are not sent), a lost WebGL context, a failed load
 //     (the file and its HTTP status), the engine exiting with an error, and the end of an
 //     earlier visit that stopped unexpectedly in front (below): at most MAX_EVENTS per page
 //     load, each error once;
-//   - a session start per page load (Sentry's release health, which isn't billed);
-//   - transactions (performance data, not errors, on Sentry's span quota): the load
-//     ("game load", once, when play starts: the page load and each loading step as spans,
-//     with the funnel's times), the timed stats ("game stats", from GameStats: one after a
-//     minute of play, then one every five minutes, at most MAX_STATS) and the earlier
-//     visits that ended before play started ("game visit", how far each got, at most
-//     MAX_VISITS), all sampled at the build's traces_sample_rate.
+//   - a session start per page load from the yes on (Sentry's release health, not billed);
+//   - transactions (performance data, not errors, on Sentry's span quota), all sampled at
+//     the build's traces_sample_rate: on a visit that began with the yes given earlier, the
+//     load ("game load", once, when play starts: the page load and each loading step as
+//     spans, with the funnel's times); on the visit the player says yes nothing from before
+//     the answer, so in its place "game start" once play starts after it (that step's time
+//     alone); the timed stats ("game stats", from GameStats: one after a minute of play,
+//     then one every five minutes, at most MAX_STATS); and the earlier visits that ended
+//     before play started ("game visit", how far each got, at most MAX_VISITS).
 // Every message carries the build (its release), the device class, the browser's and the
 // OS's names with their major versions, the game's snapshot (GameStats.snapshot: map cell,
 // movement, bands of height, speed and frame rate, graphics settings, coarse GPU, screen
 // class, input) where the game has sent one, and the anonymous id as its user id
 // (GameStats' rule, owner 2026-11-17: ANONYMOUS_ID_BYTES random bytes, made the first time
-// a message is sent and kept in this browser's storage for the site until the switch goes
-// off or the site's data is cleared; nothing about the device or the player goes into
-// it), so Sentry counts players and returning players. Nothing per frame or per input, no
-// breadcrumbs, logs or
-// replays, no headers added to any request; no address (a URL becomes its file's name), no
-// user name in a local path, no request, cookies, IP address or user agent.
+// a message is sent and kept in this browser's storage for the site until the answer
+// becomes no or the site's data is cleared; nothing about the device or the player goes
+// into it), so Sentry counts players and returning players. Nothing per frame or per
+// input, no breadcrumbs, logs or replays, no headers added to any request; no address (a
+// URL becomes its file's name), no user name in a local path, no request, cookies, IP
+// address or user agent.
 //
-// The funnel (GameStats.FUNNEL_STEPS): this page load's record keeps when it reached each
-// step (ms from the navigation's start); the load's transaction carries them when play
-// starts. A visit that ends before play starts sends nothing then; if this browser comes
-// back and plays, that later visit sends one "game visit" for it.
+// The funnel (GameStats.FUNNEL_STEPS): from the yes on, this page load's record keeps when
+// it reached each step (ms from the navigation's start): all of them on a visit that began
+// with the yes, the steps after it on the visit the player says yes. A visit that ends
+// before play starts sends nothing then; if this browser comes back and plays, that later
+// visit sends one "game visit" for it. A first visit that ends before the answer is never
+// counted.
 //
-// The end of a visit: this page load keeps a record (SESSION + its id) of its build,
-// phase ('loading' until play-ready, then 'play'), steps, the game's last snapshot,
-// whether it is visible and focused, and when it started and was last seen: written as the
-// page loads, every HEARTBEAT_MS while visible, on every change of visibility or focus and
-// at each step, and marked clean on pagehide (unmarked on a pageshow from the back/forward
-// cache). A record left unclean ended without pagehide: a crash, an out-of-memory kill, the
-// browser or the device stopping it. A page killed for memory runs no script at all
-// (WebKit: "If WebContent process dies (e.g. due to jetsam / crash) or MobileSafari itself
-// is killed, then the fact pagehide event not firing is by design",
-// https://bugs.webkit.org/show_bug.cgi?id=199854), so this is how one is seen. A tab that
-// still runs holds a Web Lock named after its record, so another tab's live record is never
-// taken for a dead one. The next load reports one such end, the newest, if that page was
-// last seen in front (visible and focused); one last seen hidden or unfocused was in the
-// background, where browsers evict pages routinely (iOS above all), and is not reported.
-// The reports wait in storage (UNCLEAN, VISITS) until they can be sent.
+// The end of a visit: from the yes on, this page load keeps a record (SESSION + its id) of
+// its build, phase ('loading' until play-ready, then 'play'), steps, the game's last
+// snapshot, whether it is visible and focused, and when it started and was last seen:
+// written at the yes (or as the page loads, after an earlier yes), every HEARTBEAT_MS while
+// visible, on every change of visibility or focus and at each step, and marked clean on
+// pagehide (unmarked on a pageshow from the back/forward cache). A record left unclean
+// ended without pagehide: a crash, an out-of-memory kill, the browser or the device
+// stopping it. A page killed for memory runs no script at all (WebKit: "If WebContent
+// process dies (e.g. due to jetsam / crash) or MobileSafari itself is killed, then the fact
+// pagehide event not firing is by design", https://bugs.webkit.org/show_bug.cgi?id=199854),
+// so this is how one is seen. A tab that still runs holds a Web Lock named after its
+// record, so another tab's live record is never taken for a dead one. The next load
+// reports one such end, the newest, if that page was last seen in front (visible and
+// focused); one last seen hidden or unfocused was in the background, where browsers evict
+// pages routinely (iOS above all), and is not reported. The reports wait in storage
+// (UNCLEAN, VISITS) until they can be sent.
 //
 //   tiReporting(config, env) -> {start(), seen(), ended(), resumed(), phase(name),
 //       step(name, ms), error(value, kind), contextLost(), loadFailed(text),
-//       engineExit(code), read(), setEnabled(on), noticeShown(), playStarted(),
-//       snapshot(json), stats(json), linkAreas(json), linkAt(x, y), status()}
+//       engineExit(code), read(), setConsent(answer), playStarted(), snapshot(json),
+//       stats(json), linkAreas(json), linkAt(x, y), status()}
 //     config: the build's settings (the ti-reporting block): {dsn, release, sdk,
 //       integrity, traces_sample_rate}, or {}.
 //     env: {storage (localStorage, or null), locks (navigator.locks, or null), now() (ms
@@ -650,8 +660,7 @@ function tiLoadingLine(loading) {
 // and checks that the names below match GameStats'.
 function tiReporting(config, env) {
 	const PREFIX = 'grand-treasure-island.';
-	const SWITCH = PREFIX + 'crash-reports';
-	const NOTICE = PREFIX + 'crash-notice';
+	const CONSENT = PREFIX + 'crash-reports';
 	const ANONYMOUS_ID = PREFIX + 'anonymous-id';
 	const SESSION = PREFIX + 'session.';
 	const UNCLEAN = PREFIX + 'unclean';
@@ -680,23 +689,34 @@ function tiReporting(config, env) {
 	const dsn = typeof config.dsn === 'string' ? config.dsn : '';
 	const tracesRate = finite(config.traces_sample_rate) !== null && config.traces_sample_rate >= 0 && config.traces_sample_rate <= 1 ? config.traces_sample_rate : 0;
 
-	// localStorage, each call guarded: storage that throws (blocked site data, an old
-	// Safari's private window) or is missing reads as nothing, and then nothing is sent.
+	// localStorage, each call guarded: storage that throws (blocked site data) or is missing
+	// reads as nothing, and then nothing is asked, kept or sent. Whether it works is read,
+	// not written: nothing is written before a yes.
 	const get = (key) => { try { return env.storage.getItem(key); } catch (err) { return null; } };
 	const put = (key, value) => { try { env.storage.setItem(key, value); return true; } catch (err) { return false; } };
 	const drop = (key) => { try { env.storage.removeItem(key); } catch (err) { /* nothing kept */ } };
 	const parse = (text) => { try { return JSON.parse(text); } catch (err) { return null; } };
 	const storage = (() => {
-		const probe = PREFIX + 'probe';
-		if (!put(probe, '1')) return false;
-		const ok = get(probe) === '1';
-		drop(probe);
-		return ok;
+		try {
+			env.storage.getItem(PREFIX + 'crash-reports');
+			return true;
+		} catch (err) {
+			return false;
+		}
 	})();
+	// The answer kept here: 'yes', 'no', or null (not asked yet, or no storage).
+	const consent = () => {
+		const kept = storage ? get(CONSENT) : null;
+		return kept === 'yes' || kept === 'no' ? kept : null;
+	};
+	const agreed = () => consent() === 'yes';
+	// Whether the yes was given before this page loaded: then the whole visit counts (its
+	// load, its funnel from the page's opening); after a yes given in this visit, only what
+	// follows it.
+	let fromLoad = agreed();
 
 	let pagePhase = 'loading';
-	// Whether this visit put the notice up, and whether play has started since.
-	let noticeNow = false;
+	// Whether play has started (the start prompt's tap or click).
 	let playing = false;
 	// The SDK: 'none', 'loading', 'ready', 'failed' or 'closed' (switched off).
 	let sdkState = 'none';
@@ -716,24 +736,29 @@ function tiReporting(config, env) {
 	// What the transport let out this visit (capped again there).
 	const sent = {event: 0, transaction: 0};
 
+	// This page load's record, kept (save) only while the answer is yes; since: 'load' when
+	// the yes came before this page loaded, 'answer' when it came in this visit (its steps
+	// then start at the answer).
 	const recordKey = SESSION + env.id();
-	const record = {v: 1, release, build, phase: 'loading', steps: {page_opened: 0}, snapshot: null, visible: env.visible(), focused: env.focused(), store: Boolean(env.store), startedAt: env.now(), lastSeenAt: env.now(), clean: false};
+	const record = {v: 1, release, build, since: 'load', phase: 'loading', steps: fromLoad ? {page_opened: 0} : {}, snapshot: null, visible: env.visible(), focused: env.focused(), store: Boolean(env.store), startedAt: env.now(), lastSeenAt: env.now(), clean: false};
 	const save = (fields) => {
 		Object.assign(record, fields, {lastSeenAt: env.now()});
-		if (storage) put(recordKey, JSON.stringify(record));
+		if (agreed()) put(recordKey, JSON.stringify(record));
 	};
+	// The record's Web Lock, held from the yes on until the page dies or a no (lock).
+	let locked = false;
+	let unlock = () => {};
 
 	// Why nothing may be sent now, or '' when it may.
 	const blocked = () => {
 		if (!dsn) return 'no DSN';
 		if (!storage) return 'no storage';
-		if (get(SWITCH) === 'off') return 'switched off';
-		if (!get(NOTICE)) return 'notice not shown';
-		if (noticeNow && !playing) return 'play not started';
+		const answer = consent();
+		if (answer !== 'yes') return answer === 'no' ? 'answered no' : 'not asked yet';
 		return '';
 	};
-	// Whether an error report may still go out in this visit (else it is dropped at once).
-	const mayLater = () => Boolean(dsn) && storage && get(SWITCH) !== 'off';
+	// Whether an error report may go out in this visit (else it is dropped at once).
+	const mayLater = () => Boolean(dsn) && agreed();
 	const phaseTag = () => (pagePhase === 'play' ? 'play' : pagePhase === 'error' ? 'load failed' : 'loading');
 
 	// The tags every message carries: the build, the device class, OS and browser, whether
@@ -759,8 +784,7 @@ function tiReporting(config, env) {
 	}
 
 	// The anonymous id (GameStats.anonymous_id's rule): the one kept, else new random bytes,
-	// kept. Asked for only as a message goes out, so none is made before the notice, nor
-	// with the switch off.
+	// kept. Asked for only as a message goes out, so none is made before a yes.
 	function anonymousId() {
 		const kept = get(ANONYMOUS_ID);
 		if (typeof kept === 'string' && new RegExp('^[0-9a-f]{' + 2 * ANONYMOUS_ID_BYTES + '}$').test(kept)) return kept;
@@ -795,7 +819,9 @@ function tiReporting(config, env) {
 			drop(key);
 			if (!earlier || typeof earlier !== 'object') continue;
 			const steps = earlier.steps && typeof earlier.steps === 'object' ? earlier.steps : {};
-			if (steps.play_started === undefined) {
+			// A visit's record that began at the answer has no steps from before it, so how
+			// far that visit got is not known: it goes as no visit.
+			if (steps.play_started === undefined && earlier.since !== 'answer') {
 				visits.push({release: String(earlier.release || ''), build: String(earlier.build || 'unknown'), ended: earlier.clean ? 'cleanly' : 'unexpectedly', at: earlier.lastSeenAt,
 					reached: FUNNEL_STEPS.filter((name) => finite(steps[name]) !== null).pop() || 'page_opened', steps});
 			}
@@ -909,16 +935,24 @@ function tiReporting(config, env) {
 		});
 	}
 
-	// The load's transaction, once, when play starts: from the navigation's start to the
-	// start prompt's tap, a span for each loading step, and the funnel's times.
+	// Once, when play starts: on a visit that began with the yes, the load's transaction
+	// (from the navigation's start to the start prompt's tap, a span for each loading step,
+	// and the funnel's times); on the visit the player says yes, nothing from before the
+	// answer, so only "game start", with play's start if it came after the yes.
 	function sendLoad() {
 		if (loadSent || !playing || tracesRate === 0) return;
 		loadSent = true;
+		if (!fromLoad) {
+			const playAt = finite(record.steps.play_started);
+			const now = env.now() / 1000;
+			if (playAt !== null) transaction('game start', 'ti.start', now, now, {...baseTags(snapshot), kind: 'start'}, null, [], [['funnel.play_started', playAt, 'millisecond']]);
+			return;
+		}
 		const marks = env.marks();
 		const at = (ms) => (env.timeOrigin + ms) / 1000;
 		const started = finite(record.steps.play_started) !== null ? record.steps.play_started : env.sinceStart();
 		const page = env.page();
-		const tags = {...baseTags(snapshot), kind: 'load', visit: noticeNow ? 'first' : 'returning', pack_source: marks['TI_BOOT:cache:pack:device'] !== undefined ? 'device' : 'network'};
+		const tags = {...baseTags(snapshot), kind: 'load', pack_source: marks['TI_BOOT:cache:pack:device'] !== undefined ? 'device' : 'network'};
 		transaction('game load', 'ti.load', at(0), at(started), tags, null,
 			tiLoadSpans(marks, started).map((span) => [span.name, 'ti.load.step', at(span.start), at(span.end)]),
 			FUNNEL_STEPS.filter((name) => name !== 'page_opened' && finite(record.steps[name]) !== null).map((name) => ['funnel.' + name, record.steps[name], 'millisecond'])
@@ -1018,26 +1052,62 @@ function tiReporting(config, env) {
 		maybeStart();
 	}
 
-	// A funnel step reached, at MS from the navigation's start (the first time only).
+	// A funnel step reached, at MS from the navigation's start (the first time only). Kept
+	// with the record only with the answer yes (save); a yes given in this visit starts the
+	// steps afresh (setConsent), so none from before it count.
 	function step(name, ms) {
 		if (!FUNNEL_STEPS.includes(name) || record.steps[name] !== undefined || finite(ms) === null) return;
 		save({steps: {...record.steps, [name]: Math.round(ms)}});
 	}
 
+	// The record's Web Lock, named after it, so another tab's live record is never taken
+	// for a dead one: asked for at the yes (or the load, after an earlier yes) and held
+	// until the page dies; a no lets it go (forget), also one granted after the no.
+	function lock() {
+		if (locked || !env.locks) return;
+		locked = true;
+		try {
+			env.locks.request(recordKey, () => (locked ? new Promise((resolve) => { unlock = resolve; }) : null)).catch(() => {});
+		} catch (err) {
+			// No lock: this record may be taken for a dead one while this tab runs.
+			locked = false;
+		}
+	}
+
+	// A no: every key of ours but the answer deleted (the anonymous id, every visit's record,
+	// the reports waiting), the record's lock let go, what waits in this page dropped and
+	// the SDK closed. A later yes in this visit starts the record afresh.
+	function forget() {
+		waiting.length = 0;
+		const keys = [];
+		try {
+			for (let i = 0; i < env.storage.length; i += 1) keys.push(env.storage.key(i));
+		} catch (err) {
+			// Nothing more to see.
+		}
+		for (const key of keys) {
+			if (typeof key === 'string' && key.startsWith(PREFIX) && key !== CONSENT) drop(key);
+		}
+		locked = false;
+		unlock();
+		unlock = () => {};
+		fromLoad = false;
+		if (sdkState === 'ready' || sdkState === 'loading') {
+			if (sdk) sdk.close(0).catch(() => {});
+			sdkState = sdkState === 'ready' ? 'closed' : sdkState;
+		}
+	}
+
 	return {
-		// At load: this page's record and its lock, the heartbeat, the earlier visits.
+		// At load: the heartbeat (which keeps nothing before a yes); with the answer yes
+		// already, this page's record and its lock, and the earlier visits.
 		start() {
-			save({});
-			if (storage && env.locks) {
-				try {
-					env.locks.request(recordKey, () => new Promise(() => {})).catch(() => {});
-				} catch (err) {
-					// No lock: this record may be taken for a dead one while this tab runs.
-				}
-			}
 			env.every(HEARTBEAT_MS, () => {
 				if (env.visible()) save({visible: true, focused: env.focused()});
 			});
+			if (!agreed()) return Promise.resolve();
+			save({});
+			lock();
 			return previousVisits();
 		},
 		// A change of visibility or focus.
@@ -1049,6 +1119,7 @@ function tiReporting(config, env) {
 		phase: setPhase,
 		step,
 		error(value, kind = 'error') {
+			if (!mayLater()) return;
 			const isError = value instanceof Error || (value && typeof value === 'object' && typeof value.message === 'string' && typeof value.stack === 'string');
 			const text = isError ? String(value.message) : typeof value === 'string' ? value : '';
 			const key = kind + ':' + (isError ? value.name + ':' : '') + text;
@@ -1060,7 +1131,7 @@ function tiReporting(config, env) {
 			report((Sentry, tags, contexts) => Sentry.captureException(error, {tags: {...tags, kind}, contexts}));
 		},
 		contextLost() {
-			if (seenErrors.has('webgl')) return;
+			if (!mayLater() || seenErrors.has('webgl')) return;
 			seenErrors.add('webgl');
 			report((Sentry, tags, contexts) => Sentry.captureMessage('WebGL context lost', {level: 'error', tags: {...tags, kind: 'webgl_context_lost'}, contexts}));
 		},
@@ -1068,7 +1139,10 @@ function tiReporting(config, env) {
 		// the engine's loader words them ("Failed loading file 'NAME': HTTP 503"); else the
 		// notice's first line (the page's own words, or the game's WORLD_FAILED line).
 		loadFailed(text) {
-			if (seenErrors.has('load')) return;
+			if (!mayLater() || seenErrors.has('load')) {
+				setPhase('error');
+				return;
+			}
 			seenErrors.add('load');
 			const notice = String(text);
 			const file = tiScrubText((notice.match(/'([^']+)'/) || [])[1] || 'none');
@@ -1079,36 +1153,36 @@ function tiReporting(config, env) {
 			setPhase('error');
 		},
 		engineExit(code) {
-			if (code === 0 || seenErrors.has('exit')) return;
+			if (code === 0 || !mayLater() || seenErrors.has('exit')) return;
 			seenErrors.add('exit');
 			report((Sentry, tags, contexts) => Sentry.captureMessage('engine exited', {level: 'error', tags: {...tags, kind: 'engine_exit', code: String(code)}, contexts}));
 		},
-		// For the game (game/scripts/reports/crash_reports.gd): whether the switch is kept
-		// on or off here (null: never set) and whether the start prompt should show the
-		// notice now (once, with storage working and the switch not off).
+		// For the game (game/scripts/reports/crash_reports.gd): the answer kept here ('yes',
+		// 'no' or null for not asked yet) and whether this browser keeps anything (without
+		// storage the game asks nothing).
 		read() {
-			const kept = storage ? get(SWITCH) : null;
-			return JSON.stringify({on: kept === 'on' ? true : kept === 'off' ? false : null, notice: storage && kept !== 'off' && !get(NOTICE)});
+			return JSON.stringify({consent: consent(), storage});
 		},
-		setEnabled(on) {
-			if (!storage) return;
-			put(SWITCH, on ? 'on' : 'off');
-			if (on) {
+		// The player's answer (the start prompt's question, Options' switch): 'yes' kept, this
+		// page load's record started (its steps from now) with its lock, and the SDK loaded
+		// at the start prompt; 'no' kept and everything else forgotten (forget). Nothing
+		// without storage.
+		setConsent(answer) {
+			if (!storage || (answer !== 'yes' && answer !== 'no')) return;
+			if (answer === 'no') {
+				put(CONSENT, 'no');
+				forget();
+				return;
+			}
+			if (agreed()) {
 				flush();
 				return;
 			}
-			drop(ANONYMOUS_ID);
-			waiting.length = 0;
-			if (sdkState === 'ready' || sdkState === 'loading') {
-				if (sdk) sdk.close(0).catch(() => {});
-				sdkState = sdkState === 'ready' ? 'closed' : sdkState;
-			}
-		},
-		// The start prompt shows the notice (or, for a player who turns the switch on in
-		// Options, the switch told them): kept, so later visits send from the start.
-		noticeShown() {
-			if (!storage || get(NOTICE)) return;
-			if (put(NOTICE, String(env.now()))) noticeNow = true;
+			if (!put(CONSENT, 'yes')) return;
+			Object.assign(record, {since: 'answer', steps: {}});
+			save({visible: env.visible(), focused: env.focused()});
+			lock();
+			flush();
 		},
 		playStarted() {
 			step('play_started', env.sinceStart());
@@ -1143,7 +1217,7 @@ function tiReporting(config, env) {
 			return links.areas.some(([left, top, width, height]) => x >= left && x <= left + width && y >= top && y <= top + height) ? links.url : '';
 		},
 		status() {
-			return JSON.stringify({dsn: Boolean(dsn), storage, on: get(SWITCH) !== 'off', notice: Boolean(get(NOTICE)), noticeNow, playing, phase: pagePhase, blocked: blocked(),
+			return JSON.stringify({dsn: Boolean(dsn), storage, consent: consent(), fromLoad, playing, phase: pagePhase, blocked: blocked(),
 				sdk: sdkState, made, waiting: waiting.length, sent, loadSent, statsSent, steps: record.steps, snapshot: Boolean(snapshot), anonymousId: Boolean(get(ANONYMOUS_ID)),
 				unclean: get(UNCLEAN) !== null, visits: (parse(get(VISITS)) || []).length, environment: env.environment, release});
 		},
@@ -1288,9 +1362,9 @@ const GODOT_CONFIG = $GODOT_CONFIG;
 const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 
 // The anonymous statistics (tiReporting), set up first so that an error anywhere below
-// is seen. window.__tiReporting is what the game reads and calls
-// (game/scripts/reports/crash_reports.gd): read(), setEnabled(on), noticeShown(),
-// playStarted(), snapshot(json) and stats(json); and status() for tests.
+// is seen (and, before the player's yes, dropped). window.__tiReporting is what the game
+// reads and calls (game/scripts/reports/crash_reports.gd): read(), setConsent(answer),
+// playStarted(), snapshot(json), stats(json) and linkAreas(json); and status() for tests.
 // tiReports.useEngine(engine) lets it read the engine's memory once the engine exists.
 const tiReports = (() => {
 	let config = {};
@@ -1351,16 +1425,15 @@ const tiReports = (() => {
 	document.getElementById('canvas').addEventListener('webglcontextlost', () => reporting.contextLost());
 	window.__tiReporting = {
 		read: () => reporting.read(),
-		setEnabled: (on) => reporting.setEnabled(Boolean(on)),
-		noticeShown: () => reporting.noticeShown(),
+		setConsent: (answer) => reporting.setConsent(String(answer)),
 		playStarted: () => reporting.playStarted(),
 		snapshot: (json) => reporting.snapshot(String(json)),
 		stats: (json) => reporting.stats(String(json)),
 		linkAreas: (json) => reporting.linkAreas(String(json)),
 		status: () => reporting.status(),
 	};
-	// A tap or click on the privacy page's link (the start prompt's line about the
-	// statistics, Options' link; the game says where, linkAreas) opens the page in a new
+	// A tap or click on the privacy page's link (the start prompt's question's link,
+	// Options' link; the game says where, linkAreas) opens the page in a new
 	// tab, here inside the player's own gesture, which is the only time a page may open
 	// another; the game's own tab stays where it is. The game still gets the event, and
 	// the click a browser may send after a tap opens nothing more.

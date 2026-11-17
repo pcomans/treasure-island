@@ -1,91 +1,110 @@
 class_name CrashReports
 extends RefCounted
-## The anonymous statistics' switch (owner, 2026-11-17: on by default, "Easier is
-## better. Always opt-out" and "we need an opt-out in settings"): Options' "Send
-## anonymous statistics", on the web for now (the desktop builds get theirs with their
-## own reports). It turns everything off together: crash reports, performance traces and
-## the timed statistics (GameStats). The web page sends them (game/web/shell.html's
-## tiReporting); the game keeps the switch in its settings file
-## (ShadowQuality.settings_path, section privacy) and mirrors it to the page, which can't
-## read the engine's settings before the engine starts and keeps its own copy in the
-## browser's storage. The two are written apart, so either may lose a change (a page
-## closed before the engine's file reached the browser's storage): off on either side
-## wins, and a player's off is never undone by a copy that missed it.
+## The anonymous statistics' consent (owner, 2026-11-17: "Ask once on first launch";
+## nothing is stored for them or sent until the player says yes). On the web for now (the
+## desktop builds get theirs with their own reports). The answer is "yes", "no" or ""
+## (not asked yet): the start prompt asks (GameStats.CONSENT_QUESTION) while the answer is
+## "" and fewer than GameStats.CONSENT_MAX_ASKS visits have started play without one; the
+## last of those makes it "no". Options' switch ("Send anonymous statistics") shows it on
+## for "yes" alone and changes it either way at any time. "no" stops everything at once:
+## the page deletes the anonymous id and what it kept for the statistics.
 ##
-## The page also says whether the start prompt should carry the one line about the
-## statistics (notice), and hears when it showed it (notice_shown) and when play started
-## (play_started): it sends nothing before a player has seen that line, and in the visit
-## that first shows it, nothing before play starts. A player who turns the switch on in
-## Options has read about it there, which counts the same. While the switch is on, the
-## page gets the game's state (snapshot) and the timed stats (stats) from GameStats.
+## The game keeps the answer and the count in its settings file
+## (ShadowQuality.settings_path, section privacy: crash_reports "yes" or "no", missing for
+## not asked; crash_reports_asked) and mirrors the answer to the page (game/web/shell.html's
+## tiReporting), which can't read the engine's settings before the engine starts and keeps
+## its own copy in the browser's storage. The two are written apart, so either may lose a
+## change: "no" on either side wins, then "yes" on either side, else not asked; nothing
+## kept never counts as yes.
 ##
-## The page: an object with read() (JSON {"on": true, false or null, "notice": bool}),
-## set_enabled(on), notice_shown(), play_started(), snapshot(json), stats(json) and
-## link_areas(json); WebPage on the web, a stand-in in a test (as main.gd's crash_page).
+## The page: an object with read() (JSON {"consent": "yes", "no" or null, "storage": bool}),
+## set_consent(answer), play_started(), snapshot(json), stats(json) and link_areas(json);
+## WebPage on the web, a stand-in in a test (as main.gd's crash_page).
 
 const SECTION := "privacy"
 const KEY := "crash_reports"
+const ASKED_KEY := "crash_reports_asked"
 
-## The page's reporting, or null where there is none (desktop, a page without it): then
-## Options shows no switch and nothing is told.
+## The page's reporting, or null where there is none (desktop, a page without it, or one
+## whose browser keeps nothing): then nothing is asked, Options shows no switch and nothing
+## is told.
 var page: Object
-## Whether the statistics are on, as the switch shows it.
-var on := true
-## Whether the start prompt should show the notice (until it has).
-var notice := false
-## Whether the page has heard the notice shown in this run (it hears it once).
-var _shown_told := false
+## The answer: "yes", "no" or "" (not asked yet).
+var answer := ""
+## The visits that showed the question and started play without an answer.
+var asked := 0
+## Whether the statistics are on: the answer is yes.
+var on: bool:
+	get:
+		return answer == "yes"
 
 
-## The switch as kept in the game's settings (kept_on) and on the page, off on either
-## side winning; the page told the result.
-func _init(reporting_page: Object, kept_on: bool) -> void:
+## The answer as kept in the game's settings (KEPT: {"answer", "asked"}) and on the page,
+## "no" on either side winning, then "yes"; the page told the result.
+func _init(reporting_page: Object, kept: Dictionary) -> void:
 	page = reporting_page
-	on = kept_on
+	answer = _valid(kept.get("answer", ""))
+	asked = maxi(0, int(kept.get("asked", 0)))
 	if page == null:
 		return
 	var told: Variant = JSON.parse_string(str(page.read()))
-	var state: Dictionary = told if told is Dictionary else {}
-	if state.get("on") is bool and not bool(state.on):
-		on = false
-	notice = on and bool(state.get("notice", false))
-	page.set_enabled(on)
+	if not (told is Dictionary and bool((told as Dictionary).get("storage", false))):
+		# A page whose browser keeps nothing (blocked site data) can't keep the answer or
+		# send: nothing is asked and Options has no switch.
+		page = null
+		return
+	var theirs := _valid((told as Dictionary).get("consent", ""))
+	if answer == "no" or theirs == "no":
+		answer = "no"
+	elif answer == "yes" or theirs == "yes":
+		answer = "yes"
+	if not answer.is_empty():
+		page.set_consent(answer)
 
 
-## The switch kept in the settings file: on unless it says off.
-static func saved() -> bool:
+## The answer and the count kept in the settings file: not asked and none when there is none.
+static func saved() -> Dictionary:
 	var file := ConfigFile.new()
 	if file.load(ShadowQuality.settings_path) != OK:
-		return true
-	var kept: Variant = file.get_value(SECTION, KEY, true)
-	return kept if kept is bool else true
+		return {"answer": "", "asked": 0}
+	var count: Variant = file.get_value(SECTION, ASKED_KEY, 0)
+	return {"answer": _valid(file.get_value(SECTION, KEY, "")), "asked": maxi(0, int(count)) if count is int else 0}
 
 
-## Keeps the switch for the next run, with whatever else the file holds. Where storage
-## is unavailable this quietly keeps nothing, as the other settings do.
-static func save(value: bool) -> void:
+## Keeps the answer and the count for the next run, with whatever else the file holds
+## (not asked: no answer kept). Where storage is unavailable this quietly keeps nothing,
+## as the other settings do.
+static func save(kept_answer: String, kept_asked: int) -> void:
 	var file := ConfigFile.new()
 	file.load(ShadowQuality.settings_path)
-	file.set_value(SECTION, KEY, value)
+	if _valid(kept_answer).is_empty():
+		if file.has_section_key(SECTION, KEY):
+			file.erase_section_key(SECTION, KEY)
+	else:
+		file.set_value(SECTION, KEY, kept_answer)
+	file.set_value(SECTION, ASKED_KEY, maxi(0, kept_asked))
 	file.save(ShadowQuality.settings_path)
 
 
-## The player's choice on the switch: on or off at once on the page.
-func choose(value: bool) -> void:
-	on = value
-	notice = notice and on
+## Whether the start prompt asks now.
+func should_ask() -> bool:
+	return page != null and answer.is_empty() and asked < GameStats.CONSENT_MAX_ASKS
+
+
+## The player's answer: on the start prompt (yes or no) or Options' switch (on or off).
+func choose(yes: bool) -> void:
+	answer = "yes" if yes else "no"
 	if page != null:
-		page.set_enabled(on)
-		if on:
-			page.notice_shown()
+		page.set_consent(answer)
 
 
-## The start prompt shows the notice: the page hears it once.
-func notice_shown() -> void:
-	notice = false
-	if page != null and not _shown_told:
-		_shown_told = true
-		page.notice_shown()
+## Play started with the question unanswered: one more ask; the last makes it "no".
+func unanswered_play() -> void:
+	asked += 1
+	if asked >= GameStats.CONSENT_MAX_ASKS and answer.is_empty():
+		answer = "no"
+		if page != null:
+			page.set_consent(answer)
 
 
 ## The start prompt's tap or click: play starts.
@@ -94,22 +113,23 @@ func play_started() -> void:
 		page.play_started()
 
 
-## The game's state now (GameStats.snapshot), for the page to attach to what it sends.
+## The game's state now (GameStats.snapshot), for the page to attach to what it sends;
+## only with a yes.
 func snapshot(state: Dictionary) -> void:
 	if page != null and on:
 		page.snapshot(JSON.stringify(state))
 
 
-## The timed stats (GameStats.take_stats), for the page to send.
+## The timed stats (GameStats.take_stats), for the page to send; only with a yes.
 func stats(window: Dictionary) -> void:
 	if page != null and on:
 		page.stats(JSON.stringify(window))
 
 
-## Where a tap or click opens the privacy page now (the HUD's link areas, in pixels of
-## a page of PAGE_SIZE), for the web page to open it inside the player's own gesture: as
-## shares of the page, with the address (GameStats.PRIVACY_URL). Whether or not the
-## statistics are on, as Options' link shows either way.
+## Where a tap or click opens the privacy page now (the HUD's link areas, in pixels of a
+## page of PAGE_SIZE), for the web page to open it inside the player's own gesture: as
+## shares of the page, with the address (GameStats.PRIVACY_URL). Whatever the answer, as
+## the question and Options both show the link.
 func link_areas(areas: Array, page_size: Vector2) -> void:
 	if page == null or page_size.x <= 0.0 or page_size.y <= 0.0:
 		return
@@ -134,6 +154,11 @@ static func web_adapter() -> String:
 	return str(JavaScriptBridge.eval("(() => { try { const gl = document.getElementById('canvas').getContext('webgl2'); const info = gl && gl.getExtension('WEBGL_debug_renderer_info'); return gl ? String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER)) : ''; } catch (e) { return ''; } })()"))
 
 
+## "yes" or "no", else "".
+static func _valid(value: Variant) -> String:
+	return str(value) if value is String and str(value) in ["yes", "no"] else ""
+
+
 ## window.__tiReporting (game/web/shell.html), through JavaScriptBridge: its object,
 ## got once, its methods called directly (no script to parse on each call).
 class WebPage extends RefCounted:
@@ -142,11 +167,8 @@ class WebPage extends RefCounted:
 	func read() -> String:
 		return str(_reporting.read())
 
-	func set_enabled(value: bool) -> void:
-		_reporting.setEnabled(value)
-
-	func notice_shown() -> void:
-		_reporting.noticeShown()
+	func set_consent(value: String) -> void:
+		_reporting.setConsent(value)
 
 	func play_started() -> void:
 		_reporting.playStarted()

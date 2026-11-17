@@ -4,32 +4,35 @@
 // for the Sentry SDK: a fake that records what the page asks of it, builds each message
 // as the SDK would (with what the SDK adds by default and the page must strip), and sends
 // it through the page's own transport, which scrubs it and lets it out or not. What a
-// player would see, and what would leave the page:
-//   - nothing is loaded or sent with no DSN, with the switch off (also on the next visit),
-//     with storage that can't be read, before the start prompt's notice was shown, or in
-//     the visit that first shows it before play starts; then the SDK loads once and what
-//     waited goes out; a returning player's page loads it at the start prompt;
-//   - with no DSN the page still keeps its records: the notice, the visit's record and an
-//     earlier visit's unexpected end waiting to be sent;
+// player would see, and what would leave the page (owner, 2026-11-17: "Ask once on first
+// launch"):
+//   - not asked yet, answered no (this visit and the next) or with storage that can't be
+//     read: over a whole visit, no storage write, no lock, no SDK load and nothing sent;
+//     an error made before the yes is dropped, not kept for later;
+//   - the yes at the start prompt: the answer kept, the visit's record started from it,
+//     the SDK loaded once with narrow settings and the session sent; then errors, "game
+//     start" when play starts (no load times from before the answer) and the timed stats;
+//   - a player who said yes earlier: the SDK loads at the start prompt and the load's
+//     transaction goes when play starts, with the funnel's times; with no DSN, nothing is
+//     loaded or sent but the records are kept;
 //   - the end of an earlier visit that stopped unexpectedly in front is reported exactly
 //     once, with its build, phase, last snapshot, store, bucketed length and time since,
 //     and never again; one in the background, a clean one and another tab's live one are
 //     not; an earlier visit that ended before play started is sent once as a "game visit"
-//     of its own build, with how far it got;
+//     of its own build, with how far it got (not one whose record began at the answer);
 //   - the scrubbing: no query string, fragment, host, local path's user name, request,
 //     cookies, user agent, breadcrumbs, extra data, other contexts, IP address or user
 //     field but the anonymous id, and no tags but the page's own; sessions keep only the
 //     anonymous id as their user; client reports never leave;
 //   - at most five error events per page load (in the page and again in the transport),
 //     each error once; the timed stats at most 48;
-//   - the switch turned off stops sending at once, closes the SDK and deletes the
-//     anonymous id; on again sends again, with a new one;
-//   - the load's transaction when play starts, with the funnel's times; the timed stats
-//     as a transaction with the cells and movements as spans and the frame rates and
-//     memory as measurements; stats that come before the SDK is up are dropped;
-//   - the anonymous id: none before the notice or with the switch off, then the same on
-//     every later visit (the user of every message and the session's distinct id), and a
-//     new one after the switch goes off and on again;
+//   - a no mid-visit stops sending at once, closes the SDK, deletes every key of ours but
+//     the answer and lets the lock go; a yes again sends again, with a new anonymous id;
+//   - the timed stats as a transaction with the cells and movements as spans and the
+//     frame rates and memory as measurements; stats that come before the SDK is up are
+//     dropped;
+//   - the anonymous id: none before a yes, then the same on every later visit (the user
+//     of every message and the session's distinct id), gone with a no and new after;
 //   - a failed load, a lost WebGL context and the engine's error exit are each reported
 //     once, a failed load letting the SDK load before the start prompt;
 //   - the privacy page's link opens only an https address, only where the game says;
@@ -60,20 +63,27 @@ const HEX32 = /^[0-9a-f]{32}$/;
 const PREFIX = 'grand-treasure-island.';
 const NOW = 1_800_000_000_000;
 
-// localStorage: broken throws on every call, as blocked site data does.
+// localStorage: broken throws on every call, as blocked site data does; the keys
+// written (setItem) and deleted, in order.
 class Storage {
-  constructor({broken = false} = {}) { this.map = new Map(); this.broken = broken; }
+  constructor({broken = false} = {}) { this.map = new Map(); this.broken = broken; this.writes = []; this.deletions = []; }
   guard() { if (this.broken) throw Object.assign(new Error('blocked'), {name: 'SecurityError'}); }
   getItem(key) { this.guard(); return this.map.has(key) ? this.map.get(key) : null; }
-  setItem(key, value) { this.guard(); this.map.set(key, String(value)); }
-  removeItem(key) { this.guard(); this.map.delete(key); }
+  setItem(key, value) { this.guard(); this.writes.push(key); this.map.set(key, String(value)); }
+  removeItem(key) { this.guard(); this.deletions.push(key); this.map.delete(key); }
   key(index) { this.guard(); return [...this.map.keys()][index] ?? null; }
   get length() { this.guard(); return this.map.size; }
 }
-// Web Locks: a page's lock stays held until its page dies (die(name)).
+// Web Locks: a lock is held while the promise its callback returns is pending, until its
+// page dies (dieAll); requests counts the locks asked for.
 class Locks {
-  constructor() { this.held = new Set(); }
-  request(name) { this.held.add(name); return new Promise(() => {}); }
+  constructor() { this.held = new Set(); this.requests = 0; }
+  request(name, callback) {
+    this.requests += 1;
+    this.held.add(name);
+    Promise.resolve().then(() => callback()).then(() => this.held.delete(name));
+    return new Promise(() => {});
+  }
   query() { return Promise.resolve({held: [...this.held].map((name) => ({name}))}); }
   dieAll() { this.held.clear(); }
 }
@@ -194,91 +204,131 @@ const SNAPSHOT = {area: '-2,7', movement: 'in_car', height_m: '<5', speed_m_s: '
 const STATS = {first: true, play_min: 1, window_s: 60, fps_median: 41.5, fps_p05: 22.0, fps_worst: 9.5,
   areas_s: {'-2,7': 31, '-2,8': 12, '-1,7': 9, '-3,7': 3, '-3,8': 2, '0,7': 1, '0,8': 1, '1,8': 1, other: 1}, movement_s: {on_foot: 30, jetpack: 10, in_car: 20},
   graphics_changes: [{setting: 'resolution', from: '67', to: '50'}], snapshot: SNAPSHOT};
-// A returning player: the notice was shown on an earlier visit.
-const returning = () => { const storage = new Storage(); storage.setItem(PREFIX + 'crash-notice', String(NOW - 86400000)); return storage; };
-
-{ // No DSN: nothing loads or leaves, and the page keeps its records all the same.
-  const storage = new Storage();
-  storage.setItem(PREFIX + 'session.old', JSON.stringify({v: 1, release: 'grand-treasure-island@2100+abcdef0', build: '2100', phase: 'play', steps: {page_opened: 0, play_started: 5000},
-    snapshot: SNAPSHOT, visible: true, focused: true, store: false, startedAt: NOW - 400000, lastSeenAt: NOW - 20000, clean: false}));
-  const p = page({storage, config: {...CONFIG, dsn: ''}});
+// A player who said yes on an earlier visit, and one who said no.
+const answered = (answer) => { const storage = new Storage(); storage.map.set(PREFIX + 'crash-reports', answer); return storage; };
+const returning = () => answered('yes');
+// Everything a visit does, as the page and the game would do it.
+async function wholeVisit(p) {
   await p.started;
-  check(JSON.parse(p.reporting.read()).notice === true, 'no DSN: the start prompt is not asked for the notice');
-  p.reporting.phase('play'); p.reporting.noticeShown(); p.reporting.playStarted();
-  p.reporting.error(new Error('boom')); p.reporting.contextLost(); p.reporting.snapshot(JSON.stringify(SNAPSHOT)); p.reporting.stats(JSON.stringify(STATS));
+  p.reporting.step('download_finished', 30000);
+  p.reporting.error(new Error('during the load'));
+  p.reporting.phase('play');
+  p.reporting.step('start_prompt', 60020);
+  p.reporting.snapshot(JSON.stringify(SNAPSHOT));
+  p.reporting.seen();
+  p.env.heartbeat();
+  p.reporting.playStarted();
+  p.reporting.error(new Error('in play'));
+  p.reporting.contextLost();
+  p.reporting.engineExit(3);
+  p.reporting.stats(JSON.stringify(STATS));
+  p.reporting.ended();
+  p.reporting.resumed();
   await settle();
-  const status = JSON.parse(p.reporting.status());
-  check(p.sdk.loads === 0 && p.sdk.network.length === 0 && status.blocked === 'no DSN', `no DSN: the SDK loaded ${p.sdk.loads} times and ${p.sdk.network.length} envelopes left (${status.blocked})`);
-  check(storage.getItem(PREFIX + 'unclean') !== null && storage.getItem(PREFIX + 'crash-notice') !== null && [...storage.map.keys()].some((key) => key.startsWith(PREFIX + 'session.') && key !== PREFIX + 'session.old'),
-    'no DSN: the page did not keep its records (the earlier visit\'s end, the notice, this visit\'s record)');
 }
-{ // The switch off (kept from an earlier visit): nothing loads or leaves, on this visit and the next.
-  const storage = returning();
-  storage.setItem(PREFIX + 'crash-reports', 'off');
+
+{ // Not asked yet: over a whole visit nothing is written, locked, loaded or sent; the game asks.
+  const p = page();
+  await wholeVisit(p);
+  const told = JSON.parse(p.reporting.read());
+  check(p.storage.writes.length === 0 && p.storage.deletions.length === 0 && p.locks.requests === 0 && p.sdk.loads === 0 && p.sdk.network.length === 0
+    && told.consent === null && told.storage === true && JSON.parse(p.reporting.status()).blocked === 'not asked yet',
+  `not asked yet: wrote ${p.storage.writes}, deleted ${p.storage.deletions}, locks ${p.locks.requests}, loaded ${p.sdk.loads}, sent ${p.sdk.network.length}, read ${JSON.stringify(told)}`);
+}
+{ // Answered no on an earlier visit: nothing written, locked, loaded or sent, this visit and the next.
+  const storage = answered('no');
   for (const visit of [1, 2]) {
     const p = page({storage});
-    await p.started;
-    p.reporting.phase('play'); p.reporting.playStarted(); p.reporting.error(new Error('boom ' + visit)); p.reporting.stats(JSON.stringify(STATS));
-    await settle();
+    await wholeVisit(p);
     const told = JSON.parse(p.reporting.read());
-    check(p.sdk.loads === 0 && p.sdk.network.length === 0 && told.on === false && told.notice === false, `switched off, visit ${visit}: loaded ${p.sdk.loads}, sent ${p.sdk.network.length}, read ${JSON.stringify(told)}`);
+    check(storage.writes.length === 0 && storage.deletions.length === 0 && p.locks.requests === 0 && p.sdk.loads === 0 && p.sdk.network.length === 0 && told.consent === 'no',
+      `answered no, visit ${visit}: wrote ${storage.writes}, locks ${p.locks.requests}, loaded ${p.sdk.loads}, sent ${p.sdk.network.length}, read ${JSON.stringify(told)}`);
   }
 }
-{ // Storage that can't be read: nothing loads or leaves, and no notice is asked for.
+{ // Storage that can't be read: nothing loaded or sent, no question (storage false), a yes kept nowhere.
   const p = page({storage: new Storage({broken: true})});
   await p.started;
-  p.reporting.noticeShown(); p.reporting.phase('play'); p.reporting.playStarted(); p.reporting.error(new Error('boom'));
+  p.reporting.phase('play');
+  p.reporting.setConsent('yes');
+  p.reporting.playStarted();
+  p.reporting.error(new Error('boom'));
   await settle();
   const told = JSON.parse(p.reporting.read());
-  check(p.sdk.loads === 0 && p.sdk.network.length === 0 && told.notice === false && told.on === null, `broken storage: loaded ${p.sdk.loads}, sent ${p.sdk.network.length}, read ${JSON.stringify(told)}`);
+  check(p.sdk.loads === 0 && p.sdk.network.length === 0 && p.locks.requests === 0 && told.consent === null && told.storage === false,
+    `broken storage: loaded ${p.sdk.loads}, sent ${p.sdk.network.length}, locks ${p.locks.requests}, read ${JSON.stringify(told)}`);
 }
-{ // A first visit: nothing before the notice, nor before play starts once it shows; then
-  // the SDK loads once and what waited leaves, with the load's transaction.
+{ // No DSN, with the yes kept: nothing loads or leaves, and the page keeps its records all the same.
+  const storage = returning();
+  storage.setItem(PREFIX + 'session.old', JSON.stringify({v: 1, release: 'grand-treasure-island@2100+abcdef0', build: '2100', since: 'load', phase: 'play', steps: {page_opened: 0, play_started: 5000},
+    snapshot: SNAPSHOT, visible: true, focused: true, store: false, startedAt: NOW - 400000, lastSeenAt: NOW - 20000, clean: false}));
+  const p = page({storage, config: {...CONFIG, dsn: ''}});
+  await wholeVisit(p);
+  const status = JSON.parse(p.reporting.status());
+  check(p.sdk.loads === 0 && p.sdk.network.length === 0 && status.blocked === 'no DSN', `no DSN: the SDK loaded ${p.sdk.loads} times and ${p.sdk.network.length} envelopes left (${status.blocked})`);
+  check(storage.getItem(PREFIX + 'unclean') !== null && [...storage.map.keys()].some((key) => key.startsWith(PREFIX + 'session.') && key !== PREFIX + 'session.old'),
+    'no DSN: the page did not keep its records (the earlier visit\'s end, this visit\'s record)');
+}
+{ // The first visit, yes at the start prompt: nothing before the answer; then the answer and
+  // the record kept, the SDK loaded once, the session; errors from then on; "game start"
+  // when play starts, no load times; the timed stats.
   const p = page();
   await p.started;
   p.reporting.step('download_finished', 30000);
   p.reporting.error(new Error('during the load'));
   p.reporting.phase('play');
   p.reporting.step('start_prompt', 60020);
+  p.reporting.snapshot(JSON.stringify(SNAPSHOT));
+  p.env.heartbeat();
   await settle();
-  const beforeNotice = [p.sdk.loads, p.sdk.network.length];
-  check(JSON.parse(p.reporting.read()).notice === true, 'first visit: the start prompt is not asked for the notice');
-  p.reporting.noticeShown();
-  p.reporting.error(new Error('at the start prompt'));
+  const beforeYes = [p.storage.writes.length, p.locks.requests, p.sdk.loads, p.sdk.network.length];
+  p.env.since = 70000;
+  p.reporting.setConsent('yes');
   await settle();
-  const beforePlay = [p.sdk.loads, p.sdk.network.length];
+  const kept = [p.storage.getItem(PREFIX + 'crash-reports'), [...p.storage.map.keys()].filter((key) => key.startsWith(PREFIX + 'session.')).length, p.locks.held.size];
+  p.reporting.error(new Error('after the yes'));
   p.env.since = 75000;
   p.reporting.playStarted();
   await settle();
-  check(beforeNotice.join() === '0,0' && beforePlay.join() === '0,0', `first visit: loaded and sent ${beforeNotice} before the notice and ${beforePlay} before play started, not 0,0`);
+  p.env.since = 135000;
+  p.reporting.stats(JSON.stringify(STATS));
+  await settle();
+  check(beforeYes.join() === '0,0,0,0', `first visit: before the yes wrote, locked, loaded and sent ${beforeYes}, not 0,0,0,0`);
+  check(kept[0] === 'yes' && kept[1] === 1 && kept[2] === 1, `first visit: the yes did not keep the answer, the visit's record and its lock (${kept})`);
   check(p.sdk.loads === 1 && p.sdk.loadedWith.join() === `${CONFIG.sdk},${CONFIG.integrity}`, `first visit: the SDK loaded ${p.sdk.loads} times, from ${p.sdk.loadedWith}`);
-  const options = p.sdk.inits[0];
+  const options = p.sdk.inits[0] || {integrations: [], dataCollection: {}, tracePropagationTargets: [1]};
   check(options.defaultIntegrations === false && options.integrations.map((i) => i.name).join() === 'eventFilters,linkedErrors,dedupe,browserSession' && options.tracePropagationTargets.length === 0
     && options.dataCollection.userInfo === false && options.dataCollection.httpHeaders === false && options.dataCollection.cookies === false && options.dataCollection.urlQueryParams === false
     && options.sendClientReports === false && options.maxBreadcrumbs === 0 && options.attachStacktrace === false && options.tracesSampleRate === 1 && options.environment === 'production' && options.release === CONFIG.release,
   `first visit: the SDK's settings are not the page's narrow ones: ${JSON.stringify({...options, transport: undefined, beforeSend: undefined, beforeSendTransaction: undefined})}`);
   const events = ofType(p.sdk, 'event');
-  const loads = ofType(p.sdk, 'transaction').filter((t) => t.transaction === 'game load');
+  const transactions = ofType(p.sdk, 'transaction');
+  const starts = transactions.filter((t) => t.transaction === 'game start');
   const sessions = ofType(p.sdk, 'session');
-  check(events.length === 2 && events[0].tags.phase === 'loading' && events[0].tags.kind === 'error' && events[0].exception.values[0].value === 'during the load' && events[1].tags.phase === 'play',
-    `first visit: the errors made during the load and at the start prompt did not leave once each, tagged with their phases (${JSON.stringify(events.map((e) => e.tags))})`);
-  check(loads.length === 1 && loads[0].tags.visit === 'first' && measure(loads[0], 'funnel.download_finished') === 30000 && measure(loads[0], 'funnel.start_prompt') === 60020
-    && measure(loads[0], 'funnel.play_started') === 75000 && loads[0].spans.some((s) => s.description === 'waiting to play'),
-  `first visit: the load's transaction did not carry the funnel's times (${JSON.stringify(loads.map((l) => [l.tags, l.measurements]))})`);
+  check(events.length === 1 && events[0].exception.values[0].value === 'after the yes' && events[0].tags.phase === 'play',
+    `first visit: the errors that left are not the one after the yes alone (${JSON.stringify(events.map((e) => [e.exception && e.exception.values[0].value, e.tags.phase]))})`);
+  check(starts.length === 1 && measure(starts[0], 'funnel.play_started') === 75000 && Object.keys(starts[0].measurements || {}).join() === 'funnel.play_started' && starts[0].tags.kind === 'start'
+    && transactions.every((t) => t.transaction !== 'game load') && transactions.filter((t) => t.transaction === 'game stats').length === 1,
+  `first visit: not one game start with play's time alone, no load and the stats (${JSON.stringify(transactions.map((t) => [t.transaction, t.tags.kind, t.measurements]))})`);
   const id = events[0] && events[0].user && events[0].user.id;
-  check(HEX32.test(id || '') && loads[0] && loads[0].user.id === id && sessions.length === 1 && sessions[0].did === id, `first visit: the anonymous id is not every message's user and the session's distinct id (${id}, ${JSON.stringify(sessions)})`);
+  check(HEX32.test(id || '') && starts[0] && starts[0].user.id === id && sessions.length === 1 && sessions[0].did === id, `first visit: the anonymous id is not every message's user and the session's distinct id (${id}, ${JSON.stringify(sessions)})`);
   check(sentItems(p.sdk).every(([type]) => type !== 'client_report'), 'first visit: a client report left');
+  check(JSON.stringify(JSON.parse(p.reporting.status()).steps) === JSON.stringify({play_started: 75000, playing_1min: 135000}), `first visit: the record's steps are not those after the yes alone (${JSON.stringify(JSON.parse(p.reporting.status()).steps)})`);
 }
-{ // A returning player: the SDK loads at the start prompt; the load's transaction waits for play.
+{ // A player who said yes earlier: the SDK loads at the start prompt; the load's transaction waits for play.
   const p = page({storage: returning()});
   await p.started;
+  p.reporting.step('download_finished', 30000);
   p.reporting.phase('play');
+  p.reporting.step('start_prompt', 60020);
   await settle();
   const atPrompt = [p.sdk.loads, ofType(p.sdk, 'session').length, ofType(p.sdk, 'transaction').length];
+  p.env.since = 75000;
   p.reporting.playStarted();
   await settle();
   const loads = ofType(p.sdk, 'transaction').filter((t) => t.transaction === 'game load');
-  check(atPrompt.join() === '1,1,0' && loads.length === 1 && loads[0].tags.visit === 'returning', `returning player: at the start prompt loaded, sessions, transactions ${atPrompt} (want 1,1,0); then ${loads.length} load transactions`);
+  check(atPrompt.join() === '1,1,0' && loads.length === 1 && measure(loads[0], 'funnel.download_finished') === 30000 && measure(loads[0], 'funnel.start_prompt') === 60020
+    && measure(loads[0], 'funnel.play_started') === 75000 && loads[0].spans.some((s) => s.description === 'waiting to play') && loads[0].tags.visit === undefined,
+  `yes earlier: at the start prompt loaded, sessions, transactions ${atPrompt} (want 1,1,0); then ${JSON.stringify(loads.map((l) => [l.tags, l.measurements]))}`);
 }
 { // An earlier visit that ended unexpectedly in front: reported once, with its tags and snapshot.
   const storage = returning();
@@ -291,6 +341,7 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   storage.setItem(PREFIX + 'session.clean', record({clean: true}));
   storage.setItem(PREFIX + 'session.gave-up', record({clean: true, steps: {page_opened: 0, download_finished: 30000, start_prompt: 50000}}));
   storage.setItem(PREFIX + 'session.live', record({}));
+  storage.setItem(PREFIX + 'session.answered', record({clean: true, since: 'answer', steps: {}}));
   locks.held.add(PREFIX + 'session.live');
   const p = page({storage, locks});
   await p.started;
@@ -306,7 +357,7 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   check(visits.length === 1 && visits[0].release === 'grand-treasure-island@2100+abcdef0' && visits[0].tags.reached === 'start_prompt' && visits[0].tags.ended === 'cleanly'
     && measure(visits[0], 'funnel.start_prompt') === 50000 && !(visits[0].contexts && visits[0].contexts.game),
   `an earlier visit that ended before play: sent as ${JSON.stringify(visits.map((v) => [v.release, v.tags, v.measurements]))}, not one game visit of build 2100 that reached the start prompt`);
-  check(storage.getItem(PREFIX + 'session.live') !== null && ['crashed', 'background', 'unfocused', 'clean', 'gave-up'].every((name) => storage.getItem(PREFIX + 'session.' + name) === null),
+  check(storage.getItem(PREFIX + 'session.live') !== null && ['crashed', 'background', 'unfocused', 'clean', 'gave-up', 'answered'].every((name) => storage.getItem(PREFIX + 'session.' + name) === null),
     'earlier visits: a live tab\'s record was taken, or a dead one left');
   const again = page({storage, locks});
   await again.started;
@@ -355,26 +406,35 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   for (let i = 0; i < 7; i += 1) q.sdk.transport.send([{}, [[{type: 'event'}, {message: 'direct ' + i}]]]);
   check(ofType(q.sdk, 'event').length === 5, `the transport's cap: ${ofType(q.sdk, 'event').length} of 7 events sent straight to it left, not 5`);
 }
-{ // The switch off mid-visit: at once nothing more, the SDK closed and the anonymous id gone; on again sends again.
-  const p = page({storage: returning()});
+{ // A no mid-visit (Options' switch off): at once nothing more, the SDK closed, every key of
+  // ours but the answer deleted and the lock let go; a yes again sends again, with a new id.
+  const storage = returning();
+  storage.map.set(PREFIX + 'visits', '[]');
+  const p = page({storage});
   await p.started;
   p.reporting.phase('play');
   p.reporting.playStarted();
+  p.reporting.error(new Error('before the no'));
   await settle();
   const before = p.sdk.network.length;
-  p.reporting.setEnabled(false);
-  p.reporting.error(new Error('after off'));
+  const firstId = storage.getItem(PREFIX + 'anonymous-id');
+  p.reporting.setConsent('no');
+  p.env.heartbeat();
+  p.reporting.seen();
+  p.reporting.error(new Error('after the no'));
   p.reporting.stats(JSON.stringify(STATS));
   p.sdk.transport.send([{}, [[{type: 'event'}, {message: 'queued in the SDK'}]]]);
   await settle();
-  const off = [p.sdk.network.length - before, p.sdk.closes, p.storage.getItem(PREFIX + 'anonymous-id')];
-  p.reporting.setEnabled(true);
+  const off = [p.sdk.network.length - before, p.sdk.closes, [...storage.map.keys()].join(), storage.getItem(PREFIX + 'crash-reports'), p.locks.held.size];
+  p.reporting.setConsent('yes');
   await settle();
-  p.reporting.error(new Error('after on'));
+  p.reporting.error(new Error('after the yes again'));
   await settle();
-  const onAgain = ofType(p.sdk, 'event').filter((e) => e.exception && e.exception.values[0].value === 'after on');
-  check(off[0] === 0 && off[1] === 1 && off[2] === null && p.sdk.inits.length === 2 && onAgain.length === 1,
-    `switched off mid-visit: ${off[0]} more envelopes, ${off[1]} closes, anonymous id ${off[2]}; on again: ${p.sdk.inits.length} inits, ${onAgain.length} events`);
+  const again = ofType(p.sdk, 'event').filter((e) => e.exception && e.exception.values[0].value === 'after the yes again');
+  const newId = again[0] && again[0].user.id;
+  check(HEX32.test(firstId || '') && off[0] === 0 && off[1] === 1 && off[2] === PREFIX + 'crash-reports' && off[3] === 'no' && off[4] === 0 && p.sdk.inits.length === 2 && again.length === 1
+    && HEX32.test(newId || '') && newId !== firstId,
+  `a no mid-visit: ${off[0]} more envelopes, ${off[1]} closes, keys left ${off[2]}, answer ${off[3]}, locks held ${off[4]}; a yes again: ${p.sdk.inits.length} inits, ${again.length} events, id ${newId} (was ${firstId})`);
 }
 { // The timed stats: a transaction over the window, the cells and movements as spans, the
   // numbers as measurements; dropped before the SDK is up; at most 48.
@@ -399,16 +459,16 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   for (let i = 0; i < 60; i += 1) p.reporting.stats(JSON.stringify({...STATS, first: false}));
   check(ofType(p.sdk, 'transaction').filter((t) => t.transaction === 'game stats').length === 48, 'the timed stats: not at most 48 per page load');
 }
-{ // The anonymous id: none before the notice or with the switch off; then kept across
-  // visits as every message's user; deleted by the switch off, a new one when on again.
+{ // The anonymous id: none before a yes; then kept across visits as every message's user;
+  // gone with a no (kept so on the next visit), a new one after a yes again.
   const storage = new Storage();
   const first = page({storage});
   await first.started;
   first.reporting.phase('play');
-  first.reporting.error(new Error('before the notice'));
+  first.reporting.error(new Error('before the yes'));
   await settle();
-  const beforeNotice = storage.getItem(PREFIX + 'anonymous-id');
-  first.reporting.noticeShown();
+  const beforeYes = storage.getItem(PREFIX + 'anonymous-id');
+  first.reporting.setConsent('yes');
   first.reporting.playStarted();
   await settle();
   const made = storage.getItem(PREFIX + 'anonymous-id');
@@ -422,17 +482,18 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   }
   const off = page({storage});
   await off.started;
-  off.reporting.setEnabled(false);
-  off.reporting.phase('play'); off.reporting.playStarted(); off.reporting.error(new Error('while off'));
+  off.reporting.setConsent('no');
   await settle();
-  const whileOff = [storage.getItem(PREFIX + 'anonymous-id'), off.sdk.network.length];
-  off.reporting.setEnabled(true);
-  off.reporting.error(new Error('on again'));
+  const later = page({storage});
+  await wholeVisit(later);
+  const whileOff = [storage.getItem(PREFIX + 'anonymous-id'), later.sdk.network.length];
+  later.reporting.setConsent('yes');
+  later.reporting.error(new Error('yes again'));
   await settle();
-  const fresh = (ofType(off.sdk, 'event')[0] || {user: {}}).user.id;
-  check(beforeNotice === null && HEX32.test(made || '') && ids.every((id) => id === made) && whileOff[0] === null && whileOff[1] === 0 && HEX32.test(fresh || '') && fresh !== made
+  const fresh = (ofType(later.sdk, 'event')[0] || {user: {}}).user.id;
+  check(beforeYes === null && HEX32.test(made || '') && ids.every((id) => id === made) && whileOff[0] === null && whileOff[1] === 0 && HEX32.test(fresh || '') && fresh !== made
     && storage.getItem(PREFIX + 'anonymous-id') === fresh,
-  `the anonymous id: before the notice ${beforeNotice}, made ${made}, later visits ${ids}, while off ${whileOff}, on again ${fresh}`);
+  `the anonymous id: before the yes ${beforeYes}, made ${made}, later visits ${ids}, after a no ${whileOff}, a yes again ${fresh}`);
 }
 { // A failed load (the SDK loads at once), a lost WebGL context and an error exit: each once.
   const p = page({storage: returning()});
@@ -450,6 +511,12 @@ const returning = () => { const storage = new Storage(); storage.setItem(PREFIX 
   q.reporting.loadFailed('Game stopped before startup completed (1).');
   await settle();
   check((ofType(q.sdk, 'event')[0] || {}).message === 'load failed: Game stopped before startup completed (1).', 'a failed start: not reported with its first line');
+  const r = page();
+  await r.started;
+  r.reporting.loadFailed("Failed loading file 'treasure-island-140968e9.pck': HTTP 503");
+  await settle();
+  check(r.sdk.loads === 0 && r.sdk.network.length === 0 && r.storage.writes.length === 0 && JSON.parse(r.reporting.status()).phase === 'error',
+    `a failed load before any answer: loaded ${r.sdk.loads}, sent ${r.sdk.network.length}, wrote ${r.storage.writes}, phase ${JSON.parse(r.reporting.status()).phase}`);
 }
 { // The privacy page's link: only an https address and areas of four numbers; a point in
   // an area gives the address, anywhere else nothing.
@@ -499,4 +566,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s anonymous statistics load and send nothing with no DSN (its records still kept), with the switch off (this visit and the next), with unreadable storage, before the notice or before play in the visit that shows it; then the SDK loads once with narrow settings and what waited leaves: the load\'s transaction with the funnel\'s times, errors tagged with their phase, the anonymous id as every message\'s user and the session\'s distinct id; an earlier visit\'s unexpected end is reported once with its tags and snapshot (a background, clean or live one not), an earlier visit that ended before play once as a game visit of its build; the scrubbing leaves no query, host, path user name, request, cookie, user agent, breadcrumb, extra, other context, IP or stray tag, sessions only the anonymous id, no client reports; at most five error events per page load, each once, in the page and the transport; the switch off stops sending at once, closes the SDK and deletes the anonymous id, on again sends with a new one; the timed stats go as a transaction with cells and movements as spans and the numbers as measurements, none before the SDK, at most 48; the anonymous id is made only once a message may go, kept across visits and replaced after off and on; a failed load, a lost context and an error exit are each reported once; the privacy link opens only an https address where the game says; the load\'s steps, device tags and environment read right; the page\'s names match GameStats\'');
+console.log('PASS: the page\'s anonymous statistics write, lock, load and send nothing while not asked yet, after a no (this visit and the next) or with unreadable storage, and drop errors made before a yes; a yes at the start prompt keeps the answer and the visit\'s record from then on, loads the SDK once with narrow settings, sends the session, the errors after it, a game start with play\'s time (no load times from before the answer) and the timed stats; a player who said yes earlier gets the SDK at the start prompt and the load\'s transaction with the funnel\'s times; with no DSN nothing loads or leaves but the records are kept; an earlier visit\'s unexpected end is reported once with its tags and snapshot (a background, clean or live one not), an earlier visit that ended before play once as a game visit of its build (not one begun at the answer); the scrubbing leaves no query, host, path user name, request, cookie, user agent, breadcrumb, extra, other context, IP or stray tag, sessions only the anonymous id, no client reports; at most five error events per page load, each once, in the page and the transport; a no stops sending at once, closes the SDK, deletes every key but the answer and lets the lock go, a yes again sends with a new anonymous id; the timed stats go as a transaction with cells and movements as spans and the numbers as measurements, none before the SDK, at most 48; the anonymous id is made only after a yes, kept across visits and replaced after a no and a yes; a failed load, a lost context and an error exit are each reported once (a failed load before any answer not at all); the privacy link opens only an https address where the game says; the load\'s steps, device tags and environment read right; the page\'s names match GameStats\'');

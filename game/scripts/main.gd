@@ -141,9 +141,9 @@ var night_lights: NightLights
 var sound: Sound
 ## The page that sends the anonymous statistics (CrashReports.web_page(): on the web,
 ## window.__tiReporting), or null where there is none; a test sets a stand-in before
-## adding main, as a browser would. Their switch, as main starts it, and the game's state
-## and timed stats for them (GameStats, made once the world is ready where there is a
-## page), from when the game started.
+## adding main, as a browser would. The player's answer about them, as main starts it,
+## and the game's state and timed stats for them (GameStats, made once the world is ready
+## where there is a page; sent only after a yes), from when the game started.
 var crash_page: Object = CrashReports.web_page()
 var crash_reports: CrashReports
 var game_stats: GameStats
@@ -205,18 +205,22 @@ func _ready() -> void:
 	sound.apply_settings(float(kept.volume), bool(kept.muted))
 	hud.set_sound_settings(sound.volume, sound.muted)
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
-	# The anonymous statistics (CrashReports): the switch as kept here and on
-	# the page, off on either side winning, the page told and the result kept; Options
-	# shows the switch where there is a page (the web).
-	var reports_kept := CrashReports.saved() if use_saved_settings and settings_problem.is_empty() else true
+	# The anonymous statistics (CrashReports; owner, 2026-11-17: "Ask once on first
+	# launch"): the answer as kept here and on the page ("no" on either side winning, then
+	# "yes"; nothing kept is not asked yet), the page told and the result kept; a test or
+	# capture driver starts not asked. The start prompt asks while it is still to come;
+	# Options shows the switch where there is a page (the web), on for a yes alone, and
+	# either answer goes the same way.
+	var reports_kept := CrashReports.saved() if use_saved_settings and settings_problem.is_empty() else {"answer": "", "asked": 0}
 	crash_reports = CrashReports.new(crash_page, reports_kept)
-	if crash_reports.on != reports_kept and use_saved_settings and settings_problem.is_empty():
-		CrashReports.save(crash_reports.on)
-	hud.set_crash_reports(crash_page != null, crash_reports.on)
+	if crash_reports.answer != str(reports_kept.answer) and use_saved_settings and settings_problem.is_empty():
+		CrashReports.save(crash_reports.answer, crash_reports.asked)
+	hud.set_crash_reports(crash_reports.page != null, crash_reports.on)
 	hud.crash_reports_chosen.connect(_on_crash_reports_chosen)
+	hud.consent_answered.connect(_on_crash_reports_chosen)
 	# The privacy page: on the web the page opens it inside the player's tap or click on
-	# the start prompt's line or Options' link, wherever the HUD says they are; a desktop
-	# build opens it in the system's browser (GameStats.open_privacy).
+	# the question's link or Options', wherever the HUD says they are; a desktop build
+	# opens it in the system's browser (GameStats.open_privacy).
 	hud.link_areas_changed.connect(func(areas: Array) -> void: crash_reports.link_areas(areas, hud.get_viewport_rect().size))
 	hud.privacy_link_pressed.connect(func() -> void:
 		if not OS.has_feature("web"):
@@ -571,7 +575,7 @@ func _on_world_ready(_report: Dictionary) -> void:
 			_touch_controls.vehicles = vehicles
 	# The game's state and timed stats for the anonymous statistics (GameStats), where
 	# a page sends them: they count play only, from the start prompt's tap on.
-	if crash_page != null and game_stats == null:
+	if crash_reports.page != null and game_stats == null:
 		game_stats = GameStats.new(self, _started_msec, CrashReports.web_adapter() if OS.has_feature("web") else RenderingServer.get_video_adapter_name())
 		game_stats.name = "GameStats"
 		game_stats.snapshot_changed.connect(crash_reports.snapshot)
@@ -737,11 +741,12 @@ func _set_paused(paused: bool, quiet := false) -> void:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
 	elif not hud.start_prompt_text().is_empty() and crash_reports != null:
-		# The start prompt's tap or click: play starts, and the reports may go out. Its
-		# line about them was on screen with it (behind a controls screen opened on
-		# the loading screen, it was not when the prompt came up).
-		if hud.start_notes_state().reports:
-			crash_reports.notice_shown()
+		# The start prompt's tap or click: play starts. Play is no answer: with the question
+		# still on screen, this visit counts as asked once more (the last such visit makes
+		# the answer no; CrashReports.unanswered_play).
+		if hud.start_notes_state().question:
+			crash_reports.unanswered_play()
+			_keep_crash_reports("started play without answering about the statistics, writing")
 		crash_reports.play_started()
 	if get_tree().paused != paused and not quiet:
 		# The pause menu opening, a little lower closing.
@@ -798,17 +803,25 @@ func _on_graphics_chosen(key: String, value: Variant) -> void:
 	hud.show_graphics(graphics.current)
 
 
-## The anonymous statistics switched on the options screen: on or off at
-## once on the page (CrashReports.choose), and kept for next time (never by a driver
-## in the player's own settings file).
-func _on_crash_reports_chosen(on: bool) -> void:
-	crash_reports.choose(on)
-	var settings_problem := player_settings_problem(get_tree(), "switched the crash reports, writing")
+## The player's answer about the anonymous statistics, from the start prompt's question
+## ("Yes, send" or "No thanks") or Options' switch (on or off): on the page at once
+## (CrashReports.choose), kept for next time (never by a driver in the player's own
+## settings file), the switch showing it and the question gone.
+func _on_crash_reports_chosen(yes: bool) -> void:
+	crash_reports.choose(yes)
+	_keep_crash_reports("answered about the anonymous statistics, writing")
+	hud.show_crash_reports(crash_reports.on)
+	hud.end_consent_question()
+
+
+## The answer about the anonymous statistics and the visits asked, kept for next time
+## (never by a driver in the player's own settings file: USE says what it did).
+func _keep_crash_reports(use: String) -> void:
+	var settings_problem := player_settings_problem(get_tree(), use)
 	if settings_problem.is_empty():
-		CrashReports.save(crash_reports.on)
+		CrashReports.save(crash_reports.answer, crash_reports.asked)
 	else:
 		push_error(settings_problem)
-	hud.show_crash_reports(crash_reports.on)
 
 
 ## The master volume or mute changed on the options screen: on at once, and kept
@@ -853,17 +866,15 @@ func _resume_game() -> void:
 ## screen; on any iPhone or iPad, that the sound needs the silent mode off, unless the
 ## game's own sound is off (Options' mute or no volume); on an Android phone or
 ## tablet nothing to read, the prompt's tap going full screen (_resume_game). Then on
-## any web page, until the page has recorded it shown, the line about the crash and
-## performance reports (CrashReports.notice), which the page hears is shown. A page
-## without the notes shows none of the phone ones.
+## any web page, while the answer is still to come, the question about the anonymous
+## statistics (CrashReports.should_ask). A page without the notes shows none of the phone
+## ones.
 func _show_start_notes() -> void:
 	var told: Variant = JSON.parse_string(str(JavaScriptBridge.eval("window.__tiStartNotes ? window.__tiStartNotes.read() : '{}'"))) if OS.has_feature("web") else {}
 	var notes: Dictionary = told if told is Dictionary else {}
 	_full_screen_on_start = bool(notes.get("full_screen", false))
 	var sound_on := not sound.muted and sound.volume > 0.0
-	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on, crash_reports.notice)
-	if hud.start_notes_state().reports:
-		crash_reports.notice_shown()
+	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on, crash_reports.should_ask())
 
 
 func _exit_game() -> void:
@@ -1007,9 +1018,12 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
-		# The anonymous statistics: whether Options offers the switch and it is
-		# on, where the switch is, and whether the start prompt shows their line.
-		"crash_reports": {"offered": hud.privacy_row.visible, "on": crash_reports.on, "notice": hud.start_notes_state().reports, "switch": [hud.crash_reports.get_global_rect().get_center().x, hud.crash_reports.get_global_rect().get_center().y]},
+		# The anonymous statistics: whether Options offers the switch, the answer ("yes",
+		# "no" or "" for not asked) and the visits asked without one, whether the start
+		# prompt asks, and where the switch, the answers and the question's link are
+		# (each [] while hidden).
+		"crash_reports": {"offered": hud.privacy_row.visible, "answer": crash_reports.answer, "asked": crash_reports.asked, "question": hud.start_notes_state().question,
+			"switch": _center_of(hud.crash_reports), "yes": _center_of(hud.consent_yes), "no": _center_of(hud.consent_no), "link": _center_of(hud.consent_link_box), "options_link": _center_of(hud.privacy_link_box)},
 		# The time of day: whether it is on (DayClock.enabled), the clock's instant,
 		# whether it runs, the Sun's rotation and sky mode, whether the options screen
 		# offers the date and time, and whether there are night lights (none on the
@@ -1048,6 +1062,14 @@ func _graphics_state() -> Dictionary:
 func _rect(control: Control) -> Array:
 	var at := control.get_global_rect()
 	return [at.position.x, at.position.y, at.size.x, at.size.y]
+
+
+## A control's centre in the HUD's pixels while it shows, else [].
+func _center_of(control: Control) -> Array:
+	if control == null or not control.is_visible_in_tree():
+		return []
+	var at := control.get_global_rect().get_center()
+	return [at.x, at.y]
 
 
 func _sound_state() -> Dictionary:
