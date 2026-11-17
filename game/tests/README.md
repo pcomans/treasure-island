@@ -33,7 +33,7 @@ It must pass before anything is pushed to `main`, with the private sounds fetche
 | `shared/island_test.gd -- --use-prebuilt-world` | The same, on the baked world desktop exports load (baked first by `tools/prebuild-static-world.sh native`, removed afterwards). |
 | `tools/validate_godot_world.mjs` | The committed generated world is valid. |
 | `tools/check_godot_world_determinism.mjs` | Fresh world builds from the OSM sources are identical to each other and to the committed world. |
-| `tools/check_street_detail_clearance.mjs` | With every street-detail layer on, nothing intrudes on a catalog stair, its door or approach, the ferry spawn, the ferry path or the QA route (a fence counts by its solid runs), and no built fence shuts walkable ground in. |
+| `tools/check_street_detail_clearance.mjs` | With every street-detail layer on, nothing intrudes on a catalog stair, its door or approach, the ferry spawn, the ferry path or the QA route (a fence counts by its solid runs), and no built fence shuts walkable ground in. No solid street prop a car cannot knock over (the furniture kit's `FELLABLE`) stands on the paving of an OSM footway band that a park zone draws (the Cityside Park promenade). |
 
 Checks for one building, used while working on it (see [AGENTS.md](../../AGENTS.md#what-done-means-for-a-building)):
 

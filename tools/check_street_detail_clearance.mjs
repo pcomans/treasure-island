@@ -30,15 +30,30 @@
 // rules, tools/lib/street-yard-generation.mjs) is flooded the same way over its
 // whole polygon, walls, shed rows, containers and vehicles included, so no yard
 // shuts walkable ground in (its gates stay open).
+//
+// No solid street prop a car cannot knock over stands on the paving of an OSM
+// footway that a park zone draws as a band (owner, 2026-11-17: two salvaged stump
+// seats inferred onto the Cityside Park promenade stopped every car driven along
+// it). A band is a zone surface layer drawn along an OSM way tagged
+// highway=footway, its centre line offset_m to the way's left and width_m wide,
+// as the street ground draws it (offsetPolyline). A prop stands on the band when
+// its foot lies within it and on the band's own material: one on a later layer
+// drawn over the strip (plaza paint, a tree strip's mulch) stands on that layer.
+// Solid is a point row isStreetSolid counts (a street prop, a parked car, a tree
+// trunk); the props a car knocks over are the furniture kit's FELLABLE, read from
+// the kit itself.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { parseRawOsmXml, rawWayLine } from "./lib/osm-geometry.mjs";
+import { STREET_FURNITURE_PROPS } from "./lib/street-furniture-generation.mjs";
 import {
   POCKET_CELL_M,
   STREET_DETAIL_KINDS,
   STREET_DETAIL_LAYERS,
+  isStreetSolid,
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   planDistance,
@@ -49,8 +64,10 @@ import {
   streetDetailPieces,
   streetSolids,
 } from "./lib/street-detail-generation.mjs";
+import { offsetPolyline } from "./lib/street-ground-generation.mjs";
 import { unpackPlantingRows } from "./lib/street-planting-generation.mjs";
 import { isYardZone } from "./lib/street-yard-generation.mjs";
+import { SOURCE_CONTRACT } from "./lib/world-contract.mjs";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const worldRoot = resolve(projectRoot, process.argv[2] ?? "generated/world");
@@ -114,15 +131,62 @@ function main() {
   if (covered.length > 0) console.log(`NOTE: always-on street ground (walkable, not an intrusion) lies on ${covered.join(", ")}`);
   const pockets = fencedPockets(manifest, detail);
   failures.push(...pockets.failures);
+  const footways = footwayObstacles(detail);
+  failures.push(...footways.failures);
   const stairs = zones.filter((zone) => zone.name === "stair").length;
   // A check with nothing to compare would pass untested.
   if (items.length === 0 || stairs === 0) failures.push(`nothing to check: ${items.length} items, ${stairs} stair flights`);
+  if (footways.bands.length === 0 || footways.solids === 0) failures.push(`nothing to check: ${footways.bands.length} footway bands, ${footways.solids} solid props a car cannot knock over`);
   for (const message of failures) console.log(`FAIL: ${message}`);
   if (failures.length > 0) process.exit(1);
   const byLayer = STREET_DETAIL_LAYERS.map((layer) => `${items.filter((item) => item.layer === layer).length} ${layer}`).join(", ");
   const closest = Object.entries(minimum).map(([name, value]) => `${name} ${value.toFixed(2)} m`).join(", ");
   console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
   console.log(`PASS: ${pockets.fences} built fences and ${pockets.yards} yards shut no walkable ground in (${pockets.cells} cells of ${POCKET_CELL_M} m checked)`);
+  console.log(`PASS: none of ${footways.solids} solid street props a car cannot knock over stands on the paving of ${footways.bands.length} OSM footway band(s) (${footways.bands.map((band) => `${band.id} ${band.way}`).join(", ")})`);
+}
+
+// Solid props a car cannot knock over standing on a zone's OSM footway band
+// (see the header): {bands, solids, failures}.
+function footwayObstacles(detail) {
+  const osm = parseRawOsmXml(resolve(projectRoot, SOURCE_CONTRACT.raw_osm.path));
+  const bands = [];
+  for (const zone of loadStreetDetailZones(projectRoot).zones) {
+    for (const layer of zone.ground?.surfaces?.layers ?? []) {
+      const way = layer.shape.way;
+      if (way === undefined || osm.ways.get(way.slice(1))?.tags.highway !== "footway") continue;
+      // The layer's centre line in the east/north frame, then in world x, z.
+      const centre = offsetPolyline(rawWayLine(osm, way.slice(1)), layer.shape.offset_m).map(([east, north]) => [east, -north]);
+      bands.push({ id: `${zone.id}/${layer.id}`, way, material: layer.material, centre, half: layer.shape.width_m / 2 });
+    }
+  }
+  const fellable = fellableProps();
+  const failures = [];
+  let solids = 0;
+  for (const row of detail.rows) {
+    if (row.geometry !== "point" || !isStreetSolid(row) || fellable.has(row.prop)) continue;
+    solids += 1;
+    const foot = [row.position_m[0], row.position_m[2]];
+    for (const band of bands) {
+      if (row.surface?.material_key !== band.material || planDistance([foot], band.centre) > band.half) continue;
+      failures.push(`${row.id} (${row.prop}) stands on the paving of ${band.id} (OSM footway ${band.way}) at (${foot.map((value) => value.toFixed(2)).join(", ")}), and a car cannot knock it over; keep it off the footway`);
+    }
+  }
+  return { bands, solids, failures };
+}
+
+// The props a car knocks over: the keys of FELLABLE in
+// game/scripts/world/street_furniture_kit.gd, each a kit prop.
+function fellableProps() {
+  const kit = readFileSync(resolve(projectRoot, "game/scripts/world/street_furniture_kit.gd"), "utf8");
+  const start = kit.indexOf("const FELLABLE := {");
+  const block = start < 0 ? "" : kit.slice(start, kit.indexOf("\n}", start));
+  const props = [...block.matchAll(/^\t"([a-z0-9_]+)":/gmu)].map((match) => match[1]);
+  if (props.length === 0 || props.some((prop) => STREET_FURNITURE_PROPS[prop] === undefined)) {
+    console.log(`FAIL: could not read the furniture kit's FELLABLE props (read: ${props.join(", ") || "none"})`);
+    process.exit(1);
+  }
+  return new Set(props);
 }
 
 // Ground a built fence or a yard shuts in (shutInPockets in
