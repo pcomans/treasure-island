@@ -66,11 +66,14 @@ def marks(pixels, frame):
 
 def reduce_native_eye_whites(pixels, source, frame):
     strength = float(wide.ease((frame - EYES_FIRST) / 8))
-    if not strength:
-        return
+    if strength:
+        soften_eye_highlights(pixels, source, observe(source, min(frame, LAST_NATIVE)), strength)
+
+
+def soften_eye_highlights(pixels, source, boxes, strength):
     # Only lower existing native near-white pixels. The native eye material
     # already drew the aperture, dark pupil, eyelashes and the brown lids.
-    for box in observe(source, min(frame, LAST_NATIVE)):
+    for box in boxes:
         if box is None:
             continue
         left, right, top, bottom = np.rint(box).astype(int)
@@ -108,6 +111,20 @@ def encode_tail(raw, tail):
         actual_marks.append(marks(image, frame))
     tracking = rounded_filter(np.stack(actual_marks))
     settled = developed(src[-1], LAST_NATIVE, 0)
+
+    def frames():
+        for frame in range(JOIN, LAST + 1):
+            native = min(frame, LAST_NATIVE)
+            source = settled if native == LAST_NATIVE else developed(src[native - CAPTURE_START], native, 0)
+            if frame >= EYES_FIRST:
+                patch = tracking[native - MOUTH_FIRST] if frame >= MOUTH_FIRST else None
+                source = express(source, patch, frame)
+            yield source
+
+    encode_rgb24(tail, frames())
+
+
+def encode_rgb24(output, frames):
     convert = ("scale=in_range=pc:out_range=tv:out_color_matrix=bt709"
                ":flags=accurate_rnd+full_chroma_int,format=yuv420p,setsar=1"
                ",setparams=range=limited:color_primaries=bt709:color_trc=bt709:colorspace=bt709")
@@ -117,16 +134,11 @@ def encode_tail(raw, tail):
                "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-g", "60",
                "-profile:v", "high", "-level:v", "4.1", "-maxrate", "18M", "-bufsize", "18M",
                "-color_range", "tv", "-colorspace", "bt709", "-color_trc", "bt709",
-               "-color_primaries", "bt709", "-video_track_timescale", "30000", "-movflags", "+faststart", str(tail)]
+               "-color_primaries", "bt709", "-video_track_timescale", "30000", "-movflags", "+faststart", str(output)]
     with subprocess.Popen(command, stdin=subprocess.PIPE) as ffmpeg:
         assert ffmpeg.stdin is not None
         try:
-            for frame in range(JOIN, LAST+1):
-                native = min(frame, LAST_NATIVE)
-                source = settled if native == LAST_NATIVE else developed(src[native-CAPTURE_START], native, 0)
-                if frame >= EYES_FIRST:
-                    patch = tracking[native-MOUTH_FIRST] if frame >= MOUTH_FIRST else None
-                    source = express(source, patch, frame)
+            for source in frames:
                 ffmpeg.stdin.write(source.tobytes())
         finally:
             ffmpeg.stdin.close()

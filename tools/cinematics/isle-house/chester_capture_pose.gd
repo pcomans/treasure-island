@@ -1,6 +1,8 @@
 extends RefCounted
 ## Shot-local contacts, eyeline and wink on the stock Chester model.
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
+const Parts := preload("res://game/scripts/player/chest_avatar_parts.gd")
+const ORIGINAL_EYE_CUE := 840
 const CONTACT_M := 0.002
 const FOOT_REGION := 0.58
 const IRIS_WHITE := Color(0.88, 0.875, 0.86, 1.0)
@@ -12,10 +14,12 @@ var ground_triangles: Array[PackedVector3Array] = []
 var meshes: Array[MeshInstance3D] = []
 var sole_samples: Array[PackedVector3Array] = []
 var world_harness: WorldHarness
+var eye_cue_frame := ORIGINAL_EYE_CUE
 
 
-func prepare(harness: WorldHarness) -> String:
+func prepare(harness: WorldHarness, cue_frame: int = ORIGINAL_EYE_CUE) -> String:
 	world_harness = harness
+	eye_cue_frame = cue_frame
 	avatar = harness.player.avatar_pivot.get_node_or_null("ChestAvatar") as ChestAvatar
 	if avatar == null:
 		return "The shot has no stock Chester."
@@ -120,12 +124,27 @@ func aim_eyes(frame: int, camera: Camera3D) -> void:
 	var direction := (avatar._eye_mount.global_transform.affine_inverse() * camera.global_position).normalized()
 	var look := Vector2(direction.x, direction.y) * 0.55
 	material.set_shader_parameter(&"shot_look", look.limit_length(0.43))
-	var seconds := float(frame - 840) / 30.0
+	var seconds := float(frame - eye_cue_frame) / 30.0
 	var wink := _smooth((seconds - 1.08) / 0.14) * (1.0 - _smooth((seconds - 1.36) / 0.21))
 	# Keep natural paired blinks away from the deliberately single-eye cue.
 	var isolated := _smooth((seconds - 0.73) / 0.27) * (1.0 - _smooth((seconds - 1.71) / 0.22))
 	material.set_shader_parameter(&"shot_wink", wink)
 	material.set_shader_parameter(&"shot_isolated", isolated)
+
+
+func face_row(frame: int, camera: Camera3D) -> PackedStringArray:
+	# Seed the finishing fit from the actual projected character, including the smaller smile pose.
+	var mount := avatar._eye_mount.global_transform
+	var eye_left := camera.unproject_position(mount * Vector3(-Parts.EYE_CENTER.x, 0.016, 0.035))
+	var eye_right := camera.unproject_position(mount * Vector3(Parts.EYE_CENTER.x, 0.016, 0.035))
+	var body := avatar._body.global_transform
+	var corner := Vector3(Parts.BODY_W * 0.5 + 0.016, Parts.BODY_H - 0.022, Parts.BODY_D * 0.5 + 0.016)
+	var mouth_left := camera.unproject_position(body * Vector3(-corner.x, corner.y, corner.z))
+	var mouth_right := camera.unproject_position(body * corner)
+	var latch := camera.unproject_position(avatar._lid.global_transform * Vector3(0.0, 0.03, Parts.LID_D + 0.029))
+	return PackedStringArray([str(frame), str(minf(eye_left.x, eye_right.x)), str(maxf(eye_left.x, eye_right.x)),
+		str((eye_left.y + eye_right.y) * 0.5), str(minf(mouth_left.x, mouth_right.x)),
+		str(maxf(mouth_left.x, mouth_right.x)), str(latch.x), str(latch.y)])
 
 
 func _install_eye_material() -> bool:

@@ -1,9 +1,14 @@
 extends SceneTree
 ## Standalone native Isle House trailer capture with a no-glow environment.
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
-const ChesterCapturePose := preload("res://chester_capture_pose.gd")
+const ChesterCapturePose := preload("chester_capture_pose.gd")
 const FRAME_SIZE := Vector2i(1920, 1080)
 const FRAME_COUNT := 900
+const EASED_START := 725
+const EASED_LENS_TURN := 781
+const EASED_LENS_SETTLE := 854
+const EASED_EYE_CUE := 772
+const EASED_FACE_FIRST := 711
 const HOLD_FRAMES := 27
 const MAP_SPAN_M := 2700.0
 const MAP_HEIGHT_M := 26000.0
@@ -24,6 +29,9 @@ const TAIL_PROOFS := [590, 598, 599, 600, 601, 602, 665, 715, 730, 739, 740, 741
 	743, 744, 745, 746, 747, 748, 749, 750, 765, 766, 767, 768, 769, 777, 781, 782, 783, 784, 785, 800, 850,
 	861, 875, 876, 877, 878, 879, 880, 881, 888, 898, 899]
 const CONTACT_PROOFS := [590, 730, 744, 767, 783, 899]
+const EASED_PROOFS := [0, 27, 28, 76, 77, 78, 79, 80, 206, 207, 208, 449, 450,
+	650, 665, 695, 715, 719, 720, 725, 745, 758, 775, 781, 783, 793, 809,
+	811, 820, 854, 899]
 const AERIAL_PROOFS := [0, 1, 2, 90, 180, 276, 360, 450, 478, 479, 480, 481,
 	510, 525, 536, 537, 538, 539, 540, 541, 542, 543, 544, 600, 665, 715, 730, 740,
 	750, 800, 844, 850, 861, 875, 876, 877, 878, 879, 880, 881, 888, 898, 899]
@@ -50,6 +58,7 @@ var final_eye_y: float
 var stock_fog_density: float
 var aerial_intro := false
 var tail_repair := false
+var eased_map := false
 var capture_chester: ChesterCapturePose
 var aerial_keys: Array[Array] = []
 var proof_frames: Array = PROOF_FRAMES
@@ -62,12 +71,15 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.size() not in [2, 3] or args[1] not in ["staged", "preview", "render"] \
-		or (args.size() == 3 and args[2] not in ["map", "aerial", "aerial-tail"]):
-		_stop("Usage: -- /absolute/new-output-dir staged|preview|render [map|aerial|aerial-tail]")
+		or (args.size() == 3 and args[2] not in ["map", "map-eased", "aerial", "aerial-tail"]):
+		_stop("Usage: -- /absolute/new-output-dir staged|preview|render [map|map-eased|aerial|aerial-tail]")
 		return
 	tail_repair = args.size() == 3 and args[2] == "aerial-tail"
 	aerial_intro = args.size() == 3 and args[2] in ["aerial", "aerial-tail"]
-	if aerial_intro:
+	eased_map = args.size() == 3 and args[2] == "map-eased"
+	if eased_map:
+		proof_frames = EASED_PROOFS
+	elif aerial_intro:
 		proof_frames = TAIL_PROOFS if tail_repair else AERIAL_PROOFS
 	var out := args[0]
 	if not out.is_absolute_path() or DirAccess.dir_exists_absolute(out):
@@ -120,6 +132,9 @@ func _run() -> void:
 	if not aerial_intro and not _verify_map_registration():
 		_stop("Opening view failed SVG registration.")
 		return
+	if eased_map and not _verify_portrait_registration():
+		_stop("The native portrait no longer matches the approved closing composition.")
+		return
 
 	if args[1] != "render":
 		if not await _preview(out):
@@ -155,9 +170,10 @@ func _place_actor() -> String:
 	var face := FINAL_CAMERA_XZ - ACTOR_XZ
 	harness.player.avatar_pivot.rotation.y = atan2(face.x, face.y)
 	harness.player.avatar_pivot.show()
-	if tail_repair:
+	if tail_repair or eased_map:
 		capture_chester = ChesterCapturePose.new()
-		var contact_failure := capture_chester.prepare(harness)
+		var cue_frame := EASED_EYE_CUE if eased_map else ChesterCapturePose.ORIGINAL_EYE_CUE
+		var contact_failure := capture_chester.prepare(harness, cue_frame)
 		if not contact_failure.is_empty():
 			return contact_failure
 	print("SHOT_ACTOR grounded=", feet, " aim=", actor_aim, " final_eye_y=", final_eye_y)
@@ -434,6 +450,11 @@ func _render(out: String) -> bool:
 	var raw := FileAccess.open(out.path_join("frames.rgb"), FileAccess.WRITE)
 	if raw == null:
 		return false
+	var face_track: FileAccess
+	if eased_map:
+		face_track = FileAccess.open(out.path_join("face-track.csv"), FileAccess.WRITE)
+		if face_track == null:
+			return false
 	var first := TAIL_START if tail_repair else 0
 	await _warm(first)
 	for frame in range(first, FRAME_COUNT):
@@ -450,9 +471,15 @@ func _render(out: String) -> bool:
 		raw.store_buffer(pixels.get_data())
 		if raw.get_error() != OK:
 			return false
+		if face_track != null and frame >= EASED_FACE_FIRST:
+			face_track.store_csv_line(capture_chester.face_row(frame, camera))
+			if face_track.get_error() != OK:
+				return false
 		if frame % 60 == 0:
 			print("SHOT_FRAME ", frame, " / ", FRAME_COUNT)
 	raw.close()
+	if face_track != null:
+		face_track.close()
 	return true
 
 
@@ -475,7 +502,10 @@ func _pose(frame: int) -> void:
 	var direction: Vector3 = pose.direction
 	var target: Vector3 = pose.target
 	var screen_up: Vector3 = pose.screen_up
-	camera.set_perspective(float(pose.fov), NEAR_M, FAR_M)
+	if pose.has("frustum_size"):
+		camera.set_frustum(pose.frustum_size, Vector2(0.0, pose.frustum_shift), NEAR_M, FAR_M)
+	else:
+		camera.set_perspective(float(pose.fov), NEAR_M, FAR_M)
 	camera.global_position = position
 	camera.look_at(position + direction, screen_up)
 	_fit_shadow_cascades(position.distance_to(target))
@@ -497,12 +527,66 @@ func _fit_shadow_cascades(focus_depth: float) -> void:
 func _sample(frame: int) -> Dictionary:
 	if aerial_intro and frame < AERIAL_JOIN:
 		return _aerial_sample(frame)
+	if eased_map and frame >= EASED_START:
+		return _eased_portrait(frame)
 	return _established_sample(frame)
 
 
-func _established_sample(frame: int) -> Dictionary:
+func _eased_portrait(frame: int) -> Dictionary:
+	# Follow the established world-space path while spending more time near eye height.
+	var f := float(frame)
+	var lag := 12.0 * _window(f, EASED_START, 780.0) * (1.0 - _window(f, 780.0, 840.0))
+	var pose := _established_sample(f - lag)
+	var first := _projected_scale(EASED_START)
+	var incoming_rate := (_projected_scale(EASED_START + 0.05) - _projected_scale(EASED_START - 0.05)) * 300.0
+	var finished := _projected_scale(FRAME_COUNT - 1) / 0.8
+	var scale: float
+	if f < EASED_LENS_TURN:
+		scale = _lens_curve(f, EASED_START, EASED_LENS_TURN, first, 480.0, incoming_rate, 200.0)
+	elif f < EASED_LENS_SETTLE:
+		scale = _lens_curve(f, EASED_LENS_TURN, EASED_LENS_SETTLE, 480.0, finished, 200.0, 0.0)
+	else:
+		scale = finished
+	var depth: float = (pose.position as Vector3).distance_to(pose.target)
+	var near_half := NEAR_M * FRAME_SIZE.y * 0.5 / (depth * scale)
+	# The shifted lens frames the same top-anchored portrait directly in the renderer.
+	var anchor := 1.0 - 0.2 * _window(f, 777.0, EASED_LENS_SETTLE)
+	pose["frustum_size"] = near_half * 2.0
+	pose["frustum_shift"] = near_half * (1.0 - anchor) / anchor
+	return pose
+
+
+func _projected_scale(frame: float) -> float:
+	var pose := _established_sample(frame)
+	var depth: float = (pose.position as Vector3).distance_to(pose.target)
+	return FRAME_SIZE.y * 0.5 / (depth * tan(deg_to_rad(float(pose.fov) * 0.5)))
+
+
+func _lens_curve(frame: float, first: float, last: float, a: float, b: float, da: float, db: float) -> float:
+	# Match endpoint velocities in projected pixels per second, at 30 frames per second.
+	var span := last - first
+	return cubic_interpolate(a, b, b - span * da / 15.0, a + span * db / 15.0, (frame - first) / span)
+
+
+func _verify_portrait_registration() -> bool:
+	_pose(FRAME_COUNT - 1)
+	var pins: Array[Vector3] = [actor_aim, actor_aim + Vector3.UP * 0.4, actor_aim + Vector3.RIGHT * 0.25]
+	var actual: Array[Vector2] = []
+	for point in pins:
+		actual.append(camera.unproject_position(point))
+	camera.set_perspective(float(_established_sample(FRAME_COUNT - 1).fov), NEAR_M, FAR_M)
+	var matched := true
+	for i in pins.size():
+		var expected := (camera.unproject_position(pins[i]) - Vector2(192.0, 0.0)) / 0.8
+		print("SHOT_PORTRAIT_PIN ", actual[i], " expected=", expected)
+		matched = matched and actual[i].distance_to(expected) <= 0.3
+	_pose(0)
+	return matched
+
+
+func _established_sample(frame: float) -> Dictionary:
 	if frame < OVERVIEW_FRAME_COUNT:
-		return _overview_sample(frame)
+		return _overview_sample(int(frame))
 	var end := _overview_sample(OVERVIEW_FRAME_COUNT - 1)
 	var t := float(frame - (OVERVIEW_FRAME_COUNT - 1)) / 30.0
 	var route_frame := lerpf(565.0, 882.0, _window(t, 0.0, 14.35))

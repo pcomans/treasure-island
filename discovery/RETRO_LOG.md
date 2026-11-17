@@ -26592,3 +26592,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: A small release stayed small: the fix and its review retro merged without conflict onto cf9192ed, the review's one wording note went in as a single-line edit to the tests README, and the one check the owner left in place (the Options contract, after an import) ran under an engine lock in under a minute and passed.
 - What did not work well: The review's retro branch was cut on top of the fix branch rather than on main, so its own file list (against main) showed the code files too; only the log of its commits beyond the fix showed it adds nothing but RETRO_LOG.
 - What the team should change next time: Cut review retro branches from main, or name the branch they sit on in the handback, so the integrator's "RETRO_LOG only" check reads true at a glance.
+
+### trailer_recapture — PR 21 eased map source — 2026-11-17
+
+- What worked well: The verified movie's camera and local face finishing could become a named map-eased mode while preserving the original map, aerial and aerial-tail defaults. Eight route/environment/capture functions stayed exact, thirteen retained native portrait samples finished byte-for-byte alike, and the packaged sources parsed against the pinned game revision.
+- What did not work well: The first draft of the copyable setup reassigned the selected opening and game revision. Independent review found that it could send the reader to the older world and cut.
+- What the team should change next time: Keep recipe choices explicit across shared setup examples and verify them alongside the actual capture and finishing entrypoints. The source recipe renders all 900 frames and needs no earlier MP4.
