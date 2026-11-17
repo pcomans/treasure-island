@@ -9,9 +9,12 @@
 #   a retro commit and a merge commit before the release;
 # - check fails a build without its entry, passes a push of Markdown alone and
 #   says whether a run started by hand would stop (--hand-run fails then);
-# - the notes say "Changes in build N:" with N's real number and the lines of
-#   every unreleased entry, newest first, at most 10 entries, a shared line
-#   once, without "No changes to the game." beside other lines; notes
+# - the notes start with the fixed header (the game and its website) exactly
+#   once, for one entry and for several, then say "Changes in build N:" with
+#   N's real number and the lines of every unreleased entry, newest first, at
+#   most 10 entries, a shared line once, without "No changes to the game."
+#   beside other lines; notes.md's first line is still the marker the publish
+#   job checks, and no VirusTotal section marker can occur in it; notes
 #   --published re-makes a released build's notes from a later commit, or
 #   exits 3 without an entry;
 # - every rule of the format fails a file that breaks it, and a bare address
@@ -74,6 +77,21 @@ entries() {
     done
   } > "${repo}/CHANGELOG.md"
 }
+# header_once DIR LABEL: DIR/CHANGELOG.txt starts with the header and a blank
+# line and holds each header line once; DIR/notes.md is the marker line, then
+# the same text, then the end marker, with no VirusTotal section marker in it.
+header_once() {
+  local text="$1/CHANGELOG.txt" notes="$1/notes.md"
+  { [ "$(sed -n 1p "${text}")" = "Grand Treasure Island" ] \
+    && [ "$(sed -n 2p "${text}")" = "https://grandtreasureisland.vercel.app/" ] && [ -z "$(sed -n 3p "${text}")" ] \
+    && [ "$(sed -n 4p "${text}")" = "Changes in build $3:" ] \
+    && [ "$(grep -c -x -F "Grand Treasure Island" "${text}")" = 1 ] \
+    && [ "$(grep -c -F "grandtreasureisland.vercel.app" "${text}")" = 1 ]; } \
+    || fail "$2: CHANGELOG.txt does not start with the header once, then build $3's changes: $(cat "${text}")"
+  { [ "$(sed -n 1p "${notes}")" = "<!-- changelog: build $3 -->" ] && sed '1d;$d' "${notes}" | cmp -s - "${text}" \
+    && [ "$(tail -n 1 "${notes}")" = "<!-- /changelog -->" ] && ! grep -q "^VirusTotal reports" "${notes}"; } \
+    || fail "$2: notes.md is not the marker line, CHANGELOG.txt's text and the end line: $(cat "${notes}")"
+}
 # passes|stops LABEL ARGS...: the tool with ARGS exits 0 | 1.
 passes() { local label="$1"; shift; status="$(tool "$@")"; [ "${status}" = 0 ] || fail "${label}: exited ${status}, not 0: $(cat "${work}/out")"; }
 stops() { local label="$1"; shift; status="$(tool "$@")"; [ "${status}" = 1 ] || fail "${label}: exited ${status}, not 1: $(cat "${work}/out")"; }
@@ -97,6 +115,9 @@ passes "check at build 4" check
 passes "notes --build 4" notes --build 4 --out "${work}/notes" --link https://example.invalid/CHANGELOG.md
 cat > "${work}/expected.md" <<'EOF'
 <!-- changelog: build 4 -->
+Grand Treasure Island
+https://grandtreasureisland.vercel.app/
+
 Changes in build 4:
 
 - Change 4, first.
@@ -109,6 +130,7 @@ Every build's changes: https://example.invalid/CHANGELOG.md
 EOF
 cmp -s "${work}/expected.md" "${work}/notes/notes.md" || fail "notes.md for build 4: $(diff "${work}/expected.md" "${work}/notes/notes.md" || true)"
 sed '1d;$d' "${work}/expected.md" | cmp -s - "${work}/notes/CHANGELOG.txt" || fail "CHANGELOG.txt for build 4 is not notes.md without its two marker lines"
+header_once "${work}/notes" "two unreleased entries" 4
 
 # Build 4 published: its own tag must not count as the release before it.
 release 4
@@ -167,15 +189,18 @@ passes "eleven unreleased entries" notes --build "${top}" --out "${work}/eleven"
   && ! grep -q -F -- "- Line 1." "${work}/eleven/notes.md" && ! grep -q -F "No changes" "${work}/eleven/notes.md" \
   && ! grep -q -F "Released" "${work}/eleven/notes.md"; } \
   || fail "the notes of 11 unreleased entries are not the newest 10 without \"No changes\": $(cat "${work}/eleven/notes.md")"
+header_once "${work}/eleven" "eleven unreleased entries" "${top}"
 { printf '# Changes\n\n## Build %s (2026-11-16)\n\n- No changes to the game.\n' "${top}"; } > "${repo}/CHANGELOG.md"
 passes "an entry of no changes alone" notes --build "${top}" --out "${work}/nochange"
 grep -q -F -- "- No changes to the game." "${work}/nochange/notes.md" || fail "an entry of \"No changes to the game.\" alone lost its line"
+header_once "${work}/nochange" "one entry" "${top}"
 # Two unreleased entries sharing a line: the notes carry it once, where the
 # newer entry has it.
 printf '# Changes\n\n## Build %s (2026-11-16)\n\n- Shared.\n- Newer.\n\n## Build %s (2026-11-16)\n\n- Older.\n- Shared.\n' \
   "${top}" "$((top - 1))" > "${repo}/CHANGELOG.md"
 passes "two entries sharing a line" notes --build "${top}" --out "${work}/shared"
-printf 'Changes in build %s:\n\n- Shared.\n- Newer.\n- Older.\n' "${top}" | cmp -s - "${work}/shared/CHANGELOG.txt" \
+printf 'Grand Treasure Island\nhttps://grandtreasureisland.vercel.app/\n\nChanges in build %s:\n\n- Shared.\n- Newer.\n- Older.\n' "${top}" \
+  | cmp -s - "${work}/shared/CHANGELOG.txt" \
   || fail "the notes of two entries sharing a line do not carry it once: $(cat "${work}/shared/CHANGELOG.txt")"
 
 # A push of Markdown alone builds nothing and needs no entry; check says what a
@@ -234,6 +259,11 @@ good | sed 's/^- Fine\.$/- See ![a picture](x.png)./' > "${work}/broken.md"; bro
 good | sed 's/^- Fine\.$/- See [the page](https:\/\/example.invalid)./' > "${work}/broken.md"; broken "a link" 'no images or links'
 good | sed 's/^- Fine\.$/- [page]: https:\/\/example.invalid/' > "${work}/broken.md"; broken "a link definition" 'no images or links'
 good | sed 's/^- Fine\.$/- Thanks \&#64;someone./' > "${work}/broken.md"; broken "an HTML entity" 'has an "&"'
+# The header is the tool's own text: an entry can neither link the website nor
+# write a line of the header itself.
+good | sed 's/^- Fine\.$/- [Grand Treasure Island](https:\/\/grandtreasureisland.vercel.app\/)/' > "${work}/broken.md"; broken "the website as a link" 'no images or links'
+good | sed 's/^- Fine\.$/https:\/\/grandtreasureisland.vercel.app\//' > "${work}/broken.md"; broken "the website as a header line" "each of its lines is"
+good | sed 's/^- Fine\.$/Grand Treasure Island/' > "${work}/broken.md"; broken "the game's name as a header line" "each of its lines is"
 # A bare address stays allowed.
 good | sed 's/^- Fine\.$/- More at https:\/\/example.invalid\/page./' > "${repo}/CHANGELOG.md"
 passes "a bare address" latest
@@ -254,16 +284,20 @@ fi
 grep -q -F 'warning::change 4' "${log}" || fail "the log never showed the \"::warning::\" entry line, so the check above checked nothing"
 
 # The repository's own CHANGELOG.md reads well (its build check is for a release
-# head: tools/changelog.py check). -B: no __pycache__ in tools/.
+# head: tools/changelog.py check), and its introduction has the website the
+# header names on a line of its own. -B: no __pycache__ in tools/.
 if ! python3 -I -B -c 'import importlib.util
 spec = importlib.util.spec_from_file_location("changelog", "tools/changelog.py")
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-module.read_entries()' 2> "${work}/own"; then
+module.read_entries()
+introduction = open("CHANGELOG.md", encoding="utf-8").read().split("\n## ", 1)[0]
+if module.HEADER[1] not in introduction.split("\n"):
+    raise SystemExit("its introduction has no line that is the website " + module.HEADER[1])' 2> "${work}/own"; then
   fail "the repository's CHANGELOG.md does not read: $(cat "${work}/own")"
 fi
 
 if [ "${failures}" -gt 0 ]; then
   exit 1
 fi
-echo "PASS: tools/changelog.py takes the newest entry above the newest release in HEAD's history and at most HEAD's build (edges, side-branch and own tags, no tag, a merge head after the entry), fails a build without one, notes a push of Markdown alone that a run by hand would stop on, writes notes with the real build number and up to 10 unreleased entries, re-makes a published build's notes, rejects every break of the format, never prints FAIL from latest or starts an output line with \"::\"; the repository's CHANGELOG.md reads well"
+echo "PASS: tools/changelog.py takes the newest entry above the newest release in HEAD's history and at most HEAD's build (edges, side-branch and own tags, no tag, a merge head after the entry), fails a build without one, notes a push of Markdown alone that a run by hand would stop on, writes notes under the game's name and website once, with the real build number and up to 10 unreleased entries, re-makes a published build's notes, rejects every break of the format, never prints FAIL from latest or starts an output line with \"::\"; the repository's CHANGELOG.md reads well and names the website"

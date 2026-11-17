@@ -27,11 +27,12 @@ one, and commits that follow in the same release (a retro, a merge, GitHub's
 merge button) keep the entry valid. A history with no build-* tag fails, since
 it cannot tell which entries are new (locally: git fetch --tags origin).
 
-A build's release notes start with "Changes in build N:" and the lines of every
-entry after the newest released build, up to N (at most 10 entries, newest first;
-"No changes to the game." is dropped when other lines come with it), between the
-lines "<!-- changelog: build N -->" and "<!-- /changelog -->", which GitHub shows
-as nothing.
+A build's release notes start with a fixed header, the game's name and its
+website (HEADER below, never read from any file), a blank line, then "Changes in
+build N:" and the lines of every entry after the newest released build, up to N
+(at most 10 entries, newest first; "No changes to the game." is dropped when
+other lines come with it), between the lines "<!-- changelog: build N -->" and
+"<!-- /changelog -->", which GitHub shows as nothing.
 
   tools/changelog.py next     the suggested heading for an entry made on HEAD
   tools/changelog.py check [--hand-run]
@@ -71,6 +72,10 @@ MAX_LINES = 12
 MAX_LENGTH = 300
 MAX_ENTRIES = 10
 NO_CHANGES = "No changes to the game."
+# The first lines of every build's changes (CHANGELOG.txt and the release notes'
+# block): the game and its website (owner, 2026-11-17). Fixed text here, never
+# an entry and never read from a file.
+HEADER = ("Grand Treasure Island", "https://grandtreasureisland.vercel.app/")
 START = "<!-- changelog: build %d -->"
 END = "<!-- /changelog -->"
 # Control, format (invisible: zero-width, bidirectional overrides), line and
@@ -234,7 +239,7 @@ def notes_lines(entries, number, link):
         lines += [text for text in texts if text not in lines]
     if len(lines) > 1 and NO_CHANGES in lines:
         lines.remove(NO_CHANGES)
-    body = ["Changes in build %d:" % number, ""] + ["- " + text for text in lines]
+    body = list(HEADER) + ["", "Changes in build %d:" % number, ""] + ["- " + text for text in lines]
     if link:
         body += ["", "Every build's changes: %s" % link]
     return body
