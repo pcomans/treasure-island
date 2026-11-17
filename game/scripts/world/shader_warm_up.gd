@@ -443,8 +443,16 @@ func _point_inside(count: int, layers: int) -> Variant:
 ## Shows each stop's proxies to a camera of the warm-up's own, a frame a stop, and
 ## gives the view back to restore. Call once the probes have their images (an
 ## instance counts a probe only then: RasterizerSceneGLES3::_fill_render_list).
+## Each stop is shown in a process step and hidden in the next, so the frame
+## between draws it; called after a frame's drawing (main calls it straight after
+## awaiting frame_post_draw), a stop shown then would be hidden again before any
+## frame drew it (the web proof, 2026-11-17: the first stop's shaders compiled in
+## play), so it waits for the next process step first.
 func probe_pass(restore: Camera3D) -> void:
 	if stops.is_empty():
+		return
+	await get_tree().process_frame
+	if not is_inside_tree():
 		return
 	_camera = Camera3D.new()
 	_camera.name = "ProbeCamera"
