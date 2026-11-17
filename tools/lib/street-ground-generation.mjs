@@ -1244,7 +1244,8 @@ function cleanPolygons(multi, minimumArea, minimumWidth, holeArea = minimumArea,
 }
 
 // Offsets a polyline sideways by distance (positive = left), with mitred joins.
-function offsetPolyline(points, distance) {
+// tools/check_street_detail_clearance.mjs finds a way layer's band with it too.
+export function offsetPolyline(points, distance) {
   const result = [];
   for (let index = 0; index < points.length; index += 1) {
     const before = index > 0 ? unit(sub(points[index], points[index - 1])) : null;
