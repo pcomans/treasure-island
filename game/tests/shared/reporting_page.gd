@@ -1,14 +1,16 @@
 extends RefCounted
-## The web page's crash and performance reports as CrashReports sees them
+## The web page's anonymous statistics as CrashReports sees them
 ## (game/web/shell.html's window.__tiReporting), for a test to give main as its
 ## crash_page, as a browser does: its own copy of the switch (kept: true, false or
 ## null when never set), whether it has recorded the start prompt's line about the
-## reports as shown, and what it was told, in order ("on", "off", "notice shown",
-## "play started").
+## statistics as shown, what it was told, in order ("on", "off", "notice shown",
+## "play started"), and the snapshots and stats it got (parsed).
 
 var kept: Variant = null
 var notice_recorded := false
 var told := []
+var snapshots := []
+var stats_got := []
 
 
 func read() -> String:
@@ -27,3 +29,11 @@ func notice_shown() -> void:
 
 func play_started() -> void:
 	told.append("play started")
+
+
+func snapshot(json: String) -> void:
+	snapshots.append(JSON.parse_string(json))
+
+
+func stats(json: String) -> void:
+	stats_got.append(JSON.parse_string(json))

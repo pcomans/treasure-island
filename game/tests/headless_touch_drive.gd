@@ -119,6 +119,8 @@ func _run() -> void:
 	_vehicles = _main.vehicles
 	if not await _start_prompt():
 		return _finish()
+	if not _check_game_stats():
+		return _finish()
 	if not _require(_vehicles != null and _touch.vehicles == _vehicles and _touch.visible, "main.gd did not hand the touch controls the cars and start them (visible %s)." % _touch.visible):
 		return _finish()
 	await _ticks(10)
@@ -129,7 +131,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; the anonymous statistics' line the page asked for, the page hearing it shown; with an iPhone's notes too, the home screen hint and the silent mode line, the three lines each centred under the button inside the panel and the page at both shapes, the reports' line on one line sideways and, on a narrower phone held sideways, wrapped with the home screen hint giving way, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the page hearing it, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics, sound and the reports' switch, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; the anonymous statistics' line the page asked for, the page hearing it shown; with an iPhone's notes too, the home screen hint and the silent mode line, the three lines each centred under the button inside the panel and the page at both shapes, the reports' line on one line sideways and, on a narrower phone held sideways, wrapped with the home screen hint giving way, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the page hearing it, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics, sound and the reports' switch, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step; the game's state for the statistics (GameStats) in its fields and bands, in a car when driving, and after a minute of play (a test clock) one stats message with its frame rates, cells and movements (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -253,6 +255,45 @@ func _check_start_notes(shape: String) -> bool:
 	return _require(missing.is_empty(), "The start prompt's notes use characters the web build's font lacks: %s." % [missing])
 
 
+## The game's state for the anonymous statistics (GameStats), with the page standing in
+## for the browser's: the snapshot the page got has every field GameStats names, the cell
+## as "column,row" and the bands as their edges give them, the player on foot; then a
+## minute of play on a test clock (60 frames a second, the node stepped by hand, since
+## its own clock counts real play time) gives the page one stats message: the first, a
+## minute played, the frame rates of its seconds, the seconds in the player's cell and
+## on foot, the snapshot.
+func _check_game_stats() -> bool:
+	var stats := _main.game_stats
+	if not _require(stats != null and not _page.snapshots.is_empty(), "With a page for the statistics, main must make GameStats and the page get its snapshot (GameStats %s, snapshots %d)." % [stats, _page.snapshots.size()]):
+		return false
+	var snapshot: Dictionary = _page.snapshots.back()
+	var band := RegEx.create_from_string("^(<[0-9.]+|[0-9.]+-[0-9.]+|[0-9.]+\\+)$")
+	var fields := ["area", "movement", "height_m", "speed_m_s", "fps", "session_min", "resolution", "shadows", "frame_rate_limit", "gpu", "screen", "input", "video_mb", "texture_mb", "buffer_mb"]
+	var bands_ok := ["height_m", "speed_m_s", "fps", "session_min"].all(func(key: String) -> bool: return band.search(str(snapshot.get(key, ""))) != null)
+	# JSON.stringify sorts the keys, so the fields are compared as sets.
+	var keys := snapshot.keys()
+	keys.sort()
+	fields.sort()
+	if not _require(keys == fields and RegEx.create_from_string("^-?[0-9]+,-?[0-9]+$").search(str(snapshot.area)) != null and snapshot.movement == "on_foot" and bands_ok \
+			and snapshot.input == "touch" and snapshot.screen in GameStats.SCREEN_CLASSES, "The snapshot must hold GameStats' fields, the cell as column,row and the bands as their edges give them, on foot and touch (%s)." % [snapshot]):
+		return false
+	var clock := [stats.now_usec.call()]
+	var real_clock := stats.now_usec
+	stats.now_usec = func() -> int: return clock[0]
+	stats._last_usec = clock[0]
+	for _frame in roundi(GameStats.STATS_FIRST_S * 60.0) + 30:
+		clock[0] += 16667
+		stats._process(0.0)
+	stats.now_usec = real_clock
+	stats._last_usec = real_clock.call()
+	var got := _page.stats_got.duplicate()
+	var first: Dictionary = got[0] if got.size() == 1 and got[0] is Dictionary else {}
+	var cell := str(first.get("snapshot", {}).get("area", ""))
+	return _require(got.size() == 1 and first.get("first") == true and int(first.get("play_min", -1)) == 1 and int(first.get("window_s", -1)) == 60 \
+		and absf(float(first.get("fps_median", 0.0)) - 60.0) < 1.0 and float(first.get("fps_worst", 0.0)) > 50.0 and int(first.get("areas_s", {}).get(cell, 0)) >= 59 \
+		and int(first.get("movement_s", {}).get("on_foot", 0)) >= 59 and first.get("graphics_changes") == [], "A minute of play must give the page one stats message, the first, a minute played over a 60 s window at about 60 frames a second, its seconds in the player's cell and on foot (got %s)." % [got])
+
+
 ## Whether the wind's bed has started: its loop_start in the sound manager's log
 ## where it has takes, its loop_silent where it has none (a checkout without the
 ## sounds).
@@ -316,6 +357,7 @@ func _drive(shape: String, body: String) -> bool:
 	await _ticks(30)
 	var car := _vehicles.active_car()
 	if not _require(car != null and car.row_id == id and car.body == body, "%s: a tap on DRIVE did not get the player into it (in %s)." % [label, car.row_id if car != null else "no car"]) \
+	or not _require(_main.game_stats.snapshot().movement == "in_car", "%s: the statistics' snapshot must say the player is in a car (%s)." % [label, _main.game_stats.snapshot().movement]) \
 	or not _check_use("%s, in it" % label, TouchUseButton.Mode.EXIT) \
 	or not await _pause_and_resume("%s, in it" % label) \
 	or not _check_use("%s, in it after the pause and Resume" % label, TouchUseButton.Mode.EXIT):
