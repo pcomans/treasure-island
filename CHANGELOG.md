@@ -6,6 +6,12 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2198 (2026-11-17)
+
+- The windows on the big box truck, the motorhome and the shuttle no longer flicker.
+- Planted beds, the promenade and the street planting strips now have wood-chip mulch instead of flat brown, with loose chips up close on desktop.
+- The changelog in the downloads and the release notes starts with the game's website.
+
 ## Build 2176 (2026-11-16)
 
 - Avenue of the Palms beside the Isle House park is level now; the hill under the road is gone.
