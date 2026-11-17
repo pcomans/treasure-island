@@ -593,13 +593,14 @@ function tiTraceText(env, a) {
 			}).observe({type, buffered: true});
 		} catch (e) { /* not reported by this browser */ }
 	}
-	document.addEventListener('visibilitychange', () => event('page', 'visibility ' + document.visibilityState));
-	for (const type of ['pagehide', 'pageshow', 'freeze', 'resume']) window.addEventListener(type, () => event('page', type));
+	// A page event that may come just before the end is kept on the device at once (beat).
+	document.addEventListener('visibilitychange', () => { event('page', 'visibility ' + document.visibilityState); beat(); });
+	for (const type of ['pagehide', 'pageshow', 'freeze', 'resume']) window.addEventListener(type, () => { event('page', type); beat(); });
 	window.addEventListener('error', (e) => event('error', e.message));
 	window.addEventListener('resize', () => event('page', `resize ${innerWidth}x${innerHeight} dpr ${devicePixelRatio}`));
 	const canvas = document.getElementById('canvas');
 	if (canvas) {
-		canvas.addEventListener('webglcontextlost', () => event('page', 'WebGL context lost'));
+		canvas.addEventListener('webglcontextlost', () => { event('page', 'WebGL context lost'); beat(); });
 		canvas.addEventListener('webglcontextrestored', () => event('page', 'WebGL context restored'));
 	}
 	// A screen that stays on through the drive (iOS 16.4+, a secure page), asked for in
@@ -612,20 +613,27 @@ function tiTraceText(env, a) {
 	for (const type of ['touchend', 'click']) document.addEventListener(type, askWake, {capture: true, passive: true});
 
 	// Memory once a second, and a heartbeat on the device: where the drive was, so a
-	// reload after a crash shows the last thing seen.
+	// reload after a crash shows the last thing seen; with the long frames and the
+	// seconds kept every PROGRESS_MS, so a run that ends without warning (a killed page)
+	// still shows its last seconds.
+	const PROGRESS_MS = 10000;
 	let lastSaved = 0;
+	const mib = () => [performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null, memory ? round(memory.buffer.byteLength / 1048576) : null];
+	function beat() {
+		if (!log.header || log.end) return;
+		const [js, wasm] = mib();
+		save('heartbeat', {
+			at: new Date().toISOString(), page_ms: round(now()), frames: log.raf.length, row: log.rows[log.rows.length - 1] || null,
+			fields: log.header.fields, last_events: log.events.slice(-8), js_mb: js, wasm_mb: wasm,
+			last_frames: log.raf.slice(-31).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1),
+		});
+	}
 	setInterval(() => {
-		const js = performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null;
-		const wasm = memory ? round(memory.buffer.byteLength / 1048576) : null;
+		const [js, wasm] = mib();
 		log.memory.push([round(now()), js, wasm]);
 		if (log.header && !log.end) {
-			const r = log.rows[log.rows.length - 1];
-			save('heartbeat', {
-				at: new Date().toISOString(), page_ms: round(now()), frames: log.raf.length, row: r || null,
-				fields: log.header.fields, last_events: log.events.slice(-6), js_mb: js, wasm_mb: wasm,
-				last_frames: log.raf.slice(-20).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1),
-			});
-			if (log.rows.length > lastSaved + 10 * 60) saveProgress();
+			beat();
+			if (log.rows.length && now() - lastSaved >= PROGRESS_MS) saveProgress();
 		}
 	}, 1000);
 
@@ -633,11 +641,17 @@ function tiTraceText(env, a) {
 	let frames = [];
 	function saveProgress() {
 		const began = now();
-		lastSaved = log.rows.length;
+		lastSaved = began;
 		frames = tiTraceFrames(log.raf, log.rows, log.header.fields, log.header.page_ms_at_origin, log.gl);
 		const F = {};
 		TI_TRACE_FRAME.forEach((n, i) => { F[n] = i; });
+		// The last 400 long frames (the newest kept, the oldest dropped).
 		save('long', frames.filter((fr) => fr[F.ms] >= 33).slice(-400));
+		// The engine's texture and buffer memory (MiB) at the end of each page second.
+		const fields = log.header.fields;
+		const [ti, tx, bf] = ['t', 'tex_mb', 'buf_mb'].map((n) => fields.indexOf(n));
+		const memoryAt = {};
+		for (const r of log.rows) memoryAt[Math.floor((log.header.page_ms_at_origin + r[ti]) / 1000)] = [round(r[tx]), round(r[bf])];
 		const seconds = [];
 		for (const fr of frames) {
 			const s = Math.floor(fr[F.t] / 1000);
@@ -645,7 +659,7 @@ function tiTraceText(env, a) {
 			if (!row || row[0] !== s) seconds.push([s, 1, fr[F.ms], fr[F.ms], round(fr[F.x]), round(fr[F.z]), fr[F.step], fr[F.leg]]);
 			else { row[1] += 1; row[2] += fr[F.ms]; row[3] = Math.max(row[3], fr[F.ms]); }
 		}
-		save('seconds', seconds.slice(-900).map((r) => [r[0], r[1], round(r[2] / r[1]), round(r[3]), r[4], r[5], r[6], r[7]]));
+		save('seconds', seconds.slice(-900).map((r) => [r[0], r[1], round(r[2] / r[1]), round(r[3]), r[4], r[5], r[6], r[7], ...(memoryAt[r[0]] || [null, null])]));
 		// Its own cost, which the results can then tell from the game's.
 		event('hook', `kept the trace on the device in ${round(now() - began)} ms`);
 	}
@@ -804,11 +818,12 @@ function tiTraceText(env, a) {
 		if (hb && hb.row) {
 			const f = hb.fields;
 			lines.push(`Last place: (${Math.round(hb.row[f.indexOf('x')])}, ${Math.round(hb.row[f.indexOf('z')])}), step ${hb.row[f.indexOf('step')]}, ${Math.round(hb.row[f.indexOf('t')] / 1000)} s into the trace; last frame times (ms): ${(hb.last_frames || []).join(' ')}`);
+			lines.push(`Last engine frame: draw ${hb.row[f.indexOf('draw_ms')]} ms, ${hb.row[f.indexOf('dc')]} draw calls, texture ${hb.row[f.indexOf('tex_mb')]} MiB, buffer ${hb.row[f.indexOf('buf_mb')]} MiB`);
 			lines.push('Last markers: ' + JSON.stringify(hb.last_events));
 			lines.push(`Memory then: JS ${hb.js_mb} MiB, WebAssembly ${hb.wasm_mb} MiB`);
 		}
 		lines.push('', 'Long frames kept (time ms, frame ms, x, z, speed, step, leg, flags, ...):', JSON.stringify(before.long || []));
-		lines.push('', 'Seconds kept (s, frames, mean ms, worst ms, x, z, step, leg):', JSON.stringify(before.seconds || []));
+		lines.push('', 'Seconds kept (s, frames, mean ms, worst ms, x, z, step, leg, texture MiB, buffer MiB):', JSON.stringify(before.seconds || []));
 		lines.push('', 'Its page: ' + JSON.stringify(before.meta.page || {}), 'Its game: ' + JSON.stringify(before.meta.header || {}));
 		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish'));
 		save('previous', {...before, meta: {...before.meta, status: 'shown'}});

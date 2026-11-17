@@ -22,7 +22,14 @@ extends Node
 ## that slows for the bends (up to CRUISE_MPS); then out of the car, a walk, a run, a
 ## jetpack climb to about 70 m turning the view right round, a slow descent and a
 ## fast drop to the ground. With laps=2 (?trace=drive&laps=2) the car goes round the
-## loop twice before the foot leg, the second time past places already drawn. Then,
+## loop twice before the foot leg, the second time past places already drawn. With
+## seconds=N (?trace=drive&seconds=120, --trace-seconds=N natively) the trace ends N s
+## after its first record, wherever it is, and shows its results; with scale=S
+## (&scale=0.5, --trace-scale=S) the run draws the world at that 3D resolution (one the
+## Options menu offers: 0.5, 0.67, 0.75 or 1), applied as the menu applies it (not
+## kept) and put back at the end. A "view" marker records the 3D scale, MSAA, window
+## and visible rect at the start and whenever one changes (an Options change mid-run).
+## Then,
 ## after the drive's analysed steps (the page's analysis ends at "landed"), the
 ## triggers: each script that draws only in play shown by a camera of the trace's
 ## own (TRIGGERS): a fence bay broken, a street prop felled, a car's splash, goal
@@ -158,6 +165,13 @@ var _trigger := 0
 var _trigger_ticks := 0
 var _trigger_camera: Camera3D
 var _resolution_before := ""
+## The run's limits and settings from the page's address or the command line: the
+## trace's length (s, 0 for the whole drive), the 3D resolution asked for (an Options
+## id, "" for the player's own) and the one to put back; the view last recorded.
+var _seconds_limit := 0.0
+var _scale_asked := ""
+var _scale_restore := ""
+var _view := ""
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
 var _pipelines := {}
 
@@ -176,12 +190,18 @@ func _ready() -> void:
 	if _web:
 		_js = JavaScriptBridge.get_interface("__tiTrace")
 		_laps = int(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('laps') || '1'")))
+		_seconds_limit = float(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('seconds') || '0'")))
+		_scale_asked = _resolution_id(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('scale') || ''")))
 	else:
 		for arg: String in OS.get_cmdline_user_args():
 			if arg.begins_with("--trace-out="):
 				_out = FileAccess.open(arg.trim_prefix("--trace-out="), FileAccess.WRITE)
 			elif arg.begins_with("--trace-laps="):
 				_laps = int(arg.trim_prefix("--trace-laps="))
+			elif arg.begins_with("--trace-seconds="):
+				_seconds_limit = float(arg.trim_prefix("--trace-seconds="))
+			elif arg.begins_with("--trace-scale="):
+				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
 		# Natively, --trace-web-loading loads as the web build does (the shaders a group
 		# at a time, then the shader warm-up), to tell what that loading does on desktop.
@@ -474,6 +494,7 @@ func _finish_frame() -> void:
 	_buf_mb = buf_mb
 	if not _web:
 		_mark_pipelines()
+	_mark_view()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -501,6 +522,54 @@ func _finish_frame() -> void:
 
 func _event(kind: String, text: String, value: float) -> void:
 	_events.append([snappedf(_ms(_now_us()), 0.01), kind, text, value])
+
+
+## A "view" marker when the 3D scale, MSAA, window size or visible rect differs from
+## the last one recorded (the first frame records it).
+func _mark_view() -> void:
+	var viewport := get_viewport()
+	var window := get_window()
+	var rect := viewport.get_visible_rect().size
+	var view := "3D scale %.2f, MSAA %d, window %dx%d, visible %dx%d" % [viewport.scaling_3d_scale, viewport.msaa_3d, window.size.x, window.size.y, rect.x, rect.y]
+	if view != _view:
+		_view = view
+		_event("view", view, viewport.scaling_3d_scale)
+
+
+## An Options resolution id for a scale asked for ("0.5" -> "50"), "" if the menu
+## offers none such.
+static func _resolution_id(scale: String) -> String:
+	if not scale.is_valid_float():
+		return ""
+	var id := str(roundi(float(scale) * 100.0))
+	for choice: Dictionary in GraphicsSettings.offered(GraphicsSettings.RESOLUTION_KEY):
+		if str(choice.id) == id:
+			return id
+	return ""
+
+
+## The resolution asked for, applied as the Options menu applies it (not kept), the
+## player's own remembered to put back at the end.
+func _apply_scale() -> void:
+	var graphics := _main.graphics
+	if _scale_asked == "" or graphics == null:
+		return
+	_scale_restore = str(graphics.current.get(GraphicsSettings.RESOLUTION_KEY, ""))
+	var choices: Dictionary = graphics.current.duplicate()
+	choices[GraphicsSettings.RESOLUTION_KEY] = _scale_asked
+	graphics.apply(choices)
+	_event("trace", "3D resolution %s%% for the run" % _scale_asked, float(_scale_asked))
+
+
+## The player's own resolution back (after a run that asked for another).
+func _restore_scale() -> void:
+	var graphics := _main.graphics
+	if _scale_restore == "" or graphics == null:
+		return
+	var choices: Dictionary = graphics.current.duplicate()
+	choices[GraphicsSettings.RESOLUTION_KEY] = _scale_restore
+	graphics.apply(choices)
+	_scale_restore = ""
 
 
 ## The pipeline compilations by source, now.
@@ -598,6 +667,7 @@ func _header() -> Dictionary:
 	return {
 		"fields": FIELDS, "steps": STEPS, "legs": ROUTE_LEGS, "route": route, "outline": outline,
 		"route_m": _cum[_cum.size() - 1], "car": CAR_ROW, "cruise_mps": CRUISE_MPS, "laps": _laps,
+		"seconds_limit": _seconds_limit, "scale_asked": _scale_asked,
 		"renderer": RenderingServer.get_current_rendering_method(), "adapter": RenderingServer.get_video_adapter_name(),
 		"vendor": RenderingServer.get_video_adapter_vendor(), "display": DisplayServer.get_name(), "os": OS.get_name(),
 		"engine": Engine.get_version_info().get("string", ""), "version": stamp,
@@ -639,6 +709,7 @@ func _begin_report() -> void:
 
 
 func _end_report(result: String) -> void:
+	_restore_scale()
 	_send()
 	var summary := {
 		"result": result, "frames": _frames, "stucks": _stucks, "ms": _ms(_now_us()),
@@ -741,6 +812,12 @@ func _physics_process(delta: float) -> void:
 		return
 	_step_ticks += 1
 	var player := _main.player
+	if _seconds_limit > 0.0 and _step > 0 and _step < STEPS.size() - 1 and _ms(_now_us()) >= _seconds_limit * 1000.0:
+		_release_all()
+		_event("trace", "seconds limit %.0f s" % _seconds_limit, _seconds_limit)
+		_set_step("done")
+		_end_report("complete" if _stucks == 0 else "complete_with_stops")
+		return
 	match STEPS[_step]:
 		"wait":
 			# Play has started: on the web after the start prompt's tap.
@@ -750,6 +827,7 @@ func _physics_process(delta: float) -> void:
 				elif _step_ticks > 60 and (_census_rids.size() >= _census_base.size() or _step_ticks > 120):
 					_finish_census()
 					_wrap_vehicles(_main.vehicles)
+					_apply_scale()
 					_begin_report()
 					_set_step("baseline")
 			else:
