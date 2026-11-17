@@ -20,8 +20,8 @@ extends Node
 ##     no order and no times, never a trail), the seconds on foot, with the jetpack and in
 ##     a car, and the graphics settings changed during the window. There is no message at
 ##     the end of a visit.
-##   - FUNNEL_STEPS, the loading funnel's step names, and the daily anonymous id's rule
-##     (daily_id), which the web page applies in its own code before the engine runs
+##   - FUNNEL_STEPS, the loading funnel's step names, and the anonymous id's rule
+##     (anonymous_id), which the web page applies in its own code before the engine runs
 ##     (tools/check_web_reporting.mjs checks that it uses these names and sizes).
 ## Main adds it once the world is ready, where the statistics have somewhere to go (on the
 ## web, a page that sends them). It runs only while play does (pausable), and does a few
@@ -62,12 +62,14 @@ const MAX_FRAME_S := 2.0
 ## downloaded, the start prompt up, play started (its tap or click), and play still going
 ## after STATS_FIRST_S (the first timed stats).
 const FUNNEL_STEPS := ["page_opened", "download_finished", "start_prompt", "play_started", "playing_1min"]
-## The daily anonymous id: DAILY_ID_BYTES random bytes, as hex, made with the device's
-## local date and replaced by new random bytes once that date changes. Never derived from
-## anything about the device or the player; cleared when the player turns the statistics
-## off; sent only in the reports, as their user id, so Sentry counts players per day and
-## per release while nothing links one day to the next.
-const DAILY_ID_BYTES := 16
+## The anonymous id (owner, 2026-11-17: "Let's just switch to permanent IDs ... People can
+## just turn off analytics if they don't like it"): ANONYMOUS_ID_BYTES random bytes, as
+## hex, made the first time the statistics are sent and kept with the reporting state (on
+## the web, the browser's storage for the site) until the player turns the statistics off,
+## which deletes it (turning them on again makes a new one), or clears the site's data.
+## Never derived from anything about the device or the player; sent only in the reports,
+## as their user id, so Sentry counts players and returning players.
+const ANONYMOUS_ID_BYTES := 16
 
 ## The game whose state this reads.
 var main: GameMain
@@ -273,20 +275,13 @@ static func coarse_gpu(adapter: String) -> String:
 	return text.left(60) if not text.is_empty() else "unknown"
 
 
-## The daily anonymous id kept as {"id", "date"} for TODAY (the device's local date,
-## local_date()): the same while the date is, else new random bytes. For the desktop
-## builds; the web page applies the same rule in its own code.
-static func daily_id(kept: Dictionary, today: String) -> Dictionary:
-	var id := str(kept.get("id", ""))
-	if str(kept.get("date", "")) == today and id.length() == DAILY_ID_BYTES * 2 and id.is_valid_hex_number():
-		return {"id": id, "date": today}
-	return {"id": Crypto.new().generate_random_bytes(DAILY_ID_BYTES).hex_encode(), "date": today}
-
-
-## The device's local date, "YYYY-MM-DD".
-static func local_date() -> String:
-	var today := Time.get_date_dict_from_system()
-	return "%04d-%02d-%02d" % [today.year, today.month, today.day]
+## The anonymous id to use: KEPT when it is one (ANONYMOUS_ID_BYTES bytes as lowercase
+## hex), else new random bytes for the caller to keep. For the desktop builds; the web
+## page applies the same rule in its own code.
+static func anonymous_id(kept: String) -> String:
+	if kept.length() == ANONYMOUS_ID_BYTES * 2 and kept == kept.to_lower() and kept.is_valid_hex_number():
+		return kept
+	return Crypto.new().generate_random_bytes(ANONYMOUS_ID_BYTES).hex_encode()
 
 
 static func _number(value: float) -> String:

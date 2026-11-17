@@ -205,7 +205,7 @@ func _ready() -> void:
 	sound.apply_settings(float(kept.volume), bool(kept.muted))
 	hud.set_sound_settings(sound.volume, sound.muted)
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
-	# The crash and performance reports (CrashReports): the switch as kept here and on
+	# The anonymous statistics (CrashReports): the switch as kept here and on
 	# the page, off on either side winning, the page told and the result kept; Options
 	# shows the switch where there is a page (the web).
 	var reports_kept := CrashReports.saved() if use_saved_settings and settings_problem.is_empty() else true
@@ -791,7 +791,7 @@ func _on_graphics_chosen(key: String, value: Variant) -> void:
 	hud.show_graphics(graphics.current)
 
 
-## The crash and performance reports switched on the options screen: on or off at
+## The anonymous statistics switched on the options screen: on or off at
 ## once on the page (CrashReports.choose), and kept for next time (never by a driver
 ## in the player's own settings file).
 func _on_crash_reports_chosen(on: bool) -> void:
@@ -1000,7 +1000,7 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
-		# The crash and performance reports: whether Options offers the switch and it is
+		# The anonymous statistics: whether Options offers the switch and it is
 		# on, where the switch is, and whether the start prompt shows their line.
 		"crash_reports": {"offered": hud.privacy_row.visible, "on": crash_reports.on, "notice": hud.start_notes_state().reports, "switch": [hud.crash_reports.get_global_rect().get_center().x, hud.crash_reports.get_global_rect().get_center().y]},
 		# The time of day: whether it is on (DayClock.enabled), the clock's instant,

@@ -13,7 +13,7 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
-## The crash and performance reports switched on or off on the options screen
+## The anonymous statistics switched on or off on the options screen
 ## (main.gd tells the page and keeps it; CrashReports).
 signal crash_reports_chosen(on: bool)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
@@ -68,13 +68,16 @@ const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look �
 const START_HOME_SCREEN_NOTE := "For full screen: Share › Add to Home Screen"
 const START_SILENT_NOTE := "Turn off silent mode to hear sound"
 const START_NOTE_FONT_PX := 24
-## The start prompt's line about the crash and performance reports (owner,
-## 2026-11-17), on the web, until the page has recorded it shown (CrashReports): the
-## last of the notes, in the credits' notes' colour, at the notes' size on a touch
-## screen and the controls line's on a desktop. On one line where the page is wide
-## enough, else wrapped to the page's width less REPORTS_NOTE_SIDES_PX (a phone held
-## upright). In the web font's characters, as the other notes.
-const START_REPORTS_NOTE := "Sends anonymous statistics (device type, errors, frame rate, where in the game, time played). Turn off in Options."
+## The start prompt's line about the anonymous statistics (owner, 2026-11-17), on the
+## web, until the page has recorded it shown (CrashReports): the last of the notes, in
+## the credits' notes' colour, at the notes' size on a touch screen and the controls
+## line's on a desktop. On one line where the page is wide enough (a phone as wide as an
+## iPhone 16 Pro held sideways), else wrapped to the page's width less
+## REPORTS_NOTE_SIDES_PX (a phone held upright). Wrapped on a page wider than tall (a
+## narrower phone held sideways), its second line would push three notes past the top of
+## the page, so the home screen hint gives way on that visit (it shows again on the next,
+## when this line no longer does). In the web font's characters, as the other notes.
+const START_REPORTS_NOTE := "Sends anonymous statistics with a random ID (device type, errors, frame rate, where in the game, time played). Turn off in Options."
 const REPORTS_NOTE_SIDES_PX := 96.0
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
@@ -219,6 +222,8 @@ var _start_notes: VBoxContainer
 var _home_screen_hint: Label
 var _silent_note: Label
 var _reports_note: Label
+## Which notes main.gd asked for: [home_screen, silent_mode, reports].
+var _notes_asked := [false, false, false]
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -443,9 +448,9 @@ func start_prompt_text() -> String:
 ## mouse), which main.gd asks the web page for (owner, 2026-11-16 and 2026-11-17):
 ## home_screen, how to play full screen from the home screen (Safari on an iPhone
 ## or iPad, outside a home screen app); silent_mode, that the sound needs the silent
-## mode off (any iPhone or iPad); reports, the line about the crash and performance
-## reports (any web page, until it has been shown once; START_REPORTS_NOTE). None
-## shows without the prompt, and play's first start ends them with it.
+## mode off (any iPhone or iPad); reports, the line about the anonymous statistics
+## (any web page, until it has been shown once; START_REPORTS_NOTE). None shows
+## without the prompt, and play's first start ends them with it.
 func set_start_notes(home_screen: bool, silent_mode: bool, reports := false) -> void:
 	if _start_text.is_empty():
 		return
@@ -453,10 +458,11 @@ func set_start_notes(home_screen: bool, silent_mode: bool, reports := false) -> 
 		if not home_screen and not silent_mode and not reports:
 			return
 		_make_start_notes()
-	_home_screen_hint.visible = home_screen
+	_notes_asked = [home_screen, silent_mode, reports]
 	_silent_note.visible = silent_mode
 	_reports_note.visible = reports
 	_start_notes.visible = home_screen or silent_mode or reports
+	_fit_reports_note()
 
 
 ## The notes' lines under the Play button, after the line of controls where there is
@@ -490,13 +496,17 @@ func _start_note_label(node_name: String, text: String) -> Label:
 
 
 ## The reports' line as wide as its words on one line, but no wider than the page
-## less REPORTS_NOTE_SIDES_PX, where it wraps.
+## less REPORTS_NOTE_SIDES_PX, where it wraps; and the home screen hint, asked for,
+## shown unless that line wraps on a page wider than tall (START_REPORTS_NOTE).
 func _fit_reports_note() -> void:
 	if _reports_note == null:
 		return
 	var font := _reports_note.get_theme_font("font")
-	var one_line := font.get_string_size(_reports_note.text, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("font_size")).x
-	_reports_note.custom_minimum_size.x = minf(ceilf(one_line), maxf(0.0, size.x - REPORTS_NOTE_SIDES_PX))
+	var one_line := ceilf(font.get_string_size(_reports_note.text, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("font_size")).x)
+	var room := maxf(0.0, size.x - REPORTS_NOTE_SIDES_PX)
+	_reports_note.custom_minimum_size.x = minf(one_line, room)
+	var wraps := _reports_note.visible and one_line > room and size.x > size.y
+	_home_screen_hint.visible = bool(_notes_asked[0]) and not wraps
 
 
 ## Which start prompt notes show (the web state readback).
@@ -711,7 +721,7 @@ func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
 
 
-## The crash and performance reports' switch under Privacy, where main.gd offers it
+## The anonymous statistics' switch under Privacy, where main.gd offers it
 ## (a web page that sends the reports; CrashReports), showing whether they are on.
 ## Pressing it asks main.gd to switch them (crash_reports_chosen).
 func set_crash_reports(offered: bool, on: bool) -> void:

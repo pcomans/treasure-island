@@ -30,7 +30,7 @@ extends SceneTree
 ##     buttons and a finger's drag scrolls the credits; Back and Resume play on.
 ##     Options has the rows a touch screen gets, the web's (main.gd uses touch
 ##     controls only in a touch browser): its graphics (owner, 2026-11-14), the
-##     sound and the crash and performance reports' switch, no shadow levels or time
+##     sound and the anonymous statistics' switch, no shadow levels or time
 ##     of day; a finger's tap on a resolution puts it on;
 ##   - the frame rate, shown throughout, mirrors the pause button in the other top
 ##     corner of the touch controls' safe area, clear of every touch control;
@@ -58,6 +58,9 @@ const ReportingPage := preload("res://game/tests/shared/reporting_page.gd")
 ## (1206 px wide, 2148 px under the status bar and over the address bar), and
 ## sideways (874 x 370 points at 3x).
 const SHAPES := {"upright": Vector2i(1206, 2148), "sideways": Vector2i(2622, 1110)}
+## A narrower phone's Safari page held sideways (an iPhone SE's, about 667 x 325 points at
+## 2x): the start prompt's notes only.
+const NARROW_SIDEWAYS := Vector2i(1334, 650)
 ## The height of a menu button on a touch screen (hud.gd's set_touch_instructions),
 ## and how far a finger drags the credits.
 const THUMB_PX := 64.0
@@ -95,7 +98,7 @@ func _run() -> void:
 	# The default shadows, never a level saved in the shared user folder (main.gd).
 	_main.use_saved_settings = false
 	# As on a touch browser: play waits behind the start prompt, and a page sends the
-	# crash and performance reports.
+	# anonymous statistics.
 	_main.start_prompt = true
 	_page = ReportingPage.new()
 	_main.crash_page = _page
@@ -126,7 +129,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; the crash and performance reports' line the page asked for, the page hearing it shown; with an iPhone's notes too, the home screen hint and the silent mode line, the three lines each centred under the button inside the panel and the page at both shapes, the reports' line on one line sideways, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the page hearing it, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics, sound and the reports' switch, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; the anonymous statistics' line the page asked for, the page hearing it shown; with an iPhone's notes too, the home screen hint and the silent mode line, the three lines each centred under the button inside the panel and the page at both shapes, the reports' line on one line sideways and, on a narrower phone held sideways, wrapped with the home screen hint giving way, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the page hearing it, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics, sound and the reports' switch, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -159,16 +162,19 @@ func _start_prompt() -> bool:
 			return false
 	# The reports' line, which the page asked for, shows with the prompt, and the page
 	# heard it shown (main.gd's _show_start_notes, CrashReports).
-	if not _require(hud.start_notes_state().reports and _page.told == ["on", "notice shown"], "The start prompt must show the crash and performance reports' line the page asked for, and the page hear it shown (shown %s, the page told %s)." % [hud.start_notes_state().reports, _page.told]):
+	if not _require(hud.start_notes_state().reports and _page.told == ["on", "notice shown"], "The start prompt must show the anonymous statistics' line the page asked for, and the page hear it shown (shown %s, the page told %s)." % [hud.start_notes_state().reports, _page.told]):
 		return false
 	# The notes an iPhone's Safari page asks for, with the reports' line.
 	hud.set_start_notes(true, true, true)
-	for shape: String in ["sideways", "upright"]:
-		root.size = SHAPES[shape]
+	for shape: String in ["sideways", "upright", "narrow sideways"]:
+		root.size = SHAPES[shape] if SHAPES.has(shape) else NARROW_SIDEWAYS
 		for _frame in 3:
 			await process_frame
 		if not _check_start_notes(shape):
 			return false
+	root.size = SHAPES.upright
+	for _frame in 3:
+		await process_frame
 	for pressed: bool in [true, false]:
 		var esc := InputEventAction.new()
 		esc.action = &"pause"
@@ -206,28 +212,38 @@ func _start_prompt() -> bool:
 ## it, inside the panel and the page, clear of each other, each line's text centred
 ## on the panel as the button is; the panel still within the top START_PANEL_SHARE
 ## of the page; the reports' line on one line sideways, and upright no wider than
-## the page less REPORTS_NOTE_SIDES_PX; and every character of the lines in the font
-## the web build draws them with (it has no other).
+## the page less REPORTS_NOTE_SIDES_PX; on a narrower phone held sideways, where that
+## line wraps, the home screen hint gives way (hud.gd's START_REPORTS_NOTE); and every
+## character of the lines in the font the web build draws them with (it has no other).
 func _check_start_notes(shape: String) -> bool:
 	var hud := _main.hud
 	var state := hud.start_notes_state()
 	var notes := hud.find_child("StartNotes", true, false) as Control
-	if not _require(notes != null and state.home_screen and state.silent_mode and state.reports, "%s: the start prompt must show the home screen hint, the silent mode line and the reports' line (%s)." % [shape, state]):
+	var narrow := shape == "narrow sideways"
+	if not _require(notes != null and bool(state.home_screen) != narrow and state.silent_mode and state.reports, "%s: the start prompt must show %s the silent mode line and the reports' line (%s)." % [shape, "no home screen hint (it gives way to the wrapped reports' line), only" if narrow else "the home screen hint,", state]):
 		return false
 	var page := hud.get_viewport_rect()
 	var panel := hud.pause_box.get_global_rect()
 	var button := hud.resume_button.get_global_rect()
-	var labels: Array[Label] = [notes.get_node("HomeScreenHint") as Label, notes.get_node("SilentNote") as Label, notes.get_node("ReportsNote") as Label]
-	var hint := labels[0].get_global_rect()
-	var line := labels[1].get_global_rect()
-	var reports := labels[2].get_global_rect()
-	var placed := [hint, line, reports].all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
+	var labels: Array[Label] = []
+	for label_name: String in ["HomeScreenHint", "SilentNote", "ReportsNote"]:
+		if (notes.get_node(label_name) as Label).visible:
+			labels.append(notes.get_node(label_name) as Label)
+	var rects: Array[Rect2] = []
+	for label: Label in labels:
+		rects.append(label.get_global_rect())
+	var placed := rects.all(func(rect: Rect2) -> bool: return page.encloses(rect) and panel.encloses(rect) and rect.position.y >= button.end.y)
 	var centred := labels.all(func(label: Label) -> bool: return label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER and absf(label.get_global_rect().get_center().x - panel.get_center().x) < 1.0)
-	var apart := not hint.intersects(line) and not line.intersects(reports) and not hint.intersects(reports)
-	if not _require(placed and centred and apart and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, each centred on its panel (%s) inside it and the page (%s), and the panel within the top %.2f of the page (hint %s, silent mode line %s, reports' line %s)." % [shape, button, panel, page, GameHUD.START_PANEL_SHARE, hint, line, reports]):
+	var apart := true
+	for i in rects.size():
+		for j in range(i + 1, rects.size()):
+			apart = apart and not rects[i].intersects(rects[j])
+	if not _require(placed and centred and apart and panel.end.y <= page.size.y * GameHUD.START_PANEL_SHARE + 1.0, "%s: the start prompt's notes must lie under its button (%s), clear of it and of each other, each centred on its panel (%s) inside it and the page (%s), and the panel within the top %.2f of the page (notes %s)." % [shape, button, panel, page, GameHUD.START_PANEL_SHARE, rects]):
 		return false
-	var fits := labels[2].get_line_count() == 1 if shape == "sideways" else reports.size.x <= page.size.x - GameHUD.REPORTS_NOTE_SIDES_PX + 1.0
-	if not _require(fits, "%s: the reports' line must take one line sideways and be no wider than the page less %d px upright (%d lines, %s on a page %s)." % [shape, int(GameHUD.REPORTS_NOTE_SIDES_PX), labels[2].get_line_count(), reports, page]):
+	var reports_label := notes.get_node("ReportsNote") as Label
+	var reports := reports_label.get_global_rect()
+	var fits := reports_label.get_line_count() == 1 if shape == "sideways" else (reports_label.get_line_count() > 1 if narrow else reports.size.x <= page.size.x - GameHUD.REPORTS_NOTE_SIDES_PX + 1.0)
+	if not _require(fits, "%s: the reports' line must take one line sideways, wrap on the narrower phone, and be no wider than the page less %d px upright (%d lines, %s on a page %s)." % [shape, int(GameHUD.REPORTS_NOTE_SIDES_PX), reports_label.get_line_count(), reports, page]):
 		return false
 	var missing := []
 	for text: String in [GameHUD.START_HOME_SCREEN_NOTE, GameHUD.START_SILENT_NOTE, GameHUD.START_REPORTS_NOTE]:
@@ -417,7 +433,7 @@ func _credits_and_resume(shape: String) -> bool:
 	var page := Rect2(Vector2.ZERO, hud.get_viewport_rect().size)
 	var options := hud.options_panel.get_global_rect()
 	if not _require(paused and hud.options_visible() and page.encloses(options), "%s: Options shows at %s, not inside the page %s (paused %s)." % [shape, options, page, paused]) \
-	or not _require(not hud.shadow_row.is_visible_in_tree() and not hud.time_row.is_visible_in_tree() and hud.resolutions.is_visible_in_tree() and hud.show_frame_rate.is_visible_in_tree() and hud.sound_volume.is_visible_in_tree() and hud.crash_reports.is_visible_in_tree(), "%s: a touch screen's Options must show the web's rows: graphics, sound and the crash and performance reports' switch, no shadow levels or time of day." % shape):
+	or not _require(not hud.shadow_row.is_visible_in_tree() and not hud.time_row.is_visible_in_tree() and hud.resolutions.is_visible_in_tree() and hud.show_frame_rate.is_visible_in_tree() and hud.sound_volume.is_visible_in_tree() and hud.crash_reports.is_visible_in_tree(), "%s: a touch screen's Options must show the web's rows: graphics, sound and the anonymous statistics' switch, no shadow levels or time of day." % shape):
 		return false
 	var buttons: Array = (hud.frame_rates.get_children() if hud.frame_rates.is_visible_in_tree() else []) + hud.resolutions.get_children() + [hud.show_frame_rate, hud.sound_mute, hud.crash_reports, hud.options_back_button]
 	for i in buttons.size():

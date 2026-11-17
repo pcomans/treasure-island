@@ -45,7 +45,7 @@ extends SceneTree
 ##     on again, the capture harness's opt-out gets the defaults, and unknown,
 ##     missing and unwritable settings fall back quietly; the web offers them with
 ##     its own default resolution (two thirds, owner 2026-11-15);
-##   - the crash and performance reports' switch (CrashReports, owner 2026-11-17):
+##   - the anonymous statistics' switch (CrashReports, owner 2026-11-17):
 ##     with no page to send them (desktop) Options has no Privacy section; with a
 ##     page, as a browser has (a stand-in recording what it is told), the switch
 ##     shows under Privacy after the sound, on by default, the page told so at
@@ -264,7 +264,7 @@ func _make_main(use_saved := true, page: Object = null) -> GameMain:
 	return _main
 
 
-## The crash and performance reports' switch (CrashReports), in mains made one after
+## The anonymous statistics' switch (CrashReports), in mains made one after
 ## another as a browser would make them, each with a page standing in for the web
 ## page's reporting. No frame passes, so no main's world starts loading. Returns a
 ## summary, or "" after failing.
