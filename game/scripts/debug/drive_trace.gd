@@ -190,7 +190,8 @@ var _view := ""
 var _probes_off := false
 var _sound_off := false
 var _msaa_off := false
-var _msaa_before := -1
+var _msaa_restore := false
+var _msaa_before := Viewport.MSAA_DISABLED
 var _route_name := ""
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
 var _pipelines := {}
@@ -222,17 +223,17 @@ func _ready() -> void:
 				_seconds_limit = float(arg.trim_prefix("--trace-seconds="))
 			elif arg.begins_with("--trace-scale="):
 				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
-	_probes_off = _option("probes") == "0"
-	_sound_off = _option("sound") == "0"
-	_msaa_off = _option("msaa") == "0"
-	_route_name = "hover" if _option("route") == "hover" else ""
-	_apply_switches()
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
 		# Natively, --trace-web-loading loads as the web build does (the shaders a group
 		# at a time, then the shader warm-up), to tell what that loading does on desktop.
 		if OS.get_cmdline_user_args().has("--trace-web-loading"):
 			_main.compile_by_group = true
 	_laps = clampi(_laps, 1, MAX_LAPS)
+	_probes_off = _option("probes") == "0"
+	_sound_off = _option("sound") == "0"
+	_msaa_off = _option("msaa") == "0"
+	_route_name = "hover" if _option("route") == "hover" else ""
+	_apply_switches()
 	# The scripts' share of each step: probes first and last of all.
 	for at: int in [-1000000, 1000000]:
 		var probe := TraceProbe.new(self, "script_first" if at < 0 else "script_last")
@@ -596,9 +597,9 @@ func _apply_scale() -> void:
 ## player chose one in the Options meanwhile; MSAA as it was.
 func _restore_scale() -> void:
 	var graphics := _main.graphics
-	if _msaa_before >= 0:
-		get_viewport().msaa_3d = _msaa_before as Viewport.MSAA
-		_msaa_before = -1
+	if _msaa_restore:
+		get_viewport().msaa_3d = _msaa_before
+		_msaa_restore = false
 	if _scale_restore == "" or graphics == null:
 		return
 	if str(graphics.current.get(GraphicsSettings.RESOLUTION_KEY, "")) == _scale_asked:
@@ -626,6 +627,7 @@ func _apply_switches() -> void:
 	_apply_scale()
 	if _msaa_off:
 		_msaa_before = get_viewport().msaa_3d
+		_msaa_restore = true
 		get_viewport().msaa_3d = Viewport.MSAA_DISABLED
 	if _probes_off:
 		MERSEA_MODEL.reflections_off = true
