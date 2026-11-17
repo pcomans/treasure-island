@@ -1,0 +1,67 @@
+{
+ "name": "04a_building-one",
+ "description": "Explore local landmarks: Building 1's west crescent fills the frame, Chester small in front, walking; slow crane up and drift south.",
+ "duration": 1.5,
+ "handle": 0.5,
+ "fps": 30,
+ "resolution": [
+  1920,
+  1080
+ ],
+ "street_detail": true,
+ "chester": {
+  "at": [
+   -75.0,
+   752.0
+  ],
+  "facing": [
+   -75.0,
+   730.0
+  ],
+  "track": [
+   {
+    "t": -2.0,
+    "move": "walk",
+    "path": [
+     [
+      -75.0,
+      700.0
+     ]
+    ]
+   }
+  ]
+ },
+ "camera": {
+  "near": 0.2,
+  "keys": [
+   {
+    "t": -0.5,
+    "position": [
+     -150.0,
+     3.0,
+     752.0
+    ],
+    "target": [
+     -10.0,
+     13.0,
+     744.0
+    ],
+    "fov": 36.0
+   },
+   {
+    "t": 2.0,
+    "position": [
+     -150.0,
+     4.6,
+     749.5
+    ],
+    "target": [
+     -10.0,
+     13.3,
+     742.5
+    ],
+    "fov": 36.0
+   }
+  ]
+ }
+}

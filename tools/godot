@@ -7,9 +7,9 @@
 # Binary: $GODOT_BIN if set, else /opt/godot/4.7.2/godot (installed by
 # .devcontainer/setup-godot.sh).
 #
-# Without --headless, renders on the GPU through a private headless Weston
-# compositor. Under xvfb Godot silently falls back to llvmpipe (CPU), so xvfb
-# is not used.
+# Without --headless, renders on the GPU: natively on macOS, and on Linux
+# through a private headless Weston compositor. Under xvfb Godot silently falls
+# back to llvmpipe (CPU), so xvfb is not used.
 #
 # Sound: every run here uses Godot's Dummy audio driver (it still mixes, so
 # players and buses work, but nothing is heard), unless the command names an
@@ -35,7 +35,8 @@ has_flag() { local flag; for flag in "${engine_args[@]}"; do [ "${flag}" = "$1" 
 audio=()
 has_flag --audio-driver || audio=(--audio-driver Dummy)
 
-if has_flag --headless; then
+# macOS draws natively (Metal); the private Weston below is for Linux only.
+if [ "$(uname -s)" = Darwin ] || has_flag --headless; then
   exec "${bin}" "${audio[@]}" "$@"
 fi
 

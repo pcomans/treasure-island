@@ -1,0 +1,55 @@
+{
+ "name": "04c_aracely",
+ "description": "Explore local landmarks: Aracely Cafe at the south tip of Building 33 F fills the frame, Chester small in front; slow drift.",
+ "duration": 1.5,
+ "handle": 0.5,
+ "fps": 30,
+ "resolution": [
+  1920,
+  1080
+ ],
+ "street_detail": true,
+ "chester": {
+  "at": [
+   -283.0,
+   -424.0
+  ],
+  "facing": [
+   -270.0,
+   -405.0
+  ]
+ },
+ "camera": {
+  "near": 0.2,
+  "keys": [
+   {
+    "t": -0.5,
+    "position": [
+     -268.0,
+     1.9,
+     -403.0
+    ],
+    "target": [
+     -288.0,
+     3.6,
+     -440.0
+    ],
+    "fov": 42.0
+   },
+   {
+    "t": 2.0,
+    "position": [
+     -266.0,
+     2.1,
+     -405.0
+    ],
+    "target": [
+     -288.0,
+     3.6,
+     -440.0
+    ],
+    "fov": 42.0
+   }
+  ]
+ }
+}
