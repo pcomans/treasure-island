@@ -10,7 +10,7 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 
 ## Play it
 
-- **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
+- **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 145 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
 - **On a Mac:** [download the app](https://github.com/pcomans/treasure-island/releases/latest/download/treasure-island-mac.zip) (a zip of about 229 MB). It isn't notarized, so macOS blocks it the first time you open it. Click Done, then go to System Settings > Privacy & Security, scroll down, click Open Anyway and confirm. After that it opens normally.
 
 The downloadable version looks nicer.
