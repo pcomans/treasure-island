@@ -269,20 +269,43 @@ func _finish_census() -> void:
 	remove_from_group("_native_shader_source_visualizer")
 	var uniform := RegEx.create_from_string("uniform\\s+(?:(?:lowp|mediump|highp)\\s+)?\\w+\\s+(\\w+)")
 	var render_mode := RegEx.create_from_string("render_mode\\s+([^;]*);")
-	var materials: Array = []
+	# One entry a shader (the programs are a shader's, whatever the material's values):
+	# the materials that draw with it merged, their users and cells added up.
+	var shaders := {}
 	for entry: Dictionary in _census_entries.values():
 		if entry.has("inspect"):
 			var index := int(entry.inspect)
 			entry.erase("inspect")
 			if index < _census_rids.size():
-				var code := RenderingServer.shader_get_code(_census_rids[index])
 				entry.shader = "generated %d" % _census_rids[index].get_id()
-				entry.uniforms = uniform.search_all(code).map(func(found: RegExMatch) -> String: return found.get_string(1))
-				var mode := render_mode.search(code)
-				entry["render_mode"] = mode.get_string(1) if mode != null else ""
+				if not shaders.has(entry.shader):
+					var code := RenderingServer.shader_get_code(_census_rids[index])
+					entry.uniforms = uniform.search_all(code).map(func(found: RegExMatch) -> String: return found.get_string(1))
+					var mode := render_mode.search(code)
+					entry["render_mode"] = mode.get_string(1) if mode != null else ""
+		var key := str(entry.shader) if not str(entry.shader).is_empty() and entry.shader != "built-in" else "%s %s" % [entry.kind, entry.example]
+		if not shaders.has(key):
+			entry["materials"] = 0
+			entry["examples"] = []
+			shaders[key] = entry
+		var merged: Dictionary = shaders[key]
+		merged.materials += 1
+		if not is_same(merged, entry):
+			merged.users += entry.users
+			merged.instanced += entry.instanced
+			if entry.range > 0.0:
+				merged.range = entry.range if merged.range == 0.0 else minf(merged.range, entry.range)
+			for cell: String in entry.cells:
+				if (merged.cells as Dictionary).size() < 400:
+					merged.cells[cell] = true
+		if (merged.examples as Array).size() < 4:
+			merged.examples.append(str(entry.path) if not str(entry.path).is_empty() else str(entry.example))
+	var materials: Array = []
+	for entry: Dictionary in shaders.values():
 		entry.cells = (entry.cells as Dictionary).keys()
 		materials.append(entry)
 	_census["materials"] = materials
+	_census["material_count"] = _census_entries.size()
 	# The inspector answers in the order asked only if every material asked had a shader.
 	_census["inspector"] = {"asked": _census_base.size(), "answered": _census_rids.size()}
 	_census_entries.clear()
