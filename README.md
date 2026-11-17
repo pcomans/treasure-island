@@ -434,6 +434,7 @@ terms, see
 - [HUMAN.md](HUMAN.md): things only the owner can do.
 - [KNOWN_ISSUES.md](KNOWN_ISSUES.md): known issues and planned work.
 - [tools/sfx/README.md](tools/sfx/README.md): the sound-effect prompts, the tools that make and fetch the audio (`tools/generate-sfx`, `tools/fetch-sfx`), how to make your own set, and why the audio itself stays out of Git.
+- [Reproduce the website trailer](tools/cinematics/isle-house/README.md) from its camera path and pinned game scene.
 - Older records: Git history and `evidence/`.
 
 

@@ -1,0 +1,8 @@
+diff --git a/game/tests/shared/world_harness.gd b/game/tests/shared/world_harness.gd
+--- a/game/tests/shared/world_harness.gd
++++ b/game/tests/shared/world_harness.gd
+@@ -8,3 +8,3 @@
+ ## capture runs ran out at 120 s while a plain rendered start took 94 s).
+-const LOAD_LIMIT_MS := 300000
++const LOAD_LIMIT_MS := 600000
+ const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
