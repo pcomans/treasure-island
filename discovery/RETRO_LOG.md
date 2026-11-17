@@ -27095,6 +27095,7 @@ Comparing every record against the base commit found a change the author hadn't 
 - What the team should change next time: Run `tools/changelog.py check` on the exact head handed to review, and add a selftest case for each way the release head is made (a merge commit, a tag outside HEAD's history, more than ten unreleased builds).
 - Round 2 (e358a093): Re-running the earlier mutations plus six new ones against the new selftest took a few seconds. Nine of the ten were caught; only duplicate-line removal goes untested. Next time, also name the CI checkout options a rule depends on (here: tags fetched with `fetch-depth: 0`) in the workflow itself, not just in comments.
 - Round 3 (8282ed22): The delta was small and matched its description file for file, so reading it, running the selftest and parsing the YAML were enough. No engine and no re-run of the mutations were needed.
+- Website header (32f84010, branch `ci/changelog-website-20261117`): `git merge-tree --write-tree` against main and the mulch branch showed, without touching the worktree, that the mulch branch's `tools/test.sh` conflict is with main, not with this branch. This kind of check is worth running whenever a brief names a branch that might conflict.
 
 ### security-review: ci-build-changelog-20261116 — 2026-11-16 — security review of the changelog workflow change at c94ff3cb
 
