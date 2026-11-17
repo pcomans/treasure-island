@@ -139,6 +139,15 @@ var day_sun: DaySun
 var night_lights: NightLights
 ## The game's sound (game/scripts/audio/sound.gd), made as the game starts.
 var sound: Sound
+## The page that sends the anonymous statistics (CrashReports.web_page(): on the web,
+## window.__tiReporting), or null where there is none; a test sets a stand-in before
+## adding main, as a browser would. Their switch, as main starts it, and the game's state
+## and timed stats for them (GameStats, made once the world is ready where there is a
+## page), from when the game started.
+var crash_page: Object = CrashReports.web_page()
+var crash_reports: CrashReports
+var game_stats: GameStats
+var _started_msec := Time.get_ticks_msec()
 ## Startup puts on the shadow level, graphics and sound kept from the last run; the
 ## shared capture harness turns this off, so its captures always have the defaults
 ## (a player's choice is a global engine setting that would reach its neutral sun,
@@ -196,6 +205,15 @@ func _ready() -> void:
 	sound.apply_settings(float(kept.volume), bool(kept.muted))
 	hud.set_sound_settings(sound.volume, sound.muted)
 	hud.sound_settings_changed.connect(_on_sound_settings_changed)
+	# The crash and performance reports (CrashReports): the switch as kept here and on
+	# the page, off on either side winning, the page told and the result kept; Options
+	# shows the switch where there is a page (the web).
+	var reports_kept := CrashReports.saved() if use_saved_settings and settings_problem.is_empty() else true
+	crash_reports = CrashReports.new(crash_page, reports_kept)
+	if crash_reports.on != reports_kept and use_saved_settings and settings_problem.is_empty():
+		CrashReports.save(crash_reports.on)
+	hud.set_crash_reports(crash_page != null, crash_reports.on)
+	hud.crash_reports_chosen.connect(_on_crash_reports_chosen)
 	if OS.has_feature("web"):
 		# The view fills the browser's shape (window/stretch/aspect "expand", as
 		# everywhere). Its 3D scale is the graphics' resolution (above).
@@ -305,6 +323,11 @@ func _unhandled_input(event: InputEvent) -> void:
 ## player grounded and the initial graphics prepared.
 func is_play_ready() -> bool:
 	return _world_ready
+
+
+## Whether play uses the touch controls (a touch browser).
+func has_touch_controls() -> bool:
+	return _touch_controls != null
 
 
 func _notification(what: int) -> void:
@@ -539,6 +562,14 @@ func _on_world_ready(_report: Dictionary) -> void:
 		vehicles.configure(world_root, player, hud, _touch_controls != null)
 		if _touch_controls != null:
 			_touch_controls.vehicles = vehicles
+	# The game's state and timed stats for the anonymous statistics (GameStats), where
+	# a page sends them: they count play only, from the start prompt's tap on.
+	if crash_page != null and game_stats == null:
+		game_stats = GameStats.new(self, _started_msec, CrashReports.web_adapter() if OS.has_feature("web") else RenderingServer.get_video_adapter_name())
+		game_stats.name = "GameStats"
+		game_stats.snapshot_changed.connect(crash_reports.snapshot)
+		game_stats.stats_due.connect(crash_reports.stats)
+		add_child(game_stats)
 	# The buildings' daylight fills, found once now the world is loaded, go out at
 	# night with the look (DaySun; nothing with the time of day off).
 	day_sun.collect_fills(world_root.buildings)
@@ -584,9 +615,8 @@ func _on_world_ready(_report: Dictionary) -> void:
 	# hands over to it as play is ready. Never auto-request browser lock.
 	if start_prompt:
 		hud.set_start_prompt("Tap to play" if _touch_controls != null else "Click to play")
-		if OS.has_feature("web") and _touch_controls != null:
-			_show_start_notes()
 		_set_paused(true, true)
+		_show_start_notes()
 	else:
 		if _touch_controls != null:
 			_touch_controls.set_gameplay_active(true)
@@ -699,6 +729,13 @@ func _set_paused(paused: bool, quiet := false) -> void:
 	if paused:
 		for action: StringName in GAMEPLAY_ACTIONS:
 			Input.action_release(action)
+	elif not hud.start_prompt_text().is_empty() and crash_reports != null:
+		# The start prompt's tap or click: play starts, and the reports may go out. Its
+		# line about them was on screen with it (behind a controls screen opened on
+		# the loading screen, it was not when the prompt came up).
+		if hud.start_notes_state().reports:
+			crash_reports.notice_shown()
+		crash_reports.play_started()
 	if get_tree().paused != paused and not quiet:
 		# The pause menu opening, a little lower closing.
 		Sound.play(&"ui_pause", Vector3.INF, 1.0, 1.0 if paused else 0.9)
@@ -754,6 +791,19 @@ func _on_graphics_chosen(key: String, value: Variant) -> void:
 	hud.show_graphics(graphics.current)
 
 
+## The crash and performance reports switched on the options screen: on or off at
+## once on the page (CrashReports.choose), and kept for next time (never by a driver
+## in the player's own settings file).
+func _on_crash_reports_chosen(on: bool) -> void:
+	crash_reports.choose(on)
+	var settings_problem := player_settings_problem(get_tree(), "switched the crash reports, writing")
+	if settings_problem.is_empty():
+		CrashReports.save(crash_reports.on)
+	else:
+		push_error(settings_problem)
+	hud.show_crash_reports(crash_reports.on)
+
+
 ## The master volume or mute changed on the options screen: on at once, and kept
 ## for next time when keep (once a drag ends; never by a driver in the player's
 ## own settings file).
@@ -790,20 +840,23 @@ func _resume_game() -> void:
 		_set_paused(false)
 
 
-## The start prompt's notes on a touch screen (owner, 2026-11-16), as the web page
-## decides them (game/web/shell.html's __tiStartNotes): on an iPhone or iPad, in
-## Safari outside a home screen app, how to play full screen from the home screen;
-## on any iPhone or iPad, that the sound needs the silent mode off, unless the
+## The start prompt's notes (owner, 2026-11-16 and 2026-11-17), the phone ones as the
+## web page decides them (game/web/shell.html's __tiStartNotes): on an iPhone or
+## iPad, in Safari outside a home screen app, how to play full screen from the home
+## screen; on any iPhone or iPad, that the sound needs the silent mode off, unless the
 ## game's own sound is off (Options' mute or no volume); on an Android phone or
-## tablet nothing to read, the prompt's tap going full screen (_resume_game). A
-## page without the notes shows none.
+## tablet nothing to read, the prompt's tap going full screen (_resume_game). Then on
+## any web page, until the page has recorded it shown, the line about the crash and
+## performance reports (CrashReports.notice), which the page hears is shown. A page
+## without the notes shows none of the phone ones.
 func _show_start_notes() -> void:
-	var notes: Variant = JSON.parse_string(str(JavaScriptBridge.eval("window.__tiStartNotes ? window.__tiStartNotes.read() : '{}'")))
-	if not notes is Dictionary:
-		return
+	var told: Variant = JSON.parse_string(str(JavaScriptBridge.eval("window.__tiStartNotes ? window.__tiStartNotes.read() : '{}'"))) if OS.has_feature("web") else {}
+	var notes: Dictionary = told if told is Dictionary else {}
 	_full_screen_on_start = bool(notes.get("full_screen", false))
 	var sound_on := not sound.muted and sound.volume > 0.0
-	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on)
+	hud.set_start_notes(bool(notes.get("home_screen", false)), bool(notes.get("silent_mode", false)) and sound_on, crash_reports.notice)
+	if hud.start_notes_state().reports:
+		crash_reports.notice_shown()
 
 
 func _exit_game() -> void:
@@ -947,6 +1000,9 @@ func _publish_web_state(_args: Array) -> void:
 		# The sound: the audio driver, the master volume and mute, the slider on the
 		# options screen, and how many times each sound has played.
 		"sound": _sound_state(),
+		# The crash and performance reports: whether Options offers the switch and it is
+		# on, where the switch is, and whether the start prompt shows their line.
+		"crash_reports": {"offered": hud.privacy_row.visible, "on": crash_reports.on, "notice": hud.start_notes_state().reports, "switch": [hud.crash_reports.get_global_rect().get_center().x, hud.crash_reports.get_global_rect().get_center().y]},
 		# The time of day: whether it is on (DayClock.enabled), the clock's instant,
 		# whether it runs, the Sun's rotation and sky mode, whether the options screen
 		# offers the date and time, and whether there are night lights (none on the

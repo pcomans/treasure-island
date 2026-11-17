@@ -1,14 +1,18 @@
 #!/usr/bin/env bash
 # Checks tools/check_web_paths.py, the web build's check that the exported page
 # loads every file by a path relative to itself (tools/build-web.sh), on a page
-# shaped like Godot's export with tools/build-web.sh's web app manifest: the page
-# passes, with a link out of the game and a comment that quotes a root path, and
-# names its manifest's icons; it fails when its engine script comes from the
-# site's root, when the loader's pack comes from another origin, when a <base>
-# element moves every path, when its manifest link starts at the site's root, when
-# the manifest's start_url, scope or an icon leaves the page's folder, when its
-# start_url is outside its scope, when it sets an id, when it isn't JSON, and when
-# a file the page or the manifest loads is missing from the build. No network and
+# shaped like Godot's export with tools/build-web.sh's web app manifest and crash
+# reports' settings: the page passes, with a link out of the game, a comment that
+# quotes a root path, a Sentry DSN and the reports' environment read from its host
+# (tiEnvironment(location.hostname)), and names its manifest's icons and the
+# reports' SDK; it fails when its engine script comes from the site's root, when the
+# loader's pack comes from another origin, when a <base> element moves every path,
+# when its manifest link starts at the site's root, when it uses its host anywhere
+# else, when the SDK comes from another origin, has no integrity hash or not its own,
+# when the DSN isn't a Sentry DSN or the settings aren't JSON, when the manifest's
+# start_url, scope or an icon leaves the page's folder, when its start_url is
+# outside its scope, when it sets an id, when it isn't JSON, and when a file the
+# page, the manifest or the settings load is missing from the build. No network and
 # no engine; well under a second. Part of tools/test.sh.
 #
 #   tools/check_web_paths_selftest.sh
@@ -26,6 +30,10 @@ name=treasure-island-0123abcd
 for file in icon.png png js wasm pck audio.worklet.js audio.position.worklet.js icon-192.png icon-maskable-512.png; do
   : > "${build}/${name}.${file}"
 done
+# The crash reports' SDK as tools/build-web.sh puts it beside the page, and its hash.
+printf 'var Sentry = {};\n' > "${build}/${name}.sentry.js"
+integrity="sha384-$(python3 -I -c 'import base64, hashlib, sys; print(base64.b64encode(hashlib.sha384(open(sys.argv[1], "rb").read()).digest()).decode())' "${build}/${name}.sentry.js")"
+dsn=https://0123456789abcdef0123456789abcdef@o1.ingest.example.invalid/2
 cat > "${build}/${name}.webmanifest" <<EOF
 {
   "name": "Check",
@@ -51,11 +59,14 @@ cat > "${build}/index.html" <<EOF
 <canvas id="canvas"></canvas>
 <img id="status-splash" src="${name}.png" alt="">
 <a href="https://github.com/pcomans/treasure-island">The source</a>
+<script type="application/json" id="ti-reporting">{"dsn":"${dsn}","release":"grand-treasure-island@1+0123abc","sdk":"${name}.sentry.js","integrity":"${integrity}","traces_sample_rate":1}</script>
 <script src="${name}.js"></script>
 <script>
 const GODOT_CONFIG = {"args":[],"executable":"${name}","fileSizes":{"${name}.pck":1,"${name}.wasm":1},"gdextensionLibs":[]};
 // The engine's job, not the page's: it doesn't fetch '/x' from here.
 const pack = GODOT_CONFIG.mainPack || GODOT_CONFIG.executable + '.pck';
+// The crash reports' environment, the one use of the page's host.
+const environment = tiEnvironment(location.hostname);
 </script>
 </body>
 </html>
@@ -73,6 +84,8 @@ grep -q -F "${name}.pck" "${work}/out" && grep -q -F "${name}.audio.worklet.js" 
   || fail "the good page's PASS does not name the loader's pack and audio worklet: $(cat "${work}/out")"
 grep -q -F "${name}.webmanifest" "${work}/out" && grep -q -F "${name}.icon-maskable-512.png" "${work}/out" \
   || fail "the good page's PASS does not name its manifest and the manifest's icons: $(cat "${work}/out")"
+grep -q -F "${name}.sentry.js" "${work}/out" \
+  || fail "the good page's PASS does not name the crash reports' SDK: $(cat "${work}/out")"
 
 # mutate LABEL OLD NEW SHOWN: the good page with OLD replaced by NEW must fail,
 # and its failure must show SHOWN.
@@ -92,6 +105,12 @@ mutate root-script "src=\"${name}.js\"" "src=\"/${name}.js\"" "https://site.inva
 mutate other-origin-pack '"executable":' '"mainPack":"https://cdn.example/x.pck","executable":' "https://cdn.example/x.pck"
 mutate base '<head>' '<head><base href="/">' "<base>"
 mutate root-manifest "href=\"${name}.webmanifest\"" "href=\"/${name}.webmanifest\"" "https://site.invalid/${name}.webmanifest"
+mutate host-use 'tiEnvironment(location.hostname)' 'location.hostname' "uses location.hostname"
+mutate sdk-elsewhere "\"sdk\":\"${name}.sentry.js\"" '"sdk":"https://cdn.example/sentry.js"' "https://cdn.example/sentry.js"
+mutate sdk-integrity "\"integrity\":\"${integrity}\"" "\"integrity\":\"sha384-${integrity:7:63}A\"" "a browser would refuse to run it"
+mutate sdk-no-integrity ",\"integrity\":\"${integrity}\"" '' "without an sha384 integrity hash"
+mutate http-dsn "\"dsn\":\"https://" '"dsn":"http://' "neither \"\" nor a Sentry DSN"
+mutate settings-not-json '"traces_sample_rate":1}' '"traces_sample_rate":1' "don't read as JSON"
 
 # mutate_manifest LABEL OLD NEW SHOWN: the good page with its manifest's OLD
 # replaced by NEW must fail, and its failure must show SHOWN. The good manifest
@@ -124,8 +143,13 @@ rm "${build}/${name}.wasm"
 status="$(run "${build}/index.html")"
 [ "${status}" = 1 ] && grep -q -F "${name}.wasm, which is not in" "${work}/out" \
   || fail "a missing ${name}.wasm did not fail the check (exit ${status}): $(cat "${work}/out")"
+: > "${build}/${name}.wasm"
+rm "${build}/${name}.sentry.js"
+status="$(run "${build}/index.html")"
+[ "${status}" = 1 ] && grep -q -F "${name}.sentry.js, which is not in" "${work}/out" \
+  || fail "a missing ${name}.sentry.js did not fail the check (exit ${status}): $(cat "${work}/out")"
 
 if [ "${failures}" -gt 0 ]; then
   exit 1
 fi
-echo "PASS: tools/check_web_paths.py passes a page that loads its files and its manifest's icons from beside itself (with a link out of the game and a commented root path), and fails a script from the site's root, a pack from another origin, a <base> element, a manifest from the site's root, a manifest whose start_url, scope or icon leaves the page's folder, whose start_url is outside its scope, that sets an id or isn't JSON, and a file the page or its manifest loads missing from the build"
+echo "PASS: tools/check_web_paths.py passes a page that loads its files, its manifest's icons and the crash reports' SDK from beside itself (with a link out of the game, a commented root path, a Sentry DSN and the crash reports' environment read from its host), and fails a script from the site's root, a pack from another origin, a <base> element, a manifest from the site's root, another use of the page's host, an SDK from another origin, without an integrity hash or with one that isn't its file's, a DSN that isn't a Sentry DSN, settings that aren't JSON, a manifest whose start_url, scope or icon leaves the page's folder, whose start_url is outside its scope, that sets an id or isn't JSON, and a file the page, its manifest or its settings load missing from the build"

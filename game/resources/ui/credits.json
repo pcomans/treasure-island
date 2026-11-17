@@ -40,6 +40,16 @@
       "folders": ["game/scripts/vendor/selgesel", "game/resources/ui/selgesel"]
     },
     {
+      "id": "sentry_javascript_sdk",
+      "title": "Sentry JavaScript SDK (web version only)",
+      "credit": "Copyright (c) 2019 Functional Software, Inc. dba Sentry",
+      "licence": "MIT",
+      "url": "https://github.com/getsentry/sentry-javascript",
+      "required": true,
+      "used_for": "In the browser, sends the anonymous crash and performance reports while Options' switch for them is on. Only the web version includes it, with its licence text beside it.",
+      "folders": ["game/web/vendor/sentry"]
+    },
+    {
       "id": "usgs_3dep",
       "title": "USGS 3D Elevation Program",
       "credit": "Elevation data: U.S. Geological Survey, 3D Elevation Program (3DEP)",

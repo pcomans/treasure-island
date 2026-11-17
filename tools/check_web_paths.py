@@ -20,8 +20,15 @@ must stay inside /game/:
     worker and GDExtension libraries if there are any;
   - string literals in the page's own scripts that look like a path from the
     root or an address, and any use of the page's host (location.origin, .host,
-    .hostname). The engine script beside the page names its files from
-    GODOT_CONFIG alone;
+    .hostname) but one: tiEnvironment(location.hostname), which names the crash
+    reports' environment (production or local) and no file. The engine script
+    beside the page names its files from GODOT_CONFIG alone;
+  - the crash and performance reports' settings (the page's
+    <script type="application/json" id="ti-reporting"> block, which
+    tools/build-web.sh fills): the SDK file it names, with an integrity hash
+    (sha384) that, with FOLDER, must be that file's; and its DSN, "" or a Sentry
+    DSN (https://KEY@HOST/PROJECT), the one address on another origin the page
+    may name: reports are sent there, no file is loaded from it;
   - with FOLDER, the web app manifest a <link rel="manifest"> names, read from
     the folder: its start_url and scope (start_url inside scope) and its
     shortcuts' pages, and the images it fetches (icons, screenshots, the
@@ -34,6 +41,8 @@ be in it. Prints PASS with the files, or FAIL with each reference that leaves th
 folder, and exits 1 on any failure. --files prints only the files' names, one a
 line.
 """
+import base64
+import hashlib
 import json
 import re
 import sys
@@ -52,6 +61,11 @@ SRCSET_ATTRIBUTES = {"srcset", "imagesrcset"}
 LOCAL_SCHEMES = {"data", "blob", "about", "javascript", "mailto", "tel"}
 CSS_URL = re.compile(r"""url\(\s*(['"]?)(.*?)\1\s*\)|@import\s+(['"])(.*?)\3""", re.I | re.S)
 HOST_USE = re.compile(r"\blocation\s*\.\s*(origin|host|hostname)\b")
+# The one use of the page's host that names no file: the crash reports' environment.
+ENVIRONMENT_HOST_USE = "tiEnvironment(location.hostname)"
+# The crash and performance reports' settings block, and the DSN it may name.
+REPORTING_ID = "ti-reporting"
+DSN = re.compile(r"https://[0-9a-f]{32}@[a-z0-9.-]+/[0-9]+")
 # A string that looks like a path from the root ("/x"), an address ("//x",
 # "https://x") or a parent folder ("../x").
 ABSOLUTE_LITERAL = re.compile(r"^\s*(/[^/\s*]|//\S|[a-z][a-z0-9+.-]*://|\.\./)", re.I)
@@ -70,7 +84,9 @@ class Page(HTMLParser):
         self.script_sources = 0
         self.bases = 0
         self.manifests = []  # the hrefs of <link rel="manifest">
+        self.reporting = []  # the text of each crash reports' settings block
         self._inline = None
+        self._reporting = False
 
     def handle_starttag(self, tag, attrs):
         if tag == "link" and "manifest" in (dict(attrs).get("rel") or "").lower().split():
@@ -96,12 +112,15 @@ class Page(HTMLParser):
             self.bases += 1
         if tag == "script" and dict(attrs).get("src") is not None:
             self.script_sources += 1
+        self._reporting = tag == "script" and dict(attrs).get("id") == REPORTING_ID
         self._inline = [] if tag in ("script", "style") else None
 
     def handle_endtag(self, tag):
         if self._inline is not None and tag in ("script", "style"):
-            (self.scripts if tag == "script" else self.styles).append("".join(self._inline))
+            text = "".join(self._inline)
+            (self.reporting if self._reporting else self.scripts if tag == "script" else self.styles).append(text)
         self._inline = None
+        self._reporting = False
 
     def handle_data(self, data):
         if self._inline is not None:
@@ -157,6 +176,47 @@ def godot_config(scripts):
                 return json.JSONDecoder().raw_decode(code, found.end() - 1)[0]
             except ValueError:
                 return "unreadable"
+    return None
+
+
+def reporting_settings(blocks, problems):
+    """The crash reports' settings block's SDK file, as ([(where, value)], its
+    integrity hash), or ([], None) when it names none (no block, or {}: an export
+    without tools/build-web.sh). Its DSN must be "" or a Sentry DSN, and an SDK file
+    needs an sha384 integrity hash; each problem goes in PROBLEMS."""
+    if len(blocks) > 1:
+        problems.append("the page has %d crash reports' settings blocks (id %s), not one" % (len(blocks), REPORTING_ID))
+    if not blocks:
+        return [], None
+    where = "the crash reports' settings (id %s)" % REPORTING_ID
+    try:
+        settings = json.loads(blocks[0])
+    except ValueError as error:
+        problems.append("%s don't read as JSON: %s" % (where, error))
+        return [], None
+    if not isinstance(settings, dict):
+        problems.append("%s are not a JSON object" % where)
+        return [], None
+    dsn = settings.get("dsn", "")
+    if not isinstance(dsn, str) or (dsn and not DSN.fullmatch(dsn)):
+        problems.append('%s name a DSN that is neither "" nor a Sentry DSN (https://KEY@HOST/PROJECT)' % where)
+    if "sdk" not in settings:
+        return [], None
+    integrity = settings.get("integrity")
+    if not isinstance(integrity, str) or not re.fullmatch(r"sha384-[A-Za-z0-9+/]{64}", integrity):
+        problems.append("%s name the SDK file %r without an sha384 integrity hash" % (where, settings.get("sdk")))
+    return [(where + "' SDK", settings["sdk"])], integrity
+
+
+def integrity_problem(folder, name, integrity):
+    """Why the file NAME in FOLDER doesn't have the sha384 INTEGRITY the page gives
+    it, or None when it has."""
+    path = folder / name
+    if not path.is_file():
+        return None  # reported as a missing file
+    actual = "sha384-" + base64.b64encode(hashlib.sha384(path.read_bytes()).digest()).decode()
+    if actual != integrity:
+        return "the crash reports' SDK %s has the integrity %s, but the page gives %s: a browser would refuse to run it" % (name, actual, integrity)
     return None
 
 
@@ -260,8 +320,10 @@ def main(argv):
         for literal in script_strings(code):
             if ABSOLUTE_LITERAL.match(literal):
                 problems.append("a script on the page has the string %r, a path from the site's root or an address" % literal)
-        for use in HOST_USE.finditer(code):
+        for use in HOST_USE.finditer(code.replace(ENVIRONMENT_HOST_USE, "")):
             problems.append("a script on the page uses %s, the page's host" % use.group(0))
+    reporting, integrity = reporting_settings(page.reporting, problems)
+    references += reporting
     config = godot_config(page.scripts)
     if not page.script_sources:
         problems.append("the page loads no script, so it is not a Godot web export this can check")
@@ -297,6 +359,12 @@ def main(argv):
         for name in files:
             if not (folder / name).is_file():
                 problems.append("the page or its loader fetches %s, which is not in %s" % (name, folder))
+        for _where, value in reporting:
+            result = resolve(value) if isinstance(value, str) else None
+            if result is not None and result[0] is not None and isinstance(integrity, str):
+                problem = integrity_problem(folder, result[0], integrity)
+                if problem:
+                    problems.append(problem)
     if problems:
         for problem in problems:
             print("FAIL: %s: %s" % (page_path, problem), file=sys.stderr)

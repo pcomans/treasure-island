@@ -15,7 +15,9 @@
 #      lets Godot's file system keep the page's pack buffer (game/web/shell.html),
 #   2. checks the data pack contains only game files (no reference photos,
 #      research or evidence),
-#   3. writes the web app manifest and its icons for a phone's home screen,
+#   3. writes the web app manifest and its icons for a phone's home screen, and puts
+#      the crash and performance reports' SDK beside the page with the page's settings
+#      for it (tools/config/crash-reports.json),
 #   4. checks the page, the manifest and Godot's loader fetch every file by a path
 #      relative to the page (tools/check_web_paths.py): players reach the game in
 #      a folder of its website, https://grandtreasureisland.vercel.app/game/,
@@ -160,6 +162,48 @@ link = 'href="$TI_WEB_MANIFEST"'
 if text.count(link) != 1:
     sys.exit("FAIL: %s has %d manifest links to fill (%s in game/web/shell.html), not 1" % (page, text.count(link), link))
 page.write_text(text.replace(link, 'href="%s.webmanifest"' % name), encoding="utf-8")
+EOF
+
+# The crash and performance reports (owner, 2026-11-17; tiReporting in
+# game/web/shell.html): Sentry's pinned browser SDK beside the page with its licence,
+# named after the commit like the game's files (so cached for good, vercel.json), and the
+# page's settings from this commit's tools/config/crash-reports.json: the DSN ("" for
+# none: the page then loads no SDK and sends nothing), the release (the build number and
+# the commit's first seven digits, as the releases' tags name them), the SDK's file with
+# its integrity hash, which the browser checks before running it, and the share of loads
+# traced. The settings must fill the shell's one empty block, or the build stops. The
+# DSN is never printed.
+python3 -I - "${out}" "${name}" "${project}" "${TI_BUILD_NUMBER}" "${revision:0:7}" <<'EOF'
+import base64, hashlib, json, re, shutil, sys
+from pathlib import Path
+out, name, project, number, short = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3]), sys.argv[4], sys.argv[5]
+where = "tools/config/crash-reports.json"
+try:
+    web = json.loads((project / where).read_text(encoding="utf-8"))["web"]
+    dsn, rate = web["dsn"], web["traces_sample_rate"]
+except (OSError, ValueError, KeyError, TypeError) as error:
+    sys.exit("FAIL: %s does not read as web.dsn and web.traces_sample_rate: %s" % (where, error))
+if not isinstance(dsn, str) or (dsn and not re.fullmatch(r"https://[0-9a-f]{32}@[a-z0-9.-]+/[0-9]+", dsn)):
+    sys.exit('FAIL: %s\'s web.dsn is neither "" nor a Sentry DSN (https://KEY@HOST/PROJECT)' % where)
+if isinstance(rate, bool) or not isinstance(rate, (int, float)) or not 0 <= rate <= 1:
+    sys.exit("FAIL: %s's web.traces_sample_rate is not a number from 0 to 1" % where)
+vendor = project / "game/web/vendor/sentry"
+sdk = out / (name + ".sentry.js")
+shutil.copyfile(vendor / "bundle.tracing.min.js", sdk)
+shutil.copyfile(vendor / "LICENSE", out / (name + ".sentry.LICENSE.txt"))
+integrity = "sha384-" + base64.b64encode(hashlib.sha384(sdk.read_bytes()).digest()).decode()
+settings = {"dsn": dsn, "release": "grand-treasure-island@%s+%s" % (number, short), "sdk": sdk.name,
+            "integrity": integrity, "traces_sample_rate": rate}
+page = out / "index.html"
+text = page.read_text(encoding="utf-8")
+empty = '<script type="application/json" id="ti-reporting">{}</script>'
+if text.count(empty) != 1:
+    sys.exit("FAIL: %s has %d empty ti-reporting blocks to fill (game/web/shell.html), not 1" % (page, text.count(empty)))
+filled = json.dumps(settings, separators=(",", ":")).replace("<", "\\u003c")
+page.write_text(text.replace(empty, '<script type="application/json" id="ti-reporting">%s</script>' % filled), encoding="utf-8")
+print("REPORTING: %s; release %s; %s (%d bytes, %s); %s of loads traced"
+      % ("on (a DSN is configured)" if dsn else "off (no DSN configured)", settings["release"], sdk.name,
+         sdk.stat().st_size, integrity, rate))
 EOF
 
 # One change to Godot's loader (the engine script beside the page): its file system

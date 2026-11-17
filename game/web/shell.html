@@ -149,6 +149,13 @@ body {
 			<div id="status-notice"></div>
 		</div>
 
+		<!-- The crash and performance reports' settings (tiReporting below), which
+		     tools/build-web.sh writes here from tools/config/crash-reports.json: the DSN,
+		     the release, the SDK file beside the page with its integrity hash and the
+		     share of loads traced. An export without that script keeps {}: no DSN, so the
+		     page loads no SDK and sends nothing. -->
+		<script type="application/json" id="ti-reporting">{}</script>
+
 		<script src="$GODOT_URL"></script>
 		<script>
 // This device's copy of a build's game data pack (owner, 2026-11-16: "cache the
@@ -556,10 +563,626 @@ function tiLoadingLine(loading) {
 		text: known ? words + ': ' + Math.floor((100 * loaded) / total) + '%' : words + '…',
 	};
 }
+
+// Crash and performance reports (owner, 2026-11-17: on by default, "Easier is better.
+// Always opt-out" and "we need an opt-out in settings"; then "Add performance tracing").
+// Sentry's browser SDK sends them: a pinned bundle that tools/build-web.sh puts beside
+// the page (game/web/vendor/sentry), loaded only once the start prompt is reached, and
+// only while all of these hold:
+//   - the build names a DSN (tools/config/crash-reports.json). Without one the page loads
+//     no SDK and sends nothing, and keeps its own records below all the same;
+//   - this browser's storage works (localStorage, which the switch and the notice need);
+//   - the switch is on: SWITCH says 'off' once the player turns Options' "Send crash and
+//     performance reports" off, kept across visits. The game keeps the switch in its own
+//     settings and mirrors it here, since the page can't read the engine's settings
+//     before the engine starts; whichever side says off wins (game/scripts/settings/
+//     crash_reports.gd);
+//   - the start prompt's one line about the reports has been shown (NOTICE), and in the
+//     visit that first shows it, play has started, so the player had the chance to read it.
+// Until then a report waits in this page, never more than MAX_EVENTS of them; with the
+// switch off, no DSN or no storage it is dropped at once. Turning the switch off stops
+// sending at once (the SDK closed, the transport refusing); turning it on resumes.
+//
+// What is sent: an error or unhandled rejection in the page (the engine's own aborts are
+// these; Godot's printed errors are not sent), a lost WebGL context, a failed load (the
+// file and its HTTP status), the engine exiting with an error, and the end of an earlier
+// visit that stopped unexpectedly (below); a session start per page load (Sentry's
+// release health, which isn't billed); and a trace of the page's load, sampled at the
+// build's traces_sample_rate: the page load as the browser times it and one span per
+// loading step (tiLoadSpans), with the times to the engine's start, play-ready and the
+// start prompt as measurements. Nothing per frame or per input, no breadcrumbs, no logs,
+// no replays, no headers added to any request. At most MAX_EVENTS events per page load,
+// and the trace once. Every event carries the build (its release), the device class, the
+// browser's and the OS's names with their major versions, and the game's phase; what
+// identifies a person or a place never leaves the page (tiScrubEvent, tiScrubEnvelope):
+// no address (a URL becomes its file's name: no host, query or fragment), no user name in
+// a local path, no request, cookies, user, IP address or user agent.
+//
+// The end of a visit: this page load keeps a record (SESSION + its id) of its build,
+// phase ('loading' until play-ready, then 'play'), whether it is visible and focused,
+// and when it started and was last seen: written as the page loads, at play-ready, every
+// HEARTBEAT_MS while visible and on every change of visibility or focus, and marked clean
+// on pagehide (unmarked on a pageshow from the back/forward cache). A record left unclean
+// ended without pagehide: a crash, an out-of-memory kill, the browser or the device
+// stopping it. A page killed for memory runs no script at all (WebKit: "If WebContent
+// process dies (e.g. due to jetsam / crash) or MobileSafari itself is killed, then the
+// fact pagehide event not firing is by design", https://bugs.webkit.org/show_bug.cgi?id=199854),
+// so this is how one is seen. A tab that still runs holds a Web Lock named after its
+// record, so another tab's live record is never taken for a dead one. The next load
+// reports one such end, the newest, if that page was last seen in front (visible and
+// focused); one last seen hidden or unfocused was in the background, where browsers
+// evict pages routinely (iOS above all), and is not reported. The report waits in
+// storage (UNCLEAN) until it can be sent.
+//
+//   tiReporting(config, env) -> {start(), seen(), ended(), resumed(), phase(name),
+//       error(value, kind), contextLost(), loadFailed(text), engineExit(code),
+//       read(), setEnabled(on), noticeShown(), playStarted(), status()}
+//     config: the build's settings (the ti-reporting block): {dsn, release, sdk,
+//       integrity, traces_sample_rate}, or {}.
+//     env: {storage (localStorage, or null), locks (navigator.locks, or null), now(),
+//       id() (a random id for this page load's record), visible(), focused(), tags
+//       ({device, os, browser}: tiDeviceTags), store (whether this device keeps the pack),
+//       environment ('production' or 'local': tiEnvironment), timeOrigin, marks() (the
+//       page's TI_BOOT marks, {name: ms}), loadSdk(src, integrity) -> a promise of the
+//       SDK, every(ms, fn) (a repeating timer)}
+//   tiDeviceTags(agent, maxTouchPoints), tiEnvironment(hostname), tiLoadSpans(marks),
+//   tiScrubText(text), tiScrubEvent(event), tiScrubEnvelope(envelope, allow)
+// tools/check_web_reporting.mjs runs these with stand-ins for the browser's and the SDK's.
+function tiReporting(config, env) {
+	const PREFIX = 'grand-treasure-island.';
+	const SWITCH = PREFIX + 'crash-reports';
+	const NOTICE = PREFIX + 'crash-notice';
+	const SESSION = PREFIX + 'session.';
+	const UNCLEAN = PREFIX + 'unclean';
+	const MAX_EVENTS = 5;
+	const HEARTBEAT_MS = 10000;
+	// Without Web Locks to ask, an unclean record seen this recently may be another tab's.
+	const LIVE_MS = 60000;
+	// Seconds into the visit, and from its last sign of life to the next load: as tags.
+	const LENGTHS = [[30, '<30s'], [120, '30s-2m'], [300, '2m-5m'], [900, '5m-15m'], [3600, '15m-1h'], [Infinity, '>1h']];
+	const GAPS = [[30, '<30s'], [300, '30s-5m'], [3600, '5m-1h'], [86400, '1h-1d'], [Infinity, '>1d']];
+	const bucket = (seconds, edges) => edges.find(([edge]) => seconds < edge)[1];
+	const release = String(config.release || '');
+	const build = (release.match(/@(\d+)\+/) || [])[1] || 'unknown';
+	const dsn = typeof config.dsn === 'string' ? config.dsn : '';
+	const tracesRate = Number(config.traces_sample_rate) >= 0 && Number(config.traces_sample_rate) <= 1 ? Number(config.traces_sample_rate) : 0;
+
+	// localStorage, each call guarded: storage that throws (blocked site data, an old
+	// Safari's private window) or is missing reads as nothing, and then nothing is sent.
+	const get = (key) => { try { return env.storage.getItem(key); } catch (err) { return null; } };
+	const put = (key, value) => { try { env.storage.setItem(key, value); return true; } catch (err) { return false; } };
+	const drop = (key) => { try { env.storage.removeItem(key); } catch (err) { /* nothing kept */ } };
+	const storage = (() => {
+		const probe = PREFIX + 'probe';
+		if (!put(probe, '1')) return false;
+		const ok = get(probe) === '1';
+		drop(probe);
+		return ok;
+	})();
+
+	let pagePhase = 'loading';
+	// Whether this visit put the notice up, and whether play has started since.
+	let noticeNow = false;
+	let playing = false;
+	// The SDK: 'none', 'loading', 'ready', 'failed' or 'closed' (switched off).
+	let sdkState = 'none';
+	let sdk = null;
+	// Whether this visit's load has its trace, and where its pack came from (a tag of it).
+	let traced = false;
+	let packSource = 'network';
+	// Reports made this visit (the cap counts them), those waiting for the SDK, and the
+	// errors already reported (each once).
+	let made = 0;
+	const waiting = [];
+	const seenErrors = new Set();
+	// What the transport let out this visit: events (capped again there) and the trace.
+	const sent = {event: 0, transaction: 0};
+
+	const recordKey = SESSION + env.id();
+	const record = {v: 1, release, build, phase: 'loading', visible: env.visible(), focused: env.focused(), store: Boolean(env.store), startedAt: env.now(), lastSeenAt: env.now(), clean: false};
+	const save = (fields) => {
+		Object.assign(record, fields, {lastSeenAt: env.now()});
+		if (storage) put(recordKey, JSON.stringify(record));
+	};
+
+	// Why nothing may be sent now, or '' when it may.
+	const blocked = () => {
+		if (!dsn) return 'no DSN';
+		if (!storage) return 'no storage';
+		if (get(SWITCH) === 'off') return 'switched off';
+		if (!get(NOTICE)) return 'notice not shown';
+		if (noticeNow && !playing) return 'play not started';
+		return '';
+	};
+	// Whether a report may still go out in this visit (else it is dropped at once).
+	const mayLater = () => Boolean(dsn) && storage && get(SWITCH) !== 'off';
+	const baseTags = () => ({build, device: env.tags.device, os: env.tags.os, browser: env.tags.browser, store: env.store ? 'yes' : 'no'});
+	const phaseTag = () => (pagePhase === 'play' ? 'play' : pagePhase === 'error' ? 'load failed' : 'loading');
+
+	// The records of earlier page loads: a clean one goes, a live tab's stays, and the
+	// newest that ended unexpectedly in front becomes the report waiting in UNCLEAN.
+	async function previousVisits() {
+		if (!storage) return;
+		let held = null;
+		try {
+			held = env.locks ? new Set(((await env.locks.query()).held || []).map((lock) => lock.name)) : null;
+		} catch (err) {
+			held = null;
+		}
+		const keys = [];
+		try {
+			for (let i = 0; i < env.storage.length; i += 1) keys.push(env.storage.key(i));
+		} catch (err) {
+			return;
+		}
+		let newest = null;
+		for (const key of keys) {
+			if (typeof key !== 'string' || !key.startsWith(SESSION) || key === recordKey) continue;
+			let earlier = null;
+			try {
+				earlier = JSON.parse(get(key));
+			} catch (err) {
+				earlier = null;
+			}
+			if (!earlier || typeof earlier !== 'object' || earlier.clean) {
+				drop(key);
+				continue;
+			}
+			if (held ? held.has(key) : env.now() - earlier.lastSeenAt < LIVE_MS) continue;
+			drop(key);
+			if (earlier.visible && earlier.focused && (!newest || earlier.lastSeenAt > newest.lastSeenAt)) newest = earlier;
+		}
+		if (newest) {
+			put(UNCLEAN, JSON.stringify({release: String(newest.release || ''), tags: {
+				kind: 'unclean_exit',
+				previous_build: String(newest.build || 'unknown'),
+				phase: newest.phase === 'play' ? 'play' : 'loading',
+				store: newest.store ? 'yes' : 'no',
+				session_length: bucket(Math.max(0, newest.lastSeenAt - newest.startedAt) / 1000, LENGTHS),
+				returned_after: bucket(Math.max(0, env.now() - newest.lastSeenAt) / 1000, GAPS),
+			}}));
+			flush();
+		}
+	}
+
+	// Loads the SDK once the start prompt is reached (or the load failed), when sending
+	// is allowed; after a switch off and on again, starts it afresh.
+	function maybeStart() {
+		if (blocked() || (pagePhase !== 'play' && pagePhase !== 'error')) return;
+		if (sdkState === 'closed') {
+			init();
+			return;
+		}
+		if (sdkState !== 'none' || !config.sdk) return;
+		sdkState = 'loading';
+		env.loadSdk(config.sdk, config.integrity).then((loaded) => {
+			sdk = loaded;
+			init();
+		}, () => {
+			sdkState = 'failed';
+		});
+	}
+
+	function init() {
+		if (!sdk || blocked()) {
+			sdkState = sdk ? 'closed' : sdkState;
+			return;
+		}
+		const Sentry = sdk;
+		const trace = !traced && tracesRate > 0;
+		Sentry.init({
+			dsn,
+			release,
+			environment: env.environment,
+			defaultIntegrations: false,
+			integrations: [
+				Sentry.eventFiltersIntegration(),
+				Sentry.linkedErrorsIntegration(),
+				Sentry.dedupeIntegration(),
+				Sentry.browserSessionIntegration(),
+			].concat(trace ? [Sentry.browserTracingIntegration({
+				// The load's own trace only: no navigations, nothing per input or frame, no
+				// requests traced and so no headers added to any, no resource spans (the
+				// pack and the WebAssembly are fetched, which it skips anyway), and the
+				// load named the same at either address.
+				instrumentNavigation: false,
+				instrumentBfcacheRestore: false,
+				enableLongTask: false,
+				enableLongAnimationFrame: false,
+				webVitals: {ignore: ['inp']},
+				traceFetch: false,
+				traceXHR: false,
+				enableHTTPTimings: false,
+				detectRedirects: false,
+				linkPreviousTrace: 'off',
+				ignoreResourceSpans: ['resource.script', 'resource.link', 'resource.css', 'resource.img', 'resource.image', 'resource.other', 'resource.audio', 'resource.video', 'resource.track', 'resource.beacon', 'resource.iframe', 'resource.navigation', 'resource.early-hints', 'resource.ping', 'resource.input', 'resource.body', 'resource.object', 'resource.embed'],
+				// The SDK starts after the load, from the navigation's start; the default
+				// 30 s would cut a load short.
+				finalTimeout: 600000,
+				beforeStartSpan: (options) => ({...options, name: 'game load'}),
+			})] : []),
+			tracesSampleRate: trace ? tracesRate : undefined,
+			tracePropagationTargets: [],
+			// Sentry 11 collects all of these unless told not to (sendDefaultPii is gone).
+			dataCollection: {
+				userInfo: false, cookies: false, httpHeaders: false, httpBodies: [], urlQueryParams: false,
+				graphQL: {document: false, variables: false}, genAI: {inputs: false, outputs: false},
+				mcp: {inputs: false, outputs: false}, databaseQueryData: false, queues: false,
+				stackFrameVariables: false, frameContextLines: 0,
+			},
+			attachStacktrace: false,
+			sendClientReports: false,
+			maxBreadcrumbs: 0,
+			beforeBreadcrumb: () => null,
+			beforeSend: (event) => tiScrubEvent(event),
+			beforeSendTransaction: (event) => {
+				const out = tiScrubEvent(event);
+				if (out) out.tags.pack_source = packSource;
+				return out;
+			},
+			transport: (options) => {
+				const network = Sentry.makeFetchTransport(options);
+				return {
+					send(envelope) {
+						const out = blocked() ? null : tiScrubEnvelope(envelope, (type) => {
+							if (type === 'transaction' ? sent.transaction >= 1 : sent.event >= MAX_EVENTS) return false;
+							sent[type] += 1;
+							return true;
+						});
+						return out ? network.send(out) : Promise.resolve({});
+					},
+					flush: (timeout) => network.flush(timeout),
+				};
+			},
+			initialScope: {tags: baseTags()},
+		});
+		sdkState = 'ready';
+		if (trace) {
+			traced = true;
+			traceLoad(Sentry);
+		}
+		flush();
+	}
+
+	// The load's steps, as spans of the page load's own span (from the navigation's
+	// start), and its milestones as measurements.
+	function traceLoad(Sentry) {
+		const root = Sentry.getActiveSpan();
+		if (!root) return;
+		const marks = env.marks();
+		const at = (ms) => (env.timeOrigin + ms) / 1000;
+		for (const step of tiLoadSpans(marks)) {
+			Sentry.startInactiveSpan({name: step.name, op: 'ti.load', startTime: at(step.start), parentSpan: root}).end(at(step.end));
+		}
+		for (const [name, mark] of [['ti.engine_start', 'game_start_begin'], ['ti.play_ready', 'play_ready'], ['ti.start_prompt', 'overlay_hidden']]) {
+			const ms = marks['TI_BOOT:' + mark];
+			if (typeof ms === 'number') Sentry.setMeasurement(name, Math.round(ms), 'millisecond', root);
+		}
+		packSource = marks['TI_BOOT:cache:pack:device'] !== undefined ? 'device' : 'network';
+	}
+
+	// Sends what waits, when it may: the earlier visit's end first, then this visit's.
+	function flush() {
+		if (sdkState !== 'ready' || blocked()) {
+			maybeStart();
+			return;
+		}
+		const earlier = get(UNCLEAN);
+		if (earlier !== null) {
+			drop(UNCLEAN);
+			let end = null;
+			try {
+				end = JSON.parse(earlier);
+			} catch (err) {
+				end = null;
+			}
+			if (end && end.tags && made < MAX_EVENTS) {
+				made += 1;
+				sdk.captureEvent({message: 'previous session ended unexpectedly', level: 'fatal', release: end.release || release, tags: {...baseTags(), ...end.tags}});
+			}
+		}
+		while (waiting.length > 0) waiting.shift()(sdk);
+	}
+
+	// One report: made now (with the phase as it is now), sent once it may be.
+	function report(capture) {
+		if (made >= MAX_EVENTS || !mayLater()) return;
+		made += 1;
+		const tags = {...baseTags(), phase: phaseTag()};
+		waiting.push((Sentry) => capture(Sentry, tags));
+		flush();
+	}
+
+	// 'play' at play-ready (the start prompt), 'error' once the load failed: either lets
+	// the SDK load.
+	function setPhase(name) {
+		pagePhase = name;
+		if (name === 'play') save({phase: 'play'});
+		maybeStart();
+	}
+
+	return {
+		// At load: this page's record and its lock, the heartbeat, the earlier visits.
+		start() {
+			save({});
+			if (storage && env.locks) {
+				try {
+					env.locks.request(recordKey, () => new Promise(() => {})).catch(() => {});
+				} catch (err) {
+					// No lock: this record may be taken for a dead one while this tab runs.
+				}
+			}
+			env.every(HEARTBEAT_MS, () => {
+				if (env.visible()) save({visible: true, focused: env.focused()});
+			});
+			return previousVisits();
+		},
+		// A change of visibility or focus.
+		seen() { save({visible: env.visible(), focused: env.focused()}); },
+		// pagehide: this visit ended cleanly.
+		ended() { save({clean: true}); },
+		// pageshow from the back/forward cache: the visit goes on.
+		resumed() { save({clean: false, visible: env.visible(), focused: env.focused()}); },
+		phase: setPhase,
+		error(value, kind) {
+			const isError = value instanceof Error || (value && typeof value === 'object' && typeof value.message === 'string' && typeof value.stack === 'string');
+			const text = isError ? String(value.message) : typeof value === 'string' ? value : '';
+			const key = kind + ':' + (isError ? value.name + ':' : '') + text;
+			if (seenErrors.has(key)) return;
+			seenErrors.add(key);
+			// A thrown string is the browser's or the engine's message; a value of another
+			// kind is named by its type only, as it may hold anything.
+			const error = isError ? value : new Error(text ? tiScrubText(text).slice(0, 300) : 'a ' + (value === null ? 'null' : typeof value) + ' value, not an Error');
+			report((Sentry, tags) => Sentry.captureException(error, {tags: {...tags, kind}}));
+		},
+		contextLost() {
+			if (seenErrors.has('webgl')) return;
+			seenErrors.add('webgl');
+			report((Sentry, tags) => Sentry.captureMessage('WebGL context lost', {level: 'error', tags: {...tags, kind: 'webgl_context_lost'}}));
+		},
+		// The page's failure notice: for a file, its name and HTTP status as the page's or
+		// the engine's loader words them ("Failed loading file 'NAME': HTTP 503"); else the
+		// notice's first line (the page's own words, or the game's WORLD_FAILED line).
+		loadFailed(text) {
+			if (seenErrors.has('load')) return;
+			seenErrors.add('load');
+			const notice = String(text);
+			const file = tiScrubText((notice.match(/'([^']+)'/) || [])[1] || 'none');
+			const status = (notice.match(/\bHTTP (\d{3})\b/) || [])[1] || 'none';
+			const what = file !== 'none' ? ((file.match(/\.([a-z0-9]+)$/i) || [])[1] || 'file') + (status === 'none' ? '' : ' HTTP ' + status)
+				: tiScrubText(notice.split('\n').find((line) => line.trim() && line.trim() !== 'Error') || 'unknown').trim().slice(0, 160);
+			report((Sentry, tags) => Sentry.captureMessage('load failed: ' + what, {level: 'error', tags: {...tags, kind: 'load_failed', file, status}}));
+			setPhase('error');
+		},
+		engineExit(code) {
+			if (code === 0 || seenErrors.has('exit')) return;
+			seenErrors.add('exit');
+			report((Sentry, tags) => Sentry.captureMessage('engine exited', {level: 'error', tags: {...tags, kind: 'engine_exit', code: String(code)}}));
+		},
+		// For the game (game/scripts/settings/crash_reports.gd): whether the switch is kept
+		// on or off here (null: never set) and whether the start prompt should show the
+		// notice now (once, with storage working and the switch not off).
+		read() {
+			const kept = storage ? get(SWITCH) : null;
+			return JSON.stringify({on: kept === 'on' ? true : kept === 'off' ? false : null, notice: storage && kept !== 'off' && !get(NOTICE)});
+		},
+		setEnabled(on) {
+			if (!storage) return;
+			put(SWITCH, on ? 'on' : 'off');
+			if (on) {
+				flush();
+				return;
+			}
+			waiting.length = 0;
+			if (sdkState === 'ready' || sdkState === 'loading') {
+				if (sdk) sdk.close(0).catch(() => {});
+				sdkState = sdkState === 'ready' ? 'closed' : sdkState;
+			}
+		},
+		// The start prompt shows the notice (or, for a player who turns the switch on in
+		// Options, the switch told them): kept, so later visits send from the start.
+		noticeShown() {
+			if (!storage || get(NOTICE)) return;
+			if (put(NOTICE, String(env.now()))) noticeNow = true;
+		},
+		playStarted() {
+			playing = true;
+			flush();
+		},
+		status() {
+			return JSON.stringify({dsn: Boolean(dsn), storage, on: get(SWITCH) !== 'off', notice: Boolean(get(NOTICE)), noticeNow, playing, phase: pagePhase, blocked: blocked(), sdk: sdkState, made, waiting: waiting.length, sent, unclean: get(UNCLEAN) !== null, environment: env.environment, release});
+		},
+	};
+}
+
+// The device's class (iPhone, iPad, Android or desktop: an iPad asking for desktop
+// sites says Macintosh, but has touch) and its OS's and browser's names with their
+// major versions, read from the user agent, which itself is never sent.
+function tiDeviceTags(agent, maxTouchPoints) {
+	const device = /\b(iPhone|iPod)\b/.test(agent) ? 'iPhone' : tiAppleTouchDevice(agent, maxTouchPoints) ? 'iPad' : /\bAndroid\b/.test(agent) ? 'Android' : 'desktop';
+	const ios = agent.match(/\bOS (\d+)[_\d]* like Mac OS X/);
+	const android = agent.match(/\bAndroid (\d+)/);
+	const os = ios ? 'iOS ' + ios[1] : device === 'iPad' ? 'iPadOS' : android ? 'Android ' + android[1]
+		: /\bWindows\b/.test(agent) ? 'Windows' : /\bCrOS\b/.test(agent) ? 'ChromeOS' : /\bMac OS X\b/.test(agent) ? 'macOS' : /\bLinux\b/.test(agent) ? 'Linux' : 'other';
+	const named = [['Edge', /\b(?:Edg|EdgA|EdgiOS)\/(\d+)/], ['Samsung Internet', /\bSamsungBrowser\/(\d+)/], ['Firefox', /\b(?:Firefox|FxiOS)\/(\d+)/], ['Chrome', /\b(?:CriOS|Chrome)\/(\d+)/], ['Safari', /\bVersion\/(\d+)[.\d]* (?:Mobile\/\S+ )?Safari\//]];
+	const found = named.map(([name, pattern]) => [name, agent.match(pattern)]).find(([, match]) => match);
+	return {device, os, browser: found ? found[0] + ' ' + found[1][1] : 'other'};
+}
+
+// The reports' environment: 'production' at the game's two public addresses (the
+// deploy origin and the website's /game/ folder), 'local' anywhere else (a local server,
+// a test). Only that word is sent, never the host.
+function tiEnvironment(hostname) {
+	return ['grandtreasureisland.vercel.app', 'play-grandtreasureisland.vercel.app'].includes(hostname) ? 'production' : 'local';
+}
+
+// The load's steps for its trace, from the page's TI_BOOT marks ({name: ms from the
+// navigation's start}): the page before it starts the engine and the game's files, then
+// each loading line the page put up (its "step:" marks: the download or the load from
+// this device, the store, the engine's start, then the game's own steps, each shader
+// group among them) until the next, the last until play-ready, and the start prompt
+// coming up. Each {name, start, end} in ms; the names are the lines' words.
+function tiLoadSpans(marks) {
+	const at = (name) => (typeof marks['TI_BOOT:' + name] === 'number' ? marks['TI_BOOT:' + name] : null);
+	const steps = Object.keys(marks).filter((name) => name.startsWith('TI_BOOT:step:'))
+		.map((name) => ({name: name.slice('TI_BOOT:step:'.length).replace(/ /g, ' ').replace(/…$/, ''), start: marks[name]}))
+		.sort((a, b) => a.start - b.start);
+	const ready = at('play_ready');
+	const spans = [];
+	if (at('engine_init_begin') !== null) spans.push({name: 'page', start: 0, end: at('engine_init_begin')});
+	steps.forEach((step, index) => {
+		const end = index + 1 < steps.length ? steps[index + 1].start : ready;
+		if (end !== null && end >= step.start) spans.push({name: step.name, start: step.start, end});
+	});
+	if (ready !== null && at('overlay_hidden') !== null) spans.push({name: 'start prompt', start: ready, end: at('overlay_hidden')});
+	return spans;
+}
+
+// A text with no address and no user name in it: a URL becomes its file's name (no
+// host, query or fragment; a folder's address, as the page's own, "index.html"), and a
+// user's folder in a local path becomes "~".
+function tiScrubText(text) {
+	return String(text)
+		.replace(/\b[a-z][a-z0-9+.-]*:\/\/[^\s'"<>()]*/gi, (url) => {
+			const path = url.replace(/^[a-z][a-z0-9+.-]*:\/\/[^\/]*/i, '').replace(/[?#].*$/, '');
+			return path.slice(path.lastIndexOf('/') + 1) || 'index.html';
+		})
+		.replace(/(\/(?:Users|home)\/|[A-Za-z]:\\Users\\)[^\/\\\s'"]+/g, '$1~');
+}
+
+// An event or a transaction as it may leave: every text scrubbed (tiScrubText), no
+// request, user, breadcrumbs, extra data or contexts but the trace's, only the page's
+// own tags, and nothing in a span's data or the trace's that names a URL's query, the
+// connection or the device's memory and cores.
+function tiScrubEvent(event) {
+	if (!event || typeof event !== 'object') return null;
+	const scrub = (value, depth) => {
+		if (typeof value === 'string') return tiScrubText(value);
+		if (!value || typeof value !== 'object' || depth > 16) return value;
+		if (Array.isArray(value)) return value.map((item) => scrub(item, depth + 1));
+		const out = {};
+		for (const [key, item] of Object.entries(value)) out[key] = scrub(item, depth + 1);
+		return out;
+	};
+	const unwanted = /^(user|client|http\.request\.header|http\.response\.header|device|network|browser|os)\b|^(url\.(full|query|fragment)|http\.(query|fragment)|deviceMemory|hardwareConcurrency|effectiveConnectionType|connectionType)$/;
+	const data = (attributes) => {
+		const kept = {};
+		for (const [key, value] of Object.entries(attributes || {})) if (!unwanted.test(key)) kept[key] = value;
+		return kept;
+	};
+	const out = scrub(event, 0);
+	for (const key of ['request', 'user', 'breadcrumbs', 'extra', 'server_name', 'modules']) delete out[key];
+	const trace = out.contexts && out.contexts.trace;
+	if (trace) {
+		out.contexts = {trace: {...trace, data: data(trace.data)}};
+	} else {
+		delete out.contexts;
+	}
+	const tags = {};
+	for (const key of ['kind', 'build', 'device', 'os', 'browser', 'store', 'phase', 'pack_source', 'previous_build', 'session_length', 'returned_after', 'file', 'status', 'code']) {
+		if (out.tags && typeof out.tags[key] === 'string') tags[key] = out.tags[key];
+	}
+	out.tags = tags;
+	if (Array.isArray(out.spans)) out.spans = out.spans.map((span) => ({...span, data: data(span.data)}));
+	if (out.measurements) delete out.measurements['connection.rtt'];
+	return out;
+}
+
+// An envelope as it may leave: its events and transactions scrubbed (tiScrubEvent) as
+// allow(type) lets them out, its sessions without a user agent, IP address or user id,
+// and nothing else (client reports, attachments, replays, logs). Null when nothing is left.
+function tiScrubEnvelope(envelope, allow) {
+	const [headers, items] = envelope;
+	const kept = [];
+	for (const [header, payload] of items || []) {
+		const type = header && header.type;
+		if ((type === 'event' || type === 'transaction') && allow(type)) {
+			const event = tiScrubEvent(payload);
+			if (event) kept.push([header, event]);
+		} else if (type === 'session' && payload && typeof payload === 'object') {
+			const session = {...payload, attrs: {release: payload.attrs && payload.attrs.release, environment: payload.attrs && payload.attrs.environment}};
+			delete session.did;
+			kept.push([header, session]);
+		}
+	}
+	if (kept.length === 0) return null;
+	const head = {...headers};
+	if (head.trace) {
+		const trace = {};
+		for (const key of ['trace_id', 'public_key', 'release', 'environment', 'transaction', 'sampled', 'sample_rate', 'sample_rand']) {
+			if (head.trace[key] !== undefined) trace[key] = head.trace[key];
+		}
+		head.trace = trace;
+	}
+	return [head, kept];
+}
 		</script>
 		<script>
 const GODOT_CONFIG = $GODOT_CONFIG;
 const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
+
+// The crash and performance reports (tiReporting), set up first so that an error
+// anywhere below is seen. window.__tiReporting is what the game reads and calls
+// (game/scripts/settings/crash_reports.gd): read(), setEnabled(on), noticeShown(),
+// playStarted(), and status() for tests.
+const tiReports = (() => {
+	let config = {};
+	try {
+		config = JSON.parse(document.getElementById('ti-reporting').textContent) || {};
+	} catch (err) {
+		config = {};
+	}
+	let storage = null;
+	try {
+		storage = window.localStorage;
+	} catch (err) {
+		storage = null;
+	}
+	const appleTouch = tiAppleTouchDevice(navigator.userAgent, navigator.maxTouchPoints);
+	const reporting = tiReporting(config, {
+		storage,
+		locks: navigator.locks || null,
+		now: () => Date.now(),
+		id: () => (window.crypto && crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2)),
+		visible: () => document.visibilityState === 'visible',
+		focused: () => document.hasFocus(),
+		tags: tiDeviceTags(navigator.userAgent, navigator.maxTouchPoints),
+		store: tiStoreOnThisDevice(window.location.search, appleTouch),
+		environment: tiEnvironment(location.hostname),
+		timeOrigin: performance.timeOrigin,
+		marks: () => Object.fromEntries(performance.getEntriesByType('mark')
+			.filter((mark) => mark.name.startsWith('TI_BOOT:')).map((mark) => [mark.name, mark.startTime])),
+		loadSdk: (src, integrity) => new Promise((resolve, reject) => {
+			const script = document.createElement('script');
+			script.src = src;
+			script.integrity = integrity;
+			script.crossOrigin = 'anonymous';
+			script.onload = () => (window.Sentry ? resolve(window.Sentry) : reject(new Error('no SDK')));
+			script.onerror = () => reject(new Error('the SDK did not load'));
+			document.head.appendChild(script);
+		}),
+		every: (ms, fn) => setInterval(fn, ms),
+	});
+	window.addEventListener('error', (event) => reporting.error(event.error || event.message, 'error'));
+	window.addEventListener('unhandledrejection', (event) => reporting.error(event.reason, 'unhandled_rejection'));
+	document.addEventListener('visibilitychange', () => reporting.seen());
+	window.addEventListener('focus', () => reporting.seen());
+	window.addEventListener('blur', () => reporting.seen());
+	window.addEventListener('pagehide', () => reporting.ended());
+	window.addEventListener('pageshow', (event) => {
+		if (event.persisted) reporting.resumed();
+	});
+	document.getElementById('canvas').addEventListener('webglcontextlost', () => reporting.contextLost());
+	window.__tiReporting = {
+		read: () => reporting.read(),
+		setEnabled: (on) => reporting.setEnabled(Boolean(on)),
+		noticeShown: () => reporting.noticeShown(),
+		playStarted: () => reporting.playStarted(),
+		status: () => reporting.status(),
+	};
+	reporting.start();
+	return reporting;
+})();
 
 // Web Audio and the first gesture (owner, 2026-11-15: on an iPhone or iPad no
 // sound until the pause menu). A browser lets the engine's AudioContext start
@@ -764,6 +1387,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		console.error(err);
 		showNotice(err instanceof Error ? err.message : String(err));
 		mark('failed');
+		tiReports.loadFailed(err instanceof Error ? err.message : String(err));
 	}
 
 	const engine = new Engine({
@@ -786,6 +1410,8 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			if (line === 'PLAY_READY' && phase !== 'error') {
 				phase = 'ready';
 				mark('play_ready');
+				// The start prompt is up: the reports' SDK may load now (tiReporting).
+				tiReports.phase('play');
 				// The synchronous game callback finishes its Resume/menu setup first.
 				requestAnimationFrame(() => {
 					if (phase === 'ready') {
@@ -801,6 +1427,7 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 		},
 		onExit(code) {
 			if (phase !== 'ready') displayFailureNotice('Game stopped before startup completed (' + code + ').');
+			else tiReports.engineExit(code);
 		},
 	});
 

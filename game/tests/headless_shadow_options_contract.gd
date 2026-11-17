@@ -44,11 +44,23 @@ extends SceneTree
 ##     three are kept: a restart puts them
 ##     on again, the capture harness's opt-out gets the defaults, and unknown,
 ##     missing and unwritable settings fall back quietly; the web offers them with
-##     its own default resolution (two thirds, owner 2026-11-15).
+##     its own default resolution (two thirds, owner 2026-11-15);
+##   - the crash and performance reports' switch (CrashReports, owner 2026-11-17):
+##     with no page to send them (desktop) Options has no Privacy section; with a
+##     page, as a browser has (a stand-in recording what it is told), the switch
+##     shows under Privacy after the sound, on by default, the page told so at
+##     startup and asked for the start prompt's line about the reports; switched off,
+##     the page is told at once and the choice kept, so a restart starts off and tells
+##     the page off; off on either side wins over on on the other (a page that kept
+##     off and a file that lost it, or the reverse), and the winner is kept; switched
+##     on again, the page is told on and that the player has read about the reports;
+##     the capture harness's opt-out gets the default (on) and writes nothing.
 ## Uses its own settings file, removed at the end. The first failure stops the run.
 
 const MAIN_SCENE := "res://game/scenes/main.tscn"
 const SUN_KEYS := ["enabled", "mode", "splits", "max_distance"]
+## A stand-in for the web page's crash reports (crash_page), as a browser gives main.
+const ReportingPage := preload("res://game/tests/shared/reporting_page.gd")
 ## The least contrast a focus ring must have against what it lies on (WCAG 2's 3:1
 ## for a control's parts).
 const FOCUS_CONTRAST := 3.0
@@ -180,6 +192,9 @@ func _run() -> void:
 	var graphics := _check_graphics()
 	if graphics.is_empty():
 		return _finish()
+	var reports := _check_crash_reports()
+	if reports.is_empty():
+		return _finish()
 	_free_main()
 	# A test or capture driver (this run) that would read or write the player's
 	# settings file is caught, unless it brought a file of its own: main.gd's own
@@ -231,20 +246,77 @@ func _run() -> void:
 	var fallback := [ShadowQuality.default_id(), GraphicsSettings.defaults()]
 	if not _require([unknown, missing, unwritten] == [fallback, fallback, fallback], "An unknown kept level or graphics setting, a missing file and an unwritable one must all give the defaults, quietly (gave %s, %s, %s)." % [unknown, missing, unwritten]):
 		return _finish()
-	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed and focused, its focus ring showing when opened with Enter and hidden when by a click, every level's note as many lines as the others' (the panel keeps its height), Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; the web's Off alone leaves Options with its graphics rows (No limit and 67 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics])
+	print("PASS: shadow options: with no kept choice the game puts on Medium, main.tscn's sun and project.godot's shadow map and filter (the default); each level puts on what it claims (%s); the pause menu's Options (between Controls and Credits) opens the levels with the one on pressed and focused, its focus ring showing when opened with Enter and hidden when by a click, every level's note as many lines as the others' (the panel keeps its height), Right and Enter put on %s at once, the level in use alone shows pressed in the headings' blue whoever changes it, and Back returns; the choice survives a restart and a new one replaces it; the capture harness gets the default and a driver that would use the player's settings file is caught; %s; %s; the web's Off alone leaves Options with its graphics rows (No limit and 67 %% on) and the sound's volume, no shadow levels; unknown, missing and unwritable settings fall back quietly" % ["; ".join(applied), next, graphics, reports])
 	_finish()
 
 
 ## The main scene made and readied (its shadow level put on), after freeing the
 ## one before: each lives a few frames at most, long before its world finishes
-## loading.
-func _make_main(use_saved := true) -> GameMain:
+## loading. With a page, as a browser gives main (crash_page).
+func _make_main(use_saved := true, page: Object = null) -> GameMain:
 	_free_main()
 	_main = (load(MAIN_SCENE) as PackedScene).instantiate() as GameMain
 	_main.capture_mouse_on_ready = false
 	_main.use_saved_settings = use_saved
+	if page != null:
+		_main.crash_page = page
 	root.add_child(_main)
 	return _main
+
+
+## The crash and performance reports' switch (CrashReports), in mains made one after
+## another as a browser would make them, each with a page standing in for the web
+## page's reporting. No frame passes, so no main's world starts loading. Returns a
+## summary, or "" after failing.
+func _check_crash_reports() -> String:
+	DirAccess.remove_absolute(_settings_file)
+	# No page (desktop): no Privacy section.
+	var main := _make_main()
+	if not _require(main.crash_reports.page == null and main.crash_reports.on and not main.hud.privacy_heading.visible and not main.hud.privacy_row.visible, "With no page to send them, Options must have no switch for the crash reports (heading shown %s, row shown %s)." % [main.hud.privacy_heading.visible, main.hud.privacy_row.visible]):
+		return ""
+	# A page that never had the switch set: on, the page told so and asked for the notice.
+	var page := ReportingPage.new()
+	main = _make_main(true, page)
+	var hud := main.hud
+	var order := PackedStringArray()
+	for child: Node in hud.options_panel.get_node("OptionsLayout").get_children():
+		if (child as Control).visible:
+			order.append(child.name)
+	if not _require(main.crash_reports.on and hud.crash_reports.button_pressed and hud.privacy_row.visible and page.told == ["on"] and main.crash_reports.notice, "With a page that never had it set, the reports must be on, the switch shown pressed, the page told on and the start prompt asked for the notice (on %s, pressed %s, shown %s, told %s, notice %s)." % [main.crash_reports.on, hud.crash_reports.button_pressed, hud.privacy_row.visible, page.told, main.crash_reports.notice]) \
+	or not _require(order.slice(order.size() - 5) == PackedStringArray(["SoundHeading", "SoundRow", "PrivacyHeading", "PrivacyRow", "BackButton"]) and hud.crash_reports.text == "Send anonymous statistics", "Options must end with Sound, then Privacy with \"Send anonymous statistics\", then Back (it reads %s, the switch \"%s\")." % [order, hud.crash_reports.text]):
+		return ""
+	# Switched off: the page told at once, the choice kept; a restart starts off.
+	hud.crash_reports.button_pressed = false
+	if not _require(not main.crash_reports.on and page.told.back() == "off" and not CrashReports.saved(), "Switching the reports off must tell the page off at once and keep it (on %s, told %s, kept %s)." % [main.crash_reports.on, page.told, CrashReports.saved()]):
+		return ""
+	page.told.clear()
+	main = _make_main(true, page)
+	if not _require(not main.crash_reports.on and not main.hud.crash_reports.button_pressed and page.told == ["off"] and not main.crash_reports.notice, "After a restart the reports must start off, the switch shown off, the page told off and no notice asked for (on %s, told %s, notice %s)." % [main.crash_reports.on, page.told, main.crash_reports.notice]):
+		return ""
+	# Off on either side wins over on on the other, and the winner is kept.
+	CrashReports.save(true)
+	page.kept = false
+	main = _make_main(true, page)
+	var page_off_wins := [main.crash_reports.on, CrashReports.saved()]
+	CrashReports.save(false)
+	page.kept = true
+	page.told.clear()
+	main = _make_main(true, page)
+	var file_off_wins := [main.crash_reports.on, page.told.duplicate(), CrashReports.saved()]
+	if not _require(page_off_wins == [false, false] and file_off_wins == [false, ["off"], false], "Off on either side must win over on on the other and be kept: a page that kept off over a file that says on gave [on, kept] %s; a file that kept off over a page that says on gave [on, told, kept] %s." % [page_off_wins, file_off_wins]):
+		return ""
+	# Switched on again: the page told on, and that the player has read about them.
+	page.told.clear()
+	main.hud.crash_reports.button_pressed = true
+	if not _require(main.crash_reports.on and page.told == ["on", "notice shown"] and CrashReports.saved(), "Switching the reports on must tell the page on and that the player has read about them, and keep it (on %s, told %s, kept %s)." % [main.crash_reports.on, page.told, CrashReports.saved()]):
+		return ""
+	# The capture harness's opt-out: the default (on), the settings file untouched.
+	CrashReports.save(false)
+	page.kept = null
+	main = _make_main(false, page)
+	if not _require(main.crash_reports.on and not CrashReports.saved(), "With use_saved_settings off the reports must start on (the default) and the settings file stay as it was (on %s, kept %s)." % [main.crash_reports.on, CrashReports.saved()]):
+		return ""
+	return "the crash reports' switch: none without a page; with one, under Privacy after the sound, on by default and the page told so and asked for the notice; switched off at once on the page and kept over a restart; off on either side winning and kept; switched on again with the page told the player read about them; the capture harness on by default, writing nothing"
 
 
 func _free_main() -> void:

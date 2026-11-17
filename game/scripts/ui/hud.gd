@@ -13,6 +13,9 @@ signal graphics_chosen(key: String, value: Variant)
 ## it on, and keeps it when keep (a drag on the slider is kept where it ends, not
 ## at each step).
 signal sound_settings_changed(volume: float, muted: bool, keep: bool)
+## The crash and performance reports switched on or off on the options screen
+## (main.gd tells the page and keeps it; CrashReports).
+signal crash_reports_chosen(on: bool)
 ## The loading screen put up a line (show_loading): main.gd's loading steps.
 signal loading_shown(text: String)
 
@@ -65,6 +68,14 @@ const START_CONTROLS := "WASD move · Shift run · Space jetpack · Mouse look �
 const START_HOME_SCREEN_NOTE := "For full screen: Share › Add to Home Screen"
 const START_SILENT_NOTE := "Turn off silent mode to hear sound"
 const START_NOTE_FONT_PX := 24
+## The start prompt's line about the crash and performance reports (owner,
+## 2026-11-17), on the web, until the page has recorded it shown (CrashReports): the
+## last of the notes, in the credits' notes' colour, at the notes' size on a touch
+## screen and the controls line's on a desktop. On one line where the page is wide
+## enough, else wrapped to the page's width less REPORTS_NOTE_SIDES_PX (a phone held
+## upright). In the web font's characters, as the other notes.
+const START_REPORTS_NOTE := "Sends anonymous statistics (device type, errors, frame rate, where in the game, time played). Turn off in Options."
+const REPORTS_NOTE_SIDES_PX := 96.0
 ## The options screen's choice buttons (shadow levels, frame rate limits,
 ## resolutions) are at least this wide (px), and the one in use is filled in the
 ## headings' colour with this dark type.
@@ -121,9 +132,11 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 ## level on pressed and its note under them, where there is a choice to make; the
 ## frame rate limit with the switch for the frame rate display, and the 3D
 ## resolution (set_graphics), each choice a button like the shadow levels with its
-## note as its tooltip. Then the time of day, on desktop, and the sound's master
-## volume and mute. Each section after the first stands as far below the one before.
-## A solid panel over the dimmed game, which shows a change at once.
+## note as its tooltip. Then the time of day, on desktop, the sound's master
+## volume and mute, and on the web, under Privacy, the switch for the crash and
+## performance reports (set_crash_reports). Each section after the first stands as
+## far below the one before. A solid panel over the dimmed game, which shows a
+## change at once.
 @onready var options_screen: Control = $OptionsScreen
 @onready var options_panel: PanelContainer = $OptionsScreen/Center/OptionsPanel
 @onready var graphics_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/GraphicsHeading
@@ -157,6 +170,9 @@ const DAYLIGHT_MARK_PX := Vector2(2.0, 22.0)
 @onready var time_now_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/TimeRow/NowButton
 @onready var sound_volume: HSlider = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundVolume
 @onready var sound_mute: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/SoundRow/SoundMute
+@onready var privacy_heading: Label = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyHeading
+@onready var privacy_row: HBoxContainer = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow
+@onready var crash_reports: CheckButton = $OptionsScreen/Center/OptionsPanel/OptionsLayout/PrivacyRow/CrashReports
 @onready var options_back_button: Button = $OptionsScreen/Center/OptionsPanel/OptionsLayout/BackButton
 ## The credits screen, opened from the pause menu: the list in CREDITS_PATH and,
 ## behind its Licences button, the licence texts that ship with the game and the
@@ -198,10 +214,11 @@ var _menu_before := {}
 ## The start prompt's line of controls (with a mouse), made the first time.
 var _start_controls: Label
 ## The start prompt's notes (set_start_notes), made the first time: the home
-## screen hint's line and the silent mode line.
+## screen hint's line, the silent mode line and the reports' line.
 var _start_notes: VBoxContainer
 var _home_screen_hint: Label
 var _silent_note: Label
+var _reports_note: Label
 var _touch := false
 ## The finger scrolling a credits view, or -1 (_on_credits_scroll_input).
 var _credits_finger := -1
@@ -264,8 +281,9 @@ func _ready() -> void:
 		_sound_changed(true))
 	sound_mute.toggled.connect(func(_on: bool) -> void: _sound_changed(true))
 	show_frame_rate.toggled.connect(func(on: bool) -> void: graphics_chosen.emit(GraphicsSettings.SHOW_FRAME_RATE_KEY, on))
+	crash_reports.toggled.connect(func(on: bool) -> void: crash_reports_chosen.emit(on))
 	var switch_off := DPITexture.create_from_string(SWITCH_OFF_SVG)
-	for switch: CheckButton in [show_frame_rate, sound_mute]:
+	for switch: CheckButton in [show_frame_rate, sound_mute, crash_reports]:
 		switch.add_theme_icon_override("unchecked", switch_off)
 	time_date_slider.value_changed.connect(_on_time_slid.bind(true))
 	time_slider.value_changed.connect(_on_time_slid.bind(false))
@@ -295,6 +313,7 @@ func _ready() -> void:
 	_fit_load_icon()
 	resized.connect(_fit_credits)
 	_fit_credits()
+	resized.connect(_fit_reports_note)
 
 
 ## The chest on the loading screen is a quarter of the screen's shorter side, at
@@ -420,24 +439,28 @@ func start_prompt_text() -> String:
 	return _start_text
 
 
-## The start prompt's notes under its Play button, which main.gd asks the web page
-## for on a touch screen (owner, 2026-11-16): home_screen, how to play full screen
-## from the home screen (Safari on an iPhone or iPad, outside a home screen app);
-## silent_mode, that the sound needs the silent mode off (any iPhone or iPad).
-## Neither shows without the prompt, and play's first start ends both with it.
-func set_start_notes(home_screen: bool, silent_mode: bool) -> void:
+## The start prompt's notes under its Play button (and the line of controls, with a
+## mouse), which main.gd asks the web page for (owner, 2026-11-16 and 2026-11-17):
+## home_screen, how to play full screen from the home screen (Safari on an iPhone
+## or iPad, outside a home screen app); silent_mode, that the sound needs the silent
+## mode off (any iPhone or iPad); reports, the line about the crash and performance
+## reports (any web page, until it has been shown once; START_REPORTS_NOTE). None
+## shows without the prompt, and play's first start ends them with it.
+func set_start_notes(home_screen: bool, silent_mode: bool, reports := false) -> void:
 	if _start_text.is_empty():
 		return
 	if _start_notes == null:
-		if not home_screen and not silent_mode:
+		if not home_screen and not silent_mode and not reports:
 			return
 		_make_start_notes()
 	_home_screen_hint.visible = home_screen
 	_silent_note.visible = silent_mode
-	_start_notes.visible = home_screen or silent_mode
+	_reports_note.visible = reports
+	_start_notes.visible = home_screen or silent_mode or reports
 
 
-## The notes' lines under the Play button, each centred on the panel.
+## The notes' lines under the Play button, after the line of controls where there is
+## one, each centred on the panel.
 func _make_start_notes() -> void:
 	_start_notes = VBoxContainer.new()
 	_start_notes.name = "StartNotes"
@@ -446,7 +469,14 @@ func _make_start_notes() -> void:
 	_start_notes.add_child(_home_screen_hint)
 	_silent_note = _start_note_label("SilentNote", START_SILENT_NOTE)
 	_start_notes.add_child(_silent_note)
-	resume_button.add_sibling(_start_notes)
+	_reports_note = _start_note_label("ReportsNote", START_REPORTS_NOTE)
+	_reports_note.add_theme_color_override("font_color", CREDITS_NOTE_COLOR)
+	_reports_note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	if not _touch:
+		_reports_note.remove_theme_font_size_override("font_size")
+	_start_notes.add_child(_reports_note)
+	(_start_controls if _start_controls != null else resume_button).add_sibling(_start_notes)
+	_fit_reports_note()
 
 
 func _start_note_label(node_name: String, text: String) -> Label:
@@ -459,12 +489,23 @@ func _start_note_label(node_name: String, text: String) -> Label:
 	return label
 
 
+## The reports' line as wide as its words on one line, but no wider than the page
+## less REPORTS_NOTE_SIDES_PX, where it wraps.
+func _fit_reports_note() -> void:
+	if _reports_note == null:
+		return
+	var font := _reports_note.get_theme_font("font")
+	var one_line := font.get_string_size(_reports_note.text, HORIZONTAL_ALIGNMENT_LEFT, -1, _reports_note.get_theme_font_size("font_size")).x
+	_reports_note.custom_minimum_size.x = minf(ceilf(one_line), maxf(0.0, size.x - REPORTS_NOTE_SIDES_PX))
+
+
 ## Which start prompt notes show (the web state readback).
 func start_notes_state() -> Dictionary:
 	var shown := _start_notes != null and _start_notes.is_visible_in_tree()
 	return {
 		"home_screen": shown and _home_screen_hint.visible,
 		"silent_mode": shown and _silent_note.visible,
+		"reports": shown and _reports_note.visible,
 	}
 
 
@@ -668,6 +709,20 @@ func set_sound_settings(volume: float, muted: bool) -> void:
 ## The volume as the slider shows it (0..1).
 func sound_volume_share() -> float:
 	return sound_volume.value / sound_volume.max_value
+
+
+## The crash and performance reports' switch under Privacy, where main.gd offers it
+## (a web page that sends the reports; CrashReports), showing whether they are on.
+## Pressing it asks main.gd to switch them (crash_reports_chosen).
+func set_crash_reports(offered: bool, on: bool) -> void:
+	for part: Control in [privacy_heading, privacy_row]:
+		part.visible = offered
+	show_crash_reports(on)
+
+
+## Shows the reports on or off, without asking for it again.
+func show_crash_reports(on: bool) -> void:
+	crash_reports.set_pressed_no_signal(on)
 
 
 ## Whether the options screen offers the date and time: with the time of day on
@@ -1247,7 +1302,7 @@ func set_touch_instructions() -> void:
 	_touch = true
 	_fill_controls()
 	resume_button.text = "Play / Resume"
-	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate]:
+	for button: Control in [resume_button, controls_button, options_button, credits_button, exit_button, back_button, load_controls_button, options_back_button, credits_licences_button, credits_back_button, sound_volume, sound_mute, time_date_slider, time_slider, time_now_button, show_frame_rate, crash_reports]:
 		button.custom_minimum_size.y = 64.0
 	for button: Node in shadow_levels.get_children() + frame_rates.get_children() + resolutions.get_children():
 		(button as Button).custom_minimum_size.y = 64.0

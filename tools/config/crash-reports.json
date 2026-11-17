@@ -1,0 +1,12 @@
+{
+  "schema_version": "ti.crash-reports/1",
+  "notes": [
+    "The crash and performance reports' settings (owner, 2026-11-17: on by default, with a switch in Options that turns all sending off). tools/build-web.sh reads web from the commit it builds and writes it into the page (game/web/shell.html's ti-reporting block, tiReporting); tools/check-web-live.sh checks that the deployed page has the same DSN as the commit it names, without printing it.",
+    "web.dsn: the Sentry project grand-treasure-island-web's client key (DSN). A DSN is public by design: it lets a page send reports and nothing else. \"\" turns the reports off: the page then loads no SDK and sends nothing, and keeps only its own records in the player's browser. The project has Prevent Storing of IP Addresses on.",
+    "web.traces_sample_rate: the share of page loads whose load is traced (0 to 1). Sentry's free Developer plan includes 5,000,000 spans a month (sentry.io/pricing, 2026-11-17); a traced load sends about 30 (the page load's own, one per loading step, the start prompt), so 1 keeps every load up to about 5,000 loads a day, and the plan drops what is over its quota without billing it. Lower it if the game gets busier than that."
+  ],
+  "web": {
+    "dsn": "https://dd327caf9afec302a1940d90e0e30737@o4512444392013824.ingest.us.sentry.io/4512444474195968",
+    "traces_sample_rate": 1
+  }
+}
