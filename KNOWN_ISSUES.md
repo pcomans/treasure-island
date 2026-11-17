@@ -46,6 +46,7 @@ Every wood-mulch surface draws one shared chip tile (`tools/bake_mulch_chips.mjs
 - The loose chips are flat-shaded slivers, with no texture or relief of their own, so at 2 to 3 m they read as cut-outs.
 - Loose chips stop within about 5 cm (half a texel of the chips capture, 1024 px over 96 m) of a kerb, path or the land drawn over a bed's edge. Where other ground lies within a millimetre under a bed (about 0.1 % of the beds' sample points in the 2026-11-16 world), the chips there go too.
 - On desktop the chips capture costs about 0.3 ms on the GPU each time it renders, once every 22 m the camera travels with a bed within 48 m.
+- On desktop the chips capture's target is 1024 px square in half floats, about 9 MB more graphics memory than the 512 px it had before chips were made to stop at ground over a bed, and it is allocated even when chips are off (at a level without chips, or with no bed near): then only its rendering is skipped (code review, 2026-11-17).
 - Grass blades and stones within about a third of a metre (a colour-capture texel) of a bed take on some of the bed's brown: the colour capture draws the bed's mulch colour, and the grass and stones take theirs from it. Code review, 2026-11-17; close view `e1-bed-edge-lawn-2m` in `procedural-mulch-20261116/runs/R08c-round2`.
 - One building's own site mulch keeps its old texture: the midrise family's `r133351.json` (`site_mulch`) draws `street_mulch.png` as part of that building's model, outside the world surfaces this mulch covers.
 - One grade (`park_mulch`) covers Cityside's beds, Garden Walk's, Maceo May's and the 9th Street lot strip, set between Cityside's two Sep 2025 contributor photos (ph08 darker, ph04 paler in full sun). The 9th Street Street View (Sep 2025) shows a flatter, browner worn mulch, and no close photo shows Garden Walk's or Maceo May's bare mulch.
@@ -230,6 +231,11 @@ Limits:
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
 - The cars' index of the drawn ground and ways is built twice at load, about 76 ms: once in `world_loader.gd` for the shoreline (`VisibleGround.new()` before `ShorelineBuilder`) and again in `vehicle_manager.gd` (`_visible_ground.build`) (code review, 2026-11-11).
 - Not covered by any test: pausing while a car rolls down the riprap, `R` while a car is sinking, and a native run of the web smoke's water leg (code review, 2026-11-11).
+
+## Yard vehicle meshes (`tools/lib/street-yard-meshes.mjs`, `game/resources/models/street/street_yard_kit.glb`, 2026-11-17)
+
+- The kit still draws surfaces of different parts in one plane in two places, which can flicker as the large box truck's cab windows did: the semi trailer's ends (about 0.3 m² at each end) and the step van's rear (about 0.06 m²). Nothing yet checks the kit for surfaces of different parts in one plane; the code review's offline pass (same-facing triangles of different parts within 2 mm of one plane) flags 30 meshes in all, these two among them and mostly downward faces at ground level, so such a check needs its hits sorted first (code review, 2026-11-17).
+- A swept side (`sweptBody`) is cut by polygon clipping only when one of its window or door holes reaches past the side's outline; every other side keeps earcut. The clipping path assumes a simple side outline, one that doesn't cross itself. The travel trailer's and the fifth wheel's side outlines cross themselves at the wheel wells, where clipping drops a strip of paint that earcut draws, which is why they stay on the earcut path (their holes lie inside their outlines); a hole reaching past one of those outlines would send that side through clipping and lose the strip (code review, 2026-11-17).
 
 ## Sound (`game/scripts/audio/`, 2026-11-14)
 
