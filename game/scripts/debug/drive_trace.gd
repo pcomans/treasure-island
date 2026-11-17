@@ -27,8 +27,14 @@ extends Node
 ## after its first record, wherever it is, and shows its results; with scale=S
 ## (&scale=0.5, --trace-scale=S) the run draws the world at that 3D resolution (one the
 ## Options menu offers: 0.5, 0.67, 0.75 or 1), applied as the menu applies it (not
-## kept) and put back at the end. A "view" marker records the 3D scale, MSAA, window
-## and visible rect at the start and whenever one changes (an Options change mid-run).
+## kept) and put back at the end, from the start of loading. A "view" marker records
+## the 3D scale, MSAA, window and visible rect at the start and whenever one changes
+## (an Options change mid-run). For the iPhone's reloads, switches that each take one
+## suspect out of a run (the header records them): probes=0 (--trace-probes=0) takes
+## Mersea's reflection probes out before startup renders them; sound=0 silences the
+## game (no sample registered with the browser, no player started); msaa=0 draws the
+## world without MSAA (the web's default is 2x); route=hover leaves out the car: from
+## the spawn straight to the walk, the run, the jetpack climb and hover, the drop.
 ## Then,
 ## after the drive's analysed steps (the page's analysis ends at "landed"), the
 ## triggers: each script that draws only in play shown by a camera of the trace's
@@ -74,15 +80,20 @@ const DRIVE_LIMIT_S := 900.0
 ## of a place costs from what drawing it costs.
 const MAX_LAPS := 3
 ## A frame's record, in this order (the page's hook and the native file name them).
-const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap"]
+## After lap: the renderer's video memory (textures, buffers and render targets, MiB),
+## the primitives of the main view and of the shadow pass (thousands: Compatibility
+## counts the shadow pass's draw calls with the main view's and the depth pre-pass in
+## neither), the resources and nodes alive, the 3D scale and MSAA.
+const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap", "vid_mb", "vis_prim_k", "sh_prim_k", "res_n", "node_n", "scale", "msaa"]
 ## flags: driving, the tree paused, nothing drawn this frame, the drive running.
 const FLAG_DRIVING := 1
 const FLAG_PAUSED := 2
 const FLAG_UNDRAWN := 4
 const FLAG_RUNNING := 8
-## Memory jumps (MiB) worth a marker, and how often (ms) records go to the page.
+## Memory jumps (MiB) worth a marker, and how often (ms) records go to the page (which
+## keeps the latest on the device each time, so a killed page's record is that fresh).
 const MEM_JUMP_MB := 0.25
-const SEND_MS := 1000.0
+const SEND_MS := 250.0
 ## The steps, in order (the record's step field is the index).
 const STEPS := ["wait", "baseline", "to_car", "drive", "stop", "out", "walk", "run", "rise", "hover", "drop", "landed", "triggers", "done"]
 ## The triggers step's parts, each [what, ticks it lasts]: a fence bay broken, a
@@ -93,6 +104,8 @@ const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti
 ## What the splash and confetti triggers make (as the vehicle manager and the ball do).
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const GOAL_CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
+## Mersea's probes, which probes=0 takes out (MerseaModel.reflections_off).
+const MERSEA_MODEL := preload("res://game/scripts/world/facades/mersea_model.gd")
 ## The trace's camera stands this far from what it shows (m), this high above it.
 const TRIGGER_VIEW_M := 9.0
 const TRIGGER_VIEW_UP_M := 3.0
@@ -172,6 +185,13 @@ var _seconds_limit := 0.0
 var _scale_asked := ""
 var _scale_restore := ""
 var _view := ""
+## The switches (off unless asked): Mersea's probes out, the game silent, MSAA off (and
+## what it was), the short route ("" for the whole drive).
+var _probes_off := false
+var _sound_off := false
+var _msaa_off := false
+var _msaa_before := -1
+var _route_name := ""
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
 var _pipelines := {}
 
@@ -202,6 +222,11 @@ func _ready() -> void:
 				_seconds_limit = float(arg.trim_prefix("--trace-seconds="))
 			elif arg.begins_with("--trace-scale="):
 				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
+	_probes_off = _option("probes") == "0"
+	_sound_off = _option("sound") == "0"
+	_msaa_off = _option("msaa") == "0"
+	_route_name = "hover" if _option("route") == "hover" else ""
+	_apply_switches()
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
 		# Natively, --trace-web-loading loads as the web build does (the shaders a group
 		# at a time, then the shader warm-up), to tell what that loading does on desktop.
@@ -499,6 +524,7 @@ func _finish_frame() -> void:
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
 	var draw_ms := float(_t_post - _t_pre) / 1000.0 if _drawn and _t_pre > 0 else 0.0
+	var viewport := get_viewport()
 	var row := [
 		_ms(_t_first), float(_t_first - _t_prev_first) / 1000.0 if _t_prev_first > 0 else 0.0,
 		float(_t_first - _t_prev_end) / 1000.0 if _t_prev_end > 0 else 0.0,
@@ -508,6 +534,11 @@ func _finish_frame() -> void:
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME) / 1000.0,
 		at.x, at.y, at.z, speed, flags, _step, _leg, _nadd, _nrem, tex_mb, buf_mb,
 		Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS), Performance.get_monitor(Performance.PHYSICS_3D_COLLISION_PAIRS), _lap,
+		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED) / 1048576.0,
+		viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME) / 1000.0,
+		viewport.get_render_info(Viewport.RENDER_INFO_TYPE_SHADOW, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME) / 1000.0,
+		Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT), Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
+		viewport.scaling_3d_scale, viewport.msaa_3d,
 	]
 	for value: Variant in row:
 		_rows.append(float(value))
@@ -561,15 +592,57 @@ func _apply_scale() -> void:
 	_event("trace", "3D resolution %s%% for the run" % _scale_asked, float(_scale_asked))
 
 
-## The player's own resolution back (after a run that asked for another).
+## The player's own resolution back (after a run that asked for another), unless the
+## player chose one in the Options meanwhile; MSAA as it was.
 func _restore_scale() -> void:
 	var graphics := _main.graphics
+	if _msaa_before >= 0:
+		get_viewport().msaa_3d = _msaa_before as Viewport.MSAA
+		_msaa_before = -1
 	if _scale_restore == "" or graphics == null:
 		return
-	var choices: Dictionary = graphics.current.duplicate()
-	choices[GraphicsSettings.RESOLUTION_KEY] = _scale_restore
-	graphics.apply(choices)
+	if str(graphics.current.get(GraphicsSettings.RESOLUTION_KEY, "")) == _scale_asked:
+		var choices: Dictionary = graphics.current.duplicate()
+		choices[GraphicsSettings.RESOLUTION_KEY] = _scale_restore
+		graphics.apply(choices)
 	_scale_restore = ""
+
+
+## A switch's value: the page address's parameter on the web, --trace-NAME=VALUE
+## natively; "" when not given.
+func _option(name: String) -> String:
+	if _web:
+		return str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('%s') || ''" % name))
+	for arg: String in OS.get_cmdline_user_args():
+		if arg.begins_with("--trace-%s=" % name):
+			return arg.trim_prefix("--trace-%s=" % name)
+	return ""
+
+
+## The run's resolution and switches, before the world loads (the trace is made in
+## main's _ready, the world loads after it): so loading draws at them too, and
+## Mersea's probes are taken out before startup renders them.
+func _apply_switches() -> void:
+	_apply_scale()
+	if _msaa_off:
+		_msaa_before = get_viewport().msaa_3d
+		get_viewport().msaa_3d = Viewport.MSAA_DISABLED
+	if _probes_off:
+		MERSEA_MODEL.reflections_off = true
+	if _sound_off:
+		# No player started (every play goes through Sound.current), no bed stepped,
+		# and on the web no take registered with the browser as a sample.
+		Sound.current = null
+		_main.sound.process_mode = Node.PROCESS_MODE_DISABLED
+		_main.sound.set("_registered", true)
+		AudioServer.set_bus_mute(0, true)
+
+
+## The switches as the header and the start marker give them.
+func _switches() -> Dictionary:
+	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off,
+		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive",
+		"probes_present": _main.world_root.buildings.find_children("*", "ReflectionProbe", true, false).size() if _main.world_root.buildings != null else -1}
 
 
 ## The pipeline compilations by source, now.
@@ -695,6 +768,8 @@ func _begin_report() -> void:
 	_origin_us = _now_us()
 	var header := _header()
 	header["origin_ms_engine"] = 0.0
+	header["switches"] = _switches()
+	_event("trace", "switches %s" % JSON.stringify(header.switches), 0)
 	if _web and _js != null:
 		# The page's clock at this trace's origin (both are performance.now() on the web).
 		var before := _now_us()
@@ -827,14 +902,13 @@ func _physics_process(delta: float) -> void:
 				elif _step_ticks > 60 and (_census_rids.size() >= _census_base.size() or _step_ticks > 120):
 					_finish_census()
 					_wrap_vehicles(_main.vehicles)
-					_apply_scale()
 					_begin_report()
 					_set_step("baseline")
 			else:
 				_step_ticks = 0
 		"baseline":
 			if _step_ticks >= 300:
-				_set_step("to_car")
+				_set_step("walk" if _route_name == "hover" else "to_car")
 		"to_car":
 			var to := _route[0] - Vector2(player.global_position.x, player.global_position.z)
 			_face(player, to)
@@ -889,6 +963,11 @@ func _physics_process(delta: float) -> void:
 		"landed":
 			if _step_ticks >= 180:
 				_release_all()
+				if _route_name != "":
+					# A short route ends here, without the triggers.
+					_set_step("done")
+					_end_report("complete")
+					return
 				_trigger = 0
 				_trigger_ticks = 0
 				_set_step("triggers")

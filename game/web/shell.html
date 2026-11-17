@@ -418,12 +418,14 @@ function tiTraceText(env, a) {
 	// What a previous page left unfinished (a crash or a kill), kept for the results.
 	const previous = load('meta');
 	if (previous && previous.status === 'running') {
-		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds')});
+		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds'), ring: load('ring'), page_events: load('page_events')});
 	}
 	save('meta', {id: log.id, status: 'waiting', path: log.page.path});
 	save('heartbeat', null);
 	save('long', []);
 	save('seconds', []);
+	save('ring', []);
+	save('page_events', []);
 
 	// WebGL: the calls that can stall a frame, timed; the rest left alone.
 	let counters = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -593,15 +595,30 @@ function tiTraceText(env, a) {
 			}).observe({type, buffered: true});
 		} catch (e) { /* not reported by this browser */ }
 	}
-	// A page event that may come just before the end is kept on the device at once (beat).
-	document.addEventListener('visibilitychange', () => { event('page', 'visibility ' + document.visibilityState); beat(); });
-	for (const type of ['pagehide', 'pageshow', 'freeze', 'resume']) window.addEventListener(type, () => { event('page', type); beat(); });
-	window.addEventListener('error', (e) => event('error', e.message));
-	window.addEventListener('resize', () => event('page', `resize ${innerWidth}x${innerHeight} dpr ${devicePixelRatio}`));
+	// The page's own events (hidden, frozen, an error, the WebGL context lost, a
+	// rotation) kept on the device the moment they come, with the clock time: what a
+	// page that is then killed or reloaded leaves behind.
+	const pageEvents = [];
 	const canvas = document.getElementById('canvas');
+	const orientation = () => (screen.orientation && screen.orientation.type) || (innerWidth > innerHeight ? 'landscape' : 'portrait');
+	const view = () => `${innerWidth}x${innerHeight} css, dpr ${devicePixelRatio}, canvas ${canvas ? canvas.width + 'x' + canvas.height : '?'}, ${orientation()}`;
+	const pageEvent = (kind, text) => {
+		event(kind, text);
+		pageEvents.push([new Date().toISOString(), round(now()), kind, String(text)]);
+		if (pageEvents.length > 40) pageEvents.shift();
+		save('page_events', pageEvents);
+		beat();
+	};
+	document.addEventListener('visibilitychange', () => pageEvent('page', 'visibility ' + document.visibilityState));
+	window.addEventListener('pagehide', (e) => pageEvent('page', 'pagehide' + (e.persisted ? ' (kept for back)' : '')));
+	for (const type of ['pageshow', 'freeze', 'resume']) window.addEventListener(type, () => pageEvent('page', type));
+	window.addEventListener('error', (e) => pageEvent('error', `${e.message} ${e.filename || ''}:${e.lineno || ''}`));
+	window.addEventListener('unhandledrejection', (e) => pageEvent('error', 'unhandled rejection: ' + (e.reason && e.reason.message ? e.reason.message : String(e.reason))));
+	window.addEventListener('resize', () => pageEvent('page', 'resize ' + view()));
+	if (screen.orientation) screen.orientation.addEventListener('change', () => pageEvent('page', 'orientation ' + view()));
 	if (canvas) {
-		canvas.addEventListener('webglcontextlost', () => { event('page', 'WebGL context lost'); beat(); });
-		canvas.addEventListener('webglcontextrestored', () => event('page', 'WebGL context restored'));
+		canvas.addEventListener('webglcontextlost', () => pageEvent('page', 'WebGL context lost'));
+		canvas.addEventListener('webglcontextrestored', () => pageEvent('page', 'WebGL context restored'));
 	}
 	// A screen that stays on through the drive (iOS 16.4+, a secure page), asked for in
 	// the start prompt's tap; the owner can also set Auto-Lock to Never for the run.
@@ -617,49 +634,145 @@ function tiTraceText(env, a) {
 	// seconds kept every PROGRESS_MS, so a run that ends without warning (a killed page)
 	// still shows its last seconds.
 	const PROGRESS_MS = 10000;
+	const BEAT_MS = 250;
 	let lastSaved = 0;
+	let lastBeat = 0;
 	const mib = () => [performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null, memory ? round(memory.buffer.byteLength / 1048576) : null];
 	function beat() {
 		if (!log.header || log.end) return;
+		lastBeat = now();
 		const [js, wasm] = mib();
 		save('heartbeat', {
 			at: new Date().toISOString(), page_ms: round(now()), frames: log.raf.length, row: log.rows[log.rows.length - 1] || null,
-			fields: log.header.fields, last_events: log.events.slice(-8), js_mb: js, wasm_mb: wasm,
-			last_frames: log.raf.slice(-31).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1),
+			fields: log.header.fields, last_events: log.events.slice(-8), js_mb: js, wasm_mb: wasm, view: view(),
+			last_frames: log.raf.slice(-31).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1), second: bucket,
 		});
+	}
+
+	// A row a page second from the engine's records as they come (SECOND_COLUMNS): the
+	// last RING_S kept on the device each second, all of them (up to 900) with the
+	// long frames every PROGRESS_MS.
+	const RING_S = 120;
+	const SECOND_COLUMNS = 's, frames, mean ms, worst ms, x, z, step, leg, draw ms, outside ms, draw calls, primitives k, main view k, shadow k, texture MiB, buffer MiB, video MiB, resources, nodes, 3D scale, MSAA, nodes added, nodes removed, page view, WebAssembly MiB';
+	const secondsAll = [];
+	let bucket = null;
+	let F = null;
+	function closeSecond() {
+		if (!bucket) return;
+		const b = bucket;
+		const n = Math.max(1, b.n);
+		secondsAll.push([b.s, b.n, round(b.ms / n), round(b.worst), round(b.x), round(b.z), b.step, b.leg, round(b.draw / n), round(b.gap / n),
+			Math.round(b.dc / n), Math.round(b.prim / n), Math.round(b.vis / n), Math.round(b.sh / n), round(b.tex), round(b.buf), round(b.vid),
+			b.res, b.nodes, round(b.scale), b.msaa, b.nadd, b.nrem, view(), mib()[1]]);
+		if (secondsAll.length > 900) secondsAll.shift();
+		save('ring', secondsAll.slice(-RING_S));
+		bucket = null;
+	}
+	function addSecond(r) {
+		const s = Math.floor((log.header.page_ms_at_origin + r[F.t]) / 1000);
+		if (bucket && bucket.s !== s) closeSecond();
+		if (!bucket) bucket = {s, n: 0, ms: 0, worst: 0, draw: 0, gap: 0, dc: 0, prim: 0, vis: 0, sh: 0, nadd: 0, nrem: 0};
+		const b = bucket;
+		const at = (name) => (F[name] === undefined ? null : r[F[name]]);
+		b.n += 1; b.ms += at('dt'); b.worst = Math.max(b.worst, at('dt')); b.draw += at('draw_ms'); b.gap += at('gap');
+		b.dc += at('dc'); b.prim += at('prim_k'); b.vis += at('vis_prim_k') || 0; b.sh += at('sh_prim_k') || 0;
+		b.nadd += at('nadd'); b.nrem += at('nrem');
+		b.x = at('x'); b.z = at('z'); b.step = at('step'); b.leg = at('leg'); b.tex = at('tex_mb'); b.buf = at('buf_mb'); b.vid = at('vid_mb');
+		b.res = at('res_n'); b.nodes = at('node_n'); b.scale = at('scale'); b.msaa = at('msaa');
+	}
+	// Every record of the run kept on the device as it comes, in IndexedDB (written
+	// outside the page, so what was handed over before a kill stays; not capped as the
+	// synchronous store is): what the log gained, a chunk a second, at most KEEP_CHUNKS
+	// a run. Only the last unfinished run's chunks and this run's are kept.
+	const KEEP_DB = 'ti-trace';
+	const KEEP_STORE = 'chunks';
+	const KEEP_CHUNKS = 1800;
+	const KEPT = ['raf', 'gl', 'rows', 'events', 'programs', 'tasks', 'memory'];
+	const keptUpTo = Object.fromEntries(KEPT.map((k) => [k, 0]));
+	let keepN = 0;
+	let keepMs = 0;
+	const keepOpen = new Promise((resolve) => {
+		try {
+			const req = indexedDB.open(KEEP_DB, 1);
+			req.onupgradeneeded = () => req.result.createObjectStore(KEEP_STORE);
+			req.onsuccess = () => resolve(req.result);
+			req.onerror = () => resolve(null);
+		} catch (e) { resolve(null); }
+	});
+	let keepDb = null;
+	keepOpen.then((db) => {
+		keepDb = db;
+		if (!db) return;
+		const keepRun = ((load('previous') || {}).meta || {}).id || '';
+		try {
+			const req = db.transaction(KEEP_STORE, 'readwrite').objectStore(KEEP_STORE).openCursor();
+			req.onsuccess = () => {
+				const c = req.result;
+				if (!c) return;
+				const run = String(c.key).split('|')[0];
+				if (run !== keepRun && run !== log.id) c.delete();
+				c.continue();
+			};
+		} catch (e) { /* off */ }
+	});
+	const keepPut = (key, value) => {
+		try { keepDb.transaction(KEEP_STORE, 'readwrite').objectStore(KEEP_STORE).put(value, `${log.id}|${key}`); } catch (e) { /* full or off */ }
+	};
+	function keepChunk() {
+		if (!keepDb || !log.header || keepN >= KEEP_CHUNKS) return;
+		const began = now();
+		if (keepN === 0) keepPut('head', {header: log.header, page: log.page});
+		const chunk = {};
+		for (const k of KEPT) { chunk[k] = log[k].slice(keptUpTo[k]); keptUpTo[k] = log[k].length; }
+		keepPut(String(keepN).padStart(5, '0'), chunk);
+		keepN += 1;
+		keepMs += now() - began;
+		if (keepN % 60 === 0) event('hook', `kept ${keepN} chunks of the trace in IndexedDB, ${round(keepMs)} ms in all`);
+	}
+	// A previous run's whole log, put together from its chunks.
+	function keptLog(meta) {
+		return keepOpen.then((db) => new Promise((resolve) => {
+			if (!db || !meta || !meta.id) { resolve(null); return; }
+			const out = {version: 1, id: meta.id, previous_run: true, header: meta.header || null, page: meta.page || null, end: null};
+			for (const k of KEPT) out[k] = [];
+			let chunks = 0;
+			try {
+				const req = db.transaction(KEEP_STORE).objectStore(KEEP_STORE).openCursor(IDBKeyRange.bound(meta.id + '|', meta.id + '|\uffff'));
+				req.onsuccess = () => {
+					const c = req.result;
+					if (!c) { out.chunks = chunks; resolve(chunks ? out : null); return; }
+					const v = c.value;
+					if (v.header) { out.header = v.header; out.page = v.page; } else { chunks += 1; for (const k of KEPT) for (const x of v[k] || []) out[k].push(x); }
+					c.continue();
+				};
+				req.onerror = () => resolve(null);
+			} catch (e) { resolve(null); }
+		}));
 	}
 	setInterval(() => {
 		const [js, wasm] = mib();
 		log.memory.push([round(now()), js, wasm]);
 		if (log.header && !log.end) {
 			beat();
+			keepChunk();
 			if (log.rows.length && now() - lastSaved >= PROGRESS_MS) saveProgress();
 		}
 	}, 1000);
 
 	// The long frames so far and a row a second, kept on the device as the drive goes.
-	let frames = [];
 	function saveProgress() {
 		const began = now();
 		lastSaved = began;
-		frames = tiTraceFrames(log.raf, log.rows, log.header.fields, log.header.page_ms_at_origin, log.gl);
-		const F = {};
-		TI_TRACE_FRAME.forEach((n, i) => { F[n] = i; });
-		// The last 400 long frames (the newest kept, the oldest dropped).
-		save('long', frames.filter((fr) => fr[F.ms] >= 33).slice(-400));
-		// The engine's texture and buffer memory (MiB) at the end of each page second.
-		const fields = log.header.fields;
-		const [ti, tx, bf] = ['t', 'tex_mb', 'buf_mb'].map((n) => fields.indexOf(n));
-		const memoryAt = {};
-		for (const r of log.rows) memoryAt[Math.floor((log.header.page_ms_at_origin + r[ti]) / 1000)] = [round(r[tx]), round(r[bf])];
-		const seconds = [];
-		for (const fr of frames) {
-			const s = Math.floor(fr[F.t] / 1000);
-			const row = seconds[seconds.length - 1];
-			if (!row || row[0] !== s) seconds.push([s, 1, fr[F.ms], fr[F.ms], round(fr[F.x]), round(fr[F.z]), fr[F.step], fr[F.leg]]);
-			else { row[1] += 1; row[2] += fr[F.ms]; row[3] = Math.max(row[3], fr[F.ms]); }
-		}
-		save('seconds', seconds.slice(-900).map((r) => [r[0], r[1], round(r[2] / r[1]), round(r[3]), r[4], r[5], r[6], r[7], ...(memoryAt[r[0]] || [null, null])]));
+		// The last 400 long frames (the newest kept, the oldest dropped), from the last
+		// minute of records only: the cost of keeping them does not grow with the run.
+		const fromT = log.rows.length ? log.rows[log.rows.length - 1][F.t] - 60000 : 0;
+		let first = log.rows.length;
+		while (first > 0 && log.rows[first - 1][F.t] >= fromT) first -= 1;
+		const kept = tiTraceFrames(log.raf, log.rows.slice(first), log.header.fields, log.header.page_ms_at_origin, log.gl);
+		const L = {};
+		TI_TRACE_FRAME.forEach((n, i) => { L[n] = i; });
+		save('long', kept.filter((fr) => fr[L.ms] >= 33).slice(-400));
+		save('seconds', secondsAll);
 		// Its own cost, which the results can then tell from the game's.
 		event('hook', `kept the trace on the device in ${round(now() - began)} ms`);
 	}
@@ -680,6 +793,9 @@ function tiTraceText(env, a) {
 			log.page.canvas = canvas ? {buffer: [canvas.width, canvas.height], css: [canvas.clientWidth, canvas.clientHeight]} : null;
 			log.page.dpr_at_play = window.devicePixelRatio;
 			log.page.inner_at_play = [innerWidth, innerHeight];
+			log.page.view_at_play = view();
+			F = {};
+			log.header.fields.forEach((n, i) => { F[n] = i; });
 			save('meta', {id: log.id, status: 'running', path: log.page.path, started: new Date().toISOString(), page: log.page, header: {...log.header, route: undefined, outline: undefined}});
 			event('trace', 'drive started');
 			showStatus();
@@ -687,16 +803,23 @@ function tiTraceText(env, a) {
 		engine(json) {
 			const batch = JSON.parse(json);
 			const n = batch.fields;
-			for (let i = 0; i + n <= batch.rows.length; i += n) log.rows.push(batch.rows.slice(i, i + n));
+			for (let i = 0; i + n <= batch.rows.length; i += n) {
+				const row = batch.rows.slice(i, i + n);
+				log.rows.push(row);
+				if (F) addSecond(row);
+			}
 			const origin = log.header ? log.header.page_ms_at_origin : 0;
 			for (const e of batch.events) log.events.push([round(origin + e[0]), e[1], e[2]]);
+			if (now() - lastBeat >= BEAT_MS) beat();
 		},
 		census(json) {
 			log.census = JSON.parse(json);
 		},
 		end(json) {
+			closeSecond();
 			log.end = JSON.parse(json);
 			event('trace', 'drive ended: ' + log.end.result);
+			keepChunk();
 			saveProgress();
 			finish();
 		},
@@ -746,7 +869,7 @@ function tiTraceText(env, a) {
 		save('text', text);
 		show(text, a);
 	}
-	function show(text, a, title) {
+	function show(text, a, title, previousMeta) {
 		if (status) status.remove();
 		const panel = document.createElement('div');
 		panel.id = 'ti-trace-results';
@@ -765,6 +888,9 @@ function tiTraceText(env, a) {
 			bar.appendChild(b);
 		};
 		const full = () => JSON.stringify({...log, analysis: a});
+		// An unfinished run's whole log is read from IndexedDB on the first tap and
+		// saved on the next (a browser keeps a download to the tap that asks for it).
+		let previousLog = null;
 		button('Copy results', () => {
 			const done = () => { note.textContent = 'Copied. Paste it to ROOT.'; };
 			if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => { box.select(); note.textContent = document.execCommand && document.execCommand('copy') ? 'Copied.' : 'Copy failed: use Select all, then Copy.'; });
@@ -772,10 +898,20 @@ function tiTraceText(env, a) {
 		});
 		button('Select all', () => { box.focus(); box.select(); box.setSelectionRange(0, text.length); });
 		button('Download full log', () => {
-			const blob = new Blob([full()], {type: 'application/json'});
+			if (previousMeta && previousLog === null) {
+				previousLog = undefined;
+				note.textContent = 'Reading the unfinished run\u2019s records\u2026';
+				keptLog(previousMeta).then((kept) => {
+					previousLog = kept ? JSON.stringify(kept) : '';
+					note.textContent = kept ? `The unfinished run\u2019s log is ready (${kept.rows.length} frames): tap Download full log again.` : 'Nothing of the unfinished run was kept in IndexedDB.';
+				});
+				return;
+			}
+			if (previousMeta && !previousLog) return;
+			const blob = new Blob([previousMeta ? previousLog : full()], {type: 'application/json'});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
-			link.download = `drive-trace-${log.id.replace(/[:.]/g, '-')}.json`;
+			link.download = `drive-trace-${(previousMeta ? previousMeta.id : log.id).replace(/[:.]/g, '-')}.json`;
 			document.body.appendChild(link);
 			link.click();
 			setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 60000);
@@ -819,13 +955,16 @@ function tiTraceText(env, a) {
 			const f = hb.fields;
 			lines.push(`Last place: (${Math.round(hb.row[f.indexOf('x')])}, ${Math.round(hb.row[f.indexOf('z')])}), step ${hb.row[f.indexOf('step')]}, ${Math.round(hb.row[f.indexOf('t')] / 1000)} s into the trace; last frame times (ms): ${(hb.last_frames || []).join(' ')}`);
 			lines.push(`Last engine frame: draw ${hb.row[f.indexOf('draw_ms')]} ms, ${hb.row[f.indexOf('dc')]} draw calls, texture ${hb.row[f.indexOf('tex_mb')]} MiB, buffer ${hb.row[f.indexOf('buf_mb')]} MiB`);
+			lines.push('Last engine record: ' + JSON.stringify(Object.fromEntries(f.map((name, i) => [name, hb.row[i]]))));
 			lines.push('Last markers: ' + JSON.stringify(hb.last_events));
-			lines.push(`Memory then: JS ${hb.js_mb} MiB, WebAssembly ${hb.wasm_mb} MiB`);
+			lines.push(`Memory then: JS ${hb.js_mb} MiB, WebAssembly ${hb.wasm_mb} MiB; page then: ${hb.view || '?'} (kept at ${hb.page_ms} ms page time)`);
 		}
+		lines.push('', 'Page events (clock time, page ms, kind, what):', JSON.stringify(before.page_events || []));
+		lines.push('', `Last seconds, kept each second (${SECOND_COLUMNS}):`, JSON.stringify(before.ring || []));
 		lines.push('', 'Long frames kept (time ms, frame ms, x, z, speed, step, leg, flags, ...):', JSON.stringify(before.long || []));
-		lines.push('', 'Seconds kept (s, frames, mean ms, worst ms, x, z, step, leg, texture MiB, buffer MiB):', JSON.stringify(before.seconds || []));
+		lines.push('', `Seconds kept every 10 s (${SECOND_COLUMNS}):`, JSON.stringify(before.seconds || []));
 		lines.push('', 'Its page: ' + JSON.stringify(before.meta.page || {}), 'Its game: ' + JSON.stringify(before.meta.header || {}));
-		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish'));
+		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish', before.meta));
 		save('previous', {...before, meta: {...before.meta, status: 'shown'}});
 	}
 }());

@@ -4,6 +4,9 @@ extends RefCounted
 
 ## The two probes that settle on one capture; see _settle_reflection.
 const REFLECTION_PROBES: Array[String] = ["MerseaExteriorReflection", "MerseaBarReflection"]
+## Off only for a diagnostic run (the drive trace's probes=0, game/scripts/debug/
+## drive_trace.gd): the two probes are taken out as the world is put together.
+static var reflections_off := false
 ## The most drawn frames a probe's settling waits for it to be shown (_settle_reflection).
 const SETTLE_FRAME_LIMIT := 240
 
@@ -991,13 +994,27 @@ static func bar_golf_deck(p: Node3D,frame: Transform3D,land: Dictionary,top: flo
 static func resume_prebuilt_reflections(buildings: Node3D) -> void:
 	for probe_name: String in REFLECTION_PROBES:
 		for probe: Node in buildings.find_children(probe_name, "ReflectionProbe", true, false):
+			if reflections_off:
+				_take_out(probe)
+				continue
 			probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
 			_settle_reflection(probe, buildings)
 
 
 static func _settle_generated_reflections(assembly: Node3D) -> void:
 	for probe_name: String in REFLECTION_PROBES:
-		_settle_reflection(assembly.get_node("MerseaSite_"+POI+"/"+probe_name))
+		var probe := assembly.get_node("MerseaSite_"+POI+"/"+probe_name)
+		if reflections_off:
+			_take_out(probe)
+			continue
+		_settle_reflection(probe)
+
+
+## A probe taken out for a run without Mersea's reflections (reflections_off): before
+## startup renders it, so it never has an atlas slot or a capture.
+static func _take_out(probe: Node) -> void:
+	probe.get_parent().remove_child(probe)
+	probe.free()
 
 
 ## Keeps a probe updating until the procedural images it captures exist, then lets
