@@ -26,7 +26,7 @@ packed with ImageMagick:
 | File | Use | Source prompt (short) |
 |---|---|---|
 | `street_concrete_panels.png` | sidewalk concrete: 2 x 2 poured panels (one UV unit = one 1.5 m panel) with saw-cut joints drawn on the panel edges; broom lines turned to run across the walk, each panel toned slightly differently; also the concrete driveway skin (`road_path_concrete`) in 1.5 m panels | seamless light grey broom-finished concrete, no joints |
-| `street_mulch.png` | the plant galleries' `street_mulch` beds (`building_shots.gd`); the planting strips draw `mulch_chips.png` | seamless dark reddish-brown shredded bark mulch |
+| `street_mulch.png` | the plant galleries' `street_mulch` beds (`building_shots.gd`) and one midrise building's site mulch (`game/resources/midrise_family/r133351.json`); the planting strips draw `mulch_chips.png` | seamless dark reddish-brown shredded bark mulch |
 | `street_plaza_pavers.png` | Waterfront Plaza banded paving; band contrast pulled down to the photographed plaza | seamless charcoal and mid-grey stack-bond pavers in alternating bands |
 
 `street_legends.png` (2048 x 512, eight 256 x 512 cells, white on black) holds the
