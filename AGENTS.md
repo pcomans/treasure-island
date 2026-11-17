@@ -364,6 +364,7 @@ Detailed camera tuning, visual style beyond approved simple initial massing and 
 - Avoid recurring services and production-scale infrastructure unless their value is unusually clear.
 - Do not spend time on storefront certification, monetization, analytics, live operations, extensive legal review, or public-release polish beyond Mac notarization.
 - Keep lightweight provenance notes for reproducibility. Do not perform a legal audit.
+- The repository's own code is under the MIT licence (`LICENSE.md`) and its own assets under CC BY 4.0 (`ASSETS-CC-BY-4.0.md`), as the README's [Licence](README.md#licence) section maps them by path; third-party material keeps its own terms, as listed in the credits. The app icon and the Chester character (his name, design and likeness) are the owner's and are not licensed.
 - Shipped third-party content is credited in `game/resources/ui/credits.json`, which the pause menu's Credits screen shows (owner, 2026-11-12); sounds or other assets added later go in the same list. `game/tests/headless_credits_contract.gd` fails on an uncredited third-party folder or an undeclared image folder, so a new source or image folder gets its entry, or an `own_work` line saying how it was made, in the same change.
 
 ## Resource and access requests
