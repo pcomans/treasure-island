@@ -303,9 +303,11 @@ publishes. Build numbers count every commit, so the commits of such pushes leave
 gaps: build 1925 may follow build 1921. To build anyway, start the workflow by
 hand, which always builds: `gh workflow run mac-build.yml --ref main`.
 
-A release's notes start with what changed for players, "Changes in build
-<number>:" and the lines of every entry in [CHANGELOG.md](CHANGELOG.md) since the
-previous release. Whoever assembles a release writes its entry while assembling
+A release's notes and the itch.io downloads' `CHANGELOG.txt` start with the game's
+name and its website, https://grandtreasureisland.vercel.app/ (fixed text from
+`tools/changelog.py`, never an entry), then say what changed for players,
+"Changes in build <number>:" and the lines of every entry in
+[CHANGELOG.md](CHANGELOG.md) since the previous release. Whoever assembles a release writes its entry while assembling
 it, under the heading `tools/changelog.py next` suggests, and runs
 `tools/changelog.py check` before pushing it to `main`. The entry's number need
 not be exact: a build has its entry when the newest entry's number is above the

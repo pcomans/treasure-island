@@ -68,7 +68,8 @@
 # players' changelog (owner-requested 2026-11-16; tools/changelog.py). A build
 # has its entry when CHANGELOG.md's newest entry is numbered above the newest
 # released build in its history (build-* tags) and at most its own number; the
-# notes say "Changes in build <its number>" and take every entry since that
+# notes start with the tool's fixed header (the game's name and its website),
+# then say "Changes in build <its number>" and take every entry since that
 # release. Before it builds anything, the build job stops on main when the build
 # has no entry; it hands the notes and CHANGELOG.txt to the publish and itch jobs
 # as files (the artifact changelog), never through a run: line, an output or an
@@ -358,10 +359,12 @@ jobs:
         # The build must have its entry before anything is built: CHANGELOG.md's
         # newest entry numbered above the newest released build in its history
         # and at most this build's number. The tool writes the start of the
-        # release notes (notes.md: "Changes in build N:" and the lines of every
-        # entry since that release) and CHANGELOG.txt to files; their text never
-        # reaches a run: line, an output or the log. A run that publishes nothing
-        # (another branch, a dry run) goes on with a warning.
+        # release notes (notes.md: its first line the marker the publish job
+        # checks, then the tool's fixed header with the game's website, "Changes
+        # in build N:" and the lines of every entry since that release) and
+        # CHANGELOG.txt (the same without the marker lines) to files; their text
+        # never reaches a run: line, an output or the log. A run that publishes
+        # nothing (another branch, a dry run) goes on with a warning.
         env:
           BUILD_NUMBER: ${{ steps.number.outputs.number }}
           PUBLISHES: ${{ github.ref == 'refs/heads/main' && !inputs.dry_run }}
