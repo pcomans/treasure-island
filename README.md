@@ -10,8 +10,8 @@ Step into the shoes of Chester Schatz and live a life of leisure, exploration an
 
 ## Play it
 
-- **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 140 MB loads before you can play. Needs WebGL 2; mouse and keyboard or touch.
-- **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB), in the browser or with the [itch app](https://itch.io/app). The app is signed and notarized by Apple, so it opens normally: the first time, macOS asks once whether to open an app downloaded from the Internet. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest), under Assets, as `grand-treasure-island-mac-build-<number>.zip`.
+- **In the browser:** [grandtreasureisland.vercel.app/play](https://grandtreasureisland.vercel.app/play). About 144 MB downloads, compressed, before you can play. Needs WebGL 2; mouse and keyboard or touch.
+- **On a Mac:** get it from [phppco.itch.io/grand-treasure-island](https://phppco.itch.io/grand-treasure-island) (about 229 MB), in the browser or with the [itch app](https://itch.io/app). The app is signed with a Developer ID and notarized by Apple, so it opens normally: the first time, macOS asks once whether to open an app downloaded from the Internet; if macOS says it can't check the app, see [Build for the Mac](#build-for-the-mac). The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest), under Assets, as `grand-treasure-island-mac-build-<number>.zip`.
 - **On Linux:** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Linux build.
 - **On Windows (64-bit):** the same [itch.io page](https://phppco.itch.io/grand-treasure-island) has a Windows build (about 215 MB). Downloaded in the browser, unzip it and run `treasure-island.exe`; its `.pck` must stay beside it. The build isn't signed, so the first time you start it Windows may show "Windows protected your PC": click **More info**, then **Run anyway**. Installed through the [itch app](https://itch.io/app), it should start without that warning. The same build is on [GitHub's latest release](https://github.com/pcomans/treasure-island/releases/latest) as `grand-treasure-island-windows-build-<number>.zip`. No Windows machine has played it yet: CI starts it on Windows and loads the island, but has never seen it drawn on a Windows graphics card.
 
@@ -189,9 +189,10 @@ gh release download --pattern 'grand-treasure-island-mac-build-*.zip' --repo pco
 The zip holds `Grand Treasure Island.app`. It keeps the options chosen in any
 earlier build, so an older `Treasure Island First Playable.app` can simply go.
 
-Release builds are signed with a Developer ID and notarized by Apple, and their
-notes say "Signed and notarized (Developer ID)": after a browser download the app
-opens with only macOS's usual question about an app downloaded from the Internet.
+From build 2084 on, release builds are signed with a Developer ID and notarized
+by Apple, and their notes say "Signed and notarized (Developer ID)": after a
+browser download the app opens with only macOS's usual question about an app
+downloaded from the Internet.
 CI signs and notarizes while the repository variable `MAC_SIGNING` is `on`, as it
 is, once the owner approves the run's sign job in the GitHub environment
 `mac-signing`; the top of [mac-build.yml](.github/workflows/mac-build.yml) lists
@@ -199,8 +200,8 @@ the environment's secrets with the `gh` commands that set them. A run that canno
 notarize publishes the build job's ad-hoc signed app instead, with "not notarized"
 in the release title and the reason in its notes. That app, the Mac apps of the
 releases before build 2084 and a local `tools/build-mac.sh` build are ad-hoc
-signed and not notarized, so after a browser download macOS blocks the first launch: open System
-Settings → Privacy & Security and click "Open Anyway".
+signed and not notarized, so after a browser download macOS blocks the first
+launch: open System Settings → Privacy & Security and click "Open Anyway".
 
 To build it in the devcontainer instead:
 
@@ -450,7 +451,7 @@ does.
 
 Open https://grandtreasureisland.vercel.app/game/ and wait for the island to load:
 the page names each step as it runs, **Downloading the game** with how far along
-it is (about 145 MB travels, compressed), or **Loading the game from this device**
+it is (about 144 MB travels, compressed), or **Loading the game from this device**
 when the browser already keeps this build's game data (below), **Saving the game on
 this device…** while it stores a download, **Starting the engine…**, the
 island's load and setup, the
