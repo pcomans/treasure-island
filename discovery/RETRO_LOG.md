@@ -27457,3 +27457,4 @@ Comparing every record against the base commit found a change the author hadn't 
 ### ti-code-review licence-chester-20261117 — 2026-11-17 — review of `docs/licence-chester-20261117` at 98ae2dd9
 
 - Grepping every user of the reserved files, not only their header comments, showed the seam: `chest_avatar.gd` also plays the player's footstep, landing and jetpack sounds and starts the landing dust, `chest_avatar_parts.gd` places the contact shadow, and `drivable_car.gd` and `street_clutter_kit.gd` preload `car_driver.gd`, so a licence line saying "replace the avatar" has to name what a replacement must provide; next time, list callers before writing that line.
+- Delta at a94413a8: the reserved-files sentence now names what a replacement must provide, and the ASSETS phrase matches the README; a Markdown-only delta re-checked in a few commands, nothing re-derived.
