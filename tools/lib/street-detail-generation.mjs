@@ -29,7 +29,7 @@ import {
   validateFurnitureRules,
   validateIslandFurniture,
 } from "./street-furniture-generation.mjs";
-import { STREET_GROUND_RULES_PATH } from "./street-ground-generation.mjs";
+import { STREET_GROUND_RULES_PATH, validateOsmException } from "./street-ground-generation.mjs";
 import {
   PAVING_CLEAR_M,
   crownRadius,
@@ -128,6 +128,10 @@ export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "door",
   "approach",
 ]);
+
+// The street-detail zones that are recorded exceptions to the frozen OSM layout (owner
+// approval in each zone's osm_exception); a new one needs a code change here.
+const EXCEPTION_ZONE_IDS = Object.freeze(["isle_house_park"]);
 
 function pointKind(layer, footprintRadiusM, yawRule) {
   return Object.freeze({ layer, geometry: "point", footprint_radius_m: footprintRadiusM, yaw_rule: yawRule, overhead: false });
@@ -647,6 +651,14 @@ export function loadStreetDetailZones(projectRoot) {
       invariant(isFiniteNumber(shape.half_width_m) && shape.half_width_m > 0, `Street detail zone ${zone.id} corridor needs a positive half_width_m`);
     } else {
       throw new Error(`Street detail zone ${zone.id} shape must be polygon or corridor`);
+    }
+    // A zone drawn where the frozen OSM snapshot has nothing of its kind (the park outside
+    // Isle House, an untagged lot in the snapshot) records that exception as a street-ground
+    // lot does, with the same check (validateOsmException): its id on EXCEPTION_ZONE_IDS,
+    // the reason, the owner's approval, the dated source and the outline, the zone's own.
+    if (zone.osm_exception !== undefined) {
+      validateOsmException(zone.osm_exception, zone.id, EXCEPTION_ZONE_IDS, `Street detail zone ${zone.id}`);
+      invariant(shape.type === "polygon" && JSON.stringify(zone.osm_exception.outline_xz) === JSON.stringify(shape.points_xz), `Street detail zone ${zone.id} osm_exception outline must be the zone's polygon`);
     }
     invariant(Array.isArray(zone.scatter), `Street detail zone ${zone.id} scatter must be a list`);
     const ruleIds = new Set();

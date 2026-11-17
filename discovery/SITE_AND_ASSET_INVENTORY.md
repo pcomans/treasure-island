@@ -96,6 +96,7 @@ below use. Place #8 is two zones. The zones the tree push added are in
 | Avenue of the Palms | `avenue_of_the_palms` | 3 est. | Step 1 parking lanes and mulch strips (strip order PASS at `25d2eeb5`); step 2 stop signs and name blades; step 4 curb cars PASS; step 5 palms and bed grasses PASS; Cityside panel fence (step 3) | 4: materials and paint wear |
 | Building 1 forecourt | `building_1_forecourt`; w96665914 | 2 est. | Step 1 lot asphalt (two-tone fixed in round 2); step 2 fix round added the exit stop sign and lot lights (delta PASS); step 4 lot-stall cars PASS | 3: the planted island at the exit that the Sep 2025 photo shows (the stop sign stands on lot asphalt instead) |
 | Cityside Park | `cityside_park`; w1428380753 | 3 est. | Whole-park visual PASS at `9807b468` and code PASS: lawn, stormwater beds, coastal gardens, paths, painted plazas, windrow gums and set pieces (Canopy of Sky, disc lamps, event poles, long benches, picnic tables, grills, log seats, pump station). Sidewalk-spill fix PASS | 4: materials |
+| The park outside Isle House | `isle_house_park`; untagged lot (OSM exception, owner 2026-11-15) | 2 est. (study) | Study from the owner's video of 2026-11-15 and the 2026-05-26 aerial: lobed lawn, raised north-west end, mulch beds, planted basin (visual only), verge, young staked pines and saplings, chairs, timber block benches, weathered and forked logs, disc lamps. Rounds 1-4 reviewed: visual PASS WITH NOTES ("may ship"), code PASS WITH NOTES. Round 5 (2026-11-16): the bank behind the avenue's west sidewalk by the north tip falls from the sidewalk's back; held on the owner's call about the avenue's hump (the street and sidewalk stand up to 2.0 m above the lawn there) | 3: the avenue kerb strip of palms and grasses, the bed triangle's planting at the north tip, the bike path's markings, the sign face and the sides not filmed |
 | #1 Central self-storage complex | `yard_central_storage`; ground on w96698665 | 2 est. | Yards A visual rounds, code PASS at `a63b6188`: shed rows, container walls and rows, vehicle lot, screened and slatted fences, pole flags and floodlights | 3: secondary items (signage, small props) from the dated photos |
 | #2 CityView Storage main lot | `yard_cityview_main` | 2 est. | Yards A (as #1): RV, truck, bus and boat rows, sheds, container-walled Avenue M side | 3: secondary items |
 | #3 Avenue H truck and trailer lot | `yard_avenue_h_truck_lot` | 2 est. | Yards A (as #1): trucks, vans, trailers, containers; cones and barricades at the gate | 3: secondary items |
@@ -387,6 +388,20 @@ All are used round the whole island: ten segments and seven closures.
 | Marsh plants: pale-seeded shrub 3–5, `marsh_stems`, `marsh_mat`, `marsh_brush`, `marsh_fringe`, `marsh_stones` | The ditch's banks and floor (`marsh_atlas.png`) | | From the owner's video and bank photo, Nov 2026; not yet reviewed | Rate |
 | Young planting (`young_planting`) | The Mersea promenade's mulch on both sides | | From the owner's video, Nov 2026, crossed cards; not yet reviewed | Rate |
 | Slim old palm (date palm variant 6) | The lawn by the Mersea promenade, one | | From the owner's video, Nov 2026, with its own baked far impostor; not yet reviewed | Rate |
+
+### Breakwater birds
+
+[`game/scripts/world/breakwater_birds.gd`](../game/scripts/world/breakwater_birds.gd), built
+under the ferry breakwater (OSM w1011830371) by `ferry_terminal.gd` (2026-11-15/16). The
+owner named the three birds and their poses, a standing and a sitting version of every bird,
+and about a hundred of them; forms and colours are production inference from public species
+photos. Placed by a seeded colony and cluster rule along the breakwater's cap.
+
+| Asset | Where used | Level | Evidence | Next level |
+|---|---|---|---|---|
+| Brown pelican (bill out, bill tucked, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`: "convincing"); the tucked and sitting poses reworked in round 3 (reviewed PASS WITH NOTES), the primaries given relief in round 4, not yet reviewed | Rate |
+| Double-crested cormorant (wings folded, wings spread to dry, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); the neck, bill and lying pose reworked in round 3 (reviewed PASS WITH NOTES), the head, neck and bill narrowed in round 4, not yet reviewed | Rate |
+| Western gull (standing, sitting) | the ferry breakwater's cap | | Visual reviews PASS WITH NOTES (`57157271`, `f7d98ea9`); reworked in rounds 2 and 3 after the owner found the gulls too cute (darker slate back, smaller head, the sitting gull long and low; round 3 reviewed PASS WITH NOTES), the brow, breast, wing edge and neck refined in round 4, not yet reviewed | Rate |
 
 ### Player
 

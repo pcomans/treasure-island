@@ -157,7 +157,9 @@
       "opaque": false,
       "receiver_kind": "none",
       "source_keys": [
+        "w1212173444",
         "w1252737754",
+        "w1370667325",
         "w1428380753"
       ],
       "surface_bias_m": 0.1,

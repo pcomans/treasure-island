@@ -11,6 +11,7 @@
 // normal it is given.
 
 import earcut from "earcut";
+import polygonClipping from "polygon-clipping";
 
 import { buildCar, buildCarTyre, carBodyGeometry, clamp, lerp, MeshBuilder, v3, vadd, vcross, vdot, vlen, vnorm, vscale, vsub } from "./street-clutter-kit.mjs";
 import { CONTAINER_LENGTHS, CONVEYOR_FOOT_M, CONVEYOR_INCLINE, CONVEYOR_MODULE_M, STUNT_RAMP_SIDE, STUNT_RAMP_VARIANTS, YARD_KIT_PART_SLOTS, YARD_KIT_PARTS, stuntRampProfile } from "./street-yard-kit.mjs";
@@ -166,7 +167,8 @@ function polygonFace(out, origin, u, v, outer, holes, normal, part, ao = 1) {
 // (mid: its [z, y] midpoint, band: "face" across the flat middle of the
 // width, "round" over the rounded edges); return null to leave it out.
 // side: {part, holes: [{points: [[z, y]...], part}]} draws the two flat side
-// faces (holes filled with their own part, coplanar).
+// faces (holes filled with their own part, coplanar; a hole reaching past a
+// side's outline is cut and filled only where it lies on the side).
 function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoothDeg = 30, aoEdge = () => 1 }) {
   // The far level draws rounded window corners chamfered.
   if (side && out.lod > 0) side = { ...side, holes: (side.holes ?? []).map((hole) => (hole.rect ? { ...hole, points: hole.rect } : hole)) };
@@ -261,20 +263,34 @@ function sweptBody(out, { profile, hw, r = 0.08, steps = 3, partEdge, side, smoo
       }
     }
   }
-  // Side faces: the inset profile at x = ±hw, with coplanar holes.
+  // Side faces: the inset profile at x = ±hw less its holes, each hole filled
+  // with its own part in the same plane, so every point of a side is drawn
+  // once. earcut cuts holes that lie inside the profile. A hole that reaches
+  // past it (a cab window running into the windshield's rounded edge) would
+  // cross earcut's outer ring and leave the side's triangles over the window,
+  // the two z-fighting, so such a side is cut by polygon clipping instead: its
+  // holes are cut out and filled only where they lie on the side.
   if (side) {
-    const ring = rings.at(-1).points;
-    const outer = ring.map((point) => [point[0], point[1]]);
+    const outer = rings.at(-1).points.map((point) => [point[0], point[1]]);
     for (const sign of [1, -1]) {
+      const origin = v3(sign * hw, 0, 0);
+      const normal = v3(sign, 0, 0);
       // A hole may belong to one side only (a door on the right).
       const holes = (side.holes ?? []).filter((hole) => !hole.side || hole.side === sign);
-      polygonFace(out, v3(sign * hw, 0, 0), Z, Y, outer, holes.map((hole) => hole.points), v3(sign, 0, 0), side.part, side.ao ?? 1);
+      const clip = holes.some((hole) => polygonClipping.difference([hole.points], [outer]).length > 0);
+      // A polygon-clipping result's pieces (closed rings: an outline, then its holes) on this side.
+      const pieces = (result, part, ao) => {
+        for (const [ring, ...inner] of result) polygonFace(out, origin, Z, Y, ring.slice(0, -1), inner.map((hole) => hole.slice(0, -1)), normal, part, ao);
+      };
+      if (clip) pieces(polygonClipping.difference([outer], ...holes.map((hole) => [hole.points])), side.part, side.ao ?? 1);
+      else polygonFace(out, origin, Z, Y, outer, holes.map((hole) => hole.points), normal, side.part, side.ao ?? 1);
       for (const hole of holes) {
         // A hole is filled with its part, or with its own fills (panes and
         // pillars of one window band, which must not touch as separate holes).
         for (const fill of hole.fills ?? [hole]) {
           if (fill.part === null) continue;
-          polygonFace(out, v3(sign * hw, 0, 0), Z, Y, fill.points, [], v3(sign, 0, 0), fill.part, fill.ao ?? 1);
+          if (clip) pieces(polygonClipping.intersection([fill.points], [outer]), fill.part, fill.ao ?? 1);
+          else polygonFace(out, origin, Z, Y, fill.points, [], normal, fill.part, fill.ao ?? 1);
         }
       }
     }

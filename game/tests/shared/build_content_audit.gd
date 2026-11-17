@@ -1,13 +1,18 @@
 extends SceneTree
 ## Checks an exported game data pack (.pck) contains only game files: no
-## reference photos (Street View etc.), research, evidence or source assets.
-## Run against the pack itself, so res:// is exactly what the build contains:
+## reference photos (Street View etc.), research, evidence or source assets; and
+## that it carries the stamp of the build that made it, which the pause menu shows
+## (game/scripts/ui/build_stamp.gd): the build number and commit its build script
+## gave the export, given here the same way. Run against the pack itself, so
+## res:// is exactly what the build contains:
 ##
-##   tools/godot --headless --main-pack /abs/path/game.pck --script res://game/tests/shared/build_content_audit.gd
+##   TI_BUILD_NUMBER=<tools/build-number> TI_BUILD_COMMIT=<commit> tools/godot --headless --main-pack /abs/path/game.pck --script res://game/tests/shared/build_content_audit.gd
 ##
-## tools/build-mac.sh runs this on every build. This script must stay in the
-## export (it runs from inside the pack), so don't exclude game/tests/shared/.
+## tools/build-mac.sh, tools/build-linux.sh and tools/build-web.sh run this on
+## every build. This script must stay in the export (it runs from inside the
+## pack), so don't exclude game/tests/shared/.
 
+const BuildStamp := preload("res://game/scripts/ui/build_stamp.gd")
 ## The only top-level entries a build may contain.
 const ALLOWED_TOP_LEVEL := ["game", "generated", ".godot", "project.binary"]
 ## Images may only come from the game's own asset folder.
@@ -28,8 +33,12 @@ func _initialize() -> void:
 		var problem := _check(path.trim_prefix("res://"))
 		if problem != "":
 			problems.append(problem)
+	var stamp := BuildStamp.read()
+	var wrong_stamp := stamp_problem(stamp, OS.get_environment("TI_BUILD_NUMBER"), OS.get_environment("TI_BUILD_COMMIT"))
+	if wrong_stamp != "":
+		problems.append(wrong_stamp)
 	if problems.is_empty():
-		print("PASS: %d files in the build, all game files" % files.size())
+		print("PASS: %d files in the build, all game files; stamped build %d, commit %s, as its pause menu says: \"%s\"" % [files.size(), stamp.build, stamp.commit, BuildStamp.text(stamp, true)])
 		quit(0)
 	else:
 		for problem in problems:
@@ -49,6 +58,21 @@ func _check(path: String) -> String:
 	var is_image := source.get_extension().to_lower() in IMAGE_EXTENSIONS or has_image_bytes(path)
 	if is_image and not source.begins_with(IMAGE_FOLDER) and not path.begins_with(".godot/"):
 		return "%s is an image outside %s" % [path, IMAGE_FOLDER]
+	return ""
+
+
+## Why a pack's build stamp (as BuildStamp.read gives it) is not the stamp of the
+## build its script made, whose number (tools/build-number) and commit it gave the
+## export and this check as TI_BUILD_NUMBER and TI_BUILD_COMMIT, read by the
+## export's own rule (BuildStamp.from_values); "" when it is.
+static func stamp_problem(stamp: Dictionary, number: String, commit: String) -> String:
+	var expected := BuildStamp.from_values(number, commit)
+	if expected.is_empty():
+		return "TI_BUILD_NUMBER (\"%s\") and TI_BUILD_COMMIT (\"%s\") must give this build's number and commit: its build script sets them, for the export that stamps the pack and for this check" % [number, commit]
+	if stamp.is_empty():
+		return "%s is missing or unreadable: the export plugin (addons/generated_world_export) stamps each export with TI_BUILD_NUMBER and TI_BUILD_COMMIT" % BuildStamp.PATH
+	if stamp != expected:
+		return "%s names build %d, commit %s, not this build's %d, commit %s" % [BuildStamp.PATH, stamp.build, stamp.commit, expected.build, expected.commit]
 	return ""
 
 

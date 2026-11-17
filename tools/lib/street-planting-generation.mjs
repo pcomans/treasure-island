@@ -87,7 +87,7 @@ export const PLANT_WIDTHS_M = Object.freeze({
   indian_hawthorn: Object.freeze([2.0, 2.5, 3.0]),
   island_oak_young: Object.freeze([1.0, 1.2, 1.4]),
   monterey_cypress: Object.freeze([17.0, 12.5, 2.0, 1.4, 1.1]),
-  monterey_pine: Object.freeze([4.0, 5.0, 6.0, 3.0, 3.6, 4.2]),
+  monterey_pine: Object.freeze([4.0, 5.0, 6.0, 3.0, 3.6, 4.2, 1.5, 1.7, 1.9]),
   norfolk_island_pine: Object.freeze([2.0, 2.4]),
   nz_christmas_tree: Object.freeze([3.0, 3.4]),
   nz_flax: Object.freeze([1.4, 1.7, 2.0, 1.5]),
@@ -111,6 +111,12 @@ export const PLANT_WIDTHS_M = Object.freeze({
   weeping_broadleaf: Object.freeze([2.5, 2.5]),
   sydney_blue_gum_young: Object.freeze([0.8, 0.8, 0.8]),
   white_umbel_perennial: Object.freeze([0.32, 0.42, 0.52]),
+  staked_sapling: Object.freeze([1.3, 1.5, 1.7]),
+  red_stem_shrub: Object.freeze([0.6, 0.85, 1.1]),
+  coastal_mound_shrub: Object.freeze([1.1, 1.4, 1.7]),
+  magenta_rosette: Object.freeze([0.45, 0.6, 0.75]),
+  california_fuchsia: Object.freeze([0.6, 0.85, 1.1]),
+  silver_cushion: Object.freeze([0.4, 0.55, 0.7]),
 });
 const DRIFT_VARIANTS = Object.freeze({
   blue_eyed_grass: Object.freeze([3]),
@@ -134,7 +140,8 @@ const EDGE_CLEAR_M = 0.1;
 // piers), that no crown reaches over; so is any ground added later until it is
 // listed here.
 export const SPILL_GROUNDS = Object.freeze([
-  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_gravel", "park_lawn", "park_mulch", "promenade_mulch", "promenade_rock",
+  "land_ground", "major_area_amenity", "major_area_landuse", "major_area_leisure", "park_chips", "park_chips_damp", "park_chips_pale", "park_gravel", "park_lawn", "park_lawn_turf",
+  "park_mulch", "promenade_mulch", "promenade_rock",
   "street_kerb_planting", "street_kerb_verge", "terrain_riprap", "terrain_sand", "terrain_wetland",
 ]);
 const SPILL = new Set(SPILL_GROUNDS);

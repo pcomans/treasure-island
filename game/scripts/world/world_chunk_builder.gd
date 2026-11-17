@@ -50,6 +50,9 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
+## Wood-chip mulch surfaces (mulch_ground.gd GRADES: the parks' beds and chips, the
+## promenade's bark and the street planting strips): the shared chip shader.
+const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
 ## Yerba Buena Island's ground (context:ybi): its own shader and cover map.
 const YBI_GROUND := preload("res://game/scripts/world/ybi_ground.gd")
 ## YBI's photographed façades and its summit sculpture.
@@ -87,21 +90,20 @@ const STREET_DECAL_MATERIALS := {
 ## Raised street-ground tops in their own generated textures, which carry the
 ## colour (no tint, so neither renderer pushes them past white): sidewalk concrete
 ## in 1.5 m poured panels with saw-cut joints (UV unit = one panel; the texture
-## holds two by two), mulch in planting strips (2 m tiles) and banded plaza
-## pavers (UV unit = one texture).
+## holds two by two) and banded plaza pavers (UV unit = one texture). The planting
+## strips' mulch is MULCH_GROUND's.
 const STREET_GROUND_SURFACES := {
 	"street_kerb_concrete": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9},
 	# The Johnson St lot's curb: the same panels, darkened to the weathered grey of
 	# the owner's November 2026 photographs (a tint under 1 stays clear of white).
 	"street_kerb_lot": {"albedo": preload("res://game/resources/textures/world/street/street_concrete_panels.png"), "uv_scale": 0.5, "roughness": 0.9, "tint": Color(0.68, 0.65, 0.62)},
-	"street_kerb_planting": {"albedo": preload("res://game/resources/textures/world/street/street_mulch.png"), "uv_scale": 1.0, "roughness": 1.0},
 	"street_plaza_pavers": {"albedo": preload("res://game/resources/textures/world/street/street_plaza_pavers.png"), "uv_scale": 1.0, "roughness": 0.85},
 	# Park ground (park_* records): grey pea gravel along the riprap (the
 	# vegetation kit's park texture), the new dark asphalt paths and the
 	# decomposed-granite paths in 2 m tiles of the world UV, the promenade and
 	# garden paths in 3 m poured panels (one UV unit a panel, warm buff
 	# concrete), and the pink-painted concrete stripes under the Canopy of Sky
-	# (ph05, Sep 2025). The beds' mulch is PARK_BED below.
+	# (ph05, Sep 2025). The beds' mulch is MULCH_GROUND's.
 	"park_asphalt": {"albedo": preload("res://game/resources/textures/world/street/park_asphalt.png"), "uv_scale": 5.0, "roughness": 0.92, "specular": ASPHALT_SPECULAR},
 	"park_paint_pink": {"albedo": preload("res://game/resources/textures/world/street/street_paint_wear.png"), "uv_scale": 5.0, "roughness": 0.85, "tint": Color(0.86, 0.55, 0.58)},
 	"park_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95},
@@ -133,11 +135,14 @@ const STREET_GROUND_SURFACES := {
 	# The Johnson St lot's new, dark asphalt (the same tiles, darkened and a little warmer).
 	"yard_asphalt_fresh": {"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"), "uv_scale": 4.76, "roughness": 1.0, "specular": ASPHALT_SPECULAR, "tint": Color(0.84, 0.82, 0.81)},
 	# The Mersea promenade's verges (owner video IMG_0960, 2026-11-06): buff decomposed
-	# granite, grey-brown bark mulch and dark crushed rock, and the warm poured slab at
-	# its south end, low in specular so the sky's sheen doesn't wash them out at a
-	# walker's grazing angle. Its asphalt is PROMENADE_PAVEMENT's.
+	# granite and dark crushed rock, and the warm poured slab at its south end, low in
+	# specular so the sky's sheen doesn't wash them out at a walker's grazing angle. Its
+	# asphalt is PROMENADE_PAVEMENT's, its bark mulch MULCH_GROUND's.
 	"promenade_dg": {"albedo": preload("res://game/resources/textures/world/street/park_dg.png"), "uv_scale": 5.0, "roughness": 1.0, "specular": 0.2, "tint": Color(0.52, 0.545, 0.57)},
-	"promenade_mulch": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.42, 0.405, 0.375)},
+	# The park outside Isle House (owner video, 2026-11-15): a pale grey gravel patch
+	# by the forked log (f_058), the bark texture paled. Its beds' chips and the damp
+	# stormwater basin are wood-chip mulch (MULCH_GROUND).
+	"park_chips_pale": {"albedo": preload("res://game/resources/textures/world/street/promenade_bark_mulch.png"), "uv_scale": 5.5, "roughness": 1.0, "specular": 0.2, "tint": Color(0.84, 0.83, 0.8)},
 	"promenade_rock": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.62, 0.61, 0.57)},
 	"promenade_slab": {"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"), "uv_scale": 4.0, "roughness": 0.95, "specular": 0.25, "tint": Color(0.71, 0.69, 0.65)},
 	"yard_gravel": {"albedo": preload("res://game/resources/textures/world/vegetation/park_gravel.png"), "uv_scale": 5.0, "roughness": 0.97, "tint": Color(1.22, 1.2, 1.15)},
@@ -179,14 +184,6 @@ const PROMENADE_PAVEMENT := {
 	"promenade_seal": {"tile_m": 0.62, "contrast": 0.55, "tone": Color(0.485, 0.51, 0.54), "wear": 0.3},
 }
 
-## A park's planted beds (park_mulch records): the vegetation kit's dark
-## grey-brown shredded mulch in 2 m tiles of the world UV, blending to the
-## beds' planted colour beyond the low plants' range
-## (game/resources/materials/world/street/park_bed.gdshader).
-const PARK_BED_MATERIAL_KEY := "park_mulch"
-const PARK_BED_SHADER := preload("res://game/resources/materials/world/street/park_bed.gdshader")
-const PARK_BED_MULCH := preload("res://game/resources/textures/world/vegetation/park_mulch.png")
-const PARK_BED_UV_SCALE := 5.0
 ## Painted park plazas (park_plaza_* records): game/resources/materials/world/street/park_paving.gdshader
 ## draws the pattern in the plaza's own frame (UV in metres); colours read from the dated photos.
 const PARK_PAVING_SHADER := preload("res://game/resources/materials/world/street/park_paving.gdshader")
@@ -264,7 +261,6 @@ var _materials: Dictionary = {}
 var _street_decal_materials: Dictionary = {}
 var _street_ground_materials: Dictionary = {}
 var _park_paving_materials: Dictionary = {}
-var _park_bed: ShaderMaterial
 var _generic_roof_material: StandardMaterial3D
 var _ybi_ground_material: ShaderMaterial
 
@@ -861,8 +857,8 @@ func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	var placeholder_material: Material
 	if STREET_DECAL_MATERIALS.has(str(record.material_key)):
 		placeholder_material = _street_decal_material(str(record.material_key))
-	elif str(record.material_key) == PARK_BED_MATERIAL_KEY and not uvs.is_empty():
-		placeholder_material = _park_bed_material()
+	elif MULCH_GROUND.is_mulch(str(record.material_key)) and not uvs.is_empty():
+		placeholder_material = MULCH_GROUND.material(str(record.material_key))
 	elif STREET_GROUND_SURFACES.has(str(record.material_key)) and not uvs.is_empty():
 		placeholder_material = _street_ground_material(str(record.material_key))
 	elif PROMENADE_PAVEMENT.has(str(record.material_key)):
@@ -1071,17 +1067,6 @@ func _promenade_pavement_material(material_key: String) -> ShaderMaterial:
 	material.set_shader_parameter("wear", pavement.wear)
 	_street_ground_materials[material_key] = material
 	return material
-
-
-## The shared material for a park's planted beds.
-func _park_bed_material() -> ShaderMaterial:
-	if _park_bed == null:
-		_park_bed = ShaderMaterial.new()
-		_park_bed.resource_name = PARK_BED_MATERIAL_KEY
-		_park_bed.shader = PARK_BED_SHADER
-		_park_bed.set_shader_parameter("mulch", PARK_BED_MULCH)
-		_park_bed.set_shader_parameter("uv_scale", PARK_BED_UV_SCALE)
-	return _park_bed
 
 
 ## The shared material for a painted park plaza.

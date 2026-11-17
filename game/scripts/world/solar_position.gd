@@ -20,8 +20,10 @@ const UNIX_EPOCH_JD := 2440587.5
 
 
 ## The sun at `unix_seconds` (UTC) from latitude and longitude (degrees, north and
-## east positive): {elevation_deg (refracted), azimuth_deg, hour_angle_deg (negative
-## before solar noon, positive after), equation_of_time_min, declination_deg}.
+## east positive): {elevation_deg (refracted), geometric_elevation_deg (the same
+## before refraction: sunrise and sunset, DayClock.sun_times), azimuth_deg,
+## hour_angle_deg (negative before solar noon, positive after),
+## equation_of_time_min, declination_deg}.
 static func at(unix_seconds: float, latitude: float, longitude: float) -> Dictionary:
 	# The Node tool's julianDay(date) + local hours less the offset, for a UTC instant.
 	var jd := UNIX_EPOCH_JD + unix_seconds / 86400.0
@@ -68,6 +70,7 @@ static func at(unix_seconds: float, latitude: float, longitude: float) -> Dictio
 	var azimuth := fmod(angle + 180.0, 360.0) if hour_angle > 0.0 else fmod(540.0 - angle, 360.0)
 	return {
 		"elevation_deg": geometric + refraction,
+		"geometric_elevation_deg": geometric,
 		"azimuth_deg": azimuth,
 		"hour_angle_deg": hour_angle,
 		"equation_of_time_min": equation_of_time,

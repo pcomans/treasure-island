@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Runs every test. Must pass before anything is pushed to main.
+# Runs every test. Must pass before a change to the game, its data or its tests
+# is pushed to main (AGENTS.md, Tests).
 #
 #   tools/test.sh
 #
@@ -13,15 +14,28 @@
 #    it waits through a slow start and stops at once when Weston exits; every run
 #    gets the Dummy audio driver unless it names its own. And how tools/browser
 #    stops (tools/check_browser_cleanup.sh): it closes its sessions, names and
-#    stops what is left, and nothing it starts holds its caller's lock.
-# 4. The behaviour tests: the game parses, loads and plays, and every building
+#    stops what is left, and nothing it starts holds its caller's lock. And
+#    tools/build-number (tools/check_build_number.sh): each newer head of main
+#    gets a larger build number, and a shallow clone is refused. And
+#    tools/docs-only (tools/check_docs_only.sh): only Markdown counts as
+#    documentation, so only a push of Markdown alone skips the Mac build. And
+#    the web build's path check (tools/check_web_paths_selftest.sh): a page
+#    that loads a file from outside its own folder fails. And the players'
+#    changelog tool and CHANGELOG.md (tools/check_changelog.sh): a build
+#    without its entry, or a badly written entry, fails. And the web page's
+#    build cache (tools/check_web_build_files.mjs): a pack stored on the device
+#    loads without a download, and a short or failed download is never stored.
+# 4. Every shader under game/ compiles and draws, with each define it tests, on
+#    Forward+ and on the Compatibility renderer the web build uses
+#    (game/tests/shader_compile_check.gd).
+# 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
 #    Where the private sounds are fetched, the tests marked "# sfx:
 #    takes-dependent" run again without them (--no-sfx): a checkout without the
 #    sounds must pass too, and a test that reads what the sound manager plays
 #    without the mark or takes of its own fails the suite.
-# 5. The generated-world checks, including the street-detail clearance check:
+# 6. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
 #    approaches, the spawn or the QA corridors. They run in the background
 #    beside the long Godot stages, and their results come last.
@@ -32,8 +46,8 @@ export PATH="/usr/local/share/nvm/current/bin:${PATH}"
 failed=()
 
 # Godot can exit 0 after a script or engine error, so its output is checked too.
-# A clean run prints no ERROR lines at all.
-godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
+# A clean run prints no ERROR lines at all, and no shader error.
+godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR|SHADER ERROR'
 
 echo "== junk check"
 command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }
@@ -109,6 +123,43 @@ tools/check_godot_weston_wait.sh || failed+=("tools/check_godot_weston_wait.sh")
 # running, and nothing it starts holds its caller's lock. About 7 s.
 echo "== tools/check_browser_cleanup.sh"
 tools/check_browser_cleanup.sh || failed+=("tools/check_browser_cleanup.sh")
+
+# tools/build-number, the releases' build number, in a throwaway repository
+# shaped like main's history (commits, merges, a fast-forward to a branch that
+# merged main): each newer head gets a larger number, a partial clone gives the
+# same, and a shallow clone is refused. About a second.
+echo "== tools/check_build_number.sh"
+tools/check_build_number.sh || failed+=("tools/check_build_number.sh")
+
+# tools/docs-only, which lets a push to main of documentation alone skip the
+# Mac build: Markdown is documentation, and the building catalog JSON, workflow,
+# images, scripts, Godot settings and generated data are code. Instant.
+echo "== tools/check_docs_only.sh"
+tools/check_docs_only.sh || failed+=("tools/check_docs_only.sh")
+
+# tools/check_web_paths.py, which tools/build-web.sh runs on the exported page,
+# on a page shaped like Godot's export: it passes, a link out of the game
+# included, and fails a script from the site's root, a pack from another origin,
+# a <base> element and a missing file. Offline, under a second.
+echo "== tools/check_web_paths_selftest.sh"
+tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh")
+
+# tools/changelog.py, which the release workflow and the integrator run, in a
+# throwaway repository with tagged releases: a build with an entry since the
+# last release passes and one without fails, every break of CHANGELOG.md's
+# format fails, the notes carry the build's real number and every unreleased
+# entry, and the repository's own CHANGELOG.md reads well. Offline, a few
+# seconds.
+echo "== tools/check_changelog.sh"
+tools/check_changelog.sh || failed+=("tools/check_changelog.sh")
+
+# The web page's build cache (tiBuildFiles in game/web/shell.html), with stand-ins
+# for the browser's file system, locks, HTTP cache and network: a stored pack loads
+# without a download, a new build replaces the old one, a short or failed download is
+# never stored, and without storage (or storage that never answers) the pack comes
+# from the network. Node only, about 30 s.
+echo "== tools/check_web_build_files.mjs"
+node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mjs")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
@@ -196,6 +247,7 @@ tests=(
   game/tests/headless_gameplay_contract.gd
   game/tests/headless_touch_controls.gd
   game/tests/headless_credits_contract.gd
+  game/tests/headless_build_label_contract.gd
   game/tests/headless_shadow_options_contract.gd
   game/tests/headless_day_clock_contract.gd
   game/tests/headless_world_material_contract.gd
@@ -206,6 +258,7 @@ tests=(
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
   game/tests/headless_shore_lift.gd
+  game/tests/headless_breakwater_birds.gd
   game/tests/headless_fast_drop.gd
   game/tests/headless_vehicle_contract.gd
   game/tests/headless_car_stance.gd
@@ -259,6 +312,16 @@ sfx_selection() {
   done
   return "${status}"
 }
+# Every shader compiles on both renderers the game ships with: Forward+ (desktop) and
+# the Compatibility renderer (the web build's), which alone compiles each shader's
+# CURRENT_RENDERER == RENDERER_COMPATIBILITY branches. Drawn, so not headless.
+for method in forward_plus gl_compatibility; do
+  echo "== game/tests/shader_compile_check.gd (${method})"
+  driver=()
+  [ "${method}" != gl_compatibility ] || driver=(--rendering-driver opengl3)
+  check_godot "game/tests/shader_compile_check.gd (${method})" 300 tools/godot --rendering-method "${method}" "${driver[@]}" --path . --audio-driver Dummy --script game/tests/shader_compile_check.gd
+done
+
 echo "== sound-state tests"
 silent_tests=()
 if selection="$(sfx_selection "${tests[@]}")"; then

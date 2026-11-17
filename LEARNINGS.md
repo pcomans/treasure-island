@@ -727,6 +727,21 @@ runtime supports or executes a diagnostic entrypoint. Before comparing an
 isolation, require actual changed-property counts and a before-draw marker; the
 subsequent query-gated game hook supplied both without modifying engine code.
 
+## Drive an exported pack with the editor binary, not the release template
+
+On 2026-11-16 the exported Linux build (Godot 4.7.2's release template), started
+with `--script /abs/capture_pause.gd`, ran its own main scene instead: none of the
+driver's lines, no image, and its one engine line was the mouse capture the driver
+turns off. It was stopped by PID after four minutes (`build-label-20261116`, run
+G4). The template holds the string `--script` but did not run the driver; the
+silent driver on the release web build (previous lesson) may share that cause,
+unverified. To check what an exported pack holds or does, run the editor binary on
+it from an empty folder with `--main-pack <pck> --script ...`, as the content audit
+does. There `OS.has_feature("template")` is false, so a check of export-only
+behaviour must take that branch explicitly and say so. Have a driver print a line
+from `_initialize` and stop the run when that line has not appeared within a
+minute, rather than waiting out the slot's limit.
+
 ## Preserve texture channels that carry shader data
 
 Reviewing the 2026-11-08 VRAM-compression change found that BC3 altered all four
@@ -765,6 +780,12 @@ viewport and 3× scale but no touch: `navigator.maxTouchPoints` stayed 0 and the
 controls. Holding `Emulation.setTouchEmulationEnabled` from the check's own CDP session, attached to
 agent-browser's page before it opened the game and kept alive to the end, gave 5 touch points through the
 load and a later `set viewport` turn to landscape.
+
+On 2026-11-16 (`home-screen-20261116`) Chrome 154's `Emulation.setSafeAreaInsetsOverride`, held from that same
+session, gave the page an iPhone's `env(safe-area-inset-*)` (the shell's `--safe-*`). One turn went ahead before
+the new insets reached the page, and the touch controls, which read the insets only on a resize, kept the old
+ones: the pause button sat under the emulated status bar. A phone's rotation brings both at once, so set the
+insets, wait until the page itself reads them, then change the viewport.
 
 A new worktree may lack Git author identity even when prior bot commits exist.
 Before a build that requires a committed tree, check `git var GIT_AUTHOR_IDENT`;
@@ -1418,3 +1439,15 @@ GDScript's `float` is 64-bit, but `Vector2` and `Vector3` store 32-bit component
 ## Test a paid or irreversible step's premise in the cheapest real way first
 
 The Mac notarization work (2026-11-14) planned on the claim that notarizing with an Apple ID and an app-specific password needs no App Store Connect access. A one-minute local `xcrun notarytool history` with the owner's credential answered HTTP 403, which no documentation had settled. Before secrets go into CI, money is spent or a step is hard to undo, find the smallest real check of the claim it rests on and run it, and keep the plan open until it passes.
+
+## At a walker's height a ground texture's own detail is gone by 10 m
+
+The mulch shader (2026-11-16) darkens the gaps between chips, as a share of the tile's height, and uses the gaps' mean once the texture is read averaged. At f_090's matched pose, 1.4 m up and 10 to 15 m out, a pixel covers about 6 mm across the view but 40 to 90 mm along it, and a texture filtered 4x anisotropically reads at the larger of its narrow footprint and a quarter of its wide one: 10 to 25 mm, past eight texels of a 1.2 mm tile. So the gaps, a few texels wide, average away in the sampler itself, and a three-way sweep of the gaps' depth left the darkest tenth there unchanged; up close (2 m) the gap grade darkened and warmed it as intended. A photo at that distance stays darker and more mottled because real chips cast shadows and lie in clumps. Darkness or speckle meant to read at 10 m must sit in structure several centimetres across (clumps, patches), not in the tile's fine detail; check what scale the sampler keeps at the pose before tuning a fine-detail parameter, and check that one sweep step moves the measure there. This is the texture side of "Vary detail at the scale the gameplay camera resolves".
+
+## Build a SceneTree test's fixtures after the root joins the tree
+
+A SceneTree script's `_initialize()` runs before its root is inside the tree, so nodes a test adds there report `Condition "!is_inside_tree()" is true` on every global transform, which `tools/test.sh` fails, while the test's own checks still pass on the identity transforms it gets back. The coverage contract met this in October (see "Tag actual roof-function batches inside mixed wall meshes") and the ground dressing contract's chips-capture fixture again on 2026-11-17 (`procedural-mulch-20261116/runs/R08-round2`). Call a coroutine from `_initialize()` and `await process_frame` before building nodes. Keep the suite's error tokens out of a test's own lines too: the new shader compile check's first PASS line said a failing shader "prints SHADER ERROR", and the suite's pattern failed the passing run (`R08b-round2`).
+
+## Place traced site details against the drawn band, not the aerial's edge
+
+On 2026-11-17 the owner found two "bollards" on the Cityside Park promenade: every car driven into them either stopped dead or was thrown up. They were salvaged-log seat set pieces, placed at nooks traced on the Esri aerial. In the aerial's registration the real promenade's seaward edge lies about 2–3.5 m landward of the band the game draws from the OSM Perimeter Path (offset 1.4 m, 7.5 m wide). So nooks traced at the real edge landed inside the drawn band, and both seats stood wholly on its paving. The set-piece check only kept props off the exclusion mask, which a park promenade is not part of. When a detail is traced from imagery beside a band drawn from OSM, measure its offset from the drawn band in the band's own frame before placing it. `tools/check_street_detail_clearance.mjs` now fails any solid street prop a car cannot knock over whose foot stands on the paving of an OSM footway band a zone draws.

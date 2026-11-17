@@ -34,6 +34,16 @@ extends RefCounted
 ##                     bare thin dark stems under sparse seed heads (variants 0, 1),
 ##                     or laden with cream seed on lighter stems (variant 2), which
 ##                     is what reads along the bank from a distance.
+## The park outside Isle House (owner video, 2026-11-15), its plants named by their
+## photographed form where the footage does not settle the species:
+##   monterey_pine     variants 6-8, young staked pines, 2-3.5 m, in a three-post frame.
+##   staked_sapling    narrow-leaved saplings in the stormwater basin, in the same frame.
+##   red_stem_shrub    leafless shrubs of bare red stems in the basin (dogwood-like).
+##   coastal_mound_shrub  dense dark-green rounded shrubs of the north-west corner garden.
+##   magenta_rosette   magenta flowers on tall stalks over low grey-green rosettes.
+##   california_fuchsia  grey-green sub-shrubs with red-orange tubular flowers
+##                     (Epilobium canum's form) in the verge along the bike path.
+##   silver_cushion    low silver-grey cushions in the same verge.
 ## The island-wide rollout's trees, shrubs and hedges (vegetation species pass,
 ## 2026-11-05; dated Street View crops p1-p6, c2-c4, b1-b8, n1-n2, s1-s3, h1-h2
 ## kept with the vegetation-inventory work notes, outside Git):
@@ -358,6 +368,10 @@ const GUMS := [
 const STAKE_M := 2.3
 const STAKE_SPACING_M := 0.7
 const STAKE_RADIUS_M := 0.03
+## The three-post frame round the young pines and basin saplings of the park outside
+## Isle House: posts this far from the trunk, this thick (production inference, f_025).
+const FRAME_STAKE_RADIUS_M := 0.3
+const FRAME_STAKE_POST_M := 0.032
 ## Young island oaks in the beds (named on the 2024 art-location plan and in the
 ## 2025 acceptance minutes; no dated photo, so the form is a young oak of the
 ## species' habit, production inference): two or three stems parting from one root
@@ -390,6 +404,15 @@ const PINES := [
 	{"form": "pruned", "seed": 204, "height": 6.0, "spread": 7.2, "clear": 1.7, "fork": 1.7, "trunk_radius": 0.26, "leaders": 2, "lean": 0.6, "shear": 0.1, "lobes": 8},
 	{"form": "pruned", "seed": 205, "height": 6.8, "spread": 8.2, "clear": 2.0, "fork": 2.0, "trunk_radius": 0.3, "leaders": 3, "lean": 0.8, "shear": 0.12, "lobes": 9},
 	{"form": "pruned", "seed": 206, "height": 7.6, "spread": 8.6, "clear": 2.4, "fork": 2.4, "trunk_radius": 0.34, "leaders": 3, "lean": 1.0, "shear": 0.14, "lobes": 10},
+	# Young staked pines in the new park outside Isle House (owner video 2026-11-15,
+	# f_000, f_003, f_025, f_058, f_066): 2-3.5 m, a slim whip of a trunk with short
+	# upswept whorls ending in long-needled tufts, pale candles at the leader, held by
+	# three posts joined near their tops by boards, with black ties (_frame_stakes).
+	# whorls is how many tiers of branches, stake_m the posts' height; sizes are
+	# production inference from the frames.
+	{"form": "young", "seed": 207, "height": 2.4, "spread": 1.2, "trunk_radius": 0.035, "whorls": 4, "stake_m": 1.9},
+	{"form": "young", "seed": 208, "height": 2.9, "spread": 1.45, "trunk_radius": 0.04, "whorls": 5, "stake_m": 2.1},
+	{"form": "young", "seed": 209, "height": 3.4, "spread": 1.65, "trunk_radius": 0.045, "whorls": 5, "stake_m": 2.2},
 ]
 ## The spreading broadleaf (species unresolved, the photographed form): two mid
 ## trees (b1/b4, Northpoint, Mar 2025: 7-10 m, a round 8-10 m crown on a trunk
@@ -756,6 +779,65 @@ const MARSH_STONES := [
 	{"seed": 149, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 6, "spread_m": 0.8, "size_m": [0.025, 0.07]}]},
 	{"seed": 150, "layers": [{"kind": "stones", "cell": "marsh_stone", "stones": 2, "spread_m": 0.3, "size_m": [0.07, 0.15], "tone": 0.55}]},
 ]
+## The park outside Isle House (owner video 2026-11-15): plants the footage shows but
+## does not name, so each is drawn and named by its photographed form, from cells the
+## kit already holds; sizes and counts are production inference from the frames.
+## Narrow-leaved saplings in the stormwater basin, 2-3 m, in the pines' three-post
+## frame (f_038, f_051): the young gums' lance sprays, small and few.
+const STAKED_SAPLINGS := [
+	{"seed": 661, "height": 2.4, "trunk_radius": 0.025, "clear": 0.32, "crown": 1.0, "branches": 7, "lean": 0.08, "spray": 0.36, "stakes": 3, "stake_m": 1.8},
+	{"seed": 662, "height": 2.8, "trunk_radius": 0.03, "clear": 0.3, "crown": 1.2, "branches": 8, "lean": 0.1, "spray": 0.4, "stakes": 3, "stake_m": 2.0},
+	{"seed": 663, "height": 3.2, "trunk_radius": 0.034, "clear": 0.3, "crown": 1.4, "branches": 9, "lean": 0.12, "spray": 0.44, "stakes": 3, "stake_m": 2.1},
+]
+## Leafless shrubs of bare red stems in the basin, 0.5-1.2 m (f_051, f_058; a red-twig
+## dogwood's look): the bare twiggy stems' cards, reddened.
+const RED_STEM_TINT := Color(0.95, 0.4, 0.33)
+const RED_STEMS := [
+	{"seed": 671, "lean": 0.05, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 3, "width": 0.6, "height": 0.6, "splay_deg": 6.0, "flutter": 0.03, "shade_low": 0.75, "tint": RED_STEM_TINT}]},
+	{"seed": 672, "lean": 0.07, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 0.85, "height": 0.88, "splay_deg": 7.0, "flop_deg": 8.0, "flutter": 0.035, "shade_low": 0.75, "tint": RED_STEM_TINT}]},
+	{"seed": 673, "lean": 0.06, "layers": [{"kind": "crossed", "cell": "seeded_stems", "cards": 4, "width": 1.1, "height": 1.15, "splay_deg": 8.0, "flop_deg": 10.0, "flutter": 0.04, "shade_low": 0.75, "tint": RED_STEM_TINT}]},
+]
+## Dense dark-green rounded shrubs of the north-west corner garden (f_107, f_110, f_112;
+## a mounding coyote brush's look): the school's dark clipped mounds' build, unclipped.
+const COASTAL_MOUNDS := [
+	{"seed": 681, "shape": "mound", "cell": "dark", "height": 0.7, "width": 1.0, "lobes": 3, "leaf": "hedge_clump_foliage"},
+	{"seed": 682, "shape": "mound", "cell": "dark", "height": 0.9, "width": 1.3, "lobes": 4, "leaf": "hedge_clump_foliage"},
+	{"seed": 683, "shape": "mound", "cell": "dark", "height": 1.1, "width": 1.6, "lobes": 5, "leaf": "hedge_clump_foliage"},
+]
+## Magenta flowers on short bare stalks over low grey-green rosettes, a few in the corner
+## garden and along the walk (f_107, f_110, f_112): the daisy's leaf rosette, flat, under
+## the thrift's stalks, their heads tinted magenta.
+const MAGENTA_TINT := Color(0.95, 0.3, 0.78)
+const MAGENTA_ROSETTES := [
+	{"seed": 691, "layers": [{"kind": "shell", "cell": "daisy", "cards": 9, "card": 0.36, "width": 0.45, "height": 0.13, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 1, "width": 0.36, "height": 0.34, "base": 0.06, "flutter": 0.04, "tint": MAGENTA_TINT}]},
+	{"seed": 692, "layers": [{"kind": "shell", "cell": "daisy", "cards": 11, "card": 0.34, "width": 0.6, "height": 0.15, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.46, "height": 0.42, "base": 0.06, "splay_deg": 8.0, "flutter": 0.045, "tint": MAGENTA_TINT}]},
+	{"seed": 693, "lean": 0.06, "layers": [{"kind": "shell", "cell": "daisy", "cards": 13, "card": 0.32, "width": 0.75, "height": 0.17, "flat": 0.6, "rough": 0.5, "tint": Color(0.8, 0.88, 0.9)},
+		{"kind": "crossed", "cell": "thrift_stalks", "cards": 2, "width": 0.56, "height": 0.5, "base": 0.08, "splay_deg": 10.0, "flutter": 0.05, "tint": MAGENTA_TINT}]},
+]
+## Loose grey-green sub-shrubs with small red tubular flowers in the verge along the bike
+## path (f_066, f_076, f_090; California fuchsia's look, Epilobium canum): the sage's grey
+## mound, loose, with the monkeyflower's flower stalks short among it, tinted red.
+const SCARLET_TINT := Color(0.9, 0.16, 0.12)
+const CALIFORNIA_FUCHSIAS := [
+	{"seed": 741, "lean": 0.06, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.4},
+		{"kind": "shell", "cell": "sagebrush", "cards": 5, "card": 0.55, "width": 0.5, "height": 0.32, "tint": Color(0.7, 0.78, 0.68)},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.4, "height": 0.3, "base": 0.14, "splay_deg": 14.0, "flutter": 0.04, "tint": SCARLET_TINT}]},
+	{"seed": 742, "lean": 0.08, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.55},
+		{"kind": "shell", "cell": "sagebrush", "cards": 6, "card": 0.52, "width": 0.72, "height": 0.42, "tint": Color(0.7, 0.78, 0.68)},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 2, "width": 0.55, "height": 0.38, "base": 0.2, "splay_deg": 16.0, "flutter": 0.045, "tint": SCARLET_TINT}]},
+	{"seed": 743, "lean": 0.07, "layers": [{"kind": "litter", "cell": "litter", "radius": 0.7},
+		{"kind": "shell", "cell": "sagebrush", "cards": 7, "card": 0.5, "width": 0.95, "height": 0.52, "tint": Color(0.7, 0.78, 0.68)},
+		{"kind": "crossed", "cell": "monkey_stalks", "cards": 3, "width": 0.7, "height": 0.45, "base": 0.26, "splay_deg": 18.0, "flutter": 0.05, "tint": SCARLET_TINT}]},
+]
+## Low silver-grey cushions in the verge (f_076, f_090, f_103; a beach sagewort's look):
+## the sagebrush's feathery silver leaves as a tight low dome.
+const SILVER_CUSHIONS := [
+	{"seed": 751, "layers": [{"kind": "shell", "cell": "sagebrush", "cards": 9, "card": 0.4, "width": 0.4, "height": 0.2, "flat": 0.4, "rough": 0.45}]},
+	{"seed": 752, "layers": [{"kind": "shell", "cell": "sagebrush", "cards": 12, "card": 0.38, "width": 0.55, "height": 0.25, "flat": 0.4, "rough": 0.45}]},
+	{"seed": 753, "layers": [{"kind": "shell", "cell": "sagebrush", "cards": 15, "card": 0.36, "width": 0.7, "height": 0.3, "flat": 0.4, "rough": 0.45}]},
+]
 ## Low plants stand in grass_clump rows or, spaced wider, in planting_slot rows.
 const LOW_KINDS := ["grass_clump", "planting_slot"]
 ## Per prop: its variants, visibility ranges in metres (LOD0 until the first,
@@ -823,6 +905,12 @@ const PROPS := {
 	"pale_seeded_shrub": {"kinds": LOW_KINDS, "variants": SEEDED_SHRUBS, "ranges": [65.0], "foot_m": 0.2, "form": "low", "shadow": true},
 	"marsh_stems": {"kinds": LOW_KINDS, "variants": MARSH_STEMS, "ranges": [55.0], "foot_m": 0.15, "form": "low"},
 	"marsh_mat": {"kinds": LOW_KINDS, "variants": MARSH_MATS, "ranges": [85.0], "foot_m": 0.2, "form": "low"},
+	"staked_sapling": {"kinds": ["tree"], "variants": STAKED_SAPLINGS, "ranges": [40.0, 100.0, 900.0], "foot_m": 0.3, "form": "gum"},
+	"red_stem_shrub": {"kinds": LOW_KINDS, "variants": RED_STEMS, "ranges": [60.0], "foot_m": 0.2, "form": "low", "shadow": true},
+	"coastal_mound_shrub": {"kinds": ["planting_slot"], "variants": COASTAL_MOUNDS, "ranges": [30.0, 75.0, 160.0], "foot_m": 0.5, "form": "shrub", "impostor_grid": IMPOSTOR_SHRUB_GRID, "impostor_alpha": 0.1},
+	"magenta_rosette": {"kinds": LOW_KINDS, "variants": MAGENTA_ROSETTES, "ranges": [45.0], "foot_m": 0.15, "form": "low"},
+	"california_fuchsia": {"kinds": LOW_KINDS, "variants": CALIFORNIA_FUCHSIAS, "ranges": [60.0], "foot_m": 0.25, "form": "low", "shadow": true},
+	"silver_cushion": {"kinds": LOW_KINDS, "variants": SILVER_CUSHIONS, "ranges": [55.0], "foot_m": 0.2, "form": "low"},
 	"marsh_brush": {"kinds": LOW_KINDS, "variants": MARSH_BRUSHES, "ranges": [170.0], "foot_m": 0.2, "form": "low"},
 	"marsh_fringe": {"kinds": LOW_KINDS, "variants": MARSH_FRINGES, "ranges": [170.0], "foot_m": 0.2, "form": "low"},
 	"marsh_stones": {"kinds": LOW_KINDS, "variants": MARSH_STONES, "ranges": [70.0], "foot_m": 0.15, "form": "low"},
@@ -1845,7 +1933,7 @@ func _build_gum(p: Dictionary) -> Dictionary:
 	var clear := float(p.clear)
 	var half := float(p.crown) * 0.5
 	var count := int(p.branches)
-	var spray_size := 0.5 + 0.06 * height
+	var spray_size := float(p.get("spray", 0.5 + 0.06 * height))
 	var branches := []
 	var sprays := []
 	var phase := rng.randf() * TAU
@@ -1884,8 +1972,12 @@ func _build_gum(p: Dictionary) -> Dictionary:
 		crown += spray.at
 	crown /= maxf(1.0, sprays.size())
 	var low_y := _gum_axis(height, lean, bow, clear).y
-	# The stakes stand across the lean, so the trunk leans between them.
+	# The stakes stand across the lean, so the trunk leans between them; a sapling of
+	# the park outside Isle House stands in the three-post frame instead (stakes 3).
 	var stake_side := Vector3(-lean.z, 0.0, lean.x).normalized() * STAKE_SPACING_M * 0.5
+	var framed := int(p.get("stakes", 2)) == 3
+	var frame_m := float(p.get("stake_m", STAKE_M))
+	var axis := func(t: float) -> Vector3: return _gum_axis(height, lean, bow, t)
 	var meshes: Array[ArrayMesh] = []
 	for lod in 2:
 		var mesh := ArrayMesh.new()
@@ -1929,20 +2021,25 @@ func _build_gum(p: Dictionary) -> Dictionary:
 			var spray: Dictionary = sprays[index]
 			for card in 2:
 				_gum_spray_card(leaves, spray, float(spray.azimuth) + card * PI * 0.5, float(spray.size) * (1.15 if lod == 1 else 1.0), crown, half, low_y, height, sway_top)
-		_gum_stakes(bark, stake_side, lod)
+		if framed:
+			_frame_stakes(bark, frame_m, phase, lod, axis)
+		else:
+			_gum_stakes(bark, stake_side, lod)
 		bark.commit(mesh, material("gum_bark"))
 		leaves.commit(mesh, material("young_tree_foliage"))
 		meshes.append(mesh)
+	var capsules: Array = [{"radius_m": trunk_radius * 1.15, "from": Vector3.ZERO, "to": _gum_axis(height, lean, bow, minf(clear, 2.2 / height))}]
+	if framed:
+		capsules.append_array(_frame_stake_capsules(frame_m, phase))
+	else:
+		capsules.append({"radius_m": STAKE_RADIUS_M, "from": stake_side, "to": stake_side + Vector3.UP * STAKE_M})
+		capsules.append({"radius_m": STAKE_RADIUS_M, "from": -stake_side, "to": -stake_side + Vector3.UP * STAKE_M})
 	return {
 		"lod0": meshes[0],
 		"lod1": meshes[1],
 		"crown_surface": -1,
 		"top_m": top.y + spray_size * 0.2,
-		"capsules": [
-			{"radius_m": trunk_radius * 1.15, "from": Vector3.ZERO, "to": _gum_axis(height, lean, bow, minf(clear, 2.2 / height))},
-			{"radius_m": STAKE_RADIUS_M, "from": stake_side, "to": stake_side + Vector3.UP * STAKE_M},
-			{"radius_m": STAKE_RADIUS_M, "from": -stake_side, "to": -stake_side + Vector3.UP * STAKE_M},
-		],
+		"capsules": capsules,
 	}
 
 
@@ -2761,6 +2858,8 @@ static func _hash01(seed: int, a: int, b: int) -> float:
 ## the hollows between the domes; limbs run out from the trunk to the lower domes.
 ## A residential tree is built by _build_residential_pine.
 func _build_pine(p: Dictionary) -> Dictionary:
+	if str(p.get("form", "")) == "young":
+		return _build_young_pine(p)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = int(p.seed)
 	var height := float(p.height)
@@ -2891,6 +2990,150 @@ func _build_pine(p: Dictionary) -> Dictionary:
 	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": height,
 		"shadow": _shadow_mesh(branches, lobes, [], PINE_CREST, "pine_bark", "pine_foliage", PINE_BARK_M, height, clear, sway_top, rng),
 		"capsules": [{"radius_m": trunk_radius * 1.1, "from": Vector3.ZERO, "to": fork}]}
+
+
+## A young staked pine (the park outside Isle House, f_025, f_058): an open, leaning
+## whip of a trunk with a few whorls of long, thin branches swept steeply up, bare
+## along their length and each ending in one small round brush of light needles (a
+## second, smaller one on some), a few small brushes low on the trunk, candles at the
+## leader, and the three-post stake frame round it. The tufts take the lighter young
+## needles (pine_foliage_young). LOD1 keeps the trunk, every other tuft (grown) and
+## the posts.
+func _build_young_pine(p: Dictionary) -> Dictionary:
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(p.seed)
+	var height := float(p.height)
+	var spread := float(p.spread)
+	var trunk_radius := float(p.trunk_radius)
+	var whorls := int(p.whorls)
+	var sway_top := GUM_SWAY * height
+	var lean_angle := rng.randf() * TAU
+	var lean := Vector3(cos(lean_angle), 0.0, sin(lean_angle)) * height * 0.03
+	var axis := func(t: float) -> Vector3: return Vector3.UP * (height * 0.96 * t) + lean * t * t
+	var trunk := PackedVector3Array([Vector3.DOWN * BURY_M])
+	var trunk_radii := PackedFloat32Array([trunk_radius * 1.25])
+	for i in 8:
+		var t := float(i) / 7.0
+		trunk.append(axis.call(t))
+		trunk_radii.append(lerpf(trunk_radius, 0.008, pow(t, 0.9)) + trunk_radius * 0.25 * exp(-t * height / 0.2))
+	var branches := [{"depth": 0, "points": trunk, "radii": trunk_radii}]
+	var cards := []
+	var heart: Vector3 = axis.call(0.62)
+	var phase := rng.randf() * TAU
+	var tuft_w := clampf(spread * 0.24, 0.32, 0.4)
+	# The brushes' running number, in an array: a lambda's reassigned local would not
+	# carry from one call to the next.
+	var cluster := [0]
+	# Each brush is three small cards of the whole crest (whose tufts taper off on
+	# every side) turned 60 degrees apart round the way it points, so it reads round.
+	var add_tuft := func(at: Vector3, out: Vector3, size: float, shade: float, candles: bool) -> void:
+		var rise := (Vector3.UP * 0.8 + Vector3(out.x, 0.0, out.z) * 0.6).normalized()
+		var color := Color(shade, shade, shade)
+		var cell := PINE_CANDLES if candles else PINE_CREST
+		var across := rise.cross(Vector3.RIGHT if absf(rise.x) < 0.9 else Vector3.BACK).normalized()
+		var turn := rng.randf() * PI
+		for k in 3:
+			var normal := across.rotated(rise, turn + PI * k / 3.0)
+			var card := _card(at, normal, rise, tuft_w * size * (1.0 if rng.randf() < 0.5 else -1.0), tuft_w * size * 0.44, 0.3, rng.randf_range(-0.2, 0.2), cell, color, heart, cluster[0], 0.03)
+			card.root = 0.7
+			card.heart_weight = 0.4
+			card.lod1_grow = 1.5
+			cards.append(card)
+		cluster[0] += 1
+	for k in whorls:
+		var f := float(k) / maxf(1.0, float(whorls - 1))
+		var origin: Vector3 = axis.call(lerpf(0.3, 0.84, f))
+		var count := 3 if k % 2 == 0 else 4
+		for b in count:
+			var azimuth := phase + k * 0.9 + b * TAU / count + rng.randf_range(-0.35, 0.35)
+			var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+			var reach := spread * 0.5 * lerpf(1.0, 0.55, f) * rng.randf_range(0.85, 1.1)
+			var rise_angle := deg_to_rad(rng.randf_range(44.0, 62.0))
+			var tip := origin + out * reach + Vector3.UP * (reach * tan(rise_angle))
+			# Bowed a little down at first, then turning up to the brush.
+			var middle := origin.lerp(tip, 0.45) + Vector3.DOWN * (reach * 0.08)
+			branches.append({"depth": 2, "points": PackedVector3Array([origin, middle, tip]), "radii": PackedFloat32Array([lerpf(0.014, 0.009, f), 0.007, 0.004])})
+			var shade := rng.randf_range(0.9, 1.0) * lerpf(0.86, 1.0, f)
+			add_tuft.call(tip, (out + Vector3.UP * 0.6).normalized(), rng.randf_range(0.9, 1.1), shade, false)
+			if rng.randf() < 0.3:
+				add_tuft.call(origin.lerp(tip, 0.72) + out * 0.05, (out + Vector3.UP * 0.2).normalized(), 0.6, shade * 0.95, false)
+	# A few small brushes on short shoots low on the trunk.
+	for k in 2:
+		var at: Vector3 = axis.call(rng.randf_range(0.16, 0.26))
+		var azimuth := phase + PI * (0.4 + k)
+		var out := Vector3(cos(azimuth), 0.0, sin(azimuth))
+		var tip := at + out * 0.12 + Vector3.UP * 0.1
+		branches.append({"depth": 2, "points": PackedVector3Array([at, at.lerp(tip, 0.5), tip]), "radii": PackedFloat32Array([0.008, 0.006, 0.004])})
+		add_tuft.call(tip, (out + Vector3.UP * 0.4).normalized(), 0.6, 0.86, false)
+	# The leader: a brush round the top and its candles.
+	var top: Vector3 = axis.call(1.0)
+	add_tuft.call(top - Vector3.UP * 0.06, Vector3.UP, 1.0, 1.0, true)
+	add_tuft.call(top - Vector3.UP * 0.2, Vector3(cos(phase), 0.4, sin(phase)).normalized(), 0.75, 0.96, false)
+	var stake_m := float(p.stake_m)
+	var meshes: Array[ArrayMesh] = []
+	for lod in 2:
+		var mesh := ArrayMesh.new()
+		var bark := Surf.new()
+		var leaves := Surf.new()
+		_emit_limbs(bark, branches, lod, height, 0.3, sway_top, PINE_BARK_M, [[8, 5, 4], [5, 3, 3]], 0.0)
+		_emit_cards(leaves, cards, lod, height, sway_top)
+		# The stakes share the trunk's surface: a young pine's thin trunk is pale grey-tan
+		# (f_058), the gum's pale bark's look, as the posts are.
+		_frame_stakes(bark, stake_m, phase, lod, axis)
+		bark.commit(mesh, material("gum_bark"))
+		leaves.commit(mesh, material("pine_foliage_young"))
+		meshes.append(mesh)
+	var capsules: Array = [{"radius_m": trunk_radius * 1.3, "from": Vector3.ZERO, "to": axis.call(minf(1.0, 1.8 / height))}]
+	capsules.append_array(_frame_stake_capsules(stake_m, phase))
+	return {"lod0": meshes[0], "lod1": meshes[1], "crown_surface": -1, "top_m": top.y + tuft_w * 0.3, "capsules": capsules}
+
+
+## The three-post stake frame round a young tree (the park outside Isle House, owner
+## video 2026-11-15, f_025, f_051, f_058): pale tan posts FRAME_STAKE_RADIUS_M apart
+## from the trunk, a board across each pair about two-thirds up, and black ties from
+## each post to the trunk just under the boards and low down. axis gives the trunk at
+## t (0 foot, 1 top).
+func _frame_stakes(s: Surf, stake_m: float, phase: float, lod: int, axis: Callable) -> void:
+	var wood := Color(0.86, 0.74, 0.56)
+	var sides := 5 if lod == 0 else 4
+	var posts := _frame_stake_feet(phase)
+	for foot: Vector3 in posts:
+		_tube(s, PackedVector3Array([foot + Vector3.DOWN * BURY_M, foot + Vector3.UP * stake_m]), PackedFloat32Array([FRAME_STAKE_POST_M, FRAME_STAKE_POST_M * 0.92]),
+			PackedColorArray([wood * 0.78, wood]), PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), sides, 1.0, GUM_BARK_M)
+	var board_y := Vector3.UP * (stake_m * 0.66)
+	for k in 3:
+		var a: Vector3 = posts[k] + board_y
+		var b: Vector3 = posts[(k + 1) % 3] + board_y
+		var inward := (a.lerp(b, 0.5) - board_y).normalized() * -0.03
+		_tube(s, PackedVector3Array([a + inward, b + inward]), PackedFloat32Array([0.026, 0.026]), PackedColorArray([wood * 0.92, wood * 0.92]),
+			PackedVector2Array([Vector2.ZERO, Vector2.ZERO]), 4, 1.0, GUM_BARK_M)
+	if lod > 0:
+		return
+	var tie := Color(0.06, 0.06, 0.06)
+	for height_m: float in [0.45, stake_m * 0.66 - 0.06]:
+		var trunk: Vector3 = axis.call(0.0)
+		for foot: Vector3 in posts:
+			var at := foot + Vector3.UP * height_m
+			var to := Vector3(trunk.x, height_m, trunk.z)
+			_tube(s, PackedVector3Array([at, at.lerp(to, 0.5) + Vector3.DOWN * 0.03, to]), PackedFloat32Array([0.012, 0.01, 0.012]), PackedColorArray([tie, tie, tie]),
+				PackedVector2Array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO]), 4, 1.0, GUM_BARK_M)
+
+
+## The feet of the three stake posts, turned by phase round the trunk.
+func _frame_stake_feet(phase: float) -> Array[Vector3]:
+	var feet: Array[Vector3] = []
+	for k in 3:
+		var angle := phase + 0.5 + TAU * k / 3.0
+		feet.append(Vector3(cos(angle), 0.0, sin(angle)) * FRAME_STAKE_RADIUS_M)
+	return feet
+
+
+## Collision for the three posts, as the gum's two.
+func _frame_stake_capsules(stake_m: float, phase: float) -> Array:
+	var capsules := []
+	for foot: Vector3 in _frame_stake_feet(phase):
+		capsules.append({"radius_m": FRAME_STAKE_POST_M, "from": foot, "to": foot + Vector3.UP * stake_m})
+	return capsules
 
 
 ## A residential Monterey pine (p5, p6): no dome, but a broken, open crown, the sum
@@ -4505,6 +4748,9 @@ func material(key: String) -> Material:
 			made = _bark("pine_bark.png", Color(0.9, 0.88, 0.86))
 		"pine_foliage":
 			made = _crown_foliage("pine_foliage_atlas.png", Color(0.94, 0.98, 0.9), Color(0.06, 0.09, 0.03), Vector2(1024.0, 1024.0), 0.08, 0.9)
+		"pine_foliage_young":
+			# A young pine's new needles are a lighter, yellower green than the old trees'.
+			made = _crown_foliage("pine_foliage_atlas.png", Color(1.02, 1.08, 0.94), Color(0.08, 0.11, 0.04), Vector2(1024.0, 1024.0), 0.08, 0.9)
 		"broadleaf_bark":
 			made = _bark("broadleaf_bark.png", Color(0.92, 0.9, 0.88))
 		"christmas_bark":

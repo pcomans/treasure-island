@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Installs the pinned Godot 4.7.2 Linux editor and the Linux, macOS and Web
-# export templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see devcontainer.json).
+# Installs the pinned Godot 4.7.2 Linux editor and the Linux, macOS, Windows and
+# Web export templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see
+# devcontainer.json).
 # Skips anything already present, so it is safe to re-run.
 #
 # With GODOT_DOWNLOAD_CACHE set to a directory (CI), the downloaded archives are
@@ -48,8 +49,11 @@ touch "${DEST}/_sc_"
 
 # The templates the export presets use, all from the one archive above. Web is
 # the single-threaded ("nothreads") build, which needs no COOP/COEP headers.
+# Windows needs only the x86-64 release build: Godot's built-in template
+# modifier sets its icon and version information (no rcedit), and the release
+# export makes no console wrapper.
 TEMPLATES=(version.txt linux_debug.x86_64 linux_release.x86_64 macos.zip
-  web_nothreads_debug.zip web_nothreads_release.zip)
+  web_nothreads_debug.zip web_nothreads_release.zip windows_release_x86_64.exe)
 missing=()
 for name in "${TEMPLATES[@]}"; do
   [ -f "${TEMPLATES_DIR}/${name}" ] || missing+=("templates/${name}")

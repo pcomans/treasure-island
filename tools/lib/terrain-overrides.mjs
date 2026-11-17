@@ -3,18 +3,24 @@
 //
 // The island's land is a 32 m grid of triangles sampled from the 2023 USGS raster
 // (griddedTerrainSurfaceMesh). A site lists a scope (OSM areas plus traced
-// polygons, minus protected way corridors and traced polygons, inside the land)
+// polygons, minus protected way corridors and traced polygons, inside the land;
+// a corridor can be narrower on either side along spans of its way, or open there)
 // and ordered regions, each a shape with a rule:
 //   level    a flat elevation (a lawn, a pad)
 //   profile  control elevations along a line (a promenade)
 //   sink     lowered by depth_m with a side_run_m rim (basins, swales, forebays)
+//   raise    lifted by height_m with a side_run_m rim (a landform mound), the mirror of sink
 // The site's grade is the smoothest surface (a harmonic membrane on a grid_m grid)
 // that takes the generated land's height B everywhere outside the scope and the
 // level and profile targets inside their shapes: the 32 m grid's waves across the
 // scope smooth out and the designed surfaces meet the surroundings in gentle
-// ramps. Sinks are cut into that grade. The correction D = F (grade - sinks - B)
-// fades to exactly zero over edge_blend_m at the scope's edge (F), so the land
-// outside the scope and on the coastline keeps its generated surface.
+// ramps. Sinks are cut into that grade and raises built up on it, each only
+// within its own shape, so neither spreads through the membrane. The correction D = F (grade - sinks - B)
+// fades to exactly zero over edge_blend_m at the scope's edge (F; from a traced
+// exclusion that gives its own edge_blend_m, over that: such an exclusion must be at
+// least the site's edge_blend_m wide, or the site's fade from its far side would
+// govern its near side too), so the land outside the scope and on the coastline keeps
+// its generated surface.
 //
 // Every 32 m cell touching a scope is re-meshed as a quadtree of square leaves
 // (down to min_leaf_m) split until each leaf's two triangles stay within
@@ -22,7 +28,11 @@
 // diagonal; where a smaller neighbour puts a vertex on a leaf edge, the leaf's
 // triangle is fanned through it, and coarse neighbour cells get the same vertices
 // on their shared edges (where D is zero, so their surface is unchanged): the
-// land stays watertight. Heights are production inference, not survey data.
+// land stays watertight. A site may name buildings in scope.fan_beside: a re-meshed
+// cell beside the land cell under one of them puts no vertex on their shared edge but
+// its corners (the leaves along it fanned to those corners), so that cell, and the
+// foundation that follows its facets, stay exactly as generated; the site keeps the
+// correction at zero along that edge. Heights are production inference, not survey data.
 
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
@@ -45,7 +55,9 @@ import { invariant, roundCoordinate, sha256File } from "./world-contract.mjs";
 export const TERRAIN_OVERRIDES_SCHEMA = "ti.terrain-overrides/1";
 export const TERRAIN_OVERRIDES_PATH = "tools/config/terrain-overrides.json";
 
-const RULE_KINDS = Object.freeze(["level", "profile", "sink"]);
+const RULE_KINDS = Object.freeze(["level", "profile", "sink", "raise"]);
+// Rules shaped on the grade after it is solved, within their own shapes and rims.
+const RIM_RULE_KINDS = Object.freeze(["sink", "raise"]);
 const SAFE_ID = /^[a-z0-9_]+$/u;
 // Central-difference steps for shading normals (m): the raster's, as the coarse
 // land (mesh-output.mjs terrainNormal), and the correction's.
@@ -55,6 +67,14 @@ const RASTER_NORMAL_STEP_M = 2;
 const MAX_CORRECTED_RISE = Math.tan((48 * Math.PI) / 180);
 const DELTA_NORMAL_STEP_M = 0.5;
 const MM = 1000;
+// Leaves along a narrowed corridor span: no leaf larger than this joins kept and
+// corrected ground within this reach of the span's cut (planTerrainOverrides).
+const SPAN_EDGE_LEAF_M = 1;
+const SPAN_EDGE_REACH_M = 1.5;
+// Within this reach of an edge whose leaves are fanned to its corners (scope.fan_beside),
+// the span-edge rule stops at this leaf size.
+const FAN_EDGE_LEAF_M = 4;
+const FAN_EDGE_REACH_M = 8;
 
 function isFiniteNumber(value) {
   return typeof value === "number" && Number.isFinite(value);
@@ -67,6 +87,32 @@ function isXZ(value) {
 function exactKeys(value, keys, label) {
   invariant(value != null && typeof value === "object" && !Array.isArray(value), `${label} must be an object`);
   invariant(JSON.stringify(Object.keys(value).sort()) === JSON.stringify([...keys].sort()), `${label} must have exactly ${[...keys].sort().join(", ")}`);
+}
+
+// The narrowest width of a polygon's convex hull: over the hull's edges, the least of the
+// farthest distances of its points from that edge's line.
+function hullWidth(points) {
+  const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  const sorted = points.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+  const chain = (list) => {
+    const out = [];
+    for (const point of list) {
+      while (out.length >= 2 && cross(out[out.length - 2], out[out.length - 1], point) <= 0) out.pop();
+      out.push(point);
+    }
+    return out.slice(0, -1);
+  };
+  const hull = [...chain(sorted), ...chain(sorted.slice().reverse())];
+  if (hull.length < 3) return 0;
+  let width = Infinity;
+  for (let index = 0; index < hull.length; index += 1) {
+    const a = hull[index];
+    const b = hull[(index + 1) % hull.length];
+    const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (length === 0) continue;
+    width = Math.min(width, Math.max(...hull.map((point) => Math.abs(cross(a, b, point)) / length)));
+  }
+  return width;
 }
 
 function smoothstep(edge0, edge1, value) {
@@ -105,6 +151,11 @@ function validateRule(rule, shape, label) {
     exactKeys(rule, ["elevations_m", "kind"], `${label} profile rule`);
     invariant(shape.line_xz, `${label} profile needs a line shape`);
     invariant(Array.isArray(rule.elevations_m) && rule.elevations_m.length === shape.line_xz.length && rule.elevations_m.every(isFiniteNumber), `${label} profile needs one elevation per line point`);
+  } else if (rule.kind === "raise") {
+    exactKeys(rule, ["height_m", "kind", "side_run_m"], `${label} raise rule`);
+    invariant(isFiniteNumber(rule.height_m) && rule.height_m > 0 && isFiniteNumber(rule.side_run_m) && rule.side_run_m > 0, `${label} raise needs positive height_m and side_run_m`);
+    // As a sink's sides: well under the stock player's 48 degrees at the steepest.
+    invariant(Math.atan2(rule.height_m * 1.5, rule.side_run_m) <= (35 * Math.PI) / 180, `${label} raise side is steeper than 35 degrees at its steepest`);
   } else {
     exactKeys(rule, ["depth_m", "kind", "side_run_m"], `${label} sink rule`);
     invariant(isFiniteNumber(rule.depth_m) && rule.depth_m > 0 && isFiniteNumber(rule.side_run_m) && rule.side_run_m > 0, `${label} sink needs positive depth_m and side_run_m`);
@@ -137,20 +188,48 @@ export function loadTerrainOverrides(projectRoot) {
     siteIds.add(site.id);
     invariant(site.basis === "production_inference", `${label} basis must be production_inference`);
     for (const field of ["name", "evidence"]) invariant(typeof site[field] === "string" && site[field].trim() !== "", `${label} needs ${field}`);
-    exactKeys(site.scope, ["add_xz", "edge_blend_m", "exclude_ways", "exclude_xz", "source_keys"], `${label} scope`);
+    exactKeys(site.scope, ["add_xz", "edge_blend_m", "exclude_ways", "exclude_xz", "source_keys", ...("fan_beside" in (site.scope ?? {}) ? ["fan_beside"] : [])], `${label} scope`);
+    // fan_beside: buildings (OSM keys) whose land cells the site's re-meshed cells must
+    // leave unsplit, fanning to the shared edges' corners (planTerrainOverrides).
+    invariant(!("fan_beside" in site.scope) || (Array.isArray(site.scope.fan_beside) && site.scope.fan_beside.length > 0 && site.scope.fan_beside.every((key) => /^[wr]\d+$/u.test(key))), `${label} scope fan_beside must list OSM building keys`);
     invariant(Array.isArray(site.scope.source_keys) && site.scope.source_keys.every((key) => /^[wr]\d+$/u.test(key)), `${label} scope source_keys must be OSM area keys`);
     invariant(Array.isArray(site.scope.add_xz) && site.scope.add_xz.every((ring) => Array.isArray(ring) && ring.length >= 3 && ring.every(isXZ)), `${label} scope add_xz must be polygons of [x, z] points`);
     invariant(site.scope.source_keys.length + site.scope.add_xz.length > 0, `${label} scope is empty`);
+    invariant(isFiniteNumber(site.scope.edge_blend_m) && site.scope.edge_blend_m > 0, `${label} scope needs a positive edge_blend_m`);
     invariant(Array.isArray(site.scope.exclude_xz) && site.scope.exclude_xz.every((entry) => {
-      exactKeys(entry, ["points_xz", "reason"], `${label} exclude_xz entry`);
+      // edge_blend_m (optional): the correction fades out over this, not the site's
+      // edge_blend_m, from this polygon's edge (the scope in planTerrainOverrides).
+      exactKeys(entry, ["points_xz", "reason", ...("edge_blend_m" in (entry ?? {}) ? ["edge_blend_m"] : [])], `${label} exclude_xz entry`);
+      invariant(!("edge_blend_m" in entry) || (isFiniteNumber(entry.edge_blend_m) && entry.edge_blend_m > 0 && entry.edge_blend_m <= site.scope.edge_blend_m), `${label} exclude_xz edge_blend_m must be in (0, the site's edge_blend_m]`);
+      // Its own blend takes effect only where the scope's edge beyond it lies at least the
+      // site's edge_blend_m away: the exclusion must be that wide (across its convex hull).
+      invariant(!("edge_blend_m" in entry) || !(Array.isArray(entry.points_xz) && entry.points_xz.length >= 3 && entry.points_xz.every(isXZ)) || hullWidth(entry.points_xz) >= site.scope.edge_blend_m, `${label} exclude_xz with its own edge_blend_m must be at least the site's edge_blend_m (${site.scope.edge_blend_m} m) wide`);
       return Array.isArray(entry.points_xz) && entry.points_xz.length >= 3 && entry.points_xz.every(isXZ) && typeof entry.reason === "string" && entry.reason.trim() !== "";
     }), `${label} exclude_xz must be polygons of [x, z] points with a reason`);
-    invariant(isFiniteNumber(site.scope.edge_blend_m) && site.scope.edge_blend_m > 0, `${label} scope needs a positive edge_blend_m`);
     invariant(Array.isArray(site.scope.exclude_ways), `${label} exclude_ways must be a list`);
     for (const corridor of site.scope.exclude_ways) {
-      exactKeys(corridor, ["half_width_m", "reason", "source_keys"], `${label} exclude_ways entry`);
+      exactKeys(corridor, ["half_width_m", "reason", "source_keys", ...("spans" in (corridor ?? {}) ? ["spans"] : [])], `${label} exclude_ways entry`);
       invariant(Array.isArray(corridor.source_keys) && corridor.source_keys.length > 0 && corridor.source_keys.every((key) => /^w\d+$/u.test(key)), `${label} exclude_ways needs OSM way keys`);
       invariant(isFiniteNumber(corridor.half_width_m) && corridor.half_width_m > 0 && typeof corridor.reason === "string" && corridor.reason.trim() !== "", `${label} exclude_ways needs half_width_m and a reason`);
+      if (!("spans" in corridor)) continue;
+      // spans: stretches of one way (from_m to to_m, metres along it from its first
+      // node) where one or both sides of the corridor are narrower than half_width_m
+      // (left and right of the way's direction); 0 opens that side, so with both
+      // sides 0 the corridor stops along the span and the way's own ground there is
+      // the site's wherever the scope's parts cover it; see corridorArea in planTerrainOverrides.
+      invariant(corridor.source_keys.length === 1, `${label} exclude_ways spans need exactly one way`);
+      invariant(Array.isArray(corridor.spans) && corridor.spans.length > 0, `${label} exclude_ways spans must be a non-empty list`);
+      let lastEnd = 0;
+      for (const span of corridor.spans) {
+        exactKeys(span, ["from_m", "left_half_width_m", "reason", "right_half_width_m", "to_m"], `${label} exclude_ways span`);
+        invariant(isFiniteNumber(span.from_m) && isFiniteNumber(span.to_m) && span.from_m >= lastEnd && span.to_m > span.from_m, `${label} exclude_ways spans must run forward along the way without overlapping (from_m ${span.from_m}, to_m ${span.to_m})`);
+        lastEnd = span.to_m;
+        for (const side of ["left_half_width_m", "right_half_width_m"]) {
+          invariant(isFiniteNumber(span[side]) && span[side] >= 0 && span[side] <= corridor.half_width_m, `${label} exclude_ways span ${side} must be in [0, half_width_m]`);
+        }
+        invariant(span.left_half_width_m < corridor.half_width_m || span.right_half_width_m < corridor.half_width_m, `${label} exclude_ways span from ${span.from_m} m narrows neither side`);
+        invariant(typeof span.reason === "string" && span.reason.trim() !== "", `${label} exclude_ways span needs a reason`);
+      }
     }
     invariant(Array.isArray(site.regions) && site.regions.length > 0, `${label} needs regions`);
     const regionIds = new Set();
@@ -246,6 +325,54 @@ function shapeField(shape) {
   };
 }
 
+// The band one side of a way's corridor loses along a span: between offset width
+// and past the corridor's edge (half + 1 m), from from_m to to_m along the line
+// (east/north points, the way's direction; sign +1 left, -1 right), with a mitred
+// wedge on the outside of each bend, less everything within width of the line
+// (nothing when width is 0: the side is open from the line out).
+function spanSideCut(line, fromM, toM, width, half, sign, label) {
+  const cumulative = [0];
+  for (let index = 1; index < line.length; index += 1) cumulative.push(cumulative[index - 1] + Math.hypot(line[index][0] - line[index - 1][0], line[index][1] - line[index - 1][1]));
+  const total = cumulative.at(-1);
+  invariant(toM <= total + 1e-6, `${label} ends ${toM} m along a way of ${total.toFixed(2)} m`);
+  const pointAt = (metres) => {
+    let index = 1;
+    while (index < line.length - 1 && cumulative[index] < metres) index += 1;
+    const t = (metres - cumulative[index - 1]) / (cumulative[index] - cumulative[index - 1]);
+    return [line[index - 1][0] + (line[index][0] - line[index - 1][0]) * t, line[index - 1][1] + (line[index][1] - line[index - 1][1]) * t];
+  };
+  const clipped = [pointAt(fromM), ...line.filter((_, index) => cumulative[index] > fromM + 1e-6 && cumulative[index] < toM - 1e-6), pointAt(Math.min(toM, total))];
+  const reach = half + 1;
+  const ccw = (ring) => (signedRingArea(ring) < 0 ? ring.slice().reverse() : ring);
+  const normals = [];
+  const pieces = [];
+  for (let index = 1; index < clipped.length; index += 1) {
+    const [a, b] = [clipped[index - 1], clipped[index]];
+    const length = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    invariant(length > 1e-6, `${label} has a zero-length piece`);
+    const normal = [(-(b[1] - a[1]) / length) * sign, ((b[0] - a[0]) / length) * sign];
+    normals.push(normal);
+    const at = (point, offset) => [point[0] + normal[0] * offset, point[1] + normal[1] * offset];
+    pieces.push([[ccw([at(a, width), at(b, width), at(b, reach), at(a, reach)])]]);
+  }
+  for (let index = 1; index < normals.length; index += 1) {
+    const [before, after] = [normals[index - 1], normals[index]];
+    const turn = Math.acos(Math.max(-1, Math.min(1, before[0] * after[0] + before[1] * after[1])));
+    invariant(turn <= Math.PI / 3, `${label} bends by more than 60 degrees`);
+    // Outside the bend the two pieces leave a gap; a mitred wedge closes it.
+    const cross = before[0] * after[1] - before[1] * after[0];
+    if (cross * sign >= 0 || turn < 1e-9) continue;
+    const vertex = clipped[index];
+    const mitre = [before[0] + after[0], before[1] + after[1]];
+    const scale = reach / Math.cos(turn / 2) / Math.hypot(...mitre);
+    pieces.push([[ccw([vertex, [vertex[0] + before[0] * reach, vertex[1] + before[1] * reach], [vertex[0] + mitre[0] * scale, vertex[1] + mitre[1] * scale], [vertex[0] + after[0] * reach, vertex[1] + after[1] * reach]])]]);
+  }
+  const band = unionMultiPolygons(...pieces);
+  const cut = width > 0 ? differenceMultiPolygons(band, lineRibbon(clipped, width * 2, label)) : band;
+  invariant(cut.length > 0 && multiPolygonArea(cut) > 1e-3, `${label} cuts nothing`);
+  return cut;
+}
+
 // The arc-length position of the closest point on a line and its interpolated control value.
 function profileAt(line, values, point) {
   let best = null;
@@ -283,7 +410,7 @@ function harmonicGrade(grade, scope, land, regions, baseAt) {
     }
   }
   const free = [];
-  const constraints = regions.filter((region) => region.rule.kind !== "sink");
+  const constraints = regions.filter((region) => !RIM_RULE_KINDS.includes(region.rule.kind));
   for (let j = 0; j < height; j += 1) {
     for (let i = 0; i < width; i += 1) {
       const point = [x0 + i * step, y0 + j * step];
@@ -439,6 +566,20 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     throw new Error(`Terrain overrides find no land near ${point}`);
   };
 
+  // A way's protected corridor: a ribbon half_width_m each side (lineRibbon), less,
+  // along each of its spans, the band on a narrowed side between that side's half
+  // width (the line itself where it is 0) and the ribbon's edge (its cuts). Outside
+  // the spans the ribbon is unchanged.
+  const corridorArea = (siteId, corridor, key) => {
+    const label = `terrain override ${siteId} corridor ${key}`;
+    const line = rawWayLine(rawOsm, key.slice(1));
+    const ribbon = lineRibbon(line, corridor.half_width_m * 2, label);
+    if (!corridor.spans) return { area: ribbon, cuts: [] };
+    const cuts = corridor.spans.flatMap((span) => [["left_half_width_m", 1], ["right_half_width_m", -1]]
+      .filter(([side]) => span[side] < corridor.half_width_m)
+      .map(([side, sign]) => spanSideCut(line, span.from_m, span.to_m, span[side], corridor.half_width_m, sign, `${label} span ${span.from_m}-${span.to_m} m ${side}`)));
+    return { area: differenceMultiPolygons(ribbon, ...cuts), cuts };
+  };
   const sites = config.sites.map((site) => {
     const parts = [
       ...site.scope.source_keys.map((key) => {
@@ -452,24 +593,34 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
         return [[points]];
       }),
     ];
+    const wayCorridors = site.scope.exclude_ways.flatMap((corridor) => corridor.source_keys.map((key) => corridorArea(site.id, corridor, key)));
+    const exclusionShape = (entry) => {
+      let points = entry.points_xz.map(([x, z]) => [x, -z]);
+      if (signedRingArea(points) < 0) points = points.reverse();
+      return [[points]];
+    };
     const corridors = [
-      ...site.scope.exclude_ways.flatMap((corridor) => corridor.source_keys.map((key) =>
-        lineRibbon(rawWayLine(rawOsm, key.slice(1)), corridor.half_width_m * 2, `terrain override ${site.id} corridor ${key}`))),
-      ...site.scope.exclude_xz.map((entry) => {
-        let points = entry.points_xz.map(([x, z]) => [x, -z]);
-        if (signedRingArea(points) < 0) points = points.reverse();
-        return [[points]];
-      }),
+      ...wayCorridors.map(({ area }) => area),
+      ...site.scope.exclude_xz.filter((entry) => !("edge_blend_m" in entry)).map(exclusionShape),
     ];
+    // An exclusion with its own edge_blend_m is cut from the scope after the rest,
+    // and the correction fades over that width from its edge: the scope's other
+    // edges (those of `outer`) keep the site's edge_blend_m.
+    const ownBlend = site.scope.exclude_xz.filter((entry) => "edge_blend_m" in entry).map((entry) => ({ shape: exclusionShape(entry), blend: entry.edge_blend_m }));
     // The correction fades out at the scope's edges but not at the coastline:
     // there the grade runs on to the shore, where the rock slope starts from it.
-    const fadeGeometry = differenceMultiPolygons(unionMultiPolygons(...parts), ...corridors);
+    const outer = differenceMultiPolygons(unionMultiPolygons(...parts), ...corridors);
+    const fadeGeometry = ownBlend.length > 0 ? differenceMultiPolygons(outer, ...ownBlend.map(({ shape }) => shape)) : outer;
     const geometry = intersectMultiPolygons(fadeGeometry, boundary);
     invariant(geometry.length > 0 && multiPolygonArea(geometry) > 1, `Terrain override site ${site.id} scope is empty`);
-    const scope = { geometry, fadeGeometry, edges: edgeIndex(fadeGeometry), bounds: multiPolygonBounds(geometry) };
+    const scope = {
+      geometry, fadeGeometry, edges: edgeIndex(outer), bounds: multiPolygonBounds(geometry), fan_beside: site.scope.fan_beside ?? [],
+      ownBlendEdges: ownBlend.map(({ shape, blend }) => ({ edges: edgeIndex(shape), blend })),
+    };
     const regions = site.regions.map((region) => ({ id: region.id, rule: region.rule, field: shapeField(region.shape), minLeaf: region.min_leaf_m ?? null }));
     const grade = harmonicGrade(site.grade, scope, boundary, regions, baseAnywhere);
-    return { id: site.id, name: site.name, edgeBlend: site.scope.edge_blend_m, scope, regions, grade, area_m2: multiPolygonArea(geometry) };
+    const spanCuts = wayCorridors.flatMap(({ cuts }) => cuts).map((geometry) => ({ geometry, bounds: multiPolygonBounds(geometry) }));
+    return { id: site.id, name: site.name, edgeBlend: site.scope.edge_blend_m, scope, regions, grade, spanCuts, area_m2: multiPolygonArea(geometry) };
   });
 
   // The site correction at a point, given the coarse surface there.
@@ -479,15 +630,18 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const box = site.scope.bounds;
     if (point[0] < box.min_x || point[0] > box.max_x || point[1] < box.min_y || point[1] > box.max_y) return null;
     if (!pointInMultiPolygon(point, site.scope.fadeGeometry, true)) return null;
-    const fade = smoothstep(0, site.edgeBlend, distanceToEdges(point, site.scope.edges));
+    let fade = smoothstep(0, site.edgeBlend, distanceToEdges(point, site.scope.edges));
+    for (const { edges, blend } of site.scope.ownBlendEdges) fade = Math.min(fade, smoothstep(0, blend, distanceToEdges(point, edges)));
     if (fade === 0) return null;
     let surface = site.grade.at(point);
     for (const region of site.regions) {
-      if (region.rule.kind !== "sink") continue;
+      if (!RIM_RULE_KINDS.includes(region.rule.kind)) continue;
       const bounds = region.field.bounds;
       if (point[0] < bounds.min_x || point[0] > bounds.max_x || point[1] < bounds.min_y || point[1] > bounds.max_y) continue;
       const signed = region.field.signed(point);
-      if (signed < 0) surface -= region.rule.depth_m * smoothstep(0, region.rule.side_run_m, -signed);
+      if (signed >= 0) continue;
+      const rim = smoothstep(0, region.rule.side_run_m, -signed);
+      surface += region.rule.kind === "raise" ? region.rule.height_m * rim : -region.rule.depth_m * rim;
     }
     return { fade, surface };
   };
@@ -542,8 +696,26 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     return value;
   };
 
+  // The rings of the buildings the sites name in scope.fan_beside, with their boxes, and
+  // whether a cell holds one: the one test for the leaves' span-edge limit, the guarded
+  // edges and the guard that such a cell keeps its triangles. A re-meshed cell beside a
+  // coarse cell holding one fans the leaves along their shared edge to the edge's corners
+  // (refinedCellMesh) and never draws those leaves.
+  const fanKeys = new Set(sites.flatMap((site) => site.scope.fan_beside ?? []));
+  const fanRings = [];
+  for (const object of playableObjects.values()) {
+    if (!fanKeys.has(object.row.source_key) || !(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
+    for (const polygon of object.geometry) {
+      for (const ring of polygon) fanRings.push({ key: object.row.source_key, box: multiPolygonBounds([[ring]]) });
+    }
+  }
+  for (const key of fanKeys) invariant(fanRings.some((ring) => ring.key === key), `Terrain overrides scope.fan_beside names ${key}, which is not a building in the snapshot`);
+  const holdsFanBuilding = (west, south) => fanRings.some(({ box }) => box.max_x > west && box.min_x < west + cellSizeM && box.max_y > south && box.min_y < south + cellSizeM);
+  const EDGE_STEPS = Object.freeze({ east: [cellSizeM, 0], west: [-cellSizeM, 0], north: [0, cellSizeM], south: [0, -cellSizeM] });
+
   // ---- quadtree leaves per refined cell
   const steps = Math.round(cellSizeM / sampleM);
+  const spanCuts = sites.flatMap((site) => site.spanCuts);
   const audit = { leaves: 0, cells: refined.size, maximum_raise_m: 0, maximum_cut_m: 0, sampled_points: 0 };
   for (const cell of refined.values()) {
     // Surface samples on the cell's grid (rows south to north).
@@ -623,11 +795,51 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
       return limit;
     };
+    // Along a narrowed span of a way's corridor (its cut, grown by SPAN_EDGE_REACH_M),
+    // a leaf larger than SPAN_EDGE_LEAF_M that holds both kept ground (no correction)
+    // and corrected ground splits, as a plane through both would tilt the kept side:
+    // the way's own ground, a leaf's diagonal or more inside the narrowed edge, keeps
+    // its generated surface exactly.
+    const nearSpanCut = (x0, y0, size) => spanCuts.some(({ geometry, bounds }) => {
+      const reach = SPAN_EDGE_REACH_M;
+      if (x0 + size + reach < bounds.min_x || x0 - reach > bounds.max_x || y0 + size + reach < bounds.min_y || y0 - reach > bounds.max_y) return false;
+      return multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(x0 - reach, y0 - reach, x0 + size + reach, y0 + size + reach), geometry)) > 1e-9;
+    });
+    const joinsKeptAndMoved = (x0, y0, size) => {
+      const n = Math.round(size / sampleM);
+      let kept = false;
+      let moved = false;
+      for (let j = 0; j <= n; j += 1) {
+        for (let i = 0; i <= n; i += 1) {
+          const index = sampleIndex(x0 + i * sampleM, y0 + j * sampleM);
+          if (!inside[index]) continue;
+          if (deltas[index] === 0) kept = true;
+          else moved = true;
+          if (kept && moved) return true;
+        }
+      }
+      return false;
+    };
+    // Within FAN_EDGE_REACH_M of an edge beside a fan_beside building the span-edge rule
+    // splits no node below FAN_EDGE_LEAF_M: the leaves along that edge are fanned to its two
+    // corners (refinedCellMesh), and 1 m leaves along it or beside them fan into slivers
+    // some 30 m long and millimetres wide near the corners, which the street ground drapes
+    // with gaps. The tolerance still splits them as it does any leaf.
+    const fanEdges = Object.entries(EDGE_STEPS).filter(([, [dx, dy]]) => holdsFanBuilding(cell.west + dx, cell.south + dy)).map(([edge]) => edge);
+    const nearFanEdge = (x0, y0, size) => fanEdges.some((edge) => ({
+      east: x0 + size >= cell.west + cellSizeM - FAN_EDGE_REACH_M, west: x0 <= cell.west + FAN_EDGE_REACH_M,
+      north: y0 + size >= cell.south + cellSizeM - FAN_EDGE_REACH_M, south: y0 <= cell.south + FAN_EDGE_REACH_M,
+    })[edge]);
+    const spanEdgeLeaf = (x0, y0, size) => (nearFanEdge(x0, y0, size) ? FAN_EDGE_LEAF_M : SPAN_EDGE_LEAF_M);
+    // Such a cell fans its guarded edge's leaves best ear first (refinedCellMesh): its
+    // larger leaves there would otherwise fan into one corner across the whole edge.
+    cell.fanBestEars = fanEdges.length > 0 && nearSpanCut(cell.west, cell.south, cellSizeM);
     const leaves = [];
     const stack = [[cell.west, cell.south, cellSizeM]];
     while (stack.length > 0) {
       const [x0, y0, size] = stack.pop();
-      if (size > leafLimit(x0, y0, size) && nodeError(x0, y0, size) > tolerance) {
+      if ((size > leafLimit(x0, y0, size) && nodeError(x0, y0, size) > tolerance)
+        || (size > spanEdgeLeaf(x0, y0, size) && nearSpanCut(x0, y0, size) && joinsKeptAndMoved(x0, y0, size))) {
         const half = size / 2;
         stack.push([x0, y0, half], [x0 + half, y0, half], [x0, y0 + half, half], [x0 + half, y0 + half, half]);
       } else {
@@ -638,6 +850,68 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     cell.leaves = leaves;
     audit.leaves += leaves.length;
   }
+  // A fan_beside building's land cells stay as generated: no correction re-meshes one.
+  for (const cell of refined.values()) {
+    invariant(cell.mode !== "leaves" || !holdsFanBuilding(cell.west, cell.south), `Terrain override cell ${cell.west}, ${cell.south} holds a scope.fan_beside building but the correction reaches it; keep the scope off that building's cells`);
+  }
+
+  // A split coarse neighbour keeps its surface but gains edges, fanned from its
+  // new edge vertices across the cell. Under a building that no re-meshed cell
+  // reaches they would re-cut a foundation that otherwise stays as generated
+  // (it follows the land facets, and landmark forms match those wall records),
+  // so a site must leave such a neighbour unsplit: exclude the re-meshed cell
+  // beside it from the scope (scope.exclude_xz). A building that a re-meshed
+  // cell reaches has its foundation re-cut by that cell's facets anyway.
+  const remeshed = (geometry) => [...refined.values()].some((cell) => cell.mode === "leaves"
+    && multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(cell.west, cell.south, cell.west + cellSizeM, cell.south + cellSizeM), geometry)) > 1e-6);
+  const buildingRings = [];
+  for (const object of playableObjects.values()) {
+    if (!(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
+    const box = multiPolygonBounds(object.geometry);
+    const near = siteBoxes.some((site) => box.max_x > site.min_x - cellSizeM && box.min_x < site.max_x + cellSizeM && box.max_y > site.min_y - cellSizeM && box.min_y < site.max_y + cellSizeM);
+    if (!near || remeshed(object.geometry)) continue;
+    for (const polygon of object.geometry) {
+      for (const ring of polygon) {
+        const xs = ring.map((point) => point[0]);
+        const ys = ring.map((point) => point[1]);
+        buildingRings.push({ key: object.row.source_key, ring, box: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } });
+      }
+    }
+  }
+  // A re-meshed cell beside a coarse cell that holds a guarded building (holdsFanBuilding:
+  // one a site names in scope.fan_beside) puts no vertex on their shared edge but its two corners: the
+  // leaves along that edge are joined into one polygon fanned to those corners
+  // (refinedCellMesh), so the neighbour is never split and its land, and the
+  // foundation that follows it, stay exactly as generated. A site keeps the
+  // correction at zero along such an edge (scope.exclude_xz, faded by edge_blend_m),
+  // so the fan lies on the generated surface there.
+  // Only the buildings a site names in scope.fan_beside: other sites keep their output.
+  const guardedEdges = new Map();
+  for (const cell of refined.values()) {
+    if (cell.mode !== "leaves") continue;
+    const edges = Object.entries(EDGE_STEPS)
+      .filter(([, [dx, dy]]) => refined.get(cellKey(cell.west + dx, cell.south + dy))?.mode !== "leaves" && holdsFanBuilding(cell.west + dx, cell.south + dy))
+      .map(([edge]) => edge);
+    if (edges.length > 0) guardedEdges.set(cellKey(cell.west, cell.south), edges);
+  }
+  const edgesOf = (cell) => guardedEdges.get(cellKey(cell.west, cell.south)) ?? [];
+  // Whether point lies on one of the cell's guarded edges, strictly between its corners.
+  const insideGuardedEdge = (cell, point) => edgesOf(cell).some((edge) => {
+    const vertical = edge === "east" || edge === "west";
+    const line = edge === "east" ? cell.west + cellSizeM : edge === "west" ? cell.west : edge === "north" ? cell.south + cellSizeM : cell.south;
+    const [across, along, low] = vertical ? [point[0], point[1], cell.south] : [point[1], point[0], cell.west];
+    return Math.abs(across - line) <= 1e-6 && along > low + 1e-6 && along < low + cellSizeM - 1e-6;
+  });
+  // Whether point lies on a guarded edge's line, its corners included.
+  const onGuardedLine = (cell, point) => edgesOf(cell).some((edge) => {
+    const vertical = edge === "east" || edge === "west";
+    const line = edge === "east" ? cell.west + cellSizeM : edge === "west" ? cell.west : edge === "north" ? cell.south + cellSizeM : cell.south;
+    return Math.abs((vertical ? point[0] : point[1]) - line) <= 1e-6;
+  });
+  const touchesGuardedEdge = (cell, leaf) => edgesOf(cell).some((edge) => ({
+    east: leaf.x0 + leaf.size >= cell.west + cellSizeM - 1e-9, west: leaf.x0 <= cell.west + 1e-9,
+    north: leaf.y0 + leaf.size >= cell.south + cellSizeM - 1e-9, south: leaf.y0 <= cell.south + 1e-9,
+  })[edge]);
 
   // ---- vertices on grid lines (leaf corners, and coast points where leaves
   // are clipped), for T-junction-free edges.
@@ -667,7 +941,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
       }
       const whole = Math.abs(multiPolygonArea(polygons) - leaf.size * leaf.size) <= 1e-9;
       cell.leafPolygons.push({ leaf, polygons, whole });
-      for (const polygon of polygons) for (const point of polygon[0]) addLinePoint(point);
+      for (const polygon of polygons) for (const point of polygon[0]) if (!insideGuardedEdge(cell, point)) addLinePoint(point);
     }
   }
   const sortedLine = (map) => new Map([...map.entries()].map(([key, set]) => [key, [...set].sort((left, right) => left - right)]));
@@ -765,28 +1039,41 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     for (let index = 1; index < tail.length; index += 1) emit(last, tail[index - 1], tail[index]);
   };
   // Ear clipping that keeps collinear vertices (earcut drops them), for small
-  // convex-ish leaf polygons along the coast. Counter-clockwise ring in.
-  const clipEars = (ring) => {
+  // convex-ish leaf polygons along the coast. Counter-clockwise ring in. With best,
+  // each step clips the ear whose smallest angle is largest, not the first: the
+  // polygon beside a guarded edge then fans to both of the edge's corners and meets
+  // them in one triangle, instead of running every fan triangle into one corner.
+  const clipEars = (ring, best = false) => {
     const points = ring.slice();
     const triangles = [];
     const area2 = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
     const contains = (a, b, c, p) => area2(a, b, p) >= -1e-12 && area2(b, c, p) >= -1e-12 && area2(c, a, p) >= -1e-12;
+    const angle = (p, q, r) => Math.abs(Math.atan2(area2(p, q, r), (q[0] - p[0]) * (r[0] - p[0]) + (q[1] - p[1]) * (r[1] - p[1])));
+    const smallestAngle = (a, b, c) => Math.min(angle(a, b, c), angle(b, c, a), angle(c, a, b));
     let guard = points.length * points.length + 10;
     while (points.length > 3 && guard > 0) {
       guard -= 1;
-      let clipped = false;
+      let chosen = -1;
+      let quality = -Infinity;
       for (let index = 0; index < points.length; index += 1) {
         const a = points[(index + points.length - 1) % points.length];
         const b = points[index];
         const c = points[(index + 1) % points.length];
         if (area2(a, b, c) <= 1e-9) continue;
         if (points.some((p) => p !== a && p !== b && p !== c && contains(a, b, c, p))) continue;
-        triangles.push([a, b, c]);
-        points.splice(index, 1);
-        clipped = true;
-        break;
+        if (!best) {
+          chosen = index;
+          break;
+        }
+        const q = smallestAngle(a, b, c);
+        if (q > quality + 1e-12) {
+          quality = q;
+          chosen = index;
+        }
       }
-      if (!clipped) return null;
+      if (chosen < 0) return null;
+      triangles.push([points[(chosen + points.length - 1) % points.length], points[chosen], points[(chosen + 1) % points.length]]);
+      points.splice(chosen, 1);
     }
     if (points.length === 3 && area2(points[0], points[1], points[2]) > 1e-9) triangles.push(points);
     return triangles;
@@ -796,7 +1083,30 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
   const refinedCellMesh = (cell, label) => {
     const mesh = newMesh();
     const emit = (a, b, c) => pushTriangle(mesh, vertexOf(mesh, a, cell), vertexOf(mesh, b, cell), vertexOf(mesh, c, cell));
+    const guarded = edgesOf(cell).length > 0;
+    if (guarded) {
+      // The leaves along the guarded edges, as one polygon fanned to the edges' corners.
+      const along = cell.leafPolygons.filter(({ leaf }) => touchesGuardedEdge(cell, leaf));
+      invariant(along.every(({ whole }) => whole), `${label}: a leaf on an edge beside a guarded building is clipped by the coast`);
+      const union = unionMultiPolygons(...along.map(({ leaf }) => rectangleMultiPolygon(leaf.x0, leaf.y0, leaf.x0 + leaf.size, leaf.y0 + leaf.size)));
+      invariant(union.length === 1 && union[0].length === 1, `${label}: the leaves beside a guarded building do not join into one polygon`);
+      let ring = union[0][0].map((point) => [roundCoordinate(point[0]), roundCoordinate(point[1])]);
+      if (signedRingArea(ring) < 0) ring = ring.slice().reverse();
+      const withExtras = [];
+      for (let index = 0; index < ring.length; index += 1) {
+        const a = ring[index];
+        const b = ring[(index + 1) % ring.length];
+        if (insideGuardedEdge(cell, a)) continue;
+        withExtras.push(a);
+        if (!(onGuardedLine(cell, a) && onGuardedLine(cell, b))) withExtras.push(...extrasBetween(a, b));
+      }
+      const cleaned = withExtras.filter((point, index) => vertexKey(point) !== vertexKey(withExtras[(index + 1) % withExtras.length]));
+      const triangles = clipEars(cleaned, cell.fanBestEars);
+      invariant(triangles, `${label} could not fan the leaves beside a guarded building: ${JSON.stringify(cleaned)}`);
+      for (const [a, b, c] of triangles) emit(a, b, c);
+    }
     for (const { leaf, polygons, whole } of cell.leafPolygons) {
+      if (guarded && touchesGuardedEdge(cell, leaf)) continue;
       const { x0, y0, size } = leaf;
       if (whole) {
         const sw = [x0, y0];
@@ -903,29 +1213,6 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     return { mesh: { vertices: out.vertices, normals: out.normals, uvs: out.uvs, indices: out.indices }, inserted };
   };
 
-  // A split coarse neighbour keeps its surface but gains edges, fanned from its
-  // new edge vertices across the cell. Under a building that no re-meshed cell
-  // reaches they would re-cut a foundation that otherwise stays as generated
-  // (it follows the land facets, and landmark forms match those wall records),
-  // so a site must leave such a neighbour unsplit: exclude the re-meshed cell
-  // beside it from the scope (scope.exclude_xz). A building that a re-meshed
-  // cell reaches has its foundation re-cut by that cell's facets anyway.
-  const remeshed = (geometry) => [...refined.values()].some((cell) => cell.mode === "leaves"
-    && multiPolygonArea(intersectMultiPolygons(rectangleMultiPolygon(cell.west, cell.south, cell.west + cellSizeM, cell.south + cellSizeM), geometry)) > 1e-6);
-  const buildingRings = [];
-  for (const object of playableObjects.values()) {
-    if (!(object.roles.includes("building") || object.roles.includes("building_part")) || !object.geometry) continue;
-    const box = multiPolygonBounds(object.geometry);
-    const near = siteBoxes.some((site) => box.max_x > site.min_x - cellSizeM && box.min_x < site.max_x + cellSizeM && box.max_y > site.min_y - cellSizeM && box.min_y < site.max_y + cellSizeM);
-    if (!near || remeshed(object.geometry)) continue;
-    for (const polygon of object.geometry) {
-      for (const ring of polygon) {
-        const xs = ring.map((point) => point[0]);
-        const ys = ring.map((point) => point[1]);
-        buildingRings.push({ key: object.row.source_key, ring, box: { min_x: Math.min(...xs), max_x: Math.max(...xs), min_y: Math.min(...ys), max_y: Math.max(...ys) } });
-      }
-    }
-  }
   const orientation = (a, b, c) => (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
   const crosses = (p, q, a, b) => {
     const d1 = orientation(a, b, p);
@@ -959,6 +1246,20 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     }
   };
 
+  // The land cell under a guarded building keeps exactly the triangles it was
+  // generated with: no vertex inserted, and the same triangles by position.
+  const assertGuardedCellKept = (west, south, coarse, split, label) => {
+    if (!holdsFanBuilding(west, south)) return;
+    const triangles = (mesh) => {
+      const list = [];
+      for (let offset = 0; offset < mesh.indices.length; offset += 3) {
+        list.push([0, 1, 2].map((k) => mesh.indices[offset + k] * 3).map((i) => `${mesh.vertices[i]},${mesh.vertices[i + 1]},${mesh.vertices[i + 2]}`).sort().join(";"));
+      }
+      return list.sort().join("|");
+    };
+    invariant(split.inserted === 0 && triangles(split.mesh) === triangles(coarse), `${label}: the land cell under a guarded building changed (${split.inserted} vertices inserted); a re-meshed cell beside it must fan to their shared edge's corners`);
+  };
+
   // Meshes for the generator's per-cell callback (griddedTerrainSurfaceMesh).
   let neighbourInserts = 0;
   let refinedTriangles = 0;
@@ -966,8 +1267,12 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const cell = refined.get(cellKey(west, south));
     if (cell) {
       invariant(JSON.stringify(clipped) === JSON.stringify(cell.polygon), `${label} land polygon differs from the terrain override plan`);
-      const mesh = cell.mode === "leaves" ? refinedCellMesh(cell, label) : splitCoarseMesh(coarse, label).mesh;
-      if (cell.mode === "coarse") assertBuildingsUncut(west, south, coarse, mesh, label);
+      const split = cell.mode === "leaves" ? null : splitCoarseMesh(coarse, label);
+      const mesh = split ? split.mesh : refinedCellMesh(cell, label);
+      if (cell.mode === "coarse") {
+        assertBuildingsUncut(west, south, coarse, mesh, label);
+        assertGuardedCellKept(west, south, coarse, split, label);
+      }
       refinedTriangles += mesh.indices.length / 3;
       return mesh;
     }
@@ -977,6 +1282,7 @@ export function planTerrainOverrides({ loaded, playableObjects, rawOsm, boundary
     const result = splitCoarseMesh(coarse, label);
     neighbourInserts += result.inserted;
     assertBuildingsUncut(west, south, coarse, result.mesh, label);
+    assertGuardedCellKept(west, south, coarse, result, label);
     return result.mesh;
   };
 

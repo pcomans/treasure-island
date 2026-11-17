@@ -3,12 +3,16 @@ extends RefCounted
 ## The game's time of day: the instant (UTC, Unix seconds) the sun is drawn for
 ## (DaySun), and Treasure Island's own clock for the menu (Pacific time).
 ##
-## Owner, 2026-11-14: the game opens at the real date and time on the island and
-## runs at real speed, one minute of play a minute of real time, whatever the game
-## is doing (a pause too: the sun keeps the real time); the Options screen's date
-## and time jump to any moment of the year, and time runs on from there; "Now"
-## comes back to the real time. Nothing of it is kept between runs. The web build
-## holds the recorded moment ("Mac first, web later").
+## The game opens on the island's date today at the recorded moment's time of day,
+## 12:30 (start_instant; owner, 2026-11-16: "always start the game during a time
+## with nice lighting", rather than at the real time, which may be the middle of
+## the night), so the sun's height follows the season but it is always early
+## afternoon. From there time runs at real speed, one minute of play a minute of
+## real time, whatever the game is doing (a pause too: the sun keeps time; owner,
+## 2026-11-14); the Options screen's date and time jump to any moment of the year,
+## and time runs on from there; "Now" jumps to the real date and time. Nothing of
+## it is kept between runs: every run starts so. The web build holds the recorded
+## moment ("Mac first, web later").
 ##
 ## The one switch for everything that must stay the same from run to run: every
 ## test or capture driver (a --script run, its SceneTree scripted, as
@@ -43,12 +47,18 @@ extends RefCounted
 ## buildings' daylight fills put out, the shadows' reach), the Options screen's
 ## date and time, and NightLights (the flashlight and the driven car's
 ## headlights), which a scripted run doesn't make either (scripted()). Each run
-## prints one line as it reads the switch: TIME_OF_DAY on, held (a --script run)
-## or off, and why.
+## prints one TIME_OF_DAY line: off, and why, or held (a --script run) as it reads
+## the switch; on, as its clock starts, with the moment it starts at and the real
+## time then.
 
 ## Treasure Island, as tools/solar_position.mjs takes it.
 const LATITUDE := 37.82
 const LONGITUDE := -122.37
+## The sun's centre this far under the horizon (degrees, its geometric elevation,
+## before refraction) at sunrise and sunset (sun_times), as almanacs and the NOAA
+## Solar Calculator count them: the top of the disc on the horizon, lifted by 34'
+## of refraction, with the disc's 16' radius below it.
+const SUNRISE_ELEVATION_DEG := -0.833
 ## 2026-11-13 12:30 PST: main.tscn's Sun (its solar_moment metadata).
 const RECORDED_UNIX := 1794601800.0
 ## The switch (see the top): the project setting, and the command line's argument
@@ -111,14 +121,10 @@ static func _read_switch() -> void:
 		return
 	_switch_read = true
 	_off = off_reason_for(OS.get_cmdline_user_args(), ProjectSettings.get_setting(ENABLED_SETTING, true), OS.has_feature("web"))
-	var at := local(RECORDED_UNIX)
-	var recorded := "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
 	if not _off.is_empty():
-		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, recorded])
+		print("TIME_OF_DAY off (%s): the clock holds %s" % [_off, moment_text(RECORDED_UNIX)])
 	elif scripted():
-		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % recorded)
-	else:
-		print("TIME_OF_DAY on: the clock runs from the real time")
+		print("TIME_OF_DAY held: a --script run holds the clock at %s unless its driver moves it" % moment_text(RECORDED_UNIX))
 
 
 ## Whether this run is a test or capture driver's (its SceneTree scripted): the
@@ -154,7 +160,7 @@ static func start_at(unix: float) -> void:
 	_jump(unix, true)
 
 
-## The real current time, running (the game's start; the Options screen's Now).
+## The real current time, running (the Options screen's Now).
 static func start_now() -> void:
 	_jump(float(system_clock.call()), true)
 
@@ -165,15 +171,40 @@ static func pin(unix: float = RECORDED_UNIX) -> void:
 	_jump(unix, false)
 
 
-## The clock as a run starts: the real time in play, the recorded moment, held,
-## with the time of day off (the web's too) and for every test or capture driver.
+## The clock as a run starts (start_for), with its TIME_OF_DAY line when it runs.
 static func _start() -> void:
 	if _started:
 		return
-	if not enabled() or scripted():
-		_set_clock(RECORDED_UNIX, false)
-	else:
-		_set_clock(float(system_clock.call()), true)
+	var real := float(system_clock.call())
+	var start := start_for(enabled(), scripted(), real)
+	_set_clock(float(start[0]), bool(start[1]))
+	if _running:
+		print("TIME_OF_DAY on: the clock starts at %s, the recorded moment's time of day on the island's date, and runs at real speed (the real time %s)" % [moment_text(float(start[0])), moment_text(real)])
+
+
+## [instant, running] a run's clock starts at, with the time of day on or off, in a
+## test or capture driver's run or not, the real time (the system clock) being
+## `real_unix`: in play, start_instant(real_unix), running; held at the recorded
+## moment with the time of day off (the web's too) and for every test or capture
+## driver.
+static func start_for(on: bool, is_scripted: bool, real_unix: float) -> Array:
+	if not on or is_scripted:
+		return [RECORDED_UNIX, false]
+	return [start_instant(real_unix), true]
+
+
+## The instant play starts at, the real time being `real_unix`: the island's date
+## then at the recorded moment's time of day (12:30, PST or PDT as that date has
+## it).
+static func start_instant(real_unix: float) -> float:
+	var today := local(real_unix)
+	return unix_from_local(int(today.year), int(today.day_of_year), float(local(RECORDED_UNIX).minutes))
+
+
+## The island's clock at `unix` as "YYYY-MM-DD HH:MM ZONE".
+static func moment_text(unix: float) -> String:
+	var at := local(unix)
+	return "%d-%02d-%02d %02d:%02d %s" % [at.year, at.month, at.day, at.hour, at.minute, at.zone]
 
 
 ## Real time from the system clock again, after a test's stand-in. Set the source
@@ -262,6 +293,43 @@ static func parse_local(text: String) -> float:
 ## The number of days in `year`.
 static func days_in_year(year: int) -> int:
 	return 366 if (year % 4 == 0 and year % 100 != 0) or year % 400 == 0 else 365
+
+
+## The island's clock at `unix` in minutes into its day, the seconds a fraction of
+## a minute: the Options screen's time slider's scale.
+static func local_minutes(unix: float) -> float:
+	return float(local(unix).minutes) + fposmod(unix, 60.0) / 60.0
+
+
+## Sunrise and sunset on day `day_of_year` (1 on 1 January) of `year` on the
+## island's clock: [sunrise, sunset] (UTC, Unix seconds), the moments the sun's
+## centre crosses SUNRISE_ELEVATION_DEG (SolarPosition's geometric elevation),
+## rising before that day's solar noon and setting after it. The Options screen
+## marks them on its time slider (hud.gd).
+static func sun_times(year: int, day_of_year: int) -> Array[float]:
+	# Solar noon, where the hour angle is 0: it turns 15 degrees an hour, so from the
+	# island's noon two steps settle it to well under a second.
+	var noon := unix_from_local(year, day_of_year, 720.0)
+	for _step in 2:
+		noon -= float(SolarPosition.at(noon, LATITUDE, LONGITUDE).hour_angle_deg) / 15.0 * 3600.0
+	var times: Array[float] = [_horizon_crossing(noon, -1.0), _horizon_crossing(noon, 1.0)]
+	return times
+
+
+## The moment the sun's centre crosses SUNRISE_ELEVATION_DEG between solar noon and
+## the solar midnight before it (side -1) or after it (side 1), halved down to well
+## under a millisecond: at the island's latitude the sun is up at every noon and
+## down at every midnight, and climbs (or sinks) all the way between.
+static func _horizon_crossing(noon: float, side: float) -> float:
+	var up := noon
+	var down := noon + side * 43200.0
+	for _halving in 36:
+		var middle := 0.5 * (up + down)
+		if float(SolarPosition.at(middle, LATITUDE, LONGITUDE).geometric_elevation_deg) >= SUNRISE_ELEVATION_DEG:
+			up = middle
+		else:
+			down = middle
+	return 0.5 * (up + down)
 
 
 ## Midnight UTC on the nth Sunday of a month.

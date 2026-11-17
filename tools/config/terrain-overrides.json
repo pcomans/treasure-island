@@ -2,7 +2,7 @@
   "schema_version": "ti.terrain-overrides/1",
   "notes": [
     "Local corrections of the generated land where the frozen 2023 USGS raster predates what was built (tools/lib/terrain-overrides.mjs). World metres: +X east, +Z south.",
-    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge, so the land outside the scope and on the coastline keeps its generated surface.",
+    "A site's scope is its OSM areas plus traced polygons (add_xz), minus corridors round protected ways (exclude_ways: half_width_m each side; a single-way entry may list spans, metres along the way from its first node, where the left or right side of its direction is narrower, or open at 0 (with both sides 0 the corridor stops there); along a span the land leaves that join kept and corrected ground are 1 m, so the way's own ground more than 1.5 m inside the narrowed edge stays exactly as generated) and traced polygons (exclude_xz), inside the land. The correction fades to exactly zero over edge_blend_m at the scope's edge (from a traced exclusion that gives its own edge_blend_m, over that), so the land outside the scope and on the coastline keeps its generated surface.",
     "The site's grade is a harmonic membrane on a grid_m grid (relaxation over-relaxation factor, a fixed number of iterations): it takes the generated land outside the scope and the level and profile targets inside their shapes, and is as smooth as possible everywhere else, so the 32 m land grid's waves smooth out and designed surfaces meet their surroundings in gentle ramps. Regions apply in order: level holds a flat elevation_m inside its shape, profile holds control elevations_m along its line, sink cuts depth_m below the grade with a smoothstep rim side_run_m wide. Shapes: points_xz (optionally grown by buffer_m, negative to inset), line_xz with width_m, or an ellipse (center_xz, radii_m, rotation_deg turning +X toward +Z).",
     "Every 32 m land cell the correction reaches is re-meshed as a quadtree of leaves down to min_leaf_m, split until each leaf's two triangles stay within tolerance_m of the corrected surface (sampled every sample_m); shared edges stay watertight, coarse neighbours keep their surface.",
     "All elevations, depths and rims here are production inference for game art, traced from the designer's plan and dated photos, not survey data."
@@ -17,84 +17,55 @@
       "id": "cityside_park",
       "name": "Cityside Park",
       "basis": "production_inference",
-      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade.",
+      "evidence": "OSM w1428380753 (leisure=park, 2025-09-09); CMG/TIDA Phase 1 site plan 2025-04-16 (event lawn, stormwater treatment areas, forebay, promenade); SFAC art-location plan 2024-02 (Stormwater Bioretention Area x3, Stormwater Channel); Esri World Imagery 2026-05-26 and 2025-08-29; CMG photos (Sep 2025 to Oct 2026), Google Maps contributor photos ph05, ph08, ph10 (Sep 2025). The 2023 USGS raster (CA_SanFrancisco_B23) predates the 2024-2025 grading: it shows a pit where the lawn is and fill mounds along the future promenade. The lot south-east of the park, fenced until 2026, is built as a park (owner video 2026-11-15): its wedge by the notch, its north-west corner and its north part join the scope (all but a strip along Isle House's land cell, whose shared edge the re-meshed cells fan to), its mound is a raise. Avenue of the Palms over the 2023 raster's stockpile hump and the land east of it as far as Isle House's land cells join the scope too (owner, 2026-11-16: flatten the hill), so the avenue, the park's north end and the cycle-track leg take one grade, level as the owner's video shows (f_000-f_005, f_103, f_107, f_112).",
       "scope": {
         "source_keys": [
           "w1428380753"
         ],
-        "add_xz": [
-          [
-            [
-              -352.78,
-              324.11
-            ],
-            [
-              -180.85,
-              663.85
-            ],
-            [
-              -212.05,
-              679.65
-            ],
-            [
-              -383.98,
-              339.91
-            ]
-          ]
-        ],
+        "add_xz": [[[-352.78, 324.11], [-180.85, 663.85], [-212.05, 679.65], [-383.98, 339.91]], [[-207.0, 561.3], [-192.5, 540.9], [-192.5, 586.1]], [[-192.5, 494.0], [-168.0, 494.0], [-168.0, 545.0], [-192.5, 545.0]], [[-200.35, 479.59], [-195.34, 477.0], [-150.0, 477.0], [-150.0, 515.0], [-170.96, 536.44]]],
         "exclude_ways": [
           {
             "source_keys": [
               "w1001544697"
             ],
             "half_width_m": 13,
-            "reason": "Avenue of the Palms: its carriageway, parking lanes, curbs, sidewalks and the street ground beside them (planting strips, verges, the west palms) keep their generated surface; the cycle track runs inside this corridor."
+            "reason": "Avenue of the Palms: its carriageway, parking lanes, curbs, sidewalks and the street ground beside them (planting strips, verges, the west palms) keep their generated surface; the cycle track runs inside this corridor.",
+            "spans": [
+              {
+                "from_m": 254,
+                "to_m": 318,
+                "left_half_width_m": 0,
+                "right_half_width_m": 0,
+                "reason": "Over the 2023 raster's stockpile hump the corridor is open on both sides: there a 32 m land-grid corner at (-192, 512) stands on the fill (8.3 m), so the generated carriageway rose to 6.1 m about 280 m along the way and the west sidewalk to 6.8 m, about 2 m over the road at either end. The carriageway, kerbs, sidewalks and verges between 254 and 318 m take this site's grade (the avenue_of_the_palms_hump profile), the hump's land east of them grades down to Isle House's land cells, and the park's ground runs level to the west sidewalk (owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange'; owner video 2026-11-15, f_103, f_107, f_112: the avenue level with the park). Outside the span the corridor keeps the road as generated, which already lies level there."
+              }
+            ]
           }
         ],
         "exclude_xz": [
           {
             "points_xz": [
               [
-                -215.5,
-                547.3
+                -160.0,
+                476.0
               ],
               [
-                -177,
-                512.2
+                -150.0,
+                476.0
               ],
               [
-                -170.5,
-                512.6
+                -150.0,
+                545.0
               ],
               [
-                -205,
-                563
+                -160.0,
+                545.0
               ]
             ],
-            "reason": "The fenced lawn lot south-east of the park (Jun 2026 pano p10, aerial 2026-05-26): the OSM park polygon takes in its north-west corner up to the construction-panel fence, which is not part of the opened park."
-          },
-          {
-            "points_xz": [
-              [
-                -192.5,
-                479.5
-              ],
-              [
-                -159.5,
-                479.5
-              ],
-              [
-                -159.5,
-                544.5
-              ],
-              [
-                -192.5,
-                544.5
-              ]
-            ],
-            "reason": "The two land cells beside Isle House (w1249412094) stay as generated: re-meshing them would split the cells under the building and re-cut the foundation its landmark form matches. Only the park's edge strip by the avenue lies here, where the grade follows the USGS land anyway."
+            "edge_blend_m": 1,
+            "reason": "Isle House's land cells (w1249412094, east of x -160) keep their generated surface: the scope stops at their shared edge, where the correction is zero, and the re-meshed cells beside them fan to that edge's corners (tools/lib/terrain-overrides.mjs guarded edges), so Isle House's cells are never split and the fan lies on the generated ground there. The lowered avenue and the land beside it blend back to that edge over 1 m, not the site's 3 m, so the hump's flank (rising about 0.14 m a metre from the edge) leaves no swell on the avenue's east sidewalk; the added scope reaches past the edge (to x -150) only so that this strip, not the scope's outline, is the edge there."
           }
         ],
+        "fan_beside": ["w1249412094"],
         "edge_blend_m": 3
       },
       "grade": {
@@ -396,6 +367,78 @@
           "reason": "The central stormwater meadow (ph08 Sep 2025): a shallow planted basin round the decomposed-granite meander."
         },
         {
+          "id": "z7_forebay_grade",
+          "shape": {
+            "points_xz": [
+              [
+                -233.1,
+                500.8
+              ],
+              [
+                -225.8,
+                489.8
+              ],
+              [
+                -216.7,
+                485.7
+              ],
+              [
+                -213.1,
+                485.5
+              ],
+              [
+                -211.6,
+                488.2
+              ],
+              [
+                -210.2,
+                488.8
+              ],
+              [
+                -209.3,
+                488.6
+              ],
+              [
+                -209.6,
+                489.6
+              ],
+              [
+                -210.6,
+                490.6
+              ],
+              [
+                -211.8,
+                491
+              ],
+              [
+                -215.8,
+                491.3
+              ],
+              [
+                -222.4,
+                494.3
+              ],
+              [
+                -229.6,
+                501.4
+              ],
+              [
+                -231,
+                501.8
+              ],
+              [
+                -231.7,
+                501.7
+              ]
+            ]
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.2
+          },
+          "reason": "Keeps the stormwater swale and forebay, and the event plaza's north-east end beside them, at the accepted park's heights now that no held line along the cycle-track leg sets the grade there: level at 4.2 m, the 2023 raster's level round them (3.97 to 4.20 m). It stops 2 m short of the pump pad and 5.5 m short of the event plaza, so their own grades blend into it; the swale's, the forebay's and the bed's sinks are cut into it."
+        },
+        {
           "id": "z7_bioretention",
           "shape": {
             "points_xz": [
@@ -513,6 +556,51 @@
           },
           "min_leaf_m": 1,
           "reason": "The oval stormwater forebay beside the pump station (CMG plan label, aerial 2025-08-29 and 2026-05-26: about 7.5 by 4.7 m)."
+        },
+        {
+          "id": "isle_house_park_chair_slope",
+          "shape": {
+            "center_xz": [
+              -201.0,
+              554.2
+            ],
+            "radii_m": [
+              4.6,
+              2.8
+            ],
+            "rotation_deg": 62.2
+          },
+          "rule": {
+            "kind": "level",
+            "elevation_m": 4.5
+          },
+          "reason": "The mulch apron at the foot of the mound where the loose group of chairs stands, held level so they stand upright (owner video 2026-11-15, f_100-f_108; height production inference from the ground beside it)."
+        },
+        {
+          "id": "isle_house_park_mound",
+          "shape": {
+            "center_xz": [
+              -198.67,
+              546.53
+            ],
+            "radii_m": [
+              8.0,
+              6.0
+            ],
+            "rotation_deg": 62.2
+          },
+          "rule": {
+            "kind": "raise",
+            "height_m": 0.7,
+            "side_run_m": 6.5
+          },
+          "reason": "The park outside Isle House's raised lawn at its north-west end, its mulch slope with the chairs falling to the bike path (owner video 2026-11-15, f_100-f_110). Height about 1 m and extent are production inference: the frames show the slope from the bike path, not the mound's top or north-east side."
+        },
+        {
+          "id": "avenue_of_the_palms_hump",
+          "shape": {"line_xz": [[-187.97, 468.69], [-166.85, 509.55]], "width_m": 19},
+          "rule": {"kind": "profile", "elevations_m": [3.978, 4.032]},
+          "reason": "Avenue of the Palms over the 2023 raster's stockpile hump (w1001544697, from 250 to 296 m along it: its carriageway, parking lanes, kerbs, planting strip, sidewalks and verges, 10.5 m east and 8.5 m west of a line 1 m east of the way) on a straight grade from the untouched road at its north end (the generated land there, 3.978 m at 250 m) at 0.12 % (4.032 m at 296 m), level across. South of it the site's grade carries the road on to the generated road at about 318 m, whose west half rises about 2 % to the west kerb, over some 15 m instead of a short ramp at the scope's edge. The park's north tip and Cityside's north-west corner (the cycle-track leg, its walk, the bioretention bed's rim) take the site's grade between this, the pump pad and the park's lawn: level with the avenue and the track, as the owner's video shows (f_103, f_107, f_112), with no level or held region of their own. Owner, 2026-11-16: 'the hill outside the avenue of the palms looks very strange. I think we should just flatten it'."
         }
       ]
     },

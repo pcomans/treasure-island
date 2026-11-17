@@ -30,11 +30,20 @@ extends Node
 ## FLASH_AHEAD_M in front of the chest (less if a wall is nearer, so it never starts
 ## inside one), at FLASH_HEIGHT_M, and casts shadows when the player's shadow option
 ## is not Off (ShadowQuality; about 0.1 to 0.2 ms of GPU time on the dev machine's
-## Radeon 780M, 2026-11-15), so it lights nothing through a wall. A small fill on the
-## chest itself (FILL_*), lighting only the chest (its own render layer, the light's
-## cull mask), shows its back and lid in front of the beam. Hidden while the player
-## is in a car. The headlights cast no shadows: what they reach through a wall
-## within HEAD_RANGE_M is behind that wall from the chase camera too.
+## Radeon 780M, 2026-11-15), so it lights nothing through a wall. The chest casts no
+## shadow in it (owner, 2026-11-17: "exclude Chester from things that can cast shadows
+## from a flashlight"). It shines from just in front of the closed lid's front edge:
+## speeding up into a run the chest leans forward and its sprung lid swings open,
+## which brought that edge to within a few centimetres of the light, in front of it,
+## blacking out most of the beam and flickering with the gait's bob (the limbs stay
+## outside the beam's cone). Once the flashlight is made the chest's meshes are on
+## CHEST_LAYER alone, which the flashlight's shadow caster mask leaves out: it still
+## lights the chest, everything else still shadows its beam, and the Sun lights the
+## chest and casts its shadow as before. A small fill on the chest itself (FILL_*),
+## lighting only the chest (CHEST_LAYER is its cull mask), shows its back and lid in
+## front of the beam. Hidden while the player is in a car. The headlights cast no
+## shadows: what they reach through a wall within HEAD_RANGE_M is behind that wall
+## from the chase camera too.
 
 ## Darkness (DaySun.night) at which the lights come on, and back under which they go off.
 const ON_AT := 0.5
@@ -64,12 +73,20 @@ const SPILL_ANGLE_DEG := 60.0
 const SPILL_SHARE := 0.2
 const SPILL_RANGE_M := 12.0
 ## The chest's fill: a small omni light behind and above the chest on the camera's
-## side, lighting only what is on FILL_LAYER (the chest's meshes).
+## side, lighting only what is on CHEST_LAYER (the chest's meshes).
 const FILL_ENERGY := 0.4
 const FILL_RANGE_M := 2.6
 const FILL_BACK_M := 0.9
 const FILL_UP_M := 1.5
-const FILL_LAYER := 1 << 19
+## The chest's own render layer (layer 20, "avatar_fill" in project.godot), which
+## nothing else in the game is on. The engine leaves a mesh out of a light's shadows
+## when none of the mesh's layers is in that light's shadow caster mask, so once the
+## flashlight is made the chest's meshes are on this layer alone (off layer 1,
+## world_visible), and the flashlight's mask is every layer but this one. The cameras
+## draw every layer; the Sun's and the flashlight's light cull masks and the Sun's
+## shadow caster mask keep all of them.
+const CHEST_LAYER := 1 << 19
+const FLASH_SHADOW_CASTERS := 0xFFFFFFFF & ~CHEST_LAYER
 
 const HEAD_ENERGY := 8.0
 const HEAD_RANGE_M := 75.0
@@ -209,9 +226,12 @@ func _update_flashlight() -> void:
 
 
 ## The flashlight with its spill (riding with it), and the chest's fill, which
-## lights only the chest's meshes (put on FILL_LAYER as well as their own).
+## lights only the chest's meshes. They go on CHEST_LAYER alone, which the
+## flashlight's shadows leave out; Mersea's reflection probes, which draw layers 1
+## and 2, leave the chest out of their captures from then on.
 func _make_flashlight() -> void:
 	flashlight = _spot("Flashlight", FLASH_COLOR, FLASH_RANGE_M, FLASH_ANGLE_DEG, FLASH_ANGLE_ATTENUATION, FLASH_ATTENUATION, flash_shadows())
+	flashlight.shadow_caster_mask = FLASH_SHADOW_CASTERS
 	add_child(flashlight)
 	spill = _spot("Spill", FLASH_COLOR, SPILL_RANGE_M, SPILL_ANGLE_DEG, 1.0, 1.0, false)
 	spill.visible = true
@@ -220,13 +240,13 @@ func _make_flashlight() -> void:
 	fill.name = "ChestFill"
 	fill.light_color = FLASH_COLOR
 	fill.omni_range = FILL_RANGE_M
-	fill.light_cull_mask = FILL_LAYER
+	fill.light_cull_mask = CHEST_LAYER
 	fill.shadow_enabled = false
 	fill.light_energy = 0.0
 	fill.visible = false
 	add_child(fill)
 	for piece: Node in player.avatar_pivot.find_children("*", "GeometryInstance3D", true, false):
-		(piece as GeometryInstance3D).layers |= FILL_LAYER
+		(piece as GeometryInstance3D).layers = CHEST_LAYER
 
 
 func _update_headlights() -> void:

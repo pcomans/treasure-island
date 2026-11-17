@@ -333,7 +333,7 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Authorizing decision or request: owner, 2026-11-03: build on every push to `main`, newest build at one fixed link.
 - Trust and malware checks: official publishers only; a checksum mismatch stops setup-godot.sh and the build.
 - Verification and result: Godot reported `4.7.2.stable.official.ed1daf0bf`; the bake reported `BAKE_RENDERER Wayland / llvmpipe (LLVM 21.1.8, 256 bits)`; all four runs built, audited and launched the app.
-- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the Mac releases with their `mac-*` tags.
+- Removal steps: delete `.github/workflows/mac-build.yml`, its Actions cache entry and the releases with their `mac-*` and `build-*` tags.
 
 ### 2026-11-14 — ffmpeg in the devcontainer setup
 
@@ -349,3 +349,63 @@ was attempted. Installation log: /tmp/ti-native-rootcause-20261025-gdb-install.l
 - Trust and malware checks: official Ubuntu archive only.
 - Verification and result: `ffmpeg -version` reports `8.0.1-3ubuntu2`; `node tools/check_sfx.mjs` passes its post-processing checks with it.
 - Removal steps: remove `ffmpeg` from the apt list in `post-create.sh`, then `sudo apt-get remove ffmpeg`.
+
+### 2026-11-15 — butler on the itch job's runner (GitHub Actions)
+
+- Date and time (UTC): 2026-11-15, the workflow change. Every run of the `itch` job installs it; none has run yet.
+- Status: `planned`
+- Exact package and version: itch.io's `butler` 15.32.0, darwin-arm64 build.
+- Publisher and source URL: itch.io's own distribution site, `https://broth.itch.zone/butler/darwin-arm64/15.32.0/archive/default` (https://itch.io/docs/butler/installing.html).
+- Checksum, signature, notarization, or registry integrity evidence: itch.io publishes no checksum for it. The workflow pins the archive's SHA-256 as itch.io served it on 2026-11-15, `f1c460f08c02686b49f8da74344e5578ece9ea1a8bae1779445b5d98e0a794b3`; that archive's butler executable and 7-zip libraries are byte-identical to those in `butler-darwin-arm64.zip` of the `v15.32.0` release of https://github.com/itchio/butler (published 2026-10-06), whose digest GitHub records as `sha256:b1983cd1d0460cd39f8e6f1d6858c14f49ea0352ae34f0d40a56ffc30007399e`. A mismatch stops the job before butler runs.
+- Exact command or installation method: the `Install butler` step of `.github/workflows/mac-build.yml`: `curl -fsSL --retry 3` into `$RUNNER_TEMP/butler`, `shasum -a 256 -c`, `unzip`, then that folder goes on the job's `PATH`.
+- Purpose: push each release's Mac app and Linux build to the itch.io page phppco/grand-treasure-island, and fetch back what itch.io serves to compare it.
+- Scope and install location: the ephemeral GitHub-hosted `macos-26` runner of the `itch` job only, under `$RUNNER_TEMP/butler`; nothing changes in the devcontainer or on the owner's machines.
+- Authorizing decision or request: owner, 2026-11-15: put the Mac and Linux builds on itch.io after each release.
+- Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
+- Verification and result: not run yet; the job logs `butler version` on each run.
+- Removal steps: delete the `itch` job and the `itch_release_tag` input from `.github/workflows/mac-build.yml`, and the secret `BUTLER_API_KEY` of the GitHub environment `itch`.
+
+### 2026-11-16 — Godot's Windows export template (devcontainer and CI)
+
+- Date and time (UTC): 2026-11-16T02:55:32Z to 02:55:48Z in the devcontainer, by running the extended `.devcontainer/setup-godot.sh`.
+- Status: `completed`
+- Exact package and version: `windows_release_x86_64.exe` (109,268,480 bytes, SHA-256 `d34d36f3be1a6c49c56525ae86469b92e4f417ddf0b43cf00dd80c385c4b0562`; PE32+ x86-64, GUI) from Godot `4.7.2-stable`'s export templates, `Godot_v4.7.2-stable_export_templates.tpz`.
+- Publisher and source URL: Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable: the same archive the other export templates come from.
+- Checksum, signature, notarization, or registry integrity evidence: the archive's SHA-256 pinned in `setup-godot.sh` (`f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011`), checked before extraction; the extracted template's SHA-256 above. Nothing else was downloaded.
+- Exact command or installation method: `windows_release_x86_64.exe` added to the script's `TEMPLATES` list; the script fetched the archive into a temporary folder, checked its SHA-256, extracted only the missing template into `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/`, deleted the archive and printed `godot --version`. In CI the build job runs the same script; the Actions cache is keyed on the script's hash, so the first build after this change downloads the archive once (about 1.3 GB) and caches it again.
+- Purpose: the Windows (x86-64) build that `tools/build-mac.sh` exports for each release (owner, 2026-11-16: "Why no windows build"). Godot's own template modifier sets its icon and version information; no rcedit.
+- Scope and install location: the shared `/opt/godot/4.7.2` volume of the devcontainer, and the ephemeral `ubuntu-26.04` build runners. The new `windows` and `windows-render` jobs run on GitHub's `windows-2025` image (Windows Server 2025) and install nothing: they use its Git Bash and 7-Zip, and `actions/download-artifact` pinned as before.
+- Authorizing decision or request: owner, 2026-11-16, assignment `ci/windows-build-20261116`; AGENTS.md: needed project tool installations are owner-authorized, export templates through `setup-godot.sh`.
+- Trust and malware checks: official publisher only; the pinned archive hash.
+- Verification and result: `godot --version` printed `4.7.2.stable.official.ed1daf0bf`; `tools/build-mac.sh` at 44922551 exported, audited and zipped the Windows build (`treasure-island.exe` with the game's icon and version information, and a `.pck` byte-identical to the Linux build's).
+- Removal steps: remove the name from `TEMPLATES` in `setup-godot.sh` and delete the file from `/opt/godot/4.7.2/editor_data/export_templates/4.7.2.stable/`.
+
+### 2026-11-16 — ImageMagick in the devcontainer setup
+
+- Date and time (UTC): 2026-11-16, the setup change. The package was already in this container: someone installed it by hand on 2026-10-16 at 05:23 UTC (`apt-get install -y --no-install-recommends imagemagick=8:7.1.2.18+dfsg1-1` in `/var/log/apt/history.log`), with no log entry and no setup line, so a rebuilt container would have lacked it.
+- Status: `completed`
+- Exact package and version: Ubuntu `imagemagick` 8:7.1.2.18+dfsg1-1 (resolute/universe), which depends on `imagemagick-7.q16` (with `imagemagick-7-common`, `libmagickcore-7.q16-10` and `libmagickwand-7.q16-10`, all 8:7.1.2.18+dfsg1-1); `imagemagick-7.q16` provides `/usr/bin/magick` through the alternatives system (`/usr/bin/magick-im7.q16`), and `magick -version` reports ImageMagick 7.1.2-18 Q16.
+- Publisher and source URL: Ubuntu archive, http://archive.ubuntu.com/ubuntu (resolute/universe).
+- Checksum, signature, notarization, or registry integrity evidence: apt's archive signature verification.
+- Exact command or installation method: `imagemagick` added to the existing apt package list in `.devcontainer/post-create.sh`. Nothing was installed or rebuilt this time; the installed package was only checked (`dpkg-query`, `apt-cache policy`, `update-alternatives --query magick`, `apt-get -s install`). The setup line installs the package's recommends (`ghostscript`, `netpbm`, `libmagickcore-7.q16-10-extra`), which the hand install left out; nothing here needs them.
+- Purpose: `tools/build-web.sh` makes the web build's home screen icons with `magick` (owner, 2026-11-16: add to home screen), and stops at once without it; `tools/make_app_icon.sh` and the `tools/draw_*.sh` scripts use it too.
+- Scope and install location: inside the container only (`/usr/bin/magick` and the ImageMagick 7 libraries).
+- Authorizing decision or request: owner, 2026-11-16 (the web build's home screen support); code-review fix for `web/home-screen-20261116`; AGENTS.md: needed project tool installations are owner-authorized.
+- Trust and malware checks: official Ubuntu archive only.
+- Verification and result: `magick -version` reports `ImageMagick 7.1.2-18 Q16 x86_64`; `tools/build-web.sh` at 8c24b7b3 made the three icons with it (192 and 512 px, and the 512 px maskable one).
+- Removal steps: remove `imagemagick` from the apt list in `post-create.sh`, then `sudo apt-get remove imagemagick imagemagick-7.q16`.
+
+### 2026-11-16 — butler's darwin-amd64 build on the itch job's Intel runner (GitHub Actions)
+
+- Date and time (UTC): 2026-11-16, the workflow change that moves the `itch` job to `macos-26-intel`. Every run of the job installs it; the first release on `main` after the change is the first real run.
+- Status: `planned` (the pinned archive was installed and run once on `macos-26-intel` and on `macos-15-intel` by a keyless probe on branch `ci/mac-runner-intel-20261116`, run 43954153229: checksum OK, `butler version` printed `v15.32.0, built on Oct  6 2026 @ 04:11:54, ref 336f95416289de8fd17589000d48de5526c1a8f2`).
+- Exact package and version: itch.io's `butler` 15.32.0, darwin-amd64 build (replaces the darwin-arm64 build of the 2026-11-15 entry, as the job no longer runs on Apple Silicon). 15.32.0 is the newest version broth lists for darwin-amd64.
+- Publisher and source URL: itch.io's own distribution site, `https://broth.itch.zone/butler/darwin-amd64/15.32.0/archive/default` (https://itch.io/docs/butler/installing.html).
+- Checksum, signature, notarization, or registry integrity evidence: itch.io publishes no checksum for it. The workflow pins the archive's SHA-256 as broth served it twice on 2026-11-16 (from 20:44Z, 10,981,715 bytes, the same bytes both times), `a92947c9556c9bfb0cc9bdc3814f342b30e0ee7269efc418658894a916ca9584`. Its three files (`butler` SHA-256 `4f3a99672090599bb207d85521bd3268481cf4b65c54fc81ef172c51ccaa952c`, a Mach-O x86_64 executable; `7z.so`; `libc7zip.dylib`) are byte-identical to those in `butler-darwin-amd64.zip` of the `v15.32.0` release of https://github.com/itchio/butler (published 2026-10-06), whose digest GitHub records as `sha256:fe7607c6227cd735231e4a7376b8148666d84fba63b9e9e6a5e313c5da70466c`; the downloaded GitHub zip had that digest. The same check on the darwin-arm64 archive still gave the 2026-11-15 pin. A mismatch stops the job before butler runs.
+- Exact command or installation method: the `Install butler` step of `.github/workflows/mac-build.yml`: `curl -fsSL --retry 3 --retry-all-errors` into `$RUNNER_TEMP/butler`, `shasum -a 256 -c`, `unzip`, then that folder goes on the job's `PATH`.
+- Purpose: push each release's builds to the itch.io page phppco/grand-treasure-island and fetch back the Mac app itch.io serves, as before, from an Intel Mac.
+- Scope and install location: the ephemeral GitHub-hosted `macos-26-intel` runner of the `itch` job only, under `$RUNNER_TEMP/butler`; nothing changes in the devcontainer or on the owner's machines.
+- Authorizing decision or request: the owner's 2026-11-15 itch.io publishing decision; the runner move is ROOT's assignment ci/mac-runner-intel-20261116 (GitHub had no Apple Silicon runner for the sign and itch jobs on 2026-11-16), pending its reviews.
+- Trust and malware checks: itch.io's own distribution site, the pinned SHA-256, and the byte comparison with GitHub's release above.
+- Verification and result: see Status; the job logs `butler version` on each run.
+- Removal steps: as for the 2026-11-15 entry; to go back to an Apple Silicon runner, restore that entry's darwin-arm64 URL and SHA-256 with `runs-on: macos-26`.

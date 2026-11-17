@@ -3,7 +3,10 @@ extends EditorExportPlugin
 ## Exported games load the static-world bake, which this plugin adds, and no pack
 ## carries the bake's inputs: generated/.gdignore keeps the raw world under
 ## generated/world out of Godot's file list, and export_presets.cfg leaves out the
-## shared families' JSON configs.
+## shared families' JSON configs. It also stamps every pack with the build the pause
+## menu names (_add_build_stamp).
+
+const BuildStamp := preload("res://game/scripts/ui/build_stamp.gd")
 
 
 func _get_name() -> String:
@@ -11,6 +14,7 @@ func _get_name() -> String:
 
 
 func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, _flags: int) -> void:
+	_add_build_stamp()
 	var baked := ""
 	if "web" in features:
 		baked = "res://generated/web/static_world.scn"
@@ -24,3 +28,20 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 		push_error("Missing static world: export through the platform build script")
 		return
 	add_file(baked, FileAccess.get_file_as_bytes(baked), false)
+
+
+## The build stamp (game/scripts/ui/build_stamp.gd): the build number and commit
+## the build script gives the export as TI_BUILD_NUMBER and TI_BUILD_COMMIT, at
+## BuildStamp.PATH, only when BuildStamp.from_values takes them as they are. An
+## export without them (by hand, in the editor), or with ones that don't read
+## ("2085-rc", "v2085", an empty commit), carries none: the pause menu then says
+## "Build unknown". The export still completes, as without the bake, and the build
+## scripts' content audit fails a pack without its stamp.
+func _add_build_stamp() -> void:
+	var number := OS.get_environment("TI_BUILD_NUMBER")
+	var commit := OS.get_environment("TI_BUILD_COMMIT")
+	var stamp := BuildStamp.from_values(number, commit)
+	if stamp.is_empty():
+		push_error("No build stamp: TI_BUILD_NUMBER (\"%s\") and TI_BUILD_COMMIT (\"%s\") are no build number and commit; export through the platform build script" % [number, commit])
+		return
+	add_file(BuildStamp.PATH, BuildStamp.file_text(stamp).to_utf8_buffer(), false)
