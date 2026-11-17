@@ -1,9 +1,9 @@
 extends RefCounted
-## Wood-chip mulch: one shared material per mulch surface of the generated world (and
-## the street trees' pits), drawing the shared chip tile (tools/bake_mulch_chips.mjs) in
-## world metres with mulch.gdshader, graded per kind from that kind's dated photos. The
-## ground dressing (ground_dressing.gd) finds these surfaces by their shader and lays
-## loose chips on them near the camera.
+## Wood-chip mulch: one shared material per mulch surface kind of the generated world
+## (the street trees' pits share the planting strips'), drawing the shared chip tile
+## (tools/bake_mulch_chips.mjs) in world metres with mulch.gdshader, graded per kind
+## from that kind's dated photos. The ground dressing (ground_dressing.gd) finds these
+## surfaces by their shader and lays loose chips on them near the camera.
 ##
 ## Which surfaces are mulch is GRADES; every other key keeps the builder's own
 ## material. The brown ground that is not wood mulch keeps its own: the grey gravel
@@ -50,11 +50,10 @@ const GRADES := {
 	"promenade_mulch": {"tint": Vector3(0.422, 0.353, 0.268), "saturation": 0.7, "damp": 0.0, "relief_m": 0.011, "fresh_share": 0.25, "gap_albedo": Vector3(0.55, 0.48, 0.38), "gap_ao": 0.45, "gap_light": 0.4, "planted": false},
 	# The street planting strips (Street View Sep 2025, ih02 at 5286 Ave of the Palms:
 	# dark brown bark between the grasses, about half the sidewalk's brightness; Cityside's
-	# ph08 has its bark at 0.4 of the concrete beside it): rendered at about 0.45.
+	# ph08 has its bark at 0.4 of the concrete beside it): rendered at about 0.45. The
+	# street trees' pits in paving draw this material too (street_vegetation_builder.gd):
+	# no dated photo shows a pit's surface closely, so theirs is production inference.
 	"street_kerb_planting": {"tint": Vector3(0.455, 0.403, 0.318), "saturation": 0.8, "damp": 0.0, "relief_m": 0.011, "fresh_share": 0.3, "gap_albedo": Vector3(0.4, 0.35, 0.27), "gap_ao": 0.35, "gap_light": 0.5, "planted": false},
-	# Street trees' pits in paving (street_vegetation_builder.gd): the strips' bark; no
-	# dated photo shows a pit's surface closely, so this is production inference.
-	"street_tree_pit": {"tint": Vector3(0.455, 0.403, 0.318), "saturation": 0.8, "damp": 0.0, "relief_m": 0.011, "fresh_share": 0.3, "gap_albedo": Vector3(0.4, 0.35, 0.27), "gap_ao": 0.35, "gap_light": 0.5, "planted": false},
 }
 
 static var _materials: Dictionary = {}

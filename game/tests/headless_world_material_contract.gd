@@ -332,7 +332,8 @@ func _ground_routes_match(builder: WorldChunkBuilder) -> bool:
 	return true
 
 
-## Each mulch kind's record draws its shared mulch material, on the mulch shader.
+## Each mulch kind's record draws its shared mulch material, on the mulch shader, and
+## the street trees' pits draw the planting strips'.
 func _mulch_routes_match(builder: WorldChunkBuilder) -> bool:
 	for route: Array in MULCH_ROUTES:
 		var key := str(route[1])
@@ -361,7 +362,8 @@ func _mulch_routes_match(builder: WorldChunkBuilder) -> bool:
 		var expected := MULCH_GROUND.material(key)
 		if not _require(material == expected and expected.shader.resource_path == MULCH_SHADER_PATH, "%s does not draw the shared mulch." % key):
 			return false
-	return true
+	# The street trees' pits share the planting strips' material.
+	return _require(StreetVegetationBuilder.new()._well_material() == MULCH_GROUND.material("street_kerb_planting"), "The street trees' pits do not draw the planting strips' mulch.")
 
 
 ## Each frozen OSM override names a generated major area and a real family.

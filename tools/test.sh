@@ -23,14 +23,17 @@
 #    that loads a file from outside its own folder fails. And the players'
 #    changelog tool and CHANGELOG.md (tools/check_changelog.sh): a build
 #    without its entry, or a badly written entry, fails.
-# 4. The behaviour tests: the game parses, loads and plays, and every building
+# 4. Every shader under game/ compiles and draws, with each define it tests, on
+#    Forward+ and on the Compatibility renderer the web build uses
+#    (game/tests/shader_compile_check.gd).
+# 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
 #    Where the private sounds are fetched, the tests marked "# sfx:
 #    takes-dependent" run again without them (--no-sfx): a checkout without the
 #    sounds must pass too, and a test that reads what the sound manager plays
 #    without the mark or takes of its own fails the suite.
-# 5. The generated-world checks, including the street-detail clearance check:
+# 6. The generated-world checks, including the street-detail clearance check:
 #    with all street-detail layers on, nothing intrudes on doors, stairs, their
 #    approaches, the spawn or the QA corridors. They run in the background
 #    beside the long Godot stages, and their results come last.
@@ -41,8 +44,8 @@ export PATH="/usr/local/share/nvm/current/bin:${PATH}"
 failed=()
 
 # Godot can exit 0 after a script or engine error, so its output is checked too.
-# A clean run prints no ERROR lines at all.
-godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
+# A clean run prints no ERROR lines at all, and no shader error.
+godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR|SHADER ERROR'
 
 echo "== junk check"
 command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }
@@ -299,6 +302,16 @@ sfx_selection() {
   done
   return "${status}"
 }
+# Every shader compiles on both renderers the game ships with: Forward+ (desktop) and
+# the Compatibility renderer (the web build's), which alone compiles each shader's
+# CURRENT_RENDERER == RENDERER_COMPATIBILITY branches. Drawn, so not headless.
+for method in forward_plus gl_compatibility; do
+  echo "== game/tests/shader_compile_check.gd (${method})"
+  driver=()
+  [ "${method}" != gl_compatibility ] || driver=(--rendering-driver opengl3)
+  check_godot "game/tests/shader_compile_check.gd (${method})" 300 tools/godot --rendering-method "${method}" "${driver[@]}" --path . --audio-driver Dummy --script game/tests/shader_compile_check.gd
+done
+
 echo "== sound-state tests"
 silent_tests=()
 if selection="$(sfx_selection "${tests[@]}")"; then

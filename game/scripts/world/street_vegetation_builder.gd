@@ -46,8 +46,8 @@ extends RefCounted
 
 const KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const MULCH_GROUND := preload("res://game/scripts/world/mulch_ground.gd")
-## The pits' grade in MULCH_GROUND.
-const WELL_MULCH_KEY := "street_tree_pit"
+## The pits draw the street planting strips' mulch material (MULCH_GROUND).
+const WELL_MULCH_KEY := "street_kerb_planting"
 const TREE_CELL_M := 16.0
 const GRASS_CELL_M := 32.0
 const SHADOW_CELL_M := 48.0

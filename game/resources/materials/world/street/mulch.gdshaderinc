@@ -10,8 +10,19 @@
 // bed varies a little: fresher, browner patches and a soft mottle. Each material grades
 // the chips: a tint, how much of their colour shows, how dark the gaps are, and how
 // damp the bed is.
+//
+// The web build (the Compatibility renderer, which phones run) draws a cheaper mulch:
+// the two copies' colour and height from two plain trilinear reads (the desktop takes
+// six anisotropic ones for colour, height and slope) and one mottle, with the fresh
+// patches as their mean tint. It keeps the chips' colour, their dark gaps and the
+// bed's tone, and loses the light their relief catches (a flat surface's normal), the
+// sharper grazing detail of anisotropic filtering and the fresher patches.
 
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+uniform sampler2D mulch_chips : source_color, filter_linear_mipmap, repeat_enable;
+#else
 uniform sampler2D mulch_chips : source_color, filter_linear_mipmap_anisotropic, repeat_enable;
+#endif
 // The tile's width on the ground, metres (MulchGround.TILE_M).
 uniform float chip_tile_m = 1.25;
 // The grade: a linear multiplier, the share of the chips' own colour kept (0 grey),
@@ -52,6 +63,40 @@ float mulch_noise(vec2 p) {
 	return mix(mix(mulch_hash(cell), mulch_hash(cell + vec2(1.0, 0.0)), u.x), mix(mulch_hash(cell + vec2(0.0, 1.0)), mulch_hash(cell + vec2(1.0, 1.0)), u.x), u.y);
 }
 
+// The grade and the gaps' depth, shared by both mulches below: colour from the chips'
+// colour at height, the pixel's read_m (see mulch_sample) and the bed's variation (a
+// multiplier), with roughness and AO.
+void mulch_grade(vec3 colour, float height, float read_m, vec3 variation, out vec3 albedo, out float roughness, out float ao) {
+	// How deep the pixel lies: near, from its height; past a few texels a pixel, the
+	// tile's mean, which the averaged texture shows there.
+	float texel_m = chip_tile_m / float(textureSize(mulch_chips, 0).x);
+	float risen = mix(smoothstep(0.0, mulch_gap_rise, height), mulch_gap_cover, smoothstep(2.0 * texel_m, 8.0 * texel_m, read_m));
+	float grey = dot(colour, vec3(0.2126, 0.7152, 0.0722));
+	colour = mix(vec3(grey), colour, mulch_saturation) * mulch_tint * mix(mulch_gap_albedo, vec3(1.0), risen);
+	albedo = colour * variation * mix(1.0, 0.6, mulch_damp);
+	roughness = mix(0.97, 0.86, smoothstep(0.25, 0.7, height)) - 0.18 * mulch_damp;
+	ao = mix(mulch_gap_ao, 1.0, risen);
+}
+
+#if CURRENT_RENDERER == RENDERER_COMPATIBILITY
+// The web build's mulch (see the top): the copies' colour and height only, so no slope,
+// and the fresher patches as their mean tint (they cover about 0.3 of a bed at full
+// share). foot_m is unused.
+void mulch_sample(vec2 p, float foot_m, float read_m, out vec3 albedo, out float height, out vec2 slope, out float roughness, out float ao) {
+	vec4 a = texture(mulch_chips, p / chip_tile_m);
+	// The second copy turned 0.83 rad and 1.37 times larger, as on the desktop.
+	vec2 turned = vec2(0.67488 * p.x - 0.73793 * p.y, 0.73793 * p.x + 0.67488 * p.y);
+	vec4 b = texture(mulch_chips, turned / (chip_tile_m * 1.37) + vec2(0.37, 0.71));
+	float top = max(a.a, b.a) - 0.12;
+	float weight_a = max(a.a - top, 0.0);
+	float weight_b = max(b.a - top, 0.0);
+	float total = weight_a + weight_b;
+	height = (a.a * weight_a + b.a * weight_b) / total;
+	slope = vec2(0.0);
+	vec3 variation = mix(vec3(1.0), mulch_fresh, 0.3 * mulch_fresh_share) * (1.0 + mulch_mottle * (2.0 * mulch_noise(p / 1.4 + vec2(31.7, 7.9)) - 1.0));
+	mulch_grade((a.rgb * weight_a + b.rgb * weight_b) / total, height, read_m, variation, albedo, roughness, ao);
+}
+#else
 // One copy of the tile at world point p (metres), turned by angle and scaled: its
 // colour, height and the height's slope per metre along world x and z. foot_m is the
 // pixel's footprint on the ground, so the slope is taken at the scale the texture is
@@ -97,27 +142,16 @@ void mulch_sample(vec2 p, float foot_m, float read_m, out vec3 albedo, out float
 	float weight_a = max(top_a - top, 0.0);
 	float weight_b = max(top_b - top, 0.0);
 	float total = weight_a + weight_b;
-	vec3 colour = (colour_a * weight_a + colour_b * weight_b) / total;
 	height = (height_a * weight_a + height_b * weight_b) / total;
 	slope = (slope_a * weight_a + slope_b * weight_b) / total;
-	// How deep the pixel lies: near, from its height; past a few texels a pixel, the
-	// tile's mean, which the averaged texture shows there.
-	float texel_m = chip_tile_m / float(textureSize(mulch_chips, 0).x);
-	float risen = mix(smoothstep(0.0, mulch_gap_rise, height), mulch_gap_cover, smoothstep(2.0 * texel_m, 8.0 * texel_m, read_m));
-	// The grade.
-	float grey = dot(colour, vec3(0.2126, 0.7152, 0.0722));
-	colour = mix(vec3(grey), colour, mulch_saturation) * mulch_tint * mix(mulch_gap_albedo, vec3(1.0), risen);
 	// Fresher patches and a soft mottle.
 	float patches = 0.65 * mulch_noise(p / 6.7 + vec2(5.3, 1.7)) + 0.35 * mulch_noise(p / 2.1 + vec2(2.1, 9.4));
 	float fresh = smoothstep(0.5, 0.68, patches) * mulch_fresh_share;
-	colour *= mix(vec3(1.0), mulch_fresh, fresh);
 	float mottle = 0.6 * mulch_noise(p / 1.4 + vec2(31.7, 7.9)) + 0.4 * mulch_noise(p / 0.55 + vec2(3.1, 27.3));
-	colour *= 1.0 + mulch_mottle * (2.0 * mottle - 1.0);
-	colour *= mix(1.0, 0.6, mulch_damp);
-	albedo = colour;
-	roughness = mix(0.97, 0.86, smoothstep(0.25, 0.7, height)) - 0.18 * mulch_damp;
-	ao = mix(mulch_gap_ao, 1.0, risen);
+	vec3 variation = mix(vec3(1.0), mulch_fresh, fresh) * (1.0 + mulch_mottle * (2.0 * mottle - 1.0));
+	mulch_grade((colour_a * weight_a + colour_b * weight_b) / total, height, read_m, variation, albedo, roughness, ao);
 }
+#endif
 
 // A world normal bent by the mulch's slope from the surface's own.
 vec3 mulch_normal(vec3 surface_normal, vec2 slope) {

@@ -32,6 +32,8 @@ uniform vec3 chip_grey = vec3(2.3, 2.28, 2.2);
 uniform vec3 chip_brown = vec3(1.0, 0.9, 0.8);
 uniform vec3 chip_dark = vec3(0.45, 0.42, 0.4);
 uniform vec2 chip_shares = vec2(0.5, 0.32);
+// The most green and blue a chip keeps, as shares of its red.
+uniform vec3 chip_warmth = vec3(1.0, 0.96, 0.88);
 // At a bed's edge the capture's cover falls from 1 to 0 over about a texel: each chip
 // lies where the cover passes its own threshold in this range, so the edge is ragged
 // and a few chips lie just past it.
@@ -100,6 +102,9 @@ void vertex() {
 			float grey = dot(tone, vec3(0.2126, 0.7152, 0.0722));
 			float pick = fract(h.x * 7.31 + h2.z * 3.17 + h2.y * 1.13);
 			vec3 colour = pick < chip_shares.x ? vec3(grey) * chip_grey : (pick < chip_shares.x + chip_shares.y ? tone * chip_brown : tone * chip_dark);
+			// Wood is never bluer than it is red: a weathered chip stays warm grey under the
+			// sky, and one beside paving doesn't take the paving's grey-blue.
+			colour = min(colour, colour.r * chip_warmth);
 			tint = colour * (0.82 + 0.36 * fract(h2.x * 13.7 + h.y * 5.3));
 		}
 	}

@@ -131,7 +131,9 @@ extends SceneTree
 ## Ground dressing (the grass of ground_dressing.gd; --ground-dressing LEVEL on the
 ##   command line, else the project setting): a still view may add "dressing":
 ##   "off", "low", "medium" or "high" to shoot at that density, "dressing_parts":
-##   {"cards": false, "grass": true, "stones": true, "chips": true} for what draws, "dressing_params":
+##   {"cards": false, "grass": true, "stones": true, "chips": true} for what draws,
+##   "dressing_occluders": false to let the loose chips stand where other ground is
+##   drawn over a bed (as before they were hidden there, to compare), "dressing_params":
 ##   {"uniform": value, ...} to set grass uniforms (a list is a vector), all kept
 ##   for the views after it, "dressing_maps": true to save the ground captures
 ##   beside the shot, and "measure_dressing": N to time N frames at each of
@@ -140,10 +142,11 @@ extends SceneTree
 ##   with wall, render CPU and GPU times, and a DRESSING_CAPTURE line with what a
 ##   new capture costs.
 ## Mulch (mulch_ground.gd): a still view may add "mulch_params": {"MATERIAL_KEY":
-##   {"uniform": value, ...}, ...} to set the shared mulch materials' uniforms (a list
-##   is a vector), kept for the views after it, to compare grades in one run. The
-##   ground dressing's loose chips keep the colour they were captured with, so shoot
-##   such views with "dressing": "off".
+##   {"uniform": value, ...}, ...} to set the uniforms (a list is a vector) of the mulch
+##   materials the loaded world draws with, generated or baked (--use-prebuilt-world),
+##   kept for the views after it, to compare grades in one run; a NOTE says when the
+##   world draws none of that key. The ground dressing's loose chips keep the colour
+##   they were captured with, so shoot such views with "dressing": "off".
 ## Resource counts: a still view may add "resource_counts": true to print a
 ##   RESOURCE_COUNTS line after its shot: the scene's mesh and MultiMesh nodes, their
 ##   distinct resources, MultiMesh instances and mesh surfaces, and the renderer's
@@ -227,6 +230,8 @@ const NEUTRAL_SUN := {
 
 var _h: WorldHarness
 var _errors: Array[String] = []
+## The loaded world's mulch materials by key (_loaded_mulch_materials()).
+var _mulch_materials := {}
 
 
 func _initialize() -> void:
@@ -826,24 +831,48 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	return error
 
 
-## Applies a view's "mulch_params" to the shared mulch materials. Returns an error, or "".
+## Applies a view's "mulch_params" to the mulch materials the loaded world draws with:
+## the shared ones of a generated world, or a baked world's own copies
+## (--use-prebuilt-world), found by their shader and named by their key. Returns an
+## error, or "".
 func _apply_mulch(view: Dictionary) -> String:
 	if not view.has("mulch_params"):
 		return ""
 	if not view.mulch_params is Dictionary:
 		return "mulch_params maps a mulch material key to its uniforms"
 	var params: Dictionary = view.mulch_params
+	var loaded := _loaded_mulch_materials()
 	for key: String in params:
 		if not MULCH_GROUND.is_mulch(key) or not params[key] is Dictionary:
 			return "mulch_params: %s is not a mulch material key of mulch_ground.gd" % key
-		var material := MULCH_GROUND.material(key)
+		var materials: Dictionary = loaded.get(key, {})
+		if materials.is_empty():
+			print("NOTE: mulch_params: the loaded world draws no %s mulch, so its uniforms reach nothing in this run" % key)
 		var uniforms: Dictionary = params[key]
 		for uniform: String in uniforms:
 			var value: Variant = uniforms[uniform]
 			if value is Array:
 				value = Vector2(value[0], value[1]) if (value as Array).size() == 2 else Vector3(value[0], value[1], value[2])
-			material.set_shader_parameter(uniform, value)
+			for material: ShaderMaterial in materials:
+				material.set_shader_parameter(uniform, value)
 	return ""
+
+
+## The loaded world's mulch materials: key -> {material: true}, gathered once.
+func _loaded_mulch_materials() -> Dictionary:
+	if _mulch_materials.is_empty():
+		var shader_path := (MULCH_GROUND.SHADER as Shader).resource_path
+		for node: Node in _h.world.find_children("*", "MeshInstance3D", true, false):
+			var mesh_node := node as MeshInstance3D
+			if mesh_node.mesh == null:
+				continue
+			for index in mesh_node.mesh.get_surface_count():
+				var material := mesh_node.get_active_material(index) as ShaderMaterial
+				if material != null and material.shader != null and material.shader.resource_path == shader_path:
+					if not _mulch_materials.has(material.resource_name):
+						_mulch_materials[material.resource_name] = {}
+					_mulch_materials[material.resource_name][material] = true
+	return _mulch_materials
 
 
 ## Prints what the loaded scene draws with: its mesh and MultiMesh nodes, their distinct
@@ -876,7 +905,7 @@ func _print_resource_counts(label: String) -> void:
 
 ## Applies a view's "dressing" level and "dressing_params". Returns an error, or "".
 func _apply_dressing(view: Dictionary) -> String:
-	if not view.has("dressing") and not view.has("dressing_parts") and not view.has("dressing_params"):
+	if not view.has("dressing") and not view.has("dressing_parts") and not view.has("dressing_params") and not view.has("dressing_occluders"):
 		return ""
 	var dressing := _h.main.ground_dressing
 	if dressing == null:
@@ -889,6 +918,8 @@ func _apply_dressing(view: Dictionary) -> String:
 	if view.has("dressing_parts"):
 		var parts: Dictionary = view.dressing_parts
 		dressing.set_parts(bool(parts.get("cards", false)), bool(parts.get("grass", true)), bool(parts.get("stones", true)), bool(parts.get("chips", true)))
+	if view.has("dressing_occluders"):
+		dressing.set_chip_occluders(bool(view.dressing_occluders))
 	var params: Dictionary = view.get("dressing_params", {})
 	for uniform: String in params:
 		var value: Variant = params[uniform]

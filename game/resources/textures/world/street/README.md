@@ -164,5 +164,8 @@ generation and no photograph): 1024 px per 1.25 m, shredded chips seen from abov
 RGB their colour and alpha the pile's height. `game/resources/materials/world/street/mulch.gdshader`
 lays it twice in world metres for every wood-mulch surface: the parks' beds and
 chips, the promenade's bark, the planting strips and the street trees' pits, graded
-per kind in `game/scripts/world/mulch_ground.gd`. Rerun the script to change it; the
-same seed paints the same image.
+per kind in `game/scripts/world/mulch_ground.gd` (the pits share the strips' grade).
+The web build (the Compatibility renderer) reads it twice per pixel without
+anisotropic filtering and without the slope reads that light the chips' relief
+(`mulch.gdshaderinc`). Rerun the script to change it; the same seed paints the same
+image.

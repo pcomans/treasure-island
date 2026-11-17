@@ -72,15 +72,17 @@ void fragment() {
 #ifdef MULCH_CAPTURE_COLOUR
 	ALBEDO = albedo;
 #else
-	float far = 0.0;
-	if (planted_far) {
-		far = smoothstep(blend_start_m, blend_end_m, distance(world_position, CAMERA_POSITION_WORLD));
+	float far = planted_far ? smoothstep(blend_start_m, blend_end_m, distance(world_position, CAMERA_POSITION_WORLD)) : 0.0;
+	if (far > 0.0) {
 		vec2 p = world_position.xz;
-		// Drift patches with hard-ish edges, a few straw accents, then each plant's
-		// crown lighter on top and mulch showing in the darkest gaps.
+		// Drift patches with hard-ish edges, a few straw accents (not on the web's
+		// cheaper mulch), then each plant's crown lighter on top and mulch showing in the
+		// darkest gaps.
 		float patch = smoothstep(0.35, 0.65, planted_noise(p / drift_m));
 		vec3 planted = mix(planted_green, planted_grey, patch);
+#if CURRENT_RENDERER != RENDERER_COMPATIBILITY
 		planted = mix(planted, planted_straw, smoothstep(0.68, 0.8, planted_noise(p / (drift_m * 1.7) + 31.0)) * 0.8);
+#endif
 		float grain = planted_noise(p / plant_m + 7.0);
 		planted *= 0.7 + 0.6 * grain;
 		planted = mix(albedo, planted, smoothstep(0.08, 0.3, grain));

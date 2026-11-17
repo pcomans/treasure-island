@@ -18,11 +18,14 @@ extends Node3D
 ## (ground_dressing_mask.gdshader), which stops grass cleanly at their edges.
 ##
 ## Mulch beds (mulch_ground.gd's surfaces) get loose wood chips instead
-## (ground_dressing_chips.gdshader): a third capture, of the mulch alone from above over
-## a smaller window (CHIP_WINDOW_M), says where they lie and how high (ground_chips), and
-## the colour capture draws the bed's own colour for them to take on. Nothing grows on
-## mulch. Chip cells are only kept over the CELL_M ground cells a mulch surface reaches
-## (mulch_cells()), so the chips draw nothing away from a bed.
+## (ground_dressing_chips.gdshader): a third capture, of the mulch from above over a
+## smaller window (CHIP_WINDOW_M), says where they lie and how high (ground_chips), and
+## the colour capture draws the bed's own colour for them to take on. Ground drawn over
+## a bed (a kerb, a path or the land crossing its edge a few millimetres up) clears that
+## capture as an occluder (_chips_occluder), so no chip stands in paving. Nothing grows
+## on mulch. Chip cells are only kept over the CELL_M ground cells a mulch surface
+## reaches (mulch_cells()), so the chips draw nothing away from a bed, and the chips
+## capture renders only while a bed lies in its window (chips_capture_wanted()).
 ##
 ## The grass (ground_dressing_blades.gdshader) is opaque tufts of blades and the stones
 ## (ground_dressing_stones.gdshader) opaque low-poly rocks, each in MultiMesh cells.
@@ -116,9 +119,13 @@ const COLOUR_PIXELS := 768
 ## The chips capture covers a smaller window round the same centre, since chips stand
 ## only near the camera: it must hold the chip ring wherever the camera goes before a
 ## recapture (RECENTRE_M plus the widest chip_ring_m, under half of it). A texel is
-## under a fifth of a metre, so chips stop at a bed's edge within a few centimetres.
+## under a tenth of a metre, so chips stop at a bed's edge, or at a kerb's 20 cm drawn
+## over it, within a few centimetres.
 const CHIP_WINDOW_M := 96.0
-const CHIP_PIXELS := 512
+const CHIP_PIXELS := 1024
+## Ground over a bed clears the chips capture from this height above its mesh, so
+## ground level with the bed counts as over it.
+const CHIP_OCCLUDER_LIFT_M := 0.001
 ## Chip cells are kept over the ground cells a mulch surface reaches and this many
 ## cells round them.
 const MULCH_MARGIN_CELLS := 1
@@ -205,6 +212,12 @@ var _ground_materials := {}
 var _mask_block: ShaderMaterial
 var _mask_pass: ShaderMaterial
 var _mask_prop: ShaderMaterial
+## Clears the chips capture where other ground is drawn over a bed.
+var _chips_occluder: ShaderMaterial
+## Ground meshes without mulch, kept while the captures are built: those over a bed's
+## ground cells become the chips capture's occluders.
+var _occluder_sources: Array[MeshInstance3D] = []
+var _chip_occluders := 0
 
 
 ## The level this run draws, OFF where it isn't drawn at all: the flag on the
@@ -548,7 +561,8 @@ func configure(world: Node3D, player: Node3D, level: String) -> void:
 	_build_captures()
 	_mulch_cells = grow_cells(_mulch_cells, MULCH_MARGIN_CELLS)
 	_chips.ground = _mulch_cells
-	print("GROUND_DRESSING level=%s surface_copies=%d colour_copies=%d mulch_copies=%d build_ms=%d" % [level, surface_viewport.get_child_count() - 1, colour_viewport.get_child_count() - 1, chips_viewport.get_child_count() - 1, Time.get_ticks_msec() - started])
+	_add_chip_occluders()
+	print("GROUND_DRESSING level=%s surface_copies=%d colour_copies=%d mulch_copies=%d chip_occluders=%d build_ms=%d" % [level, surface_viewport.get_child_count() - 1, colour_viewport.get_child_count() - 1, chips_viewport.get_child_count() - 1 - _chip_occluders, _chip_occluders, Time.get_ticks_msec() - started])
 	_share_captures(blades)
 	_share_captures(stones)
 	_share_captures(chips)
@@ -610,6 +624,8 @@ func set_level(level: String) -> void:
 		return
 	var settings: Dictionary = LEVELS[level]
 	_set_lawn_threads(false)
+	# Capture again: the chips capture is skipped at a level without chips.
+	_window_centre = Vector2.INF
 	if _draw_grass:
 		_set_ring(_grass, float(settings.tufts_m2) * (CARD_TUFT_SHARE if _use_cards else 1.0), float(settings.ring_m))
 	if _draw_stones:
@@ -649,6 +665,13 @@ func set_parts(cards: bool, grass: bool, stones: bool, chips: bool = true) -> vo
 	_draw_chips = chips
 	_pick_grass()
 	set_level(level)
+
+
+## Whether ground drawn over a bed clears the chips capture (always, but for a shot
+## that compares without it).
+func set_chip_occluders(on: bool) -> void:
+	_chips_occluder.set_shader_parameter("factor", Vector4.ZERO if on else Vector4.ONE)
+	_window_centre = Vector2.INF
 
 
 func set_render_priority(priority: int) -> void:
@@ -694,14 +717,46 @@ func _process(_delta: float) -> void:
 
 func _capture(at: Vector3) -> void:
 	_window_centre = Vector2(snappedf(at.x, SNAP_M), snappedf(at.z, SNAP_M))
+	var chips_wanted := chips_capture_wanted(float(LEVELS[_level].chips_m2), _draw_chips, _mulch_cells, _window_centre)
 	for viewport: SubViewport in capture_viewports():
+		if viewport == chips_viewport and not chips_wanted:
+			continue
 		(viewport.get_node("Camera") as Camera3D).position = Vector3(_window_centre.x, CAPTURE_HEIGHT_M, _window_centre.y)
 		viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 	var window := Vector3(_window_centre.x - WINDOW_M * 0.5, _window_centre.y - WINDOW_M * 0.5, 1.0 / WINDOW_M)
 	for ring: Dictionary in _rings():
 		(ring.material as ShaderMaterial).set_shader_parameter("ground_window", window)
-	var chips_window := Vector3(_window_centre.x - CHIP_WINDOW_M * 0.5, _window_centre.y - CHIP_WINDOW_M * 0.5, 1.0 / CHIP_WINDOW_M)
-	(_chips.material as ShaderMaterial).set_shader_parameter("chips_window", chips_window)
+	if chips_wanted:
+		var chips_window := Vector3(_window_centre.x - CHIP_WINDOW_M * 0.5, _window_centre.y - CHIP_WINDOW_M * 0.5, 1.0 / CHIP_WINDOW_M)
+		(_chips.material as ShaderMaterial).set_shader_parameter("chips_window", chips_window)
+
+
+## Whether the chips capture has a use: chips at this level (chips_m2), drawn at all,
+## and a bed's ground cell within the window round centre. With none there, no chip
+## can stand before the next capture, since the ring stays inside the window till then
+## (the ground dressing contract checks that).
+static func chips_capture_wanted(chips_m2: float, draw_chips: bool, cells: Dictionary, centre: Vector2) -> bool:
+	if chips_m2 <= 0.0 or not draw_chips or cells.is_empty():
+		return false
+	var half := CHIP_WINDOW_M * 0.5
+	return reaches_cells(AABB(Vector3(centre.x - half, 0.0, centre.y - half), Vector3(CHIP_WINDOW_M, 0.0, CHIP_WINDOW_M)), cells)
+
+
+## Whether a world box's ground footprint reaches any of these CELL_M ground cells
+## (Vector2i).
+static func reaches_cells(box: AABB, cells: Dictionary) -> bool:
+	var low := Vector2i(floori(box.position.x / CELL_M), floori(box.position.z / CELL_M))
+	var high := Vector2i(floori(box.end.x / CELL_M), floori(box.end.z / CELL_M))
+	if (high.x - low.x + 1) * (high.y - low.y + 1) > cells.size():
+		for cell: Vector2i in cells:
+			if cell.x >= low.x and cell.x <= high.x and cell.y >= low.y and cell.y <= high.y:
+				return true
+		return false
+	for x in range(low.x, high.x + 1):
+		for z in range(low.y, high.y + 1):
+			if cells.has(Vector2i(x, z)):
+				return true
+	return false
 
 
 func _new_ring(material: ShaderMaterial, meshes: Array[Mesh], mesh_levels: bool) -> Dictionary:
@@ -912,12 +967,15 @@ func _build_captures() -> void:
 	_mask_pass.set_shader_parameter("factor", Vector4.ONE)
 	_mask_prop = _ring_material("ground_dressing_mask_prop", mask_shader)
 	_mask_prop.set_shader_parameter("below_m", PROP_MASK_M)
+	_chips_occluder = _ring_material("ground_dressing_chips_occluder", mask_shader)
+	_chips_occluder.set_shader_parameter("factor", Vector4.ZERO)
+	_chips_occluder.set_shader_parameter("lift_m", CHIP_OCCLUDER_LIFT_M)
 	for parent_name: String in ["ground_and_areas", "roads_and_paths", "buildings"]:
 		var parent: Node = _world.get(parent_name)
 		for node: Node in parent.find_children("*", "MeshInstance3D", true, false):
 			var source := node as MeshInstance3D
 			if source.mesh != null and source.is_visible_in_tree():
-				_copy_mesh(source)
+				_copy_mesh(source, parent_name != "buildings")
 	var street_detail: Node = _world.get("street_detail")
 	for layer: String in ["Furniture", "Clutter"]:
 		for node: Node in street_detail.get_node(layer).find_children("*", "MultiMeshInstance3D", true, false):
@@ -932,13 +990,30 @@ func _build_captures() -> void:
 				surface_viewport.add_child(copy)
 
 
-func _copy_mesh(source: MeshInstance3D) -> void:
+## Ground that reaches the chips' ground cells hides a bed from the chips capture
+## wherever it is drawn over it (a kerb, a path, the land over a strip's edge).
+## Buildings don't: chips lie on under an eave or a canopy.
+func _add_chip_occluders() -> void:
+	for source: MeshInstance3D in _occluder_sources:
+		if reaches_cells(source.global_transform * source.get_aabb(), _mulch_cells):
+			var occluders: Array[Material] = []
+			for index in source.mesh.get_surface_count():
+				occluders.append(_chips_occluder)
+			_add_copy(chips_viewport, source, occluders)
+			_chip_occluders += 1
+	_occluder_sources.clear()
+
+
+## Copies a mesh into the captures. ground: a ground or road record, which hides a bed
+## from the chips capture where it is drawn over it; a building does not.
+func _copy_mesh(source: MeshInstance3D, ground: bool) -> void:
 	var kerb := str(source.get_parent().get_meta("feature_kind", "")) == "street_kerb"
 	var surface_materials: Array[Material] = []
 	var colour_materials: Array[Material] = []
 	var chip_materials: Array[Material] = []
 	var on_ground := false
 	var on_mulch := false
+	var other := _chips_occluder if ground else _mask_pass
 	for index in source.mesh.get_surface_count():
 		var material := source.get_active_material(index)
 		var mulch := _mulch_capture(material)
@@ -953,11 +1028,11 @@ func _copy_mesh(source: MeshInstance3D) -> void:
 		elif pair.is_empty():
 			surface_materials.append(_mask_block)
 			colour_materials.append(_mask_pass)
-			chip_materials.append(_mask_pass)
+			chip_materials.append(other)
 		else:
 			colour_materials.append(pair[0])
 			surface_materials.append(pair[1])
-			chip_materials.append(_mask_pass)
+			chip_materials.append(other)
 			on_ground = true
 	_add_copy(surface_viewport, source, surface_materials)
 	if on_ground:
@@ -965,6 +1040,8 @@ func _copy_mesh(source: MeshInstance3D) -> void:
 	if on_mulch:
 		_add_copy(chips_viewport, source, chip_materials)
 		mulch_cells(_ground_triangles(source), _mulch_cells)
+	elif ground:
+		_occluder_sources.append(source)
 
 
 ## A ground record's triangles in world x, z, from data the world keeps on the CPU: a
