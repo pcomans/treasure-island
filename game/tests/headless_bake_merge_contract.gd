@@ -156,6 +156,7 @@ func _run() -> void:
 	_check_same_material()
 	_check_surface_limit()
 	_check_ground_proof()
+	_check_web_distances()
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
 	for index in kept.size():
@@ -360,11 +361,12 @@ func _check_same_material() -> void:
 	var long_parts: Array[MeshInstance3D] = [_channel_part(building, shared, Transform3D.IDENTITY, true, 90.0, 10), _channel_part(building, shared, Transform3D.IDENTITY, true, 90.0, 11)]
 	# Pairs that would join but for what they draw with.
 	var refused := {}
-	for case: String in ["ALPHA", "TIME", "INSTANCE_ID", "instance uniform", "depth_draw_never", "blend_add"]:
+	for case: String in ["ALPHA", "TIME", "INSTANCE_ID", "VERTEX_ID", "instance uniform", "depth_draw_never", "blend_add"]:
 		var code: String = {
 			"ALPHA": "shader_type spatial;\nvoid fragment() { ALBEDO = vec3(0.5); ALPHA = 0.5; }",
 			"TIME": "shader_type spatial;\nvoid fragment() { ALBEDO = vec3(fract(TIME)); }",
 			"INSTANCE_ID": "shader_type spatial;\nvarying float id;\nvoid vertex() { id = float(INSTANCE_ID); }\nvoid fragment() { ALBEDO = vec3(id); }",
+			"VERTEX_ID": "shader_type spatial;\nvarying float id;\nvoid vertex() { id = float(VERTEX_ID); }\nvoid fragment() { ALBEDO = vec3(id); }",
 			"instance uniform": "shader_type spatial;\ninstance uniform vec4 shade : source_color;\nvoid fragment() { ALBEDO = shade.rgb; }",
 			"depth_draw_never": "shader_type spatial;\nrender_mode depth_draw_never;\nvoid fragment() { ALBEDO = vec3(0.3); }",
 			"blend_add": "shader_type spatial;\nrender_mode blend_add;\nvoid fragment() { ALBEDO = vec3(0.3); }",
@@ -531,10 +533,81 @@ func _check_ground_proof() -> void:
 	site.free()
 
 
+## The web culls each unmerged part by its whole mesh's size, and drew a mesh the merge
+## by colour had partly taken by what that left of it (main.gd). Merged and left-over
+## parts keep the distance the web drew them to: a surface joining by material from a
+## mesh the merge by colour left takes that left-over size, not the mesh's; a mesh
+## that keeps some surfaces keeps its size and box; a batch never mixes distances; the
+## merge says how far a batch's fade moved from its parts'.
+func _check_web_distances() -> void:
+	var site := Node3D.new()
+	root.add_child(site)
+	var top := Node3D.new()
+	site.add_child(top)
+	var building := Node3D.new()
+	building.set_meta("source_keys", ["w6"])
+	top.add_child(building)
+	var shader := _shader("shader_type spatial;\nuniform vec4 tint : source_color = vec4(0.5, 0.4, 0.3, 1.0);\nvoid fragment() { ALBEDO = tint.rgb; }")
+	var long_material := _shader_material(shader, Color(0.6, 0.5, 0.4))
+	var unique := _shader_material(shader, Color(0.2, 0.5, 0.4))
+	var small_material := _shader_material(shader, Color(0.3, 0.3, 0.6))
+	# A 60 m surface joins by material; its mesh keeps a 5 m one (both drawn at any
+	# distance before, as their mesh was 60 m long).
+	var keeper := _strip_part(building, [[long_material, 60.0, 0.0], [unique, 5.0, 1.0]])
+	var keeper_box := keeper.mesh.get_aabb()
+	var twin := _strip_part(building, [[long_material, 60.0, 2.0]])
+	# 5 m surfaces whose 60 m plain neighbours join by colour: the web drew them by the
+	# 5 m the merge by colour left, culling them at 200 m.
+	var left := _strip_part(building, [[_material(Color(0.7, 0.7, 0.7)), 60.0, 10.0], [small_material, 5.0, 11.0]])
+	var right := _strip_part(building, [[_material(Color(0.6, 0.6, 0.7)), 60.0, 12.0], [small_material, 5.0, 13.0]])
+	var report := Merge.merge(site)
+	check((report.problems as PackedStringArray).is_empty(), "A merge of partly taken meshes must report no problems: %s" % report.problems)
+	var long_batch := _batch_with(building, long_material, Transform3D.IDENTITY)
+	check(long_batch != null and not is_instance_valid(twin) and Merge.PREBUILT_WORLD.web_detail_range(float(long_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, -1.0))) == Vector2.ZERO, "A 60 m surface joining by material must keep being drawn at any distance")
+	check(is_instance_valid(keeper) and keeper.mesh.get_surface_count() == 1 and keeper.mesh.surface_get_material(0) == unique, "A mesh must keep the surface no other shares")
+	if is_instance_valid(keeper):
+		check(keeper.custom_aabb == keeper_box and Merge.PREBUILT_WORLD.web_detail_range(float(keeper.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, -1.0))) == Vector2.ZERO, "A mesh that kept a 5 m surface of a 60 m one must keep its box and its distance: %s, %s" % [keeper.custom_aabb, keeper.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, null)])
+	var small_batch := _batch_with(building, small_material, Transform3D.IDENTITY)
+	check(small_batch != null and not is_instance_valid(left) and not is_instance_valid(right), "5 m surfaces must join by material once their 60 m neighbours joined by colour")
+	if small_batch != null:
+		check(Merge.PREBUILT_WORLD.web_detail_range(float(small_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, -1.0))) == Vector2(200, 20), "5 m surfaces the web culled at 200 m must keep that once joined, not take their old meshes' 60 m: %s" % small_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, null))
+	for child: Node in building.get_children():
+		if child.has_meta("baked_merge") and child.has_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META):
+			var range_m := Merge.PREBUILT_WORLD.web_detail_range(float(child.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META)))
+			for surface in (child as MeshInstance3D).mesh.get_surface_count():
+				var material: Material = (child as MeshInstance3D).mesh.surface_get_material(surface)
+				var expected := Vector2(200, 20) if material == small_material else Vector2.ZERO
+				check(range_m == expected, "A batch must hold parts of one web distance, its own: %s holds %s" % [range_m, material])
+		elif child.has_meta("baked_merge"):
+			check(not (child as MeshInstance3D).mesh.surface_get_material(0) is ShaderMaterial, "Only the merge by colour's own batches may go without a size")
+	var shift := float(report.get("most_fade_shift_m", -1.0))
+	check(shift > 0.5 and shift < 2.0, "The merge must say how far a culled batch's fade moved from its parts' (two 5 m parts 2 m apart): %s" % shift)
+	site.free()
+
+
+## A part with one surface per [material, length along x (m), z], each a 1 m wide strip.
+func _strip_part(parent: Node3D, strips: Array) -> MeshInstance3D:
+	var mesh := ArrayMesh.new()
+	for strip: Array in strips:
+		var length: float = strip[1]
+		var z: float = strip[2]
+		var arrays: Array = []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([Vector3(0, 0, z), Vector3(length, 0, z), Vector3(0, 0, z + 1), Vector3(length, 0, z + 1)])
+		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([Vector3.UP, Vector3.UP, Vector3.UP, Vector3.UP])
+		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2, 2, 1, 3])
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mesh.surface_set_material(mesh.get_surface_count() - 1, strip[0])
+	var part := MeshInstance3D.new()
+	part.mesh = mesh
+	parent.add_child(part, true)
+	return part
+
+
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; a housing family's ground proof keeps its meshes as authored while other families' support and ground meshes join by colour, keeping the web's culling by size; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; a housing family's ground proof keeps its meshes as authored while other families' support and ground meshes join by colour; every merged or left-over part keeps the distance the web drew it to, a batch never mixing distances; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
 		quit(0)
 		return
 	for message in failures:

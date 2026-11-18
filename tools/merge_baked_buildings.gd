@@ -45,9 +45,6 @@ extends RefCounted
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 const STUDY_GEOMETRY := preload("res://game/tests/support/building_study_geometry.gd")
-## The scope housing_family_live_attachment.gd gives an installed family, the only one
-## StudyGeometry.retained_ground_contact compares.
-const FAMILY_SCOPE := "approved_shared_family_normal_play"
 ## Metadata that says which building and role a mesh belongs to. A merged mesh carries
 ## its sources' values; meshes that differ in any of them don't merge.
 const IDENTITY_META: Array[StringName] = [&"source_keys", &"source_key", &"derived_object_key", &"family_role", &"physical_role", &"mersea_role", &"visual_only"]
@@ -89,9 +86,9 @@ const SAME_MATERIAL_DEFAULTS := {
 const UNDRAWN_PROPERTIES := ["resource_name", "resource_path", "resource_local_to_scene", "resource_scene_unique_id"]
 ## What a shader whose surfaces join by material must not use: alpha, blending, the
 ## screen or depth behind it, and drawing without the depth test or depth writes sort or
-## blend per object; TIME animates; the others read per-instance values. An include
-## could hide any of them.
-const SHADER_REFUSALS: Array[String] = ["ALPHA", "TIME", "INSTANCE_ID", "INSTANCE_CUSTOM", "SCREEN_TEXTURE", "DEPTH_TEXTURE",
+## blend per object; TIME animates; the others read per-instance values, and VERTEX_ID
+## a vertex's place in its mesh, which joining moves. An include could hide any of them.
+const SHADER_REFUSALS: Array[String] = ["ALPHA", "TIME", "INSTANCE_ID", "INSTANCE_CUSTOM", "VERTEX_ID", "SCREEN_TEXTURE", "DEPTH_TEXTURE",
 	"NORMAL_ROUGHNESS_TEXTURE", "hint_screen_texture", "hint_depth_texture", "hint_normal_roughness_texture", "blend_add",
 	"blend_sub", "blend_mul", "blend_premul_alpha", "depth_test_disabled", "depth_draw_never", "depth_prepass_alpha",
 	"alpha_to_coverage", "alpha_to_coverage_and_one", "include"]
@@ -135,7 +132,9 @@ static func merge(buildings: Node3D) -> Dictionary:
 			proof_meshes[mesh] = true
 	counts["ground_proof_families"] = proofs.size()
 	counts["ground_proof_meshes"] = proof_meshes.size()
-	# Each drawn node with the surfaces it gives up by colour: [node, [surface, ...]].
+	# Each drawn node with the surfaces it gives up by colour, and the box (in its own
+	# space) of what the web drew of it before this round's merges: [node, [surface,
+	# ...], box].
 	var visited: Array = []
 	for node: MeshInstance3D in leaves:
 		if node.mesh == null or not node.is_visible_in_tree():
@@ -149,9 +148,14 @@ static func merge(buildings: Node3D) -> Dictionary:
 		var taken: Array[int] = []
 		var may_merge := _may_merge(node, uses, anchor) and not proof_meshes.has(node)
 		var rigid := _rigid(to_anchor)
+		var culled := _culled_detail(node)
+		var boxes: Array[AABB] = []
+		# Surfaces that may join by material: [key, material, data, surface].
+		var candidates: Array = []
 		for surface in surface_count:
 			# The surface as the renderer holds it.
 			var data := RenderingServer.mesh_get_surface(mesh.get_rid(), surface)
+			boxes.append(data.get("aabb", AABB()))
 			# A merged surface has no LODs, so one that has them keeps its own mesh.
 			if not (data.get("lods", []) as Array).is_empty():
 				counts.surfaces_with_lods += 1
@@ -163,7 +167,9 @@ static func merge(buildings: Node3D) -> Dictionary:
 			if signature != "":
 				var arrays := mesh.surface_get_arrays(surface)
 				if _has_only_supported_channels(arrays):
-					var group := _group(groups, node, anchor, _culled_detail(node))
+					# A support or ground node stood whole until this round, so the web
+					# culled its parts by the whole node's size.
+					var group := _group(groups, node, anchor, _longest_side(node, node.get_aabb()) if culled else -1.0)
 					_add_part(group, signature, material as StandardMaterial3D, arrays, to_anchor, materials)
 					_count_taken(group, arrays)
 					counts.taken_by_colour += 1
@@ -171,8 +177,19 @@ static func merge(buildings: Node3D) -> Dictionary:
 					continue
 			var key := _material_key(material, material_keys)
 			if key != "" and _keeps_format(data):
-				_add_same_part(_same_group(same_groups, node, anchor, to_anchor), key, material, data, node, surface)
-		visited.append([node, taken])
+				candidates.append([key, material, data, surface])
+		# What the web culled of this node before this round's merges: the whole of a
+		# support or ground node, else what the merge by colour left of it (main.gd
+		# measured that left-over mesh).
+		var box := AABB()
+		var first := true
+		for surface in surface_count:
+			if culled or not taken.has(surface):
+				box = boxes[surface] if first else box.merge(boxes[surface])
+				first = false
+		for candidate: Array in candidates:
+			_add_same_part(_same_group(same_groups, node, anchor, to_anchor, box), candidate[0], candidate[1], candidate[2], node, candidate[3])
+		visited.append([node, taken, box])
 	# A surface joins by material only beside another: alone it stays where it is.
 	var taken_by_material := {}
 	for group: Dictionary in same_groups.values():
@@ -198,7 +215,14 @@ static func merge(buildings: Node3D) -> Dictionary:
 			node.get_parent().remove_child(node)
 			node.free()
 			continue
-		# Kept surfaces stay in their own mesh, their buffers untouched.
+		# Kept surfaces stay in their own mesh, their buffers untouched. A mesh that
+		# gives some up shrinks to the rest, so it keeps the box and size the web
+		# culled it by: its custom box puts its fade where it was, and the size keeps
+		# its distance (main.gd reads it in place of the shrunk mesh's).
+		if not taken.is_empty():
+			var box: AABB = entry[2]
+			node.custom_aabb = box
+			node.set_meta(PREBUILT_WORLD.DETAIL_SIZE_META, _longest_side(node, box))
 		taken.sort()
 		taken.reverse()
 		for surface: int in taken:
@@ -213,6 +237,7 @@ static func merge(buildings: Node3D) -> Dictionary:
 	counts["surfaces_by_material"] = same_batches.surfaces
 	counts["materials_after"] = materials.size()
 	counts["most_surface_vertices"] = maxi(int(batches.most_vertices), int(same_batches.most_vertices))
+	counts["most_fade_shift_m"] = snappedf(maxf(batches.most_fade_shift_m, same_batches.most_fade_shift_m), 0.1)
 	counts["taken_indices"] = int(batches.taken_indices) + int(same_batches.taken_indices)
 	counts["taken_vertices"] = int(batches.taken_vertices) + int(same_batches.taken_vertices)
 	var problems: PackedStringArray = batches.problems
@@ -241,6 +266,7 @@ static func _build_groups(groups: Dictionary, by_material := false, first_index 
 	var meshes := 0
 	var surfaces := 0
 	var most_vertices := 0
+	var most_shift := 0.0
 	var taken_indices := 0
 	var taken_vertices := 0
 	var problems := PackedStringArray()
@@ -260,12 +286,28 @@ static func _build_groups(groups: Dictionary, by_material := false, first_index 
 				var problem := _build_problem(built, group)
 				if problem != "":
 					problems.append("%s under %s: %s" % [batch, (group.anchor as Node3D).get_path(), problem])
+				most_shift = maxf(most_shift, _fade_shift(group))
 		var shortfall := _taken_problem(built, group)
 		if shortfall != "":
 			problems.append("%s under %s: %s" % [batch, (group.anchor as Node3D).get_path(), shortfall])
 		taken_indices += int(group.taken_indices)
 		taken_vertices += int(group.taken_vertices)
-	return {"meshes": meshes, "surfaces": surfaces, "most_vertices": most_vertices, "taken_indices": taken_indices, "taken_vertices": taken_vertices, "problems": problems}
+	return {"meshes": meshes, "surfaces": surfaces, "most_vertices": most_vertices, "most_fade_shift_m": most_shift, "taken_indices": taken_indices, "taken_vertices": taken_vertices, "problems": problems}
+
+
+## How far (m) a batch the web culls by distance moved the fade of its parts: the web
+## measures a batch's distance from its box's centre, where it measured each part's
+## from that part's, so a part fades up to this much nearer or farther. 0 for a batch
+## drawn at any distance.
+static func _fade_shift(group: Dictionary) -> float:
+	if not group.has("centres") or not group.has("node") or PREBUILT_WORLD.web_detail_range(group.detail_m) == Vector2.ZERO:
+		return 0.0
+	var batch: MeshInstance3D = group.node
+	var centre := (batch.global_transform * batch.get_aabb()).get_center()
+	var shift := 0.0
+	for part: Vector3 in group.centres.values():
+		shift = maxf(shift, part.distance_to(centre))
+	return shift
 
 
 ## The nearest ancestor holding inherited identity, or else the building's top node.
@@ -321,14 +363,14 @@ static func _rigid(to_anchor: Transform3D) -> bool:
 	return basis.determinant() > 0.0 and basis.is_equal_approx(basis.orthonormalized())
 
 
-## Each installed housing family that has a ground proof, with the meshes it compares
-## in order (StudyGeometry.retained_ground_meshes, looked up in the whole tree as the
-## proof looks them up in the game's).
+## Each housing family that has a ground proof, with the meshes it compares in order
+## (StudyGeometry.retained_ground_meshes, which also decides which families count,
+## looked up in the whole tree as the proof looks them up in the game's).
 static func _ground_proofs(buildings: Node3D) -> Dictionary:
 	var scene: Node = buildings.get_tree().root if buildings.is_inside_tree() else buildings
 	var proofs := {}
 	for family: Node3D in buildings.find_children("*", "Node3D", true, false):
-		if str(family.get_meta("scope", "")) == FAMILY_SCOPE:
+		if family.has_meta("scope"):
 			var meshes := STUDY_GEOMETRY.retained_ground_meshes(scene, family)
 			if not meshes.is_empty():
 				proofs[family] = meshes
@@ -343,24 +385,27 @@ static func _identity(node: MeshInstance3D) -> Dictionary:
 	return identity
 
 
-## The group of surfaces that will share one merged node with this one. culled: a part
-## the web culls by its size (_culled_detail), which joins only parts it culls at the
-## same distance, the group keeping the largest one's size (detail_m) for the batch.
-static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, culled := false) -> Dictionary:
+## The group of surfaces that will share one merged node with this one. culled_m: for
+## a part the web culled by its size (_culled_detail), that size, so it joins only
+## parts culled at the same distance, the group keeping the largest such size
+## (detail_m) and each part's centre for the batch; negative for a part the web drew
+## at any distance (the merge by colour's own).
+static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, culled_m := -1.0) -> Dictionary:
 	var identity := _identity(node)
 	var group_key := "%d|%s|%d|%d" % [anchor.get_instance_id(), identity, node.cast_shadow, node.layers]
-	var longest := _longest_side(node) if culled else 0.0
-	if culled:
-		group_key += "|culled " + var_to_str(PREBUILT_WORLD.web_detail_range(longest))
+	if culled_m >= 0.0:
+		group_key += "|culled " + var_to_str(PREBUILT_WORLD.web_detail_range(culled_m))
 	if not groups.has(group_key):
 		# taken_*: what merge() took out of the sources for this group, counted apart
 		# from the parts it records, for _taken_problem.
 		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "surfaces": {}, "taken_indices": 0, "taken_vertices": 0}
-		if culled:
+		if culled_m >= 0.0:
 			groups[group_key]["detail_m"] = 0.0
+			groups[group_key]["centres"] = {}
 	var group: Dictionary = groups[group_key]
-	if culled:
-		group.detail_m = maxf(group.detail_m, longest)
+	if culled_m >= 0.0:
+		group.detail_m = maxf(group.detail_m, culled_m)
+		group.centres[node] = (node.global_transform * node.get_aabb()).get_center()
 	return group
 
 
@@ -372,24 +417,28 @@ static func _culled_detail(node: MeshInstance3D) -> bool:
 	return node.get_parent().has_meta("scope") and str(node.get_meta("family_role", "support")) == "support"
 
 
-## A part's longest side in the world, as main.gd's web culling measures it.
-static func _longest_side(node: MeshInstance3D) -> float:
-	var size := (node.global_transform * node.get_aabb()).size
+## The longest side in the world of a box in a part's space, as main.gd's web culling
+## measures a part (its whole mesh's box).
+static func _longest_side(node: MeshInstance3D, box: AABB) -> float:
+	var size := (node.global_transform * box).size
 	return maxf(size.x, maxf(size.y, size.z))
 
 
 ## The group of surfaces joining by material that will share one merged node with this
 ## one: the same anchor, identity, shadow and layers as _group, the same transform, and
-## the same distance the web draws parts of its size to.
-static func _same_group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, to_anchor: Transform3D) -> Dictionary:
+## the same distance the web drew it to. box: what the web culled of the part, in its
+## own space (merge()), whose size sets that distance and whose centre the batch's
+## fade is measured against.
+static func _same_group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, to_anchor: Transform3D, box: AABB) -> Dictionary:
 	var identity := _identity(node)
-	var longest := _longest_side(node)
+	var longest := _longest_side(node, box)
 	# The transform by its bytes: a text form may round two transforms together.
 	var group_key := "%d|%s|%d|%d|%s|%s" % [anchor.get_instance_id(), identity, node.cast_shadow, node.layers, var_to_bytes(to_anchor).hex_encode(), var_to_str(PREBUILT_WORLD.web_detail_range(longest))]
 	if not groups.has(group_key):
-		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "transform": to_anchor, "detail_m": 0.0, "surfaces": {}, "taken_indices": 0, "taken_vertices": 0}
+		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "transform": to_anchor, "detail_m": 0.0, "centres": {}, "surfaces": {}, "taken_indices": 0, "taken_vertices": 0}
 	var group: Dictionary = groups[group_key]
 	group.detail_m = maxf(group.detail_m, longest)
+	group.centres[node] = (node.global_transform * box).get_center()
 	return group
 
 
@@ -592,6 +641,7 @@ static func _build_node(group: Dictionary, index: int) -> ArrayMesh:
 	if group.has("detail_m"):
 		node.set_meta(PREBUILT_WORLD.DETAIL_SIZE_META, group.detail_m)
 	(group.anchor as Node3D).add_child(node)
+	group["node"] = node
 	return mesh
 
 
@@ -613,6 +663,7 @@ static func _build_same_node(group: Dictionary, index: int) -> ArrayMesh:
 	node.transform = group.transform
 	node.set_meta(PREBUILT_WORLD.DETAIL_SIZE_META, group.detail_m)
 	(group.anchor as Node3D).add_child(node)
+	group["node"] = node
 	return mesh
 
 
