@@ -1460,6 +1460,10 @@ Drawing each group of the world once from the spawn camera (`main.gd` `COMPILE_G
 
 A coroutine resumed by `RenderingServer.frame_post_draw` runs after that frame was drawn; if it shows a node and then awaits `process_frame` before hiding it, the next frame's process step hides it again before that frame draws, so nothing ever draws it. The shader warm-up's probe pass did exactly that (`main.gd` calls it straight after `_prepare_initial_graphics`, whose last await is `frame_post_draw`): of its two stops only the second was drawn, and the first stop's shader (Mersea's glazing: 5 programs) still compiled in play in both browsers (`shader-warmup-20261117`, the first browser proof). Headless runs cannot show it, as nothing is drawn. Before showing something that must be drawn once, await a `process_frame` first, so the show happens in a process step that a draw follows.
 
+## A pause freezes an idle animation part-way through
+
+The web's start prompt pauses the tree as loading ends, so the chest avatar shows whatever its idle breath was doing in that frame. The shader warm-up's extra loading frames moved the pause from the lid-shut to the lid-lifted part of its 1.1 s breath, and every after-run's prompt showed gold under the lid (review of `web/shader-warmup-20261117`, 2026-11-17; a native per-tick log showed the springs at rest, only the breath moving). A change to loading's length changes such a pose: hold animated characters at rest until play starts (`chest_avatar.gd` does), and compare the prompt's pixels before and after a loading change.
+
 ## Serve a web build to a phone over HTTPS
 
 Godot's web engine refuses to start on a page that is not a secure context: over plain HTTP at the dev machine's address (`http://<dev-box>:<port>/`) it stopped at "Secure Context - Check web server configuration (use HTTPS)" (`platform/web/js/engine/features.js`; `web-drive-trace-20261117`, run C01). `localhost` counts as secure, so a test there does not show it. A build for a phone needs an HTTPS address.
