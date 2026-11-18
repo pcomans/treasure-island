@@ -418,7 +418,8 @@ function tiTraceText(env, a) {
 	// What a previous page left unfinished (a crash or a kill), kept for the results.
 	const previous = load('meta');
 	if (previous && previous.status === 'running') {
-		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds'), ring: load('ring'), page_events: load('page_events')});
+		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds'), ring: load('ring'), page_events: load('page_events'),
+			gl_big: load('gl_big'), audio: load('audio')});
 	}
 	save('meta', {id: log.id, status: 'waiting', path: log.page.path});
 	save('heartbeat', null);
@@ -426,6 +427,8 @@ function tiTraceText(env, a) {
 	save('seconds', []);
 	save('ring', []);
 	save('page_events', []);
+	save('gl_big', []);
+	save('audio', []);
 
 	// WebGL: the calls that can stall a frame, timed; the rest left alone.
 	let counters = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -461,6 +464,157 @@ function tiTraceText(env, a) {
 		if (typeof original !== 'function') return;
 		proto[method] = function (...args) { return fn.call(this, original, args); };
 	}
+	// What the page asks of WebGL in memory (glm), an estimate from each call's sizes and
+	// formats (never the data, which no wrapper keeps): the live objects by kind, and the
+	// storage live in textures (by kind: 2D, cube map, 2D array, 3D), renderbuffers (of
+	// which multisampled) and buffers; the bytes uploaded, the storage asked for in all
+	// (re-specified storage counted again: churn) and allocations of GLM_BIG or more. A
+	// texture's, buffer's or renderbuffer's storage goes to the one bound, read back with
+	// getParameter (answered from the browser's own state). Not counted: the canvas's own
+	// drawing buffer, the browser's and the driver's own copies and padding, and what a
+	// GPU makes of a format (tools/web_trace/README.md).
+	const GLM_BIG = 4 * 1048576;
+	const glm = {live: {texture: 0, buffer: 0, program: 0, shader: 0, framebuffer: 0, renderbuffer: 0, vao: 0},
+		tex: {'2d': 0, cube: 0, array: 0, '3d': 0}, buf: 0, rb: 0, rbMsaa: 0, uploaded: 0, asked: 0, big: 0, cubeBinds: 0, cubeAttach: 0};
+	const mb = (n) => Math.round(n / 10485.76) / 100;
+	const texTotal = () => glm.tex['2d'] + glm.tex.cube + glm.tex.array + glm.tex['3d'];
+	const glmSummary = () => `textures ${glm.live.texture} ${mb(texTotal())} MiB (2D ${mb(glm.tex['2d'])}, cube ${mb(glm.tex.cube)}, array ${mb(glm.tex.array)}, 3D ${mb(glm.tex['3d'])}),`
+		+ ` renderbuffers ${glm.live.renderbuffer} ${mb(glm.rb)} MiB (multisampled ${mb(glm.rbMsaa)}), buffers ${glm.live.buffer} ${mb(glm.buf)} MiB;`
+		+ ` all ${mb(texTotal() + glm.rb + glm.buf)} MiB`;
+	// Bytes a texel takes by sized internal format (RGB formats as the GPU pads them, to 4
+	// bytes a component group), else by its format's components and type; the compressed
+	// formats' blocks: [bytes, width, height].
+	const TEXEL = {0x8229: 1, 0x8F94: 1, 0x822B: 2, 0x8F95: 2, 0x8051: 4, 0x8F96: 4, 0x8D62: 2, 0x8056: 2, 0x8057: 2, 0x8058: 4, 0x8F97: 4,
+		0x8059: 4, 0x906F: 4, 0x8C41: 4, 0x8C43: 4, 0x822D: 2, 0x822F: 4, 0x881B: 8, 0x881A: 8, 0x822E: 4, 0x8230: 8, 0x8815: 16, 0x8814: 16,
+		0x8C3A: 4, 0x8C3D: 4, 0x8231: 1, 0x8232: 1, 0x8233: 2, 0x8234: 2, 0x8235: 4, 0x8236: 4, 0x8237: 2, 0x8238: 2, 0x8239: 4, 0x823A: 4,
+		0x823B: 8, 0x823C: 8, 0x8D8F: 4, 0x8D7D: 4, 0x8D89: 8, 0x8D77: 8, 0x8D83: 16, 0x8D71: 16, 0x8D8E: 4, 0x8D7C: 4, 0x8D88: 8, 0x8D76: 8,
+		0x8D82: 16, 0x8D70: 16, 0x81A5: 2, 0x81A6: 4, 0x8CAC: 4, 0x88F0: 4, 0x8CAD: 8, 0x8D48: 1};
+	const COMPONENTS = {0x1903: 1, 0x8227: 2, 0x1907: 3, 0x1908: 4, 0x1909: 1, 0x190A: 2, 0x1906: 1, 0x8D94: 1, 0x8228: 2, 0x8D98: 3, 0x8D99: 4, 0x1902: 1, 0x84F9: 1};
+	const TYPE_BYTES = {0x1401: 1, 0x1400: 1, 0x1403: 2, 0x1402: 2, 0x1405: 4, 0x1404: 4, 0x140B: 2, 0x8D61: 2, 0x1406: 4};
+	const PACKED = {0x8363: 2, 0x8033: 2, 0x8034: 2, 0x8368: 4, 0x8C3B: 4, 0x8C3E: 4, 0x84FA: 4, 0x8DAD: 8};
+	const FORMAT_NAME = {0x8229: 'R8', 0x822B: 'RG8', 0x8051: 'RGB8', 0x8058: 'RGBA8', 0x8C41: 'SRGB8', 0x8C43: 'SRGB8_ALPHA8', 0x8059: 'RGB10_A2',
+		0x822D: 'R16F', 0x822F: 'RG16F', 0x881B: 'RGB16F', 0x881A: 'RGBA16F', 0x822E: 'R32F', 0x8230: 'RG32F', 0x8814: 'RGBA32F', 0x8C3A: 'R11F_G11F_B10F',
+		0x8C3D: 'RGB9_E5', 0x8D62: 'RGB565', 0x81A5: 'DEPTH16', 0x81A6: 'DEPTH24', 0x8CAC: 'DEPTH32F', 0x88F0: 'DEPTH24_STENCIL8', 0x8CAD: 'DEPTH32F_STENCIL8',
+		0x8D48: 'STENCIL8', 0x8236: 'R32UI', 0x8D7C: 'RGBA8UI', 0x1908: 'RGBA', 0x1907: 'RGB', 0x9274: 'ETC2_RGB8', 0x9278: 'ETC2_RGBA8', 0x9279: 'ETC2_SRGB8_ALPHA8',
+		0x93B0: 'ASTC_4x4', 0x93D0: 'SRGB8_ALPHA8_ASTC_4x4', 0x83F0: 'DXT1', 0x83F3: 'DXT5', 0x8E8C: 'BPTC_RGBA', 0x8E8F: 'BPTC_RGB_UFLOAT'};
+	const BLOCK = {};
+	for (const f of [0x9274, 0x9275, 0x9276, 0x9277, 0x9270, 0x9271, 0x83F0, 0x83F1, 0x8C4C, 0x8C4D, 0x8DBB, 0x8DBC, 0x8D64]) BLOCK[f] = [8, 4, 4];
+	for (const f of [0x9278, 0x9279, 0x9272, 0x9273, 0x83F2, 0x83F3, 0x8C4E, 0x8C4F, 0x8E8C, 0x8E8D, 0x8E8E, 0x8E8F, 0x8DBD, 0x8DBE]) BLOCK[f] = [16, 4, 4];
+	[[4, 4], [5, 4], [5, 5], [6, 5], [6, 6], [8, 5], [8, 6], [8, 8], [10, 5], [10, 6], [10, 8], [10, 10], [12, 10], [12, 12]].forEach(([w, h], i) => {
+		BLOCK[0x93B0 + i] = [16, w, h];
+		BLOCK[0x93D0 + i] = [16, w, h];
+	});
+	const formatName = (f) => FORMAT_NAME[f] || '0x' + Number(f).toString(16);
+	const texel = (internal, format, type) => TEXEL[internal] || PACKED[type] || (COMPONENTS[format] || COMPONENTS[internal] || 4) * (TYPE_BYTES[type] || 1);
+	const levelBytes = (internal, w, h, d, format, type) => {
+		const block = BLOCK[internal];
+		if (block) return Math.ceil(w / block[1]) * Math.ceil(h / block[2]) * block[0] * Math.max(1, d);
+		return w * h * Math.max(1, d) * texel(internal, format, type);
+	};
+	const storageBytes = (levels, internal, w, h, d, shrinkDepth) => {
+		let n = 0;
+		for (let l = 0; l < levels; l += 1) n += levelBytes(internal, Math.max(1, w >> l), Math.max(1, h >> l), shrinkDepth ? Math.max(1, d >> l) : d);
+		return n;
+	};
+	const CUBE_FACE = (target) => target >= 0x8515 && target <= 0x851A;
+	const texKind = (target) => (target === 0x8513 || CUBE_FACE(target) ? 'cube' : target === 0x8C1A ? 'array' : target === 0x806F ? '3d' : '2d');
+	const TEX_BINDING = {0x0DE1: 0x8069, 0x8513: 0x8514, 0x8C1A: 0x8C1D, 0x806F: 0x806A};
+	const BUFFER_BINDING = {0x8892: 0x8894, 0x8893: 0x8895, 0x8A11: 0x8A28, 0x8F36: 0x8F36, 0x8F37: 0x8F37, 0x88EB: 0x88ED, 0x88EC: 0x88EF, 0x8C8E: 0x8C8F};
+	const glLive = new WeakSet();
+	const texStore = new WeakMap();
+	const bufStore = new WeakMap();
+	const rbStore = new WeakMap();
+	const cubeFbos = new WeakSet();
+	// An allocation of GLM_BIG or more, kept at once (gl_big) with the totals after it and
+	// where the drive was; a same-size re-specification of the same storage is not one.
+	const bigAlloc = (what, bytes) => {
+		glm.big += 1;
+		const r = log.rows.length && F ? log.rows[log.rows.length - 1] : null;
+		const where = r ? `, trace ${Math.round(r[F.t] / 100) / 10} s at (${Math.round(r[F.x])}, ${Math.round(r[F.z])})` : ', before the trace';
+		keepEvent('gl_big', 'gl', `${what}: ${mb(bytes)} MiB${where}; then ${glmSummary()}`);
+	};
+	// A texture level's (key) or a whole immutable texture's (key null) storage, on the
+	// texture bound to target.
+	const texSet = (gl, target, key, bytes, what) => {
+		const tex = gl.getParameter(CUBE_FACE(target) ? 0x8514 : (TEX_BINDING[target] || 0x8069));
+		if (!tex) return;
+		const kind = texKind(target);
+		let had = texStore.get(tex);
+		if (!had) { had = new Map(); texStore.set(tex, had); }
+		let before = 0;
+		for (const [k, v] of had) {
+			if (key === null || k === key || k === 'all') { glm.tex[v[1]] -= v[0]; before += v[0]; had.delete(k); }
+		}
+		had.set(key === null ? 'all' : key, [bytes, kind]);
+		glm.tex[kind] += bytes;
+		glm.asked += bytes;
+		if (bytes >= GLM_BIG && bytes !== before) bigAlloc(`texture ${kind} ${what}`, bytes);
+	};
+	const texGone = (tex) => {
+		const had = texStore.get(tex);
+		if (!had) return;
+		for (const v of had.values()) glm.tex[v[1]] -= v[0];
+		texStore.delete(tex);
+	};
+	// The storage each allocating call asks for, after the call.
+	const alloc = {
+		texImage2D: (gl, a) => {
+			const [w, h] = a.length >= 9 ? [a[3], a[4]] : [a[5] && a[5].width, a[5] && a[5].height];
+			const [format, type] = a.length >= 9 ? [a[6], a[7]] : [a[3], a[4]];
+			texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], w || 0, h || 0, 1, format, type), `${formatName(a[2])} ${w}x${h} level ${a[1]}${CUBE_FACE(a[0]) ? ' face ' + (a[0] - 0x8515) : ''}`);
+		},
+		compressedTexImage2D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], 1), `${formatName(a[2])} ${a[3]}x${a[4]} level ${a[1]}${CUBE_FACE(a[0]) ? ' face ' + (a[0] - 0x8515) : ''}`),
+		texImage3D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5], a[7], a[8]), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]} level ${a[1]}`),
+		compressedTexImage3D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5]), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]} level ${a[1]}`),
+		texStorage2D: (gl, a) => texSet(gl, a[0], null, storageBytes(a[1], a[2], a[3], a[4], a[0] === 0x8513 ? 6 : 1, false), `${formatName(a[2])} ${a[3]}x${a[4]}${a[0] === 0x8513 ? 'x6 faces' : ''}, ${a[1]} levels (storage)`),
+		texStorage3D: (gl, a) => texSet(gl, a[0], null, storageBytes(a[1], a[2], a[3], a[4], a[5], a[0] === 0x806F), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]}, ${a[1]} levels (storage)`),
+		copyTexImage2D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[5], a[6], 1), `${formatName(a[2])} ${a[5]}x${a[6]} level ${a[1]} (copied)`),
+		// A level-0 image's mipmaps: a third of it again, per face.
+		generateMipmap: (gl, a) => {
+			const tex = gl.getParameter(TEX_BINDING[a[0]] || 0x8069);
+			const had = tex && texStore.get(tex);
+			if (!had) return;
+			for (const [k, v] of [...had]) {
+				const [target, level] = k.split(':');
+				if (level === '0') texSet(gl, a[0] === 0x8513 ? +target : a[0], `${target}:mips`, Math.round(v[0] / 3), `mipmaps of ${k}`);
+			}
+		},
+		bufferData: (gl, a) => {
+			const buf = gl.getParameter(BUFFER_BINDING[a[0]] || 0x8894);
+			if (!buf) return;
+			const per = (a[1] && a[1].BYTES_PER_ELEMENT) || 1;
+			const bytes = typeof a[1] === 'number' ? a[1] : !a[1] ? 0 : a[4] > 0 ? a[4] * per : a[1].byteLength - (a[3] || 0) * per;
+			const before = bufStore.get(buf) || 0;
+			bufStore.set(buf, bytes);
+			glm.buf += bytes - before;
+			glm.asked += bytes;
+			if (bytes >= GLM_BIG && bytes !== before) bigAlloc(`buffer 0x${a[0].toString(16)}`, bytes);
+		},
+	};
+	const rbSet = (gl, samples, internal, w, h) => {
+		const rb = gl.getParameter(0x8CA7);
+		if (!rb) return;
+		const bytes = Math.max(1, samples) * w * h * texel(internal);
+		const before = rbStore.get(rb) || [0, false];
+		glm.rb += bytes - before[0];
+		glm.rbMsaa += (samples > 1 ? bytes : 0) - (before[1] ? before[0] : 0);
+		rbStore.set(rb, [bytes, samples > 1]);
+		glm.asked += bytes;
+		if (bytes >= GLM_BIG && bytes !== before[0]) bigAlloc(`renderbuffer ${formatName(internal)} ${w}x${h}${samples > 1 ? ' x' + samples + ' samples' : ''}`, bytes);
+	};
+	// Bytes an upload passes (none for storage alone): the image's size where the call has
+	// one, by its format, else the data's.
+	const passed = (data) => (data === null || data === undefined || typeof data === 'number' ? 0 : 1);
+	const uploaded = {
+		texImage2D: (a) => (a.length >= 9 ? passed(a[8]) * levelBytes(a[2], a[3], a[4], 1, a[6], a[7]) : a[5] && a[5].width ? 4 * a[5].width * a[5].height : 0),
+		texSubImage2D: (a) => (a.length >= 9 ? passed(a[8]) * a[4] * a[5] * texel(0, a[6], a[7]) : a[6] && a[6].width ? 4 * a[6].width * a[6].height : 0),
+		compressedTexImage2D: (a) => (a.length >= 9 ? a[8] : typeof a[6] === 'number' ? 0 : (a[6] && a[6].byteLength) || 0),
+		compressedTexSubImage2D: (a) => (a.length >= 10 ? a[9] : typeof a[7] === 'number' ? 0 : (a[7] && a[7].byteLength) || 0),
+		texImage3D: (a) => passed(a[9]) * levelBytes(a[2], a[3], a[4], a[5], a[7], a[8]),
+		texSubImage3D: (a) => passed(a[10]) * a[5] * a[6] * a[7] * texel(0, a[8], a[9]),
+		compressedTexImage3D: (a) => (a.length >= 10 ? a[9] : typeof a[7] === 'number' ? 0 : (a[7] && a[7].byteLength) || 0),
+		bufferData: (a) => (typeof a[1] === 'number' || !a[1] ? 0 : a[4] > 0 ? a[4] * (a[1].BYTES_PER_ELEMENT || 1) : a[1].byteLength - (a[3] || 0) * (a[1].BYTES_PER_ELEMENT || 1)),
+	};
 	for (const proto of [window.WebGL2RenderingContext && WebGL2RenderingContext.prototype].filter(Boolean)) {
 		wrap(proto, 'shaderSource', function (original, args) {
 			if (args[0] && typeof args[0] === 'object') {
@@ -529,9 +683,67 @@ function tiTraceText(env, a) {
 				counters[4] += now() - t;
 				counters[2] += 1;
 				counters[3] += size(args) / 1024;
+				try {
+					if (alloc[method]) alloc[method](this, args);
+					if (uploaded[method]) glm.uploaded += uploaded[method](args);
+				} catch (e) { /* an estimate only */ }
 				return result;
 			});
 		}
+		wrap(proto, 'copyTexImage2D', function (original, args) {
+			const result = original.apply(this, args);
+			try { alloc.copyTexImage2D(this, args); } catch (e) { /* an estimate only */ }
+			return result;
+		});
+		for (const method of ['renderbufferStorage', 'renderbufferStorageMultisample']) {
+			wrap(proto, method, function (original, args) {
+				const result = original.apply(this, args);
+				try {
+					const a = method === 'renderbufferStorage' ? [0, args[1], args[2], args[3]] : args.slice(1);
+					rbSet(this, a[0], a[1], a[2], a[3]);
+				} catch (e) { /* an estimate only */ }
+				return result;
+			});
+		}
+		// Live objects by kind; a deleted one's storage taken off.
+		for (const [type, kind] of Object.entries({Texture: 'texture', Buffer: 'buffer', Program: 'program', Shader: 'shader', Framebuffer: 'framebuffer', Renderbuffer: 'renderbuffer', VertexArray: 'vao'})) {
+			wrap(proto, 'create' + type, function (original, args) {
+				const made = original.apply(this, args);
+				if (made) { glLive.add(made); glm.live[kind] += 1; }
+				return made;
+			});
+			wrap(proto, 'delete' + type, function (original, args) {
+				const gone = args[0];
+				if (gone && glLive.has(gone)) {
+					glLive.delete(gone);
+					glm.live[kind] -= 1;
+					if (kind === 'texture') texGone(gone);
+					if (kind === 'buffer') { glm.buf -= bufStore.get(gone) || 0; bufStore.delete(gone); }
+					if (kind === 'renderbuffer') {
+						const had = rbStore.get(gone);
+						if (had) { glm.rb -= had[0]; if (had[1]) glm.rbMsaa -= had[0]; rbStore.delete(gone); }
+					}
+				}
+				return original.apply(this, args);
+			});
+		}
+		// Cube-map faces drawn: Godot's Compatibility renderer draws a reflection probe's
+		// faces (and the sky's radiance) into framebuffers a cube-map face is attached to;
+		// each attachment of a face and each bind of such a framebuffer is counted.
+		wrap(proto, 'framebufferTexture2D', function (original, args) {
+			if (CUBE_FACE(args[2])) {
+				glm.cubeAttach += 1;
+				try {
+					const fb = this.getParameter(args[0] === 0x8CA8 ? 0x8CAA : 0x8CA6);
+					if (fb) cubeFbos.add(fb);
+				} catch (e) { /* an estimate only */ }
+			}
+			return original.apply(this, args);
+		});
+		wrap(proto, 'bindFramebuffer', function (original, args) {
+			if (args[1] && cubeFbos.has(args[1])) glm.cubeBinds += 1;
+			return original.apply(this, args);
+		});
 		for (const method of ['readPixels', 'getBufferSubData', 'clientWaitSync', 'finish', 'getError']) {
 			wrap(proto, method, function (original, args) {
 				const t = now();
@@ -547,6 +759,38 @@ function tiTraceText(env, a) {
 	if (audio && audio.createBufferSource) {
 		const original = audio.createBufferSource;
 		audio.createBufferSource = function (...args) { counters[7] = (counters[7] || 0) + 1; return original.apply(this, args); };
+	}
+	// Sound buffers made (Godot's web samples are registered with createBuffer: float
+	// samples, 4 bytes each a channel), and each buffer started, kept at once in 'audio'
+	// with its length and decoded bytes (the game's "sound" markers name the sound).
+	const sound = {buffers: 0, bytes: 0, starts: 0, startedBytes: 0};
+	if (audio && audio.createBuffer) {
+		const original = audio.createBuffer;
+		audio.createBuffer = function (...args) {
+			sound.buffers += 1;
+			sound.bytes += 4 * (args[0] || 0) * (args[1] || 0);
+			return original.apply(this, args);
+		};
+	}
+	const source = window.AudioBufferSourceNode && window.AudioBufferSourceNode.prototype;
+	if (source && source.start) {
+		const original = source.start;
+		const started = new WeakSet();
+		source.start = function (...args) {
+			try {
+				const b = this.buffer;
+				sound.starts += 1;
+				if (b) {
+					const bytes = 4 * b.numberOfChannels * b.length;
+					const first = !started.has(b);
+					if (first) { started.add(b); sound.startedBytes += bytes; }
+					keepEvent('audio', 'audio', `buffer started: ${round(b.duration)} s, ${b.numberOfChannels} ch, ${b.sampleRate} Hz, ${mb(bytes)} MiB decoded${first ? ', its first start' : ''}${this.loop ? ', looping' : ''}`);
+				} else {
+					keepEvent('audio', 'audio', 'buffer source started without a buffer');
+				}
+			} catch (e) { /* an estimate only */ }
+			return original.apply(this, args);
+		};
 	}
 	// The engine's WebAssembly memory: its size and each growth.
 	let memory = null;
@@ -566,7 +810,7 @@ function tiTraceText(env, a) {
 		const before = this.buffer.byteLength;
 		const t = now();
 		const result = grow.call(this, pages);
-		event('wasm', `memory grew ${Math.round(before / 1048576)} to ${Math.round(this.buffer.byteLength / 1048576)} MiB in ${round(now() - t)} ms`);
+		pageEvent('wasm', `memory grew ${before} to ${this.buffer.byteLength} bytes (${mb(before)} to ${mb(this.buffer.byteLength)} MiB) in ${round(now() - t)} ms`);
 		return result;
 	};
 
@@ -598,15 +842,24 @@ function tiTraceText(env, a) {
 	// The page's own events (hidden, frozen, an error, the WebGL context lost, a
 	// rotation) kept on the device the moment they come, with the clock time: what a
 	// page that is then killed or reloaded leaves behind.
-	const pageEvents = [];
+	// Three lists kept that way: the page's own events (and the game's view and probe
+	// markers), graphics allocations of GLM_BIG or more, and sounds started.
+	const kept = {page_events: [], gl_big: [], audio: []};
+	const KEPT_CAP = {page_events: 60, gl_big: 60, audio: 40};
+	const keepIn = (list, entry, saveNow) => {
+		kept[list].push(entry);
+		if (kept[list].length > KEPT_CAP[list]) kept[list].shift();
+		if (saveNow) save(list, kept[list]);
+	};
+	const keepEvent = (list, kind, text) => {
+		event(kind, text);
+		keepIn(list, [new Date().toISOString(), round(now()), kind, String(text)], true);
+	};
 	const canvas = document.getElementById('canvas');
 	const orientation = () => (screen.orientation && screen.orientation.type) || (innerWidth > innerHeight ? 'landscape' : 'portrait');
 	const view = () => `${innerWidth}x${innerHeight} css, dpr ${devicePixelRatio}, canvas ${canvas ? canvas.width + 'x' + canvas.height : '?'}, ${orientation()}`;
 	const pageEvent = (kind, text) => {
-		event(kind, text);
-		pageEvents.push([new Date().toISOString(), round(now()), kind, String(text)]);
-		if (pageEvents.length > 40) pageEvents.shift();
-		save('page_events', pageEvents);
+		keepEvent('page_events', kind, text);
 		beat();
 	};
 	document.addEventListener('visibilitychange', () => pageEvent('page', 'visibility ' + document.visibilityState));
@@ -638,6 +891,43 @@ function tiTraceText(env, a) {
 	let lastSaved = 0;
 	let lastBeat = 0;
 	const mib = () => [performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null, memory ? round(memory.buffer.byteLength / 1048576) : null];
+	// The page's own view of memory now, in bytes and counts (MEMORY_COLUMNS).
+	const MEMORY_COLUMNS = 'WebAssembly bytes, JS heap bytes, GL textures, GL texture bytes, of which 2D, cube map, 2D array, 3D, GL renderbuffers, '
+		+ 'GL renderbuffer bytes, of which multisampled, GL buffers, GL buffer bytes, GL programs, GL shaders, GL framebuffers, GL vertex arrays, '
+		+ 'GL bytes uploaded so far, GL storage bytes asked so far, GL allocations of 4 MiB or more so far, cube-map face binds so far, '
+		+ 'cube-map face attachments so far, sound buffers made, their bytes, sound buffers started so far, bytes of the buffers started';
+	const memoryNow = () => [memory ? memory.buffer.byteLength : null, performance.memory ? performance.memory.usedJSHeapSize : null,
+		glm.live.texture, texTotal(), glm.tex['2d'], glm.tex.cube, glm.tex.array, glm.tex['3d'], glm.live.renderbuffer, glm.rb, glm.rbMsaa,
+		glm.live.buffer, glm.buf, glm.live.program, glm.live.shader, glm.live.framebuffer, glm.live.vao, glm.uploaded, glm.asked, glm.big,
+		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes];
+	// Cube-map faces drawing, started and stopped, kept as page events: a run of face
+	// binds or attachments with no gap of more than a second.
+	let cubeSeen = 0;
+	let cubeSince = -1;
+	let cubeFrom = null;
+	const markCubes = () => {
+		const n = glm.cubeBinds + glm.cubeAttach;
+		if (n !== cubeSeen) {
+			if (cubeSince < 0) {
+				cubeFrom = [glm.cubeBinds, glm.cubeAttach, texTotal() + glm.rb + glm.buf];
+				pageEvent('cube', `cube-map faces drawing (a reflection probe or the sky's radiance); GL then: ${glmSummary()}`);
+			}
+			cubeSeen = n;
+			cubeSince = now();
+		} else if (cubeSince >= 0 && now() - cubeSince > 1000) {
+			pageEvent('cube', `cube-map faces done: ${glm.cubeBinds - cubeFrom[0]} face binds, ${glm.cubeAttach - cubeFrom[1]} face attachments, GL storage ${mb(texTotal() + glm.rb + glm.buf - cubeFrom[2])} MiB more; GL now: ${glmSummary()}`);
+			cubeSince = -1;
+		}
+	};
+	// The canvas's drawing buffer resized (the engine sets it), kept as a page event.
+	let canvasSize = '';
+	const markCanvas = () => {
+		const size = canvas ? `${canvas.width}x${canvas.height}` : '';
+		if (size !== canvasSize) {
+			canvasSize = size;
+			pageEvent('page', `canvas buffer ${size} (${view()})`);
+		}
+	};
 	function beat() {
 		if (!log.header || log.end) return;
 		lastBeat = now();
@@ -646,6 +936,7 @@ function tiTraceText(env, a) {
 			at: new Date().toISOString(), page_ms: round(now()), frames: log.raf.length, row: log.rows[log.rows.length - 1] || null,
 			fields: log.header.fields, last_events: log.events.slice(-8), js_mb: js, wasm_mb: wasm, view: view(),
 			last_frames: log.raf.slice(-31).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1), second: bucket,
+			memory: memoryNow(),
 		});
 	}
 
@@ -653,7 +944,8 @@ function tiTraceText(env, a) {
 	// last RING_S kept on the device each second, all of them (up to 900) with the
 	// long frames every PROGRESS_MS.
 	const RING_S = 120;
-	const SECOND_COLUMNS = 's, frames, mean ms, worst ms, x, z, step, leg, draw ms, outside ms, draw calls, primitives k, main view k, shadow k, texture MiB, buffer MiB, video MiB, resources, nodes, 3D scale, MSAA, nodes added, nodes removed, page view, WebAssembly MiB';
+	const SECOND_COLUMNS = 's, frames, mean ms, worst ms, x, z, step, leg, draw ms, outside ms, draw calls, primitives k, main view k, shadow k, texture MiB, buffer MiB, video MiB, resources, nodes, 3D scale, MSAA, nodes added, nodes removed, page view, WebAssembly MiB, '
+		+ 'engine static bytes, engine static peak bytes, objects, orphan nodes, ' + MEMORY_COLUMNS;
 	const secondsAll = [];
 	let bucket = null;
 	let F = null;
@@ -663,7 +955,7 @@ function tiTraceText(env, a) {
 		const n = Math.max(1, b.n);
 		secondsAll.push([b.s, b.n, round(b.ms / n), round(b.worst), round(b.x), round(b.z), b.step, b.leg, round(b.draw / n), round(b.gap / n),
 			Math.round(b.dc / n), Math.round(b.prim / n), Math.round(b.vis / n), Math.round(b.sh / n), round(b.tex), round(b.buf), round(b.vid),
-			b.res, b.nodes, round(b.scale), b.msaa, b.nadd, b.nrem, view(), mib()[1]]);
+			b.res, b.nodes, round(b.scale), b.msaa, b.nadd, b.nrem, view(), mib()[1], b.statics, b.static_max, b.objects, b.orphans, ...memoryNow()]);
 		if (secondsAll.length > 900) secondsAll.shift();
 		save('ring', secondsAll.slice(-RING_S));
 		bucket = null;
@@ -679,6 +971,7 @@ function tiTraceText(env, a) {
 		b.nadd += at('nadd'); b.nrem += at('nrem');
 		b.x = at('x'); b.z = at('z'); b.step = at('step'); b.leg = at('leg'); b.tex = at('tex_mb'); b.buf = at('buf_mb'); b.vid = at('vid_mb');
 		b.res = at('res_n'); b.nodes = at('node_n'); b.scale = at('scale'); b.msaa = at('msaa');
+		b.statics = at('static_b'); b.static_max = at('static_max_b'); b.objects = at('obj_n'); b.orphans = at('orphan_n');
 	}
 	// Every record of the run kept on the device as it comes, in IndexedDB (written
 	// outside the page, so what was handed over before a kill stays; not capped as the
@@ -751,7 +1044,9 @@ function tiTraceText(env, a) {
 	}
 	setInterval(() => {
 		const [js, wasm] = mib();
-		log.memory.push([round(now()), js, wasm]);
+		log.memory.push([round(now()), js, wasm, ...memoryNow()]);
+		markCubes();
+		markCanvas();
 		if (log.header && !log.end) {
 			beat();
 			keepChunk();
@@ -794,6 +1089,7 @@ function tiTraceText(env, a) {
 			log.page.dpr_at_play = window.devicePixelRatio;
 			log.page.inner_at_play = [innerWidth, innerHeight];
 			log.page.view_at_play = view();
+			log.page.memory_columns = 'page ms, JS MiB, WebAssembly MiB, ' + MEMORY_COLUMNS;
 			F = {};
 			log.header.fields.forEach((n, i) => { F[n] = i; });
 			save('meta', {id: log.id, status: 'running', path: log.page.path, started: new Date().toISOString(), page: log.page, header: {...log.header, route: undefined, outline: undefined}});
@@ -809,7 +1105,16 @@ function tiTraceText(env, a) {
 				if (F) addSecond(row);
 			}
 			const origin = log.header ? log.header.page_ms_at_origin : 0;
-			for (const e of batch.events) log.events.push([round(origin + e[0]), e[1], e[2]]);
+			const keptNow = {};
+			for (const e of batch.events) {
+				const at = round(origin + e[0]);
+				log.events.push([at, e[1], e[2]]);
+				// The game's view and probe markers kept with the page's events, its sound
+				// markers with the sounds started, once a batch.
+				const list = e[1] === 'probe' || e[1] === 'view' ? 'page_events' : e[1] === 'sound' ? 'audio' : null;
+				if (list) { keepIn(list, [new Date().toISOString(), at, e[1], String(e[2])], false); keptNow[list] = true; }
+			}
+			for (const list of Object.keys(keptNow)) save(list, kept[list]);
 			if (now() - lastBeat >= BEAT_MS) beat();
 		},
 		census(json) {
@@ -958,8 +1263,11 @@ function tiTraceText(env, a) {
 			lines.push('Last engine record: ' + JSON.stringify(Object.fromEntries(f.map((name, i) => [name, hb.row[i]]))));
 			lines.push('Last markers: ' + JSON.stringify(hb.last_events));
 			lines.push(`Memory then: JS ${hb.js_mb} MiB, WebAssembly ${hb.wasm_mb} MiB; page then: ${hb.view || '?'} (kept at ${hb.page_ms} ms page time)`);
+			lines.push(`Memory columns then (${MEMORY_COLUMNS}): ${JSON.stringify(hb.memory || null)}`);
 		}
 		lines.push('', 'Page events (clock time, page ms, kind, what):', JSON.stringify(before.page_events || []));
+		lines.push('', 'Graphics allocations of 4 MiB or more, an estimate (clock time, page ms, kind, what):', JSON.stringify(before.gl_big || []));
+		lines.push('', 'Sounds started (clock time, page ms, kind, what):', JSON.stringify(before.audio || []));
 		lines.push('', `Last seconds, kept each second (${SECOND_COLUMNS}):`, JSON.stringify(before.ring || []));
 		lines.push('', 'Long frames kept (time ms, frame ms, x, z, speed, step, leg, flags, ...):', JSON.stringify(before.long || []));
 		lines.push('', `Seconds kept every 10 s (${SECOND_COLUMNS}):`, JSON.stringify(before.seconds || []));

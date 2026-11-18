@@ -9,7 +9,9 @@ extends SceneTree
 ##     normal play nothing;
 ##   - the trace's script loads and makes a node, which records nothing and drives
 ##     nothing until play has started (it waits on its first step, its frame and node
-##     signals not yet connected).
+##     signals not yet connected);
+##   - its whole drive follows the whole route, and route=corner the part of it that
+##     passes the Mersea corner, from Bruton Street's start.
 ## The drive itself and its records are checked by running it (natively with
 ## --trace-drive --trace-out=FILE, and in browsers with ?trace=drive).
 
@@ -61,9 +63,28 @@ func _run() -> void:
 		if Input.is_action_pressed(action):
 			_fail("Before play the drive trace must not drive, but %s is held." % action)
 			return
+	# The routes: the whole loop with every named stretch, and route=corner, the part of
+	# it from Bruton Street round the Mersea corner to Johnson Street's bend.
+	var constants := (trace.get_script() as GDScript).get_script_constant_map()
+	var route_xz: Array = constants["ROUTE_XZ"]
+	var whole: PackedVector2Array = trace.get("_route")
+	if whole.size() != route_xz.size() / 2 or str(trace.get("_legs")) != str(constants["ROUTE_LEGS"]):
+		_fail("The whole drive must follow every point of ROUTE_XZ with every stretch of ROUTE_LEGS, but it has %d points and stretches %s." % [whole.size(), trace.get("_legs")])
+		return
+	trace.set("_route_name", "corner")
+	trace.call("_prepare_route")
+	var corner: PackedVector2Array = trace.get("_route")
+	var legs: Array = trace.get("_legs")
+	var nearest := INF
+	for index in range(1, corner.size()):
+		nearest = minf(nearest, Geometry2D.get_closest_point_to_segment(constants["MERSEA_CORNER_XZ"], corner[index - 1], corner[index]).distance_to(constants["MERSEA_CORNER_XZ"]))
+	var first: int = constants["CORNER_POINTS"][0]
+	if corner.is_empty() or corner[0] != Vector2(route_xz[first * 2], route_xz[first * 2 + 1]) or nearest > 5.0 or legs.is_empty() or int(legs[0][0]) != 0 or str(legs[0][1]) != "Bruton Street":
+		_fail("route=corner must start on Bruton Street and pass within 5 m of the Mersea corner, but it starts at %s, passes %.1f m from it, with stretches %s." % [corner[0] if not corner.is_empty() else null, nearest, legs])
+		return
 	trace.free()
 	main.free()
-	print("PASS: drive trace: a run without --trace-drive is not the trace; main.tscn then makes no DriveTrace, never loads its script and connects no frame or tree signal to it; the trace's own node, made before play, waits with no signal connected and no action held")
+	print("PASS: drive trace: a run without --trace-drive is not the trace; main.tscn then makes no DriveTrace, never loads its script and connects no frame or tree signal to it; the trace's own node, made before play, waits with no signal connected and no action held; the whole drive follows the whole route, route=corner the part round the Mersea corner")
 	quit(0)
 
 

@@ -34,8 +34,14 @@ extends Node
 ## Mersea's reflection probes out before startup renders them; sound=0 silences the
 ## game (no sample registered with the browser, no player started); msaa=0 draws the
 ## world without MSAA (the web's default is 2x); route=hover leaves out the car: from
-## the spawn straight to the walk, the run, the jetpack climb and hover, the drop.
-## Then,
+## the spawn straight to the walk, the run, the jetpack climb and hover, the drop;
+## route=corner (CORNER_POINTS) puts the car straight on Bruton Street after the
+## baseline, drives it round the Mersea corner where the iPhone's page is killed (about
+## 35 s in) and on to Johnson Street's bend, gets out and ends, about a minute in all.
+## For the iPhone's memory deaths, markers name each reflection probe as it enters or
+## leaves the camera's view ("probe"; the engine gives no signal when a probe renders,
+## the page counts the cube-map faces drawn) and each sound as it starts ("sound"), and
+## the frame record carries the engine's static memory and object counts. Then,
 ## after the drive's analysed steps (the page's analysis ends at "landed"), the
 ## triggers: each script that draws only in play shown by a camera of the trace's
 ## own (TRIGGERS): a fence bay broken, a street prop felled, a car's splash, goal
@@ -59,6 +65,11 @@ extends Node
 ## route point where each named stretch starts.
 const ROUTE_XZ := [-108.8, 730.2, -112.2, 723.0, -111.5, 712.9, -103.5, 706.0, -68.1, 685.8, 47.9, 624.6, -18.1, 494.1, -27.2, 482.6, -33.7, 489.9, -112.5, 581.8, -121.4, 587.2, -129.2, 583.0, -131.5, 580.1, -291.4, 272.6, -284.8, 265.5, -246.5, 224.7, -192.8, 161.9, -217.3, 116.1, -233.3, 98.0, -243.6, 81.5, -273.8, 22.4, -300.9, 42.2, -344.9, 65.6, -354.4, 24.8, -356.6, 15.1, -359.9, 5.4, -366.9, -5.8, -537.7, -341.0, -545.4, -351.3, -551.9, -356.2, -559.4, -359.6, -562.4, -360.5, -581.5, -366.2, -575.6, -389.8, -550.3, -474.5, -543.1, -494.7, -530.0, -537.8, -524.3, -552.6, -517.5, -565.4, -503.1, -586.7, -488.7, -602.4, -473.4, -614.9, -442.7, -632.7, -382.1, -671.3, -370.2, -678.1, -355.7, -684.0, -343.7, -687.9, -329.3, -691.3, -304.1, -693.8, -290.7, -693.4, -263.1, -688.9, -236.4, -679.7, -223.2, -673.1, -205.8, -662.5, -183.1, -641.4, -174.1, -630.0, -161.8, -610.5, -99.1, -521.5, -92.2, -510.6, -12.3, -358.5, 136.2, -77.6, 285.5, 209.3, 366.9, 166.8, 495.7, 99.5, 500.0, 107.6, 612.7, 321.4, 634.4, 326.1, 584.8, 486.8, 483.0, 541.7, 471.3, 554.3, 408.6, 590.1, 422.3, 613.0, 328.4, 662.8, 282.4, 687.2, 132.5, 761.9, -41.9, 855.5, -70.8, 798.5, -96.2, 754.2, -108.8, 730.2]
 const ROUTE_LEGS := [[0, "ferry plaza to Seven Seas"], [8, "Bruton Street"], [11, "Avenue of the Palms"], [14, "Johnson, Seven Seas, 9th St"], [23, "Avenue B"], [31, "Gateview Avenue"], [49, "Avenue H north"], [59, "Avenue H south"], [61, "4th Street"], [63, "Avenue M"], [65, "Pier 1, Avenue N"], [67, "Clipper Cove Way"], [74, "Treasure Island Road"]]
+## route=corner: the route's points from Bruton Street's start (8) to Johnson Street's
+## bend (16), past the Avenue of the Palms' corner with Johnson Street by Mersea
+## (MERSEA_CORNER_XZ, about 490 m along), where the iPhone's page is killed.
+const CORNER_POINTS := [8, 16]
+const MERSEA_CORNER_XZ := Vector2(-289.0, 274.0)
 ## The car driven: the forecourt lot's pearl-white sedan (its row id ends so).
 const CAR_ROW := "w1473253282_left_s0191"
 ## Speeds (m/s): the fastest on a straight, the slowest the bends ask for, the
@@ -83,8 +94,11 @@ const MAX_LAPS := 3
 ## After lap: the renderer's video memory (textures, buffers and render targets, MiB),
 ## the primitives of the main view and of the shadow pass (thousands: Compatibility
 ## counts the shadow pass's draw calls with the main view's and the depth pre-pass in
-## neither), the resources and nodes alive, the 3D scale and MSAA.
-const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap", "vid_mb", "vis_prim_k", "sh_prim_k", "res_n", "node_n", "scale", "msaa"]
+## neither), the resources and nodes alive, the 3D scale and MSAA. After msaa: the
+## engine's static memory now and at its peak (bytes, Performance.MEMORY_STATIC and
+## MEMORY_STATIC_MAX: 0 where a release build does not count them, as the web's), the
+## objects alive and the orphan nodes (nodes out of the tree, not freed).
+const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap", "vid_mb", "vis_prim_k", "sh_prim_k", "res_n", "node_n", "scale", "msaa", "static_b", "static_max_b", "obj_n", "orphan_n"]
 ## flags: driving, the tree paused, nothing drawn this frame, the drive running.
 const FLAG_DRIVING := 1
 const FLAG_PAUSED := 2
@@ -152,6 +166,8 @@ var _step := 0
 var _step_ticks := 0
 var _leg := -1
 var _route := PackedVector2Array()
+## The route's named stretches ([first point, name], as ROUTE_LEGS) for the route driven.
+var _legs: Array = []
 var _cum := PackedFloat32Array()
 var _speeds := PackedFloat32Array()
 var _s := 0.0
@@ -186,13 +202,20 @@ var _scale_asked := ""
 var _scale_restore := ""
 var _view := ""
 ## The switches (off unless asked): Mersea's probes out, the game silent, MSAA off (and
-## what it was), the short route ("" for the whole drive).
+## what it was), the short route ("hover" or "corner"; "" for the whole drive).
 var _probes_off := false
 var _sound_off := false
 var _msaa_off := false
 var _msaa_restore := false
 var _msaa_before := Viewport.MSAA_DISABLED
 var _route_name := ""
+## Every reflection probe in the world as the records start, its name, and whether it
+## was in the camera's view last frame (-2 not yet looked at, -1 out of the world).
+var _reflection_probes: Array = []
+var _probe_names: Array[String] = []
+var _probe_states: Array[int] = []
+## The plays (and loop starts) of each sound so far, as Sound.played_counts had them.
+var _sound_counts := {}
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
 var _pipelines := {}
 
@@ -232,7 +255,10 @@ func _ready() -> void:
 	_probes_off = _option("probes") == "0"
 	_sound_off = _option("sound") == "0"
 	_msaa_off = _option("msaa") == "0"
-	_route_name = "hover" if _option("route") == "hover" else ""
+	var route := _option("route")
+	_route_name = route if route in ["hover", "corner"] else ""
+	if _route_name == "corner":
+		_laps = 1
 	_apply_switches()
 	# The scripts' share of each step: probes first and last of all.
 	for at: int in [-1000000, 1000000]:
@@ -521,6 +547,8 @@ func _finish_frame() -> void:
 	if not _web:
 		_mark_pipelines()
 	_mark_view()
+	_mark_probes()
+	_mark_sounds()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -540,6 +568,8 @@ func _finish_frame() -> void:
 		viewport.get_render_info(Viewport.RENDER_INFO_TYPE_SHADOW, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME) / 1000.0,
 		Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT), Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
 		viewport.scaling_3d_scale, viewport.msaa_3d,
+		Performance.get_monitor(Performance.MEMORY_STATIC), Performance.get_monitor(Performance.MEMORY_STATIC_MAX),
+		Performance.get_monitor(Performance.OBJECT_COUNT), Performance.get_monitor(Performance.OBJECT_ORPHAN_NODE_COUNT),
 	]
 	for value: Variant in row:
 		_rows.append(float(value))
@@ -566,6 +596,66 @@ func _mark_view() -> void:
 	if view != _view:
 		_view = view
 		_event("view", view, viewport.scaling_3d_scale)
+
+
+## A "probe" marker when a reflection probe comes into the camera's view or leaves it
+## (its box against the view's planes, as the engine culls it; a probe set to update
+## once renders only when dirty, a probe set to update always every frame it is seen),
+## or is taken out of the world. The value is 1 in view, 0 out of it, -1 gone.
+func _mark_probes() -> void:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null or _reflection_probes.is_empty():
+		return
+	var planes := camera.get_frustum()
+	for index in _reflection_probes.size():
+		var node: Variant = _reflection_probes[index]
+		var state := -1
+		var mode := ""
+		if is_instance_valid(node) and (node as Node).is_inside_tree():
+			var probe := node as ReflectionProbe
+			mode = "once" if probe.update_mode == ReflectionProbe.UPDATE_ONCE else "always"
+			var box := probe.global_transform * AABB(-probe.size * 0.5, probe.size)
+			state = 1 if probe.is_visible_in_tree() else 0
+			for plane: Plane in planes:
+				var outside := true
+				for corner in 8:
+					if not plane.is_point_over(box.get_endpoint(corner)):
+						outside = false
+						break
+				if outside:
+					state = 0
+					break
+		if _probe_states[index] != state:
+			_probe_states[index] = state
+			var what := "taken out of the world" if state < 0 else ("in the camera's view (update %s)" % mode if state > 0 else "out of the camera's view (update %s)" % mode)
+			_event("probe", "%s %s" % [_probe_names[index], what], float(state))
+
+
+## A "sound" marker for each sound that started since the last frame (a play or a loop
+## started, as Sound.played_counts counts them): its id, how many started, whether it
+## loops, and its takes' lengths (s). The page adds each start's buffer.
+func _mark_sounds() -> void:
+	var sound := Sound.current
+	if sound == null:
+		return
+	var counts: Dictionary = sound.played_counts
+	for id: Variant in counts:
+		var n := int(counts[id])
+		var was := int(_sound_counts.get(id, 0))
+		if n == was:
+			continue
+		_sound_counts[id] = n
+		var catalog: Variant = sound.get("_catalog")
+		var all_takes: Variant = sound.get("_takes")
+		var settings: Variant = (catalog as Dictionary).get(id) if catalog is Dictionary else null
+		var takes: Variant = (all_takes as Dictionary).get(id) if all_takes is Dictionary else null
+		var lengths := PackedStringArray()
+		if takes is Array:
+			for take: Variant in takes:
+				if take is AudioStream:
+					lengths.append("%.2f" % (take as AudioStream).get_length())
+		var loop := settings is Dictionary and bool((settings as Dictionary).get("loop", false))
+		_event("sound", "%s %s x%d, takes %s s" % [id, "loop started" if loop else "played", n - was, "/".join(lengths) if not lengths.is_empty() else "none"], n - was)
 
 
 ## An Options resolution id for a scale asked for ("0.5" -> "50"), "" if the menu
@@ -643,7 +733,7 @@ func _apply_switches() -> void:
 ## The switches as the header and the start marker give them.
 func _switches() -> Dictionary:
 	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off,
-		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive",
+		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive", "laps": _laps,
 		"probes_present": _main.world_root.buildings.find_children("*", "ReflectionProbe", true, false).size() if _main.world_root.buildings != null else -1}
 
 
@@ -740,7 +830,7 @@ func _header() -> Dictionary:
 		route.append([point.x, point.y])
 	var stamp: Variant = ProjectSettings.get_setting("application/config/version", "")
 	return {
-		"fields": FIELDS, "steps": STEPS, "legs": ROUTE_LEGS, "route": route, "outline": outline,
+		"fields": FIELDS, "steps": STEPS, "legs": _legs, "route": route, "outline": outline,
 		"route_m": _cum[_cum.size() - 1], "car": CAR_ROW, "cruise_mps": CRUISE_MPS, "laps": _laps,
 		"seconds_limit": _seconds_limit, "scale_asked": _scale_asked,
 		"renderer": RenderingServer.get_current_rendering_method(), "adapter": RenderingServer.get_video_adapter_name(),
@@ -772,6 +862,22 @@ func _begin_report() -> void:
 	header["origin_ms_engine"] = 0.0
 	header["switches"] = _switches()
 	_event("trace", "switches %s" % JSON.stringify(header.switches), 0)
+	# The reflection probes the "probe" markers follow, listed in the header.
+	_reflection_probes.clear()
+	_probe_names.clear()
+	_probe_states.clear()
+	var probes: Array = []
+	for node: Node in _main.find_children("*", "ReflectionProbe", true, false):
+		var probe := node as ReflectionProbe
+		_reflection_probes.append(probe)
+		_probe_names.append(str(probe.name))
+		_probe_states.append(-2)
+		probes.append({"name": str(probe.name), "update": "once" if probe.update_mode == ReflectionProbe.UPDATE_ONCE else "always",
+			"size": [probe.size.x, probe.size.y, probe.size.z], "at": [probe.global_position.x, probe.global_position.y, probe.global_position.z],
+			"max_distance": probe.max_distance})
+	header["reflection_probes"] = probes
+	header["reflection_atlas"] = {"size": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_size", 0),
+		"count": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_count", 0)}
 	if _web and _js != null:
 		# The page's clock at this trace's origin (both are performance.now() on the web).
 		var before := _now_us()
@@ -809,8 +915,20 @@ func _end_report(result: String) -> void:
 
 func _prepare_route() -> void:
 	_route.clear()
-	for index in range(0, ROUTE_XZ.size(), 2):
-		_route.append(Vector2(float(ROUTE_XZ[index]), float(ROUTE_XZ[index + 1])))
+	_legs.clear()
+	var first := 0
+	var last := ROUTE_XZ.size() / 2 - 1
+	if _route_name == "corner":
+		first = int(CORNER_POINTS[0])
+		last = int(CORNER_POINTS[1])
+	for index in range(first, last + 1):
+		_route.append(Vector2(float(ROUTE_XZ[index * 2]), float(ROUTE_XZ[index * 2 + 1])))
+	# The stretches the part driven passes: the one it starts in, then each it reaches.
+	for leg: Array in ROUTE_LEGS:
+		if int(leg[0]) <= first:
+			_legs = [[0, leg[1]]]
+		elif int(leg[0]) < last:
+			_legs.append([int(leg[0]) - first, leg[1]])
 	_cum.resize(_route.size())
 	_cum[0] = 0.0
 	for index in range(1, _route.size()):
@@ -910,7 +1028,11 @@ func _physics_process(delta: float) -> void:
 				_step_ticks = 0
 		"baseline":
 			if _step_ticks >= 300:
-				_set_step("walk" if _route_name == "hover" else "to_car")
+				if _route_name == "corner":
+					# Straight into the car at the corner route's start.
+					_start_drive()
+				else:
+					_set_step("walk" if _route_name == "hover" else "to_car")
 		"to_car":
 			var to := _route[0] - Vector2(player.global_position.x, player.global_position.z)
 			_face(player, to)
@@ -935,6 +1057,12 @@ func _physics_process(delta: float) -> void:
 				if _main.vehicles.is_driving():
 					_main.vehicles.force_exit()
 					_event("car", "F did not get out; forced out", 0)
+				if _route_name == "corner":
+					# The corner route ends out of the car, without the foot leg.
+					_release_all()
+					_set_step("done")
+					_end_report("complete" if _stucks == 0 else "complete_with_stops")
+					return
 				_set_step("walk")
 		"walk":
 			_hold(&"move_forward", 1.0)
@@ -1130,12 +1258,12 @@ func _drive(delta: float) -> void:
 	var position := Vector2(_car.global_position.x, _car.global_position.z)
 	_s = _nearest_s(position, _s)
 	var leg := -1
-	for index in ROUTE_LEGS.size():
-		if _s >= _cum[int(ROUTE_LEGS[index][0])]:
+	for index in _legs.size():
+		if _s >= _cum[int(_legs[index][0])]:
 			leg = index
 	if leg != _leg:
 		_leg = leg
-		_event("leg", str(ROUTE_LEGS[leg][1]), leg)
+		_event("leg", str(_legs[leg][1]), leg)
 	if _s >= total - 4.0 and _lap < _laps:
 		# The route ends where it starts: round again.
 		_lap += 1
