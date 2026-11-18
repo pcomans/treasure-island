@@ -883,7 +883,7 @@ func _apply_web_detail_distances() -> void:
 	for node in world_root.get_node("PlayableWorld/Buildings").find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
 		var longest := 0.0
-		# A mesh the bake merged from parts of one material is culled as its parts were.
+		# A mesh the bake merged from parts culled by their size is culled as they were.
 		if geometry.has_meta(PREBUILT_WORLD.DETAIL_SIZE_META):
 			longest = float(geometry.get_meta(PREBUILT_WORLD.DETAIL_SIZE_META))
 		# The bake's other merged meshes hold a building's walls and roofs, not small parts.

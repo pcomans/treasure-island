@@ -84,6 +84,10 @@ func _run() -> void:
 	tagged_support.set_meta("family_role", "support")
 	var family_wall := _box(family, _material(Color.GREEN), Transform3D.IDENTITY)
 	family_wall.set_meta("family_role", "wall")
+	# Over 50 m: a support part the web draws at any distance, apart from the 3 m ones.
+	var long_support := _box(family, _material(Color(0.25, 0.35, 0.45)), Transform3D.IDENTITY)
+	(long_support.mesh as BoxMesh).size = Vector3(80, 1, 1)
+	long_support.set_meta("family_role", "support")
 	var kept_meshes: Array[Mesh] = []
 	for part in kept:
 		kept_meshes.append(part.mesh)
@@ -189,8 +193,16 @@ func _run() -> void:
 		check(normal.distance_to(red_normal) < 0.001, "Normals must follow the part's rotation: %s against %s" % [normal, red_normal])
 	check(_close(_world_triangles(roof_batch, 0), expected["roof"]), "A roof's triangles must not move")
 	check(_family_batch(family, "wall") != null, "A family wall must merge under its family and keep its role")
-	check(not is_instance_valid(untagged_support) and not is_instance_valid(tagged_support) and _family_batch(family, "support") != null and _family_batch(family, "") != null, "Support meshes of a family with no ground proof must join by colour under the family, keeping their role")
-	check(not is_instance_valid(ground_visual) and _batch(record, "ground_visual") != null, "A ground visual outside any ground proof must join by colour, keeping its role")
+	check(not is_instance_valid(untagged_support) and not is_instance_valid(tagged_support) and not is_instance_valid(long_support) and _family_batch(family, "support", 0.0, 50.0) != null and _family_batch(family, "") != null, "Support meshes of a family with no ground proof must join by colour under the family, keeping their role")
+	# The web culls support and ground parts by their size: merged, they keep that.
+	var support_batch := _family_batch(family, "support", 0.0, 50.0)
+	if support_batch != null:
+		check(Merge.PREBUILT_WORLD.web_detail_range(float(support_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))) == Vector2(200, 20), "Merged 3 m support parts must keep the web's 200 m culling: %s" % support_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, null))
+	var long_batch := _family_batch(family, "support", 50.0, INF)
+	check(long_batch != null and long_batch != support_batch and Merge.PREBUILT_WORLD.web_detail_range(float(long_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))) == Vector2.ZERO, "A support part the web draws at any distance must join apart")
+	var ground_batch := _batch(record, "ground_visual")
+	check(not is_instance_valid(ground_visual) and ground_batch != null and ground_batch.has_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META), "A ground visual outside any ground proof must join by colour, keeping its role and the web's culling")
+	check(_family_batch(family, "wall") != null and not _family_batch(family, "wall").has_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META) and not wall.has_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META), "Walls merged by colour stay drawn at any distance on the web")
 	check(int(report.get("ground_proof_families", -1)) == 0, "A family with no roof record has no ground proof: %s" % report.get("ground_proof_families"))
 	_finish()
 
@@ -522,7 +534,7 @@ func _check_ground_proof() -> void:
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; a housing family's ground proof keeps its meshes as authored while other families' support and ground meshes join by colour; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; a housing family's ground proof keeps its meshes as authored while other families' support and ground meshes join by colour, keeping the web's culling by size; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
 		quit(0)
 		return
 	for message in failures:
@@ -587,11 +599,15 @@ func _indexed(arrays: Array) -> Array:
 	return copy
 
 
-## The batch directly under a family holding the given family role ("" for none).
-func _family_batch(family: Node3D, role: String) -> MeshInstance3D:
+## The batch directly under a family holding the given family role ("" for none), and
+## for a batch carrying its parts' size for the web's culling, that size in
+## [detail_from, detail_to).
+func _family_batch(family: Node3D, role: String, detail_from := -INF, detail_to := INF) -> MeshInstance3D:
 	for child: Node in family.get_children():
 		if child.has_meta("baked_merge") and str(child.get_meta("family_role", "")) == role:
-			return child as MeshInstance3D
+			var detail := float(child.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))
+			if detail >= detail_from and detail < detail_to:
+				return child as MeshInstance3D
 	return null
 
 

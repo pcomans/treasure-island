@@ -6,9 +6,9 @@ const SCHEMA := "ti.static-world/3"
 ## Build-time evidence carried by the bake. The street-detail on/off state is not
 ## among them: it is chosen again when the baked world loads.
 const EVIDENCE_FIELDS := ["chunks_expected", "chunks_loaded", "playable_rows", "context_rows", "mesh_instances", "surfaces", "triangles", "static_bodies", "shapes", "street_detail_rows", "street_detail_rows_by_layer"]
-## On a mesh the bake's merge (tools/merge_baked_buildings.gd) made of parts it joined by
-## material: the longest side of its largest part (m), which the web's distance culling
-## (main.gd) reads in place of the merged mesh's own size.
+## On a mesh the bake's merge (tools/merge_baked_buildings.gd) made of parts the web
+## culls by their size: the longest side of its largest part (m), which the web's
+## distance culling (main.gd) reads in place of the merged mesh's own size.
 const DETAIL_SIZE_META := &"baked_detail_m"
 
 ## How far the web draws a building part whose longest side is this long (m), and the

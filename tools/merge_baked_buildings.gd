@@ -8,7 +8,10 @@ extends RefCounted
 ## - By colour: opaque surfaces whose plain materials differ only in base colour become
 ##   one surface, the colour moving into vertex colours. Surfaces that differ in anything
 ##   else (roughness, metallic, textures, cull mode...) stay apart, so each keeps the
-##   material it had. Their parts move into the record's space.
+##   material it had. Their parts move into the record's space. Housing support and
+##   ground meshes, which the web culls by their size (main.gd), join only with parts
+##   it culls at the same distance, and the merged mesh carries their size for that
+##   culling; other merged meshes the web draws at any distance.
 ## - By material: the other surfaces join those with the same material, or a copy of it
 ##   equal in every stored value (a shader material's shader, its parameters and its
 ##   metadata alike), keeping that material and their vertex data byte for byte. Only
@@ -160,7 +163,7 @@ static func merge(buildings: Node3D) -> Dictionary:
 			if signature != "":
 				var arrays := mesh.surface_get_arrays(surface)
 				if _has_only_supported_channels(arrays):
-					var group := _group(groups, node, anchor)
+					var group := _group(groups, node, anchor, _culled_detail(node))
 					_add_part(group, signature, material as StandardMaterial3D, arrays, to_anchor, materials)
 					_count_taken(group, arrays)
 					counts.taken_by_colour += 1
@@ -340,15 +343,39 @@ static func _identity(node: MeshInstance3D) -> Dictionary:
 	return identity
 
 
-## The group of surfaces that will share one merged node with this one.
-static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D) -> Dictionary:
+## The group of surfaces that will share one merged node with this one. culled: a part
+## the web culls by its size (_culled_detail), which joins only parts it culls at the
+## same distance, the group keeping the largest one's size (detail_m) for the batch.
+static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, culled := false) -> Dictionary:
 	var identity := _identity(node)
 	var group_key := "%d|%s|%d|%d" % [anchor.get_instance_id(), identity, node.cast_shadow, node.layers]
+	var longest := _longest_side(node) if culled else 0.0
+	if culled:
+		group_key += "|culled " + var_to_str(PREBUILT_WORLD.web_detail_range(longest))
 	if not groups.has(group_key):
 		# taken_*: what merge() took out of the sources for this group, counted apart
 		# from the parts it records, for _taken_problem.
 		groups[group_key] = {"anchor": anchor, "identity": identity, "cast_shadow": node.cast_shadow, "layers": node.layers, "surfaces": {}, "taken_indices": 0, "taken_vertices": 0}
-	return groups[group_key]
+		if culled:
+			groups[group_key]["detail_m"] = 0.0
+	var group: Dictionary = groups[group_key]
+	if culled:
+		group.detail_m = maxf(group.detail_m, longest)
+	return group
+
+
+## Housing support and ground meshes (a family's support part or a record's ground
+## visual): the web culls them by their size, as it does any unmerged part.
+static func _culled_detail(node: MeshInstance3D) -> bool:
+	if str(node.get_meta("physical_role", "")) == "ground_visual":
+		return true
+	return node.get_parent().has_meta("scope") and str(node.get_meta("family_role", "support")) == "support"
+
+
+## A part's longest side in the world, as main.gd's web culling measures it.
+static func _longest_side(node: MeshInstance3D) -> float:
+	var size := (node.global_transform * node.get_aabb()).size
+	return maxf(size.x, maxf(size.y, size.z))
 
 
 ## The group of surfaces joining by material that will share one merged node with this
@@ -356,8 +383,7 @@ static func _group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D) -> 
 ## the same distance the web draws parts of its size to.
 static func _same_group(groups: Dictionary, node: MeshInstance3D, anchor: Node3D, to_anchor: Transform3D) -> Dictionary:
 	var identity := _identity(node)
-	var size := (node.global_transform * node.get_aabb()).size
-	var longest := maxf(size.x, maxf(size.y, size.z))
+	var longest := _longest_side(node)
 	# The transform by its bytes: a text form may round two transforms together.
 	var group_key := "%d|%s|%d|%d|%s|%s" % [anchor.get_instance_id(), identity, node.cast_shadow, node.layers, var_to_bytes(to_anchor).hex_encode(), var_to_str(PREBUILT_WORLD.web_detail_range(longest))]
 	if not groups.has(group_key):
@@ -563,6 +589,8 @@ static func _build_node(group: Dictionary, index: int) -> ArrayMesh:
 			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _surface_arrays({"parts": chunk, "channels": surface.channels}))
 			mesh.surface_set_material(mesh.get_surface_count() - 1, surface.material)
 	var node := _batch_node(group, mesh, index)
+	if group.has("detail_m"):
+		node.set_meta(PREBUILT_WORLD.DETAIL_SIZE_META, group.detail_m)
 	(group.anchor as Node3D).add_child(node)
 	return mesh
 
@@ -596,8 +624,8 @@ static func _batch_node(group: Dictionary, mesh: ArrayMesh, index: int) -> MeshI
 	node.layers = group.layers
 	for key: StringName in group.identity:
 		node.set_meta(key, group.identity[key])
-	# main.gd leaves these whole: their distance culling would drop an entire building
-	# (unless they carry their parts' size, PrebuiltWorld.DETAIL_SIZE_META).
+	# main.gd leaves these whole, their distance culling would drop an entire building,
+	# unless they carry their parts' size (PrebuiltWorld.DETAIL_SIZE_META).
 	node.set_meta("baked_merge", true)
 	return node
 
