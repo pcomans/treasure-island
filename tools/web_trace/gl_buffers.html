@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GL buffer cost</title>
+<style>body { margin: 0; background: #222; color: #ddd; font: 13px monospace; } canvas { width: 64px; height: 64px; }</style>
+</head>
+<body>
+<!--
+  A bare WebGL2 page for measuring what one GL buffer costs a browser's processes
+  (tools/web_trace/gl_buffers.cjs drives it; not part of the game). makeBuffers(n, size)
+  makes n ARRAY_BUFFERs of size bytes each with bufferData(..., STATIC_DRAW), then draws one
+  point from every one of them, so each is realised, and waits for the GPU (gl.finish).
+-->
+<canvas id="canvas" width="64" height="64"></canvas>
+<pre id="out"></pre>
+<script>
+'use strict';
+const gl = document.getElementById('canvas').getContext('webgl2', {antialias: false});
+const compile = (type, source) => {
+	const shader = gl.createShader(type);
+	gl.shaderSource(shader, source);
+	gl.compileShader(shader);
+	return shader;
+};
+const program = gl.createProgram();
+gl.attachShader(program, compile(gl.VERTEX_SHADER, '#version 300 es\nlayout(location = 0) in vec4 p;\nvoid main() { gl_Position = vec4(p.xyz * 0.0, 1.0); gl_PointSize = 1.0; }'));
+gl.attachShader(program, compile(gl.FRAGMENT_SHADER, '#version 300 es\nprecision mediump float;\nout vec4 c;\nvoid main() { c = vec4(1.0); }'));
+gl.linkProgram(program);
+gl.useProgram(program);
+gl.enableVertexAttribArray(0);
+const buffers = [];
+// Makes n buffers of size bytes, draws a point from each, waits for the GPU; returns what it did.
+window.makeBuffers = (n, size) => {
+	const began = performance.now();
+	const data = new Uint8Array(size);
+	for (let i = 0; i < data.length; i += 4) data[i] = i & 255;
+	for (let i = 0; i < n; i += 1) {
+		const buffer = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+		buffers.push(buffer);
+	}
+	const made = performance.now();
+	for (const buffer of buffers) {
+		gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+		gl.vertexAttribPointer(0, 4, gl.UNSIGNED_BYTE, false, 0, 0);
+		gl.drawArrays(gl.POINTS, 0, 1);
+	}
+	gl.finish();
+	const result = {buffers: buffers.length, size, make_ms: Math.round(made - began), draw_ms: Math.round(performance.now() - made), error: gl.getError()};
+	document.getElementById('out').textContent = JSON.stringify(result);
+	return result;
+};
+window.ready = () => {
+	gl.clear(gl.COLOR_BUFFER_BIT);
+	gl.finish();
+	return Boolean(gl) && !gl.isContextLost();
+};
+</script>
+</body>
+</html>

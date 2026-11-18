@@ -292,6 +292,14 @@ OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules
 - `FOOTPRINT_AT_PROMPT=1` instead stops at the start prompt and records the web process's
   `footprint` and `vmmap -summary` (no sudo: Playwright's WebKit is not hardened) beside the
   page's memory inventory, in `footprint.txt`, `vmmap.txt` and `footprint.json`.
+- Playwright's WebKit draws WebGL in its GPU process and does not charge that memory to the
+  web process as Safari does, so `FOOTPRINT_AT_PROMPT` measures the GPU process too
+  (`footprint-gpu.txt`).
+- `node tools/web_trace/gl_buffers.cjs` (with `OUT` and `PW_MODULE`) measures what one GL buffer
+  costs the web and GPU processes: for each case (N buffers of S bytes, by default 20000 x 200 B,
+  20000 x 4 KiB, 20000 x 16 KiB, 4 x 1 MiB and 43000 x 5 KiB) it opens the bare page
+  `gl_buffers.html` in a fresh context, makes the buffers, draws once from each, and records
+  each process's footprint before and after by category (`gl-buffers.json`). Not part of the game.
 - There it kills the biggest web process of Playwright's WebKit, and only while that WebKit's
   browser is the one running from its folder.
 - Building on a Mac: set `GODOT_BIN`; `tools/build-web.sh` needs a `timeout` command on the

@@ -168,27 +168,40 @@ function macWebProcesses() {
   const procs = ps.split('\n').map((l) => l.trim().match(/^(\d+)\s+(\d+)\s+(.*)$/)).filter(Boolean).map((m) => ({pid: +m[1], rss: +m[2], cmd: m[3]}));
   const browsers = procs.filter((p) => p.cmd.startsWith(folder + '/') && /\/Contents\/MacOS\/Playwright(\s|$)/.test(p.cmd));
   const web = procs.filter((p) => p.cmd.startsWith(folder + '/') && /com\.apple\.WebKit\.WebContent/.test(p.cmd));
-  log('WEB_PROCESSES', browsers.length, 'browser(s)', JSON.stringify(web.map((p) => [p.pid, Math.round(p.rss / 1024)])));
+  const gpu = procs.filter((p) => p.cmd.startsWith(folder + '/') && /com\.apple\.WebKit\.GPU/.test(p.cmd));
+  log('WEB_PROCESSES', browsers.length, 'browser(s)', JSON.stringify(web.map((p) => [p.pid, Math.round(p.rss / 1024)])), 'gpu', JSON.stringify(gpu.map((p) => [p.pid, Math.round(p.rss / 1024)])));
   if (browsers.length !== 1) throw new Error(`${browsers.length} Playwright WebKit browsers from ${folder} are running, not this one alone`);
-  return web.sort((a, b) => b.rss - a.rss);
+  const sorted = web.sort((a, b) => b.rss - a.rss);
+  sorted.gpu = gpu.sort((a, b) => b.rss - a.rss);
+  return sorted;
 }
 
 // At the start prompt: the web process's footprint beside the page's own inventory (a Mac only).
 async function footprintAtPrompt() {
   await sleep(5000);
   const {execFileSync} = require('child_process');
-  const best = macWebProcesses()[0];
+  const found = macWebProcesses();
+  const best = found[0];
   if (!best) throw new Error('no web process');
+  // Playwright's WebKit draws WebGL in its GPU process and, unlike Safari, does not charge that memory back to
+  // the web process ("Owned physical footprint (unmapped) (graphics)"), so the GPU process is measured too.
+  const gpu = found.gpu[0];
   const run = (cmd, args) => { try { return execFileSync(cmd, args, {encoding: 'utf8', timeout: 120000}); } catch (e) { return 'FAILED ' + cmd + ': ' + String(e.stderr || e.message).slice(0, 500); } };
   const fp = run('footprint', [String(best.pid)]);
   const vm = run('vmmap', ['-summary', String(best.pid)]);
   fs.writeFileSync(OUT + '/footprint.txt', fp);
   fs.writeFileSync(OUT + '/vmmap.txt', vm);
+  const gpuFp = gpu ? run('footprint', [String(gpu.pid)]) : 'no GPU process';
+  fs.writeFileSync(OUT + '/footprint-gpu.txt', gpuFp);
+  const gpuLine = (re) => { const m = gpuFp.match(re); return m ? m[1].trim() : null; };
   const line = (re) => { const m = fp.match(re); return m ? m[1].trim() : null; };
   const inventory = JSON.parse(await js('inventory', "localStorage.getItem('ti-trace:inventory') || '[]'"));
   const summary = {pid: best.pid, footprint: line(/Footprint:\s*([^(\n]+)/), phys_footprint: line(/phys_footprint:\s*([^\n]+)/),
     webkit_malloc: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+WebKit malloc/), graphics: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+Owned physical footprint \(unmapped\) \(graphics\)/),
-    gigacage: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+JS VM Gigacage/), inventory: inventory[inventory.length - 1] || null};
+    gigacage: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+JS VM Gigacage/),
+    gpu_pid: gpu ? gpu.pid : null, gpu_footprint: gpuLine(/Footprint:\s*([^(\n]+)/),
+    gpu_graphics: gpuLine(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+[^\n]*\(graphics\)/), gpu_iosurface: gpuLine(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+IOSurface/),
+    inventory: inventory[inventory.length - 1] || null};
   fs.writeFileSync(OUT + '/footprint.json', JSON.stringify(summary, null, 1));
   log('FOOTPRINT', JSON.stringify({...summary, inventory: undefined}));
   return 0;
