@@ -3,19 +3,23 @@
 // side is game/scripts/debug/drive_trace.gd) with stand-ins for the browser:
 //   - without ?trace=drive (normal play) it does nothing: no WebGL, WebAssembly or
 //     Web Audio call is wrapped, no frame loop or timer starts, no listener or
-//     observer is added, nothing is read from or written to storage, and it leaves
-//     no global behind;
+//     observer is added, nothing is read from or written to storage, and it defines
+//     no global name (the script runs as a page's script would, in a context of its
+//     own whose global names are checked after it);
 //   - with ?trace=drive it wraps WebGL's stalling calls (and only times them: each
 //     wrapped call returns what the browser's did), keeps a frame loop, and once the
 //     game's records come in, names what each long frame's time went to: a frame whose
 //     shader compiles took its time is a shader compile (gpu), one whose physics step
 //     grew is the physics step (main thread), one the engine finished early but the
 //     next frame came late is outside the engine (browser); it shows the results and
-//     keeps them on the device. It sends nothing anywhere (it has no network call).
+//     keeps them on the device. It sends nothing anywhere: no fetch, XMLHttpRequest,
+//     sendBeacon, WebSocket, EventSource, RTCPeerConnection, dynamic import, image,
+//     script, frame or link element, or src set to an address.
 // Node only, no browser; under a second. Part of tools/test.sh.
 //
 //   node tools/check_web_trace.mjs [SHELL]   (SHELL: another copy of the page's shell)
 import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
 import {fileURLToPath} from 'node:url';
 import {dirname, join} from 'node:path';
 
@@ -28,7 +32,13 @@ if (!script) {
   console.log('FAIL: game/web/shell.html has no inline script with function tiTraceAnalyze');
   process.exit(1);
 }
-check(!/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket|EventSource/.test(script), 'the trace script must make no network call (fetch, XMLHttpRequest, sendBeacon, WebSocket, EventSource)');
+const NETWORK = [
+  [/\bfetch\s*\(/, 'fetch'], [/XMLHttpRequest/, 'XMLHttpRequest'], [/sendBeacon/, 'sendBeacon'], [/WebSocket/, 'WebSocket'],
+  [/EventSource/, 'EventSource'], [/RTCPeerConnection/, 'RTCPeerConnection'], [/\bimport\s*\(/, 'import()'],
+  [/new\s+Image\b/, 'new Image'], [/createElement\s*\(\s*['"`](script|img|iframe|link)['"`]/, 'a script, img, iframe or link element'],
+  [/\.src\s*=\s*['"`]?(https?:|\/\/)/, 'src set to an address'],
+];
+for (const [pattern, what] of NETWORK) check(!pattern.test(script), `the trace script must make no network call: it has ${what}`);
 
 // A browser of stand-ins, counting every use the trace could make of it.
 function browser(search) {
@@ -75,10 +85,19 @@ function browser(search) {
     requestAnimationFrame: (cb) => { use('frame loop'); frames.push(cb); return frames.length; },
     setInterval: (cb) => { use('timer'); intervals.push(cb); return intervals.length; },
     setTimeout: () => 0, matchMedia: win.matchMedia, Blob: function () {}, URL: {createObjectURL: () => 'blob:x', revokeObjectURL: () => {}},
+    URLSearchParams, console,
   };
-  const names = Object.keys(globals);
-  const exports = new Function(...names, `${script}\nreturn {tiTraceFrames, tiTraceAnalyze, tiTraceText, TI_TRACE_FRAME};`)(...names.map((n) => globals[n]));
-  return {exports, used, win, gl, audio, memoryProto, wasm, originals, frames, intervals, storage,
+  // The script runs as a page's classic script does, at the top of a context of its own:
+  // a name it declares there is a global name of that context.
+  const before = new Set(Object.keys(globals));
+  const context = vm.createContext(globals);
+  vm.runInContext(script, context);
+  const added = Object.keys(context).filter((name) => !before.has(name));
+  for (const name of ['TI_TRACE_FRAME', 'TI_TRACE_CAUSES', 'tiTraceFrames', 'tiTraceAnalyze', 'tiTraceText']) {
+    if (!added.includes(name) && vm.runInContext(`typeof ${name}`, context) !== 'undefined') added.push(name);
+  }
+  const exports = win.__tiTraceLib || {};
+  return {exports, added, used, win, gl, audio, memoryProto, wasm, originals, frames, intervals, storage,
     tick: (ms) => { clock += ms; const due = frames.splice(0); for (const cb of due) cb(clock); }, advance: (ms) => { clock += ms; }, clock: () => clock};
 }
 
@@ -89,11 +108,11 @@ function browser(search) {
   check(Object.entries(b.originals.gl).every(([name, fn]) => b.gl[name] === fn), 'without ?trace=drive no WebGL call may be wrapped');
   check(b.audio.createBufferSource === b.originals.audio && b.memoryProto.grow === b.originals.grow
     && b.wasm.instantiate === b.originals.instantiate && b.wasm.instantiateStreaming === b.originals.streaming, 'without ?trace=drive no Web Audio or WebAssembly call may be wrapped');
-  check(b.win.__tiTrace === undefined, 'without ?trace=drive the page must have no window.__tiTrace');
+  check(b.win.__tiTrace === undefined && b.win.__tiTraceLib === undefined && b.added.length === 0, `without ?trace=drive the page must have no global of the trace's, but it has: ${[...b.added, ...(b.win.__tiTrace ? ['window.__tiTrace'] : []), ...(b.win.__tiTraceLib ? ['window.__tiTraceLib'] : [])].join(', ')}`);
 }
 for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   const b = browser(other);
-  check(b.used.length === 0 && b.win.__tiTrace === undefined, `${other} is not the drive trace, but the trace script ran`);
+  check(b.used.length === 0 && b.win.__tiTrace === undefined && b.added.length === 0, `${other} is not the drive trace, but the trace script ran or left a name`);
 }
 
 // The drive trace: wrappers that only time, a frame loop, and the analysis.
@@ -137,7 +156,8 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   check(byCause[100] === 'compile' && a.causes.compile && a.causes.compile.class === 'gpu', `a frame whose shader compiles took its time must be a shader compile (gpu), not ${byCause[100]}`);
   check(byCause[150] === 'phys_engine' && a.causes.phys_engine && a.causes.phys_engine.class === 'main thread', `a frame whose physics step grew must be the physics step (main thread), not ${byCause[150]}`);
   check(byCause[200] === 'outside' && a.causes.outside && a.causes.outside.class === 'browser', `a frame the engine finished early but came late must be outside the engine (browser), not ${byCause[200]}`);
-  const text = tiTraceText({run: 'check'}, a);
+  check(typeof tiTraceText === 'function', 'with ?trace=drive the page must give its analysis as window.__tiTraceLib');
+  const text = typeof tiTraceText === 'function' ? tiTraceText({run: 'check'}, a) : '';
   check(/Long frames \(33 ms or more\): 3/.test(text) && /shader compile/.test(text), 'the results text must give the long frames and their causes');
   const kept = JSON.parse(b.storage.data['ti-trace:meta'] || 'null');
   check(kept && kept.status === 'done' && b.storage.data['ti-trace:text'], 'the results must be kept on the device when the drive ends');
@@ -147,4 +167,4 @@ if (failures.length) {
   for (const f of failures) console.log('FAIL: ' + f);
   process.exit(1);
 }
-console.log('PASS: the drive trace\'s page side does nothing without ?trace=drive (no wrapper, frame loop, timer, listener, observer, storage or global), makes no network call, and with it times WebGL\'s stalling calls without changing what they return and names a long frame\'s cause: shader compile (gpu), the physics step (main thread), outside the engine (browser); its results are kept on the device');
+console.log('PASS: the drive trace\'s page side does nothing without ?trace=drive (no wrapper, frame loop, timer, listener, observer, storage or global name), has no network call of any kind, and with it times WebGL\'s stalling calls without changing what they return and names a long frame\'s cause: shader compile (gpu), the physics step (main thread), outside the engine (browser); its results are kept on the device');

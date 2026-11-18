@@ -152,8 +152,8 @@ body {
 		<script>
 // The drive trace's page side (game/scripts/debug/drive_trace.gd, owner 2026-11-17:
 // "script a drive around the island and instrument it so we can identify why" the web
-// build hitches). Only with ?trace=drive in the page's address; otherwise the last
-// function here returns at once and nothing else in this script runs. It sends nothing
+// build hitches). Only with ?trace=drive in the page's address; otherwise the function
+// here returns at once, nothing in this script runs and it defines no name. It sends nothing
 // anywhere: the records stay in the page and in this site's localStorage on the device,
 // and leave it only through the results' Copy, Select and Download, by hand.
 //
@@ -175,6 +175,13 @@ body {
 // the engine's own steps, which stay on the main thread either way), 'gpu' (WebGL work:
 // shader compiles, uploads, waits and drawing), 'browser' (time outside the engine:
 // garbage collection, the compositor, other tasks).
+
+// All of it inside one function that returns at once without ?trace=drive: the page then
+// has none of the trace's names (the frame record, the analysis, the text, the runtime).
+// The analysis is left at column 0 inside it. With the trace, window.__tiTraceLib holds
+// it for the tools that read a kept log (tools/check_web_trace.mjs).
+(function () {
+if (new URLSearchParams(window.location.search).get('trace') !== 'drive') return;
 
 // The frame record tiTraceFrames makes, a number list in this order.
 const TI_TRACE_FRAME = ['t', 'ms', 'x', 'z', 'speed', 'step', 'leg', 'flags', 'phys_n', 'pre', 'phys_engine', 'phys_vehicles',
@@ -828,6 +835,9 @@ function tiTraceText(env, a) {
 		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish'));
 		save('previous', {...before, meta: {...before.meta, status: 'shown'}});
 	}
+}());
+
+window.__tiTraceLib = {TI_TRACE_FRAME, TI_TRACE_CAUSES, tiTraceFrames, tiTraceAnalyze, tiTraceText};
 }());
 		</script>
 		<script src="$GODOT_URL"></script>
