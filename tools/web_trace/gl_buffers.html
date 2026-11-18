@@ -109,6 +109,53 @@ window.drawMeshes = () => {
 	gl.useProgram(program);
 	return {drawn: meshes.length, draw_ms: Math.round(performance.now() - began), error: gl.getError()};
 };
+// makeSized(n, size, kind): n STATIC_DRAW buffers of size bytes, each with a vertex array of its
+// own read in Godot's layout with tangents (positions 3 floats, stride 12; normals and tangents as 4
+// shorts, stride 8, from 60 % into the buffer), drawn once. kind 'array': the buffers are vertex
+// buffers; kind 'element': they are index buffers (16-bit) over one small shared vertex buffer.
+const sized = [];
+window.makeSized = (n, size, kind) => {
+	const began = performance.now();
+	const data = new Uint8Array(size);
+	const shared = gl.createBuffer();
+	gl.bindBuffer(gl.ARRAY_BUFFER, shared);
+	gl.bufferData(gl.ARRAY_BUFFER, new Uint8Array(4096), gl.STATIC_DRAW);
+	const normalsAt = Math.floor(size * 0.6 / 8) * 8;
+	for (let i = 0; i < n; i += 1) {
+		const vao = gl.createVertexArray();
+		gl.bindVertexArray(vao);
+		const buffer = gl.createBuffer();
+		if (kind === 'element') {
+			gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
+			gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, data, gl.STATIC_DRAW);
+			gl.bindBuffer(gl.ARRAY_BUFFER, shared);
+			gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 12, 0);
+			gl.vertexAttribPointer(1, 4, gl.UNSIGNED_SHORT, true, 8, 2048);
+		} else {
+			gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+			gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+			gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 12, 0);
+			gl.vertexAttribPointer(1, 4, gl.UNSIGNED_SHORT, true, 8, normalsAt);
+		}
+		gl.enableVertexAttribArray(0);
+		gl.enableVertexAttribArray(1);
+		gl.bindVertexArray(null);
+		sized.push([vao, kind]);
+	}
+	const made = performance.now();
+	gl.useProgram(meshProgram);
+	for (const [vao, kindOf] of sized) {
+		gl.bindVertexArray(vao);
+		if (kindOf === 'element') gl.drawElements(gl.POINTS, 3, gl.UNSIGNED_SHORT, 0);
+		else gl.drawArrays(gl.POINTS, 0, 3);
+	}
+	gl.bindVertexArray(null);
+	gl.finish();
+	gl.useProgram(program);
+	const result = {buffers: sized.length, size, kind, make_ms: Math.round(made - began), draw_ms: Math.round(performance.now() - made), error: gl.getError()};
+	document.getElementById('out').textContent = JSON.stringify(result);
+	return result;
+};
 window.ready = () => {
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.finish();

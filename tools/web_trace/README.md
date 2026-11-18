@@ -310,7 +310,10 @@ OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules
 - `gl_buffers.cjs` also takes cases `mesh:N:V:LAYOUT`: N meshes of V vertices in Godot's
   Compatibility layout (positions, then normals read as 4 shorts with a stride of 4 without
   tangents, `normal`, or 8 with them, `tangent`; UVs; 16-bit indices; a vertex array each),
-  measured once made and again once each is drawn once.
+  measured once made and again once each is drawn once. Cases `sized:N:S:KIND` make N
+  STATIC_DRAW buffers of S bytes (`array`: vertex buffers; `element`: index buffers), each drawn
+  once from a vertex array of its own in Godot's layout with tangents, for comparing one total
+  of data split into few or many buffers.
 - The driver stops at once when a file of the page fails to load (the local server can drop one
   with `Errno 55`); run it again.
 - There it kills the biggest web process of Playwright's WebKit, and only while that WebKit's

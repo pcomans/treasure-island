@@ -7,7 +7,9 @@
 // Default cases: 20000:200 20000:4096 20000:16384 4:1048576 43000:5120. A case mesh:N:V:LAYOUT instead makes N meshes
 // of V vertices in Godot's Compatibility layout (gl_buffers.html makeMeshes: LAYOUT normal, normals without tangents,
 // read with a stride of 4; tangent, with a stride of 8), records the footprint once they are made and again once
-// each has been drawn once. Writes OUT/gl-buffers.json.
+// each has been drawn once. A case sized:N:S:KIND makes N STATIC_DRAW buffers of S bytes (KIND array: vertex buffers;
+// element: index buffers), each drawn once from a vertex array of its own in Godot's layout with tangents
+// (gl_buffers.html makeSized), and records the footprint after. Writes OUT/gl-buffers.json.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -17,7 +19,7 @@ const pw = require(process.env.PW_MODULE || 'playwright');
 const OUT = process.env.OUT;
 if (!OUT || process.platform !== 'darwin') { console.error('usage: OUT=<dir> on a Mac'); process.exit(2); }
 const CASES = (process.argv.slice(2).length ? process.argv.slice(2) : ['20000:200', '20000:4096', '20000:16384', '4:1048576', '43000:5120'])
-  .map((c) => (c.startsWith('mesh:') ? c.split(':') : c.split(':').map(Number)));
+  .map((c) => (/^(mesh|sized):/.test(c) ? c.split(':') : c.split(':').map(Number)));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => { const line = a.join(' '); console.log(line); fs.appendFileSync(OUT + '/progress.txt', line + '\n'); };
 
@@ -78,6 +80,11 @@ async function main() {
         const afterDrawn = measure();
         result = {meshes: +count, vertices: +vertices, layout, made, drawn, web_pid: procs.web.pid, gpu_pid: procs.gpu ? procs.gpu.pid : null,
           made_change: change(before, afterMade), drawn_change: change(afterMade, afterDrawn)};
+      } else if (c[0] === 'sized') {
+        const [, count, size, kind] = c;
+        const made = await page.evaluate(`window.makeSized(${+count}, ${+size}, ${JSON.stringify(kind)})`);
+        await sleep(3000);
+        result = {buffers: +count, size: +size, kind, bytes: +count * +size, made, web_pid: procs.web.pid, gpu_pid: procs.gpu ? procs.gpu.pid : null, ...change(before, measure())};
       } else {
         const [n, size] = c;
         const made = await page.evaluate(`window.makeBuffers(${n}, ${size})`);
