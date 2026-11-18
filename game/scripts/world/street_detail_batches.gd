@@ -11,9 +11,9 @@ extends RefCounted
 ## within 35-60 m of its 16 m cell's centre, its far impostor from 90-140 m. A large
 ## batch can't say which of its instances shows, so each instance keeps the range
 ## its small cell gave it and its shader tests it, from that small cell's box centre
-## to the main camera (vegetation_band.gdshaderinc; for a parked car or yard piece
-## alone in its cell, its own box centre: street_clutter.gdshader and
-## street_yard.gdshader). The test reproduces the renderer's own: the same centre,
+## to the main camera (vegetation_band.gdshaderinc; for a parked car or yard piece,
+## the clutter shaders: street_clutter.gdshader and street_yard.gdshader). The test
+## reproduces the renderer's own: the same centre,
 ## the same range ends and the same camera in the colour, shadow and probe passes,
 ## so every instance shows, and hands over, exactly where it did. The batch's own
 ## range is only a coarse cull that keeps it while any of its instances may show:
@@ -22,37 +22,40 @@ extends RefCounted
 ## Interactive rows (bending trees, parked cars a car can take) find their instances
 ## by node name and index as before (the builders' bending_rows and swappable_rows).
 
-## The large cell (m). One cell size for every batched level; chosen by measurement
-## (web/street-detail-regroup-20261118: buffers, draw calls and frame time on the web
-## build in the phone rig at 64, 128 and 256 m).
-const CELL_M := 128.0
+## The large cell (m) for every batched level but the trees' far impostors; chosen
+## by measurement (web/street-detail-regroup-20261118: the web build in the phone rig
+## at 64, 128 and 256 m held 40,268, 38,227 and 36,826 GL buffers and drew 3,650,
+## 3,551 and 3,480 calls a frame on the corner route, against 43,422 and 3,805
+## before, with the frame time the same within the runs' noise).
+const CELL_M := 256.0
+## The far impostors' cell (m): drawn out to 600-900 m, they are in range from most
+## of the island anyway, and each is one quad, so a large cell costs nothing.
+const FAR_CELL_M := 1024.0
 ## Metres a batch's coarse range reaches past what its instances need, so float
 ## rounding never culls a batch while one of its instances is in its range.
 const RANGE_PAD_M := 1.0
 ## The uniform each banded material carries ([begin, end] in metres).
 const BAND_UNIFORM := &"street_band"
-## The clutter shaders' reference point (the near mesh's box centre, in the
-## instance's own frame).
-const REFERENCE_UNIFORM := &"street_reference"
 ## The vegetation shaders' switch to a merged hedge's per-vertex centres.
 const BY_VERTEX_UNIFORM := &"street_band_by_vertex"
 
 
-static func cell(position: Vector3) -> String:
-	return "%d_%d" % [floori(position.x / CELL_M), floori(position.z / CELL_M)]
+static func cell(position: Vector3, size_m := CELL_M) -> String:
+	return "%d_%d" % [floori(position.x / size_m), floori(position.z / size_m)]
 
 
 ## A batch to fill with add(): its mesh, shadow setting and its level's range.
 static func batch(mesh: Mesh, cast: int, begin_m: float, end_m: float) -> Dictionary:
-	return {"mesh": mesh, "cast": cast, "begin": begin_m, "end": end_m, "transforms": [], "customs": [], "references": PackedVector3Array(), "extras": PackedFloat32Array(), "box": AABB(), "count": 0}
+	return {"mesh": mesh, "cast": cast, "begin": begin_m, "end": end_m, "transforms": [], "colors": [], "customs": [], "references": PackedVector3Array(), "extras": PackedFloat32Array(), "box": AABB(), "count": 0}
 
 
 ## Adds an instance (its transform, the box it draws in, the point its range is
-## measured from, the metres its range's end reaches past the level's, and its custom
-## data) and returns its index in the batch.
-static func add(into: Dictionary, transform: Transform3D, box: AABB, reference: Vector3, extra_m: float, custom: Color) -> int:
+## measured from, the metres its range's end reaches past the level's, its custom
+## data and its colour) and returns its index in the batch.
+static func add(into: Dictionary, transform: Transform3D, box: AABB, reference: Vector3, extra_m: float, custom: Color, color := Color(1, 1, 1, 1)) -> int:
 	var index := int(into.count)
 	(into.transforms as Array).append(transform)
+	(into.colors as Array).append(color)
 	(into.customs as Array).append(custom)
 	# A packed array read out of a Dictionary is a copy: append, then put it back.
 	var references: PackedVector3Array = into.references
@@ -66,9 +69,11 @@ static func add(into: Dictionary, transform: Transform3D, box: AABB, reference: 
 	return index
 
 
-## The custom data of a vegetation instance whose range the band test measures from
-## reference, ending extra_m past its level's end (vegetation_band.gdshaderinc).
-static func vegetation_custom(transform: Transform3D, reference: Vector3, extra_m: float) -> Color:
+## What the band test reads of an instance whose range it measures from reference,
+## ending extra_m past its level's end: that point less the instance's origin and 1
+## plus extra_m (a vegetation instance's custom data, vegetation_band.gdshaderinc; a
+## clutter instance's colour, street_clutter.gdshader and street_yard.gdshader).
+static func band_data(transform: Transform3D, reference: Vector3, extra_m: float) -> Color:
 	var offset := reference - transform.origin
 	return Color(offset.x, offset.y, offset.z, 1.0 + extra_m)
 
@@ -89,22 +94,23 @@ static func coarse_range(from: Dictionary) -> Vector2:
 	return Vector2(begin if begin > 0.0 and float(from.begin) > 0.0 else 0.0, farthest + RANGE_PAD_M)
 
 
-## The filled batch as a MultiMeshInstance3D named node_name: its instances with their
-## custom data, its box, its coarse range and no fade. With white, every instance also
-## has the colour white: Godot 4.7.2's Compatibility renderer reserves an instance's
-## colour beside its custom data and multiplies a shader's COLOR by it whether or not
-## the MultiMesh uses colours (drivers/gles3/shaders/scene.glsl), leaving it zero or
-## stale without them, so a batch whose shaders read COLOR (the vegetation's) needs
-## them white. The instances go in as one buffer, which the headless renderer keeps
-## too (it drops instances set one at a time), so a headless test can read them back.
-static func node(from: Dictionary, node_name: String, white: bool) -> MultiMeshInstance3D:
+## The filled batch as a MultiMeshInstance3D named node_name: its instances with
+## their colours and custom data, its box, its coarse range and no fade. A batch
+## always has colours: Godot 4.7.2's Compatibility renderer reserves an instance's
+## colour beside its custom data and multiplies a shader's COLOR by it whether or
+## not the MultiMesh uses colours (drivers/gles3/shaders/scene.glsl), leaving it
+## zero or stale without them, so the vegetation's (whose shaders read COLOR) are
+## white, and the clutter's carry its band (band_data). The instances go in as one
+## buffer, which the headless renderer keeps too (it drops instances set one at a
+## time), so a headless test can read them back.
+static func node(from: Dictionary, node_name: String) -> MultiMeshInstance3D:
 	var multimesh := MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_colors = white
+	multimesh.use_colors = true
 	multimesh.use_custom_data = true
 	multimesh.mesh = from.mesh
 	multimesh.instance_count = int(from.count)
-	multimesh.buffer = buffer(from.transforms, from.customs, white)
+	multimesh.buffer = buffer(from.transforms, from.colors, from.customs)
 	multimesh.custom_aabb = from.box
 	var instance := MultiMeshInstance3D.new()
 	instance.name = node_name
@@ -118,15 +124,14 @@ static func node(from: Dictionary, node_name: String, white: bool) -> MultiMeshI
 	return instance
 
 
-## A MultiMesh buffer (TRANSFORM_3D) as Godot lays one out: per instance its basis
-## rows with the origin, then (white) the colour white, then its custom data.
-static func buffer(transforms: Array, customs: Array, white: bool) -> PackedFloat32Array:
-	var stride := 16 + (4 if white else 0)
+## A MultiMesh buffer (TRANSFORM_3D, colours and custom data) as Godot lays one out:
+## per instance its basis rows with the origin, then its colour, then its custom data.
+static func buffer(transforms: Array, colors: Array, customs: Array) -> PackedFloat32Array:
 	var data := PackedFloat32Array()
-	data.resize(transforms.size() * stride)
+	data.resize(transforms.size() * 20)
 	for index in transforms.size():
 		var xf: Transform3D = transforms[index]
-		var at := index * stride
+		var at := index * 20
 		data[at] = xf.basis.x.x
 		data[at + 1] = xf.basis.y.x
 		data[at + 2] = xf.basis.z.x
@@ -139,27 +144,36 @@ static func buffer(transforms: Array, customs: Array, white: bool) -> PackedFloa
 		data[at + 9] = xf.basis.y.z
 		data[at + 10] = xf.basis.z.z
 		data[at + 11] = xf.origin.z
-		if white:
-			for channel in 4:
-				data[at + 12 + channel] = 1.0
+		var color: Color = colors[index]
 		var custom: Color = customs[index]
-		var custom_at := at + (16 if white else 12)
-		data[custom_at] = custom.r
-		data[custom_at + 1] = custom.g
-		data[custom_at + 2] = custom.b
-		data[custom_at + 3] = custom.a
+		for channel in 4:
+			data[at + 12 + channel] = color[channel]
+			data[at + 16 + channel] = custom[channel]
 	return data
 
 
-## An instance's transform and custom data read back from a batch's MultiMesh buffer,
-## laid out as buffer() lays it out: [Transform3D, Color].
+## A MultiMesh buffer (TRANSFORM_3D, no colours or custom data) of transforms.
+static func transform_buffer(transforms: Array) -> PackedFloat32Array:
+	var data := PackedFloat32Array()
+	data.resize(transforms.size() * 12)
+	for index in transforms.size():
+		var xf: Transform3D = transforms[index]
+		var at := index * 12
+		for row in 3:
+			data[at + row * 4] = xf.basis[0][row]
+			data[at + row * 4 + 1] = xf.basis[1][row]
+			data[at + row * 4 + 2] = xf.basis[2][row]
+			data[at + row * 4 + 3] = xf.origin[row]
+	return data
+
+
+## An instance's transform, custom data and colour read back from a batch's MultiMesh
+## buffer, laid out as buffer() lays it out: [Transform3D, Color, Color].
 static func read(multimesh: MultiMesh, index: int) -> Array:
 	var data := multimesh.buffer
-	var stride := 16 + (4 if multimesh.use_colors else 0)
-	var at := index * stride
+	var at := index * 20
 	var xf := Transform3D(Vector3(data[at], data[at + 4], data[at + 8]), Vector3(data[at + 1], data[at + 5], data[at + 9]), Vector3(data[at + 2], data[at + 6], data[at + 10]), Vector3(data[at + 3], data[at + 7], data[at + 11]))
-	var custom_at := at + stride - 4
-	return [xf, Color(data[custom_at], data[custom_at + 1], data[custom_at + 2], data[custom_at + 3])]
+	return [xf, Color(data[at + 16], data[at + 17], data[at + 18], data[at + 19]), Color(data[at + 12], data[at + 13], data[at + 14], data[at + 15])]
 
 
 ## Whether a material takes the band test (its shader has the band uniform).
@@ -172,16 +186,13 @@ static func takes_band(material: Material) -> bool:
 	return false
 
 
-## The copy of material that tests the range [begin_m, end_m] (and, given reference,
-## measures it from that point of the instance's frame; with by_vertex, from each
-## vertex's CUSTOM0, a merged hedge's), one per material, range and way in cache.
-static func band_material(material: ShaderMaterial, begin_m: float, end_m: float, cache: Dictionary, reference := Vector3.INF, by_vertex := false) -> ShaderMaterial:
-	var key := "%d|%s|%s|%s|%s" % [material.get_instance_id(), begin_m, end_m, reference, by_vertex]
+## The copy of material that tests the range [begin_m, end_m] (with by_vertex, from
+## each vertex's CUSTOM0, a merged hedge's), one per material, range and way in cache.
+static func band_material(material: ShaderMaterial, begin_m: float, end_m: float, cache: Dictionary, by_vertex := false) -> ShaderMaterial:
+	var key := "%d|%s|%s|%s" % [material.get_instance_id(), begin_m, end_m, by_vertex]
 	if not cache.has(key):
 		var made := material.duplicate() as ShaderMaterial
 		made.set_shader_parameter(BAND_UNIFORM, Vector2(begin_m, end_m))
-		if reference.is_finite():
-			made.set_shader_parameter(REFERENCE_UNIFORM, reference)
 		if by_vertex:
 			made.set_shader_parameter(BY_VERTEX_UNIFORM, true)
 		cache[key] = made

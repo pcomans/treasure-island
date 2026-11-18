@@ -9,8 +9,10 @@ extends SceneTree
 ##   from the batch's box centre and then each instance's band, as the shaders test it
 ##   (vegetation_band.gdshaderinc: the small cell's centre in the custom data and the
 ##   level's range on the level mesh's materials; a merged hedge's centres per vertex in
-##   CUSTOM0; a lone car's or yard piece's own centre and range on its batch's material).
-## - Every placed instance is in exactly one batch of each of its levels.
+##   CUSTOM0; a car's, cone's or yard piece's in its instance colour, the range on
+##   its batch's material).
+## - Every placed instance is in exactly one batch of each of its levels; vegetation
+##   instances are white (their shaders multiply COLOR by the instance colour).
 ## - The interactive refs (bending trees, parked cars a car can take) name the batch and
 ##   index whose instance stands at the row's placement.
 ## - The vegetation, hedge and clutter shaders carry the band test.
@@ -49,7 +51,7 @@ func _run() -> void:
 		_check_clutter(node)
 	await process_frame
 	if failures.is_empty():
-		print("PASS: street-detail batches draw every tree, plant, hedge and lone car at the levels its small cell drew, from every camera point tried (hand-overs and ends, near and far, low and high); each placed instance is in one batch per level; bending trees and parked cars find their own instances; the vegetation, hedge and clutter shaders test the bands")
+		print("PASS: street-detail batches draw every tree, plant, hedge, car and cone at the levels its small cell drew, from every camera point tried (hand-overs and ends, near and far, low and high); each placed instance is in one batch per level; bending trees and parked cars find their own instances; the vegetation, hedge and clutter shaders test the bands")
 		quit(0)
 	else:
 		for failure: String in failures:
@@ -216,6 +218,8 @@ func _batched(root_node: Node3D) -> Array[Dictionary]:
 			var read := BATCHES.read(multimesh, index)
 			var xf: Transform3D = read[0]
 			var custom: Color = read[1]
+			if read[2] != Color(1, 1, 1, 1):
+				_fail("%s %d is not white (%s): the vegetation's COLOR would change" % [node.name, index, read[2]])
 			if custom.a < 0.5:
 				_fail("%s %d has no band (w %s)" % [node.name, index, custom.a])
 			instances.append({"name": level, "kind": kind, "transform": xf, "reference": xf.origin + Vector3(custom.r, custom.g, custom.b), "extra": custom.a - 1.0,
@@ -375,77 +379,102 @@ func _check_bending(root_node: Node3D) -> void:
 
 func _check_clutter(root_node: Node3D) -> void:
 	var kit := CLUTTER_KIT.new()
-	var swappable: Dictionary = root_node.get_meta("swappable_rows", {})
-	# The small cells as the clutter builder measures them: lone items' levels by
-	# their own near box, from the rows.
-	var rows := _clutter_rows()
+	# The small cells' nodes as street_clutter_builder.gd measured them, from the rows:
+	# [{name (level), kind (mesh key), begin, end, centre, origins}].
 	var cells := {}
-	for row: Dictionary in rows:
+	for row: Dictionary in _clutter_rows():
 		var parts := kit.parts(str(row.prop), row.prop_params, str(row.id))
 		var position := Vector3(row.position_m[0], row.position_m[1], row.position_m[2])
 		var key := "%s|%d_%d" % [parts.mesh_key, floori(position.x / StreetClutterBuilder.CELL_M), floori(position.z / StreetClutterBuilder.CELL_M)]
 		if not cells.has(key):
-			cells[key] = {"parts": parts, "rows": []}
-		(cells[key].rows as Array).append(row)
-	var lone := 0
+			cells[key] = {"parts": parts, "placements": []}
+		(cells[key].placements as Array).append(Transform3D(Basis(Vector3.UP, float(row.yaw_radians)), position))
+	var small: Array[Dictionary] = []
 	for key: String in cells:
-		var cell: Dictionary = cells[key]
-		if (cell.rows as Array).size() != 1:
-			continue
-		lone += 1
-		var row: Dictionary = cell.rows[0]
-		var parts: Dictionary = cell.parts
+		var parts: Dictionary = cells[key].parts
 		var near_box: AABB = (parts.meshes[0] as Mesh).get_aabb()
-		var levels := [["lod0", 0.0, CLUTTER_KIT.LOD_NEAR_M], ["lod1", CLUTTER_KIT.LOD_NEAR_M, float(parts.range_m)]]
+		var bounds := AABB()
+		var placements: Array = cells[key].placements
+		for index in placements.size():
+			var box: AABB = (placements[index] as Transform3D) * near_box
+			bounds = box if index == 0 else bounds.merge(box)
+		var slack := 0.0
+		for xf: Transform3D in placements:
+			slack = maxf(slack, (xf * near_box).get_center().distance_to(bounds.get_center()))
+		var levels := [["lod0", 0.0, CLUTTER_KIT.LOD_NEAR_M], ["lod1", CLUTTER_KIT.LOD_NEAR_M, float(parts.range_m) + ceilf(slack)]]
 		if parts.has("shadow_mesh"):
 			levels.append(["shadow", 0.0, CLUTTER_KIT.LOD_NEAR_M])
-		var batched := 0
-		for child: Node in root_node.get_children():
-			if not child is MultiMeshInstance3D or not str(child.name).begins_with("%s_" % parts.mesh_key) or not "__b" in str(child.name):
-				continue
-			var node := child as MultiMeshInstance3D
-			var level_name := str(node.name).trim_prefix("%s_" % parts.mesh_key).get_slice("__b", 0)
-			var level: Array = levels.filter(func(each: Array) -> bool: return each[0] == level_name).front() if levels.any(func(each: Array) -> bool: return each[0] == level_name) else []
-			var material := node.material_override as ShaderMaterial
-			for index in node.multimesh.instance_count:
-				var xf: Transform3D = BATCHES.read(node.multimesh, index)[0]
-				# The lone row's own instance (an item of another row may share the batch).
-				if not xf.origin.is_equal_approx(Vector3(row.position_m[0], row.position_m[1], row.position_m[2])):
-					continue
-				batched += 1
-				if level.is_empty() or material == null:
-					_fail("%s: lone %s in %s has no level or material" % [key, row.id, node.name])
-					continue
-				var band: Variant = material.get_shader_parameter(BATCHES.BAND_UNIFORM)
-				var reference: Variant = material.get_shader_parameter(BATCHES.REFERENCE_UNIFORM)
-				if band != Vector2(level[1], level[2]) or not reference is Vector3 or not (reference as Vector3).is_equal_approx(near_box.get_center()):
-					_fail("%s %s: band %s and reference %s, not %s and %s" % [row.id, node.name, band, reference, Vector2(level[1], level[2]), near_box.get_center()])
-				var centre := (xf * near_box).get_center()
-				var node_centre := node.multimesh.custom_aabb.get_center()
-				for camera: Vector3 in _cameras([centre], [0.0, 30.0, float(level[1]), float(level[2]), float(level[2]) + 50.0]):
-					var before := _node_draws(float(level[1]), float(level[2]), centre, camera)
-					var after := _node_draws(node.visibility_range_begin, node.visibility_range_end, node_centre, camera) and _band_draws(band, xf * (reference as Vector3), 0.0, camera)
-					if before != after:
-						_fail("from %s lone %s's %s drew %s, its batch %s" % [camera, row.id, level_name, before, after])
-						break
-		if batched != levels.size():
-			_fail("lone %s is in %d batches, not its %d levels" % [row.id, batched, levels.size()])
-	if lone < 3:
-		_fail("only %d lone items in the fixture" % lone)
+		for level: Array in levels:
+			small.append({"name": level[0], "kind": str(parts.mesh_key), "begin": level[1], "end": level[2], "centre": bounds.get_center(), "origins": placements.map(func(xf: Transform3D) -> Vector3: return xf.origin)})
+	# The batches' instances.
+	var batched: Array[Dictionary] = []
+	for child: Node in root_node.get_children():
+		if not child is MultiMeshInstance3D or not "__b" in str(child.name):
+			continue
+		var node := child as MultiMeshInstance3D
+		var prefix := str(node.name).rsplit("__b", true, 1)[0]
+		var level := prefix.get_slice("_", prefix.get_slice_count("_") - 1)
+		var material := node.material_override as ShaderMaterial
+		var band: Variant = material.get_shader_parameter(BATCHES.BAND_UNIFORM) if material != null else null
+		if not band is Vector2 or not node.multimesh.use_colors:
+			_fail("%s has no band on its material or no colours" % node.name)
+			continue
+		for index in node.multimesh.instance_count:
+			var read := BATCHES.read(node.multimesh, index)
+			var xf: Transform3D = read[0]
+			var color: Color = read[2]
+			batched.append({"name": level, "kind": prefix.substr(0, prefix.length() - level.length() - 1), "origin": xf.origin, "reference": xf.origin + Vector3(color.r, color.g, color.b),
+				"extra": color.a - 1.0, "band": band, "begin": node.visibility_range_begin, "end": node.visibility_range_end, "centre": node.multimesh.custom_aabb.get_center()})
+	var expected := {}
+	for node: Dictionary in small:
+		for origin: Vector3 in node.origins:
+			expected["%s|%s|%s" % [node.kind, node.name, origin]] = int(expected.get("%s|%s|%s" % [node.kind, node.name, origin], 0)) + 1
+	var found := {}
+	for instance: Dictionary in batched:
+		var key := "%s|%s|%s" % [instance.kind, instance.name, instance.origin]
+		found[key] = int(found.get(key, 0)) + 1
+	if expected != found:
+		_fail("clutter instances per level differ: small cells %s, batches %s" % [expected, found])
+	var centres: Array = small.map(func(node: Dictionary) -> Vector3: return node.centre)
+	var differ := 0
+	var cameras := _cameras(centres, [0.0, 30.0, CLUTTER_KIT.LOD_NEAR_M, 90.0, 110.0, 260.0, 300.0])
+	for camera: Vector3 in cameras:
+		var before := {}
+		for node: Dictionary in small:
+			if _node_draws(float(node.begin), float(node.end), node.centre, camera):
+				for origin: Vector3 in node.origins:
+					before["%s|%s|%s" % [node.kind, node.name, origin]] = true
+		var after := {}
+		for instance: Dictionary in batched:
+			if _node_draws(float(instance.begin), float(instance.end), instance.centre, camera) and _band_draws(instance.band, instance.reference, float(instance.extra), camera):
+				after["%s|%s|%s" % [instance.kind, instance.name, instance.origin]] = true
+		if before != after:
+			differ += 1
+			if differ <= 3:
+				_fail("from %s the clutter's cells drew %s but the batches %s" % [camera, before.keys(), after.keys()])
+	if differ > 0:
+		_fail("%d of %d camera points draw different clutter" % [differ, cameras.size()])
+	# The parked cars a car can take name the batch and index of their own instance.
+	var swappable: Dictionary = root_node.get_meta("swappable_rows", {})
+	if swappable.size() != 4:
+		_fail("%d parked cars listed to take, not the fixture's 4" % swappable.size())
 	for id: String in swappable:
 		var entry: Dictionary = swappable[id]
 		var placement: Transform3D = entry.transform
+		var refs := 0
 		for ref: Array in entry.instances:
 			var node := root_node.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
 			if node == null or int(ref[1]) >= node.multimesh.instance_count:
 				_fail("car %s names %s, which is not a batch instance" % [id, ref])
 				continue
-			if "__b" in str(ref[0]):
-				var xf: Transform3D = BATCHES.read(node.multimesh, int(ref[1]))[0]
-				if not xf.is_equal_approx(placement):
-					_fail("car %s's instance %s stands at %s, not %s" % [id, ref, xf, placement])
+			var xf: Transform3D = BATCHES.read(node.multimesh, int(ref[1]))[0]
+			if not xf.is_equal_approx(placement):
+				_fail("car %s's instance %s stands at %s, not %s" % [id, ref, xf, placement])
 			if (ref.size() > 2) != str(ref[0]).contains("_shadow__"):
 				_fail("car %s's ref %s is marked shadow wrongly" % [id, ref])
+			refs += 1
+		if refs != 3:
+			_fail("car %s names %d instances, not its near, far and shadow levels" % [id, refs])
 
 
 # --- Shaders ------------------------------------------------------------------------

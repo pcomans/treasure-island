@@ -219,10 +219,10 @@ func build(document: Dictionary, shared_kit: RefCounted = null, level_bands := t
 				var cast := GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(level.shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 				for index in transforms.size():
 					var xf: Transform3D = transforms[index]
-					var node_name := "%s_%s__c%s" % [key, level.name, StreetDetailBatches.cell(xf.origin)]
+					var node_name := "%s_%s__c%s" % [key, level.name, StreetDetailBatches.cell(xf.origin, StreetDetailBatches.FAR_CELL_M if level.name == "far" else StreetDetailBatches.CELL_M)]
 					if not large.has(node_name):
 						large[node_name] = StreetDetailBatches.batch(level.mesh, cast, float(level.begin_m), float(level.end_m))
-					var custom := StreetDetailBatches.vegetation_custom(xf, centre, extra) if level_bands else Color(0, 0, 0, 0)
+					var custom := StreetDetailBatches.band_data(xf, centre, extra) if level_bands else Color(0, 0, 0, 0)
 					var at := StreetDetailBatches.add(large[node_name], xf, boxes[index], centre, extra, custom)
 					placed_at["%s|%s|%s|%d" % [level.name, key, cell, index]] = [node_name, at]
 	var shadow_keys: Array = shadows.keys()
@@ -247,14 +247,14 @@ func build(document: Dictionary, shared_kit: RefCounted = null, level_bands := t
 				var node_name := "%s_shadow__c%s" % [key, StreetDetailBatches.cell(xf.origin)]
 				if not large.has(node_name):
 					large[node_name] = StreetDetailBatches.batch(batch.mesh, GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY, 0.0, float(batch.end_m))
-				var custom := StreetDetailBatches.vegetation_custom(xf, centre, extra) if level_bands else Color(0, 0, 0, 0)
+				var custom := StreetDetailBatches.band_data(xf, centre, extra) if level_bands else Color(0, 0, 0, 0)
 				var at := StreetDetailBatches.add(large[node_name], xf, bounds.boxes[index], centre, extra, custom)
 				placed_at["shadow|%s|%s|%d" % [key, cell, index]] = [node_name, at]
 	var multimeshes := 0
 	var node_names: Array = large.keys()
 	node_names.sort()
 	for node_name: String in node_names:
-		var instance := StreetDetailBatches.node(large[node_name], node_name, true)
+		var instance := StreetDetailBatches.node(large[node_name], node_name)
 		instance.layers = RENDER_WORLD_VISIBLE
 		instance.set_meta("street_detail_layer", "vegetation")
 		root.add_child(instance)
@@ -465,7 +465,7 @@ func _build_hedges(root: Node3D, kit: KIT, hedges: Dictionary, bands: Dictionary
 				if not bands.is_empty():
 					arrays[Mesh.ARRAY_CUSTOM0] = arrays_of.centres
 					flags = Mesh.ARRAY_CUSTOM_RGB_FLOAT << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT
-					material = StreetDetailBatches.band_material(material as ShaderMaterial, float(batch.begin), float(batch.end), bands, Vector3.INF, true)
+					material = StreetDetailBatches.band_material(material as ShaderMaterial, float(batch.begin), float(batch.end), bands, true)
 				mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {}, flags)
 				mesh.surface_set_material(mesh.get_surface_count() - 1, material)
 			mesh.custom_aabb = batch.box
