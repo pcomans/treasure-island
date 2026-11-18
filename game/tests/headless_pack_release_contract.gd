@@ -33,13 +33,15 @@ func _run() -> void:
 		if ResourceLoader.has_cached(path):
 			_finish("%s is in Godot's cache before the run loads it." % path)
 			return
-	var texture: Resource = load(HELD)
-	var texture_id := texture.get_instance_id() if texture != null else 0
-	if texture == null:
+	# Loaded, listed and held inside a function of its own, so nothing of the run's own
+	# (a GDScript temporary included) holds the texture once it returns.
+	var listed := _collect_holding(HELD)
+	var release: PACK_RELEASE = listed[0]
+	var drop: PackedStringArray = listed[1]
+	var texture_id: int = listed[2]
+	if texture_id == 0:
 		_finish("%s does not load." % HELD)
 		return
-	var release := PACK_RELEASE.new()
-	var drop := release.collect()
 	var expected := _dest_files(HELD)
 	if expected.size() < 2:
 		_finish("%s.import names %d imported files, not one per texture format." % [HELD, expected.size()])
@@ -56,30 +58,48 @@ func _run() -> void:
 		if not file.begins_with(PACK_RELEASE.IMPORTED):
 			_finish("collect() listed %s, which is not an imported file." % file)
 			return
-	if not release.held.any(func(held: Resource) -> bool: return held.get_instance_id() == texture_id):
+	var held: Array[Resource] = release.held
+	if not held.any(func(resource: Resource) -> bool: return resource.get_instance_id() == texture_id):
 		_finish("collect() listed %s's files but does not hold it." % HELD)
 		return
-	if release.held.any(func(held: Resource) -> bool: return held.resource_path == UNLOADED):
+	if held.any(func(resource: Resource) -> bool: return resource.resource_path == UNLOADED):
 		_finish("collect() holds %s, which was never loaded." % UNLOADED)
 		return
-	texture = null
 	if not ResourceLoader.has_cached(HELD) or load(HELD).get_instance_id() != texture_id:
 		_finish("%s, held by collect() and let go elsewhere, left Godot's cache, so a later load would read its released files." % HELD)
 		return
-	var other: Resource = load(LET_GO)
-	if other == null:
-		_finish("%s does not load." % LET_GO)
+	if _cached_after_let_go(LET_GO):
+		_finish("%s, loaded and let go without a hold, is still in Godot's cache: the check above would pass without the hold." % LET_GO)
 		return
-	other = null
-	if ResourceLoader.has_cached(LET_GO):
-		_finish("%s, let go without a hold, is still in Godot's cache: the check above would pass without the hold." % LET_GO)
-		return
-	var answer := release.release([])
+	var none: Array[String] = []
+	var answer := release.release(none)
 	if answer != "not the web":
 		_finish("release() off the web answered %s, not \"not the web\"." % answer)
 		return
-	print("PASS: collect() lists the %d imported files of the %d imported resources Godot holds (both of %s's) and holds them, so a later load() comes from the cache; nothing unloaded or outside res://.godot/imported/; release() asks nothing off the web" % [drop.size(), release.held.size(), HELD.get_file()])
+	print("PASS: collect() lists the %d imported files of the %d imported resources Godot holds (both of %s's) and holds them, so a later load() comes from the cache; nothing unloaded or outside res://.godot/imported/; release() asks nothing off the web" % [drop.size(), held.size(), HELD.get_file()])
 	_finish("")
+
+
+## [the release, what its collect() listed, PATH's instance id (0 if it did not load)]:
+## PATH loaded and held here only while collect() runs.
+func _collect_holding(path: String) -> Array:
+	var resource: Resource = load(path)
+	var release := PACK_RELEASE.new()
+	var drop := release.collect()
+	return [release, drop, resource.get_instance_id() if resource != null else 0]
+
+
+## Whether PATH is still in Godot's cache once loaded and let go (by a function of its
+## own, whose temporaries go with it).
+func _cached_after_let_go(path: String) -> bool:
+	_load_and_let_go(path)
+	return ResourceLoader.has_cached(path)
+
+
+func _load_and_let_go(path: String) -> void:
+	var resource: Resource = load(path)
+	if resource == null:
+		push_error("FAIL: %s does not load." % path)
 
 
 ## The imported files a source project's .import file lists for PATH ([deps] dest_files).
