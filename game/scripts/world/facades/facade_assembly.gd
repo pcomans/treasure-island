@@ -34,8 +34,11 @@ extends RefCounted
 ## unit spec (defaults in UNIT): pane_d (pane face depth), member_d (members stand this
 ## far in front of the pane), frame_w, mullion_w, transom_w, split (mullion position as a
 ## width fraction, used when the unit is wider than split_min_w), divisions (n equal
-## lights; overrides split when > 1), transoms (bar heights above the unit bottom),
-## lower_field (opaque field height above the bottom, 0 none, closed by a transom bar).
+## lights; overrides split when > 1), pane_w (opt-in: when > 0, as many equal lights
+## as the unit's width over pane_w, rounded, in place of divisions, so the wide and
+## narrow openings of one spec keep similar panes; one light falls back to split),
+## transoms (bar heights above the unit bottom), lower_field (opaque field height above
+## the bottom, 0 none, closed by a transom bar).
 
 const MIN_DEPTH_M := 0.005
 const PANE_DEPTH_M := 0.01
@@ -44,7 +47,7 @@ const PANE_DEPTH_M := 0.01
 const STACK_SURROUND_W_M := 0.12
 const UNIT := {
 	"pane_d": -0.15, "member_d": 0.02, "frame_w": 0.07, "mullion_w": 0.084, "transom_w": 0.07,
-	"split": 0.0, "split_min_w": 1.4, "divisions": 1, "transoms": [], "lower_field": 0.0,
+	"split": 0.0, "split_min_w": 1.4, "divisions": 1, "pane_w": 0.0, "transoms": [], "lower_field": 0.0,
 }
 const STACK := {"spandrel_d": 0.015, "surround_w": 0.0, "surround_d": 0.03}
 const GROUP := {"surround_w": 0.22, "surround_d": 0.06, "spandrel_d": 0.08}
@@ -62,6 +65,8 @@ static func unit(u0: float, u1: float, y0: float, y1: float, spec: Dictionary = 
 	var s := _spec(UNIT, spec)
 	if int(s.divisions) < 1:
 		errors.append("unit: divisions must be at least 1")
+	if not float(s.pane_w) >= 0.0:
+		errors.append("unit: pane_w must not be negative")
 	if not errors.is_empty():
 		return _result([], errors)
 	var out := []
@@ -81,6 +86,8 @@ static func unit(u0: float, u1: float, y0: float, y1: float, spec: Dictionary = 
 		_rect(out, s, "transom", u0, u1, y0 + t - tw * 0.5, y0 + t + tw * 0.5, pane, front)
 	var mw := float(s.mullion_w)
 	var divisions := int(s.divisions)
+	if float(s.pane_w) > 0.0:
+		divisions = maxi(1, roundi((u1 - u0) / float(s.pane_w)))
 	if divisions > 1:
 		for k in range(1, divisions):
 			var mu := lerpf(u0, u1, float(k) / float(divisions))
