@@ -12,7 +12,8 @@
 # build/web is a static site: serve it locally or deploy it to Vercel. Godot's web platform only has the Compatibility
 # renderer (WebGL 2). Before handing it over this
 #   1. exports the single-threaded web build, which needs no special headers, and
-#      lets Godot's file system keep the page's pack buffer (game/web/shell.html),
+#      lets Godot's file system keep the page's pack buffer (game/web/shell.html)
+#      and the page reach that file, to free what the game no longer reads of it,
 #   2. checks the data pack contains only game files (no reference photos,
 #      research or evidence),
 #   3. writes the web app manifest and its icons for a phone's home screen,
@@ -166,9 +167,11 @@ EOF
 # keeps a preloaded file's buffer instead of copying it (Emscripten's canOwn).
 # GodotFS.copy_to_fs's FS.writeFile copied the 160 MB pack, and the page held two or
 # three copies of it a few seconds into loading (iphone-memory-20261116). The page
-# (game/web/shell.html, tiBuildFiles) reads the pack into one buffer and never
-# touches it again; whatever else calls copy_to_fs must not either. It must apply
-# exactly once, or the build stops: check it again with a new Godot.
+# (game/web/shell.html, tiBuildFiles) reads the pack into one buffer and never writes
+# to it again; once play is ready it gives the engine's file new contents and only then
+# detaches that buffer (tiPackRelease, with the second change below). Whatever else
+# calls copy_to_fs must not write to its buffer afterwards. It must apply exactly once,
+# or the build stops: check it again with a new Godot.
 python3 -I - "${out}/${name}.js" <<'EOF'
 import os, shutil, sys, tempfile
 path = sys.argv[1]
@@ -178,6 +181,31 @@ old = "FS.writeFile(path,new Uint8Array(buffer))}"
 if text.count(old) != 1:
     sys.exit("FAIL: the engine script %s has %d of %r, not 1; Godot's loader changed" % (path, text.count(old), old))
 text = text.replace(old, "FS.writeFile(path,new Uint8Array(buffer),{canOwn:true})}")
+handle, temporary = tempfile.mkstemp(dir=os.path.dirname(path))
+with os.fdopen(handle, "w", encoding="utf-8") as out:
+    out.write(text)
+shutil.copymode(path, temporary)
+os.replace(temporary, path)
+EOF
+
+# A second change to Godot's loader: the page can reach a file in the engine's file
+# system, Module.tiFileNode(path) giving Emscripten's MEMFS node (FS itself stays
+# unexported; the Module is the page's own Engine's, on no global). Once play is ready
+# the game names the pack's files it never reads again (game/scripts/web/pack_release.gd),
+# and the page uses the node to check that the file's contents are its own pack buffer,
+# gives the file new contents that keep every other byte, and frees the buffer, about
+# 160 MB of a phone's memory (game/web/shell.html, tiPackRelease). Without it the page
+# keeps the whole pack, as before. It must apply exactly once, or the build stops: check
+# it again with a new Godot; tools/check-web-live.sh checks the deployed engine script.
+python3 -I - "${out}/${name}.js" <<'EOF'
+import os, shutil, sys, tempfile
+path = sys.argv[1]
+with open(path, encoding="utf-8") as handle:
+    text = handle.read()
+old = 'Module["copyToFS"]=GodotFS.copy_to_fs;'
+if text.count(old) != 1:
+    sys.exit("FAIL: the engine script %s has %d of %r, not 1; Godot's loader changed" % (path, text.count(old), old))
+text = text.replace(old, old + 'Module["tiFileNode"]=function(path){return FS.lookupPath(path).node};')
 handle, temporary = tempfile.mkstemp(dir=os.path.dirname(path))
 with os.fdopen(handle, "w", encoding="utf-8") as out:
     out.write(text)

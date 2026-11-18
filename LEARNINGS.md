@@ -1471,3 +1471,7 @@ Godot's web engine refuses to start on a page that is not a secure context: over
 ## Read back what a phone profile really gives before measuring with it
 
 Playwright's WebKit on Linux (WebKitGTK) reports `navigator.maxTouchPoints` 0 even with touch emulated, so the game took the phone profile for a mouse ("Click to play", no touch controls) and the first run's tap did nothing (`web-drive-trace-20261117`, R01). The device scale did hold: at 874 x 402 CSS px and 3x the canvas, its WebGL drawing buffer and Godot's window were all 2622 x 1206, Godot's 3D drawn at 0.67 of that. Before a phone-like run counts, read back the touch points, `devicePixelRatio`, the canvas and drawing-buffer sizes and the game's own window and 3D scale, and label any stand-in that fixes one (the rig defines `maxTouchPoints` 5 for WebKit's phone profiles, in an init script that says so).
+
+## Let a resource go in a function of its own before checking that it left Godot's cache
+
+The pack release contract's control (`game/tests/headless_pack_release_contract.gd`, 2026-11-18, `web-memory-20261118/pack` run G2) loaded a texture in the test's run function, set its variable to null and still found the texture in Godot's cache (`ResourceLoader.has_cached`): the load's result also sat in a GDScript temporary of that function, which kept a reference until the function returned. Load and let go inside a helper function, and check the cache after it returns; a check that something stays cached only because it is held needs that control, or it passes without the hold.

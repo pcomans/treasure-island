@@ -20,7 +20,9 @@
 # .wasm and the .pck). Where COMMIT's own tools/build-web.sh patches the engine
 # script so that sound plays share each take's buffer (Godot 4.7.2 copies the take
 # for every play), the engine script served must carry the patch; a build from an
-# older commit, such as a rollback, skips that check. COMMIT must be in this
+# older commit, such as a rollback, skips that check. Likewise, where its build
+# patches the engine script so the page can free the game data it no longer reads
+# (tiFileNode), the engine script served must carry that. COMMIT must be in this
 # checkout to tell. Then in a browser (tools/browser: a fresh profile on a
 # private Weston, so run it in an engine slot like any other GPU work), the page
 # with ?profile_startup=1 must reach the start prompt within 8 minutes: the world
@@ -62,6 +64,17 @@ engine_patch_of() {
   esac
 }
 engine_patch="$(engine_patch_of "${commit}")"
+# Whether COMMIT's own build lets the page reach the pack's file in the engine's file
+# system, to free what the game no longer reads of it (tiFileNode): yes or no as above.
+pack_patch_of() {
+  local full
+  full="$(git -C "${root}" rev-parse --verify --quiet "$1^{commit}")" || { echo unknown; return; }
+  case "$(git -C "${root}" show "${full}:tools/build-web.sh" 2>/dev/null)" in
+    *'Module["tiFileNode"]='*) echo yes ;;
+    *) echo no ;;
+  esac
+}
+pack_patch="$(pack_patch_of "${commit}")"
 work="$(mktemp -d)"
 # The running tools/browser, if any: stopped (it closes its sessions and Weston)
 # however this ends.
@@ -157,6 +170,16 @@ sys.exit(text.count("getAudioBuffer(){return this._audioBuffer}") != 1
     echo "CHECK ${url}${name} shares each sound take's buffer among its plays"
   else
     fail "${url}${name} is not tools/build-web.sh's engine script: its sound plays do not share each take's buffer"
+  fi
+  # The page's way to the pack's file, where COMMIT's build adds it.
+  if [ "${status}" = 200 ] && [ "${pack_patch}" = yes ]; then
+    if python3 -I -c 'import sys
+text = open(sys.argv[1], encoding="utf-8").read()
+sys.exit(text.count("Module[\"tiFileNode\"]=function(path){return FS.lookupPath(path).node};") != 1)' "${dir}/engine.js"; then
+      echo "CHECK ${url}${name} lets the page free the game data it no longer reads"
+    else
+      fail "${url}${name} is not tools/build-web.sh's engine script: the page cannot reach the pack's file to free it"
+    fi
   fi
 }
 
