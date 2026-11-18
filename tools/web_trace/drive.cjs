@@ -155,7 +155,12 @@ async function main() {
     await sleep(pending.length ? 2000 : 10000);
     if (pending.length) {
       const t = await js('trace_s', "(() => { const l = window.__tiTrace && window.__tiTrace.log(); const r = l && l.rows[l.rows.length - 1]; return r ? r[0] / 1000 : -1; })()", 30000);
-      if (typeof t === 'number' && t >= pending[0]) await measure(`t${pending.shift()}`, false);
+      if (typeof t === 'number' && t >= pending[0]) {
+        const label = `t${pending.shift()}`;
+        await measure(label, false);
+        // A picture of the drive at each mark, to see missing or broken drawing beside the numbers.
+        await shot(label);
+      }
     }
     if (crashed) throw new Error('crashed during the drive');
     const s = await js('state', 'JSON.stringify(window.__tiTrace.state())', 60000);

@@ -306,7 +306,11 @@ OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules
 - `FOOTPRINT_MARKS=30,60,90` records both processes' footprints by category beside the page's
   last memory row at the start prompt, at those trace seconds and at the end (`footprints.json`;
   `vmmap -summary` of both and `heap -s` of the GPU process at the prompt and the end);
-  `HOLD_S=N` first leaves the page at its prompt N s and measures again.
+  `HOLD_S=N` first leaves the page at its prompt N s and measures again. Each trace-second mark
+  also saves a screenshot (`t30.png`, ...), to see missing or broken drawing beside the numbers.
+- `python3 -I tools/web_trace/serve.py <port> <folder>` serves a build on 127.0.0.1 and retries a
+  send the Mac refuses with `Errno 55` (No buffer space available), where `http.server` drops the
+  file and the page stops loading.
 - `gl_buffers.cjs` also takes cases `mesh:N:V:LAYOUT`: N meshes of V vertices in Godot's
   Compatibility layout (positions, then normals read as 4 shorts with a stride of 4 without
   tangents, `normal`, or 8 with them, `tangent`; UVs; 16-bit indices; a vertex array each),
