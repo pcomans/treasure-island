@@ -8,7 +8,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 ## Build 2270 (2026-11-18)
 
-- On the web, the game no longer freezes for a moment the first time something comes into view: its graphics are prepared during loading, which takes a few seconds longer.
+- On the web, the game no longer freezes for a moment the first time something comes into view: its graphics are prepared during loading, which takes several seconds longer.
 
 ## Build 2221 (2026-11-17)
 
