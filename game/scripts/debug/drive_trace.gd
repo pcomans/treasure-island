@@ -756,6 +756,14 @@ func _mesh_census() -> Dictionary:
 					_census_add_buffer(group, totals, "skin", vertices * skin)
 				if format & Mesh.ARRAY_FORMAT_INDEX:
 					_census_add_buffer(group, totals, "index", array_mesh.surface_get_array_index_len(surface) * (2 if vertices <= 65536 else 4))
+				# Normals without tangents, uncompressed: GLES3 reads them as 4 shorts (8 bytes)
+				# with a stride of 4 (mesh_storage.cpp), which ANGLE's Metal backend cannot take
+				# (VertexArrayMtl.mm: stride below the format's size), so it makes a converted
+				# copy of them, 8 bytes a vertex, in a buffer of its own, at the first draw.
+				if format & Mesh.ARRAY_FORMAT_NORMAL and not format & Mesh.ARRAY_FORMAT_TANGENT and not format & Mesh.ARRAY_FLAG_COMPRESS_ATTRIBUTES:
+					for target: Dictionary in [group, totals]:
+						target.normals_converted += 1
+						target.normals_converted_bytes += vertices * 8
 		if node is MeshInstance3D:
 			for surface in (node as MeshInstance3D).get_surface_override_material_count():
 				var material := (node as MeshInstance3D).get_surface_override_material(surface)
@@ -789,7 +797,7 @@ static func _census_group() -> Dictionary:
 		bins.resize(CENSUS_BINS.size() + 1)
 		bins.fill(0)
 		by_kind[kind] = bins
-	return {"nodes": 0, "surfaces": 0, "materials": 0, "buffers": 0, "bytes": 0, "paged": 0, "by_kind": by_kind}
+	return {"nodes": 0, "surfaces": 0, "materials": 0, "buffers": 0, "bytes": 0, "paged": 0, "normals_converted": 0, "normals_converted_bytes": 0, "by_kind": by_kind}
 
 
 static func _census_add_buffer(group: Dictionary, totals: Dictionary, kind: String, bytes: int) -> void:

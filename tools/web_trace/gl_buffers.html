@@ -53,6 +53,62 @@ window.makeBuffers = (n, size) => {
 	document.getElementById('out').textContent = JSON.stringify(result);
 	return result;
 };
+// Godot 4.7.2's Compatibility renderer's surface layout (drivers/gles3/storage/mesh_storage.cpp,
+// _mesh_surface_generate_version_for_input_mask): one vertex buffer of positions (3 floats,
+// stride 12) followed by normals as R16G16B16A16_UNORM read with a stride of 4 when the surface has
+// no tangents (layout 'normal') or 8 with tangents (layout 'tangent'); an attribute buffer of UVs
+// (2 floats); a 16-bit index buffer; a vertex array object each. makeMeshes(n, vertices, layout)
+// makes them; drawMeshes() draws each once and waits for the GPU.
+const meshes = [];
+const meshProgram = gl.createProgram();
+gl.attachShader(meshProgram, compile(gl.VERTEX_SHADER, '#version 300 es\nlayout(location = 0) in vec3 p;\nlayout(location = 1) in vec4 n;\nlayout(location = 4) in vec2 uv;\nout vec4 v;\nvoid main() { v = n + vec4(uv, 0.0, 0.0); gl_Position = vec4(p * 0.0, 1.0); gl_PointSize = 1.0; }'));
+gl.attachShader(meshProgram, compile(gl.FRAGMENT_SHADER, '#version 300 es\nprecision mediump float;\nin vec4 v;\nout vec4 c;\nvoid main() { c = v; }'));
+gl.linkProgram(meshProgram);
+window.makeMeshes = (n, vertices, layout) => {
+	const began = performance.now();
+	const normalStride = layout === 'tangent' ? 8 : 4;
+	const vertexData = new Uint8Array(vertices * (12 + normalStride));
+	const uvData = new Float32Array(vertices * 2);
+	const indexData = new Uint16Array(vertices);
+	for (let i = 0; i < vertices; i += 1) indexData[i] = i;
+	for (let i = 0; i < n; i += 1) {
+		const vao = gl.createVertexArray();
+		gl.bindVertexArray(vao);
+		const vertex = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, vertex);
+		gl.bufferData(gl.ARRAY_BUFFER, vertexData, gl.STATIC_DRAW);
+		gl.vertexAttribPointer(0, 3, gl.FLOAT, false, 12, 0);
+		gl.enableVertexAttribArray(0);
+		gl.vertexAttribPointer(1, 4, gl.UNSIGNED_SHORT, true, normalStride, 12 * vertices);
+		gl.enableVertexAttribArray(1);
+		const attribute = gl.createBuffer();
+		gl.bindBuffer(gl.ARRAY_BUFFER, attribute);
+		gl.bufferData(gl.ARRAY_BUFFER, uvData, gl.STATIC_DRAW);
+		gl.vertexAttribPointer(4, 2, gl.FLOAT, false, 8, 0);
+		gl.enableVertexAttribArray(4);
+		const index = gl.createBuffer();
+		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, index);
+		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indexData, gl.STATIC_DRAW);
+		gl.bindVertexArray(null);
+		meshes.push(vao);
+	}
+	gl.finish();
+	const result = {meshes: meshes.length, vertices, layout, make_ms: Math.round(performance.now() - began), error: gl.getError()};
+	document.getElementById('out').textContent = JSON.stringify(result);
+	return result;
+};
+window.drawMeshes = () => {
+	const began = performance.now();
+	gl.useProgram(meshProgram);
+	for (const vao of meshes) {
+		gl.bindVertexArray(vao);
+		gl.drawElements(gl.POINTS, 3, gl.UNSIGNED_SHORT, 0);
+	}
+	gl.bindVertexArray(null);
+	gl.finish();
+	gl.useProgram(program);
+	return {drawn: meshes.length, draw_ms: Math.round(performance.now() - began), error: gl.getError()};
+};
 window.ready = () => {
 	gl.clear(gl.COLOR_BUFFER_BIT);
 	gl.finish();

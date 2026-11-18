@@ -12,7 +12,10 @@
 // page again in the same browser and save what the unfinished-run panel shows (previous-panel.txt) and its Download
 // full log (previous-log.json), as after an iPhone's reload. FOOTPRINT_AT_PROMPT=1 (a Mac, Playwright's own WebKit):
 // at the start prompt, record the web process's footprint (footprint, vmmap -summary; no sudo) beside the page's
-// memory inventory (footprint.txt, vmmap.txt, footprint.json), then stop without playing.
+// memory inventory (footprint.txt, vmmap.txt, footprint.json), then stop without playing. FOOTPRINT_MARKS=30,60,90 (a
+// Mac): the web and GPU processes' footprints by category, beside the page's last memory row, at the start prompt,
+// at each of those trace seconds and at the end (footprints.json; vmmap -summary and heap -s of the GPU process at
+// the prompt and the end); HOLD_S=N first leaves the page at its prompt N s and measures again.
 'use strict';
 const fs = require('fs');
 const pw = require(process.env.PW_MODULE || 'playwright');
@@ -34,7 +37,7 @@ const PROFILES = {
   iphone: {viewport: {width: 874, height: 292}, deviceScaleFactor: 3, hasTouch: true, isMobile: true, userAgent: PHONE_UA},
   desktop: {viewport: {width: 1440, height: 900}, deviceScaleFactor: 1, hasTouch: false, isMobile: false},
 };
-let page = null; let browser = null; let crashed = false;
+let page = null; let browser = null; let crashed = false; let loadFailed = null;
 
 const evalTimed = async (expr, ms = 60000) => {
   let timer;
@@ -86,7 +89,11 @@ async function main() {
   }
   page = await context.newPage();
   page.on('console', (m) => fs.appendFileSync(OUT + '/console.txt', `${now().slice(11, 23)} [${m.type()}] ${m.text()}\n`));
-  page.on('pageerror', (e) => fs.appendFileSync(OUT + '/console.txt', `${now().slice(11, 23)} [pageerror] ${String(e).slice(0, 600)}\n`));
+  page.on('pageerror', (e) => {
+    fs.appendFileSync(OUT + '/console.txt', `${now().slice(11, 23)} [pageerror] ${String(e).slice(0, 600)}\n`);
+    // A file that failed to load (the local server dropped it): the page would wait for good, so stop.
+    if (!loadFailed && /Load failed|Failed to fetch/.test(String(e))) loadFailed = String(e).slice(0, 300);
+  });
   page.on('crash', () => { crashed = true; log('PAGE_CRASH', now()); });
   let cdp = null;
   if (BROWSER === 'chrome') cdp = await context.newCDPSession(page);
@@ -96,6 +103,7 @@ async function main() {
   const t0 = Date.now(); let r = null; let last = '';
   for (;;) {
     if (crashed) throw new Error('crashed while loading');
+    if (loadFailed) throw new Error('a file failed to load: ' + loadFailed);
     try { r = JSON.parse(await evalTimed(READBACK, 20000)); } catch (e) { r = null; }
     const line = r ? `overlay=${r.overlay} ready=${r.game && r.game.ready} prompt=${r.game && r.game.prompt}` : 'no readback';
     if (line !== last) { log('LOAD', ((Date.now() - t0) / 1000).toFixed(0) + 's', line); last = line; }
@@ -106,6 +114,13 @@ async function main() {
   log('PROMPT', ((Date.now() - t0) / 1000).toFixed(0) + 's', JSON.stringify(r));
   fs.writeFileSync(OUT + '/readback-prompt.json', JSON.stringify(r, null, 1));
   if (process.env.FOOTPRINT_AT_PROMPT === '1') return await footprintAtPrompt();
+  const MARKS = (process.env.FOOTPRINT_MARKS || '').split(',').filter(Boolean).map(Number);
+  if (MARKS.length) {
+    await sleep(5000);
+    await measure('prompt', true);
+    const hold = +(process.env.HOLD_S || 0);
+    if (hold > 0) { await sleep(hold * 1000); await measure(`prompt+${hold}s`, true); }
+  }
   await sleep(1500);
   await shot('prompt');
   if (cdp && THROTTLE > 1) {
@@ -135,8 +150,13 @@ async function main() {
   const KILL_AT_S = +(process.env.KILL_AT_S || 0);
   if (KILL_AT_S > 0) return await killAndReopen(context, cdp, KILL_AT_S);
   const t1 = Date.now(); let state = null;
+  const pending = MARKS.slice();
   for (;;) {
-    await sleep(10000);
+    await sleep(pending.length ? 2000 : 10000);
+    if (pending.length) {
+      const t = await js('trace_s', "(() => { const l = window.__tiTrace && window.__tiTrace.log(); const r = l && l.rows[l.rows.length - 1]; return r ? r[0] / 1000 : -1; })()", 30000);
+      if (typeof t === 'number' && t >= pending[0]) await measure(`t${pending.shift()}`, false);
+    }
     if (crashed) throw new Error('crashed during the drive');
     const s = await js('state', 'JSON.stringify(window.__tiTrace.state())', 60000);
     try { state = JSON.parse(s); } catch (e) { state = null; }
@@ -145,6 +165,7 @@ async function main() {
     if (Date.now() - t1 > 40 * 60000) throw new Error('the drive did not end in 40 min');
   }
   log('END', JSON.stringify(state.end));
+  if (MARKS.length) await measure('end', true);
   if (cdp && THROTTLE > 1) await cdp.send('Emulation.setCPUThrottlingRate', {rate: 1});
   await sleep(3000);
   fs.writeFileSync(OUT + '/readback-end.json', await js('readback', READBACK));
@@ -205,6 +226,33 @@ async function footprintAtPrompt() {
   fs.writeFileSync(OUT + '/footprint.json', JSON.stringify(summary, null, 1));
   log('FOOTPRINT', JSON.stringify({...summary, inventory: undefined}));
   return 0;
+}
+
+// The footprints by category of this session's web and GPU processes beside the page's last memory row (MEMORY
+// columns), kept in OUT/footprints.json; deep: vmmap -summary and heap -s of both too, in OUT/<label>-*.txt.
+const footprints = [];
+async function measure(label, deep) {
+  const {execFileSync} = require('child_process');
+  const found = macWebProcesses();
+  const procs = {web: found[0], gpu: found.gpu[0]};
+  const run = (cmd, args) => { try { return execFileSync(cmd, args, {encoding: 'utf8', timeout: 300000, maxBuffer: 256 * 1048576}); } catch (e) { return 'FAILED ' + cmd + ': ' + String(e.stderr || e.message).slice(0, 500); } };
+  const entry = {label, at: now()};
+  for (const [name, proc] of Object.entries(procs)) {
+    if (!proc) continue;
+    const text = run('footprint', ['-f', 'bytes', String(proc.pid)]);
+    const categories = {};
+    for (const m of text.matchAll(/^\s*(\d+) B\s+\d+ B\s+\d+ B\s+(\d+)\s+(.+?)\s*$/gm)) categories[m[3]] = [+m[1], +m[2]];
+    entry[name] = {pid: proc.pid, total: +((text.match(/Footprint:\s*(\d+) B/) || [0, 0])[1]), categories};
+    if (deep) {
+      fs.writeFileSync(`${OUT}/${label}-${name}-vmmap.txt`, run('vmmap', ['-summary', String(proc.pid)]));
+      if (name === 'gpu') fs.writeFileSync(`${OUT}/${label}-${name}-heap.txt`, run('heap', ['-s', '-q', String(proc.pid)]));
+    }
+  }
+  const row = await js('memory_row', "(() => { const l = window.__tiTrace && window.__tiTrace.log(); return JSON.stringify({row: l && l.memory[l.memory.length - 1], columns: l && l.page.memory_columns, t: l && l.rows.length ? l.rows[l.rows.length - 1][0] / 1000 : null}); })()");
+  try { Object.assign(entry, JSON.parse(row)); } catch (e) { entry.page = String(row).slice(0, 200); }
+  footprints.push(entry);
+  fs.writeFileSync(OUT + '/footprints.json', JSON.stringify(footprints, null, 1));
+  log('MEASURED', label, 'web', entry.web && Math.round(entry.web.total / 1e6), 'gpu', entry.gpu && Math.round(entry.gpu.total / 1e6), 'MB');
 }
 
 // The page's process killed once the trace is KILL_AT_S s in, as iOS kills a page over its memory limit; then the

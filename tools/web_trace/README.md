@@ -167,7 +167,10 @@ each such buffer's size (vertex, attribute and skin strides from `RenderingServe
 size, instance count) and gives, per group (the path below main, three names deep, a mesh or
 material counted in the first group using it), the buffers of each kind by size, their bytes
 and bytes in 16 KiB pages, and the materials. LOD index buffers are not counted (no cheap
-count); surfaces of meshes other than ArrayMesh are counted as of unknown format.
+count); surfaces of meshes other than ArrayMesh are counted as of unknown format. `normals_converted` counts the surfaces whose
+normals ANGLE's Metal backend must copy at their first draw (uncompressed, without tangents:
+GLES3 reads them as 4 shorts with a stride of 4, below the format's 8 bytes, which
+`VertexArrayMtl.mm` converts), and `normals_converted_bytes` the copies' size (8 bytes a vertex).
 
 **Engine counters (`drive_trace.gd`, each frame).** Besides texture, buffer and video memory,
 draw calls, resources and nodes, the frame record has `static_b` and `static_max_b`
@@ -300,6 +303,16 @@ OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules
   20000 x 4 KiB, 20000 x 16 KiB, 4 x 1 MiB and 43000 x 5 KiB) it opens the bare page
   `gl_buffers.html` in a fresh context, makes the buffers, draws once from each, and records
   each process's footprint before and after by category (`gl-buffers.json`). Not part of the game.
+- `FOOTPRINT_MARKS=30,60,90` records both processes' footprints by category beside the page's
+  last memory row at the start prompt, at those trace seconds and at the end (`footprints.json`;
+  `vmmap -summary` of both and `heap -s` of the GPU process at the prompt and the end);
+  `HOLD_S=N` first leaves the page at its prompt N s and measures again.
+- `gl_buffers.cjs` also takes cases `mesh:N:V:LAYOUT`: N meshes of V vertices in Godot's
+  Compatibility layout (positions, then normals read as 4 shorts with a stride of 4 without
+  tangents, `normal`, or 8 with them, `tangent`; UVs; 16-bit indices; a vertex array each),
+  measured once made and again once each is drawn once.
+- The driver stops at once when a file of the page fails to load (the local server can drop one
+  with `Errno 55`); run it again.
 - There it kills the biggest web process of Playwright's WebKit, and only while that WebKit's
   browser is the one running from its folder.
 - Building on a Mac: set `GODOT_BIN`; `tools/build-web.sh` needs a `timeout` command on the

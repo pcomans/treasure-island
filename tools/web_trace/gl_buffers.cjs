@@ -4,7 +4,10 @@
 // makes the buffers (each drawn from once, then gl.finish), waits, records again, and prints the difference by
 // category. Not part of the game.
 //   OUT=<dir> PW_MODULE=<node_modules>/playwright node tools/web_trace/gl_buffers.cjs [N:S ...]
-// Default cases: 20000:200 20000:4096 20000:16384 4:1048576 43000:5120. Writes OUT/gl-buffers.json.
+// Default cases: 20000:200 20000:4096 20000:16384 4:1048576 43000:5120. A case mesh:N:V:LAYOUT instead makes N meshes
+// of V vertices in Godot's Compatibility layout (gl_buffers.html makeMeshes: LAYOUT normal, normals without tangents,
+// read with a stride of 4; tangent, with a stride of 8), records the footprint once they are made and again once
+// each has been drawn once. Writes OUT/gl-buffers.json.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -14,7 +17,7 @@ const pw = require(process.env.PW_MODULE || 'playwright');
 const OUT = process.env.OUT;
 if (!OUT || process.platform !== 'darwin') { console.error('usage: OUT=<dir> on a Mac'); process.exit(2); }
 const CASES = (process.argv.slice(2).length ? process.argv.slice(2) : ['20000:200', '20000:4096', '20000:16384', '4:1048576', '43000:5120'])
-  .map((c) => c.split(':').map(Number));
+  .map((c) => (c.startsWith('mesh:') ? c.split(':') : c.split(':').map(Number)));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const log = (...a) => { const line = a.join(' '); console.log(line); fs.appendFileSync(OUT + '/progress.txt', line + '\n'); };
 
@@ -54,19 +57,34 @@ async function main() {
   const browser = await pw.webkit.launch({headless: false});
   const results = [];
   try {
-    for (const [n, size] of CASES) {
+    for (const c of CASES) {
       const context = await browser.newContext({viewport: {width: 400, height: 300}});
       const page = await context.newPage();
       await page.goto('file://' + path.join(__dirname, 'gl_buffers.html'));
       if (!(await page.evaluate('window.ready()'))) throw new Error('no WebGL2');
       await sleep(2000);
       const procs = processes();
-      const before = {web: footprint(procs.web.pid), gpu: procs.gpu ? footprint(procs.gpu.pid) : null};
-      const made = await page.evaluate(`window.makeBuffers(${n}, ${size})`);
-      await sleep(3000);
-      const after = {web: footprint(procs.web.pid), gpu: procs.gpu ? footprint(procs.gpu.pid) : null};
-      const result = {buffers: n, size, bytes: n * size, made, web_pid: procs.web.pid, gpu_pid: procs.gpu ? procs.gpu.pid : null,
-        web: diff(before.web, after.web), gpu: before.gpu ? diff(before.gpu, after.gpu) : null};
+      const measure = () => ({web: footprint(procs.web.pid), gpu: procs.gpu ? footprint(procs.gpu.pid) : null});
+      const change = (a, b) => ({web: diff(a.web, b.web), gpu: a.gpu ? diff(a.gpu, b.gpu) : null});
+      const before = measure();
+      let result;
+      if (c[0] === 'mesh') {
+        const [, count, vertices, layout] = c;
+        const made = await page.evaluate(`window.makeMeshes(${+count}, ${+vertices}, ${JSON.stringify(layout)})`);
+        await sleep(3000);
+        const afterMade = measure();
+        const drawn = await page.evaluate('window.drawMeshes()');
+        await sleep(3000);
+        const afterDrawn = measure();
+        result = {meshes: +count, vertices: +vertices, layout, made, drawn, web_pid: procs.web.pid, gpu_pid: procs.gpu ? procs.gpu.pid : null,
+          made_change: change(before, afterMade), drawn_change: change(afterMade, afterDrawn)};
+      } else {
+        const [n, size] = c;
+        const made = await page.evaluate(`window.makeBuffers(${n}, ${size})`);
+        await sleep(3000);
+        const after = measure();
+        result = {buffers: n, size, bytes: n * size, made, web_pid: procs.web.pid, gpu_pid: procs.gpu ? procs.gpu.pid : null, ...change(before, after)};
+      }
       results.push(result);
       log('CASE', JSON.stringify(result));
       await context.close();
