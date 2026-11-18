@@ -7,22 +7,25 @@ extends RefCounted
 ## Every helper returns {"ok": bool, "boxes": Array, "errors": Array}. A box is
 ## {"role": String, "u0", "u1", "y0", "y1", "d0", "d1": float} in a wall's own frame:
 ## u along the wall (metres), y height (the producer's metres) and d out from the wall
-## plane (0 on the wall, positive outward, d0 < d1). Producers map each role to a
-## material, emit the boxes and own their collision. The same spec always gives the
-## same boxes: placement varies only with the spec's "seed".
+## plane (0 on the wall, positive outward, d0 < d1). A box with "sides" is round: an
+## upright cylinder of that many sides inscribed in its u/d square. Producers map each
+## role to a material, emit the boxes and own their collision. The same spec always
+## gives the same boxes: placement varies only with the spec's "seed".
 ##
 ## antenna_cluster(spec): mounts spread evenly over "s": [u0, u1], panel antennas
 ## (or cabinets) topping out near y1 of "y": [y0, y1], radios under them, cable
-## drops and, with "signs", small warning signs on the wall near y0.
+## drops and, with "signs", a small warning sign on the wall under each mount's radios.
 ##   "mounts" 2-12 (default 4), "standoff" 0.2-1 m (default 0.45: pipes stand that far
 ##   out), "cabinets" (every k-th mount carries a cabinet instead of a panel; 0 none),
 ##   "signs" (default true), "seed" (an integer).
 ##   Roles: pipe, bracket, panel, cabinet, radio, cable, sign.
 ## duct(spec): a shaft "s": [u0, u1] wide from y0 up to y1 of "y", "depth" out from the
-## wall (0.1-1 m, default 0.35), turning at the top into a gooseneck that runs along
-## the wall to station "hood_to" and ends in a hood; "conduits" (0-4) thin conduits
-## beside the shaft on the gooseneck's side, and straps every "strap_every" metres
-## (default 1.5; 0 none).
+## wall (0.1-1 m, default 0.35), turning at the top in an elbow "neck" tall (0.1-1 m,
+## default 0.45, at most the shaft's width) into a gooseneck whose run along the wall to
+## station "hood_to" is the weathered hood (at least 0.3 m long); "round" (default
+## false) makes the shaft a pipe standing a little proud of the wall; "conduits" (0-4)
+## thin conduits beside the shaft on the gooseneck's side, and straps every
+## "strap_every" metres (default 1.5; 0 none).
 ##   Roles: duct, hood, conduit, strap.
 
 const ROLES := ["pipe", "bracket", "panel", "cabinet", "radio", "cable", "sign", "duct", "hood", "conduit", "strap"]
@@ -35,6 +38,9 @@ const DEFAULT_MATERIALS := {
 const PIPE_W_M := 0.08
 const CABLE_W_M := 0.03
 const MIN_DEPTH_M := 0.01
+## Sides of a round shaft, and its gap off the wall.
+const ROUND_SIDES := 12
+const ROUND_GAP_M := 0.06
 
 
 static func antenna_cluster(spec: Dictionary) -> Dictionary:
@@ -76,13 +82,13 @@ static func antenna_cluster(spec: Dictionary) -> Dictionary:
 		var top := y1 - 0.25 * rng.unit()
 		var role := "cabinet" if cabinet else "panel"
 		if cabinet:
-			width = lerpf(0.35, 0.55, rng.unit())
-			height = lerpf(0.6, 0.95, rng.unit())
+			width = lerpf(0.4, 0.6, rng.unit())
+			height = lerpf(0.7, 1.0, rng.unit())
 		else:
-			width = lerpf(0.26, 0.6, rng.unit())
-			height = lerpf(1.2, 1.9, rng.unit())
+			width = lerpf(0.3, 0.6, rng.unit())
+			height = lerpf(1.3, 1.9, rng.unit())
 		height = minf(height, (top - y0) * 0.6)
-		var depth := lerpf(0.12, 0.24, rng.unit())
+		var depth := lerpf(0.14, 0.26, rng.unit())
 		var side := rng.signed() * pitch * 0.12
 		var g0 := c + side - width * 0.5
 		var g1 := c + side + width * 0.5
@@ -90,28 +96,31 @@ static func antenna_cluster(spec: Dictionary) -> Dictionary:
 		_box(out, role, g0, g1, gear_bottom, top, front, front + depth)
 		# One or two radios below, each a little off the gear's centre line.
 		var cursor := gear_bottom - lerpf(0.08, 0.3, rng.unit())
-		var radios := 1 + int(rng.unit() > 0.5)
-		var lowest := cursor
+		var radios := 1 + int(rng.unit() > 0.4)
+		var lowest := gear_bottom
+		var lowest_c := c
 		for r in radios:
 			var rh := lerpf(0.32, 0.55, rng.unit())
-			if cursor - rh < y0 + 0.25:
+			if cursor - rh < y0 + 0.35:
 				break
-			var rw := lerpf(0.24, 0.4, rng.unit())
+			var rw := lerpf(0.26, 0.42, rng.unit())
 			var rc := c + rng.signed() * pitch * 0.15
-			_box(out, "radio", rc - rw * 0.5, rc + rw * 0.5, cursor - rh, cursor, front, front + lerpf(0.12, 0.2, rng.unit()))
+			_box(out, "radio", rc - rw * 0.5, rc + rw * 0.5, cursor - rh, cursor, front, front + lerpf(0.14, 0.22, rng.unit()))
 			# Cable tails hang below each radio.
-			for t in 2 + int(rng.unit() * 2.0):
-				var tc := rc - rw * 0.35 + rw * 0.7 * rng.unit()
-				_box(out, "cable", tc - CABLE_W_M * 0.5, tc + CABLE_W_M * 0.5, cursor - rh - lerpf(0.15, 0.45, rng.unit()), cursor - rh, front + 0.02, front + 0.02 + CABLE_W_M)
+			for t in 3 + int(rng.unit() * 2.0):
+				var tc := rc - rw * 0.4 + rw * 0.8 * rng.unit()
+				_box(out, "cable", tc - CABLE_W_M * 0.5, tc + CABLE_W_M * 0.5, cursor - rh - lerpf(0.15, 0.5, rng.unit()), cursor - rh, front + 0.02, front + 0.02 + CABLE_W_M)
 			lowest = cursor - rh
+			lowest_c = rc
 			cursor -= rh + lerpf(0.1, 0.3, rng.unit())
 		# Jumper cables from the gear down past the radios, close to the wall.
-		for t in 2:
-			var jc := g0 + (g1 - g0) * (0.25 + 0.5 * float(t)) + 0.05 * rng.signed()
-			_box(out, "cable", jc - CABLE_W_M * 0.5, jc + CABLE_W_M * 0.5, maxf(y0 + 0.3, lowest - 0.2), gear_bottom, standoff - 0.12, standoff - 0.12 + CABLE_W_M)
-		if bool(spec.get("signs", true)) and i % 2 == 0:
-			var sc := c + 0.1 * rng.signed()
-			_box(out, "sign", sc - 0.08, sc + 0.08, y0, y0 + 0.2, 0.0, MIN_DEPTH_M)
+		for t in 3:
+			var jc := g0 + (g1 - g0) * (0.2 + 0.3 * float(t)) + 0.05 * rng.signed()
+			_box(out, "cable", jc - CABLE_W_M * 0.5, jc + CABLE_W_M * 0.5, maxf(y0 + 0.3, lowest - 0.25), gear_bottom, standoff - 0.14, standoff - 0.14 + CABLE_W_M)
+		# A warning sign on the wall just under the mount's lowest radio.
+		if bool(spec.get("signs", true)):
+			var sign_top := maxf(y0 + 0.2, lowest - 0.15)
+			_box(out, "sign", lowest_c - 0.07, lowest_c + 0.07, sign_top - 0.2, sign_top, 0.0, MIN_DEPTH_M)
 	return _result(out, [])
 
 
@@ -122,10 +131,13 @@ static func duct(spec: Dictionary) -> Dictionary:
 	var depth := float(spec.get("depth", 0.35))
 	var conduits := int(spec.get("conduits", 0))
 	var strap_every := float(spec.get("strap_every", 1.5))
+	var neck_h := float(spec.get("neck", 0.45))
 	if s.size() != 2 or y.size() != 2 or not _finite(s + y) or float(s[1]) - float(s[0]) < 0.15 or float(y[1]) - float(y[0]) < 1.0:
 		errors.append("duct needs s [u0, u1] at least 0.15 m wide and y [y0, y1] at least 1 m tall")
 	if not (depth >= 0.1 and depth <= 1.0):
 		errors.append("duct depth must be 0.1-1 m")
+	if not (neck_h >= 0.1 and neck_h <= 1.0):
+		errors.append("duct neck must be 0.1-1 m")
 	if conduits < 0 or conduits > 4:
 		errors.append("duct conduits must be 0-4")
 	if not (strap_every == 0.0 or (strap_every >= 0.5 and strap_every <= 10.0)):
@@ -138,24 +150,30 @@ static func duct(spec: Dictionary) -> Dictionary:
 	var y1 := float(y[1])
 	var out := []
 	var w := u1 - u0
+	var is_round := bool(spec.get("round", false))
+	# A round shaft is a pipe of the duct's width, a little off the wall.
+	var d0 := ROUND_GAP_M if is_round else 0.02
+	var d1 := d0 + w if is_round else depth
 	# The gooseneck turns toward hood_to; without it the shaft just ends in a hood.
 	var hood_to := float(spec.get("hood_to", u1 + w))
 	var dir := 1.0 if hood_to >= (u0 + u1) * 0.5 else -1.0
-	var neck := minf(w, 0.45)
-	_box(out, "duct", u0, u1, y0, y1 - neck, 0.02, depth)
-	var n0 := minf(u0, hood_to)
-	var n1 := maxf(u1, hood_to)
-	_box(out, "duct", n0, n1, y1 - neck, y1, 0.02, depth)
-	# The hood is the neck's weathered end, a little proud of it all round.
-	var cap := hood_to - dir * 0.3
-	_box(out, "hood", minf(cap, hood_to + dir * 0.05), maxf(cap, hood_to + dir * 0.05), y1 - neck - 0.04, y1 + 0.04, 0.0, depth + 0.04)
+	var neck := minf(w, neck_h)
+	_box(out, "duct", u0, u1, y0, y1 - neck, d0, d1)
+	if is_round:
+		out[out.size() - 1]["sides"] = ROUND_SIDES
+	# The elbow over the shaft; past it, the run along the wall to hood_to is the hood,
+	# weathered sheet metal a little proud of the elbow all round.
+	_box(out, "duct", u0, u1, y1 - neck, y1, d0, d1)
+	var side := u1 if dir > 0.0 else u0
+	var cap := side if absf(hood_to - side) >= 0.3 else hood_to - dir * 0.3
+	_box(out, "hood", minf(cap, hood_to + dir * 0.05), maxf(cap, hood_to + dir * 0.05), y1 - neck - 0.04, y1 + 0.04, maxf(0.0, d0 - 0.04), d1 + 0.04)
 	for k in conduits:
 		var cu := (u1 + 0.05 + 0.06 * float(k)) if dir > 0.0 else (u0 - 0.05 - 0.06 * float(k))
 		_box(out, "conduit", cu - 0.025, cu + 0.025, y0 + 0.1, y1 - 0.05, 0.02, 0.07)
 	if strap_every > 0.0:
 		var at := y0 + strap_every * 0.5
 		while at < y1 - neck - 0.2:
-			_box(out, "strap", u0 - 0.02, u1 + 0.02, at, at + 0.05, 0.0, depth + 0.02)
+			_box(out, "strap", u0 - 0.02, u1 + 0.02, at, at + 0.05, d0 - 0.02 if is_round else 0.0, d1 + 0.02)
 			at += strap_every
 	return _result(out, [])
 

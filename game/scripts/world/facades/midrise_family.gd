@@ -1344,7 +1344,7 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 				blocked[k] = true
 	for k in block.storeys:
 		if face.has_grid:
-			out.append_array(_grid_cells(face, s0, s1, k, ground if k == 0 else _storey_window(window, [scheme, rng, feature], k), blocked))
+			out.append_array(_grid_cells(face, s0, s1, k, ground if k == 0 else _storey_window(window, [scheme, rng, feature], k), blocked, rng.get("grid_unit", {})))
 			continue
 		if claimed.has(k) or k in skip_storeys:
 			continue
@@ -1490,10 +1490,11 @@ static func _storey_window(window: Dictionary, sources: Array, k: int) -> Dictio
 
 ## Grid openings starting in storey k whose columns lie inside the bay [s0, s1]. An
 ## opening joined over storeys is kept only when none of them is blocked (claimed by a
-## feature, skipped or blank); window_spec supplies the default materials.
-static func _grid_cells(face: Face, s0: float, s1: float, k: int, window_spec: Dictionary, blocked: Dictionary) -> Array:
+## feature, skipped or blank); window_spec supplies the default materials. Opt-in: the
+## bay's `bays` range may override the scheme's grid_unit fields (unit_over).
+static func _grid_cells(face: Face, s0: float, s1: float, k: int, window_spec: Dictionary, blocked: Dictionary, unit_over: Dictionary = {}) -> Array:
 	var out: Array = []
-	var unit: Dictionary = face.scheme.get("grid_unit", {})
+	var unit := _merge(face.scheme.get("grid_unit", {}), unit_over)
 	for i in face.grid_openings.size():
 		var o: Array = face.grid_openings[i]
 		if _storey_at(face.block, float(o[2])) != k or float(o[1]) <= s0 or float(o[0]) >= s1:
@@ -3197,6 +3198,16 @@ static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
 		if not ctx.materials.has(key):
 			ctx.errors.append("%s part: palette has no %s for %s" % [str(spec.kind), key, str(item.role)])
 			return
+		if item.has("sides"):
+			# A round item (a duct's shaft): an upright prism in its u/d square.
+			var r := (float(item.u1) - float(item.u0)) * 0.5
+			var centre := face.a + face.d * (float(item.u0) + r) + face.n * ((float(item.d0) + float(item.d1)) * 0.5)
+			var ring: Array = []
+			for k in int(item.sides):
+				var angle := TAU * float(k) / float(item.sides)
+				ring.append(centre + Vector2(cos(angle), sin(angle)) * r)
+			_prism(ctx, ring, float(item.y0), float(item.y1), key, key)
+			continue
 		# The kit's d runs out from the wall; the family's depth runs in.
 		_box(ctx.bucket("support", key), face, float(item.u0), float(item.u1), float(item.y0), float(item.y1), -float(item.d1), -float(item.d0), false)
 

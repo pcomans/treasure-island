@@ -6,6 +6,10 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2307 (2026-11-18)
+
+- The Job Corps dormitory on California Avenue (Building 369) looks more like itself: pale walls and slate stair towers, sunshades, blinds and white sashes at its windows, an overhanging roof slab, the rooftop penthouse and siren, and the antennas and duct on its north tower.
+
 ## Build 2302 (2026-11-18)
 
 - On the web, the game uses much less memory, so it should stop reloading on iPhones.

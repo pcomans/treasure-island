@@ -220,6 +220,15 @@ static func _check_assembly(failures: Array) -> void:
 	_expect(failures, not u.is_empty() and _roles(u, "frame")[0].material == "frame_grey" and _roles(u, "pane")[0].material == "pane", "role materials")
 	var narrow := _rects(ASSEMBLY.unit(0.0, 1.0, 0.0, 2.5, {"split": 0.5}))
 	_expect(failures, not narrow.is_empty() and _roles(narrow, "mullion").is_empty(), "split on a narrow unit")
+	# Opt-in pane_w: lights by width (4.4 m over 1.1 m panes: four lights, three
+	# mullions); a unit of one light falls back to split.
+	var sashes := {"pane_w": 1.1, "split": 0.5, "split_min_w": 0.9}
+	var wide := _rects(ASSEMBLY.unit(0.0, 4.4, 0.0, 1.3, sashes))
+	var wide_centres := _roles(wide, "mullion").map(func(r: Dictionary) -> float: return (r.u0 + r.u1) * 0.5)
+	wide_centres.sort()
+	_expect(failures, _near_list(wide_centres, [1.1, 2.2, 3.3]), "pane_w lights on a wide unit")
+	_expect(failures, _roles(_rects(ASSEMBLY.unit(0.0, 1.0, 0.0, 1.3, sashes)), "mullion").size() == 1, "pane_w single light falls back to split")
+	_expect(failures, not bool(ASSEMBLY.unit(0.0, 1.0, 0.0, 1.3, {"pane_w": -1.0}).ok), "unit accepted a negative pane_w")
 	# A two-storey stack from the grid: two units and one spandrel; a surround outside
 	# it; the opening's pane style becomes the pane material.
 	var openings := _open(_grid({"groups": [[0, 1], [2, 2]]}), {"style": {"surround": true, "pane": "glass_blue"}})
