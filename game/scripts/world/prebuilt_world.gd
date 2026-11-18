@@ -6,6 +6,19 @@ const SCHEMA := "ti.static-world/3"
 ## Build-time evidence carried by the bake. The street-detail on/off state is not
 ## among them: it is chosen again when the baked world loads.
 const EVIDENCE_FIELDS := ["chunks_expected", "chunks_loaded", "playable_rows", "context_rows", "mesh_instances", "surfaces", "triangles", "static_bodies", "shapes", "street_detail_rows", "street_detail_rows_by_layer"]
+## On a mesh the bake's merge (tools/merge_baked_buildings.gd) made of parts it joined by
+## material: the longest side of its largest part (m), which the web's distance culling
+## (main.gd) reads in place of the merged mesh's own size.
+const DETAIL_SIZE_META := &"baked_detail_m"
+
+## How far the web draws a building part whose longest side is this long (m), and the
+## margin it fades over: Vector2(end, margin), or Vector2.ZERO to draw it at any distance.
+static func web_detail_range(longest_m: float) -> Vector2:
+	if longest_m <= 12.0:
+		return Vector2(200.0, 20.0)
+	if longest_m <= 50.0:
+		return Vector2(500.0, 40.0)
+	return Vector2.ZERO
 
 static func profile() -> String:
 	return "web" if OS.has_feature("web") or OS.get_cmdline_user_args().has("--web-world-bake") else "native"

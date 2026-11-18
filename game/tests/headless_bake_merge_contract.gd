@@ -146,6 +146,8 @@ func _run() -> void:
 	_check_dropped_parts(part_arrays)
 	_check_merge_counts_drop()
 	_check_prune()
+	_check_same_material()
+	_check_surface_limit()
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
 	for index in kept.size():
@@ -295,10 +297,180 @@ func _check_prune() -> void:
 	check(Merge.prune_superseded(none, 0).problem == "", "Nothing switched off and nothing to prune must pass")
 
 
+## Surfaces joining by material: the same material, or a copy equal in every value,
+## joins under one transform, every vertex attribute kept as it was; anything else that
+## differs (a parameter, the render priority, the Shader object, the transform, the
+## web's distance class) keeps them apart; shaders that sort, blend, animate or read
+## per-instance values, transparency and surfaces with LODs stay as authored; a
+## surface alone stays in its source.
+func _check_same_material() -> void:
+	var site := Node3D.new()
+	root.add_child(site)
+	var top := Node3D.new()
+	site.add_child(top)
+	var building := Node3D.new()
+	building.position = Vector3(-40, 2, 25)
+	building.rotation = Vector3(0, 0.8, 0)
+	building.set_meta("source_keys", ["w3"])
+	building.set_meta("derived_object_key", "building:w3:wall")
+	top.add_child(building)
+	var object_space := _shader("shader_type spatial;\nuniform vec4 tint : source_color = vec4(0.5, 0.4, 0.3, 1.0);\nvarying vec3 local_position;\nvoid vertex() { local_position = VERTEX; }\nvoid fragment() { ALBEDO = tint.rgb * (0.8 + 0.2 * fract(local_position.y)); }")
+	var shared := _shader_material(object_space, Color(0.6, 0.5, 0.4))
+	var copy := shared.duplicate() as ShaderMaterial
+	var other_tint := _shader_material(object_space, Color(0.6, 0.5, 0.41))
+	var other_priority := shared.duplicate() as ShaderMaterial
+	other_priority.render_priority = 1
+	var same_code := _shader_material(_shader(object_space.code), Color(0.6, 0.5, 0.4))
+	var turned := Transform3D(Basis(Vector3.UP, 0.7), Vector3(3, 0, -2))
+	var stretched := Transform3D(Basis.IDENTITY.scaled(Vector3(1, 1.5, 1)), Vector3(0, 0, 6))
+	var first := _channel_part(building, shared, Transform3D.IDENTITY, true, 4.0, 1)
+	var second := _channel_part(building, copy, Transform3D.IDENTITY, false, 4.0, 2)
+	var expected := {"first": first.mesh.surface_get_arrays(0), "second": second.mesh.surface_get_arrays(0)}
+	var first_global := first.global_transform * (expected.first[Mesh.ARRAY_VERTEX] as PackedVector3Array)
+	var detail := maxf(_world_longest(first), _world_longest(second))
+	check(Merge.shader_refusal(object_space) == "", "An opaque shader reading object space must not be refused: %s" % Merge.shader_refusal(object_space))
+	var alone: Array[MeshInstance3D] = [
+		_channel_part(building, other_tint, Transform3D.IDENTITY, true, 4.0, 3),
+		_channel_part(building, other_priority, Transform3D.IDENTITY, true, 4.0, 4),
+		_channel_part(building, same_code, Transform3D.IDENTITY, true, 4.0, 5),
+	]
+	var turned_parts: Array[MeshInstance3D] = [_channel_part(building, shared, turned, true, 4.0, 6), _channel_part(building, shared, turned, false, 4.0, 7)]
+	var turned_arrays: Array = [turned_parts[0].mesh.surface_get_arrays(0), turned_parts[1].mesh.surface_get_arrays(0)]
+	var turned_global := turned_parts[1].global_transform * (turned_arrays[1][Mesh.ARRAY_VERTEX] as PackedVector3Array)
+	var stretched_parts: Array[MeshInstance3D] = [_channel_part(building, shared, stretched, true, 4.0, 8), _channel_part(building, copy, stretched, true, 4.0, 9)]
+	# Over 50 m long however it turns: a part the web draws at any distance, apart from the 4 m ones.
+	var long_parts: Array[MeshInstance3D] = [_channel_part(building, shared, Transform3D.IDENTITY, true, 90.0, 10), _channel_part(building, shared, Transform3D.IDENTITY, true, 90.0, 11)]
+	# Pairs that would join but for what they draw with.
+	var refused := {}
+	for case: String in ["ALPHA", "TIME", "INSTANCE_ID", "instance uniform", "depth_draw_never", "blend_add"]:
+		var code: String = {
+			"ALPHA": "shader_type spatial;\nvoid fragment() { ALBEDO = vec3(0.5); ALPHA = 0.5; }",
+			"TIME": "shader_type spatial;\nvoid fragment() { ALBEDO = vec3(fract(TIME)); }",
+			"INSTANCE_ID": "shader_type spatial;\nvarying float id;\nvoid vertex() { id = float(INSTANCE_ID); }\nvoid fragment() { ALBEDO = vec3(id); }",
+			"instance uniform": "shader_type spatial;\ninstance uniform vec4 shade : source_color;\nvoid fragment() { ALBEDO = shade.rgb; }",
+			"depth_draw_never": "shader_type spatial;\nrender_mode depth_draw_never;\nvoid fragment() { ALBEDO = vec3(0.3); }",
+			"blend_add": "shader_type spatial;\nrender_mode blend_add;\nvoid fragment() { ALBEDO = vec3(0.3); }",
+		}[case]
+		var material := _shader_material(_shader(code), Color.WHITE)
+		check(Merge.shader_refusal(material.shader) != "", "A shader using %s must be refused" % case)
+		refused[case] = [_channel_part(building, material, Transform3D.IDENTITY, true, 4.0, 20), _channel_part(building, material, Transform3D.IDENTITY, true, 4.0, 21)]
+	var see_through := _material(Color(0.5, 0.6, 0.7, 0.5))
+	see_through.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	refused["transparency"] = [_channel_part(building, see_through, Transform3D.IDENTITY, true, 4.0, 22), _channel_part(building, see_through, Transform3D.IDENTITY, true, 4.0, 23)]
+	var lod_material := _shader_material(object_space, Color(0.2, 0.3, 0.4))
+	refused["lods"] = [_channel_part(building, lod_material, Transform3D.IDENTITY, true, 4.0, 24, true), _channel_part(building, lod_material, Transform3D.IDENTITY, true, 4.0, 25, true)]
+	var refused_meshes := {}
+	for case: String in refused:
+		refused_meshes[case] = [refused[case][0].mesh, refused[case][1].mesh]
+	# Triplanar mapping by object space joins under one transform only.
+	var triplanar := _material(Color(0.4, 0.5, 0.6))
+	triplanar.uv1_triplanar = true
+	var triplanar_joined: Array[MeshInstance3D] = [_channel_part(building, triplanar, turned, true, 4.0, 30), _channel_part(building, triplanar, turned, true, 4.0, 31)]
+	var triplanar_apart: Array[MeshInstance3D] = [_channel_part(building, triplanar, Transform3D(Basis.IDENTITY, Vector3(1, 0, 0)), true, 4.0, 32), _channel_part(building, triplanar, Transform3D(Basis.IDENTITY, Vector3(2, 0, 0)), true, 4.0, 33)]
+	# A building's lamps keep their night role (DaySun finds them by it).
+	var lamp := _shader_material(_shader("shader_type spatial;\nuniform vec4 glow : source_color = vec4(1.0, 0.8, 0.5, 1.0);\nvoid fragment() { ALBEDO = vec3(0.1); EMISSION = glow.rgb; }"), Color(1.0, 0.8, 0.5))
+	lamp.set_meta(DaySun.NIGHT_ROLE, DaySun.LAMP)
+	var lamp_copy := lamp.duplicate() as ShaderMaterial
+	var lamps: Array[MeshInstance3D] = [_channel_part(building, lamp, Transform3D.IDENTITY, true, 4.0, 40), _channel_part(building, lamp_copy, Transform3D.IDENTITY, true, 4.0, 41)]
+	# The 4 m parts under no transform that join: the batch's box must be theirs.
+	var bounds := first.mesh.get_aabb()
+	for part: MeshInstance3D in [second, lamps[0], lamps[1]]:
+		bounds = bounds.merge(part.mesh.get_aabb())
+
+	var report := Merge.merge(site)
+	check((report.problems as PackedStringArray).is_empty(), "A clean merge by material must report no problems: %s" % report.problems)
+	check(int(report.get("surfaces_by_material", 0)) > 0 and int(report.get("taken_by_material", 0)) > 0, "A merge by material must count what it takes: %s" % report)
+	check(not is_instance_valid(first) and not is_instance_valid(second), "The same material and an equal copy must join")
+	var joined := _batch_with(building, shared, Transform3D.IDENTITY, 0.0, 50.0)
+	check(joined != null, "Parts of one material under one transform must join into a batch under their record")
+	if joined != null:
+		var surface := _surface_of(joined, shared)
+		check(joined.get_meta("baked_merge", false) and is_equal_approx(float(joined.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, -1.0)), detail), "A batch by material must carry its parts' size for the web's culling: %s against %s" % [joined.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, null), detail])
+		check(Merge.PREBUILT_WORLD.web_detail_range(float(joined.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))) == Vector2(200, 20), "4 m parts must keep the web's 200 m culling")
+		check(surface >= 0, "The batch must draw with the first part's own material")
+		if surface >= 0:
+			var arrays := joined.mesh.surface_get_arrays(surface)
+			for channel: int in [Mesh.ARRAY_VERTEX, Mesh.ARRAY_NORMAL, Mesh.ARRAY_TANGENT, Mesh.ARRAY_COLOR, Mesh.ARRAY_TEX_UV, Mesh.ARRAY_TEX_UV2, Mesh.ARRAY_CUSTOM0]:
+				var want: Variant = expected.first[channel].duplicate()
+				want.append_array(expected.second[channel])
+				check(arrays[channel] == want, "Channel %d must come through exactly: %s" % [channel, _difference(arrays[channel], want)])
+			var count := (expected.first[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+			var indices := PackedInt32Array(expected.first[Mesh.ARRAY_INDEX])
+			for i in (expected.second[Mesh.ARRAY_VERTEX] as PackedVector3Array).size():
+				indices.append(count + i)
+			check(arrays[Mesh.ARRAY_INDEX] == indices, "Triangles must keep their order, an unindexed part's indexed one per vertex")
+			check(joined.global_transform * (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).slice(0, count) == first_global, "A part under no transform must keep its world positions exactly")
+			check(joined.mesh.get_aabb().is_equal_approx(bounds), "A batch's box must be its parts' box: %s against %s" % [joined.mesh.get_aabb(), bounds])
+	for index in alone.size():
+		check(is_instance_valid(alone[index]), "A part whose material differs (%s) must stay as authored" % ["a parameter", "the render priority", "another Shader object"][index])
+	var turned_batch := _batch_with(building, shared, turned)
+	check(turned_batch != null and not is_instance_valid(turned_parts[0]) and not is_instance_valid(turned_parts[1]), "Parts under one turned transform must join, the batch keeping that transform")
+	if turned_batch != null:
+		var arrays := turned_batch.mesh.surface_get_arrays(_surface_of(turned_batch, shared))
+		var count := (turned_arrays[0][Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+		check((arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).slice(count) == turned_arrays[1][Mesh.ARRAY_VERTEX], "Joined parts must keep their object-space positions")
+		check(_close(turned_batch.global_transform * (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).slice(count), turned_global), "Joined parts must keep their world positions")
+	check(_batch_with(building, shared, stretched) != null and not is_instance_valid(stretched_parts[0]) and not is_instance_valid(stretched_parts[1]), "Scaled parts under one transform must join, the batch keeping the scale")
+	var long_batch := _batch_with(building, shared, Transform3D.IDENTITY, 50.0, INF)
+	check(long_batch != null and long_batch != joined and Merge.PREBUILT_WORLD.web_detail_range(float(long_batch.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))) == Vector2.ZERO, "Parts the web culls at another distance must join apart")
+	for case: String in refused:
+		var parts: Array = refused[case]
+		check(is_instance_valid(parts[0]) and is_instance_valid(parts[1]) and parts[0].mesh == refused_meshes[case][0] and parts[1].mesh == refused_meshes[case][1] and parts[0].mesh.get_surface_count() == 1, "Parts with %s must stay as authored" % case)
+	check(int(report.get("surfaces_with_lods", 0)) == 2, "Surfaces with LODs must be counted and kept: %s" % report.get("surfaces_with_lods"))
+	check(_batch_with(building, triplanar, turned) != null and not is_instance_valid(triplanar_joined[0]), "Triplanar parts under one transform must join")
+	check(is_instance_valid(triplanar_apart[0]) and is_instance_valid(triplanar_apart[1]), "Triplanar parts under different transforms must stay apart")
+	var glows := DaySun.building_glows(site)
+	check(not is_instance_valid(lamps[0]) and not is_instance_valid(lamps[1]) and glows[DaySun.LAMP] == [lamp] and (glows.untagged as Array).is_empty(), "Lamps must join and keep their night role: %s" % [glows])
+	site.free()
+
+
+## The colour merge and the merge by material each split a batch into surfaces of at most
+## MAX_SURFACE_VERTICES vertices, at parts' edges, keeping every triangle.
+func _check_surface_limit() -> void:
+	var site := Node3D.new()
+	root.add_child(site)
+	var top := Node3D.new()
+	site.add_child(top)
+	var building := Node3D.new()
+	building.set_meta("source_keys", ["w4"])
+	top.add_child(building)
+	var shader := _shader_material(_shader("shader_type spatial;\nvoid fragment() { ALBEDO = vec3(0.4); }"), Color.WHITE)
+	var parts := 3
+	var per_part := 30000
+	for index in parts:
+		for material: Material in [shader, _material(Color(0.1 * index, 0.2, 0.3))]:
+			var arrays: Array = []
+			arrays.resize(Mesh.ARRAY_MAX)
+			var vertices := PackedVector3Array()
+			for i in per_part:
+				vertices.append(Vector3(fmod(i * 0.37, 8.0), fmod(i * 0.61, 8.0), fmod(i * 0.89, 8.0)))
+			arrays[Mesh.ARRAY_VERTEX] = vertices
+			var mesh := ArrayMesh.new()
+			mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+			var part := MeshInstance3D.new()
+			part.mesh = mesh
+			part.material_override = material
+			building.add_child(part)
+	var report := Merge.merge(site)
+	check((report.problems as PackedStringArray).is_empty(), "A split batch must build clean: %s" % report.problems)
+	var batches := 0
+	for child: Node in building.get_children():
+		if child.has_meta("baked_merge"):
+			batches += 1
+			var mesh := (child as MeshInstance3D).mesh
+			var total := 0
+			for surface in mesh.get_surface_count():
+				check(mesh.surface_get_array_len(surface) <= Merge.MAX_SURFACE_VERTICES, "A merged surface must stay within 16-bit indices: %d vertices" % mesh.surface_get_array_len(surface))
+				total += mesh.surface_get_array_len(surface)
+			check(mesh.get_surface_count() == 2 and total == parts * per_part, "Three parts of %d vertices must split in two surfaces holding them all: %d surfaces, %d vertices" % [per_part, mesh.get_surface_count(), total])
+	check(batches == 2, "Both merges must build their batch: %d" % batches)
+	site.free()
+
+
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
 		quit(0)
 		return
 	for message in failures:
@@ -406,3 +578,96 @@ func _close(a: PackedVector3Array, b: PackedVector3Array) -> bool:
 
 func _byte(channel: float) -> int:
 	return roundi(channel * 255.0)
+
+
+func _shader(code: String) -> Shader:
+	var shader := Shader.new()
+	shader.code = code
+	return shader
+
+
+func _shader_material(shader: Shader, tint: Color) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = shader
+	if shader.code.contains("uniform vec4 tint"):
+		material.set_shader_parameter("tint", tint)
+	return material
+
+
+## A part of size metres along x whose one surface carries every channel a merge by
+## material keeps (normals, tangents, colours, two UV sets, an RGBA8 custom channel),
+## with values that vary by seed; indexed or not, with LODs or not.
+func _channel_part(parent: Node3D, material: Material, pose: Transform3D, indexed: bool, size: float, seed: int, lods := false) -> MeshInstance3D:
+	var count := 4 if indexed else 6
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var tangents := PackedFloat32Array()
+	var colors := PackedColorArray()
+	var uvs := PackedVector2Array()
+	var uv2s := PackedVector2Array()
+	var custom := PackedByteArray()
+	for i in count:
+		var t := float(i * 7 + seed)
+		vertices.append(Vector3(size * float(i % 2), 0.5 * floorf(i / 2.0) + 0.01 * seed, 0.3 * sin(t)))
+		var normal := Vector3(sin(t * 1.3), cos(t * 0.7) + 0.2, sin(t * 0.3 + 1.0)).normalized()
+		normals.append(normal)
+		var tangent := normal.cross(Vector3.UP if absf(normal.y) < 0.9 else Vector3.RIGHT).normalized()
+		tangents.append_array(PackedFloat32Array([tangent.x, tangent.y, tangent.z, 1.0 if i % 2 == 0 else -1.0]))
+		colors.append(Color(fmod(t * 0.13, 1.0), fmod(t * 0.29, 1.0), fmod(t * 0.47, 1.0), 1.0))
+		uvs.append(Vector2(t * 0.01, t * 0.02))
+		uv2s.append(Vector2(t * 0.03, -t * 0.05))
+		custom.append_array(PackedByteArray([(seed * 11 + i) % 256, (seed * 13 + i * 3) % 256, (seed * 17 + i * 5) % 256, 255]))
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	arrays[Mesh.ARRAY_TANGENT] = tangents
+	arrays[Mesh.ARRAY_COLOR] = colors
+	arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_TEX_UV2] = uv2s
+	arrays[Mesh.ARRAY_CUSTOM0] = custom
+	if indexed:
+		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2, 2, 1, 3])
+	var mesh := ArrayMesh.new()
+	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays, [], {0.25: PackedInt32Array([0, 1, 2])} if lods else {}, Mesh.ARRAY_CUSTOM_RGBA8_UNORM << Mesh.ARRAY_FORMAT_CUSTOM0_SHIFT)
+	mesh.surface_set_material(0, material)
+	var part := MeshInstance3D.new()
+	part.mesh = mesh
+	part.transform = pose
+	parent.add_child(part, true)
+	return part
+
+
+## The batch directly under parent drawn at pose with this material, whose parts' size
+## (for the web's culling) is in [detail_from, detail_to), or null.
+func _batch_with(parent: Node3D, material: Material, pose: Transform3D, detail_from := 0.0, detail_to := INF) -> MeshInstance3D:
+	for child: Node in parent.get_children():
+		if child.has_meta("baked_merge") and (child as MeshInstance3D).transform == pose and _surface_of(child, material) >= 0:
+			var detail := float(child.get_meta(Merge.PREBUILT_WORLD.DETAIL_SIZE_META, 0.0))
+			if detail >= detail_from and detail < detail_to:
+				return child as MeshInstance3D
+	return null
+
+
+func _surface_of(part: MeshInstance3D, material: Material) -> int:
+	for surface in part.mesh.get_surface_count():
+		if part.mesh.surface_get_material(surface) == material:
+			return surface
+	return -1
+
+
+func _world_longest(part: MeshInstance3D) -> float:
+	var size := (part.global_transform * part.get_aabb()).size
+	return maxf(size.x, maxf(size.y, size.z))
+
+
+## Where two arrays first differ, for a failure message.
+func _difference(got: Variant, want: Variant) -> String:
+	if got == null or want == null:
+		return "got %s, want %s" % [type_string(typeof(got)), type_string(typeof(want))]
+	if got.size() != want.size():
+		return "%d values, want %d" % [got.size(), want.size()]
+	for i in got.size():
+		if got[i] != want[i]:
+			return "first at %d: %s, want %s" % [i, got[i], want[i]]
+	return "none"
