@@ -62,6 +62,18 @@ static func _cell(position: Array, size_m: float) -> String:
 	return "%d_%d" % [floori(float(position[0]) / size_m), floori(float(position[2]) / size_m)]
 
 
+## Whether a mesh has vertex colours. A banded batch's shader reads its item's cell
+## centre and extra range from COLOR, which is the vertex colour times the instance
+## colour (white where a mesh has none), so such a mesh fails the build.
+static func has_vertex_colours(mesh: Variant) -> bool:
+	if not mesh is ArrayMesh:
+		return false
+	for surface in (mesh as ArrayMesh).get_surface_count():
+		if (mesh as ArrayMesh).surface_get_format(surface) & Mesh.ARRAY_FORMAT_COLOR:
+			return true
+	return false
+
+
 func build(document: Dictionary) -> Dictionary:
 	var kit := KIT.new()
 	var yard: Variant = null
@@ -137,6 +149,11 @@ func build(document: Dictionary) -> Dictionary:
 	batch_keys.sort()
 	for key: String in batch_keys:
 		var batch: Dictionary = batches[key]
+		if StreetDetailBatches.takes_band(batch.material):
+			for mesh: Variant in (batch.meshes as Array) + [batch.get("shadow_mesh", null)]:
+				if has_vertex_colours(mesh):
+					root.free()
+					return {"ok": false, "code": "street_clutter_band", "message": "%s: a mesh with vertex colours cannot carry its items' band in COLOR" % key, "source_keys": []}
 		var cell_keys: Array = (batch.cells as Dictionary).keys()
 		cell_keys.sort()
 		for cell: String in cell_keys:

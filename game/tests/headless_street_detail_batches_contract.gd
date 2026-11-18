@@ -15,11 +15,21 @@ extends SceneTree
 ##   instances are white (their shaders multiply COLOR by the instance colour).
 ## - The interactive refs (bending trees, parked cars a car can take) name the batch and
 ##   index whose instance stands at the row's placement.
-## - The vegetation, hedge and clutter shaders carry the band test.
+## - The vegetation, hedge and clutter shaders carry the band test. A banded clutter
+##   batch reads its band from COLOR, so a mesh with vertex colours fails the build;
+##   the fixture's cars and cones have none.
+## - Two fence rows in one merge cell (street_fence_builder.gd): every bay's and post's
+##   vertex runs, which street_fence_breaker.gd collapses, name the same vertices in the
+##   merged cell meshes as when each row is built alone, all inside its bay's (or
+##   post's) box, and the second row's runs start past the first row's vertices.
 
 const VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
 const CLUTTER_KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
 const BATCHES := preload("res://game/scripts/world/street_detail_batches.gd")
+const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
+## How far (m) a bay's or post's vertices may stand outside its collision box: a
+## post's tube reaches 0.3 m into the ground.
+const FENCE_BOX_SLACK_M := 0.35
 const TREE_CELL_M := 16.0
 const GRASS_CELL_M := 32.0
 const SHADOW_CELL_M := 48.0
@@ -49,9 +59,11 @@ func _run() -> void:
 		var node: Node3D = clutter.node
 		root.add_child(node)
 		_check_clutter(node)
+	_check_vertex_colours()
+	_check_fences()
 	await process_frame
 	if failures.is_empty():
-		print("PASS: street-detail batches draw every tree, plant, hedge, car and cone at the levels its small cell drew, from every camera point tried (hand-overs and ends, near and far, low and high); each placed instance is in one batch per level; bending trees and parked cars find their own instances; the vegetation, hedge and clutter shaders test the bands")
+		print("PASS: street-detail batches draw every tree, plant, hedge, car and cone at the levels its small cell drew, from every camera point tried (hand-overs and ends, near and far, low and high); each placed instance is in one batch per level; bending trees and parked cars find their own instances; the vegetation, hedge and clutter shaders test the bands; a clutter mesh with vertex colours fails the build; two fence rows merged in one cell mesh keep every bay's and post's vertex runs on its own geometry, inside its box")
 		quit(0)
 	else:
 		for failure: String in failures:
@@ -475,6 +487,136 @@ func _check_clutter(root_node: Node3D) -> void:
 			refs += 1
 		if refs != 3:
 			_fail("car %s names %d instances, not its near, far and shadow levels" % [id, refs])
+
+
+# --- Vertex colours -----------------------------------------------------------------
+
+
+func _check_vertex_colours() -> void:
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([Vector3.ZERO, Vector3.RIGHT, Vector3.UP])
+	var plain := ArrayMesh.new()
+	plain.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	arrays[Mesh.ARRAY_COLOR] = PackedColorArray([Color.WHITE, Color.WHITE, Color.WHITE])
+	var coloured := ArrayMesh.new()
+	coloured.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	if StreetClutterBuilder.has_vertex_colours(plain) or not StreetClutterBuilder.has_vertex_colours(coloured):
+		_fail("has_vertex_colours does not tell a mesh with vertex colours from one without")
+	var kit := CLUTTER_KIT.new()
+	for row: Dictionary in _clutter_rows():
+		var parts := kit.parts(str(row.prop), row.prop_params, str(row.id))
+		for mesh: Variant in (parts.meshes as Array) + [parts.get("shadow_mesh", null)]:
+			if StreetClutterBuilder.has_vertex_colours(mesh):
+				_fail("%s's %s mesh has vertex colours, which would move its band" % [row.id, parts.mesh_key])
+
+
+# --- Fences -------------------------------------------------------------------------
+
+
+func _fence_row(id: String, points: Array) -> Dictionary:
+	var biases: Array = []
+	biases.resize(points.size())
+	biases.fill(0.0)
+	return {"id": id, "status": "placed", "layer": "fences", "prop": "chain_link", "prop_params": {"inside": "left"},
+		"fence": {"type": "chain_link", "runs": [{"points_m": points, "surface_bias_m": biases}]}}
+
+
+func _fence_rows() -> Array:
+	# Both rows' cell meshes fall in one merge cell; the second crosses a render cell.
+	return [
+		_fence_row("fence_a", [[2.0, 1.5, 4.0], [5.0, 1.5, 4.0], [8.0, 1.6, 4.5], [8.0, 1.6, 9.0]]),
+		_fence_row("fence_b", [[40.0, 1.5, 20.0], [44.0, 1.5, 21.0], [49.0, 1.4, 22.0], [53.0, 1.4, 22.0]]),
+	]
+
+
+func _check_fences() -> void:
+	var rows := _fence_rows()
+	var together := StreetFenceBuilder.new().build({"rows": rows})
+	if not together.ok:
+		_fail("the fences did not build: %s" % together.get("message", ""))
+		return
+	root.add_child(together.node)
+	var holder := (together.node as Node3D).get_node_or_null("FenceCells")
+	if holder == null or holder.get_child_count() == 0:
+		_fail("the fences have no merged cell meshes")
+		return
+	for row_index in rows.size():
+		var row: Dictionary = rows[row_index]
+		var alone := StreetFenceBuilder.new().build({"rows": [row]})
+		if not alone.ok:
+			_fail("fence %s alone did not build: %s" % [row.id, alone.get("message", "")])
+			continue
+		root.add_child(alone.node)
+		var group := (together.node as Node3D).get_node_or_null("Fence__" + str(row.id)) as Node3D
+		var own := (alone.node as Node3D).get_node_or_null("Fence__" + str(row.id)) as Node3D
+		if group == null or own == null:
+			_fail("fence %s has no group" % row.id)
+			continue
+		var bays: Dictionary = group.get_meta("fence_bays", {})
+		var posts: Dictionary = group.get_meta("fence_posts", {})
+		if bays.size() != (row.fence.runs[0].points_m as Array).size() - 1 or posts.size() != (row.fence.runs[0].points_m as Array).size():
+			_fail("fence %s lists %d bays and %d posts for its %d posts" % [row.id, bays.size(), posts.size(), (row.fence.runs[0].points_m as Array).size()])
+		var boxes := {}
+		for shape: Node in group.get_node("Collision").get_children():
+			boxes[str(shape.get_meta("fence_bay", ""))] = shape
+		var merged_first := -1
+		for key: String in bays:
+			var what := "fence %s bay %s" % [row.id, key]
+			var vertices := _fence_vertices(group, bays[key].ranges, what)
+			if vertices != _fence_vertices(own, (own.get_meta("fence_bays", {}) as Dictionary).get(key, {}).get("ranges", []), what + " alone"):
+				_fail("%s names other vertices merged than built alone" % what)
+			var shape := boxes.get(key, null) as CollisionShape3D
+			if shape == null:
+				_fail("%s has no box" % what)
+			else:
+				_fence_inside(what, shape.global_transform, (shape.shape as BoxShape3D).size, vertices)
+			for ref: Array in bays[key].ranges:
+				if str(ref[0]).begins_with("../FenceCells/"):
+					merged_first = int(ref[2]) if merged_first < 0 else mini(merged_first, int(ref[2]))
+		for key: String in posts:
+			var what := "fence %s post %s" % [row.id, key]
+			var vertices := _fence_vertices(group, posts[key].ranges, what)
+			if vertices != _fence_vertices(own, (own.get_meta("fence_posts", {}) as Dictionary).get(key, {}).get("ranges", []), what + " alone"):
+				_fail("%s names other vertices merged than built alone" % what)
+			_fence_inside(what, FENCE_BREAKER._post_transform(posts[key]), posts[key].size, vertices)
+		if merged_first < 0:
+			_fail("fence %s's bays name no merged cell mesh" % row.id)
+		elif row_index > 0 and merged_first == 0:
+			_fail("fence %s's runs start at the merged meshes' first vertex, not past fence %s's" % [row.id, rows[0].id])
+
+
+## The vertices a bay's or post's runs name ([mesh instance from the group, surface,
+## first vertex, count], as street_fence_breaker.gd collapses them), in order, in the
+## world; a run the breaker would skip fails.
+func _fence_vertices(group: Node3D, ranges: Array, what: String) -> PackedVector3Array:
+	var vertices := PackedVector3Array()
+	if ranges.is_empty():
+		_fail("%s has no vertex runs" % what)
+	for ref: Array in ranges:
+		var instance := group.get_node_or_null(str(ref[0])) as MeshInstance3D
+		if instance == null or not instance.mesh is ArrayMesh or int(ref[1]) < 0 or int(ref[1]) >= instance.mesh.get_surface_count():
+			_fail("%s: run %s names no mesh surface" % [what, ref])
+			continue
+		var positions: PackedVector3Array = (instance.mesh as ArrayMesh).surface_get_arrays(int(ref[1]))[Mesh.ARRAY_VERTEX]
+		if int(ref[3]) <= 0 or int(ref[2]) < 0 or int(ref[2]) + int(ref[3]) > positions.size():
+			_fail("%s: run %s is outside its surface's %d vertices" % [what, ref, positions.size()])
+			continue
+		for index in range(int(ref[2]), int(ref[2]) + int(ref[3])):
+			vertices.append(instance.global_transform * positions[index])
+	return vertices
+
+
+func _fence_inside(what: String, box: Transform3D, size: Vector3, vertices: PackedVector3Array) -> void:
+	var inverse := box.affine_inverse()
+	var half := size * 0.5 + Vector3.ONE * FENCE_BOX_SLACK_M
+	var outside := 0
+	for vertex: Vector3 in vertices:
+		var local := inverse * vertex
+		if absf(local.x) > half.x or absf(local.y) > half.y or absf(local.z) > half.z:
+			outside += 1
+	if outside > 0:
+		_fail("%s: %d of its %d vertices stand outside its box" % [what, outside, vertices.size()])
 
 
 # --- Shaders ------------------------------------------------------------------------

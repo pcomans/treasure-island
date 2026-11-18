@@ -35,10 +35,14 @@ const CELL_M := 48.0
 ## The cell (m) the rows' opaque and shadow-only cell meshes are merged in (owner,
 ## 2026-11-18: street furniture and fences may be drawn up to about one cell farther
 ## away than before, never nearer, to fold many small meshes together). The merged
-## mesh's range is each row's cell mesh's own, widened by its centre's offset from
-## the merged mesh's (StreetDetailBatches.coarse_range): nothing goes earlier, and
-## a piece can draw at most twice that offset (90 m at 64 m cells) farther.
+## mesh's range E reaches each row cell mesh's own range e from that mesh's centre c
+## (StreetDetailBatches.coarse_range: the largest e + |c - C| over the cell, C the
+## merged mesh's centre, plus a metre), so nothing goes earlier; a row cell mesh then
+## draws up to E + |c - C| - e farther: at most 91.4 m over the island generated on
+## 2026-11-18 (median 40 m), and never past MAX_FARTHER_M, which fails the build.
 const MERGE_CELL_M := 64.0
+## The most (m) a merged row cell mesh may draw farther than its own range.
+const MAX_FARTHER_M := 2.0 * MERGE_CELL_M
 const RENDER_WORLD_VISIBLE := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
@@ -185,6 +189,9 @@ func build(document: Dictionary) -> Dictionary:
 		fences += 1
 		type_counts[type] = int(type_counts.get(type, 0)) + 1
 	var merged := _merge_cell_meshes(root, merging)
+	if merged.has("error"):
+		root.free()
+		return _error(str(merged.error))
 	meshes += int(merged.meshes)
 	for entry: Dictionary in pending:
 		var group: Node3D = entry.group
@@ -236,7 +243,8 @@ static func _placed_ranges(runs: Array, placed: Dictionary) -> Array:
 ## cell under root/FenceCells, a surface per material and vertex layout, each with
 ## the widest range any of its rows' meshes needs from the merged mesh's centre.
 ## {meshes, surfaces: "merge key|row mesh|its surface" -> [path from root, merged
-## surface, first vertex]}.
+## surface, first vertex]}, or {error} where a row's mesh would draw more than
+## MAX_FARTHER_M farther.
 static func _merge_cell_meshes(root: Node3D, merging: Dictionary) -> Dictionary:
 	var holder := Node3D.new()
 	holder.name = "FenceCells"
@@ -274,12 +282,19 @@ static func _merge_cell_meshes(root: Node3D, merging: Dictionary) -> Dictionary:
 			merged.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _joined(into.arrays), [], {}, int(into.flags))
 			merged.surface_set_material(merged.get_surface_count() - 1, into.material)
 		merged.custom_aabb = batch.box
+		var end := StreetDetailBatches.coarse_range(batch).y
+		# Each row mesh's centre and own range, as added above.
+		for part_index in parts.size():
+			var centre: Vector3 = (batch.references as PackedVector3Array)[part_index]
+			var farther := end + centre.distance_to(batch.box.get_center()) - (batch.extras as PackedFloat32Array)[part_index]
+			if farther > MAX_FARTHER_M:
+				return {"error": "%s: a row's cell mesh at %s would draw %.1f m farther than its own range (at most %.0f m)" % [node_name, centre, farther, MAX_FARTHER_M]}
 		var instance := MeshInstance3D.new()
 		instance.name = node_name
 		instance.mesh = merged
 		instance.layers = RENDER_WORLD_VISIBLE
 		instance.cast_shadow = int(parts[0].cast)
-		instance.visibility_range_end = StreetDetailBatches.coarse_range(batch).y
+		instance.visibility_range_end = end
 		instance.visibility_range_end_margin = 10.0
 		instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
 		instance.set_meta("street_detail_layer", "fences")
