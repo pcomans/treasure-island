@@ -6,6 +6,10 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2306 (2026-11-18)
+
+- The Job Corps campus has its chain-link fence along Seven Seas Avenue, its north side, 5th Street and round the 4th Street lot. Cars stop at it; its gates and the streets into the campus stay open.
+
 ## Build 2302 (2026-11-18)
 
 - On the web, the game uses much less memory, so it should stop reloading on iPhones.
