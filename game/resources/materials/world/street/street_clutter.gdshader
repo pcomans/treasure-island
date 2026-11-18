@@ -26,6 +26,15 @@ shader_type spatial;
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
+// The large batches of parked cars and yard pieces that stand alone in their small
+// cell (street_clutter_builder.gd with game/scripts/world/street_detail_batches.gd):
+// a batch can't say which of its instances shows, so each one shows only within its
+// level's range street_band ([begin, end] in metres; y 0: no test), measured as its
+// small cell measured it, from its near mesh's box centre (street_reference, in the
+// instance's frame) to the main camera, the same camera in the shadow and probe
+// passes. Outside it the instance collapses to its origin and draws nothing.
+uniform vec2 street_band = vec2(0.0);
+uniform vec3 street_reference = vec3(0.0);
 // A hero wheel's own mesh, its axle along X through the origin: the tyre gets
 // its tread and sidewall detail.
 uniform bool wheel_local = false;
@@ -85,6 +94,12 @@ void vertex() {
 	// Tyre, rim and hub: the wheel follows the ground (front is -Z, right +X).
 	if (part >= P_TIRE && part <= P_HUB) {
 		VERTEX.y += INSTANCE_CUSTOM.b * sign(VERTEX.x) * sign(VERTEX.z);
+	}
+	if (street_band.y > 0.0) {
+		float away = distance(MAIN_CAM_INV_VIEW_MATRIX[3].xyz, (MODEL_MATRIX * vec4(street_reference, 1.0)).xyz);
+		if (away < street_band.x || away > street_band.y) {
+			VERTEX = vec3(0.0);
+		}
 	}
 }
 

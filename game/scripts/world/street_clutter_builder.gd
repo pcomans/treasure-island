@@ -7,7 +7,11 @@ extends RefCounted
 ## cell and detail level: the near mesh while the camera is within LOD_NEAR_M of
 ## the cell's centre, the far mesh beyond, to the prop's range (Godot measures
 ## visibility ranges to the MultiMesh bounds centre; the far range is extended by
-## the farthest instance's offset from that centre so no item vanishes early).
+## the farthest instance's offset from that centre so no item vanishes early). An
+## item alone in its cell is drawn instead in a large batch per mesh, level and
+## StreetDetailBatches.CELL_M cell (__b nodes) with a material that tests that same
+## range from the item's own box centre in the shader (street_clutter.gdshader,
+## street_yard.gdshader), so it shows and hands over exactly where its cell did.
 ## A car's near mesh casts no shadow: its shadow caster (the kit's far body a
 ## little inside the surface) does, over the same range, so the detailed levels
 ## are not drawn again in the shadow passes. The parked cars nearest the camera
@@ -121,6 +125,13 @@ func build(document: Dictionary) -> Dictionary:
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		items += 1
 	var multimeshes := 0
+	# An item alone in its small cell goes into a large batch (StreetDetailBatches)
+	# with a material that tests its level's range from its own box centre, as its
+	# cell did; a cell of several keeps its own MultiMeshes, whose range is measured
+	# from the cell's centre (its instances have no room left in their custom data
+	# to carry that centre). Batch node name -> its batch.
+	var large: Dictionary = {}
+	var bands: Dictionary = {}
 	var batch_keys: Array = batches.keys()
 	batch_keys.sort()
 	for key: String in batch_keys:
@@ -148,6 +159,21 @@ func build(document: Dictionary) -> Dictionary:
 			]
 			if caster is Mesh:
 				levels.append({"name": "shadow", "mesh": caster, "begin": 0.0, "end": float(batch.lod_near_m), "cast": GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY})
+			if entries.size() == 1 and StreetDetailBatches.takes_band(batch.material):
+				# Alone, its own near box's centre is its cell's centre (slack 0).
+				var xf: Transform3D = entries[0][0]
+				for level: Dictionary in levels:
+					var node_name := "%s_%s__b%s" % [key, level.name, StreetDetailBatches.cell(xf.origin)]
+					if not large.has(node_name):
+						large[node_name] = StreetDetailBatches.batch(level.mesh, level.cast, float(level.begin), float(level.end))
+						large[node_name]["material"] = StreetDetailBatches.band_material(batch.material, float(level.begin), float(level.end), bands, near_box.get_center())
+					var at := StreetDetailBatches.add(large[node_name], xf, xf * near_box, (xf * near_box).get_center(), 0.0, entries[0][1])
+					if swappable.has(entries[0][2]):
+						var ref := [node_name, at]
+						if level.name == "shadow":
+							ref.append("shadow")
+						(swappable[entries[0][2]].instances as Array).append(ref)
+				continue
 			for level: Dictionary in levels:
 				var multimesh := MultiMesh.new()
 				multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -180,6 +206,15 @@ func build(document: Dictionary) -> Dictionary:
 				instance.set_meta("placement_count", entries.size())
 				root.add_child(instance)
 				multimeshes += 1
+	var node_names: Array = large.keys()
+	node_names.sort()
+	for node_name: String in node_names:
+		var instance := StreetDetailBatches.node(large[node_name], node_name, false)
+		instance.material_override = large[node_name].material
+		instance.layers = RENDER_WORLD_VISIBLE
+		instance.set_meta("street_detail_layer", "clutter")
+		root.add_child(instance)
+		multimeshes += 1
 	var shape_count := 0
 	var shape_cells: Array = shapes.keys()
 	shape_cells.sort()

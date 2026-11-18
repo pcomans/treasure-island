@@ -564,7 +564,8 @@ func _plant_gallery(plan: Dictionary) -> Dictionary:
 			"prop": prop, "prop_params": params, "position_m": [xz.x, y, xz.y], "surface": {"bias_m": 0.0}, "yaw_radians": float(plant.get("yaw", 0.0))})
 	var groups := {}
 	for group: String in rows:
-		var built := StreetVegetationBuilder.new().build({"rows": rows[group]})
+		# A group drawn at one forced level shows it at any distance: no level bands.
+		var built := StreetVegetationBuilder.new().build({"rows": rows[group]}, null, levels[group] == null)
 		if not built.ok:
 			root.free()
 			return {"error": "group %s: %s" % [group, built.message]}
