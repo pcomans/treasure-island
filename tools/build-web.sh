@@ -187,13 +187,14 @@ os.replace(temporary, path)
 EOF
 
 # A second change to Godot's loader: the page can reach a file in the engine's file
-# system, Module.tiFileNode(path) giving Emscripten's MEMFS node (FS is not exported).
-# Once play is ready the game names the pack's files it never reads again
-# (game/scripts/web/pack_release.gd), and the page gives the pack's file new contents
-# that keep every other byte and frees the pack's buffer, about 160 MB of a phone's
-# memory (game/web/shell.html, tiPackRelease). Without it the page keeps the whole
-# pack, as before. It must apply exactly once, or the build stops: check it again with
-# a new Godot; tools/check-web-live.sh checks the deployed engine script for it.
+# system, Module.tiFileNode(path) giving Emscripten's MEMFS node (FS itself stays
+# unexported; the Module is the page's own Engine's, on no global). Once play is ready
+# the game names the pack's files it never reads again (game/scripts/web/pack_release.gd),
+# and the page uses the node to check that the file's contents are its own pack buffer,
+# gives the file new contents that keep every other byte, and frees the buffer, about
+# 160 MB of a phone's memory (game/web/shell.html, tiPackRelease). Without it the page
+# keeps the whole pack, as before. It must apply exactly once, or the build stops: check
+# it again with a new Godot; tools/check-web-live.sh checks the deployed engine script.
 python3 -I - "${out}/${name}.js" <<'EOF'
 import os, shutil, sys, tempfile
 path = sys.argv[1]

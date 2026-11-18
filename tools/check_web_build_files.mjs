@@ -31,7 +31,17 @@
 //     writes;
 //   - the loading line: never blank once anything reports, "Loading the game…" while the
 //     pack's source isn't known, "Downloading" only once the pack comes over the network,
-//     "from this device" only when it comes from there, a percentage once every size is known.
+//     "from this device" only when it comes from there, a percentage once every size is known;
+//   - once play is ready, freeing what the game no longer reads of the pack (tiPackDirectory,
+//     tiReleasedPack, tiPackRelease, with a stand-in for the engine's file and MEMFS's read):
+//     the pack's directory reads as Godot writes it, and a damaged one or a pack the page
+//     should leave alone (encrypted, sparse) doesn't; every kept byte reads as before, read
+//     as the engine does, once the pack's buffer is detached; a read that starts in a released
+//     file, of any length, is an I/O error that names the file; one that runs on past a kept
+//     file into a released one gets zeros there; the swap runs in a task of its own, and the
+//     buffer is freed only once this tab's store has stopped writing from it; without the
+//     engine's own file of the pack (a build without the engine-script patch, a copy, another
+//     size, a lookup that throws) or with a request it does not take, it keeps the whole pack.
 // Node only, no network and no engine; about thirty seconds, mostly the page's
 // waits between download attempts and for storage that doesn't answer. Part of tools/test.sh.
 //
