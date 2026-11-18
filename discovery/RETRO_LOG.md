@@ -27522,3 +27522,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: The Vercel CLI's own authenticated API (`vercel api` GET on the deployment's file list and file contents) gave the exact deployed files, each checked against its SHA-1 uid, with no rebuild and no setting changed; the pack's build stamp named the build and commit. Two interleaved A/B pairs (merged then baseline, baseline then merged) showed the run-to-run spread before any difference was claimed.
 - What did not work well: `http.server` dropped the pack with `Errno 55` on the first run again. The rig took no picture during the drive, so missing street detail could not be checked.
 - What the team should change next time: Serve with `tools/web_trace/serve.py` (added; it retries the refused send). Each trace-second mark now saves a screenshot. Always run at least two pairs: the GPU process's MALLOC_SMALL at the prompt alone moved by about 90 MB between identical runs.
+
+### regrouped_build iphone-trace-memory-20261118 — 2026-11-18 — regrouped street-detail build against the unmerged build, sound on, two alternating pairs (branch `web/iphone-trace-memory-20261118`)
+
+- What worked well: The earlier agent's scripts (deployment file download checked against each SHA-1, loopback `serve.py`, the rig's footprint marks) ran unchanged, so the whole job took about 30 minutes. The rig's screenshots at each mark let the street detail be compared by eye.
+- What did not work well: The build number is not in the trace header; it had to be read out of the pack's stamp. The GPU process footprint still moves by about 50 MB from run to run, as does the web process late in a run, so single runs of either cannot show a small saving.
+- What the team should change next time: Print the build stamp in the trace header. Judge a merge by the GL buffer count (deterministic, identical across repeats) first and by footprints only with several runs.
