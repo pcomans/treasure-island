@@ -56,8 +56,7 @@ static var _shared_shaders: Dictionary = {}
 ## One entry a shader: {"key": String, "kind": "shader", "generated", "label" or
 ## "default", "material": a material drawn with it (null for a Label3D's and the
 ## default), "label": a Label3D's flags ({} otherwise), "uses": {use key: render
-## layers}, "users": how many nodes, BaseMaterial3Ds and registrations led to it}. A use key is
-## "PROBES INSTANCED SHADOW_ONLY", as 0 or 1 each (probes up to 2).
+## layers}}. A use key is "PROBES INSTANCED SHADOW_ONLY", as 0 or 1 each (probes up to 2).
 var entries: Array[Dictionary] = []
 ## What this could not proxy: drawables and materials of a kind it does not draw (by
 ## class), and uses with no place inside their probes' boxes: {what: count}. The
@@ -115,7 +114,10 @@ static func registered() -> Array:
 
 ## One Shader for each distinct code, shared: two Shader resources with the same code
 ## are two shaders to the renderer, each compiling its own programs (Mersea's glazing
-## made one a window bay, nine in all).
+## made one a window bay, nine in all). Every material made with a code shares this
+## Shader, so its code must never be changed in place: duplicate first, as
+## northpoint_1232_asset.gd does (a deep duplicate of the material, whose Shader then
+## is its own, before it edits material.shader.code).
 static func shared_shader(code: String) -> Shader:
 	var shader: Shader = _shared_shaders.get(code)
 	if shader == null:
@@ -238,10 +240,9 @@ func _add_uses(first: Variant, uses: Dictionary) -> void:
 func _note(key: String, kind: String, material: Material, label: Dictionary, uses: Dictionary) -> void:
 	var entry: Dictionary = _by_key.get(key, {})
 	if entry.is_empty():
-		entry = {"key": key, "kind": kind, "material": material, "label": label, "uses": {}, "users": 0}
+		entry = {"key": key, "kind": kind, "material": material, "label": label, "uses": {}}
 		_by_key[key] = entry
 		entries.append(entry)
-	entry.users += 1
 	_merge(entry.uses, uses)
 
 

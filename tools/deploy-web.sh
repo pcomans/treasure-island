@@ -29,6 +29,9 @@
 # the build fetched, for the release record; credentials never appear in it.
 # CHANGES lines beside it show the build's entry in CHANGELOG.md, the players'
 # changelog (tools/changelog.py latest); they never stop a deploy.
+#
+# Shader proof: the deploy stops unless tools/web_shader_proof.sh has passed for
+# this commit's web build (its receipt, build/shader-proof/COMMIT.pass; below).
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
@@ -227,6 +230,22 @@ refuse_hidden_files() {
   fi
 }
 refuse_hidden_files || exit 1
+
+# The shader proof must have passed for this commit's web build: once loading has
+# ended the build compiles no shader program (tools/web_shader_proof.sh, WebKit and
+# Chrome on this machine's GPU, about 20 minutes; it cannot run in CI as set up). A
+# passing run writes build/shader-proof/COMMIT.pass for the commit the export names;
+# the deploy, which builds the same commit again, stops without that receipt. A dry
+# run only says whether it is there.
+proof="build/shader-proof/${head:0:8}.pass"
+if [ -f "${proof}" ]; then
+  echo "SHADER PROOF: $(head -1 "${proof}")"
+elif [ "${dry_run}" = true ]; then
+  echo "WARNING: no shader proof for ${head:0:8} (${proof}); a real deploy stops here"
+else
+  echo "FAIL: no shader proof for ${head:0:8}: run tools/web_shader_proof.sh build/web OUT_DIR on this commit's build first (it writes ${proof})" >&2
+  exit 1
+fi
 
 # The summary's lines: the warning again for a silent deploy, then SOUNDS and
 # the CHANGES lines.

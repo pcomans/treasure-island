@@ -13,22 +13,33 @@ extends SceneTree
 ##   - no two Shader resources under main have the same code (each is a shader of its
 ##     own to the renderer, compiling its own programs);
 ##   - each script that makes materials, shaders or drawables is classified: it
-##     registers what it draws only in play (ShaderWarmUp.add), or CLASSIFIED says why
-##     it need not (a new kind of runtime effect fails here until it says);
+##     registers what it draws only in play (a ShaderWarmUp.add call, not a comment),
+##     or CLASSIFIED says why it need not, by folder, by file or by function (a new
+##     kind of runtime effect fails here until it says), and no file classified by
+##     folder or file makes one inside a callback Godot calls in play;
 ##   - after play starts, what the runtime effects draw (a fence bay broken, a street
 ##     prop felled, a car's splash, goal confetti, a live car) uses only shaders the
 ##     warm-up drew that way;
 ##   - nothing of it is left: no warm-up node, no proxy, the player's camera current.
 ## Whether that leaves no program compiled in play is the browser's to tell: the drive
 ## trace (?trace=drive) counts them, tools/web_shader_proof.sh checks it.
+## The island here is the one generated as it loads; the web loads the one baked from it
+## (generated/web/static_world.scn, tools/build-web.sh), which this test does not
+## load: its census and duplicate-code check cover the baked island only as far as the
+## bake keeps what it saves, and the browser proof is what covers the web's island.
 
 ## Every script under SCRIPTS_ROOT matching SCAN makes materials, shaders or drawables.
 const SCRIPTS_ROOT := "res://game/scripts"
 const SCAN := "(Shader|Standard|ORM|CanvasItem|ParticleProcess)Material(3D)?\\.new\\(|\\bShader\\.new\\(|\\b(Mesh|MultiMesh)Instance3D\\.new\\(|Label3D\\.new\\(|Sprite3D\\.new\\(|CPUParticles3D|GPUParticles3D|RenderingServer\\.(instance_create|multimesh_create|mesh_create)|\\.instantiate\\(|duplicate\\(\\)\\s+as\\s+\\w*Material"
-## A script registers what it draws only in play when it calls this.
-const REGISTERS := "ShaderWarmUp.add"
+## A script registers what it draws only in play when it calls this: a call on a line
+## of its own (a comment does not count).
+const REGISTERS := "(?m)^\\s*ShaderWarmUp\\.add(_mesh)?\\("
+## The callbacks Godot calls in play: a maker inside one in a script classified by folder
+## or file (as making what it draws while the island loads) fails.
+const RUNTIME_CALLBACKS := "^(_process|_physics_process|_input|_unhandled_input|_unhandled_key_input|_notification|_integrate_forces|_on_\\w+)$"
 ## Why the scripts that make materials, shaders or drawables and register none need
-## none: by folder (ending "/") or by file.
+## none: by folder (ending "/"), by file, or by function ("FILE::FUNCTION": each maker
+## in that file must then be in a function named here).
 const CLASSIFIED := {
 	"res://game/scripts/world/facades/": "builds buildings while the island loads (or bakes)",
 	"res://game/scripts/world/massing/": "builds buildings while the island loads (or bakes)",
@@ -37,8 +48,9 @@ const CLASSIFIED := {
 	"res://game/scripts/player/chest_avatar_parts.gd": "the player's materials, made with it while the island loads (a driver's are made alike: car_driver.gd)",
 	"res://game/scripts/player/landing_poof.gd": "made with the player while the island loads",
 	"res://game/scripts/vehicles/car_driver.gd": "a car's driver at the hero level, desktop only, drawn with the player's shaders (chest_avatar_parts.gd)",
-	"res://game/scripts/vehicles/drivable_car.gd": "draws a live car with the clutter and yard kits' materials, which the kits register",
-	"res://game/scripts/vehicles/vehicle_manager.gd": "its yards' instances are made while the island loads, with the yard kit's materials (registered there)",
+	"res://game/scripts/vehicles/drivable_car.gd::_instance": "a live car's instances, drawn with the clutter and yard kits' materials, which the kits register",
+	"res://game/scripts/vehicles/drivable_car.gd::set_lamps_lit": "a lit lamp's copy of a kit's ShaderMaterial: the same Shader, so the same programs",
+	"res://game/scripts/vehicles/vehicle_manager.gd::_new_barrier": "a yard's barrier instances, made while the island loads with the yard kit's materials (registered there)",
 	"res://game/scripts/world/bay_bridge_builder.gd": "builds the Bay Bridge while the island loads (or bakes)",
 	"res://game/scripts/world/breakwater_birds.gd": "builds the birds while the island loads (or bakes)",
 	"res://game/scripts/world/ferry_terminal.gd": "builds the ferry terminal while the island loads (or bakes)",
@@ -131,42 +143,79 @@ func _run() -> void:
 ## registers. Returns a summary, or "" after failing.
 func _check_scan() -> String:
 	var pattern := RegEx.create_from_string(SCAN)
+	var registers_call := RegEx.create_from_string(REGISTERS)
+	var runtime := RegEx.create_from_string(RUNTIME_CALLBACKS)
 	var makers := 0
 	var registering: Array[String] = []
 	var unclassified: Array[String] = []
+	var in_play: Array[String] = []
 	var both: Array[String] = []
 	var found: Array[String] = []
+	var named := {}
 	for path: String in _scripts(SCRIPTS_ROOT):
 		var source := FileAccess.get_file_as_string(path)
-		if pattern.search(source) == null:
+		var made := _makers(source, pattern)
+		if made.is_empty():
 			continue
-		makers += 1
+		makers += made.size()
 		found.append(path)
-		var registers := source.contains(REGISTERS)
-		var reason := _classified(path)
-		if registers:
+		if registers_call.search(source) != null:
 			registering.append(path.get_file())
-			if not reason.is_empty() and not CLASSIFIED.has(path.get_base_dir() + "/"):
+			if CLASSIFIED.has(path) or CLASSIFIED.keys().any(func(key: String) -> bool: return key.begins_with(path + "::")):
 				both.append(path)
-		elif reason.is_empty():
-			unclassified.append(path)
+			continue
+		var reason := _classified(path)
+		for maker: Array in made:
+			var function := str(maker[0])
+			if CLASSIFIED.has(path + "::" + function):
+				named[path + "::" + function] = true
+			elif reason.is_empty():
+				unclassified.append("%s (%s: %s)" % [path, function, maker[1]])
+			elif runtime.search(function) != null:
+				in_play.append("%s (%s: %s)" % [path, function, maker[1]])
 	if not unclassified.is_empty():
-		_fail("These scripts make materials, shaders or drawables but neither register what they draw only in play (ShaderWarmUp.add, as the island loads) nor say in CLASSIFIED (game/tests/headless_shader_warm_up_contract.gd) why they need not: %s" % [unclassified])
+		_fail("These makers of materials, shaders or drawables are in scripts that neither register what they draw only in play (a ShaderWarmUp.add call, as the island loads) nor say in CLASSIFIED (game/tests/headless_shader_warm_up_contract.gd) why they need not: %s" % [unclassified])
+		return ""
+	if not in_play.is_empty():
+		_fail("These makers are inside callbacks Godot calls in play, in scripts CLASSIFIED as making what they draw while the island loads: register what they draw (ShaderWarmUp.add) or classify the function: %s" % [in_play])
 		return ""
 	if not both.is_empty():
 		_fail("These scripts register with ShaderWarmUp and are also CLASSIFIED as needing no registration: %s" % [both])
 		return ""
 	var stale: Array[String] = []
 	for key: String in CLASSIFIED:
-		if key.ends_with("/"):
+		if key.contains("::"):
+			if not named.has(key):
+				stale.append(key)
+		elif key.ends_with("/"):
 			if not found.any(func(path: String) -> bool: return path.begins_with(key)):
 				stale.append(key)
 		elif not found.has(key):
 			stale.append(key)
 	if not stale.is_empty():
-		_fail("CLASSIFIED names scripts that make no materials, shaders or drawables (or are gone): %s" % [stale])
+		_fail("CLASSIFIED names scripts or functions that make no materials, shaders or drawables (or are gone): %s" % [stale])
 		return ""
-	return "%d scripts make materials, shaders or drawables, each classified (%d register: %s)" % [makers, registering.size(), ", ".join(registering)]
+	return "%d scripts make materials, shaders or drawables (%d makers), each classified (%d register: %s)" % [found.size(), makers, registering.size(), ", ".join(registering)]
+
+
+## Each maker in a script's source (a SCAN match not in a comment): [the function it is
+## in ("" at the script's top level), the text matched].
+static func _makers(source: String, pattern: RegEx) -> Array:
+	var functions := RegEx.create_from_string("(?m)^(?:static\\s+)?func\\s+(\\w+)")
+	var starts: Array = []
+	for found: RegExMatch in functions.search_all(source):
+		starts.append([found.get_start(), found.get_string(1)])
+	var made: Array = []
+	for found: RegExMatch in pattern.search_all(source):
+		var line_start := source.rfind("\n", found.get_start()) + 1
+		if source.substr(line_start, found.get_start() - line_start).strip_edges().begins_with("#"):
+			continue
+		var function := ""
+		for start: Array in starts:
+			if int(start[0]) < found.get_start():
+				function = str(start[1])
+		made.append([function, found.get_string()])
+	return made
 
 
 func _classified(path: String) -> String:
@@ -399,7 +448,16 @@ func _check_nothing_left(main: GameMain) -> String:
 	if not left.is_empty() or not steps_with_nodes.is_empty() or camera != main.player.get_camera():
 		_fail("Once play has started nothing of the warm-up may be left: nodes %s, steps with nodes %d, current camera %s." % [left.map(func(node: Node) -> String: return str(node.get_path())), steps_with_nodes.size(), camera.get_path() if camera != null else "none"])
 		return ""
-	return "nothing of it left in play (the player's camera current)"
+	# The chest as play starts: at rest with its lid shut (within 0.6 deg of rest: a
+	# breath lifts it up to 2 deg, which showed the gold at the web's start prompt),
+	# however many frames the warm-up added to loading (it holds its rest pose until
+	# play starts).
+	var avatars := main.player.find_children("*", "ChestAvatar", true, false)
+	var pose: Dictionary = (avatars[0] as ChestAvatar).describe() if not avatars.is_empty() else {}
+	if pose.is_empty() or absf(float(pose.squash)) > 0.002 or absf(float(pose.lid_deg) - rad_to_deg(ChestAvatar.LID_REST)) > 0.6 or bool(pose.airborne):
+		_fail("As play starts the chest must stand at rest with its lid shut (squash 0, lid %.1f deg, on the ground), whatever loading's length: %s." % [rad_to_deg(ChestAvatar.LID_REST), pose])
+		return ""
+	return "nothing of it left in play (the player's camera current; the chest at rest, its lid shut)"
 
 
 ## What the runtime effects draw after play has started uses only shaders the warm-up

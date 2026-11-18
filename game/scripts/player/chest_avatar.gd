@@ -464,10 +464,16 @@ func _physics_process(delta: float) -> void:
 	var origin := _player.global_position
 	var active := _player.is_physics_processing()
 	var velocity := _player.get_real_velocity() if active else Vector3.ZERO
-	if _reset_pending or origin.distance_to(_last_position) > 1.0 + velocity.length() * delta * 4.0:
+	# Before play (the controller off after its start-up settle, through the loading
+	# screen's steps) the chest holds its rest pose: its springs start again from rest
+	# each tick and its idle clock waits, so the start prompt shows the same chest,
+	# standing with its lid shut, however many frames loading takes (the shader
+	# warm-up's extra loading frames had left it paused part-way through a breath).
+	if _reset_pending or not active or origin.distance_to(_last_position) > 1.0 + velocity.length() * delta * 4.0:
 		_reset(xf)
 	_last_position = origin
-	_time += delta
+	if active:
+		_time += delta
 	var on_floor := _player.is_on_floor()
 	var thrust := active and _player.is_processing_unhandled_input() and Input.is_action_pressed("jetpack")
 	var dropping := active and _player.is_processing_unhandled_input() and Input.is_action_pressed("fast_drop") and not Input.is_action_pressed("jetpack")

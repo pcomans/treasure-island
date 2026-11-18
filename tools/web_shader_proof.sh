@@ -20,6 +20,7 @@
 # complete). Nothing is sent anywhere: the trace keeps its records in the page, and
 # the rig reads them there. Each session takes about 10 minutes.
 #
+# A pass writes build/shader-proof/COMMIT8.pass, which tools/deploy-web.sh requires.
 # Run it in an engine slot, like any other GPU work (tools/check-web-live.sh).
 # Needs: Playwright 1.65.1 installed with npm's global root (PW_MODULE overrides), its
 # WebKit build, and Chrome for Testing (agent-browser's, from .devcontainer/
@@ -79,3 +80,13 @@ if [ "${failed}" -ne 0 ]; then
   exit 1
 fi
 echo "PASS: no shader program compiled after loading, in WebKit (phone, 3x) or Chrome (desktop): ${out}"
+# The receipt tools/deploy-web.sh asks for: the commit the export names (its files'
+# treasure-island-COMMIT8 prefix), kept outside build/web, which every build clears.
+commit="$(ls "${export_dir}" | sed -n 's/^treasure-island-\([0-9a-f]\{8\}\)\.js$/\1/p' | head -1)"
+if [ -n "${commit}" ]; then
+  mkdir -p "${root}/build/shader-proof"
+  printf 'PASS %s commit %s, %s\n' "$(date -u +%FT%TZ)" "${commit}" "${out}" > "${root}/build/shader-proof/${commit}.pass"
+  echo "RECEIPT: build/shader-proof/${commit}.pass"
+else
+  echo "NOTE: ${export_dir} names no commit (treasure-island-COMMIT8.js), so no receipt for tools/deploy-web.sh"
+fi
