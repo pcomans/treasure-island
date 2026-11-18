@@ -169,6 +169,21 @@ async function killAndReopen(context, cdp, killAt) {
   }
   if (BROWSER === 'chrome') {
     await cdp.send('Page.crash').catch(() => {});
+  } else if (process.platform === 'darwin') {
+    // On a Mac (no session.sh: run this driver directly), Playwright's own WebKit, whose web processes run from
+    // its folder. Only while exactly one Playwright WebKit of that folder runs, so every one of them is this
+    // session's; the biggest killed.
+    const folder = require('path').dirname(pw.webkit.executablePath());
+    const ps = require('child_process').execFileSync('ps', ['-axww', '-o', 'pid=,rss=,command='], {encoding: 'utf8'});
+    const procs = ps.split('\n').map((l) => l.trim().match(/^(\d+)\s+(\d+)\s+(.*)$/)).filter(Boolean).map((m) => ({pid: +m[1], rss: +m[2], cmd: m[3]}));
+    const browsers = procs.filter((p) => p.cmd.startsWith(folder + '/') && /\/Contents\/MacOS\/Playwright(\s|$)/.test(p.cmd));
+    const web = procs.filter((p) => p.cmd.startsWith(folder + '/') && /com\.apple\.WebKit\.WebContent/.test(p.cmd));
+    log('WEB_PROCESSES', browsers.length, 'browser(s)', JSON.stringify(web.map((p) => [p.pid, Math.round(p.rss / 1024)])));
+    if (browsers.length !== 1) throw new Error(`not killing: ${browsers.length} Playwright WebKit browsers from ${folder} are running, not this one alone`);
+    const best = web.sort((a, b) => b.rss - a.rss)[0];
+    if (!best) throw new Error('no web process to kill under ' + folder);
+    log('KILL', 'pid', best.pid, 'rss_mib', Math.round(best.rss / 1024));
+    process.kill(best.pid, 'SIGKILL');
   } else {
     // This browser session's web processes (its runtime directory), the biggest killed.
     const xdg = process.env.XDG_RUNTIME_DIR;

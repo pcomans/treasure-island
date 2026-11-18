@@ -902,22 +902,23 @@ function tiTraceText(env, a) {
 		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes];
 	// Cube-map faces drawing, started and stopped, kept as page events: a run of face
 	// binds or attachments with no gap of more than a second.
-	let cubeSeen = 0;
+	// The counts and GL storage at the last look (a second ago): a run counts from them.
+	let cubeLast = [0, 0, 0];
 	let cubeSince = -1;
 	let cubeFrom = null;
 	const markCubes = () => {
-		const n = glm.cubeBinds + glm.cubeAttach;
-		if (n !== cubeSeen) {
+		const counts = [glm.cubeBinds, glm.cubeAttach, texTotal() + glm.rb + glm.buf];
+		if (counts[0] !== cubeLast[0] || counts[1] !== cubeLast[1]) {
 			if (cubeSince < 0) {
-				cubeFrom = [glm.cubeBinds, glm.cubeAttach, texTotal() + glm.rb + glm.buf];
+				cubeFrom = cubeLast;
 				pageEvent('cube', `cube-map faces drawing (a reflection probe or the sky's radiance); GL then: ${glmSummary()}`);
 			}
-			cubeSeen = n;
 			cubeSince = now();
 		} else if (cubeSince >= 0 && now() - cubeSince > 1000) {
 			pageEvent('cube', `cube-map faces done: ${glm.cubeBinds - cubeFrom[0]} face binds, ${glm.cubeAttach - cubeFrom[1]} face attachments, GL storage ${mb(texTotal() + glm.rb + glm.buf - cubeFrom[2])} MiB more; GL now: ${glmSummary()}`);
 			cubeSince = -1;
 		}
+		cubeLast = counts;
 	};
 	// The canvas's drawing buffer resized (the engine sets it), kept as a page event.
 	let canvasSize = '';

@@ -199,6 +199,23 @@ KILL_AT_S=72 BROWSER=webkit PROFILE=iphone TI_WEBKIT_EXEC=<MiniBrowser wrapper> 
 - The `iphone` profile is the owner's Safari held sideways: 874 x 292 CSS px at 3x, a canvas of
   2622 x 876.
 
+On a Mac, `session.sh` (Weston, `/proc`) does not run; run the driver itself against
+Playwright's own WebKit (a Playwright package whose WebKit revision is installed, outside the
+project):
+
+```sh
+OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules>/playwright \
+  URL='http://127.0.0.1:<port>/?trace=drive&profile_startup=1&scale=0.67&route=corner&seconds=80' \
+  node tools/web_trace/drive.cjs
+```
+
+- There it kills the biggest web process of Playwright's WebKit, and only while that WebKit's
+  browser is the one running from its folder.
+- Building on a Mac: set `GODOT_BIN`; `tools/build-web.sh` needs a `timeout` command on the
+  `PATH` (GNU coreutils' or a stand-in), and the Mac's `/bin/bash` 3.2 stops on its empty
+  argument list unless a flag is given (`--sfx-result FILE` does). The static world is then
+  baked on the Mac's GPU.
+
 ## Checks that must stay green
 
 - `tools/godot --headless --path . --script game/tests/headless_drive_trace_contract.gd` (part of

@@ -212,6 +212,10 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
     && heart.memory[12] === 4 * MiB && heart.memory[20] >= 1 && heart.memory[21] === 1 && heart.memory[24] === 1 && heart.memory[25] === 4 * 2 * 96000,
     `the heartbeat must carry the memory totals (GL textures ${live}, of which cube ${48 * MiB}, renderbuffers ${8 * MiB}, all multisampled, buffers ${4 * MiB}, a cube-map face drawn, a sound started): ${JSON.stringify(heart && heart.memory)}`);
   check((load('page_events') || []).some((e) => e[2] === 'cube' && /cube-map faces drawing/.test(e[3])), 'cube-map faces drawing must be kept as a page event');
+  b.advance(1500);
+  for (const cb of b.intervals) cb();
+  const done = (load('page_events') || []).find((e) => e[2] === 'cube' && /cube-map faces done/.test(e[3]));
+  check(done && /done: 1 face binds, 1 face attachments/.test(done[3]), `cube-map faces done must be kept with the faces drawn in that run: ${done && done[3]}`);
   ctx.deleteTexture(cube);
   ctx.deleteRenderbuffer(rb);
   b.tick(1000);
