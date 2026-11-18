@@ -471,30 +471,37 @@ static func _is_plain(material: Material) -> bool:
 
 
 ## "" for a material whose surfaces may not join by material (_joins_by_material).
-## Otherwise a text that two materials share exactly when every value they store is
-## the same (resources by identity: the same Shader, the same textures): the material
-## itself, or a copy of it.
+## Otherwise its value_key, UNDRAWN_PROPERTIES aside: the material itself, or a copy of
+## it.
 static func _material_key(material: Material, keys: Dictionary) -> String:
 	if keys.has(material):
 		return keys[material]
-	var key := ""
-	if _joins_by_material(material):
-		var parts := PackedStringArray([material.get_class()])
-		for property: Dictionary in material.get_property_list():
-			var name: String = property.name
-			if int(property.usage) & PROPERTY_USAGE_STORAGE != 0 and name not in UNDRAWN_PROPERTIES:
-				parts.append(name + "=" + _value_text(material.get(name)))
-		# Each uniform's value too, read from the material itself whatever the renderer
-		# lists among its properties.
-		if material is ShaderMaterial:
-			for uniform: String in _uniform_names((material as ShaderMaterial).shader):
-				parts.append("uniform " + uniform + "=" + _value_text((material as ShaderMaterial).get_shader_parameter(uniform)))
-		key = "|".join(parts)
+	var key := value_key(material, UNDRAWN_PROPERTIES) if _joins_by_material(material) else ""
 	keys[material] = key
 	return key
 
 
-## A stored value as text for _material_key: a resource by identity, a collection as
+## A text two materials share exactly when they are of one class and every value they
+## store is the same, the `ignored` properties aside: resources by identity (the same
+## Shader, the same textures, the same next pass), collections and other objects as
+## text, anything else by its bytes, metadata among them; and for a ShaderMaterial each
+## uniform's value as the material reads it. The bake's material sharing uses it too
+## (tools/share_baked_materials.gd).
+static func value_key(material: Material, ignored: Array) -> String:
+	var parts := PackedStringArray([material.get_class()])
+	for property: Dictionary in material.get_property_list():
+		var name: String = property.name
+		if int(property.usage) & PROPERTY_USAGE_STORAGE != 0 and name not in ignored:
+			parts.append(name + "=" + _value_text(material.get(name)))
+	# Each uniform's value too, read from the material itself whatever the renderer
+	# lists among its properties.
+	if material is ShaderMaterial and (material as ShaderMaterial).shader != null:
+		for uniform: String in _uniform_names((material as ShaderMaterial).shader):
+			parts.append("uniform " + uniform + "=" + _value_text((material as ShaderMaterial).get_shader_parameter(uniform)))
+	return "|".join(parts)
+
+
+## A stored value as text for value_key: a resource by identity, a collection as
 ## text, anything else by its bytes, so no rounding can make two values one.
 static func _value_text(value: Variant) -> String:
 	if value is Resource:
