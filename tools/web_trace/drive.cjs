@@ -244,8 +244,10 @@ async function measure(label, deep) {
     for (const m of text.matchAll(/^\s*(\d+) B\s+\d+ B\s+\d+ B\s+(\d+)\s+(.+?)\s*$/gm)) categories[m[3]] = [+m[1], +m[2]];
     entry[name] = {pid: proc.pid, total: +((text.match(/Footprint:\s*(\d+) B/) || [0, 0])[1]), categories};
     if (deep) {
-      fs.writeFileSync(`${OUT}/${label}-${name}-vmmap.txt`, run('vmmap', ['-summary', String(proc.pid)]));
-      if (name === 'gpu') fs.writeFileSync(`${OUT}/${label}-${name}-heap.txt`, run('heap', ['-s', '-q', String(proc.pid)]));
+      // On a forked corpse: heap stopping the GPU process itself for its walk made WebKit
+      // take it for hung and restart it, and the page lost its WebGL context.
+      fs.writeFileSync(`${OUT}/${label}-${name}-vmmap.txt`, run('vmmap', ['-forkCorpse', '-summary', String(proc.pid)]));
+      if (name === 'gpu') fs.writeFileSync(`${OUT}/${label}-${name}-heap.txt`, run('heap', ['--forkCorpse', '-s', '-q', String(proc.pid)]));
     }
   }
   const row = await js('memory_row', "(() => { const l = window.__tiTrace && window.__tiTrace.log(); return JSON.stringify({row: l && l.memory[l.memory.length - 1], columns: l && l.page.memory_columns, t: l && l.rows.length ? l.rows[l.rows.length - 1][0] / 1000 : null}); })()");
