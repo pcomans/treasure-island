@@ -861,7 +861,8 @@ window.__tiTraceLib = {TI_TRACE_FRAME, TI_TRACE_CAUSES, tiTraceFrames, tiTraceAn
 // answer within SETUP_MS, the pack comes from the network as before.
 //
 // The pack goes into one buffer of its size, the only copy the page makes: the
-// engine's file system keeps that buffer (tools/build-web.sh), a failed or cut download
+// engine's file system keeps that buffer (tools/build-web.sh) until play is ready, when
+// the page frees what the game no longer reads (tiPackRelease), a failed or cut download
 // and a stored copy that reads short are read again into it, and the store writes
 // views of it. A byte stream (Chrome's downloads and stored files) is read with a BYOB
 // reader through one small reused buffer, so no chunk is made: chunks copied in would
@@ -1218,6 +1219,259 @@ function tiAppleTouchDevice(agent, maxTouchPoints) {
 	return /\b(iPhone|iPod|iPad)\b/.test(agent) || (/\bMacintosh\b/.test(agent) && maxTouchPoints > 1);
 }
 
+// Releasing the pack once the game has loaded what it keeps (owner, 2026-11-18: an
+// iPhone ends the page past 2,048 MB). The engine reads every resource from the pack's
+// file in its own file system, which keeps the page's one buffer of it (above): about
+// 160 MB of the page's memory for the whole session. Once play is ready the game names
+// the pack's files it never reads again (game/scripts/web/pack_release.gd): the files
+// of the imported resources it holds, each held for the rest of the session so that a
+// later load of it comes from the engine's cache, and the baked world, loaded once.
+// The page then gives the engine's file new contents (tiReleasedPack) that keep every
+// other byte, copied into a buffer of their own, and frees the pack's buffer. A file
+// the game may still load (not loaded yet, or loaded and let go), every script and
+// every file read as it is (JSON, the credits) stays readable as before. The page
+// reaches the engine's file through tools/build-web.sh's engine-script patch
+// (tiFileNode); without it, or with anything else unexpected, it keeps the whole pack.
+//
+//   tiPackDirectory(bytes) -> {entries: [{path, offset, size}] by offset} or null
+//   tiReleasedPack(bytes, released, onMiss) -> {contents, keptBytes, state()}
+//   tiPackRelease(buffer, env) -> {release(json) -> string, state()}
+// tools/check_web_build_files.mjs runs these with stand-ins for the engine's file.
+
+// The pack's directory, as Godot 4.7.2 reads it (core/io/file_access_pack.cpp,
+// PackedSourcePCK::try_open_pack; pack formats 2 to 4) from BYTES, the whole pack: each
+// file's path (without res://), offset and size, by offset. Null when BYTES is not such
+// a pack, its directory is encrypted, it is a sparse bundle (its files live outside
+// it), or its entries run past its end or into each other.
+function tiPackDirectory(bytes) {
+	try {
+		const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+		if (view.getUint32(0, true) !== 0x43504447) return null;
+		const version = view.getUint32(4, true);
+		const flags = view.getUint32(20, true);
+		if (version < 2 || version > 4 || (flags & (1 | 4)) !== 0) return null;
+		const base = Number(view.getBigUint64(24, true));
+		// Format 2: the directory follows the header's 16 reserved words; 3 and 4 name it.
+		let at = version >= 3 ? Number(view.getBigUint64(32, true)) : 96;
+		const count = view.getUint32(at, true);
+		at += 4;
+		const decoder = new TextDecoder();
+		const entries = [];
+		for (let i = 0; i < count; i += 1) {
+			const length = view.getUint32(at, true);
+			const path = decoder.decode(bytes.subarray(at + 4, at + 4 + length)).replace(/\0+$/, '');
+			at += 4 + length;
+			const offset = base + Number(view.getBigUint64(at, true));
+			const size = Number(view.getBigUint64(at + 8, true));
+			// After the offset and size: the file's MD5 (16 bytes) and its flags.
+			const removal = (view.getUint32(at + 32, true) & 2) !== 0;
+			at += 36;
+			if (!removal) entries.push({path, offset, size});
+		}
+		entries.sort((a, b) => a.offset - b.offset);
+		let end = 0;
+		for (const entry of entries) {
+			if (!Number.isSafeInteger(entry.offset + entry.size) || entry.offset < end || entry.offset + entry.size > bytes.byteLength) return null;
+			end = entry.offset + entry.size;
+		}
+		return {entries};
+	} catch (err) {
+		// A read past the end of BYTES: not a whole pack.
+		return null;
+	}
+}
+
+// New contents for the pack's file in the engine's file system (Emscripten's MEMFS reads
+// a file through its contents' subarray(), or byte by byte for reads of 8 bytes or
+// fewer) that keep every byte of BYTES (the whole pack) outside RELEASED (entries of
+// tiPackDirectory's, by offset), copied into one buffer of their own, so BYTES' buffer
+// can go. A read that starts in a released file is the engine reading what the game said
+// it never reads again: it fails with an I/O error (EIO) and onMiss(entry, position,
+// length) names it, so it is never silent. A read that starts in kept bytes and runs on
+// into a released file gets zeros there: the C library reads up to a kilobyte past what
+// it was asked for (stdio's buffer), and the engine reads no further than the file it
+// opened. State: the kept bytes, misses and such reads on.
+function tiReleasedPack(bytes, released, onMiss) {
+	const size = bytes.byteLength;
+	// The kept runs [start, end) by position, and where each starts in the kept buffer.
+	const starts = [];
+	const ends = [];
+	let from = 0;
+	for (const entry of released) {
+		if (entry.offset > from) {
+			starts.push(from);
+			ends.push(entry.offset);
+		}
+		from = Math.max(from, entry.offset + entry.size);
+	}
+	if (from < size) {
+		starts.push(from);
+		ends.push(size);
+	}
+	const at = [];
+	let keptBytes = 0;
+	for (let i = 0; i < starts.length; i += 1) {
+		at.push(keptBytes);
+		keptBytes += ends[i] - starts[i];
+	}
+	const kept = new Uint8Array(keptBytes);
+	for (let i = 0; i < starts.length; i += 1) kept.set(bytes.subarray(starts[i], ends[i]), at[i]);
+	const releasedStarts = released.map((entry) => entry.offset);
+	let misses = 0;
+	let spills = 0;
+	// The last of SORTED at or before POSITION, or -1.
+	const below = (sorted, position) => {
+		let lo = 0;
+		let hi = sorted.length - 1;
+		let hit = -1;
+		while (lo <= hi) {
+			const mid = (lo + hi) >> 1;
+			if (sorted[mid] <= position) {
+				hit = mid;
+				lo = mid + 1;
+			} else {
+				hi = mid - 1;
+			}
+		}
+		return hit;
+	};
+	const runOf = (position) => {
+		const i = below(starts, position);
+		return i >= 0 && position < ends[i] ? i : -1;
+	};
+	const miss = (position, length) => {
+		misses += 1;
+		const i = below(releasedStarts, position);
+		onMiss(i >= 0 && position < released[i].offset + released[i].size ? released[i] : null, position, length);
+		// Emscripten's file system takes an error of this name as the error number it carries.
+		throw Object.assign(new Error('read of released game data at byte ' + position), {name: 'ErrnoError', errno: 29});
+	};
+	const subarray = (begin, end) => {
+		const i = runOf(begin);
+		if (i < 0) miss(begin, end - begin);
+		if (end <= ends[i]) return kept.subarray(at[i] + begin - starts[i], at[i] + end - starts[i]);
+		spills += 1;
+		const out = new Uint8Array(end - begin);
+		for (let j = i; j < starts.length && starts[j] < end; j += 1) {
+			const a = Math.max(begin, starts[j]);
+			const b = Math.min(end, ends[j]);
+			out.set(kept.subarray(at[j] + a - starts[j], at[j] + b - starts[j]), a - begin);
+		}
+		return out;
+	};
+	const byteAt = (position) => {
+		const i = runOf(position);
+		if (i < 0) miss(position, 1);
+		return kept[at[i] + position - starts[i]];
+	};
+	const target = {subarray, length: size};
+	const contents = new Proxy(target, {
+		get(object, key) {
+			// A byte by its index, as MEMFS reads 8 bytes or fewer.
+			if (typeof key === 'string' && key.charCodeAt(0) >= 48 && key.charCodeAt(0) <= 57) {
+				const position = Number(key);
+				if (Number.isSafeInteger(position)) return position < size ? byteAt(position) : undefined;
+			}
+			return object[key];
+		},
+	});
+	return {contents, keptBytes, state: () => ({kept_bytes: keptBytes, kept_runs: starts.length, misses, spills})};
+}
+
+// The page's side of the release (window.__tiPack), for the pack in BUFFER (an
+// ArrayBuffer). env: node() gives the pack's file in the engine's file system (or null),
+// saved() a promise that this tab's store of the pack has stopped writing from BUFFER
+// (tiBuildFiles' saved()), later(fn) runs fn in a task of its own (not inside the
+// engine's call), now(), log, error and mark. release(json) takes the game's request,
+// {"drop": [paths], "once": [paths]} (res:// paths of pack files), answers "scheduled"
+// (or why not), and in that task gives the file its new contents; once the store is no
+// longer writing it frees BUFFER (ArrayBuffer.transfer(0) detaches it, which frees its
+// memory at once; without it, dropping it leaves that to the garbage collector).
+// Anything unexpected keeps the whole pack in memory, as before.
+function tiPackRelease(buffer, env) {
+	let pack = buffer;
+	let status = 'waiting';
+	let made = null;
+	const result = {};
+	const state = () => ({status, ...result, ...(made ? made.state() : {})});
+	const refuse = (why) => {
+		status = 'kept: ' + why;
+		env.log('The game data stays in memory: ' + why);
+	};
+	async function swap(paths) {
+		const began = env.now();
+		let node = null;
+		try {
+			node = env.node();
+		} catch (err) {
+			node = null;
+		}
+		const size = pack.byteLength;
+		const ours = (contents) => ArrayBuffer.isView(contents) && contents.buffer === pack && contents.byteOffset === 0 && contents.byteLength === size;
+		if (!node || node.usedBytes !== size || !ours(node.contents)) {
+			refuse('the engine\'s file is not the page\'s pack');
+			return;
+		}
+		let bytes = new Uint8Array(pack);
+		const directory = tiPackDirectory(bytes);
+		if (!directory) {
+			refuse('its directory does not read');
+			return;
+		}
+		const byPath = new Map(directory.entries.map((entry) => [entry.path, entry]));
+		const chosen = new Set();
+		let unknown = 0;
+		for (const path of paths) {
+			const entry = byPath.get(path);
+			if (!entry) unknown += 1;
+			else if (entry.size > 0) chosen.add(entry);
+		}
+		if (chosen.size === 0) {
+			refuse('the game named no file of the pack');
+			return;
+		}
+		const released = [...chosen].sort((a, b) => a.offset - b.offset);
+		made = tiReleasedPack(bytes, released, (entry, position, length) => {
+			env.error(`The game read ${length} bytes of released game data at byte ${position} (${entry ? entry.path : 'between files'}): an I/O error`);
+			env.mark('pack:miss');
+		});
+		bytes = null;
+		node.contents = made.contents;
+		status = 'released';
+		Object.assign(result, {files: released.length, released_bytes: size - made.keptBytes, unknown, ms: Math.round(env.now() - began)});
+		env.mark('pack:released');
+		// The pack's buffer goes once this tab's store of it has stopped writing from it.
+		await env.saved();
+		result.freed = 'dropped';
+		try {
+			if (typeof pack.transfer === 'function') {
+				pack.transfer(0);
+				result.freed = 'detached';
+			}
+		} catch (err) {
+			env.log('The game data\'s buffer was not detached:', err);
+		}
+		pack = null;
+		status = 'freed';
+		env.mark('pack:freed');
+	}
+	function release(json) {
+		if (status !== 'waiting') return status;
+		let paths = null;
+		try {
+			const request = JSON.parse(String(json));
+			paths = [...(request.drop || []), ...(request.once || [])].map((path) => String(path).replace(/^res:\/\//, ''));
+		} catch (err) {
+			refuse('the request does not read');
+			return status;
+		}
+		status = 'scheduled';
+		env.later(() => swap(paths).catch((err) => refuse(String(err))));
+		return status;
+	}
+	return {release, state};
+}
+
 // The loading screen's line while the engine and the game's data come in, from
 // loading = {started, engine: {loaded, total}, pack: {loaded, total, from} or null}:
 // started once either reports, the engine's own downloads (its WebAssembly, and the
@@ -1560,7 +1814,20 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 				loading.pack.total = packSize;
 				loading.pack.from = from;
 				showLoading();
-			}).then((buffer) => engine.preloadFile(buffer, pack));
+			}).then((buffer) => {
+				// Once play is ready the game names what it no longer reads of the pack, and
+				// the page frees it (tiPackRelease; game/scripts/web/pack_release.gd).
+				window.__tiPack = tiPackRelease(buffer, {
+					node: () => (engine.rtenv && typeof engine.rtenv.tiFileNode === 'function' ? engine.rtenv.tiFileNode(pack) : null),
+					saved: () => files.saved(),
+					later: (fn) => setTimeout(fn, 0),
+					now: () => performance.now(),
+					log: (...args) => console.log(...args),
+					error: (...args) => console.error(...args),
+					mark,
+				});
+				return engine.preloadFile(buffer, pack);
+			});
 		} else {
 			loading.pack = null;
 			packLoaded = engine.preloadFile(pack, pack);

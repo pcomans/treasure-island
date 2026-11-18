@@ -13,6 +13,9 @@ const DRIVE_TRACE_PATH := "res://game/scripts/debug/drive_trace.gd"
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+## On the web: the game data pack's bytes the game never reads again, freed once play
+## is ready (_release_pack).
+const PACK_RELEASE := preload("res://game/scripts/web/pack_release.gd")
 ## A touch screen's HUD is laid out for this many pixels or more each way
 ## (use_touch_controls); the view still fills the screen's shape.
 const TOUCH_LAYOUT_PX := 720
@@ -160,6 +163,9 @@ var use_saved_settings := true
 ## a touch screen and a mouse alike. Tests of touch play set it as a browser
 ## would.
 var start_prompt := OS.has_feature("web")
+## On the web, once play is ready: what released the pack's bytes the game no longer
+## reads, holding the imported resources whose files were freed (_release_pack).
+var pack_release: PACK_RELEASE
 
 
 func _init() -> void:
@@ -658,9 +664,29 @@ func _on_world_ready(_report: Dictionary) -> void:
 			_touch_controls.set_gameplay_active(true)
 		if controls_open:
 			_set_paused(true)
+	if OS.has_feature("web"):
+		_release_pack.call_deferred()
 	# Launch check for exported builds: load the island, then exit cleanly.
 	if OS.get_cmdline_user_args().has("--quit-on-ready"):
 		get_tree().quit(0)
+
+
+## On the web: tells the page which of the game data pack's files the game never reads
+## again, so it frees their bytes (PACK_RELEASE; game/web/shell.html): the imported
+## resources held now, and the baked world, which the world loader loads once. Two
+## frames after play is ready, so the start prompt is drawn first. Prints the page's
+## answer.
+func _release_pack() -> void:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	if not is_inside_tree() or _startup_failed or pack_release != null:
+		return
+	pack_release = PACK_RELEASE.new()
+	var once: Array[String] = []
+	if world_root.uses_prebuilt_world() and world_root.is_world_validated():
+		once.append(WorldLoader.PREBUILT_WORLD.resource_path())
+	var answer := pack_release.release(once)
+	print("PACK_RELEASE %s: %d imported resources held" % [answer, pack_release.held.size()])
 
 
 func _prepare_initial_graphics() -> String:

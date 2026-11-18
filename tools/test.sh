@@ -24,7 +24,9 @@
 #    changelog tool and CHANGELOG.md (tools/check_changelog.sh): a build
 #    without its entry, or a badly written entry, fails. And the web page's
 #    build cache (tools/check_web_build_files.mjs): a pack stored on the device
-#    loads without a download, and a short or failed download is never stored.
+#    loads without a download, and a short or failed download is never stored;
+#    and once play is ready the page frees the pack's released files, and keeps
+#    every byte the game may still read.
 #    And the page's side of the drive trace (tools/check_web_trace.mjs): without
 #    ?trace=drive it does nothing at all.
 # 4. Every shader under game/ compiles and draws, with each define it tests, on
@@ -258,6 +260,7 @@ tests=(
   game/tests/headless_touch_controls.gd
   game/tests/headless_credits_contract.gd
   game/tests/headless_build_label_contract.gd
+  game/tests/headless_pack_release_contract.gd
   game/tests/headless_shadow_options_contract.gd
   game/tests/headless_day_clock_contract.gd
   game/tests/headless_world_material_contract.gd

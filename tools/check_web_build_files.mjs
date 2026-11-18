@@ -55,8 +55,8 @@ class CountingUint8Array extends Uint8Array {
     if (args[0] === packBuffers.size) packBuffers.made += 1;
   }
 }
-const {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice} = new Function('Uint8Array',
-  `${script}\nreturn {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice};`)(CountingUint8Array);
+const {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice, tiPackDirectory, tiReleasedPack, tiPackRelease} = new Function('Uint8Array',
+  `${script}\nreturn {tiBuildFiles, tiLoadingLine, tiAfterDownload, tiStoreOnThisDevice, tiAppleTouchDevice, tiPackDirectory, tiReleasedPack, tiPackRelease};`)(CountingUint8Array);
 
 const failures = [];
 const check = (ok, what) => { if (!ok) failures.push(what); };
@@ -534,8 +534,172 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
   check(cases[5][0].done && !cases[4][0].done && !cases[2][0].done, 'line: done at 100% only, never while the source is unknown');
 }
 
+// Releasing the pack once play is ready (tiPackDirectory, tiReleasedPack, tiPackRelease).
+// A pack as Godot 4.7.2 writes one (format 3, offsets from the end of its 112-byte
+// header, files 16-byte aligned, the directory after them; names padded to 4 bytes),
+// FILES [path, size] in order, each file's bytes from bytes(size, seed).
+function makePack(files, {version = 3, flags = 2} = {}) {
+  const parts = [];
+  let at = 112;
+  for (const [path, size] of files) {
+    at = Math.ceil(at / 16) * 16;
+    parts.push({path, size, at, data: bytes(size, path.length * 7 + size)});
+    at += size;
+  }
+  const names = parts.map((p) => new TextEncoder().encode(p.path));
+  const padded = names.map((n) => Math.ceil((n.length + 1) / 4) * 4);
+  const dirAt = Math.ceil(at / 16) * 16;
+  const total = dirAt + 4 + padded.reduce((n, l) => n + 4 + l + 8 + 8 + 16 + 4, 0);
+  const out = new Uint8Array(total);
+  const view = new DataView(out.buffer);
+  view.setUint32(0, 0x43504447, true);
+  view.setUint32(4, version, true);
+  view.setUint32(8, 4, true); view.setUint32(12, 7, true); view.setUint32(16, 2, true);
+  view.setUint32(20, flags, true);
+  view.setBigUint64(24, 112n, true);
+  view.setBigUint64(32, BigInt(dirAt), true);
+  for (const p of parts) out.set(p.data, p.at);
+  let d = dirAt;
+  view.setUint32(d, parts.length, true); d += 4;
+  parts.forEach((p, i) => {
+    view.setUint32(d, padded[i], true); d += 4;
+    out.set(names[i], d); d += padded[i];
+    view.setBigUint64(d, BigInt(p.at - 112), true); d += 8;
+    view.setBigUint64(d, BigInt(p.size), true); d += 8 + 16 + 4;
+  });
+  return {pack: out, files: Object.fromEntries(parts.map((p) => [p.path, p]))};
+}
+// MEMFS's read (Emscripten, as the engine script has it): through contents.subarray() for
+// more than 8 bytes, else byte by byte; never past the file's size.
+function memfsRead(node, position, length) {
+  const contents = node.contents;
+  if (position >= node.usedBytes) return new Uint8Array(0);
+  const size = Math.min(node.usedBytes - position, length);
+  const out = new Uint8Array(size);
+  if (size > 8 && contents.subarray) out.set(contents.subarray(position, position + size), 0);
+  else for (let i = 0; i < size; i += 1) out[i] = contents[position + i];
+  return out;
+}
+const throwsEio = (fn) => { try { fn(); return false; } catch (e) { return e.name === 'ErrnoError' && e.errno === 29; } };
+const FILES = [['generated/build_stamp.json', 75], ['generated/web/static_world.scn', 300001], ['game/a.gd.remap', 40],
+  ['.godot/imported/a.png-1.s3tc.ctex', 70000], ['.godot/imported/a.png-1.etc2.ctex', 50000], ['game/a.png.import', 300],
+  ['.godot/imported/b.ogg-2.oggvorbisstr', 3], ['game/credits.json', 9000], ['project.binary', 1200]];
+{ // The pack's directory, and what it refuses.
+  const {pack, files} = makePack(FILES);
+  const dir = tiPackDirectory(pack);
+  check(dir && dir.entries.length === FILES.length && dir.entries.every((e) => files[e.path] && e.offset === files[e.path].at && e.size === files[e.path].size),
+    `directory: ${dir ? JSON.stringify(dir.entries.slice(0, 2)) : 'none'}, not the pack's files`);
+  const v2 = makePack(FILES, {version: 4});
+  check(tiPackDirectory(v2.pack) !== null, 'directory: format 4 does not read');
+  for (const [what, damage] of [['another magic', (p) => { p[0] = 0; }], ['an encrypted directory', (p) => { p[20] |= 1; }],
+    ['a sparse bundle', (p) => { p[20] |= 4; }], ['a cut directory', null],
+    ['a file past its end', (p) => { const v = new DataView(p.buffer); const at = Number(v.getBigUint64(32, true)) + 8 + v.getUint32(Number(v.getBigUint64(32, true)) + 4, true) + 8; v.setBigUint64(at, BigInt(p.byteLength), true); }],
+    ['files that overlap', (p) => { const v = new DataView(p.buffer); const at = Number(v.getBigUint64(32, true)) + 8 + v.getUint32(Number(v.getBigUint64(32, true)) + 4, true) + 8; v.setBigUint64(at, 100n, true); }]]) {
+    const copy = what === 'a cut directory' ? pack.slice(0, pack.byteLength - 20) : pack.slice();
+    if (damage) damage(copy);
+    check(tiPackDirectory(copy) === null, `directory: read a pack with ${what}`);
+  }
+}
+{ // The released pack's contents: every kept byte, as before; released files read as an I/O error.
+  const {pack, files} = makePack(FILES);
+  const original = pack.slice();
+  const dir = tiPackDirectory(pack);
+  const gone = new Set(['generated/web/static_world.scn', '.godot/imported/a.png-1.s3tc.ctex', '.godot/imported/a.png-1.etc2.ctex', '.godot/imported/b.ogg-2.oggvorbisstr']);
+  const released = dir.entries.filter((e) => gone.has(e.path));
+  const misses = [];
+  const made = tiReleasedPack(pack, released, (entry, position, length) => misses.push([entry && entry.path, position, length]));
+  const node = {usedBytes: pack.byteLength, contents: made.contents};
+  const releasedBytes = released.reduce((n, e) => n + e.size, 0);
+  check(made.keptBytes === pack.byteLength - releasedBytes, `released: keeps ${made.keptBytes} bytes, not ${pack.byteLength - releasedBytes}`);
+  // The pack's own buffer can go: detached, every kept byte still reads.
+  pack.buffer.transfer(0);
+  check(pack.byteLength === 0, 'released: the test could not detach the pack');
+  let same = true;
+  for (const e of dir.entries) {
+    if (gone.has(e.path)) continue;
+    // As the engine reads a file: from its start, in pieces of 1 to 4096 bytes (stdio and the binary loader).
+    for (let at = e.offset, n = 1; at < e.offset + e.size; at += n, n = (n * 7 + 3) % 4096 + 1) {
+      const want = original.subarray(at, Math.min(at + n, e.offset + e.size));
+      const got = memfsRead(node, at, want.byteLength);
+      if (Buffer.compare(Buffer.from(got), Buffer.from(want)) !== 0) { same = false; break; }
+    }
+  }
+  check(same, 'released: a kept file reads other bytes than the pack had');
+  const header = memfsRead(node, 0, 112);
+  check(Buffer.compare(Buffer.from(header), Buffer.from(original.subarray(0, 112))) === 0, 'released: the header reads other bytes');
+  check(misses.length === 0, `released: kept reads counted as misses: ${JSON.stringify(misses)}`);
+  // stdio's read-ahead past a kept file into a released one: the kept bytes, then zeros.
+  const stamp = files['generated/build_stamp.json'];
+  const ahead = memfsRead(node, stamp.at + 10, 1024);
+  const keptPart = stamp.size - 10 + (files['generated/web/static_world.scn'].at - stamp.at - stamp.size);
+  check(Buffer.compare(Buffer.from(ahead.subarray(0, keptPart)), Buffer.from(original.subarray(stamp.at + 10, stamp.at + 10 + keptPart))) === 0
+    && ahead.subarray(keptPart).every((b) => b === 0) && made.state().spills === 1 && misses.length === 0, 'released: a read on past a kept file into a released one is not its kept bytes, then zeros');
+  // A read that starts in a released file, large or byte by byte: an I/O error naming it.
+  const world = files['generated/web/static_world.scn'];
+  check(throwsEio(() => memfsRead(node, world.at, 4096)), 'released: a read of the released world is no I/O error');
+  check(throwsEio(() => memfsRead(node, world.at + 100, 4)), 'released: a 4-byte read of the released world is no I/O error');
+  const tiny = files['.godot/imported/b.ogg-2.oggvorbisstr'];
+  check(throwsEio(() => memfsRead(node, tiny.at, 3)), 'released: a read of a released 3-byte file is no I/O error');
+  check(misses.length === 3 && misses[0][0] === world.path && misses[2][0] === tiny.path && made.state().misses === 3, `released: misses ${JSON.stringify(misses)}`);
+  // The last file before the directory, and past the end, read as MEMFS does.
+  const last = files['project.binary'];
+  check(Buffer.compare(Buffer.from(memfsRead(node, last.at, last.size + 50000)), Buffer.from(original.subarray(last.at, original.byteLength))) === 0, 'released: the pack\'s end reads other bytes');
+}
+{ // The page's side: a request, the swap in a task of its own, the buffer freed once the store stops writing.
+  const {pack, files} = makePack(FILES);
+  const original = pack.slice();
+  const buffer = pack.buffer;
+  let storeDone = null;
+  const storeOver = new Promise((resolve) => { storeDone = resolve; });
+  const marks = [];
+  const errors = [];
+  const node = {usedBytes: buffer.byteLength, contents: new Uint8Array(buffer)};
+  const env = {node: () => node, saved: () => storeOver, later: (fn) => setTimeout(fn, 0), now: () => performance.now(),
+    log: () => {}, error: (...a) => errors.push(a.join(' ')), mark: (m) => marks.push(m)};
+  const page = tiPackRelease(buffer, env);
+  const request = JSON.stringify({drop: ['res://.godot/imported/a.png-1.s3tc.ctex', 'res://.godot/imported/a.png-1.etc2.ctex', 'res://.godot/imported/not-in-the-pack.ctex'], once: ['res://generated/web/static_world.scn']});
+  const answer = page.release(request);
+  check(answer === 'scheduled' && node.contents instanceof Uint8Array, `page: the request answered ${answer}, or the swap ran inside the game's call`);
+  await later(10);
+  const st = page.state();
+  check(st.status === 'released' && st.files === 3 && st.unknown === 1 && st.released_bytes === 300001 + 70000 + 50000 && !(node.contents instanceof Uint8Array),
+    `page: after the swap ${JSON.stringify(st)}`);
+  check(buffer.byteLength === original.byteLength, 'page: the buffer was freed while the store may still write from it');
+  storeDone();
+  await later(10);
+  check(page.state().status === 'freed' && page.state().freed === 'detached' && buffer.byteLength === 0 && marks.join() === 'pack:released,pack:freed',
+    `page: once the store stopped, ${JSON.stringify(page.state())}, buffer ${buffer.byteLength} bytes, marks ${marks}`);
+  const credits = files['game/credits.json'];
+  check(Buffer.compare(Buffer.from(memfsRead(node, credits.at, credits.size)), Buffer.from(original.subarray(credits.at, credits.at + credits.size))) === 0, 'page: a kept file reads other bytes after the free');
+  check(throwsEio(() => memfsRead(node, files['.godot/imported/a.png-1.etc2.ctex'].at, 100)) && errors.length === 1 && errors[0].includes('a.png-1.etc2.ctex') && marks.includes('pack:miss'),
+    `page: a read of a released file: errors ${JSON.stringify(errors)}`);
+  check(page.release(request) === 'freed', 'page: a second request was taken');
+}
+{ // The page keeps the whole pack when anything is unexpected, and frees nothing.
+  const refusals = [
+    ['no engine file (a build without the patch)', (node) => null, '{"drop": ["res://game/credits.json"]}'],
+    ['the engine\'s file is a copy', (node) => ({...node, contents: node.contents.slice()}), '{"drop": ["res://game/credits.json"]}'],
+    ['the file has another size', (node) => ({...node, usedBytes: node.usedBytes - 1}), '{"drop": ["res://game/credits.json"]}'],
+    ['the lookup throws', () => { throw new Error('no such file'); }, '{"drop": ["res://game/credits.json"]}'],
+    ['a request that does not read', (node) => node, 'not json'],
+    ['a request naming no file of the pack', (node) => node, '{"drop": ["res://nothing.ctex"], "once": []}'],
+  ];
+  for (const [what, nodeOf, request] of refusals) {
+    const {pack} = makePack(FILES);
+    const buffer = pack.buffer;
+    const node = {usedBytes: buffer.byteLength, contents: new Uint8Array(buffer)};
+    const contents = node.contents;
+    const page = tiPackRelease(buffer, {node: () => nodeOf(node), saved: () => Promise.resolve(), later: (fn) => setTimeout(fn, 0), now: () => 0,
+      log: () => {}, error: () => {}, mark: () => {}});
+    page.release(request);
+    await later(10);
+    check(page.state().status.startsWith('kept: ') && node.contents === contents && buffer.byteLength === pack.byteLength && page.release(request).startsWith('kept: '),
+      `keeps the pack with ${what}: ${JSON.stringify(page.state())}, buffer ${buffer.byteLength} bytes`);
+  }
+}
+
 if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, shows "Saving…" only while a store is writing, makes no storage call with storing off (an iPhone or iPad, ?store=0), takes an only-if-cached answer from the network as its one download, and its loading line is never blank and says "Downloading" only for the network');
+console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, shows "Saving…" only while a store is writing, makes no storage call with storing off (an iPhone or iPad, ?store=0), takes an only-if-cached answer from the network as its one download, its loading line is never blank and says "Downloading" only for the network, and once play is ready it frees the pack\'s released files: every kept byte still reads, a read of a released file is an I/O error that names it, a read running on past a kept file gets zeros, the buffer goes only once the store has stopped writing from it, and without the engine\'s own file of the pack or with a request it does not take it keeps the whole pack');
