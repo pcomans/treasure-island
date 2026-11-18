@@ -1,6 +1,6 @@
 extends SceneTree
 ## The bake's material sharing (tools/share_baked_materials.gd), headless, on hand-built
-## nodes; and every function in game/scripts that writes materials:
+## nodes; and every function in game/ that writes materials:
 ##   - equal materials on overrides, overlays, surface overrides, mesh surfaces (a
 ##     MultiMesh's and a PrimitiveMesh's too) come out as one object, the first found,
 ##     and next passes are shared before the materials pointing to them; materials that
@@ -13,9 +13,11 @@ extends SceneTree
 ##     cover the ground dressing's captures copy is what it writes in play
 ##     (GroundDressing._set_lawn_threads), before and after sharing, and its write
 ##     reaches the same meshes as before;
-##   - every function in game/scripts that writes a material's values (WRITES: assigns a
-##     material property, sets one by name or a shader parameter, or calls a
-##     RenderingServer material function) is classified, by folder, file or function:
+##   - every function in game/ (its tests aside, which never run in play) that writes a
+##     material's values (_writes: assigns a material property or a component of one,
+##     sets one by name, deferred, by path or with a tween, sets a shader parameter, or
+##     calls a RenderingServer material function) is classified, by folder, file or
+##     function (a script that also reads the baked world's materials, by function):
 ##     BUILDS (it writes while the island loads or bakes, before the bake shares the baked
 ##     world's materials; none of its writes sits in a callback Godot calls in play),
 ##     OWN (in play it writes only materials it makes or copies, or ones the baked world
@@ -27,7 +29,9 @@ const SHARE := preload("res://tools/share_baked_materials.gd")
 const MERGE_BUILDINGS := preload("res://tools/merge_baked_buildings.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
-const SCRIPTS_ROOT := "res://game/scripts"
+## Scanned for writers, but for TESTS_ROOT: tests and their support run only in tests.
+const SCRIPTS_ROOT := "res://game"
+const TESTS_ROOT := "res://game/tests/"
 ## The callbacks Godot calls in play (as headless_shader_warm_up_contract.gd's).
 const RUNTIME_CALLBACKS := "^(_process|_physics_process|_input|_unhandled_input|_unhandled_key_input|_notification|_integrate_forces|_on_\\w+)$"
 ## The material classes whose properties WRITES looks for.
@@ -35,6 +39,7 @@ const MATERIAL_CLASSES: Array[String] = ["StandardMaterial3D", "ORMMaterial3D", 
 ## Writers whose writes all come while the island loads or bakes, before the bake shares
 ## the baked world's materials: by folder (ending "/"), file, or "FILE::FUNCTION".
 const BUILDS := {
+	"res://game/resources/models/bulgarian_wall/": "builds the Bulgarian Wall's court and neighbour while the island loads (or bakes)",
 	"res://game/scripts/world/facades/": "builds buildings while the island loads (or bakes)",
 	"res://game/scripts/world/massing/": "builds buildings while the island loads (or bakes)",
 	"res://game/scripts/world/bay_bridge_builder.gd": "builds the Bay Bridge while the island loads (or bakes)",
@@ -52,18 +57,34 @@ const BUILDS := {
 	"res://game/scripts/world/ybi_vegetation_builder.gd": "builds Yerba Buena Island's trees while the island loads (or bakes)",
 }
 ## Writers that in play write only materials they make or copy, or ones the baked world
-## doesn't hold, so the bake's sharing never reaches what they write.
+## doesn't hold, so the bake's sharing never reaches what they write. Scripts that also
+## find the baked world's materials (day_sun, ground_dressing, drivable_car,
+## street_furniture_breaker) are classified by function, so a new writer there must say.
 const OWN := {
 	"res://game/scripts/debug/drive_trace.gd": "writes no material: its census records have a field named shader",
 	"res://game/scripts/debug/startup_marks.gd": "its probe's own material (a startup measurement, only with ?profile_startup=1)",
 	"res://game/scripts/player/": "the player's own materials, made with it",
 	"res://game/scripts/vehicles/car_driver.gd": "a car driver's own materials, made with it",
 	"res://game/scripts/vehicles/car_splash.gd": "a splash's own materials",
-	"res://game/scripts/vehicles/drivable_car.gd": "a driven car's lit lamps: a copy of its kit's material, made before it writes, on the car's own pieces",
-	"res://game/scripts/vehicles/street_furniture_breaker.gd": "a felled lamp's lenses: a material of its own, on the felled prop's own copy",
-	"res://game/scripts/world/day_sun.gd": "the sky's material (main.tscn's environment), which the baked world doesn't hold",
+	"res://game/scripts/vehicles/drivable_car.gd::set_lamps_lit": "a driven car's lit lamps: a copy of its kit's material, made before it writes, on the car's own pieces",
+	"res://game/scripts/vehicles/street_furniture_breaker.gd::_lens_off_material": "makes the felled lamps' lens-off material, which only a felled prop's own copy draws",
+	"res://game/scripts/world/day_sun.gd::light": "the sky's material (main.tscn's environment), which the baked world doesn't hold",
 	"res://game/scripts/world/goal_confetti.gd": "the confetti's own materials",
-	"res://game/scripts/world/ground_dressing.gd": "the grass, stones and chips' own materials and the captures' copies (desktop only)",
+	"res://game/scripts/world/ground_dressing.gd::configure": "the chips' own material: its capture",
+	"res://game/scripts/world/ground_dressing.gd::_ring_material": "makes a ring's material",
+	"res://game/scripts/world/ground_dressing.gd::_share_captures": "a ring's own material: the captures it reads",
+	"res://game/scripts/world/ground_dressing.gd::_pick_grass": "makes the grass cards' material",
+	"res://game/scripts/world/ground_dressing.gd::set_level": "the grass's own material: its blades' width",
+	"res://game/scripts/world/ground_dressing.gd::set_chip_occluders": "its own chips occluder material",
+	"res://game/scripts/world/ground_dressing.gd::set_render_priority": "its rings' own materials",
+	"res://game/scripts/world/ground_dressing.gd::set_parameter": "its rings' own materials and the captures' copies (tuning shots)",
+	"res://game/scripts/world/ground_dressing.gd::_process": "the grass's own material: where the player bends it",
+	"res://game/scripts/world/ground_dressing.gd::_capture": "its rings' own materials: the captures' windows",
+	"res://game/scripts/world/ground_dressing.gd::_set_ring": "a ring's own material: its density and reach",
+	"res://game/scripts/world/ground_dressing.gd::_build_captures": "makes the captures' mask and occluder materials",
+	"res://game/scripts/world/ground_dressing.gd::_mulch_capture": "makes a mulch material's capture copies",
+	"res://game/scripts/world/ground_dressing.gd::_ground_capture": "makes a ground family's capture copies",
+	"res://game/scripts/world/ground_dressing.gd::_yard_capture": "a yard material's capture copy, and the stones' own material",
 	"res://game/scripts/world/shader_warm_up.gd": "its proxies' own labels",
 	"res://game/scripts/world/sky_weather.gd": "the sky's material (main.tscn's environment), which the baked world doesn't hold",
 	"res://game/scripts/world/soccer_ball.gd": "the ball's own material, made with it",
@@ -73,6 +94,14 @@ const OWN := {
 	"res://game/scripts/world/street_vegetation_kit.gd": "makes its materials when a kit is made or first asked for one, while the island loads (or bakes)",
 	"res://game/scripts/world/street_yard_kit.gd": "makes its materials when a kit is made (the yards' while the island loads or bakes, the vehicles' own in play)",
 }
+## Ways of writing a material the scan must see, and lines it must not take for one.
+const WRITE_SPELLINGS: Array[String] = [
+	"m.albedo_color = Color.RED", "m.albedo_color.a = 0.5", "m.uv1_scale.x *= 2.0", "m.set(\"emission_energy_multiplier\", 2.0)",
+	"m.set_deferred(&\"albedo_color\", Color.RED)", "m.set_indexed(\"albedo_color:a\", 0.5)",
+	"create_tween().tween_property(m, \"emission_energy_multiplier\", 2.0, 1.0)", "m.set_shader_parameter(\"amount\", 1.0)",
+	"RenderingServer.material_set_param(rid, \"amount\", 1.0)",
+]
+const NOT_WRITES: Array[String] = ["# m.albedo_color = Color.RED", "if m.albedo_color == Color.RED: pass", "var c := m.albedo_color", "m.roughness >= 0.5"]
 ## Writers that in play write the baked world's materials they find by walking it, by
 ## function: the walker (SHARE.WALKERS) that finds the same materials, which the bake
 ## shares only among themselves.
@@ -357,6 +386,10 @@ func _filed(resource: Resource, path: String) -> Resource:
 ## Returns a summary, or "" after failing.
 func _check_scan() -> String:
 	var pattern := _writes()
+	for line: String in WRITE_SPELLINGS + NOT_WRITES:
+		var found := _writers("func f():\n\t%s\n" % line, pattern).size()
+		if not _require(found == (1 if line in WRITE_SPELLINGS else 0), "The writer scan finds %d writes in `%s`." % [found, line]):
+			return ""
 	var runtime := RegEx.create_from_string(RUNTIME_CALLBACKS)
 	var unclassified: Array[String] = []
 	var in_play: Array[String] = []
@@ -364,6 +397,8 @@ func _check_scan() -> String:
 	var writers := 0
 	var files := 0
 	for path: String in _scripts(SCRIPTS_ROOT):
+		if path.begins_with(TESTS_ROOT):
+			continue
 		var written := _writers(FileAccess.get_file_as_string(path), pattern)
 		if written.is_empty():
 			continue
@@ -427,9 +462,10 @@ static func _classification(path: String, function: String) -> String:
 	return ""
 
 
-## A material's values written: one of its properties assigned (MATERIAL_CLASSES', as
-## the engine lists them, its name among them) or set by name, a shader parameter set,
-## or a RenderingServer material call.
+## A material's values written: one of its properties (MATERIAL_CLASSES', as the engine
+## lists them, its name among them) or a component of one assigned, or set by name
+## (set, set_deferred, set_indexed) or with a tween (tween_property), a shader parameter
+## set, or a RenderingServer material call.
 static func _writes() -> RegEx:
 	var names := {}
 	for type: String in MATERIAL_CLASSES:
@@ -440,7 +476,8 @@ static func _writes() -> RegEx:
 	for unwritten: String in ["resource_path", "resource_scene_unique_id", "resource_local_to_scene", "script"]:
 		names.erase(unwritten)
 	var alternatives := "|".join(PackedStringArray(names.keys()))
-	return RegEx.create_from_string("\\bset_shader_parameter\\(|\\bRenderingServer\\.material_\\w+\\(|\\.set\\(\\s*&?\"(?:shader_parameter/|(?:%s)\")|\\.(?:%s)\\b\\s*[-+*/]?=(?!=)" % [alternatives, alternatives])
+	var by_name := "&?\"(?:shader_parameter/|(?:%s)[:\"])" % alternatives
+	return RegEx.create_from_string("\\bset_shader_parameter\\(|\\bRenderingServer\\.material_\\w+\\(|\\.(?:set|set_deferred|set_indexed)\\(\\s*%s|\\btween_property\\(\\s*[^,]+,\\s*%s|\\.(?:%s)\\b(?:\\.\\w+)*\\s*[-+*/]?=(?!=)" % [by_name, by_name, alternatives])
 
 
 ## Each write in a script's source (a match not on a comment line): [the function it is

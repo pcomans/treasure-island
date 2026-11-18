@@ -734,7 +734,7 @@ Measured on 2026-11-18 against the building merge's head (`a5932d7b`), on worlds
 Known gaps:
 
 - Equal is by stored value: materials with equal but distinct textures or shaders stay apart, as do equal materials with different names.
-- The writer scan reads the scripts' text: a write through a property name held in a variable (`object.set(name, value)`) or from outside `game/scripts` is not seen, as with the shader warm-up's scan.
+- The writer scan reads the scripts' text in `game/` (component writes, `set`, `set_deferred`, `set_indexed` and `tween_property` included): a write through a property name held in a variable, a `tween_method` or an animation track is not seen, as with the shader warm-up's scan.
 - Code that in play writes materials it finds by walking the world must be one of the step's `WALKERS`; the contract asks each such writer's classification to name its walker.
 
 ## Deferred by the owner
