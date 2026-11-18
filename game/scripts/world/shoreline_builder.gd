@@ -37,6 +37,10 @@ const DRIFTWOOD_MATERIAL := "shoreline_driftwood"
 ## The ground cover family of the verge: the band inside the outline (a chunk
 ## overlay, see world_chunk_builder.gd) and the shoulder outside it.
 const BAND_GROUND_FAMILY := "verge"
+## The large batches' cell (m) for stones whose prototype has no LODs: each stone
+## thins out in the shader by its own distance, so the cell only sets how coarsely
+## an empty batch is culled.
+const SHORE_CELL_M := 256.0
 ## The inland stones' body: what it blocks (a street prop's layer, so the player's mask
 ## has it and the camera's doesn't), the length of one wedge, how steeply it climbs from
 ## the land to the stones' tops, how far it reaches below them, and how high in their
@@ -254,22 +258,60 @@ func build(document: Dictionary, boundary: Dictionary = {}, ways: VisibleGround 
 	for prototype_value: Variant in document.prototypes:
 		var prototype: Dictionary = prototype_value
 		var material: Material = stone_material() if str(prototype.material_key) == STONE_MATERIAL else driftwood_material()
-		prototypes[str(prototype.id)] = {"mesh": _array_mesh(prototype, material), "triangles": int(prototype.indices.size() / 3)}
+		# _array_mesh gives a prototype without UVs its generated LODs.
+		var lods := not prototype.has("uvs") and not (prototype.get("lods", []) as Array).is_empty()
+		prototypes[str(prototype.id)] = {"mesh": _array_mesh(prototype, material), "triangles": int(prototype.indices.size() / 3), "lods": lods}
 	# One MultiMesh per generated batch (segment, shore section, band and
-	# prototype), so each culls and picks its LOD on its own. The stones carry
-	# no colour: the shader tints each one from its position and its segment's
-	# tone, and thins them out one by one with distance.
+	# prototype), so each culls and picks its LOD on its own; a prototype with no
+	# LODs goes into a large batch per segment and SHORE_CELL_M cell. The
+	# stones carry no colour: the shader tints each one from its position and its
+	# segment's tone, and thins them out one by one with distance.
 	var stones := Node3D.new()
 	stones.name = "Stones"
 	root.add_child(stones)
 	var batches := 0
 	var instances := 0
 	var inland: Array[AABB] = []
+	# Large batches of stones whose prototype has no LODs (StreetDetailBatches):
+	# node name -> its batch, each stone with the range its own generated batch drew it
+	# to, from that batch's box centre (its reference and the range's end).
+	var large: Dictionary = {}
 	for batch_value: Variant in document.batches:
 		var batch: Dictionary = batch_value
 		var prototype: Dictionary = prototypes[str(batch.prototype)]
 		var transforms: PackedFloat32Array = batch.transforms
 		var count := int(transforms.size() / GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH)
+		var placements: Array[Transform3D] = []
+		for index in count:
+			var at := index * GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH
+			var rotation := Quaternion(transforms[at + 3], transforms[at + 4], transforms[at + 5], transforms[at + 6]).normalized()
+			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
+			placements.append(Transform3D(basis, Vector3(transforms[at], transforms[at + 1], transforms[at + 2])))
+		var mesh_box := (prototype.mesh as ArrayMesh).get_aabb()
+		if str(batch.band) == "inland":
+			for placed: Transform3D in placements:
+				inland.append(placed * mesh_box)
+		if str(batch.band) != "driftwood" and (prototype.mesh as ArrayMesh).get_surface_count() == 1 and not prototype.lods:
+			# A stone shows only while its shader keeps it (the riprap's thinning, from
+			# its own distance), and its batch's range only culls the batch once its
+			# last stone has gone: in a large batch every stone keeps that range, from
+			# its own batch's centre, so the large batch never culls one the small one
+			# drew, and a prototype with no LODs draws the same at any batch size.
+			var box := AABB()
+			for index in placements.size():
+				var stone_box := placements[index] * mesh_box
+				box = stone_box if index == 0 else box.merge(stone_box)
+			var cast := GeometryInstance3D.SHADOW_CASTING_SETTING_ON if bool(batch.cast_shadow) else GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			for placed: Transform3D in placements:
+				var node_name := ("%s__%s__%s__c%s" % [batch.segment, batch.prototype, int(cast), StreetDetailBatches.cell(placed.origin, SHORE_CELL_M)]).validate_node_name()
+				if not large.has(node_name):
+					large[node_name] = StreetDetailBatches.batch(prototype.mesh, cast, 0.0, 0.0)
+					large[node_name].merge({"segment": str(batch.segment), "bands": {}, "margin": float(batch.visibility_margin_m), "triangles": int(prototype.triangles)})
+				# The reference is the stone's own batch's centre and the extra its range's end.
+				StreetDetailBatches.add(large[node_name], placed, placed * mesh_box, box.get_center(), float(batch.visibility_end_m), Color(0, 0, 0, 0))
+				large[node_name].margin = maxf(float(large[node_name].margin), float(batch.visibility_margin_m))
+				(large[node_name].bands as Dictionary)[str(batch.band)] = true
+			continue
 		var multi_mesh := MultiMesh.new()
 		multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
 		multi_mesh.use_colors = false
@@ -277,13 +319,7 @@ func build(document: Dictionary, boundary: Dictionary = {}, ways: VisibleGround 
 		multi_mesh.mesh = prototype.mesh
 		multi_mesh.instance_count = count
 		for index in count:
-			var at := index * GeneratedWorldContract.SHORELINE_PLACEMENT_LENGTH
-			var rotation := Quaternion(transforms[at + 3], transforms[at + 4], transforms[at + 5], transforms[at + 6]).normalized()
-			var basis := Basis(rotation) * Basis.from_scale(Vector3(transforms[at + 7], transforms[at + 8], transforms[at + 9]))
-			var placed := Transform3D(basis, Vector3(transforms[at], transforms[at + 1], transforms[at + 2]))
-			multi_mesh.set_instance_transform(index, placed)
-			if str(batch.band) == "inland":
-				inland.append(placed * (prototype.mesh as ArrayMesh).get_aabb())
+			multi_mesh.set_instance_transform(index, placements[index])
 		var node := MultiMeshInstance3D.new()
 		node.name = str(batch.id).validate_node_name()
 		node.multimesh = multi_mesh
@@ -305,6 +341,35 @@ func build(document: Dictionary, boundary: Dictionary = {}, ways: VisibleGround 
 		batches += 1
 		instances += count
 		triangles += int(prototype.triangles) * count
+	var node_names: Array = large.keys()
+	node_names.sort()
+	for node_name: String in node_names:
+		var batch: Dictionary = large[node_name]
+		var multi_mesh := MultiMesh.new()
+		multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
+		multi_mesh.mesh = batch.mesh
+		multi_mesh.instance_count = int(batch.count)
+		multi_mesh.buffer = StreetDetailBatches.transform_buffer(batch.transforms)
+		multi_mesh.custom_aabb = batch.box
+		var node := MultiMeshInstance3D.new()
+		node.name = node_name
+		node.multimesh = multi_mesh
+		node.layers = RENDER_WORLD_VISIBLE
+		node.cast_shadow = batch.cast
+		# Each stone's own batch's end, widened by its centre's offset from this one's.
+		node.visibility_range_end = StreetDetailBatches.coarse_range(batch).y
+		node.visibility_range_end_margin = float(batch.margin)
+		node.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+		node.material_override = segment_materials[str(batch.segment)].stone
+		var bands: Array = (batch.bands as Dictionary).keys()
+		bands.sort()
+		node.set_meta("band", "+".join(PackedStringArray(bands)))
+		node.set_meta("placement_count", int(batch.count))
+		node.set_meta("visual_only", true)
+		stones.add_child(node)
+		batches += 1
+		instances += int(batch.count)
+		triangles += int(batch.triangles) * int(batch.count)
 	if not inland.is_empty():
 		root.add_child(_inland_body(inland))
 	var rings := _outline_rings(boundary)

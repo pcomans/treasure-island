@@ -21,6 +21,17 @@ shader_type spatial;
 render_mode depth_draw_opaque, cull_back, diffuse_burley, specular_schlick_ggx;
 
 uniform sampler2D palette : source_color, filter_nearest, repeat_disable;
+// The large batches of parked cars and yard pieces (street_clutter_builder.gd with
+// game/scripts/world/street_detail_batches.gd): a batch can't say which of its
+// instances shows, so each one shows only within its level's range street_band
+// ([begin, end] in metres; y 0: no test), measured as its small cell measured it,
+// from that cell's box centre to the main camera, the same camera in the shadow and
+// probe passes. The instance colour carries that centre less the instance's origin
+// (xyz, in the world's frame) and 1 plus the metres the cell's far level ran on past
+// its end (w): the kit's meshes have no vertex colour, which both renderers then
+// take as white, so COLOR here is the instance colour. Outside its range the
+// instance collapses to its origin and draws nothing.
+uniform vec2 street_band = vec2(0.0);
 
 // Parts (tools/lib/street-yard-kit.mjs YARD_KIT_PARTS), 48 used of 64 slots;
 // the arrays below have one entry per part, and the parts the shader treats
@@ -140,6 +151,12 @@ void vertex() {
 	v_w = dot(VERTEX, along);
 	v_barge.y = dot(world, normalize((MODEL_MATRIX * vec4(along, 0.0)).xyz));
 	v_along = normalize((MODELVIEW_MATRIX * vec4(along, 0.0)).xyz);
+	if (street_band.y > 0.0) {
+		float away = distance(MAIN_CAM_INV_VIEW_MATRIX[3].xyz, MODEL_MATRIX[3].xyz + COLOR.xyz);
+		if (away < street_band.x || away > street_band.y + COLOR.a - 1.0) {
+			VERTEX = vec3(0.0);
+		}
+	}
 }
 
 // A profile's slope (normal tilt) and its height (0 valley .. 1 crest) at u.

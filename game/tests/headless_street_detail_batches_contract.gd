@@ -1,0 +1,630 @@
+extends SceneTree
+## The street detail's large batches (game/scripts/world/street_detail_batches.gd, with
+## street_vegetation_builder.gd and street_clutter_builder.gd), built headless from
+## hand-placed rows: trees alone and sharing a small cell, low plants, a hedge, cones
+## and parked cars alone and together.
+## - For camera points round them (on every level's hand-over and past it, near and far,
+##   low and high), every level draws exactly the instances its small cell's own node
+##   drew: the small cell's range from its box's centre, against the batch's coarse range
+##   from the batch's box centre and then each instance's band, as the shaders test it
+##   (vegetation_band.gdshaderinc: the small cell's centre in the custom data and the
+##   level's range on the level mesh's materials; a merged hedge's centres per vertex in
+##   CUSTOM0; a car's, cone's or yard piece's in its instance colour, the range on
+##   its batch's material).
+## - Every placed instance is in exactly one batch of each of its levels; vegetation
+##   instances are white (their shaders multiply COLOR by the instance colour).
+## - The interactive refs (bending trees, parked cars a car can take) name the batch and
+##   index whose instance stands at the row's placement.
+## - The vegetation, hedge and clutter shaders carry the band test. A banded clutter
+##   batch reads its band from COLOR, so a mesh with vertex colours fails the build;
+##   the fixture's cars and cones have none.
+## - Two fence rows in one merge cell (street_fence_builder.gd): every bay's and post's
+##   vertex runs, which street_fence_breaker.gd collapses, name the same vertices in the
+##   merged cell meshes as when each row is built alone, all inside its bay's (or
+##   post's) box, and the second row's runs start past the first row's vertices.
+
+const VEGETATION_KIT := preload("res://game/scripts/world/street_vegetation_kit.gd")
+const CLUTTER_KIT := preload("res://game/scripts/world/street_clutter_kit.gd")
+const BATCHES := preload("res://game/scripts/world/street_detail_batches.gd")
+const FENCE_BREAKER := preload("res://game/scripts/vehicles/street_fence_breaker.gd")
+## How far (m) a bay's or post's vertices may stand outside its collision box: a
+## post's tube reaches 0.3 m into the ground.
+const FENCE_BOX_SLACK_M := 0.35
+const TREE_CELL_M := 16.0
+const GRASS_CELL_M := 32.0
+const SHADOW_CELL_M := 48.0
+
+var failures: Array[String] = []
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	_check_shaders()
+	var vegetation := StreetVegetationBuilder.new().build({"rows": _vegetation_rows()})
+	if not vegetation.ok:
+		_fail("the vegetation did not build: %s" % vegetation.get("message", ""))
+	else:
+		var node: Node3D = vegetation.node
+		root.add_child(node)
+		_check_vegetation(node)
+		_check_hedges(node)
+		_check_bending(node)
+	var clutter := StreetClutterBuilder.new().build({"rows": _clutter_rows()})
+	if not clutter.ok:
+		_fail("the clutter did not build: %s" % clutter.get("message", ""))
+	else:
+		var node: Node3D = clutter.node
+		root.add_child(node)
+		_check_clutter(node)
+	_check_vertex_colours()
+	_check_fences()
+	await process_frame
+	if failures.is_empty():
+		print("PASS: street-detail batches draw every tree, plant, hedge, car and cone at the levels its small cell drew, from every camera point tried (hand-overs and ends, near and far, low and high); each placed instance is in one batch per level; bending trees and parked cars find their own instances; the vegetation, hedge and clutter shaders test the bands; a clutter mesh with vertex colours fails the build; two fence rows merged in one cell mesh keep every bay's and post's vertex runs on its own geometry, inside its box")
+		quit(0)
+	else:
+		for failure: String in failures:
+			push_error("FAIL: " + failure)
+		quit(1)
+
+
+func _fail(message: String) -> void:
+	if failures.size() < 30:
+		failures.append(message)
+
+
+# --- Fixtures -----------------------------------------------------------------------
+
+
+func _plant(id: String, prop: String, variant: int, x: float, z: float, yaw := 0.0, scale := 1.0) -> Dictionary:
+	var params := {"variant": variant, "scale": scale, "lift_m": 0.0, "foot_spread_m": 0.0, "well_m": 0.0}
+	return {"id": id, "status": "placed", "layer": "vegetation", "kind": str((VEGETATION_KIT.PROPS[prop].kinds as Array)[0]), "prop": prop,
+		"prop_params": params, "position_m": [x, 1.5, z], "surface": {"bias_m": 0.0}, "yaw_radians": yaw}
+
+
+func _vegetation_rows() -> Array:
+	return [
+		# Two young gums sharing a tree cell, one alone; they bend under a car.
+		_plant("gum_a", "sydney_blue_gum_young", 0, 3.0, 4.0, 0.3),
+		_plant("gum_b", "sydney_blue_gum_young", 0, 13.0, 11.0, 1.9),
+		_plant("gum_c", "sydney_blue_gum_young", 0, 41.0, 6.0),
+		# Big broadleaves (a shadow mesh each): two in one tree cell and shadow cell, one alone.
+		_plant("oak_a", "spreading_broadleaf", 1, 70.0, 66.0, 0.5),
+		_plant("oak_b", "spreading_broadleaf", 1, 78.0, 75.0, 2.5, 0.9),
+		_plant("oak_c", "spreading_broadleaf", 1, -130.0, 210.0),
+		# Low plants: three in one grass cell, one far off.
+		_plant("sedge_a", "dense_sedge", 0, 100.0, 4.0),
+		_plant("sedge_b", "dense_sedge", 0, 110.0, 20.0, 1.0),
+		_plant("sedge_c", "dense_sedge", 0, 125.0, 30.0, 2.0),
+		_plant("sedge_d", "dense_sedge", 0, -300.0, -260.0),
+		# A hedge across two tree cells.
+		{"id": "hedge_a", "status": "placed", "layer": "vegetation", "kind": "hedge", "geometry": "polyline", "prop": "clipped_hedge",
+			"prop_params": {"variant": 0, "ground_y_m": [1.5, 1.5, 1.5]}, "points_m": [[-20.0, 1.5, -20.0], [-2.0, 1.5, -18.0], [12.0, 1.5, -30.0]]},
+	]
+
+
+func _clutter_rows() -> Array:
+	var car := func(id: String, body: String, x: float, z: float, yaw: float) -> Dictionary:
+		return {"id": id, "status": "placed", "layer": "clutter", "prop": "parked_car", "prop_params": {"body": body, "paint": "white", "finish": "solid", "dirt": 0.2},
+			"position_m": [x, 1.5, z], "surface": {"bias_m": 0.0, "kind": "road"}, "yaw_radians": yaw}
+	var cone := func(id: String, x: float, z: float) -> Dictionary:
+		return {"id": id, "status": "placed", "layer": "clutter", "prop": "traffic_cone", "prop_params": {}, "position_m": [x, 1.5, z], "surface": {"bias_m": 0.0}, "yaw_radians": 0.0}
+	return [
+		car.call("car_a", "sedan", 5.0, 5.0, 0.0), car.call("car_b", "sedan", 9.0, 15.0, 1.2),
+		car.call("car_c", "sedan", 300.0, 40.0, 2.0), car.call("car_d", "suv", -200.0, -70.0, 0.4),
+		cone.call("cone_a", 50.0, 50.0), cone.call("cone_b", 52.0, 53.0), cone.call("cone_c", 400.0, -150.0),
+	]
+
+
+# --- The rule each side draws by ----------------------------------------------------
+
+
+## Whether the renderer draws a node seen from camera: its visibility range from its
+## box centre (fade off, no margins: begin <= distance <= end).
+static func _node_draws(begin_m: float, end_m: float, centre: Vector3, camera: Vector3) -> bool:
+	var away := camera.distance_to(centre)
+	return (end_m <= 0.0 or away <= end_m) and (begin_m <= 0.0 or away >= begin_m)
+
+
+## The band test of vegetation_band.gdshaderinc and the clutter shaders.
+static func _band_draws(band: Vector2, reference: Vector3, extra_m: float, camera: Vector3) -> bool:
+	var away := camera.distance_to(reference)
+	return away >= band.x and away <= band.y + extra_m
+
+
+## Camera points round a set of references: on each level's begin and end (just
+## inside and outside), and a spread of distances, low and high.
+static func _cameras(references: Array, distances: Array) -> Array[Vector3]:
+	var cameras: Array[Vector3] = []
+	var directions := [Vector3(1, 0, 0), Vector3(-0.6, 0, 0.8), Vector3(0, 0, -1), Vector3(0.7, 0.2, 0.69).normalized()]
+	for reference: Vector3 in references:
+		for distance: float in distances:
+			for offset: float in [-0.05, 0.05]:
+				for direction: Vector3 in directions:
+					cameras.append(reference + direction * maxf(0.0, distance + offset) + Vector3(0, 1.7, 0))
+	for x in range(-600, 601, 150):
+		for z in range(-600, 601, 150):
+			for y: float in [3.0, 60.0]:
+				cameras.append(Vector3(x, y, z))
+	return cameras
+
+
+# --- Vegetation ------------------------------------------------------------------
+
+
+## The small cells' nodes the vegetation was drawn in before its large batches: [{level
+## mesh, begin, end (its last level's run on), centre, transforms}], from the rows and
+## the kit as street_vegetation_builder.gd measured them.
+func _small_cells() -> Array[Dictionary]:
+	var kit := VEGETATION_KIT.new()
+	var cells: Dictionary = {}
+	var shadow_cells: Dictionary = {}
+	for row: Dictionary in _vegetation_rows():
+		if VEGETATION_KIT.is_hedge(str(row.prop)):
+			continue
+		var proto := kit.prototype(str(row.prop), int(row.prop_params.variant))
+		var foot := Vector3(row.position_m[0], row.position_m[1], row.position_m[2])
+		var placement := Transform3D(Basis(Vector3.UP, float(row.yaw_radians)).scaled(Vector3.ONE * float(row.prop_params.scale)), foot)
+		var size := GRASS_CELL_M if VEGETATION_KIT.is_low_plant(str(row.prop)) else TREE_CELL_M
+		var key := "%s_%d|%d_%d" % [row.prop, int(row.prop_params.variant), floori(foot.x / size), floori(foot.z / size)]
+		if not cells.has(key):
+			cells[key] = {"levels": proto.levels, "transforms": []}
+		(cells[key].transforms as Array).append(placement)
+		if proto.has("shadow"):
+			var shadow_key := "%s_%d|%d_%d" % [row.prop, int(row.prop_params.variant), floori(foot.x / SHADOW_CELL_M), floori(foot.z / SHADOW_CELL_M)]
+			if not shadow_cells.has(shadow_key):
+				shadow_cells[shadow_key] = {"levels": [{"name": "shadow", "mesh": proto.shadow.mesh, "begin_m": 0.0, "end_m": proto.shadow.end_m}], "transforms": []}
+			(shadow_cells[shadow_key].transforms as Array).append(placement)
+	var nodes: Array[Dictionary] = []
+	for group: Dictionary in [cells, shadow_cells]:
+		for key: String in group:
+			var cell: Dictionary = group[key]
+			var box := AABB()
+			var first := true
+			var centres: Array[Vector3] = []
+			for xf: Transform3D in cell.transforms:
+				var tree := AABB()
+				for index in (cell.levels as Array).size():
+					var mesh_box: AABB = xf * ((cell.levels[index].mesh as Mesh).get_aabb())
+					tree = mesh_box if index == 0 else tree.merge(mesh_box)
+				box = tree if first else box.merge(tree)
+				first = false
+				centres.append(tree.get_center())
+			var slack := 0.0
+			for centre: Vector3 in centres:
+				slack = maxf(slack, centre.distance_to(box.get_center()))
+			for index in (cell.levels as Array).size():
+				var level: Dictionary = cell.levels[index]
+				var last := index == (cell.levels as Array).size() - 1
+				nodes.append({"name": str(level.name), "begin": float(level.begin_m), "end": float(level.end_m) + (ceilf(slack) if last else 0.0), "centre": box.get_center(), "transforms": cell.transforms, "kind": key.get_slice("|", 0)})
+	return nodes
+
+
+## Each vegetation batch's instances: [{name (level), kind, transform, reference,
+## extra, band, node begin, end and centre}].
+func _batched(root_node: Node3D) -> Array[Dictionary]:
+	var instances: Array[Dictionary] = []
+	for child: Node in root_node.get_children():
+		if not child is MultiMeshInstance3D:
+			continue
+		var node := child as MultiMeshInstance3D
+		var multimesh := node.multimesh
+		if not multimesh.use_custom_data or not multimesh.use_colors:
+			_fail("%s: a vegetation batch carries white colours and custom data (colours %s, custom %s)" % [node.name, multimesh.use_colors, multimesh.use_custom_data])
+			continue
+		var band := Vector2.ZERO
+		for surface in multimesh.mesh.get_surface_count():
+			var material := multimesh.mesh.surface_get_material(surface) as ShaderMaterial
+			var this_band: Variant = material.get_shader_parameter(BATCHES.BAND_UNIFORM) if material != null else null
+			if not this_band is Vector2 or (surface > 0 and this_band != band):
+				_fail("%s: surface %d of its mesh has no band or another (%s)" % [node.name, surface, this_band])
+			band = this_band if this_band is Vector2 else band
+		var parts := str(node.name).rsplit("__c", true, 1)
+		var level := parts[0].get_slice("_", parts[0].get_slice_count("_") - 1)
+		var kind := parts[0].substr(0, parts[0].length() - level.length() - 1)
+		var centre := multimesh.custom_aabb.get_center()
+		for index in multimesh.instance_count:
+			var read := BATCHES.read(multimesh, index)
+			var xf: Transform3D = read[0]
+			var custom: Color = read[1]
+			if read[2] != Color(1, 1, 1, 1):
+				_fail("%s %d is not white (%s): the vegetation's COLOR would change" % [node.name, index, read[2]])
+			if custom.a < 0.5:
+				_fail("%s %d has no band (w %s)" % [node.name, index, custom.a])
+			instances.append({"name": level, "kind": kind, "transform": xf, "reference": xf.origin + Vector3(custom.r, custom.g, custom.b), "extra": custom.a - 1.0,
+				"band": band, "begin": node.visibility_range_begin, "end": node.visibility_range_end, "centre": centre})
+	return instances
+
+
+func _check_vegetation(root_node: Node3D) -> void:
+	var small := _small_cells()
+	var batched := _batched(root_node)
+	# Every placed instance in exactly one batch of each of its levels.
+	var expected := {}
+	for node: Dictionary in small:
+		for xf: Transform3D in node.transforms:
+			var key := "%s|%s|%s" % [node.kind, node.name, xf.origin]
+			expected[key] = int(expected.get(key, 0)) + 1
+	var found := {}
+	for instance: Dictionary in batched:
+		var key := "%s|%s|%s" % [instance.kind, instance.name, (instance.transform as Transform3D).origin]
+		found[key] = int(found.get(key, 0)) + 1
+	if expected != found:
+		_fail("vegetation instances per level differ: small cells %s, batches %s" % [expected, found])
+	var references: Array = []
+	for node: Dictionary in small:
+		references.append(node.centre)
+	var cameras := _cameras(references, [0.0, 25.0, 30.0, 35.0, 40.0, 45.0, 55.0, 60.0, 75.0, 90.0, 95.0, 100.0, 110.0, 160.0, 220.0, 230.0, 700.0, 900.0, 910.0])
+	var differ := 0
+	for camera: Vector3 in cameras:
+		var before := {}
+		for node: Dictionary in small:
+			if _node_draws(float(node.begin), float(node.end), node.centre, camera):
+				for xf: Transform3D in node.transforms:
+					before["%s|%s|%s" % [node.kind, node.name, xf.origin]] = true
+		var after := {}
+		for instance: Dictionary in batched:
+			if _node_draws(float(instance.begin), float(instance.end), instance.centre, camera) and _band_draws(instance.band, instance.reference, float(instance.extra), camera):
+				after["%s|%s|%s" % [instance.kind, instance.name, (instance.transform as Transform3D).origin]] = true
+		if before != after:
+			differ += 1
+			if differ <= 3:
+				_fail("from %s the small cells drew %s but the batches %s" % [camera, before.keys(), after.keys()])
+	if differ > 0:
+		_fail("%d of %d camera points draw different vegetation" % [differ, cameras.size()])
+	print("VEGETATION batches=%d instances=%d small_cell_nodes=%d cameras=%d" % [root_node.get_children().filter(func(n: Node) -> bool: return n is MultiMeshInstance3D).size(), batched.size(), small.size(), cameras.size()])
+
+
+func _check_hedges(root_node: Node3D) -> void:
+	# The hedge as its tree cells drew it: per cell, each level's mesh and the union box.
+	var kit := VEGETATION_KIT.new()
+	var probe := StreetVegetationBuilder.new()
+	var hedges := {}
+	for row: Dictionary in _vegetation_rows():
+		if VEGETATION_KIT.is_hedge(str(row.prop)):
+			probe._add_hedge(hedges, row)
+	var ranges: Array = VEGETATION_KIT.PROPS.clipped_hedge.ranges
+	var small: Array[Dictionary] = []
+	for cell: String in hedges:
+		var box := AABB()
+		var counts: Array[int] = []
+		for lod in 3:
+			var surfs := {}
+			for piece: Dictionary in hedges[cell]:
+				kit.hedge_into(surfs, int(piece.variant), piece.points, float(piece.from_m), float(piece.to_m), lod, int(piece.seed))
+			var mesh := ArrayMesh.new()
+			var vertices := 0
+			for key: String in surfs:
+				surfs[key].commit(mesh, kit.material(key))
+				vertices += (surfs[key].verts as PackedVector3Array).size() if not (surfs[key].indices as PackedInt32Array).is_empty() else 0
+			counts.append(vertices)
+			box = mesh.get_aabb() if lod == 0 else box.merge(mesh.get_aabb())
+		for lod in 3:
+			small.append({"lod": lod, "centre": box.get_center(), "begin": 0.0 if lod == 0 else float(ranges[lod - 1]), "end": float(ranges[lod]), "vertices": counts[lod]})
+	# The merged hedges: each surface's vertices by their CUSTOM0 centre.
+	var merged: Array[Dictionary] = []
+	for child: Node in root_node.get_children():
+		if not child is MeshInstance3D or not str(child.name).begins_with("Hedges_"):
+			continue
+		var node := child as MeshInstance3D
+		var lod := ["lod0", "lod1", "far"].find(str(node.name).trim_prefix("Hedges_").get_slice("__", 0))
+		var mesh := node.mesh as ArrayMesh
+		for surface in mesh.get_surface_count():
+			var material := mesh.surface_get_material(surface) as ShaderMaterial
+			var band: Variant = material.get_shader_parameter(BATCHES.BAND_UNIFORM) if material != null else null
+			if not band is Vector2 or material.get_shader_parameter(BATCHES.BY_VERTEX_UNIFORM) != true:
+				_fail("%s surface %d does not test its band by vertex" % [node.name, surface])
+				continue
+			if mesh.surface_get_format(surface) & Mesh.ARRAY_FORMAT_CUSTOM0 == 0:
+				_fail("%s surface %d has no CUSTOM0 centres" % [node.name, surface])
+				continue
+			var centres: PackedFloat32Array = mesh.surface_get_arrays(surface)[Mesh.ARRAY_CUSTOM0]
+			var by_centre := {}
+			for at in range(0, centres.size(), 3):
+				var centre := Vector3(centres[at], centres[at + 1], centres[at + 2])
+				by_centre[centre] = int(by_centre.get(centre, 0)) + 1
+			for centre: Vector3 in by_centre:
+				merged.append({"lod": lod, "centre": centre, "band": band, "vertices": by_centre[centre], "begin": node.visibility_range_begin, "end": node.visibility_range_end, "node_centre": mesh.custom_aabb.get_center()})
+	if merged.is_empty():
+		_fail("no merged hedges")
+		return
+	# Same vertices per cell and level.
+	var expected := {}
+	for cell: Dictionary in small:
+		if int(cell.vertices) > 0:
+			expected["%d|%s" % [cell.lod, cell.centre]] = int(cell.vertices)
+	var found := {}
+	for part: Dictionary in merged:
+		var key := "%d|%s" % [part.lod, part.centre]
+		found[key] = int(found.get(key, 0)) + int(part.vertices)
+	if expected != found:
+		_fail("hedge vertices per cell and level differ: cells %s, merged %s" % [expected, found])
+	var references: Array = small.map(func(cell: Dictionary) -> Vector3: return cell.centre)
+	var differ := 0
+	var cameras := _cameras(references, [0.0, 44.0, 45.0, 46.0, 99.0, 100.0, 101.0, 169.0, 170.0, 171.0, 400.0])
+	for camera: Vector3 in cameras:
+		var before := {}
+		for cell: Dictionary in small:
+			if int(cell.vertices) > 0 and _node_draws(float(cell.begin), float(cell.end), cell.centre, camera):
+				before["%d|%s" % [cell.lod, cell.centre]] = true
+		var after := {}
+		for part: Dictionary in merged:
+			if _node_draws(float(part.begin), float(part.end), part.node_centre, camera) and _band_draws(part.band, part.centre, 0.0, camera):
+				after["%d|%s" % [part.lod, part.centre]] = true
+		if before != after:
+			differ += 1
+			if differ <= 3:
+				_fail("from %s the hedge's cells drew %s but the merged hedges %s" % [camera, before.keys(), after.keys()])
+	if differ > 0:
+		_fail("%d of %d camera points draw a different hedge" % [differ, cameras.size()])
+
+
+func _check_bending(root_node: Node3D) -> void:
+	var listed: Dictionary = root_node.get_meta("bending_rows", {})
+	if not listed.has("gum_a") or not listed.has("gum_b") or not listed.has("gum_c"):
+		_fail("the young gums are not listed as bending: %s" % listed.keys())
+		return
+	var proto := VEGETATION_KIT.new().prototype("sydney_blue_gum_young", 0)
+	var expected_refs: int = (proto.levels as Array).size() + (1 if proto.has("shadow") else 0)
+	for id: String in listed:
+		var entry: Dictionary = listed[id]
+		var placement: Transform3D = entry.transform
+		var levels := 0
+		for ref: Array in entry.instances:
+			var node := root_node.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
+			if node == null or int(ref[1]) >= node.multimesh.instance_count:
+				_fail("bending %s names %s, which is not a batch instance" % [id, ref])
+				continue
+			var xf: Transform3D = BATCHES.read(node.multimesh, int(ref[1]))[0]
+			if not xf.is_equal_approx(placement):
+				_fail("bending %s's instance %s stands at %s, not %s" % [id, ref, xf, placement])
+			levels += 1
+		if levels != expected_refs:
+			_fail("bending %s names %d instances, not its %d levels and shadow mesh" % [id, levels, expected_refs])
+
+
+# --- Clutter ------------------------------------------------------------------------
+
+
+func _check_clutter(root_node: Node3D) -> void:
+	var kit := CLUTTER_KIT.new()
+	# The small cells' nodes as street_clutter_builder.gd measured them, from the rows:
+	# [{name (level), kind (mesh key), begin, end, centre, origins}].
+	var cells := {}
+	for row: Dictionary in _clutter_rows():
+		var parts := kit.parts(str(row.prop), row.prop_params, str(row.id))
+		var position := Vector3(row.position_m[0], row.position_m[1], row.position_m[2])
+		var key := "%s|%d_%d" % [parts.mesh_key, floori(position.x / StreetClutterBuilder.CELL_M), floori(position.z / StreetClutterBuilder.CELL_M)]
+		if not cells.has(key):
+			cells[key] = {"parts": parts, "placements": []}
+		(cells[key].placements as Array).append(Transform3D(Basis(Vector3.UP, float(row.yaw_radians)), position))
+	var small: Array[Dictionary] = []
+	for key: String in cells:
+		var parts: Dictionary = cells[key].parts
+		var near_box: AABB = (parts.meshes[0] as Mesh).get_aabb()
+		var bounds := AABB()
+		var placements: Array = cells[key].placements
+		for index in placements.size():
+			var box: AABB = (placements[index] as Transform3D) * near_box
+			bounds = box if index == 0 else bounds.merge(box)
+		var slack := 0.0
+		for xf: Transform3D in placements:
+			slack = maxf(slack, (xf * near_box).get_center().distance_to(bounds.get_center()))
+		var levels := [["lod0", 0.0, CLUTTER_KIT.LOD_NEAR_M], ["lod1", CLUTTER_KIT.LOD_NEAR_M, float(parts.range_m) + ceilf(slack)]]
+		if parts.has("shadow_mesh"):
+			levels.append(["shadow", 0.0, CLUTTER_KIT.LOD_NEAR_M])
+		for level: Array in levels:
+			small.append({"name": level[0], "kind": str(parts.mesh_key), "begin": level[1], "end": level[2], "centre": bounds.get_center(), "origins": placements.map(func(xf: Transform3D) -> Vector3: return xf.origin)})
+	# The batches' instances.
+	var batched: Array[Dictionary] = []
+	for child: Node in root_node.get_children():
+		if not child is MultiMeshInstance3D or not "__b" in str(child.name):
+			continue
+		var node := child as MultiMeshInstance3D
+		var prefix := str(node.name).rsplit("__b", true, 1)[0]
+		var level := prefix.get_slice("_", prefix.get_slice_count("_") - 1)
+		var material := node.material_override as ShaderMaterial
+		var band: Variant = material.get_shader_parameter(BATCHES.BAND_UNIFORM) if material != null else null
+		if not band is Vector2 or not node.multimesh.use_colors:
+			_fail("%s has no band on its material or no colours" % node.name)
+			continue
+		for index in node.multimesh.instance_count:
+			var read := BATCHES.read(node.multimesh, index)
+			var xf: Transform3D = read[0]
+			var color: Color = read[2]
+			batched.append({"name": level, "kind": prefix.substr(0, prefix.length() - level.length() - 1), "origin": xf.origin, "reference": xf.origin + Vector3(color.r, color.g, color.b),
+				"extra": color.a - 1.0, "band": band, "begin": node.visibility_range_begin, "end": node.visibility_range_end, "centre": node.multimesh.custom_aabb.get_center()})
+	var expected := {}
+	for node: Dictionary in small:
+		for origin: Vector3 in node.origins:
+			expected["%s|%s|%s" % [node.kind, node.name, origin]] = int(expected.get("%s|%s|%s" % [node.kind, node.name, origin], 0)) + 1
+	var found := {}
+	for instance: Dictionary in batched:
+		var key := "%s|%s|%s" % [instance.kind, instance.name, instance.origin]
+		found[key] = int(found.get(key, 0)) + 1
+	if expected != found:
+		_fail("clutter instances per level differ: small cells %s, batches %s" % [expected, found])
+	var centres: Array = small.map(func(node: Dictionary) -> Vector3: return node.centre)
+	var differ := 0
+	var cameras := _cameras(centres, [0.0, 30.0, CLUTTER_KIT.LOD_NEAR_M, 90.0, 110.0, 260.0, 300.0])
+	for camera: Vector3 in cameras:
+		var before := {}
+		for node: Dictionary in small:
+			if _node_draws(float(node.begin), float(node.end), node.centre, camera):
+				for origin: Vector3 in node.origins:
+					before["%s|%s|%s" % [node.kind, node.name, origin]] = true
+		var after := {}
+		for instance: Dictionary in batched:
+			if _node_draws(float(instance.begin), float(instance.end), instance.centre, camera) and _band_draws(instance.band, instance.reference, float(instance.extra), camera):
+				after["%s|%s|%s" % [instance.kind, instance.name, instance.origin]] = true
+		if before != after:
+			differ += 1
+			if differ <= 3:
+				_fail("from %s the clutter's cells drew %s but the batches %s" % [camera, before.keys(), after.keys()])
+	if differ > 0:
+		_fail("%d of %d camera points draw different clutter" % [differ, cameras.size()])
+	# The parked cars a car can take name the batch and index of their own instance.
+	var swappable: Dictionary = root_node.get_meta("swappable_rows", {})
+	if swappable.size() != 4:
+		_fail("%d parked cars listed to take, not the fixture's 4" % swappable.size())
+	for id: String in swappable:
+		var entry: Dictionary = swappable[id]
+		var placement: Transform3D = entry.transform
+		var refs := 0
+		for ref: Array in entry.instances:
+			var node := root_node.get_node_or_null(str(ref[0])) as MultiMeshInstance3D
+			if node == null or int(ref[1]) >= node.multimesh.instance_count:
+				_fail("car %s names %s, which is not a batch instance" % [id, ref])
+				continue
+			var xf: Transform3D = BATCHES.read(node.multimesh, int(ref[1]))[0]
+			if not xf.is_equal_approx(placement):
+				_fail("car %s's instance %s stands at %s, not %s" % [id, ref, xf, placement])
+			if (ref.size() > 2) != str(ref[0]).contains("_shadow__"):
+				_fail("car %s's ref %s is marked shadow wrongly" % [id, ref])
+			refs += 1
+		if refs != 3:
+			_fail("car %s names %d instances, not its near, far and shadow levels" % [id, refs])
+
+
+# --- Vertex colours -----------------------------------------------------------------
+
+
+func _check_vertex_colours() -> void:
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([Vector3.ZERO, Vector3.RIGHT, Vector3.UP])
+	var plain := ArrayMesh.new()
+	plain.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	arrays[Mesh.ARRAY_COLOR] = PackedColorArray([Color.WHITE, Color.WHITE, Color.WHITE])
+	var coloured := ArrayMesh.new()
+	coloured.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	if StreetClutterBuilder.has_vertex_colours(plain) or not StreetClutterBuilder.has_vertex_colours(coloured):
+		_fail("has_vertex_colours does not tell a mesh with vertex colours from one without")
+	var kit := CLUTTER_KIT.new()
+	for row: Dictionary in _clutter_rows():
+		var parts := kit.parts(str(row.prop), row.prop_params, str(row.id))
+		for mesh: Variant in (parts.meshes as Array) + [parts.get("shadow_mesh", null)]:
+			if StreetClutterBuilder.has_vertex_colours(mesh):
+				_fail("%s's %s mesh has vertex colours, which would move its band" % [row.id, parts.mesh_key])
+
+
+# --- Fences -------------------------------------------------------------------------
+
+
+func _fence_row(id: String, points: Array) -> Dictionary:
+	var biases: Array = []
+	biases.resize(points.size())
+	biases.fill(0.0)
+	return {"id": id, "status": "placed", "layer": "fences", "prop": "chain_link", "prop_params": {"inside": "left"},
+		"fence": {"type": "chain_link", "runs": [{"points_m": points, "surface_bias_m": biases}]}}
+
+
+func _fence_rows() -> Array:
+	# Both rows' cell meshes fall in one merge cell; the second crosses a render cell.
+	return [
+		_fence_row("fence_a", [[2.0, 1.5, 4.0], [5.0, 1.5, 4.0], [8.0, 1.6, 4.5], [8.0, 1.6, 9.0]]),
+		_fence_row("fence_b", [[40.0, 1.5, 20.0], [44.0, 1.5, 21.0], [49.0, 1.4, 22.0], [53.0, 1.4, 22.0]]),
+	]
+
+
+func _check_fences() -> void:
+	var rows := _fence_rows()
+	var together := StreetFenceBuilder.new().build({"rows": rows})
+	if not together.ok:
+		_fail("the fences did not build: %s" % together.get("message", ""))
+		return
+	root.add_child(together.node)
+	var holder := (together.node as Node3D).get_node_or_null("FenceCells")
+	if holder == null or holder.get_child_count() == 0:
+		_fail("the fences have no merged cell meshes")
+		return
+	for row_index in rows.size():
+		var row: Dictionary = rows[row_index]
+		var alone := StreetFenceBuilder.new().build({"rows": [row]})
+		if not alone.ok:
+			_fail("fence %s alone did not build: %s" % [row.id, alone.get("message", "")])
+			continue
+		root.add_child(alone.node)
+		var group := (together.node as Node3D).get_node_or_null("Fence__" + str(row.id)) as Node3D
+		var own := (alone.node as Node3D).get_node_or_null("Fence__" + str(row.id)) as Node3D
+		if group == null or own == null:
+			_fail("fence %s has no group" % row.id)
+			continue
+		var bays: Dictionary = group.get_meta("fence_bays", {})
+		var posts: Dictionary = group.get_meta("fence_posts", {})
+		if bays.size() != (row.fence.runs[0].points_m as Array).size() - 1 or posts.size() != (row.fence.runs[0].points_m as Array).size():
+			_fail("fence %s lists %d bays and %d posts for its %d posts" % [row.id, bays.size(), posts.size(), (row.fence.runs[0].points_m as Array).size()])
+		var boxes := {}
+		for shape: Node in group.get_node("Collision").get_children():
+			boxes[str(shape.get_meta("fence_bay", ""))] = shape
+		var merged_first := -1
+		for key: String in bays:
+			var what := "fence %s bay %s" % [row.id, key]
+			var vertices := _fence_vertices(group, bays[key].ranges, what)
+			if vertices != _fence_vertices(own, (own.get_meta("fence_bays", {}) as Dictionary).get(key, {}).get("ranges", []), what + " alone"):
+				_fail("%s names other vertices merged than built alone" % what)
+			var shape := boxes.get(key, null) as CollisionShape3D
+			if shape == null:
+				_fail("%s has no box" % what)
+			else:
+				_fence_inside(what, shape.global_transform, (shape.shape as BoxShape3D).size, vertices)
+			for ref: Array in bays[key].ranges:
+				if str(ref[0]).begins_with("../FenceCells/"):
+					merged_first = int(ref[2]) if merged_first < 0 else mini(merged_first, int(ref[2]))
+		for key: String in posts:
+			var what := "fence %s post %s" % [row.id, key]
+			var vertices := _fence_vertices(group, posts[key].ranges, what)
+			if vertices != _fence_vertices(own, (own.get_meta("fence_posts", {}) as Dictionary).get(key, {}).get("ranges", []), what + " alone"):
+				_fail("%s names other vertices merged than built alone" % what)
+			_fence_inside(what, FENCE_BREAKER._post_transform(posts[key]), posts[key].size, vertices)
+		if merged_first < 0:
+			_fail("fence %s's bays name no merged cell mesh" % row.id)
+		elif row_index > 0 and merged_first == 0:
+			_fail("fence %s's runs start at the merged meshes' first vertex, not past fence %s's" % [row.id, rows[0].id])
+
+
+## The vertices a bay's or post's runs name ([mesh instance from the group, surface,
+## first vertex, count], as street_fence_breaker.gd collapses them), in order, in the
+## world; a run the breaker would skip fails.
+func _fence_vertices(group: Node3D, ranges: Array, what: String) -> PackedVector3Array:
+	var vertices := PackedVector3Array()
+	if ranges.is_empty():
+		_fail("%s has no vertex runs" % what)
+	for ref: Array in ranges:
+		var instance := group.get_node_or_null(str(ref[0])) as MeshInstance3D
+		if instance == null or not instance.mesh is ArrayMesh or int(ref[1]) < 0 or int(ref[1]) >= instance.mesh.get_surface_count():
+			_fail("%s: run %s names no mesh surface" % [what, ref])
+			continue
+		var positions: PackedVector3Array = (instance.mesh as ArrayMesh).surface_get_arrays(int(ref[1]))[Mesh.ARRAY_VERTEX]
+		if int(ref[3]) <= 0 or int(ref[2]) < 0 or int(ref[2]) + int(ref[3]) > positions.size():
+			_fail("%s: run %s is outside its surface's %d vertices" % [what, ref, positions.size()])
+			continue
+		for index in range(int(ref[2]), int(ref[2]) + int(ref[3])):
+			vertices.append(instance.global_transform * positions[index])
+	return vertices
+
+
+func _fence_inside(what: String, box: Transform3D, size: Vector3, vertices: PackedVector3Array) -> void:
+	var inverse := box.affine_inverse()
+	var half := size * 0.5 + Vector3.ONE * FENCE_BOX_SLACK_M
+	var outside := 0
+	for vertex: Vector3 in vertices:
+		var local := inverse * vertex
+		if absf(local.x) > half.x or absf(local.y) > half.y or absf(local.z) > half.z:
+			outside += 1
+	if outside > 0:
+		_fail("%s: %d of its %d vertices stand outside its box" % [what, outside, vertices.size()])
+
+
+# --- Shaders ------------------------------------------------------------------------
+
+
+func _check_shaders() -> void:
+	for path: String in ["res://game/resources/materials/world/vegetation/vegetation_bark.gdshader", "res://game/resources/materials/world/vegetation/vegetation_foliage.gdshader", "res://game/resources/materials/world/vegetation/vegetation_impostor.gdshader", "res://game/resources/materials/world/vegetation/vegetation_impostor_unshadowed.gdshader", "res://game/resources/materials/world/street/street_clutter.gdshader", "res://game/resources/materials/world/street/street_yard.gdshader"]:
+		var shader := load(path) as Shader
+		var names: Array = shader.get_shader_uniform_list().map(func(uniform: Dictionary) -> String: return str(uniform.name))
+		if not names.has(str(BATCHES.BAND_UNIFORM)):
+			_fail("%s has no %s" % [path, BATCHES.BAND_UNIFORM])

@@ -14,11 +14,16 @@ extends RefCounted
 ## drawn as visual-only context beyond the playable boundary) has no body, as the
 ## deck has none.
 ##
+## The rows' opaque (Mesh) and shadow-only (Shadow) cell meshes are merged across
+## rows into one mesh per part and MERGE_CELL_M cell (FenceCells/Mesh__c...,
+## Shadow__c...), a surface per material; the blended wire and windscreens (Fabric)
+## stay each row's own, so their blending order is as before.
+##
 ## A car breaks a fence one bay at a time (game/scripts/vehicles/street_fence_breaker.gd):
 ## each bay's box carries its key (fence_bay) and the row's group lists every
 ## bay (fence_bays: key -> {type, params, a, b, seed, posts, ranges: [[mesh
-## instance, surface, first vertex, count], ...]}), the runs of its own vertices
-## in the cell meshes, and every post (fence_posts: key -> {frame, size,
+## instance (a path from the group), surface, first vertex, count], ...]}), the runs
+## of its own vertices in the cell meshes, and every post (fence_posts: key -> {frame, size,
 ## ranges}; a bay's posts are the keys of the two it hangs between), which a car
 ## fells where it hits one; the group's fence_type and fence_params say how to
 ## build a felled post alone. The body's breakable meta is false where the
@@ -27,6 +32,17 @@ extends RefCounted
 const KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 ## Render cell size (m).
 const CELL_M := 48.0
+## The cell (m) the rows' opaque and shadow-only cell meshes are merged in (owner,
+## 2026-11-18: street furniture and fences may be drawn up to about one cell farther
+## away than before, never nearer, to fold many small meshes together). The merged
+## mesh's range E reaches each row cell mesh's own range e from that mesh's centre c
+## (StreetDetailBatches.coarse_range: the largest e + |c - C| over the cell, C the
+## merged mesh's centre, plus a metre), so nothing goes earlier; a row cell mesh then
+## draws up to E + |c - C| - e farther: at most 91.4 m over the island generated on
+## 2026-11-18 (median 40 m), and never past MAX_FARTHER_M, which fails the build.
+const MERGE_CELL_M := 64.0
+## The most (m) a merged row cell mesh may draw farther than its own range.
+const MAX_FARTHER_M := 2.0 * MERGE_CELL_M
 const RENDER_WORLD_VISIBLE := 1
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const PHYSICS_STREET_PROP := 1 << 3
@@ -43,6 +59,10 @@ func build(document: Dictionary) -> Dictionary:
 	var type_counts: Dictionary = {}
 	# size key -> BoxShape3D, shared by every bay of that size in every row
 	var box_shapes: Dictionary = {}
+	# The cell meshes to merge: "Part|merge cell" -> [{mesh, cast}], and each row's
+	# bays and posts until their vertex runs can name the merged meshes.
+	var merging: Dictionary = {}
+	var pending: Array[Dictionary] = []
 	for row_value: Variant in document.get("rows", []):
 		var row: Dictionary = row_value
 		if str(row.get("status", "")) != "placed" or str(row.get("layer", "")) != "fences" or not row.get("prop", null) is String:
@@ -108,6 +128,13 @@ func build(document: Dictionary) -> Dictionary:
 				var mesh: ArrayMesh = part[1]
 				if mesh == null:
 					continue
+				if part[0] != "Fabric":
+					var merge_key := "%s|%s" % [part[0], KIT.cell_key(mesh.get_aabb().get_center(), MERGE_CELL_M)]
+					if not merging.has(merge_key):
+						merging[merge_key] = []
+					where[part[3]] = [merge_key, (merging[merge_key] as Array).size()]
+					(merging[merge_key] as Array).append({"mesh": mesh, "cast": part[2]})
+					continue
 				var instance := MeshInstance3D.new()
 				instance.name = "%s__c%s" % [part[0], key]
 				where[part[3]] = str(instance.name)
@@ -128,14 +155,8 @@ func build(document: Dictionary) -> Dictionary:
 					if where.has(spot[0]):
 						(landed[builder] as Array).append([where[spot[0]], int(spot[1])])
 			placed[key] = landed
-		var bays: Dictionary = {}
-		for entry: Dictionary in bay_boxes:
-			bays[entry.key] = {"type": type, "params": (row.prop_params as Dictionary).duplicate(true), "a": entry.a, "b": entry.b, "seed": int(entry.seed), "posts": entry.get("posts", []), "ranges": _placed_ranges(entry.get("ranges", []), placed)}
-		group.set_meta("fence_bays", bays)
-		var fence_posts: Dictionary = {}
-		for entry: Dictionary in post_entries:
-			fence_posts[entry.key] = {"frame": entry.frame, "size": entry.size, "ranges": _placed_ranges(entry.ranges, placed)}
-		group.set_meta("fence_posts", fence_posts)
+		# The bays' and posts' vertex runs once the merged meshes exist (below).
+		pending.append({"group": group, "row": row, "type": type, "bays": bay_boxes, "posts": post_entries, "placed": placed})
 		group.set_meta("fence_type", type)
 		group.set_meta("fence_params", (row.prop_params as Dictionary).duplicate(true))
 		if (fence as Dictionary).has("deck"):
@@ -167,6 +188,32 @@ func build(document: Dictionary) -> Dictionary:
 		root.add_child(group)
 		fences += 1
 		type_counts[type] = int(type_counts.get(type, 0)) + 1
+	var merged := _merge_cell_meshes(root, merging)
+	if merged.has("error"):
+		root.free()
+		return _error(str(merged.error))
+	meshes += int(merged.meshes)
+	for entry: Dictionary in pending:
+		var group: Node3D = entry.group
+		var row: Dictionary = entry.row
+		var placed: Dictionary = entry.placed
+		# Each run in a merged mesh: its path from the group, surface and first vertex.
+		for cell: String in placed:
+			for builder: String in placed[cell]:
+				var spots: Array = placed[cell][builder]
+				for index in spots.size():
+					var spot: Array = spots[index]
+					if spot[0] is Array:
+						var at: Array = (merged.surfaces as Dictionary)["%s|%d|%d" % [spot[0][0], spot[0][1], spot[1]]]
+						spots[index] = ["../" + str(at[0]), int(at[1]), int(at[2])]
+		var bays: Dictionary = {}
+		for bay: Dictionary in entry.bays:
+			bays[bay.key] = {"type": entry.type, "params": (row.prop_params as Dictionary).duplicate(true), "a": bay.a, "b": bay.b, "seed": int(bay.seed), "posts": bay.get("posts", []), "ranges": _placed_ranges(bay.get("ranges", []), placed)}
+		group.set_meta("fence_bays", bays)
+		var fence_posts: Dictionary = {}
+		for post: Dictionary in entry.posts:
+			fence_posts[post.key] = {"frame": post.frame, "size": post.size, "ranges": _placed_ranges(post.ranges, placed)}
+		group.set_meta("fence_posts", fence_posts)
 	root.set_meta("fences", fences)
 	root.set_meta("fence_types", type_counts)
 	return {
@@ -181,13 +228,107 @@ func build(document: Dictionary) -> Dictionary:
 
 
 ## Vertex runs [[cell key, builder key, first vertex, end], ...] where they
-## landed: [[mesh instance, surface, first vertex, count], ...].
+## landed: [[mesh instance, surface, first vertex, count], ...] (in a merged mesh,
+## past the earlier rows' vertices).
 static func _placed_ranges(runs: Array, placed: Dictionary) -> Array:
 	var ranges: Array = []
 	for run: Array in runs:
 		for target: Array in (placed.get(run[0], {}) as Dictionary).get(run[1], []):
-			ranges.append([target[0], target[1], int(run[2]), int(run[3]) - int(run[2])])
+			var base := int(target[2]) if target.size() > 2 else 0
+			ranges.append([target[0], target[1], base + int(run[2]), int(run[3]) - int(run[2])])
 	return ranges
+
+
+## The rows' opaque and shadow-only cell meshes merged per part and MERGE_CELL_M
+## cell under root/FenceCells, a surface per material and vertex layout, each with
+## the widest range any of its rows' meshes needs from the merged mesh's centre.
+## {meshes, surfaces: "merge key|row mesh|its surface" -> [path from root, merged
+## surface, first vertex]}, or {error} where a row's mesh would draw more than
+## MAX_FARTHER_M farther.
+static func _merge_cell_meshes(root: Node3D, merging: Dictionary) -> Dictionary:
+	var holder := Node3D.new()
+	holder.name = "FenceCells"
+	root.add_child(holder)
+	var surfaces: Dictionary = {}
+	var keys: Array = merging.keys()
+	keys.sort()
+	for merge_key: String in keys:
+		var parts: Array = merging[merge_key]
+		var node_name := "%s__c%s" % [merge_key.get_slice("|", 0), merge_key.get_slice("|", 1)]
+		# material id|layout -> {material, flags, arrays: [...], vertices}
+		var by_surface: Dictionary = {}
+		var order: Array = []
+		var batch := StreetDetailBatches.batch(null, int(parts[0].cast), 0.0, 0.0)
+		for part_index in parts.size():
+			var mesh: ArrayMesh = parts[part_index].mesh
+			var box := mesh.get_aabb()
+			# This row's cell mesh drew to KIT.RANGE_M past half its box's diagonal.
+			StreetDetailBatches.add(batch, Transform3D.IDENTITY, box, box.get_center(), KIT.RANGE_M + ceilf(box.size.length() * 0.5), Color(0, 0, 0, 0))
+			for surface in mesh.get_surface_count():
+				var material := mesh.surface_get_material(surface)
+				var format := mesh.surface_get_format(surface)
+				var key := "%d|%d" % [material.get_instance_id() if material != null else 0, format]
+				if not by_surface.has(key):
+					by_surface[key] = {"material": material, "flags": format & ~((1 << Mesh.ARRAY_MAX) - 1), "arrays": [], "vertices": 0}
+					order.append(key)
+				var into: Dictionary = by_surface[key]
+				surfaces["%s|%d|%d" % [merge_key, part_index, surface]] = ["FenceCells/" + node_name, order.find(key), int(into.vertices)]
+				var arrays := mesh.surface_get_arrays(surface)
+				into.vertices = int(into.vertices) + (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+				(into.arrays as Array).append(arrays)
+		var merged := ArrayMesh.new()
+		for key: String in order:
+			var into: Dictionary = by_surface[key]
+			merged.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _joined(into.arrays), [], {}, int(into.flags))
+			merged.surface_set_material(merged.get_surface_count() - 1, into.material)
+		merged.custom_aabb = batch.box
+		var end := StreetDetailBatches.coarse_range(batch).y
+		# Each row mesh's centre and own range, as added above.
+		for part_index in parts.size():
+			var centre: Vector3 = (batch.references as PackedVector3Array)[part_index]
+			var farther := end + centre.distance_to(batch.box.get_center()) - (batch.extras as PackedFloat32Array)[part_index]
+			if farther > MAX_FARTHER_M:
+				return {"error": "%s: a row's cell mesh at %s would draw %.1f m farther than its own range (at most %.0f m)" % [node_name, centre, farther, MAX_FARTHER_M]}
+		var instance := MeshInstance3D.new()
+		instance.name = node_name
+		instance.mesh = merged
+		instance.layers = RENDER_WORLD_VISIBLE
+		instance.cast_shadow = int(parts[0].cast)
+		instance.visibility_range_end = end
+		instance.visibility_range_end_margin = 10.0
+		instance.visibility_range_fade_mode = GeometryInstance3D.VISIBILITY_RANGE_FADE_DISABLED
+		instance.set_meta("street_detail_layer", "fences")
+		holder.add_child(instance)
+	return {"meshes": holder.get_child_count(), "surfaces": surfaces}
+
+
+## Surface arrays of one layout joined end to end, each one's indices moved past
+## the vertices before it.
+static func _joined(list: Array) -> Array:
+	var joined := []
+	joined.resize(Mesh.ARRAY_MAX)
+	var base := 0
+	for arrays: Array in list:
+		var count := (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()
+		for slot in Mesh.ARRAY_MAX:
+			var value: Variant = arrays[slot]
+			if value == null:
+				continue
+			if slot == Mesh.ARRAY_INDEX:
+				var indices: PackedInt32Array = value
+				var moved := PackedInt32Array()
+				moved.resize(indices.size())
+				for index in indices.size():
+					moved[index] = indices[index] + base
+				value = moved
+			if joined[slot] == null:
+				joined[slot] = value.duplicate()
+			else:
+				var into: Variant = joined[slot]
+				into.append_array(value)
+				joined[slot] = into
+		base += count
+	return joined
 
 
 ## A run's posts at the visible ground: land elevation plus the surface bias.

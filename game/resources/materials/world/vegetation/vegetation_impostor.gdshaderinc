@@ -35,6 +35,8 @@ uniform float high_frame_m = 0.0;
 // The time of day's scale on the specular, as vegetation_foliage.gdshader's.
 global uniform float vegetation_sheen;
 
+#include "res://game/resources/materials/world/vegetation/vegetation_band.gdshaderinc"
+
 // The camera's height angle (radians) where the crossfade to the views from above runs.
 const float HIGH_FADE_START = 0.21;
 const float HIGH_FADE_END = 0.66;
@@ -93,6 +95,9 @@ void vertex() {
 	float turn = fract(atan(forward.x, forward.z) / TAU) * count;
 	float first = min(floor(turn), count - 1.0);
 	views = vec3(first, mod(first + 1.0, count), turn - first);
+	if (street_band_hides(MODEL_MATRIX[3].xyz, INSTANCE_CUSTOM, MAIN_CAM_INV_VIEW_MATRIX[3].xyz)) {
+		VERTEX = vec3(0.0);
+	}
 }
 
 void fragment() {

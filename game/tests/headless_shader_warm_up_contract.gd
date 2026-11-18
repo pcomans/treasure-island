@@ -62,6 +62,7 @@ const CLASSIFIED := {
 	"res://game/scripts/world/shoreline_builder.gd": "builds the shoreline while the island loads (or bakes)",
 	"res://game/scripts/world/soccer_ball.gd": "made with the street furniture while the island loads (its confetti registers)",
 	"res://game/scripts/world/street_clutter_builder.gd": "builds the street clutter while the island loads (or bakes)",
+	"res://game/scripts/world/street_detail_batches.gd": "batches the street vegetation and clutter, and copies their materials with level bands, while the island loads (or bakes)",
 	"res://game/scripts/world/street_fence_builder.gd": "builds the fences while the island loads (or bakes)",
 	"res://game/scripts/world/street_fence_kit.gd": "its materials are made with the fences while the island loads; the fence breaker registers its debris's",
 	"res://game/scripts/world/street_furniture_builder.gd": "builds the street furniture while the island loads (or bakes)",

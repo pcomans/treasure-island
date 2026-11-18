@@ -7,7 +7,12 @@ extends RefCounted
 ## cell and detail level: the near mesh while the camera is within LOD_NEAR_M of
 ## the cell's centre, the far mesh beyond, to the prop's range (Godot measures
 ## visibility ranges to the MultiMesh bounds centre; the far range is extended by
-## the farthest instance's offset from that centre so no item vanishes early).
+## the farthest instance's offset from that centre so no item vanishes early). The
+## items are drawn in large batches, one per mesh, level and
+## StreetDetailBatches.CELL_M cell (__b nodes), in which each item keeps its cell's
+## range: its colour holds the cell's centre and its batch's material the range,
+## which the clutter shaders test (street_clutter.gdshader, street_yard.gdshader),
+## so it shows and hands over exactly where its cell's MultiMesh did.
 ## A car's near mesh casts no shadow: its shadow caster (the kit's far body a
 ## little inside the surface) does, over the same range, so the detailed levels
 ## are not drawn again in the shadow passes. The parked cars nearest the camera
@@ -55,6 +60,18 @@ const WATER_BARRIER_VARIANT := 7
 
 static func _cell(position: Array, size_m: float) -> String:
 	return "%d_%d" % [floori(float(position[0]) / size_m), floori(float(position[2]) / size_m)]
+
+
+## Whether a mesh has vertex colours. A banded batch's shader reads its item's cell
+## centre and extra range from COLOR, which is the vertex colour times the instance
+## colour (white where a mesh has none), so such a mesh fails the build.
+static func has_vertex_colours(mesh: Variant) -> bool:
+	if not mesh is ArrayMesh:
+		return false
+	for surface in (mesh as ArrayMesh).get_surface_count():
+		if (mesh as ArrayMesh).surface_get_format(surface) & Mesh.ARRAY_FORMAT_COLOR:
+			return true
+	return false
 
 
 func build(document: Dictionary) -> Dictionary:
@@ -121,10 +138,22 @@ func build(document: Dictionary) -> Dictionary:
 		prop_counts[prop] = int(prop_counts.get(prop, 0)) + 1
 		items += 1
 	var multimeshes := 0
+	# Each small cell's levels go into the large batches (StreetDetailBatches), each
+	# instance carrying its cell's box centre in its colour and its level's range on
+	# the batch's material, which the clutter shaders test as the cell did; a piece
+	# whose material has no band test (a flag's) keeps its small cell's MultiMeshes.
+	# Batch node name -> its batch.
+	var large: Dictionary = {}
+	var bands: Dictionary = {}
 	var batch_keys: Array = batches.keys()
 	batch_keys.sort()
 	for key: String in batch_keys:
 		var batch: Dictionary = batches[key]
+		if StreetDetailBatches.takes_band(batch.material):
+			for mesh: Variant in (batch.meshes as Array) + [batch.get("shadow_mesh", null)]:
+				if has_vertex_colours(mesh):
+					root.free()
+					return {"ok": false, "code": "street_clutter_band", "message": "%s: a mesh with vertex colours cannot carry its items' band in COLOR" % key, "source_keys": []}
 		var cell_keys: Array = (batch.cells as Dictionary).keys()
 		cell_keys.sort()
 		for cell: String in cell_keys:
@@ -148,6 +177,25 @@ func build(document: Dictionary) -> Dictionary:
 			]
 			if caster is Mesh:
 				levels.append({"name": "shadow", "mesh": caster, "begin": 0.0, "end": float(batch.lod_near_m), "cast": GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY})
+			if StreetDetailBatches.takes_band(batch.material):
+				var centre := bounds.get_center()
+				for level: Dictionary in levels:
+					# The far level ran on past the prop's range by the farthest item's offset.
+					var extra := ceilf(slack) if level.name == "lod1" else 0.0
+					var end := float(level.end) - extra
+					for index in entries.size():
+						var xf: Transform3D = entries[index][0]
+						var node_name := "%s_%s__b%s" % [key, level.name, StreetDetailBatches.cell(xf.origin)]
+						if not large.has(node_name):
+							large[node_name] = StreetDetailBatches.batch(level.mesh, level.cast, float(level.begin), end)
+							large[node_name]["material"] = StreetDetailBatches.band_material(batch.material, float(level.begin), end, bands)
+						var at := StreetDetailBatches.add(large[node_name], xf, xf * near_box, centre, extra, entries[index][1], StreetDetailBatches.band_data(xf, centre, extra))
+						if swappable.has(entries[index][2]):
+							var ref := [node_name, at]
+							if level.name == "shadow":
+								ref.append("shadow")
+							(swappable[entries[index][2]].instances as Array).append(ref)
+				continue
 			for level: Dictionary in levels:
 				var multimesh := MultiMesh.new()
 				multimesh.transform_format = MultiMesh.TRANSFORM_3D
@@ -180,6 +228,15 @@ func build(document: Dictionary) -> Dictionary:
 				instance.set_meta("placement_count", entries.size())
 				root.add_child(instance)
 				multimeshes += 1
+	var node_names: Array = large.keys()
+	node_names.sort()
+	for node_name: String in node_names:
+		var instance := StreetDetailBatches.node(large[node_name], node_name)
+		instance.material_override = large[node_name].material
+		instance.layers = RENDER_WORLD_VISIBLE
+		instance.set_meta("street_detail_layer", "clutter")
+		root.add_child(instance)
+		multimeshes += 1
 	var shape_count := 0
 	var shape_cells: Array = shapes.keys()
 	shape_cells.sort()
