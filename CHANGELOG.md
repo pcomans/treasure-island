@@ -6,6 +6,11 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2302 (2026-11-18)
+
+- On the web, the game uses much less memory, so it should stop reloading on iPhones.
+- Fences can be seen from slightly farther away.
+
 ## Build 2270 (2026-11-18)
 
 - On the web, the game no longer freezes for a moment the first time something comes into view: its graphics are prepared during loading, which takes several seconds longer.
