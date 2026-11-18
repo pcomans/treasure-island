@@ -41,14 +41,6 @@ func _run() -> void:
 		return
 	print("SOURCE_WORLD_MS ", world.runtime_evidence.load_duration_msec)
 	print("BAKE_STREET_DETAIL layers_on=", ",".join(PackedStringArray(world.get_street_detail_layers())), " rows=", world.runtime_evidence.street_detail_rows)
-	var merge_started := Time.get_ticks_msec()
-	var merged := MERGE_BUILDINGS.merge(world.buildings)
-	print("BAKE_MERGE ", merged, " ms=", Time.get_ticks_msec() - merge_started)
-	# A script error inside the merge comes back as an empty report.
-	if not merged.has("problems") or not (merged.problems as PackedStringArray).is_empty():
-		push_error("The building merge failed: ", merged)
-		quit(1)
-		return
 	# How many bodies the prune must remove comes from the installer's own count of the
 	# bodies it switched off, not from the candidates it handed over.
 	var housing: Variant = ready_report.get("housing_family")
@@ -56,11 +48,21 @@ func _run() -> void:
 		push_error("The source world's ready report has no housing family result to check the prune against: ", ready_report.keys())
 		quit(1)
 		return
+	# Pruned before the merge, so the merge sees the buildings as the baked world holds
+	# them: which housing families have a ground proof depends on what remains of them.
 	var pruned := MERGE_BUILDINGS.prune_superseded(superseded, housing.disabled_legacy_bodies)
 	print("BAKE_PRUNE_SUPERSEDED removed=", int(pruned.removed_meshes) + int(pruned.removed_bodies), " candidates=", pruned.candidates,
 		" removed_bodies=", pruned.removed_bodies, " superseded_bodies=", pruned.superseded_bodies)
 	if pruned.problem != "":
 		push_error("The bake's prune failed: ", pruned.problem)
+		quit(1)
+		return
+	var merge_started := Time.get_ticks_msec()
+	var merged := MERGE_BUILDINGS.merge(world.buildings)
+	print("BAKE_MERGE ", merged, " ms=", Time.get_ticks_msec() - merge_started)
+	# A script error inside the merge comes back as an empty report.
+	if not merged.has("problems") or not (merged.problems as PackedStringArray).is_empty():
+		push_error("The building merge failed: ", merged)
 		quit(1)
 		return
 	var packed := PREBUILT_WORLD.pack_world(world)

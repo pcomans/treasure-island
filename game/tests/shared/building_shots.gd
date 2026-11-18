@@ -108,6 +108,9 @@ extends SceneTree
 ##   proxies, ShaderWarmUp), so shots show what play shows after that loading (with
 ##   --rendering-method gl_compatibility --rendering-driver opengl3, the web's
 ##   renderer).
+## --web-distances: the web build's distance culling of building parts by their size
+##   (main.gd _apply_web_detail_distances), applied once the island has loaded, so far
+##   views show what the web draws there.
 ## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
 ##   in every shot. Without it, close-ups and focused views are taken with street
 ##   detail off, and context, island and overhead views both ways. A view taken
@@ -307,6 +310,9 @@ func _run() -> void:
 		_fail(error)
 		return
 	print("RENDERER: %s / %s" % [RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
+	if args.has("web-distances"):
+		_h.main._apply_web_detail_distances()
+		print("WEB_DISTANCES applied as the web build applies them")
 	if args.has("neutral-lighting"):
 		await _use_neutral_lighting()
 	if not args.has("show-player"):

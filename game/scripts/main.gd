@@ -16,6 +16,7 @@ const PACK_RELEASE := preload("res://game/scripts/web/pack_release.gd")
 const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
+const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 ## A touch screen's HUD is laid out for this many pixels or more each way
 ## (use_touch_controls); the view still fills the screen's shape.
 const TOUCH_LAYOUT_PX := 720
@@ -907,18 +908,20 @@ func _apply_web_detail_distances() -> void:
 	# collision inventory, terrain and roads; distant small meshes can disappear.
 	for node in world_root.get_node("PlayableWorld/Buildings").find_children("*", "GeometryInstance3D", true, false):
 		var geometry := node as GeometryInstance3D
-		# The bake's merged meshes hold a building's walls and roofs, not small parts.
-		if geometry.has_meta("baked_merge"):
+		var longest := 0.0
+		# A mesh the bake merged from parts culled by their size is culled as they were.
+		if geometry.has_meta(PREBUILT_WORLD.DETAIL_SIZE_META):
+			longest = float(geometry.get_meta(PREBUILT_WORLD.DETAIL_SIZE_META))
+		# The bake's other merged meshes hold a building's walls and roofs, not small parts.
+		elif geometry.has_meta("baked_merge"):
 			continue
-		var bounds := geometry.get_aabb()
-		var world_size := (geometry.global_transform * bounds).size
-		var longest := maxf(world_size.x, maxf(world_size.y, world_size.z))
-		if longest <= 12.0:
-			geometry.visibility_range_end = 200.0
-			geometry.visibility_range_end_margin = 20.0
-		elif longest <= 50.0:
-			geometry.visibility_range_end = 500.0
-			geometry.visibility_range_end_margin = 40.0
+		else:
+			var world_size := (geometry.global_transform * geometry.get_aabb()).size
+			longest = maxf(world_size.x, maxf(world_size.y, world_size.z))
+		var detail := PREBUILT_WORLD.web_detail_range(longest)
+		if detail.x > 0.0:
+			geometry.visibility_range_end = detail.x
+			geometry.visibility_range_end_margin = detail.y
 
 
 func _on_web_pointer_lock(_arguments: Array) -> void:

@@ -695,7 +695,20 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
 
 ## Building merge in the bake: known gaps
 
-Exports and the web build load a baked world whose buildings are merged by `tools/merge_baked_buildings.gd`: the same triangles through far fewer draws, while the world generated at startup keeps its authored nodes. Compared at 72 fixed views on 2026-11-06 (shader time frozen):
+Exports and the web build load a baked world whose buildings are merged by `tools/merge_baked_buildings.gd`: the same triangles through far fewer draws, while the world generated at startup keeps its authored nodes. Opaque surfaces whose plain materials differ only in colour join by colour, the colour moving into vertex colours; since 2026-11-18 other surfaces join those that share their material (or an equal copy), their vertex data byte for byte under one transform, and the merge by colour also takes housing support and ground meshes outside the two ground proofs (below). Merged surfaces hold at most 65,535 vertices. Building meshes have no LODs (0 of 16,666 source surfaces, measured in the bake).
+
+On the web, main.gd culls each unmerged building part by its mesh's size (200 m up to 12 m, 500 m up to 50 m) and draws the merge by colour's own batches at any distance. Every part the merges newly take keeps the distance the web drew it to: a batch holds parts of one distance and carries their size (`PrebuiltWorld.DETAIL_SIZE_META`), measured from what the web culled before (a support or ground mesh whole, else what the merge by colour left of it), and a mesh that gives some surfaces up keeps its old box (`custom_aabb`) and size. A batch fades at its own box's centre's distance, where each part faded at its own: the 200 m and 500 m switches move by up to half the batch's extent, 50.6 m in the worst batch of the 2026-11-18 bake (`most_fade_shift_m` in the bake's log).
+
+Measured on 2026-11-18, main's build 2272 (`fa943907`) against the merge's head, each with the web drive trace (`web/iphone-trace-memory-20261118`) merged in for the measurement only, silent builds, WebKit phone rig (874 × 292 at 3x, 3D scale 0.67, corner route), two runs each:
+
+- Buildings in the web bake: 5,725 → 4,250 mesh surfaces, about 15,100 → 11,350 mesh buffers (the trace's own census: 13,983 → 10,259, of 256 bytes or less 4,616 → 2,211) and 2,665 → 640 materials, one uniform buffer each. GL buffers on the page at their peak: 43,761 → 38,003; their bytes 239.3 → 243.2 MB, or 868.9 → 779.5 MB counted in 16 KiB pages. The engine's video memory 440.5 → 444.4 MB.
+- Draw calls on the drive: median 3,771 → about 3,560. Frame time: median 56 and 47 ms before, 45 and 47 ms after; the runs' spread is as large as any change.
+- The baked world's scene file grew 85.7 → 86.3 MB (vertex colours and indices of the support parts), the web pack 158.8 → 159.4 MB.
+- Pixels, at 49 fixed views of 24 buildings (every housing kit, the two ground-proof families, the landmarks) and the island views, on desktop (with a same-code rerun to set aside moving water, grass and trees) and in Compatibility with the web's culling (`building_shots.gd --web-distances`): the housing support parts that now join by colour (windows, doors, trims, canopy posts and beams) and the ground visuals differ by one 8-bit level on part of their pixels on desktop, one or two in Compatibility. That is main's 8-bit vertex-colour quantisation, now also on support and ground parts: a part's colour moves by at most half an 8-bit step before lighting. At most 4 pixels a view differ by more, at edges. Some views' skies differ by a level in bands, from the clouds' drift, as the two builds load in different frame counts.
+- Far and night views, on 2026-11-18 after the merge's distance fix: from 30 m up at about 210 and 480 m across a garage-court block, a Bayside block and the midrise r19685981, and from 450 and 620 m above r19685981, in Compatibility with the web's culling, no part appears or goes (at most 14 pixels a view differ by more than 24 levels); close views of Isle House, Building 600, Building 1 and Building 3 differ by at most 1,238 pixels by one level. Desktop night pairs (the pier canopy's lamps, Aracely's lamp and daylight fill, Mersea's bulbs) match apart from the support parts' level; the web holds the recorded daytime, so it has no night. Two desktop runs of the same main build with different preceding views already differ by about 1,200 scattered pixels a view (the frame's last column and the asphalt), so a difference of that size between builds is not the merge.
+- **Compatibility at island height:** seen from about 1.8 km straight down (the island top view), r19685981's lower rooftop solar panel shows where main showed the roof. It is drawn at any distance in both builds (it shows identically from 450 and 620 m); at 1.8 km the 24-bit depth buffer can't tell a few metres apart, so the draw order decides, and the merge changed it. The same kind of tie as the near-coplanar parts below.
+
+Compared at 72 fixed views on 2026-11-06 (shader time frozen):
 
 - About 3.7% of pixels on desktop differ by one 8-bit level, because a vertex colour stores 8 bits per channel where a material's colour is a float. Only about 0.025% differ by more.
 - Near-coplanar parts can tie differently on depth: a 1-pixel lip at the south porch of Chinook w95934105, and 8 pixels on a distant sign beyond Fire Station 48.
@@ -705,9 +718,12 @@ Exports and the web build load a baked world whose buildings are merged by `tool
 
 Not needed to ship, and not done:
 
-- Housing support and retained ground meshes are left whole, because `StudyGeometry.retained_ground_contact` compares them with their collider face by face, in order: 2,668 of the 5,529 surfaces left. Combining only neighbouring surfaces inside a support mesh would keep that order and take its 2,211 surfaces to about 950.
+- The two housing families that keep the production ground (w96215674 and w96215673) keep their 458 support and ground meshes (520 surfaces) whole: `StudyGeometry.retained_ground_contact` compares them with their collider face by face, in order, and `StudyGeometry.retained_ground_meshes` names them for the merge.
+- Per-house siding and roof colours are shader uniforms, so 397 shader-material surfaces (265 materials) and 54 housing support surfaces stay apart; about 300 would join if those colours moved into vertices (owner, 2026-11-18: not in this task). Sharing equal materials across buildings would free about 570 more uniform buffers (likewise not in this task).
+- 2,895 merged surfaces in 867 batches stay apart by material (roughness, metallic, textures) or by the channels their parts carry; 524 of them hold 1 KiB of vertices or less.
+- Also kept as authored: Mersea's 171 triplanar surfaces under their own transforms, 76 on reflection layers, 57 transparent and 27 scaled parts under their own transforms.
 - Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
-- 1,852 hidden meshes stay in the bake.
+- 50 hidden meshes (89 buffers) stay in the bake.
 
 Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 

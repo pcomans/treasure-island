@@ -372,7 +372,7 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 		hit: Dictionary, land: Dictionary, max_offset: float, tolerance: float, floor_cos: float, proof_cache: Dictionary = {}) -> bool:
 	if family == null or body == null or body.get_parent() != family or hit.get("collider") != body or (hit.has("rid") and hit.rid != body.get_rid()): return false
 	var source := str(family.get_meta("source_key", ""))
-	if family.global_transform != Transform3D.IDENTITY or family.get_meta("scope", "") != "approved_shared_family_normal_play" or not family.get_meta("build_valid", false): return false
+	if not _ground_proof_family(family): return false
 	if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != "building:" + source + ":wall" or body.get_meta("family_role", "") != "support" or body.get_meta("receiver_kind", "") != "none" or body.collision_layer != 1 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall"): return false
 	var owners := body.get_shape_owners()
 	if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1: return false
@@ -393,10 +393,7 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 		if not inventory.ok: return false
 		var expected := PackedVector3Array()
 		var ground_faces := PackedVector3Array()
-		var meshes: Array[MeshInstance3D] = []
-		for child: Node in family.get_children():
-			if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
-		meshes.append_array(inventory.ground_meshes)
+		var meshes := _ground_proof_meshes(family, inventory)
 		for mesh: MeshInstance3D in meshes:
 			if not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
 			var retained: bool = mesh in inventory.ground_meshes
@@ -437,6 +434,35 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 	if land_body == null or land_body.get_parent() == null or land_body.get_parent().get_meta("feature_kind", "") != "land_ground" or (land_body.collision_layer & 1) == 0: return false
 	return ground_face_contact(hit.get("position", Vector3.INF), hit.get("normal", Vector3.ZERO), ground_faces,
 		land.get("position", Vector3.INF), land.get("normal", Vector3.ZERO), max_offset, tolerance, floor_cos)
+
+
+# The meshes retained_ground_contact compares, in order, with a family's support
+# collider: its support meshes, then its retained ground visuals; none when it compares
+# nothing: a family it does not take (_ground_proof_family) or one with no retained
+# ground (retained_housing_inventory fails). The bake's building merge
+# (tools/merge_baked_buildings.gd) leaves these as authored, by this same rule.
+static func retained_ground_meshes(scene: Node, family: Node3D) -> Array[MeshInstance3D]:
+	var none: Array[MeshInstance3D] = []
+	if not _ground_proof_family(family):
+		return none
+	var inventory := retained_housing_inventory(scene, family, str(family.get_meta("source_key", "")), false)
+	if not inventory.ok:
+		return none
+	return _ground_proof_meshes(family, inventory)
+
+
+# The families retained_ground_contact takes: installed for normal play, built whole,
+# and at the world's origin.
+static func _ground_proof_family(family: Node3D) -> bool:
+	return family.global_transform == Transform3D.IDENTITY and family.get_meta("scope", "") == "approved_shared_family_normal_play" and family.get_meta("build_valid", false)
+
+
+static func _ground_proof_meshes(family: Node3D, inventory: Dictionary) -> Array[MeshInstance3D]:
+	var meshes: Array[MeshInstance3D] = []
+	for child: Node in family.get_children():
+		if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
+	meshes.append_array(inventory.ground_meshes)
+	return meshes
 
 
 static func _ground_proof_state(node: Node) -> Array:
