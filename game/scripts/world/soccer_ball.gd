@@ -205,6 +205,7 @@ static func _triangle(vertices: PackedVector3Array, normals: PackedVector3Array,
 func _ready() -> void:
 	_touch = get_node("Touch") as Area3D
 	_previous = global_position
+	CONFETTI.register_warm_up()
 
 
 ## Puts the ball at rest at `at` (tests and capture drivers set a shot up this

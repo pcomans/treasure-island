@@ -28,6 +28,12 @@ const PIECE_M := Vector2(0.12, 0.16)
 static var _mesh: QuadMesh
 
 
+## The paper's material, for the shader warm-up (ShaderWarmUp): made as the island
+## loads (the ball calls this as it enters the tree), drawn only at a goal.
+static func register_warm_up() -> void:
+	ShaderWarmUp.add_mesh(_piece(), true)
+
+
 ## Starts the burst at a goal (once this node is in the tree): the goal's frame
 ## (origin on the middle of the goal line, -Z toward the pitch), its mouth's half
 ## width and its crossbar's height (m).

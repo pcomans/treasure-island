@@ -103,6 +103,11 @@ extends SceneTree
 ##   reflection probes recaptured under them, so a change to main.tscn's lighting
 ##   does not reach these shots. A change to a palette or material does, as it
 ##   should. Gameplay always uses main.tscn.
+## --web-loading: the island loaded as the web build loads it (main.gd
+##   compile_by_group: its shaders a group at a time, then the shader warm-up's
+##   proxies, ShaderWarmUp), so shots show what play shows after that loading (with
+##   --rendering-method gl_compatibility --rendering-driver opengl3, the web's
+##   renderer).
 ## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
 ##   in every shot. Without it, close-ups and focused views are taken with street
 ##   detail off, and context, island and overhead views both ways. A view taken
@@ -295,6 +300,7 @@ func _run() -> void:
 		print(_sun_line())
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
+	_h.web_loading = args.has("web-loading")
 	# Load with every layer on when any view wants it; the off views come after.
 	var error := await _h.load_world(WorldLoader.STREET_DETAIL_LAYERS.duplicate() if "on" in passes else [])
 	if error != "":

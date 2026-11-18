@@ -341,8 +341,7 @@ static func _surface_material(label: String, cfg: Dictionary) -> Material:
 	var colors: Dictionary = {"CarportRoof": cfg.materials.carport_roof_rgb, "CarportPosts": cfg.materials.carport_post_rgb, "PaleCompleteTrim": cfg.materials.trim_rgb, "BlueOpaqueGlazing": cfg.materials.blue_glass_rgb, "DarkOpaqueGlazing": cfg.materials.dark_glass_rgb, "MaroonClosedDoors": cfg.materials.door_rgb, "PlumClosedDoors": cfg.materials.plum_door_rgb, "PaleClosedDoor": cfg.materials.pale_door_rgb, "LocalPrivacyScreens": cfg.materials.screen_rgb, "PaleDrainageAndFascia": cfg.materials.trim_rgb, "DoorHardware": cfg.materials.metal_rgb, "DrapedEntryPaths": cfg.materials.path_rgb}
 	if label in ["NearHorizontalSiding", "ProjectedUpperSiding", "ProjectedUpperClosures"]:
 		var material := ShaderMaterial.new()
-		var shader := Shader.new()
-		shader.code = SIDING_FIELD.code.replace("normalize(NORMAL.xz)", "(length(NORMAL.xz) > 0.0 ? normalize(NORMAL.xz) : vec2(1.0, 0.0))")
+		var shader := ShaderWarmUp.shared_shader(SIDING_FIELD.code.replace("normalize(NORMAL.xz)", "(length(NORMAL.xz) > 0.0 ? normalize(NORMAL.xz) : vec2(1.0, 0.0))"))
 		material.shader = shader
 		material.resource_name = "1240_pale_horizontal_siding"
 		var base := _color(cfg.materials.siding_rgb)

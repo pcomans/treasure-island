@@ -115,7 +115,7 @@ static func _surface_tone(label:String,spec:Dictionary,boarded:bool) -> ShaderMa
 	material.set_shader_parameter("low_color",_color(spec.low_rgb));material.set_shader_parameter("high_color",_color(spec.high_rgb));material.set_shader_parameter("boarded_grain",boarded)
 	return material
 static func _siding_material(spec:Dictionary) -> ShaderMaterial:
-	var material:=ShaderMaterial.new();material.shader=MARKS;material.resource_name="1317_inferred_cream_world_y_siding"
+	var material:=ShaderMaterial.new();material.shader=ShaderWarmUp.shared_shader(MARKS.code);material.resource_name="1317_inferred_cream_world_y_siding"
 	material.set_shader_parameter("base_color",_color(spec.base_rgb));material.set_shader_parameter("seam_color",_color(spec.seam_rgb));material.set_shader_parameter("roughness_value",float(spec.roughness))
 	material.set_shader_parameter("course_height_m",float(spec.course_height_m));material.set_shader_parameter("phase_offset_m",float(spec.phase_y));material.set_shader_parameter("seam_half_width_cycles",.006/(2.0*float(spec.course_height_m)))
 	material.set_shader_parameter("relief_strength",float(spec.relief_strength));material.set_shader_parameter("color_variation",float(spec.color_variation))

@@ -191,7 +191,7 @@ static func _public_roof_material() -> StandardMaterial3D:
 	return material
 
 static func _lawn_material() -> ShaderMaterial:
-	var material:=ShaderMaterial.new();material.shader=LAWN_TONE;material.resource_name="private_restrained_green_frontage_lawn"
+	var material:=ShaderMaterial.new();material.shader=ShaderWarmUp.shared_shader(LAWN_TONE.code);material.resource_name="private_restrained_green_frontage_lawn"
 	material.set_shader_parameter("lawn_albedo",LAWN_ALBEDO);material.set_shader_parameter("lawn_roughness",LAWN_ROUGHNESS)
 	material.set_shader_parameter("dark_color",Color("4d663d"));material.set_shader_parameter("light_color",Color("819a57"));material.set_shader_parameter("luminance_gain",5.0)
 	return material
@@ -207,7 +207,7 @@ static func _grade_pad(bucket:Dictionary,pad:Dictionary,thickness:float) -> void
 		_quad(bucket,a,b,b-Vector3.UP*thickness,a-Vector3.UP*thickness,outward)
 
 static func _siding_material(inf:Dictionary) -> ShaderMaterial:
-	var material:=ShaderMaterial.new();material.shader=MARKS;material.resource_name="inferred_quiet_pale_horizontal_siding"
+	var material:=ShaderMaterial.new();material.shader=ShaderWarmUp.shared_shader(MARKS.code);material.resource_name="inferred_quiet_pale_horizontal_siding"
 	material.set_shader_parameter("base_color",Color(.81,.82,.75));material.set_shader_parameter("seam_color",Color(.63,.65,.58));material.set_shader_parameter("roughness_value",.87)
 	material.set_shader_parameter("course_height_m",float(inf.siding_course_m));material.set_shader_parameter("phase_offset_m",float(inf.siding_phase_y));material.set_shader_parameter("seam_half_width_cycles",.006/(2.0*float(inf.siding_course_m)))
 	material.set_shader_parameter("relief_strength",.02);material.set_shader_parameter("color_variation",0.0)

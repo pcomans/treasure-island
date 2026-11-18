@@ -6,20 +6,17 @@ static func build(record: Dictionary, ground: Callable) -> Node3D:
 	var root := Node3D.new()
 	root.name = "Northpoint1232ScratchStudy"
 	var siding := _material(Color(0.65,0.69,0.66),0.86)
-	var shader := Shader.new()
-	shader.code = "shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float line=smoothstep(0.88,0.98,fract(wp.y/0.155)); float n=fract(sin(dot(floor(wp.xz*45.0),vec2(12.9898,78.233)))*43758.5453); ALBEDO=vec3(0.27,0.33,0.34)*(1.0-line*0.28)+(n-0.5)*0.012; ROUGHNESS=0.86;}"
+	var shader := ShaderWarmUp.shared_shader("shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float line=smoothstep(0.88,0.98,fract(wp.y/0.155)); float n=fract(sin(dot(floor(wp.xz*45.0),vec2(12.9898,78.233)))*43758.5453); ALBEDO=vec3(0.27,0.33,0.34)*(1.0-line*0.28)+(n-0.5)*0.012; ROUGHNESS=0.86;}")
 	var clad := ShaderMaterial.new()
 	clad.shader=shader
 	var trim := _material(Color(0.87,0.88,0.82),0.72)
 	var dark := _material(Color(0.07,0.13,0.16),0.36)
 	var glass := _material(Color(0.25,0.34,0.36),0.23)
 	var door := _material(Color(0.075,0.13,0.19),0.7)
-	var roofshader:=Shader.new()
-	roofshader.code="shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float row=floor(wp.x*5.0);float cell=floor(wp.z*4.0+mod(row,2.0)*0.5);float n=fract(sin(row*12.9898+cell*78.233)*43758.5453);ALBEDO=vec3(0.23,0.25,0.23)+(n-0.5)*0.075;ROUGHNESS=0.94;}"
+	var roofshader:=ShaderWarmUp.shared_shader("shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float row=floor(wp.x*5.0);float cell=floor(wp.z*4.0+mod(row,2.0)*0.5);float n=fract(sin(row*12.9898+cell*78.233)*43758.5453);ALBEDO=vec3(0.23,0.25,0.23)+(n-0.5)*0.075;ROUGHNESS=0.94;}")
 	var roofmat:=ShaderMaterial.new();roofmat.shader=roofshader
 	var steel := _material(Color(0.30,0.26,0.20),0.85)
-	var fascia_shader:=Shader.new()
-	fascia_shader.code="shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float a=fract(sin(dot(floor(wp.xz*14.0),vec2(12.9898,78.233)))*43758.5453); float b=fract(sin(dot(floor(wp.xz*2.0),vec2(39.346,11.135)))*15347.231); ALBEDO=vec3(0.42,0.43,0.39)+(a-0.5)*0.075+(b-0.5)*0.055; ROUGHNESS=0.95;}"
+	var fascia_shader:=ShaderWarmUp.shared_shader("shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float a=fract(sin(dot(floor(wp.xz*14.0),vec2(12.9898,78.233)))*43758.5453); float b=fract(sin(dot(floor(wp.xz*2.0),vec2(39.346,11.135)))*15347.231); ALBEDO=vec3(0.42,0.43,0.39)+(a-0.5)*0.075+(b-0.5)*0.055; ROUGHNESS=0.95;}")
 	var fascia:=ShaderMaterial.new();fascia.shader=fascia_shader
 	var rust:=_material(Color(0.39,0.27,0.17),0.95)
 	var underside:=_material(Color(0.16,0.20,0.19),0.97)

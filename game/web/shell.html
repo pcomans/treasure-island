@@ -149,6 +149,697 @@ body {
 			<div id="status-notice"></div>
 		</div>
 
+		<script>
+// The drive trace's page side (game/scripts/debug/drive_trace.gd, owner 2026-11-17:
+// "script a drive around the island and instrument it so we can identify why" the web
+// build hitches). Only with ?trace=drive in the page's address; otherwise the function
+// here returns at once, nothing in this script runs and it defines no name. It sends nothing
+// anywhere: the records stay in the page and in this site's localStorage on the device,
+// and leave it only through the results' Copy, Select and Download, by hand.
+//
+// With the trace it records every animation frame's time, and in each frame the WebGL
+// work that can stall it (shader compiles and links, texture and buffer uploads, read
+// backs and waits, timed around the context's own calls), the page's long tasks and
+// long animation frames where the browser reports them, the JavaScript heap where the
+// browser has one, the WebAssembly memory and its growth, sound sources started, the
+// page hidden or frozen and the WebGL context lost. The game's trace sends its own
+// records (where each frame's time went inside the engine, markers, the player's place)
+// once a second. tiTraceFrames joins them frame by frame, tiTraceAnalyze names what
+// each long frame's time went to, and tiTraceText writes the results; the page shows
+// them at the end and keeps a running copy on the device (localStorage) so a reload
+// after a crash can show what was gathered and the last thing seen before it.
+//
+// The causes, by what could take them off the frame: 'main thread' (engine work on the
+// browser's main thread that a threaded web export could run elsewhere: the physics
+// step, in 4.7.2 only with physics on its own thread), 'engine' (the game's scripts and
+// the engine's own steps, which stay on the main thread either way), 'gpu' (WebGL work:
+// shader compiles, uploads, waits and drawing), 'browser' (time outside the engine:
+// garbage collection, the compositor, other tasks).
+
+// All of it inside one function that returns at once without ?trace=drive: the page then
+// has none of the trace's names (the frame record, the analysis, the text, the runtime).
+// The analysis is left at column 0 inside it. With the trace, window.__tiTraceLib holds
+// it for the tools that read a kept log (tools/check_web_trace.mjs).
+(function () {
+if (new URLSearchParams(window.location.search).get('trace') !== 'drive') return;
+
+// The frame record tiTraceFrames makes, a number list in this order.
+const TI_TRACE_FRAME = ['t', 'ms', 'x', 'z', 'speed', 'step', 'leg', 'flags', 'phys_n', 'pre', 'phys_engine', 'phys_vehicles',
+	'phys_scripts', 'proc_engine', 'proc_vehicles', 'proc_scripts', 'draw', 'compile', 'compile_n', 'upload', 'upload_kb', 'sync',
+	'outside', 'dc', 'prim_k', 'nadd', 'nrem', 'sources', 'lap'];
+// The causes a long frame's time is named by, each with its class (above).
+const TI_TRACE_CAUSES = {
+	pre: ['engine before physics (input, the first tick\'s car physics)', 'engine'],
+	phys_engine: ['physics step (engine)', 'main thread'],
+	phys_vehicles: ['vehicle scripts (physics)', 'engine'],
+	phys_scripts: ['other scripts (physics)', 'engine'],
+	proc_engine: ['engine idle step (scene changes, deferred calls)', 'engine'],
+	proc_vehicles: ['vehicle scripts (idle)', 'engine'],
+	proc_scripts: ['other scripts (idle)', 'engine'],
+	draw: ['drawing (WebGL draw calls)', 'gpu'],
+	compile: ['shader compile', 'gpu'],
+	upload: ['texture/buffer upload', 'gpu'],
+	sync: ['GPU wait or read back', 'gpu'],
+	outside: ['outside the engine (browser: GC, compositor, other tasks)', 'browser'],
+};
+
+// Joins the page's animation frames (raf: their times, ms) with the game's frame records
+// (rows: number lists named by fields, t in ms since the game's trace began, which on
+// this page's clock is origin + t) and the WebGL counters (gl: [frame index, then what
+// was gathered up to that frame's start: programs linked, compile and link ms, uploads,
+// upload KiB, upload ms, waits, wait ms, sound sources started]). Each game frame runs between two page
+// frames: page frame k's time is raf[k+1] - raf[k], its WebGL work the counters at k + 1.
+// Returns the frames as TI_TRACE_FRAME lists, game frames only.
+function tiTraceFrames(raf, rows, fields, origin, gl) {
+	const f = {};
+	fields.forEach((name, index) => { f[name] = index; });
+	const glAt = new Map();
+	for (const g of gl) glAt.set(g[0], g);
+	const out = [];
+	let k = 0;
+	for (const r of rows) {
+		const start = origin + r[f.t];
+		while (k + 1 < raf.length && raf[k + 1] <= start) k += 1;
+		if (k + 1 >= raf.length || raf[k] > start) continue;
+		const ms = raf[k + 1] - raf[k];
+		const g = glAt.get(k + 1) || [k + 1, 0, 0, 0, 0, 0, 0, 0, 0];
+		const compile = g[2];
+		const upload = g[5];
+		const sync = g[7];
+		const busy = r[f.phys_ms] + r[f.proc_ms] + r[f.draw_ms];
+		const pre = Math.max(0, start - raf[k]);
+		// WebGL work is taken from drawing first (where it mostly runs), then the idle step.
+		let gpu = compile + upload + sync;
+		let draw = r[f.draw_ms];
+		const fromDraw = Math.min(draw, gpu);
+		draw -= fromDraw;
+		gpu -= fromDraw;
+		let procEngine = Math.max(0, r[f.proc_ms] - r[f.sproc_ms]);
+		const fromProc = Math.min(procEngine, gpu);
+		procEngine -= fromProc;
+		gpu -= fromProc;
+		let physEngine = Math.max(0, r[f.phys_ms] - r[f.sphys_ms]);
+		physEngine -= Math.min(physEngine, gpu);
+		out.push([start, ms, r[f.x], r[f.z], r[f.speed], r[f.step], r[f.leg], r[f.flags], r[f.phys_n], pre,
+			physEngine, r[f.vphys_ms], Math.max(0, r[f.sphys_ms] - r[f.vphys_ms]), procEngine, r[f.vproc_ms],
+			Math.max(0, r[f.sproc_ms] - r[f.vproc_ms]), draw, compile, g[1], upload, g[4], sync,
+			Math.max(0, ms - pre - busy), r[f.dc], r[f.prim_k], r[f.nadd], r[f.nrem], g[8], f.lap === undefined ? 1 : r[f.lap]]);
+	}
+	return out;
+}
+
+// What each long frame's time went to, and the run's figures. frames: tiTraceFrames'
+// lists; events: [t, kind, text] on the page's clock; programs: [t, ms, name] of the
+// shaders linked; opts: {steps (names), from and to (the step indices the drive covers)}.
+// A frame is long at 33 ms or more and very long at 100 ms or more; its excess is its
+// time over the run's median frame. Its cause is the part of TI_TRACE_CAUSES that grew
+// most over its own median in the drive ('outside' counting only what is over the
+// median frame), and its excess is shared between the parts by how much each grew.
+function tiTraceAnalyze(frames, events, programs, opts) {
+	const F = {};
+	TI_TRACE_FRAME.forEach((name, index) => { F[name] = index; });
+	const paused = 2;
+	const live = frames.filter((fr) => !(fr[F.flags] & paused) && fr[F.step] >= opts.from && fr[F.step] <= opts.to);
+	const result = {frames: live.length, causes: {}, classes: {}, worst: [], histogram: [], programs: {}, lost_ms: 0, long: 0, very_long: 0};
+	if (live.length === 0) return result;
+	const times = live.map((fr) => fr[F.ms]).sort((a, b) => a - b);
+	const pct = (p) => times[Math.min(times.length - 1, Math.floor(p * times.length))];
+	const base = pct(0.5);
+	result.median_ms = base;
+	result.p95_ms = pct(0.95);
+	result.p99_ms = pct(0.99);
+	result.max_ms = times[times.length - 1];
+	result.seconds = (live[live.length - 1][F.t] - live[0][F.t] + live[live.length - 1][F.ms]) / 1000;
+	const edges = [0, 20, 33, 50, 100, 250, 500, 1000, Infinity];
+	result.histogram = edges.slice(0, -1).map((low, i) => ({from: low, to: edges[i + 1], frames: times.filter((t) => t >= low && t < edges[i + 1]).length}));
+	const parts = Object.keys(TI_TRACE_CAUSES);
+	const typical = {};
+	for (const part of parts) {
+		const values = live.map((fr) => fr[F[part]]).sort((a, b) => a - b);
+		typical[part] = part === 'outside' ? 0 : values[Math.floor(values.length / 2)];
+	}
+	result.typical = typical;
+	const long = [];
+	for (const fr of live) {
+		if (fr[F.ms] < 33) continue;
+		const excess = Math.max(0, fr[F.ms] - base);
+		const share = {};
+		for (const part of parts) share[part] = fr[F[part]];
+		share.outside = Math.max(0, fr[F.outside] - Math.max(0, base - (fr[F.ms] - fr[F.outside])));
+		const grew = {};
+		for (const part of parts) grew[part] = Math.max(0, share[part] - typical[part]);
+		let cause = 'outside';
+		for (const part of parts) if (grew[part] > grew[cause]) cause = part;
+		result.long += 1;
+		if (fr[F.ms] >= 100) result.very_long += 1;
+		result.lost_ms += excess;
+		const c = result.causes[cause] || (result.causes[cause] = {frames: 0, very_long: 0, lost_ms: 0, label: TI_TRACE_CAUSES[cause][0], class: TI_TRACE_CAUSES[cause][1]});
+		c.frames += 1;
+		if (fr[F.ms] >= 100) c.very_long += 1;
+		c.lost_ms += excess;
+		// The lost time shared between the parts by how much each grew.
+		const over = parts.map((part) => grew[part]);
+		const sum = over.reduce((a, b) => a + b, 0) || 1;
+		parts.forEach((part, i) => {
+			const cls = TI_TRACE_CAUSES[part][1];
+			result.classes[cls] = (result.classes[cls] || 0) + excess * over[i] / sum;
+		});
+		long.push({fr, cause, share, excess});
+	}
+	long.sort((a, b) => b.fr[F.ms] - a.fr[F.ms]);
+	const t0 = live[0][F.t];
+	for (const item of long.slice(0, 30)) {
+		const fr = item.fr;
+		const near = events.filter((e) => e[0] >= fr[F.t] - 50 && e[0] <= fr[F.t] + fr[F.ms] + 20 && e[1] !== 'step').map((e) => e[1] + ' ' + e[2]);
+		const linked = programs.filter((p) => p[0] >= fr[F.t] - 5 && p[0] <= fr[F.t] + fr[F.ms] + 5);
+		result.worst.push({
+			at_s: (fr[F.t] - t0) / 1000, ms: fr[F.ms], x: fr[F.x], z: fr[F.z], speed: fr[F.speed],
+			step: opts.steps[fr[F.step]] || String(fr[F.step]), leg: fr[F.leg], cause: item.cause,
+			parts: Object.fromEntries(parts.filter((p) => item.share[p] >= 1).map((p) => [p, Math.round(item.share[p] * 10) / 10])),
+			physics_ticks: fr[F.phys_n], draw_calls: fr[F.dc], nodes: [fr[F.nadd], fr[F.nrem]], compiles: fr[F.compile_n],
+			programs: linked.map((p) => p[2] + ' ' + Math.round(p[1]) + ' ms'), markers: near.slice(0, 8),
+		});
+	}
+	const tEnd = live[live.length - 1][F.t] + 1000;
+	for (const p of programs) {
+		if (p[0] < t0 || p[0] > tEnd) continue;
+		const e = result.programs[p[2]] || (result.programs[p[2]] = {count: 0, ms: 0});
+		e.count += 1;
+		e.ms += p[1];
+	}
+	result.long_per_min = result.long / (result.seconds / 60);
+	result.very_long_per_min = result.very_long / (result.seconds / 60);
+	// Spikes: frames far over the drive's median (at least twice it and 50 ms over it),
+	// which compare across devices whatever their median, and the drive's laps apart
+	// (a second lap passes places already drawn once).
+	result.spike_at_ms = Math.max(2 * base, base + 50);
+	result.spikes = 0;
+	result.spike_lost_ms = 0;
+	result.spike_causes = {};
+	result.laps = {};
+	for (const fr of live) {
+		const lap = result.laps[fr[F.lap]] || (result.laps[fr[F.lap]] = {frames: 0, ms: 0, spikes: 0, spike_lost_ms: 0, compiles: 0});
+		lap.frames += 1;
+		lap.ms += fr[F.ms];
+		lap.compiles += fr[F.compile_n];
+	}
+	for (const item of long) {
+		if (item.fr[F.ms] < result.spike_at_ms) continue;
+		result.spikes += 1;
+		result.spike_lost_ms += item.excess;
+		const c = result.spike_causes[item.cause] || (result.spike_causes[item.cause] = {frames: 0, lost_ms: 0});
+		c.frames += 1;
+		c.lost_ms += item.excess;
+		const lap = result.laps[item.fr[F.lap]];
+		lap.spikes += 1;
+		lap.spike_lost_ms += item.excess;
+	}
+	result.spikes_per_min = result.spikes / (result.seconds / 60);
+	result.points = long.map((item) => [item.fr[F.x], item.fr[F.z], Math.round(item.fr[F.ms]), item.cause]);
+	return result;
+}
+
+// The results as lines of text a person can read on a phone: env (what ran) and the
+// analysis (tiTraceAnalyze).
+function tiTraceText(env, a) {
+	const r1 = (v) => Math.round(v * 10) / 10;
+	const lines = [];
+	lines.push('Grand Treasure Island drive trace');
+	for (const [k, v] of Object.entries(env)) lines.push(k + ': ' + (typeof v === 'object' ? JSON.stringify(v) : v));
+	lines.push('');
+	if (!a.frames) {
+		lines.push('No frames of the drive recorded.');
+		return lines.join('\n');
+	}
+	lines.push(`Drive: ${r1(a.seconds)} s, ${a.frames} frames; frame time median ${r1(a.median_ms)} ms, 95% ${r1(a.p95_ms)}, 99% ${r1(a.p99_ms)}, worst ${r1(a.max_ms)}`);
+	lines.push(`Long frames (33 ms or more): ${a.long} (${r1(a.long_per_min)} a minute); 100 ms or more: ${a.very_long} (${r1(a.very_long_per_min)} a minute)`);
+	lines.push(`Time lost in long frames (over the median): ${r1(a.lost_ms / 1000)} s`);
+	lines.push(`Spikes (${Math.round(a.spike_at_ms)} ms or more: twice the median and 50 ms over it): ${a.spikes} (${r1(a.spikes_per_min)} a minute), ${r1(a.spike_lost_ms / 1000)} s over the median; by cause: ` + Object.entries(a.spike_causes).sort((x, y) => y[1].lost_ms - x[1].lost_ms).map(([k, c]) => `${TI_TRACE_CAUSES[k][0]} ${c.frames} (${r1(c.lost_ms / 1000)} s)`).join(', '));
+	if (Object.keys(a.laps).length > 1) {
+		for (const [n, lap] of Object.entries(a.laps)) lines.push(`  Lap ${n}: ${lap.frames} frames, mean ${r1(lap.ms / lap.frames)} ms, ${lap.spikes} spikes (${r1(lap.spike_lost_ms / 1000)} s), ${lap.compiles} shader programs compiled`);
+	}
+	lines.push('Frame times: ' + a.histogram.map((h) => `${h.from}-${h.to === Infinity ? '' : h.to} ms: ${h.frames}`).join(', '));
+	lines.push('');
+	lines.push('Causes of long frames (by lost time):');
+	for (const [, c] of Object.entries(a.causes).sort((x, y) => y[1].lost_ms - x[1].lost_ms)) {
+		lines.push(`  ${c.label} [${c.class}]: ${c.frames} frames (${c.very_long} of 100 ms+), ${r1(c.lost_ms / 1000)} s lost`);
+	}
+	lines.push('Lost time by class: ' + Object.entries(a.classes).sort((x, y) => y[1] - x[1]).map(([k, v]) => `${k} ${r1(v / 1000)} s`).join(', '));
+	const programs = Object.entries(a.programs).sort((x, y) => y[1].ms - x[1].ms);
+	if (programs.length) {
+		lines.push('');
+		lines.push(`Shaders compiled during the drive: ${programs.reduce((s, p) => s + p[1].count, 0)}, ${r1(programs.reduce((s, p) => s + p[1].ms, 0) / 1000)} s:`);
+		for (const [name, p] of programs.slice(0, 15)) lines.push(`  ${p.count}x ${r1(p.ms)} ms ${name}`);
+	}
+	lines.push('');
+	lines.push('Worst frames (time into the drive, ms, where, step, cause; parts in ms; markers):');
+	for (const w of a.worst) {
+		lines.push(`  ${r1(w.at_s)} s ${Math.round(w.ms)} ms at (${Math.round(w.x)}, ${Math.round(w.z)}) ${w.speed > 0 ? r1(w.speed) + ' m/s ' : ''}${w.step}${w.leg >= 0 ? ' leg ' + w.leg : ''}: ${TI_TRACE_CAUSES[w.cause][0]}`);
+		lines.push('    parts ' + JSON.stringify(w.parts) + ` ticks ${w.physics_ticks} draws ${w.draw_calls} nodes +${w.nodes[0]}/-${w.nodes[1]}`);
+		if (w.programs.length) lines.push('    shaders: ' + w.programs.slice(0, 4).join('; ') + (w.programs.length > 4 ? `; +${w.programs.length - 4}` : ''));
+		for (const m of w.markers) lines.push('    ' + m.slice(0, 160));
+	}
+	return lines.join('\n');
+}
+
+(function () {
+	if (new URLSearchParams(window.location.search).get('trace') !== 'drive') return;
+	const KEY = 'ti-trace:';
+	const now = () => performance.now();
+	const round = (v) => Math.round(v * 100) / 100;
+	const store = (() => { try { return window.localStorage; } catch (e) { return null; } })();
+	const save = (key, value) => { try { if (store) store.setItem(KEY + key, JSON.stringify(value)); } catch (e) { /* full or off */ } };
+	const load = (key) => { try { return store ? JSON.parse(store.getItem(KEY + key) || 'null') : null; } catch (e) { return null; } };
+	const log = {
+		version: 1, id: new Date().toISOString(), header: null, end: null,
+		page: {
+			ua: navigator.userAgent, path: location.pathname + location.search, dpr: window.devicePixelRatio,
+			screen: [screen.width, screen.height], inner: [innerWidth, innerHeight], secure: window.isSecureContext,
+			cores: navigator.hardwareConcurrency || null, memory_gb: navigator.deviceMemory || null,
+			standalone: navigator.standalone === true || (window.matchMedia && matchMedia('(display-mode: standalone)').matches),
+		},
+		raf: [], gl: [], programs: [], rows: [], events: [], tasks: [], memory: [],
+	};
+	const event = (kind, text) => { log.events.push([round(now()), kind, String(text)]); };
+
+	// What a previous page left unfinished (a crash or a kill), kept for the results.
+	const previous = load('meta');
+	if (previous && previous.status === 'running') {
+		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds')});
+	}
+	save('meta', {id: log.id, status: 'waiting', path: log.page.path});
+	save('heartbeat', null);
+	save('long', []);
+	save('seconds', []);
+
+	// WebGL: the calls that can stall a frame, timed; the rest left alone.
+	let counters = [0, 0, 0, 0, 0, 0, 0, 0];
+	const sources = new WeakMap();
+	const attached = new WeakMap();
+	const shaderMs = new WeakMap();
+	// A shader stage's details from its source: which of Godot's GLES3 shaders it is
+	// (scene, sky, canvas, particles or another), every define it is built with (the
+	// specialization and variant defines Godot puts first, then the material's own), and
+	// every identifier of the material's own code (Godot prefixes them m_).
+	const details = (src) => {
+		const head = src.slice(0, 12000);
+		return {
+			kind: /SceneDataBlock/.test(src) ? 'scene' : /\bFrameData\b/.test(src) ? 'particles' : /DirectionalLights/.test(src) ? 'sky' : /canvas_/i.test(head) ? 'canvas' : 'other',
+			defines: [...head.matchAll(/^#define ([A-Za-z0-9_]+)\s*$/gm)].map((m) => m[1]),
+			ids: [...new Set([...src.matchAll(/\bm_([A-Za-z0-9_]+)/g)].map((m) => m[1]))],
+			size: src.length,
+		};
+	};
+	const detail = new WeakMap();
+	const name = (src) => {
+		// A shader's name from its source: the material's own uniforms (Godot prefixes
+		// them m_), the specialization defines Godot puts first, and its size.
+		const defines = [];
+		for (const m of src.slice(0, 4000).matchAll(/^#define ([A-Z0-9_]+)\s*$/gm)) {
+			if (!/^(USE_GLES_OVER_GL|MAX_VIEWS|M_PI|SHADER_IS_SRGB|SHADER_SPACE_FAR|OUTPUT_IS_MULTIVIEW|ViewIndex|IN_SHADOW_PASS|USE_HALF2FLOAT|MATERIAL_UNIFORMS_USED)$/.test(m[1])) defines.push(m[1]);
+		}
+		const own = [...new Set([...src.matchAll(/\bm_([A-Za-z0-9_]+)/g)].map((m) => m[1]))].slice(0, 6);
+		return (own.length ? own.join(',') : 'engine') + ' {' + defines.filter((d) => !/_CODE_USED$/.test(d)).slice(0, 12).join(' ') + '} ' + Math.round(src.length / 1000) + 'k';
+	};
+	function wrap(proto, method, fn) {
+		const original = proto[method];
+		if (typeof original !== 'function') return;
+		proto[method] = function (...args) { return fn.call(this, original, args); };
+	}
+	for (const proto of [window.WebGL2RenderingContext && WebGL2RenderingContext.prototype].filter(Boolean)) {
+		wrap(proto, 'shaderSource', function (original, args) {
+			if (args[0] && typeof args[0] === 'object') {
+				sources.set(args[0], name(String(args[1] || '')));
+				detail.set(args[0], details(String(args[1] || '')));
+			}
+			return original.apply(this, args);
+		});
+		for (const method of ['compileShader', 'getShaderParameter']) {
+			wrap(proto, method, function (original, args) {
+				if (method === 'getShaderParameter' && args[1] !== this.COMPILE_STATUS) return original.apply(this, args);
+				const t = now();
+				const result = original.apply(this, args);
+				const ms = now() - t;
+				counters[1] += ms;
+				if (args[0] && typeof args[0] === 'object') shaderMs.set(args[0], (shaderMs.get(args[0]) || 0) + ms);
+				return result;
+			});
+		}
+		wrap(proto, 'attachShader', function (original, args) {
+			const list = attached.get(args[0]) || [];
+			list.push(args[1]);
+			attached.set(args[0], list);
+			return original.apply(this, args);
+		});
+		for (const method of ['linkProgram', 'getProgramParameter']) {
+			wrap(proto, method, function (original, args) {
+				if (method === 'getProgramParameter' && args[1] !== this.LINK_STATUS) return original.apply(this, args);
+				const t = now();
+				const result = original.apply(this, args);
+				const ms = now() - t;
+				counters[1] += ms;
+				if (method === 'linkProgram') {
+					shaderMs.set(args[0], (shaderMs.get(args[0]) || 0) + ms);
+				} else {
+					const shaders = attached.get(args[0]) || [];
+					const total = shaders.reduce((s, sh) => s + (shaderMs.get(sh) || 0), (shaderMs.get(args[0]) || 0) + ms);
+					const frag = shaders.map((sh) => sources.get(sh)).filter(Boolean);
+					// Both stages: the same defines, and between them every identifier of the material's code.
+					const more = shaders.map((sh) => detail.get(sh)).filter(Boolean);
+					const d = more[0] || null;
+					log.programs.push([round(now()), round(total), frag[frag.length - 1] || frag[0] || 'unknown',
+						d ? {kind: d.kind, defines: d.defines.join(' '), ids: [...new Set(more.flatMap((x) => x.ids))].join(','), size: more.reduce((n, x) => n + x.size, 0)} : null]);
+					counters[0] += 1;
+				}
+				return result;
+			});
+		}
+		const bytes = (v) => (v && typeof v.byteLength === 'number' ? v.byteLength : 0);
+		// Sizes, roughly: the engine passes its whole WebAssembly heap with an offset and
+		// a length, so the length is used where the call has one, else width x height x 4.
+		const image = (v) => (v && v.width ? 4 * v.width * v.height : 0);
+		const length = (n, v) => (typeof n === 'number' && n > 0 ? n : (bytes(v) < 1e8 ? bytes(v) : 0));
+		const uploads = {
+			texImage2D: (a) => (a.length >= 9 ? 4 * a[3] * a[4] : image(a[5])),
+			texSubImage2D: (a) => (a.length >= 9 ? 4 * a[4] * a[5] : image(a[6])),
+			compressedTexImage2D: (a) => length(a[8], a[6]), compressedTexSubImage2D: (a) => length(a[9], a[7]),
+			texImage3D: (a) => 4 * a[3] * a[4] * a[5], texSubImage3D: (a) => 4 * a[5] * a[6] * a[7], compressedTexImage3D: (a) => length(a[9], a[7]),
+			texStorage2D: () => 0, texStorage3D: () => 0, generateMipmap: () => 0,
+			bufferData: (a) => (typeof a[1] === 'number' ? a[1] : length(a[4], a[1])),
+		};
+		for (const [method, size] of Object.entries(uploads)) {
+			wrap(proto, method, function (original, args) {
+				const t = now();
+				const result = original.apply(this, args);
+				counters[4] += now() - t;
+				counters[2] += 1;
+				counters[3] += size(args) / 1024;
+				return result;
+			});
+		}
+		for (const method of ['readPixels', 'getBufferSubData', 'clientWaitSync', 'finish', 'getError']) {
+			wrap(proto, method, function (original, args) {
+				const t = now();
+				const result = original.apply(this, args);
+				counters[6] += now() - t;
+				counters[5] += 1;
+				return result;
+			});
+		}
+	}
+	// Sound: buffer sources started (Godot's web sample playback starts one a play).
+	const audio = window.BaseAudioContext && BaseAudioContext.prototype;
+	if (audio && audio.createBufferSource) {
+		const original = audio.createBufferSource;
+		audio.createBufferSource = function (...args) { counters[7] = (counters[7] || 0) + 1; return original.apply(this, args); };
+	}
+	// The engine's WebAssembly memory: its size and each growth.
+	let memory = null;
+	const keep = (instance) => {
+		const m = instance && instance.exports && Object.values(instance.exports).find((v) => v instanceof WebAssembly.Memory);
+		if (m && !memory) memory = m;
+	};
+	for (const method of ['instantiate', 'instantiateStreaming']) {
+		const original = WebAssembly[method];
+		if (typeof original !== 'function') continue;
+		WebAssembly[method] = function (...args) {
+			return original.apply(this, args).then((result) => { keep(result.instance || result); return result; });
+		};
+	}
+	const grow = WebAssembly.Memory.prototype.grow;
+	WebAssembly.Memory.prototype.grow = function (pages) {
+		const before = this.buffer.byteLength;
+		const t = now();
+		const result = grow.call(this, pages);
+		event('wasm', `memory grew ${Math.round(before / 1048576)} to ${Math.round(this.buffer.byteLength / 1048576)} MiB in ${round(now() - t)} ms`);
+		return result;
+	};
+
+	// Every animation frame's time, and the WebGL counters gathered up to it.
+	function frame() {
+		const t = now();
+		const k = log.raf.length;
+		log.raf.push(round(t));
+		if (counters.some((v) => v > 0)) {
+			log.gl.push([k, counters[0], round(counters[1]), counters[2], Math.round(counters[3]), round(counters[4]), counters[5], round(counters[6]), counters[7] || 0]);
+			counters = [0, 0, 0, 0, 0, 0, 0, 0];
+		}
+		requestAnimationFrame(frame);
+	}
+	requestAnimationFrame(frame);
+
+	// What the browser reports of its own: long tasks and long animation frames
+	// (Chromium), the page hidden, frozen or gone, the WebGL context lost, errors.
+	for (const type of ['longtask', 'long-animation-frame']) {
+		try {
+			new PerformanceObserver((list) => {
+				for (const e of list.getEntries()) {
+					const scripts = (e.scripts || []).filter((s) => s.duration >= 5).map((s) => `${s.invokerType || ''} ${s.invoker || ''} ${(s.sourceFunctionName || '')} ${Math.round(s.duration)}ms`.trim());
+					log.tasks.push([round(e.startTime), round(e.duration), type, type === 'long-animation-frame' ? {blocking: round(e.blockingDuration || 0), render: e.renderStart ? round(e.renderStart - e.startTime) : null, scripts: scripts.slice(0, 4)} : null]);
+				}
+			}).observe({type, buffered: true});
+		} catch (e) { /* not reported by this browser */ }
+	}
+	// A page event that may come just before the end is kept on the device at once (beat).
+	document.addEventListener('visibilitychange', () => { event('page', 'visibility ' + document.visibilityState); beat(); });
+	for (const type of ['pagehide', 'pageshow', 'freeze', 'resume']) window.addEventListener(type, () => { event('page', type); beat(); });
+	window.addEventListener('error', (e) => event('error', e.message));
+	window.addEventListener('resize', () => event('page', `resize ${innerWidth}x${innerHeight} dpr ${devicePixelRatio}`));
+	const canvas = document.getElementById('canvas');
+	if (canvas) {
+		canvas.addEventListener('webglcontextlost', () => { event('page', 'WebGL context lost'); beat(); });
+		canvas.addEventListener('webglcontextrestored', () => event('page', 'WebGL context restored'));
+	}
+	// A screen that stays on through the drive (iOS 16.4+, a secure page), asked for in
+	// the start prompt's tap; the owner can also set Auto-Lock to Never for the run.
+	let wake = null;
+	const askWake = () => {
+		if (wake || !navigator.wakeLock || document.visibilityState !== 'visible') return;
+		navigator.wakeLock.request('screen').then((lock) => { wake = lock; event('page', 'screen wake lock on'); lock.addEventListener('release', () => { wake = null; event('page', 'screen wake lock released'); }); }, (err) => event('page', 'screen wake lock refused: ' + err));
+	};
+	for (const type of ['touchend', 'click']) document.addEventListener(type, askWake, {capture: true, passive: true});
+
+	// Memory once a second, and a heartbeat on the device: where the drive was, so a
+	// reload after a crash shows the last thing seen; with the long frames and the
+	// seconds kept every PROGRESS_MS, so a run that ends without warning (a killed page)
+	// still shows its last seconds.
+	const PROGRESS_MS = 10000;
+	let lastSaved = 0;
+	const mib = () => [performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null, memory ? round(memory.buffer.byteLength / 1048576) : null];
+	function beat() {
+		if (!log.header || log.end) return;
+		const [js, wasm] = mib();
+		save('heartbeat', {
+			at: new Date().toISOString(), page_ms: round(now()), frames: log.raf.length, row: log.rows[log.rows.length - 1] || null,
+			fields: log.header.fields, last_events: log.events.slice(-8), js_mb: js, wasm_mb: wasm,
+			last_frames: log.raf.slice(-31).map((t, i, a) => (i ? round(t - a[i - 1]) : 0)).slice(1),
+		});
+	}
+	setInterval(() => {
+		const [js, wasm] = mib();
+		log.memory.push([round(now()), js, wasm]);
+		if (log.header && !log.end) {
+			beat();
+			if (log.rows.length && now() - lastSaved >= PROGRESS_MS) saveProgress();
+		}
+	}, 1000);
+
+	// The long frames so far and a row a second, kept on the device as the drive goes.
+	let frames = [];
+	function saveProgress() {
+		const began = now();
+		lastSaved = began;
+		frames = tiTraceFrames(log.raf, log.rows, log.header.fields, log.header.page_ms_at_origin, log.gl);
+		const F = {};
+		TI_TRACE_FRAME.forEach((n, i) => { F[n] = i; });
+		// The last 400 long frames (the newest kept, the oldest dropped).
+		save('long', frames.filter((fr) => fr[F.ms] >= 33).slice(-400));
+		// The engine's texture and buffer memory (MiB) at the end of each page second.
+		const fields = log.header.fields;
+		const [ti, tx, bf] = ['t', 'tex_mb', 'buf_mb'].map((n) => fields.indexOf(n));
+		const memoryAt = {};
+		for (const r of log.rows) memoryAt[Math.floor((log.header.page_ms_at_origin + r[ti]) / 1000)] = [round(r[tx]), round(r[bf])];
+		const seconds = [];
+		for (const fr of frames) {
+			const s = Math.floor(fr[F.t] / 1000);
+			const row = seconds[seconds.length - 1];
+			if (!row || row[0] !== s) seconds.push([s, 1, fr[F.ms], fr[F.ms], round(fr[F.x]), round(fr[F.z]), fr[F.step], fr[F.leg]]);
+			else { row[1] += 1; row[2] += fr[F.ms]; row[3] = Math.max(row[3], fr[F.ms]); }
+		}
+		save('seconds', seconds.slice(-900).map((r) => [r[0], r[1], round(r[2] / r[1]), round(r[3]), r[4], r[5], r[6], r[7], ...(memoryAt[r[0]] || [null, null])]));
+		// Its own cost, which the results can then tell from the game's.
+		event('hook', `kept the trace on the device in ${round(now() - began)} ms`);
+	}
+
+	// The game's side (drive_trace.gd): its header as play starts, a batch of frame
+	// records and markers a second, and its end.
+	let status = null;
+	window.__tiTrace = {
+		begin(json) {
+			log.header = JSON.parse(json);
+			const gl = canvas && (canvas.getContext('webgl2') || null);
+			const debug = gl && gl.getExtension('WEBGL_debug_renderer_info');
+			log.page.gl = gl ? {
+				renderer: gl.getParameter(gl.RENDERER), vendor: gl.getParameter(gl.VENDOR), version: gl.getParameter(gl.VERSION),
+				unmasked: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : null,
+				drawing_buffer: [gl.drawingBufferWidth, gl.drawingBufferHeight], antialias: (gl.getContextAttributes() || {}).antialias,
+			} : null;
+			log.page.canvas = canvas ? {buffer: [canvas.width, canvas.height], css: [canvas.clientWidth, canvas.clientHeight]} : null;
+			log.page.dpr_at_play = window.devicePixelRatio;
+			log.page.inner_at_play = [innerWidth, innerHeight];
+			save('meta', {id: log.id, status: 'running', path: log.page.path, started: new Date().toISOString(), page: log.page, header: {...log.header, route: undefined, outline: undefined}});
+			event('trace', 'drive started');
+			showStatus();
+		},
+		engine(json) {
+			const batch = JSON.parse(json);
+			const n = batch.fields;
+			for (let i = 0; i + n <= batch.rows.length; i += n) log.rows.push(batch.rows.slice(i, i + n));
+			const origin = log.header ? log.header.page_ms_at_origin : 0;
+			for (const e of batch.events) log.events.push([round(origin + e[0]), e[1], e[2]]);
+		},
+		census(json) {
+			log.census = JSON.parse(json);
+		},
+		end(json) {
+			log.end = JSON.parse(json);
+			event('trace', 'drive ended: ' + log.end.result);
+			saveProgress();
+			finish();
+		},
+		log: () => log,
+		analysis: () => analyse(),
+		state: () => ({header: Boolean(log.header), end: log.end, rows: log.rows.length, raf: log.raf.length, status: status ? status.textContent : null}),
+	};
+
+	function env() {
+		const h = log.header || {};
+		const g = log.page.gl || {};
+		return {
+			run: log.id, page: log.page.path, browser: log.page.ua, secure_page: log.page.secure,
+			screen: `${log.page.inner_at_play || log.page.inner} css px at ${log.page.dpr_at_play || log.page.dpr}x; canvas ${log.page.canvas ? log.page.canvas.buffer.join('x') : '?'}; WebGL buffer ${g.drawing_buffer ? g.drawing_buffer.join('x') : '?'}`,
+			gpu: [g.unmasked, g.renderer].filter(Boolean).join(' / '),
+			game: `${h.version || ''} ${h.renderer || ''}; viewport ${h.viewport ? h.viewport.join('x') : '?'}, 3D scale ${h.scale_3d}, MSAA ${h.msaa_3d}, frame limit ${h.max_fps}, touch ${h.touch}`,
+			result: log.end ? log.end.result : 'unfinished',
+		};
+	}
+	function analyse() {
+		if (!log.header) return null;
+		const fr = tiTraceFrames(log.raf, log.rows, log.header.fields, log.header.page_ms_at_origin, log.gl);
+		const steps = log.header.steps;
+		return tiTraceAnalyze(fr, log.events, log.programs, {steps, from: steps.indexOf('baseline'), to: steps.indexOf('landed')});
+	}
+
+	// On the page: a line while the drive runs, and the results at its end.
+	function showStatus() {
+		status = document.createElement('div');
+		status.style.cssText = 'position:fixed;left:calc(8px + env(safe-area-inset-left,0px));top:calc(4px + env(safe-area-inset-top,0px));z-index:5;font:12px/1.3 monospace;color:#fff;background:rgba(0,0,0,.55);padding:2px 6px;border-radius:4px;pointer-events:none';
+		document.body.appendChild(status);
+		setInterval(() => {
+			if (!log.header || log.end) return;
+			const r = log.rows[log.rows.length - 1];
+			const f = log.header.fields;
+			const step = r ? log.header.steps[r[f.indexOf('step')]] : '';
+			const n = log.raf.length;
+			let longs = 0;
+			for (let i = Math.max(1, n - 600); i < n; i += 1) if (log.raf[i] - log.raf[i - 1] >= 33) longs += 1;
+			status.textContent = `TRACE ${step} ${r ? Math.round(r[f.indexOf('t')] / 1000) + ' s' : ''} · long frames in the last 600: ${longs} · leave the screen alone`;
+		}, 1000);
+	}
+	function finish() {
+		const a = analyse();
+		const text = tiTraceText(env(), a || {});
+		save('meta', {...(load('meta') || {}), status: 'done'});
+		save('text', text);
+		show(text, a);
+	}
+	function show(text, a, title) {
+		if (status) status.remove();
+		const panel = document.createElement('div');
+		panel.id = 'ti-trace-results';
+		panel.style.cssText = 'position:fixed;inset:0;z-index:10;overflow:auto;background:#111;color:#eee;font:13px/1.35 monospace;padding:calc(10px + env(safe-area-inset-top,0px)) calc(10px + env(safe-area-inset-right,0px)) 10px calc(10px + env(safe-area-inset-left,0px));-webkit-user-select:text;user-select:text;touch-action:auto';
+		const bar = document.createElement('div');
+		const note = document.createElement('div');
+		const box = document.createElement('textarea');
+		box.readOnly = true;
+		box.value = text;
+		box.style.cssText = 'width:100%;height:60vh;background:#1b1b1b;color:#eee;font:12px/1.3 monospace;border:1px solid #555;-webkit-user-select:text;user-select:text';
+		const button = (label, act) => {
+			const b = document.createElement('button');
+			b.textContent = label;
+			b.style.cssText = 'font:15px sans-serif;margin:0 8px 8px 0;padding:10px 14px;border-radius:6px;border:0;background:#2f6fd0;color:#fff';
+			b.addEventListener('click', act);
+			bar.appendChild(b);
+		};
+		const full = () => JSON.stringify({...log, analysis: a});
+		button('Copy results', () => {
+			const done = () => { note.textContent = 'Copied. Paste it to ROOT.'; };
+			if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => { box.select(); note.textContent = document.execCommand && document.execCommand('copy') ? 'Copied.' : 'Copy failed: use Select all, then Copy.'; });
+			else { box.focus(); box.select(); box.setSelectionRange(0, text.length); note.textContent = document.execCommand && document.execCommand('copy') ? 'Copied.' : 'Select all, then Copy.'; }
+		});
+		button('Select all', () => { box.focus(); box.select(); box.setSelectionRange(0, text.length); });
+		button('Download full log', () => {
+			const blob = new Blob([full()], {type: 'application/json'});
+			const link = document.createElement('a');
+			link.href = URL.createObjectURL(blob);
+			link.download = `drive-trace-${log.id.replace(/[:.]/g, '-')}.json`;
+			document.body.appendChild(link);
+			link.click();
+			setTimeout(() => { URL.revokeObjectURL(link.href); link.remove(); }, 60000);
+		});
+		button('Close', () => panel.remove());
+		const head = document.createElement('div');
+		head.textContent = title || 'Drive trace results';
+		head.style.cssText = 'font:bold 16px sans-serif;margin-bottom:8px';
+		panel.append(head, bar, note, box);
+		if (a && a.points && log.header && log.header.outline) {
+			const map = document.createElement('canvas');
+			map.width = 600;
+			map.height = 640;
+			map.style.cssText = 'width:min(100%,600px);margin-top:8px;background:#1b1b1b';
+			panel.appendChild(map);
+			const ctx = map.getContext('2d');
+			const x0 = -760, z0 = -960, s = 600 / 1660;
+			const p = (x, z) => [(x - x0) * s, (z - z0) * s * 0.92 + 10];
+			ctx.strokeStyle = '#6a7';
+			for (const ring of log.header.outline) { ctx.beginPath(); ring.forEach((q, i) => ctx[i ? 'lineTo' : 'moveTo'](...p(q[0], q[1]))); ctx.closePath(); ctx.stroke(); }
+			ctx.strokeStyle = '#468';
+			ctx.beginPath();
+			log.header.route.forEach((q, i) => ctx[i ? 'lineTo' : 'moveTo'](...p(q[0], q[1])));
+			ctx.stroke();
+			for (const [x, z, ms] of a.points) {
+				ctx.fillStyle = ms >= 100 ? 'rgba(255,70,50,.85)' : 'rgba(255,190,40,.7)';
+				ctx.beginPath();
+				ctx.arc(...p(x, z), Math.min(9, 2 + ms / 60), 0, 2 * Math.PI);
+				ctx.fill();
+			}
+		}
+		document.body.appendChild(panel);
+	}
+	// A previous run that did not finish (the page was reloaded or killed): what it got.
+	const before = load('previous');
+	if (before && before.meta && before.meta.status === 'running') {
+		const hb = before.heartbeat;
+		const lines = ['A previous drive trace on this page did not finish (the page was reloaded, closed or killed).',
+			`It started ${before.meta.started || '?'}; its last heartbeat was ${hb ? hb.at : 'never'}.`];
+		if (hb && hb.row) {
+			const f = hb.fields;
+			lines.push(`Last place: (${Math.round(hb.row[f.indexOf('x')])}, ${Math.round(hb.row[f.indexOf('z')])}), step ${hb.row[f.indexOf('step')]}, ${Math.round(hb.row[f.indexOf('t')] / 1000)} s into the trace; last frame times (ms): ${(hb.last_frames || []).join(' ')}`);
+			lines.push(`Last engine frame: draw ${hb.row[f.indexOf('draw_ms')]} ms, ${hb.row[f.indexOf('dc')]} draw calls, texture ${hb.row[f.indexOf('tex_mb')]} MiB, buffer ${hb.row[f.indexOf('buf_mb')]} MiB`);
+			lines.push('Last markers: ' + JSON.stringify(hb.last_events));
+			lines.push(`Memory then: JS ${hb.js_mb} MiB, WebAssembly ${hb.wasm_mb} MiB`);
+		}
+		lines.push('', 'Long frames kept (time ms, frame ms, x, z, speed, step, leg, flags, ...):', JSON.stringify(before.long || []));
+		lines.push('', 'Seconds kept (s, frames, mean ms, worst ms, x, z, step, leg, texture MiB, buffer MiB):', JSON.stringify(before.seconds || []));
+		lines.push('', 'Its page: ' + JSON.stringify(before.meta.page || {}), 'Its game: ' + JSON.stringify(before.meta.header || {}));
+		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish'));
+		save('previous', {...before, meta: {...before.meta, status: 'shown'}});
+	}
+}());
+
+window.__tiTraceLib = {TI_TRACE_FRAME, TI_TRACE_CAUSES, tiTraceFrames, tiTraceAnalyze, tiTraceText};
+}());
+		</script>
 		<script src="$GODOT_URL"></script>
 		<script>
 // This device's copy of a build's game data pack (owner, 2026-11-16: "cache the

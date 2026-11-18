@@ -25,6 +25,8 @@
 #    without its entry, or a badly written entry, fails. And the web page's
 #    build cache (tools/check_web_build_files.mjs): a pack stored on the device
 #    loads without a download, and a short or failed download is never stored.
+#    And the page's side of the drive trace (tools/check_web_trace.mjs): without
+#    ?trace=drive it does nothing at all.
 # 4. Every shader under game/ compiles and draws, with each define it tests, on
 #    Forward+ and on the Compatibility renderer the web build uses
 #    (game/tests/shader_compile_check.gd).
@@ -161,6 +163,12 @@ tools/check_changelog.sh || failed+=("tools/check_changelog.sh")
 echo "== tools/check_web_build_files.mjs"
 node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mjs")
 
+# The drive trace's page side (game/web/shell.html, ?trace=drive): without the
+# parameter it wraps, starts, stores and leaves nothing; with it, it names what a
+# long frame's time went to. Node only, under a second.
+echo "== tools/check_web_trace.mjs"
+node tools/check_web_trace.mjs || failed+=("tools/check_web_trace.mjs")
+
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"
 if [ $? -ne 0 ] || grep -qE "${godot_errors}" <<< "${output}"; then
@@ -243,6 +251,8 @@ node tools/solar_position.mjs --table > "${solar_table}" || echo "NOTE: tools/so
 tests=(
   game/tests/headless_scene_parse.gd
   game/tests/headless_startup_configuration_contract.gd
+  game/tests/headless_drive_trace_contract.gd
+  game/tests/headless_shader_warm_up_contract.gd
   game/tests/validate_generated_world.gd
   game/tests/headless_gameplay_contract.gd
   game/tests/headless_touch_controls.gd

@@ -484,7 +484,9 @@ this device…** while it stores a download, **Starting the engine…**, the
 island's load and setup, the
 shaders compiled a group of the world at a time (**Compiling shaders: sky and
 player…** to **…the ferry and the view across the bay…**, the buildings counted
-in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Rendering
+in two batches; `COMPILE_GROUPS` in `game/scripts/main.gd`), then **Compiling
+shaders: everything else** (every other shader play may draw, each drawn once by a
+tiny stand-in out of sight: `game/scripts/world/shader_warm_up.gd`), then **Rendering
 reflections…**. Then **Click to play** (on a touch screen, **Tap to play**) starts play: that
 first click or tap also starts the sound, which a browser allows only after one,
 and with a mouse it captures the mouse to look around. WASD or the arrow keys
@@ -527,6 +529,23 @@ loads the game at both addresses.
 Only `build/web` is uploaded, never the source checkout, reference imagery or
 evidence. The web exporter writes immutable caching for commit-named assets and
 the WASM content type.
+
+Before a web release, check that nothing compiles a shader once loading has ended,
+in an engine slot (it needs the GPU), on the build about to go out:
+
+```sh
+tools/web_shader_proof.sh build/web /path/outside/the/checkout
+```
+
+It serves the build on loopback and runs the drive trace (`?trace=drive`: a drive
+round the island, the foot and jetpack legs, then each effect drawn only in play) in
+WebKit as an iPhone and in Chrome as a desktop, about 10 minutes each, and fails with
+the list of programs compiled after loading (`programs.txt` beside each run's records).
+A pass writes `build/shader-proof/COMMIT.pass`, COMMIT the checkout's full HEAD, when
+the build is that commit's: run the proof in the checkout that deploys.
+`tools/deploy-web.sh` looks for that receipt before it builds and stops without one;
+a receipt for the latest commit that changed more than documentation counts (a dry
+run only warns).
 
 Browser performance and pointer lock need checking on the playing machine.
 The development container's Chrome 154 on headless Weston has a reproducible

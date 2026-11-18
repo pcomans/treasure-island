@@ -112,6 +112,14 @@ func configure(fences_layer: Node) -> void:
 			continue
 		_bodies[fence.get_rid()] = {"body": fence, "group": group}
 		_rids.append(fence.get_rid())
+	# The kit that draws the debris, made now, as the island loads, and its debris
+	# materials registered for the shader warm-up (ShaderWarmUp): drawn as meshes,
+	# only once a car breaks a fence (the shadow-only copies need no warm-up).
+	if not _rids.is_empty():
+		if _kit == null:
+			_kit = FENCE_KIT.new()
+		for material: Material in _kit.debris_materials():
+			ShaderWarmUp.add(material, false)
 
 
 ## The breakable fence bodies a live car or K-rail passes through (breaking them).

@@ -209,6 +209,10 @@ func _init() -> void:
 	_flag_material.roughness = 0.85
 	_flag_material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	_flag_material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	# A live yard vehicle or K-rail draws these as instances, only after loading
+	# (the shader warm-up: ShaderWarmUp).
+	ShaderWarmUp.add(_material, true)
+	ShaderWarmUp.add(_flag_material, true)
 	var scene := KIT_SCENE.instantiate()
 	for node: Node in scene.find_children("*", "MeshInstance3D", true, false):
 		_meshes[str(node.name)] = (node as MeshInstance3D).mesh

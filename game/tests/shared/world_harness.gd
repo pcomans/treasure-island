@@ -16,6 +16,9 @@ var world: WorldLoader
 var player: PlayerController
 var hud: GameHUD
 var retained_ground_proof: Dictionary = {}
+## Load as the web build does (main.gd compile_by_group: the shaders a group at a
+## time, then the shader warm-up), not as a desktop does.
+var web_loading := false
 
 
 func _init(scene_tree: SceneTree) -> void:
@@ -41,6 +44,8 @@ func load_world(street_detail: Variant = null) -> String:
 	main.capture_mouse_on_ready = false
 	# Captures always have the default shadows, whatever a player last chose here.
 	main.use_saved_settings = false
+	if web_loading:
+		main.compile_by_group = true
 	world = main.get_node("WorldRoot") as WorldLoader
 	if typeof(street_detail) != TYPE_NIL:
 		world.street_detail_request = street_detail

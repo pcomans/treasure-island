@@ -346,7 +346,7 @@ static func _surface_material(label: String, cfg: Dictionary) -> Material:
 		return fascia
 	if label == ROOF_BUCKET:
 		var roof := ShaderMaterial.new()
-		var shader := Shader.new(); shader.code = SHINGLE_CODE
+		var shader := ShaderWarmUp.shared_shader(SHINGLE_CODE)
 		roof.shader = shader
 		roof.resource_name = "1221_observed_shingle_planes_gray_and_warm_left"
 		roof.set_shader_parameter("source_albedo", ROOF_MATERIAL.albedo_texture)
@@ -360,8 +360,7 @@ static func _surface_material(label: String, cfg: Dictionary) -> Material:
 	if label in GROUND_BUCKETS:
 		# Luminance remapping exposes actual material colors without emission or baked illumination.
 		var ground := ShaderMaterial.new()
-		var shader := Shader.new()
-		shader.code = LAWN_TONE.code.replace("ROUGHNESS = texture(lawn_roughness, sample_uv).r;", "ROUGHNESS = max(0.88, texture(lawn_roughness, sample_uv).r);")
+		var shader := ShaderWarmUp.shared_shader(LAWN_TONE.code.replace("ROUGHNESS = texture(lawn_roughness, sample_uv).r;", "ROUGHNESS = max(0.88, texture(lawn_roughness, sample_uv).r);"))
 		ground.shader = shader
 		ground.resource_name = "1221_actual_grade_" + label
 		var lawn := label == "PlantedFrontage"
@@ -377,8 +376,7 @@ static func _surface_material(label: String, cfg: Dictionary) -> Material:
 	var colors: Dictionary = {"CarportRoof": cfg.materials.carport_roof_rgb, "CarportPosts": cfg.materials.carport_post_rgb, "PaleCompleteTrim": cfg.materials.trim_rgb, "BlueOpaqueGlazing": cfg.materials.blue_glass_rgb, "DarkOpaqueGlazing": cfg.materials.dark_glass_rgb, "MaroonClosedDoors": cfg.materials.door_rgb, "PlumClosedDoors": cfg.materials.plum_door_rgb, "PaleClosedDoor": cfg.materials.pale_door_rgb, "LocalPrivacyScreens": cfg.materials.screen_rgb, "PaleDrainageAndFascia": cfg.materials.trim_rgb, "DoorHardware": cfg.materials.metal_rgb, "DrapedEntryPaths": cfg.materials.path_rgb}
 	if label in ["NearHorizontalSiding", "ProjectedUpperSiding", "ProjectedUpperClosures"]:
 		var material := ShaderMaterial.new()
-		var shader := Shader.new()
-		shader.code = SIDING_FIELD.code.replace("normalize(NORMAL.xz)", "(length(NORMAL.xz) > 0.0 ? normalize(NORMAL.xz) : vec2(1.0, 0.0))")
+		var shader := ShaderWarmUp.shared_shader(SIDING_FIELD.code.replace("normalize(NORMAL.xz)", "(length(NORMAL.xz) > 0.0 ? normalize(NORMAL.xz) : vec2(1.0, 0.0))"))
 		material.shader = shader
 		material.resource_name = "1221_pale_horizontal_siding"
 		var base := _color(cfg.materials.siding_rgb)
