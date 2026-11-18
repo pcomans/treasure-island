@@ -38,10 +38,12 @@
 //     should leave alone (encrypted, sparse) doesn't; every kept byte reads as before, read
 //     as the engine does, once the pack's buffer is detached; a read that starts in a released
 //     file, of any length, is an I/O error that names the file; one that runs on past a kept
-//     file into a released one gets zeros there; the swap runs in a task of its own, and the
-//     buffer is freed only once this tab's store has stopped writing from it; without the
-//     engine's own file of the pack (a build without the engine-script patch, a copy, another
-//     size, a lookup that throws) or with a request it does not take, it keeps the whole pack.
+//     file into a released one gets zeros there; a patch pack's removal entries are no files;
+//     nothing is copied, swapped or freed while this tab's store still writes from the buffer,
+//     then the swap and the free run in a task of their own; a failure after the swap says the
+//     files stay released, never that the pack stays; without the engine's own file of the pack
+//     (a build without the engine-script patch, a copy, another size, a lookup that throws) or
+//     with a request it does not take, it keeps the whole pack.
 // Node only, no network and no engine; about thirty seconds, mostly the page's
 // waits between download attempts and for storage that doesn't answer. Part of tools/test.sh.
 //
@@ -547,13 +549,18 @@ const B = build('treasure-island-bbbbbbb', 1100005, 7);
 // Releasing the pack once play is ready (tiPackDirectory, tiReleasedPack, tiPackRelease).
 // A pack as Godot 4.7.2 writes one (format 3, offsets from the end of its 112-byte
 // header, files 16-byte aligned, the directory after them; names padded to 4 bytes),
-// FILES [path, size] in order, each file's bytes from bytes(size, seed).
+// FILES [path, size] or [path, 0, 2] (a removal entry, as a patch pack names a file it
+// removes: no bytes, flag 2) in order, each file's bytes from bytes(size, seed).
 function makePack(files, {version = 3, flags = 2} = {}) {
   const parts = [];
   let at = 112;
-  for (const [path, size] of files) {
+  for (const [path, size, fileFlags = 0] of files) {
+    if (fileFlags & 2) {
+      parts.push({path, size: 0, at: 112, data: new Uint8Array(0), flags: fileFlags});
+      continue;
+    }
     at = Math.ceil(at / 16) * 16;
-    parts.push({path, size, at, data: bytes(size, path.length * 7 + size)});
+    parts.push({path, size, at, data: bytes(size, path.length * 7 + size), flags: fileFlags});
     at += size;
   }
   const names = parts.map((p) => new TextEncoder().encode(p.path));
@@ -575,7 +582,8 @@ function makePack(files, {version = 3, flags = 2} = {}) {
     view.setUint32(d, padded[i], true); d += 4;
     out.set(names[i], d); d += padded[i];
     view.setBigUint64(d, BigInt(p.at - 112), true); d += 8;
-    view.setBigUint64(d, BigInt(p.size), true); d += 8 + 16 + 4;
+    view.setBigUint64(d, BigInt(p.size), true); d += 8 + 16;
+    view.setUint32(d, p.flags, true); d += 4;
   });
   return {pack: out, files: Object.fromEntries(parts.map((p) => [p.path, p]))};
 }
@@ -601,6 +609,9 @@ const FILES = [['generated/build_stamp.json', 75], ['generated/web/static_world.
     `directory: ${dir ? JSON.stringify(dir.entries.slice(0, 2)) : 'none'}, not the pack's files`);
   const v2 = makePack(FILES, {version: 4});
   check(tiPackDirectory(v2.pack) !== null, 'directory: format 4 does not read');
+  const patch = tiPackDirectory(makePack([...FILES.slice(0, 3), ['game/removed.gd.remap', 0, 2], ...FILES.slice(3)]).pack);
+  check(patch && patch.entries.length === FILES.length && !patch.entries.some((e) => e.path === 'game/removed.gd.remap'),
+    `directory: a removal entry was read as a file: ${patch ? patch.entries.map((e) => e.path) : 'none'}`);
   for (const [what, damage] of [['another magic', (p) => { p[0] = 0; }], ['an encrypted directory', (p) => { p[20] |= 1; }],
     ['a sparse bundle', (p) => { p[20] |= 4; }], ['a cut directory', null],
     ['a file past its end', (p) => { const v = new DataView(p.buffer); const at = Number(v.getBigUint64(32, true)) + 8 + v.getUint32(Number(v.getBigUint64(32, true)) + 4, true) + 8; v.setBigUint64(at, BigInt(p.byteLength), true); }],
@@ -655,7 +666,7 @@ const FILES = [['generated/build_stamp.json', 75], ['generated/web/static_world.
   const last = files['project.binary'];
   check(Buffer.compare(Buffer.from(memfsRead(node, last.at, last.size + 50000)), Buffer.from(original.subarray(last.at, original.byteLength))) === 0, 'released: the pack\'s end reads other bytes');
 }
-{ // The page's side: a request, the swap in a task of its own, the buffer freed once the store stops writing.
+{ // The page's side: a request; nothing copied or swapped while the store still writes; then, in a task of its own, the swap and the free.
   const {pack, files} = makePack(FILES);
   const original = pack.slice();
   const buffer = pack.buffer;
@@ -671,19 +682,32 @@ const FILES = [['generated/build_stamp.json', 75], ['generated/web/static_world.
   const answer = page.release(request);
   check(answer === 'scheduled' && node.contents instanceof Uint8Array, `page: the request answered ${answer}, or the swap ran inside the game's call`);
   await later(10);
-  const st = page.state();
-  check(st.status === 'released' && st.files === 3 && st.unknown === 1 && st.released_bytes === 300001 + 70000 + 50000 && !(node.contents instanceof Uint8Array),
-    `page: after the swap ${JSON.stringify(st)}`);
-  check(buffer.byteLength === original.byteLength, 'page: the buffer was freed while the store may still write from it');
+  check(page.state().status === 'scheduled' && !('kept_bytes' in page.state()) && node.contents instanceof Uint8Array && node.contents.buffer === buffer && buffer.byteLength === original.byteLength && marks.length === 0,
+    `page: while the store still writes, ${JSON.stringify(page.state())}, buffer ${buffer.byteLength} bytes: a copy was made, the file swapped or the buffer freed`);
   storeDone();
   await later(10);
-  check(page.state().status === 'freed' && page.state().freed === 'detached' && buffer.byteLength === 0 && marks.join() === 'pack:released,pack:freed',
-    `page: once the store stopped, ${JSON.stringify(page.state())}, buffer ${buffer.byteLength} bytes, marks ${marks}`);
+  const st = page.state();
+  check(st.status === 'freed' && st.freed === 'detached' && st.files === 3 && st.unknown === 1 && st.released_bytes === 300001 + 70000 + 50000
+    && !(node.contents instanceof Uint8Array) && buffer.byteLength === 0 && marks.join() === 'pack:released,pack:freed',
+    `page: once the store stopped, ${JSON.stringify(st)}, buffer ${buffer.byteLength} bytes, marks ${marks}`);
   const credits = files['game/credits.json'];
   check(Buffer.compare(Buffer.from(memfsRead(node, credits.at, credits.size)), Buffer.from(original.subarray(credits.at, credits.at + credits.size))) === 0, 'page: a kept file reads other bytes after the free');
   check(throwsEio(() => memfsRead(node, files['.godot/imported/a.png-1.etc2.ctex'].at, 100)) && errors.length === 1 && errors[0].includes('a.png-1.etc2.ctex') && marks.includes('pack:miss'),
     `page: a read of a released file: errors ${JSON.stringify(errors)}`);
   check(page.release(request) === 'freed', 'page: a second request was taken');
+}
+{ // A failure once the file has its new contents: the files stay released, and the page says so.
+  const {pack, files} = makePack(FILES);
+  const buffer = pack.buffer;
+  const node = {usedBytes: buffer.byteLength, contents: new Uint8Array(buffer)};
+  const logs = [];
+  const page = tiPackRelease(buffer, {node: () => node, saved: () => Promise.resolve(), later: (fn) => setTimeout(fn, 0), now: () => 0,
+    log: (...a) => logs.push(a.join(' ')), error: () => {}, mark: (m) => { if (m === 'pack:released') throw new Error('no marks'); }});
+  page.release('{"drop": ["res://game/credits.json"]}');
+  await later(10);
+  check(page.state().status.startsWith('released, not freed: ') && !(node.contents instanceof Uint8Array)
+    && logs.length === 1 && !logs[0].includes('stays in memory') && throwsEio(() => memfsRead(node, files['game/credits.json'].at, 100)),
+    `a failure after the swap: ${JSON.stringify(page.state())}, logs ${JSON.stringify(logs)}`);
 }
 { // The page keeps the whole pack when anything is unexpected, and frees nothing.
   const refusals = [
@@ -712,4 +736,4 @@ if (failures.length > 0) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, shows "Saving…" only while a store is writing, makes no storage call with storing off (an iPhone or iPad, ?store=0), takes an only-if-cached answer from the network as its one download, its loading line is never blank and says "Downloading" only for the network, and once play is ready it frees the pack\'s released files: every kept byte still reads, a read of a released file is an I/O error that names it, a read running on past a kept file gets zeros, the buffer goes only once the store has stopped writing from it, and without the engine\'s own file of the pack or with a request it does not take it keeps the whole pack');
+console.log('PASS: the page\'s build cache stores a build\'s pack (without a second copy in the HTTP cache), loads that build from the device without downloading, removes an older build once a new one is stored, never marks a short, long or failed download, ignores damaged copies, writes only with the lock, keeps one buffer through retries, keeps a stored copy through a busy page, falls back to the network without storage, when storage never answers or when a stored copy stops, shows "Saving…" only while a store is writing, makes no storage call with storing off (an iPhone or iPad, ?store=0), takes an only-if-cached answer from the network as its one download, its loading line is never blank and says "Downloading" only for the network, and once play is ready it frees the pack\'s released files: every kept byte still reads, a read of a released file is an I/O error that names it, a read running on past a kept file gets zeros, nothing is copied, swapped or freed while the store still writes from the buffer, a failure after the swap says the files stay released, a patch pack\'s removal entries are no files, and without the engine\'s own file of the pack or with a request it does not take it keeps the whole pack');

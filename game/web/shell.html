@@ -1383,22 +1383,38 @@ function tiReleasedPack(bytes, released, onMiss) {
 // saved() a promise that this tab's store of the pack has stopped writing from BUFFER
 // (tiBuildFiles' saved()), later(fn) runs fn in a task of its own (not inside the
 // engine's call), now(), log, error and mark. release(json) takes the game's request,
-// {"drop": [paths], "once": [paths]} (res:// paths of pack files), answers "scheduled"
-// (or why not), and in that task gives the file its new contents; once the store is no
-// longer writing it frees BUFFER (ArrayBuffer.transfer(0) detaches it, which frees its
-// memory at once; without it, dropping it leaves that to the garbage collector).
-// Anything unexpected keeps the whole pack in memory, as before.
+// {"drop": [paths], "once": [paths]} (res:// paths of pack files), and answers
+// "scheduled" (or why not). In that task, once the store is no longer writing from
+// BUFFER (so a store that never ends never leaves the page holding the pack and the
+// copy too), it gives the file its new contents and frees BUFFER
+// (ArrayBuffer.transfer(0) detaches it, which frees its memory at once; without it,
+// dropping it leaves that to the garbage collector). Anything unexpected before the new
+// contents are in keeps the whole pack in memory, as before.
 function tiPackRelease(buffer, env) {
 	let pack = buffer;
 	let status = 'waiting';
 	let made = null;
+	// Whether the engine's file has its new contents (from then on the pack is released).
+	let swapped = false;
 	const result = {};
 	const state = () => ({status, ...result, ...(made ? made.state() : {})});
 	const refuse = (why) => {
 		status = 'kept: ' + why;
 		env.log('The game data stays in memory: ' + why);
 	};
+	// A failure once the file has its new contents: the released files stay released,
+	// and only the buffer may not be freed yet.
+	const fail = (why) => {
+		if (!swapped) {
+			refuse(why);
+			return;
+		}
+		status = 'released, not freed: ' + why;
+		env.log('The game data was released, but its buffer may not be freed: ' + why);
+	};
 	async function swap(paths) {
+		// The pack's buffer stays whole while this tab's store of it still writes from it.
+		await env.saved();
 		const began = env.now();
 		let node = null;
 		try {
@@ -1437,11 +1453,10 @@ function tiPackRelease(buffer, env) {
 		});
 		bytes = null;
 		node.contents = made.contents;
+		swapped = true;
 		status = 'released';
 		Object.assign(result, {files: released.length, released_bytes: size - made.keptBytes, unknown, ms: Math.round(env.now() - began)});
 		env.mark('pack:released');
-		// The pack's buffer goes once this tab's store of it has stopped writing from it.
-		await env.saved();
 		result.freed = 'dropped';
 		try {
 			if (typeof pack.transfer === 'function') {
@@ -1466,7 +1481,7 @@ function tiPackRelease(buffer, env) {
 			return status;
 		}
 		status = 'scheduled';
-		env.later(() => swap(paths).catch((err) => refuse(String(err))));
+		env.later(() => swap(paths).catch((err) => fail(String(err))));
 		return status;
 	}
 	return {release, state};

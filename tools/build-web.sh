@@ -167,9 +167,11 @@ EOF
 # keeps a preloaded file's buffer instead of copying it (Emscripten's canOwn).
 # GodotFS.copy_to_fs's FS.writeFile copied the 160 MB pack, and the page held two or
 # three copies of it a few seconds into loading (iphone-memory-20261116). The page
-# (game/web/shell.html, tiBuildFiles) reads the pack into one buffer and never
-# touches it again; whatever else calls copy_to_fs must not either. It must apply
-# exactly once, or the build stops: check it again with a new Godot.
+# (game/web/shell.html, tiBuildFiles) reads the pack into one buffer and never writes
+# to it again; once play is ready it gives the engine's file new contents and only then
+# detaches that buffer (tiPackRelease, with the second change below). Whatever else
+# calls copy_to_fs must not write to its buffer afterwards. It must apply exactly once,
+# or the build stops: check it again with a new Godot.
 python3 -I - "${out}/${name}.js" <<'EOF'
 import os, shutil, sys, tempfile
 path = sys.argv[1]
