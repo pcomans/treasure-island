@@ -1846,12 +1846,16 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			var out := face.out3()
 			for r: Dictionary in assembly.rects:
 				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
-			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material].
+			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material],
+			# and opt-in blinds in each of its lights.
 			var bottom := y0
 			var bands: Array = (o.get("extras", {}) as Dictionary).get("spandrels", [])
+			var blinds: Dictionary = unit.get("blinds", {})
 			for storey: int in bands.size() + 1:
 				var top := float(bands[storey][0]) if storey < bands.size() else y1
 				_panels(ctx, face, unit, s0, s1, bottom, top, depth)
+				if not blinds.is_empty():
+					_blinds(ctx, face, blinds, assembly.rects, s0, s1, bottom, top, depth)
 				if storey < bands.size():
 					bottom = float(bands[storey][1])
 			_window_box(ctx, face, unit, s0, s1, y0, y1)
@@ -1905,6 +1909,35 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 static func _panels(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
 	for panel: Array in spec.get("panels", []):
 		_rect(ctx.bucket("wall", str(panel[4])), face, lerpf(s0, s1, float(panel[0])), lerpf(s0, s1, float(panel[1])), lerpf(y0, y1, float(panel[2])), lerpf(y0, y1, float(panel[3])), depth - 0.005, face.out3())
+
+
+## Opt-in blinds (grid_unit `blinds`) in one storey of a grid opening [s0, s1] x [y0, y1]:
+## each light between the storey's mullions (from the opening's assembly rects) takes
+## one of `drops`, the share of its height the blind covers from its head down (0: none),
+## picked by `seed` and the light's place, so a config always draws the same blinds;
+## `material` paints them, as `panels` are drawn.
+static func _blinds(ctx: Ctx, face: Face, blinds: Dictionary, rects: Array, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+	var drops: Variant = blinds.get("drops", [])
+	var material := str(blinds.get("material", ""))
+	var valid: bool = drops is Array and not (drops as Array).is_empty() and ctx.materials.has(material) and (blinds.get("seed", 0) is int or blinds.get("seed", 0) is float)
+	if valid:
+		for drop: Variant in drops:
+			valid = valid and (drop is float or drop is int) and _in_range(float(drop), 0.0, 1.0)
+	if not valid:
+		ctx.errors.append("%s/%s grid blinds need a palette material, a seed and drops between 0 and 1" % [face.block.id, face.key])
+		return
+	var edges: Array = [s0, s1]
+	for r: Dictionary in rects:
+		var mid := (float(r.y0) + float(r.y1)) * 0.5
+		if str(r.role) == "mullion" and mid > y0 and mid < y1:
+			edges.append((float(r.u0) + float(r.u1)) * 0.5)
+	edges.sort()
+	var bucket := ctx.bucket("wall", material)
+	for i in edges.size() - 1:
+		var pick := posmod(int(blinds.get("seed", 0)) * 73856093 ^ face.edge * 2654435761 ^ roundi(float(edges[i]) * 100.0) * 19349663 ^ roundi(y0 * 100.0) * 83492791, (drops as Array).size())
+		var drop := float(drops[pick])
+		if drop > 0.0:
+			_rect(bucket, face, float(edges[i]), float(edges[i + 1]), lerpf(y1, y0, drop), y1, depth - 0.005, face.out3())
 
 
 ## Opt-in window box (window or grid_unit `box`): a frame `t` thick round the opening,
@@ -3179,35 +3212,44 @@ static func _part(ctx: Ctx, spec: Variant) -> void:
 ## Wall equipment from the shared kit (wall_equipment_kit.gd) on a footprint edge:
 ## kind "antenna_cluster" or "duct", stations `s`, heights `y` above the building
 ## floor, the kit's own fields, and `materials` {role: palette key} over the kit's
-## defaults. Support role.
+## defaults (kit roles only). Every piece must lie on the edge, between its stations 0
+## and its length, or the build fails. Support role.
 static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
+	var kind := str(spec.kind)
 	var face := _edge_face(ctx, spec)
 	var range_y: Array = spec.get("y", [])
 	if face == null or range_y.size() != 2:
-		ctx.errors.append("%s part needs an edge and a y range" % str(spec.kind))
+		ctx.errors.append("%s part needs an edge and a y range" % kind)
 		return
+	var spec_materials: Variant = spec.get("materials", {})
+	if not spec_materials is Dictionary:
+		ctx.errors.append("%s part: materials must map kit roles to palette keys" % kind)
+		return
+	for role: Variant in spec_materials:
+		if not WallEquipmentKit.ROLES.has(str(role)):
+			ctx.errors.append("%s part: %s is not a kit role (%s)" % [kind, str(role), ", ".join(PackedStringArray(WallEquipmentKit.ROLES))])
+			return
+	var stations: Variant = spec.get("s", [])
+	if stations is Array:
+		for value: Variant in stations:
+			if (value is float or value is int) and (float(value) < 0.0 or float(value) > face.length):
+				ctx.errors.append("%s part on edge %d: station %.2f is off the edge (0-%.2f m)" % [kind, int(spec.edge), float(value), face.length])
+				return
 	var local := spec.duplicate(true)
 	local["y"] = [ctx.floor_y + float(range_y[0]), ctx.floor_y + float(range_y[1])]
-	var made: Dictionary = WallEquipmentKit.antenna_cluster(local) if str(spec.kind) == "antenna_cluster" else WallEquipmentKit.duct(local)
+	var made: Dictionary = WallEquipmentKit.antenna_cluster(local) if kind == "antenna_cluster" else WallEquipmentKit.duct(local)
 	if not bool(made.ok):
 		ctx.errors.append("; ".join(PackedStringArray(made.errors)))
 		return
-	var materials := _merge(WallEquipmentKit.DEFAULT_MATERIALS, spec.get("materials", {}))
+	var materials := _merge(WallEquipmentKit.DEFAULT_MATERIALS, spec_materials)
 	for item: Dictionary in made.boxes:
+		if float(item.u0) < -0.001 or float(item.u1) > face.length + 0.001:
+			ctx.errors.append("%s part on edge %d: its %s at stations %.2f-%.2f runs past the edge (0-%.2f m)" % [kind, int(spec.edge), str(item.role), float(item.u0), float(item.u1), face.length])
+			return
 		var key := str(materials.get(item.role, ""))
 		if not ctx.materials.has(key):
-			ctx.errors.append("%s part: palette has no %s for %s" % [str(spec.kind), key, str(item.role)])
+			ctx.errors.append("%s part: palette has no %s for %s" % [kind, key, str(item.role)])
 			return
-		if item.has("sides"):
-			# A round item (a duct's shaft): an upright prism in its u/d square.
-			var r := (float(item.u1) - float(item.u0)) * 0.5
-			var centre := face.a + face.d * (float(item.u0) + r) + face.n * ((float(item.d0) + float(item.d1)) * 0.5)
-			var ring: Array = []
-			for k in int(item.sides):
-				var angle := TAU * float(k) / float(item.sides)
-				ring.append(centre + Vector2(cos(angle), sin(angle)) * r)
-			_prism(ctx, ring, float(item.y0), float(item.y1), key, key)
-			continue
 		# The kit's d runs out from the wall; the family's depth runs in.
 		_box(ctx.bucket("support", key), face, float(item.u0), float(item.u1), float(item.y0), float(item.y1), -float(item.d1), -float(item.d0), false)
 

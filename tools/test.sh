@@ -271,6 +271,7 @@ tests=(
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
+  game/tests/headless_midrise_wall_detail_contract.gd
   game/tests/headless_shore_lift.gd
   game/tests/headless_breakwater_birds.gd
   game/tests/headless_fast_drop.gd
