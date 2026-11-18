@@ -197,6 +197,10 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   b.bound[0x8894] = buffer;
   ctx.bufferData(0x8892, 4 * 1048576, 0x88E8);
   ctx.bufferData(0x8892, 4 * 1048576, 0x88E8);
+  // A small uniform buffer: 100 bytes, a whole 16 KiB page.
+  const uniform = ctx.createBuffer();
+  b.bound[0x8A28] = uniform;
+  ctx.bufferData(0x8A11, new Uint8Array(100), 0x88E4);
   const big = load('gl_big') || [];
   const texts = big.map((e) => e[3]).join('\n');
   check(big.length === 9 && /texture 2d RGBA8 2048x1024, 1 levels \(storage\): 8 MiB/.test(texts) && /texture cube RGBA16F 1024x1024 level 0 face 5: 8 MiB/.test(texts)
@@ -230,7 +234,7 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   for (const cb of b.intervals) cb();
   let heart = load('heartbeat');
   check(heart && heart.memory && heart.memory[3] === live && heart.memory[5] === 48 * MiB && heart.memory[9] === 8 * MiB && heart.memory[10] === 8 * MiB
-    && heart.memory[12] === 4 * MiB && heart.memory[20] === 1 && heart.memory[21] === 2 && heart.memory[22] === 1 && heart.memory[23] === 4 * 2 * 96000 && heart.memory[26] === 1 && heart.memory[27] === 4 * 2 * 96000 && heart.memory[24] === 1 && heart.memory[25] === 4 * 2 * 96000,
+    && heart.memory[12] === 4 * MiB + 100 && heart.memory[20] === 1 && heart.memory[21] === 2 && heart.memory[22] === 1 && heart.memory[23] === 4 * 2 * 96000 && heart.memory[26] === 1 && heart.memory[27] === 4 * 2 * 96000 && heart.memory[24] === 1 && heart.memory[25] === 4 * 2 * 96000,
     `the heartbeat must carry the memory totals (GL textures ${live}, of which cube ${48 * MiB}, renderbuffers ${8 * MiB}, all multisampled, buffers ${4 * MiB}, one cube-map face bind, two attachments, a sound buffer made, live and started): ${JSON.stringify(heart && heart.memory)}`);
   check((load('page_events') || []).some((e) => e[2] === 'cube' && /cube-map faces drawing/.test(e[3])), 'cube-map faces drawing must be kept as a page event');
   b.advance(1500);
@@ -244,8 +248,17 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   heart = load('heartbeat');
   check(heart && heart.memory[3] === 8 * MiB + 16384 && heart.memory[9] === 0 && heart.memory[2] === 2 && heart.memory[8] === 1,
     `a deleted texture's and renderbuffer's storage must come off the totals: ${JSON.stringify(heart && heart.memory)}`);
+  heart = load('heartbeat');
+  check(heart.memory[29] === 4 * MiB + 16384 && heart.memory[30] === 8 * MiB + 16384 && heart.memory[12] === 4 * MiB + 100,
+    `the buffers' and the textures' and renderbuffers' bytes in 16 KiB pages must be kept: ${JSON.stringify(heart.memory.slice(28))}`);
   const ring = load('ring') || [];
-  check(ring.length === 1 && ring[0].length === 25 + 4 + 29, `a row a second must carry the engine's and the page's memory columns: ${JSON.stringify(ring)}`);
+  check(ring.length === 1 && ring[0].length === 25 + 4 + 31, `a row a second must carry the engine's and the page's memory columns: ${JSON.stringify(ring)}`);
+  b.win.__tiTrace.end(JSON.stringify({result: 'complete', frames: 2}));
+  const inv = (load('inventory') || []).find((i) => i.moment === 'end');
+  const hist = inv && inv.gl.buffers;
+  check(hist && JSON.stringify(hist.by_size['<=256 B']) === JSON.stringify([1, 100, 16384]) && JSON.stringify(hist.by_size['>1 MiB']) === JSON.stringify([1, 4 * MiB, 4 * MiB])
+    && hist.by_target['UNIFORM_BUFFER <=256 B'] && hist.by_usage['DYNAMIC_DRAW >1 MiB'],
+    `the end's inventory must give the live buffers by size, target and usage: ${JSON.stringify(hist)}`);
 }
 
 if (failures.length) {

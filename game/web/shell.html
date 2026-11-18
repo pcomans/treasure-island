@@ -478,7 +478,11 @@ function tiTraceText(env, a) {
 	// GPU makes of a format (tools/web_trace/README.md).
 	const GLM_BIG = 4 * 1048576;
 	const glm = {live: {texture: 0, buffer: 0, program: 0, shader: 0, framebuffer: 0, renderbuffer: 0, vao: 0},
-		tex: {'2d': 0, cube: 0, array: 0, '3d': 0}, buf: 0, rb: 0, rbMsaa: 0, uploaded: 0, asked: 0, big: 0, cubeBinds: 0, cubeAttach: 0, selfMs: 0};
+		tex: {'2d': 0, cube: 0, array: 0, '3d': 0}, buf: 0, rb: 0, rbMsaa: 0, uploaded: 0, asked: 0, big: 0, cubeBinds: 0, cubeAttach: 0, selfMs: 0, bufPaged: 0, texRbPaged: 0};
+	// Storage as whole 16 KiB pages (Apple Silicon's page size): a GPU allocation takes
+	// at least one, so many small buffers can hold far more than their bytes.
+	const PAGE = 16384;
+	const paged = (n) => (n > 0 ? Math.ceil(n / PAGE) * PAGE : 0);
 	const mb = (n) => Math.round(n / 10485.76) / 100;
 	const texTotal = () => glm.tex['2d'] + glm.tex.cube + glm.tex.array + glm.tex['3d'];
 	const glmSummary = () => `textures ${glm.live.texture} ${mb(texTotal())} MiB (2D ${mb(glm.tex['2d'])}, cube ${mb(glm.tex.cube)}, array ${mb(glm.tex.array)}, 3D ${mb(glm.tex['3d'])}),`
@@ -525,7 +529,29 @@ function tiTraceText(env, a) {
 	const BUFFER_BINDING = {0x8892: 0x8894, 0x8893: 0x8895, 0x8A11: 0x8A28, 0x8F36: 0x8F36, 0x8F37: 0x8F37, 0x88EB: 0x88ED, 0x88EC: 0x88EF, 0x8C8E: 0x8C8F};
 	const glLive = new WeakSet();
 	const texStore = new WeakMap();
+	// A buffer's id (bufStore), and by id its bytes, target and usage (bufInfo: ids only,
+	// so the trace holds no buffer alive).
 	const bufStore = new WeakMap();
+	const bufInfo = new Map();
+	let bufNext = 1;
+	// The live buffers by size, target and usage hint, for the inventory.
+	const BUFFER_TARGET = {0x8892: 'ARRAY_BUFFER', 0x8893: 'ELEMENT_ARRAY_BUFFER', 0x8A11: 'UNIFORM_BUFFER'};
+	const USAGE = {0x88E4: 'STATIC_DRAW', 0x88E8: 'DYNAMIC_DRAW', 0x88E0: 'STREAM_DRAW', 0x88E5: 'STATIC_READ', 0x88E9: 'DYNAMIC_READ', 0x88E1: 'STREAM_READ',
+		0x88E6: 'STATIC_COPY', 0x88EA: 'DYNAMIC_COPY', 0x88E2: 'STREAM_COPY'};
+	const SIZE_BINS = [[256, '<=256 B'], [1024, '<=1 KiB'], [4096, '<=4 KiB'], [16384, '<=16 KiB'], [65536, '<=64 KiB'], [262144, '<=256 KiB'], [1048576, '<=1 MiB'], [Infinity, '>1 MiB']];
+	const bufferHistogram = () => {
+		const out = {by_size: {}, by_target: {}, by_usage: {}, empty: 0};
+		const add = (table, key, bytes) => { const e = table[key] || (table[key] = [0, 0, 0]); e[0] += 1; e[1] += bytes; e[2] += paged(bytes); };
+		for (const [bytes, target, usage] of bufInfo.values()) {
+			if (!bytes) { out.empty += 1; continue; }
+			const bin = SIZE_BINS.find((b) => bytes <= b[0])[1];
+			add(out.by_size, bin, bytes);
+			add(out.by_target, `${BUFFER_TARGET[target] || 'other 0x' + Number(target).toString(16)} ${bin}`, bytes);
+			add(out.by_usage, `${USAGE[usage] || '0x' + Number(usage).toString(16)} ${bin}`, bytes);
+		}
+		out.columns = 'count, bytes, bytes in 16 KiB pages';
+		return out;
+	};
 	const rbStore = new WeakMap();
 	const cubeFbos = new WeakMap();
 	// An allocation of GLM_BIG or more, kept at once (gl_big) with the totals after it and
@@ -545,10 +571,13 @@ function tiTraceText(env, a) {
 		let had = texStore.get(tex);
 		if (!had) { had = new Map(); texStore.set(tex, had); }
 		let before = 0;
+		let total = 0;
+		for (const v of had.values()) total += v[0];
 		for (const [k, v] of had) {
 			if (key === null || k === key || k === 'all') { glm.tex[v[1]] -= v[0]; before += v[0]; had.delete(k); }
 		}
 		had.set(key === null ? 'all' : key, [bytes, kind]);
+		glm.texRbPaged += paged(total - before + bytes) - paged(total);
 		glm.tex[kind] += bytes;
 		glm.asked += bytes;
 		if (bytes >= GLM_BIG && bytes !== before) bigAlloc(`texture ${kind} ${what}`, bytes);
@@ -556,7 +585,9 @@ function tiTraceText(env, a) {
 	const texGone = (tex) => {
 		const had = texStore.get(tex);
 		if (!had) return;
-		for (const v of had.values()) glm.tex[v[1]] -= v[0];
+		let total = 0;
+		for (const v of had.values()) { glm.tex[v[1]] -= v[0]; total += v[0]; }
+		glm.texRbPaged -= paged(total);
 		texStore.delete(tex);
 	};
 	// A compressed image's size as the call gives it, for a format the table lacks: the
@@ -591,9 +622,13 @@ function tiTraceText(env, a) {
 			if (!buf) return;
 			const per = (a[1] && a[1].BYTES_PER_ELEMENT) || 1;
 			const bytes = typeof a[1] === 'number' ? a[1] : !a[1] ? 0 : a[4] > 0 ? a[4] * per : a[1].byteLength - (a[3] || 0) * per;
-			const before = bufStore.get(buf) || 0;
-			bufStore.set(buf, bytes);
+			let id = bufStore.get(buf);
+			if (id === undefined) { id = bufNext; bufNext += 1; bufStore.set(buf, id); }
+			const had = bufInfo.get(id);
+			const before = had ? had[0] : 0;
+			bufInfo.set(id, [bytes, a[0], a[2]]);
 			glm.buf += bytes - before;
+			glm.bufPaged += paged(bytes) - paged(before);
 			glm.asked += bytes;
 			if (bytes >= GLM_BIG && bytes !== before) bigAlloc(`buffer 0x${a[0].toString(16)}`, bytes);
 		},
@@ -604,6 +639,7 @@ function tiTraceText(env, a) {
 		const bytes = Math.max(1, samples) * w * h * texel(internal);
 		const before = rbStore.get(rb) || [0, false];
 		glm.rb += bytes - before[0];
+		glm.texRbPaged += paged(bytes) - paged(before[0]);
 		glm.rbMsaa += (samples > 1 ? bytes : 0) - (before[1] ? before[0] : 0);
 		rbStore.set(rb, [bytes, samples > 1]);
 		glm.asked += bytes;
@@ -731,10 +767,15 @@ function tiTraceText(env, a) {
 					glLive.delete(gone);
 					glm.live[kind] -= 1;
 					if (kind === 'texture') texGone(gone);
-					if (kind === 'buffer') { glm.buf -= bufStore.get(gone) || 0; bufStore.delete(gone); }
+					if (kind === 'buffer') {
+						const id = bufStore.get(gone);
+						const had = id === undefined ? null : bufInfo.get(id);
+						if (had) { glm.buf -= had[0]; glm.bufPaged -= paged(had[0]); bufInfo.delete(id); }
+						bufStore.delete(gone);
+					}
 					if (kind === 'renderbuffer') {
 						const had = rbStore.get(gone);
-						if (had) { glm.rb -= had[0]; if (had[1]) glm.rbMsaa -= had[0]; rbStore.delete(gone); }
+						if (had) { glm.rb -= had[0]; glm.texRbPaged -= paged(had[0]); if (had[1]) glm.rbMsaa -= had[0]; rbStore.delete(gone); }
 					}
 				}
 				return original.apply(this, args);
@@ -979,7 +1020,8 @@ function tiTraceText(env, a) {
 					if (n >= 1048576 && !(ArrayBuffer.isView(v) && v.buffer === wasmBuffer)) inv.module_buffers.push([k, n, v.constructor.name]);
 				}
 			}
-			inv.gl = {live: {...glm.live}, texture_bytes: texTotal(), renderbuffer_bytes: glm.rb, buffer_bytes: glm.buf, summary: glmSummary()};
+			inv.gl = {live: {...glm.live}, texture_bytes: texTotal(), renderbuffer_bytes: glm.rb, buffer_bytes: glm.buf, summary: glmSummary(),
+				buffer_bytes_paged: glm.bufPaged, texture_renderbuffer_bytes_paged: glm.texRbPaged, buffers: bufferHistogram()};
 			inv.audio = {buffers_made: sound.buffers, made_bytes: sound.bytes, live: sound.live, live_bytes: sound.liveBytes, decodes: sound.decoded,
 				started: sound.starts, contexts: [...sound.contexts].map((c) => `${c.state}, ${c.sampleRate} Hz, base latency ${c.baseLatency || '?'} s`), worklets: sound.worklets};
 			// The trace's own records (numbers at 8 bytes, a rough size).
@@ -1089,11 +1131,11 @@ function tiTraceText(env, a) {
 		+ 'GL renderbuffer bytes, of which multisampled, GL buffers, GL buffer bytes, GL programs, GL shaders, GL framebuffers, GL vertex arrays, '
 		+ 'GL bytes uploaded so far, GL storage bytes asked so far, GL allocations of 4 MiB or more so far, cube-map face binds so far, '
 		+ 'cube-map face attachments so far, sound buffers made, their bytes, sound buffers started so far, bytes of the buffers started, '
-		+ 'sound buffers live, their bytes, the trace\'s own bookkeeping ms so far';
+		+ 'sound buffers live, their bytes, the trace\'s own bookkeeping ms so far, GL buffer bytes in 16 KiB pages, GL texture and renderbuffer bytes in 16 KiB pages';
 	const memoryNow = () => [memory ? memory.buffer.byteLength : null, performance.memory ? performance.memory.usedJSHeapSize : null,
 		glm.live.texture, texTotal(), glm.tex['2d'], glm.tex.cube, glm.tex.array, glm.tex['3d'], glm.live.renderbuffer, glm.rb, glm.rbMsaa,
 		glm.live.buffer, glm.buf, glm.live.program, glm.live.shader, glm.live.framebuffer, glm.live.vao, glm.uploaded, glm.asked, glm.big,
-		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes, sound.live, sound.liveBytes, round(glm.selfMs)];
+		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes, sound.live, sound.liveBytes, round(glm.selfMs), glm.bufPaged, glm.texRbPaged];
 	// Cube-map faces drawing, started and stopped, kept as page events: a run of face
 	// binds or attachments with no gap of more than a second.
 	// The counts and GL storage at the last look (a second ago): a run counts from them.

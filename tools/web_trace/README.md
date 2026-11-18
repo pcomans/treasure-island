@@ -144,6 +144,23 @@ deleted object's storage off, and a re-specified level or buffer replaces its ol
   storage and are not counted as allocations. An object's storage goes to the object bound
   when the call is made, read back with `getParameter`.
 
+- In 16 KiB pages (Apple Silicon's page size; a GPU allocation takes at least one): two
+  more columns give the live buffers' bytes and the live textures' and renderbuffers' bytes
+  each rounded up to whole pages (a texture's levels together), so many small buffers show
+  what they may really hold. The inventory gives the live buffers by size (256 B, 1 KiB,
+  4 KiB, 16 KiB, 64 KiB, 256 KiB, 1 MiB and more), by target (ARRAY_BUFFER,
+  ELEMENT_ARRAY_BUFFER, UNIFORM_BUFFER, other) and by usage hint, each with count, bytes and
+  paged bytes.
+
+**Where the buffers come from (`drive_trace.gd`, header `mesh_census`).** At the trace's
+start: the drawing nodes by class, the unique meshes and their surfaces, how many surfaces
+have an index buffer, an attribute buffer (GLES3 keeps colour, UVs and custom data apart
+from the vertex buffer) or a skin buffer, a lower bound of the GL buffers that makes (a
+surface's LODs each add an index buffer, which the engine gives no cheap count of), the
+unique MultiMeshes (an instance buffer each) and their instances, and the 10 groups (the path
+below main, three names deep) with the most unique surfaces. Surfaces of meshes other than
+ArrayMesh are counted as of unknown format.
+
 **Engine counters (`drive_trace.gd`, each frame).** Besides texture, buffer and video memory,
 draw calls, resources and nodes, the frame record has `static_b` and `static_max_b`
 (`Performance.MEMORY_STATIC` and its peak: 0 in a release build, as the web's), `obj_n`

@@ -663,6 +663,69 @@ func _mark_sounds() -> void:
 		_event("sound", "%s %s x%d, takes %s s" % [id, "loop started" if loop else "played", n - was, "/".join(lengths) if not lengths.is_empty() else "none"], n - was)
 
 
+## Where the renderer's buffers come from, at the trace's start: the drawing nodes by
+## class, the unique meshes and their surfaces, and of those surfaces how many have an
+## index buffer, an attribute buffer (colour, UVs, custom: GLES3 keeps them apart from
+## the vertex buffer) and a skin buffer, giving a lower bound of the GL buffers they
+## make (a surface's LODs each add an index buffer, not counted: the engine gives no
+## cheap count); the unique MultiMeshes (each one instance buffer) and their instances;
+## and the 10 groups (the path below main, three names deep) with the most unique
+## surfaces. Surfaces of meshes other than ArrayMesh (primitive and text meshes) count
+## in format_unknown.
+func _mesh_census() -> Dictionary:
+	var kinds := {}
+	var meshes := {}
+	var multimeshes := {}
+	var instances := 0
+	var surfaces := 0
+	var indexed := 0
+	var attributes := 0
+	var skinned := 0
+	var unknown := 0
+	var groups := {}
+	var attribute_flags := Mesh.ARRAY_FORMAT_COLOR | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_CUSTOM0 | Mesh.ARRAY_FORMAT_CUSTOM1 | Mesh.ARRAY_FORMAT_CUSTOM2 | Mesh.ARRAY_FORMAT_CUSTOM3
+	for node: Node in _main.find_children("*", "GeometryInstance3D", true, false):
+		kinds[node.get_class()] = int(kinds.get(node.get_class(), 0)) + 1
+		var mesh: Mesh = null
+		if node is MeshInstance3D:
+			mesh = (node as MeshInstance3D).mesh
+		elif node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh != null:
+			var multimesh := (node as MultiMeshInstance3D).multimesh
+			mesh = multimesh.mesh
+			if not multimeshes.has(multimesh.get_instance_id()):
+				multimeshes[multimesh.get_instance_id()] = true
+				instances += multimesh.instance_count
+		var parts := str(_main.get_path_to(node)).split("/")
+		var group := "/".join(parts.slice(0, mini(3, parts.size() - 1))) if parts.size() > 1 else "."
+		var entry: Array = groups.get(group, [0, 0])
+		entry[0] += 1
+		if mesh != null and not meshes.has(mesh.get_instance_id()):
+			meshes[mesh.get_instance_id()] = true
+			var count := mesh.get_surface_count()
+			surfaces += count
+			entry[1] += count
+			if not mesh is ArrayMesh:
+				unknown += count
+				continue
+			for surface in count:
+				var format := (mesh as ArrayMesh).surface_get_format(surface)
+				if format & Mesh.ARRAY_FORMAT_INDEX:
+					indexed += 1
+				if format & attribute_flags:
+					attributes += 1
+				if format & Mesh.ARRAY_FORMAT_BONES:
+					skinned += 1
+		groups[group] = entry
+	var names := groups.keys()
+	names.sort_custom(func(a: String, b: String) -> bool: return int(groups[a][1]) > int(groups[b][1]))
+	var top: Array = []
+	for name: String in names.slice(0, 10):
+		top.append({"group": name, "nodes": groups[name][0], "unique_surfaces": groups[name][1]})
+	return {"nodes": kinds, "unique_meshes": meshes.size(), "unique_surfaces": surfaces, "with_index": indexed, "with_attributes": attributes,
+		"with_skin": skinned, "format_unknown": unknown, "buffers_at_least": surfaces + indexed + attributes + skinned + multimeshes.size(),
+		"multimeshes": multimeshes.size(), "multimesh_instances": instances, "top_groups": top}
+
+
 ## An Options resolution id for a scale asked for ("0.5" -> "50"), "" if the menu
 ## offers none such.
 static func _resolution_id(scale: String) -> String:
@@ -886,6 +949,7 @@ func _begin_report() -> void:
 	header["reflection_probes"] = probes
 	header["reflection_atlas"] = {"size": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_size", 0),
 		"count": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_count", 0)}
+	header["mesh_census"] = _mesh_census()
 	if _web and _js != null:
 		# The page's clock at this trace's origin (both are performance.now() on the web).
 		var before := _now_us()
