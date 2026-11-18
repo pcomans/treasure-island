@@ -10,7 +10,9 @@
 // PW_MODULE (Playwright), WK_EXEC (WebKit's MiniBrowser, or a wrapper starting it), CHROME_EXEC; KILL_AT_S: kill the
 // page's process once the trace is that many seconds in (WebKit: its web process; Chrome: its renderer), then open the
 // page again in the same browser and save what the unfinished-run panel shows (previous-panel.txt) and its Download
-// full log (previous-log.json), as after an iPhone's reload.
+// full log (previous-log.json), as after an iPhone's reload. FOOTPRINT_AT_PROMPT=1 (a Mac, Playwright's own WebKit):
+// at the start prompt, record the web process's footprint (footprint, vmmap -summary; no sudo) beside the page's
+// memory inventory (footprint.txt, vmmap.txt, footprint.json), then stop without playing.
 'use strict';
 const fs = require('fs');
 const pw = require(process.env.PW_MODULE || 'playwright');
@@ -103,6 +105,7 @@ async function main() {
   }
   log('PROMPT', ((Date.now() - t0) / 1000).toFixed(0) + 's', JSON.stringify(r));
   fs.writeFileSync(OUT + '/readback-prompt.json', JSON.stringify(r, null, 1));
+  if (process.env.FOOTPRINT_AT_PROMPT === '1') return await footprintAtPrompt();
   await sleep(1500);
   await shot('prompt');
   if (cdp && THROTTLE > 1) {
@@ -157,6 +160,40 @@ async function main() {
   return state.end.result === 'complete' ? 0 : 4;
 }
 
+// On a Mac: this session's Playwright WebKit web processes, biggest first, only while exactly one Playwright WebKit
+// browser runs from its folder (so every one of them is this session's).
+function macWebProcesses() {
+  const folder = require('path').dirname(pw.webkit.executablePath());
+  const ps = require('child_process').execFileSync('ps', ['-axww', '-o', 'pid=,rss=,command='], {encoding: 'utf8'});
+  const procs = ps.split('\n').map((l) => l.trim().match(/^(\d+)\s+(\d+)\s+(.*)$/)).filter(Boolean).map((m) => ({pid: +m[1], rss: +m[2], cmd: m[3]}));
+  const browsers = procs.filter((p) => p.cmd.startsWith(folder + '/') && /\/Contents\/MacOS\/Playwright(\s|$)/.test(p.cmd));
+  const web = procs.filter((p) => p.cmd.startsWith(folder + '/') && /com\.apple\.WebKit\.WebContent/.test(p.cmd));
+  log('WEB_PROCESSES', browsers.length, 'browser(s)', JSON.stringify(web.map((p) => [p.pid, Math.round(p.rss / 1024)])));
+  if (browsers.length !== 1) throw new Error(`${browsers.length} Playwright WebKit browsers from ${folder} are running, not this one alone`);
+  return web.sort((a, b) => b.rss - a.rss);
+}
+
+// At the start prompt: the web process's footprint beside the page's own inventory (a Mac only).
+async function footprintAtPrompt() {
+  await sleep(5000);
+  const {execFileSync} = require('child_process');
+  const best = macWebProcesses()[0];
+  if (!best) throw new Error('no web process');
+  const run = (cmd, args) => { try { return execFileSync(cmd, args, {encoding: 'utf8', timeout: 120000}); } catch (e) { return 'FAILED ' + cmd + ': ' + String(e.stderr || e.message).slice(0, 500); } };
+  const fp = run('footprint', [String(best.pid)]);
+  const vm = run('vmmap', ['-summary', String(best.pid)]);
+  fs.writeFileSync(OUT + '/footprint.txt', fp);
+  fs.writeFileSync(OUT + '/vmmap.txt', vm);
+  const line = (re) => { const m = fp.match(re); return m ? m[1].trim() : null; };
+  const inventory = JSON.parse(await js('inventory', "localStorage.getItem('ti-trace:inventory') || '[]'"));
+  const summary = {pid: best.pid, footprint: line(/Footprint:\s*([^(\n]+)/), phys_footprint: line(/phys_footprint:\s*([^\n]+)/),
+    webkit_malloc: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+WebKit malloc/), graphics: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+Owned physical footprint \(unmapped\) \(graphics\)/),
+    gigacage: line(/\n\s*(\S+ \S+)\s+\S+ \S+\s+\S+ \S+\s+\d+\s+JS VM Gigacage/), inventory: inventory[inventory.length - 1] || null};
+  fs.writeFileSync(OUT + '/footprint.json', JSON.stringify(summary, null, 1));
+  log('FOOTPRINT', JSON.stringify({...summary, inventory: undefined}));
+  return 0;
+}
+
 // The page's process killed once the trace is KILL_AT_S s in, as iOS kills a page over its memory limit; then the
 // page opened again in the same browser (its storage kept), its unfinished-run panel and full log saved.
 async function killAndReopen(context, cdp, killAt) {
@@ -173,15 +210,8 @@ async function killAndReopen(context, cdp, killAt) {
     // On a Mac (no session.sh: run this driver directly), Playwright's own WebKit, whose web processes run from
     // its folder. Only while exactly one Playwright WebKit of that folder runs, so every one of them is this
     // session's; the biggest killed.
-    const folder = require('path').dirname(pw.webkit.executablePath());
-    const ps = require('child_process').execFileSync('ps', ['-axww', '-o', 'pid=,rss=,command='], {encoding: 'utf8'});
-    const procs = ps.split('\n').map((l) => l.trim().match(/^(\d+)\s+(\d+)\s+(.*)$/)).filter(Boolean).map((m) => ({pid: +m[1], rss: +m[2], cmd: m[3]}));
-    const browsers = procs.filter((p) => p.cmd.startsWith(folder + '/') && /\/Contents\/MacOS\/Playwright(\s|$)/.test(p.cmd));
-    const web = procs.filter((p) => p.cmd.startsWith(folder + '/') && /com\.apple\.WebKit\.WebContent/.test(p.cmd));
-    log('WEB_PROCESSES', browsers.length, 'browser(s)', JSON.stringify(web.map((p) => [p.pid, Math.round(p.rss / 1024)])));
-    if (browsers.length !== 1) throw new Error(`not killing: ${browsers.length} Playwright WebKit browsers from ${folder} are running, not this one alone`);
-    const best = web.sort((a, b) => b.rss - a.rss)[0];
-    if (!best) throw new Error('no web process to kill under ' + folder);
+    const best = macWebProcesses()[0];
+    if (!best) throw new Error('no web process to kill');
     log('KILL', 'pid', best.pid, 'rss_mib', Math.round(best.rss / 1024));
     process.kill(best.pid, 'SIGKILL');
   } else {

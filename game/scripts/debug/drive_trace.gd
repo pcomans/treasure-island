@@ -34,7 +34,10 @@ extends Node
 ## Mersea's reflection probes out before startup renders them; sound=0 silences the
 ## game (no sample registered with the browser, so none decoded into a Web Audio
 ## buffer, no player started; the takes stay loaded, compressed); sound=none also drops
-## the loaded takes, as in a build without sounds; msaa=0 draws the
+## the loaded takes, as in a build without sounds; detail=0 loads the world without its
+## placed street-detail layers (vegetation, furniture, fences, clutter: the world loader's
+## own street-detail choice, as --street-detail off); horizon=0 drops what Yerba Buena
+## Island, the Bay Bridge and the Bay Area horizon hold as the world is ready; msaa=0 draws the
 ## world without MSAA (the web's default is 2x); route=hover leaves out the car: from
 ## the spawn straight to the walk, the run, the jetpack climb and hover, the drop;
 ## route=corner (CORNER_POINTS) puts the car straight on Bruton Street after the
@@ -209,6 +212,10 @@ var _probes_off := false
 var _sound_off := false
 ## sound=none: the takes the bank loaded dropped too (they are freed once nothing holds them).
 var _sound_none := false
+## detail=0 and horizon=0, and what horizon=0 dropped (nodes, by group).
+var _detail_off := false
+var _horizon_off := false
+var _horizon_dropped := {}
 var _msaa_off := false
 var _msaa_restore := false
 var _msaa_before := Viewport.MSAA_DISABLED
@@ -218,6 +225,8 @@ var _route_name := ""
 var _reflection_probes: Array = []
 var _probe_names: Array[String] = []
 var _probe_states: Array[int] = []
+## Where the renderer's buffers come from (_mesh_census), taken before the records.
+var _mesh_census_data := {}
 ## The plays (and loop starts) of each sound so far, as Sound.played_counts had them.
 var _sound_counts := {}
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
@@ -259,6 +268,8 @@ func _ready() -> void:
 	_probes_off = _option("probes") == "0"
 	_sound_none = _option("sound") == "none"
 	_sound_off = _option("sound") == "0" or _sound_none
+	_detail_off = _option("detail") == "0"
+	_horizon_off = _option("horizon") == "0"
 	_msaa_off = _option("msaa") == "0"
 	var route := _option("route")
 	_route_name = route if route in ["hover", "corner"] else ""
@@ -663,67 +674,128 @@ func _mark_sounds() -> void:
 		_event("sound", "%s %s x%d, takes %s s" % [id, "loop started" if loop else "played", n - was, "/".join(lengths) if not lengths.is_empty() else "none"], n - was)
 
 
-## Where the renderer's buffers come from, at the trace's start: the drawing nodes by
-## class, the unique meshes and their surfaces, and of those surfaces how many have an
-## index buffer, an attribute buffer (colour, UVs, custom: GLES3 keeps them apart from
-## the vertex buffer) and a skin buffer, giving a lower bound of the GL buffers they
-## make (a surface's LODs each add an index buffer, not counted: the engine gives no
-## cheap count); the unique MultiMeshes (each one instance buffer) and their instances;
-## and the 10 groups (the path below main, three names deep) with the most unique
-## surfaces. Surfaces of meshes other than ArrayMesh (primitive and text meshes) count
-## in format_unknown.
+## Where the renderer's buffers come from, taken with the material census before the
+## records start (so its cost is in none of them). From the Compatibility renderer's
+## source (Godot 4.7.2, drivers/gles3/storage/mesh_storage.cpp, material_storage.cpp):
+## every mesh surface makes a vertex buffer (positions, and normals and tangents), an
+## attribute buffer when it has colours, UVs or custom data, a skin buffer when it has
+## bones, an index buffer when indexed, and one more index buffer for each LOD; every
+## MultiMesh makes one instance buffer (instances x 12 floats of transform, and 2 more
+## when it has colours or custom data); every material with uniforms one uniform buffer.
+## For each group (the path below main, three names deep; a mesh or material counted in
+## the first group that uses it) the estimated GL buffers of each kind, by size, and
+## their bytes and bytes in 16 KiB pages; LOD index buffers are not counted (the engine
+## gives no cheap count of LODs). Surfaces of meshes other than ArrayMesh count in
+## format_unknown. Also the drawing nodes by class and the totals.
+const CENSUS_BINS := [256, 1024, 4096, 16384, 65536, 262144, 1048576]
+const CENSUS_BIN_NAMES := ["<=256 B", "<=1 KiB", "<=4 KiB", "<=16 KiB", "<=64 KiB", "<=256 KiB", "<=1 MiB", ">1 MiB"]
+
+
 func _mesh_census() -> Dictionary:
 	var kinds := {}
 	var meshes := {}
 	var multimeshes := {}
-	var instances := 0
-	var surfaces := 0
-	var indexed := 0
-	var attributes := 0
-	var skinned := 0
-	var unknown := 0
+	var materials := {}
 	var groups := {}
-	var attribute_flags := Mesh.ARRAY_FORMAT_COLOR | Mesh.ARRAY_FORMAT_TEX_UV | Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_CUSTOM0 | Mesh.ARRAY_FORMAT_CUSTOM1 | Mesh.ARRAY_FORMAT_CUSTOM2 | Mesh.ARRAY_FORMAT_CUSTOM3
+	var totals := _census_group()
+	var unknown := 0
+	var instances := 0
 	for node: Node in _main.find_children("*", "GeometryInstance3D", true, false):
 		kinds[node.get_class()] = int(kinds.get(node.get_class(), 0)) + 1
+		var parts := str(_main.get_path_to(node)).split("/")
+		var name := "/".join(parts.slice(0, mini(3, parts.size() - 1))) if parts.size() > 1 else "."
+		if not groups.has(name):
+			groups[name] = _census_group()
+		var group: Dictionary = groups[name]
+		group.nodes += 1
+		var geometry := node as GeometryInstance3D
 		var mesh: Mesh = null
 		if node is MeshInstance3D:
 			mesh = (node as MeshInstance3D).mesh
 		elif node is MultiMeshInstance3D and (node as MultiMeshInstance3D).multimesh != null:
 			var multimesh := (node as MultiMeshInstance3D).multimesh
 			mesh = multimesh.mesh
-			if not multimeshes.has(multimesh.get_instance_id()):
+			if not multimeshes.has(multimesh.get_instance_id()) and multimesh.instance_count > 0:
 				multimeshes[multimesh.get_instance_id()] = true
 				instances += multimesh.instance_count
-		var parts := str(_main.get_path_to(node)).split("/")
-		var group := "/".join(parts.slice(0, mini(3, parts.size() - 1))) if parts.size() > 1 else "."
-		var entry: Array = groups.get(group, [0, 0])
-		entry[0] += 1
+				var floats := (8 if multimesh.transform_format == MultiMesh.TRANSFORM_2D else 12) + (2 if multimesh.use_colors or multimesh.use_custom_data else 0)
+				_census_add_buffer(group, totals, "multimesh", multimesh.instance_count * floats * 4)
+		var used: Array[Material] = []
+		for material: Material in [geometry.material_override, geometry.material_overlay]:
+			if material != null:
+				used.append(material)
 		if mesh != null and not meshes.has(mesh.get_instance_id()):
 			meshes[mesh.get_instance_id()] = true
 			var count := mesh.get_surface_count()
-			surfaces += count
-			entry[1] += count
-			if not mesh is ArrayMesh:
-				unknown += count
-				continue
+			group.surfaces += count
+			totals.surfaces += count
 			for surface in count:
-				var format := (mesh as ArrayMesh).surface_get_format(surface)
+				var material := mesh.surface_get_material(surface)
+				if material != null:
+					used.append(material)
+				if not mesh is ArrayMesh:
+					unknown += 1
+					continue
+				var array_mesh := mesh as ArrayMesh
+				var format := array_mesh.surface_get_format(surface)
+				var vertices := array_mesh.surface_get_array_len(surface)
+				_census_add_buffer(group, totals, "vertex", vertices * (RenderingServer.mesh_surface_get_format_vertex_stride(format, vertices) + RenderingServer.mesh_surface_get_format_normal_tangent_stride(format, vertices)))
+				var attribute := RenderingServer.mesh_surface_get_format_attribute_stride(format, vertices)
+				if attribute > 0:
+					_census_add_buffer(group, totals, "attribute", vertices * attribute)
+				var skin := RenderingServer.mesh_surface_get_format_skin_stride(format, vertices)
+				if skin > 0:
+					_census_add_buffer(group, totals, "skin", vertices * skin)
 				if format & Mesh.ARRAY_FORMAT_INDEX:
-					indexed += 1
-				if format & attribute_flags:
-					attributes += 1
-				if format & Mesh.ARRAY_FORMAT_BONES:
-					skinned += 1
-		groups[group] = entry
+					_census_add_buffer(group, totals, "index", array_mesh.surface_get_array_index_len(surface) * (2 if vertices <= 65536 else 4))
+		if node is MeshInstance3D:
+			for surface in (node as MeshInstance3D).get_surface_override_material_count():
+				var material := (node as MeshInstance3D).get_surface_override_material(surface)
+				if material != null:
+					used.append(material)
+		for first: Material in used:
+			var material := first
+			while material != null:
+				if not materials.has(material.get_instance_id()):
+					materials[material.get_instance_id()] = true
+					group.materials += 1
+					totals.materials += 1
+				material = material.next_pass
 	var names := groups.keys()
-	names.sort_custom(func(a: String, b: String) -> bool: return int(groups[a][1]) > int(groups[b][1]))
+	names.sort_custom(func(a: String, b: String) -> bool: return int(groups[a].buffers) + int(groups[a].materials) > int(groups[b].buffers) + int(groups[b].materials))
 	var top: Array = []
 	for name: String in names.slice(0, 10):
-		top.append({"group": name, "nodes": groups[name][0], "unique_surfaces": groups[name][1]})
-	return {"nodes": kinds, "unique_meshes": meshes.size(), "unique_surfaces": surfaces, "with_index": indexed, "with_attributes": attributes,
-		"with_skin": skinned, "format_unknown": unknown, "buffers_at_least": surfaces + indexed + attributes + skinned + multimeshes.size(),
-		"multimeshes": multimeshes.size(), "multimesh_instances": instances, "top_groups": top}
+		var group: Dictionary = groups[name]
+		group["group"] = name
+		top.append(group)
+	totals.erase("nodes")
+	return {"nodes": kinds, "unique_meshes": meshes.size(), "format_unknown": unknown, "multimeshes": multimeshes.size(), "multimesh_instances": instances,
+		"bins": CENSUS_BIN_NAMES, "totals": totals, "top_groups": top,
+		"note": "estimated GL buffers of each kind by size bin (counts), with bytes and bytes in 16 KiB pages; materials: one uniform buffer each; LOD index buffers not counted"}
+
+
+static func _census_group() -> Dictionary:
+	var by_kind := {}
+	for kind: String in ["vertex", "attribute", "skin", "index", "multimesh"]:
+		var bins: Array[int] = []
+		bins.resize(CENSUS_BINS.size() + 1)
+		bins.fill(0)
+		by_kind[kind] = bins
+	return {"nodes": 0, "surfaces": 0, "materials": 0, "buffers": 0, "bytes": 0, "paged": 0, "by_kind": by_kind}
+
+
+static func _census_add_buffer(group: Dictionary, totals: Dictionary, kind: String, bytes: int) -> void:
+	var bin := CENSUS_BINS.size()
+	for index in CENSUS_BINS.size():
+		if bytes <= int(CENSUS_BINS[index]):
+			bin = index
+			break
+	var paged := int(ceil(bytes / 16384.0)) * 16384
+	for target: Dictionary in [group, totals]:
+		target.buffers += 1
+		target.bytes += bytes
+		target.paged += paged
+		target.by_kind[kind][bin] += 1
 
 
 ## An Options resolution id for a scale asked for ("0.5" -> "50"), "" if the menu
@@ -789,6 +861,11 @@ func _apply_switches() -> void:
 		get_viewport().msaa_3d = Viewport.MSAA_DISABLED
 	if _probes_off:
 		MERSEA_MODEL.reflections_off = true
+	if _detail_off:
+		# No street-detail layer kept: the loader frees them as it loads the world.
+		_main.world_root.street_detail_request = []
+	if _horizon_off:
+		_main.world_root.world_ready.connect(_drop_horizon, CONNECT_ONE_SHOT)
 	if _sound_off:
 		# No player started (every play goes through Sound.current), no bed stepped,
 		# and on the web no take registered with the browser as a sample.
@@ -801,9 +878,24 @@ func _apply_switches() -> void:
 			_main.sound.set("_takes", {})
 
 
+## horizon=0: what Yerba Buena Island, the Bay Bridge and the Bay Area horizon hold,
+## freed as the world is ready (their own nodes kept, empty), with what it held.
+func _drop_horizon(_report: Dictionary) -> void:
+	for path: String in ["ContextWorld/YerbaBuenaIsland", "ContextWorld/BayBridge", "ContextWorld/BayAreaHorizon"]:
+		var holder := _main.world_root.get_node_or_null(path)
+		if holder == null:
+			_horizon_dropped[path] = "missing"
+			continue
+		_horizon_dropped[path] = holder.find_children("*", "GeometryInstance3D", true, false).size()
+		for child: Node in holder.get_children():
+			child.free()
+
+
 ## The switches as the header and the start marker give them.
 func _switches() -> Dictionary:
 	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off, "sound_takes_dropped": _sound_none,
+		"street_detail": "off" if _detail_off else "on", "street_detail_layers": _main.world_root.get_street_detail_layers(),
+		"horizon": "off" if _horizon_off else "on", "horizon_dropped_geometry": _horizon_dropped,
 		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive", "laps": _laps,
 		"probes_present": _main.world_root.buildings.find_children("*", "ReflectionProbe", true, false).size() if _main.world_root.buildings != null else -1}
 
@@ -949,7 +1041,7 @@ func _begin_report() -> void:
 	header["reflection_probes"] = probes
 	header["reflection_atlas"] = {"size": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_size", 0),
 		"count": ProjectSettings.get_setting("rendering/reflections/reflection_atlas/reflection_count", 0)}
-	header["mesh_census"] = _mesh_census()
+	header["mesh_census"] = _mesh_census_data
 	if _web and _js != null:
 		# The page's clock at this trace's origin (both are performance.now() on the web).
 		var before := _now_us()
@@ -1090,6 +1182,7 @@ func _physics_process(delta: float) -> void:
 			# Play has started: on the web after the start prompt's tap.
 			if _main.is_play_ready() and player.is_processing_unhandled_input():
 				if _step_ticks == 60:
+					_mesh_census_data = _mesh_census()
 					_start_census()
 				elif _step_ticks > 60 and (_census_rids.size() >= _census_base.size() or _step_ticks > 120):
 					_finish_census()

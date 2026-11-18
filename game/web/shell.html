@@ -1002,7 +1002,7 @@ function tiTraceText(env, a) {
 	const inventories = [];
 	const inventory = (moment) => {
 		const began = now();
-		const inv = {moment, at: new Date().toISOString(), page_ms: round(now())};
+		const inv = {moment, at: new Date().toISOString(), page_ms: round(now()), search: location.search};
 		try {
 			const m = engineRef && engineRef.rtenv;
 			const wasmBuffer = memory ? memory.buffer : m && m.HEAPU8 ? m.HEAPU8.buffer : null;

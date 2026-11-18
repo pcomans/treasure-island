@@ -52,11 +52,14 @@ trace code.
 | `probes=0` | Takes Mersea's reflection probes out as the world is put together (`MerseaModel.reflections_off`). |
 | `sound=0` | Silences the game: no sample is registered with the browser, so no take is decoded into the WebAssembly heap or into a Web Audio buffer, and no player is started. The takes the sound bank loaded at startup (compressed Ogg Vorbis) stay loaded, and the engine's audio driver and its AudioContext still run, as in a silent build. |
 | `sound=none` | All `sound=0` does, and the loaded takes are dropped too (freed once nothing holds them), so the game holds no sound data, as a build without sounds. |
+| `detail=0` | Loads the world without its placed street-detail layers (vegetation, furniture, fences, clutter), through the world loader's own street-detail choice (as `--street-detail off`); the prebuilt world's layers are freed as it loads. The header's switches give the layers kept. |
+| `horizon=0` | Frees what Yerba Buena Island, the Bay Bridge and the Bay Area horizon hold as the world is ready (their own nodes kept, empty); the header gives how many drawing nodes each held. |
 | `msaa=0` | Turns MSAA off (the web's default is 2x). |
 | `profile_startup=1` | Gives the game's startup marks and readback (`window.__tiReadback`); the rig uses it. |
 
 Natively, the same options are `--trace-drive`, `--trace-laps=N`, `--trace-seconds=N`,
-`--trace-scale=S`, `--trace-route=hover|corner`, `--trace-probes=0`, `--trace-sound=0|none` and
+`--trace-scale=S`, `--trace-route=hover|corner`, `--trace-probes=0`, `--trace-sound=0|none`,
+`--trace-detail=0`, `--trace-horizon=0` and
 `--trace-msaa=0`, with `--trace-out=FILE --trace-quit`.
 
 For example, the corner alone without Mersea's probes at the phone's resolution:
@@ -152,14 +155,19 @@ deleted object's storage off, and a re-specified level or buffer replaces its ol
   ELEMENT_ARRAY_BUFFER, UNIFORM_BUFFER, other) and by usage hint, each with count, bytes and
   paged bytes.
 
-**Where the buffers come from (`drive_trace.gd`, header `mesh_census`).** At the trace's
-start: the drawing nodes by class, the unique meshes and their surfaces, how many surfaces
-have an index buffer, an attribute buffer (GLES3 keeps colour, UVs and custom data apart
-from the vertex buffer) or a skin buffer, a lower bound of the GL buffers that makes (a
-surface's LODs each add an index buffer, which the engine gives no cheap count of), the
-unique MultiMeshes (an instance buffer each) and their instances, and the 10 groups (the path
-below main, three names deep) with the most unique surfaces. Surfaces of meshes other than
-ArrayMesh are counted as of unknown format.
+**Where the buffers come from (`drive_trace.gd`, header `mesh_census`).** Taken in the
+frames before the records start. From Godot 4.7.2's Compatibility renderer
+(`drivers/gles3/storage/mesh_storage.cpp`, `material_storage.cpp`): a mesh surface makes a
+vertex buffer (lines 221-238), an attribute buffer for colours, UVs or custom data (243-247),
+a skin buffer for bones (250-254), an index buffer (266-269) and one index buffer per LOD
+(275-281); a MultiMesh makes one instance buffer of instances x 12 floats, 2 more with colours
+or custom data (`_multimesh_allocate_data`, 1590-1634); a material with uniforms makes one
+uniform buffer (`MaterialData::update_parameters_internal`, 1100-1119). The census estimates
+each such buffer's size (vertex, attribute and skin strides from `RenderingServer`, index
+size, instance count) and gives, per group (the path below main, three names deep, a mesh or
+material counted in the first group using it), the buffers of each kind by size, their bytes
+and bytes in 16 KiB pages, and the materials. LOD index buffers are not counted (no cheap
+count); surfaces of meshes other than ArrayMesh are counted as of unknown format.
 
 **Engine counters (`drive_trace.gd`, each frame).** Besides texture, buffer and video memory,
 draw calls, resources and nodes, the frame record has `static_b` and `static_max_b`
@@ -281,6 +289,9 @@ OUT=<out-dir> KILL_AT_S=45 BROWSER=webkit PROFILE=iphone PW_MODULE=<node_modules
   node tools/web_trace/drive.cjs
 ```
 
+- `FOOTPRINT_AT_PROMPT=1` instead stops at the start prompt and records the web process's
+  `footprint` and `vmmap -summary` (no sudo: Playwright's WebKit is not hardened) beside the
+  page's memory inventory, in `footprint.txt`, `vmmap.txt` and `footprint.json`.
 - There it kills the biggest web process of Playwright's WebKit, and only while that WebKit's
   browser is the one running from its folder.
 - Building on a Mac: set `GODOT_BIN`; `tools/build-web.sh` needs a `timeout` command on the
