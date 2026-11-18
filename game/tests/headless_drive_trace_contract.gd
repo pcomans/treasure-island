@@ -82,9 +82,21 @@ func _run() -> void:
 	if corner.is_empty() or corner[0] != Vector2(route_xz[first * 2], route_xz[first * 2 + 1]) or nearest > 5.0 or legs.is_empty() or int(legs[0][0]) != 0 or str(legs[0][1]) != "Bruton Street":
 		_fail("route=corner must start on Bruton Street and pass within 5 m of the Mersea corner, but it starts at %s, passes %.1f m from it, with stretches %s." % [corner[0] if not corner.is_empty() else null, nearest, legs])
 		return
+	# detail=0: both routes drive CAR_ROW (_start_drive), which must be a placed parked car
+	# of a layer detail=0 still loads, so the vehicles can make it live.
+	var car_row: String = constants["CAR_ROW"]
+	var kept_layers: Array = constants["DETAIL_OFF_LAYERS"]
+	var detail: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://generated/world/street_detail.json"))
+	var found: Dictionary = {}
+	for row: Variant in (detail as Dictionary).get("rows", []) if detail is Dictionary else []:
+		if row is Dictionary and str((row as Dictionary).get("id", "")).ends_with(car_row):
+			found = row
+	if found.is_empty() or str(found.get("kind")) != "parked_car" or str(found.get("status")) != "placed" or not kept_layers.has(str(found.get("layer"))):
+		_fail("With detail=0 both routes' car %s must be a placed parked car of a layer detail=0 loads (%s), but generated/world/street_detail.json has %s." % [car_row, kept_layers, {"layer": found.get("layer"), "kind": found.get("kind"), "status": found.get("status")} if not found.is_empty() else "no such row"])
+		return
 	trace.free()
 	main.free()
-	print("PASS: drive trace: a run without --trace-drive is not the trace; main.tscn then makes no DriveTrace, never loads its script and connects no frame or tree signal to it; the trace's own node, made before play, waits with no signal connected and no action held; the whole drive follows the whole route, route=corner the part round the Mersea corner")
+	print("PASS: drive trace: a run without --trace-drive is not the trace; main.tscn then makes no DriveTrace, never loads its script and connects no frame or tree signal to it; the trace's own node, made before play, waits with no signal connected and no action held; the whole drive follows the whole route, route=corner the part round the Mersea corner; with detail=0 both routes' car is a parked car of the layer it keeps")
 	quit(0)
 
 

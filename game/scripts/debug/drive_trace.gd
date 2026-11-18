@@ -35,8 +35,10 @@ extends Node
 ## game (no sample registered with the browser, so none decoded into a Web Audio
 ## buffer, no player started; the takes stay loaded, compressed); sound=none also drops
 ## the loaded takes, as in a build without sounds; detail=0 loads the world without its
-## placed street-detail layers (vegetation, furniture, fences, clutter: the world loader's
-## own street-detail choice, as --street-detail off); horizon=0 drops what Yerba Buena
+## placed street-detail layers (vegetation, furniture and fences through the world
+## loader's own street-detail choice; the clutter layer is loaded so the vehicles know the
+## parked car the route drives, then everything it draws is freed once play is ready, so
+## only the driven car is drawn); horizon=0 drops what Yerba Buena
 ## Island, the Bay Bridge and the Bay Area horizon hold as the world is ready; msaa=0 draws the
 ## world without MSAA (the web's default is 2x); route=hover leaves out the car: from
 ## the spawn straight to the walk, the run, the jetpack climb and hover, the drop;
@@ -75,6 +77,9 @@ const ROUTE_LEGS := [[0, "ferry plaza to Seven Seas"], [8, "Bruton Street"], [11
 ## (MERSEA_CORNER_XZ, about 490 m along), where the iPhone's page is killed.
 const CORNER_POINTS := [8, 16]
 const MERSEA_CORNER_XZ := Vector2(-289.0, 274.0)
+## detail=0 loads only this street-detail layer: its rows hold the parked car every route
+## drives (CAR_ROW), so the vehicles can make it live; what it draws is freed at play.
+const DETAIL_OFF_LAYERS: Array[String] = ["clutter"]
 ## The car driven: the forecourt lot's pearl-white sedan (its row id ends so).
 const CAR_ROW := "w1473253282_left_s0191"
 ## Speeds (m/s): the fastest on a straight, the slowest the bends ask for, the
@@ -214,6 +219,9 @@ var _sound_off := false
 var _sound_none := false
 ## detail=0 and horizon=0, and what horizon=0 dropped (nodes, by group).
 var _detail_off := false
+## detail=0: the clutter still to be emptied once play is ready, and what was kept.
+var _detail_strip_pending := false
+var _detail_kept := {}
 var _horizon_off := false
 var _horizon_dropped := {}
 var _msaa_off := false
@@ -862,8 +870,11 @@ func _apply_switches() -> void:
 	if _probes_off:
 		MERSEA_MODEL.reflections_off = true
 	if _detail_off:
-		# No street-detail layer kept: the loader frees them as it loads the world.
-		_main.world_root.street_detail_request = []
+		# Only the clutter layer kept as the world loads (the loader frees the others):
+		# the vehicles index its parked cars, the route's among them; what it draws
+		# goes once play is ready (_strip_clutter).
+		_main.world_root.street_detail_request = DETAIL_OFF_LAYERS.duplicate()
+		_detail_strip_pending = true
 	if _horizon_off:
 		_main.world_root.world_ready.connect(_drop_horizon, CONNECT_ONE_SHOT)
 	if _sound_off:
@@ -876,6 +887,29 @@ func _apply_switches() -> void:
 		if _sound_none:
 			# The takes the bank loaded, dropped: freed once nothing holds them.
 			_main.sound.set("_takes", {})
+
+
+## detail=0, once play is ready (the vehicles have indexed the clutter's rows): every
+## drawn or colliding piece of the clutter freed, its rows kept for the car the route
+## drives, which the vehicles make live as its own body.
+func _process(_delta: float) -> void:
+	if not _detail_strip_pending or not _main.is_play_ready():
+		return
+	_detail_strip_pending = false
+	var layer := _main.world_root.street_detail_layer("clutter") if "clutter" in _main.world_root.get_street_detail_layers() else null
+	var clutter := layer.get_node_or_null("GeneratedStreetClutter") if layer != null else null
+	var freed := {}
+	if clutter != null:
+		for child: Node in clutter.get_children():
+			freed[child.get_class()] = int(freed.get(child.get_class(), 0)) + 1
+			child.free()
+	var rows: Dictionary = _main.vehicles.get("_rows") if _main.vehicles != null and _main.vehicles.get("_rows") is Dictionary else {}
+	var car := ""
+	for id: Variant in rows:
+		if str(id).ends_with(CAR_ROW):
+			car = str(id)
+	_detail_kept = {"layers_loaded": _main.world_root.get_street_detail_layers(), "clutter_pieces_freed": freed, "vehicle_rows_kept": rows.size(), "route_car": car}
+	_event("trace", "detail=0: clutter freed %s, route car %s" % [JSON.stringify(freed), car if car != "" else "MISSING"], rows.size())
 
 
 ## horizon=0: what Yerba Buena Island, the Bay Bridge and the Bay Area horizon hold,
@@ -894,7 +928,7 @@ func _drop_horizon(_report: Dictionary) -> void:
 ## The switches as the header and the start marker give them.
 func _switches() -> Dictionary:
 	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off, "sound_takes_dropped": _sound_none,
-		"street_detail": "off" if _detail_off else "on", "street_detail_layers": _main.world_root.get_street_detail_layers(),
+		"street_detail": "off" if _detail_off else "on", "street_detail_layers": _main.world_root.get_street_detail_layers(), "detail_kept": _detail_kept,
 		"horizon": "off" if _horizon_off else "on", "horizon_dropped_geometry": _horizon_dropped,
 		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive", "laps": _laps,
 		"probes_present": _main.world_root.buildings.find_children("*", "ReflectionProbe", true, false).size() if _main.world_root.buildings != null else -1}
