@@ -393,10 +393,7 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 		if not inventory.ok: return false
 		var expected := PackedVector3Array()
 		var ground_faces := PackedVector3Array()
-		var meshes: Array[MeshInstance3D] = []
-		for child: Node in family.get_children():
-			if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
-		meshes.append_array(inventory.ground_meshes)
+		var meshes := _ground_proof_meshes(family, inventory)
 		for mesh: MeshInstance3D in meshes:
 			if not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
 			var retained: bool = mesh in inventory.ground_meshes
@@ -437,6 +434,27 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 	if land_body == null or land_body.get_parent() == null or land_body.get_parent().get_meta("feature_kind", "") != "land_ground" or (land_body.collision_layer & 1) == 0: return false
 	return ground_face_contact(hit.get("position", Vector3.INF), hit.get("normal", Vector3.ZERO), ground_faces,
 		land.get("position", Vector3.INF), land.get("normal", Vector3.ZERO), max_offset, tolerance, floor_cos)
+
+
+# The meshes retained_ground_contact compares, in order, with a family's support
+# collider: its support meshes, then its retained ground visuals; none when the family
+# has no retained ground (retained_housing_inventory fails), as it then compares
+# nothing. The bake's building merge (tools/merge_baked_buildings.gd) leaves these as
+# authored, by this same rule.
+static func retained_ground_meshes(scene: Node, family: Node3D) -> Array[MeshInstance3D]:
+	var inventory := retained_housing_inventory(scene, family, str(family.get_meta("source_key", "")), false)
+	if not inventory.ok:
+		var none: Array[MeshInstance3D] = []
+		return none
+	return _ground_proof_meshes(family, inventory)
+
+
+static func _ground_proof_meshes(family: Node3D, inventory: Dictionary) -> Array[MeshInstance3D]:
+	var meshes: Array[MeshInstance3D] = []
+	for child: Node in family.get_children():
+		if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
+	meshes.append_array(inventory.ground_meshes)
+	return meshes
 
 
 static func _ground_proof_state(node: Node) -> Array:

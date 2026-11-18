@@ -30,13 +30,21 @@ extends RefCounted
 ## - meshes another node or a MultiMesh also draws, nodes with children or a script,
 ##   surface overrides, blend shapes, skinning, compressed vertex formats, and surfaces
 ##   with LODs (a merged surface would have none);
-## - housing support and retained ground meshes: StudyGeometry.retained_ground_contact
-##   compares them with their collider face by face, in order.
+## - the meshes of a housing family's ground proof (StudyGeometry.retained_ground_meshes:
+##   where a family keeps the production ground, its support meshes and that ground):
+##   StudyGeometry.retained_ground_contact compares them with their collider face by
+##   face, in order. Other families' support and ground meshes join like any part. The
+##   merge fails if, after it, any family's proof would compare other meshes.
 ##
-## The bake then frees what the housing family installer replaced (prune_superseded):
-## the meshes it hid and the bodies it switched off, where nothing else hangs on them.
+## Before it the bake frees what the housing family installer replaced
+## (prune_superseded): the meshes it hid and the bodies it switched off, where nothing
+## else hangs on them.
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
+const STUDY_GEOMETRY := preload("res://game/tests/support/building_study_geometry.gd")
+## The scope housing_family_live_attachment.gd gives an installed family, the only one
+## StudyGeometry.retained_ground_contact compares.
+const FAMILY_SCOPE := "approved_shared_family_normal_play"
 ## Metadata that says which building and role a mesh belongs to. A merged mesh carries
 ## its sources' values; meshes that differ in any of them don't merge.
 const IDENTITY_META: Array[StringName] = [&"source_keys", &"source_key", &"derived_object_key", &"family_role", &"physical_role", &"mersea_role", &"visual_only"]
@@ -116,6 +124,14 @@ static func merge(buildings: Node3D) -> Dictionary:
 	var material_keys := {}
 	var materials := {}
 	var counts := {"meshes_before": 0, "surfaces_before": 0, "meshes_kept": 0, "surfaces_kept": 0, "surfaces_with_lods": 0, "taken_by_colour": 0, "taken_by_material": 0}
+	# The meshes the housing families' ground proofs compare stay as they are.
+	var proofs := _ground_proofs(buildings)
+	var proof_meshes := {}
+	for meshes: Array in proofs.values():
+		for mesh: MeshInstance3D in meshes:
+			proof_meshes[mesh] = true
+	counts["ground_proof_families"] = proofs.size()
+	counts["ground_proof_meshes"] = proof_meshes.size()
 	# Each drawn node with the surfaces it gives up by colour: [node, [surface, ...]].
 	var visited: Array = []
 	for node: MeshInstance3D in leaves:
@@ -128,7 +144,7 @@ static func merge(buildings: Node3D) -> Dictionary:
 		var anchor := _anchor(node, buildings)
 		var to_anchor := _relative_transform(node, anchor)
 		var taken: Array[int] = []
-		var may_merge := _may_merge(node, uses, anchor)
+		var may_merge := _may_merge(node, uses, anchor) and not proof_meshes.has(node)
 		var rigid := _rigid(to_anchor)
 		for surface in surface_count:
 			# The surface as the renderer holds it.
@@ -198,6 +214,9 @@ static func merge(buildings: Node3D) -> Dictionary:
 	counts["taken_vertices"] = int(batches.taken_vertices) + int(same_batches.taken_vertices)
 	var problems: PackedStringArray = batches.problems
 	problems.append_array(same_batches.problems)
+	# A merged mesh must not bring a family into a ground proof, or change what one compares.
+	if _ground_proofs(buildings) != proofs:
+		problems.append("the housing families' ground proofs compare other meshes after the merge than before it")
 	counts["problems"] = problems
 	return counts
 
@@ -272,7 +291,7 @@ static func _relative_transform(node: Node3D, anchor: Node3D) -> Transform3D:
 static func _may_merge(node: MeshInstance3D, uses: Dictionary, anchor: Node3D) -> bool:
 	if int(uses[node.mesh]) != 1 or node.get_child_count() != 0 or node.get_script() != null or (node.layers & ~PLAIN_LAYERS) != 0:
 		return false
-	if _in_contact_proof(node) or not (node.mesh is ArrayMesh or node.mesh.get_surface_count() == 1):
+	if not (node.mesh is ArrayMesh or node.mesh.get_surface_count() == 1):
 		return false
 	if node.mesh is ArrayMesh and ((node.mesh as ArrayMesh).get_blend_shape_count() != 0 or (node.mesh as ArrayMesh).custom_aabb != AABB()):
 		return false
@@ -299,10 +318,18 @@ static func _rigid(to_anchor: Transform3D) -> bool:
 	return basis.determinant() > 0.0 and basis.is_equal_approx(basis.orthonormalized())
 
 
-static func _in_contact_proof(node: MeshInstance3D) -> bool:
-	if str(node.get_meta("physical_role", "")) == "ground_visual":
-		return true
-	return node.get_parent().has_meta("scope") and str(node.get_meta("family_role", "support")) == "support"
+## Each installed housing family that has a ground proof, with the meshes it compares
+## in order (StudyGeometry.retained_ground_meshes, looked up in the whole tree as the
+## proof looks them up in the game's).
+static func _ground_proofs(buildings: Node3D) -> Dictionary:
+	var scene: Node = buildings.get_tree().root if buildings.is_inside_tree() else buildings
+	var proofs := {}
+	for family: Node3D in buildings.find_children("*", "Node3D", true, false):
+		if str(family.get_meta("scope", "")) == FAMILY_SCOPE:
+			var meshes := STUDY_GEOMETRY.retained_ground_meshes(scene, family)
+			if not meshes.is_empty():
+				proofs[family] = meshes
+	return proofs
 
 
 static func _identity(node: MeshInstance3D) -> Dictionary:

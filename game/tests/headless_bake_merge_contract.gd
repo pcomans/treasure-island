@@ -7,6 +7,7 @@ extends SceneTree
 ## housing family installer switched off.
 
 const Merge := preload("res://tools/merge_baked_buildings.gd")
+const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
 ## The same tool's source, which _check_merge_counts_drop compiles with a fault. (Merge
 ## is the script's class here, so Merge.resource_path does not parse.)
 const MERGE_SOURCE := "res://tools/merge_baked_buildings.gd"
@@ -68,17 +69,19 @@ func _run() -> void:
 	var reflective := _box(record, _material(Color.RED), Transform3D.IDENTITY)
 	reflective.layers = 4
 	kept.append(reflective)
+	# A family with no ground proof (w1 has no roof record, so
+	# StudyGeometry.retained_ground_meshes finds none): its support meshes and the
+	# record's ground visual join by colour like any part (_check_ground_proof keeps a
+	# proof's own).
 	var ground_visual := _box(record, _material(Color.RED), Transform3D.IDENTITY)
 	ground_visual.set_meta("physical_role", "ground_visual")
-	kept.append(ground_visual)
 	var family := Node3D.new()
 	family.set_meta("scope", "approved_shared_family_normal_play")
 	family.set_meta("source_key", "w1")
 	record.add_child(family)
-	kept.append(_box(family, _material(Color.RED), Transform3D.IDENTITY))
-	var tagged_support := _box(family, _material(Color.RED), Transform3D.IDENTITY)
+	var untagged_support := _box(family, _material(Color.RED), Transform3D.IDENTITY)
+	var tagged_support := _box(family, _material(Color(0.2, 0.3, 0.9)), Transform3D.IDENTITY)
 	tagged_support.set_meta("family_role", "support")
-	kept.append(tagged_support)
 	var family_wall := _box(family, _material(Color.GREEN), Transform3D.IDENTITY)
 	family_wall.set_meta("family_role", "wall")
 	var kept_meshes: Array[Mesh] = []
@@ -148,6 +151,7 @@ func _run() -> void:
 	_check_prune()
 	_check_same_material()
 	_check_surface_limit()
+	_check_ground_proof()
 
 	check(not is_instance_valid(red) and not is_instance_valid(blue), "Parts that merged must leave the tree")
 	for index in kept.size():
@@ -184,8 +188,10 @@ func _run() -> void:
 		var normal := (wall.global_basis * (arrays[Mesh.ARRAY_NORMAL] as PackedVector3Array)[0]).normalized()
 		check(normal.distance_to(red_normal) < 0.001, "Normals must follow the part's rotation: %s against %s" % [normal, red_normal])
 	check(_close(_world_triangles(roof_batch, 0), expected["roof"]), "A roof's triangles must not move")
-	var family_batch := _batch(family, "")
-	check(family_batch != null and family_batch.get_meta("family_role", "") == "wall", "A family wall must merge under its family and keep its role")
+	check(_family_batch(family, "wall") != null, "A family wall must merge under its family and keep its role")
+	check(not is_instance_valid(untagged_support) and not is_instance_valid(tagged_support) and _family_batch(family, "support") != null and _family_batch(family, "") != null, "Support meshes of a family with no ground proof must join by colour under the family, keeping their role")
+	check(not is_instance_valid(ground_visual) and _batch(record, "ground_visual") != null, "A ground visual outside any ground proof must join by colour, keeping its role")
+	check(int(report.get("ground_proof_families", -1)) == 0, "A family with no roof record has no ground proof: %s" % report.get("ground_proof_families"))
 	_finish()
 
 
@@ -467,10 +473,56 @@ func _check_surface_limit() -> void:
 	site.free()
 
 
+## A housing family that keeps the production ground (a roof record with its roof, a
+## ground visual beside the family): StudyGeometry.retained_ground_contact compares its
+## support meshes and that ground with their collider in order, so the merge leaves
+## exactly those (StudyGeometry.retained_ground_meshes) as they are, though their plain
+## materials would join by colour, and they are still what the proof compares after it.
+func _check_ground_proof() -> void:
+	var site := Node3D.new()
+	root.add_child(site)
+	var top := Node3D.new()
+	site.add_child(top)
+	var wall := Node3D.new()
+	wall.set_meta("source_keys", ["w5"])
+	wall.set_meta("derived_object_key", "building:w5:wall")
+	top.add_child(wall)
+	var family := Node3D.new()
+	family.set_meta("scope", "approved_shared_family_normal_play")
+	family.set_meta("source_key", "w5")
+	family.set_meta("build_valid", true)
+	wall.add_child(family)
+	var steps := _box(family, _material(Color(0.5, 0.4, 0.3)), Transform3D.IDENTITY)
+	var porch := _box(family, _material(Color(0.3, 0.4, 0.5)), Transform3D(Basis.IDENTITY, Vector3(0, 0, 4)))
+	porch.set_meta("family_role", "support")
+	var ground := _box(wall, _material(Color(0.4, 0.5, 0.4)), Transform3D(Basis.IDENTITY, Vector3(5, 0, 0)))
+	for key: String in ["source_keys", "derived_object_key"]:
+		ground.set_meta(key, wall.get_meta(key))
+	ground.set_meta("physical_role", "ground_visual")
+	var roof_owner := Node3D.new()
+	roof_owner.set_meta("source_keys", ["w5"])
+	roof_owner.set_meta("derived_object_key", "building:w5:roof")
+	top.add_child(roof_owner)
+	var roof := _box(roof_owner, _material(Color(0.3, 0.3, 0.3)), Transform3D(Basis.IDENTITY, Vector3(0, 6, 0)))
+	for key: String in ["source_keys", "derived_object_key"]:
+		roof.set_meta(key, roof_owner.get_meta(key))
+	roof.set_meta("physical_role", "roof")
+	var proof := StudyGeometry.retained_ground_meshes(root, family)
+	check(proof == [steps, porch, ground], "The fixture must have a ground proof of its support meshes and ground, in order: %s" % [proof])
+	var meshes := [steps.mesh, porch.mesh, ground.mesh]
+	var report := Merge.merge(site)
+	check((report.problems as PackedStringArray).is_empty(), "A merge beside a ground proof must report no problems: %s" % report.problems)
+	check(int(report.get("ground_proof_families", 0)) == 1 and int(report.get("ground_proof_meshes", 0)) == 3, "The merge must find the one proof and its three meshes: %s" % report)
+	check(is_instance_valid(steps) and is_instance_valid(porch) and is_instance_valid(ground) and [steps.mesh, porch.mesh, ground.mesh] == meshes, "A ground proof's meshes must stay as authored")
+	check(StudyGeometry.retained_ground_meshes(root, family) == proof, "The proof must compare the same meshes after the merge")
+	check(not is_instance_valid(roof) and _batch(roof_owner, "roof") != null, "The kept roof must still join by colour under its record, keeping its role")
+	site.free()
+
+
 func _finish() -> void:
 	buildings.free()
 	if failures.is_empty():
-		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
+		print("PASS: the bake's building merge keeps triangles, colours and separate surfaces, and fails when a part it took never reaches a batch, merge() itself included; surfaces of one material (or an equal copy) join under one transform with every attribute as it was, while other materials, transforms, web distances, shaders that sort, blend, animate or read per-instance values, transparency and surfaces with LODs stay apart; merged surfaces stay within 16-bit indices; a housing family's ground proof keeps its meshes as authored while other families' support and ground meshes join by colour; its prune frees only inert superseded nodes and fails when fewer bodies go than the installer switched off")
 		quit(0)
 		return
 	for message in failures:
@@ -533,6 +585,14 @@ func _indexed(arrays: Array) -> Array:
 	var copy := arrays.duplicate()
 	copy[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2])
 	return copy
+
+
+## The batch directly under a family holding the given family role ("" for none).
+func _family_batch(family: Node3D, role: String) -> MeshInstance3D:
+	for child: Node in family.get_children():
+		if child.has_meta("baked_merge") and str(child.get_meta("family_role", "")) == role:
+			return child as MeshInstance3D
+	return null
 
 
 ## The batch directly under parent holding the given physical role ("" for none).
