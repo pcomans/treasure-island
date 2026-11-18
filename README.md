@@ -541,9 +541,11 @@ It serves the build on loopback and runs the drive trace (`?trace=drive`: a driv
 round the island, the foot and jetpack legs, then each effect drawn only in play) in
 WebKit as an iPhone and in Chrome as a desktop, about 10 minutes each, and fails with
 the list of programs compiled after loading (`programs.txt` beside each run's records).
-A pass writes `build/shader-proof/COMMIT.pass` for the commit the build names, and
-`tools/deploy-web.sh` stops without that receipt for the commit it deploys (a dry run
-only warns).
+A pass writes `build/shader-proof/COMMIT.pass`, COMMIT the checkout's full HEAD, when
+the build is that commit's: run the proof in the checkout that deploys.
+`tools/deploy-web.sh` looks for that receipt before it builds and stops without one;
+a receipt for the latest commit that changed more than documentation counts (a dry
+run only warns).
 
 Browser performance and pointer lock need checking on the playing machine.
 The development container's Chrome 154 on headless Weston has a reproducible

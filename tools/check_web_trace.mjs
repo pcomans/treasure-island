@@ -96,6 +96,12 @@ function browser(search) {
   for (const name of ['TI_TRACE_FRAME', 'TI_TRACE_CAUSES', 'tiTraceFrames', 'tiTraceAnalyze', 'tiTraceText']) {
     if (!added.includes(name) && vm.runInContext(`typeof ${name}`, context) !== 'undefined') added.push(name);
   }
+  // A top-level let, const or class is a global name no property shows: without the
+  // trace (where the script returns at once) a second run in the same context finds it
+  // declared already.
+  if (!search.includes('trace=drive')) {
+    try { vm.runInContext(script, context); } catch (e) { if (/already been declared/.test(String(e))) added.push('a top-level let, const or class (' + String(e.message) + ')'); }
+  }
   const exports = win.__tiTraceLib || {};
   return {exports, added, used, win, gl, audio, memoryProto, wasm, originals, frames, intervals, storage,
     tick: (ms) => { clock += ms; const due = frames.splice(0); for (const cb of due) cb(clock); }, advance: (ms) => { clock += ms; }, clock: () => clock};
@@ -116,7 +122,7 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
 }
 
 // The drive trace: wrappers that only time, a frame loop, and the analysis.
-{
+try {
   const b = browser('?trace=drive');
   const {tiTraceText} = b.exports;
   check(typeof b.win.__tiTrace === 'object', 'with ?trace=drive the page must have window.__tiTrace');
@@ -161,6 +167,8 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   check(/Long frames \(33 ms or more\): 3/.test(text) && /shader compile/.test(text), 'the results text must give the long frames and their causes');
   const kept = JSON.parse(b.storage.data['ti-trace:meta'] || 'null');
   check(kept && kept.status === 'done' && b.storage.data['ti-trace:text'], 'the results must be kept on the device when the drive ends');
+} catch (e) {
+  check(false, `with ?trace=drive the trace's page side failed: ${String(e).slice(0, 300)}`);
 }
 
 if (failures.length) {

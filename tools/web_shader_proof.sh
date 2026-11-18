@@ -20,7 +20,8 @@
 # complete). Nothing is sent anywhere: the trace keeps its records in the page, and
 # the rig reads them there. Each session takes about 10 minutes.
 #
-# A pass writes build/shader-proof/COMMIT8.pass, which tools/deploy-web.sh requires.
+# A pass writes build/shader-proof/COMMIT.pass (COMMIT this checkout's full HEAD, which
+# the export must be the build of), which tools/deploy-web.sh requires.
 # Run it in an engine slot, like any other GPU work (tools/check-web-live.sh).
 # Needs: Playwright 1.65.1 installed with npm's global root (PW_MODULE overrides), its
 # WebKit build, and Chrome for Testing (agent-browser's, from .devcontainer/
@@ -79,14 +80,16 @@ fi
 if [ "${failed}" -ne 0 ]; then
   exit 1
 fi
-echo "PASS: no shader program compiled after loading, in WebKit (phone, 3x) or Chrome (desktop): ${out}"
-# The receipt tools/deploy-web.sh asks for: the commit the export names (its files'
-# treasure-island-COMMIT8 prefix), kept outside build/web, which every build clears.
-commit="$(ls "${export_dir}" | sed -n 's/^treasure-island-\([0-9a-f]\{8\}\)\.js$/\1/p' | head -1)"
-if [ -n "${commit}" ]; then
-  mkdir -p "${root}/build/shader-proof"
-  printf 'PASS %s commit %s, %s\n' "$(date -u +%FT%TZ)" "${commit}" "${out}" > "${root}/build/shader-proof/${commit}.pass"
-  echo "RECEIPT: build/shader-proof/${commit}.pass"
-else
-  echo "NOTE: ${export_dir} names no commit (treasure-island-COMMIT8.js), so no receipt for tools/deploy-web.sh"
+# The receipt tools/deploy-web.sh asks for, named by this checkout's full HEAD, written
+# only when the export is that commit's build (its files' treasure-island-COMMIT
+# prefix, however long, starts HEAD): the proof and the deploy run in one checkout.
+named="$(ls "${export_dir}" | sed -n 's/^treasure-island-\([0-9a-f]\{7,40\}\)\.js$/\1/p' | head -1)"
+head="$(git -C "${root}" rev-parse HEAD)"
+if [ -z "${named}" ] || [ "${head#"${named}"}" = "${head}" ]; then
+  echo "FAIL: no program compiled after loading, but no receipt: the export names commit '${named:-none}', not this checkout's HEAD ${head:0:12} (build it here and prove that): ${out}"
+  exit 1
 fi
+mkdir -p "${root}/build/shader-proof"
+printf 'PASS %s commit %s, %s\n' "$(date -u +%FT%TZ)" "${head}" "${out}" > "${root}/build/shader-proof/${head}.pass"
+echo "PASS: no shader program compiled after loading, in WebKit (phone, 3x) or Chrome (desktop): ${out}"
+echo "RECEIPT: build/shader-proof/${head}.pass"

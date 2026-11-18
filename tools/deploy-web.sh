@@ -30,8 +30,10 @@
 # CHANGES lines beside it show the build's entry in CHANGELOG.md, the players'
 # changelog (tools/changelog.py latest); they never stop a deploy.
 #
-# Shader proof: the deploy stops unless tools/web_shader_proof.sh has passed for
-# this commit's web build (its receipt, build/shader-proof/COMMIT.pass; below).
+# Shader proof: the deploy stops, before building, unless tools/web_shader_proof.sh
+# has passed in this checkout for this commit's web build, or for the last commit
+# before it that changed more than documentation (its receipt,
+# build/shader-proof/COMMIT.pass; below).
 set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 cd "${root}"
@@ -173,6 +175,32 @@ if [ "${head}" != "${main}" ]; then
   echo "NOTE: --any-commit: HEAD ${head:0:8} is not origin/main ${main:0:8}; dry run only"
 fi
 build="$(tools/build-number "${head}")"
+
+# The shader proof must have passed for this commit's web build, checked before
+# anything is built: once loading has ended the build compiles no shader program
+# (tools/web_shader_proof.sh in this same checkout, WebKit and Chrome on this
+# machine's GPU, about 20 minutes; it cannot run in CI as set up). A pass writes
+# build/shader-proof/COMMIT.pass, COMMIT the full hash of the commit it proved. A
+# receipt for an earlier commit counts when every change since it is documentation
+# (tools/docs-only): the game it proved is the game this deploy builds. A dry run
+# only says whether there is one.
+proof=""
+for commit in $(git rev-list --first-parent --max-count=200 "${head}"); do
+  if [ -f "build/shader-proof/${commit}.pass" ]; then
+    if [ "${commit}" = "${head}" ] || git diff --name-only "${commit}" "${head}" | tools/docs-only > /dev/null; then
+      proof="build/shader-proof/${commit}.pass"
+    fi
+    break
+  fi
+done
+if [ -n "${proof}" ]; then
+  echo "SHADER PROOF: $(head -1 "${proof}")"
+elif [ "${dry_run}" = true ]; then
+  echo "WARNING: no shader proof for ${head:0:8} or a commit it differs from only by documentation; a real deploy stops here"
+else
+  echo "FAIL: no shader proof for ${head:0:8}: in this checkout, build it (tools/build-web.sh) and run tools/web_shader_proof.sh build/web OUT_DIR first; nothing was built or uploaded" >&2
+  exit 1
+fi
 changes="$(python3 -I tools/changelog.py latest 2>/dev/null)" \
   || changes="CHANGES: none: CHANGELOG.md does not read (tools/changelog.py check says why)"
 
@@ -230,22 +258,6 @@ refuse_hidden_files() {
   fi
 }
 refuse_hidden_files || exit 1
-
-# The shader proof must have passed for this commit's web build: once loading has
-# ended the build compiles no shader program (tools/web_shader_proof.sh, WebKit and
-# Chrome on this machine's GPU, about 20 minutes; it cannot run in CI as set up). A
-# passing run writes build/shader-proof/COMMIT.pass for the commit the export names;
-# the deploy, which builds the same commit again, stops without that receipt. A dry
-# run only says whether it is there.
-proof="build/shader-proof/${head:0:8}.pass"
-if [ -f "${proof}" ]; then
-  echo "SHADER PROOF: $(head -1 "${proof}")"
-elif [ "${dry_run}" = true ]; then
-  echo "WARNING: no shader proof for ${head:0:8} (${proof}); a real deploy stops here"
-else
-  echo "FAIL: no shader proof for ${head:0:8}: run tools/web_shader_proof.sh build/web OUT_DIR on this commit's build first (it writes ${proof})" >&2
-  exit 1
-fi
 
 # The summary's lines: the warning again for a silent deploy, then SOUNDS and
 # the CHANGES lines.

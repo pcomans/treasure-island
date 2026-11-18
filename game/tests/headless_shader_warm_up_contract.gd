@@ -95,8 +95,10 @@ func _run() -> void:
 	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
 	main.capture_mouse_on_ready = false
 	main.use_saved_settings = false
-	# The shaders a group at a time, as the web build compiles them.
+	# The shaders a group at a time, as the web build compiles them; and, as on the web,
+	# play starts paused behind the start prompt (the chest as it shows there is checked).
 	main.compile_by_group = true
+	main.start_prompt = true
 	var world := main.get_node("WorldRoot") as WorldLoader
 	var load_failures: Array[String] = []
 	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
@@ -112,6 +114,9 @@ func _run() -> void:
 		await process_frame
 	if not load_failures.is_empty() or not main.is_play_ready():
 		_fail("The island did not reach play: %s" % [load_failures])
+		return
+	var chest := _check_chest_at_prompt(main)
+	if chest.is_empty():
 		return
 	if int(seen.lines) == 0 or (seen.proxies as Array).is_empty():
 		_fail("Loading must put up the warm-up's line(s) (\"%s\") and its proxies; lines %d, proxies %d." % [WARM_UP_LINE, seen.lines, (seen.proxies as Array).size()])
@@ -130,11 +135,14 @@ func _run() -> void:
 	var left := await _check_nothing_left(main)
 	if left.is_empty():
 		return
+	# The start prompt's tap: play goes on, for the runtime effects.
+	main._resume_game()
+	await process_frame
 	var effects := await _check_effects(main, seen)
 	if effects.is_empty():
 		return
 	main.free()
-	print("PASS: shader warm-up: %s; %s; %s; %s; %s" % [scan, coverage, shared, left, effects])
+	print("PASS: shader warm-up: %s; %s; %s; %s; %s; %s" % [scan, coverage, shared, chest, left, effects])
 	quit(0)
 
 
@@ -448,16 +456,23 @@ func _check_nothing_left(main: GameMain) -> String:
 	if not left.is_empty() or not steps_with_nodes.is_empty() or camera != main.player.get_camera():
 		_fail("Once play has started nothing of the warm-up may be left: nodes %s, steps with nodes %d, current camera %s." % [left.map(func(node: Node) -> String: return str(node.get_path())), steps_with_nodes.size(), camera.get_path() if camera != null else "none"])
 		return ""
-	# The chest as play starts: at rest with its lid shut (within 0.6 deg of rest: a
-	# breath lifts it up to 2 deg, which showed the gold at the web's start prompt),
-	# however many frames the warm-up added to loading (it holds its rest pose until
-	# play starts).
+	return "nothing of it left in play (the player's camera current)"
+
+
+## The chest as the start prompt shows it, play paused as loading ends (as on the
+## web): at rest with its lid shut, however many frames the warm-up added to loading
+## (it holds its rest pose until play starts; a breath lifts the lid up to 2 deg,
+## which showed the gold at the web's prompt). Returns a summary, or "".
+func _check_chest_at_prompt(main: GameMain) -> String:
 	var avatars := main.player.find_children("*", "ChestAvatar", true, false)
 	var pose: Dictionary = (avatars[0] as ChestAvatar).describe() if not avatars.is_empty() else {}
-	if pose.is_empty() or absf(float(pose.squash)) > 0.002 or absf(float(pose.lid_deg) - rad_to_deg(ChestAvatar.LID_REST)) > 0.6 or bool(pose.airborne):
-		_fail("As play starts the chest must stand at rest with its lid shut (squash 0, lid %.1f deg, on the ground), whatever loading's length: %s." % [rad_to_deg(ChestAvatar.LID_REST), pose])
+	if not paused or main.hud.start_prompt_text().is_empty():
+		_fail("Play must start paused behind the start prompt (main.start_prompt), as on the web: paused %s, prompt \"%s\"." % [paused, main.hud.start_prompt_text()])
 		return ""
-	return "nothing of it left in play (the player's camera current; the chest at rest, its lid shut)"
+	if pose.is_empty() or absf(float(pose.squash)) > 0.002 or absf(float(pose.lid_deg) - rad_to_deg(ChestAvatar.LID_REST)) > 0.5 or bool(pose.airborne):
+		_fail("At the start prompt the chest must stand at rest with its lid shut (squash 0, lid %.2f deg, on the ground), whatever loading's length: %s." % [rad_to_deg(ChestAvatar.LID_REST), pose])
+		return ""
+	return "the chest at rest at the start prompt (lid %.2f deg)" % float(pose.lid_deg)
 
 
 ## What the runtime effects draw after play has started uses only shaders the warm-up
