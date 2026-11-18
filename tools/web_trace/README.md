@@ -50,12 +50,13 @@ trace code.
 | `route=hover` | Leaves out the car: from the spawn, walk, run, climb about 74 m on the jetpack, hover, drop. |
 | `route=corner` | After the 5 s baseline, puts the car straight on Bruton Street (route point 8), drives it round the Avenue of the Palms' corner with Johnson Street by Mersea (about 35 s in, where the iPhone's page dies) to Johnson Street's bend (point 16), gets out and ends: about a minute. It skips the walk to the car and the ferry plaza, so less of the island has been drawn by the corner than on the whole drive. |
 | `probes=0` | Takes Mersea's reflection probes out as the world is put together (`MerseaModel.reflections_off`). |
-| `sound=0` | Silences the game: no sample is registered with the browser and no player is started. |
+| `sound=0` | Silences the game: no sample is registered with the browser, so no take is decoded into the WebAssembly heap or into a Web Audio buffer, and no player is started. The takes the sound bank loaded at startup (compressed Ogg Vorbis) stay loaded, and the engine's audio driver and its AudioContext still run, as in a silent build. |
+| `sound=none` | All `sound=0` does, and the loaded takes are dropped too (freed once nothing holds them), so the game holds no sound data, as a build without sounds. |
 | `msaa=0` | Turns MSAA off (the web's default is 2x). |
 | `profile_startup=1` | Gives the game's startup marks and readback (`window.__tiReadback`); the rig uses it. |
 
 Natively, the same options are `--trace-drive`, `--trace-laps=N`, `--trace-seconds=N`,
-`--trace-scale=S`, `--trace-route=hover|corner`, `--trace-probes=0`, `--trace-sound=0` and
+`--trace-scale=S`, `--trace-route=hover|corner`, `--trace-probes=0`, `--trace-sound=0|none` and
 `--trace-msaa=0`, with `--trace-out=FILE --trace-quit`.
 
 For example, the corner alone without Mersea's probes at the phone's resolution:
@@ -104,7 +105,9 @@ IndexedDB database `ti-trace`.
 - `audio` holds the last 40 sounds started, each saved the moment it starts: the page's buffer
   starts at once, the game's "sound" markers once a batch.
 - The game's "view" and "probe" markers are kept in `page_events` too, once a batch.
-- The next load with `?trace=drive` finds `meta` still "running". It shows the panel "A previous
+- `inventory` holds the memory inventories; `after_end` the memory each second after a run's end.
+- The next load with `?trace=drive` finds `meta` still "running" (or "done", for a run killed
+  after its end). It shows the panel "A previous
   drive trace did not finish" with those records. On that panel, the first tap on "Download full
   log" reads the killed run's chunks from IndexedDB, and the second tap saves the file.
 
@@ -155,10 +158,61 @@ the camera's planes, as the engine culls it, with its update mode). Whether it w
 drawn shows in the page's cube-map face counts. The header lists every probe and the
 reflection atlas's settings.
 
-**Sounds.** The game marks every sound it starts (`sound` markers: its id, play or loop start,
+**Sounds.** Where the sound memory goes: at load the bank loads every take compressed
+(`sound.gd` `_read_manifest`); behind the loading screen `prepare_for_play` registers each
+with the browser (`AudioServer.register_stream_as_sample`), which decodes it into the
+WebAssembly heap as float samples and copies them into a stereo Web Audio buffer at the
+context's rate (`godot_audio_sample_register_stream`, `GodotAudio.ctx.createBuffer`). The
+build's patch makes every play share that buffer. The page counts the buffers made, their
+bytes (channels x frames x 4) and the live ones (made and not yet collected, by a
+FinalizationRegistry, so a released buffer counts until collected), wraps
+`decodeAudioData` (Godot does not use it), records each audio worklet node made with its
+options, and keeps the context's resume as `audio` page events.
+
+The game marks every sound it starts (`sound` markers: its id, play or loop start,
 its takes' lengths). The page keeps every Web Audio buffer started (`audio`: its length,
 channels, rate, decoded bytes, whether it loops and whether it is that buffer's first start),
 and counts the sound buffers made and their bytes.
+
+**The memory inventory (`inventory`, kept at once).** At the start prompt (the game's
+`PLAY_READY` line), at the trace's start and at its end: the WebAssembly memory, the files the
+page fetched of 1 MiB or more, each file the loader wrote into the engine's file system (with
+whether it is the page's own pack buffer and whether that buffer is still alive, by a
+WeakRef), the runtime module's own buffers of 1 MiB or more, the GL totals, the sound buffers,
+contexts and worklet nodes, and the trace's own records (counts and a rough size). The
+loader's script hands the trace its `Engine` (`window.__tiTrace.loader`, only with the trace).
+Emscripten's `FS` is not exported by this engine build, so the file system cannot be walked:
+what the loader wrote into it is what is known.
+
+What the loader does with the pack (the build's engine script, `build/web/treasure-island-*.js`):
+- The page reads the pack into one buffer (`tiBuildFiles`) and hands it to
+  `engine.preloadFile(buffer, pack)`; the Preloader keeps it in `preloadedFiles`
+  (`this.preload`, about line 217 of the export).
+- `start` copies every preloaded file into the file system with `copyToFS` and then empties
+  `preloadedFiles` (`preloader.preloadedFiles.length = 0; // Clear memory`, about line 797).
+- `GodotFS.copy_to_fs` writes it with `FS.writeFile(path, new Uint8Array(buffer), {canOwn: true})`
+  (the build's patch; Godot 4.7.2 copies it without `canOwn`), so MEMFS keeps the page's buffer
+  itself as the file's contents: one copy of the pack, about 159 MB.
+- Nothing ever removes the pack from MEMFS: the engine reads `res://` from it for the life of the
+  page. So the pack stays in the page's memory, outside the WebAssembly heap, for good.
+- The WebAssembly file (about 40 MB) comes as a Response that the loader clones for the
+  module's `instantiateStreaming`; `Engine.unload` drops the loader's promise after init
+  (`unloadAfterInit`, true by default). Its compiled code, which JavaScriptCore keeps, is not
+  visible to the page.
+
+**After the end.** The end's parts are kept at once as `end` page events with their sizes and
+times (the drive ended, kept on the device, analysed, the results text made, shown; a full
+log asked for and assembled). The page's memory columns go on being kept every second in
+`after_end` (the last 300). The next load keeps a finished run's records as it keeps an
+unfinished one's (`previous`, with its results text) and shows them once, so a kill after the
+end can be read.
+
+**The first moments after the tap.** Each tap or click (the first 20), the audio context's
+resume and its new state, full screen and pointer lock changes, the census, the trace's start
+and the first cube-map face drawn after a quiet second are kept at once as page events.
+
+**The trace's own cost.** The bookkeeping (allocation accounting, kept lists, inventories) is
+timed into the last memory column, "the trace's own bookkeeping ms so far".
 
 **Where they are.**
 - A row a second (`SECOND_COLUMNS`; `ring` and `seconds`) ends with the engine's static memory,
@@ -168,7 +222,8 @@ and counts the sound buffers made and their bytes.
 - The heartbeat (at most every 250 ms) has the same page columns as `memory`.
 - The log's `memory` rows are page ms, JS MiB, WebAssembly MiB, then the same columns
   (`page.memory_columns` names them all).
-- The unfinished-run panel shows the heartbeat's memory columns, `gl_big` and `audio`.
+- The previous-run panel shows the heartbeat's memory columns, `gl_big`, `audio`, the
+  inventories and `after_end`.
 
 ## Adding a record that survives a killed page
 

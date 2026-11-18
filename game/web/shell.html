@@ -415,11 +415,12 @@ function tiTraceText(env, a) {
 	};
 	const event = (kind, text) => { log.events.push([round(now()), kind, String(text)]); };
 
-	// What a previous page left unfinished (a crash or a kill), kept for the results.
+	// What a previous page left, unfinished (a crash or a kill) or finished (and then
+	// reloaded or killed: what it kept after its end too), kept for the next results.
 	const previous = load('meta');
-	if (previous && previous.status === 'running') {
+	if (previous && (previous.status === 'running' || previous.status === 'done')) {
 		save('previous', {meta: previous, heartbeat: load('heartbeat'), long: load('long'), seconds: load('seconds'), ring: load('ring'), page_events: load('page_events'),
-			gl_big: load('gl_big'), audio: load('audio')});
+			gl_big: load('gl_big'), audio: load('audio'), inventory: load('inventory'), after_end: load('after_end'), text: previous.status === 'done' ? load('text') : null});
 	}
 	save('meta', {id: log.id, status: 'waiting', path: log.page.path});
 	save('heartbeat', null);
@@ -429,6 +430,8 @@ function tiTraceText(env, a) {
 	save('page_events', []);
 	save('gl_big', []);
 	save('audio', []);
+	save('inventory', []);
+	save('after_end', []);
 
 	// WebGL: the calls that can stall a frame, timed; the rest left alone.
 	let counters = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -475,7 +478,7 @@ function tiTraceText(env, a) {
 	// GPU makes of a format (tools/web_trace/README.md).
 	const GLM_BIG = 4 * 1048576;
 	const glm = {live: {texture: 0, buffer: 0, program: 0, shader: 0, framebuffer: 0, renderbuffer: 0, vao: 0},
-		tex: {'2d': 0, cube: 0, array: 0, '3d': 0}, buf: 0, rb: 0, rbMsaa: 0, uploaded: 0, asked: 0, big: 0, cubeBinds: 0, cubeAttach: 0};
+		tex: {'2d': 0, cube: 0, array: 0, '3d': 0}, buf: 0, rb: 0, rbMsaa: 0, uploaded: 0, asked: 0, big: 0, cubeBinds: 0, cubeAttach: 0, selfMs: 0};
 	const mb = (n) => Math.round(n / 10485.76) / 100;
 	const texTotal = () => glm.tex['2d'] + glm.tex.cube + glm.tex.array + glm.tex['3d'];
 	const glmSummary = () => `textures ${glm.live.texture} ${mb(texTotal())} MiB (2D ${mb(glm.tex['2d'])}, cube ${mb(glm.tex.cube)}, array ${mb(glm.tex.array)}, 3D ${mb(glm.tex['3d'])}),`
@@ -488,7 +491,7 @@ function tiTraceText(env, a) {
 		0x8059: 4, 0x906F: 4, 0x8C41: 4, 0x8C43: 4, 0x822D: 2, 0x822F: 4, 0x881B: 8, 0x881A: 8, 0x822E: 4, 0x8230: 8, 0x8815: 16, 0x8814: 16,
 		0x8C3A: 4, 0x8C3D: 4, 0x8231: 1, 0x8232: 1, 0x8233: 2, 0x8234: 2, 0x8235: 4, 0x8236: 4, 0x8237: 2, 0x8238: 2, 0x8239: 4, 0x823A: 4,
 		0x823B: 8, 0x823C: 8, 0x8D8F: 4, 0x8D7D: 4, 0x8D89: 8, 0x8D77: 8, 0x8D83: 16, 0x8D71: 16, 0x8D8E: 4, 0x8D7C: 4, 0x8D88: 8, 0x8D76: 8,
-		0x8D82: 16, 0x8D70: 16, 0x81A5: 2, 0x81A6: 4, 0x8CAC: 4, 0x88F0: 4, 0x8CAD: 8, 0x8D48: 1};
+		0x8D82: 16, 0x8D70: 16, 0x81A5: 2, 0x81A6: 4, 0x8CAC: 4, 0x88F0: 4, 0x8CAD: 8, 0x8D48: 1, 0x84F9: 4};
 	const COMPONENTS = {0x1903: 1, 0x8227: 2, 0x1907: 3, 0x1908: 4, 0x1909: 1, 0x190A: 2, 0x1906: 1, 0x8D94: 1, 0x8228: 2, 0x8D98: 3, 0x8D99: 4, 0x1902: 1, 0x84F9: 1};
 	const TYPE_BYTES = {0x1401: 1, 0x1400: 1, 0x1403: 2, 0x1402: 2, 0x1405: 4, 0x1404: 4, 0x140B: 2, 0x8D61: 2, 0x1406: 4};
 	const PACKED = {0x8363: 2, 0x8033: 2, 0x8034: 2, 0x8368: 4, 0x8C3B: 4, 0x8C3E: 4, 0x84FA: 4, 0x8DAD: 8};
@@ -524,7 +527,7 @@ function tiTraceText(env, a) {
 	const texStore = new WeakMap();
 	const bufStore = new WeakMap();
 	const rbStore = new WeakMap();
-	const cubeFbos = new WeakSet();
+	const cubeFbos = new WeakMap();
 	// An allocation of GLM_BIG or more, kept at once (gl_big) with the totals after it and
 	// where the drive was; a same-size re-specification of the same storage is not one.
 	const bigAlloc = (what, bytes) => {
@@ -556,6 +559,10 @@ function tiTraceText(env, a) {
 		for (const v of had.values()) glm.tex[v[1]] -= v[0];
 		texStore.delete(tex);
 	};
+	// A compressed image's size as the call gives it, for a format the table lacks: the
+	// data argument at index i (a view, or with a pixel unpack buffer the size itself), or
+	// the length after it (Emscripten passes its whole heap, an offset and a length).
+	const imageSize = (a, i) => (a.length >= i + 3 ? a[i + 2] : typeof a[i] === 'number' ? a[i] : (a[i] && a[i].byteLength) || 0);
 	// The storage each allocating call asks for, after the call.
 	const alloc = {
 		texImage2D: (gl, a) => {
@@ -563,9 +570,9 @@ function tiTraceText(env, a) {
 			const [format, type] = a.length >= 9 ? [a[6], a[7]] : [a[3], a[4]];
 			texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], w || 0, h || 0, 1, format, type), `${formatName(a[2])} ${w}x${h} level ${a[1]}${CUBE_FACE(a[0]) ? ' face ' + (a[0] - 0x8515) : ''}`);
 		},
-		compressedTexImage2D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], 1), `${formatName(a[2])} ${a[3]}x${a[4]} level ${a[1]}${CUBE_FACE(a[0]) ? ' face ' + (a[0] - 0x8515) : ''}`),
+		compressedTexImage2D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, BLOCK[a[2]] ? levelBytes(a[2], a[3], a[4], 1) : imageSize(a, 6), `${formatName(a[2])} ${a[3]}x${a[4]} level ${a[1]}${CUBE_FACE(a[0]) ? ' face ' + (a[0] - 0x8515) : ''}`),
 		texImage3D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5], a[7], a[8]), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]} level ${a[1]}`),
-		compressedTexImage3D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5]), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]} level ${a[1]}`),
+		compressedTexImage3D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, BLOCK[a[2]] ? levelBytes(a[2], a[3], a[4], a[5]) : imageSize(a, 7), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]} level ${a[1]}`),
 		texStorage2D: (gl, a) => texSet(gl, a[0], null, storageBytes(a[1], a[2], a[3], a[4], a[0] === 0x8513 ? 6 : 1, false), `${formatName(a[2])} ${a[3]}x${a[4]}${a[0] === 0x8513 ? 'x6 faces' : ''}, ${a[1]} levels (storage)`),
 		texStorage3D: (gl, a) => texSet(gl, a[0], null, storageBytes(a[1], a[2], a[3], a[4], a[5], a[0] === 0x806F), `${formatName(a[2])} ${a[3]}x${a[4]}x${a[5]}, ${a[1]} levels (storage)`),
 		copyTexImage2D: (gl, a) => texSet(gl, a[0], `${a[0]}:${a[1]}`, levelBytes(a[2], a[5], a[6], 1), `${formatName(a[2])} ${a[5]}x${a[6]} level ${a[1]} (copied)`),
@@ -683,25 +690,31 @@ function tiTraceText(env, a) {
 				counters[4] += now() - t;
 				counters[2] += 1;
 				counters[3] += size(args) / 1024;
+				const own = now();
 				try {
 					if (alloc[method]) alloc[method](this, args);
 					if (uploaded[method]) glm.uploaded += uploaded[method](args);
 				} catch (e) { /* an estimate only */ }
+				glm.selfMs += now() - own;
 				return result;
 			});
 		}
 		wrap(proto, 'copyTexImage2D', function (original, args) {
 			const result = original.apply(this, args);
+			const own = now();
 			try { alloc.copyTexImage2D(this, args); } catch (e) { /* an estimate only */ }
+			glm.selfMs += now() - own;
 			return result;
 		});
 		for (const method of ['renderbufferStorage', 'renderbufferStorageMultisample']) {
 			wrap(proto, method, function (original, args) {
 				const result = original.apply(this, args);
+				const own = now();
 				try {
 					const a = method === 'renderbufferStorage' ? [0, args[1], args[2], args[3]] : args.slice(1);
 					rbSet(this, a[0], a[1], a[2], a[3]);
 				} catch (e) { /* an estimate only */ }
+				glm.selfMs += now() - own;
 				return result;
 			});
 		}
@@ -729,19 +742,43 @@ function tiTraceText(env, a) {
 		}
 		// Cube-map faces drawn: Godot's Compatibility renderer draws a reflection probe's
 		// faces (and the sky's radiance) into framebuffers a cube-map face is attached to;
-		// each attachment of a face and each bind of such a framebuffer is counted.
-		wrap(proto, 'framebufferTexture2D', function (original, args) {
-			if (CUBE_FACE(args[2])) {
-				glm.cubeAttach += 1;
-				try {
-					const fb = this.getParameter(args[0] === 0x8CA8 ? 0x8CAA : 0x8CA6);
-					if (fb) cubeFbos.add(fb);
-				} catch (e) { /* an estimate only */ }
+		// each attachment of a face and each bind of such a framebuffer is counted. A
+		// framebuffer is forgotten once no attachment point holds a face (another
+		// attachment, or none, put in its place); the first face bound after a quiet
+		// second is kept at once as a page event.
+		const attach = (gl, args, cube) => {
+			const fb = gl.getParameter(args[0] === 0x8CA8 ? 0x8CAA : 0x8CA6);
+			if (!fb) return;
+			let points = cubeFbos.get(fb);
+			if (cube) {
+				if (!points) { points = new Set(); cubeFbos.set(fb, points); }
+				points.add(args[1]);
+			} else if (points) {
+				points.delete(args[1]);
+				if (!points.size) cubeFbos.delete(fb);
 			}
+		};
+		wrap(proto, 'framebufferTexture2D', function (original, args) {
+			const own = now();
+			const cube = CUBE_FACE(args[2]) && Boolean(args[3]);
+			if (cube) glm.cubeAttach += 1;
+			try { attach(this, args, cube); } catch (e) { /* an estimate only */ }
+			glm.selfMs += now() - own;
 			return original.apply(this, args);
 		});
+		for (const method of ['framebufferRenderbuffer', 'framebufferTextureLayer']) {
+			wrap(proto, method, function (original, args) {
+				try { attach(this, args, false); } catch (e) { /* an estimate only */ }
+				return original.apply(this, args);
+			});
+		}
+		let cubeBound = -Infinity;
 		wrap(proto, 'bindFramebuffer', function (original, args) {
-			if (args[1] && cubeFbos.has(args[1])) glm.cubeBinds += 1;
+			if (args[1] && cubeFbos.has(args[1])) {
+				glm.cubeBinds += 1;
+				if (now() - cubeBound > 1000) pageEvent('cube', `a cube-map face drawn after a quiet second (face binds so far ${glm.cubeBinds})`);
+				cubeBound = now();
+			}
 			return original.apply(this, args);
 		});
 		for (const method of ['readPixels', 'getBufferSubData', 'clientWaitSync', 'finish', 'getError']) {
@@ -763,13 +800,66 @@ function tiTraceText(env, a) {
 	// Sound buffers made (Godot's web samples are registered with createBuffer: float
 	// samples, 4 bytes each a channel), and each buffer started, kept at once in 'audio'
 	// with its length and decoded bytes (the game's "sound" markers name the sound).
-	const sound = {buffers: 0, bytes: 0, starts: 0, startedBytes: 0};
+	// Live ones (made and not yet collected, through a FinalizationRegistry, so a
+	// buffer let go counts until the browser collects it), the audio contexts seen, and
+	// the audio worklet nodes made (Godot's audio driver) with their options.
+	const sound = {buffers: 0, bytes: 0, starts: 0, startedBytes: 0, live: 0, liveBytes: 0, decoded: 0, contexts: new Set(), worklets: []};
+	const soundGone = typeof FinalizationRegistry === 'function' ? new FinalizationRegistry((bytes) => { sound.live -= 1; sound.liveBytes -= bytes; }) : null;
+	const soundMade = (b) => {
+		if (!b || typeof b.length !== 'number') return b;
+		const bytes = 4 * b.numberOfChannels * b.length;
+		sound.buffers += 1;
+		sound.bytes += bytes;
+		sound.live += 1;
+		sound.liveBytes += bytes;
+		if (soundGone) soundGone.register(b, bytes);
+		return b;
+	};
 	if (audio && audio.createBuffer) {
 		const original = audio.createBuffer;
 		audio.createBuffer = function (...args) {
-			sound.buffers += 1;
-			sound.bytes += 4 * (args[0] || 0) * (args[1] || 0);
-			return original.apply(this, args);
+			const own = now();
+			sound.contexts.add(this);
+			const made = original.apply(this, args);
+			try { soundMade(made); } catch (e) { /* an estimate only */ }
+			glm.selfMs += now() - own;
+			return made;
+		};
+	}
+	if (audio && audio.decodeAudioData) {
+		const original = audio.decodeAudioData;
+		audio.decodeAudioData = function (...args) {
+			sound.contexts.add(this);
+			sound.decoded += 1;
+			const result = original.apply(this, args);
+			return result && typeof result.then === 'function' ? result.then((b) => { try { soundMade(b); } catch (e) { /* an estimate only */ } return b; }) : result;
+		};
+	}
+	if (typeof window.AudioWorkletNode === 'function') {
+		const Base = window.AudioWorkletNode;
+		window.AudioWorkletNode = class extends Base {
+			constructor(...args) {
+				super(...args);
+				try {
+					const options = args[2] || {};
+					const sizes = Object.entries(options.processorOptions || {}).map(([k, v]) => `${k}: ${v && v.byteLength !== undefined ? v.byteLength + ' bytes' : typeof v}`);
+					sound.worklets.push(`${args[1]} (outputs ${JSON.stringify(options.outputChannelCount || null)}; ${sizes.join(', ') || 'no processor options'})`);
+					pageEvent('audio', `audio worklet node made: ${sound.worklets[sound.worklets.length - 1]}`);
+				} catch (e) { /* an estimate only */ }
+			}
+		};
+	}
+	if (audio && audio.resume) {
+		const original = audio.resume;
+		audio.resume = function (...args) {
+			sound.contexts.add(this);
+			const state = this.state;
+			const result = original.apply(this, args);
+			if (state !== 'running') {
+				pageEvent('audio', `audio context resume asked (was ${state})`);
+				if (result && typeof result.then === 'function') result.then(() => pageEvent('audio', `audio context now ${this.state}`), (e) => pageEvent('audio', 'audio context resume refused: ' + e));
+			}
+			return result;
 		};
 	}
 	const source = window.AudioBufferSourceNode && window.AudioBufferSourceNode.prototype;
@@ -784,7 +874,7 @@ function tiTraceText(env, a) {
 					const bytes = 4 * b.numberOfChannels * b.length;
 					const first = !started.has(b);
 					if (first) { started.add(b); sound.startedBytes += bytes; }
-					keepEvent('audio', 'audio', `buffer started: ${round(b.duration)} s, ${b.numberOfChannels} ch, ${b.sampleRate} Hz, ${mb(bytes)} MiB decoded${first ? ', its first start' : ''}${this.loop ? ', looping' : ''}`);
+					keepEvent('audio', 'audio', `buffer started: ${round(b.duration)} s, ${b.numberOfChannels} ch, ${b.sampleRate} Hz, ${mb(bytes)} MiB decoded${first ? ', its first start' : ''}${this.loop ? ', looping' : ''}; sound buffers live ${sound.live}, ${mb(sound.liveBytes)} MiB`);
 				} else {
 					keepEvent('audio', 'audio', 'buffer source started without a buffer');
 				}
@@ -847,15 +937,118 @@ function tiTraceText(env, a) {
 	const kept = {page_events: [], gl_big: [], audio: []};
 	const KEPT_CAP = {page_events: 60, gl_big: 60, audio: 40};
 	const keepIn = (list, entry, saveNow) => {
+		const own = now();
 		kept[list].push(entry);
 		if (kept[list].length > KEPT_CAP[list]) kept[list].shift();
 		if (saveNow) save(list, kept[list]);
+		glm.selfMs += now() - own;
 	};
 	const keepEvent = (list, kind, text) => {
 		event(kind, text);
 		keepIn(list, [new Date().toISOString(), round(now()), kind, String(text)], true);
 	};
 	const canvas = document.getElementById('canvas');
+	// The memory inventory (kept at once in 'inventory'), at the start prompt, at the
+	// trace's start and at its end: what the page can see holding memory. The engine's
+	// loader hands the trace its Engine (window.__tiTrace.loader, below): its runtime
+	// module's own buffers, and what the loader wrote into the engine's file system
+	// (Emscripten's FS is not exported by this engine build, so its files cannot be
+	// walked: the loader's own writes are what is known of it).
+	let engineRef = null;
+	let config = null;
+	let packRef = null;
+	const fsWritten = [];
+	const inventories = [];
+	const inventory = (moment) => {
+		const began = now();
+		const inv = {moment, at: new Date().toISOString(), page_ms: round(now())};
+		try {
+			const m = engineRef && engineRef.rtenv;
+			const wasmBuffer = memory ? memory.buffer : m && m.HEAPU8 ? m.HEAPU8.buffer : null;
+			inv.wasm_memory = wasmBuffer ? wasmBuffer.byteLength : null;
+			const sizes = (config && config.fileSizes) || {};
+			inv.files_fetched = Object.fromEntries(Object.entries(sizes).filter(([, n]) => n >= 1048576));
+			inv.fs_written = fsWritten.map((f) => ({path: f.path, bytes: f.bytes, page_buffer: f.same, alive: f.ref ? f.ref.deref() !== undefined : null}));
+			inv.pack_buffer = packRef ? {bytes: packRef.bytes, alive: packRef.ref.deref() !== undefined} : null;
+			// The runtime module's own buffers of 1 MiB or more (views of the wasm memory named as such).
+			inv.module_buffers = [];
+			if (m) {
+				for (const k of Object.keys(m)) {
+					const v = m[k];
+					const n = v instanceof ArrayBuffer ? v.byteLength : ArrayBuffer.isView(v) ? v.byteLength : 0;
+					if (n >= 1048576 && !(ArrayBuffer.isView(v) && v.buffer === wasmBuffer)) inv.module_buffers.push([k, n, v.constructor.name]);
+				}
+			}
+			inv.gl = {live: {...glm.live}, texture_bytes: texTotal(), renderbuffer_bytes: glm.rb, buffer_bytes: glm.buf, summary: glmSummary()};
+			inv.audio = {buffers_made: sound.buffers, made_bytes: sound.bytes, live: sound.live, live_bytes: sound.liveBytes, decodes: sound.decoded,
+				started: sound.starts, contexts: [...sound.contexts].map((c) => `${c.state}, ${c.sampleRate} Hz, base latency ${c.baseLatency || '?'} s`), worklets: sound.worklets};
+			// The trace's own records (numbers at 8 bytes, a rough size).
+			const numbers = (rows) => rows.reduce((n, r) => n + (Array.isArray(r) ? r.length : 1), 0);
+			inv.trace_own = {rows: log.rows.length, row_numbers: numbers(log.rows), raf: log.raf.length, gl: log.gl.length, events: log.events.length,
+				programs: log.programs.length, tasks: log.tasks.length, memory_rows: log.memory.length, seconds: secondsAll.length, chunks_kept: keepN,
+				census_entries: log.census ? (log.census.materials || []).length : 0, bookkeeping_ms: round(glm.selfMs),
+				rough_bytes: 8 * (numbers(log.rows) + log.raf.length + numbers(log.gl) + numbers(log.memory) + numbers(secondsAll)) + 64 * (log.events.length + log.programs.length)};
+		} catch (e) {
+			inv.error = String(e);
+		}
+		inv.took_ms = round(now() - began);
+		inventories.push(inv);
+		save('inventory', inventories);
+		event('inventory', JSON.stringify(inv));
+		glm.selfMs += now() - began;
+		return inv;
+	};
+	// The engine's loader hands over its Engine as it makes it (shell's loader script,
+	// only with the trace): the start prompt marked from the game's PLAY_READY line, and
+	// every file the loader writes into the engine's file system recorded.
+	const loaderHook = (engine, godotConfig) => {
+		engineRef = engine;
+		config = godotConfig;
+		const print = engine.config && engine.config.onPrint;
+		if (typeof print === 'function') {
+			engine.config.onPrint = function (...args) {
+				if (args.join(' ') === 'PLAY_READY') requestAnimationFrame(() => requestAnimationFrame(() => pageEvent('prompt', 'start prompt up; inventory: ' + JSON.stringify(inventory('prompt')).slice(0, 600))));
+				return print.apply(this, args);
+			};
+		}
+		const preload = engine.preloadFile;
+		if (typeof preload === 'function') {
+			engine.preloadFile = function (file, path) {
+				if (file instanceof ArrayBuffer) packRef = {bytes: file.byteLength, ref: typeof WeakRef === 'function' ? new WeakRef(file) : {deref: () => undefined}};
+				return preload.apply(this, arguments);
+			};
+		}
+		const init = engine.init;
+		if (typeof init === 'function') {
+			engine.init = function (...args) {
+				return init.apply(this, args).then((result) => {
+					const m = engine.rtenv;
+					if (m && typeof m.copyToFS === 'function' && !m.copyToFS.traced) {
+						const copy = m.copyToFS;
+						m.copyToFS = function (path, buffer) {
+							const bytes = buffer ? buffer.byteLength : 0;
+							const same = Boolean(packRef && packRef.ref.deref() === buffer);
+							fsWritten.push({path, bytes, same, ref: buffer && typeof WeakRef === 'function' ? new WeakRef(buffer) : null});
+							pageEvent('fs', `loader writes ${path} into the engine's file system: ${mb(bytes)} MiB${same ? ', the page\'s own pack buffer (kept, not copied: canOwn)' : ''}`);
+							return copy.apply(this, arguments);
+						};
+						m.copyToFS.traced = true;
+					}
+					return result;
+				});
+			};
+		}
+	};
+	// The first moments after the start prompt's tap, each kept at once: the tap, the
+	// audio context resumed, full screen, pointer lock (the trace's own start, the census
+	// and its first records follow from the game).
+	let taps = 0;
+	for (const type of ['touchend', 'click']) {
+		document.addEventListener(type, () => { if (!log.end && taps < 20) { taps += 1; pageEvent('tap', `${type} (${taps})`); } }, {capture: true, passive: true});
+	}
+	for (const type of ['fullscreenchange', 'webkitfullscreenchange', 'pointerlockchange', 'pointerlockerror']) {
+		document.addEventListener(type, () => pageEvent('page', type));
+	}
 	const orientation = () => (screen.orientation && screen.orientation.type) || (innerWidth > innerHeight ? 'landscape' : 'portrait');
 	const view = () => `${innerWidth}x${innerHeight} css, dpr ${devicePixelRatio}, canvas ${canvas ? canvas.width + 'x' + canvas.height : '?'}, ${orientation()}`;
 	const pageEvent = (kind, text) => {
@@ -895,11 +1088,12 @@ function tiTraceText(env, a) {
 	const MEMORY_COLUMNS = 'WebAssembly bytes, JS heap bytes, GL textures, GL texture bytes, of which 2D, cube map, 2D array, 3D, GL renderbuffers, '
 		+ 'GL renderbuffer bytes, of which multisampled, GL buffers, GL buffer bytes, GL programs, GL shaders, GL framebuffers, GL vertex arrays, '
 		+ 'GL bytes uploaded so far, GL storage bytes asked so far, GL allocations of 4 MiB or more so far, cube-map face binds so far, '
-		+ 'cube-map face attachments so far, sound buffers made, their bytes, sound buffers started so far, bytes of the buffers started';
+		+ 'cube-map face attachments so far, sound buffers made, their bytes, sound buffers started so far, bytes of the buffers started, '
+		+ 'sound buffers live, their bytes, the trace\'s own bookkeeping ms so far';
 	const memoryNow = () => [memory ? memory.buffer.byteLength : null, performance.memory ? performance.memory.usedJSHeapSize : null,
 		glm.live.texture, texTotal(), glm.tex['2d'], glm.tex.cube, glm.tex.array, glm.tex['3d'], glm.live.renderbuffer, glm.rb, glm.rbMsaa,
 		glm.live.buffer, glm.buf, glm.live.program, glm.live.shader, glm.live.framebuffer, glm.live.vao, glm.uploaded, glm.asked, glm.big,
-		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes];
+		glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes, sound.starts, sound.startedBytes, sound.live, sound.liveBytes, round(glm.selfMs)];
 	// Cube-map faces drawing, started and stopped, kept as page events: a run of face
 	// binds or attachments with no gap of more than a second.
 	// The counts and GL storage at the last look (a second ago): a run counts from them.
@@ -1043,11 +1237,18 @@ function tiTraceText(env, a) {
 			} catch (e) { resolve(null); }
 		}));
 	}
+	const afterEnd = [];
 	setInterval(() => {
 		const [js, wasm] = mib();
 		log.memory.push([round(now()), js, wasm, ...memoryNow()]);
 		markCubes();
 		markCanvas();
+		// After the end the drive's records stop; the page's memory goes on being kept.
+		if (log.end) {
+			afterEnd.push([new Date().toISOString(), round(now()), ...memoryNow()]);
+			if (afterEnd.length > 300) afterEnd.shift();
+			save('after_end', afterEnd);
+		}
 		if (log.header && !log.end) {
 			beat();
 			keepChunk();
@@ -1094,7 +1295,8 @@ function tiTraceText(env, a) {
 			F = {};
 			log.header.fields.forEach((n, i) => { F[n] = i; });
 			save('meta', {id: log.id, status: 'running', path: log.page.path, started: new Date().toISOString(), page: log.page, header: {...log.header, route: undefined, outline: undefined}});
-			event('trace', 'drive started');
+			pageEvent('trace', `drive started: header ${json.length} chars`);
+			inventory('trace_start');
 			showStatus();
 		},
 		engine(json) {
@@ -1120,15 +1322,23 @@ function tiTraceText(env, a) {
 		},
 		census(json) {
 			log.census = JSON.parse(json);
+			pageEvent('trace', `census received: ${json.length} chars`);
 		},
+		// The trace's end, each part kept at once with its size, so a kill in it is told.
 		end(json) {
 			closeSecond();
 			log.end = JSON.parse(json);
-			event('trace', 'drive ended: ' + log.end.result);
+			pageEvent('end', `drive ended (${log.end.result}): ${log.rows.length} records, ${log.raf.length} frames, ${log.events.length} markers, ${log.memory.length} memory rows`);
+			inventory('end');
+			let t = now();
 			keepChunk();
 			saveProgress();
+			pageEvent('end', `kept on the device in ${round(now() - t)} ms`);
+			t = now();
 			finish();
+			pageEvent('end', `results made and shown in ${round(now() - t)} ms`);
 		},
+		loader: loaderHook,
 		log: () => log,
 		analysis: () => analyse(),
 		state: () => ({header: Boolean(log.header), end: log.end, rows: log.rows.length, raf: log.raf.length, status: status ? status.textContent : null}),
@@ -1169,10 +1379,14 @@ function tiTraceText(env, a) {
 		}, 1000);
 	}
 	function finish() {
+		let t = now();
 		const a = analyse();
+		pageEvent('end', `analysed in ${round(now() - t)} ms`);
+		t = now();
 		const text = tiTraceText(env(), a || {});
 		save('meta', {...(load('meta') || {}), status: 'done'});
 		save('text', text);
+		pageEvent('end', `results text ${text.length} chars, made and kept in ${round(now() - t)} ms`);
 		show(text, a);
 	}
 	function show(text, a, title, previousMeta) {
@@ -1206,15 +1420,19 @@ function tiTraceText(env, a) {
 		button('Download full log', () => {
 			if (previousMeta && previousLog === null) {
 				previousLog = undefined;
-				note.textContent = 'Reading the unfinished run\u2019s records\u2026';
+				note.textContent = 'Reading the previous run\u2019s records\u2026';
 				keptLog(previousMeta).then((kept) => {
+					if (kept) kept.after_end = {columns: 'clock time, page ms, ' + MEMORY_COLUMNS, rows: (previousMeta.after_end || [])};
 					previousLog = kept ? JSON.stringify(kept) : '';
-					note.textContent = kept ? `The unfinished run\u2019s log is ready (${kept.rows.length} frames): tap Download full log again.` : 'Nothing of the unfinished run was kept in IndexedDB.';
+					note.textContent = kept ? `The previous run\u2019s log is ready (${kept.rows.length} frames): tap Download full log again.` : 'Nothing of the previous run was kept in IndexedDB.';
 				});
 				return;
 			}
 			if (previousMeta && !previousLog) return;
-			const blob = new Blob([previousMeta ? previousLog : full()], {type: 'application/json'});
+			pageEvent('end', 'full log asked for: assembling');
+			const body = previousMeta ? previousLog : full();
+			pageEvent('end', `full log assembled: ${body.length} chars`);
+			const blob = new Blob([body], {type: 'application/json'});
 			const link = document.createElement('a');
 			link.href = URL.createObjectURL(blob);
 			link.download = `drive-trace-${(previousMeta ? previousMeta.id : log.id).replace(/[:.]/g, '-')}.json`;
@@ -1251,11 +1469,14 @@ function tiTraceText(env, a) {
 		}
 		document.body.appendChild(panel);
 	}
-	// A previous run that did not finish (the page was reloaded or killed): what it got.
+	// A previous run, unfinished (the page was reloaded or killed) or finished and then
+	// reloaded or killed: what it got, and what the page kept after its end.
 	const before = load('previous');
-	if (before && before.meta && before.meta.status === 'running') {
+	if (before && before.meta && (before.meta.status === 'running' || before.meta.status === 'done')) {
 		const hb = before.heartbeat;
-		const lines = ['A previous drive trace on this page did not finish (the page was reloaded, closed or killed).',
+		const finished = before.meta.status === 'done';
+		const lines = [finished ? 'The previous drive trace on this page finished; then the page was reloaded, closed or killed. Its results are at the end.'
+			: 'A previous drive trace on this page did not finish (the page was reloaded, closed or killed).',
 			`It started ${before.meta.started || '?'}; its last heartbeat was ${hb ? hb.at : 'never'}.`];
 		if (hb && hb.row) {
 			const f = hb.fields;
@@ -1269,11 +1490,14 @@ function tiTraceText(env, a) {
 		lines.push('', 'Page events (clock time, page ms, kind, what):', JSON.stringify(before.page_events || []));
 		lines.push('', 'Graphics allocations of 4 MiB or more, an estimate (clock time, page ms, kind, what):', JSON.stringify(before.gl_big || []));
 		lines.push('', 'Sounds started (clock time, page ms, kind, what):', JSON.stringify(before.audio || []));
+		lines.push('', 'Memory inventories (start prompt, trace start, end):', JSON.stringify(before.inventory || []));
+		lines.push('', `Memory each second after the end (clock time, page ms, ${MEMORY_COLUMNS}):`, JSON.stringify(before.after_end || []));
 		lines.push('', `Last seconds, kept each second (${SECOND_COLUMNS}):`, JSON.stringify(before.ring || []));
 		lines.push('', 'Long frames kept (time ms, frame ms, x, z, speed, step, leg, flags, ...):', JSON.stringify(before.long || []));
 		lines.push('', `Seconds kept every 10 s (${SECOND_COLUMNS}):`, JSON.stringify(before.seconds || []));
 		lines.push('', 'Its page: ' + JSON.stringify(before.meta.page || {}), 'Its game: ' + JSON.stringify(before.meta.header || {}));
-		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, 'The previous drive trace did not finish', before.meta));
+		if (finished) lines.push('', 'Its results:', before.text || '(not kept)');
+		window.addEventListener('DOMContentLoaded', () => show(lines.join('\n'), null, finished ? 'The previous drive trace finished; its records and what came after' : 'The previous drive trace did not finish', {...before.meta, after_end: before.after_end}));
 		save('previous', {...before, meta: {...before.meta, status: 'shown'}});
 	}
 }());
@@ -1932,6 +2156,9 @@ const GODOT_THREADS_ENABLED = $GODOT_THREADS_ENABLED;
 			if (phase !== 'ready') displayFailureNotice('Game stopped before startup completed (' + code + ').');
 		},
 	});
+	// Only with the drive trace (?trace=drive defines window.__tiTrace): it measures what the
+	// engine holds in memory; without it nothing here runs.
+	if (window.__tiTrace && typeof window.__tiTrace.loader === 'function') window.__tiTrace.loader(engine, GODOT_CONFIG);
 
 	const missing = Engine.getMissingFeatures({
 		threads: GODOT_THREADS_ENABLED,

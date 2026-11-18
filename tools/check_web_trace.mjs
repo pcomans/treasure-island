@@ -36,7 +36,7 @@ if (!script) {
 check(!/\bfetch\s*\(|XMLHttpRequest|sendBeacon|WebSocket|EventSource/.test(script), 'the trace script must make no network call (fetch, XMLHttpRequest, sendBeacon, WebSocket, EventSource)');
 
 // A browser of stand-ins, counting every use the trace could make of it.
-function browser(search) {
+function browser(search, kept = {}) {
   const used = [];
   const use = (what) => used.push(what);
   let clock = 1000;
@@ -55,7 +55,7 @@ function browser(search) {
     'texImage2D', 'texSubImage2D', 'compressedTexImage2D', 'compressedTexSubImage2D', 'texImage3D', 'texSubImage3D',
     'compressedTexImage3D', 'texStorage2D', 'texStorage3D', 'generateMipmap', 'bufferData', 'readPixels', 'getBufferSubData',
     'clientWaitSync', 'finish', 'getError', 'copyTexImage2D', 'renderbufferStorage', 'renderbufferStorageMultisample',
-    'framebufferTexture2D', 'bindFramebuffer', 'deleteTexture', 'deleteBuffer', 'deleteProgram', 'deleteShader', 'deleteFramebuffer',
+    'framebufferTexture2D', 'framebufferRenderbuffer', 'bindFramebuffer', 'deleteTexture', 'deleteBuffer', 'deleteProgram', 'deleteShader', 'deleteFramebuffer',
     'deleteRenderbuffer', 'deleteVertexArray']) {
     gl[name] = function () { return 'gl:' + name; };
   }
@@ -68,14 +68,14 @@ function browser(search) {
   // A shader's compile status waits for its compile: 110 ms here.
   gl.getShaderParameter = function () { clock += 110; return true; };
   gl.getProgramParameter = function () { clock += 10; return true; };
-  const audio = {createBufferSource: function () { return 'source'; }, createBuffer: function () { return 'buffer'; }};
+  const audio = {createBufferSource: function () { return 'source'; }, createBuffer: function (channels, length, rate) { return {numberOfChannels: channels, length, sampleRate: rate}; }};
   const bufferSource = {start: function () { return 'started'; }};
   const memoryProto = {grow: function () { return 1; }};
   const wasm = {Memory: function () {}, instantiate: () => Promise.resolve({instance: {exports: {}}}), instantiateStreaming: () => Promise.resolve({instance: {exports: {}}})};
   wasm.Memory.prototype = memoryProto;
   const originals = {gl: {...gl}, audio: audio.createBufferSource, createBuffer: audio.createBuffer, start: bufferSource.start,
     grow: memoryProto.grow, instantiate: wasm.instantiate, streaming: wasm.instantiateStreaming};
-  const storage = {data: {}, getItem(k) { use('storage'); return this.data[k] ?? null; }, setItem(k, v) { use('storage'); this.data[k] = String(v); }};
+  const storage = {data: {...kept}, getItem(k) { use('storage'); return this.data[k] ?? null; }, setItem(k, v) { use('storage'); this.data[k] = String(v); }};
   const win = {location: {search, pathname: '/'}, devicePixelRatio: 3, isSecureContext: true, top: null, self: null,
     addEventListener: () => use('window listener'), matchMedia: () => ({matches: false}),
     WebGL2RenderingContext: {prototype: gl}, BaseAudioContext: {prototype: audio}, AudioBufferSourceNode: {prototype: bufferSource}};
@@ -157,6 +157,17 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   check(/Long frames \(33 ms or more\): 3/.test(text) && /shader compile/.test(text), 'the results text must give the long frames and their causes');
   const kept = JSON.parse(b.storage.data['ti-trace:meta'] || 'null');
   check(kept && kept.status === 'done' && b.storage.data['ti-trace:text'], 'the results must be kept on the device when the drive ends');
+  const ends = (JSON.parse(b.storage.data['ti-trace:page_events'] || '[]')).filter((e) => e[2] === 'end').map((e) => e[3]);
+  check(ends.length >= 4 && /^drive ended \(complete\)/.test(ends[0]) && ends.some((e) => /^results text \d+ chars/.test(e)) && /^results made and shown/.test(ends[ends.length - 1]),
+    `the end's parts must each be kept at once as a page event: ${JSON.stringify(ends)}`);
+  const inventories = JSON.parse(b.storage.data['ti-trace:inventory'] || '[]');
+  check(inventories.map((i) => i.moment).join() === 'trace_start,end' && inventories[1].trace_own.rows === 300 && !inventories[1].error,
+    `the memory inventory must be kept at the trace's start and end: ${JSON.stringify(inventories).slice(0, 300)}`);
+  // The page opened again after the finished run: its records kept for the next results.
+  const again = browser('?trace=drive', b.storage.data);
+  const previous = JSON.parse(again.storage.data['ti-trace:previous'] || 'null');
+  check(previous && previous.meta.status === 'shown' && previous.text && previous.page_events && previous.page_events.length && previous.inventory && previous.inventory.length === 2,
+    'a finished run\'s results, page events and inventories must be kept for the next page');
 }
 
 // The drive trace's memory records, as a killed page leaves them on the device.
@@ -196,7 +207,17 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   b.bound[0x8CA6] = fb;
   ctx.framebufferTexture2D(0x8D40, 0x8CE0, 0x8516, cube, 0);
   ctx.bindFramebuffer(0x8D40, fb);
-  // A sound buffer started (Godot's sample playback): kept at once with its decoded bytes.
+  // Another framebuffer whose face is replaced by a renderbuffer: its binds draw no face.
+  const other = ctx.createFramebuffer();
+  b.bound[0x8CA6] = other;
+  ctx.framebufferTexture2D(0x8D40, 0x8CE0, 0x8517, cube, 0);
+  ctx.framebufferRenderbuffer(0x8D40, 0x8CE0, 0x8D41, ctx.createRenderbuffer());
+  ctx.bindFramebuffer(0x8D40, other);
+  // A sound buffer registered (Godot's sample registration) and started (its sample
+  // playback): counted live, the start kept at once with its decoded bytes.
+  const context = Object.create(b.audio);
+  const registered = context.createBuffer(2, 96000, 48000);
+  check(registered.length === 96000, 'a wrapped createBuffer must return what the browser\'s returned');
   const node = Object.create(b.bufferSource);
   node.buffer = {duration: 2, numberOfChannels: 2, sampleRate: 48000, length: 96000};
   node.loop = true;
@@ -209,22 +230,22 @@ for (const other of ['?trace=other', '?trace=', '?store=1&profile_startup=1']) {
   for (const cb of b.intervals) cb();
   let heart = load('heartbeat');
   check(heart && heart.memory && heart.memory[3] === live && heart.memory[5] === 48 * MiB && heart.memory[9] === 8 * MiB && heart.memory[10] === 8 * MiB
-    && heart.memory[12] === 4 * MiB && heart.memory[20] >= 1 && heart.memory[21] === 1 && heart.memory[24] === 1 && heart.memory[25] === 4 * 2 * 96000,
-    `the heartbeat must carry the memory totals (GL textures ${live}, of which cube ${48 * MiB}, renderbuffers ${8 * MiB}, all multisampled, buffers ${4 * MiB}, a cube-map face drawn, a sound started): ${JSON.stringify(heart && heart.memory)}`);
+    && heart.memory[12] === 4 * MiB && heart.memory[20] === 1 && heart.memory[21] === 2 && heart.memory[22] === 1 && heart.memory[23] === 4 * 2 * 96000 && heart.memory[26] === 1 && heart.memory[27] === 4 * 2 * 96000 && heart.memory[24] === 1 && heart.memory[25] === 4 * 2 * 96000,
+    `the heartbeat must carry the memory totals (GL textures ${live}, of which cube ${48 * MiB}, renderbuffers ${8 * MiB}, all multisampled, buffers ${4 * MiB}, one cube-map face bind, two attachments, a sound buffer made, live and started): ${JSON.stringify(heart && heart.memory)}`);
   check((load('page_events') || []).some((e) => e[2] === 'cube' && /cube-map faces drawing/.test(e[3])), 'cube-map faces drawing must be kept as a page event');
   b.advance(1500);
   for (const cb of b.intervals) cb();
   const done = (load('page_events') || []).find((e) => e[2] === 'cube' && /cube-map faces done/.test(e[3]));
-  check(done && /done: 1 face binds, 1 face attachments/.test(done[3]), `cube-map faces done must be kept with the faces drawn in that run: ${done && done[3]}`);
+  check(done && /done: 1 face binds, 2 face attachments/.test(done[3]), `cube-map faces done must be kept with the faces drawn in that run: ${done && done[3]}`);
   ctx.deleteTexture(cube);
   ctx.deleteRenderbuffer(rb);
   b.tick(1000);
   b.win.__tiTrace.engine(JSON.stringify({rows: [1600, -290, 270, 1, 16.7], events: [], fields: 5}));
   heart = load('heartbeat');
-  check(heart && heart.memory[3] === 8 * MiB + 16384 && heart.memory[9] === 0 && heart.memory[2] === 2 && heart.memory[8] === 0,
+  check(heart && heart.memory[3] === 8 * MiB + 16384 && heart.memory[9] === 0 && heart.memory[2] === 2 && heart.memory[8] === 1,
     `a deleted texture's and renderbuffer's storage must come off the totals: ${JSON.stringify(heart && heart.memory)}`);
   const ring = load('ring') || [];
-  check(ring.length === 1 && ring[0].length === 25 + 4 + 26, `a row a second must carry the engine's and the page's memory columns: ${JSON.stringify(ring)}`);
+  check(ring.length === 1 && ring[0].length === 25 + 4 + 29, `a row a second must carry the engine's and the page's memory columns: ${JSON.stringify(ring)}`);
 }
 
 if (failures.length) {

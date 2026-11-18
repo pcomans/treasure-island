@@ -32,7 +32,9 @@ extends Node
 ## (an Options change mid-run). For the iPhone's reloads, switches that each take one
 ## suspect out of a run (the header records them): probes=0 (--trace-probes=0) takes
 ## Mersea's reflection probes out before startup renders them; sound=0 silences the
-## game (no sample registered with the browser, no player started); msaa=0 draws the
+## game (no sample registered with the browser, so none decoded into a Web Audio
+## buffer, no player started; the takes stay loaded, compressed); sound=none also drops
+## the loaded takes, as in a build without sounds; msaa=0 draws the
 ## world without MSAA (the web's default is 2x); route=hover leaves out the car: from
 ## the spawn straight to the walk, the run, the jetpack climb and hover, the drop;
 ## route=corner (CORNER_POINTS) puts the car straight on Bruton Street after the
@@ -205,6 +207,8 @@ var _view := ""
 ## what it was), the short route ("hover" or "corner"; "" for the whole drive).
 var _probes_off := false
 var _sound_off := false
+## sound=none: the takes the bank loaded dropped too (they are freed once nothing holds them).
+var _sound_none := false
 var _msaa_off := false
 var _msaa_restore := false
 var _msaa_before := Viewport.MSAA_DISABLED
@@ -253,7 +257,8 @@ func _ready() -> void:
 			_main.compile_by_group = true
 	_laps = clampi(_laps, 1, MAX_LAPS)
 	_probes_off = _option("probes") == "0"
-	_sound_off = _option("sound") == "0"
+	_sound_none = _option("sound") == "none"
+	_sound_off = _option("sound") == "0" or _sound_none
 	_msaa_off = _option("msaa") == "0"
 	var route := _option("route")
 	_route_name = route if route in ["hover", "corner"] else ""
@@ -728,11 +733,14 @@ func _apply_switches() -> void:
 		_main.sound.process_mode = Node.PROCESS_MODE_DISABLED
 		_main.sound.set("_registered", true)
 		AudioServer.set_bus_mute(0, true)
+		if _sound_none:
+			# The takes the bank loaded, dropped: freed once nothing holds them.
+			_main.sound.set("_takes", {})
 
 
 ## The switches as the header and the start marker give them.
 func _switches() -> Dictionary:
-	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off,
+	return {"scale_asked": _scale_asked, "seconds_limit": _seconds_limit, "probes": not _probes_off, "sound": not _sound_off, "sound_takes_dropped": _sound_none,
 		"msaa_off": _msaa_off, "route": _route_name if _route_name != "" else "drive", "laps": _laps,
 		"probes_present": _main.world_root.buildings.find_children("*", "ReflectionProbe", true, false).size() if _main.world_root.buildings != null else -1}
 
