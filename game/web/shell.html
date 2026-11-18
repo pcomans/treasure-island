@@ -468,6 +468,37 @@ function tiTraceText(env, a) {
 		if (typeof original !== 'function') return;
 		proto[method] = function (...args) { return fn.call(this, original, args); };
 	}
+	const glm = {live: {texture: 0, buffer: 0, program: 0, shader: 0, framebuffer: 0, renderbuffer: 0, vao: 0},
+		texBytes: 0, bufBytes: 0, rbBytes: 0, uploadBytes: 0, allocBytes: 0, cubeAttach: 0, cubeBinds: 0};
+	const glLive = new WeakSet();
+	const glStore = new WeakMap();
+	const cubeFbos = new WeakSet();
+	const storeBytes = (had) => { let n = 0; for (const v of had.values()) n += v; return n; };
+	const TEX_BINDING = {0x0DE1: 0x8069, 0x8513: 0x8514, 0x8C1A: 0x8C1D, 0x806F: 0x806A};
+	const BUFFER_BINDING = {0x8892: 0x8894, 0x8893: 0x8895, 0x8A11: 0x8A28, 0x8F36: 0x8F36, 0x8F37: 0x8F37, 0x88EB: 0x88ED, 0x88EC: 0x88EF, 0x8C8E: 0x8C8F};
+	// Bytes a texel takes by internal format (sized formats; 4 for the rest), and the
+	// compressed formats' blocks: [bytes, width, height].
+	const TEXEL = {0x8229: 1, 0x822B: 2, 0x8051: 4, 0x8058: 4, 0x8C41: 4, 0x8C43: 4, 0x8059: 4, 0x822D: 2, 0x822F: 4, 0x881A: 8, 0x881B: 8,
+		0x822E: 4, 0x8230: 8, 0x8814: 16, 0x8815: 16, 0x8C3A: 4, 0x8C3D: 4, 0x81A5: 2, 0x81A6: 4, 0x8CAC: 4, 0x88F0: 4, 0x8CAD: 8, 0x8D62: 2,
+		0x8232: 1, 0x8231: 1, 0x8238: 2, 0x8234: 2, 0x8236: 4, 0x823C: 2, 0x823A: 2, 0x8D7C: 4, 0x8D8E: 4, 0x8D76: 8, 0x8D88: 8, 0x8D70: 16, 0x8D82: 16,
+		0x1903: 1, 0x1909: 1, 0x190A: 2, 0x1907: 4, 0x1908: 4, 0x8C40: 4, 0x8C42: 4};
+	const BLOCK = {};
+	for (const f of [0x9274, 0x9275, 0x9276, 0x9277, 0x9270, 0x9271, 0x83F0, 0x83F1, 0x8C4C, 0x8C4D, 0x8DBB, 0x8DBC, 0x8D64]) BLOCK[f] = [8, 4, 4];
+	for (const f of [0x9278, 0x9279, 0x9272, 0x9273, 0x83F2, 0x83F3, 0x8C4E, 0x8C4F, 0x8E8C, 0x8E8D, 0x8E8E, 0x8E8F, 0x8DBD, 0x8DBE]) BLOCK[f] = [16, 4, 4];
+	[[4, 4], [5, 4], [5, 5], [6, 5], [6, 6], [8, 5], [8, 6], [8, 8], [10, 5], [10, 6], [10, 8], [10, 10], [12, 10], [12, 12]].forEach(([w, h], i) => {
+		BLOCK[0x93B0 + i] = [16, w, h];
+		BLOCK[0x93D0 + i] = [16, w, h];
+	});
+	const levelBytes = (format, w, h, d) => {
+		const block = BLOCK[format];
+		if (block) return Math.ceil(w / block[1]) * Math.ceil(h / block[2]) * block[0] * Math.max(1, d);
+		return w * h * Math.max(1, d) * (TEXEL[format] || 4);
+	};
+	const storageBytes = (levels, format, w, h, d) => {
+		let n = 0;
+		for (let l = 0; l < levels; l += 1) n += levelBytes(format, Math.max(1, w >> l), Math.max(1, h >> l), 1);
+		return n * Math.max(1, d);
+	};
 	for (const proto of [window.WebGL2RenderingContext && WebGL2RenderingContext.prototype].filter(Boolean)) {
 		wrap(proto, 'shaderSource', function (original, args) {
 			if (args[0] && typeof args[0] === 'object') {
@@ -548,12 +579,112 @@ function tiTraceText(env, a) {
 				return result;
 			});
 		}
+		// What the page asks of WebGL in memory (glm): live objects by kind, and estimated
+		// bytes of storage by texture, buffer and renderbuffer (from each call's sizes:
+		// formats and levels, never the data, which no wrapper keeps), the bytes passed
+		// in uploads, and the storage asked for in all. A texture's, buffer's or
+		// renderbuffer's storage goes to the one bound (read back with getParameter,
+		// which browsers answer from their own state).
+		const KINDS = {Texture: 'texture', Buffer: 'buffer', Program: 'program', Shader: 'shader', Framebuffer: 'framebuffer', Renderbuffer: 'renderbuffer', VertexArray: 'vao'};
+		for (const [type, kind] of Object.entries(KINDS)) {
+			wrap(proto, 'create' + type, function (original, args) {
+				const made = original.apply(this, args);
+				if (made) { glLive.add(made); glm.live[kind] += 1; }
+				return made;
+			});
+			wrap(proto, 'delete' + type, function (original, args) {
+				const gone = args[0];
+				if (gone && glLive.has(gone)) {
+					glLive.delete(gone);
+					glm.live[kind] -= 1;
+					const had = glStore.get(gone);
+					if (had) { glm[kind === 'texture' ? 'texBytes' : kind === 'buffer' ? 'bufBytes' : 'rbBytes'] -= storeBytes(had); glStore.delete(gone); }
+				}
+				return original.apply(this, args);
+			});
+		}
+		const store = (gl, object, key, bytes, field) => {
+			if (!object) return;
+			let had = glStore.get(object);
+			if (!had) { had = new Map(); glStore.set(object, had); }
+			const before = storeBytes(had);
+			if (key === null) had.clear(); else had.delete('all');
+			had.set(key === null ? 'all' : key, bytes);
+			glm[field] += storeBytes(had) - before;
+			glm.allocBytes += bytes;
+		};
+		const texBound = (gl, target) => gl.getParameter(TEX_BINDING[target] || (target >= 0x8515 && target <= 0x851A ? 0x8514 : 0x8069));
+		const sized = {
+			texImage2D: (gl, a) => store(gl, texBound(gl, a[0]), `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], 1, a[6], a[7]), 'texBytes'),
+			texImage3D: (gl, a) => store(gl, texBound(gl, a[0]), `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5], a[7], a[8]), 'texBytes'),
+			compressedTexImage2D: (gl, a) => store(gl, texBound(gl, a[0]), `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], 1), 'texBytes'),
+			compressedTexImage3D: (gl, a) => store(gl, texBound(gl, a[0]), `${a[0]}:${a[1]}`, levelBytes(a[2], a[3], a[4], a[5]), 'texBytes'),
+			texStorage2D: (gl, a) => store(gl, texBound(gl, a[0]), null, storageBytes(a[1], a[2], a[3], a[4], a[0] === 0x8513 ? 6 : 1), 'texBytes'),
+			texStorage3D: (gl, a) => store(gl, texBound(gl, a[0]), null, storageBytes(a[1], a[2], a[3], a[4], a[5]), 'texBytes'),
+			bufferData: (gl, a) => store(gl, gl.getParameter(BUFFER_BINDING[a[0]] || 0x8894), null, typeof a[1] === 'number' ? a[1] : (a[1] && a[1].byteLength) || 0, 'bufBytes'),
+		};
+		for (const method of Object.keys(sized)) {
+			wrap(proto, method, function (original, args) {
+				const result = original.apply(this, args);
+				try { sized[method](this, args); } catch (e) { /* an estimate only */ }
+				if (method !== 'texStorage2D' && method !== 'texStorage3D' && !(method === 'bufferData' && typeof args[1] === 'number')) glm.uploadBytes += uploads[method] ? uploads[method](args) : 0;
+				return result;
+			});
+		}
+		for (const method of ['texSubImage2D', 'texSubImage3D', 'compressedTexSubImage2D', 'bufferSubData']) {
+			wrap(proto, method, function (original, args) {
+				glm.uploadBytes += method === 'bufferSubData' ? ((args[2] && args[2].byteLength) || 0) : uploads[method](args);
+				return original.apply(this, args);
+			});
+		}
+		for (const method of ['renderbufferStorage', 'renderbufferStorageMultisample']) {
+			wrap(proto, method, function (original, args) {
+				const result = original.apply(this, args);
+				const a = method === 'renderbufferStorage' ? [1, ...args.slice(1)] : args.slice(1);
+				try { store(this, this.getParameter(0x8CA7), null, Math.max(1, a[0]) * levelBytes(a[1], a[2], a[3], 1), 'rbBytes'); } catch (e) { /* an estimate only */ }
+				return result;
+			});
+		}
+		// The cube-map faces drawn: Godot's Compatibility renderer draws a reflection
+		// probe's faces (and the sky's radiance) through framebuffers a cube map face is
+		// attached to, made once; each bind of one is a face drawn (or filtered).
+		wrap(proto, 'framebufferTexture2D', function (original, args) {
+			if (args[2] >= 0x8515 && args[2] <= 0x851A) {
+				glm.cubeAttach += 1;
+				const fb = this.getParameter(0x8CA6);
+				if (fb) cubeFbos.add(fb);
+			}
+			return original.apply(this, args);
+		});
+		wrap(proto, 'bindFramebuffer', function (original, args) {
+			if (args[1] && cubeFbos.has(args[1])) glm.cubeBinds += 1;
+			return original.apply(this, args);
+		});
 	}
 	// Sound: buffer sources started (Godot's web sample playback starts one a play).
 	const audio = window.BaseAudioContext && BaseAudioContext.prototype;
 	if (audio && audio.createBufferSource) {
 		const original = audio.createBufferSource;
 		audio.createBufferSource = function (...args) { counters[7] = (counters[7] || 0) + 1; return original.apply(this, args); };
+	}
+	// Sound buffers made (Godot's web samples are made with createBuffer), their count and
+	// sample bytes (channels x frames x 4).
+	const sound = {buffers: 0, bytes: 0};
+	if (audio && audio.createBuffer) {
+		const original = audio.createBuffer;
+		audio.createBuffer = function (...args) {
+			sound.buffers += 1;
+			sound.bytes += 4 * (args[0] || 0) * (args[1] || 0);
+			return original.apply(this, args);
+		};
+	}
+	if (audio && audio.decodeAudioData) {
+		const original = audio.decodeAudioData;
+		audio.decodeAudioData = function (...args) {
+			const counted = (made) => { if (made) { sound.buffers += 1; sound.bytes += 4 * made.numberOfChannels * made.length; } return made; };
+			const result = original.apply(this, args);
+			return result && typeof result.then === 'function' ? result.then(counted) : result;
+		};
 	}
 	// The engine's WebAssembly memory: its size and each growth.
 	let memory = null;
@@ -573,7 +704,7 @@ function tiTraceText(env, a) {
 		const before = this.buffer.byteLength;
 		const t = now();
 		const result = grow.call(this, pages);
-		event('wasm', `memory grew ${Math.round(before / 1048576)} to ${Math.round(this.buffer.byteLength / 1048576)} MiB in ${round(now() - t)} ms`);
+		pageEvent('wasm', `memory grew ${before} to ${this.buffer.byteLength} bytes in ${round(now() - t)} ms`);
 		return result;
 	};
 
@@ -609,12 +740,15 @@ function tiTraceText(env, a) {
 	const canvas = document.getElementById('canvas');
 	const orientation = () => (screen.orientation && screen.orientation.type) || (innerWidth > innerHeight ? 'landscape' : 'portrait');
 	const view = () => `${innerWidth}x${innerHeight} css, dpr ${devicePixelRatio}, canvas ${canvas ? canvas.width + 'x' + canvas.height : '?'}, ${orientation()}`;
-	const pageEvent = (kind, text) => {
-		event(kind, text);
+	const keepEvent = (kind, text) => {
 		pageEvents.push([new Date().toISOString(), round(now()), kind, String(text)]);
-		if (pageEvents.length > 40) pageEvents.shift();
+		if (pageEvents.length > 60) pageEvents.shift();
 		save('page_events', pageEvents);
 		beat();
+	};
+	const pageEvent = (kind, text) => {
+		event(kind, text);
+		keepEvent(kind, text);
 	};
 	document.addEventListener('visibilitychange', () => pageEvent('page', 'visibility ' + document.visibilityState));
 	window.addEventListener('pagehide', (e) => pageEvent('page', 'pagehide' + (e.persisted ? ' (kept for back)' : '')));
@@ -645,6 +779,36 @@ function tiTraceText(env, a) {
 	let lastSaved = 0;
 	let lastBeat = 0;
 	const mib = () => [performance.memory ? round(performance.memory.usedJSHeapSize / 1048576) : null, memory ? round(memory.buffer.byteLength / 1048576) : null];
+	// The page's own view of memory now (MEMORY_COLUMNS, bytes and counts): the
+	// WebAssembly memory, the JavaScript heap (where the browser gives one), the browser's
+	// own measurement (where it can make one), WebGL's live objects and estimated storage,
+	// the bytes uploaded and asked for so far, cube-map faces drawn so far, sound buffers.
+	const MEMORY_COLUMNS = 'WebAssembly bytes, JS heap bytes, browser-measured bytes, GL textures, GL buffers, GL programs, GL shaders, GL framebuffers, GL renderbuffers, GL vertex arrays, GL texture bytes, GL buffer bytes, GL renderbuffer bytes, GL bytes uploaded so far, GL storage bytes asked so far, cube-map face binds so far, cube-map face attachments so far, sound buffers so far, sound buffer bytes so far';
+	let uaMemory = null;
+	const memoryNow = () => [memory ? memory.buffer.byteLength : null, performance.memory ? performance.memory.usedJSHeapSize : null, uaMemory,
+		glm.live.texture, glm.live.buffer, glm.live.program, glm.live.shader, glm.live.framebuffer, glm.live.renderbuffer, glm.live.vao,
+		glm.texBytes, glm.bufBytes, glm.rbBytes, glm.uploadBytes, glm.allocBytes, glm.cubeBinds, glm.cubeAttach, sound.buffers, sound.bytes];
+	// The browser's own measurement of the page's memory, every 10 s, where it offers one
+	// (performance.measureUserAgentSpecificMemory: a cross-origin isolated page only).
+	const canMeasure = typeof performance.measureUserAgentSpecificMemory === 'function' && window.crossOriginIsolated === true;
+	if (canMeasure) {
+		setInterval(() => { performance.measureUserAgentSpecificMemory().then((m) => { uaMemory = m.bytes; }, () => {}); }, 10000);
+	}
+	// The cube-map faces drawing, started and stopped, kept as page events: a run of face
+	// binds with no gap of more than a second.
+	let cubeSeen = 0;
+	let cubeSince = -1;
+	let cubeFrom = null;
+	const markCubes = () => {
+		if (glm.cubeBinds !== cubeSeen) {
+			if (cubeSince < 0) { cubeFrom = [glm.cubeBinds, glm.cubeAttach]; pageEvent('cube', 'cube-map faces drawing (a reflection probe or the sky\'s radiance)'); }
+			cubeSeen = glm.cubeBinds;
+			cubeSince = now();
+		} else if (cubeSince >= 0 && now() - cubeSince > 1000) {
+			pageEvent('cube', `cube-map faces done: ${glm.cubeBinds - cubeFrom[0]} face binds, ${glm.cubeAttach - cubeFrom[1]} face attachments`);
+			cubeSince = -1;
+		}
+	};
 	function beat() {
 		if (!log.header || log.end) return;
 		lastBeat = now();
@@ -660,7 +824,7 @@ function tiTraceText(env, a) {
 	// last RING_S kept on the device each second, all of them (up to 900) with the
 	// long frames every PROGRESS_MS.
 	const RING_S = 120;
-	const SECOND_COLUMNS = 's, frames, mean ms, worst ms, x, z, step, leg, draw ms, outside ms, draw calls, primitives k, main view k, shadow k, texture MiB, buffer MiB, video MiB, resources, nodes, 3D scale, MSAA, nodes added, nodes removed, page view, WebAssembly MiB';
+	const SECOND_COLUMNS = 's, frames, mean ms, worst ms, x, z, step, leg, draw ms, outside ms, draw calls, primitives k, main view k, shadow k, engine texture bytes, engine buffer bytes, engine video bytes, engine static bytes, resources, nodes, 3D scale, MSAA, nodes added, nodes removed, page view, ' + MEMORY_COLUMNS;
 	const secondsAll = [];
 	let bucket = null;
 	let F = null;
@@ -669,12 +833,13 @@ function tiTraceText(env, a) {
 		const b = bucket;
 		const n = Math.max(1, b.n);
 		secondsAll.push([b.s, b.n, round(b.ms / n), round(b.worst), round(b.x), round(b.z), b.step, b.leg, round(b.draw / n), round(b.gap / n),
-			Math.round(b.dc / n), Math.round(b.prim / n), Math.round(b.vis / n), Math.round(b.sh / n), round(b.tex), round(b.buf), round(b.vid),
-			b.res, b.nodes, round(b.scale), b.msaa, b.nadd, b.nrem, view(), mib()[1]]);
+			Math.round(b.dc / n), Math.round(b.prim / n), Math.round(b.vis / n), Math.round(b.sh / n), bytesOf(b.tex), bytesOf(b.buf), bytesOf(b.vid), b.statics,
+			b.res, b.nodes, round(b.scale), b.msaa, b.nadd, b.nrem, view(), ...memoryNow()]);
 		if (secondsAll.length > 900) secondsAll.shift();
 		save('ring', secondsAll.slice(-RING_S));
 		bucket = null;
 	}
+	const bytesOf = (mb) => (typeof mb === 'number' ? Math.round(mb * 1048576) : null);
 	function addSecond(r) {
 		const s = Math.floor((log.header.page_ms_at_origin + r[F.t]) / 1000);
 		if (bucket && bucket.s !== s) closeSecond();
@@ -685,7 +850,7 @@ function tiTraceText(env, a) {
 		b.dc += at('dc'); b.prim += at('prim_k'); b.vis += at('vis_prim_k') || 0; b.sh += at('sh_prim_k') || 0;
 		b.nadd += at('nadd'); b.nrem += at('nrem');
 		b.x = at('x'); b.z = at('z'); b.step = at('step'); b.leg = at('leg'); b.tex = at('tex_mb'); b.buf = at('buf_mb'); b.vid = at('vid_mb');
-		b.res = at('res_n'); b.nodes = at('node_n'); b.scale = at('scale'); b.msaa = at('msaa');
+		b.res = at('res_n'); b.nodes = at('node_n'); b.scale = at('scale'); b.msaa = at('msaa'); b.statics = at('static_b');
 	}
 	// Every record of the run kept on the device as it comes, in IndexedDB (written
 	// outside the page, so what was handed over before a kill stays; not capped as the
@@ -758,7 +923,8 @@ function tiTraceText(env, a) {
 	}
 	setInterval(() => {
 		const [js, wasm] = mib();
-		log.memory.push([round(now()), js, wasm]);
+		log.memory.push([round(now()), js, wasm, ...memoryNow()]);
+		markCubes();
 		if (log.header && !log.end) {
 			beat();
 			keepChunk();
@@ -801,6 +967,13 @@ function tiTraceText(env, a) {
 			log.page.dpr_at_play = window.devicePixelRatio;
 			log.page.inner_at_play = [innerWidth, innerHeight];
 			log.page.view_at_play = view();
+			log.page.memory_columns = MEMORY_COLUMNS;
+			log.page.measures = {
+				webassembly_memory: Boolean(memory), js_heap: Boolean(performance.memory), browser_measured: canMeasure,
+				cross_origin_isolated: window.crossOriginIsolated === true, webgl_wrapped: Boolean(window.WebGL2RenderingContext),
+				sound_buffers: Boolean(audio && audio.createBuffer), engine_static: 'static_b (0 where a release build does not count it)',
+				cube_faces: 'framebuffers a cube-map face is attached to, counted as bound (reflection probes and the sky\'s radiance)',
+			};
 			F = {};
 			log.header.fields.forEach((n, i) => { F[n] = i; });
 			save('meta', {id: log.id, status: 'running', path: log.page.path, started: new Date().toISOString(), page: log.page, header: {...log.header, route: undefined, outline: undefined}});
@@ -816,7 +989,10 @@ function tiTraceText(env, a) {
 				if (F) addSecond(row);
 			}
 			const origin = log.header ? log.header.page_ms_at_origin : 0;
-			for (const e of batch.events) log.events.push([round(origin + e[0]), e[1], e[2]]);
+			for (const e of batch.events) {
+				log.events.push([round(origin + e[0]), e[1], e[2]]);
+				if (e[1] === 'probe') keepEvent('probe', e[2]);
+			}
 			if (now() - lastBeat >= BEAT_MS) beat();
 		},
 		census(json) {

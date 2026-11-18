@@ -83,8 +83,10 @@ const MAX_LAPS := 3
 ## After lap: the renderer's video memory (textures, buffers and render targets, MiB),
 ## the primitives of the main view and of the shadow pass (thousands: Compatibility
 ## counts the shadow pass's draw calls with the main view's and the depth pre-pass in
-## neither), the resources and nodes alive, the 3D scale and MSAA.
-const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap", "vid_mb", "vis_prim_k", "sh_prim_k", "res_n", "node_n", "scale", "msaa"]
+## neither), the resources and nodes alive, the 3D scale and MSAA; then the engine's
+## static memory (Performance.MEMORY_STATIC, bytes: 0 where a release build does not
+## count it, as the web's).
+const FIELDS := ["t", "dt", "gap", "phys_n", "phys_ms", "sphys_ms", "vphys_ms", "proc_ms", "sproc_ms", "vproc_ms", "draw_ms", "dc", "obj", "prim_k", "x", "y", "z", "speed", "flags", "step", "leg", "nadd", "nrem", "tex_mb", "buf_mb", "act", "pairs", "lap", "vid_mb", "vis_prim_k", "sh_prim_k", "res_n", "node_n", "scale", "msaa", "static_b"]
 ## flags: driving, the tree paused, nothing drawn this frame, the drive running.
 const FLAG_DRIVING := 1
 const FLAG_PAUSED := 2
@@ -193,6 +195,12 @@ var _msaa_off := false
 var _msaa_restore := false
 var _msaa_before := Viewport.MSAA_DISABLED
 var _route_name := ""
+## Every reflection probe in the world, as the records start, and whether each was in
+## the camera's view last frame (a probe renders only when a camera's view takes it in:
+## the engine gives no signal when it renders, the page counts the cube-map faces drawn).
+var _reflection_probes: Array = []
+var _probe_names: Array[String] = []
+var _probe_states: Array[int] = []
 ## Natively, the pipeline compilations so far by source (PIPELINE_SOURCES).
 var _pipelines := {}
 
@@ -521,6 +529,7 @@ func _finish_frame() -> void:
 	if not _web:
 		_mark_pipelines()
 	_mark_view()
+	_mark_probes()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -539,7 +548,7 @@ func _finish_frame() -> void:
 		viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME) / 1000.0,
 		viewport.get_render_info(Viewport.RENDER_INFO_TYPE_SHADOW, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME) / 1000.0,
 		Performance.get_monitor(Performance.OBJECT_RESOURCE_COUNT), Performance.get_monitor(Performance.OBJECT_NODE_COUNT),
-		viewport.scaling_3d_scale, viewport.msaa_3d,
+		viewport.scaling_3d_scale, viewport.msaa_3d, Performance.get_monitor(Performance.MEMORY_STATIC),
 	]
 	for value: Variant in row:
 		_rows.append(float(value))
@@ -566,6 +575,38 @@ func _mark_view() -> void:
 	if view != _view:
 		_view = view
 		_event("view", view, viewport.scaling_3d_scale)
+
+
+## A "probe" marker when a reflection probe comes into the camera's view or leaves it
+## (by its box against the view's planes, as the engine culls it), with its update
+## mode, or is taken out of the world.
+func _mark_probes() -> void:
+	var camera := get_viewport().get_camera_3d()
+	if camera == null:
+		return
+	var planes := camera.get_frustum()
+	for index in _reflection_probes.size():
+		var node: Variant = _reflection_probes[index]
+		var state := -1
+		var mode := ""
+		if is_instance_valid(node) and (node as Node).is_inside_tree():
+			var probe := node as ReflectionProbe
+			mode = "once" if probe.update_mode == ReflectionProbe.UPDATE_ONCE else "always"
+			var box := probe.global_transform * probe.get_aabb()
+			state = 1 if probe.is_visible_in_tree() else 0
+			for plane: Plane in planes:
+				var outside := true
+				for corner in 8:
+					if plane.distance_to(box.get_endpoint(corner)) <= 0.0:
+						outside = false
+						break
+				if outside:
+					state = 0
+					break
+		if _probe_states[index] != state:
+			_probe_states[index] = state
+			var what := "taken out of the world" if state < 0 else ("in view (update %s)" % mode if state > 0 else "out of view (update %s)" % mode)
+			_event("probe", "%s %s" % [_probe_names[index], what], float(state))
 
 
 ## An Options resolution id for a scale asked for ("0.5" -> "50"), "" if the menu
@@ -772,6 +813,17 @@ func _begin_report() -> void:
 	header["origin_ms_engine"] = 0.0
 	header["switches"] = _switches()
 	_event("trace", "switches %s" % JSON.stringify(header.switches), 0)
+	_reflection_probes.clear()
+	_probe_names.clear()
+	_probe_states.clear()
+	var probes: Array = []
+	for node: Node in _main.find_children("*", "ReflectionProbe", true, false):
+		var probe := node as ReflectionProbe
+		_reflection_probes.append(probe)
+		_probe_names.append(str(probe.name))
+		_probe_states.append(-2)
+		probes.append({"name": str(probe.name), "update": "once" if probe.update_mode == ReflectionProbe.UPDATE_ONCE else "always", "size": [probe.size.x, probe.size.y, probe.size.z], "at": [probe.global_position.x, probe.global_position.y, probe.global_position.z]})
+	header["reflection_probes"] = probes
 	if _web and _js != null:
 		# The page's clock at this trace's origin (both are performance.now() on the web).
 		var before := _now_us()
