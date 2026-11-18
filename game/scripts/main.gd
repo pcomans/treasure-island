@@ -10,12 +10,12 @@ const STARTUP_MARKS := preload("res://game/scripts/debug/startup_marks.gd")
 ## an opt-in diagnostic for the web build's hitches, made only when asked for
 ## (drive_trace_requested) and never loaded otherwise.
 const DRIVE_TRACE_PATH := "res://game/scripts/debug/drive_trace.gd"
-const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
-const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
-const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 ## On the web: the game data pack's bytes the game never reads again, freed once play
 ## is ready (_release_pack).
 const PACK_RELEASE := preload("res://game/scripts/web/pack_release.gd")
+const TOUCH_CONTROLS := preload("res://game/scripts/ui/touch_controls.gd")
+const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
+const VEHICLE_MANAGER := preload("res://game/scripts/vehicles/vehicle_manager.gd")
 ## A touch screen's HUD is laid out for this many pixels or more each way
 ## (use_touch_controls); the view still fills the screen's shape.
 const TOUCH_LAYOUT_PX := 720
