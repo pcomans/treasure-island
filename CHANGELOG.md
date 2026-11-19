@@ -8,7 +8,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 ## Build 2306 (2026-11-18)
 
-- The Job Corps campus has its chain-link fence along Seven Seas Avenue, its north side, 5th Street and round the 4th Street lot. Cars stop at it; its gates and the streets into the campus stay open.
+- The Job Corps campus has its chain-link fence along Seven Seas Avenue, its north side, 5th Street and round the 4th Street lot; its gates and the streets into the campus stay open.
 
 ## Build 2302 (2026-11-18)
 

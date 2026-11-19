@@ -27602,3 +27602,9 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked: pixel-diffing before/after first confirmed the unchanged views in seconds, leaving time for full-size crops of the changed ones.
 - What did not: the corner-351 "match" pose doesn't frame the photo's landmarks, which weakened that comparison.
 - Next time: line up match poses with a fixed landmark in the photo (shelter, pole) before capturing, and record each fence type per side from the photos before choosing kit pieces.
+
+### jobcorps-fence-20261118 — 2026-11-19 — the Job Corps perimeter made breakable (branch `feature/jobcorps-fence-20261118`)
+
+- What worked well: Breakability is one rule param; the fence builder and breaker read it with no code change, and the regenerated world differs from the last one only in the four rows' params. The vehicle contract already breaks a plain chain-link bay on an OSM fence and the turf pitch's windscreen, a rule-built row, so the Job Corps-only case could go rather than turn into a fourth fence-breaking case.
+- What did not work well: The unbreakable rule had been written into code comments, AGENTS.md and KNOWN_ISSUES before the fence existed (2026-11-08), and my own first commit repeated it in the zone, CHANGELOG and the inventory, so the reversal took a grep through eight places.
+- What the team should change next time: Put a behaviour that is still to come in one place, the rule's params or one KNOWN_ISSUES line, and point to it from elsewhere instead of repeating it.
