@@ -410,6 +410,12 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
 - **899 13th St (OSM w291196367), after the 2026-11-15 fix and its review round:** the ground round the shed is a clean lawn where the Sep 2025 Street View and the May 2026 aerial show a crowded contractor yard (parked cars, trailers, containers and stacked material behind chain-link); walls and roof have no corrugation; the roof is one flat warm grey-brown where the photos show rust patches over pale sheets (and the aerial reads greyer from above), and its rooftop unit and two stacks are not modelled; the canopy's underside is pale where the photos show a dark underside with purlins; the walls read slightly yellow in game light against the photos' pale greige; the double doors under the south canopy sit about 3 m closer to the WSW corner than in the Sep 2025 and Apr 2019 photos (a perspective-limited estimate), and the photos show bars between the corner and the doors and a dark glazed window beyond them, where the model has one barred window beyond the doors; a 1 px dashed light line ran along the annex-to-shed eave in the neutral top view, seen in review before the trim turned brown and not visible in the game-light overhead after (2026-11-15).
 - **Open-sided mid-rise decks (OSM w291196366, w1222514685):** `midrise_family.gd` `_open_face` places posts every `module` from each face's start, so a face's last post can stand just beside the next face's corner post: six such pairs, 0.06 to 1.3 m apart, on w291196366's deck and two, 0.2 and 0.4 m apart, on w1222514685's pergola deck (2026-11-15). A new rule would move their geometry, so it waits for its own review.
 - **Garden Walk (w1249412095):** Johnson Street's sidewalk still crosses the walk's north mouth, where Street View starview-nw01 (Nov 2025) shows the aggregate running to the curb, and the drive apron at Maceo May's Seven Seas portal is asphalt where Street View ss02 (Jun 2026) shows concrete.
+- **Job Corps Dorm 369 (OSM w291189926), after its 2026-11-18/19 L3 study (seen in review):**
+  - the vent duct on the north-west tower is a lighter grey than photographed, and its rust starts at the bend;
+  - the conduit strip is too dark;
+  - a little loose cable hangs under the radios;
+  - the east wing's end tower's blue is inferred from the other towers;
+  - the north and east sides have no dated photo, so they stay plain.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;
@@ -796,6 +802,11 @@ Known gaps:
   - In `tools/lib/ground-cover-map.mjs:493`, `drawn[cell] = 1` also runs for `no_fill` rules, so a `no_fill` rule that is the only rule on a verge would cut that verge off from the ground behind it. It doesn't happen today.
   - `tools/render_naip_generated_vegetation_comparison.mjs` is broken: it reads `generated/world/vegetation.json`, which no longer exists. Fix or remove it with its outputs in `source_assets/vegetation/naip_2022/`.
   - `tools/render_world_coverage_evidence.mjs` fails on an unknown demolished status.
+- **Mid-rise wall details** (Dorm 369 review notes, 2026-11-19):
+  - the wall equipment kit's defaults (the vent's section offset and depth) are written again in `game/scripts/world/facades/midrise_family.gd:3295`; the kit should export them and the family use them;
+  - the duct's wall-top check uses the block's `top_y`, which on a railing block is not its wall top (`wall_top`);
+  - the duct's drop check tests the run's corners only;
+  - `game/tests/headless_midrise_wall_detail_contract.gd` has no 3-D winding assertion.
 - **Street objects generator** (findings at `f4a6f827`, line numbers of that commit):
   - `stepOffSlope` in `tools/lib/street-furniture-generation.mjs:722` tests a spot with the `bus_stop` kind's 1.5 m radius, so a flag could go quietly to `osm_unbuilt`.
   - `except_cells` (`:1498`) is keyed by station index, so a spacing change can remove a different lamp.

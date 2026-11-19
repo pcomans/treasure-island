@@ -27674,3 +27674,17 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Building the vent's bend as one swept profile (rounded outer corners, a run held clear of the parapet, a drop onto the roof) made it read as a bend instead of a block, and the producer now checks the host's shape (wall top, roof under the drop, parapet) where the kit only assumes it. Projecting the three NNW towers through the fitted telephoto camera settled offline that the background tower is the middle wing's and the east one is out of frame.
 - What did not work well: I read "not above the tower top" and "no box cap" as limits on the box I had, rather than looking again at the full-resolution crop that showed the sky gap under the run; it cost a round.
 - What the team should change next time: Put the full-resolution photo crop of any owner-stated or reviewer-named feature beside the render crop on the sheet from the first render, and model from that crop.
+
+### ti-code-review — Job Corps fence delta (2026-11-18)
+- Worked: a check that reuses the build's own condition was easy to confirm; rerunning the author's node negative case took seconds.
+- Change: list every `breakable: false` rule and its pattern before judging a new data check.
+
+### ti-visual-review — Dorm 369 final-r36 (2026-11-19)
+- Worked: the full-resolution photo crop placed beside the render crop settled the vent in one look, and a pixel difference between rounds confirmed the other sides had not changed.
+- Didn't: none of the earlier visual entries recorded levels per side, so the levels had to be worked out again.
+- Change: record the level for each side in every visual verdict.
+
+### ti-code-review — Dorm 369 round-4 delta (2026-11-19)
+- Worked: the bake log's before/after numbers answered the material question without a rerun.
+- Didn't: the vent's section offset and defaults are written in both the kit and the family.
+- Change: shared kits export their constants; producers don't repeat them.
