@@ -338,6 +338,14 @@
       "roughness": 0.7,
       "receive_shadows": false
     },
+    "cable_grey": {
+      "rgb": [
+        0.19,
+        0.2,
+        0.21
+      ],
+      "roughness": 0.6
+    },
     "roof_membrane": {
       "rgb": [
         0.46,
@@ -1808,8 +1816,8 @@
     }
   ],
   "study_notes": {
-    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1). L3 (2026-11-18): Sep 2025 sideD/spec/sideC, hero.jpg and the owner's 2026-11-18 photos: pale putty walls; slate stair towers with one two-pane light per half landing on their sides, about 1 m over the wing roof; eyebrow sunshades over the wide groups on storeys 1-3 of the WSW and SSE faces (also over the SSE ground floor, <=2018 photo) and on the north part of the middle wing's WSW face; white sashes, most lights curtained or blinded, some open; a thin overhanging roof slab with a blue-green fascia and underside; sand-framed ground bays with slate panels on the WSW face; grey set-back strips beside the towers; the SSE face starts with two wide groups at the SW corner; the NW tower (west wing's NNW end) carries a mid-grey antenna cluster at the 4th floor with warning signs on the wall below it, and a flat-fronted grey vent up its NNW face, rust-brown at the top, that curves over onto the tower's roof (owner 2026-11-18); the penthouse and its siren mast (Sep 2025 sideC).",
-    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled). L3: hood, slab, band, tower-light, blind and equipment sizes, the vent's run over the roof, which lights are curtained, the SSE columns past u 31.4, the middle wing's photographed column station, the penthouse size, the roof membrane's grey-brown (jc-07, undated) and the duct and cluster layout are production_inference; the middle wing's NNW tower takes colour and height only, and the east wing's (from jc-08) colour and height only; the SE tower keeps its windows (no dated photo since the repaint).",
+    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1). L3 (2026-11-18): Sep 2025 sideD/spec/sideC, hero.jpg and the owner's 2026-11-18 photos: pale putty walls; slate stair towers with one two-pane light per half landing on their sides, about 1 m over the wing roof; eyebrow sunshades over the wide groups on storeys 1-3 of the WSW and SSE faces (also over the SSE ground floor, <=2018 photo) and on the north part of the middle wing's WSW face; white sashes, most lights curtained or blinded, some open; a thin overhanging roof slab with a blue-green fascia and underside; sand-framed ground bays with slate panels on the WSW face; grey set-back strips beside the towers; the SSE face starts with two wide groups at the SW corner; the NW tower (west wing's NNW end) carries a mid-grey antenna cluster at the 4th floor with warning signs on the wall below it, and a flat-fronted grey vent up its NNW face that rises past the parapet and bends over it, its rust-brown run held about 0.3-0.4 m clear (the owner's 2026-11-18 photos), curving over onto the tower's roof (owner 2026-11-18); the penthouse and its siren mast (Sep 2025 sideC).",
+    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled). L3: hood, slab, band, tower-light, blind and equipment sizes, the vent's bend radius and its drop onto the roof 1.2 m behind the wall, which lights are curtained, the SSE columns past u 31.4, the middle wing's photographed column station, the penthouse size, the roof membrane's grey-brown (jc-07, undated) and the duct and cluster layout are production_inference; the middle wing's NNW tower takes colour and height only (it is the blue-grey tower behind the NW tower in the owner's 2026-11-18 photos, by their fitted camera); the east wing's NNW tower, outside those photos' frame (the fitted camera puts it about 700 px left of it), takes colour and height only as an inference from the other towers; the SE tower keeps its windows (no dated photo since the repaint).",
     "footprint": "Frozen 32-edge E plan split into the spine-and-wings block, the west and east wing ends, the SW and SE corner towers and the three NNW end towers (the middle wing's end block is its tower). The NW tower's WSW side is 1.9 m deep in OSM against about 3 m in the owner's 2026-11-18 photos; the frozen footprint stands."
   },
   "eaves": [
@@ -2006,13 +2014,14 @@
         16.5
       ],
       "depth": 0.3,
-      "neck": 0.26,
+      "lift": 0.35,
       "over": 1.2,
       "conduits": 2,
       "strap_every": 1.5,
       "materials": {
         "duct": "soffit",
-        "strap": "soffit"
+        "strap": "soffit",
+        "conduit": "cable_grey"
       }
     }
   ]

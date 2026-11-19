@@ -1924,7 +1924,7 @@ static func _blinds(ctx: Ctx, face: Face, blinds: Dictionary, rects: Array, s0: 
 		for drop: Variant in drops:
 			valid = valid and (drop is float or drop is int) and _in_range(float(drop), 0.0, 1.0)
 	if not valid:
-		ctx.errors.append("%s/%s grid blinds need a palette material, a seed and drops between 0 and 1" % [face.block.id, face.key])
+		ctx.errors.append("%s/%s grid blinds need a palette material and drops between 0 and 1, and a seed, if given, must be a number" % [face.block.id, face.key])
 		return
 	var edges: Array = [s0, s1]
 	for r: Dictionary in rects:
@@ -3213,7 +3213,10 @@ static func _part(ctx: Ctx, spec: Variant) -> void:
 ## kind "antenna_cluster" or "duct", stations `s`, heights `y` above the building
 ## floor, the kit's own fields, and `materials` {role: palette key} over the kit's
 ## defaults (kit roles only). Every piece must lie on the edge, between its stations 0
-## and its length, or the build fails. Support role.
+## and its length. A duct bends over its block's wall onto the roof: its `y` must end at
+## that wall's top and its drop, `over` behind the wall, must land on the block's flat
+## roof inside the parapet; it lands at the roof's level. Otherwise the build fails.
+## Support role.
 static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
 	var kind := str(spec.kind)
 	var face := _edge_face(ctx, spec)
@@ -3237,6 +3240,11 @@ static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
 				return
 	var local := spec.duplicate(true)
 	local["y"] = [ctx.floor_y + float(range_y[0]), ctx.floor_y + float(range_y[1])]
+	if kind == "duct":
+		var land: Variant = _duct_landing(ctx, face, spec)
+		if land == null:
+			return
+		local["land"] = land
 	var made: Dictionary = WallEquipmentKit.antenna_cluster(local) if kind == "antenna_cluster" else WallEquipmentKit.duct(local)
 	if not bool(made.ok):
 		ctx.errors.append("; ".join(PackedStringArray(made.errors)))
@@ -3251,7 +3259,79 @@ static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
 			ctx.errors.append("%s part: palette has no %s for %s" % [kind, key, str(item.role)])
 			return
 		# The kit's d runs out from the wall; the family's depth runs in.
-		_box(ctx.bucket("support", key), face, float(item.u0), float(item.u1), float(item.y0), float(item.y1), -float(item.d1), -float(item.d0), false)
+		if item.has("profile"):
+			_sweep(ctx.bucket("support", key), face, float(item.u0), float(item.u1), item.profile)
+		else:
+			_box(ctx.bucket("support", key), face, float(item.u0), float(item.u1), float(item.y0), float(item.y1), -float(item.d1), -float(item.d0), false)
+
+
+## Where a duct part's drop lands (its block's roof level, absolute), or null with the
+## build error: the block under the duct's foot must have a flat roof, the duct's `y`
+## must end at that block's wall top, and its drop (from `over` minus its section back
+## to `over` behind the wall, across its stations) must stand on that block's roof
+## inside the parapet.
+static func _duct_landing(ctx: Ctx, face: Face, spec: Dictionary) -> Variant:
+	var stations: Array = spec.get("s", [])
+	var range_y: Array = spec.get("y", [])
+	if stations.size() != 2 or not (stations[0] is float or stations[0] is int) or not (stations[1] is float or stations[1] is int):
+		return ctx.floor_y + float(range_y[1])
+	var s0 := float(stations[0])
+	var s1 := float(stations[1])
+	var label := "duct part on edge %d" % int(spec.edge)
+	var foot := face.a + face.d * ((s0 + s1) * 0.5) - face.n * 0.05
+	var owner: Block = null
+	for block: Block in ctx.blocks:
+		if Geometry2D.is_point_in_polygon(foot, block.poly):
+			owner = block
+			break
+	if owner == null or owner.form != "flat":
+		ctx.errors.append("%s: no block with a flat roof behind it" % label)
+		return null
+	var top := ctx.floor_y + float(range_y[1])
+	if absf(top - owner.top_y) > 0.01:
+		ctx.errors.append("%s: its y must end at its wall's top, %.2f m above the floor" % [label, owner.top_y - ctx.floor_y])
+		return null
+	var over := float(spec.get("over", 1.0))
+	var section := float(spec.get("depth", 0.35)) - 0.02
+	var parapet_t := float((owner.cfg.get("parapet", {}) as Dictionary).get("t", 0.3))
+	var lands := over - section > parapet_t
+	for s: float in [s0, s1]:
+		for depth: float in [over - section, over]:
+			lands = lands and Geometry2D.is_point_in_polygon(face.a + face.d * s - face.n * depth, owner.poly)
+	if not lands:
+		ctx.errors.append("%s: its drop, %.2f-%.2f m behind the wall, must land on block %s's roof inside its parapet" % [label, over - section, over, owner.id])
+		return null
+	return owner.roof_y
+
+
+## A polygon `profile` [[d, y], ...] in a face's frame (d out from the wall, y up)
+## swept from station s0 to s1: its sides facing out of the polygon, both ends closed.
+static func _sweep(bucket: Bucket, face: Face, s0: float, s1: float, profile: Array) -> void:
+	var points := PackedVector2Array()
+	for p: Array in profile:
+		points.append(Vector2(float(p[0]), float(p[1])))
+	var area := 0.0
+	for i in points.size():
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % points.size()]
+		area += a.x * b.y - b.x * a.y
+	var turn := 1.0 if area > 0.0 else -1.0
+	var out := face.out3()
+	for i in points.size():
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % points.size()]
+		var normal := Vector2(b.y - a.y, a.x - b.x) * turn
+		var facing := out * normal.x + Vector3.UP * normal.y
+		bucket.quad(face.point(s0, a.y, -a.x), face.point(s1, a.y, -a.x), face.point(s1, b.y, -b.x), face.point(s0, b.y, -b.x), facing)
+	var along := face.dir3()
+	var tris := Geometry2D.triangulate_polygon(points)
+	for k in range(0, tris.size(), 3):
+		for end: Array in [[s0, -along], [s1, along]]:
+			var corners: Array[Vector3] = []
+			for j in 3:
+				var p: Vector2 = points[tris[k + j]]
+				corners.append(face.point(float(end[0]), p.y, -p.x))
+			bucket.tri(corners[0], corners[1], corners[2], end[1])
 
 
 static func _plan_points(values: Variant) -> PackedVector2Array:

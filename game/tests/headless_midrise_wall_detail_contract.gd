@@ -3,9 +3,12 @@ extends SceneTree
 ## The mid-rise family's opt-in wall details, on hand-built inputs. The shared wall
 ## equipment kit (wall_equipment_kit.gd) lays out the same boxes for the same spec and
 ## other boxes for another seed, refuses bad specs, and gives every box increasing u, y
-## and d ranges inside its stations, the cluster's signs on the wall at its foot and the
-## duct's elbow on its top, curving back over the wall. The family (midrise_family.gd) refuses equipment off its
-## edge or with a material role the kit does not have; an eave whose section stands
+## and d ranges inside its stations, the cluster's signs on the wall at its foot, and
+## the duct rising past the wall's top into a rounded bend whose run is held clear of
+## it, with sky under it, before dropping onto the roof. The family (midrise_family.gd)
+## refuses equipment off its edge or with a material role the kit does not have, and a
+## duct that does not end at its wall's top or whose drop misses the roof inside the
+## parapet; an eave whose section stands
 ## outside the outline closes both ends, one inside it over walls on the outline neither;
 ## a grid hood's min_w leaves the narrow opening bare and hoods the wide one; and grid
 ## blinds are the same for the same seed, follow another seed, cover whole lights with a
@@ -18,7 +21,7 @@ const MIDRISE := preload("res://game/scripts/world/facades/midrise_family.gd")
 const SOURCE := "w0"
 const GRID_SOURCE := {"kind": "rectified_photo", "ref": "test-photo", "date": "2025-09", "side": "s"}
 const CLUSTER := {"s": [0.2, 6.0], "y": [9.0, 12.0], "mounts": 8, "cabinets": 3, "standoff": 0.45, "seed": 369}
-const DUCT := {"s": [2.75, 3.3], "y": [12.0, 16.5], "depth": 0.3, "neck": 0.26, "over": 1.0, "conduits": 2, "strap_every": 1.5}
+const DUCT := {"s": [2.75, 3.3], "y": [12.0, 16.5], "depth": 0.3, "lift": 0.35, "over": 1.2, "land": 14.5, "conduits": 2, "strap_every": 1.5}
 ## The grid face (edge 0, stations along x): a 1 m opening and a 4 m one, on storey 1.
 const NARROW := [2.0, 3.0]
 const WIDE := [8.0, 12.0]
@@ -33,7 +36,7 @@ func _run() -> void:
 	for failure: String in failures:
 		print("FAIL: mid-rise wall detail: ", failure)
 	if failures.is_empty():
-		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's elbow curving back over its top; the family refuses equipment off its edge or with an unknown role; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops")
+		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's rounded bend held clear of its wall's top; the family refuses equipment off its edge or with an unknown role, and a duct off its wall's top or off the roof; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops")
 	quit(0 if failures.is_empty() else 1)
 
 
@@ -71,20 +74,30 @@ static func _check_kit(failures: Array) -> void:
 	_expect(failures, bool(duct.ok) and duct.boxes == (KIT.duct(DUCT.duplicate(true)) as Dictionary).boxes, "the same duct spec gives the same duct")
 	_check_boxes(failures, "duct", duct, -INF, INF)
 	var shaft := {}
+	var bend := {}
 	var top := float(DUCT.y[1])
 	for box: Dictionary in duct.boxes:
-		_expect(failures, float(box.y1) <= top + float(DUCT.neck), "nothing of the duct rises above its elbow (%s)" % box.role)
 		if str(box.role) == "duct" and shaft.is_empty():
 			shaft = box
-	_expect(failures, float(shaft.y1) == top, "the duct's shaft reaches the wall's top")
-	var elbow := false
+		elif str(box.role) == "hood":
+			bend = box
+	_expect(failures, not shaft.is_empty() and not bend.is_empty() and bend.has("profile"), "the duct has a shaft and a bend profile")
+	if shaft.is_empty() or not bend.has("profile"):
+		return
+	_expect(failures, float(shaft.y1) > top, "the duct's shaft rises past the wall's top")
+	_expect(failures, float(bend.u0) == float(shaft.u0) and float(bend.u1) == float(shaft.u1) and float(bend.d1) == float(shaft.d1) and float(bend.d0) == -float(DUCT.over) and float(bend.y0) == float(DUCT.land), "the bend continues the shaft and drops over its distance behind the wall to land")
 	for box: Dictionary in duct.boxes:
-		if str(box.role) == "hood":
-			elbow = true
-			_expect(failures, float(box.y0) == top and float(box.y1) == top + float(DUCT.neck) and float(box.u0) == float(shaft.u0) and float(box.u1) == float(shaft.u1) and float(box.d1) == float(shaft.d1) and float(box.d0) == -float(DUCT.over), "the duct's elbow sits on the wall's top and curves back over it from the shaft's front")
-		elif str(box.role) != "duct":
-			_expect(failures, float(box.y1) <= top, "the duct's %s stays on the wall" % box.role)
-	_expect(failures, elbow, "the duct has its elbow")
+		_expect(failures, float(box.y1) <= float(bend.y1), "nothing of the duct rises above its bend (%s)" % box.role)
+	var outline := PackedVector2Array()
+	for p: Array in bend.profile:
+		outline.append(Vector2(float(p[0]), float(p[1])))
+	var run_d := -float(DUCT.over) * 0.5
+	var lift := float(DUCT.lift)
+	var section := float(DUCT.depth) - 0.02
+	_expect(failures, Geometry2D.is_point_in_polygon(Vector2(run_d, top + lift + section * 0.5), outline) and not Geometry2D.is_point_in_polygon(Vector2(run_d, top + lift * 0.5), outline), "the bend's run is held lift clear of the wall's top, with a gap under it")
+	_expect(failures, Geometry2D.is_point_in_polygon(Vector2(float(DUCT.depth) - 0.01, float(shaft.y1) + 0.01), outline) and not Geometry2D.is_point_in_polygon(Vector2(float(DUCT.depth) - 0.01, float(bend.y1) - 0.01), outline), "the bend's outer corner is rounded")
+	_expect(failures, Geometry2D.is_point_in_polygon(Vector2(-float(DUCT.over) + section * 0.5, float(DUCT.land) + 0.01), outline), "the bend drops down to land")
+	_expect(failures, not Geometry2D.triangulate_polygon(outline).is_empty(), "the bend's profile is a simple polygon")
 
 
 static func _check_kit_refusals(failures: Array) -> void:
@@ -97,7 +110,8 @@ static func _check_kit_refusals(failures: Array) -> void:
 		_expect(failures, not bool(made.ok) and not (made.errors as Array).is_empty() and (made.boxes as Array).is_empty(), "the kit refuses a cluster with %s" % case[1])
 	for case: Array in [
 		[{"s": [2.0, 2.1]}, "a 0.1 m shaft"], [{"y": [12.0, 12.5]}, "a short range"], [{"depth": 0.05}, "depth"],
-		[{"neck": 0.05}, "neck"], [{"over": 0.1}, "a short run over"], [{"over": 6.0}, "a long run over"],
+		[{"lift": 0.05}, "a low lift"], [{"lift": 1.5}, "a high lift"], [{"over": 0.4}, "a drop inside its own bend"],
+		[{"over": 6.0}, "a long run over"], [{"land": 17.0}, "a landing above its top"],
 		[{"conduit_side": 0}, "conduit_side 0"], [{"conduits": 5}, "conduits"], [{"strap_every": 0.2}, "strap_every"],
 	]:
 		var made: Dictionary = KIT.duct(_with(DUCT, case[0]))
@@ -115,11 +129,25 @@ static func _check_boxes(failures: Array, label: String, made: Dictionary, u_min
 
 static func _check_equipment_parts(failures: Array) -> void:
 	var cluster := _with(CLUSTER, {"kind": "antenna_cluster", "edge": 1, "s": [0.5, 9.5], "y": [1.0, 4.0]})
-	var duct := _with(DUCT, {"kind": "duct", "edge": 1, "s": [4.0, 4.5], "y": [1.0, 5.5]})
+	# The block's wall top is 6 m above its floor (two 3 m storeys, no parapet).
+	var duct := _with(DUCT, {"kind": "duct", "edge": 1, "s": [4.0, 4.5], "y": [1.0, 6.0]})
 	_expect(failures, _errors(_config({"parts": [cluster, duct]})).is_empty(), "equipment on its 10 m edge builds")
+	var below_top := _errors(_config({"parts": [_with(duct, {"y": [1.0, 5.5]})]}))
+	_expect(failures, below_top.size() == 1 and str(below_top[0]).contains("wall's top"), "a duct that ends below its wall's top fails the build: %s" % [below_top])
+	# A block 2 m deep along edge 0 and one behind it: a drop 3 m back lands on the other.
+	var split := {"blocks": [
+		{"id": "front", "storeys": 2, "ground_h": 3.0, "clip": [{"edge": 0, "max": 2.0}], "parapet": {"h": 0.0}, "faces": {"default": "wall"}},
+		{"id": "back", "storeys": 2, "ground_h": 3.0, "clip": [{"edge": 0, "min": 2.0}], "parapet": {"h": 0.0}, "faces": {"default": "wall"}},
+	]}
+	var on_edge0 := _with(duct, {"edge": 0, "s": [8.0, 8.5]})
+	_expect(failures, _errors(_config(split.merged({"parts": [on_edge0]}))).is_empty(), "a duct whose drop lands on its own block's roof builds")
+	var past := _errors(_config(split.merged({"parts": [_with(on_edge0, {"over": 3.0})]})))
+	_expect(failures, past.size() == 1 and str(past[0]).contains("must land on block front"), "a duct whose drop passes its block's roof fails the build: %s" % [past])
+	var in_parapet := _errors(_config({"parts": [_with(duct, {"over": 0.55})]}))
+	_expect(failures, in_parapet.size() == 1 and str(in_parapet[0]).contains("inside its parapet"), "a duct whose drop falls inside the parapet fails the build: %s" % [in_parapet])
 	var off := _errors(_config({"parts": [_with(cluster, {"s": [0.5, 10.5]})]}))
 	_expect(failures, off.size() == 1 and str(off[0]).contains("off the edge"), "a cluster past its edge's end fails the build: %s" % [off])
-	var run_off := _errors(_config({"parts": [_with(duct, {"s": [9.6, 9.95]})]}))
+	var run_off := _errors(_config({"parts": [_with(duct, {"s": [9.4, 9.95]})]}))
 	_expect(failures, run_off.size() == 1 and str(run_off[0]).contains("runs past the edge"), "a duct whose conduits pass its edge's end fails the build: %s" % [run_off])
 	var role := _errors(_config({"parts": [_with(duct, {"materials": {"chimney": "slab"}})]}))
 	_expect(failures, role.size() == 1 and str(role[0]).contains("not a kit role"), "an unknown material role fails the build: %s" % [role])

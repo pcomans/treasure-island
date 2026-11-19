@@ -1,16 +1,18 @@
 extends RefCounted
 
 ## Procedural wall-mounted equipment shared by facade producers (pure static,
-## producer-agnostic): a telecom antenna cluster on pipe mounts and a sheet-metal duct
-## turning into a weathered gooseneck, laid out by rule from a few numbers in the config.
+## producer-agnostic): a telecom antenna cluster on pipe mounts and a sheet-metal vent
+## bending over the wall's top onto the roof, laid out by rule from a few numbers in the
+## config.
 ##
 ## Every helper returns {"ok": bool, "boxes": Array, "errors": Array}. A box is
 ## {"role": String, "u0", "u1", "y0", "y1", "d0", "d1": float} in a wall's own frame:
 ## u along the wall (metres), y height (the producer's metres) and d out from the wall
-## plane (0 on the wall, positive outward, negative over the wall's top), each range
-## increasing. Producers map each
-## role (ROLES) to a material, emit the boxes and own their collision. The same spec
-## always gives the same boxes: placement varies only with the spec's "seed".
+## plane (0 on the wall, positive outward, negative behind it, over the roof), each range
+## increasing. A box with a "profile" ([[d, y], ...], a simple polygon inside its d and
+## y ranges) is that polygon swept from u0 to u1 instead of the whole box. Producers map
+## each role (ROLES) to a material, emit the boxes and own their collision. The same
+## spec always gives the same boxes: placement varies only with the spec's "seed".
 ##
 ## antenna_cluster(spec): mounts spread evenly over "s": [u0, u1], panel antennas (or
 ## cabinets) topping out near y1 of "y": [y0, y1], radios under them with cable tails
@@ -21,13 +23,14 @@ extends RefCounted
 ##   out), "cabinets" (every k-th mount carries a cabinet instead of a panel; 0 none),
 ##   "signs" (default true), "seed" (an integer).
 ##   Roles: pipe, bracket, panel, cabinet, radio, cable, sign.
-## duct(spec): a vent: a box shaft "s": [u0, u1] wide up the wall from y0 to the wall's
-## top y1 of "y", "depth" out from the wall (0.1-1 m, default 0.35), that curves over
-## the top onto the roof: an elbow "neck" tall (0.1-1 m, default 0.3) sitting on y1
-## runs from the shaft's front back over the wall "over" metres (0.3-5 m, default 1);
-## elbow and run are the weathered hood. "conduits" (0-4) thin conduits beside the shaft
-## on "conduit_side" (1: past u1, the default; -1: before u0), and straps every
-## "strap_every" metres (default 1.5; 0 none).
+## duct(spec): a vent: a box shaft "s": [u0, u1] wide and "depth" out from the wall
+## (0.1-1 m, default 0.35) up the wall from y0 of "y" past the wall's top y1, bending
+## over it (rounded outer corners, BEND_SEGMENTS straight pieces each) into a run held
+## "lift" clear of y1 (0.1-1 m, default 0.35), and down again "over" metres behind the
+## wall (from depth + 0.2 to 5 m, default 1) onto the roof at "land" (default y1, at most
+## y1); the bend, run and drop are the weathered hood, one profile. "conduits" (0-4)
+## thin conduits beside the shaft on "conduit_side" (1: past u1, the default; -1: before
+## u0), and straps every "strap_every" metres (default 1.5; 0 none).
 ##   Roles: duct, hood, conduit, strap.
 
 ## Every role a helper emits: a producer's material map may name only these.
@@ -39,8 +42,11 @@ const DEFAULT_MATERIALS := {
 	"conduit": "metal", "strap": "rail",
 }
 const PIPE_W_M := 0.08
-const CABLE_W_M := 0.03
+const CABLE_W_M := 0.045
 const MIN_DEPTH_M := 0.01
+## A vent's inner bend radius and the straight pieces in each rounded corner.
+const BEND_INNER_M := 0.05
+const BEND_SEGMENTS := 4
 ## The foot of a cluster's range, kept for its warning signs.
 const SIGN_BAND_M := 0.3
 const SIGN_W_M := 0.14
@@ -138,17 +144,19 @@ static func duct(spec: Dictionary) -> Dictionary:
 	var depth := float(spec.get("depth", 0.35))
 	var conduits := int(spec.get("conduits", 0))
 	var strap_every := float(spec.get("strap_every", 1.5))
-	var neck := float(spec.get("neck", 0.3))
+	var lift := float(spec.get("lift", 0.35))
 	var over := float(spec.get("over", 1.0))
 	var conduit_side: Variant = spec.get("conduit_side", 1)
 	if s.size() != 2 or y.size() != 2 or not _finite(s + y) or float(s[1]) - float(s[0]) < 0.15 or float(y[1]) - float(y[0]) < 1.0:
 		errors.append("duct needs s [u0, u1] at least 0.15 m wide and y [y0, y1] at least 1 m tall")
+	elif not (_finite([spec.get("land", y[1])]) and float(spec.get("land", y[1])) <= float(y[1]) and float(spec.get("land", y[1])) >= float(y[0])):
+		errors.append("duct land must be a height from y0 to y1")
 	if not (depth >= 0.1 and depth <= 1.0):
 		errors.append("duct depth must be 0.1-1 m")
-	if not (neck >= 0.1 and neck <= 1.0):
-		errors.append("duct neck must be 0.1-1 m")
-	if not (over >= 0.3 and over <= 5.0):
-		errors.append("duct over must be 0.3-5 m")
+	if not (lift >= 0.1 and lift <= 1.0):
+		errors.append("duct lift must be 0.1-1 m")
+	if not (over >= depth + 0.2 and over <= 5.0):
+		errors.append("duct over must be from depth + 0.2 to 5 m")
 	if not (_finite([conduit_side]) and absf(float(conduit_side)) == 1.0):
 		errors.append("duct conduit_side must be 1 or -1")
 	if conduits < 0 or conduits > 4:
@@ -161,20 +169,43 @@ static func duct(spec: Dictionary) -> Dictionary:
 	var u1 := float(s[1])
 	var y0 := float(y[0])
 	var y1 := float(y[1])
+	var land := float(spec.get("land", y1))
 	var out := []
-	_box(out, "duct", u0, u1, y0, y1, 0.02, depth)
-	# The curve over the wall's top: an elbow on y1 running from the shaft's front back
-	# over the wall onto the roof, weathered sheet metal.
-	_box(out, "hood", u0, u1, y1, y1 + neck, -over, depth)
+	# The section: from the wall (d 0.02) out to depth, t thick; the bend starts at yb so
+	# the run's underside clears the wall's top by lift.
+	var front := 0.02
+	var t := depth - front
+	var r_out := BEND_INNER_M + t
+	var yb := y1 + lift - BEND_INNER_M
+	_box(out, "duct", u0, u1, y0, yb, front, depth)
+	# Up, over and down: the outer corners round (r_out), the inner ones nearly sharp.
+	var near := Vector2(front - BEND_INNER_M, yb)
+	var far := Vector2(-over + r_out, yb)
+	var profile: Array = []
+	_arc(profile, near, r_out, 0.0, 90.0)
+	_arc(profile, far, r_out, 90.0, 180.0)
+	profile.append([-over, land])
+	profile.append([-over + t, land])
+	_arc(profile, far, BEND_INNER_M, 180.0, 90.0)
+	_arc(profile, near, BEND_INNER_M, 90.0, 0.0)
+	out.append({"role": "hood", "u0": u0, "u1": u1, "y0": land, "y1": yb + r_out, "d0": -over, "d1": depth, "profile": profile})
 	for k in conduits:
 		var cu := (u1 + 0.05 + 0.06 * float(k)) if float(conduit_side) > 0.0 else (u0 - 0.05 - 0.06 * float(k))
 		_box(out, "conduit", cu - 0.025, cu + 0.025, y0 + 0.1, y1 - 0.05, 0.02, 0.07)
 	if strap_every > 0.0:
 		var at := y0 + strap_every * 0.5
-		while at < y1 - 0.2:
+		while at < yb - 0.2:
 			_box(out, "strap", u0 - 0.02, u1 + 0.02, at, at + 0.05, 0.0, depth + 0.02)
 			at += strap_every
 	return _result(out, [])
+
+
+## Points [d, y] of an arc round `centre` (d, y) of `radius` from angle a0 to a1 (degrees,
+## 0 along +d, 90 along +y), BEND_SEGMENTS straight pieces.
+static func _arc(points: Array, centre: Vector2, radius: float, a0: float, a1: float) -> void:
+	for k in BEND_SEGMENTS + 1:
+		var angle := deg_to_rad(lerpf(a0, a1, float(k) / float(BEND_SEGMENTS)))
+		points.append([centre.x + cos(angle) * radius, centre.y + sin(angle) * radius])
 
 
 static func _box(out: Array, role: String, u0: float, u1: float, y0: float, y1: float, d0: float, d1: float) -> void:
