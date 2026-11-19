@@ -30,6 +30,7 @@ extends RefCounted
 
 const FacadeGrid := preload("res://game/scripts/world/facades/facade_grid.gd")
 const FacadeAssembly := preload("res://game/scripts/world/facades/facade_assembly.gd")
+const WallEquipmentKit := preload("res://game/scripts/world/facades/wall_equipment_kit.gd")
 # Assembly roles that take the window spec's member (frame) material by default; panes
 # take its glass. Grid windows thus keep the scheme's existing window materials.
 const GRID_MEMBER_ROLES := ["frame", "mullion", "transom", "lower_field", "spandrel", "surround", "divider"]
@@ -1343,7 +1344,7 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 				blocked[k] = true
 	for k in block.storeys:
 		if face.has_grid:
-			out.append_array(_grid_cells(face, s0, s1, k, ground if k == 0 else _storey_window(window, [scheme, rng, feature], k), blocked))
+			out.append_array(_grid_cells(face, s0, s1, k, ground if k == 0 else _storey_window(window, [scheme, rng, feature], k), blocked, rng.get("grid_unit", {})))
 			continue
 		if claimed.has(k) or k in skip_storeys:
 			continue
@@ -1489,10 +1490,11 @@ static func _storey_window(window: Dictionary, sources: Array, k: int) -> Dictio
 
 ## Grid openings starting in storey k whose columns lie inside the bay [s0, s1]. An
 ## opening joined over storeys is kept only when none of them is blocked (claimed by a
-## feature, skipped or blank); window_spec supplies the default materials.
-static func _grid_cells(face: Face, s0: float, s1: float, k: int, window_spec: Dictionary, blocked: Dictionary) -> Array:
+## feature, skipped or blank); window_spec supplies the default materials. Opt-in: the
+## bay's `bays` range may override the scheme's grid_unit fields (unit_over).
+static func _grid_cells(face: Face, s0: float, s1: float, k: int, window_spec: Dictionary, blocked: Dictionary, unit_over: Dictionary = {}) -> Array:
 	var out: Array = []
-	var unit: Dictionary = face.scheme.get("grid_unit", {})
+	var unit := _merge(face.scheme.get("grid_unit", {}), unit_over)
 	for i in face.grid_openings.size():
 		var o: Array = face.grid_openings[i]
 		if _storey_at(face.block, float(o[2])) != k or float(o[1]) <= s0 or float(o[0]) >= s1:
@@ -1844,15 +1846,22 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 			var out := face.out3()
 			for r: Dictionary in assembly.rects:
 				_rect(ctx.bucket("wall", str(r.material)), face, float(r.u0), float(r.u1), float(r.y0), float(r.y1), -float(r.d1), out)
-			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material].
+			# Opt-in opaque panels in each storey's light, as fractions [u0, u1, y0, y1, material],
+			# and opt-in blinds in each of its lights.
 			var bottom := y0
 			var bands: Array = (o.get("extras", {}) as Dictionary).get("spandrels", [])
+			var blinds: Dictionary = unit.get("blinds", {})
 			for storey: int in bands.size() + 1:
 				var top := float(bands[storey][0]) if storey < bands.size() else y1
 				_panels(ctx, face, unit, s0, s1, bottom, top, depth)
+				if not blinds.is_empty():
+					_blinds(ctx, face, blinds, assembly.rects, s0, s1, bottom, top, depth)
 				if storey < bands.size():
 					bottom = float(bands[storey][1])
 			_window_box(ctx, face, unit, s0, s1, y0, y1)
+			# Opt-in: the storey's window spec (window, window_storeys or ground) may carry
+			# a hood over the opening's head, as non-grid windows do.
+			_hood(ctx, face, window_spec, s0, s1, y1)
 		"patio":
 			var depth := float(spec.get("depth", 0.18))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, true)
@@ -1902,6 +1911,35 @@ static func _panels(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float
 		_rect(ctx.bucket("wall", str(panel[4])), face, lerpf(s0, s1, float(panel[0])), lerpf(s0, s1, float(panel[1])), lerpf(y0, y1, float(panel[2])), lerpf(y0, y1, float(panel[3])), depth - 0.005, face.out3())
 
 
+## Opt-in blinds (grid_unit `blinds`) in one storey of a grid opening [s0, s1] x [y0, y1]:
+## each light between the storey's mullions (from the opening's assembly rects) takes
+## one of `drops`, the share of its height the blind covers from its head down (0: none),
+## picked by `seed` and the light's place, so a config always draws the same blinds;
+## `material` paints them, as `panels` are drawn.
+static func _blinds(ctx: Ctx, face: Face, blinds: Dictionary, rects: Array, s0: float, s1: float, y0: float, y1: float, depth: float) -> void:
+	var drops: Variant = blinds.get("drops", [])
+	var material := str(blinds.get("material", ""))
+	var valid: bool = drops is Array and not (drops as Array).is_empty() and ctx.materials.has(material) and (blinds.get("seed", 0) is int or blinds.get("seed", 0) is float)
+	if valid:
+		for drop: Variant in drops:
+			valid = valid and (drop is float or drop is int) and _in_range(float(drop), 0.0, 1.0)
+	if not valid:
+		ctx.errors.append("%s/%s grid blinds need a palette material and drops between 0 and 1, and a seed, if given, must be a number" % [face.block.id, face.key])
+		return
+	var edges: Array = [s0, s1]
+	for r: Dictionary in rects:
+		var mid := (float(r.y0) + float(r.y1)) * 0.5
+		if str(r.role) == "mullion" and mid > y0 and mid < y1:
+			edges.append((float(r.u0) + float(r.u1)) * 0.5)
+	edges.sort()
+	var bucket := ctx.bucket("wall", material)
+	for i in edges.size() - 1:
+		var pick := posmod(int(blinds.get("seed", 0)) * 73856093 ^ face.edge * 2654435761 ^ roundi(float(edges[i]) * 100.0) * 19349663 ^ roundi(y0 * 100.0) * 83492791, (drops as Array).size())
+		var drop := float(drops[pick])
+		if drop > 0.0:
+			_rect(bucket, face, float(edges[i]), float(edges[i + 1]), lerpf(y1, y0, drop), y1, depth - 0.005, face.out3())
+
+
 ## Opt-in window box (window or grid_unit `box`): a frame `t` thick round the opening,
 ## standing `project` out from the wall, with its inner faces running back to the wall
 ## plane. Support role, so it stays clear of the spray receiver.
@@ -1924,9 +1962,11 @@ static func _window_box(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: f
 ## Opt-in box hood over a window head (window `hood`): a box `depth` out from the
 ## wall and `h` tall, `gap` above the head and `over` wider than the opening on each
 ## side, with optional side cheeks `cheek` down the jambs (`t` thick). Support role.
+## Opt-in `min_w` leaves openings narrower than that without one (eyebrows over the
+## wide window groups only).
 static func _hood(ctx: Ctx, face: Face, spec: Dictionary, s0: float, s1: float, y1: float) -> void:
 	var hood: Dictionary = spec.get("hood", {})
-	if hood.is_empty():
+	if hood.is_empty() or s1 - s0 < float(hood.get("min_w", 0.0)):
 		return
 	var depth := float(hood.get("depth", 0.5))
 	var h := float(hood.get("h", 0.3))
@@ -3037,11 +3077,12 @@ static func _plan_box(bucket: Bucket, p0: Vector2, p1: Vector2, n: Vector2, y0: 
 ## the walls set back by wall_ring. `edges` lists them in ring order; `soffit` and
 ## `top` are heights above the building floor; `profile` is the fascia section from
 ## soffit to top as [in, y, material] points (in: metres inward of the outline, so the
-## section never leaves the footprint; each point's material paints the segment ending
-## there). `roof_material` tops the strip back to the wall line, `soffit_material` and
-## per-edge `soffit_edges` {"<edge>": material} line it, and the ends are closed in
-## `end_material`. Corners are mitred. Top: roof role; the rest: support. Invalid input
-## fails the build.
+## section stays inside the footprint; each point's material paints the segment ending
+## there). Opt-in: a negative `in` (down to -FACE_BAND_M) puts the section that far
+## outside the outline instead, a slab overhanging walls that stand on it. `roof_material`
+## tops the strip back to the wall line, `soffit_material` and per-edge `soffit_edges`
+## {"<edge>": material} line it, and the ends are closed in `end_material`. Corners are
+## mitred. Top: roof role; the rest: support. Invalid input fails the build.
 static func _eave(ctx: Ctx, spec: Variant) -> void:
 	var label := "eave"
 	var run: Array = spec.get("edges", []) if spec is Dictionary else []
@@ -3050,8 +3091,10 @@ static func _eave(ctx: Ctx, spec: Variant) -> void:
 	var valid := run.size() >= 1 and profile.size() >= 2
 	for i in run.size():
 		valid = valid and int(run[i]) >= 0 and int(run[i]) < count and (i == 0 or int(run[i]) == (int(run[i - 1]) + 1) % count)
+	var outside := false
 	for point: Variant in profile:
-		valid = valid and point is Array and (point as Array).size() >= 2 and _in_range(float(point[0]), 0.0, FACE_BAND_M)
+		valid = valid and point is Array and (point as Array).size() >= 2 and _in_range(float(point[0]), -FACE_BAND_M, FACE_BAND_M)
+		outside = outside or (valid and float(point[0]) < 0.0)
 	if not valid or ctx.ring.is_empty():
 		ctx.errors.append(label + " needs consecutive footprint edges and a profile of [in, y, material] points")
 		return
@@ -3112,7 +3155,8 @@ static func _eave(ctx: Ctx, spec: Variant) -> void:
 	var ends := ctx.bucket("support", str(spec.get("end_material", "coping")))
 	for i: int in [0, run.size()]:
 		var across := inner[i] - outer[i]
-		if across.length() < 0.01:
+		# A section inside the outline over walls on it is flat; one outside never is.
+		if across.length() < 0.01 and not outside:
 			continue
 		var along: Vector2 = (ctx.edges[int(run[mini(i, last)])] as Edge).d * (-1.0 if i == 0 else 1.0)
 		var section: Array[Vector3] = []
@@ -3159,8 +3203,135 @@ static func _part(ctx: Ctx, spec: Variant) -> void:
 			_part_set(ctx, part)
 		"disc":
 			_part_disc(ctx, part)
+		"antenna_cluster", "duct":
+			_part_equipment(ctx, part)
 		_:
 			ctx.errors.append("unknown part kind " + str(part.get("kind", "")))
+
+
+## Wall equipment from the shared kit (wall_equipment_kit.gd) on a footprint edge:
+## kind "antenna_cluster" or "duct", stations `s`, heights `y` above the building
+## floor, the kit's own fields, and `materials` {role: palette key} over the kit's
+## defaults (kit roles only). Every piece must lie on the edge, between its stations 0
+## and its length. A duct bends over its block's wall onto the roof: its `y` must end at
+## that wall's top and its drop, `over` behind the wall, must land on the block's flat
+## roof inside the parapet; it lands at the roof's level. Otherwise the build fails.
+## Support role.
+static func _part_equipment(ctx: Ctx, spec: Dictionary) -> void:
+	var kind := str(spec.kind)
+	var face := _edge_face(ctx, spec)
+	var range_y: Array = spec.get("y", [])
+	if face == null or range_y.size() != 2:
+		ctx.errors.append("%s part needs an edge and a y range" % kind)
+		return
+	var spec_materials: Variant = spec.get("materials", {})
+	if not spec_materials is Dictionary:
+		ctx.errors.append("%s part: materials must map kit roles to palette keys" % kind)
+		return
+	for role: Variant in spec_materials:
+		if not WallEquipmentKit.ROLES.has(str(role)):
+			ctx.errors.append("%s part: %s is not a kit role (%s)" % [kind, str(role), ", ".join(PackedStringArray(WallEquipmentKit.ROLES))])
+			return
+	var stations: Variant = spec.get("s", [])
+	if stations is Array:
+		for value: Variant in stations:
+			if (value is float or value is int) and (float(value) < 0.0 or float(value) > face.length):
+				ctx.errors.append("%s part on edge %d: station %.2f is off the edge (0-%.2f m)" % [kind, int(spec.edge), float(value), face.length])
+				return
+	var local := spec.duplicate(true)
+	local["y"] = [ctx.floor_y + float(range_y[0]), ctx.floor_y + float(range_y[1])]
+	if kind == "duct":
+		var land: Variant = _duct_landing(ctx, face, spec)
+		if land == null:
+			return
+		local["land"] = land
+	var made: Dictionary = WallEquipmentKit.antenna_cluster(local) if kind == "antenna_cluster" else WallEquipmentKit.duct(local)
+	if not bool(made.ok):
+		ctx.errors.append("; ".join(PackedStringArray(made.errors)))
+		return
+	var materials := _merge(WallEquipmentKit.DEFAULT_MATERIALS, spec_materials)
+	for item: Dictionary in made.boxes:
+		if float(item.u0) < -0.001 or float(item.u1) > face.length + 0.001:
+			ctx.errors.append("%s part on edge %d: its %s at stations %.2f-%.2f runs past the edge (0-%.2f m)" % [kind, int(spec.edge), str(item.role), float(item.u0), float(item.u1), face.length])
+			return
+		var key := str(materials.get(item.role, ""))
+		if not ctx.materials.has(key):
+			ctx.errors.append("%s part: palette has no %s for %s" % [kind, key, str(item.role)])
+			return
+		# The kit's d runs out from the wall; the family's depth runs in.
+		if item.has("profile"):
+			_sweep(ctx.bucket("support", key), face, float(item.u0), float(item.u1), item.profile)
+		else:
+			_box(ctx.bucket("support", key), face, float(item.u0), float(item.u1), float(item.y0), float(item.y1), -float(item.d1), -float(item.d0), false)
+
+
+## Where a duct part's drop lands (its block's roof level, absolute), or null with the
+## build error: the block under the duct's foot must have a flat roof, the duct's `y`
+## must end at that block's wall top, and its drop (from `over` minus its section back
+## to `over` behind the wall, across its stations) must stand on that block's roof
+## inside the parapet.
+static func _duct_landing(ctx: Ctx, face: Face, spec: Dictionary) -> Variant:
+	var stations: Array = spec.get("s", [])
+	var range_y: Array = spec.get("y", [])
+	if stations.size() != 2 or not (stations[0] is float or stations[0] is int) or not (stations[1] is float or stations[1] is int):
+		return ctx.floor_y + float(range_y[1])
+	var s0 := float(stations[0])
+	var s1 := float(stations[1])
+	var label := "duct part on edge %d" % int(spec.edge)
+	var foot := face.a + face.d * ((s0 + s1) * 0.5) - face.n * 0.05
+	var owner: Block = null
+	for block: Block in ctx.blocks:
+		if Geometry2D.is_point_in_polygon(foot, block.poly):
+			owner = block
+			break
+	if owner == null or owner.form != "flat":
+		ctx.errors.append("%s: no block with a flat roof behind it" % label)
+		return null
+	var top := ctx.floor_y + float(range_y[1])
+	if absf(top - owner.top_y) > 0.01:
+		ctx.errors.append("%s: its y must end at its wall's top, %.2f m above the floor" % [label, owner.top_y - ctx.floor_y])
+		return null
+	var over := float(spec.get("over", 1.0))
+	var section := float(spec.get("depth", 0.35)) - 0.02
+	var parapet_t := float((owner.cfg.get("parapet", {}) as Dictionary).get("t", 0.3))
+	var lands := over - section > parapet_t
+	for s: float in [s0, s1]:
+		for depth: float in [over - section, over]:
+			lands = lands and Geometry2D.is_point_in_polygon(face.a + face.d * s - face.n * depth, owner.poly)
+	if not lands:
+		ctx.errors.append("%s: its drop, %.2f-%.2f m behind the wall, must land on block %s's roof inside its parapet" % [label, over - section, over, owner.id])
+		return null
+	return owner.roof_y
+
+
+## A polygon `profile` [[d, y], ...] in a face's frame (d out from the wall, y up)
+## swept from station s0 to s1: its sides facing out of the polygon, both ends closed.
+static func _sweep(bucket: Bucket, face: Face, s0: float, s1: float, profile: Array) -> void:
+	var points := PackedVector2Array()
+	for p: Array in profile:
+		points.append(Vector2(float(p[0]), float(p[1])))
+	var area := 0.0
+	for i in points.size():
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % points.size()]
+		area += a.x * b.y - b.x * a.y
+	var turn := 1.0 if area > 0.0 else -1.0
+	var out := face.out3()
+	for i in points.size():
+		var a: Vector2 = points[i]
+		var b: Vector2 = points[(i + 1) % points.size()]
+		var normal := Vector2(b.y - a.y, a.x - b.x) * turn
+		var facing := out * normal.x + Vector3.UP * normal.y
+		bucket.quad(face.point(s0, a.y, -a.x), face.point(s1, a.y, -a.x), face.point(s1, b.y, -b.x), face.point(s0, b.y, -b.x), facing)
+	var along := face.dir3()
+	var tris := Geometry2D.triangulate_polygon(points)
+	for k in range(0, tris.size(), 3):
+		for end: Array in [[s0, -along], [s1, along]]:
+			var corners: Array[Vector3] = []
+			for j in 3:
+				var p: Vector2 = points[tris[k + j]]
+				corners.append(face.point(float(end[0]), p.y, -p.x))
+			bucket.tri(corners[0], corners[1], corners[2], end[1])
 
 
 static func _plan_points(values: Variant) -> PackedVector2Array:

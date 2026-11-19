@@ -281,35 +281,92 @@
       ],
       "roughness": 0.95
     },
-    "dorm_white": {
-      "rgb": [
-        0.86,
-        0.87,
-        0.86
-      ],
-      "roughness": 0.85
-    },
     "tower_blue": {
       "rgb": [
-        0.4,
-        0.52,
-        0.66
+        0.48,
+        0.57,
+        0.59
       ],
       "roughness": 0.8
     },
-    "fascia": {
+    "putty": {
       "rgb": [
-        0.8,
-        0.8,
-        0.78
+        0.84,
+        0.83,
+        0.79
+      ],
+      "roughness": 0.85
+    },
+    "trim_teal": {
+      "rgb": [
+        0.47,
+        0.53,
+        0.52
       ],
       "roughness": 0.7
+    },
+    "sand": {
+      "rgb": [
+        0.72,
+        0.63,
+        0.53
+      ],
+      "roughness": 0.9
+    },
+    "lilac": {
+      "rgb": [
+        0.57,
+        0.58,
+        0.6
+      ],
+      "roughness": 0.85
+    },
+    "panel_slate": {
+      "rgb": [
+        0.38,
+        0.46,
+        0.49
+      ],
+      "roughness": 0.8
+    },
+    "blinds": {
+      "rgb": [
+        0.6,
+        0.63,
+        0.64
+      ],
+      "roughness": 0.7,
+      "receive_shadows": false
+    },
+    "cable_grey": {
+      "rgb": [
+        0.19,
+        0.2,
+        0.21
+      ],
+      "roughness": 0.6
+    },
+    "roof_membrane": {
+      "rgb": [
+        0.46,
+        0.41,
+        0.35
+      ],
+      "roughness": 0.9
+    },
+    "roof_brown": {
+      "rgb": [
+        0.36,
+        0.28,
+        0.23
+      ],
+      "roughness": 0.85
     }
   },
   "schemes": {
     "slab": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -319,7 +376,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "w": 2.0,
@@ -329,7 +386,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame",
+        "frame": "frame_light",
         "kind": "window"
       },
       "plinth": {
@@ -447,15 +504,15 @@
         "sill": 1.2,
         "depth": 0.1,
         "mullions": [],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "kind": "blank"
       }
     },
     "lobby": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -465,7 +522,15 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light",
+        "hood": {
+          "depth": 0.45,
+          "h": 0.1,
+          "over": 0.2,
+          "gap": 0.03,
+          "material": "trim_teal",
+          "min_w": 2.0
+        }
       },
       "ground": {
         "w": 2.0,
@@ -475,14 +540,165 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame",
+        "frame": "frame_light",
         "kind": "window"
       },
       "plinth": {
         "material": "concrete",
         "top": 0.3
       },
-      "features": [],
+      "features": [
+        {
+          "type": "band",
+          "from": 3.0,
+          "to": 6.7,
+          "w": 3.5,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.2,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        },
+        {
+          "type": "band",
+          "from": 9.74,
+          "to": 13.56,
+          "w": 3.62,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.06,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        },
+        {
+          "type": "band",
+          "from": 18.1,
+          "to": 23.1,
+          "w": 4.8,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.2,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        },
+        {
+          "type": "band",
+          "from": 27.2,
+          "to": 32.1,
+          "w": 4.7,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.2,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        },
+        {
+          "type": "band",
+          "from": 36.7,
+          "to": 41.4,
+          "w": 4.5,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.2,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        },
+        {
+          "type": "band",
+          "from": 43.9,
+          "to": 47.5,
+          "w": 3.4,
+          "storeys": [
+            0,
+            0
+          ],
+          "bottom": 0.25,
+          "top": 0.25,
+          "depth": 0.1,
+          "border": 0.2,
+          "frame": "sand",
+          "spandrel": "panel_slate",
+          "window": {
+            "sill": 1.75,
+            "h": 1.2,
+            "mullions": [
+              0.25,
+              0.5,
+              0.75
+            ]
+          }
+        }
+      ],
       "grid": {
         "columns": [
           [
@@ -544,16 +760,36 @@
       "grid_unit": {
         "unit": {
           "split": 0.5,
-          "split_min_w": 1.4,
+          "split_min_w": 0.9,
           "frame_w": 0.07,
           "mullion_w": 0.08,
-          "member_d": 0.02
+          "member_d": 0.02,
+          "pane_w": 1.1
+        },
+        "blinds": {
+          "material": "blinds",
+          "drops": [
+            1.0,
+            1.0,
+            0.95,
+            0.85,
+            0.7,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "seed": 369
+        }
+      },
+      "window_storeys": {
+        "4": {
+          "hood": {}
         }
       }
     },
     "door_e": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -563,7 +799,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "w": 2.0,
@@ -573,7 +809,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame",
+        "frame": "frame_light",
         "kind": "window"
       },
       "plinth": {
@@ -600,8 +836,8 @@
       ]
     },
     "door_n": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -611,7 +847,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "kind": "blank"
@@ -640,8 +876,8 @@
       ]
     },
     "door_c": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -651,7 +887,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "w": 2.0,
@@ -661,7 +897,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame",
+        "frame": "frame_light",
         "kind": "window"
       },
       "plinth": {
@@ -688,8 +924,8 @@
       ]
     },
     "slab_blank": {
-      "material": "dorm_white",
-      "parapet_material": "dorm_white",
+      "material": "putty",
+      "parapet_material": "putty",
       "module": 3.0,
       "window": {
         "w": 2.0,
@@ -699,7 +935,7 @@
         "mullions": [
           0.5
         ],
-        "frame": "frame"
+        "frame": "frame_light"
       },
       "ground": {
         "kind": "blank"
@@ -709,6 +945,485 @@
         "top": 0.3
       },
       "upper": "blank"
+    },
+    "court_mid": {
+      "material": "putty",
+      "parapet_material": "putty",
+      "module": 3.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "grid": {
+        "columns": [
+          [
+            2.5,
+            3.5
+          ],
+          [
+            4.2,
+            7.7
+          ],
+          [
+            11.7,
+            12.7
+          ],
+          [
+            14.7,
+            19.1
+          ],
+          [
+            20.9,
+            21.9
+          ],
+          [
+            23.9,
+            28.3
+          ],
+          [
+            30.1,
+            31.1
+          ],
+          [
+            33.1,
+            37.5
+          ],
+          [
+            39.3,
+            40.3
+          ],
+          [
+            42.3,
+            46.7
+          ],
+          [
+            48.5,
+            49.5
+          ],
+          [
+            51.5,
+            55.9
+          ],
+          [
+            57.7,
+            58.7
+          ],
+          [
+            60.7,
+            65.1
+          ],
+          [
+            66.9,
+            67.9
+          ],
+          [
+            69.9,
+            74.3
+          ],
+          [
+            76.1,
+            77.1
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 1.75,
+            "head": 2.95
+          },
+          "*": {
+            "sill": 0.95,
+            "head": 2.25
+          }
+        },
+        "source": {
+          "kind": "inferred_from_side",
+          "ref": "369-sideD_241 pano 9uhRtlOwZp1gmsmfe_g-Vw; 369-spec-D369SV01; 369-sideC_151 (oblique SSE); the owner's 2026-11-18 photos for the north part",
+          "date": "2025-09",
+          "side": "e0",
+          "face": "e24 (middle wing WSW face)",
+          "truth_class": "production_inference",
+          "note": "the WSW rhythm inherited on the hidden part, as before; the 4.2-7.7 column is the wide unit the owner's 2026-11-18 photos show, measured at a fitted camera (station uncertain by about 1 m), in place of the inherited 5.5-9.9"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 1.4,
+          "frame_w": 0.07,
+          "mullion_w": 0.08,
+          "member_d": 0.02
+        }
+      },
+      "features": [
+        {
+          "type": "bays",
+          "from": 3.85,
+          "to": 9.6,
+          "window": {
+            "hood": {
+              "depth": 0.45,
+              "h": 0.1,
+              "over": 0.2,
+              "gap": 0.03,
+              "material": "trim_teal",
+              "min_w": 2.0
+            }
+          },
+          "window_storeys": {
+            "4": {
+              "hood": {}
+            }
+          },
+          "grid_unit": {
+            "unit": {
+              "split": 0.5,
+              "split_min_w": 0.9,
+              "frame_w": 0.07,
+              "mullion_w": 0.08,
+              "member_d": 0.02,
+              "pane_w": 1.1
+            },
+            "blinds": {
+              "material": "blinds",
+              "drops": [
+                1.0,
+                1.0,
+                0.95,
+                0.85,
+                0.7,
+                0.5,
+                0.0,
+                0.0
+              ],
+              "seed": 369
+            }
+          }
+        }
+      ]
+    },
+    "sse": {
+      "material": "putty",
+      "parapet_material": "putty",
+      "module": 3.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "hood": {
+          "depth": 0.45,
+          "h": 0.1,
+          "over": 0.2,
+          "gap": 0.03,
+          "material": "trim_teal",
+          "min_w": 2.0
+        }
+      },
+      "ground": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light",
+        "kind": "window",
+        "hood": {
+          "depth": 0.45,
+          "h": 0.1,
+          "over": 0.2,
+          "gap": 0.03,
+          "material": "trim_teal",
+          "min_w": 2.0
+        }
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "grid": {
+        "columns": [
+          [
+            1.2,
+            4.6
+          ],
+          [
+            7.4,
+            11.8
+          ],
+          [
+            13.9,
+            14.9
+          ],
+          [
+            17.4,
+            21.8
+          ],
+          [
+            23.9,
+            24.9
+          ],
+          [
+            27.0,
+            31.4
+          ],
+          [
+            33.5,
+            34.5
+          ],
+          [
+            36.6,
+            41.0
+          ],
+          [
+            43.1,
+            44.1
+          ],
+          [
+            46.2,
+            50.6
+          ],
+          [
+            52.7,
+            53.7
+          ],
+          [
+            55.8,
+            60.2
+          ],
+          [
+            62.3,
+            63.3
+          ],
+          [
+            65.4,
+            69.8
+          ],
+          [
+            71.9,
+            72.9
+          ],
+          [
+            75.0,
+            79.4
+          ]
+        ],
+        "rows": {
+          "0": {
+            "sill": 1.75,
+            "head": 2.95
+          },
+          "*": {
+            "sill": 0.95,
+            "head": 2.25
+          }
+        },
+        "source": {
+          "kind": "rectified_photo",
+          "ref": "369-sideC_151 (Sep 2025) at its fitted camera (rms 4.4 px), cross-checked with w291189926-SSE-WSW-2018-09 (rms 5.4 px)",
+          "date": "2025-09",
+          "side": "e5",
+          "note": "columns to u 31.4 measured: two wide groups from the SW corner, then slim and wide lights alternating (the 2018 and 2025 views agree within about 1 m; widths rounded to the WSW face's 4.4 m groups and 1 m lights); beyond that the photographed alternation continues at a 9.6 m period, stations production_inference (grazing angle)"
+        }
+      },
+      "grid_unit": {
+        "unit": {
+          "split": 0.5,
+          "split_min_w": 0.9,
+          "frame_w": 0.07,
+          "mullion_w": 0.08,
+          "member_d": 0.02,
+          "pane_w": 1.1
+        },
+        "blinds": {
+          "material": "blinds",
+          "drops": [
+            1.0,
+            1.0,
+            0.95,
+            0.85,
+            0.7,
+            0.5,
+            0.0,
+            0.0
+          ],
+          "seed": 369
+        }
+      },
+      "window_storeys": {
+        "4": {
+          "hood": {}
+        }
+      }
+    },
+    "lilac_blank": {
+      "material": "lilac",
+      "parapet_material": "lilac",
+      "module": 3.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "upper": "blank"
+    },
+    "tower_blank": {
+      "material": "tower_blue",
+      "parapet_material": "tower_blue",
+      "module": 6.0,
+      "window": {
+        "w": 0.9,
+        "h": 1.0,
+        "sill": 0.5,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "upper": "blank"
+    },
+    "tower_win": {
+      "material": "tower_blue",
+      "parapet_material": "tower_blue",
+      "module": 1.9,
+      "window": {
+        "w": 0.9,
+        "h": 1.0,
+        "sill": 0.5,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      }
+    },
+    "tower_win_door": {
+      "material": "tower_blue",
+      "parapet_material": "tower_blue",
+      "module": 1.9,
+      "window": {
+        "w": 0.9,
+        "h": 1.0,
+        "sill": 0.5,
+        "depth": 0.1,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 0.3,
+          "to": 1.7,
+          "door": {
+            "kind": "unit",
+            "w": 0.9,
+            "h": 2.15,
+            "leaf_h": 2.15,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.4,
+            "depth": 1.1
+          },
+          "canopy": {
+            "w": 1.5,
+            "depth": 0.9,
+            "t": 0.1,
+            "gap": 0.1,
+            "material": "trim_teal"
+          }
+        }
+      ]
+    },
+    "door_n_slate": {
+      "material": "tower_blue",
+      "parapet_material": "tower_blue",
+      "module": 3.0,
+      "window": {
+        "w": 2.0,
+        "h": 1.3,
+        "sill": 0.95,
+        "depth": 0.12,
+        "mullions": [
+          0.5
+        ],
+        "frame": "frame_light"
+      },
+      "ground": {
+        "kind": "blank"
+      },
+      "plinth": {
+        "material": "concrete",
+        "top": 0.3
+      },
+      "features": [
+        {
+          "type": "entry",
+          "from": 2.2,
+          "to": 4.0,
+          "door": {
+            "kind": "unit",
+            "w": 1.0,
+            "h": 2.2,
+            "leaf_h": 2.2,
+            "material": "door"
+          },
+          "landing": {
+            "w": 1.8,
+            "depth": 1.2
+          }
+        }
+      ]
     }
   },
   "blocks": [
@@ -718,7 +1433,7 @@
       "ground_h": 3.2,
       "storey_h": 3.0,
       "parapet": {
-        "h": 0.6,
+        "h": 0.3,
         "t": 0.25
       },
       "clip": [
@@ -742,7 +1457,7 @@
         "e16": "door_c",
         "e1": "slab_blank",
         "e3": "slab_blank",
-        "e7": "slab_blank",
+        "e7": "tower_blank",
         "e9": "slab_blank",
         "e12": "slab_blank",
         "e14": "slab_blank",
@@ -753,8 +1468,29 @@
         "e28": "slab_blank",
         "e30": "slab_blank",
         "e31": "slab_blank",
-        "e0": "lobby"
-      }
+        "e0": "lobby",
+        "e2": "lilac_blank",
+        "e5": "sse",
+        "e24": "court_mid"
+      },
+      "roof_material": "roof_membrane",
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 5,
+          "s": [
+            48.0,
+            60.0
+          ],
+          "d": [
+            3.0,
+            9.5
+          ],
+          "h": 3.4,
+          "material": "putty",
+          "top": "roof_membrane"
+        }
+      ]
     },
     {
       "id": "west_end",
@@ -762,7 +1498,7 @@
       "ground_h": 3.2,
       "storey_h": 3.0,
       "parapet": {
-        "h": 0.6,
+        "h": 0.3,
         "t": 0.25
       },
       "clip": [
@@ -773,6 +1509,10 @@
         {
           "edge": 19,
           "max": 0.0
+        },
+        {
+          "edge": 27,
+          "min": 0.0
         }
       ],
       "faces": {
@@ -793,16 +1533,20 @@
         "e28": "slab_blank",
         "e30": "slab_blank",
         "e31": "slab_blank",
-        "e0": "lobby"
-      }
+        "e0": "lobby",
+        "p3": "lilac_blank",
+        "p5": "tower_blank",
+        "p6": "lilac_blank"
+      },
+      "roof_material": "roof_membrane"
     },
     {
       "id": "middle_end",
       "storeys": 5,
-      "ground_h": 3.2,
+      "ground_h": 2.5,
       "storey_h": 3.0,
       "parapet": {
-        "h": 0.6,
+        "h": 2.0,
         "t": 0.25
       },
       "clip": [
@@ -820,25 +1564,27 @@
         }
       ],
       "faces": {
-        "default": "slab",
-        "e8": "door_e",
-        "e21": "door_n",
-        "e16": "door_c",
-        "e1": "slab_blank",
-        "e3": "slab_blank",
-        "e7": "slab_blank",
-        "e9": "slab_blank",
-        "e12": "slab_blank",
-        "e14": "slab_blank",
-        "e15": "slab_blank",
-        "e20": "slab_blank",
-        "e22": "slab_blank",
-        "e23": "slab_blank",
-        "e28": "slab_blank",
-        "e30": "slab_blank",
-        "e31": "slab_blank",
-        "e0": "lobby"
-      }
+        "default": "tower_blank",
+        "e21": "door_n_slate"
+      },
+      "roof_material": "roof_membrane",
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 21,
+          "s": [
+            0.25,
+            5.97
+          ],
+          "d": [
+            0.25,
+            1.75
+          ],
+          "h": 2.0,
+          "material": "tower_blue",
+          "top": "roof_membrane"
+        }
+      ]
     },
     {
       "id": "east_end",
@@ -846,7 +1592,7 @@
       "ground_h": 3.2,
       "storey_h": 3.0,
       "parapet": {
-        "h": 0.6,
+        "h": 0.3,
         "t": 0.25
       },
       "clip": [
@@ -857,6 +1603,10 @@
         {
           "edge": 19,
           "max": 0.0
+        },
+        {
+          "edge": 11,
+          "min": 0.0
         }
       ],
       "faces": {
@@ -869,7 +1619,7 @@
         "e7": "slab_blank",
         "e9": "slab_blank",
         "e12": "slab_blank",
-        "e14": "slab_blank",
+        "e14": "tower_blank",
         "e15": "slab_blank",
         "e20": "slab_blank",
         "e22": "slab_blank",
@@ -878,15 +1628,16 @@
         "e30": "slab_blank",
         "e31": "slab_blank",
         "e0": "lobby"
-      }
+      },
+      "roof_material": "roof_membrane"
     },
     {
       "id": "tower_sw",
       "storeys": 5,
-      "ground_h": 3.2,
+      "ground_h": 2.5,
       "storey_h": 3.0,
       "parapet": {
-        "h": 1.8,
+        "h": 2.0,
         "t": 0.25
       },
       "clip": [
@@ -904,8 +1655,28 @@
         }
       ],
       "faces": {
-        "default": "tower"
-      }
+        "default": "tower_blank",
+        "e1": "tower_win",
+        "e3": "tower_win_door"
+      },
+      "roof_material": "roof_membrane",
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 2,
+          "s": [
+            0.25,
+            6.3
+          ],
+          "d": [
+            0.25,
+            1.73
+          ],
+          "h": 2.0,
+          "material": "tower_blue",
+          "top": "roof_membrane"
+        }
+      ]
     },
     {
       "id": "tower_se",
@@ -913,7 +1684,7 @@
       "ground_h": 3.2,
       "storey_h": 3.0,
       "parapet": {
-        "h": 1.8,
+        "h": 1.3,
         "t": 0.25
       },
       "clip": [
@@ -932,12 +1703,326 @@
       ],
       "faces": {
         "default": "tower"
-      }
+      },
+      "roof_material": "roof_membrane",
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 8,
+          "s": [
+            0.25,
+            6.58
+          ],
+          "d": [
+            0.25,
+            1.77
+          ],
+          "h": 1.3,
+          "material": "tower_blue",
+          "top": "roof_membrane"
+        }
+      ]
+    },
+    {
+      "id": "tower_nw",
+      "clip": [
+        {
+          "edge": 27,
+          "max": 0.0
+        },
+        {
+          "edge": 28,
+          "min": 0.0
+        },
+        {
+          "edge": 30,
+          "min": 0.0
+        }
+      ],
+      "faces": {
+        "default": "tower_blank",
+        "p2": "tower_win"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 29,
+          "s": [
+            0.25,
+            5.98
+          ],
+          "d": [
+            0.25,
+            1.63
+          ],
+          "h": 2.0,
+          "material": "tower_blue",
+          "top": "roof_membrane"
+        }
+      ],
+      "storeys": 5,
+      "ground_h": 2.5,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 2.0,
+        "t": 0.25
+      },
+      "roof_material": "roof_membrane"
+    },
+    {
+      "id": "tower_ne",
+      "clip": [
+        {
+          "edge": 11,
+          "max": 0.0
+        },
+        {
+          "edge": 12,
+          "min": 0.0
+        },
+        {
+          "edge": 14,
+          "min": 0.0
+        }
+      ],
+      "faces": {
+        "default": "tower_blank"
+      },
+      "roof_items": [
+        {
+          "kind": "box",
+          "edge": 13,
+          "s": [
+            0.25,
+            5.77
+          ],
+          "d": [
+            0.25,
+            1.61
+          ],
+          "h": 2.0,
+          "material": "tower_blue",
+          "top": "roof_membrane"
+        }
+      ],
+      "storeys": 5,
+      "ground_h": 2.5,
+      "storey_h": 3.0,
+      "parapet": {
+        "h": 2.0,
+        "t": 0.25
+      },
+      "roof_material": "roof_membrane"
     }
   ],
   "study_notes": {
-    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1).",
-    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled).",
-    "footprint": "Frozen 32-edge E plan split into the spine-and-wings block, three wing ends and two corner towers."
-  }
+    "observed": "Sep 2025 Seven Seas Ave (SSE and WSW): five-storey white slab with paired windows and blue stair towers at its corners; official Job Corps aerial: E-shaped plan of equal height; entrance photo: glazed doors under a flat canopy. The official entrance photo (hero.jpg, '369 / 275 California Ave') shows the glazed doors under the flat canopy of the one-storey entrance wing at the SSE end (the low wing in 369-sideC_151 and the jc-07 aerial), outside this footprint; the Sep 2025 WSW photo (369-sideD_241) shows no entrance on the WSW wing face, so the lobby entry modelled there was removed (2026-10-24 grid batch B1). L3 (2026-11-18): Sep 2025 sideD/spec/sideC, hero.jpg and the owner's 2026-11-18 photos: pale putty walls; slate stair towers with one two-pane light per half landing on their sides, about 1 m over the wing roof; eyebrow sunshades over the wide groups on storeys 1-3 of the WSW and SSE faces (also over the SSE ground floor, <=2018 photo) and on the north part of the middle wing's WSW face; white sashes, most lights curtained or blinded, some open; a thin overhanging roof slab with a blue-green fascia and underside; sand-framed ground bays with slate panels on the WSW face; grey set-back strips beside the towers; the SSE face starts with two wide groups at the SW corner; the NW tower (west wing's NNW end) carries a mid-grey antenna cluster at the 4th floor with warning signs on the wall below it, and a flat-fronted grey vent up its NNW face that rises past the parapet and bends over it, its rust-brown run held about 0.3-0.4 m clear (the owner's 2026-11-18 photos), curving over onto the tower's roof (owner 2026-11-18); the penthouse and its siren mast (Sep 2025 sideC).",
+    "inferred": "Five storeys over the OSM 6 m tag, window cadence, doors on the other accessible sides; the SSE spine wall faces the attached Oasis hall (no door). Stair towers are enclosed blocks (no stairs modelled). L3: hood, slab, band, tower-light, blind and equipment sizes, the vent's bend radius and its drop onto the roof 1.2 m behind the wall, which lights are curtained, the SSE columns past u 31.4, the middle wing's photographed column station, the penthouse size, the roof membrane's grey-brown (jc-07, undated) and the duct and cluster layout are production_inference; the middle wing's NNW tower takes colour and height only (it is the blue-grey tower behind the NW tower in the owner's 2026-11-18 photos, by their fitted camera); the east wing's NNW tower, outside those photos' frame (the fitted camera puts it about 700 px left of it), takes colour and height only as an inference from the other towers; the SE tower keeps its windows (no dated photo since the repaint).",
+    "footprint": "Frozen 32-edge E plan split into the spine-and-wings block, the west and east wing ends, the SW and SE corner towers and the three NNW end towers (the middle wing's end block is its tower). The NW tower's WSW side is 1.9 m deep in OSM against about 3 m in the owner's 2026-11-18 photos; the frozen footprint stands."
+  },
+  "eaves": [
+    {
+      "edges": [
+        4,
+        5,
+        6
+      ],
+      "soffit": 15.2,
+      "top": 15.5,
+      "profile": [
+        [
+          -0.45,
+          15.2,
+          "trim_teal"
+        ],
+        [
+          -0.45,
+          15.5,
+          "trim_teal"
+        ]
+      ],
+      "roof_material": "roof_membrane",
+      "soffit_material": "trim_teal",
+      "end_material": "trim_teal"
+    },
+    {
+      "edges": [
+        10,
+        11
+      ],
+      "soffit": 15.2,
+      "top": 15.5,
+      "profile": [
+        [
+          -0.45,
+          15.2,
+          "trim_teal"
+        ],
+        [
+          -0.45,
+          15.5,
+          "trim_teal"
+        ]
+      ],
+      "roof_material": "roof_membrane",
+      "soffit_material": "trim_teal",
+      "end_material": "trim_teal"
+    },
+    {
+      "edges": [
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "soffit": 15.2,
+      "top": 15.5,
+      "profile": [
+        [
+          -0.45,
+          15.2,
+          "trim_teal"
+        ],
+        [
+          -0.45,
+          15.5,
+          "trim_teal"
+        ]
+      ],
+      "roof_material": "roof_membrane",
+      "soffit_material": "trim_teal",
+      "end_material": "trim_teal"
+    },
+    {
+      "edges": [
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "soffit": 15.2,
+      "top": 15.5,
+      "profile": [
+        [
+          -0.45,
+          15.2,
+          "trim_teal"
+        ],
+        [
+          -0.45,
+          15.5,
+          "trim_teal"
+        ]
+      ],
+      "roof_material": "roof_membrane",
+      "soffit_material": "trim_teal",
+      "end_material": "trim_teal"
+    },
+    {
+      "edges": [
+        31,
+        0
+      ],
+      "soffit": 15.2,
+      "top": 15.5,
+      "profile": [
+        [
+          -0.45,
+          15.2,
+          "trim_teal"
+        ],
+        [
+          -0.45,
+          15.5,
+          "trim_teal"
+        ]
+      ],
+      "roof_material": "roof_membrane",
+      "soffit_material": "trim_teal",
+      "end_material": "trim_teal"
+    }
+  ],
+  "parts": [
+    {
+      "kind": "box",
+      "edge": 5,
+      "s": [
+        48.45,
+        48.6
+      ],
+      "d": [
+        6.1,
+        6.25
+      ],
+      "y": [
+        18.6,
+        21.6
+      ],
+      "material": "rail"
+    },
+    {
+      "kind": "box",
+      "edge": 5,
+      "s": [
+        48.15,
+        48.9
+      ],
+      "d": [
+        5.8,
+        6.55
+      ],
+      "y": [
+        21.15,
+        21.55
+      ],
+      "material": "metal"
+    },
+    {
+      "kind": "antenna_cluster",
+      "edge": 29,
+      "s": [
+        0.12,
+        6.11
+      ],
+      "y": [
+        9.2,
+        12.3
+      ],
+      "mounts": 8,
+      "cabinets": 3,
+      "standoff": 0.45,
+      "seed": 369,
+      "materials": {
+        "panel": "panel_slate",
+        "radio": "door",
+        "pipe": "door",
+        "bracket": "door",
+        "cabinet": "soffit"
+      }
+    },
+    {
+      "kind": "duct",
+      "edge": 29,
+      "s": [
+        2.75,
+        3.3
+      ],
+      "y": [
+        12.3,
+        16.5
+      ],
+      "depth": 0.3,
+      "lift": 0.35,
+      "over": 1.2,
+      "conduits": 2,
+      "strap_every": 1.5,
+      "materials": {
+        "duct": "soffit",
+        "strap": "soffit",
+        "conduit": "cable_grey"
+      }
+    }
+  ]
 }
