@@ -13,7 +13,10 @@ extends SceneTree
 ##   - the siding takes siding_course_shadow;
 ##   - a gable run under gable_rakes carries no eave trim (the config without them draws one
 ##     there); story_band height 0 draws no board along the front; the frontage setback's
-##     soffit takes its soffit_rgb.
+##     soffit takes its soffit_rgb;
+##   - an end annex stands outside the frozen footprint only with its recorded exception,
+##     and collides as drawn: chest-height probes into its three open faces and one down
+##     through its roof meet its contact faces, which the config without it lacks.
 
 const FAMILY := preload("res://game/scripts/world/facades/housing_site_family.gd")
 const ATTACH := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
@@ -21,7 +24,7 @@ const SIDING := preload("res://game/resources/housing_family/siding.gdshader")
 const SOURCE := "w96215673"
 const CONFIG := "res://game/resources/housing_family/w96215673.json"
 const CHUNK := "res://generated/world/chunks/x_-2__z_-3.json"
-const DETAIL_KEYS := ["window_blinds", "utility_kit", "roof_vents", "siding_course_shadow", "gable_rakes"]
+const DETAIL_KEYS := ["window_blinds", "utility_kit", "roof_vents", "siding_course_shadow", "gable_rakes", "end_annexes"]
 
 var failures: Array[String] = []
 
@@ -52,7 +55,7 @@ func _initialize() -> void:
 	_check_plain(plain)
 	_check_details(model, FAMILY.build(wall, roof, cfg), cfg, wall)
 	if failures.is_empty():
-		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts collide as drawn, vents stand inside the footprint and rakes over their gables; the siding takes its lap shadow; the rake replaces its gables' eave trim, story_band 0 draws no board and the setback's soffit takes soffit_rgb")
+		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts collide as drawn, vents stand inside the footprint and rakes over their gables; the siding takes its lap shadow; the rake replaces its gables' eave trim, story_band 0 draws no board and the setback's soffit takes soffit_rgb; the end annex stands outside the footprint by its recorded exception and collides as drawn")
 		quit(0)
 	else:
 		for failure: String in failures:
@@ -109,6 +112,7 @@ func _check_details(model: Node3D, twin: Node3D, cfg: Dictionary, wall: Dictiona
 	_check_blinds(blinds, cfg)
 	_check_utilities(shells, boxes, cfg, wall)
 	_check_downspouts_and_vents(model, support_faces, cfg, wall)
+	_check_annexes(bodies, cfg, wall)
 	model.free()
 	twin.free()
 
@@ -313,6 +317,43 @@ func _check_floor_line_and_gables(plain: Node3D, model: Node3D, cfg: Dictionary,
 					else:
 						elsewhere += 1
 		check(at_band > 0 and elsewhere == 0, "the setback's soffit takes soffit_rgb, at the band and nowhere else (%d vertices at the band, %d elsewhere)" % [at_band, elsewhere])
+
+
+## Each annex: its outline outside the footprint (an exception only for listed sources,
+## which annex_valid enforces), probes into its open faces at chest height meet wall
+## faces, and one down through its roof meets support faces.
+func _check_annexes(bodies: Dictionary, cfg: Dictionary, wall: Dictionary) -> void:
+	var ring := _ring(wall)
+	var walls: PackedVector3Array = bodies.get("wall", PackedVector3Array())
+	var support: PackedVector3Array = bodies.get("support", PackedVector3Array())
+	var vertices: Array = wall.vertices
+	for annex: Dictionary in cfg.get("end_annexes", []):
+		check(annex.has("osm_exception"), "an end annex carries its recorded exception")
+		var i := int(annex.run) * 12
+		var a := Vector3(float(vertices[i]), 0.0, float(vertices[i + 2]))
+		var b := Vector3(float(vertices[i + 3]), 0.0, float(vertices[i + 5]))
+		var t := (b - a).normalized()
+		var n := Vector3(-t.z, 0.0, t.x)
+		var depth := float(annex.depth_m)
+		var mid_along := (float(annex.from_m) + float(annex.to_m)) * 0.5
+		var centre := a + t * mid_along + n * depth * 0.5
+		check(not Geometry2D.is_point_in_polygon(Vector2(centre.x, centre.z), ring), "the annex stands outside the frozen footprint")
+		var chest := float(annex.door.bottom_y) + 1.3
+		var door_face := a + t * float(annex.to_m) + n * (depth - 0.03)
+		var probes := [
+			[a + t * mid_along + n * (depth + 0.6), a + t * mid_along + n * (depth - 0.3), "its far face"],
+			[door_face + t * 0.6, door_face - t * 0.3, "its end face by the door"],
+			[a + t * float(annex.from_m) + n * depth * 0.5 - t * 0.6, a + t * float(annex.from_m) + n * depth * 0.5 + t * 0.3, "its other end face"],
+		]
+		for probe: Array in probes:
+			var from: Vector3 = probe[0]
+			var to: Vector3 = probe[1]
+			from.y = chest
+			to.y = chest
+			check(_crosses(walls, from, to), "the annex's wall collides as drawn: %s" % probe[2])
+		var over := centre + Vector3.UP * (float(annex.top_y) + 1.0)
+		var into := centre + Vector3.UP * (float(annex.top_y) - 0.5)
+		check(_crosses(support, over, into), "the annex's roof collides as drawn")
 
 
 ## Every drawn triangle of a model, in its frame.

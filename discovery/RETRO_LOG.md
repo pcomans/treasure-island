@@ -27765,3 +27765,8 @@ Comparing every record against the base commit found a change the author hadn't 
 - Worked: the matched photo-camera sheets and full-resolution raw captures let me compare directly.
 - Didn't: the 5.5x enlarged crop hid the floor-line overhang, and I only saw it when I enlarged the north-end photo myself.
 - Change: put a 4x crop of the reference next to every zoom sheet, and include an end-wall view with each first render.
+
+### ti-visual-review — Northpoint pilot r3b (2026-11-19)
+- Worked: matched 4x crops in the same projection settled the roof-pitch question independently of the camera-distance error.
+- Didn't work: the sheets had no angled view of the north end with the annex region at eye level, and no matched photo of the unit at close range.
+- Change: send footprint-limited gaps (the annex) to the owner as a decision before the next round instead of holding the modeller on them.

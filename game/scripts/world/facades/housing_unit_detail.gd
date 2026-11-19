@@ -483,27 +483,74 @@ static func _leg(bucket: Dictionary, p: Vector3, t: Vector3, n: Vector3, d0: flo
 
 # ------------------------------------------------------------------ roof plane
 
-## Checks roof_plane {"ridge": [[x, z], [x, z]], "ridge_y": y, "slope": rise a metre}:
-## a two-slope roof whose surface falls `slope` metres a metre from its ridge line.
+## Checks roof_plane: the instance's roof as one gable per footprint segment, in the
+## production roof's own frame: "axis" [x, z] along the ridges, "normal" [x, z] across
+## them, "ridge_d" (the frame's origin across), "slope" (rise a metre), "segments"
+## [{"ridge_offset", "ridge_y"}] (each ridge's offset across from ridge_d and height),
+## "cuts" [{"west_t", "east_t", "jog_d"}] between neighbours (a point lies before cut k
+## where t <= west_t if d >= jog_d, east_t otherwise) and "extent_t" [t0, t1].
 static func plane_valid(root: Node3D, plane: Variant) -> bool:
 	var ok: bool = plane is Dictionary
 	if ok:
-		var ridge: Variant = plane.get("ridge", [])
-		ok = ridge is Array and (ridge as Array).size() == 2 and _number(plane.get("ridge_y")) and _number(plane.get("slope")) and float(plane.get("slope", 0.0)) >= 0.0 and float(plane.get("slope", 0.0)) < 1.5
+		for key: String in ["axis", "normal", "extent_t"]:
+			var pair: Variant = plane.get(key, [])
+			ok = ok and pair is Array and (pair as Array).size() == 2 and _number(pair[0]) and _number(pair[1])
+		ok = ok and _number(plane.get("ridge_d")) and _number(plane.get("slope")) and float(plane.get("slope", 0.0)) >= 0.0 and float(plane.get("slope", 0.0)) < 1.5
+		var segments: Variant = plane.get("segments", [])
+		var cuts: Variant = plane.get("cuts", [])
+		ok = ok and segments is Array and not (segments as Array).is_empty() and cuts is Array and (cuts as Array).size() == (segments as Array).size() - 1
 		if ok:
-			for end: Variant in ridge:
-				ok = ok and end is Array and (end as Array).size() == 2 and _number(end[0]) and _number(end[1])
+			for segment: Variant in segments:
+				ok = ok and segment is Dictionary and _number(segment.get("ridge_offset")) and _number(segment.get("ridge_y"))
+			for cut: Variant in cuts:
+				ok = ok and cut is Dictionary and _number(cut.get("west_t")) and _number(cut.get("east_t")) and _number(cut.get("jog_d"))
 	if not ok:
-		_invalid(root, "Invalid roof_plane (ridge [[x, z], [x, z]], ridge_y, slope 0-1.5)")
+		_invalid(root, "Invalid roof_plane (axis, normal, ridge_d, slope 0-1.5, segments [{ridge_offset, ridge_y}], cuts [{west_t, east_t, jog_d}] one fewer, extent_t)")
 	return ok
 
 
-## The roof plane's surface height over xz.
-static func _roof_y(plane: Dictionary, xz: Vector2) -> float:
-	var a := Vector2(float(plane.ridge[0][0]), float(plane.ridge[0][1]))
-	var b := Vector2(float(plane.ridge[1][0]), float(plane.ridge[1][1]))
-	var across := Vector2(-(b - a).normalized().y, (b - a).normalized().x)
-	return float(plane.ridge_y) - absf((xz - a).dot(across)) * float(plane.slope)
+## (t, d): along the ridges and across them, from ridge_d.
+static func _plane_td(plane: Dictionary, xz: Vector2) -> Vector2:
+	var axis := Vector2(float(plane.axis[0]), float(plane.axis[1]))
+	var normal := Vector2(float(plane.normal[0]), float(plane.normal[1]))
+	return Vector2(xz.dot(axis), xz.dot(normal) - float(plane.ridge_d))
+
+
+static func _plane_segment(plane: Dictionary, td: Vector2) -> int:
+	var cuts: Array = plane.cuts
+	for k in cuts.size():
+		if td.x <= float(cuts[k].west_t if td.y >= float(cuts[k].jog_d) else cuts[k].east_t):
+			return k
+	return cuts.size()
+
+
+## The cut's t at a given d (its west or east line).
+static func _cut_t(cut: Dictionary, d: float) -> float:
+	return float(cut.west_t if d >= float(cut.jog_d) else cut.east_t)
+
+
+## The point at (t, d) in the plane's frame.
+static func _plane_xz(plane: Dictionary, t: float, d: float) -> Vector2:
+	var axis := Vector2(float(plane.axis[0]), float(plane.axis[1]))
+	var normal := Vector2(float(plane.normal[0]), float(plane.normal[1]))
+	return axis * t + normal * (float(plane.ridge_d) + d)
+
+
+## The roof's surface height over xz (segment k when given, else the one over xz).
+static func _roof_y(plane: Dictionary, xz: Vector2, k: int = -1) -> float:
+	var td := _plane_td(plane, xz)
+	if k < 0:
+		k = _plane_segment(plane, td)
+	var segment: Dictionary = plane.segments[k]
+	return float(segment.ridge_y) - absf(td.y - float(segment.ridge_offset)) * float(plane.slope)
+
+
+## Segment k's ridge line: its two ends in xz, between its cuts (or the plane's extent).
+static func _ridge_ends(plane: Dictionary, k: int) -> Array[Vector2]:
+	var dc := float(plane.segments[k].ridge_offset)
+	var t0 := float(plane.extent_t[0]) if k == 0 else _cut_t(plane.cuts[k - 1], dc)
+	var t1 := float(plane.extent_t[1]) if k == (plane.segments as Array).size() - 1 else _cut_t(plane.cuts[k], dc)
+	return [_plane_xz(plane, t0, dc), _plane_xz(plane, t1, dc)]
 
 
 # ------------------------------------------------------------------ roof vents
@@ -530,14 +577,25 @@ static func vents_valid(root: Node3D, spec: Dictionary) -> bool:
 ## margin_m and clear of the `avoid` points (existing vents) by 0.6 m. Stacks are
 ## 8-sided pipes with a cap; box vents a low hood on a curb; all in grey metal (rgb).
 static func roof_vents(root: Node3D, spec: Dictionary, plane: Dictionary, ring: PackedVector2Array, front_xz: Vector2) -> void:
-	var a := Vector2(float(plane.ridge[0][0]), float(plane.ridge[0][1]))
-	var b := Vector2(float(plane.ridge[1][0]), float(plane.ridge[1][1]))
+	var vents := KIT._bucket()
+	for k in (plane.segments as Array).size():
+		var ends := _ridge_ends(plane, k)
+		_segment_vents(vents, spec, plane, k, ends[0], ends[1], ring, front_xz)
+	var metal := PARTS._material(_color(spec, "rgb", Color(0.56, 0.57, 0.58)), float(spec.get("roughness", 0.5)))
+	metal.metallic = float(spec.get("metallic", 0.3))
+	var node := KIT._commit(root, vents, metal, "RoofVents")
+	if node != null:
+		node.set_meta("family_role", "support")
+
+
+## One segment's vents, along its ridge from a to b (see roof_vents).
+static func _segment_vents(vents: Dictionary, spec: Dictionary, plane: Dictionary, k: int, a: Vector2, b: Vector2, ring: PackedVector2Array, front_xz: Vector2) -> void:
 	var along := (b - a).normalized()
 	var across := Vector2(-along.y, along.x)
 	if across.dot(front_xz - a) < 0.0:
 		across = -across
 	var length := a.distance_to(b)
-	var seed := int(spec.get("seed", 0))
+	var seed := int(spec.get("seed", 0)) + 7919 * k
 	var spacing := float(spec.spacing_m)
 	var jitter := float(spec.jitter_m)
 	var lo := float(spec.offset_m[0])
@@ -549,7 +607,6 @@ static func roof_vents(root: Node3D, spec: Dictionary, plane: Dictionary, ring: 
 	var avoid: Array[Vector2] = []
 	for item: Array in spec.get("avoid", []):
 		avoid.append(Vector2(float(item[0]), float(item[1])))
-	var vents := KIT._bucket()
 	var next := spacing * 0.5
 	while next < length:
 		var s := next
@@ -563,9 +620,13 @@ static func roof_vents(root: Node3D, spec: Dictionary, plane: Dictionary, ring: 
 			clear = clear and Geometry2D.get_closest_point_to_segment(xz, ring[i], ring[(i + 1) % ring.size()]).distance_to(xz) >= margin
 		for point: Vector2 in avoid:
 			clear = clear and point.distance_to(xz) >= 0.6
+		# On this segment's roof, clear of a neighbour's (a step's gable end).
+		var td := _plane_td(plane, xz)
+		for dt in [-0.5, 0.5]:
+			clear = clear and _plane_segment(plane, td + Vector2(dt, 0.0)) == k
 		if not clear:
 			continue
-		var roof_y := _roof_y(plane, xz)
+		var roof_y := _roof_y(plane, xz, k)
 		var base := Vector3(xz.x, roof_y, xz.y)
 		var t3 := Vector3(along.x, 0.0, along.y)
 		var n3 := Vector3(across.x, 0.0, across.y)
@@ -580,11 +641,6 @@ static func roof_vents(root: Node3D, spec: Dictionary, plane: Dictionary, ring: 
 			var curb := 0.3
 			KIT._box(vents, base + Vector3.UP * 0.02, t3, n3, Vector3(curb, 0.16 + curb * slope, curb))
 			KIT._box(vents, base + Vector3.UP * 0.13, t3, n3, Vector3(curb + 0.08, 0.05, curb + 0.08))
-	var metal := PARTS._material(_color(spec, "rgb", Color(0.56, 0.57, 0.58)), float(spec.get("roughness", 0.5)))
-	metal.metallic = float(spec.get("metallic", 0.3))
-	var node := KIT._commit(root, vents, metal, "RoofVents")
-	if node != null:
-		node.set_meta("family_role", "support")
 
 
 ## An 8-sided upright prism (radius r, height h) standing on foot, capped on top; its
@@ -614,26 +670,30 @@ static func rakes_valid(root: Node3D, spec: Dictionary, run_count: int) -> bool:
 			ok = ok and _number(run) and int(run) >= 0 and int(run) < run_count
 	for key: String in ["overhang_m", "board_m", "soffit_drop_m"]:
 		ok = ok and _number(spec.get(key, 0.2)) and float(spec.get(key, 0.2)) > 0.0 and float(spec.get(key, 0.2)) <= 1.0
+	ok = ok and _number(spec.get("edge_m", 0.03)) and float(spec.get("edge_m", 0.03)) >= 0.0 and float(spec.get("edge_m", 0.03)) <= 0.1
+	for key: String in ["top_rgb", "board_rgb", "soffit_rgb"]:
+		ok = ok and (not spec.has(key) or _rgb(spec[key]))
 	if not ok:
-		_invalid(root, "Invalid gable_rakes (runs of the wall ring, overhang_m, board_m, soffit_drop_m 0-1 m)")
+		_invalid(root, "Invalid gable_rakes (runs of the wall ring, overhang_m, board_m, soffit_drop_m 0-1 m, edge_m 0-0.1, rgbs)")
 	return ok
 
 
 ## The roof (roof_plane) carried out over the listed gable runs: a strip of roof
 ## overhang_m deep along each run, its top a little above the roof's own edge so it
-## covers it, a soffit soffit_drop_m under it back to the wall, a rake board down its
-## outer edge and end caps at the eaves. Heights follow the two-slope plane, split at
-## the ridge. Roof top in the roofing, the rest in the trim.
+## covers it, running edge_m past the rake board so the roofing's edge shows over it, a
+## soffit soffit_drop_m under it back to the wall, the board down its outer edge and end
+## caps at the eaves. Heights follow the run's segment of the roof, split at its ridge.
+## Roof top in top_rgb (else the roofing), board and caps in board_rgb, soffit in
+## soffit_rgb (else the trim).
 static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, vertices: Array, roofing: Material, trim: Material) -> void:
 	var over := float(spec.get("overhang_m", 0.4))
 	var board := float(spec.get("board_m", 0.2))
 	var drop := float(spec.get("soffit_drop_m", 0.14))
+	var edge := float(spec.get("edge_m", 0.03))
 	var lift := 0.06
 	var top := KIT._bucket()
 	var white := KIT._bucket()
-	var ra := Vector2(float(plane.ridge[0][0]), float(plane.ridge[0][1]))
-	var rb := Vector2(float(plane.ridge[1][0]), float(plane.ridge[1][1]))
-	var across := Vector2(-(rb - ra).normalized().y, (rb - ra).normalized().x)
+	var under := KIT._bucket()
 	var count := vertices.size() / 12
 	var listed := {}
 	for run: Variant in spec.runs: listed[int(run)] = true
@@ -643,33 +703,46 @@ static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, verti
 		var b := Vector2(float(vertices[i + 3]), float(vertices[i + 5]))
 		var t := (b - a).normalized()
 		var n := Vector2(-t.y, t.x)
-		# Split where the run crosses the ridge line.
+		# The run's segment, and where the run crosses that segment's ridge.
+		var k := _plane_segment(plane, _plane_td(plane, (a + b) * 0.5))
+		var dc := float(plane.segments[k].ridge_offset)
 		var stations: Array[Vector2] = [a]
-		var da := (a - ra).dot(across)
-		var db := (b - ra).dot(across)
+		var da := _plane_td(plane, a).y - dc
+		var db := _plane_td(plane, b).y - dc
 		if da * db < 0.0:
 			stations.append(a.lerp(b, da / (da - db)))
 		stations.append(b)
-		for k in stations.size() - 1:
-			var p0 := stations[k]
-			var p1 := stations[k + 1]
-			var q0 := p0 + n * over
-			var q1 := p1 + n * over
-			var y0 := _roof_y(plane, p0) + lift
-			var y1 := _roof_y(plane, p1) + lift
-			var w0 := Vector3(p0.x, y0, p0.y)
-			var w1 := Vector3(p1.x, y1, p1.y)
-			var o0 := Vector3(q0.x, _roof_y(plane, q0) + lift, q0.y)
-			var o1 := Vector3(q1.x, _roof_y(plane, q1) + lift, q1.y)
-			var down := Vector3.DOWN * drop
-			KIT._quad(top, w0, w1, o1, o0, Vector3.UP)
-			KIT._quad(white, w0 + down, w1 + down, o1 + down, o0 + down, Vector3.DOWN)
-			# The rake board: the outer edge's face, from under the soffit to the strip's top.
-			var face := Vector3(n.x, 0.0, n.y)
+		var face := Vector3(n.x, 0.0, n.y)
+		for j in stations.size() - 1:
+			var p0 := stations[j]
+			var p1 := stations[j + 1]
+			var q0 := p0 + n * (over + edge)
+			var q1 := p1 + n * (over + edge)
+			var w0 := Vector3(p0.x, _roof_y(plane, p0, k) + lift, p0.y)
+			var w1 := Vector3(p1.x, _roof_y(plane, p1, k) + lift, p1.y)
+			var o0 := Vector3(q0.x, _roof_y(plane, q0, k) + lift, q0.y)
+			var o1 := Vector3(q1.x, _roof_y(plane, q1, k) + lift, q1.y)
+			# The roof's own slope normal, up and away from the ridge.
+			var up := (w1 - w0).cross(o0 - w0).normalized()
+			if up.y < 0.0:
+				up = -up
+			KIT._quad(top, w0, w1, o1, o0, up)
+			# The roofing's edge: a thin dark face over the board.
+			KIT._quad(top, o0, o1, o1 + Vector3.DOWN * 0.03, o0 + Vector3.DOWN * 0.03, face)
+			# The board, edge_m inside the roofing's edge, from under the soffit to the top.
+			var b0 := o0 - face * edge
+			var b1 := o1 - face * edge
 			var low := Vector3.DOWN * (board - 0.02)
-			KIT._quad(white, o0 + Vector3.UP * 0.02 + face * 0.005, o1 + Vector3.UP * 0.02 + face * 0.005, o1 + low + face * 0.005, o0 + low + face * 0.005, face)
-			# Close the board's underside back to the soffit.
-			KIT._quad(white, o0 + low + face * 0.005, o1 + low + face * 0.005, o1 + down, o0 + down, Vector3.DOWN)
+			KIT._quad(white, b0 + Vector3.DOWN * 0.03, b1 + Vector3.DOWN * 0.03, b1 + low, b0 + low, face)
+			KIT._quad(white, b0 + low, b1 + low, b1 + low - face * 0.025, b0 + low - face * 0.025, Vector3.DOWN)
+			# The soffit, from the board's back to the wall.
+			var down := Vector3.DOWN * drop
+			var s0 := Vector3(p0.x, w0.y, p0.y) + down
+			var s1 := Vector3(p1.x, w1.y, p1.y) + down
+			var e0 := b0 - face * 0.025 + Vector3.UP * (o0.y - b0.y) + down
+			var e1 := b1 - face * 0.025 + Vector3.UP * (o1.y - b1.y) + down
+			KIT._quad(under, s0, s1, e1, e0, Vector3.DOWN)
+			KIT._quad(white, b0 + low - face * 0.025, b1 + low - face * 0.025, e1, e0, -face)
 		# End caps where the strip meets the eaves: the run's ends that no listed run continues.
 		for end: Array in [[a, -t, posmod(int(run) - 1, count)], [b, t, posmod(int(run) + 1, count)]]:
 			if listed.has(int(end[2])):
@@ -677,11 +750,157 @@ static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, verti
 			var p: Vector2 = end[0]
 			var out: Vector2 = end[1]
 			var q := p + n * over
-			var yp := _roof_y(plane, p) + lift
-			var yq := _roof_y(plane, q) + lift
+			var yp := _roof_y(plane, p, k) + lift
+			var yq := _roof_y(plane, q, k) + lift
 			var o3 := Vector3(out.x, 0.0, out.y)
 			KIT._quad(white, Vector3(p.x, yp, p.y), Vector3(q.x, yq, q.y), Vector3(q.x, yq - board + 0.02, q.y), Vector3(p.x, yp - drop, p.y), o3)
-	for pair: Array in [[top, roofing, "GableRakeTop"], [white, trim, "GableRake"]]:
+	var roof_top: Material = roofing
+	if spec.has("top_rgb"):
+		roof_top = PARTS._material(_color(spec, "top_rgb", Color.GRAY), 0.95)
+	var board_material: Material = trim
+	if spec.has("board_rgb"):
+		board_material = PARTS._material(_color(spec, "board_rgb", Color.WHITE), 0.7)
+	var soffit_material: Material = trim
+	if spec.has("soffit_rgb"):
+		soffit_material = PARTS._material(_color(spec, "soffit_rgb", Color.WHITE), 0.85)
+	for pair: Array in [[top, roof_top, "GableRakeTop"], [white, board_material, "GableRake"], [under, soffit_material, "GableRakeSoffit"]]:
 		var node := KIT._commit(root, pair[0], pair[1], pair[2])
+		if node != null:
+			node.set_meta("family_role", "support")
+
+
+# ------------------------------------------------------------------ end annexes
+
+## Sources whose annex may stand outside the frozen OSM footprint: each one a recorded
+## owner exception (the entry's osm_exception), so a new one needs a code change here.
+const ANNEX_EXCEPTION_SOURCES := ["w96215673"]
+
+
+## Checks an end_annexes entry: {"run", "from_m", "to_m" (along the run), "depth_m" (out
+## from it), "base_y" (under the ground), "top_y", "door": {"out_m" (from the wall to its
+## near jamb), "width_m", "height_m", "bottom_y", "rgb"}, "flues": [{"at_m", "out_m",
+## "diameter_m", "height_m"}], "roof_rgb", "evidence",
+## "osm_exception": {"reason", "approved", "photo", "outline_xz"} (exactly these, as the
+## street detail's zones record theirs)}.
+static func annex_valid(root: Node3D, spec: Dictionary, source_key: String, run_count: int) -> bool:
+	var ok: bool = ANNEX_EXCEPTION_SOURCES.has(source_key)
+	ok = ok and _number(spec.get("run")) and int(spec.get("run", -1)) >= 0 and int(spec.get("run", -1)) < run_count
+	for key: String in ["from_m", "to_m", "depth_m", "base_y", "top_y"]:
+		ok = ok and _number(spec.get(key))
+	if ok:
+		ok = float(spec.to_m) > float(spec.from_m) + 0.5 and float(spec.depth_m) >= 0.5 and float(spec.depth_m) <= 6.0 and float(spec.top_y) > float(spec.base_y) + 2.0
+	var door: Variant = spec.get("door", {})
+	ok = ok and door is Dictionary
+	if ok:
+		for key: String in ["out_m", "width_m", "height_m", "bottom_y"]:
+			ok = ok and _number(door.get(key))
+		ok = ok and (not door.has("rgb") or _rgb(door.rgb))
+		ok = ok and float(door.get("out_m", 0.0)) >= 0.0 and float(door.get("out_m", 0.0)) + float(door.get("width_m", 0.0)) <= float(spec.get("depth_m", 0.0)) - 0.05
+	ok = ok and (not spec.has("roof_rgb") or _rgb(spec.roof_rgb))
+	var exception: Variant = spec.get("osm_exception", null)
+	ok = ok and exception is Dictionary and (exception as Dictionary).size() == 4
+	if ok:
+		for key: String in ["reason", "approved", "photo"]:
+			ok = ok and exception.get(key) is String and not str(exception.get(key)).strip_edges().is_empty()
+		var outline: Variant = exception.get("outline_xz", [])
+		ok = ok and outline is Array and (outline as Array).size() >= 3
+	for flue: Variant in spec.get("flues", []):
+		ok = ok and flue is Dictionary and _number(flue.get("at_m")) and _number(flue.get("out_m")) and _number(flue.get("diameter_m")) and _number(flue.get("height_m"))
+	if not ok:
+		_invalid(root, "Invalid end_annexes entry (a recorded exception for this source only: run, from_m < to_m, depth_m 0.5-6, base_y, top_y, door {out_m, width_m, height_m, bottom_y} inside the end face, flues, osm_exception {reason, approved, photo, outline_xz})")
+	return ok
+
+
+## A one-storey block on an end wall, as the dated photo shows it: siding on its three
+## open sides from base_y (under the ground) up to a flat roof slab with a coping round
+## its edge, a two-leaf door in the end face toward the run's end (door.out_m from the
+## wall) with its casing and a threshold slab from the door down into the ground, and
+## the flues on the roof. Sides the photo doesn't show stay plain siding. Walls are the
+## wall role; roof, coping, door, flues and threshold collide as support.
+static func end_annex(root: Node3D, spec: Dictionary, vertices: Array, siding: Material, trim: Material, concrete: Material) -> void:
+	var i := int(spec.run) * 12
+	var a := Vector3(float(vertices[i]), 0.0, float(vertices[i + 2]))
+	var b := Vector3(float(vertices[i + 3]), 0.0, float(vertices[i + 5]))
+	var t := (b - a).normalized()
+	var n := Vector3(-t.z, 0.0, t.x)
+	var depth := float(spec.depth_m)
+	var base := float(spec.base_y)
+	var top := float(spec.top_y)
+	var slab := 0.2
+	var a0 := a + t * float(spec.from_m)
+	var a1 := a + t * float(spec.to_m)
+	var b0 := a0 + n * depth
+	var b1 := a1 + n * depth
+	var wall_top := top - slab
+	var door: Dictionary = spec.door
+	var door_w := float(door.width_m)
+	var door_h := float(door.height_m)
+	var door_bottom := float(door.bottom_y)
+	# The end face runs from b1 back to a1 (outward t); x along it from b1.
+	var door_x := depth - float(door.out_m) - door_w
+	var begin := root.get_child_count()
+	PARTS._wall_with_openings(root, Vector3(b0.x, base, b0.z), Vector3(b1.x, base, b1.z), wall_top, [], siding)
+	var holes: Array[Rect2] = [Rect2(door_x, door_bottom, door_w, door_h)]
+	PARTS._wall_with_openings(root, Vector3(b1.x, base, b1.z), Vector3(a1.x, base, a1.z), wall_top, holes, siding)
+	PARTS._wall_with_openings(root, Vector3(a0.x, base, a0.z), Vector3(b0.x, base, b0.z), wall_top, [], siding)
+	for k in range(begin, root.get_child_count()):
+		root.get_child(k).set_meta("family_role", "wall")
+	var white := KIT._bucket()
+	var leaf := KIT._bucket()
+	var dark := KIT._bucket()
+	var roof := KIT._bucket()
+	var pad := KIT._bucket()
+	var metal := KIT._bucket()
+	var mid_y := (base + wall_top) * 0.5
+	# Corner boards on the two outer corners.
+	for corner: Vector3 in [b0, b1]:
+		KIT._box(white, Vector3(corner.x, mid_y, corner.z), t, n, Vector3(0.1, wall_top - base, 0.1))
+	# Flat roof: the slab over the block, a coping band round its three open edges.
+	var centre := (a0 + b1) * 0.5
+	KIT._box(roof, Vector3(centre.x, top - slab * 0.5 - 0.01, centre.z), t, n, Vector3(float(spec.to_m) - float(spec.from_m) + 0.06, slab, depth + 0.06))
+	var c_top := top + 0.02
+	for side: Array in [[b0, b1, n], [b1, a1, t], [a0, b0, -t]]:
+		var p: Vector3 = side[0]
+		var q: Vector3 = side[1]
+		var out: Vector3 = side[2]
+		var along := (q - p).normalized()
+		var mid := (p + q) * 0.5 + out * 0.05
+		KIT._box(white, Vector3(mid.x, c_top - 0.11, mid.z), along, out, Vector3(p.distance_to(q) + 0.16, 0.22, 0.06))
+	# The door: two leaves set 6 cm back in the opening, dark reveals at its jambs and
+	# head, the casing proud of the siding, the leaves' joint, handles and the plate on
+	# the first leaf.
+	var face := -n
+	var door_mid := b1 + face * (door_x + door_w * 0.5)
+	var dc := Vector3(door_mid.x, door_bottom + door_h * 0.5, door_mid.z)
+	KIT._box(leaf, dc - t * 0.075, face, t, Vector3(door_w, door_h, 0.03))
+	for side in [-1.0, 1.0]:
+		KIT._box(dark, dc + face * side * (door_w * 0.5 - 0.01) - t * 0.03, face, t, Vector3(0.02, door_h, 0.06))
+	KIT._box(dark, dc + Vector3.UP * (door_h * 0.5 - 0.01) - t * 0.03, face, t, Vector3(door_w, 0.02, 0.06))
+	KIT._box(dark, dc - t * 0.055, face, t, Vector3(0.012, door_h - 0.04, 0.012))
+	for side in [-1.0, 1.0]:
+		KIT._box(white, dc + face * side * (door_w * 0.5 + 0.045) + t * 0.015 + Vector3.UP * 0.04, face, t, Vector3(0.09, door_h + 0.08, 0.05))
+		KIT._box(dark, dc + face * side * 0.07 - t * 0.045 + Vector3.DOWN * 0.08, face, t, Vector3(0.03, 0.16, 0.03))
+	KIT._box(white, dc + Vector3.UP * (door_h * 0.5 + 0.045) + t * 0.015, face, t, Vector3(door_w + 0.18, 0.09, 0.05))
+	KIT._box(white, dc - face * (door_w * 0.25) + Vector3.UP * 0.15 - t * 0.055, face, t, Vector3(0.34, 0.12, 0.012))
+	# Threshold: from the door out, its top at the door's foot, its bottom in the ground.
+	var low := minf(base + 0.1, door_bottom - 0.25)
+	var step := dc + t * 0.45
+	KIT._box(pad, Vector3(step.x, (door_bottom + low) * 0.5, step.z), face, t, Vector3(door_w + 0.3, door_bottom - low, 0.9))
+	# Flues on the roof, at_m along the run and out_m from the wall, with their caps.
+	for flue: Dictionary in spec.get("flues", []):
+		var foot := a + t * float(flue.at_m) + n * float(flue.out_m)
+		var r := float(flue.diameter_m) * 0.5
+		var h := float(flue.height_m)
+		_prism(metal, Vector3(foot.x, top - 0.05, foot.z), r, h + 0.05)
+		_prism(metal, Vector3(foot.x, top + h, foot.z), r * 1.35, 0.08)
+		_prism(metal, Vector3(foot.x, top + h + 0.08, foot.z), r * 0.6, 0.12)
+	var door_rgb := _color(door, "rgb", Color(0.62, 0.64, 0.64))
+	var parts: Array = [[white, trim, "AnnexTrim"], [leaf, PARTS._material(door_rgb, 0.6), "AnnexDoor"], [dark, PARTS._material(Color(0.16, 0.17, 0.18), 0.6), "AnnexReveal"],
+		[roof, PARTS._material(_color(spec, "roof_rgb", Color(0.2, 0.21, 0.22)), 0.9), "AnnexRoof"], [pad, concrete, "AnnexThreshold"]]
+	var steel := PARTS._material(Color(0.62, 0.63, 0.64), 0.45)
+	steel.metallic = 0.5
+	parts.append([metal, steel, "AnnexFlues"])
+	for part: Array in parts:
+		var node := KIT._commit(root, part[0], part[1], part[2])
 		if node != null:
 			node.set_meta("family_role", "support")

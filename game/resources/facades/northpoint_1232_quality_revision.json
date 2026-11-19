@@ -6,5 +6,45 @@
     "res://generated/world/chunks/x_-2__z_-4.json"
   ],
   "frontage_parking_from_m": 2.0,
-  "frontage_parking_evidence": "Google Street View March 2025, north end (heading 162.5): the north segment's two units front a lawn and the walk, no parking; the parking and carport begin at the middle segment. Station in northpoint_1232_quality_model.gd's frontage frame (production inference)."
+  "frontage_parking_evidence": "Google Street View March 2025, north end (heading 162.5): the north segment's two units front a lawn and the walk, no parking; the parking and carport begin at the middle segment. Station in northpoint_1232_quality_model.gd's frontage frame (production inference).",
+  "roof_segments": {
+    "slope": 0.36,
+    "segments": [
+      {
+        "ridge_offset": 0.968,
+        "ridge_y": 10.039
+      },
+      {
+        "ridge_offset": -0.6295,
+        "ridge_y": 10.1608
+      },
+      {
+        "ridge_offset": 0.7725,
+        "ridge_y": 10.0453
+      }
+    ],
+    "cuts": [
+      {
+        "west_t": -725.67,
+        "east_t": -725.58,
+        "jog_d": 0.3385
+      },
+      {
+        "west_t": -711.16,
+        "east_t": -710.43,
+        "jog_d": 0.232
+      }
+    ],
+    "extent_t": [
+      -739.65,
+      -696.48
+    ]
+  },
+  "roof_segments_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): each segment under its own gable roof with a rake at the steps (front photo, the north step); the north gable's apex on that segment's centre line. Pitch 0.36 from the north-end photo through its solved camera (apex, west rake, ridge silhouette); production inference. The same roof as w96215673.json's roof_plane, from one generator.",
+  "frontage_asphalt_rgb": [
+    0.24,
+    0.21,
+    0.17
+  ],
+  "frontage_asphalt_evidence": "Google Street View, March 2025, west front: the stalls' asphalt grey-black (it read navy in game light)."
 }

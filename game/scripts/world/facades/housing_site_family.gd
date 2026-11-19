@@ -90,7 +90,20 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	# Opt-in soffit_rgb: the setback's soffit in its own colour (a floor-line shadow).
 	var recess_soffit: Material = null
 	if recess.has("soffit_rgb"): recess_soffit = PARTS._material(color(recess,"soffit_rgb",Color.GRAY),0.95)
+	# Opt-in shade_m/shade: the lower wall's top in the overhang's shade, two strips of the
+	# siding darkened toward the soffit (shade the darkest factor), just proud of the wall.
+	var recess_shades: Array = []
+	if float(recess.get("shade_m", 0.0)) > 0.0:
+		for factor: float in [float(recess.get("shade", 0.7)), (1.0 + float(recess.get("shade", 0.7))) * 0.5]:
+			var dim := siding.duplicate() as ShaderMaterial
+			var base := dim.get_shader_parameter("wall_color") as Color
+			dim.set_shader_parameter("wall_color", Color(base.r * factor, base.g * factor, base.b * factor, base.a))
+			recess_shades.append(dim)
 	# Gable runs under an opt-in rake carry it in place of the eave trim.
+	# Opt-in window_sill_out_m (how far sills stand out; default 0.26 m) and window_glass
+	# {roughness, metallic} for the panes.
+	var sill_out := float(cfg.get("window_sill_out_m", -1.0))
+	var pane_finish := Vector2(float(cfg.get("window_glass", {}).get("roughness", -1.0)), float(cfg.get("window_glass", {}).get("metallic", -1.0)))
 	var rake_runs: Dictionary = {}
 	for run: Variant in cfg.get("gable_rakes", {}).get("runs", []): rake_runs[int(run)] = true
 	# The target schedule carries complete motifs. A basis pins each motif to its
@@ -181,7 +194,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						PARTS._panel(root,point+t*side*(width/2+0.025),t,n,Vector3(0.065,height+0.12,0.09),trim)
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
-					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
+					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,pane_finish)
 					if not blind_buckets.is_empty() and not is_rear:
 						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height)
 				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
@@ -267,7 +280,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		for hole: Rect2 in holes_by_run.get(i/12, []): holes.append(hole)
 		var wall_begin := root.get_child_count()
 		if recess_runs.has(i/12):
-			_recessed_wall(root, a, b, top, holes, siding, trim if recess_soffit == null else recess_soffit, vertices, i/12, recess_runs[i/12], recess, recess_runs)
+			_recessed_wall(root, a, b, top, holes, siding, trim if recess_soffit == null else recess_soffit, vertices, i/12, recess_runs[i/12], recess, recess_runs, recess_shades)
 		elif rear_recess_runs.has(i/12):
 			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, rear_recess_runs[i/12], rear_recess, rear_recess_runs)
 		elif not (bool(recess.get("join_runs", false)) and _notched_wall(root, a, b, top, holes, siding, vertices, i/12, recess, recess_runs)):
@@ -379,6 +392,11 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 					_ground_triangle(root,triangle,concrete,not recess.is_empty())
 	_tag_since(root,ground_begin,"ground")
 	GARAGE_COURT.extras(root,cfg,palette,trim)
+	# Opt-in end_annexes: a photographed block on an end wall, outside the frozen footprint
+	# by a recorded exception (DETAIL).
+	for annex: Variant in cfg.get("end_annexes", []):
+		if annex is Dictionary and DETAIL.annex_valid(root, annex, str(cfg.target.source_key), vertices.size() / 12):
+			DETAIL.end_annex(root, annex, vertices, siding, trim, concrete)
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
@@ -576,8 +594,23 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	var steel := PARTS._material(color(palette,"carport_post_rgb",Color(0.35,0.3,0.25)),0.9)
 	var fascia: Material = trim
 	if cfg.has("fascia_rgb"): fascia = PARTS._material(color(cfg,"fascia_rgb",Color.GRAY),0.96)
+	# Opt-in fascia_seam_m: board joints across both fascias every fascia_seam_m, a hair
+	# proud of each face, in fascia_seam_rgb.
+	var seam_every := float(cfg.get("fascia_seam_m", 0.0))
+	var seam_material: Material = null
+	if seam_every >= 0.5: seam_material = PARTS._material(color(cfg,"fascia_seam_rgb",Color(0.3,0.31,0.32)),0.95)
 	for d in cfg.depth_m:
 		PARTS._beam(root,a+n*(float(d)-middle),b+n*(float(d)-middle),0.13,0.29,fascia)
+		if seam_material != null:
+			var seam_at := float(cfg.station_m[0]) + seam_every
+			while seam_at < float(cfg.station_m[1]) - 0.1:
+				# _panel stands its box 0.06 out along n: start it that far back.
+				var seam := start+t*seam_at+n*(float(d)-0.06)
+				seam.y = a.y
+				PARTS._panel(root,seam,t,n,Vector3(0.025,0.282,0.137),seam_material)
+				seam_at += seam_every
+			# The board line along each fascia's face, a little above its middle.
+			PARTS._beam(root,a+n*(float(d)-middle)+Vector3.UP*0.03,b+n*(float(d)-middle)+Vector3.UP*0.03,0.137,0.012,seam_material)
 		# Opt-in fascia_top_rgb: a weathered strip along the fascia's top edge.
 		if cfg.has("fascia_top_rgb"):
 			PARTS._beam(root,a+n*(float(d)-middle)+Vector3(0,0.1575,0),b+n*(float(d)-middle)+Vector3(0,0.1575,0),0.135,0.025,PARTS._material(color(cfg,"fascia_top_rgb",Color.GRAY),0.97))
@@ -838,7 +871,7 @@ static func _tag_since(root: Node3D, begin: int, role: String) -> void:
 ## run's neighbours from the wall ring instead of its frame: a recessed neighbour in any
 ## frame meets it at the offset-line miter, and next to an unrecessed one the lower wall
 ## runs to the corner with no terminal strip (_notched_wall meets it there).
-static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, soffit: Material, vertices: Array, run: int, frame: Dictionary, recess: Dictionary, recessed: Dictionary = {}) -> void:
+static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, soffit: Material, vertices: Array, run: int, frame: Dictionary, recess: Dictionary, recessed: Dictionary = {}, shades: Array = []) -> void:
 	var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 	var n := Vector3(-t.z,0,t.x)
 	var length := Vector2(b.x-a.x,b.z-a.z).length()
@@ -878,7 +911,15 @@ static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, hol
 		inner_b = outer_b-(n+nn)*depth/(1.0+n.dot(nn))
 	PARTS._wall_with_openings(root,Vector3(a.x,band,a.z),Vector3(b.x,band,b.z),top,_clipped_holes(holes,0,length,band,top),siding)
 	var shift := Vector3(inner_a.x-a.x,0,inner_a.z-a.z).dot(t)
-	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z)),minf(a.y,b.y),band),siding)
+	var inner_length := inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z))
+	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_length,minf(a.y,b.y),band),siding)
+	# Opt-in shade_m/shade: the lower wall's top in the overhang's shade, two strips of the
+	# siding darkened toward the soffit (shade the darkest factor), just proud of the wall.
+	if shades.size() == 2:
+		var tall := float(recess.shade_m)
+		var lift := n * 0.004
+		for step: Array in [[band - tall * 0.4, band, shades[0]], [band - tall, band - tall * 0.4, shades[1]]]:
+			PARTS._wall_with_openings(root,Vector3(inner_a.x,float(step[0]),inner_a.z)+lift,Vector3(inner_b.x,float(step[0]),inner_b.z)+lift,float(step[1]),_clipped_holes(holes,shift,shift+inner_length,float(step[0]),float(step[1])),step[2])
 	if lo > 0:
 		PARTS._wall_with_openings(root,a,outer_a,band,[],siding)
 		PARTS._quad(root,[outer_a,inner_a,Vector3(inner_a.x,band,inner_a.z),Vector3(outer_a.x,band,outer_a.z)],siding,cavity_facing_returns)
