@@ -1063,7 +1063,7 @@ static func end_annex(root: Node3D, spec: Dictionary, vertices: Array, siding: M
 	var parts: Array = [[white, trim, "AnnexTrim"], [leaf, PARTS._material(door_rgb, 0.6), "AnnexDoor"], [dark, PARTS._material(Color(0.16, 0.17, 0.18), 0.6), "AnnexReveal"],
 		[roof, PARTS._material(_color(spec, "roof_rgb", Color(0.2, 0.21, 0.22)), 0.9), "AnnexRoof"], [pad, concrete, "AnnexThreshold"]]
 	var steel := PARTS._material(_color(spec, "flue_rgb", Color(0.62, 0.63, 0.64)), 0.32)
-	steel.metallic = 0.75
+	steel.metallic = 0.55
 	parts.append([metal, steel, "AnnexFlues"])
 	var cap_steel := PARTS._material(_color(spec, "flue_cap_rgb", Color(0.8, 0.81, 0.82)), 0.35)
 	cap_steel.metallic = 0.6
