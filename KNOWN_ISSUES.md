@@ -415,6 +415,7 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
   - a little loose cable hangs under the radios;
   - the east wing's end tower's blue is inferred from the other towers;
   - the north and east sides have no dated photo, so they stay plain.
+- **Mid-rise door landings under raised street ground (found 2026-11-19, `fix/door-threshold-ground-20261119`):** since that fix every mid-rise door's recess is paved from its landing to the door, but four landings lie partly under the raised street ground the generator draws round them, 2 to 13 cm above the landing: the Avenue D security booth on the Job Corps campus (OSM w1473253276), whose step still shows a strip of verge grass in front of the door, Star View Court's NNW link lobby (w1212173437) and 490 Avenue of the Palms's NNW lobby and link door (w1272162518). The landing stands on the frozen land, not on the street ground drawn over it, so closing these needs the landing and its door raised to the drawn ground or the street ground cut round the landing.
 - Finish items (seen in review, by 2026-11-05):
   - the generic "noisy stone" placeholder texture is still on a few visible walls:
     - the Fire Station 48 NNW notch, kept by an earlier study decision; changing it needs an explicit decision;

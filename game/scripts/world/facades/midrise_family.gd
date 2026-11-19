@@ -1886,6 +1886,8 @@ static func _assembly(ctx: Ctx, face: Face, bay: Dictionary, o: Dictionary) -> v
 		"garage":
 			var depth := float(spec.get("depth", 0.3))
 			_reveals(ctx, face, wall_mat, s0, s1, y0, y1, depth, false)
+			# Paved from the wall's line to the door, as a door's recess is (see _door).
+			_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0)
 			var out := face.out3()
 			_rect(ctx.bucket("wall", str(spec.get("material", "garage"))), face, s0, s1, y0, y1, depth, out)
 			var groove := ctx.bucket("wall", "frame")
@@ -2190,7 +2192,6 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 		_rect(ctx.bucket("wall", str(door.get("back", "render"))), face, s0, s1, y0, y1, depth, out)
 		var dw := float(door.get("door_w", 1.8))
 		_glazing(ctx, face, _merge({"mullions": [0.5], "transoms": [0.82]}, door.get("glazing", {})), c - dw * 0.5, c + dw * 0.5, y0, minf(y1 - 0.2, y0 + 2.7), depth - 0.01)
-		_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0)
 	elif kind == "lobby":
 		_glazing(ctx, face, _merge({"mullions": door.get("mullions", [0.25, 0.5, 0.75]), "transoms": door.get("transoms", [0.78])}, door.get("glazing", {})), s0, s1, y0, y1, depth)
 		_panels(ctx, face, door, s0, s1, y0, y1, depth)
@@ -2203,7 +2204,14 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 		if y1 - leaf_top > 0.2:
 			_glazing(ctx, face, {}, s0, s1, leaf_top, y1, depth)
 		_box(ctx.bucket("wall", "frame"), face, s1 - 0.22, s1 - 0.12, y0 + 1.0, y0 + 1.04, depth - 0.06, depth)
-	_pad(ctx, face, c - land_w * 0.5, c + land_w * 0.5, -land_d, 0.0, y0, drop)
+	# The recess floor (a porch's whole floor): the landing's paving runs on between
+	# the jambs to the door, so the ground under the building never shows at the
+	# door's foot. Each edge where the two meet takes the other's corner stations,
+	# so they meet edge to edge.
+	var l0 := c - land_w * 0.5
+	var l1 := c + land_w * 0.5
+	_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0, [l0, l1])
+	_pad(ctx, face, l0, l1, -land_d, 0.0, y0, drop, [], [s0, s1])
 	var ramp: Dictionary = spec.get("ramp", {})
 	if not ramp.is_empty():
 		_ramp(ctx, face, ramp, c, land_w, land_d, y0)
@@ -2221,19 +2229,58 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 			_box(screen, face, s - 0.025, s + 0.025, y0, y0 + float(spec.get("screen_h", 1.1)), -land_d + 0.15, 0.0, false)
 
 
-## Walkable landing: flat top at y with bevelled outer and side skirts (at most
-## 40 degrees, the stock 48-degree floor limit) reaching drop metres into the ground.
-static func _pad(ctx: Ctx, face: Face, s0: float, s1: float, d0: float, d1: float, y: float, drop: float) -> void:
+## Walkable paving: flat top at y from d0 to d1, with (drop > 0) bevelled outer (d0)
+## and side skirts (at most 40 degrees, the stock 48-degree floor limit) reaching drop
+## metres into the ground. `front` and `back` list stations on its d0 and d1 edges
+## where another surface's corner meets that edge: the edge takes a vertex there, so
+## the two meet with no T-junction to crack open between them.
+static func _pad(ctx: Ctx, face: Face, s0: float, s1: float, d0: float, d1: float, y: float, drop: float, front: Array = [], back: Array = []) -> void:
 	var ground := ctx.bucket("ground", "paving")
-	ground.quad(face.point(s0, y, d0), face.point(s1, y, d0), face.point(s1, y, d1), face.point(s0, y, d1), Vector3.UP)
+	var fs := _pad_stations(s0, s1, front)
+	var bs := _pad_stations(s0, s1, back)
+	if fs.size() == 2 and bs.size() == 2:
+		ground.quad(face.point(s0, y, d0), face.point(s1, y, d0), face.point(s1, y, d1), face.point(s0, y, d1), Vector3.UP)
+	else:
+		# Zipped between its two edges, as a wall cell is between its neighbours.
+		var i := 0
+		var j := 0
+		while i < fs.size() - 1 or j < bs.size() - 1:
+			if j >= bs.size() - 1 or (i < fs.size() - 1 and fs[i + 1] <= bs[j + 1]):
+				ground.tri(face.point(fs[i], y, d0), face.point(fs[i + 1], y, d0), face.point(bs[j], y, d1), Vector3.UP)
+				i += 1
+			else:
+				ground.tri(face.point(fs[i], y, d0), face.point(bs[j + 1], y, d1), face.point(bs[j], y, d1), Vector3.UP)
+				j += 1
 	if drop <= 0.0:
 		return
 	var run := drop * 1.2
 	var out := face.out3()
 	var along := face.dir3()
-	ground.quad(face.point(s0, y, d0), face.point(s1, y, d0), face.point(s1 + run, y - drop, d0 - run), face.point(s0 - run, y - drop, d0 - run), out + Vector3.UP)
+	# The outer skirt in one piece per front span, its ends running out to the corners.
+	var last := fs.size() - 2
+	for k in fs.size() - 1:
+		var a := fs[k] - (run if k == 0 else 0.0)
+		var b := fs[k + 1] + (run if k == last else 0.0)
+		ground.quad(face.point(fs[k], y, d0), face.point(fs[k + 1], y, d0), face.point(b, y - drop, d0 - run), face.point(a, y - drop, d0 - run), out + Vector3.UP)
 	ground.quad(face.point(s0, y, d0), face.point(s0, y, d1), face.point(s0 - run, y - drop, d1), face.point(s0 - run, y - drop, d0 - run), -along + Vector3.UP)
 	ground.quad(face.point(s1, y, d0), face.point(s1, y, d1), face.point(s1 + run, y - drop, d1), face.point(s1 + run, y - drop, d0 - run), along + Vector3.UP)
+
+
+## s0, the given stations more than 1 mm inside (s0, s1) in ascending order (one of
+## any two within 1 mm), then s1.
+static func _pad_stations(s0: float, s1: float, joins: Array) -> PackedFloat64Array:
+	var inner: Array[float] = []
+	for value: Variant in joins:
+		var s := float(value)
+		if s > s0 + 0.001 and s < s1 - 0.001:
+			inner.append(s)
+	inner.sort()
+	var stations := PackedFloat64Array([s0])
+	for s: float in inner:
+		if s > stations[stations.size() - 1] + 0.001:
+			stations.append(s)
+	stations.append(s1)
+	return stations
 
 
 # ---------------------------------------------------------------------- roofs

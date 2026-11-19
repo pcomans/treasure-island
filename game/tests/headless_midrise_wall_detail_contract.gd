@@ -10,9 +10,12 @@ extends SceneTree
 ## duct that does not end at its wall's top or whose drop misses the roof inside the
 ## parapet; an eave whose section stands
 ## outside the outline closes both ends, one inside it over walls on the outline neither;
-## a grid hood's min_w leaves the narrow opening bare and hoods the wide one; and grid
+## a grid hood's min_w leaves the narrow opening bare and hoods the wide one; grid
 ## blinds are the same for the same seed, follow another seed, cover whole lights with a
-## drop of 1, none with 0, and refuse a drop past 1. The family cases run its own build
+## drop of 1, none with 0, and refuse a drop past 1; and every door kind and a garage
+## is paved from its landing to the door at the sill's height, with no ground showing in
+## its recess (the Job Corps doors showed grass there: owner, 2026-11-19), the landing
+## and the recess floor meeting edge to edge. The family cases run its own build
 ## steps (_build_all) on a 20 x 10 m footprint, so expected refusals are read from its
 ## error list. Behaviour only.
 
@@ -25,6 +28,16 @@ const DUCT := {"s": [2.75, 3.3], "y": [12.0, 16.5], "depth": 0.3, "lift": 0.35, 
 ## The grid face (edge 0, stations along x): a 1 m opening and a 4 m one, on storey 1.
 const NARROW := [2.0, 3.0]
 const WIDE := [8.0, 12.0]
+## Door kinds on edge 0 (stations along x, outside towards -z), each in its own bay: a
+## unit door, a lobby, a porch, a unit door wider than its landing and a garage. The
+## land is flat at y 0, so every landing stands at 0.1 m and the garage's sill at 0.04 m.
+const DOORS := [
+	{"type": "entry", "from": 0.5, "to": 3.5, "door": {"kind": "unit", "w": 1.0, "h": 2.2}, "landing": {"w": 1.8, "depth": 1.2}},
+	{"type": "entry", "from": 4.0, "to": 8.0, "door": {"kind": "lobby", "w": 2.4, "h": 2.6}, "landing": {"w": 3.4, "depth": 2.0}},
+	{"type": "entry", "from": 8.5, "to": 12.5, "door": {"kind": "porch", "w": 2.4, "h": 2.6, "recess": 1.5, "door_w": 1.6}, "landing": {"w": 3.0, "depth": 1.2}},
+	{"type": "entry", "from": 13.0, "to": 15.5, "door": {"kind": "unit", "w": 1.6, "h": 2.2}, "landing": {"w": 1.2, "depth": 1.0}},
+	{"type": "garage", "from": 16.0, "to": 19.5, "w": 2.6, "h": 2.4},
+]
 
 
 func _initialize() -> void:
@@ -36,7 +49,7 @@ func _run() -> void:
 	for failure: String in failures:
 		print("FAIL: mid-rise wall detail: ", failure)
 	if failures.is_empty():
-		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's rounded bend held clear of its wall's top; the family refuses equipment off its edge or with an unknown role, and a duct off its wall's top or off the roof; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops")
+		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's rounded bend held clear of its wall's top; the family refuses equipment off its edge or with an unknown role, and a duct off its wall's top or off the roof; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops; every door kind and a garage is paved from its landing to the door, its landing and recess floor meeting edge to edge")
 	quit(0 if failures.is_empty() else 1)
 
 
@@ -48,6 +61,7 @@ static func run_checks() -> Array:
 	_check_outward_eave(failures)
 	_check_hood_min_w(failures)
 	_check_blinds(failures)
+	_check_door_floors(failures)
 	return failures
 
 
@@ -199,6 +213,88 @@ static func _check_blinds(failures: Array) -> void:
 	_expect(failures, absf(lo.x - float(NARROW[0])) < 0.001 and absf(hi.x - float(WIDE[1])) < 0.001, "drops of 1 cover the lights edge to edge (x %.3f-%.3f)" % [lo.x, hi.x])
 	var ctx := _build(_config({}, {"grid_unit": {"unit": {"pane_w": 1.1}, "blinds": {"material": "blinds_test", "drops": [1.5], "seed": 1}}}))
 	_expect(failures, ctx.errors.size() >= 1 and str(ctx.errors[0]).contains("blinds"), "a drop past 1 fails the build: %s" % [ctx.errors])
+
+
+## Straight down from just over the sill, anywhere in each door's recess and on its
+## landing in front of the door, the first surface met is the paving at the sill's
+## height, never the land under the building. Where the landing meets the recess floor
+## along the wall's line, both have their vertices at the same stations, so no
+## T-junction can crack open between them.
+static func _check_door_floors(failures: Array) -> void:
+	var cfg := _config({})
+	cfg.schemes["doors"] = {"material": "render", "module": 60.0, "ground": {"kind": "blank"}, "upper": "blank", "features": DOORS.duplicate(true)}
+	cfg.blocks[0].faces["e0"] = "doors"
+	var ctx := _build(cfg)
+	if not ctx.errors.is_empty():
+		failures.append("the door kinds build: %s" % [ctx.errors])
+		return
+	var tris: Array = []
+	for key: String in ctx.buckets:
+		var bucket: MIDRISE.Bucket = ctx.buckets[key]
+		for i in range(0, bucket.vertices.size(), 3):
+			tris.append([bucket.vertices[i], bucket.vertices[i + 1], bucket.vertices[i + 2], key])
+	# The flat land under the footprint (_records).
+	tris.append([Vector3(-50.0, 0.0, -50.0), Vector3(70.0, 0.0, -50.0), Vector3(70.0, 0.0, 60.0), "land"])
+	tris.append([Vector3(-50.0, 0.0, -50.0), Vector3(70.0, 0.0, 60.0), Vector3(-50.0, 0.0, 60.0), "land"])
+	for feature: Dictionary in DOORS:
+		var garage := str(feature.type) == "garage"
+		var door: Dictionary = feature.get("door", {})
+		var kind := "garage" if garage else str(door.kind)
+		var w := float(feature.w) if garage else float(door.w)
+		var c := (float(feature.from) + float(feature.to)) * 0.5
+		var s0 := c - w * 0.5
+		var s1 := c + w * 0.5
+		var depth := float(door.get("recess", 0.3))
+		var sill := 0.04 if garage else 0.1
+		var landing: Dictionary = feature.get("landing", {})
+		var l0 := maxf(s0, c - float(landing.get("w", 0.0)) * 0.5)
+		var l1 := minf(s1, c + float(landing.get("w", 0.0)) * 0.5)
+		# [s0, s1, z0, z1]: the recess, and the landing in front of the door.
+		var zones := [[s0, s1, 0.0, depth]]
+		if not garage:
+			zones.append([l0, l1, -float(landing.depth), 0.0])
+		var misses := []
+		for zone: Array in zones:
+			for i in 7:
+				for j in 5:
+					var x := lerpf(float(zone[0]) + 0.02, float(zone[1]) - 0.02, float(i) / 6.0)
+					var z := lerpf(float(zone[2]) + 0.005, float(zone[3]) - 0.005, float(j) / 4.0)
+					var hit := _first_hit(tris, Vector3(x, sill + 0.25, z))
+					if hit.is_empty() or not str(hit.key).begins_with("ground|paving") or absf(float(hit.y) - sill) > 0.001:
+						misses.append("(%.2f, %.3f) meets %s" % [x, z, "nothing" if hit.is_empty() else "%s at %.3f" % [hit.key, float(hit.y)]])
+		_expect(failures, misses.is_empty(), "a %s is paved from its landing to the door (%d of %d points are not: %s)" % [kind, misses.size(), zones.size() * 35, misses.slice(0, 3)])
+		if not garage:
+			var outside := _seam_stations(tris, l0, l1, sill, -1.0)
+			var inside := _seam_stations(tris, l0, l1, sill, 1.0)
+			_expect(failures, not outside.is_empty() and outside == inside, "a %s's landing and recess floor meet edge to edge along the wall (landing %s, recess floor %s)" % [kind, outside, inside])
+
+
+## The highest surface straight under `from`: {key, y}, or {} when there is none.
+static func _first_hit(tris: Array, from: Vector3) -> Dictionary:
+	var best := {}
+	for tri: Array in tris:
+		var at: Variant = Geometry3D.ray_intersects_triangle(from, Vector3.DOWN, tri[0], tri[1], tri[2])
+		if at is Vector3 and (best.is_empty() or (at as Vector3).y > float(best.y)):
+			best = {"key": tri[3], "y": (at as Vector3).y}
+	return best
+
+
+## Stations (x, to 0.1 mm) of the paving's vertices at the sill's height on the wall's
+## line (z 0) from s0 to s1, from its triangles on one side of that line (-1 outside).
+static func _seam_stations(tris: Array, s0: float, s1: float, sill: float, side: float) -> Array:
+	var stations := {}
+	for tri: Array in tris:
+		var a: Vector3 = tri[0]
+		var b: Vector3 = tri[1]
+		var c: Vector3 = tri[2]
+		if not str(tri[3]).begins_with("ground|paving") or (a.z + b.z + c.z) * side <= 0.0:
+			continue
+		for p: Vector3 in [a, b, c]:
+			if absf(p.z) < 0.0001 and absf(p.y - sill) < 0.0001 and p.x > s0 - 0.0001 and p.x < s1 + 0.0001:
+				stations[snappedf(p.x, 0.0001)] = true
+	var out := stations.keys()
+	out.sort()
+	return out
 
 
 static func _blind_config(drops: Array, seed: int) -> Dictionary:

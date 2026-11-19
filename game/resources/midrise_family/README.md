@@ -46,7 +46,7 @@ A scheme fills one face with bays. Single-bay `features` sit at their stations (
 
 Feature types: `loggia` (`storeys`, `depth`, `pier`), `frame` (a multi-storey recess over `storeys` `[k0, k1]`), `band` (a dark vertical window/spandrel stack), `entry` (`door.kind` `unit`, `lobby` or `porch`, plus `canopy`, `landing` and `screens`), `garage`, `vents`, `corner` (a window aligned to the face end), and the opt-in `stair_bay` and `top_box` (see the outbuilding fields table). A feature may also set `material`, `material_from`/`material_to`, `window`, `window_storeys`, `ground` and `upper`; under a grid, a `bays` range may also set `grid_unit` fields for the openings in it (a shallow override of the scheme's: give the whole `unit` when changing it).
 
-Entry landings are flat walkable pads at the highest terrain under them plus 0.1 m, with skirts of at most 40 degrees into the ground. Doors sit on the landing, so there are no steps to walk-test.
+Entry landings are flat walkable pads at the highest terrain under them plus 0.1 m, with skirts of at most 40 degrees into the ground. Doors sit on the landing, so there are no steps to walk-test. The landing's paving runs on into the door's recess, between the jambs to the door (a porch's whole floor), and a garage's recess is paved the same way at its sill, so the ground under the building never shows at a door's foot (owner, 2026-11-19).
 
 ## Outbuilding fields
 
@@ -134,4 +134,4 @@ Top-level `parts` adds pieces a scheme has no field for. Heights for `box`, `gla
 
 ## Roles
 
-Facade planes, reveals, glazing and doors are `wall` (spray receivers); roofs and the deck are `roof`; landings and aprons are `ground`; parapets, railings, canopies, slabs and roof items are `support`. The installer turns each role into one source-owned contact body. Check an instance in the real island with `game/tests/shared/building_shots.gd` and `building_fit_test.gd -- --native-producer housing-get-faces`.
+Facade planes, reveals, glazing and doors are `wall` (spray receivers); roofs and the deck are `roof`; landings, door and garage recess floors and aprons are `ground`; parapets, railings, canopies, slabs and roof items are `support`. The installer turns each role into one source-owned contact body. Check an instance in the real island with `game/tests/shared/building_shots.gd` and `building_fit_test.gd -- --native-producer housing-get-faces`.
