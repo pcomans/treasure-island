@@ -47,10 +47,7 @@ extends SceneTree
 ##      same key as a broken one (keys repeat from fence to fence) breaks too
 ##      and its gap opens on foot; then the turf pitch's windscreen: the car
 ##      breaks its bay and stops at the ball-stop net behind it, whose rows are
-##      breakable: false; then the Job Corps perimeter (breakable: false, owner
-##      2026-11-08): driven straight at it from outside, the car stops at the bay
-##      its run-up meets, breaks none of the fence, stays outside within
-##      JOBCORPS_STOP_M of that bay's line, and the bay keeps its box;
+##      breakable: false;
 ##   7. plants: the car drives through a shrub without slowing; through Cityside
 ##      Park's windrow of young gums (small trees, their trunks thinner than the
 ##      vegetation kit's BENDING_TRUNK_RADIUS_M) on the stock W it keeps going, every
@@ -224,9 +221,6 @@ const PALMS_UNLOADED_TICKS := 6
 const PALMS_UP := 0.99
 const PALMS_LAUNCH_MPS := 1.5
 const PALMS_RIDE_M := 0.15
-## The Job Corps perimeter case: the car's middle comes to rest within this of the
-## line of the bay it was driven at (m), so it was the fence that stopped it.
-const JOBCORPS_STOP_M := 4.0
 
 var _failure := ""
 var _main: GameMain
@@ -272,10 +266,10 @@ func _run() -> void:
 	_cases = parsed
 	_vehicles.car_recovered.connect(func(cause: String, from: Vector3) -> void: _recoveries.append({"cause": cause, "from": from, "tick": Engine.get_physics_frames()}))
 	print("VEHICLE swappable rows %d" % _vehicles.swappable_ids().size())
-	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_palms_level, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_jobcorps_fence, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_on_foot_park, _case_touch, _case_yard, _case_riprap_cover]:
+	for case: Callable in [_case_enter_exit, _case_night_lights, _case_route, _case_palms_level, _case_shore, _case_empty_off_shore, _case_bay, _case_causeway, _case_roll, _case_ramp, _case_fence, _case_fence_shared, _case_field_net, _case_plants, _case_lamps, _case_poles, _case_pole_kerb, _case_shove, _case_ball, _case_on_foot, _case_on_foot_park, _case_touch, _case_yard, _case_riprap_cover]:
 		if not await case.call():
 			return _finish()
-	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, the chest casting no shadow in it, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, a run each way on Avenue of the Palms where the stockpile's hump stood, on its wheels and level with no launch, snag or sink, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, the car stopped outside the Job Corps perimeter with none of it broken, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
+	print("PASS: drivable cars: F in and out beside a parked car that stays where it was left, the view blending each way and seeing as far as on foot, no night light made with the time of day held (a test run), by day or at night; with its switch off none wanted, one a driver makes doing nothing even in the dark, the Sun, the sky, its stars, the globals, the shadows' reach and the buildings' daylight fills left at the day's; made as play makes them, at night the flashlight on by itself at the chest and pointing where the camera looks, the chest casting no shadow in it, its shadow off with the shadow option, hidden in a car whose two headlights and own lamps come on while the parked cars' go out, every glowing building material a lamp or a daylight fill, the fills dark and the lamps lit, the headlights gone with the player out of the car and every light off and every fill back by day again, a run on Seven Seas Avenue on its wheels, a handbrake slide, a run each way on Avenue of the Palms where the stockpile's hump stood, on its wheels and level with no launch, snag or sink, off the shore fast and slow over the crest and down the rocks with no stop and no stone inside the car, a splash only where it met the water and a sink under the surface clear of the stones, and R from the slope by them, each back on a level spot clear of the shore facing inland and staying put, the riprap as before on foot, an empty car left past the edge back on the island and parked, a splash, a sink and back on land from open water, a car stopped at the causeway's barrier with no splash while the edge there still lifts the player, a roll onto its roof or side, F out of it there, the car righting itself and F back in, a clean jump off a ramp, a fence joint broken with its stand felled and its untouched neighbours standing while intact bays still stop the player, a second fence's bay of the same key broken and open on foot, a turf windscreen bay broken and the car stopped by the ball-stop net behind it, through a shrub and a windrow of young gums, each leaning away and standing again, and stopped by a palm and the thinnest established tree, a young gum still stopping the player on foot, a street lamp standing a creep, a press and a tap and stopping the car while another driven at falls with the car carrying on, nothing left to stop a car or the player where it stood, a street-name post, a stop sign, a post sign, a Muni stop flag (its pad staying), a bollard, a signal mast, a utility pole with its wires, a light tower and an event pole each stopping the player and standing a nudge slower than it falls to, then driven at, falling and lying on the ground drawn where it stood with the car carrying on, the pole's wires coming down with it, and the player walking through where each stood, a parked car pushed from a standstill and one and a K-rail shoved at speed, each pushed or shoved again once it had frozen, the pitch's ball sent rolling and pushed into a goal, with confetti there and the ball back on its spot, and the stock walk, run, jetpack and fast drop after getting out, the avatar standing with the player on foot after every exit; on touch, GET OUT in a car where the stick drives and steers and RISE is the handbrake, taps out and back in by DRIVE, the button hidden away from cars, and DROP in the air holding the fast drop until the finger lifts or the player lands; in a car RISE shows the handbrake glyph and RUN and the look hint hide, with no run left held, until the player gets out; every row a player can drive driving as a body the car knows and every storage-yard body (%s) with rows, a boxy one's outline matching its kit chassis, F in and out beside a parked one of each, each driving off on its wheels, upright, as its acceleration gives; and round the whole outline, wherever riprap is drawn 1.5 m and 3 m out, a car has something to land on there" % ", ".join(PackedStringArray(_yard_bodies())))
 	_finish()
 
 
@@ -1621,64 +1615,6 @@ func _case_field_net() -> bool:
 	or not _require(_side(net_bay, car_xz) == _side(net_bay, start), "The car got through the ball-stop net."):
 		return false
 	return await _stop_and_exit(car, "field_net")
-
-
-## The Job Corps perimeter (breakable: false, owner 2026-11-08) stops a car driven
-## straight at it from outside like a wall: no bay breaks, the car stays outside,
-## against the bay its run-up meets, and that bay keeps its box.
-func _case_jobcorps_fence() -> bool:
-	var car := _vehicles.live_node(str(_cases.enter.car)) as DRIVABLE_CAR
-	var row := str(_cases.jobcorps_fence.row)
-	var start := Vector2(_cases.jobcorps_fence.start_xz[0], _cases.jobcorps_fence.start_xz[1])
-	var heading := Vector2(_cases.jobcorps_fence.heading_xz[0], _cases.jobcorps_fence.heading_xz[1]).normalized()
-	var group := _fence_group(row)
-	if not _require(group != null and group.has_meta("fence_bays"), "Fixture fence %s has no bays." % row):
-		return false
-	var body := group.get_node_or_null("Collision") as StaticBody3D
-	if not _require(body != null and not bool(body.get_meta("breakable", true)), "The Job Corps perimeter %s is not breakable: false." % row):
-		return false
-	# The bay the run-up's line meets.
-	var bays: Dictionary = group.get_meta("fence_bays")
-	var hit := ""
-	for key: String in bays:
-		var a: Vector3 = bays[key].a
-		var b: Vector3 = bays[key].b
-		if Geometry2D.segment_intersects_segment(start, start + heading * 60.0, Vector2(a.x, a.z), Vector2(b.x, b.z)) != null:
-			hit = key
-			break
-	if not _require(hit != "", "The run-up from %s along %s meets no bay of %s." % [start, heading, row]):
-		return false
-	var bay: Dictionary = bays[hit]
-	if not await _drive_from(car, start, heading):
-		return false
-	var breaker := _vehicles.fence_breaker()
-	var broken_before := breaker.broken_count()
-	var top := 0.0
-	var stopped := false
-	Input.action_press("move_forward")
-	for tick in 300:
-		_steer_toward(car, start + heading * 200.0)
-		await physics_frame
-		var speed := car.linear_velocity.length()
-		top = maxf(top, speed)
-		if top > 5.0 and speed < 0.5:
-			stopped = true
-			break
-	_release_driving()
-	var car_xz := Vector2(car.global_position.x, car.global_position.z)
-	var foot_a := Vector2((bay.a as Vector3).x, (bay.a as Vector3).z)
-	var foot_b := Vector2((bay.b as Vector3).x, (bay.b as Vector3).z)
-	var off_line := Geometry2D.get_closest_point_to_segment(car_xz, foot_a, foot_b).distance_to(car_xz)
-	var broken := breaker.broken_count() - broken_before
-	var shape := _bay_shape(group, hit)
-	print("JOBCORPS_FENCE %s bay %s: broke %d, up to %.2f m/s, stopped %s at %s, %.2f m from the bay's line" % [row, hit, broken, top, stopped, car_xz, off_line])
-	if not _require(broken == 0, "Driving at the Job Corps perimeter broke %d bays." % broken) \
-	or not _require(stopped, "The car did not stop at the Job Corps perimeter (top %.2f m/s)." % top) \
-	or not _require(_side(bay, car_xz) == _side(bay, start), "The car got through the Job Corps perimeter.") \
-	or not _require(off_line < JOBCORPS_STOP_M, "The car stopped %.2f m from the perimeter's bay %s: something else stopped it." % [off_line, hit]) \
-	or not _require(shape != null and not shape.disabled, "The perimeter's bay %s lost its box." % hit):
-		return false
-	return await _stop_and_exit(car, "jobcorps_fence")
 
 
 ## Which side of a bay's line a point lies on.

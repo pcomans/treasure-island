@@ -285,9 +285,8 @@ export function fenceParamsError(type, params) {
   const spec = STREET_FENCE_TYPES[type];
   if (!spec) return `unknown fence type ${type}`;
   if (params === null || typeof params !== "object" || Array.isArray(params)) return "params must be an object";
-  // breakable: false keeps a fence whole when a car hits it (the Job Corps
-  // perimeter, owner 2026-11-08; the ball-stop nets); every other kit fence
-  // breaks bay by bay.
+  // breakable: false keeps a fence whole when a car hits it (the ball-stop
+  // nets); every other kit fence breaks bay by bay.
   const allowed = ["inside", "breakable"];
   if (spec.heights_m) allowed.push("height_m");
   if (COATED_TYPES.includes(type)) allowed.push("coating", "curb");
@@ -661,8 +660,8 @@ export function placeStreetFences({
     applyStatus(row);
     if (row.status === "placed" && pilot) {
       // What a way's rules leave, the OSM path builds as a breakable fence: a way
-      // with an unbreakable rule (the Job Corps perimeter, owner 2026-11-08) must
-      // not get that, so its rules cover it all or no pilot zone reaches its line.
+      // with an unbreakable rule must not get that, so its rules cover it all or
+      // no pilot zone reaches its line.
       const unbreakable = (wayRules.get(row.source_id) ?? []).filter(({ rule }) => rule.params?.breakable === false);
       invariant(unbreakable.length === 0, `${row.id}: a pilot zone reaches its line, and ${row.source_id} has breakable: false rules (${unbreakable.map(({ zone, rule }) => `${zone.id}/${rule.id}`).join(", ")}), so the stretch they leave would be built as OSM's default breakable fence; cover the whole way with rules, or keep the pilot zones off its line`);
       setProp(row, { inside: "center" });

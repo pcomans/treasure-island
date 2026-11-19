@@ -26,10 +26,10 @@ extends Node3D
 ## key (keys repeat from row to row) and stay so for the session; a restart
 ## rebuilds the world.
 ##
-## A fence row whose params say "breakable": false (the Job Corps perimeter,
-## owner 2026-11-08) gets no exception and no break: a car stops at it like a
-## wall. The wheels' rays skip every fence, breakable or not, so a wheel never
-## stands on a fence's top.
+## A fence row whose params say "breakable": false (the pitches' ball-stop nets)
+## gets no exception and no break: a car stops at it like a wall. The wheels'
+## rays skip every fence, breakable or not, so a wheel never stands on a fence's
+## top.
 
 const FENCE_KIT := preload("res://game/scripts/world/street_fence_kit.gd")
 const PHYSICS_WORLD_SOLID := 1
