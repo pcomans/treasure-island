@@ -7,6 +7,9 @@ const ROOF = preload("res://game/resources/housing_family/roof.gdshader")
 # Opt-in garage-court motifs (garage doors, piers, loggias, stairs, vents,
 # per-run siding colour); each runs only for its own config key.
 const GARAGE_COURT = preload("res://game/scripts/world/facades/housing_garage_court.gd")
+# Opt-in unit details (window blinds, utilities by the doors, downspouts, roof
+# vents); each runs only for its own config key.
+const DETAIL = preload("res://game/scripts/world/facades/housing_unit_detail.gd")
 
 static func vec(a: Array) -> Vector3:
 	return Vector3(a[0], a[1], a[2])
@@ -39,6 +42,19 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	var warm_roof := ShaderMaterial.new()
 	warm_roof.shader = ROOF
 	warm_roof.set_shader_parameter("roof_color",color(cfg.get("facade",{}),"roof_warm_high_rgb",Color(0.55,0.37,0.25)))
+	# Opt-in unit details (DETAIL): blinds in the front windows, utilities by the
+	# front doors and a stronger lap shadow on the siding.
+	var blinds: Dictionary = cfg.get("window_blinds", {})
+	var blind_buckets: Dictionary = DETAIL.blind_buckets() if not blinds.is_empty() and DETAIL.blinds_valid(root, blinds) else {}
+	var utility_kit: Dictionary = cfg.get("utility_kit", {})
+	var utilities: Dictionary = DETAIL.utility_context(utility_kit) if not utility_kit.is_empty() and DETAIL.kit_valid(root, utility_kit) else {}
+	if cfg.has("siding_course_shadow"):
+		var lap: Variant = cfg.siding_course_shadow
+		if (lap is float or lap is int) and float(lap) >= 0.0 and float(lap) <= 1.0:
+			siding.set_shader_parameter("course_shadow", float(lap))
+		else:
+			root.set_meta("build_valid",false)
+			push_error("Invalid siding_course_shadow (0-1): %s %s" % [cfg.target.source_key, lap])
 	var holes_by_run: Dictionary = {}
 	var vertices: Array = wall.vertices
 	# Opt-in open canopy bays. Authored host runs use the frozen 12-float run
@@ -142,6 +158,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						push_error("Threshold bottom must be numeric")
 						continue
 					PARTS._entry(root,point,t,n,trim,entry_material,concrete,float(motif.get("threshold_bottom_y", 0.0)),extend_threshold)
+					if not utilities.is_empty() and not is_rear:
+						DETAIL.add_landing(utilities, point, t, n)
+						if motif.has("utilities"):
+							DETAIL.entry_utilities(root, utilities, utility_kit, motif, frame, point, t, n, station, float(motif.bottom_y))
 				elif group == "garage_doors":
 					GARAGE_COURT.garage_door(root,point,t,n,width,height,motif,palette,trim)
 				elif group == "loggias":
@@ -153,6 +173,8 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
 					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
+					if not blind_buckets.is_empty() and not is_rear:
+						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height)
 				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
 					for child_index in range(motif_begin, root.get_child_count()):
 						var child := root.get_child(child_index)
@@ -195,6 +217,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 			var low := float(pipe.bottom_y)
 			var high := float(pipe.top_y)
 			if bool(cfg.get("clamp_pipe_to_eave",false)): high=minf(high,float(cfg.wall_top_y)-0.03)
+			# Opt-in pipe style: a downspout with its bends, straps and kick-out (DETAIL).
+			if str(pipe.get("style", "")) == "downspout":
+				DETAIL.downspout(root,p,vec(basis.tangent),vec(basis.normal),low,high,-1000.0 if cfg.has("broad_band") else band_y,trim,concrete)
+				continue
 			p.y=(low+high)/2
 			PARTS._panel(root,p+vec(basis.normal)*0.12,vec(basis.tangent),vec(basis.normal),Vector3(0.075,high-low,0.09),trim)
 		for screen: Dictionary in frame.get("screens", []):
@@ -229,7 +255,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		GARAGE_COURT.run_siding(root,wall_begin,i/12,cfg,siding)
 		var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 		var n := Vector3(-t.z,0,t.x)
-		if bool(cfg.get("vertical_seams",false)):
+		# vertical_seams true trims every run start; opt-in "corners" only those where the
+		# wall turns (more than 15 degrees from the run before), as photos show the boards.
+		var seams: Variant = cfg.get("vertical_seams",false)
+		if (seams is bool and seams) or (str(seams) == "corners" and _turns_at(vertices,i/12)):
 			PARTS._panel(root,Vector3(a.x,(a.y+top)/2,a.z),t,n,Vector3(0.08,top-a.y,0.08),trim)
 		if not bool(cfg.get("public_roof",{}).get("replace_eave_trim",false)):
 			PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
@@ -325,6 +354,15 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
 		_canopy(root,canopy,palette,roofing,trim,siding)
+	if not blind_buckets.is_empty() or not utilities.is_empty() or cfg.has("roof_vents"):
+		var ring := PackedVector2Array()
+		for i in range(0, (wall.vertices as Array).size(), 12): ring.append(Vector2(wall.vertices[i], wall.vertices[i+2]))
+		if not blind_buckets.is_empty(): DETAIL.commit_blinds(root, blind_buckets, blinds)
+		if not utilities.is_empty(): DETAIL.commit_utilities(root, utilities, ring)
+		if cfg.has("roof_vents") and DETAIL.vents_valid(root, cfg.roof_vents):
+			var front: Dictionary = cfg.target.frames[0]
+			var ahead := vec(front.start) + vec(front.normal) * 5.0
+			DETAIL.roof_vents(root, cfg.roof_vents, ring, Vector2(ahead.x, ahead.z), trim)
 	if merge: _merge_parts(root)
 	return root
 
@@ -349,10 +387,12 @@ static func _merge_parts(root: Node3D) -> void:
 			continue
 		var role := str(part.get_meta("family_role", "support"))
 		var collision_only := bool(part.get_meta("collision_only", false))
-		var node_key := [role, int(part.cast_shadow), part.visible, collision_only]
+		# Visual-only parts (DETAIL's blinds and utility shells) never join colliding ones.
+		var visual_only := bool(part.get_meta("visual_only", false))
+		var node_key := [role, int(part.cast_shadow), part.visible, collision_only, visual_only]
 		if not group_index.has(node_key):
 			group_index[node_key] = groups.size()
-			groups.append({"role": role, "cast_shadow": part.cast_shadow, "visible": part.visible, "collision_only": collision_only, "surfaces": [], "surface_index": {}})
+			groups.append({"role": role, "cast_shadow": part.cast_shadow, "visible": part.visible, "collision_only": collision_only, "visual_only": visual_only, "surfaces": [], "surface_index": {}})
 		var group: Dictionary = groups[group_index[node_key]]
 		for s in part.mesh.get_surface_count():
 			var material: Material = part.material_override if part.material_override != null else part.mesh.surface_get_material(s)
@@ -378,6 +418,7 @@ static func _merge_parts(root: Node3D) -> void:
 			node.visible = group.visible
 			node.set_meta("family_role", group.role)
 			if group.collision_only: node.set_meta("collision_only", true)
+			if group.visual_only: node.set_meta("visual_only", true)
 			root.add_child(node)
 
 # The kit's roof, siding and brick shaders pattern by object-space VERTEX, so a
@@ -463,7 +504,7 @@ static func _merged_arrays(parts: Array) -> Array:
 static func _material_key(material: Material) -> Variant:
 	var standard := material as StandardMaterial3D
 	if standard != null and standard.get_class() == "StandardMaterial3D":
-		return ["standard", standard.albedo_color, standard.roughness, standard.metallic]
+		return ["standard", standard.albedo_color, standard.roughness, standard.metallic, standard.disable_receive_shadows]
 	return material
 
 static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material, siding: Material = null) -> void:
@@ -715,6 +756,17 @@ static func _polygon_area(polygon: PackedVector2Array) -> float:
 		var by := float(b.y)-float(origin.y)
 		sum += ax*by-ay*bx
 	return absf(sum)*0.5
+
+## Whether the wall ring turns more than 15 degrees where run `run` starts (from the
+## run before it in the ring).
+static func _turns_at(vertices: Array, run: int) -> bool:
+	var count := vertices.size() / 12
+	var before := posmod(run - 1, count) * 12
+	var here := run * 12
+	var a := Vector2(float(vertices[before + 3]) - float(vertices[before]), float(vertices[before + 5]) - float(vertices[before + 2])).normalized()
+	var b := Vector2(float(vertices[here + 3]) - float(vertices[here]), float(vertices[here + 5]) - float(vertices[here + 2])).normalized()
+	return a.dot(b) < cos(deg_to_rad(15.0))
+
 
 static func _tag_since(root: Node3D, begin: int, role: String) -> void:
 	for i in range(begin,root.get_child_count()):
