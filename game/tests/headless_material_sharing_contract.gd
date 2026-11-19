@@ -49,6 +49,7 @@ const BUILDS := {
 	"res://game/scripts/world/ground_cover.gd": "makes the ground-cover materials while the island loads (or bakes)",
 	"res://game/scripts/world/mulch_ground.gd": "makes the mulch materials while the island loads (or bakes)",
 	"res://game/scripts/world/shoreline_builder.gd": "builds the shoreline while the island loads (or bakes)",
+	"res://game/scripts/world/street_detail_batches.gd": "gives the street detail's levels their band copies while the island loads (or bakes)",
 	"res://game/scripts/world/street_furniture_builder.gd": "builds the street furniture while the island loads (or bakes)",
 	"res://game/scripts/world/western_background_blockout.gd": "builds the western background while the island loads (or bakes)",
 	"res://game/scripts/world/world_chunk_builder.gd": "builds the island's chunks while it loads (or bakes)",
