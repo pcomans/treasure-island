@@ -27760,3 +27760,8 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: the batch's main is the previous batch's final commit, so that batch's fixed-pose captures of bacb372a served as the look check's "before" with no new runs; the author's own door view plans, filtered by name into one batch plan, gave the earlier-fixed door pairs without a new script.
 - What did not work well: the 19a capture helper stripped a run's "Cn-" prefix with a one-digit pattern, so the tenth run's images went to a folder of the wrong name and needed moving before the diff.
 - What the team should change next time: name capture output folders explicitly instead of deriving them from run names, and cite the main-run log lines beside every page-check miss in the hand-back.
+
+### ti-documentation — Building 1 interior scope (2026-11-19)
+- What worked well: one grep for interior/exterior wording across AGENTS, CLAUDE, README and the role files showed the world-coverage bullet was the only statement the exception contradicts, so the change stayed one sentence pair.
+- What did not work well: the brief's "otherwise frozen geometry" for accepted buildings is not written in AGENTS.md, so the doorway cut needed no separate rule change; ROOT and the agreement disagree on what is written down.
+- What the team should change next time: when a brief cites a rule, name its file and section so the editor can confirm it exists before deciding what to amend.
