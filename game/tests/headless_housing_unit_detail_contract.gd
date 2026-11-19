@@ -499,18 +499,31 @@ func _check_refusals(cfg: Dictionary, wall: Dictionary, roof: Dictionary) -> voi
 	check(refused_moved and not bool(shifted.get_meta("build_valid", true)), "an annex outline 2 cm off its block is refused")
 	for node: Node3D in [probe, other, shifted]:
 		node.free()
-	# The lower storey's plan on a 10 m square, run 0 (along x at z 0) set back 0.3 m.
-	var square := PackedVector2Array([Vector2(0, 0), Vector2(10, 0), Vector2(10, 10), Vector2(0, 10)])
+	# The lower storey's plan on a 10 m square at 1232's own place and bearing (its run 10's
+	# start and direction): single precision this far out read a zero-width sliver as
+	# 78 cm2 before 69332a4f. Run 0 is set back 0.3 m.
+	var origin := Vector2(-306.3, -751.479)
+	var along := Vector2(-0.0481, 0.9988).normalized()
+	var across := Vector2(along.y, -along.x)
+	var at := func(u: float, v: float) -> Vector2: return origin + along * u + across * v
+	var square := PackedVector2Array([at.call(0.0, 0.0), at.call(10.0, 0.0), at.call(10.0, 10.0), at.call(0.0, 10.0)])
 	var plan := DETAIL.lower_outline(square, {0: 0.3})
 	var area := 0.0
 	for part: PackedVector2Array in plan:
 		area += DETAIL._area(part)
-	check(absf(area - 97.0) < 0.01, "the lower storey's plan loses only the recessed run's strip (%.3f m2 of 97)" % area)
-	var on_strip := PackedVector2Array([Vector2(2, 0.05), Vector2(3, 0.05), Vector2(3, 0.25), Vector2(2, 0.25)])
-	var into_wall := PackedVector2Array([Vector2(9.95, 4), Vector2(10.5, 4), Vector2(10.5, 5), Vector2(9.95, 5)])
+	check(absf(area - 97.0) < 0.01, "the lower storey's plan loses only the recessed run's strip (%.4f m2 of 97)" % area)
+	# A zero-width sliver along the run, its third corner 0.1 mm on along the line (single
+	# precision's grain this far out is about 0.06 mm): under the build's 1 cm2 limit.
+	var start: Vector2 = at.call(2.0, 0.0)
+	var sliver := DETAIL._area(PackedVector2Array([start, at.call(3.0, 0.0), start + along * 0.0001]))
+	check(sliver < 0.0001, "a zero-width sliver this far out stays under 1 cm2 (%.6f m2)" % sliver)
+	# Like the run-10 condenser: its back 0.24 m inside the recessed run's line, its front
+	# out past it; and one 5 cm into the unrecessed run 1.
+	var straddling := PackedVector2Array([at.call(2.0, -0.38), at.call(2.92, -0.38), at.call(2.92, 0.24), at.call(2.0, 0.24)])
+	var into_wall := PackedVector2Array([at.call(9.95, 4.0), at.call(10.5, 4.0), at.call(10.5, 5.0), at.call(9.95, 5.0)])
 	var kept := Node3D.new()
-	DETAIL.commit_utilities(kept, {"footprints": [["unit", "on-strip", on_strip]], "landings": [], "buckets": {}, "colors": {}, "roughness": 0.9, "collision": KIT._bucket()}, plan)
-	check(bool(kept.get_meta("build_valid", true)), "a utility under a recessed run's overhang stands clear of the lower storey")
+	DETAIL.commit_utilities(kept, {"footprints": [["unit", "straddling", straddling]], "landings": [], "buckets": {}, "colors": {}, "roughness": 0.9, "collision": KIT._bucket()}, plan)
+	check(bool(kept.get_meta("build_valid", true)), "a utility across a recessed run's line, under its overhang, stands clear of the lower storey")
 	var inside := Node3D.new()
 	Engine.print_error_messages = false
 	DETAIL.commit_utilities(inside, {"footprints": [["unit", "into-wall", into_wall]], "landings": [], "buckets": {}, "colors": {}, "roughness": 0.9, "collision": KIT._bucket()}, plan)

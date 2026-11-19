@@ -395,9 +395,10 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 		var ground_faces := PackedVector3Array()
 		var meshes := _ground_proof_meshes(family, inventory)
 		for mesh: MeshInstance3D in meshes:
-			# Only a part tagged collision_only (a walking surface, a carport's ceiling slab)
-			# may be hidden; its faces are still in the contact.
-			var hidden_ok: bool = mesh.get_meta("collision_only", false) is bool and mesh.get_meta("collision_only", false)
+			# Only a family part tagged collision_only (a walking surface, a carport's ceiling
+			# slab) may be hidden; its faces are still in the contact. Retained production
+			# ground never may: hidden, it is not ground the player sees.
+			var hidden_ok: bool = not (mesh in inventory.ground_meshes) and mesh.get_meta("collision_only", false) is bool and mesh.get_meta("collision_only", false)
 			if (not mesh.is_visible_in_tree() and not hidden_ok) or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
 			var retained: bool = mesh in inventory.ground_meshes
 			var pose := mesh.transform

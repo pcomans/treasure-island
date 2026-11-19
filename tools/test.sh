@@ -159,6 +159,12 @@ tools/check_web_paths_selftest.sh || failed+=("tools/check_web_paths_selftest.sh
 echo "== tools/check_changelog.sh"
 tools/check_changelog.sh || failed+=("tools/check_changelog.sh")
 
+# tools/housing_1232_roof.py, which writes 1232 Northpoint's segment roof into its
+# housing family config: the config's roof_plane, retained closures and vents to
+# avoid are what it writes from the frozen wall record. Offline, under a second.
+echo "== tools/housing_1232_roof.py --check"
+python3 tools/housing_1232_roof.py --check || failed+=("tools/housing_1232_roof.py --check")
+
 # The web page's build cache (tiBuildFiles in game/web/shell.html), with stand-ins
 # for the browser's file system, locks, HTTP cache and network: a stored pack loads
 # without a download, a new build replaces the old one, a short or failed download is

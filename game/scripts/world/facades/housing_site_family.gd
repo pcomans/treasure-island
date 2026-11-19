@@ -605,7 +605,9 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	# canopy, their tones cycling through deck_tones (factors on underside_rgb); deck_gap_m
 	# opens a joint that wide between neighbouring boards, deck_backing_rgb behind it.
 	# joist_tones cycles the joists' tones and joist_size_m [width, depth] sizes them;
-	# beam_rgb runs a beam (beam_size_m [width, depth]) along each post row.
+	# joist_top_shade [m, factor] darkens each joist's top m (against the deck, which keeps
+	# the sky off it) by factor; beam_rgb runs a beam (beam_size_m [width, depth]) along
+	# each post row.
 	var under_color := color(cfg,"underside_rgb",Color(0.16,0.20,0.19))
 	var panel_every := float(cfg.get("deck_panel_m", 0.0))
 	var joist_size: Array = cfg.get("joist_size_m", [0.07, 0.14])
@@ -642,15 +644,23 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 		var joist_color := color(cfg,"joist_rgb",Color(0.3,0.3,0.29))
 		var joist_tones: Array = cfg.get("joist_tones", [1.0])
 		var joist := PARTS._material(joist_color,0.95)
+		var top_shade: Array = cfg.get("joist_top_shade", [0.0, 1.0])
+		var band := clampf(float(top_shade[0]), 0.0, float(joist_size[1])*0.5)
 		var station := float(cfg.station_m[0])+float(cfg.joist_spacing_m)*0.5
 		var count := 0
 		while station < float(cfg.station_m[1]):
 			var j := start+t*station
-			j.y = deck_bottom-float(joist_size[1])*0.5
+			j.y = deck_bottom-band-(float(joist_size[1])-band)*0.5
 			var tone := float(joist_tones[count % joist_tones.size()])
 			var joist_material: Material = joist if is_equal_approx(tone, 1.0) else PARTS._material(Color(joist_color.r*tone,joist_color.g*tone,joist_color.b*tone),0.95)
-			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),float(joist_size[1]),joist_material)
+			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),float(joist_size[1])-band,joist_material)
 			if relief: root.get_child(-1).set_meta("visual_only", true)
+			if band > 0.0:
+				var f := tone*float(top_shade[1])
+				var u := start+t*station
+				u.y = deck_bottom-band*0.5
+				PARTS._beam(root,u+n*(float(cfg.depth_m[0])+0.07),u+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),band,PARTS._material(Color(joist_color.r*f,joist_color.g*f,joist_color.b*f),0.95))
+				if relief: root.get_child(-1).set_meta("visual_only", true)
 			station += float(cfg.joist_spacing_m)
 			count += 1
 	if relief:

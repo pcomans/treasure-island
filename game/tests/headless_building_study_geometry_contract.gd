@@ -343,6 +343,13 @@ func _check_retained_housing_inventory() -> void:
 	slab.free(); drawn_only.free()
 	shape.set_faces(support_faces)
 	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "The proof did not recover once the extra parts left")
+	# Retained production ground never counts hidden, even tagged collision_only.
+	ground.visible = false
+	ground.set_meta("collision_only", true)
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "A hidden retained ground tagged collision_only accepted")
+	ground.visible = true
+	ground.remove_meta("collision_only")
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "The proof did not recover once the ground showed again")
 	shape.set_faces(second.faces)
 	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Incomplete native bucket accepted")
 	# Teardown must release both changed resources and still-connected callbacks.

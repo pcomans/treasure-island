@@ -27791,6 +27791,16 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: I captured r3 to r4b from a dirty tree, so reviewed pixels could not be tied to a commit; the front photo's solved camera stands several metres too far out (a facade-only solve trades distance for lens width), which cost two rounds on the carport and the head-on roof; a warm-up count with street detail on was first compared against main's with it off.
 - What the team should change next time: commit, then capture, and stamp each sheet with the run log's tree line; validate a photo camera on near objects (posts, kerb, cars) as well as the facade before measuring from it; take before and after measurements with one identical command line.
 
+### ti-code-review — housing pilot r6 delta (2026-11-19)
+- Worked: tracing every caller of the changed proof (installer, fit test, world_harness, bake) settled "alignment or weakening" quickly.
+- Didn't: helper scripts with `--check` modes keep arriving with nothing to run them.
+- Change: when a delta adds a generator with `--check`, require it in `tools/test.sh` in the same commit. Contract fixtures for precision fixes should use real-world coordinates.
+
+### ti-visual-review — 1232 r6 (2026-11-19)
+- Worked: the matched 4x crops and the r5-versus-r6 contrast-stretched strip let me separate the camera-clearance limit from a modelling fault quickly.
+- Did not work: there is no underside reference, so the carport could only be judged as believable, not as accurate.
+- Change next time: when the camera sits about 0.15 m under a ceiling, note that in the brief up front, and get a dated eye-level photo before asking the modeller for more underside detail.
+
 ### ti-implementation — housing pilot r6, 1232 Northpoint (2026-11-19)
 - What worked well: contrast-stretching my own walk frames before handoff showed what the gameplay camera really sees under the carport (it rides 0.15 m under the ceiling, so joists read and deck joints stay hidden); committing before every capture tied each failed run to an exact commit, so each fix was a small follow-up commit.
 - What did not work well: two avoidable engine runs. The utilities' overlap area was taken in world coordinates 750 m out in single precision and read a zero-width sliver as 78 cm2; the shared ground proof assumed every support-role mesh is drawn and in the contact, which the new visual-only and collision-only carport parts broke at capture time.
