@@ -27770,3 +27770,8 @@ Comparing every record against the base commit found a change the author hadn't 
 - Worked: matched 4x crops in the same projection settled the roof-pitch question independently of the camera-distance error.
 - Didn't work: the sheets had no angled view of the north end with the annex region at eye level, and no matched photo of the unit at close range.
 - Change: send footprint-limited gaps (the annex) to the owner as a decision before the next round instead of holding the modeller on them.
+
+### ti-visual-review — housing pilot r4b (2026-11-19)
+- Worked: the matched 4x crops (3a/3b) and the annex eye-level sheet made the pitch and annex calls measurable within minutes.
+- Didn't work: the captures came from a dirty tree on ef6546ad, not the committed head, so the reviewed pixels can't be tied to the commit. The front-camera roof band disagrees with the north-end pitch and is still unresolved.
+- Change: capture from the committed head, or record the diff of the dirty tree. Add a close-up of the south segment, and a side view of the carport fascia matched to the front photo.

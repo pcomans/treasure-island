@@ -34,15 +34,8 @@
         ],
         "upper_windows": [
           {
-            "station_m": 1.1083736960068893,
-            "width_m": 1.6667473920137785,
-            "height_m": 1.3,
-            "center_y": 6.95,
-            "glazing": "blue"
-          },
-          {
-            "station_m": 3.325121088020668,
-            "width_m": 1.6667473920137785,
+            "station_m": 1.77,
+            "width_m": 1.82,
             "height_m": 1.3,
             "center_y": 6.95,
             "glazing": "blue"
@@ -50,8 +43,8 @@
         ],
         "lower_windows": [
           {
-            "station_m": 1.5073882265693694,
-            "width_m": 1.52,
+            "station_m": 1.74,
+            "width_m": 1.84,
             "height_m": 1.34,
             "center_y": 3.833,
             "glazing": "blue"
@@ -92,22 +85,22 @@
         ]
       },
       {
-        "id": "source-run-11",
+        "id": "source-run-11-12",
         "runs": [
-          11
+          11,
+          12
         ],
-        "source_run": 11,
         "start": [
           -306.3,
           2.374,
           -751.479
         ],
         "end": [
-          -306.39,
-          2.385,
-          -749.61
+          -306.652,
+          2.43,
+          -744.176
         ],
-        "length_m": 1.8711656794629654,
+        "length_m": 7.311478170487692,
         "tangent": [
           -0.04809835974856351,
           0,
@@ -118,57 +111,17 @@
           0,
           -0.04809835974856351
         ],
-        "upper_windows": [],
-        "lower_windows": [
-          {
-            "station_m": 1.35,
-            "width_m": 1.0,
-            "height_m": 0.9,
-            "center_y": 4.04,
-            "glazing": "blue"
-          }
-        ],
-        "entries": [],
-        "screens": []
-      },
-      {
-        "id": "source-run-12",
-        "runs": [
-          12
-        ],
-        "source_run": 12,
-        "start": [
-          -306.39,
-          2.385,
-          -749.61
-        ],
-        "end": [
-          -306.652,
-          2.43,
-          -744.176
-        ],
-        "length_m": 5.440312491024726,
-        "tangent": [
-          -0.048158998298763286,
-          0,
-          0.9988396822728158
-        ],
-        "normal": [
-          -0.9988396822728158,
-          0,
-          -0.048158998298763286
-        ],
         "upper_windows": [
           {
-            "station_m": 1.3600781227561816,
-            "width_m": 1.78,
+            "station_m": 1.737,
+            "width_m": 2.0,
             "height_m": 1.3,
             "center_y": 6.95,
             "glazing": "blue"
           },
           {
-            "station_m": 4.0802343682685445,
-            "width_m": 1.78,
+            "station_m": 5.757,
+            "width_m": 1.9,
             "height_m": 1.3,
             "center_y": 6.95,
             "glazing": "blue"
@@ -176,7 +129,14 @@
         ],
         "lower_windows": [
           {
-            "station_m": 1.8497062469484071,
+            "station_m": 1.737,
+            "width_m": 0.9,
+            "height_m": 0.9,
+            "center_y": 4.04,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 3.7208719264113723,
             "width_m": 1.52,
             "height_m": 1.34,
             "center_y": 3.87,
@@ -185,7 +145,7 @@
         ],
         "entries": [
           {
-            "station_m": 4.243443742999287,
+            "station_m": 6.1146094224622525,
             "width_m": 0.92,
             "height_m": 2.13,
             "bottom_y": 2.4099999999999997
@@ -877,9 +837,9 @@
   },
   "materials": {
     "siding_rgb": [
-      0.7,
-      0.75,
-      0.78
+      0.66,
+      0.71,
+      0.71
     ],
     "trim_rgb": [
       0.83,
@@ -1049,6 +1009,23 @@
       0.32,
       0.33,
       0.34
+    ],
+    "deck_panel_m": 0.9,
+    "deck_tones": [
+      1.0,
+      0.9,
+      1.07,
+      0.95,
+      1.03
+    ],
+    "joist_tones": [
+      1.0,
+      0.86
+    ],
+    "beam_rgb": [
+      0.36,
+      0.35,
+      0.33
     ],
     "fascia_top_rgb": [
       0.45,
@@ -5289,47 +5266,48 @@
   ],
   "study_notes": [
     "2026-10-11 whole architecture: reuse housing_site_family complete opening/entry assemblies, no new base. Third west front20-23 and east long1/3-5/7 receive complete upper/lower opening groups. March2025 actual1232 front/end vocabulary supports broad/narrow windows and navy entries. Exact counts/cadence/anchors and hidden rear layout are production_inference, not as-built; rearGoogle is unusable/foreground-neighbor and Apple layout is undated. Ends0/8-9 and short returns2/6/14/19 retained; all earlier target frames, roof, ground, canopy and source identity unchanged. Threshold elevations use canonical local LAND and source wall bottom; independent native/playability review pending.",
-    "2026-11-19 housing-detail pilot r3: the March 2025 north-end and front photos show the west front's lower window heads level with the door heads and the upper storey's overhang just above them; lower windows moved down to the door heads (sizes kept), overhang line 4.8 (production inference)."
+    "2026-11-19 housing-detail pilot r3: the March 2025 north-end and front photos show the west front's lower window heads level with the door heads and the upper storey's overhang just above them; lower windows moved down to the door heads (sizes kept), overhang line 4.8 (production inference).",
+    "2026-11-19 housing-detail pilot r5: unit 1's upper windows, lower window and small window placed from the March 2025 north-end photo through its solved camera; runs 11 and 12 (collinear) share one frame so the openings over their seam stay whole (production inference)."
   ],
   "window_blinds": {
     "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): white blinds at varied drops and pale curtains behind most west-front windows, upper and lower.",
     "rgbs": [
       [
-        0.8,
-        0.8,
-        0.78
-      ],
-      [
-        0.84,
-        0.83,
-        0.8
+        0.72,
+        0.72,
+        0.7
       ],
       [
         0.76,
-        0.77,
-        0.78
+        0.75,
+        0.72
       ],
       [
-        0.86,
-        0.85,
-        0.82
+        0.68,
+        0.69,
+        0.7
+      ],
+      [
+        0.78,
+        0.77,
+        0.74
       ]
     ],
     "curtain_rgbs": [
       [
-        0.82,
-        0.8,
-        0.75
-      ],
-      [
-        0.78,
-        0.78,
-        0.77
-      ],
-      [
         0.74,
         0.72,
-        0.68
+        0.67
+      ],
+      [
+        0.7,
+        0.7,
+        0.69
+      ],
+      [
+        0.66,
+        0.64,
+        0.6
       ]
     ],
     "hem_shade": 0.8,
@@ -5343,23 +5321,23 @@
       0.6,
       0.7
     ],
-    "curtain_share": 0.5,
+    "curtain_share": 0.35,
     "curtain_widths": [
-      0.35,
-      0.5,
-      0.7
+      0.25,
+      0.35
     ],
-    "roughness": 0.15,
-    "metallic": 0.25,
+    "roughness": 0.1,
+    "metallic": 0.35,
     "receive_shadows": false,
     "seed": 1232
   },
   "window_glass": {
-    "roughness": 0.1,
-    "metallic": 0.4
+    "roughness": 0.08,
+    "metallic": 0.45,
+    "lift": 0.45
   },
   "window_sill_out_m": 0.04,
-  "siding_course_shadow": 0.8,
+  "siding_course_shadow": 1.0,
   "lower_frontage_recess": {
     "depth_m": 0.3,
     "band_y": 4.8,
@@ -5512,22 +5490,30 @@
   "roof_vents": {
     "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): grey metal vent stacks and a few box vents spread along the upper roof, most on the west slope; Esri World Imagery 2026-05-26 (z19) shows about fifteen along the ridge, some on the east slope.",
     "rgb": [
-      0.56,
-      0.57,
-      0.58
+      0.74,
+      0.75,
+      0.76
     ],
-    "roughness": 0.5,
-    "metallic": 0.3,
-    "spacing_m": 3.1,
-    "jitter_m": 0.9,
+    "roughness": 0.35,
+    "metallic": 0.6,
+    "spacing_m": 2.2,
+    "jitter_m": 0.7,
     "offset_m": [
       0.45,
       1.5
     ],
     "margin_m": 0.8,
     "back_share": 0.25,
-    "stack_share": 0.75,
+    "stack_share": 0.85,
     "seed": 1232,
+    "stack_height_m": [
+      0.45,
+      0.75
+    ],
+    "stack_radius_m": [
+      0.045,
+      0.065
+    ],
     "avoid": [
       [
         -301.667,
@@ -5566,9 +5552,9 @@
     "soffit_drop_m": 0.14,
     "edge_m": 0.03,
     "top_rgb": [
-      0.52,
-      0.54,
-      0.52
+      0.56,
+      0.53,
+      0.48
     ],
     "board_rgb": [
       0.94,
@@ -5576,8 +5562,8 @@
       0.94
     ],
     "soffit_rgb": [
-      0.82,
-      0.83,
+      0.72,
+      0.76,
       0.82
     ]
   },
@@ -5591,8 +5577,8 @@
       "base_y": 2.309,
       "top_y": 6.065,
       "door": {
-        "out_m": 0.08,
-        "width_m": 1.73,
+        "out_m": 0.06,
+        "width_m": 1.85,
         "height_m": 2.2,
         "bottom_y": 2.501,
         "rgb": [
@@ -5606,13 +5592,13 @@
           "at_m": 1.58,
           "out_m": 0.55,
           "diameter_m": 0.55,
-          "height_m": 1.4
+          "height_m": 1.85
         },
         {
           "at_m": 2.88,
           "out_m": 0.5,
           "diameter_m": 0.36,
-          "height_m": 1.2
+          "height_m": 1.55
         }
       ],
       "roof_rgb": [

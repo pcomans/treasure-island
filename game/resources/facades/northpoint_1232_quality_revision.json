@@ -42,9 +42,15 @@
   },
   "roof_segments_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): each segment under its own gable roof with a rake at the steps (front photo, the north step); the north gable's apex on that segment's centre line. Pitch 0.36 from the north-end photo through its solved camera (apex, west rake, ridge silhouette); production inference. The same roof as w96215673.json's roof_plane, from one generator.",
   "frontage_asphalt_rgb": [
-    0.24,
-    0.21,
-    0.17
+    0.19,
+    0.19,
+    0.19
   ],
-  "frontage_asphalt_evidence": "Google Street View, March 2025, west front: the stalls' asphalt grey-black (it read navy in game light)."
+  "frontage_asphalt_evidence": "Google Street View, March 2025, west front: the stalls' asphalt grey-black (it read navy in game light).",
+  "roof_rgb": [
+    0.56,
+    0.53,
+    0.48
+  ],
+  "roof_rgb_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): tan-grey shingles."
 }

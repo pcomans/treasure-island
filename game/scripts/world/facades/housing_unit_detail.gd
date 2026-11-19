@@ -631,8 +631,11 @@ static func _segment_vents(vents: Dictionary, spec: Dictionary, plane: Dictionar
 		var t3 := Vector3(along.x, 0.0, along.y)
 		var n3 := Vector3(across.x, 0.0, across.y)
 		if float(_pick(seed, [s, 4.0], 1000)) / 1000.0 < stack_share:
-			var r := 0.04 + 0.02 * float(_pick(seed, [s, 5.0], 3)) * 0.5
-			var hgt := 0.28 + 0.06 * float(_pick(seed, [s, 6.0], 4))
+			# Opt-in stack_radius_m / stack_height_m [min, max] (default 0.04-0.06, 0.28-0.46).
+			var radii: Array = spec.get("stack_radius_m", [0.04, 0.06])
+			var heights: Array = spec.get("stack_height_m", [0.28, 0.46])
+			var r := lerpf(float(radii[0]), float(radii[1]), float(_pick(seed, [s, 5.0], 3)) * 0.5)
+			var hgt := lerpf(float(heights[0]), float(heights[1]), float(_pick(seed, [s, 6.0], 4)) / 3.0)
 			# From under the roof surface (its fall across the pipe) to the stack's top.
 			var foot := roof_y - r * slope - 0.03
 			_prism(vents, Vector3(xz.x, foot, xz.y), r, roof_y + hgt - foot)

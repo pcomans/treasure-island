@@ -1,6 +1,8 @@
 extends RefCounted
 
 # Reviewed whole-building construction; live factory assigns exact geometry contacts.
+# The housing family's roof shader, for an opt-in roof_rgb (no new shader program).
+const FAMILY_ROOF := preload("res://game/resources/housing_family/roof.gdshader")
 # Footprint is read verbatim from the frozen wall record. Unmeasured detail is art inference.
 ## options (from the live factory's revision config): "frontage_parking_from_m", the
 ## frontage station (origin frame below) where the parking begins; north of it the
@@ -21,6 +23,11 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 	var door := _material(Color(0.075,0.13,0.19),0.7)
 	var roofshader:=ShaderWarmUp.shared_shader("shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float row=floor(wp.x*5.0);float cell=floor(wp.z*4.0+mod(row,2.0)*0.5);float n=fract(sin(row*12.9898+cell*78.233)*43758.5453);ALBEDO=vec3(0.23,0.25,0.23)+(n-0.5)*0.075;ROUGHNESS=0.94;}")
 	var roofmat:=ShaderMaterial.new();roofmat.shader=roofshader
+	# Opt-in roof_rgb: the roof in the family's roof shader and that colour.
+	if options.has("roof_rgb"):
+		var roof_rgb: Array = options.roof_rgb
+		roofmat.shader=FAMILY_ROOF
+		roofmat.set_shader_parameter("roof_color",Color(float(roof_rgb[0]),float(roof_rgb[1]),float(roof_rgb[2])))
 	var steel := _material(Color(0.30,0.26,0.20),0.85)
 	var fascia_shader:=ShaderWarmUp.shared_shader("shader_type spatial; varying vec3 wp; void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;} void fragment(){float a=fract(sin(dot(floor(wp.xz*14.0),vec2(12.9898,78.233)))*43758.5453); float b=fract(sin(dot(floor(wp.xz*2.0),vec2(39.346,11.135)))*15347.231); ALBEDO=vec3(0.42,0.43,0.39)+(a-0.5)*0.075+(b-0.5)*0.055; ROUGHNESS=0.95;}")
 	var fascia:=ShaderMaterial.new();fascia.shader=fascia_shader
@@ -334,7 +341,7 @@ static func _segment_of(t:float,d:float,cuts:Array)->int:
 		if t<=_segment_cut_t(cuts[k],d): return k
 	return cuts.size()
 
-static func _recessed_window(root:Node3D,p:Vector3,t:Vector3,n:Vector3,w:float,h:float,trim:Material,dark:Material,glass:Material,sill_out:float=-1.0,pane_finish:Vector2=Vector2(-1.0,-1.0))->void:
+static func _recessed_window(root:Node3D,p:Vector3,t:Vector3,n:Vector3,w:float,h:float,trim:Material,dark:Material,glass:Material,sill_out:float=-1.0,pane_finish:Vector2=Vector2(-1.0,-1.0),pane_lift:float=0.0)->void:
 	# Hole is cut through the outer facade. Deep reveals and a recessed opaque back preserve exterior-only scope.
 	var reveal:=_material(Color(0.50,0.54,0.51),0.9)
 	for side in [-1.0,1.0]:
@@ -346,7 +353,10 @@ static func _recessed_window(root:Node3D,p:Vector3,t:Vector3,n:Vector3,w:float,h
 	_panel(root,p-n*0.29,t,n,Vector3(w,h,0.025),dark)
 	for side in [-1.0,1.0]:
 		var value:float=fposmod(sin(p.x*3.12+p.z*5.17+side)*412.7,1.0)
-		var pane:=_material(Color(0.23,0.32,0.35).lerp(Color(0.53,0.57,0.53),value*0.65),0.24 if pane_finish.x<0.0 else pane_finish.x)
+		# Opt-in pane_lift: the pane toward a pale sky grey, as glass that takes the light.
+		var pane_color:=Color(0.23,0.32,0.35).lerp(Color(0.53,0.57,0.53),value*0.65)
+		if pane_lift>0.0: pane_color=pane_color.lerp(Color(0.66,0.72,0.77),pane_lift)
+		var pane:=_material(pane_color,0.24 if pane_finish.x<0.0 else pane_finish.x)
 		pane.metallic=0.22 if pane_finish.y<0.0 else pane_finish.y
 		_panel(root,p+t*side*w*0.25-n*0.255,t,n,Vector3(w/2.0-0.045,h-0.07,0.02),pane)
 	_panel(root,p-n*0.22,t,n,Vector3(0.045,h,0.045),trim)

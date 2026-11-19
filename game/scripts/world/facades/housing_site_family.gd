@@ -104,6 +104,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	# {roughness, metallic} for the panes.
 	var sill_out := float(cfg.get("window_sill_out_m", -1.0))
 	var pane_finish := Vector2(float(cfg.get("window_glass", {}).get("roughness", -1.0)), float(cfg.get("window_glass", {}).get("metallic", -1.0)))
+	var pane_lift := float(cfg.get("window_glass", {}).get("lift", 0.0))
 	var rake_runs: Dictionary = {}
 	for run: Variant in cfg.get("gable_rakes", {}).get("runs", []): rake_runs[int(run)] = true
 	# The target schedule carries complete motifs. A basis pins each motif to its
@@ -194,7 +195,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						PARTS._panel(root,point+t*side*(width/2+0.025),t,n,Vector3(0.065,height+0.12,0.09),trim)
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
-					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,pane_finish)
+					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,pane_finish,pane_lift)
 					if not blind_buckets.is_empty() and not is_rear:
 						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height)
 				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
@@ -581,16 +582,54 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	b.y = a.y
 	PARTS._beam(root,a,b,depth,0.16,roof)
 	# Opt-in underside_rgb lightens the soffit; joist_spacing_m hangs cross joists under it.
-	var underside := PARTS._material(color(cfg,"underside_rgb",Color(0.16,0.20,0.19)),0.97)
-	PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
+	# deck_panel_m lays the soffit in panels across the depth, every deck_panel_m along the
+	# canopy, their tones cycling through deck_tones (factors on underside_rgb), and
+	# joist_tones does the same for the joists; beam_rgb runs a beam along each post row.
+	var under_color := color(cfg,"underside_rgb",Color(0.16,0.20,0.19))
+	var panel_every := float(cfg.get("deck_panel_m", 0.0))
+	if panel_every >= 0.3:
+		var tones: Array = cfg.get("deck_tones", [1.0])
+		var from := float(cfg.station_m[0])
+		var count := 0
+		while from < float(cfg.station_m[1]) - 0.01:
+			var to := minf(from + panel_every, float(cfg.station_m[1]))
+			var f := float(tones[count % tones.size()])
+			var pa := start+t*from+n*middle
+			var pb := start+t*to+n*middle
+			pa.y = a.y-0.10
+			pb.y = pa.y
+			PARTS._beam(root,pa,pb,depth-0.10,0.025,PARTS._material(Color(under_color.r*f,under_color.g*f,under_color.b*f),0.97))
+			from = to
+			count += 1
+	else:
+		var underside := PARTS._material(under_color,0.97)
+		PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
 	if cfg.has("joist_spacing_m") and float(cfg.joist_spacing_m) >= 0.5:
-		var joist := PARTS._material(color(cfg,"joist_rgb",Color(0.3,0.3,0.29)),0.95)
+		var joist_color := color(cfg,"joist_rgb",Color(0.3,0.3,0.29))
+		var joist_tones: Array = cfg.get("joist_tones", [1.0])
+		var joist := PARTS._material(joist_color,0.95)
 		var station := float(cfg.station_m[0])+float(cfg.joist_spacing_m)*0.5
+		var count := 0
 		while station < float(cfg.station_m[1]):
 			var j := start+t*station
 			j.y = a.y-0.1825
-			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),0.07,0.14,joist)
+			var tone := float(joist_tones[count % joist_tones.size()])
+			var joist_material: Material = joist if is_equal_approx(tone, 1.0) else PARTS._material(Color(joist_color.r*tone,joist_color.g*tone,joist_color.b*tone),0.95)
+			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),0.07,0.14,joist_material)
 			station += float(cfg.joist_spacing_m)
+			count += 1
+	if cfg.has("beam_rgb"):
+		var beam := PARTS._material(color(cfg,"beam_rgb",Color.GRAY),0.9)
+		var rows := {}
+		for post: Dictionary in cfg.get("posts", []):
+			rows[snappedf(float(post.depth_m), 0.01)] = true
+		for row: float in rows:
+			# On the posts as drawn (_panel stands them 0.06 out along n).
+			var ba := start+t*(float(cfg.station_m[0])+0.05)+n*(row+0.06)
+			var bb := start+t*(float(cfg.station_m[1])-0.05)+n*(row+0.06)
+			ba.y = a.y-0.2
+			bb.y = ba.y
+			PARTS._beam(root,ba,bb,0.12,0.18,beam)
 	var steel := PARTS._material(color(palette,"carport_post_rgb",Color(0.35,0.3,0.25)),0.9)
 	var fascia: Material = trim
 	if cfg.has("fascia_rgb"): fascia = PARTS._material(color(cfg,"fascia_rgb",Color.GRAY),0.96)
