@@ -793,6 +793,14 @@ Known gaps:
 
 ## Code and tooling cleanup (low priority)
 
+- **Door landings and doorstep ground** (review notes, batch 20261119b):
+  - the ground-cover and marsh maps read the cut park/lot layer, so cells under door landings read as land (`tools/lib/ground-cover-map.mjs:534,551`); a fix would treat the landing and recess rings as paving in both maps;
+  - a cut park/lot edge has no vertical face: the lawn that stood up to 7.9 cm over the foot of the Mersea trailer ramp (w1001544698) now ends in a lip;
+  - three tracked descriptions leave out that the park/lot ground stops at landings too: `tools/lib/street-ground-generation.mjs:44-51`, `tools/export_door_landings.gd:12-14` and `tools/config/street-detail-zones.json:7`. Update them at the next regeneration; editing the zones config alone would change the generator's recorded input hash;
+  - `_side_wall`'s pergola and edge-of-posts branches have no contract case (`game/scripts/world/facades/midrise_family.gd:2333,2340`).
+- **Web page checks and live check** (batch 20261119b):
+  - the desktop page check's capture flights stall at the same height and spot near (-140, 104, 757) on main too; the cause is not established and could be the game's;
+  - the web page has no watchdog for a stalled download, and `tools/check-web-live.sh` neither logs the loading line nor retries a stuck leg (seen at the build 2332 deploy).
 - `game/scripts/world/day_sun.gd` finds a shader's glow by the text `EMISSION` in its code (`shader.code.contains("EMISSION")`), so a comment naming it would count (review note, 2026-11-15).
 - `tools/test.sh`'s takes-dependent check (`grep -qE "${sfx_reads}"`, line 255) reads grep's status 2, an error, as no match, and its `Sound.manifest_path =` exemption also passes a test that sets `Sound.DEFAULT_MANIFEST_PATH`, the real takes (silent-checkout review notes, 2026-11-15).
 - **Web release smoke:** the run check gates on distance, not speed, since 2026-11-06 (the scripts are outside Git, last in `perf-2-bake-20261106/release/scripts`).

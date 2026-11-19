@@ -27740,3 +27740,18 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: One scan of every landing top and every door recess against every drawn ground record found all the cases at once: the five Palms bed steps, two lobby walks, the Mersea lawns and the recess under the buried step, and the cause, mulch drawn at exactly the step's height. A cut check then tied every removed triangle to a landing or recess before any render. Reading a cut layer "as laid out" inside landings kept every bed's plan, so the plants did not ripple.
 - What did not work well: My round-2 scan checked only street ground and plants, not park layers, so the buried step went to review. A capture batch failed again on relative plan paths, the same slip as round 1. I edited a generator config while a regeneration ran and had to revert it to keep the recorded input hash true.
 - What the team should change next time: Scan every drawn layer against a new footprint, not just the layers the change touches. Have the plan writer emit absolute paths itself. Never edit a generator input while a regeneration runs.
+
+### code-review-integration-20261119a
+- What worked well: re-merging each merge with `git merge-tree` and diffing against the actual commit confirmed in seconds that only the conflict resolutions differed; checking the BUILDS line against the callers of `band_material` settled the classification without running the engine.
+- What did not work well: "known harness miss" was carried over from 18b without a diagnosis. The desktop flight stalls at the same altitude and spot on main too, which could be a game issue.
+- Next time: when a page-check failure is called a harness miss, cite the matching main-run log lines, and file the unexplained stall as its own ticket.
+
+### ti-code-review — door landings round 3 (2026-11-19)
+- Worked: the cut check tied every removed triangle to a landing or recess.
+- Didn't work: the author didn't explain the audit counter change. The ground-cover maps still read the cut layer.
+- Change next time: trace every audit counter change to its cause before review. When a layer gets two views, list every place that reads it.
+
+### ti-visual-review — doorstep round 3 (2026-11-19)
+- Worked: matching round-2 and round-3 raws made checking s249 and the mulch speckle quick.
+- Didn't: round 3 had no pictures of the doors already fixed in round 2, including the owner's own complaint door.
+- Change: every round should recapture the door from the owner's complaint plus one view per earlier-fixed door group.
