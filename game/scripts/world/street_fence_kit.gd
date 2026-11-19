@@ -32,8 +32,7 @@ extends RefCounted
 ## runs, so a car can break one bay, and fell the posts it hits, of a merged
 ## cell mesh (game/scripts/vehicles/street_fence_breaker.gd); bay_only builds a
 ## bay alone and add_post a post alone, as the debris they leave. "breakable":
-## false in a row's params keeps a fence whole (the Job Corps perimeter, owner
-## 2026-11-08).
+## false in a row's params keeps a fence whole (the pitches' ball-stop nets).
 
 const FURNITURE := preload("res://game/scripts/world/street_furniture_kit.gd")
 const FABRIC_SHADER := preload("res://game/resources/materials/world/street/street_fence_mesh.gdshader")

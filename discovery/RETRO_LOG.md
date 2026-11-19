@@ -27694,3 +27694,8 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: Breakability is one rule param; the fence builder and breaker read it with no code change, and the regenerated world differs from the last one only in the four rows' params. The vehicle contract already breaks a plain chain-link bay on an OSM fence and the turf pitch's windscreen, a rule-built row, so the Job Corps-only case could go rather than turn into a fourth fence-breaking case.
 - What did not work well: The unbreakable rule had been written into code comments, AGENTS.md and KNOWN_ISSUES before the fence existed (2026-11-08), and my own first commit repeated it in the zone, CHANGELOG and the inventory, so the reversal took a grep through eight places.
 - What the team should change next time: Put a behaviour that is still to come in one place, the rule's params or one KNOWN_ISSUES line, and point to it from elsewhere instead of repeating it.
+
+### ti-code-review — 2026-11-19 — jobcorps-fence delta (a40df537..2d3d5bc5)
+- What worked well: a structural JSON diff of `street_detail.json` confirmed in seconds that the change was confined to the four rows; diffing the contract against the merge-base proved it was restored.
+- What did not work well: the local `main` ref was stale, so the first comparison against main was misleading; the stale kit comment came from main and was missed by a grep scoped to the touched files.
+- Next time: compare against `origin/main`, and grep the whole tree, not just the diff, for wording that is being removed.
