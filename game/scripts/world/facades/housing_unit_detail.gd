@@ -342,11 +342,9 @@ static func entry_utilities(root: Node3D, ctx: Dictionary, kit: Dictionary, moti
 		cursor += w + gap
 
 
-## Commits the utilities (visual only, one mesh per colour, plus their collision
-## boxes) after checking that none stands inside `ring` (the building's lower walls)
-## or on a door landing.
 ## The lower storey's plan: the footprint ring less each recessed run's strip (recessed maps
-## a run index to how far its lower wall stands in), so only those runs move in.
+## a run index to how far its lower wall stands in), so only those runs move in. Each strip
+## starts 5 mm outside its run, so no sliver of the plan is left along the run's line.
 static func lower_outline(ring: PackedVector2Array, recessed: Dictionary) -> Array[PackedVector2Array]:
 	var parts: Array[PackedVector2Array] = [ring]
 	for run: int in recessed:
@@ -359,7 +357,7 @@ static func lower_outline(ring: PackedVector2Array, recessed: Dictionary) -> Arr
 		if not Geometry2D.is_point_in_polygon((a + b) * 0.5 + inward * 0.01, ring):
 			inward = -inward
 		var depth := float(recessed[run])
-		var strip := PackedVector2Array([a - t * 0.001, b + t * 0.001, b + t * 0.001 + inward * depth, a - t * 0.001 + inward * depth])
+		var strip := PackedVector2Array([a - t * 0.001 - inward * 0.005, b + t * 0.001 - inward * 0.005, b + t * 0.001 + inward * depth, a - t * 0.001 + inward * depth])
 		var next: Array[PackedVector2Array] = []
 		for part: PackedVector2Array in parts:
 			next.append_array(Geometry2D.clip_polygons(part, strip))
@@ -367,16 +365,18 @@ static func lower_outline(ring: PackedVector2Array, recessed: Dictionary) -> Arr
 	return parts
 
 
-## A simple polygon's area.
+## A simple polygon's area, from its first corner (world coordinates are hundreds of
+## metres out, too far for single-precision cross products).
 static func _area(polygon: PackedVector2Array) -> float:
 	var twice := 0.0
-	for i in polygon.size():
-		twice += polygon[i].cross(polygon[(i + 1) % polygon.size()])
+	for i in range(1, polygon.size() - 1):
+		twice += (polygon[i] - polygon[0]).cross(polygon[i + 1] - polygon[0])
 	return absf(twice) * 0.5
 
 
-## Commits the utilities, failing the build where one overlaps the lower storey's plan
-## (lower_outline) by more than 1 cm2 or stands on a door landing.
+## Commits the utilities (visual only, one mesh per colour, plus their collision boxes),
+## failing the build where one overlaps the lower storey's plan (lower_outline) by more
+## than 1 cm2 or stands on a door landing.
 static func commit_utilities(root: Node3D, ctx: Dictionary, outline: Array[PackedVector2Array]) -> void:
 	for entry: Array in ctx.footprints:
 		var quad: PackedVector2Array = entry[2]

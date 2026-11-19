@@ -247,9 +247,12 @@ func _check_downspouts_and_vents(model: Node3D, support: PackedVector3Array, cfg
 	var metal: Array = cfg.roof_vents.get("rgb", [0.56, 0.57, 0.58])
 	var vents := 0
 	var inside := 0
-	# Each vent's lowest point against the roof surface: vertices within 0.3 m (in plan) of
-	# a vent's first one count as that vent.
-	var feet: Array[Array] = []
+	# Against the roof surface: the vertices at or under it (feet, in 0.13 m cells) and the
+	# rest, each of which must stand within 0.13 m (in plan) of a foot of its own vent (a
+	# stack's radius and cap; vents of a cluster stand 0.4 m apart).
+	var feet: Dictionary = {}
+	var above: Array[Vector2] = []
+	var sunk := 0
 	for child: Node in model.get_children():
 		var mesh := child as MeshInstance3D
 		if mesh == null or mesh.mesh == null or str(child.get_meta("family_role", "support")) != "support":
@@ -263,21 +266,26 @@ func _check_downspouts_and_vents(model: Node3D, support: PackedVector3Array, cfg
 				var xz := Vector2(vertex.x, vertex.z)
 				inside += int(Geometry2D.is_point_in_polygon(xz, ring))
 				var under := vertex.y - DETAIL._roof_y(cfg.roof_plane, xz)
-				var found := false
-				for foot: Array in feet:
-					if (foot[0] as Vector2).distance_to(xz) <= 0.3:
-						foot[1] = minf(float(foot[1]), under)
-						found = true
-						break
-				if not found:
-					feet.append([xz, under])
+				sunk += int(under < -0.25)
+				if under <= 0.005:
+					var cell := Vector2i(floori(xz.x / 0.13), floori(xz.y / 0.13))
+					if not feet.has(cell):
+						feet[cell] = []
+					(feet[cell] as Array).append(xz)
+				else:
+					above.append(xz)
 	check(vents > 0 and inside == vents, "the roof vents stand inside the footprint (%d of %d vertices inside)" % [inside, vents])
-	var floating := 0
-	var sunk := 0
-	for foot: Array in feet:
-		floating += int(float(foot[1]) > 0.005)
-		sunk += int(float(foot[1]) < -0.25)
-	check(not feet.is_empty() and floating == 0 and sunk == 0, "every vent's foot is just under the roof surface (%d vents: %d floating, %d sunk over 0.25 m)" % [feet.size(), floating, sunk])
+	var floating: Array[String] = []
+	for xz: Vector2 in above:
+		var held := false
+		var cell := Vector2i(floori(xz.x / 0.13), floori(xz.y / 0.13))
+		for dx in range(-1, 2):
+			for dz in range(-1, 2):
+				for foot: Vector2 in feet.get(cell + Vector2i(dx, dz), []):
+					held = held or foot.distance_to(xz) <= 0.13
+		if not held and floating.size() < 5:
+			floating.append(str(xz))
+	check(not feet.is_empty() and floating.is_empty() and sunk == 0, "every vent stands on the roof: each part over a foot at or under the surface, none sunk over 0.25 m (floating near %s; %d sunk)" % [", ".join(floating), sunk])
 	var over := float(cfg.get("gable_rakes", {}).get("overhang_m", 0.0)) + 0.05
 	var vertices: Array = wall.vertices
 	var stray := 0
