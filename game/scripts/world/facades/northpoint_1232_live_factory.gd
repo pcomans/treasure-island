@@ -34,7 +34,7 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder
 			misses.append(p)
 			return 0.0
 		return value
-	var model: Node3D = MODEL.build(wall, ground)
+	var model: Node3D = MODEL.build(wall, ground, cfg)
 	if not misses.is_empty():
 		model.free()
 		return {"ok": false, "message": "Reviewed local ground sample outside frozen colliding land."}

@@ -36,3 +36,25 @@ The family has no standalone demo; check it in the real island with `game/tests/
 ## Separate housing-instance experiment
 
 The owner-authorized `experiment/housing-family-instances` branch starts at `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16` for A/B comparison with MAIN. Its [canonical target inventory](../../../discovery/HOUSING_FAMILY_INSTANCES.md) records current photo-confirmed, written-only and imagery-insufficient coverage separately from the frozen 23-target A/B capture. The straight prototype needs stepped runs, target opening schedules and appropriate roof/canopy variants before site use; a matching palette or six-metre cadence alone does not establish a fit. Keep per-target identity/grade/geometry and independent acceptance checks even when geometry is shared.
+
+## Opt-in unit details (live family, `housing_unit_detail.gd`)
+
+The live producer, [housing_site_family.gd](../../scripts/world/facades/housing_site_family.gd), reads one JSON config per building (`w*.json` here, listed in `live_instances.json`). The keys below are opt-in: a config without them builds exactly as before. They were piloted on 1232 Northpoint Drive (`w96215673.json`, 2026-11-19), the only building that sets them. Add one only for a side a dated photo shows, and record the photo in the key's `evidence`.
+
+| Key | Meaning |
+|---|---|
+| `window_blinds` | Blinds and curtains behind the glass of every front window: `rgbs`, `drops` (share of a pane covered from its head down; 0 none), `curtain_share`, `curtain_widths`, `curtain_rgbs`, `hem_shade`, `pleat_shade`, `roughness`, `metallic`, `receive_shadows` (false keeps them out of the reveal's shadow, as Dorm 369's blinds), `seed`. Visual only: no collision. |
+| `utility_kit` + an entry's `utilities` | Kit items (`form` condenser, cabinet, enclosure or bin; `size_m` [w, h, d]; `rgb`) and per-door rows: `{"side": 1 or -1, "items": [...], "start_m": m, "ground_y": y}`. Items stand in a row along the wall from the door's trim, on the visible ground at `ground_y`; each has one plain box collider. The build fails if one would stand in the building or on a door landing (door width plus 0.25 m each side, 1.3 m deep). |
+| a `pipes` entry's `"style": "downspout"` | A downspout instead of the plain pipe: gooseneck from the eave trim, straps, kick-out and splash block. It steps out round the storey band, or under a `lower_frontage_recess` bends back to the lower wall below the overhang. |
+| `roof_plane` | `{"ridge": [[x, z], [x, z]], "ridge_y", "slope"}`: the two-slope roof the roof details follow. |
+| `roof_vents` | Vent stacks and box vents along the ridge: `spacing_m`, `jitter_m`, `offset_m` [min, max] from the ridge, `back_share`, `stack_share`, `margin_m`, `avoid` (existing vents), `rgb`, `seed`. |
+| `gable_rakes` | `{"runs": [...], "overhang_m", "board_m", "soffit_drop_m"}`: the roof carried out over those gable runs, with a rake board and soffit, in place of those runs' eave trim. |
+| `siding_course_shadow` | 0-1: the lap shadow under each siding course (the siding shader's `course_shadow`, zero for every other building). |
+| `vertical_seams: "corners"` | Trim boards only where the wall turns, not at every source-run split (`true` keeps the old behaviour). |
+| `lower_frontage_recess.join_runs` | With the existing lower-frontage setback: neighbours come from the wall ring, so collinear runs in different frames meet without the 0.05 m terminal strips, and an unrecessed gable beside the setback is notched under the overhang. Corner boards split at the soffit. |
+| `lower_frontage_recess.soffit_rgb` | The setback's soffit in its own colour instead of the trim's, such as the overhang's shadow line. |
+| `story_band` | `{"depth_m", "height_m"}`: a slimmer storey band board (default 0.20 x 0.09 m); `height_m` 0 draws none, leaving an overhang's soffit as the floor line. |
+| a lower window's `"glazing": "sidelight"` | A full-height glazed sidelight beside a door. |
+| carport `underside_rgb`, `joist_spacing_m`, `joist_rgb`, `fascia_top_rgb`, `post_bands` | A lighter soffit with cross joists, a weathered strip on the fascia and painted bands on the posts (`[[from_m, to_m, rgb], ...]` up from a post's foot, each stopping at the post's top). |
+
+`game/tests/headless_housing_unit_detail_contract.gd` checks these behaviours on 1232. Every detail kept here is per building; switching the set on for another building is that building's own change, with its own photos and reviews.

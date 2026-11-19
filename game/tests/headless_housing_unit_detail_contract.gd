@@ -10,7 +10,10 @@ extends SceneTree
 ##   - each utility has a box collider holding its drawn parts, outside the building and
 ##     off every front door's landing;
 ##   - the downspouts and roof vents collide as drawn; every vent stands inside the footprint;
-##   - the siding takes siding_course_shadow.
+##   - the siding takes siding_course_shadow;
+##   - a gable run under gable_rakes carries no eave trim (the config without them draws one
+##     there); story_band height 0 draws no board along the front; the frontage setback's
+##     soffit takes its soffit_rgb.
 
 const FAMILY := preload("res://game/scripts/world/facades/housing_site_family.gd")
 const ATTACH := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
@@ -18,7 +21,7 @@ const SIDING := preload("res://game/resources/housing_family/siding.gdshader")
 const SOURCE := "w96215673"
 const CONFIG := "res://game/resources/housing_family/w96215673.json"
 const CHUNK := "res://generated/world/chunks/x_-2__z_-3.json"
-const DETAIL_KEYS := ["window_blinds", "utility_kit", "roof_vents", "siding_course_shadow"]
+const DETAIL_KEYS := ["window_blinds", "utility_kit", "roof_vents", "siding_course_shadow", "gable_rakes"]
 
 var failures: Array[String] = []
 
@@ -43,10 +46,13 @@ func _initialize() -> void:
 			entry.erase("utilities")
 		for pipe: Dictionary in frame.get("pipes", []):
 			pipe.erase("style")
-	_check_plain(FAMILY.build(wall, roof, plain_cfg))
-	_check_details(FAMILY.build(wall, roof, cfg), FAMILY.build(wall, roof, cfg), cfg, wall)
+	var plain := FAMILY.build(wall, roof, plain_cfg)
+	var model := FAMILY.build(wall, roof, cfg)
+	_check_floor_line_and_gables(plain, model, cfg, wall)
+	_check_plain(plain)
+	_check_details(model, FAMILY.build(wall, roof, cfg), cfg, wall)
 	if failures.is_empty():
-		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts and vents collide as drawn, vents inside the footprint; the siding takes its lap shadow")
+		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts collide as drawn, vents stand inside the footprint and rakes over their gables; the siding takes its lap shadow; the rake replaces its gables' eave trim, story_band 0 draws no board and the setback's soffit takes soffit_rgb")
 		quit(0)
 	else:
 		for failure: String in failures:
@@ -102,14 +108,16 @@ func _check_details(model: Node3D, twin: Node3D, cfg: Dictionary, wall: Dictiona
 	var support_faces: PackedVector3Array = bodies.get("support", PackedVector3Array())
 	_check_blinds(blinds, cfg)
 	_check_utilities(shells, boxes, cfg, wall)
-	_check_downspouts_and_vents(support_faces, cfg, wall)
+	_check_downspouts_and_vents(model, support_faces, cfg, wall)
 	model.free()
 	twin.free()
 
 
-## Every blind vertex inside a front window's opening, 0.15-0.2 m behind its wall plane.
+## Every blind vertex inside a front window's opening, 0.15-0.2 m behind its wall plane
+## (a lower window's plane stands back with the lower storey under a frontage setback).
 func _check_blinds(blinds: Array[MeshInstance3D], cfg: Dictionary) -> void:
 	var windows: Array[Dictionary] = []
+	var back := float(cfg.get("lower_frontage_recess", {}).get("depth_m", 0.0))
 	for frame: Dictionary in cfg.target.frames:
 		for group: String in ["upper_windows", "lower_windows"]:
 			for motif: Dictionary in frame.get(group, []):
@@ -117,6 +125,8 @@ func _check_blinds(blinds: Array[MeshInstance3D], cfg: Dictionary) -> void:
 				var t := _vec(basis.tangent)
 				var n := _vec(basis.normal)
 				var point := _vec(basis.start) + t * float(motif.get("local_station_m", motif.station_m))
+				if group == "lower_windows":
+					point -= n * back
 				windows.append({"point": Vector3(point.x, float(motif.center_y), point.z), "t": t, "n": n, "w": float(motif.width_m), "h": float(motif.height_m)})
 	var outside := 0
 	var total := 0
@@ -138,7 +148,11 @@ func _check_blinds(blinds: Array[MeshInstance3D], cfg: Dictionary) -> void:
 func _check_utilities(shells: Array[MeshInstance3D], boxes: Array[MeshInstance3D], cfg: Dictionary, wall: Dictionary) -> void:
 	if boxes.is_empty():
 		return
+	# The lower walls: the footprint, moved in by a frontage setback.
 	var ring := _ring(wall)
+	var back := float(cfg.get("lower_frontage_recess", {}).get("depth_m", 0.0))
+	if back > 0.0:
+		ring = Geometry2D.offset_polygon(ring, -back)[0]
 	var corners := _triangles(boxes[0])
 	var hulls: Array[PackedVector2Array] = []
 	var heights: Array[Vector2] = []
@@ -176,7 +190,7 @@ func _check_utilities(shells: Array[MeshInstance3D], boxes: Array[MeshInstance3D
 				var basis: Dictionary = entry.get("basis", frame)
 				var t := _vec(basis.tangent)
 				var n := _vec(basis.normal)
-				var door := _vec(basis.start) + t * float(entry.get("local_station_m", entry.station_m))
+				var door := _vec(basis.start) + t * float(entry.get("local_station_m", entry.station_m)) - n * back
 				var p := Vector2(door.x, door.z)
 				var tt := Vector2(t.x, t.z) * 0.8225
 				var nn := Vector2(n.x, n.z) * 1.3
@@ -184,9 +198,10 @@ func _check_utilities(shells: Array[MeshInstance3D], boxes: Array[MeshInstance3D
 				check(Geometry2D.intersect_polygons(hull, landing).is_empty(), "no utility stands on a front door's landing (frame %s)" % frame.id)
 
 
-## Collision faces at every downspout's foot-to-top run, and vents (support faces above
-## the eave trim) inside the footprint.
-func _check_downspouts_and_vents(support: PackedVector3Array, cfg: Dictionary, wall: Dictionary) -> void:
+## Collision faces at every downspout's foot-to-top run; the roof vents (their own metal)
+## inside the footprint; and every support face above the eaves outside the footprint
+## within a gable rake's overhang of its gable.
+func _check_downspouts_and_vents(model: Node3D, support: PackedVector3Array, cfg: Dictionary, wall: Dictionary) -> void:
 	for frame: Dictionary in cfg.target.frames:
 		for pipe: Dictionary in frame.get("pipes", []):
 			if str(pipe.get("style", "")) != "downspout":
@@ -199,14 +214,122 @@ func _check_downspouts_and_vents(support: PackedVector3Array, cfg: Dictionary, w
 				near = near or (Vector2(vertex.x - p.x, vertex.z - p.z).length() < 0.45 and absf(vertex.y - mid) < 1.0)
 			check(near, "the downspout in frame %s collides as drawn" % frame.id)
 	var ring := _ring(wall)
+	var metal: Array = cfg.roof_vents.get("rgb", [0.56, 0.57, 0.58])
 	var vents := 0
 	var inside := 0
+	for child: Node in model.get_children():
+		var mesh := child as MeshInstance3D
+		if mesh == null or mesh.mesh == null or str(child.get_meta("family_role", "support")) != "support":
+			continue
+		for s in mesh.mesh.get_surface_count():
+			var material := mesh.mesh.surface_get_material(s) as StandardMaterial3D
+			if material == null or not material.albedo_color.is_equal_approx(Color(float(metal[0]), float(metal[1]), float(metal[2]))):
+				continue
+			for vertex: Vector3 in mesh.mesh.surface_get_arrays(s)[Mesh.ARRAY_VERTEX]:
+				vents += 1
+				inside += int(Geometry2D.is_point_in_polygon(Vector2(vertex.x, vertex.z), ring))
+	check(vents > 0 and inside == vents, "the roof vents stand inside the footprint (%d of %d vertices inside)" % [inside, vents])
+	var over := float(cfg.get("gable_rakes", {}).get("overhang_m", 0.0)) + 0.05
+	var vertices: Array = wall.vertices
+	var stray := 0
 	var eave := float(cfg.get("wall_top_y", 8.05)) + 0.3
 	for vertex: Vector3 in support:
-		if vertex.y > eave:
-			vents += 1
-			inside += int(Geometry2D.is_point_in_polygon(Vector2(vertex.x, vertex.z), ring))
-	check(vents > 0 and inside == vents, "the roof vents collide as drawn and stand inside the footprint (%d of %d vertices inside)" % [inside, vents])
+		var xz := Vector2(vertex.x, vertex.z)
+		if vertex.y <= eave or Geometry2D.is_point_in_polygon(xz, ring):
+			continue
+		var held := false
+		for run: Variant in cfg.get("gable_rakes", {}).get("runs", []):
+			var i := int(run) * 12
+			var a := Vector2(float(vertices[i]), float(vertices[i + 2]))
+			var b := Vector2(float(vertices[i + 3]), float(vertices[i + 5]))
+			held = held or Geometry2D.get_closest_point_to_segment(xz, a, b).distance_to(xz) <= over
+		stray += int(not held)
+	check(stray == 0, "the roof's support parts outside the footprint lie over a gable rake's overhang (%d vertices elsewhere)" % stray)
+
+
+## Probes in the open air where a removed part would stand: at the middle of each rake run,
+## just outside the wall at its top, where the eave trim runs (the plain build must draw it,
+## the detailed one not); along the front at the storey band, just in front of the wall,
+## away from the downspouts. And the setback's soffit, in its own colour, at the band.
+func _check_floor_line_and_gables(plain: Node3D, model: Node3D, cfg: Dictionary, wall: Dictionary) -> void:
+	var vertices: Array = wall.vertices
+	var top := float(cfg.get("wall_top_y", 8.05))
+	var plain_faces := _faces(plain)
+	var faces := _faces(model)
+	for run: Variant in cfg.gable_rakes.runs:
+		var i := int(run) * 12
+		var a := Vector3(float(vertices[i]), top, float(vertices[i + 2]))
+		var b := Vector3(float(vertices[i + 3]), top, float(vertices[i + 5]))
+		var t := (b - a).normalized()
+		var n := Vector3(-t.z, 0.0, t.x)
+		var mid := (a + b) * 0.5
+		check(_crosses(plain_faces, mid + n * 0.03, mid + n * 0.3), "without gable_rakes, gable run %d carries the eave trim" % int(run))
+		check(not _crosses(faces, mid + n * 0.03, mid + n * 0.3), "under its rake, gable run %d carries no eave trim" % int(run))
+	if float(cfg.get("story_band", {}).get("height_m", 0.09)) <= 0.0:
+		var band_y := float(cfg.get("facade", {}).get("story_band_y", 5.38))
+		var pipes: Array[Vector3] = []
+		for frame: Dictionary in cfg.target.frames:
+			for pipe: Dictionary in frame.get("pipes", []):
+				var basis: Dictionary = pipe.get("basis", frame)
+				pipes.append(_vec(basis.start) + _vec(basis.tangent) * float(pipe.get("local_station_m", pipe.station_m)))
+		var probes := 0
+		var blocked: Array[String] = []
+		# Along each front run's own wall line (a frame's runs can step).
+		for frame: Dictionary in cfg.target.frames:
+			for run: Variant in frame.runs:
+				var i := int(run) * 12
+				var a := Vector3(float(vertices[i]), band_y, float(vertices[i + 2]))
+				var b := Vector3(float(vertices[i + 3]), band_y, float(vertices[i + 5]))
+				var t := (b - a).normalized()
+				var n := Vector3(-t.z, 0.0, t.x)
+				for k in range(1, 5):
+					var p := a.lerp(b, k / 5.0)
+					var near := false
+					for q: Vector3 in pipes:
+						near = near or Vector2(q.x - p.x, q.z - p.z).length() < 0.6
+					if near:
+						continue
+					probes += 1
+					if _crosses(faces, p + n * 0.01, p + n * 0.12):
+						blocked.append("run %d at %s" % [int(run), str(p)])
+		check(probes > 0 and blocked.is_empty(), "story_band height 0 draws no board along the front (%d probes, blocked: %s)" % [probes, ", ".join(blocked)])
+	var recess: Dictionary = cfg.get("lower_frontage_recess", {})
+	if recess.has("soffit_rgb"):
+		var rgb: Array = recess.soffit_rgb
+		var want := Color(float(rgb[0]), float(rgb[1]), float(rgb[2]))
+		var at_band := 0
+		var elsewhere := 0
+		for child: Node in model.get_children():
+			var mesh := child as MeshInstance3D
+			if mesh == null or mesh.mesh == null:
+				continue
+			for s in mesh.mesh.get_surface_count():
+				var material := mesh.mesh.surface_get_material(s) as StandardMaterial3D
+				if material == null or not material.albedo_color.is_equal_approx(want):
+					continue
+				for vertex: Vector3 in mesh.mesh.surface_get_arrays(s)[Mesh.ARRAY_VERTEX]:
+					if absf((mesh.transform * vertex).y - float(recess.band_y)) < 0.005:
+						at_band += 1
+					else:
+						elsewhere += 1
+		check(at_band > 0 and elsewhere == 0, "the setback's soffit takes soffit_rgb, at the band and nowhere else (%d vertices at the band, %d elsewhere)" % [at_band, elsewhere])
+
+
+## Every drawn triangle of a model, in its frame.
+func _faces(model: Node3D) -> PackedVector3Array:
+	var out := PackedVector3Array()
+	for child: Node in model.get_children():
+		var mesh := child as MeshInstance3D
+		if mesh != null and mesh.mesh != null and mesh.visible:
+			out.append_array(_triangles(mesh))
+	return out
+
+
+func _crosses(faces: PackedVector3Array, from: Vector3, to: Vector3) -> bool:
+	for i in range(0, faces.size(), 3):
+		if Geometry3D.segment_intersects_triangle(from, to, faces[i], faces[i + 1], faces[i + 2]) != null:
+			return true
+	return false
 
 
 ## Each contact body's world faces, by role.

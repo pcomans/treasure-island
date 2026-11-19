@@ -2,7 +2,11 @@ extends RefCounted
 
 # Reviewed whole-building construction; live factory assigns exact geometry contacts.
 # Footprint is read verbatim from the frozen wall record. Unmeasured detail is art inference.
-static func build(record: Dictionary, ground: Callable) -> Node3D:
+## options (from the live factory's revision config): "frontage_parking_from_m", the
+## frontage station (origin frame below) where the parking begins; north of it the
+## lawn and parking strips and stall lines are left out, so the island's own ground
+## shows round the walk, as the dated photos show. Absent: the whole frontage as before.
+static func build(record: Dictionary, ground: Callable, options: Dictionary = {}) -> Node3D:
 	var root := Node3D.new()
 	root.name = "Northpoint1232ScratchStudy"
 	var siding := _material(Color(0.65,0.69,0.66),0.86)
@@ -123,11 +127,12 @@ static func build(record: Dictionary, ground: Callable) -> Node3D:
 		roof_mesh.set_meta("physical_role", "wall" if roof_mesh.material_override == clad else "roof")
 	# Immediate frontage: ground follows actual colliding land; no terrain replacement.
 	var origin:=Vector2(-305.509,-741.527)
+	var parking_from:=float(options.get("frontage_parking_from_m",-INF))
 	for s in range(-14,15,2):
 		var center:=origin+tan*(s+1.0)
-		_ground_strip(root,center,tan,norm,2.01,0.15,3.0,ground,lawn)
+		if s+1.0>=parking_from: _ground_strip(root,center,tan,norm,2.01,0.15,3.0,ground,lawn)
 		_ground_strip(root,center,tan,norm,2.01,3.0,4.15,ground,concrete)
-		_ground_strip(root,center,tan,norm,2.01,4.15,8.50,ground,asphalt)
+		if s+1.0>=parking_from: _ground_strip(root,center,tan,norm,2.01,4.15,8.50,ground,asphalt)
 	# Long flat carport, deliberately light edge and shallow weathered fascia.
 	var canopy_a:=origin+tan*(-14.0)+norm*6.35
 	var canopy_b:=origin+tan*14.0+norm*6.35
@@ -145,7 +150,7 @@ static func build(record: Dictionary, ground: Callable) -> Node3D:
 		var p:=origin+tan*s+norm*8.35;var y:=float(ground.call(p))
 		_box(root,Vector3(p.x,(y+5.28)*0.5,p.y),Vector3(0.085,5.28-y,0.085),steel)
 		_box(root,Vector3(p.x,y+0.65,p.y),Vector3(0.095,0.18,0.095),trim)
-		_ground_strip(root,origin+tan*s,tan,norm,0.07,4.30,8.40,ground,trim)
+		if s>=parking_from: _ground_strip(root,origin+tan*s,tan,norm,0.07,4.30,8.40,ground,trim)
 	# A few small foundation shrubs; no giant foliage used to conceal architecture.
 	var green:=_material(Color(0.18,0.26,0.105),0.95)
 	for s in [-12.0,-6.0,1.5,10.5]:

@@ -53,8 +53,15 @@
             "station_m": 1.5073882265693694,
             "width_m": 1.52,
             "height_m": 1.34,
-            "center_y": 4.22,
+            "center_y": 3.833,
             "glazing": "blue"
+          },
+          {
+            "station_m": 4.2,
+            "width_m": 0.36,
+            "height_m": 2.13,
+            "center_y": 3.438,
+            "glazing": "sidelight"
           }
         ],
         "entries": [
@@ -70,24 +77,15 @@
                 "enclosure",
                 "cabinet"
               ],
-              "ground_y": 2.4373
+              "start_m": 1.3,
+              "ground_y": 2.4096
             }
-          }
-        ],
-        "screens": [
-          {
-            "station_m": 4.308125931541494,
-            "width_m": 0.08,
-            "height_m": 1.18,
-            "depth_m": 0.66,
-            "bottom_y": 2.3729999999999998,
-            "return_length_m": 1.28
           }
         ],
         "pipes": [
           {
             "station_m": 0.35,
-            "bottom_y": 2.4199,
+            "bottom_y": 2.3899,
             "top_y": 8.0,
             "style": "downspout"
           }
@@ -121,7 +119,15 @@
           -0.04809835974856351
         ],
         "upper_windows": [],
-        "lower_windows": [],
+        "lower_windows": [
+          {
+            "station_m": 1.35,
+            "width_m": 1.0,
+            "height_m": 0.9,
+            "center_y": 4.04,
+            "glazing": "blue"
+          }
+        ],
         "entries": [],
         "screens": []
       },
@@ -173,7 +179,7 @@
             "station_m": 1.8497062469484071,
             "width_m": 1.52,
             "height_m": 1.34,
-            "center_y": 4.22,
+            "center_y": 3.87,
             "glazing": "blue"
           }
         ],
@@ -183,16 +189,6 @@
             "width_m": 0.92,
             "height_m": 2.13,
             "bottom_y": 2.4099999999999997
-          }
-        ],
-        "screens": [
-          {
-            "station_m": 5.093443742999287,
-            "width_m": 0.08,
-            "height_m": 1.18,
-            "depth_m": 0.66,
-            "bottom_y": 2.4099999999999997,
-            "return_length_m": 1.28
           }
         ]
       },
@@ -230,7 +226,7 @@
         "pipes": [
           {
             "station_m": 2.3,
-            "bottom_y": 2.518,
+            "bottom_y": 2.488,
             "top_y": 8.0,
             "style": "downspout"
           }
@@ -309,7 +305,7 @@
             "station_m": 1.4033118498751538,
             "width_m": 1.52,
             "height_m": 1.34,
-            "center_y": 4.22,
+            "center_y": 3.962,
             "glazing": "blue"
           }
         ],
@@ -326,24 +322,14 @@
                 "bin_green",
                 "bin_blue"
               ],
-              "ground_y": 2.5729
+              "ground_y": 2.579
             }
-          }
-        ],
-        "screens": [
-          {
-            "station_m": 4.069362479125353,
-            "width_m": 0.08,
-            "height_m": 1.18,
-            "depth_m": 0.66,
-            "bottom_y": 2.502,
-            "return_length_m": 1.28
           }
         ],
         "pipes": [
           {
             "station_m": 0.3,
-            "bottom_y": 2.5498,
+            "bottom_y": 2.5198,
             "top_y": 8.0,
             "style": "downspout"
           }
@@ -429,7 +415,7 @@
             "station_m": 1.7785865373379985,
             "width_m": 1.52,
             "height_m": 1.34,
-            "center_y": 4.22,
+            "center_y": 4.007,
             "glazing": "blue"
           }
         ],
@@ -444,18 +430,8 @@
               "items": [
                 "condenser"
               ],
-              "ground_y": 2.5853
+              "ground_y": 2.5914
             }
-          }
-        ],
-        "screens": [
-          {
-            "station_m": 4.9302867621283495,
-            "width_m": 0.08,
-            "height_m": 1.18,
-            "depth_m": 0.66,
-            "bottom_y": 2.5469999999999997,
-            "return_length_m": 1.28
           }
         ]
       },
@@ -500,7 +476,7 @@
             "station_m": 1.8830573544106688,
             "width_m": 1.38,
             "height_m": 1.22,
-            "center_y": 4.21,
+            "center_y": 4.067,
             "glazing": "blue"
           }
         ],
@@ -702,7 +678,7 @@
             "width_m": 1.52,
             "wall_receiver": true,
             "height_m": 1.34,
-            "center_y": 4.3,
+            "center_y": 4.01,
             "glazing": "blue"
           },
           {
@@ -735,7 +711,7 @@
             "width_m": 1.52,
             "wall_receiver": true,
             "height_m": 1.34,
-            "center_y": 4.3,
+            "center_y": 4.016,
             "glazing": "blue"
           }
         ],
@@ -778,7 +754,7 @@
                 "cabinet",
                 "enclosure"
               ],
-              "ground_y": 2.5332
+              "ground_y": 2.5393
             }
           },
           {
@@ -818,7 +794,7 @@
         "pipes": [
           {
             "station_m": 0.35,
-            "bottom_y": 2.5776,
+            "bottom_y": 2.5826,
             "top_y": 8.0,
             "style": "downspout"
           }
@@ -901,9 +877,9 @@
   },
   "materials": {
     "siding_rgb": [
-      0.75,
+      0.7,
       0.79,
-      0.74
+      0.85
     ],
     "trim_rgb": [
       0.83,
@@ -1005,14 +981,14 @@
       "length_m": 14.343287349837224
     },
     "station_m": [
-      16.0,
+      16.3,
       26.7
     ],
     "depth_m": [
       2.65,
       8.1
     ],
-    "roof_y": 5.53,
+    "roof_y": 4.7,
     "posts": [
       {
         "station_m": 16.6,
@@ -1022,8 +998,8 @@
       },
       {
         "station_m": 16.6,
-        "depth_m": 7.91,
-        "bottom_y": 2.2899,
+        "depth_m": 5.6,
+        "bottom_y": 2.3373,
         "ground_label": "carport-post-2"
       },
       {
@@ -1034,8 +1010,8 @@
       },
       {
         "station_m": 22.1,
-        "depth_m": 7.91,
-        "bottom_y": 2.3219,
+        "depth_m": 5.6,
+        "bottom_y": 2.3685,
         "ground_label": "carport-post-4"
       },
       {
@@ -1046,12 +1022,71 @@
       },
       {
         "station_m": 26.1,
-        "depth_m": 7.91,
-        "bottom_y": 2.3252,
+        "depth_m": 5.6,
+        "bottom_y": 2.3718,
         "ground_label": "carport-post-6"
       }
     ],
-    "inference": "One bounded visible canopy segment. North end and post stations re-read from the March 2025 north-end and front photos through their solved cameras (housing-detail pilot, 2026-11-19): the north segment's two units stand open; depth unchanged. Length, depth and post stations are production_inference; endpoints do not claim physical endpoints or hidden attachment continuation."
+    "inference": "One bounded visible canopy segment. North end, post stations and rows, height and paint re-read from the March 2025 north-end and front photos (housing-detail pilot, 2026-11-19): the north segment's two units stand open; the canopy's inner edge at the door heads, the outer posts set back under a cantilevered front; depth unchanged. Length, depth, height and post stations are production_inference; endpoints do not claim physical endpoints or hidden attachment continuation.",
+    "underside_rgb": [
+      0.33,
+      0.37,
+      0.42
+    ],
+    "joist_spacing_m": 1.6,
+    "joist_rgb": [
+      0.27,
+      0.3,
+      0.33
+    ],
+    "fascia_rgb": [
+      0.45,
+      0.48,
+      0.51
+    ],
+    "fascia_top_rgb": [
+      0.45,
+      0.31,
+      0.21
+    ],
+    "post_bands": [
+      [
+        0.72,
+        0.85,
+        [
+          0.82,
+          0.84,
+          0.85
+        ]
+      ],
+      [
+        0.85,
+        1.03,
+        [
+          0.82,
+          0.5,
+          0.16
+        ]
+      ],
+      [
+        1.03,
+        1.14,
+        [
+          0.82,
+          0.84,
+          0.85
+        ]
+      ],
+      [
+        1.68,
+        3.0,
+        [
+          0.8,
+          0.82,
+          0.83
+        ]
+      ]
+    ]
   },
   "ground": {
     "land_key": "land:w26767313:x_-2__z_-3",
@@ -4839,39 +4874,68 @@
     }
   ],
   "study_notes": [
-    "2026-10-11 whole architecture: reuse housing_site_family complete opening/entry assemblies, no new base. Third west front20-23 and east long1/3-5/7 receive complete upper/lower opening groups. March2025 actual1232 front/end vocabulary supports broad/narrow windows and navy entries. Exact counts/cadence/anchors and hidden rear layout are production_inference, not as-built; rearGoogle is unusable/foreground-neighbor and Apple layout is undated. Ends0/8-9 and short returns2/6/14/19 retained; all earlier target frames, roof, ground, canopy and source identity unchanged. Threshold elevations use canonical local LAND and source wall bottom; independent native/playability review pending."
+    "2026-10-11 whole architecture: reuse housing_site_family complete opening/entry assemblies, no new base. Third west front20-23 and east long1/3-5/7 receive complete upper/lower opening groups. March2025 actual1232 front/end vocabulary supports broad/narrow windows and navy entries. Exact counts/cadence/anchors and hidden rear layout are production_inference, not as-built; rearGoogle is unusable/foreground-neighbor and Apple layout is undated. Ends0/8-9 and short returns2/6/14/19 retained; all earlier target frames, roof, ground, canopy and source identity unchanged. Threshold elevations use canonical local LAND and source wall bottom; independent native/playability review pending.",
+    "2026-11-19 housing-detail pilot r3: the March 2025 north-end and front photos show the west front's lower window heads level with the door heads and the upper storey's overhang just above them; lower windows moved down to the door heads (sizes kept), overhang line 4.8 (production inference)."
   ],
   "window_blinds": {
     "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): white blinds at varied drops and pale curtains behind most west-front windows, upper and lower.",
-    "rgb": [
-      0.8,
-      0.8,
-      0.78
+    "rgbs": [
+      [
+        0.7,
+        0.7,
+        0.68
+      ],
+      [
+        0.75,
+        0.73,
+        0.68
+      ],
+      [
+        0.64,
+        0.65,
+        0.66
+      ],
+      [
+        0.77,
+        0.75,
+        0.7
+      ]
     ],
-    "rail_rgb": [
-      0.66,
-      0.66,
-      0.64
+    "curtain_rgbs": [
+      [
+        0.74,
+        0.71,
+        0.64
+      ],
+      [
+        0.7,
+        0.7,
+        0.69
+      ],
+      [
+        0.66,
+        0.63,
+        0.58
+      ]
     ],
-    "curtain_rgb": [
-      0.76,
-      0.73,
-      0.67
-    ],
+    "hem_shade": 0.78,
+    "pleat_shade": 0.86,
     "drops": [
       0.0,
-      0.25,
-      0.45,
+      0.2,
+      0.35,
+      0.5,
       0.6,
-      0.6,
-      0.8,
-      1.0,
+      0.7,
+      0.85,
       1.0
     ],
-    "curtain_share": 0.2,
+    "curtain_share": 0.5,
     "curtain_widths": [
-      0.3,
-      0.42
+      0.35,
+      0.5,
+      0.7,
+      1.0
     ],
     "roughness": 0.28,
     "metallic": 0.12,
@@ -4879,6 +4943,20 @@
     "seed": 1232
   },
   "siding_course_shadow": 0.8,
+  "lower_frontage_recess": {
+    "depth_m": 0.3,
+    "band_y": 4.8,
+    "join_runs": true,
+    "soffit_rgb": [
+      0.4,
+      0.44,
+      0.49
+    ],
+    "dimensions": "production_inference from the March 2025 north-end photo (corner-board offset at the floor line); lower storey set back under the upper one on every west-front run, corners mitred, the gable ends notched"
+  },
+  "story_band": {
+    "height_m": 0.0
+  },
   "utility_kit": {
     "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227). North-end photo, first unit: a grey condenser, a dark slatted enclosure and a pale grey cabinet south of the door. Front photo: a grey cabinet with green and blue wheelie bins south of the middle segment's first door, a grey unit north of its second door, and grey units with a slatted enclosure south of the south segment's first door.",
     "door_clear_m": 0.35,
@@ -4926,7 +5004,7 @@
         "form": "enclosure",
         "size_m": [
           1.3,
-          1.5,
+          1.8,
           0.95
         ],
         "rgb": [
@@ -4969,8 +5047,8 @@
     }
   },
   "downspout_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): white downspouts at the north-west corner (stepping out round the storey band), a pair either side of the first step, and one at the south segment's first corner.",
-  "roof_vents": {
-    "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): pale vent stacks and a few box vents spread along the upper roof, most on the west slope; Esri World Imagery 2026-05-26 (z19) shows about fifteen along the ridge, some on the east slope.",
+  "roof_plane": {
+    "evidence": "The production roof of northpoint_1232_quality_model.gd: two slopes falling 0.25 m a metre from a ridge at 9.68 m.",
     "ridge": [
       [
         -299.722,
@@ -4982,7 +5060,17 @@
       ]
     ],
     "ridge_y": 9.68,
-    "slope": 0.25,
+    "slope": 0.25
+  },
+  "roof_vents": {
+    "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): grey metal vent stacks and a few box vents spread along the upper roof, most on the west slope; Esri World Imagery 2026-05-26 (z19) shows about fifteen along the ridge, some on the east slope.",
+    "rgb": [
+      0.56,
+      0.57,
+      0.58
+    ],
+    "roughness": 0.5,
+    "metallic": 0.3,
     "spacing_m": 3.1,
     "jitter_m": 0.9,
     "offset_m": [
@@ -5019,5 +5107,15 @@
         -719.657
       ]
     ]
+  },
+  "gable_rakes": {
+    "evidence": "Google Street View, March 2025, north end (heading 162.5): the north gable's roof runs out over the gable wall on a deep rake, white rake board and soffit under it. Depth production inference.",
+    "runs": [
+      8,
+      9
+    ],
+    "overhang_m": 0.4,
+    "board_m": 0.2,
+    "soffit_drop_m": 0.14
   }
 }

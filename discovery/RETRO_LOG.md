@@ -27760,3 +27760,8 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: the batch's main is the previous batch's final commit, so that batch's fixed-pose captures of bacb372a served as the look check's "before" with no new runs; the author's own door view plans, filtered by name into one batch plan, gave the earlier-fixed door pairs without a new script.
 - What did not work well: the 19a capture helper stripped a run's "Cn-" prefix with a one-digit pattern, so the tenth run's images went to a folder of the wrong name and needed moving before the diff.
 - What the team should change next time: name capture output folders explicitly instead of deriving them from run names, and cite the main-run log lines beside every page-check miss in the hand-back.
+
+### ti-visual-review — housing detail pilot r2 (2026-11-19)
+- Worked: the matched photo-camera sheets and full-resolution raw captures let me compare directly.
+- Didn't: the 5.5x enlarged crop hid the floor-line overhang, and I only saw it when I enlarged the north-end photo myself.
+- Change: put a 4x crop of the reference next to every zoom sheet, and include an end-wall view with each first render.
