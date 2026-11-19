@@ -527,6 +527,9 @@ export function placeStreetClutter({
   grounded,
   surfaceAt,
   chunks,
+  // The visible ground as street detail reads it (generateStreetDetail's groundAt), or
+  // null to index the chunks here.
+  groundAt: sharedGroundAt = null,
   parkingLots = new Map(),
   parkingAisles = [],
   roads = null,
@@ -655,7 +658,7 @@ export function placeStreetClutter({
     ...pilotShapes.map(({ zone, contains }) => ({ zone, contains, rules: zone.clutter ?? [] })),
     { zone: { id: "island", island: true }, contains: () => true, rules: islandRules },
   ];
-  const groundAt = visibleGroundIndex(chunks);
+  const groundAt = sharedGroundAt ?? visibleGroundIndex(chunks);
   // The occupied items on a grid of their reach, for the site checks: each one
   // in every cell its points' box, grown by its radius, touches.
   const occupiedCells = new Map();

@@ -18,7 +18,11 @@ extends SceneTree
 ## and the recess floor meeting edge to edge, on flat land and on land rising 0.2 m into
 ## the building across the recess (the sill clears the land at the recess's back); a
 ## doorstep stopping 0.3 m short of a side wall runs on to it, one 0.7 m short does not,
-## and every landing is listed as drawn (Ctx.landings, which the street generators read).
+## one 0.45 m short on land rising toward the wall stands over the land along all of
+## its run, and an open_sided wing is no wall; every landing is listed as drawn, with
+## its door's recess floor (Ctx.landings, which the street generators read); and the
+## gate a built instance must pass (_check_built, also tools/export_door_landings.gd's)
+## refuses terrain samples off the land and triangles with no clear facing.
 ## The family cases run its own build steps (_build_all) on a 20 x 10 m footprint, so
 ## expected refusals are read from its error list. Behaviour only.
 
@@ -56,7 +60,7 @@ func _run() -> void:
 	for failure: String in failures:
 		print("FAIL: mid-rise wall detail: ", failure)
 	if failures.is_empty():
-		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's rounded bend held clear of its wall's top; the family refuses equipment off its edge or with an unknown role, and a duct off its wall's top or off the roof; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops; every door kind and a garage is paved from its landing to the door on flat and rising land, its landing and recess floor meeting edge to edge; a doorstep runs on to a side wall 0.3 m off and not to one 0.7 m off; every landing is listed as drawn")
+		print("PASS: mid-rise wall detail: the equipment kit lays out the same boxes for a spec and others for another seed, refuses bad specs and keeps its boxes ordered, inside their stations, the signs at the foot and the duct's rounded bend held clear of its wall's top; the family refuses equipment off its edge or with an unknown role, and a duct off its wall's top or off the roof; an outward eave closes both ends; a hood's min_w skips the narrow opening; grid blinds follow their seed and drops; every door kind and a garage is paved from its landing to the door on flat and rising land, its landing and recess floor meeting edge to edge; a doorstep runs on to a side wall 0.3 m off and not to one 0.7 m off, over rising land stands over all of its run, and keeps its width beside an open_sided wing; every landing is listed as drawn, with its door's recess floor; the built-instance gate refuses terrain misses and unfaced triangles")
 	quit(0 if failures.is_empty() else 1)
 
 
@@ -71,6 +75,9 @@ static func run_checks() -> Array:
 	_check_door_floors(failures, 0.0)
 	_check_door_floors(failures, RISE_M)
 	_check_side_wall(failures)
+	_check_side_wall_rising(failures)
+	_check_side_wall_open(failures)
+	_check_built_gate(failures)
 	return failures
 
 
@@ -270,6 +277,8 @@ static func _check_door_floors(failures: Array, rise: float) -> void:
 		_expect(failures, not listed.is_empty() and absf(float(listed.top_y_m) - sill) < 0.001 and _extent_is(listed, drawn), "a %s's landing on %s is listed as drawn at %.2f m over %s: %s" % [kind, land, sill, drawn, listed])
 		# A face key repeats on every block of a row, so a listed landing names its block.
 		_expect(failures, str(listed.get("block", "")) == "main", "a %s's listed landing on %s names its block: %s" % [kind, land, listed])
+		# And it lists the door's recess floor, between the jambs from the wall line to the door.
+		_expect(failures, _ring_extent_is(listed.get("recess_xz"), [s0, s1, 0.0, depth]), "a %s's listed recess floor on %s spans %s: %s" % [kind, land, [s0, s1, 0.0, depth], listed.get("recess_xz")])
 
 
 ## A doorstep 0.3 m short of a side wall (the wing at x 4, an inside corner) runs on to
@@ -299,14 +308,71 @@ static func _check_side_wall(failures: Array) -> void:
 	_expect(failures, open.size() == 35 and not far.is_empty() and _extent_is(far, [13.5, 15.3, 0.8, 2.0]), "a doorstep 0.7 m short of a side wall keeps its width (%d of 35 points of its gap paved at the sill; listed %s)" % [35 - open.size(), far])
 
 
+## The side-wall footprint of _check_side_wall with the wing ending at x `wing_to` and
+## `wing` merged into its block: a door at x 4.0-6.4 on the main block, set 2 m back,
+## whose 1.8 m doorstep (x 4.3-6.1, 1.2 m deep) stops short of the wing's side.
+static func _side_wall_config(wing_to: float, wing: Dictionary = {}) -> Dictionary:
+	var wing_block := {"id": "wing", "storeys": 2, "ground_h": 3.0, "clip": [{"edge": 0, "s_max": wing_to}], "parapet": {"h": 0.0}, "faces": {"e0": "steps", "default": "wall"}}
+	wing_block.merge(wing, true)
+	var cfg := _config({"blocks": [
+		wing_block,
+		{"id": "main", "storeys": 2, "ground_h": 3.0, "clip": [{"edge": 0, "s_min": wing_to, "s_max": 16.0, "min": 2.0}], "parapet": {"h": 0.0}, "faces": {"e0": "steps", "default": "wall"}},
+		{"id": "east", "storeys": 2, "ground_h": 3.0, "clip": [{"edge": 0, "s_min": 16.0}], "parapet": {"h": 0.0}, "faces": {"e0": "steps", "default": "wall"}},
+	]})
+	cfg.schemes["steps"] = {"material": "render", "module": 60.0, "ground": {"kind": "blank"}, "upper": "blank", "features": [
+		{"type": "entry", "from": 4.0, "to": 6.4, "door": {"kind": "unit", "w": 1.0, "h": 2.2}, "landing": {"w": 1.8, "depth": 1.2}},
+	]}
+	return cfg
+
+
+## A doorstep 0.45 m short of a side wall, on land that rises 0.2 m over its last
+## 0.1-0.15 m to the wall (flat elsewhere): the step runs on to the wall, and its top
+## stands over the land along all of that run, so no land shows on it.
+static func _check_side_wall_rising(failures: Array) -> void:
+	var land := _records_west_rise(0.2, 3.9, 4.0)
+	var ctx := _build(_side_wall_config(3.85), 0.0, land)
+	if not ctx.errors.is_empty():
+		failures.append("the doorstep on land rising to a side wall builds: %s" % [ctx.errors])
+		return
+	var near := _listed(ctx, 5.2, 2.0)
+	var top := float(near.get("top_y_m", -INF))
+	var gap := _misses(_surfaces(ctx, 0.0, land), [[3.87, 4.28, 0.85, 1.95]], top)
+	_expect(failures, _extent_is(near, [3.85, 6.1, 0.8, 2.0]) and top >= 0.3 - 0.0001 and gap.is_empty(), "a doorstep run on to a side wall over rising land stands over it (top %.3f m, 0.3 needed; %d points of the run not paved at the top: %s; listed %s)" % [top, gap.size(), gap.slice(0, 3), near])
+
+
+## The same doorstep 0.3 m short of a wing that is an open_sided canopy: the wing has no
+## wall there, so the step keeps its own width.
+static func _check_side_wall_open(failures: Array) -> void:
+	var ctx := _build(_side_wall_config(4.0, {"open_sided": true}))
+	if not ctx.errors.is_empty():
+		failures.append("the doorstep beside an open_sided wing builds: %s" % [ctx.errors])
+		return
+	var near := _listed(ctx, 5.2, 2.0)
+	_expect(failures, _extent_is(near, [4.3, 6.1, 0.8, 2.0]), "a doorstep beside an open_sided wing keeps its width (listed %s)" % [near])
+
+
+## The gate a built instance must pass before it is drawn, which the landings' exporter
+## runs too: a terrain sample off the land and a triangle with no clear facing each fail it.
+static func _check_built_gate(failures: Array) -> void:
+	var clean := MIDRISE.Ctx.new()
+	MIDRISE._check_built(clean)
+	var missed := MIDRISE.Ctx.new()
+	missed.terrain_misses = 2
+	MIDRISE._check_built(missed)
+	var unfaced := MIDRISE.Ctx.new()
+	unfaced.bucket("wall", "render").misaligned = 1
+	MIDRISE._check_built(unfaced)
+	_expect(failures, clean.errors.is_empty() and missed.errors.size() == 1 and str(missed.errors[0]).contains("terrain") and unfaced.errors.size() == 1 and str(unfaced.errors[0]).contains("facing"), "the built-instance gate refuses terrain misses and unfaced triangles (clean %s, missed %s, unfaced %s)" % [clean.errors, missed.errors, unfaced.errors])
+
+
 ## Every surface the build drew, with its bucket key, and the land under it (_records).
-static func _surfaces(ctx: MIDRISE.Ctx, rise: float) -> Array:
+static func _surfaces(ctx: MIDRISE.Ctx, rise: float, records: Dictionary = {}) -> Array:
 	var tris: Array = []
 	for key: String in ctx.buckets:
 		var bucket: MIDRISE.Bucket = ctx.buckets[key]
 		for i in range(0, bucket.vertices.size(), 3):
 			tris.append([bucket.vertices[i], bucket.vertices[i + 1], bucket.vertices[i + 2], key])
-	var land: Dictionary = _records(rise).chunks[0].records[0]
+	var land: Dictionary = (records if not records.is_empty() else _records(rise)).chunks[0].records[0]
 	for i in range(0, (land.indices as Array).size(), 3):
 		var corners: Array = []
 		for k in 3:
@@ -346,9 +412,16 @@ static func _listed(ctx: MIDRISE.Ctx, x: float, wall_z: float) -> Dictionary:
 
 ## Whether a listed landing's top spans [x0, x1, z0, z1] (to 1 mm).
 static func _extent_is(landing: Dictionary, extent: Array) -> bool:
+	return not landing.is_empty() and _ring_extent_is(landing.top_xz, extent)
+
+
+## Whether plan corners span [x0, x1, z0, z1] (to 1 mm).
+static func _ring_extent_is(ring: Variant, extent: Array) -> bool:
+	if not ring is Array or (ring as Array).is_empty():
+		return false
 	var lo := Vector2(INF, INF)
 	var hi := Vector2(-INF, -INF)
-	for corner: Array in landing.top_xz:
+	for corner: Array in ring:
 		lo = lo.min(Vector2(float(corner[0]), float(corner[1])))
 		hi = hi.max(Vector2(float(corner[0]), float(corner[1])))
 	return absf(lo.x - float(extent[0])) < 0.001 and absf(hi.x - float(extent[1])) < 0.001 and absf(lo.y - float(extent[2])) < 0.001 and absf(hi.y - float(extent[3])) < 0.001
@@ -407,8 +480,8 @@ static func _errors(cfg: Dictionary) -> Array:
 
 ## The producer's build steps for a config on the hand-built footprint and land
 ## (rising `rise` into the building across the recess, _records).
-static func _build(cfg: Dictionary, rise := 0.0) -> MIDRISE.Ctx:
-	var records := _records(rise)
+static func _build(cfg: Dictionary, rise := 0.0, land: Dictionary = {}) -> MIDRISE.Ctx:
+	var records := land if not land.is_empty() else _records(rise)
 	var ctx := MIDRISE.Ctx.new()
 	ctx.cfg = cfg
 	ctx.source = SOURCE
@@ -442,6 +515,21 @@ static func _config(extra: Dictionary, grid_face: Dictionary = {}) -> Dictionary
 	}
 	cfg.merge(extra, true)
 	return cfg
+
+
+## _records with its land replaced: flat at y 0 east of x_lo, `height` west of x_hi,
+## a slope between (land rising toward a wing at the footprint's west end).
+static func _records_west_rise(height: float, x_hi: float, x_lo: float) -> Dictionary:
+	var records := _records()
+	var vertices: Array = []
+	for column: Array in [[-50.0, height], [x_hi, height], [x_lo, 0.0], [70.0, 0.0]]:
+		vertices.append_array([float(column[0]), float(column[1]), -50.0, float(column[0]), float(column[1]), 60.0])
+	var indices: Array = []
+	for strip in 3:
+		var k := strip * 2
+		indices.append_array([k, k + 2, k + 3, k, k + 3, k + 1])
+	records.chunks = [{"records": [{"feature_kind": "land_ground", "vertices": vertices, "indices": indices}]}]
+	return records
 
 
 ## The footprint's wall record (one quad run per edge, outward normals), its roof

@@ -207,8 +207,10 @@ class Ctx:
 	var ring := PackedVector2Array()
 	## Every entry landing and ramp as drawn: {block, face, kind, station_m, top_y_m,
 	## top_xz} (stations along the block's face, plan corners in world x/z; a face key
-	## repeats on every block of a row). tools/export_door_landings.gd writes them out for the
-	## street generators, which keep plants off them and pave the street ground's grass beside them.
+	## repeats on every block of a row), and a door's recess floor (recess_xz, between
+	## its jambs from the wall line to the door). tools/export_door_landings.gd writes
+	## them out for the street generators, which keep plants off them, pave the street
+	## ground's grass beside them and stop park ground at them.
 	var landings: Array = []
 
 	func bucket(role: String, mat: String) -> Bucket:
@@ -231,13 +233,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, chunks: A
 	ctx.cfg = cfg
 	ctx.source = source
 	_build_all(ctx, wall, roof, chunks)
-	if ctx.terrain_misses > 0:
-		ctx.errors.append("%d terrain samples fell outside the frozen land" % ctx.terrain_misses)
-	var misaligned := 0
-	for key: String in ctx.buckets:
-		misaligned += (ctx.buckets[key] as Bucket).misaligned
-	if misaligned > 0:
-		ctx.errors.append("%d triangles had no clear facing" % misaligned)
+	_check_built(ctx)
 	var triangles := 0
 	if ctx.errors.is_empty():
 		triangles = _emit(ctx, root)
@@ -249,6 +245,20 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, chunks: A
 	root.set_meta("midrise_triangles", triangles)
 	root.set_meta("midrise_skipped_features", ctx.skipped.duplicate())
 	return root
+
+
+## The checks a built instance must pass before it is drawn: a terrain sample off the
+## frozen land or a triangle with no clear facing drops the building (build).
+## tools/export_door_landings.gd runs them too, so it never lists a dropped building's
+## landings.
+static func _check_built(ctx: Ctx) -> void:
+	if ctx.terrain_misses > 0:
+		ctx.errors.append("%d terrain samples fell outside the frozen land" % ctx.terrain_misses)
+	var misaligned := 0
+	for key: String in ctx.buckets:
+		misaligned += (ctx.buckets[key] as Bucket).misaligned
+	if misaligned > 0:
+		ctx.errors.append("%d triangles had no clear facing" % misaligned)
 
 
 static func _build_all(ctx: Ctx, wall: Dictionary, roof: Dictionary, chunks: Array) -> void:
@@ -464,13 +474,15 @@ static func _ground_max(ctx: Ctx, face: Face, s0: float, s1: float, inward := 0.
 	return high
 
 
-## Landing top above the highest terrain under its pad, skirts, any porch floor and
-## the door's recess (door_w wide, recess deep), whose floor is the landing's paving.
-static func _landing(ctx: Ctx, face: Face, center: float, width: float, depth: float, inside: float, door_w := 0.0, recess := 0.0) -> Dictionary:
+## Landing top above the highest terrain under its pad (span [l0, l1] along the face,
+## _step_span), skirts, any porch floor and the door's recess (door_w wide round
+## center, recess deep), whose floor is the landing's paving.
+static func _landing(ctx: Ctx, face: Face, span: Vector2, depth: float, inside: float, center: float, door_w := 0.0, recess := 0.0) -> Dictionary:
 	var high := -INF
 	var low := INF
+	var width := span.y - span.x
 	for i in 7:
-		var s := center - width * 0.5 - 0.3 + (width + 0.6) * float(i) / 6.0
+		var s := span.x - 0.3 + (width + 0.6) * float(i) / 6.0
 		for j in 7:
 			var d := inside - (inside + depth + 0.3) * float(j) / 6.0
 			var y := _ground_y(ctx, face.a + face.d * s - face.n * d)
@@ -1307,7 +1319,9 @@ static func _openings(ctx: Ctx, face: Face, bay: Dictionary) -> Array:
 			var porch := str(door.get("kind", "unit")) == "porch"
 			var recess := float(door.get("recess", 2.2 if porch else 0.3))
 			var inside := recess if porch else 0.0
-			var land := _landing(ctx, face, center, float(landing.get("w", w + 1.0)), float(landing.get("depth", 1.6)), inside, w, recess)
+			var land_d := float(landing.get("depth", 1.6))
+			var span := _step_span(ctx, face, feature, center, float(landing.get("w", w + 1.0)), land_d)
+			var land := _landing(ctx, face, span, land_d, inside, center, w, recess)
 			if str(landing.get("at", "grade")) == "floor":
 				var lowest := minf(float(land.y) - 0.1, float(land.y) - float(land.drop) + 0.12)
 				land = {"y": block.floors[0], "drop": maxf(0.25, block.floors[0] - lowest + 0.12)}
@@ -2224,19 +2238,15 @@ static func _door(ctx: Ctx, face: Face, spec: Dictionary, wall_mat: String, s0: 
 	# the jambs to the door, so the ground under the building never shows at the
 	# door's foot. Each edge where the two meet takes the other's corner stations,
 	# so they meet edge to edge.
-	var l0 := c - land_w * 0.5
-	var l1 := c + land_w * 0.5
+	var span := _step_span(ctx, face, spec, c, land_w, land_d)
+	var l0 := span.x
+	var l1 := span.y
 	var ramp: Dictionary = spec.get("ramp", {})
-	# A plain doorstep that stops short of a side wall (an inside corner) runs on to
-	# it, so no strip of ground shows between the step and the wall. A deck's sides
-	# keep their rails, screens and ramp.
-	if ramp.is_empty() and not bool(spec.get("rails", false)) and not bool(spec.get("screens", false)):
-		l0 -= _side_wall(ctx, face, l0, land_d, -1.0)
-		l1 += _side_wall(ctx, face, l1, land_d, 1.0)
 	_pad(ctx, face, s0, s1, 0.0, depth, y0, 0.0, [l0, l1])
 	_pad(ctx, face, l0, l1, -land_d, 0.0, y0, drop, [], [s0, s1])
 	ctx.landings.append({"block": face.block.id, "face": face.key, "kind": kind, "station_m": [s0, s1], "top_y_m": y0,
-		"top_xz": [face.point(l0, y0, -land_d), face.point(l1, y0, -land_d), face.point(l1, y0, 0.0), face.point(l0, y0, 0.0)].map(func(p: Vector3) -> Array: return [p.x, p.z])})
+		"top_xz": [face.point(l0, y0, -land_d), face.point(l1, y0, -land_d), face.point(l1, y0, 0.0), face.point(l0, y0, 0.0)].map(func(p: Vector3) -> Array: return [p.x, p.z]),
+		"recess_xz": [face.point(s0, y0, 0.0), face.point(s1, y0, 0.0), face.point(s1, y0, depth), face.point(s0, y0, depth)].map(func(p: Vector3) -> Array: return [p.x, p.z])})
 	if not ramp.is_empty():
 		_ramp(ctx, face, ramp, c, land_w, land_d, y0)
 	if bool(spec.get("rails", not ramp.is_empty())):
@@ -2290,12 +2300,29 @@ static func _pad(ctx: Ctx, face: Face, s0: float, s1: float, d0: float, d1: floa
 	ground.quad(face.point(s1, y, d0), face.point(s1, y, d1), face.point(s1 + run, y - drop, d1), face.point(s1 + run, y - drop, d0 - run), along + Vector3.UP)
 
 
+## A doorstep's span [l0, l1] along its face: land_w wide round c. A plain step (no
+## ramp, rails or screens) that stops short of a side wall (an inside corner) runs on
+## to it, so no strip of ground shows between the step and the wall; a deck's sides
+## keep their rails, screens and ramp. The step's height is sampled over this span
+## (_openings, _landing) and the step drawn over it (_door).
+static func _step_span(ctx: Ctx, face: Face, spec: Dictionary, c: float, land_w: float, land_d: float) -> Vector2:
+	var l0 := c - land_w * 0.5
+	var l1 := c + land_w * 0.5
+	var ramp: Dictionary = spec.get("ramp", {})
+	if ramp.is_empty() and not bool(spec.get("rails", false)) and not bool(spec.get("screens", false)):
+		l0 -= _side_wall(ctx, face, l0, land_d, -1.0)
+		l1 += _side_wall(ctx, face, l1, land_d, 1.0)
+	return Vector2(l0, l1)
+
+
 ## How far a landing's side edge at station s must move along the face (sign -1 back
 ## toward the face's start, 1 on toward its end) to meet a wall of the building
 ## standing across its path, less than SIDE_WALL_REACH_M off at every depth of the
 ## landing (its near, middle and outer lines), else 0. A wall that leaves any of those
-## lines open (a pilaster, a slanting corner) is not met.
+## lines open (a pilaster, a slanting corner) is not met, and neither is a block with
+## no wall there: a pergola, an open_sided canopy or an edge of posts (an open scheme).
 static func _side_wall(ctx: Ctx, face: Face, s: float, land_d: float, sign: float) -> float:
+	var schemes: Dictionary = ctx.cfg.get("schemes", {})
 	var reach := 0.0
 	for k in 3:
 		var out := 0.05 + (land_d - 0.1) * float(k) / 2.0
@@ -2303,11 +2330,14 @@ static func _side_wall(ctx: Ctx, face: Face, s: float, land_d: float, sign: floa
 		var to := from + face.d * (sign * SIDE_WALL_REACH_M)
 		var hit := INF
 		for block: Block in ctx.blocks:
-			if block.stacked:
+			if block.stacked or block.cfg.has("pergola") or bool(block.cfg.get("open_sided", false)):
 				continue
 			for i in block.poly.size():
 				var cross: Variant = Geometry2D.segment_intersects_segment(from, to, block.poly[i], block.poly[(i + 1) % block.poly.size()])
-				if cross != null:
+				if cross == null:
+					continue
+				var scheme: Variant = schemes.get(_scheme_name(block, i, str(_face_key(ctx, block, i, false)[0])))
+				if not (scheme is Dictionary and (scheme as Dictionary).has("open")):
 					hit = minf(hit, from.distance_to(cross))
 		if hit == INF:
 			return 0.0

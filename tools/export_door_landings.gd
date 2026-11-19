@@ -5,9 +5,10 @@ extends SceneTree
 ##   tools/godot --headless --path . --script tools/export_door_landings.gd -- --check
 ##
 ## Builds every mid-rise instance of game/resources/housing_family/live_instances.json
-## through the family's own build steps (midrise_family.gd _build_all, with the frozen
-## wall and land records of generated/world/chunks) and writes each landing and ramp it
-## draws, as plan corners in world x/z, to data/street_detail/door_landings.json.
+## through the family's own build steps (midrise_family.gd _build_all and the runtime's
+## _check_built, with the frozen wall and land records of generated/world/chunks) and
+## writes each landing and ramp it draws, as plan corners in world x/z, to
+## data/street_detail/door_landings.json. A building that does not build fails the run.
 ## tools/build_godot_world.mjs reads that file: no plant, hedge or prop stands on a
 ## landing, the street ground's grass and mulch beside one are paved, and a sidewalk
 ## a landing stands up out of is cut at its outline.
@@ -84,8 +85,10 @@ static func build_landings() -> Dictionary:
 		ctx.cfg = JSON.parse_string(FileAccess.get_file_as_string(item.config))
 		ctx.source = source
 		MIDRISE._build_all(ctx, records[wall_key], records[roof_key], chunks)
+		# The runtime's own gate (MIDRISE.build): a building it would drop lists nothing.
+		MIDRISE._check_built(ctx)
 		if not ctx.errors.is_empty():
-			errors.append("%s does not build: %s" % [source, ctx.errors])
+			errors.append("%s does not build, so the game would not draw it: %s" % [source, ctx.errors])
 			continue
 		buildings += 1
 		for landing: Dictionary in ctx.landings:
@@ -99,19 +102,38 @@ static func build_landings() -> Dictionary:
 
 
 static func rounded(source: String, landing: Dictionary) -> Dictionary:
-	var corners: Array = []
-	for corner: Array in landing.top_xz:
-		corners.append([snappedf(float(corner[0]), 0.001), snappedf(float(corner[1]), 0.001)])
 	var heights: Variant = landing.top_y_m
-	return {
+	var out := {
 		"source_key": source,
 		"block": str(landing.block),
 		"face": str(landing.face),
 		"kind": str(landing.kind),
 		"station_m": [snappedf(float(landing.station_m[0]), 0.001), snappedf(float(landing.station_m[1]), 0.001)],
 		"top_y_m": [snappedf(float(heights[0]), 0.001), snappedf(float(heights[1]), 0.001)] if heights is Array else snappedf(float(heights), 0.001),
-		"top_xz": corners,
+		"top_xz": rounded_ring(landing.top_xz),
 	}
+	if landing.has("recess_xz"):
+		out["recess_xz"] = rounded_ring(landing.recess_xz)
+	return out
+
+
+static func rounded_ring(ring: Array) -> Array:
+	var corners: Array = []
+	for corner: Array in ring:
+		corners.append([snappedf(float(corner[0]), 0.001), snappedf(float(corner[1]), 0.001)])
+	return corners
+
+
+## Whether two rings of plan corners are the same, corner by corner, to TOLERANCE_M.
+static func same_ring(a: Variant, b: Variant) -> bool:
+	if not a is Array or not b is Array or (a as Array).size() != (b as Array).size():
+		return false
+	for i in (a as Array).size():
+		var p: Variant = a[i]
+		var q: Variant = b[i]
+		if not p is Array or not q is Array or absf(float(p[0]) - float(q[0])) > TOLERANCE_M or absf(float(p[1]) - float(q[1])) > TOLERANCE_M:
+			return false
+	return true
 
 
 ## A landing's name: source, block, face, kind and stations (a door's, or its ramp's).
@@ -127,10 +149,10 @@ static func text_of(landings: Array) -> String:
 	return "{\n  \"landings\": [\n%s\n  ],\n  \"notes\": %s,\n  \"producer\": %s,\n  \"schema_version\": %s\n}\n" % [
 		",\n".join(lines),
 		JSON.stringify([
-			"Every mid-rise entry landing (door kind unit, lobby or porch) and ramp the game builds, as drawn: block and face name the building block and its footprint edge, station_m the door's (or ramp's) span along that block's face, top_xz its top's plan corners in world x/z (metres, +x east, +z south), top_y_m its top height (a ramp's at each end).",
-			"tools/build_godot_world.mjs reads this file: no plant, hedge or prop stands on a landing, the street ground's grass and mulch beside one are paved, and a sidewalk a landing stands up out of is cut at its outline. Regenerate it with tools/export_door_landings.gd after a change that moves a mid-rise door; its --check (tools/test.sh) fails while the file differs from what the game builds.",
+			"Every mid-rise entry landing (door kind unit, lobby or porch) and ramp the game builds, as drawn: block and face name the building block and its footprint edge, station_m the door's (or ramp's) span along that block's face, top_xz its top's plan corners in world x/z (metres, +x east, +z south), top_y_m its top height (a ramp's at each end), and a door's recess_xz the plan corners of its recess floor, between the jambs from the wall line to the door, at the same height.",
+			"tools/build_godot_world.mjs reads this file: no plant, hedge or prop stands on a landing, the street ground's grass and mulch beside one are paved, park and lot ground stops at a landing's top and a door's recess floor, and a sidewalk a landing stands up out of is cut at its outline. Regenerate it with tools/export_door_landings.gd after a change that moves a mid-rise door; its --check (tools/test.sh) fails while the file differs from what the game builds.",
 		]),
-		JSON.stringify("tools/export_door_landings.gd: game/scripts/world/facades/midrise_family.gd _build_all over game/resources/housing_family/live_instances.json and the frozen wall and land records of generated/world/chunks"),
+		JSON.stringify("tools/export_door_landings.gd: game/scripts/world/facades/midrise_family.gd _build_all and _check_built over game/resources/housing_family/live_instances.json and the frozen wall and land records of generated/world/chunks"),
 		JSON.stringify(SCHEMA),
 	]
 
@@ -157,12 +179,8 @@ static func compare(built: Array, committed: Variant) -> Array[String]:
 			problems.append("%s: the game builds it, the file lacks it" % key)
 			continue
 		var other: Dictionary = held[key]
-		var moved := not other.get("top_xz") is Array or (other.top_xz as Array).size() != (landing.top_xz as Array).size()
-		if not moved:
-			for i in (landing.top_xz as Array).size():
-				var a: Array = landing.top_xz[i]
-				var b: Variant = other.top_xz[i]
-				moved = moved or not b is Array or absf(float(a[0]) - float(b[0])) > TOLERANCE_M or absf(float(a[1]) - float(b[1])) > TOLERANCE_M
+		var moved := not same_ring(landing.top_xz, other.get("top_xz")) or landing.has("recess_xz") != other.has("recess_xz") \
+			or (landing.has("recess_xz") and not same_ring(landing.recess_xz, other.recess_xz))
 		var ya: Array = landing.top_y_m if landing.top_y_m is Array else [landing.top_y_m]
 		var yb: Array = other.top_y_m if other.get("top_y_m") is Array else [other.get("top_y_m", INF)]
 		moved = moved or ya.size() != yb.size()
@@ -170,7 +188,7 @@ static func compare(built: Array, committed: Variant) -> Array[String]:
 			for i in ya.size():
 				moved = moved or absf(float(ya[i]) - float(yb[i])) > TOLERANCE_M
 		if moved:
-			problems.append("%s: the game builds it at %s, top %s; the file has %s, top %s" % [key, landing.top_xz, landing.top_y_m, other.get("top_xz"), other.get("top_y_m")])
+			problems.append("%s: the game builds it at %s, top %s, recess %s; the file has %s, top %s, recess %s" % [key, landing.top_xz, landing.top_y_m, landing.get("recess_xz"), other.get("top_xz"), other.get("top_y_m"), other.get("recess_xz")])
 	for key: String in held:
 		if not seen.has(key):
 			problems.append("%s: the file holds it, the game no longer builds it" % key)

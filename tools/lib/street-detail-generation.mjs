@@ -897,7 +897,8 @@ export function walkUpOccupancy(sides) {
 
 // The mid-rise family's entry landings and ramps as the game draws them
 // (tools/export_door_landings.gd): {source_key, block, face, kind, station_m,
-// top_y_m, top_xz}, top_xz the corners of its top's plan ring in world [x, z].
+// top_y_m, top_xz, recess_xz}, top_xz the corners of its top's plan ring in world
+// [x, z] and a door's recess_xz those of its recess floor (a ramp has none).
 export function loadDoorLandings(projectRoot) {
   const document = readJson(projectRoot, STREET_DETAIL_INPUTS.door_landings);
   invariant(document?.schema_version === DOOR_LANDINGS_SCHEMA && Array.isArray(document.landings), `${STREET_DETAIL_INPUTS.door_landings} must be a ${DOOR_LANDINGS_SCHEMA} document`);
@@ -907,10 +908,32 @@ export function loadDoorLandings(projectRoot) {
     invariant(/^[wr]\d+$/u.test(landing?.source_key ?? "") && typeof landing.block === "string" && landing.block !== "" && typeof landing.face === "string" && ["unit", "lobby", "porch", "ramp"].includes(landing.kind), `Door landing ${name} needs a source_key, block, face and kind`);
     invariant(Array.isArray(landing.station_m) && landing.station_m.length === 2 && landing.station_m.every(isFiniteNumber), `Door landing ${name} needs its two stations`);
     invariant(Array.isArray(landing.top_xz) && landing.top_xz.length >= 3 && landing.top_xz.every(isXZ), `Door landing ${name} needs at least three [x, z] corners`);
+    // The street ground grows each top as a convex ring (grownConvexRing).
+    invariant(convexRing(landing.top_xz), `Door landing ${name}'s top must be a convex ring with an area`);
+    // A door's recess floor (between its jambs, to the door), where park ground stops too.
+    invariant(landing.kind === "ramp" ? landing.recess_xz === undefined
+      : Array.isArray(landing.recess_xz) && landing.recess_xz.length >= 3 && landing.recess_xz.every(isXZ) && convexRing(landing.recess_xz),
+    `Door landing ${name} needs its recess floor as a convex ring (recess_xz), a ramp none`);
     invariant(!names.has(doorLandingId(landing)), `Door landing ${doorLandingId(landing)} is listed twice`);
     names.add(doorLandingId(landing));
   }
   return document.landings;
+}
+
+// Whether plan corners [x, z] make a convex ring with an area: every turn the same
+// way round (a straight run between turns is allowed).
+function convexRing(points) {
+  let area = 0;
+  let sign = 0;
+  for (let index = 0; index < points.length; index += 1) {
+    const [a, b, c] = [points[index], points[(index + 1) % points.length], points[(index + 2) % points.length]];
+    area += a[0] * b[1] - b[0] * a[1];
+    const turn = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]);
+    if (Math.abs(turn) < 1e-9) continue;
+    if (sign !== 0 && Math.sign(turn) !== sign) return false;
+    sign = Math.sign(turn);
+  }
+  return Math.abs(area) / 2 > 1e-6 && sign !== 0;
 }
 
 // A door landing's name in exclusions and audits: source, block, face, kind and stations.
@@ -1171,7 +1194,22 @@ export function generateStreetDetail({
   const landingShapes = hardShapes.filter((shape) => shape.component === "landing");
   const nonLandingShapes = hardShapes.filter((shape) => shape.component !== "landing");
   // The visible ground (draped areas, raised street ground, land) a planted row rests on.
-  const groundAt = visibleGroundIndex(chunks);
+  const drawnGroundAt = visibleGroundIndex(chunks);
+  // The street ground stops its park and lot layers at a door landing's outline and a
+  // door's recess when it draws them. Inside either the plans read such a layer as laid
+  // out (the street ground's surfaceAt), so a bed's plan, and so every plant round it,
+  // is the same as without the cut; nothing is placed there either way.
+  const doorFloors = [...landingShapes.map((shape) => shape.points), ...doorLandings.filter((landing) => landing.recess_xz)
+    .map((landing) => [...landing.recess_xz, landing.recess_xz[0]])].map((points) => ({ points, box: boxOfXZ(points) }));
+  const groundAt = (xz) => {
+    const drawn = drawnGroundAt(xz);
+    if (!doorFloors.some((floor) => xz[0] >= floor.box[0] && xz[0] <= floor.box[1] && xz[1] >= floor.box[2] && xz[1] <= floor.box[3] &&
+      pointInRing(xz, floor.points, true))) return drawn;
+    const laid = ground.surfaceAt(xz);
+    if (!laid || laid.kind !== "street_paint" || laid.material_key === "street_parking") return drawn;
+    const y = grounded(xz).y + laid.bias_m;
+    return drawn && drawn.y > y + 1e-4 ? drawn : { y, material_key: laid.material_key };
+  };
 
   const objects = [...playableObjects.values()];
   const buildingItems = objects
@@ -2425,6 +2463,8 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     chunks,
+    // The plans' view of the ground (park layers read as laid out inside door landings).
+    groundAt,
     parkingLots,
     parkingAisles,
     roads,

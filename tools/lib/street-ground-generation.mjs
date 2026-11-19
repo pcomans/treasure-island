@@ -3230,8 +3230,24 @@ export function generateStreetGround({
       parkLayers.push({ zone, layer, polygon: own, index: polygonIndex(own), box: boxOfMulti(own), lift: surfaces.lift_m, sources: surfaces.source_keys });
     }
   }
+  // A park or lot layer is never drawn on a door landing or in a door's recess: it
+  // stops at their outlines, with no margin, so a step standing in a bed, a lawn or a
+  // walk shows whole up to the door. The layer's own outline (parkLayers, parkAt)
+  // stays whole for whatever is placed on it.
+  const recessRings = doorLandings.filter((landing) => landing.recess_xz).map((landing) => {
+    const ring = landing.recess_xz.map(([x, z]) => [x, -z]);
+    return ringArea(ring) > 0 ? ring : ring.reverse();
+  });
+  const landingTops = polygonIndex(union("door landing tops", [...landingRings, ...recessRings].map((ring) => [[ring]])));
+  const offLandings = (label, polygon) => {
+    const near = landingTops.near(boxOfMulti(polygon));
+    if (near.length === 0 || intersect(`${label} test`, polygon, near).length === 0) return polygon;
+    return difference(label, polygon, near);
+  };
   for (const entry of parkLayers) {
-    const { layer, polygon, lift } = entry;
+    const { layer, lift } = entry;
+    const polygon = offLandings(`park ${layer.id} off door landings`, entry.polygon);
+    if (polygon.length === 0) continue;
     for (const key of entry.sources) sources[layer.material].add(key);
     const height = constantHeight(lift);
     const path = ["park_concrete", "park_walk", "park_brick"].includes(layer.material) ? layerLine(layer) : null;
@@ -3293,7 +3309,7 @@ export function generateStreetGround({
     parkLifts.set(material, LOT_SURFACE_LIFT_M);
     sources[material].add(lot.source_key);
     parkLayers.push({ zone: null, layer: { material, id }, polygon, index: polygonIndex(polygon), box: boxOfMulti(polygon), lift: LOT_SURFACE_LIFT_M, sources: [lot.source_key] });
-    addPiece(material, polygon, constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
+    addPiece(material, offLandings(`lot ${lot.id} ${id} off door landings`, polygon), constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
   };
   // A strip outward from the lot's shoulder edges, as wide as width (its outer edge
   // wandering by up to wander).
