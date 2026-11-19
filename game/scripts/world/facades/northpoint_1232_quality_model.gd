@@ -3,13 +3,19 @@ extends RefCounted
 # Reviewed whole-building construction; live factory assigns exact geometry contacts.
 # The housing family's roof shader, for an opt-in roof_rgb (no new shader program).
 const FAMILY_ROOF := preload("res://game/resources/housing_family/roof.gdshader")
+## The production roof's frame: along the ridge, across it, and the ridge line's offset
+## across. An opt-in roof_plane must be given in this frame.
+const ROOF_AXIS := Vector2(-0.04894628457,0.9988014123)
+const ROOF_NORMAL := Vector2(-0.9988014123,-0.04894628457)
+const ROOF_RIDGE_D := 336.328678
 # Footprint is read verbatim from the frozen wall record. Unmeasured detail is art inference.
 ## options (from the live factory's revision config): "frontage_parking_from_m", the
 ## frontage station (origin frame below) where the parking begins; north of it the
 ## lawn and parking strips and stall lines are left out, so the island's own ground
 ## shows round the walk, as the dated photos show. "frontage_asphalt_rgb": the
-## parking strips' colour. "roof_segments": the roof as one gable per footprint
-## segment (_segment_roof). Absent: everything as before.
+## parking strips' colour. "roof_plane" (the housing family config's, which the live
+## factory passes on): the roof as one gable per footprint segment (_segment_roof), the
+## same description the family's roof details follow. Absent: everything as before.
 static func build(record: Dictionary, ground: Callable, options: Dictionary = {}) -> Node3D:
 	var root := Node3D.new()
 	root.name = "Northpoint1232ScratchStudy"
@@ -100,12 +106,17 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 			_panel(root,Vector3(a.x,5.30,a.z)+n*0.02,t,n,Vector3(0.09,5.46,0.08),trim)
 	var roof_start := root.get_child_count()
 	# Two planar roof slopes clipped to the exact footprint; ridge follows long axis.
-	var tan:=Vector2(-0.04894628457,0.9988014123)
-	var norm:=Vector2(-0.9988014123,-0.04894628457)
-	var ridge_d:=336.328678
-	if options.has("roof_segments"):
-		_segment_roof(root,options.roof_segments,polygon,edges,tan,norm,ridge_d,roofmat,trim,clad)
-	for side in ([] if options.has("roof_segments") else [-1.0,1.0]):
+	var tan:=ROOF_AXIS
+	var norm:=ROOF_NORMAL
+	var ridge_d:=ROOF_RIDGE_D
+	var segmented:=options.has("roof_plane")
+	if segmented:
+		# The live factory refuses a roof_plane in another frame before it gets here.
+		if same_roof_frame(options.roof_plane):
+			_segment_roof(root,options.roof_plane,polygon,edges,tan,norm,ridge_d,roofmat,trim,clad)
+		else:
+			push_error("roof_plane is not in the production roof's frame (ROOF_AXIS, ROOF_NORMAL, ROOF_RIDGE_D)")
+	for side in ([] if segmented else [-1.0,1.0]):
 		var clip:=PackedVector2Array()
 		for st in [Vector2(-800,0),Vector2(-650,0),Vector2(-650,30*side),Vector2(-800,30*side)]:
 			clip.append(tan*st.x+norm*(ridge_d+st.y))
@@ -114,7 +125,7 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 			var pts:Array=[]
 			for p in part: pts.append(Vector3(p.x,9.68-abs(p.dot(norm)-ridge_d)*0.25,p.y))
 			_mesh(root,pts,ids,roofmat)
-	for edge in ([] if options.has("roof_segments") else edges):
+	for edge in ([] if segmented else edges):
 		var a:Vector3=edge[0];var b:Vector3=edge[1]
 		var da:=Vector2(a.x,a.z).dot(norm)-ridge_d
 		var db:=Vector2(b.x,b.z).dot(norm)-ridge_d
@@ -130,8 +141,8 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 	# Continuous ridge and small roof penetrations follow the shallow residential roof vocabulary.
 	var ridge_a:=tan*(-739.65)+norm*ridge_d
 	var ridge_b:=tan*(-696.48)+norm*ridge_d
-	if not options.has("roof_segments"): _beam(root,Vector3(ridge_a.x,9.70,ridge_a.y),Vector3(ridge_b.x,9.70,ridge_b.y),0.17,0.075,roofmat)
-	for station in ([] if options.has("roof_segments") else [-736.0,-730.0,-723.5,-717.0,-710.5,-704.0]):
+	if not segmented: _beam(root,Vector3(ridge_a.x,9.70,ridge_a.y),Vector3(ridge_b.x,9.70,ridge_b.y),0.17,0.075,roofmat)
+	for station in ([] if segmented else [-736.0,-730.0,-723.5,-717.0,-710.5,-704.0]):
 		var p:Vector2=tan*station+norm*(ridge_d+0.8)
 		var stem:=CylinderMesh.new();stem.top_radius=0.055;stem.bottom_radius=0.055;stem.height=0.28;stem.radial_segments=8
 		var pipe:=MeshInstance3D.new();pipe.mesh=stem;pipe.material_override=trim;pipe.position=Vector3(p.x,9.64,p.y);root.add_child(pipe)
@@ -218,7 +229,14 @@ static func _wall_with_openings(root:Node3D,a:Vector3,b:Vector3,top:float,holes:
 			var p0:=Vector3(a.x,maxf(ys[j],lerpf(a.y,b.y,xs[i]/length)),a.z)+t*xs[i]
 			var p1:=Vector3(a.x,maxf(ys[j],lerpf(a.y,b.y,xs[i+1]/length)),a.z)+t*xs[i+1]
 			_quad(root,[p0,p1,Vector3(p1.x,ys[j+1],p1.z),Vector3(p0.x,ys[j+1],p0.z)],m)
-## Opt-in roof_segments {"slope", "segments": [{"ridge_offset", "ridge_y"}], "cuts":
+## Whether a roof_plane is given in this model's roof frame (axis, normal, ridge_d).
+static func same_roof_frame(plane:Dictionary)->bool:
+	var axis:Array=plane.get("axis",[])
+	var normal:Array=plane.get("normal",[])
+	return axis.size()==2 and normal.size()==2 and is_equal_approx(float(axis[0]),ROOF_AXIS.x) and is_equal_approx(float(axis[1]),ROOF_AXIS.y) \
+		and is_equal_approx(float(normal[0]),ROOF_NORMAL.x) and is_equal_approx(float(normal[1]),ROOF_NORMAL.y) and is_equal_approx(float(plane.get("ridge_d",0.0)),ROOF_RIDGE_D)
+
+## Opt-in roof_plane {"slope", "segments": [{"ridge_offset", "ridge_y"}], "cuts":
 ## [{"west_t", "east_t", "jog_d"}], "extent_t": [t0, t1]}: the roof as one gable per
 ## footprint segment, each ridge on its segment's centre line ridge_offset across from
 ## ridge_d, the surface ridge_y - |d - ridge_offset| * slope. Cut k divides segment k
@@ -322,16 +340,26 @@ static func _segment_roof(root:Node3D,spec:Dictionary,polygon:PackedVector2Array
 		var ra:=tan*t0+norm*(ridge_d+dc);var rb:=tan*t1+norm*(ridge_d+dc)
 		var ry:=float(segs[k].ridge_y)+0.02
 		_beam(root,Vector3(ra.x,ry,ra.y),Vector3(rb.x,ry,rb.y),0.17,0.075,roofmat)
+	for foot:Vector3 in segment_vents(spec):
+		var stem:=CylinderMesh.new();stem.top_radius=0.055;stem.bottom_radius=0.055;stem.height=0.3;stem.radial_segments=8
+		var pipe:=MeshInstance3D.new();pipe.mesh=stem;pipe.material_override=trim;pipe.position=foot+Vector3(0,0.12,0);root.add_child(pipe)
+		_box(root,foot+Vector3(0,0.28,0),Vector3(0.16,0.025,0.16),roofmat)
+
+## The production roof's six pipe vents under a roof_plane: at their stations along the
+## ridge, 0.8 m down the front slope of the segment there, each on the roof's surface.
+## (The family config's roof_vents.avoid keeps its vents clear of these.)
+static func segment_vents(spec:Dictionary)->Array[Vector3]:
+	var out:Array[Vector3]=[]
+	var segs:Array=spec.segments
+	var cuts:Array=spec.cuts
 	for station in [-736.0,-730.0,-723.5,-717.0,-710.5,-704.0]:
-		for k in count:
+		for k in segs.size():
 			var dc:=float(segs[k].ridge_offset)
 			if _segment_of(station,dc+0.8,cuts)!=k: continue
-			var p:Vector2=tan*station+norm*(ridge_d+dc+0.8)
-			var base:=float(segs[k].ridge_y)-0.8*slope
-			var stem:=CylinderMesh.new();stem.top_radius=0.055;stem.bottom_radius=0.055;stem.height=0.3;stem.radial_segments=8
-			var pipe:=MeshInstance3D.new();pipe.mesh=stem;pipe.material_override=trim;pipe.position=Vector3(p.x,base+0.12,p.y);root.add_child(pipe)
-			_box(root,Vector3(p.x,base+0.28,p.y),Vector3(0.16,0.025,0.16),roofmat)
+			var p:Vector2=ROOF_AXIS*station+ROOF_NORMAL*(ROOF_RIDGE_D+dc+0.8)
+			out.append(Vector3(p.x,float(segs[k].ridge_y)-0.8*float(spec.slope),p.y))
 			break
+	return out
 
 static func _segment_cut_t(cut:Dictionary,d:float)->float:
 	return float(cut.west_t) if d>=float(cut.jog_d) else float(cut.east_t)

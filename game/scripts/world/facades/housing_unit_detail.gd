@@ -105,6 +105,22 @@ static func blinds_valid(root: Node3D, spec: Dictionary) -> bool:
 	return ok
 
 
+## Checks a window's own "blind" {"drops": [left, right], "curtains": [left, right]}, each a
+## share 0-1 of that pane (see window_blinds); an invalid one fails the build.
+static func pinned_blind_valid(root: Node3D, pinned: Variant) -> bool:
+	var ok: bool = pinned is Dictionary and not (pinned as Dictionary).is_empty()
+	if ok:
+		for key: String in pinned:
+			var pair: Variant = pinned[key]
+			ok = ok and key in ["drops", "curtains"] and pair is Array and (pair as Array).size() == 2
+			if ok:
+				for share: Variant in pair:
+					ok = ok and _number(share) and float(share) >= 0.0 and float(share) <= 1.0
+	if not ok:
+		_invalid(root, "Invalid window blind (drops and curtains: [left, right] shares 0-1)")
+	return ok
+
+
 ## Colour buckets for one building's blinds and curtains.
 static func blind_buckets() -> Dictionary:
 	return {"buckets": {}, "colors": {}}
@@ -118,7 +134,7 @@ static func blind_buckets() -> Dictionary:
 ## outer jambs, `curtain_widths` of the pane wide, in a colour from `curtain_rgbs`,
 ## with two pleats (pleat_shade). Picks follow `seed` and the window's place, so a
 ## config always draws the same blinds.
-static func window_blinds(ctx: Dictionary, spec: Dictionary, point: Vector3, t: Vector3, n: Vector3, w: float, h: float) -> void:
+static func window_blinds(ctx: Dictionary, spec: Dictionary, point: Vector3, t: Vector3, n: Vector3, w: float, h: float, pinned: Dictionary = {}) -> void:
 	var seed := int(spec.get("seed", 0))
 	var drops: Array = spec.drops
 	var face := -n * (PANE_FRONT_M - BLIND_GAP_M)
@@ -126,6 +142,11 @@ static func window_blinds(ctx: Dictionary, spec: Dictionary, point: Vector3, t: 
 	var pane_h := h - 0.07
 	var top := h * 0.5 - 0.035
 	var place := [point.x, point.z, point.y]
+	# A window's own "blind" {"drops": [left, right], "curtains": [left, right]} (share of a
+	# pane; 0 none) pins what a dated photo shows there; colours still come from the set.
+	if not pinned.is_empty():
+		_pinned_blinds(ctx, spec, pinned, point, t, n, w, face, pane_w, pane_h, top, place)
+		return
 	var curtains := float(_pick(seed, place + [7.0], 1000)) / 1000.0 < float(spec.get("curtain_share", 0.0))
 	if curtains:
 		var curtain_rgbs: Array = spec.get("curtain_rgbs", spec.rgbs)
@@ -157,6 +178,34 @@ static func window_blinds(ctx: Dictionary, spec: Dictionary, point: Vector3, t: 
 		# A soft foot: two bands, each a shade darker, toward the glass below.
 		for k in 2:
 			_face(_bucket_for(ctx, hems[k]), center + Vector3.UP * (top - bh + hem * (0.75 - 0.5 * float(k))), t, n, pane_w, hem * 0.5)
+
+
+static func _pinned_blinds(ctx: Dictionary, spec: Dictionary, pinned: Dictionary, point: Vector3, t: Vector3, n: Vector3, w: float, face: Vector3, pane_w: float, pane_h: float, top: float, place: Array) -> void:
+	var seed := int(spec.get("seed", 0))
+	var rgbs: Array = spec.rgbs
+	var blind := _to_color(rgbs[_pick(seed, place + [13.0], rgbs.size())])
+	var shade := float(spec.get("hem_shade", 0.78))
+	var curtain_rgbs: Array = spec.get("curtain_rgbs", spec.rgbs)
+	var cloth := _to_color(curtain_rgbs[_pick(seed, place + [11.0], curtain_rgbs.size())])
+	var pleat := cloth * float(spec.get("pleat_shade", 0.86))
+	var drops: Array = pinned.get("drops", [0.0, 0.0])
+	var curtains: Array = pinned.get("curtains", [0.0, 0.0])
+	for i in 2:
+		var side := -1.0 if i == 0 else 1.0
+		var drop := float(drops[i])
+		if drop > 0.0:
+			var center := point + t * side * w * 0.25 + face
+			var bh := pane_h * minf(drop, 1.0)
+			var hem := minf(0.06, bh * 0.25)
+			_face(_bucket_for(ctx, blind), center + Vector3.UP * (top - (bh - hem) * 0.5), t, n, pane_w, bh - hem)
+			_face(_bucket_for(ctx, blind * shade), center + Vector3.UP * (top - bh + hem * 0.5), t, n, pane_w, hem)
+		var share := float(curtains[i])
+		if share > 0.0:
+			var cw := pane_w * minf(share, 1.0)
+			var c := point + t * side * (w * 0.25 + pane_w * 0.5 - cw * 0.5) + face + n * 0.003
+			_face(_bucket_for(ctx, cloth), c, t, n, cw, pane_h)
+			for k: float in [-1.0 / 6.0, 1.0 / 6.0]:
+				_face(_bucket_for(ctx, pleat), c + t * cw * k * 2.0 + n * 0.002, t, n, minf(0.03, cw * 0.2), pane_h)
 
 
 ## Commits a building's blinds and curtains as visual-only meshes, one per colour.
@@ -296,13 +345,48 @@ static func entry_utilities(root: Node3D, ctx: Dictionary, kit: Dictionary, moti
 ## Commits the utilities (visual only, one mesh per colour, plus their collision
 ## boxes) after checking that none stands inside `ring` (the building's lower walls)
 ## or on a door landing.
-static func commit_utilities(root: Node3D, ctx: Dictionary, ring: PackedVector2Array) -> void:
+## The lower storey's plan: the footprint ring less each recessed run's strip (recessed maps
+## a run index to how far its lower wall stands in), so only those runs move in.
+static func lower_outline(ring: PackedVector2Array, recessed: Dictionary) -> Array[PackedVector2Array]:
+	var parts: Array[PackedVector2Array] = [ring]
+	for run: int in recessed:
+		if run < 0 or run >= ring.size():
+			continue
+		var a := ring[run]
+		var b := ring[(run + 1) % ring.size()]
+		var t := (b - a).normalized()
+		var inward := Vector2(-t.y, t.x)
+		if not Geometry2D.is_point_in_polygon((a + b) * 0.5 + inward * 0.01, ring):
+			inward = -inward
+		var depth := float(recessed[run])
+		var strip := PackedVector2Array([a - t * 0.001, b + t * 0.001, b + t * 0.001 + inward * depth, a - t * 0.001 + inward * depth])
+		var next: Array[PackedVector2Array] = []
+		for part: PackedVector2Array in parts:
+			next.append_array(Geometry2D.clip_polygons(part, strip))
+		parts = next
+	return parts
+
+
+## A simple polygon's area.
+static func _area(polygon: PackedVector2Array) -> float:
+	var twice := 0.0
+	for i in polygon.size():
+		twice += polygon[i].cross(polygon[(i + 1) % polygon.size()])
+	return absf(twice) * 0.5
+
+
+## Commits the utilities, failing the build where one overlaps the lower storey's plan
+## (lower_outline) by more than 1 cm2 or stands on a door landing.
+static func commit_utilities(root: Node3D, ctx: Dictionary, outline: Array[PackedVector2Array]) -> void:
 	for entry: Array in ctx.footprints:
 		var quad: PackedVector2Array = entry[2]
-		for corner: Vector2 in quad:
-			if Geometry2D.is_point_in_polygon(corner, ring):
-				_invalid(root, "Utility %s in frame %s stands inside the building" % [entry[0], entry[1]])
-				return
+		var inside := 0.0
+		for part: PackedVector2Array in outline:
+			for piece: PackedVector2Array in Geometry2D.intersect_polygons(quad, part):
+				inside += _area(piece)
+		if inside > 0.0001:
+			_invalid(root, "Utility %s in frame %s stands inside the building" % [entry[0], entry[1]])
+			return
 		for landing: PackedVector2Array in ctx.landings:
 			if not Geometry2D.intersect_polygons(quad, landing).is_empty():
 				_invalid(root, "Utility %s in frame %s stands on a door landing" % [entry[0], entry[1]])
@@ -566,9 +650,21 @@ static func vents_valid(root: Node3D, spec: Dictionary) -> bool:
 	for item: Variant in spec.get("avoid", []):
 		ok = ok and item is Array and (item as Array).size() == 2 and _number(item[0]) and _number(item[1])
 	ok = ok and (not spec.has("rgb") or _rgb(spec.rgb))
+	ok = ok and _range_pair(spec, "stack_radius_m", 0.01, 0.3) and _range_pair(spec, "stack_height_m", 0.05, 2.0)
+	ok = ok and _range_pair(spec, "cluster_size", 1.0, 4.0) and _range_pair(spec, "cap_m", 0.0, 0.2)
+	ok = ok and (not spec.has("cluster_step_m") or (_number(spec.cluster_step_m) and float(spec.cluster_step_m) >= 0.25 and float(spec.cluster_step_m) <= 1.5))
 	if not ok:
-		_invalid(root, "Invalid roof_vents (spacing_m >= 0.8, jitter_m, offset_m [min, max], seed, avoid, rgb)")
+		_invalid(root, "Invalid roof_vents (spacing_m >= 0.8, jitter_m, offset_m [min, max], seed, avoid, rgb, stack_radius_m, stack_height_m, cluster_size 1-4, cluster_step_m 0.25-1.5, cap_m)")
 	return ok
+
+
+## Whether an optional spec[key] is absent or [a, b] with lo <= a <= b <= hi.
+static func _range_pair(spec: Dictionary, key: String, lo: float, hi: float) -> bool:
+	if not spec.has(key):
+		return true
+	var pair: Variant = spec[key]
+	return pair is Array and (pair as Array).size() == 2 and _number(pair[0]) and _number(pair[1]) \
+		and float(pair[0]) >= lo and float(pair[0]) <= float(pair[1]) and float(pair[1]) <= hi
 
 
 ## Vent stacks and box vents along the roof plane's ridge: one every spacing_m (moved
@@ -607,13 +703,30 @@ static func _segment_vents(vents: Dictionary, spec: Dictionary, plane: Dictionar
 	var avoid: Array[Vector2] = []
 	for item: Array in spec.get("avoid", []):
 		avoid.append(Vector2(float(item[0]), float(item[1])))
+	# Opt-in cluster_size [min, max]: that many vents at each place, cluster_step_m apart
+	# along the ridge, each a little off its neighbour's line; cap_m [wider by, tall] gives a
+	# stack a broad cap with a hood on it (default one vent, a thin cap).
+	var cluster: Array = spec.get("cluster_size", [1, 1])
+	var step := float(spec.get("cluster_step_m", 0.45))
+	var cap: Array = spec.get("cap_m", [0.012, 0.025])
+	var places: Array[Array] = []
 	var next := spacing * 0.5
 	while next < length:
-		var s := next
+		var s0 := next
 		next += spacing
-		var at := s + (float(_pick(seed, [s, 1.0], 1000)) / 1000.0 - 0.5) * 2.0 * jitter
-		var off := lerpf(lo, hi, float(_pick(seed, [s, 2.0], 1000)) / 1000.0)
-		var sign := -1.0 if float(_pick(seed, [s, 3.0], 1000)) / 1000.0 < back_share else 1.0
+		var count := int(cluster[0]) + _pick(seed, [s0, 9.0], int(cluster[1]) - int(cluster[0]) + 1)
+		for m in count:
+			# The first vent where a single one would stand; the others step along the ridge
+			# with their own picks (station s) and a small offset across.
+			var s := s0 + float(m) * 0.37
+			var dy := 0.0 if m == 0 else (float(_pick(seed, [s, 11.0], 1000)) / 1000.0 - 0.5) * step * 0.4
+			places.append([s0, s, float(m) * step, dy])
+	for place: Array in places:
+		var s: float = place[1]
+		var s_base: float = place[0]
+		var at := s_base + float(place[2]) + (float(_pick(seed, [s_base, 1.0], 1000)) / 1000.0 - 0.5) * 2.0 * jitter
+		var off := lerpf(lo, hi, float(_pick(seed, [s_base, 2.0], 1000)) / 1000.0) + float(place[3])
+		var sign := -1.0 if float(_pick(seed, [s_base, 3.0], 1000)) / 1000.0 < back_share else 1.0
 		var xz := a + along * at + across * off * sign
 		var clear := Geometry2D.is_point_in_polygon(xz, ring)
 		for i in ring.size():
@@ -639,16 +752,18 @@ static func _segment_vents(vents: Dictionary, spec: Dictionary, plane: Dictionar
 			# From under the roof surface (its fall across the pipe) to the stack's top.
 			var foot := roof_y - r * slope - 0.03
 			_prism(vents, Vector3(xz.x, foot, xz.y), r, roof_y + hgt - foot)
-			_prism(vents, Vector3(xz.x, roof_y + hgt, xz.y), r + 0.012, 0.025)
+			_prism(vents, Vector3(xz.x, roof_y + hgt, xz.y), r + float(cap[0]), float(cap[1]), spec.has("cap_m"))
+			if spec.has("cap_m"):
+				_prism(vents, Vector3(xz.x, roof_y + hgt + float(cap[1]), xz.y), r * 0.55, float(cap[1]) * 1.2)
 		else:
 			var curb := 0.3
 			KIT._box(vents, base + Vector3.UP * 0.02, t3, n3, Vector3(curb, 0.16 + curb * slope, curb))
 			KIT._box(vents, base + Vector3.UP * 0.13, t3, n3, Vector3(curb + 0.08, 0.05, curb + 0.08))
 
 
-## An 8-sided upright prism (radius r, height h) standing on foot, capped on top; its
-## foot stands under the roof surface, so it needs no bottom.
-static func _prism(bucket: Dictionary, foot: Vector3, r: float, h: float) -> void:
+## An 8-sided upright prism (radius r, height h) standing on foot, capped on top; a foot
+## under the roof surface needs no bottom, a cap seen from below takes one (underside).
+static func _prism(bucket: Dictionary, foot: Vector3, r: float, h: float, underside: bool = false) -> void:
 	var ring: Array[Vector3] = []
 	for i in 8:
 		var angle := TAU * (float(i) + 0.5) / 8.0
@@ -660,6 +775,8 @@ static func _prism(bucket: Dictionary, foot: Vector3, r: float, h: float) -> voi
 		var out := (ring[i] + ring[(i + 1) % 8]).normalized()
 		KIT._quad(bucket, p, q, q + up, p + up, out)
 		KIT._tri(bucket, foot + up, p + up, q + up, Vector3.UP)
+		if underside:
+			KIT._tri(bucket, foot, p, q, Vector3.DOWN)
 
 
 # ------------------------------------------------------------------ gable rakes
@@ -674,6 +791,7 @@ static func rakes_valid(root: Node3D, spec: Dictionary, run_count: int) -> bool:
 	for key: String in ["overhang_m", "board_m", "soffit_drop_m"]:
 		ok = ok and _number(spec.get(key, 0.2)) and float(spec.get(key, 0.2)) > 0.0 and float(spec.get(key, 0.2)) <= 1.0
 	ok = ok and _number(spec.get("edge_m", 0.03)) and float(spec.get("edge_m", 0.03)) >= 0.0 and float(spec.get("edge_m", 0.03)) <= 0.1
+	ok = ok and _number(spec.get("shade_m", 0.0)) and float(spec.get("shade_m", 0.0)) >= 0.0 and float(spec.get("shade_m", 0.0)) <= 1.5
 	for key: String in ["top_rgb", "board_rgb", "soffit_rgb"]:
 		ok = ok and (not spec.has(key) or _rgb(spec[key]))
 	if not ok:
@@ -688,8 +806,12 @@ static func rakes_valid(root: Node3D, spec: Dictionary, run_count: int) -> bool:
 ## caps at the eaves. Heights follow the run's segment of the roof, split at its ridge.
 ## Roof top in top_rgb (else the roofing), board and caps in board_rgb, soffit in
 ## soffit_rgb (else the trim).
-static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, vertices: Array, roofing: Material, trim: Material) -> void:
+static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, vertices: Array, roofing: Material, trim: Material, shades: Array = []) -> void:
 	var over := float(spec.get("overhang_m", 0.4))
+	# Opt-in shade_m: the wall under the soffit, that far down, in the building's two shade
+	# materials (darker at the soffit), as the deep rake keeps the sky off it.
+	var shade_m := float(spec.get("shade_m", 0.0)) if shades.size() == 2 else 0.0
+	var shade_buckets := [KIT._bucket(), KIT._bucket()]
 	var board := float(spec.get("board_m", 0.2))
 	var drop := float(spec.get("soffit_drop_m", 0.14))
 	var edge := float(spec.get("edge_m", 0.03))
@@ -746,6 +868,13 @@ static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, verti
 			var e1 := b1 - face * 0.025 + Vector3.UP * (o1.y - b1.y) + down
 			KIT._quad(under, s0, s1, e1, e0, Vector3.DOWN)
 			KIT._quad(white, b0 + low - face * 0.025, b1 + low - face * 0.025, e1, e0, -face)
+			if shade_m > 0.0:
+				# Two bands a hair off the wall, from the soffit down: the darker one first.
+				var off := face * 0.004
+				for band in 2:
+					var hi := Vector3.DOWN * (0.0 if band == 0 else shade_m * 0.4)
+					var lo := Vector3.DOWN * (shade_m * 0.4 if band == 0 else shade_m)
+					KIT._quad(shade_buckets[band], s0 + hi + off, s1 + hi + off, s1 + lo + off, s0 + lo + off, face)
 		# End caps where the strip meets the eaves: the run's ends that no listed run continues.
 		for end: Array in [[a, -t, posmod(int(run) - 1, count)], [b, t, posmod(int(run) + 1, count)]]:
 			if listed.has(int(end[2])):
@@ -770,6 +899,11 @@ static func gable_rakes(root: Node3D, spec: Dictionary, plane: Dictionary, verti
 		var node := KIT._commit(root, pair[0], pair[1], pair[2])
 		if node != null:
 			node.set_meta("family_role", "support")
+	if shade_m > 0.0:
+		for band in 2:
+			var node := KIT._commit(root, shade_buckets[band], shades[band], "GableRakeShade")
+			if node != null:
+				node.set_meta("family_role", "support")
 
 
 # ------------------------------------------------------------------ end annexes
@@ -785,9 +919,9 @@ const ANNEX_EXCEPTION_SOURCES := ["w96215673"]
 ## "diameter_m", "height_m"}], "roof_rgb", "evidence",
 ## "osm_exception": {"reason", "approved", "photo", "outline_xz"} (exactly these, as the
 ## street detail's zones record theirs)}.
-static func annex_valid(root: Node3D, spec: Dictionary, source_key: String, run_count: int) -> bool:
+static func annex_valid(root: Node3D, spec: Dictionary, source_key: String, vertices: Array) -> bool:
 	var ok: bool = ANNEX_EXCEPTION_SOURCES.has(source_key)
-	ok = ok and _number(spec.get("run")) and int(spec.get("run", -1)) >= 0 and int(spec.get("run", -1)) < run_count
+	ok = ok and _number(spec.get("run")) and int(spec.get("run", -1)) >= 0 and int(spec.get("run", -1)) < vertices.size() / 12
 	for key: String in ["from_m", "to_m", "depth_m", "base_y", "top_y"]:
 		ok = ok and _number(spec.get(key))
 	if ok:
@@ -799,19 +933,43 @@ static func annex_valid(root: Node3D, spec: Dictionary, source_key: String, run_
 			ok = ok and _number(door.get(key))
 		ok = ok and (not door.has("rgb") or _rgb(door.rgb))
 		ok = ok and float(door.get("out_m", 0.0)) >= 0.0 and float(door.get("out_m", 0.0)) + float(door.get("width_m", 0.0)) <= float(spec.get("depth_m", 0.0)) - 0.05
-	ok = ok and (not spec.has("roof_rgb") or _rgb(spec.roof_rgb))
+	for key: String in ["roof_rgb", "flue_rgb", "flue_cap_rgb"]:
+		ok = ok and (not spec.has(key) or _rgb(spec[key]))
 	var exception: Variant = spec.get("osm_exception", null)
 	ok = ok and exception is Dictionary and (exception as Dictionary).size() == 4
 	if ok:
 		for key: String in ["reason", "approved", "photo"]:
 			ok = ok and exception.get(key) is String and not str(exception.get(key)).strip_edges().is_empty()
+		# The recorded outline is the block itself: its four corners within 1 cm of the
+		# run's from_m and to_m, at the wall and depth_m out, in that order.
 		var outline: Variant = exception.get("outline_xz", [])
-		ok = ok and outline is Array and (outline as Array).size() >= 3
+		ok = ok and outline is Array and (outline as Array).size() == 4
+		if ok:
+			var corners := annex_corners(spec, vertices)
+			ok = float(spec.to_m) <= corners[4].x + 0.01
+			for c in 4:
+				var given: Variant = outline[c]
+				ok = ok and given is Array and (given as Array).size() == 2 and _number(given[0]) and _number(given[1]) \
+					and Vector2(float(given[0]), float(given[1])).distance_to(corners[c]) <= 0.01
 	for flue: Variant in spec.get("flues", []):
 		ok = ok and flue is Dictionary and _number(flue.get("at_m")) and _number(flue.get("out_m")) and _number(flue.get("diameter_m")) and _number(flue.get("height_m"))
 	if not ok:
-		_invalid(root, "Invalid end_annexes entry (a recorded exception for this source only: run, from_m < to_m, depth_m 0.5-6, base_y, top_y, door {out_m, width_m, height_m, bottom_y} inside the end face, flues, osm_exception {reason, approved, photo, outline_xz})")
+		_invalid(root, "Invalid end_annexes entry (a recorded exception for this source only: run, from_m < to_m within the run, depth_m 0.5-6, base_y, top_y, door {out_m, width_m, height_m, bottom_y} inside the end face, flues, osm_exception {reason, approved, photo, outline_xz: the block's corners within 1 cm})")
 	return ok
+
+
+## An annex's plan corners (XZ): at from_m and to_m along its run on the wall, then
+## depth_m out at to_m and from_m; a fifth entry carries the run's length in x.
+static func annex_corners(spec: Dictionary, vertices: Array) -> Array[Vector2]:
+	var i := int(spec.run) * 12
+	var a := Vector2(float(vertices[i]), float(vertices[i + 2]))
+	var b := Vector2(float(vertices[i + 3]), float(vertices[i + 5]))
+	var t := (b - a).normalized()
+	var n := Vector2(-t.y, t.x)
+	var from := float(spec.from_m)
+	var to := float(spec.to_m)
+	var depth := float(spec.depth_m)
+	return [a + t * from, a + t * to, a + t * to + n * depth, a + t * from + n * depth, Vector2(a.distance_to(b), 0.0)]
 
 
 ## A one-storey block on an end wall, as the dated photo shows it: siding on its three
@@ -889,20 +1047,27 @@ static func end_annex(root: Node3D, spec: Dictionary, vertices: Array, siding: M
 	var low := minf(base + 0.1, door_bottom - 0.25)
 	var step := dc + t * 0.45
 	KIT._box(pad, Vector3(step.x, (door_bottom + low) * 0.5, step.z), face, t, Vector3(door_w + 0.3, door_bottom - low, 0.9))
-	# Flues on the roof, at_m along the run and out_m from the wall, with their caps.
+	# Flues on the roof, at_m along the run and out_m from the wall: a dark collar where they
+	# leave the roof, the metal body, a wide rain cap on a short neck and its cone.
+	var caps := KIT._bucket()
 	for flue: Dictionary in spec.get("flues", []):
 		var foot := a + t * float(flue.at_m) + n * float(flue.out_m)
 		var r := float(flue.diameter_m) * 0.5
 		var h := float(flue.height_m)
-		_prism(metal, Vector3(foot.x, top - 0.05, foot.z), r, h + 0.05)
-		_prism(metal, Vector3(foot.x, top + h, foot.z), r * 1.35, 0.08)
-		_prism(metal, Vector3(foot.x, top + h + 0.08, foot.z), r * 0.6, 0.12)
+		_prism(dark, Vector3(foot.x, top - 0.05, foot.z), r * 1.25, 0.2)
+		_prism(metal, Vector3(foot.x, top + 0.15, foot.z), r, h - 0.15)
+		_prism(caps, Vector3(foot.x, top + h, foot.z), r * 0.5, 0.1)
+		_prism(caps, Vector3(foot.x, top + h + 0.1, foot.z), r * 1.6, 0.06, true)
+		_prism(caps, Vector3(foot.x, top + h + 0.16, foot.z), r * 0.9, 0.1)
 	var door_rgb := _color(door, "rgb", Color(0.62, 0.64, 0.64))
 	var parts: Array = [[white, trim, "AnnexTrim"], [leaf, PARTS._material(door_rgb, 0.6), "AnnexDoor"], [dark, PARTS._material(Color(0.16, 0.17, 0.18), 0.6), "AnnexReveal"],
 		[roof, PARTS._material(_color(spec, "roof_rgb", Color(0.2, 0.21, 0.22)), 0.9), "AnnexRoof"], [pad, concrete, "AnnexThreshold"]]
-	var steel := PARTS._material(Color(0.62, 0.63, 0.64), 0.45)
-	steel.metallic = 0.5
+	var steel := PARTS._material(_color(spec, "flue_rgb", Color(0.62, 0.63, 0.64)), 0.32)
+	steel.metallic = 0.75
 	parts.append([metal, steel, "AnnexFlues"])
+	var cap_steel := PARTS._material(_color(spec, "flue_cap_rgb", Color(0.8, 0.81, 0.82)), 0.35)
+	cap_steel.metallic = 0.6
+	parts.append([caps, cap_steel, "AnnexFlueCaps"])
 	for part: Array in parts:
 		var node := KIT._commit(root, part[0], part[1], part[2])
 		if node != null:

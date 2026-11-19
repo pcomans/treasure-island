@@ -87,24 +87,40 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	if not recess.is_empty():
 		for frame: Dictionary in cfg.target.frames:
 			for run in frame.runs: recess_runs[int(run)] = frame
+	# join_runs meets a neighbouring lower wall only through _recessed_wall's miter or
+	# _notched_wall, and a rear setback run takes neither: refuse that adjacency.
+	if bool(recess.get("join_runs", false)):
+		for run: int in recess_runs:
+			for side: int in [-1, 1]:
+				var neighbour := posmod(run + side, vertices.size() / 12)
+				if rear_recess_runs.has(neighbour) and not recess_runs.has(neighbour):
+					root.set_meta("build_valid", false)
+					push_error("join_runs cannot meet a rear setback run: %s run %d beside run %d" % [cfg.target.source_key, run, neighbour])
 	# Opt-in soffit_rgb: the setback's soffit in its own colour (a floor-line shadow).
 	var recess_soffit: Material = null
 	if recess.has("soffit_rgb"): recess_soffit = PARTS._material(color(recess,"soffit_rgb",Color.GRAY),0.95)
 	# Opt-in shade_m/shade: the lower wall's top in the overhang's shade, two strips of the
 	# siding darkened toward the soffit (shade the darkest factor), just proud of the wall.
-	var recess_shades: Array = []
-	if float(recess.get("shade_m", 0.0)) > 0.0:
+	# A gable rake's shade_m bands the wall under its soffit with the same two materials.
+	var shade_set: Array = []
+	if float(recess.get("shade_m", 0.0)) > 0.0 or float(cfg.get("gable_rakes", {}).get("shade_m", 0.0)) > 0.0:
 		for factor: float in [float(recess.get("shade", 0.7)), (1.0 + float(recess.get("shade", 0.7))) * 0.5]:
 			var dim := siding.duplicate() as ShaderMaterial
 			var base := dim.get_shader_parameter("wall_color") as Color
 			dim.set_shader_parameter("wall_color", Color(base.r * factor, base.g * factor, base.b * factor, base.a))
-			recess_shades.append(dim)
+			shade_set.append(dim)
+	var recess_shades: Array = shade_set if float(recess.get("shade_m", 0.0)) > 0.0 else []
 	# Gable runs under an opt-in rake carry it in place of the eave trim.
 	# Opt-in window_sill_out_m (how far sills stand out; default 0.26 m) and window_glass
-	# {roughness, metallic} for the panes.
+	# {roughness, metallic, lift} for the panes; its "lower" {roughness, metallic, lift}
+	# takes over for the lower windows, which stand under the storey above.
 	var sill_out := float(cfg.get("window_sill_out_m", -1.0))
-	var pane_finish := Vector2(float(cfg.get("window_glass", {}).get("roughness", -1.0)), float(cfg.get("window_glass", {}).get("metallic", -1.0)))
-	var pane_lift := float(cfg.get("window_glass", {}).get("lift", 0.0))
+	var glass_cfg: Dictionary = cfg.get("window_glass", {})
+	var lower_glass: Dictionary = glass_cfg.get("lower", glass_cfg)
+	var pane_finish := Vector2(float(glass_cfg.get("roughness", -1.0)), float(glass_cfg.get("metallic", -1.0)))
+	var pane_lift := float(glass_cfg.get("lift", 0.0))
+	var lower_finish := Vector2(float(lower_glass.get("roughness", -1.0)), float(lower_glass.get("metallic", -1.0)))
+	var lower_lift := float(lower_glass.get("lift", 0.0))
 	var rake_runs: Dictionary = {}
 	for run: Variant in cfg.get("gable_rakes", {}).get("runs", []): rake_runs[int(run)] = true
 	# The target schedule carries complete motifs. A basis pins each motif to its
@@ -195,9 +211,13 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						PARTS._panel(root,point+t*side*(width/2+0.025),t,n,Vector3(0.065,height+0.12,0.09),trim)
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
-					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,pane_finish,pane_lift)
+					var lower: bool = group == "lower_windows"
+					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,lower_finish if lower else pane_finish,lower_lift if lower else pane_lift)
+					# A window's own "blind" pins what its dated photo shows (DETAIL.window_blinds).
+					var pinned: Dictionary = {}
+					if motif.has("blind") and DETAIL.pinned_blind_valid(root, motif.blind): pinned = motif.blind
 					if not blind_buckets.is_empty() and not is_rear:
-						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height)
+						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height, pinned)
 				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
 					for child_index in range(motif_begin, root.get_child_count()):
 						var child := root.get_child(child_index)
@@ -396,7 +416,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	# Opt-in end_annexes: a photographed block on an end wall, outside the frozen footprint
 	# by a recorded exception (DETAIL).
 	for annex: Variant in cfg.get("end_annexes", []):
-		if annex is Dictionary and DETAIL.annex_valid(root, annex, str(cfg.target.source_key), vertices.size() / 12):
+		if annex is Dictionary and DETAIL.annex_valid(root, annex, str(cfg.target.source_key), vertices):
 			DETAIL.end_annex(root, annex, vertices, siding, trim, concrete)
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
@@ -407,12 +427,11 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		for i in range(0, (wall.vertices as Array).size(), 12): ring.append(Vector2(wall.vertices[i], wall.vertices[i+2]))
 		if not blind_buckets.is_empty(): DETAIL.commit_blinds(root, blind_buckets, blinds)
 		if not utilities.is_empty():
-			# Utilities stand clear of the lower walls, which a frontage setback moves in.
-			var lower_ring := ring
-			if not recess.is_empty():
-				var shrunk := Geometry2D.offset_polygon(ring, -float(recess.depth_m))
-				if shrunk.size() == 1: lower_ring = shrunk[0]
-			DETAIL.commit_utilities(root, utilities, lower_ring)
+			# Utilities stand clear of the lower walls, which a setback moves in on its runs.
+			var recessed: Dictionary = {}
+			for run: int in recess_runs: recessed[run] = float(recess.depth_m)
+			for run: int in rear_recess_runs: recessed[run] = float(rear_recess.depth_m)
+			DETAIL.commit_utilities(root, utilities, DETAIL.lower_outline(ring, recessed))
 		# Roof details follow the instance's two-slope roof_plane.
 		var plane_ok: bool = (cfg.has("roof_vents") or cfg.has("gable_rakes")) and DETAIL.plane_valid(root, cfg.get("roof_plane"))
 		if plane_ok and cfg.has("roof_vents") and DETAIL.vents_valid(root, cfg.roof_vents):
@@ -420,7 +439,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 			var ahead := vec(front.start) + vec(front.normal) * 5.0
 			DETAIL.roof_vents(root, cfg.roof_vents, cfg.roof_plane, ring, Vector2(ahead.x, ahead.z))
 		if plane_ok and cfg.has("gable_rakes") and DETAIL.rakes_valid(root, cfg.gable_rakes, (wall.vertices as Array).size() / 12):
-			DETAIL.gable_rakes(root, cfg.gable_rakes, cfg.roof_plane, wall.vertices, roofing, trim)
+			DETAIL.gable_rakes(root, cfg.gable_rakes, cfg.roof_plane, wall.vertices, roofing, trim, shade_set)
 	if merge: _merge_parts(root)
 	return root
 
@@ -582,29 +601,44 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	b.y = a.y
 	PARTS._beam(root,a,b,depth,0.16,roof)
 	# Opt-in underside_rgb lightens the soffit; joist_spacing_m hangs cross joists under it.
-	# deck_panel_m lays the soffit in panels across the depth, every deck_panel_m along the
-	# canopy, their tones cycling through deck_tones (factors on underside_rgb), and
-	# joist_tones does the same for the joists; beam_rgb runs a beam along each post row.
+	# deck_panel_m lays the soffit in boards across the depth, every deck_panel_m along the
+	# canopy, their tones cycling through deck_tones (factors on underside_rgb); deck_gap_m
+	# opens a joint that wide between neighbouring boards, deck_backing_rgb behind it.
+	# joist_tones cycles the joists' tones and joist_size_m [width, depth] sizes them;
+	# beam_rgb runs a beam (beam_size_m [width, depth]) along each post row.
 	var under_color := color(cfg,"underside_rgb",Color(0.16,0.20,0.19))
 	var panel_every := float(cfg.get("deck_panel_m", 0.0))
+	var joist_size: Array = cfg.get("joist_size_m", [0.07, 0.14])
+	var has_joists: bool = cfg.has("joist_spacing_m") and float(cfg.joist_spacing_m) >= 0.5
+	# With open joints the boards, their backing and the joists are visual only: one plain
+	# collision-only slab fills the underside down to the joists' feet, so the camera and a
+	# rising player meet a flat ceiling instead of catching on each joist.
+	var gap := clampf(float(cfg.get("deck_gap_m", 0.0)), 0.0, panel_every * 0.25) if panel_every >= 0.3 else 0.0
+	var relief := gap > 0.0
+	var deck_bottom := a.y-0.1125
 	if panel_every >= 0.3:
 		var tones: Array = cfg.get("deck_tones", [1.0])
+		if relief:
+			var backing := PARTS._material(color(cfg,"deck_backing_rgb",under_color*0.3),0.98)
+			PARTS._beam(root,a-Vector3(0,0.084,0),b-Vector3(0,0.084,0),depth-0.10,0.006,backing)
+			root.get_child(-1).set_meta("visual_only", true)
 		var from := float(cfg.station_m[0])
 		var count := 0
 		while from < float(cfg.station_m[1]) - 0.01:
 			var to := minf(from + panel_every, float(cfg.station_m[1]))
 			var f := float(tones[count % tones.size()])
-			var pa := start+t*from+n*middle
-			var pb := start+t*to+n*middle
+			var pa := start+t*(from+gap*0.5)+n*middle
+			var pb := start+t*(to-gap*0.5)+n*middle
 			pa.y = a.y-0.10
 			pb.y = pa.y
 			PARTS._beam(root,pa,pb,depth-0.10,0.025,PARTS._material(Color(under_color.r*f,under_color.g*f,under_color.b*f),0.97))
+			if relief: root.get_child(-1).set_meta("visual_only", true)
 			from = to
 			count += 1
 	else:
 		var underside := PARTS._material(under_color,0.97)
 		PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
-	if cfg.has("joist_spacing_m") and float(cfg.joist_spacing_m) >= 0.5:
+	if has_joists:
 		var joist_color := color(cfg,"joist_rgb",Color(0.3,0.3,0.29))
 		var joist_tones: Array = cfg.get("joist_tones", [1.0])
 		var joist := PARTS._material(joist_color,0.95)
@@ -612,14 +646,26 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 		var count := 0
 		while station < float(cfg.station_m[1]):
 			var j := start+t*station
-			j.y = a.y-0.1825
+			j.y = deck_bottom-float(joist_size[1])*0.5
 			var tone := float(joist_tones[count % joist_tones.size()])
 			var joist_material: Material = joist if is_equal_approx(tone, 1.0) else PARTS._material(Color(joist_color.r*tone,joist_color.g*tone,joist_color.b*tone),0.95)
-			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),0.07,0.14,joist_material)
+			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),float(joist_size[1]),joist_material)
+			if relief: root.get_child(-1).set_meta("visual_only", true)
 			station += float(cfg.joist_spacing_m)
 			count += 1
+	if relief:
+		var low := deck_bottom-(float(joist_size[1]) if has_joists else 0.0)
+		var ea := a
+		var eb := b
+		ea.y = (low+a.y-0.08)*0.5
+		eb.y = ea.y
+		PARTS._beam(root,ea,eb,depth-0.10,a.y-0.08-low,null)
+		var envelope := root.get_child(-1) as MeshInstance3D
+		envelope.visible = false
+		envelope.set_meta("collision_only", true)
 	if cfg.has("beam_rgb"):
 		var beam := PARTS._material(color(cfg,"beam_rgb",Color.GRAY),0.9)
+		var beam_size: Array = cfg.get("beam_size_m", [0.12, 0.18])
 		var rows := {}
 		for post: Dictionary in cfg.get("posts", []):
 			rows[snappedf(float(post.depth_m), 0.01)] = true
@@ -627,9 +673,9 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 			# On the posts as drawn (_panel stands them 0.06 out along n).
 			var ba := start+t*(float(cfg.station_m[0])+0.05)+n*(row+0.06)
 			var bb := start+t*(float(cfg.station_m[1])-0.05)+n*(row+0.06)
-			ba.y = a.y-0.2
+			ba.y = a.y-0.11-float(beam_size[1])*0.5
 			bb.y = ba.y
-			PARTS._beam(root,ba,bb,0.12,0.18,beam)
+			PARTS._beam(root,ba,bb,float(beam_size[0]),float(beam_size[1]),beam)
 	var steel := PARTS._material(color(palette,"carport_post_rgb",Color(0.35,0.3,0.25)),0.9)
 	var fascia: Material = trim
 	if cfg.has("fascia_rgb"): fascia = PARTS._material(color(cfg,"fascia_rgb",Color.GRAY),0.96)

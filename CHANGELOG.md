@@ -11,7 +11,7 @@ Every build of the game has a number, the one in its title on the [releases page
 - The townhouse row at 1232 Northpoint Drive looks much more like itself: its upper floor now overhangs the ground floor, and each of its three parts has its own steeper roof with vent stacks on it.
 - At 1232 Northpoint Drive, the first home has its glazed panel beside the door and its small window again, the windows sit where they really are, and there are blinds and curtains behind the glass.
 - 1232 Northpoint Drive now has the air conditioners, cabinets, bins and slatted screens that stand by its photographed doors, white downspouts, and the low utility room with its double door and flues on its north end.
-- The carport at 1232 Northpoint Drive is lower and shorter, as it really is, with painted posts and a grey underside, and the homes at its north end face a lawn instead of parking.
+- The carport at 1232 Northpoint Drive is lower and shorter, as it really is, with painted posts and a boarded grey underside on its joists, and the homes at its north end face a lawn instead of parking.
 
 ## Build 2336 (2026-11-19)
 

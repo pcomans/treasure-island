@@ -27776,6 +27776,16 @@ Comparing every record against the base commit found a change the author hadn't 
 - Didn't work: the captures came from a dirty tree on ef6546ad, not the committed head, so the reviewed pixels can't be tied to the commit. The front-camera roof band disagrees with the north-end pitch and is still unresolved.
 - Change: capture from the committed head, or record the diff of the dirty tree. Add a close-up of the south segment, and a side view of the carport fascia matched to the front photo.
 
+### ti-visual-review — housing pilot r5 (2026-11-19)
+- Worked: the camera-solved height evidence (sheet 7) checked two ways settled a whole round's question.
+- Didn't: the claimed underside detail wasn't checked in the walking frames before handoff.
+- Change: the author should contrast-stretch the gameplay frames before claiming surface detail.
+
+### ti-code-review — housing detail pilot, 1232 Northpoint (2026-11-19)
+- What worked well: every option is keyed and guarded, so I could prove other buildings are unchanged from the code paths without an engine run; the run logs answered the warm-up, bake, neighbour-fit and suite questions directly.
+- What did not work well: the roof shape lives in three config places, and the script that wrote them isn't in Git, so I had to check by hand that they agree.
+- What the team should change next time: when one shape feeds two builders, commit the generator or add a contract check that the copies agree in the same change.
+
 ### ti-implementation — housing detail pilot, 1232 Northpoint (2026-11-19)
 - What worked well: back-projecting photo edges through the solved camera, checked first on the render's own known geometry (0.1 m), settled the overhang height, the window stations, the gable apex and the annex sizes; crops of the full-frame photo-camera render gave matched comparisons the narrow-lens views never did; every option opt-in with a contract case and a five-building control dump kept the other 112 buildings provably unchanged.
 - What did not work well: I captured r3 to r4b from a dirty tree, so reviewed pixels could not be tied to a commit; the front photo's solved camera stands several metres too far out (a facade-only solve trades distance for lens width), which cost two rounds on the carport and the head-on roof; a warm-up count with street detail on was first compared against main's with it off.

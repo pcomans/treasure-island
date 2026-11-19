@@ -16,9 +16,22 @@ extends SceneTree
 ##     soffit takes its soffit_rgb;
 ##   - an end annex stands outside the frozen footprint only with its recorded exception,
 ##     and collides as drawn: chest-height probes into its three open faces and one down
-##     through its roof meet its contact faces, which the config without it lacks.
+##     through its roof meet its contact faces, which the config without it lacks; the
+##     validator refuses it for another source and an outline 2 cm off the block;
+##   - the segment roof is described once (roof_plane): the production model's frame
+##     matches it, the revision config holds no copy, the retained closures' tops lie on
+##     its surface, roof_vents.avoid marks the production vents, which stand on it, and
+##     every detail vent's foot is just under it;
+##   - the carport's open-jointed deck and joists are visual only, inside the plain
+##     collision-only slab that ends at the joists' feet;
+##   - utilities are refused only where they overlap the lower storey's plan (the footprint
+##     less its recessed runs' strips), and join_runs refuses a rear setback beside it.
 
 const FAMILY := preload("res://game/scripts/world/facades/housing_site_family.gd")
+const DETAIL := preload("res://game/scripts/world/facades/housing_unit_detail.gd")
+const MODEL := preload("res://game/scripts/world/facades/northpoint_1232_quality_model.gd")
+const KIT := preload("res://game/scripts/world/facades/housing_garage_court.gd")
+const REVISION := "res://game/resources/facades/northpoint_1232_quality_revision.json"
 const ATTACH := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 const SIDING := preload("res://game/resources/housing_family/siding.gdshader")
 const SOURCE := "w96215673"
@@ -49,13 +62,17 @@ func _initialize() -> void:
 			entry.erase("utilities")
 		for pipe: Dictionary in frame.get("pipes", []):
 			pipe.erase("style")
+	# Closed deck joints keep the carport's boards and joists colliding as before.
+	plain_cfg.carport.erase("deck_gap_m")
 	var plain := FAMILY.build(wall, roof, plain_cfg)
 	var model := FAMILY.build(wall, roof, cfg)
 	_check_floor_line_and_gables(plain, model, cfg, wall)
 	_check_plain(plain)
 	_check_details(model, FAMILY.build(wall, roof, cfg), cfg, wall)
+	_check_roof_agreement(cfg)
+	_check_refusals(cfg, wall, roof)
 	if failures.is_empty():
-		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts collide as drawn, vents stand inside the footprint and rakes over their gables; the siding takes its lap shadow; the rake replaces its gables' eave trim, story_band 0 draws no board and the setback's soffit takes soffit_rgb; the end annex stands outside the footprint by its recorded exception and collides as drawn")
+		print("PASS: housing unit details: absent keys add no part and leave the siding's default; blinds and utility shells are visual only and every blind sits behind the glass of a front window; each utility's box collider holds it, outside the building and off every front door's landing; downspouts collide as drawn, vents stand inside the footprint with their feet just under the roof, and rakes over their gables; the siding takes its lap shadow; the rake replaces its gables' eave trim, story_band 0 draws no board and the setback's soffit takes soffit_rgb; the end annex stands outside the footprint by its recorded exception (refused for another source or a moved outline) and collides as drawn; the roof is described once and its closures and production vents lie on it; the carport's relief is visual only inside its collision slab; utilities are refused by real overlap with the lower storey; join_runs refuses a rear setback beside it")
 		quit(0)
 	else:
 		for failure: String in failures:
@@ -86,15 +103,23 @@ func _check_details(model: Node3D, twin: Node3D, cfg: Dictionary, wall: Dictiona
 	var blinds: Array[MeshInstance3D] = []
 	var shells: Array[MeshInstance3D] = []
 	var boxes: Array[MeshInstance3D] = []
+	var relief: Array[MeshInstance3D] = []
+	var slabs: Array[MeshInstance3D] = []
 	for child: Node in model.get_children():
 		var mesh := child as MeshInstance3D
 		if mesh == null:
 			continue
 		if child.get_meta("visual_only", false):
-			check(str(child.get_meta("family_role", "")) == "solid" and mesh.visible, "visual-only parts are visible and in the solid role")
-			(blinds if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF else shells).append(mesh)
+			var role := str(child.get_meta("family_role", ""))
+			check(mesh.visible and role in ["solid", "support"], "visual-only parts are visible, in the solid role or (the carport's relief) the support role")
+			if role == "support":
+				relief.append(mesh)
+			else:
+				(blinds if mesh.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_OFF else shells).append(mesh)
 		elif child.get_meta("collision_only", false) and str(child.get_meta("family_role", "")) == "solid":
 			boxes.append(mesh)
+		elif child.get_meta("collision_only", false) and str(child.get_meta("family_role", "")) == "support":
+			slabs.append(mesh)
 	check(not blinds.is_empty() and not shells.is_empty() and boxes.size() == 1, "blinds, utility shells and the utilities' collision boxes are built apart")
 	var contacts: Dictionary = ATTACH._contacts(model, [] as Array[MeshInstance3D], SOURCE)
 	check(bool(contacts.get("ok", false)), "the attachment builds contacts for the detailed model")
@@ -113,6 +138,7 @@ func _check_details(model: Node3D, twin: Node3D, cfg: Dictionary, wall: Dictiona
 	_check_utilities(shells, boxes, cfg, wall)
 	_check_downspouts_and_vents(model, support_faces, cfg, wall)
 	_check_annexes(bodies, cfg, wall)
+	_check_carport(relief, slabs, support_faces, cfg)
 	model.free()
 	twin.free()
 
@@ -221,6 +247,9 @@ func _check_downspouts_and_vents(model: Node3D, support: PackedVector3Array, cfg
 	var metal: Array = cfg.roof_vents.get("rgb", [0.56, 0.57, 0.58])
 	var vents := 0
 	var inside := 0
+	# Each vent's lowest point against the roof surface: vertices within 0.3 m (in plan) of
+	# a vent's first one count as that vent.
+	var feet: Array[Array] = []
 	for child: Node in model.get_children():
 		var mesh := child as MeshInstance3D
 		if mesh == null or mesh.mesh == null or str(child.get_meta("family_role", "support")) != "support":
@@ -231,8 +260,24 @@ func _check_downspouts_and_vents(model: Node3D, support: PackedVector3Array, cfg
 				continue
 			for vertex: Vector3 in mesh.mesh.surface_get_arrays(s)[Mesh.ARRAY_VERTEX]:
 				vents += 1
-				inside += int(Geometry2D.is_point_in_polygon(Vector2(vertex.x, vertex.z), ring))
+				var xz := Vector2(vertex.x, vertex.z)
+				inside += int(Geometry2D.is_point_in_polygon(xz, ring))
+				var under := vertex.y - DETAIL._roof_y(cfg.roof_plane, xz)
+				var found := false
+				for foot: Array in feet:
+					if (foot[0] as Vector2).distance_to(xz) <= 0.3:
+						foot[1] = minf(float(foot[1]), under)
+						found = true
+						break
+				if not found:
+					feet.append([xz, under])
 	check(vents > 0 and inside == vents, "the roof vents stand inside the footprint (%d of %d vertices inside)" % [inside, vents])
+	var floating := 0
+	var sunk := 0
+	for foot: Array in feet:
+		floating += int(float(foot[1]) > 0.005)
+		sunk += int(float(foot[1]) < -0.25)
+	check(not feet.is_empty() and floating == 0 and sunk == 0, "every vent's foot is just under the roof surface (%d vents: %d floating, %d sunk over 0.25 m)" % [feet.size(), floating, sunk])
 	var over := float(cfg.get("gable_rakes", {}).get("overhang_m", 0.0)) + 0.05
 	var vertices: Array = wall.vertices
 	var stray := 0
@@ -354,6 +399,126 @@ func _check_annexes(bodies: Dictionary, cfg: Dictionary, wall: Dictionary) -> vo
 		var over := centre + Vector3.UP * (float(annex.top_y) + 1.0)
 		var into := centre + Vector3.UP * (float(annex.top_y) - 0.5)
 		check(_crosses(support, over, into), "the annex's roof collides as drawn")
+
+
+## The carport's open-jointed relief (visual only, support role) lies inside its canopy and
+## between the collision-only slab's foot and the roof board; the slab ends at the joists'
+## feet and a probe up into it from below meets the support contact.
+func _check_carport(relief: Array[MeshInstance3D], slabs: Array[MeshInstance3D], support: PackedVector3Array, cfg: Dictionary) -> void:
+	var carport: Dictionary = cfg.get("carport", {})
+	if float(carport.get("deck_gap_m", 0.0)) <= 0.0:
+		return
+	check(not relief.is_empty() and slabs.size() == 1, "the open-jointed carport deck is drawn visual only over one collision-only slab")
+	if relief.is_empty() or slabs.size() != 1:
+		return
+	var start := _vec(carport.frame.start)
+	var t := _vec(carport.frame.tangent)
+	var n := _vec(carport.frame.normal)
+	var roof_y := float(carport.roof_y)
+	var foot := roof_y - 0.1125 - float(carport.joist_size_m[1])
+	var low := INF
+	for vertex: Vector3 in _triangles(slabs[0]):
+		low = minf(low, vertex.y)
+	check(absf(low - foot) <= 0.001, "the carport's collision slab ends at the joists' feet (%.4f, joists' feet %.4f)" % [low, foot])
+	var outside := 0
+	var total := 0
+	for mesh: MeshInstance3D in relief:
+		for vertex: Vector3 in _triangles(mesh):
+			total += 1
+			var d := vertex - start
+			var along := d.dot(t)
+			var out := d.dot(n)
+			var held := along >= float(carport.station_m[0]) - 0.01 and along <= float(carport.station_m[1]) + 0.01
+			held = held and out >= float(carport.depth_m[0]) - 0.01 and out <= float(carport.depth_m[1]) + 0.01
+			held = held and vertex.y >= foot - 0.001 and vertex.y <= roof_y - 0.08 + 0.001
+			outside += int(not held)
+	check(total > 0 and outside == 0, "the carport's drawn relief lies inside its canopy and its collision slab (%d of %d vertices outside)" % [outside, total])
+	var middle := start + t * (float(carport.station_m[0]) + float(carport.station_m[1])) * 0.5 + n * (float(carport.depth_m[0]) + float(carport.depth_m[1])) * 0.5
+	check(_crosses(support, Vector3(middle.x, foot - 0.3, middle.z), Vector3(middle.x, foot + 0.02, middle.z)), "a probe up under the carport meets its collision slab at the joists' feet")
+
+
+## The segment roof is described once: roof_plane, which the live factory hands the
+## production model. Its derived copies agree with it: the model's frame constants, the
+## retained closures' tops on its surface (their feet on the wall top), and
+## roof_vents.avoid at the production vents, which stand on it.
+func _check_roof_agreement(cfg: Dictionary) -> void:
+	var plane: Dictionary = cfg.roof_plane
+	check(MODEL.same_roof_frame(plane), "the production roof's frame constants match roof_plane's axis, normal and ridge_d")
+	var revision: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(REVISION))
+	check(not revision.has("roof_segments") and not revision.has("roof_plane"), "the production revision config holds no second copy of the roof")
+	var top := float(cfg.get("wall_top_y", 8.05))
+	var off := 0
+	var total := 0
+	for tri: Array in cfg.retained_roof_wall_closures:
+		for point: Array in tri:
+			total += 1
+			var v := _vec(point)
+			if absf(v.y - top) <= 0.001:
+				continue
+			var best := INF
+			for k in (plane.segments as Array).size():
+				best = minf(best, absf(v.y - DETAIL._roof_y(plane, Vector2(v.x, v.z), k)))
+			off += int(best > 0.01)
+	check(total > 0 and off == 0, "every retained closure vertex lies on the wall top or the roof surface (%d of %d off both)" % [off, total])
+	var vents := MODEL.segment_vents(plane)
+	var avoid: Array = cfg.roof_vents.get("avoid", [])
+	check(vents.size() == 6 and avoid.size() == vents.size(), "the production roof's six vents, each marked in roof_vents.avoid (%d vents, %d marks)" % [vents.size(), avoid.size()])
+	for i in mini(vents.size(), avoid.size()):
+		var vent: Vector3 = vents[i]
+		var mark := Vector2(float(avoid[i][0]), float(avoid[i][1]))
+		check(Vector2(vent.x, vent.z).distance_to(mark) <= 0.001, "roof_vents.avoid[%d] marks the production vent there" % i)
+		check(absf(vent.y - DETAIL._roof_y(plane, Vector2(vent.x, vent.z))) <= 0.01, "the production vent %d stands on the roof surface" % i)
+
+
+## What the validators refuse, each on a copy of 1232's own data, its errors muted: the
+## annex for another source and with an outline 2 cm off the block; a utility overlapping
+## the lower storey's plan (but not one on a recessed run's strip); join_runs beside a rear
+## setback.
+func _check_refusals(cfg: Dictionary, wall: Dictionary, roof: Dictionary) -> void:
+	var vertices: Array = wall.vertices
+	var annex: Dictionary = cfg.end_annexes[0]
+	var probe := Node3D.new()
+	check(DETAIL.annex_valid(probe, annex, SOURCE, vertices), "1232's annex passes its validator")
+	Engine.print_error_messages = false
+	var other := Node3D.new()
+	var refused_other := not DETAIL.annex_valid(other, annex, "w96215659", vertices)
+	var moved: Dictionary = annex.duplicate(true)
+	moved.osm_exception.outline_xz[2][0] = float(moved.osm_exception.outline_xz[2][0]) + 0.02
+	var shifted := Node3D.new()
+	var refused_moved := not DETAIL.annex_valid(shifted, moved, SOURCE, vertices)
+	Engine.print_error_messages = true
+	check(refused_other and not bool(other.get_meta("build_valid", true)), "the annex is refused for another source")
+	check(refused_moved and not bool(shifted.get_meta("build_valid", true)), "an annex outline 2 cm off its block is refused")
+	for node: Node3D in [probe, other, shifted]:
+		node.free()
+	# The lower storey's plan on a 10 m square, run 0 (along x at z 0) set back 0.3 m.
+	var square := PackedVector2Array([Vector2(0, 0), Vector2(10, 0), Vector2(10, 10), Vector2(0, 10)])
+	var plan := DETAIL.lower_outline(square, {0: 0.3})
+	var area := 0.0
+	for part: PackedVector2Array in plan:
+		area += DETAIL._area(part)
+	check(absf(area - 97.0) < 0.01, "the lower storey's plan loses only the recessed run's strip (%.3f m2 of 97)" % area)
+	var on_strip := PackedVector2Array([Vector2(2, 0.05), Vector2(3, 0.05), Vector2(3, 0.25), Vector2(2, 0.25)])
+	var into_wall := PackedVector2Array([Vector2(9.95, 4), Vector2(10.5, 4), Vector2(10.5, 5), Vector2(9.95, 5)])
+	var kept := Node3D.new()
+	DETAIL.commit_utilities(kept, {"footprints": [["unit", "on-strip", on_strip]], "landings": [], "buckets": {}, "colors": {}, "roughness": 0.9, "collision": KIT._bucket()}, plan)
+	check(bool(kept.get_meta("build_valid", true)), "a utility under a recessed run's overhang stands clear of the lower storey")
+	var inside := Node3D.new()
+	Engine.print_error_messages = false
+	DETAIL.commit_utilities(inside, {"footprints": [["unit", "into-wall", into_wall]], "landings": [], "buckets": {}, "colors": {}, "roughness": 0.9, "collision": KIT._bucket()}, plan)
+	Engine.print_error_messages = true
+	check(not bool(inside.get_meta("build_valid", true)), "a utility 5 cm into an unrecessed wall is refused")
+	kept.free()
+	inside.free()
+	# join_runs beside a rear setback: the west front's run 10 and the gable run 9 before it.
+	var rear_cfg: Dictionary = cfg.duplicate(true)
+	rear_cfg["lower_rear_recess"] = {"depth_m": 0.3, "band_y": 4.8}
+	rear_cfg["rear_frames"] = [{"id": "contract-rear", "elevation_role": "rear", "runs": [9]}]
+	Engine.print_error_messages = false
+	var joined := FAMILY.build(wall, roof, rear_cfg)
+	Engine.print_error_messages = true
+	check(not bool(joined.get_meta("build_valid", true)), "join_runs refuses a rear setback run beside a recessed run")
+	joined.free()
 
 
 ## Every drawn triangle of a model, in its frame.

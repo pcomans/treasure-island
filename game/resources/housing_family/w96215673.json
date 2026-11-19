@@ -38,7 +38,17 @@
             "width_m": 1.82,
             "height_m": 1.3,
             "center_y": 6.95,
-            "glazing": "blue"
+            "glazing": "blue",
+            "blind": {
+              "drops": [
+                0.0,
+                1.0
+              ],
+              "curtains": [
+                0.5,
+                0.0
+              ]
+            }
           }
         ],
         "lower_windows": [
@@ -989,15 +999,15 @@
     ],
     "inference": "One bounded visible canopy segment. North end, post stations and rows, height and paint re-read from the March 2025 north-end and front photos (housing-detail pilot, 2026-11-19): the north segment's two units stand open; the canopy's inner edge at the door heads, the outer posts set back under a cantilevered front; depth unchanged. Length, depth, height and post stations are production_inference; endpoints do not claim physical endpoints or hidden attachment continuation.",
     "underside_rgb": [
-      0.32,
-      0.35,
-      0.43
-    ],
-    "joist_spacing_m": 1.6,
-    "joist_rgb": [
-      0.42,
+      0.36,
       0.39,
-      0.35
+      0.45
+    ],
+    "joist_spacing_m": 0.9,
+    "joist_rgb": [
+      0.54,
+      0.51,
+      0.46
     ],
     "fascia_rgb": [
       0.45,
@@ -1010,22 +1020,35 @@
       0.33,
       0.34
     ],
-    "deck_panel_m": 0.9,
+    "deck_panel_m": 0.3,
     "deck_tones": [
       1.0,
-      0.9,
-      1.07,
-      0.95,
-      1.03
+      0.84,
+      1.12,
+      0.92
     ],
     "joist_tones": [
       1.0,
-      0.86
+      0.8
     ],
     "beam_rgb": [
-      0.36,
-      0.35,
-      0.33
+      0.3,
+      0.29,
+      0.27
+    ],
+    "deck_gap_m": 0.04,
+    "deck_backing_rgb": [
+      0.06,
+      0.06,
+      0.07
+    ],
+    "joist_size_m": [
+      0.08,
+      0.16
+    ],
+    "beam_size_m": [
+      0.14,
+      0.2
     ],
     "fascia_top_rgb": [
       0.45,
@@ -4365,7 +4388,7 @@
       ]
     ]
   ],
-  "retained_roof_wall_closure_inference": "Round 4: the segment gables' boundary down to the unchanged 8.05 m family wall top along every run (split at the cuts and ridges), and the exposed gable ends where neighbouring segments' roofs differ at the steps; exact source XZ, no hidden openings inferred.",
+  "retained_roof_wall_closure_inference": "The segment gables' boundary down to the unchanged 8.05 m family wall top along every run (split at the cuts and ridges), and the exposed gable ends where neighbouring segments' roofs differ at the steps; exact source XZ, no hidden openings inferred. Written by tools/housing_1232_roof.py.",
   "rear_frames": [
     {
       "source_run": 1,
@@ -5334,7 +5357,12 @@
   "window_glass": {
     "roughness": 0.08,
     "metallic": 0.45,
-    "lift": 0.45
+    "lift": 0.45,
+    "lower": {
+      "roughness": 0.32,
+      "metallic": 0.12,
+      "lift": 0.55
+    }
   },
   "window_sill_out_m": 0.04,
   "siding_course_shadow": 1.0,
@@ -5444,49 +5472,6 @@
     }
   },
   "downspout_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): white downspouts at the north-west corner (stepping out round the storey band), a pair either side of the first step, and one at the south segment's first corner.",
-  "roof_plane": {
-    "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): each segment under its own gable roof with a rake at the steps (front photo, the north step); the north gable's apex on that segment's centre line. Pitch 0.36 from the north-end photo through its solved camera (apex, west rake, ridge silhouette); production inference.",
-    "axis": [
-      -0.04894628457,
-      0.9988014123
-    ],
-    "normal": [
-      -0.9988014123,
-      -0.04894628457
-    ],
-    "ridge_d": 336.328678,
-    "slope": 0.36,
-    "segments": [
-      {
-        "ridge_offset": 0.968,
-        "ridge_y": 10.039
-      },
-      {
-        "ridge_offset": -0.6295,
-        "ridge_y": 10.1608
-      },
-      {
-        "ridge_offset": 0.7725,
-        "ridge_y": 10.0453
-      }
-    ],
-    "cuts": [
-      {
-        "west_t": -725.67,
-        "east_t": -725.58,
-        "jog_d": 0.3385
-      },
-      {
-        "west_t": -711.16,
-        "east_t": -710.43,
-        "jog_d": 0.232
-      }
-    ],
-    "extent_t": [
-      -739.65,
-      -696.48
-    ]
-  },
   "roof_vents": {
     "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): grey metal vent stacks and a few box vents spread along the upper roof, most on the west slope; Esri World Imagery 2026-05-26 (z19) shows about fifteen along the ridge, some on the east slope.",
     "rgb": [
@@ -5496,7 +5481,7 @@
     ],
     "roughness": 0.35,
     "metallic": 0.6,
-    "spacing_m": 2.2,
+    "spacing_m": 2.4,
     "jitter_m": 0.7,
     "offset_m": [
       0.45,
@@ -5507,12 +5492,21 @@
     "stack_share": 0.85,
     "seed": 1232,
     "stack_height_m": [
-      0.45,
-      0.75
+      0.35,
+      0.65
     ],
     "stack_radius_m": [
-      0.045,
-      0.065
+      0.06,
+      0.085
+    ],
+    "cluster_size": [
+      1,
+      3
+    ],
+    "cluster_step_m": 0.4,
+    "cap_m": [
+      0.035,
+      0.05
     ],
     "avoid": [
       [
@@ -5565,7 +5559,8 @@
       0.72,
       0.76,
       0.82
-    ]
+    ],
+    "shade_m": 0.5
   },
   "end_annexes": [
     {
@@ -5606,6 +5601,16 @@
         0.21,
         0.22
       ],
+      "flue_rgb": [
+        0.4,
+        0.43,
+        0.47
+      ],
+      "flue_cap_rgb": [
+        0.8,
+        0.82,
+        0.84
+      ],
       "osm_exception": {
         "reason": "The frozen OSM snapshot's footprint of 1232 (way 96215673) stops at the north wall; the dated photo shows a one-storey annex on it. This entry draws that block outside the footprint: a recorded exception to taking the snapshot as the horizontal layout, for this block only (the OSM way, the footprint and the generated coverage records stay unchanged).",
         "approved": "Owner, 2026-11-19 (question tool): \"Yes, build the annex\" - a map exception for 1232's one-storey north-end annex only, not the whole family, with the March 2025 north-end photo as the evidence.",
@@ -5630,5 +5635,48 @@
         ]
       }
     }
-  ]
+  ],
+  "roof_plane": {
+    "evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): each segment under its own gable roof with a rake at the steps (front photo, the north step); the north gable's apex on that segment's centre line. Pitch 0.36 from the north-end photo through its solved camera (apex, west rake, ridge silhouette); production inference. Written by tools/housing_1232_roof.py.",
+    "axis": [
+      -0.04894628457,
+      0.9988014123
+    ],
+    "normal": [
+      -0.9988014123,
+      -0.04894628457
+    ],
+    "ridge_d": 336.328678,
+    "slope": 0.36,
+    "segments": [
+      {
+        "ridge_offset": 0.968,
+        "ridge_y": 10.039
+      },
+      {
+        "ridge_offset": -0.6295,
+        "ridge_y": 10.1608
+      },
+      {
+        "ridge_offset": 0.7725,
+        "ridge_y": 10.0453
+      }
+    ],
+    "cuts": [
+      {
+        "west_t": -725.67,
+        "east_t": -725.58,
+        "jog_d": 0.3385
+      },
+      {
+        "west_t": -711.16,
+        "east_t": -710.43,
+        "jog_d": 0.232
+      }
+    ],
+    "extent_t": [
+      -739.65,
+      -696.48
+    ]
+  }
 }
