@@ -87,11 +87,11 @@
     {
       "id": "murals",
       "title": "Murals",
-      "credit": "Bulgaria in the USA by Oleg Gotchev (the handball courts at Ninth Street and Avenue\u00a0D)\nRocky Purslane by Nathaniel J. Bice (Mersea restaurant, Treasure Island)\nThe mural on the north-northwest end wall of Building 201 (Island Cove Market, 800 Avenue I), Treasure Island; its artist is not established",
+      "credit": "Bulgaria in the USA by Oleg Gotchev (the handball courts at Ninth Street and Avenue\u00a0D)\nRocky Purslane by Nathaniel J. Bice (Mersea restaurant, Treasure Island)\nThe mural on the north-northwest end wall of Building 201 (Island Cove Market, 800 Avenue I), Treasure Island; its artist is not established\nBuilding 1's hall mural is this game's own sea-animal painting; its layout of scenes follows the hall's 1975 Bicentennial mural by Lowell Nesbitt.",
       "licence": "",
       "url": "",
       "required": false,
-      "used_for": "Painted reconstructions of the real murals, as game art rather than exact copies: Bulgaria in the USA and Rocky Purslane from photographs of them, Building 201's from a written description of photographs.",
+      "used_for": "Painted reconstructions of the real murals, as game art rather than exact copies: Bulgaria in the USA and Rocky Purslane from photographs of them, Building 201's from a written description of photographs. Building 1's hall mural is not a reconstruction: it is the game's own painting (own work below), with California sea animals in place of the people, after the original's sequence of scenes.",
       "folders": ["game/resources/models/bulgarian_wall", "game/resources/mersea", "game/resources/textures/world/b201"]
     },
     {
@@ -133,6 +133,10 @@
     {
       "folder": "game/resources/textures/world/aracely",
       "made_by": "the Aracely Cafe's art, generated with tools/generate-texture from text prompts; aracely_lawn.png is Poly Haven's sparse_grass (CC0, credited above) through the ground shader's masks (aracely/README.md)"
+    },
+    {
+      "folder": "game/resources/textures/world/b1_hall",
+      "made_by": "Building 1's hall mural, an original sea-animal painting generated with tools/generate-texture from text prompts and composed with ImageMagick, its ribbon drawn in code; its layout of scenes follows the hall's 1975 mural, credited above (b1_hall/PROVENANCE.md)"
     },
     {
       "folder": "game/resources/textures/world/d1_b225_repair_v1",

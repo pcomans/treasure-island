@@ -12,6 +12,10 @@ game/resources/textures/world/aracely/aracely_planting.png.import
 game/resources/textures/world/aracely/aracely_script.png.import 508
 game/resources/textures/world/aracely/aracely_slab.png.import
 game/resources/textures/world/aracely/gaa_sign.png.import
+game/resources/textures/world/b1_hall/mural_1.png.import
+game/resources/textures/world/b1_hall/mural_2.png.import
+game/resources/textures/world/b1_hall/mural_3.png.import
+game/resources/textures/world/b1_hall/mural_4.png.import
 game/resources/textures/world/b201/apron_concrete.png.import
 game/resources/textures/world/b201/banner.png.import
 game/resources/textures/world/b201/lot_worn.png.import
