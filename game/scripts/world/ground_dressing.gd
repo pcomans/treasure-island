@@ -49,6 +49,9 @@ const STONE_SHADER_PATH := "res://game/resources/materials/world/ground_cover/gr
 const CHIP_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_chips.gdshader"
 const MASK_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_mask.gdshader"
 const YARD_SHADER_PATH := "res://game/resources/materials/world/ground_cover/ground_dressing_yard.gdshader"
+## The world's parts (WorldLoader's) whose meshes the captures copy, each with whether
+## it is ground (a building is not).
+const CAPTURED_PARTS := {"ground_and_areas": true, "roads_and_paths": true, "buildings": false}
 
 const DENSITY_SETTING := "treasure_island/ground_dressing/density"
 const DENSITY_FLAG := "--ground-dressing"
@@ -207,7 +210,7 @@ var _window_centre := Vector2.INF
 var _capture_shader: Shader
 ## A ground family or yard material -> [colour material, surface material].
 var _capture_materials := {}
-## Every ground-cover material in the world, as keys.
+## Every ground-cover material the captured meshes draw, as keys (lawn_materials()).
 var _ground_materials := {}
 var _mask_block: ShaderMaterial
 var _mask_pass: ShaderMaterial
@@ -970,12 +973,9 @@ func _build_captures() -> void:
 	_chips_occluder = _ring_material("ground_dressing_chips_occluder", mask_shader)
 	_chips_occluder.set_shader_parameter("factor", Vector4.ZERO)
 	_chips_occluder.set_shader_parameter("lift_m", CHIP_OCCLUDER_LIFT_M)
-	for parent_name: String in ["ground_and_areas", "roads_and_paths", "buildings"]:
-		var parent: Node = _world.get(parent_name)
-		for node: Node in parent.find_children("*", "MeshInstance3D", true, false):
-			var source := node as MeshInstance3D
-			if source.mesh != null and source.is_visible_in_tree():
-				_copy_mesh(source, parent_name != "buildings")
+	for part: String in CAPTURED_PARTS:
+		for source: MeshInstance3D in captured_meshes(_world, part):
+			_copy_mesh(source, CAPTURED_PARTS[part])
 	var street_detail: Node = _world.get("street_detail")
 	for layer: String in ["Furniture", "Clutter"]:
 		for node: Node in street_detail.get_node(layer).find_children("*", "MultiMeshInstance3D", true, false):
@@ -1103,12 +1103,46 @@ func _add_copy(viewport: SubViewport, source: MeshInstance3D, materials: Array[M
 	viewport.add_child(copy)
 
 
+## The meshes the captures copy from one of world's CAPTURED_PARTS: every visible
+## MeshInstance3D under it that has a mesh.
+static func captured_meshes(world: Node, part: String) -> Array[MeshInstance3D]:
+	var found: Array[MeshInstance3D] = []
+	for node: Node in (world.get(part) as Node).find_children("*", "MeshInstance3D", true, false):
+		var source := node as MeshInstance3D
+		if source.mesh != null and source.is_visible_in_tree():
+			found.append(source)
+	return found
+
+
+## Whether a surface's material is ground cover (its shader is GROUND_COVER's), which
+## the captures draw by its family and whose lawn threads follow the grass.
+static func is_ground_cover(material: Material) -> bool:
+	var shader_material := material as ShaderMaterial
+	return shader_material != null and shader_material.shader != null and shader_material.shader.resource_path == (GROUND_COVER.SHADER as Shader).resource_path
+
+
+## The world's materials whose lawn threads the grass paints in play
+## (_set_lawn_threads): the ground cover the captured meshes draw, each once. The bake's
+## material sharing shares them only among themselves (tools/share_baked_materials.gd).
+static func lawn_materials(world: Node) -> Array[Material]:
+	var found: Array[Material] = []
+	var seen := {}
+	for part: String in CAPTURED_PARTS:
+		for source: MeshInstance3D in captured_meshes(world, part):
+			for index in source.mesh.get_surface_count():
+				var material := source.get_active_material(index)
+				if is_ground_cover(material) and not seen.has(material):
+					seen[material] = true
+					found.append(material)
+	return found
+
+
 ## A surface material's capture materials, [colour, surface], or [] where nothing grows.
 func _capture_pair(material: Material, kerb: bool) -> Array:
 	if material == null:
 		return []
-	var shader_material := material as ShaderMaterial
-	if shader_material != null and shader_material.shader != null and shader_material.shader.resource_path == (GROUND_COVER.SHADER as Shader).resource_path:
+	if is_ground_cover(material):
+		var shader_material := material as ShaderMaterial
 		return _ground_capture(shader_material, shader_material.resource_name.trim_prefix("ground_cover_"), kerb)
 	if material is BaseMaterial3D and YARD_DRESS.has(material.resource_name):
 		return _yard_capture(material as BaseMaterial3D)

@@ -2,6 +2,7 @@ extends SceneTree
 
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 const MERGE_BUILDINGS := preload("res://tools/merge_baked_buildings.gd")
+const SHARE_MATERIALS := preload("res://tools/share_baked_materials.gd")
 const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 ## Build the platform static scene from the same validated source generator as native play.
 ## The generated scene is a disposable build product, never a source-of-truth cache.
@@ -63,6 +64,15 @@ func _run() -> void:
 	# A script error inside the merge comes back as an empty report.
 	if not merged.has("problems") or not (merged.problems as PackedStringArray).is_empty():
 		push_error("The building merge failed: ", merged)
+		quit(1)
+		return
+	# Last, after everything that makes or points to materials: the builders (the street
+	# detail's batches among them) while the world loads, the prune and the merge.
+	var share_started := Time.get_ticks_msec()
+	var shared := SHARE_MATERIALS.share([world.get_node("PlayableWorld"), world.get_node("ContextWorld")], SHARE_MATERIALS.world_walkers(world))
+	print("BAKE_SHARE_MATERIALS ", shared, " ms=", Time.get_ticks_msec() - share_started)
+	if not shared.has("problems") or not (shared.problems as PackedStringArray).is_empty():
+		push_error("The material sharing failed: ", shared)
 		quit(1)
 		return
 	var packed := PREBUILT_WORLD.pack_world(world)

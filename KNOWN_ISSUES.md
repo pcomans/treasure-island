@@ -727,7 +727,7 @@ Compared at 72 fixed views on 2026-11-06 (shader time frozen):
 Not needed to ship, and not done:
 
 - The two housing families that keep the production ground (w96215674 and w96215673) keep their 458 support and ground meshes (520 surfaces) whole: `StudyGeometry.retained_ground_contact` compares them with their collider face by face, in order, and `StudyGeometry.retained_ground_meshes` names them for the merge.
-- Per-house siding and roof colours are shader uniforms, so 397 shader-material surfaces (265 materials) and 54 housing support surfaces stay apart; about 300 would join if those colours moved into vertices (owner, 2026-11-18: not in this task). Sharing equal materials across buildings would free about 570 more uniform buffers (likewise not in this task).
+- Per-house siding and roof colours are shader uniforms, so 397 shader-material surfaces (265 materials) and 54 housing support surfaces stay apart; about 300 would join if those colours moved into vertices (owner, 2026-11-18: not in this task). Equal materials across buildings (and the rest of the baked world) are shared by the bake's last step since 2026-11-18 (below).
 - 2,895 merged surfaces in 867 batches stay apart by material (roughness, metallic, textures) or by the channels their parts carry; 524 of them hold 1 KiB of vertices or less.
 - Also kept as authored: Mersea's 171 triplanar surfaces under their own transforms, 76 on reflection layers, 57 transparent and 27 scaled parts under their own transforms.
 - Merged surfaces keep tangents that nothing reads on about 86% of vertices (about 15 MB raw, estimated from the census), and 1.87 million vertices are still unindexed triangle soup.
@@ -736,6 +736,23 @@ Not needed to ship, and not done:
 Follow-ups from the code reviews (non-blocking at `e51de21d` and `d445887a`):
 
 - `headless_bake_merge_contract.gd` has no fixtures for some kept cases: unsupported channels, per-instance settings, and parts with children or a script.
+
+## Shared materials in the bake: known gaps
+
+The bake's last step (`tools/share_baked_materials.gd`, 2026-11-18) points every node override, overlay, surface override, mesh surface and next pass in the baked world whose material is equal to another's at one of them, so the renderer keeps one material, and on the web one uniform buffer, for each. Equal is the merge's equality (`MergeBakedBuildings.value_key`: one class and every stored value the same, numbers by their bytes, resources by identity, metadata and a shader material's parameters alike) with the name, the local-to-scene flag and the next pass added, and found by the same run-time walkers: DaySun's daylight fills and the ground dressing's lawn threads write in play what they find by walking the world, so their materials are shared only among themselves. Scripted materials and materials saved in files of their own keep their identity. `headless_material_sharing_contract.gd` classifies every function in `game/scripts` that writes a material's values; one that writes a single node's material in play writes its own copy (a felled lamp's lenses, a driven car's lamps).
+
+Measured on 2026-11-18 against the building merge's head (`a5932d7b`), on worlds without the street-detail regroup, each web build with the web drive trace merged in for the measurement only, silent builds, WebKit phone rig (874 × 292 at 3x, 3D scale 0.67, corner route), two runs each:
+
+- Materials in the baked world: 1,413 → 865 on the web and 1,412 → 864 natively (shader materials 799 → 466, standard 614 → 399), in 53 groups. The largest are the merge by colour's 205 batch materials and 242 of the horizon's mapped masses; by the trace's census, buildings 661 → 568, street detail 328 → 124 and the horizon 266 → 17. 9 more would be shared if names were left out.
+- Uniform buffers on the page: 2,078 → 1,540, or 34.2 → 25.4 MB counted in 16 KiB pages; GL buffers at their peak 38,003 → 37,465, or 779.5 → 770.7 MB in pages. Vertex and index buffers, draw calls (median 3,553 and 3,561 before, 3,549 and 3,561 after), frame time (median 46 and 46 ms, 47 and 47 ms) and the engine's video memory (444.4 MB) stay as they were.
+- The bake takes 8 s (native) to 14 s (web) longer; the scene files are 12 to 18 KB smaller.
+- Pixels, on desktop and in Compatibility with the web's culling: the pier canopy's lamps by day and night, Mersea's bulbs by day and night, Building 1, a palm avenue with parked cars, a storage yard of vans and RVs, and the island overviews over land match. What differs is what moves with time between two runs: the bay's water and glitter, the docked ferry and the vegetation's sway (a rerun of the same build differs more on the palms and a shrub close-up than the two builds do).
+
+Known gaps:
+
+- Equal is by stored value: materials with equal but distinct textures or shaders stay apart, as do equal materials with different names.
+- The writer scan reads the scripts' text in `game/` (component writes, `set`, `set_deferred`, `set_indexed` and `tween_property` included): a write through a property name held in a variable, a `tween_method` or an animation track is not seen, as with the shader warm-up's scan.
+- Code that in play writes materials it finds by walking the world must be one of the step's `WALKERS`; the contract asks each such writer's classification to name its walker.
 
 ## Deferred by the owner
 

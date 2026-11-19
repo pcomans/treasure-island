@@ -264,6 +264,7 @@ tests=(
   game/tests/headless_shadow_options_contract.gd
   game/tests/headless_day_clock_contract.gd
   game/tests/headless_world_material_contract.gd
+  game/tests/headless_material_sharing_contract.gd
   game/tests/headless_ground_dressing_contract.gd
   game/tests/headless_facade_meter_uv_adapter_contract.gd
   game/tests/headless_building_study_geometry_contract.gd
