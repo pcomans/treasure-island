@@ -27608,3 +27608,21 @@ Comparing every record against the base commit found a change the author hadn't 
 ### code-review share-identical-materials-20261118, delta — 2026-11-18 (e87315e2..0a499588)
 
 - What worked well: The scan now checks itself on each spelling, so all three scratch breaks (a component write, a tween, a new function in per-function-classified day_sun.gd) failed the contract as intended. What did not work well: My break runner used a shell variable that was set only outside the script, so its backup copy failed; `git checkout` restored the file. Next time: define every path inside the script that runs under the lock.
+
+### jobcorps-fence-20261118 — 2026-11-18 — the Job Corps campus perimeter as unbreakable chain-link on four sides (branch `feature/jobcorps-fence-20261118`)
+
+- What worked well: Reading the existing data row first settled the openings without an engine: it already held the openings the built fence keeps, and a crossing sweep of every OSM highway way named each one and showed that no road or path crosses without one. `osm_way` rules gave the OSM fence `breakable: false`, which its own path cannot. Running the clearance check's own functions offline (`pocketRegions`, `shutInPockets`) on modified copies of the world compared every fix in seconds, and the third regeneration, checked that way first, came out clean: four new rows, nothing else on the island moved. The vehicle contract caught that the fence now stands across the pohutukawa case's run-up; re-aiming it from the east was a fixture change. Stopping at the blocker with offline numbers for each option got a decision in one round trip.
+- What did not work well: I spent the first regeneration before flooding the fence's region offline, and the second on a berm move whose knock-on (a south-west berm piece pushed into another and dropped) I had not simulated, so both went on what a seconds-long offline run would have shown. The flood's per-region sum of single-cell cells does not scale to a 2.1 km fence: unrelated cells elsewhere in its box, then cells between trees and the fence in the hangar pad yard's box, reached the 10-cell threshold. My first zone shape, a corridor along the fence, would have built the pad side as OSM's default breakable fence once that side became data; any pilot zone that reaches an OSM fence's line builds what its rules leave.
+- What the team should change next time: Before building a placed data fence, mark it built in a copy of the world and flood it with the check's own functions, then try every neighbour fix (yards, trees) the same way before regenerating. Budget one regeneration for those fixes when a long fence goes solid. When rules build only part of an OSM fence, keep the zone's shape off the fence's line.
+
+### ti-code-review — Job Corps fence (2026-11-18)
+
+- What worked well: A structural diff of the generated JSON, rows by id, settled "did anything else change?" in one step, and also turned up the walk-up audit change that the docs don't mention.
+- What did not work well: The suite log contains only PASS lines, so the new case's measured stop distance and the tree hit numbers could not be read from it.
+- What the team should change next time: When a rule depends on how the zone shape is placed (a marker shape), enforce it with a generator invariant rather than prose. Mention any change to the walk-up audit in the task's KNOWN_ISSUES entry.
+
+### ti-visual-review — Job Corps fence (2026-11-18)
+
+- What worked: pixel-diffing before/after first confirmed the unchanged views in seconds, leaving time for full-size crops of the changed ones.
+- What did not: the corner-351 "match" pose doesn't frame the photo's landmarks, which weakened that comparison.
+- Next time: line up match poses with a fixed landmark in the photo (shelter, pole) before capturing, and record each fence type per side from the photos before choosing kit pieces.

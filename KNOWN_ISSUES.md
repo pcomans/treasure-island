@@ -230,7 +230,7 @@ Limits:
 - A car pushes the pitch's ball with a scripted bumper push (the ball's own push model, `vehicle_manager.gd` `_push_loose`), not by contact alone: the hull's raked nose sits about a ball's height up, and without the push the car rode over the ball (2026-11-08).
 - Taillights read a dull brownish red in shade (visual review, 2026-11-08).
 - From raised views the dirt ramps still read as crisp blocks: hard straight shoulders, tyre-worn bands like planks and a skirt with a straight run to its ragged edge (visual review, 2026-11-08).
-- The Job Corps perimeter isn't built yet. When its fence rule lands it needs `"breakable": false` in its params, so cars stop at it (owner, 2026-11-08); every other fence breaks bay by bay under a car.
+- The Job Corps perimeter (`job_corps_perimeter` zone, 2026-11-18) is `"breakable": false`, so a car stops at it (owner, 2026-11-08), as at the pitches' ball-stop nets; every other fence breaks bay by bay under a car. Its hangar-pad side is not built yet (see [its section](#job-corps-perimeter-fence-job_corps_perimeter-zone-2026-11-18)).
 - The car ramps in three empty lots (the 12th Street and Avenue D dirt lot, the north slab site and the former school lot by Aracely Cafe) are an invented gameplay feature the owner asked for, not something on the island.
 - The cars' index of the drawn ground and ways is built twice at load, about 76 ms: once in `world_loader.gd` for the shoreline (`VisibleGround.new()` before `ShorelineBuilder`) and again in `vehicle_manager.gd` (`_visible_ground.build`) (code review, 2026-11-11).
 - Not covered by any test: pausing while a car rolls down the riprap, `R` while a car is sinking, and a native run of the web smoke's water leg (code review, 2026-11-11).
@@ -520,6 +520,22 @@ photos of 2025 and Jun 2026. What isn't there yet:
 - Not modelled: the containers, sheds and the school bus round the rugby field,
   and the GAA field's strip of containers and sheds by Avenue E.
 
+## Job Corps perimeter fence (`job_corps_perimeter` zone, 2026-11-18)
+
+The OSM fence round the Treasure Island Job Corps Center (w1252737750, 2,113 m) is built on four sides as galvanised chain-link, 6 ft, the campus on its inside, `"breakable": false`: Seven Seas Avenue from the campus's south corner to the north-west corner, the north side with the Avenue D entrance and the north-east notch, 5th Street, and round the 4th Street lot to the 4th Street gate. One `osm_way` rule per side builds it, each naming its evidence: 1,627 m of fence in 8 runs. It opens only where the data opens every fence: Avenue D (w1473253277) and its two sidewalks (w1098437859, w1098437860) at the north entrance, and 5th Street at its locked gate (n2253031332).
+
+- The hangar-pad side is not built. From the 4th Street gate along the pad's north-west edge and round the campus's south end (0 to 461 m along the way, about 442 m of fence) it stays data, so the campus is open there, the 4th Street gate included. Built, it shut ground in, which the clearance check's flood reports: a 0.76 m2 pocket between the pad's plastic berms (0.5 to 1.1 m from the line) and the fence, and single 0.2 m cells between the fence and the aerial's trees, which took the pad yard's own flood to its 10-cell threshold. Each such cell is a spot where the stock capsule stands clear and cannot walk out, so the flood stays as it is. The side can be built once the berms and those trees stand either against the line or clearly clear of it (1.3 m or more).
+- The zone's shape is a 2 m marker in the campus's open north field: a pilot zone that reaches the way's line would build the pad side as OSM's default breakable fence. The generator refuses that: a pilot zone reaching an OSM fence's line while that way's `breakable: false` rules leave part of it fails the build (`tools/lib/street-fence-generation.mjs`).
+- Height: the Sep 2025 views on Seven Seas Avenue (Dorm 369's old forecourt, the cafeteria) and the owner's Nov 2026 photo show it about 4 ft high. The kit's chain-link comes 6 or 8 ft, and its collision box is at least 1.83 m, so it stands 6 ft.
+- Along 5th Street and round the 4th Street lot (Avenue H, 4th Street) the Sep 2025 views show temporary chain-link panels on feet, some with dark screens; it is built as the same permanent chain-link. The Job Corps sign and its planting at the 351 Avenue H corner aren't built.
+- By the cafeteria on Seven Seas Avenue the Sep 2025 view shows welded rectangular mesh panels, not chain-link (visual review, 2026-11-18); it is built as chain-link.
+- By Dorm 369's old forecourt the fence follows OSM's line, about 6 m behind the back of the sidewalk, where the photos show it at the sidewalk's back.
+- Not photographed: the north side with the Avenue D entrance and the north-east notch.
+- OSM's inner fence w1164820773 stays unbuilt: tagged only barrier=fence, inside the campus with no dated photo, and 70 of its 133 m lie on Avenue D's east sidewalk and its kerbs.
+- At the three corners where two of its rules meet, each row draws its own terminal post at the same spot (0.000 m apart), two identical tubes; close views showed no flicker on them.
+- The accepted building w34313513 (655) keeps 1 free walk-up lane of the 5 its south side has open (`audit.clutter.walk_up_short`; on main it had at least 2): the fence along 4th Street crosses one of them. The island test still walks that side.
+- Cost (the fences layer built headless from the generated world): 96 more mesh instances (427 to 523) and 96 more surfaces, about 45,000 more vertices (about 1.6 MB), 547 more collision boxes. At the ferry spawn on the desktop renderer the layer draws 49 draw calls where it drew 40, and about 5,100 more primitives. Not measured on the web.
+
 ## The park outside Isle House (`isle_house_park` zone, 2026-11-15): study with known gaps
 
 Built from the owner's video of 2026-11-15 (f_000 to f_114, kept outside Git) and the
@@ -642,7 +658,7 @@ From the reviews of the shoreline, street ground, street objects, parked cars, v
   - Its stall lines break up past about 50 m, as in the other lots (seen in review, 2026-11-06).
   - The long side of the 655 building (OSM w34313513) reads blank in the lot views, where the photos show dark glazing (seen in review, 2026-11-06).
   - Lot trees vary only through `spreading_broadleaf` variants 0 and 1. Variants 2 and 3 are the old wide forms, 12 to 14 m across at the kit's smallest scale against the photos' 6 to 8 m.
-  - At its south-east corner the Sep 2025 photo at 351 Avenue H shows the Job Corps sign, its planting, a chain-link fence and the bus shelter about 8 m from the camera. None of the first three is built, and the shelter (OSM n1249019421) stands about 15 m east of that.
+  - At its south-east corner the Sep 2025 photo at 351 Avenue H shows the Job Corps sign, its planting, a chain-link fence and the bus shelter about 8 m from the camera. The fence is now the Job Corps perimeter's chain-link, where the photo shows temporary panels on feet; the sign and its planting aren't built, and the shelter (OSM n1249019421) stands about 15 m east of that.
 
 - **Mersea ditch and promenade** (owner video and track, 2026-11-06):
   - The owner's "boardwalk" is the wide paved promenade, a recorded exception to the OSM layout like the Johnson St lot. Its close footage stops at about z 236, so north of there, to the fence corner seen from the walk, it is plain surface and paint.
