@@ -31,7 +31,9 @@
 #    ?trace=drive it does nothing at all.
 # 4. Every shader under game/ compiles and draws, with each define it tests, on
 #    Forward+ and on the Compatibility renderer the web build uses
-#    (game/tests/shader_compile_check.gd).
+#    (game/tests/shader_compile_check.gd). And the mid-rise door landings the
+#    street generators read (data/street_detail/door_landings.json) are the ones
+#    the game builds (tools/export_door_landings.gd --check).
 # 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
@@ -337,6 +339,12 @@ for method in forward_plus gl_compatibility; do
   [ "${method}" != gl_compatibility ] || driver=(--rendering-driver opengl3)
   check_godot "game/tests/shader_compile_check.gd (${method})" 300 tools/godot --rendering-method "${method}" "${driver[@]}" --path . --audio-driver Dummy --script game/tests/shader_compile_check.gd
 done
+
+# The street generators keep plants and props off the mid-rise door landings in
+# data/street_detail/door_landings.json and pave the grass beside them; the family's
+# own build must still draw exactly those (headless, seconds). A failure names each door.
+echo "== tools/export_door_landings.gd --check"
+check_godot "tools/export_door_landings.gd --check" 300 tools/godot --headless --path . --audio-driver Dummy --script tools/export_door_landings.gd -- --check
 
 echo "== sound-state tests"
 silent_tests=()

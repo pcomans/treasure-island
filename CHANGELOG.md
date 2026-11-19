@@ -6,6 +6,19 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2336 (2026-11-19)
+
+- Doorsteps no longer sink into garden beds, lawns or park walks: the beds' mulch and the walks stop at the step and at the doorway, so the step at 490 Avenue of the Palms that was buried in mulch shows whole, with no bark chips scattered over it.
+
+## Build 2334 (2026-11-19)
+
+- Plants and hedges no longer grow over the doorsteps of the modern apartment buildings, and the grass beside the steps of the Avenue D gatehouse and the side door of 490 Avenue of the Palms is now paving; the lobby step at 490 Avenue of the Palms no longer sinks half under the sidewalk.
+- At the Job Corps dormitory (Building 369), the step of the stair-tower door now runs to the tower wall, with no strip of grass beside it.
+
+## Build 2333 (2026-11-19)
+
+- The doors of the Job Corps buildings, and of the other modern buildings built the same way, no longer have a strip of grass between the doorstep and the door: the step now runs into the doorway, and garage doorways have a floor too.
+
 ## Build 2307 (2026-11-18)
 
 - The Job Corps dormitory on California Avenue (Building 369) looks more like itself: pale walls and slate stair towers, sunshades, blinds and white sashes at its windows, an overhanging roof slab, and the antennas and duct on its north tower.

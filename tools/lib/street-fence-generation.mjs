@@ -400,12 +400,15 @@ export function placeStreetFences({
     const box = { min_x: Math.min(...xs) - reach, max_x: Math.max(...xs) + reach, min_y: Math.min(...ns) - reach, max_y: Math.max(...ns) + reach };
     return set.items.filter((item) => item.bounds.min_x <= box.max_x && item.bounds.max_x >= box.min_x && item.bounds.min_y <= box.max_y && item.bounds.max_y >= box.min_y);
   };
-  // Gameplay buffers whose bounds come within reach of a line.
+  // Gameplay buffers whose bounds come within reach of a line. A door landing's does
+  // not open a fence: fences follow OSM, and the two OSM draws at mid-rise doorsteps
+  // (w1252737733, w109042225) are recorded in KNOWN_ISSUES rather than moved.
   const nearShapes = (line, reach) => {
     const xs = line.map((point) => point[0]);
     const zs = line.map((point) => point[1]);
     const box = [Math.min(...xs) - reach, Math.max(...xs) + reach, Math.min(...zs) - reach, Math.max(...zs) + reach];
     return hardShapes.filter((shape) => {
+      if (shape.component === "landing") return false;
       const sx = shape.points.map((point) => point[0]);
       const sz = shape.points.map((point) => point[1]);
       return Math.min(...sx) - shape.radius_m <= box[1] && Math.max(...sx) + shape.radius_m >= box[0] &&

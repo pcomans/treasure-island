@@ -120,6 +120,7 @@ import { DEMOLISHED_STATUS, loadDemolishedBuildings } from "./lib/demolished-bui
 import { loadTerrainOverrides, planTerrainOverrides } from "./lib/terrain-overrides.mjs";
 import {
   generateStreetDetail,
+  loadDoorLandings,
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   streetDetailHardShapes,
@@ -2450,6 +2451,7 @@ function main() {
         return areaStyle(object.tags, object.roles).elevation_m;
       },
       rules: loadStreetGroundRules(projectRoot),
+      doorLandings: loadDoorLandings(projectRoot),
     });
     for (const [id, records] of streetGround.records) {
       const chunk = chunks.get(id);

@@ -5,7 +5,8 @@
 //   (b) scatter   - seeded zone scatter from tools/config/street-detail-zones.json;
 //   (c) set_piece - hand-picked entries from data/street_detail/set_pieces.json.
 // Every row is checked against one shared exclusion mask (doors, stairs and
-// their approaches, spawn, ferry path and QA corridors, buildings, roads).
+// their approaches, the mid-rise door landings, spawn, ferry path and QA
+// corridors, buildings, roads).
 // Coordinates are world metres: +X east, +Z south (-Z north), Y up (NAVD 88).
 
 import { createHash } from "node:crypto";
@@ -77,7 +78,9 @@ export const STREET_DETAIL_INPUTS = Object.freeze({
   set_pieces: "data/street_detail/set_pieces.json",
   tree_crowns: "data/street_detail/tree_crowns.json",
   stair_catalog: "discovery/facades/facade-recognition-catalog.json",
+  door_landings: "data/street_detail/door_landings.json",
 });
+export const DOOR_LANDINGS_SCHEMA = "ti.door-landings/1";
 // Runtime subtrees under PlayableWorld/StreetDetail, in node order; each one
 // can be switched off. "ground" rows (crossings, kerbs) feed the always-on
 // chunk surfaces in a later step and are never switched off.
@@ -91,6 +94,7 @@ export const STREET_DETAIL_EXCLUSION_KEYS = Object.freeze([
   "door_radius_m",
   "ferry_path_half_width_m",
   "land_edge_buffer_m",
+  "landing_buffer_m",
   "qa_route_half_width_m",
   "road_buffer_m",
   "spawn_forward_half_width_m",
@@ -127,6 +131,7 @@ export const STREET_DETAIL_HARD_COMPONENTS = Object.freeze([
   "stair",
   "door",
   "approach",
+  "landing",
 ]);
 
 // The street-detail zones that are recorded exceptions to the frozen OSM layout (owner
@@ -890,6 +895,52 @@ export function walkUpOccupancy(sides) {
   };
 }
 
+// The mid-rise family's entry landings and ramps as the game draws them
+// (tools/export_door_landings.gd): {source_key, block, face, kind, station_m,
+// top_y_m, top_xz, recess_xz}, top_xz the corners of its top's plan ring in world
+// [x, z] and a door's recess_xz those of its recess floor (a ramp has none).
+export function loadDoorLandings(projectRoot) {
+  const document = readJson(projectRoot, STREET_DETAIL_INPUTS.door_landings);
+  invariant(document?.schema_version === DOOR_LANDINGS_SCHEMA && Array.isArray(document.landings), `${STREET_DETAIL_INPUTS.door_landings} must be a ${DOOR_LANDINGS_SCHEMA} document`);
+  const names = new Set();
+  for (const landing of document.landings) {
+    const name = `${landing?.source_key} ${landing?.block} ${landing?.face} ${landing?.kind}`;
+    invariant(/^[wr]\d+$/u.test(landing?.source_key ?? "") && typeof landing.block === "string" && landing.block !== "" && typeof landing.face === "string" && ["unit", "lobby", "porch", "ramp"].includes(landing.kind), `Door landing ${name} needs a source_key, block, face and kind`);
+    invariant(Array.isArray(landing.station_m) && landing.station_m.length === 2 && landing.station_m.every(isFiniteNumber), `Door landing ${name} needs its two stations`);
+    invariant(Array.isArray(landing.top_xz) && landing.top_xz.length >= 3 && landing.top_xz.every(isXZ), `Door landing ${name} needs at least three [x, z] corners`);
+    // The street ground grows each top as a convex ring (grownConvexRing).
+    invariant(convexRing(landing.top_xz), `Door landing ${name}'s top must be a convex ring with an area`);
+    // A door's recess floor (between its jambs, to the door), where park ground stops too.
+    invariant(landing.kind === "ramp" ? landing.recess_xz === undefined
+      : Array.isArray(landing.recess_xz) && landing.recess_xz.length >= 3 && landing.recess_xz.every(isXZ) && convexRing(landing.recess_xz),
+    `Door landing ${name} needs its recess floor as a convex ring (recess_xz), a ramp none`);
+    invariant(!names.has(doorLandingId(landing)), `Door landing ${doorLandingId(landing)} is listed twice`);
+    names.add(doorLandingId(landing));
+  }
+  return document.landings;
+}
+
+// Whether plan corners [x, z] make a convex ring with an area: every turn the same
+// way round (a straight run between turns is allowed).
+function convexRing(points) {
+  let area = 0;
+  let sign = 0;
+  for (let index = 0; index < points.length; index += 1) {
+    const [a, b, c] = [points[index], points[(index + 1) % points.length], points[(index + 2) % points.length]];
+    area += a[0] * b[1] - b[0] * a[1];
+    const turn = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]);
+    if (Math.abs(turn) < 1e-9) continue;
+    if (sign !== 0 && Math.sign(turn) !== sign) return false;
+    sign = Math.sign(turn);
+  }
+  return Math.abs(area) / 2 > 1e-6 && sign !== 0;
+}
+
+// A door landing's name in exclusions and audits: source, block, face, kind and stations.
+function doorLandingId(landing) {
+  return `${landing.source_key}:${landing.block}:${landing.face}:${landing.kind}:${landing.station_m.join("-")}`;
+}
+
 // Every catalog stair flight, accepted or not: the stairs exist either way,
 // unless the building is demolished (tools/config/demolished-buildings.json).
 export function loadStreetDetailStairFlights(projectRoot) {
@@ -911,7 +962,9 @@ export function loadStreetDetailStairFlights(projectRoot) {
 
 // The gameplay part of the shared mask: shapes no switchable item may enter.
 // spawn is the manifest's initial spawn as {xz: [x, z], yaw}.
-export function streetDetailHardShapes(exclusions, spawn, stairFlights) {
+// landings: the mid-rise door landings (loadDoorLandings); each keeps every item
+// landing_buffer_m clear of its top, anywhere inside counting as touching it.
+export function streetDetailHardShapes(exclusions, spawn, stairFlights, landings = []) {
   invariant(Array.isArray(spawn?.xz) && spawn.xz.length === 2 && spawn.xz.every(isFiniteNumber) && isFiniteNumber(spawn.yaw), "Street detail needs the spawn position and yaw");
   const spawnXZ = [spawn.xz[0], spawn.xz[1]];
   // The player faces local -Z turned by yaw: world direction (-sin yaw, -cos yaw).
@@ -945,12 +998,50 @@ export function streetDetailHardShapes(exclusions, spawn, stairFlights) {
     shapes.push({ component: "door", source_id: sourceId, points: [flight.top], radius_m: exclusions.door_radius_m });
     shapes.push({ component: "approach", source_id: sourceId, points: [flight.bottom, approachEnd], radius_m: exclusions.approach_half_width_m });
   }
+  for (const landing of landings) {
+    const points = [...landing.top_xz, landing.top_xz[0]].map(([x, z]) => [x, z]);
+    shapes.push({
+      component: "landing",
+      source_id: doorLandingId(landing),
+      points,
+      polygon: true,
+      box: boxOfXZ(points),
+      radius_m: exclusions.landing_buffer_m,
+    });
+  }
   return shapes;
 }
 
+// [min x, max x, min z, max z] of plan points.
+function boxOfXZ(points) {
+  const xs = points.map((point) => point[0]);
+  const zs = points.map((point) => point[1]);
+  return [Math.min(...xs), Math.max(...xs), Math.min(...zs), Math.max(...zs)];
+}
+
+// A lower bound of the plan distance between two boxes (0 when they overlap).
+function boxGap(left, right) {
+  const dx = Math.max(0, left[0] - right[1], right[0] - left[1]);
+  const dz = Math.max(0, left[2] - right[3], right[2] - left[3]);
+  return Math.hypot(dx, dz);
+}
+
+// Plan distance from a point or polyline to a hard shape. A polygon shape (a door
+// landing's top) holds everything inside it at distance 0.
+export function hardShapeDistance(shape, points) {
+  if (shape.polygon && points.some((point) => pointInRing(point, shape.points, true))) return 0;
+  return points.length === 1 ? polylineDistance(points[0], shape.points) : polylinePolylineDistance(points, shape.points);
+}
+
 function hardViolation(shapes, points, itemRadius) {
+  let itemBox = null;
   for (const shape of shapes) {
-    const distance = points.length === 1 ? polylineDistance(points[0], shape.points) : polylinePolylineDistance(points, shape.points);
+    // Boxed shapes (the many small landings) are skipped when the boxes alone keep them clear.
+    if (shape.box) {
+      itemBox ??= boxOfXZ(points);
+      if (boxGap(shape.box, itemBox) >= shape.radius_m + itemRadius) continue;
+    }
+    const distance = hardShapeDistance(shape, points);
     if (distance < shape.radius_m + itemRadius) {
       return {
         reason: shape.component,
@@ -966,7 +1057,7 @@ function hardViolation(shapes, points, itemRadius) {
 function hardClearances(shapes, points, itemRadius) {
   const clearances = Object.fromEntries(STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Infinity]));
   for (const shape of shapes) {
-    const distance = points.length === 1 ? polylineDistance(points[0], shape.points) : polylinePolylineDistance(points, shape.points);
+    const distance = hardShapeDistance(shape, points);
     clearances[shape.component] = Math.min(clearances[shape.component], distance - itemRadius);
   }
   return clearances;
@@ -1093,12 +1184,32 @@ export function generateStreetDetail({
   const setPieceDocument = loadStreetDetailSetPieces(projectRoot);
   const treeCrowns = loadTreeCrowns(projectRoot);
   const stairFlights = loadStreetDetailStairFlights(projectRoot);
+  const doorLandings = loadDoorLandings(projectRoot);
   const exclusions = config.exclusions;
   const seed = config.seed;
   const spawnXZ = [spawn.xz[0], spawn.xz[1]];
-  const hardShapes = streetDetailHardShapes(exclusions, spawn, stairFlights);
+  const hardShapes = streetDetailHardShapes(exclusions, spawn, stairFlights, doorLandings);
+  // The door landings apart from the rest, for the checks that hold them differently
+  // (OSM points in pointExclusion, planted beds in placePlanting).
+  const landingShapes = hardShapes.filter((shape) => shape.component === "landing");
+  const nonLandingShapes = hardShapes.filter((shape) => shape.component !== "landing");
   // The visible ground (draped areas, raised street ground, land) a planted row rests on.
-  const groundAt = visibleGroundIndex(chunks);
+  const drawnGroundAt = visibleGroundIndex(chunks);
+  // The street ground stops its park and lot layers at a door landing's outline and a
+  // door's recess when it draws them. Inside either the plans read such a layer as laid
+  // out (the street ground's surfaceAt), so a bed's plan, and so every plant round it,
+  // is the same as without the cut; nothing is placed there either way.
+  const doorFloors = [...landingShapes.map((shape) => shape.points), ...doorLandings.filter((landing) => landing.recess_xz)
+    .map((landing) => [...landing.recess_xz, landing.recess_xz[0]])].map((points) => ({ points, box: boxOfXZ(points) }));
+  const groundAt = (xz) => {
+    const drawn = drawnGroundAt(xz);
+    if (!doorFloors.some((floor) => xz[0] >= floor.box[0] && xz[0] <= floor.box[1] && xz[1] >= floor.box[2] && xz[1] <= floor.box[3] &&
+      pointInRing(xz, floor.points, true))) return drawn;
+    const laid = ground.surfaceAt(xz);
+    if (!laid || laid.kind !== "street_paint" || laid.material_key === "street_parking") return drawn;
+    const y = grounded(xz).y + laid.bias_m;
+    return drawn && drawn.y > y + 1e-4 ? drawn : { y, material_key: laid.material_key };
+  };
 
   const objects = [...playableObjects.values()];
   const buildingItems = objects
@@ -1329,10 +1440,13 @@ export function generateStreetDetail({
     return { yaw: null, source: null };
   };
 
+  // An OSM point keeps off a door landing by its own spot only: the street
+  // furniture may still move an item mapped near one (its site check holds the
+  // landing where it lands), and the final clearance check holds every placed footprint.
   const pointExclusion = (kindName, xz, { wallBuffer }) => {
     const kind = STREET_DETAIL_KINDS[kindName];
     if (kind.layer === STREET_DETAIL_GROUND_LAYER) return null;
-    const hard = hardViolation(hardShapes, [xz], kind.footprint_radius_m);
+    const hard = hardViolation(nonLandingShapes, [xz], kind.footprint_radius_m) ?? hardViolation(landingShapes, [xz], 0);
     if (hard) return hard;
     const building = buildings.nearest(xz, wallBuffer + kind.footprint_radius_m);
     if (building.distance === 0) return { reason: "inside_building", source_id: building.key, observed_m: 0, required_m: wallBuffer };
@@ -1725,7 +1839,7 @@ export function generateStreetDetail({
       let problem = null;
       if (!contains(xz)) problem = "outside_zone";
       else if (!onLand(xz, exclusions.land_edge_buffer_m + radius * 0.5)) problem = "land_edge";
-      else if (hardViolation(hardShapes, [xz], radius)) problem = hardViolation(hardShapes, [xz], radius).reason;
+      else if (hardViolation(nonLandingShapes, [xz], radius)) problem = hardViolation(nonLandingShapes, [xz], radius).reason;
       else if (buildingsFor(rule).nearest(xz, wallBuffer + radius).distance < wallBuffer + radius) problem = "building_buffer";
       else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
       else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
@@ -1744,6 +1858,15 @@ export function generateStreetDetail({
       if (planted.problem) {
         count(audit.scatter.rejected_by_reason, planted.problem);
         return false;
+      }
+      // A plant the bed would grow on or against a door landing keeps its place in
+      // the bed's plan (the planner records it as grown), so the rest of the bed
+      // grows as it would without the landing; it is not planted, and the next
+      // plant takes its row number.
+      const landing = hardViolation(landingShapes, [xz], radius);
+      if (landing) {
+        count(audit.scatter.rejected_by_reason, landing.reason);
+        return true;
       }
       const row = {
         id: `scatter:${zone.id}:${rule.id}:p${String(placed).padStart(5, "0")}`,
@@ -2340,6 +2463,8 @@ export function generateStreetDetail({
     grounded,
     surfaceAt,
     chunks,
+    // The plans' view of the ground (park layers read as laid out inside door landings).
+    groundAt,
     parkingLots,
     parkingAisles,
     roads,
@@ -2484,6 +2609,7 @@ export function generateStreetDetail({
   rows.sort((left, right) => compareText(left.id, right.id));
   invariant(new Set(rows.map((row) => row.id)).size === rows.length, "Street detail row ids are not unique");
   const minimumClearances = Object.fromEntries(STREET_DETAIL_HARD_COMPONENTS.map((component) => [component, Infinity]));
+  const closestRows = {};
   for (const row of rows) {
     const points = row.geometry === "point" ? [[row.position_m[0], row.position_m[2]]] : row.points_m.map((point) => [point[0], point[2]]);
     row.zones = zoneShapes.filter(({ contains }) => points.some((point) => contains(point))).map(({ zone }) => zone.id).sort(compareText);
@@ -2492,13 +2618,16 @@ export function generateStreetDetail({
     for (const piece of streetDetailPieces(row)) {
       const clearances = hardClearances(hardShapes, piece.points, piece.radius);
       for (const component of STREET_DETAIL_HARD_COMPONENTS) {
+        // Fences follow OSM and do not open at a door landing (placeStreetFences).
+        if (component === "landing" && row.fence) continue;
+        if (clearances[component] < minimumClearances[component]) closestRows[component] = row.id;
         minimumClearances[component] = Math.min(minimumClearances[component], clearances[component]);
       }
     }
   }
   for (const component of STREET_DETAIL_HARD_COMPONENTS) {
     const required = hardShapes.find((shape) => shape.component === component)?.radius_m ?? 0;
-    invariant(minimumClearances[component] >= required, `Placed street detail enters the ${component} clearance`);
+    invariant(minimumClearances[component] >= required, `Placed street detail enters the ${component} clearance: ${closestRows[component]} comes within ${round3(minimumClearances[component])} m of it, where ${required} m is needed`);
   }
   audit.osm.outside_land.sort((left, right) => compareSourceKeys(left.source_id, right.source_id));
   const countBy = (field, values) => Object.fromEntries(values.map((value) => [value, rows.filter((row) => row[field] === value).length]));
@@ -2548,6 +2677,7 @@ export function generateStreetDetail({
       walk_up_lanes: { path: WALK_UP_INPUT, sha256: sha256File(resolve(projectRoot, WALK_UP_INPUT)) },
       // Only the stairs, the anchor keys and the demolished status are read; other acceptance edits to the catalog do not change this output.
       stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs, units[].anchor_source_key, units[].claim_status.reference_recognizable", flights: stairFlights.length },
+      door_landings: { path: STREET_DETAIL_INPUTS.door_landings, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.door_landings)), landings: doorLandings.length },
     },
     exclusions,
     exclusion_inputs: {

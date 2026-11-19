@@ -40,6 +40,15 @@
 // ribbon), pedestrian skin, gutter (lifts.gutter_m), wear (midway between the
 // gutter and the paint) and paint (lifts.paint_m). A zone's ground lies at least
 // a step over the paint.
+//
+// Mid-rise door landings (doorLandings, from data/street_detail/door_landings.json):
+// within the street detail's landing_buffer_m of a landing, the band's soft tops
+// and slopes (grass, mulch) are paved, so no grass or bed meets a step. A landing
+// that stands up out of the band's paving (its top over the paving across most of
+// where they overlap) cuts the band at its outline, which ends there in a closed
+// concrete face with an invisible walk-on ramp over the landing's edge, as a curb
+// has, so the whole step shows with a straight seam. Paving that stands over a
+// landing (a sidewalk or island poured up to the door) stays as built.
 
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -168,6 +177,16 @@ const RAMP_LANDING_M = 1.5;
 const STREET_CORRIDOR_HALF_M = 18;
 // A verge side: this much concrete curb top at the curb, then grass.
 const CURB_TOP_M = 0.25;
+// What cutting a door landing out of the raised band leaves beside it stays, but
+// for slivers smaller or narrower (twice area over perimeter) than these.
+const LANDING_STUB_AREA_M2 = 0.1;
+const LANDING_STUB_WIDTH_M = 0.2;
+// The grid on which a landing's overlap with the band is sampled for its height.
+const LANDING_SAMPLE_M = 0.1;
+// A grassed slope that a landing's apron cuts is paved too where the cut leaves a
+// scrap under this area lying wholly within this reach of the landing.
+const DOOR_SCRAP_AREA_M2 = 0.3;
+const DOOR_SCRAP_REACH_M = 1.0;
 // Red curb paint: the strip of the curb top it covers.
 const RED_CURB_TOP_M = 0.15;
 // A curb face longer than this with road on both sides fails the build (a
@@ -818,6 +837,22 @@ function unit(a) {
 // Left normal of a direction in the east/north frame.
 function leftOf(direction) {
   return [-direction[1], direction[0]];
+}
+
+// A convex ring (counter-clockwise, east/north) grown outward by distance, its
+// corners mitred.
+function grownConvexRing(ring, distance) {
+  const lines = ring.map((a, index) => {
+    const direction = unit(sub(ring[(index + 1) % ring.length], a));
+    return { point: add(a, scale(leftOf(direction), -distance)), direction };
+  });
+  return lines.map((line, index) => {
+    const previous = lines[(index + lines.length - 1) % lines.length];
+    const turn = previous.direction[0] * line.direction[1] - previous.direction[1] * line.direction[0];
+    if (Math.abs(turn) < 1e-9) return line.point;
+    const gap = sub(line.point, previous.point);
+    return add(previous.point, scale(previous.direction, (gap[0] * line.direction[1] - gap[1] * line.direction[0]) / turn));
+  });
 }
 
 function emptyBox() {
@@ -1585,6 +1620,8 @@ export function generateStreetGround({
   areaSkin,
   // The island-wide rules (validateStreetGroundRules), or null for the pilot zones alone.
   rules = null,
+  // The mid-rise door landings and ramps (loadDoorLandings): top_xz in world [x, z].
+  doorLandings = [],
 }) {
   const settings = streetGroundSettings(config);
   const { kerb, crossings, lines, lifts } = settings;
@@ -1987,6 +2024,17 @@ export function generateStreetGround({
     }
   }
   const raisedRaw = union("raised band", [defaultBand, ...sidewalkParts, ...plazaParts]);
+  // The door landings' tops in the east/north frame, and their aprons: each grown by
+  // the landing buffer, where the band's soft tops and slopes are paved.
+  const landingBuffer = config.exclusions?.landing_buffer_m;
+  invariant(isFiniteNumber(landingBuffer) && landingBuffer >= 0, "Street ground needs the street detail exclusions' landing_buffer_m");
+  const landingRings = doorLandings.map((landing) => {
+    const ring = landing.top_xz.map(([x, z]) => [x, -z]);
+    return ringArea(ring) > 0 ? ring : ring.reverse();
+  });
+  const doorAprons = landingRings.map((ring) => [[grownConvexRing(ring, landingBuffer)]]);
+  const doorApronIndex = polygonIndex(union("door landing aprons", doorAprons));
+  const doorReachIndex = polygonIndex(union("door landing reach", landingRings.map((ring) => [[grownConvexRing(ring, DOOR_SCRAP_REACH_M)]])));
   // A parking lot's narrow tips (under 3 m) do not notch the sidewalk.
   const blockers = [vehicleUnion, openShapes("parking lot body", lotUnion, LOT_OPENING_M), buildingClearance, hardKeepout];
   // The pilot's raised ground stays inside its kerbed zones, the rule streets'
@@ -1995,13 +2043,48 @@ export function generateStreetGround({
   const ruleRaised = ruleBand.length === 0 && ruleSidewalkParts.length === 0 ? [] :
     intersect("rule band zone", union("rule raised", [ruleBand, ...ruleSidewalkParts].map((part) => onLattice(part))), ruleRegion);
   const allRaised = ruleRaised.length === 0 ? pilotRaised : union("raised", [pilotRaised, ruleRaised]);
-  const bandBase = cleanPolygons(
+  const bandCleaned = cleanPolygons(
     difference("band subtraction", closeGaps("band closing", allRaised, kerb.closing_m), blockers),
     1.0,
     kerb.minimum_width_m,
     6.0,
     1.5,
   );
+  // The landings that stand up out of the band's paving: over where a landing and the
+  // band overlap, the band's top (the land plus the band's height, top) lies below the
+  // landing's top on average. A ramp, which runs down to the ground, never cuts the band.
+  const cleanedIndex = polygonIndex(bandCleaned);
+  const proud = (ring, landing) => {
+    if (landing.kind === "ramp") return false;
+    const overlap = intersect("door landing over the band", [[ring]], cleanedIndex.near(boxOfPoints(ring)));
+    if (multiArea(overlap) < 0.01) return false;
+    const inside = polygonIndex(overlap);
+    const box = boxOfMulti(overlap);
+    let sum = 0;
+    let samples = 0;
+    for (let x = box.min_x + LANDING_SAMPLE_M / 2; x < box.max_x; x += LANDING_SAMPLE_M) {
+      for (let y = box.min_y + LANDING_SAMPLE_M / 2; y < box.max_y; y += LANDING_SAMPLE_M) {
+        if (!inside.contains([x, y])) continue;
+        const facet = facetsForChunk(chunkId(Math.floor(x / CHUNK_SIZE_M), Math.floor(-y / CHUNK_SIZE_M)))
+          .find((candidate) => inBox(candidate.bounds, [x, y], 1e-6) && facetElevation(candidate, x, y).inside);
+        if (!facet) continue;
+        sum += facetElevation(facet, x, y).elevation + top - landing.top_y_m;
+        samples += 1;
+      }
+    }
+    return samples > 0 && sum / samples < 0;
+  };
+  const cutRings = landingRings.filter((ring, index) => proud(ring, doorLandings[index]));
+  // The proud landings' tops: the band stops at their edges (a closed face, classifyRaised).
+  const landingIndex = polygonIndex(union("door landings cut from the band", cutRings.map((ring) => [[ring]])));
+  // They are cut from the cleaned band, piece by piece where one reaches it: a stub
+  // the cut leaves beside a step stays (cleaned with the band, it would go and bare
+  // the ground there), a landing inside a piece leaves a hole, and every piece no
+  // such landing reaches stays exactly as it was.
+  const bandBase = bandCleaned.flatMap((polygon) => {
+    const near = landingIndex.near(boxOfPoints(polygon[0]));
+    return near.length === 0 ? [polygon] : cleanPolygons(difference("band minus door landings", [polygon], near), LANDING_STUB_AREA_M2, LANDING_STUB_WIDTH_M);
+  });
   const bandOriginal = islandUnion.length === 0 ? bandBase : union("band and islands", [bandBase, islandUnion]);
   const bandIndex = polygonIndex(bandOriginal);
   invariant(!bandIndex.contains([spawnXZ[0], -spawnXZ[1]]), "Street ground raises the ferry spawn");
@@ -2131,11 +2214,12 @@ export function generateStreetGround({
   const landings = notches.map((notch) => rectangle(notch.landing, notch.outward, notch.across,
     crossings.ramp_depth_m - 0.05, crossings.ramp_depth_m + RAMP_LANDING_M, -crossings.ramp_width_m / 2, crossings.ramp_width_m / 2));
   const curbStripRegion = union("curb-strip zones", zoneRegions.filter((zone) => zone.settings.planting === "curb_strip").map((zone) => zone.region));
-  const concreteKeep = union("concrete keep", [difference("default band beside set-back walks", defaultBand, wideGapParts), ...wideGapWalks, ...plazaParts, ...landings]);
+  // Mulch and grass also stay off a door landing's apron: a step meets concrete.
+  const concreteKeep = union("concrete keep", [difference("default band beside set-back walks", defaultBand, wideGapParts), ...wideGapWalks, ...plazaParts, ...landings, ...doorAprons]);
   const pilotPlanted = intersect("planting", difference("planting candidates", bandOriginal, [concreteKeep, paverTop]), curbStripRegion);
   // A rule street's mulch fill between the curb and a set-back walk.
   const ruleMulch = ruleFills.mulch.length === 0 ? [] :
-    difference("rule mulch", intersect("rule mulch band", bandOriginal, union("rule mulch fills", ruleFills.mulch)), [paverTop, ...landings]);
+    difference("rule mulch", intersect("rule mulch band", bandOriginal, union("rule mulch fills", ruleFills.mulch)), [paverTop, ...landings, ...doorAprons]);
   const plantedTop = cleanPolygons(ruleMulch.length === 0 ? pilotPlanted : union("planted", [pilotPlanted, ruleMulch]), 1.0, 0.6);
   const plantedIndex = polygonIndex(plantedTop);
   const bandRaised = cleanPolygons(difference("band minus ramps", bandOriginal, [notchUnion]), 0.3, 0.2);
@@ -2166,7 +2250,7 @@ export function generateStreetGround({
       });
     }
     lawnTop = cleanPolygons(difference("grass tops", intersect("grass candidates", bandRaised, grassRegion),
-      [union("curb tops", curbTops), plantedTop, paverTop, ...landings]), 0.3, 0.3);
+      [union("curb tops", curbTops), plantedTop, paverTop, ...landings, ...doorAprons]), 0.3, 0.3);
   }
 
   const counts = { crosswalks: crosswalks.length, curb_ramps: notches.length, centerline_m: 0, stop_bars: 0, stall_lines: 0, bays: 0, shoulder_stalls: 0, lot_stalls: 0, red_curb_m: 0, skirt_split_fallbacks: 0, ring_spikes: 0, wear: {} };
@@ -2309,8 +2393,8 @@ export function generateStreetGround({
   // and with its ramp on the lot, invisible like an island's. outline is an edge on the
   // island's own outline (the causeway seam, where the street runs on past it): a
   // closed face down to the land, with no slope, ramp or gutter beyond the island.
-  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, lot_curb: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0, outline: 0 };
-  const footOf = { curb: 0, island: 0, lot_curb: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0, outline: 0 };
+  const runOf = { curb: kerb.support_run_m, island: kerb.support_run_m, lot_curb: kerb.support_run_m, landing: kerb.support_run_m, flare: kerb.flare_run_m, back: kerb.back_slope_run_m, inner: 0, outline: 0 };
+  const footOf = { curb: 0, island: 0, lot_curb: 0, landing: 0, flare: SKIRT_FOOT_M, back: SKIRT_FOOT_M, inner: 0, outline: 0 };
   const landIndex = polygonIndex(land.geometry);
   // Whether a plan point lies on the island's outline (within a centimetre): only the
   // spikes there are dropped (dropSpikes), so the street ground elsewhere stays as built.
@@ -2323,6 +2407,13 @@ export function generateStreetGround({
   const classifyRaised = (a, b, outward) => {
     // A lot island's edge is a curb face all round, over the lot.
     if (islandUnion.length > 0 && islandIndex.contains(add(add(a, scale(sub(b, a), 0.5)), scale(outward, -0.04)))) return "island";
+    // An edge against a door landing: a closed face down past the land, with a walk-on
+    // ramp over the landing's edge (invisible, as a curb's), never a slope onto the step.
+    let landing = 0;
+    for (const fraction of [0.25, 0.5, 0.75]) {
+      if (landingIndex.contains(add(add(a, scale(sub(b, a), fraction)), scale(outward, 0.04)))) landing += 1;
+    }
+    if (landing >= 2) return "landing";
     // An edge on the island's outline (the land ends just beyond it): the raised
     // ground ends there with a closed face. A back slope there would fall off the
     // land, where nothing draws it, and left the causeway median's end open (owner,
@@ -2369,7 +2460,7 @@ export function generateStreetGround({
       const bOut = add(edge.b, scale(edge.outward, run));
       skirtPieces.push({ kind: edge.kind, points: [edge.a, edge.b, bOut], heights: [edge.ha, edge.hb, foot], edge });
       skirtPieces.push({ kind: edge.kind, points: [edge.a, bOut, aOut], heights: [edge.ha, foot, foot], edge });
-      if (edge.kind === "curb" || edge.kind === "island" || edge.kind === "lot_curb") faces.push(edge);
+      if (edge.kind === "curb" || edge.kind === "island" || edge.kind === "lot_curb" || edge.kind === "landing") faces.push(edge);
       // Round the corner to the next edge when the outline turns convex.
       const next = edges[(index + 1) % edges.length];
       const nextRun = runOf[next.kind];
@@ -2379,7 +2470,10 @@ export function generateStreetGround({
       while (sweep <= 0) sweep += 2 * Math.PI;
       if (sweep >= Math.PI) continue;
       const steps = Math.max(1, Math.ceil(sweep / (Math.PI / 8)));
-      const kind = edge.kind === next.kind ? edge.kind : edge.kind === "curb" || next.kind === "curb" ? "curb" : edge.kind;
+      // A corner beside a door landing stays invisible support: a visible slope there
+      // would sweep over the step's corner.
+      const kind = edge.kind === next.kind ? edge.kind : edge.kind === "landing" || next.kind === "landing" ? "landing"
+        : edge.kind === "curb" || next.kind === "curb" ? "curb" : edge.kind;
       for (let step = 0; step < steps; step += 1) {
         const point = (k) => {
           const angle = start + (sweep * k) / steps;
@@ -2404,8 +2498,8 @@ export function generateStreetGround({
     if (Math.abs(ringArea(skirt.points)) < 1e-6) continue;
     const height = affineHeight(skirt.points, skirt.heights);
     // A lot island's ramps lie on the lot, like those of an edge along the lot OSM
-    // lacks: invisible support all round.
-    if (skirt.kind === "island" || skirt.kind === "lot_curb") {
+    // lacks, and a landing face's on the landing: invisible support all round.
+    if (skirt.kind === "island" || skirt.kind === "lot_curb" || skirt.kind === "landing") {
       addPiece("ramp", triangle, height, worldUv);
       continue;
     }
@@ -2428,11 +2522,23 @@ export function generateStreetGround({
       counts.skirt_split_fallbacks += 1;
     }
     addPiece("ramp", support, height, worldUv);
-    const visible = difference("skirt beside buildings", open, buildingIndex.near(box, 0.01));
+    const beside = difference("skirt beside buildings", open, buildingIndex.near(box, 0.01));
+    if (beside.length === 0) continue;
+    const middle = add(skirt.edge.a, scale(sub(skirt.edge.b, skirt.edge.a), 0.5));
+    // A slope on a door landing's apron is concrete, as the step it meets, and so is
+    // a scrap of it the apron cuts off next to the step (under DOOR_SCRAP_AREA_M2,
+    // wholly within DOOR_SCRAP_REACH_M of the landing).
+    const aprons = doorApronIndex.near(box);
+    const onApron = aprons.length === 0 ? [] : intersect("skirt on door aprons", beside, aprons);
+    let visible = beside;
+    if (onApron.length > 0) {
+      visible = difference("skirt off door aprons", beside, aprons).filter((polygon) => multiArea([polygon]) >= DOOR_SCRAP_AREA_M2 ||
+        !openRing(polygon[0]).every((point) => doorReachIndex.contains(point)));
+      addPiece("kerb", difference("skirt paved at doors", beside, [visible]), height, roadFrameUv(nearestKerbLine(middle), middle, kerb.panel_m));
+    }
     if (visible.length === 0) continue;
     // The slope takes the raised top it falls from: a mulch bed's own edge, else
     // concrete where it runs down onto paving and grass where it meets ground.
-    const middle = add(skirt.edge.a, scale(sub(skirt.edge.b, skirt.edge.a), 0.5));
     const probe = add(middle, scale(skirt.edge.outward, runOf[skirt.kind] * 0.7));
     const inner = add(middle, scale(skirt.edge.outward, -0.05));
     const planted = skirt.kind === "back" && plantedIndex.contains(inner);
@@ -3124,8 +3230,24 @@ export function generateStreetGround({
       parkLayers.push({ zone, layer, polygon: own, index: polygonIndex(own), box: boxOfMulti(own), lift: surfaces.lift_m, sources: surfaces.source_keys });
     }
   }
+  // A park or lot layer is never drawn on a door landing or in a door's recess: it
+  // stops at their outlines, with no margin, so a step standing in a bed, a lawn or a
+  // walk shows whole up to the door. The layer's own outline (parkLayers, parkAt)
+  // stays whole for whatever is placed on it.
+  const recessRings = doorLandings.filter((landing) => landing.recess_xz).map((landing) => {
+    const ring = landing.recess_xz.map(([x, z]) => [x, -z]);
+    return ringArea(ring) > 0 ? ring : ring.reverse();
+  });
+  const landingTops = polygonIndex(union("door landing tops", [...landingRings, ...recessRings].map((ring) => [[ring]])));
+  const offLandings = (label, polygon) => {
+    const near = landingTops.near(boxOfMulti(polygon));
+    if (near.length === 0 || intersect(`${label} test`, polygon, near).length === 0) return polygon;
+    return difference(label, polygon, near);
+  };
   for (const entry of parkLayers) {
-    const { layer, polygon, lift } = entry;
+    const { layer, lift } = entry;
+    const polygon = offLandings(`park ${layer.id} off door landings`, entry.polygon);
+    if (polygon.length === 0) continue;
     for (const key of entry.sources) sources[layer.material].add(key);
     const height = constantHeight(lift);
     const path = ["park_concrete", "park_walk", "park_brick"].includes(layer.material) ? layerLine(layer) : null;
@@ -3187,7 +3309,7 @@ export function generateStreetGround({
     parkLifts.set(material, LOT_SURFACE_LIFT_M);
     sources[material].add(lot.source_key);
     parkLayers.push({ zone: null, layer: { material, id }, polygon, index: polygonIndex(polygon), box: boxOfMulti(polygon), lift: LOT_SURFACE_LIFT_M, sources: [lot.source_key] });
-    addPiece(material, polygon, constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
+    addPiece(material, offLandings(`lot ${lot.id} ${id} off door landings`, polygon), constantHeight(LOT_SURFACE_LIFT_M), worldUv, true);
   };
   // A strip outward from the lot's shoulder edges, as wide as width (its outer edge
   // wandering by up to wander).
@@ -3507,8 +3629,9 @@ export function generateStreetGround({
         const along0 = length(sub(p0, edge.a));
         const along1 = length(sub(p1, edge.a));
         // A lot island's face runs down to the land, under the lot's surface, and so
-        // does a face on the island's outline, where the land ends.
-        const foot = edge.kind === "island" || edge.kind === "lot_curb" || edge.kind === "outline" ? ISLAND_FOOT_M : ROAD_TOP_M;
+        // does a face on the island's outline, where the land ends, and one against a
+        // door landing, whose step hides its foot.
+        const foot = edge.kind === "island" || edge.kind === "lot_curb" || edge.kind === "outline" || edge.kind === "landing" ? ISLAND_FOOT_M : ROAD_TOP_M;
         const corners = [
           [p0, foot, along0],
           [p1, foot, along1],
