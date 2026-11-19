@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 // Street-detail clearance: with every street-detail layer switched on, nothing
 // they would build (OSM-placed items, scatter and set pieces) intrudes on a
-// door, stair or approach buffer, the ferry spawn and the walk straight ahead
-// from it, the ferry path, the normal QA route or a whole-island QA landing
+// door, stair or approach buffer, a mid-rise door landing or ramp (its top, as
+// data/street_detail/door_landings.json gives it, and landing_buffer_m round it;
+// fences follow OSM and are not held to it), the ferry spawn and the walk straight
+// ahead from it, the ferry path, the normal QA route or a whole-island QA landing
 // anchor.
 //
 //   node tools/check_street_detail_clearance.mjs [WORLD_DIR]   (default generated/world)
@@ -53,7 +55,9 @@ import {
   POCKET_CELL_M,
   STREET_DETAIL_KINDS,
   STREET_DETAIL_LAYERS,
+  hardShapeDistance,
   isStreetSolid,
+  loadDoorLandings,
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   planDistance,
@@ -81,8 +85,8 @@ function main() {
   const detail = unpackPlantingRows(readJson(resolve(worldRoot, manifest.street_detail.path)));
   const exclusions = loadStreetDetailZones(projectRoot).exclusions;
   const spawn = { xz: [manifest.initial_spawn.origin[0], manifest.initial_spawn.origin[2]], yaw: manifest.initial_spawn.yaw };
-  const zones = streetDetailHardShapes(exclusions, spawn, loadStreetDetailStairFlights(projectRoot))
-    .map((shape) => ({ name: shape.component, id: shape.source_id, points: shape.points, radius: shape.radius_m }));
+  const zones = streetDetailHardShapes(exclusions, spawn, loadStreetDetailStairFlights(projectRoot), loadDoorLandings(projectRoot))
+    .map((shape) => ({ name: shape.component, id: shape.source_id, points: shape.points, radius: shape.radius_m, shape }));
 
   // Everything the switchable layers build when they are all on. Overhead lines
   // never reach the ground; ground rows (crossings, kerbs) are always-on surfaces.
@@ -91,7 +95,7 @@ function main() {
     const kind = STREET_DETAIL_KINDS[row.kind];
     if (row.status !== "placed" || !STREET_DETAIL_LAYERS.includes(row.layer) || kind.overhead) continue;
     streetDetailPieces(row).forEach((piece, index) => {
-      items.push({ id: row.fence ? `${row.id} ${piece.label ?? index}` : row.id, layer: row.layer, points: piece.points, radius: piece.radius });
+      items.push({ id: row.fence ? `${row.id} ${piece.label ?? index}` : row.id, layer: row.layer, fence: Boolean(row.fence), points: piece.points, radius: piece.radius });
     });
   }
 
@@ -99,7 +103,8 @@ function main() {
   const minimum = {};
   for (const item of items) {
     for (const zone of zones) {
-      const clearance = planDistance(item.points, zone.points) - item.radius;
+      if (zone.name === "landing" && item.fence) continue;
+      const clearance = hardShapeDistance(zone.shape, item.points) - item.radius;
       minimum[zone.name] = Math.min(minimum[zone.name] ?? Infinity, clearance);
       if (clearance < zone.radius) {
         failures.push(`${item.id} (${item.layer}) is ${Math.max(0, clearance).toFixed(3)} m from ${zone.name} ${zone.id}; needs ${zone.radius} m`);
@@ -141,7 +146,8 @@ function main() {
   if (failures.length > 0) process.exit(1);
   const byLayer = STREET_DETAIL_LAYERS.map((layer) => `${items.filter((item) => item.layer === layer).length} ${layer}`).join(", ");
   const closest = Object.entries(minimum).map(([name, value]) => `${name} ${value.toFixed(2)} m`).join(", ");
-  console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
+  const landings = zones.filter((zone) => zone.name === "landing").length;
+  console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, ${landings} mid-rise door landings and ramps, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
   console.log(`PASS: ${pockets.fences} built fences and ${pockets.yards} yards shut no walkable ground in (${pockets.cells} cells of ${POCKET_CELL_M} m checked)`);
   console.log(`PASS: none of ${footways.solids} solid street props a car cannot knock over stands on the paving of ${footways.bands.length} OSM footway band(s) (${footways.bands.map((band) => `${band.id} ${band.way}`).join(", ")})`);
 }
