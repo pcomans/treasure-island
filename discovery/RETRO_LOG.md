@@ -27838,6 +27838,81 @@ Comparing every record against the base commit found a change the author hadn't 
 - What did not work well: The squash shortens the history, so the branch's changelog heading (build 2354) was above the batch's own build number and had to be renumbered to 2341; the scope commit, cut from main before the hall's retro entries, conflicted in RETRO_LOG.md (both sides kept). The outside-names search over the added lines turns up many generic words ("bar", "museum", "LR-5", a reference file label) that each need a look at the source.
 - What the team should change next time: When a branch will be squashed, leave its changelog heading to the integrator (or use `tools/changelog.py next` on main). Keep reference labels in shipped notes as plain "photo N" names so a names search does not have to trace them to the private references.
 
+### ti-visual-review — housing detail pilot r2 (2026-11-19)
+- Worked: the matched photo-camera sheets and full-resolution raw captures let me compare directly.
+- Didn't: the 5.5x enlarged crop hid the floor-line overhang, and I only saw it when I enlarged the north-end photo myself.
+- Change: put a 4x crop of the reference next to every zoom sheet, and include an end-wall view with each first render.
+
+### ti-visual-review — Northpoint pilot r3b (2026-11-19)
+- Worked: matched 4x crops in the same projection settled the roof-pitch question independently of the camera-distance error.
+- Didn't work: the sheets had no angled view of the north end with the annex region at eye level, and no matched photo of the unit at close range.
+- Change: send footprint-limited gaps (the annex) to the owner as a decision before the next round instead of holding the modeller on them.
+
+### ti-visual-review — housing pilot r4b (2026-11-19)
+- Worked: the matched 4x crops (3a/3b) and the annex eye-level sheet made the pitch and annex calls measurable within minutes.
+- Didn't work: the captures came from a dirty tree on ef6546ad, not the committed head, so the reviewed pixels can't be tied to the commit. The front-camera roof band disagrees with the north-end pitch and is still unresolved.
+- Change: capture from the committed head, or record the diff of the dirty tree. Add a close-up of the south segment, and a side view of the carport fascia matched to the front photo.
+
+### ti-visual-review — housing pilot r5 (2026-11-19)
+- Worked: the camera-solved height evidence (sheet 7) checked two ways settled a whole round's question.
+- Didn't: the claimed underside detail wasn't checked in the walking frames before handoff.
+- Change: the author should contrast-stretch the gameplay frames before claiming surface detail.
+
+### ti-code-review — housing detail pilot, 1232 Northpoint (2026-11-19)
+- What worked well: every option is keyed and guarded, so I could prove other buildings are unchanged from the code paths without an engine run; the run logs answered the warm-up, bake, neighbour-fit and suite questions directly.
+- What did not work well: the roof shape lives in three config places, and the script that wrote them isn't in Git, so I had to check by hand that they agree.
+- What the team should change next time: when one shape feeds two builders, commit the generator or add a contract check that the copies agree in the same change.
+
+### ti-implementation — housing detail pilot, 1232 Northpoint (2026-11-19)
+- What worked well: back-projecting photo edges through the solved camera, checked first on the render's own known geometry (0.1 m), settled the overhang height, the window stations, the gable apex and the annex sizes; crops of the full-frame photo-camera render gave matched comparisons the narrow-lens views never did; every option opt-in with a contract case and a five-building control dump kept the other 112 buildings provably unchanged.
+- What did not work well: I captured r3 to r4b from a dirty tree, so reviewed pixels could not be tied to a commit; the front photo's solved camera stands several metres too far out (a facade-only solve trades distance for lens width), which cost two rounds on the carport and the head-on roof; a warm-up count with street detail on was first compared against main's with it off.
+- What the team should change next time: commit, then capture, and stamp each sheet with the run log's tree line; validate a photo camera on near objects (posts, kerb, cars) as well as the facade before measuring from it; take before and after measurements with one identical command line.
+
+### ti-code-review — housing pilot r6 delta (2026-11-19)
+- Worked: tracing every caller of the changed proof (installer, fit test, world_harness, bake) settled "alignment or weakening" quickly.
+- Didn't: helper scripts with `--check` modes keep arriving with nothing to run them.
+- Change: when a delta adds a generator with `--check`, require it in `tools/test.sh` in the same commit. Contract fixtures for precision fixes should use real-world coordinates.
+
+### ti-visual-review — 1232 r6 (2026-11-19)
+- Worked: the matched 4x crops and the r5-versus-r6 contrast-stretched strip let me separate the camera-clearance limit from a modelling fault quickly.
+- Did not work: there is no underside reference, so the carport could only be judged as believable, not as accurate.
+- Change next time: when the camera sits about 0.15 m under a ceiling, note that in the brief up front, and get a dated eye-level photo before asking the modeller for more underside detail.
+
+### ti-implementation — housing pilot r6, 1232 Northpoint (2026-11-19)
+- What worked well: contrast-stretching my own walk frames before handoff showed what the gameplay camera really sees under the carport (it rides 0.15 m under the ceiling, so joists read and deck joints stay hidden); committing before every capture tied each failed run to an exact commit, so each fix was a small follow-up commit.
+- What did not work well: two avoidable engine runs. The utilities' overlap area was taken in world coordinates 750 m out in single precision and read a zero-width sliver as 78 cm2; the shared ground proof assumed every support-role mesh is drawn and in the contact, which the new visual-only and collision-only carport parts broke at capture time.
+- What the team should change next time: take areas and cross products about a local origin in world-space GDScript; before adding a new kind of part (visual-only, collision-only) to a family role, search the shared proofs (StudyGeometry, world_harness) for that role and extend them in the same commit.
+
+### ti-implementation — housing pilot closing round, 1232 Northpoint (2026-11-19)
+- What worked well: sampling my own pixels against the photo before changing a colour or size: the matched crop showed the flues already stand taller than photographed, so I lightened them instead of stretching them; one fit run carried the door walks and the native-producer check together.
+- What did not work well: the native-producer check and the ground proof each held their own copy of the installer's role rules, so every new kind of part needed three edits.
+- What the team should change next time: give the installer's contact rules (roles, visual-only, collision-only, layers) one shared helper that the installer, the proof and the fit test all call.
+
+### ti-visual-review — batch 20261119b final doors (2026-11-19)
+- What worked well: having all three views of every door before and after the change let me close the earlier rounds' doors in one pass.
+- What did not work well: the brief said the Star View lobby was identical to main, and the images show it is not.
+- What the team should change next time: before stating that a door is unchanged, run a pixel comparison of its before and after captures.
+
+### ti-code-review — integration 20261119b (2026-11-19)
+- Worked: checking whether main was an ancestor of the branch settled the merge question in one command. Running `changelog.py check` and comparing earlier tags with their entries settled the build-number question without guessing.
+- Didn't: the look RESULT labelled its 1 % counts as 4 %. The known-issues note cited only the marsh map's lines for a problem in two maps.
+- Change: generate the look summary's counts from the comparison tables, with each threshold named. When a note says two places, cite a line in each.
+
+### integrator-batch-20261120a — release batch 20261120a (2026-11-20)
+- What worked well: the branch was based on main, so the merge was clean and the branch's single changelog entry needed no change; the step scripts carried over with paths only.
+- What did not work well: the cleanup removed the previous batch's captures of main, so the look check's "before" had to be baked and captured again; in 19b I typed the look summary's counts by hand and mislabelled a threshold.
+- What the team should change next time: generate the look summary from the comparison tables with each threshold named, and keep the last batch's captures of main until the next batch has its own.
+
+### ti-code-review — integration review, release/batch-20261120b (d2c8e6af, 2026-11-20)
+- What worked well: the integrator's STATUS named each commit's claim (tree equal but one line, conflict kept both sides, two-line follow-up), so each was settled by one git diff; run logs carry the head and dirty=0 at start and end, which tied the suite, web build and shader proof to this exact commit without re-running anything.
+- What did not work well: F-diff-check.log is empty, so it shows a clean `git diff --check` only by absence; it does not name the head or base it ran on. A names search over added lines still needs a hand read of every capitalized word (species names such as Brandt's cormorant look like people).
+- What the team should change next time: have the diff-check step print a one-line "PASS head=<sha> base=<sha>" like the junk check does. Keep the integrator's list of already-allowed names (credits, PROVENANCE, National Register) in STATUS, as here; it cut the names check to minutes.
+
+### integrator-batch-20261120c — release batch 20261120c (2026-11-20)
+- What worked well: the hall batch's STATUS had already dry-run this merge and named the only two conflicts and how to resolve them, so the merge took minutes; both sides' changelog headings (2347 over 2341) already satisfied the check against the newest release, so neither entry needed a new number. Importing and running the two batches' own contracts, the shared geometry contract and the roof check on the merge commit took 12 s, before any suite.
+- What did not work well: the brief asked for the closing-commit delta review of the housing pilot and the integration review of 20261120a, but no retro file for either exists in the batch or pilot folders, so neither could be added; a review owed across batches has no single place where its entry waits.
+- What the team should change next time: have every reviewer save the retro entry in the batch folder under one fixed name (retro-<review>.md) when the review ends, even when no commit follows, so the next integrator finds it by listing one pattern.
+
 ### touch-look-anywhere-20261120 — touch look anywhere and more room round the bottom controls (2026-11-20, branch `feature/touch-look-anywhere-20261120`)
 - What worked well: Probing the real touch controls on a grid (a finger down, a short drag, what it did read back, lifted, all in one idle step) made the before/after a measured look map, 47 % of an iPhone's screen before and 94 % after, and it showed the stick's square corners swallowing look drags, which led to the disc hit test. Running the new light test on d2c8e6af's three touch scripts (put back by a trap) showed it fails on the right-side look, so the test is known to discriminate. Keeping the code in a staging folder until the before capture had run let that capture use the pristine tree without a second worktree. Reusing the 11-11 capture driver, home-screen's lock receipts and the trace rig's WebKit launch kept setup short; the suite, build, proof and WebKit touch run each passed the first time.
 - What did not work well: My first test runner had a bash quoting error (an apostrophe inside `${VAR:?...}`), costing one empty slot hold. The first sheets clipped the legend, and a landscape caption landed mid-sheet because ImageMagick's `-append` kept page offsets (`+repage` fixed it). Slot B, assigned to me, was held by another agent's shader proof for my first four minutes. WebKitGTK has no `Touch` constructor, so the web drags are script events with touch lists on a plain Event: they prove Godot's routing in the real build, not a phone's touch delivery or thumb comfort.

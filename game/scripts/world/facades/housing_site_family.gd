@@ -7,6 +7,9 @@ const ROOF = preload("res://game/resources/housing_family/roof.gdshader")
 # Opt-in garage-court motifs (garage doors, piers, loggias, stairs, vents,
 # per-run siding colour); each runs only for its own config key.
 const GARAGE_COURT = preload("res://game/scripts/world/facades/housing_garage_court.gd")
+# Opt-in unit details (window blinds, utilities by the doors, downspouts, roof
+# vents); each runs only for its own config key.
+const DETAIL = preload("res://game/scripts/world/facades/housing_unit_detail.gd")
 
 static func vec(a: Array) -> Vector3:
 	return Vector3(a[0], a[1], a[2])
@@ -39,6 +42,19 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	var warm_roof := ShaderMaterial.new()
 	warm_roof.shader = ROOF
 	warm_roof.set_shader_parameter("roof_color",color(cfg.get("facade",{}),"roof_warm_high_rgb",Color(0.55,0.37,0.25)))
+	# Opt-in unit details (DETAIL): blinds in the front windows, utilities by the
+	# front doors and a stronger lap shadow on the siding.
+	var blinds: Dictionary = cfg.get("window_blinds", {})
+	var blind_buckets: Dictionary = DETAIL.blind_buckets() if not blinds.is_empty() and DETAIL.blinds_valid(root, blinds) else {}
+	var utility_kit: Dictionary = cfg.get("utility_kit", {})
+	var utilities: Dictionary = DETAIL.utility_context(utility_kit) if not utility_kit.is_empty() and DETAIL.kit_valid(root, utility_kit) else {}
+	if cfg.has("siding_course_shadow"):
+		var lap: Variant = cfg.siding_course_shadow
+		if (lap is float or lap is int) and float(lap) >= 0.0 and float(lap) <= 1.0:
+			siding.set_shader_parameter("course_shadow", float(lap))
+		else:
+			root.set_meta("build_valid",false)
+			push_error("Invalid siding_course_shadow (0-1): %s %s" % [cfg.target.source_key, lap])
 	var holes_by_run: Dictionary = {}
 	var vertices: Array = wall.vertices
 	# Opt-in open canopy bays. Authored host runs use the frozen 12-float run
@@ -71,6 +87,42 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 	if not recess.is_empty():
 		for frame: Dictionary in cfg.target.frames:
 			for run in frame.runs: recess_runs[int(run)] = frame
+	# join_runs meets a neighbouring lower wall only through _recessed_wall's miter or
+	# _notched_wall, and a rear setback run takes neither: refuse that adjacency.
+	if bool(recess.get("join_runs", false)):
+		for run: int in recess_runs:
+			for side: int in [-1, 1]:
+				var neighbour := posmod(run + side, vertices.size() / 12)
+				if rear_recess_runs.has(neighbour) and not recess_runs.has(neighbour):
+					root.set_meta("build_valid", false)
+					push_error("join_runs cannot meet a rear setback run: %s run %d beside run %d" % [cfg.target.source_key, run, neighbour])
+	# Opt-in soffit_rgb: the setback's soffit in its own colour (a floor-line shadow).
+	var recess_soffit: Material = null
+	if recess.has("soffit_rgb"): recess_soffit = PARTS._material(color(recess,"soffit_rgb",Color.GRAY),0.95)
+	# Opt-in shade_m/shade: the lower wall's top in the overhang's shade, two strips of the
+	# siding darkened toward the soffit (shade the darkest factor), just proud of the wall.
+	# A gable rake's shade_m bands the wall under its soffit with the same two materials.
+	var shade_set: Array = []
+	if float(recess.get("shade_m", 0.0)) > 0.0 or float(cfg.get("gable_rakes", {}).get("shade_m", 0.0)) > 0.0:
+		for factor: float in [float(recess.get("shade", 0.7)), (1.0 + float(recess.get("shade", 0.7))) * 0.5]:
+			var dim := siding.duplicate() as ShaderMaterial
+			var base := dim.get_shader_parameter("wall_color") as Color
+			dim.set_shader_parameter("wall_color", Color(base.r * factor, base.g * factor, base.b * factor, base.a))
+			shade_set.append(dim)
+	var recess_shades: Array = shade_set if float(recess.get("shade_m", 0.0)) > 0.0 else []
+	# Gable runs under an opt-in rake carry it in place of the eave trim.
+	# Opt-in window_sill_out_m (how far sills stand out; default 0.26 m) and window_glass
+	# {roughness, metallic, lift} for the panes; its "lower" {roughness, metallic, lift}
+	# takes over for the lower windows, which stand under the storey above.
+	var sill_out := float(cfg.get("window_sill_out_m", -1.0))
+	var glass_cfg: Dictionary = cfg.get("window_glass", {})
+	var lower_glass: Dictionary = glass_cfg.get("lower", glass_cfg)
+	var pane_finish := Vector2(float(glass_cfg.get("roughness", -1.0)), float(glass_cfg.get("metallic", -1.0)))
+	var pane_lift := float(glass_cfg.get("lift", 0.0))
+	var lower_finish := Vector2(float(lower_glass.get("roughness", -1.0)), float(lower_glass.get("metallic", -1.0)))
+	var lower_lift := float(lower_glass.get("lift", 0.0))
+	var rake_runs: Dictionary = {}
+	for run: Variant in cfg.get("gable_rakes", {}).get("runs", []): rake_runs[int(run)] = true
 	# The target schedule carries complete motifs. A basis pins each motif to its
 	# actual stepped source edge; no row or opening receives a scale transform.
 	var opening_frames: Array = cfg.target.frames.duplicate()
@@ -142,17 +194,30 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 						push_error("Threshold bottom must be numeric")
 						continue
 					PARTS._entry(root,point,t,n,trim,entry_material,concrete,float(motif.get("threshold_bottom_y", 0.0)),extend_threshold)
+					if not utilities.is_empty() and not is_rear:
+						DETAIL.add_landing(utilities, point, t, n)
+						if motif.has("utilities"):
+							DETAIL.entry_utilities(root, utilities, utility_kit, motif, frame, point, t, n, station, float(motif.bottom_y))
 				elif group == "garage_doors":
 					GARAGE_COURT.garage_door(root,point,t,n,width,height,motif,palette,trim)
 				elif group == "loggias":
 					GARAGE_COURT.loggia(root,point,t,n,width,height,motif,palette,siding,trim,dark,concrete)
+				elif str(motif.get("glazing", "")) == "sidelight":
+					# Opt-in: a full-height glazed sidelight beside a door (DETAIL).
+					DETAIL.sidelight(root,point,t,n,width,height,trim,dark,glass)
 				elif str(motif.get("glazing", "")) == "boarded":
 					PARTS._panel(root,point-n*0.03,t,n,Vector3(width,height,0.07),PARTS._material(color(palette,"closure_rgb",Color(0.48,0.40,0.28)),0.96))
 					for side in [-1.0,1.0]:
 						PARTS._panel(root,point+t*side*(width/2+0.025),t,n,Vector3(0.065,height+0.12,0.09),trim)
 						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
-					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
+					var lower: bool = group == "lower_windows"
+					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass,sill_out,lower_finish if lower else pane_finish,lower_lift if lower else pane_lift)
+					# A window's own "blind" pins what its dated photo shows (DETAIL.window_blinds).
+					var pinned: Dictionary = {}
+					if motif.has("blind") and DETAIL.pinned_blind_valid(root, motif.blind): pinned = motif.blind
+					if not blind_buckets.is_empty() and not is_rear:
+						DETAIL.window_blinds(blind_buckets, blinds, point, t, n, width, height, pinned)
 				if recessed or is_rear or bool(motif.get("wall_receiver", false)):
 					for child_index in range(motif_begin, root.get_child_count()):
 						var child := root.get_child(child_index)
@@ -183,18 +248,34 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		var fa := vec(frame.start)
 		var fb := vec(frame.end)
 		var band_y := float(cfg.get("facade",{}).get("story_band_y",5.38))
-		if not cfg.has("broad_band"):
+		var band_spec: Dictionary = cfg.get("story_band", {})
+		if not cfg.has("broad_band") and band_spec.is_empty():
 			PARTS._beam(root,Vector3(fa.x,band_y,fa.z)+fn*0.11,Vector3(fb.x,band_y,fb.z)+fn*0.11,0.20,0.09,trim)
 			# Thin frontage trim keeps its visible geometry without stippled cast shadows.
 			if not recess.is_empty() and str(cfg.target.source_key) in ["w96215661", "w96215669", "w96215672"]:
 				var story_trim := root.get_child(-1) as MeshInstance3D
 				story_trim.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		elif not cfg.has("broad_band") and float(band_spec.get("height_m", 0.09)) > 0.0:
+			# Opt-in story_band {depth_m, height_m}: a slimmer board; height_m 0 draws none,
+			# leaving a jetty's own soffit as the floor line.
+			var board_d := float(band_spec.get("depth_m", 0.20))
+			PARTS._beam(root,Vector3(fa.x,band_y,fa.z)+fn*(0.01+board_d*0.5),Vector3(fb.x,band_y,fb.z)+fn*(0.01+board_d*0.5),board_d,float(band_spec.get("height_m", 0.09)),trim)
 		for pipe: Dictionary in frame.get("pipes",[]):
 			var basis: Dictionary = pipe.get("basis",frame)
 			var p := vec(basis.start)+vec(basis.tangent)*float(pipe.get("local_station_m",pipe.station_m))
 			var low := float(pipe.bottom_y)
 			var high := float(pipe.top_y)
 			if bool(cfg.get("clamp_pipe_to_eave",false)): high=minf(high,float(cfg.wall_top_y)-0.03)
+			# Opt-in pipe style: a downspout with its bends, straps and kick-out (DETAIL).
+			if str(pipe.get("style", "")) == "downspout":
+				# Under a lower-frontage setback the leader bends back to the lower wall below
+				# the band board and the setback's soffit.
+				var jetty := 0.0 if recess.is_empty() else float(recess.depth_m)
+				var jetty_low := 0.0
+				if jetty > 0.0:
+					jetty_low = minf(float(recess.band_y), band_y - float(band_spec.get("height_m", 0.09)) * 0.5) - 0.08
+				DETAIL.downspout(root,p,vec(basis.tangent),vec(basis.normal),low,high,-1000.0 if cfg.has("broad_band") else band_y,jetty,jetty_low,trim,concrete)
+				continue
 			p.y=(low+high)/2
 			PARTS._panel(root,p+vec(basis.normal)*0.12,vec(basis.tangent),vec(basis.normal),Vector3(0.075,high-low,0.09),trim)
 		for screen: Dictionary in frame.get("screens", []):
@@ -220,18 +301,29 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 		for hole: Rect2 in holes_by_run.get(i/12, []): holes.append(hole)
 		var wall_begin := root.get_child_count()
 		if recess_runs.has(i/12):
-			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, recess_runs[i/12], recess)
+			_recessed_wall(root, a, b, top, holes, siding, trim if recess_soffit == null else recess_soffit, vertices, i/12, recess_runs[i/12], recess, recess_runs, recess_shades)
 		elif rear_recess_runs.has(i/12):
-			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, rear_recess_runs[i/12], rear_recess)
-		else:
+			_recessed_wall(root, a, b, top, holes, siding, trim, vertices, i/12, rear_recess_runs[i/12], rear_recess, rear_recess_runs)
+		elif not (bool(recess.get("join_runs", false)) and _notched_wall(root, a, b, top, holes, siding, vertices, i/12, recess, recess_runs)):
 			PARTS._wall_with_openings(root,a,b,top,holes,siding)
 		_tag_since(root,wall_begin,"wall")
 		GARAGE_COURT.run_siding(root,wall_begin,i/12,cfg,siding)
 		var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 		var n := Vector3(-t.z,0,t.x)
-		if bool(cfg.get("vertical_seams",false)):
-			PARTS._panel(root,Vector3(a.x,(a.y+top)/2,a.z),t,n,Vector3(0.08,top-a.y,0.08),trim)
-		if not bool(cfg.get("public_roof",{}).get("replace_eave_trim",false)):
+		# vertical_seams true trims every run start; opt-in "corners" only those where the
+		# wall turns (more than 15 degrees from the run before), as photos show the boards.
+		var seams: Variant = cfg.get("vertical_seams",false)
+		if (seams is bool and seams) or (str(seams) == "corners" and _turns_at(vertices,i/12)):
+			# With join_runs, a corner where a lower storey stands back takes its board in
+			# two: the upper storey's on the corner, the lower storey's on its own corner.
+			var lower: Variant = _lower_corner(vertices,i/12,recess_runs,float(recess.depth_m)) if bool(recess.get("join_runs", false)) else null
+			if lower is Vector2:
+				var band := float(recess.band_y)
+				PARTS._panel(root,Vector3(a.x,(band+top)/2,a.z),t,n,Vector3(0.08,top-band,0.08),trim)
+				PARTS._panel(root,Vector3(a.x+lower.x,(a.y+band)/2,a.z+lower.y),t,n,Vector3(0.08,band-a.y,0.08),trim)
+			else:
+				PARTS._panel(root,Vector3(a.x,(a.y+top)/2,a.z),t,n,Vector3(0.08,top-a.y,0.08),trim)
+		if not bool(cfg.get("public_roof",{}).get("replace_eave_trim",false)) and not rake_runs.has(i/12):
 			PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
 	var roof_begin := root.get_child_count()
 	# Keep the frozen roof footprint; existing observed pitched surfaces are data.
@@ -321,10 +413,33 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary, merge: bo
 					_ground_triangle(root,triangle,concrete,not recess.is_empty())
 	_tag_since(root,ground_begin,"ground")
 	GARAGE_COURT.extras(root,cfg,palette,trim)
+	# Opt-in end_annexes: a photographed block on an end wall, outside the frozen footprint
+	# by a recorded exception (DETAIL).
+	for annex: Variant in cfg.get("end_annexes", []):
+		if annex is Dictionary and DETAIL.annex_valid(root, annex, str(cfg.target.source_key), vertices):
+			DETAIL.end_annex(root, annex, vertices, siding, trim, concrete)
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
 		_canopy(root,canopy,palette,roofing,trim,siding)
+	if not blind_buckets.is_empty() or not utilities.is_empty() or cfg.has("roof_vents") or cfg.has("gable_rakes"):
+		var ring := PackedVector2Array()
+		for i in range(0, (wall.vertices as Array).size(), 12): ring.append(Vector2(wall.vertices[i], wall.vertices[i+2]))
+		if not blind_buckets.is_empty(): DETAIL.commit_blinds(root, blind_buckets, blinds)
+		if not utilities.is_empty():
+			# Utilities stand clear of the lower walls, which a setback moves in on its runs.
+			var recessed: Dictionary = {}
+			for run: int in recess_runs: recessed[run] = float(recess.depth_m)
+			for run: int in rear_recess_runs: recessed[run] = float(rear_recess.depth_m)
+			DETAIL.commit_utilities(root, utilities, DETAIL.lower_outline(ring, recessed))
+		# Roof details follow the instance's two-slope roof_plane.
+		var plane_ok: bool = (cfg.has("roof_vents") or cfg.has("gable_rakes")) and DETAIL.plane_valid(root, cfg.get("roof_plane"))
+		if plane_ok and cfg.has("roof_vents") and DETAIL.vents_valid(root, cfg.roof_vents):
+			var front: Dictionary = cfg.target.frames[0]
+			var ahead := vec(front.start) + vec(front.normal) * 5.0
+			DETAIL.roof_vents(root, cfg.roof_vents, cfg.roof_plane, ring, Vector2(ahead.x, ahead.z))
+		if plane_ok and cfg.has("gable_rakes") and DETAIL.rakes_valid(root, cfg.gable_rakes, (wall.vertices as Array).size() / 12):
+			DETAIL.gable_rakes(root, cfg.gable_rakes, cfg.roof_plane, wall.vertices, roofing, trim, shade_set)
 	if merge: _merge_parts(root)
 	return root
 
@@ -349,10 +464,12 @@ static func _merge_parts(root: Node3D) -> void:
 			continue
 		var role := str(part.get_meta("family_role", "support"))
 		var collision_only := bool(part.get_meta("collision_only", false))
-		var node_key := [role, int(part.cast_shadow), part.visible, collision_only]
+		# Visual-only parts (DETAIL's blinds and utility shells) never join colliding ones.
+		var visual_only := bool(part.get_meta("visual_only", false))
+		var node_key := [role, int(part.cast_shadow), part.visible, collision_only, visual_only]
 		if not group_index.has(node_key):
 			group_index[node_key] = groups.size()
-			groups.append({"role": role, "cast_shadow": part.cast_shadow, "visible": part.visible, "collision_only": collision_only, "surfaces": [], "surface_index": {}})
+			groups.append({"role": role, "cast_shadow": part.cast_shadow, "visible": part.visible, "collision_only": collision_only, "visual_only": visual_only, "surfaces": [], "surface_index": {}})
 		var group: Dictionary = groups[group_index[node_key]]
 		for s in part.mesh.get_surface_count():
 			var material: Material = part.material_override if part.material_override != null else part.mesh.surface_get_material(s)
@@ -378,6 +495,7 @@ static func _merge_parts(root: Node3D) -> void:
 			node.visible = group.visible
 			node.set_meta("family_role", group.role)
 			if group.collision_only: node.set_meta("collision_only", true)
+			if group.visual_only: node.set_meta("visual_only", true)
 			root.add_child(node)
 
 # The kit's roof, siding and brick shaders pattern by object-space VERTEX, so a
@@ -463,7 +581,7 @@ static func _merged_arrays(parts: Array) -> Array:
 static func _material_key(material: Material) -> Variant:
 	var standard := material as StandardMaterial3D
 	if standard != null and standard.get_class() == "StandardMaterial3D":
-		return ["standard", standard.albedo_color, standard.roughness, standard.metallic]
+		return ["standard", standard.albedo_color, standard.roughness, standard.metallic, standard.disable_receive_shadows]
 	return material
 
 static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Material, trim: Material, siding: Material = null) -> void:
@@ -482,18 +600,129 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	a.y = float(cfg.roof_y)
 	b.y = a.y
 	PARTS._beam(root,a,b,depth,0.16,roof)
-	var underside := PARTS._material(Color(0.16,0.20,0.19),0.97)
-	PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
+	# Opt-in underside_rgb lightens the soffit; joist_spacing_m hangs cross joists under it.
+	# deck_panel_m lays the soffit in boards across the depth, every deck_panel_m along the
+	# canopy, their tones cycling through deck_tones (factors on underside_rgb); deck_gap_m
+	# opens a joint that wide between neighbouring boards, deck_backing_rgb behind it.
+	# joist_tones cycles the joists' tones and joist_size_m [width, depth] sizes them;
+	# joist_top_shade [m, factor] darkens each joist's top m (against the deck, which keeps
+	# the sky off it) by factor; beam_rgb runs a beam (beam_size_m [width, depth]) along
+	# each post row.
+	var under_color := color(cfg,"underside_rgb",Color(0.16,0.20,0.19))
+	var panel_every := float(cfg.get("deck_panel_m", 0.0))
+	var joist_size: Array = cfg.get("joist_size_m", [0.07, 0.14])
+	var has_joists: bool = cfg.has("joist_spacing_m") and float(cfg.joist_spacing_m) >= 0.5
+	# With open joints the boards, their backing and the joists are visual only: one plain
+	# collision-only slab fills the underside down to the joists' feet, so the camera and a
+	# rising player meet a flat ceiling instead of catching on each joist.
+	var gap := clampf(float(cfg.get("deck_gap_m", 0.0)), 0.0, panel_every * 0.25) if panel_every >= 0.3 else 0.0
+	var relief := gap > 0.0
+	var deck_bottom := a.y-0.1125
+	if panel_every >= 0.3:
+		var tones: Array = cfg.get("deck_tones", [1.0])
+		if relief:
+			var backing := PARTS._material(color(cfg,"deck_backing_rgb",under_color*0.3),0.98)
+			PARTS._beam(root,a-Vector3(0,0.084,0),b-Vector3(0,0.084,0),depth-0.10,0.006,backing)
+			root.get_child(-1).set_meta("visual_only", true)
+		var from := float(cfg.station_m[0])
+		var count := 0
+		while from < float(cfg.station_m[1]) - 0.01:
+			var to := minf(from + panel_every, float(cfg.station_m[1]))
+			var f := float(tones[count % tones.size()])
+			var pa := start+t*(from+gap*0.5)+n*middle
+			var pb := start+t*(to-gap*0.5)+n*middle
+			pa.y = a.y-0.10
+			pb.y = pa.y
+			PARTS._beam(root,pa,pb,depth-0.10,0.025,PARTS._material(Color(under_color.r*f,under_color.g*f,under_color.b*f),0.97))
+			if relief: root.get_child(-1).set_meta("visual_only", true)
+			from = to
+			count += 1
+	else:
+		var underside := PARTS._material(under_color,0.97)
+		PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
+	if has_joists:
+		var joist_color := color(cfg,"joist_rgb",Color(0.3,0.3,0.29))
+		var joist_tones: Array = cfg.get("joist_tones", [1.0])
+		var joist := PARTS._material(joist_color,0.95)
+		var top_shade: Array = cfg.get("joist_top_shade", [0.0, 1.0])
+		var band := clampf(float(top_shade[0]), 0.0, float(joist_size[1])*0.5)
+		var station := float(cfg.station_m[0])+float(cfg.joist_spacing_m)*0.5
+		var count := 0
+		while station < float(cfg.station_m[1]):
+			var j := start+t*station
+			j.y = deck_bottom-band-(float(joist_size[1])-band)*0.5
+			var tone := float(joist_tones[count % joist_tones.size()])
+			var joist_material: Material = joist if is_equal_approx(tone, 1.0) else PARTS._material(Color(joist_color.r*tone,joist_color.g*tone,joist_color.b*tone),0.95)
+			PARTS._beam(root,j+n*(float(cfg.depth_m[0])+0.07),j+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),float(joist_size[1])-band,joist_material)
+			if relief: root.get_child(-1).set_meta("visual_only", true)
+			if band > 0.0:
+				var f := tone*float(top_shade[1])
+				var u := start+t*station
+				u.y = deck_bottom-band*0.5
+				PARTS._beam(root,u+n*(float(cfg.depth_m[0])+0.07),u+n*(float(cfg.depth_m[1])-0.07),float(joist_size[0]),band,PARTS._material(Color(joist_color.r*f,joist_color.g*f,joist_color.b*f),0.95))
+				if relief: root.get_child(-1).set_meta("visual_only", true)
+			station += float(cfg.joist_spacing_m)
+			count += 1
+	if relief:
+		var low := deck_bottom-(float(joist_size[1]) if has_joists else 0.0)
+		var ea := a
+		var eb := b
+		ea.y = (low+a.y-0.08)*0.5
+		eb.y = ea.y
+		PARTS._beam(root,ea,eb,depth-0.10,a.y-0.08-low,null)
+		var envelope := root.get_child(-1) as MeshInstance3D
+		envelope.visible = false
+		envelope.set_meta("collision_only", true)
+	if cfg.has("beam_rgb"):
+		var beam := PARTS._material(color(cfg,"beam_rgb",Color.GRAY),0.9)
+		var beam_size: Array = cfg.get("beam_size_m", [0.12, 0.18])
+		var rows := {}
+		for post: Dictionary in cfg.get("posts", []):
+			rows[snappedf(float(post.depth_m), 0.01)] = true
+		for row: float in rows:
+			# On the posts as drawn (_panel stands them 0.06 out along n).
+			var ba := start+t*(float(cfg.station_m[0])+0.05)+n*(row+0.06)
+			var bb := start+t*(float(cfg.station_m[1])-0.05)+n*(row+0.06)
+			ba.y = a.y-0.11-float(beam_size[1])*0.5
+			bb.y = ba.y
+			PARTS._beam(root,ba,bb,float(beam_size[0]),float(beam_size[1]),beam)
 	var steel := PARTS._material(color(palette,"carport_post_rgb",Color(0.35,0.3,0.25)),0.9)
 	var fascia: Material = trim
 	if cfg.has("fascia_rgb"): fascia = PARTS._material(color(cfg,"fascia_rgb",Color.GRAY),0.96)
+	# Opt-in fascia_seam_m: board joints across both fascias every fascia_seam_m, a hair
+	# proud of each face, in fascia_seam_rgb.
+	var seam_every := float(cfg.get("fascia_seam_m", 0.0))
+	var seam_material: Material = null
+	if seam_every >= 0.5: seam_material = PARTS._material(color(cfg,"fascia_seam_rgb",Color(0.3,0.31,0.32)),0.95)
 	for d in cfg.depth_m:
 		PARTS._beam(root,a+n*(float(d)-middle),b+n*(float(d)-middle),0.13,0.29,fascia)
+		if seam_material != null:
+			var seam_at := float(cfg.station_m[0]) + seam_every
+			while seam_at < float(cfg.station_m[1]) - 0.1:
+				# _panel stands its box 0.06 out along n: start it that far back.
+				var seam := start+t*seam_at+n*(float(d)-0.06)
+				seam.y = a.y
+				PARTS._panel(root,seam,t,n,Vector3(0.025,0.282,0.137),seam_material)
+				seam_at += seam_every
+			# The board line along each fascia's face, a little above its middle.
+			PARTS._beam(root,a+n*(float(d)-middle)+Vector3.UP*0.03,b+n*(float(d)-middle)+Vector3.UP*0.03,0.137,0.012,seam_material)
+		# Opt-in fascia_top_rgb: a weathered strip along the fascia's top edge.
+		if cfg.has("fascia_top_rgb"):
+			PARTS._beam(root,a+n*(float(d)-middle)+Vector3(0,0.1575,0),b+n*(float(d)-middle)+Vector3(0,0.1575,0),0.135,0.025,PARTS._material(color(cfg,"fascia_top_rgb",Color.GRAY),0.97))
 	for post: Dictionary in cfg.get("posts", []):
 		var p := start+t*float(post.station_m)+n*float(post.depth_m)
 		var bottom := float(post.bottom_y)
 		p.y = (a.y+bottom)/2
 		PARTS._panel(root,p,t,n,Vector3(0.09,a.y-bottom,0.09),steel)
+		# Opt-in post_bands [[from_m, to_m, rgb], ...]: painted bands up from the post's foot,
+		# each stopping at the post's top.
+		for band: Array in cfg.get("post_bands", []):
+			var low := float(band[0])
+			var high := minf(float(band[1]), a.y-bottom)
+			if high <= low: continue
+			var q := start+t*float(post.station_m)+n*float(post.depth_m)
+			q.y = bottom+(low+high)*0.5
+			PARTS._panel(root,q,t,n,Vector3(0.1,high-low,0.1),PARTS._material(Color(float(band[2][0]),float(band[2][1]),float(band[2][2])),0.7))
 
 # Opt-in gable-front canopy over an open bay: the ridge runs along the frame
 # normal from the host wall to the bay front. Its two roof planes carry the
@@ -716,13 +945,28 @@ static func _polygon_area(polygon: PackedVector2Array) -> float:
 		sum += ax*by-ay*bx
 	return absf(sum)*0.5
 
+## Whether the wall ring turns more than 15 degrees where run `run` starts (from the
+## run before it in the ring).
+static func _turns_at(vertices: Array, run: int) -> bool:
+	var count := vertices.size() / 12
+	var before := posmod(run - 1, count) * 12
+	var here := run * 12
+	var a := Vector2(float(vertices[before + 3]) - float(vertices[before]), float(vertices[before + 5]) - float(vertices[before + 2])).normalized()
+	var b := Vector2(float(vertices[here + 3]) - float(vertices[here]), float(vertices[here + 5]) - float(vertices[here + 2])).normalized()
+	return a.dot(b) < cos(deg_to_rad(15.0))
+
+
 static func _tag_since(root: Node3D, begin: int, role: String) -> void:
 	for i in range(begin,root.get_child_count()):
 		root.get_child(i).set_meta("family_role",role)
 
 # Keep the upper receiver and frozen roof in place. The complete lower wall,
 # openings and return shell move inward; dimensions are production inference.
-static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, soffit: Material, vertices: Array, run: int, frame: Dictionary, recess: Dictionary) -> void:
+## recessed: every run with this setback (run -> frame). Opt-in recess.join_runs takes a
+## run's neighbours from the wall ring instead of its frame: a recessed neighbour in any
+## frame meets it at the offset-line miter, and next to an unrecessed one the lower wall
+## runs to the corner with no terminal strip (_notched_wall meets it there).
+static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, soffit: Material, vertices: Array, run: int, frame: Dictionary, recess: Dictionary, recessed: Dictionary = {}, shades: Array = []) -> void:
 	var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 	var n := Vector3(-t.z,0,t.x)
 	var length := Vector2(b.x-a.x,b.z-a.z).length()
@@ -733,26 +977,44 @@ static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, hol
 	var runs: Array[int] = []
 	for source_run in frame.runs: runs.append(int(source_run))
 	var position: int = runs.find(run)
-	var lo := 0.05 if position == 0 else 0.0
-	var hi := length-0.05 if position == runs.size()-1 else length
+	var join := bool(recess.get("join_runs", false))
+	var count := vertices.size() / 12
+	var before := -1
+	var after := -1
+	if join:
+		if recessed.has(posmod(run-1,count)): before = posmod(run-1,count)
+		if recessed.has(posmod(run+1,count)): after = posmod(run+1,count)
+	else:
+		if position > 0: before = runs[position-1]
+		if position < runs.size()-1: after = runs[position+1]
+	var lo := 0.05 if before < 0 and not join else 0.0
+	var hi := length-0.05 if after < 0 and not join else length
 	var outer_a := a.lerp(b,lo/length)
 	var outer_b := a.lerp(b,hi/length)
 	var inner_a := outer_a-n*depth
 	var inner_b := outer_b-n*depth
 	# Adjacent serialized source runs meet at a shared offset-line miter.
-	if position > 0:
-		var previous := runs[position-1]*12
+	if before >= 0:
+		var previous := before*12
 		var pt := Vector3(vertices[previous+3]-vertices[previous],0,vertices[previous+5]-vertices[previous+2]).normalized()
 		var pn := Vector3(-pt.z,0,pt.x)
 		inner_a = outer_a-(n+pn)*depth/(1.0+n.dot(pn))
-	if position < runs.size()-1:
-		var following := runs[position+1]*12
+	if after >= 0:
+		var following := after*12
 		var nt := Vector3(vertices[following+3]-vertices[following],0,vertices[following+5]-vertices[following+2]).normalized()
 		var nn := Vector3(-nt.z,0,nt.x)
 		inner_b = outer_b-(n+nn)*depth/(1.0+n.dot(nn))
 	PARTS._wall_with_openings(root,Vector3(a.x,band,a.z),Vector3(b.x,band,b.z),top,_clipped_holes(holes,0,length,band,top),siding)
 	var shift := Vector3(inner_a.x-a.x,0,inner_a.z-a.z).dot(t)
-	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z)),minf(a.y,b.y),band),siding)
+	var inner_length := inner_a.distance_to(Vector3(inner_b.x,inner_a.y,inner_b.z))
+	PARTS._wall_with_openings(root,inner_a,inner_b,band,_clipped_holes(holes,shift,shift+inner_length,minf(a.y,b.y),band),siding)
+	# Opt-in shade_m/shade: the lower wall's top in the overhang's shade, two strips of the
+	# siding darkened toward the soffit (shade the darkest factor), just proud of the wall.
+	if shades.size() == 2:
+		var tall := float(recess.shade_m)
+		var lift := n * 0.004
+		for step: Array in [[band - tall * 0.4, band, shades[0]], [band - tall, band - tall * 0.4, shades[1]]]:
+			PARTS._wall_with_openings(root,Vector3(inner_a.x,float(step[0]),inner_a.z)+lift,Vector3(inner_b.x,float(step[0]),inner_b.z)+lift,float(step[1]),_clipped_holes(holes,shift,shift+inner_length,float(step[0]),float(step[1])),step[2])
 	if lo > 0:
 		PARTS._wall_with_openings(root,a,outer_a,band,[],siding)
 		PARTS._quad(root,[outer_a,inner_a,Vector3(inner_a.x,band,inner_a.z),Vector3(outer_a.x,band,outer_a.z)],siding,cavity_facing_returns)
@@ -760,6 +1022,63 @@ static func _recessed_wall(root: Node3D, a: Vector3, b: Vector3, top: float, hol
 		PARTS._wall_with_openings(root,outer_b,b,band,[],siding)
 		PARTS._quad(root,[inner_b,outer_b,Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z)],siding,cavity_facing_returns)
 	PARTS._quad(root,[Vector3(outer_a.x,band,outer_a.z),Vector3(outer_b.x,band,outer_b.z),Vector3(inner_b.x,band,inner_b.z),Vector3(inner_a.x,band,inner_a.z)],soffit,false)
+
+## recess.join_runs: an unrecessed run beside a recessed one (in the wall ring). Its
+## upper storey runs the whole run; its lower storey stops short of an outside corner,
+## or runs on past an inside one, to meet the neighbour's set-back lower wall under the
+## overhang. Returns false, building nothing, when neither neighbour is recessed.
+static func _notched_wall(root: Node3D, a: Vector3, b: Vector3, top: float, holes: Array[Rect2], siding: Material, vertices: Array, run: int, recess: Dictionary, recessed: Dictionary) -> bool:
+	var count := vertices.size() / 12
+	var previous := posmod(run-1,count)
+	var following := posmod(run+1,count)
+	if not (recessed.has(previous) or recessed.has(following)):
+		return false
+	var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
+	var length := Vector2(b.x-a.x,b.z-a.z).length()
+	var band := float(recess.band_y)
+	var depth := float(recess.depth_m)
+	var start := 0.0
+	var end := length
+	# Where this run's line meets the neighbour's set-back line (depth behind its face).
+	if recessed.has(previous):
+		var k := Vector2(t.x,t.z).dot(_run_normal(vertices,previous))
+		if absf(k) > 0.25: start = -depth/k
+	if recessed.has(following):
+		var k := Vector2(t.x,t.z).dot(_run_normal(vertices,following))
+		if absf(k) > 0.25: end = length-depth/k
+	PARTS._wall_with_openings(root,Vector3(a.x,band,a.z),Vector3(b.x,band,b.z),top,_clipped_holes(holes,0,length,band,top),siding)
+	var low_a := a+t*start
+	var low_b := a+t*end
+	low_a.y = lerpf(a.y,b.y,start/length)
+	low_b.y = lerpf(a.y,b.y,end/length)
+	PARTS._wall_with_openings(root,low_a,low_b,band,_clipped_holes(holes,start,end,minf(a.y,b.y),band),siding)
+	return true
+
+
+## recess.join_runs: where the lower storey's walls meet at the start of run `run`,
+## as an XZ offset from the run's start: the crossing of the two runs' lower wall
+## lines, each `depth` behind its face when recessed. Null when neither is recessed
+## or the runs are nearly parallel.
+static func _lower_corner(vertices: Array, run: int, recessed: Dictionary, depth: float) -> Variant:
+	var previous := posmod(run-1,vertices.size()/12)
+	var dp := depth if recessed.has(previous) else 0.0
+	var di := depth if recessed.has(run) else 0.0
+	if dp == 0.0 and di == 0.0:
+		return null
+	var np := _run_normal(vertices,previous)
+	var ni := _run_normal(vertices,run)
+	var det := np.x*ni.y-np.y*ni.x
+	if absf(det) < 0.2:
+		return null
+	return Vector2((-dp*ni.y+di*np.y)/det,(-di*np.x+dp*ni.x)/det)
+
+
+## A ring run's outward normal in XZ.
+static func _run_normal(vertices: Array, run: int) -> Vector2:
+	var i := run*12
+	var t := Vector2(float(vertices[i+3])-float(vertices[i]),float(vertices[i+5])-float(vertices[i+2])).normalized()
+	return Vector2(-t.y,t.x)
+
 
 static func _clipped_holes(holes: Array[Rect2], start: float, end: float, bottom: float, top: float) -> Array[Rect2]:
 	var result: Array[Rect2] = []

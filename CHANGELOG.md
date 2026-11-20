@@ -6,10 +6,17 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
-## Build 2345 (2026-11-20)
+## Build 2366 (2026-11-20)
 
 - On phones and tablets you can look around by dragging anywhere on the screen that isn't a button, not only on its right side.
 - The move stick and the RUN and RISE buttons sit a little further in from the edges of the screen, with a little more room between RUN and RISE.
+
+## Build 2347 (2026-11-19)
+
+- The townhouse row at 1232 Northpoint Drive looks much more like itself: its upper floor now overhangs the ground floor, and each of its three parts has its own steeper roof with vent stacks on it.
+- At 1232 Northpoint Drive, the first home has its glazed panel beside the door and its small window again, the windows sit where they really are, and there are blinds and curtains behind the glass.
+- 1232 Northpoint Drive now has the air conditioners, cabinets, bins and slatted screens that stand by its photographed doors, white downspouts, and the low utility room with its double door and flues on its north end.
+- The carport at 1232 Northpoint Drive is lower and shorter, as it really is, with painted posts and a boarded grey underside on its joists, and the homes at its north end face a lawn instead of parking.
 
 ## Build 2341 (2026-11-20)
 
