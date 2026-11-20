@@ -203,8 +203,8 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var north_face_centers := _evenly_spaced(_chain_length(record, north_face), int(schedule.north_face_windows_per_floor), float(front.north_face_window_margin_m))
 	_append_window_grid(buckets, record, north_face, north_face_centers, float(front.north_face_window_width), floors, wing_style)
 	_append_north_junction_bays(buckets, record, schedule.north_junction_windows as Array, floors, wing_style)
-	_append_pavilion(buckets, collision, record, north_pavilion, floors, front)
-	_append_pavilion(buckets, collision, record, south_pavilion, floors, front)
+	_append_pavilion(buckets, collision, record, north_pavilion, floors, front, "north_pavilion")
+	_append_pavilion(buckets, collision, record, south_pavilion, floors, front, "south_pavilion")
 
 	# SE face and the visible podium (dated 2023 rear view): one lower ribbon
 	# wraps from the SE face across the bound rear hosts, butting the protected
@@ -1289,18 +1289,19 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 ## a group of incised lines, closed by a thin flat coping with little overhang. A
 ## thin skin over the tier's face, from the head bands up to the coping, closes
 ## the field between the pier tops, so the attic reads as one plane; its lines are
-## gaps floored in the darker base stucco. Near only (_fine): past `near` a plain
-## skin with one faint field-stucco band over the line group stands in, where the
-## gaps would shimmer. Visual only; the exact face and its collision are unchanged.
-## The coping, like the cornice it replaces, closes its back above the tier roof.
+## gaps floored in the darker base stucco. Near only (_fine): past `near` the same
+## skin without gaps stands in, where gaps a few pixels apart would shimmer (four
+## 5 cm lines average to within a few percent of the plain skin's tone). Visual
+## only; the exact face and its collision are unchanged. The coping, like the
+## cornice it replaces, closes its back above the tier roof.
 static func _append_crescent_attic(buckets: Dictionary, path: Dictionary, attic: Dictionary, coping_back: float) -> void:
 	var skin := attic.skin_y as Array
 	var front := float(attic.skin_front)
 	var back := float(attic.skin_back)
 	var lines := attic.incised_lines_y as Array
 	var height := float(attic.incised_line_height)
-	var near := _fine(buckets, "near", "trim")
-	var line_floor := _fine(buckets, "near", "base")
+	var near := _fine(buckets, "near", "trim", "crescent")
+	var line_floor := _fine(buckets, "near", "base", "crescent")
 	var bottom := float(skin[0])
 	for line_value in lines:
 		var y := float(line_value)
@@ -1308,12 +1309,7 @@ static func _append_crescent_attic(buckets: Dictionary, path: Dictionary, attic:
 		_append_path_band(line_floor, path, y, y + height, float(attic.incised_line_floor_front), back)
 		bottom = y + height
 	_append_path_band(near, path, bottom, float(skin[1]), front, back)
-	var group_low := float(lines[0])
-	var group_high := float(lines[lines.size() - 1]) + height
-	var far := _fine(buckets, "far", "trim")
-	_append_path_band(far, path, float(skin[0]), group_low, front, back)
-	_append_path_band(_fine(buckets, "far", "field"), path, group_low, group_high, front, back)
-	_append_path_band(far, path, group_high, float(skin[1]), front, back)
+	_append_path_band(_fine(buckets, "far", "trim", "crescent"), path, float(skin[0]), float(skin[1]), front, back)
 	var coping := attic.coping as Array
 	_append_path_band(buckets.trim, path, float(coping[0]), float(coping[1]), float(coping[2]), coping_back, false, false, true)
 	var coping_line := attic.coping_line_y as Array
@@ -2079,7 +2075,7 @@ static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: flo
 ## twenty-light windows on a fluted mullion pier, plain corner fins, an abstract
 ## winged relief, a pale-portal entry and a flat-topped crown over the whole face.
 ## Flanks and the recessed corner bay carry the wing floor schedule.
-static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record: Dictionary, spec: Dictionary, floors: Array, front: Dictionary) -> void:
+static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record: Dictionary, spec: Dictionary, floors: Array, front: Dictionary, region: String) -> void:
 	var center_runs := _int_array(spec.center_runs)
 	var length := _chain_length(record, center_runs)
 	var frame := _span_frame(record, center_runs, 0.0, length)
@@ -2097,10 +2093,10 @@ static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record:
 	_append_winged_emblem(buckets.trim, buckets.emblem, frame, front.pavilion_emblem as Dictionary)
 	_append_pavilion_entry(buckets, collision, frame, base_mid, base_low, spec.entry as Dictionary)
 	# Corner fins (2008 south pavilion view, 2003 Photograph 11; the nomination's
-	# "corner pilasters"): plain strips slightly proud of the face, filling it
-	# outside the window field, from the plinth to a shoulder just over the flank
-	# roofs with three incised lines under it. They reach chest height, so they
-	# are solid.
+	# "corner pilasters"): plain strips slightly proud of the face, in its stucco,
+	# filling it outside the window field, from the plinth to a shoulder just over
+	# the flank roofs with three incised lines under it. They reach chest height,
+	# so they are solid.
 	var crown := front.pavilion_crown as Dictionary
 	var half := length * 0.5
 	var fin_inner := float(crown.fin_inner_half_width_m)
@@ -2108,27 +2104,29 @@ static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record:
 	var fin_top := float(crown.fin_top_y)
 	var line_height := float(crown.line_height)
 	var line_front := float(crown.line_front)
-	var lines := _fine(buckets, "near", "base")
+	var lines := _fine(buckets, "near", "base", region)
 	for side in [-1.0, 1.0]:
 		var inner := float(side) * fin_inner
 		var outer := float(side) * half
-		for target: Dictionary in [buckets.trim, collision]:
+		for target: Dictionary in [buckets.wall, collision]:
 			_append_frame_box(target, frame, minf(inner, outer), maxf(inner, outer), base_low - 0.06, fin_top, float(frame.lo) - 0.03, fin_front)
 		for line_value in crown.fin_lines_y as Array:
 			var y := float(line_value)
 			_append_frame_box(lines, frame, minf(inner, outer) + 0.02, maxf(inner, outer) - 0.02, y, y + line_height, fin_front - 0.01, fin_front + line_front)
 	# Flat-topped crown (same views; the north pavilion's from its low-resolution
-	# 2025 and 2003 views): solid masonry over the whole centre face, seated into
-	# the flank roof, with three incised lines under a thin cap. Its sides, top,
-	# back and cap are all in the wall body's collision: the roof is reachable.
+	# 2025 and 2003 views): solid masonry over the whole centre face in the face's
+	# stucco, seated into the flank roof, with three incised lines under a thin pale
+	# cap. Its sides, top, back and cap are all in the wall body's collision: the
+	# roof is reachable.
 	var block_half := half - float(crown.side_inset_m)
 	var block_front := wall + float(crown.front_m)
 	var block_back := wall + float(crown.back_m)
 	var cap := crown.cap as Dictionary
 	var cap_y := cap.y as Array
 	var overhang := float(cap.overhang)
-	for target: Dictionary in [buckets.trim, collision]:
+	for target: Dictionary in [buckets.wall, collision]:
 		_append_frame_box(target, frame, -block_half, block_half, float(crown.bottom_y), float(cap_y[0]) + 0.02, block_back, block_front)
+	for target: Dictionary in [buckets.trim, collision]:
 		_append_frame_box(target, frame, -block_half - overhang, block_half + overhang, float(cap_y[0]), float(cap_y[1]), block_back - overhang, block_front + float(cap.front))
 	for line_value in crown.lines_y as Array:
 		var y := float(line_value)
@@ -2922,13 +2920,14 @@ static func _append_triangle(bucket: Dictionary, a: Vector3, b: Vector3, c: Vect
 
 
 ## A fine-relief bucket: reeds, teeth, incised lines and soffit joints a few
-## centimetres deep, which the gameplay camera resolves only near the building.
-## Kept apart by detail range ("close", "near"; "far" for what stands in for them
-## farther off) and material ("trim", "field", "base", "reveal"), each drawn as one
-## mesh within its range (_fine_specs).
-static func _fine(buckets: Dictionary, range_key: String, material_key: String) -> Dictionary:
+## centimetres deep, which the gameplay camera resolves only near them. Kept apart
+## by region (a part of the building, so its range is measured from that part),
+## detail range ("close", "near"; "far" for what stands in for them farther off) and
+## material ("trim", "field", "base", "reveal"), each drawn as one mesh within its
+## range (_fine_specs).
+static func _fine(buckets: Dictionary, range_key: String, material_key: String, region: String = "") -> Dictionary:
 	var fine := buckets.fine as Dictionary
-	var key := range_key + ":" + material_key
+	var key := region + ":" + range_key + ":" + material_key
 	if not fine.has(key):
 		fine[key] = _bucket()
 	return fine[key]
@@ -2936,20 +2935,21 @@ static func _fine(buckets: Dictionary, range_key: String, material_key: String) 
 
 ## One mesh spec per fine-relief bucket, with its range from detail_ranges_m:
 ## [begin, end] metres (an end of 0 draws to any distance) and the margin both
-## switch over. The ranges hide whole meshes, so a record's relief shares one mesh
-## per range and material, sized like the building, which the bake leaves as authored
-## (per-instance settings) and the web's size culling leaves alone (over 50 m).
+## switch over. A range hides a whole mesh, measured to its bounds' centre, so each
+## region's relief is one mesh per range and material. The bake leaves them as
+## authored (per-instance settings); the web's size culling (main.gd) sets its own
+## end on those under 50 m long (the pavilions' and canopy's: 200 or 500 m).
 static func _fine_specs(fine: Dictionary, ranges: Dictionary, prefix: String, layers: int) -> Array[Dictionary]:
 	var specs: Array[Dictionary] = []
 	var keys := fine.keys()
 	keys.sort()
 	for key_value: Variant in keys:
 		var parts := str(key_value).split(":")
-		var span := ranges[parts[0]] as Array
+		var span := ranges[parts[1]] as Array
 		specs.append({
-			"name": prefix + parts[0].capitalize() + parts[1].capitalize(),
+			"name": prefix + parts[0].to_pascal_case() + parts[1].capitalize() + parts[2].capitalize(),
 			"bucket": fine[key_value],
-			"material": _fine_material(parts[1]),
+			"material": _fine_material(parts[2]),
 			"layers": layers,
 			"range": Vector3(float(span[0]), float(span[1]), float(ranges.margin)),
 		})
