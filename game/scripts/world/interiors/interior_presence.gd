@@ -8,15 +8,17 @@ extends Node
 ##   {"kind": "ring_sector", "centre": Vector2(x, z), "radii": Vector2(inner, outer),
 ##    "angles": Vector2(from, to), "top_y": float}
 ## an annular sector about a centre (Building 1's crescent), from its inner to its outer
-## radius, between the two angles (atan2 of z over x from the centre), below top_y; the
+## radius, from the first angle round to the second (atan2 of z over x from the centre,
+## either side of the -PI/PI seam or across it; less than a whole turn), below top_y; the
 ## one kind there is so far (KINDS).
 ##
 ## Each frame it reads the current camera's position. The camera is in once it stands
 ## HYSTERESIS_M inside the plan's bounds, and out again only once it stands as far
 ## outside them: two lines, so a camera on a doorway does not go in and out frame by
-## frame. A progress follows, toward 1 while in and 0 while out, at 1 / fade_s a second,
-## turning round wherever it is when the camera turns back; blend() is that progress
-## eased (smoothstep). The signals mark each turn and each end: entering_started and
+## frame. A progress follows, toward 1 while in and 0 while out, at 1 / fade_s a second
+## (a frame counts for at most MAX_STEP_S, so one long frame at the door cannot finish a
+## fade), turning round wherever it is when the camera turns back; blend() is that
+## progress eased (smoothstep). The signals mark each turn and each end: entering_started and
 ## leaving_started when the camera goes in or out, fully_inside and fully_outside when
 ## the progress gets to 1 or 0.
 ##
@@ -36,6 +38,8 @@ const PLAN_META := "interior_plan"
 const KINDS: Array[String] = ["ring_sector"]
 ## The camera is in this far (m) inside the plan's bounds, out this far outside them.
 const HYSTERESIS_M := 0.4
+## The most of a frame (s) the progress counts: a longer frame moves it no further.
+const MAX_STEP_S := 0.1
 
 ## How long (s) the blend takes from one end to the other.
 @export var fade_s := 0.5
@@ -49,7 +53,9 @@ var _inside := false
 var _progress := 0.0
 var _centre := Vector2.ZERO
 var _radii := Vector2.ZERO
-var _angles := Vector2.ZERO
+## The angle halfway round the plan's turn, and half that turn.
+var _middle := 0.0
+var _half := 0.0
 var _top := 0.0
 ## The squared distance from the centre beyond which the camera cannot be in.
 var _reach := 0.0
@@ -64,7 +70,8 @@ func _ready() -> void:
 		return
 	_centre = plan.centre
 	_radii = plan.radii
-	_angles = plan.angles
+	_middle = (plan.angles.x + plan.angles.y) * 0.5
+	_half = (plan.angles.y - plan.angles.x) * 0.5
 	_top = float(plan.top_y)
 	_reach = (_radii.y + HYSTERESIS_M) * (_radii.y + HYSTERESIS_M)
 	_ready_plan = true
@@ -80,8 +87,10 @@ static func plan_problem(plan: Variant) -> String:
 		return "a ring_sector plan needs centre, radii and angles (Vector2) and top_y"
 	var radii: Vector2 = plan.radii
 	var angles: Vector2 = plan.angles
-	if radii.x < 0.0 or radii.y <= radii.x or angles.y <= angles.x:
-		return "a ring_sector plan's radii and angles must each run from less to more"
+	if radii.x < 0.0 or radii.y <= radii.x:
+		return "a ring_sector plan's radii must run from less to more"
+	if angles.y <= angles.x or angles.y - angles.x >= TAU:
+		return "a ring_sector plan's angles must run from less to more, less than a whole turn"
 	return ""
 
 
@@ -103,7 +112,7 @@ func _process(delta: float) -> void:
 			leaving_started.emit()
 	var goal := 1.0 if _inside else 0.0
 	if _progress != goal:
-		_progress = move_toward(_progress, goal, delta / maxf(fade_s, 0.001))
+		_progress = move_toward(_progress, goal, minf(delta, MAX_STEP_S) / maxf(fade_s, 0.001))
 		if _progress == goal:
 			if _inside:
 				fully_inside.emit()
@@ -135,13 +144,14 @@ func progress() -> float:
 
 
 ## Whether a point is in the plan, margin metres inside its bounds (outside them, for a
-## negative margin): between the radii, between the angles (the margin as an arc at the
-## point's radius) and below the top.
+## negative margin): between the radii, within the plan's turn (the margin as an arc at
+## the point's radius; the angle is taken from the turn's middle and wrapped, so a plan
+## either side of the -PI/PI seam or across it holds the same) and below the top.
 func contains(at: Vector3, margin := 0.0) -> bool:
 	if not _ready_plan:
 		return false
 	var offset := Vector2(at.x - _centre.x, at.z - _centre.y)
 	var r := offset.length()
-	var angle := atan2(offset.y, offset.x)
+	var off := absf(wrapf(atan2(offset.y, offset.x) - _middle, -PI, PI))
 	var turn := margin / maxf(r, 1.0)
-	return r > _radii.x + margin and r < _radii.y - margin and angle > _angles.x + turn and angle < _angles.y - turn and at.y < _top - margin
+	return r > _radii.x + margin and r < _radii.y - margin and off < _half - turn and at.y < _top - margin

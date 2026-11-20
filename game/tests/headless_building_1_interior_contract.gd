@@ -26,7 +26,8 @@ extends SceneTree
 ## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
 ## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
 ## it builds the hall as the web's bake does and checks its reflections node carries
-## neither floor attribute set: the web draws none of them.
+## neither floor attribute set (the web draws none of them), and its InteriorPresence
+## and plan as above: the web's hall fades in and out by the same plan.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -76,7 +77,8 @@ func _run() -> void:
 	_check_roof(hall)
 	if OS.get_cmdline_user_args().has("--web-world-bake"):
 		_check_web_bake(hall)
-		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets" % (hall.get_node("HallReflections") as Building1HallReflections).mode if failures.is_empty() else "")
+		_check_presence(hall, "the hall built for the web")
+		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets, and its Presence before it with a plan on the mural loader's bounds" % (hall.get_node("HallReflections") as Building1HallReflections).mode if failures.is_empty() else "")
 		return
 	_check_mural(hall)
 	_check_reflections(hall, "the generated hall")
