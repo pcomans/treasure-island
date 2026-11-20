@@ -407,8 +407,7 @@ static func _append_floors(plan: Dictionary, buckets: Dictionary, shell: Diction
 
 ## The vestibule's floor: level with the door's sill (sill_y) from under its front wall
 ## to sill_landing (0.3 m) inside it, then rising too gently to see to the hall's floor
-## at the colonnade's back, through the inner doorway; the door's open leaves reach past
-## the landing, their far ends over the start of the rise. In the
+## at the colonnade's back, through the inner doorway. In the
 ## doorway it starts at the sill's inner edge, on the sill's stations (_append_doorway).
 static func _append_vestibule_floor(plan: Dictionary, floor: Dictionary, shell: Dictionary, cuts: Array[float]) -> void:
 	var front_in := float(plan.front_in)
@@ -1123,50 +1122,6 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	_quad([stone, shell], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
 	_triangle([stone], _lifted(foot_left, y - bevel - 0.03), _lifted(outer_left, y), _lifted(outer_left, y - bevel - 0.03), -tangent)
 	_triangle([stone], _lifted(outer_right, y - bevel - 0.03), _lifted(outer_right, y), _lifted(foot_right, y - bevel - 0.03), tangent)
-	_append_door_leaves(plan, buckets, shell)
-
-
-## The group's three bronze leaves stood open, swung in against the reveal sides:
-## two folded together on the left, one on the right. Glazed bronze in the facade;
-## here the frames (the glass is clear), solid for the player.
-static func _append_door_leaves(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
-	var door := plan.door as Dictionary
-	var leaf := plan.members.door_leaf as Dictionary
-	# On the sill's level, which runs on inside for sill_landing under their hinge ends;
-	# their far ends stand over the start of the rise.
-	var y := float(plan.sill_y)
-	var top := float(door.top_y)
-	var half := float(door.half)
-	var hinge := float(door.face) + 0.06
-	var width := half * 2.0 / 3.0
-	var thickness := float(leaf.thickness)
-	var inset := float(leaf.inset)
-	var tangent := door.tangent as Vector3
-	var normal := door.normal as Vector3
-	var stile := float(leaf.stile)
-	var rail := float(leaf.rail)
-	var lefts := [float(door.center) - half + inset, float(door.center) - half + inset + thickness + 0.01]
-	var places: Array = []
-	for lateral: float in lefts:
-		places.append(lateral + thickness * 0.5)
-	places.append(float(door.center) + half - inset - thickness * 0.5)
-	for lateral: float in places:
-		# The leaf lies in the plane of the normal and up, from the hinge inward.
-		var hinge_point := _frame_point(door, lateral, hinge, 0.0)
-		var middle := hinge_point - normal * width * 0.5
-		var bronze := buckets.bronze as Dictionary
-		_box([shell], Vector3(middle.x, (y + top) * 0.5, middle.z), normal, tangent, width, top - y, thickness)
-		for edge: float in [stile * 0.5, width - stile * 0.5]:
-			var at := hinge_point - normal * edge
-			_box([bronze], Vector3(at.x, (y + top) * 0.5, at.z), normal, tangent, stile, top - y, thickness)
-		var rails := [y + float((leaf.rails as Array)[0]) * 0.5, y + float((leaf.rails as Array)[1]), top - rail * 0.5]
-		var heights := [float((leaf.rails as Array)[0]), rail, rail]
-		for index in rails.size():
-			_box([bronze], Vector3(middle.x, float(rails[index]), middle.z), normal, tangent, width - stile * 2.0, float(heights[index]), thickness * 0.8)
-		# Dark glass between the rails, as the facade's door glass.
-		var glass_bottom := y + float((leaf.rails as Array)[0])
-		var glass_top := top - rail
-		_box([buckets.glass], Vector3(middle.x, (glass_bottom + glass_top) * 0.5, middle.z), normal, tangent, width - stile * 2.0, glass_top - glass_bottom, thickness * 0.4)
 
 
 ## A door group's glazing seen from inside, on the front wall's inner face: daylight

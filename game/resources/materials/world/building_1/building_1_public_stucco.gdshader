@@ -21,25 +21,43 @@ uniform float grain_variation = 0.2;
 uniform float broad_variation = 0.1;
 uniform float roughness_base = 0.84;
 uniform float roughness_variation = 0.12;
-// Fine relief that gives way to its flat face with distance (the crescent piers'
-// reeds): from relief_fade_m.x to relief_fade_m.y metres from the camera the mesh's
-// own normals blend into the face normal its UV carries as (x, z), so stripes finer
-// than a pixel never alias; no switch, no pop. 0 (the default) leaves normals alone.
-uniform vec2 relief_fade_m = vec2(0.0, 0.0);
+// Matte paint's specular level (Godot's SPECULAR; its own default is 0.5): low, so
+// small ledges seen edge-on do not mirror the sky as blue lines.
+uniform float specular_level = 0.25;
+// Fine relief kept to what the screen can show (the crescent piers' reeds). Its mesh
+// carries in UV its flat face's normal as an angle about Y from +X (x, radians) and
+// each point's place across the reeds (y, metres). Where a reed of relief_period_m
+// spans fewer pixels across than relief_fade_px.y, down to relief_fade_px.x, its own
+// normals give way to one broad wave per relief_coarse_period_m across the same reeds
+// (tilting relief_coarse_tilt at most), and that wave in turn to the flat face: a
+// calm stripe at every distance, no switch, no pop. A relief_period_m of 0 (the
+// default) leaves normals alone.
+uniform float relief_period_m = 0.0;
+uniform float relief_coarse_period_m = 0.45;
+uniform float relief_coarse_tilt = 0.45;
+uniform vec2 relief_fade_px = vec2(3.0, 6.0);
 varying vec3 world_position;
 varying vec3 world_normal;
 varying vec3 face_normal;
+varying float relief_across;
 
 void vertex() {
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
-	face_normal = MODEL_NORMAL_MATRIX * vec3(UV.x, 0.0, UV.y);
+	face_normal = MODEL_NORMAL_MATRIX * vec3(cos(UV.x), 0.0, sin(UV.x));
+	relief_across = UV.y;
 }
 
 void fragment() {
 	vec3 n = normalize(world_normal);
-	if (relief_fade_m.y > 0.0 && length(face_normal) > 0.5) {
-		n = normalize(mix(n, normalize(face_normal), smoothstep(relief_fade_m.x, relief_fade_m.y, length(VERTEX))));
+	if (relief_period_m > 0.0) {
+		vec3 face = normalize(face_normal);
+		vec3 across = vec3(-face.z, 0.0, face.x);
+		float metres_per_pixel = max(fwidth(relief_across), 1e-5);
+		float fine = smoothstep(relief_fade_px.x, relief_fade_px.y, relief_period_m / metres_per_pixel);
+		float coarse = smoothstep(relief_fade_px.x, relief_fade_px.y, relief_coarse_period_m / metres_per_pixel);
+		vec3 wave = normalize(face + across * (relief_coarse_tilt * sin(6.2831853 * relief_across / relief_coarse_period_m)));
+		n = normalize(mix(mix(face, wave, coarse), n, fine));
 	}
 	// Face-aligned world-metre projection keeps one continuous phase across the
 	// exact runs and applied modules, independent of their box UVs. V runs
@@ -56,6 +74,7 @@ void fragment() {
 	ALBEDO = paint_color.rgb * clamp(variation, 0.86, 1.1) * texture(detail_pattern, UV).rgb;
 	ROUGHNESS = clamp(roughness_base + (texture(surface_roughness, uv).r - 0.5) * roughness_variation, 0.45, 0.97);
 	METALLIC = 0.0;
+	SPECULAR = specular_level;
 	vec3 detail = texture(surface_normal, uv).rgb * 2.0 - 1.0;
 	vec3 perturbed = normalize(n + (t * detail.x + b * detail.y) * relief_strength);
 	NORMAL = normalize((VIEW_MATRIX * vec4(perturbed, 0.0)).xyz);
