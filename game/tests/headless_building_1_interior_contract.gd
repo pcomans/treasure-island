@@ -102,7 +102,11 @@ func _check_closure(hall: Node3D) -> void:
 	var floor_y := loader.door.y - 1.5
 	var space := hall.get_world_3d().direct_space_state
 	var points: Array[Vector3] = []
-	for spot: Vector4 in [Vector4(42.8, -30.0, 1.6, 0), Vector4(42.8, -70.0, 3.0, 0), Vector4(42.8, 12.0, 3.0, 0), Vector4(42.8, -30.0, 12.5, 0), Vector4(32.5, -50.0, 6.5, 0), Vector4(32.0, -10.0, 15.5, 0), Vector4(32.5, -29.9, 1.6, 0), Vector4(45.0, -78.8, 1.5, 0), Vector4(42.0, -78.0, 6.4, 0), Vector4(53.2, -15.0, 1.5, 0)]:
+	# One point sits in the balcony zone a metre under its ceiling, which follows the
+	# facade's window heads (building_1_interior.json).
+	var heights := (JSON.parse_string(FileAccess.get_file_as_string(INTERIOR.CONFIG_PATH)) as Dictionary).heights_production_inference_m as Dictionary
+	var balcony_high := float(heights.balcony_ceiling) - 1.0
+	for spot: Vector4 in [Vector4(42.8, -30.0, 1.6, 0), Vector4(42.8, -70.0, 3.0, 0), Vector4(42.8, 12.0, 3.0, 0), Vector4(42.8, -30.0, 12.5, 0), Vector4(32.5, -50.0, 6.5, 0), Vector4(32.0, -10.0, balcony_high, 0), Vector4(32.5, -29.9, 1.6, 0), Vector4(45.0, -78.8, 1.5, 0), Vector4(42.0, -78.0, 6.4, 0), Vector4(53.2, -15.0, 1.5, 0)]:
 		var theta := deg_to_rad(spot.y)
 		points.append(Vector3(center.x + spot.x * cos(theta), floor_y + spot.z, center.y + spot.x * sin(theta)))
 	var door := loader.door
@@ -139,7 +143,10 @@ func _check_door(hall: Node3D) -> void:
 		failures.append("the door's car blocker is missing or not on the cars' ground layer only")
 		return
 	var box := (blocker.get_child(0) as CollisionShape3D).shape as BoxShape3D
-	if box == null or box.size.x < 3.0 or box.size.y < 3.0:
+	# The door group is 3.1 m wide and its open leaves 2.29 m high under the glazed
+	# transom (the owner's 2026-11-20 photos); the blocker spans that and stands
+	# taller than any car.
+	if box == null or box.size.x < 3.0 or box.size.y < 2.0:
 		failures.append("the car blocker does not span the door")
 	var normal := blocker.global_transform.basis.z.normalized()
 	var capsule := CapsuleShape3D.new()

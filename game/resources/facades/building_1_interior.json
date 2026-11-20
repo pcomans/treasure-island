@@ -12,7 +12,7 @@
     "text": "National Register nomination NRIS 08000081 (2007-12-02), Section 7 pages 3-4: entrance doors, marble-walled vestibule, three-storey concourse about 48 ft 8 in wide and 200 ft long, mural on most of the east wall, balcony with bronze Art Deco balustrade and tall square wood-clad columns over the vestibule, stairs at the north and south ends, wood panelling, terrazzo floor, chandeliers",
     "bar_photos": "two web photos of the bar room, no reuse licence, proportions only, kept outside Git",
     "mural_size": "about 250 ft by 26 ft (76 x 8 m), from a self-guided tour flyer for the building; the 2023 photos show it from the north gallery's end to the end of east bay 9 (photo 1's south end; the north end is provisional)",
-    "measurement": "Heights and the east wall's rhythm come from level-camera fits to the 2023 photos (east pier corners, bases, band and mural top): thirteen equal east bays, office bays 3.6 m, band to 4.2 m, mural to 12.2 m, hall lanterns over every other east bay on the centre line at about 7.8-9.8 m, flat ceiling about 13 m. The window heads (exterior, 15.75 m over the floor) set the higher ceiling over the balcony. Round 3: a joint fit of the west and south views (photos 3 and 5: column side and hall faces, plinth bases, east piers) gives the colonnade's hall faces 35.2-35.5 m from the crescent's centre, the columns 0.5 m wide and 0.8 m deep; the stepped drum's front edge silhouettes 3.45 m into the hall (photo 5); the north view's camera stands about 2 m north of the old north line, under a gallery that crosses the hall's north end to the mural's start (photos 1, 4, 5)."
+    "measurement": "Heights and the east wall's rhythm come from level-camera fits to the 2023 photos (east pier corners, bases, band and mural top): thirteen equal east bays, office bays 3.6 m, band to 4.2 m, mural to 12.2 m, hall lanterns over every other east bay on the centre line at about 7.8-9.8 m, flat ceiling about 13 m. The facade's window frames (the owner's 2026-11-20 photos, 4.9-12.3 m over the floor) set the walkway under them and the ceiling over the balcony. Round 3: a joint fit of the west and south views (photos 3 and 5: column side and hall faces, plinth bases, east piers) gives the colonnade's hall faces 35.2-35.5 m from the crescent's centre, the columns 0.5 m wide and 0.8 m deep; the stepped drum's front edge silhouettes 3.45 m into the hall (photo 5); the north view's camera stands about 2 m north of the old north line, under a gallery that crosses the hall's north end to the mural's start (photos 1, 4, 5)."
   },
   "plan_production_inference_m": {
     "front_wall_thickness": 0.45,
@@ -31,8 +31,8 @@
     "sill_y": 6.37,
     "sill_landing": 0.3,
     "ceiling": 13.05,
-    "balcony_ceiling": 16.3,
-    "balcony_floor": 5.25,
+    "balcony_ceiling": 13.45,
+    "balcony_floor": 4.75,
     "balcony_slab": 0.05,
     "west_opening_head": 3.5,
     "fascia": [3.5, 4.3],
@@ -49,7 +49,7 @@
     "mural": [4.2, 12.2],
     "cove": [12.45, 12.65, 12.85, 13.05],
     "cove_step_run": 0.55,
-    "cornice": [15.95, 16.3],
+    "cornice": [13.1, 13.45],
     "hall_lamp": [7.8, 9.8],
     "balcony_lamp": [8.7, 10.0],
     "office_door": [0.95, 2.15],
@@ -58,7 +58,7 @@
     "museum_grid": [3, 3],
     "threshold_bevel": 0.13,
     "stair_parapet": 1.0,
-    "note": "Floor 2.5 cm over the highest drawn ground under it (6.495, the plaza over the land by the bar room's north wall; headless_interior_ground_contract.gd checks every floor sample). The door's sill (sill_y) stays 2.5 cm over the highest drawn ground at the door (6.345, at the vestibule's south-front corner): the vestibule's floor runs level with it for sill_landing (0.3 m) inside the door, then rises 1.9 degrees to the hall's floor at the colonnade's back; the open leaves reach past the landing, so their far ends sit over the start of the ramp. The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: level with its top, just over the vestibule's ceiling, which clears the facade's door transom (11.53 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (22.12 m)."
+    "note": "Floor 2.5 cm over the highest drawn ground under it (6.495, the plaza over the land by the bar room's north wall; headless_interior_ground_contract.gd checks every floor sample). The door's sill (sill_y) stays 2.5 cm over the highest drawn ground at the door (6.345, at the vestibule's south-front corner): the vestibule's floor runs level with it for sill_landing (0.3 m) inside the door, then rises 1.9 degrees to the hall's floor at the colonnade's back; the open leaves reach past the landing, so their far ends sit over the start of the ramp. The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: about a rail's height (1.05 m) under the rail's top and under the facade's window frames (11.42 m), over the vestibule's ceiling, which clears the facade's door transom (9.70 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (18.85 m)."
   },
   "members_production_inference_m": {
     "west_column": [0.5, 0.8],

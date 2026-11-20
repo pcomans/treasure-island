@@ -68,7 +68,7 @@
     "lights_per_tall_end_window": 20,
     "relief_proxies_per_end": 1,
     "entrance_groups": 3,
-    "entrance_bays": [2, 5, 8],
+    "entrance_bays": [4, 5, 6],
     "doors_per_entrance_group": 3,
     "junction_windows": [
       {"run": 38, "glass_width": 0.9, "columns": 1},
