@@ -74,7 +74,7 @@
     "crescent_window_grid": [3, 6],
     "crescent_grille": {"pairs": 4, "bar": 0.035, "gap": 0.07, "rung": 0.03, "rung_pitch": 0.48, "back": 0.075, "front": 0.12},
     "crescent_head_rolls": {"y": [19.01, 19.64], "radius": 0.085, "pitch": 0.2, "face": 0.1},
-    "crescent_head_dentils": {"y": [19.68, 20.02], "front": 0.2, "width": 0.11, "pitch": 0.19},
+    "crescent_head_dentils": {"y": [19.7, 19.96], "front": 0.19, "width": 0.13, "pitch": 0.21},
     "crescent_attic": {
       "skin_y": [20.2, 24.12],
       "skin_front": 0.04,

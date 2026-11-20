@@ -81,6 +81,10 @@ const PUBLIC_LIGHT_STEEL_MATERIAL := preload("res://game/resources/materials/wor
 const PIER_REED_TOP_STEP_M := 0.04
 ## The pavilions' emblem relief, white as photographed.
 const PUBLIC_RELIEF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_relief_white.tres")
+## The narrow grooves between a pier's reeds: the sky reaches little of them, so they
+## stay dark in shade as the photographed flutes do, with or without screen-space
+## occlusion.
+const PUBLIC_GROOVE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_groove.tres")
 ## The concourse behind the crescent (owner, 2026-11-19): its door group opens, the
 ## exterior faces that stood inside it are cut, and its node rides with the wall.
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -167,6 +171,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"public_bronze": _bucket(),
 		"light_steel": _bucket(),
 		"relief": _bucket(),
+		"groove": _bucket(),
 	}
 	var collision := _bucket()
 
@@ -448,6 +453,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	specs.append({"name": "HeroPublicBronze", "bucket": buckets.public_bronze, "material": PUBLIC_BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroLightSteel", "bucket": buckets.light_steel, "material": PUBLIC_LIGHT_STEEL_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroEmblemRelief", "bucket": buckets.relief, "material": PUBLIC_RELIEF_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroReedGrooves", "bucket": buckets.groove, "material": PUBLIC_GROOVE_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	var crescent_style := front.crescent_window_style as Dictionary
 	var metadata := _common_metadata(config, record, "building_wall")
 	metadata.merge({
@@ -1477,7 +1483,7 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 		var center_m := float(center_value)
 		var frame := _span_frame(record, runs, center_m - pier * 0.5 - 0.1, center_m + pier * 0.5 + 0.1)
 		var center := center_m - float(frame.mid_m)
-		_append_fluted_pier(buckets.trim, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
+		_append_fluted_pier(buckets.trim, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front), buckets.groove)
 
 
 ## The crescent's attic (the owner's 2026-11-20 photos; the 2003 nomination's
@@ -2403,7 +2409,7 @@ static func _strip_rear_outline(record: Dictionary, runs: Array[int], depth: flo
 
 ## A pier with its reeds in the round (the owner's 2026-11-20 photos): each reed
 ## rounded across and at both ends, their tops stepping down from the middle reed.
-static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
+static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float, groove: Dictionary = {}) -> void:
 	var back := float(frame.lo) - 0.03
 	var wall := float(frame.hi)
 	_append_frame_box(trim, frame, center - width * 0.5, center + width * 0.5, bottom, top, back, wall + depth)
@@ -2414,6 +2420,11 @@ static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: flo
 		var x := center - total * 0.5 + reed_width * 0.5 + float(reed) * (reed_width + reed_gap)
 		var step := absf(float(reed) - middle) * PIER_REED_TOP_STEP_M
 		_append_reed(trim, frame, x, reed_width * 0.5, reed_front - depth, wall + depth - 0.005, bottom + 0.06, top - 0.04 - step, end)
+		# The groove's floor beside each reed, dark where the sky barely reaches.
+		if not groove.is_empty() and reed < reeds - 1:
+			var gap_x := x + (reed_width + reed_gap) * 0.5
+			var gap_top := top - 0.04 - maxf(step, absf(float(reed + 1) - middle) * PIER_REED_TOP_STEP_M) - end
+			_append_frame_box(groove, frame, gap_x - reed_gap * 0.5 - reed_width * 0.2, gap_x + reed_gap * 0.5 + reed_width * 0.2, bottom + 0.06 + end, gap_top, wall + depth - 0.01, wall + depth + 0.004)
 
 
 ## The crescent windows' bronze grille (the owner's 2026-11-20 frontal and close
