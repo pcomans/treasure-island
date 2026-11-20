@@ -1,6 +1,6 @@
 extends SceneTree
 ## The whole island: it loads and every building counted in the recognition
-## score passes the full fit check (solid, grounded, walk-up, stairs).
+## score passes the full fit check (solid, grounded, walk-up, stairs, passages).
 ##
 ##   tools/godot --fixed-fps 60 --path . --script game/tests/shared/island_test.gd
 ##
@@ -107,7 +107,7 @@ func _run() -> void:
 	var drawing := h.stop_drawing()
 	for unit: Dictionary in accepted:
 		var key := str(unit.anchor_source_key)
-		failures.append_array(await fit.check(key, true, "%s: " % key, unit.get("stairs", [])))
+		failures.append_array(await fit.check(key, true, "%s: " % key, unit.get("stairs", []), BuildingFit.passage_routes(unit)))
 		checked += 1
 		if fit.has_unsafe_failure():
 			failures.append("island checks stopped after unsafe failure at %s; %d remaining buildings untested" % [key, accepted.size() - checked])

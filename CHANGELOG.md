@@ -6,6 +6,12 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2341 (2026-11-20)
+
+- You can walk into Building 1, the Administration Building: its middle front doors stand open into the great curved hall, with its wood columns, balcony and tall windows.
+- Along the hall's east wall runs a long painted mural of the island's story, told by sea lions, otters, pelicans and other California sea animals; it appears as you come near the doors.
+- Cars stop at the doors; only people on foot go in.
+
 ## Build 2336 (2026-11-19)
 
 - The doors of the Job Corps buildings, and of the other modern buildings built the same way, no longer have a strip of grass between the doorstep and the door: the step now runs into the doorway, and garage doorways have a floor too.

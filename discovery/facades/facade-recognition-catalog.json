@@ -13914,6 +13914,7 @@
         }
       ],
       "anchor_source_key": "r16681702",
+      "passages": [{"name": "front door", "outside": [-6.457, 732.468], "inside": [5.383, 725.605]}],
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
@@ -13933,7 +13934,7 @@
       "legacy_adapter_ids": [],
       "protected_scopes": [
         {
-          "reason": "Inner-return wall faces (runs 97\u2013109), material, collision and source ownership remain protected. ROOT released runs 70\u201392 on 2026-10-22 (owner OK to rework buildings that fall significantly short): the rear podium (runs 72\u201383) and north lower ring (runs 84\u201395) now carry a railed terrace and a setback upper wall per the Sep 2025 north and 18 Jul 2023 rear views; the accepted rear ribbon keeps its bay design and moved to 8.2\u201311.0 m, its photo-measured place in the podium. The observed small and tall drum-end openings moved from the drum join (runs 40/41) onto the SE shoulder block (runs 69\u201370). The upper drum stays blank; no hidden annex, unmapped utility block or interior is modelled.",
+          "reason": "Inner-return wall faces (runs 97\u2013109), material, collision and source ownership remain protected outside the concourse. The concourse (owner 2026-11-19: one real doorway and the one interior, hall, mural and bar; game/scripts/world/facades/building_1_interior.gd) opens the crescent's middle door group (bay 5) and cuts the exterior faces that stand inside its plan: the parts of runs 97\u2013109 there, the two-storey slab, the central tier partitions and the north wing's end and roof at the junction. Runs 70\u201392 are open to rework (ROOT 2026-10-22; owner OK to rework buildings that fall significantly short): the rear podium (runs 72\u201383) and north lower ring (runs 84\u201395) carry a railed terrace and a setback upper wall per the Sep 2025 north and 18 Jul 2023 rear views; the accepted rear ribbon keeps its bay design at 8.2\u201311.0 m, its photo-measured place in the podium. The observed small and tall drum-end openings stand on the SE shoulder block (runs 69\u201370). The upper drum stays blank; no hidden annex or unmapped utility block is modelled, and the concourse is the building's one modelled interior.",
           "receiver_key": "building:r16681702:wall",
           "run_indices": [
             97,

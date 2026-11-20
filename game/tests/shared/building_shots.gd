@@ -16,7 +16,11 @@ extends SceneTree
 ## "player_xz": [x,z], "target_xyz": [x,y,z]}]}. A view may add "camera_xyz": [x,y,z]
 ## and "fov": degrees (vertical, default 70) to shoot from a free camera at that
 ## position aimed at the target, e.g. to match a reference photo's height, tilt and
-## field of view, or "projection": "ortho" with "ortho_size": metres (vertical
+## field of view; "shift": [x, y] then moves the frame off the lens axis as a shift
+## lens or a perspective-corrected (upright) photo does, in frame heights (y up),
+## so a level camera aimed at a target at its own height frames the photo's
+## off-centre horizon (run with the photo's aspect, e.g. --resolution 1800x1200);
+## or "projection": "ortho" with "ortho_size": metres (vertical
 ## extent) for a square-on elevation. A free camera sees as far as the gameplay
 ## camera (player.tscn's far plane, which holds the distant horizon), or may add
 ## "far": metres (100 up to that) to see less far.
@@ -373,8 +377,12 @@ func _use_neutral_lighting() -> void:
 	var environment := _with_settings(Environment.new(), NEUTRAL_ENVIRONMENT) as Environment
 	environment.sky = sky
 	(_h.main.get_node("WorldEnvironment") as WorldEnvironment).environment = environment
-	(_h.main.get_node("Sun") as DirectionalLight3D).visible = false
-	_h.main.add_child(_with_settings(DirectionalLight3D.new(), NEUTRAL_SUN) as DirectionalLight3D)
+	var game_sun := _h.main.get_node("Sun") as DirectionalLight3D
+	game_sun.visible = false
+	var neutral_sun := _with_settings(DirectionalLight3D.new(), NEUTRAL_SUN) as DirectionalLight3D
+	# What the sun lights is the scene's, not the look's: it leaves interiors out.
+	neutral_sun.light_cull_mask = game_sun.light_cull_mask
+	_h.main.add_child(neutral_sun)
 	for probe: ReflectionProbe in _h.world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
 		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS
 	for _i in 30:
@@ -1221,6 +1229,11 @@ func _free_camera(view: Dictionary, target: Vector3) -> Camera3D:
 		free.size = float(view.ortho_size)
 	else:
 		free.fov = float(view.get("fov", 70.0))
+		if view.has("shift"):
+			# The frame's height at the near plane, and its centre moved off the axis.
+			free.projection = Camera3D.PROJECTION_FRUSTUM
+			free.size = 2.0 * free.near * tan(deg_to_rad(free.fov) * 0.5)
+			free.frustum_offset = Vector2(float(view.shift[0]), float(view.shift[1])) * free.size
 	free.far = float(view.get("far", _h.player.get_camera().far))
 	_h.main.add_child(free)
 	free.global_position = Vector3(view.camera_xyz[0], view.camera_xyz[1], view.camera_xyz[2])
@@ -1424,7 +1437,7 @@ static func _plain(value: Variant) -> Variant:
 ## Why a view's free-camera fields are unusable, or "" (also when it has none).
 func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 	if not view.has("camera_xyz"):
-		for key in ["projection", "fov", "ortho_size", "far"]:
+		for key in ["projection", "fov", "ortho_size", "far", "shift"]:
 			if view.has(key):
 				return key + " needs camera_xyz"
 		return ""
@@ -1437,6 +1450,8 @@ func _free_camera_error(view: Dictionary, target: Vector3) -> String:
 		return "fov must be a number of degrees between 0 and 180"
 	if projection == "ortho" and (not _numbers([view.get("ortho_size")], 1) or float(view.ortho_size) <= 0.0):
 		return "ortho needs a positive ortho_size"
+	if view.has("shift") and (projection != "perspective" or not _numbers(view.get("shift"), 2) or absf(float(view.shift[0])) >= 1.0 or absf(float(view.shift[1])) >= 1.0):
+		return "shift needs a perspective view and two numbers between -1 and 1 (frame heights)"
 	var gameplay_far := _h.player.get_camera().far
 	if view.has("far") and (not _numbers([view.get("far")], 1) or float(view.far) < 100.0 or float(view.far) > gameplay_far):
 		return "far must be metres between 100 and the gameplay camera's %d" % int(gameplay_far)

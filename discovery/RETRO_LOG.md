@@ -27760,3 +27760,58 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: the batch's main is the previous batch's final commit, so that batch's fixed-pose captures of bacb372a served as the look check's "before" with no new runs; the author's own door view plans, filtered by name into one batch plan, gave the earlier-fixed door pairs without a new script.
 - What did not work well: the 19a capture helper stripped a run's "Cn-" prefix with a one-digit pattern, so the tenth run's images went to a folder of the wrong name and needed moving before the diff.
 - What the team should change next time: name capture output folders explicitly instead of deriving them from run names, and cite the main-run log lines beside every page-check miss in the hand-back.
+
+### ti-visual-review — Building 1 interior stage 1 (2026-11-19)
+- Worked: side-by-side sheets of dated photos and the street-off diff images made the review fast.
+- Didn't work: the "matched" poses differed in field of view and camera height, so proportions couldn't be judged. The closeup and island before/after pairs used different settings or versions.
+- Change: copy the photo's field of view and camera height when matching poses. Before/after pairs should use the same street mode and the same commit.
+
+### building1-interior-20261119 round 2 — 2026-11-19 — concourse matched to the 2023 photos (branch `feature/building1-interior-20261119`)
+- What worked well: Reading the photos' embedded metadata first (18 mm on an APS-C crop, perspective correction on, lens profile) and solving each level camera from measured pier corners gave true matched poses in a small pure-Python fit. The solved poses then measured the hall: thirteen east bays rather than the facade's eleven, office bays 3.6 m, the mural top 12.2 m. Baked vertex shading in the Bay Bridge's existing material flags gave the hall form without a new shader (warm-up still 83 shaders, 24 generated).
+- What did not work well: A fit to piers on a circle is ambiguous by whole bays, so the north end's place stays uncertain (photo 5's camera solves 2 m past the modelled end). First-pass grooves read as pinstripes, and the ceiling colour took three full renders because each tweak re-rendered the whole batch.
+- What the team should change next time: Read a photo's embedded metadata (lens, crop and edits) before matching any pose. Anchor a camera fit with a feature that breaks the symmetry, such as an end wall or the door axis, before trusting bay indices. Tune colours on one matched view, then render the batch once.
+
+### ti-visual-review — Building 1 interior round 2 (2026-11-19)
+- Worked: the solved cameras made it possible to rule on proportions. Self-made edge overlays (photo edges magenta, game edges green) separated true misses from fit error quickly.
+- Didn't work: the 4:3 crop of photo 1 hid the west colonnade's miss, and the sheets are too small to judge reeding.
+- Change: include raw-size edge overlays, label which points each camera was fitted on, and supply a low side view of the feet for contact questions.
+
+### building1-interior-20261119 round 3 — 2026-11-19 — west colonnade, drum and north end from the photos (branch `feature/building1-interior-20261119`)
+- What worked well: Measuring the balcony in two photos with independent cameras (photo 3 refitted on floor-level points, photo 5 on the east piers) gave the same heights to within 0.1 m and showed the balcony 1.2 m too high, which one overlay alone could not settle. The 50/50 blends at the true frame showed geometry misses at a glance; sampling matching regions in photo and render turned colour notes into numbers.
+- What did not work well: The capture window comes up 1800x1125, not the 1800x1200 asked for, and the round-2 sheets stretched the photo to that size; I found it only when an overlay disagreed with a 14 px fit. The ambiguity of fitting piers on an arc cost many solves before I anchored on what already matched. A moving view of the sill was spoiled by the car an earlier view had parked in the doorway.
+- What the team should change next time: Read the render's actual size and crop it to the photo's aspect before any sheet or overlay. Put views that leave things behind (a parked car) last in a moving plan. Fit heights from floor-level points the camera actually sees in full, never a base cut off by the frame edge.
+
+### ti-visual-review — Building 1 hall r3 (2026-11-19)
+- Worked: sheets cropped to the photo's shape plus the ghost blends made the balcony and column calls quick and certain. Comparing crops of the far end of photo 5 settled the mural length in one step.
+- Didn't: the mural length was set from one photo (photo 1) where the south end isn't visible; photos 5, 2 and LR-5 contradicted it. The north gallery went in without a photo showing it.
+- Change: before fixing an extent such as the mural's ends, cite the photo that shows each end. Label any element without photo support as inferred on the sheet.
+
+### building1-mural-art-20261119 — Building 1 hall mural art, style test to four tiles (2026-11-19)
+- What worked well: Bay stations drawn over the 2023 photos with the interior study's fitted cameras gave the scene fractions from geometry, not guesswork. A one-section style test let the owner choose before the band was painted. Putting each seam object (a mast, a palm trunk, a lattice mast) wholly inside the left quarter and cutting just right of it hid every join without inpainting. Giving Codex our own previous quarter as a continuity reference matched the horizon at the third seam within 1 %. A numbered station grid projected into the hall render caught two mock-up bugs before the real band was shown.
+- What did not work well: the ship's direction and the California-native cast rule arrived after the first band batch, so 7 of 16 band images were unusable. The generator ignored about half the "keep this strip empty" and "fly left" layout instructions. One Codex run generated an image but did not save it (exit 1). A steamer hull carried a faint letter-like smudge that had to be blurred out. ImageMagick 7's SoftLight composite brightened the ribbon instead of staying neutral.
+- What the team should change next time: settle species rules and layout facts before the first band batch. Give the generator layout as measured fractions plus the neighbouring quarter as a reference from the start. Zoom-check every hull, flag and window for text before stitching, not after.
+
+### ti-visual-review — Building 1 interior stage 2 (2026-11-19)
+- Worked: matched-pose sheets and blends made the mural extent and registration quick to rule on. The band sheet named where the seams fall, so they could be checked on full-size raw crops.
+- Didn't work: there is no photo of the north end, so the inferred gallery can't be checked. The balcony was reported as "warmer", but the pixels are still cool, so the author's claim didn't match the render.
+- Change next time: before handing over, the author should sample colours (floor, balcony, wood) against the photos. Ask for one dated photo of the north end.
+
+### building1-interior-20261119 stage 2 — 2026-11-19/20 — mural, review notes, reflections trial, finishing checks (branch `feature/building1-interior-20261119`)
+- What worked well: Sampling the same regions in the photo and the render at the photo's own camera turned colour notes into numbers (floor 132,118,113 against 129,116,111), so a claim like "warmer" could be checked before hand-back. A load, release and reload cycle flown over the forecourt with the jetpack, its frames not saved, measured the mural's second load cleanly on both renderers (four frames at the scene's own 25 ms) and showed the texture memory returning exactly; the first, polluted load would have looked like a 300 ms hitch.
+- What did not work well: BaseMaterial3D adds the emission colour to the emission texture, so a white emission colour washed the mural at night and by day; I caught it only by sampling before and after. Vertex colours stop at 1, so the floor's baked sheen first had no headroom. Three trial runs went on building_shots' rules (focused views must target the source building; --views needs --source) and on a walk taken without --fixed-fps. The web shader proof's drive never comes within 40 m of the hall, so the mural's first load needed a new trace trigger.
+- What the team should change next time: Sample colours and read a material's emission formula before claiming a look change. When a feature loads by distance, check that the shader proof's trace actually reaches it. Check a capture driver's argument rules in a dry run before spending an engine run.
+
+### ti-code-review — Building 1 interior stages 1+2 (2026-11-20)
+- Worked: the triangle diff against the accepted cuts and a contract that builds from the real crescent made the exterior check quick.
+- Didn't: a silent fallback (roof-hole warning) and a brand string in shipped JSON got through the author's self-check.
+- Next time: grep shipped `game/` text for outside names before review, and treat fallback-plus-warning in geometry code as a failure unless a test covers it.
+
+### ti-visual-review — Building 1 hall round 5 (2026-11-20)
+- Worked: comparing raw crops at full size against the photo, and measuring the mural against s2b, quickly settled the "washed out" and floor-colour questions.
+- Didn't: mural-load-cycle frames never show the mural, so the pop question went unanswered. SSR was trialled before probe options were scoped.
+- Change next time: any capture meant to show a visual change must frame that change. Capture the web floor whenever floor colour is under review.
+
+### building1-interior-20261119 fix round — 2026-11-20 — outside names, roof cuts, the mural's load frame, movement checks (branch `feature/building1-interior-20261119`)
+- What worked well: Lining up the loader's frame-time list with the capture driver's MOVE_TICK lines put the 230-340 ms frame in the interval where a PNG was saved, and re-saving those very frames timed the cause (241-291 ms) without a render. A hall-only drive trace (a cold start, then a walk in through the door) then measured the load itself: about 1 ms of script time in each of the four tile frames, none more than 0.8 ms over the normal frame on Compatibility or Forward+. Dropping the stock player onto each ledge with start_xyz found the two real perches (an invisible ledge over the balcony rail, the gallery guard wedged against its ceiling) in one run.
+- What did not work well: My stage-2 "no hitch" rested on prints inside shipping code that also timed the capture driver's screenshot saves, and I logged the spike as unexplained instead of asking what else ran in that frame. The shipped config named the photo sites, the photographer, the camera and the editing software; the code reviewer caught it, not my self-check. I first diffed the triangle dump against an older round's file and nearly reported a roof change that was not there.
+- What the team should change next time: Measure load hitches with the drive trace, never with prints in the feature, and never across a frame the capture driver saves. Grep shipped text for outside names before hand-back. Name dump files by commit, not by round.

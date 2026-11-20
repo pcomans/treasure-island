@@ -27,6 +27,9 @@ extends SceneTree
 ##    naming the fence.
 ## 5. Stairs: each flight listed in the building's catalog entry as
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
+## 6. Passages: each doorway into an interior listed in the catalog entry as
+##    "passages": [{"name": "front door", "outside": [x, z], "inside": [x, z]}] is
+##    walked in from outside and back out (building_fit.gd passage_routes).
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
@@ -244,7 +247,9 @@ func _run() -> void:
 			h.main.queue_free()
 			quit(1)
 			return
-	var stairs: Array = Catalog.unit_for(source_key).get("stairs", [])
+	var unit := Catalog.unit_for(source_key)
+	var stairs: Array = unit.get("stairs", [])
+	routes.append_array(BuildingFit.passage_routes(unit))
 	var walk_started := Time.get_ticks_msec()
 	var ticks := Engine.get_physics_frames()
 	var drawn := Engine.get_frames_drawn()

@@ -569,6 +569,32 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		report.shapes += int(record_result.get("shapes", 1 if str(record.collision_kind) == "world_solid" else 0))
 		for key_value: Variant in record.source_keys:
 			report.source_keys[str(key_value)] = true
+		# A record's producer may build a node to stand beside the record rather than
+		# under it (Building 1's concourse), with an identity of its own.
+		var extras: Array = record_result.get("extra_nodes", [])
+		for extra_index in extras.size():
+			var extra: Dictionary = extras[extra_index]
+			var built: Dictionary = extra.result
+			if not bool(built.get("ok", false)) or not category_parents.has(str(extra.parent)):
+				# The extras not yet in the chunk (this one and those after it) are freed
+				# here; the chunk's free takes the rest.
+				for rest: Dictionary in extras.slice(extra_index):
+					var orphan: Variant = (rest.result as Dictionary).get("node")
+					if is_instance_valid(orphan) and orphan is Node and (orphan as Node).get_parent() == null:
+						(orphan as Node).free()
+				_free_unconsumed_plans(rollback_plans)
+				chunk_root.free()
+				return {"ok": false, "code": "extra_node", "message": "%s: %s could not be built beside its record." % [str(record.object_key), str(extra.name)], "source_keys": record.source_keys}
+			var extra_proxy := Node3D.new()
+			extra_proxy.name = "%s__%s" % [str(chunk.chunk_id), str(extra.name).validate_node_name()]
+			extra_proxy.add_child(built.node as Node3D)
+			extra_proxy.set_meta("target_parent", category_parents[str(extra.parent)])
+			chunk_root.add_child(extra_proxy)
+			report.mesh_instances += int(built.mesh_instances)
+			report.surfaces += int(built.surfaces)
+			report.triangles += int(built.triangles)
+			report.static_bodies += int(built.static_bodies)
+			report.shapes += int(built.shapes)
 	if not FIRE_TRAINING600_LIVE_REPLACEMENT.plan_was_fully_consumed(fire_training600_plan):
 		_free_unconsumed_plans(rollback_plans)
 		chunk_root.free()

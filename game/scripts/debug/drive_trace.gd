@@ -33,7 +33,12 @@ extends Node
 ## after the drive's analysed steps (the page's analysis ends at "landed"), the
 ## triggers: each script that draws only in play shown by a camera of the trace's
 ## own (TRIGGERS): a fence bay broken, a street prop felled, a car's splash, goal
-## confetti, and the web's 3D resolutions in turn, for the shaders they compile.
+## confetti, Building 1's hall walked into from outside its front door (its mural's
+## tiles load on the way: Building1MuralLoader loads them once a camera is near the
+## door, a "mural" marker in each frame one goes up), and the web's 3D resolutions in
+## turn, for the shaders they compile. With hall=1 (?trace=drive&hall=1, --trace-hall
+## natively) the trace goes from its baseline at the spawn straight to the hall's walk
+## and ends after it: the mural's first load in a freshly started game.
 ##
 ## The trace: for every frame, from the engine's own signals (physics_frame,
 ## process_frame, frame_pre_draw, frame_post_draw) and four probe nodes, the time of
@@ -87,9 +92,18 @@ const SEND_MS := 1000.0
 const STEPS := ["wait", "baseline", "to_car", "drive", "stop", "out", "walk", "run", "rise", "hover", "drop", "landed", "triggers", "done"]
 ## The triggers step's parts, each [what, ticks it lasts]: a fence bay broken, a
 ## street prop felled, a car's splash and goal confetti (each where the trace's
-## camera sees it, near the player), then the 3D resolution set to 100%, 50% and back
-## (applied, not saved).
-const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti", 150], ["resolution 100", 40], ["resolution 50", 40], ["resolution back", 40]]
+## camera sees it, near the player), Building 1's hall walked into (its mural loads on
+## the way), then the 3D resolution set to 100%, 50% and back (applied, not saved).
+const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti", 150], ["hall", 900], ["resolution 100", 40], ["resolution 50", 40], ["resolution back", 40]]
+## The hall trigger's walk: the trace's camera at a standing eye height over the hall's
+## floor, from this far out on the front door's axis (beyond the mural's load radius)
+## to this far inside, at the stock player's walking speed (player_controller.gd
+## walk_speed_mps), looking ahead and a little up; the ticks left at the end stand
+## still inside.
+const HALL_WALK_FROM_M := 46.0
+const HALL_WALK_TO_M := 10.0
+const HALL_WALK_MPS := 4.0
+const HALL_WALK_EYE_M := 1.7
 ## What the splash and confetti triggers make (as the vehicle manager and the ball do).
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const GOAL_CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
@@ -165,6 +179,15 @@ var _trigger := 0
 var _trigger_ticks := 0
 var _trigger_camera: Camera3D
 var _resolution_before := ""
+## The hall trigger: the hall's mural loader, the tiles it had on the walls at the
+## last frame's end (a "mural" marker when that changes), the walk's start and way in.
+## With hall_only (?hall=1, --trace-hall) the trace goes from its baseline straight to
+## the hall's walk and ends there: a cold start's first sight of the hall.
+var _hall_loader: Building1MuralLoader
+var _hall_seen := 0
+var _hall_from := Vector3.ZERO
+var _hall_dir := Vector3.ZERO
+var _hall_only := false
 ## The run's limits and settings from the page's address or the command line: the
 ## trace's length (s, 0 for the whole drive), the 3D resolution asked for (an Options
 ## id, "" for the player's own) and the one to put back; the view last recorded.
@@ -192,6 +215,7 @@ func _ready() -> void:
 		_laps = int(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('laps') || '1'")))
 		_seconds_limit = float(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('seconds') || '0'")))
 		_scale_asked = _resolution_id(str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('scale') || ''")))
+		_hall_only = str(JavaScriptBridge.eval("new URLSearchParams(location.search).get('hall') || ''")) == "1"
 	else:
 		for arg: String in OS.get_cmdline_user_args():
 			if arg.begins_with("--trace-out="):
@@ -203,6 +227,7 @@ func _ready() -> void:
 			elif arg.begins_with("--trace-scale="):
 				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
+		_hall_only = OS.get_cmdline_user_args().has("--trace-hall")
 		# Natively, --trace-web-loading loads as the web build does (the shaders a group
 		# at a time, then the shader warm-up), to tell what that loading does on desktop.
 		if OS.get_cmdline_user_args().has("--trace-web-loading"):
@@ -495,6 +520,7 @@ func _finish_frame() -> void:
 	if not _web:
 		_mark_pipelines()
 	_mark_view()
+	_mark_mural()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -667,7 +693,7 @@ func _header() -> Dictionary:
 	return {
 		"fields": FIELDS, "steps": STEPS, "legs": ROUTE_LEGS, "route": route, "outline": outline,
 		"route_m": _cum[_cum.size() - 1], "car": CAR_ROW, "cruise_mps": CRUISE_MPS, "laps": _laps,
-		"seconds_limit": _seconds_limit, "scale_asked": _scale_asked,
+		"seconds_limit": _seconds_limit, "scale_asked": _scale_asked, "hall_only": _hall_only,
 		"renderer": RenderingServer.get_current_rendering_method(), "adapter": RenderingServer.get_video_adapter_name(),
 		"vendor": RenderingServer.get_video_adapter_vendor(), "display": DisplayServer.get_name(), "os": OS.get_name(),
 		"engine": Engine.get_version_info().get("string", ""), "version": stamp,
@@ -833,7 +859,13 @@ func _physics_process(delta: float) -> void:
 			else:
 				_step_ticks = 0
 		"baseline":
-			if _step_ticks >= 300:
+			if _step_ticks >= 300 and _hall_only:
+				_trigger = 0
+				while str(TRIGGERS[_trigger][0]) != "hall":
+					_trigger += 1
+				_trigger_ticks = 0
+				_set_step("triggers")
+			elif _step_ticks >= 300:
 				_set_step("to_car")
 		"to_car":
 			var to := _route[0] - Vector2(player.global_position.x, player.global_position.z)
@@ -900,14 +932,16 @@ func _physics_process(delta: float) -> void:
 ## with a marker; then the player's camera back and the report's end.
 func _triggers() -> void:
 	_trigger_ticks += 1
+	var part := str(TRIGGERS[_trigger][0])
 	if _trigger_ticks == 1:
-		var part := str(TRIGGERS[_trigger][0])
 		_event("trigger", "%s: %s" % [part, _start_trigger(part)], _trigger)
+	if part == "hall" and _hall_loader != null:
+		_walk_hall()
 	if _trigger_ticks < int(TRIGGERS[_trigger][1]):
 		return
 	_trigger += 1
 	_trigger_ticks = 0
-	if _trigger < TRIGGERS.size():
+	if _trigger < TRIGGERS.size() and not _hall_only:
 		return
 	if is_instance_valid(_trigger_camera):
 		_trigger_camera.queue_free()
@@ -979,6 +1013,19 @@ func _start_trigger(part: String) -> String:
 			_main.add_child(confetti)
 			confetti.start(Transform3D(Basis.IDENTITY, at), 3.0, 2.4)
 			return "at %.0f, %.0f" % [at.x, at.z]
+		"hall":
+			# Building 1's hall, walked into from outside (_walk_hall): its mural's tiles
+			# load on the way, into the materials the warm-up drew with their placeholder.
+			_hall_loader = _main.world_root.buildings.find_child("MuralLoader", true, false) as Building1MuralLoader
+			if _hall_loader == null:
+				return "no Building 1 hall"
+			_hall_seen = _hall_loader.tiles_loaded
+			var door := _hall_loader.door
+			# Out of the door is toward the crescent's centre (the hall's plan centre).
+			var out := Vector3(_hall_loader.hall.x - door.x, 0.0, _hall_loader.hall.y - door.z).normalized()
+			_hall_from = Vector3(door.x, door.y - 1.5 + HALL_WALK_EYE_M, door.z) + out * HALL_WALK_FROM_M
+			_hall_dir = -out
+			return "walking in from %.0f m out on its door's axis at %.1f m/s to %.0f m inside; its mural %d of %d tiles on the walls, loaded within %.0f m of the door" % [HALL_WALK_FROM_M, HALL_WALK_MPS, HALL_WALK_TO_M, _hall_seen, _hall_loader.tiles.size(), _hall_loader.load_radius]
 		"resolution 100", "resolution 50", "resolution back":
 			var graphics := _main.graphics
 			if graphics == null:
@@ -995,13 +1042,36 @@ func _start_trigger(part: String) -> String:
 
 ## Puts the trace's camera TRIGGER_VIEW_M from a point, a little above, looking at it.
 func _look_at_trigger(at: Vector3) -> void:
+	var from := at + Vector3(0.0, TRIGGER_VIEW_UP_M, TRIGGER_VIEW_M)
+	_place_trigger_camera(Transform3D(Basis.IDENTITY, from).looking_at(at, Vector3.UP))
+
+
+func _place_trigger_camera(view: Transform3D) -> void:
 	if not is_instance_valid(_trigger_camera):
 		_trigger_camera = Camera3D.new()
 		_trigger_camera.name = "TraceTriggerCamera"
 		add_child(_trigger_camera)
-	var from := at + Vector3(0.0, TRIGGER_VIEW_UP_M, TRIGGER_VIEW_M)
-	_trigger_camera.global_transform = Transform3D(Basis.IDENTITY, from).looking_at(at, Vector3.UP)
+	_trigger_camera.global_transform = view
 	_trigger_camera.make_current()
+
+
+## The hall trigger's walk, a tick at a time: from _hall_from along _hall_dir at
+## HALL_WALK_MPS, stopping HALL_WALK_TO_M inside the door.
+func _walk_hall() -> void:
+	var walked := minf(HALL_WALK_MPS * float(_trigger_ticks - 1) / float(Engine.physics_ticks_per_second), HALL_WALK_FROM_M + HALL_WALK_TO_M)
+	var at := _hall_from + _hall_dir * walked
+	_place_trigger_camera(Transform3D(Basis.IDENTITY, at).looking_at(at + _hall_dir * 10.0 + Vector3.UP, Vector3.UP))
+
+
+## A "mural" marker in the frame Building 1's hall mural's tiles on the walls change
+## (Building1MuralLoader puts one up a frame): this frame loaded it and drew it first.
+func _mark_mural() -> void:
+	if _hall_loader == null or not is_instance_valid(_hall_loader) or _hall_loader.tiles_loaded == _hall_seen:
+		return
+	_hall_seen = _hall_loader.tiles_loaded
+	var camera := get_viewport().get_camera_3d()
+	var off := camera.global_position.distance_to(_hall_loader.door) if camera != null else -1.0
+	_event("mural", "tiles on the walls %d of %d, camera %.1f m from the door" % [_hall_seen, _hall_loader.tiles.size(), off], _hall_seen)
 
 
 ## Turns the on-foot camera (and so the walk) toward a direction on the ground.

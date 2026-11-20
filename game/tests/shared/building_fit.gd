@@ -57,6 +57,22 @@ func _init(harness: WorldHarness) -> void:
 	_h = harness
 
 
+## A catalog unit's walk-through doorways ("passages": [{"name": "front door",
+## "outside": [x, z], "inside": [x, z]}]: Building 1's door into its concourse) as
+## routes for check(). Each is walked like a flight of stairs: in from the outside
+## end, where the player settles on open ground, to the inside end, and back out
+## from where it arrived (return_from_arrival). A malformed entry fails the routes'
+## own validation.
+static func passage_routes(unit: Dictionary) -> Array:
+	var routes: Array = []
+	for passage: Variant in unit.get("passages", []):
+		if not passage is Dictionary:
+			routes.append({})
+			continue
+		routes.append({"name": "passage %s" % str(passage.get("name", "")), "start_xz": passage.get("outside"), "end_xz": passage.get("inside"), "return_from_arrival": true})
+	return routes
+
+
 ## Unsafe source/setup/recovery/rest failures stop this driver's whole lifetime.
 func has_unsafe_failure() -> bool:
 	return _unsafe

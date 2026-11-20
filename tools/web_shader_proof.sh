@@ -9,7 +9,8 @@
 # loopback (a secure context: Godot's web engine refuses plain HTTP anywhere else),
 # and the drive trace (?trace=drive, game/scripts/debug/drive_trace.gd: the drive round
 # the island, the foot and jetpack legs, then a fence bay broken, a street prop felled,
-# a car's splash, goal confetti and the web's 3D resolutions in turn) runs in two
+# a car's splash, goal confetti, Building 1's hall walked into as its mural loads, and
+# the web's 3D resolutions in turn) runs in two
 # browsers, one after the other, each headed on a private Weston on the GPU
 # (tools/web_trace/session.sh): Playwright's WebKit as an iPhone 16 Pro held sideways
 # (874 x 402 CSS px at 3x, touch) and Chrome for Testing as a desktop (1440 x 900).
