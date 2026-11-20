@@ -67,6 +67,13 @@ const INTERIOR_PRESENCE := preload("res://game/scripts/world/interiors/interior_
 ## How far over the hall's highest ceiling (m) the camera still counts as in the hall
 ## (InteriorPresence): that ceiling's own depth, not the floors or the roof above.
 const TOP_MARGIN_M := 1.2
+## The terrazzo's own polar frame (floor_layout), which its UVs span 0 to 1 and the floor
+## textures cover: past its angles by FLOOR_FRAME_PAD_RAD, from FLOOR_FRAME_OUT_M outside
+## the crescent's facade (the vestibule and the door's sill) to FLOOR_FRAME_PAD_M past the
+## deepest east bay's back.
+const FLOOR_FRAME_PAD_RAD := 0.01
+const FLOOR_FRAME_OUT_M := 1.5
+const FLOOR_FRAME_PAD_M := 0.5
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -204,6 +211,8 @@ static func build(plan: Dictionary) -> Dictionary:
 	var mural_entry := plan.config.palette.mural as Dictionary
 	var placeholder := _mural_placeholder(mural_entry)
 	var floor_data := {}
+	var layout := floor_layout(plan)
+	root.set_meta("floor_layout", layout)
 	for surface: String in SURFACES:
 		var bucket := buckets[surface] as Dictionary
 		if (bucket.indices as Array).is_empty():
@@ -212,7 +221,9 @@ static func build(plan: Dictionary) -> Dictionary:
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
 		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
-		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+		# The terrazzo's UVs are its polar frame's (floor_layout): its textures follow the
+		# crescent's rings and radii.
+		arrays[Mesh.ARRAY_TEX_UV] = _floor_uvs(layout, bucket.vertices as Array) if surface == "terrazzo" else PackedVector2Array(bucket.uvs as Array)
 		if not surface in GLOWS:
 			arrays[Mesh.ARRAY_COLOR] = _shading(plan, bucket, surface == "terrazzo")
 		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
@@ -322,6 +333,55 @@ static func _door_leaves(plan: Dictionary, leaves: Dictionary) -> MeshInstance3D
 	# only with the sun low in the opening.
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	return instance
+
+
+## The terrazzo's layout in its own polar frame: the frame its UVs span 0 to 1 and the
+## floor textures cover (theta: angles about the crescent's centre, radius: metres from
+## it), and where the hall's walls, door and bays stand in it. The root carries it as
+## the "floor_layout" meta, which the floor textures' generator reads
+## (tools/b1_hall_floor_textures.gd): regenerate them when the plan moves these.
+static func floor_layout(plan: Dictionary) -> Dictionary:
+	var bays: Array = []
+	var deepest := 0.0
+	var east_piers := plan.east_piers as Array
+	for bay in east_piers.size() - 1:
+		var depth := _east_bay_depth(plan, bay)
+		var span := _east_bay_span(plan, bay, depth)
+		bays.append([span.x, span.y, depth])
+		deepest = maxf(deepest, depth)
+	return {
+		"centre": plan.center,
+		"theta": Vector2(float(plan.annex_north) - FLOOR_FRAME_PAD_RAD, float(plan.south) + FLOOR_FRAME_PAD_RAD),
+		"radius": Vector2(float(plan.radius) - FLOOR_FRAME_OUT_M, float(plan.east) + deepest + FLOOR_FRAME_PAD_M),
+		"front_in": float(plan.front_in),
+		"column": float(plan.column),
+		"east": float(plan.east),
+		"north": float(plan.north),
+		"south": float(plan.south),
+		"annex_north": float(plan.annex_north),
+		"vestibule": vestibule_span(plan),
+		"door": door_span(plan),
+		"bays": bays,
+	}
+
+
+## Each terrazzo vertex's place in the floor's polar frame: u along the angles, v out
+## along the radius, 0 to 1. Said as an error if one falls outside it.
+static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Array:
+	var centre := layout.centre as Vector2
+	var theta := layout.theta as Vector2
+	var radius := layout.radius as Vector2
+	var uvs := PackedVector2Array()
+	var outside := 0
+	for vertex: Vector3 in vertices:
+		var offset := Vector2(vertex.x - centre.x, vertex.z - centre.y)
+		var uv := Vector2((atan2(offset.y, offset.x) - theta.x) / (theta.y - theta.x), (offset.length() - radius.x) / (radius.y - radius.x))
+		if uv.x < 0.0 or uv.x > 1.0 or uv.y < 0.0 or uv.y > 1.0:
+			outside += 1
+		uvs.append(uv)
+	if outside > 0:
+		push_error("Building 1 interior: %d terrazzo vertices lie outside the floor's frame %s; its textures would not cover them." % [outside, layout])
+	return uvs
 
 
 ## The hall's floor reflections (plan.config.reflections; Building1HallReflections),
@@ -1826,8 +1886,35 @@ static func _material(key: String, entry: Dictionary) -> StandardMaterial3D:
 	else:
 		material.vertex_color_use_as_albedo = true
 		material.vertex_color_is_srgb = true
+	_textures(material, entry)
 	_materials[key] = material
 	return material
+
+
+## A palette entry's textures, if it names any (the terrazzo's): "albedo_texture" over
+## the surface's UVs; "detail_texture", multiplied in, tiling every "detail_tile_m"
+## metres on the world's ground plane (no UVs of its own, so no seam anywhere); and,
+## except in the web's bake (it draws no reflections), "roughness_texture" over the UVs,
+## which the material's roughness scales.
+static func _textures(material: StandardMaterial3D, entry: Dictionary) -> void:
+	if not entry.has("albedo_texture") and not entry.has("detail_texture"):
+		return
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.texture_repeat = true
+	if entry.has("albedo_texture"):
+		material.albedo_texture = load(str(entry.albedo_texture)) as Texture2D
+	if entry.has("detail_texture"):
+		var tile := float(entry.get("detail_tile_m", 1.0))
+		material.detail_enabled = true
+		material.detail_albedo = load(str(entry.detail_texture)) as Texture2D
+		material.detail_blend_mode = BaseMaterial3D.BLEND_MODE_MUL
+		material.detail_uv_layer = BaseMaterial3D.DETAIL_UV_2
+		material.uv2_triplanar = true
+		material.uv2_world_triplanar = true
+		material.uv2_scale = Vector3.ONE / tile
+	if entry.has("roughness_texture") and PREBUILT_WORLD.profile() != "web":
+		material.roughness_texture = load(str(entry.roughness_texture)) as Texture2D
+		material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
 
 
 ## A mural tile's material, new for each build (not shared like _material's: the
