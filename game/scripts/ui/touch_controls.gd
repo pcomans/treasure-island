@@ -220,7 +220,6 @@ func describe() -> Dictionary:
 		"rise_label": _rise_label(),
 		"rise_icon": "brake" if _buttons[0].button_texture == BRAKE_ICON else "jump",
 		"run_visible": _buttons[1].visible,
-		"look_hint": true,
 		# Where the view looks (yaw and pitch, degrees): on foot the stock camera rig,
 		# which a look drag turns; in a car the chase camera, which it glances.
 		"camera": _view(),
