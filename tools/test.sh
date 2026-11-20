@@ -33,10 +33,16 @@
 #    Forward+ and on the Compatibility renderer the web build uses
 #    (game/tests/shader_compile_check.gd). And the mid-rise door landings the
 #    street generators read (data/street_detail/door_landings.json) are the ones
-#    the game builds (tools/export_door_landings.gd --check).
+#    the game builds (tools/export_door_landings.gd --check), and so is the
+#    housing buildings' own paving they keep plants off
+#    (data/street_detail/building_paving.json, tools/export_building_paving.gd --check).
 # 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
+#    And no outdoor ground shows inside an enterable interior (a catalog unit
+#    with passages): its floor covers its plan up to its walls, above the land and
+#    the ground draped over it, and no street detail stands in it
+#    (game/tests/headless_interior_ground_contract.gd).
 #    Where the private sounds are fetched, the tests marked "# sfx:
 #    takes-dependent" run again without them (--no-sfx): a checkout without the
 #    sounds must pass too, and a test that reads what the sound manager plays
@@ -278,6 +284,7 @@ tests=(
   game/tests/headless_building_study_geometry_contract.gd
   game/tests/headless_bake_merge_contract.gd
   game/tests/headless_building_1_interior_contract.gd
+  game/tests/headless_interior_ground_contract.gd
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
@@ -353,6 +360,11 @@ done
 # own build must still draw exactly those (headless, seconds). A failure names each door.
 echo "== tools/export_door_landings.gd --check"
 check_godot "tools/export_door_landings.gd --check" 300 tools/godot --headless --path . --audio-driver Dummy --script tools/export_door_landings.gd -- --check
+# They keep plants off the paving the housing buildings draw for themselves, in
+# data/street_detail/building_paving.json; the family's build and the retained
+# buildings' live factories must still draw exactly that paving. A failure names each building.
+echo "== tools/export_building_paving.gd --check"
+check_godot "tools/export_building_paving.gd --check" 300 tools/godot --headless --path . --audio-driver Dummy --script tools/export_building_paving.gd -- --check
 
 echo "== sound-state tests"
 silent_tests=()

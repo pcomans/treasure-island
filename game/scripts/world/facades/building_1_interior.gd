@@ -37,6 +37,12 @@ const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_CAR_GROUND := 1 << 5
 ## Longest arc segment (radians) of a curved wall, floor or ceiling.
 const ARC_STEP := 0.035
+## How far a floor runs on under a curved wall it meets (m): the wall's chords and the
+## floor's need not share their stations, and a chord sags up to 8 mm off its arc, so a
+## floor that stopped at the wall's arc would leave a crack of the ground under it.
+const FLOOR_TUCK := 0.02
+## The thickness (m) of the partitions between the bays under the balcony.
+const PARTITION_M := 0.15
 const NIGHT_ROLE := &"night_role"
 const SURFACES := ["terrazzo", "walkway", "plaster", "cream", "ceiling", "wood", "groove", "infill", "stone", "vestibule", "room", "frame", "mural_1", "mural_2", "mural_3", "mural_4", "curtain", "bronze", "brass", "glass", "door", "lamp", "daylight"]
 ## The floor's shade under its sheen (_shading): headroom for the bright reflections.
@@ -94,6 +100,9 @@ static func plan(site: Dictionary) -> Dictionary:
 	var column := front_in + float(plan_m.west_zone_depth)
 	var east := column + float(plan_m.hall_width)
 	var floor_y := float(heights.floor_y)
+	var sill_y := float(heights.sill_y)
+	if sill_y > floor_y:
+		return {"ok": false, "message": "Building 1 interior's door sill stands above the hall's floor."}
 	# The east wall's own bays: equal steps over the hall's arc.
 	var east_bays := int(plan_m.east_bays)
 	var east_piers: Array[float] = []
@@ -108,6 +117,8 @@ static func plan(site: Dictionary) -> Dictionary:
 		"column": column,
 		"east": east,
 		"floor_y": floor_y,
+		# The door's sill and the vestibule's floor inside it, below the hall's floor.
+		"sill_y": sill_y,
 		"north": piers[0],
 		"south": piers[piers.size() - 1],
 		# The north annex under the north gallery, north of the old north line.
@@ -255,42 +266,94 @@ static func build(plan: Dictionary) -> Dictionary:
 static func _append_floors(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	var y := float(plan.floor_y)
 	var floor := buckets.terrazzo as Dictionary
-	# In rings and cut at the east piers and the windows, so its baked shading can
-	# darken toward the walls and carry the polished terrazzo's sheen (_floor_sheen).
+	# In rings, so its baked shading can darken toward the walls and carry the polished
+	# terrazzo's sheen (_floor_sheen), and every ring, the vestibule's floor and the
+	# east bays' floors cut at the same angles (floor_cuts): wherever two of them meet,
+	# they share their edge's vertices, so no crack opens between them. The first ring
+	# runs on under the front wall (FLOOR_TUCK).
+	var front_in := float(plan.front_in)
 	var column := float(plan.column)
 	var east := float(plan.east)
-	var rings := [float(plan.front_in), column - float((plan.members.west_column as Array)[1]), column, column + 1.0, column + 2.2, column + 3.5, east - 3.0, east - 1.6, east - 0.6, east]
+	var rings := [front_in - FLOOR_TUCK, column - float((plan.members.west_column as Array)[1]), column, column + 1.0, column + 2.2, column + 3.5, east - 3.0, east - 1.6, east - 0.6, east]
+	var cuts := floor_cuts(plan)
+	var vestibule := vestibule_span(plan)
+	for ring in rings.size() - 1:
+		# The vestibule has a floor of its own (_append_vestibule_floor).
+		var spans := [Vector2(float(plan.north), vestibule.x), Vector2(vestibule.y, float(plan.south))] if ring == 0 else [Vector2(float(plan.north), float(plan.south))]
+		for span: Vector2 in spans:
+			_annulus_cut(plan, [floor], float(rings[ring]), float(rings[ring + 1]), span.x, span.y, y, cuts)
+			_annulus(plan, [shell], float(rings[ring]), float(rings[ring + 1]), span.x, span.y, y, true)
+	_append_vestibule_floor(plan, floor, shell, cuts)
+	# The east bays' floors run on under their walls, the recessed bays' under their backs.
+	var east_piers := plan.east_piers as Array
+	for bay in east_piers.size() - 1:
+		var depth := _east_bay_depth(plan, bay)
+		var span := _east_bay_span(plan, bay, depth)
+		_annulus_cut(plan, [floor, shell], east, east + depth + FLOOR_TUCK, span.x, span.y, y, cuts)
+	# The balcony floor over the west zone, from under the front wall to the parapet's
+	# back: a plain walkway (unphotographed).
+	var heights := plan.heights as Dictionary
+	var members := plan.members as Dictionary
+	var parapet_back := column - float(members.parapet_setback) - float(members.parapet_thickness)
+	_annulus(plan, [buckets.walkway, shell], front_in - FLOOR_TUCK, parapet_back, plan.north, plan.south, y + float(heights.balcony_floor), true)
+
+
+## The vestibule's floor: level with the door's sill (sill_y) from under its front wall
+## to sill_landing (0.3 m) inside it, then rising too gently to see to the hall's floor
+## at the colonnade's back, through the inner doorway; the door's open leaves reach past
+## the landing, their far ends over the start of the rise. In the
+## doorway it starts at the sill's inner edge, on the sill's stations (_append_doorway).
+static func _append_vestibule_floor(plan: Dictionary, floor: Dictionary, shell: Dictionary, cuts: Array[float]) -> void:
+	var front_in := float(plan.front_in)
+	var column_back := float(plan.column) - float((plan.members.west_column as Array)[1])
+	var sill := float(plan.sill_y)
+	var landing := front_in + float((plan.heights as Dictionary).sill_landing)
+	var span := vestibule_span(plan)
+	var door := door_span(plan)
+	_annulus_cut(plan, [floor, shell], front_in - FLOOR_TUCK, landing, span.x, door.x, sill, cuts)
+	_annulus_cut(plan, [floor, shell], front_in, landing, door.x, door.y, sill, cuts)
+	_annulus_cut(plan, [floor, shell], front_in - FLOOR_TUCK, landing, door.y, span.y, sill, cuts)
+	_ramp_cut(plan, [floor, shell], landing, column_back, span.x, span.y, sill, float(plan.floor_y), cuts)
+
+
+## The angles every floor of the hall is cut at (_append_floors): the east piers' sides
+## and middles and the windows' sides and middles, for the floor's baked shading and
+## sheen; the columns' dark reflections' edges; and the sides of the east bays, the
+## vestibule and its door, where other floors meet the hall's.
+static func floor_cuts(plan: Dictionary) -> Array[float]:
 	var cuts: Array[float] = []
-	var pier_half := float((plan.members.east_pier as Array)[0]) * 0.5 / east
+	var pier_half := float((plan.members.east_pier as Array)[0]) * 0.5 / float(plan.east)
 	for theta: Variant in plan.east_piers:
 		cuts.append_array([float(theta) - pier_half, float(theta) - pier_half * 0.5, float(theta), float(theta) + pier_half * 0.5, float(theta) + pier_half])
 	var window_half := float((plan.members.window as Dictionary).inner_width) * 0.5 / float(plan.front_in)
 	for window: Dictionary in plan.windows:
 		cuts.append_array([float(window.theta) - window_half, float(window.theta), float(window.theta) + window_half])
-	# The rings in front of the colonnade are cut at the columns too, so their dark
-	# reflections (_floor_sheen) keep their edges.
-	var near_cuts: Array[float] = []
-	near_cuts.append_array(cuts)
-	var column_half := float((plan.members.west_column as Array)[0]) * COLUMN_REFLECTION / column
+	var column_half := float((plan.members.west_column as Array)[0]) * COLUMN_REFLECTION / float(plan.column)
 	for theta: Variant in plan.piers:
 		for k: float in [-1.0, -REFLECTION_CORE, 0.0, REFLECTION_CORE, 1.0]:
-			near_cuts.append(float(theta) + column_half * k)
-	for ring in rings.size() - 1:
-		var near := float(rings[ring]) >= column - 0.01 and float(rings[ring + 1]) <= column + COLUMN_REFLECTION_M + 1.01
-		_annulus_cut(plan, [floor], float(rings[ring]), float(rings[ring + 1]), plan.north, plan.south, y, near_cuts if near else cuts)
-		_annulus(plan, [shell], float(rings[ring]), float(rings[ring + 1]), plan.north, plan.south, y, true)
-	# The east bays' floors run to their walls, the recessed bays' to their backs.
+			cuts.append(float(theta) + column_half * k)
 	var east_piers := plan.east_piers as Array
 	for bay in east_piers.size() - 1:
-		var depth := _east_bay_depth(plan, bay)
-		var span := _east_bay_span(plan, bay, depth)
-		_annulus(plan, [floor, shell], float(plan.east), float(plan.east) + depth, span.x, span.y, y, true)
-	# The balcony floor over the west zone, to the parapet's back: a plain walkway
-	# (unphotographed).
-	var heights := plan.heights as Dictionary
-	var members := plan.members as Dictionary
-	var parapet_back := float(plan.column) - float(members.parapet_setback) - float(members.parapet_thickness)
-	_annulus(plan, [buckets.walkway, shell], float(plan.front_in), parapet_back, plan.north, plan.south, y + float(heights.balcony_floor), true)
+		var span := _east_bay_span(plan, bay, _east_bay_depth(plan, bay))
+		cuts.append_array([span.x, span.y])
+	var vestibule := vestibule_span(plan)
+	var door := door_span(plan)
+	cuts.append_array([vestibule.x, door.x, door.y, vestibule.y])
+	return cuts
+
+
+## The vestibule's sides (angles): the door bay's piers, less its walls.
+static func vestibule_span(plan: Dictionary) -> Vector2:
+	var piers := plan.piers as Array
+	var bay := int((plan.rooms as Dictionary).vestibule_bay)
+	var wall := PARTITION_M / float(plan.front_in)
+	return Vector2(float(piers[bay]) + wall, float(piers[bay + 1]) - wall)
+
+
+## The open door's sides where they meet the vestibule's front wall (angles).
+static func door_span(plan: Dictionary) -> Vector2:
+	var door := plan.door as Dictionary
+	return Vector2(_angle(plan.center, door.inner_left as Vector3), _angle(plan.center, door.inner_right as Vector3))
 
 
 static func _append_ceilings(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
@@ -708,7 +771,7 @@ static func _append_rooms(plan: Dictionary, buckets: Dictionary, shell: Dictiona
 	var ceiling := y + float(heights.balcony_floor) - float(heights.balcony_slab)
 	var opening := y + float(heights.west_opening_head)
 	var piers := plan.piers as Array
-	var wall := 0.15
+	var wall := PARTITION_M
 	# The lintel's back over each room, the rooms' fronts, ceilings and partitions.
 	for group: Array in [_ints(rooms.room_bays), _ints(rooms.bar_bays)]:
 		if group.is_empty():
@@ -768,32 +831,33 @@ static func _append_curtain(plan: Dictionary, bucket: Dictionary, r: float, from
 static func _append_vestibule(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	# The vestibule (plain stone, its finish unphotographed): its ceiling under the
 	# balcony, the open front door and the inner doorway to the hall on the same axis.
+	# Its floor rises from the door's sill to the hall's (_append_vestibule_floor), so
+	# its walls stand from the sill's height; the inner doorway's hall face from the hall's.
 	var y := float(plan.floor_y)
+	var sill := float(plan.sill_y)
 	var heights := plan.heights as Dictionary
 	var members := plan.members as Dictionary
-	var rooms := plan.rooms as Dictionary
 	var column := float(plan.column)
 	var front_in := float(plan.front_in)
 	var column_back := column - float((members.west_column as Array)[1])
 	var ceiling := y + float(heights.balcony_floor) - float(heights.balcony_slab)
 	var opening := y + float(heights.west_opening_head)
-	var piers := plan.piers as Array
-	var wall := 0.15
 	var stone := buckets.vestibule as Dictionary
 	var door := plan.door as Dictionary
-	var bay := int(rooms.vestibule_bay)
-	var from := float(piers[bay]) + wall / front_in
-	var to := float(piers[bay + 1]) - wall / front_in
+	var span := vestibule_span(plan)
+	var from := span.x
+	var to := span.y
 	# Its back wall stands just behind the columns' backs, so they don't show in it.
 	var inner := column_back - 0.05
 	var door_top := float(door.top_y)
 	_annulus(plan, [stone, shell], front_in, inner, from, to, ceiling, false)
-	_radial_wall(plan, [stone, shell], from, front_in, inner, y, ceiling, 1.0)
-	_radial_wall(plan, [stone, shell], to, front_in, inner, y, ceiling, -1.0)
-	var left := _angle(plan.center, door.inner_left as Vector3)
-	var right := _angle(plan.center, door.inner_right as Vector3)
-	_arc_wall(plan, [stone, shell], front_in, from, left, y, ceiling, 1.0)
-	_arc_wall(plan, [stone, shell], front_in, right, to, y, ceiling, 1.0)
+	_radial_wall(plan, [stone, shell], from, front_in, inner, sill, ceiling, 1.0)
+	_radial_wall(plan, [stone, shell], to, front_in, inner, sill, ceiling, -1.0)
+	var opened := door_span(plan)
+	var left := opened.x
+	var right := opened.y
+	_arc_wall(plan, [stone, shell], front_in, from, left, sill, ceiling, 1.0)
+	_arc_wall(plan, [stone, shell], front_in, right, to, sill, ceiling, 1.0)
 	_arc_wall(plan, [stone, shell], front_in, left, right, door_top, ceiling, 1.0)
 	var transom := door.transom as Array
 	_append_door_glass(plan, buckets, (left + right) * 0.5, (right - left) * 0.5 * front_in - 0.02, float(transom[0]), float(transom[0]), minf(float(transom[1]), ceiling - 0.05))
@@ -801,15 +865,15 @@ static func _append_vestibule(plan: Dictionary, buckets: Dictionary, shell: Dict
 	# and its reveal meet on the same lines.
 	var axis := float(door.theta)
 	var half := float(door.half) / inner
-	_arc_wall(plan, [stone, shell], inner, from, axis - half, y, ceiling, -1.0)
-	_arc_wall(plan, [stone, shell], inner, axis + half, to, y, ceiling, -1.0)
+	_arc_wall(plan, [stone, shell], inner, from, axis - half, sill, ceiling, -1.0)
+	_arc_wall(plan, [stone, shell], inner, axis + half, to, sill, ceiling, -1.0)
 	_arc_wall(plan, [stone, shell], inner, axis - half, axis + half, door_top, ceiling, -1.0)
 	var hall_side := column_back
 	_arc_wall(plan, [stone, shell], hall_side, from, axis - half, y, opening, 1.0)
 	_arc_wall(plan, [stone, shell], hall_side, axis + half, to, y, opening, 1.0)
 	_arc_wall(plan, [stone, shell], hall_side, axis - half, axis + half, door_top, opening, 1.0)
-	_radial_wall(plan, [stone, shell], axis - half, inner, hall_side, y, door_top, 1.0)
-	_radial_wall(plan, [stone, shell], axis + half, inner, hall_side, y, door_top, -1.0)
+	_radial_wall(plan, [stone, shell], axis - half, inner, hall_side, sill, door_top, 1.0)
+	_radial_wall(plan, [stone, shell], axis + half, inner, hall_side, sill, door_top, -1.0)
 	_annulus(plan, [stone, shell], inner, hall_side, axis - half, axis + half, door_top, false)
 
 
@@ -858,7 +922,8 @@ static func _append_north_annex(plan: Dictionary, buckets: Dictionary, shell: Di
 	var pier_half := float((members.east_pier as Array)[0]) * 0.5 / east
 	# Warm like the hall (cream walls, a wood soffit), not dark holes.
 	var cream := buckets.cream as Dictionary
-	_annulus(plan, [buckets.terrazzo, shell], west, east, far, north, y, true)
+	# The floor runs on under the east wall, whose chords are not the floor's.
+	_annulus(plan, [buckets.terrazzo, shell], west, east + FLOOR_TUCK, far, north, y, true)
 	_annulus(plan, [buckets.wood, shell], west, east, far, north, soffit, false)
 	_annulus(plan, [buckets.walkway, shell], west, east, far, north, gallery, true)
 	_annulus(plan, [cream, shell], west, east, far, north, top, false)
@@ -917,9 +982,11 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	# wall: sides, head and a level stone sill, its front a riser down to the
 	# forecourt's paving; under it, for the feet, a hidden slope over the same step.
 	# The sides and head start at the dark border's back, which frames the opening
-	# outside; the sill runs to the border's front and on to its riser.
+	# outside; the sill runs to the border's front and on to its riser. The sill is the
+	# door's own height (sill_y), below the hall's floor, and meets the vestibule's floor
+	# on its stations (_append_vestibule_floor).
 	var door := plan.door as Dictionary
-	var y := float(plan.floor_y)
+	var y := float(plan.sill_y)
 	var heights := plan.heights as Dictionary
 	var top := float(door.top_y)
 	var left := float(door.center) - float(door.half)
@@ -938,7 +1005,8 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	_doorway_strip(plan, [buckets.vestibule, shell], side_left, side_right, inner_left, inner_right, top, Vector3.DOWN)
 	var outer_left := _frame_point(door, left, front, 0.0)
 	var outer_right := _frame_point(door, right, front, 0.0)
-	_doorway_strip(plan, [stone, shell], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP)
+	var opened := door_span(plan)
+	_doorway_strip(plan, [stone, shell], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP, _cut_stations(opened.x, opened.y, floor_cuts(plan)))
 	# The sill's front: a 45-degree bevel down to the forecourt's paving, the same
 	# surface seen and walked (a slope the stock player takes as floor).
 	var bevel := float(heights.threshold_bevel)
@@ -957,7 +1025,9 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 static func _append_door_leaves(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	var door := plan.door as Dictionary
 	var leaf := plan.members.door_leaf as Dictionary
-	var y := float(plan.floor_y)
+	# On the sill's level, which runs on inside for sill_landing under their hinge ends;
+	# their far ends stand over the start of the rise.
+	var y := float(plan.sill_y)
 	var top := float(door.top_y)
 	var half := float(door.half)
 	var hinge := float(door.face) + 0.06
@@ -1012,15 +1082,19 @@ static func _append_door_glass(plan: Dictionary, buckets: Dictionary, middle: fl
 
 
 ## A horizontal strip at y from a straight outer edge to the vestibule wall's arc,
-## so the head and threshold meet the curved wall without a sliver.
-static func _doorway_strip(plan: Dictionary, targets: Array, outer_a: Vector3, outer_b: Vector3, inner_a: Vector3, inner_b: Vector3, y: float, normal: Vector3) -> void:
+## so the head and threshold meet the curved wall without a sliver: on stations (the
+## angles from inner_a's to inner_b's) where a floor meets the strip's arc on them,
+## else in even steps.
+static func _doorway_strip(plan: Dictionary, targets: Array, outer_a: Vector3, outer_b: Vector3, inner_a: Vector3, inner_b: Vector3, y: float, normal: Vector3, stations := PackedFloat64Array()) -> void:
 	var center := plan.center as Vector2
 	var radius := float(plan.front_in)
-	var stations := _stations(_angle(center, inner_a), _angle(center, inner_b))
+	if stations.is_empty():
+		stations = _stations(_angle(center, inner_a), _angle(center, inner_b))
 	var count := stations.size() - 1
+	var span := stations[count] - stations[0]
 	for index in count:
-		var o0 := outer_a.lerp(outer_b, float(index) / float(count))
-		var o1 := outer_a.lerp(outer_b, float(index + 1) / float(count))
+		var o0 := outer_a.lerp(outer_b, (stations[index] - stations[0]) / span)
+		var o1 := outer_a.lerp(outer_b, (stations[index + 1] - stations[0]) / span)
 		var i0 := inner_a if index == 0 else _at(plan, radius, stations[index], 0.0)
 		var i1 := inner_b if index == count - 1 else _at(plan, radius, stations[index + 1], 0.0)
 		_quad(targets, _lifted(o0, y), _lifted(o1, y), _lifted(i1, y), _lifted(i0, y), normal)
@@ -1113,7 +1187,7 @@ static func _lantern(plan: Dictionary, buckets: Dictionary, r: float, theta: flo
 
 static func _car_blocker(plan: Dictionary) -> StaticBody3D:
 	var door := plan.door as Dictionary
-	var y := float(plan.floor_y)
+	var y := float(plan.sill_y)
 	var height := float(door.top_y) - y
 	var box := BoxShape3D.new()
 	box.size = Vector3(float(door.half) * 2.0, height, 0.3)
@@ -1328,13 +1402,40 @@ static func _annulus(plan: Dictionary, targets: Array, r0: float, r1: float, fro
 
 ## An upward annular sector split at the given angles as well as along its arc.
 static func _annulus_cut(plan: Dictionary, targets: Array, r0: float, r1: float, from: float, to: float, y: float, cuts: Array[float]) -> void:
+	_ramp_cut(plan, targets, r0, r1, from, to, y, y, cuts)
+
+
+## An upward annular sector rising evenly from y0 at r0 to y1 at r1, split at the given
+## angles as well as along its arc (_cut_stations).
+static func _ramp_cut(plan: Dictionary, targets: Array, r0: float, r1: float, from: float, to: float, y0: float, y1: float, cuts: Array[float]) -> void:
+	if r1 - r0 < 0.001 or to - from < 0.0001:
+		return
+	var rise := (y1 - y0) / (r1 - r0)
+	var stations := _cut_stations(from, to, cuts)
+	for index in stations.size() - 1:
+		var a := stations[index]
+		var b := stations[index + 1]
+		var normal := (Vector3.UP - _radial((a + b) * 0.5) * rise).normalized()
+		_quad(targets, _at(plan, r0, a, y0), _at(plan, r1, a, y1), _at(plan, r1, b, y1), _at(plan, r0, b, y0), normal)
+
+
+## Angles from one to the other through every cut between them, each piece in steps
+## no longer than ARC_STEP (_stations): surfaces cut at the same angles share their
+## edges' vertices wherever they meet.
+static func _cut_stations(from: float, to: float, cuts: Array[float]) -> PackedFloat64Array:
 	var edges: Array[float] = [from, to]
 	for cut in cuts:
 		if cut > from + 0.0005 and cut < to - 0.0005:
 			edges.append(cut)
 	edges.sort()
+	var result := PackedFloat64Array([from])
 	for index in edges.size() - 1:
-		_annulus(plan, targets, r0, r1, edges[index], edges[index + 1], y, true)
+		if edges[index + 1] - edges[index] < 1e-7:
+			continue
+		var piece := _stations(edges[index], edges[index + 1])
+		for step in range(1, piece.size()):
+			result.append(piece[step])
+	return result
 
 
 ## A vertical wall on the arc of radius r between two angles, facing away from the

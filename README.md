@@ -565,8 +565,10 @@ the container crash. That override is not in the deployed game.
 
 On a touch-capable browser, **Tap to play** starts play once the island has loaded
 (that tap also starts the sound). Drag the
-left movement stick to walk, drag the right side to look, hold **RISE** to jetpack
-upward and release it to descend, and hold **RUN** while moving to run. The
+left movement stick to walk, drag anywhere else on the screen to look, hold **RISE** to jetpack
+upward and release it to descend, and hold **RUN** while moving to run. A finger
+that starts on a control works only that control, and a look finger that slides
+over a button doesn't press it. The
 **II** button pauses; **Play / Resume** continues, **Controls** lists the touch
 controls and **Credits** lists the game's sources (drag to scroll); **Options** has the
 frame-rate limit, Show fps, the resolution and the sound (no shadows or time of day on the web). Movement, look and buttons
@@ -586,7 +588,7 @@ screen; the back gesture leaves it.
 A context button above **RISE** does what F and C do. Beside a parked car it
 shows a car, **DRIVE**: tap it to get in. In a car it shows **GET OUT**: tap it to
 get out. In a car the stick drives and steers, **RISE** turns into **BRAKE** (a
-handbrake symbol), and **RUN** and the look hint are hidden until you get out. In
+handbrake symbol), and **RUN**, the look and its hint are off until you get out. In
 the air it shows a down arrow, **DROP**: hold it to fall fast; it lets go when
 you land. Otherwise it is hidden.
 

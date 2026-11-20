@@ -27,7 +27,9 @@
     "note": "Polar plan about the circle fitted to the exact crescent (runs 21-37). The hall runs between the radial lines of the outer crescent piers 0 and 11; the west colonnade stands on the facade's twelve pier lines, the east wall has its own thirteen equal bays over the same arc (2023 photos). Width 48 ft 8 in between the column faces and the east pier faces (NRHP)."
   },
   "heights_production_inference_m": {
-    "floor_y": 6.37,
+    "floor_y": 6.52,
+    "sill_y": 6.37,
+    "sill_landing": 0.3,
     "ceiling": 13.05,
     "balcony_ceiling": 16.3,
     "balcony_floor": 5.25,
@@ -56,7 +58,7 @@
     "museum_grid": [3, 3],
     "threshold_bevel": 0.13,
     "stair_parapet": 1.0,
-    "note": "Floor 2.5 cm over the highest drawn ground under the shell (6.345 at the vestibule's south-front corner). The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: level with its top, just over the vestibule's ceiling, which clears the facade's door transom (11.53 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (22.12 m)."
+    "note": "Floor 2.5 cm over the highest drawn ground under it (6.495, the plaza over the land by the bar room's north wall; headless_interior_ground_contract.gd checks every floor sample). The door's sill (sill_y) stays 2.5 cm over the highest drawn ground at the door (6.345, at the vestibule's south-front corner): the vestibule's floor runs level with it for sill_landing (0.3 m) inside the door, then rises 1.9 degrees to the hall's floor at the colonnade's back; the open leaves reach past the landing, so their far ends sit over the start of the ramp. The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: level with its top, just over the vestibule's ceiling, which clears the facade's door transom (11.53 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (22.12 m)."
   },
   "members_production_inference_m": {
     "west_column": [0.5, 0.8],

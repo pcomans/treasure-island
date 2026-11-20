@@ -6,6 +6,23 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2383 (2026-11-20)
+
+- On phones and tablets you can look around by dragging anywhere on the screen that isn't a button, not only on its right side.
+- The move stick and the RUN and RISE buttons sit a little further in from the edges of the screen, with a little more room between RUN and RISE.
+
+## Build 2373 (2026-11-20)
+
+- At 1232 Northpoint Drive, the white lines in the parking spaces under the carport no longer flicker, and the parking runs flat out to the road instead of under a raised strip of grass.
+- The tree that grew out of the parking at 1232 Northpoint Drive now stands on the lawn beside it, and across the island no tree, shrub or hedge stands on the parking, drives or walks that the homes draw for themselves; a few trees moved a little, and six that had nowhere nearby to go are gone.
+- The carport at 1232 Northpoint Drive no longer reaches out over the road: its roof ends at the edge of the parking, and its front row of posts stands further out, so it rests on its posts as in the photos.
+- The parking under the carport at 1232 Northpoint Drive has the island's asphalt finish and reads dark grey in the sun; in the shade under the roof it still looks bluish.
+
+## Build 2366 (2026-11-20)
+
+- Inside Building 1's hall, the plaza's dry grass no longer shows through the floor along the bar room's front wall: the hall's floor now stands clear of the ground outside, and the entrance rises gently from the doors to it.
+- The hall's floor no longer has thin cracks along the foot of its walls.
+
 ## Build 2347 (2026-11-19)
 
 - The townhouse row at 1232 Northpoint Drive looks much more like itself: its upper floor now overhangs the ground floor, and each of its three parts has its own steeper roof with vent stacks on it.
