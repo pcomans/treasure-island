@@ -884,8 +884,13 @@ func _apply_settings(view: Dictionary) -> String:
 				var now: Variant = node.get_indexed(property)
 				if now == null:
 					return "set: %s has no property %s" % [node_name, path]
-				node.set_indexed(property, _setting(now, properties[path]))
-				print("SET %s %s=%s" % [node_name, path, node.get_indexed(property)])
+				var value: Variant = _setting(now, properties[path])
+				node.set_indexed(property, value)
+				var held: Variant = node.get_indexed(property)
+				# A value of the wrong kind leaves a typed property as it was.
+				if typeof(held) != typeof(value) or not (is_equal_approx(held, value) if held is float else held == value):
+					return "set: %s %s did not take %s (it holds %s)" % [node_name, path, value, held]
+				print("SET %s %s=%s" % [node_name, path, held])
 	var frames: Variant = view.get("settle_frames", 0)
 	if not _numbers([frames], 1) or float(frames) < 0.0 or float(frames) > 600.0:
 		return "settle_frames must be a number of frames from 0 to 600"
