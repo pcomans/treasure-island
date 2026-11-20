@@ -804,7 +804,7 @@ Known gaps:
 ## Code and tooling cleanup (low priority)
 
 - **Door landings and doorstep ground** (review notes, batch 20261119b):
-  - the ground-cover and marsh maps read the cut park/lot layer, so cells under door landings read as land (`tools/lib/ground-cover-map.mjs:534,551`); a fix would treat the landing and recess rings as paving in both maps;
+  - the ground-cover and marsh maps read the cut park/lot layer, so cells under door landings read as land (`tools/lib/ground-cover-map.mjs:399,534,551`); a fix would treat the landing and recess rings as paving in both maps;
   - a cut park/lot edge has no vertical face: the lawn that stood up to 7.9 cm over the foot of the Mersea trailer ramp (w1001544698) now ends in a lip;
   - three tracked descriptions leave out that the park/lot ground stops at landings too: `tools/lib/street-ground-generation.mjs:44-51`, `tools/export_door_landings.gd:12-14` and `tools/config/street-detail-zones.json:7`. Update them at the next regeneration; editing the zones config alone would change the generator's recorded input hash;
   - `_side_wall`'s pergola and edge-of-posts branches have no contract case (`game/scripts/world/facades/midrise_family.gd:2333,2340`).

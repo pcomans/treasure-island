@@ -27810,3 +27810,18 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: sampling my own pixels against the photo before changing a colour or size: the matched crop showed the flues already stand taller than photographed, so I lightened them instead of stretching them; one fit run carried the door walks and the native-producer check together.
 - What did not work well: the native-producer check and the ground proof each held their own copy of the installer's role rules, so every new kind of part needed three edits.
 - What the team should change next time: give the installer's contact rules (roles, visual-only, collision-only, layers) one shared helper that the installer, the proof and the fit test all call.
+
+### ti-visual-review — batch 20261119b final doors (2026-11-19)
+- What worked well: having all three views of every door before and after the change let me close the earlier rounds' doors in one pass.
+- What did not work well: the brief said the Star View lobby was identical to main, and the images show it is not.
+- What the team should change next time: before stating that a door is unchanged, run a pixel comparison of its before and after captures.
+
+### ti-code-review — integration 20261119b (2026-11-19)
+- Worked: checking whether main was an ancestor of the branch settled the merge question in one command. Running `changelog.py check` and comparing earlier tags with their entries settled the build-number question without guessing.
+- Didn't: the look RESULT labelled its 1 % counts as 4 %. The known-issues note cited only the marsh map's lines for a problem in two maps.
+- Change: generate the look summary's counts from the comparison tables, with each threshold named. When a note says two places, cite a line in each.
+
+### integrator-batch-20261120a — release batch 20261120a (2026-11-20)
+- What worked well: the branch was based on main, so the merge was clean and the branch's single changelog entry needed no change; the step scripts carried over with paths only.
+- What did not work well: the cleanup removed the previous batch's captures of main, so the look check's "before" had to be baked and captured again; in 19b I typed the look summary's counts by hand and mislabelled a threshold.
+- What the team should change next time: generate the look summary from the comparison tables with each threshold named, and keep the last batch's captures of main until the next batch has its own.
