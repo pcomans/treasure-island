@@ -54,6 +54,7 @@
       "soffit_joint": {"width": 0.035, "drop": 0.006},
       "soffit_vents": {"from_wall_m": 2.525, "bay_fractions": [0.375, 0.875], "size_along_across": [0.56, 0.5], "frame": 0.06, "frame_drop": 0.03, "plate_drop": 0.008, "bar": 0.05},
       "floodlight": {"from_edge_m": 0.35, "size_along_up_across": [0.34, 0.16, 0.26]},
+      "fascia_rolls": {"count": 5, "radius": 0.045, "pitch": 0.1},
       "evidence": {
         "read_from_photos": ["the canopy is deep enough to roof a walkway with seated sculptures under it, its soffit reading as an edge band, three panel rows and a wall band (2008 canopy ends)", "its ends sweep round in a quarter turn back to the wall (2008 canopy ends; the owner's 2026-11-20 photos, south end)", "its soffit meets the wall 3.6 m over the door sills; its fascia, a stack of thin rolls about 0.55 m deep, stops about 0.9 m under the window frames, and floodlight boxes stand on it at the piers (the owner's 2026-11-20 photos: the frontal and south-end views, scaled by the footprint's bay pitch)", "three reed lines along the soffit's edges, one row of two-slot vents in the middle row (2008 close-ups)"],
         "production_inference": ["depth 5.0 m from the soffit's rows against the sculptures and walkway under it", "the end turns' radius", "the fascia's five rolls as a mipmapped pattern", "panel joints at quarter bays and two vents per bay"]
@@ -65,23 +66,22 @@
     "crescent_pier_depth": 0.4,
     "crescent_pier_y": [11.14, 20.7],
     "crescent_pier_reeds": 9,
-    "crescent_pier_reed_width": 0.095,
-    "crescent_pier_reed_gap": 0.04,
-    "crescent_pier_reed_front": 0.56,
+    "crescent_pier_reed_width": 0.12,
+    "crescent_pier_reed_gap": 0.025,
+    "crescent_pier_reed_front": 0.47,
     "crescent_window_y": [11.42, 18.85],
-    "crescent_window_style": {"surround": 0.23, "jamb_front": 0.2, "head_height": 0.2, "head_front": 0.24, "sill_height": 0.18, "sill_front": 0.26, "sill_overhang": 0.01, "edge_bar": 0.16, "bar": 0.13, "bar_front": 0.11, "transom_row": 3, "transom_bar": 0.2, "reveal_depth": true, "inner_step": [0.07, 0.1]},
-    "crescent_window_grid": [4, 7],
-    "crescent_head_reed_bottoms_y": [19.03, 19.24, 19.45],
-    "crescent_head_reed_height": 0.19,
-    "crescent_head_reed_front": 0.17,
-    "crescent_head_dentils": {"y": [19.66, 20.04], "front": 0.15, "pitch": 0.2},
+    "crescent_window_style": {"surround": 0.23, "jamb_front": 0.34, "head_height": 0.16, "head_front": 0.36, "sill_height": 0.18, "sill_front": 0.38, "sill_overhang": 0.01, "edge_bar": 0.08, "bar": 0.045, "bar_front": 0.07, "transom_row": 3, "transom_bar": 0.07, "reveal_depth": true, "inner_step": [0.07, 0.2]},
+    "crescent_window_grid": [3, 6],
+    "crescent_grille": {"pairs": 4, "bar": 0.035, "gap": 0.07, "rung": 0.03, "rung_pitch": 0.48, "back": 0.075, "front": 0.12},
+    "crescent_head_rolls": {"y": [19.01, 19.64], "radius": 0.085, "pitch": 0.2, "face": 0.1},
+    "crescent_head_dentils": {"y": [19.68, 20.02], "front": 0.2, "width": 0.11, "pitch": 0.19},
     "crescent_attic": {
       "skin_y": [20.2, 24.12],
       "skin_front": 0.04,
       "skin_back": -0.03,
-      "lines": {"bottom": 21.98, "pitch": 0.3, "count": 3},
+      "lines": {"bottom": 21.98, "pitch": 0.3, "count": 3, "radius": 0.05},
       "coping": [24.12, 24.42, 0.09],
-      "coping_line": {"bottom": 24.19, "pitch": 0.14},
+      "coping_line": {"pitch": 0.14, "radius": 0.03, "cap_height": 0.1, "cap_overhang": 0.05},
       "evidence": {
         "read_from_photos": ["the piers stop about 1.85 m over the window frames, under a plain frieze", "a group of three incised lines about 3.1-3.8 m over the frames and a thin flat coping about 5.6 m over them with one line in it (the owner's 2026-11-20 photos: the south-end and north-end views; 2008 frontal)"],
         "production_inference": ["heights from the photos' ratios to the window height, scaled by the footprint's bay pitch", "line and coping sizes"]
@@ -94,6 +94,18 @@
       "evidence": {
         "read_from_photos": ["the crescent's front block ends in its coping about 18 m over the door sills, lower than the central block behind it (the owner's 2026-11-20 photos, scaled by the footprint's bay pitch; the National Register nomination's four-storey block between three-storey blocks east and west)", "nothing of the taller block shows over the coping from the forecourt, and the cupola stands well back (the owner's 2026-11-20 photos: cupola and north-end views)"],
         "production_inference": ["the front block's depth (7 m, over the hall's west zone)", "its roof 0.12 m under the coping's top"]
+      }
+    },
+    "junction_towers": {
+      "north_tower_runs": [17, 18, 19],
+      "north_plain_bay_runs": [20],
+      "south_tower_runs": [39, 40, 41, 42, 43],
+      "top_y": 24.72,
+      "depth_m": 5.0,
+      "min_segment_m": 2.5,
+      "evidence": {
+        "read_from_photos": ["a narrow tower about a bay wide at each end of the crescent, its top a little over the crescent's coping, with sky over the wings behind it; a plain bay at the crescent's height between each tower and the end pier, the attic lines running over it (the owner's 2026-11-20 south-end, north-end and close views)"],
+        "production_inference": ["the towers' depth (5 m) and top", "the south junction's mass behind the tower at the wings' three storeys"]
       }
     },
     "flagpole": {
@@ -123,7 +135,7 @@
       {"bottom": 7.76, "top": 9.31, "rows": 2},
       {"bottom": 11.42, "top": 13.96, "rows": 4}
     ],
-    "wing_upper_panel": {"below": 0.82, "dentils": [0.06, 0.4], "dentil_front": 0.08, "panel_front": 0.05, "panel_margin": 0.16},
+    "wing_upper_panel": {"below": 0.82, "dentils": [0.12, 0.38], "dentil_front": 0.12, "dentil_width": 0.08, "dentil_pitch": 0.16, "panel_front": 0.05, "panel_margin": 0.16},
     "wing_string_course": [10.05, 10.4, 0.06],
     "wing_doors": {"north_index": 1, "south_index": 7, "width": 1.9, "transom": 0.6, "columns": 2},
     "wing_setback": {
@@ -136,7 +148,7 @@
         "production_inference": ["the setback (6 m; the photos show less of the third storey over the coping, as a deeper setback would)", "the coping height from the photos' window-to-coping ratio", "upper windows level with the crescent's"]
       }
     },
-    "flat_coping": {"height": 0.42, "front": 0.08, "line_pitch": 0.12, "line_count": 3, "line_offset": 0.02, "top_above_roof": 0.11},
+    "flat_coping": {"height": 0.5, "front": 0.06, "line_pitch": 0.11, "line_count": 3, "line_radius": 0.03, "cap_height": 0.12, "cap_overhang": 0.06, "top_above_roof": 0.11},
     "wing_window_width": 1.37,
     "wing_window_margin_m": 1.9,
     "wing_window_style": {"surround": 0.14, "jamb_front": 0.15, "head_height": 0.16, "head_front": 0.18, "sill_height": 0.14, "sill_front": 0.24, "sill_overhang": 0.06, "edge_bar": 0.09, "bar": 0.07},
@@ -147,7 +159,7 @@
     "pavilion_tall_window_offset": 1.2,
     "pavilion_tall_window_width": 1.9,
     "pavilion_tall_window_y": [9.6, 18.55],
-    "pavilion_tall_window_style": {"surround": 0.16, "jamb_front": 0.17, "head_height": 0.2, "head_front": 0.2, "sill_height": 0.16, "sill_front": 0.22, "sill_overhang": 0.06, "edge_bar": 0.1, "bar": 0.07, "transom_row": 5, "transom_bar": 0.13, "reveal_depth": true, "reveal_front_max": 0.24, "inner_step": [0.06, 0.09]},
+    "pavilion_tall_window_style": {"surround": 0.16, "jamb_front": 0.3, "head_height": 0.2, "head_front": 0.32, "sill_height": 0.16, "sill_front": 0.32, "sill_overhang": 0.06, "edge_bar": 0.08, "bar": 0.05, "transom_row": 5, "transom_bar": 0.08, "reveal_depth": true, "reveal_front_max": 0.24, "inner_step": [0.06, 0.18], "frame_bucket": "light_steel", "side_light": 0.2},
     "pavilion_mullion_pier_width": 0.42,
     "pavilion_emblem": {
       "center_y": 20.72,
@@ -168,7 +180,10 @@
         "production_inference": ["the relief as two flat raised outlines, nothing modelled inside them", "all sizes, from the photos' ratios to the pavilions' faces"]
       }
     },
-    "pavilion_dentils": {"above_window_head": [0.2, 0.55], "pitch": 0.32, "front": 0.1},
+    "pavilion_dentils": {"above_window_head": [0.2, 0.55], "width": 0.26, "count": 12, "front": 0.16},
+    "pavilion_tall_window_grid": [3, 10],
+    "pavilion_garage": {"width_of_window_pair": 0.84, "height": 2.7, "depth": 0.6, "jamb": 0.35, "lintel": 0.55, "panels": 5},
+    "flank_window_dentils": {"height": 0.24, "width": 0.09, "count": 7, "front": 0.14},
     "window_reveal_extra_depth": 0.13,
     "window_reveal_min_clearance_m": 2.2,
     "drum_banding": {"coping": [25.4, 26.33, 0.09], "speed_lines": [[24.48, 24.54], [24.73, 24.79], [24.98, 25.04]], "speed_line_front": 0.05, "back": -0.05},
@@ -190,13 +205,13 @@
       "side_inset_m": 0.2,
       "front_m": -0.01,
       "back_m": -3.0,
-      "cap": {"y": [22.32, 22.4], "overhang": 0.05, "front": 0.04},
+      "cap": {"y": [22.1, 22.4], "overhang": 0.16, "front": 0.18},
       "lines_y": [21.86, 22.0, 22.14],
       "fin_inner_half_width_m": 2.75,
-      "fin_front_m": 0.18,
+      "fin_front_m": 0.4,
       "fin_top_y": 20.49,
       "fin_lines_y": [20.04, 20.17, 20.3],
-      "fin_cap": {"height": 0.5, "front": 0.12},
+      "fin_cap": {"height": 0.62, "front": 0.12, "side": 0.06, "cap_height": 0.16, "cap_overhang": 0.1},
       "line_height": 0.04,
       "line_front": 0.006,
       "evidence": {
@@ -211,13 +226,15 @@
     "entrance_group_width": 3.1,
     "entrance_door_height": 2.29,
     "entrance_transom_top_above_base": 3.42,
-    "entrance_reveal_border": 0.24,
+    "entrance_reveal_border": 0.08,
     "entrance_frame_width": 0.13,
     "entrance_frame_front": 0.16,
-    "entrance_portal_jamb_width": 0.36,
+    "entrance_portal_jamb_width": 0.0,
     "entrance_portal_front": 0.42,
     "entrance_portal_head_y": [9.72, 9.93],
-    "ground_floor_window": {"width": 1.55, "bottom_above_base": 0.9, "top_above_base": 3.35, "columns": 3, "rows": 2},
+    "ground_floor_window": {"width": 1.55, "bottom_above_base": 0.9, "top_above_base": 3.35, "columns": 3, "rows": 2, "bar": 0.07, "transom_fraction": 0.72},
+    "ground_floor_round_piers": {"first": 1, "skip_last": 1, "half_width": 0.5, "relief": 0.32, "bands_above_base": [0.95, 1.95, 2.95], "band_height": 0.09, "band_out": 0.03},
+    "entrance_kick_plate_height": 0.4,
     "entrance_portal_head_front": 0.46,
     "se_narrow_window_y": [15.05, 18.65],
     "se_narrow_window_width": 1.0,

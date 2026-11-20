@@ -71,12 +71,10 @@
     "entrance_bays": [4, 5, 6],
     "doors_per_entrance_group": 3,
     "junction_windows": [
-      {"run": 38, "glass_width": 0.9, "columns": 1},
       {"run": 43, "glass_width": 1.2, "columns": 2}
     ],
     "north_junction_windows": [
-      {"run": 17, "glass_width": 1.8, "columns": 2},
-      {"run": 20, "glass_width": 2.0, "columns": 2}
+      {"run": 17, "glass_width": 1.8, "columns": 2}
     ],
     "se_face_runs": [63, 64, 65, 66, 67, 68, 69],
     "rear_ribbon_host_chains": [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]],

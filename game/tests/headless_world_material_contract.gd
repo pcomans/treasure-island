@@ -64,8 +64,6 @@ const LOSSLESS_DATA_TEXTURES := {
 	"res://game/resources/textures/world/water/bay_waves.png": "wave slopes decoded from red and green (bay_water.gdshader)",
 	"res://game/resources/textures/world/sky/cloud_noise.png": "independent cloud noise octaves, one per channel (bay_sky.gdshader)",
 	"res://game/resources/textures/world/building_1_detail/b1_incised_line.png": "a linear greyscale multiplier over Building 1's paint (building_1_public_stucco.gdshader detail_pattern)",
-	"res://game/resources/textures/world/building_1_detail/b1_canopy_fascia.png": "a linear greyscale multiplier over Building 1's paint (building_1_public_stucco.gdshader detail_pattern)",
-	"res://game/resources/textures/world/building_1_detail/b1_dentils.png": "a linear greyscale multiplier over Building 1's paint (building_1_public_stucco.gdshader detail_pattern)",
 }
 ## UI images draw at their own size on screen: every image under this folder imports
 ## lossless with mipmaps off.
