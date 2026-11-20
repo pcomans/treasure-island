@@ -1665,16 +1665,18 @@ static func _append_entry_composition(buckets: Dictionary, collision: Dictionary
 			# On the hall's door sill (building_1_interior.json), just proud of it.
 			var sill := float((_json(INTERIOR.CONFIG_PATH).heights_production_inference_m as Dictionary).sill_y)
 			_append_frame_box(buckets.public_bronze, frame, center - half, center + half, sill - 0.04, sill + float(front.entrance_threshold_rise), face - 0.08, face + 0.06)
-			# The hall's leaves stand open, swung out under the canopy, solid: two
-			# folded together on the left jamb, one on the right. Swung as far as the
-			# round piers beside the group allow, the opening stays as wide as the
-			# group and the leaves' faces show from the forecourt.
+			# The hall's leaves stand open, swung out under the canopy: two folded
+			# together on the left jamb, one on the right. Swung as far as the round
+			# piers beside the group allow, the opening stays as wide as the group and
+			# the leaves' faces show from the forecourt. Visual only: solid, each leaf
+			# made a wedge with the facade in which the stock player walking along
+			# the facade under the canopy stuck fast.
 			var swing := deg_to_rad(float(front.entrance_open_leaf_deg))
 			for side in [-1.0, 1.0]:
 				var hinge := center + float(side) * (half - bar * 0.5)
 				var folds := 2 if side < 0.0 else 1
 				for fold in folds:
-					_append_open_leaf(buckets, collision, frame, hinge, face + 0.125, float(side), swing, fold, leaf_width - bar, floor_y, base_y, door_top, kick, stile, front)
+					_append_open_leaf(buckets, frame, hinge, face + 0.125, float(side), swing, fold, leaf_width - bar, floor_y, base_y, door_top, kick, stile, front)
 		else:
 			for leaf in doors_per_group:
 				var left := center - half + group_width * float(leaf) / float(doors_per_group) + bar * 0.5
@@ -2845,8 +2847,8 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 ## facade (side -1: the left jamb's leaf, closing toward +lateral; +1: the right's),
 ## drawn as the closed leaves are: bronze stiles and top rail, glass, a push bar
 ## and the worn-brass kick panel from `floor_y`, its bottom on `bottom`. A `fold` of 1
-## lies folded back against the first, on its side toward the facade. Solid.
-static func _append_open_leaf(buckets: Dictionary, collision: Dictionary, frame: Dictionary, hinge: float, hinge_depth: float, side: float, swing: float, fold: int, width: float, floor_y: float, bottom: float, door_top: float, kick: float, stile: float, front: Dictionary) -> void:
+## lies folded back against the first, on its side toward the facade. Visual only.
+static func _append_open_leaf(buckets: Dictionary, frame: Dictionary, hinge: float, hinge_depth: float, side: float, swing: float, fold: int, width: float, floor_y: float, bottom: float, door_top: float, kick: float, stile: float, front: Dictionary) -> void:
 	var tangent := frame.tangent as Vector3
 	var normal := frame.normal as Vector3
 	var anchor := frame.anchor as Vector3
@@ -2868,7 +2870,6 @@ static func _append_open_leaf(buckets: Dictionary, collision: Dictionary, frame:
 	_append_box(buckets.glass, at.call(stile, width - stile, kick_top, door_top - rail), along, across, width - stile * 2.0, door_top - rail - kick_top, thickness * 0.4)
 	var push := floor_y + float(front.entrance_push_bar_height)
 	_append_box(buckets.public_bronze, at.call(stile, width - stile, push - 0.025, push + 0.025), along, across, width - stile * 2.0, 0.05, thickness + 0.1)
-	_append_box(collision, at.call(0.0, width, bottom, door_top), along, across, width, door_top - bottom, thickness)
 
 
 ## A horizontal bar of half-round section on a module frame: lateral span, centre
