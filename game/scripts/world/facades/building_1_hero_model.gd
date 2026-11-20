@@ -2742,7 +2742,8 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 		_append_quad(collision, _lifted(a, soffit_y), _lifted(b, soffit_y), _lifted(b, top_y), _lifted(a, top_y), edge_normals[segment] as Vector3)
 	# The fascia: a stack of rolls in the round on the edge (the owner's photos).
 	var fascia := canopy.fascia_rolls as Dictionary
-	_append_profile_sweep(buckets.fascia, edge, _rolls_profile(soffit_y, top_y, 0.0, 0.0, int(fascia.count), float(fascia.radius), float(fascia.pitch), 4, false), true)
+	# Its ends die into the wall at the face's end corners, so they stay open.
+	_append_profile_sweep(buckets.fascia, edge, _rolls_profile(soffit_y, top_y, 0.0, 0.0, int(fascia.count), float(fascia.radius), float(fascia.pitch), 4, false), true, false)
 	var close_trim := buckets.trim as Dictionary
 	# Soffit: reed lines along the front edge and the wall, panel joints, vents.
 	var runs := plan.runs as Array[int]
