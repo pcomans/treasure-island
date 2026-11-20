@@ -20,20 +20,22 @@ func handle_mobile_input(event: InputEvent) -> void:
 		button.handle_input(event)
 	_move_stick.handle_input(event)
 	if event is InputEventScreenTouch:
-		# A lift ends its finger's look. A press of an index still held as a look
-		# finger means that finger's lift was lost: its stale look ends first, so it
-		# neither blocks a new look nor turns the camera with the reused index.
+		# A lift ends its finger's look (a press of an index still looking means its
+		# lift was lost, so that stale look ends too).
 		_touches.erase(event.index)
-		# One look finger, pressed anywhere but on a control.
-		if event.pressed and not event.canceled and look_enabled and _touches.is_empty() and event.index != _move_stick._touch_index and not _on_control(event.position):
+		# One look finger: the newest pressed anywhere but on a control takes the look
+		# over from any older one, so a finger whose lift was lost (iOS never reuses a
+		# touch's index) can't block looking; the old finger's drags turn nothing, and
+		# the new one turns from its own position.
+		if event.pressed and not event.canceled and look_enabled and event.index != _move_stick._touch_index and not _on_control(event.position):
+			_touches.clear()
 			_touches[event.index] = {"begin": event.position, "current": event.position}
 	if event is InputEventScreenDrag and _touches.has(event.index):
 		var relative: Vector2 = event.position - _touches[event.index].current
 		_touches[event.index].current = event.position
-		if _touches.size() == 1:
-			_cam_rot.x -= relative.x * sensitivity
-			_cam_rot.y -= relative.y * sensitivity
-			_cam_rot.y = clampf(_cam_rot.y, min_pitch, max_pitch)
+		_cam_rot.x -= relative.x * sensitivity
+		_cam_rot.y -= relative.y * sensitivity
+		_cam_rot.y = clampf(_cam_rot.y, min_pitch, max_pitch)
 
 ## Whether a finger pressed here is on a control the player sees: the stick
 ## (where it takes a finger) or a button. Such a finger never turns the camera,
