@@ -16,6 +16,7 @@ shader_parameter/relief_period_m = 0.15
 shader_parameter/relief_coarse_period_m = 0.45
 shader_parameter/relief_coarse_tilt = 0.45
 shader_parameter/relief_fade_px = Vector2(3, 6)
+shader_parameter/relief_cavity = 0.4
 shader_parameter/tile_span_m = 1.7
 shader_parameter/relief_strength = 0.08
 shader_parameter/grain_variation = 0.14

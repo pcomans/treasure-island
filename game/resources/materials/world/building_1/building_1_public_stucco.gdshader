@@ -36,6 +36,10 @@ uniform float relief_period_m = 0.0;
 uniform float relief_coarse_period_m = 0.45;
 uniform float relief_coarse_tilt = 0.45;
 uniform vec2 relief_fade_px = vec2(3.0, 6.0);
+// How much less of the sky the relief's hollows see (an occlusion deepening from each
+// reed's crest to its grooves, and from the broad wave's crests to its troughs), half
+// of it on direct light too, so the fluting reads in shade and in sun; 0 leaves it.
+uniform float relief_cavity = 0.0;
 varying vec3 world_position;
 varying vec3 world_normal;
 varying vec3 face_normal;
@@ -57,6 +61,9 @@ void fragment() {
 		float fine = smoothstep(relief_fade_px.x, relief_fade_px.y, relief_period_m / metres_per_pixel);
 		float coarse = smoothstep(relief_fade_px.x, relief_fade_px.y, relief_coarse_period_m / metres_per_pixel);
 		vec3 wave = normalize(face + across * (relief_coarse_tilt * sin(6.2831853 * relief_across / relief_coarse_period_m)));
+		float hollow = fine * clamp((1.0 - dot(n, face)) / 0.36, 0.0, 1.0) + (1.0 - fine) * coarse * 0.6 * clamp((1.0 - dot(wave, face)) / 0.09, 0.0, 1.0);
+		AO = 1.0 - relief_cavity * hollow;
+		AO_LIGHT_AFFECT = 0.5;
 		n = normalize(mix(mix(face, wave, coarse), n, fine));
 	}
 	// Face-aligned world-metre projection keeps one continuous phase across the
