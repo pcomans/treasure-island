@@ -24,6 +24,9 @@ extends SceneTree
 ##     with no jump and on RUN it is RUN's and turns nothing; when it never does
 ##     (iOS), a newer finger off the controls takes the look over by its own stroke
 ##     and the old finger's drags turn nothing; either way others can look after;
+##   - a stray second touch off the controls (a palm at a tablet's edge) takes the
+##     look over: the first finger turns nothing, after the stray touch lifts too,
+##     until it is lifted and pressed again;
 ##   - RUN or RISE held and a look finger together each do their own;
 ##   - pause lets go of everything, and a finger held across it does nothing after;
 ##     RUN holds and lets go on a cancel; RISE holds the handbrake with the jetpack;
@@ -79,7 +82,7 @@ func _run() -> void:
 	if _held().size() > 0:
 		_fail("Teardown left %s held" % [_held()])
 		return
-	print("PASS: touch controls upright and sideways (%s): donor analog strength, multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; look anywhere: a drag starting anywhere but on a control turned the camera (%d starts tried, the left half beside the stick and the hidden use button's place among them), one starting on the stick moved and never turned, a second finger on the held stick never turned, the stick and a look finger worked together, and a look drag over RUN, RISE, DRIVE, the stick and the pause button pressed none of them; the stick took a press just inside its disc's edge and none just outside it or in its square's corner; fingers starting on RUN, RISE and the pause button turned nothing; a look finger pressed again after a lost lift looked from where it was or was RUN's, a newer finger took the look over from one whose lift never came, and others looked after; RUN or RISE held and a look finger worked together; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, neither its finger nor a second one on it turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go" % [", ".join(PackedStringArray(shapes.values().map(func(size: Vector2) -> String: return "%d x %d px" % [roundi(size.x), roundi(size.y)]))), _looked])
+	print("PASS: touch controls upright and sideways (%s): donor analog strength, multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; look anywhere: a drag starting anywhere but on a control turned the camera (%d starts tried, the left half beside the stick and the hidden use button's place among them), one starting on the stick moved and never turned, a second finger on the held stick never turned, the stick and a look finger worked together, and a look drag over RUN, RISE, DRIVE, the stick and the pause button pressed none of them; the stick took a press just inside its disc's edge and none just outside it or in its square's corner; fingers starting on RUN, RISE and the pause button turned nothing; a look finger pressed again after a lost lift looked from where it was or was RUN's, a newer finger took the look over from one whose lift never came, and others looked after; a stray touch ended the first finger's look until that finger was pressed again; RUN or RISE held and a look finger worked together; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, neither its finger nor a second one on it turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go" % [", ".join(PackedStringArray(shapes.values().map(func(size: Vector2) -> String: return "%d x %d px" % [roundi(size.x), roundi(size.y)]))), _looked])
 	quit(0)
 
 
@@ -149,7 +152,7 @@ func _shape(controls: TouchControls, shape: String) -> bool:
 	_touch(controls, 5, rise, false)
 	if Input.is_action_pressed("jetpack") or Input.is_action_pressed("handbrake"):
 		return _fail("%s: lifting rise left the jetpack or the handbrake held" % shape)
-	if not _look_anywhere(controls, shape, free) or not _lost_lift(controls, shape, free):
+	if not _look_anywhere(controls, shape, free) or not _lost_lift(controls, shape, free) or not _stray_touch(controls, shape, free):
 		return false
 	if not await _use_button(controls):
 		return false
@@ -327,6 +330,28 @@ func _lost_lift(controls: TouchControls, shape: String, free: Array[Vector2]) ->
 	# The old finger's lift, arriving at last, changes nothing; others still look.
 	_touch(controls, 40, a - STROKE, false)
 	return _look_stroke(controls, 42, a, "%s: a new look finger after an iOS-style lost lift, from %s," % [shape, a])
+
+
+## The trade the takeover accepts (KNOWN_ISSUES): a stray second touch off the
+## controls (a palm resting at a tablet's edge) takes the look over, so the first
+## finger's look ends and stays ended, after the stray touch lifts too, until that
+## finger is lifted and pressed again; then it looks again.
+func _stray_touch(controls: TouchControls, shape: String, free: Array[Vector2]) -> bool:
+	var a := free[0]
+	var palm := _nearest(free, Vector2(controls.size.x, controls.size.y * 0.5))
+	_touch(controls, 50, a, true)
+	_slide(controls, 50, a + STROKE)
+	_touch(controls, 51, palm, true)
+	var view := controls.get_camera_rotation()
+	_slide(controls, 50, a + STROKE * 2.0)
+	var while_palm := controls.get_camera_rotation() - view
+	_touch(controls, 51, palm, false)
+	_slide(controls, 50, a + STROKE * 3.0)
+	var after_palm := controls.get_camera_rotation() - view
+	_touch(controls, 50, a + STROKE * 3.0, false)
+	if not while_palm.is_zero_approx() or not after_palm.is_zero_approx() or _other(controls) != "":
+		return _fail("%s: a stray touch at %s must end the first finger's look until that finger is lifted and pressed again (it turned %s while the stray touch was down and %s after it lifted%s)" % [shape, palm, while_palm, after_palm, _other(controls)])
+	return _look_stroke(controls, 50, a, "%s: the first finger, lifted and pressed again after a stray touch, from %s," % [shape, a])
 
 
 ## One finger down at `at`, a stroke and back, lifted: the camera turns by the

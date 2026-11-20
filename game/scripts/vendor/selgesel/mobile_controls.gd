@@ -9,8 +9,6 @@ var _touches := {}
 var sensitivity := 0.1 # Upstream degrees per logical viewport pixel.
 var min_pitch := -60.0
 var max_pitch := 25.0
-## Whether a finger may turn the camera (touch_controls.gd: not in a car).
-var look_enabled := true
 
 func handle_mobile_input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
@@ -27,7 +25,7 @@ func handle_mobile_input(event: InputEvent) -> void:
 		# over from any older one, so a finger whose lift was lost (iOS never reuses a
 		# touch's index) can't block looking; the old finger's drags turn nothing, and
 		# the new one turns from its own position.
-		if event.pressed and not event.canceled and look_enabled and event.index != _move_stick._touch_index and not _on_control(event.position):
+		if event.pressed and not event.canceled and event.index != _move_stick._touch_index and not _on_control(event.position):
 			_touches.clear()
 			_touches[event.index] = {"begin": event.position, "current": event.position}
 	if event is InputEventScreenDrag and _touches.has(event.index):
