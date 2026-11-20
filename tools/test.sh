@@ -37,6 +37,10 @@
 # 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load.
+#    And no outdoor ground shows inside an enterable interior (a catalog unit
+#    with passages): its floor covers its plan up to its walls, above the land and
+#    the ground draped over it, and no street detail stands in it
+#    (game/tests/headless_interior_ground_contract.gd).
 #    Where the private sounds are fetched, the tests marked "# sfx:
 #    takes-dependent" run again without them (--no-sfx): a checkout without the
 #    sounds must pass too, and a test that reads what the sound manager plays
@@ -278,6 +282,7 @@ tests=(
   game/tests/headless_building_study_geometry_contract.gd
   game/tests/headless_bake_merge_contract.gd
   game/tests/headless_building_1_interior_contract.gd
+  game/tests/headless_interior_ground_contract.gd
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
