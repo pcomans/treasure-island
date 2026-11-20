@@ -74,7 +74,7 @@
     "crescent_window_grid": [3, 6],
     "crescent_grille": {"pairs": 4, "bar": 0.035, "gap": 0.07, "rung": 0.03, "rung_pitch": 0.48, "back": 0.075, "front": 0.12},
     "crescent_head_rolls": {"y": [19.01, 19.64], "radius": 0.085, "pitch": 0.2, "face": 0.1},
-    "crescent_head_dentils": {"y": [19.7, 19.96], "front": 0.19, "width": 0.13, "pitch": 0.21},
+    "crescent_head_dentils": {"y": [19.7, 19.94], "front": 0.14, "width": 0.13, "pitch": 0.21},
     "crescent_attic": {
       "skin_y": [20.2, 24.12],
       "skin_front": 0.04,
@@ -89,16 +89,17 @@
     },
     "crescent_block": {
       "runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
-      "depth_m": 7.0,
+      "depth_m": 15.0,
       "roof_y": 24.3,
       "evidence": {
         "read_from_photos": ["the crescent's front block ends in its coping about 18 m over the door sills, lower than the central block behind it (the owner's 2026-11-20 photos, scaled by the footprint's bay pitch; the National Register nomination's four-storey block between three-storey blocks east and west)", "nothing of the taller block shows over the coping from the forecourt, and the cupola stands well back (the owner's 2026-11-20 photos: cupola and north-end views)"],
-        "production_inference": ["the front block's depth (7 m, over the hall's west zone)", "its roof 0.12 m under the coping's top"]
+        "production_inference": ["the front block's depth (15 m: from the forecourt nothing of the taller block shows over the coping, even beside the junction towers)", "its roof 0.12 m under the coping's top"]
       }
     },
     "junction_towers": {
       "north_tower_runs": [17, 18, 19],
       "north_plain_bay_runs": [20],
+      "north_plain_bay_depth_m": 10.0,
       "south_tower_runs": [39, 40, 41, 42, 43],
       "top_y": 24.72,
       "depth_m": 5.0,
@@ -171,13 +172,15 @@
       "bars": {"reach": 1.24, "bar_height": 0.2, "gap": 0.075, "front": 0.08},
       "relief_front": 0.15,
       "relief": [
-        {"name": "kneeling figure", "points": [[-0.36, -0.62], [0.3, -0.62], [0.36, -0.42], [0.2, -0.3], [0.24, 0.05], [0.12, 0.22], [0.1, 0.42], [-0.06, 0.5], [-0.2, 0.42], [-0.2, 0.2], [-0.3, 0.02], [-0.24, -0.28], [-0.4, -0.42]]},
-        {"name": "raised arm and airplane", "points": [[0.06, 0.2], [0.2, 0.3], [0.3, 0.36], [0.5, 0.36], [0.5, 0.42], [0.3, 0.45], [0.26, 0.56], [0.2, 0.56], [0.2, 0.44], [0.04, 0.32]]}
+        {"name": "head", "points": [[-0.12, 0.3], [-0.02, 0.3], [0.04, 0.36], [0.04, 0.46], [-0.02, 0.52], [-0.12, 0.52], [-0.18, 0.46], [-0.18, 0.36]]},
+        {"name": "torso and kneeling legs", "points": [[-0.22, 0.26], [0.0, 0.26], [0.08, 0.12], [0.06, -0.08], [0.3, -0.22], [0.36, -0.36], [0.28, -0.58], [0.16, -0.58], [0.2, -0.38], [0.02, -0.3], [-0.06, -0.46], [-0.38, -0.58], [-0.42, -0.5], [-0.24, -0.36], [-0.3, -0.12], [-0.3, 0.12]]},
+        {"name": "raised arm", "points": [[0.0, 0.2], [0.24, 0.32], [0.24, 0.4], [-0.02, 0.28]]},
+        {"name": "airplane", "points": [[0.18, 0.4], [0.3, 0.38], [0.36, 0.5], [0.4, 0.5], [0.38, 0.37], [0.54, 0.34], [0.54, 0.3], [0.38, 0.32], [0.36, 0.2], [0.32, 0.2], [0.3, 0.32], [0.18, 0.34]]}
       ],
       "small_windows": {"pavilions": ["south_pavilion"], "width": 0.96, "y": [20.03, 21.18], "offset": 1.67, "columns": 2, "rows": 4},
       "evidence": {
         "read_from_photos": ["an elongated octagon in blue round a white relief of a kneeling figure holding an airplane up to its right, three blue bars either side, its centre about level with the fin caps; two small windows flank the bars on the south pavilion, plain wall on the north one (the owner's 2026-11-20 photos: both pavilions and the emblem close-up; 2003 Photograph 11; 2008 south pavilion)"],
-        "production_inference": ["the relief as two flat raised outlines, nothing modelled inside them", "all sizes, from the photos' ratios to the pavilions' faces"]
+        "production_inference": ["the relief as four flat raised outlines (head, body with kneeling legs, raised arm, airplane), nothing modelled inside them", "all sizes, from the photos' ratios to the pavilions' faces"]
       }
     },
     "pavilion_dentils": {"above_window_head": [0.2, 0.55], "width": 0.26, "count": 12, "front": 0.16},
@@ -227,7 +230,7 @@
     "entrance_door_height": 2.29,
     "entrance_transom_top_above_base": 3.42,
     "entrance_reveal_border": 0.08,
-    "entrance_frame_width": 0.13,
+    "entrance_frame_width": 0.09,
     "entrance_frame_front": 0.16,
     "entrance_portal_jamb_width": 0.0,
     "entrance_portal_front": 0.42,

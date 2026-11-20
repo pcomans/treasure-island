@@ -227,7 +227,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_append_strip_walls(buckets.wall, original, collision, record, north_runs, two_y, three_y, north_depth, tier_clip, north_skip, interior_cuts, true)
 	_append_front_step(buckets.wall, collision, record, north_setback_runs, two_y, wing_face_top, three_y, wing_step, true, true)
 	_append_front_step(buckets.wall, collision, record, north_tower_runs, two_y, tower_top, three_y, tower_depth, true, true, tower_segment)
-	_append_front_step(buckets.wall, collision, record, north_bay_runs, two_y, block_roof, three_y, block_depth, true, false)
+	_append_front_step(buckets.wall, collision, record, north_bay_runs, two_y, block_roof, three_y, float(towers.north_plain_bay_depth_m), true, false)
 	# The central block stands behind the crescent and its plain south bay only; the
 	# south junction is a tower before a three-storey strip like the wings'.
 	var central_main := central_runs.slice(0, central_runs.find(south_tower_runs[0]))
@@ -581,7 +581,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var north_cuts := interior_cuts.duplicate()
 	north_cuts.append_array(_setback_cuts(wall_record, [north_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
 	north_cuts.append_array(_setback_cuts(wall_record, [north_tower_runs], tower_depth, tower_segment))
-	north_cuts.append_array(_setback_cuts(wall_record, [north_bay_runs], float(block.depth_m), FRONT_STEP_MIN_SEGMENT_M))
+	north_cuts.append_array(_setback_cuts(wall_record, [north_bay_runs], float(towers.north_plain_bay_depth_m), FRONT_STEP_MIN_SEGMENT_M))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth), tier_clip, north_cuts) and cut_whole
 	var central := _int_array(chains.central_four_story_runs)
 	var central_main := central.slice(0, central.find(south_tower_runs[0]))
@@ -589,7 +589,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var tower_cuts := interior_cuts.duplicate()
 	tower_cuts.append_array(_setback_cuts(wall_record, [south_tower_runs], tower_depth, tower_segment))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_tower_runs, three_y, float(vertical.south_wing_inward_depth), {}, tower_cuts) and cut_whole
-	cut_whole = _append_front_step_roof(roof, collision, wall_record, north_bay_runs, float(block.depth_m), float(block.roof_y)) and cut_whole
+	cut_whole = _append_front_step_roof(roof, collision, wall_record, north_bay_runs, float(towers.north_plain_bay_depth_m), float(block.roof_y)) and cut_whole
 	for tower_runs: Array[int] in [north_tower_runs, south_tower_runs]:
 		cut_whole = _append_front_step_roof(roof, collision, wall_record, tower_runs, tower_depth, tower_top, tower_segment) and cut_whole
 	var se_setback := front.se_setback as Dictionary
@@ -1466,7 +1466,7 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 		var grid := front.crescent_window_grid as Array
 		_append_window_module(buckets, frame, center, glass, float(window_y[0]), float(window_y[1]), int(grid[0]), int(grid[1]), style)
 		# The bronze grille over the steel window: paired bars with short rungs.
-		_append_bronze_grille(buckets.public_bronze, frame, center, glass, float(window_y[0]), float(window_y[1]), float(frame.hi), front.crescent_grille as Dictionary)
+		_append_bronze_grille(buckets.bronze, frame, center, glass, float(window_y[0]), float(window_y[1]), float(frame.hi), front.crescent_grille as Dictionary)
 		# Three bold rolls from pier to pier under pale block dentils (the owner's
 		# 2026-11-20 close-ups), in relief.
 		var head_reach := glass * 0.5 + surround + 0.04
@@ -1588,7 +1588,7 @@ static func _append_entry_composition(buckets: Dictionary, collision: Dictionary
 			var inner_leaf := leaf > 0 and leaf < doors_per_group
 			var bottom := door_top if open and inner_leaf else base_y - bar * 0.5
 			_append_frame_box(buckets.public_bronze, frame, x - bar * 0.5, x + bar * 0.5, bottom, transom_top + bar * 0.5, face + 0.09, face + bronze_front)
-		for rail in [base_y, base_y + 0.95, door_top + bar * 0.5, (transom_bottom + transom_top) * 0.5, transom_top]:
+		for rail in [base_y, door_top + bar * 0.5, transom_top]:
 			var y := float(rail)
 			if open and y < door_top:
 				continue
