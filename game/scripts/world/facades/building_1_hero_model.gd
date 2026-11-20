@@ -2625,7 +2625,7 @@ static func _pavilion_garage_half(front: Dictionary) -> float:
 ## relief of a kneeling figure holding an airplane up, three blue bars either side,
 ## centred about level with the fin caps. The relief is modelled only as far as the
 ## photos resolve it: flat raised outlines of the figure's parts and the airplane,
-## nothing inside them. On the south pavilion two small windows flank
+## each at its own depth so their edges draw the figure, nothing inside them. On the south pavilion two small windows flank
 ## the bars; the north pavilion's wall there is plain. Visual only, above the fins'
 ## chest-height collision.
 static func _append_pavilion_emblem(buckets: Dictionary, frame: Dictionary, emblem: Dictionary, region: String, style: Dictionary) -> void:
@@ -2650,7 +2650,7 @@ static func _append_pavilion_emblem(buckets: Dictionary, frame: Dictionary, embl
 		_append_frame_outline(buckets.relief, frame, center_y, [octagon[side], octagon[next], ring_outer[next], ring_outer[side]], back, wall + float(emblem.ring_front))
 	for part_value in emblem.relief as Array:
 		var part := part_value as Dictionary
-		_append_frame_outline(buckets.relief, frame, center_y, part.points as Array, field_front - 0.02, wall + float(emblem.relief_front))
+		_append_frame_outline(buckets.relief, frame, center_y, part.points as Array, field_front - 0.02, wall + float(part.get("front", emblem.relief_front)))
 	var bars := emblem.bars as Dictionary
 	var bar_height := float(bars.bar_height)
 	var gap := float(bars.gap)
