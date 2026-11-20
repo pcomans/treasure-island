@@ -13,7 +13,7 @@
  "exposure": {
   "crescent": 0.12,
   "wing": 0.3,
-  "pavilion": 0.65,
+  "pavilion": 0.75,
   "junction": 0.45,
   "se": 0.35,
   "rear": 1.0,
@@ -27,15 +27,15 @@
   "HeroTowerBaseStorey": "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
   "HeroOriginalIvory": "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
   "HeroPublicBase": "res://game/resources/materials/world/building_1/building_1_m_ground_wall.tres",
-  "HeroEntranceCanopy": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
-  "HeroCanopyFascia": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
+  "HeroEntranceCanopy": "res://game/resources/materials/world/building_1/building_1_m_trim_clean.tres",
+  "HeroCanopyFascia": "res://game/resources/materials/world/building_1/building_1_m_trim_clean.tres",
   "HeroTowerBaseStoreyTrim": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
   "HeroEntranceCanopySoffit": "res://game/resources/materials/world/building_1/building_1_m_soffit.tres",
-  "HeroTowerBaseStoreyGlazing": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
   "HeroBronze": "res://game/resources/materials/world/building_1/building_1_m_grille_bronze.tres",
   "HeroPublicBronze": "res://game/resources/materials/world/building_1/building_1_m_door_bronze.tres",
   "HeroLightSteel": "res://game/resources/materials/world/building_1/building_1_m_window_blue.tres",
-  "HeroEmblemEnamel": "res://game/resources/materials/world/building_1/building_1_m_emblem_blue.tres"
+  "HeroEmblemEnamel": "res://game/resources/materials/world/building_1/building_1_m_emblem_blue.tres",
+  "HeroCanopySoffitJoints": "res://game/resources/materials/world/building_1/building_1_m_soffit.tres"
  },
  "splits": [
   {
@@ -80,7 +80,33 @@
    "near_windows": {
     "crescent": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres"
    },
-   "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres"
+   "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
+   "pane_uv2": true
+  },
+  {
+   "mesh": "HeroTowerBaseStoreyGlazing",
+   "margins_m": [0.05, 0.05, 0.05, 0.05],
+   "near_windows": {},
+   "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
+   "pane_uv2": true
+  }
+ ],
+ "pane_kinds": [
+  {
+   "class": "rear",
+   "min_bottom_m": 13.0,
+   "kind": 3,
+   "share": 0.7
+  },
+  {
+   "class": "rear",
+   "kind": 2,
+   "share": 0.4
+  },
+  {
+   "class": "wing",
+   "kind": 2,
+   "share": 0.35
   }
  ]
 }

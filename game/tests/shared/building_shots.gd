@@ -115,6 +115,11 @@ extends SceneTree
 ## --web-distances: the web build's distance culling of building parts by their size
 ##   (main.gd _apply_web_detail_distances), applied once the island has loaded, so far
 ##   views show what the web draws there.
+## --web-shadows: the web build's sun, which casts no shadows (ShadowQuality offers the
+##   web only Off). Captures otherwise take the native default (Medium), and in the
+##   Compatibility renderer sun shadows also brighten every sunlit surface by about
+##   40 %, so a native Compatibility run shows the web's colours only with this flag.
+##   Applied once the island has loaded, to the game's sun and the neutral one alike.
 ## --study FILE: a material or look study laid over the loaded world without editing
 ##   its models: FILE is JSON {"script": "res://...gd", ...its own settings}. Once the
 ##   island has loaded (and the neutral light, if asked, is in), the script's static
@@ -328,6 +333,11 @@ func _run() -> void:
 		print("WEB_DISTANCES applied as the web build applies them")
 	if args.has("neutral-lighting"):
 		await _use_neutral_lighting()
+	if args.has("web-shadows"):
+		_h.main.shadows.apply("off")
+		for light: Node in _h.main.find_children("*", "DirectionalLight3D", true, false):
+			(light as DirectionalLight3D).shadow_enabled = false
+		print("WEB_SHADOWS off, as the web build draws its sun")
 	if args.has("study"):
 		error = _prepare_study(str(args.study))
 		if error != "":

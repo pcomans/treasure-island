@@ -17,4 +17,5 @@ shader_parameter/grain_variation = 0.25
 shader_parameter/broad_variation = 0.06
 shader_parameter/roughness_base = 0.7
 shader_parameter/roughness_variation = 0.15
+shader_parameter/world_axis_projection = true
 shader_parameter/paint_color = Color(0.12, 0.31, 0.43, 1)

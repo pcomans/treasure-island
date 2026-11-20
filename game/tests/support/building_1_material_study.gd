@@ -15,12 +15,20 @@ extends RefCounted
 ## is built from the loaded building and its source wall runs, each run's exposure
 ## from its class in the study's settings.
 ##
+## Glass splits can also carry the pane data the glass material reads from UV2 (see
+## building_1_public_stucco.gdshader): each pane's seed + u across it and its kind + v
+## up it, the kind from "pane_kinds" (the first rule matching the pane's part of the
+## building and its height, taken by that share of panes; otherwise 1, a dark room),
+## standing in for pane data the model would supply.
+##
 ## Settings (the --study file): "run_classes": {CLASS: [run index, ...]} for the main
 ## wall record (the tower's runs are class "tower"); "exposure": {CLASS: 0..1};
 ## "by_mesh": {MESH NAME: material path}; "splits": [{"mesh": NAME, "margins_m":
 ## [side, top, bottom, depth], "near_windows": {CLASS: material path}, "rest":
-## material path or ""}] ("" keeps the mesh's own material for triangles near no
-## listed window); optional "save_map": an absolute PNG path for a picture of the map.
+## material path or "", "pane_uv2": true or absent}] ("" keeps the mesh's own material
+## for triangles near no listed window); "pane_kinds": [{"class": CLASS, "min_bottom_m":
+## metres (optional), "kind": 2 or 3, "share": 0..1}]; optional "save_map": an absolute
+## PNG path for a picture of the map.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const WEATHERING_MAP := preload("res://game/scripts/world/facades/building_1_weathering_map.gd")
@@ -78,7 +86,7 @@ static func prepare(world: Node, settings: Dictionary) -> String:
 		_overrides.append([meshes[name], material])
 	var panels := _panels(glass, runs)
 	for spec: Variant in settings.get("splits", []):
-		var error := _split(spec as Dictionary, meshes, panels, materials)
+		var error := _split(spec as Dictionary, meshes, panels, materials, runs, settings.get("pane_kinds", []) as Array)
 		if error != "":
 			return error
 	print("STUDY_PREPARED overrides=%d split_meshes=%d parts=%d panels=%d materials=%d" % [_overrides.size(), _split_sources.size(), _split_parts.size(), (panels.list as Array).size(), materials.size()])
@@ -206,7 +214,7 @@ static func _nearest_class(point: Vector3, runs: Array) -> String:
 
 ## Splits one mesh's triangles by the class of the nearest window panel within the
 ## margins: each listed class becomes a part with its material, the others the rest.
-static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, materials: Dictionary) -> String:
+static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, materials: Dictionary, runs: Array, pane_kinds: Array) -> String:
 	var name := str(spec.get("mesh", ""))
 	if not meshes.has(name):
 		return "building 1 study: no mesh %s to split" % name
@@ -217,6 +225,8 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 	var arrays := source.mesh.surface_get_arrays(0)
 	var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
 	var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+	if bool(spec.get("pane_uv2", false)):
+		arrays[Mesh.ARRAY_TEX_UV2] = _pane_uv2(vertices, indices, xform, runs, pane_kinds)
 	# Plain Arrays in the dictionary: a packed array read back through it would be a
 	# copy, and what was appended to it lost.
 	var parts := {}
@@ -258,6 +268,59 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 		_split_parts.append(node)
 		print("STUDY_SPLIT %s part=%s triangles=%d material=%s" % [name, part if part != "" else "rest", (parts[part] as Array).size() / 3, path if path != "" else "(own)"])
 	return ""
+
+
+## Each glass vertex's pane data for UV2: x = the pane's seed (1 to 997) + u across
+## it, y = its kind + v up it (u and v from 0 to just under 1). A pane is a face of
+## the glazing's boxes; each triangle of a rectangle split on its diagonal spans the
+## whole rectangle, so its own extent is the pane's. Faces that are not walls (the
+## boxes' tops and bottoms) take the middle of a plain pane.
+static func _pane_uv2(vertices: PackedVector3Array, indices: PackedInt32Array, xform: Transform3D, runs: Array, pane_kinds: Array) -> PackedVector2Array:
+	var uv2 := PackedVector2Array()
+	uv2.resize(vertices.size())
+	var kinds := {}
+	for t in range(0, indices.size(), 3):
+		var points: Array[Vector3] = [xform * vertices[indices[t]], xform * vertices[indices[t + 1]], xform * vertices[indices[t + 2]]]
+		var n := (points[1] - points[0]).cross(points[2] - points[0]).normalized()
+		var along := Vector3.UP.cross(n)
+		var a0 := INF
+		var a1 := -INF
+		var y0 := INF
+		var y1 := -INF
+		for p in points:
+			a0 = minf(a0, p.dot(along))
+			a1 = maxf(a1, p.dot(along))
+			y0 = minf(y0, p.y)
+			y1 = maxf(y1, p.y)
+		# The middle of the rectangle's extremes, the same for both of its triangles.
+		var low := points[0].min(points[1]).min(points[2])
+		var high := points[0].max(points[1]).max(points[2])
+		var center := (low + high) * 0.5
+		var seed := 1 + absi(int(roundf(center.x * 7.0)) * 73856093 ^ int(roundf(center.y * 7.0)) * 19349663 ^ int(roundf(center.z * 7.0)) * 83492791) % 997
+		var key := Vector3i(roundi(center.x * 4.0), roundi(y0 * 4.0), roundi(center.z * 4.0))
+		if not kinds.has(key):
+			kinds[key] = _pane_kind(center, y0, seed, runs, pane_kinds)
+		var kind: int = kinds[key]
+		var flat := absf(n.y) > 0.5 or a1 - a0 < 0.0001 or y1 - y0 < 0.0001
+		for k in 3:
+			var p := points[k]
+			var u := 0.5 if flat else clampf((p.dot(along) - a0) / (a1 - a0), 0.0, 0.999)
+			var v := 0.5 if flat else clampf((p.y - y0) / (y1 - y0), 0.0, 0.999)
+			uv2[indices[t + k]] = Vector2(float(seed) + u, float(kind) + v)
+	return uv2
+
+
+## The kind of a pane from the first rule for its part of the building and height,
+## taken by that rule's share of panes (by the pane's seed); otherwise 1.
+static func _pane_kind(center: Vector3, bottom: float, seed: int, runs: Array, pane_kinds: Array) -> int:
+	var part := _nearest_class(center, runs)
+	for rule: Variant in pane_kinds:
+		var r := rule as Dictionary
+		if str(r.get("class", "")) != part or bottom < float(r.get("min_bottom_m", -INF)):
+			continue
+		var pick := float((seed * 2654435761) % 1000) / 1000.0
+		return int(r.get("kind", 1)) if pick < float(r.get("share", 0.0)) else 1
+	return 1
 
 
 ## A near-vertical face at least min_area_m2 in area and min_extent_m both along and

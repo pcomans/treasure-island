@@ -17,6 +17,7 @@ shader_parameter/grain_variation = 0.15
 shader_parameter/broad_variation = 0.08
 shader_parameter/roughness_base = 0.55
 shader_parameter/roughness_variation = 0.15
+shader_parameter/world_axis_projection = false
 shader_parameter/paint_color = Color(0.11, 0.115, 0.12, 1)
 shader_parameter/roughness_range = Vector2(0.3, 0.85)
 shader_parameter/metallic_value = 0.2
