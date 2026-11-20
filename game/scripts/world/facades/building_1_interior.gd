@@ -52,6 +52,7 @@ const GRAIN := 0.18
 ## The mural's tiles, north to south: one surface each (Building1MuralLoader).
 const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
+const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -196,8 +197,8 @@ static func build(plan: Dictionary) -> Dictionary:
 		if surface in MURALS:
 			mesh.surface_set_material(index, _mural_material(surface, mural_entry, placeholder))
 		else:
-			# From the shared static _materials cache, terrazzo too: the mural loader's reflections-trial
-			# writes would reach every hall if a second one were built (reflections are off; one hall is built).
+			# From the shared static _materials cache, terrazzo too: the reflections trial's floor
+			# writes would reach every hall if a second one were built (they are off; one hall is built).
 			mesh.surface_set_material(index, _material(surface, plan.config.palette[surface] as Dictionary))
 		triangles += (bucket.indices as Array).size() / 3
 	var instance := MeshInstance3D.new()
@@ -237,17 +238,56 @@ static func build(plan: Dictionary) -> Dictionary:
 	loader.load_radius = float(mural.load_radius)
 	loader.unload_radius = float(mural.unload_radius)
 	loader.unload_delay = float(mural.unload_delay)
-	# The trial switch for screen-space reflections in the hall (plan.config.reflections).
-	var reflections := plan.config.get("reflections", {}) as Dictionary
-	loader.ssr_mode = str(reflections.get("ssr", "off"))
-	var gloss := reflections.get("floor_gloss", [0.15, 0.5]) as Array
-	loader.floor_gloss = Vector2(float(gloss[0]), float(gloss[1]))
 	loader.hall = Vector4((plan.center as Vector2).x, (plan.center as Vector2).y, float(plan.front_in) - 0.5, float(plan.east) + 4.0)
-	loader.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
 	root.add_child(loader)
+	root.add_child(_reflections(plan, loader.hall, buckets.terrazzo as Dictionary))
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
 	return {"ok": true, "node": root, "mesh_instances": 1, "surfaces": mesh.get_surface_count(), "triangles": triangles, "static_bodies": 2, "shapes": 2}
+
+
+## The hall's reflections trial (plan.config.reflections; Building1HallReflections):
+## off unless its mode says, Forward+ only. It carries the floor's vertex colours
+## without the baked sheen, for while the real reflections are on.
+static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> Node:
+	var config := plan.config.get("reflections", {}) as Dictionary
+	var ssr := config.get("ssr", {}) as Dictionary
+	var polish := config.get("floor", {}) as Dictionary
+	var probes := config.get("probes", {}) as Dictionary
+	var node := HALL_REFLECTIONS.new()
+	node.name = "HallReflections"
+	node.mode = str(config.get("mode", "off"))
+	node.hall = hall
+	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
+	# As high as the door's middle plus 16 m: the balcony and gallery, not the roof.
+	node.top_y = float(plan.floor_y) + 17.5
+	node.ssr = bool(ssr.get("enabled", true))
+	node.ssr_max_steps = int(ssr.get("max_steps", 64))
+	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))
+	node.ssr_fade_out = float(ssr.get("fade_out", 2.0))
+	node.ssr_depth_tolerance = float(ssr.get("depth_tolerance", 0.2))
+	node.floor_roughness = float(polish.get("roughness", 0.15))
+	node.floor_specular = float(polish.get("specular", 0.5))
+	# The floor's tint while on: one number for all channels, or [r, g, b].
+	var tint: Variant = polish.get("albedo", 1.0)
+	node.floor_albedo = Color(float(tint[0]), float(tint[1]), float(tint[2])) if tint is Array else Color(float(tint), float(tint), float(tint))
+	node.baked_sheen = bool(polish.get("baked_sheen", true))
+	var plain := PackedByteArray()
+	for colour: Color in _shading(plan, floor, true, false):
+		for channel: float in [colour.r, colour.g, colour.b, colour.a]:
+			plain.append(int(clampf(channel * 255.0, 0.0, 255.0)))
+	node.plain_floor = plain
+	node.probes = bool(probes.get("enabled", false))
+	node.probe_sections = int(probes.get("sections", 4))
+	node.probe_intensity = float(probes.get("intensity", 1.0))
+	node.probe_blend = float(probes.get("blend", 1.0))
+	node.probe_capture_height = float(probes.get("capture_height", 4.0))
+	# From the front wall to the deepest east bays' backs, floor to the hall's ceiling.
+	var deepest := 0.0
+	for bay in (plan.east_piers as Array).size() - 1:
+		deepest = maxf(deepest, _east_bay_depth(plan, bay))
+	node.probe_box = Vector4(float(plan.front_in), float(plan.east) + deepest, float(plan.floor_y), float(plan.floor_y) + float(plan.heights.ceiling))
+	return node
 
 
 # --- the shell ------------------------------------------------------------------
@@ -1612,8 +1652,9 @@ static func _mural_placeholder(entry: Dictionary) -> Texture2D:
 ## and their bounce, which the sky's ambient light alone (all the sun-less hall gets)
 ## spreads evenly. Faces toward the windows stay full, faces away and soffits fall
 ## off, members darken toward the floor, the floor toward the walls, and the bays
-## and rooms under the balcony go dim, darker the deeper they run.
-static func _shading(plan: Dictionary, bucket: Dictionary, floor := false) -> PackedColorArray:
+## and rooms under the balcony go dim, darker the deeper they run. The floor carries
+## its baked sheen unless sheen_on is false (the reflections trial's plain floor).
+static func _shading(plan: Dictionary, bucket: Dictionary, floor := false, sheen_on := true) -> PackedColorArray:
 	var colors := PackedColorArray()
 	var vertices := bucket.vertices as Array
 	var normals := bucket.normals as Array
@@ -1624,7 +1665,7 @@ static func _shading(plan: Dictionary, bucket: Dictionary, floor := false) -> Pa
 		if floor:
 			# Vertex colours stop at 1: the floor's own shade sits lower (its albedo is
 			# that much brighter), leaving the sheen room to brighten.
-			var sheen := _floor_sheen(plan, vertices[index] as Vector3)
+			var sheen := _floor_sheen(plan, vertices[index] as Vector3) if sheen_on else Color.WHITE
 			shade *= FLOOR_BASE
 			colour = Color(minf(1.0, shade * sheen.r), minf(1.0, shade * sheen.g), minf(1.0, shade * sheen.b))
 		colors.append(colour.linear_to_srgb())

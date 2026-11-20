@@ -163,6 +163,14 @@ extends SceneTree
 ##   RESOURCE_COUNTS line after its shot: the scene's mesh and MultiMesh nodes, their
 ##   distinct resources, MultiMesh instances and mesh surfaces, and the renderer's
 ##   texture, buffer and video memory.
+## Settings (look trials): a still view may add "set": {"NODE": {"PROPERTY": value}}
+##   to set properties of the loaded game's nodes once its camera is in place, before
+##   its shot (NODE: the name of the first node of that name under main.tscn's root,
+##   or "Main"; PROPERTY: a property path as Object.set_indexed takes it, such as
+##   "environment:glow_enabled"), kept for the views after it (set them back there),
+##   each printed as a SET line; a number on a whole-number property is rounded, a
+##   list sets a colour or vector. "settle_frames": N (0-600) then draws N frames
+##   before the shot, for what takes several to follow (a reflection probe's capture).
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const GROUND_COVER := preload("res://game/scripts/world/ground_cover.gd")
@@ -815,6 +823,12 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var free := _free_camera(view, target)
 	if free == null:
 		_h.aim_camera(target)
+	error = await _apply_settings(view)
+	if error != "":
+		if free != null:
+			free.queue_free()
+			_h.player.get_camera().make_current()
+		return error
 	await physics_frame
 	await physics_frame
 	if moments.is_empty():
@@ -850,6 +864,52 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 		free.queue_free()
 		_h.player.get_camera().make_current()
 	return error
+
+
+## Applies a still view's "set" to the loaded game's nodes, then draws its
+## "settle_frames". Returns an error, or "".
+func _apply_settings(view: Dictionary) -> String:
+	if view.has("set"):
+		if not view.set is Dictionary:
+			return "set maps a node's name to {property path: value}"
+		for node_name: Variant in view.set:
+			var node: Node = _h.main if str(node_name) == "Main" else _h.main.find_child(str(node_name), true, false)
+			if node == null:
+				return "set: the game has no node named %s" % node_name
+			var properties: Variant = view.set[node_name]
+			if not properties is Dictionary:
+				return "set: %s takes {property path: value}" % node_name
+			for path: Variant in properties:
+				var property := NodePath(str(path))
+				var now: Variant = node.get_indexed(property)
+				if now == null:
+					return "set: %s has no property %s" % [node_name, path]
+				node.set_indexed(property, _setting(now, properties[path]))
+				print("SET %s %s=%s" % [node_name, path, node.get_indexed(property)])
+	var frames: Variant = view.get("settle_frames", 0)
+	if not _numbers([frames], 1) or float(frames) < 0.0 or float(frames) > 600.0:
+		return "settle_frames must be a number of frames from 0 to 600"
+	for _i in int(frames):
+		await RenderingServer.frame_post_draw
+	return ""
+
+
+## A view's setting as the type of the property it sets: a whole number for an int, a
+## colour or vector from a list.
+static func _setting(now: Variant, value: Variant) -> Variant:
+	if now is int and (value is float or value is int):
+		return roundi(float(value))
+	if value is Array:
+		var list := value as Array
+		if now is Color and list.size() in [3, 4]:
+			return Color(float(list[0]), float(list[1]), float(list[2]), float(list[3]) if list.size() == 4 else 1.0)
+		if now is Vector2 and list.size() == 2:
+			return Vector2(float(list[0]), float(list[1]))
+		if now is Vector3 and list.size() == 3:
+			return Vector3(float(list[0]), float(list[1]), float(list[2]))
+		if now is Vector4 and list.size() == 4:
+			return Vector4(float(list[0]), float(list[1]), float(list[2]), float(list[3]))
+	return value
 
 
 ## Applies a view's "mulch_params" to the mulch materials the loaded world draws with:
