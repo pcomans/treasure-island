@@ -47,6 +47,8 @@ const SETBACK_INWARD_FACE_INSET_M := 0.02
 const FRONT_STEP_MIN_SEGMENT_M := 1.0
 ## How far outside a set-down band's walls its roof cut reaches (_setback_cuts).
 const SETBACK_CUT_OUTER_REACH_M := 1.5
+## How far a junction tower's coping stops short of its corners (see the copings).
+const TOWER_COPING_CORNER_TRIM_M := 0.25
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -388,8 +390,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_append_flat_coping(buckets.trim, lines, north_path, wing_top, flat_coping, cornice_back)
 	_append_flat_coping(buckets.trim, lines, _chain_points(record, north_runs, north_gap.y, north_notch.x), wing_top, flat_coping, cornice_back)
 	var tower_coping_top := tower_top + float(flat_coping.top_above_roof)
+	# The towers' copings stop short of the corners they share with the crescent's
+	# chain, so no overhang covers the roof's outline there.
 	for tower_runs: Array[int] in [north_tower_runs, south_tower_runs]:
-		var tower_outer := _simplified_path(_chain_points(record, tower_runs, 0.0, _chain_length(record, tower_runs)), tower_segment)
+		var tower_outer := _simplified_path(_chain_points(record, tower_runs, TOWER_COPING_CORNER_TRIM_M, _chain_length(record, tower_runs) - TOWER_COPING_CORNER_TRIM_M), tower_segment)
 		_append_flat_coping(buckets.trim, lines, _loop_path(tower_outer, _offset_path(tower_outer, tower_depth)), tower_coping_top, flat_coping, cornice_back)
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
 		var notch_face := _chain_points(record, notch_runs, 0.0, _chain_length(record, notch_runs))
