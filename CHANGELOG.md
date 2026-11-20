@@ -6,6 +6,11 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2369 (2026-11-20)
+
+- On computers, the polished floor of Building 1's hall now reflects the hall: its tall windows, wood columns and piers and its hanging lamps show in it, most at a low angle, while the floor keeps its own warm colour.
+- The web version keeps the hall's floor as before.
+
 ## Build 2366 (2026-11-20)
 
 - Inside Building 1's hall, the plaza's dry grass no longer shows through the floor along the bar room's front wall: the hall's floor now stands clear of the ground outside, and the entrance rises gently from the doors to it.

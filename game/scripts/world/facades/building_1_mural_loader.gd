@@ -15,7 +15,7 @@ extends Node
 ##
 ## Nothing here measures or prints: the drive trace (game/scripts/debug/drive_trace.gd)
 ## reads state and tiles_loaded to mark the frames the tiles go up in. The hall's
-## reflections trial (Building1HallReflections) reads state too: its probes capture
+## floor reflections (Building1HallReflections) read state too: their probes capture
 ## the hall once the mural is up.
 
 enum State { UNLOADED, LOADING, LOADED }
@@ -61,7 +61,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if materials.is_empty() or not _play_started():
+	if materials.is_empty() or not play_started(get_tree()):
 		return
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
@@ -101,6 +101,8 @@ func release() -> void:
 	_far_for = 0.0
 
 
-func _play_started() -> bool:
-	var main := get_tree().root.get_node_or_null("Main")
+## Whether the game has handed over play (main.gd is_play_ready): the hall's nodes wait
+## for it (the reflections too, Building1HallReflections).
+static func play_started(tree: SceneTree) -> bool:
+	var main := tree.root.get_node_or_null("Main")
 	return main != null and main.has_method("is_play_ready") and bool(main.call("is_play_ready"))
