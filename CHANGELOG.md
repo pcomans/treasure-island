@@ -6,6 +6,11 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2366 (2026-11-20)
+
+- Inside Building 1's hall, the plaza's dry grass no longer shows through the floor along the bar room's front wall: the hall's floor now stands clear of the ground outside, and the entrance rises gently from the doors to it.
+- The hall's floor no longer has thin cracks along the foot of its walls.
+
 ## Build 2347 (2026-11-19)
 
 - The townhouse row at 1232 Northpoint Drive looks much more like itself: its upper floor now overhangs the ground floor, and each of its three parts has its own steeper roof with vent stacks on it.
