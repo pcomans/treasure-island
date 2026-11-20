@@ -298,7 +298,8 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var central_last := _strip_cap(record, central_runs[central_runs.size() - 1], false, central_depth - inner_trim)
 	_prepend_point(central_path, central_first.point as Vector3, central_first.normal as Vector3)
 	_append_point(central_path, central_last.point as Vector3, central_last.normal as Vector3)
-	_append_crescent_attic(buckets, central_path, front.crescent_attic as Dictionary, cornice_back)
+	var central_face := _chain_points(record, central_runs, 0.0, _chain_length(record, central_runs))
+	_append_crescent_attic(buckets, central_face, central_path, front.crescent_attic as Dictionary, cornice_back)
 	var se_first := int((se_setback.runs as Array)[0])
 	var south_front_runs: Array[int] = []
 	for run_index in south_runs:
@@ -1291,10 +1292,14 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 ## the field between the pier tops, so the attic reads as one plane; its lines are
 ## gaps floored in the darker base stucco. Near only (_fine): past `near` the same
 ## skin without gaps stands in, where gaps a few pixels apart would shimmer (four
-## 5 cm lines average to within a few percent of the plain skin's tone). Visual
-## only; the exact face and its collision are unchanged. The coping, like the
-## cornice it replaces, closes its back above the tier roof.
-static func _append_crescent_attic(buckets: Dictionary, path: Dictionary, attic: Dictionary, coping_back: float) -> void:
+## 5 cm lines average to within a few percent of the plain skin's tone). It sits
+## 5 mm behind the near skin, so where both draw (the web build sets its own end on
+## meshes under 50 m long, main.gd) it only fills the gaps. The skin
+## and lines run along the public face only (`face_path`), so their range is
+## measured from the face; the coping, like the cornice it replaces, also wraps the
+## tier's end caps (`capped_path`) and closes its back above the tier roof. Visual
+## only; the exact faces and their collision are unchanged.
+static func _append_crescent_attic(buckets: Dictionary, face_path: Dictionary, capped_path: Dictionary, attic: Dictionary, coping_back: float) -> void:
 	var skin := attic.skin_y as Array
 	var front := float(attic.skin_front)
 	var back := float(attic.skin_back)
@@ -1305,15 +1310,15 @@ static func _append_crescent_attic(buckets: Dictionary, path: Dictionary, attic:
 	var bottom := float(skin[0])
 	for line_value in lines:
 		var y := float(line_value)
-		_append_path_band(near, path, bottom, y, front, back)
-		_append_path_band(line_floor, path, y, y + height, float(attic.incised_line_floor_front), back)
+		_append_path_band(near, face_path, bottom, y, front, back)
+		_append_path_band(line_floor, face_path, y, y + height, float(attic.incised_line_floor_front), back)
 		bottom = y + height
-	_append_path_band(near, path, bottom, float(skin[1]), front, back)
-	_append_path_band(_fine(buckets, "far", "trim", "crescent"), path, float(skin[0]), float(skin[1]), front, back)
+	_append_path_band(near, face_path, bottom, float(skin[1]), front, back)
+	_append_path_band(_fine(buckets, "far", "trim", "crescent"), face_path, float(skin[0]), float(skin[1]), float(attic.far_skin_front), back)
 	var coping := attic.coping as Array
-	_append_path_band(buckets.trim, path, float(coping[0]), float(coping[1]), float(coping[2]), coping_back, false, false, true)
+	_append_path_band(buckets.trim, capped_path, float(coping[0]), float(coping[1]), float(coping[2]), coping_back, false, false, true)
 	var coping_line := attic.coping_line_y as Array
-	_append_path_band(line_floor, path, float(coping_line[0]), float(coping_line[1]), float(attic.coping_line_front), 0.0)
+	_append_path_band(line_floor, face_path, float(coping_line[0]), float(coping_line[1]), float(attic.coping_line_front), 0.0)
 
 
 ## Three glazed-bronze triple-door groups under the crescent bays the dated WSW
@@ -2938,7 +2943,7 @@ static func _fine(buckets: Dictionary, range_key: String, material_key: String, 
 ## switch over. A range hides a whole mesh, measured to its bounds' centre, so each
 ## region's relief is one mesh per range and material. The bake leaves them as
 ## authored (per-instance settings); the web's size culling (main.gd) sets its own
-## end on those under 50 m long (the pavilions' and canopy's: 200 or 500 m).
+## end on meshes under 50 m long, which all of these are (200 or 500 m there).
 static func _fine_specs(fine: Dictionary, ranges: Dictionary, prefix: String, layers: int) -> Array[Dictionary]:
 	var specs: Array[Dictionary] = []
 	var keys := fine.keys()

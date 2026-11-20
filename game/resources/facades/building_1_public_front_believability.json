@@ -79,6 +79,7 @@
     "crescent_attic": {
       "skin_y": [22.94, 25.94],
       "skin_front": 0.04,
+      "far_skin_front": 0.035,
       "skin_back": -0.03,
       "incised_lines_y": [25.04, 25.23, 25.42, 25.61],
       "incised_line_height": 0.05,
