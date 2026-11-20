@@ -273,7 +273,8 @@ Limits:
 
 ## Touch controls (`game/scripts/ui/touch_controls.gd`, `touch_use_button.gd`, 2026-11-08)
 
-- In a car, dragging the right side doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
+- In a car, a drag doesn't look round: the chase camera follows the car, and touch has no glance like the mouse's.
+- Look anywhere (owner, 2026-11-20): a drag that starts anywhere but on a control looks, so a thumb that lands just beside a control (outside the stick's disc, which reaches 16 px past its drawn ring, or a button's square) turns the camera instead of working it. Checked in the headless touch tests and in browser emulation, not on a phone: how the new margins and the look area feel under a real thumb is for the owner's device.
 - Touch has no R: nothing resets a car to land or recovers the player on foot. A car on its roof rights itself, and one in the bay comes back on its own.
 - On a touch browser with a keyboard, pausing, resizing or lifting RISE lets go of the handbrake (and the jetpack) even while a physical Space is held, until Space is pressed again (code review, 2026-11-08).
 
