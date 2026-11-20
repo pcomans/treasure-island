@@ -39,7 +39,8 @@ extends SceneTree
 ##   holding "fast_drop"). Run with --fixed-fps 60 so the frames
 ##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
 ##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
-##   line, with the avatar's describe() when it has one, and what the player
+##   line, with the avatar's describe() when it has one, the drawing camera's
+##   position (cam=, where the frame is seen from), and what the player
 ##   stands on: the slide floor collider and the first solid straight under its
 ##   feet (support=OBJECT_KEY@y, from the body's derived_object_key or name).
 ##   Moves may also hold vehicle_enter_exit (F: a step of 2 ticks gets into the
@@ -1411,7 +1412,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				var active: Variant = _h.main.vehicles.active_car()
 				car = active.describe()
 				car["at"] = [snappedf(active.global_position.x, 0.01), snappedf(active.global_position.y, 0.01), snappedf(active.global_position.z, 0.01)]
-			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car)])
+			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s cam=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car), root.get_camera_3d().global_position if root.get_camera_3d() != null else Vector3.INF])
 			tick += 1
 			if car != null and _drive_step_done(_h.main.vehicles.active_car(), step):
 				break

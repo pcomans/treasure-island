@@ -127,6 +127,8 @@ func _check_reflections(hall: Node3D, where: String) -> void:
 		failures.append("%s: the floor's built attributes are not the ones its surface draws" % where)
 	if node.plain_attributes.size() != node.sheen_attributes.size() or node.plain_attributes == node.sheen_attributes:
 		failures.append("%s: the floor's plain attributes are not a changed set of the same size (%d and %d bytes)" % [where, node.plain_attributes.size(), node.sheen_attributes.size()])
+	# For the record, not a test: what the two sets weigh, and where the node's switch is.
+	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, node.top_y])
 
 
 ## The hero record's exterior collision faces (its collision surfaces), to prove the

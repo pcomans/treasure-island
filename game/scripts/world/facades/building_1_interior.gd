@@ -59,6 +59,10 @@ const GRAIN := 0.18
 const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
 const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
+const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
+## How far over the hall's highest ceiling (m) a camera still counts as in the hall for
+## its floor reflections: that ceiling's own depth, not the floors or the roof above.
+const REFLECTIONS_TOP_MARGIN_M := 1.2
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -209,7 +213,9 @@ static func build(plan: Dictionary) -> Dictionary:
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		var index := mesh.get_surface_count() - 1
 		mesh.surface_set_name(index, surface)
-		if surface == "terrazzo":
+		# The floor's two attribute sets for its reflections, which only desktop draws: the
+		# web's bake carries neither (Building1HallReflections does nothing there).
+		if surface == "terrazzo" and PREBUILT_WORLD.profile() != "web":
 			floor_data = _floor_attributes(plan, bucket, arrays, mesh.surface_get_format(index))
 		if surface in MURALS:
 			mesh.surface_set_material(index, _mural_material(surface, mural_entry, placeholder))
@@ -277,8 +283,10 @@ static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> 
 	node.render_layer = RENDER_INTERIOR
 	node.hall = hall
 	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
-	# As high as the door's middle plus 16 m: the balcony and gallery, not the roof.
-	node.top_y = float(plan.floor_y) + 17.5
+	# Up to the hall's highest ceiling (the balcony's, or its own if that were higher) and
+	# a little over: the hall, its balcony and gallery, not the roof above them.
+	var heights := plan.heights as Dictionary
+	node.top_y = float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + REFLECTIONS_TOP_MARGIN_M
 	node.ssr = bool(ssr.get("enabled", true))
 	node.ssr_max_steps = int(ssr.get("max_steps", 64))
 	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))

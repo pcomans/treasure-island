@@ -1,8 +1,10 @@
 extends SceneTree
 ## Building 1's hall floor reflections (building_1_hall_reflections.gd) in the loaded
-## island, drawn; tools/test.sh runs it on both renderers the game ships with:
-##   tools/godot --rendering-method forward_plus --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd
-##   tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd
+## island, drawn; tools/test.sh runs it on both renderers the game ships with, naming
+## the one it asks for (-- --expect METHOD): a run the engine draws with another
+## renderer (Forward+ falling back to Compatibility without Vulkan) fails.
+##   tools/godot --rendering-method forward_plus --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect forward_plus
+##   tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect gl_compatibility
 ## Forward+ (desktop), with mode "inside" (set here, as the config ships it):
 ## - far from the door the mural is not up and there is no probe, nor while it loads;
 ## - outside near the door, once the mural is up, the probes are there reflecting
@@ -13,10 +15,14 @@ extends SceneTree
 ## - back outside, the environment's five reflection settings and the floor's
 ##   roughness, specular and albedo are exactly as before, and the renderer draws the
 ##   baked sheen's attributes again, byte for byte;
-## - on the doorway the look does not switch frame by frame: a camera put across the
-##   line and back every frame, a camera going round the doorway and the stock player's
-##   own spring-arm camera turned round where it stands in the door (each frame printed
-##   as DOORWAY lines, beside what a single line would have done);
+## - on the doorway, where the look switches on HYSTERESIS_M inside the hall's bound
+##   and off as far outside it: a camera walked across that whole band and back,
+##   BAND_TRIPS times, switches it exactly once each time it crosses the far line, in
+##   that frame, and never between the lines. Regression checks against the flicker one
+##   line made: a camera put across the bound and back every frame switches it at most
+##   once, and one going round the doorway, or the stock player's own spring-arm camera
+##   turned round where it stands in the door, never twice within FLICKER_FRAMES
+##   frames (each frame printed as DOORWAY lines, beside what one line would have done);
 ## - an environment swapped in while they are on gets the reflections and the one
 ##   swapped out its own settings back;
 ## - taken out of the tree while on, the node puts the environment, the floor and its
@@ -33,13 +39,19 @@ const SSR_PROPERTIES := ["ssr_enabled", "ssr_max_steps", "ssr_fade_in", "ssr_fad
 const FAR_M := 150.0
 const OUTSIDE_M := 20.0
 const INSIDE_M := 10.0
-## The doorway: a camera put this far either side of the switch line every frame, and
-## one going round the line's middle at this radius, a turn in DOORWAY_FRAMES frames.
+## The doorway: a camera put this far either side of the hall's bound every frame, and
+## one going round the bound's middle at this radius, a turn in DOORWAY_FRAMES frames.
 const JITTER_M := 0.2
 const ORBIT_M := 1.5
 const DOORWAY_FRAMES := 120
 ## Two switches of the look this close together (frames) are a flicker.
 const FLICKER_FRAMES := 10
+## The band between the two switch lines: walked from BAND_PAST_M beyond one line to as
+## far beyond the other, BAND_STEP_M a frame (steps that never land on a line), in and
+## out BAND_TRIPS times.
+const BAND_PAST_M := 0.125
+const BAND_STEP_M := 0.05
+const BAND_TRIPS := 3
 
 var _h: WorldHarness
 var failures: Array[String] = []
@@ -58,6 +70,15 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var method := RenderingServer.get_current_rendering_method()
+	print("RENDERER: %s / %s / %s" % [method, RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
+	var expected := _expected_method()
+	if expected == "":
+		_finish("name the renderer the run asks for: -- --expect forward_plus or -- --expect gl_compatibility")
+		return
+	if method != expected:
+		_finish("asked for %s, the engine draws with %s" % [expected, method])
+		return
 	_h = WorldHarness.new(self)
 	var error := await _h.load_world([])
 	if error != "":
@@ -77,12 +98,18 @@ func _run() -> void:
 	_camera.name = "ReflectionsCheckCamera"
 	_h.main.add_child(_camera)
 	_camera.make_current()
-	print("RENDERER: %s / %s / %s" % [RenderingServer.get_current_rendering_method(), RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
-	if RenderingServer.get_current_rendering_method() == "forward_plus":
+	if method == "forward_plus":
 		await _check_forward_plus()
 	else:
 		await _check_elsewhere()
 	_finish("")
+
+
+## The renderer the run asks for (-- --expect METHOD), or "" when it names none.
+static func _expected_method() -> String:
+	var args := OS.get_cmdline_user_args()
+	var at := args.find("--expect")
+	return args[at + 1] if at >= 0 and at + 1 < args.size() else ""
 
 
 func _check_forward_plus() -> void:
@@ -152,13 +179,16 @@ func _check_forward_plus() -> void:
 		print("PASS: Forward+: no probe before the mural is up; probes reflecting nothing outside; inside, the hall's reflections and polish; outside again, the environment's reflections and the floor exactly as before; no flicker on the doorway; a swapped environment and the node leaving the tree put back; probes freed with the mural")
 
 
-## The doorway: the switch line where the door's axis crosses the hall's bound, crossed
-## by a camera put either side of it every frame, by one going round it, and by the
-## stock player's spring-arm camera turned round where the player stands in the door.
+## The doorway, where the door's axis crosses the hall's bound (line): the band between
+## the two switch lines walked across and back; then, as regression checks against a
+## single line's flicker, the bound crossed by a camera put either side of it every
+## frame, by one going round it, and by the stock player's spring-arm camera turned
+## round where the player stands in the door.
 func _check_doorway() -> void:
 	var line := Vector3(_loader.hall.x, _door.y, _loader.hall.y) - _out * _loader.hall.z
 	var outward := _out
-	# Across the line and back every frame.
+	await _check_band(line, outward)
+	# Across the bound and back every frame.
 	_put(line + outward * 2.0, line - outward)
 	await _frames(5)
 	var before := _node.toggles
@@ -191,6 +221,49 @@ func _check_doorway() -> void:
 	await _record_doorway("spring-arm", func(frame: int) -> void:
 		player.camera_rig.rotation.y = TAU * float(frame) / float(DOORWAY_FRAMES))
 	_camera.make_current()
+
+
+## The band between the switch lines, on the door's axis (line, outward: out of the
+## hall): a camera from BAND_PAST_M beyond the outer line to as far beyond the inner one
+## and back, BAND_STEP_M a frame, BAND_TRIPS times. What two lines do, worked out here
+## from the camera's metres off the bound: on in the frame it first stands more than
+## HYSTERESIS_M inside, off in the frame it first stands HYSTERESIS_M or more outside.
+## The node must agree every frame, so it switches exactly once per crossing, at that
+## line, and never in the band between.
+func _check_band(line: Vector3, outward: Vector3) -> void:
+	var width := Building1HallReflections.HYSTERESIS_M
+	var reach := width + BAND_PAST_M
+	_put(line + outward * 2.0, line - outward)
+	await _frames(5)
+	if _node.is_on():
+		failures.append("2 m out of the door, the look is on before the doorway band")
+		return
+	var steps := roundi(2.0 * reach / BAND_STEP_M)
+	var on := false
+	var before := _node.toggles
+	var crossings := 0
+	var wrong: Array[String] = []
+	var frame := 0
+	for trip in BAND_TRIPS:
+		for inward: bool in [true, false]:
+			for step in range(1, steps + 1):
+				# Metres out of the hall from its bound (negative: in it).
+				var offset := reach - 2.0 * reach * float(step) / float(steps)
+				if not inward:
+					offset = -offset
+				_put(line + outward * offset, line - outward)
+				await process_frame
+				if (not on and offset < -width) or (on and offset >= width):
+					on = not on
+					crossings += 1
+				if _node.is_on() != on:
+					wrong.append("frame %d at %+.3f m" % [frame, offset])
+				print("DOORWAY band frame=%d offset=%+.3f on=%s two_lines=%s switches=%d crossings=%d" % [frame, offset, _node.is_on(), on, _node.toggles - before, crossings])
+				frame += 1
+	var switches := _node.toggles - before
+	print("DOORWAY band: %d switches for %d crossings in %d frames, the lines %.1f m either side of the bound" % [switches, crossings, frame, width])
+	if switches != crossings or crossings != 2 * BAND_TRIPS or not wrong.is_empty():
+		failures.append("walked across the doorway's band %d times, the look switched %d times for %d crossings, against two lines at %s" % [2 * BAND_TRIPS, switches, crossings, ", ".join(wrong.slice(0, 6)) if not wrong.is_empty() else "no frame"])
 
 
 ## Runs a doorway move a frame at a time (move(frame) puts the camera), printing each
