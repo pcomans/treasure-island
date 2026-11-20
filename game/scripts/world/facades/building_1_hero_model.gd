@@ -598,6 +598,15 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var central_low := central_main.slice(central_high.size())
 	cut_whole = _append_strip_roof(roof, collision, wall_record, central_high, four_y, float(vertical.central_inward_depth), {}, _setback_cuts(wall_record, [central_high], float(block.depth_m), FRONT_STEP_MIN_SEGMENT_M)) and cut_whole
 	cut_whole = _append_strip_roof(roof, collision, wall_record, central_low, float(block.roof_y), float(vertical.central_inward_depth)) and cut_whole
+	# Where the crescent's chain meets the south junction's, the corner between the two
+	# strips' end caps keeps a roof, as the single chain's join did.
+	var low_end := _run_frame(wall_record, central_low[central_low.size() - 1])
+	var tower_start := _run_frame(wall_record, south_tower_runs[0])
+	var corner := low_end.end as Vector3
+	var join_y := float(block.roof_y) - 0.01
+	var join := [_lifted(corner, join_y), _lifted(corner - (low_end.normal as Vector3) * tower_depth, join_y), _lifted(corner - (tower_start.normal as Vector3) * tower_depth, join_y)]
+	for target: Dictionary in [roof, collision]:
+		_append_triangle(target, join[0], join[1], join[2], Vector3.UP)
 	var tower_cuts := interior_cuts.duplicate()
 	tower_cuts.append_array(_setback_cuts(wall_record, [south_tower_runs], tower_depth, tower_segment))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_tower_runs, three_y, float(vertical.south_wing_inward_depth), {}, tower_cuts) and cut_whole
