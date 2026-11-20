@@ -8,6 +8,18 @@ const FAMILY_ROOF := preload("res://game/resources/housing_family/roof.gdshader"
 const ROOF_AXIS := Vector2(-0.04894628457,0.9988014123)
 const ROOF_NORMAL := Vector2(-0.9988014123,-0.04894628457)
 const ROOF_RIDGE_D := 336.328678
+## The frontage's frame origin (stations along ROOF_AXIS, depths along ROOF_NORMAL) and its
+## bands, in metres: 2 m strips from FRONTAGE_STATIONS[0] to [1], lawn, walk and parking
+## asphalt by depth, stall lines FRONTAGE_LINE_WIDTH_M wide every 4 m from the first station,
+## over FRONTAGE_LINE_DEPTH_M of the asphalt, all FRONTAGE_LIFT_M over the colliding land.
+const FRONTAGE_ORIGIN := Vector2(-305.509,-741.527)
+const FRONTAGE_STATIONS := [-14,16]
+const FRONTAGE_LAWN_M := [0.15,3.0]
+const FRONTAGE_WALK_M := [3.0,4.15]
+const FRONTAGE_ASPHALT_M := [4.15,8.50]
+const FRONTAGE_LINE_DEPTH_M := [4.30,8.40]
+const FRONTAGE_LINE_WIDTH_M := 0.07
+const FRONTAGE_LIFT_M := 0.055
 # Footprint is read verbatim from the frozen wall record. Unmeasured detail is art inference.
 ## options (from the live factory's revision config): "frontage_parking_from_m", the
 ## frontage station (origin frame below) where the parking begins; north of it the
@@ -44,6 +56,9 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 	if options.has("frontage_asphalt_rgb"):
 		var rgb: Array = options.frontage_asphalt_rgb
 		asphalt = _material(Color(float(rgb[0]),float(rgb[1]),float(rgb[2])),0.98)
+	# The island's asphalt specular (world_chunk_builder.gd ASPHALT_SPECULAR): at the default 0.5
+	# the dark pad mirrored the sky at a walker's grazing view and read navy beside the grey road.
+	asphalt.metallic_specular = 0.25
 	var lawn := _material(Color(0.29,0.36,0.15),0.98)
 	var verts: Array=record.vertices
 	var polygon := PackedVector2Array()
@@ -151,13 +166,9 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 		var roof_mesh := root.get_child(i) as MeshInstance3D
 		roof_mesh.set_meta("physical_role", "wall" if roof_mesh.material_override == clad else "roof")
 	# Immediate frontage: ground follows actual colliding land; no terrain replacement.
-	var origin:=Vector2(-305.509,-741.527)
+	var origin:=FRONTAGE_ORIGIN
 	var parking_from:=float(options.get("frontage_parking_from_m",-INF))
-	for s in range(-14,15,2):
-		var center:=origin+tan*(s+1.0)
-		if s+1.0>=parking_from: _ground_strip(root,center,tan,norm,2.01,0.15,3.0,ground,lawn)
-		_ground_strip(root,center,tan,norm,2.01,3.0,4.15,ground,concrete)
-		if s+1.0>=parking_from: _ground_strip(root,center,tan,norm,2.01,4.15,8.50,ground,asphalt)
+	_frontage(root,origin,tan,norm,parking_from,ground,lawn,concrete,asphalt,trim)
 	# Long flat carport, deliberately light edge and shallow weathered fascia.
 	var canopy_a:=origin+tan*(-14.0)+norm*6.35
 	var canopy_b:=origin+tan*14.0+norm*6.35
@@ -175,7 +186,6 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 		var p:=origin+tan*s+norm*8.35;var y:=float(ground.call(p))
 		_box(root,Vector3(p.x,(y+5.28)*0.5,p.y),Vector3(0.085,5.28-y,0.085),steel)
 		_box(root,Vector3(p.x,y+0.65,p.y),Vector3(0.095,0.18,0.095),trim)
-		if s>=parking_from: _ground_strip(root,origin+tan*s,tan,norm,0.07,4.30,8.40,ground,trim)
 	# A few small foundation shrubs; no giant foliage used to conceal architecture.
 	var green:=_material(Color(0.18,0.26,0.105),0.95)
 	for s in [-12.0,-6.0,1.5,10.5]:
@@ -203,6 +213,64 @@ static func _mesh(root:Node3D,pts:Array,indices:PackedInt32Array,m:Material)->vo
 	var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in indices: st.add_vertex(pts[i])
 	st.generate_normals();var node:=MeshInstance3D.new();node.mesh=st.commit();node.material_override=m;root.add_child(node)
+## The frontage's lawn, walk and parking asphalt with its stall lines, as one mesh per
+## surface. The walk runs the whole frontage; lawn and asphalt only the 2 m strips whose
+## middle lies at or past parking_from, as do the stall lines. The lines are cut into the
+## asphalt rather than laid over it, and every corner is sampled from the land once and
+## shared by the cells that meet there, so no two surfaces overlap (nothing to z-fight) and
+## no seam opens between them. Each mesh carries its ground_surface (lawn, walk, asphalt or
+## paint).
+static func _frontage(root:Node3D,origin:Vector2,tan:Vector2,norm:Vector2,parking_from:float,ground:Callable,lawn:Material,concrete:Material,asphalt:Material,paint:Material)->void:
+	var first:int=FRONTAGE_STATIONS[0];var last:int=FRONTAGE_STATIONS[1]
+	var parked:=float(last)
+	for s in range(first,last,2):
+		if s+1.0>=parking_from:
+			parked=float(s);break
+	var lines:Array[Vector2]=[]
+	for s in range(first,last,4):
+		if parked>=float(last) or float(s)<parking_from: continue
+		var a:=clampf(float(s)-FRONTAGE_LINE_WIDTH_M*0.5,parked,float(last)-FRONTAGE_LINE_WIDTH_M)
+		lines.append(Vector2(a,a+FRONTAGE_LINE_WIDTH_M))
+	var stations:Array[float]=[]
+	for s in range(first,last+1,2): stations.append(float(s))
+	for line in lines: stations.append_array([line.x,line.y])
+	stations.sort()
+	var corners:={}
+	var at:=func(s:float,d:float)->Vector3:
+		var key:=Vector2(s,d)
+		if not corners.has(key):
+			var p:Vector2=origin+tan*s+norm*d
+			corners[key]=Vector3(p.x,float(ground.call(p))+FRONTAGE_LIFT_M,p.y)
+		return corners[key]
+	var bands:Array=[["lawn",lawn,parked,FRONTAGE_LAWN_M],["walk",concrete,float(first),FRONTAGE_WALK_M],["asphalt",asphalt,parked,[FRONTAGE_ASPHALT_M[0],FRONTAGE_LINE_DEPTH_M[0],FRONTAGE_LINE_DEPTH_M[1],FRONTAGE_ASPHALT_M[1]]]]
+	var tools:={}
+	for band:Array in bands:
+		var depths:Array=band[3]
+		for i in range(stations.size()-1):
+			var s0:float=stations[i];var s1:float=stations[i+1]
+			if s0<float(band[2])-0.0001 or s1-s0<0.0001: continue
+			# A strip boundary may cross a line, so a line can span more than one interval.
+			var line:=false
+			for l in lines: line=line or (s0>=l.x-0.0001 and s1<=l.y+0.0001)
+			for j in range(depths.size()-1):
+				var d0:float=depths[j];var d1:float=depths[j+1]
+				var surface:String=band[0]
+				var m:Material=band[1]
+				if surface=="asphalt" and line and is_equal_approx(d0,FRONTAGE_LINE_DEPTH_M[0]):
+					surface="paint";m=paint
+				if not tools.has(surface):
+					var st:=SurfaceTool.new();st.begin(Mesh.PRIMITIVE_TRIANGLES)
+					tools[surface]=[st,m]
+				var pts:Array=[at.call(s0,d0),at.call(s1,d0),at.call(s1,d1),at.call(s0,d1)]
+				for k in [0,1,2,0,2,3]: (tools[surface][0] as SurfaceTool).add_vertex(pts[k])
+	for surface:String in ["lawn","walk","asphalt","paint"]:
+		if not tools.has(surface): continue
+		var st:SurfaceTool=tools[surface][0]
+		st.generate_normals()
+		var node:=MeshInstance3D.new();node.name="Frontage_"+surface;node.mesh=st.commit();node.material_override=tools[surface][1];root.add_child(node)
+		node.set_meta("physical_role","ground_visual")
+		node.set_meta("ground_surface",surface)
+
 static func _ground_strip(root:Node3D,c:Vector2,t:Vector2,n:Vector2,w:float,d0:float,d1:float,ground:Callable,m:Material,lift:float=0.055)->void:
 	# Paving sits20mm above lawn; the former coplanar surfaces competed in depth.
 	var pts:Array=[]
