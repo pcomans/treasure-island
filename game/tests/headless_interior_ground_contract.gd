@@ -32,6 +32,7 @@ extends SceneTree
 ## floor, and outdoor ground under at least one of them.
 
 const Catalog := preload("res://game/tests/shared/catalog.gd")
+const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
 const GROUND_DRESSING := preload("res://game/scripts/world/ground_dressing.gd")
 const WORLD := "res://generated/world/"
 const MANIFEST := WORLD + "manifest.json"
@@ -233,7 +234,7 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 	var label := "%s's interior %s" % [source, interior.name]
 	if not (_parents[BUILDINGS] as Node).is_ancestor_of(interior):
 		failures.append("%s does not hang under the world's buildings, so the ground dressing could grow grass under it" % label)
-	var triangles := _interior_triangles(interior)
+	var triangles := _drawn_triangles(interior.find_children("*", "MeshInstance3D", true, false), label)
 	var box := _bounds(triangles.corners as PackedVector3Array)
 	if box.size == Vector3.ZERO:
 		failures.append("%s draws nothing" % label)
@@ -251,7 +252,7 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 				_build(chunk_id, chunk_paths)
 	var ground := Surfaces.new(low, high)
 	for part: String in GROUND_PARTS:
-		_ground_surfaces(_parents[part] as Node, ground)
+		_ground_surfaces(_parents[part] as Node, ground, label)
 	# The samples: a grid over the plan, and the foot of every wall just inside its face.
 	var samples := {}
 	var x := snappedf(box.position.x, GRID_M)
@@ -394,38 +395,34 @@ func _column(inside: Surfaces, point: Vector2) -> Dictionary:
 	return {"kind": kind, "y": level, "below_eye": below_eye, "top": all.max()}
 
 
-## The interior's drawn triangles (its MeshInstance3D surfaces) in world space:
-## {"corners": three per triangle, "normals": one per triangle, from its vertex
-## normals, else from Godot's clockwise front faces}.
-func _interior_triangles(node: Node) -> Dictionary:
+## The triangles these MeshInstance3D nodes draw, in world space: the shared collector's
+## (building_study_geometry.gd) indexed arrays, which the renderer draws, with
+## each triangle's facing, the side its clockwise winding shows (Godot's front faces; a
+## mirroring transform turns it): {"corners": three per triangle, "normals": one per
+## triangle}. A mesh it can't read is a failure.
+func _drawn_triangles(meshes: Array[Node], label: String) -> Dictionary:
 	var corners := PackedVector3Array()
 	var facings := PackedVector3Array()
-	for found: Node in node.find_children("*", "MeshInstance3D", true, false):
+	for found: Node in meshes:
 		var instance := found as MeshInstance3D
-		if instance.mesh == null or not instance.visible:
+		if instance.mesh == null or not instance.is_visible_in_tree():
 			continue
-		var to_world := instance.global_transform
-		var turn := to_world.basis.inverse().transposed()
-		for surface in instance.mesh.get_surface_count():
-			var arrays := instance.mesh.surface_get_arrays(surface)
-			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-			var normals := PackedVector3Array()
-			if arrays[Mesh.ARRAY_NORMAL] != null:
-				normals = arrays[Mesh.ARRAY_NORMAL]
-			var indices := PackedInt32Array()
-			if arrays[Mesh.ARRAY_INDEX] != null:
-				indices = arrays[Mesh.ARRAY_INDEX]
-			if indices.is_empty():
-				indices = PackedInt32Array(range(vertices.size()))
-			for t in range(0, indices.size() - 2, 3):
-				var a := to_world * vertices[indices[t]]
-				var b := to_world * vertices[indices[t + 1]]
-				var c := to_world * vertices[indices[t + 2]]
-				corners.append_array([a, b, c])
-				if normals.size() == vertices.size():
-					facings.append((turn * (normals[indices[t]] + normals[indices[t + 1]] + normals[indices[t + 2]])).normalized())
-				else:
-					facings.append((c - a).cross(b - a).normalized())
+		# A surface without indices is drawn straight from its vertices, as Mesh.get_faces() reads it.
+		var producer := StudyGeometry.INDEXED_ARRAYS
+		if instance.mesh is ArrayMesh:
+			for surface in instance.mesh.get_surface_count():
+				if (instance.mesh as ArrayMesh).surface_get_array_index_len(surface) <= 0:
+					producer = StudyGeometry.MESH_GET_FACES
+		var pose: Array[Transform3D] = [instance.global_transform]
+		var collected := StudyGeometry.collect(instance.mesh, pose, producer)
+		if not bool(collected.ok):
+			failures.append("%s: the mesh %s can't be read: %s" % [label, instance.get_path(), str(collected.errors)])
+			continue
+		var faces: PackedVector3Array = collected.faces
+		var turn := -1.0 if instance.global_transform.basis.determinant() < 0.0 else 1.0
+		for t in range(0, faces.size(), 3):
+			facings.append((faces[t + 2] - faces[t]).cross(faces[t + 1] - faces[t]).normalized() * turn)
+		corners.append_array(faces)
 	return {"corners": corners, "normals": facings}
 
 
@@ -462,24 +459,25 @@ func _interior_surfaces(triangles: Dictionary, owner_name: String, surfaces: Sur
 				walls.append([p, q, into.normalized()])
 
 
-## The outdoor ground's triangles under parent: every drawn surface and every solid
-## shape (a kerb's support ramp is solid only), each named for its generated record.
-func _ground_surfaces(parent: Node, surfaces: Surfaces) -> void:
+## The outdoor ground's triangles under parent: every drawn surface (_drawn_triangles)
+## and every solid shape's faces (a kerb's support ramp is solid only), each named for
+## its generated record.
+func _ground_surfaces(parent: Node, surfaces: Surfaces, label: String) -> void:
 	for found: Node in parent.find_children("*", "", true, false):
 		var triangles := PackedVector3Array()
-		var to_world := Transform3D.IDENTITY
-		if found is MeshInstance3D and (found as MeshInstance3D).mesh != null:
-			triangles = (found as MeshInstance3D).mesh.get_faces()
-			to_world = (found as MeshInstance3D).global_transform
+		if found is MeshInstance3D:
+			var mesh: Array[Node] = [found]
+			triangles = _drawn_triangles(mesh, label).corners
 		elif found is CollisionShape3D and (found as CollisionShape3D).shape is ConcavePolygonShape3D:
-			triangles = ((found as CollisionShape3D).shape as ConcavePolygonShape3D).get_faces()
-			to_world = (found as CollisionShape3D).global_transform
-		else:
+			var to_world := (found as CollisionShape3D).global_transform
+			for corner in ((found as CollisionShape3D).shape as ConcavePolygonShape3D).get_faces():
+				triangles.append(to_world * corner)
+		if triangles.is_empty():
 			continue
 		var owner := surfaces.names.size()
 		surfaces.names.append(_record_name(found))
 		for t in range(0, triangles.size() - 2, 3):
-			surfaces.add(to_world * triangles[t], to_world * triangles[t + 1], to_world * triangles[t + 2], 0.0, owner)
+			surfaces.add(triangles[t], triangles[t + 1], triangles[t + 2], 0.0, owner)
 
 
 ## The generated record a ground node belongs to (its derived_object_key), else its name.
