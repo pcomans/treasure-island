@@ -60,9 +60,10 @@ const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
 const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
-## How far over the hall's highest ceiling (m) a camera still counts as in the hall for
-## its floor reflections: that ceiling's own depth, not the floors or the roof above.
-const REFLECTIONS_TOP_MARGIN_M := 1.2
+const INTERIOR_PRESENCE := preload("res://game/scripts/world/interiors/interior_presence.gd")
+## How far over the hall's highest ceiling (m) the camera still counts as in the hall
+## (InteriorPresence): that ceiling's own depth, not the floors or the roof above.
+const TOP_MARGIN_M := 1.2
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -263,6 +264,15 @@ static func build(plan: Dictionary) -> Dictionary:
 	loader.unload_delay = float(mural.unload_delay)
 	loader.hall = Vector4((plan.center as Vector2).x, (plan.center as Vector2).y, float(plan.front_in) - 0.5, float(plan.east) + 4.0)
 	root.add_child(loader)
+	# Whether the camera is in the hall (InteriorPresence), from the plan on the root: the
+	# loader's bounds about the crescent's centre, the hall's angles, and up to a little
+	# over its highest ceiling (the balcony's, or its own if that were higher): the hall,
+	# its balcony and gallery, not the roof above them.
+	var heights := plan.heights as Dictionary
+	root.set_meta(INTERIOR_PRESENCE.PLAN_META, {"kind": "ring_sector", "centre": Vector2(loader.hall.x, loader.hall.y), "radii": Vector2(loader.hall.z, loader.hall.w), "angles": Vector2(float(plan.annex_north), float(plan.south)), "top_y": float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + TOP_MARGIN_M})
+	var presence := INTERIOR_PRESENCE.new()
+	presence.name = "Presence"
+	root.add_child(presence)
 	root.add_child(_reflections(plan, loader.hall, floor_data))
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
@@ -283,10 +293,6 @@ static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> 
 	node.render_layer = RENDER_INTERIOR
 	node.hall = hall
 	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
-	# Up to the hall's highest ceiling (the balcony's, or its own if that were higher) and
-	# a little over: the hall, its balcony and gallery, not the roof above them.
-	var heights := plan.heights as Dictionary
-	node.top_y = float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + REFLECTIONS_TOP_MARGIN_M
 	node.ssr = bool(ssr.get("enabled", true))
 	node.ssr_max_steps = int(ssr.get("max_steps", 64))
 	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))

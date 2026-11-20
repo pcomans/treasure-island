@@ -7,9 +7,10 @@ extends Node
 ## anywhere else (the web's Compatibility renderer) this node does nothing at all, and
 ## the floor keeps the polish baked into its vertex shading.
 ##
-## They fade in and out over FADE_S rather than switching in one frame: a blend from 0
-## (the floor as built) to 1 (polished) moves toward whichever the camera calls for at
-## 1 / FADE_S a second. Along the blend this
+## They fade in and out with the hall's InteriorPresence (game/scripts/world/interiors/
+## interior_presence.gd, the "Presence" beside this node): its blend, 0 for the floor
+## as built to 1 polished, eased over its fade_s (0.5 s), turning round wherever it is
+## when the camera does. "always" and "off" go straight to 1 or 0. Along the blend this
 ## - turns the world environment's screen-space reflections on with this hall's
 ##   settings (ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance) from the
 ##   fade-in's first frame to the fade-out's last: they can only switch, and the floor's
@@ -32,8 +33,9 @@ extends Node
 ##   reflect nothing (intensity 0) until the camera is in, so the hall seen through its
 ##   door is as before, capture again as the sun moves (RECAPTURE_DEG) and are freed
 ##   when the mural goes. Neighbouring boxes overlap and blend over probe_blend metres.
-## Going in and coming out have lines of their own, HYSTERESIS_M inside and outside the
-## hall's bounds, so a camera on the doorway does not turn the fade round frame by frame.
+## Going in and coming out have lines of their own (InteriorPresence.HYSTERESIS_M inside
+## and outside the hall's bounds), so a camera on the doorway does not turn the fade round
+## frame by frame.
 
 const MODES: Array[String] = ["off", "inside", "always"]
 ## The sun's move (degrees) after which the probes capture again, as DaySun's for
@@ -43,22 +45,15 @@ const RECAPTURE_DEG := 2.0
 ## box, so the boxes reach that and this much more (m) below the floor and past the
 ## hall's walls and each other's: the floor has full probe weight everywhere.
 const PROBE_MARGIN_M := 0.5
-## The camera turns the reflections on this far (m) inside the hall's bounds, and off
-## this far outside them: two lines twice this far apart.
-const HYSTERESIS_M := 0.4
-## How long (s) the reflections take to fade in, or out.
-const FADE_S := 0.5
 
 @export var mode := "off"
 ## The render layer the hall draws on (building_1_interior.gd RENDER_INTERIOR): the
 ## probes see it alone and light it alone.
 @export var render_layer := 0
-## The inside test: the hall's plan about the crescent's centre (centre x, centre z,
-## inner radius, outer radius), its angles (from, to) and the height below which the
-## camera is in it.
+## The hall's plan about the crescent's centre (centre x, centre z, inner radius, outer
+## radius) and its angles (from, to), which the probes divide among themselves.
 @export var hall := Vector4.ZERO
 @export var hall_angles := Vector2.ZERO
-@export var top_y := 0.0
 @export var ssr := true
 @export var ssr_max_steps := 64
 @export var ssr_fade_in := 0.15
@@ -89,13 +84,11 @@ const FADE_S := 0.5
 ## Where the probes capture, this high over the floor.
 @export var probe_capture_height := 4.0
 
-## How many times the camera has called for the reflections or let them go.
-var toggles := 0
 ## The settings last applied, compared each frame (they may change in play).
 var _applied: Array = []
-## Whether the camera calls for the reflections (the fade's goal), and the fade: 0 the
-## floor as built, 1 polished; the blend last shown (-1: none yet).
-var _on := false
+## The hall's presence: where the blend comes from.
+var _presence: InteriorPresence
+## The blend now: 0 the floor as built, 1 polished; and the one last shown (-1: none yet).
 var _blend := 0.0
 var _shown := -1.0
 var _shell: MeshInstance3D
@@ -120,8 +113,9 @@ func _ready() -> void:
 		return
 	_shell = get_parent().get_node_or_null("Shell") as MeshInstance3D
 	_floor_surface = floor_surface(_shell)
-	if _floor_surface < 0:
-		push_error("Building 1 hall reflections: the hall has no Shell with a terrazzo surface; no reflections.")
+	_presence = get_parent().get_node_or_null("Presence") as InteriorPresence
+	if _floor_surface < 0 or _presence == null:
+		push_error("Building 1 hall reflections: the hall has no %s; no reflections." % ("Shell with a terrazzo surface" if _floor_surface < 0 else "Presence (InteriorPresence)"))
 		set_process(false)
 		return
 	_floor = _shell.mesh.surface_get_material(_floor_surface) as BaseMaterial3D
@@ -132,20 +126,13 @@ func _ready() -> void:
 		push_error("Building 1 hall reflections: the floor's built attributes do not fit its surface (format %d of %d, %d of %d vertices, %d of %d indices, %d and %d bytes); its baked sheen stays." % [floor_format, _shell.mesh.surface_get_format(_floor_surface), floor_vertex_count, _shell.mesh.surface_get_array_len(_floor_surface), floor_index_count, _shell.mesh.surface_get_array_index_len(_floor_surface), sheen_attributes.size(), plain_attributes.size()])
 
 
-func _process(delta: float) -> void:
-	if (mode == "off" and not _on and _blend == 0.0 and _probes.is_empty()) or not Building1MuralLoader.play_started(get_tree()):
-		return
-	var camera := get_viewport().get_camera_3d()
-	if camera == null:
+func _process(_delta: float) -> void:
+	if (mode == "off" and _blend == 0.0 and _probes.is_empty()) or not Building1MuralLoader.play_started(get_tree()):
 		return
 	var settings := [mode, ssr, ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance, floor_roughness, floor_specular, floor_albedo, baked_sheen]
-	var on := mode == "always" or (mode == "inside" and inside(camera.global_position, -HYSTERESIS_M if _on else HYSTERESIS_M))
-	if on != _on:
-		toggles += 1
-		_on = on
-	_blend = move_toward(_blend, 1.0 if _on else 0.0, delta / FADE_S)
+	_blend = 1.0 if mode == "always" else (_presence.blend() if mode == "inside" else 0.0)
 	if _blend != _shown or settings != _applied:
-		_apply()
+		_apply(is_on())
 		_applied = settings
 	elif _environment != null and _world_environment() != _environment:
 		# The world's environment was swapped while the reflections are in it.
@@ -155,18 +142,16 @@ func _process(delta: float) -> void:
 
 func _exit_tree() -> void:
 	# Mid-fade or on: everything as built at once, the probes freed.
-	if _on:
-		toggles += 1
-	_on = false
 	_blend = 0.0
 	if _shown > 0.0 or _environment != null or _plain_shown:
-		_apply()
+		_apply(false)
 	_free_probes()
 
 
-## Whether the camera calls for the reflections now (they fade in or out after it).
+## Whether the reflections are called for now (they fade in or out after it): "always",
+## or "inside" with the camera in the hall.
 func is_on() -> bool:
-	return _on
+	return mode == "always" or (mode == "inside" and _presence != null and _presence.is_inside())
 
 
 ## The fade: 0 the floor as built, 1 the reflections and polish all in.
@@ -182,16 +167,6 @@ func plain_floor_shown() -> bool:
 ## The probes there are now.
 func probe_nodes() -> Array[ReflectionProbe]:
 	return _probes.duplicate()
-
-
-## Whether a point is in the hall, margin metres inside its bounds (outside, for a
-## negative margin).
-func inside(at: Vector3, margin := 0.0) -> bool:
-	var offset := Vector2(at.x - hall.x, at.z - hall.y)
-	var r := offset.length()
-	var angle := atan2(offset.y, offset.x)
-	var turn := margin / maxf(r, 1.0)
-	return r > hall.z + margin and r < hall.w - margin and angle > hall_angles.x + turn and angle < hall_angles.y - turn and at.y < top_y - margin
 
 
 ## The terrazzo surface's index in the hall's Shell, or -1.
@@ -217,11 +192,11 @@ func attributes_fit(shell: MeshInstance3D) -> bool:
 		and sheen_attributes.size() == stride * floor_vertex_count and plain_attributes.size() == sheen_attributes.size()
 
 
-## The look at the blend now: the environment's reflections in from the fade-in's start
-## to the fade-out's end, the floor between its own values and the polished ones (each
-## end exact), its plain colours from the middle on.
-func _apply() -> void:
-	_set_environment(_on or _blend > 0.0)
+## The look at the blend now: the environment's reflections in while called for (from
+## the fade-in's start) and until the fade-out's end, the floor between its own values
+## and the polished ones (each end exact), its plain colours from the middle on.
+func _apply(called_for: bool) -> void:
+	_set_environment(called_for or _blend > 0.0)
 	if _floor != null:
 		var albedo: Color = _floor_matte.albedo
 		var polished := Color(albedo.r * floor_albedo.r, albedo.g * floor_albedo.g, albedo.b * floor_albedo.b, albedo.a)

@@ -6,7 +6,10 @@ extends SceneTree
 ##   tools/godot --rendering-method forward_plus --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect forward_plus
 ##   tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect gl_compatibility
 ## It runs at 60 frames a second of game time (--fixed-fps 60), so the reflections' fade
-## (Building1HallReflections.FADE_S) takes a known number of frames (_fade_frames).
+## (the hall's InteriorPresence, its fade_s) takes a known number of frames
+## (_fade_frames). The presence's own rules (its lines, blend and signals) are checked
+## headless on their own (game/tests/headless_interior_presence_contract.gd); here they
+## drive the reflections in the real hall.
 ## Forward+ (desktop), with mode "inside" (set here, as the config ships it):
 ## - far from the door the mural is not up and there is no probe, nor while it loads;
 ## - outside near the door, once the mural is up, the probes are there reflecting
@@ -76,6 +79,7 @@ const TURN_PAST := 21
 var _h: WorldHarness
 var failures: Array[String] = []
 var _node: Building1HallReflections
+var _presence: InteriorPresence
 var _loader: Building1MuralLoader
 var _shell: MeshInstance3D
 var _world_environment: WorldEnvironment
@@ -110,6 +114,10 @@ func _run() -> void:
 		_finish("the island's Building 1 hall has no HallReflections or MuralLoader node")
 		return
 	_shell = _node.get_parent().get_node_or_null("Shell") as MeshInstance3D
+	_presence = _node.get_parent().get_node_or_null("Presence") as InteriorPresence
+	if _presence == null:
+		_finish("the island's Building 1 hall has no Presence (InteriorPresence) beside its reflections")
+		return
 	_world_environment = _h.main.get_node("WorldEnvironment") as WorldEnvironment
 	_node.mode = "inside"
 	_door = _loader.door
@@ -204,8 +212,8 @@ func _check_forward_plus() -> void:
 
 
 ## The frames a fade takes at FPS, and one for the last step's rounding.
-static func _fade_frames() -> int:
-	return ceili(Building1HallReflections.FADE_S * FPS) + 1
+func _fade_frames() -> int:
+	return ceili(_presence.fade_s * FPS) + 1
 
 
 ## The polished floor's values: [roughness, specular, albedo] as the node sets them.
@@ -327,16 +335,16 @@ func _check_doorway() -> void:
 	# Across the bound and back every frame.
 	_put(line + outward * 2.0, line - outward)
 	await _frames(5)
-	var before := _node.toggles
+	var before := _presence.switches
 	var single := 0
-	var was := _node.inside(_camera.global_position)
+	var was := _presence.contains(_camera.global_position)
 	for frame in 60:
 		var at := line + outward * (JITTER_M if frame % 2 == 0 else -JITTER_M)
 		_put(at, line - outward)
 		await process_frame
-		single += 1 if _node.inside(at) != was else 0
-		was = _node.inside(at)
-	var jitter := _node.toggles - before
+		single += 1 if _presence.contains(at) != was else 0
+		was = _presence.contains(at)
+	var jitter := _presence.switches - before
 	print("DOORWAY jitter %d frames across the line by %.1f m: %d switches (a single line: %d)" % [60, JITTER_M, jitter, single])
 	if jitter > 1:
 		failures.append("a camera put across the doorway line every frame switched the look %d times" % jitter)
@@ -367,7 +375,7 @@ func _check_doorway() -> void:
 ## The node must agree every frame, so it switches exactly once per crossing, at that
 ## line, and never in the band between.
 func _check_band(line: Vector3, outward: Vector3) -> void:
-	var width := Building1HallReflections.HYSTERESIS_M
+	var width := InteriorPresence.HYSTERESIS_M
 	var reach := width + BAND_PAST_M
 	_put(line + outward * 2.0, line - outward)
 	await _frames(5)
@@ -376,7 +384,7 @@ func _check_band(line: Vector3, outward: Vector3) -> void:
 		return
 	var steps := roundi(2.0 * reach / BAND_STEP_M)
 	var on := false
-	var before := _node.toggles
+	var before := _presence.switches
 	var crossings := 0
 	var wrong: Array[String] = []
 	var frame := 0
@@ -394,9 +402,9 @@ func _check_band(line: Vector3, outward: Vector3) -> void:
 					crossings += 1
 				if _node.is_on() != on:
 					wrong.append("frame %d at %+.3f m" % [frame, offset])
-				print("DOORWAY band frame=%d offset=%+.3f on=%s two_lines=%s switches=%d crossings=%d" % [frame, offset, _node.is_on(), on, _node.toggles - before, crossings])
+				print("DOORWAY band frame=%d offset=%+.3f on=%s two_lines=%s switches=%d crossings=%d" % [frame, offset, _node.is_on(), on, _presence.switches - before, crossings])
 				frame += 1
-	var switches := _node.toggles - before
+	var switches := _presence.switches - before
 	print("DOORWAY band: %d switches for %d crossings in %d frames, the lines %.1f m either side of the bound" % [switches, crossings, frame, width])
 	if switches != crossings or crossings != 2 * BAND_TRIPS or not wrong.is_empty():
 		failures.append("walked across the doorway's band %d times, the look switched %d times for %d crossings, against two lines at %s" % [2 * BAND_TRIPS, switches, crossings, ", ".join(wrong.slice(0, 6)) if not wrong.is_empty() else "no frame"])
@@ -407,19 +415,19 @@ func _check_band(line: Vector3, outward: Vector3) -> void:
 ## made. Fails on two switches FLICKER_FRAMES frames or closer.
 func _record_doorway(label: String, move: Callable) -> void:
 	await _frames(5)
-	var before := _node.toggles
+	var before := _presence.switches
 	var single := 0
-	var was := _node.inside(root.get_camera_3d().global_position)
+	var was := _presence.contains(root.get_camera_3d().global_position)
 	var last_switch := -FLICKER_FRAMES - 1
 	var switches := 0
 	for frame in DOORWAY_FRAMES:
 		move.call(frame)
 		await process_frame
 		var at := root.get_camera_3d().global_position
-		var now := _node.inside(at)
+		var now := _presence.contains(at)
 		single += 1 if now != was else 0
 		was = now
-		var toggles := _node.toggles - before
+		var toggles := _presence.switches - before
 		if toggles != switches:
 			if frame - last_switch <= FLICKER_FRAMES:
 				failures.append("the %s at the doorway switched the look twice within %d frames (frame %d)" % [label, FLICKER_FRAMES, frame])

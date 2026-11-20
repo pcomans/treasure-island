@@ -285,6 +285,7 @@ tests=(
   game/tests/headless_bake_merge_contract.gd
   game/tests/headless_building_1_interior_contract.gd
   game/tests/headless_interior_ground_contract.gd
+  game/tests/headless_interior_presence_contract.gd
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd

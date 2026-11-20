@@ -17,7 +17,10 @@ extends SceneTree
 ## - its floor reflections (Building1HallReflections) are there with a mode the node
 ##   knows (a config with any other fails the hall's plan), and carry the terrazzo
 ##   surface's own vertex attributes, byte for byte as the hall draws them, beside a
-##   plain set of the same layout and size that differs from them (the baked sheen out).
+##   plain set of the same layout and size that differs from them (the baked sheen out);
+## - its InteriorPresence ("Presence") is there before the reflections (so it moves its
+##   blend in a frame before they read it), and the hall's root carries a plan it takes:
+##   a ring_sector on the mural loader's bounds.
 ## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
 ## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
 ## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
@@ -77,7 +80,27 @@ func _run() -> void:
 		return
 	_check_mural(hall)
 	_check_reflections(hall, "the generated hall")
+	_check_presence(hall, "the generated hall")
 	_finish("")
+
+
+## The hall's InteriorPresence: there, before the reflections, with a plan on the root
+## that it takes, about the mural loader's centre and between its bounds.
+func _check_presence(hall: Node3D, where: String) -> void:
+	var presence := hall.get_node_or_null("Presence") as InteriorPresence
+	var reflections := hall.get_node_or_null("HallReflections")
+	var loader := hall.get_node_or_null("MuralLoader") as Building1MuralLoader
+	if presence == null or reflections == null or loader == null:
+		failures.append("%s lacks its Presence, HallReflections or MuralLoader" % where)
+		return
+	if presence.get_index() > reflections.get_index():
+		failures.append("%s's Presence comes after its reflections, so they would read its blend a frame late" % where)
+	var plan: Variant = hall.get_meta(InteriorPresence.PLAN_META, null)
+	var problem := InteriorPresence.plan_problem(plan)
+	if problem != "":
+		failures.append("%s's plan: %s" % [where, problem])
+	elif plan.centre != Vector2(loader.hall.x, loader.hall.y) or plan.radii != Vector2(loader.hall.z, loader.hall.w):
+		failures.append("%s's plan (centre %s, radii %s) is not on the mural loader's bounds %s" % [where, plan.centre, plan.radii, loader.hall])
 
 
 ## The hall as the web's bake builds it: its reflections node (which does nothing on the
@@ -118,6 +141,7 @@ func _run_prebuilt() -> void:
 			error = "the baked island has no hall reflections"
 		else:
 			_check_reflections(node.get_parent() as Node3D, "the baked hall")
+			_check_presence(node.get_parent() as Node3D, "the baked hall")
 	main.queue_free()
 	await process_frame
 	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
@@ -147,7 +171,8 @@ func _check_reflections(hall: Node3D, where: String) -> void:
 	if node.plain_attributes.size() != node.sheen_attributes.size() or node.plain_attributes == node.sheen_attributes:
 		failures.append("%s: the floor's plain attributes are not a changed set of the same size (%d and %d bytes)" % [where, node.plain_attributes.size(), node.sheen_attributes.size()])
 	# For the record, not a test: what the two sets weigh, and where the node's switch is.
-	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, node.top_y])
+	var plan: Dictionary = hall.get_meta(InteriorPresence.PLAN_META, {})
+	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, float(plan.get("top_y", NAN))])
 
 
 ## The hero record's exterior collision faces (its collision surfaces), to prove the
