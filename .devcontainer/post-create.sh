@@ -5,6 +5,9 @@ cd "$(dirname "$0")/.."
 # The node feature only puts npm on PATH for login shells.
 export PATH="/usr/local/share/nvm/current/bin:${PATH}"
 
+# Agent history and logins live on volumes so they survive a recreate.
+sudo chown -R vscode:vscode ~/.claude ~/.codex
+
 curl -fsSL https://claude.ai/install.sh | bash
 
 sudo apt-get update -qq
