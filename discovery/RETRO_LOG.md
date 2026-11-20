@@ -27760,3 +27760,53 @@ Comparing every record against the base commit found a change the author hadn't 
 - What worked well: the batch's main is the previous batch's final commit, so that batch's fixed-pose captures of bacb372a served as the look check's "before" with no new runs; the author's own door view plans, filtered by name into one batch plan, gave the earlier-fixed door pairs without a new script.
 - What did not work well: the 19a capture helper stripped a run's "Cn-" prefix with a one-digit pattern, so the tenth run's images went to a folder of the wrong name and needed moving before the diff.
 - What the team should change next time: name capture output folders explicitly instead of deriving them from run names, and cite the main-run log lines beside every page-check miss in the hand-back.
+
+### ti-visual-review — housing detail pilot r2 (2026-11-19)
+- Worked: the matched photo-camera sheets and full-resolution raw captures let me compare directly.
+- Didn't: the 5.5x enlarged crop hid the floor-line overhang, and I only saw it when I enlarged the north-end photo myself.
+- Change: put a 4x crop of the reference next to every zoom sheet, and include an end-wall view with each first render.
+
+### ti-visual-review — Northpoint pilot r3b (2026-11-19)
+- Worked: matched 4x crops in the same projection settled the roof-pitch question independently of the camera-distance error.
+- Didn't work: the sheets had no angled view of the north end with the annex region at eye level, and no matched photo of the unit at close range.
+- Change: send footprint-limited gaps (the annex) to the owner as a decision before the next round instead of holding the modeller on them.
+
+### ti-visual-review — housing pilot r4b (2026-11-19)
+- Worked: the matched 4x crops (3a/3b) and the annex eye-level sheet made the pitch and annex calls measurable within minutes.
+- Didn't work: the captures came from a dirty tree on ef6546ad, not the committed head, so the reviewed pixels can't be tied to the commit. The front-camera roof band disagrees with the north-end pitch and is still unresolved.
+- Change: capture from the committed head, or record the diff of the dirty tree. Add a close-up of the south segment, and a side view of the carport fascia matched to the front photo.
+
+### ti-visual-review — housing pilot r5 (2026-11-19)
+- Worked: the camera-solved height evidence (sheet 7) checked two ways settled a whole round's question.
+- Didn't: the claimed underside detail wasn't checked in the walking frames before handoff.
+- Change: the author should contrast-stretch the gameplay frames before claiming surface detail.
+
+### ti-code-review — housing detail pilot, 1232 Northpoint (2026-11-19)
+- What worked well: every option is keyed and guarded, so I could prove other buildings are unchanged from the code paths without an engine run; the run logs answered the warm-up, bake, neighbour-fit and suite questions directly.
+- What did not work well: the roof shape lives in three config places, and the script that wrote them isn't in Git, so I had to check by hand that they agree.
+- What the team should change next time: when one shape feeds two builders, commit the generator or add a contract check that the copies agree in the same change.
+
+### ti-implementation — housing detail pilot, 1232 Northpoint (2026-11-19)
+- What worked well: back-projecting photo edges through the solved camera, checked first on the render's own known geometry (0.1 m), settled the overhang height, the window stations, the gable apex and the annex sizes; crops of the full-frame photo-camera render gave matched comparisons the narrow-lens views never did; every option opt-in with a contract case and a five-building control dump kept the other 112 buildings provably unchanged.
+- What did not work well: I captured r3 to r4b from a dirty tree, so reviewed pixels could not be tied to a commit; the front photo's solved camera stands several metres too far out (a facade-only solve trades distance for lens width), which cost two rounds on the carport and the head-on roof; a warm-up count with street detail on was first compared against main's with it off.
+- What the team should change next time: commit, then capture, and stamp each sheet with the run log's tree line; validate a photo camera on near objects (posts, kerb, cars) as well as the facade before measuring from it; take before and after measurements with one identical command line.
+
+### ti-code-review — housing pilot r6 delta (2026-11-19)
+- Worked: tracing every caller of the changed proof (installer, fit test, world_harness, bake) settled "alignment or weakening" quickly.
+- Didn't: helper scripts with `--check` modes keep arriving with nothing to run them.
+- Change: when a delta adds a generator with `--check`, require it in `tools/test.sh` in the same commit. Contract fixtures for precision fixes should use real-world coordinates.
+
+### ti-visual-review — 1232 r6 (2026-11-19)
+- Worked: the matched 4x crops and the r5-versus-r6 contrast-stretched strip let me separate the camera-clearance limit from a modelling fault quickly.
+- Did not work: there is no underside reference, so the carport could only be judged as believable, not as accurate.
+- Change next time: when the camera sits about 0.15 m under a ceiling, note that in the brief up front, and get a dated eye-level photo before asking the modeller for more underside detail.
+
+### ti-implementation — housing pilot r6, 1232 Northpoint (2026-11-19)
+- What worked well: contrast-stretching my own walk frames before handoff showed what the gameplay camera really sees under the carport (it rides 0.15 m under the ceiling, so joists read and deck joints stay hidden); committing before every capture tied each failed run to an exact commit, so each fix was a small follow-up commit.
+- What did not work well: two avoidable engine runs. The utilities' overlap area was taken in world coordinates 750 m out in single precision and read a zero-width sliver as 78 cm2; the shared ground proof assumed every support-role mesh is drawn and in the contact, which the new visual-only and collision-only carport parts broke at capture time.
+- What the team should change next time: take areas and cross products about a local origin in world-space GDScript; before adding a new kind of part (visual-only, collision-only) to a family role, search the shared proofs (StudyGeometry, world_harness) for that role and extend them in the same commit.
+
+### ti-implementation — housing pilot closing round, 1232 Northpoint (2026-11-19)
+- What worked well: sampling my own pixels against the photo before changing a colour or size: the matched crop showed the flues already stand taller than photographed, so I lightened them instead of stretching them; one fit run carried the door walks and the native-producer check together.
+- What did not work well: the native-producer check and the ground proof each held their own copy of the installer's role rules, so every new kind of part needed three edits.
+- What the team should change next time: give the installer's contact rules (roles, visual-only, collision-only, layers) one shared helper that the installer, the proof and the fit test all call.

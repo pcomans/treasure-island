@@ -395,7 +395,11 @@ static func retained_ground_contact(scene: Node, family: Node3D, body: StaticBod
 		var ground_faces := PackedVector3Array()
 		var meshes := _ground_proof_meshes(family, inventory)
 		for mesh: MeshInstance3D in meshes:
-			if not mesh.is_visible_in_tree() or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
+			# Only a family part tagged collision_only (a walking surface, a carport's ceiling
+			# slab) may be hidden; its faces are still in the contact. Retained production
+			# ground never may: hidden, it is not ground the player sees.
+			var hidden_ok: bool = not (mesh in inventory.ground_meshes) and mesh.get_meta("collision_only", false) is bool and mesh.get_meta("collision_only", false)
+			if (not mesh.is_visible_in_tree() and not hidden_ok) or mesh.layers != 1 or mesh.is_set_as_top_level(): return false
 			var retained: bool = mesh in inventory.ground_meshes
 			var pose := mesh.transform
 			if retained:
@@ -460,7 +464,9 @@ static func _ground_proof_family(family: Node3D) -> bool:
 static func _ground_proof_meshes(family: Node3D, inventory: Dictionary) -> Array[MeshInstance3D]:
 	var meshes: Array[MeshInstance3D] = []
 	for child: Node in family.get_children():
-		if child is MeshInstance3D and child.get_meta("family_role", "support") == "support": meshes.append(child)
+		# As the installer (housing_family_live_attachment._contacts): a visual-only part
+		# makes no contact, so it is not in the support contact's faces.
+		if child is MeshInstance3D and child.get_meta("family_role", "support") == "support" and not bool(child.get_meta("visual_only", false)): meshes.append(child)
 	meshes.append_array(inventory.ground_meshes)
 	return meshes
 

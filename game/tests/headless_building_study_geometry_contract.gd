@@ -323,6 +323,33 @@ func _check_retained_housing_inventory() -> void:
 	hit.shape = -1
 	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Wrong native shape accepted")
 	hit.shape = support.shape_owner_get_shape_index(support.get_shape_owners()[0], 0)
+	# A visual-only support part makes no contact, and a hidden collision-only one does
+	# (housing_family_live_attachment._contacts); a hidden part without that tag doesn't pass.
+	var drawn_only := MeshInstance3D.new(); family.add_child(drawn_only)
+	drawn_only.mesh = BoxMesh.new(); drawn_only.position = Vector3(20,0,0)
+	drawn_only.set_meta("family_role", "support"); drawn_only.set_meta("visual_only", true)
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "A visual-only support part broke the proof")
+	var slab := MeshInstance3D.new(); family.add_child(slab)
+	slab.mesh = BoxMesh.new(); slab.position = Vector3(30,0,0); slab.visible = false
+	slab.set_meta("family_role", "support"); slab.set_meta("collision_only", true)
+	family.move_child(slab, support_mesh.get_index() + 1)
+	var with_slab: PackedVector3Array = Geometry.collect(support_mesh.mesh, [support_mesh.transform], Geometry.MESH_GET_FACES).faces
+	with_slab.append_array(Geometry.collect(slab.mesh, [slab.transform], Geometry.MESH_GET_FACES).faces)
+	with_slab.append_array(second.faces)
+	shape.set_faces(with_slab)
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "A hidden collision-only support part in the contact broke the proof")
+	slab.remove_meta("collision_only")
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "A hidden support part without collision_only accepted")
+	slab.free(); drawn_only.free()
+	shape.set_faces(support_faces)
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "The proof did not recover once the extra parts left")
+	# Retained production ground never counts hidden, even tagged collision_only.
+	ground.visible = false
+	ground.set_meta("collision_only", true)
+	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "A hidden retained ground tagged collision_only accepted")
+	ground.visible = true
+	ground.remove_meta("collision_only")
+	check(Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "The proof did not recover once the ground showed again")
 	shape.set_faces(second.faces)
 	check(not Geometry.retained_ground_contact(scene, family, support, hit, land_hit, .35, .001, .7, proof_cache), "Incomplete native bucket accepted")
 	# Teardown must release both changed resources and still-connected callbacks.

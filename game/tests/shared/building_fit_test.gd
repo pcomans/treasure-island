@@ -586,18 +586,21 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 		retained = _check_housing_retained(h, root, source, require_family_roof)
 		if retained.error != "":
 			return str(retained.error)
-	var meshes := {"wall": [], "roof": [], "support": [], "ground": []}
+	# The installer's roles (housing_family_live_attachment._contacts); "solid" is an
+	# opaque non-receiver on the spray layer, as the family's utility boxes.
+	var meshes := {"wall": [], "roof": [], "support": [], "ground": [], "solid": []}
 	var bodies := {}
 	for node: Node in root.get_children():
-		if node is MeshInstance3D and bool(node.get_meta("visual_only", false)) and str(node.get_meta("family_role", "")) == "ground":
+		# As the installer: a visual-only part, of any role, makes no contact.
+		if node is MeshInstance3D and bool(node.get_meta("visual_only", false)):
 			continue
 		if node is MeshInstance3D:
 			var role := str(node.get_meta("family_role", "support"))
-			# A stair walking surface through the tread nosings is collision-only
-			# (the Mersea / Bulgarian-wall stair grammar). Only a support-role mesh
-			# explicitly tagged collision_only may be hidden; its faces must still
-			# match the support collision below. Every other mesh must be visible.
-			var collision_only: bool = role == "support" and node.get_meta("collision_only", false) is bool and node.get_meta("collision_only", false)
+			# A stair walking surface through the tread nosings, a carport's ceiling slab
+			# and a utility's box are collision-only. Only a support- or solid-role mesh
+			# explicitly tagged collision_only may be hidden; its faces must still match
+			# its role's collision below. Every other mesh must be visible.
+			var collision_only: bool = role in ["support", "solid"] and node.get_meta("collision_only", false) is bool and node.get_meta("collision_only", false)
 			if not meshes.has(role) or node.is_visible_in_tree() == collision_only or node.is_set_as_top_level() or not node.transform.is_finite() or node.layers != (2 if role == "wall" else 1):
 				return "unsupported housing visible role/placement/layer"
 			meshes[role].append(node)
@@ -622,10 +625,11 @@ func _check_housing_faces(h: WorldHarness, source: String, retained_quality: boo
 			return "missing housing native role"
 		var body: StaticBody3D = bodies[role]
 		var wall := role == "wall"
+		var spray_layer := wall or role == "solid"
 		var key := "building:" + source + (":roof" if role == "roof" else ":wall")
-		if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != key or body.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or bool(body.get_meta("opaque", false)) != wall:
+		if body.get_meta("source_keys", []) != [source] or body.get_meta("derived_object_key", "") != key or body.get_meta("receiver_kind", "") != ("building_wall" if wall else "none") or bool(body.get_meta("opaque", false)) != spray_layer:
 			return "housing source/receiver identity differs"
-		if body.is_set_as_top_level() or body.basis != Basis.IDENTITY or not body.position.is_finite() or body.collision_layer != (5 if wall else 1) or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
+		if body.is_set_as_top_level() or body.basis != Basis.IDENTITY or not body.position.is_finite() or body.collision_layer != (5 if spray_layer else 1) or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != wall:
 			return "housing body placement/layer differs"
 		var owners := body.get_shape_owners()
 		if owners.size() != 1 or body.is_shape_owner_disabled(owners[0]) or body.shape_owner_get_shape_count(owners[0]) != 1:
