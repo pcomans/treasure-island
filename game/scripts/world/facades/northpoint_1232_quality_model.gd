@@ -56,6 +56,9 @@ static func build(record: Dictionary, ground: Callable, options: Dictionary = {}
 	if options.has("frontage_asphalt_rgb"):
 		var rgb: Array = options.frontage_asphalt_rgb
 		asphalt = _material(Color(float(rgb[0]),float(rgb[1]),float(rgb[2])),0.98)
+	# The island's asphalt specular (world_chunk_builder.gd ASPHALT_SPECULAR): at the default 0.5
+	# the dark pad mirrored the sky at a walker's grazing view and read navy beside the grey road.
+	asphalt.metallic_specular = 0.25
 	var lawn := _material(Color(0.29,0.36,0.15),0.98)
 	var verts: Array=record.vertices
 	var polygon := PackedVector2Array()
