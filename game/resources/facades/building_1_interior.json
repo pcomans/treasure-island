@@ -125,7 +125,7 @@
   },
   "palette": {
     "note": "Albedo times the baked vertex shading (building_1_interior.gd _shade): the sky's ambient light is all the hall gets by day, blue from above and warm from below, so floors run warmer and ceilings cooler than they read in the photos (calibrated on photo 5's floor, ceiling and drum). Specular stays low: the sky is the only reflection source, so a glossy floor would read sky-blue (on desktop the hall's reflections, Building1HallReflections, give it reflections of its own). lamp and daylight glow (DaySun night roles: lamps lit at night, daylight panels out).",
-    "terrazzo": {"rgb": [1.0, 1.0, 1.0], "roughness": 0.42, "specular": 0.08, "albedo_texture": "res://game/resources/textures/world/b1_hall/floor_layout.png", "detail_texture": "res://game/resources/textures/world/b1_hall/floor_terrazzo.png", "detail_tile_m": 1.5, "roughness_texture": "res://game/resources/textures/world/b1_hall/floor_wear.png"},
+    "terrazzo": {"rgb": [1.0, 0.96, 0.88], "roughness": 0.42, "specular": 0.08, "albedo_texture": "res://game/resources/textures/world/b1_hall/floor_layout.png", "detail_texture": "res://game/resources/textures/world/b1_hall/floor_terrazzo.png", "detail_tile_m": 1.5, "roughness_texture": "res://game/resources/textures/world/b1_hall/floor_wear.png"},
     "walkway": {"rgb": [0.9, 0.72, 0.52], "roughness": 0.9, "specular": 0.08},
     "plaster": {"rgb": [0.78, 0.72, 0.68], "roughness": 0.9, "specular": 0.15},
     "ceiling": {"rgb": [0.76, 0.81, 0.94], "roughness": 0.9, "specular": 0.1},

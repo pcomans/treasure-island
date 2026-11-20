@@ -40,10 +40,10 @@ const BAND_OFFSETS_M := [-3.75, 3.75]
 const BAND_M := 0.45
 ## Colours (sRGB): the warm tan field, the greyer alternate panels' shade, the bands, the
 ## strips and the dust's.
-const FIELD := Color(0.82, 0.72, 0.6)
-const ALTERNATE := Color(0.95, 0.96, 0.98)
-const BAND := Color(0.56, 0.5, 0.44)
-const STRIP := Color(0.36, 0.32, 0.28)
+const FIELD := Color(0.86, 0.76, 0.62)
+const ALTERNATE := Color(0.95, 0.95, 0.94)
+const BAND := Color(0.66, 0.58, 0.49)
+const STRIP := Color(0.42, 0.37, 0.32)
 const DUST := Color(0.8, 0.78, 0.74)
 ## Dust along the foot of the walls (m): full within DUST_M, gone by DUST_FADE_M.
 const DUST_M := 0.1
@@ -369,7 +369,7 @@ func _paint_terrazzo() -> Image:
 					reaches.append(size * (0.65 + _hash(seed, 20 + cut, 58) * 0.5))
 				chips[cy * cells + cx].append([centre, size, colour, normals, reaches])
 				count += 1
-	var matrix := Color(0.93, 0.89, 0.82)
+	var matrix := Color(0.97, 0.94, 0.89)
 	for y in n:
 		for x in n:
 			var p := Vector2(float(x) + 0.5, float(y) + 0.5)
