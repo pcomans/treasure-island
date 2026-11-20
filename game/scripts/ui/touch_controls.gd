@@ -3,7 +3,6 @@ extends "res://game/scripts/vendor/selgesel/mobile_controls.gd"
 
 signal pause_requested
 
-const THUMB := preload("res://game/scripts/vendor/selgesel/virtual_thumb_stick.gd")
 const BUTTON := preload("res://game/scripts/vendor/selgesel/virtual_button.gd")
 const USE_BUTTON := preload("res://game/scripts/ui/touch_use_button.gd")
 const BRAKE_ICON := preload("res://game/resources/ui/touch/icon-brake.png")
@@ -21,6 +20,22 @@ const PAUSE_INSET_PX := 55.0
 ## this offset from the stick's corner.
 const LABEL_INSET_PX := 18.0
 const STICK_LABEL_AT := Vector2(82, 228)
+## The bottom controls stand clear of the screen's edges and the home bar, with
+## room round them for a look drag to start (owner, 2026-11-20): the stick's
+## square this far in from the safe area's left and up from its bottom, RISE this
+## far in from its right and up from its bottom (RISE's and RUN's labels lie under
+## them), and RUN BUTTON_GAP_PX left of RISE.
+const STICK_INSET_PX := Vector2(36, 54)
+const RISE_INSET_PX := Vector2(64, 136)
+const BUTTON_GAP_PX := 48.0
+## The MOVE stick's drawn disc (its radius, centred in the stick's square) and how
+## far past it a finger still takes the stick, a thumb's width (MoveStick.covers):
+## _draw and the hit test share them, so the two cannot drift apart.
+const STICK_RADIUS_PX := 94.0
+const STICK_TOUCH_MARGIN_PX := 16.0
+## On foot, centred under the controls on the MOVE label's baseline: a drag that
+## starts anywhere but on a control turns the camera (mobile_controls.gd).
+const LOOK_HINT := "Drag to look"
 var camera_rig: PlayerCamera
 var player: PlayerController
 ## The drivable cars (main.gd sets them once the world is loaded): the use
@@ -41,7 +56,7 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_move_stick = THUMB.new()
+	_move_stick = MoveStick.new()
 	_move_stick.name = "MoveStick"
 	_move_stick.max_distance = 90.0
 	_texture(_move_stick, "Reticle", "joystick-reticle.png", Vector2(90, 90), Vector2(40, 40))
@@ -87,15 +102,15 @@ func _layout() -> void:
 		var end := Vector2(float(insets[2]), float(insets[3])) * css_scale
 		_safe_rect = Rect2(start, size - start - end)
 	_pause_center = Vector2(_safe_rect.end.x - PAUSE_INSET_PX, _safe_rect.position.y + PAUSE_INSET_PX)
-	_move_stick.position = Vector2(_safe_rect.position.x + 20, _safe_rect.end.y - 250)
 	_move_stick.size = Vector2(220, 220)
-	_buttons[0].position = _safe_rect.end - Vector2(144, 208)
-	_buttons[1].position = _safe_rect.end - Vector2(272, 208)
+	_move_stick.position = Vector2(_safe_rect.position.x + STICK_INSET_PX.x, _safe_rect.end.y - STICK_INSET_PX.y - _move_stick.size.y)
 	for button in _buttons:
 		button.size = Vector2(96, 96)
+	_buttons[0].position = _safe_rect.end - RISE_INSET_PX - _buttons[0].size
+	_buttons[1].position = _buttons[0].position - Vector2(_buttons[1].size.x + BUTTON_GAP_PX, 0)
 	# Above RISE, under the same right thumb, clear of RISE's label.
-	use_button.position = _safe_rect.end - Vector2(144, 352)
 	use_button.size = Vector2(96, 96)
+	use_button.position = _buttons[0].position - Vector2(0, 144)
 	queue_redraw()
 
 ## The screen less the browser's safe-area insets (a notch, the home bar), in
@@ -166,14 +181,17 @@ func _update_use_button(delta: float) -> void:
 			mode = TouchUseButton.Mode.ENTER
 	use_button.set_mode(mode)
 
-## In a car RISE is the handbrake, shown with its own glyph and label, and RUN
-## and the look hint go (a car reads neither the run nor a touch look); on foot
-## all come back. RUN lets go of its finger first, so no run outlasts the hide.
+## In a car RISE is the handbrake, shown with its own glyph and label, and RUN,
+## the look and its hint go (a car reads neither the run nor a touch look); on
+## foot all come back. RUN and the look let go of their fingers first, so no run
+## outlasts the hide and a finger held on the way in never turns the view.
 func _show_driving(driving: bool) -> void:
 	_buttons[0].set_button_texture(BRAKE_ICON if driving else _rise_texture)
 	if driving:
 		_buttons[1]._release()
+		_touches.clear()
 	_buttons[1].visible = not driving
+	look_enabled = not driving
 	queue_redraw()
 
 ## Where the controls are, in viewport pixels, and what they show (the web
@@ -193,6 +211,8 @@ func describe() -> Dictionary:
 		"rise_icon": "brake" if _buttons[0].button_texture == BRAKE_ICON else "jump",
 		"run_visible": _buttons[1].visible,
 		"look_hint": not _driving,
+		# Where the stock camera rig looks (yaw and pitch, degrees): a look drag turns it.
+		"camera": [rad_to_deg(camera_rig.rotation.y), rad_to_deg(camera_rig.spring_arm.rotation.x)] if camera_rig != null else [],
 	}
 
 func _rise_label() -> String:
@@ -210,19 +230,28 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	# Keep the upstream stick texture readable over pale paths and grass.
-	var stick_center := _move_stick.position + Vector2(110, 110)
-	draw_circle(stick_center, 94, Color(0.02, 0.06, 0.09, 0.62))
-	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
+	var stick_center := _move_stick.get_rect().get_center()
+	draw_circle(stick_center, STICK_RADIUS_PX, Color(0.02, 0.06, 0.09, 0.62))
+	draw_arc(stick_center, STICK_RADIUS_PX - 4.0, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
 	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
 	var label_at := Vector2(LABEL_INSET_PX, USE_BUTTON.LABEL_BASELINE_PX)
 	var labels := [[_move_stick.position + STICK_LABEL_AT, "MOVE"], [_buttons[0].position + label_at, _rise_label()]]
 	if not _driving:
-		labels.append_array([[_buttons[1].position + label_at, "RUN"], [Vector2(_safe_rect.position.x + _safe_rect.size.x * 0.55, _safe_rect.end.y - 30), "Drag right side to look"]])
+		labels.append([_buttons[1].position + label_at, "RUN"])
+		draw_string(font, Vector2(_safe_rect.position.x, _move_stick.position.y + STICK_LABEL_AT.y), LOOK_HINT, HORIZONTAL_ALIGNMENT_CENTER, _safe_rect.size.x, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 	for item in labels:
 		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 	draw_circle(_pause_center, PAUSE_RADIUS_PX, Color(0.03, 0.1, 0.14, 0.65))
 	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
+
+## The MOVE stick takes a finger pressed on its drawn disc or within a thumb's
+## width round it (STICK_RADIUS_PX and STICK_TOUCH_MARGIN_PX from its centre), not
+## one in its square's corners, where a look drag may start.
+class MoveStick extends SelgeselThumbStick:
+	func covers(point: Vector2) -> bool:
+		return point.distance_to(get_global_rect().get_center()) <= STICK_RADIUS_PX + STICK_TOUCH_MARGIN_PX
+
 
 ## RISE presses the jetpack and, as Space does, the handbrake: in a car the
 ## vehicles read it (the jetpack is off there); on foot nothing reads it.

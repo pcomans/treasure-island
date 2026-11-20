@@ -1193,7 +1193,7 @@ func _control_rows() -> Array:
 		return [
 			["On foot", [
 				["MOVE stick", "Move (push further to go faster)"],
-				["Drag on the right side", "Look around"],
+				["Drag anywhere", "Look around"],
 				["RISE (hold)", "Jetpack up; let go to float down"],
 				["RUN (hold while moving)", "Run"],
 				["DROP (hold, in the air)", "Drop fast"],

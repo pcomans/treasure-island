@@ -20,8 +20,8 @@ func handle_input(event):
     if !is_visible_in_tree():
         return
 
-    # if a finger has just been pressed checked the screen and if it's position is inside our global rect
-    if event is InputEventScreenTouch && event.is_pressed() && !event.canceled && get_global_rect().has_point(event.position):
+    # if a finger has just been pressed checked the screen and if it's position is on the stick (covers)
+    if event is InputEventScreenTouch && event.is_pressed() && !event.canceled && covers(event.position):
         # start tracking the finger
         _begin_drag(event)
 
@@ -34,6 +34,11 @@ func handle_input(event):
     if event is InputEventScreenDrag && event.index == _touch_index:
         # update the drag position
         _update_drag(event)
+
+# whether a finger pressed at this point takes the stick: anywhere in its global rect (a subclass may narrow it;
+# the look excludes the same area, mobile_controls.gd)
+func covers(point: Vector2) -> bool:
+    return get_global_rect().has_point(point)
 
 func _begin_drag(event: InputEventScreenTouch):
     # if we're already tracking a finger don't do anything

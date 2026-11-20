@@ -6,6 +6,11 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2383 (2026-11-20)
+
+- On phones and tablets you can look around by dragging anywhere on the screen that isn't a button, not only on its right side.
+- The move stick and the RUN and RISE buttons sit a little further in from the edges of the screen, with a little more room between RUN and RISE.
+
 ## Build 2373 (2026-11-20)
 
 - At 1232 Northpoint Drive, the white lines in the parking spaces under the carport no longer flicker, and the parking runs flat out to the road instead of under a raised strip of grass.

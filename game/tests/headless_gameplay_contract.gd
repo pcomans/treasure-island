@@ -609,7 +609,7 @@ func _check_controls_screen(main: GameMain) -> String:
 	if not shown or not closed:
 		_fail("The loading screen's Controls button must open the controls screen, and Back close it.")
 		return ""
-	for needed: String in ["MOVE stick", "Drag on the right side", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
+	for needed: String in ["MOVE stick", "Drag anywhere", "RISE (hold)", "RUN (hold while moving)", "DROP (hold, in the air)", "DRIVE (beside a parked car)", "BRAKE (hold)", "GET OUT", "II (top right)"]:
 		if not touch.contains(needed):
 			_fail("The touch controls screen does not list %s:\n%s" % [needed, touch])
 			return ""
