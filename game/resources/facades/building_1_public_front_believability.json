@@ -196,6 +196,7 @@
       "fin_front_m": 0.18,
       "fin_top_y": 20.49,
       "fin_lines_y": [20.04, 20.17, 20.3],
+      "fin_cap": {"height": 0.5, "front": 0.12},
       "line_height": 0.04,
       "line_front": 0.006,
       "evidence": {

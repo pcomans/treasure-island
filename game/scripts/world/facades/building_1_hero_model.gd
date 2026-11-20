@@ -2328,9 +2328,11 @@ static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record:
 		var outer := float(side) * half
 		for target: Dictionary in [buckets.wall, collision]:
 			_append_frame_box(target, frame, minf(inner, outer), maxf(inner, outer), base_low - 0.06, fin_top, float(frame.lo) - 0.03, fin_front)
-		# The fin's shoulder lines, a pattern band just proud of its face.
-		var fin_path := _frame_path(frame, minf(inner, outer) + 0.02, maxf(inner, outer) - 0.02, fin_front)
-		_append_pattern_band(buckets.lines_field, fin_path, float(fin_lines[0]), float(fin_lines[fin_lines.size() - 1]) + fin_pitch, line_front, -0.01, 1.0, float(fin_lines[0]), fin_pitch, Vector2(0.5, 0.6), 0)
+		# The fin's cap (the owner's 2026-11-20 photos of both pavilions): a band proud
+		# of its face with three incised lines, the crown standing back above it.
+		var fin_cap := crown.fin_cap as Dictionary
+		var fin_path := _frame_path(frame, minf(inner, outer), maxf(inner, outer), fin_front)
+		_append_lined_band(buckets.wall, buckets.lines_field, fin_path, fin_top - float(fin_cap.height), fin_top, float(fin_cap.front), -float(crown.fin_front_m) - 0.03, float(fin_lines[0]), fin_pitch, fin_lines.size(), true)
 	# A dentil course over the tall windows, between the fins (the owner's 2026-11-20
 	# photos of both pavilions).
 	var dentils := front.pavilion_dentils as Dictionary
