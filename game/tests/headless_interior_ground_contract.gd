@@ -282,7 +282,6 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 			var cell := Vector2i(floori(point.x / NEAR_M), floori(point.y / NEAR_M))
 			floors_near[cell] = minf(float(floors_near.get(cell, INF)), float(column.y))
 	var on_floor := 0
-	var levels := 0
 	var over_ground := 0
 	var least := INF
 	var holes: Array[String] = []
@@ -307,7 +306,6 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 				continue
 		else:
 			on_floor += 1
-			levels = maxi(levels, int(column.levels))
 		# The outdoor ground inside the shell: under the interior's top (ground over its
 		# roof, as over a cellar, is outside it).
 		var top := ground.top(point.x, point.y, float(column.top))
@@ -351,11 +349,11 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 			failures.append("%s: passage %s's inside end %s is not on its floor" % [label, str((passage as Dictionary).get("name", "")), str(end)])
 	if failures.size() > before:
 		return ""
-	return "%s: %d samples on its floor (up to %d levels over one), outdoor ground under %d samples, at least %.3f m under the floor" % [label, on_floor, levels, over_ground, least]
+	return "%s: %d samples on its floor, outdoor ground under %d samples, at least %.3f m under the floor" % [label, on_floor, over_ground, least]
 
 
 ## Where a point stands on the interior: {"kind": "floor", "y": the lowest surface facing
-## up with one facing down over it, "levels": how many such floors, "below_eye": the
+## up with one facing down over it (every level over it stands higher), "below_eye": the
 ## highest surface of the interior under eye height over that floor, "top": its highest
 ## surface there}; {"kind": "under", "y", "below_eye", "top"} where the lowest surface of
 ## the interior faces down (an underside, or a ceiling over a hole); or {"kind":
@@ -377,7 +375,6 @@ func _column(inside: Surfaces, point: Vector2) -> Dictionary:
 	downs.sort()
 	var level := INF
 	var kind := "outside"
-	var levels := 0
 	if ups.is_empty() or downs[0] < ups[0] - REST_M:
 		level = downs[0]
 		kind = "under"
@@ -385,17 +382,16 @@ func _column(inside: Surfaces, point: Vector2) -> Dictionary:
 		var top := downs[downs.size() - 1]
 		for y in ups:
 			if top > y + OVER_M:
-				levels += 1
-				if is_inf(level):
-					level = y
-					kind = "floor"
+				level = y
+				kind = "floor"
+				break
 	if kind == "outside":
 		return {"kind": kind}
 	var below_eye := -INF
 	for y in all:
 		if y < level + EYE_HEIGHT_M:
 			below_eye = maxf(below_eye, y)
-	return {"kind": kind, "y": level, "levels": levels, "below_eye": below_eye, "top": all.max()}
+	return {"kind": kind, "y": level, "below_eye": below_eye, "top": all.max()}
 
 
 ## The interior's drawn triangles (its MeshInstance3D surfaces) in world space:
