@@ -230,9 +230,17 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_append_front_step(buckets.wall, collision, record, north_bay_runs, two_y, block_roof, three_y, float(towers.north_plain_bay_depth_m), true, false)
 	# The central block stands behind the crescent and its plain south bay only; the
 	# south junction is a tower before a three-storey strip like the wings'.
+	# The taller central block ends north of the crescent's south bays, whose block
+	# keeps the front block's height through its depth: from the forecourt the photos
+	# show sky beside the south junction tower, not a taller mass.
+	var high_runs := _int_array(block.four_storey_runs as Array)
 	var central_main := central_runs.slice(0, central_runs.find(south_tower_runs[0]))
-	_append_strip_walls(buckets.wall, original, collision, record, central_main, two_y, four_y, central_depth, {}, central_skip, interior_cuts, false, Vector2(block_depth, block_roof), Vector2(block_depth, block_roof))
-	var block_step := _append_front_step(buckets.wall, collision, record, block_runs, two_y, block_roof, four_y, block_depth, false, false)
+	var central_high := central_main.slice(0, central_main.find(high_runs[high_runs.size() - 1]) + 1)
+	var central_low := central_main.slice(central_high.size())
+	_append_strip_walls(buckets.wall, original, collision, record, central_high, two_y, four_y, central_depth, {}, central_skip, interior_cuts, false, Vector2(block_depth, block_roof), Vector2(block_depth, block_roof))
+	_append_strip_walls(buckets.wall, original, collision, record, central_low, two_y, block_roof, central_depth, {}, central_skip, interior_cuts)
+	var block_step := _append_front_step(buckets.wall, collision, record, central_high, two_y, block_roof, four_y, block_depth, false, false)
+	_append_front_step(buckets.wall, collision, record, central_low, two_y, block_roof, block_roof, block_depth, false, false)
 	var tower_skip := {}
 	for run_index in south_tower_runs:
 		tower_skip[run_index] = true
@@ -401,7 +409,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_append_point(central_path, central_first.point as Vector3, central_first.normal as Vector3)
 	(central_path.points as Array).append_array(riser.points as Array)
 	(central_path.normals as Array).append_array(riser.normals as Array)
-	var central_last := _strip_cap(record, central_main[central_main.size() - 1], false, central_depth - inner_trim)
+	var central_last := _strip_cap(record, central_high[central_high.size() - 1], false, central_depth - inner_trim)
 	_append_point(central_path, central_last.point as Vector3, central_last.normal as Vector3)
 	_append_flat_coping(buckets.trim, lines, central_path, central_top, flat_coping, cornice_back)
 	var se_first := int((se_setback.runs as Array)[0])
@@ -585,7 +593,11 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	cut_whole = _append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth), tier_clip, north_cuts) and cut_whole
 	var central := _int_array(chains.central_four_story_runs)
 	var central_main := central.slice(0, central.find(south_tower_runs[0]))
-	cut_whole = _append_strip_roof(roof, collision, wall_record, central_main, four_y, float(vertical.central_inward_depth), {}, _setback_cuts(wall_record, [block_runs], float(block.depth_m), FRONT_STEP_MIN_SEGMENT_M)) and cut_whole
+	var high_runs := _int_array(block.four_storey_runs as Array)
+	var central_high := central_main.slice(0, central_main.find(high_runs[high_runs.size() - 1]) + 1)
+	var central_low := central_main.slice(central_high.size())
+	cut_whole = _append_strip_roof(roof, collision, wall_record, central_high, four_y, float(vertical.central_inward_depth), {}, _setback_cuts(wall_record, [central_high], float(block.depth_m), FRONT_STEP_MIN_SEGMENT_M)) and cut_whole
+	cut_whole = _append_strip_roof(roof, collision, wall_record, central_low, float(block.roof_y), float(vertical.central_inward_depth)) and cut_whole
 	var tower_cuts := interior_cuts.duplicate()
 	tower_cuts.append_array(_setback_cuts(wall_record, [south_tower_runs], tower_depth, tower_segment))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_tower_runs, three_y, float(vertical.south_wing_inward_depth), {}, tower_cuts) and cut_whole
@@ -599,7 +611,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var south_cuts := se_cuts.duplicate()
 	south_cuts.append_array(_setback_cuts(wall_record, [south_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, south_cuts) and cut_whole
-	cut_whole = _append_front_step_roof(roof, collision, wall_record, block_runs, float(block.depth_m), float(block.roof_y)) and cut_whole
+	cut_whole = _append_front_step_roof(roof, collision, wall_record, central_high, float(block.depth_m), float(block.roof_y)) and cut_whole
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
 		cut_whole = _append_front_step_roof(roof, collision, wall_record, notch_runs, wing_step, float(wing_setback.face_top_y)) and cut_whole
 	if not cut_whole:
@@ -612,7 +624,8 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	# the 18 Jul 2023 rear photograph (see the b1-roof study notes). Solid,
 	# non-receiver.
 	var mast := _bucket()
-	var mast_placed := _append_drum_mast(mast, collision, wall_record, _int_array(chains.central_four_story_runs), float(vertical.central_inward_depth), four_y, front.drum_mast as Dictionary)
+	# It stands behind the crescent's south bays, on their block's roof.
+	var mast_placed := _append_drum_mast(mast, collision, wall_record, _int_array(chains.central_four_story_runs), float(vertical.central_inward_depth), float(block.roof_y), front.drum_mast as Dictionary)
 	if not mast_placed:
 		push_warning("Building 1 hero: the configured drum mast point is not on the drum roof; the mast was omitted.")
 	# A plain flagpole on the front block's roof behind the middle bay (the owner's
@@ -3282,6 +3295,8 @@ static func _append_front_step(visual: Dictionary, collision: Dictionary, record
 	var outer_points := outer.points as Array
 	var inner_points := inner.points as Array
 	var normals := outer.normals as Array
+	if absf(face_top - high_y) < 0.001:
+		return {"outer": _chain_points(record, runs, 0.0, _chain_length(record, runs)), "inner": inner}
 	var raised := face_top > high_y
 	var low := minf(face_top, high_y)
 	var high := maxf(face_top, high_y)

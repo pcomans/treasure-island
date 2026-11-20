@@ -91,6 +91,7 @@
       "runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
       "depth_m": 15.0,
       "roof_y": 24.3,
+      "four_storey_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35],
       "evidence": {
         "read_from_photos": ["the crescent's front block ends in its coping about 18 m over the door sills, lower than the central block behind it (the owner's 2026-11-20 photos, scaled by the footprint's bay pitch; the National Register nomination's four-storey block between three-storey blocks east and west)", "nothing of the taller block shows over the coping from the forecourt, and the cupola stands well back (the owner's 2026-11-20 photos: cupola and north-end views)"],
         "production_inference": ["the front block's depth (15 m: from the forecourt nothing of the taller block shows over the coping, even beside the junction towers)", "its roof 0.12 m under the coping's top"]
