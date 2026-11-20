@@ -222,9 +222,9 @@ void fragment() {
 			float open = open_z * run_w.x + open_x * run_w.y;
 			// The butt joints' tilt along the face, as t runs along z or x.
 			float butt = butt_z * run_w.x * sign(t.z + 0.0001) + butt_x * run_w.y * sign(t.x + 0.0001);
-			float show_joint = wall * smoothstep(4.0, 9.0, board_px);
+			float show_joint = wall * smoothstep(6.0, 14.0, board_px);
 			albedo *= 1.0 + tone * board_tone * show_board;
-			slope.y += tilt * board_relief * 0.15 * show_board;
+			slope.y += tilt * board_relief * 0.06 * show_board;
 			float cavity = max(groove * open, abs(butt_z) * run_w.x * 0.35 + abs(butt_x) * run_w.y * 0.35);
 			albedo *= 1.0 - cavity * board_joint * show_joint;
 			// The groove's walls face down above the joint and up below it.
@@ -256,7 +256,8 @@ void fragment() {
 		float blot = wall > 0.0 ? blot_z * run_w.x + blot_x * run_w.y : soft_noise(world_position.xz / mottle_scale_m * 0.37, 3.0);
 		// On walls the blotches gather under the top, where the water runs longest.
 		float upper = top_d > -0.05 ? mix(0.3, 1.0, exp(-max(top_d, 0.0) / 5.0)) : 1.0;
-		float mask = smoothstep(0.1, 0.75, blot) * mottle * (weathering > 0.0 ? exposure : 1.0) * upper;
+		// Blotches belong to old, exposed paint: they fall away fast as exposure drops.
+		float mask = smoothstep(0.1, 0.75, blot) * mottle * (weathering > 0.0 ? exposure * exposure : 1.0) * upper;
 		albedo = mix(albedo, mottle_color.rgb * (0.85 + 0.3 * smoothstep(-1.0, 1.0, blot)), mask);
 		metallic = mix(metallic, mottle_metallic, mask);
 		roughness = mix(roughness, max(roughness, 0.7), mask);
