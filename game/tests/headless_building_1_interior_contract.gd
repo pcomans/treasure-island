@@ -19,11 +19,11 @@ extends SceneTree
 ##   surface's own vertex attributes, byte for byte as the hall draws them, beside a
 ##   plain set of the same layout and size that differs from them (the baked sheen out).
 ## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
-## desktop exports (tools/prebuild-static-world.sh native), which tools/test.sh bakes.
+## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
+## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
-const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
 ## How far round the hall's plan a roof slab must stand for the slab check to count.
 const SLAB_NEAR_M := 6.0
 
@@ -73,20 +73,35 @@ func _run() -> void:
 	_finish("")
 
 
-## The reflections of the hall in the island baked for desktop exports.
+## The reflections of the hall in the island baked for desktop exports, loaded through
+## the game's main scene. (Loaded on its own, before the game's scripts, the baked scene
+## stops on the preload cycle of Hawkins 77 Bruton's massing script, facade scene and
+## facade script, which the game's own load order passes.)
 func _run_prebuilt() -> void:
-	var packed := load(PREBUILT_WORLD.NATIVE_PATH) as PackedScene
-	if packed == null:
-		_finish("no island baked for desktop at %s (tools/prebuild-static-world.sh native)" % PREBUILT_WORLD.NATIVE_PATH)
-		return
-	var baked := packed.instantiate()
-	_loose.append(baked)
-	var node := baked.find_child("HallReflections", true, false)
-	if node == null:
-		_finish("the baked island has no hall reflections")
-		return
-	_check_reflections(node.get_parent() as Node3D, "the baked hall")
-	_finish("", "PASS: the baked island's hall carries its floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
+	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
+	main.capture_mouse_on_ready = false
+	main.use_saved_settings = false
+	var world := main.get_node("WorldRoot") as WorldLoader
+	var load_failures: Array[String] = []
+	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	root.add_child(main)
+	var started := Time.get_ticks_msec()
+	while not main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
+		await process_frame
+	var error := ""
+	if not load_failures.is_empty() or not main.is_play_ready():
+		error = "the baked island did not reach play: %s" % [load_failures]
+	elif not world.uses_prebuilt_world():
+		error = "the world loader built the island instead of loading the baked one"
+	else:
+		var node := world.find_child("HallReflections", true, false)
+		if node == null:
+			error = "the baked island has no hall reflections"
+		else:
+			_check_reflections(node.get_parent() as Node3D, "the baked hall")
+	main.queue_free()
+	await process_frame
+	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
 
 
 ## The hall's floor reflections: a mode the node knows (and a config with another one

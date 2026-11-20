@@ -8,10 +8,11 @@ extends SceneTree
 ## - outside near the door, once the mural is up, the probes are there reflecting
 ##   nothing (intensity 0), and the environment and the floor are as they were;
 ## - inside, the environment's screen-space reflections are on with the hall's
-##   settings, the floor is polished and tinted, its plain attributes are up and the
-##   probes reflect;
+##   settings, the floor is polished and tinted, the renderer draws its plain attributes
+##   (read back, byte for byte the node's plain set) and the probes reflect;
 ## - back outside, the environment's five reflection settings and the floor's
-##   roughness, specular and albedo are exactly as before, the baked attributes back;
+##   roughness, specular and albedo are exactly as before, and the renderer draws the
+##   baked sheen's attributes again, byte for byte;
 ## - on the doorway the look does not switch frame by frame: a camera put across the
 ##   line and back every frame, a camera going round the doorway and the stock player's
 ##   own spring-arm camera turned round where it stands in the door (each frame printed
@@ -132,8 +133,8 @@ func _check_forward_plus() -> void:
 	var parent := _node.get_parent()
 	parent.remove_child(_node)
 	await _frames(2)
-	if _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown() or not _hall_probes(parent).is_empty():
-		failures.append("taken out of the tree while on, it left the environment %s (own %s), the floor %s (was %s), its plain attributes %s and %d probes" % [_ssr_of(environment), own, _floor_values(), floor, "up" if _node.plain_floor_shown() else "down", _hall_probes(parent).size()])
+	if _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown() or _drawn_attributes() != _node.sheen_attributes or not _hall_probes(parent).is_empty():
+		failures.append("taken out of the tree while on, it left the environment %s (own %s), the floor %s (was %s), its plain attributes %s (the drawn bytes %s its baked sheen) and %d probes" % [_ssr_of(environment), own, _floor_values(), floor, "up" if _node.plain_floor_shown() else "down", "are" if _drawn_attributes() == _node.sheen_attributes else "are not", _hall_probes(parent).size()])
 	parent.add_child(_node)
 	await _frames(10)
 	_check_on("inside, the node back in the tree", environment)
@@ -245,6 +246,10 @@ func _check_on(where: String, environment: Environment) -> void:
 		problems.append("the floor at roughness %.3f and specular %.3f, not %.3f and %.3f" % [material.roughness, material.metallic_specular, _node.floor_roughness, _node.floor_specular])
 	if _node.plain_floor_shown() == _node.baked_sheen:
 		problems.append("its plain attributes %s" % ("up" if _node.plain_floor_shown() else "down"))
+	var wanted := _node.sheen_attributes if _node.baked_sheen else _node.plain_attributes
+	var drawn := _drawn_attributes()
+	if wanted.is_empty() or drawn != wanted:
+		problems.append("the floor draws %d attribute bytes that are not its %s set of %d" % [drawn.size(), "baked sheen" if _node.baked_sheen else "plain", wanted.size()])
 	var probes := _node.probe_nodes()
 	if probes.is_empty() or probes.any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, _node.probe_intensity)):
 		problems.append("%d probes, not all at intensity %.2f" % [probes.size(), _node.probe_intensity])
@@ -262,6 +267,9 @@ func _check_off(where: String, environment: Environment, own: Array, floor: Arra
 		problems.append("the floor %s, not %s" % [_floor_values(), floor])
 	if _node.plain_floor_shown():
 		problems.append("its plain attributes up")
+	var drawn := _drawn_attributes()
+	if _node.sheen_attributes.is_empty() or drawn != _node.sheen_attributes:
+		problems.append("the floor draws %d attribute bytes that are not its baked sheen of %d" % [drawn.size(), _node.sheen_attributes.size()])
 	if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return probe.intensity != 0.0):
 		problems.append("a probe reflecting")
 	if not problems.is_empty():
@@ -315,6 +323,13 @@ func _floor_material() -> BaseMaterial3D:
 func _floor_values() -> Array:
 	var material := _floor_material()
 	return [material.roughness, material.metallic_specular, material.albedo_color]
+
+
+## The floor's vertex attributes as the renderer holds them to draw (read back from the
+## GPU: a check may, the game does not), byte for byte the set the node swapped in.
+func _drawn_attributes() -> PackedByteArray:
+	var surface := RenderingServer.mesh_get_surface(_shell.mesh.get_rid(), Building1HallReflections.floor_surface(_shell))
+	return surface.get("attribute_data", PackedByteArray())
 
 
 ## The hall's reflection probes under the hall's node.
