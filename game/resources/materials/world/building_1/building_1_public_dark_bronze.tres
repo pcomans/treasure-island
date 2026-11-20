@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_public_patinated_dark_bronze"
+albedo_color = Color(0.075, 0.072, 0.06, 1)
+metallic = 0.45
+roughness = 0.5

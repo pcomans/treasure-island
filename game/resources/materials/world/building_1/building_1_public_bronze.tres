@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "building_1_public_golden_bronze"
-albedo_color = Color(0.46, 0.33, 0.17, 1)
+albedo_color = Color(0.62, 0.48, 0.26, 1)
 metallic = 0.6
 roughness = 0.4

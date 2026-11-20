@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_public_slate_teal_garage_door"
+albedo_color = Color(0.13, 0.2, 0.22, 1)
+metallic = 0.2
+roughness = 0.6
