@@ -5,16 +5,29 @@ extends SceneTree
 ## renderer (Forward+ falling back to Compatibility without Vulkan) fails.
 ##   tools/godot --rendering-method forward_plus --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect forward_plus
 ##   tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --script game/tests/building_1_hall_reflections_check.gd -- --expect gl_compatibility
+## It runs at 60 frames a second of game time (--fixed-fps 60), so the reflections' fade
+## (Building1HallReflections.FADE_S) takes a known number of frames (_fade_frames).
 ## Forward+ (desktop), with mode "inside" (set here, as the config ships it):
 ## - far from the door the mural is not up and there is no probe, nor while it loads;
 ## - outside near the door, once the mural is up, the probes are there reflecting
 ##   nothing (intensity 0), and the environment and the floor are as they were;
-## - inside, the environment's screen-space reflections are on with the hall's
-##   settings, the floor is polished and tinted, the renderer draws its plain attributes
-##   (read back, byte for byte the node's plain set) and the probes reflect;
-## - back outside, the environment's five reflection settings and the floor's
-##   roughness, specular and albedo are exactly as before, and the renderer draws the
-##   baked sheen's attributes again, byte for byte;
+## - walked in, the reflections fade in frame by frame: the blend only rises and is
+##   all in within the fade's frames; each frame the floor's roughness, specular and
+##   colour are the blend's mix of its own and the polished ones, its plain attributes
+##   are up exactly from the blend's middle, the probes reflect at the blend's share,
+##   and the environment has the hall's screen-space reflections from the first frame
+##   (each frame printed as a FADE line). At the end, all in: the environment's
+##   reflections the hall's, the floor polished and tinted, the renderer drawing its
+##   plain attributes (read back, byte for byte the node's plain set), the probes at
+##   full intensity;
+## - walked out, the same fading out: the blend only falls, the environment keeps the
+##   hall's reflections to the fade's last frame, and at the end its five reflection
+##   settings and the floor's roughness, specular and albedo are exactly as before, and
+##   the renderer draws the baked sheen's attributes again, byte for byte;
+## - turned back mid-fade, below and past the blend's middle, the fade turns round
+##   without flapping: from the frame the camera leaves, the blend only falls, the plain
+##   attributes come down once if they went up, and the environment's reflections go
+##   once, when the blend is back at 0;
 ## - on the doorway, where the look switches on HYSTERESIS_M inside the hall's bound
 ##   and off as far outside it: a camera walked across that whole band and back,
 ##   BAND_TRIPS times, switches it exactly once each time it crosses the far line, in
@@ -25,8 +38,9 @@ extends SceneTree
 ##   frames (each frame printed as DOORWAY lines, beside what one line would have done);
 ## - an environment swapped in while they are on gets the reflections and the one
 ##   swapped out its own settings back;
-## - taken out of the tree while on, the node puts the environment, the floor and its
-##   attributes back and frees its probes;
+## - taken out of the tree while on, and again mid-fade with the plain attributes up,
+##   the node puts the environment, the floor and its attributes back at once and frees
+##   its probes; back in the tree it fades in again;
 ## - the mural released far away frees the probes.
 ## Compatibility (the web's renderer): with the camera inside, nothing of it: no probe,
 ## the environment and the floor untouched.
@@ -52,6 +66,12 @@ const FLICKER_FRAMES := 10
 const BAND_PAST_M := 0.125
 const BAND_STEP_M := 0.05
 const BAND_TRIPS := 3
+## The frames of game time a second (the run's --fixed-fps).
+const FPS := 60.0
+## Frames the camera stays in before turning back mid-fade: below the blend's middle,
+## and past it (the plain attributes up).
+const TURN_BELOW := 9
+const TURN_PAST := 21
 
 var _h: WorldHarness
 var failures: Array[String] = []
@@ -133,18 +153,21 @@ func _check_forward_plus() -> void:
 	_check_off("outside near the door, the mural up", environment, own, floor)
 	if _node.probe_nodes().is_empty():
 		failures.append("no probes outside near the door once the mural is up")
-	# Inside: on.
-	await _stand(INSIDE_M, 10)
+	# Inside: fading in, then all in.
+	await _check_fade("fading in", INSIDE_M, environment, own, floor)
 	_check_on("inside", environment)
-	# Back outside: everything as before.
-	await _stand(-OUTSIDE_M, 10)
+	# Back outside: fading out, then everything as before.
+	await _check_fade("fading out", -OUTSIDE_M, environment, own, floor)
 	_check_off("back outside", environment, own, floor)
+	# Turned back mid-fade, below the blend's middle and past it.
+	await _check_turn_back("turned back below the middle", TURN_BELOW, environment, own, floor)
+	await _check_turn_back("turned back past the middle", TURN_PAST, environment, own, floor)
 	await _check_doorway()
-	await _stand(-OUTSIDE_M, 10)
+	await _stand(-OUTSIDE_M, _fade_frames() + 2)
 	_check_off("outside after the doorway", environment, own, floor)
 	# Another environment (a copy made while the reflections are off) swapped in while on.
 	var other := environment.duplicate() as Environment
-	await _stand(INSIDE_M, 10)
+	await _stand(INSIDE_M, _fade_frames() + 2)
 	_world_environment.environment = other
 	await _frames(3)
 	if _ssr_of(environment) != own:
@@ -156,15 +179,16 @@ func _check_forward_plus() -> void:
 	if _ssr_of(other) != own:
 		failures.append("the environment swapped back out keeps the hall's reflections: %s" % [_ssr_of(other)])
 	_check_on("inside, the environment swapped back", environment)
-	# Out of the tree while on: everything back, the probes freed.
+	# Out of the tree while on, and again mid-fade with the plain attributes up:
+	# everything back at once, the probes freed; back in, it fades in again.
 	var parent := _node.get_parent()
-	parent.remove_child(_node)
-	await _frames(2)
-	if _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown() or _drawn_attributes() != _node.sheen_attributes or not _hall_probes(parent).is_empty():
-		failures.append("taken out of the tree while on, it left the environment %s (own %s), the floor %s (was %s), its plain attributes %s (the drawn bytes %s its baked sheen) and %d probes" % [_ssr_of(environment), own, _floor_values(), floor, "up" if _node.plain_floor_shown() else "down", "are" if _drawn_attributes() == _node.sheen_attributes else "are not", _hall_probes(parent).size()])
-	parent.add_child(_node)
-	await _frames(10)
-	_check_on("inside, the node back in the tree", environment)
+	await _check_leave(parent, "while on", environment, own, floor)
+	await _stand(-OUTSIDE_M, _fade_frames() + 2)
+	_put(_at(INSIDE_M), _at(INSIDE_M + 5.0))
+	await _frames(TURN_PAST)
+	if _node.fade() <= 0.5 or _node.fade() >= 1.0 or not _node.plain_floor_shown():
+		failures.append("%d frames into the fade-in the blend is %.3f and the plain attributes %s, not past the middle and up" % [TURN_PAST, _node.fade(), "up" if _node.plain_floor_shown() else "down"])
+	await _check_leave(parent, "mid-fade", environment, own, floor)
 	# Far away again: the mural released after its delay, the probes freed.
 	_put(_at(-FAR_M), _door)
 	frames = 0
@@ -176,7 +200,119 @@ func _check_forward_plus() -> void:
 	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty() or not _hall_probes(parent).is_empty():
 		failures.append("far away the mural is %s and %d probes are left" % [Building1MuralLoader.State.keys()[_loader.state], _hall_probes(parent).size()])
 	if failures.is_empty():
-		print("PASS: Forward+: no probe before the mural is up; probes reflecting nothing outside; inside, the hall's reflections and polish; outside again, the environment's reflections and the floor exactly as before; no flicker on the doorway; a swapped environment and the node leaving the tree put back; probes freed with the mural")
+		print("PASS: Forward+: no probe before the mural is up; probes reflecting nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, plain attributes, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
+
+
+## The frames a fade takes at FPS, and one for the last step's rounding.
+static func _fade_frames() -> int:
+	return ceili(Building1HallReflections.FADE_S * FPS) + 1
+
+
+## The polished floor's values: [roughness, specular, albedo] as the node sets them.
+func _polished(floor: Array) -> Array:
+	var albedo: Color = floor[2]
+	var tint := _node.floor_albedo
+	return [_node.floor_roughness, _node.floor_specular, Color(albedo.r * tint.r, albedo.g * tint.g, albedo.b * tint.b, albedo.a)]
+
+
+## The camera put on the door's axis (metres in, out if negative), then a fade watched
+## frame by frame until it has ended and a few frames more: the blend moves only toward
+## its end and gets there within _fade_frames(); each frame the floor's values are the
+## blend's mix of its own (floor) and the polished ones, the plain attributes are up
+## exactly from the blend's middle, the probes reflect at its share of their intensity,
+## and the environment has the hall's reflections while the camera calls for them or
+## the blend is above 0, else its own (own) exactly.
+func _check_fade(where: String, metres: float, environment: Environment, own: Array, floor: Array) -> void:
+	var hall_ssr := [true, _node.ssr_max_steps, _node.ssr_fade_in, _node.ssr_fade_out, _node.ssr_depth_tolerance]
+	var polished := _polished(floor)
+	var start := _node.fade()
+	_put(_at(metres), _at(metres + 5.0))
+	var target := 1.0 if metres > 0.0 else 0.0
+	var last := start
+	var ended := -1
+	var problems: Array[String] = []
+	for frame in _fade_frames() + 3:
+		await process_frame
+		var blend := _node.fade()
+		if (target - blend) * (target - last) < 0.0 or absf(target - blend) > absf(target - last):
+			problems.append("frame %d: the blend went from %.3f to %.3f, away from %.0f" % [frame, last, blend, target])
+		if blend == target and ended < 0:
+			ended = frame
+		var values := _floor_values()
+		var mixed := [lerpf(floor[0], polished[0], blend), lerpf(floor[1], polished[1], blend), (floor[2] as Color).lerp(polished[2], blend)]
+		if not is_equal_approx(values[0], mixed[0]) or not is_equal_approx(values[1], mixed[1]) or not (values[2] as Color).is_equal_approx(mixed[2]):
+			problems.append("frame %d at blend %.3f: the floor %s, not %s" % [frame, blend, values, mixed])
+		if _node.plain_floor_shown() != (not _node.baked_sheen and blend >= 0.5):
+			problems.append("frame %d at blend %.3f: the plain attributes %s" % [frame, blend, "up" if _node.plain_floor_shown() else "down"])
+		if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, _node.probe_intensity * blend)):
+			problems.append("frame %d at blend %.3f: a probe not at %.3f" % [frame, blend, _node.probe_intensity * blend])
+		var hall := _node.is_on() or blend > 0.0
+		if (hall and not _same(_ssr_of(environment), hall_ssr)) or (not hall and _ssr_of(environment) != own):
+			problems.append("frame %d at blend %.3f: the environment's reflections %s" % [frame, blend, _ssr_of(environment)])
+		print("FADE %s frame=%d blend=%.3f roughness=%.4f specular=%.4f plain=%s ssr=%s" % [where, frame, blend, values[0], values[1], _node.plain_floor_shown(), _ssr_of(environment)[0]])
+		last = blend
+	if ended < 0 or ended >= _fade_frames():
+		problems.append("the blend reached %.0f %s, not within %d frames" % [target, "at frame %d" % ended if ended >= 0 else "never", _fade_frames()])
+	print("FADE %s: from %.3f to %.0f in %d frames" % [where, start, target, ended + 1])
+	if not problems.is_empty():
+		failures.append("%s: %s" % [where, "; ".join(problems.slice(0, 6))])
+
+
+## The camera in from outside (blend 0) for `frames` frames, then out again: from the
+## frame it leaves the blend only falls, back to 0 within _fade_frames(); the plain
+## attributes come down once if they went up, never otherwise, and the environment's
+## reflections go once, when the blend is back at 0; then everything as before.
+func _check_turn_back(where: String, frames: int, environment: Environment, own: Array, floor: Array) -> void:
+	await _stand(-OUTSIDE_M, _fade_frames() + 2)
+	_put(_at(INSIDE_M), _at(INSIDE_M + 5.0))
+	await _frames(frames)
+	var peak := _node.fade()
+	var plain := _node.plain_floor_shown()
+	var hall := _ssr_of(environment) != own
+	_put(_at(-OUTSIDE_M), _at(-OUTSIDE_M + 5.0))
+	var last := peak
+	var plain_changes := 0
+	var environment_changes := 0
+	var ended := -1
+	var problems: Array[String] = []
+	for frame in _fade_frames() + 3:
+		await process_frame
+		var blend := _node.fade()
+		if blend > last:
+			problems.append("frame %d: the blend rose from %.3f to %.3f" % [frame, last, blend])
+		if blend == 0.0 and ended < 0:
+			ended = frame
+		if _node.plain_floor_shown() != plain:
+			plain = _node.plain_floor_shown()
+			plain_changes += 1
+		if (_ssr_of(environment) != own) != hall:
+			hall = not hall
+			environment_changes += 1
+			if blend != 0.0:
+				problems.append("frame %d: the environment's reflections went at blend %.3f" % [frame, blend])
+		last = blend
+	var expected_plain := 1 if peak >= 0.5 and not _node.baked_sheen else 0
+	if plain_changes != expected_plain or environment_changes != 1 or ended < 0 or ended >= _fade_frames():
+		problems.append("turned back at blend %.3f: the plain attributes changed %d times (%d expected), the environment's reflections %d times (1 expected), the blend at 0 %s" % [peak, plain_changes, expected_plain, environment_changes, "at frame %d" % ended if ended >= 0 else "never"])
+	print("FADE %s at blend %.3f: back to 0 in %d frames, the plain attributes changed %d times, the environment's reflections %d" % [where, peak, ended + 1, plain_changes, environment_changes])
+	if not problems.is_empty():
+		failures.append("%s: %s" % [where, "; ".join(problems.slice(0, 6))])
+	_check_off(where + ", at the end", environment, own, floor)
+
+
+## The node out of the tree (as it is now: on, or mid-fade), then back in: out, the
+## environment, the floor and its attributes are back at once and the probes freed; back
+## in with the camera inside, it fades in again.
+func _check_leave(parent: Node, when: String, environment: Environment, own: Array, floor: Array) -> void:
+	var blend := _node.fade()
+	parent.remove_child(_node)
+	await _frames(2)
+	if _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown() or _drawn_attributes() != _node.sheen_attributes or not _hall_probes(parent).is_empty() or _node.fade() != 0.0:
+		failures.append("taken out of the tree %s (blend %.3f), it left the environment %s (own %s), the floor %s (was %s), its plain attributes %s (the drawn bytes %s its baked sheen), %d probes and the blend at %.3f" % [when, blend, _ssr_of(environment), own, _floor_values(), floor, "up" if _node.plain_floor_shown() else "down", "are" if _drawn_attributes() == _node.sheen_attributes else "are not", _hall_probes(parent).size(), _node.fade()])
+	print("FADE out of the tree %s at blend %.3f: put back" % [when, blend])
+	parent.add_child(_node)
+	await _frames(_fade_frames() + 2)
+	_check_on("inside, the node back in the tree after leaving it %s" % when, environment)
 
 
 ## The doorway, where the door's axis crosses the hall's bound (line): the band between
@@ -311,8 +447,8 @@ func _check_on(where: String, environment: Environment) -> void:
 	var values := [true, _node.ssr_max_steps, _node.ssr_fade_in, _node.ssr_fade_out, _node.ssr_depth_tolerance]
 	var material := _floor_material()
 	var problems: Array[String] = []
-	if not _node.is_on():
-		problems.append("not on")
+	if not _node.is_on() or _node.fade() != 1.0:
+		problems.append("not all in (on %s, blend %.3f)" % [_node.is_on(), _node.fade()])
 	if not _same(_ssr_of(environment), values):
 		problems.append("the environment's reflections %s, not the hall's %s" % [_ssr_of(environment), values])
 	if not is_equal_approx(material.roughness, _node.floor_roughness) or not is_equal_approx(material.metallic_specular, _node.floor_specular):
@@ -332,8 +468,8 @@ func _check_on(where: String, environment: Environment) -> void:
 
 func _check_off(where: String, environment: Environment, own: Array, floor: Array) -> void:
 	var problems: Array[String] = []
-	if _node.is_on():
-		problems.append("on")
+	if _node.is_on() or _node.fade() != 0.0:
+		problems.append("not all out (on %s, blend %.3f)" % [_node.is_on(), _node.fade()])
 	if _ssr_of(environment) != own:
 		problems.append("the environment's reflections %s, not its own %s" % [_ssr_of(environment), own])
 	if _floor_values() != floor:

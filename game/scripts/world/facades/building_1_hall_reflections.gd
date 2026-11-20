@@ -7,28 +7,33 @@ extends Node
 ## anywhere else (the web's Compatibility renderer) this node does nothing at all, and
 ## the floor keeps the polish baked into its vertex shading.
 ##
-## While on it
+## They fade in and out over FADE_S rather than switching in one frame: a blend from 0
+## (the floor as built) to 1 (polished) moves toward whichever the camera calls for at
+## 1 / FADE_S a second. Along the blend this
 ## - turns the world environment's screen-space reflections on with this hall's
-##   settings (ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance), and puts
-##   the environment's own back when they go off, when the environment is swapped for
-##   another, and when this node leaves the tree (the environment is the main scene's);
-## - polishes the terrazzo (floor_roughness, floor_specular; floor_albedo tints its
-##   colour, channel by channel, since the reflections add light of their own);
-## - unless baked_sheen, puts up plain_attributes, the floor's vertex attributes without
-##   its painted window streaks and dark pier reflections, which the real reflections
-##   replace, and puts sheen_attributes, the floor as built, back after. Both were built
-##   on the CPU with the floor (nothing is read back from the GPU); the same shader draws
-##   both. If they do not fit the surface this hall draws, it says so as an error and
-##   leaves the baked sheen up;
-## - with probes, reflects the hall itself wherever the screen has nothing to reflect:
-##   probe_sections box-projected reflection probes along the crescent, seeing and
-##   lighting the hall's render layer only. They are made once the mural is up near the
-##   door (Building1MuralLoader, so they capture it), reflect nothing (intensity 0) until
-##   the camera is in, so the hall seen through its door is as before, capture again as
-##   the sun moves (RECAPTURE_DEG) and are freed when the mural goes. Neighbouring boxes
-##   overlap and blend over probe_blend metres.
+##   settings (ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance) from the
+##   fade-in's first frame to the fade-out's last: they can only switch, and the floor's
+##   polish brings them in and out. The environment's own settings come back then, when
+##   the environment is swapped for another, and when this node leaves the tree (the
+##   environment is the main scene's);
+## - polishes the terrazzo: its roughness, specular and colour go from the material's
+##   own to floor_roughness, floor_specular and its colour tinted by floor_albedo,
+##   channel by channel (the reflections add light of their own);
+## - unless baked_sheen, puts up plain_attributes from the blend's middle on, the floor's
+##   vertex attributes without its painted window streaks and dark pier reflections,
+##   which the real reflections replace, and puts sheen_attributes, the floor as built,
+##   back below it. Both were built on the CPU with the floor (nothing is read back from
+##   the GPU); the same shader draws both. If they do not fit the surface this hall
+##   draws, it says so as an error and leaves the baked sheen up;
+## - with probes, reflects the hall itself wherever the screen has nothing to reflect,
+##   at probe_intensity times the blend: probe_sections box-projected reflection probes
+##   along the crescent, seeing and lighting the hall's render layer only. They are
+##   made once the mural is up near the door (Building1MuralLoader, so they capture it),
+##   reflect nothing (intensity 0) until the camera is in, so the hall seen through its
+##   door is as before, capture again as the sun moves (RECAPTURE_DEG) and are freed
+##   when the mural goes. Neighbouring boxes overlap and blend over probe_blend metres.
 ## Going in and coming out have lines of their own, HYSTERESIS_M inside and outside the
-## hall's bounds, so a camera on the doorway does not switch the look frame by frame.
+## hall's bounds, so a camera on the doorway does not turn the fade round frame by frame.
 
 const MODES: Array[String] = ["off", "inside", "always"]
 ## The sun's move (degrees) after which the probes capture again, as DaySun's for
@@ -41,6 +46,8 @@ const PROBE_MARGIN_M := 0.5
 ## The camera turns the reflections on this far (m) inside the hall's bounds, and off
 ## this far outside them: two lines twice this far apart.
 const HYSTERESIS_M := 0.4
+## How long (s) the reflections take to fade in, or out.
+const FADE_S := 0.5
 
 @export var mode := "off"
 ## The render layer the hall draws on (building_1_interior.gd RENDER_INTERIOR): the
@@ -82,11 +89,15 @@ const HYSTERESIS_M := 0.4
 ## Where the probes capture, this high over the floor.
 @export var probe_capture_height := 4.0
 
-## How many times the reflections have come on or gone off.
+## How many times the camera has called for the reflections or let them go.
 var toggles := 0
 ## The settings last applied, compared each frame (they may change in play).
 var _applied: Array = []
+## Whether the camera calls for the reflections (the fade's goal), and the fade: 0 the
+## floor as built, 1 polished; the blend last shown (-1: none yet).
 var _on := false
+var _blend := 0.0
+var _shown := -1.0
 var _shell: MeshInstance3D
 var _floor: BaseMaterial3D
 var _floor_surface := -1
@@ -121,32 +132,46 @@ func _ready() -> void:
 		push_error("Building 1 hall reflections: the floor's built attributes do not fit its surface (format %d of %d, %d of %d vertices, %d of %d indices, %d and %d bytes); its baked sheen stays." % [floor_format, _shell.mesh.surface_get_format(_floor_surface), floor_vertex_count, _shell.mesh.surface_get_array_len(_floor_surface), floor_index_count, _shell.mesh.surface_get_array_index_len(_floor_surface), sheen_attributes.size(), plain_attributes.size()])
 
 
-func _process(_delta: float) -> void:
-	if (mode == "off" and not _on and _probes.is_empty()) or not Building1MuralLoader.play_started(get_tree()):
+func _process(delta: float) -> void:
+	if (mode == "off" and not _on and _blend == 0.0 and _probes.is_empty()) or not Building1MuralLoader.play_started(get_tree()):
 		return
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
 		return
 	var settings := [mode, ssr, ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance, floor_roughness, floor_specular, floor_albedo, baked_sheen]
 	var on := mode == "always" or (mode == "inside" and inside(camera.global_position, -HYSTERESIS_M if _on else HYSTERESIS_M))
-	if on != _on or settings != _applied:
-		_apply(on)
+	if on != _on:
+		toggles += 1
+		_on = on
+	_blend = move_toward(_blend, 1.0 if _on else 0.0, delta / FADE_S)
+	if _blend != _shown or settings != _applied:
+		_apply()
 		_applied = settings
-	elif _on and _world_environment() != _environment:
-		# The world's environment was swapped while on.
+	elif _environment != null and _world_environment() != _environment:
+		# The world's environment was swapped while the reflections are in it.
 		_set_environment(true)
 	_update_probes()
 
 
 func _exit_tree() -> void:
+	# Mid-fade or on: everything as built at once, the probes freed.
 	if _on:
-		_apply(false)
+		toggles += 1
+	_on = false
+	_blend = 0.0
+	if _shown > 0.0 or _environment != null or _plain_shown:
+		_apply()
 	_free_probes()
 
 
-## Whether the reflections are on now.
+## Whether the camera calls for the reflections now (they fade in or out after it).
 func is_on() -> bool:
 	return _on
+
+
+## The fade: 0 the floor as built, 1 the reflections and polish all in.
+func fade() -> float:
+	return _blend
 
 
 ## Whether the floor shows its plain colours (no baked sheen) now.
@@ -192,17 +217,24 @@ func attributes_fit(shell: MeshInstance3D) -> bool:
 		and sheen_attributes.size() == stride * floor_vertex_count and plain_attributes.size() == sheen_attributes.size()
 
 
-func _apply(on: bool) -> void:
-	_set_environment(on)
+## The look at the blend now: the environment's reflections in from the fade-in's start
+## to the fade-out's end, the floor between its own values and the polished ones (each
+## end exact), its plain colours from the middle on.
+func _apply() -> void:
+	_set_environment(_on or _blend > 0.0)
 	if _floor != null:
-		_floor.roughness = floor_roughness if on else float(_floor_matte.roughness)
-		_floor.metallic_specular = floor_specular if on else float(_floor_matte.specular)
 		var albedo: Color = _floor_matte.albedo
-		_floor.albedo_color = Color(albedo.r * floor_albedo.r, albedo.g * floor_albedo.g, albedo.b * floor_albedo.b, albedo.a) if on else albedo
-	_show_plain_floor(on and not baked_sheen)
-	if on != _on:
-		toggles += 1
-	_on = on
+		var polished := Color(albedo.r * floor_albedo.r, albedo.g * floor_albedo.g, albedo.b * floor_albedo.b, albedo.a)
+		_floor.roughness = _mix(float(_floor_matte.roughness), floor_roughness)
+		_floor.metallic_specular = _mix(float(_floor_matte.specular), floor_specular)
+		_floor.albedo_color = albedo if _blend == 0.0 else (polished if _blend == 1.0 else albedo.lerp(polished, _blend))
+	_show_plain_floor(not baked_sheen and _blend >= 0.5)
+	_shown = _blend
+
+
+## A value between the floor's own (blend 0) and the polished one (blend 1).
+func _mix(own: float, polished: float) -> float:
+	return own if _blend == 0.0 else (polished if _blend == 1.0 else lerpf(own, polished, _blend))
 
 
 ## The world environment's reflections: this hall's while on (only its own if ssr is
@@ -263,7 +295,7 @@ func _update_probes() -> void:
 		_make_probes()
 		_probe_layout = layout
 		_captured_elevation = _sun_elevation()
-	var intensity := probe_intensity if _on else 0.0
+	var intensity := probe_intensity * _blend
 	for probe in _probes:
 		if probe.intensity != intensity:
 			probe.intensity = intensity

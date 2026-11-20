@@ -6,6 +6,10 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2397 (2026-11-20)
+
+- On computers, the reflections in the floor of Building 1's hall now fade in over half a second as you walk in, and out as you leave, instead of appearing all at once at the door.
+
 ## Build 2394 (2026-11-20)
 
 - While driving on a phone or tablet, drag anywhere that isn't a button to glance around, as with the mouse; the view swings back a moment after you stop.

@@ -21,6 +21,9 @@ extends SceneTree
 ## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
 ## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
 ## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
+## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
+## it builds the hall as the web's bake does and checks its reflections node carries
+## neither floor attribute set: the web draws none of them.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -68,9 +71,25 @@ func _run() -> void:
 	_check_closure(hall)
 	_check_door(hall)
 	_check_roof(hall)
+	if OS.get_cmdline_user_args().has("--web-world-bake"):
+		_check_web_bake(hall)
+		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets" % (hall.get_node("HallReflections") as Building1HallReflections).mode if failures.is_empty() else "")
+		return
 	_check_mural(hall)
 	_check_reflections(hall, "the generated hall")
 	_finish("")
+
+
+## The hall as the web's bake builds it: its reflections node (which does nothing on the
+## web) carries none of the floor's attribute bytes, so the web pack carries none.
+func _check_web_bake(hall: Node3D) -> void:
+	var node := hall.get_node_or_null("HallReflections") as Building1HallReflections
+	if node == null:
+		failures.append("the hall built for the web has no HallReflections node")
+		return
+	if not node.sheen_attributes.is_empty() or not node.plain_attributes.is_empty():
+		failures.append("the hall built for the web carries the floor's attribute sets (%d and %d bytes)" % [node.sheen_attributes.size(), node.plain_attributes.size()])
+	print("REFLECTIONS the web-bake hall: the floor's attribute sets %d and %d bytes" % [node.sheen_attributes.size(), node.plain_attributes.size()])
 
 
 ## The reflections of the hall in the island baked for desktop exports, loaded through

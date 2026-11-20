@@ -356,7 +356,7 @@ for method in forward_plus gl_compatibility; do
 done
 
 # Building 1's hall floor reflections in the loaded island, drawn on both renderers: on
-# Forward+ they come and go with the camera, never flicker on the doorway and put the
+# Forward+ they fade in and out with the camera, never flicker on the doorway and put the
 # environment and the floor back exactly; on the Compatibility renderer (the web's) they
 # do nothing at all (game/tests/building_1_hall_reflections_check.gd). Each run names
 # the renderer it asks for, and fails if the engine draws with another.
@@ -393,6 +393,11 @@ for test in "${tests[@]}"; do
   [ "${test}" != game/tests/shared/island_test.gd ] || start_node_checks
   run_test "${test}" "${test}"
 done
+
+# Built as the web's bake builds it (its flag, which the builders read), Building 1's
+# hall carries no floor attribute sets for the reflections the web never draws.
+echo "== game/tests/headless_building_1_interior_contract.gd -- --web-world-bake"
+run_test "game/tests/headless_building_1_interior_contract.gd (web bake)" game/tests/headless_building_1_interior_contract.gd --web-world-bake
 
 echo "== silent pass (--no-sfx)"
 if [ ! -f game/resources/audio/sfx/sfx.json ]; then
