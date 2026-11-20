@@ -299,8 +299,9 @@ static func _append_floors(plan: Dictionary, buckets: Dictionary, shell: Diction
 
 
 ## The vestibule's floor: level with the door's sill (sill_y) from under its front wall
-## to sill_landing inside it, under the door's open leaves, then rising too gently to
-## see to the hall's floor at the colonnade's back, through the inner doorway. In the
+## to sill_landing (0.3 m) inside it, then rising too gently to see to the hall's floor
+## at the colonnade's back, through the inner doorway; the door's open leaves reach past
+## the landing, their far ends over the start of the rise. In the
 ## doorway it starts at the sill's inner edge, on the sill's stations (_append_doorway).
 static func _append_vestibule_floor(plan: Dictionary, floor: Dictionary, shell: Dictionary, cuts: Array[float]) -> void:
 	var front_in := float(plan.front_in)
@@ -1024,7 +1025,8 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 static func _append_door_leaves(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	var door := plan.door as Dictionary
 	var leaf := plan.members.door_leaf as Dictionary
-	# On the sill's level, which runs on inside under them (sill_landing).
+	# On the sill's level, which runs on inside for sill_landing under their hinge ends;
+	# their far ends stand over the start of the rise.
 	var y := float(plan.sill_y)
 	var top := float(door.top_y)
 	var half := float(door.half)

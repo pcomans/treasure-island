@@ -12,7 +12,11 @@ extends SceneTree
 ## with the world's own WorldChunkBuilder: their ground and roads (land, draped areas,
 ## roads and paths, park and street surfaces, kerbs and overlays, drawn or solid) are
 ## the outdoor ground, and the street detail's placed rows (planting, hedges, furniture,
-## fences, clutter and parked cars) the outdoor instances.
+## fences, clutter and parked cars) the outdoor instances. Not checked: a node marked
+## interior_of_source_key whose catalog unit lists no passages, and ground that the
+## world loader adds beyond those chunk records (the shoreline builder's, and the
+## installers' such as the housing family's, Mersea's or the Bulgarian wall's): this
+## check does not build it, so it is not read.
 ##
 ## The interior is sampled on a GRID_M grid over its plan and along the foot of each of
 ## its walls, FOOT_INSET_M inside the face, so every floor is sampled right up to its
@@ -220,9 +224,11 @@ func _build(chunk_id: String, chunk_paths: Dictionary) -> void:
 	_builder.attach_built_chunk(report, _parents)
 
 
+## Every node marked as the source's interior, searched from the root, so one built
+## outside the buildings' parent is found and fails the check below.
 func _interiors(source: String) -> Array[Node3D]:
 	var found: Array[Node3D] = []
-	for node: Node in (_parents[BUILDINGS] as Node).find_children("*", "Node3D", true, false):
+	for node: Node in root.find_children("*", "Node3D", true, false):
 		if str(node.get_meta(INTERIOR_META, "")) == source:
 			found.append(node as Node3D)
 	return found
