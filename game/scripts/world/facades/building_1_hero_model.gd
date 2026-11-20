@@ -175,6 +175,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"light_steel": _bucket(),
 		"relief": _bucket(),
 		"dark_bronze": _bucket(),
+		"reeds": _bucket(),
 		"gilded": _bucket(),
 		"slate_teal": _bucket(),
 		"plain_trim": _bucket(),
@@ -475,6 +476,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	specs.append({"name": "HeroLightSteel", "bucket": buckets.light_steel, "material": PUBLIC_LIGHT_STEEL_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroEmblemRelief", "bucket": buckets.relief, "material": PUBLIC_RELIEF_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroDarkBronze", "bucket": buckets.dark_bronze, "material": PUBLIC_DARK_BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	# The fluted piers' reeds are shaded by their own shallow waves and take the
+	# building's shadows, but cast none: their 2.5 cm self-shadows fall between the
+	# shadow map's texels at play distances and crawl as the camera moves.
+	specs.append({"name": "HeroPierReeds", "bucket": buckets.reeds, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL, "casts_shadow": false})
 	specs.append({"name": "HeroGildedKickPanels", "bucket": buckets.gilded, "material": PUBLIC_GILDED_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": PUBLIC_SLATE_TEAL_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroRoundPiers", "bucket": buckets.plain_trim, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL})
@@ -1517,7 +1522,7 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 		var center_m := float(center_value)
 		var frame := _span_frame(record, runs, center_m - pier * 0.5 - 0.1, center_m + pier * 0.5 + 0.1)
 		var center := center_m - float(frame.mid_m)
-		_append_fluted_pier(buckets.trim, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
+		_append_fluted_pier(buckets.trim, buckets.reeds, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
 
 
 ## The crescent's attic (the owner's 2026-11-20 photos; the 2003 nomination's
@@ -2452,9 +2457,9 @@ static func _strip_rear_outline(record: Dictionary, runs: Array[int], depth: flo
 	return {"points": points, "normals": normals}
 
 
-## A pier with its soft reeds (the owner's 2026-11-20 photos): each reed a shallow
-## arc across, rounded at both ends, their tops stepping down from the middle reed.
-static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
+## A pier with its soft reeds (the owner's 2026-11-20 photos): each reed one shallow
+## wave across, rounded at both ends, their tops stepping down from the middle reed.
+static func _append_fluted_pier(trim: Dictionary, reed_bucket: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
 	var back := float(frame.lo) - 0.03
 	var wall := float(frame.hi)
 	_append_frame_box(trim, frame, center - width * 0.5, center + width * 0.5, bottom, top, back, wall + depth)
@@ -2464,7 +2469,7 @@ static func _append_fluted_pier(trim: Dictionary, frame: Dictionary, center: flo
 	for reed in reeds:
 		var x := center - total * 0.5 + reed_width * 0.5 + float(reed) * (reed_width + reed_gap)
 		var step := absf(float(reed) - middle) * PIER_REED_TOP_STEP_M
-		_append_reed(trim, frame, x, reed_width * 0.5, reed_front - depth, wall + depth - 0.005, bottom + 0.06, top - 0.04 - step, end, 4, true)
+		_append_reed(reed_bucket, frame, x, reed_width * 0.5, reed_front - depth, wall + depth - 0.005, bottom + 0.06, top - 0.04 - step, end, 4, true)
 
 
 ## The crescent windows' bronze grille (the owner's 2026-11-20 frontal and close
@@ -2527,7 +2532,7 @@ static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record:
 	for side in [-1.0, 1.0]:
 		var tall_grid := front.pavilion_tall_window_grid as Array
 		_append_window_module(buckets, frame, float(side) * offset, float(front.pavilion_tall_window_width), tall_bottom, tall_top, int(tall_grid[0]), int(tall_grid[1]), tall_style)
-	_append_fluted_pier(buckets.trim, frame, 0.0, float(front.pavilion_mullion_pier_width), tall_bottom - 0.2, tall_top + 0.3, 0.27, 2, 0.11, 0.1, 0.32)
+	_append_fluted_pier(buckets.trim, buckets.reeds, frame, 0.0, float(front.pavilion_mullion_pier_width), tall_bottom - 0.2, tall_top + 0.3, 0.27, 2, 0.11, 0.1, 0.32)
 	_append_pavilion_emblem(buckets, frame, front.pavilion_emblem as Dictionary, region, front.wing_window_style as Dictionary)
 	_append_pavilion_garage(buckets, collision, frame, base_low, front)
 	# Corner fins (2008 south pavilion view, 2003 Photograph 11; the nomination's
@@ -3150,7 +3155,7 @@ static func _coping_profile(bottom: float, top: float, front: float, back: float
 ## rounded over `end` metres (no rounding where `end` is 0). Smooth-shaded across, so
 ## a pier's reeds keep soft stripes in shade, where the sky lights each reed's front
 ## more than its sides.
-static func _append_reed(bucket: Dictionary, frame: Dictionary, center: float, half: float, relief: float, face: float, bottom: float, top: float, end: float, segments: int = 5, arc: bool = false) -> void:
+static func _append_reed(bucket: Dictionary, frame: Dictionary, center: float, half: float, relief: float, face: float, bottom: float, top: float, end: float, segments: int = 5, soft: bool = false) -> void:
 	var tangent := frame.tangent as Vector3
 	var normal := frame.normal as Vector3
 	var anchor := frame.anchor as Vector3
@@ -3168,15 +3173,15 @@ static func _append_reed(bucket: Dictionary, frame: Dictionary, center: float, h
 		rings.append([top - end + sin(angle) * end, cos(angle), sin(angle)])
 	var section: Array[Vector2] = []
 	var section_normals: Array[Vector2] = []
-	# A half ellipse (round piers), or with `arc` a shallow circular segment meeting
-	# the face at an angle (the crescent piers' soft reeds).
-	var radius := (half * half + relief * relief) / (2.0 * maxf(relief, 0.001))
-	var spread := asin(clampf(half / radius, 0.0, 1.0))
+	# A half ellipse (round piers), or with `soft` one wave of a cosine across: the
+	# crescent piers' soft reeds, which leave the face along its own normal, so
+	# neighbouring reeds meet without a crease of light (no hard line to alias).
 	for step in segments + 1:
-		if arc:
-			var phi := -spread + 2.0 * spread * float(step) / float(segments)
-			section.append(Vector2(sin(phi) * radius, cos(phi) * radius - (radius - relief)))
-			section_normals.append(Vector2(sin(phi), cos(phi)))
+		if soft:
+			var x := -half + 2.0 * half * float(step) / float(segments)
+			var phase := PI * x / maxf(half, 0.001)
+			section.append(Vector2(x, relief * (1.0 + cos(phase)) * 0.5))
+			section_normals.append(Vector2(relief * PI * 0.5 / maxf(half, 0.001) * sin(phase), 1.0).normalized())
 		else:
 			var angle := PI - PI * float(step) / float(segments)
 			section.append(Vector2(cos(angle) * half, sin(angle) * relief))
@@ -3748,6 +3753,8 @@ static func _finish_record(root: Node3D, specs: Array[Dictionary], collision_buc
 		if (bucket.indices as Array).is_empty():
 			continue
 		var mesh_instance := _mesh_instance(str(spec.name), bucket, spec.material as Material, int(spec.layers))
+		if not bool(spec.get("casts_shadow", true)):
+			mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 		root.add_child(mesh_instance)
 		mesh_count += 1
 		surface_count += 1
