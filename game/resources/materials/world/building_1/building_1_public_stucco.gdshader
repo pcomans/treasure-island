@@ -21,16 +21,26 @@ uniform float grain_variation = 0.2;
 uniform float broad_variation = 0.1;
 uniform float roughness_base = 0.84;
 uniform float roughness_variation = 0.12;
+// Fine relief that gives way to its flat face with distance (the crescent piers'
+// reeds): from relief_fade_m.x to relief_fade_m.y metres from the camera the mesh's
+// own normals blend into the face normal its UV carries as (x, z), so stripes finer
+// than a pixel never alias; no switch, no pop. 0 (the default) leaves normals alone.
+uniform vec2 relief_fade_m = vec2(0.0, 0.0);
 varying vec3 world_position;
 varying vec3 world_normal;
+varying vec3 face_normal;
 
 void vertex() {
 	world_position = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
 	world_normal = normalize(MODEL_NORMAL_MATRIX * NORMAL);
+	face_normal = MODEL_NORMAL_MATRIX * vec3(UV.x, 0.0, UV.y);
 }
 
 void fragment() {
 	vec3 n = normalize(world_normal);
+	if (relief_fade_m.y > 0.0 && length(face_normal) > 0.5) {
+		n = normalize(mix(n, normalize(face_normal), smoothstep(relief_fade_m.x, relief_fade_m.y, length(VERTEX))));
+	}
 	// Face-aligned world-metre projection keeps one continuous phase across the
 	// exact runs and applied modules, independent of their box UVs. V runs
 	// downward so the OpenGL normal map's +Y stays world-up on walls.

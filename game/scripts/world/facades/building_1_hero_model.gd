@@ -85,6 +85,7 @@ const PIER_REED_TOP_STEP_M := 0.04
 const PUBLIC_RELIEF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_relief_white.tres")
 ## The crescent grilles' near-black patinated bronze, the floodlights' black, the
 ## garages' dark slate teal (the owner's 2026-11-20 photos).
+const PUBLIC_REEDS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_reeds.tres")
 const PUBLIC_GILDED_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_gilded.tres")
 const PUBLIC_DARK_BRONZE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_dark_bronze.tres")
 const PUBLIC_SLATE_TEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_slate_teal.tres")
@@ -478,8 +479,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	specs.append({"name": "HeroDarkBronze", "bucket": buckets.dark_bronze, "material": PUBLIC_DARK_BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	# The fluted piers' reeds are shaded by their own shallow waves and take the
 	# building's shadows, but cast none: their 2.5 cm self-shadows fall between the
-	# shadow map's texels at play distances and crawl as the camera moves.
-	specs.append({"name": "HeroPierReeds", "bucket": buckets.reeds, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL, "casts_shadow": false})
+	# shadow map's texels at play distances and crawl as the camera moves. Their
+	# material fades their waves into the pier's flat face from 10 to 28 m, where the
+	# stripes get finer than a pixel (the reeds carry that face's normal in their UV).
+	specs.append({"name": "HeroPierReeds", "bucket": buckets.reeds, "material": PUBLIC_REEDS_MATERIAL, "layers": RENDER_BUILDING_WALL, "casts_shadow": false})
 	specs.append({"name": "HeroGildedKickPanels", "bucket": buckets.gilded, "material": PUBLIC_GILDED_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": PUBLIC_SLATE_TEAL_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroRoundPiers", "bucket": buckets.plain_trim, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL})
@@ -3173,6 +3176,8 @@ static func _append_reed(bucket: Dictionary, frame: Dictionary, center: float, h
 		rings.append([top - end + sin(angle) * end, cos(angle), sin(angle)])
 	var section: Array[Vector2] = []
 	var section_normals: Array[Vector2] = []
+	# Soft reeds carry their face's normal in UV (x, z) for the material's fade.
+	var face_uv := Vector2(normal.x, normal.z) if soft else Vector2.ZERO
 	# A half ellipse (round piers), or with `soft` one wave of a cosine across: the
 	# crescent piers' soft reeds, which leave the face along its own normal, so
 	# neighbouring reeds meet without a crease of light (no hard line to alias).
@@ -3199,7 +3204,7 @@ static func _append_reed(bucket: Dictionary, frame: Dictionary, center: float, h
 				corners.append(base + tangent * (center + s.x) + normal * (face + s.y) + Vector3.UP * float(r[0]))
 				var rise := float(r[2])
 				corner_normals.append((tangent * n.x + normal * n.y) * sqrt(maxf(1.0 - rise * rise, 0.0)) + Vector3.UP * rise)
-			_append_quad_uv(bucket, corners, corner_normals, [Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
+			_append_quad_uv(bucket, corners, corner_normals, [face_uv, face_uv, face_uv, face_uv])
 
 
 ## Pale dentil blocks along a module frame's chord (the owner's 2026-11-20 photos:
