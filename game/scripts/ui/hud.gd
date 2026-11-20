@@ -1201,6 +1201,7 @@ func _control_rows() -> Array:
 			]],
 			["In a car", [
 				["MOVE stick", "Drive and steer"],
+				["Drag anywhere", "Glance around (the view swings back)"],
 				["BRAKE (hold)", "Handbrake"],
 				["GET OUT", "Get out"],
 			]],

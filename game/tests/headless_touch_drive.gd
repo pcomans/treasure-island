@@ -35,11 +35,16 @@ extends SceneTree
 ##     half above the stick turns the stock camera by its stroke; a drag from the
 ##     stick walks the player out past the stick and never turns; the stick and a
 ##     look finger together each do their own; a look drag over RUN and RISE,
-##     lifted on RISE, presses neither and the player stays on the ground. In the
-##     first car at each shape (a car has no touch look) a drag from open screen
-##     over BRAKE and the stick turns neither the chase camera nor the stock rig
-##     and neither brakes, drives nor steers, while the stick still steers and
-##     BRAKE still brakes;
+##     lifted on RISE, presses neither and the player stays on the ground;
+##   - the touch glance in a car (owner, 2026-11-20), in the first car at each
+##     shape: got into with a look finger held, which then turns neither view and
+##     leaves the car at rest; a drag from open screen glances the chase camera
+##     by its stroke (the look's turn a pixel, as the mouse's glance), holds it,
+##     and it swings back; one finger glances while others steer and brake; drags
+##     that start on the stick or BRAKE never glance; a glance finger sliding over
+##     BRAKE brakes nothing; and got out of with a glance finger held: the stock
+##     camera takes the car's view, glance and all, with no jump, the finger turns
+##     nothing on foot, and a new finger looks;
 ##   - beside a parked vehicle of every drivable body (the street cars',
 ##     street_clutter_kit.gd CAR_BODIES, and the storage yards' vans, trucks and
 ##     RVs, vehicle_spots.gd yard_bodies(); a different one at each shape where
@@ -139,7 +144,7 @@ func _run() -> void:
 	for shape: String in SHAPES:
 		if not await _check_shape(shape):
 			return _finish()
-	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; with an iPhone's notes, the home screen hint and the silent mode line, each centred under the button inside the panel and the page at both shapes, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; look anywhere at both shapes: on foot a drag from the left half above the stick turned the camera, one from the stick walked and never turned, the stick and a look finger worked together and a look drag over RUN and RISE pressed neither; in a car a drag from open screen over BRAKE and the stick turned, braked, drove and steered nothing, while the stick steered and BRAKE braked; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
+	print("PASS: touch drive: play waited behind the start prompt (only \"Tap to play\", inside the page held upright and sideways, no touch control, the wind's bed not started and no frame rate though it was switched on, its button focused with a ring that shows on its blue; with an iPhone's notes, the home screen hint and the silent mode line, each centred under the button inside the panel and the page at both shapes, in the web font's characters) and Space on it started play and the wind (%s) as its tap does, the frame rate showing, the notes gone; held upright (%s) and sideways (%s), the touch pause button and Resume left no keyboard prompt and nothing of the HUD over the touch controls, nor did Options (the web's rows: graphics and sound, a finger's tap putting a resolution on), Credits and its Licences, which lay inside the page with thumb-sized buttons, the credits scrolling under a finger; the frame rate shown throughout opposite the pause button, clear of every touch control; beside a parked %s, a different one at each shape where the world has another, DRIVE showed the car inside the screen and clear of the stick, RUN, RISE and the pause button and their labels, a tap got the player in, GET OUT showed the same way there (also after a pause and Resume) and a tap got the player out; look anywhere at both shapes: on foot a drag from the left half above the stick turned the camera, one from the stick walked and never turned, the stick and a look finger worked together and a look drag over RUN and RISE pressed neither; in a car, got into and out of with a finger held and no stuck finger or jump, a drag from open screen glanced the chase camera by its stroke, held and swung back, glanced while other fingers steered and braked and over BRAKE without braking, and drags from the stick or BRAKE never glanced; no keyboard prompt at any step (%d checks)" % ["playing" if Sound.has_takes(Sound.WIND_BED) else "silent, with no takes", _size_text("upright"), _size_text("sideways"), ", ".join(PackedStringArray(_bodies())), _checked.size()])
 	_finish()
 
 
@@ -297,7 +302,14 @@ func _drive(shape: String, body: String) -> bool:
 	or not _check_use(label, TouchUseButton.Mode.ENTER):
 		return false
 	print("TOUCH_DRIVE %s %s %s: standing at %s, DRIVE at %s" % [shape, body, id, _main.player.global_position, _touch.use_button.get_global_rect()])
-	await _tap_use()
+	# The first body at each shape is got into with a look finger held, and out of
+	# with a glance finger held.
+	var first: bool = body == _bodies()[0]
+	if first:
+		if not await _get_in_mid_look(label):
+			return false
+	else:
+		await _tap_use()
 	await _ticks(30)
 	var car := _vehicles.active_car()
 	if not _require(car != null and car.row_id == id and car.body == body, "%s: a tap on DRIVE did not get the player into it (in %s)." % [label, car.row_id if car != null else "no car"]) \
@@ -305,9 +317,11 @@ func _drive(shape: String, body: String) -> bool:
 	or not await _pause_and_resume("%s, in it" % label) \
 	or not _check_use("%s, in it after the pause and Resume" % label, TouchUseButton.Mode.EXIT):
 		return false
-	if body == _bodies()[0] and not await _check_car_touch("%s, in it" % label, car):
-		return false
-	await _tap_use()
+	if first:
+		if not await _check_car_touch("%s, in it" % label, car) or not await _get_out_mid_glance(label):
+			return false
+	else:
+		await _tap_use()
 	await _ticks(45)
 	if not _require(not _vehicles.is_driving() and not _main.player.is_driving() and _main.player.is_on_floor(), "%s: a tap on GET OUT did not get the player out onto the ground (driving %s, on the floor %s)." % [label, _vehicles.is_driving(), _main.player.is_on_floor()]):
 		return false
@@ -377,45 +391,143 @@ func _check_look(shape: String) -> bool:
 	return true
 
 
-## In a car at this shape (a car has no touch look; see the header): a drag from
-## open screen over BRAKE and the stick turns neither the chase camera nor the
-## stock rig and neither brakes, drives nor steers; the stick still steers and
-## BRAKE still brakes.
+## In a car at this shape (owner, 2026-11-20: a drag off the controls glances as
+## the mouse does; see the header): a drag from open screen glances the chase
+## camera by its stroke, holds, then swings back; while one finger glances, the
+## stick steers and BRAKE brakes with others; drags that start on the stick or
+## BRAKE never glance; and a glance finger sliding over BRAKE glances on and brakes
+## nothing.
 func _check_car_touch(label: String, car: DrivableCar) -> bool:
 	var shown := _touch.describe()
 	var stick := _point(shown.stick)
 	var brake := _point(shown.rise)
 	var reach := float(shown.stick_reach)
-	var safe := _touch.safe_area()
-	var start := Vector2(safe.position.x + safe.size.x * 0.25, safe.position.y + safe.size.y * 0.4)
-	if not _require(_off_controls(start), "%s: the car check's start %s lies on a touch control (%s)." % [label, start, _footprints()]):
+	var start := _open_start()
+	if not _require(_off_controls(start), "%s: the car checks' start %s lies on a touch control (%s)." % [label, start, _footprints()]):
 		return false
 	var chase := _vehicles.driving_camera()
-	var view := chase.view_yaw()
-	var rig_view: Array = shown.camera
-	var took := func() -> String:
+	# The glance a layout px gives (rad): the look's turn on foot, as the mouse motion
+	# that makes it there, at the chase camera's own sensitivity.
+	var per_px := deg_to_rad(DEGREES_PER_PX) * chase.look_sensitivity / _main.player.camera_rig.look_sensitivity
+	var at_rest := func() -> String:
 		return "" if not car.handbrake and absf(car.drive_input) < 0.01 and absf(car.steer_input) < 0.01 else ", the car took it (handbrake %s, drive %.2f, steer %.2f)" % [car.handbrake, car.drive_input, car.steer_input]
-	var problem: String = await _slide_along(34, [start, brake, stick, start], took, 24.0)
-	await _ticks(2)
-	var turned := rad_to_deg(angle_difference(view, chase.view_yaw()))
-	var rig_now: Array = _touch.describe().camera
-	if not _require(problem == "" and absf(turned) < 0.5 and rig_now == rig_view, "%s: a drag from open screen over BRAKE and the stick must turn, brake, drive and steer nothing (chase view turned %.2f degrees, stock rig %s, then %s%s)." % [label, turned, rig_view, rig_now, problem]):
+	# A glance by the stroke, held for a moment, then swung back.
+	var rest := chase.view_yaw()
+	var problem: String = await _slide_along(34, [start, start + Vector2(60, 0)], at_rest)
+	var glanced := angle_difference(rest, chase.view_yaw())
+	await _ticks(30)
+	var held := angle_difference(rest, chase.view_yaw())
+	await _ticks(150)
+	var back := angle_difference(rest, chase.view_yaw())
+	if not _require(problem == "" and absf(glanced + 60.0 * per_px) < deg_to_rad(0.1) and absf(held - glanced) < deg_to_rad(0.1) and absf(back) < absf(glanced) * 0.1, "%s: a drag of 60 px from open screen must glance the chase camera by %.2f degrees, hold it half a second and swing back (glanced %.2f, held %.2f, then %.2f degrees%s)." % [label, rad_to_deg(-60.0 * per_px), rad_to_deg(glanced), rad_to_deg(held), rad_to_deg(back), problem]):
 		return false
+	# One finger glances while others steer and brake.
+	rest = chase.view_yaw()
 	_push(35, stick, true)
 	_push_slide(35, stick + Vector2(reach, 0))
-	await _ticks(3)
-	var steer := car.steer_input
-	_push(35, stick + Vector2(reach, 0), false)
 	_push(36, brake, true)
-	await _ticks(3)
-	var braking := car.handbrake
+	problem = await _slide_along(37, [start, start + Vector2(-60, 0)], func() -> String: return "" if car.steer_input > 0.9 and car.handbrake else ", the stick or BRAKE let go (steer %.2f, handbrake %s)" % [car.steer_input, car.handbrake])
+	var together := angle_difference(rest, chase.view_yaw())
 	_push(36, brake, false)
+	_push(35, stick + Vector2(reach, 0), false)
 	await _ticks(3)
-	if not _require(steer > 0.9 and braking and not car.handbrake and absf(car.steer_input) < 0.01, "%s: the stick must still steer and BRAKE still brake (steer %.2f, braking %s; after the lifts handbrake %s, steer %.2f)." % [label, steer, braking, car.handbrake, car.steer_input]):
+	if not _require(problem == "" and absf(together - 60.0 * per_px) < deg_to_rad(0.1) and at_rest.call() == "", "%s: a glance while other fingers steer and brake must glance by its stroke and leave them steering and braking (glanced %.2f degrees%s; after the lifts%s)." % [label, rad_to_deg(together), problem, at_rest.call()]):
 		return false
-	print("TOUCH_LOOK %s: a drag from %s over BRAKE and the stick took nothing; chase view turned %.3f degrees; the stick steered %.2f, BRAKE braked" % [label, start, turned, steer])
-	_checked.append("%s, no touch look and the car's controls" % label)
+	# Drags that start on the stick or BRAKE never glance (the glance back at rest first).
+	await _ticks(240)
+	rest = chase.view_yaw()
+	var no_glance := func() -> String:
+		return "" if absf(angle_difference(rest, chase.view_yaw())) < deg_to_rad(0.05) else ", it glanced %.2f degrees" % rad_to_deg(angle_difference(rest, chase.view_yaw()))
+	var from_stick: String = await _slide_along(35, [stick, stick + Vector2(reach * 3.0, 0)], no_glance, LOOK_STEP_PX, false)
+	var steering := car.steer_input
+	_push(35, stick + Vector2(reach * 3.0, 0), false)
+	await _ticks(2)
+	var from_brake: String = await _slide_along(36, [brake, brake + Vector2(-200, -150)], func() -> String: return no_glance.call() + ("" if car.handbrake else ", BRAKE let go"))
+	await _ticks(3)
+	if not _require(from_stick == "" and steering > 0.9 and from_brake == "" and at_rest.call() == "", "%s: drags that start on the stick or BRAKE must work them and never glance (stick%s, steering %.2f out past its reach; BRAKE%s; after the lifts%s)." % [label, from_stick, steering, from_brake, at_rest.call()]):
+		return false
+	# A glance finger sliding over BRAKE glances on and brakes nothing.
+	rest = chase.view_yaw()
+	var end := brake + Vector2(-150, -60)
+	problem = await _slide_along(38, [start, brake, end], at_rest, 16.0)
+	var over := angle_difference(rest, chase.view_yaw())
+	if not _require(problem == "" and absf(over + (end.x - start.x) * per_px) < deg_to_rad(0.2), "%s: a glance finger sliding over BRAKE must glance by its travel (%.2f degrees) and brake nothing (glanced %.2f degrees%s)." % [label, rad_to_deg(-(end.x - start.x) * per_px), rad_to_deg(over), problem]):
+		return false
+	print("TOUCH_GLANCE %s: a 60 px drag from %s glanced %.2f degrees, held %.2f, swung back to %.2f; with the stick and BRAKE held %.2f; over BRAKE %.2f degrees; drags from the stick and BRAKE never glanced" % [label, start, rad_to_deg(glanced), rad_to_deg(held), rad_to_deg(back), rad_to_deg(together), rad_to_deg(over)])
+	_checked.append("%s, the touch glance and the car's controls" % label)
 	return true
+
+
+## Getting in with a look finger held (no stuck finger, no jump): the finger that
+## looked on foot as DRIVE was tapped turns neither the chase camera nor the stock
+## rig once in the car, and the car stays at rest. (A new finger glances: the
+## checks after this, _check_car_touch.)
+func _get_in_mid_look(label: String) -> bool:
+	var at := _open_start()
+	if not _require(_off_controls(at), "%s: the get-in look's start %s lies on a touch control (%s)." % [label, at, _footprints()]):
+		return false
+	var rig := _main.player.camera_rig
+	var yaw := rig.rotation.y
+	_push(40, at, true)
+	_push_slide(40, at + Vector2(20, 0))
+	await _ticks(1)
+	var looked := rad_to_deg(angle_difference(yaw, rig.rotation.y))
+	await _tap_use()
+	await _ticks(30)
+	if not _require(_vehicles.is_driving() and absf(looked + 20 * DEGREES_PER_PX) < 0.01, "%s: a tap on DRIVE with a look finger held must get in (driving %s; the finger looked %.2f degrees on foot)." % [label, _vehicles.is_driving(), looked]):
+		return false
+	var car := _vehicles.active_car()
+	var chase := _vehicles.driving_camera()
+	var view := chase.view_yaw()
+	var rig_yaw := rig.rotation.y
+	var problem := ""
+	for step in 5:
+		_push_slide(40, at + Vector2(20.0 + 16.0 * (step + 1), 0))
+		await _ticks(1)
+		if absf(angle_difference(view, chase.view_yaw())) > deg_to_rad(0.05) or not is_equal_approx(rig.rotation.y, rig_yaw) or car.handbrake or absf(car.drive_input) > 0.01 or absf(car.steer_input) > 0.01:
+			problem = "chase view turned %.2f degrees, stock rig %.2f, handbrake %s, drive %.2f, steer %.2f" % [rad_to_deg(angle_difference(view, chase.view_yaw())), rad_to_deg(angle_difference(rig_yaw, rig.rotation.y)), car.handbrake, car.drive_input, car.steer_input]
+			break
+	_push(40, at + Vector2(100, 0), false)
+	await _ticks(1)
+	return _require(problem == "", "%s: a look finger held through getting in must turn and press nothing in the car (%s)." % [label, problem])
+
+
+## Getting out with a glance finger held (no stuck finger, no jump): the stock
+## rig takes the view the car had, glance and all; the finger then turns nothing on
+## foot; and a new finger looks on foot.
+func _get_out_mid_glance(label: String) -> bool:
+	var at := _open_start()
+	var chase := _vehicles.driving_camera()
+	var rest := chase.view_yaw()
+	_push(41, at, true)
+	for step in 3:
+		_push_slide(41, at + Vector2(16.0 * (step + 1), 0))
+		await _ticks(1)
+	var glancing := chase.view_yaw()
+	await _tap_use()
+	await _ticks(45)
+	if not _require(not _vehicles.is_driving() and absf(angle_difference(rest, glancing)) > deg_to_rad(4.0), "%s: a tap on GET OUT with a glance finger held must get out (driving %s; the glance turned %.2f degrees)." % [label, _vehicles.is_driving(), rad_to_deg(angle_difference(rest, glancing))]):
+		return false
+	var rig := _main.player.camera_rig
+	var yaw := rig.rotation.y
+	var jump := angle_difference(glancing, yaw)
+	for step in 5:
+		_push_slide(41, at + Vector2(48.0 + 16.0 * (step + 1), 0))
+		await _ticks(1)
+	var turned_after := angle_difference(yaw, rig.rotation.y)
+	_push(41, at + Vector2(128, 0), false)
+	await _ticks(1)
+	var before := rig.rotation.y
+	var problem: String = await _slide_along(42, [at, at + Vector2(40, 0)], func() -> String: return _pressed_or_moved())
+	var looked := rad_to_deg(angle_difference(before, rig.rotation.y))
+	return _require(absf(jump) < deg_to_rad(0.5) and is_zero_approx(turned_after) and problem == "" and absf(looked + 40 * DEGREES_PER_PX) < 0.01, "%s: getting out with a glance finger held must hand the stock rig the car's view (off by %.2f degrees), the finger then turning nothing (it turned %.2f degrees), and a new finger must look on foot (it turned %.2f degrees%s)." % [label, rad_to_deg(jump), rad_to_deg(turned_after), looked, problem])
+
+
+## Open screen for the in-car checks: a quarter in from the safe area's left and
+## 40 % down it, clear of every touch control at both shapes.
+func _open_start() -> Vector2:
+	var safe := _touch.safe_area()
+	return Vector2(safe.position.x + safe.size.x * 0.25, safe.position.y + safe.size.y * 0.4)
 
 
 ## A finger down at the path's first point, slid along it step_px at a time with a

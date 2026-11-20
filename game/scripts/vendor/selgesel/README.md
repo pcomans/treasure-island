@@ -19,7 +19,8 @@ removed. Look deltas use the tracked finger’s previous/current logical positio
 first hosted four-finger trial produced a large jump from event.relative despite
 a small owner-finger move. Explicit routing gives one look finger to a press
 anywhere but on the stick or a button (owner, 2026-11-20), never to a finger a
-control holds, and touch_controls.gd turns the look off in a car. The newest such
+control holds, and in a car touch_controls.gd turns that look into the chase
+camera's glance (owner, 2026-11-20). The newest such
 press takes the look over from any older look finger, so a finger whose lift was
 lost cannot block looking, whether its index comes back (Android) or never does
 (iOS): the old finger's drags then turn nothing and the new one turns from its own

@@ -588,8 +588,9 @@ screen; the back gesture leaves it.
 A context button above **RISE** does what F and C do. Beside a parked car it
 shows a car, **DRIVE**: tap it to get in. In a car it shows **GET OUT**: tap it to
 get out. In a car the stick drives and steers, **RISE** turns into **BRAKE** (a
-handbrake symbol), and **RUN**, the look and its hint are off until you get out. In
-the air it shows a down arrow, **DROP**: hold it to fall fast; it lets go when
+handbrake symbol), **RUN** is hidden until you get out, and a drag anywhere else
+glances round as the mouse does: the view swings back a moment after the finger
+stops. In the air it shows a down arrow, **DROP**: hold it to fall fast; it lets go when
 you land. Otherwise it is hidden.
 
 This ports the MIT mobile input layer from Selgesel’s Godot4 third-person
