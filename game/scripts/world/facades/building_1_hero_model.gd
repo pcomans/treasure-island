@@ -45,6 +45,8 @@ const SETBACK_INWARD_FACE_INSET_M := 0.02
 ## A set-down band's riser and roof edge follow the chain without its source runs
 ## shorter than this (_simplified_path).
 const FRONT_STEP_MIN_SEGMENT_M := 1.0
+## How far outside a set-down band's walls its roof cut reaches (_setback_cuts).
+const SETBACK_CUT_OUTER_REACH_M := 1.5
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -347,8 +349,8 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		_append_flat_coping(buckets.trim, lines, _offset_path(notch_face, wing_step), wing_top, flat_coping, cornice_back)
 	var block_face := block_step.outer as Dictionary
 	var block_capped := block_face.duplicate(true)
-	var block_cap := _strip_cap(record, block_runs[0], true, block_depth - inner_trim)
-	_prepend_point(block_capped, block_cap.point as Vector3, block_cap.normal as Vector3)
+	var block_first := _strip_cap(record, block_runs[0], true, block_depth - inner_trim)
+	_prepend_point(block_capped, block_first.point as Vector3, block_first.normal as Vector3)
 	_append_crescent_attic(buckets, block_face, block_capped, front.crescent_attic as Dictionary, cornice_back)
 	# The central block's parapet: its north cap behind the step, the riser, the
 	# notch's south wall, the south junction's faces and its south cap.
@@ -1264,7 +1266,13 @@ static func _setback_cuts(record: Dictionary, chains: Array, setback: float, min
 		var chain := _int_array(chain_value as Array)
 		var outer := _chain_points(record, chain, 0.0, _chain_length(record, chain))
 		var pushed := _offset_path(outer, -0.05)
-		var inner := _offset_path(_simplified_path(outer, min_segment) if min_segment > 0.0 else outer, setback)
+		var inner := _offset_path(outer, setback)
+		if min_segment > 0.0:
+			# Past a chain's very short source runs (a set-down band's, _append_front_step)
+			# both edges follow the simplified path, the outer one well outside the walls.
+			var simple := _simplified_path(outer, min_segment)
+			pushed = _offset_path(simple, -SETBACK_CUT_OUTER_REACH_M)
+			inner = _offset_path(simple, setback)
 		var polygon := PackedVector2Array()
 		for point_value in pushed.points as Array:
 			var point := point_value as Vector3
@@ -3649,7 +3657,7 @@ static func _bar_config_valid(config: Dictionary) -> bool:
 	var coping := attic.get("coping", []) as Array
 	var lines := attic.get("lines", {}) as Dictionary
 	var block_runs: Array[int] = []
-	for run_index in range(21, 38):
+	for run_index in range(21, 39):
 		block_runs.append(run_index)
 	# The canopy clears the entrance portals' heads and the projecting base's cap, and
 	# its top stays under the crescent windows' sills; the attic skin runs from over

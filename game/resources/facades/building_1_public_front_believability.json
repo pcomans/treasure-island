@@ -88,7 +88,7 @@
       }
     },
     "crescent_block": {
-      "runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+      "runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
       "depth_m": 7.0,
       "roof_y": 24.3,
       "evidence": {
@@ -129,11 +129,11 @@
     "wing_setback": {
       "north_runs": [9, 10, 11, 12, 13, 14, 15, 16],
       "south_runs": [44, 45, 46, 47, 48, 49, 50, 51],
-      "setback": 4.0,
+      "setback": 6.0,
       "face_top_y": 16.54,
       "evidence": {
         "read_from_photos": ["the wings' forecourt faces carry two window rows, the upper windows in recessed panels under dentil heads, below a flat coping with three lines; the third storey stands back behind them (the owner's 2026-11-20 photos: the south wing from the forecourt and the south end; the National Register nomination's three-storey section surrounded by two-storey elements)"],
-        "production_inference": ["the setback (4 m)", "the coping height from the photos' window-to-coping ratio", "upper windows level with the crescent's"]
+        "production_inference": ["the setback (6 m; the photos show less of the third storey over the coping, as a deeper setback would)", "the coping height from the photos' window-to-coping ratio", "upper windows level with the crescent's"]
       }
     },
     "flat_coping": {"height": 0.42, "front": 0.08, "line_pitch": 0.12, "line_count": 3, "line_offset": 0.02, "top_above_roof": 0.11},
@@ -145,10 +145,10 @@
     "corner_bay_window_width": 1.55,
     "flank_window_width": 1.0,
     "pavilion_tall_window_offset": 1.2,
-    "pavilion_tall_window_width": 1.45,
+    "pavilion_tall_window_width": 1.9,
     "pavilion_tall_window_y": [9.6, 18.55],
     "pavilion_tall_window_style": {"surround": 0.16, "jamb_front": 0.17, "head_height": 0.2, "head_front": 0.2, "sill_height": 0.16, "sill_front": 0.22, "sill_overhang": 0.06, "edge_bar": 0.1, "bar": 0.07, "transom_row": 5, "transom_bar": 0.13, "reveal_depth": true, "reveal_front_max": 0.24, "inner_step": [0.06, 0.09]},
-    "pavilion_mullion_pier_width": 0.69,
+    "pavilion_mullion_pier_width": 0.42,
     "pavilion_emblem": {
       "center_y": 20.72,
       "octagon_width": 1.19,
