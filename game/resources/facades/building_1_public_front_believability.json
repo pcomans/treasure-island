@@ -49,7 +49,7 @@
       "floodlight": {"from_edge_m": 0.35, "radius": 0.12, "height": 0.08},
       "fascia_rolls": {"count": 5, "radius": 0.045, "pitch": 0.1, "depth_scale": 0.5},
       "evidence": {
-        "read_from_photos": ["the canopy is deep enough to roof a walkway with seated sculptures under it, its soffit reading as an edge band, three panel rows and a wall band (2008 canopy ends)", "its ends sweep round in a quarter turn back to the wall (2008 canopy ends; the owner's 2026-11-20 photos, south end)", "its soffit meets the wall 3.6 m over the door sills; its fascia, a stack of thin rolls about 0.55 m deep, stops about 0.9 m under the window frames, and floodlight boxes stand on it at the piers (the owner's 2026-11-20 photos: the frontal and south-end views, scaled by the footprint's bay pitch)", "a smooth pale soffit (the owner's 2026-11-20 frontal view)"],
+        "read_from_photos": ["the canopy is deep enough to roof a walkway with seated sculptures under it, its soffit reading as an edge band, three panel rows and a wall band (2008 canopy ends)", "its ends sweep round in a quarter turn back to the wall (2008 canopy ends; the owner's 2026-11-20 photos, south end)", "its soffit meets the wall 3.6 m over the door sills; its fascia, a stack of thin rolls about 0.55 m deep, stops about 0.9 m under the window frames, and black floodlight pucks stand on it at the piers (the owner's 2026-11-20 photos: the frontal and south-end views, scaled by the footprint's bay pitch)", "a smooth pale soffit (the owner's 2026-11-20 frontal view)"],
         "production_inference": ["depth 5.0 m from the soffit's rows against the sculptures and walkway under it", "the end turns' radius", "the fascia's five rolls as a mipmapped pattern", "the floodlights' size"]
       }
     },
@@ -130,7 +130,7 @@
       {"bottom": 7.76, "top": 9.31, "rows": 2},
       {"bottom": 11.42, "top": 13.96, "rows": 4}
     ],
-    "wing_upper_panel": {"below": 0.82, "dentils": [0.12, 0.28], "dentil_front": 0.1, "dentil_width": 0.08, "dentil_pitch": 0.105, "dentil_fascia": 0.05, "panel_front": 0.06, "plate_front": 0.03, "panel_margin": 0.16},
+    "wing_upper_panel": {"below": 1.02, "border": 0.12, "border_above_window": 0.36, "panel_front": 0.06, "flute_width": 0.05, "flute_front": 0.025, "dentil_height": 0.14, "dentil_width": 0.2, "dentil_count": 7, "dentil_front": 0.1},
     "wing_string_course": [10.05, 10.4, 0.06],
     "wing_doors": {"north_index": 1, "south_index": 7, "width": 1.9, "transom": 0.6, "columns": 2},
     "wing_setback": {
@@ -160,25 +160,29 @@
       "center_y": 20.72,
       "octagon_width": 1.19,
       "octagon_height": 1.39,
-      "ring": 0.15,
-      "ring_front": 0.1,
+      "ring": 0.07,
+      "ring_front": 0.08,
       "field_front": 0.05,
       "bars": {"reach": 1.24, "bar_height": 0.2, "gap": 0.075, "front": 0.08},
       "relief_front": 0.15,
       "relief": [
-        {"name": "head", "points": [[-0.16, 0.38], [-0.12, 0.34], [-0.04, 0.34], [0.0, 0.38], [0.0, 0.46], [-0.04, 0.5], [-0.12, 0.5], [-0.16, 0.46]]},
-        {"name": "torso", "points": [[-0.24, 0.3], [0.06, 0.3], [0.1, 0.0], [0.04, -0.15], [-0.26, -0.15], [-0.3, 0.1]]},
-        {"name": "forward leg, knee up", "points": [[0.0, -0.12], [0.36, -0.12], [0.4, -0.2], [0.36, -0.6], [0.24, -0.6], [0.26, -0.24], [0.0, -0.24]]},
-        {"name": "kneeling leg", "points": [[-0.3, -0.12], [-0.04, -0.12], [-0.02, -0.3], [-0.42, -0.6], [-0.46, -0.52], [-0.28, -0.28]]},
-        {"name": "raised arm", "points": [[0.02, 0.24], [0.3, 0.32], [0.3, 0.4], [0.0, 0.32]]},
-        {"name": "airplane fuselage", "points": [[0.24, 0.38], [0.56, 0.36], [0.56, 0.42], [0.24, 0.44]]},
-        {"name": "airplane wing", "points": [[0.36, 0.26], [0.42, 0.26], [0.42, 0.54], [0.36, 0.54]]}
+        {"name": "head", "points": [[-0.098, 0.618], [-0.021, 0.704], [0.109, 0.68], [0.14, 0.587], [0.109, 0.494], [0.057, 0.402], [-0.072, 0.386], [-0.119, 0.463], [-0.119, 0.556]]},
+        {"name": "torso", "points": [[-0.318, 0.371], [-0.15, 0.417], [0.057, 0.402], [0.212, 0.34], [0.251, 0.185], [0.16, 0.0], [0.109, -0.108], [-0.202, -0.139], [-0.305, 0.0], [-0.344, 0.216]]},
+        {"name": "hanging arm", "points": [[-0.46, 0.34], [-0.344, 0.402], [-0.305, 0.216], [-0.318, 0.0], [-0.254, -0.216], [-0.279, -0.355], [-0.383, -0.371], [-0.448, -0.247], [-0.435, 0.0], [-0.473, 0.185]]},
+        {"name": "lap", "points": [[-0.318, 0.015], [-0.124, -0.046], [0.005, -0.185], [0.122, -0.284], [-0.15, -0.263], [-0.266, -0.232], [-0.326, -0.124]]},
+        {"name": "thigh, knee up", "points": [[-0.124, -0.062], [0.109, 0.0], [0.316, 0.046], [0.432, 0.0], [0.458, -0.124], [0.393, -0.216], [0.212, -0.201], [-0.021, -0.216]]},
+        {"name": "shin and drapery", "points": [[0.316, -0.185], [0.458, -0.139], [0.484, -0.371], [0.419, -0.556], [0.29, -0.618], [0.251, -0.432]]},
+        {"name": "kneeling leg", "points": [[-0.409, -0.34], [-0.15, -0.247], [0.109, -0.278], [0.316, -0.402], [0.329, -0.556], [0.109, -0.587], [-0.202, -0.587], [-0.344, -0.525]]},
+        {"name": "arm holding the airplane", "points": [[0.16, 0.309], [0.251, 0.324], [0.38, 0.185], [0.419, 0.077], [0.341, 0.046], [0.264, 0.124], [0.173, 0.185]]},
+        {"name": "airplane fuselage", "points": [[0.264, 0.562], [0.31, 0.605], [0.352, 0.556], [0.352, 0.117], [0.31, 0.074], [0.269, 0.117]]},
+        {"name": "airplane wings", "points": [[-0.021, 0.309], [0.605, 0.331], [0.667, 0.287], [0.605, 0.235], [-0.021, 0.235]]},
+        {"name": "airplane tail", "points": [[0.212, 0.5], [0.409, 0.5], [0.409, 0.442], [0.212, 0.442]]}
       ],
       "plaque": {"margin": 0.06, "front": 0.03},
       "small_windows": {"pavilions": ["south_pavilion"], "width": 0.96, "y": [20.03, 21.18], "offset": 1.67, "columns": 2, "rows": 4},
       "evidence": {
         "read_from_photos": ["an elongated octagon in blue round a white relief of a kneeling figure holding an airplane up to its right, three blue bars either side, its centre about level with the fin caps; two small windows flank the bars on the south pavilion, plain wall on the north one (the owner's 2026-11-20 photos: both pavilions and the emblem close-up; 2003 Photograph 11; 2008 south pavilion)"],
-        "production_inference": ["the relief as flat raised outlines of a kneeling figure (head, torso, the forward leg with its knee up, the kneeling leg, the raised arm) and the airplane it holds, nothing modelled inside them", "the pale plaque behind the bars", "all sizes, from the photos' ratios to the pavilions' faces"]
+        "production_inference": ["the relief as flat raised outlines of the kneeling figure traced from the owner's close-up (head, torso, the hanging arm, the lap, the thigh with its knee up, the shin, the kneeling leg, the arm holding the airplane) and the airplane (fuselage, wings, tail), nothing modelled inside them", "the pale ring and the pale plaque behind the bars, the bars' half-round section", "all sizes, from the photos' ratios to the pavilions' faces"]
       }
     },
     "pavilion_dentils": {"above_window_head": [0.2, 0.42], "width": 0.23, "count": 16, "front": 0.1},
@@ -237,6 +241,7 @@
     "entrance_kick_panel_fraction": 0.2,
     "entrance_leaf_stile": 0.07,
     "entrance_push_bar_height": 1.05,
+    "entrance_threshold_rise": 0.015,
     "entrance_portal_head_front": 0.46,
     "se_narrow_window_y": [15.05, 18.65],
     "se_narrow_window_width": 1.0,

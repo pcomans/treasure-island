@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "building_1_pavilion_emblem_enamel_blue_reference_colour"
-albedo_color = Color(0.24, 0.34, 0.46, 1)
+albedo_color = Color(0.12, 0.27, 0.38, 1)
 metallic = 0.0
 roughness = 0.45
