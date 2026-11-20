@@ -28,6 +28,11 @@ const STICK_LABEL_AT := Vector2(82, 228)
 const STICK_INSET_PX := Vector2(36, 54)
 const RISE_INSET_PX := Vector2(64, 136)
 const BUTTON_GAP_PX := 48.0
+## The MOVE stick's drawn disc (its radius, centred in the stick's square) and how
+## far past it a finger still takes the stick, a thumb's width (MoveStick.covers):
+## _draw and the hit test share them, so the two cannot drift apart.
+const STICK_RADIUS_PX := 94.0
+const STICK_TOUCH_MARGIN_PX := 16.0
 ## On foot, centred under the controls on the MOVE label's baseline: a drag that
 ## starts anywhere but on a control turns the camera (mobile_controls.gd).
 const LOOK_HINT := "Drag to look"
@@ -225,9 +230,9 @@ func _exit_tree() -> void:
 
 func _draw() -> void:
 	# Keep the upstream stick texture readable over pale paths and grass.
-	var stick_center := _move_stick.position + Vector2(110, 110)
-	draw_circle(stick_center, 94, Color(0.02, 0.06, 0.09, 0.62))
-	draw_arc(stick_center, 90, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
+	var stick_center := _move_stick.get_rect().get_center()
+	draw_circle(stick_center, STICK_RADIUS_PX, Color(0.02, 0.06, 0.09, 0.62))
+	draw_arc(stick_center, STICK_RADIUS_PX - 4.0, 0, TAU, 64, Color(0.75, 0.9, 0.95, 0.75), 2, true)
 	draw_circle(stick_center, 24, Color(0.04, 0.22, 0.28, 0.85))
 	var font := ThemeDB.fallback_font
 	var label_at := Vector2(LABEL_INSET_PX, USE_BUTTON.LABEL_BASELINE_PX)
@@ -240,13 +245,12 @@ func _draw() -> void:
 	draw_circle(_pause_center, PAUSE_RADIUS_PX, Color(0.03, 0.1, 0.14, 0.65))
 	draw_string(font, _pause_center + Vector2(-8, 7), "II", HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 
-## The MOVE stick takes a finger pressed on its disc, the drawn ring and a
-## thumb's width round it (its square's inscribed circle), not one in the
-## square's corners, where a look drag may start.
+## The MOVE stick takes a finger pressed on its drawn disc or within a thumb's
+## width round it (STICK_RADIUS_PX and STICK_TOUCH_MARGIN_PX from its centre), not
+## one in its square's corners, where a look drag may start.
 class MoveStick extends SelgeselThumbStick:
 	func covers(point: Vector2) -> bool:
-		var rect := get_global_rect()
-		return point.distance_to(rect.get_center()) <= minf(rect.size.x, rect.size.y) * 0.5
+		return point.distance_to(get_global_rect().get_center()) <= STICK_RADIUS_PX + STICK_TOUCH_MARGIN_PX
 
 
 ## RISE presses the jetpack and, as Space does, the handbrake: in a car the

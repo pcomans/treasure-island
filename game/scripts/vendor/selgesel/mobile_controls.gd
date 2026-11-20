@@ -20,10 +20,12 @@ func handle_mobile_input(event: InputEvent) -> void:
 		button.handle_input(event)
 	_move_stick.handle_input(event)
 	if event is InputEventScreenTouch:
-		if not event.pressed or event.canceled:
-			_touches.erase(event.index)
+		# A lift ends its finger's look. A press of an index still held as a look
+		# finger means that finger's lift was lost: its stale look ends first, so it
+		# neither blocks a new look nor turns the camera with the reused index.
+		_touches.erase(event.index)
 		# One look finger, pressed anywhere but on a control.
-		elif look_enabled and _touches.is_empty() and event.index != _move_stick._touch_index and not _on_control(event.position):
+		if event.pressed and not event.canceled and look_enabled and _touches.is_empty() and event.index != _move_stick._touch_index and not _on_control(event.position):
 			_touches[event.index] = {"begin": event.position, "current": event.position}
 	if event is InputEventScreenDrag and _touches.has(event.index):
 		var relative: Vector2 = event.position - _touches[event.index].current

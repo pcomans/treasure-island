@@ -10,12 +10,18 @@ extends SceneTree
 ##     relative value polluted by another finger, and a new look finger starts fresh;
 ##   - look anywhere (owner, 2026-11-20): a drag that starts anywhere but on a
 ##     control turns the camera (a grid over the whole screen, the left half beside
-##     the stick named on its own, and the hidden use button's place); a drag that
+##     the stick named on its own, and the hidden use button's place); the stick
+##     takes a finger on its disc and a thumb's width round it (one press just
+##     inside that edge moves and never turns) but not in its square's corners (one
+##     stroke just outside the edge, and one from a corner, turn); a drag that
 ##     starts on the stick moves and never turns, out past the stick too, and a second
 ##     finger pressed on the held stick doesn't turn; the stick and a look finger
 ##     together each do their own; a look drag that slides over RUN, RISE, DRIVE, the
 ##     stick and the pause button and lifts on RISE presses none of them; a finger
 ##     pressed on RUN, RISE or the pause button and dragged off turns nothing;
+##   - a look finger whose lift was lost (a browser can drop a touchend) and whose
+##     index comes back pressed: off the controls it starts a fresh look with no
+##     jump, on RUN it is RUN's and turns nothing, and another finger can look after;
 ##   - pause lets go of everything, and a finger held across it does nothing after;
 ##     RUN holds and lets go on a cancel; RISE holds the handbrake with the jetpack;
 ##   - the use button: its tap is one F press that a physics tick sees, neither its
@@ -70,7 +76,7 @@ func _run() -> void:
 	if _held().size() > 0:
 		_fail("Teardown left %s held" % [_held()])
 		return
-	print("PASS: touch controls upright and sideways (%s): donor analog strength, multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; look anywhere: a drag starting anywhere but on a control turned the camera (%d starts tried, the left half beside the stick and the hidden use button's place among them), one starting on the stick moved and never turned, a second finger on the held stick never turned, the stick and a look finger worked together, and a look drag over RUN, RISE, DRIVE, the stick and the pause button pressed none of them; fingers starting on RUN, RISE and the pause button turned nothing; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, neither its finger nor a second one on it turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go" % [", ".join(PackedStringArray(shapes.values().map(func(size: Vector2) -> String: return "%d x %d px" % [roundi(size.x), roundi(size.y)]))), _looked])
+	print("PASS: touch controls upright and sideways (%s): donor analog strength, multitouch independence, release, pause, stale-finger rejection, cancellation and teardown; look anywhere: a drag starting anywhere but on a control turned the camera (%d starts tried, the left half beside the stick and the hidden use button's place among them), one starting on the stick moved and never turned, a second finger on the held stick never turned, the stick and a look finger worked together, and a look drag over RUN, RISE, DRIVE, the stick and the pause button pressed none of them; the stick took a press just inside its disc's edge and none just outside it or in its square's corner; fingers starting on RUN, RISE and the pause button turned nothing; a look finger pressed again after a lost lift looked from where it was or was RUN's, and others looked after; rise holds the handbrake with the jetpack; the use button's tap is one F press that a physics tick sees, neither its finger nor a second one on it turns the camera, and drop holds C until the finger lifts or is cancelled, the button changes or hides, the game pauses or the controls go" % [", ".join(PackedStringArray(shapes.values().map(func(size: Vector2) -> String: return "%d x %d px" % [roundi(size.x), roundi(size.y)]))), _looked])
 	quit(0)
 
 
@@ -140,7 +146,7 @@ func _shape(controls: TouchControls, shape: String) -> bool:
 	_touch(controls, 5, rise, false)
 	if Input.is_action_pressed("jetpack") or Input.is_action_pressed("handbrake"):
 		return _fail("%s: lifting rise left the jetpack or the handbrake held" % shape)
-	if not _look_anywhere(controls, shape, free):
+	if not _look_anywhere(controls, shape, free) or not _lost_lift(controls, shape, free):
 		return false
 	if not await _use_button(controls):
 		return false
@@ -156,6 +162,27 @@ func _look_anywhere(controls: TouchControls, shape: String, free: Array[Vector2]
 	var run := _centre(controls, "run")
 	var reach := float(controls.describe().stick_reach)
 	var screen := Rect2(Vector2.ZERO, controls.size)
+	# The stick's edge, STICK_RADIUS_PX and STICK_TOUCH_MARGIN_PX from its centre: a
+	# press just inside it, on the diagonal toward open screen, moves at full
+	# strength and never turns; a stroke just outside it on that diagonal, and one
+	# from just inside the square's top left corner, both in the stick's square,
+	# turn the camera and move nothing.
+	var edge: float = TOUCH.STICK_RADIUS_PX + TOUCH.STICK_TOUCH_MARGIN_PX
+	var diagonal := Vector2(1, -1).normalized()
+	var edge_view := controls.get_camera_rotation()
+	var inside := stick + diagonal * (edge - 8.0)
+	_touch(controls, 19, inside, true)
+	_slide(controls, 19, inside + diagonal * 8.0)
+	var pushed := controls.get_movement_vector()
+	var turned_inside := controls.get_camera_rotation() != edge_view
+	_touch(controls, 19, inside + diagonal * 8.0, false)
+	if pushed.length() < 0.9 or turned_inside or not controls.get_movement_vector().is_zero_approx():
+		return _fail("%s: a press %.0f px from the stick's centre, inside its edge, must move at full strength and never turn (movement %s, turned %s)" % [shape, edge - 8.0, pushed, turned_inside])
+	for at: Vector2 in [stick + diagonal * (edge + 8.0), stick_rect.position + Vector2(8, 8)]:
+		if not stick_rect.has_point(at):
+			return _fail("%s: the stick-edge probe %s lies outside the stick's square %s" % [shape, at, stick_rect])
+		if not _look_stroke(controls, 19, at, "%s: a drag from %s, in the stick's square but off its disc," % [shape, at]):
+			return false
 	# A drag from every point off the controls turns the camera by its own stroke,
 	# and moves or presses nothing.
 	for at: Vector2 in free:
@@ -228,6 +255,39 @@ func _look_anywhere(controls: TouchControls, shape: String, free: Array[Vector2]
 		return false
 	_looked += 3
 	return true
+
+
+## A look finger whose lift was lost (a browser can drop a touchend) and whose
+## index comes back pressed: off the controls it starts a fresh look from where it
+## is now, with no jump from the stale position; on RUN it is RUN's and turns
+## nothing; and after either, another finger can look.
+func _lost_lift(controls: TouchControls, shape: String, free: Array[Vector2]) -> bool:
+	var run := _centre(controls, "run")
+	var a := free[0]
+	var c := _nearest(free, a + controls.size * 0.5)
+	_touch(controls, 27, a, true)
+	_slide(controls, 27, a + STROKE)
+	_touch(controls, 27, c, true)
+	var before := controls.get_camera_rotation()
+	_slide(controls, 27, c + STROKE)
+	var turned := controls.get_camera_rotation() - before
+	_touch(controls, 27, c + STROKE, false)
+	var relative := (c + STROKE) - c
+	if not turned.is_equal_approx(-relative * DEGREES_PER_PX) or _other(controls) != "":
+		return _fail("%s: a look finger pressed again at %s after its lift was lost at %s must look from where it is now (turned %s, not %s%s)" % [shape, c, a + STROKE, turned, -relative * DEGREES_PER_PX, _other(controls)])
+	if not _look_stroke(controls, 28, a, "%s: a new look finger after a lost lift, from %s," % [shape, a]):
+		return false
+	_touch(controls, 29, a, true)
+	_slide(controls, 29, a + STROKE)
+	_touch(controls, 29, run, true)
+	var view := controls.get_camera_rotation()
+	var running := Input.is_action_pressed("run")
+	_slide(controls, 29, a)
+	var turned_on_run := controls.get_camera_rotation() != view
+	_touch(controls, 29, a, false)
+	if not running or turned_on_run or not _held().is_empty():
+		return _fail("%s: a look finger pressed again on RUN after its lift was lost must be RUN's and turn nothing (run %s, turned %s, held after the lift %s)" % [shape, running, turned_on_run, _held()])
+	return _look_stroke(controls, 30, a, "%s: a new look finger after a lost lift on RUN, from %s," % [shape, a])
 
 
 ## One finger down at `at`, a stroke and back, lifted: the camera turns by the

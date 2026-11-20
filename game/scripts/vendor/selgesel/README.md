@@ -19,7 +19,9 @@ removed. Look deltas use the tracked finger’s previous/current logical positio
 first hosted four-finger trial produced a large jump from event.relative despite
 a small owner-finger move. Explicit routing gives one look finger to a press
 anywhere but on the stick or a button (owner, 2026-11-20), never to a finger a
-control holds, and touch_controls.gd turns the look off in a car; pause/focus
+control holds, and touch_controls.gd turns the look off in a car. A press of an
+index still held as the look finger (its lift lost) ends that stale look first,
+so it cannot block a new look or turn the camera with the reused index; pause/focus
 releases all. touch_controls.gd supplies layout and stock-camera/vector
 mapping. Player physics is retained; only touch movement preserves analog strength.
 This older upstream template does not claim Godot4.7 web or iPad Safari support;
