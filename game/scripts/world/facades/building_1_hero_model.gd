@@ -586,7 +586,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 		{"name": "HeroCanopyVentPlates", "bucket": canopy_buckets.reveal, "material": REVEAL_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroCanopyFloodlights", "bucket": canopy_buckets.bronze, "material": BRONZE_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroDrumMast", "bucket": mast, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroFlagpole", "bucket": flagpole, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroFlagpole", "bucket": flagpole, "material": TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var canopy_config := front.canopy as Dictionary
 	var metadata := _common_metadata(config, record, "building_roof")
