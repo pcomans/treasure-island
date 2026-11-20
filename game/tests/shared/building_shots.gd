@@ -115,6 +115,13 @@ extends SceneTree
 ## --web-distances: the web build's distance culling of building parts by their size
 ##   (main.gd _apply_web_detail_distances), applied once the island has loaded, so far
 ##   views show what the web draws there.
+## --study FILE: a material or look study laid over the loaded world without editing
+##   its models: FILE is JSON {"script": "res://...gd", ...its own settings}. Once the
+##   island has loaded (and the neutral light, if asked, is in), the script's static
+##   prepare(world, settings) -> String (an error, or "") runs once; a still view may
+##   then add "study": "NAME" to run its apply(world, NAME) -> String before the shot,
+##   kept for the views after it. A study shows something; it decides nothing about
+##   the game (game/tests/support/building_1_material_study.gd).
 ## --street-detail off|on|both: street detail (vegetation, furniture, fences, clutter)
 ##   in every shot. Without it, close-ups and focused views are taken with street
 ##   detail off, and context, island and overhead views both ways. A view taken
@@ -242,6 +249,8 @@ const NEUTRAL_SUN := {
 
 var _h: WorldHarness
 var _errors: Array[String] = []
+## The --study file's script once prepared on the loaded world, else null.
+var _study: GDScript = null
 ## The loaded world's mulch materials by key (_loaded_mulch_materials()).
 var _mulch_materials := {}
 
@@ -319,6 +328,11 @@ func _run() -> void:
 		print("WEB_DISTANCES applied as the web build applies them")
 	if args.has("neutral-lighting"):
 		await _use_neutral_lighting()
+	if args.has("study"):
+		error = _prepare_study(str(args.study))
+		if error != "":
+			_fail(error)
+			return
 	if not args.has("show-player"):
 		(_h.player.get_node("AvatarPivot") as Node3D).visible = false
 	for state in passes:
@@ -389,6 +403,25 @@ func _use_neutral_lighting() -> void:
 		await process_frame
 	await RenderingServer.frame_post_draw
 	print("LIGHTING: neutral (fixed colour-matching daylight, screenshots only)")
+
+
+## Loads --study's script and runs its prepare on the loaded world. Returns an error,
+## or "".
+func _prepare_study(path: String) -> String:
+	var settings: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not settings is Dictionary or not settings.get("script") is String:
+		return "--study takes a JSON file naming its \"script\""
+	var script := load(str(settings.script)) as GDScript
+	if script == null:
+		return "--study: %s did not load" % settings.script
+	var result: Variant = script.call("prepare", _h.world, settings)
+	if not result is String:
+		return "--study: %s's prepare must return an error or \"\"" % settings.script
+	if result != "":
+		return str(result)
+	_study = script
+	print("STUDY %s prepared from %s" % [settings.script, path])
+	return ""
 
 
 ## Whether a view in this run's plans (--views, --street-views, --views-batch) asks
@@ -803,6 +836,12 @@ func _shoot_view(view: Dictionary, target: Vector3, path: String) -> String:
 	var mulch_error := _apply_mulch(view)
 	if mulch_error != "":
 		return mulch_error
+	if view.has("study"):
+		if _study == null:
+			return "a view's \"study\" needs --study"
+		var study_error: Variant = _study.call("apply", _h.world, str(view.study))
+		if not study_error is String or study_error != "":
+			return "study: %s" % study_error
 	if not view.get("times", []) is Array:
 		return "times must be a list of the island's own clock times"
 	var moments: Array = view.get("times", [])

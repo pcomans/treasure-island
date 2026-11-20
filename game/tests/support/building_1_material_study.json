@@ -1,0 +1,86 @@
+{
+ "script": "res://game/tests/support/building_1_material_study.gd",
+ "run_classes": {
+  "pavilion": [0, 1, 2, 3, 4, 5, 6, 7, 8, 52, 53, 54, 55, 56, 57, 58, 59, 60],
+  "wing": [9, 10, 11, 12, 13, 14, 15, 16, 44, 45, 46, 47, 48, 49, 50, 51],
+  "junction": [17, 18, 19, 20, 38, 39, 40, 41, 42, 43],
+  "crescent": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37],
+  "se": [61, 62, 63, 64, 65, 66, 67, 68, 69],
+  "rear": [70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92],
+  "north": [93, 94, 95, 96],
+  "inner": [97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+ },
+ "exposure": {
+  "crescent": 0.12,
+  "wing": 0.3,
+  "pavilion": 0.9,
+  "junction": 0.45,
+  "se": 0.35,
+  "rear": 1.0,
+  "north": 0.35,
+  "inner": 0.5,
+  "tower": 0.6,
+  "other": 0.4
+ },
+ "by_mesh": {
+  "HeroPublicStucco": "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
+  "HeroTowerBaseStorey": "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
+  "HeroOriginalIvory": "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
+  "HeroPublicBase": "res://game/resources/materials/world/building_1/building_1_m_ground_wall.tres",
+  "HeroEntranceCanopy": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
+  "HeroCanopyFascia": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
+  "HeroTowerBaseStoreyTrim": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
+  "HeroEntranceCanopySoffit": "res://game/resources/materials/world/building_1/building_1_m_soffit.tres",
+  "HeroTowerBaseStoreyGlazing": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
+  "HeroBronze": "res://game/resources/materials/world/building_1/building_1_m_grille_bronze.tres",
+  "HeroPublicBronze": "res://game/resources/materials/world/building_1/building_1_m_door_bronze.tres",
+  "HeroLightSteel": "res://game/resources/materials/world/building_1/building_1_m_window_blue.tres",
+  "HeroEmblemEnamel": "res://game/resources/materials/world/building_1/building_1_m_emblem_blue.tres"
+ },
+ "splits": [
+  {
+   "mesh": "HeroPublicTrim",
+   "margins_m": [0.32, 0.45, 0.35, 0.7],
+   "near_windows": {
+    "wing": "res://game/resources/materials/world/building_1/building_1_m_surround.tres",
+    "pavilion": "res://game/resources/materials/world/building_1/building_1_m_surround.tres",
+    "rear": "res://game/resources/materials/world/building_1/building_1_m_surround.tres"
+   },
+   "rest": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
+   "large_faces": {
+    "min_area_m2": 1.2,
+    "min_extent_m": 0.8,
+    "material": "res://game/resources/materials/world/building_1/building_1_m_wall.tres"
+   }
+  },
+  {
+   "mesh": "HeroWindowRevealDepth",
+   "margins_m": [0.4, 0.5, 0.45, 0.8],
+   "near_windows": {
+    "wing": "res://game/resources/materials/world/building_1/building_1_m_surround.tres",
+    "pavilion": "res://game/resources/materials/world/building_1/building_1_m_surround.tres",
+    "rear": "res://game/resources/materials/world/building_1/building_1_m_surround.tres"
+   },
+   "rest": "res://game/resources/materials/world/building_1/building_1_m_trim.tres"
+  },
+  {
+   "mesh": "HeroWindowMetal",
+   "margins_m": [0.15, 0.15, 0.15, 0.4],
+   "near_windows": {
+    "wing": "res://game/resources/materials/world/building_1/building_1_m_window_blue.tres",
+    "pavilion": "res://game/resources/materials/world/building_1/building_1_m_window_blue.tres",
+    "rear": "res://game/resources/materials/world/building_1/building_1_m_window_dark.tres",
+    "crescent": "res://game/resources/materials/world/building_1/building_1_m_grille_bronze.tres"
+   },
+   "rest": ""
+  },
+  {
+   "mesh": "HeroGlazing",
+   "margins_m": [0.05, 0.05, 0.05, 0.05],
+   "near_windows": {
+    "crescent": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres"
+   },
+   "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres"
+  }
+ ]
+}
