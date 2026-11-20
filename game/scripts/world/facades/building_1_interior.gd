@@ -196,6 +196,8 @@ static func build(plan: Dictionary) -> Dictionary:
 		if surface in MURALS:
 			mesh.surface_set_material(index, _mural_material(surface, mural_entry, placeholder))
 		else:
+			# From the shared static _materials cache, terrazzo too: the mural loader's reflections-trial
+			# writes would reach every hall if a second one were built (reflections are off; one hall is built).
 			mesh.surface_set_material(index, _material(surface, plan.config.palette[surface] as Dictionary))
 		triangles += (bucket.indices as Array).size() / 3
 	var instance := MeshInstance3D.new()

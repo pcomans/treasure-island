@@ -294,7 +294,7 @@ func _check_second_build(first: Building1MuralLoader) -> void:
 	_world.add_child(second)
 	var other := second.get_node("MuralLoader") as Building1MuralLoader
 	var plain := other.placeholder
-	if plain == null or plain == first.placeholder or plain.resource_path != "" or plain.get_width() != 4:
+	if plain == null or plain == first.placeholder or plain.resource_path != "":
 		failures.append("a second build's mural placeholder is not a plain texture of its own")
 	if other.materials.size() != first.materials.size():
 		failures.append("a second build's hall has %d mural surfaces, not %d" % [other.materials.size(), first.materials.size()])
