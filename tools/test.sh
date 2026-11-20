@@ -355,6 +355,18 @@ for method in forward_plus gl_compatibility; do
   check_godot "game/tests/shader_compile_check.gd (${method})" 300 tools/godot --rendering-method "${method}" "${driver[@]}" --path . --audio-driver Dummy --script game/tests/shader_compile_check.gd
 done
 
+# Building 1's hall floor reflections in the loaded island, drawn on both renderers: on
+# Forward+ they come and go with the camera, never flicker on the doorway and put the
+# environment and the floor back exactly; on the Compatibility renderer (the web's) they
+# do nothing at all (game/tests/building_1_hall_reflections_check.gd). Each run names
+# the renderer it asks for, and fails if the engine draws with another.
+for method in forward_plus gl_compatibility; do
+  echo "== game/tests/building_1_hall_reflections_check.gd (${method})"
+  driver=()
+  [ "${method}" != gl_compatibility ] || driver=(--rendering-driver opengl3)
+  check_godot "game/tests/building_1_hall_reflections_check.gd (${method})" 600 tools/godot --rendering-method "${method}" "${driver[@]}" --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/building_1_hall_reflections_check.gd -- --expect "${method}"
+done
+
 # The street generators keep plants and props off the mid-rise door landings in
 # data/street_detail/door_landings.json and pave the grass beside them; the family's
 # own build must still draw exactly those (headless, seconds). A failure names each door.
@@ -402,6 +414,9 @@ check_godot "tools/prebuild-static-world.sh native" 900 tools/prebuild-static-wo
 if [ -s "${baked}" ]; then
   echo "== game/tests/shared/island_test.gd -- --use-prebuilt-world"
   check_godot "game/tests/shared/island_test.gd (prebuilt world)" 900 tools/godot --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/island_test.gd -- --use-prebuilt-world
+  # The baked hall's floor reflections carry the floor's own attributes (they swap them in play).
+  echo "== game/tests/headless_building_1_interior_contract.gd -- --use-prebuilt-world"
+  check_godot "game/tests/headless_building_1_interior_contract.gd (prebuilt world)" 600 tools/godot --headless --path . --audio-driver Dummy --script game/tests/headless_building_1_interior_contract.gd -- --use-prebuilt-world
 fi
 rm -f "${baked}"
 
