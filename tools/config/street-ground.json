@@ -675,7 +675,7 @@
         "w8920838"
       ],
       "treatment": "village",
-      "evidence": "Google Street View Mar 2025 at 1200 Northpoint Drive: red curbs, STOP legend, two crosswalk lines, a curb ramp at the corner. Mar 2025 at 1200 Northpoint Dr (heading 175): concrete walks behind the red curbs on both sides, curving round both corners onto Gateview Avenue, curb ramps at the two-line crosswalk. Red curb: both curbs of the Gateview Avenue approach (heading 175), and Mar 2025 at 1243 Northpoint Dr (heading 40) the curb round a lawn on the left. Mar 2025 at 1236 Northpoint Dr (heading 330): a white curb, no red.",
+      "evidence": "Google Street View Mar 2025 at 1200 Northpoint Drive: red curbs, STOP legend, two crosswalk lines, a curb ramp at the corner. Mar 2025 at 1200 Northpoint Dr (heading 175): concrete walks behind the red curbs on both sides, curving round both corners onto Gateview Avenue, curb ramps at the two-line crosswalk. Red curb: both curbs of the Gateview Avenue approach (heading 175), and Mar 2025 at 1243 Northpoint Dr (heading 40) the curb round a lawn on the left. Mar 2025 at 1236 Northpoint Dr (heading 330): a white curb, no red. No curb along 1232's stalls (right, 32.4-48 m; the verge's rounded ends stay off the pad's corners): Mar 2025 at 1232 Northpoint Dr (west front, heading 90.7) the stalls run flat to the road edge, a pale concrete strip at their ends and no curb or grass between them and the road; Mar 2025 at the north end (heading 162.5) the curb and lawn of the north segment stop where the parking begins. That stretch is open asphalt edge, with an apron out to the building's own parking pad (northpoint_1232_quality_model.gd's frontage).",
       "sides": {
         "w8920838": {
           "left": [
@@ -698,6 +698,16 @@
             ],
             [
               30,
+              32.4,
+              "verge"
+            ],
+            [
+              32.4,
+              48,
+              "none"
+            ],
+            [
+              48,
               510,
               "verge"
             ]
@@ -1731,6 +1741,14 @@
       "to_m": 44,
       "depth_m": 0.6,
       "evidence": "Google Street View Mar 2025 at 1420 Gateview Ct (headings 340 and 245): flat paving from the road into the stalls. Closes the gap to the building's parking pad."
+    },
+    {
+      "way": "w8920838",
+      "side": "right",
+      "from_m": 33,
+      "to_m": 47.3,
+      "depth_m": 0.45,
+      "evidence": "Google Street View Mar 2025 at 1232 Northpoint Dr (west front, heading 90.7): 1232's stalls run flat from the road into the parking under the carport. Closes the 0.03-0.24 m gap from the road edge to the building's parking pad (northpoint_1232_quality_model.gd's frontage asphalt, 3.03-3.24 m from the way's line) and lies 0.2 m over its edge."
     }
   ],
   "lots": [

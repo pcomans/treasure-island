@@ -79,8 +79,10 @@ export const STREET_DETAIL_INPUTS = Object.freeze({
   tree_crowns: "data/street_detail/tree_crowns.json",
   stair_catalog: "discovery/facades/facade-recognition-catalog.json",
   door_landings: "data/street_detail/door_landings.json",
+  building_paving: "data/street_detail/building_paving.json",
 });
 export const DOOR_LANDINGS_SCHEMA = "ti.door-landings/1";
+export const BUILDING_PAVING_SCHEMA = "ti.building-paving/1";
 // Runtime subtrees under PlayableWorld/StreetDetail, in node order; each one
 // can be switched off. "ground" rows (crossings, kerbs) feed the always-on
 // chunk surfaces in a later step and are never switched off.
@@ -235,6 +237,13 @@ const CANOPY_NUDGE_DIRECTIONS = 12;
 export const TREE_POLE_CLEAR_M = 2.2;
 export const TREE_WIRE_CLEAR_M = 2.2;
 const TREE_KINDS = Object.freeze(["palm_slot", "tree"]);
+// How far a tree's or palm's trunk keeps from the paving a building draws
+// (data/street_detail/building_paving.json), its crown free to hang over a pad or walk as a
+// real tree's does; a low plant or hedge only keeps its foot or line off the paving itself,
+// so a bed or hedge beside a walk stays as planted (pavingReach).
+const PAVING_TRUNK_CLEAR_M = 0.4;
+// The grid cell of the building paving index (buildingPavingIndex).
+const PAVING_CELL_M = 4;
 // A row's step back toward its line where its offset spot fails (give_m).
 const ROW_GIVE_STEP_M = 0.25;
 // Clipped hedges: how often a hedge line is sampled against its site (m), the
@@ -920,6 +929,58 @@ export function loadDoorLandings(projectRoot) {
   return document.landings;
 }
 
+// The paving the housing buildings draw for themselves (tools/export_building_paving.gd):
+// {source_key, triangles_xz}, each triangle three plan corners [x, z].
+export function loadBuildingPaving(projectRoot) {
+  const document = readJson(projectRoot, STREET_DETAIL_INPUTS.building_paving);
+  invariant(document?.schema_version === BUILDING_PAVING_SCHEMA && Array.isArray(document.paving), `${STREET_DETAIL_INPUTS.building_paving} must be a ${BUILDING_PAVING_SCHEMA} document`);
+  const names = new Set();
+  for (const building of document.paving) {
+    invariant(/^[wr]\d+$/u.test(building?.source_key ?? "") && !names.has(building.source_key), `Building paving ${building?.source_key} needs a source key of its own`);
+    invariant(Array.isArray(building.triangles_xz) && building.triangles_xz.length > 0 && building.triangles_xz.every((triangle) => Array.isArray(triangle) && triangle.length === 3 && triangle.every(isXZ)),
+      `Building paving ${building.source_key} needs plan triangles of three [x, z] corners`);
+    names.add(building.source_key);
+  }
+  return document.paving;
+}
+
+// How far a plant of a kind keeps from building paving: a tree's or palm's trunk
+// PAVING_TRUNK_CLEAR_M; a low plant or hedge none, only its foot or line off the paving.
+export function pavingReach(kindName) {
+  return TREE_KINDS.includes(kindName) ? PAVING_TRUNK_CLEAR_M : 0;
+}
+
+// A plan index of the building paving: (xz, reach) gives the source key of the paving
+// the point stands on or comes within reach of, or null.
+export function buildingPavingIndex(paving) {
+  const cells = new Map();
+  for (const building of paving) {
+    for (const triangle of building.triangles_xz) {
+      const ring = [...triangle, triangle[0]];
+      const entry = { source_key: building.source_key, ring, box: boxOfXZ(triangle) };
+      for (let i = Math.floor(entry.box[0] / PAVING_CELL_M); i <= Math.floor(entry.box[1] / PAVING_CELL_M); i += 1) {
+        for (let j = Math.floor(entry.box[2] / PAVING_CELL_M); j <= Math.floor(entry.box[3] / PAVING_CELL_M); j += 1) {
+          const key = `${i},${j}`;
+          if (!cells.has(key)) cells.set(key, []);
+          cells.get(key).push(entry);
+        }
+      }
+    }
+  }
+  return (xz, reach) => {
+    const near = [xz[0] - reach, xz[0] + reach, xz[1] - reach, xz[1] + reach];
+    for (let i = Math.floor(near[0] / PAVING_CELL_M); i <= Math.floor(near[1] / PAVING_CELL_M); i += 1) {
+      for (let j = Math.floor(near[2] / PAVING_CELL_M); j <= Math.floor(near[3] / PAVING_CELL_M); j += 1) {
+        for (const entry of cells.get(`${i},${j}`) ?? []) {
+          if (boxGap(entry.box, near) > 0) continue;
+          if (pointInRing(xz, entry.ring, true) || polylineDistance(xz, entry.ring) < reach) return entry.source_key;
+        }
+      }
+    }
+    return null;
+  };
+}
+
 // Whether plan corners [x, z] make a convex ring with an area: every turn the same
 // way round (a straight run between turns is allowed).
 function convexRing(points) {
@@ -1185,6 +1246,9 @@ export function generateStreetDetail({
   const treeCrowns = loadTreeCrowns(projectRoot);
   const stairFlights = loadStreetDetailStairFlights(projectRoot);
   const doorLandings = loadDoorLandings(projectRoot);
+  // The paving the housing buildings draw for themselves: no plant stands on it.
+  const buildingPaving = loadBuildingPaving(projectRoot);
+  const onPaving = buildingPavingIndex(buildingPaving);
   const exclusions = config.exclusions;
   const seed = config.seed;
   const spawnXZ = [spawn.xz[0], spawn.xz[1]];
@@ -1680,6 +1744,10 @@ export function generateStreetDetail({
     if (!onLand(xz, exclusions.land_edge_buffer_m + radius)) return { reason: "land_edge", source_id: PLAYABLE_BOUNDARY_SOURCE_KEY, observed_m: 0, required_m: exclusions.land_edge_buffer_m };
     const hard = hardViolation(hardShapes, [xz], radius);
     if (hard) return hard;
+    if (kind.layer === "vegetation") {
+      const paved = onPaving(xz, pavingReach(kindName));
+      if (paved) return { reason: "building_paving", source_id: paved, observed_m: 0, required_m: pavingReach(kindName) };
+    }
     const building = sited.nearest(xz, buildingBuffer + radius);
     if (building.distance < buildingBuffer + radius) {
       return { reason: building.distance === 0 ? "inside_building" : "building_buffer", source_id: building.key, observed_m: round3(Math.max(0, building.distance - radius)), required_m: buildingBuffer };
@@ -1840,6 +1908,7 @@ export function generateStreetDetail({
       if (!contains(xz)) problem = "outside_zone";
       else if (!onLand(xz, exclusions.land_edge_buffer_m + radius * 0.5)) problem = "land_edge";
       else if (hardViolation(nonLandingShapes, [xz], radius)) problem = hardViolation(nonLandingShapes, [xz], radius).reason;
+      else if (onPaving(xz, pavingReach(rule.kind))) problem = "building_paving";
       else if (buildingsFor(rule).nearest(xz, wallBuffer + radius).distance < wallBuffer + radius) problem = "building_buffer";
       else if (rule.pattern !== "field" && shorelineOverlays.nearest(xz, radius).distance < radius) problem = "shoreline_overlay";
       else if (rule.pattern !== "field" && !rule.surfaces.includes(surfaceAt(xz).material_key)) problem = "rule_surface";
@@ -2085,6 +2154,7 @@ export function generateStreetDetail({
   const hedgeClear = (xz) => {
     if (!onLand(xz, exclusions.land_edge_buffer_m)) return false;
     if (hardViolation(hardShapes, [xz], STREET_DETAIL_KINDS.hedge.footprint_radius_m)) return false;
+    if (onPaving(xz, pavingReach("hedge"))) return false;
     if (buildings.nearest(xz, 0.6).distance < 0.6) return false;
     if (plantRoads.nearest(xz, exclusions.road_buffer_m).distance < exclusions.road_buffer_m) return false;
     if (shorelineOverlays.nearest(xz, 0.5).distance < 0.5) return false;
@@ -2678,6 +2748,7 @@ export function generateStreetDetail({
       // Only the stairs, the anchor keys and the demolished status are read; other acceptance edits to the catalog do not change this output.
       stair_catalog: { path: STREET_DETAIL_INPUTS.stair_catalog, field: "units[].stairs, units[].anchor_source_key, units[].claim_status.reference_recognizable", flights: stairFlights.length },
       door_landings: { path: STREET_DETAIL_INPUTS.door_landings, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.door_landings)), landings: doorLandings.length },
+      building_paving: { path: STREET_DETAIL_INPUTS.building_paving, sha256: sha256File(resolve(projectRoot, STREET_DETAIL_INPUTS.building_paving)), buildings: buildingPaving.length },
     },
     exclusions,
     exclusion_inputs: {

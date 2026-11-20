@@ -44,6 +44,11 @@
 // Solid is a point row isStreetSolid counts (a street prop, a parked car, a tree
 // trunk); the props a car knocks over are the furniture kit's FELLABLE, read from
 // the kit itself.
+//
+// No plant stands on the paving a housing building draws for itself (its parking pad,
+// aprons, walks and door paths, as data/street_detail/building_paving.json gives them,
+// tools/export_building_paving.gd): a tree's or palm's trunk keeps pavingReach clear
+// of it, and a low plant's foot or a hedge's line stays off it.
 
 import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -55,12 +60,15 @@ import {
   POCKET_CELL_M,
   STREET_DETAIL_KINDS,
   STREET_DETAIL_LAYERS,
+  buildingPavingIndex,
   hardShapeDistance,
   isStreetSolid,
+  loadBuildingPaving,
   loadDoorLandings,
   loadStreetDetailStairFlights,
   loadStreetDetailZones,
   planDistance,
+  pavingReach,
   pocketRegions,
   roofTriangles,
   shutInPockets,
@@ -138,10 +146,13 @@ function main() {
   failures.push(...pockets.failures);
   const footways = footwayObstacles(detail);
   failures.push(...footways.failures);
+  const paving = pavedPlants(detail);
+  failures.push(...paving.failures);
   const stairs = zones.filter((zone) => zone.name === "stair").length;
   // A check with nothing to compare would pass untested.
   if (items.length === 0 || stairs === 0) failures.push(`nothing to check: ${items.length} items, ${stairs} stair flights`);
   if (footways.bands.length === 0 || footways.solids === 0) failures.push(`nothing to check: ${footways.bands.length} footway bands, ${footways.solids} solid props a car cannot knock over`);
+  if (paving.buildings === 0 || paving.plants === 0) failures.push(`nothing to check: ${paving.buildings} buildings' paving, ${paving.plants} plants`);
   for (const message of failures) console.log(`FAIL: ${message}`);
   if (failures.length > 0) process.exit(1);
   const byLayer = STREET_DETAIL_LAYERS.map((layer) => `${items.filter((item) => item.layer === layer).length} ${layer}`).join(", ");
@@ -150,6 +161,28 @@ function main() {
   console.log(`PASS: street detail with all layers on (${byLayer}) clears ${stairs} stair flights with their doors and approaches, ${landings} mid-rise door landings and ramps, the spawn, its walk-forward line and the QA corridors; closest: ${closest}`);
   console.log(`PASS: ${pockets.fences} built fences and ${pockets.yards} yards shut no walkable ground in (${pockets.cells} cells of ${POCKET_CELL_M} m checked)`);
   console.log(`PASS: none of ${footways.solids} solid street props a car cannot knock over stands on the paving of ${footways.bands.length} OSM footway band(s) (${footways.bands.map((band) => `${band.id} ${band.way}`).join(", ")})`);
+  console.log(`PASS: none of ${paving.plants} plants stands on the paving ${paving.buildings} housing buildings draw for themselves`);
+}
+
+// Plants standing on a building's drawn paving (see the header): {buildings, plants, failures}.
+function pavedPlants(detail) {
+  const paving = loadBuildingPaving(projectRoot);
+  const onPaving = buildingPavingIndex(paving);
+  const failures = [];
+  let plants = 0;
+  for (const row of detail.rows) {
+    if (row.status !== "placed" || row.layer !== "vegetation") continue;
+    plants += 1;
+    const points = row.geometry === "point" ? [[row.position_m[0], row.position_m[2]]] : row.points_m.map((point) => [point[0], point[2]]);
+    for (const point of points) {
+      const paved = onPaving(point, pavingReach(row.kind));
+      if (paved) {
+        failures.push(`${row.id} (${row.kind}) stands within ${pavingReach(row.kind)} m of the paving ${paved} draws at [${point.map((value) => value.toFixed(2)).join(", ")}]`);
+        break;
+      }
+    }
+  }
+  return { buildings: paving.length, plants, failures };
 }
 
 // Solid props a car cannot knock over standing on a zone's OSM footway band
