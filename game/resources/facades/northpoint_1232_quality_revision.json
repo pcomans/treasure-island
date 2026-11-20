@@ -4,5 +4,19 @@
   "ground_chunks": [
     "res://generated/world/chunks/x_-2__z_-3.json",
     "res://generated/world/chunks/x_-2__z_-4.json"
-  ]
+  ],
+  "frontage_parking_from_m": 2.0,
+  "frontage_parking_evidence": "Google Street View March 2025, north end (heading 162.5): the north segment's two units front a lawn and the walk, no parking; the parking and carport begin at the middle segment. Station in northpoint_1232_quality_model.gd's frontage frame (production inference).",
+  "frontage_asphalt_rgb": [
+    0.19,
+    0.19,
+    0.19
+  ],
+  "frontage_asphalt_evidence": "Google Street View, March 2025, west front: the stalls' asphalt grey-black (it read navy in game light).",
+  "roof_rgb": [
+    0.56,
+    0.53,
+    0.48
+  ],
+  "roof_rgb_evidence": "Google Street View, March 2025: 1232 west front (pano CN9mis-1NnYxLSEucK7PvQ, heading 90.7) and north end with the west front (heading 162.5, Maps label 1227): tan-grey shingles."
 }

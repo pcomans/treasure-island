@@ -5,6 +5,9 @@ const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_suppo
 const CONFIG_PATH := "res://game/resources/facades/northpoint_1232_quality_revision.json"
 const SELF_PATH := "res://game/scripts/world/facades/northpoint_1232_live_factory.gd"
 const CHUNK_PATH := "res://generated/world/chunks/x_-2__z_-3.json"
+## 1232's housing family config: its roof_plane is the one description of the segment roof,
+## which the production roof (MODEL) and the family's roof details both build from.
+const FAMILY_CONFIG_PATH := "res://game/resources/housing_family/w96215673.json"
 const WALL_KEY := "building:w96215673:wall"
 const ROOF_KEY := "building:w96215673:roof"
 
@@ -25,6 +28,11 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder
 	if baseline or not source_builder.is_valid() or not tangent_builder.is_valid() or not matches_record_pair(wall, roof):
 		return {"ok": false, "message": "Exact source pair and live caller required; no baseline fallback."}
 	var cfg := _json(CONFIG_PATH)
+	var family := _json(FAMILY_CONFIG_PATH)
+	if family.has("roof_plane"):
+		if not MODEL.same_roof_frame(family.roof_plane):
+			return {"ok": false, "message": "1232's roof_plane is not in the production roof's frame."}
+		cfg["roof_plane"] = family.roof_plane
 	var land := SUPPORT.land_triangles(cfg.get("ground_chunks", []) as Array)
 	if not bool(land.get("ok", false)): return land
 	var misses: Array = []
@@ -34,7 +42,7 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder
 			misses.append(p)
 			return 0.0
 		return value
-	var model: Node3D = MODEL.build(wall, ground)
+	var model: Node3D = MODEL.build(wall, ground, cfg)
 	if not misses.is_empty():
 		model.free()
 		return {"ok": false, "message": "Reviewed local ground sample outside frozen colliding land."}
