@@ -63,7 +63,8 @@ extends Node3D
 ## Touch (the browser's touch controls, touch_controls.gd): no key prompts show;
 ## the use button shows instead, a car while can_enter() or driving, and a tap on
 ## it is F. In a car the touch stick drives and steers (its vector, not the WASD
-## actions) and RISE, which presses the handbrake as Space does, brakes.
+## actions), RISE, which presses the handbrake as Space does, brakes, and a drag
+## off the controls glances (glance) as the mouse does.
 ##
 ## Sound (game/scripts/audio/sound.gd): the driven car's doors, engine and tyres
 ## (car_sound.gd); a hit of any moving live car, from the velocity change its own
@@ -503,8 +504,9 @@ func driving_camera() -> VEHICLE_CAMERA:
 	return _camera
 
 
-## A glance of the driving camera by this much mouse motion (a capture driver's
-## stand-in for the mouse).
+## A glance of the driving camera by this much mouse motion: the touch controls'
+## look in a car, as mouse motion of the same turn (touch_controls.gd), and a
+## capture driver's stand-in for the mouse.
 func glance(relative: Vector2) -> void:
 	if _active != null:
 		_camera.glance(relative)

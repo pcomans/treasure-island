@@ -38,7 +38,10 @@ extends Node
 ## door, a "mural" marker in each frame one goes up), and the web's 3D resolutions in
 ## turn, for the shaders they compile. With hall=1 (?trace=drive&hall=1, --trace-hall
 ## natively) the trace goes from its baseline at the spawn straight to the hall's walk
-## and ends after it: the mural's first load in a freshly started game.
+## and ends after it: the mural's first load in a freshly started game. On desktop a
+## "reflections" marker records the hall's floor reflections coming on or going off and
+## their probes made or freed (Building1HallReflections), and natively
+## --trace-hall-shot=FILE saves the view half a second after the walk stops inside.
 ##
 ## The trace: for every frame, from the engine's own signals (physics_frame,
 ## process_frame, frame_pre_draw, frame_post_draw) and four probe nodes, the time of
@@ -188,6 +191,13 @@ var _hall_seen := 0
 var _hall_from := Vector3.ZERO
 var _hall_dir := Vector3.ZERO
 var _hall_only := false
+## The hall's floor reflections (Building1HallReflections, desktop only), as last
+## recorded (a "reflections" marker when they come on or go off or their probes change);
+## natively, --trace-hall-shot=FILE saves the view once the walk has stopped inside.
+var _hall_reflections: Building1HallReflections
+var _reflections_seen := ""
+var _hall_shot := ""
+var _hall_still := 0
 ## The run's limits and settings from the page's address or the command line: the
 ## trace's length (s, 0 for the whole drive), the 3D resolution asked for (an Options
 ## id, "" for the player's own) and the one to put back; the view last recorded.
@@ -228,6 +238,9 @@ func _ready() -> void:
 				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
 		_hall_only = OS.get_cmdline_user_args().has("--trace-hall")
+		for arg: String in OS.get_cmdline_user_args():
+			if arg.begins_with("--trace-hall-shot="):
+				_hall_shot = arg.trim_prefix("--trace-hall-shot=")
 		# Natively, --trace-web-loading loads as the web build does (the shaders a group
 		# at a time, then the shader warm-up), to tell what that loading does on desktop.
 		if OS.get_cmdline_user_args().has("--trace-web-loading"):
@@ -521,6 +534,7 @@ func _finish_frame() -> void:
 		_mark_pipelines()
 	_mark_view()
 	_mark_mural()
+	_mark_reflections()
 	_flush_nodes()
 	var phys_ms := float(_t_proc - _t_first) / 1000.0 if _phys_n > 0 and _t_proc > 0 else 0.0
 	var proc_ms := float((_t_pre if _t_pre > 0 else end) - _t_proc) / 1000.0 if _t_proc > 0 else 0.0
@@ -1019,6 +1033,7 @@ func _start_trigger(part: String) -> String:
 			_hall_loader = _main.world_root.buildings.find_child("MuralLoader", true, false) as Building1MuralLoader
 			if _hall_loader == null:
 				return "no Building 1 hall"
+			_hall_reflections = _hall_loader.get_parent().get_node_or_null("HallReflections") as Building1HallReflections
 			_hall_seen = _hall_loader.tiles_loaded
 			var door := _hall_loader.door
 			# Out of the door is toward the crescent's centre (the hall's plan centre).
@@ -1061,6 +1076,12 @@ func _walk_hall() -> void:
 	var walked := minf(HALL_WALK_MPS * float(_trigger_ticks - 1) / float(Engine.physics_ticks_per_second), HALL_WALK_FROM_M + HALL_WALK_TO_M)
 	var at := _hall_from + _hall_dir * walked
 	_place_trigger_camera(Transform3D(Basis.IDENTITY, at).looking_at(at + _hall_dir * 10.0 + Vector3.UP, Vector3.UP))
+	# Half a second after the walk has stopped inside, the view once (--trace-hall-shot).
+	if _hall_shot != "" and walked >= HALL_WALK_FROM_M + HALL_WALK_TO_M:
+		_hall_still += 1
+		if _hall_still == Engine.physics_ticks_per_second / 2:
+			var saved := get_viewport().get_texture().get_image().save_png(_hall_shot)
+			_event("trace", "hall view saved to %s (error %d)" % [_hall_shot, saved], saved)
 
 
 ## A "mural" marker in the frame Building 1's hall mural's tiles on the walls change
@@ -1072,6 +1093,21 @@ func _mark_mural() -> void:
 	var camera := get_viewport().get_camera_3d()
 	var off := camera.global_position.distance_to(_hall_loader.door) if camera != null else -1.0
 	_event("mural", "tiles on the walls %d of %d, camera %.1f m from the door" % [_hall_seen, _hall_loader.tiles.size(), off], _hall_seen)
+
+
+## A "reflections" marker in the frame Building 1's hall floor reflections come on or
+## go off, or their probes are made or freed (Building1HallReflections; desktop only).
+func _mark_reflections() -> void:
+	if _hall_reflections == null or not is_instance_valid(_hall_reflections):
+		return
+	var probes := _hall_reflections.probe_nodes().size()
+	var state := "%s, %d probes" % ["on" if _hall_reflections.is_on() else "off", probes]
+	if state == _reflections_seen:
+		return
+	_reflections_seen = state
+	var camera := get_viewport().get_camera_3d()
+	var off := camera.global_position.distance_to(_hall_loader.door) if camera != null and is_instance_valid(_hall_loader) else -1.0
+	_event("reflections", "%s, camera %.1f m from the door" % [state, off], probes)
 
 
 ## Turns the on-foot camera (and so the walk) toward a direction on the ground.

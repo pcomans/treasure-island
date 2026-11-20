@@ -14,13 +14,9 @@ extends Node
 ## which may already hold a tile.
 ##
 ## Nothing here measures or prints: the drive trace (game/scripts/debug/drive_trace.gd)
-## reads state and tiles_loaded to mark the frames the tiles go up in.
-##
-## It also holds the hall's trial switch for screen-space reflections (ssr_mode, from
-## the interior's config "reflections"): "off", "inside" (on only while the camera is
-## in the hall) or "always"; while they are on, the terrazzo turns glossy
-## (floor_gloss: roughness, specular), since the reflections then show the room, not
-## the sky. Forward+ only; the web's renderer has none.
+## reads state and tiles_loaded to mark the frames the tiles go up in. The hall's
+## floor reflections (Building1HallReflections) read state too: their probes capture
+## the hall once the mural is up.
 
 enum State { UNLOADED, LOADING, LOADED }
 
@@ -33,13 +29,9 @@ enum State { UNLOADED, LOADING, LOADED }
 @export var unload_delay := 10.0
 ## The plain texture the mural surfaces show while the tiles are not loaded.
 @export var placeholder: Texture2D
-@export var ssr_mode := "off"
-## The terrazzo's roughness and specular while the reflections are on.
-@export var floor_gloss := Vector2(0.15, 0.5)
-## The hall's plan for the inside test: (centre x, centre z, inner radius, outer radius)
-## and its angles (from, to) about the crescent's centre.
+## The hall's plan about the crescent's centre: (centre x, centre z, inner radius,
+## outer radius); the drive trace walks in along it.
 @export var hall := Vector4.ZERO
-@export var hall_angles := Vector2.ZERO
 
 var state := State.UNLOADED
 ## How many tiles are on the walls now, from 0 to tiles.size().
@@ -48,9 +40,6 @@ var tiles_loaded := 0
 ## surfaces, found by name: a baked world keeps the surfaces, not this node's links).
 var materials: Array[BaseMaterial3D] = []
 var _far_for := 0.0
-var _ssr_on := false
-var _floor: BaseMaterial3D
-var _floor_matte := Vector2.ZERO
 
 
 func _ready() -> void:
@@ -69,21 +58,15 @@ func _ready() -> void:
 			push_error("Building 1 mural: the hall has no surface mural_%d; its mural stays plain." % (index + 1))
 			return
 		materials.append(material)
-	for surface in shell.mesh.get_surface_count():
-		if shell.mesh.surface_get_name(surface) == "terrazzo":
-			_floor = shell.mesh.surface_get_material(surface) as BaseMaterial3D
-	if _floor != null:
-		_floor_matte = Vector2(_floor.roughness, _floor.metallic_specular)
 
 
 func _process(delta: float) -> void:
-	if materials.is_empty() or not _play_started():
+	if materials.is_empty() or not play_started(get_tree()):
 		return
 	var camera := get_viewport().get_camera_3d()
 	if camera == null:
 		return
 	step(camera.global_position.distance_to(door), delta)
-	_update_reflections(camera.global_position)
 
 
 ## Advances the loading for a camera this far from the door, delta seconds on.
@@ -118,32 +101,8 @@ func release() -> void:
 	_far_for = 0.0
 
 
-## Screen-space reflections on while the camera is in the hall (ssr_mode "inside"),
-## always ("always") or never ("off", the default): the world's environment, Forward+.
-func _update_reflections(at: Vector3) -> void:
-	if ssr_mode == "off" or RenderingServer.get_current_rendering_method() == "gl_compatibility":
-		return
-	var inside := ssr_mode == "always"
-	if not inside:
-		var offset := Vector2(at.x - hall.x, at.z - hall.y)
-		var angle := atan2(offset.y, offset.x)
-		inside = offset.length() > hall.z and offset.length() < hall.w and angle > hall_angles.x and angle < hall_angles.y and at.y < door.y + 16.0
-	if inside == _ssr_on:
-		return
-	var environment := get_viewport().world_3d.environment if get_viewport().world_3d != null else null
-	if environment == null:
-		var world := get_viewport().find_child("WorldEnvironment", true, false) as WorldEnvironment
-		environment = world.environment if world != null else null
-	if environment == null:
-		return
-	environment.ssr_enabled = inside
-	if _floor != null:
-		var gloss := floor_gloss if inside else _floor_matte
-		_floor.roughness = gloss.x
-		_floor.metallic_specular = gloss.y
-	_ssr_on = inside
-
-
-func _play_started() -> bool:
-	var main := get_tree().root.get_node_or_null("Main")
+## Whether the game has handed over play (main.gd is_play_ready): the hall's nodes wait
+## for it (the reflections too, Building1HallReflections).
+static func play_started(tree: SceneTree) -> bool:
+	var main := tree.root.get_node_or_null("Main")
 	return main != null and main.has_method("is_play_ready") and bool(main.call("is_play_ready"))

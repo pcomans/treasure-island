@@ -64,7 +64,8 @@ const BUILDS := {
 const OWN := {
 	"res://game/scripts/debug/drive_trace.gd": "writes no material: its census records have a field named shader",
 	"res://game/scripts/debug/startup_marks.gd": "its probe's own material (a startup measurement, only with ?profile_startup=1)",
-	"res://game/scripts/world/facades/building_1_mural_loader.gd": "only the Building 1 hall's own mural and floor materials, which its builder names for the hall alone (Building1Interior_*), so the bake's sharing joins them with no other material: the mural tiles' textures as they load and go, and the floor's gloss while the reflections trial is on",
+	"res://game/scripts/world/facades/building_1_mural_loader.gd": "only the Building 1 hall's own mural materials, which its builder names for the hall alone (Building1Interior_*), so the bake's sharing joins them with no other material: the mural tiles' textures as they load and go",
+	"res://game/scripts/world/facades/building_1_hall_reflections.gd": "only the Building 1 hall's own floor material, which its builder names for the hall alone (Building1Interior_terrazzo), so the bake's sharing joins it with no other material: its polish while the hall's floor reflections are on",
 	"res://game/scripts/player/": "the player's own materials, made with it",
 	"res://game/scripts/vehicles/car_driver.gd": "a car driver's own materials, made with it",
 	"res://game/scripts/vehicles/car_splash.gd": "a splash's own materials",

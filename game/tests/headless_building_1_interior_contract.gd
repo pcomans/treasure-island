@@ -13,7 +13,14 @@ extends SceneTree
 ##   repeat their texture, and Building1MuralLoader loads the tiles near the door, one a
 ##   frame, and puts the placeholder back after a while far away, never while anyone is
 ##   in the hall (every point of the hall is within its load radius of the door); a
-##   second build in the same process has its own placeholder and materials.
+##   second build in the same process has its own placeholder and materials;
+## - its floor reflections (Building1HallReflections) are there with a mode the node
+##   knows (a config with any other fails the hall's plan), and carry the terrazzo
+##   surface's own vertex attributes, byte for byte as the hall draws them, beside a
+##   plain set of the same layout and size that differs from them (the baked sheen out).
+## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
+## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
+## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -32,6 +39,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	if OS.get_cmdline_user_args().has("--use-prebuilt-world"):
+		_run_prebuilt()
+		return
 	var result: Dictionary = HERO.build_record(HERO._record_from_chunk(HERO.MAIN_CHUNK_PATH, HERO.BUILDING_WALL_KEY))
 	if not bool(result.get("ok", false)):
 		_finish("the hero wall record does not build: %s" % result)
@@ -59,7 +69,66 @@ func _run() -> void:
 	_check_door(hall)
 	_check_roof(hall)
 	_check_mural(hall)
+	_check_reflections(hall, "the generated hall")
 	_finish("")
+
+
+## The reflections of the hall in the island baked for desktop exports, loaded through
+## the game's main scene. (Loaded on its own, before the game's scripts, the baked scene
+## stops on the preload cycle of Hawkins 77 Bruton's massing script, facade scene and
+## facade script, which the game's own load order passes.)
+func _run_prebuilt() -> void:
+	var main := (load("res://game/scenes/main.tscn") as PackedScene).instantiate() as GameMain
+	main.capture_mouse_on_ready = false
+	main.use_saved_settings = false
+	var world := main.get_node("WorldRoot") as WorldLoader
+	var load_failures: Array[String] = []
+	world.world_failed.connect(func(code: String, message: String, _keys: Array) -> void: load_failures.append("%s: %s" % [code, message]))
+	root.add_child(main)
+	var started := Time.get_ticks_msec()
+	while not main.is_play_ready() and load_failures.is_empty() and Time.get_ticks_msec() - started < 180000:
+		await process_frame
+	var error := ""
+	if not load_failures.is_empty() or not main.is_play_ready():
+		error = "the baked island did not reach play: %s" % [load_failures]
+	elif not world.uses_prebuilt_world():
+		error = "the world loader built the island instead of loading the baked one"
+	else:
+		var node := world.find_child("HallReflections", true, false)
+		if node == null:
+			error = "the baked island has no hall reflections"
+		else:
+			_check_reflections(node.get_parent() as Node3D, "the baked hall")
+	main.queue_free()
+	await process_frame
+	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
+
+
+## The hall's floor reflections: a mode the node knows (and a config with another one
+## fails the plan), the attributes they swap built for the very surface the hall draws.
+func _check_reflections(hall: Node3D, where: String) -> void:
+	var node := hall.get_node_or_null("HallReflections") as Building1HallReflections
+	if node == null:
+		failures.append("%s has no HallReflections node" % where)
+		return
+	if not node.mode in Building1HallReflections.MODES:
+		failures.append("%s's reflections mode \"%s\" is not one the node knows" % [where, node.mode])
+	if INTERIOR.reflections_problem({"reflections": {"mode": "sometimes"}}) == "":
+		failures.append("a reflections mode the node does not know does not fail the hall's plan")
+	var shell := hall.get_node_or_null("Shell") as MeshInstance3D
+	var surface := Building1HallReflections.floor_surface(shell)
+	if surface < 0:
+		failures.append("%s has no terrazzo surface" % where)
+		return
+	if not node.attributes_fit(shell):
+		failures.append("%s: the floor's built attributes do not fit its surface (format %d of %d, %d of %d vertices)" % [where, node.floor_format, shell.mesh.surface_get_format(surface), node.floor_vertex_count, shell.mesh.surface_get_array_len(surface)])
+	var drawn := RenderingServer.mesh_get_surface(shell.mesh.get_rid(), surface)
+	if drawn.get("attribute_data", PackedByteArray()) != node.sheen_attributes:
+		failures.append("%s: the floor's built attributes are not the ones its surface draws" % where)
+	if node.plain_attributes.size() != node.sheen_attributes.size() or node.plain_attributes == node.sheen_attributes:
+		failures.append("%s: the floor's plain attributes are not a changed set of the same size (%d and %d bytes)" % [where, node.plain_attributes.size(), node.sheen_attributes.size()])
+	# For the record, not a test: what the two sets weigh, and where the node's switch is.
+	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, node.top_y])
 
 
 ## The hero record's exterior collision faces (its collision surfaces), to prove the
@@ -312,7 +381,7 @@ func _check_second_build(first: Building1MuralLoader) -> void:
 	second.free()
 
 
-func _finish(error: String) -> void:
+func _finish(error: String, passed := "") -> void:
 	if error != "":
 		failures.append(error)
 	# Leave nothing behind: the nodes built here, and the hall's shared materials.
@@ -325,7 +394,10 @@ func _finish(error: String) -> void:
 			node.free()
 	INTERIOR._materials.clear()
 	if failures.is_empty():
-		print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials")
+		if passed != "":
+			print(passed)
+		else:
+			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set")
 		quit(0)
 		return
 	for message in failures:

@@ -58,6 +58,11 @@ const GRAIN := 0.18
 ## The mural's tiles, north to south: one surface each (Building1MuralLoader).
 const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
+const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
+const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
+## How far over the hall's highest ceiling (m) a camera still counts as in the hall for
+## its floor reflections: that ceiling's own depth, not the floors or the roof above.
+const REFLECTIONS_TOP_MARGIN_M := 1.2
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -75,6 +80,9 @@ static func plan(site: Dictionary) -> Dictionary:
 	var config := _json(CONFIG_PATH)
 	if str(config.get("schema_version", "")) != SCHEMA:
 		return {"ok": false, "message": "Building 1 interior configuration is missing or has another schema."}
+	var reflections_error := reflections_problem(config)
+	if reflections_error != "":
+		return {"ok": false, "message": reflections_error}
 	var fit := _fit_circle(site.front as PackedVector2Array)
 	if fit.is_empty():
 		return {"ok": false, "message": "Building 1's crescent front does not fit a circle."}
@@ -189,6 +197,7 @@ static func build(plan: Dictionary) -> Dictionary:
 	# their textures in play), so no other build ever shares a tile through them.
 	var mural_entry := plan.config.palette.mural as Dictionary
 	var placeholder := _mural_placeholder(mural_entry)
+	var floor_data := {}
 	for surface: String in SURFACES:
 		var bucket := buckets[surface] as Dictionary
 		if (bucket.indices as Array).is_empty():
@@ -204,11 +213,15 @@ static func build(plan: Dictionary) -> Dictionary:
 		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 		var index := mesh.get_surface_count() - 1
 		mesh.surface_set_name(index, surface)
+		# The floor's two attribute sets for its reflections, which only desktop draws: the
+		# web's bake carries neither (Building1HallReflections does nothing there).
+		if surface == "terrazzo" and PREBUILT_WORLD.profile() != "web":
+			floor_data = _floor_attributes(plan, bucket, arrays, mesh.surface_get_format(index))
 		if surface in MURALS:
 			mesh.surface_set_material(index, _mural_material(surface, mural_entry, placeholder))
 		else:
-			# From the shared static _materials cache, terrazzo too: the mural loader's reflections-trial
-			# writes would reach every hall if a second one were built (reflections are off; one hall is built).
+			# From the shared static _materials cache, terrazzo too: the floor reflections' writes
+			# (Building1HallReflections) would reach every hall if a second one were built; one is.
 			mesh.surface_set_material(index, _material(surface, plan.config.palette[surface] as Dictionary))
 		triangles += (bucket.indices as Array).size() / 3
 	var instance := MeshInstance3D.new()
@@ -248,17 +261,111 @@ static func build(plan: Dictionary) -> Dictionary:
 	loader.load_radius = float(mural.load_radius)
 	loader.unload_radius = float(mural.unload_radius)
 	loader.unload_delay = float(mural.unload_delay)
-	# The trial switch for screen-space reflections in the hall (plan.config.reflections).
-	var reflections := plan.config.get("reflections", {}) as Dictionary
-	loader.ssr_mode = str(reflections.get("ssr", "off"))
-	var gloss := reflections.get("floor_gloss", [0.15, 0.5]) as Array
-	loader.floor_gloss = Vector2(float(gloss[0]), float(gloss[1]))
 	loader.hall = Vector4((plan.center as Vector2).x, (plan.center as Vector2).y, float(plan.front_in) - 0.5, float(plan.east) + 4.0)
-	loader.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
 	root.add_child(loader)
+	root.add_child(_reflections(plan, loader.hall, floor_data))
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
 	return {"ok": true, "node": root, "mesh_instances": 1, "surfaces": mesh.get_surface_count(), "triangles": triangles, "static_bodies": 2, "shapes": 2}
+
+
+## The hall's floor reflections (plan.config.reflections; Building1HallReflections),
+## Forward+ only. It carries the floor's vertex attributes as built and without the
+## baked sheen (floor: _floor_attributes), for while the real reflections are on.
+static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> Node:
+	var config := plan.config.get("reflections", {}) as Dictionary
+	var ssr := config.get("ssr", {}) as Dictionary
+	var polish := config.get("floor", {}) as Dictionary
+	var probes := config.get("probes", {}) as Dictionary
+	var node := HALL_REFLECTIONS.new()
+	node.name = "HallReflections"
+	node.mode = str(config.get("mode", "off"))
+	node.render_layer = RENDER_INTERIOR
+	node.hall = hall
+	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
+	# Up to the hall's highest ceiling (the balcony's, or its own if that were higher) and
+	# a little over: the hall, its balcony and gallery, not the roof above them.
+	var heights := plan.heights as Dictionary
+	node.top_y = float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + REFLECTIONS_TOP_MARGIN_M
+	node.ssr = bool(ssr.get("enabled", true))
+	node.ssr_max_steps = int(ssr.get("max_steps", 64))
+	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))
+	node.ssr_fade_out = float(ssr.get("fade_out", 2.0))
+	node.ssr_depth_tolerance = float(ssr.get("depth_tolerance", 0.2))
+	node.floor_roughness = float(polish.get("roughness", 0.15))
+	node.floor_specular = float(polish.get("specular", 0.5))
+	# The floor's tint while on: one number for all channels, or [r, g, b].
+	var tint: Variant = polish.get("albedo", 1.0)
+	node.floor_albedo = Color(float(tint[0]), float(tint[1]), float(tint[2])) if tint is Array else Color(float(tint), float(tint), float(tint))
+	node.baked_sheen = bool(polish.get("baked_sheen", true))
+	node.sheen_attributes = floor.get("sheen", PackedByteArray())
+	node.plain_attributes = floor.get("plain", PackedByteArray())
+	node.floor_format = int(floor.get("format", 0))
+	node.floor_vertex_count = int(floor.get("vertices", 0))
+	node.floor_index_count = int(floor.get("indices", 0))
+	node.probes = bool(probes.get("enabled", false))
+	node.probe_sections = int(probes.get("sections", 4))
+	node.probe_intensity = float(probes.get("intensity", 1.0))
+	node.probe_blend = float(probes.get("blend", 1.0))
+	node.probe_capture_height = float(probes.get("capture_height", 4.0))
+	# From the front wall to the deepest east bays' backs, floor to the hall's ceiling.
+	var deepest := 0.0
+	for bay in (plan.east_piers as Array).size() - 1:
+		deepest = maxf(deepest, _east_bay_depth(plan, bay))
+	node.probe_box = Vector4(float(plan.front_in), float(plan.east) + deepest, float(plan.floor_y), float(plan.floor_y) + float(plan.heights.ceiling))
+	return node
+
+
+## The terrazzo surface's vertex attributes as RenderingServer keeps them, encoded on
+## the CPU from the arrays the surface was just built from (its baked sheen in its
+## colours) and from the same arrays with the colours of the floor's shading alone:
+## {"sheen", "plain", "format", "vertices", "indices"}. The layout (stride, offsets) is
+## the engine's own for the surface's format (RenderingServer's format functions); the
+## floor's attributes are its colours (8 bits a channel, as the engine keeps them) and
+## its full-precision UVs, and any other attribute or a compressed one is an error: the
+## reflections would put the wrong bytes up. The interior contract compares the sheen
+## set with the bytes the engine itself made for the surface.
+static func _floor_attributes(plan: Dictionary, bucket: Dictionary, arrays: Array, format: int) -> Dictionary:
+	var uvs := arrays[Mesh.ARRAY_TEX_UV] as PackedVector2Array
+	var count := uvs.size()
+	var others := Mesh.ARRAY_FORMAT_TEX_UV2 | Mesh.ARRAY_FORMAT_CUSTOM0 | Mesh.ARRAY_FORMAT_CUSTOM1 | Mesh.ARRAY_FORMAT_CUSTOM2 | Mesh.ARRAY_FORMAT_CUSTOM3 | Mesh.ARRAY_FLAG_COMPRESS_ATTRIBUTES
+	if (format & Mesh.ARRAY_FORMAT_COLOR) == 0 or (format & Mesh.ARRAY_FORMAT_TEX_UV) == 0 or (format & others) != 0:
+		push_error("Building 1 interior: the floor's surface format %d has attributes other than colours and full-precision UVs; its reflections keep the baked sheen." % format)
+		return {}
+	var stride := RenderingServer.mesh_surface_get_format_attribute_stride(format, count)
+	var color_at := RenderingServer.mesh_surface_get_format_offset(format, count, Mesh.ARRAY_COLOR)
+	var uv_at := RenderingServer.mesh_surface_get_format_offset(format, count, Mesh.ARRAY_TEX_UV)
+	var sheen := _attribute_bytes(arrays[Mesh.ARRAY_COLOR] as PackedColorArray, uvs, stride, color_at, uv_at)
+	var plain := _attribute_bytes(_shading(plan, bucket, true, false), uvs, stride, color_at, uv_at)
+	return {"sheen": sheen, "plain": plain, "format": format, "vertices": count, "indices": (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).size()}
+
+
+## One surface's attribute bytes: per vertex, its colour's channels in 8 bits (as the
+## engine converts them, the fraction cut off) at color_at and its UV in two 32-bit
+## floats at uv_at, stride bytes apart.
+static func _attribute_bytes(colors: PackedColorArray, uvs: PackedVector2Array, stride: int, color_at: int, uv_at: int) -> PackedByteArray:
+	var bytes := PackedByteArray()
+	bytes.resize(stride * colors.size())
+	for index in colors.size():
+		var at := index * stride
+		var colour := colors[index]
+		for channel in 4:
+			bytes[at + color_at + channel] = int(clampf(colour[channel] * 255.0, 0.0, 255.0))
+		bytes.encode_float(at + uv_at, uvs[index].x)
+		bytes.encode_float(at + uv_at + 4, uvs[index].y)
+	return bytes
+
+
+## What is wrong with the config's "reflections" (Building1HallReflections), or "":
+## its mode must be one the node knows.
+static func reflections_problem(config: Dictionary) -> String:
+	var reflections: Variant = config.get("reflections", {})
+	if not reflections is Dictionary:
+		return "Building 1 interior's reflections config is not an object."
+	var mode := str((reflections as Dictionary).get("mode", "off"))
+	if not mode in HALL_REFLECTIONS.MODES:
+		return "Building 1 interior's reflections mode is \"%s\": it must be one of %s." % [mode, ", ".join(PackedStringArray(HALL_REFLECTIONS.MODES))]
+	return ""
 
 
 # --- the shell ------------------------------------------------------------------
@@ -1713,8 +1820,9 @@ static func _mural_placeholder(entry: Dictionary) -> Texture2D:
 ## and their bounce, which the sky's ambient light alone (all the sun-less hall gets)
 ## spreads evenly. Faces toward the windows stay full, faces away and soffits fall
 ## off, members darken toward the floor, the floor toward the walls, and the bays
-## and rooms under the balcony go dim, darker the deeper they run.
-static func _shading(plan: Dictionary, bucket: Dictionary, floor := false) -> PackedColorArray:
+## and rooms under the balcony go dim, darker the deeper they run. The floor carries
+## its baked sheen unless sheen_on is false (the plain floor of the hall's reflections).
+static func _shading(plan: Dictionary, bucket: Dictionary, floor := false, sheen_on := true) -> PackedColorArray:
 	var colors := PackedColorArray()
 	var vertices := bucket.vertices as Array
 	var normals := bucket.normals as Array
@@ -1725,7 +1833,7 @@ static func _shading(plan: Dictionary, bucket: Dictionary, floor := false) -> Pa
 		if floor:
 			# Vertex colours stop at 1: the floor's own shade sits lower (its albedo is
 			# that much brighter), leaving the sheen room to brighten.
-			var sheen := _floor_sheen(plan, vertices[index] as Vector3)
+			var sheen := _floor_sheen(plan, vertices[index] as Vector3) if sheen_on else Color.WHITE
 			shade *= FLOOR_BASE
 			colour = Color(minf(1.0, shade * sheen.r), minf(1.0, shade * sheen.g), minf(1.0, shade * sheen.b))
 		colors.append(colour.linear_to_srgb())

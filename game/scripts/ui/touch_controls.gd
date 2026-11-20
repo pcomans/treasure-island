@@ -33,8 +33,9 @@ const BUTTON_GAP_PX := 48.0
 ## _draw and the hit test share them, so the two cannot drift apart.
 const STICK_RADIUS_PX := 94.0
 const STICK_TOUCH_MARGIN_PX := 16.0
-## On foot, centred under the controls on the MOVE label's baseline: a drag that
-## starts anywhere but on a control turns the camera (mobile_controls.gd).
+## Centred under the controls on the MOVE label's baseline: a drag that starts
+## anywhere but on a control turns the camera, or in a car glances it
+## (mobile_controls.gd, _process).
 const LOOK_HINT := "Drag to look"
 var camera_rig: PlayerCamera
 var player: PlayerController
@@ -124,12 +125,13 @@ func set_gameplay_active(active: bool) -> void:
 	visible = active
 	_sync_camera()
 
-## Look from where the stock camera rig points now.
+## Look from where the stock camera rig points now. In a car the chase camera's
+## glance keeps its own pitch limits (vehicle_camera.gd), so the look sets none.
 func _sync_camera() -> void:
 	if camera_rig != null:
 		_cam_rot = Vector2(rad_to_deg(camera_rig.rotation.y), rad_to_deg(camera_rig.spring_arm.rotation.x))
-		min_pitch = camera_rig.minimum_pitch_degrees
-		max_pitch = camera_rig.maximum_pitch_degrees
+		min_pitch = -INF if _driving else camera_rig.minimum_pitch_degrees
+		max_pitch = INF if _driving else camera_rig.maximum_pitch_degrees
 	_last_camera_rotation = _cam_rot
 
 func _input(event: InputEvent) -> void:
@@ -153,8 +155,16 @@ func _process(delta: float) -> void:
 	if player != null:
 		player.touch_input_vector = get_movement_vector()
 	if camera_rig != null:
+		# The look's turn as the mouse motion that makes it on foot (the stock rig's
+		# sensitivity): on foot the rig turns by it; in a car the chase camera glances
+		# by it as by the mouse's, its limits and its swing back a moment after the
+		# last glance its own (vehicle_camera.gd glance).
 		var change := get_camera_rotation() - _last_camera_rotation
-		camera_rig.apply_look_delta(-change * (PI / 180.0) / camera_rig.look_sensitivity)
+		var relative := -change * (PI / 180.0) / camera_rig.look_sensitivity
+		if not _driving:
+			camera_rig.apply_look_delta(relative)
+		elif vehicles != null and change != Vector2.ZERO:
+			vehicles.glance(relative)
 	_last_camera_rotation = get_camera_rotation()
 	_update_use_button(delta)
 
@@ -181,17 +191,17 @@ func _update_use_button(delta: float) -> void:
 			mode = TouchUseButton.Mode.ENTER
 	use_button.set_mode(mode)
 
-## In a car RISE is the handbrake, shown with its own glyph and label, and RUN,
-## the look and its hint go (a car reads neither the run nor a touch look); on
-## foot all come back. RUN and the look let go of their fingers first, so no run
-## outlasts the hide and a finger held on the way in never turns the view.
+## In a car RISE is the handbrake, shown with its own glyph and label, RUN goes (a
+## car reads no run), and the look glances the chase camera (_process); on foot
+## RISE and RUN come back. RUN lets go of its finger first, so no run outlasts the
+## hide, and the look lets go of its finger both ways, so a finger held while
+## getting in or out turns neither view; a new one looks.
 func _show_driving(driving: bool) -> void:
 	_buttons[0].set_button_texture(BRAKE_ICON if driving else _rise_texture)
 	if driving:
 		_buttons[1]._release()
-		_touches.clear()
+	_touches.clear()
 	_buttons[1].visible = not driving
-	look_enabled = not driving
 	queue_redraw()
 
 ## Where the controls are, in viewport pixels, and what they show (the web
@@ -210,10 +220,17 @@ func describe() -> Dictionary:
 		"rise_label": _rise_label(),
 		"rise_icon": "brake" if _buttons[0].button_texture == BRAKE_ICON else "jump",
 		"run_visible": _buttons[1].visible,
-		"look_hint": not _driving,
-		# Where the stock camera rig looks (yaw and pitch, degrees): a look drag turns it.
-		"camera": [rad_to_deg(camera_rig.rotation.y), rad_to_deg(camera_rig.spring_arm.rotation.x)] if camera_rig != null else [],
+		# Where the view looks (yaw and pitch, degrees): on foot the stock camera rig,
+		# which a look drag turns; in a car the chase camera, which it glances.
+		"camera": _view(),
 	}
+
+func _view() -> Array:
+	if _driving and vehicles != null and vehicles.driving_camera() != null:
+		return [rad_to_deg(vehicles.driving_camera().view_yaw()), rad_to_deg(vehicles.driving_camera().view_pitch())]
+	if camera_rig != null:
+		return [rad_to_deg(camera_rig.rotation.y), rad_to_deg(camera_rig.spring_arm.rotation.x)]
+	return []
 
 func _rise_label() -> String:
 	return "BRAKE" if _driving else "RISE"
@@ -239,7 +256,7 @@ func _draw() -> void:
 	var labels := [[_move_stick.position + STICK_LABEL_AT, "MOVE"], [_buttons[0].position + label_at, _rise_label()]]
 	if not _driving:
 		labels.append([_buttons[1].position + label_at, "RUN"])
-		draw_string(font, Vector2(_safe_rect.position.x, _move_stick.position.y + STICK_LABEL_AT.y), LOOK_HINT, HORIZONTAL_ALIGNMENT_CENTER, _safe_rect.size.x, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
+	draw_string(font, Vector2(_safe_rect.position.x, _move_stick.position.y + STICK_LABEL_AT.y), LOOK_HINT, HORIZONTAL_ALIGNMENT_CENTER, _safe_rect.size.x, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 	for item in labels:
 		draw_string(font, item[0], item[1], HORIZONTAL_ALIGNMENT_LEFT, -1, USE_BUTTON.LABEL_FONT_SIZE, Color.WHITE)
 	draw_circle(_pause_center, PAUSE_RADIUS_PX, Color(0.03, 0.1, 0.14, 0.65))
