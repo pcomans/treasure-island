@@ -8,7 +8,7 @@ The owner's idea: "before we even send a building for modeling, we need an agent
 
 Their requirement: "whoever judges the output of the 1st modeling round has to have access to the architectural … description as well".
 
-The larger modelling shootout waits for this test. The owner: "Can we wait until we know that the architect descriptions are good".
+The larger modelling shootout waited for this test until the owner lifted the hold on 2026-11-21. The owner: "Can we wait until we know that the architect descriptions are good".
 
 ## The eval set
 
