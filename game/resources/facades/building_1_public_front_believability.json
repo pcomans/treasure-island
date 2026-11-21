@@ -105,13 +105,15 @@
     },
     "flagpole": {
       "bay": 5,
-      "behind_face_m": 3.0,
-      "height": 12.0,
-      "width": 0.14,
-      "finial": 0.24,
+      "front_of_face_m": 0.3,
+      "foot_y": 22.75,
+      "height": 6.85,
+      "width": 0.12,
+      "finial": 0.22,
+      "brackets": {"above_foot": [0.0, 1.0], "height": 0.08, "width": 0.1, "face": 0.04},
       "evidence": {
-        "read_from_photos": ["a white flagpole with a ball finial on the crescent's roof in front of the cab, on the crescent's axis within about a metre, its top well over the cab's finial, standing clear of the cab (2008 and 2021 frontal photos on the axis; from north of the axis, as in the owner's 2026-11-20 cupola photo, parallax sets it to the cab's right)"],
-        "production_inference": ["its place on the middle bay's axis 3 m behind the face, about 12 m in front of the cab's front facet (the photos allow about 8-25 m, most likely 10-15 m)", "its height: 12 m from the front block's roof, so its top stands well over the cab's finial as photographed (the study reads 7-9 m from its foot, which it places at a higher block's wall); a square finial for the ball; no flag"]
+        "read_from_photos": ["a white flagpole with a ball finial fixed to the crescent's attic face over the middle bay, in front of the coping band (its lower end shows below the coping's top edge in both of the owner's 2026-11-20 cupola photos, at the attic's top incised line), with a clamp on the coping band; about 6.7 m from its foot to the finial (both photos, from the camera poses solved on the crescent's windows)"],
+        "production_inference": ["its place 0.3 m in front of the attic face on the middle bay's axis, its foot on the attic's top incised line and its length from the solved poses; the brackets' size; no flag"]
       }
     },
     "cornice_back": -0.06,
@@ -199,16 +201,16 @@
       "frame": {"width": 0.06, "depth": 0.05, "front": 0.01},
       "corner_post": {"width": 0.17, "depth": 0.1, "front": 0.02},
       "sill": {"height": 0.12, "front": 0.08},
-      "fascia": {"height": 0.4, "ribs": 4, "groove": 0.012, "rib_front": 0.06, "groove_front": 0.03},
+      "fascia": {"height": 0.36, "rolls": 4, "roll_radius": 0.04, "roll_pitch": 0.09, "face": 0.03, "rib_front": 0.07},
       "door": {"from": 0.56, "to": 0.92, "bottom_below_sill": 0.55, "front": 0.03, "light": [0.35, 0.85], "hood_height": 0.08, "hood_depth": 0.35},
-      "louvre": {"from": 0.12, "to": 0.46, "bottom": 0.18, "top": 0.82, "ribs": 7, "rib_width": 0.045, "rib_front": 0.035},
+      "louvre": {"from": 0.42, "to": 0.88, "bottom": 0.12, "top": 0.86, "ribs": 11, "rib_width": 0.05, "rib_front": 0.06},
       "roof": {"eave_overhang": 0.25, "eave_thickness": 0.08, "seams_per_facet": 5, "seam_height": 0.035, "seam_width": 0.05, "hip_height": 0.05, "hip_width": 0.1},
       "hatch": {"down_slope_fraction": 0.4, "width": 0.9, "length": 0.6, "height": 0.2},
       "crown": {"radius": 0.4, "height": 0.3},
       "rod": {"width": 0.04, "height": 0.5},
       "evidence": {
-        "read_from_photos": ["a regular-looking octagon with one facet straight down the crescent's axis, wide and low: about 7.0 m across its flats at the glazing's head and 7.5 m at the sill (1.63 and 1.75 of the 4.31 m bay pitch), the glazing leaning in about 7 degrees", "glazing about 2.0 m high, its upper row about 0.34 of it: three small panes over one large pane on the front facet, three over three on the facet north of it, glass and a white door under a flat hood on the facet south of it; black frames since 2018, a white post at each corner", "a fascia of four or five stacked ribs about 0.4 m tall under the roof, a pale sill band, a solid white base about 1.0 m from the platform's deck to the sill with a ribbed louvre panel under the front facet's left part", "an octagonal standing-seam pyramid rising about 1.8 m (about 27 degrees), a small raised hatch on its front slope, and a white crown block about 0.8 by 0.3 m with a slim rod", "a white pipe railing about 1.0 m high with top and mid rails round the platform, whose block's face stands about 1.4 m", "(2008-2026 dated frontal, oblique, distant and rear photographs and the owner's 2026-11-20 photos)"],
-        "production_inference": ["the platform block 2.4 m over the four-storey roof: from the owner's two cupola photos' poses (north of the axis) the cab's base then shows just over the crescent's top edge with all its glazing above, as photographed (the study reads the platform's face about 1.4 m and the sill about 2.5 m over the roof the flagpole stands on; in this model the crescent's coping, the four-storey roof and the solved poses leave the cab about 1 m lower in those views than the photos show at those heights)", "the base keeps the frozen tower plan; the head ring is that plan 0.25 m in", "the three-over-three pattern on the five unphotographed facets", "the door's size and the light in it, the louvre's span", "the platform's outline (a rectangle along the drum about twice the cab's width)", "the hatch's size and place"],
+        "read_from_photos": ["a regular-looking octagon with one facet straight down the crescent's axis, wide and low: about 7.0 m across its flats at the glazing's head and 7.5 m at the sill (1.63 and 1.75 of the 4.31 m bay pitch), the glazing leaning in about 7 degrees", "glazing about 2.0 m high, its upper row about 0.34 of it: three small panes over one large pane on the front facet, three over three on the facet north of it, glass and a white door under a flat hood on the facet south of it; black frames since 2018, a white post at each corner", "a fascia of four or five stacked rolls about 0.3-0.4 m tall under the roof, a pale sill band, a solid white base about 1.0 m from the platform's deck to the sill with a ribbed louvre panel under the front facet's southern half (about 0.4 to 0.9 of the facet from its north corner in both of the owner's cupola photos)", "an octagonal standing-seam pyramid in mid-grey metal, about three quarters as bright as the white trim beside it, rising about 1.8 m (about 27 degrees), a small raised hatch on its front slope, and a white crown block about 0.8 by 0.3 m with a slim rod", "a white pipe railing about 1.0 m high with top and mid rails round the platform, whose block's face stands about 1.4 m", "(2008-2026 dated frontal, oblique, distant and rear photographs and the owner's 2026-11-20 photos)"],
+        "production_inference": ["the platform block 1.7 m over the four-storey roof: rendered from the camera poses of the owner's two cupola photos (solved on the crescent's windows and the cab's corners), the cab's base then shows over the crescent's top edge in front of it as in both photos (about 1.0-1.2 m in the cab's plane between the sill and that edge; at 2.4 m it stood about 2.0-2.2 m over it). Against the crescent's windows the cab and the coping both stand about 0.5 m higher than the photos put them: the attic between the window heads and the coping reads about 5.0 m in both photos, against 5.57 m here", "the base keeps the frozen tower plan; the head ring is that plan 0.25 m in", "the three-over-three pattern on the five unphotographed facets", "the door's size and the light in it, the louvre's span", "the platform's outline (a rectangle along the drum about twice the cab's width)", "the hatch's size and place"],
         "left_out": ["the short service stair with pipe handrails from the platform up to the door: a visible stair needs stock-player walking checks, on a roof reached only by jetpack", "the masts, dishes and lamp posts beside the cab (not resolved enough to model)", "the flag"]
       }
     },

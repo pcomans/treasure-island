@@ -88,11 +88,15 @@ const PUBLIC_BRONZE_MATERIAL := preload("res://game/resources/materials/world/bu
 const PUBLIC_LIGHT_STEEL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_light_steel.tres")
 ## The crescent piers' reeds stop this much lower each, out from the middle reed.
 const PIER_REED_TOP_STEP_M := 0.04
+## The head bands' shaded hollow behind the dentils stands this far proud of the wall,
+## clear of it in depth at any distance.
+const DENTIL_HOLLOW_FRONT_M := 0.015
 ## The pavilions' emblem relief, white as photographed.
 const PUBLIC_RELIEF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_relief_white.tres")
 ## The crescent grilles' near-black patinated bronze, the floodlights' black, the
 ## garages' dark slate teal (the owner's 2026-11-20 photos).
 const PUBLIC_REEDS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_reeds.tres")
+const PUBLIC_RETURN_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_return.tres")
 const PUBLIC_GILDED_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_gilded.tres")
 ## The door groups' worn brass: their frames, leaves' stiles and rails, push rails and
 ## threshold (the owner's 2026-11-20 frontal view); the windows keep their bronze.
@@ -185,6 +189,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"relief": _bucket(),
 		"dark_bronze": _bucket(),
 		"reeds": _bucket(),
+		"returns": _bucket(),
 		"gilded": _bucket(),
 		"door_brass": _bucket(),
 		"slate_teal": _bucket(),
@@ -512,6 +517,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# gives way to a broad wave over three reeds, and that to the pier's flat face
 	# (the reeds carry that face and their place across it in their UV).
 	specs.append({"name": "HeroPierReeds", "bucket": buckets.reeds, "material": PUBLIC_REEDS_MATERIAL, "layers": RENDER_BUILDING_WALL, "casts_shadow": false})
+	# The crescent piers' sides and the hollow behind the head bands' dentils, in the
+	# same stucco seeing less of the sky (its face_occlusion), so the piers' projection
+	# and the head bands read at play distances in any sun.
+	specs.append({"name": "HeroShadedReturns", "bucket": buckets.returns, "material": PUBLIC_RETURN_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGildedKickPanels", "bucket": buckets.gilded, "material": PUBLIC_GILDED_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroDoorBrass", "bucket": buckets.door_brass, "material": PUBLIC_DOOR_BRASS_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": PUBLIC_SLATE_TEAL_MATERIAL, "layers": RENDER_BUILDING_WALL})
@@ -707,19 +716,28 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var mast_placed := _append_drum_mast(mast, collision, wall_record, _int_array(chains.central_four_story_runs), float(vertical.central_inward_depth), float(block.roof_y), front.drum_mast as Dictionary)
 	if not mast_placed:
 		push_warning("Building 1 hero: the configured drum mast point is not on the drum roof; the mast was omitted.")
-	# A plain flagpole on the front block's roof behind the middle bay (the owner's
-	# 2026-11-20 photos; no flag). Solid, non-receiver.
+	# A plain flagpole fixed to the crescent's attic face over the middle bay, in front
+	# of the coping band, on brackets from the face (the owner's 2026-11-20 photos; no
+	# flag). Solid, non-receiver.
 	var pole := front.flagpole as Dictionary
 	var flagpole := _bucket()
 	var pole_s := float((crescent.windows as Array)[int(pole.bay)])
 	var pole_wall := _smoothed_wall(wall_record, block_runs, pole_s, float((front.canopy as Dictionary).normal_smoothing_m))
-	var pole_at := (pole_wall.point as Vector3) - (pole_wall.normal as Vector3) * float(pole.behind_face_m)
-	var pole_base := float(block.roof_y)
+	var pole_normal := pole_wall.normal as Vector3
+	var pole_at := (pole_wall.point as Vector3) + pole_normal * float(pole.front_of_face_m)
+	var pole_base := float(pole.foot_y)
 	var pole_width := float(pole.width)
-	var pole_tangent := Vector3((pole_wall.normal as Vector3).z, 0.0, -(pole_wall.normal as Vector3).x)
+	var pole_tangent := Vector3(pole_normal.z, 0.0, -pole_normal.x)
 	for target: Dictionary in [flagpole, collision]:
-		_append_box(target, Vector3(pole_at.x, pole_base + float(pole.height) * 0.5, pole_at.z), pole_tangent, pole_wall.normal as Vector3, pole_width, float(pole.height), pole_width)
-		_append_box(target, Vector3(pole_at.x, pole_base + float(pole.height) + float(pole.finial) * 0.5, pole_at.z), pole_tangent, pole_wall.normal as Vector3, float(pole.finial), float(pole.finial), float(pole.finial))
+		_append_box(target, Vector3(pole_at.x, pole_base + float(pole.height) * 0.5, pole_at.z), pole_tangent, pole_normal, pole_width, float(pole.height), pole_width)
+		_append_box(target, Vector3(pole_at.x, pole_base + float(pole.height) + float(pole.finial) * 0.5, pole_at.z), pole_tangent, pole_normal, float(pole.finial), float(pole.finial), float(pole.finial))
+	var brackets := pole.brackets as Dictionary
+	var bracket_back := float(brackets.face)
+	var bracket_front := float(pole.front_of_face_m) - pole_width * 0.5
+	for above: Variant in brackets.above_foot as Array:
+		var bracket_middle := (pole_wall.point as Vector3) + pole_normal * ((bracket_back + bracket_front) * 0.5)
+		for target: Dictionary in [flagpole, collision]:
+			_append_box(target, Vector3(bracket_middle.x, pole_base + float(above) + float(brackets.height) * 0.5, bracket_middle.z), pole_tangent, pole_normal, float(brackets.width), float(brackets.height), bracket_front - bracket_back)
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
@@ -741,7 +759,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	metadata["wing_tier_roofs_clipped_to_frozen_footprint"] = not tier_clip.is_empty()
 	metadata["crescent_front_block_roof_y"] = float(block.roof_y)
 	metadata["wing_face_terrace_y"] = float(wing_setback.face_top_y)
-	metadata["flagpole_on_front_block"] = true
+	metadata["flagpole_on_attic_face"] = true
 	metadata["drum_mast_placed"] = mast_placed
 	metadata["public_family_pass_id"] = str(bar_config.pass_id)
 	metadata["public_front_believability_config_path"] = BAR_CONFIG_PATH
@@ -817,16 +835,13 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 			_append_cab_door(trim, frames, b0, b1, t0, t1, out, glass_base, transom_v, door)
 		if index == front_facet:
 			_append_cab_louvre(trim, points[index] as Vector3, points[next] as Vector3, _ring_edge_normal(ring, index), deck, cab.louvre as Dictionary)
-	# The fascia: stacked ribs on the head ring, solid behind them.
+	# The fascia: rolls stacked on the head ring and swept round it, rounded so each
+	# reads with a lit top and a shaded underside (the owner's 2026-11-20 photos);
+	# solid behind them.
 	var fascia := cab.fascia as Dictionary
 	var fascia_top := glass_top + float(fascia.height)
-	for target: Dictionary in [trim, collision]:
-		_append_ring_band(target, head, glass_top, fascia_top, float(fascia.groove_front), -0.15)
-	var ribs := int(fascia.ribs)
-	for rib in ribs:
-		var rib_bottom := glass_top + float(fascia.height) * float(rib) / float(ribs)
-		var rib_top := glass_top + float(fascia.height) * float(rib + 1) / float(ribs)
-		_append_ring_band(trim, head, rib_bottom + float(fascia.groove), rib_top - float(fascia.groove), float(fascia.rib_front), 0.0)
+	_append_ring_band(collision, head, glass_top, fascia_top, float(fascia.face), -0.15)
+	_append_profile_sweep(trim, _closed_ring_path(head), _rolls_profile(glass_top, fascia_top, float(fascia.face), -0.15, int(fascia.rolls), float(fascia.roll_radius), float(fascia.roll_pitch)), true, false)
 	# The viewing platform under the cab: a low block on the four-storey roof, its
 	# deck railed round.
 	if not _tower_base_block_fits(front.tower_base_block as Dictionary, center):
@@ -874,7 +889,7 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 	var crown_bucket := _bucket()
 	var collision := _bucket()
 	_append_scaled_record_roof(roof, collision, record, center, scale, deck + 0.02)
-	# A low standing-seam pyramid (the cab study: pale silver-grey, raised seams and
+	# A low standing-seam pyramid (the cab study: mid-grey metal, raised seams and
 	# hips, about 27 degrees): its eave overhangs the fascia by eave_overhang, with a
 	# soffit back to the fascia's face; a small raised hatch on the front slope, and a
 	# white crown block with a slim rod at the apex. Roof faces, eave edge, soffit,
@@ -932,7 +947,7 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 	var root := _hero_root("Building1ObservationTowerHeroRoof", record, "tower_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroTowerPlatform", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroTowerPaleStandingSeamRoof", "bucket": cab_roof, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerStandingSeamRoof", "bucket": cab_roof, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroTowerCrown", "bucket": crown_bucket, "material": TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "tower_roof")
@@ -1029,8 +1044,9 @@ static func _append_cab_door(trim: Dictionary, frames: Dictionary, b0: Vector3, 
 	_append_box(trim, hood_middle, along, flat, (to - from) * (b1 - b0).length() + 0.2, float(door.hood_height), float(door.hood_depth))
 
 
-## The ribbed louvre panel on the cab's base under its front facet's left part (the
-## cab study): upright ribs standing proud of the base. Drawn only.
+## The ribbed louvre panel on the cab's base under its front facet's southern half
+## (the owner's 2026-11-20 cupola photos): upright ribs standing proud of the base,
+## from `from` to `to` of the facet from its first (north) corner. Drawn only.
 static func _append_cab_louvre(trim: Dictionary, a: Vector3, b: Vector3, normal: Vector3, deck: float, louvre: Dictionary) -> void:
 	var along := Vector3(b.x - a.x, 0.0, b.z - a.z)
 	var length := along.length()
@@ -1077,6 +1093,22 @@ static func _ring_edge_normal(ring: Dictionary, index: int) -> Vector3:
 static func _ring_miter(ring: Dictionary, index: int) -> Vector3:
 	var count := (ring.points as Array).size()
 	return _miter_between(_ring_edge_normal(ring, (index + count - 1) % count), _ring_edge_normal(ring, index))
+
+
+## A ring as a closed sweep path (_append_profile_sweep): from the middle of its first
+## edge round to it again, so the sweep's two ends meet on a straight edge.
+static func _closed_ring_path(ring: Dictionary) -> Dictionary:
+	var points := ring.points as Array
+	var count := points.size()
+	var start := ((points[0] as Vector3) + (points[1] as Vector3)) * 0.5
+	var path_points: Array = [start]
+	var normals: Array = []
+	for step in count:
+		path_points.append(points[(step + 1) % count])
+		normals.append(_ring_edge_normal(ring, step))
+	path_points.append(start)
+	normals.append(_ring_edge_normal(ring, 0))
+	return {"points": path_points, "normals": normals}
 
 
 ## Closed band around a ring, mitred at every corner: outer face, top and
@@ -1747,12 +1779,14 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 		var dentil_y := dentils.y as Array
 		var span := head_reach * 2.0 - 0.16
 		_append_dentil_blocks(buckets.trim, frame, center - span * 0.5, center + span * 0.5, float(dentil_y[0]), float(dentil_y[1]), float(frame.lo) - 0.03, float(frame.hi) + float(dentils.front), float(dentils.width), roundi(span / float(dentils.pitch)))
+		# The hollow behind them, seen between the blocks, in the shaded stucco.
+		_append_frame_box(buckets.returns, frame, center - span * 0.5, center + span * 0.5, float(dentil_y[0]), float(dentil_y[1]), float(frame.hi) - 0.02, float(frame.hi) + DENTIL_HOLLOW_FRONT_M)
 	var pier_y := front.crescent_pier_y as Array
 	for center_value in layout.piers as Array:
 		var center_m := float(center_value)
 		var frame := _span_frame(record, runs, center_m - pier * 0.5 - 0.1, center_m + pier * 0.5 + 0.1)
 		var center := center_m - float(frame.mid_m)
-		_append_fluted_pier(buckets.trim, buckets.reeds, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
+		_append_fluted_pier(buckets.trim, buckets.returns, buckets.reeds, frame, center, pier, float(pier_y[0]), float(pier_y[1]), float(front.crescent_pier_depth), int(front.crescent_pier_reeds), float(front.crescent_pier_reed_width), float(front.crescent_pier_reed_gap), float(front.crescent_pier_reed_front))
 
 
 ## The crescent's attic (the owner's 2026-11-20 photos; the 2003 nomination's
@@ -2703,11 +2737,14 @@ static func _strip_rear_outline(record: Dictionary, runs: Array[int], depth: flo
 
 ## A pier with its reeds (the owner's 2026-11-20 photos): each reed a shallow arc
 ## across meeting the next in a groove, rounded at both ends, their tops stepping down
-## from the middle reed.
-static func _append_fluted_pier(trim: Dictionary, reed_bucket: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
+## from the middle reed. Its two sides go to `returns`, the rest of its body to `trim`.
+static func _append_fluted_pier(trim: Dictionary, returns: Dictionary, reed_bucket: Dictionary, frame: Dictionary, center: float, width: float, bottom: float, top: float, depth: float, reeds: int, reed_width: float, reed_gap: float, reed_front: float) -> void:
 	var back := float(frame.lo) - 0.03
 	var wall := float(frame.hi)
-	_append_frame_box(trim, frame, center - width * 0.5, center + width * 0.5, bottom, top, back, wall + depth)
+	var body := _bucket()
+	_append_frame_box(body, frame, center - width * 0.5, center + width * 0.5, bottom, top, back, wall + depth)
+	var tangent := frame.tangent as Vector3
+	_split_by_normal(body, trim, returns, func(face: Vector3) -> bool: return absf(face.dot(tangent)) > 0.9)
 	var total := float(reeds) * reed_width + float(maxi(reeds - 1, 0)) * reed_gap
 	var middle := float(reeds - 1) * 0.5
 	var end := minf(reed_width, 0.12)
@@ -2717,7 +2754,6 @@ static func _append_fluted_pier(trim: Dictionary, reed_bucket: Dictionary, frame
 	var across := Vector3(-normal.z, 0.0, normal.x)
 	var anchor := frame.anchor as Vector3
 	var base := Vector3(anchor.x, 0.0, anchor.z)
-	var tangent := frame.tangent as Vector3
 	var origin := minf((base + tangent * (center - total * 0.5)).dot(across), (base + tangent * (center + total * 0.5)).dot(across))
 	for reed in reeds:
 		var x := center - total * 0.5 + reed_width * 0.5 + float(reed) * (reed_width + reed_gap)
@@ -2785,7 +2821,7 @@ static func _append_pavilion(buckets: Dictionary, collision: Dictionary, record:
 	for side in [-1.0, 1.0]:
 		var tall_grid := front.pavilion_tall_window_grid as Array
 		_append_window_module(buckets, frame, float(side) * offset, float(front.pavilion_tall_window_width), tall_bottom, tall_top, int(tall_grid[0]), int(tall_grid[1]), tall_style)
-	_append_fluted_pier(buckets.trim, buckets.trim, frame, 0.0, float(front.pavilion_mullion_pier_width), tall_bottom - 0.2, tall_top + 0.3, 0.27, 2, 0.11, 0.1, 0.32)
+	_append_fluted_pier(buckets.trim, buckets.trim, buckets.trim, frame, 0.0, float(front.pavilion_mullion_pier_width), tall_bottom - 0.2, tall_top + 0.3, 0.27, 2, 0.11, 0.1, 0.32)
 	_append_pavilion_emblem(buckets, frame, front.pavilion_emblem as Dictionary, region, front.wing_window_style as Dictionary)
 	_append_pavilion_garage(buckets, collision, frame, base_low, front)
 	# Corner fins (2008 south pavilion view, 2003 Photograph 11; the nomination's
@@ -3848,6 +3884,26 @@ static func _span_frame(record: Dictionary, runs: Array[int], from_m: float, to_
 
 ## Box in a module frame: lateral metres along the frame tangent from its
 ## anchor, absolute Y, and signed depth along its outward normal.
+## Each quad of `source` (as _append_quad and _append_box lay them: four vertices,
+## six indices, one normal) into `chosen` where `choose` holds for its normal, else
+## into `rest`.
+static func _split_by_normal(source: Dictionary, rest: Dictionary, chosen: Dictionary, choose: Callable) -> void:
+	var vertices := source.vertices as Array
+	var normals := source.normals as Array
+	var uvs := source.uvs as Array
+	var indices := source.indices as Array
+	for quad in range(vertices.size() >> 2):
+		var first := quad * 4
+		var target := chosen if bool(choose.call(normals[first] as Vector3)) else rest
+		var base := (target.vertices as Array).size()
+		for corner in 4:
+			(target.vertices as Array).append(vertices[first + corner])
+			(target.normals as Array).append(normals[first + corner])
+			(target.uvs as Array).append(uvs[first + corner])
+		for slot in 6:
+			(target.indices as Array).append(int(indices[quad * 6 + slot]) - first + base)
+
+
 static func _append_frame_box(bucket: Dictionary, frame: Dictionary, lateral_min: float, lateral_max: float, y_min: float, y_max: float, depth_min: float, depth_max: float) -> void:
 	var tangent := frame.tangent as Vector3
 	var normal := frame.normal as Vector3

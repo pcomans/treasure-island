@@ -40,6 +40,12 @@ uniform vec2 relief_fade_px = vec2(3.0, 6.0);
 // reed's crest to its grooves, and from the broad wave's crests to its troughs), half
 // of it on direct light too, so the fluting reads in shade and in sun; 0 leaves it.
 uniform float relief_cavity = 0.0;
+// How much less of the sky a whole face sees that stands in a return or recess (the
+// crescent piers' sides, the hollow behind the head bands' dentils), half of it on
+// direct light too, as relief_cavity: a projection's edge then reads at play distances
+// whatever the sun's direction, where its cast shadow is finer than the shadow map's
+// texels. 0 (the default) leaves it.
+uniform float face_occlusion = 0.0;
 varying vec3 world_position;
 varying vec3 world_normal;
 varying vec3 face_normal;
@@ -54,6 +60,10 @@ void vertex() {
 
 void fragment() {
 	vec3 n = normalize(world_normal);
+	if (face_occlusion > 0.0) {
+		AO = 1.0 - face_occlusion;
+		AO_LIGHT_AFFECT = 0.5;
+	}
 	if (relief_period_m > 0.0) {
 		vec3 face = normalize(face_normal);
 		vec3 across = vec3(-face.z, 0.0, face.x);
@@ -62,7 +72,7 @@ void fragment() {
 		float coarse = smoothstep(relief_fade_px.x, relief_fade_px.y, relief_coarse_period_m / metres_per_pixel);
 		vec3 wave = normalize(face + across * (relief_coarse_tilt * sin(6.2831853 * relief_across / relief_coarse_period_m)));
 		float hollow = fine * clamp((1.0 - dot(n, face)) / 0.36, 0.0, 1.0) + (1.0 - fine) * coarse * 0.6 * clamp((1.0 - dot(wave, face)) / 0.09, 0.0, 1.0);
-		AO = 1.0 - relief_cavity * hollow;
+		AO = (1.0 - face_occlusion) * (1.0 - relief_cavity * hollow);
 		AO_LIGHT_AFFECT = 0.5;
 		n = normalize(mix(mix(face, wave, coarse), n, fine));
 	}
