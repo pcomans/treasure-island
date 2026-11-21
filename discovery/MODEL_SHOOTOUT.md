@@ -38,9 +38,9 @@ The resumed owner-authorized combined blind test includes prior critiques, housi
 
 The first shootout compared two anonymous options, X and Y, later unsealed as X = DeepSeek V4.1 Flash and Y = Opus 5.5, one mapping for all tasks.
 
-In the critique task (two cases, a housing block and Building 1), the owner found case A's critiques roughly equivalent and X better on case B: Y said the reference's right wing has three window rows (it has two) and that the rooftop cupola is not visible (it is). Overall the owner felt X was better, with the margin unsure, and guessed X was Claude; it was DeepSeek. Both critiques were flowing prose and not very actionable. The owner's hypothesis, that the prompt should ask for specific, concise, concrete findings, led to the four-question review format.
+In the critique task (two cases, a housing block and Building 1), the owner found case A's critiques roughly equivalent and X better on case B: Y said the reference's right wing has three window rows (it has two) and called the rooftop structure a "lantern" (the owner: "I would not have called it a lantern") that is not visible, when it is. Overall the owner felt X was better, with the margin unsure, and guessed X was Claude; it was DeepSeek. Both critiques were flowing prose and not very actionable. The owner's hypothesis, that the prompt should ask for specific, concise, concrete findings, led to the four-question review format.
 
-On the housing model, Y was "clearly better. Like no contest": more correct colour, lap-siding texture and the correct side wall, where X invented a window under the gable and a row of side windows and looked too slim. After one review round Y was "very clearly pulling ahead", with facade depth and the shed added at the back.
+On the housing model, Y was "clearly better. Like no contest": more correct colour, shiplap texture and the correct side wall, where X invented a window under the gable and a row of side windows and looked too slim. After one review round Y was "very clearly pulling ahead", with facade depth and the shed added at the back.
 
 Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
 
@@ -50,21 +50,19 @@ Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
 
 The owner's plan: "Kimi I think looks … basic but acceptable. So I would say I would use Kimi for like cheap low detail modeling, right? Maybe for like a first pass. I would keep using Opus for mid-detail modeling and then I think we should start investigating Gemini for high detail work". Earlier in the same discussion: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
 
-Against the [five levels](../AGENTS.md#zoom-in-authoring-pattern), low detail reads as roughly Level 1, mid detail as Levels 2–3 and high detail as Levels 4–5 and hero landmarks. That is a reading of the owner's words; they have not set the boundaries.
-
-**Evidence.** One housing block, with the same brief, references, sandbox and renderer for every model: a first build (with one self-revision), then one review round by the same model (a fresh session reviews, another revises). Each figure comes from one run, so it is a single sample, not an average. Costs are at list prices as the harness recorded them; Gemini's come from the gateway's credit balance. Triangles are counted from the built meshes.
+**Evidence.** One housing block, with the same brief, references, sandbox and renderer for every model: a first build (with one self-revision), then one review round by the same model (a fresh session reviews, another revises). Each figure comes from one run, so it is a single sample, not an average. Costs are the prices the harness recorded (catalog prices; for DeepSeek about twice what was actually charged); Gemini's come from the gateway's credit balance. Opus and DeepSeek reviewed with the earlier free-form prompt, Kimi and Gemini with the four-question prompt, so review costs and revisions are not strictly like for like. Triangles are counted from the built meshes.
 
 | Model | Cost: build / review / revision | Total | Triangles: first build → after review | Notes |
 |---|---|---|---|---|
 | Opus 5.5 | $0.40 / $0.31 / $1.05 | $1.76 | 7,790 → 13,840 | Build about 2 min |
 | Kimi K3.1 Pro | $0.36 / $0.07 / $0.26 | $0.69 | 7,342 → 7,702 | |
-| DeepSeek V4.1 Flash | | $0.13 | 5,390 → 8,810 | Owner judged it not suited to modelling |
+| DeepSeek V4.1 Flash | $0.04 / $0.02 / $0.07 | $0.13 | 5,390 → 8,810 | Owner: "Maybe DeepSeek is just not the right model here" |
 | Gemini 4 Neon | $1.45 / $0.55 / did not complete | | 27,084 (no revision) | Build about 9 min |
 
 Gemini 4 Neon in detail:
 
 - 16,896 of its 27,084 triangles are four door knobs built as default-resolution spheres (4,224 each; computed from the model's code, not measured). Siding, roof and concrete are textures drawn in code, with relief (normal) maps on flat walls.
-- Its revision did not complete in two attempts in this harness. It thinks silently for longer than the harness waits for a first reply, and its thinking summaries had to be switched off for it to run at all.
+- Its revision did not complete in two attempts in this harness. In both attempts its requests ran for minutes without output and were restarted until the time cap ended the step; its thinking summaries had to be switched off for it to run at all.
 - The gateway bills abandoned requests: the two revision attempts cost $8.23 of its $10.47 total, about $7.84 of that for requests that returned nothing. The gateway's per-key budget is a soft cap; spending went past it.
 
 Before Gemini 4 Neon can be used:
