@@ -81,6 +81,9 @@ const GLOWS := ["lamp", "daylight"]
 ## the terrazzo's lines drawn in its polar frame bend at most a segment's angle over
 ## this between the stand-in's corners.
 const FAR_FLOOR_SPLIT := 3
+## How far (m) the doorway's box (the far stand-in spec's opening) reaches round the
+## reveal, so the reveal's own edges are in it (_far_spec).
+const FAR_OPENING_MARGIN_M := 0.05
 
 static var _materials: Dictionary = {}
 
@@ -335,9 +338,15 @@ static func build(plan: Dictionary) -> Dictionary:
 ## floor in two rings and FAR_FLOOR_SPLIT steps a bay, the ceiling, the east wall in its
 ## bands (bays, the slatted band, the mural, the coves) on the east bays' piers, its
 ## bays' band parted at the piers' sides, and the end walls; the east museum bays'
-## daylight panels kept glowing on the wall's line. The floors keep the terrazzo's own material and frame,
-## so its pattern carries on; everything else is coloured from the Shell. The west side
-## under the balcony is never seen from outside, so it has no stand-in.
+## daylight panels kept glowing on the wall's line. North of the north line the annex
+## (_append_north_annex) as the Shell has it: as low as its own ceiling, under the
+## two-storey roof, open to the hall, which closes over it with its return
+## (_append_end_walls) up to the hall's ceiling. The floors keep the terrazzo's own
+## material and frame, so its pattern carries on; everything else is coloured from the
+## Shell. The west side under the balcony is never seen from outside, so it has no
+## stand-in. The doorway, sill to head and the bevel's foot to the vestibule's back
+## wall, FAR_OPENING_MARGIN_M round, is the hall's one opening: the only place either
+## the Shell or the stand-in shows from outside.
 static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 	var y := float(plan.floor_y)
 	var sill := float(plan.sill_y)
@@ -350,8 +359,9 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 	var vestibule_ceiling := y + float(heights.balcony_floor) - float(heights.balcony_slab)
 	var mural := heights.mural as Array
 	var bands := [y, y + float(heights.east_bay_head), y + float(mural[0]), y + float(mural[1]), ceiling]
-	var stations: Array = [float(plan.annex_north)]
-	stations.append_array(plan.east_piers as Array)
+	var piers := plan.east_piers as Array
+	var annex_top := y + float((plan.config.plan_production_inference_m.north_annex as Dictionary).height)
+	var rings := [column_back, (column_back + east) * 0.5, east]
 	var door := plan.door as Dictionary
 	var door_top := float(door.top_y)
 	var span := vestibule_span(plan)
@@ -374,12 +384,21 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 	var foot_left := _frame_point(door, left, front + bevel, 0.0)
 	var foot_right := _frame_point(door, right, front + bevel, 0.0)
 	var tangent := door.tangent as Vector3
+	var normal := door.normal as Vector3
+	var anchor := door.anchor as Vector3
+	var depth_in := minf((inner_left - anchor).dot(normal), (inner_right - anchor).dot(normal)) - FAR_OPENING_MARGIN_M
+	var depth_out := front + bevel + FAR_OPENING_MARGIN_M
+	var foot_y := sill - bevel - FAR_OPENING_MARGIN_M
+	var head_y := door_top + FAR_OPENING_MARGIN_M
+	var half_width := float(door.half) + FAR_OPENING_MARGIN_M
+	var doorway := Transform3D(Basis(tangent * half_width, Vector3.UP * (head_y - foot_y) * 0.5, normal * (depth_out - depth_in) * 0.5), _frame_point(door, float(door.center), (depth_in + depth_out) * 0.5, (foot_y + head_y) * 0.5))
 	return {
 		"near_source": "MuralLoader",
 		"near_nodes": ["Shell"],
 		"near_processes": ["Presence", "HallReflections"],
 		"zones": [
-			{"radii": Vector2(column_back, east), "stations": stations, "rings": [column_back, (column_back + east) * 0.5, east], "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": ceiling, "outer": bands, "outer_split": {"bands": 1, "half_m": float((members.east_pier as Array)[0]) * 0.5}, "start": bands, "end": bands, "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, float(plan.config.plan_production_inference_m.east_museum_depth) + 0.5)},
+			{"radii": Vector2(column_back, east), "stations": [float(plan.annex_north), float(piers[0])], "rings": rings, "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": annex_top, "outer": [y, annex_top], "start": [y, annex_top]},
+			{"radii": Vector2(column_back, east), "stations": piers, "rings": rings, "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": ceiling, "outer": bands, "outer_split": {"bands": 1, "half_m": float((members.east_pier as Array)[0]) * 0.5}, "start": [annex_top, ceiling], "end": bands, "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, float(plan.config.plan_production_inference_m.east_museum_depth) + 0.5)},
 			{"radii": Vector2(front_in, inner), "stations": [span.x, span.y], "rings": [front_in, column_back], "floor_split": FAR_FLOOR_SPLIT, "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top), "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, 0.02)},
 		],
 		"quads": [
@@ -389,6 +408,7 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 			{"corners": [_lifted(outer_left, sill), _lifted(outer_right, sill), _lifted(inner_right, sill), _lifted(inner_left, sill)], "normal": Vector3.UP},
 			{"corners": [_lifted(foot_left, sill - bevel), _lifted(foot_right, sill - bevel), _lifted(outer_right, sill), _lifted(outer_left, sill)], "normal": ((door.normal as Vector3) + Vector3.UP).normalized()},
 		],
+		"openings": [doorway],
 		"kept": ["daylight"],
 		"materials": ["terrazzo"],
 		"uv_frames": {"terrazzo": {"theta": layout.theta, "radius": layout.radius}},

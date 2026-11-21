@@ -47,6 +47,11 @@ extends Node
 ##           its ends, half_m (m) off it: piers on the stations, bays between them.
 ##   quads   faces given whole: {"corners": four points, "normal"}, such as a door's
 ##           reveal.
+##   openings  where the interior may be seen from outside, its doorways: boxes, each
+##           the cube from -1 to 1 under a Transform3D in the root's frame. From
+##           anywhere outside, what either state draws of the interior shows through
+##           these alone (headless_interior_far_stand_in_contract.gd's outside views);
+##           neither the switch nor build() reads them.
 ##   kept    detailed surfaces kept in their own material: each piece of one inside a
 ##           zone becomes a quad over its extent (angles, heights) facing the way it
 ##           faces, on the outer wall's line (KEPT_LIFT_M off it) if it stands at or
@@ -137,6 +142,9 @@ static func spec_problem(spec: Variant) -> String:
 		return "a stand-in spec needs near_source (a name) and near_nodes (a list)"
 	if (spec.get("zones", []) as Array).is_empty() and (spec.get("quads", []) as Array).is_empty():
 		return "a stand-in spec needs zones or quads to stand in"
+	var openings: Variant = spec.get("openings", [])
+	if not openings is Array or (openings as Array).any(func(box: Variant) -> bool: return not box is Transform3D or is_zero_approx((box as Transform3D).basis.determinant())):
+		return "a stand-in spec's openings are boxes, a Transform3D each (of the cube from -1 to 1)"
 	return ""
 
 

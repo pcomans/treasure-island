@@ -25,6 +25,24 @@ extends SceneTree
 ## - A camera in the plan, or within INSIDE_MARGIN_M of it, keeps the interior near
 ##   whatever the source says, from the frame it gets there; farther out, far again.
 ## - force holds a state; leaving the tree while far puts everything back as built.
+##
+## Outside views, for each interior with a stand-in that the generated world builds
+## (game/tests/support/interior_world.gd: the catalog units with walk-through passages,
+## their chunks built as the world builds them, and the chunks under the interior): from
+## anywhere outside, far and near look the same but through the spec's declared
+## openings (its doorway). With the interior's own switch forced far, then near, all
+## that is drawn is read (every visible mesh and multimesh instance, each surface's
+## triangles by the shared collector, building_study_geometry.gd, showing the side its
+## material shows): what is on the interior's layer (the stand-in's: what the switch
+## changes) is looked at, and the rest hides it, but for surfaces that can be seen
+## through (transparent or discarding materials, or ones the collector can't read).
+## Points over every looked-at triangle (its middle, its corners drawn a little in, and
+## every SAMPLE_M across a large one) are looked at from viewpoints all round the
+## interior at eye height, over its roof and at jetpack heights, from overhead and from
+## in front of each opening, but none shut in (under something facing up). A point
+## whose side faces a viewpoint and that nothing hides from it must be seen through an
+## opening (the sight line crosses its box). Not empty: in each state something is seen
+## through an opening.
 
 const PLAN := {"kind": "ring_sector", "centre": Vector2(0.0, 0.0), "radii": Vector2(10.0, 20.0), "angles": Vector2(-0.5, 0.5), "top_y": 8.0}
 const LAYERS := 1 << 5
@@ -44,6 +62,33 @@ const FLOOR_TINT := 0.5
 const OPENING := Vector3(-0.1, 0.1, 3.0)
 const GLOW_SPAN := Vector2(0.2, 0.3)
 const COLOUR_TOLERANCE := 0.02
+const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
+const InteriorWorld := preload("res://game/tests/support/interior_world.gd")
+## The outside views: points this far apart across a large looked-at triangle, its
+## corners drawn this share of the way to its middle, and of an instance's points one
+## to a SAMPLE_M cube facing one way (its sides' main axis); viewpoints in VIEW_AZIMUTHS
+## directions about the interior's bounds, VIEW_DISTANCES_M past their reach, at eye
+## height (EYE_M over their floor) and VIEW_HEIGHTS_M over their top; overhead at
+## OVERHEAD_M, and in front of each opening at OPENING_VIEWS_M (out, up).
+const SAMPLE_M := 1.0
+const CORNER_INSET := 0.02
+const VIEW_AZIMUTHS := 16
+const VIEW_DISTANCES_M: Array[float] = [10.0, 60.0]
+const EYE_M := 1.6
+const VIEW_HEIGHTS_M: Array[float] = [2.0, 25.0, 100.0]
+const OVERHEAD_M: Array[float] = [30.0, 120.0]
+const OPENING_VIEWS_M: Array[Vector2] = [Vector2(6.0, 0.0), Vector2(20.0, 0.0), Vector2(20.0, 8.0), Vector2(60.0, 20.0)]
+## A sight line stops this short of the point, so a surface just over it still hides it,
+## and passes a face it meets from behind by this much; past MAX_PASSES such faces it
+## is taken as unhidden (and shown below if that matters). A point is seen only when
+## the four sight lines SPREAD_M round its own, across it, are clear too: one line
+## through the meeting edge of two hiding faces, or a crack narrower than that between
+## them, is not a view.
+const SIGHT_END_M := 0.01
+const SPREAD_M := 0.02
+const PASS_M := 0.001
+const MAX_PASSES := 64
+const EXAMPLES := 8
 const SPEC := {
 	"near_source": "Source",
 	"near_nodes": ["Detail"],
@@ -157,12 +202,17 @@ func _run() -> void:
 	await _check_camera_inside()
 	await _check_force()
 	await _check_leave()
+	await _check_outside_views()
 	_finish()
 
 
 func _check_specs() -> void:
 	var zone := (SPEC.zones as Array)[0] as Dictionary
 	var wrong := [null, {}, {"near_source": 3, "near_nodes": []}, {"near_source": "Source"}, {"near_source": "Source", "near_nodes": ["Detail"]}, {"near_source": "Source", "near_nodes": ["Detail"], "zones": [], "quads": []}]
+	for openings: Variant in [Transform3D.IDENTITY, [AABB()], [Transform3D(Basis.from_scale(Vector3(1.0, 0.0, 1.0)), Vector3.ZERO)]]:
+		var spec := SPEC.duplicate(true)
+		spec["openings"] = openings
+		wrong.append(spec)
 	for spec: Variant in wrong:
 		if InteriorFarStandIn.spec_problem(spec) == "":
 			failures.append("a stand-in spec it cannot use is taken: %s" % [spec])
@@ -477,6 +527,280 @@ func _check_leave() -> void:
 	_root = null
 
 
+## The outside views (see the notes above) of every interior with a stand-in in the
+## generated world.
+func _check_outside_views() -> void:
+	var world := InteriorWorld.new(root)
+	var looked := 0
+	var checked: Array[String] = []
+	for unit: Dictionary in InteriorWorld.units_with_passages():
+		var source := str(unit.get("anchor_source_key", ""))
+		if not world.build_holding(source):
+			failures.append("%s lists passages, but no chunk holds its records" % source)
+			continue
+		for interior: Node3D in world.interiors(source):
+			if interior.has_meta(InteriorFarStandIn.FAR_META):
+				looked += 1
+				var report: String = await _check_outside(world, interior, "%s's interior %s" % [source, interior.name])
+				if report != "":
+					checked.append(report)
+	failures.append_array(world.errors)
+	world.free_parents()
+	if looked == 0:
+		failures.append("outside views: no interior with a far stand-in was looked at in the generated world")
+	elif not checked.is_empty():
+		print("OUTSIDE_VIEWS %s" % "; ".join(checked))
+
+
+## One interior's outside views, far and then near: a summary, or "" when it fails.
+func _check_outside(world: InteriorWorld, interior: Node3D, label: String) -> String:
+	var before := failures.size()
+	var spec: Dictionary = interior.get_meta(InteriorFarStandIn.FAR_META)
+	var switch: InteriorFarStandIn = null
+	for child: Node in interior.get_children():
+		if child is InteriorFarStandIn:
+			switch = child
+	var stand_in := interior.get_node_or_null(InteriorFarStandIn.FAR_MESH) as GeometryInstance3D
+	var openings: Array[Transform3D] = []
+	for box: Variant in spec.get("openings", []):
+		openings.append(interior.global_transform * (box as Transform3D))
+	if switch == null or stand_in == null or openings.is_empty():
+		failures.append("%s: outside views need its FarSwitch, its %s mesh and its spec's openings (has %s, %s, %d)" % [label, InteriorFarStandIn.FAR_MESH, switch != null, stand_in != null, openings.size()])
+		return ""
+	var bounds := AABB()
+	for node: Node in interior.find_children("*", "GeometryInstance3D", true, false):
+		var instance := node as GeometryInstance3D
+		if instance.layers & stand_in.layers != 0:
+			var box := instance.global_transform * instance.get_aabb()
+			bounds = box if bounds.size == Vector3.ZERO else bounds.merge(box)
+	world.build_under(Vector2(bounds.position.x, bounds.position.z) - Vector2.ONE * VIEW_DISTANCES_M[0], Vector2(bounds.end.x, bounds.end.z) + Vector2.ONE * VIEW_DISTANCES_M[0])
+	var summary: Array[String] = []
+	for state: String in ["far", "near"]:
+		switch.force = state
+		await _frames(2)
+		if switch.is_far() != (state == "far"):
+			failures.append("%s: forced %s, its switch is not" % [label, state])
+			continue
+		var drawn := _drawn(stand_in.layers, label)
+		if int(drawn.hiding) == 0 or (drawn.points as PackedVector3Array).is_empty():
+			failures.append("%s, %s: nothing to look at (%d points) or nothing to hide it (%d triangles)" % [label, state, (drawn.points as PackedVector3Array).size(), drawn.hiding])
+			continue
+		var viewpoints := _viewpoints(bounds, openings, drawn.hide as TriangleMesh, drawn.sides as PackedVector3Array)
+		summary.append("%s %s" % [state, _look(drawn, viewpoints, openings, "%s, %s" % [label, state])])
+	switch.force = ""
+	if failures.size() > before:
+		return ""
+	return "%s: %s" % [label, ", ".join(summary)]
+
+
+## What is drawn now under the root: every visible mesh and multimesh instance's
+## triangles in world space, by the shared collector (indexed arrays, or the vertices in
+## order for a surface without indices, as Mesh.get_faces() reads them), with the side
+## each shows (Godot's front by its clockwise winding, turned by a mirroring pose; the
+## back for cull_front; both, as a zero vector, for cull_disabled). On the layers given:
+## "points" over each triangle to look at, with the side it shows and its instance's
+## path ("owners"). Elsewhere: "hide", what hides them, with each triangle's side
+## ("sides"), but for surfaces that can be seen through, which hide nothing.
+func _drawn(layers: int, label: String) -> Dictionary:
+	var hide_faces := PackedVector3Array()
+	var sides := PackedVector3Array()
+	var points := PackedVector3Array()
+	var point_sides := PackedVector3Array()
+	var point_owners := PackedInt32Array()
+	var owners: Array[String] = []
+	var taken := {}
+	for node: Node in root.find_children("*", "GeometryInstance3D", true, false):
+		var instance := node as GeometryInstance3D
+		if not instance.is_visible_in_tree():
+			continue
+		var mesh: Mesh = null
+		var poses: Array[Transform3D] = []
+		if instance is MeshInstance3D:
+			mesh = (instance as MeshInstance3D).mesh
+			poses.append(instance.global_transform)
+		elif instance is MultiMeshInstance3D and (instance as MultiMeshInstance3D).multimesh != null:
+			var multimesh := (instance as MultiMeshInstance3D).multimesh
+			mesh = multimesh.mesh
+			var count := multimesh.instance_count if multimesh.visible_instance_count < 0 else multimesh.visible_instance_count
+			for index in count:
+				poses.append(instance.global_transform * multimesh.get_instance_transform(index))
+		if mesh == null or poses.is_empty():
+			continue
+		var looked_at := instance.layers & layers != 0
+		var owner := owners.size()
+		if looked_at:
+			owners.append(str(instance.get_path()))
+		for surface in mesh.get_surface_count():
+			var material := instance.material_override
+			if material == null:
+				material = (instance as MeshInstance3D).get_active_material(surface) if instance is MeshInstance3D else mesh.surface_get_material(surface)
+			var cull := StudyGeometry.roof_cull_mode(material)
+			if not bool(cull.ok) and not looked_at:
+				continue
+			var mode := int(cull.get("mode", BaseMaterial3D.CULL_DISABLED))
+			var primitive := (mesh as ArrayMesh).surface_get_primitive_type(surface) if mesh is ArrayMesh else Mesh.PRIMITIVE_TRIANGLES
+			var arrays := mesh.surface_get_arrays(surface)
+			var vertices: Variant = arrays[Mesh.ARRAY_VERTEX]
+			if primitive != Mesh.PRIMITIVE_TRIANGLES or not vertices is PackedVector3Array or (vertices as PackedVector3Array).is_empty():
+				if looked_at and primitive != Mesh.PRIMITIVE_TRIANGLES:
+					failures.append("%s: %s's surface %d is not drawn as triangles, so it can't be looked at" % [label, instance.get_path(), surface])
+				continue
+			var single := ArrayMesh.new()
+			single.add_surface_from_arrays(primitive, arrays)
+			var producer := StudyGeometry.INDEXED_ARRAYS if arrays[Mesh.ARRAY_INDEX] is PackedInt32Array and not (arrays[Mesh.ARRAY_INDEX] as PackedInt32Array).is_empty() else StudyGeometry.MESH_GET_FACES
+			var collected := StudyGeometry.collect(single, poses, producer)
+			if not bool(collected.ok):
+				if not (collected.errors as Array).is_empty():
+					failures.append("%s: %s's surface %d can't be read: %s" % [label, instance.get_path(), surface, str(collected.errors)])
+				continue
+			var faces: PackedVector3Array = collected.faces
+			var per_pose := (collected.local_faces as PackedVector3Array).size() / 3
+			for t in faces.size() / 3:
+				var a := faces[t * 3]
+				var b := faces[t * 3 + 1]
+				var c := faces[t * 3 + 2]
+				var side := (c - a).cross(b - a).normalized()
+				if poses[t / per_pose].basis.determinant() < 0.0:
+					side = -side
+				if mode == BaseMaterial3D.CULL_FRONT:
+					side = -side
+				elif mode == BaseMaterial3D.CULL_DISABLED:
+					side = Vector3.ZERO
+				if not looked_at:
+					hide_faces.append_array(PackedVector3Array([a, b, c]))
+					sides.append(side)
+					continue
+				var middle := (a + b + c) / 3.0
+				var across := ceili(maxf(a.distance_to(b), maxf(b.distance_to(c), c.distance_to(a))) / SAMPLE_M)
+				var spots: Array[Vector3] = [middle, a.lerp(middle, CORNER_INSET), b.lerp(middle, CORNER_INSET), c.lerp(middle, CORNER_INSET)]
+				if across > 1:
+					for i in across + 1:
+						for j in across + 1 - i:
+							spots.append(a + (b - a) * (float(i) / across) + (c - a) * (float(j) / across))
+				var axis := side.abs().max_axis_index()
+				var facing := 6 if side == Vector3.ZERO else axis * 2 + (1 if side[axis] < 0.0 else 0)
+				for spot in spots:
+					var cell := Vector4i(floori(spot.x / SAMPLE_M), floori(spot.y / SAMPLE_M), floori(spot.z / SAMPLE_M), owner * 8 + facing)
+					if taken.has(cell):
+						continue
+					taken[cell] = true
+					points.append(spot)
+					point_sides.append(side)
+					point_owners.append(owner)
+	var hide := TriangleMesh.new()
+	if not hide_faces.is_empty():
+		hide.create_from_faces(hide_faces)
+	return {"hide": hide, "sides": sides, "points": points, "point_sides": point_sides, "point_owners": point_owners, "owners": owners, "hiding": hide_faces.size() / 3}
+
+
+## Viewpoints round the bounds (see the constants), less those shut in: under something
+## of the hiding surfaces facing up.
+func _viewpoints(bounds: AABB, openings: Array[Transform3D], hide: TriangleMesh, sides: PackedVector3Array) -> Array[Vector3]:
+	var centre := bounds.get_center()
+	var reach := Vector2(bounds.size.x, bounds.size.z).length() * 0.5
+	var all: Array[Vector3] = []
+	for k in VIEW_AZIMUTHS:
+		var way := Vector3(cos(TAU * k / VIEW_AZIMUTHS), 0.0, sin(TAU * k / VIEW_AZIMUTHS))
+		for distance in VIEW_DISTANCES_M:
+			var at := centre + way * (reach + distance)
+			all.append(Vector3(at.x, bounds.position.y + EYE_M, at.z))
+			for height in VIEW_HEIGHTS_M:
+				all.append(Vector3(at.x, bounds.end.y + height, at.z))
+	for height in OVERHEAD_M:
+		for offset: Vector2 in [Vector2.ZERO, Vector2(1, 1), Vector2(1, -1), Vector2(-1, 1), Vector2(-1, -1)]:
+			all.append(Vector3(centre.x + offset.x * reach * 0.5, bounds.end.y + height, centre.z + offset.y * reach * 0.5))
+	for box in openings:
+		var out := Vector3(box.origin.x - centre.x, 0.0, box.origin.z - centre.z).normalized()
+		for view in OPENING_VIEWS_M:
+			all.append(box.origin + out * view.x + Vector3.UP * view.y)
+	var open: Array[Vector3] = []
+	for at in all:
+		var above := hide.intersect_ray(at, Vector3.UP)
+		if above.is_empty() or sides[int(above.face_index)].y <= 0.0:
+			open.append(at)
+	return open
+
+
+## Looks at every point from every viewpoint: a point whose side faces the viewpoint and
+## that nothing hides from it must be seen through an opening. A summary for the PASS
+## line; failures with their operands.
+func _look(drawn: Dictionary, viewpoints: Array[Vector3], openings: Array[Transform3D], label: String) -> String:
+	var hide := drawn.hide as TriangleMesh
+	var sides: PackedVector3Array = drawn.sides
+	var points: PackedVector3Array = drawn.points
+	var point_sides: PackedVector3Array = drawn.point_sides
+	var point_owners: PackedInt32Array = drawn.point_owners
+	var owners: Array[String] = drawn.owners
+	var inverses: Array[Transform3D] = []
+	for box in openings:
+		inverses.append(box.affine_inverse())
+	var through := 0
+	var leaks := 0
+	var leaking := {}
+	var examples: Array[String] = []
+	for at in viewpoints:
+		for index in points.size():
+			var point := points[index]
+			var side := point_sides[index]
+			if side != Vector3.ZERO and side.dot(at - point) <= 0.0:
+				continue
+			var way := (point - at).normalized()
+			var end := point - way * SIGHT_END_M
+			if _hidden(hide, sides, at, end, way):
+				continue
+			if inverses.any(func(inverse: Transform3D) -> bool: return _crosses_box(inverse * at, inverse * point)):
+				through += 1
+				continue
+			var across := way.cross(Vector3.UP if absf(way.y) < 0.9 else Vector3.RIGHT).normalized()
+			var spread: Array[Vector3] = [across, -across, way.cross(across), -way.cross(across)]
+			if spread.any(func(offset: Vector3) -> bool: return _hidden(hide, sides, at, end + offset * SPREAD_M, way)):
+				continue
+			leaks += 1
+			leaking[index] = true
+			if examples.size() < EXAMPLES:
+				examples.append("%s at %s (side %s) from %s" % [owners[point_owners[index]], point, side, at])
+	if leaks > 0:
+		failures.append("%s: drawn on the interior's layer and seen from outside other than through its openings at %d of %d points (%d sight lines), as %s" % [label, leaking.size(), points.size(), leaks, "; ".join(examples)])
+	elif through == 0:
+		failures.append("%s: from %d viewpoints nothing of it is seen through its openings, so the views prove nothing" % [label, viewpoints.size()])
+	return "%d points from %d viewpoints, %d sight lines through its openings and none elsewhere" % [points.size(), viewpoints.size(), through]
+
+
+## Whether a hiding face lies on the segment, met on the side it shows (or two-sided).
+func _hidden(hide: TriangleMesh, sides: PackedVector3Array, from: Vector3, to: Vector3, way: Vector3) -> bool:
+	var at := from
+	for _pass in MAX_PASSES:
+		var hit := hide.intersect_segment(at, to)
+		if hit.is_empty():
+			return false
+		var side := sides[int(hit.face_index)]
+		if side == Vector3.ZERO or side.dot(way) < 0.0:
+			return true
+		at = (hit.position as Vector3) + way * PASS_M
+		if (to - at).dot(way) <= 0.0:
+			return false
+	return false
+
+
+## Whether the segment from a to b (in a box's frame) crosses the cube from -1 to 1.
+static func _crosses_box(a: Vector3, b: Vector3) -> bool:
+	var enter := 0.0
+	var leave := 1.0
+	var d := b - a
+	for axis in 3:
+		if absf(d[axis]) < 1e-12:
+			if absf(a[axis]) > 1.0:
+				return false
+			continue
+		var t0 := (-1.0 - a[axis]) / d[axis]
+		var t1 := (1.0 - a[axis]) / d[axis]
+		enter = maxf(enter, minf(t0, t1))
+		leave = minf(leave, maxf(t0, t1))
+		if enter > leave:
+			return false
+	return true
+
+
 func _frames(count: int) -> void:
 	for _i in count:
 		await process_frame
@@ -502,7 +826,7 @@ func _finish() -> void:
 	if is_instance_valid(_main):
 		_main.queue_free()
 	if failures.is_empty():
-		print("PASS: InteriorFarStandIn: specs it cannot use refused; the stand-in hidden, shadowless, every face facing in with the detailed colour over it, the floor in its own material and polar UVs, the glow kept, its own faces in a detailed surface's shader, the opening open; nothing switched before play; far and near in the frame the source turns, one switch a turn, the near process paused a frame into far and given back with near; near with the camera in or by the plan; force held; back as built leaving the tree")
+		print("PASS: InteriorFarStandIn: specs it cannot use refused; the stand-in hidden, shadowless, every face facing in with the detailed colour over it, the floor in its own material and polar UVs, the glow kept, its own faces in a detailed surface's shader, the opening open; nothing switched before play; far and near in the frame the source turns, one switch a turn, the near process paused a frame into far and given back with near; near with the camera in or by the plan; force held; back as built leaving the tree; from outside, far and near alike seen only through the openings")
 		quit(0)
 		return
 	for message in failures:
