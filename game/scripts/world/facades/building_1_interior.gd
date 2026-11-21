@@ -1900,6 +1900,10 @@ static func _material(key: String, entry: Dictionary) -> StandardMaterial3D:
 static func _textures(material: StandardMaterial3D, entry: Dictionary) -> void:
 	if not entry.has("albedo_texture") and not entry.has("detail_texture"):
 		return
+	# Experiment: on the web an entry may go without its textures ("web_textures": false),
+	# drawn by the shader its plain neighbours share, its colour web_rgb alone.
+	if PREBUILT_WORLD.profile() == "web" and not bool(entry.get("web_textures", true)):
+		return
 	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
 	material.texture_repeat = true
 	if entry.has("albedo_texture"):
