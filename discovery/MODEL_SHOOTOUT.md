@@ -62,7 +62,14 @@ Earlier, not blind: after a second review round the owner found the Opus buildin
 
 Variant E (2026-11-21, not blind: added after A–D, and the owner has not judged it yet) told the review to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake. The review ran to 975 words and asked for 0 additions, 6 fixes and 2 removals (as recorded at the time); mesh nodes went from 336 to 374 and triangles from 7,790 to 8,246; review and fix cost $0.75. The fixer still went from three grey utility boxes by the doors to five, although the review had listed the boxes under 'keep it' and asked for none. The review did not mention the upper-floor overhang.
 
-Variant F, a form-first instruction plus enlargements of the same two photos, is running; no result yet.
+Variant F (2026-11-21, not blind; the owner has not judged it yet) is E's instruction plus a first step: describe the building's basic form from the photos (massing and silhouette, storeys and how they relate, roof form, rhythm of bays, wall-to-opening proportion) before colours, sizes and placement, because "a mismatch in form outranks any detail finding". Its reviewer and fixer also got five labelled enlargements cut from the same two reference photos, with no new viewpoints, so it tests form first with the overhang made visible, not more photos. F's review made the upper-floor overhang its first and top finding, and the fix built it, setting the ground floor back 0.75 m under the upper storey. The door colour went the other way: E's review flagged the doors and its fix darkened them, while F's review called the navy doors a strength and kept them. Which way the doors should go is for the owner to say.
+
+| Variant | Review words | Add / fix / remove asked | Mesh nodes, from 336 | Triangles, from 7,790 | Cost |
+|---|---|---|---|---|---|
+| E | 975 | 0 / 6 / 2 | 374 | 8,246 | $0.75 |
+| F | 1,116 | 3 / 5 / 2 | 584 | 10,290 | $1.14 |
+
+The add / fix / remove tallies are as recorded at the time. F's fixer rewrote the model from scratch and added staggered segments, vent stacks (31 cylinders against E's 5), slatted screens and an annex, so the form-first run also grew the model considerably. This is one building and one run each, and the enlargements and the instruction changed together, so this run cannot say which of the two made the reviewer see the overhang.
 
 ## Model tiers by detail level
 
