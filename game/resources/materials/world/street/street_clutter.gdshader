@@ -50,7 +50,9 @@ global uniform float parked_lamps;
 uniform bool lamps_lit = false;
 // Each car body's wheels, in the order of street_clutter_kit.gd CAR_BODIES (the
 // kit sets them from its axle markers): x the front axle's z, y the rear axle's
-// z (the car's frame: front -Z), z the wheel radius.
+// z (the car's frame: front -Z), z the wheel radius. One slot a body: the kit
+// reports an error unless this reads [CAR_BODIES.size()], and fragment()'s
+// lookup clamps to the last slot, so a new body changes both.
 uniform vec4 car_axles[9];
 
 // Parts (tools/lib/street-car-parts.mjs CAR_PARTS): paint, roof, glass, tire,
@@ -248,9 +250,11 @@ void fragment() {
 			float blot = smoothstep(0.3, 0.7, value_noise(q * vec3(2.6, 3.4, 2.6) + seed));
 			float spatter = (value_noise(TURN * q * 27.0 + seed) - 0.5) * (1.0 - smoothstep(0.012, 0.04, pixel));
 			float film = (1.0 - smoothstep(mix(0.3, 0.5, dirt), 1.0, up)) * mix(1.0, blot, smoothstep(0.3, 0.9, up)) * (1.0 + 0.35 * spatter);
-			// A fan up the side behind each wheel (its body's axles).
+			// A fan up the side behind each wheel (its body's axles; a radius kept
+			// above zero, so a missing marker can't make the fan's ramps undefined).
 			vec4 axles = car_axles[clamp(style >> 4, 0, 8)];
-			float spray = smoothstep(0.25, 0.6, abs(n.x)) * max(wheel_spray(q, axles.x, axles.z, dirt), wheel_spray(q, axles.y, axles.z, dirt)) * mix(0.7, 1.0, blot);
+			float radius = max(axles.z, 0.2);
+			float spray = smoothstep(0.25, 0.6, abs(n.x)) * max(wheel_spray(q, axles.x, radius, dirt), wheel_spray(q, axles.y, radius, dirt)) * mix(0.7, 1.0, blot);
 			// A haze up the tail, where the wake lays it.
 			float up_tail = clamp((q.y - 0.1) / max(0.05, film_top + mix(0.1, 0.35, dirt)), 0.0, 1.0);
 			float tail = smoothstep(0.35, 0.85, n.z) * (1.0 - smoothstep(0.3, 1.0, up_tail)) * (0.7 + 0.3 * value_noise(q * 3.0 + seed)) * 0.8;

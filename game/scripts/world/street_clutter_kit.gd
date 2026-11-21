@@ -150,20 +150,34 @@ func _init() -> void:
 	_glass_material.resource_name = "street_car_glass"
 	_glass_material.shader = GLASS_SHADER
 	_read_scene(KIT_SCENE)
-	# Each body's wheels, by CAR_BODIES (the shader's car_axles, four floats a
-	# body): where its dirt fans out.
-	var axles := PackedFloat32Array()
-	for body: String in CAR_BODIES:
-		var front: Vector3 = _markers.get("car_%s_axle_front" % body, Vector3.ZERO)
-		var rear: Vector3 = _markers.get("car_%s_axle_rear" % body, Vector3.ZERO)
-		axles.append_array([front.z, rear.z, front.y, 0.0])
-	_material.set_shader_parameter("car_axles", axles)
+	_material.set_shader_parameter("car_axles", _car_axles())
 	# A live car and the hero level draw these as instances, only after loading
 	# (the shader warm-up: ShaderWarmUp); the glass only at the hero level.
 	ShaderWarmUp.add(_material, true)
 	ShaderWarmUp.add(_wheel_material, true)
 	if hero_level_enabled():
 		ShaderWarmUp.add(_glass_material, true)
+
+
+## Each body's wheels for the shader's car_axles (four floats a body, by
+## CAR_BODIES): its front and rear axles' z and its wheel radius, from the kit's
+## axle markers; where a car's dirt fans out behind its wheels. A body the
+## shader's array has no slot for, or without both markers, is an error (and
+## gets a crossover's wheels rather than none).
+func _car_axles() -> PackedFloat32Array:
+	var declared := "uniform vec4 car_axles[%d];" % CAR_BODIES.size()
+	if not SHADER.code.contains(declared):
+		push_error("street_clutter.gdshader must declare %s: one slot per body of CAR_BODIES" % declared)
+	var axles := PackedFloat32Array()
+	for body: String in CAR_BODIES:
+		var front: Variant = _markers.get("car_%s_axle_front" % body)
+		var rear: Variant = _markers.get("car_%s_axle_rear" % body)
+		if not front is Vector3 or not rear is Vector3 or (front as Vector3).y <= 0.0:
+			push_error("street_clutter_kit.glb has no axle markers for the %s: its dirt can't find its wheels" % body)
+			front = Vector3(0.0, 0.36, -1.41)
+			rear = Vector3(0.0, 0.36, 1.35)
+		axles.append_array([(front as Vector3).z, (rear as Vector3).z, (front as Vector3).y, 0.0])
+	return axles
 
 
 func _read_scene(packed: PackedScene) -> void:
