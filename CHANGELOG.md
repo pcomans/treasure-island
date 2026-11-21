@@ -9,6 +9,7 @@ Every build of the game has a number, the one in its title on the [releases page
 ## Build 2397 (2026-11-20)
 
 - On computers, the reflections in the floor of Building 1's hall now fade in over half a second as you walk in, and out as you leave, instead of appearing all at once at the door.
+- The open glass doors of Building 1's hall keep the sky's reflection when seen from inside, where they looked black.
 
 ## Build 2394 (2026-11-20)
 
