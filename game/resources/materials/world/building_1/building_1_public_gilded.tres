@@ -2,6 +2,6 @@
 
 [resource]
 resource_name = "building_1_public_gilded_kick_panel"
-albedo_color = Color(0.8, 0.64, 0.32, 1)
-metallic = 0.8
-roughness = 0.32
+albedo_color = Color(0.84, 0.74, 0.48, 1)
+metallic = 0.45
+roughness = 0.45

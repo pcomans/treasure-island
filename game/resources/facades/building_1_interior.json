@@ -58,7 +58,7 @@
     "museum_grid": [3, 3],
     "threshold_bevel": 0.13,
     "stair_parapet": 1.0,
-    "note": "Floor 2.5 cm over the highest drawn ground under it (6.495, the plaza over the land by the bar room's north wall; headless_interior_ground_contract.gd checks every floor sample). The door's sill (sill_y) stays 2.5 cm over the highest drawn ground at the door (6.345, at the vestibule's south-front corner): the vestibule's floor runs level with it for sill_landing (0.3 m) inside the door, then rises 1.9 degrees to the hall's floor at the colonnade's back; The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: about a rail's height (1.05 m) under the rail's top and under the facade's window frames (11.42 m), over the vestibule's ceiling, which clears the facade's door transom (9.70 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (18.85 m)."
+    "note": "Floor 2.5 cm over the highest drawn ground under it (6.495, the plaza over the land by the bar room's north wall; headless_interior_ground_contract.gd checks every floor sample). The door's sill (sill_y) stays 2.5 cm over the highest drawn ground at the door (6.345, at the vestibule's south-front corner): the vestibule's floor runs level with it for sill_landing (0.3 m) inside the door, then rises 1.9 degrees to the hall's floor at the colonnade's back. The west heights are measured in the west and south views (photos 3 and 5, independent cameras): the openings' heads about 3.5 m, the reeded fascia about 3.8-4.0 m, the parapet's top 5.2-5.3 m and the Deco rail's 5.7-5.9 m. The walkway behind the parapet is unphotographed: about a rail's height (1.05 m) under the rail's top and under the facade's window frames (11.42 m), over the vestibule's ceiling, which clears the facade's door transom (9.70 m); the open rail is solid to the player up to its top (railing); the north gallery's front is solid to the player from its floor to its ceiling, so the gallery is seen over its rail, never entered. The balcony zone's ceiling clears the tall windows' heads (18.85 m)."
   },
   "members_production_inference_m": {
     "west_column": [0.5, 0.8],
@@ -83,7 +83,7 @@
   },
   "door": {
     "bay": 5,
-    "note": "The middle of the crescent's three door groups (the NRHP's main public entrance; its centre group under the canopy) opens: its three bronze leaves stand swung in against the reveal sides, the transom stays glazed."
+    "note": "The middle of the crescent's three door groups (the NRHP's main public entrance; its centre group under the canopy) opens: the facade draws its three leaves standing open outward under the canopy and its transom glazed (building_1_hero_model.gd), and the opening it cuts reaches the transom's top, so the stock camera follows the player through."
   },
   "rooms": {
     "vestibule_bay": 5,

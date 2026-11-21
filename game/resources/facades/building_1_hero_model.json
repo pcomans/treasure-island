@@ -28,10 +28,10 @@
     "north_wing_inward_depth": 11.0,
     "central_inward_depth": 25.0,
     "south_wing_inward_depth": 11.0,
-    "tower_platform_top_y": 27.9,
-    "tower_glass_base_y": 29.13,
-    "tower_glass_top_y": 31.55,
-    "tower_roof_peak_y": 34.08,
+    "tower_platform_top_y": 28.681,
+    "tower_glass_base_y": 29.681,
+    "tower_glass_top_y": 31.681,
+    "tower_roof_peak_y": 33.961,
     "tower_platform_plan_scale": 1.0
   },
   "massing_chains": {
@@ -55,14 +55,12 @@
     "north_pavilion": {
       "center_runs": [6],
       "flank_runs": [[3, 4], [8]],
-      "corner_runs": [0, 1],
-      "entry": {"recess_half_width": 1.15, "door_half_width": 0.8, "height": 3.1, "transom_height": 0.6, "jamb_width": 0.32, "jamb_front": 0.34, "hood_overhang": 0.12, "hood_height": 0.42, "hood_front": 0.55}
+      "corner_runs": [0, 1]
     },
     "south_pavilion": {
       "center_runs": [54, 55, 56],
       "flank_runs": [[52], [58]],
-      "corner_runs": [60],
-      "entry": {"recess_half_width": 1.9, "door_half_width": 1.15, "height": 3.2, "transom_height": 0.65, "jamb_width": 0.32, "jamb_front": 0.34, "hood_overhang": 0.12, "hood_height": 0.42, "hood_front": 0.55}
+      "corner_runs": [60]
     },
     "tall_windows_per_end": 2,
     "lights_per_tall_end_window": 20,

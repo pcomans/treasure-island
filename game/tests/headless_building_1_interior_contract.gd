@@ -212,11 +212,13 @@ func _check_door(hall: Node3D) -> void:
 		failures.append("the door's car blocker is missing or not on the cars' ground layer only")
 		return
 	var box := (blocker.get_child(0) as CollisionShape3D).shape as BoxShape3D
-	# The door group is 3.1 m wide and its open leaves 2.29 m high under the glazed
-	# transom (the owner's 2026-11-20 photos); the blocker spans that and stands
-	# taller than any car.
-	if box == null or box.size.x < 3.0 or box.size.y < 2.0:
-		failures.append("the car blocker does not span the door")
+	# The blocker spans the opened door group (the facade's entrance_group_width, to the
+	# shape's single precision) and stands at least as tall as its leaves
+	# (entrance_door_height): the opening reaches the transom's top, and no car is
+	# taller than the leaves.
+	var entrance := (JSON.parse_string(FileAccess.get_file_as_string(HERO.BAR_CONFIG_PATH)) as Dictionary).geometry_production_inference_m as Dictionary
+	if box == null or box.size.x < float(entrance.entrance_group_width) - 0.001 or box.size.y < float(entrance.entrance_door_height):
+		failures.append("the car blocker does not span the door: %s, the group %.2f m wide and its leaves %.2f m high" % [box.size if box != null else Vector3.ZERO, float(entrance.entrance_group_width), float(entrance.entrance_door_height)])
 	var normal := blocker.global_transform.basis.z.normalized()
 	var capsule := CapsuleShape3D.new()
 	capsule.radius = 0.35
