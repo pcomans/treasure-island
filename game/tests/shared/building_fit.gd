@@ -112,6 +112,11 @@ const PASSAGE_SPARE_SECONDS := 3.0
 ## The threshold: the first point of the passage's line, from outside, over the
 ## interior's own collision, sought every PASSAGE_SCAN_M.
 const PASSAGE_SCAN_M := 0.02
+## An interior with a far stand-in (InteriorFarStandIn) is let go far before its ways:
+## a camera held PASSAGE_FAR_M over the passage's outside end for at most
+## PASSAGE_FAR_WAIT_S until it is far (_arrive_from_far).
+const PASSAGE_FAR_M := 300.0
+const PASSAGE_FAR_WAIT_S := 15.0
 
 
 ## Unsafe source/setup/recovery/rest failures stop this driver's whole lifetime.
@@ -1109,15 +1114,20 @@ func _route_ground_at_player() -> bool:
 ## turn, on to the next once there or past it). A way passes when both legs arrive
 ## without standing still, stalling or a recovery, and rest on the interior's own floor
 ## inside and on open ground outside. A failed way leaves the others to run; an unsafe
-## one stops the driver.
+## one stops the driver. An interior with a far stand-in is first let go far, so the
+## ways begin with an arrival from its far state (_arrive_from_far).
 func _check_passage_ways(route: Dictionary) -> void:
 	var outside := Vector2(route.start_xz[0], route.start_xz[1])
 	var inside := Vector2(route.end_xz[0], route.end_xz[1])
 	var interior: Array[RID] = []
+	var switches: Array[InteriorFarStandIn] = []
 	for node: Node in _h.world.find_children("*", "Node3D", true, false):
 		if str(node.get_meta("interior_of_source_key", "")) == _source:
 			var built: Array[Node3D] = [node as Node3D]
 			interior.append_array(_h.collision_rids(built))
+			for child in node.get_children():
+				if child is InteriorFarStandIn:
+					switches.append(child)
 	if interior.is_empty():
 		_failures.append(_prefix + "%s leads into no interior of %s (no node carries interior_of_source_key)" % [route.name, _source])
 		return
@@ -1126,6 +1136,10 @@ func _check_passage_ways(route: Dictionary) -> void:
 		_failures.append(_prefix + "%s ways: can't settle at its outside end: %s" % [route.name, problem])
 		_unsafe = true
 		return
+	if not switches.is_empty():
+		var error := await _arrive_from_far(switches, _h.player.global_position)
+		if error != "":
+			_failures.append(_prefix + "%s ways: %s" % [route.name, error])
 	var threshold := _passage_threshold(outside, inside, _h.player.global_position.y, interior)
 	if not threshold.is_finite():
 		_failures.append(_prefix + "%s ways: no point of its line from outside to inside stands over the interior's collision" % route.name)
@@ -1155,6 +1169,36 @@ func _check_passage_ways(route: Dictionary) -> void:
 		if _unsafe:
 			return
 	print("%sROUTE_WAYS %s: %d of %d ways in and out passed; threshold %s" % [_prefix, route.name, ways.size() - failed, ways.size(), threshold])
+
+
+## Lets an interior's far stand-ins go far, then arrives as a teleport or a respawn
+## does: a camera of the test's own held PASSAGE_FAR_M straight over the player (who
+## stands at the passage's outside end) until every switch is far, at most
+## PASSAGE_FAR_WAIT_S of game time (the frames' own deltas, as the mural loader counts
+## its release delay, whatever the frame rate), then the player's camera back in one
+## frame. Every switch must be near in that frame, its detailed interior drawn over its
+## collision, before the first way walks in; "" or why not.
+func _arrive_from_far(switches: Array[InteriorFarStandIn], at: Vector3) -> String:
+	var camera := Camera3D.new()
+	_h.world.add_child(camera)
+	camera.global_position = at + Vector3.UP * PASSAGE_FAR_M
+	camera.make_current()
+	var waited_s := 0.0
+	while switches.any(func(switch: InteriorFarStandIn) -> bool: return not switch.is_far()) and waited_s < PASSAGE_FAR_WAIT_S:
+		await _h.tree.process_frame
+		waited_s += camera.get_process_delta_time()
+	var went_far := switches.all(func(switch: InteriorFarStandIn) -> bool: return switch.is_far())
+	# Back here at a frame's start: that frame runs with the player's camera.
+	_h.player.get_camera().make_current()
+	camera.queue_free()
+	await _h.tree.process_frame
+	var near := switches.all(func(switch: InteriorFarStandIn) -> bool: return not switch.is_far())
+	print("%sROUTE_FAR_ARRIVAL went far after %.1f s with the camera %.0f m off; near in the frame it came back: %s" % [_prefix, waited_s, PASSAGE_FAR_M, near])
+	if not went_far:
+		return "the interior never went far with the camera %.0f m off for %.0f s" % [PASSAGE_FAR_M, PASSAGE_FAR_WAIT_S]
+	if not near:
+		return "arriving from far, the interior was still far in the frame the player's camera came back"
+	return ""
 
 
 ## The first point of the line from outside to inside, every PASSAGE_SCAN_M, whose

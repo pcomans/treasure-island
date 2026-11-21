@@ -23,21 +23,60 @@ extends SceneTree
 ##   plain set of the same layout and size that differs from them (the baked sheen out);
 ## - its InteriorPresence ("Presence") is there before the reflections (so it moves its
 ##   blend in a frame before they read it), and the hall's root carries a plan it takes:
-##   a ring_sector on the mural loader's bounds.
-## With -- --use-prebuilt-world it checks the reflections, the presence and the layers
+##   a ring_sector on the mural loader's bounds;
+## - its far stand-in (InteriorFarStandIn: "FarStandIn", and "FarSwitch" running after
+##   the mural loader) has under FAR_SHARE of the Shell's triangles and draws on the
+##   interior layer without shadows, every material the Shell's own or generating one of
+##   the Shell's shaders (nothing new for the web to compile), and exactly one of the
+##   Shell and the stand-in is drawn;
+## - with play started, a camera and the real mural loader: far away, the stand-in is
+##   drawn instead of the Shell and the presence and reflections are paused; a camera
+##   coming at ARRIVAL_MPS finds the Shell drawn from the load radius on (a frame's
+##   travel late at most), and one put straight into the hall finds it in the frame it
+##   lands, over the hall's floor collision; teleported out, the hall stays near until
+##   the mural is released, then switches once; jittered across either radius it
+##   switches once or not at all; the collision and the car blocker stay as built in
+##   both states; leaving the tree while far, everything is back as built; and a hall
+##   whose mural loader could not set up stays drawn as built far away (its loader is
+##   near: the hall is never left as its stand-in).
+## With -- --use-prebuilt-world it checks the reflections, the presence, the layers
 ## (the door's open leaves still a mesh of their own on the facades' layer after the
-## bake's merge, tools/merge_baked_buildings.gd), in the island baked for desktop exports
+## bake's merge, tools/merge_baked_buildings.gd) and the far stand-in's parts, in the island baked for desktop exports
 ## (tools/prebuild-static-world.sh native, which tools/test.sh bakes), loaded as the game
 ## loads it: the main scene, whose WorldLoader reads the flag itself.
 ## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
 ## it builds the hall as the web's bake does and checks its reflections node carries
-## neither floor attribute set (the web draws none of them), and its InteriorPresence
-## and plan as above: the web's hall fades in and out by the same plan.
+## neither floor attribute set (the web draws none of them), its InteriorPresence and
+## plan as above (the web's hall fades in and out by the same plan), and its far
+## stand-in's parts.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
 ## How far round the hall's plan a roof slab must stand for the slab check to count.
 const SLAB_NEAR_M := 6.0
+## The far stand-in's most triangles, as a share of the Shell's (the owner: "something
+## drastically simpler, like 1% of polygons").
+const FAR_SHARE := 0.02
+## The fastest arrival the switch is tested against (m/s): faster than a run (20) or a
+## car's top speed; and where the camera waits far away (m from the door).
+const ARRIVAL_MPS := 60.0
+const FAR_AWAY_M := 300.0
+
+
+## Stands in for the game's main scene: play has started (Building1MuralLoader and
+## InteriorFarStandIn wait for it).
+class PlayStarted extends Node:
+	func is_play_ready() -> bool:
+		return true
+
+
+## Takes the shader the engine's shader inspector names for each material asked.
+class ShaderInspector extends Node:
+	var answers: Array[RID] = []
+
+	func _inspect_shader(shader: RID) -> void:
+		answers.append(shader)
+
 
 var failures: Array[String] = []
 var _world: Node3D
@@ -83,11 +122,14 @@ func _run() -> void:
 	if OS.get_cmdline_user_args().has("--web-world-bake"):
 		_check_web_bake(hall)
 		_check_presence(hall, "the hall built for the web")
-		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets, and its Presence before it with a plan on the mural loader's bounds" % (hall.get_node("HallReflections") as Building1HallReflections).mode if failures.is_empty() else "")
+		await _check_far_parts(hall, "the hall built for the web")
+		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets, its Presence before it with a plan on the mural loader's bounds, and its far stand-in under %.0f%% of the Shell's triangles, in the Shell's shaders" % [(hall.get_node("HallReflections") as Building1HallReflections).mode, FAR_SHARE * 100.0] if failures.is_empty() else "")
 		return
 	_check_mural(hall)
 	_check_reflections(hall, "the generated hall")
 	_check_presence(hall, "the generated hall")
+	await _check_far_parts(hall, "the generated hall")
+	await _check_far_switch(hall)
 	_finish("")
 
 
@@ -150,9 +192,10 @@ func _run_prebuilt() -> void:
 			_check_reflections(node.get_parent() as Node3D, "the baked hall")
 			_check_presence(node.get_parent() as Node3D, "the baked hall")
 			_check_layers(node.get_parent() as Node3D)
+			await _check_far_parts(node.get_parent() as Node3D, "the baked hall")
 	main.queue_free()
 	await process_frame
-	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout; it draws on the interior layer without shadows, its door's open leaves on the facades' layer, out of the probes' reach")
+	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout; it draws on the interior layer without shadows, its door's open leaves on the facades' layer, out of the probes' reach; its far stand-in, under %.0f%% of the Shell's triangles in the Shell's shaders, drawn in place of the Shell exactly when its switch is far" % (FAR_SHARE * 100.0))
 
 
 ## The hall's floor reflections: a mode the node knows (and a config with another one
@@ -433,6 +476,218 @@ func _check_second_build(first: Building1MuralLoader) -> void:
 	second.free()
 
 
+## The hall's far stand-in, as built or as baked: its parts (see the notes above).
+func _check_far_parts(hall: Node3D, where: String) -> void:
+	var shell := hall.get_node_or_null("Shell") as MeshInstance3D
+	var far := hall.get_node_or_null(InteriorFarStandIn.FAR_MESH) as MeshInstance3D
+	var switch := hall.get_node_or_null("FarSwitch") as InteriorFarStandIn
+	var loader := hall.get_node_or_null("MuralLoader") as Building1MuralLoader
+	if shell == null or far == null or far.mesh == null or switch == null or loader == null:
+		failures.append("%s has no Shell, far stand-in mesh, FarSwitch or MuralLoader" % where)
+		return
+	if far.layers != INTERIOR.RENDER_INTERIOR or far.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+		failures.append("%s's far stand-in draws on layers %d with shadows %d, not the interior layer without shadows" % [where, far.layers, far.cast_shadow])
+	if far.visible == shell.visible or far.visible != switch.is_far():
+		failures.append("%s draws %s while its switch is %s" % [where, "both its Shell and its stand-in" if far.visible else "neither its Shell nor its stand-in" if not shell.visible else "the wrong one of its Shell and its stand-in", "far" if switch.is_far() else "near"])
+	if switch.process_priority <= loader.process_priority:
+		failures.append("%s's FarSwitch runs before its mural loader, so a turn would show a frame late" % where)
+	var shell_triangles := 0
+	var shell_materials: Array[Material] = []
+	for surface in shell.mesh.get_surface_count():
+		shell_triangles += shell.mesh.surface_get_array_index_len(surface) / 3
+		shell_materials.append(shell.mesh.surface_get_material(surface))
+	var far_triangles := 0
+	var own: Array[Material] = []
+	for surface in far.mesh.get_surface_count():
+		far_triangles += far.mesh.surface_get_array_index_len(surface) / 3
+		var material := far.mesh.surface_get_material(surface)
+		if not material in shell_materials:
+			own.append(material)
+	if far_triangles == 0 or far_triangles >= FAR_SHARE * shell_triangles:
+		failures.append("%s's far stand-in has %d triangles, not under %.0f%% of the Shell's %d" % [where, far_triangles, FAR_SHARE * 100.0, shell_triangles])
+	# Its own materials generate shaders the Shell already uses: nothing new to compile.
+	var asked: Array[Material] = []
+	asked.append_array(own)
+	asked.append_array(shell_materials)
+	var inspector := ShaderInspector.new()
+	root.add_child(inspector)
+	inspector.add_to_group(&"_native_shader_source_visualizer")
+	for material in asked:
+		material.inspect_native_shader_code()
+	await process_frame
+	await process_frame
+	var answers := inspector.answers.duplicate()
+	inspector.queue_free()
+	if answers.size() != asked.size() or answers.any(func(shader: RID) -> bool: return not shader.is_valid()):
+		failures.append("%s: the shader inspector named %d valid shaders of %d materials" % [where, answers.filter(func(shader: RID) -> bool: return shader.is_valid()).size(), asked.size()])
+	else:
+		var shell_shaders := answers.slice(own.size())
+		for index in own.size():
+			if not answers[index] in shell_shaders:
+				failures.append("%s's far stand-in draws with a material (%s) whose shader the Shell does not use" % [where, own[index].resource_name])
+	print("FAR_STAND_IN %s: %d triangles in %d surfaces (%.2f%% of the Shell's %d in %d), %d material(s) of its own, %s" % [where, far_triangles, far.mesh.get_surface_count(), 100.0 * far_triangles / maxf(shell_triangles, 1.0), shell_triangles, shell.mesh.get_surface_count(), own.size(), "far" if switch.is_far() else "near"])
+
+
+## The switch at work in the generated hall (see the notes above), with play started,
+## a camera on the door's line out to the forecourt, and the real mural loader.
+func _check_far_switch(hall: Node3D) -> void:
+	var shell := hall.get_node("Shell") as MeshInstance3D
+	var far := hall.get_node(InteriorFarStandIn.FAR_MESH) as MeshInstance3D
+	var switch := hall.get_node("FarSwitch") as InteriorFarStandIn
+	var loader := hall.get_node("MuralLoader") as Building1MuralLoader
+	var paused: Array[Node] = [hall.get_node("Presence"), hall.get_node("HallReflections")]
+	var collision := hall.get_node("Collision") as StaticBody3D
+	var blocker := hall.get_node("CarBlocker") as StaticBody3D
+	var bodies: Array[StaticBody3D] = [collision, blocker]
+	var built := _collision_state(bodies)
+	var plan: Dictionary = hall.get_meta(InteriorPresence.PLAN_META)
+	var out := ((plan.centre as Vector2) - Vector2(loader.door.x, loader.door.z)).normalized()
+	var camera := Camera3D.new()
+	_world.add_child(camera)
+	camera.make_current()
+	var put := func(metres: float) -> void:
+		camera.global_position = Vector3(loader.door.x + out.x * metres, loader.door.y, loader.door.z + out.y * metres)
+	put.call(FAR_AWAY_M)
+	var main := PlayStarted.new()
+	main.name = "Main"
+	root.add_child(main)
+	# _check_mural stepped the loader by hand and stopped it; it runs on its own from here.
+	loader.set_process(true)
+	await _ticks(2)
+	if not switch.is_far() or shell.visible or not far.visible:
+		failures.append("far away, play started: the hall is not drawn as its stand-in (far %s, Shell shown %s)" % [switch.is_far(), shell.visible])
+	await _ticks(2)
+	for node in paused:
+		if node.process_mode != Node.PROCESS_MODE_DISABLED:
+			failures.append("far away, the hall's %s still runs" % node.name)
+	if _collision_state(bodies) != built:
+		failures.append("far away, the hall's collision or car blocker is not as built")
+	# Coming at ARRIVAL_MPS, a frame at a time: the Shell is drawn from the load radius on.
+	var step := ARRIVAL_MPS / 60.0
+	var metres := FAR_AWAY_M
+	var near_at := -1.0
+	var flapped := false
+	while metres > 2.0:
+		metres -= step
+		put.call(metres)
+		await _ticks(1)
+		if not switch.is_far() and near_at < 0.0:
+			near_at = metres
+		elif switch.is_far() and near_at >= 0.0:
+			flapped = true
+	if near_at < loader.load_radius - step or flapped:
+		failures.append("coming at %.0f m/s the Shell is drawn from %.1f m (the load radius %.0f m)%s" % [ARRIVAL_MPS, near_at, loader.load_radius, ", and goes again" if flapped else ""])
+	if not shell.visible or far.visible or _collision_state(bodies) != built:
+		failures.append("at the door after a fast arrival the Shell is not drawn, or the collision is not as built")
+	for node in paused:
+		if node.process_mode == Node.PROCESS_MODE_DISABLED:
+			failures.append("at the door the hall's %s is still paused" % node.name)
+	print("FAR_SWITCH coming at %.0f m/s: the Shell drawn from %.1f m out" % [ARRIVAL_MPS, near_at])
+	# Teleported out: near until the mural's release, then far once.
+	var switches := switch.switches
+	put.call(FAR_AWAY_M)
+	await _ticks(int((loader.unload_delay - 0.25) * 60.0))
+	if switch.is_far() or switch.switches != switches:
+		failures.append("teleported out, the hall went far before the mural's release (%.0f s)" % loader.unload_delay)
+	await _ticks(30)
+	if not switch.is_far() or switch.switches != switches + 1:
+		failures.append("teleported out, the hall did not go far once at the mural's release (far %s, %d switches)" % [switch.is_far(), switch.switches - switches])
+	# Put straight into the hall, at the point of its middle ring farthest from the door
+	# over its floor: near in the frame it lands.
+	var inside := Vector3.ZERO
+	var middle_r := ((plan.radii as Vector2).x + (plan.radii as Vector2).y) * 0.5
+	for index in 40:
+		var angle := lerpf((plan.angles as Vector2).x, (plan.angles as Vector2).y, (float(index) + 0.5) / 40.0)
+		var at := Vector3((plan.centre as Vector2).x + cos(angle) * middle_r, loader.door.y, (plan.centre as Vector2).y + sin(angle) * middle_r)
+		if _floor_under(at, collision) and (inside == Vector3.ZERO or Vector2(at.x - loader.door.x, at.z - loader.door.z).length() > Vector2(inside.x - loader.door.x, inside.z - loader.door.z).length()):
+			inside = at
+	var inside_m := Vector2(inside.x - loader.door.x, inside.z - loader.door.z).length()
+	switches = switch.switches
+	camera.global_position = inside
+	await _ticks(1)
+	if inside == Vector3.ZERO or switch.is_far() or not shell.visible or switch.switches != switches + 1:
+		failures.append("put into the hall at %s (%.1f m from the door) it is not near in that frame" % [inside, inside_m])
+	print("FAR_SWITCH put into the hall %.1f m from the door, over its floor: near in that frame" % inside_m)
+	put.call(FAR_AWAY_M)
+	await _ticks(int((loader.unload_delay + 0.5) * 60.0))
+	if not switch.is_far():
+		failures.append("out again, the hall did not go far after the mural's release")
+	# Jittered across the load radius: one switch, to near.
+	switches = switch.switches
+	for tick in 60:
+		put.call(loader.load_radius + (0.1 if tick % 2 == 0 else -0.1))
+		await _ticks(1)
+	if switch.is_far() or switch.switches != switches + 1:
+		failures.append("jittered across the load radius, the hall switched %d times and is %s" % [switch.switches - switches, "far" if switch.is_far() else "near"])
+	# Jittered across the unload radius for twice the delay: no switch; then held beyond
+	# it for the delay: one, to far.
+	switches = switch.switches
+	for tick in int(loader.unload_delay * 2.0 * 60.0):
+		put.call(loader.unload_radius + (0.1 if tick % 2 == 0 else -0.1))
+		await _ticks(1)
+	if switch.is_far() or switch.switches != switches:
+		failures.append("jittered across the unload radius, the hall switched %d times" % (switch.switches - switches))
+	put.call(loader.unload_radius + 1.0)
+	await _ticks(int((loader.unload_delay + 0.25) * 60.0))
+	if not switch.is_far() or switch.switches != switches + 1:
+		failures.append("held past the unload radius, the hall switched %d times and is %s" % [switch.switches - switches, "far" if switch.is_far() else "near"])
+	await _ticks(2)
+	print("FAR_SWITCH teleported out and in, and jittered across both radii: %d switches in all" % switch.switches)
+	# Leaving the tree while far: everything as built.
+	_world.remove_child(hall)
+	if switch.is_far() or not shell.visible or far.visible or paused.any(func(node: Node) -> bool: return node.process_mode != Node.PROCESS_MODE_INHERIT) or _collision_state(bodies) != built:
+		failures.append("left the tree while far, the hall is not as built (far %s, Shell shown %s, stand-in shown %s)" % [switch.is_far(), shell.visible, far.visible])
+	_world.add_child(hall)
+	loader.set_process(false)
+	# A hall whose mural loader could not set up (here no placeholder): far away with play
+	# started, its Shell stays drawn and its stand-in hidden.
+	put.call(FAR_AWAY_M)
+	var failed: Dictionary = HERO.build_record(HERO._record_from_chunk(HERO.MAIN_CHUNK_PATH, HERO.BUILDING_WALL_KEY))
+	if failed.get("node") is Node:
+		_loose.append(failed.get("node"))
+	var extras: Array = failed.get("extra_nodes", [])
+	var broken := (extras[0] as Dictionary).result.node as Node3D if extras.size() == 1 else null
+	if broken == null:
+		failures.append("a third build of the hall in one process fails")
+	else:
+		(broken.get_node("MuralLoader") as Building1MuralLoader).placeholder = null
+		# Its loader's _ready says why it can't set up, as it should; not a failure here.
+		Engine.print_error_messages = false
+		_world.add_child(broken)
+		Engine.print_error_messages = true
+		await _ticks(4)
+		var broken_switch := broken.get_node("FarSwitch") as InteriorFarStandIn
+		if not (broken.get_node("MuralLoader") as Building1MuralLoader).is_near() or broken_switch.is_far() or not (broken.get_node("Shell") as Node3D).visible or (broken.get_node(InteriorFarStandIn.FAR_MESH) as Node3D).visible:
+			failures.append("far away with a mural loader that could not set up, the hall is drawn as its stand-in (far %s)" % broken_switch.is_far())
+		broken.free()
+	main.queue_free()
+	camera.queue_free()
+	await _ticks(1)
+
+
+## What the switch must never change: each body's layers, mask, mode and shapes.
+func _collision_state(bodies: Array[StaticBody3D]) -> Array:
+	var state: Array = []
+	for body in bodies:
+		state.append([body.collision_layer, body.collision_mask, body.process_mode])
+		for child in body.get_children():
+			if child is CollisionShape3D:
+				state.append([(child as CollisionShape3D).shape, (child as CollisionShape3D).disabled])
+	return state
+
+
+## Whether the hall's own collision is the first solid straight under a point.
+func _floor_under(at: Vector3, collision: StaticBody3D) -> bool:
+	var query := PhysicsRayQueryParameters3D.create(at, at - Vector3.UP * 4.0, INTERIOR.PHYSICS_WORLD_SOLID)
+	var hit := _world.get_world_3d().direct_space_state.intersect_ray(query)
+	return not hit.is_empty() and hit.collider == collision
+
+
+func _ticks(count: int) -> void:
+	for _i in count:
+		await process_frame
+
+
 func _finish(error: String, passed := "") -> void:
 	if error != "":
 		failures.append(error)
@@ -449,7 +704,7 @@ func _finish(error: String, passed := "") -> void:
 		if passed != "":
 			print(passed)
 		else:
-			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows, but for its door's open leaves on the facades' layer, out of the probes' reach; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set")
+			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows, but for its door's open leaves on the facades' layer, out of the probes' reach; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set; its far stand-in, under %.0f%% of the Shell's triangles in the Shell's shaders, is drawn in its place far away while the presence and reflections pause, gives way from the load radius on to a camera coming at %.0f m/s and in the frame a camera lands inside, waits for the mural's release to go far again, switches once or not at all jittered across either radius, never touches the collision, and is back as built leaving the tree" % [FAR_SHARE * 100.0, ARRIVAL_MPS])
 		quit(0)
 		return
 	for message in failures:

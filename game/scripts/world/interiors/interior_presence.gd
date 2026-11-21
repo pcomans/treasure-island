@@ -148,10 +148,19 @@ func progress() -> float:
 ## the point's radius; the angle is taken from the turn's middle and wrapped, so a plan
 ## either side of the -PI/PI seam or across it holds the same) and below the top.
 func contains(at: Vector3, margin := 0.0) -> bool:
-	if not _ready_plan:
-		return false
-	var offset := Vector2(at.x - _centre.x, at.z - _centre.y)
+	return _ready_plan and _sector_contains(_centre, _radii, _middle, _half, _top, at, margin)
+
+
+## contains() for a plan that plan_problem() accepts, without a node (the far stand-in's
+## switch asks it: InteriorFarStandIn).
+static func plan_contains(plan: Dictionary, at: Vector3, margin := 0.0) -> bool:
+	var angles: Vector2 = plan.angles
+	return _sector_contains(plan.centre, plan.radii, (angles.x + angles.y) * 0.5, (angles.y - angles.x) * 0.5, float(plan.top_y), at, margin)
+
+
+static func _sector_contains(centre: Vector2, radii: Vector2, middle: float, half: float, top: float, at: Vector3, margin: float) -> bool:
+	var offset := Vector2(at.x - centre.x, at.z - centre.y)
 	var r := offset.length()
-	var off := absf(wrapf(atan2(offset.y, offset.x) - _middle, -PI, PI))
+	var off := absf(wrapf(atan2(offset.y, offset.x) - middle, -PI, PI))
 	var turn := margin / maxf(r, 1.0)
-	return r > _radii.x + margin and r < _radii.y - margin and off < _half - turn and at.y < _top - margin
+	return r > radii.x + margin and r < radii.y - margin and off < half - turn and at.y < top - margin

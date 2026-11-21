@@ -16,7 +16,8 @@ extends Node
 ## Nothing here measures or prints: the drive trace (game/scripts/debug/drive_trace.gd)
 ## reads state and tiles_loaded to mark the frames the tiles go up in. The hall's
 ## floor reflections (Building1HallReflections) read state too: their probes capture
-## the hall once the mural is up.
+## the hall once the mural is up. While it is released, the hall is drawn as its far
+## stand-in (InteriorFarStandIn, which reads is_near()).
 
 enum State { UNLOADED, LOADING, LOADED }
 
@@ -89,6 +90,15 @@ func step(distance: float, delta: float) -> void:
 			_far_for = _far_for + delta if distance > unload_radius else 0.0
 			if _far_for >= unload_delay:
 				release()
+
+
+## Whether the hall's near content is up: the tiles loading or loaded, from the moment
+## the camera comes within load_radius until release(); and always when the loader could
+## not set up (no Shell, placeholder or mural surface: no materials), so that the hall
+## is never left drawn as its stand-in. The hall's far stand-in (InteriorFarStandIn)
+## follows it.
+func is_near() -> bool:
+	return state != State.UNLOADED or materials.is_empty()
 
 
 ## Puts the placeholder back on every mural surface, so the tiles are freed.
