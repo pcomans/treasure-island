@@ -107,8 +107,10 @@ const SHELL_MARGIN_M := 1.0
 const SHELL_STEP_M := 0.001
 const SHELL_JITTER_M := 0.001
 const SHELL_MAX_CROSSINGS := 64
-## Escapes are reported by the place they start from, on a grid this coarse.
+## Escapes are reported by the place they start from, on a grid this coarse; past the
+## failure's EXAMPLES, up to SHELL_LISTED_PLACES more places are listed to find them by.
 const SHELL_CLUSTER_M := 2.0
+const SHELL_LISTED_PLACES := 200
 ## A surface's drawing (_shell_flags): it hides nothing, its back is drawn too, or its
 ## back alone.
 const SEE_THROUGH := 1
@@ -520,7 +522,7 @@ func _check_shell(source: String, interior: Node3D, passages: Array, chunk_paths
 			examples.append("%d rays from %s" % [int(places[place][0]), str(places[place][1])])
 		failures.append("%s: %d of %d rays from points behind its surfaces reach a viewer outside, from %d places (%s), as %s" % [label, escapes, rays, places.size(), triangles_note, "; ".join(examples)])
 		# The next places, for finding them (not part of the verdict).
-		for place: Vector3i in listed.slice(EXAMPLES, 1000):
+		for place: Vector3i in listed.slice(EXAMPLES, EXAMPLES + SHELL_LISTED_PLACES):
 			print("  also %d rays from %s" % [int(places[place][0]), str(places[place][1])])
 	for index in openings.size():
 		if seen[index] == 0:
