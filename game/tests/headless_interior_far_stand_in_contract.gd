@@ -7,12 +7,16 @@ extends SceneTree
 ## surfaces a closed room of known colours, a near source whose state the test turns, a
 ## near node, a near process that counts its frames, and a camera.
 ## - Specs it cannot use are refused (spec_problem).
+## (The room's outer wall is open from the floor to OPENING's top, the top of its lower
+## band, between OPENING's angles: a doorway.)
 ## - build(): the stand-in is hidden, on the layers given, casting no shadow; every face
 ##   faces into the room (Godot's front, clockwise seen from inside); each face carries
-##   the detailed colour over it; the floor keeps the detailed floor's own material and
-##   its polar UVs; the glowing panel keeps its material; every other face is drawn with
-##   a material whose shader is a detailed surface's own (no new shader to compile); the
-##   outer wall's opening stays open.
+##   the detailed colour over it, the outer wall's lower band parted at its piers (the
+##   faces on them darker, as the piers are, than the bays beside them); the floor keeps
+##   the detailed floor's own material and its polar UVs, parted in floor_split steps
+##   of each segment; the glowing panel keeps its material; every other face is drawn
+##   with a material whose shader is a detailed surface's own (no new shader to
+##   compile); the outer wall's opening stays open.
 ## - Before play starts nothing switches.
 ## - The source going far shows the stand-in in that same frame (the switch runs after
 ##   its source) and hides the near node; a frame later the near process is paused (its
@@ -30,15 +34,21 @@ const START_RGB := Color(0.2, 0.7, 0.2)
 const END_RGB := Color(0.2, 0.2, 0.8)
 const CEILING_RGB := Color(0.9, 0.9, 0.3)
 const SILL_RGB := Color(0.6, 0.6, 0.6)
+const PIER_RGB := Color(0.15, 0.1, 0.05)
+## The zone's stations between its ends, each a pier PIER_HALF_M either side in the
+## outer wall's lower band (0 to 3 m); the floor parted in FLOOR_SPLIT steps a segment.
+const PIERS: Array[float] = [-0.25, 0.25]
+const PIER_HALF_M := 0.5
+const FLOOR_SPLIT := 2
 const FLOOR_TINT := 0.5
-const OPENING := Vector3(-0.1, 0.1, 2.0)
+const OPENING := Vector3(-0.1, 0.1, 3.0)
 const GLOW_SPAN := Vector2(0.2, 0.3)
 const COLOUR_TOLERANCE := 0.02
 const SPEC := {
 	"near_source": "Source",
 	"near_nodes": ["Detail"],
 	"near_processes": ["Busy"],
-	"zones": [{"radii": Vector2(10.0, 20.0), "stations": [-0.5, 0.0, 0.5], "floor_y": 0.0, "ceiling_y": 6.0, "outer": [0.0, 3.0, 6.0], "start": [0.0, 6.0], "end": [0.0, 6.0], "opening": OPENING}],
+	"zones": [{"radii": Vector2(10.0, 20.0), "stations": [-0.5, -0.25, 0.0, 0.25, 0.5], "floor_split": FLOOR_SPLIT, "floor_y": 0.0, "ceiling_y": 6.0, "outer": [0.0, 3.0, 6.0], "outer_split": {"bands": 1, "half_m": PIER_HALF_M}, "start": [0.0, 6.0], "end": [0.0, 6.0], "opening": OPENING}],
 	"kept": ["glow"],
 	"materials": ["floor"],
 	"uv_frames": {"floor": {"theta": Vector2(-0.5, 0.5), "radius": Vector2(10.0, 20.0)}},
@@ -167,7 +177,7 @@ func _check_specs() -> void:
 ## outer wall, and the sill outside.
 func _room() -> Array[Dictionary]:
 	var steps := 16
-	var quads := {"floor": [], "wall": [], "start": [], "end": [], "ceiling": [], "glow": [], "sill": []}
+	var quads := {"floor": [], "wall": [], "start": [], "end": [], "ceiling": [], "glow": [], "sill": [], "pier": []}
 	for step in steps:
 		var a0 := lerpf(-0.5, 0.5, float(step) / steps)
 		var a1 := lerpf(-0.5, 0.5, float(step + 1) / steps)
@@ -175,9 +185,20 @@ func _room() -> Array[Dictionary]:
 		var radial := Vector3(cos(mid), 0.0, sin(mid))
 		quads.floor.append([[_at(10.0, a0, 0.0), _at(20.0, a0, 0.0), _at(20.0, a1, 0.0), _at(10.0, a1, 0.0)], Vector3.UP])
 		quads.ceiling.append([[_at(10.0, a0, 6.0), _at(20.0, a0, 6.0), _at(20.0, a1, 6.0), _at(10.0, a1, 6.0)], Vector3.DOWN])
-		# The opening's steps keep only the wall over it.
-		var bottom := OPENING.z if mid > OPENING.x and mid < OPENING.y else 0.0
-		quads.wall.append([[_at(20.0, a0, bottom), _at(20.0, a1, bottom), _at(20.0, a1, 6.0), _at(20.0, a0, 6.0)], -radial])
+		quads.wall.append([[_at(20.0, a0, 3.0), _at(20.0, a1, 3.0), _at(20.0, a1, 6.0), _at(20.0, a0, 6.0)], -radial])
+	# The wall's lower band in finer steps, open where the piers stand (a step's width
+	# clear of them) and below the opening's top.
+	var fine := 64
+	var clear := PIER_HALF_M / 20.0 + 1.0 / fine
+	for step in fine:
+		var a0 := lerpf(-0.5, 0.5, float(step) / fine)
+		var a1 := lerpf(-0.5, 0.5, float(step + 1) / fine)
+		var mid := (a0 + a1) * 0.5
+		if PIERS.any(func(pier: float) -> bool: return absf(mid - pier) < clear):
+			continue
+		if mid > OPENING.x and mid < OPENING.y:
+			continue
+		quads.wall.append([[_at(20.0, a0, 0.0), _at(20.0, a1, 0.0), _at(20.0, a1, 3.0), _at(20.0, a0, 3.0)], -Vector3(cos(mid), 0.0, sin(mid))])
 	for end: int in [0, 1]:
 		var a := -0.5 if end == 0 else 0.5
 		var into := Vector3(-sin(a), 0.0, cos(a)) * (1.0 if end == 0 else -1.0)
@@ -185,7 +206,10 @@ func _room() -> Array[Dictionary]:
 	var glow_mid := (GLOW_SPAN.x + GLOW_SPAN.y) * 0.5
 	quads.glow.append([[_at(19.9, GLOW_SPAN.x, 2.0), _at(19.9, GLOW_SPAN.y, 2.0), _at(19.9, GLOW_SPAN.y, 4.0), _at(19.9, GLOW_SPAN.x, 4.0)], -Vector3(cos(glow_mid), 0.0, sin(glow_mid))])
 	quads.sill.append([[_at(9.5, -0.1, 0.0), _at(10.0, -0.1, 0.0), _at(10.0, 0.1, 0.0), _at(9.5, 0.1, 0.0)], Vector3.UP])
-	var colours := {"wall": WALL_RGB, "start": START_RGB, "end": END_RGB, "ceiling": CEILING_RGB, "sill": SILL_RGB, "floor": Color(0.9, 0.85, 0.8)}
+	var half := PIER_HALF_M / 20.0
+	for pier in PIERS:
+		quads.pier.append([[_at(20.0, pier - half, 0.0), _at(20.0, pier + half, 0.0), _at(20.0, pier + half, 3.0), _at(20.0, pier - half, 3.0)], -Vector3(cos(pier), 0.0, sin(pier))])
+	var colours := {"pier": PIER_RGB, "wall": WALL_RGB, "start": START_RGB, "end": END_RGB, "ceiling": CEILING_RGB, "sill": SILL_RGB, "floor": Color(0.9, 0.85, 0.8)}
 	var surfaces: Array[Dictionary] = []
 	for name: String in quads:
 		var made := StandardMaterial3D.new()
@@ -240,6 +264,9 @@ func _check_build() -> void:
 	var seen := {}
 	var middle := _at(15.0, 0.0, 3.0)
 	var plain_shaders: Array[Material] = []
+	# The lightest face on a pier and the darkest bay face of the lower band.
+	var pier_light := -1.0
+	var bay_light := 2.0
 	for surface in mesh.get_surface_count():
 		var name: String = mesh.surface_get_name(surface)
 		var material := mesh.surface_get_material(surface)
@@ -270,6 +297,16 @@ func _check_build() -> void:
 				failures.append("a %s triangle at %s stands in the outer wall's opening" % [name, centroid])
 			var kind := _kind(front, polar, centroid)
 			seen[name + " " + kind] = true
+			if name == "floor" and absf(_polar(p0).x - _polar(p1).x) + absf(_polar(p1).x - _polar(p2).x) > 2.0 * (0.25 / FLOOR_SPLIT) + 0.0001:
+				failures.append("a floor triangle at %s spans more than a %d-step part of its segment" % [centroid, FLOOR_SPLIT])
+			if kind == "outer" and name == "matte" and centroid.y < 3.0 and colours is PackedColorArray:
+				var luminance := (colours as PackedColorArray)[indices[t]].get_luminance()
+				var on_pier := PIERS.any(func(pier: float) -> bool: return absf(polar.x - pier) < PIER_HALF_M / 20.0)
+				if on_pier:
+					pier_light = maxf(pier_light, luminance)
+				elif not (polar.x > OPENING.x and polar.x < OPENING.y):
+					bay_light = minf(bay_light, luminance)
+				continue
 			if colours is PackedColorArray:
 				var colour: Color = (colours as PackedColorArray)[indices[t]]
 				var wanted := _wanted(name, kind)
@@ -280,6 +317,8 @@ func _check_build() -> void:
 					if uvs[index].distance_to(_polar_uv(points[index])) > 0.001:
 						failures.append("the stand-in's floor UV %s at %s is not the floor's polar frame %s" % [uvs[index], points[index], _polar_uv(points[index])])
 						break
+	if pier_light < 0.0 or bay_light > 1.0 or pier_light >= bay_light - 0.1:
+		failures.append("the outer wall's lower band is not parted at its piers, darker on them (lightest pier face %.2f, darkest bay face %.2f)" % [pier_light, bay_light])
 	for wanted: String in ["floor floor", "matte ceiling", "matte outer", "matte start", "matte end", "matte sill", "glow outer"]:
 		if not seen.has(wanted):
 			failures.append("the stand-in has no %s face (it has %s)" % [wanted, seen.keys()])

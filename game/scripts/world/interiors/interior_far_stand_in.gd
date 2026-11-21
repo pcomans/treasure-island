@@ -40,6 +40,11 @@ extends Node
 ##           wall from its foot up to top; "outer_reach" (in front, behind: m) is how
 ##           far off the outer wall a detailed face still colours it (default
 ##           SAMPLE_REACH_M both ways): deep bays behind a wall's line, say.
+##           "floor_split" (N) parts each segment's floor in N even steps of its
+##           angle, so a pattern drawn in the floor's polar frame keeps its lines
+##           (a face's UVs run straight across it); "outer_split" ({"bands", "half_m"})
+##           parts the outer wall's first bands either side of each station between
+##           its ends, half_m (m) off it: piers on the stations, bays between them.
 ##   quads   faces given whole: {"corners": four points, "normal"}, such as a door's
 ##           reveal.
 ##   kept    detailed surfaces kept in their own material: each piece of one inside a
@@ -261,22 +266,26 @@ static func zone_faces(centre: Vector2, zone: Dictionary) -> Array[Dictionary]:
 	var stations: PackedFloat64Array = frame.stations
 	var rings: PackedFloat64Array = frame.rings
 	var faces: Array[Dictionary] = []
-	for segment in stations.size() - 1:
-		var a0 := stations[segment]
-		var a1 := stations[segment + 1]
+	var floor_stations: PackedFloat64Array = frame.floor_stations
+	for segment in floor_stations.size() - 1:
+		var a0 := floor_stations[segment]
+		var a1 := floor_stations[segment + 1]
 		for ring in rings.size() - 1:
 			var r0 := rings[ring]
 			var r1 := rings[ring + 1]
 			faces.append(_face([_point(centre, r0, a0, _floor_at(frame, r0)), _point(centre, r1, a0, _floor_at(frame, r1)), _point(centre, r1, a1, _floor_at(frame, r1)), _point(centre, r0, a1, _floor_at(frame, r0))], Vector3.UP, {"kind": "floor", "segment": segment, "band": ring}))
+	for segment in stations.size() - 1:
+		var a0 := stations[segment]
+		var a1 := stations[segment + 1]
 		if frame.has("ceiling_y"):
 			var top := float(frame.ceiling_y)
 			faces.append(_face([_point(centre, radii.x, a0, top), _point(centre, radii.y, a0, top), _point(centre, radii.y, a1, top), _point(centre, radii.x, a1, top)], Vector3.DOWN, {"kind": "ceiling", "segment": segment, "band": 0}))
 	var outer: PackedFloat64Array = frame.outer
-	var outer_stations: PackedFloat64Array = frame.outer_stations
-	for segment in outer_stations.size() - 1:
-		var a0 := outer_stations[segment]
-		var a1 := outer_stations[segment + 1]
-		for band in outer.size() - 1:
+	for band in outer.size() - 1:
+		var outer_stations: PackedFloat64Array = frame.outer_bands[band]
+		for segment in outer_stations.size() - 1:
+			var a0 := outer_stations[segment]
+			var a1 := outer_stations[segment + 1]
 			if _in_opening(frame, (a0 + a1) * 0.5, (outer[band] + outer[band + 1]) * 0.5):
 				continue
 			faces.append(_face([_point(centre, radii.y, a0, outer[band]), _point(centre, radii.y, a1, outer[band]), _point(centre, radii.y, a1, outer[band + 1]), _point(centre, radii.y, a0, outer[band + 1])], -_radial((a0 + a1) * 0.5), {"kind": "outer", "segment": segment, "band": band}))
@@ -321,6 +330,26 @@ static func _zone_frame(zone: Dictionary) -> Dictionary:
 	outer.sort()
 	frame["outer_stations"] = outer_stations
 	frame["outer"] = outer
+	var floor_stations := PackedFloat64Array([stations[0]])
+	var split := maxi(1, int(zone.get("floor_split", 1)))
+	for segment in stations.size() - 1:
+		for step in split:
+			floor_stations.append(lerpf(stations[segment], stations[segment + 1], float(step + 1) / split))
+	frame["floor_stations"] = floor_stations
+	# Each outer band's stations: the first outer_split.bands parted at the piers.
+	var piers: Dictionary = zone.get("outer_split", {})
+	var outer_bands: Array[PackedFloat64Array] = []
+	for band in maxi(outer.size() - 1, 0):
+		var band_stations := outer_stations.duplicate()
+		if band < int(piers.get("bands", 0)):
+			var half := float(piers.get("half_m", 0.0)) / radii.y
+			for index in range(1, stations.size() - 1):
+				for edge: float in [stations[index] - half, stations[index] + half]:
+					if edge > stations[0] and edge < stations[stations.size() - 1] and not band_stations.has(edge):
+						band_stations.append(edge)
+			band_stations.sort()
+		outer_bands.append(band_stations)
+	frame["outer_bands"] = outer_bands
 	return frame
 
 
@@ -427,7 +456,7 @@ static func _zone_face(lookup: Dictionary, zones: Array, at: Vector3, normal: Ve
 		var floor_y := _floor_at(frame, r)
 		if normal.y > FACING:
 			if within and absf(at.y - floor_y) < SAMPLE_REACH_M * 0.5 and r >= rings[0] - SAMPLE_REACH_M * 0.5 and r <= rings[rings.size() - 1] + SAMPLE_REACH_M * 0.5:
-				return lookup.get(_key(z, 0, _step(stations, a), _step(rings, r)), -1)
+				return lookup.get(_key(z, 0, _step(frame.floor_stations, a), _step(rings, r)), -1)
 			continue
 		if normal.y < -FACING:
 			if within and frame.has("ceiling_y") and at.y > (floor_y + float(frame.ceiling_y)) * 0.5 and at.y < float(frame.ceiling_y) + SAMPLE_REACH_M:
@@ -435,7 +464,8 @@ static func _zone_face(lookup: Dictionary, zones: Array, at: Vector3, normal: Ve
 			continue
 		if normal.dot(-_radial(a)) > FACING:
 			if within and r >= radii.y - reach.x and _in_bands(frame.outer, at.y) and not _in_opening(frame, a, at.y):
-				return lookup.get(_key(z, 2, _step(frame.outer_stations, a), _step(frame.outer, at.y)), -1)
+				var band := _step(frame.outer, at.y)
+				return lookup.get(_key(z, 2, _step(frame.outer_bands[band], a), band), -1)
 			continue
 		var along := normal.dot(_tangent(a))
 		var start_m := (a - stations[0]) * r
@@ -604,10 +634,14 @@ static func _add_kept(groups: Dictionary, surface: Dictionary, zones: Array, cen
 			continue
 		var outer_r := (frame.radii as Vector2).y
 		var on_wall := facing < 0.0 and r >= outer_r - (frame.outer_reach as Vector2).x
-		# On the wall: edges at its stations between the piece's ends, so it follows the chords.
+		# On the wall: edges at the stations of the band it stands in, between its ends, so
+		# it follows that band's chords.
+		var wall_stations: PackedFloat64Array = frame.outer_stations
+		if on_wall and not (frame.outer_bands as Array).is_empty():
+			wall_stations = frame.outer_bands[_step(frame.outer, (low + high) * 0.5)]
 		var edges := PackedFloat64Array([a0, a1])
 		if on_wall:
-			for station: float in frame.outer_stations:
+			for station: float in wall_stations:
 				if station > a0 and station < a1:
 					edges.append(station)
 		edges.sort()
@@ -619,7 +653,7 @@ static func _add_kept(groups: Dictionary, surface: Dictionary, zones: Array, cen
 			var corners: Array = []
 			for corner: Vector2 in [Vector2(edges[step], low), Vector2(edges[step + 1], low), Vector2(edges[step + 1], high), Vector2(edges[step], high)]:
 				if on_wall:
-					corners.append(_on_chord(centre, frame.outer_stations, outer_r, corner.x, corner.y) - _radial(corner.x) * KEPT_LIFT_M)
+					corners.append(_on_chord(centre, wall_stations, outer_r, corner.x, corner.y) - _radial(corner.x) * KEPT_LIFT_M)
 				else:
 					corners.append(_point(centre, r, corner.x, corner.y))
 			var face := _face(corners, radial * signf(facing), {"kind": "kept"})
