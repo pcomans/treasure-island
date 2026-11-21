@@ -57,6 +57,7 @@ const CLASSIFIED := {
 	"res://game/scripts/world/fresh_bay_horizon.gd": "builds the horizon while the island loads (or bakes)",
 	"res://game/scripts/world/ground_cover.gd": "builds the ground cover while the island loads (or bakes)",
 	"res://game/scripts/world/ground_dressing.gd": "the grass round the camera, desktop only (Forward+): the web has none",
+	"res://game/scripts/world/interiors/interior_far_stand_in.gd": "builds an interior's far stand-in with the interior while the island loads (or bakes): hidden until far, which the warm-up finds all the same, drawn with the interior's own shaders",
 	"res://game/scripts/world/mulch_ground.gd": "builds the mulch while the island loads (or bakes)",
 	"res://game/scripts/world/shader_warm_up.gd": "the warm-up's own proxies",
 	"res://game/scripts/world/shoreline_builder.gd": "builds the shoreline while the island loads (or bakes)",
