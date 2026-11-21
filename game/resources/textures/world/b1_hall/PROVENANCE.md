@@ -109,4 +109,4 @@
 | Repeats on the receiver | 1 x 1 | 1 x 1 | every 1.5 m both ways |
 | Web build | 512 x 256 (`tools/web-texture-cap-512.txt`) | not drawn on the web (its bake gives the floor no roughness map); 512 x 256 in the pack | 512 x 512 |
 | Import | VRAM compressed, mipmaps, Detect 3D off | the same | the same |
-| Verdicts | early comparison for the owner (show first); no review yet, no as-built claim | | |
+| Verdicts | the owner chose this floor as it is (2026-11-21); its release candidate's code and visual reviews pending; no as-built claim | | |
