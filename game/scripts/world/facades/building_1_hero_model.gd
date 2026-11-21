@@ -3902,8 +3902,6 @@ static func _span_frame(record: Dictionary, runs: Array[int], from_m: float, to_
 	}
 
 
-## Box in a module frame: lateral metres along the frame tangent from its
-## anchor, absolute Y, and signed depth along its outward normal.
 ## Each quad of `source` (as _append_quad and _append_box lay them: four vertices,
 ## six indices, one normal) into `chosen` where `choose` holds for its normal, else
 ## into `rest`.

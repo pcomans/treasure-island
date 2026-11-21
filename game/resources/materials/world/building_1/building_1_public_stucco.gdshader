@@ -259,7 +259,8 @@ void fragment() {
 	vec3 t = normalize(cross(reference_axis, n));
 	vec3 b = normalize(cross(n, t));
 	// Every derivative is taken here, before any branch (inside one they are
-	// undefined): metres per pixel up the face and along world x and z, and the
+	// undefined), but for the reeds' fwidth above, which sits under a branch on a
+	// material setting: metres per pixel up the face and along world x and z, and the
 	// world-axis projections' gradients.
 	float height_fw = max(fwidth(world_position.y), 0.00001);
 	float x_fw = max(fwidth(world_position.x), 0.00001);
