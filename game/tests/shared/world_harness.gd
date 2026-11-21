@@ -444,11 +444,12 @@ const SETTLE_RESUME_HEIGHT_M := 0.4
 ## as a screenshot, can also pass a small drop_m. drop_m must still clear the
 ## ground under the whole capsule (0.35 m radius, its bottom at the player's
 ## origin): 0.15 m on the steepest slope the support check allows, 0.2 m beside
-## a 15 cm kerb.
-func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0) -> String:
+## a 15 cm kerb. The ground is the first surface under ground_from_y (by default
+## from high over everything; lower, for ground under a canopy or eave).
+func settle_player(xz: Vector2, support_context: Dictionary = {}, drop_m := 2.0, ground_from_y := 300.0) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
 		return OFF_ISLAND
-	var hit := ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y), player.collision_mask)
+	var hit := ray(Vector3(xz.x, ground_from_y, xz.y), Vector3(xz.x, -50.0, xz.y), player.collision_mask)
 	if hit.is_empty():
 		return OFF_ISLAND
 	if not is_approach_support(hit, support_context):

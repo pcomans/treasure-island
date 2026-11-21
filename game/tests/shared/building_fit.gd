@@ -61,16 +61,55 @@ func _init(harness: WorldHarness) -> void:
 ## "outside": [x, z], "inside": [x, z]}]: Building 1's door into its concourse) as
 ## routes for check(). Each is walked like a flight of stairs: in from the outside
 ## end, where the player settles on open ground, to the inside end, and back out
-## from where it arrived (return_from_arrival). A malformed entry fails the routes'
-## own validation.
+## from where it arrived (return_from_arrival); then the ways players walk through
+## a door (_check_passage_ways). A malformed entry fails the routes' own validation.
 static func passage_routes(unit: Dictionary) -> Array:
 	var routes: Array = []
 	for passage: Variant in unit.get("passages", []):
 		if not passage is Dictionary:
 			routes.append({})
 			continue
-		routes.append({"name": "passage %s" % str(passage.get("name", "")), "start_xz": passage.get("outside"), "end_xz": passage.get("inside"), "return_from_arrival": true})
+		routes.append({"name": "passage %s" % str(passage.get("name", "")), "start_xz": passage.get("outside"), "end_xz": passage.get("inside"), "return_from_arrival": true, "passage": true})
 	return routes
+
+
+## The ways players walk through a passage's door (_check_passage_ways): the touch
+## MOVE stick's vector (PlayerController.touch_input_vector, analogue: the stick at
+## about 30, 60 and 100 % of its reach gives 0.2, 0.55 and 1.0), walking and with RUN
+## held, and the keys (move_forward); from starts PASSAGE_STARTS_M from the doorway's
+## threshold, PASSAGE_ANGLES_DEG off the passage's line; at 60 physics ticks a second,
+## and the inputs at the degraded PASSAGE_SLOW_TICK_RATES from the first start at the
+## first three angles. Never a jump or the jetpack.
+const PASSAGE_INPUTS: Array[Dictionary] = [
+	{"name": "stick 0.2", "stick": 0.2, "run": false},
+	{"name": "stick 0.55", "stick": 0.55, "run": false},
+	{"name": "stick 1.0", "stick": 1.0, "run": false},
+	{"name": "stick 0.55 run", "stick": 0.55, "run": true},
+	{"name": "stick 1.0 run", "stick": 1.0, "run": true},
+	{"name": "keys", "stick": 0.0, "run": false},
+]
+const PASSAGE_ANGLES_DEG: Array[float] = [0.0, 20.0, -20.0, 40.0, -40.0]
+const PASSAGE_STARTS_M: Array[float] = [5.0, 4.0]
+## A start under the building's own canopy or eave is settled from just under it
+## (PASSAGE_UNDER_GAP_M below the overhang's top), dropped PASSAGE_UNDER_DROP_M.
+const PASSAGE_UNDER_GAP_M := 0.05
+const PASSAGE_UNDER_DROP_M := 0.3
+const PASSAGE_SLOW_TICK_RATES: Array[int] = [30, 20]
+## A held walk fails when the player stands still (horizontal speed under
+## PASSAGE_STILL_MPS) for longer than PASSAGE_STILL_SECONDS, or gets no nearer its
+## goal for longer than PASSAGE_STALL_SECONDS.
+const PASSAGE_STILL_MPS := 0.05
+const PASSAGE_STILL_SECONDS := 0.1
+const PASSAGE_STALL_SECONDS := 0.5
+## A walk ends this close (metres) to its goal, or once past it within PASSAGE_PASS_M (a
+## run cannot stop on a point, and a run turned at the threshold curves wide of a start
+## a few metres out); its budget is the path at its speed plus PASSAGE_SPARE_SECONDS.
+const PASSAGE_ARRIVAL_M := 0.5
+const PASSAGE_PASS_M := 5.0
+const PASSAGE_SPARE_SECONDS := 3.0
+## The threshold: the first point of the passage's line, from outside, over the
+## interior's own collision, sought every PASSAGE_SCAN_M.
+const PASSAGE_SCAN_M := 0.02
 
 
 ## Unsafe source/setup/recovery/rest failures stop this driver's whole lifetime.
@@ -986,6 +1025,10 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_failures.append(_prefix + "return_from_arrival must be boolean")
 			_unsafe = true
 			return
+		if route.has("passage") and (not route.passage is bool or (route.passage and not route.get("return_from_arrival", false))):
+			_failures.append(_prefix + "passage must be boolean, and a passage returns from its arrival")
+			_unsafe = true
+			return
 		if route.has("reach_m") and (not (route.reach_m is float or route.reach_m is int) or float(route.reach_m) < 15.0 or float(route.reach_m) > 40.0):
 			_failures.append(_prefix + "route reach_m must be a number from 15 to 40")
 			_unsafe = true
@@ -1039,6 +1082,10 @@ func _check_routes(routes: Array, box: AABB) -> void:
 				break
 		if _unsafe:
 			return
+		if route.get("passage", false):
+			await _check_passage_ways(route)
+			if _unsafe:
+				return
 
 	_observe_adjacent_support = false
 
@@ -1051,6 +1098,194 @@ func _route_ground_at_player() -> bool:
 	var valid := _h.is_walkable_ground(hit)
 	print("ROUTE_GROUND qualified=%s at=%s support=%s" % [valid, at, str((hit.collider as Node).get_path()) if not hit.is_empty() else "none"])
 	return valid
+
+
+## The ways players walk through a passage's door (PASSAGE_INPUTS and the constants
+## after it), in and out: from each start the stock player walks over the threshold to
+## the passage's inside end, and back out from where it stopped, by the inside end and
+## the threshold, to its start, steering as a player does (at each of those points in
+## turn, on to the next once there or past it). A way passes when both legs arrive
+## without standing still, stalling or a recovery, and rest on the interior's own floor
+## inside and on open ground outside. A failed way leaves the others to run; an unsafe
+## one stops the driver.
+func _check_passage_ways(route: Dictionary) -> void:
+	var outside := Vector2(route.start_xz[0], route.start_xz[1])
+	var inside := Vector2(route.end_xz[0], route.end_xz[1])
+	var interior: Array[RID] = []
+	for node: Node in _h.world.find_children("*", "Node3D", true, false):
+		if str(node.get_meta("interior_of_source_key", "")) == _source:
+			var built: Array[Node3D] = [node as Node3D]
+			interior.append_array(_h.collision_rids(built))
+	if interior.is_empty():
+		_failures.append(_prefix + "%s leads into no interior of %s (no node carries interior_of_source_key)" % [route.name, _source])
+		return
+	var problem := await _h.settle_player(outside, _support_context)
+	if problem != "":
+		_failures.append(_prefix + "%s ways: can't settle at its outside end: %s" % [route.name, problem])
+		_unsafe = true
+		return
+	var threshold := _passage_threshold(outside, inside, _h.player.global_position.y, interior)
+	if not threshold.is_finite():
+		_failures.append(_prefix + "%s ways: no point of its line from outside to inside stands over the interior's collision" % route.name)
+		return
+	var out_dir := (outside - threshold).normalized()
+	var ways: Array[Dictionary] = []
+	for start_m: float in PASSAGE_STARTS_M:
+		for angle: float in PASSAGE_ANGLES_DEG:
+			for input: Dictionary in PASSAGE_INPUTS:
+				ways.append({"input": input, "angle": angle, "start_m": start_m, "hz": 60})
+	for hz: int in PASSAGE_SLOW_TICK_RATES:
+		for angle: float in PASSAGE_ANGLES_DEG.slice(0, 3):
+			for input: Dictionary in PASSAGE_INPUTS:
+				ways.append({"input": input, "angle": angle, "start_m": PASSAGE_STARTS_M[0], "hz": hz})
+	var own := _h.collision_rids(_h.building_nodes(_source))
+	var rate := Engine.physics_ticks_per_second
+	var failed := 0
+	for way: Dictionary in ways:
+		var label := "%s, %s, %+.0f deg, %.0f m out, %d Hz" % [route.name, way.input.name, way.angle, way.start_m, way.hz]
+		var start := threshold + out_dir.rotated(deg_to_rad(float(way.angle))) * float(way.start_m)
+		Engine.physics_ticks_per_second = int(way.hz)
+		var error := await _walk_passage_way(label, start, threshold, inside, way.input, interior, own)
+		Engine.physics_ticks_per_second = rate
+		if error != "":
+			failed += 1
+			_failures.append(_prefix + label + ": " + error)
+		if _unsafe:
+			return
+	print("%sROUTE_WAYS %s: %d of %d ways in and out passed; threshold %s" % [_prefix, route.name, ways.size() - failed, ways.size(), threshold])
+
+
+## The first point of the line from outside to inside, every PASSAGE_SCAN_M, whose
+## ground (the first solid under chest height over the outside ground) is the
+## interior's own collision; a non-finite vector when none is.
+func _passage_threshold(outside: Vector2, inside: Vector2, ground_y: float, interior: Array[RID]) -> Vector2:
+	var length := outside.distance_to(inside)
+	for step in ceili(length / PASSAGE_SCAN_M) + 1:
+		var at := outside.lerp(inside, minf(1.0, step * PASSAGE_SCAN_M / length))
+		var hit := _h.ray(Vector3(at.x, ground_y + 1.5, at.y), Vector3(at.x, ground_y - 3.0, at.y), _h.player.collision_mask)
+		if not hit.is_empty() and (hit.rid as RID) in interior:
+			return at
+	return Vector2(INF, INF)
+
+
+## One way through a passage: settle at start (under the building's own canopy or
+## eave, from just under it: open ground there all the same), walk in, then back out;
+## "" or why not.
+func _walk_passage_way(label: String, start: Vector2, threshold: Vector2, inside: Vector2, input: Dictionary, interior: Array[RID], own: Array[RID]) -> String:
+	var problem := await _h.settle_player(start, _support_context)
+	if problem == WorldHarness.ON_BUILDING:
+		var over := _h.ray(Vector3(start.x, 300.0, start.y), Vector3(start.x, -50.0, start.y), _h.player.collision_mask)
+		if not over.is_empty() and (over.rid as RID) in own:
+			print("%sROUTE_WAY_START %s: under the building at %.2f m, settled from just under it" % [_prefix, label, (over.position as Vector3).y])
+			problem = await _h.settle_player(start, _support_context, PASSAGE_UNDER_DROP_M, (over.position as Vector3).y - PASSAGE_UNDER_GAP_M)
+	if problem != "":
+		_unsafe = _unsafe or problem == WorldHarness.NOT_SETTLED
+		return "can't start at (%.2f, %.2f): %s" % [start.x, start.y, problem]
+	for leg: String in ["in", "out"]:
+		var points: Array[Vector2] = [threshold, inside]
+		if leg == "out":
+			points = [inside, threshold, start]
+		var error := await _walk_passage_leg(label + ", " + leg, points, threshold, input)
+		if error == "":
+			var at := _h.player.global_position
+			var below := _h.ray(at + Vector3.UP * 0.2, at - Vector3.UP * 0.4, _h.player.collision_mask)
+			var on_interior := not below.is_empty() and (below.rid as RID) in interior
+			if leg == "in" and not on_interior:
+				error = "came to rest off the interior's floor at %s" % at
+			elif leg == "out" and (on_interior or not _h.is_walkable_ground(below)):
+				error = "came to rest off open ground at %s" % at
+		if error != "":
+			return leg + ": " + error
+	return ""
+
+
+## Holds one input along points (two or more, the last the goal), as a player steers:
+## the camera turned each tick to the point they head for, on to the next once there or
+## past it, the touch stick's vector (or the keys) held. Fails when the player stands still or
+## stalls for too long (PASSAGE_STILL_SECONDS, PASSAGE_STALL_SECONDS), needs a recovery
+## or runs out of time; then proves its rest.
+func _walk_passage_leg(label: String, points: Array[Vector2], threshold: Vector2, input: Dictionary) -> String:
+	var evidence := _h.world.get_runtime_evidence()
+	var recoveries := evidence.recovery_count
+	var hz := Engine.physics_ticks_per_second
+	var stick := float(input.stick)
+	var speed := (_h.player.run_speed_mps if bool(input.run) else _h.player.walk_speed_mps) * (stick if stick > 0.0 else 1.0)
+	var at := _h.player.global_position
+	var budget := ceili((_passage_path(Vector2(at.x, at.z), points, 0) / speed + PASSAGE_SPARE_SECONDS) * hz)
+	var still_limit := ceili(PASSAGE_STILL_SECONDS * hz)
+	var stall_limit := ceili(PASSAGE_STALL_SECONDS * hz)
+	var next := 0
+	var best := INF
+	var still := 0
+	var stall := 0
+	var longest_still := 0
+	var ticks := 0
+	var problem := "did not arrive within %d ticks" % budget
+	_h.player.set_gameplay_enabled(true)
+	if bool(input.run):
+		Input.action_press("run")
+	if stick <= 0.0:
+		Input.action_press("move_forward")
+	for _tick in budget:
+		at = _h.player.global_position
+		var flat := Vector2(at.x, at.z)
+		while next < points.size() - 1 and (flat.distance_to(points[next]) < PASSAGE_ARRIVAL_M or (flat - points[next]).dot(points[next + 1] - points[next]) > 0.0):
+			next += 1
+		_h.aim_camera(Vector3(points[next].x, at.y + 1.5, points[next].y))
+		if stick > 0.0:
+			_h.player.touch_input_vector = Vector2(0.0, -stick)
+		await _h.tree.physics_frame
+		ticks += 1
+		if evidence.recovery_count != recoveries:
+			problem = "needed a recovery"
+			break
+		at = _h.player.global_position
+		flat = Vector2(at.x, at.z)
+		var remaining := _passage_path(flat, points, next)
+		var goal := points[points.size() - 1]
+		if next == points.size() - 1 and (remaining < PASSAGE_ARRIVAL_M or (remaining < PASSAGE_PASS_M and (flat - goal).dot(goal - points[points.size() - 2]) > 0.0)):
+			problem = ""
+			break
+		still = still + 1 if Vector2(_h.player.velocity.x, _h.player.velocity.z).length() < PASSAGE_STILL_MPS else 0
+		longest_still = maxi(longest_still, still)
+		if remaining < best - 0.001:
+			best = remaining
+			stall = 0
+		else:
+			stall += 1
+		if still > still_limit or stall > stall_limit:
+			problem = "%s at %s, %.2f m from the threshold, after %d ticks, touching%s" % ["stood still for %d ticks" % still if still > still_limit else "got no nearer its goal for %d ticks" % stall, at, flat.distance_to(threshold), ticks, _steep_contacts()]
+			break
+	_h.player.touch_input_vector = Vector2.ZERO
+	var rest_error := await _rest_and_disable(recoveries)
+	print("%sROUTE_WAY %s ok=%s ticks=%d longest_still=%d at=%s%s" % [_prefix, label, problem == "" and rest_error == "", ticks, longest_still, _h.player.global_position, "" if problem == "" else " problem=" + problem])
+	return problem + ("; " if problem != "" and rest_error != "" else "") + rest_error
+
+
+## How far it is from at along points, from the one at index next to the last.
+static func _passage_path(at: Vector2, points: Array[Vector2], next: int) -> float:
+	var length := at.distance_to(points[next])
+	for index in range(next, points.size() - 1):
+		length += points[index].distance_to(points[index + 1])
+	return length
+
+
+## The player's contacts steeper than its floor limit, as " body at point (angle,
+## height over its feet)", or " nothing steep".
+func _steep_contacts() -> String:
+	var found := ""
+	var feet := _h.player.global_position
+	for index in _h.player.get_slide_collision_count():
+		var slide := _h.player.get_slide_collision(index)
+		for contact in slide.get_collision_count():
+			var normal := slide.get_normal(contact)
+			var angle := rad_to_deg(acos(clampf(normal.dot(_h.player.up_direction.normalized()), -1.0, 1.0)))
+			if angle <= rad_to_deg(_h.player.floor_max_angle):
+				continue
+			var body := slide.get_collider(contact)
+			var point := slide.get_position(contact)
+			found += " %s at %s (%.1f deg, %.3f m over the feet)" % [str((body as Node).get_path()) if body is Node else "unknown", point, angle, point.y - feet.y]
+	return found if found != "" else " nothing steep"
 
 
 func _numbers(value: Variant) -> bool:

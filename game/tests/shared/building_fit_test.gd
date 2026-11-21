@@ -29,12 +29,18 @@ extends SceneTree
 ##    "stairs": [{"bottom": [x, z], "top": [x, z]}] is walked up and back down.
 ## 6. Passages: each doorway into an interior listed in the catalog entry as
 ##    "passages": [{"name": "front door", "outside": [x, z], "inside": [x, z]}] is
-##    walked in from outside and back out (building_fit.gd passage_routes).
+##    walked in from outside and back out (building_fit.gd passage_routes), and then
+##    the ways players walk through it: on the touch stick at three magnitudes, walking
+##    and running, and on the keys, from starts at five angles to its line, at 60 and
+##    at degraded physics tick rates, never standing still or stalling on the way.
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
 ## --use-prebuilt-world checks the native baked scene with the same stock checks. It
 ## refuses --native-producer and --adjacent-source, which compare authored meshes.
+## With --web-world-bake as well it checks the scene baked for the web build
+## (tools/prebuild-static-world.sh web), as the web build loads it; run it on the
+## Compatibility renderer (--rendering-method gl_compatibility --rendering-driver opengl3).
 ## Optional --street-detail on|off: street detail (vegetation, furniture, fences,
 ## clutter) is off by default here, so the building is checked on its own.
 ## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
@@ -144,7 +150,7 @@ func _run() -> void:
 	var index := 0
 	while index < raw_args.size():
 		var flag := raw_args[index]
-		if flag == "--use-prebuilt-world" and not seen.has(flag):
+		if flag in ["--use-prebuilt-world", "--web-world-bake"] and not seen.has(flag):
 			seen[flag] = true
 			index += 1
 			continue
@@ -160,6 +166,10 @@ func _run() -> void:
 		index += 2
 	if seen.has("--use-prebuilt-world") and (seen.has("--native-producer") or seen.has("--adjacent-source")):
 		push_error("--use-prebuilt-world cannot take --native-producer or --adjacent-source: they compare authored meshes, which only the generated world keeps")
+		quit(1)
+		return
+	if seen.has("--web-world-bake") and not seen.has("--use-prebuilt-world"):
+		push_error("--web-world-bake loads the web's baked world, so it needs --use-prebuilt-world")
 		quit(1)
 		return
 	var args := WorldHarness.user_args()

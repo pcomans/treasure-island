@@ -38,7 +38,10 @@
 #    (data/street_detail/building_paving.json, tools/export_building_paving.gd --check).
 # 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
-#    in the world generated at startup and in the baked world desktop exports load.
+#    in the world generated at startup and in the baked world desktop exports load;
+#    each interior's passages are walked in and out every way players walk them
+#    (touch stick magnitudes, running, keys, approach angles, degraded tick rates),
+#    there and in the world baked for the web build, drawn as the web draws it.
 #    And no outdoor ground shows inside an enterable interior (a catalog unit
 #    with passages): its floor covers its plan up to its walls, above the land and
 #    the ground draped over it, and no street detail stands in it
@@ -226,6 +229,7 @@ node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.
 node_pids=()
 node_logs=""
 baked=""
+web_baked=""
 solar_table=""
 # A process and every process under it, each parent before its children.
 process_tree() {
@@ -245,6 +249,7 @@ cleanup() {
   for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
   [ -z "${node_logs}" ] || rm -rf "${node_logs}"
   [ -z "${baked}" ] || rm -f "${baked}"
+  [ -z "${web_baked}" ] || rm -f "${web_baked}"
   [ -z "${solar_table}" ] || rm -f "${solar_table}"
 }
 trap cleanup EXIT
@@ -419,6 +424,26 @@ if [ -s "${baked}" ]; then
   check_godot "game/tests/headless_building_1_interior_contract.gd (prebuilt world)" 600 tools/godot --headless --path . --audio-driver Dummy --script game/tests/headless_building_1_interior_contract.gd -- --use-prebuilt-world
 fi
 rm -f "${baked}"
+
+# The web build loads a world baked for it (tools/prebuild-static-world.sh web). Bake it
+# the same way and give every building with an interior (a catalog unit with
+# passages) the full fit check on it, its passages walked every way players walk them,
+# drawn as the web draws it (Compatibility) and with the street detail the game shows.
+# A build product too, removed afterwards (and on any exit, by cleanup).
+web_baked=generated/web/static_world.scn
+echo "== tools/prebuild-static-world.sh web"
+check_godot "tools/prebuild-static-world.sh web" 900 tools/prebuild-static-world.sh web
+if [ -s "${web_baked}" ]; then
+  if ! passage_sources="$(node -e 'for (const unit of require("./discovery/facades/facade-recognition-catalog.json").units) if ((unit.passages || []).length) console.log(unit.anchor_source_key)')" || [ -z "${passage_sources}" ]; then
+    echo "FAIL: the catalog lists no unit with passages to walk in the web's baked world"
+    failed+=("web-world passages")
+  fi
+  for source in ${passage_sources}; do
+    echo "== game/tests/shared/building_fit_test.gd -- --source ${source} --use-prebuilt-world --web-world-bake"
+    check_godot "game/tests/shared/building_fit_test.gd ${source} (web's baked world)" 900 tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/building_fit_test.gd -- --source "${source}" --use-prebuilt-world --web-world-bake --street-detail on
+  done
+fi
+rm -f "${web_baked}"
 
 # The generated-world checks' results (started above; here if they were not).
 [ "${#node_pids[@]}" -gt 0 ] || start_node_checks
