@@ -12,14 +12,19 @@ extends SceneTree
 ## drive the reflections in the real hall.
 ## Forward+ (desktop), with mode "inside" (set here, as the config ships it):
 ## - far from the door the mural is not up and there is no probe, nor while it loads;
-## - outside near the door, once the mural is up, the probes are there reflecting
-##   nothing (intensity 0), and the environment and the floor are as they were;
+## - outside near the door, once the mural is up, the probes are there reflecting next
+##   to nothing (Building1HallReflections.PROBE_HOLD: at 0 the engine would skip them and
+##   the sky's reflection would take their place), and the environment and the floor are
+##   as they were;
 ## - walked in, the reflections fade in frame by frame: the blend only rises and is
 ##   all in within the fade's frames; each frame the floor's roughness, specular and
 ##   colour are the blend's mix of its own and the polished ones, its plain attributes
-##   are up exactly from the blend's middle, the probes reflect at the blend's share,
-##   and the environment has the hall's screen-space reflections from the first frame
-##   (each frame printed as a FADE line). At the end, all in: the environment's
+##   are up exactly from the blend's middle, the probes reflect at the blend's share
+##   (never below the hold), and the environment has the hall's screen-space reflections
+##   from the first frame, their two fade exponents raised for the blend (SSR_FADE_RISE),
+##   so that where the blend is at most SSR_EDGE_BLEND (the fades' ends, where they
+##   switch) no ray weighs over SSR_EDGE_WEIGHT (each frame printed as a FADE line). At
+##   the end, all in: the environment's
 ##   reflections the hall's, the floor polished and tinted, the renderer drawing its
 ##   plain attributes (read back, byte for byte the node's plain set), the probes at
 ##   full intensity;
@@ -51,6 +56,10 @@ extends SceneTree
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 ## The environment's reflection settings the node sets and puts back.
 const SSR_PROPERTIES := ["ssr_enabled", "ssr_max_steps", "ssr_fade_in", "ssr_fade_out", "ssr_depth_tolerance"]
+## At a blend this low or lower (a fade's first and last frames) with the hall's
+## screen-space reflections on, no reflected ray may weigh more than SSR_EDGE_WEIGHT.
+const SSR_EDGE_BLEND := 0.02
+const SSR_EDGE_WEIGHT := 0.01
 ## Where the camera stands: far beyond the mural's unload radius, outside near the door,
 ## and inside, on the door's axis (m from the door), at the door's eye height.
 const FAR_M := 150.0
@@ -208,7 +217,7 @@ func _check_forward_plus() -> void:
 	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty() or not _hall_probes(parent).is_empty():
 		failures.append("far away the mural is %s and %d probes are left" % [Building1MuralLoader.State.keys()[_loader.state], _hall_probes(parent).size()])
 	if failures.is_empty():
-		print("PASS: Forward+: no probe before the mural is up; probes reflecting nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, plain attributes, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
+		print("PASS: Forward+: no probe before the mural is up; probes held at next to nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, plain attributes, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
 
 
 ## The frames a fade takes at FPS, and one for the last step's rounding.
@@ -231,7 +240,6 @@ func _polished(floor: Array) -> Array:
 ## and the environment has the hall's reflections while the camera calls for them or
 ## the blend is above 0, else its own (own) exactly.
 func _check_fade(where: String, metres: float, environment: Environment, own: Array, floor: Array) -> void:
-	var hall_ssr := [true, _node.ssr_max_steps, _node.ssr_fade_in, _node.ssr_fade_out, _node.ssr_depth_tolerance]
 	var polished := _polished(floor)
 	var start := _node.fade()
 	_put(_at(metres), _at(metres + 5.0))
@@ -252,12 +260,17 @@ func _check_fade(where: String, metres: float, environment: Environment, own: Ar
 			problems.append("frame %d at blend %.3f: the floor %s, not %s" % [frame, blend, values, mixed])
 		if _node.plain_floor_shown() != (not _node.baked_sheen and blend >= 0.5):
 			problems.append("frame %d at blend %.3f: the plain attributes %s" % [frame, blend, "up" if _node.plain_floor_shown() else "down"])
-		if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, _node.probe_intensity * blend)):
-			problems.append("frame %d at blend %.3f: a probe not at %.3f" % [frame, blend, _node.probe_intensity * blend])
+		var intensity := maxf(_node.probe_intensity * blend, Building1HallReflections.PROBE_HOLD)
+		if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, intensity)):
+			problems.append("frame %d at blend %.3f: a probe not at %.4f" % [frame, blend, intensity])
 		var hall := _node.is_on() or blend > 0.0
-		if (hall and not _same(_ssr_of(environment), hall_ssr)) or (not hall and _ssr_of(environment) != own):
-			problems.append("frame %d at blend %.3f: the environment's reflections %s" % [frame, blend, _ssr_of(environment)])
-		print("FADE %s frame=%d blend=%.3f roughness=%.4f specular=%.4f plain=%s ssr=%s" % [where, frame, blend, values[0], values[1], _node.plain_floor_shown(), _ssr_of(environment)[0]])
+		var ssr := _ssr_of(environment)
+		if (hall and not _same(ssr, _hall_ssr(blend))) or (not hall and ssr != own):
+			problems.append("frame %d at blend %.3f: the environment's reflections %s, not %s" % [frame, blend, ssr, _hall_ssr(blend) if hall else own])
+		var weight := _largest_ray_weight(float(ssr[2]), float(ssr[3])) if hall else 0.0
+		if hall and blend <= SSR_EDGE_BLEND and weight > SSR_EDGE_WEIGHT:
+			problems.append("frame %d at blend %.3f: a screen-space reflection can still weigh %.4f there" % [frame, blend, weight])
+		print("FADE %s frame=%d blend=%.3f roughness=%.4f specular=%.4f plain=%s ssr=%s ray_weight=%.4f" % [where, frame, blend, values[0], values[1], _node.plain_floor_shown(), ssr[0], weight])
 		last = blend
 	if ended < 0 or ended >= _fade_frames():
 		problems.append("the blend reached %.0f %s, not within %d frames" % [target, "at frame %d" % ended if ended >= 0 else "never", _fade_frames()])
@@ -452,7 +465,7 @@ func _check_elsewhere() -> void:
 
 
 func _check_on(where: String, environment: Environment) -> void:
-	var values := [true, _node.ssr_max_steps, _node.ssr_fade_in, _node.ssr_fade_out, _node.ssr_depth_tolerance]
+	var values := _hall_ssr(1.0)
 	var material := _floor_material()
 	var problems: Array[String] = []
 	if not _node.is_on() or _node.fade() != 1.0:
@@ -487,8 +500,8 @@ func _check_off(where: String, environment: Environment, own: Array, floor: Arra
 	var drawn := _drawn_attributes()
 	if _node.sheen_attributes.is_empty() or drawn != _node.sheen_attributes:
 		problems.append("the floor draws %d attribute bytes that are not its baked sheen of %d" % [drawn.size(), _node.sheen_attributes.size()])
-	if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return probe.intensity != 0.0):
-		problems.append("a probe reflecting")
+	if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, Building1HallReflections.PROBE_HOLD)):
+		problems.append("a probe not held at %.4f" % Building1HallReflections.PROBE_HOLD)
 	if not problems.is_empty():
 		failures.append("%s: %s" % [where, "; ".join(problems)])
 
@@ -512,6 +525,24 @@ func _stand(metres: float, frames: int) -> void:
 func _frames(count: int) -> void:
 	for _i in count:
 		await process_frame
+
+
+## The hall's screen-space reflections at a blend, as the node puts them in the
+## environment: both fade exponents raised by SSR_FADE_RISE * (1 - blend) / blend.
+func _hall_ssr(blend: float) -> Array:
+	var rise := Building1HallReflections.SSR_FADE_RISE * (1.0 - blend) / maxf(blend, 0.0001)
+	return [true, _node.ssr_max_steps, _node.ssr_fade_in + rise, _node.ssr_fade_out + rise, _node.ssr_depth_tolerance]
+
+
+## The most a screen-space reflection ray can weigh under these fade exponents: the
+## engine weighs one of screen length g (0 to 1) by g^fade_in * (1 - g)^fade_out, an
+## exponent of 0 counting as none; with both above 0 the most is at
+## g = fade_in / (fade_in + fade_out).
+static func _largest_ray_weight(fade_in: float, fade_out: float) -> float:
+	if fade_in <= 0.0 or fade_out <= 0.0:
+		return 1.0
+	var g := fade_in / (fade_in + fade_out)
+	return pow(g, fade_in) * pow(1.0 - g, fade_out)
 
 
 func _ssr_of(environment: Environment) -> Array:

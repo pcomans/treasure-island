@@ -13,10 +13,11 @@ extends Node
 ## when the camera does. "always" and "off" go straight to 1 or 0. Along the blend this
 ## - turns the world environment's screen-space reflections on with this hall's
 ##   settings (ssr_max_steps, ssr_fade_in, ssr_fade_out, ssr_depth_tolerance) from the
-##   fade-in's first frame to the fade-out's last: they can only switch, and the floor's
-##   polish brings them in and out. The environment's own settings come back then, when
+##   fade-in's first frame to the fade-out's last, their two fade exponents raised along
+##   the way (SSR_FADE_RISE) so that what they reflect comes and goes with the blend and
+##   is nothing where they switch. The environment's own settings come back then, when
 ##   the environment is swapped for another, and when this node leaves the tree (the
-##   environment is the main scene's);
+##   environment is the main scene's); each setting is written only when it changes;
 ## - polishes the terrazzo: its roughness, specular and colour go from the material's
 ##   own to floor_roughness, floor_specular and its colour tinted by floor_albedo,
 ##   channel by channel (the reflections add light of their own);
@@ -30,9 +31,14 @@ extends Node
 ##   at probe_intensity times the blend: probe_sections box-projected reflection probes
 ##   along the crescent, seeing and lighting the hall's render layer only. They are
 ##   made once the mural is up near the door (Building1MuralLoader, so they capture it),
-##   reflect nothing (intensity 0) until the camera is in, so the hall seen through its
-##   door is as before, capture again as the sun moves (RECAPTURE_DEG) and are freed
-##   when the mural goes. Neighbouring boxes overlap and blend over probe_blend metres.
+##   reflect next to nothing (PROBE_HOLD) until the camera is in, capture again as the
+##   sun moves (RECAPTURE_DEG) and are freed when the mural goes. Neighbouring boxes
+##   overlap and blend over probe_blend metres. A probe's intensity scales its colour,
+##   not its weight, and the engine skips a probe at 0, where the sky's reflection takes
+##   its place: so they never go to 0 (a surface in their boxes would take the sky's
+##   reflection at once at the fade's ends; held, the hall seen through its door keeps
+##   next to no reflection), and the door's open leaves, glossy and in the boxes, draw
+##   on another layer (building_1_interior.gd _door_leaves), out of their reach.
 ## Going in and coming out have lines of their own (InteriorPresence.HYSTERESIS_M inside
 ## and outside the hall's bounds), so a camera on the doorway does not turn the fade round
 ## frame by frame.
@@ -45,6 +51,14 @@ const RECAPTURE_DEG := 2.0
 ## box, so the boxes reach that and this much more (m) below the floor and past the
 ## hall's walls and each other's: the floor has full probe weight everywhere.
 const PROBE_MARGIN_M := 0.5
+## The engine weighs each screen-space reflection by ray^fade_in * (1 - ray)^fade_out (ray:
+## its length on screen, 0 to 1, and an exponent of 0 off). While the blend b fades, both
+## exponents rise by this times (1 - b) / b: nothing at b = 1, and every ray's weight goes
+## to nothing as b nears 0, where the reflections switch on and off unseen.
+const SSR_FADE_RISE := 0.25
+## The probes' least intensity, the blend at 0 included: above 0, so the engine never
+## skips them.
+const PROBE_HOLD := 0.0001
 
 @export var mode := "off"
 ## The render layer the hall draws on (building_1_interior.gd RENDER_INTERIOR): the
@@ -226,16 +240,24 @@ func _set_environment(on: bool) -> void:
 		_environment_own = {"ssr_enabled": current.ssr_enabled, "ssr_max_steps": current.ssr_max_steps, "ssr_fade_in": current.ssr_fade_in, "ssr_fade_out": current.ssr_fade_out, "ssr_depth_tolerance": current.ssr_depth_tolerance}
 	var values := _environment_own
 	if ssr:
-		values = {"ssr_enabled": true, "ssr_max_steps": ssr_max_steps, "ssr_fade_in": ssr_fade_in, "ssr_fade_out": ssr_fade_out, "ssr_depth_tolerance": ssr_depth_tolerance}
-	for property: String in values:
-		_environment.set(property, values[property])
+		var rise := SSR_FADE_RISE * (1.0 - _blend) / maxf(_blend, 0.0001)
+		values = {"ssr_enabled": true, "ssr_max_steps": ssr_max_steps, "ssr_fade_in": ssr_fade_in + rise, "ssr_fade_out": ssr_fade_out + rise, "ssr_depth_tolerance": ssr_depth_tolerance}
+	_write_environment(values)
 
 
 func _restore_environment() -> void:
-	for property: String in _environment_own:
-		_environment.set(property, _environment_own[property])
+	_write_environment(_environment_own)
 	_environment = null
 	_environment_own = {}
+
+
+## Writes the values into the environment, each only where it holds another.
+func _write_environment(values: Dictionary) -> void:
+	for property: String in values:
+		var now: Variant = _environment.get(property)
+		var value: Variant = values[property]
+		if not (is_equal_approx(now, value) if value is float else now == value):
+			_environment.set(property, value)
 
 
 ## The world's environment: the viewport's World3D's, else main.tscn's WorldEnvironment
@@ -270,7 +292,7 @@ func _update_probes() -> void:
 		_make_probes()
 		_probe_layout = layout
 		_captured_elevation = _sun_elevation()
-	var intensity := probe_intensity * _blend
+	var intensity := maxf(probe_intensity * _blend, PROBE_HOLD)
 	for probe in _probes:
 		if probe.intensity != intensity:
 			probe.intensity = intensity

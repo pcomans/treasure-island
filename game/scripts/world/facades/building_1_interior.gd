@@ -23,7 +23,8 @@ extends RefCounted
 ## exterior they always saw; it is lit by the sky's ambient light and its own glowing
 ## fixtures (lamps and daylight panels, DaySun night roles) over baked vertex
 ## shading, on RENDER_INTERIOR, which main.tscn's Sun leaves out of its light: the web
-## draws no sun shadows, so the sun would otherwise light the hall through its roof. Its collision is a closed shell of
+## draws no sun shadows, so the sun would otherwise light the hall through its roof
+## (but for the door's open leaves on desktop, _door_leaves). Its collision is a closed shell of
 ## its own, colliding from both sides; the doorway's car blocker is on the cars' ground
 ## layer only, so cars stay out and the player and camera pass.
 
@@ -31,6 +32,8 @@ const CONFIG_PATH := "res://game/resources/facades/building_1_interior.json"
 const SCHEMA := "ti.building-1-interior/1"
 ## Render layer 6 ("interior" in project.godot): main.tscn's Sun leaves it out.
 const RENDER_INTERIOR := 1 << 5
+## Render layer 1 ("world_visible"), the facades' own.
+const RENDER_WORLD_VISIBLE := 1 << 0
 const PHYSICS_WORLD_SOLID := 1 << 0
 ## The cars' ground (ShorelineBuilder.PHYSICS_CAR_GROUND): cars and K-rails meet it,
 ## the player and the on-foot camera do not.
@@ -182,7 +185,9 @@ static func build(plan: Dictionary) -> Dictionary:
 	_append_vestibule(plan, buckets, shell)
 	_append_end_walls(plan, buckets, shell)
 	_append_north_annex(plan, buckets, shell)
-	_append_doorway(plan, buckets, shell)
+	# The door's open leaves: a mesh of their own (_door_leaves) but on the web.
+	var leaves := buckets if PREBUILT_WORLD.profile() == "web" else {"bronze": _bucket(), "glass": _bucket()}
+	_append_doorway(plan, buckets, leaves, shell)
 	_append_fixtures(plan, buckets)
 	var root := Node3D.new()
 	root.name = "Building1Interior"
@@ -232,6 +237,13 @@ static func build(plan: Dictionary) -> Dictionary:
 	# The sun never lights it (RENDER_INTERIOR), so its shadows would be unseen work.
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	root.add_child(instance)
+	var leaf_surfaces := 0
+	if not is_same(leaves, buckets):
+		var door_leaves := _door_leaves(plan, leaves)
+		root.add_child(door_leaves)
+		leaf_surfaces = door_leaves.mesh.get_surface_count()
+		for surface: String in leaves:
+			triangles += ((leaves[surface] as Dictionary).indices as Array).size() / 3
 	var faces := PackedVector3Array()
 	var shell_vertices := shell.vertices as Array
 	for index_value: int in shell.indices as Array:
@@ -276,7 +288,40 @@ static func build(plan: Dictionary) -> Dictionary:
 	root.add_child(_reflections(plan, loader.hall, floor_data))
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
-	return {"ok": true, "node": root, "mesh_instances": 1, "surfaces": mesh.get_surface_count(), "triangles": triangles, "static_bodies": 2, "shapes": 2}
+	return {"ok": true, "node": root, "mesh_instances": 2 if leaf_surfaces > 0 else 1, "surfaces": mesh.get_surface_count() + leaf_surfaces, "triangles": triangles, "static_bodies": 2, "shapes": 2}
+
+
+## The door's open leaves (_append_door_leaves: bronze and glass) as a mesh of their own
+## on the facades' render layer, not RENDER_INTERIOR. They stand in the doorway, half out
+## of the hall: the sun lights them as it does the facade around them, where it reaches
+## them through the opening, and the hall's reflection probes, which reflect on
+## RENDER_INTERIOR alone and fade as the camera goes in and out
+## (Building1HallReflections), never reach their glass: it keeps the sky's reflection,
+## the same from either side. The web, which draws no probes, keeps them in the Shell.
+static func _door_leaves(plan: Dictionary, leaves: Dictionary) -> MeshInstance3D:
+	var mesh := ArrayMesh.new()
+	for surface: String in leaves:
+		var bucket := leaves[surface] as Dictionary
+		if (bucket.indices as Array).is_empty():
+			continue
+		var arrays: Array = []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
+		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
+		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+		arrays[Mesh.ARRAY_COLOR] = _shading(plan, bucket)
+		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mesh.surface_set_name(mesh.get_surface_count() - 1, surface)
+		mesh.surface_set_material(mesh.get_surface_count() - 1, _material(surface, plan.config.palette[surface] as Dictionary))
+	var instance := MeshInstance3D.new()
+	instance.name = "DoorLeaves"
+	instance.mesh = mesh
+	instance.layers = RENDER_WORLD_VISIBLE
+	# Inside the doorway: their shadow would fall on the unlit vestibule, or on the paving
+	# only with the sun low in the opening.
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return instance
 
 
 ## The hall's floor reflections (plan.config.reflections; Building1HallReflections),
@@ -1090,7 +1135,7 @@ static func _append_north_annex(plan: Dictionary, buckets: Dictionary, shell: Di
 			_box([buckets.bronze], _lifted(a, (gallery + rail) * 0.5) - n * 0.05, b - a, n, float(bar[0]), rail - gallery, float(bar[0]))
 
 
-static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
+static func _append_doorway(plan: Dictionary, buckets: Dictionary, leaves: Dictionary, shell: Dictionary) -> void:
 	# The opened door group's reveal, from the facade's dark border to the vestibule
 	# wall: sides, head and a level stone sill, its front a riser down to the
 	# forecourt's paving; under it, for the feet, a hidden slope over the same step.
@@ -1129,12 +1174,13 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	_quad([stone, shell], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
 	_triangle([stone], _lifted(foot_left, y - bevel - 0.03), _lifted(outer_left, y), _lifted(outer_left, y - bevel - 0.03), -tangent)
 	_triangle([stone], _lifted(outer_right, y - bevel - 0.03), _lifted(outer_right, y), _lifted(foot_right, y - bevel - 0.03), tangent)
-	_append_door_leaves(plan, buckets, shell)
+	_append_door_leaves(plan, leaves, shell)
 
 
 ## The group's three bronze leaves stood open, swung in against the reveal sides:
 ## two folded together on the left, one on the right. Glazed bronze in the facade;
-## here the frames (the glass is clear), solid for the player.
+## here the frames (the glass is clear), solid for the player. Into buckets' bronze and
+## glass (the Shell's, or the leaves' own: _door_leaves) and the shell's collision.
 static func _append_door_leaves(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	var door := plan.door as Dictionary
 	var leaf := plan.members.door_leaf as Dictionary
