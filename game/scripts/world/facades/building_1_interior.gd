@@ -331,12 +331,11 @@ static func build(plan: Dictionary) -> Dictionary:
 ## hall from outside through its open door, the one way in. The door's reveal (sides,
 ## head, sill and its bevel, as _append_doorway builds them); the vestibule (its floor
 ## rising from the sill in FAR_FLOOR_SPLIT steps, its sides and ceiling, its back wall
-## round the inner doorway);
-## and the hall from the columns' backs to the east wall: the floor in two rings and
-## FAR_FLOOR_SPLIT steps a bay, the ceiling, the east wall in its bands (bays, the slatted
-## band, the mural, the coves) on the east bays' piers, its bays' band parted at the
-## piers' sides, and the end walls; the east museum bays' daylight panels kept
-## glowing on the wall's line. The floors keep the terrazzo's own material and frame,
+## round the inner doorway); and the hall from the columns' backs to the east wall: the
+## floor in two rings and FAR_FLOOR_SPLIT steps a bay, the ceiling, the east wall in its
+## bands (bays, the slatted band, the mural, the coves) on the east bays' piers, its
+## bays' band parted at the piers' sides, and the end walls; the east museum bays'
+## daylight panels kept glowing on the wall's line. The floors keep the terrazzo's own material and frame,
 ## so its pattern carries on; everything else is coloured from the Shell. The west side
 ## under the balcony is never seen from outside, so it has no stand-in.
 static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
