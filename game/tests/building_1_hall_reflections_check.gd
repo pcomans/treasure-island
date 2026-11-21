@@ -10,12 +10,22 @@ extends SceneTree
 ## (_fade_frames). The presence's own rules (its lines, blend and signals) are checked
 ## headless on their own (game/tests/headless_interior_presence_contract.gd); here they
 ## drive the reflections in the real hall.
+## On both renderers, while the camera stands outside an interior's plan, loading or
+## capturing that interior's content must not change what is seen outside or what lights
+## the whole island (_watch_still): a still camera outside near the door, facing the hall,
+## watches the mural load, the far stand-in hand over and (Forward+) the probes be made
+## and capture; its frame may not step past STILL_MEAN_LEVELS over the whole frame or
+## STILL_P95_LEVELS at the 95th percentile of its cells (the cells over the interior's
+## doorways left out), and no property of the world's environment, its sky and the sky's
+## material, the Sun or the camera attributes may change.
 ## Forward+ (desktop), with mode "inside" (set here, as the config ships it):
 ## - far from the door the mural is not up and there is no probe, nor while it loads;
 ## - outside near the door, once the mural is up, the probes are there reflecting next
 ##   to nothing (Building1HallReflections.PROBE_HOLD: at 0 the engine would skip them and
 ##   the sky's reflection would take their place), and the environment and the floor are
 ##   as they were;
+## - inside, all in, the probes captured again (as the sun's move makes them): the same
+##   still-frame bounds and no global lighting change;
 ## - walked in, the reflections fade in frame by frame: the blend only rises and is
 ##   all in within the fade's frames; each frame the floor's roughness, specular and
 ##   colour are the blend's mix of its own and the polished ones, its attributes the
@@ -86,6 +96,20 @@ const FPS := 60.0
 ## and past it.
 const TURN_BELOW := 9
 const TURN_PAST := 21
+## A still camera's frame as cell means (8-bit luma), and how far it may move against
+## the frame kept before: over the whole frame, and at the 95th percentile of its cells.
+## Measured 2026-11-21: with hall probes whose captures could not see the sun (the
+## island's sky light redrawn without it), this check's outside view moved 3.95 levels
+## over the whole frame and 15.8 at its cells' 95th percentile, and its inside view 8.5
+## and 16.5 while they captured again; with the sun seen, 0.00 and 0.00, and 0.06 and 0.28.
+const STILL_GRID := Vector2i(32, 20)
+const STILL_MEAN_LEVELS := 0.5
+const STILL_P95_LEVELS := 1.0
+## Drawn frames a still camera settles before its frame is kept, and is then watched:
+## past the mural's tiles (one a frame), the probes' captures (a face a frame, then their
+## filtering) and the sky's own redraw spread over frames after them.
+const STILL_SETTLE_FRAMES := 30
+const STILL_WATCH_FRAMES := 150
 
 var _h: WorldHarness
 var failures: Array[String] = []
@@ -159,22 +183,17 @@ func _check_forward_plus() -> void:
 	await _stand(-FAR_M, 30)
 	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty():
 		failures.append("far from the door the mural is %s and there are %d probes" % [Building1MuralLoader.State.keys()[_loader.state], _node.probe_nodes().size()])
-	# Outside near the door: no probe until the mural is up, then probes reflecting nothing.
-	_put(_at(-OUTSIDE_M), _door)
-	var frames := 0
-	while _loader.state != Building1MuralLoader.State.LOADED and frames < 120:
-		if not _node.probe_nodes().is_empty():
-			failures.append("probes made before the mural is up (%s)" % Building1MuralLoader.State.keys()[_loader.state])
-			break
-		await process_frame
-		frames += 1
-	await _frames(10)
+	# Outside near the door, facing the hall: the mural loads and the probes are made and
+	# capture with nothing seen outside or global changing; no probe until the mural is
+	# up, then probes reflecting nothing.
+	await _check_outside_still("outside near the door while the hall loads and its probes capture")
 	_check_off("outside near the door, the mural up", environment, own, floor)
 	if _node.probe_nodes().is_empty():
 		failures.append("no probes outside near the door once the mural is up")
-	# Inside: fading in, then all in.
+	# Inside: fading in, then all in; then the probes captured again.
 	await _check_fade("fading in", INSIDE_M, environment, own, floor)
 	_check_on("inside", environment)
+	await _check_recapture_still("inside, all in, the probes capturing again")
 	# Back outside: fading out, then everything as before.
 	await _check_fade("fading out", -OUTSIDE_M, environment, own, floor)
 	_check_off("back outside", environment, own, floor)
@@ -210,7 +229,7 @@ func _check_forward_plus() -> void:
 	await _check_leave(parent, "mid-fade", environment, own, floor)
 	# Far away again: the mural released after its delay, the probes freed.
 	_put(_at(-FAR_M), _door)
-	frames = 0
+	var frames := 0
 	while _loader.state != Building1MuralLoader.State.UNLOADED and frames < int((_loader.unload_delay + 5.0) * Engine.physics_ticks_per_second):
 		await process_frame
 		frames += 1
@@ -219,7 +238,7 @@ func _check_forward_plus() -> void:
 	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty() or not _hall_probes(parent).is_empty():
 		failures.append("far away the mural is %s and %d probes are left" % [Building1MuralLoader.State.keys()[_loader.state], _hall_probes(parent).size()])
 	if failures.is_empty():
-		print("PASS: Forward+: no probe before the mural is up; probes held at next to nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, its attribute steps, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
+		print("PASS: Forward+: outside, the hall loading and its probes capturing moved nothing seen outside (at most %.1f levels over the frame, %.1f at its cells' 95th percentile) and no global lighting, nor did the probes capturing again inside; no probe before the mural is up; probes held at next to nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, its attribute steps, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % [STILL_MEAN_LEVELS, STILL_P95_LEVELS, _fade_frames()])
 
 
 ## The frames a fade takes at FPS, and one for the last step's rounding.
@@ -452,18 +471,182 @@ func _record_doorway(label: String, move: Callable) -> void:
 	print("DOORWAY %s: %d switches in %d frames (a single line: %d)" % [label, switches, DOORWAY_FRAMES, single])
 
 
-## Compatibility: nothing of the reflections with the camera inside.
+## Compatibility: outside, the hall loads with nothing seen outside or global changing;
+## nothing of the reflections with the camera inside.
 func _check_elsewhere() -> void:
 	var environment := _world_environment.environment
 	var own := _ssr_of(environment)
 	var floor := _floor_values()
+	await _check_outside_still("outside near the door while the hall loads")
 	await _stand(-OUTSIDE_M, 30)
 	await _stand(INSIDE_M, 30)
 	var probes := _hall_probes(_node.get_parent())
 	if _node.is_on() or not probes.is_empty() or _ssr_of(environment) != own or _floor_values() != floor or _node.floor_step() != 0:
 		failures.append("on %s the reflections did something: on %s, %d probes, the environment %s (own %s), the floor %s (was %s)" % [RenderingServer.get_current_rendering_method(), _node.is_on(), probes.size(), _ssr_of(environment), own, _floor_values(), floor])
 	if failures.is_empty():
-		print("PASS: %s: inside the hall, no probe, and the environment and the floor untouched" % RenderingServer.get_current_rendering_method())
+		print("PASS: %s: outside, the hall loading moved nothing seen outside (at most %.1f levels over the frame, %.1f at its cells' 95th percentile) and no global lighting; inside the hall, no probe, and the environment and the floor untouched" % [RenderingServer.get_current_rendering_method(), STILL_MEAN_LEVELS, STILL_P95_LEVELS])
+
+
+## Outside near the door, facing the hall so that its probes' boxes are in view (a probe
+## captures only once a camera sees its box), the mural held back while the camera
+## settles; then the mural loads, the far stand-in hands over and the probes are made and
+## capture, all watched by _watch_still. No probe until the mural is up.
+func _check_outside_still(where: String) -> void:
+	var radius := _loader.load_radius
+	_loader.load_radius = 0.0
+	_put(_at(-OUTSIDE_M), _door)
+	await _drawn_frames(STILL_SETTLE_FRAMES)
+	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty():
+		failures.append("%s: before the mural loads it is %s, with %d probes" % [where, Building1MuralLoader.State.keys()[_loader.state], _node.probe_nodes().size()])
+	var early: Array[String] = []
+	var load_mural := func() -> void:
+		_loader.load_radius = radius
+	var no_early_probe := func() -> void:
+		if early.is_empty() and _loader.state != Building1MuralLoader.State.LOADED and not _node.probe_nodes().is_empty():
+			early.append("probes made before the mural is up (%s)" % Building1MuralLoader.State.keys()[_loader.state])
+	await _watch_still(where, load_mural, no_early_probe)
+	_loader.load_radius = radius
+	failures.append_array(early)
+	if _loader.state != Building1MuralLoader.State.LOADED:
+		failures.append("%s: the mural is %s %d drawn frames after the camera came within its radius" % [where, Building1MuralLoader.State.keys()[_loader.state], STILL_WATCH_FRAMES])
+
+
+## Inside, all in, the camera still: the probes captured again, as the sun's move makes
+## them (Building1HallReflections.RECAPTURE_DEG), watched by _watch_still.
+func _check_recapture_still(where: String) -> void:
+	await _drawn_frames(STILL_SETTLE_FRAMES)
+	var capture_again := func() -> void:
+		for probe: ReflectionProbe in _node.probe_nodes():
+			probe.update_mode = ReflectionProbe.UPDATE_ONCE
+	await _watch_still(where, capture_again, Callable())
+
+
+## What a still camera draws and what lights the whole island, kept; then start runs and
+## STILL_WATCH_FRAMES drawn frames are compared with what was kept (each_frame, when
+## given, runs after each). Fails on any change of a global lighting property
+## (_global_lighting), or when the frame's cell means, the cells over the interior's
+## openings left out (_opening_cells), move by more than STILL_MEAN_LEVELS over the whole
+## frame or STILL_P95_LEVELS at the 95th percentile of the cells.
+func _watch_still(where: String, start: Callable, each_frame: Callable) -> void:
+	var skip := _opening_cells(root.get_camera_3d())
+	var before := _cells(await _drawn_image())
+	var lighting := _global_lighting()
+	start.call()
+	var worst_mean := 0.0
+	var worst_p95 := 0.0
+	var worst_frame := -1
+	var changes: Array[String] = []
+	for frame in STILL_WATCH_FRAMES:
+		var cells := _cells(await _drawn_image())
+		var moved := PackedFloat32Array()
+		var sum := 0.0
+		for i in cells.size():
+			if not skip.has(i):
+				moved.append(absf(cells[i] - before[i]))
+				sum += cells[i] - before[i]
+		moved.sort()
+		var mean := absf(sum / float(maxi(moved.size(), 1)))
+		var p95 := moved[int(0.95 * float(moved.size() - 1))] if not moved.is_empty() else 0.0
+		if mean > worst_mean or p95 > worst_p95:
+			worst_frame = frame
+		worst_mean = maxf(worst_mean, mean)
+		worst_p95 = maxf(worst_p95, p95)
+		var now := _global_lighting()
+		for key: String in now:
+			if not lighting.has(key) or typeof(lighting[key]) != typeof(now[key]) or lighting[key] != now[key]:
+				changes.append("frame %d %s: %s -> %s" % [frame, key, lighting.get(key, "none"), now[key]])
+		lighting = now
+		if each_frame.is_valid():
+			each_frame.call()
+	print("STILL %s: %d drawn frames, largest whole-frame change %.2f levels, largest 95th-percentile cell change %.2f levels (worst at frame %d), %d of %d cells over openings left out, %d global lighting changes" % [where, STILL_WATCH_FRAMES, worst_mean, worst_p95, worst_frame, skip.size(), STILL_GRID.x * STILL_GRID.y, changes.size()])
+	if worst_mean > STILL_MEAN_LEVELS or worst_p95 > STILL_P95_LEVELS:
+		failures.append("%s: the still frame moved %.2f levels over the whole frame (at most %.1f) and %.2f at its cells' 95th percentile (at most %.1f)" % [where, worst_mean, STILL_MEAN_LEVELS, worst_p95, STILL_P95_LEVELS])
+	if not changes.is_empty():
+		failures.append("%s: global lighting changed: %s" % [where, "; ".join(changes.slice(0, 6))])
+	# Back on a frame's process step, where the checks after this one count their frames
+	# from (they move the camera, then count; resumed after a draw, they would count one
+	# frame late).
+	await process_frame
+
+
+func _drawn_frames(count: int) -> void:
+	for _i in count:
+		await RenderingServer.frame_post_draw
+
+
+## The next frame drawn, as an image.
+func _drawn_image() -> Image:
+	await RenderingServer.frame_post_draw
+	return root.get_texture().get_image()
+
+
+## An image's STILL_GRID cell means as 8-bit luma (Rec. 709 weights on its sRGB values),
+## each cell the average its mipmaps give (trilinear).
+func _cells(image: Image) -> PackedFloat32Array:
+	image.resize(STILL_GRID.x, STILL_GRID.y, Image.INTERPOLATE_TRILINEAR)
+	var cells := PackedFloat32Array()
+	for y in STILL_GRID.y:
+		for x in STILL_GRID.x:
+			var colour := image.get_pixel(x, y)
+			cells.append((0.2126 * colour.r + 0.7152 * colour.g + 0.0722 * colour.b) * 255.0)
+	return cells
+
+
+## The STILL_GRID cells that the interior's openings (its stand-in spec's doorway boxes,
+## where the interior itself is seen from outside) cover in this camera's frame, and one
+## cell round them, as {index: true}.
+func _opening_cells(camera: Camera3D) -> Dictionary:
+	var cells := {}
+	var interior := _node.get_parent() as Node3D
+	var spec: Dictionary = interior.get_meta(InteriorFarStandIn.FAR_META, {})
+	var size := root.get_visible_rect().size
+	for box: Variant in spec.get("openings", []):
+		var pose := interior.global_transform * (box as Transform3D)
+		var low := Vector2(INF, INF)
+		var high := Vector2(-INF, -INF)
+		for corner in 8:
+			var at := pose * Vector3(1.0 if corner & 1 else -1.0, 1.0 if corner & 2 else -1.0, 1.0 if corner & 4 else -1.0)
+			if not camera.is_position_behind(at):
+				var point := camera.unproject_position(at)
+				low = low.min(point)
+				high = high.max(point)
+		if low.x > high.x:
+			continue
+		for y in range(maxi(floori(low.y / size.y * STILL_GRID.y) - 1, 0), mini(floori(high.y / size.y * STILL_GRID.y) + 1, STILL_GRID.y - 1) + 1):
+			for x in range(maxi(floori(low.x / size.x * STILL_GRID.x) - 1, 0), mini(floori(high.x / size.x * STILL_GRID.x) + 1, STILL_GRID.x - 1) + 1):
+				cells[y * STILL_GRID.x + x] = true
+	return cells
+
+
+## Every stored property of what lights the whole island: the world's environment, its
+## sky and the sky's material (its shader parameters), the Sun, and the camera attributes
+## in use (the world's and the current camera's); objects by identity.
+func _global_lighting() -> Dictionary:
+	var values := {}
+	var environment := _world_environment.environment
+	_properties("environment", environment, values)
+	if environment.sky != null:
+		_properties("sky", environment.sky, values)
+		var material := environment.sky.sky_material as ShaderMaterial
+		if material != null and material.shader != null:
+			for uniform: Dictionary in material.shader.get_shader_uniform_list():
+				values["sky material " + str(uniform.name)] = material.get_shader_parameter(uniform.name)
+	_properties("Sun", _h.main.get_node("Sun"), values)
+	if _world_environment.camera_attributes != null:
+		_properties("world camera attributes", _world_environment.camera_attributes, values)
+	var camera := root.get_camera_3d()
+	if camera != null and camera.attributes != null:
+		_properties("camera attributes", camera.attributes, values)
+	return values
+
+
+func _properties(prefix: String, object: Object, into: Dictionary) -> void:
+	for property: Dictionary in object.get_property_list():
+		var name := str(property.name)
+		if not (int(property.usage) & PROPERTY_USAGE_STORAGE) or name in ["script", "resource_local_to_scene", "resource_path", "resource_name", "resource_scene_unique_id"]:
+			continue
+		var value: Variant = object.get(name)
+		into[prefix + " " + name] = str(value) if value is Object else value
 
 
 func _check_on(where: String, environment: Environment) -> void:

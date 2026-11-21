@@ -394,8 +394,10 @@ func _use_neutral_lighting() -> void:
 	var game_sun := _h.main.get_node("Sun") as DirectionalLight3D
 	game_sun.visible = false
 	var neutral_sun := _with_settings(DirectionalLight3D.new(), NEUTRAL_SUN) as DirectionalLight3D
-	# What the sun lights is the scene's, not the look's: it leaves interiors out.
+	# What the sun lights is the scene's, not the look's: it leaves interiors out, and
+	# it is on the game Sun's layers, so the hall's probes see it (main.tscn's layers_note).
 	neutral_sun.light_cull_mask = game_sun.light_cull_mask
+	neutral_sun.layers = game_sun.layers
 	_h.main.add_child(neutral_sun)
 	for probe: ReflectionProbe in _h.world.buildings.find_children("Mersea*Reflection", "ReflectionProbe", true, false):
 		probe.update_mode = ReflectionProbe.UPDATE_ALWAYS

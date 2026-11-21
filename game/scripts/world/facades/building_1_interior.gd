@@ -24,13 +24,19 @@ extends RefCounted
 ## fixtures (lamps and daylight panels, DaySun night roles) over baked vertex
 ## shading, on RENDER_INTERIOR, which main.tscn's Sun leaves out of its light: the web
 ## draws no sun shadows, so the sun would otherwise light the hall through its roof
-## (but for the door's open leaves on desktop, _door_leaves). Its collision is a closed shell of
+## (but for the door's open leaves on desktop, _door_leaves). The Sun is on that layer
+## all the same (its layers, not its light_cull_mask), so that the hall's probes, which
+## see RENDER_INTERIOR alone, see the sun in their captures: a capture without it
+## redraws the island's one shared sky light without the sun, darkening every surface
+## in view while it captures (Building1HallReflections). Its collision is a closed shell of
 ## its own, colliding from both sides; the doorway's car blocker is on the cars' ground
 ## layer only, so cars stay out and the player and camera pass.
 
 const CONFIG_PATH := "res://game/resources/facades/building_1_interior.json"
 const SCHEMA := "ti.building-1-interior/1"
-## Render layer 6 ("interior" in project.godot): main.tscn's Sun leaves it out.
+## Render layer 6 ("interior" in project.godot): main.tscn's Sun leaves it out of its
+## light (light_cull_mask) but is on it (layers), so renders of this layer alone (the
+## hall's probes) see the sun.
 const RENDER_INTERIOR := 1 << 5
 ## Render layer 1 ("world_visible"), the facades' own.
 const RENDER_WORLD_VISIBLE := 1 << 0

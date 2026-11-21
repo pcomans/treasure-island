@@ -31,7 +31,11 @@ extends Node
 ##   and leaves the baked sheen up;
 ## - with probes, reflects the hall itself wherever the screen has nothing to reflect,
 ##   at probe_intensity times the blend: probe_sections box-projected reflection probes
-##   along the crescent, seeing and lighting the hall's render layer only. They are
+##   along the crescent, seeing and lighting the hall's render layer only. main.tscn's
+##   Sun is on that layer too (its layers; its light_cull_mask still leaves the hall
+##   unlit), so their captures see it: every render that takes light from the sky
+##   redraws the one shared sky, and a capture without the sun would redraw the
+##   island's ambient light and reflections without it while it captures. They are
 ##   made once the mural is up near the door (Building1MuralLoader, so they capture it),
 ##   reflect next to nothing (PROBE_HOLD) until the camera is in, capture again as the
 ##   sun moves (RECAPTURE_DEG) and are freed when the mural goes. Neighbouring boxes
