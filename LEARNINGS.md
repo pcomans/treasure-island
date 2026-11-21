@@ -1,6 +1,6 @@
 # Project learnings
 
-Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
+Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`. The orchestrating session's own lessons on running agents, mostly hypotheses, are in [Agent architecture learnings](discovery/AGENT_ARCHITECTURE_LEARNINGS.md).
 
 Retain the current owner-authorized [routing](AGENTS.md#bounded-subagent-execution): since 2026-10-21, every role runs in Claude Code on Opus 5.5 at effort `high`, modeling included, set by each role file's frontmatter. Since 2026-10-23, landmark visual review runs in Codex on `gpt-6.1-sol` / `high`. This supersedes the 2026-10-10 Codex Astra Low modeling / Sol High review routing. Keep root orchestration, explicit non-ultra dispatch, separate reviewers and existing gates. Earlier model choices and comparisons below are historical evidence, not a universal quality/cost/speed claim.
 
