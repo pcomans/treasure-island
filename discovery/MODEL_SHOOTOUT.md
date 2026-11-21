@@ -44,6 +44,24 @@ On the housing model, Y was "clearly better. Like no contest": more correct colo
 
 Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
 
+## Review-format test (Opus only)
+
+Every version starts from the same Opus first build of the housing block. Each had one review round under different review instructions, then a fix by Opus (2026-11-20), and the owner saw the results blind as A–D. The mapping, unsealed by the owner's vote: A = the four-question format, run 1; B = the four-question format with "no additions allowed"; C = a free-form prose review (the earlier format); D = the four-question format, run 2.
+
+| Review | Words | Additions / fixes asked | Mesh nodes, start → after fix |
+|---|---|---|---|
+| Prose (C) | 339 | 3 / 3 | 336 → 781 |
+| Four questions (A, D: one review, two fixes) | 1,138 | 3 / 5 | 336 → 421 (A), 409 (D) |
+| No additions (B) | 862 | 0 / 8 | 336 → 322 |
+
+Words and node counts are measured from the run's files. The additions and fixes tallies, and that in B both the reviewer and the fixer obeyed the rule, are as recorded at the time.
+
+The owner's blind verdict: "if I absolutely had to pick one, I would pick version A". Its small windows shrink to about the right size (a bit too much), the big windows stay a bit too big, the box positions are still clumsy, and it adds the shed. C "does make a significant leap in terms of small detail" (the front doors set back) "but it also just adds a lot of clutter … It's more like noise and not signal". All four "make very modest gains"; "I don't think the iteration … beyond the starting building is really worth it here". Every version missed the upper floor slightly overhanging the ground floor, and all drifted away from the doors' real blue. The owner did not comment on B or D.
+
+Earlier, not blind: after a second review round the owner found the Opus building worse: "It looks more cluttered", with bins, AC units and small windows crowding the doors.
+
+A fifth variant is running, with the review told to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake; no result yet.
+
 ## Model tiers by detail level
 
 **Status (2026-11-21): a plan, not routing.** Modelling runs in Claude Code on Opus 5.5, as [AGENTS](../AGENTS.md#bounded-subagent-execution) says. Kimi K3.1 Pro is a candidate to consider for cheap low-detail modelling, possibly as a first pass; Gemini 4 Neon is to be investigated for high-detail work. Neither is routed, and adopting either is a later owner decision.
