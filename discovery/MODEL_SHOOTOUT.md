@@ -100,6 +100,6 @@ Before Gemini 4 Neon can be used:
 
 ## Architect-description test (describe from photos)
 
-Before a building goes to modelling, a describer writes an architect-style description of it from its photos, to brief the first modelling round and its reviewer; the larger modelling shootout waits until the descriptions are shown to be good.
+The owner's proposal: before a building goes to modelling, a describer would write an architect-style description of it from its photos, to brief the first modelling round and its reviewer; the larger modelling shootout waits until the descriptions are shown to be good.
 Opus 5.5 and Fable 5.2 describe blind, against answer keys from professional descriptions in a private eval set. With the footprint given, two judges found the descriptions usable for a first modelling round; plan depth guessed from photos is the weakest area.
 Purpose, method and every round's results are in the [architect-description shootout](ARCHITECT_DESCRIPTION_SHOOTOUT.md).

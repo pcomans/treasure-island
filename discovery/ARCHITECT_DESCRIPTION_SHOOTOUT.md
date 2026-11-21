@@ -50,7 +50,7 @@ Result over 103 determinable facts (correct / partly / incorrect / not mentioned
 
 Both followed the brief in every case and named no building. Fable said it recognised both in-domain buildings, Opus one of them, with a vague sense about the other; the judge found no statement that could only have come from memory or signage.
 
-- **Errors.** Opus's worst: it read one vaulted hall as two buildings (a flat-roofed hall plus a separate vault hall); gave a plan 4–5 times longer than deep where the key gives about 2:1; placed tower windows as a central stack instead of wrapping the corners; and miscounted doors. Fable's errors were all sizes and ratios (a plan called "close to square" where the key gives about 1.5:1; a depth of 7–9 m where the key gives 12.1 m), never the form itself.
+- **Errors.** Opus's worst: it read one vaulted hall as two buildings (a flat-roofed hall plus a separate vault hall); gave a plan 4–5 times longer than deep where the key gives about 2:1; placed tower windows as a central stack instead of wrapping the corners; and miscounted doors. Fable's errors were all sizes and ratios (a plan called "close to square" where the key gives about 1.5:1; a depth about 25–40 % short of the key's), never the form itself.
 - **Shared patterns.** Plan depth and length-to-depth ratios are the weakest area for both. Roof features are under-described: both missed three saw-tooth roof monitors visible in one view. Altered openings were seen but not called alterations, and neither committed to how windows open. Reliable for both: storey counts, roof types, bay systems and entrance compositions.
 - **Confidence: low to moderate.** Six cases, two pairs of them correlated (sister buildings; one shared site); monochrome photos of about 900 px; draft checklists from scanned text, in which the judge listed several facts as wrong, self-contradictory or not checkable; one judge. The gap between the describers comes from about four misreadings in two cases; on two cases and most of a third they were indistinguishable.
 - **Next steps then.** Fix the answer-key problems the judge listed; add the two cases whose photos could not be fetched yet; in the next shootout, give the description to the first modelling round and to its reviewer, as one blind pair: built from photos alone against photos plus description.
@@ -125,7 +125,7 @@ The plan facts the footprint gives (12 across the four cases): Fable 7 correct, 
 
 | Describer | Errors |
 |---|---|
-| Fable 5.2 | K4 (A): plan "only slightly longer than wide", 1.15:1 against 1.49:1. P8 (A): plan about 3:1 and too shallow, against 2:1. J7 (A): plan "twice as long as wide" against 1.5:1, and the concave entrance wall as tall as the pylons (about 20 m against 13 m). Runners-up: L8's infilled middle storey read as double-height; X8's tower windows on the centre line. |
+| Fable 5.2 | K4 (A): plan "only slightly longer than wide", 1.15:1 against 1.49:1. P8 (A): plan about 3:1 and too shallow, against 2:1. J7 (A): plan "twice as long as wide" against 1.5:1, and the concave entrance wall as tall as the pylons (about 50 % too tall). Runners-up: L8's infilled middle storey read as double-height; X8's tower windows on the centre line. |
 | Opus 5.5 | S4 (A): the entrance end described as the opposite long side. P8 (A and B): one off-centre carport instead of two side by side (A also a 3–4:1 plan). K4 (A): the one-storey section read as a flush lower storey, and the crown about 35 % too low; B leaves the section unresolved and adds pylons reaching the crown. |
 
 Judge 1's reading: Fable has more correct and fewer partly verdicts, fewer wrong key form facts and fewer cases with basic-form errors; Fable's errors are numeric and the footprint removes them, while Opus's are misreadings of placement and massing that the footprint does not fix. In the judge's words, this "rests on about four independent buildings, one run each, one judge — not a verdict on which model is better."
@@ -211,8 +211,8 @@ Judge 1 is an Opus session, judge 2 a Fable session; each was blind to the model
 | With footprint, out of domain | 80 % / 87 % | 69 % / 71 % |
 
 - The footprint brings plan size and ratio errors to 0 (0–2 %) in all eight variant-B sheets and causes no new mistakes. It does not improve facts other than the plan.
-- Fable's errors without a footprint are plan proportions (3 of 6 cases, both judges) and vanish with it (0 of 4, both judges).
-- Opus's errors are misreadings of how parts and views fit together (4 of 6 cases by judge 1, 5 of 6 by judge 2; 2 of 4 with the footprint, both judges), and the footprint does not fix them.
+- Fable's errors without a footprint are plan proportions (3 of 6 cases, both judges; judge 2 adds one hedged roof block) and vanish with it (0 of 4, both judges).
+- Opus's errors are misreadings of how parts and views fit together (4 of 6 cases by judge 1, 5 of 6 by judge 2; 2 of 4 with the footprint, both judges), and the footprint mostly does not fix them (judge 2: it partly repaired one).
 - Both describers are rarely wrong on a visible fact they address.
 - The shared failure patterns: depth from oblique views, roof objects, views not tied to sides, positions of openings, and statements about what the photos cannot show.
 
@@ -220,7 +220,7 @@ Judge 1 is an Opus session, judge 2 a Fable session; each was blind to the model
 
 - Judge 1 rated no description unusable; judge 2 rated one (Opus, photos only, the operations building) not usable as written for the plan.
 - The number of "partly" verdicts differs, so the size of the gap in points is not firm.
-- Key form facts wrong for Opus without the footprint: 6 of 99 for judge 1, 17 of 99 for judge 2, who counts errors of any weight.
+- Key form facts wrong for Opus without the footprint: 6 of 99 for judge 1 (which gives 6–9 %), 17 of 99 for judge 2, 10 of them wrong in form.
 - Judge 1 counted all three conflicts the describers reported between photos and footprint as real; judge 2 calls one that Opus reported not real.
 
 Two judges agreeing is stronger than one, but both judges are themselves sessions of the two models under test (judge 1 Opus, judge 2 Fable), both read the prep notes, and the cases are about four independent buildings with one run per variant. The direction is consistent; the sizes are not firm.
@@ -230,7 +230,7 @@ Two judges agreeing is stronger than one, but both judges are themselves session
 These are findings from about four independent buildings and two judges, not rules.
 
 - **Usable with the footprint.** With the footprint given, the descriptions are usable for a first modelling round: both judges rated them usable as is or with listed corrections, and storeys, roof forms and main massing were right in nearly every sheet.
-- **Plan proportions.** Without the footprint, plan depth and length-to-depth ratio from photos must not be trusted. The footprint from map data removed those errors without introducing new ones in this run (see the [footprint lesson](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos)). The footprints here came from the professional text, so a real map outline may do less well.
+- **Plan proportions.** Without the footprint, plan depth and length-to-depth ratio from photos were not reliable in these cases. A footprint of the kind map data gives removed those errors without introducing new ones in this run (see the [footprint lesson](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos)). The footprints here came from the professional text, so a real map outline may do less well.
 - **Fitting views and parts together.** Misreadings of how parts attach and which side a view shows are not fixed by the footprint.
 - **Memory.** The in-domain cases carry a memory risk: Fable said it recognised both in-domain buildings, and Opus recognised one in round 1, so in-domain scores may not measure reading from photos alone.
 
@@ -246,7 +246,7 @@ Proposed changes to the describer brief for the next round, from both judges' pa
 
 Open:
 
-- **Owner decision:** whether this is "good enough" to lift the hold on the modelling shootout;
+- **Owner decision:** whether the descriptions are good enough to lift the hold on the modelling shootout. The owner has since lifted the hold (2026-11-21, "Yes" to starting the modelling shootout with Fable as describer and the footprint supplied); the next modelling shootout is being prepared;
 - more independent cases, including the two still without photos;
 - colour photos;
 - whether a description actually improves a first modelling round. This is to be tested as a blind pair in the next modelling shootout: one build from photos alone, one from photos plus the description, with the reviewer also given the description.
