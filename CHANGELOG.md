@@ -6,7 +6,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
-## Build 2463 (2026-11-21)
+## Build 2465 (2026-11-21)
 
 - Parked cars are now mostly dusty: about a quarter are clean, most carry road dirt along their sills, behind their wheels and up their tails, a quarter are clearly dirty and a few filthy, and the dirt now shows on white and silver cars too.
 - Each van, truck, RV, bus and trailer in the storage yards now has its own wear, most of them weathered: road grime low down, dark streaks down their sides and dusty roofs.
