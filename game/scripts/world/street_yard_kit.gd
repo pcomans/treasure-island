@@ -181,7 +181,9 @@ const WEATHERING := {
 	"shipping_container": 0.5, "container_wall": 0.3, "storage_shed_row": 0.35, "fabric_shed": 0.3,
 	"crane_barge": 0.6, "equipment": 0.45,
 }
-## The props built as one vehicle (_vehicle): their pieces carry the vehicle mark.
+## The props built as one vehicle: pieces() builds exactly these with _vehicle,
+## whose pieces carry the vehicle mark and its own weathering, and fails on any
+## other prop it has no builder for (a new vehicle prop goes in this list).
 const VEHICLE_PROPS := ["rv", "bus", "box_truck", "van", "food_truck", "trailer", "boat_on_trailer"]
 
 var _material: ShaderMaterial
@@ -358,29 +360,32 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0, plan: Dicti
 	var level := float(params.get("weathering", vehicle_weathering(seed) if prop in VEHICLE_PROPS else WEATHERING.get(prop, 0.2)))
 	var result := {"ok": true, "pieces": [], "shapes": [], "range_m": float(PROPS[prop].range_m), "lod_near_m": LOD_NEAR_M, "cell_m": CELL_M, "shadow": true}
 	var error := ""
-	match prop:
-		"shipping_container":
-			error = _container_stack(result, variants[variant], params, level, seed)
-		"container_wall":
-			error = _container_wall(result, variant, params, level, seed)
-		"storage_shed_row":
-			error = _shed_row(result, variants[variant], params, level, seed)
-		"fabric_shed":
-			error = _fabric_shed(result, variants[variant], params, level, seed)
-		"plastic_berm":
-			error = _modules(result, "berm_%s" % variants[variant], int(params.get("modules", 0)), BERM_MODULE_M, float(BERM_CAP_M[variants[variant]]), _custom("black", "black", "black", level, seed))
-		"material_pile":
-			error = _pile(result, variants[variant], params, level, seed)
-		"crane_barge":
-			error = _barge(result, variants[variant], params, level, seed)
-		"equipment":
-			error = _equipment(result, variants[variant], params, level, seed, plan)
-		"pole_flag":
-			error = _pole_flag(result, params, seed)
-		"stunt_ramp":
-			error = _stunt_ramp(result, variants[variant], params, level, seed)
-		_:
-			error = _vehicle(result, prop, variants[variant], params, level, seed, plan)
+	if prop in VEHICLE_PROPS:
+		error = _vehicle(result, prop, variants[variant], params, level, seed, plan)
+	else:
+		match prop:
+			"shipping_container":
+				error = _container_stack(result, variants[variant], params, level, seed)
+			"container_wall":
+				error = _container_wall(result, variant, params, level, seed)
+			"storage_shed_row":
+				error = _shed_row(result, variants[variant], params, level, seed)
+			"fabric_shed":
+				error = _fabric_shed(result, variants[variant], params, level, seed)
+			"plastic_berm":
+				error = _modules(result, "berm_%s" % variants[variant], int(params.get("modules", 0)), BERM_MODULE_M, float(BERM_CAP_M[variants[variant]]), _custom("black", "black", "black", level, seed))
+			"material_pile":
+				error = _pile(result, variants[variant], params, level, seed)
+			"crane_barge":
+				error = _barge(result, variants[variant], params, level, seed)
+			"equipment":
+				error = _equipment(result, variants[variant], params, level, seed, plan)
+			"pole_flag":
+				error = _pole_flag(result, params, seed)
+			"stunt_ramp":
+				error = _stunt_ramp(result, variants[variant], params, level, seed)
+			_:
+				error = "the yard kit has no builder for it (a vehicle goes in VEHICLE_PROPS)"
 	if error != "":
 		return {"ok": false, "message": "%s: %s" % [prop, error]}
 	return result
