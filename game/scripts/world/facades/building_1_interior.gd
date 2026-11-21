@@ -77,8 +77,9 @@ const FLOOR_FRAME_OUT_M := 1.5
 const FLOOR_FRAME_PAD_M := 0.5
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
-## The far stand-in's floor steps per east bay (_far_spec): the terrazzo's lines drawn in
-## its polar frame bend at most a bay's angle over this between the stand-in's corners.
+## The far stand-in's floor steps per segment, an east bay or the vestibule (_far_spec):
+## the terrazzo's lines drawn in its polar frame bend at most a segment's angle over
+## this between the stand-in's corners.
 const FAR_FLOOR_SPLIT := 3
 
 static var _materials: Dictionary = {}
@@ -329,7 +330,8 @@ static func build(plan: Dictionary) -> Dictionary:
 ## The hall's far stand-in (InteriorFarStandIn), from the plan: what can be seen of the
 ## hall from outside through its open door, the one way in. The door's reveal (sides,
 ## head, sill and its bevel, as _append_doorway builds them); the vestibule (its floor
-## rising from the sill, its sides and ceiling, its back wall round the inner doorway);
+## rising from the sill in FAR_FLOOR_SPLIT steps, its sides and ceiling, its back wall
+## round the inner doorway);
 ## and the hall from the columns' backs to the east wall: the floor in two rings and
 ## FAR_FLOOR_SPLIT steps a bay, the ceiling, the east wall in its bands (bays, the slatted
 ## band, the mural, the coves) on the east bays' piers, its bays' band parted at the
@@ -379,7 +381,7 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 		"near_processes": ["Presence", "HallReflections"],
 		"zones": [
 			{"radii": Vector2(column_back, east), "stations": stations, "rings": [column_back, (column_back + east) * 0.5, east], "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": ceiling, "outer": bands, "outer_split": {"bands": 1, "half_m": float((members.east_pier as Array)[0]) * 0.5}, "start": bands, "end": bands, "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, float(plan.config.plan_production_inference_m.east_museum_depth) + 0.5)},
-			{"radii": Vector2(front_in, inner), "stations": [span.x, span.y], "rings": [front_in, column_back], "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top), "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, 0.02)},
+			{"radii": Vector2(front_in, inner), "stations": [span.x, span.y], "rings": [front_in, column_back], "floor_split": FAR_FLOOR_SPLIT, "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top), "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, 0.02)},
 		],
 		"quads": [
 			{"corners": [_lifted(side_left, sill), _lifted(inner_left, sill), _lifted(inner_left, door_top), _lifted(side_left, door_top)], "normal": tangent},
