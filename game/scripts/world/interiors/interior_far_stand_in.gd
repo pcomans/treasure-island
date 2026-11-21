@@ -18,6 +18,9 @@ extends Node
 ##                   one frame after the far state begins, so that each has run once
 ##                   since its near content went (the hall's reflections free their
 ##                   probes then), and given back their mode as soon as near returns
+## Whatever the near source says, the interior is near while the camera stands in the
+## root's PLAN_META plan or within INSIDE_MARGIN_M of it (InteriorPresence.plan_contains):
+## nobody is ever inside it while it is far, however they got there.
 ## Nothing switches before the game hands over play (main.gd is_play_ready): the
 ## loading screen sees the interior as built (near), and the shader warm-up compiles
 ## the hidden stand-in with the rest. force ("near" or "far") holds one state, for
@@ -51,9 +54,10 @@ extends Node
 ##           face: vertex colour as albedo (sRGB) and nothing else, as an interior's
 ##           plain surfaces are drawn, so the same shader draws it.
 ## Each face's colour comes from the detailed triangles over it (close to its plane,
-## in its bounds, facing its way; for a ring sector's outer wall, anywhere between the
-## reaches in front of it and behind it), by area, in linear light: their material's
-## colour times its albedo texture's mean times their vertex colours. A floor or a
+## in its bounds and heights, facing its way; for a ring sector's outer wall, anywhere
+## between the reaches in front of it and behind it; a triangle over a given quad
+## colours the quad), by area, in linear light: their material's colour times its
+## albedo texture's mean times their vertex colours. A floor or a
 ## ceiling blends its faces' colours at their shared corners; a wall keeps each face
 ## flat, so bays read as bays.
 
@@ -68,6 +72,8 @@ const SAMPLE_REACH_M := 0.6
 const KEPT_LIFT_M := 0.03
 ## A texture's mean is read from its first mip level no longer than this (pixels).
 const MEAN_MIP_PX := 16
+## How far (m) outside the interior's plan the camera still keeps it near.
+const INSIDE_MARGIN_M := 1.0
 ## A zone face's kinds, as numbers in its lookup key.
 const KINDS: Array[String] = ["floor", "ceiling", "outer", "start", "end"]
 
@@ -77,6 +83,7 @@ const KINDS: Array[String] = ["floor", "ceiling", "outer", "start", "end"]
 ## How many times it has switched between near and far.
 var switches := 0
 var _source: Node
+var _plan: Dictionary
 var _near_nodes: Array[Node3D] = []
 var _processes: Array[Node] = []
 var _mesh: Node3D
@@ -90,8 +97,12 @@ var _ready_spec := false
 func _ready() -> void:
 	var root := get_parent()
 	var spec: Variant = root.get_meta(FAR_META, null) if root != null else null
+	var plan: Variant = root.get_meta(InteriorPresence.PLAN_META, null) if root != null else null
 	var problem := spec_problem(spec)
 	if problem == "":
+		problem = InteriorPresence.plan_problem(plan)
+	if problem == "":
+		_plan = plan
 		_source = root.get_node_or_null(NodePath(str(spec.near_source)))
 		_mesh = root.get_node_or_null(FAR_MESH) as Node3D
 		if _source == null or not _source.has_method("is_near") or _mesh == null:
@@ -127,7 +138,10 @@ static func spec_problem(spec: Variant) -> String:
 func _process(_delta: float) -> void:
 	if not _ready_spec or (force == "" and not play_started(get_tree())):
 		return
-	var near: bool = force == "near" or (force == "" and (not is_instance_valid(_source) or bool(_source.call("is_near"))))
+	var near := force == "near"
+	if force == "":
+		var camera := get_viewport().get_camera_3d()
+		near = not is_instance_valid(_source) or bool(_source.call("is_near")) or (camera != null and InteriorPresence.plan_contains(_plan, camera.global_position, -INSIDE_MARGIN_M))
 	if near == _far:
 		_set_far(not near)
 	elif _pause_due:
@@ -366,12 +380,15 @@ static func _sample(faces: Array[Dictionary], zones: Array, surfaces: Array, kep
 			# Godot draws a triangle's front where its corners run clockwise.
 			var normal := (normals[i0] + normals[i1] + normals[i2]).normalized() if has_normals else -cross.normalized()
 			var centroid := (p0 + p1 + p2) / 3.0
-			var target := _zone_face(lookup, zones, centroid, normal, centre)
-			if target < 0 and quad_box.has_point(centroid):
+			# A given quad first: the zones' wider reach would take what lies on it.
+			var target := -1
+			if quad_box.has_point(centroid):
 				for index in quads:
 					if _over(faces[index], centroid, normal):
 						target = index
 						break
+			if target < 0:
+				target = _zone_face(lookup, zones, centroid, normal, centre)
 			if target < 0:
 				continue
 			var tint := Vector3.ONE
@@ -401,30 +418,38 @@ static func _zone_face(lookup: Dictionary, zones: Array, at: Vector3, normal: Ve
 		var a := stations[0] + wrapf(angle - stations[0], -PI, PI)
 		var radii: Vector2 = frame.radii
 		var reach: Vector2 = frame.outer_reach
+		var rings: PackedFloat64Array = frame.rings
+		# Past the sector's ends only for its end walls, which stand on them.
 		var slack := SAMPLE_REACH_M / maxf(r, 1.0)
-		if a < stations[0] - slack or a > stations[stations.size() - 1] + slack or r < radii.x - SAMPLE_REACH_M or r > radii.y + reach.y:
+		if a < stations[0] - slack or a > stations[stations.size() - 1] + slack or r < minf(radii.x, rings[0]) - SAMPLE_REACH_M or r > radii.y + reach.y:
 			continue
+		var within := a >= stations[0] and a <= stations[stations.size() - 1]
 		var floor_y := _floor_at(frame, r)
 		if normal.y > FACING:
-			if absf(at.y - floor_y) < SAMPLE_REACH_M * 0.5 and r <= radii.y + SAMPLE_REACH_M * 0.5:
-				return lookup.get(_key(z, 0, _step(stations, a), _step(frame.rings, r)), -1)
+			if within and absf(at.y - floor_y) < SAMPLE_REACH_M * 0.5 and r >= rings[0] - SAMPLE_REACH_M * 0.5 and r <= rings[rings.size() - 1] + SAMPLE_REACH_M * 0.5:
+				return lookup.get(_key(z, 0, _step(stations, a), _step(rings, r)), -1)
 			continue
 		if normal.y < -FACING:
-			if frame.has("ceiling_y") and at.y > (floor_y + float(frame.ceiling_y)) * 0.5:
+			if within and frame.has("ceiling_y") and at.y > (floor_y + float(frame.ceiling_y)) * 0.5 and at.y < float(frame.ceiling_y) + SAMPLE_REACH_M:
 				return lookup.get(_key(z, 1, _step(stations, a), 0), -1)
 			continue
 		if normal.dot(-_radial(a)) > FACING:
-			if r >= radii.y - reach.x and not _in_opening(frame, a, at.y):
+			if within and r >= radii.y - reach.x and _in_bands(frame.outer, at.y) and not _in_opening(frame, a, at.y):
 				return lookup.get(_key(z, 2, _step(frame.outer_stations, a), _step(frame.outer, at.y)), -1)
 			continue
 		var along := normal.dot(_tangent(a))
 		var start_m := (a - stations[0]) * r
 		var end_m := (stations[stations.size() - 1] - a) * r
-		if along > FACING and start_m > -SAMPLE_REACH_M * 0.5 and start_m < SAMPLE_REACH_M:
+		if along > FACING and start_m > -SAMPLE_REACH_M * 0.5 and start_m < SAMPLE_REACH_M and _in_bands(frame.start, at.y):
 			return lookup.get(_key(z, 3, 0, _step(frame.start, at.y)), -1)
-		if along < -FACING and end_m > -SAMPLE_REACH_M * 0.5 and end_m < SAMPLE_REACH_M:
+		if along < -FACING and end_m > -SAMPLE_REACH_M * 0.5 and end_m < SAMPLE_REACH_M and _in_bands(frame.end, at.y):
 			return lookup.get(_key(z, 4, 0, _step(frame.end, at.y)), -1)
 	return -1
+
+
+## Whether a height lies within a wall's bands (or just past their ends).
+static func _in_bands(bands: PackedFloat64Array, y: float) -> bool:
+	return bands.size() > 1 and y > bands[0] - SAMPLE_REACH_M * 0.5 and y < bands[bands.size() - 1] + SAMPLE_REACH_M * 0.5
 
 
 ## The index of the step of a sorted list of edges a value falls in, clamped to the

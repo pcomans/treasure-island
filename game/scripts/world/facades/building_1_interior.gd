@@ -350,8 +350,11 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 	var door := plan.door as Dictionary
 	var door_top := float(door.top_y)
 	var span := vestibule_span(plan)
-	# The inner doorway, on the door's axis, as wide as the door (_append_vestibule).
-	var inner_half := float(door.half) / (column_back - 0.05)
+	# The vestibule's back wall just behind the columns' backs, and in it the inner
+	# doorway on the door's axis, as wide as the door (_append_vestibule); its floor runs
+	# on to the hall's.
+	var inner := column_back - 0.05
+	var inner_half := float(door.half) / inner
 	var left := float(door.center) - float(door.half)
 	var right := float(door.center) + float(door.half)
 	var back := float(door.back)
@@ -372,7 +375,7 @@ static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
 		"near_processes": ["Presence", "HallReflections"],
 		"zones": [
 			{"radii": Vector2(column_back, east), "stations": stations, "rings": [column_back, (column_back + east) * 0.5, east], "floor_y": y, "ceiling_y": ceiling, "outer": bands, "start": bands, "end": bands, "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, float(plan.config.plan_production_inference_m.east_museum_depth) + 0.5)},
-			{"radii": Vector2(front_in, column_back), "stations": [span.x, span.y], "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top)},
+			{"radii": Vector2(front_in, inner), "stations": [span.x, span.y], "rings": [front_in, column_back], "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top), "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, 0.02)},
 		],
 		"quads": [
 			{"corners": [_lifted(side_left, sill), _lifted(inner_left, sill), _lifted(inner_left, door_top), _lifted(side_left, door_top)], "normal": tangent},
