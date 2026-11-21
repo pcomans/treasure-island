@@ -32,11 +32,15 @@ extends SceneTree
 ## whatever faces the camera.
 ## --only PREFIX[,PREFIX...] shoots only the views whose names start so.
 ## "kit" names the kit whose preview() builds the items: "street_clutter" (the
-## default) or "birds" (breakwater_birds.gd, the breakwater's resting birds: a
-## prop is one of its POSES, one detail level, params may set "scale").
+## default), "yard" (street_yard_kit.gd, the yards' vehicles, containers and the
+## rest: params as a row's, with "seed" for the row id's hash and "weathering"
+## for its level; "lod0" or "lod1") or "birds" (breakwater_birds.gd, the
+## breakwater's resting birds: a prop is one of its POSES, one detail level,
+## params may set "scale").
 
 const KITS := {
 	"street_clutter": preload("res://game/scripts/world/street_clutter_kit.gd"),
+	"yard": preload("res://game/scripts/world/street_yard_kit.gd"),
 	"birds": preload("res://game/scripts/world/breakwater_birds.gd"),
 }
 const MAIN_SCENE := "res://game/scenes/main.tscn"

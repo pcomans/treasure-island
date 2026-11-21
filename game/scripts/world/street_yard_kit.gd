@@ -175,11 +175,14 @@ const CONVEYOR_FOOT_M := 1.2
 const BARGE_RAKE_M := 3.0
 const BARGE_FREEBOARD_M := 1.0
 ## Default weathering (0..1) by prop; a row's weathering param overrides it.
-## The photographed container walls are clean paint with light streaks.
+## The photographed container walls are clean paint with light streaks. A
+## vehicle (VEHICLE_PROPS) takes its own level from its seed (vehicle_weathering).
 const WEATHERING := {
 	"shipping_container": 0.5, "container_wall": 0.3, "storage_shed_row": 0.35, "fabric_shed": 0.3,
-	"crane_barge": 0.6, "equipment": 0.45, "trailer": 0.3, "rv": 0.35,
+	"crane_barge": 0.6, "equipment": 0.45,
 }
+## The props built as one vehicle (_vehicle): their pieces carry the vehicle mark.
+const VEHICLE_PROPS := ["rv", "bus", "box_truck", "van", "food_truck", "trailer", "boat_on_trailer"]
 
 var _material: ShaderMaterial
 var _flag_material: StandardMaterial3D
@@ -282,15 +285,53 @@ func material() -> ShaderMaterial:
 	return _material
 
 
+## What the world draws for one row at a detail level ("lod0" near, "lod1" far),
+## at any distance, at placement: for the kit gallery
+## (game/tests/shared/kit_gallery.gd). params as a row's; a "seed" stands in for
+## the row id's hash (its weathering's pattern and a vehicle's level) and
+## "weathering" sets the level.
+func preview(prop: String, params: Dictionary, level: String, placement: Transform3D) -> Node3D:
+	var built := pieces(prop, params, int(params.get("seed", 0)), {"x_m": 1.0, "z_m": 1.0})
+	if not built.ok:
+		push_error(str(built.message))
+		return null
+	var root := Node3D.new()
+	root.transform = placement
+	for piece: Dictionary in built.pieces:
+		var multimesh := MultiMesh.new()
+		multimesh.transform_format = MultiMesh.TRANSFORM_3D
+		multimesh.use_custom_data = true
+		multimesh.mesh = (piece.meshes as Array)[1 if level == "lod1" else 0]
+		multimesh.instance_count = 1
+		multimesh.set_instance_transform(0, piece.transform)
+		multimesh.set_instance_custom_data(0, piece.custom)
+		var instance := MultiMeshInstance3D.new()
+		instance.multimesh = multimesh
+		instance.material_override = piece.get("material", _material)
+		root.add_child(instance)
+	return root
+
+
 ## A palette column for a colour name (custom data channel value).
 func _column(colour: String) -> float:
 	return (float(_colour_index.get(colour, _colour_index["grey"])) + 0.5) / float(SLOTS)
 
 
 ## Custom data of one piece: three paints and the weathering level with a seed.
-func _custom(primary: String, secondary: String, tertiary: String, level: float, seed: int) -> Color:
+## A vehicle's tertiary column sits a quarter of a column early, still inside its
+## column, which marks it a vehicle to the shader (its road film and streaks).
+func _custom(primary: String, secondary: String, tertiary: String, level: float, seed: int, vehicle := false) -> Color:
 	var seed_fraction := float(seed % 9973) / 9973.0
-	return Color(_column(primary), _column(secondary), _column(tertiary), (floorf(clampf(level, 0.0, 1.0) * 15.0) + seed_fraction * 0.999) / 16.0)
+	var tertiary_column := _column(tertiary) - (0.25 / float(SLOTS) if vehicle else 0.0)
+	return Color(_column(primary), _column(secondary), tertiary_column, (floorf(clampf(level, 0.0, 1.0) * 15.0) + seed_fraction * 0.999) / 16.0)
+
+
+## A yard vehicle's weathering from its seed (its row id's hash): each its own,
+## skewed toward weathered (owner, 2026-11-21: "vary and dirty them"): in the 16
+## steps _custom keeps, about one in eight fairly clean (under 0.4), nearly half
+## at 0.7 or more and one in eight at 0.9 or more.
+static func vehicle_weathering(seed: int) -> float:
+	return 0.2 + 0.8 * pow(_unit(seed, 7), 0.7)
 
 
 ## A small repeatable number in [0, 1) from a seed and an index.
@@ -314,7 +355,7 @@ func pieces(prop: String, params: Dictionary, default_seed: int = 0, plan: Dicti
 		return {"ok": false, "message": "%s needs a variant 0..%d: %s" % [prop, variants.size() - 1, params]}
 	var variant := int(variant_value)
 	var seed := int(params.get("seed", default_seed)) & 0x7fffffff
-	var level := float(params.get("weathering", WEATHERING.get(prop, 0.2)))
+	var level := float(params.get("weathering", vehicle_weathering(seed) if prop in VEHICLE_PROPS else WEATHERING.get(prop, 0.2)))
 	var result := {"ok": true, "pieces": [], "shapes": [], "range_m": float(PROPS[prop].range_m), "lod_near_m": LOD_NEAR_M, "cell_m": CELL_M, "shadow": true}
 	var error := ""
 	match prop:
@@ -588,7 +629,7 @@ func _vehicle(result: Dictionary, prop: String, mesh: String, params: Dictionary
 			var cover := str(params.get("cover", "none"))
 			secondary = "grey" if cover == "none" else _colour(params, "cover", "blue")
 			mesh = "boat_%s_%s" % [mesh, "open" if cover == "none" else "covered"]
-	var error := _add(result, mesh, Transform3D.IDENTITY, _custom(primary, secondary, tertiary, level, seed))
+	var error := _add(result, mesh, Transform3D.IDENTITY, _custom(primary, secondary, tertiary, level, seed, true))
 	if error == "":
 		error = _plan_box(result, plan, mesh)
 	return error

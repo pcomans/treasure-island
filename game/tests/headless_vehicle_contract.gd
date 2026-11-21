@@ -4,7 +4,9 @@ extends SceneTree
 ## game/tests/shared/vehicle_cases.json. Cases, in order; the first failure
 ## stops the run (later cases need the earlier ones):
 ##   1. enter and exit with F: the parked cars differ in how dirty they are
-##      (most nearly clean, a few dirty); with the game paused F beside a parked
+##      (most dusty: some clean, at least a fifth clearly dirty, a few filthy)
+##      and the yard's drivable vehicles in their weathering (most of them
+##      weathered); with the game paused F beside a parked
 ##      car does nothing; unpaused, the stock player presses F
 ##      and drives it (avatar hidden, capsule off, the parked box gone, and it
 ##      looks as it did parked: paint, finish and dirt), the view
@@ -282,21 +284,43 @@ func _case_enter_exit() -> bool:
 		return false
 	var parked: Transform3D = entry.transform
 	# Cars differ in how dirty they are (by their row ids), the same car always
-	# the same: most nearly clean, a few dirty, but not many (owner, 2026-11-13:
-	# fewer dirty cars).
+	# the same, and most show some road dirt (owner, 2026-11-21: "mostly dusty",
+	# reversing 2026-11-13's fewer dirty cars): some clean, but no more than a
+	# third; at least a third lightly to moderately dusty; at least a fifth
+	# clearly dirty; a few filthy, but no more than a tenth.
 	var cars := 0
 	var clean := 0
+	var dusty := 0
 	var dirty := 0
+	var filthy := 0
+	# The storage yards' vehicles each have a weathering of their own, skewed
+	# toward weathered (owner, 2026-11-21): the drivable ones, by the level
+	# packed in their custom data (street_yard_kit.gd _custom).
+	var yard_levels := {}
+	var yard := 0
+	var weathered := 0
+	var fresh := 0
 	for other: String in _vehicles.swappable_ids():
 		var other_entry: Dictionary = _vehicles.row(other)
 		if str(other_entry.get("prop", "")) != "parked_car":
+			if other_entry.has("body"):
+				var level := floorf((other_entry.custom as Color).a * 16.0) / 15.0
+				yard += 1
+				yard_levels[level] = true
+				weathered += 1 if level >= 0.7 else 0
+				fresh += 1 if level < 0.4 else 0
 			continue
 		var dirt := (other_entry.custom as Color).a
 		cars += 1
-		clean += 1 if dirt < 0.2 else 0
-		dirty += 1 if dirt > 0.5 else 0
-	print("DIRT %d parked cars: %d nearly clean, %d dirty" % [cars, clean, dirty])
-	if not _require(cars > 20 and clean >= cars / 2 and dirty >= cars / 30 and dirty <= cars / 5, "Most parked cars should be nearly clean and a few dirty (%d cars, %d nearly clean, %d dirty)." % [cars, clean, dirty]):
+		clean += 1 if dirt < 0.1 else 0
+		dusty += 1 if dirt >= 0.1 and dirt <= 0.6 else 0
+		dirty += 1 if dirt > 0.6 else 0
+		filthy += 1 if dirt > 0.85 else 0
+	print("DIRT %d parked cars: %d clean, %d lightly to moderately dusty, %d clearly dirty (%d of them filthy)" % [cars, clean, dusty, dirty, filthy])
+	if not _require(cars > 20 and clean >= cars / 8 and clean <= cars / 3 and dusty >= cars / 3 and dirty >= cars / 5 and filthy >= 1 and filthy <= cars / 10, "Most parked cars should show some road dirt: a few clean, many lightly to moderately dusty, at least a fifth clearly dirty and a few filthy (%d cars: %d clean, %d dusty, %d dirty, %d filthy)." % [cars, clean, dusty, dirty, filthy]):
+		return false
+	print("WEATHERING %d drivable yard vehicles: %d levels, %d weathered (0.7 or more), %d fresh (under 0.4)" % [yard, yard_levels.size(), weathered, fresh])
+	if not _require(yard > 20 and yard_levels.size() >= 5 and weathered >= yard / 3 and fresh <= yard / 4, "The yard's vehicles should each have their own weathering, most of them weathered (%d vehicles: %d levels, %d weathered, %d fresh)." % [yard, yard_levels.size(), weathered, fresh]):
 		return false
 	# The stock player 1.6 m off the driver's (left) door, walking.
 	var door := parked.origin - parked.basis.x * 1.6
