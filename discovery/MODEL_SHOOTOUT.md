@@ -54,13 +54,15 @@ Every version starts from the same Opus first build of the housing block. Each h
 | Four questions (A, D: one review, two fixes) | 1,138 | 3 / 5 | 336 → 421 (A), 409 (D) |
 | No additions (B) | 862 | 0 / 8 | 336 → 322 |
 
-Words and node counts are measured from the run's files. The additions and fixes tallies, and that in B both the reviewer and the fixer obeyed the rule, are as recorded at the time.
+Words and node counts are measured from the run's files. The additions and fixes tallies, and that in B both the reviewer and the fixer obeyed the rule, are as recorded at the time. The test so far is one building with one run per format, and the owner regards the format changes as hypotheses until measured: "Right now it's just a hypothesis, right?"
 
 The owner's blind verdict: "if I absolutely had to pick one, I would pick version A". Its small windows shrink to about the right size (a bit too much), the big windows stay a bit too big, the box positions are still clumsy, and it adds the shed. C "does make a significant leap in terms of small detail" (the front doors set back) "but it also just adds a lot of clutter … It's more like noise and not signal". All four "make very modest gains"; "I don't think the iteration … beyond the starting building is really worth it here". Every version missed the upper floor slightly overhanging the ground floor, and all drifted away from the doors' real blue. The owner did not comment on B or D.
 
 Earlier, not blind: after a second review round the owner found the Opus building worse: "It looks more cluttered", with bins, AC units and small windows crowding the doors.
 
-A fifth variant is running, with the review told to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake; no result yet.
+Variant E (2026-11-21, not blind: added after A–D, and the owner has not judged it yet) told the review to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake. The review ran to 975 words and asked for 0 additions, 6 fixes and 2 removals (the runner's count); mesh nodes went from 336 to 374 and triangles from 7,790 to 8,246; review and fix cost $0.75. The fixer still added two storage boxes nobody asked for, and the review did not mention the upper-floor overhang.
+
+Variant F, a form-first instruction plus enlargements of the same two photos, is running; no result yet.
 
 ## Model tiers by detail level
 
