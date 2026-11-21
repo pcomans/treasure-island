@@ -140,7 +140,7 @@
     },
     {
       "folder": "game/resources/textures/world/b1_hall",
-      "made_by": "Building 1's hall mural, an original sea-animal painting generated with tools/generate-texture from text prompts and composed with ImageMagick, its ribbon drawn in code; its layout of scenes follows the hall's 1975 mural, credited above (b1_hall/PROVENANCE.md)"
+      "made_by": "Building 1's hall mural, an original sea-animal painting generated with tools/generate-texture from text prompts and composed with ImageMagick, its ribbon drawn in code; its layout of scenes follows the hall's 1975 mural, credited above; and the hall's worn terrazzo floor, drawn in code from the hall's own plan by tools/b1_hall_floor_textures.gd (b1_hall/PROVENANCE.md)"
     },
     {
       "folder": "game/resources/textures/world/d1_b225_repair_v1",

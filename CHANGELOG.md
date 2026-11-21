@@ -6,6 +6,21 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2459 (2026-11-21)
+
+- From far away, Building 1's hall is now drawn through its open front door as a simple stand-in of about 400 triangles instead of the full 35,000, so the island takes a little less work to draw; the full hall is back before you reach the door.
+
+## Build 2428 (2026-11-21)
+
+- On computers, the reflections in the floor of Building 1's hall now fade in over half a second as you walk in, and out as you leave, instead of appearing all at once at the door.
+- The open glass doors of Building 1's hall keep the sky's reflection when seen from inside, where they looked black.
+- The floor of Building 1's hall is now a worn terrazzo: large panels between thin divider strips, two darker bands curving along the hall, and decades of wear in its polish.
+- On computers, that floor's reflections are back at their full strength, clearer than in the last build.
+
+## Build 2404 (2026-11-21)
+
+- You can now walk into Building 1's hall without jumping: walking at any speed or angle, on a phone or a computer, the player no longer stops at the front door's doorstep.
+
 ## Build 2394 (2026-11-20)
 
 - While driving on a phone or tablet, drag anywhere that isn't a button to glance around, as with the mouse; the view swings back a moment after you stop.

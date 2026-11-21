@@ -23,8 +23,9 @@ extends RefCounted
 ## exterior they always saw; it is lit by the sky's ambient light and its own glowing
 ## fixtures (lamps and daylight panels, DaySun night roles) over baked vertex
 ## shading, on RENDER_INTERIOR, which main.tscn's Sun leaves out of its light: the web
-## draws no sun shadows, so the sun would otherwise light the hall through its roof. Its collision is a closed shell of
-## its own, colliding from both sides; the doorway's car blocker is on the cars' ground
+## draws no sun shadows, so the sun would otherwise light the hall through its roof.
+## The door group's open leaves belong to the facade (Building1HeroModel), on its render
+## layer. Its collision is a closed shell of its own, colliding from both sides; the doorway's car blocker is on the cars' ground
 ## layer only, so cars stay out and the player and camera pass.
 
 const CONFIG_PATH := "res://game/resources/facades/building_1_interior.json"
@@ -60,11 +61,27 @@ const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
 const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
-## How far over the hall's highest ceiling (m) a camera still counts as in the hall for
-## its floor reflections: that ceiling's own depth, not the floors or the roof above.
-const REFLECTIONS_TOP_MARGIN_M := 1.2
+const INTERIOR_PRESENCE := preload("res://game/scripts/world/interiors/interior_presence.gd")
+const INTERIOR_FAR := preload("res://game/scripts/world/interiors/interior_far_stand_in.gd")
+## How far over the hall's highest ceiling (m) the camera still counts as in the hall
+## (InteriorPresence): that ceiling's own depth, not the floors or the roof above.
+const TOP_MARGIN_M := 1.2
+## The terrazzo's own polar frame (floor_layout), which its UVs span 0 to 1 and the floor
+## textures cover: past its angles by FLOOR_FRAME_PAD_RAD, from FLOOR_FRAME_OUT_M outside
+## the crescent's facade (the vestibule and the door's sill) to FLOOR_FRAME_PAD_M past the
+## deepest east bay's back.
+const FLOOR_FRAME_PAD_RAD := 0.01
+const FLOOR_FRAME_OUT_M := 1.5
+const FLOOR_FRAME_PAD_M := 0.5
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
+## The far stand-in's floor steps per segment, an east bay or the vestibule (_far_spec):
+## the terrazzo's lines drawn in its polar frame bend at most a segment's angle over
+## this between the stand-in's corners.
+const FAR_FLOOR_SPLIT := 3
+## How far (m) the doorway's box (the far stand-in spec's opening) reaches round the
+## reveal, so the reveal's own edges are in it (_far_spec).
+const FAR_OPENING_MARGIN_M := 0.05
 
 static var _materials: Dictionary = {}
 
@@ -111,6 +128,9 @@ static func plan(site: Dictionary) -> Dictionary:
 	var sill_y := float(heights.sill_y)
 	if sill_y > floor_y:
 		return {"ok": false, "message": "Building 1 interior's door sill stands above the hall's floor."}
+	var walk: Variant = heights.get("threshold_walk")
+	if not walk is Dictionary or not (float(walk.get("slope_deg", 0.0)) > 0.0 and float(walk.get("slope_deg", 0.0)) < 45.0 and float(walk.get("below", -1.0)) >= 0.0):
+		return {"ok": false, "message": "Building 1 interior's threshold_walk needs a slope gentler than the sill's 45-degree bevel and a depth under the bevel's foot."}
 	# The east wall's own bays: equal steps over the hall's arc.
 	var east_bays := int(plan_m.east_bays)
 	var east_piers: Array[float] = []
@@ -198,6 +218,10 @@ static func build(plan: Dictionary) -> Dictionary:
 	var mural_entry := plan.config.palette.mural as Dictionary
 	var placeholder := _mural_placeholder(mural_entry)
 	var floor_data := {}
+	var layout := floor_layout(plan)
+	root.set_meta("floor_layout", layout)
+	# The Shell's surfaces as built, which colour its far stand-in (_far_spec).
+	var detail: Array[Dictionary] = []
 	for surface: String in SURFACES:
 		var bucket := buckets[surface] as Dictionary
 		if (bucket.indices as Array).is_empty():
@@ -206,7 +230,9 @@ static func build(plan: Dictionary) -> Dictionary:
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
 		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
-		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+		# The terrazzo's UVs are its polar frame's (floor_layout): its textures follow the
+		# crescent's rings and radii.
+		arrays[Mesh.ARRAY_TEX_UV] = _floor_uvs(layout, bucket.vertices as Array) if surface == "terrazzo" else PackedVector2Array(bucket.uvs as Array)
 		if not surface in GLOWS:
 			arrays[Mesh.ARRAY_COLOR] = _shading(plan, bucket, surface == "terrazzo")
 		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
@@ -223,6 +249,7 @@ static func build(plan: Dictionary) -> Dictionary:
 			# From the shared static _materials cache, terrazzo too: the floor reflections' writes
 			# (Building1HallReflections) would reach every hall if a second one were built; one is.
 			mesh.surface_set_material(index, _material(surface, plan.config.palette[surface] as Dictionary))
+		detail.append({"name": surface, "arrays": arrays, "material": mesh.surface_get_material(index)})
 		triangles += (bucket.indices as Array).size() / 3
 	var instance := MeshInstance3D.new()
 	instance.name = "Shell"
@@ -263,10 +290,171 @@ static func build(plan: Dictionary) -> Dictionary:
 	loader.unload_delay = float(mural.unload_delay)
 	loader.hall = Vector4((plan.center as Vector2).x, (plan.center as Vector2).y, float(plan.front_in) - 0.5, float(plan.east) + 4.0)
 	root.add_child(loader)
+	# Whether the camera is in the hall (InteriorPresence), from the plan on the root: the
+	# loader's bounds about the crescent's centre, the hall's angles, and up to a little
+	# over its highest ceiling (the balcony's, or its own if that were higher): the hall,
+	# its balcony and gallery, not the roof above them.
+	var heights := plan.heights as Dictionary
+	root.set_meta(INTERIOR_PRESENCE.PLAN_META, {"kind": "ring_sector", "centre": Vector2(loader.hall.x, loader.hall.y), "radii": Vector2(loader.hall.z, loader.hall.w), "angles": Vector2(float(plan.annex_north), float(plan.south)), "top_y": float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + TOP_MARGIN_M})
+	var presence := INTERIOR_PRESENCE.new()
+	presence.name = "Presence"
+	root.add_child(presence)
 	root.add_child(_reflections(plan, loader.hall, floor_data))
+	# While the mural is released, far off, the Shell gives way to a stand-in of a few
+	# hundred triangles (InteriorFarStandIn) and the presence and reflections pause. The
+	# collision stays as it is.
+	root.set_meta(INTERIOR_FAR.FAR_META, _far_spec(plan, layout))
+	var far := INTERIOR_FAR.build(root, detail, RENDER_INTERIOR)
+	var far_surfaces := 0
+	if far != null:
+		root.add_child(far)
+		far_surfaces = far.mesh.get_surface_count()
+		for surface in far_surfaces:
+			triangles += far.mesh.surface_get_array_index_len(surface) / 3
+		var switch := INTERIOR_FAR.new()
+		switch.name = "FarSwitch"
+		root.add_child(switch)
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
-	return {"ok": true, "node": root, "mesh_instances": 1, "surfaces": mesh.get_surface_count(), "triangles": triangles, "static_bodies": 2, "shapes": 2}
+	return {"ok": true, "node": root, "mesh_instances": 1 + (1 if far != null else 0), "surfaces": mesh.get_surface_count() + far_surfaces, "triangles": triangles, "static_bodies": 2, "shapes": 2}
+
+
+## The hall's far stand-in (InteriorFarStandIn), from the plan: what can be seen of the
+## hall from outside through its open door, the one way in. The door's reveal (sides,
+## head, sill and its bevel, as _append_doorway builds them); the vestibule (its floor
+## rising from the sill in FAR_FLOOR_SPLIT steps, its sides and ceiling, its back wall
+## round the inner doorway); and the hall from the columns' backs to the east wall: the
+## floor in two rings and FAR_FLOOR_SPLIT steps a bay, the ceiling, the east wall in its
+## bands (bays, the slatted band, the mural, the coves) on the east bays' piers, its
+## bays' band parted at the piers' sides, and the end walls; the east museum bays'
+## daylight panels kept glowing on the wall's line. North of the north line the annex
+## (_append_north_annex) as the Shell has it: as low as its own ceiling, under the
+## two-storey roof, open to the hall, which closes over it with its return
+## (_append_end_walls) up to the hall's ceiling. The floors keep the terrazzo's own
+## material and frame, so its pattern carries on; everything else is coloured from the
+## Shell. The west side under the balcony is never seen from outside, so it has no
+## stand-in. The doorway, sill to head and the bevel's foot to the vestibule's back
+## wall, FAR_OPENING_MARGIN_M round, is the hall's one opening: the only place either
+## the Shell or the stand-in shows from outside.
+static func _far_spec(plan: Dictionary, layout: Dictionary) -> Dictionary:
+	var y := float(plan.floor_y)
+	var sill := float(plan.sill_y)
+	var heights := plan.heights as Dictionary
+	var members := plan.members as Dictionary
+	var front_in := float(plan.front_in)
+	var east := float(plan.east)
+	var column_back := float(plan.column) - float((members.west_column as Array)[1])
+	var ceiling := y + float(heights.ceiling)
+	var vestibule_ceiling := y + float(heights.balcony_floor) - float(heights.balcony_slab)
+	var mural := heights.mural as Array
+	var bands := [y, y + float(heights.east_bay_head), y + float(mural[0]), y + float(mural[1]), ceiling]
+	var piers := plan.east_piers as Array
+	var annex_top := y + float((plan.config.plan_production_inference_m.north_annex as Dictionary).height)
+	var rings := [column_back, (column_back + east) * 0.5, east]
+	var door := plan.door as Dictionary
+	var door_top := float(door.top_y)
+	var span := vestibule_span(plan)
+	# The vestibule's back wall just behind the columns' backs, and in it the inner
+	# doorway on the door's axis, as wide as the door (_append_vestibule); its floor runs
+	# on to the hall's.
+	var inner := column_back - 0.05
+	var inner_half := float(door.half) / inner
+	var left := float(door.center) - float(door.half)
+	var right := float(door.center) + float(door.half)
+	var back := float(door.back)
+	var front := float(door.face) + 0.06
+	var bevel := float(heights.threshold_bevel)
+	var side_left := _frame_point(door, left, back, 0.0)
+	var side_right := _frame_point(door, right, back, 0.0)
+	var inner_left := door.inner_left as Vector3
+	var inner_right := door.inner_right as Vector3
+	var outer_left := _frame_point(door, left, front, 0.0)
+	var outer_right := _frame_point(door, right, front, 0.0)
+	var foot_left := _frame_point(door, left, front + bevel, 0.0)
+	var foot_right := _frame_point(door, right, front + bevel, 0.0)
+	var tangent := door.tangent as Vector3
+	var normal := door.normal as Vector3
+	var anchor := door.anchor as Vector3
+	var depth_in := minf((inner_left - anchor).dot(normal), (inner_right - anchor).dot(normal)) - FAR_OPENING_MARGIN_M
+	var depth_out := front + bevel + FAR_OPENING_MARGIN_M
+	var foot_y := sill - bevel - FAR_OPENING_MARGIN_M
+	var head_y := door_top + FAR_OPENING_MARGIN_M
+	var half_width := float(door.half) + FAR_OPENING_MARGIN_M
+	var doorway := Transform3D(Basis(tangent * half_width, Vector3.UP * (head_y - foot_y) * 0.5, normal * (depth_out - depth_in) * 0.5), _frame_point(door, float(door.center), (depth_in + depth_out) * 0.5, (foot_y + head_y) * 0.5))
+	return {
+		"near_source": "MuralLoader",
+		"near_nodes": ["Shell"],
+		"near_processes": ["Presence", "HallReflections"],
+		"zones": [
+			{"radii": Vector2(column_back, east), "stations": [float(plan.annex_north), float(piers[0])], "rings": rings, "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": annex_top, "outer": [y, annex_top], "start": [y, annex_top]},
+			{"radii": Vector2(column_back, east), "stations": piers, "rings": rings, "floor_split": FAR_FLOOR_SPLIT, "floor_y": y, "ceiling_y": ceiling, "outer": bands, "outer_split": {"bands": 1, "half_m": float((members.east_pier as Array)[0]) * 0.5}, "start": [annex_top, ceiling], "end": bands, "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, float(plan.config.plan_production_inference_m.east_museum_depth) + 0.5)},
+			{"radii": Vector2(front_in, inner), "stations": [span.x, span.y], "rings": [front_in, column_back], "floor_split": FAR_FLOOR_SPLIT, "floor_y": Vector2(sill, y), "ceiling_y": vestibule_ceiling, "outer": [sill, door_top, vestibule_ceiling], "start": [sill, vestibule_ceiling], "end": [sill, vestibule_ceiling], "opening": Vector3(float(door.theta) - inner_half, float(door.theta) + inner_half, door_top), "outer_reach": Vector2(INTERIOR_FAR.SAMPLE_REACH_M, 0.02)},
+		],
+		"quads": [
+			{"corners": [_lifted(side_left, sill), _lifted(inner_left, sill), _lifted(inner_left, door_top), _lifted(side_left, door_top)], "normal": tangent},
+			{"corners": [_lifted(inner_right, sill), _lifted(side_right, sill), _lifted(side_right, door_top), _lifted(inner_right, door_top)], "normal": -tangent},
+			{"corners": [_lifted(side_left, door_top), _lifted(side_right, door_top), _lifted(inner_right, door_top), _lifted(inner_left, door_top)], "normal": Vector3.DOWN},
+			{"corners": [_lifted(outer_left, sill), _lifted(outer_right, sill), _lifted(inner_right, sill), _lifted(inner_left, sill)], "normal": Vector3.UP},
+			{"corners": [_lifted(foot_left, sill - bevel), _lifted(foot_right, sill - bevel), _lifted(outer_right, sill), _lifted(outer_left, sill)], "normal": ((door.normal as Vector3) + Vector3.UP).normalized()},
+		],
+		"openings": [doorway],
+		"kept": ["daylight"],
+		"materials": ["terrazzo"],
+		"uv_frames": {"terrazzo": {"theta": layout.theta, "radius": layout.radius}},
+		"matte": {"roughness": 0.9, "specular": 0.15},
+	}
+
+
+## The terrazzo's layout in its own polar frame: the frame its UVs span 0 to 1 and the
+## floor textures cover (theta: angles about the crescent's centre, radius: metres from
+## it), and where the hall's walls, door and bays stand in it. The root carries it as
+## the "floor_layout" meta, which the floor textures' generator reads
+## (tools/b1_hall_floor_textures.gd): regenerate them when the plan moves these.
+static func floor_layout(plan: Dictionary) -> Dictionary:
+	var bays: Array = []
+	var deepest := 0.0
+	var east_piers := plan.east_piers as Array
+	for bay in east_piers.size() - 1:
+		var depth := _east_bay_depth(plan, bay)
+		var span := _east_bay_span(plan, bay, depth)
+		bays.append([span.x, span.y, depth])
+		deepest = maxf(deepest, depth)
+	return {
+		"centre": plan.center,
+		"theta": Vector2(float(plan.annex_north) - FLOOR_FRAME_PAD_RAD, float(plan.south) + FLOOR_FRAME_PAD_RAD),
+		"radius": Vector2(float(plan.radius) - FLOOR_FRAME_OUT_M, float(plan.east) + deepest + FLOOR_FRAME_PAD_M),
+		"front_in": float(plan.front_in),
+		"column": float(plan.column),
+		"east": float(plan.east),
+		"north": float(plan.north),
+		"south": float(plan.south),
+		"annex_north": float(plan.annex_north),
+		"vestibule": vestibule_span(plan),
+		"door": door_span(plan),
+		"bays": bays,
+	}
+
+
+## Each terrazzo vertex's place in the floor's polar frame: u along the angles (taken
+## from the frame's first angle and wrapped, so a frame across the -PI/PI seam holds
+## too, but only for a frame spanning under PI with theta.y unwrapped above theta.x),
+## v out along the radius, 0 to 1. Said as an error if one falls outside it.
+static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Array:
+	var centre := layout.centre as Vector2
+	var theta := layout.theta as Vector2
+	var radius := layout.radius as Vector2
+	var uvs := PackedVector2Array()
+	var outside := 0
+	for vertex: Vector3 in vertices:
+		var offset := Vector2(vertex.x - centre.x, vertex.z - centre.y)
+		var turn := wrapf(atan2(offset.y, offset.x) - theta.x, -PI, PI)
+		var uv := Vector2(turn / (theta.y - theta.x), (offset.length() - radius.x) / (radius.y - radius.x))
+		if uv.x < 0.0 or uv.x > 1.0 or uv.y < 0.0 or uv.y > 1.0:
+			outside += 1
+		uvs.append(uv)
+	if outside > 0:
+		push_error("Building 1 interior: %d terrazzo vertices lie outside the floor's frame %s; its textures would not cover them." % [outside, layout])
+	return uvs
 
 
 ## The hall's floor reflections (plan.config.reflections; Building1HallReflections),
@@ -283,10 +471,6 @@ static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> 
 	node.render_layer = RENDER_INTERIOR
 	node.hall = hall
 	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
-	# Up to the hall's highest ceiling (the balcony's, or its own if that were higher) and
-	# a little over: the hall, its balcony and gallery, not the roof above them.
-	var heights := plan.heights as Dictionary
-	node.top_y = float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + REFLECTIONS_TOP_MARGIN_M
 	node.ssr = bool(ssr.get("enabled", true))
 	node.ssr_max_steps = int(ssr.get("max_steps", 64))
 	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))
@@ -1085,10 +1269,10 @@ static func _append_north_annex(plan: Dictionary, buckets: Dictionary, shell: Di
 
 static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	# The opened door group's reveal, from the facade's dark border to the vestibule
-	# wall: sides, head and a level stone sill, its front a riser down to the
-	# forecourt's paving; under it, for the feet, a hidden slope over the same step.
+	# wall: sides, head and a level stone sill, its front bevelled down to the
+	# forecourt's paving; under the bevel, for the feet, a gentler hidden slope.
 	# The sides and head start at the dark border's back, which frames the opening
-	# outside; the sill runs to the border's front and on to its riser. The sill is the
+	# outside; the sill runs to the border's front and on to its bevel. The sill is the
 	# door's own height (sill_y), below the hall's floor, and meets the vestibule's floor
 	# on its stations (_append_vestibule_floor).
 	var door := plan.door as Dictionary
@@ -1112,16 +1296,31 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	var outer_left := _frame_point(door, left, front, 0.0)
 	var outer_right := _frame_point(door, right, front, 0.0)
 	var opened := door_span(plan)
-	_doorway_strip(plan, [stone, shell], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP, _cut_stations(opened.x, opened.y, floor_cuts(plan)))
-	# The sill's front: a 45-degree bevel down to the forecourt's paving, the same
-	# surface seen and walked (a slope the stock player takes as floor).
+	var stations := _cut_stations(opened.x, opened.y, floor_cuts(plan))
+	_doorway_strip(plan, [stone], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP, stations)
+	# The sill's front, seen: a 45-degree bevel down to the forecourt's paving.
 	var bevel := float(heights.threshold_bevel)
 	var foot_left := _frame_point(door, left, front + bevel, 0.0)
 	var foot_right := _frame_point(door, right, front + bevel, 0.0)
 	var slope := (normal + Vector3.UP).normalized()
-	_quad([stone, shell], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
+	_quad([stone], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
 	_triangle([stone], _lifted(foot_left, y - bevel - 0.03), _lifted(outer_left, y), _lifted(outer_left, y - bevel - 0.03), -tangent)
 	_triangle([stone], _lifted(outer_right, y - bevel - 0.03), _lifted(outer_right, y), _lifted(foot_right, y - bevel - 0.03), tangent)
+	# Walked: a gentler slope through the bevel's foot (threshold_walk), hidden in the
+	# stone. It meets the sill's level a little inside the bevel's top and runs on under
+	# the bevel's foot below the paving, so the feet sink up to 4 cm into the bevel and
+	# no edge they meet reads near the stock controller's 48-degree floor limit. Walked
+	# as seen, the 45-degree bevel stopped the player: its top edge read up to about 5
+	# degrees steeper than the bevel, past that limit (the config's note).
+	var walk := heights.threshold_walk as Dictionary
+	var run := bevel / tan(deg_to_rad(float(walk.slope_deg)))
+	var below := float(walk.below)
+	var walk_top_left := _frame_point(door, left, front + bevel - run, 0.0)
+	var walk_top_right := _frame_point(door, right, front + bevel - run, 0.0)
+	var walk_low_left := _frame_point(door, left, front + bevel + below * run / bevel, 0.0)
+	var walk_low_right := _frame_point(door, right, front + bevel + below * run / bevel, 0.0)
+	_doorway_strip(plan, [shell], walk_top_left, walk_top_right, inner_left, inner_right, y, Vector3.UP, stations)
+	_quad([shell], _lifted(walk_low_left, y - bevel - below), _lifted(walk_low_right, y - bevel - below), _lifted(walk_top_right, y), _lifted(walk_top_left, y), (normal * bevel + Vector3.UP * run).normalized())
 
 
 ## A door group's glazing seen from inside, on the front wall's inner face: daylight
@@ -1729,8 +1928,35 @@ static func _material(key: String, entry: Dictionary) -> StandardMaterial3D:
 	else:
 		material.vertex_color_use_as_albedo = true
 		material.vertex_color_is_srgb = true
+	_textures(material, entry)
 	_materials[key] = material
 	return material
+
+
+## A palette entry's textures, if it names any (the terrazzo's): "albedo_texture" over
+## the surface's UVs; "detail_texture", multiplied in, tiling every "detail_tile_m"
+## metres on the world's ground plane (no UVs of its own, so no seam anywhere); and,
+## except in the web's bake (it draws no reflections), "roughness_texture" over the UVs,
+## which the material's roughness scales.
+static func _textures(material: StandardMaterial3D, entry: Dictionary) -> void:
+	if not entry.has("albedo_texture") and not entry.has("detail_texture"):
+		return
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.texture_repeat = true
+	if entry.has("albedo_texture"):
+		material.albedo_texture = load(str(entry.albedo_texture)) as Texture2D
+	if entry.has("detail_texture"):
+		var tile := float(entry.get("detail_tile_m", 1.0))
+		material.detail_enabled = true
+		material.detail_albedo = load(str(entry.detail_texture)) as Texture2D
+		material.detail_blend_mode = BaseMaterial3D.BLEND_MODE_MUL
+		material.detail_uv_layer = BaseMaterial3D.DETAIL_UV_2
+		material.uv2_triplanar = true
+		material.uv2_world_triplanar = true
+		material.uv2_scale = Vector3.ONE / tile
+	if entry.has("roughness_texture") and PREBUILT_WORLD.profile() != "web":
+		material.roughness_texture = load(str(entry.roughness_texture)) as Texture2D
+		material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
 
 
 ## A mural tile's material, new for each build (not shared like _material's: the

@@ -47,6 +47,7 @@ const BUILDS := {
 	"res://game/scripts/world/ferry_terminal.gd": "builds the ferry terminal while the island loads (or bakes)",
 	"res://game/scripts/world/fresh_bay_horizon.gd": "builds the horizon while the island loads (or bakes)",
 	"res://game/scripts/world/ground_cover.gd": "makes the ground-cover materials while the island loads (or bakes)",
+	"res://game/scripts/world/interiors/interior_far_stand_in.gd": "makes an interior's far stand-in and its plain material with the interior while the island loads (or bakes)",
 	"res://game/scripts/world/mulch_ground.gd": "makes the mulch materials while the island loads (or bakes)",
 	"res://game/scripts/world/shoreline_builder.gd": "builds the shoreline while the island loads (or bakes)",
 	"res://game/scripts/world/street_detail_batches.gd": "gives the street detail's levels their band copies while the island loads (or bakes)",

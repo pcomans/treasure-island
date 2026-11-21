@@ -4,6 +4,7 @@
 #
 #   tools/test.sh
 #
+# Its output starts with the commit it tests and `git status --short`.
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
@@ -38,7 +39,11 @@
 #    (data/street_detail/building_paving.json, tools/export_building_paving.gd --check).
 # 5. The behaviour tests: the game parses, loads and plays, and every building
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
-#    in the world generated at startup and in the baked world desktop exports load.
+#    in the world generated at startup and in the baked world desktop exports load;
+#    each interior's passages are walked in and out every way players walk them
+#    (touch stick magnitudes, running, keys, approach angles, and physics steps
+#    at 30 and 20 a second besides the game's fixed 60, to vary where each tick
+#    lands), there and in the world baked for the web build, drawn as the web draws it.
 #    And no outdoor ground shows inside an enterable interior (a catalog unit
 #    with passages): its floor covers its plan up to its walls, above the land and
 #    the ground draped over it, and no street detail stands in it
@@ -60,6 +65,13 @@ failed=()
 # Godot can exit 0 after a script or engine error, so its output is checked too.
 # A clean run prints no ERROR lines at all, and no shader error.
 godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR|SHADER ERROR'
+
+# What this run tests: the commit and what is changed beside it, so a saved log names
+# its own source.
+echo "== source"
+echo "commit $(git rev-parse HEAD 2>/dev/null || echo unknown)"
+echo "git status --short (nothing listed: a clean worktree):"
+git status --short 2>/dev/null || echo "NOTE: not a git worktree"
 
 echo "== junk check"
 command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }
@@ -226,6 +238,7 @@ node_checks=(tools/validate_godot_world.mjs tools/check_godot_world_determinism.
 node_pids=()
 node_logs=""
 baked=""
+web_baked=""
 solar_table=""
 # A process and every process under it, each parent before its children.
 process_tree() {
@@ -245,6 +258,7 @@ cleanup() {
   for pid in "${pids[@]}"; do kill "${pid}" 2>/dev/null; done
   [ -z "${node_logs}" ] || rm -rf "${node_logs}"
   [ -z "${baked}" ] || rm -f "${baked}"
+  [ -z "${web_baked}" ] || rm -f "${web_baked}"
   [ -z "${solar_table}" ] || rm -f "${solar_table}"
 }
 trap cleanup EXIT
@@ -285,6 +299,8 @@ tests=(
   game/tests/headless_bake_merge_contract.gd
   game/tests/headless_building_1_interior_contract.gd
   game/tests/headless_interior_ground_contract.gd
+  game/tests/headless_interior_presence_contract.gd
+  game/tests/headless_interior_far_stand_in_contract.gd
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
@@ -356,7 +372,7 @@ for method in forward_plus gl_compatibility; do
 done
 
 # Building 1's hall floor reflections in the loaded island, drawn on both renderers: on
-# Forward+ they come and go with the camera, never flicker on the doorway and put the
+# Forward+ they fade in and out with the camera, never flicker on the doorway and put the
 # environment and the floor back exactly; on the Compatibility renderer (the web's) they
 # do nothing at all (game/tests/building_1_hall_reflections_check.gd). Each run names
 # the renderer it asks for, and fails if the engine draws with another.
@@ -394,6 +410,11 @@ for test in "${tests[@]}"; do
   run_test "${test}" "${test}"
 done
 
+# Built as the web's bake builds it (its flag, which the builders read), Building 1's
+# hall carries no floor attribute sets for the reflections the web never draws.
+echo "== game/tests/headless_building_1_interior_contract.gd -- --web-world-bake"
+run_test "game/tests/headless_building_1_interior_contract.gd (web bake)" game/tests/headless_building_1_interior_contract.gd --web-world-bake
+
 echo "== silent pass (--no-sfx)"
 if [ ! -f game/resources/audio/sfx/sfx.json ]; then
   echo "NOTE: no sounds fetched (game/resources/audio/sfx/sfx.json), so the pass above was silent: ${silent_tests[*]:-no test}"
@@ -419,6 +440,26 @@ if [ -s "${baked}" ]; then
   check_godot "game/tests/headless_building_1_interior_contract.gd (prebuilt world)" 600 tools/godot --headless --path . --audio-driver Dummy --script game/tests/headless_building_1_interior_contract.gd -- --use-prebuilt-world
 fi
 rm -f "${baked}"
+
+# The web build loads a world baked for it (tools/prebuild-static-world.sh web). Bake it
+# the same way and give every building with an interior (a catalog unit with
+# passages) the full fit check on it, its passages walked every way players walk them,
+# drawn as the web draws it (Compatibility) and with the street detail the game shows.
+# A build product too, removed afterwards (and on any exit, by cleanup).
+web_baked=generated/web/static_world.scn
+echo "== tools/prebuild-static-world.sh web"
+check_godot "tools/prebuild-static-world.sh web" 900 tools/prebuild-static-world.sh web
+if [ -s "${web_baked}" ]; then
+  if ! passage_sources="$(node -e 'for (const unit of require("./discovery/facades/facade-recognition-catalog.json").units) if ((unit.passages || []).length) console.log(unit.anchor_source_key)')" || [ -z "${passage_sources}" ]; then
+    echo "FAIL: the catalog lists no unit with passages to walk in the web's baked world"
+    failed+=("web-world passages")
+  fi
+  for source in ${passage_sources}; do
+    echo "== game/tests/shared/building_fit_test.gd -- --source ${source} --use-prebuilt-world --web-world-bake"
+    check_godot "game/tests/shared/building_fit_test.gd ${source} (web's baked world)" 900 tools/godot --rendering-method gl_compatibility --rendering-driver opengl3 --fixed-fps 60 --path . --audio-driver Dummy --script game/tests/shared/building_fit_test.gd -- --source "${source}" --use-prebuilt-world --web-world-bake --street-detail on
+  done
+fi
+rm -f "${web_baked}"
 
 # The generated-world checks' results (started above; here if they were not).
 [ "${#node_pids[@]}" -gt 0 ] || start_node_checks

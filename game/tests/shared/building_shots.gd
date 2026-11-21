@@ -40,7 +40,8 @@ extends SceneTree
 ##   are evenly spaced in game time. A free camera (camera_xyz) follows the player,
 ##   keeping its offset and looking at the player. Each tick prints a MOVE_TICK
 ##   line, with the avatar's describe() when it has one, the drawing camera's
-##   position (cam=, where the frame is seen from), and what the player
+##   position (cam=, where the frame is seen from), view direction (look=) and
+##   vertical field of view (fov=, degrees), and what the player
 ##   stands on: the slide floor collider and the first solid straight under its
 ##   feet (support=OBJECT_KEY@y, from the body's derived_object_key or name).
 ##   Moves may also hold vehicle_enter_exit (F: a step of 2 ticks gets into the
@@ -57,6 +58,9 @@ extends SceneTree
 ##   drive keeps to its route whatever the frame-to-frame physics; and it may
 ##   end early, at "until_xz": [x, z, radius_m] (the car within radius_m of that
 ##   point) or "until_below_mps": metres per second (the car slower than that).
+##   A moving view may add "watch": {"NODE": ["PROPERTY", ...]} (NODE as "set" names
+##   it) to print those properties each tick on its MOVE_TICK line (watch=NODE.PROPERTY=
+##   value,...), such as a switch's count to find the frame it turned in.
 ##   A moving view may add "car_start": {"car": ROW_ID, "xz": [x,z],
 ##   "heading_xz": [x,z]} to start in that parked car instead, on the ground
 ##   there facing that way (vehicle_manager.gd drive_from); the moves then drive it.
@@ -162,8 +166,9 @@ extends SceneTree
 ##   they were captured with, so shoot such views with "dressing": "off".
 ## Resource counts: a still view may add "resource_counts": true to print a
 ##   RESOURCE_COUNTS line after its shot: the scene's mesh and MultiMesh nodes, their
-##   distinct resources, MultiMesh instances and mesh surfaces, and the renderer's
-##   texture, buffer and video memory.
+##   distinct resources, MultiMesh instances and mesh surfaces, the renderer's
+##   texture, buffer and video memory, and the process's static memory
+##   (OS.get_static_memory_usage).
 ## Settings (look trials): a still view may add "set": {"NODE": {"PROPERTY": value}}
 ##   to set properties of the loaded game's nodes once its camera is in place, before
 ##   its shot (NODE: the name of the first node of that name under main.tscn's root,
@@ -787,6 +792,16 @@ func _measure_view(view: Dictionary, target: Vector3, gallery: Dictionary) -> St
 	return ""
 
 
+## A moving view's watched properties as " watch=NODE.PROPERTY=value,...", or "".
+static func _watch_text(watched: Array) -> String:
+	if watched.is_empty():
+		return ""
+	var parts := PackedStringArray()
+	for item: Array in watched:
+		parts.append("%s=%s" % [item[0], (item[1] as Node).get_indexed(item[2]) if is_instance_valid(item[1]) else "freed"])
+	return " watch=" + ",".join(parts)
+
+
 ## Every ground-cover family's bare soil on as configured, or off by a bare
 ## threshold out of reach (the shader then skips its bare branch).
 func _set_ground_bare(on: bool) -> void:
@@ -982,12 +997,12 @@ func _print_resource_counts(label: String) -> void:
 	var instances := 0
 	for multimesh: MultiMesh in multimeshes:
 		instances += multimesh.instance_count
-	print("RESOURCE_COUNTS view=%s mesh_nodes=%d meshes=%d surfaces=%d multimesh_nodes=%d multimeshes=%d multimesh_instances=%d texture_mem=%d buffer_mem=%d video_mem=%d renderer=%s" % [
+	print("RESOURCE_COUNTS view=%s mesh_nodes=%d meshes=%d surfaces=%d multimesh_nodes=%d multimeshes=%d multimesh_instances=%d texture_mem=%d buffer_mem=%d video_mem=%d static_mem=%d renderer=%s" % [
 		label, mesh_nodes, meshes.size(), surfaces, multimesh_nodes, multimeshes.size(), instances,
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TEXTURE_MEM_USED),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_BUFFER_MEM_USED),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED),
-		RenderingServer.get_current_rendering_method()])
+		OS.get_static_memory_usage(), RenderingServer.get_current_rendering_method()])
 
 
 ## Applies a view's "dressing" level and "dressing_params". Returns an error, or "".
@@ -1336,6 +1351,21 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 		return camera_error
 	if view.has("start_xyz") and not _numbers(view.get("start_xyz"), 3):
 		return "start_xyz needs [x, y, z]"
+	# The watched properties, as [label, node, property path].
+	var watched: Array = []
+	if view.has("watch"):
+		if not view.watch is Dictionary:
+			return "watch maps a node's name to a list of its properties"
+		for node_name: Variant in view.watch:
+			var node: Node = _h.main if str(node_name) == "Main" else _h.main.find_child(str(node_name), true, false)
+			if node == null or not view.watch[node_name] is Array:
+				return "watch: the game has no node named %s, or it names no list of properties" % node_name
+			for path: Variant in view.watch[node_name]:
+				# A property the node has, by its name before any ":"; its value may be null.
+				var base := str(path).get_slice(":", 0)
+				if not node.get_property_list().any(func(property: Dictionary) -> bool: return str(property.name) == base):
+					return "watch: %s has no property %s" % [node_name, path]
+				watched.append(["%s.%s" % [node_name, path], node, NodePath(str(path))])
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]), {}, SHOT_DROP_M)
 	if error != "":
 		return error
@@ -1412,7 +1442,7 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 				var active: Variant = _h.main.vehicles.active_car()
 				car = active.describe()
 				car["at"] = [snappedf(active.global_position.x, 0.01), snappedf(active.global_position.y, 0.01), snappedf(active.global_position.z, 0.01)]
-			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s cam=%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car), root.get_camera_3d().global_position if root.get_camera_3d() != null else Vector3.INF])
+			print("MOVE_TICK %s tick=%d frame=%s pos=%s speed=%.3f floor=%s held=%s avatar=%s floor_body=%s support=%s car=%s cam=%s look=%s fov=%.1f%s" % [prefix.get_file(), tick, saved, player.global_position, Vector2(velocity.x, velocity.z).length(), player.is_on_floor(), ",".join(PackedStringArray(step.hold)), JSON.stringify(state), _floor_body(player), _support_under(player), JSON.stringify(car), root.get_camera_3d().global_position if root.get_camera_3d() != null else Vector3.INF, -root.get_camera_3d().global_transform.basis.z if root.get_camera_3d() != null else Vector3.INF, root.get_camera_3d().fov if root.get_camera_3d() != null else 0.0, _watch_text(watched)])
 			tick += 1
 			if car != null and _drive_step_done(_h.main.vehicles.active_car(), step):
 				break
