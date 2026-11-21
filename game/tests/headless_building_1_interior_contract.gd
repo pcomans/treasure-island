@@ -24,9 +24,11 @@ extends SceneTree
 ## - its InteriorPresence ("Presence") is there before the reflections (so it moves its
 ##   blend in a frame before they read it), and the hall's root carries a plan it takes:
 ##   a ring_sector on the mural loader's bounds.
-## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
-## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
-## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
+## With -- --use-prebuilt-world it checks the reflections, the presence and the layers
+## (the door's open leaves still a mesh of their own on the facades' layer after the
+## bake's merge, tools/merge_baked_buildings.gd), in the island baked for desktop exports
+## (tools/prebuild-static-world.sh native, which tools/test.sh bakes), loaded as the game
+## loads it: the main scene, whose WorldLoader reads the flag itself.
 ## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
 ## it builds the hall as the web's bake does and checks its reflections node carries
 ## neither floor attribute set (the web draws none of them), and its InteriorPresence
@@ -147,9 +149,10 @@ func _run_prebuilt() -> void:
 		else:
 			_check_reflections(node.get_parent() as Node3D, "the baked hall")
 			_check_presence(node.get_parent() as Node3D, "the baked hall")
+			_check_layers(node.get_parent() as Node3D)
 	main.queue_free()
 	await process_frame
-	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
+	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout; it draws on the interior layer without shadows, its door's open leaves on the facades' layer, out of the probes' reach")
 
 
 ## The hall's floor reflections: a mode the node knows (and a config with another one

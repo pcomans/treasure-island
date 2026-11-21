@@ -4,6 +4,7 @@
 #
 #   tools/test.sh
 #
+# Its output starts with the commit it tests and `git status --short`.
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
@@ -60,6 +61,13 @@ failed=()
 # Godot can exit 0 after a script or engine error, so its output is checked too.
 # A clean run prints no ERROR lines at all, and no shader error.
 godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR|SHADER ERROR'
+
+# What this run tests: the commit and what is changed beside it, so a saved log names
+# its own source.
+echo "== source"
+echo "commit $(git rev-parse HEAD 2>/dev/null || echo unknown)"
+echo "git status --short (nothing listed: a clean worktree):"
+git status --short 2>/dev/null || echo "NOTE: not a git worktree"
 
 echo "== junk check"
 command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }

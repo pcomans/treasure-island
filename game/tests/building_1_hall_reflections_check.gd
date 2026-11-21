@@ -18,8 +18,10 @@ extends SceneTree
 ##   as they were;
 ## - walked in, the reflections fade in frame by frame: the blend only rises and is
 ##   all in within the fade's frames; each frame the floor's roughness, specular and
-##   colour are the blend's mix of its own and the polished ones, its plain attributes
-##   are up exactly from the blend's middle, the probes reflect at the blend's share
+##   colour are the blend's mix of its own and the polished ones, its attributes the
+##   blend's step of Building1HallReflections.SHEEN_STEPS from its sheen to its plain
+##   colours (read back, byte for byte each byte's own rounded straight line between
+##   the two sets, so the streaks never swap at once), the probes reflect at the blend's share
 ##   (never below the hold), and the environment has the hall's screen-space reflections
 ##   from the first frame, their two fade exponents raised for the blend (SSR_FADE_RISE),
 ##   so that where the blend is at most SSR_EDGE_BLEND (the fades' ends, where they
@@ -33,9 +35,9 @@ extends SceneTree
 ##   settings and the floor's roughness, specular and albedo are exactly as before, and
 ##   the renderer draws the baked sheen's attributes again, byte for byte;
 ## - turned back mid-fade, below and past the blend's middle, the fade turns round
-##   without flapping: from the frame the camera leaves, the blend only falls, the plain
-##   attributes come down once if they went up, and the environment's reflections go
-##   once, when the blend is back at 0;
+##   without flapping: from the frame the camera leaves, the blend and the floor's
+##   attribute step only fall, back to 0, and the environment's reflections go once,
+##   when the blend is back at 0;
 ## - on the doorway, where the look switches on HYSTERESIS_M inside the hall's bound
 ##   and off as far outside it: a camera walked across that whole band and back,
 ##   BAND_TRIPS times, switches it exactly once each time it crosses the far line, in
@@ -46,7 +48,7 @@ extends SceneTree
 ##   frames (each frame printed as DOORWAY lines, beside what one line would have done);
 ## - an environment swapped in while they are on gets the reflections and the one
 ##   swapped out its own settings back;
-## - taken out of the tree while on, and again mid-fade with the plain attributes up,
+## - taken out of the tree while on, and again mid-fade past the blend's middle,
 ##   the node puts the environment, the floor and its attributes back at once and frees
 ##   its probes; back in the tree it fades in again;
 ## - the mural released far away frees the probes.
@@ -81,7 +83,7 @@ const BAND_TRIPS := 3
 ## The frames of game time a second (the run's --fixed-fps).
 const FPS := 60.0
 ## Frames the camera stays in before turning back mid-fade: below the blend's middle,
-## and past it (the plain attributes up).
+## and past it.
 const TURN_BELOW := 9
 const TURN_PAST := 21
 
@@ -196,15 +198,15 @@ func _check_forward_plus() -> void:
 	if _ssr_of(other) != own:
 		failures.append("the environment swapped back out keeps the hall's reflections: %s" % [_ssr_of(other)])
 	_check_on("inside, the environment swapped back", environment)
-	# Out of the tree while on, and again mid-fade with the plain attributes up:
+	# Out of the tree while on, and again mid-fade past the blend's middle:
 	# everything back at once, the probes freed; back in, it fades in again.
 	var parent := _node.get_parent()
 	await _check_leave(parent, "while on", environment, own, floor)
 	await _stand(-OUTSIDE_M, _fade_frames() + 2)
 	_put(_at(INSIDE_M), _at(INSIDE_M + 5.0))
 	await _frames(TURN_PAST)
-	if _node.fade() <= 0.5 or _node.fade() >= 1.0 or not _node.plain_floor_shown():
-		failures.append("%d frames into the fade-in the blend is %.3f and the plain attributes %s, not past the middle and up" % [TURN_PAST, _node.fade(), "up" if _node.plain_floor_shown() else "down"])
+	if _node.fade() <= 0.5 or _node.fade() >= 1.0 or _node.floor_step() != _floor_step_for(_node.fade()):
+		failures.append("%d frames into the fade-in the blend is %.3f and the floor's attribute step %d, not past the middle and its step" % [TURN_PAST, _node.fade(), _node.floor_step()])
 	await _check_leave(parent, "mid-fade", environment, own, floor)
 	# Far away again: the mural released after its delay, the probes freed.
 	_put(_at(-FAR_M), _door)
@@ -217,7 +219,7 @@ func _check_forward_plus() -> void:
 	if _loader.state != Building1MuralLoader.State.UNLOADED or not _node.probe_nodes().is_empty() or not _hall_probes(parent).is_empty():
 		failures.append("far away the mural is %s and %d probes are left" % [Building1MuralLoader.State.keys()[_loader.state], _hall_probes(parent).size()])
 	if failures.is_empty():
-		print("PASS: Forward+: no probe before the mural is up; probes held at next to nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, plain attributes, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
+		print("PASS: Forward+: no probe before the mural is up; probes held at next to nothing outside; the hall's reflections and polish fading in and out within %d frames, the blend moving one way, the floor, its attribute steps, probes and environment following it; outside again, the environment's reflections and the floor exactly as before; turned back mid-fade without flapping; no flicker on the doorway; a swapped environment and the node leaving the tree, on or mid-fade, put back; probes freed with the mural" % _fade_frames())
 
 
 ## The frames a fade takes at FPS, and one for the last step's rounding.
@@ -235,8 +237,9 @@ func _polished(floor: Array) -> Array:
 ## The camera put on the door's axis (metres in, out if negative), then a fade watched
 ## frame by frame until it has ended and a few frames more: the blend moves only toward
 ## its end and gets there within _fade_frames(); each frame the floor's values are the
-## blend's mix of its own (floor) and the polished ones, the plain attributes are up
-## exactly from the blend's middle, the probes reflect at its share of their intensity,
+## blend's mix of its own (floor) and the polished ones, its attributes the blend's step
+## between its sheen and its plain colours (read back from the renderer), the probes
+## reflect at its share of their intensity,
 ## and the environment has the hall's reflections while the camera calls for them or
 ## the blend is above 0, else its own (own) exactly.
 func _check_fade(where: String, metres: float, environment: Environment, own: Array, floor: Array) -> void:
@@ -258,8 +261,9 @@ func _check_fade(where: String, metres: float, environment: Environment, own: Ar
 		var mixed := [lerpf(floor[0], polished[0], blend), lerpf(floor[1], polished[1], blend), (floor[2] as Color).lerp(polished[2], blend)]
 		if not is_equal_approx(values[0], mixed[0]) or not is_equal_approx(values[1], mixed[1]) or not (values[2] as Color).is_equal_approx(mixed[2]):
 			problems.append("frame %d at blend %.3f: the floor %s, not %s" % [frame, blend, values, mixed])
-		if _node.plain_floor_shown() != (not _node.baked_sheen and blend >= 0.5):
-			problems.append("frame %d at blend %.3f: the plain attributes %s" % [frame, blend, "up" if _node.plain_floor_shown() else "down"])
+		var step := _floor_step_for(blend)
+		if _node.floor_step() != step or _drawn_attributes() != _floor_set(step):
+			problems.append("frame %d at blend %.3f: the floor's attribute step %d, not %d (the drawn bytes %s that step's set)" % [frame, blend, _node.floor_step(), step, "are" if _drawn_attributes() == _floor_set(step) else "are not"])
 		var intensity := maxf(_node.probe_intensity * blend, Building1HallReflections.PROBE_HOLD)
 		if _node.probe_nodes().any(func(probe: ReflectionProbe) -> bool: return not is_equal_approx(probe.intensity, intensity)):
 			problems.append("frame %d at blend %.3f: a probe not at %.4f" % [frame, blend, intensity])
@@ -270,7 +274,7 @@ func _check_fade(where: String, metres: float, environment: Environment, own: Ar
 		var weight := _largest_ray_weight(float(ssr[2]), float(ssr[3])) if hall else 0.0
 		if hall and blend <= SSR_EDGE_BLEND and weight > SSR_EDGE_WEIGHT:
 			problems.append("frame %d at blend %.3f: a screen-space reflection can still weigh %.4f there" % [frame, blend, weight])
-		print("FADE %s frame=%d blend=%.3f roughness=%.4f specular=%.4f plain=%s ssr=%s ray_weight=%.4f" % [where, frame, blend, values[0], values[1], _node.plain_floor_shown(), ssr[0], weight])
+		print("FADE %s frame=%d blend=%.3f roughness=%.4f specular=%.4f floor_step=%d ssr=%s ray_weight=%.4f" % [where, frame, blend, values[0], values[1], _node.floor_step(), ssr[0], weight])
 		last = blend
 	if ended < 0 or ended >= _fade_frames():
 		problems.append("the blend reached %.0f %s, not within %d frames" % [target, "at frame %d" % ended if ended >= 0 else "never", _fade_frames()])
@@ -280,19 +284,18 @@ func _check_fade(where: String, metres: float, environment: Environment, own: Ar
 
 
 ## The camera in from outside (blend 0) for `frames` frames, then out again: from the
-## frame it leaves the blend only falls, back to 0 within _fade_frames(); the plain
-## attributes come down once if they went up, never otherwise, and the environment's
-## reflections go once, when the blend is back at 0; then everything as before.
+## frame it leaves the blend and the floor's attribute step only fall, back to 0 within
+## _fade_frames(), and the environment's reflections go once, when the blend is back at
+## 0; then everything as before.
 func _check_turn_back(where: String, frames: int, environment: Environment, own: Array, floor: Array) -> void:
 	await _stand(-OUTSIDE_M, _fade_frames() + 2)
 	_put(_at(INSIDE_M), _at(INSIDE_M + 5.0))
 	await _frames(frames)
 	var peak := _node.fade()
-	var plain := _node.plain_floor_shown()
+	var step := _node.floor_step()
 	var hall := _ssr_of(environment) != own
 	_put(_at(-OUTSIDE_M), _at(-OUTSIDE_M + 5.0))
 	var last := peak
-	var plain_changes := 0
 	var environment_changes := 0
 	var ended := -1
 	var problems: Array[String] = []
@@ -303,19 +306,18 @@ func _check_turn_back(where: String, frames: int, environment: Environment, own:
 			problems.append("frame %d: the blend rose from %.3f to %.3f" % [frame, last, blend])
 		if blend == 0.0 and ended < 0:
 			ended = frame
-		if _node.plain_floor_shown() != plain:
-			plain = _node.plain_floor_shown()
-			plain_changes += 1
+		if _node.floor_step() > step:
+			problems.append("frame %d: the floor's attribute step rose from %d to %d" % [frame, step, _node.floor_step()])
+		step = _node.floor_step()
 		if (_ssr_of(environment) != own) != hall:
 			hall = not hall
 			environment_changes += 1
 			if blend != 0.0:
 				problems.append("frame %d: the environment's reflections went at blend %.3f" % [frame, blend])
 		last = blend
-	var expected_plain := 1 if peak >= 0.5 and not _node.baked_sheen else 0
-	if plain_changes != expected_plain or environment_changes != 1 or ended < 0 or ended >= _fade_frames():
-		problems.append("turned back at blend %.3f: the plain attributes changed %d times (%d expected), the environment's reflections %d times (1 expected), the blend at 0 %s" % [peak, plain_changes, expected_plain, environment_changes, "at frame %d" % ended if ended >= 0 else "never"])
-	print("FADE %s at blend %.3f: back to 0 in %d frames, the plain attributes changed %d times, the environment's reflections %d" % [where, peak, ended + 1, plain_changes, environment_changes])
+	if step != 0 or environment_changes != 1 or ended < 0 or ended >= _fade_frames():
+		problems.append("turned back at blend %.3f: the floor's attribute step ended at %d (0 expected), the environment's reflections changed %d times (1 expected), the blend at 0 %s" % [peak, step, environment_changes, "at frame %d" % ended if ended >= 0 else "never"])
+	print("FADE %s at blend %.3f: back to 0 in %d frames, the floor's attribute step back to %d, the environment's reflections changed %d times" % [where, peak, ended + 1, step, environment_changes])
 	if not problems.is_empty():
 		failures.append("%s: %s" % [where, "; ".join(problems.slice(0, 6))])
 	_check_off(where + ", at the end", environment, own, floor)
@@ -328,8 +330,8 @@ func _check_leave(parent: Node, when: String, environment: Environment, own: Arr
 	var blend := _node.fade()
 	parent.remove_child(_node)
 	await _frames(2)
-	if _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown() or _drawn_attributes() != _node.sheen_attributes or not _hall_probes(parent).is_empty() or _node.fade() != 0.0:
-		failures.append("taken out of the tree %s (blend %.3f), it left the environment %s (own %s), the floor %s (was %s), its plain attributes %s (the drawn bytes %s its baked sheen), %d probes and the blend at %.3f" % [when, blend, _ssr_of(environment), own, _floor_values(), floor, "up" if _node.plain_floor_shown() else "down", "are" if _drawn_attributes() == _node.sheen_attributes else "are not", _hall_probes(parent).size(), _node.fade()])
+	if _ssr_of(environment) != own or _floor_values() != floor or _node.floor_step() != 0 or _drawn_attributes() != _node.sheen_attributes or not _hall_probes(parent).is_empty() or _node.fade() != 0.0:
+		failures.append("taken out of the tree %s (blend %.3f), it left the environment %s (own %s), the floor %s (was %s), its attribute step %d (the drawn bytes %s its baked sheen), %d probes and the blend at %.3f" % [when, blend, _ssr_of(environment), own, _floor_values(), floor, _node.floor_step(), "are" if _drawn_attributes() == _node.sheen_attributes else "are not", _hall_probes(parent).size(), _node.fade()])
 	print("FADE out of the tree %s at blend %.3f: put back" % [when, blend])
 	parent.add_child(_node)
 	await _frames(_fade_frames() + 2)
@@ -458,7 +460,7 @@ func _check_elsewhere() -> void:
 	await _stand(-OUTSIDE_M, 30)
 	await _stand(INSIDE_M, 30)
 	var probes := _hall_probes(_node.get_parent())
-	if _node.is_on() or not probes.is_empty() or _ssr_of(environment) != own or _floor_values() != floor or _node.plain_floor_shown():
+	if _node.is_on() or not probes.is_empty() or _ssr_of(environment) != own or _floor_values() != floor or _node.floor_step() != 0:
 		failures.append("on %s the reflections did something: on %s, %d probes, the environment %s (own %s), the floor %s (was %s)" % [RenderingServer.get_current_rendering_method(), _node.is_on(), probes.size(), _ssr_of(environment), own, _floor_values(), floor])
 	if failures.is_empty():
 		print("PASS: %s: inside the hall, no probe, and the environment and the floor untouched" % RenderingServer.get_current_rendering_method())
@@ -474,8 +476,8 @@ func _check_on(where: String, environment: Environment) -> void:
 		problems.append("the environment's reflections %s, not the hall's %s" % [_ssr_of(environment), values])
 	if not is_equal_approx(material.roughness, _node.floor_roughness) or not is_equal_approx(material.metallic_specular, _node.floor_specular):
 		problems.append("the floor at roughness %.3f and specular %.3f, not %.3f and %.3f" % [material.roughness, material.metallic_specular, _node.floor_roughness, _node.floor_specular])
-	if _node.plain_floor_shown() == _node.baked_sheen:
-		problems.append("its plain attributes %s" % ("up" if _node.plain_floor_shown() else "down"))
+	if _node.floor_step() != (0 if _node.baked_sheen else Building1HallReflections.SHEEN_STEPS):
+		problems.append("its attribute step %d" % _node.floor_step())
 	var wanted := _node.sheen_attributes if _node.baked_sheen else _node.plain_attributes
 	var drawn := _drawn_attributes()
 	if wanted.is_empty() or drawn != wanted:
@@ -495,8 +497,8 @@ func _check_off(where: String, environment: Environment, own: Array, floor: Arra
 		problems.append("the environment's reflections %s, not its own %s" % [_ssr_of(environment), own])
 	if _floor_values() != floor:
 		problems.append("the floor %s, not %s" % [_floor_values(), floor])
-	if _node.plain_floor_shown():
-		problems.append("its plain attributes up")
+	if _node.floor_step() != 0:
+		problems.append("its attribute step %d, not its sheen's" % _node.floor_step())
 	var drawn := _drawn_attributes()
 	if _node.sheen_attributes.is_empty() or drawn != _node.sheen_attributes:
 		problems.append("the floor draws %d attribute bytes that are not its baked sheen of %d" % [drawn.size(), _node.sheen_attributes.size()])
@@ -575,6 +577,24 @@ func _floor_values() -> Array:
 
 ## The floor's vertex attributes as the renderer holds them to draw (read back from the
 ## GPU: a check may, the game does not), byte for byte the set the node swapped in.
+## The floor's attribute step at a blend: 0 (its sheen) while the sheen stays, else the
+## blend's share of Building1HallReflections.SHEEN_STEPS, rounded.
+func _floor_step_for(blend: float) -> int:
+	return 0 if _node.baked_sheen else roundi(blend * Building1HallReflections.SHEEN_STEPS)
+
+
+## The floor's attributes at a step, worked out here from the node's two sets: each byte
+## rounded from its straight line between the sheen's value and the plain one.
+func _floor_set(step: int) -> PackedByteArray:
+	var sheen := _node.sheen_attributes
+	var plain := _node.plain_attributes
+	var bytes := sheen.duplicate()
+	var share := float(step) / float(Building1HallReflections.SHEEN_STEPS)
+	for i in bytes.size():
+		bytes[i] = sheen[i] + roundi(float(plain[i] - sheen[i]) * share)
+	return bytes
+
+
 func _drawn_attributes() -> PackedByteArray:
 	var surface := RenderingServer.mesh_get_surface(_shell.mesh.get_rid(), Building1HallReflections.floor_surface(_shell))
 	return surface.get("attribute_data", PackedByteArray())

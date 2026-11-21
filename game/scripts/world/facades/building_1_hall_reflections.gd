@@ -21,12 +21,14 @@ extends Node
 ## - polishes the terrazzo: its roughness, specular and colour go from the material's
 ##   own to floor_roughness, floor_specular and its colour tinted by floor_albedo,
 ##   channel by channel (the reflections add light of their own);
-## - unless baked_sheen, puts up plain_attributes from the blend's middle on, the floor's
-##   vertex attributes without its painted window streaks and dark pier reflections,
-##   which the real reflections replace, and puts sheen_attributes, the floor as built,
-##   back below it. Both were built on the CPU with the floor (nothing is read back from
-##   the GPU); the same shader draws both. If they do not fit the surface this hall
-##   draws, it says so as an error and leaves the baked sheen up;
+## - unless baked_sheen, moves the floor's vertex attributes from sheen_attributes (the
+##   floor as built, with its painted window streaks and dark pier reflections) to
+##   plain_attributes (the same without them, which the real reflections replace) along
+##   the blend, in SHEEN_STEPS steps made once when the node is ready: the streaks fade
+##   as the reflections come in, each end exactly one of the two sets. Both were built on
+##   the CPU with the floor (nothing is read back from the GPU); the same shader draws
+##   every step. If they do not fit the surface this hall draws, it says so as an error
+##   and leaves the baked sheen up;
 ## - with probes, reflects the hall itself wherever the screen has nothing to reflect,
 ##   at probe_intensity times the blend: probe_sections box-projected reflection probes
 ##   along the crescent, seeing and lighting the hall's render layer only. They are
@@ -59,6 +61,11 @@ const SSR_FADE_RISE := 0.25
 ## The probes' least intensity, the blend at 0 included: above 0, so the engine never
 ## skips them.
 const PROBE_HOLD := 0.0001
+## The floor's attribute sets from its sheen (step 0) to its plain colours (this step):
+## each step moves a colour byte by at most a twelfth of its whole change (17 levels on
+## average, 71 at most, in Building 1's floor), so no frame of a fade swaps the streaks
+## at once.
+const SHEEN_STEPS := 12
 
 @export var mode := "off"
 ## The render layer the hall draws on (building_1_interior.gd RENDER_INTERIOR): the
@@ -111,7 +118,10 @@ var _floor_surface := -1
 var _floor_matte := {}
 ## Whether sheen_attributes and plain_attributes fit the floor surface drawn.
 var _attributes_fit := false
-var _plain_shown := false
+## The floor's attribute sets, step 0 to SHEEN_STEPS (attribute_steps; none when they do
+## not fit), and the step the floor draws now.
+var _floor_sets: Array[PackedByteArray] = []
+var _floor_step := 0
 ## The environment this turned the reflections on in, and its own settings from before.
 var _environment: Environment
 var _environment_own := {}
@@ -138,6 +148,8 @@ func _ready() -> void:
 	_attributes_fit = attributes_fit(_shell)
 	if not _attributes_fit:
 		push_error("Building 1 hall reflections: the floor's built attributes do not fit its surface (format %d of %d, %d of %d vertices, %d of %d indices, %d and %d bytes); its baked sheen stays." % [floor_format, _shell.mesh.surface_get_format(_floor_surface), floor_vertex_count, _shell.mesh.surface_get_array_len(_floor_surface), floor_index_count, _shell.mesh.surface_get_array_index_len(_floor_surface), sheen_attributes.size(), plain_attributes.size()])
+	else:
+		_floor_sets = attribute_steps(sheen_attributes, plain_attributes, SHEEN_STEPS)
 
 
 func _process(_delta: float) -> void:
@@ -157,7 +169,7 @@ func _process(_delta: float) -> void:
 func _exit_tree() -> void:
 	# Mid-fade or on: everything as built at once, the probes freed.
 	_blend = 0.0
-	if _shown > 0.0 or _environment != null or _plain_shown:
+	if _shown > 0.0 or _environment != null or _floor_step != 0:
 		_apply(false)
 	_free_probes()
 
@@ -173,9 +185,29 @@ func fade() -> float:
 	return _blend
 
 
-## Whether the floor shows its plain colours (no baked sheen) now.
-func plain_floor_shown() -> bool:
-	return _plain_shown
+## The floor's attribute step now: 0 its sheen as built, SHEEN_STEPS its plain colours.
+func floor_step() -> int:
+	return _floor_step
+
+
+## The floor's attribute sets from `from` to `to` in `steps` even steps: steps + 1 sets,
+## the first and the last those two themselves, each between them a copy of `from` with
+## every byte that differs rounded from its straight line to `to`'s (the bytes the two
+## share, such as the UVs, unchanged).
+static func attribute_steps(from: PackedByteArray, to: PackedByteArray, steps: int) -> Array[PackedByteArray]:
+	var sets: Array[PackedByteArray] = [from]
+	var differ := PackedInt32Array()
+	for i in mini(from.size(), to.size()):
+		if from[i] != to[i]:
+			differ.append(i)
+	for step in range(1, steps):
+		var bytes := from.duplicate()
+		var share := float(step) / float(steps)
+		for i in differ:
+			bytes[i] = from[i] + roundi(float(to[i] - from[i]) * share)
+		sets.append(bytes)
+	sets.append(to)
+	return sets
 
 
 ## The probes there are now.
@@ -208,7 +240,8 @@ func attributes_fit(shell: MeshInstance3D) -> bool:
 
 ## The look at the blend now: the environment's reflections in while called for (from
 ## the fade-in's start) and until the fade-out's end, the floor between its own values
-## and the polished ones (each end exact), its plain colours from the middle on.
+## and the polished ones (each end exact), its attributes the blend's step between its
+## sheen and its plain colours.
 func _apply(called_for: bool) -> void:
 	_set_environment(called_for or _blend > 0.0)
 	if _floor != null:
@@ -217,7 +250,7 @@ func _apply(called_for: bool) -> void:
 		_floor.roughness = _mix(float(_floor_matte.roughness), floor_roughness)
 		_floor.metallic_specular = _mix(float(_floor_matte.specular), floor_specular)
 		_floor.albedo_color = albedo if _blend == 0.0 else (polished if _blend == 1.0 else albedo.lerp(polished, _blend))
-	_show_plain_floor(not baked_sheen and _blend >= 0.5)
+	_show_floor_step(0 if baked_sheen else roundi(_blend * SHEEN_STEPS))
 	_shown = _blend
 
 
@@ -256,7 +289,7 @@ func _write_environment(values: Dictionary) -> void:
 	for property: String in values:
 		var now: Variant = _environment.get(property)
 		var value: Variant = values[property]
-		if not (is_equal_approx(now, value) if value is float else now == value):
+		if now != value:
 			_environment.set(property, value)
 
 
@@ -270,12 +303,13 @@ func _world_environment() -> Environment:
 	return node.environment if node != null else null
 
 
-## Puts the floor's plain attributes up, or its baked ones back (when they fit).
-func _show_plain_floor(plain: bool) -> void:
-	if plain == _plain_shown or not _attributes_fit:
+## Puts the floor's attribute set for a step up (0 its sheen as built, SHEEN_STEPS its
+## plain colours), where there are sets (they fit the surface drawn).
+func _show_floor_step(step: int) -> void:
+	if step == _floor_step or _floor_sets.is_empty():
 		return
-	RenderingServer.mesh_surface_update_attribute_region(_shell.mesh.get_rid(), _floor_surface, 0, plain_attributes if plain else sheen_attributes)
-	_plain_shown = plain
+	RenderingServer.mesh_surface_update_attribute_region(_shell.mesh.get_rid(), _floor_surface, 0, _floor_sets[step])
+	_floor_step = step
 
 
 ## The probes: made once the mural is up near the door while the reflections may come
