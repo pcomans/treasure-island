@@ -46,9 +46,9 @@ Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
 
 ## Model tiers by detail level
 
-**Status (2026-11-21): a plan, not routing.** Modelling runs in Claude Code on Opus 5.5, as [AGENTS](../AGENTS.md#bounded-subagent-execution) says. Kimi K3.1 Pro is a candidate to consider for low-detail work; Gemini 4 Neon is to be investigated for high-detail work. Neither is routed, and adopting either is a later owner decision.
+**Status (2026-11-21): a plan, not routing.** Modelling runs in Claude Code on Opus 5.5, as [AGENTS](../AGENTS.md#bounded-subagent-execution) says. Kimi K3.1 Pro is a candidate to consider for cheap low-detail modelling, possibly as a first pass; Gemini 4 Neon is to be investigated for high-detail work. Neither is routed, and adopting either is a later owner decision.
 
-The owner's plan: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
+The owner's plan: "Kimi I think looks … basic but acceptable. So I would say I would use Kimi for like cheap low detail modeling, right? Maybe for like a first pass. I would keep using Opus for mid-detail modeling and then I think we should start investigating Gemini for high detail work". Earlier in the same discussion: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
 
 Against the [five levels](../AGENTS.md#zoom-in-authoring-pattern), low detail reads as roughly Level 1, mid detail as Levels 2–3 and high detail as Levels 4–5 and hero landmarks. That is a reading of the owner's words; they have not set the boundaries.
 
