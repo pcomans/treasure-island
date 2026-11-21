@@ -575,8 +575,6 @@ func _floor_values() -> Array:
 	return [material.roughness, material.metallic_specular, material.albedo_color]
 
 
-## The floor's vertex attributes as the renderer holds them to draw (read back from the
-## GPU: a check may, the game does not), byte for byte the set the node swapped in.
 ## The floor's attribute step at a blend: 0 (its sheen) while the sheen stays, else the
 ## blend's share of Building1HallReflections.SHEEN_STEPS, rounded.
 func _floor_step_for(blend: float) -> int:
@@ -595,6 +593,8 @@ func _floor_set(step: int) -> PackedByteArray:
 	return bytes
 
 
+## The floor's vertex attributes as the renderer holds them to draw (read back from the
+## GPU: a check may, the game does not), byte for byte the set the node swapped in.
 func _drawn_attributes() -> PackedByteArray:
 	var surface := RenderingServer.mesh_get_surface(_shell.mesh.get_rid(), Building1HallReflections.floor_surface(_shell))
 	return surface.get("attribute_data", PackedByteArray())
