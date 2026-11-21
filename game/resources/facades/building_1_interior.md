@@ -27,11 +27,11 @@ radii from that centre, angles along the arc between the crescent's outer piers.
 - The hall's shell is one mesh on render layer 6 (`interior`), which the Sun leaves out, with
   its own closed collision that collides from both sides. A blocker on the cars' ground layer
   stops cars in the doorway; the player and the camera pass.
-- No surface the player walks is steeper than about 44 degrees: the stock capsule reads a
+- No surface the player walks is steeper than about 40 degrees: the stock capsule reads a
   slope's edges up to about 5 degrees steeper than the slope, and the controller stops at 48.
   The sill's 45-degree bevel is seen only; the feet walk `threshold_walk` under it. The fit
   check walks every catalog passage in and out across speeds, stick magnitudes, approach
-  angles and tick rates (game/tests/shared/building_fit.gd).
+  angles and physics step sizes (game/tests/shared/building_fit.gd).
 - The mural's surfaces start on a small placeholder texture in the same material, and
   `Building1MuralLoader` swaps the tiles in once play has started and the camera is within
   `load_radius` of the door, one tile a frame, and puts the placeholder back after the camera

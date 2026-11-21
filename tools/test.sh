@@ -40,8 +40,9 @@
 #    in the score is present and fits (game/tests/shared/island_test.gd), both
 #    in the world generated at startup and in the baked world desktop exports load;
 #    each interior's passages are walked in and out every way players walk them
-#    (touch stick magnitudes, running, keys, approach angles, degraded tick rates),
-#    there and in the world baked for the web build, drawn as the web draws it.
+#    (touch stick magnitudes, running, keys, approach angles, and physics steps
+#    at 30 and 20 a second besides the game's fixed 60, to vary where each tick
+#    lands), there and in the world baked for the web build, drawn as the web draws it.
 #    And no outdoor ground shows inside an enterable interior (a catalog unit
 #    with passages): its floor covers its plan up to its walls, above the land and
 #    the ground draped over it, and no street detail stands in it

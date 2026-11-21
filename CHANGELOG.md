@@ -6,7 +6,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
-## Build 2399 (2026-11-21)
+## Build 2404 (2026-11-21)
 
 - You can now walk into Building 1's hall without jumping: walking at any speed or angle, on a phone or a computer, the player no longer stops at the front door's doorstep.
 

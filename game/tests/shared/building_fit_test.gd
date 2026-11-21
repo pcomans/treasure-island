@@ -31,8 +31,9 @@ extends SceneTree
 ##    "passages": [{"name": "front door", "outside": [x, z], "inside": [x, z]}] is
 ##    walked in from outside and back out (building_fit.gd passage_routes), and then
 ##    the ways players walk through it: on the touch stick at three magnitudes, walking
-##    and running, and on the keys, from starts at five angles to its line, at 60 and
-##    at degraded physics tick rates, never standing still or stalling on the way.
+##    and running, and on the keys, from starts at five angles to its line, at the
+##    game's fixed 60 physics ticks a second and again at 30 and 20, whose longer steps
+##    vary where each tick puts the player, never standing still or stalling on the way.
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.

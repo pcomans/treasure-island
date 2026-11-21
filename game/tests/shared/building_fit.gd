@@ -78,8 +78,10 @@ static func passage_routes(unit: Dictionary) -> Array:
 ## about 30, 60 and 100 % of its reach gives 0.2, 0.55 and 1.0), walking and with RUN
 ## held, and the keys (move_forward); from starts PASSAGE_STARTS_M from the doorway's
 ## threshold, PASSAGE_ANGLES_DEG off the passage's line; at 60 physics ticks a second,
-## and the inputs at the degraded PASSAGE_SLOW_TICK_RATES from the first start at the
-## first three angles. Never a jump or the jetpack.
+## the game's fixed rate, and the inputs again at PASSAGE_SLOW_TICK_RATES from the first
+## start at the first three angles: longer steps, which vary where each tick puts the
+## capsule beside the threshold's edges (a slow device does not change the step; the
+## game still steps at 60 a second). Never a jump or the jetpack.
 const PASSAGE_INPUTS: Array[Dictionary] = [
 	{"name": "stick 0.2", "stick": 0.2, "run": false},
 	{"name": "stick 0.55", "stick": 0.55, "run": false},
