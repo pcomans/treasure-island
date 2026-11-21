@@ -22,9 +22,9 @@ extends RefCounted
 ##   paint's age changes over a few metres, not at a straight line;
 ## - A: the ground at the foot of the nearest run (metres): its base, as the source
 ##   record levelled it.
-## The material study (game/tests/support/building_1_material_study.gd, 2026-11-21)
-## builds it from the loaded building; the model can build the same from its own
-## meshes and runs when it adopts the material set (or bake it to a small image).
+## tools/bake_building_1_weathering.gd bakes it from the hero model's built records
+## (each run's class and exposure in game/resources/facades/building_1_weathering.json)
+## into the materials that read it; the game never builds it at load.
 ## Grids are local packed arrays each helper returns, so they are never written
 ## through a copy.
 

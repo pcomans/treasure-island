@@ -201,7 +201,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"returns": _bucket(),
 		"gilded": _bucket(),
 		"door_brass": _bucket(),
-		"slate_teal": _bucket(),
+		"garage_doors": _bucket(),
 		"plain_trim": _bucket(),
 	}
 	var collision := _bucket()
@@ -537,7 +537,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	specs.append({"name": "HeroShadedReturns", "bucket": buckets.returns, "material": M_TRIM_RETURN, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGildedKickPanels", "bucket": buckets.gilded, "material": PUBLIC_GILDED_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroDoorBrass", "bucket": buckets.door_brass, "material": PUBLIC_DOOR_BRASS_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": M_EMBLEM_BLUE, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroGarageDoors", "bucket": buckets.garage_doors, "material": M_EMBLEM_BLUE, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroRoundPiers", "bucket": buckets.plain_trim, "material": M_GROUND_WALL, "layers": RENDER_BUILDING_WALL})
 	var crescent_style := front.crescent_window_style as Dictionary
 	var metadata := _common_metadata(config, record, "building_wall")
@@ -2919,7 +2919,7 @@ static func _append_pavilion_garage(buckets: Dictionary, collision: Dictionary, 
 	for panel in panels:
 		var y0 := lerpf(ground_y, top, float(panel) / float(panels)) + 0.02
 		var y1 := lerpf(ground_y, top, float(panel + 1) / float(panels)) - 0.02
-		_append_frame_box(buckets.slate_teal, frame, -half + 0.05, half - 0.05, y0, y1, wall + 0.02, wall + 0.06)
+		_append_frame_box(buckets.garage_doors, frame, -half + 0.05, half - 0.05, y0, y1, wall + 0.02, wall + 0.06)
 	for side in [-1.0, 1.0]:
 		var inner := float(side) * half
 		var outer := float(side) * (half + jamb)
