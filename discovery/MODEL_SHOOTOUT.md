@@ -33,3 +33,87 @@ These are separate serial invocations under the existing named engine slot; insp
 Use the same runner with `--study mersea` for both variants and both phases. It selects identical shared position/target pairs: whole site `(0,10,62)` → `(0,1,0)`, elevated oblique `(46,36,50)` → `(0,0,0)`, and courtyard `(7,1.7,12)` → `(-4,1.8,-8)`. The study envelope is X±26, Z±24, Y0..8 metres, an unmeasured framing inference around the courtyard origin/open approach+Z. Resolution1440×900, FOV60, neutral daylight, Forward+ and the complete capture/terminal lifecycle are unchanged. Omit the flag for the original housing profile. Unknown profiles are rejected before model loading. Native MERSEA validation completed in four serialized macOS captures (two variants, initial and final): each exited cleanly with the completion marker and three native 1440×900 PNGs. This validates the scoped study capture, not production or cross-platform acceptance.
 
 The resumed owner-authorized combined blind test includes prior critiques, housing initial/final and fresh MERSEA initial/final results; the earlier critique-vote prerequisite does not block this experiment. References, mappings, models and measurements remain private, outside Git.
+
+## Owner's blind vote, 2026-11-19
+
+The first shootout compared two anonymous options, X and Y, later unsealed as X = DeepSeek V4.1 Flash and Y = Opus 5.5, one mapping for all tasks.
+
+In the critique task (two cases, a housing block and Building 1), the owner found case A's critiques roughly equivalent and X better on case B: Y said the reference's right wing has three window rows (it has two) and said the rooftop structure, which it called a "lantern" (the owner: "I would not have called it a lantern"), is not visible, when it is. Overall the owner felt X was better, with the margin unsure, and guessed X was Claude; it was DeepSeek. Both critiques were flowing prose and not very actionable. The owner's hypothesis, that the prompt should ask for specific, concise, concrete findings, led to the four-question review format.
+
+On the housing model, Y was "clearly better. Like no contest": more correct colour, shiplap texture and the correct side wall, where X invented a window under the gable and a row of side windows and looked too slim. After one review round Y was "very clearly pulling ahead", with facade depth and the shed added at the back.
+
+Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
+
+## Review-format test (Opus only)
+
+Every version starts from the same Opus first build of the housing block. Each had one review round under different review instructions, then a fix by Opus (2026-11-19 to 20), and the owner saw the results blind as A–D. The mapping, unsealed by the owner's vote: A = the four-question format, run 1; B = the four-question format with "no additions allowed"; C = a free-form prose review (the earlier format); D = the four-question format, run 2.
+
+| Review | Words | Additions / fixes asked | Mesh nodes, start → after fix |
+|---|---|---|---|
+| Prose (C) | 339 | 3 / 3 | 336 → 781 |
+| Four questions (A, D: one review, two fixes) | 1,138 | 3 / 5 | 336 → 421 (A), 409 (D) |
+| No additions (B) | 862 | 0 / 8 | 336 → 322 |
+
+Words and node counts are measured from the run's files. The additions and fixes tallies, and that in B both the reviewer and the fixer obeyed the rule, are as recorded at the time. The test so far is one building with one run per format, and the owner regards the format changes as hypotheses until measured: "Right now it's just a hypothesis, right?"
+
+The owner's blind verdict: "if I absolutely had to pick one, I would pick version A". Its small windows shrink to about the right size (a bit too much), the big windows stay a bit too big, the box positions are still clumsy, and it adds the shed. C "does make a significant leap in terms of small detail" (the front doors set back) "but it also just adds a lot of clutter … It's more like noise and not signal". All four "make very modest gains"; "I don't think the iteration … beyond the starting building is really worth it here". Every version missed the upper floor slightly overhanging the ground floor, and all drifted away from the doors' real blue. The owner did not comment on B or D.
+
+Earlier, not blind: after a second review round the owner found the Opus building worse: "It looks more cluttered", with bins, AC units and small windows crowding the doors.
+
+Variant E (2026-11-21, not blind: added after A–D, and the owner has not judged it yet) told the review to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake. The review ran to 975 words and asked for 0 additions, 6 fixes and 2 removals (as recorded at the time); mesh nodes went from 336 to 374 and triangles from 7,790 to 8,246; review and fix cost $0.75. The fixer still went from three grey utility boxes by the doors to five, although the review had listed the boxes under 'keep it' and asked for none. The review did not mention the upper-floor overhang.
+
+Variant F (2026-11-21, not blind; the owner has not judged it yet) is E's instruction plus a first step: describe the building's basic form from the photos (massing and silhouette, storeys and how they relate, roof form, rhythm of bays, wall-to-opening proportion) before colours, sizes and placement, because "a mismatch in form outranks any detail finding". Its reviewer and fixer also got five labelled enlargements cut from the same two reference photos, with no new viewpoints, so it tests form first with the overhang made visible, not more photos. F's review made the upper-floor overhang its first and top finding, and the fix built it, setting the ground floor back 0.75 m under the upper storey. The door colour went the other way: E's review flagged the doors and its fix darkened them, while F's review called the navy doors a strength and kept them. Which way the doors should go is for the owner to say.
+
+| Variant | Review words | Add / fix / remove asked | Mesh nodes, from 336 | Triangles, from 7,790 | Cost |
+|---|---|---|---|---|---|
+| E | 975 | 0 / 6 / 2 | 374 | 8,246 | $0.75 |
+| F | 1,116 | 3 / 5 / 2 | 584 | 10,290 | $1.14 |
+
+The add / fix / remove tallies are as recorded at the time. F's fixer rewrote the model from scratch and added staggered segments, vent stacks (31 cylinders against E's 5), slatted screens and an annex, so the form-first run also grew the model considerably. This is one building and one run each, and the enlargements and the instruction changed together, so this run cannot say which of the two made the reviewer see the overhang.
+
+## Model tiers by detail level
+
+**Status (2026-11-21): a plan, not routing.** Modelling runs in Claude Code on Opus 5.5, as [AGENTS](../AGENTS.md#bounded-subagent-execution) says. Kimi K3.1 Pro is a candidate to consider for cheap low-detail modelling, possibly as a first pass; Gemini 4 Neon is to be investigated for high-detail work. Neither is routed, and adopting either is a later owner decision.
+
+The owner's plan: "Kimi I think looks … basic but acceptable. So I would say I would use Kimi for like cheap low detail modeling, right? Maybe for like a first pass. I would keep using Opus for mid-detail modeling and then I think we should start investigating Gemini for high detail work". Earlier in the same discussion: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
+
+**Evidence.** One housing block, with the same brief, references, sandbox and renderer for every model: a first build (with one self-revision), then one review round by the same model (a fresh session reviews, another revises). Each figure comes from one run, so it is a single sample, not an average. Costs are the prices the harness recorded (catalog prices; for DeepSeek about twice what was actually charged); Gemini's come from the gateway's credit balance. Opus and DeepSeek reviewed with the earlier free-form prompt, Kimi and Gemini with the four-question prompt, so review costs and revisions are not strictly like for like. Triangles are counted from the built meshes.
+
+| Model | Cost: build / review / revision | Total | Triangles: first build → after review | Notes |
+|---|---|---|---|---|
+| Opus 5.5 | $0.40 / $0.31 / $1.05 | $1.76 | 7,790 → 13,840 | Build about 2 min |
+| Kimi K3.1 Pro | $0.36 / $0.07 / $0.26 | $0.69 | 7,342 → 7,702 | |
+| DeepSeek V4.1 Flash | $0.04 / $0.02 / $0.07 | $0.13 | 5,390 → 8,810 | Owner: "Maybe DeepSeek is just not the right model here" |
+| Gemini 4 Neon | $1.45 / $0.55 / did not complete | | 27,084 (no revision) | Build about 9 min |
+
+Gemini 4 Neon in detail:
+
+- 16,896 of its 27,084 triangles are four door knobs built as default-resolution spheres (4,224 each; computed from the model's code, not measured). Siding, roof and concrete are textures drawn in code, with relief (normal) maps on flat walls.
+- Its revision did not complete in two attempts in this harness. In both attempts its requests ran for minutes without output and were restarted until the time cap ended the step; its thinking summaries had to be switched off for it to run at all.
+- The gateway bills abandoned requests: the two revision attempts cost $8.23 of its $10.47 total, about $7.84 of that for requests that returned nothing. The gateway's per-key budget is a soft cap; spending went past it.
+
+Before Gemini 4 Neon can be used:
+
+- a harness and timeout setup in which it can iterate;
+- a spend ceiling that actually holds;
+- a triangle budget, because of the phone memory limit.
+
+## Architect-description test (describe from photos)
+
+The owner's idea: "before we even send a building for modeling, we need an agent to describe that building like an architect would … find a building online that has good photo resources and a good architect-written description … test if Opus or Fable can describe the building from the images clearly enough and correctly in architect's terms. And then … pass [it] in to the agent that generates iteration 1." And their requirement: "whoever judges the output of the 1st modeling round has to have access to the architectural … description as well".
+
+**Method (2026-11-21).** The private architect-description eval set, kept outside Git, holds buildings that have both dated exterior photos and a professionally written exterior description from the same documentation campaign. Each description is reduced to a checklist of checkable form facts. Six cases are ready: four out of domain (a modest residential type, an operations building with a tower, an industrial warehouse, a plain storehouse) and two in domain, this island's Buildings 2 and 3. Each describer got only the photos, under neutral code names, with labels cropped and metadata stripped, and one shared brief: a fixed order (form, roof, materials, elevations, entrances, ornament, alterations); seen separated from inferred, with confidence; "not shown" instead of guessing; leave to declare the references insufficient; 12–20 key form facts; no identification. One blind judge, an Opus session that did not know which describer was which, first decided per fact whether it can be determined from the photos, then scored.
+
+**Result** over 103 determinable facts (correct / partly / incorrect / not mentioned / honest "not shown"):
+
+| Describer | All six cases | Out of domain only (70 facts) | Other claims contradicted |
+|---|---|---|---|
+| Opus 5.5 | 63 / 25 / 5 / 9 / 1 | 44 / 16 / 3 / 6 / 1 | 7 substantive |
+| Fable 5.2 | 72 / 23 / 0 / 6 / 2 | 48 / 16 / 0 / 4 / 2 | 4 substantive, 5 low-weight |
+
+Both followed the brief in every case and named no building. Fable said it recognised both in-domain buildings, Opus one of them, with a vague sense about the other; the judge found no statement that could only have come from memory or signage.
+
+- **Errors.** Opus's worst: it read one vaulted hall as two buildings (a flat-roofed hall plus a separate vault hall); gave a plan 4–5 times longer than deep where the key gives about 2:1; placed tower windows as a central stack instead of wrapping the corners; and miscounted doors. Fable's errors were all sizes and ratios (a plan called "close to square" where the key gives about 1.5:1; a depth of 7–9 m where the key gives 12.1 m), never the form itself.
+- **Shared patterns.** Plan depth and length-to-depth ratios are the weakest area for both. Roof features are under-described: both missed three saw-tooth roof monitors visible in one view. Altered openings were seen but not called alterations, and neither committed to how windows open. Reliable for both: storey counts, roof types, bay systems and entrance compositions.
+- **Confidence: low to moderate.** Six cases, two pairs of them correlated (sister buildings; one shared site); monochrome photos of about 900 px; draft checklists from scanned text, in which the judge listed several facts as wrong, self-contradictory or not checkable; one judge. The gap between the describers comes from about four misreadings in two cases; on two cases and most of a third they were indistinguishable.
+- **Next steps.** Fix the answer-key problems the judge listed; add the two cases whose photos could not be fetched yet; in the next shootout, give the description to the first modelling round and to its reviewer, as one blind pair: built from photos alone against photos plus description.
