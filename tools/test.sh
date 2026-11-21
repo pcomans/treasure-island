@@ -4,6 +4,7 @@
 #
 #   tools/test.sh
 #
+# Its output starts with the commit it tests and `git status --short`.
 # 1. Junk check: changes since origin/main (committed or not) must not add
 #    screenshots, videos, builds, logs, reference photos or huge files outside
 #    the game's own asset folders (game/resources/, generated/).
@@ -64,6 +65,13 @@ failed=()
 # Godot can exit 0 after a script or engine error, so its output is checked too.
 # A clean run prints no ERROR lines at all, and no shader error.
 godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR|SHADER ERROR'
+
+# What this run tests: the commit and what is changed beside it, so a saved log names
+# its own source.
+echo "== source"
+echo "commit $(git rev-parse HEAD 2>/dev/null || echo unknown)"
+echo "git status --short (nothing listed: a clean worktree):"
+git status --short 2>/dev/null || echo "NOTE: not a git worktree"
 
 echo "== junk check"
 command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }
@@ -291,6 +299,7 @@ tests=(
   game/tests/headless_bake_merge_contract.gd
   game/tests/headless_building_1_interior_contract.gd
   game/tests/headless_interior_ground_contract.gd
+  game/tests/headless_interior_presence_contract.gd
   game/tests/headless_street_detail_batches_contract.gd
   game/tests/headless_facade_grid_contract.gd
   game/tests/headless_midrise_open_cover_contract.gd
@@ -362,7 +371,7 @@ for method in forward_plus gl_compatibility; do
 done
 
 # Building 1's hall floor reflections in the loaded island, drawn on both renderers: on
-# Forward+ they come and go with the camera, never flicker on the doorway and put the
+# Forward+ they fade in and out with the camera, never flicker on the doorway and put the
 # environment and the floor back exactly; on the Compatibility renderer (the web's) they
 # do nothing at all (game/tests/building_1_hall_reflections_check.gd). Each run names
 # the renderer it asks for, and fails if the engine draws with another.
@@ -399,6 +408,11 @@ for test in "${tests[@]}"; do
   [ "${test}" != game/tests/shared/island_test.gd ] || start_node_checks
   run_test "${test}" "${test}"
 done
+
+# Built as the web's bake builds it (its flag, which the builders read), Building 1's
+# hall carries no floor attribute sets for the reflections the web never draws.
+echo "== game/tests/headless_building_1_interior_contract.gd -- --web-world-bake"
+run_test "game/tests/headless_building_1_interior_contract.gd (web bake)" game/tests/headless_building_1_interior_contract.gd --web-world-bake
 
 echo "== silent pass (--no-sfx)"
 if [ ! -f game/resources/audio/sfx/sfx.json ]; then

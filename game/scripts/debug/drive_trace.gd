@@ -39,9 +39,11 @@ extends Node
 ## turn, for the shaders they compile. With hall=1 (?trace=drive&hall=1, --trace-hall
 ## natively) the trace goes from its baseline at the spawn straight to the hall's walk
 ## and ends after it: the mural's first load in a freshly started game. On desktop a
-## "reflections" marker records the hall's floor reflections coming on or going off and
-## their probes made or freed (Building1HallReflections), and natively
-## --trace-hall-shot=FILE saves the view half a second after the walk stops inside.
+## "reflections" marker records the hall's floor reflections called for or let go,
+## fading and done fading, and their probes made or freed (Building1HallReflections).
+## Natively --trace-hall-shot=FILE saves the view half a second after the walk stops
+## inside, and --trace-hall-out walks back out after it, still facing in, to
+## HALL_OUT_TO_M outside the door, and stands there HALL_OUT_STILL_S.
 ##
 ## The trace: for every frame, from the engine's own signals (physics_frame,
 ## process_frame, frame_pre_draw, frame_post_draw) and four probe nodes, the time of
@@ -97,7 +99,9 @@ const STEPS := ["wait", "baseline", "to_car", "drive", "stop", "out", "walk", "r
 ## street prop felled, a car's splash and goal confetti (each where the trace's
 ## camera sees it, near the player), Building 1's hall walked into (its mural loads on
 ## the way), then the 3D resolution set to 100%, 50% and back (applied, not saved).
-const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti", 150], ["hall", 900], ["resolution 100", 40], ["resolution 50", 40], ["resolution back", 40]]
+## The hall trigger's ticks: its walk in and the stand still inside after it.
+const HALL_TICKS := 900
+const TRIGGERS := [["fence", 90], ["furniture", 150], ["splash", 90], ["confetti", 150], ["hall", HALL_TICKS], ["resolution 100", 40], ["resolution 50", 40], ["resolution back", 40]]
 ## The hall trigger's walk: the trace's camera at a standing eye height over the hall's
 ## floor, from this far out on the front door's axis (beyond the mural's load radius)
 ## to this far inside, at the stock player's walking speed (player_controller.gd
@@ -107,6 +111,10 @@ const HALL_WALK_FROM_M := 46.0
 const HALL_WALK_TO_M := 10.0
 const HALL_WALK_MPS := 4.0
 const HALL_WALK_EYE_M := 1.7
+## With --trace-hall-out, after HALL_TICKS: back out the way it came at the same speed,
+## still facing in, to this far outside the door, then still for this long (s).
+const HALL_OUT_TO_M := 6.0
+const HALL_OUT_STILL_S := 1.0
 ## What the splash and confetti triggers make (as the vehicle manager and the ball do).
 const CAR_SPLASH := preload("res://game/scripts/vehicles/car_splash.gd")
 const GOAL_CONFETTI := preload("res://game/scripts/world/goal_confetti.gd")
@@ -198,6 +206,8 @@ var _hall_reflections: Building1HallReflections
 var _reflections_seen := ""
 var _hall_shot := ""
 var _hall_still := 0
+## Natively, --trace-hall-out: the walk goes back out after it (HALL_OUT_TO_M).
+var _hall_out := false
 ## The run's limits and settings from the page's address or the command line: the
 ## trace's length (s, 0 for the whole drive), the 3D resolution asked for (an Options
 ## id, "" for the player's own) and the one to put back; the view last recorded.
@@ -238,6 +248,7 @@ func _ready() -> void:
 				_scale_asked = _resolution_id(arg.trim_prefix("--trace-scale="))
 		_quit_at_end = OS.get_cmdline_user_args().has("--trace-quit")
 		_hall_only = OS.get_cmdline_user_args().has("--trace-hall")
+		_hall_out = OS.get_cmdline_user_args().has("--trace-hall-out")
 		for arg: String in OS.get_cmdline_user_args():
 			if arg.begins_with("--trace-hall-shot="):
 				_hall_shot = arg.trim_prefix("--trace-hall-shot=")
@@ -951,7 +962,7 @@ func _triggers() -> void:
 		_event("trigger", "%s: %s" % [part, _start_trigger(part)], _trigger)
 	if part == "hall" and _hall_loader != null:
 		_walk_hall()
-	if _trigger_ticks < int(TRIGGERS[_trigger][1]):
+	if _trigger_ticks < int(TRIGGERS[_trigger][1]) + (_hall_out_ticks() if part == "hall" else 0):
 		return
 	_trigger += 1
 	_trigger_ticks = 0
@@ -1040,7 +1051,7 @@ func _start_trigger(part: String) -> String:
 			var out := Vector3(_hall_loader.hall.x - door.x, 0.0, _hall_loader.hall.y - door.z).normalized()
 			_hall_from = Vector3(door.x, door.y - 1.5 + HALL_WALK_EYE_M, door.z) + out * HALL_WALK_FROM_M
 			_hall_dir = -out
-			return "walking in from %.0f m out on its door's axis at %.1f m/s to %.0f m inside; its mural %d of %d tiles on the walls, loaded within %.0f m of the door" % [HALL_WALK_FROM_M, HALL_WALK_MPS, HALL_WALK_TO_M, _hall_seen, _hall_loader.tiles.size(), _hall_loader.load_radius]
+			return "walking in from %.0f m out on its door's axis at %.1f m/s to %.0f m inside%s; its mural %d of %d tiles on the walls, loaded within %.0f m of the door" % [HALL_WALK_FROM_M, HALL_WALK_MPS, HALL_WALK_TO_M, ", then back out to %.0f m outside, facing in" % HALL_OUT_TO_M if _hall_out else "", _hall_seen, _hall_loader.tiles.size(), _hall_loader.load_radius]
 		"resolution 100", "resolution 50", "resolution back":
 			var graphics := _main.graphics
 			if graphics == null:
@@ -1071,9 +1082,14 @@ func _place_trigger_camera(view: Transform3D) -> void:
 
 
 ## The hall trigger's walk, a tick at a time: from _hall_from along _hall_dir at
-## HALL_WALK_MPS, stopping HALL_WALK_TO_M inside the door.
+## HALL_WALK_MPS, stopping HALL_WALK_TO_M inside the door; with --trace-hall-out, from
+## HALL_TICKS on, back out at the same speed, facing in, to HALL_OUT_TO_M outside it.
 func _walk_hall() -> void:
-	var walked := minf(HALL_WALK_MPS * float(_trigger_ticks - 1) / float(Engine.physics_ticks_per_second), HALL_WALK_FROM_M + HALL_WALK_TO_M)
+	var hz := float(Engine.physics_ticks_per_second)
+	var walked := minf(HALL_WALK_MPS * float(_trigger_ticks - 1) / hz, HALL_WALK_FROM_M + HALL_WALK_TO_M)
+	# With --trace-hall-out, after HALL_TICKS: back out the same way, still facing in.
+	if _hall_out and _trigger_ticks > HALL_TICKS:
+		walked -= minf(HALL_WALK_MPS * float(_trigger_ticks - HALL_TICKS) / hz, HALL_WALK_TO_M + HALL_OUT_TO_M)
 	var at := _hall_from + _hall_dir * walked
 	_place_trigger_camera(Transform3D(Basis.IDENTITY, at).looking_at(at + _hall_dir * 10.0 + Vector3.UP, Vector3.UP))
 	# Half a second after the walk has stopped inside, the view once (--trace-hall-shot).
@@ -1082,6 +1098,14 @@ func _walk_hall() -> void:
 		if _hall_still == Engine.physics_ticks_per_second / 2:
 			var saved := get_viewport().get_texture().get_image().save_png(_hall_shot)
 			_event("trace", "hall view saved to %s (error %d)" % [_hall_shot, saved], saved)
+
+
+## The ticks --trace-hall-out adds to the hall trigger: the walk back out and its stand.
+func _hall_out_ticks() -> int:
+	if not _hall_out:
+		return 0
+	var hz := float(Engine.physics_ticks_per_second)
+	return ceili((HALL_WALK_TO_M + HALL_OUT_TO_M) / HALL_WALK_MPS * hz + HALL_OUT_STILL_S * hz)
 
 
 ## A "mural" marker in the frame Building 1's hall mural's tiles on the walls change
@@ -1095,13 +1119,15 @@ func _mark_mural() -> void:
 	_event("mural", "tiles on the walls %d of %d, camera %.1f m from the door" % [_hall_seen, _hall_loader.tiles.size(), off], _hall_seen)
 
 
-## A "reflections" marker in the frame Building 1's hall floor reflections come on or
-## go off, or their probes are made or freed (Building1HallReflections; desktop only).
+## A "reflections" marker in the frame Building 1's hall floor reflections are called
+## for or let go (they start fading), finish fading, or their probes are made or freed
+## (Building1HallReflections; desktop only).
 func _mark_reflections() -> void:
 	if _hall_reflections == null or not is_instance_valid(_hall_reflections):
 		return
 	var probes := _hall_reflections.probe_nodes().size()
-	var state := "%s, %d probes" % ["on" if _hall_reflections.is_on() else "off", probes]
+	var fade := _hall_reflections.fade()
+	var state := "%s%s, %d probes" % ["on" if _hall_reflections.is_on() else "off", ", fading" if fade > 0.0 and fade < 1.0 else "", probes]
 	if state == _reflections_seen:
 		return
 	_reflections_seen = state

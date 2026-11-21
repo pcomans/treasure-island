@@ -23,7 +23,8 @@ extends RefCounted
 ## exterior they always saw; it is lit by the sky's ambient light and its own glowing
 ## fixtures (lamps and daylight panels, DaySun night roles) over baked vertex
 ## shading, on RENDER_INTERIOR, which main.tscn's Sun leaves out of its light: the web
-## draws no sun shadows, so the sun would otherwise light the hall through its roof. Its collision is a closed shell of
+## draws no sun shadows, so the sun would otherwise light the hall through its roof
+## (but for the door's open leaves on desktop, _door_leaves). Its collision is a closed shell of
 ## its own, colliding from both sides; the doorway's car blocker is on the cars' ground
 ## layer only, so cars stay out and the player and camera pass.
 
@@ -31,6 +32,8 @@ const CONFIG_PATH := "res://game/resources/facades/building_1_interior.json"
 const SCHEMA := "ti.building-1-interior/1"
 ## Render layer 6 ("interior" in project.godot): main.tscn's Sun leaves it out.
 const RENDER_INTERIOR := 1 << 5
+## Render layer 1 ("world_visible"), the facades' own.
+const RENDER_WORLD_VISIBLE := 1 << 0
 const PHYSICS_WORLD_SOLID := 1 << 0
 ## The cars' ground (ShorelineBuilder.PHYSICS_CAR_GROUND): cars and K-rails meet it,
 ## the player and the on-foot camera do not.
@@ -60,9 +63,17 @@ const MURALS := ["mural_1", "mural_2", "mural_3", "mural_4"]
 const MURAL_LOADER := preload("res://game/scripts/world/facades/building_1_mural_loader.gd")
 const HALL_REFLECTIONS := preload("res://game/scripts/world/facades/building_1_hall_reflections.gd")
 const PREBUILT_WORLD := preload("res://game/scripts/world/prebuilt_world.gd")
-## How far over the hall's highest ceiling (m) a camera still counts as in the hall for
-## its floor reflections: that ceiling's own depth, not the floors or the roof above.
-const REFLECTIONS_TOP_MARGIN_M := 1.2
+const INTERIOR_PRESENCE := preload("res://game/scripts/world/interiors/interior_presence.gd")
+## How far over the hall's highest ceiling (m) the camera still counts as in the hall
+## (InteriorPresence): that ceiling's own depth, not the floors or the roof above.
+const TOP_MARGIN_M := 1.2
+## The terrazzo's own polar frame (floor_layout), which its UVs span 0 to 1 and the floor
+## textures cover: past its angles by FLOOR_FRAME_PAD_RAD, from FLOOR_FRAME_OUT_M outside
+## the crescent's facade (the vestibule and the door's sill) to FLOOR_FRAME_PAD_M past the
+## deepest east bay's back.
+const FLOOR_FRAME_PAD_RAD := 0.01
+const FLOOR_FRAME_OUT_M := 1.5
+const FLOOR_FRAME_PAD_M := 0.5
 ## The glowing surfaces: lit by their own emission, not shaded.
 const GLOWS := ["lamp", "daylight"]
 
@@ -184,7 +195,9 @@ static func build(plan: Dictionary) -> Dictionary:
 	_append_vestibule(plan, buckets, shell)
 	_append_end_walls(plan, buckets, shell)
 	_append_north_annex(plan, buckets, shell)
-	_append_doorway(plan, buckets, shell)
+	# The door's open leaves: a mesh of their own (_door_leaves) but on the web.
+	var leaves := buckets if PREBUILT_WORLD.profile() == "web" else {"bronze": _bucket(), "glass": _bucket()}
+	_append_doorway(plan, buckets, leaves, shell)
 	_append_fixtures(plan, buckets)
 	var root := Node3D.new()
 	root.name = "Building1Interior"
@@ -201,6 +214,8 @@ static func build(plan: Dictionary) -> Dictionary:
 	var mural_entry := plan.config.palette.mural as Dictionary
 	var placeholder := _mural_placeholder(mural_entry)
 	var floor_data := {}
+	var layout := floor_layout(plan)
+	root.set_meta("floor_layout", layout)
 	for surface: String in SURFACES:
 		var bucket := buckets[surface] as Dictionary
 		if (bucket.indices as Array).is_empty():
@@ -209,7 +224,9 @@ static func build(plan: Dictionary) -> Dictionary:
 		arrays.resize(Mesh.ARRAY_MAX)
 		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
 		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
-		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+		# The terrazzo's UVs are its polar frame's (floor_layout): its textures follow the
+		# crescent's rings and radii.
+		arrays[Mesh.ARRAY_TEX_UV] = _floor_uvs(layout, bucket.vertices as Array) if surface == "terrazzo" else PackedVector2Array(bucket.uvs as Array)
 		if not surface in GLOWS:
 			arrays[Mesh.ARRAY_COLOR] = _shading(plan, bucket, surface == "terrazzo")
 		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
@@ -234,6 +251,13 @@ static func build(plan: Dictionary) -> Dictionary:
 	# The sun never lights it (RENDER_INTERIOR), so its shadows would be unseen work.
 	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	root.add_child(instance)
+	var leaf_surfaces := 0
+	if not is_same(leaves, buckets):
+		var door_leaves := _door_leaves(plan, leaves)
+		root.add_child(door_leaves)
+		leaf_surfaces = door_leaves.mesh.get_surface_count()
+		for surface: String in leaves:
+			triangles += ((leaves[surface] as Dictionary).indices as Array).size() / 3
 	var faces := PackedVector3Array()
 	var shell_vertices := shell.vertices as Array
 	for index_value: int in shell.indices as Array:
@@ -266,10 +290,103 @@ static func build(plan: Dictionary) -> Dictionary:
 	loader.unload_delay = float(mural.unload_delay)
 	loader.hall = Vector4((plan.center as Vector2).x, (plan.center as Vector2).y, float(plan.front_in) - 0.5, float(plan.east) + 4.0)
 	root.add_child(loader)
+	# Whether the camera is in the hall (InteriorPresence), from the plan on the root: the
+	# loader's bounds about the crescent's centre, the hall's angles, and up to a little
+	# over its highest ceiling (the balcony's, or its own if that were higher): the hall,
+	# its balcony and gallery, not the roof above them.
+	var heights := plan.heights as Dictionary
+	root.set_meta(INTERIOR_PRESENCE.PLAN_META, {"kind": "ring_sector", "centre": Vector2(loader.hall.x, loader.hall.y), "radii": Vector2(loader.hall.z, loader.hall.w), "angles": Vector2(float(plan.annex_north), float(plan.south)), "top_y": float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + TOP_MARGIN_M})
+	var presence := INTERIOR_PRESENCE.new()
+	presence.name = "Presence"
+	root.add_child(presence)
 	root.add_child(_reflections(plan, loader.hall, floor_data))
 	root.set_meta("triangles", triangles)
 	root.set_meta("collision_triangles", faces.size() / 3)
-	return {"ok": true, "node": root, "mesh_instances": 1, "surfaces": mesh.get_surface_count(), "triangles": triangles, "static_bodies": 2, "shapes": 2}
+	return {"ok": true, "node": root, "mesh_instances": 2 if leaf_surfaces > 0 else 1, "surfaces": mesh.get_surface_count() + leaf_surfaces, "triangles": triangles, "static_bodies": 2, "shapes": 2}
+
+
+## The door's open leaves (_append_door_leaves: bronze and glass) as a mesh of their own
+## on the facades' render layer, not RENDER_INTERIOR. They stand in the doorway, half out
+## of the hall: the sun lights them as it does the facade around them, where it reaches
+## them through the opening, and the hall's reflection probes, which reflect on
+## RENDER_INTERIOR alone and fade as the camera goes in and out
+## (Building1HallReflections), never reach their glass: it keeps the sky's reflection,
+## the same from either side. The web, which draws no probes, keeps them in the Shell.
+static func _door_leaves(plan: Dictionary, leaves: Dictionary) -> MeshInstance3D:
+	var mesh := ArrayMesh.new()
+	for surface: String in leaves:
+		var bucket := leaves[surface] as Dictionary
+		if (bucket.indices as Array).is_empty():
+			continue
+		var arrays: Array = []
+		arrays.resize(Mesh.ARRAY_MAX)
+		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
+		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
+		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+		arrays[Mesh.ARRAY_COLOR] = _shading(plan, bucket)
+		arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		mesh.surface_set_name(mesh.get_surface_count() - 1, surface)
+		mesh.surface_set_material(mesh.get_surface_count() - 1, _material(surface, plan.config.palette[surface] as Dictionary))
+	var instance := MeshInstance3D.new()
+	instance.name = "DoorLeaves"
+	instance.mesh = mesh
+	instance.layers = RENDER_WORLD_VISIBLE
+	# Inside the doorway: their shadow would fall on the unlit vestibule, or on the paving
+	# only with the sun low in the opening.
+	instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return instance
+
+
+## The terrazzo's layout in its own polar frame: the frame its UVs span 0 to 1 and the
+## floor textures cover (theta: angles about the crescent's centre, radius: metres from
+## it), and where the hall's walls, door and bays stand in it. The root carries it as
+## the "floor_layout" meta, which the floor textures' generator reads
+## (tools/b1_hall_floor_textures.gd): regenerate them when the plan moves these.
+static func floor_layout(plan: Dictionary) -> Dictionary:
+	var bays: Array = []
+	var deepest := 0.0
+	var east_piers := plan.east_piers as Array
+	for bay in east_piers.size() - 1:
+		var depth := _east_bay_depth(plan, bay)
+		var span := _east_bay_span(plan, bay, depth)
+		bays.append([span.x, span.y, depth])
+		deepest = maxf(deepest, depth)
+	return {
+		"centre": plan.center,
+		"theta": Vector2(float(plan.annex_north) - FLOOR_FRAME_PAD_RAD, float(plan.south) + FLOOR_FRAME_PAD_RAD),
+		"radius": Vector2(float(plan.radius) - FLOOR_FRAME_OUT_M, float(plan.east) + deepest + FLOOR_FRAME_PAD_M),
+		"front_in": float(plan.front_in),
+		"column": float(plan.column),
+		"east": float(plan.east),
+		"north": float(plan.north),
+		"south": float(plan.south),
+		"annex_north": float(plan.annex_north),
+		"vestibule": vestibule_span(plan),
+		"door": door_span(plan),
+		"bays": bays,
+	}
+
+
+## Each terrazzo vertex's place in the floor's polar frame: u along the angles (taken
+## from the frame's first angle and wrapped, so a frame across the -PI/PI seam holds
+## too), v out along the radius, 0 to 1. Said as an error if one falls outside it.
+static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Array:
+	var centre := layout.centre as Vector2
+	var theta := layout.theta as Vector2
+	var radius := layout.radius as Vector2
+	var uvs := PackedVector2Array()
+	var outside := 0
+	for vertex: Vector3 in vertices:
+		var offset := Vector2(vertex.x - centre.x, vertex.z - centre.y)
+		var turn := wrapf(atan2(offset.y, offset.x) - theta.x, -PI, PI)
+		var uv := Vector2(turn / (theta.y - theta.x), (offset.length() - radius.x) / (radius.y - radius.x))
+		if uv.x < 0.0 or uv.x > 1.0 or uv.y < 0.0 or uv.y > 1.0:
+			outside += 1
+		uvs.append(uv)
+	if outside > 0:
+		push_error("Building 1 interior: %d terrazzo vertices lie outside the floor's frame %s; its textures would not cover them." % [outside, layout])
+	return uvs
 
 
 ## The hall's floor reflections (plan.config.reflections; Building1HallReflections),
@@ -286,10 +403,6 @@ static func _reflections(plan: Dictionary, hall: Vector4, floor: Dictionary) -> 
 	node.render_layer = RENDER_INTERIOR
 	node.hall = hall
 	node.hall_angles = Vector2(float(plan.annex_north), float(plan.south))
-	# Up to the hall's highest ceiling (the balcony's, or its own if that were higher) and
-	# a little over: the hall, its balcony and gallery, not the roof above them.
-	var heights := plan.heights as Dictionary
-	node.top_y = float(plan.floor_y) + maxf(float(heights.ceiling), float(heights.balcony_ceiling)) + REFLECTIONS_TOP_MARGIN_M
 	node.ssr = bool(ssr.get("enabled", true))
 	node.ssr_max_steps = int(ssr.get("max_steps", 64))
 	node.ssr_fade_in = float(ssr.get("fade_in", 0.15))
@@ -1087,7 +1200,7 @@ static func _append_north_annex(plan: Dictionary, buckets: Dictionary, shell: Di
 			_box([buckets.bronze], _lifted(a, (gallery + rail) * 0.5) - n * 0.05, b - a, n, float(bar[0]), rail - gallery, float(bar[0]))
 
 
-static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
+static func _append_doorway(plan: Dictionary, buckets: Dictionary, leaves: Dictionary, shell: Dictionary) -> void:
 	# The opened door group's reveal, from the facade's dark border to the vestibule
 	# wall: sides, head and a level stone sill, its front bevelled down to the
 	# forecourt's paving; under the bevel, for the feet, a gentler hidden slope.
@@ -1141,12 +1254,13 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, shell: Dictio
 	var walk_low_right := _frame_point(door, right, front + bevel + below * run / bevel, 0.0)
 	_doorway_strip(plan, [shell], walk_top_left, walk_top_right, inner_left, inner_right, y, Vector3.UP, stations)
 	_quad([shell], _lifted(walk_low_left, y - bevel - below), _lifted(walk_low_right, y - bevel - below), _lifted(walk_top_right, y), _lifted(walk_top_left, y), (normal * bevel + Vector3.UP * run).normalized())
-	_append_door_leaves(plan, buckets, shell)
+	_append_door_leaves(plan, leaves, shell)
 
 
 ## The group's three bronze leaves stood open, swung in against the reveal sides:
 ## two folded together on the left, one on the right. Glazed bronze in the facade;
-## here the frames (the glass is clear), solid for the player.
+## here the frames (the glass is clear), solid for the player. Into buckets' bronze and
+## glass (the Shell's, or the leaves' own: _door_leaves) and the shell's collision.
 static func _append_door_leaves(plan: Dictionary, buckets: Dictionary, shell: Dictionary) -> void:
 	var door := plan.door as Dictionary
 	var leaf := plan.members.door_leaf as Dictionary
@@ -1792,8 +1906,35 @@ static func _material(key: String, entry: Dictionary) -> StandardMaterial3D:
 	else:
 		material.vertex_color_use_as_albedo = true
 		material.vertex_color_is_srgb = true
+	_textures(material, entry)
 	_materials[key] = material
 	return material
+
+
+## A palette entry's textures, if it names any (the terrazzo's): "albedo_texture" over
+## the surface's UVs; "detail_texture", multiplied in, tiling every "detail_tile_m"
+## metres on the world's ground plane (no UVs of its own, so no seam anywhere); and,
+## except in the web's bake (it draws no reflections), "roughness_texture" over the UVs,
+## which the material's roughness scales.
+static func _textures(material: StandardMaterial3D, entry: Dictionary) -> void:
+	if not entry.has("albedo_texture") and not entry.has("detail_texture"):
+		return
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.texture_repeat = true
+	if entry.has("albedo_texture"):
+		material.albedo_texture = load(str(entry.albedo_texture)) as Texture2D
+	if entry.has("detail_texture"):
+		var tile := float(entry.get("detail_tile_m", 1.0))
+		material.detail_enabled = true
+		material.detail_albedo = load(str(entry.detail_texture)) as Texture2D
+		material.detail_blend_mode = BaseMaterial3D.BLEND_MODE_MUL
+		material.detail_uv_layer = BaseMaterial3D.DETAIL_UV_2
+		material.uv2_triplanar = true
+		material.uv2_world_triplanar = true
+		material.uv2_scale = Vector3.ONE / tile
+	if entry.has("roughness_texture") and PREBUILT_WORLD.profile() != "web":
+		material.roughness_texture = load(str(entry.roughness_texture)) as Texture2D
+		material.roughness_texture_channel = BaseMaterial3D.TEXTURE_CHANNEL_RED
 
 
 ## A mural tile's material, new for each build (not shared like _material's: the

@@ -6,7 +6,10 @@ extends SceneTree
 ## - the front door's passage stays open to the player (nothing of the shell or the
 ##   hero's exterior collision stands in it) while its car blocker, on the cars' ground
 ##   layer only, spans it;
-## - it draws on the interior render layer the Sun leaves out, with no shadows;
+## - it draws on the interior render layer the Sun leaves out, with no shadows, but for
+##   the door's open leaves: a mesh of their own (bronze and glass) on the facades' layer,
+##   which the hall's reflection probes do not reflect on, also without shadows (in the
+##   Shell on the web, which has no probes);
 ## - the hero's roof slabs stand nowhere over the hall's plan below its ceiling (the
 ##   closure test above meets only the hall's own shell and the hero's walls);
 ## - the mural's four tile surfaces start on a placeholder in materials that never
@@ -17,10 +20,19 @@ extends SceneTree
 ## - its floor reflections (Building1HallReflections) are there with a mode the node
 ##   knows (a config with any other fails the hall's plan), and carry the terrazzo
 ##   surface's own vertex attributes, byte for byte as the hall draws them, beside a
-##   plain set of the same layout and size that differs from them (the baked sheen out).
-## With -- --use-prebuilt-world it checks the reflections alone, in the island baked for
-## desktop exports (tools/prebuild-static-world.sh native, which tools/test.sh bakes),
-## loaded as the game loads it: the main scene, whose WorldLoader reads the flag itself.
+##   plain set of the same layout and size that differs from them (the baked sheen out);
+## - its InteriorPresence ("Presence") is there before the reflections (so it moves its
+##   blend in a frame before they read it), and the hall's root carries a plan it takes:
+##   a ring_sector on the mural loader's bounds.
+## With -- --use-prebuilt-world it checks the reflections, the presence and the layers
+## (the door's open leaves still a mesh of their own on the facades' layer after the
+## bake's merge, tools/merge_baked_buildings.gd), in the island baked for desktop exports
+## (tools/prebuild-static-world.sh native, which tools/test.sh bakes), loaded as the game
+## loads it: the main scene, whose WorldLoader reads the flag itself.
+## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
+## it builds the hall as the web's bake does and checks its reflections node carries
+## neither floor attribute set (the web draws none of them), and its InteriorPresence
+## and plan as above: the web's hall fades in and out by the same plan.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -68,9 +80,46 @@ func _run() -> void:
 	_check_closure(hall)
 	_check_door(hall)
 	_check_roof(hall)
+	if OS.get_cmdline_user_args().has("--web-world-bake"):
+		_check_web_bake(hall)
+		_check_presence(hall, "the hall built for the web")
+		_finish("", "PASS: built as the web's bake builds it, the hall's reflections node is there (mode \"%s\") with neither of the floor's attribute sets, and its Presence before it with a plan on the mural loader's bounds" % (hall.get_node("HallReflections") as Building1HallReflections).mode if failures.is_empty() else "")
+		return
 	_check_mural(hall)
 	_check_reflections(hall, "the generated hall")
+	_check_presence(hall, "the generated hall")
 	_finish("")
+
+
+## The hall's InteriorPresence: there, before the reflections, with a plan on the root
+## that it takes, about the mural loader's centre and between its bounds.
+func _check_presence(hall: Node3D, where: String) -> void:
+	var presence := hall.get_node_or_null("Presence") as InteriorPresence
+	var reflections := hall.get_node_or_null("HallReflections")
+	var loader := hall.get_node_or_null("MuralLoader") as Building1MuralLoader
+	if presence == null or reflections == null or loader == null:
+		failures.append("%s lacks its Presence, HallReflections or MuralLoader" % where)
+		return
+	if presence.get_index() > reflections.get_index():
+		failures.append("%s's Presence comes after its reflections, so they would read its blend a frame late" % where)
+	var plan: Variant = hall.get_meta(InteriorPresence.PLAN_META, null)
+	var problem := InteriorPresence.plan_problem(plan)
+	if problem != "":
+		failures.append("%s's plan: %s" % [where, problem])
+	elif plan.centre != Vector2(loader.hall.x, loader.hall.y) or plan.radii != Vector2(loader.hall.z, loader.hall.w):
+		failures.append("%s's plan (centre %s, radii %s) is not on the mural loader's bounds %s" % [where, plan.centre, plan.radii, loader.hall])
+
+
+## The hall as the web's bake builds it: its reflections node (which does nothing on the
+## web) carries none of the floor's attribute bytes, so the web pack carries none.
+func _check_web_bake(hall: Node3D) -> void:
+	var node := hall.get_node_or_null("HallReflections") as Building1HallReflections
+	if node == null:
+		failures.append("the hall built for the web has no HallReflections node")
+		return
+	if not node.sheen_attributes.is_empty() or not node.plain_attributes.is_empty():
+		failures.append("the hall built for the web carries the floor's attribute sets (%d and %d bytes)" % [node.sheen_attributes.size(), node.plain_attributes.size()])
+	print("REFLECTIONS the web-bake hall: the floor's attribute sets %d and %d bytes" % [node.sheen_attributes.size(), node.plain_attributes.size()])
 
 
 ## The reflections of the hall in the island baked for desktop exports, loaded through
@@ -99,9 +148,11 @@ func _run_prebuilt() -> void:
 			error = "the baked island has no hall reflections"
 		else:
 			_check_reflections(node.get_parent() as Node3D, "the baked hall")
+			_check_presence(node.get_parent() as Node3D, "the baked hall")
+			_check_layers(node.get_parent() as Node3D)
 	main.queue_free()
 	await process_frame
-	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout")
+	_finish(error, "PASS: the baked island, loaded as the game loads it, has the hall's floor reflections with a mode the node knows and the terrazzo surface's own attributes, byte for byte, beside a plain set of the same layout; it draws on the interior layer without shadows, its door's open leaves on the facades' layer, out of the probes' reach")
 
 
 ## The hall's floor reflections: a mode the node knows (and a config with another one
@@ -128,7 +179,8 @@ func _check_reflections(hall: Node3D, where: String) -> void:
 	if node.plain_attributes.size() != node.sheen_attributes.size() or node.plain_attributes == node.sheen_attributes:
 		failures.append("%s: the floor's plain attributes are not a changed set of the same size (%d and %d bytes)" % [where, node.plain_attributes.size(), node.sheen_attributes.size()])
 	# For the record, not a test: what the two sets weigh, and where the node's switch is.
-	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, node.top_y])
+	var plan: Dictionary = hall.get_meta(InteriorPresence.PLAN_META, {})
+	print("REFLECTIONS %s: the floor's attribute sets %d and %d bytes (%d vertices, format %d); hall %s, angles %s, top %.2f m" % [where, node.sheen_attributes.size(), node.plain_attributes.size(), node.floor_vertex_count, node.floor_format, node.hall, node.hall_angles, float(plan.get("top_y", NAN))])
 
 
 ## The hero record's exterior collision faces (its collision surfaces), to prove the
@@ -156,6 +208,13 @@ func _check_layers(hall: Node3D) -> void:
 		failures.append("the hall draws on layers %d, not the interior layer the Sun leaves out" % shell.layers)
 	if shell.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
 		failures.append("the hall casts shadows the Sun never draws")
+	var leaves := hall.get_node_or_null("DoorLeaves") as MeshInstance3D
+	var reflections := hall.get_node_or_null("HallReflections") as Building1HallReflections
+	if INTERIOR.PREBUILT_WORLD.profile() == "web":
+		if leaves != null:
+			failures.append("the hall built for the web has a DoorLeaves mesh; its leaves belong in the Shell")
+	elif leaves == null or leaves.mesh == null or leaves.mesh.get_surface_count() != 2 or leaves.layers != INTERIOR.RENDER_WORLD_VISIBLE or reflections == null or leaves.layers & reflections.render_layer != 0 or leaves.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
+		failures.append("the door's open leaves are not a mesh of their own (bronze and glass) on the facades' layer, out of the probes' reach, without shadows: %s" % ("none" if leaves == null else "layers %d, %d surfaces, shadows %d" % [leaves.layers, leaves.mesh.get_surface_count() if leaves.mesh != null else 0, leaves.cast_shadow]))
 	var body := hall.get_node_or_null("Collision") as StaticBody3D
 	if body == null or body.collision_layer != INTERIOR.PHYSICS_WORLD_SOLID:
 		failures.append("the hall's collision is not on the world's solid layer")
@@ -390,7 +449,7 @@ func _finish(error: String, passed := "") -> void:
 		if passed != "":
 			print(passed)
 		else:
-			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set")
+			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows, but for its door's open leaves on the facades' layer, out of the probes' reach; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set")
 		quit(0)
 		return
 	for message in failures:
