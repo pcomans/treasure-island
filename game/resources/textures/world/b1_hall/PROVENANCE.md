@@ -88,15 +88,20 @@
     generator. Regenerate them whenever the plan moves the hall's walls, door or bays.
   - Read from the 2023 interior photographs (photos 1, 3 and 5; pattern and tone only):
     a warm tan-grey polished terrazzo in large panels set out on the crescent's rings and
-    radii, thin dark divider strips between them, panels a shade apart from their
-    neighbours and unevenly worn, wide darker grey-brown bands curving along the hall,
-    and reflections broken up from panel to panel.
+    radii, thin divider strips between them, panels unevenly worn and a touch apart in
+    shade, wide darker grey-brown bands curving along the hall, a fine low-contrast
+    aggregate, and reflections broken up from panel to panel.
   - `production_inference` (not measured): the panels' size (1.5 m along the rings at
     the hall's middle radius and 1.5 m out, counted from the front wall's foot), the
-    strips' width (12 mm), the two bands' places (3.75 m either side of the middle radius
-    between the colonnade and the east wall) and width (0.45 m), all colours, the lanes
-    of wear (down the middle of the hall, and fanning in from the door), the polish near
-    the walls and under the balcony, the scuffs, and the dust along the foot of the walls.
+    strips' width (12 mm) and tone, the two bands' places (each starting on the ring strip
+    nearest 3.75 m either side of the middle radius between the colonnade and the east
+    wall) and width (0.45 m), all colours, the aggregate's chips and their contrast, the
+    broad patches, the lanes of wear (down the middle of the hall, and fanning in from the
+    door: duller, and a little darker and greyer), the polish near the walls and under the
+    balcony, the heel scuffs, and the grey dust along the foot of the walls.
+  - Round 2 (2026-11-21, a variant beside round 1 for the owner): no checkerboard of
+    panels, softer strips, the band's edge a single strip, the wear visible in the colour,
+    and the aggregate's contrast cut; round 1's set is commit 58e5f3c9's.
 
 ## Record (building-texture skill)
 
@@ -109,4 +114,4 @@
 | Repeats on the receiver | 1 x 1 | 1 x 1 | every 1.5 m both ways |
 | Web build | 512 x 256 (`tools/web-texture-cap-512.txt`) | not drawn on the web (its bake gives the floor no roughness map); 512 x 256 in the pack | 512 x 512 |
 | Import | VRAM compressed, mipmaps, Detect 3D off | the same | the same |
-| Verdicts | early comparison for the owner (show first); no review yet, no as-built claim | | |
+| Verdicts | round 2 study for the owner beside round 1 (show first); no review yet, no as-built claim | | |

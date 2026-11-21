@@ -8,17 +8,19 @@ extends SceneTree
 ## moves those. Fixed seeds: the same plan gives the same pictures.
 ## - floor_layout.png (LAYOUT_SIZE, sRGB): the terrazzo's colour over its frame (u along
 ##   the angles, v out along the radius, as the floor's UVs): warm tan panels on a polar
-##   grid of thin dark divider strips (PANEL_M), every second panel a shade greyer and
-##   each a little uneven, two wide grey-brown bands along the crescent with dark edge
-##   strips (BANDS), broad soft patches, and dust along the foot of the walls;
+##   grid of thin divider strips a little darker than the panels (PANEL_M), each panel a
+##   touch uneven, broad soft patches metres across, two wide grey-brown bands along the
+##   crescent that start on a strip of the grid (BAND_OFFSETS_M), and the wear: the lanes
+##   of traffic down the middle of the hall and in from the door a little darker and
+##   greyer, a few heel scuffs (most in the lanes) and grey dust along the foot of the walls;
 ## - floor_wear.png (WEAR_SIZE, linear): its roughness over the same frame, which the
-##   material's roughness scales (1 the dullest): lanes of traffic down the middle of the
-##   hall and in from the door duller, the floor near the walls and under the balcony more
-##   polished, each panel's polish a little its own, the strips and the dust along the
-##   walls dull, and fine scuffs;
+##   material's roughness scales (1 the dullest): the lanes dull, the floor near the walls
+##   and under the balcony polished, each panel's polish a little its own, the strips and
+##   the dust along the walls dull, and the scuffs;
 ## - floor_terrazzo.png (TILE_SIZE, sRGB): the aggregate, a seamless tile the floor
-##   multiplies in every TILE_M metres on the ground plane: chips of cream, tan, grey,
-##   brown, rust, white and black stone in a warm pale matrix.
+##   multiplies in every TILE_M metres on the ground plane: chips of cream, tan, grey and
+##   brown stone close in tone to their warm pale matrix (CHIP_CONTRAST), so that at a
+##   few metres the floor reads finely grained rather than speckled.
 ## The panel size, bands, lanes and colours are production inference from the 2023
 ## interior photographs (their pattern and tone, never their pixels): see
 ## game/resources/textures/world/b1_hall/PROVENANCE.md.
@@ -34,20 +36,29 @@ const TILE_M := 1.5
 ## radial every PANEL_M of arc at the hall's middle radius; a strip STRIP_M wide.
 const PANEL_M := 1.5
 const STRIP_M := 0.012
-## The two curved bands: their middles this far either side of the hall's middle radius
-## (between the colonnade and the east wall), BAND_M wide, with dark edge strips.
+## The two curved bands, BAND_M wide: each starts on the concentric strip nearest to this
+## far either side of the hall's middle radius (between the colonnade and the east wall),
+## so its inner edge is that strip (one line, not two side by side), and has a strip of
+## its own along its outer edge.
 const BAND_OFFSETS_M := [-3.75, 3.75]
 const BAND_M := 0.45
-## Colours (sRGB): the warm tan field, the greyer alternate panels' shade, the bands, the
-## strips and the dust's.
+## Colours (sRGB): the warm tan field, the bands, the strips, the dust's grey and the
+## scuffs' dark grey.
 const FIELD := Color(0.86, 0.76, 0.62)
-const ALTERNATE := Color(0.95, 0.95, 0.94)
 const BAND := Color(0.66, 0.58, 0.49)
-const STRIP := Color(0.42, 0.37, 0.32)
-const DUST := Color(0.8, 0.78, 0.74)
-## Dust along the foot of the walls (m): full within DUST_M, gone by DUST_FADE_M.
-const DUST_M := 0.1
-const DUST_FADE_M := 0.45
+const STRIP := Color(0.62, 0.55, 0.47)
+const DUST := Color(0.64, 0.62, 0.59)
+const SCUFF := Color(0.32, 0.3, 0.29)
+## Dust along the foot of the walls (m): full within DUST_M, gone by DUST_FADE_M; at
+## most DUST_MIX of the way to DUST.
+const DUST_M := 0.12
+const DUST_FADE_M := 0.5
+const DUST_MIX := 0.45
+## The lanes of traffic: this much darker and this much of the way to grey at their middle.
+const LANE_DARK := 0.05
+const LANE_GREY := 0.15
+## The aggregate's chips: this share of their own tone's difference from the matrix.
+const CHIP_CONTRAST := 0.4
 
 var _layout: Dictionary
 
@@ -203,6 +214,7 @@ func _paint_layout() -> Image:
 	var dr := ((_layout.radius as Vector2).y - (_layout.radius as Vector2).x) / float(h)
 	var dt := ((_layout.theta as Vector2).y - theta0) / float(w)
 	var columns := _columns(w)
+	var bands := _bands()
 	for y in h:
 		var r := _radius(y, h)
 		# Concentric strips every PANEL_M out from the front wall's foot.
@@ -211,10 +223,10 @@ func _paint_layout() -> Image:
 		var ring_edge := PANEL_M * 0.5 - absf(ring_d)
 		var band := 0.0
 		var band_edge := 0.0
-		for offset: float in BAND_OFFSETS_M:
-			var d := r - (mid + offset)
-			band = maxf(band, _cover(d, BAND_M, dr))
-			band_edge = maxf(band_edge, maxf(_cover(d - BAND_M * 0.5, STRIP_M, dr), _cover(d + BAND_M * 0.5, STRIP_M, dr)))
+		for start: float in bands:
+			band = maxf(band, _cover(r - (start + BAND_M * 0.5), BAND_M, dr))
+			# The inner edge is the ring strip there; the outer one has its own.
+			band_edge = maxf(band_edge, _cover(r - (start + BAND_M), STRIP_M, dr))
 		var ring_strip := _cover(ring_edge, STRIP_M, dr)
 		var px := dt * r
 		for x in w:
@@ -223,24 +235,26 @@ func _paint_layout() -> Image:
 			var spoke := floori((theta - theta0) / step)
 			var spoke_edge := (step * 0.5 - absf((theta - theta0) - (float(spoke) + 0.5) * step)) * r
 			var strip := maxf(ring_strip, maxf(_cover(spoke_edge, STRIP_M, px), band_edge))
-			# The panel's own shade: every second one greyer, each a little uneven.
-			var colour := FIELD
-			if (ring + spoke) % 2 != 0:
-				colour = Color(colour.r * ALTERNATE.r, colour.g * ALTERNATE.g, colour.b * ALTERNATE.b)
-			var own := 1.0 + (_hash(spoke, ring, 11) - 0.5) * 0.06
-			var warm := (_hash(spoke, ring, 12) - 0.5) * 0.03
-			colour = Color(colour.r * own * (1.0 + warm), colour.g * own, colour.b * own * (1.0 - warm))
+			# The panel's own shade, a touch uneven and no pattern to it.
+			var own := 1.0 + (_hash(spoke, ring, 11) - 0.5) * 0.05
+			var warm := (_hash(spoke, ring, 12) - 0.5) * 0.02
+			var colour := Color(FIELD.r * own * (1.0 + warm), FIELD.g * own, FIELD.b * own * (1.0 - warm))
 			colour = colour.lerp(BAND, band)
-			# Broad soft patches, metres across, and a fine mottle.
+			# Broad soft patches, several metres and a couple of metres across, and a fine
+			# mottle.
 			var arc := theta * mid
-			var patch := 1.0 + (_noise(arc, r, 3.5, 21) - 0.5) * 0.08 + (_noise(arc, r, 0.6, 22) - 0.5) * 0.03
+			var patch := 1.0 + (_noise(arc, r, 7.0, 21) - 0.5) * 0.09 + (_noise(arc, r, 2.5, 23) - 0.5) * 0.04 + (_noise(arc, r, 0.6, 22) - 0.5) * 0.025
 			colour = Color(colour.r * patch, colour.g * patch, colour.b * patch)
 			colour = colour.lerp(STRIP, strip)
-			# Dust along the foot of the walls.
+			# The lanes of traffic: a little darker and greyer.
+			var traffic := _traffic(theta, r)
+			colour = _greyer(colour, LANE_GREY * traffic) * (1.0 - LANE_DARK * traffic)
+			# A few heel scuffs, most in the lanes.
+			colour = colour.lerp(SCUFF, _scuff_mark(arc, r, maxf(px, dr), traffic))
+			# Grey dust along the foot of the walls.
 			var wall := _to_wall(column, r)
 			if wall < DUST_FADE_M:
-				var dust := 1.0 - smoothstep(DUST_M, DUST_FADE_M, wall)
-				colour = colour.lerp(Color(colour.r * DUST.r, colour.g * DUST.g, colour.b * DUST.b), dust)
+				colour = colour.lerp(DUST, DUST_MIX * (1.0 - smoothstep(DUST_M, DUST_FADE_M, wall)))
 			var i := (y * w + x) * 3
 			data[i] = clampi(roundi(colour.r * 255.0), 0, 255)
 			data[i + 1] = clampi(roundi(colour.g * 255.0), 0, 255)
@@ -256,8 +270,6 @@ func _paint_wear() -> Image:
 	var front_in := float(_layout.front_in)
 	var colonnade := float(_layout.column)
 	var mid := (colonnade + float(_layout.east)) * 0.5
-	var door := _layout.door as Vector2
-	var door_mid := (door.x + door.y) * 0.5
 	var step := _theta_step()
 	var theta0 := (_layout.theta as Vector2).x
 	var dr := ((_layout.radius as Vector2).y - (_layout.radius as Vector2).x) / float(h)
@@ -267,35 +279,105 @@ func _paint_wear() -> Image:
 		var r := _radius(y, h)
 		var ring := floori((r - front_in) / PANEL_M)
 		var ring_edge := PANEL_M * 0.5 - absf((r - front_in) - (float(ring) + 0.5) * PANEL_M)
-		# The lane of traffic down the middle of the hall.
-		var lane := 1.0 - smoothstep(1.2, 3.2, absf(r - mid))
 		# Under the balcony, between the front wall and the colonnade: less walked on.
 		var balcony := 1.0 - smoothstep(colonnade - 0.6, colonnade + 0.6, r) if r > front_in else 0.0
 		var px := dt * r
 		for x in w:
 			var column: Array = columns[x]
 			var theta: float = column[0]
-			var rough := 0.8
-			# In from the door: a fan widening from the vestibule to the lane.
-			var reach := clampf((r - front_in) / maxf(mid - front_in, 0.001), 0.0, 1.0)
-			var fan := (1.0 - smoothstep(0.6 + 1.6 * reach, 1.6 + 2.4 * reach, absf(theta - door_mid) * r)) * (1.0 - smoothstep(mid - 1.0, mid + 1.0, r))
-			rough += 0.2 * maxf(lane, fan)
-			rough -= 0.15 * balcony * (1.0 - fan)
+			# The lanes of traffic dull, the rest polished.
+			var traffic := _traffic(theta, r)
+			var rough := 0.62 + 0.38 * traffic
+			rough -= 0.12 * balcony * (1.0 - traffic)
 			# Polished near the walls, with dust right at their foot.
 			var wall := _to_wall(column, r)
-			rough -= 0.22 * (smoothstep(DUST_M, 0.5, wall) * (1.0 - smoothstep(0.6, 1.6, wall)))
+			rough -= 0.15 * (smoothstep(DUST_M, 0.5, wall) * (1.0 - smoothstep(0.6, 1.6, wall)))
 			rough = lerpf(rough, 1.0, 1.0 - smoothstep(DUST_M * 0.5, DUST_M * 1.5, wall))
 			# Each panel's polish its own.
 			var spoke := floori((theta - theta0) / step)
-			rough += (_hash(spoke, ring, 31) - 0.5) * 0.12
+			rough += (_hash(spoke, ring, 31) - 0.5) * 0.1
 			rough += (_noise(theta * mid, r, 0.9, 32) - 0.5) * 0.08
-			# Scuffs: short strokes, a few in each 0.25 m cell.
+			# Fine scuffs (a few in each 0.25 m cell), and the heel scuffs the colour shows.
 			rough += 0.16 * _scuff(theta * mid, r, px, dr)
+			rough += 0.3 * _scuff_mark(theta * mid, r, maxf(px, dr), traffic)
 			# The strips and the bands' edges hold dirt.
 			var spoke_edge := (step * 0.5 - absf((theta - theta0) - (float(spoke) + 0.5) * step)) * r
 			rough = lerpf(rough, 1.0, maxf(_cover(ring_edge, STRIP_M, dr), _cover(spoke_edge, STRIP_M, px)))
 			data[y * w + x] = clampi(roundi(clampf(rough, 0.3, 1.0) * 255.0), 0, 255)
+	_report_wear(data, w, h)
 	return Image.create_from_data(w, h, false, Image.FORMAT_L8, data)
+
+
+## The wear map's mean over the hall's own floor (from the colonnade's back to the east
+## wall's foot), which the polished roughness divides into (the palette's reflections
+## floor roughness: the hall's average as the owner approved it).
+func _report_wear(data: PackedByteArray, w: int, h: int) -> void:
+	var inner := float(_layout.column) - 0.8
+	var outer := float(_layout.east)
+	var total := 0.0
+	var count := 0
+	for y in h:
+		var r := _radius(y, h)
+		if r < inner or r > outer:
+			continue
+		for x in w:
+			total += float(data[y * w + x]) / 255.0
+			count += 1
+	print("FLOOR wear: mean %.4f over the hall's own floor (%d texels)" % [total / maxf(count, 1.0), count])
+
+
+## The two bands' inner edges (radii): each on the concentric strip nearest to the
+## hall's middle radius plus its offset.
+func _bands() -> Array[float]:
+	var front_in := float(_layout.front_in)
+	var mid := (float(_layout.column) + float(_layout.east)) * 0.5
+	var starts: Array[float] = []
+	for offset: float in BAND_OFFSETS_M:
+		starts.append(front_in + PANEL_M * roundf((mid + offset - BAND_M * 0.5 - front_in) / PANEL_M))
+	return starts
+
+
+## How much of the traffic a point bears, 0 to 1: the lane down the middle of the hall,
+## and a fan in from the door that widens from the vestibule to it.
+func _traffic(theta: float, r: float) -> float:
+	var front_in := float(_layout.front_in)
+	var mid := (float(_layout.column) + float(_layout.east)) * 0.5
+	var door := _layout.door as Vector2
+	var lane := 1.0 - smoothstep(1.2, 3.2, absf(r - mid))
+	var reach := clampf((r - front_in) / maxf(mid - front_in, 0.001), 0.0, 1.0)
+	var fan := (1.0 - smoothstep(0.6 + 1.6 * reach, 1.6 + 2.4 * reach, absf(theta - (door.x + door.y) * 0.5) * r)) * (1.0 - smoothstep(mid - 1.0, mid + 1.0, r))
+	return maxf(lane, fan)
+
+
+## A colour that much of the way to its own grey.
+static func _greyer(colour: Color, amount: float) -> Color:
+	var grey := colour.r * 0.2126 + colour.g * 0.7152 + colour.b * 0.0722
+	return colour.lerp(Color(grey, grey, grey), amount)
+
+
+## How dark a heel scuff makes a pixel at (a, r) (metres along the arc and out), 0 to
+## about 0.2: in each 0.6 m cell, with a chance that grows with the traffic, one smudge
+## 8-24 cm long and about a centimetre wide at its own angle, fading to its ends.
+func _scuff_mark(a: float, r: float, pixel: float, traffic: float) -> float:
+	const CELL := 0.6
+	var ia := floori(a / CELL)
+	var ir := floori(r / CELL)
+	var best := 0.0
+	for i in range(ia - 1, ia + 2):
+		for j in range(ir - 1, ir + 2):
+			if _hash(i, j, 71) > 0.04 + 0.22 * traffic:
+				continue
+			var ca := (float(i) + _hash(i, j, 72)) * CELL
+			var cr := (float(j) + _hash(i, j, 73)) * CELL
+			var angle := _hash(i, j, 74) * PI
+			var half := 0.04 + _hash(i, j, 75) * 0.08
+			var along := Vector2(cos(angle), sin(angle))
+			var offset := Vector2(a - ca, r - cr)
+			var t := clampf(offset.dot(along), -half, half)
+			var d := (offset - along * t).length()
+			var fade := 1.0 - absf(t) / half
+			best = maxf(best, _cover(d, 0.01, pixel) * (0.08 + 0.12 * _hash(i, j, 76)) * (0.4 + 0.6 * fade))
+	return best
 
 
 ## How much of a pixel at (a, r) (metres along the arc and out) a scuff covers: in each
@@ -370,10 +452,11 @@ func _paint_terrazzo() -> Image:
 				chips[cy * cells + cx].append([centre, size, colour, normals, reaches])
 				count += 1
 	var matrix := Color(0.97, 0.94, 0.89)
+	var total := Color(0, 0, 0)
 	for y in n:
 		for x in n:
 			var p := Vector2(float(x) + 0.5, float(y) + 0.5)
-			var colour := matrix * (1.0 + (_noise_periodic(float(x), float(y), 8.0, n / 8, 61) - 0.5) * 0.05 + (_hash(x, y, 62) - 0.5) * 0.03)
+			var colour := matrix * (1.0 + (_noise_periodic(float(x), float(y), 8.0, n / 8, 61) - 0.5) * 0.03 + (_hash(x, y, 62) - 0.5) * 0.015)
 			var ccx := x / CELL_PX
 			var ccy := y / CELL_PX
 			for oy in range(-1, 2):
@@ -396,13 +479,14 @@ func _paint_terrazzo() -> Image:
 							inside = minf(inside, reaches[cut] - d.dot(normals[cut]))
 						var cover := clampf(inside + 0.5, 0.0, 1.0)
 						if cover > 0.0:
-							var tone: Color = chip[2]
-							# A chip's own faint grain.
-							tone = tone * (1.0 + (_hash(x, y, 63) - 0.5) * 0.04)
+							# Close to the matrix in tone, with a chip's own faint grain.
+							var tone: Color = matrix.lerp(chip[2], CHIP_CONTRAST)
+							tone = tone * (1.0 + (_hash(x, y, 63) - 0.5) * 0.02)
 							colour = colour.lerp(tone, cover)
+			total += colour
 			var i := (y * n + x) * 3
 			data[i] = clampi(roundi(colour.r * 255.0), 0, 255)
 			data[i + 1] = clampi(roundi(colour.g * 255.0), 0, 255)
 			data[i + 2] = clampi(roundi(colour.b * 255.0), 0, 255)
-	print("FLOOR terrazzo chips: %d on a %d px tile of %.2f m" % [count, n, TILE_M])
+	print("FLOOR terrazzo chips: %d on a %d px tile of %.2f m; mean colour %s" % [count, n, TILE_M, total / float(n * n)])
 	return Image.create_from_data(n, n, false, Image.FORMAT_RGB8, data)

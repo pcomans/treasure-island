@@ -1870,7 +1870,8 @@ static func _lifted(point: Vector3, y: float) -> Vector3:
 static func _material(key: String, entry: Dictionary) -> StandardMaterial3D:
 	if _materials.has(key):
 		return _materials[key]
-	var rgb := entry.rgb as Array
+	# The web's renderer draws some colours otherwise: an entry may give its own there.
+	var rgb := (entry.get("web_rgb", entry.rgb) if PREBUILT_WORLD.profile() == "web" else entry.rgb) as Array
 	var material := StandardMaterial3D.new()
 	material.resource_name = "Building1Interior_" + key
 	material.albedo_color = Color(float(rgb[0]), float(rgb[1]), float(rgb[2]))
