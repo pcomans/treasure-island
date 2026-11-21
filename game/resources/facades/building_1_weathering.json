@@ -1,6 +1,7 @@
 {
  "schema_version": "ti.building-1-weathering/1",
  "map_path": "res://game/resources/textures/world/building_1_detail/b1_weathering_map.res",
+ "web_cell_m": 0.5,
  "materials": [
   "res://game/resources/materials/world/building_1/building_1_m_wall.tres",
   "res://game/resources/materials/world/building_1/building_1_m_wall_lines.tres",
@@ -157,5 +158,5 @@
   "HeroFlagpole",
   "HeroDrumMast"
  ],
- "note": "Building 1's weathering map (game/scripts/world/facades/building_1_weathering_map.gd), baked by tools/bake_building_1_weathering.gd from the built records, never at load: each source wall run's exposure (its paint's age and shelter, 0 to 1) from its class: the crescent 0.12, the wings 0.3, the pavilions 0.65, the junction towers 0.45, the rear and the drum's inner walls 1.0, the unphotographed south-east and north faces 0.35, the cab 0.4 (the material study, 2026-11-21). The bake writes the map and its bounds into each listed material."
+ "note": "Building 1's weathering map (game/scripts/world/facades/building_1_weathering_map.gd), baked by tools/bake_building_1_weathering.gd from the built records, never at load: each source wall run's exposure (its paint's age and shelter, 0 to 1) from its class: the crescent 0.12, the wings 0.3, the pavilions 0.65, the junction towers 0.45, the rear and the drum's inner walls 1.0, the unphotographed south-east and north faces 0.35, the cab 0.4 (the material study, 2026-11-21). The bake writes the map and its bounds into each listed material. Web builds carry a copy at web_cell_m (0.5 m cells, a quarter of the memory) over the same bounds, baked beside the map as MAP.web."
 }

@@ -5,10 +5,10 @@ extends RefCounted
 ## where the building's own drip edges, tops and ground are, on every instance of a
 ## shared material, with no unwrapped texture and no change to the meshes.
 ##
-## One cell every CELL_M metres, half floats:
+## One cell every cell_m metres (CELL_M unless the options give one), half floats:
 ## - R: the top of the mass behind a wall (metres): the highest point of any face over
-##   the cell, slivers no face covers between two roofs (up to GAP_REACH_CELLS each
-##   way) filled with the lower roof's, then one cell of growth so a wall's own top
+##   the cell, slivers no face covers between two roofs (up to GAP_REACH_M each way)
+##   filled with the lower roof's, then one cell of growth so a wall's own top
 ##   reaches the cell inside it; the options' "flat_tops" meshes (the tower block on
 ##   the drum's roof, close behind its coping) join after the growth, so their tops
 ##   never spread into the roof round them;
@@ -27,25 +27,25 @@ extends RefCounted
 ## Grids are local packed arrays each helper returns, so they are never written
 ## through a copy.
 
-## The map's resolution: a cell is 0.25 m.
+## The map's resolution: a cell is 0.25 m (the web's copy takes "cell_m" 0.5).
 const CELL_M := 0.25
 ## Margin round the building's plan bounds (m).
 const MARGIN_M := 2.0
 ## How far from a run its class and ground reach before cells take their nearest
 ## assigned neighbour's (m).
 const RUN_REACH_M := 3.0
-## How far (cells, each way) a sliver between two roofs is looked across.
-const GAP_REACH_CELLS := 4
+## How far (m, each way) a sliver between two roofs is looked across.
+const GAP_REACH_M := 1.0
 
 
 ## meshes: every MeshInstance3D of the building that its tops come from; runs:
 ## [{"start": Vector3, "end": Vector3, "exposure": float}] the source wall runs' foot
-## segments; options: "interior_exposure" (0 to 1,
-## for cells farther than RUN_REACH_M from every run; absent: the nearest run's, as
-## the ground), "exposure_blur_m" (absent or 0: none) and "flat_tops" (an Array of
-## MeshInstance3D whose tops are not grown). Returns {"image", "bounds": Vector4(x0,
-## z0, size_x, size_z) for the shader's weathering_map_bounds}, or {} when there is
-## nothing to map.
+## segments; options: "cell_m" (the cell size, m; absent: CELL_M), "interior_exposure"
+## (0 to 1, for cells farther than RUN_REACH_M from every run; absent: the nearest
+## run's, as the ground), "exposure_blur_m" (absent or 0: none) and "flat_tops" (an
+## Array of MeshInstance3D whose tops are not grown). Returns {"image", "bounds":
+## Vector4(x0, z0, size_x, size_z) for the shader's weathering_map_bounds}, or {} when
+## there is nothing to map.
 static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dictionary:
 	var box := AABB()
 	var started := false
@@ -59,16 +59,17 @@ static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dicti
 		started = true
 	if not started:
 		return {}
+	var cell := float(options.get("cell_m", CELL_M))
 	var x0 := floorf(box.position.x - MARGIN_M)
 	var z0 := floorf(box.position.z - MARGIN_M)
-	var width := int(ceilf((box.size.x + 2.0 * MARGIN_M) / CELL_M / 4.0)) * 4
-	var depth := int(ceilf((box.size.z + 2.0 * MARGIN_M) / CELL_M / 4.0)) * 4
-	var grid := {"x0": x0, "z0": z0, "w": width, "h": depth}
+	var width := int(ceilf((box.size.x + 2.0 * MARGIN_M) / cell / 4.0)) * 4
+	var depth := int(ceilf((box.size.z + 2.0 * MARGIN_M) / cell / 4.0)) * 4
+	var grid := {"x0": x0, "z0": z0, "w": width, "h": depth, "cell": cell}
 	var top := PackedFloat32Array()
 	top.resize(width * depth)
 	for node: Variant in meshes:
 		top = _with_tops(node as MeshInstance3D, grid, top)
-	top = _gaps_filled(top, width, depth, GAP_REACH_CELLS)
+	top = _gaps_filled(top, width, depth, int(roundf(GAP_REACH_M / cell)))
 	top = _grown(top, width, depth)
 	if not flat.is_empty():
 		var flat_top := PackedFloat32Array()
@@ -92,15 +93,15 @@ static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dicti
 		var run := value as Dictionary
 		var start := run.start as Vector3
 		var end := run.end as Vector3
-		var i0 := maxi(int(floorf((minf(start.x, end.x) - RUN_REACH_M - x0) / CELL_M)), 0)
-		var i1 := mini(int(floorf((maxf(start.x, end.x) + RUN_REACH_M - x0) / CELL_M)), width - 1)
-		var j0 := maxi(int(floorf((minf(start.z, end.z) - RUN_REACH_M - z0) / CELL_M)), 0)
-		var j1 := mini(int(floorf((maxf(start.z, end.z) + RUN_REACH_M - z0) / CELL_M)), depth - 1)
+		var i0 := maxi(int(floorf((minf(start.x, end.x) - RUN_REACH_M - x0) / cell)), 0)
+		var i1 := mini(int(floorf((maxf(start.x, end.x) + RUN_REACH_M - x0) / cell)), width - 1)
+		var j0 := maxi(int(floorf((minf(start.z, end.z) - RUN_REACH_M - z0) / cell)), 0)
+		var j1 := mini(int(floorf((maxf(start.z, end.z) + RUN_REACH_M - z0) / cell)), depth - 1)
 		var segment := Vector2(end.x - start.x, end.z - start.z)
 		var length_squared := maxf(segment.length_squared(), 1e-9)
 		for j in range(j0, j1 + 1):
 			for i in range(i0, i1 + 1):
-				var p := Vector2(x0 + (float(i) + 0.5) * CELL_M - start.x, z0 + (float(j) + 0.5) * CELL_M - start.z)
+				var p := Vector2(x0 + (float(i) + 0.5) * cell - start.x, z0 + (float(j) + 0.5) * cell - start.z)
 				var along := clampf(p.dot(segment) / length_squared, 0.0, 1.0)
 				var distance := (p - segment * along).length()
 				var index := j * width + i
@@ -134,7 +135,7 @@ static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dicti
 		for index in exposure.size():
 			if nearest[index] == INF:
 				exposure[index] = interior
-	var blur_cells := int(roundf(float(options.get("exposure_blur_m", 0.0)) / CELL_M))
+	var blur_cells := int(roundf(float(options.get("exposure_blur_m", 0.0)) / cell))
 	if blur_cells > 0:
 		# Two box passes each way: a soft, triangle-like falloff.
 		for _pass in 2:
@@ -147,7 +148,7 @@ static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dicti
 			image.set_pixel(i, j, Color(top[index], 0.0, maxf(exposure[index], 0.0), ground[index]))
 	return {
 		"image": image,
-		"bounds": Vector4(x0, z0, float(width) * CELL_M, float(depth) * CELL_M),
+		"bounds": Vector4(x0, z0, float(width) * cell, float(depth) * cell),
 	}
 
 
@@ -162,6 +163,7 @@ static func _with_tops(instance: MeshInstance3D, grid: Dictionary, top: PackedFl
 	var depth := int(grid.h)
 	var x0 := float(grid.x0)
 	var z0 := float(grid.z0)
+	var cell := float(grid.cell)
 	for surface in instance.mesh.get_surface_count():
 		var arrays := instance.mesh.surface_get_arrays(surface)
 		var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
@@ -172,11 +174,11 @@ static func _with_tops(instance: MeshInstance3D, grid: Dictionary, top: PackedFl
 			for k in 3:
 				var a := corners[k]
 				var b := corners[(k + 1) % 3]
-				var steps := maxi(1, int(ceilf(Vector2(b.x - a.x, b.z - a.z).length() / (CELL_M * 0.5))))
+				var steps := maxi(1, int(ceilf(Vector2(b.x - a.x, b.z - a.z).length() / (cell * 0.5))))
 				for s in steps + 1:
 					var p := a.lerp(b, float(s) / float(steps))
-					var i := int(floorf((p.x - x0) / CELL_M))
-					var j := int(floorf((p.z - z0) / CELL_M))
+					var i := int(floorf((p.x - x0) / cell))
+					var j := int(floorf((p.z - z0) / cell))
 					if i >= 0 and j >= 0 and i < width and j < depth and p.y > top[j * width + i]:
 						top[j * width + i] = p.y
 			if normals.is_empty() or (normal_basis * normals[indices[t]]).normalized().y <= 0.5:
@@ -189,13 +191,13 @@ static func _with_tops(instance: MeshInstance3D, grid: Dictionary, top: PackedFl
 			var area := ab.x * ac.y - ab.y * ac.x
 			if absf(area) < 1e-8:
 				continue
-			var i0 := maxi(int(floorf((minf(a.x, minf(corners[1].x, corners[2].x)) - x0) / CELL_M)), 0)
-			var i1 := mini(int(floorf((maxf(a.x, maxf(corners[1].x, corners[2].x)) - x0) / CELL_M)), width - 1)
-			var j0 := maxi(int(floorf((minf(a.z, minf(corners[1].z, corners[2].z)) - z0) / CELL_M)), 0)
-			var j1 := mini(int(floorf((maxf(a.z, maxf(corners[1].z, corners[2].z)) - z0) / CELL_M)), depth - 1)
+			var i0 := maxi(int(floorf((minf(a.x, minf(corners[1].x, corners[2].x)) - x0) / cell)), 0)
+			var i1 := mini(int(floorf((maxf(a.x, maxf(corners[1].x, corners[2].x)) - x0) / cell)), width - 1)
+			var j0 := maxi(int(floorf((minf(a.z, minf(corners[1].z, corners[2].z)) - z0) / cell)), 0)
+			var j1 := mini(int(floorf((maxf(a.z, maxf(corners[1].z, corners[2].z)) - z0) / cell)), depth - 1)
 			for j in range(j0, j1 + 1):
 				for i in range(i0, i1 + 1):
-					var p := Vector2(x0 + (float(i) + 0.5) * CELL_M - a.x, z0 + (float(j) + 0.5) * CELL_M - a.z)
+					var p := Vector2(x0 + (float(i) + 0.5) * cell - a.x, z0 + (float(j) + 0.5) * cell - a.z)
 					var u := (p.x * ac.y - p.y * ac.x) / area
 					var v := (ab.x * p.y - ab.y * p.x) / area
 					if u < -0.001 or v < -0.001 or u + v > 1.001:

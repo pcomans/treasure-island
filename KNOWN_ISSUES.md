@@ -445,6 +445,7 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
 - **Building 1's exterior (OSM r16681702 and its cab w1222720021, `game/scripts/world/facades/building_1_hero_model.gd`; the 2026-11-20/21 detail passes and the material set, `building_1_m_*.tres`; the owner: "Building 1 is good", 2026-11-21):**
   - The rear's ribbon windows are one glass band each, so they carry no pane data: they draw plain, without the blinds and sheers the rear's other windows show.
   - On the web, game light clips the sunlit crescent to white: its piers, head bands and board lines hardly read there (desktop draws them).
+  - On the web the weathering map is drawn at 0.5 m cells (a copy baked for web builds, a quarter of the memory), so its grime bands follow the walls' tops a little more coarsely there than on desktop.
   - The board-formed concrete's lines are toned down in shade (the material study's round 4).
   - The grime band under the drum's coping is smoother than in the owner's photos.
   - The hall door's open leaves and the opened transom over them are drawn only (see the hall's entry above).

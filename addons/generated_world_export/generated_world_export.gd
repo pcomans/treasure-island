@@ -4,9 +4,14 @@ extends EditorExportPlugin
 ## carries the bake's inputs: generated/.gdignore keeps the raw world under
 ## generated/world out of Godot's file list, and export_presets.cfg leaves out the
 ## shared families' JSON configs. It also stamps every pack with the build the pause
-## menu names (_add_build_stamp).
+## menu names (_add_build_stamp), and gives web packs a file's web copy in its place
+## (_export_file).
 
 const BuildStamp := preload("res://game/scripts/ui/build_stamp.gd")
+## A file's web copy sits beside it under its name plus this (a name Godot neither
+## imports nor exports): Building 1's weathering map at 0.5 m cells
+## (tools/bake_building_1_weathering.gd).
+const WEB_COPY_SUFFIX := ".web"
 
 
 func _get_name() -> String:
@@ -28,6 +33,18 @@ func _export_begin(features: PackedStringArray, _is_debug: bool, _path: String, 
 		push_error("Missing static world: export through the platform build script")
 		return
 	add_file(baked, FileAccess.get_file_as_bytes(baked), false)
+
+
+## A web export carries a file that has a web copy beside it (PATH.web) with the copy's
+## bytes, under the file's own path, so everything that loads it loads the copy there;
+## other exports carry the file itself.
+func _export_file(path: String, _type: String, features: PackedStringArray) -> void:
+	if not "web" in features:
+		return
+	var copy := path + WEB_COPY_SUFFIX
+	if FileAccess.file_exists(copy):
+		skip()
+		add_file(path, FileAccess.get_file_as_bytes(copy), false)
 
 
 ## The build stamp (game/scripts/ui/build_stamp.gd): the build number and commit

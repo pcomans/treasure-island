@@ -2,10 +2,13 @@ extends SceneTree
 ## Bakes Building 1's weathering map (game/scripts/world/facades/building_1_weathering_map.gd)
 ## from the hero model's built records, as the world builds them, and writes it with its
 ## bounds into the materials that read it (game/resources/facades/building_1_weathering.json).
+## It also bakes the web's copy, the same map at web_cell_m (0.5 m: a quarter of the
+## memory) over the same bounds, beside it as MAP.web, which web exports carry in the
+## map's place (addons/generated_world_export); desktop and the editor draw the map.
 ## The game never builds the map at load; run this again whenever the building's form
 ## changes:
 ##   tools/godot --headless --path . --script tools/bake_building_1_weathering.gd
-## Prints the map's size, bounds and bytes; exits 1 when it cannot bake.
+## Prints the maps' sizes, bounds and bytes; exits 1 when it cannot bake.
 
 const HERO := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const WEATHERING_MAP := preload("res://game/scripts/world/facades/building_1_weathering_map.gd")
@@ -17,6 +20,8 @@ const TOWER_CLASS := "tower"
 const FLAT_TOPS_PREFIX := "HeroTower"
 ## The map's ext_resource id in the materials it is written into.
 const MAP_ID := "9_weathering_map"
+## The web copy's name beside the map (GeneratedWorldExport.WEB_COPY_SUFFIX).
+const WEB_SUFFIX := ".web"
 
 
 func _initialize() -> void:
@@ -59,25 +64,55 @@ func _run() -> void:
 		_fail("nothing to map: %d meshes, %d runs" % [meshes.size(), runs.size()])
 		return
 	var started := Time.get_ticks_msec()
-	var map := WEATHERING_MAP.build(meshes, runs, {"flat_tops": flat, "interior_exposure": float(config.interior_exposure), "exposure_blur_m": float(config.exposure_blur_m)})
-	if map.is_empty():
+	var options := {"flat_tops": flat, "interior_exposure": float(config.interior_exposure), "exposure_blur_m": float(config.exposure_blur_m)}
+	var map := WEATHERING_MAP.build(meshes, runs, options)
+	options["cell_m"] = float(config.web_cell_m)
+	var web := WEATHERING_MAP.build(meshes, runs, options)
+	if map.is_empty() or web.is_empty():
 		_fail("the weathering map is empty")
 		return
-	var image := map.image as Image
-	var texture := ImageTexture.create_from_image(image)
-	var error := ResourceSaver.save(texture, str(config.map_path))
-	if error != OK:
-		_fail("cannot save %s (%d)" % [config.map_path, error])
-		return
 	var bounds := map.bounds as Vector4
+	# The materials hold one bounds for both: the web's cells must tile the same area.
+	if not (web.bounds as Vector4).is_equal_approx(bounds):
+		_fail("the web copy's bounds %s are not the map's %s" % [web.bounds, bounds])
+		return
+	var image := map.image as Image
+	var web_image := web.image as Image
+	# A resource saver needs a .res name: the web copy is saved at the map's path
+	# first, its bytes copied to MAP.web, and the map itself then saved over it.
+	var problem := _save(web_image, str(config.map_path))
+	if problem == "":
+		problem = _copy_to_web(str(config.map_path))
+	if problem == "":
+		problem = _save(image, str(config.map_path))
+	if problem != "":
+		_fail(problem)
+		return
 	for path: Variant in config.materials:
-		var problem := _write_into(str(path), str(config.map_path), bounds)
+		problem = _write_into(str(path), str(config.map_path), bounds)
 		if problem != "":
 			_fail(problem)
 			return
-	print("WEATHERING_MAP %dx%d cells, bounds %s, %d bytes of image data, built in %d ms, written into %d materials" % [image.get_width(), image.get_height(), bounds, image.get_data().size(), Time.get_ticks_msec() - started, (config.materials as Array).size()])
+	print("WEATHERING_MAP %dx%d cells, bounds %s, %d bytes of image data; web copy %dx%d cells, %d bytes; built in %d ms, written into %d materials" % [image.get_width(), image.get_height(), bounds, image.get_data().size(), web_image.get_width(), web_image.get_height(), web_image.get_data().size(), Time.get_ticks_msec() - started, (config.materials as Array).size()])
 	holder.free()
 	quit(0)
+
+
+## Saves image as a texture at path. Returns a problem, or "".
+func _save(image: Image, path: String) -> String:
+	var error := ResourceSaver.save(ImageTexture.create_from_image(image), path)
+	return "" if error == OK else "cannot save %s (%d)" % [path, error]
+
+
+## Copies the texture file at path to path + WEB_SUFFIX. Returns a problem, or "".
+func _copy_to_web(path: String) -> String:
+	var bytes := FileAccess.get_file_as_bytes(path)
+	var file := FileAccess.open(path + WEB_SUFFIX, FileAccess.WRITE)
+	if bytes.is_empty() or file == null:
+		return "cannot copy %s to %s%s" % [path, path, WEB_SUFFIX]
+	file.store_buffer(bytes)
+	file.close()
+	return ""
 
 
 ## The source wall runs' feet with their class's exposure: [{"start", "end", "exposure"}].
