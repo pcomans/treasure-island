@@ -23,4 +23,4 @@ shader_parameter/specular_value = 0.5
 shader_parameter/paint_color = Color(0.32, 0.325, 0.33, 1)
 shader_parameter/pane_tilt = 0.012
 shader_parameter/metallic_value = 0.45
-shader_parameter/oblique_dim = 0.9
+shader_parameter/oblique_dim = 0.85

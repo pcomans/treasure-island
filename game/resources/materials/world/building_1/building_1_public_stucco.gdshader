@@ -157,10 +157,10 @@ float noise_m(vec2 position_m, float feature_m) {
 // Short straight drips hanging below a drip edge: s runs along the wall (metres),
 // below_m down from the edge. Columns spacing_m apart hold at most one drip each, of
 // its own width (25 to 55 % of the column), strength and length, soft at its sides,
-// strongest near the edge and fading as it runs down. A drip is drawn at least two
-// pixels wide (s_fw: metres per pixel along the wall) with its darkness spread over
-// that width, and where the columns are under about three pixels apart the field
-// settles to its mean, a soft even shade.
+// strongest near the edge and fading as it runs down. Where a typical drip is under
+// about five pixels wide (s_fw: metres per pixel along the wall; a wall seen at a
+// grazing angle) the drips settle into their mean, a soft even shade, so they never
+// draw as thin hard ticks.
 float streak_field(float s, float below_m, float spacing_m, float length_m, float salt, float s_fw) {
 	float c = s / spacing_m;
 	float ci = floor(c);
@@ -174,7 +174,7 @@ float streak_field(float s, float below_m, float spacing_m, float length_m, floa
 	float body = smoothstep(0.0, 0.1, below_m) * (1.0 - smoothstep(run * 0.35, run, below_m)) * mix(1.0, 0.6, clamp(below_m / run, 0.0, 1.0));
 	float strength = step(0.45, hash21(vec2(ci, salt + 6.1))) * mix(0.55, 1.0, hash21(vec2(ci, salt + 2.9)));
 	float mean = 0.12 * smoothstep(0.0, 0.1, below_m) * (1.0 - smoothstep(length_m * 0.3, length_m * 0.9, below_m));
-	return mix(mean, profile * body * strength, smoothstep(1.5, 3.0, spacing_m / s_fw));
+	return mix(mean, profile * body * strength, smoothstep(3.0, 6.0, spacing_m * 0.4 / s_fw));
 }
 
 // One world-axis projection of the plaster: its luminance, roughness, normal tilt
@@ -437,7 +437,7 @@ void fragment() {
 	float specular = specular_value;
 	if (oblique_dim > 0.0) {
 		float facing_view = clamp(dot(normalize((VIEW_MATRIX * vec4(n, 0.0)).xyz), VIEW), 0.0, 1.0);
-		float slant = oblique_dim * smoothstep(0.95, 0.4, facing_view);
+		float slant = oblique_dim * smoothstep(0.97, 0.55, facing_view);
 		albedo *= 1.0 - slant;
 		specular *= 1.0 - slant;
 		metallic *= 1.0 - slant;
