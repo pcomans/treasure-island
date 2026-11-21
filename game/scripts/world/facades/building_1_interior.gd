@@ -964,9 +964,9 @@ static func _append_vestibule(plan: Dictionary, buckets: Dictionary, shell: Dict
 	var right := opened.y
 	_arc_wall(plan, [stone, shell], front_in, from, left, sill, ceiling, 1.0)
 	_arc_wall(plan, [stone, shell], front_in, right, to, sill, ceiling, 1.0)
+	# Over the open door the wall starts at the opening's top, the transom's (the open
+	# group stands open to it, building_1_hero_model.gd), so no transom glass shows here.
 	_arc_wall(plan, [stone, shell], front_in, left, right, door_top, ceiling, 1.0)
-	var transom := door.transom as Array
-	_append_door_glass(plan, buckets, (left + right) * 0.5, (right - left) * 0.5 * front_in - 0.02, float(transom[0]), float(transom[0]), minf(float(transom[1]), ceiling - 0.05))
 	# The inner doorway: radial sides at one angle each, so both faces of the wall
 	# and its reveal meet on the same lines.
 	var axis := float(door.theta)

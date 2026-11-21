@@ -1819,9 +1819,9 @@ static func _entry_frames(record: Dictionary, runs: Array[int], layout: Dictiona
 
 ## The crescent's door groups: dark glazed leaves under a glazed transom in a dark
 ## reveal, framed in worn brass (the owner's 2026-11-20 frontal view). The hall's open
-## group (open_bay) has no closed leaves or door glass: its dark reveal stays as the
-## border round the opening and the band behind the transom, and its leaves stand
-## open outside it (_append_open_leaf).
+## group (open_bay) is open to its transom's top: its dark reveal stays as the border
+## round the opening, its outer frame and top rail stay, and its leaves stand open
+## outside it (_append_open_leaf).
 static func _append_entry_composition(buckets: Dictionary, collision: Dictionary, frames: Array[Dictionary], doors_per_group: int, front: Dictionary, open_bay: int = -1) -> void:
 	var group_width := float(front.entrance_group_width)
 	var half := group_width * 0.5
@@ -1845,24 +1845,26 @@ static func _append_entry_composition(buckets: Dictionary, collision: Dictionary
 		var open := int(frame.bay) == open_bay
 		# The reveal front clears the rustication courses so they cannot streak
 		# through the dark opening.
+		# The hall's open group stands open to its transom's top as well: no transom
+		# glass, door head or mullions over the opening, where the stock camera passes
+		# following the player through (_interior_plan); its outer frame stays.
 		if open:
 			for side in [-1.0, 1.0]:
 				var edge := center + float(side) * half
 				var rim := center + float(side) * (half + border)
 				_append_frame_box(buckets.reveal, frame, minf(edge, rim), maxf(edge, rim), base_y - border, head_bottom + 0.03, back, face + 0.06)
-			_append_frame_box(buckets.reveal, frame, center - half, center + half, door_top, head_bottom + 0.03, back, face + 0.06)
 		else:
 			_append_frame_box(buckets.reveal, frame, center - half - border, center + half + border, base_y - border, head_bottom + 0.03, back, face + 0.06)
 			_append_frame_box(buckets.glass, frame, center - half, center + half, base_y, door_top, face + 0.05, face + 0.1)
-		_append_frame_box(buckets.glass, frame, center - half, center + half, transom_bottom, transom_top, face + 0.05, face + 0.1)
+			_append_frame_box(buckets.glass, frame, center - half, center + half, transom_bottom, transom_top, face + 0.05, face + 0.1)
 		for leaf in range(doors_per_group + 1):
+			if open and leaf > 0 and leaf < doors_per_group:
+				continue
 			var x := center - half + group_width * float(leaf) / float(doors_per_group)
-			var inner_leaf := leaf > 0 and leaf < doors_per_group
-			var bottom := door_top if open and inner_leaf else base_y - bar * 0.5
-			_append_frame_box(buckets.door_brass, frame, x - bar * 0.5, x + bar * 0.5, bottom, transom_top + bar * 0.5, face + 0.09, face + bronze_front)
+			_append_frame_box(buckets.door_brass, frame, x - bar * 0.5, x + bar * 0.5, base_y - bar * 0.5, transom_top + bar * 0.5, face + 0.09, face + bronze_front)
 		for rail in [base_y, door_top + bar * 0.5, transom_top]:
 			var y := float(rail)
-			if open and y < door_top:
+			if open and y < transom_top:
 				continue
 			_append_frame_box(buckets.door_brass, frame, center - half - bar * 0.5, center + half + bar * 0.5, y - bar * 0.5, y + bar * 0.5, face + 0.092, face + bronze_front - 0.004)
 		# Each leaf a brass-framed door (the owner's 2026-11-20 frontal view): its own
@@ -2015,8 +2017,9 @@ static func _interior_plan(record: Dictionary, config: Dictionary, front: Dictio
 	# The hall's open door group is open up to its transom's top, the height of the
 	# opening cut in the walls and of the hall's doorway behind it: under the leaves'
 	# own head (entrance_door_height) the stock camera's spring arm, following the
-	# player through, struck the head and snapped in and out. The leaves and the
-	# transom's glass and bars keep their heights, drawn only (_append_entry_composition).
+	# player through, struck the head and snapped in and out, and the transom's glass
+	# and bars stood in the camera's way. The leaves keep their height, drawn only
+	# (_append_entry_composition).
 	var open_bay := int((_json(INTERIOR.CONFIG_PATH).door as Dictionary).bay)
 	if doors.has(open_bay):
 		(doors[open_bay] as Dictionary)["top_y"] = float(((doors[open_bay] as Dictionary).transom as Array)[1])
