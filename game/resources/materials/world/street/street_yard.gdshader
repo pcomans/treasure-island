@@ -6,7 +6,10 @@ shader_type spatial;
 // parts, row 1 the paints; source_color, so each renderer brings the sRGB
 // colours into its own lighting space). A piece is a MultiMesh instance whose
 // custom data picks three paints (r primary, g secondary, b tertiary: palette
-// columns) and packs its weathering and seed in a ((level + seed) / 16).
+// columns) and packs its weathering and seed in a ((level + seed) / 16). A
+// vehicle's tertiary column sits a quarter of a column early (street_yard_kit.gd
+// _custom), still inside its column: that marks it a vehicle, whose road film,
+// streaks and roof dust follow its level (VEHICLE below).
 //
 // Corrugation and ribs are drawn here, from the vertex's model-space
 // position: the normal tilts across a trapezoid, sine or rib profile running
@@ -65,8 +68,16 @@ const float RUST[48] = float[48](0.03, 0.03, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 
 	1.0, 1.0, 0.8, 1.3, 0.6, 0.03, 0.15, 0.2, 0.35, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 1.0, 0.0, 0.9, 0.2, 0.0, 0.0, 0.0, 0.2, 0.0, 0.0, 0.15, 0.9, 0.0, 0.0, 0.0);
 const float GRIME[48] = float[48](0.55, 0.55, 0.0, 0.0, 0.3, 0.0, 0.2, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.4,
 	1.0, 0.6, 1.0, 1.0, 0.6, 0.35, 0.6, 0.8, 0.5, 0.9, 0.5, 0.0, 0.0, 0.0, 0.3, 0.8, 0.6, 0.8, 0.0, 0.6, 0.8, 0.0, 0.4, 0.6, 0.4, 0.0, 0.6, 0.5, 0.8, 0.2, 0.0, 0.0);
+// VEHICLE: how much of a vehicle's road film and streaks each part takes (only a
+// vehicle's pieces read it).
+const float VEHICLE[48] = float[48](1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.8, 0.3, 0.0, 0.0, 0.5, 0.0, 0.5, 0.0, 0.8, 0.6,
+	0.8, 0.0, 0.8, 0.6, 0.4, 1.0, 1.0, 1.0, 0.5, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.5, 1.0, 0.0, 1.0, 0.6, 0.6, 0.4, 1.0, 0.6, 0.0, 0.0, 0.0, 0.0);
 const vec3 RUST_COLOUR = vec3(0.235, 0.075, 0.025); // linear; about sRGB (0.52, 0.30, 0.17)
 const vec3 DIRT_COLOUR = vec3(0.16, 0.12, 0.08); // linear; about sRGB (0.44, 0.38, 0.31)
+// A vehicle's road dirt (linear), as the street cars' (street_clutter.gdshader):
+// pale dust on dark paint, a darker, browner film on light paint.
+const vec3 ROAD_PALE = vec3(0.42, 0.39, 0.33);
+const vec3 ROAD_DARK = vec3(0.1, 0.088, 0.068);
 
 varying flat int part;
 varying vec3 v_pos;
@@ -213,6 +224,17 @@ void fragment() {
 		w = roof ? v_barge.yx : vec2(v_barge.x, v_pos.y);
 	}
 	vec2 ws = w + vec2(seed * 137.0, seed * 59.0);
+	// A vehicle's coordinate along its faces for what runs down them (its paint's
+	// runs, its streaks and road film below): along the axis of the vehicle's own
+	// frame that this fragment's normal turns from most (its length on a side,
+	// across it on a front or a back), so lines of one value run straight down any
+	// face. v_u takes that axis vertex by vertex, which on a rounded or curved face
+	// (a box's front, an RV's cap) mixed the two axes across a triangle and slanted
+	// or smeared what ran down it; on a flat face the two agree.
+	bool vehicle = fract(v_custom.b * 64.0) < 0.375;
+	vec3 face = normalize(v_normal_model);
+	bool side = abs(face.x) >= abs(face.z);
+	vec2 vs = vec2((side ? sign(face.x) * v_pos.z : -sign(face.z) * v_pos.x) + seed * 137.0, ws.y);
 	// Profiles.
 	int pattern = PATTERN[p];
 	vec2 profile = vec2(0.0, 0.5);
@@ -260,8 +282,9 @@ void fragment() {
 	// from the roof line (RV sidewalls especially).
 	if (p == PART_PAINT) {
 		albedo *= 0.96 + 0.06 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
-		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(ws.x * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
-		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(ws.x) * 2.5));
+		float along = vehicle ? vs.x : ws.x;
+		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(along * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
+		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(along) * 2.5));
 	}
 	if (pattern == 9) {
 		// The membrane's seams over the portal frames, every 5 m.
@@ -387,6 +410,45 @@ void fragment() {
 		float splash = roof ? 0.0 : smoothstep(0.6, 0.0, v_pos.y) * (0.6 + 0.4 * vnoise(ws * 2.0));
 		albedo = mix(albedo, DIRT_COLOUR, clamp(splash * 0.4 * grime, 0.0, 0.45));
 		albedo *= 1.0 - 0.06 * grime * fbm(ws * 0.35);
+	}
+	// A vehicle (its tertiary column a quarter early) by its level: road film up
+	// the lower body to an uneven top, higher and thicker with the level, in
+	// blotches near its top; dark streaks down the sides from the roof line and
+	// the windows; dust on the roof. The film is the street cars' road dirt: pale
+	// on dark paint, darker and browner on light (one colour a vehicle, from its
+	// primary paint).
+	float road = vehicle ? VEHICLE[p] : 0.0;
+	if (road > 0.0) {
+		if (roof) {
+			albedo = mix(albedo, ROAD_PALE * 0.8, road * level * 0.45 * (0.55 + 0.45 * fbm(ws * 0.6 + 5.0)));
+		} else {
+			// (Sunlit white paint sits past the tone curve's white, so a film must
+			// lie thick to show there at all: it holds its full depth to about
+			// half its height, then thins out in blotches.)
+			float film_top = mix(0.75, 1.7, level) + 0.3 * level * (vnoise(vec2(vs.x * 0.8, 3.0)) - 0.5);
+			float up = clamp((v_pos.y - 0.2) / max(0.05, film_top - 0.2), 0.0, 1.0);
+			float blot = smoothstep(0.35, 0.75, fbm(vs * 1.4 + 11.0));
+			float film = (1.0 - smoothstep(0.45, 1.0, up)) * mix(1.0, blot, smoothstep(0.45, 1.0, up));
+			float dense = smoothstep(0.1, 0.35, level) * mix(0.45, 0.92, level);
+			float light = smoothstep(0.12, 0.3, dot(paint(v_custom.r), vec3(0.2126, 0.7152, 0.0722)));
+			albedo = mix(albedo, mix(ROAD_PALE, ROAD_DARK, light), film * road * dense * mix(0.75, 0.92, light));
+			// Streaks: in every 0.35 m along the face, perhaps one thin dark run
+			// straight down from the roof line to its own length, more of them and
+			// darker with the level, over a soft grey wash under the roof line; on
+			// a front or a back they keep to the upper body (above a windscreen,
+			// up a cap or a rear wall), not down a nose or a bumper. Past a few
+			// pixels a streak gives way to its average.
+			float cell = floor(vs.x / 0.35);
+			float width = mix(0.012, 0.045, hash12(vec2(cell, 5.0)));
+			float across = abs(fract(vs.x / 0.35) - mix(0.15, 0.85, hash12(vec2(cell, 3.0)))) * 0.35;
+			float pixel = fwidth(vs.x);
+			float run = (1.0 - smoothstep(width * 0.3, width + pixel, across)) * step(1.0 - 0.6 * level, hash12(vec2(cell, 7.0)))
+				* smoothstep(-0.25, 0.25, v_pos.y - mix(0.4, 2.2, hash12(vec2(cell, 9.0))));
+			float keep = 1.0 - smoothstep(0.02, 0.06, pixel);
+			float upper = side ? 1.0 : smoothstep(1.3, 1.7, v_pos.y);
+			float wash = smoothstep(0.8, 2.8, v_pos.y) * (0.6 + 0.4 * vnoise(vec2(vs.x * 2.0, v_pos.y)));
+			albedo *= 1.0 - road * level * (0.22 * wash + 0.55 * upper * mix(0.12 * smoothstep(0.6, 2.6, v_pos.y), run, keep));
+		}
 	}
 	ALBEDO = albedo;
 	ROUGHNESS = ROUGH[p];

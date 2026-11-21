@@ -150,12 +150,34 @@ func _init() -> void:
 	_glass_material.resource_name = "street_car_glass"
 	_glass_material.shader = GLASS_SHADER
 	_read_scene(KIT_SCENE)
+	_material.set_shader_parameter("car_axles", _car_axles())
 	# A live car and the hero level draw these as instances, only after loading
 	# (the shader warm-up: ShaderWarmUp); the glass only at the hero level.
 	ShaderWarmUp.add(_material, true)
 	ShaderWarmUp.add(_wheel_material, true)
 	if hero_level_enabled():
 		ShaderWarmUp.add(_glass_material, true)
+
+
+## Each body's wheels for the shader's car_axles (four floats a body, by
+## CAR_BODIES): its front and rear axles' z and its wheel radius, from the kit's
+## axle markers; where a car's dirt fans out behind its wheels. A body the
+## shader's array has no slot for, or without both markers, is an error (and
+## gets a crossover's wheels rather than none).
+func _car_axles() -> PackedFloat32Array:
+	var declared := "uniform vec4 car_axles[%d];" % CAR_BODIES.size()
+	if not SHADER.code.contains(declared):
+		push_error("street_clutter.gdshader must declare %s: one slot per body of CAR_BODIES" % declared)
+	var axles := PackedFloat32Array()
+	for body: String in CAR_BODIES:
+		var front: Variant = _markers.get("car_%s_axle_front" % body)
+		var rear: Variant = _markers.get("car_%s_axle_rear" % body)
+		if not front is Vector3 or not rear is Vector3 or (front as Vector3).y <= 0.0:
+			push_error("street_clutter_kit.glb has no axle markers for the %s: its dirt can't find its wheels" % body)
+			front = Vector3(0.0, 0.36, -1.41)
+			rear = Vector3(0.0, 0.36, 1.35)
+		axles.append_array([(front as Vector3).z, (rear as Vector3).z, (front as Vector3).y, 0.0])
+	return axles
 
 
 func _read_scene(packed: PackedScene) -> void:
@@ -178,10 +200,11 @@ static func hero_level_enabled() -> bool:
 ## How dirty a car is, 0 (just washed) to 1 (filthy), from its row's id: so a
 ## car looks the same wherever it is drawn, at every level and when it is
 ## driven. The id's hash is mixed first (ids next to each other in a row differ
-## only in its low bits, which left whole rows equally dirty), and the sixth
-## power of that even spread keeps most cars nearly clean and a few dirty
-## (owner, 2026-11-13: fewer dirty cars): about three in four below 0.2, one in
-## eleven over 0.5.
+## only in its low bits, which left whole rows equally dirty), and that even
+## spread is bent toward dirty (owner, 2026-11-21: "mostly dusty", which
+## reverses the 2026-11-13 "fewer dirty cars"): about a quarter of the cars
+## clean (under 0.1), half lightly to moderately dusty (0.1 to 0.6), a quarter
+## clearly dirty (over 0.6) and a few of those filthy (over 0.85); none quite 1.
 static func car_dirt(row_id: String) -> float:
 	if row_id == "":
 		return 0.0
@@ -189,11 +212,18 @@ static func car_dirt(row_id: String) -> float:
 	h = (((h >> 16) ^ h) * 0x45D9F3B) & 0xFFFFFFFF
 	h = (((h >> 16) ^ h) * 0x45D9F3B) & 0xFFFFFFFF
 	h = (h >> 16) ^ h
-	return pow(float(h & 0xFFFF) / 65535.0, 6.0)
+	return 0.95 * pow(float(h & 0xFFFF) / 65535.0, 1.6)
 
 
-## A parked car's instance custom data (paint, style, suspension twist, dirt)
-## from its row params and id: {ok, custom} or {ok: false, message}. A drivable
+## The instance custom data's style channel: a style code (bit 0-1 finish, bit 2
+## black roof, bit 3 dark rims) and a car's body (its index in CAR_BODIES, which
+## places the dirt its wheels throw up), as street_clutter.gdshader reads it.
+static func style_channel(style: int, body_index: int = 0) -> float:
+	return (float(style + 16 * body_index) + 0.5) / 256.0
+
+
+## A parked car's instance custom data (paint, style and body, suspension twist,
+## dirt) from its row params and id: {ok, custom} or {ok: false, message}. A drivable
 ## car takes the same with no twist (its suspension takes up the ground). An
 ## optional params.dirt (0 to 1) stands in for the id's (a gallery's own levels).
 static func car_custom(params: Dictionary, twist_override: Variant = null, row_id := "") -> Dictionary:
@@ -214,7 +244,7 @@ static func car_custom(params: Dictionary, twist_override: Variant = null, row_i
 	if not (dirt is float or dirt is int) or float(dirt) < 0.0 or float(dirt) > 1.0:
 		return {"ok": false, "message": "parked_car dirt must be a number from 0 to 1: %s" % [params]}
 	var paint_index := paint_names().find(paint)
-	return {"ok": true, "custom": Color((float(paint_index) + 0.5) / 32.0, (float(style) + 0.5) / 16.0, float(twist), float(dirt))}
+	return {"ok": true, "custom": Color((float(paint_index) + 0.5) / 32.0, style_channel(style, CAR_BODIES.find(body)), float(twist), float(dirt))}
 
 
 ## The parts of a body that a drivable car draws (tools/lib/street-car-kit.mjs
@@ -438,7 +468,7 @@ func parts(prop: String, params: Dictionary, row_id := "") -> Dictionary:
 			return {"ok": false, "message": "%s needs a known paint (and lid): %s" % [prop, params]}
 		base = prop
 		var lid_u := 0.0 if lid == "body" else (float(paint_names().find(lid)) + 0.5) / 32.0
-		result.custom = Color((float(paint_names().find(bin_paint)) + 0.5) / 32.0, (float(MATTE_FINISH) + 0.5) / 16.0, 0.0, lid_u)
+		result.custom = Color((float(paint_names().find(bin_paint)) + 0.5) / 32.0, style_channel(MATTE_FINISH), 0.0, lid_u)
 	else:
 		base = prop
 	var near: Variant = _meshes.get("%s_lod0" % base, null)

@@ -15,6 +15,11 @@ Every build of the game has a number, the one in its title on the [releases page
 - Building 1's walls are painted board-formed concrete, weathered: grime under the copings and along the base, heaviest on the sides most open to the weather.
 - Behind many of Building 1's windows there are now blinds and sheer curtains.
 
+## Build 2473 (2026-11-21)
+
+- Parked cars are now mostly dusty: about a quarter are clean, most carry road dirt along their sills, behind their wheels and up their tails, a quarter are clearly dirty and a few filthy, and the dirt now shows on white and silver cars too.
+- Each van, truck, RV, bus and trailer in the storage yards now has its own wear, most of them weathered: road grime low down, dark streaks down their sides and dusty roofs.
+
 ## Build 2464 (2026-11-21)
 
 - On computers, everything in view no longer turns darker and bluer for about a second as you come within about 40 m of Building 1, nor now and then inside its hall: preparing the hall's floor reflections no longer upsets the island's light.
