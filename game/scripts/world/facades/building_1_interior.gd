@@ -122,6 +122,9 @@ static func plan(site: Dictionary) -> Dictionary:
 	var sill_y := float(heights.sill_y)
 	if sill_y > floor_y:
 		return {"ok": false, "message": "Building 1 interior's door sill stands above the hall's floor."}
+	var walk: Variant = heights.get("threshold_walk")
+	if not walk is Dictionary or not (float(walk.get("slope_deg", 0.0)) > 0.0 and float(walk.get("slope_deg", 0.0)) < 45.0 and float(walk.get("below", -1.0)) >= 0.0):
+		return {"ok": false, "message": "Building 1 interior's threshold_walk needs a slope gentler than the sill's 45-degree bevel and a depth under the bevel's foot."}
 	# The east wall's own bays: equal steps over the hall's arc.
 	var east_bays := int(plan_m.east_bays)
 	var east_piers: Array[float] = []
@@ -1199,10 +1202,10 @@ static func _append_north_annex(plan: Dictionary, buckets: Dictionary, shell: Di
 
 static func _append_doorway(plan: Dictionary, buckets: Dictionary, leaves: Dictionary, shell: Dictionary) -> void:
 	# The opened door group's reveal, from the facade's dark border to the vestibule
-	# wall: sides, head and a level stone sill, its front a riser down to the
-	# forecourt's paving; under it, for the feet, a hidden slope over the same step.
+	# wall: sides, head and a level stone sill, its front bevelled down to the
+	# forecourt's paving; under the bevel, for the feet, a gentler hidden slope.
 	# The sides and head start at the dark border's back, which frames the opening
-	# outside; the sill runs to the border's front and on to its riser. The sill is the
+	# outside; the sill runs to the border's front and on to its bevel. The sill is the
 	# door's own height (sill_y), below the hall's floor, and meets the vestibule's floor
 	# on its stations (_append_vestibule_floor).
 	var door := plan.door as Dictionary
@@ -1226,16 +1229,31 @@ static func _append_doorway(plan: Dictionary, buckets: Dictionary, leaves: Dicti
 	var outer_left := _frame_point(door, left, front, 0.0)
 	var outer_right := _frame_point(door, right, front, 0.0)
 	var opened := door_span(plan)
-	_doorway_strip(plan, [stone, shell], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP, _cut_stations(opened.x, opened.y, floor_cuts(plan)))
-	# The sill's front: a 45-degree bevel down to the forecourt's paving, the same
-	# surface seen and walked (a slope the stock player takes as floor).
+	var stations := _cut_stations(opened.x, opened.y, floor_cuts(plan))
+	_doorway_strip(plan, [stone], outer_left, outer_right, inner_left, inner_right, y, Vector3.UP, stations)
+	# The sill's front, seen: a 45-degree bevel down to the forecourt's paving.
 	var bevel := float(heights.threshold_bevel)
 	var foot_left := _frame_point(door, left, front + bevel, 0.0)
 	var foot_right := _frame_point(door, right, front + bevel, 0.0)
 	var slope := (normal + Vector3.UP).normalized()
-	_quad([stone, shell], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
+	_quad([stone], _lifted(foot_left, y - bevel), _lifted(foot_right, y - bevel), _lifted(outer_right, y), _lifted(outer_left, y), slope)
 	_triangle([stone], _lifted(foot_left, y - bevel - 0.03), _lifted(outer_left, y), _lifted(outer_left, y - bevel - 0.03), -tangent)
 	_triangle([stone], _lifted(outer_right, y - bevel - 0.03), _lifted(outer_right, y), _lifted(foot_right, y - bevel - 0.03), tangent)
+	# Walked: a gentler slope through the bevel's foot (threshold_walk), hidden in the
+	# stone. It meets the sill's level a little inside the bevel's top and runs on under
+	# the bevel's foot below the paving, so the feet sink up to 4 cm into the bevel and
+	# no edge they meet reads near the stock controller's 48-degree floor limit. Walked
+	# as seen, the 45-degree bevel stopped the player: its top edge read up to about 5
+	# degrees steeper than the bevel, past that limit (the config's note).
+	var walk := heights.threshold_walk as Dictionary
+	var run := bevel / tan(deg_to_rad(float(walk.slope_deg)))
+	var below := float(walk.below)
+	var walk_top_left := _frame_point(door, left, front + bevel - run, 0.0)
+	var walk_top_right := _frame_point(door, right, front + bevel - run, 0.0)
+	var walk_low_left := _frame_point(door, left, front + bevel + below * run / bevel, 0.0)
+	var walk_low_right := _frame_point(door, right, front + bevel + below * run / bevel, 0.0)
+	_doorway_strip(plan, [shell], walk_top_left, walk_top_right, inner_left, inner_right, y, Vector3.UP, stations)
+	_quad([shell], _lifted(walk_low_left, y - bevel - below), _lifted(walk_low_right, y - bevel - below), _lifted(walk_top_right, y), _lifted(walk_top_left, y), (normal * bevel + Vector3.UP * run).normalized())
 	_append_door_leaves(plan, leaves, shell)
 
 

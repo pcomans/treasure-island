@@ -13,6 +13,10 @@ Every build of the game has a number, the one in its title on the [releases page
 - The floor of Building 1's hall is now a worn terrazzo: large panels between thin divider strips, two darker bands curving along the hall, and decades of wear in its polish.
 - On computers, that floor's reflections are back at their full strength, clearer than in the last build.
 
+## Build 2404 (2026-11-21)
+
+- You can now walk into Building 1's hall without jumping: walking at any speed or angle, on a phone or a computer, the player no longer stops at the front door's doorstep.
+
 ## Build 2394 (2026-11-20)
 
 - While driving on a phone or tablet, drag anywhere that isn't a button to glance around, as with the mouse; the view swings back a moment after you stop.
