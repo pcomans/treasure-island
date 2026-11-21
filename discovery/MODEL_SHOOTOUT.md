@@ -100,20 +100,6 @@ Before Gemini 4 Neon can be used:
 
 ## Architect-description test (describe from photos)
 
-The owner's idea: "before we even send a building for modeling, we need an agent to describe that building like an architect would … find a building online that has good photo resources and a good architect-written description … test if Opus or Fable can describe the building from the images clearly enough and correctly in architect's terms. And then … pass [it] in to the agent that generates iteration 1." And their requirement: "whoever judges the output of the 1st modeling round has to have access to the architectural … description as well".
-
-**Method (2026-11-21).** The private architect-description eval set, kept outside Git, holds buildings that have both dated exterior photos and a professionally written exterior description from the same documentation campaign. Each description is reduced to a checklist of checkable form facts. Six cases are ready: four out of domain (a modest residential type, an operations building with a tower, an industrial warehouse, a plain storehouse) and two in domain, this island's Buildings 2 and 3. Each describer got only the photos, under neutral code names, with labels cropped and metadata stripped, and one shared brief: a fixed order (form, roof, materials, elevations, entrances, ornament, alterations); seen separated from inferred, with confidence; "not shown" instead of guessing; leave to declare the references insufficient; 12–20 key form facts; no identification. One blind judge, an Opus session that did not know which describer was which, first decided per fact whether it can be determined from the photos, then scored.
-
-**Result** over 103 determinable facts (correct / partly / incorrect / not mentioned / honest "not shown"):
-
-| Describer | All six cases | Out of domain only (70 facts) | Other claims contradicted |
-|---|---|---|---|
-| Opus 5.5 | 63 / 25 / 5 / 9 / 1 | 44 / 16 / 3 / 6 / 1 | 7 substantive |
-| Fable 5.2 | 72 / 23 / 0 / 6 / 2 | 48 / 16 / 0 / 4 / 2 | 4 substantive, 5 low-weight |
-
-Both followed the brief in every case and named no building. Fable said it recognised both in-domain buildings, Opus one of them, with a vague sense about the other; the judge found no statement that could only have come from memory or signage.
-
-- **Errors.** Opus's worst: it read one vaulted hall as two buildings (a flat-roofed hall plus a separate vault hall); gave a plan 4–5 times longer than deep where the key gives about 2:1; placed tower windows as a central stack instead of wrapping the corners; and miscounted doors. Fable's errors were all sizes and ratios (a plan called "close to square" where the key gives about 1.5:1; a depth of 7–9 m where the key gives 12.1 m), never the form itself.
-- **Shared patterns.** Plan depth and length-to-depth ratios are the weakest area for both. Roof features are under-described: both missed three saw-tooth roof monitors visible in one view. Altered openings were seen but not called alterations, and neither committed to how windows open. Reliable for both: storey counts, roof types, bay systems and entrance compositions.
-- **Confidence: low to moderate.** Six cases, two pairs of them correlated (sister buildings; one shared site); monochrome photos of about 900 px; draft checklists from scanned text, in which the judge listed several facts as wrong, self-contradictory or not checkable; one judge. The gap between the describers comes from about four misreadings in two cases; on two cases and most of a third they were indistinguishable.
-- **Next steps.** Fix the answer-key problems the judge listed; add the two cases whose photos could not be fetched yet; in the next shootout, give the description to the first modelling round and to its reviewer, as one blind pair: built from photos alone against photos plus description.
+Before a building goes to modelling, a describer writes an architect-style description of it from its photos, to brief the first modelling round and its reviewer; the larger modelling shootout waits until the descriptions are shown to be good.
+Opus 5.5 and Fable 5.2 describe blind, against answer keys from professional descriptions in a private eval set. No description was rated unusable, and plan depth guessed from photos is the weakest area.
+Purpose, method and every round's results are in the [architect-description shootout](ARCHITECT_DESCRIPTION_SHOOTOUT.md).
