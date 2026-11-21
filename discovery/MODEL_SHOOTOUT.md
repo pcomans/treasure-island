@@ -38,7 +38,7 @@ The resumed owner-authorized combined blind test includes prior critiques, housi
 
 The first shootout compared two anonymous options, X and Y, later unsealed as X = DeepSeek V4.1 Flash and Y = Opus 5.5, one mapping for all tasks.
 
-In the critique task (two cases, a housing block and Building 1), the owner found case A's critiques roughly equivalent and X better on case B: Y said the reference's right wing has three window rows (it has two) and called the rooftop structure a "lantern" (the owner: "I would not have called it a lantern") that is not visible, when it is. Overall the owner felt X was better, with the margin unsure, and guessed X was Claude; it was DeepSeek. Both critiques were flowing prose and not very actionable. The owner's hypothesis, that the prompt should ask for specific, concise, concrete findings, led to the four-question review format.
+In the critique task (two cases, a housing block and Building 1), the owner found case A's critiques roughly equivalent and X better on case B: Y said the reference's right wing has three window rows (it has two) and said the rooftop structure, which it called a "lantern" (the owner: "I would not have called it a lantern"), is not visible, when it is. Overall the owner felt X was better, with the margin unsure, and guessed X was Claude; it was DeepSeek. Both critiques were flowing prose and not very actionable. The owner's hypothesis, that the prompt should ask for specific, concise, concrete findings, led to the four-question review format.
 
 On the housing model, Y was "clearly better. Like no contest": more correct colour, shiplap texture and the correct side wall, where X invented a window under the gable and a row of side windows and looked too slim. After one review round Y was "very clearly pulling ahead", with facade depth and the shed added at the back.
 
@@ -46,7 +46,7 @@ Net: DeepSeek narrowly ahead on critique, Opus decisively ahead on modelling.
 
 ## Review-format test (Opus only)
 
-Every version starts from the same Opus first build of the housing block. Each had one review round under different review instructions, then a fix by Opus (2026-11-20), and the owner saw the results blind as A–D. The mapping, unsealed by the owner's vote: A = the four-question format, run 1; B = the four-question format with "no additions allowed"; C = a free-form prose review (the earlier format); D = the four-question format, run 2.
+Every version starts from the same Opus first build of the housing block. Each had one review round under different review instructions, then a fix by Opus (2026-11-19 to 20), and the owner saw the results blind as A–D. The mapping, unsealed by the owner's vote: A = the four-question format, run 1; B = the four-question format with "no additions allowed"; C = a free-form prose review (the earlier format); D = the four-question format, run 2.
 
 | Review | Words | Additions / fixes asked | Mesh nodes, start → after fix |
 |---|---|---|---|
@@ -60,7 +60,7 @@ The owner's blind verdict: "if I absolutely had to pick one, I would pick versio
 
 Earlier, not blind: after a second review round the owner found the Opus building worse: "It looks more cluttered", with bins, AC units and small windows crowding the doors.
 
-Variant E (2026-11-21, not blind: added after A–D, and the owner has not judged it yet) told the review to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake. The review ran to 975 words and asked for 0 additions, 6 fixes and 2 removals (the runner's count); mesh nodes went from 336 to 374 and triangles from 7,790 to 8,246; review and fix cost $0.75. The fixer still added two storage boxes nobody asked for, and the review did not mention the upper-floor overhang.
+Variant E (2026-11-21, not blind: added after A–D, and the owner has not judged it yet) told the review to judge recognisability and overall visual fit first and not to ask for fine detail for its own sake. The review ran to 975 words and asked for 0 additions, 6 fixes and 2 removals (as recorded at the time); mesh nodes went from 336 to 374 and triangles from 7,790 to 8,246; review and fix cost $0.75. The fixer still went from three grey utility boxes by the doors to five, although the review had listed the boxes under 'keep it' and asked for none. The review did not mention the upper-floor overhang.
 
 Variant F, a form-first instruction plus enlargements of the same two photos, is running; no result yet.
 
