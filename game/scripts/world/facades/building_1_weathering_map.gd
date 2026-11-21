@@ -7,11 +7,19 @@ extends RefCounted
 ##
 ## One cell every CELL_M metres, half floats:
 ## - R: the top of the mass behind a wall (metres): the highest point of any face over
-##   the cell, after one cell of growth so a wall's own top reaches the cell inside it;
+##   the cell, slivers no face covers between two roofs (up to GAP_REACH_CELLS each
+##   way) filled with the lower roof's, then one cell of growth so a wall's own top
+##   reaches the cell inside it; the options' "flat_tops" meshes (the tower block on
+##   the drum's roof, close behind its coping) join after the growth, so their tops
+##   never spread into the roof round them;
 ## - G: the lowest window bottom over the cell (metres, 0 where no glass): the sill a
 ##   wall below a window hangs its streaks from;
 ## - B: the exposure of that part of the building (0 to 1: its paint's age and shelter),
-##   from the nearest source wall run's class;
+##   from the nearest source wall run's class within RUN_REACH_M; farther in (the drum
+##   and the stepped blocks behind the outer walls) one interior exposure when the
+##   options give it, so an inner wall never crosses the boundaries between the outer
+##   runs' classes; then softened over exposure_blur_m, so where two classes meet the
+##   paint's age changes over a few metres, not at a straight line;
 ## - A: the ground at the foot of the nearest run (metres): its base, as the source
 ##   record levelled it.
 ## The material study (game/tests/support/building_1_material_study.gd, 2026-11-21)
@@ -27,17 +35,23 @@ const MARGIN_M := 2.0
 ## How far from a run its class and ground reach before cells take their nearest
 ## assigned neighbour's (m).
 const RUN_REACH_M := 3.0
+## How far (cells, each way) a sliver between two roofs is looked across.
+const GAP_REACH_CELLS := 4
 
 
 ## meshes: every MeshInstance3D of the building that its tops come from; glass: the
 ## ones holding window glass; runs: [{"start": Vector3, "end": Vector3, "exposure":
-## float}] the source wall runs' foot segments. Returns {"texture", "image", "bounds":
-## Vector4(x0, z0, size_x, size_z) for the shader's weathering_map_bounds}, or {} when
-## there is nothing to map.
-static func build(meshes: Array, glass: Array, runs: Array) -> Dictionary:
+## float}] the source wall runs' foot segments; options: "interior_exposure" (0 to 1,
+## for cells farther than RUN_REACH_M from every run; absent: the nearest run's, as
+## the ground), "exposure_blur_m" (absent or 0: none) and "flat_tops" (an Array of
+## MeshInstance3D whose tops are not grown). Returns {"texture", "image",
+## "bounds": Vector4(x0, z0, size_x, size_z) for the shader's weathering_map_bounds},
+## or {} when there is nothing to map.
+static func build(meshes: Array, glass: Array, runs: Array, options: Dictionary = {}) -> Dictionary:
 	var box := AABB()
 	var started := false
-	for node: Variant in meshes:
+	var flat: Array = options.get("flat_tops", [])
+	for node: Variant in meshes + flat:
 		var instance := node as MeshInstance3D
 		if instance == null or instance.mesh == null:
 			continue
@@ -55,7 +69,15 @@ static func build(meshes: Array, glass: Array, runs: Array) -> Dictionary:
 	top.resize(width * depth)
 	for node: Variant in meshes:
 		top = _with_tops(node as MeshInstance3D, grid, top)
+	top = _gaps_filled(top, width, depth, GAP_REACH_CELLS)
 	top = _grown(top, width, depth)
+	if not flat.is_empty():
+		var flat_top := PackedFloat32Array()
+		flat_top.resize(width * depth)
+		for node: Variant in flat:
+			flat_top = _with_tops(node as MeshInstance3D, grid, flat_top)
+		for index in top.size():
+			top[index] = maxf(top[index], flat_top[index])
 	var sill := PackedFloat32Array()
 	sill.resize(width * depth)
 	for node: Variant in glass:
@@ -113,6 +135,17 @@ static func build(meshes: Array, glass: Array, runs: Array) -> Dictionary:
 					ground[neighbour] = ground[index]
 					next.append(neighbour)
 		frontier = next
+	if options.has("interior_exposure"):
+		var interior := clampf(float(options.interior_exposure), 0.0, 1.0)
+		for index in exposure.size():
+			if nearest[index] == INF:
+				exposure[index] = interior
+	var blur_cells := int(roundf(float(options.get("exposure_blur_m", 0.0)) / CELL_M))
+	if blur_cells > 0:
+		# Two box passes each way: a soft, triangle-like falloff.
+		for _pass in 2:
+			exposure = _box_blur(exposure, width, depth, blur_cells, true)
+			exposure = _box_blur(exposure, width, depth, blur_cells, false)
 	var image := Image.create_empty(width, depth, false, Image.FORMAT_RGBAH)
 	for j in depth:
 		for i in width:
@@ -206,6 +239,60 @@ static func _with_sills(instance: MeshInstance3D, grid: Dictionary, sill: Packed
 					if sill[index] == 0.0 or p.y < sill[index]:
 						sill[index] = p.y
 	return sill
+
+
+## A box blur of radius `radius` cells along rows (along_x) or columns, by running sums,
+## the edge cells repeated past the grid's edges.
+static func _box_blur(values: PackedFloat32Array, width: int, depth: int, radius: int, along_x: bool) -> PackedFloat32Array:
+	var result := values.duplicate()
+	var lines := depth if along_x else width
+	var length := width if along_x else depth
+	var step := 1 if along_x else width
+	var span := float(2 * radius + 1)
+	for line in lines:
+		var first := line * width if along_x else line
+		var sum := 0.0
+		for k in range(-radius, radius + 1):
+			sum += values[first + clampi(k, 0, length - 1) * step]
+		for k in length:
+			result[first + k * step] = sum / span
+			sum += values[first + mini(k + radius + 1, length - 1) * step] - values[first + maxi(k - radius, 0) * step]
+	return result
+
+
+## Slivers no face covers between two roofs (seams in a roof's triangles): an empty
+## cell with a top on both sides of it within `reach` cells, along a row, a column or a
+## diagonal, takes the lower of the two (the lowest such pair). A wall's lookup into
+## such a seam would otherwise find no top, and its stains would stop in a straight
+## strip from coping to ground.
+static func _gaps_filled(values: PackedFloat32Array, width: int, depth: int, reach: int) -> PackedFloat32Array:
+	var result := values.duplicate()
+	var steps: Array[Vector2i] = [Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 1), Vector2i(1, -1)]
+	for j in depth:
+		for i in width:
+			if values[j * width + i] != 0.0:
+				continue
+			var fill := INF
+			for step in steps:
+				var lower := INF
+				for direction: int in [1, -1]:
+					var found := 0.0
+					for k in range(1, reach + 1):
+						var ni := i + step.x * k * direction
+						var nj := j + step.y * k * direction
+						if ni < 0 or nj < 0 or ni >= width or nj >= depth:
+							break
+						found = values[nj * width + ni]
+						if found != 0.0:
+							break
+					if found == 0.0:
+						lower = INF
+						break
+					lower = minf(lower, found)
+				fill = minf(fill, lower)
+			if fill != INF:
+				result[j * width + i] = fill
+	return result
 
 
 ## One cell of growth: each cell takes the highest of itself and its eight neighbours.

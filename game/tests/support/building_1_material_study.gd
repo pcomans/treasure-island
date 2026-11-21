@@ -25,8 +25,10 @@ extends RefCounted
 ## wall record (the tower's runs are class "tower"); "exposure": {CLASS: 0..1};
 ## "by_mesh": {MESH NAME: material path}; "splits": [{"mesh": NAME, "margins_m":
 ## [side, top, bottom, depth], "near_windows": {CLASS: material path}, "rest":
-## material path or "", "pane_uv2": true or absent}] ("" keeps the mesh's own material
-## for triangles near no listed window); "pane_kinds": [{"class": CLASS, "min_bottom_m":
+## material path or "", "pane_uv2": true or absent, and optionally "large_faces",
+## "low" and "high" (below)}] ("" keeps the mesh's own material for triangles near no
+## listed window); "interior_exposure" and "exposure_blur_m" (the
+## weathering map's options); "pane_kinds": [{"class": CLASS, "min_bottom_m":
 ## metres (optional), "kind": 2 or 3, "share": 0..1}]; optional "save_map": an absolute
 ## PNG path for a picture of the map.
 
@@ -39,6 +41,8 @@ const GLASS_MESHES := ["HeroGlazing", "HeroTowerBaseStoreyGlazing", "HeroTowerEx
 const INDEX_CELL_M := 2.0
 ## Thin masts standing over the roofs: no wall below hangs streaks from them.
 const NOT_TOPS := ["HeroFlagpole", "HeroDrumMast", "HeroTowerVentSpike"]
+## The tower block's meshes, whose tops join the weathering map without growth.
+const FLAT_TOPS_PREFIX := "HeroTower"
 
 ## [[MeshInstance3D, Material]] overridden in the study.
 static var _overrides: Array = []
@@ -69,11 +73,22 @@ static func prepare(world: Node, settings: Dictionary) -> String:
 		if meshes.has(name):
 			glass.append(meshes[name])
 	var tops: Array = []
+	var flat_tops: Array = []
 	for name: String in meshes:
-		if name not in NOT_TOPS:
+		if name in NOT_TOPS:
+			continue
+		# The tower block stands on the drum's roof a metre or two behind its coping:
+		# its tops are not grown, so the coping's lookup never finds the tower's.
+		if name.begins_with(FLAT_TOPS_PREFIX):
+			flat_tops.append(meshes[name])
+		else:
 			tops.append(meshes[name])
 	var started := Time.get_ticks_msec()
-	weathering = WEATHERING_MAP.build(tops, glass, runs)
+	var options := {"flat_tops": flat_tops}
+	for key: String in ["interior_exposure", "exposure_blur_m"]:
+		if settings.has(key):
+			options[key] = float(settings[key])
+	weathering = WEATHERING_MAP.build(tops, glass, runs, options)
 	if weathering.is_empty():
 		return "building 1 study: the weathering map is empty"
 	var image := weathering.image as Image
@@ -229,6 +244,7 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 	var xform := source.global_transform
 	var arrays := source.mesh.surface_get_arrays(0)
 	var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+	var normals := arrays[Mesh.ARRAY_NORMAL] as PackedVector3Array
 	var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
 	if bool(spec.get("pane_uv2", false)):
 		arrays[Mesh.ARRAY_TEX_UV2] = _pane_uv2(vertices, indices, xform, runs, pane_kinds)
@@ -236,7 +252,8 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 	# copy, and what was appended to it lost.
 	var parts := {}
 	# Broad flat faces of a mesh of mouldings (the crescent's attic frieze, the
-	# pavilions' fins) are wall in the photos, board lines and all.
+	# pavilions' fins) are wall in the photos, board lines and all; a coping is not,
+	# however long its facet (min_extent_m above the drum coping's 0.93 m).
 	var large: Dictionary = spec.get("large_faces", {})
 	# "low": {CLASS: {"max_y": metres, "material": path}}: that class's triangles
 	# below max_y take their own material (the crescent's ground-floor frames under
@@ -244,6 +261,14 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 	var low: Dictionary = spec.get("low", {})
 	for low_class: String in low:
 		near["low " + low_class] = (low[low_class] as Dictionary).material
+	# "high": {"min_y": metres, "min_top_m": metres, "material": path}: triangles near
+	# no window whose centre is at least min_y up, on a mass whose top (the weathering
+	# map's, 0.35 m behind the face) is at least min_top_m, take their own material
+	# (the drum's tall coping, 0.93 m, darkened over its whole height where the flat
+	# copings' band is 0.45 m, and its speed lines under it).
+	var high: Dictionary = spec.get("high", {})
+	if not high.is_empty():
+		near["high"] = high.material
 	for t in range(0, indices.size(), 3):
 		var a := xform * vertices[indices[t]]
 		var b := xform * vertices[indices[t + 1]]
@@ -253,6 +278,8 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 		var part := found if near.has(found) else ""
 		if low.has(found) and c.y <= float((low[found] as Dictionary).max_y):
 			part = "low " + found
+		if part == "" and not high.is_empty() and not normals.is_empty() and c.y >= float(high.min_y) and _mass_top(c, xform.basis * (normals[indices[t]] + normals[indices[t + 1]] + normals[indices[t + 2]])) >= float(high.min_top_m):
+			part = "high"
 		if part == "" and not large.is_empty() and _is_large_wall_face(a, b, d, large):
 			part = "large"
 			near["large"] = large.material
@@ -338,6 +365,23 @@ static func _pane_kind(center: Vector3, bottom: float, seed: int, runs: Array, p
 
 ## A near-vertical face at least min_area_m2 in area and min_extent_m both along and
 ## up the face.
+## The weathering map's top of the mass behind a face: at its plan position 0.35 m
+## against its outward normal (as the shader's lookup), or 0 where the map has none.
+static func _mass_top(center: Vector3, normal: Vector3) -> float:
+	var image := weathering.get("image") as Image
+	if image == null:
+		return 0.0
+	var bounds := weathering.bounds as Vector4
+	var into := Vector2(normal.x, normal.z)
+	into = into.normalized() if into.length() > 0.0001 else Vector2.ZERO
+	var at := Vector2(center.x, center.z) - into * 0.35
+	var i := int(floorf((at.x - bounds.x) / bounds.z * float(image.get_width())))
+	var j := int(floorf((at.y - bounds.y) / bounds.w * float(image.get_height())))
+	if i < 0 or j < 0 or i >= image.get_width() or j >= image.get_height():
+		return 0.0
+	return image.get_pixel(i, j).r
+
+
 static func _is_large_wall_face(a: Vector3, b: Vector3, c: Vector3, large: Dictionary) -> bool:
 	var cross := (b - a).cross(c - a)
 	var area := cross.length() * 0.5

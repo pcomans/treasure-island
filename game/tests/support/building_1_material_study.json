@@ -50,8 +50,13 @@
    "rest": "res://game/resources/materials/world/building_1/building_1_m_trim.tres",
    "large_faces": {
     "min_area_m2": 1.2,
-    "min_extent_m": 0.8,
+    "min_extent_m": 1.0,
     "material": "res://game/resources/materials/world/building_1/building_1_m_wall.tres"
+   },
+   "high": {
+    "min_y": 24.0,
+    "min_top_m": 26.0,
+    "material": "res://game/resources/materials/world/building_1/building_1_m_trim_drum.tres"
    }
   },
   {
@@ -89,7 +94,13 @@
     "junction": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres"
    },
    "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
-   "pane_uv2": true
+   "pane_uv2": true,
+   "low": {
+    "crescent": {
+     "max_y": 10.2,
+     "material": "res://game/resources/materials/world/building_1/building_1_m_glass_door.tres"
+    }
+   }
   },
   {
    "mesh": "HeroTowerBaseStoreyGlazing",
@@ -116,5 +127,7 @@
    "kind": 2,
    "share": 0.35
   }
- ]
+ ],
+ "interior_exposure": 1.0,
+ "exposure_blur_m": 1.5
 }

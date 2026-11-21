@@ -25,6 +25,9 @@ uniform sampler2D surface_roughness : filter_linear_mipmap_anisotropic, repeat_e
 // so the plain stucco materials are unchanged. Mipmapped, it settles to the mean
 // tone with distance instead of switching or shimmering.
 uniform sampler2D detail_pattern : hint_default_white, filter_linear_mipmap_anisotropic, repeat_enable;
+// How grey the pattern's dark parts are (0: the paint darkened, its own hue; 1: a grey
+// groove, as the incised lines read in the owner's 2026-11-20 photos).
+uniform float pattern_grey = 0.0;
 uniform vec4 paint_color : source_color = vec4(0.845, 0.8, 0.665, 1.0);
 uniform float tile_span_m = 2.6;
 uniform float relief_strength = 0.12;
@@ -50,10 +53,13 @@ uniform bool world_axis_projection = false;
 // board_length_m whose ends are staggered from row to row, board_butt_share of them
 // showing; each board its own tone; joints the paint has filled in places and that
 // step up or down by up to board_step (rows) along their length, so they read as
-// broken, uneven lines. A joint is drawn at least a pixel wide with its darkness
-// spread over that pixel, so it stays visible in sun at 20 m without aliasing; where
-// a board is under about four pixels tall the joints give way to their mean
-// darkening, so they neither stripe nor shimmer at a distance.
+// broken, uneven lines, each line of its own strength. The marks are shallow relief:
+// board_relief tilts the joint's lips, which raking sun picks out and diffuse light
+// hardly shows, and board_joint darkens the paint in the joint a little. A joint is
+// drawn at least a pixel wide with its effect spread over that pixel; where a board
+// is under about five pixels tall the joints give way to their mean darkening and
+// below about six the boards' tones fade out, so nothing stripes or shimmers at a
+// distance.
 uniform float board_pitch_m = 0.0;
 uniform float board_pitch_variation = 0.0;
 uniform float board_length_m = 2.4;
@@ -77,11 +83,15 @@ uniform vec4 weathering_map_bounds = vec4(0.0);
 uniform float weathering = 0.0;
 // The even grey band at the top (top_band in band_color, fading out between 0.4 and
 // 1 times top_band_m below the top: a coping, or the darkest strip under it) and the
-// soft wash under it (wash in wash_color, fading out over three times top_band_m).
+// soft wash under it (wash in wash_color, fading out over wash_m, or three times
+// top_band_m where wash_m is 0).
 uniform vec4 band_color : source_color = vec4(0.56, 0.57, 0.55, 1.0);
 uniform float top_band = 0.0;
 uniform float top_band_m = 0.5;
+// How ragged the band's lower edge is: its depth varies by this share along the wall.
+uniform float band_ragged = 0.0;
 uniform float wash = 0.0;
+uniform float wash_m = 0.0;
 uniform vec4 wash_color : source_color = vec4(0.56, 0.57, 0.55, 1.0);
 // Short, straight drips hanging from a top (and, shorter, from window sills), in
 // streak_color, never drawn thinner than about a pixel and a half. The band, wash and
@@ -94,8 +104,13 @@ uniform float streak_spacing_m = 0.6;
 uniform float stain_min_exposure = 0.4;
 uniform float stain_min_top_m = 0.0;
 uniform float sill_streak_amount = 0.0;
-// An even film of dirt and moss on up-facing tops (copings, sills, ledges).
+// An even film of dirt and moss on up-facing tops within up_grime_depth_m of the top
+// (a coping, not the lines and ledges lower down).
 uniform float up_grime = 0.0;
+uniform float up_grime_depth_m = 1000.0;
+// Dirt on the undersides of exposed projections (copings, bands, the drum's speed
+// lines), which no rain washes: down-facing faces go this far toward band_color.
+uniform float under_grime = 0.0;
 uniform vec4 moss_color : source_color = vec4(0.47, 0.49, 0.43, 1.0);
 // Splash and dirt in the lowest base_splash_m above the ground.
 uniform float base_splash = 0.0;
@@ -280,7 +295,9 @@ void fragment() {
 		tilt = (texture(surface_normal, uv).rgb * 2.0 - 1.0).xy;
 	}
 	float variation = 1.0 + (grain - PLASTER_MEAN) * grain_variation + (broad - PLASTER_MEAN) * broad_variation * 6.0;
-	vec3 albedo = paint_color.rgb * clamp(variation, 0.86, 1.1) * texture(detail_pattern, UV).rgb;
+	vec3 painted = paint_color.rgb * clamp(variation, 0.86, 1.1);
+	vec3 pattern = texture(detail_pattern, UV).rgb;
+	vec3 albedo = mix(painted, mix(vec3(dot(painted, LUMA)), painted, dot(pattern, LUMA)), pattern_grey) * pattern;
 	float roughness = clamp(roughness_base + (rough_sample - 0.5) * roughness_variation, roughness_range.x, roughness_range.y);
 	float metallic = metallic_value;
 	// The normal's tilt along t (across the face) and b (up a wall).
@@ -293,8 +310,8 @@ void fragment() {
 		float rows = (world_position.y + warp) / board_pitch_m;
 		float rows_fw = height_fw / board_pitch_m;
 		float board_px = 1.0 / max(rows_fw, 0.0001);
-		float show_board = wall * smoothstep(2.0, 4.0, board_px);
-		float show_joint = smoothstep(4.0, 7.0, board_px);
+		float show_board = wall * smoothstep(5.0, 9.0, board_px);
+		float show_joint = smoothstep(5.0, 8.0, board_px);
 		float row = floor(rows);
 		// The boards of this row along the wall, each row's ends staggered.
 		float row_length = board_length_m * mix(0.6, 1.5, hash21(vec2(row, 3.17)));
@@ -314,7 +331,8 @@ void fragment() {
 		float jw = max(board_joint_width, rows_fw);
 		float groove = exp(-(e * e) / (jw * jw)) * (board_joint_width / jw);
 		float breaks = noise_m(vec2(s, line * 0.9), 0.35) * 0.7 + noise_m(vec2(s + 13.0, line * 1.3), 0.12) * 0.3;
-		float open = smoothstep(-0.5, 0.5, breaks + board_joint_open - 0.45) * mix(0.3, 1.0, hash21(vec2(stretch, line + 4.1)));
+		float line_strength = mix(0.35, 1.0, hash21(vec2(line, 13.7)));
+		float open = smoothstep(-0.5, 0.5, breaks + board_joint_open - 0.45) * mix(0.3, 1.0, hash21(vec2(stretch, line + 4.1))) * line_strength;
 		// Butt joints at the boards' ends, some of them showing.
 		float end_d = min(g, 1.0 - g) * row_length / board_pitch_m;
 		float butt = exp(-pow(end_d / max(board_joint_width * 0.8, s_fw / board_pitch_m), 2.0)) * step(1.0 - board_butt_share, hash21(vec2(piece, row + 5.1)));
@@ -371,8 +389,9 @@ void fragment() {
 		float stain = smoothstep(stain_min_exposure, stain_min_exposure + 0.3, exposure) * step(stain_min_top_m, top_y);
 		if (top_d > -0.05) {
 			float below = max(top_d, 0.0);
-			band = top_band * (1.0 - smoothstep(top_band_m * 0.4, top_band_m, below));
-			washed = wash * (1.0 - smoothstep(0.0, top_band_m * 3.0, below));
+			float ragged = 1.0 + band_ragged * clamp(noise_m(vec2(s, top_y * 3.1), 1.3), -1.0, 1.0);
+			band = top_band * (1.0 - smoothstep(top_band_m * 0.4 * ragged, top_band_m * ragged, below));
+			washed = wash * (1.0 - smoothstep(0.0, wash_m > 0.0 ? wash_m : top_band_m * 3.0, below));
 			streak = streak_amount * streak_field(s, below, streak_spacing_m, streak_length_m, 0.0, s_fw) * wall;
 		}
 		band *= stain;
@@ -392,9 +411,14 @@ void fragment() {
 		streak = clamp(streak * amount, 0.0, 0.7);
 		albedo = mix(albedo, streak_color.rgb, streak);
 		roughness = min(roughness + 0.08 * max(max(band, washed), streak), 0.97);
+		float down = smoothstep(0.5, 0.85, -n.y);
+		if (down > 0.0 && under_grime > 0.0) {
+			albedo = mix(albedo, band_color.rgb, clamp(under_grime * down * weathering * smoothstep(0.2, 0.6, exposure), 0.0, 0.85));
+		}
 		float up = smoothstep(0.5, 0.85, n.y);
 		if (up > 0.0 && up_grime > 0.0) {
-			float film = clamp(up_grime * up * weathering * mix(1.0, exposure, 0.5), 0.0, 0.85);
+			float near_top = top_d >= 0.0 ? 1.0 - smoothstep(up_grime_depth_m * 0.6, up_grime_depth_m, top_d) : 1.0;
+			float film = clamp(up_grime * up * near_top * weathering * mix(1.0, exposure, 0.5), 0.0, 0.85);
 			albedo = mix(albedo, moss_color.rgb, film);
 			roughness = mix(roughness, 0.95, film);
 		}
