@@ -1174,25 +1174,26 @@ func _check_passage_ways(route: Dictionary) -> void:
 ## Lets an interior's far stand-ins go far, then arrives as a teleport or a respawn
 ## does: a camera of the test's own held PASSAGE_FAR_M straight over the player (who
 ## stands at the passage's outside end) until every switch is far, at most
-## PASSAGE_FAR_WAIT_S, then the player's camera back in one frame. Every switch must be
-## near in that frame, its detailed interior drawn over its collision, before the first
-## way walks in; "" or why not.
+## PASSAGE_FAR_WAIT_S of game time (the frames' own deltas, as the mural loader counts
+## its release delay, whatever the frame rate), then the player's camera back in one
+## frame. Every switch must be near in that frame, its detailed interior drawn over its
+## collision, before the first way walks in; "" or why not.
 func _arrive_from_far(switches: Array[InteriorFarStandIn], at: Vector3) -> String:
 	var camera := Camera3D.new()
 	_h.world.add_child(camera)
 	camera.global_position = at + Vector3.UP * PASSAGE_FAR_M
 	camera.make_current()
-	var frames := 0
-	while switches.any(func(switch: InteriorFarStandIn) -> bool: return not switch.is_far()) and frames < int(PASSAGE_FAR_WAIT_S * Engine.physics_ticks_per_second):
+	var waited_s := 0.0
+	while switches.any(func(switch: InteriorFarStandIn) -> bool: return not switch.is_far()) and waited_s < PASSAGE_FAR_WAIT_S:
 		await _h.tree.process_frame
-		frames += 1
+		waited_s += camera.get_process_delta_time()
 	var went_far := switches.all(func(switch: InteriorFarStandIn) -> bool: return switch.is_far())
 	# Back here at a frame's start: that frame runs with the player's camera.
 	_h.player.get_camera().make_current()
 	camera.queue_free()
 	await _h.tree.process_frame
 	var near := switches.all(func(switch: InteriorFarStandIn) -> bool: return not switch.is_far())
-	print("%sROUTE_FAR_ARRIVAL went far after %.1f s with the camera %.0f m off; near in the frame it came back: %s" % [_prefix, frames / float(Engine.physics_ticks_per_second), PASSAGE_FAR_M, near])
+	print("%sROUTE_FAR_ARRIVAL went far after %.1f s with the camera %.0f m off; near in the frame it came back: %s" % [_prefix, waited_s, PASSAGE_FAR_M, near])
 	if not went_far:
 		return "the interior never went far with the camera %.0f m off for %.0f s" % [PASSAGE_FAR_M, PASSAGE_FAR_WAIT_S]
 	if not near:

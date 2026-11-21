@@ -1361,7 +1361,9 @@ func _moving_view(view: Dictionary, target: Vector3, prefix: String) -> String:
 			if node == null or not view.watch[node_name] is Array:
 				return "watch: the game has no node named %s, or it names no list of properties" % node_name
 			for path: Variant in view.watch[node_name]:
-				if node.get_indexed(NodePath(str(path))) == null:
+				# A property the node has, by its name before any ":"; its value may be null.
+				var base := str(path).get_slice(":", 0)
+				if not node.get_property_list().any(func(property: Dictionary) -> bool: return str(property.name) == base):
 					return "watch: %s has no property %s" % [node_name, path]
 				watched.append(["%s.%s" % [node_name, path], node, NodePath(str(path))])
 	var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]), {}, SHOT_DROP_M)

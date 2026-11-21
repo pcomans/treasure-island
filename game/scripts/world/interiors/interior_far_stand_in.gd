@@ -372,14 +372,17 @@ static func _floor_at(frame: Dictionary, r: float) -> float:
 static func _sample(faces: Array[Dictionary], zones: Array, surfaces: Array, kept: Array, centre: Vector2) -> void:
 	var lookup := {}
 	var quads: Array[int] = []
+	# The quads' bounds, from the first quad's first corner on.
 	var quad_box := AABB()
+	var first_corner := true
 	for index in faces.size():
 		var face := faces[index]
 		if face.kind != "quad":
 			lookup[_key(int(face.zone), KINDS.find(face.kind), int(face.segment), int(face.band))] = index
 			continue
 		for corner: Vector3 in face.corners:
-			quad_box = quad_box.expand(corner) if not quads.is_empty() or corner != face.corners[0] else AABB(corner, Vector3.ZERO)
+			quad_box = AABB(corner, Vector3.ZERO) if first_corner else quad_box.expand(corner)
+			first_corner = false
 		quads.append(index)
 	quad_box = quad_box.grow(SAMPLE_REACH_M)
 	for surface: Dictionary in surfaces:

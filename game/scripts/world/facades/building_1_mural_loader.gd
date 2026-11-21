@@ -93,10 +93,12 @@ func step(distance: float, delta: float) -> void:
 
 
 ## Whether the hall's near content is up: the tiles loading or loaded, from the moment
-## the camera comes within load_radius until release(). The hall's far stand-in
-## (InteriorFarStandIn) follows it.
+## the camera comes within load_radius until release(); and always when the loader could
+## not set up (no Shell, placeholder or mural surface: no materials), so that the hall
+## is never left drawn as its stand-in. The hall's far stand-in (InteriorFarStandIn)
+## follows it.
 func is_near() -> bool:
-	return state != State.UNLOADED
+	return state != State.UNLOADED or materials.is_empty()
 
 
 ## Puts the placeholder back on every mural surface, so the tiles are freed.

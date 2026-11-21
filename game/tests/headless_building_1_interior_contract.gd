@@ -36,7 +36,9 @@ extends SceneTree
 ##   lands, over the hall's floor collision; teleported out, the hall stays near until
 ##   the mural is released, then switches once; jittered across either radius it
 ##   switches once or not at all; the collision and the car blocker stay as built in
-##   both states; leaving the tree while far, everything is back as built.
+##   both states; leaving the tree while far, everything is back as built; and a hall
+##   whose mural loader could not set up stays drawn as built far away (its loader is
+##   near: the hall is never left as its stand-in).
 ## With -- --use-prebuilt-world it checks the reflections, the presence, the layers
 ## (the door's open leaves still a mesh of their own on the facades' layer after the
 ## bake's merge, tools/merge_baked_buildings.gd) and the far stand-in's parts, in the island baked for desktop exports
@@ -637,6 +639,27 @@ func _check_far_switch(hall: Node3D) -> void:
 		failures.append("left the tree while far, the hall is not as built (far %s, Shell shown %s, stand-in shown %s)" % [switch.is_far(), shell.visible, far.visible])
 	_world.add_child(hall)
 	loader.set_process(false)
+	# A hall whose mural loader could not set up (here no placeholder): far away with play
+	# started, its Shell stays drawn and its stand-in hidden.
+	put.call(FAR_AWAY_M)
+	var failed: Dictionary = HERO.build_record(HERO._record_from_chunk(HERO.MAIN_CHUNK_PATH, HERO.BUILDING_WALL_KEY))
+	if failed.get("node") is Node:
+		_loose.append(failed.get("node"))
+	var extras: Array = failed.get("extra_nodes", [])
+	var broken := (extras[0] as Dictionary).result.node as Node3D if extras.size() == 1 else null
+	if broken == null:
+		failures.append("a third build of the hall in one process fails")
+	else:
+		(broken.get_node("MuralLoader") as Building1MuralLoader).placeholder = null
+		# Its loader's _ready says why it can't set up, as it should; not a failure here.
+		Engine.print_error_messages = false
+		_world.add_child(broken)
+		Engine.print_error_messages = true
+		await _ticks(4)
+		var broken_switch := broken.get_node("FarSwitch") as InteriorFarStandIn
+		if not (broken.get_node("MuralLoader") as Building1MuralLoader).is_near() or broken_switch.is_far() or not (broken.get_node("Shell") as Node3D).visible or (broken.get_node(InteriorFarStandIn.FAR_MESH) as Node3D).visible:
+			failures.append("far away with a mural loader that could not set up, the hall is drawn as its stand-in (far %s)" % broken_switch.is_far())
+		broken.free()
 	main.queue_free()
 	camera.queue_free()
 	await _ticks(1)
