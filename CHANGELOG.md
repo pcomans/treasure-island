@@ -6,7 +6,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
-## Build 2413 (2026-11-21)
+## Build 2428 (2026-11-21)
 
 - On computers, the reflections in the floor of Building 1's hall now fade in over half a second as you walk in, and out as you leave, instead of appearing all at once at the door.
 - The open glass doors of Building 1's hall keep the sky's reflection when seen from inside, where they looked black.

@@ -462,7 +462,8 @@ static func floor_layout(plan: Dictionary) -> Dictionary:
 
 ## Each terrazzo vertex's place in the floor's polar frame: u along the angles (taken
 ## from the frame's first angle and wrapped, so a frame across the -PI/PI seam holds
-## too), v out along the radius, 0 to 1. Said as an error if one falls outside it.
+## too, but only for a frame spanning under PI with theta.y unwrapped above theta.x),
+## v out along the radius, 0 to 1. Said as an error if one falls outside it.
 static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Array:
 	var centre := layout.centre as Vector2
 	var theta := layout.theta as Vector2
