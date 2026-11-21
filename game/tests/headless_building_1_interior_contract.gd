@@ -6,10 +6,9 @@ extends SceneTree
 ## - the front door's passage stays open to the player (nothing of the shell or the
 ##   hero's exterior collision stands in it) while its car blocker, on the cars' ground
 ##   layer only, spans it;
-## - it draws on the interior render layer the Sun leaves out, with no shadows, but for
-##   the door's open leaves: a mesh of their own (bronze and glass) on the facades' layer,
-##   which the hall's reflection probes do not reflect on, also without shadows (in the
-##   Shell on the web, which has no probes);
+## - it draws on the interior render layer the Sun leaves out, with no shadows (the door
+##   group's open leaves are the facade's: Building1HeroModel draws them on its own
+##   layer, which the hall's reflection probes do not reflect on);
 ## - the hero's roof slabs stand nowhere over the hall's plan below its ceiling (the
 ##   closure test above meets only the hall's own shell and the hero's walls);
 ## - the mural's four tile surfaces start on a placeholder in materials that never
@@ -39,9 +38,8 @@ extends SceneTree
 ##   both states; leaving the tree while far, everything is back as built; and a hall
 ##   whose mural loader could not set up stays drawn as built far away (its loader is
 ##   near: the hall is never left as its stand-in).
-## With -- --use-prebuilt-world it checks the reflections, the presence, the layers
-## (the door's open leaves still a mesh of their own on the facades' layer after the
-## bake's merge, tools/merge_baked_buildings.gd) and the far stand-in's parts, in the island baked for desktop exports
+## With -- --use-prebuilt-world it checks the reflections, the presence, the layers and
+## the far stand-in's parts, in the island baked for desktop exports
 ## (tools/prebuild-static-world.sh native, which tools/test.sh bakes), loaded as the game
 ## loads it: the main scene, whose WorldLoader reads the flag itself.
 ## With -- --web-world-bake (the web bake's flag, which PREBUILT_WORLD.profile() reads)
@@ -251,13 +249,6 @@ func _check_layers(hall: Node3D) -> void:
 		failures.append("the hall draws on layers %d, not the interior layer the Sun leaves out" % shell.layers)
 	if shell.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
 		failures.append("the hall casts shadows the Sun never draws")
-	var leaves := hall.get_node_or_null("DoorLeaves") as MeshInstance3D
-	var reflections := hall.get_node_or_null("HallReflections") as Building1HallReflections
-	if INTERIOR.PREBUILT_WORLD.profile() == "web":
-		if leaves != null:
-			failures.append("the hall built for the web has a DoorLeaves mesh; its leaves belong in the Shell")
-	elif leaves == null or leaves.mesh == null or leaves.mesh.get_surface_count() != 2 or leaves.layers != INTERIOR.RENDER_WORLD_VISIBLE or reflections == null or leaves.layers & reflections.render_layer != 0 or leaves.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF:
-		failures.append("the door's open leaves are not a mesh of their own (bronze and glass) on the facades' layer, out of the probes' reach, without shadows: %s" % ("none" if leaves == null else "layers %d, %d surfaces, shadows %d" % [leaves.layers, leaves.mesh.get_surface_count() if leaves.mesh != null else 0, leaves.cast_shadow]))
 	var body := hall.get_node_or_null("Collision") as StaticBody3D
 	if body == null or body.collision_layer != INTERIOR.PHYSICS_WORLD_SOLID:
 		failures.append("the hall's collision is not on the world's solid layer")
@@ -273,7 +264,11 @@ func _check_closure(hall: Node3D) -> void:
 	var floor_y := loader.door.y - 1.5
 	var space := hall.get_world_3d().direct_space_state
 	var points: Array[Vector3] = []
-	for spot: Vector4 in [Vector4(42.8, -30.0, 1.6, 0), Vector4(42.8, -70.0, 3.0, 0), Vector4(42.8, 12.0, 3.0, 0), Vector4(42.8, -30.0, 12.5, 0), Vector4(32.5, -50.0, 6.5, 0), Vector4(32.0, -10.0, 15.5, 0), Vector4(32.5, -29.9, 1.6, 0), Vector4(45.0, -78.8, 1.5, 0), Vector4(42.0, -78.0, 6.4, 0), Vector4(53.2, -15.0, 1.5, 0)]:
+	# One point sits in the balcony zone a metre under its ceiling, which follows the
+	# facade's window heads (building_1_interior.json).
+	var heights := (JSON.parse_string(FileAccess.get_file_as_string(INTERIOR.CONFIG_PATH)) as Dictionary).heights_production_inference_m as Dictionary
+	var balcony_high := float(heights.balcony_ceiling) - 1.0
+	for spot: Vector4 in [Vector4(42.8, -30.0, 1.6, 0), Vector4(42.8, -70.0, 3.0, 0), Vector4(42.8, 12.0, 3.0, 0), Vector4(42.8, -30.0, 12.5, 0), Vector4(32.5, -50.0, 6.5, 0), Vector4(32.0, -10.0, balcony_high, 0), Vector4(32.5, -29.9, 1.6, 0), Vector4(45.0, -78.8, 1.5, 0), Vector4(42.0, -78.0, 6.4, 0), Vector4(53.2, -15.0, 1.5, 0)]:
 		var theta := deg_to_rad(spot.y)
 		points.append(Vector3(center.x + spot.x * cos(theta), floor_y + spot.z, center.y + spot.x * sin(theta)))
 	var door := loader.door
@@ -310,8 +305,13 @@ func _check_door(hall: Node3D) -> void:
 		failures.append("the door's car blocker is missing or not on the cars' ground layer only")
 		return
 	var box := (blocker.get_child(0) as CollisionShape3D).shape as BoxShape3D
-	if box == null or box.size.x < 3.0 or box.size.y < 3.0:
-		failures.append("the car blocker does not span the door")
+	# The blocker spans the opened door group (the facade's entrance_group_width, to the
+	# shape's single precision) and stands at least as tall as its leaves
+	# (entrance_door_height): the opening reaches the transom's top, and no car is
+	# taller than the leaves.
+	var entrance := (JSON.parse_string(FileAccess.get_file_as_string(HERO.BAR_CONFIG_PATH)) as Dictionary).geometry_production_inference_m as Dictionary
+	if box == null or box.size.x < float(entrance.entrance_group_width) - 0.001 or box.size.y < float(entrance.entrance_door_height):
+		failures.append("the car blocker does not span the door: %s, the group %.2f m wide and its leaves %.2f m high" % [box.size if box != null else Vector3.ZERO, float(entrance.entrance_group_width), float(entrance.entrance_door_height)])
 	var normal := blocker.global_transform.basis.z.normalized()
 	var capsule := CapsuleShape3D.new()
 	capsule.radius = 0.35
@@ -704,7 +704,7 @@ func _finish(error: String, passed := "") -> void:
 		if passed != "":
 			print(passed)
 		else:
-			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows, but for its door's open leaves on the facades' layer, out of the probes' reach; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set; its far stand-in, under %.0f%% of the Shell's triangles in the Shell's shaders, is drawn in its place far away while the presence and reflections pause, gives way from the load radius on to a camera coming at %.0f m/s and in the frame a camera lands inside, waits for the mural's release to go far again, switches once or not at all jittered across either radius, never touches the collision, and is back as built leaving the tree" % [FAR_SHARE * 100.0, ARRIVAL_MPS])
+			print("PASS: Building 1's hall is a closed shell left only through its front door, whose passage stays clear while its car blocker spans it; no roof slab stands over its plan below its top; it draws on the interior layer without shadows; its mural starts on a placeholder, loads near the door one tile a frame and is released only after the player stays far away, never from inside the hall; a second build has its own placeholder and materials; its floor reflections have a mode the node knows and carry the floor's own attributes beside a plain set; its far stand-in, under %.0f%% of the Shell's triangles in the Shell's shaders, is drawn in its place far away while the presence and reflections pause, gives way from the load radius on to a camera coming at %.0f m/s and in the frame a camera lands inside, waits for the mural's release to go far again, switches once or not at all jittered across either radius, never touches the collision, and is back as built leaving the tree" % [FAR_SHARE * 100.0, ARRIVAL_MPS])
 		quit(0)
 		return
 	for message in failures:

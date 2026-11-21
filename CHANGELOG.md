@@ -6,6 +6,15 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2508 (2026-11-21)
+
+- Building 1, the Administration Building, looks much more like itself from outside, rebuilt from new photos: its proportions, the deep canopy over the front doors, the frieze along the top of the curved front, and the towers where the curve meets the wings.
+- Building 1's tall front windows stand between fluted piers, in dark bronze frames and grilles, and the band above them carries the building's relief and emblem.
+- Building 1's front doors are bronze in brass frames, and the middle doors now stand open right up to the top of their transom.
+- The glass cab on Building 1's roof is rebuilt from photos, with its louvres and railing, and the white flagpole stands beside it.
+- Building 1's walls are painted board-formed concrete, weathered: grime under the copings and along the base, heaviest on the sides most open to the weather.
+- Behind many of Building 1's windows there are now blinds and sheer curtains.
+
 ## Build 2464 (2026-11-21)
 
 - On computers, everything in view no longer turns darker and bluer for about a second as you come within about 40 m of Building 1, nor now and then inside its hall: preparing the hall's floor reflections no longer upsets the island's light.

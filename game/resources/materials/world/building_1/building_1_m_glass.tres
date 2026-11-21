@@ -6,15 +6,23 @@
 [ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg" id="4_roughness"]
 
 [resource]
-resource_name = "building_1_public_painted_stucco_trim"
+resource_name = "building_1_m_glass"
 shader = ExtResource("1_shader")
 shader_parameter/surface_color = ExtResource("2_color")
 shader_parameter/surface_normal = ExtResource("3_normal")
 shader_parameter/surface_roughness = ExtResource("4_roughness")
-shader_parameter/paint_color = Color(0.885, 0.855, 0.77, 1)
-shader_parameter/tile_span_m = 1.7
-shader_parameter/relief_strength = 0.08
-shader_parameter/grain_variation = 0.14
-shader_parameter/broad_variation = 0.06
-shader_parameter/roughness_base = 0.78
-shader_parameter/roughness_variation = 0.1
+shader_parameter/tile_span_m = 1.3
+shader_parameter/relief_strength = 0
+shader_parameter/grain_variation = 0
+shader_parameter/broad_variation = 0
+shader_parameter/roughness_base = 0.14
+shader_parameter/roughness_variation = 0
+shader_parameter/world_axis_projection = false
+shader_parameter/roughness_range = Vector2(0.02, 0.4)
+shader_parameter/specular_level = 0.5
+shader_parameter/paint_color = Color(0.31, 0.315, 0.32, 1)
+shader_parameter/metallic_value = 0.5
+shader_parameter/pane_tilt = 0.012
+shader_parameter/interior_amount = 0.15
+shader_parameter/interior_color = Color(0.82, 0.82, 0.79, 1)
+shader_parameter/oblique_dim = 0.6

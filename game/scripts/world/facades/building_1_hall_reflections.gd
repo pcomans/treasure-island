@@ -43,8 +43,8 @@ extends Node
 ##   not its weight, and the engine skips a probe at 0, where the sky's reflection takes
 ##   its place: so they never go to 0 (a surface in their boxes would take the sky's
 ##   reflection at once at the fade's ends; held, the hall seen through its door keeps
-##   next to no reflection), and the door's open leaves, glossy and in the boxes, draw
-##   on another layer (building_1_interior.gd _door_leaves), out of their reach.
+##   next to no reflection), and the door group's open leaves, glossy and in the boxes,
+##   are the facade's (Building1HeroModel), on its layer, out of their reach.
 ## Going in and coming out have lines of their own (InteriorPresence.HYSTERESIS_M inside
 ## and outside the hall's bounds), so a camera on the doorway does not turn the fade round
 ## frame by frame.

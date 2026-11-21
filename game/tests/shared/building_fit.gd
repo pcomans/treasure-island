@@ -13,6 +13,10 @@ const WALK_ACCELERATION_ALLOWANCE_SECONDS := 2.0
 const ARRIVAL_DISTANCE_M := 1.5
 ## Arrival reuses the release ray's height while the rest chest is this close to it (metres).
 const RELEASE_HEIGHT_DRIFT_M := 0.05
+## Walking a passage the stock camera keeps up with the player: on main the stock walk
+## in and out through Building 1's hall door moves it at most 0.09 m a tick, while its
+## spring arm snapping in and out under a door head moved it metres (2026-11-21).
+const PASSAGE_CAMERA_STEP_M := 0.25
 
 var _h: WorldHarness
 var _failures: Array[String] = []
@@ -21,6 +25,10 @@ var _touched: Array[Object] = []
 var _wall_touched := false
 ## Closest the player came to the target during the last _walk_toward (metres).
 var _closest := INF
+## The gameplay camera's largest move in one physics tick during the last
+## _walk_toward after its first tick (metres), and where the player stood then.
+var _camera_step := 0.0
+var _camera_step_at := Vector3.ZERO
 ## Height of the chest ray whose wall hit released forward input in the last
 ## _walk_toward, or NAN when no near-wall release happened. The walk-up's arrival
 ## check casts its ray at this height, so release and arrival measure the same
@@ -61,15 +69,17 @@ func _init(harness: WorldHarness) -> void:
 ## "outside": [x, z], "inside": [x, z]}]: Building 1's door into its concourse) as
 ## routes for check(). Each is walked like a flight of stairs: in from the outside
 ## end, where the player settles on open ground, to the inside end, and back out
-## from where it arrived (return_from_arrival); then the ways players walk through
-## a door (_check_passage_ways). A malformed entry fails the routes' own validation.
+## from where it arrived (return_from_arrival), with the stock camera following
+## steadily through the doorway on that walk (camera_steady: PASSAGE_CAMERA_STEP_M);
+## then the ways players walk through a door (_check_passage_ways). A malformed entry
+## fails the routes' own validation.
 static func passage_routes(unit: Dictionary) -> Array:
 	var routes: Array = []
 	for passage: Variant in unit.get("passages", []):
 		if not passage is Dictionary:
 			routes.append({})
 			continue
-		routes.append({"name": "passage %s" % str(passage.get("name", "")), "start_xz": passage.get("outside"), "end_xz": passage.get("inside"), "return_from_arrival": true, "passage": true})
+		routes.append({"name": "passage %s" % str(passage.get("name", "")), "start_xz": passage.get("outside"), "end_xz": passage.get("inside"), "return_from_arrival": true, "passage": true, "camera_steady": true})
 	return routes
 
 
@@ -1032,6 +1042,10 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_failures.append(_prefix + "return_from_arrival must be boolean")
 			_unsafe = true
 			return
+		if route.has("camera_steady") and not route.camera_steady is bool:
+			_failures.append(_prefix + "camera_steady must be boolean")
+			_unsafe = true
+			return
 		if route.has("passage") and (not route.passage is bool or (route.passage and not route.get("return_from_arrival", false))):
 			_failures.append(_prefix + "passage must be boolean, and a passage returns from its arrival")
 			_unsafe = true
@@ -1078,7 +1092,9 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			if return_from_arrival and target == start and not _route_ground_at_player():
 				problem += ("; " if problem != "" else "") + "turnaround did not return to ordinary native ground"
 				_unsafe = true
-			print("ROUTE %s target=%s arrived=%s distance=%.3f contacts=%s" % [route.name, target, at, distance, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
+			print("ROUTE %s target=%s arrived=%s distance=%.3f camera_step=%.3f at=%s contacts=%s" % [route.name, target, at, distance, _camera_step, _camera_step_at, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
+			if route.get("camera_steady", false) and _camera_step > PASSAGE_CAMERA_STEP_M:
+				problem += ("; " if problem != "" else "") + "the stock camera jumped %.2f m in one tick with the player at %s (at most %.2f m)" % [_camera_step, _camera_step_at, PASSAGE_CAMERA_STEP_M]
 			if _observe_adjacent_support:
 				print("ROUTE_ADJACENT_SUPPORT route=%s source=%s observed_active_floor=%s; rest remains at route endpoint" % [route.name, _adjacent_source, _observed_adjacent_support])
 				if not _observed_adjacent_support and problem == "":
@@ -1368,9 +1384,19 @@ func _walk_toward(target: Vector3, own: Array[RID] = [], wall_shapes: Dictionary
 	_observed_adjacent_support = false
 	var still_frames := 0
 	_closest = INF
+	_camera_step = 0.0
+	_camera_step_at = Vector3.ZERO
+	var camera := _h.player.get_viewport().get_camera_3d()
+	var camera_was := Vector3.INF
 	var support_error := ""
 	for frame in walk_frames:
 		await _h.tree.physics_frame
+		# From the first tick on, after the aim's turn above has settled.
+		if camera != null:
+			if frame > 0 and camera.global_position.distance_to(camera_was) > _camera_step:
+				_camera_step = camera.global_position.distance_to(camera_was)
+				_camera_step_at = _h.player.global_position
+			camera_was = camera.global_position
 		if evidence.recovery_count != recoveries:
 			# Release held input immediately at the recovery boundary; do not
 			# continue driving the respawned player toward the old destination.

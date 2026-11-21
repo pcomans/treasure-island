@@ -115,6 +115,10 @@
       "made_by": "tools/bake_sky_noise.mjs (procedural cloud noise)"
     },
     {
+      "folder": "game/resources/textures/world/building_1_detail",
+      "made_by": "Building 1's incised-line pattern, drawn by tools/make_building_1_detail_textures.py (building_1_detail/PROVENANCE.md)"
+    },
+    {
       "folder": "game/resources/ui",
       "made_by": "the app icon: owner-supplied (ui/PROVENANCE.md); how it was made is not otherwise recorded in the repo. The touch art in selgesel/ is credited above"
     },

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_public_door_brass"
+albedo_color = Color(0.66, 0.62, 0.5, 1)
+metallic = 0.5
+roughness = 0.5
