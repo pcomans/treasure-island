@@ -34,6 +34,27 @@ extends SceneTree
 ## captures copy as a mask (ground_dressing.gd CAPTURED_PARTS), so no tuft of grass
 ## grows under it. Not empty: each interior needs MIN_FLOOR_SAMPLES samples on its
 ## floor, and outdoor ground under at least one of them.
+##
+## The shell hides the interior (2026-11-21, after a see-through notch at Building 1's
+## rear drum that two reviews of pictures missed): no ray from outside reaches the
+## interior or passes through the building's shell, other than through the interior's
+## openings. From points just behind the shell (SHELL_OFFSET_M behind each face of its
+## walls, partitions and roofs, SHELL_SPAN_M wide or more) and in front of every face of
+## the interior, every SHELL_SAMPLE_M across them, rays leave in SHELL_DIRECTIONS
+## directions; the chunks under the box round them are built too. A ray that
+## leaves the box round the unit and its interior crossing no surface that shows its
+## drawn side along it (the renderer draws one-sided surfaces from the front only;
+## see-through and shadow-only ones hide nothing, the ground always hides) shows its
+## point to a viewer out along it: from the ground, or a jetpack anywhere round and
+## above. Behind the shell, that viewer sees the face's back culled, so what lies past it
+## shows: a face of the exterior there, facing the viewer, hides it (one face standing in
+## front of another); the background or the interior is a hole. Each escape fails
+## unless it passes through one of the interior's openings: the quads
+## (four corners, in the interior's own space) its meta interior_openings declares,
+## each on one of the unit's passages. An escape counts when rays SHELL_JITTER_M to
+## either side along the surface escape too, so a numerical crack where two triangles
+## share an edge does not fail. Not empty: points on both sides, and the interior seen
+## through each opening.
 
 const Catalog := preload("res://game/tests/shared/catalog.gd")
 const StudyGeometry := preload("res://game/tests/support/building_study_geometry.gd")
@@ -70,6 +91,31 @@ const MIN_FLOOR_SAMPLES := 100
 ## Line street-detail rows are tested every this many metres along their runs.
 const ROW_STEP_M := 0.25
 const EXAMPLES := 8
+## The openings an interior's root declares (see the shell check above).
+const OPENINGS_META := "interior_openings"
+const SHELL_SAMPLE_M := 1.0
+## The shell is the walls, partitions and roofs: points stand behind exterior triangles
+## at least this wide (_span). Narrower ones are trim and detail profiles, which close
+## no room.
+const SHELL_SPAN_M := 0.5
+## Each sample is drawn this share of the way in towards its triangle's middle.
+const SHELL_SAMPLE_INSET := 0.1
+const SHELL_OFFSET_M := 0.002
+const SHELL_DIRECTIONS := 32
+const SHELL_MARGIN_M := 1.0
+## Past a surface it crosses unseen, a ray goes on from this far beyond it.
+const SHELL_STEP_M := 0.001
+const SHELL_JITTER_M := 0.001
+const SHELL_MAX_CROSSINGS := 64
+## Escapes are reported by the place they start from, on a grid this coarse.
+const SHELL_CLUSTER_M := 2.0
+## A surface's drawing (_shell_flags): it hides nothing, its back is drawn too, or its
+## back alone.
+const SEE_THROUGH := 1
+const BOTH_SIDES := 2
+const BACK_ONLY := 4
+## What a triangle belongs to.
+enum Kind { EXTERIOR, INTERIOR, OTHER, GROUND }
 
 var failures: Array[String] = []
 var _parents := {}
@@ -204,6 +250,9 @@ func _run() -> void:
 			continue
 		for interior: Node3D in interiors:
 			var report := _check_interior(source, interior, unit.get("passages", []) as Array, rows, chunk_paths, chunk_size)
+			if report != "":
+				checked.append(report)
+			report = _check_shell(source, interior, unit.get("passages", []) as Array, chunk_paths, chunk_size)
 			if report != "":
 				checked.append(report)
 	_finish("" if not checked.is_empty() or not failures.is_empty() else "no interior was checked", checked)
@@ -357,6 +406,470 @@ func _check_interior(source: String, interior: Node3D, passages: Array, rows: Ar
 	if failures.size() > before:
 		return ""
 	return "%s: %d samples on its floor, outdoor ground under %d samples, at least %.3f m under the floor" % [label, on_floor, over_ground, least]
+
+
+## The shell check for one interior (see the header): its PASS summary, or "" when it
+## fails.
+func _check_shell(source: String, interior: Node3D, passages: Array, chunk_paths: Dictionary, chunk_size: float) -> String:
+	var before := failures.size()
+	var label := "%s's shell round its interior %s" % [source, interior.name]
+	var started := Time.get_ticks_msec()
+	var faces := {"corners": PackedVector3Array(), "normals": PackedVector3Array(), "flags": PackedByteArray(), "kinds": PackedByteArray(), "owners": PackedInt32Array(), "names": []}
+	# The unit's exterior and its interior set the box; other buildings and the ground
+	# in it hide what stands behind them.
+	var unit: Array[Node] = []
+	_unit_meshes(_parents[BUILDINGS] as Node, source, unit)
+	for instance: Node in unit:
+		_shell_faces(instance as GeometryInstance3D, Kind.EXTERIOR, faces, label)
+	var drawn_inside := interior.find_children("*", "GeometryInstance3D", true, false)
+	for instance: Node in drawn_inside:
+		_shell_faces(instance as GeometryInstance3D, Kind.INTERIOR, faces, label)
+	var kinds: PackedByteArray = faces.kinds
+	if not kinds.has(Kind.EXTERIOR) or not kinds.has(Kind.INTERIOR):
+		failures.append("%s: the unit draws %s exterior and its interior %s, so nothing can be checked" % [label, "an" if kinds.has(Kind.EXTERIOR) else "no", "something" if kinds.has(Kind.INTERIOR) else "nothing"])
+		return ""
+	var box := _bounds(faces.corners as PackedVector3Array).grow(SHELL_MARGIN_M)
+	# Every chunk under the box, so the ground is known all round it.
+	for i in range(floori(box.position.x / chunk_size), floori(box.end.x / chunk_size) + 1):
+		for j in range(floori(box.position.z / chunk_size), floori(box.end.z / chunk_size) + 1):
+			var chunk_id := "x_%d__z_%d" % [i, j]
+			if chunk_paths.has(chunk_id):
+				_build(chunk_id, chunk_paths)
+	for part: String in GROUND_PARTS:
+		for instance: Node in (_parents[part] as Node).find_children("*", "GeometryInstance3D", true, false):
+			_shell_faces(instance as GeometryInstance3D, Kind.GROUND, faces, label, box)
+	for instance: Node in (_parents[BUILDINGS] as Node).find_children("*", "GeometryInstance3D", true, false):
+		if not unit.has(instance) and not drawn_inside.has(instance):
+			_shell_faces(instance as GeometryInstance3D, Kind.OTHER, faces, label, box)
+	kinds = faces.kinds
+	var corners: PackedVector3Array = faces.corners
+	var normals: PackedVector3Array = faces.normals
+	var flags: PackedByteArray = faces.flags
+	var mesh := TriangleMesh.new()
+	if not mesh.create_from_faces(corners):
+		failures.append("%s: its %d triangles do not build a TriangleMesh" % [label, kinds.size()])
+		return ""
+	# The ray caster must name the face it meets: a ray straight at the first exterior face.
+	var probe := kinds.find(Kind.EXTERIOR)
+	var middle := (corners[probe * 3] + corners[probe * 3 + 1] + corners[probe * 3 + 2]) / 3.0
+	var probe_hit := mesh.intersect_ray(middle + normals[probe] * 0.5, -normals[probe])
+	if probe_hit.is_empty() or int(probe_hit.get("face_index", -1)) < 0:
+		failures.append("%s: the TriangleMesh does not name the face a ray meets (%s), so faces can't be told apart" % [label, probe_hit])
+		return ""
+	# The ground's tops, so a ray that leaves the box under the ground (where no one
+	# stands to see along it) does not count.
+	var ground := Surfaces.new(Vector2(box.position.x, box.position.z), Vector2(box.end.x, box.end.z))
+	var drawn_by := {Kind.EXTERIOR: 0, Kind.INTERIOR: 0, Kind.OTHER: 0, Kind.GROUND: 0}
+	for face in kinds.size():
+		drawn_by[kinds[face]] += 1
+		if kinds[face] == Kind.GROUND:
+			ground.add(corners[face * 3], corners[face * 3 + 1], corners[face * 3 + 2], normals[face].y, 0)
+	var triangles_note := "%d exterior, %d interior, %d other buildings' and %d ground triangles" % [drawn_by[Kind.EXTERIOR], drawn_by[Kind.INTERIOR], drawn_by[Kind.OTHER], drawn_by[Kind.GROUND]]
+	if ground.count == 0:
+		failures.append("%s: no ground is read round it (%s), so rays that leave under the ground can't be told" % [label, triangles_note])
+		return ""
+	var openings := _openings(interior, passages, label)
+	var directions := _sphere(SHELL_DIRECTIONS)
+	var seen := PackedInt32Array()
+	seen.resize(openings.size())
+	var points := {Kind.EXTERIOR: 0, Kind.INTERIOR: 0}
+	var rays := 0
+	var escapes := 0
+	var places := {}
+	for face in kinds.size():
+		var kind := kinds[face]
+		if kind != Kind.EXTERIOR and kind != Kind.INTERIOR or flags[face] & (SEE_THROUGH | BOTH_SIDES) != 0:
+			continue
+		if kind == Kind.EXTERIOR and _span(corners[face * 3], corners[face * 3 + 1], corners[face * 3 + 2]) < SHELL_SPAN_M:
+			continue
+		# The side the face draws, and the hidden side the points stand on: behind an
+		# exterior face, in front of an interior one.
+		var drawn := normals[face] * (-1.0 if flags[face] & BACK_ONLY != 0 else 1.0)
+		var offset := drawn * SHELL_OFFSET_M * (-1.0 if kind == Kind.EXTERIOR else 1.0)
+		for sample in _triangle_samples(corners[face * 3], corners[face * 3 + 1], corners[face * 3 + 2]):
+			var origin := sample + offset
+			points[kind] += 1
+			var spin := _spin(points[Kind.EXTERIOR] + points[Kind.INTERIOR])
+			for direction_value: Vector3 in directions:
+				var direction := spin * direction_value
+				rays += 1
+				var cover := _cover(mesh, origin, direction, direction, faces)
+				if int(cover[0]) != -1 or not _leaves_above_ground(origin, direction, box, ground):
+					continue
+				var opening := _through_opening(origin, direction, openings)
+				if opening >= 0:
+					seen[opening] += 1
+					continue
+				# Behind the shell, the viewer sees the face's back culled: a face of the
+				# building beyond it, facing the viewer, hides that (one face standing in
+				# front of another); the background or the interior there is a hole.
+				if kind == Kind.EXTERIOR and _building_beyond(mesh, origin, direction, faces):
+					continue
+				if not _escape_holds(mesh, origin, direction, drawn, kind, faces):
+					continue
+				escapes += 1
+				var place := Vector3i((origin / SHELL_CLUSTER_M).floor())
+				if not places.has(place):
+					places[place] = [0, _escape_note(mesh, origin, direction, face, cover, faces)]
+				places[place][0] += 1
+	if escapes > 0:
+		var listed := places.keys()
+		listed.sort_custom(func(p: Vector3i, q: Vector3i) -> bool: return int(places[p][0]) > int(places[q][0]))
+		var examples: Array[String] = []
+		for place: Vector3i in listed.slice(0, EXAMPLES):
+			examples.append("%d rays from %s" % [int(places[place][0]), str(places[place][1])])
+		failures.append("%s: %d of %d rays from points behind its surfaces reach a viewer outside, from %d places (%s), as %s" % [label, escapes, rays, places.size(), triangles_note, "; ".join(examples)])
+		# The next places, for finding them (not part of the verdict).
+		for place: Vector3i in listed.slice(EXAMPLES, 1000):
+			print("  also %d rays from %s" % [int(places[place][0]), str(places[place][1])])
+	for index in openings.size():
+		if seen[index] == 0:
+			failures.append("%s: nothing behind its surfaces is seen through opening %d, so the opening or this check is wrong" % [label, index])
+	if points[Kind.EXTERIOR] == 0 or points[Kind.INTERIOR] == 0:
+		failures.append("%s: %d points behind its exterior and %d in its interior, so the check proves nothing" % [label, points[Kind.EXTERIOR], points[Kind.INTERIOR]])
+	if failures.size() > before:
+		return ""
+	var through := 0
+	for count in seen:
+		through += count
+	return "%s: %d rays from %d points behind its exterior and %d in its interior, none seen from outside but %d through its %d openings (%s; %.1f s)" % [label, rays, points[Kind.EXTERIOR], points[Kind.INTERIOR], through, openings.size(), triangles_note, (Time.get_ticks_msec() - started) / 1000.0]
+
+
+## The drawn meshes of the unit's own nodes under the buildings: those carrying its
+## source key (their source_keys meta, or a derived_object_key naming it), as the world
+## harness finds a building's nodes; not its interiors, which carry interior_of_source_key.
+func _unit_meshes(parent: Node, source: String, found: Array[Node]) -> void:
+	for child: Node in parent.get_children():
+		if child.has_meta(INTERIOR_META):
+			continue
+		var keys: Variant = child.get_meta("source_keys", [])
+		var own := keys is Array and (keys as Array).any(func(key: Variant) -> bool: return str(key) == source)
+		if own or (":%s:" % source) in str(child.get_meta("derived_object_key", "")):
+			if child is GeometryInstance3D:
+				found.append(child)
+			found.append_array(child.find_children("*", "GeometryInstance3D", true, false))
+		else:
+			_unit_meshes(child, source, found)
+
+
+## The triangles an instance draws, in world space, into faces: each one's drawn facing
+## (the side Godot's clockwise winding shows, turned by a mirroring transform), its
+## surface's flags (_shell_flags), its kind and its owner (the instance and surface).
+## Shadow-only and hidden instances draw nothing. With a box, only triangles whose
+## bounds meet it are kept.
+func _shell_faces(instance: GeometryInstance3D, kind: int, faces: Dictionary, label: String, box := AABB()) -> void:
+	if instance == null or not instance.is_visible_in_tree() or instance.cast_shadow == GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY:
+		return
+	var mesh: Mesh = null
+	var poses: Array[Transform3D] = []
+	if instance is MeshInstance3D:
+		mesh = (instance as MeshInstance3D).mesh
+		poses.append(instance.global_transform)
+	elif instance is MultiMeshInstance3D and (instance as MultiMeshInstance3D).multimesh != null:
+		var multimesh := (instance as MultiMeshInstance3D).multimesh
+		mesh = multimesh.mesh
+		var shown := multimesh.instance_count if multimesh.visible_instance_count < 0 else mini(multimesh.visible_instance_count, multimesh.instance_count)
+		for index in shown:
+			poses.append(instance.global_transform * multimesh.get_instance_transform(index))
+	if mesh == null or poses.is_empty():
+		return
+	if box.size != Vector3.ZERO and not (instance.global_transform * instance.get_aabb()).intersects(box):
+		return
+	# Each surface's triangle count, in the order the shared collector reads them, and
+	# how it is drawn. A surface without indices is drawn straight from its vertices.
+	var producer := StudyGeometry.INDEXED_ARRAYS
+	var counts: Array[int] = []
+	var surface_flags: Array[int] = []
+	var owners: Array[int] = []
+	for surface in mesh.get_surface_count():
+		var arrays := mesh.surface_get_arrays(surface)
+		var indices: Variant = arrays[Mesh.ARRAY_INDEX] if arrays.size() == Mesh.ARRAY_MAX else null
+		if indices is PackedInt32Array and not (indices as PackedInt32Array).is_empty():
+			counts.append((indices as PackedInt32Array).size() / 3)
+		else:
+			producer = StudyGeometry.MESH_GET_FACES
+			counts.append((arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size() / 3 if arrays.size() == Mesh.ARRAY_MAX and arrays[Mesh.ARRAY_VERTEX] is PackedVector3Array else 0)
+		surface_flags.append(_shell_flags(instance, mesh, surface))
+		var surface_name := (mesh as ArrayMesh).surface_get_name(surface) if mesh is ArrayMesh else ""
+		owners.append((faces.names as Array).size())
+		(faces.names as Array).append("%s%s" % [instance.name, ":" + surface_name if surface_name != "" else ""])
+	var collected := StudyGeometry.collect(mesh, poses, producer)
+	var triangles: PackedVector3Array = collected.faces
+	if not bool(collected.ok):
+		failures.append("%s: the mesh %s can't be read: %s" % [label, instance.get_path(), str(collected.errors)])
+		return
+	var per_pose := 0
+	for count in counts:
+		per_pose += count
+	if triangles.size() != per_pose * 3 * poses.size():
+		# Mesh.get_faces() leaves out the degenerate triangles, so its surfaces can't be
+		# told apart: the ground hides whatever its surface, and a mesh of one surface is
+		# drawn one way; another is not read.
+		if kind != Kind.GROUND and counts.size() != 1:
+			failures.append("%s: the mesh %s can't be read surface by surface" % [label, instance.get_path()])
+			return
+		per_pose = triangles.size() / 3 / poses.size()
+		counts.clear()
+		counts.append(per_pose)
+	var corners: PackedVector3Array = faces.corners
+	var normals: PackedVector3Array = faces.normals
+	var flags: PackedByteArray = faces.flags
+	var kinds: PackedByteArray = faces.kinds
+	var owner_of: PackedInt32Array = faces.owners
+	for pose_index in poses.size():
+		var turn := -1.0 if poses[pose_index].basis.determinant() < 0.0 else 1.0
+		var surface := 0
+		var surface_end := counts[0] if not counts.is_empty() else 0
+		for local in per_pose:
+			while local >= surface_end and surface < counts.size() - 1:
+				surface += 1
+				surface_end += counts[surface]
+			var at := (pose_index * per_pose + local) * 3
+			var a := triangles[at]
+			var b := triangles[at + 1]
+			var c := triangles[at + 2]
+			var cross := (c - a).cross(b - a)
+			if cross.length_squared() < 1e-12:
+				continue
+			if box.size != Vector3.ZERO:
+				var bounds := AABB(a, Vector3.ZERO).expand(b).expand(c)
+				if not bounds.intersects(box):
+					continue
+			corners.append_array([a, b, c])
+			normals.append(cross.normalized() * turn)
+			flags.append(surface_flags[surface])
+			kinds.append(kind)
+			owner_of.append(owners[surface])
+	faces.corners = corners
+	faces.normals = normals
+	faces.flags = flags
+	faces.kinds = kinds
+	faces.owners = owner_of
+
+
+## How a surface is drawn: SEE_THROUGH when it hides nothing behind it (alpha, a blend
+## other than mix, an instance drawn transparent), BOTH_SIDES when its back is drawn too,
+## BACK_ONLY when only its back is.
+static func _shell_flags(instance: GeometryInstance3D, mesh: Mesh, surface: int) -> int:
+	var flags := SEE_THROUGH if instance.transparency > 0.0 else 0
+	var material: Material = instance.material_override
+	if material == null and instance is MeshInstance3D:
+		material = (instance as MeshInstance3D).get_active_material(surface)
+	elif material == null:
+		material = mesh.surface_get_material(surface)
+	if material is BaseMaterial3D:
+		var base := material as BaseMaterial3D
+		if base.transparency != BaseMaterial3D.TRANSPARENCY_DISABLED or base.blend_mode != BaseMaterial3D.BLEND_MODE_MIX:
+			flags |= SEE_THROUGH
+		if base.cull_mode == BaseMaterial3D.CULL_DISABLED:
+			flags |= BOTH_SIDES
+		elif base.cull_mode == BaseMaterial3D.CULL_FRONT:
+			flags |= BACK_ONLY
+	elif material is ShaderMaterial and (material as ShaderMaterial).shader != null:
+		var code := (material as ShaderMaterial).shader.code
+		var modes: Array[String] = []
+		var found := RegEx.create_from_string("render_mode\\s+([^;]*);").search(code)
+		if found != null:
+			for mode in found.get_string(1).split(","):
+				modes.append(mode.strip_edges())
+		if modes.has("cull_disabled"):
+			flags |= BOTH_SIDES
+		elif modes.has("cull_front"):
+			flags |= BACK_ONLY
+		if modes.has("blend_add") or modes.has("blend_sub") or modes.has("blend_mul") or RegEx.create_from_string("\\bALPHA\\s*=(?!=)").search(code) != null:
+			flags |= SEE_THROUGH
+	return flags
+
+
+## The interior's declared openings in world space, each checked to lie on one of the
+## unit's passages (its bottom edge crosses the passage in plan), every passage through
+## one of them, and each wound to face out along its passage (_through_opening).
+func _openings(interior: Node3D, passages: Array, label: String) -> Array[PackedVector3Array]:
+	var openings: Array[PackedVector3Array] = []
+	var declared: Variant = interior.get_meta(OPENINGS_META, [])
+	if not declared is Array:
+		failures.append("%s: its meta %s is not a list of quads" % [label, OPENINGS_META])
+		return openings
+	for quad_value: Variant in declared:
+		if not quad_value is PackedVector3Array or (quad_value as PackedVector3Array).size() != 4:
+			failures.append("%s: an opening is not four corners: %s" % [label, str(quad_value)])
+			continue
+		var quad := PackedVector3Array()
+		for corner: Vector3 in quad_value:
+			quad.append(interior.global_transform * corner)
+		openings.append(quad)
+	var on_passage := {}
+	for passage: Variant in passages:
+		var ends := passage as Dictionary if passage is Dictionary else {}
+		var outside: Variant = ends.get("outside", null)
+		var inside: Variant = ends.get("inside", null)
+		if not outside is Array or not inside is Array or (outside as Array).size() != 2 or (inside as Array).size() != 2:
+			failures.append("%s: passage %s has no outside and inside ends" % [label, str(ends.get("name", ""))])
+			continue
+		var from := Vector2(float(outside[0]), float(outside[1]))
+		var to := Vector2(float(inside[0]), float(inside[1]))
+		var through := false
+		for index in openings.size():
+			var quad := openings[index]
+			if Geometry2D.segment_intersects_segment(from, to, Vector2(quad[0].x, quad[0].z), Vector2(quad[1].x, quad[1].z)) != null:
+				on_passage[index] = true
+				through = true
+				if (quad[1] - quad[0]).cross(quad[3] - quad[0]).dot(Vector3(from.x, quad[0].y, from.y) - quad[0]) < 0.0:
+					openings[index] = PackedVector3Array([quad[0], quad[3], quad[2], quad[1]])
+		if not through:
+			failures.append("%s: passage %s goes through none of its openings" % [label, str(ends.get("name", ""))])
+	for index in openings.size():
+		if not on_passage.has(index):
+			failures.append("%s: opening %d lies on none of its passages" % [label, index])
+	return openings
+
+
+## The first face a ray from origin along travel meets that a viewer out along toward
+## sees (its drawn side faces toward, or it is drawn both sides), or the ground, stepping
+## past those it crosses unseen: [face, or -1 when it meets none, crossings, the last
+## face crossed, where]. Past SHELL_MAX_CROSSINGS it counts as hidden.
+func _cover(mesh: TriangleMesh, origin: Vector3, travel: Vector3, toward: Vector3, faces: Dictionary) -> Array:
+	var normals: PackedVector3Array = faces.normals
+	var flags: PackedByteArray = faces.flags
+	var kinds: PackedByteArray = faces.kinds
+	var from := origin
+	var last := -1
+	var last_at := origin
+	for crossing in SHELL_MAX_CROSSINGS:
+		var hit := mesh.intersect_ray(from, travel)
+		if hit.is_empty():
+			return [-1, crossing, last, last_at]
+		var face := int(hit.face_index)
+		if kinds[face] == Kind.GROUND:
+			return [face, crossing, last, last_at]
+		var flag := flags[face]
+		if flag & SEE_THROUGH == 0:
+			var facing := normals[face].dot(toward)
+			if flag & BOTH_SIDES != 0 or (facing < 0.0 if flag & BACK_ONLY != 0 else facing > 0.0):
+				return [face, crossing, last, last_at]
+		last = face
+		last_at = hit.position
+		from = last_at + travel * SHELL_STEP_M
+	return [last, SHELL_MAX_CROSSINGS, last, last_at]
+
+
+## Whether a viewer out along direction, looking back past origin, sees a face of the
+## building's exterior there.
+func _building_beyond(mesh: TriangleMesh, origin: Vector3, direction: Vector3, faces: Dictionary) -> bool:
+	var beyond := int(_cover(mesh, origin, -direction, direction, faces)[0])
+	return beyond >= 0 and (faces.kinds as PackedByteArray)[beyond] == Kind.EXTERIOR
+
+
+## The escape holds for rays SHELL_JITTER_M to either side of the origin, along the
+## surface it stands by (so they keep its side): they reach the viewer too, and behind
+## the shell nothing of the building's exterior hides the hole either.
+func _escape_holds(mesh: TriangleMesh, origin: Vector3, direction: Vector3, normal: Vector3, kind: int, faces: Dictionary) -> bool:
+	var side := direction.cross(normal)
+	if side.length_squared() < 1e-8:
+		side = direction.cross(Vector3.UP if absf(direction.y) < 0.9 else Vector3.RIGHT)
+	side = side.normalized()
+	var along := normal.cross(side).normalized()
+	for shift: Vector3 in [side, -side, along, -along]:
+		var shifted := origin + shift * SHELL_JITTER_M
+		if int(_cover(mesh, shifted, direction, direction, faces)[0]) != -1:
+			return false
+		if kind == Kind.EXTERIOR and _building_beyond(mesh, shifted, direction, faces):
+			return false
+	return true
+
+
+## Whether a ray from inside the box leaves it where someone could stand to look back
+## along it: through its top, or through a side above the ground there.
+static func _leaves_above_ground(origin: Vector3, direction: Vector3, box: AABB, ground: Surfaces) -> bool:
+	var reach := INF
+	var axis := -1
+	for index in 3:
+		if absf(direction[index]) < 1e-9:
+			continue
+		var bound := box.end[index] if direction[index] > 0.0 else box.position[index]
+		var along := (bound - origin[index]) / direction[index]
+		if along < reach:
+			reach = along
+			axis = index
+	if axis == 1:
+		return direction.y > 0.0
+	var leaving := origin + direction * reach
+	var top := ground.top(leaving.x, leaving.z)
+	return top.is_empty() or leaving.y > float(top[0])
+
+
+## Which opening (index) a ray passes through, or -1. A point standing out in front of
+## an opening, within its outline, is in the doorway itself (a threshold or reveal of
+## the interior's), so its rays go out through it too.
+static func _through_opening(origin: Vector3, direction: Vector3, openings: Array[PackedVector3Array]) -> int:
+	for index in openings.size():
+		var quad := openings[index]
+		if Geometry3D.ray_intersects_triangle(origin, direction, quad[0], quad[1], quad[2]) != null or Geometry3D.ray_intersects_triangle(origin, direction, quad[0], quad[2], quad[3]) != null:
+			return index
+		var outward := (quad[1] - quad[0]).cross(quad[3] - quad[0]).normalized()
+		if (origin - quad[0]).dot(outward) > 0.0 and (Geometry3D.ray_intersects_triangle(origin, -outward, quad[0], quad[1], quad[2]) != null or Geometry3D.ray_intersects_triangle(origin, -outward, quad[0], quad[2], quad[3]) != null):
+			return index
+	return -1
+
+
+## Where an escape starts and goes, what it passes unseen and, behind the shell, what the
+## viewer sees past it.
+func _escape_note(mesh: TriangleMesh, origin: Vector3, direction: Vector3, face: int, cover: Array, faces: Dictionary) -> String:
+	var names: Array = faces.names
+	var owners: PackedInt32Array = faces.owners
+	var exterior := (faces.kinds as PackedByteArray)[face] == Kind.EXTERIOR
+	var note := "%s (%s) at (%.2f, %.2f, %.2f) towards (%.2f, %.2f, %.2f)" % [names[owners[face]], "behind it" if exterior else "in front", origin.x, origin.y, origin.z, direction.x, direction.y, direction.z]
+	if int(cover[2]) >= 0:
+		var at: Vector3 = cover[3]
+		note += ", past %d surfaces seen from behind, the last %s at (%.2f, %.2f, %.2f)" % [int(cover[1]), names[owners[int(cover[2])]], at.x, at.y, at.z]
+	if exterior:
+		var beyond := int(_cover(mesh, origin, -direction, direction, faces)[0])
+		note += ", showing %s past it" % (names[owners[beyond]] if beyond >= 0 else "the background")
+	return note
+
+
+## How wide a triangle is across its longest side (its height over that side).
+static func _span(a: Vector3, b: Vector3, c: Vector3) -> float:
+	return (b - a).cross(c - a).length() / maxf(a.distance_to(b), maxf(b.distance_to(c), c.distance_to(a)))
+
+
+## Points over a triangle about one per SHELL_SAMPLE_M square (at least its middle),
+## spread by the plastic-number sequence and drawn in towards its middle
+## (SHELL_SAMPLE_INSET), so none stands on an edge or corner that two faces share.
+static func _triangle_samples(a: Vector3, b: Vector3, c: Vector3) -> PackedVector3Array:
+	var samples := PackedVector3Array()
+	var e1 := b - a
+	var e2 := c - a
+	var middle := a + (e1 + e2) / 3.0
+	var count := maxi(1, roundi(e1.cross(e2).length() * 0.5 / (SHELL_SAMPLE_M * SHELL_SAMPLE_M)))
+	if count == 1:
+		samples.append(middle)
+		return samples
+	for index in count:
+		var u := fposmod(0.5 + float(index) * 0.7548776662466927, 1.0)
+		var v := fposmod(0.5 + float(index) * 0.5698402909980532, 1.0)
+		if u + v > 1.0:
+			u = 1.0 - u
+			v = 1.0 - v
+		samples.append(middle.lerp(a + e1 * u + e2 * v, 1.0 - SHELL_SAMPLE_INSET))
+	return samples
+
+
+## count directions spread evenly over the sphere (a Fibonacci lattice).
+static func _sphere(count: int) -> Array[Vector3]:
+	var directions: Array[Vector3] = []
+	for index in count:
+		var y := 1.0 - 2.0 * (float(index) + 0.5) / float(count)
+		var radius := sqrt(maxf(0.0, 1.0 - y * y))
+		var angle := float(index) * 2.399963229728653
+		directions.append(Vector3(radius * cos(angle), y, radius * sin(angle)))
+	return directions
+
+
+## A turn of the direction set for the point counted index, so neighbouring points look
+## along different rays.
+static func _spin(index: int) -> Basis:
+	return Basis(Vector3.UP, fposmod(float(index) * 0.6180339887498949, 1.0) * TAU) * Basis(Vector3.RIGHT, fposmod(float(index) * 0.7548776662466927, 1.0) * TAU)
 
 
 ## Where a point stands on the interior: {"kind": "floor", "y": the lowest surface facing
@@ -571,7 +1084,7 @@ func _finish(error: String, checked: Array[String] = []) -> void:
 		if is_instance_valid(_parents[part]):
 			(_parents[part] as Node).free()
 	if failures.is_empty():
-		print("PASS: no outdoor ground inside an enterable interior: %s" % "; ".join(checked))
+		print("PASS: no outdoor ground inside an enterable interior, and its building's shell hides it but for its openings: %s" % "; ".join(checked))
 		quit(0)
 		return
 	for message in failures:

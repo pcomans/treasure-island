@@ -233,8 +233,12 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var south_tower_runs := _int_array(towers.south_tower_runs as Array)
 	for run_index in north_tower_runs + north_bay_runs:
 		north_skip[run_index] = true
-	# Tier partitions and the north wing's end at the junction stood inside the hall.
-	_append_strip_walls(buckets.wall, original, collision, record, north_runs, two_y, three_y, north_depth, tier_clip, north_skip, interior_cuts, true)
+	# Tier partitions and the north wing's end at the junction stood inside the hall;
+	# those that stood out over the set-down faces' terraces go too (_setback_cuts, as
+	# the roofs over the terraces are cut).
+	var north_strip_cuts := interior_cuts.duplicate()
+	north_strip_cuts.append_array(_setback_cuts(record, [north_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
+	_append_strip_walls(buckets.wall, original, collision, record, north_runs, two_y, three_y, north_depth, tier_clip, north_skip, north_strip_cuts, true)
 	_append_front_step(buckets.wall, collision, record, north_setback_runs, two_y, wing_face_top, three_y, wing_step, true, true)
 	_append_front_step(buckets.wall, collision, record, north_tower_runs, two_y, tower_top, three_y, tower_depth, true, true, tower_segment)
 	_append_front_step(buckets.wall, collision, record, north_bay_runs, two_y, block_roof, three_y, float(towers.north_plain_bay_depth_m), true, false)
@@ -263,7 +267,9 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	for run_index in south_setback_runs:
 		skip_outer[run_index] = true
 	var se_cuts := _setback_cuts(record, [se_setback.runs], float(se_setback.setback))
-	_append_strip_walls(buckets.wall, original, collision, record, south_runs, two_y, three_y, float(vertical.south_wing_inward_depth), tier_clip, skip_outer, se_cuts)
+	var south_strip_cuts := se_cuts.duplicate()
+	south_strip_cuts.append_array(_setback_cuts(record, [south_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
+	_append_strip_walls(buckets.wall, original, collision, record, south_runs, two_y, three_y, float(vertical.south_wing_inward_depth), tier_clip, skip_outer, south_strip_cuts)
 	_append_front_step(buckets.wall, collision, record, south_setback_runs, two_y, wing_face_top, three_y, wing_step, false, true)
 	_append_projecting_base(buckets.base, collision, record, central_runs, front, hole)
 
@@ -463,6 +469,12 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var drum_banding_on_rear_outline := _append_drum_banding(buckets.trim, record, central_high, central_depth, front.drum_banding as Dictionary)
 	if not drum_banding_on_rear_outline:
 		push_warning("Building 1 hero: the drum's rear outline did not resolve; the rear drum banding was omitted.")
+	# Where the taller block ends over the south bays' lower one the chain turns, so the
+	# two strips' end caps fan apart into a wedge; its back is closed up to the lower
+	# roof, as the single chain's join did (_append_strip_walls).
+	var wedge := _strip_wedge(record, central_high[central_high.size() - 1], central_low[0], two_y, central_depth)
+	var wedge_join := (wedge[2] as Vector3) - (wedge[1] as Vector3)
+	_append_partition(original, collision, wedge[1] as Vector3, wedge[2] as Vector3, two_y, block_roof, Vector3(wedge_join.z, 0.0, -wedge_join.x).normalized(), {}, interior_cuts)
 	var seams := schedule.protected_seam_piers as Dictionary
 	_append_seam_pier(buckets.trim, collision, record, int(seams.north_run_start), true, front)
 	_append_seam_pier(buckets.trim, collision, record, int(seams.south_run_end), false, front)
@@ -575,6 +587,15 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# The concourse rides beside the wall record, not under it: it carries none of
 	# the building's source keys, so the building's own checks see its exterior.
 	var built := INTERIOR.build(interior)
+	# The open door is the one opening the shell leaves into the hall, from the ground
+	# at its jambs to its head (corners: the bottom two, then the top two, round it, in
+	# the door's front plane); the interior checks let the hall show from outside
+	# through it alone.
+	if bool(built.get("ok", false)):
+		var opening := PackedVector3Array()
+		for corner: Vector2 in [Vector2(-1.0, float(hole.base_y)), Vector2(1.0, float(hole.base_y)), Vector2(1.0, float(hole.top_y)), Vector2(-1.0, float(hole.top_y))]:
+			opening.append(_lifted((hole.anchor as Vector3) + (hole.tangent as Vector3) * (float(hole.center) + float(hole.half) * corner.x) + (hole.normal as Vector3) * float(hole.face), corner.y))
+		(built.node as Node).set_meta("interior_openings", [opening])
 	result["extra_nodes"] = [{"name": "building_1_interior", "parent": "buildings", "result": built}]
 	return result
 
@@ -625,7 +646,11 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	north_cuts.append_array(_setback_cuts(wall_record, [north_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
 	north_cuts.append_array(_setback_cuts(wall_record, [north_tower_runs], tower_depth, tower_segment))
 	north_cuts.append_array(_setback_cuts(wall_record, [north_bay_runs], float(towers.north_plain_bay_depth_m), FRONT_STEP_MIN_SEGMENT_M))
-	cut_whole = _append_strip_roof(roof, collision, wall_record, _int_array(chains.north_three_story_runs), three_y, float(vertical.north_wing_inward_depth), tier_clip, north_cuts) and cut_whole
+	# The wings' roofs stop at their strips' end caps, as their inner faces do
+	# (_append_strip_walls): past them a folded run's piece would overhang thin air.
+	var north_wing_runs := _int_array(chains.north_three_story_runs)
+	north_cuts.append_array(_strip_cap_cuts(wall_record, north_wing_runs, float(vertical.north_wing_inward_depth)))
+	cut_whole = _append_strip_roof(roof, collision, wall_record, north_wing_runs, three_y, float(vertical.north_wing_inward_depth), tier_clip, north_cuts) and cut_whole
 	var central := _int_array(chains.central_four_story_runs)
 	var central_main := central.slice(0, central.find(south_tower_runs[0]))
 	var high_runs := _int_array(block.four_storey_runs as Array)
@@ -633,6 +658,11 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var central_low := central_main.slice(central_high.size())
 	cut_whole = _append_strip_roof(roof, collision, wall_record, central_high, four_y, float(vertical.central_inward_depth), {}, _setback_cuts(wall_record, [central_high], float(block.depth_m), FRONT_STEP_MIN_SEGMENT_M)) and cut_whole
 	cut_whole = _append_strip_roof(roof, collision, wall_record, central_low, float(block.roof_y), float(vertical.central_inward_depth)) and cut_whole
+	# The wedge between the taller block's end and the lower one's start keeps the lower
+	# roof, as the single chain's join did (_append_strip_roof).
+	var wedge := _strip_wedge(wall_record, central_high[central_high.size() - 1], central_low[0], float(block.roof_y), float(vertical.central_inward_depth))
+	for target: Dictionary in [roof, collision]:
+		_append_triangle(target, wedge[0], wedge[1], wedge[2], Vector3.UP)
 	# Where the crescent's chain meets the south junction's, the corner between the two
 	# strips' end caps keeps a roof, as the single chain's join did.
 	var low_end := _run_frame(wall_record, central_low[central_low.size() - 1])
@@ -654,6 +684,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var south_depth := float(vertical.south_wing_inward_depth)
 	var south_cuts := se_cuts.duplicate()
 	south_cuts.append_array(_setback_cuts(wall_record, [south_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
+	south_cuts.append_array(_strip_cap_cuts(wall_record, south_runs, south_depth))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, south_cuts) and cut_whole
 	cut_whole = _append_front_step_roof(roof, collision, wall_record, central_high, float(block.depth_m), float(block.roof_y)) and cut_whole
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
@@ -1105,6 +1136,10 @@ static func _append_strip_walls(public_visual: Dictionary, original_visual: Dict
 		frames.append(_run_frame(record, run_index))
 	# The end caps keep their accepted faces unless the cuts are to reach them too.
 	var cap_cuts: Array = cuts if cut_end_caps else []
+	# Where the chain turns sharply its runs' inner faces reach out past the strip's end
+	# caps, standing on their own outside it: they stop at the caps.
+	var partition_cuts := cuts.duplicate()
+	partition_cuts.append_array(_strip_cap_cuts(record, runs, depth))
 	for index in frames.size():
 		var frame := frames[index]
 		var normal := frame.normal as Vector3
@@ -1117,7 +1152,7 @@ static func _append_strip_walls(public_visual: Dictionary, original_visual: Dict
 		if not skip_outer.has(runs[index]):
 			_append_vertical_face(public_visual, outer_start, outer_end, low_y, high_y, normal)
 			_append_vertical_face(collision, outer_start, outer_end, low_y, high_y, normal)
-		_append_partition(original_visual, collision, inner_end, inner_start, low_y, high_y, -normal, clip, cuts)
+		_append_partition(original_visual, collision, inner_end, inner_start, low_y, high_y, -normal, clip, partition_cuts)
 		if index == 0 and start_cap_step.x > 0.0:
 			var step_point := outer_start - normal * start_cap_step.x
 			_append_cut_face(public_visual, collision, inner_start, step_point, low_y, high_y, -(frame.tangent as Vector3), cap_cuts)
@@ -1137,7 +1172,26 @@ static func _append_strip_walls(public_visual: Dictionary, original_visual: Dict
 			var join := inner_start - previous_inner
 			if join.length_squared() > 0.000001:
 				var join_normal := Vector3(join.z, 0.0, -join.x).normalized()
-				_append_partition(original_visual, collision, previous_inner, inner_start, low_y, high_y, join_normal, clip, cuts)
+				_append_partition(original_visual, collision, previous_inner, inner_start, low_y, high_y, join_normal, clip, partition_cuts)
+
+
+## The plan rectangles past a strip's two end caps: each from the cap's line (the
+## chain's end and the point `depth` in behind it) `depth` out, away from the strip.
+static func _strip_cap_cuts(record: Dictionary, runs: Array[int], depth: float) -> Array:
+	var cuts: Array = []
+	if runs.is_empty():
+		return cuts
+	var first := _run_frame(record, runs[0])
+	var last := _run_frame(record, runs[runs.size() - 1])
+	for cap: Array in [[first.start, first.normal, -(first.tangent as Vector3)], [last.end, last.normal, last.tangent]]:
+		var corner := cap[0] as Vector3
+		var inner := corner - (cap[1] as Vector3) * depth
+		var out := (cap[2] as Vector3) * depth
+		var polygon := PackedVector2Array()
+		for point: Vector3 in [corner, inner, inner + out, corner + out]:
+			polygon.append(Vector2(point.x, point.z))
+		cuts.append(polygon)
+	return cuts
 
 
 ## False when a cut would leave a hole in a piece or a piece could not be
@@ -3566,6 +3620,16 @@ static func _miter_between(previous: Vector3, current: Vector3) -> Vector3:
 
 static func _lifted(point: Vector3, y: float) -> Vector3:
 	return Vector3(point.x, y, point.z)
+
+
+## The wedge between two strips built apart at a shared corner (the first one's last
+## run ends where the second's first starts) at y: [the corner, the first strip's inner
+## end, the second's inner start], each strip's inner face `depth` behind its run.
+static func _strip_wedge(record: Dictionary, last_run: int, first_run: int, y: float, depth: float) -> Array[Vector3]:
+	var last := _run_frame(record, last_run)
+	var first := _run_frame(record, first_run)
+	var corner := _lifted(last.end as Vector3, y)
+	return [corner, corner - (last.normal as Vector3) * depth, corner - (first.normal as Vector3) * depth]
 
 
 static func _flat_direction(origin_point: Vector3, target_point: Vector3) -> Vector3:
