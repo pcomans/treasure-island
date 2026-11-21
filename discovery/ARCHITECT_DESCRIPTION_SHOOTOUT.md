@@ -132,20 +132,121 @@ Judge 1's reading: Fable has more correct and fewer partly verdicts, fewer wrong
 
 ### Judge 2
 
-**Judge 2: pending; agreement between judges to be added.**
+Judge 2 is a Fable session, blind to the model mapping and to judge 1. It gave 808 fact verdicts over the 20 descriptions, each with the input photos open; its summary was recorded, condensed, from its hand-back, and its per-case sheets are its own. Its disclosures: it read the prep notes, as its assignment said, although the judge README says judges should not (they discuss round 1's verdicts; judge 1 read them too); it did not open the model mapping or judge 1's scores; and it warns that the headline understates form errors, because plan size and ratio facts are marked partly visible in every key and several misreadings are not checklist facts at all.
+
+**Headline: visible facts** (correct / partly / incorrect / not mentioned; share correct in brackets).
+
+Variant A, photos only, six cases:
+
+| Describer | Out of domain (4 cases, 67 facts) | In domain (2 cases, 44 facts) | All six (111 facts) |
+|---|---|---|---|
+| Fable 5.2 | 60 / 5 / 1 / 1 (90 %) | 40 / 3 / 0 / 1 (91 %) | 100 / 8 / 1 / 2 (90 %) |
+| Opus 5.5 | 50 / 12 / 2 / 3 (75 %) | 38 / 3 / 1 / 2 (86 %) | 88 / 15 / 3 / 5 (79 %) |
+
+Variant B, photos plus footprint, four cases:
+
+| Describer | Out of domain (3 cases, 55 facts) | In domain (Building 2, 22 facts) | All four (77 facts) |
+|---|---|---|---|
+| Fable 5.2 | 48 / 4 / 0 / 3 (87 %) | 22 / 0 / 0 / 0 (100 %) | 70 / 4 / 0 / 3 (91 %) |
+| Opus 5.5 | 39 / 11 / 2 / 3 (71 %) | 15 / 4 / 1 / 2 (68 %) | 54 / 15 / 3 / 5 (70 %) |
+
+Judge 2 disputes six of the key's visibility calls; with its own calls the headline moves by at most 5 points.
+
+**Other measures.**
+
+| Measure | Fable, A | Fable, B | Opus, A | Opus, B |
+|---|---|---|---|---|
+| Key form facts wrong (any weight) | 6 of 100 | 4 of 80 | 17 of 99 | 7 of 69 |
+| … of which wrong in form | 4 | 0 | 10 | 4 |
+| Substantive contradicted claims | 4 (+2 medium) | 0 | 9 (+3 medium) | 3 |
+| Cases with a basic-form error | 3 of 6 (+1 hedged) | 0 of 4 | 5 of 6 | 2 of 4 |
+| Fitness: as is / with corrections / not usable | 0 / 6 / 0 | 4 / 0 / 0 | 1 / 4 / 1 | 2 / 2 / 0 |
+| Footprint facts correct (four shared cases) | 8 of 12 | 12 of 12 | 4 of 12 | 12 of 12 |
+| Other headline facts correct (four shared cases) | 68 of 73 | 66 of 73 | 58 of 73 | 50 of 73 |
+
+**Plan proportion: error against the key.**
+
+| Case (key's plan ratio) | Fable, A | Fable, B | Opus, A | Opus, B |
+|---|---|---|---|---|
+| P8 (about 2:1) | length +9 to +18 %, depth −26 to −34 %, ratio +52 % | 0 % | depth −31 to −59 %, ratio +52 to +103 % | 0 %; recess −42 to −57 % |
+| L8 (about 7.4:1) | width +7 %; length given as a range that contains the key's | 0 to +2 % | no figures | 0 to +2 % |
+| S4 (about 2.8:1) | no length; width +9 to +18 %; ratio at least +8 % | 0 % | no figures | 0 % |
+| K4 (about 1.5:1) | length −2 to −12 %, width +9 to +31 %, ratio −23 % at the midpoint; the low strip's depth not shown | 0 %, hall and strip | ratio +1 %, no metres; a wall "3–4 storeys" high implies about −40 % in scale; the low strip not recognised | 0 %; the strip "not confirmed by the photos" |
+
+With the footprint, Fable derived correct bay spacings and counts and opening and pier sizes in all four cases; Opus used it for overall size and height only.
+
+**Judge 2's answers to the five questions.**
+
+1. **How reliable?** Both are rarely wrong on a visible fact they address: Fable about 1 %, Opus about 3–4 %. The errors sit in plan depth and in how views are fitted together. Fable's basic-form errors without a footprint are all plan proportion (three cases) plus one hedged spurious roof block, and none with a footprint. Opus's are of more kinds (a part read as a storey, an elevation on the wrong side, a part at the wrong end, a missed carport, an unresolved plan), in 5 of 6 cases without a footprint and 2 of 4 with.
+2. **Does the footprint help?** Plan size and ratio errors drop to 0–2 % in all eight variant-B sheets, with no new mistake attributable to it. It did not improve non-plan facts (Fable 68 → 66 of 73, Opus 58 → 50; not separable from run-to-run variation). Fable reported two real small differences between photos and footprint and read both correctly; Opus reported one conflict that is not real, though there the footprint partly repaired its variant-A error (the low strip is now described, flagged uncertain, instead of absent).
+3. **Fit for purpose?** Fable with a footprint: usable as is in 4 of 4; without, every case needs corrections, usually one. Opus without a footprint: 1 as is, 4 with corrections, 1 not usable as written for the plan (X8); with: 2 as is, 2 with corrections. Storeys, roof form and main massing were right in every sheet except the listed points.
+4. **Shared failure patterns, with likely prevention:**
+   - plan depth and ratio guessed from oblique views, wrong in both directions: give the footprint; without one, give depth only as a range with its basis, count modules, and carry the confidence into the key form facts;
+   - things on the roof missed or misattributed: a per-view list of roof objects and whether each stands on this roof;
+   - views not tied to sides before elevations are written: a first step linking each view to faces by shared features, and no elevation assigned to a side no link supports;
+   - position of openings across a face: ask for it explicitly and check it in two views;
+   - statements on what photos cannot show (roof covering, hidden construction): name these as "not shown" cases;
+   - battered (sloping) faces read as stepped: ask whether tall elements step, taper or both;
+   - short projecting walls overestimated: count modules;
+   - blank zones explained instead of reported: report them as blank and mark explanations as inference.
+5. **How firm?** Firm: the footprint fixes plan dimensions with no new errors in these four cases; plan depth is the weakest statement of both; Opus has more misreadings of how parts fit together; both are rarely wrong on individual visible facts. Not firm: the size of the gap in points (it depends on "partly" calls), any footprint effect on non-plan facts, and anything about variant B in domain (one case). Six buildings in two correlated pairs, one run per variant. Fable recognised both in-domain buildings, but its out-of-domain headline is about the same, so the gap does not rest on those cases.
+
+**The three most serious form errors per describer.**
+
+| Describer | Errors |
+|---|---|
+| Fable 5.2 | P8 (A): plan "length about three times the depth" against 2:1, stated as a key form fact after noting the depth is never seen squarely. K4 and J7 (A): the same hall's plan given as "only slightly longer than wide" in one and "about twice as long as wide" in the other. L8 (A): a separate building beyond the far end placed on the roof, at medium confidence. None recurs in variant B. |
+| Opus 5.5 | K4 (A): the one-storey block read as the "lower storey" of the hall wall; in B it becomes "two tiers of windows" with the strip "not confirmed", and pylons said to reach the crown. P8 (A and B): one carport instead of two side by side (A also a 3–4:1 plan). S4 (A): the entrance end described as the middle of the long entrance side, with "no loading canopy" on it. |
+
+## Where the two judges agree and differ
+
+Judge 1 is an Opus session, judge 2 a Fable session; each was blind to the model mapping and to the other judge.
+
+**Agree.**
+
+| Visible facts right (judge 1 / judge 2) | Fable 5.2 | Opus 5.5 |
+|---|---|---|
+| Photos only, out of domain | 88 % / 90 % | 69 % / 75 % |
+| Photos only, in domain | 93 % / 91 % | 84 % / 86 % |
+| With footprint, out of domain | 80 % / 87 % | 69 % / 71 % |
+
+- The footprint brings plan size and ratio errors to 0 (0–2 %) in all eight variant-B sheets and causes no new mistakes. It does not improve facts other than the plan.
+- Fable's errors without a footprint are plan proportions (3 of 6 cases, both judges) and vanish with it (0 of 4, both judges).
+- Opus's errors are misreadings of how parts and views fit together (4 of 6 cases by judge 1, 5 of 6 by judge 2; 2 of 4 with the footprint, both judges), and the footprint does not fix them.
+- Both describers are rarely wrong on a visible fact they address.
+- The shared failure patterns: depth from oblique views, roof objects, views not tied to sides, positions of openings, and statements about what the photos cannot show.
+
+**Differ.**
+
+- Judge 1 rated no description unusable; judge 2 rated one (Opus, photos only, the operations building) not usable as written for the plan.
+- The number of "partly" verdicts differs, so the size of the gap in points is not firm.
+- Key form facts wrong for Opus without the footprint: 6 of 99 for judge 1, 17 of 99 for judge 2, who counts errors of any weight.
+- Judge 1 counted all three conflicts the describers reported between photos and footprint as real; judge 2 calls one that Opus reported not real.
+
+Two judges agreeing is stronger than one, but both judges are themselves sessions of the two models under test (judge 1 Opus, judge 2 Fable), both read the prep notes, and the cases are about four independent buildings with one run per variant. The direction is consistent; the sizes are not firm.
 
 ## What this means so far
 
-These are findings from about four independent buildings and one judge in round 2, not rules.
+These are findings from about four independent buildings and two judges, not rules.
 
-- **Usable.** No description was rated unusable. Both describers get building type, storeys, roof forms and main elevations right often enough to brief a modeller, with the corrections the judge listed.
-- **Plan proportions.** Plan depth and length-to-depth ratio estimated from photos are unreliable. Giving the describer the footprint from map data removed those errors without introducing new ones in this run (see the [footprint lesson](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos)).
-- **Attachment.** Misreadings of how parts attach (which face a view shows, how a wing or low section joins the main block) are not fixed by the footprint.
-- **Memory.** The in-domain cases carry a memory risk: describers said they recognised them, so their in-domain scores may not measure reading from photos alone.
+- **Usable with the footprint.** With the footprint given, the descriptions are usable for a first modelling round: both judges rated them usable as is or with listed corrections, and storeys, roof forms and main massing were right in nearly every sheet.
+- **Plan proportions.** Without the footprint, plan depth and length-to-depth ratio from photos must not be trusted. The footprint from map data removed those errors without introducing new ones in this run (see the [footprint lesson](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos)). The footprints here came from the professional text, so a real map outline may do less well.
+- **Fitting views and parts together.** Misreadings of how parts attach and which side a view shows are not fixed by the footprint.
+- **Memory.** The in-domain cases carry a memory risk: Fable said it recognised both in-domain buildings, and Opus recognised one in round 1, so in-domain scores may not measure reading from photos alone.
+
+Proposed changes to the describer brief for the next round, from both judges' patterns (not adopted):
+
+- a first step linking each view to the sides it shows, before any elevation is written;
+- a per-view list of roof objects;
+- positions of openings across each face;
+- depth only from counted modules, or as a range with its basis;
+- roof covering and hidden construction named as "not shown" cases;
+- say whether tall elements step, taper or both;
+- report blank zones as blank.
 
 Open:
 
-- judge 2's scores and the agreement between the two judges;
+- **Owner decision:** whether this is "good enough" to lift the hold on the modelling shootout;
 - more independent cases, including the two still without photos;
 - colour photos;
 - whether a description actually improves a first modelling round. This is to be tested as a blind pair in the next modelling shootout: one build from photos alone, one from photos plus the description, with the reviewer also given the description.
