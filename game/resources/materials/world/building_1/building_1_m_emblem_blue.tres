@@ -6,16 +6,16 @@
 [ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg" id="4_roughness"]
 
 [resource]
-resource_name = "building_1_public_painted_stucco_return"
+resource_name = "building_1_m_emblem_blue"
 shader = ExtResource("1_shader")
 shader_parameter/surface_color = ExtResource("2_color")
 shader_parameter/surface_normal = ExtResource("3_normal")
 shader_parameter/surface_roughness = ExtResource("4_roughness")
-shader_parameter/paint_color = Color(0.885, 0.87, 0.815, 1)
-shader_parameter/tile_span_m = 1.7
-shader_parameter/relief_strength = 0.08
-shader_parameter/grain_variation = 0.14
+shader_parameter/tile_span_m = 1
+shader_parameter/relief_strength = 0.1
+shader_parameter/grain_variation = 0.25
 shader_parameter/broad_variation = 0.06
-shader_parameter/roughness_base = 0.78
-shader_parameter/roughness_variation = 0.1
-shader_parameter/face_occlusion = 0.4
+shader_parameter/roughness_base = 0.7
+shader_parameter/roughness_variation = 0.15
+shader_parameter/world_axis_projection = true
+shader_parameter/paint_color = Color(0.12, 0.31, 0.43, 1)

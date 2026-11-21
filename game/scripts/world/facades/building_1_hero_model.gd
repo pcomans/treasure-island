@@ -64,28 +64,12 @@ const RENDER_WORLD_VISIBLE := 1 << 0
 const RENDER_BUILDING_WALL := 1 << 1
 const VISUAL_REVIEW_STATUS := "pending_independent_original_detail_review"
 
-# Original resources stay on protected runs, inner tier faces and the tower;
-# Building 2 and calibration code share them, so this pass does not edit them.
-const WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres")
+# Original resources Building 2 and calibration code share; this model does not edit them.
 const TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_light_trim.tres")
-const GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres")
 const ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_roof_metal.tres")
 const TOWER_ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_tower_roof_pale.tres")
 const REVEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres")
-# Public-only variants for the crescent, wings and pavilions.
-const PUBLIC_WALL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_field.tres")
-const PUBLIC_TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_trim.tres")
-const PUBLIC_BASE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_base.tres")
 const PUBLIC_FRAME_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_window_metal.tres")
-const PUBLIC_GLASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_glazing.tres")
-const EMBLEM_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_emblem_blue.tres")
-## The public stucco carrying fine linear detail as a mipmapped pattern over its paint
-## (_append_pattern_band): incised lines, the canopy fascia's rolls and dentils.
-const PUBLIC_FIELD_LINES_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_field_lines.tres")
-## The door groups' and grilles' golden bronze, and the pavilions' light steel windows
-## (the owner's 2026-11-20 photos); Building 1's original bronze stays with the tower.
-const PUBLIC_BRONZE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_bronze.tres")
-const PUBLIC_LIGHT_STEEL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_light_steel.tres")
 ## The crescent piers' reeds stop this much lower each, out from the middle reed.
 const PIER_REED_TOP_STEP_M := 0.04
 ## The head bands' shaded hollow behind the dentils stands this far proud of the wall,
@@ -93,16 +77,35 @@ const PIER_REED_TOP_STEP_M := 0.04
 const DENTIL_HOLLOW_FRONT_M := 0.015
 ## The pavilions' emblem relief, white as photographed.
 const PUBLIC_RELIEF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_relief_white.tres")
-## The crescent grilles' near-black patinated bronze, the floodlights' black, the
-## garages' dark slate teal (the owner's 2026-11-20 photos).
+## The crescent piers' reeds, the door groups' kick panels and brass, the
+## floodlights' black (the owner's 2026-11-20 photos).
 const PUBLIC_REEDS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_reeds.tres")
-const PUBLIC_RETURN_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_stucco_return.tres")
 const PUBLIC_GILDED_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_gilded.tres")
 ## The door groups' worn brass: their frames, leaves' stiles and rails, push rails and
 ## threshold (the owner's 2026-11-20 frontal view); the windows keep their bronze.
 const PUBLIC_DOOR_BRASS_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_door_brass.tres")
 const PUBLIC_DARK_BRONZE_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_dark_bronze.tres")
-const PUBLIC_SLATE_TEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_public_slate_teal.tres")
+## The material set (the 2026-11-21 material study, building_1_m_*.tres): one shader,
+## many materials, each surface in the finish the owner's 2026-11-20 photos show.
+## The weathering map they read (game/resources/textures/world/building_1_detail/
+## b1_weathering_map.res) is baked by tools/bake_building_1_weathering.gd.
+const M_WALL := preload("res://game/resources/materials/world/building_1/building_1_m_wall.tres")
+const M_WALL_LINES := preload("res://game/resources/materials/world/building_1/building_1_m_wall_lines.tres")
+const M_TRIM := preload("res://game/resources/materials/world/building_1/building_1_m_trim.tres")
+const M_TRIM_RETURN := preload("res://game/resources/materials/world/building_1/building_1_m_trim_return.tres")
+const M_TRIM_CLEAN := preload("res://game/resources/materials/world/building_1/building_1_m_trim_clean.tres")
+const M_TRIM_DRUM := preload("res://game/resources/materials/world/building_1/building_1_m_trim_drum.tres")
+const M_SURROUND := preload("res://game/resources/materials/world/building_1/building_1_m_surround.tres")
+const M_GROUND_WALL := preload("res://game/resources/materials/world/building_1/building_1_m_ground_wall.tres")
+const M_SOFFIT := preload("res://game/resources/materials/world/building_1/building_1_m_soffit.tres")
+const M_GLASS := preload("res://game/resources/materials/world/building_1/building_1_m_glass.tres")
+const M_GLASS_HALL := preload("res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres")
+const M_GLASS_DOOR := preload("res://game/resources/materials/world/building_1/building_1_m_glass_door.tres")
+const M_WINDOW_BLUE := preload("res://game/resources/materials/world/building_1/building_1_m_window_blue.tres")
+const M_WINDOW_DARK := preload("res://game/resources/materials/world/building_1/building_1_m_window_dark.tres")
+const M_GRILLE_BRONZE := preload("res://game/resources/materials/world/building_1/building_1_m_grille_bronze.tres")
+const M_DOOR_BRONZE := preload("res://game/resources/materials/world/building_1/building_1_m_door_bronze.tres")
+const M_EMBLEM_BLUE := preload("res://game/resources/materials/world/building_1/building_1_m_emblem_blue.tres")
 ## The concourse behind the crescent (owner, 2026-11-19): its door group opens, the
 ## exterior faces that stood inside it are cut, and its node rides with the wall.
 const INTERIOR := preload("res://game/scripts/world/facades/building_1_interior.gd")
@@ -178,11 +181,17 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"trim": _bucket(),
 		"base": _bucket(),
 		"frame": _bucket(),
-		"glass": _bucket(),
+		"glass": _bucket_with_panes(),
+		"glass_hall": _bucket_with_panes(),
+		"glass_door": _bucket_with_panes(),
+		"surround": _bucket(),
+		"trim_drum": _bucket(),
+		"window_dark": _bucket(),
 		"reveal": _bucket(),
 		"emblem": _bucket(),
 		"reveal_depth": _bucket(),
 		"window_settings": {"extra": float(front.window_reveal_extra_depth), "clearance": float(front.window_reveal_min_clearance_m)},
+		"pane_kinds": front.get("pane_kinds", []),
 		"lines_field": _bucket(),
 		"public_bronze": _bucket(),
 		"light_steel": _bucket(),
@@ -299,11 +308,11 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var central_hole := hole.duplicate()
 	central_hole["center_m"] = float(hole.center_m) + _chain_length(record, central_runs.slice(0, field_at))
 	_append_base_rustication(buckets.base, record, central_runs, front, central_hole, _ground_window_gaps(crescent, schedule.entrance_bays as Array, front))
-	_append_crescent_bays(buckets, record, field_runs, crescent, front)
+	_append_crescent_bays(_for_part(buckets, "crescent"), record, field_runs, crescent, front)
 	_append_entry_composition(buckets, collision, _entry_frames(record, field_runs, crescent, schedule.entrance_bays as Array, front), int(schedule.doors_per_entrance_group), front, int(hole.bay))
-	_append_ground_floor_windows(buckets, record, field_runs, crescent, schedule.entrance_bays as Array, front)
+	_append_ground_floor_windows(_for_part(buckets, "crescent_low"), record, field_runs, crescent, schedule.entrance_bays as Array, front)
 	_append_round_piers(buckets, collision, record, field_runs, crescent, front)
-	_append_junction_windows(buckets, record, schedule.junction_windows as Array, front)
+	_append_junction_windows(_for_part(buckets, "junction"), record, schedule.junction_windows as Array, front)
 
 	# The wings' forecourt faces and the pavilions' flanks have two window rows (the
 	# owner's 2026-11-20 photos); the unphotographed north face and north junction keep
@@ -312,14 +321,14 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var wing_floors := front.wing_window_floors as Array
 	var wing_style := front.wing_window_style as Dictionary
 	var wing_doors := front.wing_doors as Dictionary
-	_append_wing_facade(buckets, record, _int_array(schedule.north_wing_window_runs), int(schedule.upper_windows_per_wing), int(schedule.lower_windows_per_wing), wing_floors, front, int(wing_doors.north_index))
-	_append_wing_facade(buckets, record, _int_array(schedule.south_wing_window_runs), int(schedule.upper_windows_per_wing), int(schedule.lower_windows_per_wing), wing_floors, front, int(wing_doors.south_index))
+	_append_wing_facade(_for_part(buckets, "wing"), record, _int_array(schedule.north_wing_window_runs), int(schedule.upper_windows_per_wing), int(schedule.lower_windows_per_wing), wing_floors, front, int(wing_doors.north_index))
+	_append_wing_facade(_for_part(buckets, "wing"), record, _int_array(schedule.south_wing_window_runs), int(schedule.upper_windows_per_wing), int(schedule.lower_windows_per_wing), wing_floors, front, int(wing_doors.south_index))
 	var north_face := _int_array(schedule.north_face_window_runs)
 	var north_face_centers := _evenly_spaced(_chain_length(record, north_face), int(schedule.north_face_windows_per_floor), float(front.north_face_window_margin_m))
-	_append_window_grid(buckets, record, north_face, north_face_centers, float(front.north_face_window_width), floors, wing_style)
-	_append_north_junction_bays(buckets, record, schedule.north_junction_windows as Array, floors, wing_style)
-	_append_pavilion(buckets, collision, record, north_pavilion, wing_floors, front, "north_pavilion")
-	_append_pavilion(buckets, collision, record, south_pavilion, wing_floors, front, "south_pavilion")
+	_append_window_grid(_for_part(buckets, "north"), record, north_face, north_face_centers, float(front.north_face_window_width), floors, wing_style)
+	_append_north_junction_bays(_for_part(buckets, "junction"), record, schedule.north_junction_windows as Array, floors, wing_style)
+	_append_pavilion(_for_part(buckets, "pavilion"), collision, record, north_pavilion, wing_floors, front, "north_pavilion")
+	_append_pavilion(_for_part(buckets, "pavilion"), collision, record, south_pavilion, wing_floors, front, "south_pavilion")
 
 	# SE face and the visible podium (dated 2023 rear view): one lower ribbon
 	# wraps from the SE face across the bound rear hosts, butting the protected
@@ -339,17 +348,17 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var se_style := wing_style.duplicate()
 	se_style["setback_m"] = float(se_setback.setback)
 	se_style["stepped_hood"] = true
-	_append_window_grid(buckets, record, se_runs, se_windows, float(front.se_narrow_window_width), se_floor, se_style)
+	_append_window_grid(_for_part(buckets, "se"), record, se_runs, se_windows, float(front.se_narrow_window_width), se_floor, se_style)
 	var string_course := front.se_podium_string_course as Array
 	_append_path_band(buckets.trim, _chain_points(record, se_runs, se_start, se_end), float(string_course[0]), float(string_course[1]), float(string_course[2]), -0.03)
-	_append_ribbon(buckets, record, se_runs, se_start, se_end, true, false, se_ribbon)
+	_append_ribbon(_for_part(buckets, "se"), record, se_runs, se_start, se_end, true, false, se_ribbon)
 	var rear_chains := schedule.rear_ribbon_host_chains as Array
 	var rear_hosts: Array[int] = []
 	for chain_index in rear_chains.size():
 		var host := _int_array(rear_chains[chain_index] as Array)
 		rear_hosts.append_array(host)
 		# The first host chain continues the SE ribbon past the seam pier.
-		_append_ribbon(buckets, record, host, 0.0, _chain_length(record, host), chain_index > 0, true, ribbon)
+		_append_ribbon(_for_part(buckets, "rear"), record, host, 0.0, _chain_length(record, host), chain_index > 0, true, ribbon)
 	# Rear podium edge (ROOT release of runs 70-92, 2026-10-22; dated 2023 rear
 	# view): a coping course and a pipe guardrail where the one-storey podium
 	# roof meets its exact rear walls, both solid because the roof is reachable.
@@ -378,13 +387,13 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		var semi_centers: Array[float] = []
 		for bay in int(layout.bays):
 			semi_centers.append(float(layout.first) + float(layout.pitch) * (float(bay) + 0.5))
-		_append_window_grid(buckets, record, host, semi_centers, float(semi.width), [{"bottom": float(semi.bottom), "top": float(semi.top), "rows": int(semi.rows)}], wing_style, int(semi.columns))
+		_append_window_grid(_for_part(buckets, "rear"), record, host, semi_centers, float(semi.width), [{"bottom": float(semi.bottom), "top": float(semi.top), "rows": int(semi.rows)}], wing_style, int(semi.columns))
 
 	# North lower ring (Sep 2025 frontal north view; L1/L2): semi-basement and
 	# grouped main-floor bays between piers below a band course, a railed
 	# terrace, and an upper floor set back behind it with stepped-hood windows,
 	# a frieze and a thin cornice. A taller junction pylon stands at node 0.
-	_append_north_ring(buckets, original, collision, record, north_ring, front.north_pylon as Dictionary, podium_edge, wing_style, two_y)
+	_append_north_ring(_for_part(buckets, "north"), original, collision, record, north_ring, front.north_pylon as Dictionary, podium_edge, wing_style, two_y)
 	# SE upper tier setback and the shoulder block stepping down from the drum's
 	# south end (Nov 2025 SE view, 2023 rear view). The observed small and tall
 	# openings, previously on the drum join behind it, sit on the shoulder face.
@@ -392,7 +401,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var se_inner := _offset_path(se_outer, float(se_setback.setback))
 	_append_setback_storey(buckets.wall, buckets.wall, collision, se_outer, se_inner, two_y, three_y, false, true)
 	_append_podium_edge(buckets.trim, collision, se_outer, podium_edge, two_y, false)
-	_append_se_shoulder(buckets, collision, record, front.se_shoulder as Dictionary, drum_openings, wing_style, float(se_setback.setback), two_y, three_y)
+	_append_se_shoulder(_for_part(buckets, "se"), collision, record, front.se_shoulder as Dictionary, drum_openings, wing_style, float(se_setback.setback), two_y, three_y)
 
 	# Flat copings with three incised lines (the owner's 2026-11-20 photos) close the
 	# wing tiers and the pavilions' flanks, stopping at each pavilion's centre face,
@@ -453,7 +462,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	(central_path.normals as Array).append_array(riser.normals as Array)
 	var central_last := _strip_cap(record, central_high[central_high.size() - 1], false, central_depth - inner_trim)
 	_append_point(central_path, central_last.point as Vector3, central_last.normal as Vector3)
-	_append_flat_coping(buckets.trim, central_path, central_top, flat_coping, cornice_back)
+	_append_flat_coping(buckets.trim_drum, central_path, central_top, flat_coping, cornice_back)
 	var se_first := int((se_setback.runs as Array)[0])
 	var south_front_runs: Array[int] = []
 	for run_index in south_runs:
@@ -477,7 +486,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# block's lower roof, which the course would float over. Visual relief only,
 	# high above any walkable surface; the face, its material and collision are
 	# unchanged.
-	var drum_banding_on_rear_outline := _append_drum_banding(buckets.trim, record, central_high, central_depth, front.drum_banding as Dictionary)
+	var drum_banding_on_rear_outline := _append_drum_banding(buckets.trim_drum, record, central_high, central_depth, front.drum_banding as Dictionary)
 	if not drum_banding_on_rear_outline:
 		push_warning("Building 1 hero: the drum's rear outline did not resolve; the rear drum banding was omitted.")
 	# Where the taller block ends over the south bays' lower one the chain turns, so the
@@ -495,21 +504,26 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 
 	var root := _hero_root("Building1HeroWall", record, "building_wall")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroOriginalIvory", "bucket": original, "material": WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroPublicStucco", "bucket": buckets.wall, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroPublicBase", "bucket": buckets.base, "material": PUBLIC_BASE_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroPublicTrim", "bucket": buckets.trim, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroOriginalIvory", "bucket": original, "material": M_WALL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicStucco", "bucket": buckets.wall, "material": M_WALL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicBase", "bucket": buckets.base, "material": M_GROUND_WALL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroPublicTrim", "bucket": buckets.trim, "material": M_TRIM, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroWindowSurrounds", "bucket": buckets.surround, "material": M_SURROUND, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroDrumTrim", "bucket": buckets.trim_drum, "material": M_TRIM_DRUM, "layers": RENDER_BUILDING_WALL},
 		{"name": "HeroEntryReveals", "bucket": buckets.reveal, "material": REVEAL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroGlazing", "bucket": buckets.glass, "material": PUBLIC_GLASS_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroGlazing", "bucket": buckets.glass, "material": M_GLASS, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroGlazingHall", "bucket": buckets.glass_hall, "material": M_GLASS_HALL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroGlazingDoors", "bucket": buckets.glass_door, "material": M_GLASS_DOOR, "layers": RENDER_BUILDING_WALL},
 		{"name": "HeroWindowMetal", "bucket": buckets.frame, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroEmblemEnamel", "bucket": buckets.emblem, "material": EMBLEM_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroWindowRevealDepth", "bucket": buckets.reveal_depth, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroWindowDarkSteel", "bucket": buckets.window_dark, "material": M_WINDOW_DARK, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroEmblemEnamel", "bucket": buckets.emblem, "material": M_EMBLEM_BLUE, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroWindowRevealDepth", "bucket": buckets.reveal_depth, "material": M_TRIM, "layers": RENDER_BUILDING_WALL},
 	]
-	specs.append({"name": "HeroIncisedLinesField", "bucket": buckets.lines_field, "material": PUBLIC_FIELD_LINES_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroPublicBronze", "bucket": buckets.public_bronze, "material": PUBLIC_BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroLightSteel", "bucket": buckets.light_steel, "material": PUBLIC_LIGHT_STEEL_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroIncisedLinesField", "bucket": buckets.lines_field, "material": M_WALL_LINES, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroPublicBronze", "bucket": buckets.public_bronze, "material": M_DOOR_BRONZE, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroLightSteel", "bucket": buckets.light_steel, "material": M_WINDOW_BLUE, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroEmblemRelief", "bucket": buckets.relief, "material": PUBLIC_RELIEF_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroDarkBronze", "bucket": buckets.dark_bronze, "material": PUBLIC_DARK_BRONZE_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroDarkBronze", "bucket": buckets.dark_bronze, "material": M_GRILLE_BRONZE, "layers": RENDER_BUILDING_WALL})
 	# The crescent piers' reeds take the building's shadows but cast none: their few
 	# centimetres of self-shadow fall between the shadow map's texels at play
 	# distances and crawl as the camera moves. Their material keeps their fluting to
@@ -520,11 +534,11 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# The crescent piers' sides and the hollow behind the head bands' dentils, in the
 	# same stucco seeing less of the sky (its face_occlusion), so the piers' projection
 	# and the head bands read at play distances in any sun.
-	specs.append({"name": "HeroShadedReturns", "bucket": buckets.returns, "material": PUBLIC_RETURN_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroShadedReturns", "bucket": buckets.returns, "material": M_TRIM_RETURN, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroGildedKickPanels", "bucket": buckets.gilded, "material": PUBLIC_GILDED_MATERIAL, "layers": RENDER_BUILDING_WALL})
 	specs.append({"name": "HeroDoorBrass", "bucket": buckets.door_brass, "material": PUBLIC_DOOR_BRASS_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": PUBLIC_SLATE_TEAL_MATERIAL, "layers": RENDER_BUILDING_WALL})
-	specs.append({"name": "HeroRoundPiers", "bucket": buckets.plain_trim, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroGarageDoors", "bucket": buckets.slate_teal, "material": M_EMBLEM_BLUE, "layers": RENDER_BUILDING_WALL})
+	specs.append({"name": "HeroRoundPiers", "bucket": buckets.plain_trim, "material": M_GROUND_WALL, "layers": RENDER_BUILDING_WALL})
 	var crescent_style := front.crescent_window_style as Dictionary
 	var metadata := _common_metadata(config, record, "building_wall")
 	metadata.merge({
@@ -741,9 +755,9 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
 		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroEntranceCanopy", "bucket": canopy_buckets.canopy, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroEntranceCanopySoffit", "bucket": canopy_buckets.soffit, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroCanopyFascia", "bucket": canopy_buckets.fascia, "material": PUBLIC_TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroEntranceCanopy", "bucket": canopy_buckets.canopy, "material": M_TRIM_CLEAN, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroEntranceCanopySoffit", "bucket": canopy_buckets.soffit, "material": M_SOFFIT, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroCanopyFascia", "bucket": canopy_buckets.fascia, "material": M_TRIM_CLEAN, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroCanopyFloodlights", "bucket": canopy_buckets.bronze, "material": PUBLIC_DARK_BRONZE_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroDrumMast", "bucket": mast, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroFlagpole", "bucket": flagpole, "material": TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
@@ -786,7 +800,7 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 	var platform_scale := float(vertical.tower_platform_plan_scale)
 	var cab := front.tower_cab as Dictionary
 	var center := _plan_centroid_from_wall(record)
-	var glass := _bucket()
+	var glass := _bucket_with_panes()
 	var trim := _bucket()
 	var frames := _bucket()
 	var collision := _bucket()
@@ -819,6 +833,7 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 			out = -out
 		for target: Dictionary in [glass, collision]:
 			_append_quad(target, b0, b1, t1, t0, out)
+		_set_pane_uv2(glass, 4, _pane_seed(b0.lerp(t1, 0.5)), 1, b0, b1 - b0, t0 - b0)
 		var at := func(u: float, v: float) -> Vector3:
 			return b0.lerp(b1, u).lerp(t0.lerp(t1, u), v) + out * float(frame.front)
 		var bars: Array = [[0.0, 0.0, 1.0, 0.0], [0.0, 1.0, 1.0, 1.0], [0.0, transom_v, 1.0, transom_v], [1.0 / 3.0, transom_v, 1.0 / 3.0, 1.0], [2.0 / 3.0, transom_v, 2.0 / 3.0, 1.0]]
@@ -851,11 +866,11 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 	_append_cab_platform(platform, railing, collision, front.tower_base_block as Dictionary, float(vertical.four_story_roof_y), deck)
 	var root := _hero_root("Building1ObservationTowerHeroWall", record, "tower_wall")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroTowerPlatformBlock", "bucket": platform, "material": PUBLIC_WALL_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroTowerPlatformRailing", "bucket": railing, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroTowerLeaningGlass", "bucket": glass, "material": GLASS_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroTowerBlackFrames", "bucket": frames, "material": PUBLIC_FRAME_MATERIAL, "layers": RENDER_BUILDING_WALL},
-		{"name": "HeroTowerTrim", "bucket": trim, "material": TRIM_MATERIAL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroTowerPlatformBlock", "bucket": platform, "material": M_WALL, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroTowerPlatformRailing", "bucket": railing, "material": M_TRIM, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroTowerLeaningGlass", "bucket": glass, "material": M_GLASS, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroTowerBlackFrames", "bucket": frames, "material": M_WINDOW_DARK, "layers": RENDER_BUILDING_WALL},
+		{"name": "HeroTowerTrim", "bucket": trim, "material": M_TRIM, "layers": RENDER_BUILDING_WALL},
 	]
 	var metadata := _common_metadata(config, record, "tower_wall")
 	metadata.merge({
@@ -948,7 +963,7 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 	var specs: Array[Dictionary] = [
 		{"name": "HeroTowerPlatform", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroTowerStandingSeamRoof", "bucket": cab_roof, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroTowerCrown", "bucket": crown_bucket, "material": TRIM_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerCrown", "bucket": crown_bucket, "material": M_TRIM, "layers": RENDER_WORLD_VISIBLE},
 	]
 	var metadata := _common_metadata(config, record, "tower_roof")
 	metadata.merge({
@@ -1806,9 +1821,9 @@ static func _append_crescent_attic(buckets: Dictionary, face_path: Dictionary, c
 	var skin_back := float(attic.skin_back)
 	var lines_bottom := float(lines.bottom)
 	var lines_top := lines_bottom + float(lines.pitch) * float(lines.count)
-	_append_pattern_band(buckets.trim, face_path, float(skin[0]), lines_bottom, skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 1 | 4)
+	_append_pattern_band(buckets.wall, face_path, float(skin[0]), lines_bottom, skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 1 | 4)
 	_append_profile_sweep(buckets.trim, face_path, _rolls_profile(lines_bottom, lines_top, skin_front, skin_back, int(lines.count), float(lines.radius), float(lines.pitch), 4, true, float(lines.depth_scale)), true)
-	_append_pattern_band(buckets.trim, face_path, lines_top, float(skin[1]), skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 2 | 4)
+	_append_pattern_band(buckets.wall, face_path, lines_top, float(skin[1]), skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 2 | 4)
 	var coping := attic.coping as Array
 	var coping_line := attic.coping_line as Dictionary
 	_append_profile_sweep(buckets.trim, capped_path, _coping_profile(float(coping[0]), float(coping[1]), float(coping[2]), coping_back, 1, float(coping_line.radius), float(coping_line.pitch), float(coping_line.cap_height), float(coping_line.cap_overhang)), true)
@@ -1889,8 +1904,8 @@ static func _append_entry_composition(buckets: Dictionary, collision: Dictionary
 				_append_frame_box(buckets.reveal, frame, minf(edge, rim), maxf(edge, rim), base_y - border, head_bottom + 0.03, back, face + 0.06)
 		else:
 			_append_frame_box(buckets.reveal, frame, center - half - border, center + half + border, base_y - border, head_bottom + 0.03, back, face + 0.06)
-			_append_frame_box(buckets.glass, frame, center - half, center + half, base_y, door_top, face + 0.05, face + 0.1)
-			_append_frame_box(buckets.glass, frame, center - half, center + half, transom_bottom, transom_top, face + 0.05, face + 0.1)
+			_append_frame_box(buckets.glass_door, frame, center - half, center + half, base_y, door_top, face + 0.05, face + 0.1)
+			_append_frame_box(buckets.glass_door, frame, center - half, center + half, transom_bottom, transom_top, face + 0.05, face + 0.1)
 		for leaf in range(doors_per_group + 1):
 			if open and leaf > 0 and leaf < doors_per_group:
 				continue
@@ -2191,8 +2206,8 @@ static func _append_ribbon(buckets: Dictionary, record: Dictionary, runs: Array[
 	var band := _chain_points(record, runs, from_m, to_m)
 	var glazing := _chain_points(record, runs, first, float(layout.last))
 	_append_path_band(buckets.glass, glazing, bottom, top, 0.035, -0.03)
-	_append_path_band(buckets.trim, band, bottom - float(ribbon.sill_height), bottom, float(ribbon.sill_front), -0.03)
-	_append_path_band(buckets.trim, band, top, top + float(ribbon.head_height), float(ribbon.head_front), -0.03)
+	_append_path_band(buckets.get("window_trim", buckets.trim), band, bottom - float(ribbon.sill_height), bottom, float(ribbon.sill_front), -0.03)
+	_append_path_band(buckets.get("window_trim", buckets.trim), band, top, top + float(ribbon.head_height), float(ribbon.head_front), -0.03)
 	var rows := int(ribbon.rows)
 	for row in range(1, rows):
 		var y := lerpf(bottom, top, float(row) / float(rows))
@@ -2202,7 +2217,7 @@ static func _append_ribbon(buckets: Dictionary, record: Dictionary, runs: Array[
 			continue
 		var center_m := first + pitch * float(index)
 		var frame := _span_frame(record, runs, center_m - pier * 0.5, center_m + pier * 0.5)
-		_append_frame_box(buckets.trim, frame, -pier * 0.5, pier * 0.5, bottom, top, float(frame.lo) - 0.03, float(frame.hi) + float(ribbon.pier_front))
+		_append_frame_box(buckets.get("window_trim", buckets.trim), frame, -pier * 0.5, pier * 0.5, bottom, top, float(frame.lo) - 0.03, float(frame.hi) + float(ribbon.pier_front))
 	var columns := int(ribbon.columns)
 	for index in range(bays):
 		var left := first + pitch * float(index) + (pier * 0.5 if index > 0 or start_pier else 0.0)
@@ -2236,6 +2251,9 @@ static func _append_window_module(buckets: Dictionary, frame: Dictionary, center
 	var transom_bar := float(style.get("transom_bar", bar))
 	var bar_front := float(style.get("bar_front", 0.078))
 	_append_frame_box(buckets.glass, frame, center - half, center + half, bottom, top, back, wall + 0.035)
+	var pane_corner := _frame_point_at(frame, center - half, bottom, wall + 0.035)
+	_set_pane_uv2(buckets.glass, 24, _pane_seed(pane_corner), _pane_kind(buckets, _pane_seed(pane_corner), bottom), pane_corner, _frame_point_at(frame, center + half, bottom, wall + 0.035) - pane_corner, Vector3.UP * (top - bottom))
+	var surround_bucket := buckets.get("window_trim", buckets.trim) as Dictionary
 	var metal := buckets[str(style.get("frame_bucket", "frame"))] as Dictionary
 	# Narrow side lights (the pavilions' tall windows): the outer columns take
 	# `side_light` of the width each, the rest share the middle evenly.
@@ -2255,15 +2273,15 @@ static func _append_window_module(buckets: Dictionary, frame: Dictionary, center
 	for side in [-1.0, 1.0]:
 		var inner := center + float(side) * half
 		var outer := center + float(side) * (half + surround + 0.03)
-		_append_frame_box(buckets.trim, frame, minf(inner, outer), maxf(inner, outer), bottom - 0.04, top + 0.04, back, jamb_front)
-	_append_frame_box(buckets.trim, frame, center - half - surround - 0.01, center + half + surround + 0.01, top, top + float(style.head_height), back, wall + float(style.head_front))
+		_append_frame_box(surround_bucket, frame, minf(inner, outer), maxf(inner, outer), bottom - 0.04, top + 0.04, back, jamb_front)
+	_append_frame_box(surround_bucket, frame, center - half - surround - 0.01, center + half + surround + 0.01, top, top + float(style.head_height), back, wall + float(style.head_front))
 	if bool(style.get("stepped_hood", false)):
 		# Two-step Art Deco hood over the head (Sep/Nov 2025 north and SE views).
 		var head_top := top + float(style.head_height)
-		_append_frame_box(buckets.trim, frame, center - half - surround - 0.12, center + half + surround + 0.12, head_top, head_top + 0.12, back, wall + float(style.head_front) + 0.06)
-		_append_frame_box(buckets.trim, frame, center - half - 0.05, center + half + 0.05, head_top + 0.12, head_top + 0.26, back, wall + float(style.head_front))
+		_append_frame_box(surround_bucket, frame, center - half - surround - 0.12, center + half + surround + 0.12, head_top, head_top + 0.12, back, wall + float(style.head_front) + 0.06)
+		_append_frame_box(surround_bucket, frame, center - half - 0.05, center + half + 0.05, head_top + 0.12, head_top + 0.26, back, wall + float(style.head_front))
 	var sill_reach := half + surround + float(style.sill_overhang)
-	_append_frame_box(buckets.trim, frame, center - sill_reach, center + sill_reach, bottom - float(style.sill_height), bottom, back, wall + float(style.sill_front))
+	_append_frame_box(surround_bucket, frame, center - sill_reach, center + sill_reach, bottom - float(style.sill_height), bottom, back, wall + float(style.sill_front))
 	# Stepped double reveal (2008 crescent window detail): a narrow inner frame
 	# between the glazing and the main surround, one step shallower than it.
 	var inner_step := style.get("inner_step", []) as Array
@@ -2273,9 +2291,9 @@ static func _append_window_module(buckets: Dictionary, frame: Dictionary, center
 		for side in [-1.0, 1.0]:
 			var edge := center + float(side) * half
 			var inside := center + float(side) * (half - step_width)
-			_append_frame_box(buckets.trim, frame, minf(edge, inside), maxf(edge, inside), bottom, top, back, step_front)
-		_append_frame_box(buckets.trim, frame, center - half, center + half, top - step_width, top, back, step_front)
-		_append_frame_box(buckets.trim, frame, center - half, center + half, bottom, bottom + step_width, back, step_front)
+			_append_frame_box(surround_bucket, frame, minf(edge, inside), maxf(edge, inside), bottom, top, back, step_front)
+		_append_frame_box(surround_bucket, frame, center - half, center + half, top - step_width, top, back, step_front)
+		_append_frame_box(surround_bucket, frame, center - half, center + half, bottom, bottom + step_width, back, step_front)
 	_append_reveal_depth(buckets, frame, center, half, surround, sill_reach, bottom, top, style)
 
 
@@ -2294,7 +2312,7 @@ static func _append_reveal_depth(buckets: Dictionary, frame: Dictionary, center:
 	var extra := float(settings.extra)
 	var wall := float(frame.hi)
 	var limit := wall + float(style.get("reveal_front_max", INF))
-	var target := buckets.reveal_depth as Dictionary
+	var target := buckets.get("window_reveal", buckets.reveal_depth) as Dictionary
 	var jamb_front := wall + float(style.jamb_front)
 	if minf(jamb_front + extra, limit) > jamb_front:
 		for side in [-1.0, 1.0]:
@@ -3119,7 +3137,7 @@ static func _append_open_leaf(buckets: Dictionary, frame: Dictionary, hinge: flo
 	for edge in [0.0, width - stile]:
 		_append_box(buckets.door_brass, at.call(edge, edge + stile, kick_top, door_top), along, across, stile, door_top - kick_top, OPEN_LEAF_THICKNESS_M)
 	_append_box(buckets.door_brass, at.call(stile, width - stile, door_top - rail, door_top), along, across, width - stile * 2.0, rail, OPEN_LEAF_THICKNESS_M)
-	_append_box(buckets.glass, at.call(stile, width - stile, kick_top, door_top - rail), along, across, width - stile * 2.0, door_top - rail - kick_top, OPEN_LEAF_THICKNESS_M * OPEN_LEAF_GLASS_SHARE)
+	_append_box(buckets.glass_door, at.call(stile, width - stile, kick_top, door_top - rail), along, across, width - stile * 2.0, door_top - rail - kick_top, OPEN_LEAF_THICKNESS_M * OPEN_LEAF_GLASS_SHARE)
 	var rail_height := float((front.entrance_push_rails as Dictionary).height)
 	for rail_y in _push_rails(floor_y, front):
 		_append_box(buckets.door_brass, at.call(stile, width - stile, rail_y - rail_height * 0.5, rail_y + rail_height * 0.5), along, across, width - stile * 2.0, rail_height, OPEN_LEAF_THICKNESS_M + OPEN_LEAF_PUSH_RAIL_PROUD_M * 2.0)
@@ -3777,6 +3795,8 @@ static func _append_quad_uv(bucket: Dictionary, corners: Array, corner_normals: 
 		normals.append((corner_normals[index] as Vector3).normalized())
 		uvs.append(corner_uvs[index])
 		average += corner_normals[index] as Vector3
+	if bucket.has("uv2s"):
+		(bucket.uv2s as Array).append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	var a := corners[0] as Vector3
 	if ((corners[1] as Vector3) - a).cross((corners[2] as Vector3) - a).dot(average) > 0.0:
 		indices.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
@@ -3892,6 +3912,7 @@ static func _split_by_normal(source: Dictionary, rest: Dictionary, chosen: Dicti
 	var normals := source.normals as Array
 	var uvs := source.uvs as Array
 	var indices := source.indices as Array
+	assert(not source.has("uv2s") and not rest.has("uv2s") and not chosen.has("uv2s"))
 	for quad in range(vertices.size() >> 2):
 		var first := quad * 4
 		var target := chosen if bool(choose.call(normals[first] as Vector3)) else rest
@@ -3902,6 +3923,12 @@ static func _split_by_normal(source: Dictionary, rest: Dictionary, chosen: Dicti
 			(target.uvs as Array).append(uvs[first + corner])
 		for slot in 6:
 			(target.indices as Array).append(int(indices[quad * 6 + slot]) - first + base)
+
+
+## A module frame's point: `lateral` along it, `y` up, `depth` out from its anchor.
+static func _frame_point_at(frame: Dictionary, lateral: float, y: float, depth: float) -> Vector3:
+	var anchor := frame.anchor as Vector3
+	return Vector3(anchor.x, 0.0, anchor.z) + (frame.tangent as Vector3) * lateral + (frame.normal as Vector3) * depth + Vector3.UP * y
 
 
 static func _append_frame_box(bucket: Dictionary, frame: Dictionary, lateral_min: float, lateral_max: float, y_min: float, y_max: float, depth_min: float, depth_max: float) -> void:
@@ -4060,6 +4087,8 @@ static func _append_quad(bucket: Dictionary, a: Vector3, b: Vector3, c: Vector3,
 		vertices.append(point)
 		normals.append(normal)
 		uvs.append(Vector2(point.x + point.z, point.y))
+	if bucket.has("uv2s"):
+		(bucket.uv2s as Array).append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	if (b - a).cross(c - a).dot(normal) > 0.0:
 		indices.append_array([base, base + 2, base + 1, base, base + 3, base + 2])
 	else:
@@ -4077,6 +4106,8 @@ static func _append_triangle(bucket: Dictionary, a: Vector3, b: Vector3, c: Vect
 		vertices.append(point)
 		normals.append(normal)
 		uvs.append(Vector2(point.x + point.z, point.y))
+	if bucket.has("uv2s"):
+		(bucket.uv2s as Array).append_array([Vector2.ZERO, Vector2.ZERO, Vector2.ZERO])
 	if (b - a).cross(c - a).dot(normal) > 0.0:
 		indices.append_array([base, base + 2, base + 1])
 	else:
@@ -4129,6 +4160,8 @@ static func _mesh_instance(node_name: String, bucket: Dictionary, material: Mate
 	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices as Array)
 	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals as Array)
 	arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs as Array)
+	if bucket.has("uv2s"):
+		arrays[Mesh.ARRAY_TEX_UV2] = PackedVector2Array(bucket.uv2s as Array)
 	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices as Array)
 	var mesh := ArrayMesh.new()
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
@@ -4285,6 +4318,74 @@ static func _outward_normal(start: Vector3, end: Vector3, fallback: Vector3) -> 
 
 static func _bucket() -> Dictionary:
 	return {"vertices": [], "normals": [], "uvs": [], "indices": []}
+
+
+## A bucket whose mesh carries UV2 (the glass's pane data, _set_pane_uv2): every
+## vertex appended to it gets one, (0, 0) until its pane is set.
+static func _bucket_with_panes() -> Dictionary:
+	return {"vertices": [], "normals": [], "uvs": [], "uv2s": [], "indices": []}
+
+
+## The buckets a part of the building draws its windows into, in the finishes of the
+## owner's 2026-11-20 photos (the material study): the wings', pavilions' and rear's
+## window surrounds, reveals, sills and heads in their pale blue-grey (window_trim,
+## window_reveal); their steel blue on the wings and pavilions (light_steel), dark at
+## the rear, the crescent's in the grille's bronze; the crescent's and junction
+## towers' glass apart (the hall's), the crescent's ground floor's with the door
+## groups'. The part's name rides along for its panes' kinds (_pane_kind).
+static func _for_part(buckets: Dictionary, part: String) -> Dictionary:
+	var routed := buckets.duplicate()
+	routed["part"] = part
+	if part in ["wing", "pavilion", "rear"]:
+		routed["window_trim"] = buckets.surround
+		routed["window_reveal"] = buckets.surround
+	if part in ["wing", "pavilion"]:
+		routed["frame"] = buckets.light_steel
+	elif part == "rear":
+		routed["frame"] = buckets.window_dark
+	elif part == "crescent":
+		routed["frame"] = buckets.dark_bronze
+	if part in ["crescent", "junction"]:
+		routed["glass"] = buckets.glass_hall
+	elif part == "crescent_low":
+		routed["glass"] = buckets.glass_door
+	return routed
+
+
+## A pane's seed for the glass's pane data: 1 or more, from its place.
+static func _pane_seed(at: Vector3) -> int:
+	return 1 + int(absf(sin(at.x * 12.9898 + at.z * 78.233 + at.y * 37.719) * 43758.5453)) % 997
+
+
+## A pane's kind (1 a dark room, 2 a blind, 3 sheers): the first of the config's
+## pane_kinds rules for its part (and its bottom's height) that takes it, by that
+## rule's share of panes; else 1.
+static func _pane_kind(buckets: Dictionary, seed: int, bottom: float) -> int:
+	var part := str(buckets.get("part", ""))
+	var rules: Array = buckets.get("pane_kinds", [])
+	for index in rules.size():
+		var rule := rules[index] as Dictionary
+		if str(rule.part) != part or bottom < float(rule.get("min_bottom_m", -INF)):
+			continue
+		var draw := fposmod(sin(float(seed) * 3.17 + float(index) * 11.3) * 43758.5453, 1.0)
+		if draw < float(rule.share):
+			return int(rule.kind)
+	return 1
+
+
+## The last `count` vertices of a bucket with panes take one pane's UV2: x its seed +
+## u across it (from `origin` along `across`), y its kind + v up it (along `up`),
+## each clamped inside the pane.
+static func _set_pane_uv2(bucket: Dictionary, count: int, seed: int, kind: int, origin: Vector3, across: Vector3, up: Vector3) -> void:
+	var vertices := bucket.vertices as Array
+	var uv2s := bucket.uv2s as Array
+	var across_length := maxf(across.length_squared(), 1e-6)
+	var up_length := maxf(up.length_squared(), 1e-6)
+	for index in range(vertices.size() - count, vertices.size()):
+		var offset := (vertices[index] as Vector3) - origin
+		var u := clampf(offset.dot(across) / across_length, 0.0, 0.999)
+		var v := clampf(offset.dot(up) / up_length, 0.0, 0.999)
+		uv2s[index] = Vector2(float(seed) + u, float(kind) + v)
 
 
 static func _record_from_chunk(path: String, key: String) -> Dictionary:

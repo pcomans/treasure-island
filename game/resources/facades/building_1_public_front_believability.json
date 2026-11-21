@@ -103,6 +103,12 @@
         "production_inference": ["the towers' depth (5 m) and top", "the south junction's mass behind the tower at the wings' three storeys"]
       }
     },
+    "pane_kinds": [
+      {"part": "rear", "min_bottom_m": 13.0, "kind": 3, "share": 0.7},
+      {"part": "rear", "kind": 2, "share": 0.4},
+      {"part": "wing", "kind": 2, "share": 0.35}
+    ],
+    "pane_kinds_note": "The glass's pane data (the material study, 2026-11-21): a pane's kind is the first rule for its part of the building (and its bottom's height) that takes it, by the rule's share of panes; else 1, a dark room. 2: a blind drawn down from the top; 3: sheers gathered to both sides.",
     "flagpole": {
       "bay": 5,
       "front_of_face_m": 0.3,
