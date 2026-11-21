@@ -97,11 +97,10 @@ uniform float board_joint_open = 0.45;
 
 // Weathering. weathering (0: off) scales it all. The plan-view map of the building
 // (building_1_weathering_map.gd) gives, at a wall's plan position, the top of the
-// mass behind it (R, metres), the lowest window sill above it (G, metres, 0 where
-// none), the exposure of that part of the building (B: its paint's age and
-// shelter, 0 to 1) and the ground at the wall's foot (A, metres); without a map
-// (weathering_map_bounds.z == 0) every part is fully exposed and only the
-// up-facing grime and the blotches apply.
+// mass behind it (R, metres), the exposure of that part of the building (B: its
+// paint's age and shelter, 0 to 1) and the ground at the wall's foot (A, metres;
+// G is unused); without a map (weathering_map_bounds.z == 0) every part is fully
+// exposed and only the up-facing grime and the blotches apply.
 uniform sampler2D weathering_map : filter_nearest, repeat_disable;
 uniform vec4 weathering_map_bounds = vec4(0.0);
 uniform float weathering = 0.0;
@@ -117,17 +116,16 @@ uniform float band_ragged = 0.0;
 uniform float wash = 0.0;
 uniform float wash_m = 0.0;
 uniform vec4 wash_color : source_color = vec4(0.56, 0.57, 0.55, 1.0);
-// Short, straight drips hanging from a top (and, shorter, from window sills), in
-// streak_color, never drawn thinner than about a pixel and a half. The band, wash and
-// drips all apply only where the exposure is above stain_min_exposure and only under
-// tops at least stain_min_top_m high (a parapet, not a mid-height ledge).
+// Short, straight drips hanging from a top, in streak_color, never drawn thinner
+// than about a pixel and a half. The band, wash and drips all apply only where the
+// exposure is above stain_min_exposure and only under tops at least stain_min_top_m
+// high (a parapet, not a mid-height ledge).
 uniform vec4 streak_color : source_color = vec4(0.45, 0.46, 0.44, 1.0);
 uniform float streak_amount = 0.0;
 uniform float streak_length_m = 1.2;
 uniform float streak_spacing_m = 0.6;
 uniform float stain_min_exposure = 0.4;
 uniform float stain_min_top_m = 0.0;
-uniform float sill_streak_amount = 0.0;
 // An even film of dirt and moss on up-facing tops within up_grime_depth_m of the top
 // (a coping, not the lines and ledges lower down).
 uniform float up_grime = 0.0;
@@ -392,7 +390,6 @@ void fragment() {
 	float exposure = 1.0;
 	float top_y = -1.0;
 	float top_d = -1.0;
-	float sill_d = -1.0;
 	float ground_h = -1.0;
 	if (weathering_map_bounds.z > 0.0 && (weathering > 0.0 || wear > 0.0)) {
 		vec2 into = wall > 0.5 ? normalize(n.xz) : vec2(0.0);
@@ -400,7 +397,6 @@ void fragment() {
 		vec4 at = textureLod(weathering_map, (world_position.xz - into * 0.12 - weathering_map_bounds.xy) / weathering_map_bounds.zw, 0.0);
 		top_y = behind.r;
 		top_d = behind.r > 0.0 ? behind.r - world_position.y : -1.0;
-		sill_d = at.g > 0.0 ? at.g - world_position.y : -1.0;
 		ground_h = at.a > 0.0 ? world_position.y - at.a : -1.0;
 		exposure = max(behind.b, at.b);
 	}
@@ -441,9 +437,6 @@ void fragment() {
 		band *= stain;
 		washed *= stain;
 		streak *= stain;
-		if (sill_d > 0.0 && wall > 0.5) {
-			streak += sill_streak_amount * streak_field(s + 17.0, sill_d, streak_spacing_m * 0.6, streak_length_m * 0.4, 5.0, s_fw) * smoothstep(stain_min_exposure, stain_min_exposure + 0.3, exposure);
-		}
 		if (ground_h >= 0.0 && base_splash > 0.0) {
 			float splash = 1.0 - smoothstep(base_splash_m * 0.3, base_splash_m, ground_h);
 			band += base_splash * splash * (0.75 + 0.25 * smoothstep(-1.0, 1.0, noise_m(vec2(s, world_position.y), 0.3))) * wall;

@@ -12,8 +12,7 @@ extends RefCounted
 ##   reaches the cell inside it; the options' "flat_tops" meshes (the tower block on
 ##   the drum's roof, close behind its coping) join after the growth, so their tops
 ##   never spread into the roof round them;
-## - G: the lowest window bottom over the cell (metres, 0 where no glass): the sill a
-##   wall below a window hangs its streaks from;
+## - G: unused (0);
 ## - B: the exposure of that part of the building (0 to 1: its paint's age and shelter),
 ##   from the nearest source wall run's class within RUN_REACH_M; farther in (the drum
 ##   and the stepped blocks behind the outer walls) one interior exposure when the
@@ -39,15 +38,15 @@ const RUN_REACH_M := 3.0
 const GAP_REACH_CELLS := 4
 
 
-## meshes: every MeshInstance3D of the building that its tops come from; glass: the
-## ones holding window glass; runs: [{"start": Vector3, "end": Vector3, "exposure":
-## float}] the source wall runs' foot segments; options: "interior_exposure" (0 to 1,
+## meshes: every MeshInstance3D of the building that its tops come from; runs:
+## [{"start": Vector3, "end": Vector3, "exposure": float}] the source wall runs' foot
+## segments; options: "interior_exposure" (0 to 1,
 ## for cells farther than RUN_REACH_M from every run; absent: the nearest run's, as
 ## the ground), "exposure_blur_m" (absent or 0: none) and "flat_tops" (an Array of
-## MeshInstance3D whose tops are not grown). Returns {"texture", "image",
-## "bounds": Vector4(x0, z0, size_x, size_z) for the shader's weathering_map_bounds},
-## or {} when there is nothing to map.
-static func build(meshes: Array, glass: Array, runs: Array, options: Dictionary = {}) -> Dictionary:
+## MeshInstance3D whose tops are not grown). Returns {"image", "bounds": Vector4(x0,
+## z0, size_x, size_z) for the shader's weathering_map_bounds}, or {} when there is
+## nothing to map.
+static func build(meshes: Array, runs: Array, options: Dictionary = {}) -> Dictionary:
 	var box := AABB()
 	var started := false
 	var flat: Array = options.get("flat_tops", [])
@@ -78,11 +77,6 @@ static func build(meshes: Array, glass: Array, runs: Array, options: Dictionary 
 			flat_top = _with_tops(node as MeshInstance3D, grid, flat_top)
 		for index in top.size():
 			top[index] = maxf(top[index], flat_top[index])
-	var sill := PackedFloat32Array()
-	sill.resize(width * depth)
-	for node: Variant in glass:
-		sill = _with_sills(node as MeshInstance3D, grid, sill)
-	sill = _grown_min(sill, width, depth, 2)
 	# Each run's class and ground over the cells within RUN_REACH_M of its foot, the
 	# nearest run winning; then cells no run reached take their nearest reached
 	# neighbour's (breadth first), so roofs and inner walls follow the walls round them.
@@ -150,9 +144,8 @@ static func build(meshes: Array, glass: Array, runs: Array, options: Dictionary 
 	for j in depth:
 		for i in width:
 			var index := j * width + i
-			image.set_pixel(i, j, Color(top[index], sill[index], maxf(exposure[index], 0.0), ground[index]))
+			image.set_pixel(i, j, Color(top[index], 0.0, maxf(exposure[index], 0.0), ground[index]))
 	return {
-		"texture": ImageTexture.create_from_image(image),
 		"image": image,
 		"bounds": Vector4(x0, z0, float(width) * CELL_M, float(depth) * CELL_M),
 	}
@@ -211,34 +204,6 @@ static func _with_tops(instance: MeshInstance3D, grid: Dictionary, top: PackedFl
 					if y > top[j * width + i]:
 						top[j * width + i] = y
 	return top
-
-
-## sill with the lowest glass point of instance over each cell (0 where none).
-static func _with_sills(instance: MeshInstance3D, grid: Dictionary, sill: PackedFloat32Array) -> PackedFloat32Array:
-	if instance == null or instance.mesh == null:
-		return sill
-	var xform := instance.global_transform
-	var width := int(grid.w)
-	var depth := int(grid.h)
-	for surface in instance.mesh.get_surface_count():
-		var arrays := instance.mesh.surface_get_arrays(surface)
-		var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
-		var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
-		for t in range(0, indices.size(), 3):
-			for k in 3:
-				var a := xform * vertices[indices[t + k]]
-				var b := xform * vertices[indices[t + (k + 1) % 3]]
-				var steps := maxi(1, int(ceilf(Vector2(b.x - a.x, b.z - a.z).length() / (CELL_M * 0.5))))
-				for s in steps + 1:
-					var p := a.lerp(b, float(s) / float(steps))
-					var i := int(floorf((p.x - float(grid.x0)) / CELL_M))
-					var j := int(floorf((p.z - float(grid.z0)) / CELL_M))
-					if i < 0 or j < 0 or i >= width or j >= depth:
-						continue
-					var index := j * width + i
-					if sill[index] == 0.0 or p.y < sill[index]:
-						sill[index] = p.y
-	return sill
 
 
 ## A box blur of radius `radius` cells along rows (along_x) or columns, by running sums,
@@ -307,26 +272,5 @@ static func _grown(values: PackedFloat32Array, width: int, depth: int) -> Packed
 					var nj := j + dj
 					if ni >= 0 and nj >= 0 and ni < width and nj < depth:
 						best = maxf(best, values[nj * width + ni])
-			result[j * width + i] = best
-	return result
-
-
-## Growth by `cells` for the sill heights: each empty cell takes the lowest sill of its
-## neighbours, so a wall face in front of recessed glass finds it.
-static func _grown_min(values: PackedFloat32Array, width: int, depth: int, cells: int) -> PackedFloat32Array:
-	var result := values.duplicate()
-	for j in depth:
-		for i in width:
-			if values[j * width + i] != 0.0:
-				continue
-			var best := 0.0
-			for dj in range(-cells, cells + 1):
-				for di in range(-cells, cells + 1):
-					var ni := i + di
-					var nj := j + dj
-					if ni >= 0 and nj >= 0 and ni < width and nj < depth:
-						var value := values[nj * width + ni]
-						if value != 0.0 and (best == 0.0 or value < best):
-							best = value
 			result[j * width + i] = best
 	return result

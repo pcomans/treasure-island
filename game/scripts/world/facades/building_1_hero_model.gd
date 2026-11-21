@@ -4038,12 +4038,6 @@ static func _drum_openings_fit(frame: Dictionary, width: float, openings: Dictio
 		and float(small_y[1]) + float(style.head_height) < high_y
 
 
-static func _append_wall_bar(bucket: Dictionary, anchor: Vector3, tangent: Vector3, normal: Vector3, center_y: float, width: float, height: float, projection: float) -> void:
-	var center := anchor + normal * projection
-	center.y = center_y
-	_append_box(bucket, center, tangent, normal, width, height, 0.12)
-
-
 static func _append_vertical_face(bucket: Dictionary, start: Vector3, end: Vector3, start_bottom_y: float, top_y: float, normal: Vector3, end_bottom_y: float = NAN) -> void:
 	var resolved_end_bottom := start_bottom_y if is_nan(end_bottom_y) else end_bottom_y
 	var bottom_start := Vector3(start.x, start_bottom_y, start.z)
@@ -4305,15 +4299,6 @@ static func _roof_unique_points(record: Dictionary) -> Array[Vector3]:
 
 static func _scaled_plan_point(source: Vector3, center: Vector3, scale: float, y: float) -> Vector3:
 	return Vector3(center.x + (source.x - center.x) * scale, y, center.z + (source.z - center.z) * scale)
-
-
-static func _outward_normal(start: Vector3, end: Vector3, fallback: Vector3) -> Vector3:
-	var tangent := end - start
-	tangent.y = 0.0
-	if tangent.length_squared() <= 0.000001:
-		return fallback
-	var candidate := fallback.normalized()
-	return candidate
 
 
 static func _bucket() -> Dictionary:

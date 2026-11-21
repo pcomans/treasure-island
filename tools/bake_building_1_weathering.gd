@@ -38,13 +38,16 @@ func _run() -> void:
 			_fail("%s does not build: %s" % [key, built.get("message", "")])
 			return
 		holder.add_child(built.node as Node3D)
+		# The wall's record also builds the hall beside it (extra_nodes), which the map
+		# does not read: freed at once.
+		for extra: Variant in built.get("extra_nodes", []):
+			var extra_node: Variant = ((extra as Dictionary).get("result", {}) as Dictionary).get("node")
+			if extra_node is Node:
+				(extra_node as Node).free()
 	var meshes: Array = []
 	var flat: Array = []
-	var glass: Array = []
 	for node: Node in holder.find_children("Hero*", "MeshInstance3D", true, false):
 		var name := str(node.name)
-		if name in (config.glass as Array):
-			glass.append(node)
 		if name in (config.not_tops as Array):
 			continue
 		if name.begins_with(FLAT_TOPS_PREFIX):
@@ -52,11 +55,11 @@ func _run() -> void:
 		else:
 			meshes.append(node)
 	var runs := _runs(config as Dictionary)
-	if meshes.is_empty() or glass.is_empty() or runs.is_empty():
-		_fail("nothing to map: %d meshes, %d glass, %d runs" % [meshes.size(), glass.size(), runs.size()])
+	if meshes.is_empty() or runs.is_empty():
+		_fail("nothing to map: %d meshes, %d runs" % [meshes.size(), runs.size()])
 		return
 	var started := Time.get_ticks_msec()
-	var map := WEATHERING_MAP.build(meshes, glass, runs, {"flat_tops": flat, "interior_exposure": float(config.interior_exposure), "exposure_blur_m": float(config.exposure_blur_m)})
+	var map := WEATHERING_MAP.build(meshes, runs, {"flat_tops": flat, "interior_exposure": float(config.interior_exposure), "exposure_blur_m": float(config.exposure_blur_m)})
 	if map.is_empty():
 		_fail("the weathering map is empty")
 		return
