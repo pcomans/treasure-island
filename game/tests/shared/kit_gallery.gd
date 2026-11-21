@@ -12,7 +12,8 @@ extends SceneTree
 ## the kit's preview(prop, params, level, placement): what the world draws for
 ## one such item at that detail level ("hero", "lod0", "lod1", "shadow"), at any
 ## distance. Saved as gallery-NAME.png. A view may add "frame_time_frames": N to
-## print a FRAME_TIME line for N frames from its camera. Add --rendering-method
+## print a FRAME_TIME line for N frames from its camera (the wall time between
+## frames and the GPU's own time per frame). Add --rendering-method
 ## gl_compatibility --rendering-driver opengl3 for the web renderer.
 ##
 ## "rings": [{"name": "...", "xz": [x, z], "yaw_deg": 0, "target_y": 0.8,
@@ -252,23 +253,31 @@ func _frame_time(frames: int, label: String) -> void:
 	var cap := Engine.max_fps
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	Engine.max_fps = 0
+	# The GPU's own time for each frame of the window, beside the wall time between
+	# frames (which a frame bound by the CPU hides a shader's cost in).
+	var window := root.get_viewport_rid()
+	RenderingServer.viewport_set_measure_render_time(window, true)
 	for _i in 30:
 		await RenderingServer.frame_post_draw
 	var times := PackedFloat64Array()
+	var gpu := PackedFloat64Array()
 	var last := Time.get_ticks_usec()
 	for _i in frames:
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
 		times.append(float(now - last) / 1000.0)
+		gpu.append(RenderingServer.viewport_get_measured_render_time_gpu(window))
 		last = now
+	RenderingServer.viewport_set_measure_render_time(window, false)
 	DisplayServer.window_set_vsync_mode(vsync)
 	Engine.max_fps = cap
 	times.sort()
+	gpu.sort()
 	var total := 0.0
 	for time in times:
 		total += time
-	print("FRAME_TIME gallery-%s frames=%d mean_ms=%.2f median_ms=%.2f draw_calls=%d primitives=%d method=%s" % [
-		label, times.size(), total / float(times.size()), times[times.size() / 2],
+	print("FRAME_TIME gallery-%s frames=%d mean_ms=%.2f median_ms=%.2f gpu_median_ms=%.3f draw_calls=%d primitives=%d method=%s" % [
+		label, times.size(), total / float(times.size()), times[times.size() / 2], gpu[gpu.size() / 2],
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME),
 		RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME),
 		RenderingServer.get_current_rendering_method(),
