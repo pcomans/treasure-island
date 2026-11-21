@@ -8,9 +8,10 @@ extends SceneTree
 ## moves those. Fixed seeds: the same plan gives the same pictures.
 ## - floor_layout.png (LAYOUT_SIZE, sRGB): the terrazzo's colour over its frame (u along
 ##   the angles, v out along the radius, as the floor's UVs): warm tan panels on a polar
-##   grid of thin dark divider strips (PANEL_M), every second panel a shade greyer and
-##   each a little uneven, two wide grey-brown bands along the crescent with dark edge
-##   strips (BANDS), broad soft patches, and dust along the foot of the walls;
+##   grid of thin dark divider strips (PANEL_M), every second panel a shade darker
+##   (ALTERNATE) and each a little uneven, two wide grey-brown bands along the crescent
+##   with dark edge strips (BAND_OFFSETS_M, BAND_M), broad soft patches, and dust along
+##   the foot of the walls;
 ## - floor_wear.png (WEAR_SIZE, linear): its roughness over the same frame, which the
 ##   material's roughness scales (1 the dullest): lanes of traffic down the middle of the
 ##   hall and in from the door duller, the floor near the walls and under the balcony more
@@ -18,7 +19,8 @@ extends SceneTree
 ##   walls dull, and fine scuffs;
 ## - floor_terrazzo.png (TILE_SIZE, sRGB): the aggregate, a seamless tile the floor
 ##   multiplies in every TILE_M metres on the ground plane: chips of cream, tan, grey,
-##   brown, rust, white and black stone in a warm pale matrix.
+##   brown, rust, white and dark grey stone in a warm pale matrix.
+## A texture it cannot save is an error, and the run then exits 1.
 ## The panel size, bands, lanes and colours are production inference from the 2023
 ## interior photographs (their pattern and tone, never their pixels): see
 ## game/resources/textures/world/b1_hall/PROVENANCE.md.
@@ -38,8 +40,8 @@ const STRIP_M := 0.012
 ## (between the colonnade and the east wall), BAND_M wide, with dark edge strips.
 const BAND_OFFSETS_M := [-3.75, 3.75]
 const BAND_M := 0.45
-## Colours (sRGB): the warm tan field, the greyer alternate panels' shade, the bands, the
-## strips and the dust's.
+## Colours (sRGB): the warm tan field, the bands and the strips; and two multipliers of
+## the colour under them: the alternate panels' darker shade and the dust's.
 const FIELD := Color(0.86, 0.76, 0.62)
 const ALTERNATE := Color(0.95, 0.95, 0.94)
 const BAND := Color(0.66, 0.58, 0.49)
@@ -50,6 +52,8 @@ const DUST_M := 0.1
 const DUST_FADE_M := 0.45
 
 var _layout: Dictionary
+## Whether a texture could not be saved.
+var _failed := false
 
 
 func _initialize() -> void:
@@ -75,10 +79,11 @@ func _run() -> void:
 	_save(_paint_wear(), "floor_wear.png")
 	_save(_paint_terrazzo(), "floor_terrazzo.png")
 	print("FLOOR textures drawn in %.1f s" % ((Time.get_ticks_msec() - started) / 1000.0))
-	hall.free()
+	for extra: Dictionary in extras:
+		(extra.result.node as Node).free()
 	if result.get("node") is Node:
 		(result.node as Node).free()
-	quit(0)
+	quit(1 if _failed else 0)
 
 
 func _save(image: Image, name: String) -> void:
@@ -86,6 +91,7 @@ func _save(image: Image, name: String) -> void:
 	print("FLOOR %s: %d x %d, error %d" % [name, image.get_width(), image.get_height(), error])
 	if error != OK:
 		push_error("Could not save " + name)
+		_failed = true
 
 
 ## The frame's angle and radius at a pixel's centre.
@@ -223,7 +229,7 @@ func _paint_layout() -> Image:
 			var spoke := floori((theta - theta0) / step)
 			var spoke_edge := (step * 0.5 - absf((theta - theta0) - (float(spoke) + 0.5) * step)) * r
 			var strip := maxf(ring_strip, maxf(_cover(spoke_edge, STRIP_M, px), band_edge))
-			# The panel's own shade: every second one greyer, each a little uneven.
+			# The panel's own shade: every second one darker, each a little uneven.
 			var colour := FIELD
 			if (ring + spoke) % 2 != 0:
 				colour = Color(colour.r * ALTERNATE.r, colour.g * ALTERNATE.g, colour.b * ALTERNATE.b)
@@ -299,7 +305,7 @@ func _paint_wear() -> Image:
 
 
 ## How much of a pixel at (a, r) (metres along the arc and out) a scuff covers: in each
-## SCUFF cell, with a cell's own chance, one short stroke at its own angle.
+## CELL (0.25 m) square, with the square's own chance, one short stroke at its own angle.
 func _scuff(a: float, r: float, pa: float, pr: float) -> float:
 	const CELL := 0.25
 	var ia := floori(a / CELL)

@@ -365,8 +365,9 @@ static func floor_layout(plan: Dictionary) -> Dictionary:
 	}
 
 
-## Each terrazzo vertex's place in the floor's polar frame: u along the angles, v out
-## along the radius, 0 to 1. Said as an error if one falls outside it.
+## Each terrazzo vertex's place in the floor's polar frame: u along the angles (taken
+## from the frame's first angle and wrapped, so a frame across the -PI/PI seam holds
+## too), v out along the radius, 0 to 1. Said as an error if one falls outside it.
 static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Array:
 	var centre := layout.centre as Vector2
 	var theta := layout.theta as Vector2
@@ -375,7 +376,8 @@ static func _floor_uvs(layout: Dictionary, vertices: Array) -> PackedVector2Arra
 	var outside := 0
 	for vertex: Vector3 in vertices:
 		var offset := Vector2(vertex.x - centre.x, vertex.z - centre.y)
-		var uv := Vector2((atan2(offset.y, offset.x) - theta.x) / (theta.y - theta.x), (offset.length() - radius.x) / (radius.y - radius.x))
+		var turn := wrapf(atan2(offset.y, offset.x) - theta.x, -PI, PI)
+		var uv := Vector2(turn / (theta.y - theta.x), (offset.length() - radius.x) / (radius.y - radius.x))
 		if uv.x < 0.0 or uv.x > 1.0 or uv.y < 0.0 or uv.y > 1.0:
 			outside += 1
 		uvs.append(uv)
