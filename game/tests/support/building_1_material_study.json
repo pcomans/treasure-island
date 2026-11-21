@@ -13,13 +13,13 @@
  "exposure": {
   "crescent": 0.12,
   "wing": 0.3,
-  "pavilion": 0.75,
+  "pavilion": 0.85,
   "junction": 0.45,
   "se": 0.35,
   "rear": 1.0,
   "north": 0.35,
   "inner": 0.5,
-  "tower": 0.6,
+  "tower": 0.4,
   "other": 0.4
  },
  "by_mesh": {
@@ -35,7 +35,8 @@
   "HeroPublicBronze": "res://game/resources/materials/world/building_1/building_1_m_door_bronze.tres",
   "HeroLightSteel": "res://game/resources/materials/world/building_1/building_1_m_window_blue.tres",
   "HeroEmblemEnamel": "res://game/resources/materials/world/building_1/building_1_m_emblem_blue.tres",
-  "HeroCanopySoffitJoints": "res://game/resources/materials/world/building_1/building_1_m_soffit.tres"
+  "HeroCanopySoffitJoints": "res://game/resources/materials/world/building_1/building_1_m_soffit.tres",
+  "HeroIncisedLinesField": "res://game/resources/materials/world/building_1/building_1_m_wall_lines.tres"
  },
  "splits": [
   {
@@ -72,13 +73,20 @@
     "rear": "res://game/resources/materials/world/building_1/building_1_m_window_dark.tres",
     "crescent": "res://game/resources/materials/world/building_1/building_1_m_grille_bronze.tres"
    },
-   "rest": ""
+   "rest": "",
+   "low": {
+    "crescent": {
+     "max_y": 10.2,
+     "material": "res://game/resources/materials/world/building_1/building_1_m_door_bronze.tres"
+    }
+   }
   },
   {
    "mesh": "HeroGlazing",
    "margins_m": [0.05, 0.05, 0.05, 0.05],
    "near_windows": {
-    "crescent": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres"
+    "crescent": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres",
+    "junction": "res://game/resources/materials/world/building_1/building_1_m_glass_hall.tres"
    },
    "rest": "res://game/resources/materials/world/building_1/building_1_m_glass.tres",
    "pane_uv2": true

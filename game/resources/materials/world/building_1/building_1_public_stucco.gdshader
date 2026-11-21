@@ -48,9 +48,12 @@ uniform bool world_axis_projection = false;
 // form-board lines on every painted wall). Rows about board_pitch_m tall (0: off),
 // their heights varying by board_pitch_variation of it; boards of about
 // board_length_m whose ends are staggered from row to row, board_butt_share of them
-// showing; each board its own small tone; shallow joints the paint has filled in
-// places, so they read as broken lines. Detail fades to its mean where a board is
-// only a few pixels tall, so it neither shimmers nor repeats at a distance.
+// showing; each board its own tone; joints the paint has filled in places and that
+// step up or down by up to board_step (rows) along their length, so they read as
+// broken, uneven lines. A joint is drawn at least a pixel wide with its darkness
+// spread over that pixel, so it stays visible in sun at 20 m without aliasing; where
+// a board is under about four pixels tall the joints give way to their mean
+// darkening, so they neither stripe nor shimmer at a distance.
 uniform float board_pitch_m = 0.0;
 uniform float board_pitch_variation = 0.0;
 uniform float board_length_m = 2.4;
@@ -59,6 +62,8 @@ uniform float board_tone = 0.0;
 uniform float board_joint = 0.0;
 uniform float board_joint_width = 0.05;
 uniform float board_relief = 0.0;
+uniform float board_step = 0.0;
+uniform float board_joint_open = 0.45;
 
 // Weathering. weathering (0: off) scales it all. The plan-view map of the building
 // (building_1_weathering_map.gd) gives, at a wall's plan position, the top of the
@@ -70,22 +75,24 @@ uniform float board_relief = 0.0;
 uniform sampler2D weathering_map : filter_nearest, repeat_disable;
 uniform vec4 weathering_map_bounds = vec4(0.0);
 uniform float weathering = 0.0;
-// The even grey band under a coping (top_band, fading out by top_band_m below the
-// top) and the soft wash below it (wash, fading out over four times that), both in
-// band_color.
+// The even grey band at the top (top_band in band_color, fading out between 0.4 and
+// 1 times top_band_m below the top: a coping, or the darkest strip under it) and the
+// soft wash under it (wash in wash_color, fading out over three times top_band_m).
 uniform vec4 band_color : source_color = vec4(0.56, 0.57, 0.55, 1.0);
 uniform float top_band = 0.0;
 uniform float top_band_m = 0.5;
 uniform float wash = 0.0;
-// Thin, straight rain streaks hanging from a top (and, shorter, from window sills),
-// in streak_color: only where the exposure is above streak_min_exposure and only
-// from tops at least streak_min_top_m high (a parapet, not a mid-height ledge).
+uniform vec4 wash_color : source_color = vec4(0.56, 0.57, 0.55, 1.0);
+// Short, straight drips hanging from a top (and, shorter, from window sills), in
+// streak_color, never drawn thinner than about a pixel and a half. The band, wash and
+// drips all apply only where the exposure is above stain_min_exposure and only under
+// tops at least stain_min_top_m high (a parapet, not a mid-height ledge).
 uniform vec4 streak_color : source_color = vec4(0.45, 0.46, 0.44, 1.0);
 uniform float streak_amount = 0.0;
 uniform float streak_length_m = 1.2;
 uniform float streak_spacing_m = 0.6;
-uniform float streak_min_exposure = 0.4;
-uniform float streak_min_top_m = 0.0;
+uniform float stain_min_exposure = 0.4;
+uniform float stain_min_top_m = 0.0;
 uniform float sill_streak_amount = 0.0;
 // An even film of dirt and moss on up-facing tops (copings, sills, ledges).
 uniform float up_grime = 0.0;
@@ -123,6 +130,10 @@ uniform float wear_height_m = 0.7;
 uniform float pane_tilt = 0.0;
 uniform float interior_amount = 0.0;
 uniform vec4 interior_color : source_color = vec4(0.82, 0.82, 0.79, 1.0);
+// Glass seen at a slant reads darker than face on in the owner's photos (it mirrors
+// the street and the buildings opposite, not the sky): its colour, reflectance and
+// metalness scaled by down to 1 - oblique_dim as the view grazes it.
+uniform float oblique_dim = 0.0;
 
 varying vec3 world_position;
 varying vec3 world_normal;
@@ -143,24 +154,27 @@ float noise_m(vec2 position_m, float feature_m) {
 	return (dot(textureLod(surface_color, position_m / (32.0 * feature_m), 5.0).rgb, LUMA) - PLASTER_MEAN) * 28.0;
 }
 
-// Thin straight streaks hanging below a drip edge: s runs along the wall (metres),
-// below_m down from the edge. Columns spacing_m apart hold at most one streak each,
-// of its own width (a tenth to a quarter of the column), strength and length; where
-// a streak is narrower than about three pixels (s_fw: metres per pixel along the
-// wall) the field settles to its mean, a soft even shade.
+// Short straight drips hanging below a drip edge: s runs along the wall (metres),
+// below_m down from the edge. Columns spacing_m apart hold at most one drip each, of
+// its own width (25 to 55 % of the column), strength and length, soft at its sides,
+// strongest near the edge and fading as it runs down. A drip is drawn at least two
+// pixels wide (s_fw: metres per pixel along the wall) with its darkness spread over
+// that width, and where the columns are under about three pixels apart the field
+// settles to its mean, a soft even shade.
 float streak_field(float s, float below_m, float spacing_m, float length_m, float salt, float s_fw) {
 	float c = s / spacing_m;
 	float ci = floor(c);
 	float cf = c - ci;
-	float width = mix(0.1, 0.25, hash21(vec2(ci, salt + 1.7)));
-	float center = mix(0.5 * width, 1.0 - 0.5 * width, hash21(vec2(ci, salt + 9.2)));
-	float across = abs(cf - center) / (0.5 * width);
-	float profile = 1.0 - smoothstep(0.25, 1.0, across);
-	float run = length_m * mix(0.35, 1.0, hash21(vec2(ci, salt + 4.4)));
-	float body = 1.0 - smoothstep(run * 0.5, run, below_m);
-	float strength = step(0.4, hash21(vec2(ci, salt + 6.1))) * mix(0.5, 1.0, hash21(vec2(ci, salt + 2.9)));
-	float mean = 0.06 * (1.0 - smoothstep(length_m * 0.2, length_m * 0.8, below_m));
-	return mix(profile * body * strength, mean, smoothstep(0.35, 1.0, s_fw / (spacing_m * 0.12)));
+	float width_m = spacing_m * mix(0.25, 0.55, hash21(vec2(ci, salt + 1.7)));
+	float drawn_m = max(width_m, s_fw * 2.0);
+	float center = mix(0.3, 0.7, hash21(vec2(ci, salt + 9.2)));
+	float across = abs(cf - center) * spacing_m / (0.5 * drawn_m);
+	float profile = (1.0 - smoothstep(0.0, 1.0, across)) * (width_m / drawn_m);
+	float run = length_m * mix(0.45, 1.0, hash21(vec2(ci, salt + 4.4)));
+	float body = smoothstep(0.0, 0.1, below_m) * (1.0 - smoothstep(run * 0.35, run, below_m)) * mix(1.0, 0.6, clamp(below_m / run, 0.0, 1.0));
+	float strength = step(0.45, hash21(vec2(ci, salt + 6.1))) * mix(0.55, 1.0, hash21(vec2(ci, salt + 2.9)));
+	float mean = 0.12 * smoothstep(0.0, 0.1, below_m) * (1.0 - smoothstep(length_m * 0.3, length_m * 0.9, below_m));
+	return mix(mean, profile * body * strength, smoothstep(1.5, 3.0, spacing_m / s_fw));
 }
 
 // One world-axis projection of the plaster: its luminance, roughness, normal tilt
@@ -277,35 +291,40 @@ void fragment() {
 		// so every joint stays a level line.
 		float warp = noise_m(vec2(world_position.y, 3.7), 0.45) * board_pitch_variation * board_pitch_m;
 		float rows = (world_position.y + warp) / board_pitch_m;
-		float board_px = board_pitch_m / height_fw;
+		float rows_fw = height_fw / board_pitch_m;
+		float board_px = 1.0 / max(rows_fw, 0.0001);
 		float show_board = wall * smoothstep(2.0, 4.0, board_px);
-		if (show_board > 0.0) {
-			float row = floor(rows);
-			float f = rows - row;
-			// The boards of this row along the wall, each row's ends staggered.
-			float row_length = board_length_m * mix(0.6, 1.5, hash21(vec2(row, 3.17)));
-			float along = s / row_length + hash21(vec2(row, 7.73)) * 7.0;
-			float piece = floor(along);
-			float g = along - piece;
-			float tone = hash21(vec2(row * 1.37, piece)) - 0.5;
-			albedo *= 1.0 + tone * board_tone * show_board;
-			// The joint where this row meets the next: e is 0 there, + above.
-			float e = f < 0.5 ? f : f - 1.0;
-			float joint_line = row + step(0.5, f);
-			float x = e / board_joint_width;
-			float groove = exp(-x * x);
-			// Where the paint has filled it the joint fades: a line broken in places.
-			float open = smoothstep(-0.6, 0.4, noise_m(vec2(s, joint_line * 0.9), 0.7));
-			float show_joint = wall * smoothstep(6.0, 14.0, board_px);
-			// Butt joints at the boards' ends, some of them showing.
-			float end_d = min(g, 1.0 - g) * row_length / board_pitch_m;
-			float butt = exp(-pow(end_d / (board_joint_width * 0.8), 2.0)) * step(1.0 - board_butt_share, hash21(vec2(piece, row + 5.1)));
-			butt *= (1.0 - smoothstep(0.32, 0.46, abs(f - 0.5))) * smoothstep(4.0, 9.0, board_pitch_m / s_fw);
-			float cavity = max(groove * open, butt * 0.35);
-			albedo *= 1.0 - cavity * board_joint * show_joint;
-			// The groove's walls face down above the joint and up below it.
-			slope.y -= 2.0 * x * groove * open * board_relief * show_joint;
-		}
+		float show_joint = smoothstep(4.0, 7.0, board_px);
+		float row = floor(rows);
+		// The boards of this row along the wall, each row's ends staggered.
+		float row_length = board_length_m * mix(0.6, 1.5, hash21(vec2(row, 3.17)));
+		float along = s / row_length + hash21(vec2(row, 7.73)) * 7.0;
+		float piece = floor(along);
+		float g = along - piece;
+		float tone = hash21(vec2(row * 1.37, piece)) - 0.5 + 0.35 * noise_m(vec2(s, row * 0.7), 0.6);
+		albedo *= 1.0 + tone * board_tone * show_board;
+		// The nearest joint, read from its own line so both its sides agree: it
+		// steps up or down along its length, is filled by the paint in places and
+		// is fainter in others.
+		float line = floor(rows + 0.5);
+		float run_m = board_length_m * 0.8;
+		float stretch = floor(s / run_m + hash21(vec2(line, 1.9)) * 5.0);
+		float wobble = noise_m(vec2(s, line * 1.7), 0.9) * 0.06;
+		float e = rows - line - (hash21(vec2(stretch, line)) - 0.5) * board_step - wobble;
+		float jw = max(board_joint_width, rows_fw);
+		float groove = exp(-(e * e) / (jw * jw)) * (board_joint_width / jw);
+		float breaks = noise_m(vec2(s, line * 0.9), 0.35) * 0.7 + noise_m(vec2(s + 13.0, line * 1.3), 0.12) * 0.3;
+		float open = smoothstep(-0.5, 0.5, breaks + board_joint_open - 0.45) * mix(0.3, 1.0, hash21(vec2(stretch, line + 4.1)));
+		// Butt joints at the boards' ends, some of them showing.
+		float end_d = min(g, 1.0 - g) * row_length / board_pitch_m;
+		float butt = exp(-pow(end_d / max(board_joint_width * 0.8, s_fw / board_pitch_m), 2.0)) * step(1.0 - board_butt_share, hash21(vec2(piece, row + 5.1)));
+		butt *= (1.0 - smoothstep(0.32, 0.46, abs(rows - row - 0.5))) * smoothstep(4.0, 9.0, board_pitch_m / s_fw);
+		float cavity = max(groove * open, butt * 0.25);
+		// Past the joints' last pixels their mean darkening stays.
+		float mean_cavity = board_joint_width * 1.77 * 0.5;
+		albedo *= 1.0 - board_joint * wall * mix(mean_cavity, cavity, show_joint);
+		// The groove's walls face down above the joint and up below it.
+		slope.y -= 2.0 * (e / jw) * groove * open * board_relief * show_joint * wall;
 	}
 
 	float exposure = 1.0;
@@ -346,28 +365,33 @@ void fragment() {
 		float amount = weathering * exposure * max(0.0, 1.0 + north_east_bias * facing);
 		albedo *= 1.0 - age_dim * clamp(amount, 0.0, 1.0);
 		float band = 0.0;
+		float washed = 0.0;
 		float streak = 0.0;
+		// Stains belong to the exposed parts and to real parapets only.
+		float stain = smoothstep(stain_min_exposure, stain_min_exposure + 0.3, exposure) * step(stain_min_top_m, top_y);
 		if (top_d > -0.05) {
 			float below = max(top_d, 0.0);
-			band = top_band * (1.0 - smoothstep(top_band_m * 0.5, top_band_m, below));
-			band += wash * (1.0 - smoothstep(0.0, top_band_m * 4.0, below)) * wall;
-			if (top_y >= streak_min_top_m) {
-				streak = streak_amount * streak_field(s, below, streak_spacing_m, streak_length_m, 0.0, s_fw) * wall;
-			}
+			band = top_band * (1.0 - smoothstep(top_band_m * 0.4, top_band_m, below));
+			washed = wash * (1.0 - smoothstep(0.0, top_band_m * 3.0, below));
+			streak = streak_amount * streak_field(s, below, streak_spacing_m, streak_length_m, 0.0, s_fw) * wall;
 		}
+		band *= stain;
+		washed *= stain;
+		streak *= stain;
 		if (sill_d > 0.0 && wall > 0.5) {
-			streak += sill_streak_amount * streak_field(s + 17.0, sill_d, streak_spacing_m * 0.6, streak_length_m * 0.4, 5.0, s_fw);
+			streak += sill_streak_amount * streak_field(s + 17.0, sill_d, streak_spacing_m * 0.6, streak_length_m * 0.4, 5.0, s_fw) * smoothstep(stain_min_exposure, stain_min_exposure + 0.3, exposure);
 		}
-		streak *= smoothstep(streak_min_exposure, streak_min_exposure + 0.3, exposure);
 		if (ground_h >= 0.0 && base_splash > 0.0) {
 			float splash = 1.0 - smoothstep(base_splash_m * 0.3, base_splash_m, ground_h);
 			band += base_splash * splash * (0.75 + 0.25 * smoothstep(-1.0, 1.0, noise_m(vec2(s, world_position.y), 0.3))) * wall;
 		}
+		washed = clamp(washed * amount, 0.0, 0.85);
+		albedo = mix(albedo, wash_color.rgb, washed);
 		band = clamp(band * amount, 0.0, 0.85);
 		albedo = mix(albedo, band_color.rgb, band);
 		streak = clamp(streak * amount, 0.0, 0.7);
 		albedo = mix(albedo, streak_color.rgb, streak);
-		roughness = min(roughness + 0.08 * max(band, streak), 0.97);
+		roughness = min(roughness + 0.08 * max(max(band, washed), streak), 0.97);
 		float up = smoothstep(0.5, 0.85, n.y);
 		if (up > 0.0 && up_grime > 0.0) {
 			float film = clamp(up_grime * up * weathering * mix(1.0, exposure, 0.5), 0.0, 0.85);
@@ -377,9 +401,9 @@ void fragment() {
 	}
 
 	if (wear > 0.0 && ground_h >= 0.0) {
-		float worn = wear * (1.0 - smoothstep(wear_height_m - 0.015, wear_height_m, ground_h));
-		// The worn edges, darker: a band at the plate's top and one at its foot.
-		float edge = max(1.0 - smoothstep(0.02, 0.07, wear_height_m - ground_h), 1.0 - smoothstep(0.02, 0.06, ground_h));
+		float worn = wear * (1.0 - smoothstep(wear_height_m - 0.04, wear_height_m, ground_h));
+		// The worn edges, darker: a soft band at the plate's top and one at its foot.
+		float edge = 0.7 * max(1.0 - smoothstep(0.03, 0.12, wear_height_m - ground_h), 1.0 - smoothstep(0.02, 0.08, ground_h));
 		albedo = mix(albedo, mix(wear_color.rgb, wear_edge_color.rgb, edge), worn);
 		metallic = mix(metallic, 1.0, worn);
 		roughness = mix(roughness, mix(max(roughness - 0.2, roughness_range.x), roughness, edge), worn);
@@ -406,10 +430,23 @@ void fragment() {
 		}
 	}
 
+	// At a slant: less colour, and a lower reflectance; below a reflectance of about
+	// 2 % Godot also scales down the grazing reflection of the sky (its f90 is
+	// 50 x F0), so the glass mirrors less sky edge-on, as the photos' oblique windows
+	// mirror the darker street.
+	float specular = specular_value;
+	if (oblique_dim > 0.0) {
+		float facing_view = clamp(dot(normalize((VIEW_MATRIX * vec4(n, 0.0)).xyz), VIEW), 0.0, 1.0);
+		float slant = oblique_dim * smoothstep(0.95, 0.4, facing_view);
+		albedo *= 1.0 - slant;
+		specular *= 1.0 - slant;
+		metallic *= 1.0 - slant;
+	}
+
 	ALBEDO = albedo;
 	ROUGHNESS = roughness;
 	METALLIC = metallic;
-	SPECULAR = specular_value;
+	SPECULAR = specular;
 	vec3 perturbed = normalize(n + t * slope.x + b * slope.y);
 	NORMAL = normalize((VIEW_MATRIX * vec4(perturbed, 0.0)).xyz);
 }

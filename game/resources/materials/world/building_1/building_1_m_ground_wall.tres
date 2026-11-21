@@ -20,6 +20,6 @@ shader_parameter/roughness_variation = 0.12
 shader_parameter/world_axis_projection = true
 shader_parameter/paint_color = Color(0.86, 0.84, 0.76, 1)
 shader_parameter/weathering = 1
-shader_parameter/band_color = Color(0.56, 0.57, 0.55, 1)
+shader_parameter/band_color = Color(0.5, 0.51, 0.49, 1)
 shader_parameter/base_splash = 0.2
 shader_parameter/base_splash_m = 0.45

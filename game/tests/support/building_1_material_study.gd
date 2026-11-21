@@ -56,6 +56,11 @@ static func prepare(world: Node, settings: Dictionary) -> String:
 	var meshes := _hero_meshes(world)
 	if meshes.is_empty():
 		return "building 1 study: no Building 1 hero meshes in the loaded world"
+	if bool(settings.get("list_meshes", false)):
+		for name: String in meshes:
+			var mesh := (meshes[name] as MeshInstance3D).mesh
+			var material: Material = mesh.surface_get_material(0) if mesh != null and mesh.get_surface_count() > 0 else null
+			print("STUDY_MESH %s material=%s" % [name, material.resource_path.get_file() if material != null else "none"])
 	var runs := _runs(settings)
 	if runs.is_empty():
 		return "building 1 study: the source wall runs did not resolve"
@@ -233,6 +238,12 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 	# Broad flat faces of a mesh of mouldings (the crescent's attic frieze, the
 	# pavilions' fins) are wall in the photos, board lines and all.
 	var large: Dictionary = spec.get("large_faces", {})
+	# "low": {CLASS: {"max_y": metres, "material": path}}: that class's triangles
+	# below max_y take their own material (the crescent's ground-floor frames under
+	# the canopy, gold bronze where the grilles above are dark).
+	var low: Dictionary = spec.get("low", {})
+	for low_class: String in low:
+		near["low " + low_class] = (low[low_class] as Dictionary).material
 	for t in range(0, indices.size(), 3):
 		var a := xform * vertices[indices[t]]
 		var b := xform * vertices[indices[t + 1]]
@@ -240,6 +251,8 @@ static func _split(spec: Dictionary, meshes: Dictionary, panels: Dictionary, mat
 		var c := (a + b + d) / 3.0
 		var found := _panel_class(c, panels, margins)
 		var part := found if near.has(found) else ""
+		if low.has(found) and c.y <= float((low[found] as Dictionary).max_y):
+			part = "low " + found
 		if part == "" and not large.is_empty() and _is_large_wall_face(a, b, d, large):
 			part = "large"
 			near["large"] = large.material
