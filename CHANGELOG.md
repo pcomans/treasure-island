@@ -6,7 +6,7 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
-## Build 2438 (2026-11-21)
+## Build 2459 (2026-11-21)
 
 - From far away, Building 1's hall is now drawn through its open front door as a simple stand-in of about 400 triangles instead of the full 35,000, so the island takes a little less work to draw; the full hall is back before you reach the door.
 
