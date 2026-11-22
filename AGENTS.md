@@ -247,7 +247,7 @@ A building or family study runs in this order ([evidence](discovery/PROCESS_SHOO
 2. **Build.** The modeller builds from the description, the photos and the footprint. The visual reviewer receives the same description.
 3. **Check for defects.** Every study gets the [defect pass](.claude/agents/ti-visual-review.md#defect-pass): mechanically where a shared check covers the defect, otherwise by the visual reviewer working through its list.
 4. **Show the owner**, with the real building's photos and footprint beside the renders ([owner sheets](CLAUDE.md#delivering-visual-galleries-in-vs-code)).
-5. **Fix only named defects.** Reviews after the first build check the basic form at the declared level against the description and photos, and defects. They do not ask for added fine detail or small objects; missing form at the declared level, such as a photographed opening group at Level 2, is a form finding. A further look-review round runs only for a defect named by the owner, a reviewer or a mechanical check.
+5. **Fix only named defects.** Reviews after the first build check the basic form at the declared level against the description and photos, and defects. They do not ask for fine detail or small objects beyond the declared level; missing form at the declared level, such as a photographed opening group at Level 2, is a form finding. A further look-review round runs only for a defect named by the owner, a reviewer or a mechanical check, or for a progress-review RESCOPE or REWORK.
 
 This limits repeat rounds, not review: the independent code and visual reviews, the progress decision and every check in [What done means for a building](#what-done-means-for-a-building) stay.
 
