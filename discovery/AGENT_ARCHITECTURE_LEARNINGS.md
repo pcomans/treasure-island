@@ -1,6 +1,6 @@
 # Agent architecture learnings
 
-These are the orchestrating session's own observations on running agents in this project, from one long working session (2026-11-20 to 21). Most of them are hypotheses. The owner has not adopted them as rules: "we would need to know if any of these really … make a difference. Right now it's just a hypothesis, right?" [AGENTS](../AGENTS.md) remains the authority, and this document does not change it.
+These are the orchestrating session's own observations on running agents in this project, from one long working session (2026-11-20 to 21). Most of them are hypotheses. When they were written the owner did not adopt them as rules: "we would need to know if any of these really … make a difference. Right now it's just a hypothesis, right?" The owner has since adopted one of them as the standing way of working, the heavy checks run once, on the release batch (lesson 3), and none of the others. [AGENTS](../AGENTS.md) remains the authority, and this document does not change it.
 
 Each lesson gives what was observed, what the orchestrator now does, and its status: **measured**, **first measurement** or **hypothesis**. Where a lesson in [LEARNINGS](../LEARNINGS.md) already covers the point, it is linked and only the orchestration angle is added here. Evidence marked "as recorded by the orchestrating session" is not in the repository and could not be checked against it.
 
@@ -33,7 +33,7 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 ### 5. Describe before modelling; give facts from data
 
 - **Observed.** Plan depth estimated from photos was off by up to −59 %, and about 0 % with the footprint supplied (two judges). See the [architect-description shootout](ARCHITECT_DESCRIPTION_SHOOTOUT.md) and [Give a describer or modeller the footprint](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos).
-- **Now.** Give agents facts from data (footprints, measured sizes) rather than letting them estimate from pixels. A description goes to the modeller, and the same description goes to the reviewer, as the owner requires.
+- **Now.** Give agents facts from data (footprints, measured sizes) rather than letting them estimate from pixels. A description goes to the modeller, and the same description goes to the reviewer, as the owner proposes for the next shootout.
 - **Status.** First measurement on descriptions; the effect on modelling is untested.
 
 ### 6. Corrections as measured targets
@@ -46,9 +46,7 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 
 ### 7. Build a mechanical check when eyes miss a class of defect twice
 
-- **Observed.** On Building 1 the owner, not the reviews, found a doorstep that stopped about one approach in six, a see-through gap at the rear, and a camera snap at the hall door. See [Check a building's shell and doorways mechanically](../LEARNINGS.md#check-a-buildings-shell-and-doorways-mechanically-not-by-eye). Checks built since:
-  - on `main`: the passage walk (96 ways through each catalog passage's door); the far stand-in's outside views (a stand-in poking above a roof); the case in which the hall's mural loader does not set up, so the hall stays drawn as built;
-  - on a branch not yet on `main`: the shell check (no ray from outside reaches the interior) and the steady-camera bound at the hall door.
+- **Observed.** On Building 1 the owner, not the reviews, found a doorstep that stopped about one approach in six, a see-through gap at the rear, and a camera snap at the hall door. See [Check a building's shell and doorways mechanically](../LEARNINGS.md#check-a-buildings-shell-and-doorways-mechanically-not-by-eye). Checks built since, all on `main`: the passage walk (96 ways through each catalog passage's door); the far stand-in's outside views (a stand-in poking above a roof); the case in which the hall's mural loader does not set up, so the hall stays drawn as built; the shell check (no ray from outside reaches the interior); and the steady-camera bound at the hall door.
 - **Now.** Require that a new check fails on the old state and passes on the fix, and keep that red run in the log.
 - **Status.** First measurement: the shell check found three holes in the old state, one of them in the released game; the other checks' red runs are as recorded by the orchestrating session. Whether they catch future faults is untested.
 
