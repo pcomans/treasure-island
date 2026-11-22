@@ -710,6 +710,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, south_cuts) and cut_whole
 	for fill_polygon in _tier_fill_polygons(wall_record, front.south_tier_fill as Dictionary):
 		cut_whole = _append_flat_polygon_roof(roof, collision, _polygon_points(fill_polygon), three_y) and cut_whole
+	_append_junction_wedge_top(roof, wall_record, south_tower_runs, south_runs, south_depth, three_y, front.south_junction_wedge as Dictionary)
 	cut_whole = _append_front_step_roof(roof, collision, wall_record, central_high, float(block.depth_m), float(block.roof_y)) and cut_whole
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
 		cut_whole = _append_front_step_roof(roof, collision, wall_record, notch_runs, wing_step, float(wing_setback.face_top_y)) and cut_whole
@@ -2526,8 +2527,9 @@ static func _hall_corner_outline(record: Dictionary, blocks: Dictionary, side: S
 
 
 ## A hall-corner block's walls from the ground to the hall's roof height, each facing
-## out of the plan, and a flat coping along its open top edges (front, return and the
-## side over the wing); the edges against the hall's block need none. The recess's
+## out of the plan, and a flat coping along its front and return, as the hall's parapet
+## runs (the photos show none on its sides behind; round 2: a coping there read as a pale
+## line on the roof). The recess's
 ## side, the hall's end from its front to the block's, is walled up to the two-storey
 ## roof (`low_top`), over which the hall block's own end stands. Solid.
 static func _append_hall_corner_walls(buckets: Dictionary, collision: Dictionary, outline: Array[Vector3], roof_y: float, coping: Dictionary, back: float, recess: float, low_top: float) -> void:
@@ -2549,7 +2551,7 @@ static func _append_hall_corner_walls(buckets: Dictionary, collision: Dictionary
 			normal = -normal
 		for target: Dictionary in [buckets.wall, collision]:
 			_append_vertical_face(target, a, b, a.y, roof_y, normal)
-		if index < 4:
+		if index < 2:
 			if (path.points as Array).is_empty():
 				(path.points as Array).append(Vector3(a.x, 0.0, a.z))
 			(path.points as Array).append(Vector3(b.x, 0.0, b.z))
@@ -2689,6 +2691,49 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 ## strip, its back end `rear_inset_m` inside the wedge's mouth, its top
 ## `top_below_roof_m` under the roofs either side, so no face lies in another's plane.
 static func _append_junction_wedge(bucket: Dictionary, collision: Dictionary, record: Dictionary, tower_runs: Array[int], wing_runs: Array[int], depth: float, low_y: float, roof_y: float, spec: Dictionary) -> void:
+	var box := _junction_wedge_box(record, tower_runs, wing_runs, depth, spec)
+	var frame := box.frame as Dictionary
+	var top := roof_y - float(spec.top_below_roof_m)
+	_append_frame_box(collision, frame, float(box.lateral_min), float(box.lateral_max), low_y - 0.05, top, float(box.depth_min), float(box.depth_max))
+	# Drawn without its top, which the roof draws in its own material (_append_junction_wedge_top).
+	var low := low_y - 0.05
+	var l0 := float(box.lateral_min)
+	var l1 := float(box.lateral_max)
+	var d0 := float(box.depth_min)
+	var d1 := float(box.depth_max)
+	var tangent := frame.tangent as Vector3
+	var normal := frame.normal as Vector3
+	var b00 := _frame_point_at(frame, l0, low, d0)
+	var b10 := _frame_point_at(frame, l1, low, d0)
+	var b11 := _frame_point_at(frame, l1, low, d1)
+	var b01 := _frame_point_at(frame, l0, low, d1)
+	var t00 := _frame_point_at(frame, l0, top, d0)
+	var t10 := _frame_point_at(frame, l1, top, d0)
+	var t11 := _frame_point_at(frame, l1, top, d1)
+	var t01 := _frame_point_at(frame, l0, top, d1)
+	_append_quad(bucket, b01, b11, t11, t01, normal)
+	_append_quad(bucket, b10, b00, t00, t10, -normal)
+	_append_quad(bucket, b00, b10, b11, b01, -Vector3.UP)
+	_append_quad(bucket, b00, b01, t01, t00, -tangent)
+	_append_quad(bucket, b11, b10, t10, t11, tangent)
+
+
+## The wedge filler's top, flush with the roofs either side and in the roof's material,
+## so it cannot be told from them (the round-2 sheet showed its pale top as a wedge).
+static func _append_junction_wedge_top(roof: Dictionary, record: Dictionary, tower_runs: Array[int], wing_runs: Array[int], depth: float, roof_y: float, spec: Dictionary) -> void:
+	var box := _junction_wedge_box(record, tower_runs, wing_runs, depth, spec)
+	var frame := box.frame as Dictionary
+	var top := roof_y - float(spec.top_below_roof_m)
+	var a := _frame_point_at(frame, float(box.lateral_min), top, float(box.depth_min))
+	var b := _frame_point_at(frame, float(box.lateral_max), top, float(box.depth_min))
+	var c := _frame_point_at(frame, float(box.lateral_max), top, float(box.depth_max))
+	var d := _frame_point_at(frame, float(box.lateral_min), top, float(box.depth_max))
+	_append_quad(roof, a, b, c, d, Vector3.UP)
+
+
+## The wedge filler's box in a frame along the wing's start cap: lateral along the cap,
+## depth across it toward the tower's cap.
+static func _junction_wedge_box(record: Dictionary, tower_runs: Array[int], wing_runs: Array[int], depth: float, spec: Dictionary) -> Dictionary:
 	var tower_end := _run_frame(record, tower_runs[tower_runs.size() - 1])
 	var wing_start := _run_frame(record, wing_runs[0])
 	var corner := wing_start.start as Vector3
@@ -2699,10 +2744,8 @@ static func _append_junction_wedge(bucket: Dictionary, collision: Dictionary, re
 	if gap < 0.0:
 		across = -across
 		gap = -gap
-	var frame := {"anchor": corner, "tangent": inward, "normal": across}
 	var proud := float(spec.proud_m)
-	for target: Dictionary in [bucket, collision]:
-		_append_frame_box(target, frame, proud, depth - float(spec.rear_inset_m), low_y - 0.05, roof_y - float(spec.top_below_roof_m), -proud, gap + float(spec.overlap_m))
+	return {"frame": {"anchor": corner, "tangent": inward, "normal": across}, "lateral_min": proud, "lateral_max": depth - float(spec.rear_inset_m), "depth_min": -proud, "depth_max": gap + float(spec.overlap_m)}
 
 
 ## The railed platform's configured placement must still hold the cab: the cab's
