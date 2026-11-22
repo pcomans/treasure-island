@@ -2503,6 +2503,17 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 	var coping := shoulder.coping as Array
 	for target: Dictionary in [buckets.trim, collision]:
 		_append_frame_box(target, frame, -half - 0.1, half + 0.1, float(coping[0]), float(coping[1]), wall - depth - 0.1, wall + float(coping[2]))
+	# At its south end (+half, the runs run south) the shoulder stood clear of the
+	# taller crescent block behind it, and the sky showed through the slot between
+	# them along one line of sight: a filler from the inner face reaches into that
+	# block, under the coping carried on over it.
+	var join := shoulder.drum_join as Dictionary
+	var join_length := float(join.length_m)
+	var join_depth := float(join.depth_m)
+	for target: Dictionary in [buckets.wall, collision]:
+		_append_frame_box(target, frame, half - join_length, half, low_y, top, wall - depth - join_depth, wall - depth)
+	for target: Dictionary in [buckets.trim, collision]:
+		_append_frame_box(target, frame, half - join_length - 0.1, half + 0.1, float(coping[0]), float(coping[1]), wall - depth - join_depth, wall - depth - 0.1)
 	var hooded := style.duplicate()
 	hooded["stepped_hood"] = true
 	for key: String in ["tall", "small"]:

@@ -455,9 +455,8 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
   - In the photos the pipe railing runs along the roof's edge well past the cab's platform; the model's rings the platform only.
   - Not modelled: the flag (the owner's choice), the service stair from the platform up to the cab's door, and the masts, dishes and lamp posts beside the cab.
   - The weathering map is baked by `tools/bake_building_1_weathering.gd`, and nothing in the test run notices if the building's form changes without a re-bake: the grime would then sit at the old coping and ground heights (visual only).
-  - From some angles behind the building, a crack about 3 cm wide and 1.5 m tall between the rear stair tower and the tall wall behind it shows sky (visual defect check, 2026-11-21).
-  - A line of bright pixels runs down the vertical edge where the north end of the crescent's lower wall meets the next block (visual defect check, 2026-11-21).
-  - On the rear wing's upper gallery band and on the cab's deck face, the weathering shows the hard edges of its 0.25 m map cells (visual defect check, 2026-11-21).
+  - From the forecourt at about 20 m, a bright dotted line runs down the corner where the crescent's lower wall ends at its south end: the last straight piece of that wall and its bands faces into the sun and is seen almost exactly edge-on from there, so it draws thinner than a pixel and breaks into dots. It is not a gap (seen in the 2026-11-21 visual check).
+  - The weathering map's 0.25 m cells show as hard steps in places: squares along the rear wing's upper gallery band and grey bars on the cab platform's face (seen in the 2026-11-21 visual check).
 - **Job Corps Dorm 369 (OSM w291189926), after its 2026-11-18/19 L3 study (seen in review):**
   - the vent duct on the north-west tower is a lighter grey than photographed, and its rust starts at the bend;
   - the conduit strip is too dark;
