@@ -7,7 +7,7 @@ description: Author reference-grounded Godot building art with a mandatory exist
 
 Before authoring any new building, compare it with existing assets and reuse a suitable shared base. Build reference-grounded geometry and facade art within the assignment; apply the texture guidance only to applicable surfaces.
 
-Current owner routing (2026-10-21): every role runs in Claude Code on Opus 5.5 at effort `high`, modeling (`ti-implementation`) included. Codex generates textures through `tools/generate-texture`. Follow [canonical routing](../../../AGENTS.md#bounded-subagent-execution).
+Current owner routing (2026-10-21): every role runs in Claude Code on Opus 5.5 at effort `high`, modeling (`ti-implementation`) included; the describe step runs on Fable 5.2 at `high` (2026-11-22). Codex generates textures through `tools/generate-texture`. Follow [canonical routing](../../../AGENTS.md#bounded-subagent-execution).
 
 ## Mandatory root boundary
 
