@@ -444,7 +444,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		var outline := _hall_corner_outline(record, corner_blocks, side)
 		if outline.is_empty():
 			return _failure("building_1_hero_corner_block", "Building 1's %s hall-corner block no longer matches its recorded outline (osm_exception.outline_xz), so the departure from the map's plan is not the approved one." % side, record)
-		_append_hall_corner_walls(buckets, collision, outline, block_roof, flat_coping, cornice_back)
+		_append_hall_corner_walls(buckets, collision, outline, block_roof, flat_coping, cornice_back, float(corner_blocks.recess_m), two_y)
 	# The attic runs over the crescent's block, ending against the hall-corner blocks.
 	var attic_runs: Array[int] = []
 	attic_runs.append_array(block_runs)
@@ -2527,8 +2527,15 @@ static func _hall_corner_outline(record: Dictionary, blocks: Dictionary, side: S
 
 ## A hall-corner block's walls from the ground to the hall's roof height, each facing
 ## out of the plan, and a flat coping along its open top edges (front, return and the
-## side over the wing); the edges against the hall's block need none. Solid.
-static func _append_hall_corner_walls(buckets: Dictionary, collision: Dictionary, outline: Array[Vector3], roof_y: float, coping: Dictionary, back: float) -> void:
+## side over the wing); the edges against the hall's block need none. The recess's
+## side, the hall's end from its front to the block's, is walled up to the two-storey
+## roof (`low_top`), over which the hall block's own end stands. Solid.
+static func _append_hall_corner_walls(buckets: Dictionary, collision: Dictionary, outline: Array[Vector3], roof_y: float, coping: Dictionary, back: float, recess: float, low_top: float) -> void:
+	var inward := Vector3(outline[4].x - outline[0].x, 0.0, outline[4].z - outline[0].z).normalized()
+	var away := Vector3(outline[1].x - outline[0].x, 0.0, outline[1].z - outline[0].z).normalized()
+	var hall_end := outline[0] - inward * recess
+	for target: Dictionary in [buckets.wall, collision]:
+		_append_vertical_face(target, hall_end, outline[0], outline[0].y, low_top, away)
 	var middle := Vector3.ZERO
 	for point in outline:
 		middle += point
