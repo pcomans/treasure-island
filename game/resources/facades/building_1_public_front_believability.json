@@ -39,15 +39,20 @@
     "rustication_end_trim": 0.04,
     "canopy": {
       "runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38],
-      "depth_m": 5.0,
+      "depth_m": 4.4,
       "top_y": 10.5,
       "soffit_y": 9.95,
       "wall_embed_m": 0.05,
       "normal_smoothing_m": 4.0,
       "edge_step_m": 1.0,
-      "end_segments": 16,
+      "end_segments": 6,
+      "end_inset_m": 0.4,
+      "end_corner_radius_m": 0.8,
+      "lip": {"height": 0.12, "width": 0.16},
+      "ribs": {"height": 0.14, "width": 0.18},
       "floodlight": {"from_edge_m": 0.35, "radius": 0.12, "height": 0.08},
       "fascia_rolls": {"count": 5, "radius": 0.045, "pitch": 0.1, "depth_scale": 0.5},
+      "aerial_2025_note": "The owner's 2025 aerial photos (daylight and dusk) show the canopy as a shallow slab of constant depth whose ends are cut square back to the wall with a small rounded outer corner, its fascia returning to the wall, stopping within about half a metre of the hall's corners; its top dark and weathered, with a raised lip along the edge and low ribs on the pier lines [seen]. Its depth, 4.4 m, is the map's canopy member's (front edge 4.4 m out from the hall wall line) [footprint]; the lip and rib sizes and the corner's radius are inference. In this model the hall's front wall stands on the map's canopy front edge (the generated footprint merges the canopy member into the building), so the slab is laid 4.4 m out from that wall.",
       "evidence": {
         "read_from_photos": ["the canopy is deep enough to roof a walkway with seated sculptures under it, its soffit reading as an edge band, three panel rows and a wall band (2008 canopy ends)", "its ends sweep round in a quarter turn back to the wall (2008 canopy ends; the owner's 2026-11-20 photos, south end)", "its soffit meets the wall 3.6 m over the door sills; its fascia, a stack of thin rolls about 0.55 m deep, stops about 0.9 m under the window frames, and black floodlight pucks stand on it at the piers (the owner's 2026-11-20 photos: the frontal and south-end views, scaled by the footprint's bay pitch)", "a smooth pale soffit (the owner's 2026-11-20 frontal view)"],
         "production_inference": ["depth 5.0 m from the soffit's rows against the sculptures and walkway under it", "the end turns' radius", "the fascia's five rolls as a mipmapped pattern", "the floodlights' size"]
@@ -95,9 +100,10 @@
       "north_plain_bay_runs": [20],
       "north_plain_bay_depth_m": 10.0,
       "south_tower_runs": [39, 40, 41, 42, 43],
-      "top_y": 24.72,
+      "top_y": 24.32,
       "depth_m": 5.0,
       "min_segment_m": 2.5,
+      "aerial_2025_note": "The owner's 2025 aerial photos show the blocks at each end of the hall front plain, with flat tops about level with the hall's parapet and no dark caps [seen]: their tops are lowered from 24.72 m to 24.32 m, so their copings stand level with the hall's (its top 24.42 m), and their roofs take the roofs' pale finish. Their stepped, angled fronts follow the map's outline, which there is the canopy member's notched end merged into the building (two radial steps with a 1.1 to 1.3 m jog); the photos cannot show that jog against a metre's accuracy, so the outline is kept.",
       "evidence": {
         "read_from_photos": ["a narrow tower about a bay wide at each end of the crescent, its top a little over the crescent's coping, with sky over the wings behind it; a plain bay at the crescent's height between each tower and the end pier, the attic lines running over it (the owner's 2026-11-20 south-end, north-end and close views)"],
         "production_inference": ["the towers' depth (5 m) and top", "the south junction's mass behind the tower at the wings' three storeys"]
@@ -208,10 +214,10 @@
       "corner_post": {"width": 0.17, "depth": 0.1, "front": 0.02},
       "sill": {"height": 0.12, "front": 0.08},
       "fascia": {"height": 0.36, "rolls": 4, "roll_radius": 0.04, "roll_pitch": 0.09, "face": 0.03, "rib_front": 0.07},
-      "door": {"from": 0.56, "to": 0.92, "bottom_below_sill": 0.55, "front": 0.03, "light": [0.35, 0.85], "hood_height": 0.08, "hood_depth": 0.35},
+      "door": {"from": 0.56, "to": 0.92, "bottom_below_sill": 0.9, "front": 0.03, "light": [0.35, 0.85], "hood_height": 0.08, "hood_depth": 0.35},
       "louvre": {"from": 0.42, "to": 0.88, "bottom": 0.12, "top": 0.86, "ribs": 11, "rib_width": 0.05, "rib_front": 0.06},
       "roof": {"eave_overhang": 0.25, "eave_thickness": 0.08, "seams_per_facet": 5, "seam_height": 0.035, "seam_width": 0.05, "hip_height": 0.05, "hip_width": 0.1},
-      "hatch": {"down_slope_fraction": 0.4, "width": 0.9, "length": 0.6, "height": 0.2},
+      "stair": {"risers": 8, "tread": 0.25, "width": 1.0}, "hatch": {"down_slope_fraction": 0.4, "width": 0.9, "length": 0.6, "height": 0.2},
       "crown": {"radius": 0.4, "height": 0.3},
       "rod": {"width": 0.04, "height": 0.5},
       "evidence": {
@@ -220,7 +226,11 @@
         "left_out": ["the short service stair with pipe handrails from the platform up to the door: a visible stair needs stock-player walking checks, on a roof reached only by jetpack", "the masts, dishes and lamp posts beside the cab (not resolved enough to model)", "the flag"]
       }
     },
-    "tower_base_block": {"center_xz": [14.75, 722.11], "tangent_xz": [0.473, 0.881], "length": 17.2, "depth": 9.0, "rail_height": 1.0, "mid_rail_height": 0.5, "post_spacing": 1.1, "pipe": 0.05},
+    "tower_base_block": {"center_xz": [14.75, 722.11], "tangent_xz": [0.473, 0.881], "length": 17.2, "depth": 9.0, "rail_height": 1.0, "mid_rail_height": 0.5, "post_spacing": 1.1, "pipe": 0.05, "chamfer_m": 2.0},
+    "tower_aerial_2025_note": "The owner's 2025 aerial photos show the cab on a dark-surfaced, railed deck about at the upper roof's level whose two front corners are chamfered, a solid pale wall under the cab's windows, a pale low pyramid roof, and a short straight stair on the south side up to the door [seen]: the deck now stands 0.3 m over the four-storey roof (was 1.7 m), so the cab's solid base runs 2.4 m from it to the sill and its glazing and roof keep their heights; the chamfers' size, the stair's risers and tread, and the door's foot 0.9 m under the sill are inference.",
+    "upper_band_windows": {"count": 13, "glass_m": 0.8, "bottom_above_roof": 0.42, "columns": 2, "rows": 2, "end_margin_m": 1.5, "max_pitch_m": 7.5, "middle_xz": [14.504, 722.243], "evidence": {"read_from_photos": ["a row of 13 small square windows spread evenly along the upper band's front wall behind the hall, the middle one on the axis behind the flagpole (the owner's 2025 aerial photos, daylight; the dusk one agrees on the row)"], "production_inference": ["the windows' size, 0.8 m: the band in this model is 1.98 m tall and its height stays; their pitch, at most 7.5 m and no wider than the band's shorter side from the axis allows"]}},
+    "wing_clerestory_openings": {"south": {"count": 8, "glass_m": 1.0, "bottom_above_face_top": 1.35, "end_margin_m": 2.5, "columns": 2, "rows": 2}, "north": {"window_from_junction_m": 3.0, "door_from_junction_m": 5.5, "door": {"width": 1.0, "height": 2.1}}, "evidence": {"read_from_photos": ["the south wing's set-back clerestory wall carries small square windows facing the forecourt, at least 6 on its curved run and 2 by the pavilion; the north wing's is blank but for one window and one door near the junction (the owner's 2025 aerial photos, daylight and dusk)"], "production_inference": ["8 windows evenly spaced on the south wall; the sizes and the north wall's two positions"]}},
+    "north_penthouse": {"from_junction_m": [7.5, 12.0], "out_m": [1.2, 4.6], "height_m": 2.6, "door": {"width": 1.0, "height": 2.1}, "evidence": {"read_from_photos": ["a flat-roofed penthouse box about one bay by one and a half with a door on its end, on the north wing's front roof near the junction; the south wing has none (the owner's 2025 aerial photos, daylight and dusk)"], "production_inference": ["its position along the strip, its size and height, the door's end"]}},
     "north_ring": {"chains": [[84, 85, 86, 87, 88], [91, 92, 93, 94, 95]], "all_runs": [84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95], "terrace_y": 10.85, "setback": 2.0, "bay_pitch": 3.7, "pier_width": 0.55, "pier_front": 0.1, "main_window": {"bottom": 7.2, "top": 9.6, "rows": 3, "columns": 4}, "semi_window": {"bottom": 5.3, "top": 6.25, "rows": 1, "columns": 2, "width": 1.2}, "band": [9.95, 10.2, 0.1], "terrace_coping": [-0.12, 0.18, 0.12, -0.4], "upper_window": {"bottom": 11.75, "top": 13.05, "rows": 2, "columns": 2, "width": 1.25, "count_per_m": 0.27}, "frieze": [13.55, 13.65, 0.05], "cornice": [14.4, 14.75, 0.16], "top_coping": [14.6, 14.95, 0.12]},
     "north_pylon": {"runs": [89, 90], "top_y": 18.25, "depth": 6.5, "coping": [18.05, 18.4, 0.12], "tall_window": {"bottom": 15.0, "top": 17.5, "width": 1.4, "rows": 4, "columns": 2}, "small_window": {"bottom": 11.75, "top": 13.05, "width": 1.0, "rows": 2, "columns": 2}},
     "se_setback": {"runs": [63, 64, 65, 66, 67, 68], "skip_outer_runs": [63, 64, 65, 66, 67, 68, 69], "setback": 2.0},
@@ -231,6 +241,9 @@
     "podium_edge": {"runs": [72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83], "coping": [-0.25, 0.25, 0.12, -0.35], "rail_inset": 0.3, "rail_post_spacing": 2.4, "rail_post_width": 0.07, "rail_height": 1.05, "rail_thickness": 0.07, "rail_bars": [[0.55, 0.62], [0.98, 1.05]]},
     "drum_mast": {"xz": [11.0, 756.0], "top_y": 40.5, "base_width": 0.14, "top_width": 0.08, "plinth_width": 0.6, "plinth_height": 0.3},
     "pavilion_crown": {
+      "block": false,
+      "front_coping": {"bottom_y": 19.95, "top_y": 20.36, "back_m": -0.3, "front_m": 0.06},
+      "aerial_2025_note": "The owner's 2025 aerial photos show each pavilion's roof running flat to its front coping, the central block at the wing spine's level and the shoulders at the front band's [seen]: no raised crown block is drawn (block false), only a coping along the centre face's top.",
       "top_y": 22.4,
       "bottom_y": 20.15,
       "side_inset_m": 0.2,
