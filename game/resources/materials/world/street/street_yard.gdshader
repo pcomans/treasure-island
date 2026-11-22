@@ -284,7 +284,7 @@ void fragment() {
 		albedo *= 0.96 + 0.06 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
 		float along = vehicle ? vs.x : ws.x;
 		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(along * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
-		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, fwidth(along) * 2.5));
+		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, (vehicle ? (side ? fwidth(v_pos.z) : fwidth(v_pos.x)) : fwidth(along)) * 2.5));
 	}
 	if (pattern == 9) {
 		// The membrane's seams over the portal frames, every 5 m.
@@ -441,7 +441,7 @@ void fragment() {
 			float cell = floor(vs.x / 0.35);
 			float width = mix(0.012, 0.045, hash12(vec2(cell, 5.0)));
 			float across = abs(fract(vs.x / 0.35) - mix(0.15, 0.85, hash12(vec2(cell, 3.0)))) * 0.35;
-			float pixel = fwidth(vs.x);
+			float pixel = side ? fwidth(v_pos.z) : fwidth(v_pos.x);
 			float run = (1.0 - smoothstep(width * 0.3, width + pixel, across)) * step(1.0 - 0.6 * level, hash12(vec2(cell, 7.0)))
 				* smoothstep(-0.25, 0.25, v_pos.y - mix(0.4, 2.2, hash12(vec2(cell, 9.0))));
 			float keep = 1.0 - smoothstep(0.02, 0.06, pixel);
