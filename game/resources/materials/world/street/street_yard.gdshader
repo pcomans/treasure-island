@@ -134,8 +134,12 @@ vec2 cells(vec2 x) {
 	return vec2(sqrt(d2) - sqrt(d1), hash12(id + 3.1));
 }
 
+// A paint's colour, read at level 0 explicitly: the same texel texture() reads
+// (the palette is sampled nearest, without mipmaps), but with no derivatives,
+// which texture() takes to pick its level and which are undefined inside the
+// roof test below, where paint() is also called.
 vec3 paint(float column) {
-	return texture(palette, vec2(column, 0.75)).rgb;
+	return textureLod(palette, vec2(column, 0.75), 0.0).rgb;
 }
 
 void vertex() {
@@ -208,7 +212,7 @@ void fragment() {
 	} else if (source == 3) {
 		albedo = paint(v_custom.b);
 	} else {
-		albedo = texture(palette, vec2((float(p) + 0.5) / 64.0, 0.25)).rgb;
+		albedo = textureLod(palette, vec2((float(p) + 0.5) / 64.0, 0.25), 0.0).rgb;
 	}
 	// Two boxes of one paint are never quite the same shade.
 	if (source != 0) {
