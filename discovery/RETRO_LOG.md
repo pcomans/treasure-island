@@ -28354,3 +28354,8 @@ What the team should change next time
 - What worked well: The author's before/after ray logs (x2 at 4bcda48b, x7 after the fix) give the exact corner coordinates, so whether the filler's inner corners sit inside the drum (about 0.25 to 0.35 m) could be checked by hand without an engine run. The fix lives in one config-driven block beside the shoulder it extends.
 - What did not work well: The x7 probe ran on a dirty tree (dirty=2) and the probe script is not in the commit, so the "all rays hit after the fix" claim rests on the k1 captures at b03d873b rather than on the probe itself. The filler's inner face and the new coping's inner face are flush (y 23.4 to 23.6), safe only because both are buried in the drum.
 - What the team should change next time: When a filler is meant to reach into another block, give its trim the same 0.1 m overhang on every exposed side or state in the config note which face must stay buried, so a later depth change cannot expose a coplanar wall/trim face.
+
+### ti-code-review — integration review of release/batch-20261122a at 883282d4 (2026-11-22): GO WITH NOTES
+- What worked well: every log opens and closes with head bab47110 and dirty=0, and the merges could be checked from git alone (each one-side file equals its side; every added line of both sides present in each hand-resolved file), so no engine run was needed.
+- What did not work well: the new agent-architecture document goes stale the moment the batch lands (it says the shell check and steady-camera bound are "on a branch not yet on main"), and no earlier review read it.
+- What the team should change next time: when a docs branch rides in a batch with code branches, re-read its "on main / not on main" statements against the batch head before merging.
