@@ -458,6 +458,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var clerestory := front.wing_clerestory_openings as Dictionary
 	_append_clerestory_openings(_for_part(buckets, "wing"), south_riser.inner as Dictionary, north_riser.inner as Dictionary, clerestory, wing_face_top, front.wing_window_style as Dictionary)
 	_append_penthouse(buckets, collision, record, north_setback_runs, front.north_penthouse as Dictionary, wing_face_top)
+	_append_junction_wedge(buckets.wall, collision, record, south_tower_runs, south_runs, float(vertical.south_wing_inward_depth), two_y, three_y, front.south_junction_wedge as Dictionary)
 	# The attic runs over the plain north bay too, ending against the towers' sides.
 	var attic_runs: Array[int] = []
 	attic_runs.append_array(north_bay_runs)
@@ -2556,6 +2557,30 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 	var step_wall := float(step_frame.hi)
 	for target: Dictionary in [buckets.wall, collision]:
 		_append_frame_box(target, step_frame, -step_half, step_half + 0.3, tier_top_y - 0.05, float(step.top_y), step_wall - float(step.depth), step_wall)
+
+
+## The south junction tower's strip and the south wing's strip end on two caps from one
+## corner whose runs' normals differ by a few degrees, so the caps part into a wedge open
+## to the sky. Over the wing's set-down front the wing's cap stands alone, its culled back
+## showing the wedge and the sky past it. A solid box along the wing's cap fills the
+## wedge: its face `proud_m` proud of the cap, its far side `overlap_m` into the tower's
+## strip, its back end `rear_inset_m` inside the wedge's mouth, its top
+## `top_below_roof_m` under the roofs either side, so no face lies in another's plane.
+static func _append_junction_wedge(bucket: Dictionary, collision: Dictionary, record: Dictionary, tower_runs: Array[int], wing_runs: Array[int], depth: float, low_y: float, roof_y: float, spec: Dictionary) -> void:
+	var tower_end := _run_frame(record, tower_runs[tower_runs.size() - 1])
+	var wing_start := _run_frame(record, wing_runs[0])
+	var corner := wing_start.start as Vector3
+	var inward := -(wing_start.normal as Vector3)
+	var across := Vector3(inward.z, 0.0, -inward.x)
+	# The wedge's width at its mouth: how far the tower's cap end lies across the wing's.
+	var gap := -(tower_end.normal as Vector3).dot(across) * depth
+	if gap < 0.0:
+		across = -across
+		gap = -gap
+	var frame := {"anchor": corner, "tangent": inward, "normal": across}
+	var proud := float(spec.proud_m)
+	for target: Dictionary in [bucket, collision]:
+		_append_frame_box(target, frame, proud, depth - float(spec.rear_inset_m), low_y - 0.05, roof_y - float(spec.top_below_roof_m), -proud, gap + float(spec.overlap_m))
 
 
 ## The railed platform's configured placement must still hold the cab: the cab's
