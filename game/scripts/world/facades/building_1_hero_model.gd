@@ -3268,8 +3268,9 @@ static func _append_point(path: Dictionary, point: Vector3, normal: Vector3) -> 
 ## fascia is a stack of thin rolls, smooth-shaded round the curve and returned along
 ## the ends to the wall; its top is dark, with a raised lip along the edge and low
 ## ribs on the pier lines; black floodlight pucks stand on it at the piers; its
-## soffit is smooth. The slab's top, soffit, fascia, lip, ribs and floodlights are
-## solid. Returns an empty string, or why the canopy could not be laid out.
+## soffit is smooth. The slab's top, soffit, edge and floodlights are solid; the
+## fascia's rolls, the lip and the ribs are drawn only. Returns an empty string, or
+## why the canopy could not be laid out.
 static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, record: Dictionary, layout: Dictionary, front: Dictionary) -> String:
 	var canopy := front.canopy as Dictionary
 	var plan := _canopy_plan(record, canopy)
@@ -3311,13 +3312,15 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 	var smoothing := float(canopy.normal_smoothing_m)
 	var piers := layout.piers as Array
 	# A raised lip along the edge, ends included, and low ribs on the pier lines from
-	# the wall to it (the 2025 aerial photos): pale, over the dark top.
+	# the wall to it (the 2025 aerial photos): pale, over the dark top. The lip's
+	# section is open underneath, where it stands on the top (its front, top and
+	# inner faces only). Lip and ribs are drawn only, like the fascia's rolls: in the
+	# collision they stood over the passage walk's starts under the canopy's edge.
 	var lip := canopy.lip as Dictionary
 	var lip_width := float(lip.width)
 	var lip_top := top_y + float(lip.height)
-	var lip_profile := [[-lip_width, top_y, 1], [0.0, top_y, 1], [0.0, lip_top, 1], [-lip_width, lip_top, 1]]
-	for target: Dictionary in [buckets.fascia, collision]:
-		_append_profile_sweep(target, edge, lip_profile, false, false)
+	var lip_profile := [[0.0, top_y, 1], [0.0, lip_top, 1], [-lip_width, lip_top, 1], [-lip_width, top_y, 1]]
+	_append_profile_sweep(buckets.fascia, edge, lip_profile, false, false)
 	var rib := canopy.ribs as Dictionary
 	for pier_value in piers:
 		var at_m := float(pier_value)
@@ -3326,8 +3329,7 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 			continue
 		var from := _lifted(_canopy_point(record, runs, at_m, 0.05, smoothing), top_y)
 		var to := _lifted(_canopy_point(record, runs, at_m, reach, smoothing), top_y)
-		for target: Dictionary in [buckets.fascia, collision]:
-			_append_beam(target, from, to, Vector3.UP, float(rib.width), float(rib.height))
+		_append_beam(buckets.fascia, from, to, Vector3.UP, float(rib.width), float(rib.height))
 	# Floodlights on the canopy's top at each pier, near its front edge: small black
 	# pucks (the owner's 2026-11-20 frontal and south-end views).
 	var lamp := canopy.floodlight as Dictionary
