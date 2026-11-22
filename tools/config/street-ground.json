@@ -1705,6 +1705,10 @@
   ],
   "paved_backs": [
     {
+      "points_xz": [[-0.36, 752.92], [-2.12, 758.6], [3.03, 760.2], [4.8, 754.52]],
+      "evidence": "The owner's 2026-11-20 photo of Building 1's south end: pavement runs to the hall's south end panel and the glazed door at its foot, with no planting. The panel stands over the corner the map leaves there (the hall ends' footprint exception, hall_ends in game/resources/facades/building_1_public_front_believability.json), so the raised walk's back slope there runs down in concrete; the walk itself lies inside the panel."
+    },
+    {
       "points_xz": [[-264, -421.5], [-259.5, -422.5], [-255.5, -425.5], [-244.5, -432.5], [-246.2, -436.8], [-257, -430.2], [-262, -426.8], [-265, -424]],
       "evidence": "Street View Mar 2025 panos aTtd and 4BjM at Aracely Cafe: the concrete forecourt runs to the back of the sidewalk with no grass between. The forecourt is the r133351 study's own pad."
     }

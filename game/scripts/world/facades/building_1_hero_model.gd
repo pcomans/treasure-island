@@ -46,6 +46,11 @@ const SETBACK_INWARD_FACE_INSET_M := 0.02
 const FRONT_STEP_MIN_SEGMENT_M := 1.0
 ## How far outside a set-down band's walls its roof cut reaches (_setback_cuts).
 const SETBACK_CUT_OUTER_REACH_M := 1.5
+## The attic turns the hall ends' corners square (the owner, round 3: "the corner is
+## still slightly curved"): where its path turns by more than this, at the corners and
+## where the end walls bend over the wings' bands, each face shades with its own side's
+## normal. The crescent's own runs turn by at most 10 degrees and stay smooth.
+const HALL_END_CREASE_DEG := 12.0
 ## How far a junction tower's coping stops short of its corners (see the copings).
 const TOWER_COPING_CORNER_TRIM_M := 0.25
 ## How far into the tower the plain block at a coping's short end reaches.
@@ -466,7 +471,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# returns and over the wings' set-down bands (the owner's 2026-11-20 photo of the south
 	# end: its lines and coping turn the corner).
 	var attic_face := _hall_end_attic_path(front_record, block_runs, ends)
-	_append_crescent_attic(buckets, attic_face, attic_face, front.crescent_attic as Dictionary, cornice_back)
+	_append_crescent_attic(buckets, attic_face, attic_face, front.crescent_attic as Dictionary, cornice_back, HALL_END_CREASE_DEG)
 	# The upper band's row of small square windows on its riser (the 2025 aerial
 	# photos), hidden from the forecourt by the hall's parapet.
 	_append_band_windows(_for_part(buckets, "wing"), block_step.inner as Dictionary, front.upper_band_windows as Dictionary, block_roof, front.wing_window_style as Dictionary)
@@ -1846,19 +1851,19 @@ static func _append_crescent_bays(buckets: Dictionary, record: Dictionary, runs:
 ## the face (`face_path`); the coping also turns back along the set-down north cap
 ## (`capped_path`) and closes its back above the block's roof. Visual only; the exact
 ## faces and their collision are unchanged.
-static func _append_crescent_attic(buckets: Dictionary, face_path: Dictionary, capped_path: Dictionary, attic: Dictionary, coping_back: float) -> void:
+static func _append_crescent_attic(buckets: Dictionary, face_path: Dictionary, capped_path: Dictionary, attic: Dictionary, coping_back: float, crease_deg: float = 180.0) -> void:
 	var skin := attic.skin_y as Array
 	var lines := attic.lines as Dictionary
 	var skin_front := float(attic.skin_front)
 	var skin_back := float(attic.skin_back)
 	var lines_bottom := float(lines.bottom)
 	var lines_top := lines_bottom + float(lines.pitch) * float(lines.count)
-	_append_pattern_band(buckets.wall, face_path, float(skin[0]), lines_bottom, skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 1 | 4)
-	_append_profile_sweep(buckets.trim, face_path, _rolls_profile(lines_bottom, lines_top, skin_front, skin_back, int(lines.count), float(lines.radius), float(lines.pitch), 4, true, float(lines.depth_scale)), true)
-	_append_pattern_band(buckets.wall, face_path, lines_top, float(skin[1]), skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 2 | 4)
+	_append_pattern_band(buckets.wall, face_path, float(skin[0]), lines_bottom, skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 1 | 4, crease_deg)
+	_append_profile_sweep(buckets.trim, face_path, _rolls_profile(lines_bottom, lines_top, skin_front, skin_back, int(lines.count), float(lines.radius), float(lines.pitch), 4, true, float(lines.depth_scale)), true, true, crease_deg)
+	_append_pattern_band(buckets.wall, face_path, lines_top, float(skin[1]), skin_front, skin_back, 1.0, 0.0, 1.0, Vector2(0.5, 0.5), 2 | 4, crease_deg)
 	var coping := attic.coping as Array
 	var coping_line := attic.coping_line as Dictionary
-	_append_profile_sweep(buckets.trim, capped_path, _coping_profile(float(coping[0]), float(coping[1]), float(coping[2]), coping_back, 1, float(coping_line.radius), float(coping_line.pitch), float(coping_line.cap_height), float(coping_line.cap_overhang)), true)
+	_append_profile_sweep(buckets.trim, capped_path, _coping_profile(float(coping[0]), float(coping[1]), float(coping[2]), coping_back, 1, float(coping_line.radius), float(coping_line.pitch), float(coping_line.cap_height), float(coping_line.cap_overhang)), true, true, crease_deg)
 
 
 ## Three glazed-bronze triple-door groups under the crescent bays the dated WSW
@@ -3968,8 +3973,9 @@ static func _append_path_band(bucket: Dictionary, path: Dictionary, bottom: floa
 ## path (each vertex's miter direction) and, where `rounded` is true, across the
 ## profile too (each profile vertex's normal the mean of its two edges'), so a few
 ## segments read as a rounded roll; a point given a third value (any) stays a sharp
-## crease. Its ends close with the profile's polygon.
-static func _append_profile_sweep(bucket: Dictionary, path: Dictionary, profile: Array, rounded: bool, close_ends: bool = true) -> void:
+## crease. Its ends close with the profile's polygon. Where the path turns by more
+## than `crease_deg` the sweep shades crisply there instead (_sweep_shading).
+static func _append_profile_sweep(bucket: Dictionary, path: Dictionary, profile: Array, rounded: bool, close_ends: bool = true, crease_deg: float = 180.0) -> void:
 	var points := path.points as Array
 	var normals := path.normals as Array
 	var count := profile.size()
@@ -3998,11 +4004,12 @@ static func _append_profile_sweep(bucket: Dictionary, path: Dictionary, profile:
 		flats.append(Vector3(point.x, 0.0, point.z))
 		miters.append(_miter_offset(normals, index))
 		along.append(0.0 if index == 0 else along[index - 1] + _flat_distance(flats[index - 1], flats[index]))
+	var crease_cos := cos(deg_to_rad(crease_deg))
 	for segment in normals.size():
 		var a := segment
 		var b := segment + 1
-		var dir_a := miters[a].normalized()
-		var dir_b := miters[b].normalized()
+		var dir_a := _sweep_shading(normals, miters, a, segment, crease_cos)
+		var dir_b := _sweep_shading(normals, miters, b, segment, crease_cos)
 		for edge in count - 1:
 			var p := contour[edge]
 			var q := contour[edge + 1]
@@ -4032,6 +4039,16 @@ static func _append_profile_sweep(bucket: Dictionary, path: Dictionary, profile:
 				var c := polygon[triangles[offset + corner]]
 				corners.append(_lifted(flats[at] + miters[at] * c.x, c.y))
 			_append_triangle(bucket, corners[0], corners[1], corners[2], facing)
+
+
+## The horizontal direction a swept face shades with at path vertex `index` of segment
+## `segment`: along the miter there (`miters`, smooth along the path), or the segment's
+## own normal where the path turns by more than the crease (`crease_cos`, the cosine of
+## its angle), so a sharp corner reads square instead of rounded.
+static func _sweep_shading(normals: Array, miters: Array, index: int, segment: int, crease_cos: float) -> Vector3:
+	if index > 0 and index < normals.size() and (normals[index - 1] as Vector3).dot(normals[index] as Vector3) < crease_cos:
+		return normals[segment] as Vector3
+	return (miters[index] as Vector3).normalized()
 
 
 ## A profile of `count` half-round rolls of `radius`, stacked upward from `bottom`
@@ -4146,7 +4163,7 @@ static func _append_dentil_blocks(bucket: Dictionary, frame: Dictionary, lateral
 ## miter), so a curved band shades without steps at the source runs' kinks. Its top,
 ## bottom and ends read the pattern at `plain_uv`, a plain spot of it. `faces` picks
 ## them: 1 bottom, 2 top, 4 ends, 8 back.
-static func _append_pattern_band(bucket: Dictionary, path: Dictionary, bottom: float, top: float, front: float, back: float, u_period: float, v_origin: float, v_period: float, plain_uv: Vector2 = Vector2(0.5, 0.5), faces: int = 7) -> void:
+static func _append_pattern_band(bucket: Dictionary, path: Dictionary, bottom: float, top: float, front: float, back: float, u_period: float, v_origin: float, v_period: float, plain_uv: Vector2 = Vector2(0.5, 0.5), faces: int = 7, crease_deg: float = 180.0) -> void:
 	var points := path.points as Array
 	var normals := path.normals as Array
 	if points.size() < 2 or normals.size() != points.size() - 1 or top <= bottom:
@@ -4166,13 +4183,16 @@ static func _append_pattern_band(bucket: Dictionary, path: Dictionary, bottom: f
 	var v_low := (bottom - v_origin) / v_period
 	var v_high := (top - v_origin) / v_period
 	var plain: Array = [plain_uv, plain_uv, plain_uv, plain_uv]
+	var crease_cos := cos(deg_to_rad(crease_deg))
 	for segment in normals.size():
 		var a := segment
 		var b := segment + 1
 		var normal := normals[segment] as Vector3
 		var u_a := along[a] / u_period
 		var u_b := along[b] / u_period
-		_append_quad_uv(bucket, [_lifted(fronts[a], bottom), _lifted(fronts[b], bottom), _lifted(fronts[b], top), _lifted(fronts[a], top)], [smooth[a], smooth[b], smooth[b], smooth[a]], [Vector2(u_a, v_low), Vector2(u_b, v_low), Vector2(u_b, v_high), Vector2(u_a, v_high)])
+		var shade_a := _sweep_shading(normals, smooth, a, segment, crease_cos)
+		var shade_b := _sweep_shading(normals, smooth, b, segment, crease_cos)
+		_append_quad_uv(bucket, [_lifted(fronts[a], bottom), _lifted(fronts[b], bottom), _lifted(fronts[b], top), _lifted(fronts[a], top)], [shade_a, shade_b, shade_b, shade_a], [Vector2(u_a, v_low), Vector2(u_b, v_low), Vector2(u_b, v_high), Vector2(u_a, v_high)])
 		if faces & 2:
 			_append_quad_uv(bucket, [_lifted(backs[a], top), _lifted(backs[b], top), _lifted(fronts[b], top), _lifted(fronts[a], top)], [Vector3.UP, Vector3.UP, Vector3.UP, Vector3.UP], plain)
 		if faces & 1:
