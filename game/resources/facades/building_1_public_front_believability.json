@@ -49,7 +49,7 @@
       "end_inset_m": 0.4,
       "end_corner_radius_m": 0.8,
       "lip": {"height": 0.12, "width": 0.16},
-      "ribs": {"height": 0.14, "width": 0.18},
+      "ribs": {"height": 0.14, "width": 0.18, "end_clearance_m": 1.5},
       "floodlight": {"from_edge_m": 0.35, "radius": 0.12, "height": 0.08},
       "fascia_rolls": {"count": 5, "radius": 0.045, "pitch": 0.1, "depth_scale": 0.5},
       "aerial_2025_note": "The owner's 2025 aerial photos (daylight and dusk) show the canopy as a shallow slab of constant depth whose ends are cut square back to the wall with a small rounded outer corner, its fascia returning to the wall, stopping within about half a metre of the hall's corners; its top dark and weathered, with a raised lip along the edge and low ribs on the pier lines [seen]. Its depth, 4.4 m, is the map's canopy member's (front edge 4.4 m out from the hall wall line) [footprint]; the lip and rib sizes and the corner's radius are inference. In this model the hall's front wall stands on the map's canopy front edge (the generated footprint merges the canopy member into the building), so the slab is laid 4.4 m out from that wall.",

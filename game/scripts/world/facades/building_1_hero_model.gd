@@ -69,8 +69,7 @@ const TRIM_MATERIAL := preload("res://game/resources/materials/world/building_1/
 ## The roofs (the 2025 aerial photos): mottled mid to pale grey with dark stains; the
 ## wings' lower front strips a slightly pinkish beige; the canopy's top and the cab's
 ## deck dark and weathered. All in the stucco shader, no map.
-const M_ROOF := preload("res://game/resources/materials/world/building_1/building_1_m_roof.tres")
-const M_ROOF_LOW := preload("res://game/resources/materials/world/building_1/building_1_m_roof_low.tres")
+const ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_roof_metal.tres")
 const M_CANOPY_TOP := preload("res://game/resources/materials/world/building_1/building_1_m_canopy_top.tres")
 const TOWER_ROOF_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_tower_roof_pale.tres")
 const REVEAL_MATERIAL := preload("res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres")
@@ -654,7 +653,6 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	var roof := _bucket()
 	var canopy_buckets := {"canopy": _bucket(), "soffit": _bucket(), "fascia": _bucket(), "bronze": _bucket()}
 	# The wings' set-down front strips (the 2025 aerial photos: a pinkish beige).
-	var roof_low := _bucket()
 	var collision := _bucket()
 	var tier_clip := _tier_clip(wall_record)
 	var field_runs := _int_array(schedule.crescent_field_runs)
@@ -733,7 +731,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, south_cuts) and cut_whole
 	cut_whole = _append_front_step_roof(roof, collision, wall_record, central_high, float(block.depth_m), float(block.roof_y)) and cut_whole
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
-		cut_whole = _append_front_step_roof(roof_low, collision, wall_record, notch_runs, wing_step, float(wing_setback.face_top_y)) and cut_whole
+		cut_whole = _append_front_step_roof(roof, collision, wall_record, notch_runs, wing_step, float(wing_setback.face_top_y)) and cut_whole
 	if not cut_whole:
 		return _failure("building_1_hero_roof_cut", "A cut through Building 1's roof slabs (a setback terrace or the hall's plan) would leave a hole in a slab, which would be drawn and solid across the opening, or a cut piece could not be triangulated.", record)
 	var canopy_error := _append_crescent_canopy(canopy_buckets, collision, wall_record, crescent, front)
@@ -772,8 +770,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 			_append_box(target, Vector3(bracket_middle.x, pole_base + float(above) + float(brackets.height) * 0.5, bracket_middle.z), pole_tangent, pole_normal, float(brackets.width), float(brackets.height), bracket_front - bracket_back)
 	var root := _hero_root("Building1HeroRoof", record, "building_roof")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroSteppedRoof", "bucket": roof, "material": M_ROOF, "layers": RENDER_WORLD_VISIBLE},
-		{"name": "HeroSteppedRoofLow", "bucket": roof_low, "material": M_ROOF_LOW, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroSteppedRoof", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopy", "bucket": canopy_buckets.canopy, "material": M_CANOPY_TOP, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroEntranceCanopySoffit", "bucket": canopy_buckets.soffit, "material": M_SOFFIT, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroCanopyFascia", "bucket": canopy_buckets.fascia, "material": M_TRIM_CLEAN, "layers": RENDER_WORLD_VISIBLE},
@@ -988,7 +985,7 @@ static func _build_tower_roof(record: Dictionary, config: Dictionary, front: Dic
 	_append_box(crown_bucket, Vector3(apex.x, crown_top + float(rod.height) * 0.5, apex.z), Vector3.RIGHT, Vector3.BACK, float(rod.width), float(rod.height), float(rod.width))
 	var root := _hero_root("Building1ObservationTowerHeroRoof", record, "tower_roof")
 	var specs: Array[Dictionary] = [
-		{"name": "HeroTowerPlatform", "bucket": roof, "material": M_ROOF, "layers": RENDER_WORLD_VISIBLE},
+		{"name": "HeroTowerPlatform", "bucket": roof, "material": ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroTowerStandingSeamRoof", "bucket": cab_roof, "material": TOWER_ROOF_MATERIAL, "layers": RENDER_WORLD_VISIBLE},
 		{"name": "HeroTowerCrown", "bucket": crown_bucket, "material": M_TRIM, "layers": RENDER_WORLD_VISIBLE},
 	]
@@ -3332,8 +3329,8 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 	var runs := plan.runs as Array[int]
 	var length := float(plan.length)
 	var depth := float(canopy.depth_m)
-	var inset := float(canopy.end_inset_m)
-	var corner := float(canopy.end_corner_radius_m)
+	var inset := float(plan.inset)
+	var corner := float(plan.corner)
 	var smoothing := float(canopy.normal_smoothing_m)
 	var piers := layout.piers as Array
 	# A raised lip along the edge, ends included, and low ribs on the pier lines from
@@ -3347,10 +3344,13 @@ static func _append_crescent_canopy(buckets: Dictionary, collision: Dictionary, 
 	var lip_profile := [[0.0, top_y, 1], [0.0, lip_top, 1], [-lip_width, lip_top, 1], [-lip_width, top_y, 1]]
 	_append_profile_sweep(buckets.fascia, edge, lip_profile, false, false)
 	var rib := canopy.ribs as Dictionary
+	# No rib within `end_clearance_m` of a square end, where it would run alongside the
+	# end's lip as a second line.
+	var rib_from := inset + corner + float(rib.end_clearance_m)
 	for pier_value in piers:
 		var at_m := float(pier_value)
 		var reach := _canopy_depth_at(at_m, length, depth, inset, corner) - lip_width
-		if reach <= 0.5:
+		if reach <= 0.5 or at_m < rib_from or at_m > length - rib_from:
 			continue
 		var from := _lifted(_canopy_point(record, runs, at_m, 0.05, smoothing), top_y)
 		var to := _lifted(_canopy_point(record, runs, at_m, reach, smoothing), top_y)
@@ -3470,7 +3470,7 @@ static func _canopy_plan(record: Dictionary, canopy: Dictionary) -> Dictionary:
 	for index in range(wall_points.size() - 1, -1, -1):
 		var point := (wall_points[index] as Vector3) - _miter_offset(wall_normals, index) * embed
 		polygon.append(Vector2(point.x, point.z) - origin)
-	return {"edge": edge, "polygon": polygon, "origin": origin, "length": length, "runs": runs}
+	return {"edge": edge, "polygon": polygon, "origin": origin, "length": length, "runs": runs, "inset": inset, "corner": corner}
 
 
 ## (s, d) samples of the canopy's front edge: square out from the wall at s = inset,

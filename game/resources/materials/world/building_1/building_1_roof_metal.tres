@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_dark_raised_seam_roof_hero_inference"
+albedo_color = Color(0.21, 0.225, 0.225, 1)
+metallic = 0.24
+roughness = 0.72

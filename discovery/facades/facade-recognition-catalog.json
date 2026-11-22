@@ -56,8 +56,7 @@
         "game/resources/materials/world/building_1/building_1_public_stucco_reeds.tres",
         "game/resources/materials/world/building_1/building_1_public_window_metal.tres",
         "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
-        "game/resources/materials/world/building_1/building_1_m_roof.tres",
-        "game/resources/materials/world/building_1/building_1_m_roof_low.tres",
+        "game/resources/materials/world/building_1/building_1_roof_metal.tres",
         "game/resources/materials/world/building_1/building_1_m_canopy_top.tres"
       ],
       "runtime_config_path": "game/resources/facades/building_1_hero_model.json",
@@ -82,8 +81,7 @@
         "game/resources/materials/world/building_1/building_1_m_trim.tres",
         "game/resources/materials/world/building_1/building_1_m_wall.tres",
         "game/resources/materials/world/building_1/building_1_m_window_dark.tres",
-        "game/resources/materials/world/building_1/building_1_m_roof.tres",
-        "game/resources/materials/world/building_1/building_1_m_roof_low.tres",
+        "game/resources/materials/world/building_1/building_1_roof_metal.tres",
         "game/resources/materials/world/building_1/building_1_m_canopy_top.tres",
         "game/resources/materials/world/building_1/building_1_tower_roof_pale.tres"
       ],
