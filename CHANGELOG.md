@@ -10,9 +10,9 @@ Every build of the game has a number, the one in its title on the [releases page
 
 - Building 1's entrance canopy is shallower, its ends cut square with a small rounded corner, and its top dark and weathered, with a raised edge and low ribs over the piers.
 - The band behind Building 1's great hall has its row of small square windows, the south wing's set-back wall its own row, and the north wing a window, a door and a small rooftop box with a door.
-- Building 1's roofs are a weathered pale grey with darker stains, and the wings' lower front roofs a pinkish beige.
 - The glass cab on Building 1's roof stands on a low, dark, railed deck with angled front corners, with a solid pale wall under its windows, a pale roof and a short stair up to its door.
-- The raised blocks on top of Building 1's end pavilions are gone, and the blocks at the ends of the hall front no longer stand above its parapet.
+- The raised blocks on top of Building 1's end pavilions are gone, and each end of the hall front is a plain square block, its flat top level with the hall's parapet.
+- Building 1's two wings match on top: their lower front strips stop short of the end pavilions, which stand full height to the front, and the south wing's upper roof runs unbroken to the back.
 - The narrow gap open to the sky between Building 1's south junction tower and its south wing is filled.
 
 ## Build 2546 (2026-11-22)
