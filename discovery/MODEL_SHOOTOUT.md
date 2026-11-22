@@ -103,3 +103,7 @@ Before Gemini 4 Neon can be used:
 The owner's proposal: before a building goes to modelling, a describer would write an architect-style description of it from its photos, to brief the first modelling round and its reviewer; the larger modelling shootout waited for this test until the owner lifted the hold on 2026-11-21.
 Opus 5.5 and Fable 5.2 describe blind, against answer keys from professional descriptions in a private eval set. With the footprint given, two judges found the descriptions usable for a first modelling round; plan depth guessed from photos is the weakest area.
 Purpose, method and every round's results are in the [architect-description shootout](ARCHITECT_DESCRIPTION_SHOOTOUT.md).
+
+## Process shootout 2 (description, photos and review rounds)
+
+Opus 5.5 built two buildings blind from two photos, the full photo set, or the full set plus a description, then ran one review-and-fix round in three formats; the owner voted on blind pairs and a blind judge scored every model against a sealed checklist (2026-11-21 to 22). The described builds were preferred on both buildings; review rounds after them made no difference the owner could see. Design, results and limits are in [process shootout 2](PROCESS_SHOOTOUT_2.md).

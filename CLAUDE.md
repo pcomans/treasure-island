@@ -129,6 +129,10 @@ gallery open. `tools/browser` runs the agent's headed verification/reference
 browser; it is separate from the owner's VS Code integrated browser. See the
 [observed remote-file restriction](LEARNINGS.md#serve-remote-visual-galleries-over-loopback-http).
 
+A comparison or result sheet for the owner shows the real building's dated photos
+and its plan footprint beside the renders, matched by side, so the owner can judge
+the shape; the photos stay on the loopback page and never enter Git.
+
 ## Shared building-study geometry verification
 
 `game/tests/support/building_study_geometry.gd` replaces copied face collectors used by Hawkins002/Chapel003-style checks. Configure `collect(mesh, transforms, producer, cutoff)` with `INDEXED_ARRAYS` for the raw indexed producer, or `MESH_GET_FACES` only when the actual collider uses Godot's transformed/snapped TriangleMesh path. Transforms map mesh-local to collision-local, in instance order; MultiMesh callers supply each `instance.transform * multimesh.get_instance_transform(i)`. The optional cutoff defaults to no filtering and must match an existing producer, never a new tolerance. `compare(collection, shape.get_faces(), expected_vertex_count)` requires positive complete coverage and exact ordered equality, returning full observed operands even on failure. Save it into the existing receipt before failing the driver guard.

@@ -249,4 +249,4 @@ Open:
 - **Owner decision:** whether the descriptions are good enough to lift the hold on the modelling shootout. The owner has since lifted the hold (2026-11-21, "Yes" to starting the modelling shootout with Fable as describer and the footprint supplied); the next modelling shootout is being prepared;
 - more independent cases, including the two still without photos;
 - colour photos;
-- whether a description actually improves a first modelling round. This is to be tested as a blind pair in the next modelling shootout: one build from photos alone, one from photos plus the description, with the reviewer also given the description.
+- whether a description actually improves a first modelling round. Tested in [process shootout 2](PROCESS_SHOOTOUT_2.md) (2026-11-21 to 22): the owner preferred the described build blind on both buildings, and on the housing row the blind judge's checklist agreed (24 and 23 of 24 against 19.5 and 20.5); two buildings, one description each.

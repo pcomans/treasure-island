@@ -239,6 +239,18 @@ For ground-contacting details, the first preflight must compare their intended f
 
 Before committing, run the whitespace check (`git diff --check`, plus the same check on every new untracked file) on the complete patch, using the explicit intended file list without staging unrelated work.
 
+### Describe, build, check, show
+
+A building or family study runs in this order ([evidence](discovery/PROCESS_SHOOTOUT_2.md)):
+
+1. **Describe.** Before the study goes to modelling, a describer session writes the building's form from its dated photos in an architect's terms: the plan and its parts, storeys, roof form, how the parts attach, overhangs, bay rhythm, the openings on each side, and what the photos do not show. It is given the plan footprint and sizes from the frozen map data; they are never estimated from pixels. The description marks what is seen and what is inferred; the [no-invented-detail rule](#facade-recognizability-policy) still decides what may be modelled.
+2. **Build.** The modeller builds from the description, the photos and the footprint. The visual reviewer receives the same description.
+3. **Check for defects.** Every study gets the [defect pass](.claude/agents/ti-visual-review.md#defect-pass): mechanically where a shared check covers the defect, otherwise by the visual reviewer working through its list.
+4. **Show the owner**, with the real building's photos and footprint beside the renders ([owner sheets](CLAUDE.md#delivering-visual-galleries-in-vs-code)).
+5. **Fix only named defects.** Reviews after the first build check the basic form at the declared level against the description and photos, and defects. They do not ask for added fine detail or small objects; missing form at the declared level, such as a photographed opening group at Level 2, is a form finding. A further look-review round runs only for a defect named by the owner, a reviewer or a mechanical check.
+
+This limits repeat rounds, not review: the independent code and visual reviews, the progress decision and every check in [What done means for a building](#what-done-means-for-a-building) stay.
+
 ### Tests
 
 `tools/test.sh` runs every test: a junk check on new files (no screenshots, videos, builds, logs, reference photos or files over 5 MB outside `game/resources/` and `generated/`), the behaviour tests, the whole-island check of every scored building (on both the world generated at startup and the baked world desktop exports ship), the world-generator determinism check, the street-detail clearance check and the sound tools' offline checks (`tools/check_sfx.mjs`, `tools/check_fetch_sfx.mjs`; they also fail if Git tracks any audio). It must pass before a change to the game, its data or its tests is pushed to `main`; a change that cannot affect the game (the release workflow, release tooling, documentation) goes to `main` after its own focused checks and an independent review. Fix the cause of a failure, never weaken or skip a test to make it pass.
@@ -316,6 +328,8 @@ Owner-authorized landmark routing, 2026-10-23: the independent visual bar-raiser
 Other visual review stays on Opus as above.
 
 Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The existing role prompts and project skill are indexed in [the harness entrypoints](CLAUDE.md#persisted-entrypoints). Other harnesses can read these same files without inventing a callable agent configuration or copying local session state. An agent must not independently accept its own implementation; a technical PASS does not supply the separate visual decision. Routine handoffs contain short status, actual changed paths, source revision, rendered evidence link/result and any blocker. Do not add manifests or JSON/hash/count reporting layers; the reviewed commit is the record of what was reviewed.
+
+Hand a reviewer or judge a small chosen set of images with a time and spend budget, not the whole capture set: about eight for the likeness and defect judgment (a matched reference photo and render for each side in question), and the in-context views and before/after island overviews the done list requires in a second short pass. Split a larger set across sessions ([lesson](LEARNINGS.md#give-a-reviewer-few-images-not-twenty)).
 
 Use the current harness’s actual delegation tools. In the Codex multi-agent session, dispatch every new bounded assignment with `followup_task`, whether the target agent is busy or idle; `send_message` only supplies status or clarification and does not restart a completed agent. In another harness, use its available equivalent to start the named role with the bounded task. Do not treat role filenames as callable tools. Coalesce duplicate assignments and preserve the same ownership, review and engine-release gates.
 

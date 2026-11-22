@@ -1,6 +1,6 @@
 # Agent architecture learnings
 
-These are the orchestrating session's own observations on running agents in this project, from one long working session (2026-11-20 to 21). Most of them are hypotheses. The owner has not adopted them as rules: "we would need to know if any of these really … make a difference. Right now it's just a hypothesis, right?" [AGENTS](../AGENTS.md) remains the authority, and this document does not change it.
+These are the orchestrating session's own observations on running agents in this project, from one long working session (2026-11-20 to 21). Most of them are hypotheses; the lessons [AGENTS](../AGENTS.md) has since adopted say so in their status. The owner, on the proposed rules: "we would need to know if any of these really … make a difference. Right now it's just a hypothesis, right?" [AGENTS](../AGENTS.md) remains the authority, and this document does not change it.
 
 Each lesson gives what was observed, what the orchestrator now does, and its status: **measured**, **first measurement** or **hypothesis**. Where a lesson in [LEARNINGS](../LEARNINGS.md) already covers the point, it is linked and only the orchestration angle is added here. Evidence marked "as recorded by the orchestrating session" is not in the repository and could not be checked against it.
 
@@ -16,13 +16,13 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 
 - **Observed.** A fresh reviewer each round finds a different thing. A review takes minutes; the round of fixes it triggers takes hours (as recorded by the orchestrating session). See [A review round adds objects](../LEARNINGS.md#a-review-round-adds-objects-removing-is-a-valid-fix) and [A further review round buys little](../LEARNINGS.md#a-further-review-round-on-a-decent-first-build-buys-little).
 - **Now.** One review round by default. Further rounds only for defects named by the owner, a mechanical check or a held independent review.
-- **Status.** Hypothesis.
+- **Status.** Adopted in [Describe, build, check, show](../AGENTS.md#describe-build-check-show), with a first blind measurement in [process shootout 2](PROCESS_SHOOTOUT_2.md).
 
 ### 3. Heavy checks once
 
 - **Observed.** See [Run the heavy checks once, on the final candidate](../LEARNINGS.md#run-the-heavy-checks-once-on-the-final-candidate).
 - **Now.** While iterating, the orchestrator asks only for the focused contracts the change touches; the full suite, builds and shader proof run once, on the final candidate.
-- **Status.** Hypothesis.
+- **Status.** Adopted: a release runs the suite once on its combined head ([Pushes and releases](../AGENTS.md#pushes-and-releases)). Its effect is unmeasured.
 
 ### 4. One artefact, one branch at a time
 
@@ -34,22 +34,23 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 
 - **Observed.** Plan depth estimated from photos was off by up to −59 %, and about 0 % with the footprint supplied (two judges). See the [architect-description shootout](ARCHITECT_DESCRIPTION_SHOOTOUT.md) and [Give a describer or modeller the footprint](../LEARNINGS.md#give-a-describer-or-modeller-the-footprint-dont-let-it-guess-depth-from-photos).
 - **Now.** Give agents facts from data (footprints, measured sizes) rather than letting them estimate from pixels. A description goes to the modeller, and the same description goes to the reviewer, as the owner requires.
-- **Status.** First measurement on descriptions; the effect on modelling is untested.
+- **Status.** Adopted in [Describe, build, check, show](../AGENTS.md#describe-build-check-show). First measurement on modelling in [process shootout 2](PROCESS_SHOOTOUT_2.md): the owner preferred the described build blind on both buildings.
 
 ### 6. Corrections as measured targets
 
 - **Observed.** Directional instructions overshot and swung back: wall texture made invisible, then too strong in shade; door frames darkened, then returned to brass; pier fluting removed at distance, then restored. See [Give a correction as a measured target](../LEARNINGS.md#give-a-correction-as-a-measured-target-not-a-direction).
 - **Now.** The orchestrator turns owner and reviewer feedback into a target against the reference before passing it on, not "more" or "less".
-- **Status.** Hypothesis.
+- **Status.** Hypothesis. In [process shootout 2](PROCESS_SHOOTOUT_2.md) a review with measured targets made no difference the owner could see.
+
+**First blind test of these flow lessons:** [process shootout 2](PROCESS_SHOOTOUT_2.md) (2026-11-21 to 22). It also led AGENTS to adopt a [defect pass](../.claude/agents/ti-visual-review.md#defect-pass) and [few images per reviewer](../LEARNINGS.md#give-a-reviewer-few-images-not-twenty).
 
 ## Checks
 
 ### 7. Build a mechanical check when eyes miss a class of defect twice
 
 - **Observed.** On Building 1 the owner, not the reviews, found a doorstep that stopped about one approach in six, a see-through gap at the rear, and a camera snap at the hall door. See [Check a building's shell and doorways mechanically](../LEARNINGS.md#check-a-buildings-shell-and-doorways-mechanically-not-by-eye). Checks built since:
-  - on `main`: the passage walk (96 ways through each catalog passage's door); the far stand-in's outside views (a stand-in poking above a roof); the case in which the hall's mural loader does not set up, so the hall stays drawn as built;
-  - on a branch not yet on `main`: the shell check (no ray from outside reaches the interior) and the steady-camera bound at the hall door.
-- **Now.** Require that a new check fails on the old state and passes on the fix, and keep that red run in the log.
+  - on `main`: the passage walk (96 ways through each catalog passage's door); the far stand-in's outside views (a stand-in poking above a roof); the case in which the hall's mural loader does not set up, so the hall stays drawn as built; the shell check (no ray from outside reaches the interior) and the steady-camera bound at the hall door.
+- **Now.** Require that a new check fails on the old state and passes on the fix, and keep that red run in the log. Every building study gets the [defect pass](../.claude/agents/ti-visual-review.md#defect-pass), mechanical where these checks cover a defect (adopted in [AGENTS](../AGENTS.md#describe-build-check-show)).
 - **Status.** First measurement: the shell check found three holes in the old state, one of them in the released game; the other checks' red runs are as recorded by the orchestrating session. Whether they catch future faults is untested.
 
 ### 8. Bind evidence to the commit

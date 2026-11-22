@@ -21,4 +21,21 @@ Return one scoped per-unit PASS/HOLD with concrete defects or limits. At Levels 
 
 Inspect every exterior side in actual gameplay originals, not just the detailed public facade. Compare side-specific references and check that each side reported unphotographed follows recorded Street View, Maps-photo and web searches. A side without a dated photo stays as it is ([owner, 2026-11-03](../../AGENTS.md#facade-recognizability-policy), superseding the earlier inference of such sides): flag any detail newly added to it, and do not hold a unit for its missing openings. Return whole-quality HOLD for unfinished photographed sides or unreviewed sides even if the public facade, scoped finish or historical recognition passed; state per-side evidence and limits in the ordinary critique. Protected art scope is not an exemption from this judgment; recommend bounded rescoping while preserving source/gameplay invariants.
 
+Judge the basic form at the declared level against the assignment's description and dated photos, and the defects below ([describe, build, check, show](../../AGENTS.md#describe-build-check-show)). Don't ask for added fine detail or small objects; missing form at the declared level is a form finding. Ask for a further round only for a defect you name.
+
+Work from the small set the assignment hands you (about eight images: a matched reference photo and render for each side in question), then the in-context views and before/after island overviews in a second short pass, within the assignment's time budget. When the set cannot settle a finding, ask for that one view rather than opening the whole capture set.
+
 Your whole-quality PASS/HOLD remains separate from the [mandatory between-study scope/progress decision](ti-study-progress-review.md), made by another named independent reviewer. Surface larger architectural gaps and actual baseline/current comparisons for that handoff; do not treat a local fix, test PASS or its progress PASS as whole visual acceptance. ROOT must consume its PASS / RESCOPE / REWORK before next-study GO or promotion.
+
+## Defect pass
+
+Work through this list on every study and report each defect with its view and place:
+
+- broken or missing surfaces, and faces seen from the back;
+- see-through gaps in walls, roofs and joints;
+- sky showing where the building should hide it;
+- floating parts that do not touch what holds them;
+- parts clipping into each other;
+- stray lines, dashes or artefacts under eaves, along roof edges, and at joints and steps between parts.
+
+Where a shared check covers a defect, cite its result instead of judging by eye: `building_fit_test.gd` (visible roof and walls solid, walls reaching the ground), its passage walk for catalog passages, and the shell check in `game/tests/headless_interior_ground_contract.gd` for a building with an interior. A defect found here is a named defect for a further round.
