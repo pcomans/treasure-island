@@ -451,6 +451,8 @@ All four were seen in the visual review (2026-11-08) and left as non-blocking:
   - The crescent's attic, from the window heads to the coping, reads about 0.5 m shorter in the owner's cupola photos than modelled (about 1 m at the north bays). The cab is set against the coping, so against the windows the coping and the cab stand a little high.
   - In the photos the pipe railing runs along the roof's edge well past the cab's platform; the model's rings the platform only.
   - Not modelled: the flag (the owner's choice), the service stair from the platform up to the cab's door, and the masts, dishes and lamp posts beside the cab.
+  - From the forecourt at about 20 m, a bright dotted line runs down the corner where the crescent's lower wall ends at its south end: the last straight piece of that wall and its bands faces into the sun and is seen almost exactly edge-on from there, so it draws thinner than a pixel and breaks into dots. It is not a gap (seen in the 2026-11-21 visual check).
+  - The weathering map's 0.25 m cells show as hard steps in places: squares along the rear wing's upper gallery band and grey bars on the cab platform's face (seen in the 2026-11-21 visual check).
 - **Job Corps Dorm 369 (OSM w291189926), after its 2026-11-18/19 L3 study (seen in review):**
   - the vent duct on the north-west tower is a lighter grey than photographed, and its rust starts at the bend;
   - the conduit strip is too dark;

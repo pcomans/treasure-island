@@ -6,6 +6,10 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2513 (2026-11-22)
+
+- At the back of Building 1, the sky no longer shows through a thin slot between two of its blocks.
+
 ## Build 2508 (2026-11-21)
 
 - Building 1, the Administration Building, looks much more like itself from outside, rebuilt from new photos: its proportions, the deep canopy over the front doors, the frieze along the top of the curved front, and the towers where the curve meets the wings.
