@@ -831,7 +831,7 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 ## the main panes (three over one on the front facet, a door on the next facet south,
 ## three over three elsewhere), white corner posts and a ribbed fascia under the roof
 ## (_build_tower_roof). It stands on a railed platform block (_append_cab_platform).
-## Base, glazing, fascia, platform and railing are solid.
+## Base and sill, glazing, corner posts, fascia, platform and railing are solid.
 static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dictionary) -> Dictionary:
 	var vertical := config.vertical_production_inference_m as Dictionary
 	var deck := float(vertical.tower_platform_top_y)
@@ -847,11 +847,15 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 	var ring := _tower_plan_ring(record)
 	var head := _offset_ring(ring, -float(cab.head_inset))
 	# The solid white base from the deck to the sill on the exact plan, with a pale
-	# sill band round its top.
+	# sill band round its top. The sill and the corner posts stand out past the base,
+	# 2.4 m over the deck, with the glazing's bottom bars over the sill: the sill and
+	# the posts are solid, so whatever a player can stand on there holds
+	# (building_fit's visible-roof check).
 	for target: Dictionary in [trim, collision]:
 		_append_ring_band(target, ring, deck - 0.02, glass_base, 0.0, -0.2)
 	var sill := cab.sill as Dictionary
-	_append_ring_band(trim, ring, glass_base - float(sill.height), glass_base, float(sill.front), -0.06)
+	for target: Dictionary in [trim, collision]:
+		_append_ring_band(target, ring, glass_base - float(sill.height), glass_base, float(sill.front), -0.06)
 	# The glazing, leaning in, and its frames and posts.
 	var frame := cab.frame as Dictionary
 	var post := cab.corner_post as Dictionary
@@ -885,7 +889,8 @@ static func _build_tower_wall(record: Dictionary, config: Dictionary, front: Dic
 			_append_beam(frames, at.call(float(bar[0]), float(bar[1])), at.call(float(bar[2]), float(bar[3])), out, float(frame.width), float(frame.depth))
 		var miter_base := _ring_miter(ring, index)
 		var miter_head := _ring_miter(head, index)
-		_append_beam(trim, b0 + miter_base * float(post.front), t0 + miter_head * float(post.front), miter_base.normalized(), float(post.width), float(post.depth))
+		for target: Dictionary in [trim, collision]:
+			_append_beam(target, b0 + miter_base * float(post.front), t0 + miter_head * float(post.front), miter_base.normalized(), float(post.width), float(post.depth))
 		if index == door_facet:
 			_append_cab_door(trim, frames, b0, b1, t0, t1, out, glass_base, transom_v, door)
 		if index == front_facet:
