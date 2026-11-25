@@ -47,10 +47,18 @@ const FRONT_STEP_MIN_SEGMENT_M := 1.0
 ## How far outside a set-down band's walls its roof cut reaches (_setback_cuts).
 const SETBACK_CUT_OUTER_REACH_M := 1.5
 ## The attic turns the hall ends' corners square (the owner, round 3: "the corner is
-## still slightly curved"): where its path turns by more than this, at the corners and
-## where the end walls bend over the wings' bands, each face shades with its own side's
-## normal. The crescent's own runs turn by at most 10 degrees and stay smooth.
+## still slightly curved"): where its path turns by more than this, at the two corners,
+## each face shades with its own side's normal. The crescent's own runs turn by at most
+## 10 degrees and stay smooth.
 const HALL_END_CREASE_DEG := 12.0
+## How far the plan the wings' strips give up to a hall end's band roof reaches past its
+## edges (_hall_end_terrace_cut), so faces lying along them are cut with it.
+const HALL_END_CUT_MARGIN_M := 0.1
+## The south junction's wedge filler starts this far behind the riser's line, so its front
+## face does not lie in the plane of the riser carried on to the south hall end's side wall
+## (_append_hall_end_walls); the riser's coping, reaching 0.06 m behind that line, covers
+## the slot.
+const HALL_END_WEDGE_BEHIND_RISER_M := 0.02
 ## How far a junction tower's coping stops short of its corners (see the copings).
 const TOWER_COPING_CORNER_TRIM_M := 0.25
 ## How far into the tower the plain block at a coping's short end reaches.
@@ -280,8 +288,14 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	# the roofs over the terraces are cut).
 	var north_strip_cuts := interior_cuts.duplicate()
 	north_strip_cuts.append_array(_setback_cuts(record, [north_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
+	# The hall ends' side walls run straight back (round 5): the strips give up the plan
+	# between the bands' ends and those walls, before the risers, to the bands' roofs.
+	var north_end_cut := _hall_end_terrace_cut(ends.north as Dictionary, HALL_END_CUT_MARGIN_M)
+	var south_end_cut := _hall_end_terrace_cut(ends.south as Dictionary, HALL_END_CUT_MARGIN_M)
+	north_strip_cuts.append(north_end_cut)
 	_append_strip_walls(buckets.wall, original, collision, record, north_runs, two_y, three_y, north_depth, tier_clip, north_skip, north_strip_cuts, true)
-	# The north band's end at the junction is the north hall end's side (_append_hall_end_walls).
+	# The north band's end at the junction opens onto its roof carried on to the north hall
+	# end's side wall (_append_hall_end_terrace, _append_hall_end_walls).
 	var north_riser := _append_front_step(buckets.wall, collision, record, north_setback_runs, two_y, wing_face_top, three_y, wing_step, true, false)
 	# The central block stands behind the crescent and its plain south bay only; the
 	# south junction is a tower before a three-storey strip like the wings'.
@@ -299,7 +313,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var tower_skip := {}
 	for run_index in south_tower_runs:
 		tower_skip[run_index] = true
-	_append_strip_walls(buckets.wall, original, collision, record, south_tower_runs, two_y, three_y, float(vertical.south_wing_inward_depth), {}, tower_skip, interior_cuts)
+	_append_strip_walls(buckets.wall, original, collision, record, south_tower_runs, two_y, three_y, float(vertical.south_wing_inward_depth), {}, tower_skip, interior_cuts, false, Vector2.ZERO, Vector2.ZERO, [south_end_cut])
 	var se_setback := front.se_setback as Dictionary
 	var skip_outer := {}
 	for run_value in se_setback.skip_outer_runs as Array:
@@ -309,7 +323,7 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var se_cuts := _setback_cuts(record, [se_setback.runs], float(se_setback.setback))
 	var south_strip_cuts := se_cuts.duplicate()
 	south_strip_cuts.append_array(_setback_cuts(record, [south_setback_runs], wing_step, FRONT_STEP_MIN_SEGMENT_M))
-	_append_strip_walls(buckets.wall, original, collision, record, south_runs, two_y, three_y, float(vertical.south_wing_inward_depth), tier_clip, skip_outer, south_strip_cuts)
+	_append_strip_walls(buckets.wall, original, collision, record, south_runs, two_y, three_y, float(vertical.south_wing_inward_depth), tier_clip, skip_outer, south_strip_cuts, false, Vector2.ZERO, Vector2.ZERO, [south_end_cut])
 	var south_riser := _append_front_step(buckets.wall, collision, record, south_setback_runs, two_y, wing_face_top, three_y, wing_step, false, true)
 	_append_projecting_base(buckets.base, collision, front_record, central_main, front, hole)
 
@@ -451,10 +465,12 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_prepend_point(north_path, north_cap.point as Vector3, north_cap.normal as Vector3)
 	_append_flat_coping(buckets.trim, north_path, wing_top, flat_coping, cornice_back)
 	_append_flat_coping(buckets.trim, _chain_points(record, north_runs, north_gap.y, north_notch.x), wing_top, flat_coping, cornice_back)
-	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
+	# The risers' copings run on with the risers to the hall ends' side walls (_append_hall_end_walls).
+	for side: String in ["north", "south"]:
+		var notch_runs: Array[int] = north_setback_runs if side == "north" else south_setback_runs
 		var notch_face := _chain_points(record, notch_runs, 0.0, _chain_length(record, notch_runs))
 		_append_flat_coping(buckets.trim, notch_face, wing_face_top, flat_coping, cornice_back)
-		_append_flat_coping(buckets.trim, _offset_path(notch_face, wing_step), wing_top, flat_coping, cornice_back)
+		_append_flat_coping(buckets.trim, _riser_path_to_hall_end(_offset_path(notch_face, wing_step), ends[side] as Dictionary), wing_top, flat_coping, cornice_back)
 	# The wings' set-back clerestory walls (the 2025 aerial photos): a row of small
 	# square windows on the south wing's; the north wing's blank but for one window
 	# and one door near the junction. A penthouse box with a door on the north wing's
@@ -462,14 +478,14 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var clerestory := front.wing_clerestory_openings as Dictionary
 	_append_clerestory_openings(_for_part(buckets, "wing"), south_riser.inner as Dictionary, north_riser.inner as Dictionary, clerestory, wing_face_top, front.wing_window_style as Dictionary)
 	_append_penthouse(buckets, collision, record, north_setback_runs, front.north_penthouse as Dictionary, wing_face_top)
-	_append_junction_wedge(buckets.wall, collision, record, south_tower_runs, south_runs, float(vertical.south_wing_inward_depth), two_y, three_y, front.south_junction_wedge as Dictionary, wing_step)
+	_append_junction_wedge(buckets.wall, collision, record, south_tower_runs, south_runs, float(vertical.south_wing_inward_depth), two_y, three_y, front.south_junction_wedge as Dictionary, wing_step + HALL_END_WEDGE_BEHIND_RISER_M)
 	_append_tier_fill_end(buckets.wall, collision, record, front.south_tier_fill as Dictionary, two_y, three_y)
 	for side: String in ["north", "south"]:
 		_append_hall_end_walls(buckets.wall, collision, ends[side] as Dictionary, two_y, block_roof, wing_face_top, three_y)
 		_append_hall_end_door(buckets, ends[side] as Dictionary, front)
-	# The attic runs over the crescent's block and on round both hall ends, along their
-	# returns and over the wings' set-down bands (the owner's 2026-11-20 photo of the south
-	# end: its lines and coping turn the corner).
+	# The attic runs over the crescent's block and on round both hall ends, along their side
+	# walls over the wings' set-down bands (the owner's 2026-11-20 photo of the south end:
+	# its lines and coping turn the corner).
 	var attic_face := _hall_end_attic_path(front_record, block_runs, ends)
 	_append_crescent_attic(buckets, attic_face, attic_face, front.crescent_attic as Dictionary, cornice_back, HALL_END_CREASE_DEG)
 	# The upper band's row of small square windows on its riser (the 2025 aerial
@@ -698,6 +714,9 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	# (_append_strip_walls): past them a folded run's piece would overhang thin air.
 	var north_wing_runs := _int_array(chains.north_three_story_runs)
 	north_cuts.append_array(_strip_cap_cuts(wall_record, north_wing_runs, float(vertical.north_wing_inward_depth)))
+	# Before the risers, the plan between the bands' ends and the hall ends' straight side
+	# walls is the bands' roof (_append_hall_end_terrace), not the strips'.
+	north_cuts.append(_hall_end_terrace_cut(ends.north as Dictionary, HALL_END_CUT_MARGIN_M))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, north_wing_runs, three_y, float(vertical.north_wing_inward_depth), tier_clip, north_cuts) and cut_whole
 	var central := _int_array(chains.central_four_story_runs)
 	var central_main := central.slice(0, central.find(south_tower_runs[0]))
@@ -721,11 +740,13 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	for target: Dictionary in [roof, collision]:
 		_append_triangle(target, join[0], join[1], join[2], Vector3.UP)
 	var tower_cuts := interior_cuts.duplicate()
+	tower_cuts.append(_hall_end_terrace_cut(ends.south as Dictionary, HALL_END_CUT_MARGIN_M))
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_tower_runs, three_y, float(vertical.south_wing_inward_depth), {}, tower_cuts) and cut_whole
-	# The hall ends' roofs, level with the hall block's beside them (_hall_end_plan).
+	# The hall ends' roofs, level with the hall block's beside them (_hall_end_plan); the wing
+	# corner lies on the side wall between the corner and the wall end, so it is left out.
 	for side: String in ["north", "south"]:
-		var end_outline: Array[Vector3] = []
-		end_outline.assign((ends[side] as Dictionary).outline as Array)
+		var plan := (ends[side] as Dictionary).outline as Array
+		var end_outline: Array[Vector3] = [plan[0] as Vector3, plan[1] as Vector3, plan[3] as Vector3, plan[4] as Vector3]
 		cut_whole = _append_flat_polygon_roof(roof, collision, end_outline, float(block.roof_y)) and cut_whole
 	var se_setback := front.se_setback as Dictionary
 	var se_cuts := _setback_cuts(wall_record, [se_setback.runs], float(se_setback.setback))
@@ -737,10 +758,12 @@ static func _build_building_roof(record: Dictionary, wall_record: Dictionary, co
 	cut_whole = _append_strip_roof(roof, collision, wall_record, south_runs, three_y, south_depth, tier_clip, south_cuts) and cut_whole
 	for fill_polygon in _tier_fill_polygons(wall_record, front.south_tier_fill as Dictionary):
 		cut_whole = _append_flat_polygon_roof(roof, collision, _polygon_points(fill_polygon), three_y) and cut_whole
-	_append_junction_wedge_top(roof, wall_record, south_tower_runs, south_runs, south_depth, three_y, front.south_junction_wedge as Dictionary, wing_step)
+	_append_junction_wedge_top(roof, wall_record, south_tower_runs, south_runs, south_depth, three_y, front.south_junction_wedge as Dictionary, wing_step + HALL_END_WEDGE_BEHIND_RISER_M)
 	cut_whole = _append_front_step_roof(roof, collision, wall_record, central_high, float(block.depth_m), float(block.roof_y)) and cut_whole
 	for notch_runs: Array[int] in [north_setback_runs, south_setback_runs]:
 		cut_whole = _append_front_step_roof(roof, collision, wall_record, notch_runs, wing_step, float(wing_setback.face_top_y)) and cut_whole
+	for side: String in ["north", "south"]:
+		_append_hall_end_terrace(roof, collision, ends[side] as Dictionary, float(wing_setback.face_top_y))
 	if not cut_whole:
 		return _failure("building_1_hero_roof_cut", "A cut through Building 1's roof slabs (a setback terrace or the hall's plan) would leave a hole in a slab, which would be drawn and solid across the opening, or a cut piece could not be triangulated.", record)
 	# The canopy runs along the hall front carried on to its ends (_extended_front_record),
@@ -1367,13 +1390,14 @@ static func _append_cut_face(visual: Dictionary, collision: Dictionary, a: Vecto
 
 ## `start_cap_step` and `end_cap_step` (Vector2(depth, top_y)) set down that end cap's
 ## front `depth` metres to top_y, where a set-down front band (_append_front_step)
-## begins or ends the chain.
-static func _append_strip_walls(public_visual: Dictionary, original_visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], low_y: float, high_y: float, depth: float, clip: Dictionary = {}, skip_outer: Dictionary = {}, cuts: Array = [], cut_end_caps: bool = false, start_cap_step: Vector2 = Vector2.ZERO, end_cap_step: Vector2 = Vector2.ZERO) -> void:
+## begins or ends the chain. `cap_only_cuts` cut the end caps alone (a hall end's band
+## roof, _hall_end_terrace_cut).
+static func _append_strip_walls(public_visual: Dictionary, original_visual: Dictionary, collision: Dictionary, record: Dictionary, runs: Array[int], low_y: float, high_y: float, depth: float, clip: Dictionary = {}, skip_outer: Dictionary = {}, cuts: Array = [], cut_end_caps: bool = false, start_cap_step: Vector2 = Vector2.ZERO, end_cap_step: Vector2 = Vector2.ZERO, cap_only_cuts: Array = []) -> void:
 	var frames: Array[Dictionary] = []
 	for run_index in runs:
 		frames.append(_run_frame(record, run_index))
 	# The end caps keep their accepted faces unless the cuts are to reach them too.
-	var cap_cuts: Array = cuts if cut_end_caps else []
+	var cap_cuts: Array = (cuts if cut_end_caps else []) + cap_only_cuts
 	# Where the chain turns sharply its runs' inner faces reach out past the strip's end
 	# caps, standing on their own outside it: they stop at the caps.
 	var partition_cuts := cuts.duplicate()
@@ -2545,17 +2569,20 @@ static func _hall_ends(record: Dictionary, front: Dictionary) -> Dictionary:
 
 ## One end of the hall (the owner's 2026-11-20 photo of the south end and the 2025 aerial
 ## photos, round 3: past its last pier the hall front runs on as a blank panel to a plain
-## square corner, a short return goes straight back to the wing, and the hall's end wall
-## stands over the wing's roofs). Its plan: the hall front carried on along its end run
-## (`hall_run`, at that run's end or start as `hall_end` says) to the corner square across
-## from the wing's start (`wing_run`); the return straight back to that start; the side
-## along the end of the wing's set-down band (`band_runs`) to its riser, `setback` behind
-## the wing's front as _append_front_step lays it; and the back along the riser's line to
-## the hall block's end cap. The map draws a stepped corner there (the canopy member's
-## notched end merged into the outline), so the plan must match the recorded exception's
-## outline_xz within 1 cm, or it is empty. Its points (outline: hall end, corner, wing
-## corner, side end, back end) keep the source base at the hall front's end; `bottom_y`,
-## the walls' foot, lies under both ends' source bases.
+## square corner; round 5: the hall's end wall runs straight back from that corner over the
+## wing's roofs, with no bend where the wing's band ends). Its plan: the hall front carried
+## on along its end run (`hall_run`, at that run's end or start as `hall_end` says) to the
+## corner square across from the wing's start (`wing_run`); the side wall straight back
+## from the corner through that start to the line of the wing's riser, `setback` behind the
+## wing's front at the end of its set-down band (`band_runs`) as _append_front_step lays
+## it; and the back along the riser's line to the hall block's end cap. The map draws a
+## stepped corner there (the canopy member's notched end merged into the outline), so the
+## plan must match the recorded exception's outline_xz within 1 cm, or it is empty. Its
+## points (outline: hall end, corner, wing corner, wall end, back end; the wing corner lies
+## on the side wall) keep the source base at the hall front's end; `band_end` is the band's
+## end on the riser's line, which the band's roof and riser run on from to the wall end
+## (_append_hall_end_terrace, _append_hall_end_walls); `bottom_y`, the walls' foot, lies
+## under both ends' source bases.
 static func _hall_end_plan(record: Dictionary, spec: Dictionary, band_runs: Array[int], setback: float) -> Dictionary:
 	var none := {}
 	var hall := _run_frame(record, int(spec.get("hall_run", -1)))
@@ -2574,10 +2601,15 @@ static func _hall_end_plan(record: Dictionary, spec: Dictionary, band_runs: Arra
 	var band_at := 0 if at_end else band_points.size() - 1
 	if length <= 0.0 or _flat_distance(band_points[band_at] as Vector3, wing_corner) > 0.01:
 		return none
-	var side_end := wing_corner - (band_normals[mini(band_at, band_normals.size() - 1)] as Vector3) * setback
-	var side := Vector3(side_end.x - wing_corner.x, 0.0, side_end.z - wing_corner.z)
-	var back_end := hall_end + inward * (Vector3(side_end.x - hall_end.x, 0.0, side_end.z - hall_end.z).dot(side) / inward.dot(side))
-	var outline: Array[Vector3] = [hall_end, hall_end + along * length, wing_corner, side_end, back_end]
+	var band_end := wing_corner - (band_normals[mini(band_at, band_normals.size() - 1)] as Vector3) * setback
+	# The riser's line runs through the band's end at right angles to the band's end edge
+	# (band_side); the side wall from the corner and the line back from the hall front's end
+	# each run straight back (inward) to it.
+	var band_side := Vector3(band_end.x - wing_corner.x, 0.0, band_end.z - wing_corner.z)
+	var corner := hall_end + along * length
+	var wall_end := corner + inward * (Vector3(band_end.x - corner.x, 0.0, band_end.z - corner.z).dot(band_side) / inward.dot(band_side))
+	var back_end := hall_end + inward * (Vector3(band_end.x - hall_end.x, 0.0, band_end.z - hall_end.z).dot(band_side) / inward.dot(band_side))
+	var outline: Array[Vector3] = [hall_end, corner, wing_corner, wall_end, back_end]
 	var recorded := (spec.osm_exception as Dictionary).get("outline_xz", []) as Array
 	if recorded.size() != outline.size():
 		return none
@@ -2586,22 +2618,19 @@ static func _hall_end_plan(record: Dictionary, spec: Dictionary, band_runs: Arra
 		if Vector2(outline[index].x - float(expected[0]), outline[index].z - float(expected[1])).length() > 0.01:
 			return none
 		outline[index] = Vector3(outline[index].x, hall_end.y, outline[index].z)
-	var side_normal := Vector3(side.z, 0.0, -side.x).normalized()
-	if side_normal.dot(along) < 0.0:
-		side_normal = -side_normal
-	var back := Vector3(back_end.x - side_end.x, 0.0, back_end.z - side_end.z)
+	var back := Vector3(back_end.x - wall_end.x, 0.0, back_end.z - wall_end.z)
 	var back_normal := Vector3(back.z, 0.0, -back.x).normalized()
 	if back_normal.dot(inward) < 0.0:
 		back_normal = -back_normal
 	return {
 		"spec": spec,
 		"outline": outline,
+		"band_end": Vector3(band_end.x, hall_end.y, band_end.z),
 		"hall_run": int(spec.hall_run),
 		"at_run_end": at_end,
 		"length": length,
 		"along": along,
 		"front_normal": hall.normal,
-		"side_normal": side_normal,
 		"back_normal": back_normal,
 		"bottom_y": minf(hall_end.y, wing_corner.y) - 0.06,
 	}
@@ -2636,38 +2665,91 @@ static func _shifted_layout(layout: Dictionary, by: float) -> Dictionary:
 	return shifted
 
 
-## The attic's path round the hall: the north end's side and return, the carried-on hall
-## front (_extended_front_record, along `runs`) and the south end's return and side, each
-## segment with its outward normal.
+## The attic's path round the hall: the north end's side wall, the carried-on hall front
+## (_extended_front_record, along `runs`) and the south end's side wall, each segment with
+## its outward normal. Each side wall runs straight from its corner to its wall end
+## (_hall_end_plan), so the attic turns only at the two corners.
 static func _hall_end_attic_path(front_record: Dictionary, runs: Array[int], ends: Dictionary) -> Dictionary:
 	var path := _chain_points(front_record, runs, 0.0, _chain_length(front_record, runs))
 	var north := ends.north as Dictionary
-	_prepend_point(path, (north.outline as Array)[2] as Vector3, north.along as Vector3)
-	_prepend_point(path, (north.outline as Array)[3] as Vector3, north.side_normal as Vector3)
+	_prepend_point(path, (north.outline as Array)[3] as Vector3, north.along as Vector3)
 	var south := ends.south as Dictionary
-	_append_point(path, (south.outline as Array)[2] as Vector3, south.along as Vector3)
-	_append_point(path, (south.outline as Array)[3] as Vector3, south.side_normal as Vector3)
+	_append_point(path, (south.outline as Array)[3] as Vector3, south.along as Vector3)
 	return path
 
 
 ## A hall end's walls (_hall_end_plan), drawn in the hall's stucco and solid: the front from
 ## the source base to the hall block's roof in two faces split at the two-storey roof, as
 ## the hall front's own base wall and set-down face are, so old wall and new meet vertex
-## for vertex; the return from the walls' foot; the side from just under the wing's set-down
-## band's roof (`band_top`) and the back from just under the wings' upper roof (`upper_y`),
-## where each stands over the lower roofs beside it.
+## for vertex; the side wall one plane from the corner to the wall end, down to the walls'
+## foot as far as the wing's corner and from just under the wing's set-down band's roof
+## (`band_top`) behind it, where it stands on the band's roof carried on to it
+## (_append_hall_end_terrace); the back from just under the wings' upper roof (`upper_y`),
+## standing over it. The band's riser runs on along its line from the band's end to the
+## wall end, from the band's roof to the upper roof, facing the band's roof as the riser
+## does (_append_front_step).
 static func _append_hall_end_walls(visual: Dictionary, collision: Dictionary, end: Dictionary, two_y: float, roof_y: float, band_top: float, upper_y: float) -> void:
 	var outline := end.outline as Array
 	var hall_end := outline[0] as Vector3
 	var corner := outline[1] as Vector3
+	var wing_corner := outline[2] as Vector3
+	var wall_end := outline[3] as Vector3
 	var bottom := float(end.bottom_y)
 	var front_normal := end.front_normal as Vector3
+	var side_normal := end.along as Vector3
+	var back_normal := end.back_normal as Vector3
 	for target: Dictionary in [visual, collision]:
 		_append_vertical_face(target, hall_end, corner, hall_end.y, two_y, front_normal, bottom)
 		_append_vertical_face(target, hall_end, corner, two_y, roof_y, front_normal)
-		_append_vertical_face(target, corner, outline[2] as Vector3, bottom, roof_y, end.along as Vector3)
-		_append_vertical_face(target, outline[2] as Vector3, outline[3] as Vector3, band_top - 0.05, roof_y, end.side_normal as Vector3)
-		_append_vertical_face(target, outline[3] as Vector3, outline[4] as Vector3, upper_y - 0.05, roof_y, end.back_normal as Vector3)
+		_append_vertical_face(target, corner, wing_corner, bottom, band_top - 0.05, side_normal)
+		_append_vertical_face(target, corner, wall_end, band_top - 0.05, roof_y, side_normal)
+		_append_vertical_face(target, wall_end, outline[4] as Vector3, upper_y - 0.05, roof_y, back_normal)
+		_append_vertical_face(target, end.band_end as Vector3, wall_end, band_top, upper_y, -back_normal)
+
+
+## The wing's set-down band's roof carried on to a hall end's side wall (_hall_end_plan): the
+## triangle between the band's end edge (wing corner to band end), the riser's line (band end
+## to wall end) and the side wall, at the band's roof `y`, in the roof's material and solid.
+static func _append_hall_end_terrace(roof: Dictionary, collision: Dictionary, end: Dictionary, y: float) -> void:
+	var outline := end.outline as Array
+	var a := _lifted(outline[2] as Vector3, y)
+	var b := _lifted(end.band_end as Vector3, y)
+	var c := _lifted(outline[3] as Vector3, y)
+	for target: Dictionary in [roof, collision]:
+		_append_triangle(target, a, b, c, Vector3.UP)
+
+
+## The plan the wings' strips give up to a hall end's band roof (_append_hall_end_terrace):
+## the triangle before the riser's line between the band's end edge and the side wall, which
+## the bent side wall stood over until round 5. It reaches `margin` past the band's end edge,
+## in front of the wing corner and into the hall end, so faces along those edges go with it,
+## but not behind the riser's line, where the strips' roofs stay the upper roof the carried-on
+## riser meets (_append_hall_end_walls).
+static func _hall_end_terrace_cut(end: Dictionary, margin: float) -> PackedVector2Array:
+	var outline := end.outline as Array
+	var wing_corner := outline[2] as Vector3
+	var wall_end := outline[3] as Vector3
+	var riser := _flat_direction(wall_end, outline[4] as Vector3)
+	var inward := -(end.front_normal as Vector3)
+	var toward_hall := -(end.along as Vector3)
+	var polygon := PackedVector2Array()
+	for point: Vector3 in [wing_corner - riser * margin - inward * margin, (end.band_end as Vector3) - riser * margin, wall_end + riser * margin, wing_corner - inward * margin + toward_hall * margin]:
+		polygon.append(Vector2(point.x, point.z))
+	return polygon
+
+
+## The riser's coping path (_offset_path of the band's front) carried on along the riser's
+## line to a hall end's wall end, at the band's end that meets the hall end: its last point
+## for the north band, its first for the south's (`at_run_end`, _hall_end_plan).
+static func _riser_path_to_hall_end(path: Dictionary, end: Dictionary) -> Dictionary:
+	var carried := {"points": (path.points as Array).duplicate(), "normals": (path.normals as Array).duplicate()}
+	var normals := carried.normals as Array
+	var wall_end := (end.outline as Array)[3] as Vector3
+	if bool(end.at_run_end):
+		_prepend_point(carried, wall_end, normals[0] as Vector3)
+	else:
+		_append_point(carried, wall_end, normals[normals.size() - 1] as Vector3)
+	return carried
 
 
 ## The door at a hall end's foot where its spec has one (`door`: the owner's 2026-11-20
