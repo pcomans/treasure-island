@@ -131,8 +131,9 @@ browser; it is separate from the owner's VS Code integrated browser. See the
 [observed remote-file restriction](LEARNINGS.md#serve-remote-visual-galleries-over-loopback-http).
 
 A comparison or result sheet for the owner shows the real building's dated photos
-and its plan footprint beside the renders, matched by side, so the owner can judge
-the shape; the photos stay on the loopback page and never enter Git.
+and its [plan view](AGENTS.md#describe-build-check-show) (every map member labelled,
+the generator's outline over it) beside the renders, matched by side, so the owner
+can judge the shape; the photos stay on the loopback page and never enter Git.
 
 ## Shared building-study geometry verification
 

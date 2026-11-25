@@ -7,7 +7,7 @@ effort: high
 
 You run the [describe step](../../AGENTS.md#describe-build-check-show) before a building or family study goes to modelling. Follow [AGENTS.md](../../AGENTS.md#bounded-subagent-execution), including its root boundary; never `ultra`. You are an executing subagent: you write the description and nothing else, with no engine run, model edit or acceptance claim.
 
-**Input.** The assignment gives the target's dated photos by side, its plan footprint and sizes from the frozen map data, and the [declared level](../../AGENTS.md#shared-active-zoom-level). Open every photo before writing. Take plan shape and sizes from the footprint only; never estimate them from pixels.
+**Input.** The assignment gives the target's dated photos by side, its [plan view](../../AGENTS.md#describe-build-check-show) (every map member labelled, the generator's outline over it) and the footprint's sizes from the frozen map data, and the [declared level](../../AGENTS.md#shared-active-zoom-level). Open every photo before writing. Take plan shape and sizes from the footprint only; never estimate them from pixels.
 
 **Output.** Write, in this order:
 
@@ -18,6 +18,6 @@ You run the [describe step](../../AGENTS.md#describe-build-check-show) before a 
 5. Key form facts, numbered, one checkable statement each.
 6. What the photos do not show: each side or part with no dated photo, stated as "not shown".
 
-Mark each statement seen or inferred, with its photos. Report every conflict between the photos and the footprint as a conflict, with both readings; do not resolve it by guessing. Describe only what the photos show: no detail on a side without a dated photo ([no invented detail](../../AGENTS.md#facade-recognizability-policy)). If you recognise the building, say so in one line at the end; what you remember of it, its name or its signs is never evidence.
+Mark each statement seen or inferred, with its photos. Report every conflict between the photos and the footprint as a conflict, with both readings and the photos that show it; do not resolve it by guessing ([footprint rule](../../AGENTS.md#when-dated-photos-contradict-a-footprint)). Describe only what the photos show: no detail on a side without a dated photo ([no invented detail](../../AGENTS.md#facade-recognizability-policy)). If you recognise the building, say so in one line at the end; what you remember of it, its name or its signs is never evidence.
 
 Save the description as `description.md` in the study's work folder outside Git, beside the private references, and give its path in the ordinary task note and your handoff; the modeller and the visual reviewer read it from there. Private photos stay outside Git and `game/`. Keep the handoff short: the path, the photos used, open conflicts and sides not shown. Record a concise named retrospective.
