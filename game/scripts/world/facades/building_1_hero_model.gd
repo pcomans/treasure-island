@@ -19,8 +19,6 @@ const SOUTH_WING_WINDOW_RUNS := [44, 45, 46, 47, 48, 49, 50, 51]
 # view, nodes 0-4); the three-storey north wing starts at run 96.
 const NORTH_FACE_WINDOW_RUNS := [96]
 const ENTRANCE_BAYS := [4, 5, 6]
-const JUNCTION_WINDOW_RUNS := [43]
-const NORTH_JUNCTION_WINDOW_RUNS := [17]
 # Frozen stepped west ends of both wings: a projecting centre face, two flanks
 # and the recessed corner bay. Identity is rechecked against actual coordinates.
 const NORTH_PAVILION_RUNS := {"center_runs": [6], "flank_runs": [[3, 4], [8]], "corner_runs": [0, 1]}
@@ -59,10 +57,6 @@ const HALL_END_CUT_MARGIN_M := 0.1
 ## (_append_hall_end_walls); the riser's coping, reaching 0.06 m behind that line, covers
 ## the slot.
 const HALL_END_WEDGE_BEHIND_RISER_M := 0.02
-## How far a junction tower's coping stops short of its corners (see the copings).
-const TOWER_COPING_CORNER_TRIM_M := 0.25
-## How far into the tower the plain block at a coping's short end reaches.
-const TOWER_CORNER_BLOCK_DEPTH_M := 0.25
 ## The hall's open leaves (_append_open_leaf): hinged this far out from the group's
 ## face, each this thick, folded ones this far apart, the glass this share of a leaf's
 ## thickness, and the push rails proud of each face by this much.
@@ -354,11 +348,10 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	_append_entry_composition(buckets, collision, _entry_frames(record, field_runs, crescent, schedule.entrance_bays as Array, front), int(schedule.doors_per_entrance_group), front, int(hole.bay))
 	_append_ground_floor_windows(_for_part(buckets, "crescent_low"), record, field_runs, crescent, schedule.entrance_bays as Array, front)
 	_append_round_piers(buckets, collision, record, field_runs, crescent, front)
-	_append_junction_windows(_for_part(buckets, "junction"), record, schedule.junction_windows as Array, front)
 
 	# The wings' forecourt faces and the pavilions' flanks have two window rows (the
-	# owner's 2026-11-20 photos); the unphotographed north face and north junction keep
-	# the older three-floor schedule.
+	# owner's 2026-11-20 photos); the unphotographed north face keeps the older
+	# three-floor schedule.
 	var floors := front.window_floors as Array
 	var wing_floors := front.wing_window_floors as Array
 	var wing_style := front.wing_window_style as Dictionary
@@ -368,7 +361,6 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var north_face := _int_array(schedule.north_face_window_runs)
 	var north_face_centers := _evenly_spaced(_chain_length(record, north_face), int(schedule.north_face_windows_per_floor), float(front.north_face_window_margin_m))
 	_append_window_grid(_for_part(buckets, "north"), record, north_face, north_face_centers, float(front.north_face_window_width), floors, wing_style)
-	_append_north_junction_bays(_for_part(buckets, "junction"), record, schedule.north_junction_windows as Array, floors, wing_style)
 	_append_pavilion(_for_part(buckets, "pavilion"), collision, record, north_pavilion, wing_floors, front, "north_pavilion")
 	_append_pavilion(_for_part(buckets, "pavilion"), collision, record, south_pavilion, wing_floors, front, "south_pavilion")
 
@@ -608,8 +600,6 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 		"doors_per_entrance_group": int(schedule.doors_per_entrance_group),
 		"entrance_bays": _int_array(schedule.entrance_bays as Array),
 		"entrance_groups_aligned_with_crescent_bays": true,
-		"south_junction_window_count": (schedule.junction_windows as Array).size(),
-		"north_junction_window_runs": _junction_window_runs(schedule.north_junction_windows as Array),
 		"se_face_runs": se_runs,
 		"se_narrow_window_count": se_windows.size(),
 		"rear_ribbon_host_runs": rear_hosts,
@@ -2136,20 +2126,6 @@ static func _interior_plan(record: Dictionary, config: Dictionary, front: Dictio
 	return INTERIOR.plan({"front": points, "piers": piers, "windows": windows, "window_glass": float(crescent.glass), "window_y": front.crescent_window_y, "doors": doors})
 
 
-## Tall crescent-height glazing on the south junction block's west faces,
-## where the dated WSW view shows windows on the block that ends the crescent.
-static func _append_junction_windows(buckets: Dictionary, record: Dictionary, specs: Array, front: Dictionary) -> void:
-	var window_y := front.crescent_window_y as Array
-	# Same family as the crescent bays; the sill returns past free-standing jambs.
-	var style := (front.crescent_window_style as Dictionary).duplicate()
-	style["sill_overhang"] = 0.06
-	for spec_value in specs:
-		var spec := spec_value as Dictionary
-		var runs: Array[int] = [int(spec.run)]
-		var frame := _span_frame(record, runs, 0.0, _chain_length(record, runs))
-		_append_window_module(buckets, frame, 0.0, float(spec.glass_width), float(window_y[0]), float(window_y[1]), int(spec.columns), 6, style)
-
-
 ## Wing face: eight aligned upper bays on the second and third floors and seven
 ## lower ground-floor bays centred between them.
 static func _append_wing_facade(buckets: Dictionary, record: Dictionary, runs: Array[int], upper_count: int, lower_count: int, floors: Array, front: Dictionary, door_index: int) -> void:
@@ -2232,18 +2208,6 @@ static func _append_window_grid(buckets: Dictionary, record: Dictionary, runs: A
 		for floor_value in floors:
 			var floor_spec := floor_value as Dictionary
 			_append_chain_window(buckets, record, runs, float(center_value), glass, float(floor_spec.bottom), float(floor_spec.top), columns, int(floor_spec.rows), style)
-
-
-## North crescent-wing junction: one stacked wing-family bay on each face long
-## enough for a complete window (runs 17 and 20). The dated SW view shows
-## wing-scale openings continuing there to the first crescent bay, with plain
-## wall at the short jog faces between them (runs 18-19); its lowest floor is
-## hidden by parked cars, so that floor follows the wing schedule.
-static func _append_north_junction_bays(buckets: Dictionary, record: Dictionary, specs: Array, floors: Array, style: Dictionary) -> void:
-	for spec_value in specs:
-		var spec := spec_value as Dictionary
-		var runs: Array[int] = [int(spec.run)]
-		_append_window_grid(buckets, record, runs, [_chain_length(record, runs) * 0.5], float(spec.glass_width), floors, style, int(spec.columns))
 
 
 ## Even bay layout for a podium ribbon between chain metres. Pier centres run
@@ -2908,14 +2872,15 @@ static func _append_se_shoulder(buckets: Dictionary, collision: Dictionary, reco
 		_append_frame_box(target, step_frame, -step_half, step_half + 0.3, tier_top_y - 0.05, float(step.top_y), step_wall - float(step.depth), step_wall)
 
 
-## The south junction tower's strip and the south wing's strip end on two caps from one
-## corner whose runs' normals differ by a few degrees, so the caps part into a wedge open
-## to the sky. Over the wing's set-down front the wing's cap stands alone, its culled back
-## showing the wedge and the sky past it. A solid box along the wing's cap fills the
-## wedge behind the wing's riser, `from_m` along the cap (the south hall end stands over
-## it in front of that): its face `proud_m` proud of the cap, its far side `overlap_m`
-## into the tower's strip, its back end `rear_inset_m` inside the wedge's mouth, its top
-## `top_below_roof_m` under the roofs either side, so no face lies in another's plane.
+## The south junction's strip and the south wing's strip end on two caps from one corner
+## whose runs' normals differ by a few degrees, so the caps part into a wedge open to the
+## sky. A solid box along the wing's cap fills the wedge behind the wing's riser, `from_m`
+## along the cap (before that, the band's roof carried on to the south hall end's side
+## wall covers it, _append_hall_end_terrace): its face `proud_m` proud of the cap, its far
+## side `overlap_m` into the junction's strip, its back end `rear_inset_m` inside the
+## wedge's mouth. Its top lies `top_below_roof_m` under the roofs either side (0: flush
+## with them) and is drawn with them in the roof's material (_append_junction_wedge_top),
+## not here.
 static func _append_junction_wedge(bucket: Dictionary, collision: Dictionary, record: Dictionary, tower_runs: Array[int], wing_runs: Array[int], depth: float, low_y: float, roof_y: float, spec: Dictionary, from_m: float) -> void:
 	var box := _junction_wedge_box(record, tower_runs, wing_runs, depth, spec, from_m)
 	var frame := box.frame as Dictionary
@@ -3621,8 +3586,14 @@ static func _append_pavilion_emblem(buckets: Dictionary, frame: Dictionary, embl
 			_append_window_module(buckets, frame, float(side) * float(small.offset), float(small.width), float(small_y[0]), float(small_y[1]), int(small.columns), int(small.rows), style)
 
 
+## How far the pavilion crowns' block rises over the wings' roof, which the build checks
+## against the approved rise and reports: 0 when no block is drawn (pavilion_crown.block
+## false, the 2025 aerial photos: the roof runs flat to the front coping).
 static func _crown_rise(front: Dictionary, roof_y: float) -> float:
-	return float((front.pavilion_crown as Dictionary).top_y) - roof_y
+	var crown := front.pavilion_crown as Dictionary
+	if not bool(crown.get("block", true)):
+		return 0.0
+	return float(crown.top_y) - roof_y
 
 
 ## Chain metres (Vector2(from, to)) of a pavilion's centre face on a wing chain: the
@@ -4372,50 +4343,6 @@ static func _append_front_step_roof(visual: Dictionary, collision: Dictionary, r
 	return true
 
 
-## A closed outline round a band's roof from paths of any lengths: the exact front
-## path, across its far end to the back path, the back path in reverse and across
-## the near end, each side with its outward normal (a tower's stepped front).
-static func _ring_path(front: Dictionary, back: Dictionary) -> Dictionary:
-	var front_points := front.points as Array
-	var back_points := back.points as Array
-	var back_normals := back.normals as Array
-	var center := Vector3.ZERO
-	for point_value in front_points + back_points:
-		center += point_value as Vector3
-	center /= float(front_points.size() + back_points.size())
-	var points: Array = front_points.duplicate()
-	var normals: Array = (front.normals as Array).duplicate()
-	normals.append(_cap_normal(front_points[front_points.size() - 1] as Vector3, back_points[back_points.size() - 1] as Vector3, center))
-	for index in range(back_points.size() - 1, -1, -1):
-		points.append(back_points[index])
-		if index > 0:
-			normals.append(-(back_normals[index - 1] as Vector3))
-	normals.append(_cap_normal(back_points[0] as Vector3, front_points[0] as Vector3, center))
-	points.append(front_points[0])
-	return {"points": points, "normals": normals}
-
-
-## The flat normal of the segment a-b pointing away from `center`.
-static func _cap_normal(a: Vector3, b: Vector3, center: Vector3) -> Vector3:
-	var direction := _flat_direction(a, b)
-	var normal := Vector3(direction.z, 0.0, -direction.x)
-	var middle := (a + b) * 0.5
-	if normal.dot(Vector3(middle.x - center.x, 0.0, middle.z - center.z)) < 0.0:
-		normal = -normal
-	return normal
-
-
-## A path with its first and last points moved `trim` metres in along their segments.
-static func _path_ends_trimmed(path: Dictionary, trim: float) -> Dictionary:
-	var points := (path.points as Array).duplicate()
-	var last := points.size() - 1
-	var first_point := points[0] as Vector3
-	var last_point := points[last] as Vector3
-	points[0] = first_point + _flat_direction(first_point, points[1] as Vector3) * minf(trim, _flat_distance(first_point, points[1] as Vector3) * 0.5)
-	points[last] = last_point + _flat_direction(last_point, points[last - 1] as Vector3) * minf(trim, _flat_distance(last_point, points[last - 1] as Vector3) * 0.5)
-	return {"points": points, "normals": (path.normals as Array).duplicate()}
-
-
 ## The path with interior points closer than `min_length` to the last kept one
 ## dropped (its ends kept) and each remaining segment's outward normal recomputed,
 ## turned like the source's. Offsetting a chain far (a set-down band's riser) folds
@@ -4999,9 +4926,9 @@ static func _bucket_with_panes() -> Dictionary:
 ## owner's 2026-11-20 photos (the material study): the wings', pavilions' and rear's
 ## window surrounds, reveals, sills and heads in their pale blue-grey (window_trim,
 ## window_reveal); their steel blue on the wings and pavilions (light_steel), dark at
-## the rear, the crescent's in the grille's bronze; the crescent's and junction
-## towers' glass apart (the hall's), the crescent's ground floor's with the door
-## groups'. The part's name rides along for its panes' kinds (_pane_kind).
+## the rear, the crescent's in the grille's bronze; the crescent's glass apart (the
+## hall's), the crescent's ground floor's with the door groups'. The part's name rides
+## along for its panes' kinds (_pane_kind).
 static func _for_part(buckets: Dictionary, part: String) -> Dictionary:
 	var routed := buckets.duplicate()
 	routed["part"] = part
@@ -5014,7 +4941,7 @@ static func _for_part(buckets: Dictionary, part: String) -> Dictionary:
 		routed["frame"] = buckets.window_dark
 	elif part == "crescent":
 		routed["frame"] = buckets.dark_bronze
-	if part in ["crescent", "junction"]:
+	if part == "crescent":
 		routed["glass"] = buckets.glass_hall
 	elif part == "crescent_low":
 		routed["glass"] = buckets.glass_door
@@ -5121,8 +5048,6 @@ static func _config_valid(config: Dictionary) -> bool:
 		and _pavilion_runs_match(schedule.get("north_pavilion", {}) as Dictionary, NORTH_PAVILION_RUNS) \
 		and _pavilion_runs_match(schedule.get("south_pavilion", {}) as Dictionary, SOUTH_PAVILION_RUNS) \
 		and _int_array(schedule.get("entrance_bays", []) as Array) == ENTRANCE_BAYS \
-		and _junction_window_runs(schedule.get("junction_windows", []) as Array) == JUNCTION_WINDOW_RUNS \
-		and _junction_window_runs(schedule.get("north_junction_windows", []) as Array) == NORTH_JUNCTION_WINDOW_RUNS \
 		and _int_array(schedule.get("se_face_runs", []) as Array) == SE_FACE_RUNS \
 		and _chains_equal(schedule.get("rear_ribbon_host_chains", []) as Array, REAR_RIBBON_HOST_CHAINS) \
 		and int(seams.get("north_run_start", -1)) == 96 \
@@ -5131,16 +5056,6 @@ static func _config_valid(config: Dictionary) -> bool:
 		and int(schedule.get("lights_per_tall_end_window", 0)) == 20 \
 		and int(schedule.get("entrance_groups", 0)) == 3 \
 		and int(schedule.get("doors_per_entrance_group", 0)) == 3
-
-
-static func _junction_window_runs(specs: Array) -> Array[int]:
-	var runs: Array[int] = []
-	for spec_value in specs:
-		var spec := spec_value as Dictionary
-		if not spec.has("run") or not spec.has("glass_width") or not spec.has("columns"):
-			return []
-		runs.append(int(spec.run))
-	return runs
 
 
 static func _chains_equal(chains: Array, expected: Array) -> bool:

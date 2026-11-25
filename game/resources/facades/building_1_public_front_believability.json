@@ -98,15 +98,12 @@
     "junction_towers": {
       "north_tower_runs": [17, 18, 19],
       "north_plain_bay_runs": [20],
-      "north_plain_bay_depth_m": 10.0,
       "south_tower_runs": [39, 40, 41, 42, 43],
-      "top_y": 24.32,
       "depth_m": 5.0,
-      "min_segment_m": 2.5,
       "aerial_2025_note": "Replaced (round 2, 2026-11-22): the owner wanted the stepped towers gone, not lowered. These runs now only name the map's stepped corners, which the hall ends (hall_ends, round 3: the hall front carried on to a square corner) replace from the ground up: no base walls, tower, plain bay or copings are drawn on them, and the wings' strips skip their outer faces; before the risers the strips give up the plan between the bands' ends and the hall ends' straight end walls to the bands' roofs (round 5).",
       "evidence": {
-        "read_from_photos": ["a narrow tower about a bay wide at each end of the crescent, its top a little over the crescent's coping, with sky over the wings behind it; a plain bay at the crescent's height between each tower and the end pier, the attic lines running over it (the owner's 2026-11-20 south-end, north-end and close views) [replaced: the 2025 aerial photos show each end of the hall front as a plain square-cornered block level with the parapet; see hall_corner_blocks]"],
-        "production_inference": ["the towers' depth (5 m) and top", "the south junction's mass behind the tower at the wings' three storeys"]
+        "read_from_photos": ["see hall_ends"],
+        "production_inference": ["depth_m (5 m): how far in the roof over the corner where the crescent's strip meets the south junction's reaches", "the south junction's mass behind the hall's south end at the wings' three storeys"]
       }
     },
     "pane_kinds": [
