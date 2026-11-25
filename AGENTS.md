@@ -322,10 +322,11 @@ Model tiers by detail level: Opus 5.5 is the modeller for landmarks and anything
 
 - The model is marked as a first pass in the building's data or task note.
 - When the building needs to be better, Opus 5.5 rebuilds it from the description; a first pass is never patched or iterated on.
-- A first pass is not accepted by being built: [What done means for a building](#what-done-means-for-a-building) and recognition credit are unchanged.
+- A first pass earns no acceptance or recognition credit; only an Opus 5.5 rebuild can be accepted under [What done means for a building](#what-done-means-for-a-building).
+- The tooling that runs the session sets its reasoning effort explicitly at dispatch, never `ultra`.
 - No harness rule, shared code, or ground, street or site decision is made or changed to suit a first pass's output or to make it fit; those follow the map data, the photos and the regular modeller's work.
 
-The tooling that runs DeepSeek sessions (an isolated coding-agent sandbox reached through a model gateway) lives outside the repository today; [process shootout 4](discovery/PROCESS_SHOOTOUT_4.md) describes it and the evidence. Kimi K3.1 Pro and Gemini 4 Neon are not routed; adopting either is a later owner decision. Earlier figures are in the [model shootout notes](discovery/MODEL_SHOOTOUT.md#model-tiers-by-detail-level).
+The tooling that runs DeepSeek sessions (an isolated coding-agent sandbox reached through a model gateway) lives outside the repository; [process shootout 4](discovery/PROCESS_SHOOTOUT_4.md) describes it, the effort it runs at and the evidence. Kimi K3.1 Pro and Gemini 4 Neon are not routed; adopting either is a later owner decision. The first model shootout's figures are in the [model shootout notes](discovery/MODEL_SHOOTOUT.md#model-tiers-by-detail-level).
 
 Claude Code adapter: each role file's frontmatter (`model: opus`, `effort`) is the per-dispatch model and effort selection; don't override it at dispatch time, except for the `medium` tasks below. `max` is not `ultra`. The 2026-10-10 Codex routing remains historical. The [Codex CLI review recipe](CLAUDE.md#codex-cli-delegated-visual-reviews) serves landmark visual review (below) and otherwise only an assignment that explicitly selects Codex; there, select a supported non-ultra effort explicitly. Past execution records remain unchanged.
 

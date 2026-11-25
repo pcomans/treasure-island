@@ -8,7 +8,7 @@ The owner's plan for [model tiers by detail level](MODEL_SHOOTOUT.md#model-tiers
 
 ## Design
 
-- **Modellers.** Opus 5.5 (its results reused: shootout 2's four described builds and shootout 3's review-and-fix of each), DeepSeek V4.1 Flash and Kimi K3.1 Pro (new runs through a model gateway, in the same sandboxed coding-agent harness, renderer and prompts).
+- **Modellers.** Opus 5.5 (its results reused: shootout 2's four described builds and shootout 3's review-and-fix of each), DeepSeek V4.1 Flash and Kimi K3.1 Pro (new runs through a model gateway, in the same sandboxed coding-agent harness, renderer and prompts). Every cheaper-model session and every Opus review ran at reasoning effort `high`, set by the run tooling.
 - **Buildings.** The same housing row and warehouse, with the same ten dated photos, footprint and description per building.
 - **Process per build.** Shootout 2's described arm: a first build from photos, footprint and description, one look at its own renders and one revision. Then shootout 3's detector, a defect-only review by Opus 5.5 (eight renders, description, footprint and the detector's report), and one fix session by the same modeller with the report and the review.
 - **Runs.** Two per modeller and building: 12 builds and 12 fixes.
@@ -66,7 +66,7 @@ List prices as counted by the harness. Opus's build and fix figures are from sho
 | DeepSeek V4.1 Flash | $1.03 | $3.92 | $4.94 | $1.24 | 79 % |
 | Kimi K3.1 Pro | $5.42 | $3.82 | $9.24 | $2.31 | 41 % |
 
-Per building, DeepSeek's whole process costs $1.50 (55 %) less than Opus's and Kimi's $0.43 (16 %) less. An Opus review of a cheap model's build cost $0.69 to $1.41, against $0.63 to $0.83 for Opus's own builds.
+Per building, DeepSeek's whole process costs $1.51 (55 %) less than Opus's and Kimi's $0.44 (16 %) less. An Opus review of a cheap model's build cost $0.69 to $1.41, against $0.63 to $0.83 for Opus's own builds.
 
 ### Running the cheaper models
 
@@ -115,7 +115,7 @@ These rest on two buildings, two runs, one owner and one judge: they give a dire
 
 ## What it means for the process
 
-Adopted in [AGENTS](../AGENTS.md#bounded-subagent-execution) (owner, 2026-11-25): DeepSeek V4.1 Flash may build a first pass of a low-detail background building from the description and plan view. A first pass is marked as such, is rebuilt from the description by Opus 5.5 when the building needs to be better, never patched, and counts for nothing toward acceptance; no harness rule, shared code or ground, street or site decision is made to suit it. Opus 5.5 stays the modeller for landmarks and anything seen up close; Kimi K3.1 Pro is not routed. The run tooling for these sessions lives outside the repository.
+Adopted in [AGENTS](../AGENTS.md#bounded-subagent-execution) (owner, 2026-11-25): DeepSeek V4.1 Flash may build a first pass of a low-detail background building from the description and plan view. A first pass is marked as such and is rebuilt from the description by Opus 5.5 when the building needs to be better, never patched. A first pass earns no acceptance or recognition credit; only an Opus 5.5 rebuild can be accepted under [What done means for a building](../AGENTS.md#what-done-means-for-a-building). The run tooling sets the session's reasoning effort explicitly, never `ultra`. No harness rule, shared code or ground, street or site decision is made to suit it. Opus 5.5 stays the modeller for landmarks and anything seen up close; Kimi K3.1 Pro is not routed. The run tooling for these sessions lives outside the repository.
 
 Proposals, not adopted:
 
