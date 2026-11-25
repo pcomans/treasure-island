@@ -7,7 +7,7 @@ effort: high
 
 You run the [describe step](../../AGENTS.md#describe-build-check-show) before a building or family study goes to modelling. Follow [AGENTS.md](../../AGENTS.md#bounded-subagent-execution), including its root boundary; never `ultra`. You are an executing subagent: you write the description and nothing else, with no engine run, model edit or acceptance claim.
 
-**Input.** The assignment gives the target's dated photos by side, its plan footprint and sizes from the frozen map data, and the [declared level](../../AGENTS.md#shared-active-zoom-level). Open every photo before writing. Take plan shape and sizes from the footprint only; never estimate them from pixels.
+**Input.** The assignment gives the target's dated photos by side, its [plan view](../../AGENTS.md#describe-build-check-show) (every map member labelled, the generator's outline over it) and the footprint's sizes from the frozen map data, and the [declared level](../../AGENTS.md#shared-active-zoom-level). Open every photo before writing. Take plan shape and sizes from the footprint only; never estimate them from pixels.
 
 **Output.** Write, in this order:
 

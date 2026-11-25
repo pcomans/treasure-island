@@ -119,6 +119,16 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 - **Now.** Documentation, research, describing and judging run in parallel freely; engine work queues behind locks. Private data sets are protected by keep-markers, cleanup exclusions and a private copy elsewhere.
 - **Status.** Hypothesis.
 
+## Compared with a published procedural-tools workflow (2026-11-25)
+
+The orchestrating session's observations, from the owner's comparison of this project's process with a published procedural-tools workflow for building a town.
+
+- **Same base.** Map data, procedural generation, shared rules with local controls, and few reused assets.
+- **Different loop.** There a person edits in the editor and plays the result seconds later; here each change is an agent round that ends in a sheet.
+- **Different target.** Theirs is a place "inspired by" a real one; ours is the real place judged against dated photos, which is why describing first and comparing with photos stay.
+- **Adopted** (owner, 2026-11-25): a [plan view](../AGENTS.md#describe-build-check-show) of the map's members before anything is built, and, as a direction, landmark elements built once as [shared rules with per-building data](../.agents/skills/building-texture/SKILL.md#before-every-new-building-compare-and-reuse).
+- **Not adopted:** live controls for a building's main dimensions that the owner could drag; the owner ruled them out as unfeasible.
+
 ## Owner communication
 
 ### 18. Short, plain, in the tool
