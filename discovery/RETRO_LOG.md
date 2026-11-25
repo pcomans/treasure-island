@@ -28475,3 +28475,8 @@ What the team should change next time
 - What worked well: Placing the two failing samples against the cab's exact plan (both within 16 cm of a corner, 1 to 4 cm outside the base) named the drawn-only parts before any change: the sill band and the corner posts, with the glazing's bottom bars over the sill. Giving those the same band and beams in the collision fixed it with no drawn change; the fit test failed at 40bee5a4 and passed at 62b54606, with Building 1's own still passing.
 - What did not work well: Round 1 lowered the cab's deck 1.4 m, and every round since ran the fit test for r16681702 only; the cab is its own scored unit (w1222720021), so only the release batch's island test found it.
 - What the team should change next time: When a change touches a model that builds more than one scored unit, run the fit test for each source key it builds (here r16681702 and w1222720021), not only the main one.
+
+### ti-code-review — building1-aerial-fixes-20261122 delta 5c (2026-11-25)
+- What worked well: The delta was small and the author's before/after fit logs named the failing mesh and point, so I could check the fix against the fit test's 1.0 m support rule and the drawn values without an engine run.
+- What did not work well: The visible-roof check samples a fixed 8×8 grid. Drawn-only parts such as the cab stair and door hood pass only because no sample point lands on them, so a pass does not prove every visible top is supported.
+- What the team should change next time: When a model keeps parts drawn only, check each raised top against the 1.0 m support rule from the drawn values, and make it solid, or say why not, in the same round. Do not rely on the sample grid missing it.
