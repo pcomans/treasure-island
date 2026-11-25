@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# Draws one building's plan from the frozen map data, for the describe step and
+# the owner's sheets (tools/building_plan.mjs):
+#
+#   tools/building-plan r16681702                 into <worktree parent>/building-plans/r16681702/
+#   tools/building-plan w34313525 --out DIR       into DIR (never inside this repository)
+#
+# plan.svg (and plan.png when ImageMagick's magick is on PATH): each map member
+# drawn and labelled with its role and tags, the outline the world generator uses
+# over them, neighbours, roads and areas within 15 m, the catalog's passages and
+# stairs, north arrow, scale bar and 1 m ticks. plan.md: overall and per-member
+# sizes, straight runs and fitted arcs, the members against the generated outline
+# in metres, and flags worth a look against photos. Read-only for the repository.
+set -euo pipefail
+# node lives here in the devcontainer (node feature); non-login shells lack it.
+export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+exec node "$(cd "$(dirname "$0")" && pwd)/building_plan.mjs" "$@"
