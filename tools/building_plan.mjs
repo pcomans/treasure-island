@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import polygonClipping from "polygon-clipping";
 
 import { projectLonLat } from "./lib/coordinates.mjs";
-import { parseRawOsmXml } from "./lib/osm-geometry.mjs";
+import { parseRawOsmXml, pointInRing } from "./lib/osm-geometry.mjs";
 import { GENERATOR_VERSION, ROAD_WIDTHS_M, SOURCE_CONTRACT } from "./lib/world-contract.mjs";
 import {
   ON_LINE_M,
@@ -33,7 +33,6 @@ import {
   inscribedCircle,
   lineSegments,
   orientRing,
-  pointInRing,
   pointInShape,
   principalRectangle,
   ringArea,
@@ -845,12 +844,14 @@ function flagsFor(plan) {
       const box = bounds(entry.ring);
       flags.push(`The generated outline has a ${f2(ringArea(entry.ring))} m² hole (${entry.label}, ${entry.ring.length} vertices, about ${xz([(box.minX + box.maxX) / 2, (box.minZ + box.maxZ) / 2])}) that matches no inner member; its edges follow ${totals.map(([letter, length]) => `${letter} for ${f1(length)} m`).join(", ")}.`);
     }
-    for (const { entry, matchesInner } of attribution) {
-      if (entry.hole && !matchesInner) continue;
-      const short = entry.runs.filter((run) => isStep(run, entry.runs));
-      if (short.length === 0) continue;
-      const listed = short.slice(0, 12).map((run) => `run ${run.index}, ${f2(run.length)} m at ${xz(run.from)} (corners ${f1(run.corner)}° and ${f1(entry.runs[run.index % entry.runs.length].corner)}°)`);
-      flags.push(`The generated ${entry.label} has ${short.length} step${short.length > 1 ? "s" : ""} under ${SHORT_RUN_M} m: ${listed.join("; ")}${short.length > 12 ? "; …" : ""}.`);
+    // One line for all short steps; the run tables in plan.md mark each one.
+    const steps = attribution.filter(({ entry, matchesInner }) => !entry.hole || matchesInner)
+      .map(({ entry }) => ({ entry, runs: entry.runs.filter((run) => isStep(run, entry.runs)) }))
+      .filter(({ runs }) => runs.length > 0);
+    const stepCount = steps.reduce((sum, { runs }) => sum + runs.length, 0);
+    if (stepCount > 0) {
+      const where = steps.map(({ entry, runs }) => `${entry.label} run${runs.length > 1 ? "s" : ""} ${runs.map((run) => run.index).join(", ")}`).join("; ");
+      flags.push(`The generated outline has ${stepCount} step${stepCount > 1 ? "s" : ""} under ${SHORT_RUN_M} m between corners (${where}; see the run tables).`);
     }
     if (generated.measure != null && Math.abs(generatedMeasures.area - generated.measure) > 0.5) {
       flags.push(`The outline traced from the generated roof mesh measures ${f2(generatedMeasures.area)} m², the generated record ${f2(generated.measure)} m².`);
@@ -1066,6 +1067,7 @@ function draw(plan, flags) {
   // line per level; otherwise each level's longest arc gets a short guide
   // toward its centre. Labels take the colour of the member whose arc it is.
   const radiusLabels = [];
+  const radiusLines = [];
   for (const group of arcs.groups) {
     const centre = px(group.centre);
     const visible = inPlot(centre, 8);
@@ -1091,6 +1093,7 @@ function draw(plan, flags) {
         const end = [group.centre[0] + Math.sin(radians) * level.radius, group.centre[1] - Math.cos(radians) * level.radius];
         line(marks, [group.centre, end], { stroke: colour, width: 1, dash: [4, 3] });
         const tip = px(end);
+        radiusLines.push([centre, tip]);
         marks.push({ type: "circle", centre: tip, radius: 2.5, fill: colour });
         const angle = uprightAngle(centre, tip);
         radiusLabels.push([0.8, 0.7, 0.6, 0.5, 0.4, 0.3].map((share) => {
@@ -1105,6 +1108,7 @@ function draw(plan, flags) {
         const end = [middle[0] + (toward[0] / length) * reach, middle[1] + (toward[1] / length) * reach];
         line(marks, [middle, end], { stroke: colour, width: 1, dash: [3, 3] });
         const at = px(end);
+        radiusLines.push([px(middle), at]);
         radiusLabels.push([0, 14, -14, 28].map((dy) => ({ type: "text", at: [at[0], at[1] + 4 + dy], text, size: 11, anchor: "middle", fill: colour, bold: true })));
       }
     }
@@ -1120,11 +1124,21 @@ function draw(plan, flags) {
     const end = [middle[0] + (toward[0] / length) * reach, middle[1] + (toward[1] / length) * reach];
     line(marks, [middle, end], { stroke: colour, width: 1, dash: [3, 3] });
     const at = px(end);
+    radiusLines.push([px(middle), at]);
     radiusLabels.push([0, 14, -14].map((dy) => ({ type: "text", at: [at[0], at[1] + 4 + dy], text: `R ${f2(arc.run.radius)}`, size: 11, anchor: "middle", fill: colour, bold: true })));
   }
 
-  // Labels, most important first: members (key, role, tags), catalog arrows,
-  // radii, then tagged nodes and run lengths where there is room.
+  // Labels, most important first: radii (on their own lines), then, kept off
+  // those lines, members (key, role, tags), catalog arrows, and tagged nodes
+  // and run lengths where there is room.
+  for (const candidates of radiusLabels) texts.push(...labels.place(candidates, true));
+  for (const [from, to] of radiusLines) {
+    const length = Math.hypot(to[0] - from[0], to[1] - from[1]);
+    for (let along = 0; along <= length; along += 6) {
+      const at = [from[0] + ((to[0] - from[0]) * along) / (length || 1), from[1] + ((to[1] - from[1]) * along) / (length || 1)];
+      labels.reserve({ x0: at[0] - 3, y0: at[1] - 3, x1: at[0] + 3, y1: at[1] + 3 });
+    }
+  }
   for (const { member, at } of letters) {
     const tagLines = wrapText(tagText(member.tags), 44);
     const shown = tagLines.slice(0, 2).map((text, index) => (index === 1 && tagLines.length > 2 ? `${text} …` : text));
@@ -1141,7 +1155,6 @@ function draw(plan, flags) {
       item(0, 18, "middle"), item(0, -10, "middle"), item(-8, 4, "end"), item(8, 4, "start"), item(0, 32, "middle"), item(0, -24, "middle"),
     ], true));
   }
-  for (const candidates of radiusLabels) texts.push(...labels.place(candidates, true));
   for (const node of nodes) {
     const at = px(node.point);
     const tags = node.tags;
@@ -1453,7 +1466,8 @@ function report(plan, flags, drawing, files) {
   push("- Heights, storeys and roof form beyond the tags printed above; most members carry none.");
   push("- Where doors and windows are, beyond nodes tagged as entrances.");
   push("- Exact positions: the snapshot's nodes were traced by volunteers, mostly from aerial imagery, and traced arcs wander a few decimetres about their fitted circles (fit errors above).");
-  push("- Anything built or demolished after the snapshot (2026-08-27).");
+  const snapshotDate = /\d{4}-\d{2}-\d{2}/u.exec(basename(SOURCE_CONTRACT.raw_osm.path))?.[0];
+  push(`- Anything built or demolished after the snapshot${snapshotDate ? ` (${snapshotDate})` : ""}.`);
   push("");
   return `${lines.join("\n")}\n`;
 }
@@ -1480,6 +1494,10 @@ function main() {
     console.error(`building-plan: ${error.message}${options ? "" : `\n\n${USAGE}`}`);
     return 2;
   }
+  return writePlan(options, plan);
+}
+
+function writePlan(options, plan) {
   const flags = flagsFor(plan);
   const drawing = draw(plan, flags.flags);
   mkdirSync(options.outDirectory, { recursive: true });
@@ -1502,4 +1520,11 @@ function main() {
   return 0;
 }
 
-process.exitCode = main();
+// Any other failure (unreadable data, a roof mesh that does not close) ends in
+// one line, not a stack trace.
+try {
+  process.exitCode = main();
+} catch (error) {
+  console.error(`building-plan: failed: ${error.message}`);
+  process.exitCode = 1;
+}

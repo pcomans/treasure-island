@@ -1,21 +1,13 @@
 // Plan measures for tools/building_plan.mjs, in the game's plan frame: x east,
 // z south (north is -z), metres. Pure functions; nothing here reads or writes
 // files. A ring is an array of [x, z] points without a repeated closing point.
+import { pointInRing, signedRingArea } from "./osm-geometry.mjs";
 
 export const ON_LINE_M = 0.02; // a point this close to a line lies on it
 const DEGREES = 180 / Math.PI;
 
-export function signedArea(ring) {
-  let doubled = 0;
-  for (let index = 0; index < ring.length; index += 1) {
-    const next = ring[(index + 1) % ring.length];
-    doubled += ring[index][0] * next[1] - next[0] * ring[index][1];
-  }
-  return doubled / 2;
-}
-
 export function ringArea(ring) {
-  return Math.abs(signedArea(ring));
+  return Math.abs(signedRingArea(ring));
 }
 
 export function ringPerimeter(ring) {
@@ -29,7 +21,7 @@ export function ringPerimeter(ring) {
 
 // Positive signed area in (x, z) is clockwise on a plan drawn north up.
 export function orientRing(ring, clockwise = true) {
-  return (signedArea(ring) > 0) === clockwise ? ring : [...ring].reverse();
+  return (signedRingArea(ring) > 0) === clockwise ? ring : [...ring].reverse();
 }
 
 export function dropClosingPoint(points) {
@@ -172,17 +164,6 @@ export function distanceToSegments(point, segments) {
   return best;
 }
 
-export function pointInRing(point, ring) {
-  let inside = false;
-  for (let current = 0, previous = ring.length - 1; current < ring.length; previous = current, current += 1) {
-    const a = ring[previous];
-    const b = ring[current];
-    if ((a[1] > point[1]) !== (b[1] > point[1]) &&
-      point[0] < ((b[0] - a[0]) * (point[1] - a[1])) / (b[1] - a[1]) + a[0]) inside = !inside;
-  }
-  return inside;
-}
-
 // A polygon is { outer, holes }; a shape is an array of polygons.
 export function pointInShape(point, shape) {
   return shape.some((polygon) => pointInRing(point, polygon.outer) &&
@@ -220,7 +201,7 @@ export function sampleBoundary(points, step = 0.1, closed = true) {
 // Turn at each vertex in degrees: positive turns with the ring (a convex
 // corner of a ring that runs clockwise on the plan), negative against it.
 export function vertexTurns(ring) {
-  const sign = Math.sign(signedArea(ring)) || 1;
+  const sign = Math.sign(signedRingArea(ring)) || 1;
   const turns = [];
   for (let index = 0; index < ring.length; index += 1) {
     const previous = ring[(index - 1 + ring.length) % ring.length];

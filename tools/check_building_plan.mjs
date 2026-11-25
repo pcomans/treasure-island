@@ -1,17 +1,21 @@
 #!/usr/bin/env node
 // Checks tools/building-plan (tools/building_plan.mjs) on the frozen map data and
 // the generated world, writing only to a temporary folder it removes:
-//   - on a small building (the smallest standing catalog building with a
-//     generated roof, chosen by rule so the check follows the world) it writes
+//   - on a small building (the smallest standing catalog way the generator did
+//     not cut, chosen by rule so the check follows the world) it writes
 //     plan.svg, plan.md and, where ImageMagick's magick is on PATH, plan.png. The
 //     SVG is well formed, its size matches its viewBox and every number in it is
 //     finite; its x and z rulers keep one scale; the generated outline drawn in
 //     it spans the roof mesh's own extent, read here from the generated record;
-//     and plan.md's area and extent are the roof mesh's, measured here as well;
+//     plan.md's area and extent are the roof mesh's, measured here as well; and
+//     the map way and the generated outline sit in one frame: at least 95 % of
+//     the way's edge lies on the outline, and the outline follows the way for
+//     at least 95 % of its length (a map read shifted or mirrored fails here);
 //   - a second run writes the same files, byte for byte;
 //   - on Building 1 (r16681702) the map facts behind its hall front standing
 //     4.4 m too far forward are flagged from geometry alone: two untagged outer
-//     members joined into one outline, and w34313541 a thin strip along the other;
+//     members joined into one outline, and w34313541 a thin strip along the
+//     other; and every part of the generated outline follows a member's edge;
 //   - it refuses an --out inside the repository, a key the snapshot lacks and a
 //     key that is no building, writing nothing; and no run changes the work tree.
 // Node only, a few seconds. Part of tools/test.sh.
@@ -82,21 +86,28 @@ function roofMesh(key) {
   return { minX: Math.min(...xs), maxX: Math.max(...xs), minZ: Math.min(...zs), maxZ: Math.max(...zs), area };
 }
 
-// The smallest standing catalog building with a generated roof of its own.
+// The smallest standing catalog way with a generated roof of its own that the
+// generator did not cut (its generated area is its map area), so its plan
+// should show the way and the generated outline on one line.
 function smallBuilding() {
   const catalog = JSON.parse(readFileSync(join(root, "discovery/facades/facade-recognition-catalog.json"), "utf8"));
   const logical = JSON.parse(readFileSync(join(root, "generated/world/logical-objects.json"), "utf8")).objects;
   const sizes = [];
   for (const unit of catalog.units) {
-    if (unit.demolition) continue;
     const key = unit.anchor_source_key;
+    if (unit.demolition || !key.startsWith("w")) continue;
     const object = logical.find((candidate) => candidate.logical_object_key === `building:${key}`);
     if (!object?.physical_object_keys.some((physical) => physical.endsWith(":roof"))) continue;
-    sizes.push([object.source_geometry.find((entry) => entry.source_key === key).clipped_measure, key]);
+    const measure = object.source_geometry.find((entry) => entry.source_key === key);
+    if (Math.abs(measure.source_measure - measure.clipped_measure) > 0.01) continue;
+    sizes.push([measure.clipped_measure, key]);
   }
   sizes.sort((a, b) => a[0] - b[0] || a[1].localeCompare(b[1]));
   return sizes[0]?.[1];
 }
+
+// The plan.md line that says which members the generated outline follows.
+const outlineFollows = (markdown) => /^- The generated outline \(([\d.]+) m\) follows (.*)\.$/mu.exec(markdown);
 
 try {
   const before = treeState();
@@ -170,6 +181,18 @@ try {
         check([minX - mesh.minX, maxX - mesh.maxX, minZ - mesh.minZ, maxZ - mesh.maxZ].every((difference) => Math.abs(difference) <= 0.006), `${key}: plan.md's extent x ${minX} to ${maxX}, z ${minZ} to ${maxZ} is not the roof mesh's`);
       }
       check(/^## Flags worth a look against photos$/mu.test(markdown) && /^## What the map data cannot give$/mu.test(markdown), `${key}: plan.md lacks its flags or limits section`);
+      // The map way and the generated outline in one frame: the way's edge lies
+      // on the outline, and the outline follows the way.
+      const edge = /^- A \S+ \([^)]*\): .*its edge runs ([\d.]+) m on the outline, ([\d.]+) m inside it and ([\d.]+) m outside it\./mu.exec(markdown);
+      const follows = outlineFollows(markdown);
+      if (check(edge && follows, `${key}: plan.md does not say how the way's edge and the generated outline meet`)) {
+        const [on, inside, outside] = edge.slice(1).map(Number);
+        const total = on + inside + outside;
+        check(total > 0 && on >= 0.95 * total, `${key}: only ${on} of the way's ${total.toFixed(1)} m of edge lies on the generated outline (${inside} m inside, ${outside} m outside): the map and the generated world are not drawn in one frame`);
+        const perimeter = Number(follows[1]);
+        const alongWay = Number(/(?:^|, )A for ([\d.]+) m/u.exec(follows[2])?.[1] ?? 0);
+        check(alongWay >= 0.95 * perimeter, `${key}: the generated outline (${perimeter} m) follows the way for only ${alongWay} m (${follows[2]})`);
+      }
     }
     if (written.includes("plan.png")) {
       const png = readFileSync(join(first, "plan.png"));
@@ -194,6 +217,8 @@ try {
     check(/^\d+\. The relation has 2 outer members, which the generator joins into one outline/mu.test(markdown), "r16681702: the two outer members joined into one outline are not flagged");
     check(/^\d+\. B w34313541 \(outer\) is a thin strip: greatest width [0-5]\.\d+ m.*it lies along A w1169707889/mu.test(markdown), "r16681702: w34313541 is not flagged as a thin strip along w1169707889");
     check(!/not a wall/u.test(markdown), "r16681702: a flag must not say a member is not a wall");
+    const follows = outlineFollows(markdown);
+    check(follows && !follows[2].includes("no member's edge"), `r16681702: the generated outline follows no member's edge somewhere (${follows?.[2] ?? "no such line in plan.md"}): the members and the generated world are not drawn in one frame`);
   }
 
   // 4. Refusals, writing nothing.
@@ -214,4 +239,4 @@ if (failures.length) {
   for (const failure of failures) console.log(`FAIL: ${failure}`);
   process.exit(1);
 }
-console.log(`PASS: tools/building-plan draws a building's plan from the frozen map data: a well-formed SVG${hasMagick ? " and PNG" : ""} to scale, its generated outline on the roof mesh's extent, plan.md's area and extent the roof mesh's, the same files on a second run; on Building 1 the two untagged outer members joined into one outline and w34313541 a thin strip along the other are flagged; an --out in the repository, a missing key and a road are refused; the work tree is unchanged`);
+console.log(`PASS: tools/building-plan draws a building's plan from the frozen map data: a well-formed SVG${hasMagick ? " and PNG" : ""} to scale, its generated outline on the roof mesh's extent, plan.md's area and extent the roof mesh's, the map way on the generated outline (one frame), the same files on a second run; on Building 1 the two untagged outer members joined into one outline and w34313541 a thin strip along the other are flagged, and the generated outline follows a member's edge everywhere; an --out in the repository, a missing key and a road are refused; the work tree is unchanged`);
