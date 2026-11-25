@@ -73,7 +73,7 @@ The add / fix / remove tallies are as recorded at the time. F's fixer rewrote th
 
 ## Model tiers by detail level
 
-**Status (2026-11-21): a plan, not routing.** Modelling runs in Claude Code on Opus 5.5, as [AGENTS](../AGENTS.md#bounded-subagent-execution) says. Kimi K3.1 Pro is a candidate to consider for cheap low-detail modelling, possibly as a first pass; Gemini 4 Neon is to be investigated for high-detail work. Neither is routed, and adopting either is a later owner decision.
+**Status (2026-11-25).** Opus 5.5 models landmarks and anything seen up close. After [process shootout 4](PROCESS_SHOOTOUT_4.md), DeepSeek V4.1 Flash may build a first pass of a low-detail background building, rebuilt by Opus rather than patched when it needs to be better ([AGENTS](../AGENTS.md#bounded-subagent-execution)). In that test the owner preferred Opus over Kimi K3.1 Pro in all four pairs, at 84 % of Opus's cost per building; Kimi and Gemini 4 Neon are not routed, and adopting either is a later owner decision. The 2026-11-21 plan below is kept as the owner stated it.
 
 The owner's plan: "Kimi I think looks … basic but acceptable. So I would say I would use Kimi for like cheap low detail modeling, right? Maybe for like a first pass. I would keep using Opus for mid-detail modeling and then I think we should start investigating Gemini for high detail work". Earlier in the same discussion: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
 
@@ -107,3 +107,7 @@ Purpose, method and every round's results are in the [architect-description shoo
 ## Process shootout 2 (description, photos and review rounds)
 
 Opus 5.5 built two buildings blind from two photos, the full photo set, or the full set plus a description, then ran one review-and-fix round in three formats; the owner voted on blind pairs and a blind judge scored every model against a sealed checklist (2026-11-21 to 22). The described builds were preferred on both buildings; review rounds after them made no difference the owner could see. Design, results and limits are in [process shootout 2](PROCESS_SHOOTOUT_2.md).
+
+## Process shootouts 3 and 4 (jank detector; cheaper modellers)
+
+A mechanical jank detector and one fix round on Opus's described builds cut the detector's findings from 24 to 166 per model to 0 to 15 for $8.60 (2026-11-22; not voted by the owner): [process shootout 3](PROCESS_SHOOTOUT_3.md). The same process with DeepSeek V4.1 Flash and Kimi K3.1 Pro reached Opus's form-checklist scores, but the owner preferred Opus in 7 of its 8 blind pairs, on broken geometry rather than form (2026-11-22 to 25): [process shootout 4](PROCESS_SHOOTOUT_4.md).

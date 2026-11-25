@@ -42,7 +42,7 @@ Each lesson gives what was observed, what the orchestrator now does, and its sta
 - **Now.** The orchestrator turns owner and reviewer feedback into a target against the reference before passing it on, not "more" or "less".
 - **Status.** Hypothesis. In [process shootout 2](PROCESS_SHOOTOUT_2.md) a review with measured targets made no difference the owner could see.
 
-**First blind test of these flow lessons:** [process shootout 2](PROCESS_SHOOTOUT_2.md) (2026-11-21 to 22). It also led AGENTS to adopt a [defect pass](../.claude/agents/ti-visual-review.md#defect-pass) and [few images per reviewer](../LEARNINGS.md#give-a-reviewer-few-images-not-twenty).
+**First blind test of these flow lessons:** [process shootout 2](PROCESS_SHOOTOUT_2.md) (2026-11-21 to 22); a mechanical jank detector in [process shootout 3](PROCESS_SHOOTOUT_3.md) and cheaper modellers on the same process in [process shootout 4](PROCESS_SHOOTOUT_4.md). It also led AGENTS to adopt a [defect pass](../.claude/agents/ti-visual-review.md#defect-pass) and [few images per reviewer](../LEARNINGS.md#give-a-reviewer-few-images-not-twenty).
 
 ## Checks
 
