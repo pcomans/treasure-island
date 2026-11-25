@@ -134,8 +134,12 @@ vec2 cells(vec2 x) {
 	return vec2(sqrt(d2) - sqrt(d1), hash12(id + 3.1));
 }
 
+// A paint's colour, read at level 0 explicitly: the same texel texture() reads
+// (the palette is sampled nearest, without mipmaps), but with no derivatives,
+// which texture() takes to pick its level and which are undefined inside the
+// roof test below, where paint() is also called.
 vec3 paint(float column) {
-	return texture(palette, vec2(column, 0.75)).rgb;
+	return textureLod(palette, vec2(column, 0.75), 0.0).rgb;
 }
 
 void vertex() {
@@ -208,7 +212,7 @@ void fragment() {
 	} else if (source == 3) {
 		albedo = paint(v_custom.b);
 	} else {
-		albedo = texture(palette, vec2((float(p) + 0.5) / 64.0, 0.25)).rgb;
+		albedo = textureLod(palette, vec2((float(p) + 0.5) / 64.0, 0.25), 0.0).rgb;
 	}
 	// Two boxes of one paint are never quite the same shade.
 	if (source != 0) {
@@ -234,6 +238,12 @@ void fragment() {
 	bool vehicle = fract(v_custom.b * 64.0) < 0.375;
 	vec3 face = normalize(v_normal_model);
 	bool side = abs(face.x) >= abs(face.z);
+	// How far v_pos runs along z and x across a pixel, for the runs, the streaks and
+	// a door's text below. Taken here, outside every choice that can differ from a
+	// pixel to its neighbour (side, roof, the text's block): inside one, a
+	// derivative is undefined where neighbouring pixels choose differently.
+	float fz = fwidth(v_pos.z);
+	float fx = fwidth(v_pos.x);
 	vec2 vs = vec2((side ? sign(face.x) * v_pos.z : -sign(face.z) * v_pos.x) + seed * 137.0, ws.y);
 	// Profiles.
 	int pattern = PATTERN[p];
@@ -284,7 +294,7 @@ void fragment() {
 		albedo *= 0.96 + 0.06 * hash12(floor(vec2(v_u / 1.4, v_pos.y / 0.9)) + seed * 3.0);
 		float along = vehicle ? vs.x : ws.x;
 		float run = roof ? 0.0 : smoothstep(0.6, 0.9, vnoise(vec2(along * 2.5, 0.0))) * smoothstep(0.4, 2.2, v_pos.y);
-		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, (vehicle ? (side ? fwidth(v_pos.z) : fwidth(v_pos.x)) : fwidth(along)) * 2.5));
+		albedo *= 1.0 - (0.08 + 0.15 * level) * run * (1.0 - smoothstep(0.3, 0.8, (vehicle ? (side ? fz : fx) : fwidth(along)) * 2.5));
 	}
 	if (pattern == 9) {
 		// The membrane's seams over the portal frames, every 5 m.
@@ -369,17 +379,19 @@ void fragment() {
 		bool block = (d.x > 0.28 && d.x < 0.98 && d.y > 2.0 && d.y < 2.2) || (d.x > 0.28 && d.x < 0.7 && d.y > 1.84 && d.y < 1.94);
 		if (block) {
 			float glyph = step(0.42, hash12(floor(vec2(d.x * 42.0, d.y * 22.0)) + seed * 31.0));
-			float keep = 1.0 - smoothstep(0.3, 0.8, fwidth(d.x) * 42.0);
+			float keep = 1.0 - smoothstep(0.3, 0.8, fx * 42.0);
 			albedo = mix(albedo, vec3(0.012), glyph * keep * 0.85 + (1.0 - keep) * 0.25);
 		}
 	}
-	// A barge deck's steel plates: seams and a little tone plate to plate.
+	// A barge deck's steel plates: seams and a little tone plate to plate (the
+	// plates' derivative taken before the roof test, which can differ from a pixel
+	// to its neighbour).
+	vec2 plate = vec2(v_barge.x / 9.1, v_barge.y / 2.44);
+	vec2 plate_fw = fwidth(plate) * vec2(9.1, 2.44);
 	if (p == PART_DECK && roof) {
-		vec2 plate = vec2(v_barge.x / 9.1, v_barge.y / 2.44);
 		vec2 to_seam = abs(fract(plate + 0.5) - 0.5) * vec2(9.1, 2.44);
-		vec2 fw = fwidth(plate) * vec2(9.1, 2.44);
-		float seam = 1.0 - smoothstep(0.0, 0.03 + fw.x, to_seam.x) * smoothstep(0.0, 0.03 + fw.y, to_seam.y);
-		float near = 1.0 - smoothstep(0.1, 0.4, max(fw.x, fw.y));
+		float seam = 1.0 - smoothstep(0.0, 0.03 + plate_fw.x, to_seam.x) * smoothstep(0.0, 0.03 + plate_fw.y, to_seam.y);
+		float near = 1.0 - smoothstep(0.1, 0.4, max(plate_fw.x, plate_fw.y));
 		albedo *= (0.94 + 0.12 * hash12(floor(plate) + seed * 5.0)) * (1.0 - 0.3 * seam * near);
 	}
 	// Sun-faded container roofs (the May 2026 aerial: red boxes read salmon from above).
@@ -441,7 +453,7 @@ void fragment() {
 			float cell = floor(vs.x / 0.35);
 			float width = mix(0.012, 0.045, hash12(vec2(cell, 5.0)));
 			float across = abs(fract(vs.x / 0.35) - mix(0.15, 0.85, hash12(vec2(cell, 3.0)))) * 0.35;
-			float pixel = side ? fwidth(v_pos.z) : fwidth(v_pos.x);
+			float pixel = side ? fz : fx;
 			float run = (1.0 - smoothstep(width * 0.3, width + pixel, across)) * step(1.0 - 0.6 * level, hash12(vec2(cell, 7.0)))
 				* smoothstep(-0.25, 0.25, v_pos.y - mix(0.4, 2.2, hash12(vec2(cell, 9.0))));
 			float keep = 1.0 - smoothstep(0.02, 0.06, pixel);
