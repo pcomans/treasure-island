@@ -29,7 +29,9 @@
 #    and once play is ready the page frees the pack's released files, and keeps
 #    every byte the game may still read.
 #    And the page's side of the drive trace (tools/check_web_trace.mjs): without
-#    ?trace=drive it does nothing at all.
+#    ?trace=drive it does nothing at all. And the building plan view
+#    (tools/check_building_plan.mjs): a building's plan is drawn to scale from
+#    the frozen map data, with the generated outline where the roof mesh is.
 # 4. Every shader under game/ compiles and draws, with each define it tests, on
 #    Forward+ and on the Compatibility renderer the web build uses
 #    (game/tests/shader_compile_check.gd). And the mid-rise door landings the
@@ -196,6 +198,15 @@ node tools/check_web_build_files.mjs || failed+=("tools/check_web_build_files.mj
 # long frame's time went to. Node only, under a second.
 echo "== tools/check_web_trace.mjs"
 node tools/check_web_trace.mjs || failed+=("tools/check_web_trace.mjs")
+
+# tools/building-plan, the plan view given to the describe step, on the frozen map
+# data and generated world, in a temporary folder: a small building's SVG is well
+# formed and to scale, its generated outline lies on the roof mesh, plan.md's area
+# and extent are the mesh's, and a second run writes the same files; Building 1's
+# canopy strip is flagged from geometry; an --out in the repository, a missing key
+# and a road are refused; the work tree is unchanged. Node only, about 6 s.
+echo "== tools/check_building_plan.mjs"
+node tools/check_building_plan.mjs || failed+=("tools/check_building_plan.mjs")
 
 echo "== import"
 output="$(timeout 300 tools/godot --headless --path . --import 2>&1)"

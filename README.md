@@ -163,6 +163,11 @@ with the texture.
 ### Check a building
 
 ```sh
+# Plan view before modelling (the describe step): each map member with its role and tags, the outline the
+# generator uses over them, neighbours within 15 m, and the sizes, runs, arcs and flags in plan.md. Writes
+# plan.svg, plan.png and plan.md to building-plans/<key>/ beside the checkout (or --out DIR), never into the repository.
+tools/building-plan r16681702
+
 # Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews.
 # Grass and small stones are drawn round the camera; -- --ground-dressing off|low|medium|high
 # sets their density for a run (the project setting treasure_island/ground_dressing/density
