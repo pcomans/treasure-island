@@ -28,7 +28,7 @@
     "north_wing_inward_depth": 11.0,
     "central_inward_depth": 25.0,
     "south_wing_inward_depth": 11.0,
-    "tower_platform_top_y": 27.981,
+    "tower_platform_top_y": 26.581,
     "tower_glass_base_y": 28.981,
     "tower_glass_top_y": 30.981,
     "tower_roof_peak_y": 33.221,
@@ -68,12 +68,6 @@
     "entrance_groups": 3,
     "entrance_bays": [4, 5, 6],
     "doors_per_entrance_group": 3,
-    "junction_windows": [
-      {"run": 43, "glass_width": 1.2, "columns": 2}
-    ],
-    "north_junction_windows": [
-      {"run": 17, "glass_width": 1.8, "columns": 2}
-    ],
     "se_face_runs": [63, 64, 65, 66, 67, 68, 69],
     "rear_ribbon_host_chains": [[70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83]],
     "protected_seam_piers": {"north_run_start": 96, "south_run_end": 69}

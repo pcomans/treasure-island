@@ -6,6 +6,15 @@ Every build of the game has a number, the one in its title on the [releases page
 
 <!-- Each entry: "## Build <number> (<YYYY-MM-DD>)", then 1 to 12 lines of "- " and plain text: no links, images, HTML or entities (bare addresses are fine). tools/changelog.py checks them, and its "next" suggests the next heading. -->
 
+## Build 2566 (2026-11-25)
+
+- Building 1's entrance canopy is shallower and runs on to the hall front's corners, its ends cut square with a small rounded corner, and its top dark and weathered, with a raised edge and low ribs over the piers.
+- The band behind Building 1's great hall has its row of small square windows, the south wing's set-back wall its own row, and the north wing a window, a door and a small rooftop box with a door.
+- The glass cab on Building 1's roof stands on a low, dark, railed deck with angled front corners, with a solid pale wall under its windows, a pale roof and a short stair up to its door.
+- The raised blocks on top of Building 1's end pavilions are gone, and so are the odd blocks at the hall front's ends: the front runs on past its last pier to a sharp square corner, the end wall runs straight back from it, and a glazed door at the south end opens onto paving.
+- Building 1's two wings match on top: their lower front strips stop short of the end pavilions, which stand full height to the front, and the south wing's upper roof runs unbroken to the back.
+- The narrow gap open to the sky where Building 1's south wing meets the hall's south end is filled.
+
 ## Build 2546 (2026-11-22)
 
 - At the back of Building 1, the sky no longer shows through a thin slot between two of its blocks.
