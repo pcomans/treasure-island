@@ -31,7 +31,7 @@ The owner wants it kept as a permanent eval set for the describer: "this is goin
   - say at the top if the photos are insufficient or contradict each other;
   - give metres only when something of known size supports them;
   - end with 12–20 one-line "key form facts".
-- **Describers.** Opus 5.5 and Fable 5.2, each as fresh sessions. No session that saw earlier inputs or outputs is reused.
+- **Describers.** Opus 5.5 and Fable 5.2, each as fresh sessions. No session that saw earlier inputs or outputs is reused. Rounds [3](#round-3-2026-11-25) and [3b](#round-3b-2026-11-25) add other models.
 - **Judges.** Judges score each description against the answer key without knowing which describer wrote it. The mapping from describer label to model stays sealed until scoring is done.
 - **Scores.** Per fact: correct, partly, incorrect, not mentioned, or an honest "not shown".
 
@@ -224,6 +224,116 @@ Judge 1 is an Opus session, judge 2 a Fable session; each was blind to the model
 - Judge 1 counted all three conflicts the describers reported between photos and footprint as real; judge 2 calls one that Opus reported not real.
 
 Two judges agreeing is stronger than one, but both judges are themselves sessions of the two models under test (judge 1 Opus, judge 2 Fable), both read the prep notes, and the cases are about four independent buildings with one run per variant. The direction is consistent; the sizes are not firm.
+
+## Round 3 (2026-11-25)
+
+The owner's questions: is another model as good as the current describer, Fable 5.2 at effort high, at describing buildings? Does reasoning effort help? And, added during the run: when a model does poorly, is it not seeing the building, or not knowing what an architectural description looks like? (The [guide arm](#the-guide-arm) tests that.)
+
+**Method.**
+
+- Round 2's brief, photos, footprints and answer keys, unchanged, in variant B (photos plus footprint) only. Four buildings were described; three were judged, one of them on the island. The fourth, correlated with a judged one, was left unjudged for budget.
+- Each description is one request with the photos attached and no tools, so every model gets the same input and image delivery can be checked from the input token counts. Round 2's describers were agent sessions that opened the photos themselves, so Fable 5.2 at effort high was rerun in this harness as the baseline.
+- Anthropic models ran on the Anthropic API, the others through a model gateway. Four planned models did not run: the gateway key's scope refused GPT-6.2 Astra, Gemini 4 Neon and Qwen4 Max before any spend, and GLM 5.3 takes no image input.
+- Twelve configurations under blind labels; the mapping stayed sealed until scoring was done.
+- Judges: fresh Opus 5.5 sessions at effort high, blind to the mapping. Judge 1 scored all three buildings (60 visible facts, counted as in round 2's headline); judge 2 scored one building as an agreement check. The judges are sessions of one of the models under test.
+
+**Measured: judge 1, visible facts** (correct / partly / incorrect / not mentioned; any remainder is an honest "not shown"). Cost and time are per description, measured over all four buildings, at list price (the gateway's reported cost for gateway models).
+
+| Describer | Correct | C / P / I / NM | Cases with a basic-form error | Usable as is | Cost | Time |
+|---|---|---|---|---|---|---|
+| Opus 5.5, high | 90 % | 54 / 4 / 0 / 2 | 0 of 3 | 2 of 3 | $0.24 | 118 s |
+| Fable 5.2, high | 88 % | 53 / 5 / 0 / 2 | 0 of 3 | 3 of 3 | $0.72 | 194 s |
+| Fable 5.2, medium | 85 % | 51 / 6 / 1 / 2 | 0 of 3 | 3 of 3 | $0.30 | 75 s |
+| Fable 5.2, low | 80 % | 48 / 9 / 1 / 2 | 0 of 3 | 3 of 3 | $0.20 | 42 s |
+| Kimi K3.1 Pro, default | 58 % | 35 / 14 / 1 / 9 | 2 of 3 | 1 of 3 | $0.19 | 234 s |
+| Kimi K3.1 Pro, max | 52 % | 31 / 17 / 2 / 9 | 2 of 3 | 1 of 3 | $0.19 | 215 s |
+| DeepSeek V4.1 Flash, default | 50 % | 30 / 14 / 3 / 12 | 2 of 3 | 0 of 3 | $0.01 | 93 s |
+| DeepSeek V4.1 Flash, max | 50 % | 30 / 12 / 6 / 12 | 2 of 3 | 0 of 3 | $0.02 | 181 s |
+| Kimi K3, default | 48 % | 29 / 15 / 5 / 11 | 2 of 3 | 0 of 3 | $0.22 | 115 s |
+| GLM 5.3 Flash, default | 42 % | 25 / 20 / 4 / 10 | 2 of 3 | 0 of 3 | $0.02 | 156 s |
+| DeepSeek V4.1 Flash, default, with the guide | 43 % | 26 / 14 / 8 / 12 | 3 of 3 | 0 of 3 | $0.01 | 119 s |
+| GLM 5.3 Flash, default, with the guide | 37 % | 22 / 16 / 13 / 9 | 3 of 3 | 0 of 3 | $0.02 | 252 s |
+
+- **Effort.** Fable 5.2 had no basic-form error at any effort; lower effort cost "partly" verdicts (5 at high, 9 at low). Max effort did not help Kimi K3.1 Pro (58 → 52 %) or DeepSeek V4.1 Flash (50 → 50 %).
+- **Tokens.** For the Anthropic models a request was about 8.2k input tokens: the brief, the footprint and seven to ten photos, about eight on average. Output, thinking included, averaged 3.4k tokens for Fable low, 5.9k for medium, 16.3k for high and 10.1k for Opus high. DeepSeek encodes a photo in about 300–400 tokens, the others in about 800–900.
+- **Judge agreement.** On the building both judges scored, 86 % of the 480 verdicts were identical (rank correlation 0.76 on the describers' correct counts). Both put the four Anthropic configurations at the top.
+- **Images and memory.** The judge found every description used the photos. Fable 5.2 at medium and high named the island on the in-domain building; the judge found no fact that only memory could supply.
+
+### The guide arm
+
+The owner asked whether the cheaper models' gap is seeing, or not knowing what an architectural description looks like. To test it, a generic describer guide (a template, a vocabulary and a method, about 1,200 words) was appended to the brief for the two cheapest models.
+
+- **Source.** The guide was derived only from Fable 5.2 (high) descriptions of two buildings outside the eval set, written under the unchanged round-2 brief.
+- **Author.** A fresh session that saw only the brief and those two descriptions, never eval material.
+- **Leak audits.** Two independent auditors, each holding the eval set's answer keys, compared every line with every checklist fact. The first found no hard hit and nine soft ones (generic terms that point at a scored feature), all fixed; the second found one more soft hit, fixed, and its final re-check was clean.
+
+**Measured** (judge 1, 60 visible facts):
+
+| Describer | Correct | Misread or partly right | Not addressed | Key form facts wrong | Cases with a basic-form error |
+|---|---|---|---|---|---|
+| DeepSeek V4.1 Flash, without → with the guide | 50 → 43 % | 17 → 22 | 12 → 12 | 3 → 11 | 2 → 3 of 3 |
+| GLM 5.3 Flash, without → with the guide | 42 → 37 % | 24 → 29 | 11 → 9 | 12 → 18 | 2 → 3 of 3 |
+| Fable 5.2, high, for reference | 88 % | 5 | 2 | 1 | 0 of 3 |
+
+**Interpretation.** With the guide both models covered about the same facts and got more of them wrong. Their gap is in reading the building from the photos, not in the form of the description. One run per model on three buildings.
+
+## Round 3b (2026-11-25)
+
+The owner's question: can OpenAI and Google models describe buildings as well as the current describer, and does effort help there?
+
+**Method.**
+
+- OpenAI models ran through the Codex CLI on a ChatGPT plan, Google models through a signed-in agent CLI, both on plan quota with no API spend. GPT-6.2 Astra and GPT-6.2 Sol are not available on that plan and are untested.
+- Both CLIs are agent harnesses with their own system prompts, not round 3's single request; the Google CLI opened the photos itself with a file tool, as round 2's describers did.
+- The same three buildings in variant B, round 2's brief plus a short harness note, one run per configuration and building: 30 runs, all answered first time.
+- **Isolation.** Each run had a fresh folder holding only the brief and that building's inputs, inside a sandbox that hid the rest of the disk; a probe confirmed the eval set was not visible from inside. Codex ran read-only with web search off. The Google CLI's network could not be cut (it needs it to reach the model): its logs show exactly one tool call per run, consistent with one batched image read, so web use is excluded by the prompt and that log count, not by the sandbox.
+- **Anchors.** Round 3's Fable 5.2 (high) and DeepSeek V4.1 Flash (default) texts were judged again under fresh blind labels, to measure drift between rounds: within ±2 facts per description and judge, and the anchors' order unchanged.
+- **Judges.** Four fresh Opus 5.5 sessions at effort high, as in round 3, each with its own scratch folder.
+
+**Measured: judge 1, visible facts** (as in round 3; time per description through the CLI).
+
+| Describer | Correct | C / P / I / NM | Cases with a basic-form error | Usable as is | Time |
+|---|---|---|---|---|---|
+| Gemini 4 Carbon, medium | 93 % | 56 / 3 / 0 / 1 | 0 of 3 | 3 of 3 | 445 s |
+| Gemini 4 Carbon, high | 92 % | 55 / 4 / 0 / 1 | 1 of 3 | 2 of 3 | 592 s |
+| Gemini 4 Neon, medium | 90 % | 54 / 5 / 0 / 1 | 1 of 3 | 2 of 3 | 233 s |
+| Gemini 4 Argon, medium | 90 % | 54 / 5 / 0 / 1 | 1 of 3 | 1 of 3 | 73 s |
+| Fable 5.2, high (anchor) | 90 % | 54 / 5 / 0 / 1 | 0 of 3 | 3 of 3 | (194 s) |
+| GPT-6 Astra, high | 67 % | 40 / 12 / 1 / 6 | 1 of 3 | 0 of 3 | 133 s |
+| GPT-6 Astra, medium | 62 % | 37 / 13 / 1 / 8 | 1 of 3 | 0 of 3 | 108 s |
+| GPT-6.1 Sol, high | 58 % | 35 / 14 / 1 / 10 | 1 of 3 | 0 of 3 | 105 s |
+| GPT-6.1 Sol, medium | 57 % | 34 / 11 / 2 / 12 | 2 of 3 | 0 of 3 | 58 s |
+| DeepSeek V4.1 Flash, default (anchor) | 53 % | 32 / 11 / 3 / 14 | 2 of 3 | 0 of 3 | (93 s) |
+| GPT-6.1 Terra, medium | 50 % | 30 / 16 / 1 / 11 | 2 of 3 | 0 of 3; 1 not usable | 32 s |
+| GPT-6 Luna, medium | 35 % | 21 / 15 / 3 / 20 | 3 of 3 | 0 of 3; 2 not usable | 29 s |
+
+- **Effort.** High over medium gave GPT-6 Astra 5 points and GPT-6.1 Sol 1; Gemini 4 Carbon lost 1.
+- **Tokens through the CLIs.** Input was about 20–26k tokens a run (one run 50k), the harnesses' own prompts included. The OpenAI models wrote 1.3–5.2k output tokens; Gemini 4 Carbon wrote 24–45k and Neon 12–42k, most of it reasoning.
+- **Judge agreement.** On the building both judges scored, 87 % of the 480 verdicts were identical (91 % on the visible facts; rank correlation 0.98).
+- **Memory.** Gemini 4 Carbon said it recognised the in-domain building in both its runs, and Gemini 4 Argon named the place of an out-of-domain building; the Fable anchor names the island. Judges found at most one detail that might come from memory. On the building no describer recognised, Gemini 4 Carbon (medium) scored above the Fable anchor for both judges (17 against 15 of 18).
+
+**Caveats.** Three buildings, one run per configuration; agent harnesses, not round 3's single request; the Google CLI's network was not cut; memory on the in-domain building; no dollar figure per description for the Gemini models (plan quota).
+
+## Cost of describing (estimates)
+
+Measured in round 3: $0.20 (Fable 5.2 low) to $0.72 (Fable 5.2 high) per description, $0.24 for Opus 5.5 high, $0.01–0.22 for the cheaper models. The rest of this section is estimated from those figures and published list prices, not measured.
+
+- **Batch.** Anthropic and OpenAI both publish batch rates at half the standard price (both pricing pages, checked 2026-11-26). No batch has been run here.
+- **Per 1,000 buildings**, at round 3's measured cost: Fable 5.2 high about $720 ($360 batched), medium $300 ($150), low $200 ($100); Opus 5.5 high $240 ($120).
+- **OpenAI list prices** (per million input / output tokens; OpenAI's API pricing page, checked 2026-11-25 and again 2026-11-26): GPT-6.2 Astra $8 / $40, the same as Fable 5.2; GPT-6.2 Sol $2 / $10; GPT-6.1 Terra $1 / $5; GPT-6 Luna $0.10 / $0.50. On round 3's profile (about 8.2k input tokens; 3.4k to 16.3k output) that is per 1,000 buildings about $200–720 for GPT-6.2 Astra, $50–180 for GPT-6.2 Sol, $25–90 for GPT-6.1 Terra and $3–9 for GPT-6 Luna, half that batched. This assumes these models count a photo in about as many tokens as Fable 5.2 does, which was not checked; the pricing page does not say how photos are billed in a batch; and the two GPT-6.2 models were not tested for quality.
+- **In proportion.** Describing is the small part of a building's cost: building and checking it cost $1.24–2.74 per building in [process shootout 4](PROCESS_SHOOTOUT_4.md).
+
+## Process notes (rounds 3 and 3b)
+
+- **Spend over the cap.** Round 3 had a $20 soft cap for the gateway, the Anthropic API and the judges, and cut judging from eight to four judge sessions to stay near it. Round 3 came to $18.5–21.9 (describers $8.54 and guide sources $1.55 measured; the guide author, auditors and judges $8.4–11.8 estimated) and round 3b's judges to an estimated $6.9–10.0, about $25–32 in all. Judge cost is estimated from context size, not metered, and the overrun was not flagged before the round 3b judging started.
+- **A shared scratch file.** In round 3 one judge's scratch file, in a session scratchpad, was overwritten by another process, and the judge briefly saw parts of three descriptions of a different building. It stopped, read its own files from their source paths and used nothing from the others. Round 3b gave each judge its own scratch folder.
+
+## Rounds 3 and 3b: what this means
+
+- **No routing change.** The describer stays Fable 5.2 at effort high ([AGENTS](../AGENTS.md#bounded-subagent-execution)). The benchmark changed no routing.
+- **Measured.** A top group scored 88–93 % on three buildings: Fable 5.2 high, Opus 5.5 high and the four Gemini 4 configurations. Fable 5.2 at lower effort cost less, with no basic-form error but more "partly" verdicts. The cheaper gateway models scored 42–58 % and the OpenAI models through Codex 35–67 %; more effort did not close either gap.
+- **Interpretation.** Differences inside the top group are within one run and the judges' ±2-fact drift. A generic guide did not help the cheaper models; their gap is in reading the photos (see the [lesson](../LEARNINGS.md#cheaper-vision-models-misread-the-building-a-description-guide-does-not-fix-it)).
+- **Open.** The Gemini 4 models in a single request with the network cut, and their dollar cost per description; the GPT-6.2 models; variant A (photos only) for any new model; more and independent buildings; a real batch run.
 
 ## What this means so far
 
