@@ -109,13 +109,14 @@ Gemini 4 Carbon, at reasoning effort `medium`, built the two buildings of [proce
 | Opus 5.5 run 1, same | 13,036 → 13,036 | 22,916 → 22,940 |
 | Detector findings, build → after fix | 15 → 1 | 268 → 57 |
 | Opus 5.5 run 1, same | 38 → 1 | 65 → 0 |
-| Fix: parts changed at named defects / elsewhere | 84 / 133 (3 of them removed) | 125 / 11 (20 of them removed, 1 added) |
+| Fix: parts changed at named defects / elsewhere | 84 / 133; 3 removed, all at named defects | 125 / 11; 20 removed (7 of them elsewhere), 1 added |
+| Opus 5.5 run 1, same | 42 / 8 | 52 / 25; 2 removed, 4 added |
 
-- The fix brief says "change nothing else; add nothing". On the housing row 133 of the 217 changed parts were away from any named defect; on the warehouse one part was added. The warehouse's 57 remaining findings, and the housing row's one, are all stray parts.
-- The warehouse build's first session ended at the agent CLI's own 20-minute turn limit, after the model file had been written; its self-revision worked from that file. Both fix sessions ended within a minute of the same limit.
+- The fix brief says "change nothing else; add nothing". On the housing row 133 of Carbon's 217 changed parts were away from any named defect, against Opus's 8 of 50. On the warehouse Carbon removed 7 parts away from any named defect and added one, but Opus changed more parts away from defects there than Carbon did (25 against 11). The warehouse's 57 remaining findings, and the housing row's one, are all stray parts.
+- The warehouse build's first session ended at shootout 4's 20-minute wall cap for that step, which the harness passes to the CLI as its timeout, after the model file had been written; its self-revision worked from that file. Both fix sessions, which have the same 20-minute cap, ended within a minute of it.
 - The session logs show no web or subagent tool calls. Only the prompt line kept them out; they were counted from the event logs afterwards.
 - The first build attempt for each building was lost to a harness fault, not to the model: the stall watchdog counted only the CLI's printed events, which stop while one long request streams, so it killed both live sessions at 600 s, and the retries were stopped by hand once the cause was found. The counted attempts ran with a watchdog that also counts received data and had no stall ([lesson](../LEARNINGS.md#a-stall-watchdog-must-count-received-data-not-only-printed-events)).
-- Cost: the CLI reports token counts per session (counted attempts: housing row 523k input, 284k output and 175k thinking; warehouse 401k, 253k and 159k), but this route has no per-token price, so the dollar cost of Carbon's sessions is unmeasured. The two Opus reviews cost $0.897 and $0.748 ($1.645). The plan's quota for these models went from 92 % to 76 % of the weekly allowance remaining and from 68 % to 6 % of the five-hour window, for both buildings together, including a smoke test and the lost first attempts.
+- Cost: the CLI reports token counts per session (counted attempts: housing row 523k input, 1.93M cache-read, 284k output and 175k thinking; warehouse 401k, 0.91M, 253k and 159k), but this route has no per-token price, so the dollar cost of Carbon's sessions is unmeasured. The two Opus reviews cost $0.897 and $0.748 ($1.645). The plan's quota for these models went from 92 % to 76 % of the weekly allowance remaining and from 68 % to 6 % of the five-hour window, for both buildings together, including a smoke test and the lost first attempts.
 
 The owner looked at Carbon's final models beside Opus's run 1 finals and the photos, on a page that named each column: "Indeed, carbon is just a little bit better than opus, but it seems like the number of triangles is higher." Carbon's models have about twice Opus's triangles (2.2 times on the housing row, 2.0 on the warehouse). No routing change was decided; Opus 5.5 stays the modeller.
 
@@ -123,7 +124,7 @@ This is one run per building, not blind, with no judge scores and the owner's lo
 
 - a measured price, through a paid API route that reports one;
 - a triangle budget, because of the phone memory limit;
-- fix-round discipline: a fix that changes only the named defects, adds nothing and leaves no stray parts.
+- fix-round discipline: a fix that changes only the named defects, adds nothing and leaves no stray parts (the housing row's fix changed 133 parts elsewhere, and the warehouse kept 57 stray parts).
 
 ## Architect-description test (describe from photos)
 
