@@ -23,7 +23,7 @@ The owner wants it kept as a permanent eval set for the describer: "this is goin
 
 ## Method
 
-- **Blind inputs.** Each case gets a neutral code (fresh codes and a fresh view order each round). Labels and margins are cropped from the photos and metadata is stripped. A describer sees only the photos and a one-line context file.
+- **Blind inputs.** Each case gets a neutral code (fresh codes and a fresh view order in rounds 1 and 2). Rounds 3 and 3b reuse round 2's inputs unchanged, codes and view order included. Labels and margins are cropped from the photos and metadata is stripped. A describer sees only the photos and a one-line context file.
 - **One shared brief.** Every describer gets the same brief. It asks for a survey-style exterior description that a modeller who has not seen the building could build a first version from, in a fixed order: overall form, roof, materials, each elevation, entrances and attached elements, ornament, alterations. Its rules:
   - describe only what the photos show; do not identify the building, and say in one line at the end if it is recognised;
   - separate what is seen from what is inferred, with a confidence where it is not obvious;
@@ -312,7 +312,7 @@ The owner's question: can OpenAI and Google models describe buildings as well as
 - **Judge agreement.** On the building both judges scored, 87 % of the 480 verdicts were identical (91 % on the visible facts; rank correlation 0.98).
 - **Memory.** Gemini 4 Carbon said it recognised the in-domain building in both its runs, and Gemini 4 Argon named the place of an out-of-domain building; the Fable anchor names the island. Judges found at most one detail that might come from memory. On the building no describer recognised, Gemini 4 Carbon (medium) scored above the Fable anchor for both judges (17 against 15 of 18).
 
-**Caveats.** Three buildings, one run per configuration; agent harnesses, not round 3's single request; the Google CLI's network was not cut; memory on the in-domain building; no dollar figure per description for the Gemini models (plan quota).
+**Caveats.** Three buildings, one run per configuration; agent harnesses, not round 3's single request; the Google CLI's network was not cut; memory on the in-domain building; no dollar figure per description for any round 3b model (they ran on subscription plan quota).
 
 ## Cost of describing (estimates)
 
@@ -320,7 +320,7 @@ Measured in round 3: $0.20 (Fable 5.2 low) to $0.72 (Fable 5.2 high) per descrip
 
 - **Batch.** Anthropic and OpenAI both publish batch rates at half the standard price (both pricing pages, checked 2026-11-26). No batch has been run here.
 - **Per 1,000 buildings**, at round 3's measured cost: Fable 5.2 high about $720 ($360 batched), medium $300 ($150), low $200 ($100); Opus 5.5 high $240 ($120).
-- **OpenAI list prices** (per million input / output tokens; OpenAI's API pricing page, checked 2026-11-25 and again 2026-11-26): GPT-6.2 Astra $8 / $40, the same as Fable 5.2; GPT-6.2 Sol $2 / $10; GPT-6.1 Terra $1 / $5; GPT-6 Luna $0.10 / $0.50. On round 3's profile (about 8.2k input tokens; 3.4k to 16.3k output) that is per 1,000 buildings about $200–720 for GPT-6.2 Astra, $50–180 for GPT-6.2 Sol, $25–90 for GPT-6.1 Terra and $3–9 for GPT-6 Luna, half that batched. This assumes these models count a photo in about as many tokens as Fable 5.2 does, which was not checked; the pricing page does not say how photos are billed in a batch; and the two GPT-6.2 models were not tested for quality.
+- **OpenAI list prices** (per million input / output tokens; OpenAI's API pricing page, checked 2026-11-25 and again 2026-11-26): GPT-6.2 Astra $8 / $40, the same as Fable 5.2; GPT-6.2 Sol $2 / $10; GPT-6.1 Terra $1 / $5; GPT-6 Luna $0.10 / $0.50. On round 3's profile (about 8.2k input tokens; 3.4k to 16.3k output) that is per 1,000 buildings about $200–720 for GPT-6.2 Astra, $50–180 for GPT-6.2 Sol, $25–90 for GPT-6.1 Terra and $3–9 for GPT-6 Luna, half that batched. This assumes these models count a photo in about as many tokens as Fable 5.2 does, which was not checked; the pricing page does not say how photos are billed in a batch; and the two GPT-6.2 models were not tested for quality. These are list-price estimates on round 3's token profile; the round 3b runs, through agent CLIs, had a different profile (see [round 3b](#round-3b-2026-11-25)).
 - **In proportion.** Describing is the small part of a building's cost: building and checking it cost $1.24–2.74 per building in [process shootout 4](PROCESS_SHOOTOUT_4.md).
 
 ## Process notes (rounds 3 and 3b)
@@ -335,7 +335,7 @@ Measured in round 3: $0.20 (Fable 5.2 low) to $0.72 (Fable 5.2 high) per descrip
 - **Interpretation.** Differences inside the top group are within one run and the judges' ±2-fact drift. A generic guide did not help the cheaper models; their gap is in reading the photos (see the [lesson](../LEARNINGS.md#cheaper-vision-models-misread-the-building-a-description-guide-does-not-fix-it)).
 - **Open.** The Gemini 4 models in a single request with the network cut, and their dollar cost per description; the GPT-6.2 models; variant A (photos only) for any new model; more and independent buildings; a real batch run.
 
-## What this means so far
+## Rounds 1 and 2: what this means
 
 These are findings from about four independent buildings and two judges, not rules.
 
