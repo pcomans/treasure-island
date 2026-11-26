@@ -73,7 +73,7 @@ The add / fix / remove tallies are as recorded at the time. F's fixer rewrote th
 
 ## Model tiers by detail level
 
-**Status (2026-11-25).** Opus 5.5 models landmarks and anything seen up close. After [process shootout 4](PROCESS_SHOOTOUT_4.md), DeepSeek V4.1 Flash may build a first pass of a low-detail background building, rebuilt by Opus rather than patched when it needs to be better ([AGENTS](../AGENTS.md#bounded-subagent-execution)). In that test the owner preferred Opus over Kimi K3.1 Pro in all four pairs, at 84 % of Opus's cost per building; Kimi and Gemini 4 Neon are not routed, and adopting either is a later owner decision. The 2026-11-21 plan below is kept as the owner stated it.
+**Status (2026-11-26).** Opus 5.5 models landmarks and anything seen up close. After [process shootout 4](PROCESS_SHOOTOUT_4.md), DeepSeek V4.1 Flash may build a first pass of a low-detail background building, rebuilt by Opus rather than patched when it needs to be better ([AGENTS](../AGENTS.md#bounded-subagent-execution)). In that test the owner preferred Opus over Kimi K3.1 Pro in all four pairs, at 84 % of Opus's cost per building. Gemini 4 Carbon was tried once per building on the same process ([below](#gemini-4-carbon-as-modeller-2026-11-26)). Kimi, Gemini 4 Neon and Gemini 4 Carbon are not routed, and adopting any of them is a later owner decision. The 2026-11-21 plan below is kept as the owner stated it.
 
 The owner's plan: "Kimi I think looks … basic but acceptable. So I would say I would use Kimi for like cheap low detail modeling, right? Maybe for like a first pass. I would keep using Opus for mid-detail modeling and then I think we should start investigating Gemini for high detail work". Earlier in the same discussion: "we will consider using Kimi for … cheap [low] detail work where we're gonna keep Opus as like the honestly affordable mid-detail work and … we're planning to investigate Gemini Neon as like the high detail high fidelity work". Their judgements from the shootout page: "Kimi looks fine for low detail work"; "Neon is very impressive, on par with or even beating Opus"; and earlier, of DeepSeek: "Maybe DeepSeek is just not the right model here".
 
@@ -97,6 +97,33 @@ Before Gemini 4 Neon can be used:
 - a harness and timeout setup in which it can iterate;
 - a spend ceiling that actually holds;
 - a triangle budget, because of the phone memory limit.
+
+### Gemini 4 Carbon as modeller (2026-11-26)
+
+Gemini 4 Carbon, at reasoning effort `medium`, built the two buildings of [process shootout 4](PROCESS_SHOOTOUT_4.md), a housing row and a warehouse, once each, through a signed-in agent CLI on the owner's plan. Everything else was shootout 4's: the same description, photos, plan, prompts (with the executor line and one line forbidding the web, subagents and other AI tools), renders, detector, Opus 5.5 defect review at effort `high` and one fix session by the modeller. Shootout 4's modellers had two runs each, a blind owner vote and a blind judge; Carbon had one run per building, no blind vote and no judge scores. Each figure is one run.
+
+| | Housing row | Warehouse |
+|---|---|---|
+| Time: build (with its self-revision) / Opus review / fix | 1,583 s / 234 s / 1,172 s | 1,681 s / 234 s / 1,223 s |
+| Triangles, build → after fix | 28,600 → 28,628 | 45,600 → 45,372 |
+| Opus 5.5 run 1, same | 13,036 → 13,036 | 22,916 → 22,940 |
+| Detector findings, build → after fix | 15 → 1 | 268 → 57 |
+| Opus 5.5 run 1, same | 38 → 1 | 65 → 0 |
+| Fix: parts changed at named defects / elsewhere | 84 / 133 (3 of them removed) | 125 / 11 (20 of them removed, 1 added) |
+
+- The fix brief says "change nothing else; add nothing". On the housing row 133 of the 217 changed parts were away from any named defect; on the warehouse one part was added. The warehouse's 57 remaining findings, and the housing row's one, are all stray parts.
+- The warehouse build's first session ended at the agent CLI's own 20-minute turn limit, after the model file had been written; its self-revision worked from that file. Both fix sessions ended within a minute of the same limit.
+- The session logs show no web or subagent tool calls. Only the prompt line kept them out; they were counted from the event logs afterwards.
+- The first build attempt for each building was lost to a harness fault, not to the model: the stall watchdog counted only the CLI's printed events, which stop while one long request streams, so it killed both live sessions at 600 s, and the retries were stopped by hand once the cause was found. The counted attempts ran with a watchdog that also counts received data and had no stall ([lesson](../LEARNINGS.md#a-stall-watchdog-must-count-received-data-not-only-printed-events)).
+- Cost: the CLI reports token counts per session (counted attempts: housing row 523k input, 284k output and 175k thinking; warehouse 401k, 253k and 159k), but this route has no per-token price, so the dollar cost of Carbon's sessions is unmeasured. The two Opus reviews cost $0.897 and $0.748 ($1.645). The plan's quota for these models went from 92 % to 76 % of the weekly allowance remaining and from 68 % to 6 % of the five-hour window, for both buildings together, including a smoke test and the lost first attempts.
+
+The owner looked at Carbon's final models beside Opus's run 1 finals and the photos, on a page that named each column: "Indeed, carbon is just a little bit better than opus, but it seems like the number of triangles is higher." Carbon's models have about twice Opus's triangles (2.2 times on the housing row, 2.0 on the warehouse). No routing change was decided; Opus 5.5 stays the modeller.
+
+This is one run per building, not blind, with no judge scores and the owner's look at one pair per building, so the direction is the owner's one-look verdict, not a measured ranking. Before Gemini 4 Carbon could be used:
+
+- a measured price, through a paid API route that reports one;
+- a triangle budget, because of the phone memory limit;
+- fix-round discipline: a fix that changes only the named defects, adds nothing and leaves no stray parts.
 
 ## Architect-description test (describe from photos)
 
